@@ -4,6 +4,13 @@ import { useTranslation } from "react-i18next";
 import { ExclamationText } from "./shared";
 import { SkipLinkReusable } from "@components/globals/SkipLinkReusable";
 
+export enum VaultStatus {
+  NEW = "New",
+  DOWNLOADED = "Downloaded",
+  CONFIRMED = "Confirmed",
+  PROBLEM = "Problem",
+}
+
 interface DownloadTableProps {
   submissions: VaultSubmissionList[];
   checkedItems: Map<string, boolean>;
@@ -45,21 +52,21 @@ export const DownloadTable = ({
 
   function formatStatus(vaultStatus: string) {
     switch (vaultStatus) {
-      case "New":
+      case VaultStatus.NEW:
         return (
           <span className="p-2 bg-[#ecf3eb] text-[#0c6722]">
             {t("downloadResponsesTable.status.new")}
           </span>
         );
-      case "Downloaded":
+      case VaultStatus.DOWNLOADED:
         return (
           <span className="p-2 bg-[#dcd6fe]">{t("downloadResponsesTable.status.downloaded")}</span>
         );
-      case "Confirmed":
+      case VaultStatus.CONFIRMED:
         return (
           <span className="p-2 bg-[#e2e8ef]">{t("downloadResponsesTable.status.confirmed")}</span>
         );
-      case "Problem":
+      case VaultStatus.PROBLEM:
         return (
           <span className="p-2 bg-[#f3e9e8] text-[#bc3332]">
             {t("downloadResponsesTable.status.problem")}
@@ -93,7 +100,9 @@ export const DownloadTable = ({
     }
 
     if (
-      (vaultStatus === "Downloaded" || vaultStatus === "Confirmed" || vaultStatus === "Problem") &&
+      (vaultStatus === VaultStatus.DOWNLOADED ||
+        vaultStatus === VaultStatus.CONFIRMED ||
+        vaultStatus === VaultStatus.PROBLEM) &&
       downloadedAt
     ) {
       return formatDate(downloadedAt);
@@ -110,17 +119,17 @@ export const DownloadTable = ({
     createdAtDate: Date;
   }) {
     switch (vaultStatus) {
-      case "New":
+      case VaultStatus.NEW:
         return t("downloadResponsesTable.status.unconfirmed");
-      case "Confirmed":
+      case VaultStatus.CONFIRMED:
         return t("downloadResponsesTable.status.one");
-      case "Problem":
+      case VaultStatus.PROBLEM:
         return (
           <span className="p-2 bg-[#f3e9e8] text-[#bc3332] font-bold">
-            {t("downloadResponsesTable.status.problem")}
+            {t("downloadResponsesTable.Status.PROBLEM")}
           </span>
         );
-      case "Downloaded": {
+      case VaultStatus.DOWNLOADED: {
         const daysPassed = getDaysPassed(createdAtDate);
         const daysLeft = CONFIRM_OVERDUE - daysPassed;
         if (daysLeft > 0) {
@@ -134,16 +143,16 @@ export const DownloadTable = ({
   }
 
   function formatRemoval({ vaultStatus, removedAt }: { vaultStatus: string; removedAt?: Date }) {
-    if (vaultStatus === "Confirmed" && removedAt) {
+    if (vaultStatus === VaultStatus.CONFIRMED && removedAt) {
       const daysLeft = getDaysPassed(removedAt);
       return t("downloadResponsesTable.status.withinXDays", { daysLeft });
     }
 
-    if (vaultStatus === "Problem") {
+    if (vaultStatus === VaultStatus.PROBLEM) {
       return t("downloadResponsesTable.status.wontRemove");
     }
 
-    if (vaultStatus === "New" || vaultStatus === "Downloaded") {
+    if (vaultStatus === VaultStatus.NEW || vaultStatus === VaultStatus.DOWNLOADED) {
       return t("downloadResponsesTable.status.notSet");
     }
 

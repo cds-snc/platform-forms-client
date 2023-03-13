@@ -18,7 +18,6 @@ import Head from "next/head";
 import { checkOne } from "@lib/cache/flags";
 import Link from "next/link";
 import { Card } from "@components/globals/card/Card";
-import axios, { AxiosResponse } from "axios";
 import { useRouter } from "next/router";
 import { DownloadTable } from "@components/form-builder/app/DownloadTable";
 import { ToastContainer, toast } from "react-toastify";
@@ -72,29 +71,6 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
     <Button onClick={dialogReportProblemsHandleClose}>{t("responses.reportProblems")}</Button>
   );
 
-  // Note: A hack to enable an ajax file download through axios. Oddly setting the responseType
-  // is not enough. Come back to this, suspect there is a better way..
-  const forceFileDownload = (response: AxiosResponse, fileName: string) => {
-    // NOTE: intentionally allowing Errors to be thrown and caught in container Promise
-    const url = window.URL.createObjectURL(new Blob([response.data]));
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", fileName);
-    document.body.appendChild(link);
-    link.click();
-  };
-
-  const downloadFile = async (url: string, submissionName: string) => {
-    return await axios({
-      url: url,
-      method: "GET",
-      responseType: "blob",
-      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-    }).then((response) => {
-      forceFileDownload(response, `${submissionName}.html`);
-    });
-  };
-
   // NOTE: browsers have different limits for simultaneous downloads. May need to look into
   // batching file downloads (e.g. 4 at a time) if edge cases/* come up.
   const handleDownload = async () => {
@@ -118,33 +94,45 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
       { position: toastPosition, autoClose: false }
     );
 
-    const downloads = Array.from(getCheckedItems(), (item) => {
-      const url = `/api/id/${formId}/${item[0]}/download`;
-      const fileName = item[0];
-      return downloadFile(url, fileName);
-    });
+    try {
+      const downloads = Array.from(getCheckedItems(), async (item) => {
+        if (!item || !item[0]) {
+          throw new Error("Error downloading file from Retrieval table. SubmissionId missing.");
+        }
 
-    await Promise.all(downloads)
-      .then(() => {
+        const url = `/api/id/${formId}/${item[0]}/download`;
+        const fileName = item[0];
+        return fetch(url, { method: "GET" })
+          .then((res) => res.blob())
+          .then((blob) => {
+            const urlObj = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = urlObj;
+            a.download = `${fileName}.html`;
+            a.click();
+            URL.revokeObjectURL(urlObj);
+          });
+      });
+
+      await Promise.all(downloads).then(() => {
         // NOTE: setTimeout fixes an edge case where DB/* wouldn't be updated by time of request
         setTimeout(() => {
           // Refreshes getServerSideProps data without a full page reload
           router.replace(router.asPath);
-
           toast.dismiss(toastDownloadingId);
           toast.success(t("downloadResponsesTable.download.downloadComplete"), {
             position: toastPosition,
           });
         }, 400);
-      })
-      .catch((err) => {
-        logMessage.error(err as Error);
-        toast.dismiss(toastDownloadingId);
-        toast.error(t("downloadResponsesTable.download.errorDownloadingFiles"), {
-          position: toastPosition,
-          autoClose: false,
-        });
       });
+    } catch (err) {
+      logMessage.error(err as Error);
+      toast.dismiss(toastDownloadingId);
+      toast.error(t("downloadResponsesTable.download.errorDownloadingFiles"), {
+        position: toastPosition,
+        autoClose: false,
+      });
+    }
   };
 
   return (
