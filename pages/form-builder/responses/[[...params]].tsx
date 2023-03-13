@@ -19,7 +19,7 @@ import { checkOne } from "@lib/cache/flags";
 import Link from "next/link";
 import { Card } from "@components/globals/card/Card";
 import { useRouter } from "next/router";
-import { DownloadTable } from "@components/form-builder/app/DownloadTable";
+import { DownloadTable } from "@components/form-builder/app/DownloadTable/DownloadTable";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
