@@ -511,5 +511,9 @@
     "skipLink": "Skip Download Table",
     "unknown":"Unknown"
   },
-  "autocompleteIsSetTo": "Autcomplete is set to:"
+  "autocompleteIsSetTo": "Autocomplete is set to:",
+  "maxNumberOfRows": {
+    "label": "Maximum number of rows",
+    "description": "The maximum number of rows that can be added"
+  }
 }
