@@ -55,6 +55,15 @@ Cypress.Commands.add("visitForm", (formID) => {
 });
 
 /**
+ * Navigate to a page and wait for it to load
+ */
+Cypress.Commands.add("visitPage", (path) => {
+  cy.visit(path);
+  // Ensure page has fully loaded
+  cy.get("main").should("be.visible");
+});
+
+/**
  * Set an application flag
  * @param flagName The name of the flag to modify
  * @param value Boolean value to set the value of the flag
@@ -99,9 +108,10 @@ Cypress.Commands.add("login", () => {
         callbackUrl: "http://localhost:3000/en/auth/login",
         json: true,
       },
+    }).then(() => {
+      cy.getCookie("next-auth.session-token").should("exist");
     });
   });
-  cy.getCookie("next-auth.session-token").should("exist");
 });
 
 /**
@@ -124,6 +134,7 @@ Cypress.Commands.add("logout", () => {
         json: true,
       },
     });
+    cy.clearCookies();
+    cy.getCookie("next-auth.session-token").should("not.exist");
   });
-  cy.getCookie("next-auth.session-token").should("not.exist");
 });

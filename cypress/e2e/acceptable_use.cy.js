@@ -1,62 +1,40 @@
-/** TODO
- * Hard to find a  proper way to hack requireAuthentication
- * wrapper around policy and retrieval page.We will keep this file
- * for reference until we figure out.
-
 describe("Test acceptable use Page", () => {
   beforeEach(() => {
-    cy.visit("/en/auth/policy", {
-      onBeforeLoad: (win) => {
-        let nextData;
-        Object.defineProperty(win, "__NEXT_DATA__", {
-          set(serverSideProps) {
-            serverSideProps.context = {
-              user: {
-                acceptableUse: false,
-                name: null,
-                userId: "testId",
-              },
-            };
-            nextData = serverSideProps;
-          },
-          get() {
-            return nextData;
-          },
-        });
-      },
-    });
+    cy.login();
+    cy.visitPage("/en/auth/policy");
   });
-  it.skip("En page renders proprerly", () => {
-    cy.get("h1").should("contain", "Welcome back");
-    cy.get(".gc-agree-btn").should("be.visible");
-    cy.get(".gc-cancel-btn").should("be.visible");
-    cy.get(".gc-acceptable-use-header").should("be.visible");
+  afterEach(() => {
+    cy.logout();
   });
 
-  it.skip("Fr page renders properly", () => {
+  it("En page renders proprerly", () => {
+    cy.get("h1").should("contain", "Know your responsibilities");
+    cy.get("[type='button']").should("contain.text", "Agree");
+  });
+
+  it("Fr page renders properly", () => {
     cy.get("a[lang='fr']").click();
     cy.url().should("contain", "/fr");
-    cy.get("h1").should("contain", "Content de vous revoir");
-    cy.get(".gc-agree-btn").should("be.visible");
-    cy.get(".gc-cancel-btn").should("be.visible");
-    cy.get(".gc-acceptable-use-header").should("be.visible");
+    // Ensure page has fully loaded
+    cy.get("main").should("be.visible");
+    cy.get("h1").should("contain", "Connaître vos responsabilités");
+    cy.get("[type='button']").should("contain.text", "Accepter");
+  });
+
+  it("Agree to the terms of use", () => {
+    cy.get("#acceptableUse").click();
+    cy.url().should("contain", "/myforms");
+  });
+
+  it("Redirects back to terms of use if not accepted", () => {
+    cy.visitPage("/myforms");
+    cy.url().should("contain", "/auth/policy");
+  });
+  it("Redirects back to calling page after accpetance", () => {
+    cy.visitPage("/myforms");
+    cy.url().should("contain", "/auth/policy");
+    cy.url().should("contain", "?referer=/myforms");
+    cy.get("#acceptableUse").click();
+    cy.url().should("contain", "/myforms");
   });
 });
-
-describe("Test agree and disagree on terms of use", () => {
-  beforeEach(() => {
-    cy.visit("/en/auth/policy");
-  });
-
-  it.skip("disagree on terms of use", () => {
-    cy.get(".gc-cancel-btn").click();
-    cy.url().should("contain", "/logout");
-  });
-
-  it.skip("Agree on terms of use", () => {
-    cy.get(".gc-agree-btn").click();
-    cy.url().should("contain", "/id/");
-  });
-});
-
- **/
