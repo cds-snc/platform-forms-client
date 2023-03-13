@@ -77,6 +77,7 @@ export interface FormElement {
   type: FormElementTypes;
   properties: ElementProperties;
   onchange?: (event: ChangeEvent) => void;
+  brand?: BrandProperties;
 }
 
 /**
