@@ -72,7 +72,7 @@ describe("Test FormBuilder Add Elements", () => {
       .should("have.attr", "type", "text")
       .should("have.attr", "placeholder", "Question");
 
-    cy.get('[id="option--0--1"]')
+    cy.get('[id="option--1--1"]')
       .should("have.attr", "type", "text")
       .should("have.attr", "placeholder", "Option 1");
 
@@ -90,7 +90,7 @@ describe("Test FormBuilder Add Elements", () => {
       .should("have.attr", "type", "text")
       .should("have.attr", "placeholder", "Question");
 
-    cy.get('[id="option--0--1"]')
+    cy.get('[id="option--1--1"]')
       .should("have.attr", "type", "text")
       .should("have.attr", "placeholder", "Option 1");
 
@@ -108,7 +108,7 @@ describe("Test FormBuilder Add Elements", () => {
       .should("have.attr", "type", "text")
       .should("have.attr", "placeholder", "Question");
 
-    cy.get('[id="option--0--1"]')
+    cy.get('[id="option--1--1"]')
       .should("have.attr", "type", "text")
       .should("have.attr", "placeholder", "Option 1");
 

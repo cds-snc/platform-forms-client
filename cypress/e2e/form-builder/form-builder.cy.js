@@ -42,9 +42,9 @@ describe("Test FormBuilder", () => {
     cy.get("button").contains("Select block").click();
 
     cy.get("#item-1").type("Question 1");
-    cy.get("#option--0--1").type("option 1");
+    cy.get("#option--1--1").type("option 1");
     cy.get("button").contains("Add an option").click();
-    cy.get("#option--0--2").type("option 2");
+    cy.get("#option--1--2").type("option 2");
     cy.get(`[aria-label="Privacy statement"]`).type("privacy statement");
     cy.get(`[aria-label="Confirmation page and message"]`).type("confirmation page");
     cy.get("#item-1").click();
@@ -60,7 +60,7 @@ describe("Test FormBuilder", () => {
     // re-check form editor
     cy.get("#item-1").scrollIntoView().should("have.value", "Question 1-1");
     cy.get("#item1-describedby").should("contain", "Question 1 description");
-    cy.get("#required-0-id").should("be.checked");
+    cy.get("#required-1-id").should("be.checked");
 
     // preview form
     cy.get("a").contains("Preview").click();
