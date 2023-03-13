@@ -111,7 +111,7 @@ export const SubOption = ({
       <Button
         theme="icon"
         className="group"
-        id={`remove--${subIndex}--${index + 1}`}
+        id={`remove--${id}--${index + 1}`}
         icon={<Close className="group-focus:fill-white-default" />}
         aria-label={`${t("removeOption")} ${value}`}
         onClick={() => {

@@ -24,16 +24,16 @@ describe("Options", () => {
     await user.click(button);
 
     const option1 = rendered.getByPlaceholderText("option 1");
-    expect(option1).toHaveAttribute("id", "option--0--1");
+    expect(option1).toHaveAttribute("id", "option--1--1");
     expect(option1).toHaveAttribute("value", "q1 choice 1");
 
     const option2 = rendered.getByPlaceholderText("option 2");
-    expect(option2).toHaveAttribute("id", "option--0--2");
+    expect(option2).toHaveAttribute("id", "option--1--2");
     expect(option2).toHaveAttribute("value", "q1 choice 2");
 
     expect(rendered.container.querySelectorAll("input")).toHaveLength(3);
 
-    const remove1 = rendered.container.querySelector("#remove--0--1");
+    const remove1 = rendered.container.querySelector("#remove--1--1");
     await user.click(remove1);
     expect(rendered.container.querySelectorAll("input")).toHaveLength(2);
   });
