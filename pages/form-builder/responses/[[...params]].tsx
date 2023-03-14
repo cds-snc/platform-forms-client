@@ -20,7 +20,8 @@ import { Card } from "@components/globals/card/Card";
 import { useRouter } from "next/router";
 import { DownloadTable } from "@components/form-builder/app/DownloadTable/DownloadTable";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import "react-toastify/dist/ReactToastify.min.css";
+import { logMessage } from "@lib/logger";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -38,19 +39,20 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   const toastPosition = toast.POSITION.TOP_CENTER;
   const MAX_FILE_DOWNLOADS = 20;
 
-  const [checkedItems, setCheckedItems] = useState(
+  const [selectionStatus, setSelectionStatus] = useState(
     new Map(vaultSubmissions.map((submission) => [submission.name, false]))
   );
 
-  const getCheckedItems = (): Map<string, boolean> => {
+  // Note: Ok to cache since React will re-render and update this var for any View change
+  const checkedItems = ((): Map<string, boolean> => {
     const checkedMap = new Map();
-    checkedItems.forEach((checked, name) => {
+    selectionStatus.forEach((checked, name) => {
       if (checked) {
         checkedMap.set(name, checked);
       }
     });
     return checkedMap;
-  };
+  })();
 
   const secondaryButtonClass =
     "whitespace-nowrap text-sm rounded-full bg-white-default text-black-default border-black-default hover:text-white-default hover:bg-gray-600 active:text-white-default active:bg-gray-500 py-2 px-5 rounded-lg border-2 border-solid inline-flex items-center active:top-0.5 focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500";
@@ -75,12 +77,12 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   // NOTE: browsers have different limits for simultaneous downloads. May need to look into
   // batching file downloads (e.g. 4 at a time) if edge cases/* come up.
   const handleDownload = async () => {
-    if (getCheckedItems().size === 0) {
+    if (checkedItems.size === 0) {
       toast.warn(t("downloadResponsesTable.download.atLeastOneFile"), { position: toastPosition });
       return;
     }
 
-    if (getCheckedItems().size > MAX_FILE_DOWNLOADS) {
+    if (checkedItems.size > MAX_FILE_DOWNLOADS) {
       toast.warn(
         t("downloadResponsesTable.download.trySelectingLessFiles", { max: MAX_FILE_DOWNLOADS }),
         { position: toastPosition }
@@ -90,33 +92,34 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
 
     const toastDownloadingId = toast.info(
       t("downloadResponsesTable.download.downloadingXFiles", {
-        fileCount: getCheckedItems().size,
+        fileCount: checkedItems.size,
       }),
       { position: toastPosition, autoClose: false }
     );
 
     try {
-      const downloads = Array.from(getCheckedItems(), async (item) => {
-        if (!item || !item[0]) {
+      const downloads = Array.from(checkedItems, async (checkedItem) => {
+        const submissionName = checkedItem && checkedItem[0];
+        if (!submissionName) {
           throw new Error("Error downloading file from Retrieval table. SubmissionId missing.");
         }
-
-        const url = `/api/id/${formId}/${item[0]}/download`;
-        const fileName = item[0];
+        const url = `/api/id/${formId}/${submissionName}/download`;
+        const fileName = `${submissionName}.html`;
         return fetch(url, { method: "GET" })
           .then((res) => res.blob())
           .then((blob) => {
             const urlObj = URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = urlObj;
-            a.download = `${fileName}.html`;
+            a.download = fileName;
             a.click();
             URL.revokeObjectURL(urlObj);
           });
       });
 
       await Promise.all(downloads).then(() => {
-        // NOTE: setTimeout fixes an edge case where DB/* wouldn't be updated by time of request
+        // TODO: setTimeout fixes an edge case where DB/* wouldn't be updated by time of request.
+        // May want to look into why?
         setTimeout(() => {
           // Refreshes getServerSideProps data without a full page reload
           router.replace(router.asPath);
@@ -184,9 +187,9 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
               {vaultSubmissions?.length > 0 && (
                 <DownloadTable
                   submissions={vaultSubmissions}
+                  selectionStatus={selectionStatus}
+                  setSelectionStatus={setSelectionStatus}
                   checkedItems={checkedItems}
-                  setCheckedItems={setCheckedItems}
-                  getCheckedItems={getCheckedItems}
                   handleDownload={handleDownload}
                 />
               )}
@@ -318,7 +321,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     props: {
       ...FormbuilderParams,
       vaultSubmissions,
-      formId: formID,
+      formId: FormbuilderParams.initialForm?.id,
       ...(locale &&
         (await serverSideTranslations(locale, ["common", "form-builder"], null, ["fr", "en"]))),
     },

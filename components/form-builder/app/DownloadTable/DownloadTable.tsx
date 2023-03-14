@@ -16,9 +16,9 @@ export enum VaultStatus {
 
 interface DownloadTableProps {
   submissions: VaultSubmissionList[];
+  selectionStatus: Map<string, boolean>;
+  setSelectionStatus: React.Dispatch<React.SetStateAction<Map<string, boolean>>>;
   checkedItems: Map<string, boolean>;
-  setCheckedItems: React.Dispatch<React.SetStateAction<Map<string, boolean>>>;
-  getCheckedItems: () => Map<string, boolean>;
   handleDownload: React.MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -32,9 +32,9 @@ export function getDaysPassed(date: Date): number {
 
 export const DownloadTable = ({
   submissions,
+  selectionStatus,
+  setSelectionStatus,
   checkedItems,
-  setCheckedItems,
-  getCheckedItems,
   handleDownload,
 }: DownloadTableProps) => {
   const { t } = useTranslation("form-builder");
@@ -43,7 +43,7 @@ export const DownloadTable = ({
     const name = e.target.id;
     const checked: boolean = e.target.checked;
     // Note: "new Map" Needed to clone and set so React change detection notices a change in the Map
-    setCheckedItems(new Map(checkedItems.set(name, checked)));
+    setSelectionStatus(new Map(selectionStatus.set(name, checked)));
   };
 
   return (
@@ -77,7 +77,7 @@ export const DownloadTable = ({
               key={index}
               className={
                 "border-b-2 border-grey" +
-                (checkedItems.get(submission.name) ? " bg-[#fffbf3]" : "")
+                (selectionStatus.get(submission.name) ? " bg-[#fffbf3]" : "")
               }
             >
               <td className="p-4 flex">
@@ -89,7 +89,7 @@ export const DownloadTable = ({
                       className="multiple-choice-wrapper"
                       name="responses"
                       type="checkbox"
-                      checked={checkedItems.get(submission.name)}
+                      checked={selectionStatus.get(submission.name)}
                       onChange={handleChecked}
                     />
                     <label htmlFor={submission.name}>
@@ -138,7 +138,7 @@ export const DownloadTable = ({
           aria-live="polite"
         >
           {t("downloadResponsesTable.download.downloadXSelectedResponses", {
-            size: getCheckedItems().size,
+            size: checkedItems.size,
           })}
         </button>
       </div>
