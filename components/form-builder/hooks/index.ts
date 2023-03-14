@@ -8,3 +8,4 @@ export { TemplateApiProvider, useTemplateApi } from "./useTemplateApi";
 export { useIsWithin } from "./useIsWithin";
 export { usePanelActions } from "./usePanelActions";
 export { useUpdateElement } from "./useUpdateElement";
+export { useHandleAdd } from "./useHandleAdd";

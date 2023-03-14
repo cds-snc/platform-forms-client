@@ -400,20 +400,6 @@
     background-color: #00000013;
     border-radius: 4px;
   }
-
-  /*--------------------------------------------*
-  * Required field
-  *--------------------------------------------*/
-  /* move to tailwind when >=3.1 https://tailwindcss.com/blog/tailwindcss-v3-1#arbitrary-values-but-for-variants*/
-  .required-checkbox {
-    span {
-      display: inline-block;
-      margin-left: 10px;
-    }
-
-    label {
-      padding-top: 4px;
-    }
-  }
+  
   /* end form builder styles */
 }
