@@ -520,5 +520,12 @@
   "maxNumberOfRows": {
     "label": "[FR] Maximum number of rows",
     "description": "[FR] The maximum number of rows that can be added"
+  },
+  "branding": {
+    "heading": "Image de marque",
+    "text1": "Formulaires GC affiche par défaut la signature du gouvernement du Canada dans l’en-tête de votre formulaire. Si nécessaire, vous pouvez modifier l’image de marque de ce formulaire.",
+    "select": "Sélectionnez l’image de marque de votre formulaire",
+    "preview": "Prévisualisation",
+    "defaultOption": "Gouvernement du Canada (par défault)"
   }
 }
