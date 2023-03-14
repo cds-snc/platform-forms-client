@@ -1,20 +1,17 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { middleware, cors, sessionExists } from "@lib/middleware";
 import { getAllPrivileges } from "@lib/privileges";
-
-import { AdminLogAction } from "@lib/adminLogs";
 import { Session } from "next-auth";
-import { MiddlewareProps, WithRequired } from "@lib/types";
-import { logMessage } from "@lib/logger";
+import { MiddlewareProps, WithRequired, UserAbility } from "@lib/types";
 import {
   createAbility,
   updatePrivilege as prismaUpdatePrivilege,
   createPrivilege as prismaCreatePrivilege,
 } from "@lib/privileges";
-import { MongoAbility } from "@casl/ability";
+
 const allowedMethods = ["GET", "PUT", "POST"];
 
-const getPrivilegeList = async (ability: MongoAbility, res: NextApiResponse) => {
+const getPrivilegeList = async (ability: UserAbility, res: NextApiResponse) => {
   const privileges = await getAllPrivileges(ability);
   if (privileges.length === 0) {
     res.status(500).json({ error: "Could not process request" });
@@ -24,7 +21,7 @@ const getPrivilegeList = async (ability: MongoAbility, res: NextApiResponse) => 
 };
 
 const createPrivilege = async (
-  ability: MongoAbility,
+  ability: UserAbility,
   req: NextApiRequest,
   res: NextApiResponse,
   session?: Session
@@ -37,7 +34,7 @@ const createPrivilege = async (
   privilege.permissions = JSON.parse(privilege.permissions);
 
   const result = await prismaCreatePrivilege(ability, privilege);
-  logMessage.info(AdminLogAction.Update);
+
   if (result) {
     if (session && session.user.id) {
       /*
@@ -53,7 +50,7 @@ const createPrivilege = async (
 };
 
 const updatePrivilege = async (
-  ability: MongoAbility,
+  ability: UserAbility,
   req: NextApiRequest,
   res: NextApiResponse,
   session?: Session
@@ -67,7 +64,6 @@ const updatePrivilege = async (
 
   const result = await prismaUpdatePrivilege(ability, privilege);
 
-  logMessage.info(AdminLogAction.Update);
   if (result) {
     if (session && session.user.id) {
       /*
@@ -89,7 +85,7 @@ const handler = async (
 ): Promise<void> => {
   const { session } = props as WithRequired<MiddlewareProps, "session">;
   try {
-    const ability = createAbility(session.user.privileges);
+    const ability = createAbility(session);
 
     switch (req.method) {
       case "POST":

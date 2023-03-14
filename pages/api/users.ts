@@ -1,17 +1,13 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { middleware, cors, sessionExists } from "@lib/middleware";
 import { getUsers } from "@lib/users";
+import { MiddlewareProps, WithRequired, UserAbility } from "@lib/types";
 
-import { AdminLogAction } from "@lib/adminLogs";
-import { Session } from "next-auth";
-import { MiddlewareProps, WithRequired } from "@lib/types";
-import { logMessage } from "@lib/logger";
 import { createAbility, updatePrivilegesForUser, AccessControlError } from "@lib/privileges";
-import { MongoAbility } from "@casl/ability";
 
 const allowedMethods = ["GET", "PUT"];
 
-const getUserList = async (ability: MongoAbility, res: NextApiResponse) => {
+const getUserList = async (ability: UserAbility, res: NextApiResponse) => {
   const users = await getUsers(ability);
   if (users.length === 0) {
     res.status(500).json({ error: "Could not process request" });
@@ -21,10 +17,9 @@ const getUserList = async (ability: MongoAbility, res: NextApiResponse) => {
 };
 
 const updatePrivilegeOnUser = async (
-  ability: MongoAbility,
+  ability: UserAbility,
   req: NextApiRequest,
-  res: NextApiResponse,
-  session: Session
+  res: NextApiResponse
 ) => {
   const { userID, privileges } = req.body;
   if (
@@ -36,17 +31,8 @@ const updatePrivilegeOnUser = async (
   }
 
   const result = await updatePrivilegesForUser(ability, userID, privileges);
-  logMessage.info(AdminLogAction.Update);
-  if (result && session && session.user.id) {
-    /*
-      await logAdminActivity(
-        session.user.id,
-        AdminLogAction.Update,
-        isAdmin ? AdminLogEvent.GrantAdminRole : AdminLogEvent.RevokeAdminRole,
-        `Admin role has been ${isAdmin ? "granted" : "revoked"} for user id: ${userId}`
-      );
-      */
 
+  if (result) {
     return res.status(200).send("Success");
   } else {
     return res.status(404).json({ error: "User not found" });
@@ -60,14 +46,14 @@ const handler = async (
 ): Promise<void> => {
   const { session } = props as WithRequired<MiddlewareProps, "session">;
   try {
-    const ability = createAbility(session.user.privileges);
+    const ability = createAbility(session);
 
     switch (req.method) {
       case "GET":
         await getUserList(ability, res);
         break;
       case "PUT":
-        await updatePrivilegeOnUser(ability, req, res, session);
+        await updatePrivilegeOnUser(ability, req, res);
         break;
     }
   } catch (error) {

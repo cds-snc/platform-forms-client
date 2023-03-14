@@ -10,6 +10,9 @@ import {
 import { MiddlewareProps, WithRequired } from "@lib/types";
 import { connectToDynamo } from "@lib/integration/dynamodbConnector";
 import { checkOne } from "@lib/cache/flags";
+import { AccessControlError, createAbility } from "@lib/privileges";
+import { checkUserHasTemplateOwnership } from "@lib/templates";
+import { logEvent } from "@lib/auditLogs";
 
 const MAXIMUM_CONFIRMATION_CODES_PER_REQUEST = 20;
 
@@ -39,6 +42,24 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
       error: `Too many confirmation codes. Limit is ${MAXIMUM_CONFIRMATION_CODES_PER_REQUEST}.`,
     });
   }
+  const ability = createAbility(session);
+
+  // Ensure the user has owernship of this form
+  try {
+    await checkUserHasTemplateOwnership(ability, formId);
+  } catch (e) {
+    if (e instanceof AccessControlError) {
+      logEvent(
+        ability.userID,
+        { type: "Response" },
+        "AccessDenied",
+        `Attempted to confirm response without form ownership`
+      );
+      return res.status(403).json({ error: "Forbidden" });
+    }
+    logMessage.error(e as Error);
+    return res.status(500).json({ error: "Error on server side" });
+  }
 
   try {
     const dynamoDbClient = connectToDynamo();
@@ -51,13 +72,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
 
     if (submissionsFromConfirmationCodes.submissionsToConfirm.length > 0) {
       await confirm(formId, submissionsFromConfirmationCodes.submissionsToConfirm, dynamoDbClient);
+      // Done asychronously to not block response back to client
+      submissionsFromConfirmationCodes.submissionsToConfirm.forEach((confirmation) =>
+        logEvent(
+          ability.userID,
+          { type: "Response", id: confirmation.name },
+          "ConfirmResponse",
+          `Confirmed response for form ${formId}`
+        )
+      );
     }
-
-    logMessage.info(
-      `user:${userEmail} confirmed form submissions [${submissionsFromConfirmationCodes.submissionsToConfirm.map(
-        (submission) => submission.name
-      )}] for form ID:${formId} at:${Date.now()}`
-    );
 
     return res.status(200).json({
       ...(submissionsFromConfirmationCodes.submissionsToConfirm.length > 0 && {
