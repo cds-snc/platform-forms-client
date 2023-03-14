@@ -49,7 +49,7 @@ describe("Forms Functionality", () => {
       cy.clock();
       cy.tick(1000);
       cy.get("input[id='2']").type("Test Value").should("have.value", "Test Value");
-      cy.tick(6000);
+      cy.tick(20000);
       cy.get("[type='submit']").click();
       cy.get("#submitted-thank-you").contains("Submitted thank you!");
     });
