@@ -473,7 +473,7 @@
   "unnamedForm": "Formulaire sans titre",
   "autocompleteIsSetTo": "Autcomplete is set to:",
   "maxNumberOfRows": {
-    "label": "[FR] Maximum number of rows",
-    "description": "[FR] The maximum number of rows that can be added"
+    "label": "Nombre maximum de réponses",
+    "description": "Les utilisateur·rice·s peuvent fournir jusqu'à ce nombre d'entrées pour cette question."
   }
 }

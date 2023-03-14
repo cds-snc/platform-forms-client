@@ -473,7 +473,7 @@
   "unnamedForm": "Unnamed form file",
   "autocompleteIsSetTo": "Autocomplete is set to:",
   "maxNumberOfRows": {
-    "label": "Maximum number of rows",
-    "description": "The maximum number of rows that can be added"
+    "label": "Maximum number of answers",
+    "description": "Users can provide up to this many entries for this question."
   }
 }
