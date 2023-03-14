@@ -14,9 +14,14 @@ describe("DropDown", () => {
     const user = userEvent.setup();
 
     const options = [
-      { id: "email", value: "email", icon: <EmailIcon />, className: "" },
-      { id: "date", value: "date", icon: <CalendarIcon />, className: "" },
-      { id: "number", value: "numeric", icon: <NumericFieldIcon />, className: "" },
+      { id: "email", value: "email", className: "", icon: EmailIcon },
+      { id: "date", value: "date", className: "", icon: CalendarIcon },
+      {
+        id: "number",
+        value: "numeric",
+        className: "",
+        icon: NumericFieldIcon,
+      },
     ];
 
     const mockCallback = jest.fn((e) => e);

@@ -49,10 +49,6 @@
     "formBuilderDebug": {
       "title": "Débogage du Générateur de formulaires",
       "description": "Activer le mode de débogage du Générateur de formulaires"
-    },
-    "shareMenu": {
-      "title": "Menu de partage du Générateur de formulaires",
-      "description": "Activer le menu déroulant de partage"
     }
   }
 }

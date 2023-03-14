@@ -49,10 +49,6 @@
     "formBuilderDebug": {
       "title": "Form builder debug",
       "description": "Enable the form builder debug mode"
-    },
-    "shareMenu": {
-      "title": "Form builder share menu",
-      "description": "Enable share menu dropdown"
     }
   }
 }

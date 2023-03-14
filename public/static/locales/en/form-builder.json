@@ -344,6 +344,7 @@
     "weWillRespond": "We will respond to you in 2 business days."
   },
   "required": "Required",
+  "allRequired": "All required",
   "responseDelivery": "Response delivery",
   "responses": {
     "changeSetup": "Change setup",
@@ -469,5 +470,10 @@
   "translateTitle": "Enter your translation",
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
-  "unnamedForm": "Unnamed form file"
+  "unnamedForm": "Unnamed form file",
+  "autocompleteIsSetTo": "Autocomplete is set to:",
+  "maxNumberOfRows": {
+    "label": "Maximum number of rows",
+    "description": "The maximum number of rows that can be added"
+  }
 }
