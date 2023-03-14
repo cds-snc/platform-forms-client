@@ -65,15 +65,15 @@
     "example": "exemple",
     "exampleElement": "exemple du bloc",
     "name": {
-      "description": "[FR] Include your first and last names. Middle names are optional",
-      "label": "[FR] Full name",
-      "title": "[FR] What is your name?"
+      "description": "Indiquez votre prénom et nom. Le deuxième prénom est facultatif",
+      "label": "Nom complet",
+      "title": "Quel est votre nom?"
     },
     "inputBlocks": "Blocs de saisie",
     "layoutBlocks": "Blocs de mise en page",
     "listItem": "Élément de liste ",
     "firstMiddleLastName": {
-      "description": "Description du nom (FR 3 fields)",
+      "description": "Description du nom (3 champs)",
       "first": {
         "description": "Description du prénom",
         "label": "Prénom"
@@ -148,18 +148,18 @@
     "url": "Adresse du site Web"
   },
   "autocompleteWhenNotToUse": {
-    "text1": "[FR] Auto complete attributes may not work well for information the form filler does not enter regularly. Things like historical or business information may not fill in correctly.",
-    "text2": "[FR] Usability testing is a good way to understand if the rules you set cause problems with filling in forms.",
-    "title": "[FR] When not to use autocomplete"
+    "text1": "Les attributs de remplissage automatique pourraient ne pas fonctionner correctement pour les informations que les personnes qui ne saisissent pas régulièrement. Des informations historiques ou commerciales risquent d'être erronées.",
+    "text2": "Les tests d'utilisabilité sont un bon moyen de comprendre si les règles que vous fixez posent des problèmes pour les personnes qui remplissent le formulaire.",
+    "title": "Quand ne pas utiliser le remplissage automatique"
   },
   "backToForm": "Retourner au formulaire",
   "cancel": "Annuler  ",
   "characterLimitDescription": "N'utilisez une limite de caractères que lorsqu'il existe une bonne raison de limiter le nombre de caractères que les utilisateur·rice·s peuvent entrer.",
   "characterLimitWhenToUse": {
-    "text1": "[FR] Evidence that users are likely to enter more information than they need to.",
-    "text2": "[FR] A legal or technical reason that means an entry must be no more than a certain number of characters.",
-    "text3": "[FR] If your users keep hitting the character limit imposed by the backend of your service then try to increase the limit rather than use a character count.",
-    "title": "[FR] Reasons for using a character limit"
+    "text1": "Des preuves que les utilisateur·rice·s sont susceptibles de saisir plus d'informations qu'ils n'en ont besoin.",
+    "text2": "Une raison légale ou technique qui fait qu'une entrée ne doit pas dépasser un certain nombre de caractères.",
+    "text3": "Si vos utilisateur·rice·s atteignent constamment à la limite de caractères imposée par le backend de votre service, essayez d'augmenter la limite plutôt que d'utiliser un nombre de caractères.",
+    "title": "Raisons pour la limite de caractères"
   },
   "checkboxes": "Choix multiples",
   "close": "Fermer",
