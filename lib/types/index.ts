@@ -19,6 +19,7 @@ export type { Response, Responses, FileInputResponse } from "./form-response-typ
 export type PageProps = {
   tab: string;
   initialForm: FormRecord | null;
+  publicForm: FormRecord | null;
 };
 
 export type {
