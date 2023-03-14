@@ -22,7 +22,7 @@ export const SettingsNavigation = () => {
             activeClassName="[&_svg]:fill-white"
           >
             <span>
-              <EmailIcon className="inline-block mt-[-2px] mr-3" />
+              <EmailIcon className="inline-block mt-[-2px] mr-1" />
               {t("settingsNavHome")}
             </span>
           </SubNavLink>
