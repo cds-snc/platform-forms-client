@@ -107,6 +107,8 @@ export const ListBox = ({
               listGroup = group.value;
             }
 
+            if (!id) return null;
+
             return (
               /* eslint-disable jsx-a11y/click-events-have-key-events */
               <React.Fragment key={id}>

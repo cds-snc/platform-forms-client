@@ -11,6 +11,7 @@ import {
   ContactIcon,
   AddressIcon,
   NameIcon,
+  UploadIcon,
 } from "../icons";
 
 import {
@@ -28,6 +29,7 @@ import {
   Name,
   Contact,
   FirstMiddleLastName,
+  FileInput,
 } from "../app/edit/elements/element-dialog";
 
 import { ElementOptionsFilter, ElementOption } from "../types";
@@ -39,6 +41,18 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     layout: { id: "layout", value: t("addElementDialog.layoutBlocks") },
     input: { id: "input", value: t("addElementDialog.inputBlocks") },
     advanced: { id: "advanced", value: t("addElementDialog.advancedBlocks") },
+  };
+
+  // default to off until we add file scanning
+  const allowFileInput = false;
+
+  const fileInputOption: ElementOption = {
+    id: "fileInput",
+    value: t("addElementDialog.fileInput.label"),
+    icon: UploadIcon,
+    description: FileInput,
+    className: "",
+    group: group.input,
   };
 
   const elementOptions: ElementOption[] = [
@@ -106,6 +120,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       className: "",
       group: group.input,
     },
+    allowFileInput ? { ...(fileInputOption as ElementOption) } : ({} as ElementOption),
     {
       id: "attestation",
       value: t("attestation"),
