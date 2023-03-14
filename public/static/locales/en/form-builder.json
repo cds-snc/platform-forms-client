@@ -89,6 +89,11 @@
       },
       "title": "What is your name?"
     },
+    "fileInput": {
+      "description": "File input description",
+      "label": "File input",
+      "title": "File input"
+    },
     "no": "No",
     "number": {
       "description": "Number description",

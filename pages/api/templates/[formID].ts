@@ -12,15 +12,13 @@ import {
 import { middleware, jsonValidator, cors, sessionExists } from "@lib/middleware";
 import templatesSchema from "@lib/middleware/schemas/templates.schema.json";
 import { NextApiRequest, NextApiResponse } from "next";
-import { logAdminActivity, AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
 import {
   layoutIDValidator,
   subElementsIDValidator,
   uniqueIDValidator,
 } from "@lib/middleware/jsonIDValidator";
-import { MiddlewareProps, FormProperties, DeliveryOption } from "@lib/types";
+import { MiddlewareProps, FormProperties, DeliveryOption, UserAbility } from "@lib/types";
 import { AccessControlError, createAbility } from "@lib/privileges";
-import { MongoAbility } from "@casl/ability";
 
 const allowedMethods = ["GET", "POST", "PUT", "DELETE"];
 const authenticatedMethods = ["POST", "PUT", "DELETE"];
@@ -33,7 +31,7 @@ const templates = async (
   try {
     if (!session) return res.status(401).json({ error: "Unauthorized" });
 
-    const ability = createAbility(session.user.privileges);
+    const ability = createAbility(session);
 
     const response = await templateCRUD({
       ability: ability,
@@ -43,27 +41,6 @@ const templates = async (
     });
 
     if (!response) return res.status(500).json({ error: "Error on Server Side" });
-
-    if (session && session.user.id && ["PUT", "DELETE"].includes(req.method as string)) {
-      if (req.method === "PUT") {
-        await logAdminActivity(
-          session.user.id,
-          AdminLogAction.Update,
-          AdminLogEvent.UpdateForm,
-          req.body.isPublished !== undefined
-            ? `Form id: ${req.query.formID} 'isPublished' value has been updated`
-            : `Form id: ${req.query.formID} has been updated`
-        );
-      }
-      if (req.method === "DELETE") {
-        await logAdminActivity(
-          session.user.id,
-          AdminLogAction.Delete,
-          AdminLogEvent.DeleteForm,
-          `Form id: ${req.query.formID} has been deleted`
-        );
-      }
-    }
 
     if (req.method === "GET") {
       if (Array.isArray(response)) {
@@ -93,7 +70,7 @@ const templateCRUD = async ({
   users,
   sendResponsesToVault,
 }: {
-  ability: MongoAbility;
+  ability: UserAbility;
   method: string;
   request: NextApiRequest;
   name?: string;

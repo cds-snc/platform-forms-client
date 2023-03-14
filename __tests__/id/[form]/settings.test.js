@@ -2,7 +2,7 @@
 Refactored out into Page Component vs Server Component
 
 https://github.com/nextauthjs/next-auth/issues/4866
-unstable_getServerSession breaks Jest tests due to "node_modules/jose/" dependency
+getServerSession breaks Jest tests due to "node_modules/jose/" dependency
 
 Thile file tests a NextJS Page which requires both serverside and client side dependencies.
 The 'jose' lib in next-auth loads the browser version because the test environment is set to 'jsdom'.

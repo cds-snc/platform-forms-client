@@ -3,11 +3,8 @@ import jwt from "jsonwebtoken";
 import { logMessage } from "@lib/logger";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { cors, sessionExists, middleware } from "@lib/middleware";
-import { logAdminActivity, AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
-import { MiddlewareProps, WithRequired } from "@lib/types";
+import { MiddlewareProps, WithRequired, UserAbility } from "@lib/types";
 import { createAbility, checkPrivileges, AccessControlError } from "@lib/privileges";
-import { Session } from "next-auth";
-import { MongoAbility } from "@casl/ability";
 
 const handler = async (
   req: NextApiRequest,
@@ -23,13 +20,13 @@ const handler = async (
         .json({ error: "form ID parameter was not provided in the resource path" });
 
     if (!session) return res.status(401).json({ error: "Unauthorized" });
-    const ability = createAbility(session.user.privileges);
+    const ability = createAbility(session);
 
     switch (req.method) {
       case "GET":
         return await getToken(ability, formID, res);
       case "POST":
-        return await createToken(ability, formID, res, session);
+        return await createToken(ability, formID, res);
 
       default:
         return res.status(500).json({ error: "Method not supported" });
@@ -49,10 +46,9 @@ const handler = async (
  * @param res The response object containing all that is needed to return a response
  */
 export async function createToken(
-  ability: MongoAbility,
+  ability: UserAbility,
   formID: string,
-  res: NextApiResponse,
-  session: Session
+  res: NextApiResponse
 ): Promise<void> {
   // Verify if use can update the bearer token on this form
   const targetFormRecord = await prisma.template
@@ -104,15 +100,6 @@ export async function createToken(
     })
     .catch((e) => prismaErrors(e, null));
 
-  // return the record with the id and the updated bearer token. Log the success
-  if (session && session.user.id) {
-    await logAdminActivity(
-      session.user.id,
-      AdminLogAction.Update,
-      AdminLogEvent.RefreshBearerToken,
-      `Bearer token for form id: ${formID} has been refreshed`
-    );
-  }
   return res.status(200).json(updatedBearerToken);
 }
 
@@ -124,7 +111,7 @@ export async function createToken(
  * @returns Bearer Token if it exists
  */
 export async function getToken(
-  ability: MongoAbility,
+  ability: UserAbility,
   formID: string,
   res: NextApiResponse
 ): Promise<void> {
@@ -152,4 +139,5 @@ export async function getToken(
   return res.status(200).json({ bearerToken: result.bearerToken });
 }
 
-export default middleware([cors({ allowedMethods: ["GET", "POST"] }), sessionExists()], handler);
+// Removing access for all Methods until this API is ready for use.
+export default middleware([cors({ allowedMethods: [] }), sessionExists()], handler);

@@ -2,13 +2,14 @@
  * @jest-environment node
  */
 import { createMocks } from "node-mocks-http";
-import { unstable_getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth/next";
 import enable from "@pages/api/flags/[key]/enable";
 import disable from "@pages/api/flags/[key]/disable";
 import check from "@pages/api/flags/[key]/check";
 import checkAllFlags from "@pages/api/flags";
-import { ViewApplicationSettings, ManageApplicationSettings } from "__utils__/permissions";
+import { Base, ViewApplicationSettings, ManageApplicationSettings } from "__utils__/permissions";
 import Redis from "ioredis-mock";
+import { logEvent } from "@lib/auditLogs";
 const redis = new Redis();
 
 jest.mock("@lib/integration/redisConnector", () => ({
@@ -16,9 +17,11 @@ jest.mock("@lib/integration/redisConnector", () => ({
 }));
 
 jest.mock("next-auth/next");
+jest.mock("@lib/auditLogs");
 
-//Needed in the typescript version of the test so types are inferred correclty
-const mockGetSession = jest.mocked(unstable_getServerSession, { shallow: true });
+//Needed in the typescript version of the test so types are inferred correctly
+const mockGetSession = jest.mocked(getServerSession, { shallow: true });
+const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
 
 describe("Flags API endpoint", () => {
   beforeAll(() => {
@@ -29,7 +32,7 @@ describe("Flags API endpoint", () => {
     delete process.env.REDIS_URL;
   });
   describe("Authenticated", () => {
-    describe("ViewApplicationSettings", () => {
+    describe("ViewApplicationSettings Permission", () => {
       beforeEach(async () => {
         const mockSession = {
           expires: "1",
@@ -37,7 +40,7 @@ describe("Flags API endpoint", () => {
             email: "forms@cds.ca",
             name: "forms user",
             id: "1",
-            privileges: ViewApplicationSettings,
+            privileges: Base.concat(ViewApplicationSettings),
           },
         };
         mockGetSession.mockResolvedValue(mockSession);
@@ -80,6 +83,12 @@ describe("Flags API endpoint", () => {
 
         expect(res.statusCode).toBe(403);
         expect(res._getJSONData()).toMatchObject({ error: "Forbidden" });
+        expect(mockedLogEvent).toHaveBeenCalledWith(
+          "1",
+          { id: "featureFlag", type: "Flag" },
+          "AccessDenied",
+          "Attempted to enable featureFlag"
+        );
       });
 
       it("Disable a feature flag", async () => {
@@ -99,6 +108,12 @@ describe("Flags API endpoint", () => {
 
         expect(res.statusCode).toBe(403);
         expect(res._getJSONData()).toMatchObject({ error: "Forbidden" });
+        expect(mockedLogEvent).toHaveBeenCalledWith(
+          "1",
+          { id: "featureFlag", type: "Flag" },
+          "AccessDenied",
+          "Attempted to disable featureFlag"
+        );
       });
       it("Gets a list of all feature flags", async () => {
         const { req, res } = createMocks({
@@ -114,9 +129,10 @@ describe("Flags API endpoint", () => {
 
         expect(res.statusCode).toBe(200);
         expect(res._getJSONData()).toMatchObject({ flag1: true, flag2: false });
+        expect(mockedLogEvent).toHaveBeenCalledWith("1", { type: "Flag" }, "ListAllFlags");
       });
     });
-    describe("ManageApplicationSettings", () => {
+    describe("ManageApplicationSettings Permission", () => {
       beforeEach(async () => {
         const mockSession = {
           expires: "1",
@@ -124,7 +140,7 @@ describe("Flags API endpoint", () => {
             email: "forms@cds.ca",
             name: "forms user",
             id: "1",
-            privileges: ManageApplicationSettings,
+            privileges: Base.concat(ManageApplicationSettings),
           },
         };
         mockGetSession.mockResolvedValue(mockSession);
@@ -168,6 +184,11 @@ describe("Flags API endpoint", () => {
 
         expect(res.statusCode).toBe(200);
         expect(res._getJSONData()).toMatchObject({ flag2: true });
+        expect(mockedLogEvent).toHaveBeenCalledWith(
+          "1",
+          { id: "flag2", type: "Flag" },
+          "EnableFlag"
+        );
       });
 
       it("Disable a feature flag", async () => {
@@ -187,6 +208,11 @@ describe("Flags API endpoint", () => {
 
         expect(res.statusCode).toBe(200);
         expect(res._getJSONData()).toMatchObject({ flag1: false });
+        expect(mockedLogEvent).toHaveBeenCalledWith(
+          "1",
+          { id: "flag1", type: "Flag" },
+          "DisableFlag"
+        );
       });
       it("Gets a list of all feature flags", async () => {
         const { req, res } = createMocks({
@@ -202,6 +228,7 @@ describe("Flags API endpoint", () => {
 
         expect(res.statusCode).toBe(200);
         expect(res._getJSONData()).toMatchObject({ flag1: true, flag2: false });
+        expect(mockedLogEvent).toHaveBeenCalledWith("1", { type: "Flag" }, "ListAllFlags");
       });
     });
   });

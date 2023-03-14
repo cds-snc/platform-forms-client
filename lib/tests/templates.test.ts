@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 /**
  * @jest-environment node
  */
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Redis from "ioredis-mock";
 import { prismaMock } from "@jestUtils";
 import {
@@ -29,7 +27,7 @@ import formConfiguration from "@jestFixtures/cdsIntakeTestForm.json";
 // Until we catch up... polyfill
 import v8 from "v8";
 import { Prisma } from "@prisma/client";
-import { AccessControlError, createAbility } from "@lib/privileges";
+import { AccessControlError, checkPrivilegesAsBoolean, createAbility } from "@lib/privileges";
 import {
   Base,
   getUserPrivileges,
@@ -38,6 +36,8 @@ import {
   PublishForms,
   ViewUserPrivileges,
 } from "__utils__/permissions";
+import { Session } from "next-auth";
+import { logEvent } from "@lib/auditLogs";
 
 const redis = new Redis();
 
@@ -45,9 +45,13 @@ jest.mock("@lib/integration/redisConnector", () => ({
   getRedisInstance: jest.fn(() => redis),
 }));
 
+jest.mock("@lib/auditLogs");
+
 const structuredClone = <T>(obj: T): T => {
   return v8.deserialize(v8.serialize(obj));
 };
+
+const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
 
 const buildPrismaResponse = (
   id: string,
@@ -66,16 +70,11 @@ const buildPrismaResponse = (
 };
 
 describe("Template CRUD functions", () => {
-  beforeAll(() => {
-    process.env.TOKEN_SECRET = "testsecret";
-  });
-
-  afterAll(() => {
-    delete process.env.TOKEN_SECRET;
-  });
-
-  it.each([[Base], [ManageForms]])("Create a Template", async (privileges) => {
-    const ability = createAbility(getUserPrivileges(privileges, { user: { id: "1" } }));
+  it.each([[Base], [Base.concat(ManageForms)]])("Create a Template", async (privileges) => {
+    const fakeSession = {
+      user: { id: "1", privileges: getUserPrivileges(privileges, { user: { id: "1" } }) },
+    };
+    const ability = createAbility(fakeSession as Session);
 
     (prismaMock.template.create as jest.MockedFunction<any>).mockResolvedValue(
       buildPrismaResponse("formtestID", formConfiguration)
@@ -105,10 +104,19 @@ describe("Template CRUD functions", () => {
       isPublished: false,
       securityAttribute: "Unclassified",
     });
+
+    expect(mockedLogEvent).toHaveBeenCalledWith(
+      fakeSession.user.id,
+      { id: "formtestID", type: "Form" },
+      "CreateForm"
+    );
   });
 
-  it.each([[Base], [ManageForms]])("Get multiple Templates", async (privileges) => {
-    const ability = createAbility(getUserPrivileges(privileges, { user: { id: "1" } }));
+  it.each([[Base], [Base.concat(ManageForms)]])("Get multiple Templates", async (privileges) => {
+    const fakeSession = {
+      user: { id: "1", privileges: getUserPrivileges(privileges, { user: { id: "1" } }) },
+    };
+    const ability = createAbility(fakeSession as Session);
 
     (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([
       buildPrismaResponse("formtestID", formConfiguration),
@@ -131,19 +139,55 @@ describe("Template CRUD functions", () => {
         securityAttribute: "Unclassified",
       },
     ]);
+    if (
+      // Can manage all forms
+      checkPrivilegesAsBoolean(ability, [
+        {
+          action: "view",
+          subject: {
+            type: "FormRecord",
+            object: {},
+          },
+        },
+      ])
+    ) {
+      expect(mockedLogEvent).toHaveBeenCalledWith(
+        fakeSession.user.id,
+        { type: "Form" },
+        "ReadForm",
+        "Accessed Forms: All System Forms"
+      );
+    } else {
+      expect(mockedLogEvent).toHaveBeenCalledWith(
+        fakeSession.user.id,
+        { type: "Form" },
+        "ReadForm",
+        "Accessed Forms: formtestID,formtestID2"
+      );
+    }
   });
 
-  it.each([[Base], [ManageForms]])("No templates returned", async (privileges) => {
-    const ability = createAbility(getUserPrivileges(privileges, { user: { id: "1" } }));
+  it.each([[Base], [Base.concat(ManageForms)]])("No templates returned", async (privileges) => {
+    const fakeSession = {
+      user: { id: "1", privileges: getUserPrivileges(privileges, { user: { id: "1" } }) },
+    };
+    const ability = createAbility(fakeSession as Session);
 
     (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([]);
 
     const template = await getAllTemplates(ability, "1");
     expect(template).toEqual([]);
+    expect(mockedLogEvent).toBeCalledTimes(0);
   });
 
   it("Get all templates if user has the ManageForms privileges", async () => {
-    const ability = createAbility(ManageForms);
+    const fakeSession = {
+      user: {
+        id: "1",
+        privileges: getUserPrivileges(Base.concat(ManageForms), { user: { id: "1" } }),
+      },
+    };
+    const ability = createAbility(fakeSession as Session);
 
     (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([
       buildPrismaResponse("formtestID", formConfiguration),
@@ -166,10 +210,19 @@ describe("Template CRUD functions", () => {
         securityAttribute: true,
       },
     });
+    expect(mockedLogEvent).toHaveBeenCalledWith(
+      fakeSession.user.id,
+      { type: "Form" },
+      "ReadForm",
+      "Accessed Forms: All System Forms"
+    );
   });
 
-  it("Get templates linked to the provided user if he has the Base privileges", async () => {
-    const ability = createAbility(getUserPrivileges(Base, { user: { id: "1" } }));
+  it("Get templates linked to the provided user if they have the Base privileges", async () => {
+    const fakeSession = {
+      user: { id: "1", privileges: getUserPrivileges(Base, { user: { id: "1" } }) },
+    };
+    const ability = createAbility(fakeSession as Session);
 
     (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([
       buildPrismaResponse("formtestID", formConfiguration),
@@ -197,6 +250,12 @@ describe("Template CRUD functions", () => {
         securityAttribute: true,
       },
     });
+    expect(mockedLogEvent).toHaveBeenCalledWith(
+      fakeSession.user.id,
+      { type: "Form" },
+      "ReadForm",
+      "Accessed Forms: formtestID"
+    );
   });
 
   it("Get a public template", async () => {
@@ -229,10 +288,14 @@ describe("Template CRUD functions", () => {
       isPublished: false,
       securityAttribute: "Unclassified",
     });
+    expect(mockedLogEvent).toHaveBeenCalledTimes(0);
   });
 
   it("Get a full template", async () => {
-    const ability = createAbility(getUserPrivileges(Base, { user: { id: "1" } }));
+    const fakeSession = {
+      user: { id: "1", privileges: getUserPrivileges(Base, { user: { id: "1" } }) },
+    };
+    const ability = createAbility(fakeSession as Session);
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
       ...buildPrismaResponse("formtestID", formConfiguration),
@@ -270,6 +333,11 @@ describe("Template CRUD functions", () => {
       isPublished: false,
       securityAttribute: "Unclassified",
     });
+    expect(mockedLogEvent).toHaveBeenCalledWith(
+      fakeSession.user.id,
+      { type: "Form", id: "formTestID" },
+      "ReadForm"
+    );
   });
 
   it("Null returned when Template does not Exist", async () => {
@@ -277,6 +345,7 @@ describe("Template CRUD functions", () => {
 
     const template = await getPublicTemplateByID("asdf");
     expect(template).toBe(null);
+    expect(mockedLogEvent).toHaveBeenCalledTimes(0);
   });
 
   test("Get template by id returns null if item is marked as archived", async () => {
@@ -309,10 +378,15 @@ describe("Template CRUD functions", () => {
   });
 
   it("Get templates with associated users", async () => {
-    const ability = createAbility(
-      getUserPrivileges(ManageForms.concat(ViewUserPrivileges), { user: { id: "1" } })
-    );
-
+    const fakeSession = {
+      user: {
+        id: "1",
+        privileges: getUserPrivileges(Base.concat(ManageForms, ViewUserPrivileges), {
+          user: { id: "1" },
+        }),
+      },
+    };
+    const ability = createAbility(fakeSession as Session);
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue(
       buildPrismaResponse("formtestID", formConfiguration)
     );
@@ -341,20 +415,29 @@ describe("Template CRUD functions", () => {
         },
       },
     });
+    expect(mockedLogEvent).toHaveBeenCalledWith(
+      fakeSession.user.id,
+      { id: "formtestID", type: "Form" },
+      "ReadForm",
+      "Retrieved users associated with Form"
+    );
   });
 
-  it.each([[Base], [ManageForms]])("Update Template", async (privileges) => {
-    const ability = createAbility(getUserPrivileges(privileges, { user: { id: "1" } }));
+  it.each([[Base], [Base.concat(ManageForms)]])("Update Template", async (privileges) => {
+    const fakeSession = {
+      user: { id: "1", privileges: getUserPrivileges(privileges, { user: { id: "1" } }) },
+    };
+    const ability = createAbility(fakeSession as Session);
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
-      ...buildPrismaResponse("formtestID", formConfiguration),
+      ...buildPrismaResponse("test1", formConfiguration),
       users: [{ id: "1" }],
     });
 
     const updatedFormConfig = structuredClone(formConfiguration as FormProperties);
 
     (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
-      buildPrismaResponse("formtestID", updatedFormConfig, true)
+      buildPrismaResponse("test1", updatedFormConfig, true)
     );
 
     const updatedTemplate = await updateTemplate(ability, "test1", updatedFormConfig);
@@ -379,15 +462,27 @@ describe("Template CRUD functions", () => {
     });
 
     expect(updatedTemplate).toEqual({
-      id: "formtestID",
+      id: "test1",
       form: updatedFormConfig,
       isPublished: true,
       securityAttribute: "Unclassified",
     });
+    expect(mockedLogEvent).toHaveBeenCalledWith(
+      fakeSession.user.id,
+      { id: "test1", type: "Form" },
+      "UpdateForm",
+      "Form content updated"
+    );
   });
 
   it("Update `isPublished` on a specific form", async () => {
-    const ability = createAbility(getUserPrivileges(PublishForms, { user: { id: "1" } }));
+    const fakeSession = {
+      user: {
+        id: "1",
+        privileges: getUserPrivileges(Base.concat(PublishForms), { user: { id: "1" } }),
+      },
+    };
+    const ability = createAbility(fakeSession as Session);
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
       ...buildPrismaResponse("formtestID", formConfiguration),
@@ -425,12 +520,21 @@ describe("Template CRUD functions", () => {
       isPublished: true,
       securityAttribute: "Unclassified",
     });
+    expect(mockedLogEvent).toHaveBeenCalledWith(
+      fakeSession.user.id,
+      { id: "formtestID", type: "Form" },
+      "PublishForm"
+    );
   });
 
   it("Update assigned users for template", async () => {
-    const ability = createAbility(
-      getUserPrivileges(ManageForms.concat(ManageUsers), { user: { id: "1" } })
-    );
+    const fakeSession = {
+      user: {
+        id: "1",
+        privileges: getUserPrivileges(Base.concat(ManageForms, ManageUsers), { user: { id: "1" } }),
+      },
+    };
+    const ability = createAbility(fakeSession as Session);
 
     (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
       buildPrismaResponse("formtestID", formConfiguration, true)
@@ -464,12 +568,30 @@ describe("Template CRUD functions", () => {
         securityAttribute: true,
       },
     });
+    expect(mockedLogEvent).toHaveBeenNthCalledWith(
+      1,
+      fakeSession.user.id,
+      { id: "formTestID", type: "Form" },
+      "GrantFormAccess",
+      "Access granted to 1"
+    );
+    expect(mockedLogEvent).toHaveBeenNthCalledWith(
+      2,
+      fakeSession.user.id,
+      { id: "formTestID", type: "Form" },
+      "RevokeFormAccess",
+      "Access revoked for 1"
+    );
   });
 
   it("Updates to published forms are not allowed", async () => {
-    const ability = createAbility(
-      getUserPrivileges(ManageForms.concat(ManageUsers), { user: { id: "1" } })
-    );
+    const fakeSession = {
+      user: {
+        id: "1",
+        privileges: getUserPrivileges(Base.concat(ManageForms, ManageUsers), { user: { id: "1" } }),
+      },
+    };
+    const ability = createAbility(fakeSession as Session);
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
       ...buildPrismaResponse("formtestID", formConfiguration, true),
@@ -485,55 +607,71 @@ describe("Template CRUD functions", () => {
     await expect(async () => {
       await updateTemplate(ability, "test1", updatedFormConfig);
     }).rejects.toThrowError(new TemplateAlreadyPublishedError());
+    expect(mockedLogEvent).toBeCalledTimes(0);
   });
 
-  it.each([[Base], [ManageForms]])("Remove DeliveryOption from template", async (privileges) => {
-    const ability = createAbility(getUserPrivileges(privileges, { user: { id: "1" } }));
+  it.each([[Base], [Base.concat(ManageForms)]])(
+    "Remove DeliveryOption from template",
+    async (privileges) => {
+      const fakeSession = {
+        user: { id: "1", privileges: getUserPrivileges(privileges, { user: { id: "1" } }) },
+      };
+      const ability = createAbility(fakeSession as Session);
 
-    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
-      ...buildPrismaResponse("formtestID", formConfiguration),
-      users: [{ id: "1" }],
-    });
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        ...buildPrismaResponse("formtestID", formConfiguration),
+        users: [{ id: "1" }],
+      });
 
-    (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
-      buildPrismaResponse("formtestID", formConfiguration)
-    );
+      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
+        buildPrismaResponse("formtestID", formConfiguration)
+      );
 
-    const updatedTemplate = await removeDeliveryOption(ability, "formtestID");
+      const updatedTemplate = await removeDeliveryOption(ability, "formtestID");
 
-    expect(prismaMock.template.update).toHaveBeenCalledWith(
-      expect.objectContaining({
-        where: {
-          id: "formtestID",
-        },
-        data: {
-          deliveryOption: {
-            delete: true,
+      expect(prismaMock.template.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: {
+            id: "formtestID",
           },
-        },
-        select: {
-          id: true,
-          created_at: true,
-          updated_at: true,
-          name: true,
-          jsonConfig: true,
-          isPublished: true,
-          deliveryOption: true,
-          securityAttribute: true,
-        },
-      })
-    );
+          data: {
+            deliveryOption: {
+              delete: true,
+            },
+          },
+          select: {
+            id: true,
+            created_at: true,
+            updated_at: true,
+            name: true,
+            jsonConfig: true,
+            isPublished: true,
+            deliveryOption: true,
+            securityAttribute: true,
+          },
+        })
+      );
 
-    expect(updatedTemplate).toEqual({
-      id: "formtestID",
-      form: formConfiguration,
-      isPublished: false,
-      securityAttribute: "Unclassified",
-    });
-  });
+      expect(updatedTemplate).toEqual({
+        id: "formtestID",
+        form: formConfiguration,
+        isPublished: false,
+        securityAttribute: "Unclassified",
+      });
+      expect(mockedLogEvent).toHaveBeenCalledWith(
+        fakeSession.user.id,
+        { id: "formtestID", type: "Form" },
+        "ChangeDeliveryOption",
+        "Delivery Option set to the Vault"
+      );
+    }
+  );
 
-  it.each([[Base], [ManageForms]])("Delete template", async (privileges) => {
-    const ability = createAbility(getUserPrivileges(privileges, { user: { id: "1" } }));
+  it.each([[Base], [Base.concat(ManageForms)]])("Delete template", async (privileges) => {
+    const fakeSession = {
+      user: { id: "1", privileges: getUserPrivileges(privileges, { user: { id: "1" } }) },
+    };
+    const ability = createAbility(fakeSession as Session);
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
       ...buildPrismaResponse("formtestID", formConfiguration),
@@ -573,6 +711,12 @@ describe("Template CRUD functions", () => {
       isPublished: false,
       securityAttribute: "Unclassified",
     });
+
+    expect(mockedLogEvent).toHaveBeenCalledWith(
+      fakeSession.user.id,
+      { id: "formtestID", type: "Form" },
+      "DeleteForm"
+    );
   });
 
   it("Only include public properties", async () => {
@@ -600,7 +744,10 @@ describe("Template CRUD functions", () => {
   });
 
   it("User with no permission should not be able to use CRUD functions", async () => {
-    const ability = createAbility([]);
+    const fakeSession = {
+      user: { id: "1", privileges: getUserPrivileges([], { user: { id: "1" } }) },
+    };
+    const ability = createAbility(fakeSession as Session);
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
       ...buildPrismaResponse("formtestID", formConfiguration),
@@ -634,10 +781,63 @@ describe("Template CRUD functions", () => {
     await expect(async () => {
       await deleteTemplate(ability, "formtestID");
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
+    expect(mockedLogEvent).toBeCalledTimes(7);
+    expect(mockedLogEvent).toHaveBeenNthCalledWith(
+      1,
+      fakeSession.user.id,
+      { type: "Form" },
+      "AccessDenied",
+      "Attempted to create a Form"
+    );
+    expect(mockedLogEvent).toHaveBeenNthCalledWith(
+      2,
+      fakeSession.user.id,
+      { type: "Form" },
+      "AccessDenied",
+      "Attempted to list all Forms"
+    );
+    expect(mockedLogEvent).toHaveBeenNthCalledWith(
+      3,
+      fakeSession.user.id,
+      { id: "1", type: "Form" },
+      "AccessDenied",
+      "Attemped to read form object"
+    );
+    expect(mockedLogEvent).toHaveBeenNthCalledWith(
+      4,
+      fakeSession.user.id,
+      { id: "test1", type: "Form" },
+      "AccessDenied",
+      "Attempted to update Form"
+    );
+    expect(mockedLogEvent).toHaveBeenNthCalledWith(
+      5,
+      fakeSession.user.id,
+      { id: "formtestID", type: "Form" },
+      "AccessDenied",
+      "Attempted to publish form"
+    );
+    expect(mockedLogEvent).toHaveBeenNthCalledWith(
+      6,
+      fakeSession.user.id,
+      { id: "formtestID", type: "Form" },
+      "AccessDenied",
+      "Attempted to set Delivery Option to the Vault"
+    );
+    expect(mockedLogEvent).toHaveBeenNthCalledWith(
+      7,
+      fakeSession.user.id,
+      { id: "formtestID", type: "Form" },
+      "AccessDenied",
+      "Attempted to delete Form"
+    );
   });
 
   it("User with no relation to the template being interacted with should not be able to use get, update and delete functions", async () => {
-    const ability = createAbility(getUserPrivileges(Base, { user: { id: "1" } }));
+    const fakeSession = {
+      user: { id: "1", privileges: getUserPrivileges(Base, { user: { id: "1" } }) },
+    };
+    const ability = createAbility(fakeSession as Session);
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
       ...buildPrismaResponse("formtestID", formConfiguration),

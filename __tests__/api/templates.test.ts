@@ -7,20 +7,18 @@ import { createMocks, RequestMethod } from "node-mocks-http";
 import Redis from "ioredis-mock";
 import templates from "@pages/api/templates/[formID]";
 import templatesRoot from "@pages/api/templates/index";
-import { unstable_getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth/next";
 import validFormTemplate from "../../__fixtures__/validFormTemplate.json";
 import validFormTemplateWithHTMLInDynamicRow from "../../__fixtures__/validFormTemplateWithHTMLInDynamicRow.json";
 import brokenFormTemplate from "../../__fixtures__/brokenFormTemplate.json";
-import { logAdminActivity } from "@lib/adminLogs";
 import { prismaMock } from "@jestUtils";
 import { Session } from "next-auth";
 import { Base, getUserPrivileges, ManageForms, PublishForms } from "__utils__/permissions";
 
 //Needed in the typescript version of the test so types are inferred correclty
-const mockGetSession = jest.mocked(unstable_getServerSession, { shallow: true });
+const mockGetSession = jest.mocked(getServerSession, { shallow: true });
 
 jest.mock("next-auth/next");
-jest.mock("@lib/adminLogs");
 
 const redis = new Redis();
 
@@ -49,14 +47,6 @@ describe("Requires a valid session to access API", () => {
 });
 
 describe("Test templates API functions", () => {
-  beforeAll(() => {
-    process.env.TOKEN_SECRET = "testsecret";
-  });
-
-  afterAll(() => {
-    delete process.env.TOKEN_SECRET;
-  });
-
   describe.each([[Base], [ManageForms]])("POST", (privileges) => {
     beforeEach(() => {
       const mockSession: Session = {
@@ -66,6 +56,7 @@ describe("Test templates API functions", () => {
           email: "a@b.com",
           name: "Testing Forms",
           privileges: privileges,
+          acceptableUse: true,
         },
       };
 
@@ -101,12 +92,6 @@ describe("Test templates API functions", () => {
       await templatesRoot(req, res);
 
       expect(res.statusCode).toBe(200);
-      expect(logAdminActivity).toHaveBeenCalledWith(
-        "1",
-        "Create",
-        "UploadForm",
-        "Form id: test0form00000id000asdf11 has been uploaded"
-      );
     });
 
     it("Should fail with invalid JSON", async () => {
@@ -157,6 +142,7 @@ describe("Test templates API functions", () => {
           email: "a@b.com",
           name: "Testing Forms",
           privileges: getUserPrivileges(privileges, { user: { id: "1" } }),
+          acceptableUse: true,
         },
       };
 
@@ -197,12 +183,6 @@ describe("Test templates API functions", () => {
       await templates(req, res);
 
       expect(res.statusCode).toBe(200);
-      expect(logAdminActivity).toHaveBeenCalledWith(
-        "1",
-        "Update",
-        "UpdateForm",
-        "Form id: test0form00000id000asdf11 has been updated"
-      );
     });
 
     it("Should failed when trying to update published template", async () => {
@@ -283,6 +263,7 @@ describe("Test templates API functions", () => {
           email: "a@b.com",
           name: "Testing Forms",
           privileges: getUserPrivileges(PublishForms, { user: { id: "1" } }),
+          acceptableUse: true,
         },
       };
 
@@ -324,12 +305,6 @@ describe("Test templates API functions", () => {
       await templates(req, res);
 
       expect(res.statusCode).toBe(200);
-      expect(logAdminActivity).toHaveBeenCalledWith(
-        "1",
-        "Update",
-        "UpdateForm",
-        "Form id: test0form00000id000asdf11 'isPublished' value has been updated"
-      );
     });
   });
 
@@ -342,6 +317,7 @@ describe("Test templates API functions", () => {
           email: "a@b.com",
           name: "Testing Forms",
           privileges: getUserPrivileges(privileges, { user: { id: "1" } }),
+          acceptableUse: true,
         },
       };
 
@@ -379,12 +355,6 @@ describe("Test templates API functions", () => {
       await templates(req, res);
 
       expect(res.statusCode).toBe(200);
-      expect(logAdminActivity).toHaveBeenCalledWith(
-        "1",
-        "Delete",
-        "DeleteForm",
-        "Form id: test0form00000id000asdf11 has been deleted"
-      );
     });
   });
 });
@@ -399,6 +369,7 @@ describe("Templates API functions should throw an error if user does not have pe
           email: "a@b.com",
           name: "Testing Forms",
           privileges: [],
+          acceptableUse: true,
         },
       };
       mockGetSession.mockReturnValue(Promise.resolve(mockSession));
@@ -487,6 +458,7 @@ describe("Templates API functions should throw an error if user does not have pe
           email: "forms@cds.ca",
           name: "forms",
           privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+          acceptableUse: true,
         },
       };
       mockGetSession.mockReturnValue(Promise.resolve(mockSession));
@@ -526,6 +498,7 @@ describe("Templates API functions should throw an error if user does not have pe
           email: "forms@cds.ca",
           name: "forms",
           privileges: getUserPrivileges(PublishForms, { user: { id: "1" } }),
+          acceptableUse: true,
         },
       };
       mockGetSession.mockReturnValue(Promise.resolve(mockSession));
@@ -565,6 +538,7 @@ describe("Templates API functions should throw an error if user does not have pe
           email: "forms@cds.ca",
           name: "forms",
           privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+          acceptableUse: true,
         },
       };
       mockGetSession.mockReturnValue(Promise.resolve(mockSession));
