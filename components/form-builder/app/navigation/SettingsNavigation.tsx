@@ -3,7 +3,7 @@ import { useTranslation } from "next-i18next";
 import { SubNavLink } from "./SubNavLink";
 import { useActivePathname } from "@components/form-builder/hooks";
 import { LangSwitcher } from "../shared/LangSwitcher";
-import { QuestionsIcon, TranslateIcon } from "@components/form-builder/icons";
+import { EmailIcon, BrandIcon } from "@components/form-builder/icons";
 
 export const SettingsNavigation = () => {
   const { t } = useTranslation("form-builder");
@@ -11,8 +11,6 @@ export const SettingsNavigation = () => {
 
   const svgFill =
     "[&_svg]:focus:fill-white [&_svg]:hover:fill-white hover:bg-gray-600 hover:!text-white-default";
-  const svgStroke =
-    "[&_svg]:focus:stroke-white [&_svg]:hover:stroke-white hover:bg-gray-600 hover:!text-white-default";
 
   return (
     <div className="relative flex">
@@ -24,17 +22,17 @@ export const SettingsNavigation = () => {
             activeClassName="[&_svg]:fill-white"
           >
             <span>
-              <QuestionsIcon className="inline-block mt-[-2px] mr-3" />
+              <EmailIcon className="inline-block mt-[-2px] mr-3" />
               {t("settingsNavHome")}
             </span>
           </SubNavLink>
           <SubNavLink
             href="/form-builder/settings/branding"
-            className={`[&_svg]:stroke-black !text-black focus:!text-white ${svgStroke}`}
-            activeClassName={`[&_svg]:stroke-white ${svgStroke} focus:text-white`}
+            className={`!text-black focus:!text-white ${svgFill} [&_svg]:fill-black`}
+            activeClassName={`[&_svg]:fill-white ${svgFill} focus:text-white`}
           >
             <span>
-              <TranslateIcon className="inline-block mt-[-2px] mr-2" />
+              <BrandIcon className="inline-block mt-[-2px] mr-2" />
               {t("branding.heading")}
             </span>
           </SubNavLink>
