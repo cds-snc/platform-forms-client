@@ -471,7 +471,7 @@
   "unlockPublishing": "Soumettre",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
   "unnamedForm": "Formulaire sans titre",
-  "autocompleteIsSetTo": "Autcomplete is set to:",
+  "autocompleteIsSetTo": "Le remplissage automatique est réglé :",
   "maxNumberOfRows": {
     "label": "Nombre maximum de réponses",
     "description": "Les utilisateur·rice·s peuvent fournir jusqu'à ce nombre d'entrées pour cette question."
