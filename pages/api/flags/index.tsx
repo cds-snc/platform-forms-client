@@ -13,7 +13,7 @@ const handler = async (
 ): Promise<void> => {
   try {
     const { session } = props as WithRequired<MiddlewareProps, "session">;
-    const ability = createAbility(session.user.privileges);
+    const ability = createAbility(session);
     const flags = await checkAll(ability);
     res.status(200).json(flags);
   } catch (e) {

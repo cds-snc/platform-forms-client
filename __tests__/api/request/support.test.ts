@@ -5,7 +5,7 @@
 import { createMocks, RequestMethod } from "node-mocks-http";
 import support from "@pages/api/request/support";
 import { getCsrfToken } from "next-auth/react";
-import { unstable_getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth/next";
 import { mocked } from "jest-mock";
 import { Session } from "next-auth";
 
@@ -14,7 +14,7 @@ const mockGetCSRFToken = mocked(getCsrfToken, { shallow: true });
 jest.mock("next-auth/react");
 
 //Needed in the typescript version of the test so types are inferred correclty
-const mockGetSession = jest.mocked(unstable_getServerSession, { shallow: true });
+const mockGetSession = jest.mocked(getServerSession, { shallow: true });
 jest.mock("next-auth/next");
 
 let IsGCNotifyServiceAvailable = true;
