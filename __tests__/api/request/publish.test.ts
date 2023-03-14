@@ -7,7 +7,7 @@ import publish from "@pages/api/request/publish";
 import { getServerSession } from "next-auth/next";
 import { Session } from "next-auth";
 
-//Needed in the typescript version of the test so types are inferred correclty
+//Needed in the typescript version of the test so types are inferred correctly
 const mockGetSession = jest.mocked(getServerSession, { shallow: true });
 jest.mock("next-auth/next");
 

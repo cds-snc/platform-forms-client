@@ -1,7 +1,12 @@
 describe("TSB Contact Form functionality", () => {
+  let formID;
+  before(() => {
+    cy.useForm("../../__fixtures__/tsbContactTestForm.json");
+    cy.get("@formID").then((createdID) => (formID = createdID));
+  });
   beforeEach(() => {
     cy.useFlag("formTimer", false);
-    cy.mockForm("../../__fixtures__/tsbContactTestForm.json");
+    cy.visitForm(formID);
   });
 
   it("TSB Contact Form renders", () => {

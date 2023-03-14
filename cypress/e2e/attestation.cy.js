@@ -1,7 +1,12 @@
 describe("Attestation functionality", () => {
+  let formID;
+  before(() => {
+    cy.useForm("../../__fixtures__/attestationTestForm.json");
+    cy.get("@formID").then((createdID) => (formID = createdID));
+  });
   beforeEach(() => {
     cy.useFlag("formTimer", false);
-    cy.mockForm("../../__fixtures__/attestationTestForm.json");
+    cy.visitForm(formID);
   });
 
   it("Renders properly", () => {

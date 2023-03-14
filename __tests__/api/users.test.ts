@@ -10,13 +10,13 @@ import users from "@pages/api/users";
 import { prismaMock } from "@jestUtils";
 import { Prisma } from "@prisma/client";
 import { Session } from "next-auth";
-import { getUserPrivileges, ManageUsers, ViewUserPrivileges } from "__utils__/permissions";
+import { mockUserPrivileges, ManageUsers, ViewUserPrivileges } from "__utils__/permissions";
 import { logEvent } from "@lib/auditLogs";
 
 jest.mock("next-auth/next");
 jest.mock("@lib/auditLogs");
 
-//Needed in the typescript version of the test so types are inferred correclty
+//Needed in the typescript version of the test so types are inferred correctly
 const mockGetSession = jest.mocked(getServerSession, { shallow: true });
 const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
 const redis = new Redis();
@@ -163,8 +163,7 @@ describe("Users API endpoint", () => {
           id: "1",
           email: "forms@cds.ca",
           name: "forms",
-          privileges: getUserPrivileges(ManageUsers, {}),
-          acceptableUse: true,
+          privileges: mockUserPrivileges(ManageUsers, {}),
         },
       };
       mockGetSession.mockReturnValue(Promise.resolve(mockSession));

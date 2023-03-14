@@ -15,7 +15,7 @@ interface AcceptableUseProps {
 export const AcceptableUseTerms = ({
   content,
   referer = "/myforms",
-}: AcceptableUseProps): React.ReactElement => {
+}: AcceptableUseProps): React.ReactElement | null => {
   const router = useRouter();
   const { t } = useTranslation("common");
   const session = useSession();
@@ -49,14 +49,14 @@ export const AcceptableUseTerms = ({
             logMessage.error(err);
           });
       } else {
-        logMessage.error("Undefined CSRF Token");
+        logMessage.error("Undefined CSRF Token or Session");
       }
     } catch (err) {
       logMessage.error(err as Error);
     }
   };
 
-  return (
+  return session.status === "authenticated" ? (
     <>
       <div className="border-b-2 border-red-default">
         <h1 className="md:text-small_h1 md:mb-10 border-b-0 text-h1 font-bold mb-0">
@@ -66,6 +66,7 @@ export const AcceptableUseTerms = ({
       <RichText className="py-10 w-full">{content}</RichText>
 
       <button
+        id="acceptableUse"
         type="button"
         className="h-16 w-32 rounded-lg py-3 px-6 text-[color:white] mx-auto bg-blue-800 shadow-default"
         onClick={agree}
@@ -73,7 +74,7 @@ export const AcceptableUseTerms = ({
         {t("acceptableUsePage.agree")}
       </button>
     </>
-  );
+  ) : null;
 };
 
 export default AcceptableUseTerms;
