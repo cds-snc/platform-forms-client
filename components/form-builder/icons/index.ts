@@ -57,3 +57,4 @@ export { MessageIcon } from "./Message";
 export { ExclamationIcon } from "./ExclamationIcon";
 export { QuestionsIcon } from "./QuestionsIcon";
 export { TranslateIcon } from "./TranslateIcon";
+export { UploadIcon } from "./UploadIcon";
