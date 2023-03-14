@@ -16,7 +16,7 @@ import { logEvent } from "@lib/auditLogs";
 jest.mock("next-auth/next");
 jest.mock("@lib/auditLogs");
 
-//Needed in the typescript version of the test so types are inferred correclty
+//Needed in the typescript version of the test so types are inferred correctly
 const mockGetSession = jest.mocked(getServerSession, { shallow: true });
 const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
 const redis = new Redis();

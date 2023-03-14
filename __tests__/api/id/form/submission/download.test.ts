@@ -46,7 +46,7 @@ jest.mock("@lib/cache/flags", () => {
   };
 });
 
-//Needed in the typescript version of the test so types are inferred correclty
+//Needed in the typescript version of the test so types are inferred correctly
 const mockGetSession = jest.mocked(getServerSession, { shallow: true });
 const mockLogEvent = jest.mocked(logEvent, { shallow: true });
 const testFormTemplate = {

@@ -15,7 +15,7 @@ import { prismaMock } from "@jestUtils";
 import { Session } from "next-auth";
 import { Base, mockUserPrivileges, ManageForms, PublishForms } from "__utils__/permissions";
 
-//Needed in the typescript version of the test so types are inferred correclty
+//Needed in the typescript version of the test so types are inferred correctly
 const mockGetSession = jest.mocked(getServerSession, { shallow: true });
 
 jest.mock("next-auth/next");
