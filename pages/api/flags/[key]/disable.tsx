@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { disableFlag, checkAll } from "@lib/cache/flags";
 import { middleware, cors, sessionExists } from "@lib/middleware";
-import { logAdminActivity, AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
 import { MiddlewareProps, WithRequired } from "@lib/types";
 import { AccessControlError, createAbility } from "@lib/privileges";
 
@@ -17,19 +16,10 @@ const handler = async (
     const key = req.query.key as string;
     if (Array.isArray(key) || !key)
       return res.status(400).json({ error: "Malformed API Request Flag Key is not defined" });
-    const ability = createAbility(session.user.privileges);
+    const ability = createAbility(session);
 
     await disableFlag(ability, key);
     const flags = await checkAll(ability);
-
-    if (session.user.id) {
-      await logAdminActivity(
-        session.user.id,
-        AdminLogAction.Update,
-        AdminLogEvent.DisableFeature,
-        `Feature: ${key} has been disabled`
-      );
-    }
 
     res.status(200).json(flags);
   } catch (e) {
