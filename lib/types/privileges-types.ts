@@ -1,4 +1,4 @@
-import { InferSubjects, MongoQuery } from "@casl/ability";
+import { InferSubjects, MongoQuery, MongoAbility } from "@casl/ability";
 import { FormRecord } from "@lib/types";
 import { User, Privilege as PrismaPrivilege } from "@prisma/client";
 
@@ -34,6 +34,10 @@ export type Permission = {
 export type Privilege = PrismaPrivilege & {
   permissions: Permission[];
   [key: string]: string | null | Permission[] | number | undefined;
+};
+
+export type UserAbility = MongoAbility & {
+  userID: string;
 };
 
 export type AnyObject = {

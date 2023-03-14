@@ -1,9 +1,8 @@
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { middleware, cors, sessionExists, jsonValidator } from "@lib/middleware";
 import { createTemplate, getAllTemplates, onlyIncludePublicProperties } from "@lib/templates";
-import { DeliveryOption, FormProperties, FormRecord, MiddlewareProps } from "@lib/types";
+import { DeliveryOption, FormProperties, MiddlewareProps, UserAbility } from "@lib/types";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { MongoAbility } from "@casl/ability";
 import { Session } from "next-auth";
 import templatesSchema from "@lib/middleware/schemas/templates.schema.json";
 import {
@@ -11,7 +10,6 @@ import {
   subElementsIDValidator,
   uniqueIDValidator,
 } from "@lib/middleware/jsonIDValidator";
-import { AdminLogAction, AdminLogEvent, logAdminActivity } from "@lib/adminLogs";
 
 const allowedMethods = ["GET", "POST"];
 const authenticatedMethods = ["POST"];
@@ -24,21 +22,12 @@ const templates = async (
   try {
     if (!session) return res.status(401).json({ error: "Unauthorized" });
 
-    const ability = createAbility(session.user.privileges);
+    const ability = createAbility(session);
     const user = session.user;
 
     const response = await route({ ability: ability, user: user, method: req.method, ...req.body });
 
     if (!response) return res.status(500).json({ error: "Error on Server Side" });
-
-    if (req.method === "POST") {
-      await logAdminActivity(
-        session.user.id,
-        AdminLogAction.Create,
-        AdminLogEvent.UploadForm,
-        `Form id: ${(response as FormRecord).id} has been uploaded`
-      );
-    }
 
     if (req.method === "GET") {
       if (Array.isArray(response)) {
@@ -62,7 +51,7 @@ const route = async ({
   formConfig,
   deliveryOption,
 }: {
-  ability: MongoAbility;
+  ability: UserAbility;
   user: Session["user"];
   method: string;
   name?: string;

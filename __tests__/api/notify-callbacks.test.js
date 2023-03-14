@@ -11,10 +11,6 @@ jest.mock("@aws-sdk/client-sqs");
 jest.mock("@aws-sdk/client-dynamodb");
 jest.mock("@aws-sdk/lib-dynamodb");
 
-const sqsClient = {
-  send: jest.fn(),
-};
-
 const dynamodbDocumentClient = {
   send: jest.fn(),
 };
@@ -171,6 +167,8 @@ describe("/api/notify-callbacks", () => {
   });
 
   it("Should respond with code 200 if request is valid", async () => {
+    const sqsClientSpy = jest.spyOn(SQSClient.prototype, "send");
+
     const { req, res } = createMocks({
       method: "POST",
       headers: {
@@ -184,19 +182,13 @@ describe("/api/notify-callbacks", () => {
       },
     });
 
-    sqsClient.send.mockImplementation(() => {
-      return {
+    sqsClientSpy
+      .mockResolvedValueOnce({
         QueueUrl: "http://queue_url",
-      };
-    });
-
-    dynamodbDocumentClient.send.mockImplementation(() => {
-      return {};
-    });
+      })
+      .mockImplementation(() => Promise.resolve());
 
     DynamoDBDocumentClient.from.mockReturnValue(dynamodbDocumentClient);
-
-    SQSClient.mockReturnValue(sqsClient);
 
     await notifyCallback(req, res);
 

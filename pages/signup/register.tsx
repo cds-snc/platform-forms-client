@@ -11,7 +11,7 @@ import { isValidGovEmail, isUpperCase, isLowerCase, isNumber, isSymbol } from "@
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import Loader from "@components/globals/Loader";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
-import { unstable_getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth/next";
 import Link from "next/link";
 import Head from "next/head";
 
@@ -238,7 +238,7 @@ Register.getLayout = (page: ReactElement) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await unstable_getServerSession(context.req, context.res, authOptions);
+  const session = await getServerSession(context.req, context.res, authOptions);
 
   if (session)
     return {
