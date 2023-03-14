@@ -15,7 +15,7 @@ import {
 import Redis from "ioredis-mock";
 import initialSettings from "../../../../../flag_initialization/default_flag_settings.json";
 import { prismaMock } from "@jestUtils";
-import { Base, getUserPrivileges } from "__utils__/permissions";
+import { Base, mockUserPrivileges } from "__utils__/permissions";
 import { logEvent } from "@lib/auditLogs";
 jest.mock("@lib/auditLogs");
 
@@ -89,7 +89,7 @@ describe("Report problem with form submissions (with active session)", () => {
         id: "1",
         email: "a@b.com",
         name: "Testing Forms",
-        privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+        privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
         acceptableUse: true,
       },
     };
