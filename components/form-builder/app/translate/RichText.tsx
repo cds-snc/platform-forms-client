@@ -24,7 +24,8 @@ export const RichText = ({
   const secondaryLanguage = primaryLanguage === "en" ? "fr" : "en";
   const field = LocalizedElementProperties.DESCRIPTION;
   const fieldEn = localizeField(field, "en");
-  const fieldFr = localizeField(field, "en");
+  const fieldFr = localizeField(field, "fr");
+
   return (
     <>
       <div className="text-entry">
