@@ -142,6 +142,7 @@ describe("Test templates API functions", () => {
           email: "a@b.com",
           name: "Testing Forms",
           privileges: mockUserPrivileges(privileges, { user: { id: "1" } }),
+          acceptableUse: true,
         },
       };
 
@@ -262,6 +263,7 @@ describe("Test templates API functions", () => {
           email: "a@b.com",
           name: "Testing Forms",
           privileges: mockUserPrivileges(PublishForms, { user: { id: "1" } }),
+          acceptableUse: true,
         },
       };
 
@@ -315,6 +317,7 @@ describe("Test templates API functions", () => {
           email: "a@b.com",
           name: "Testing Forms",
           privileges: mockUserPrivileges(privileges, { user: { id: "1" } }),
+          acceptableUse: true,
         },
       };
 
@@ -455,6 +458,7 @@ describe("Templates API functions should throw an error if user does not have pe
           email: "forms@cds.ca",
           name: "forms",
           privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
+          acceptableUse: true,
         },
       };
       mockGetSession.mockReturnValue(Promise.resolve(mockSession));
@@ -494,6 +498,7 @@ describe("Templates API functions should throw an error if user does not have pe
           email: "forms@cds.ca",
           name: "forms",
           privileges: mockUserPrivileges(PublishForms, { user: { id: "1" } }),
+          acceptableUse: true,
         },
       };
       mockGetSession.mockReturnValue(Promise.resolve(mockSession));
@@ -533,6 +538,7 @@ describe("Templates API functions should throw an error if user does not have pe
           email: "forms@cds.ca",
           name: "forms",
           privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
+          acceptableUse: true,
         },
       };
       mockGetSession.mockReturnValue(Promise.resolve(mockSession));
