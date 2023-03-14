@@ -26,7 +26,7 @@ jobs:
 
       - name: Configure AWS credentials
         # v1 as of Jan 28 2021
-        uses: aws-actions/configure-aws-credentials@07d5781915aab44cbbcbd613a6a8c86b5e9f2f94
+        uses: aws-actions/configure-aws-credentials@cb1361ade3c0ad3551e7d2be86bf97afcb51e4d6
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -35,7 +35,7 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         # v1 as of Jan 28 2021
-        uses: aws-actions/amazon-ecr-login@57def20d69052ef69bfd7151a617e3b1de72d8aa
+        uses: aws-actions/amazon-ecr-login@069994d041aacb6f988e7c168179a2153b0ff878
 
       - name: Get Cluster Name
         id: cluster
@@ -51,7 +51,7 @@ jobs:
       - name: Render image for form viewer service
         id: taskdef-form-viewer
         # v1.0.10
-        uses: aws-actions/amazon-ecs-render-task-definition@4bddb53041d9c94d41f3ab4b8e0cbf2bdd7860fb
+        uses: aws-actions/amazon-ecs-render-task-definition@adf27cbda7387e685c616c92f3018519a5a593e9
         with:
           task-definition: form_viewer.json
           container-name: ${{ steps.download-taskdef-form-viewer.outputs.container_name }}
