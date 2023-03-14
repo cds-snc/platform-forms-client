@@ -14,3 +14,4 @@ export { Address } from "./descriptions/Address";
 export { Contact } from "./descriptions/Contact";
 export { FirstMiddleLastName } from "./descriptions/FirstMiddleLastName";
 export { Name } from "./descriptions/Name";
+export { FileInput } from "./descriptions/FileInput";
