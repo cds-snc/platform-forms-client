@@ -1,7 +1,12 @@
 describe("CDS Platform Intake Form functionality", () => {
+  let formID;
+  before(() => {
+    cy.useForm("../../__fixtures__/platformIntakeTestForm.json");
+    cy.get("@formID").then((createdID) => (formID = createdID));
+  });
   beforeEach(() => {
     cy.useFlag("formTimer", false);
-    cy.mockForm("../../__fixtures__/platformIntakeTestForm.json");
+    cy.visitForm(formID);
   });
 
   it("CDS Platform Intake Form renders", () => {

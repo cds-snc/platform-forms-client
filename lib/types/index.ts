@@ -47,15 +47,7 @@ export type {
 
 export type { FormOwner } from "./user-types";
 
-export type {
-  Action,
-  Subject,
-  Abilities,
-  Permission,
-  Privilege,
-  AnyObject,
-  ForcedSubjectType,
-} from "./privileges-types";
+export type { Abilities, Privilege, UserAbility, Permission, AnyObject } from "./privileges-types";
 
 // Utility type creator
 export type TypeOmit<T, K extends PropertyKey> = { [P in keyof T as Exclude<P, K>]: T[P] };

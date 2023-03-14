@@ -1,7 +1,7 @@
 import { QueryCommand, QueryCommandInput } from "@aws-sdk/lib-dynamodb";
-import { MongoAbility } from "@casl/ability";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { VaultSubmissionList } from "@lib/types";
+import { VaultSubmissionList, UserAbility } from "@lib/types";
+import { logEvent } from "./auditLogs";
 import { connectToDynamo } from "./integration/dynamodbConnector";
 import { logMessage } from "./logger";
 import { AccessControlError, checkPrivileges } from "./privileges";
@@ -38,28 +38,39 @@ async function getUsersForForm(formID: string) {
  */
 
 export async function listAllSubmissions(
-  ability: MongoAbility,
+  ability: UserAbility,
   formID: string
 ): Promise<VaultSubmissionList[]> {
   // Check access control first
-  const templateOwners = await getUsersForForm(formID);
-  if (!templateOwners)
-    throw new AccessControlError(
-      `Template ${formID} must have associated owners to access responses`
-    );
+  try {
+    const templateOwners = await getUsersForForm(formID);
+    if (!templateOwners)
+      throw new AccessControlError(
+        `Template ${formID} must have associated owners to access responses`
+      );
 
-  // Will throw an access control error if not authorized to access
-  checkPrivileges(ability, [
-    {
-      action: "view",
-      subject: {
-        type: "FormRecord",
-        object: {
-          users: templateOwners,
+    // Will throw an access control error if not authorized to access
+    checkPrivileges(ability, [
+      {
+        action: "view",
+        subject: {
+          type: "FormRecord",
+          object: {
+            users: templateOwners,
+          },
         },
       },
-    },
-  ]);
+    ]);
+  } catch (e) {
+    if (e instanceof AccessControlError)
+      logEvent(
+        ability.userID,
+        { type: "Response" },
+        "AccessDenied",
+        `Attempted to list all responses for form ${formID}`
+      );
+    throw e;
+  }
 
   try {
     const documentClient = connectToDynamo();
@@ -124,6 +135,12 @@ export async function listAllSubmissions(
         lastEvaluatedKey = response.LastEvaluatedKey;
       }
     }
+    logEvent(
+      ability.userID,
+      { type: "Response" },
+      "ListResponses",
+      `List all responses for form ${formID}`
+    );
     return accumulatedResponses;
   } catch (e) {
     logMessage.error(e);

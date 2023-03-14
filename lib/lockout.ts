@@ -1,6 +1,4 @@
 import { getRedisInstance } from "./integration/redisConnector";
-import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { LoggingAction } from "@lib/auth";
 import { logMessage } from "./logger";
 
 export interface LockoutResponse {
@@ -62,29 +60,7 @@ export async function registerSuccessfulLoginAttempt(email: string): Promise<voi
 }
 
 async function logLoginLockoutEvent(email: string): Promise<void> {
-  try {
-    const apiUser = await prisma.apiUser.findFirst({
-      where: {
-        email: email,
-      },
-      select: {
-        id: true,
-      },
-    });
-
-    if (apiUser) {
-      await prisma.apiAccessLog.create({
-        data: {
-          action: LoggingAction.LOCKED,
-          userId: apiUser.id,
-        },
-      });
-    } else {
-      logMessage.warn(
-        `An email address with no access to any form has been locked out. Email: ${email}`
-      );
-    }
-  } catch (e) {
-    prismaErrors(e, null);
-  }
+  logMessage.warn(
+    `An email address with no access to any form has been locked out. Email: ${email}`
+  );
 }

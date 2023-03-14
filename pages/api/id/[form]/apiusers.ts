@@ -3,12 +3,9 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { Prisma } from "@prisma/client";
 import { isValidGovEmail } from "@lib/validation";
-import { Session } from "next-auth";
-import { logAdminActivity, AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
-import { MiddlewareProps, WithRequired } from "@lib/types";
+import { MiddlewareProps, WithRequired, UserAbility } from "@lib/types";
 import { createAbility, AccessControlError } from "@lib/privileges";
 import { checkPrivileges } from "@lib/privileges";
-import { MongoAbility } from "@casl/ability";
 
 const handler = async (
   req: NextApiRequest,
@@ -17,14 +14,14 @@ const handler = async (
 ): Promise<void> => {
   const { session } = props as WithRequired<MiddlewareProps, "session">;
   try {
-    const ability = createAbility(session.user.privileges);
+    const ability = createAbility(session);
     switch (req.method) {
       case "GET":
         return await getEmailListByFormID(ability, req, res);
       case "PUT":
-        return await activateOrDeactivateFormOwners(ability, req, res, session);
+        return await activateOrDeactivateFormOwners(ability, req, res);
       case "POST":
-        return await addEmailToForm(ability, req, res, session);
+        return await addEmailToForm(ability, req, res);
       default:
         return res.status(400).json({ error: "Bad Request" });
     }
@@ -35,7 +32,7 @@ const handler = async (
 };
 
 export async function getEmailListByFormID(
-  ability: MongoAbility,
+  ability: UserAbility,
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<void> {
@@ -88,10 +85,9 @@ export async function getEmailListByFormID(
  * @param res
  */
 export async function activateOrDeactivateFormOwners(
-  ability: MongoAbility,
+  ability: UserAbility,
   req: NextApiRequest,
-  res: NextApiResponse,
-  session: Session
+  res: NextApiResponse
 ): Promise<void> {
   try {
     //Extracting req body
@@ -142,17 +138,6 @@ export async function activateOrDeactivateFormOwners(
       },
     });
 
-    if (session && session.user.id) {
-      await logAdminActivity(
-        session.user.id,
-        AdminLogAction.Update,
-        active ? AdminLogEvent.GrantFormAccess : AdminLogEvent.RevokeFormAccess,
-        `Access to form id: ${formID} has been ${
-          active ? "granted" : "revoked"
-        } for email: ${email}`
-      );
-    }
-
     //A record was updated and returns the id { "id": 1, active: false } etc.
     return res.status(200).json(updatedRecord);
   } catch (e) {
@@ -176,10 +161,9 @@ export async function activateOrDeactivateFormOwners(
  * @param res The response object
  */
 export async function addEmailToForm(
-  ability: MongoAbility,
+  ability: UserAbility,
   req: NextApiRequest,
-  res: NextApiResponse,
-  session?: Session
+  res: NextApiResponse
 ): Promise<void> {
   //Checking the payload's content
   const { email } = req.body;
@@ -221,15 +205,6 @@ export async function addEmailToForm(
       },
     });
 
-    if (session && session.user.id) {
-      await logAdminActivity(
-        session.user.id,
-        AdminLogAction.Create,
-        AdminLogEvent.GrantInitialFormAccess,
-        `Email: ${email} has been given access to form id: ${formID}`
-      );
-    }
-
     return res.status(200).json({ success: formUserID });
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2003") {
@@ -242,7 +217,5 @@ export async function addEmailToForm(
     }
   }
 }
-export default middleware(
-  [cors({ allowedMethods: ["GET", "POST", "PUT"] }), sessionExists()],
-  handler
-);
+// Removing access for all Methods until this API is ready for use.
+export default middleware([cors({ allowedMethods: [] }), sessionExists()], handler);

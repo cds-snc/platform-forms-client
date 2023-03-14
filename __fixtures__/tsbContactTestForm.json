@@ -2,10 +2,14 @@
   "titleEn": "Transportation Safety Board of Canada general enquiries",
   "titleFr": "Demandes de renseignements au Bureau de la sécurité des transports du Canada",
   "confirmation": {
-    "descriptionEn": "#Thank you for your message \n\r The Transportation Safety Board of Canada will respond to you within a week. \n\r <a href='https://www.tsb.gc.ca/eng/index.html'>Go back.</a>",
-    "descriptionFr": "#Merci pour votre message  \n\r Le Bureau de la sécurité des transports du Canada vous répondra d’ici une semaine. \n\r <a href='https://www.tsb.gc.ca/fra/index.html'>Retour.</a>",
+    "descriptionEn": "#Thank you for your message \n\r The Transportation Safety Board of Canada will respond to you within a week. \n\r [Go back](https://www.tsb.gc.ca/eng/index.html)",
+    "descriptionFr": "#Merci pour votre message  \n\r Le Bureau de la sécurité des transports du Canada vous répondra d’ici une semaine. \n\r [Retour](https://www.tsb.gc.ca/fra/index.html",
     "referrerUrlEn": "",
     "referrerUrlFr": ""
+  },
+  "privacyPolicy": {
+    "descriptionEn": "Privacy statement",
+    "descriptionFr": "[FR] Privacy statement"
   },
   "layout": [1, 2, 3, 4, 5, 6, 7],
   "elements": [
@@ -18,8 +22,8 @@
         "validation": {
           "required": false
         },
-        "descriptionEn": "Thank you for your interest in the TSB. Send your question using the form below. \n\r Find out how <a href='https://www.tsb.gc.ca/eng/avis-notices/avis-notices.html#priv'>the TSB protects your privacy</a>.",
-        "descriptionFr": "Merci de vous intéresser au BST. Faites-nous parvenir vos questions en utilisant le formulaire suivant. \n\r Apprenez comment <a href='https://www.tsb.gc.ca/fra/avis-notices/avis-notices.html#priv'>le BST protége votre confidentialité</a>."
+        "descriptionEn": "Thank you for your interest in the TSB. Send your question using the form below. \n\r Find out how [the TSB protects your privacy](https://www.tsb.gc.ca/eng/avis-notices/avis-notices.html#priv).",
+        "descriptionFr": "Merci de vous intéresser au BST. Faites-nous parvenir vos questions en utilisant le formulaire suivant. \n\r Apprenez comment [le BST protége votre confidentialité](https://www.tsb.gc.ca/fra/avis-notices/avis-notices.html#priv)."
       }
     },
     {

@@ -2,7 +2,7 @@ import React, { ReactElement, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import { getFullTemplateByID } from "@lib/templates";
-import { unstable_getServerSession } from "next-auth";
+import { getServerSession } from "next-auth";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { NextPageWithLayout } from "@pages/_app";
@@ -12,7 +12,6 @@ import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 import { GetServerSideProps } from "next";
 import { FormRecord, VaultSubmissionList } from "@lib/types";
 import { listAllSubmissions } from "@lib/vault";
-import { logMessage } from "@lib/logger";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { checkOne } from "@lib/cache/flags";
@@ -282,7 +281,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 
   const vaultSubmissions: VaultSubmissionList[] = [];
 
-  const session = await unstable_getServerSession(req, res, authOptions);
+  const session = await getServerSession(req, res, authOptions);
 
   if (session && !session.user.acceptableUse) {
     // If they haven't agreed to Acceptable Use redirect to policy page for acceptance
@@ -296,7 +295,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 
   if (formID && session) {
     try {
-      const ability = createAbility(session.user.privileges);
+      const ability = createAbility(session);
       const [initialForm, submissions] = await Promise.all([
         getFullTemplateByID(ability, formID),
         listAllSubmissions(ability, formID),
@@ -305,9 +304,6 @@ export const getServerSideProps: GetServerSideProps = async ({
       vaultSubmissions.push(...submissions);
     } catch (e) {
       if (e instanceof AccessControlError) {
-        logMessage.info(
-          `NOT AUTHORIZED: User ${session.user.id} attempted to access form responses for form ID ${formID}`
-        );
         return {
           redirect: {
             destination: `/${locale}/admin/unauthorized`,

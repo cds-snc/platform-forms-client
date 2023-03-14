@@ -4,11 +4,11 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { createMocks, RequestMethod } from "node-mocks-http";
 import publish from "@pages/api/request/publish";
-import { unstable_getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth/next";
 import { Session } from "next-auth";
 
-//Needed in the typescript version of the test so types are inferred correclty
-const mockGetSession = jest.mocked(unstable_getServerSession, { shallow: true });
+//Needed in the typescript version of the test so types are inferred correctly
+const mockGetSession = jest.mocked(getServerSession, { shallow: true });
 jest.mock("next-auth/next");
 
 let IsGCNotifyServiceAvailable = true;
