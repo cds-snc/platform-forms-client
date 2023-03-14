@@ -5,7 +5,7 @@
 import { isAuthenticated, validateTemporaryToken, requireAuthentication } from "@lib/auth";
 import { Base, mockUserPrivileges } from "__utils__/permissions";
 import { createMocks } from "node-mocks-http";
-import { unstable_getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth/next";
 import jwt, { Secret } from "jsonwebtoken";
 import { prismaMock } from "@jestUtils";
 import { checkPrivileges } from "@lib/privileges";
@@ -14,7 +14,7 @@ import { Prisma } from "@prisma/client";
 jest.mock("next-auth/next");
 
 //Needed in the typescript version of the test so types are inferred correclty
-const mockGetSession = jest.mocked(unstable_getServerSession, { shallow: true });
+const mockGetSession = jest.mocked(getServerSession, { shallow: true });
 
 describe("Test Auth lib", () => {
   describe("requireAuthentication", () => {
@@ -264,11 +264,9 @@ describe("Test Auth lib", () => {
   });
   describe("validateTemporaryToken", () => {
     beforeAll(() => {
-      process.env.TOKEN_SECRET = "some_secret_some_secret_some_secret_some_secret";
       process.env.TOKEN_SECRET_WRONG = "wrong_secret_wrong_secret_wrong_secret_wrong_secret";
     });
     afterAll(() => {
-      delete process.env.TOKEN_SECRET;
       delete process.env.TOKEN_SECRET_WRONG;
     });
     beforeEach(() => {
@@ -317,6 +315,7 @@ describe("Test Auth lib", () => {
         temporaryToken: "theRightTokenInTheDatabase",
         created_at: new Date(),
         updated_at: new Date(),
+        lastLogin: new Date(),
       });
       const session = await validateTemporaryToken(token);
       expect(session).toEqual(null);
@@ -337,6 +336,7 @@ describe("Test Auth lib", () => {
         temporaryToken: token,
         created_at: new Date(),
         updated_at: new Date(),
+        lastLogin: new Date(),
       });
       const session = await validateTemporaryToken(token);
       expect(session).toMatchObject({

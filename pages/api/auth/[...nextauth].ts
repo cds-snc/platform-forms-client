@@ -1,4 +1,4 @@
-import NextAuth, { Session, JWT, NextAuthOptions } from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import {
@@ -13,6 +13,7 @@ import { getOrCreateUser } from "@lib/users";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { acceptableUseCheck, removeAcceptableUse } from "@lib/acceptableUseCache";
 import { getPrivilegeRulesForUser } from "@lib/privileges";
+import { logEvent } from "@lib/auditLogs";
 
 if (
   (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) &&
@@ -61,7 +62,7 @@ export const authOptions: NextAuthOptions = {
           },
         };
 
-        // signIn callback cannot be used. It has to be included in here as the url field
+        // NextAuth signIn callback cannot be used to check . The check has to be included in here as the url field
         // of the response of the sign in callback is not populated
         const prismaUser = await prisma.user
           .findUnique({
@@ -72,9 +73,7 @@ export const authOptions: NextAuthOptions = {
               accounts: true,
             },
           })
-          .catch((e) => {
-            prismaErrors(e, undefined);
-          });
+          .catch((e) => prismaErrors(e, null));
 
         if (
           prismaUser &&
@@ -110,9 +109,13 @@ export const authOptions: NextAuthOptions = {
             e.name === "NotAuthorizedException" &&
             e.message === "Password attempts exceeded"
           )
-            logMessage.warn(
-              `Cognito Lockout: Password attempts exceeded for ${credentials.username}`
+            logEvent(
+              prismaUser?.accounts[0].id ?? "unknown",
+              { type: "User", id: prismaUser?.accounts[0].id ?? "unknown" },
+              "UserTooManyFailedAttempts",
+              `Password attempts exceeded for ${credentials.username}`
             );
+
           // throw new Error with cognito error converted to string so as to include the exception name
           throw new Error((e as CognitoIdentityProviderServiceException).toString());
         }
@@ -138,23 +141,34 @@ export const authOptions: NextAuthOptions = {
   },
 
   adapter: PrismaAdapter(prisma),
+  events: {
+    async signIn({ user }) {
+      logEvent(user.id, { type: "User", id: user.id }, "UserSignIn");
+    },
+    async signOut({ token }) {
+      logEvent(token.userId, { type: "User", id: token.userId }, "UserSignOut");
+    },
+    async createUser({ user }) {
+      // This only fires for non-credential providers
+      // CredentialProvider user registration is triggered in getOrCreateUser
+      logEvent(user.id, { type: "User", id: user.id }, "UserRegistration");
+    },
+  },
 
   callbacks: {
     async signIn({ account, profile }) {
       // redirect google login if there is an existing cognito account
-      if (account.provider === "google") {
+      if (account?.provider === "google") {
         const prismaUser = await prisma.user
           .findUnique({
             where: {
-              email: profile.email,
+              email: profile?.email,
             },
             select: {
               accounts: true,
             },
           })
-          .catch((e) => {
-            prismaErrors(e, undefined);
-          });
+          .catch((e) => prismaErrors(e, null));
 
         // in this case we know there is an existing cognito account
         if (prismaUser?.accounts.length === 0) {
@@ -174,7 +188,6 @@ export const authOptions: NextAuthOptions = {
           throw new Error(`Could not get or create user with email: ${token.email}`);
 
         token.userId = user.id;
-        token.authorizedForm = null;
         token.lastLoginTime = new Date();
         token.acceptableUse = false;
       }
@@ -186,15 +199,15 @@ export const authOptions: NextAuthOptions = {
 
       return token;
     },
-    async session({ session, token }: { session: Session; token: JWT }) {
+    async session({ session, token }) {
       // Add info like 'role' to session object
-      session.user.id = token.userId as string;
-      session.user.authorizedForm = token.authorizedForm;
+      session.user.id = token.userId;
       session.user.lastLoginTime = token.lastLoginTime;
       session.user.acceptableUse = token.acceptableUse;
       session.user.name = token.name ?? null;
       session.user.image = session.user?.image ?? null;
       session.user.privileges = await getPrivilegeRulesForUser(token.userId as string);
+
       return session;
     },
   },

@@ -5,19 +5,20 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { createMocks } from "node-mocks-http";
 import Redis from "ioredis-mock";
-import { unstable_getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth/next";
 import users from "@pages/api/users";
 import { prismaMock } from "@jestUtils";
 import { Prisma } from "@prisma/client";
 import { Session } from "next-auth";
 import { mockUserPrivileges, ManageUsers, ViewUserPrivileges } from "__utils__/permissions";
+import { logEvent } from "@lib/auditLogs";
 
 jest.mock("next-auth/next");
-jest.mock("@lib/adminLogs");
+jest.mock("@lib/auditLogs");
 
 //Needed in the typescript version of the test so types are inferred correclty
-const mockGetSession = jest.mocked(unstable_getServerSession, { shallow: true });
-
+const mockGetSession = jest.mocked(getServerSession, { shallow: true });
+const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
 const redis = new Redis();
 
 jest.mock("@lib/integration/redisConnector", () => ({
@@ -73,6 +74,7 @@ describe("Users API endpoint", () => {
           email: "forms@cds.ca",
           name: "forms",
           privileges: privileges,
+          acceptableUse: true,
         },
       };
       mockGetSession.mockReturnValue(Promise.resolve(mockSession));
@@ -243,7 +245,7 @@ describe("Users API endpoint", () => {
         emailVerified: null,
         image: null,
         name: "Joe",
-        privileges: [],
+        privileges: ["1", "2"],
       });
 
       const { req, res } = createMocks({
@@ -253,13 +255,35 @@ describe("Users API endpoint", () => {
         },
         body: {
           userID: "2",
-          privileges: [],
+          privileges: [
+            { id: "1", action: "add" },
+            { id: "2", action: "add" },
+            { id: "3", action: "remove" },
+          ],
         },
       });
 
       await users(req, res);
 
       expect(res.statusCode).toBe(200);
+      expect(mockedLogEvent).toHaveBeenNthCalledWith(
+        1,
+        "1",
+        { id: "1", type: "Privilege" },
+        "GrantPrivilege"
+      );
+      expect(mockedLogEvent).toHaveBeenNthCalledWith(
+        2,
+        "1",
+        { id: "2", type: "Privilege" },
+        "GrantPrivilege"
+      );
+      expect(mockedLogEvent).toHaveBeenNthCalledWith(
+        3,
+        "1",
+        { id: "3", type: "Privilege" },
+        "RevokePrivilege"
+      );
     });
   });
 
@@ -273,6 +297,7 @@ describe("Users API endpoint", () => {
             email: "forms@cds.ca",
             name: "forms",
             privileges: [],
+            acceptableUse: true,
           },
         };
         mockGetSession.mockReturnValue(Promise.resolve(mockSession));
@@ -295,6 +320,12 @@ describe("Users API endpoint", () => {
 
         expect(res.statusCode).toBe(403);
         expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ error: "Forbidden" }));
+        expect(mockedLogEvent).toHaveBeenCalledWith(
+          "1",
+          { type: "User" },
+          "AccessDenied",
+          "Attempted to list users"
+        );
       });
 
       it("User with no permission should not be able to use PUT API functions", async () => {
@@ -313,6 +344,12 @@ describe("Users API endpoint", () => {
 
         expect(res.statusCode).toBe(403);
         expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ error: "Forbidden" }));
+        expect(mockedLogEvent).toHaveBeenCalledWith(
+          "1",
+          { type: "Privilege" },
+          "AccessDenied",
+          "Attempted to modify privilege on user 2"
+        );
       });
     });
 
@@ -325,6 +362,7 @@ describe("Users API endpoint", () => {
             email: "forms@cds.ca",
             name: "forms",
             privileges: ViewUserPrivileges,
+            acceptableUse: true,
           },
         };
         mockGetSession.mockReturnValue(Promise.resolve(mockSession));
@@ -350,6 +388,12 @@ describe("Users API endpoint", () => {
 
         expect(res.statusCode).toBe(403);
         expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ error: "Forbidden" }));
+        expect(mockedLogEvent).toHaveBeenCalledWith(
+          "1",
+          { type: "Privilege" },
+          "AccessDenied",
+          "Attempted to modify privilege on user 2"
+        );
       });
     });
   });

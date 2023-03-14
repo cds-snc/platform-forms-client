@@ -3,7 +3,7 @@
  */
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { createMocks, RequestMethod } from "node-mocks-http";
-import { unstable_getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth/next";
 import download from "@pages/api/id/[form]/[submission]/download";
 import { Session } from "next-auth";
 import { Base, mockUserPrivileges } from "__utils__/permissions";
@@ -14,9 +14,10 @@ import { mockClient } from "aws-sdk-client-mock";
 import { EventEmitter } from "events";
 import testFormConfig from "../../../../../__fixtures__/accessibilityTestForm.json";
 import initialSettings from "../../../../../flag_initialization/default_flag_settings.json";
-import { logMessage } from "@lib/logger";
+import { logEvent } from "@lib/auditLogs";
 
 jest.mock("next-auth/next");
+jest.mock("@lib/auditLogs");
 
 const ddbMock = mockClient(DynamoDBDocumentClient);
 
@@ -46,7 +47,8 @@ jest.mock("@lib/cache/flags", () => {
 });
 
 //Needed in the typescript version of the test so types are inferred correclty
-const mockGetSession = jest.mocked(unstable_getServerSession, { shallow: true });
+const mockGetSession = jest.mocked(getServerSession, { shallow: true });
+const mockLogEvent = jest.mocked(logEvent, { shallow: true });
 const testFormTemplate = {
   id: "testForm",
   form: testFormConfig,
@@ -172,6 +174,20 @@ describe("/api/id/[form]/[submission]/download", () => {
       await download(req, res);
 
       expect(res.statusCode).toBe(403);
+      expect(mockLogEvent).toHaveBeenNthCalledWith(
+        1,
+        "1",
+        { id: "formTestID", type: "Form" },
+        "AccessDenied",
+        "Attemped to read form object"
+      );
+      expect(mockLogEvent).toHaveBeenNthCalledWith(
+        2,
+        "1",
+        { type: "Response" },
+        "AccessDenied",
+        "Attemped to download response for submissionID 123456789"
+      );
     });
     test.skip("Renders a HTML file", async () => {
       // Data mocks
@@ -193,8 +209,6 @@ describe("/api/id/[form]/[submission]/download", () => {
       ddbMock.on(GetCommand).resolves(dynamodbExpectedResponse);
       ddbMock.on(UpdateCommand).resolves;
 
-      const spiedLogMessage = jest.spyOn(logMessage, "info");
-
       const { req, res } = createMocks(
         {
           method: "GET",
@@ -214,9 +228,20 @@ describe("/api/id/[form]/[submission]/download", () => {
       await download(req, res);
 
       expect(res.statusCode).toBe(200);
-      expect(spiedLogMessage).toHaveBeenCalledWith(
-        "user:forms@cds.ca retrieved form responses for response name: 123-test, submissionID: 12, form ID: formtestID"
+      expect(mockLogEvent).toHaveBeenNthCalledWith(
+        1,
+        "1",
+        { id: "formtestID", type: "Form" },
+        "ReadForm"
       );
+      expect(mockLogEvent).toHaveBeenNthCalledWith(
+        2,
+        "1",
+        { id: "123-test", type: "Response" },
+        "DownloadResponse",
+        "Downloaded form response for submission ID 12"
+      );
+
       expect(res._getHeaders()).toMatchObject({
         "content-disposition": "attachment; filename=123-test.html",
       });
