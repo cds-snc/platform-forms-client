@@ -14,7 +14,7 @@ import { Base, ManageForms, getUserPrivileges } from "__utils__/permissions";
 
 jest.mock("next-auth/next");
 
-//Needed in the typescript version of the test so types are inferred correclty
+//Needed in the typescript version of the test so types are inferred correctly
 const mockGetSession = jest.mocked(getServerSession, { shallow: true });
 
 describe.skip("/id/[forms]/owners", () => {

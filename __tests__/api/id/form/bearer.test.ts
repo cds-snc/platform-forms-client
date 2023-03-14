@@ -14,7 +14,7 @@ import { Session } from "next-auth";
 
 jest.mock("next-auth/next");
 
-//Needed in the typescript version of the test so types are inferred correclty
+//Needed in the typescript version of the test so types are inferred correctly
 const mockGetSession = jest.mocked(getServerSession, { shallow: true });
 
 jest.mock("@lib/logger");
