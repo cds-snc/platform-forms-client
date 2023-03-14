@@ -30,7 +30,7 @@ import { Prisma } from "@prisma/client";
 import { AccessControlError, checkPrivilegesAsBoolean, createAbility } from "@lib/privileges";
 import {
   Base,
-  getUserPrivileges,
+  mockUserPrivileges,
   ManageForms,
   ManageUsers,
   PublishForms,
@@ -72,7 +72,7 @@ const buildPrismaResponse = (
 describe("Template CRUD functions", () => {
   it.each([[Base], [Base.concat(ManageForms)]])("Create a Template", async (privileges) => {
     const fakeSession = {
-      user: { id: "1", privileges: getUserPrivileges(privileges, { user: { id: "1" } }) },
+      user: { id: "1", privileges: mockUserPrivileges(privileges, { user: { id: "1" } }) },
     };
     const ability = createAbility(fakeSession as Session);
 
@@ -114,7 +114,7 @@ describe("Template CRUD functions", () => {
 
   it.each([[Base], [Base.concat(ManageForms)]])("Get multiple Templates", async (privileges) => {
     const fakeSession = {
-      user: { id: "1", privileges: getUserPrivileges(privileges, { user: { id: "1" } }) },
+      user: { id: "1", privileges: mockUserPrivileges(privileges, { user: { id: "1" } }) },
     };
     const ability = createAbility(fakeSession as Session);
 
@@ -169,7 +169,7 @@ describe("Template CRUD functions", () => {
 
   it.each([[Base], [Base.concat(ManageForms)]])("No templates returned", async (privileges) => {
     const fakeSession = {
-      user: { id: "1", privileges: getUserPrivileges(privileges, { user: { id: "1" } }) },
+      user: { id: "1", privileges: mockUserPrivileges(privileges, { user: { id: "1" } }) },
     };
     const ability = createAbility(fakeSession as Session);
 
@@ -184,7 +184,7 @@ describe("Template CRUD functions", () => {
     const fakeSession = {
       user: {
         id: "1",
-        privileges: getUserPrivileges(Base.concat(ManageForms), { user: { id: "1" } }),
+        privileges: mockUserPrivileges(Base.concat(ManageForms), { user: { id: "1" } }),
       },
     };
     const ability = createAbility(fakeSession as Session);
@@ -220,7 +220,7 @@ describe("Template CRUD functions", () => {
 
   it("Get templates linked to the provided user if they have the Base privileges", async () => {
     const fakeSession = {
-      user: { id: "1", privileges: getUserPrivileges(Base, { user: { id: "1" } }) },
+      user: { id: "1", privileges: mockUserPrivileges(Base, { user: { id: "1" } }) },
     };
     const ability = createAbility(fakeSession as Session);
 
@@ -293,7 +293,7 @@ describe("Template CRUD functions", () => {
 
   it("Get a full template", async () => {
     const fakeSession = {
-      user: { id: "1", privileges: getUserPrivileges(Base, { user: { id: "1" } }) },
+      user: { id: "1", privileges: mockUserPrivileges(Base, { user: { id: "1" } }) },
     };
     const ability = createAbility(fakeSession as Session);
 
@@ -381,7 +381,7 @@ describe("Template CRUD functions", () => {
     const fakeSession = {
       user: {
         id: "1",
-        privileges: getUserPrivileges(Base.concat(ManageForms, ViewUserPrivileges), {
+        privileges: mockUserPrivileges(Base.concat(ManageForms, ViewUserPrivileges), {
           user: { id: "1" },
         }),
       },
@@ -425,7 +425,7 @@ describe("Template CRUD functions", () => {
 
   it.each([[Base], [Base.concat(ManageForms)]])("Update Template", async (privileges) => {
     const fakeSession = {
-      user: { id: "1", privileges: getUserPrivileges(privileges, { user: { id: "1" } }) },
+      user: { id: "1", privileges: mockUserPrivileges(privileges, { user: { id: "1" } }) },
     };
     const ability = createAbility(fakeSession as Session);
 
@@ -479,7 +479,7 @@ describe("Template CRUD functions", () => {
     const fakeSession = {
       user: {
         id: "1",
-        privileges: getUserPrivileges(Base.concat(PublishForms), { user: { id: "1" } }),
+        privileges: mockUserPrivileges(Base.concat(PublishForms), { user: { id: "1" } }),
       },
     };
     const ability = createAbility(fakeSession as Session);
@@ -531,7 +531,9 @@ describe("Template CRUD functions", () => {
     const fakeSession = {
       user: {
         id: "1",
-        privileges: getUserPrivileges(Base.concat(ManageForms, ManageUsers), { user: { id: "1" } }),
+        privileges: mockUserPrivileges(Base.concat(ManageForms, ManageUsers), {
+          user: { id: "1" },
+        }),
       },
     };
     const ability = createAbility(fakeSession as Session);
@@ -588,7 +590,9 @@ describe("Template CRUD functions", () => {
     const fakeSession = {
       user: {
         id: "1",
-        privileges: getUserPrivileges(Base.concat(ManageForms, ManageUsers), { user: { id: "1" } }),
+        privileges: mockUserPrivileges(Base.concat(ManageForms, ManageUsers), {
+          user: { id: "1" },
+        }),
       },
     };
     const ability = createAbility(fakeSession as Session);
@@ -614,7 +618,7 @@ describe("Template CRUD functions", () => {
     "Remove DeliveryOption from template",
     async (privileges) => {
       const fakeSession = {
-        user: { id: "1", privileges: getUserPrivileges(privileges, { user: { id: "1" } }) },
+        user: { id: "1", privileges: mockUserPrivileges(privileges, { user: { id: "1" } }) },
       };
       const ability = createAbility(fakeSession as Session);
 
@@ -669,7 +673,7 @@ describe("Template CRUD functions", () => {
 
   it.each([[Base], [Base.concat(ManageForms)]])("Delete template", async (privileges) => {
     const fakeSession = {
-      user: { id: "1", privileges: getUserPrivileges(privileges, { user: { id: "1" } }) },
+      user: { id: "1", privileges: mockUserPrivileges(privileges, { user: { id: "1" } }) },
     };
     const ability = createAbility(fakeSession as Session);
 
@@ -745,7 +749,7 @@ describe("Template CRUD functions", () => {
 
   it("User with no permission should not be able to use CRUD functions", async () => {
     const fakeSession = {
-      user: { id: "1", privileges: getUserPrivileges([], { user: { id: "1" } }) },
+      user: { id: "1", privileges: mockUserPrivileges([], { user: { id: "1" } }) },
     };
     const ability = createAbility(fakeSession as Session);
 
@@ -835,7 +839,7 @@ describe("Template CRUD functions", () => {
 
   it("User with no relation to the template being interacted with should not be able to use get, update and delete functions", async () => {
     const fakeSession = {
-      user: { id: "1", privileges: getUserPrivileges(Base, { user: { id: "1" } }) },
+      user: { id: "1", privileges: mockUserPrivileges(Base, { user: { id: "1" } }) },
     };
     const ability = createAbility(fakeSession as Session);
 

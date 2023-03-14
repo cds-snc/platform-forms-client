@@ -2,10 +2,14 @@
   "titleEn": "Lemonade Stand Funding",
   "titleFr": "Financement des stands de limonade",
   "confirmation": {
-    "descriptionEn": "#Your submission has been received \n\r Thank you for your interest. We will contact you within 3-5 business days.  \n\r <a href='https://digital.canada.ca'>Go back</a>",
-    "descriptionFr": "#[fr] Your submission has been received. \n\r Thank you for your interest. We will contact you within 3-5 business days. \n\r <a href='https://digital.canada.ca'>Go back</a>",
+    "descriptionEn": "#Your submission has been received \n\r Thank you for your interest. We will contact you within 3-5 business days.  \n\r [Go back](https://digital.canada.ca)",
+    "descriptionFr": "#[fr] Your submission has been received. \n\r Thank you for your interest. We will contact you within 3-5 business days. \n\r [Go back](https://digital.canada.ca)",
     "referrerUrlEn": "",
     "referrerUrlFr": ""
+  },
+  "privacyPolicy": {
+    "descriptionEn": "Privacy statement",
+    "descriptionFr": "[FR] Privacy statement"
   },
   "layout": [1],
   "elements": [

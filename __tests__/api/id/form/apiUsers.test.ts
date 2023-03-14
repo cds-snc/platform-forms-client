@@ -10,7 +10,7 @@ import apiUsers from "@pages/api/id/[form]/apiusers";
 import { prismaMock } from "@jestUtils";
 import { Prisma } from "@prisma/client";
 import { Session } from "next-auth";
-import { Base, ManageForms, getUserPrivileges } from "__utils__/permissions";
+import { Base, ManageForms, mockUserPrivileges } from "__utils__/permissions";
 
 jest.mock("next-auth/next");
 
@@ -62,8 +62,7 @@ describe.skip("/id/[forms]/owners", () => {
             id: "1",
             email: "forms@cds.ca",
             name: "forms user",
-            privileges: getUserPrivileges(Base, { user: { id: "1" } }),
-            acceptableUse: true,
+            privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
           },
         };
 
@@ -236,8 +235,7 @@ describe.skip("/id/[forms]/owners", () => {
             id: "1",
             email: "forms@cds.ca",
             name: "forms user",
-            privileges: getUserPrivileges(ManageForms, { user: { id: "1" } }),
-            acceptableUse: true,
+            privileges: mockUserPrivileges(ManageForms, { user: { id: "1" } }),
           },
         };
 
@@ -415,8 +413,7 @@ describe.skip("/id/[forms]/owners", () => {
             id: "1",
             email: "forms@cds.ca",
             name: "forms user",
-            privileges: getUserPrivileges(Base, { user: { id: "1" } }),
-            acceptableUse: true,
+            privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
           },
         };
 
@@ -598,8 +595,7 @@ describe.skip("/id/[forms]/owners", () => {
             id: "1",
             email: "forms@cds.ca",
             name: "forms user",
-            privileges: getUserPrivileges(ManageForms, { user: { id: "1" } }),
-            acceptableUse: true,
+            privileges: mockUserPrivileges(ManageForms, { user: { id: "1" } }),
           },
         };
 
@@ -787,8 +783,7 @@ describe.skip("/id/[forms]/owners", () => {
             id: "1",
             email: "forms@cds-snc.ca",
             name: "forms user",
-            privileges: getUserPrivileges(Base, { user: { id: "1" } }),
-            acceptableUse: true,
+            privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
           },
         };
 
@@ -991,8 +986,7 @@ describe.skip("/id/[forms]/owners", () => {
             id: "1",
             email: "forms@cds.ca",
             name: "forms user",
-            privileges: getUserPrivileges(ManageForms, { user: { id: "1" } }),
-            acceptableUse: true,
+            privileges: mockUserPrivileges(ManageForms, { user: { id: "1" } }),
           },
         };
 

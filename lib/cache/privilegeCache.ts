@@ -3,8 +3,7 @@ import { getRedisInstance } from "../integration/redisConnector";
 import { Permission } from "@lib/types";
 
 // If NODE_ENV is in test mode (Jest Tests) do not use the cache
-const cacheAvailable: boolean =
-  process.env.APP_ENV !== "test" && process.env.REDIS_URL ? true : false;
+const cacheAvailable: boolean = process.env.APP_ENV !== "test" && Boolean(process.env.REDIS_URL);
 
 // Return a random number between 300 and 600  (5 - 10 minutes)
 const randomCacheExpiry = () => Math.floor(Math.random() * 300 + 300);

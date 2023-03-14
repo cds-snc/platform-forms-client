@@ -568,4 +568,5 @@ const SimpleForm = {
 export default {
   development: [LemonadeStand, SimpleForm],
   production: [],
+  test: [LemonadeStand, SimpleForm],
 } as JsonFormCollection;
