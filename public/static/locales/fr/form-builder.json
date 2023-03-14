@@ -385,6 +385,7 @@
   "settingsResponseNote": " Définissez les parametres de la livraison des réponses avant de tester la livraison et de publier.",
   "settingsResponseNotePublished": "Pour modifier la destination de livraison des réponses.",
   "settingsResponseTitle": "Destination de livraison des réponses.",
+  "settingsNavHome": "[FR] Response delivery",
   "share": {
     "copy": "Copier",
     "email": "Partager par courriel",
