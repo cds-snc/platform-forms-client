@@ -14,7 +14,7 @@ jest.mock("next-auth/react");
 jest.mock("@lib/acceptableUseCache");
 const mockedSetAcceptableUse = jest.mocked(setAcceptableUse, { shallow: true });
 const mockedGetCsrfToken = jest.mocked(getCsrfToken, { shallow: true });
-//Needed in the typescript version of the test so types are inferred correclty
+//Needed in the typescript version of the test so types are inferred correctly
 const mockGetSession = jest.mocked(getServerSession, { shallow: true });
 
 describe("Test acceptable use endpoint", () => {

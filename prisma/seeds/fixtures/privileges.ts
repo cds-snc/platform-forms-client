@@ -126,4 +126,14 @@ export default {
     ViewApplicationSettings,
     ManageApplicationSettings,
   ],
+  test: [
+    Base,
+    PublishForms,
+    ManageForms,
+    ViewUserPrivileges,
+    ManageUsers,
+    ManagePrivileges,
+    ViewApplicationSettings,
+    ManageApplicationSettings,
+  ],
 } as PrivilegeCollection;

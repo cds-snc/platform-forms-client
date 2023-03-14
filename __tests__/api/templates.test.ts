@@ -13,9 +13,9 @@ import validFormTemplateWithHTMLInDynamicRow from "../../__fixtures__/validFormT
 import brokenFormTemplate from "../../__fixtures__/brokenFormTemplate.json";
 import { prismaMock } from "@jestUtils";
 import { Session } from "next-auth";
-import { Base, getUserPrivileges, ManageForms, PublishForms } from "__utils__/permissions";
+import { Base, mockUserPrivileges, ManageForms, PublishForms } from "__utils__/permissions";
 
-//Needed in the typescript version of the test so types are inferred correclty
+//Needed in the typescript version of the test so types are inferred correctly
 const mockGetSession = jest.mocked(getServerSession, { shallow: true });
 
 jest.mock("next-auth/next");
@@ -141,7 +141,7 @@ describe("Test templates API functions", () => {
           id: "1",
           email: "a@b.com",
           name: "Testing Forms",
-          privileges: getUserPrivileges(privileges, { user: { id: "1" } }),
+          privileges: mockUserPrivileges(privileges, { user: { id: "1" } }),
           acceptableUse: true,
         },
       };
@@ -262,7 +262,7 @@ describe("Test templates API functions", () => {
           id: "1",
           email: "a@b.com",
           name: "Testing Forms",
-          privileges: getUserPrivileges(PublishForms, { user: { id: "1" } }),
+          privileges: mockUserPrivileges(PublishForms, { user: { id: "1" } }),
           acceptableUse: true,
         },
       };
@@ -316,7 +316,7 @@ describe("Test templates API functions", () => {
           id: "1",
           email: "a@b.com",
           name: "Testing Forms",
-          privileges: getUserPrivileges(privileges, { user: { id: "1" } }),
+          privileges: mockUserPrivileges(privileges, { user: { id: "1" } }),
           acceptableUse: true,
         },
       };
@@ -457,7 +457,7 @@ describe("Templates API functions should throw an error if user does not have pe
           id: "1",
           email: "forms@cds.ca",
           name: "forms",
-          privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+          privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
           acceptableUse: true,
         },
       };
@@ -497,7 +497,7 @@ describe("Templates API functions should throw an error if user does not have pe
           id: "1",
           email: "forms@cds.ca",
           name: "forms",
-          privileges: getUserPrivileges(PublishForms, { user: { id: "1" } }),
+          privileges: mockUserPrivileges(PublishForms, { user: { id: "1" } }),
           acceptableUse: true,
         },
       };
@@ -537,7 +537,7 @@ describe("Templates API functions should throw an error if user does not have pe
           id: "1",
           email: "forms@cds.ca",
           name: "forms",
-          privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+          privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
           acceptableUse: true,
         },
       };

@@ -15,12 +15,12 @@ import {
 import Redis from "ioredis-mock";
 import initialSettings from "../../../../../flag_initialization/default_flag_settings.json";
 import { prismaMock } from "@jestUtils";
-import { Base, getUserPrivileges } from "__utils__/permissions";
+import { Base, mockUserPrivileges } from "__utils__/permissions";
 import { logEvent } from "@lib/auditLogs";
 jest.mock("@lib/auditLogs");
 
 jest.mock("next-auth/next");
-//Needed in the typescript version of the test so types are inferred correclty
+//Needed in the typescript version of the test so types are inferred correctly
 const mockGetSession = jest.mocked(getServerSession, { shallow: true });
 
 const redis = new Redis();
@@ -89,7 +89,7 @@ describe("Report problem with form submissions (with active session)", () => {
         id: "1",
         email: "a@b.com",
         name: "Testing Forms",
-        privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+        privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
         acceptableUse: true,
       },
     };
