@@ -16,7 +16,7 @@
       "title": "Quelle est votre adresse?"
     },
     "advancedBlocks": "Blocs avancés",
-    "allRequired": "Tous obligatoires",
+    "allRequired": "Toutes obligatoires",
     "answer": "Réponse...",
     "attest": "J'accepte :",
     "attestation": {
@@ -65,15 +65,15 @@
     "example": "exemple",
     "exampleElement": "exemple du bloc",
     "name": {
-      "description": "[FR] Include your first and last names. Middle names are optional",
-      "label": "[FR] Full name",
-      "title": "[FR] What is your name?"
+      "description": "Indiquez votre prénom et nom. Le deuxième prénom est facultatif",
+      "label": "Nom complet",
+      "title": "Quel est votre nom?"
     },
     "inputBlocks": "Blocs de saisie",
     "layoutBlocks": "Blocs de mise en page",
     "listItem": "Élément de liste ",
     "firstMiddleLastName": {
-      "description": "Description du nom (FR 3 fields)",
+      "description": "Description du nom (3 champs)",
       "first": {
         "description": "Description du prénom",
         "label": "Prénom"
@@ -89,6 +89,11 @@
       },
       "title": "Titre du nom"
     },
+    "fileInput": {
+      "description": "[FR] File input description",
+      "label": "[FR] File input",
+      "title": "[FR] File input"
+    },
     "no": "Non",
     "number": {
       "description": "Description du numéro",
@@ -100,7 +105,7 @@
       "title": "Boutons radio"
     },
     "richText": {
-      "description": "Texte plus petit pour les paragraphes, les <a tab-index=\"-1\" href=\"#\">hyperliens</a> et les listes.",
+      "description": "Texte pour les paragraphes, les <a tab-index=\"-1\" href=\"#\">hyperliens</a> et les listes.",
       "title": "Texte en grand format"
     },
     "sometimes": "Parfois",
@@ -148,20 +153,20 @@
     "url": "Adresse du site Web"
   },
   "autocompleteWhenNotToUse": {
-    "text1": "[FR] Auto complete attributes may not work well for information the form filler does not enter regularly. Things like historical or business information may not fill in correctly.",
-    "text2": "[FR] Usability testing is a good way to understand if the rules you set cause problems with filling in forms.",
-    "title": "[FR] When not to use autocomplete"
+    "text1": "Les attributs de remplissage automatique pourraient ne pas fonctionner correctement pour les informations que les personnes qui ne saisissent pas régulièrement. Des informations historiques ou commerciales risquent d'être erronées.",
+    "text2": "Les tests d'utilisabilité sont un bon moyen de comprendre si les règles que vous fixez posent des problèmes pour les personnes qui remplissent le formulaire.",
+    "title": "Quand ne pas utiliser le remplissage automatique"
   },
   "backToForm": "Retourner au formulaire",
   "cancel": "Annuler  ",
   "characterLimitDescription": "N'utilisez une limite de caractères que lorsqu'il existe une bonne raison de limiter le nombre de caractères que les utilisateur·rice·s peuvent entrer.",
   "characterLimitWhenToUse": {
-    "text1": "[FR] Evidence that users are likely to enter more information than they need to.",
-    "text2": "[FR] A legal or technical reason that means an entry must be no more than a certain number of characters.",
-    "text3": "[FR] If your users keep hitting the character limit imposed by the backend of your service then try to increase the limit rather than use a character count.",
-    "title": "[FR] Reasons for using a character limit"
+    "text1": "Des preuves que les utilisateur·rice·s sont susceptibles de saisir plus d'informations qu'ils n'en ont besoin.",
+    "text2": "Une raison légale ou technique qui fait qu'une entrée ne doit pas dépasser un certain nombre de caractères.",
+    "text3": "Si vos utilisateur·rice·s atteignent constamment à la limite de caractères imposée par le backend de votre service, essayez d'augmenter la limite plutôt que d'utiliser un nombre de caractères.",
+    "title": "Raisons pour la limite de caractères"
   },
-  "checkboxes": "Choix multiple",
+  "checkboxes": "Choix multiples",
   "close": "Fermer",
   "closeModal": "Fermer fenêtre modale",
   "completed": "Complétée",
@@ -170,8 +175,8 @@
   "confirmationDescriptionItem3": "des liens pour obtenir de l’information ou des liens vers des services que les utilisateur·rice·s pourraient utiliser plus tard.",
   "confirmationDescriptionItem4": "un lien vers le formulaire de rétroaction (Si vous n’en avez pas, vous pouvez en créer un à l’aide de Formulaires GC qui sera lancé même temps que votre formulaire principal).",
   "confirmationDescriptionParagraph": "Le message de confirmation s’affichera sur une nouvelle page une fois le formulaire soumis. Voici quelques éléments utiles à présenter dans votre page de confirmation :",
-  "confirmationMessage": "Message de confirmation du formulaire",
-  "confirmationPage": "Page du confirmation",
+  "confirmationMessage": "Message de confirmation",
+  "confirmationPage": "Page de confirmation",
   "contactSupport": "Contacter l’équipe de soutien",
   "contactSupportIfYouHaveQuestions": "<a href=\"/fr/form-builder/support\" target=\"_blank\">Veuillez contacter</a>  l’équipe de soutien si vous avez des questions. ",
   "contactus": {
@@ -206,10 +211,10 @@
     "number": "N'entrez que des nombres",
     "phone": "Entrez un numéro de téléphone comme 111-222-3333"
   },
-  "description": "La description ",
+  "description": "Description ",
   "descriptionDescription": "La description apparaît sous l'étiquette, et avant le champ. Elle est utilisée pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de mise en forme.",
   "didYouFindThisToolHelpful": "Avez-vous trouvé cet outil pertinent? <a href=\"/fr/form-builder/contactus\" target=\"_blank\">Donner votre avis</a>",
-  "downloadCSV": "Télécharger le fichier CSV",
+  "downloadCSV": "Exporter en fichier CSV",
   "dropdown": "Liste déroulante",
   "duplicate": "Dupliquer",
   "dyanamicRow": "Série répétitive de questions",
@@ -262,7 +267,7 @@
     "downloadBtnText": "Télécharger le fichier du formulaire",
     "title": "Télécharger le fichier du formulaire"
   },
-  "formIntroduction": "Présentation du formulaire",
+  "formIntroduction": "Introduction du formulaire ",
   "formInvalidProperty": "Invalide : {{property}}",
   "formMissingProperty": "Disparues : {{property}}",
   "formSettings": "Paramétres du formulaire",
@@ -300,7 +305,7 @@
   "optionText": "Texte d'option",
   "pagePreview": "Prévisualiser",
   "pageSettings": "Paramètres",
-  "pageText": "Section texte",
+  "pageText": "Section texte ",
   "paragraph": "Réponse longue",
   "phoneNumber": "Numéro de téléphone",
   "placeHolderFormTitle": "Titre du formulaire",
@@ -314,7 +319,7 @@
   "publishedErrors": "Erreurs du formulaire publiés",
   "publishedTitle": "Votre formulaire est publié.",
   "publishedViewLinks": "Visualisez et partagez votre formulaire publié à partir de ces liens : ",
-  "publishingDisablesEditing": "La publication désactive toute modification..",
+  "publishingDisablesEditing": "La publication désactive toute modification.",
   "publishingDisablesEditingDescription": "Une fois publié, vous ne pouvez plus apporter des modifications à ce formulaire. Si des modifications sont nécessaires après la publication, utilisez le fichier du formulaire pour créer et publier un nouveau formulaire.",
   "publishNoAuthSubTitle": "Vous pouvez publier et héberger votre formulaire avec Formulaires GC.",
   "publishNoAuthText": "Pour publier votre formulair <a href=\"{{signIn}}\"> connectez-vous</a>  à votre compte Formulaires GC. Si vous n'avez pas de compte Formulaires GC, <a href=\"{{createOne}}\">créez-en un</a>.",
@@ -361,10 +366,10 @@
       "toAccessPagePart2": "à votre compte Formulaires GC"
     }
   },
-  "richText": "Section texte",
+  "richText": "Section texte ",
   "richTextConfirmationTitle": "Page et message de confirmation",
   "richTextEditor": "Éditeur de texte enrichi",
-  "richTextIntroTitle": "Présentation du formulaire",
+  "richTextIntroTitle": "Introduction du formulaire ",
   "richTextPrivacyTitle": "Déclaration de confidentialité",
   "save": "Enregistrer",
   "saveAndRequest": "Enregistrer le formulaire et demander la capacité de publier",
@@ -411,7 +416,7 @@
     "toPreview": "Pour prévisualiser ce formulaire :",
     "unauthenticated": {
       "copyInstructions": "Copier les instructions",
-      "description": "Vous ne pouvez pas partager un formulaire directement de Formulaires GC sans compte. <a href=\"/auth/login\">Connectez-vous</a> ou <a href=\"/signup/register\">créez un compte</a> pour accéder a1 cette fonctionalité et d'autres.",
+      "description": "Vous ne pouvez pas partager un formulaire directement de Formulaires GC sans compte. <a href=\"/auth/login\">Connectez-vous</a> ou <a href=\"/signup/register\">créez un compte</a> pour accéder à cette fonctionalité et d'autres.",
       "downloadFormFile": "Télécharger le fichier du formulaire",
       "instructions": "Vous pouvez télécharger une copie de ce fichier de formulaire sur votre ordinateur et le partager par courriel.",
       "step1": "Étape 1",
@@ -430,8 +435,8 @@
   "startFormIntro": "Ajoutez une description à votre formulaire pour définir les attentes des personnes qui le remplissent.",
   "startH2": "Créer un formulaire",
   "startH3": "Ouvrir un formulaire",
-  "startP1": "Commencez à créer un formulaire à partir de zéro.",
-  "startP2": "Affichez et modifiez un formulaire en téléversant un fichier de votre ordinateur.",
+  "startP1": "Commencez à partir de zéro.",
+  "startP2": "Modifiez un formulaire téléversé de votre ordinateur.",
   "submit": "Soumettre",
   "submittedResponsesText": "Les réponses soumises seront envoyées à {{email}}.",
   "support": {
@@ -466,14 +471,21 @@
   "tooltipFormatNumberedList": "Liste numérotée",
   "tooltipInsertLink": "Insérer un lien",
   "translate": "Traduire",
-  "translateDescription": "Inscrivez la traduction du formulaire à côté de la version originale pour permettre aux personnes de le remplir dans l’une des deux langues officielles. ",
+  "translateDescription": "Traduisez le contenu de votre formulaire côte à côte pour offrir une expérience bilingue aux personnes qui remplissent votre formulaire. ",
   "translateTitle": "Entrer la traduction",
   "unlockPublishing": "Soumettre",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
   "unnamedForm": "Formulaire sans titre",
-  "autocompleteIsSetTo": "Autcomplete is set to:",
+  "autocompleteIsSetTo": "Le remplissage automatique est réglé :",
   "maxNumberOfRows": {
-    "label": "[FR] Maximum number of rows",
-    "description": "[FR] The maximum number of rows that can be added"
+    "label": "Nombre maximum de réponses",
+    "description": "Les utilisateur·rice·s peuvent fournir jusqu'à ce nombre d'entrées pour cette question."
+  },
+  "branding": {
+    "heading": "Image de marque",
+    "text1": "Formulaires GC affiche par défaut la signature du gouvernement du Canada dans l’en-tête de votre formulaire. Si nécessaire, vous pouvez modifier l’image de marque de ce formulaire.",
+    "select": "Sélectionnez l’image de marque de votre formulaire",
+    "preview": "Prévisualisation",
+    "defaultOption": "Gouvernement du Canada (par défault)"
   }
 }

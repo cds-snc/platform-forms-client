@@ -14,9 +14,9 @@
     "formTitle": "Titre du formulaire",
     "status": "Statut",
     "published": "Publié",
-    "draft": "Brouillon",
+    "draft": "Ébauche",
     "publishForm": "Publier",
-    "unpublishForm": "Brouillon",
+    "unpublishForm": "Ébauche",
     "users": "Utilisateur·rice·s",
     "assign": "Assigner"
   },

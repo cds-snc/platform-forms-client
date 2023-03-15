@@ -77,6 +77,7 @@ export interface FormElement {
   type: FormElementTypes;
   properties: ElementProperties;
   onchange?: (event: ChangeEvent) => void;
+  brand?: BrandProperties;
 }
 
 /**
@@ -122,6 +123,7 @@ export interface DeliveryOption {
   emailAddress: string;
   emailSubjectEn?: string;
   emailSubjectFr?: string;
+  [key: string]: string | undefined;
 }
 
 // defines the fields for the form record that is available in authenticated spaces and backend processes

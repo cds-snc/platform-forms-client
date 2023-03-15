@@ -31,7 +31,11 @@ Cypress.on("uncaught:exception", () => {
 });
 
 beforeEach(() => {
-  Object.keys(flagsDefault).forEach((key) => {
-    cy.useFlag(`${key}`, flagsDefault[key]);
-  });
+  cy.login()
+    .then(() => {
+      Object.keys(flagsDefault).forEach((key) => {
+        cy.useFlag(`${key}`, flagsDefault[key], true);
+      });
+    })
+    .then(() => cy.logout());
 });

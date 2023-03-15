@@ -1,13 +1,13 @@
 describe("Login Page", () => {
-  describe("Bearer Token State", () => {
+  describe("User login screen", () => {
     beforeEach(() => {
-      cy.visit("/en/auth/login");
+      cy.visitPage("/en/auth/login");
     });
 
     it("EN page renders", () => {
       cy.get("h1").should("contain", "Sign in");
-      cy.get("input[id='username']");
-      cy.get("input[id='password']");
+      cy.get("input[id='username']").should("be.visible");
+      cy.get("input[id='password']").should("be.visible");
     });
 
     it("Change page language", () => {
@@ -62,33 +62,11 @@ describe("Login Page", () => {
       cy.get("[id='errorMessagepassword']").should("not.exist");
     });
 
-    it("Displays an error message when submitting a form and getting an unsuccessful reply from the server.", () => {
-      cy.intercept("POST", "/api/token/temporary", {
-        statusCode: 403,
-      }).as("userSuccess");
-      cy.get("input[id='username']").type("test@cds-snc.ca");
+    it("Sucessfully signs in", () => {
+      cy.get("input[id='username']").type("test.user@cds-snc.ca");
+      cy.get("input[id='password']").type("testTesttest");
       cy.get("[type='submit']").click();
-      cy.get("[data-testid='alert']").should("be.visible");
+      cy.url().should("contain", "/auth/policy");
     });
   });
-
-  //TODO I think this test needs to be updated with current or future work
-  // describe("Temporary Token State", () => {
-  //   it("Submits good bearer token and displays the temporary token state", () => {
-  //     cy.visit("/en/auth/login");
-  //     cy.intercept("POST", "/api/token/temporary", {
-  //       statusCode: 200,
-  //     }).as("userSuccess");
-  //     cy.get("input[id='loginEmail']").type("test@cds-snc.ca");
-  //     cy.get("textarea[id='signInKey']").type("fAkE_sIgN_iN_kEy");
-  //     cy.get("[type='submit']").click();
-  //   });
-  //   it("Displays the temporary token state after a successful response", () => {
-  //     cy.get("[data-testid='alert']").should("not.exist");
-  //   });
-  //   it("Displays an error when entering an invalid temporary token", () => {
-  //     cy.get("[type='submit']").click();
-  //     cy.get("[data-testid='alert']").should("be.visible");
-  //   });
-  // });
 });

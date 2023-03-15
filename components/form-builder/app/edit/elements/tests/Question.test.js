@@ -43,7 +43,7 @@ describe("Question", () => {
       </Providers>
     );
 
-    const question = rendered.container.querySelector("#item0");
+    const question = rendered.container.querySelector("#item-1");
     expect(question).toHaveAttribute("placeholder", "question");
     expect(question).toHaveValue("phone input");
 
@@ -84,7 +84,7 @@ describe("Question", () => {
       </Providers>
     );
 
-    const question = rendered.container.querySelector("#item0");
+    const question = rendered.container.querySelector("#item-1");
 
     await user.type(question, "!!!");
 

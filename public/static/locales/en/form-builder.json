@@ -89,6 +89,11 @@
       },
       "title": "What is your name?"
     },
+    "fileInput": {
+      "description": "File input description",
+      "label": "File input",
+      "title": "File input"
+    },
     "no": "No",
     "number": {
       "description": "Number description",
@@ -100,7 +105,7 @@
       "title": "Radio buttons"
     },
     "richText": {
-      "description": "Smaller text for paragraphs, <a tab-index=\"-1\" href=\"#\">hyperlinks</a>, and lists.",
+      "description": "Text for paragraphs, <a tab-index=\"-1\" href=\"#\">hyperlinks</a>, and lists.",
       "title": "Large text"
     },
     "sometimes": "Sometimes",
@@ -431,7 +436,7 @@
   "startH2": "Design a form",
   "startH3": "Open a form file",
   "startP1": "Start with a blank form.",
-  "startP2": "View and edit a form by uploading it from your computer.",
+  "startP2": "Edit a form uploaded from your computer.",
   "submit": "Submit",
   "submittedResponsesText": "Submitted responses will be sent to {{email}}.",
   "support": {
@@ -473,7 +478,14 @@
   "unnamedForm": "Unnamed form file",
   "autocompleteIsSetTo": "Autocomplete is set to:",
   "maxNumberOfRows": {
-    "label": "Maximum number of rows",
-    "description": "The maximum number of rows that can be added"
+    "label": "Maximum number of answers",
+    "description": "Users can provide up to this many entries for this question."
+  },
+  "branding": {
+    "heading": "Branding",
+    "text1": "GC Forms displays the Government of Canada signature in the header of your form by default. If needed, you can change this form’s branding.",
+    "select": "Select branding for your form",
+    "preview" : "Preview",
+    "defaultOption": "Government of Canada (default) "
   }
 }

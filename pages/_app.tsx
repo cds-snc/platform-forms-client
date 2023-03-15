@@ -11,21 +11,6 @@ import "../styles/app.scss";
 import { AnyObject } from "@lib/types";
 import { Session } from "next-auth";
 
-/*
-This component disables SSR when in testing mode.
-This is because in Cypress we're manipulating and mocking the API response calls
-and the SSR pages were not matching the React rendered pages (rendered with different props)
-which generates a warning in the browser console.
-*/
-
-const SafeHydrate = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div id="safeHydrate" suppressHydrationWarning={Boolean(process.env.APP_ENV === "test")}>
-      {typeof window === "undefined" && process.env.APP_ENV === "test" ? null : children}
-    </div>
-  );
-};
-
 export type NextPageWithLayout<P = Record<string, unknown>, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
@@ -47,15 +32,13 @@ const MyApp: React.FC<AppPropsWithLayout> = ({
       refetchOnWindowFocus={true}
     >
       <AccessControlProvider>
-        <SafeHydrate>
-          {Component.getLayout ? (
-            Component.getLayout(<Component {...pageProps} />)
-          ) : (
-            <BaseLayout>
-              <Component {...pageProps} />
-            </BaseLayout>
-          )}
-        </SafeHydrate>
+        {Component.getLayout ? (
+          Component.getLayout(<Component {...pageProps} />)
+        ) : (
+          <BaseLayout>
+            <Component {...pageProps} />
+          </BaseLayout>
+        )}
       </AccessControlProvider>
     </SessionProvider>
   );

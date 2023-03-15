@@ -56,3 +56,4 @@ export { NameIcon } from "./NameIcon";
 export { MessageIcon } from "./Message";
 export { QuestionsIcon } from "./QuestionsIcon";
 export { TranslateIcon } from "./TranslateIcon";
+export { UploadIcon } from "./UploadIcon";

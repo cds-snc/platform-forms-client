@@ -218,4 +218,5 @@ function buildUserLockedOutErrorMessage(
  * 500: `Internal error` if something goes wrong while sending temporary token ; or ; `Server cannot respond at this time` if TOKEN_SECRET environment variable is not defined
  */
 
-export default middleware([cors({ allowedMethods: ["POST"] })], handler);
+// Removing access for all Methods until this API is ready for use.
+export default middleware([cors({ allowedMethods: [] })], handler);

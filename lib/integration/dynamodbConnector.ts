@@ -9,7 +9,7 @@ export function connectToDynamo(): DynamoDBDocumentClient {
   return DynamoDBDocumentClient.from(
     new DynamoDBClient({
       region: process.env.AWS_REGION ?? "ca-central-1",
-      endpoint: process.env.LOCAL_AWS_ENDPOINT,
+      ...(process.env.LOCAL_AWS_ENDPOINT && { endpoint: process.env.LOCAL_AWS_ENDPOINT }),
     })
   );
 }
