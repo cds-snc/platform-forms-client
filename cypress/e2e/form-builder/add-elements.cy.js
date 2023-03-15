@@ -40,7 +40,7 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get('[data-testid="textField"]').click();
     cy.get("button").contains("Select block").click();
 
-    cy.get('[id="item0"]')
+    cy.get('[id="item-1"]')
       .should("have.attr", "type", "text")
       .should("have.attr", "placeholder", "Question");
 
@@ -54,7 +54,7 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get('[data-testid="textArea"]').click();
     cy.get("button").contains("Select block").click();
 
-    cy.get('[id="item0"]')
+    cy.get('[id="item-1"]')
       .should("have.attr", "type", "text")
       .should("have.attr", "placeholder", "Question");
 
@@ -68,11 +68,11 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get('[data-testid="radio"]').click();
     cy.get("button").contains("Select block").click();
 
-    cy.get('[id="item0"]')
+    cy.get('[id="item-1"]')
       .should("have.attr", "type", "text")
       .should("have.attr", "placeholder", "Question");
 
-    cy.get('[id="option--0--1"]')
+    cy.get('[id="option--1--1"]')
       .should("have.attr", "type", "text")
       .should("have.attr", "placeholder", "Option 1");
 
@@ -86,11 +86,11 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get('[data-testid="checkbox"]').click();
     cy.get("button").contains("Select block").click();
 
-    cy.get('[id="item0"]')
+    cy.get('[id="item-1"]')
       .should("have.attr", "type", "text")
       .should("have.attr", "placeholder", "Question");
 
-    cy.get('[id="option--0--1"]')
+    cy.get('[id="option--1--1"]')
       .should("have.attr", "type", "text")
       .should("have.attr", "placeholder", "Option 1");
 
@@ -104,11 +104,11 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get('[data-testid="dropdown"]').click();
     cy.get("button").contains("Select block").click();
 
-    cy.get('[id="item0"]')
+    cy.get('[id="item-1"]')
       .should("have.attr", "type", "text")
       .should("have.attr", "placeholder", "Question");
 
-    cy.get('[id="option--0--1"]')
+    cy.get('[id="option--1--1"]')
       .should("have.attr", "type", "text")
       .should("have.attr", "placeholder", "Option 1");
 
@@ -122,7 +122,7 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get('[data-testid="date"]').click();
     cy.get("button").contains("Select block").click();
 
-    cy.get('[id="item0"]')
+    cy.get('[id="item-1"]')
       .should("have.attr", "type", "text")
       .should("have.attr", "placeholder", "Question");
 
@@ -139,7 +139,7 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get('[data-testid="number"]').click();
     cy.get("button").contains("Select block").click();
 
-    cy.get('[id="item0"]')
+    cy.get('[id="item-1"]')
       .should("have.attr", "type", "text")
       .should("have.attr", "placeholder", "Question");
 
