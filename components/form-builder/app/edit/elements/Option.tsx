@@ -14,11 +14,13 @@ type RenderIcon = (index: number) => ReactElement | string | undefined;
 export const Option = ({
   parentIndex,
   index,
+  id,
   renderIcon,
   initialValue,
 }: {
   parentIndex: number;
   index: number;
+  id: number;
   renderIcon?: RenderIcon;
   initialValue: string;
 }) => {
@@ -90,7 +92,7 @@ export const Option = ({
     <div className="flex mt-3">
       <div className="flex mt-2 w-5 justify-end">{icon}</div>
       <Input
-        id={`option--${parentIndex}--${index + 1}`}
+        id={`option--${id}--${index + 1}`}
         ref={input}
         type="text"
         value={value}
@@ -105,7 +107,7 @@ export const Option = ({
       <Button
         theme="icon"
         className="group"
-        id={`remove--${parentIndex}--${index + 1}`}
+        id={`remove--${id}--${index + 1}`}
         icon={<Close className="group-focus:fill-white-default" />}
         aria-label={`${t("removeOption")} ${value}`}
         onClick={() => {

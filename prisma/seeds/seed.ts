@@ -33,6 +33,29 @@ async function createPrivileges(env: string) {
   });
 }
 
+async function createTestUser() {
+  return await prisma.user.create({
+    data: {
+      id: "1",
+      name: "Test User",
+      email: "test.user@cds-snc.ca",
+      privileges: {
+        connect: [
+          { nameEn: "Base" },
+          { nameEn: "PublishForms" },
+          { nameEn: "ManageApplicationSettings" },
+        ],
+      },
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      privileges: true,
+    },
+  });
+}
+
 //Can be removed once we know that the migration is completed
 async function publishingStatusMigration() {
   const templates = await prisma.template.findMany({
@@ -156,6 +179,11 @@ async function main() {
 
   console.log("Running 'templateSchema' migration");
   await templateSchemaMigration();
+
+  if (environment === "test") {
+    console.log("Creating test User");
+    await createTestUser();
+  }
 }
 
 main()

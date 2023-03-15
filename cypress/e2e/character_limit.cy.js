@@ -1,8 +1,11 @@
 describe("Forms Functionality - Character Counts", () => {
-  beforeEach(() => {
+  let formID;
+  before(() => {
     cy.useFlag("formTimer", false);
-    cy.mockForm("../../__fixtures__/textFieldTestForm.json");
+    cy.useForm("../../__fixtures__/textFieldTestForm.json");
+    cy.get("@formID").then((createdID) => (formID = createdID));
   });
+  beforeEach(() => cy.visitForm(formID));
 
   it("does not display any message when not enough characters have been typed in", () => {
     cy.get("input[id='2']").type("This is 21 characters");
