@@ -27,7 +27,7 @@ Page.getLayout = (page: ReactElement) => {
 
 export const getServerSideProps: GetServerSideProps = async ({ locale, req, res }) => {
   // @TODO: get formID from somwehere
-  const publicForm = await getPublicTemplateByID("clen2l6g70194exe5kp7zl0xp");
+  const publicForm = await getPublicTemplateByID("clf9sozz400220ie5j2ki1lx4");
 
   const session = await getServerSession(req, res, authOptions);
 
