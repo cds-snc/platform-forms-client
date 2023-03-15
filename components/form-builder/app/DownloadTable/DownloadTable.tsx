@@ -17,7 +17,7 @@ export enum VaultStatus {
 interface DownloadTableProps {
   submissions: VaultSubmissionList[];
   selectionStatus: Map<string, boolean>;
-  setSelectionStatus: React.Dispatch<React.SetStateAction<Map<string, boolean>>>;
+  setSelectionStatus: (newStatus: Map<string, boolean>) => void;
   checkedItems: Map<string, boolean>;
   handleDownload: React.MouseEventHandler<HTMLButtonElement>;
 }

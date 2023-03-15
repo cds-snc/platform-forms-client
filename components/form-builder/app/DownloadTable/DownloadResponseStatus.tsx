@@ -5,7 +5,7 @@ import { getDaysPassed } from "./DownloadTable";
 
 const DOWNLOAD_OVERDUE = 15;
 
-// Format date for: YYY-MM-DD
+// Format date for: YYYY-MM-DD
 function formatDate(date: Date): string {
   const dateObj = new Date(date);
   const day = String(dateObj.getDate()).length <= 1 ? `0${dateObj.getDate()}` : dateObj.getDate();

@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useEffect, useState, useRef } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import { getFullTemplateByID } from "@lib/templates";
@@ -22,6 +22,7 @@ import { DownloadTable } from "@components/form-builder/app/DownloadTable/Downlo
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import { logMessage } from "@lib/logger";
+import axios from "axios";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -39,20 +40,21 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   const toastPosition = toast.POSITION.TOP_CENTER;
   const MAX_FILE_DOWNLOADS = 20;
 
+  const checkedItems = useRef(new Map());
+
   const [selectionStatus, setSelectionStatus] = useState(
     new Map(vaultSubmissions.map((submission) => [submission.name, false]))
   );
 
-  // Note: Ok to cache since React will re-render and update this var for any View change
-  const checkedItems = ((): Map<string, boolean> => {
+  useEffect(() => {
     const checkedMap = new Map();
     selectionStatus.forEach((checked, name) => {
       if (checked) {
         checkedMap.set(name, checked);
       }
     });
-    return checkedMap;
-  })();
+    checkedItems.current = checkedMap;
+  }, [selectionStatus]);
 
   const secondaryButtonClass =
     "whitespace-nowrap text-sm rounded-full bg-white-default text-black-default border-black-default hover:text-white-default hover:bg-gray-600 active:text-white-default active:bg-gray-500 py-2 px-5 rounded-lg border-2 border-solid inline-flex items-center active:top-0.5 focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500";
@@ -77,12 +79,12 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   // NOTE: browsers have different limits for simultaneous downloads. May need to look into
   // batching file downloads (e.g. 4 at a time) if edge cases/* come up.
   const handleDownload = async () => {
-    if (checkedItems.size === 0) {
+    if (checkedItems.current.size === 0) {
       toast.warn(t("downloadResponsesTable.download.atLeastOneFile"), { position: toastPosition });
       return;
     }
 
-    if (checkedItems.size > MAX_FILE_DOWNLOADS) {
+    if (checkedItems.current.size > MAX_FILE_DOWNLOADS) {
       toast.warn(
         t("downloadResponsesTable.download.trySelectingLessFiles", { max: MAX_FILE_DOWNLOADS }),
         { position: toastPosition }
@@ -92,29 +94,31 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
 
     const toastDownloadingId = toast.info(
       t("downloadResponsesTable.download.downloadingXFiles", {
-        fileCount: checkedItems.size,
+        fileCount: checkedItems.current.size,
       }),
       { position: toastPosition, autoClose: false }
     );
 
     try {
-      const downloads = Array.from(checkedItems, async (checkedItem) => {
-        const submissionName = checkedItem && checkedItem[0];
+      const downloads = Array.from(checkedItems.current, async ([submissionName]) => {
         if (!submissionName) {
           throw new Error("Error downloading file from Retrieval table. SubmissionId missing.");
         }
         const url = `/api/id/${formId}/${submissionName}/download`;
         const fileName = `${submissionName}.html`;
-        return fetch(url, { method: "GET" })
-          .then((res) => res.blob())
-          .then((blob) => {
-            const urlObj = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = urlObj;
-            a.download = fileName;
-            a.click();
-            URL.revokeObjectURL(urlObj);
-          });
+        return axios({
+          url,
+          method: "GET",
+          responseType: "blob",
+          timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+        }).then((response) => {
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", fileName);
+          document.body.appendChild(link);
+          link.click();
+        });
       });
 
       await Promise.all(downloads).then(() => {
@@ -189,7 +193,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
                   submissions={vaultSubmissions}
                   selectionStatus={selectionStatus}
                   setSelectionStatus={setSelectionStatus}
-                  checkedItems={checkedItems}
+                  checkedItems={checkedItems.current}
                   handleDownload={handleDownload}
                 />
               )}
