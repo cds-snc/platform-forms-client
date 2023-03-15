@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-export const Upload = ({ formRecord }: { formRecord: FormRecord | null }) => {
+export const BrandingRequestForm = ({ formRecord }: { formRecord: FormRecord | null }) => {
   const { t } = useTranslation("form-builder");
   const language = "en";
   const router = useRouter();
