@@ -102,3 +102,8 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+model Settings {
+  id                         String  @id @default(cuid())
+  brandingRequestForm        String  @unique
+}
