@@ -72,7 +72,7 @@ export const DownloadTable = ({
           </tr>
         </thead>
         <tbody>
-          {submissions.map((submission, index) => (
+          {submissions.map((submission) => (
             <tr
               key={submission.name}
               className={
