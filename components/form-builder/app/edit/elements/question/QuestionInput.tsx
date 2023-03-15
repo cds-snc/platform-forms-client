@@ -8,12 +8,14 @@ import { useTemplateStore } from "@formbuilder/store";
 
 export const QuestionInput = ({
   index,
+  id,
   initialValue,
   onQuestionChange,
   questionInputRef,
   describedById,
 }: {
   index: number;
+  id: number;
   initialValue: string;
   onQuestionChange: (itemIndex: number, val: string, lang: Language) => void;
   questionInputRef: React.RefObject<HTMLInputElement>;
@@ -65,7 +67,7 @@ export const QuestionInput = ({
     <Input
       ref={questionInputRef}
       type="text"
-      id={`item${index}`}
+      id={`item-${id}`}
       name={`item${index}`}
       placeholder={t("question")}
       className="w-full"
