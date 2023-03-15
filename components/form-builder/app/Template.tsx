@@ -52,7 +52,7 @@ export const PageTemplate = ({
   title: string;
   navigation?: React.ReactElement;
   leftNav?: boolean;
-  autoWidth?: boolean;
+  autoWidth: boolean;
 }) => {
   const { t, i18n } = useTranslation("form-builder");
   const { hasHydrated, form, setLang, updateField, email } = useTemplateStore((s) => ({

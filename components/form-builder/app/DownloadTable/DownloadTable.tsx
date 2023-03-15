@@ -74,7 +74,7 @@ export const DownloadTable = ({
         <tbody>
           {submissions.map((submission, index) => (
             <tr
-              key={index}
+              key={submission.name}
               className={
                 "border-b-2 border-grey" +
                 (selectionStatus.get(submission.name) ? " bg-[#fffbf3]" : "")
@@ -121,7 +121,7 @@ export const DownloadTable = ({
                 />
               </td>
               <td className="p-4">
-                <RemovalStatus vaultStatus={submission.status} removedAt={submission.removedAt} />
+                <RemovalStatus vaultStatus={submission.status} removalAt={submission.removedAt} />
               </td>
             </tr>
           ))}

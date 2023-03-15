@@ -4,16 +4,16 @@ import { VaultStatus, getDaysPassed } from "./DownloadTable";
 
 export const RemovalStatus = ({
   vaultStatus,
-  removedAt,
+  removalAt,
 }: {
   vaultStatus: string;
-  removedAt?: Date;
+  removalAt?: Date;
 }) => {
   const { t } = useTranslation("form-builder");
   let status = null;
 
-  if (vaultStatus === VaultStatus.CONFIRMED && removedAt) {
-    const daysLeft = getDaysPassed(removedAt);
+  if (vaultStatus === VaultStatus.CONFIRMED && removalAt) {
+    const daysLeft = getDaysPassed(removalAt);
     status = t("downloadResponsesTable.status.withinXDays", { daysLeft });
   } else if (vaultStatus === VaultStatus.PROBLEM) {
     status = t("downloadResponsesTable.status.wontRemove");

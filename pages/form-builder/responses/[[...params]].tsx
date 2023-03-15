@@ -26,7 +26,7 @@ import axios from "axios";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
-  formId: string;
+  formId?: string;
 }
 
 const Responses: NextPageWithLayout<ResponsesProps> = ({
@@ -122,8 +122,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
       });
 
       await Promise.all(downloads).then(() => {
-        // TODO: setTimeout fixes an edge case where DB/* wouldn't be updated by time of request.
-        // May want to look into why?
+        // TODO: Future tech debt. See https://github.com/cds-snc/platform-forms-client/issues/1744
         setTimeout(() => {
           // Refreshes getServerSideProps data without a full page reload
           router.replace(router.asPath);
@@ -188,7 +187,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         {isAuthenticated && (
           <>
             <div>
-              {vaultSubmissions?.length > 0 && (
+              {vaultSubmissions.length > 0 && (
                 <DownloadTable
                   submissions={vaultSubmissions}
                   selectionStatus={selectionStatus}
@@ -198,7 +197,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
                 />
               )}
 
-              {vaultSubmissions?.length <= 0 && (
+              {vaultSubmissions.length <= 0 && (
                 <Card
                   icon={
                     <picture>
