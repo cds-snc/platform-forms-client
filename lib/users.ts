@@ -1,15 +1,14 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { DefaultJWT } from "next-auth/jwt";
-import { ApiAccessLog } from "@prisma/client";
-import { LoggingAction } from "@lib/auth";
-import { checkPrivileges } from "@lib/privileges";
-import { MongoAbility } from "@casl/ability";
+import { JWT } from "next-auth/jwt";
+import { AccessControlError, checkPrivileges } from "@lib/privileges";
+import { UserAbility } from "./types";
+import { logEvent } from "./auditLogs";
 
 /**
  * Get or Create a user if a record does not exist
  * @returns A User Object
  */
-export const getOrCreateUser = async ({ name, email, picture }: DefaultJWT) => {
+export const getOrCreateUser = async ({ name, email, picture }: JWT) => {
   if (!email) throw new Error("Email does not exist on token");
   const user = await prisma.user
     .findUnique({
@@ -40,10 +39,12 @@ export const getOrCreateUser = async ({ name, email, picture }: DefaultJWT) => {
     })
     .catch((e) => prismaErrors(e, null));
 
-  if (basePrivileges === null) throw new Error("Base Privileges is not set in Database");
+  if (basePrivileges === null) {
+    throw new Error("Base Privileges is not set in Database");
+  }
 
   if (!user) {
-    return await prisma.user
+    const newUser = await prisma.user
       .create({
         data: {
           name,
@@ -61,6 +62,11 @@ export const getOrCreateUser = async ({ name, email, picture }: DefaultJWT) => {
         },
       })
       .catch((e) => prismaErrors(e, null));
+
+    if (newUser !== null)
+      logEvent(newUser.id, { type: "User", id: newUser.id }, "UserRegistration");
+
+    return newUser;
   } else {
     return await prisma.user
       .update({
@@ -87,51 +93,37 @@ export const getOrCreateUser = async ({ name, email, picture }: DefaultJWT) => {
  * Get all Users
  * @returns An array of all Users
  */
-export const getUsers = async (ability: MongoAbility) => {
-  checkPrivileges(ability, [{ action: "view", subject: "User" }]);
+export const getUsers = async (ability: UserAbility) => {
+  try {
+    checkPrivileges(ability, [{ action: "view", subject: "User" }]);
 
-  const users = await prisma.user
-    .findMany({
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        privileges: {
-          select: {
-            id: true,
-            nameEn: true,
-            nameFr: true,
-            descriptionEn: true,
-            descriptionFr: true,
+    const users = await prisma.user
+      .findMany({
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          privileges: {
+            select: {
+              id: true,
+              nameEn: true,
+              nameFr: true,
+              descriptionEn: true,
+              descriptionFr: true,
+            },
           },
         },
-      },
-      orderBy: {
-        id: "asc",
-      },
-    })
-    .catch((e) => prismaErrors(e, []));
+        orderBy: {
+          id: "asc",
+        },
+      })
+      .catch((e) => prismaErrors(e, []));
 
-  return users;
-};
-
-/**
- * Retrieves the accessLog entry for the last login for an API user
- * @param userId
- * @returns AccessLog object
- */
-export const userLastLogin = async (userId: string): Promise<ApiAccessLog | null> => {
-  try {
-    return await prisma.apiAccessLog.findFirst({
-      where: {
-        userId: userId,
-        action: LoggingAction.LOGIN,
-      },
-      orderBy: {
-        timestamp: "desc",
-      },
-    });
+    return users;
   } catch (e) {
-    return prismaErrors(e, null);
+    if (e instanceof AccessControlError) {
+      logEvent(ability.userID, { type: "User" }, "AccessDenied", "Attempted to list users");
+    }
+    throw e;
   }
 };

@@ -100,11 +100,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   // Redirect if form doesn't exist and
   // Only retrieve publish ready forms if isProduction
-  // Short circuit only if Cypress testing
-  if (
-    process.env.APP_ENV !== "test" &&
-    (!publicForm || (!publicForm?.isPublished && !unpublishedForms))
-  ) {
+  if (!publicForm || (!publicForm?.isPublished && !unpublishedForms)) {
     return redirect(context.locale);
   }
   return {

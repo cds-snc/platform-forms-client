@@ -24,6 +24,7 @@ import {
   ElementProperties,
 } from "@lib/types";
 import { logMessage } from "@lib/logger";
+import { BrandProperties } from "@lib/types/form-types";
 
 const defaultField: FormElement = {
   id: 0,
@@ -118,7 +119,10 @@ export interface TemplateStoreState extends TemplateStoreProps {
   resetSubChoices: (elIndex: number, subIndex: number) => void;
   removeChoice: (elIndex: number, choiceIndex: number) => void;
   removeSubChoice: (elIndex: number, subIndex: number, choiceIndex: number) => void;
-  updateField: (path: string, value: string | boolean | ElementProperties) => void;
+  updateField: (
+    path: string,
+    value: string | boolean | ElementProperties | BrandProperties
+  ) => void;
   propertyPath: (id: number, field: string, lang?: Language) => string;
   unsetField: (path: string) => void;
   duplicateElement: (elIndex: number) => void;
