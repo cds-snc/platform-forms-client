@@ -10,20 +10,16 @@ export const BrandingRequestForm = ({ formRecord }: { formRecord: FormRecord | n
   const language = "en";
   const router = useRouter();
 
-  const onSent = () => {
-    // sent
-  };
-
   let currentForm = null;
 
   if (formRecord) {
     currentForm = getRenderedForm(formRecord, language, t);
   }
-
+  // @todo - pass confirmation page handler to form via onSuccess prop
   return (
     <>
       {formRecord && (
-        <Form formRecord={formRecord} language={language} router={router} t={t} onSuccess={onSent}>
+        <Form formRecord={formRecord} language={language} router={router} t={t}>
           {currentForm}
         </Form>
       )}

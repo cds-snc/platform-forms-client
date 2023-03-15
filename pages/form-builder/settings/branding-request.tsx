@@ -25,14 +25,7 @@ Page.getLayout = (page: ReactElement) => {
   return <Template page={page} isFormBuilder />;
 };
 
-export const getServerSideProps: GetServerSideProps = async ({
-  query: { params },
-  locale,
-  req,
-  res,
-}) => {
-  const [formID = null] = params || [];
-
+export const getServerSideProps: GetServerSideProps = async ({ locale, req, res }) => {
   // @TODO: get formID from somwehere
   const publicForm = await getPublicTemplateByID("clen2l6g70194exe5kp7zl0xp");
 
