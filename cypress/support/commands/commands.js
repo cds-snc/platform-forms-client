@@ -133,8 +133,8 @@ Cypress.Commands.add("logout", () => {
         callbackUrl: "/en/auth/logout",
         json: true,
       },
+    }).then(() => {
+      cy.getCookie("next-auth.session-token").should("not.exist");
     });
-    cy.clearCookies();
-    cy.getCookie("next-auth.session-token").should("not.exist");
   });
 });

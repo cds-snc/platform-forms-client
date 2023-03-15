@@ -57,7 +57,7 @@ const getSQSClient = async () => {
   if (!sqsClient) {
     sqsClient = new SQSClient({
       region: process.env.AWS_REGION ?? "ca-central-1",
-      endpoint: process.env.LOCAL_AWS_ENDPOINT,
+      ...(process.env.LOCAL_AWS_ENDPOINT && { endpoint: process.env.LOCAL_AWS_ENDPOINT }),
     });
   }
   if (!queueUrl) {
@@ -92,7 +92,7 @@ export const logEvent = async (
     // Only log the error in Production environment.
     // Development may be running without LocalStack setup
     if (process.env.NODE_ENV === "development" || process.env.APP_ENV === "test")
-      return logMessage.debug(auditLog);
+      return logMessage.info(auditLog);
 
     logMessage.error("ERROR with Audit Logging");
     logMessage.error(e as Error);
