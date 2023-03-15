@@ -28,13 +28,13 @@ describe("Form builder attestation", () => {
     cy.get('[data-testid="attestation"]').click();
     cy.get("button").contains("Select block").click();
     cy.get("button").contains("Legal attestation").should("exist");
-    cy.get("#item0").scrollIntoView();
-    cy.get("#item0").should("have.value", "I agree to:");
-    cy.get("#option--0--1").should("have.value", "Condition 1");
-    cy.get("#option--0--2").should("have.value", "Condition 2");
-    cy.get("#option--0--3").should("have.value", "Condition 3");
-    cy.get("#required-0-id").should("be.disabled");
-    cy.get("#required-0-id").should("be.checked");
+    cy.get("#item-1").scrollIntoView();
+    cy.get("#item-1").should("have.value", "I agree to:");
+    cy.get("#option--1--1").should("have.value", "Condition 1");
+    cy.get("#option--1--2").should("have.value", "Condition 2");
+    cy.get("#option--1--3").should("have.value", "Condition 3");
+    cy.get("#required-1-id").should("be.disabled");
+    cy.get("#required-1-id").should("be.checked");
 
     cy.visit("/form-builder/preview");
     cy.get("#label-1").contains("all checkboxes required").should("exist");

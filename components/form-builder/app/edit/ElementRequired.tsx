@@ -17,8 +17,8 @@ export const ElementRequired = ({
     <div className="mt-5 [&>div>label]:!pt-[5px]">
       <Checkbox
         disabled={item.properties.validation?.all}
-        id={`required-${item.index}-id`}
-        value={`required-${item.index}-value`}
+        id={`required-${item.id}-id`}
+        value={`required-${item.id}-value`}
         checked={item.properties.validation?.required}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           if (!e.target) {

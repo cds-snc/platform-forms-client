@@ -72,7 +72,7 @@ describe("Test FormBuilder autocomplete props", () => {
       cy.get('[data-testid="textField"]').click();
       cy.get("button").contains("Select block").click();
 
-      cy.get('[id="item0"]')
+      cy.get('[id="item-1"]')
         .should("have.attr", "type", "text")
         .should("have.attr", "placeholder", "Question");
 

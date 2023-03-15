@@ -13,11 +13,11 @@ describe("Option", () => {
 
     const rendered = render(
       <Providers form={store.form}>
-        <Option parentIndex={0} index={0} initialValue="my test option" />
+        <Option parentIndex={0} index={0} id={1} initialValue="my test option" />
       </Providers>
     );
 
-    const option = rendered.container.querySelector("#option--0--1");
+    const option = rendered.container.querySelector("#option--1--1");
 
     expect(option).toHaveAttribute("placeholder", "option 1");
     expect(option).toHaveValue("my test option");

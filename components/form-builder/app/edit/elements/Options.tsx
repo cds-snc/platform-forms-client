@@ -87,6 +87,7 @@ export const Options = ({
         renderIcon={renderIcon}
         parentIndex={item.index}
         key={`child-${item.id}-${index}`}
+        id={item.id}
         index={index}
         initialValue={initialValue}
       />
