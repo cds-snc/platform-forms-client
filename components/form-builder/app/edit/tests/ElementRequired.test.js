@@ -22,7 +22,7 @@ describe("ElementRequired", () => {
 
     const checkbox = rendered.getByRole("checkbox");
 
-    expect(checkbox).toHaveAttribute("id", "required-0-id");
+    expect(checkbox).toHaveAttribute("id", "required-1-id");
 
     await user.click(checkbox);
 

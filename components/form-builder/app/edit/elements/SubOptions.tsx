@@ -85,6 +85,7 @@ export const SubOptions = ({
           renderIcon={renderIcon}
           elIndex={elIndex}
           subIndex={item.index}
+          id={item.id}
           index={choiceIndex}
           initialValue={initialValue}
         />
