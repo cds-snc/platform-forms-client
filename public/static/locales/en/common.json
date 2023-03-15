@@ -72,6 +72,7 @@
     "login": "Sign in",
     "logout": "Sign out",
     "privileges": "Privileges",
+    "settings": "Settings",
     "myForms": "Your forms"
   },
   "formElements": {
