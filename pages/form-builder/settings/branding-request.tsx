@@ -27,7 +27,7 @@ Page.getLayout = (page: ReactElement) => {
 
 export const getServerSideProps: GetServerSideProps = async ({ locale, req, res }) => {
   // @TODO: get formID from somwehere
-  const publicForm = await getPublicTemplateByID("clf9sozz400220ie5j2ki1lx4");
+  const brandingRequestForm = await getPublicTemplateByID("clf9sozz400220ie5j2ki1lx4");
 
   const session = await getServerSession(req, res, authOptions);
 
@@ -43,7 +43,7 @@ export const getServerSideProps: GetServerSideProps = async ({ locale, req, res 
 
   return {
     props: {
-      publicForm,
+      publicForm: brandingRequestForm,
       ...(locale &&
         (await serverSideTranslations(locale, ["common", "form-builder"], null, ["fr", "en"]))),
     },
