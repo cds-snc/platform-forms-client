@@ -26,6 +26,9 @@ export type VaultSubmission = {
   name: string;
   lastDownloadedBy: string;
   formSubmssionLanguage?: string;
+  confirmedAt?: Date;
+  downloadedAt?: Date;
+  removedAt?: Date;
 };
 
 export type VaultSubmissionList = TypeOmit<
