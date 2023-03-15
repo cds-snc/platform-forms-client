@@ -2,6 +2,7 @@ import { AccessControlError } from "@lib/privileges";
 import { middleware, cors, sessionExists } from "@lib/middleware";
 import { MiddlewareProps } from "@lib/types";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 
 const settings = async (
   req: NextApiRequest,
@@ -11,6 +12,18 @@ const settings = async (
   try {
     if (!session) return res.status(401).json({ error: "Unauthorized" });
     const data = { hello: "world" };
+
+    /*
+    const result = await prisma.settings.create({
+      data: {
+        brandingRequestForm: "123",
+      },
+      select: {
+        id: true,
+      },
+    });
+    */
+
     return res.status(200).json(data);
   } catch (err) {
     if (err instanceof AccessControlError) return res.status(403).json({ error: "Forbidden" });
