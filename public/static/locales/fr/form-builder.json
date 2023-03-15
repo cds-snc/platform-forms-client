@@ -516,6 +516,22 @@
     "skipLink": "Skip Download Table[fr]",
     "unknown":"Unknown[fr]"
   },
+  "downloadResponsesModals": {
+    "confirmReceiptDialog": {
+      "title": "Confirm receipt of responses[fr]",
+      "findCode": "Find the confirmation code on the bottom of the downloaded form response. They look like, c0c42c90-b816-49da-a69a-80bfd8ba15db.[fr]",
+      "copyCode": "Copy and paste up-to {{max}} confirmation codes, one per line.[fr]",
+      "responsesAvailableFor": "After you confirm, responses are available for 7 days then automatically removed from our database.[fr]",
+      "confirmReceipt": "Confirm receipt[fr]"
+    },
+    "reportProblemsDialog": {
+      "title": "Report problems with responses[fr]",
+      "findForm": "Find the form number in the form list for any responses that won't download or open. They look like, 31-12-XCRV.[fr]",
+      "enterFormNumbers": "Enter up-to {{max}} form numbers, one per line.[fr]",
+      "problemReported": "The problem will be reported, and someone will contact you with help.[fr]",
+      "reportProblems": "Report problems[fr]"
+    }
+  },
   "autocompleteIsSetTo": "Le remplissage automatique est réglé :",
   "maxNumberOfRows": {
     "label": "Nombre maximum de réponses",

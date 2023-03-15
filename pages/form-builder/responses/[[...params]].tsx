@@ -7,7 +7,7 @@ import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { NextPageWithLayout } from "@pages/_app";
 import { PageTemplate, Template } from "@components/form-builder/app";
-import { Button, useDialogRef, Dialog } from "@components/form-builder/app/shared";
+import { Button } from "@components/form-builder/app/shared";
 import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 import { GetServerSideProps } from "next";
 import { FormRecord, VaultSubmissionList } from "@lib/types";
@@ -23,6 +23,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import { logMessage } from "@lib/logger";
 import axios from "axios";
+import { DialogConfirmReceipt } from "@components/form-builder/app/DownloadTable/DialogConfirmReceipt";
+import { DialogReportProblems } from "@components/form-builder/app/DownloadTable/DialogReportProblems";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -39,9 +41,11 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   const isAuthenticated = status === "authenticated";
   const toastPosition = toast.POSITION.TOP_CENTER;
   const MAX_FILE_DOWNLOADS = 20;
-
+  const secondaryButtonClass =
+    "whitespace-nowrap text-sm rounded-full bg-white-default text-black-default border-black-default hover:text-white-default hover:bg-gray-600 active:text-white-default active:bg-gray-500 py-2 px-5 rounded-lg border-2 border-solid inline-flex items-center active:top-0.5 focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500";
+  const [isShowConfirmReceiptDialog, setIsShowConfirmReceiptDialog] = useState(false);
+  const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
   const checkedItems = useRef(new Map());
-
   const [selectionStatus, setSelectionStatus] = useState(
     new Map(vaultSubmissions.map((submission) => [submission.name, false]))
   );
@@ -55,26 +59,6 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
     });
     checkedItems.current = checkedMap;
   }, [selectionStatus]);
-
-  const secondaryButtonClass =
-    "whitespace-nowrap text-sm rounded-full bg-white-default text-black-default border-black-default hover:text-white-default hover:bg-gray-600 active:text-white-default active:bg-gray-500 py-2 px-5 rounded-lg border-2 border-solid inline-flex items-center active:top-0.5 focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500";
-
-  const dialogConfirmReceipt = useDialogRef();
-  const [isShowConfirmReceiptDialog, setIsShowConfirmReceiptDialog] = useState(false);
-  const dialogConfirmReceiptHandleClose = () => {
-    setIsShowConfirmReceiptDialog(false);
-    dialogConfirmReceipt.current?.close();
-  };
-
-  const dialogReportProblems = useDialogRef();
-  const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
-  const dialogReportProblemsHandleClose = () => {
-    setIsShowReportProblemsDialog(false);
-    dialogReportProblems.current?.close();
-  };
-  const buttonActionsReportProblems = (
-    <Button onClick={dialogReportProblemsHandleClose}>{t("responses.reportProblems")}</Button>
-  );
 
   // NOTE: browsers have different limits for simultaneous downloads. May need to look into
   // batching file downloads (e.g. 4 at a time) if edge cases/* come up.
@@ -227,28 +211,15 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         )}
       </PageTemplate>
 
-      {isShowConfirmReceiptDialog && (
-        <Dialog
-          title="Confirm receipt of responses"
-          dialogRef={dialogConfirmReceipt}
-          handleClose={dialogConfirmReceiptHandleClose}
-        >
-          <>
-            <p>TODO</p>
-          </>
-        </Dialog>
-      )}
+      <DialogConfirmReceipt
+        isShowDialog={isShowConfirmReceiptDialog}
+        setIsShowDialog={setIsShowConfirmReceiptDialog}
+      />
 
-      {isShowReportProblemsDialog && (
-        <Dialog
-          title="Report problems with responses"
-          dialogRef={dialogReportProblems}
-          actions={buttonActionsReportProblems}
-          handleClose={dialogReportProblemsHandleClose}
-        >
-          <h2>TODO Report Problems</h2>
-        </Dialog>
-      )}
+      <DialogReportProblems
+        isShowDialog={isShowReportProblemsDialog}
+        setIsShowDialog={setIsShowReportProblemsDialog}
+      />
 
       {/* Sticky position to stop the page from scrolling to the top when showing a Toast */}
       <div className="sticky top-0">
