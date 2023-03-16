@@ -64,14 +64,11 @@
     },
     "example": "exemple",
     "exampleElement": "exemple du bloc",
-    "name": {
-      "description": "Indiquez votre prénom et nom. Le deuxième prénom est facultatif",
-      "label": "Nom complet",
-      "title": "Quel est votre nom?"
+    "fileInput": {
+      "description": "[FR] File input description",
+      "label": "[FR] File input",
+      "title": "[FR] File input"
     },
-    "inputBlocks": "Blocs de saisie",
-    "layoutBlocks": "Blocs de mise en page",
-    "listItem": "Élément de liste ",
     "firstMiddleLastName": {
       "description": "Description du nom (3 champs)",
       "first": {
@@ -89,10 +86,13 @@
       },
       "title": "Titre du nom"
     },
-    "fileInput": {
-      "description": "[FR] File input description",
-      "label": "[FR] File input",
-      "title": "[FR] File input"
+    "inputBlocks": "Blocs de saisie",
+    "layoutBlocks": "Blocs de mise en page",
+    "listItem": "Élément de liste ",
+    "name": {
+      "description": "Indiquez votre prénom et nom. Le deuxième prénom est facultatif",
+      "label": "Nom complet",
+      "title": "Quel est votre nom?"
     },
     "no": "Non",
     "number": {
@@ -124,8 +124,10 @@
   "addOptions": "Ajouter ou modifier une liste",
   "addRules": "Ajouter des règles",
   "addToSet": "Ajouter à la série",
+  "allRequired": "Tous obligatoires",
   "at": "à",
   "attestation": "Attestation légale",
+  "autocompleteIsSetTo": "Le remplissage automatique est réglé :",
   "autocompleteOptions": {
     "additional-name": "Deuxième prénom",
     "address-level1": "Province, État",
@@ -158,6 +160,15 @@
     "title": "Quand ne pas utiliser le remplissage automatique"
   },
   "backToForm": "Retourner au formulaire",
+  "branding": {
+    "defaultOption": "Gouvernement du Canada (par défault)",
+    "heading": "Image de marque",
+    "notFound": "[FR] Didn’t find your department or agency in the list?",
+    "preview": "Prévisualisation",
+    "select": "Sélectionnez l’image de marque de votre formulaire",
+    "submitNew": "[FR] Submit a new branding option (opens in new tab)",
+    "text1": "Formulaires GC affiche par défaut la signature du gouvernement du Canada dans l’en-tête de votre formulaire. Si nécessaire, vous pouvez modifier l’image de marque de ce formulaire."
+  },
   "cancel": "Annuler  ",
   "characterLimitDescription": "N'utilisez une limite de caractères que lorsqu'il existe une bonne raison de limiter le nombre de caractères que les utilisateur·rice·s peuvent entrer.",
   "characterLimitWhenToUse": {
@@ -215,6 +226,46 @@
   "descriptionDescription": "La description apparaît sous l'étiquette, et avant le champ. Elle est utilisée pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de mise en forme.",
   "didYouFindThisToolHelpful": "Avez-vous trouvé cet outil pertinent? <a href=\"/fr/form-builder/contactus\" target=\"_blank\">Donner votre avis</a>",
   "downloadCSV": "Exporter en fichier CSV",
+  "downloadResponsesTable": {
+    "card": {
+      "noResponses": "You have no responses[fr]",
+      "noResponsesToDownload": "There are no responses available to download.[fr]"
+    },
+    "download": {
+      "atLeastOneFile": "At least one file must be selected to download.[fr]",
+      "downloadComplete": "Download complete[fr]",
+      "downloading": "Downloading[fr]",
+      "downloadingXFiles": "Downloading {{fileCount}} files[fr]",
+      "downloadXSelectedResponses": "Download {{size}} selected responses[fr]",
+      "errorDownloadingFiles": "Error downloading selected files.[fr]",
+      "trySelectingLessFiles": "Max of {{max}} files can be downloadled at once. Please try selecting less files.[fr]"
+    },
+    "header": {
+      "confirmReceipt": "Confirm Receipt[fr]",
+      "downloadResponse": "Download Response[fr]",
+      "lastDownloadedBy": "Last Downloaded By[fr]",
+      "number": "Number[fr]",
+      "removal": "Removal[fr]",
+      "select": "Select[fr]",
+      "status": "Status[fr]",
+      "tableTitle": "Download Responses Table[fr]"
+    },
+    "skipLink": "Skip Download Table[fr]",
+    "status": {
+      "confirmed": "Confirmed[fr]",
+      "done": "Done[fr]",
+      "downloaded": "Downloaded[fr]",
+      "new": "New[fr]",
+      "notDownloaded": "Not downloaded[fr]",
+      "notSet": "Not set[fr]",
+      "overdue": "Overdue[fr]",
+      "problem": "Problem[fr]",
+      "unconfirmed": "Unconfirmed[fr]",
+      "withinXDays": "Within {{daysLeft}} days[fr]",
+      "wontRemove": "Won't Remove[fr]"
+    },
+    "unknown": "Unknown[fr]"
+  },
   "dropdown": "Liste déroulante",
   "duplicate": "Dupliquer",
   "dyanamicRow": "Série répétitive de questions",
@@ -293,6 +344,10 @@
   "mainNavAriaLabel": "Navigation principale",
   "maxCharacterLength": "Longueur maximale des caractères :",
   "maximumCharacterLength": "Longueur maximale des caractères",
+  "maxNumberOfRows": {
+    "description": "Les utilisateur·rice·s peuvent fournir jusqu'à ce nombre d'entrées pour cette question.",
+    "label": "Nombre maximum de réponses"
+  },
   "more": "Plus",
   "moreOptions": "Plus d'options  ",
   "moveDown": "Déplacer vers le bas ",
@@ -349,7 +404,6 @@
     "weWillRespond": "Nous vous répondrons dans les deux prochains jours ouvrables."
   },
   "required": "Obligatoire",
-  "allRequired": "Tous obligatoires",
   "responseDelivery": "Tester la réception des réponses",
   "responses": {
     "changeSetup": "Changer la configuration",
@@ -378,19 +432,22 @@
   "selectAutocompleteHint": "Cette option est utile lorsque les personnes qui remplissent le formulaire fournissent des informations personnelles telles que leur adresse, courriel ou numéro de téléphone.",
   "selectElement": "Sélectionnez un type d'élément",
   "send": "Envoyer",
+  "settings": {
+    "formManagement": "Form management"
+  },
   "settingsDeleteButton": "Supprimer le formulaire",
   "settingsDeleteHint": "Une fois le formulaire supprimé, vous ne pourrez pas le récupérer. Veuillez enregistrer une copie du formulaire avant de le supprimer.",
   "settingsDeleteTitle": "Supprimer le formulaire",
   "settingsInvalidEmailAlertDesc1": "Doit être une adresse courriel du gouvernement du Canada.",
   "settingsInvalidEmailAlertDesc2": "pour enregistrer l'adresse courriel.",
   "settingsInvalidEmailAlertTitle": "Adresse courriel du gouvernement",
+  "settingsNavHome": "[FR] Response delivery",
   "settingsResponseEmailTitle": "Adresse courriel du gouvernement fédéral",
   "settingsResponseHint1": "Fournissez une adresse courriel du gouvernement du Canada où envoyer les réponses aux questions du formulaire. Vous devez indiquer une adresse pour publier un formulaire.",
   "settingsResponseHint2": "Indiquer l’adresse courriel pour la réception des réponses",
   "settingsResponseNote": " Définissez les parametres de la livraison des réponses avant de tester la livraison et de publier.",
   "settingsResponseNotePublished": "Pour modifier la destination de livraison des réponses.",
   "settingsResponseTitle": "Destination de livraison des réponses.",
-  "settingsNavHome": "[FR] Response delivery",
   "share": {
     "copy": "Copier",
     "email": "Partager par courriel",
@@ -476,57 +533,5 @@
   "translateTitle": "Entrer la traduction",
   "unlockPublishing": "Soumettre",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
-  "unnamedForm": "Formulaire sans titre",
-  "downloadResponsesTable": {
-    "header": {
-      "tableTitle": "Download Responses Table[fr]",
-      "select": "Select[fr]",
-      "number": "Number[fr]",
-      "status": "Status[fr]",
-      "downloadResponse": "Download Response[fr]",
-      "lastDownloadedBy": "Last Downloaded By[fr]",
-      "confirmReceipt": "Confirm Receipt[fr]",
-      "removal": "Removal[fr]"
-    },
-    "status": {
-      "downloaded":"Downloaded[fr]",
-      "notDownloaded":"Not downloaded[fr]",
-      "new":"New[fr]",
-      "confirmed":"Confirmed[fr]",
-      "unconfirmed": "Unconfirmed[fr]",
-      "problem":"Problem[fr]",
-      "done": "Done[fr]",
-      "withinXDays": "Within {{daysLeft}} days[fr]",
-      "overdue":"Overdue[fr]",
-      "wontRemove": "Won't Remove[fr]",
-      "notSet": "Not set[fr]"
-    },
-    "card": {
-      "noResponses": "You have no responses[fr]",
-      "noResponsesToDownload": "There are no responses available to download.[fr]"
-    },
-    "download": {
-      "downloading":"Downloading[fr]",
-      "downloadComplete": "Download complete[fr]",
-      "downloadingXFiles": "Downloading {{fileCount}} files[fr]",
-      "downloadXSelectedResponses": "Download {{size}} selected responses[fr]",
-      "trySelectingLessFiles":"Max of {{max}} files can be downloadled at once. Please try selecting less files.[fr]",
-      "atLeastOneFile": "At least one file must be selected to download.[fr]",
-      "errorDownloadingFiles":"Error downloading selected files.[fr]"
-    },
-    "skipLink": "Skip Download Table[fr]",
-    "unknown":"Unknown[fr]"
-  },
-  "autocompleteIsSetTo": "Le remplissage automatique est réglé :",
-  "maxNumberOfRows": {
-    "label": "Nombre maximum de réponses",
-    "description": "Les utilisateur·rice·s peuvent fournir jusqu'à ce nombre d'entrées pour cette question."
-  },
-  "branding": {
-    "heading": "Image de marque",
-    "text1": "Formulaires GC affiche par défaut la signature du gouvernement du Canada dans l’en-tête de votre formulaire. Si nécessaire, vous pouvez modifier l’image de marque de ce formulaire.",
-    "select": "Sélectionnez l’image de marque de votre formulaire",
-    "preview": "Prévisualisation",
-    "defaultOption": "Gouvernement du Canada (par défault)"
-  }
+  "unnamedForm": "Formulaire sans titre"
 }
