@@ -18,9 +18,9 @@
     "advancedBlocks": "Blocs avancés",
     "allRequired": "Toutes obligatoires",
     "answer": "Réponse...",
-    "attest": "J'accepte :",
+    "attest": "J'atteste que :",
     "attestation": {
-      "description": "Utilisez un bloc d'attestation légale lorsque les personnes qui remplissent le formulaire doivent accepter certaines conditions afin de continuer. Ce bloc permet d'ajouter une ou plusieurs cases à cocher obligatoires.",
+      "description": "Utilisez un bloc d'attestation légale lorsque les personnes qui remplissent le formulaire doivent attester que certaines conditions sont remplies afin de continuer. Ce bloc permet d'ajouter une ou plusieurs cases à cocher obligatoires.",
       "title": "Attestation légale"
     },
     "checkbox": {
