@@ -44,7 +44,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
   };
 
   // default to off until we add file scanning
-  const allowFileInput = true;
+  const allowFileInput = false;
 
   const fileInputOption: ElementOption = {
     id: "fileInput",
