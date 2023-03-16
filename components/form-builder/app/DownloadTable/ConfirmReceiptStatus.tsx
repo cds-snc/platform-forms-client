@@ -20,7 +20,7 @@ export const ConfirmReceiptStatus = ({
       status = t("downloadResponsesTable.status.unconfirmed");
       break;
     case VaultStatus.CONFIRMED:
-      status = t("downloadResponsesTable.status.one");
+      status = t("downloadResponsesTable.status.done");
       break;
     case VaultStatus.PROBLEM:
       status = (
