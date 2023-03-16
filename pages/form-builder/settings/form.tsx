@@ -4,7 +4,6 @@ import { NextPageWithLayout } from "../../_app";
 import { PageProps } from "@lib/types";
 import { getServerSideProps } from "../index";
 import { Template, PageTemplate, Settings } from "@components/form-builder/app";
-import { Branding } from "@components/form-builder/app/branding";
 import { SettingsNavigation } from "@components/form-builder/app/navigation/SettingsNavigation";
 
 const Page: NextPageWithLayout<PageProps> = () => {

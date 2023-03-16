@@ -14,7 +14,7 @@ const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element 
   );
 };
 
-export const Branding = () => {
+export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: boolean }) => {
   const { t, i18n } = useTranslation("form-builder");
   const { brandName, updateField, unsetField, brandLogoEn, brandLogoFr, logoTitleEn, logoTitleFr } =
     useTemplateStore((s) => ({
@@ -79,15 +79,16 @@ export const Branding = () => {
           <Image src={defaultLogo} width="360" height="33" />
         )}
       </div>
-      {/* @todo: conditionally show this block if form is set */}
-      <div>
-        <p className="text-md mb-5 mt-6">{t("branding.notFound")}</p>
-        <p className="text-md mb-5">
-          <Link href="/form-builder/settings/branding-request" target={"_blank"}>
-            {t("branding.submitNew")}
-          </Link>
-        </p>
-      </div>
+      {hasBrandingRequestForm && (
+        <div>
+          <p className="text-md mb-5 mt-6">{t("branding.notFound")}</p>
+          <p className="text-md mb-5">
+            <Link href="/form-builder/settings/branding-request" target={"_blank"}>
+              {t("branding.submitNew")}
+            </Link>
+          </p>
+        </div>
+      )}
     </div>
   );
 };
