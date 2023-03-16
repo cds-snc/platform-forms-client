@@ -54,6 +54,7 @@ export { AddressIcon } from "./AddressIcon";
 export { ContactIcon } from "./ContactIcon";
 export { NameIcon } from "./NameIcon";
 export { MessageIcon } from "./Message";
+export { ExclamationIcon } from "./ExclamationIcon";
 export { QuestionsIcon } from "./QuestionsIcon";
 export { TranslateIcon } from "./TranslateIcon";
 export { BrandIcon } from "./BrandIcon";
