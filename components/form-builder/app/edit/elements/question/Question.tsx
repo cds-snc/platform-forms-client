@@ -38,6 +38,7 @@ export const Question = ({
         questionInputRef={questionInputRef}
         initialValue={title}
         index={itemIndex}
+        id={item.id}
         describedById={describedById}
         onQuestionChange={onQuestionChange}
       />

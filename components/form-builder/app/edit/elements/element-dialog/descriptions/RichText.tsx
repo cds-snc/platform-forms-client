@@ -9,16 +9,16 @@ export const RichText = ({ title, description }: { title: string; description: s
       </div>
       <div className="mb-5">
         <ul>
-          <li>Item a</li>
-          <li>Item b</li>
-          <li>Item c</li>
+          <li>Item</li>
+          <li>Item</li>
+          <li>Item</li>
         </ul>
       </div>
       <div className="mb-5">
         <ol>
-          <li>Item 1</li>
-          <li>Item 2</li>
-          <li>Item 3</li>
+          <li>Item</li>
+          <li>Item</li>
+          <li>Item</li>
         </ol>
       </div>
     </div>

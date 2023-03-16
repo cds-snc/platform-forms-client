@@ -105,7 +105,7 @@
       "title": "Radio buttons"
     },
     "richText": {
-      "description": "Smaller text for paragraphs, <a tab-index=\"-1\" href=\"#\">hyperlinks</a>, and lists.",
+      "description": "Text for paragraphs, <a tab-index=\"-1\" href=\"#\">hyperlinks</a>, and lists.",
       "title": "Large text"
     },
     "sometimes": "Sometimes",
@@ -436,7 +436,7 @@
   "startH2": "Design a form",
   "startH3": "Open a form file",
   "startP1": "Start with a blank form.",
-  "startP2": "View and edit a form by uploading it from your computer.",
+  "startP2": "Edit a form uploaded from your computer.",
   "submit": "Submit",
   "submittedResponsesText": "Submitted responses will be sent to {{email}}.",
   "support": {
@@ -476,10 +476,50 @@
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
   "unnamedForm": "Unnamed form file",
+  "downloadResponsesTable": {
+    "header": {
+      "tableTitle": "Download Responses Table",
+      "select": "Select",
+      "number": "Number",
+      "status": "Status",
+      "downloadResponse": "Download Response",
+      "lastDownloadedBy": "Last Downloaded By",
+      "confirmReceipt": "Confirm Receipt",
+      "removal": "Removal"
+    },
+    "status": {
+      "downloaded":"Downloaded",
+      "notDownloaded":"Not downloaded",
+      "new":"New",
+      "confirmed":"Confirmed",
+      "unconfirmed": "Unconfirmed",
+      "problem":"Problem",
+      "done": "Done",
+      "withinXDays": "Within {{daysLeft}} days",
+      "overdue":"Overdue",
+      "wontRemove": "Won't Remove",
+      "notSet": "Not set"
+    },
+    "card": {
+      "noResponses": "You have no responses",
+      "noResponsesToDownload": "There are no responses available to download."
+    },
+    "download": {
+      "downloading":"Downloading",
+      "downloadComplete": "Download complete",
+      "downloadingXFiles": "Downloading {{fileCount}} files",
+      "downloadXSelectedResponses": "Download {{size}} selected responses",
+      "trySelectingLessFiles":"Max of {{max}} files can be downloadled at once. Please try selecting less files.",
+      "atLeastOneFile": "At least one file must be selected to download.",
+      "errorDownloadingFiles":"Error downloading selected files."
+    },
+    "skipLink": "Skip Download Table",
+    "unknown":"Unknown"
+  },
   "autocompleteIsSetTo": "Autocomplete is set to:",
   "maxNumberOfRows": {
-    "label": "Maximum number of rows",
-    "description": "The maximum number of rows that can be added"
+    "label": "Maximum number of answers",
+    "description": "Users can provide up to this many entries for this question."
   },
   "branding": {
     "heading": "Branding",
