@@ -20,6 +20,7 @@ export type PageProps = {
   tab: string;
   initialForm: FormRecord | null;
   publicForm: FormRecord | null;
+  hasBrandingRequestForm: boolean;
 };
 
 export type {

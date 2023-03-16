@@ -3,7 +3,7 @@ import { useTranslation } from "next-i18next";
 import { SubNavLink } from "./SubNavLink";
 import { useActivePathname } from "@components/form-builder/hooks";
 import { LangSwitcher } from "../shared/LangSwitcher";
-import { EmailIcon, BrandIcon } from "@components/form-builder/icons";
+import { EmailIcon, BrandIcon, GearIcon } from "@components/form-builder/icons";
 
 export const SettingsNavigation = () => {
   const { t } = useTranslation("form-builder");
@@ -34,6 +34,16 @@ export const SettingsNavigation = () => {
             <span>
               <BrandIcon className="inline-block mt-[-2px] mr-2" />
               {t("branding.heading")}
+            </span>
+          </SubNavLink>
+          <SubNavLink
+            href="/form-builder/settings/form"
+            className={`!text-black focus:!text-white ${svgFill} [&_svg]:fill-black`}
+            activeClassName={`[&_svg]:fill-white ${svgFill} focus:text-white`}
+          >
+            <span>
+              <GearIcon className="inline-block mt-[-2px] mr-2" />
+              {t("settings.formManagement")}
             </span>
           </SubNavLink>
         </nav>
