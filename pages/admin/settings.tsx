@@ -7,6 +7,8 @@ import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import { checkPrivileges } from "@lib/privileges";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 
 const _get = (url: string) => fetch(url).then((response) => response.json());
 const _post = (url: string, formId: string) =>
@@ -17,6 +19,8 @@ const _post = (url: string, formId: string) =>
 
 const Settings = () => {
   const { t } = useTranslation("admin-settings");
+  const successMessage = t("success");
+  const errorMessage = t("error");
 
   const { data, error } = useSWR("/api/settings", _get);
   const [brandingRequestFormId, setBrandingRequestFormId] = useState("");
@@ -28,14 +32,26 @@ const Settings = () => {
   }, [data]);
 
   const handleSubmit = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
+    async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      _post("/api/settings", brandingRequestFormId);
+
+      const position = toast.POSITION.TOP_CENTER;
+
+      try {
+        const result = await _post("/api/settings", brandingRequestFormId);
+        if (result.status === 200 && result.statusText === "OK") {
+          toast.success(successMessage, { position });
+          return;
+        }
+        throw new Error("Error");
+      } catch (error) {
+        toast.error(errorMessage, { position });
+      }
     },
-    [brandingRequestFormId]
+    [brandingRequestFormId, successMessage, errorMessage]
   );
 
-  if (error) return <p>Sorry... Something went wrong</p>;
+  if (error) return <p>{t("loadingError")}</p>;
 
   return (
     <>
@@ -62,6 +78,9 @@ const Settings = () => {
             {t("save")}
           </button>
         </form>
+      </div>
+      <div className="sticky top-0">
+        <ToastContainer />
       </div>
     </>
   );
