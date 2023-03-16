@@ -26,9 +26,6 @@ Page.getLayout = (page: ReactElement) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ locale, req, res }) => {
-  // @TODO: pull this in from the database or .env
-  const brandingRequestForm = await getPublicTemplateByID("clf9sozz400220ie5j2ki1lx4");
-
   const session = await getServerSession(req, res, authOptions);
 
   if (session && !session.user.acceptableUse) {
@@ -40,6 +37,17 @@ export const getServerSideProps: GetServerSideProps = async ({ locale, req, res 
       },
     };
   }
+
+  // @todo: get the id from the database
+  const id = null;
+
+  if (!id) {
+    return {
+      notFound: true,
+    };
+  }
+
+  const brandingRequestForm = await getPublicTemplateByID(id);
 
   return {
     props: {
