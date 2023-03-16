@@ -432,6 +432,9 @@
   "selectAutocompleteHint": "This option is great when the form filler is providing personal information like their address, email or phone number.",
   "selectElement": "Select an element type",
   "send": "Send",
+  "settings": {
+    "formManagement": "Form management"
+  },
   "settingsDeleteButton": "Delete",
   "settingsDeleteHint": "Once you delete a form, there is no way to retrieve it back again. Please save a copy before deleting your form.",
   "settingsDeleteTitle": "Delete form",

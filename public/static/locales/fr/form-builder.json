@@ -432,6 +432,9 @@
   "selectAutocompleteHint": "Cette option est utile lorsque les personnes qui remplissent le formulaire fournissent des informations personnelles telles que leur adresse, courriel ou numéro de téléphone.",
   "selectElement": "Sélectionnez un type d'élément",
   "send": "Envoyer",
+  "settings": {
+    "formManagement": "Form management"
+  },
   "settingsDeleteButton": "Supprimer le formulaire",
   "settingsDeleteHint": "Une fois le formulaire supprimé, vous ne pourrez pas le récupérer. Veuillez enregistrer une copie du formulaire avant de le supprimer.",
   "settingsDeleteTitle": "Supprimer le formulaire",
