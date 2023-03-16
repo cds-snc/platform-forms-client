@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Logos, options } from "./";
 import { useTemplateStore } from "../../store";
 import { useTranslation } from "next-i18next";
+import Link from "next/link";
 
 const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element | string }) => {
   return (
@@ -58,7 +59,7 @@ export const Branding = () => {
     <div>
       <h1 className="visually-hidden">{t("branding.heading")}</h1>
       <h2>{t("branding.heading")}</h2>
-      <p className="block text-sm mb-5">{t("branding.text1")}</p>
+      <p className="block text-md mb-5">{t("branding.text1")}</p>
       {/* Logo select */}
       <div>
         <Label htmlFor="branding-select">{t("branding.select")}</Label>
@@ -69,14 +70,23 @@ export const Branding = () => {
         />
       </div>
       {/* Logo preview */}
-      <div>
-        <div className="font-bold mb-3 text-sm">{t("branding.preview")}</div>
+      <div className="mt-5 mb-5">
+        <div className="font-bold mb-3 text-md">{t("branding.preview")}</div>
         {/* eslint-disable @next/next/no-img-element  */}
         {logo ? (
           <img alt={altText} src={logo} width={300} />
         ) : (
           <Image src={defaultLogo} width="360" height="33" />
         )}
+      </div>
+      {/* @todo: conditionally show this block if form is set */}
+      <div>
+        <p className="text-md mb-5 mt-6">{t("branding.notFound")}</p>
+        <p className="text-md mb-5">
+          <Link href="/form-builder/settings/branding-request" target={"_blank"}>
+            {t("branding.submitNew")}
+          </Link>
+        </p>
       </div>
     </div>
   );
