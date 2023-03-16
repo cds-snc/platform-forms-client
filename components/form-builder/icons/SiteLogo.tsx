@@ -7,6 +7,7 @@ export const SiteLogo = ({ title, className }: { title: string; className?: stri
     className={className}
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    role={title ? "img" : "presentation"}
   >
     {title && <title>{title}</title>}
     <rect

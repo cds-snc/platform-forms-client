@@ -476,6 +476,46 @@
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
   "unnamedForm": "Unnamed form file",
+  "downloadResponsesTable": {
+    "header": {
+      "tableTitle": "Download Responses Table",
+      "select": "Select",
+      "number": "Number",
+      "status": "Status",
+      "downloadResponse": "Download Response",
+      "lastDownloadedBy": "Last Downloaded By",
+      "confirmReceipt": "Confirm Receipt",
+      "removal": "Removal"
+    },
+    "status": {
+      "downloaded":"Downloaded",
+      "notDownloaded":"Not downloaded",
+      "new":"New",
+      "confirmed":"Confirmed",
+      "unconfirmed": "Unconfirmed",
+      "problem":"Problem",
+      "done": "Done",
+      "withinXDays": "Within {{daysLeft}} days",
+      "overdue":"Overdue",
+      "wontRemove": "Won't Remove",
+      "notSet": "Not set"
+    },
+    "card": {
+      "noResponses": "You have no responses",
+      "noResponsesToDownload": "There are no responses available to download."
+    },
+    "download": {
+      "downloading":"Downloading",
+      "downloadComplete": "Download complete",
+      "downloadingXFiles": "Downloading {{fileCount}} files",
+      "downloadXSelectedResponses": "Download {{size}} selected responses",
+      "trySelectingLessFiles":"Max of {{max}} files can be downloadled at once. Please try selecting less files.",
+      "atLeastOneFile": "At least one file must be selected to download.",
+      "errorDownloadingFiles":"Error downloading selected files."
+    },
+    "skipLink": "Skip Download Table",
+    "unknown":"Unknown"
+  },
   "autocompleteIsSetTo": "Autocomplete is set to:",
   "maxNumberOfRows": {
     "label": "Maximum number of answers",
