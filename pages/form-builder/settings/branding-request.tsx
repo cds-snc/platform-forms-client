@@ -40,16 +40,16 @@ export const getServerSideProps: GetServerSideProps = async ({ locale, req, res 
   }
 
   const result = await prisma.settings.findFirst({
-    select: { brandingRequestForm: true },
+    select: { brandingRequestFormId: true },
   });
 
-  if (!result?.brandingRequestForm) {
+  if (!result?.brandingRequestFormId) {
     return {
       notFound: true,
     };
   }
 
-  const brandingRequestForm = await getPublicTemplateByID(result.brandingRequestForm);
+  const brandingRequestForm = await getPublicTemplateByID(result.brandingRequestFormId);
 
   return {
     props: {

@@ -15,13 +15,13 @@ const settings = async (
 
     if (req.method === "GET") {
       const data = await prisma.settings.findFirst({
-        select: { brandingRequestForm: true },
+        select: { brandingRequestFormId: true },
       });
 
       return res.status(200).json(data);
     }
 
-    const { brandingRequestForm } = req.body;
+    const { brandingRequestFormId } = req.body;
 
     const recordID = await prisma.settings.findFirst({
       select: { id: true },
@@ -30,14 +30,14 @@ const settings = async (
     if (recordID) {
       const result = await prisma.settings.update({
         where: { id: recordID.id },
-        data: { brandingRequestForm: brandingRequestForm },
+        data: { brandingRequestFormId: brandingRequestFormId },
       });
 
       return res.status(200).json(result);
     }
 
     const result = await prisma.settings.create({
-      data: { brandingRequestForm: req.body.brandingRequestForm },
+      data: { brandingRequestFormId: req.body.brandingRequestFormId },
     });
 
     res.status(201).json(result);

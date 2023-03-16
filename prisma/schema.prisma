@@ -105,5 +105,5 @@ model VerificationToken {
 
 model Settings {
   id                         String  @id @default(cuid())
-  brandingRequestForm        String  @unique
+  brandingRequestFormId      String  @unique
 }

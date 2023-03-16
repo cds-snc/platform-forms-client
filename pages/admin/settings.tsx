@@ -12,27 +12,27 @@ const _get = (url: string) => fetch(url).then((response) => response.json());
 const _post = (url: string, formId: string) =>
   axios(url, {
     method: "POST",
-    data: { brandingRequestForm: formId },
+    data: { brandingRequestFormId: formId },
   });
 
 const Settings = () => {
   const { t } = useTranslation("admin-settings");
 
   const { data, error } = useSWR("/api/settings", _get);
-  const [brandingFormId, setBrandingFormId] = useState("");
+  const [brandingRequestFormId, setBrandingRequestFormId] = useState("");
 
   useEffect(() => {
     if (data) {
-      setBrandingFormId(data.brandingRequestForm);
+      setBrandingRequestFormId(data.brandingRequestFormId);
     }
   }, [data]);
 
   const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      _post("/api/settings", brandingFormId);
+      _post("/api/settings", brandingRequestFormId);
     },
-    [brandingFormId]
+    [brandingRequestFormId]
   );
 
   if (error) return <p>Sorry... Something went wrong</p>;
@@ -51,8 +51,8 @@ const Settings = () => {
             </label>
             <input
               className="gc-input-text mb-1"
-              onChange={(e) => setBrandingFormId(e.target.value)}
-              value={brandingFormId}
+              onChange={(e) => setBrandingRequestFormId(e.target.value)}
+              value={brandingRequestFormId}
               type="text"
               name="branding-form-id"
               id="branding-form-id"
