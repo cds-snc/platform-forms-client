@@ -34,6 +34,9 @@ export const SelectedElement = ({
     case "textArea":
       element = <ShortAnswer>{t("longAnswerText")}</ShortAnswer>;
       break;
+    case "fileInput":
+      element = <ShortAnswer>{t("addElementDialog.fileInput.label")}</ShortAnswer>;
+      break;
     case "radio":
       if (elIndex !== -1) {
         element = (
