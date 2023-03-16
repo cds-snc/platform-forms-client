@@ -15,14 +15,14 @@ const Page: NextPageWithLayout<PageProps> = ({ publicForm }: PageProps) => {
   const { t } = useTranslation("form-builder");
   const title = `${t("branding.heading")} — ${t("gcForms")}`;
   return (
-    <PageTemplate title={title}>
+    <PageTemplate title={title} leftNav={false}>
       <BrandingRequestForm formRecord={publicForm} />
     </PageTemplate>
   );
 };
 
 Page.getLayout = (page: ReactElement) => {
-  return <Template page={page} isFormBuilder />;
+  return <Template page={page} />;
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ locale, req, res }) => {
