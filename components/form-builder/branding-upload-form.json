@@ -1,0 +1,206 @@
+{
+    "titleEn": "Submit a new branding option",
+    "titleFr": "[FR] Upload a brand logo",
+    "introduction": {
+      "descriptionEn": "GC Forms is building a library of branding options, including symbols and logos from different departments and agencies. You can submit a new logo to appear at the top of your forms. We’ll work with you to make it available on the platform.\n\n## Upload a logo\n\nBe sure to understand how your department or agency implements the Policy on Communications and Federal Identity. Contact your Federal Identify Program Coordinator for how to proceed.\n\nFiles must be:\n\n- XXX by XXX pixels  \n- PNG or JPG image file format",
+      "descriptionFr": "[FR] GC Forms is building a library of branding options, including symbols and logos from different departments and agencies. You can submit a new logo to appear at the top of your forms. We’ll work with you to make it available on the platform.\n\n## Upload a logo\n\nBe sure to understand how your department or agency implements the Policy on Communications and Federal Identity. Contact your Federal Identify Program Coordinator for how to proceed.\n\nFiles must be:\n\n- XXX by XXX pixels  \n- PNG or JPG image file format"
+    },
+    "privacyPolicy": {
+      "descriptionEn": "Privacy",
+      "descriptionFr": "[FR] Privacy"
+    },
+    "confirmation": {
+      "descriptionEn": "Thanks!",
+      "descriptionFr": "Merci!",
+      "referrerUrlEn": "",
+      "referrerUrlFr": ""
+    },
+    "layout": [
+      7,
+      8,
+      6,
+      1,
+      2,
+      5,
+      3,
+      4
+    ],
+    "elements": [
+      {
+        "id": 7,
+        "type": "fileInput",
+        "properties": {
+          "subElements": [],
+          "choices": [
+            {
+              "en": "",
+              "fr": ""
+            }
+          ],
+          "titleEn": "English version of the logo",
+          "titleFr": "",
+          "validation": {
+            "required": true
+          },
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "placeholderEn": "",
+          "placeholderFr": ""
+        }
+      },
+      {
+        "id": 8,
+        "type": "fileInput",
+        "properties": {
+          "subElements": [],
+          "choices": [
+            {
+              "en": "",
+              "fr": ""
+            }
+          ],
+          "titleEn": "French version of the logo",
+          "titleFr": "",
+          "validation": {
+            "required": true
+          },
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "placeholderEn": "",
+          "placeholderFr": ""
+        }
+      },
+      {
+        "id": 6,
+        "type": "richText",
+        "properties": {
+          "choices": [
+            {
+              "en": "",
+              "fr": ""
+            }
+          ],
+          "titleEn": "",
+          "titleFr": "",
+          "validation": {
+            "required": false
+          },
+          "subElements": [],
+          "descriptionEn": "## Add descriptive text",
+          "descriptionFr": "## [FR] Add descriptive text",
+          "placeholderEn": "",
+          "placeholderFr": ""
+        }
+      },
+      {
+        "id": 1,
+        "type": "textField",
+        "properties": {
+          "choices": [
+            {
+              "en": "",
+              "fr": ""
+            }
+          ],
+          "titleEn": "English descriptive text",
+          "titleFr": "[FR] English descriptive text",
+          "validation": {
+            "required": true
+          },
+          "subElements": [],
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "placeholderEn": "",
+          "placeholderFr": ""
+        }
+      },
+      {
+        "id": 2,
+        "type": "textField",
+        "properties": {
+          "choices": [
+            {
+              "en": "",
+              "fr": ""
+            }
+          ],
+          "titleEn": "French descriptive text",
+          "titleFr": "[FR] French descriptive text",
+          "validation": {
+            "required": true
+          },
+          "subElements": [],
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "placeholderEn": "",
+          "placeholderFr": ""
+        }
+      },
+      {
+        "id": 5,
+        "type": "richText",
+        "properties": {
+          "choices": [
+            {
+              "en": "",
+              "fr": ""
+            }
+          ],
+          "titleEn": "",
+          "titleFr": "",
+          "validation": {
+            "required": false
+          },
+          "subElements": [],
+          "descriptionEn": "## Make the logo clickable\n\nThe branding header can be used to bring people back to the main page of your department or agency’s website.",
+          "descriptionFr": "## [FR] Make the logo clickable\n\nThe branding header can be used to bring people back to the main page of your department or agency’s website.",
+          "placeholderEn": "",
+          "placeholderFr": ""
+        }
+      },
+      {
+        "id": 3,
+        "type": "textField",
+        "properties": {
+          "choices": [
+            {
+              "en": "",
+              "fr": ""
+            }
+          ],
+          "titleEn": "English link",
+          "titleFr": "[FR] English link",
+          "validation": {
+            "required": false
+          },
+          "subElements": [],
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "placeholderEn": "",
+          "placeholderFr": ""
+        }
+      },
+      {
+        "id": 4,
+        "type": "textField",
+        "properties": {
+          "choices": [
+            {
+              "en": "",
+              "fr": ""
+            }
+          ],
+          "titleEn": "French link",
+          "titleFr": "[FR] French link",
+          "validation": {
+            "required": false
+          },
+          "subElements": [],
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "placeholderEn": "",
+          "placeholderFr": ""
+        }
+      }
+    ]
+  }
