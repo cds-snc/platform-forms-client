@@ -18,9 +18,9 @@
     "advancedBlocks": "Advanced blocks",
     "allRequired": "all required",
     "answer": "Answer...",
-    "attest": "I agree to:",
+    "attest": "I attest to:",
     "attestation": {
-      "description": "Use a legal attestation block when form fillers must agree to certain conditions to continue. This block allows you to add one or several required checkboxes.",
+      "description": "Use a legal attestation block when form fillers must attest to certain conditions to continue. This block allows you to add one or several required checkboxes.",
       "title": "Legal attestation"
     },
     "checkbox": {
