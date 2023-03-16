@@ -18,9 +18,9 @@
     "advancedBlocks": "Advanced blocks",
     "allRequired": "all required",
     "answer": "Answer...",
-    "attest": "I agree to:",
+    "attest": "I attest to:",
     "attestation": {
-      "description": "Use a legal attestation block when form fillers must agree to certain conditions to continue. This block allows you to add one or several required checkboxes.",
+      "description": "Use a legal attestation block when form fillers must attest to certain conditions to continue. This block allows you to add one or several required checkboxes.",
       "title": "Legal attestation"
     },
     "checkbox": {
@@ -64,14 +64,11 @@
     },
     "example": "example",
     "exampleElement": "block example",
-    "name": {
-      "description": "Include your first and last names. Middle names are optional",
-      "label": "Name",
-      "title": "What is your name?"
+    "fileInput": {
+      "description": "File input description",
+      "label": "File input",
+      "title": "File input"
     },
-    "inputBlocks": "Input blocks",
-    "layoutBlocks": "Layout blocks",
-    "listItem": "List item ",
     "firstMiddleLastName": {
       "description": "Name description",
       "first": {
@@ -89,10 +86,13 @@
       },
       "title": "What is your name?"
     },
-    "fileInput": {
-      "description": "File input description",
-      "label": "File input",
-      "title": "File input"
+    "inputBlocks": "Input blocks",
+    "layoutBlocks": "Layout blocks",
+    "listItem": "List item ",
+    "name": {
+      "description": "Include your first and last names. Middle names are optional",
+      "label": "Name",
+      "title": "What is your name?"
     },
     "no": "No",
     "number": {
@@ -124,8 +124,10 @@
   "addOptions": "Add options",
   "addRules": "Add rules",
   "addToSet": "Add to set",
+  "allRequired": "All required",
   "at": "at",
   "attestation": "Legal attestation",
+  "autocompleteIsSetTo": "Autocomplete is set to:",
   "autocompleteOptions": {
     "additional-name": "Middle name",
     "address-level1": "Province, State",
@@ -158,6 +160,15 @@
     "title": "When not to use autocomplete"
   },
   "backToForm": "Back to form",
+  "branding": {
+    "defaultOption": "Government of Canada (default)",
+    "heading": "Branding",
+    "notFound": "Didn’t find your department or agency in the list?",
+    "preview": "Preview of logo",
+    "select": "Select a different logo for the top of your form",
+    "submitNew": "Submit a new branding option (opens in new tab)",
+    "text1": "GC Forms displays the Government of Canada signature as the default logo at the top of your form."
+  },
   "cancel": "Cancel",
   "characterLimitDescription": "Only use a character limit when there is a good reason for limiting the number of characters users can enter.",
   "characterLimitWhenToUse": {
@@ -215,6 +226,46 @@
   "descriptionDescription": "The description appears below the label and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements.",
   "didYouFindThisToolHelpful": "Did you find this tool helpful? <a href=\"/en/form-builder/contactus\" target=\"_blank\">Provide feedback</a>",
   "downloadCSV": "Export as a spreadsheet",
+  "downloadResponsesTable": {
+    "card": {
+      "noResponses": "You have no responses",
+      "noResponsesToDownload": "There are no responses available to download."
+    },
+    "download": {
+      "atLeastOneFile": "At least one file must be selected to download.",
+      "downloadComplete": "Download complete",
+      "downloading": "Downloading",
+      "downloadingXFiles": "Downloading {{fileCount}} files",
+      "downloadXSelectedResponses": "Download {{size}} selected responses",
+      "errorDownloadingFiles": "Error downloading selected files.",
+      "trySelectingLessFiles": "Max of {{max}} files can be downloadled at once. Please try selecting less files."
+    },
+    "header": {
+      "confirmReceipt": "Confirm Receipt",
+      "downloadResponse": "Download Response",
+      "lastDownloadedBy": "Last Downloaded By",
+      "number": "Number",
+      "removal": "Removal",
+      "select": "Select",
+      "status": "Status",
+      "tableTitle": "Download Responses Table"
+    },
+    "skipLink": "Skip Download Table",
+    "status": {
+      "confirmed": "Confirmed",
+      "done": "Done",
+      "downloaded": "Downloaded",
+      "new": "New",
+      "notDownloaded": "Not downloaded",
+      "notSet": "Not set",
+      "overdue": "Overdue",
+      "problem": "Problem",
+      "unconfirmed": "Unconfirmed",
+      "withinXDays": "Within {{daysLeft}} days",
+      "wontRemove": "Won't Remove"
+    },
+    "unknown": "Unknown"
+  },
   "dropdown": "Dropdown list",
   "duplicate": "Duplicate",
   "dyanamicRow": "Repeating set",
@@ -293,6 +344,10 @@
   "mainNavAriaLabel": "Main",
   "maxCharacterLength": "Max character length: ",
   "maximumCharacterLength": "Maximum character length",
+  "maxNumberOfRows": {
+    "description": "Users can provide up to this many entries for this question.",
+    "label": "Maximum number of answers"
+  },
   "more": "More",
   "moreOptions": "More options",
   "moveDown": "Move down",
@@ -349,7 +404,6 @@
     "weWillRespond": "We will respond to you in 2 business days."
   },
   "required": "Required",
-  "allRequired": "All required",
   "responseDelivery": "Response delivery",
   "responses": {
     "changeSetup": "Change setup",
@@ -378,12 +432,16 @@
   "selectAutocompleteHint": "This option is great when the form filler is providing personal information like their address, email or phone number.",
   "selectElement": "Select an element type",
   "send": "Send",
+  "settings": {
+    "formManagement": "Form management"
+  },
   "settingsDeleteButton": "Delete",
   "settingsDeleteHint": "Once you delete a form, there is no way to retrieve it back again. Please save a copy before deleting your form.",
   "settingsDeleteTitle": "Delete form",
   "settingsInvalidEmailAlertDesc1": "Must be a Government of Canada email address.",
   "settingsInvalidEmailAlertDesc2": "to register email address.",
   "settingsInvalidEmailAlertTitle": "Government email address",
+  "settingsNavHome": "Response delivery",
   "settingsResponseEmailTitle": "Government email address",
   "settingsResponseHint1": "Provide a Government of Canada email address to send form responses to.",
   "settingsResponseHint2": "In order to publish, you need to provide a response delivery destination.",
@@ -475,17 +533,5 @@
   "translateTitle": "Enter your translation",
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
-  "unnamedForm": "Unnamed form file",
-  "autocompleteIsSetTo": "Autocomplete is set to:",
-  "maxNumberOfRows": {
-    "label": "Maximum number of answers",
-    "description": "Users can provide up to this many entries for this question."
-  },
-  "branding": {
-    "heading": "Branding",
-    "text1": "GC Forms displays the Government of Canada signature in the header of your form by default. If needed, you can change this form’s branding.",
-    "select": "Select branding for your form",
-    "preview" : "Preview",
-    "defaultOption": "Government of Canada (default) "
-  }
+  "unnamedForm": "Unnamed form file"
 }

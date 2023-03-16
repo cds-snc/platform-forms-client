@@ -4,30 +4,26 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetServerSideProps } from "next";
 import { getServerSession } from "next-auth";
 import { prisma } from "@lib/integration/prismaConnector";
-import { authOptions } from "@pages/api/auth/[...nextauth]";
 
-import { NextPageWithLayout } from "../../_app";
 import { PageProps } from "@lib/types";
+import { getPublicTemplateByID } from "@lib/templates";
+import { authOptions } from "@pages/api/auth/[...nextauth]";
+import { NextPageWithLayout } from "../../_app";
 import { Template, PageTemplate } from "@components/form-builder/app";
-import { Branding } from "@components/form-builder/app/branding";
-import { SettingsNavigation } from "@components/form-builder/app/navigation/SettingsNavigation";
+import { BrandingRequestForm } from "@components/form-builder/app/branding/";
 
-const Page: NextPageWithLayout<PageProps> = ({
-  hasBrandingRequestForm,
-}: {
-  hasBrandingRequestForm: boolean;
-}) => {
+const Page: NextPageWithLayout<PageProps> = ({ publicForm }: PageProps) => {
   const { t } = useTranslation("form-builder");
   const title = `${t("branding.heading")} — ${t("gcForms")}`;
   return (
-    <PageTemplate title={title} navigation={<SettingsNavigation />}>
-      <Branding hasBrandingRequestForm={hasBrandingRequestForm} />
+    <PageTemplate title={title} leftNav={false}>
+      <BrandingRequestForm formRecord={publicForm} />
     </PageTemplate>
   );
 };
 
 Page.getLayout = (page: ReactElement) => {
-  return <Template page={page} isFormBuilder />;
+  return <Template page={page} />;
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ locale, req, res }) => {
@@ -47,11 +43,17 @@ export const getServerSideProps: GetServerSideProps = async ({ locale, req, res 
     select: { brandingRequestFormId: true },
   });
 
-  const hasBrandingRequestForm = result?.brandingRequestFormId ?? false;
+  if (!result?.brandingRequestFormId) {
+    return {
+      notFound: true,
+    };
+  }
+
+  const brandingRequestForm = await getPublicTemplateByID(result.brandingRequestFormId);
 
   return {
     props: {
-      hasBrandingRequestForm,
+      publicForm: brandingRequestForm,
       ...(locale &&
         (await serverSideTranslations(locale, ["common", "form-builder"], null, ["fr", "en"]))),
     },

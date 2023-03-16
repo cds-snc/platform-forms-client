@@ -177,9 +177,15 @@ async function updateLastDownloadedBy(responseID: string, formID: string, email:
       FormID: formID,
       NAME_OR_CONF: `NAME#${responseID}`,
     },
-    UpdateExpression: "SET LastDownloadedBy = :email",
+    UpdateExpression:
+      "SET LastDownloadedBy = :email, #status = :statusUpdate, DownloadedAt = :downloadedAt",
     ExpressionAttributeValues: {
       ":email": email,
+      ":downloadedAt": Date.now(),
+      ":statusUpdate": "Downloaded",
+    },
+    ExpressionAttributeNames: {
+      "#status": "Status",
     },
     ReturnValues: "NONE",
   };

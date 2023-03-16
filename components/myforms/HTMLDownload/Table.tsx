@@ -49,7 +49,7 @@ const formatColumnAnswers = (
         </dt>
         <dd className="py-4">
           {response.map((subItem, subIndex) => (
-            <p key={`${parentIndex}-${subIndex}`}>{subItem.toString() || "-"}</p>
+            <p key={`${parentIndex}-${subIndex}`}>{String(subItem) || "-"}</p>
           ))}
         </dd>
       </div>
@@ -61,7 +61,7 @@ const formatColumnAnswers = (
           {question}
         </dt>
         <dd className="py-4">
-          <p>{response.toString() || "-"}</p>
+          <p>{response ? String(response) : "-"}</p>
         </dd>
       </div>
     );
@@ -84,7 +84,7 @@ const formatRowAnswers = (
         <dt className="font-bold border-b border-grey-default py-4">{question}</dt>
         <dd className="py-4">
           {response.map((subItem, subIndex) => (
-            <p key={`${parentIndex}-${subIndex}`}>{subItem.toString() || "-"}</p>
+            <p key={`${parentIndex}-${subIndex}`}>{subItem ? String(subItem) : "-"}</p>
           ))}
         </dd>
       </div>
@@ -100,7 +100,7 @@ const formatRowAnswers = (
           {question}
         </dt>
         <dd className="py-4 pr-8">
-          <p>{response.toString() || "-"}</p>
+          <p>{response ? String(response) : "-"}</p>
         </dd>
       </div>
     );

@@ -46,11 +46,13 @@ export const PageTemplate = ({
   title,
   navigation,
   leftNav = true,
+  autoWidth = false,
 }: {
   children: React.ReactNode;
   title: string;
   navigation?: React.ReactElement;
   leftNav?: boolean;
+  autoWidth?: boolean;
 }) => {
   const { t, i18n } = useTranslation("form-builder");
   const { hasHydrated, form, setLang, updateField, email } = useTemplateStore((s) => ({
@@ -91,7 +93,9 @@ export const PageTemplate = ({
               </Head>
               <main
                 id="content"
-                className={`${leftNav && "ml-60 xl:ml-40 md:pl-5 max-w-4xl"} form-builder`}
+                className={`${leftNav && "ml-60 xl:ml-40 md:pl-5"} ${
+                  leftNav && !autoWidth && "max-w-4xl"
+                } form-builder`}
               >
                 {navigation}
                 {children}
