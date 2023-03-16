@@ -390,6 +390,7 @@
   "settingsResponseNote": "Set response delivery before previewing delivery and publishing.",
   "settingsResponseNotePublished": "To change the response delivery destination.",
   "settingsResponseTitle": "Response delivery destination",
+  "settingsNavHome": "Response delivery",
   "share": {
     "copy": "Copy",
     "email": "Share by email",
