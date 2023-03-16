@@ -161,7 +161,8 @@
   },
   "backToForm": "Back to form",
   "branding": {
-    "defaultOption": "Government of Canada (default)",
+    "defaultOption": "Government of Canada",
+    "default": "(default)",
     "heading": "Branding",
     "notFound": "Didn’t find your department or agency in the list?",
     "preview": "Preview of logo",

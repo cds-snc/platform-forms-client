@@ -3,7 +3,6 @@ import { useTranslation } from "next-i18next";
 import { useTemplateStore } from "../store";
 import { Input } from "./shared";
 import { isValidGovEmail } from "@lib/validation";
-import { DeleteForm } from "./DeleteForm";
 
 const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element | string }) => {
   return (

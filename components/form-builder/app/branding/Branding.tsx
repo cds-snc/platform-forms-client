@@ -53,7 +53,10 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
     label: option[logoTitle],
   }));
 
-  brandingOptions.unshift({ value: "", label: t("branding.defaultOption") });
+  brandingOptions.unshift({
+    value: "",
+    label: `${t("branding.defaultOption")} ${t("branding.default")}`,
+  });
 
   return (
     <div>
@@ -76,7 +79,7 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
         {logo ? (
           <img alt={altText} src={logo} width={300} />
         ) : (
-          <Image src={defaultLogo} width="360" height="33" />
+          <Image alt={t("branding.defaultOption")} src={defaultLogo} width="360" height="33" />
         )}
       </div>
       {hasBrandingRequestForm && (
