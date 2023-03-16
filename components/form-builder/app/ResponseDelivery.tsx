@@ -1,63 +1,9 @@
 import React, { useState } from "react";
-import { useSession } from "next-auth/react";
 import { useTranslation } from "next-i18next";
-import { useRouter } from "next/router";
-import Markdown from "markdown-to-jsx";
-
-import { useTemplateStore, clearTemplateStore } from "../store";
-import {
-  Button,
-  Input,
-  ConfirmFormDeleteDialog,
-  useDialogRef,
-  Dialog,
-  DownloadFileButton,
-} from "./shared";
-import { useDeleteForm } from "../hooks";
+import { useTemplateStore } from "../store";
+import { Input } from "./shared";
 import { isValidGovEmail } from "@lib/validation";
-
-const FormDeleted = () => {
-  const { t } = useTranslation("form-builder");
-  const router = useRouter();
-  const dialog = useDialogRef();
-  const actions = (
-    <Button
-      onClick={() => {
-        dialog.current?.close();
-        router.push({ pathname: `/form-builder` });
-      }}
-    >
-      {t("formDeletedDialogOkay")}
-    </Button>
-  );
-
-  return (
-    <Dialog title={t("formDeletedDialogTitle")} dialogRef={dialog} actions={actions}>
-      <Markdown options={{ forceBlock: true }}>{t("formDeletedDialogMessage")}</Markdown>
-    </Dialog>
-  );
-};
-
-const FormDeletedError = ({ handleClose }: { handleClose: () => void }) => {
-  const { t } = useTranslation("form-builder");
-  const dialog = useDialogRef();
-  const actions = (
-    <Button
-      onClick={() => {
-        dialog.current?.close();
-        handleClose();
-      }}
-    >
-      {t("formDeletedDialogOkayFailed")}
-    </Button>
-  );
-
-  return (
-    <Dialog title={t("formDeleteDialogTitleFailed")} dialogRef={dialog} actions={actions}>
-      <Markdown options={{ forceBlock: true }}>{t("formDeletedDialogMessageFailed")}</Markdown>
-    </Dialog>
-  );
-};
+import { DeleteForm } from "./DeleteForm";
 
 const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element | string }) => {
   return (
@@ -185,6 +131,8 @@ export const ResponseDelivery = () => {
           />
         </div>
       )}
+
+      <DeleteForm />
     </>
   );
 };
