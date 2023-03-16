@@ -15,51 +15,51 @@ Cet accord concerne les responsabilités de différents groupes pour Formulaires
 ### Le Service numérique canadien (SNC) est responsable :
 
 1. d’héberger et de maintenir le système Formulaires GC.
-- de répondre aux demandes de soutien et aux questions durant les heures normales de travail (de 9 h à 17 h, heure de l’Est).
-- de répondre aux demandes de soutien liées à l’intégration API dans le respect des [délais fournis](#temps-de-reponse-du-service-et-mode-de-contact).
-- de veiller à ce que le transfert de données à la clientèle par courriel puisse traiter des données Protégé A ou respecte les mêmes exigences en matière de sécurité que d’autres options de livraison de données par courriel.
-- de veiller à ce que le transfert de données à la clientèle par le biais de l’API de récupération puisse traiter les données Protégé B au quatrième niveau de la détermination de menace.
-- de corriger les vulnérabilités de sécurité en temps et lieu, là où le SNC est responsable d’évaluer le niveau de menace d’une vulnérabilité de sécurité. Les vulnérabilités majeures sont corrigées le plus tôt possible et au plus tard une semaine après la découverte de la cause racine. Les délais de traitement peuvent être plus longs pour les aspects qui dépendent de code externe. Tout correctif apporté à l’infrastructure est la responsabilité de AWS (Pour plus de renseignements, consultez les conditions de service de AWS : [https://aws.amazon.com/service-terms/](https://d1.awsstatic.com/legal/awsserviceterms/AWS_Service_Terms_French_\(2022-03-31\).pdf)).
-- de rétablir le fonctionnement du système en cas d’une interruption imprévue du service.
-- d’avertir la clientèle en cas d’inaccessibilité du système Formulaires GC, quelle que soit la raison, et ce, dès que le SNC en a connaissance. Pour suivre la disponibilité du service en temps réel, consultez la [page de statut pour les produits du SNC](https://status-statut.cds-snc.ca/).
-- de veiller à ce que le système Formulaires GC envoie des réponses de formulaire rapidement à l’aide de Notification GC.
-- de veiller à ce que les fournisseurs d’infrastructure ne déconnectent pas les systèmes Formulaires GC ou Notification GC en raison d’une utilisation abusive du service par la clientèle.
-- de veiller à ce que le système fonctionne et à ce que le temps de chargement des pages soit inférieur à 10 secondes au Canada dans le cas d’une connexion Internet haute vitesse, à moins que le produit ne soit victime d’une attaque de déni de service ou qu’il y ait d’autres problèmes avec AWS.
-- de limiter le rythme auquel les utilisateurs finaux et utilisatrices finales peuvent soumettre leurs réponses afin de préserver la sécurité des systèmes du SNC et de ceux de la clientèle.
-- de répondre rapidement aux incidents : Formulaires GC respecte la [directive sur la gestion de la sécurité du SCT](https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=32611) et dispose d’un processus d’intervention en cas d’incident afin de résoudre rapidement les problèmes.
-- de partager les journaux de l’application avec le Centre canadien pour la cybersécurité : Formulaires GC respecte l’[Orientation sur l’utilisation sécurisée des services commerciaux d’informatique en nuage : Avis de mise en œuvre de la Politique sur la sécurité (AMOPS)](https://www.canada.ca/fr/gouvernement/systeme/gouvernement-numerique/innovations-gouvernementales-numeriques/services-informatique-nuage/orientation-utilisation-securisee-services-commerciaux-informatique-nuage-amops.html).
+2. de répondre aux demandes de soutien et aux questions durant les heures normales de travail (de 9 h à 17 h, heure de l’Est).
+3. de répondre aux demandes de soutien liées à l’intégration API dans le respect des [délais fournis](#temps-de-reponse-du-service-et-mode-de-contact).
+4. de veiller à ce que le transfert de données à la clientèle par courriel puisse traiter des données Protégé A ou respecte les mêmes exigences en matière de sécurité que d’autres options de livraison de données par courriel.
+5. de veiller à ce que le transfert de données à la clientèle par le biais de l’API de récupération puisse traiter les données Protégé B au quatrième niveau de la détermination de menace.
+6. de corriger les vulnérabilités de sécurité en temps et lieu, là où le SNC est responsable d’évaluer le niveau de menace d’une vulnérabilité de sécurité. Les vulnérabilités majeures sont corrigées le plus tôt possible et au plus tard une semaine après la découverte de la cause racine. Les délais de traitement peuvent être plus longs pour les aspects qui dépendent de code externe. Tout correctif apporté à l’infrastructure est la responsabilité de AWS (Pour plus de renseignements, consultez les conditions de service de AWS : [https://aws.amazon.com/service-terms/](https://d1.awsstatic.com/legal/awsserviceterms/AWS_Service_Terms_French_\(2022-03-31\).pdf)).
+7. de rétablir le fonctionnement du système en cas d’une interruption imprévue du service.
+8. d’avertir la clientèle en cas d’inaccessibilité du système Formulaires GC, quelle que soit la raison, et ce, dès que le SNC en a connaissance. Pour suivre la disponibilité du service en temps réel, consultez la [page de statut pour les produits du SNC](https://status-statut.cds-snc.ca/).
+9. de veiller à ce que le système Formulaires GC envoie des réponses de formulaire rapidement à l’aide de Notification GC.
+10. de veiller à ce que les fournisseurs d’infrastructure ne déconnectent pas les systèmes Formulaires GC ou Notification GC en raison d’une utilisation abusive du service par la clientèle.
+11. de veiller à ce que le système fonctionne et à ce que le temps de chargement des pages soit inférieur à 10 secondes au Canada dans le cas d’une connexion Internet haute vitesse, à moins que le produit ne soit victime d’une attaque de déni de service ou qu’il y ait d’autres problèmes avec AWS.
+12. de limiter le rythme auquel les utilisateurs finaux et utilisatrices finales peuvent soumettre leurs réponses afin de préserver la sécurité des systèmes du SNC et de ceux de la clientèle.
+13. de répondre rapidement aux incidents : Formulaires GC respecte la [directive sur la gestion de la sécurité du SCT](https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=32611) et dispose d’un processus d’intervention en cas d’incident afin de résoudre rapidement les problèmes.
+14. de partager les journaux de l’application avec le Centre canadien pour la cybersécurité : Formulaires GC respecte l’[Orientation sur l’utilisation sécurisée des services commerciaux d’informatique en nuage : Avis de mise en œuvre de la Politique sur la sécurité (AMOPS)](https://www.canada.ca/fr/gouvernement/systeme/gouvernement-numerique/innovations-gouvernementales-numeriques/services-informatique-nuage/orientation-utilisation-securisee-services-commerciaux-informatique-nuage-amops.html).
 
 Le SNC peut suspendre le service pour une entité cliente ou pour un·e utilisateur·rice à tout moment en cas d’utilisation jugée inappropriée. Des avis de déconnexion justifiés seront fournis lorsque nécessaire.
 
 ### La clientèle a pour responsabilité :
 
 1. de veiller à ce que les données recueillies n’excèdent pas le niveau de protection Protégé A.
-- de veiller à disposer des autorisations nécessaires pour recueillir les renseignements personnels demandés dans le formulaire.
-- de publier une traduction complète et exacte du formulaire et de l’avis de confidentialité.
-- de veiller à ce que les approbations nécessaires pour l’utilisation de Formulaires GC aient été obtenues au sein du ministère ou de l’organisme client. La clientèle doit fournir au SNC les coordonnées des personnes ayant donné leur approbation. Le SNC utilise ces renseignements pour savoir avec qui communiquer en cas de modifications importantes du service ou de dissolution de ce dernier.
-- de lire et respecter les conditions d’utilisation ([https://notification.canada.ca/conditions-dutilisation](https://notification.canada.ca/conditions-dutilisation)).
-- d’éviter toute utilisation abusive du service, y compris son utilisation à des fins non convenues au préalable avec le SNC.
-- de veiller à disposer de voies alternatives pour remplir le formulaire.
-- de diriger la réponse aux requêtes liées à la _Loi sur l’accès à l’information et à la Loi sur la protection des renseignements personnels_ concernant les renseignements transmis par le biais de Formulaires GC et correspondant à un formulaire particulier, comme décrit dans la _Loi sur la gestion des finances publiques_ :
-  - [**_Loi sur l’accès à l’information_**](https://laws-lois.justice.gc.ca/fra/lois/a-1/)  
+2. de veiller à disposer des autorisations nécessaires pour recueillir les renseignements personnels demandés dans le formulaire.
+3. de publier une traduction complète et exacte du formulaire et de l’avis de confidentialité.
+4. de veiller à ce que les approbations nécessaires pour l’utilisation de Formulaires GC aient été obtenues au sein du ministère ou de l’organisme client. La clientèle doit fournir au SNC les coordonnées des personnes ayant donné leur approbation. Le SNC utilise ces renseignements pour savoir avec qui communiquer en cas de modifications importantes du service ou de dissolution de ce dernier.
+5. de lire et respecter les conditions d’utilisation ([https://notification.canada.ca/conditions-dutilisation](https://notification.canada.ca/conditions-dutilisation)).
+6. d’éviter toute utilisation abusive du service, y compris son utilisation à des fins non convenues au préalable avec le SNC.
+7. de veiller à disposer de voies alternatives pour remplir le formulaire.
+8. de diriger la réponse aux requêtes liées à la _Loi sur l’accès à l’information et à la Loi sur la protection des renseignements personnels_ concernant les renseignements transmis par le biais de Formulaires GC et correspondant à un formulaire particulier, comme décrit dans la _Loi sur la gestion des finances publiques_ :
+  * [**_Loi sur l’accès à l’information_**](https://laws-lois.justice.gc.ca/fra/lois/a-1/)  
   **(5)** Pour l’application de la [_Loi sur l’accès à l’information_](https://laws-lois.justice.gc.ca/fra/lois/a-1/), il est entendu que les documents de toute entité à qui le Conseil du Trésor fournit des services en vertu du paragraphe (4), qui, pour le compte de cette entité, sont conservés dans les systèmes de technologie de l’information du Conseil du Trésor ou transitent par ces systèmes ne relèvent pas du Conseil du Trésor.
-  - [**_Loi sur la protection des renseignements personnels_**](https://laws-lois.justice.gc.ca/fra/lois/p-21/)  
+  * [**_Loi sur la protection des renseignements personnels_**](https://laws-lois.justice.gc.ca/fra/lois/p-21/)  
   **(6)** Pour l’application de la [_Loi sur la protection des renseignements personnels_](https://laws-lois.justice.gc.ca/fra/lois/p-21/), il est entendu que les renseignements personnels qui sont recueillis par toute entité à qui le Conseil du Trésor fournit des services en vertu du paragraphe (4), qui, pour le compte de cette entité, sont conservés dans les systèmes de technologie de l’information du Conseil du Trésor ou transitent par ces systèmes ne relèvent pas du Conseil du Trésor.
-- de fournir à Formulaires GC l’accès aux renseignements relatifs aux mesures de performance à des fins d’évaluation du système et des formulaires. Cela peut inclure :
+9. de fournir à Formulaires GC l’accès aux renseignements relatifs aux mesures de performance à des fins d’évaluation du système et des formulaires. Cela peut inclure :
   * les mesures des normes de service avant et après l’utilisation de Formulaires GC.
   * l’évaluation de la qualité de soumission des formulaires et les conséquences de cette dernière sur le flux de travail.
   * le taux d’utilisation/d’admission du programme avant et après l’utilisation de Formulaires GC.
-- Lors du traitement de formulaires avec téléversement de documents **transmis par courriel**, de déterminer si un processus interne est nécessaire pour :
+10. Lors du traitement de formulaires avec téléversement de documents **transmis par courriel**, de déterminer si un processus interne est nécessaire pour :
   * gérer tout document illégitime téléversé et soumis par les utilisateur·rice·s finaux·ales, comme du contenu pornographique ou dérangeant.
   * mettre en place des mesures d’analyse de contenu pour les soumissions avec téléversement de fichier afin de réduire le risque de virus ou de logiciel malveillant (p. ex. : détection de virus assurée par les services ministériels d’hébergement de courriels).
   * répondre aux conséquences opérationnelles ou aux conséquences sur le service du téléversement de documents par des utilisateur·rice·s finaux·ales en guise de soumission à des fins de pollupostage.
-- Lors du traitement de formulaires par le biais de l’API de récupération de Formulaires GC :
+11. Lors du traitement de formulaires par le biais de l’API de récupération de Formulaires GC :
   * de fournir à Formulaires GC les noms et adresses courriel de la ou des personne(s) responsable(s) de l’intégration de l’API au sein des systèmes de l’entité cliente.
   * de veiller à ce que les jetons du porteur et les jetons temporaires fournis à la clientèle soient conservés dans un environnement sûr, sur des appareils fournis par le gouvernement et sécurisés.
   * de veiller à ce que les jetons du porteur et les jetons temporaires soient transmis selon des méthodes chiffrées.
   * d’adapter les sorties de données (format JSON) aux spécifications applicables pour l’intégration aux systèmes de l’entité cliente.
   * de veiller à ce que l’intégration à l’API de récupération de Formulaires GC soit à jour, y compris, sans limitation, à ce que les jetons soient à jour, à ce que les soumissions de réponse soient reçues dans un format utilisable et à ce que les intergiciels soient à jour.
-- Lors du traitement de formulaires par le biais de la partie protégée de Formulaires GC :
+12. Lors du traitement de formulaires par le biais de la partie protégée de Formulaires GC :
   * d’adhérer aux directives ministérielles concernant la bonne utilisation des appareils et des réseaux.
   * de s’assurer de ne jamais transmettre sa clé de sécurité à quiconque.
   * d’accuser réception des réponses au formulaire et en enregistrer une copie dans les 30 jours suivant la réception d’une réponse.
@@ -68,8 +68,8 @@ Le SNC peut suspendre le service pour une entité cliente ou pour un·e utilisat
 
 ### Les fournisseurs d’infrastructure de Formulaires GC sont responsables
 1. d’envoyer des courriels comprenant les données des utilisateurs finaux et utilisatrices finales à l’adresse gouvernementale fournie ou aux adresses courriel gouvernementales fournies.
-- de fournir l’infrastructure infonuagique d’AWS.
-- de faire appliquer les conditions d’utilisation du service d’AWS. ([https://aws.amazon.com/service-terms/](https://d1.awsstatic.com/legal/awsserviceterms/AWS_Service_Terms_French_2022-10-14.pdf))
+2. de fournir l’infrastructure infonuagique d’AWS.
+3. de faire appliquer les conditions d’utilisation du service d’AWS. ([https://aws.amazon.com/service-terms/](https://d1.awsstatic.com/legal/awsserviceterms/AWS_Service_Terms_French_2022-10-14.pdf))
 
 Le SNC n’est pas responsable des problèmes ou des interruptions de service de l’infrastructure AWS pouvant avoir des conséquences sur le temps de fonctionnement et la disponibilité du système. Le SNC n’est pas non plus responsable des défaillances de l’infrastructure d’Amazon, d’AWS ou de SES. Le SNC est tenu de transmettre à la clientèle toute information relative à une interruption du service AWS.
 

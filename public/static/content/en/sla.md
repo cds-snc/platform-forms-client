@@ -15,51 +15,51 @@ This agreement covers the responsibilities of different groups for GC Forms: a c
 ### Canadian Digital Service (CDS) is responsible for:
 
 1. Hosting and supporting the GC Forms system.
-- Handling support requests and inquiries during regular business hours (9am - 5pm Eastern Time).
-- Responding to API integration support within the [timelines provided](#service-response-time-and-contacts).
-- Ensuring data transfer to the client via email is able to support Protected A data or meet the same security requirements as other email based data delivery options.
-- Ensuring data transferred to the client via the retrieval API is able to support Protected B data at the Threat Determination level 4 (TD4).
-- Patching security vulnerabilities in a timely manner, where CDS determines the level of threat a security vulnerability possesses. Major vulnerabilities are patched as soon as possible but no more than a week after the root cause is found. External dependencies for code are subject to longer timelines. Any infrastructure-level patching is the responsibility of AWS (For more information see their service terms: [https://aws.amazon.com/service-terms/](https://aws.amazon.com/service-terms/)).
-- Restoring the system to operation in case of any unplanned outages.
-- Alerting clients if GC Forms is to be inaccessible for whatever reasons as soon as CDS learns of this. To see real-time, see our [CDS Products status page](https://status-statut.cds-snc.ca/).
-- Ensuring the GC Forms system sends form responses in a timely manner, as provided by GC Notify.
-- Ensuring that the infrastructure providers don’t disconnect the GC Forms or GC Notify system due to misuse by clients.
-- Ensuring the system is available for use, with page load time less than 10 seconds in Canada on high-speed Internet, unless the product is experiencing a denial of service attack or there are issues with AWS.
-- Limiting the rate at which end-users can submit responses to preserve the security of CDS and client systems.
-- Responding quickly to incidents. GC Forms follows the [TBS Directive on Security Management](https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=32611) and follows an Incident Response process to resolve issues in a timely manner.
-- Sharing application logs with the Canadian Centre for Cyber Security. GC Forms follows the [Direction on the Secure Use of Commercial Cloud Services: Security Policy Implementation Notice (SPIN)](https://www.canada.ca/en/government/system/digital-government/digital-government-innovations/cloud-services/direction-secure-use-commercial-cloud-services-spin.html).
+2. Handling support requests and inquiries during regular business hours (9am - 5pm Eastern Time).
+3. Responding to API integration support within the [timelines provided](#service-response-time-and-contacts).
+4. Ensuring data transfer to the client via email is able to support Protected A data or meet the same security requirements as other email based data delivery options.
+5. Ensuring data transferred to the client via the retrieval API is able to support Protected B data at the Threat Determination level 4 (TD4).
+6. Patching security vulnerabilities in a timely manner, where CDS determines the level of threat a security vulnerability possesses. Major vulnerabilities are patched as soon as possible but no more than a week after the root cause is found. External dependencies for code are subject to longer timelines. Any infrastructure-level patching is the responsibility of AWS (For more information see their service terms: [https://aws.amazon.com/service-terms/](https://aws.amazon.com/service-terms/)).
+7. Restoring the system to operation in case of any unplanned outages.
+8. Alerting clients if GC Forms is to be inaccessible for whatever reasons as soon as CDS learns of this. To see real-time, see our [CDS Products status page](https://status-statut.cds-snc.ca/).
+9. Ensuring the GC Forms system sends form responses in a timely manner, as provided by GC Notify.
+10. Ensuring that the infrastructure providers don’t disconnect the GC Forms or GC Notify system due to misuse by clients.
+11. Ensuring the system is available for use, with page load time less than 10 seconds in Canada on high-speed Internet, unless the product is experiencing a denial of service attack or there are issues with AWS.
+12. Limiting the rate at which end-users can submit responses to preserve the security of CDS and client systems.
+13. Responding quickly to incidents. GC Forms follows the [TBS Directive on Security Management](https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=32611) and follows an Incident Response process to resolve issues in a timely manner.
+14. Sharing application logs with the Canadian Centre for Cyber Security. GC Forms follows the [Direction on the Secure Use of Commercial Cloud Services: Security Policy Implementation Notice (SPIN)](https://www.canada.ca/en/government/system/digital-government/digital-government-innovations/cloud-services/direction-secure-use-commercial-cloud-services-spin.html).
 
 CDS can suspend a client or user’s service at any time for anything deemed as inappropriate use. Notices of disconnect with a rationale will be provided when necessary.
 
 ### Clients are responsible for:
 
 1. Ensuring that the data being collected is up to protected A only.
-- Ensuring that they have the appropriate authorities to collect the personal information requested in the form.
-- Publishing a complete and accurate translation of the form and privacy notice.
-- Ensuring that the appropriate approvals for usage of GC Forms have been obtained within the client department, agency, or organization. Clients must provide CDS with the contact information for these approvers. CDS uses this information to know with whom to communicate about substantive modifications or dissolution of the service.
-- Reading and following the GC Notify terms of use ([https://notification.canada.ca/terms](https://notification.canada.ca/terms)).
-- Avoiding any misuse of the service including using it for a purpose not previously discussed with CDS.
-- Ensuring they have alternative service paths to complete the form.
-- Leading the response to _Access to Information Act_ and _Privacy Act_ requests about information that passes through GC Forms related to a particular form as detailed in the _Financial Administration Act_:
-  - [**_Access to Information Act_**](https://laws-lois.justice.gc.ca/eng/acts/A-1)  
+2. Ensuring that they have the appropriate authorities to collect the personal information requested in the form.
+3. Publishing a complete and accurate translation of the form and privacy notice.
+4. Ensuring that the appropriate approvals for usage of GC Forms have been obtained within the client department, agency, or organization. Clients must provide CDS with the contact information for these approvers. CDS uses this information to know with whom to communicate about substantive modifications or dissolution of the service.
+5. Reading and following the GC Notify terms of use ([https://notification.canada.ca/terms](https://notification.canada.ca/terms)).
+6. Avoiding any misuse of the service including using it for a purpose not previously discussed with CDS.
+7. Ensuring they have alternative service paths to complete the form.
+8. Leading the response to _Access to Information Act_ and _Privacy Act_ requests about information that passes through GC Forms related to a particular form as detailed in the _Financial Administration Act_:
+  * [**_Access to Information Act_**](https://laws-lois.justice.gc.ca/eng/acts/A-1)  
   **(5)** For greater certainty, for the purposes of the [Access to Information Act](https://laws-lois.justice.gc.ca/eng/acts/A-1), the records of an entity to which the Treasury Board provides services under subsection (4) that are, on behalf of that entity, contained in or carried on the Treasury Board’s information technology systems are not under the control of the Treasury Board.
-  - [**_Privacy Act_**](https://laws-lois.justice.gc.ca/eng/acts/P-21)  
+  * [**_Privacy Act_**](https://laws-lois.justice.gc.ca/eng/acts/P-21)  
   **(6)** For greater certainty, for the purposes of the [Privacy Act](https://laws-lois.justice.gc.ca/eng/acts/P-21), personal information that is collected by an entity to which the Treasury Board provides services under subsection (4) and that is, on behalf of that entity, contained in or carried on the Treasury Board’s information technology systems is not under the control of the Treasury Board.
-- Providing GC Forms with access to performance measurement information for the purposes of system and form evaluation. This could include:
+9. Providing GC Forms with access to performance measurement information for the purposes of system and form evaluation. This could include:
   * Service standard metrics before and after use of GC Forms.
   * Assessments of form submission quality and impacts on workflow.
   * Rates of program uptake/admission before and after use of GC forms.
-- When processing forms with document upload that are **delivered via email**, ensuring whether an internal process is necessary to:
+10. When processing forms with document upload that are **delivered via email**, ensuring whether an internal process is necessary to:
   * Manage any non-legitimate documents uploaded and submitted by end-users. For example, pornographic or disturbing content.
   * Implement content scanning measures for submissions with file upload to reduce the possibility of viruses or malicious software. (e.g., virus scanning done by departmental email services).
   * Address service or operational impacts due to end-users uploading documents to submissions for the purposes of spamming.
-- When processing forms via the GC Forms retrieval API:
+11. When processing forms via the GC Forms retrieval API:
   * Providing GC Forms with the names and email addresses of the individual(s) responsible for integrating the API with client systems.
   * Ensuring that bearer and temporary tokens provided to clients are kept in a safe and secure environment on government provided and secured devices.
   * Ensuring that sharing bearer or temporary tokens are shared using encrypted methods.
   * Adapting the data response output (a JSON format) to the required specifications to integrate with the client’s systems.
   * Ensuring the integration with GC Forms retrieval API is current, including but not limited to: tokens are current, response submissions are being received in a usable format, and middleware is up to date.
-- When processing forms via the GC Forms Vault
+12. When processing forms via the GC Forms Vault
   * Adhering to your departmental guidance for acceptable device and network use.
   * Ensure that you don’t share your secure key with anyone.
   * Save a copy and confirm receipt of your form responses within 30 days of receiving a submission.
@@ -68,8 +68,8 @@ CDS can suspend a client or user’s service at any time for anything deemed as 
 
 ### GC Forms infrastructure providers is responsible for:
 1. Delivering emails with end-user data to the provided government email address(es).
-- Providing Amazon AWS service cloud infrastructure.
-- Enforcing the AWS terms of service. ([https://aws.amazon.com/service-terms/](https://aws.amazon.com/service-terms/))
+2. Providing Amazon AWS service cloud infrastructure.
+3. Enforcing the AWS terms of service. ([https://aws.amazon.com/service-terms/](https://aws.amazon.com/service-terms/))
 
 CDS is not responsible for issues or outages with AWS infrastructure that may impact system uptime and availability. CDS is also not responsible for Amazon infrastructure failure, AWS, or SES. CDS is responsible for updating clients on any information pertaining to an AWS outage.
 
