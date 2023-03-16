@@ -44,8 +44,6 @@ const Settings = () => {
       </Head>
       <h1>{t("title")}</h1>
       <div className="gc-form">
-        <pre>{JSON.stringify(data)}</pre>
-
         <form onSubmit={handleSubmit}>
           <div className="focus-group mb-2">
             <label htmlFor="branding-form-id" className="gc-label">
