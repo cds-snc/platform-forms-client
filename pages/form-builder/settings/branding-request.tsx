@@ -3,6 +3,7 @@ import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetServerSideProps } from "next";
 import { getServerSession } from "next-auth";
+import { prisma } from "@lib/integration/prismaConnector";
 
 import { PageProps } from "@lib/types";
 import { getPublicTemplateByID } from "@lib/templates";
@@ -38,16 +39,17 @@ export const getServerSideProps: GetServerSideProps = async ({ locale, req, res 
     };
   }
 
-  // @todo: get the id from the database
-  const id = null;
+  const result = await prisma.settings.findFirst({
+    select: { brandingRequestForm: true },
+  });
 
-  if (!id) {
+  if (!result?.brandingRequestForm) {
     return {
       notFound: true,
     };
   }
 
-  const brandingRequestForm = await getPublicTemplateByID(id);
+  const brandingRequestForm = await getPublicTemplateByID(result.brandingRequestForm);
 
   return {
     props: {
