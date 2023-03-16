@@ -38,7 +38,7 @@
             }
           ],
           "titleEn": "English version of the logo",
-          "titleFr": "",
+          "titleFr": "[FR] English version of the logo",
           "validation": {
             "required": true
           },
@@ -60,7 +60,7 @@
             }
           ],
           "titleEn": "French version of the logo",
-          "titleFr": "",
+          "titleFr": "[FR] French version of the logo",
           "validation": {
             "required": true
           },
