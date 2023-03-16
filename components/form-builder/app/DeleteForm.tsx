@@ -1,18 +1,30 @@
 import React, { useState } from "react";
+import { useRouter } from "next/router";
+import { useDeleteForm } from "../hooks";
 import { useSession } from "next-auth/react";
 import { useTranslation } from "next-i18next";
-import { useRouter } from "next/router";
-import Markdown from "markdown-to-jsx";
+
+const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element | string }) => {
+  return (
+    <label className="block font-bold mb-1" htmlFor={htmlFor}>
+      {children}
+    </label>
+  );
+};
+
+const HintText = ({ id, children }: { id: string; children?: JSX.Element | string }) => {
+  return (
+    <span className="block text-sm mb-1" id={id}>
+      {children}
+    </span>
+  );
+};
+
+import { Button, ConfirmFormDeleteDialog, useDialogRef, Dialog } from "./shared";
 
 import { useTemplateStore, clearTemplateStore } from "../store";
-import {
-  Button,
-  ConfirmFormDeleteDialog,
-  useDialogRef,
-  Dialog,
-  DownloadFileButton,
-} from "./shared";
-import { useDeleteForm } from "../hooks";
+
+import Markdown from "markdown-to-jsx";
 
 const FormDeleted = () => {
   const { t } = useTranslation("form-builder");
@@ -57,51 +69,26 @@ const FormDeletedError = ({ handleClose }: { handleClose: () => void }) => {
   );
 };
 
-const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element | string }) => {
-  return (
-    <label className="block font-bold mb-1" htmlFor={htmlFor}>
-      {children}
-    </label>
-  );
-};
-
-const HintText = ({ id, children }: { id: string; children?: JSX.Element | string }) => {
-  return (
-    <span className="block text-sm mb-1" id={id}>
-      {children}
-    </span>
-  );
-};
-
-export const Settings = () => {
+export const DeleteForm = () => {
   const { t } = useTranslation("form-builder");
   const { handleDelete } = useDeleteForm();
-  const [formDeleted, setFormDeleted] = useState(false);
-  const [error, setError] = useState(false);
-
   const router = useRouter();
-  const { deleteconfirm, downloadconfirm } = router.query;
+  const { deleteconfirm } = router.query;
   const [showConfirm, setShowConfirm] = useState(deleteconfirm || false);
+  const [error, setError] = useState(false);
+  const [formDeleted, setFormDeleted] = useState(false);
+  const { status } = useSession();
 
   const { id, initialize, isPublished } = useTemplateStore((s) => ({
     id: s.id,
     initialize: s.initialize,
+    email: s.deliveryOption?.emailAddress,
+    updateField: s.updateField,
     isPublished: s.isPublished,
   }));
-  const { status } = useSession();
 
   return (
     <>
-      <h1 className="visually-hidden">{t("formSettings")}</h1>
-
-      <div id="download-form" className="mb-6">
-        <Label htmlFor="download">{t("formDownload.title")}</Label>
-        <HintText id="download-hint">{t("formDownload.description")}</HintText>
-        <div className="mt-5">
-          <DownloadFileButton autoShowDialog={Boolean(downloadconfirm) || false} />
-        </div>
-      </div>
-
       {status === "authenticated" && id && (
         <div className="mb-10">
           <Label htmlFor="delete">{t("settingsDeleteTitle")}</Label>
@@ -119,6 +106,7 @@ export const Settings = () => {
           </div>
         </div>
       )}
+
       {showConfirm && (
         <ConfirmFormDeleteDialog
           handleClose={() => setShowConfirm(false)}

@@ -9,3 +9,4 @@ export { useIsWithin } from "./useIsWithin";
 export { usePanelActions } from "./usePanelActions";
 export { useUpdateElement } from "./useUpdateElement";
 export { useHandleAdd } from "./useHandleAdd";
+export { useIsAdminUser } from "./useIsAdminUser";

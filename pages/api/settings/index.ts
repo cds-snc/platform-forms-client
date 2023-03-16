@@ -5,6 +5,8 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "@lib/integration/prismaConnector";
 import { logMessage } from "@lib/logger";
 
+// @todo
+// update to handle adding and retrieving multiple settings
 const settings = async (
   req: NextApiRequest,
   res: NextApiResponse,

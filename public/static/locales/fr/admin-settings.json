@@ -1,4 +1,7 @@
 {
   "title": "[FR] settings",
-  "brandingRequestId": "[FR] Branding Request ID"
+  "brandingRequestId": "[FR] Branding request form ID",
+  "success": "[FR] Data saved successfully",
+  "error": "[FR] Error saving data",
+  "loadingError": "[FR] Sorry... Something went wrong"
 }
