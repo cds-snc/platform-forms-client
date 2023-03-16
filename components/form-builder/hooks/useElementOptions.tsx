@@ -32,19 +32,20 @@ import {
   FileInput,
 } from "../app/edit/elements/element-dialog";
 
+import { useIsAdminUser } from "./useIsAdminUser";
+
 import { ElementOptionsFilter, ElementOption } from "../types";
 
 export const useElementOptions = (filterElements?: ElementOptionsFilter | undefined) => {
   const { t } = useTranslation("form-builder");
-
   const group = {
     layout: { id: "layout", value: t("addElementDialog.layoutBlocks") },
     input: { id: "input", value: t("addElementDialog.inputBlocks") },
     advanced: { id: "advanced", value: t("addElementDialog.advancedBlocks") },
   };
 
-  // default to off until we add file scanning
-  const allowFileInput = false;
+  // default to off unless the user is an admin
+  const allowFileInput = useIsAdminUser();
 
   const fileInputOption: ElementOption = {
     id: "fileInput",

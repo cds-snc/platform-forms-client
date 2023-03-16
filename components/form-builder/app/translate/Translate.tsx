@@ -63,7 +63,7 @@ const Element = ({
         <RichText primaryLanguage={primaryLanguage} element={element} index={index} />
       )}
 
-      {["radio", "checkbox", "dropdown"].includes(element.type) && (
+      {["radio", "checkbox", "dropdown", "fileInput"].includes(element.type) && (
         <>
           <Title primaryLanguage={primaryLanguage} element={element} />
           {(element.properties.descriptionEn || element.properties.descriptionFr) && (
