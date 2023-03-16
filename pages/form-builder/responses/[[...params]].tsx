@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState, useRef } from "react";
+import React, { ReactElement, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import { getFullTemplateByID } from "@lib/templates";
@@ -17,12 +17,7 @@ import Head from "next/head";
 import { checkOne } from "@lib/cache/flags";
 import Link from "next/link";
 import { Card } from "@components/globals/card/Card";
-import { useRouter } from "next/router";
 import { DownloadTable } from "@components/form-builder/app/DownloadTable/DownloadTable";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
-import { logMessage } from "@lib/logger";
-import axios from "axios";
 import { DialogConfirmReceipt } from "@components/form-builder/app/DownloadTable/DialogConfirmReceipt";
 import { DialogReportProblems } from "@components/form-builder/app/DownloadTable/DialogReportProblems";
 
@@ -37,94 +32,12 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
 }: ResponsesProps) => {
   const { t } = useTranslation("form-builder");
   const { status } = useSession();
-  const router = useRouter();
   const isAuthenticated = status === "authenticated";
-  const toastPosition = toast.POSITION.TOP_CENTER;
-  const MAX_FILE_DOWNLOADS = 20;
-  const secondaryButtonClass =
-    "whitespace-nowrap text-sm rounded-full bg-white-default text-black-default border-black-default hover:text-white-default hover:bg-gray-600 active:text-white-default active:bg-gray-500 py-2 px-5 rounded-lg border-2 border-solid inline-flex items-center active:top-0.5 focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500";
   const [isShowConfirmReceiptDialog, setIsShowConfirmReceiptDialog] = useState(false);
   const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
-  const checkedItems = useRef(new Map());
-  const [selectionStatus, setSelectionStatus] = useState(
-    new Map(vaultSubmissions.map((submission) => [submission.name, false]))
-  );
 
-  useEffect(() => {
-    const checkedMap = new Map();
-    selectionStatus.forEach((checked, name) => {
-      if (checked) {
-        checkedMap.set(name, checked);
-      }
-    });
-    checkedItems.current = checkedMap;
-  }, [selectionStatus]);
-
-  // NOTE: browsers have different limits for simultaneous downloads. May need to look into
-  // batching file downloads (e.g. 4 at a time) if edge cases/* come up.
-  const handleDownload = async () => {
-    if (checkedItems.current.size === 0) {
-      toast.warn(t("downloadResponsesTable.download.atLeastOneFile"), { position: toastPosition });
-      return;
-    }
-
-    if (checkedItems.current.size > MAX_FILE_DOWNLOADS) {
-      toast.warn(
-        t("downloadResponsesTable.download.trySelectingLessFiles", { max: MAX_FILE_DOWNLOADS }),
-        { position: toastPosition }
-      );
-      return;
-    }
-
-    const toastDownloadingId = toast.info(
-      t("downloadResponsesTable.download.downloadingXFiles", {
-        fileCount: checkedItems.current.size,
-      }),
-      { position: toastPosition, autoClose: false }
-    );
-
-    try {
-      const downloads = Array.from(checkedItems.current, async ([submissionName]) => {
-        if (!submissionName) {
-          throw new Error("Error downloading file from Retrieval table. SubmissionId missing.");
-        }
-        const url = `/api/id/${formId}/${submissionName}/download`;
-        const fileName = `${submissionName}.html`;
-        return axios({
-          url,
-          method: "GET",
-          responseType: "blob",
-          timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-        }).then((response) => {
-          const url = window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement("a");
-          link.href = url;
-          link.setAttribute("download", fileName);
-          document.body.appendChild(link);
-          link.click();
-        });
-      });
-
-      await Promise.all(downloads).then(() => {
-        // TODO: Future tech debt. See https://github.com/cds-snc/platform-forms-client/issues/1744
-        setTimeout(() => {
-          // Refreshes getServerSideProps data without a full page reload
-          router.replace(router.asPath);
-          toast.dismiss(toastDownloadingId);
-          toast.success(t("downloadResponsesTable.download.downloadComplete"), {
-            position: toastPosition,
-          });
-        }, 400);
-      });
-    } catch (err) {
-      logMessage.error(err as Error);
-      toast.dismiss(toastDownloadingId);
-      toast.error(t("downloadResponsesTable.download.errorDownloadingFiles"), {
-        position: toastPosition,
-        autoClose: false,
-      });
-    }
-  };
+  const secondaryButtonClass =
+    "whitespace-nowrap text-sm rounded-full bg-white-default text-black-default border-black-default hover:text-white-default hover:bg-gray-600 active:text-white-default active:bg-gray-500 py-2 px-5 rounded-lg border-2 border-solid inline-flex items-center active:top-0.5 focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500";
 
   return (
     <>
@@ -172,13 +85,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           <>
             <div>
               {vaultSubmissions.length > 0 && (
-                <DownloadTable
-                  submissions={vaultSubmissions}
-                  selectionStatus={selectionStatus}
-                  setSelectionStatus={setSelectionStatus}
-                  checkedItems={checkedItems.current}
-                  handleDownload={handleDownload}
-                />
+                <DownloadTable vaultSubmissions={vaultSubmissions} formId={formId} />
               )}
 
               {vaultSubmissions.length <= 0 && (
@@ -220,11 +127,6 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         isShowDialog={isShowReportProblemsDialog}
         setIsShowDialog={setIsShowReportProblemsDialog}
       />
-
-      {/* Sticky position to stop the page from scrolling to the top when showing a Toast */}
-      <div className="sticky top-0">
-        <ToastContainer />
-      </div>
     </>
   );
 };
