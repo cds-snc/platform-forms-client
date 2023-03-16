@@ -131,8 +131,6 @@ export const ResponseDelivery = () => {
           />
         </div>
       )}
-
-      <DeleteForm />
     </>
   );
 };
