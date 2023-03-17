@@ -6,8 +6,8 @@ import { getDaysPassed } from "./DownloadTable";
 const DOWNLOAD_OVERDUE = 15;
 
 // Format date for: YYYY-MM-DD
-function formatDate(date: Date): string {
-  const dateObj = new Date(date);
+function formatDate(timestamp: number): string {
+  const dateObj = new Date(timestamp);
   const day = String(dateObj.getDate()).length <= 1 ? `0${dateObj.getDate()}` : dateObj.getDate();
   const month =
     String(dateObj.getMonth()).length <= 1 ? `0${dateObj.getMonth() + 1}` : dateObj.getMonth() + 1;
@@ -21,8 +21,8 @@ export const DownloadResponseStatus = ({
   downloadedAt,
 }: {
   vaultStatus: string;
-  createdAt: Date;
-  downloadedAt?: Date;
+  createdAt: number;
+  downloadedAt?: number;
 }) => {
   const { t } = useTranslation("form-builder");
   let status = null;
