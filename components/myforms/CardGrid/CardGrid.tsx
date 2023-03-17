@@ -10,6 +10,7 @@ export const CardGrid = (props: CardGridProps): React.ReactElement => {
   const { cards } = props;
   const [activeCard, setActiveCard] = React.useState<CardProps | null>(null);
   const [showConfirm, setShowConfirm] = React.useState<boolean>(false);
+  const [deletedCards, setDeletedCards] = React.useState<string[]>([]);
 
   const handleDelete = useCallback((card: CardProps) => {
     setShowConfirm(true);
@@ -24,25 +25,33 @@ export const CardGrid = (props: CardGridProps): React.ReactElement => {
       >
         {cards &&
           cards?.length > 0 &&
-          cards.map((card: CardProps, index: number) => {
-            return (
-              <li className="flex flex-col" key={index}>
-                <Card
-                  id={card.id}
-                  name={card.name}
-                  titleEn={card.titleEn}
-                  titleFr={card.titleFr}
-                  url={card.url}
-                  date={card.date}
-                  isPublished={card.isPublished}
-                  handleDelete={handleDelete}
-                ></Card>
-              </li>
-            );
-          })}
+          cards
+            .filter(({ id }) => {
+              return !deletedCards.includes(id);
+            })
+            .map((card: CardProps, index: number) => {
+              return (
+                <li className="flex flex-col" key={index}>
+                  <Card
+                    id={card.id}
+                    name={card.name}
+                    titleEn={card.titleEn}
+                    titleFr={card.titleFr}
+                    url={card.url}
+                    date={card.date}
+                    isPublished={card.isPublished}
+                    handleDelete={handleDelete}
+                  ></Card>
+                </li>
+              );
+            })}
       </ol>
 
       <ConfirmDelete
+        onDeleted={(id: string) => {
+          setDeletedCards([...deletedCards, id]);
+          setShowConfirm(false);
+        }}
         show={showConfirm}
         id={activeCard?.id || ""}
         isPublished={activeCard?.isPublished || false}
