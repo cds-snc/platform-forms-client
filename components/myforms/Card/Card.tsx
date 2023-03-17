@@ -15,6 +15,7 @@ export interface CardProps {
   url: string;
   date: string;
   isPublished: boolean;
+  handleDelete: (card: CardProps) => void;
 }
 
 export const Card = (props: CardProps): React.ReactElement => {
@@ -36,7 +37,12 @@ export const Card = (props: CardProps): React.ReactElement => {
     },
     {
       title: t("card.menu.delete"),
-      url: `/${i18n.language}/form-builder/settings/${id}?deleteconfirm=true`,
+      callback: () => {
+        props.handleDelete(props);
+        return {
+          message: "",
+        };
+      },
     },
   ];
 
