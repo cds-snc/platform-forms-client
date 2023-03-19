@@ -62,12 +62,13 @@ export const Card = (props: CardProps): React.ReactElement => {
     const response = await axios({
       url,
       method: "GET",
-      responseType: "blob",
+      responseType: "json",
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     });
 
     const fileName = `${name}.json`;
-    const tempUrl = window.URL.createObjectURL(new Blob([response.data]));
+    const data = JSON.stringify(response.data.form, null, 2);
+    const tempUrl = window.URL.createObjectURL(new Blob([data]));
     const link = document.createElement("a");
     link.href = tempUrl;
     link.setAttribute("download", fileName);
