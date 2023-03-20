@@ -3,15 +3,25 @@ import { useTranslation } from "next-i18next";
 import { isFormId } from "@lib/validation";
 import { Button, useDialogRef, Dialog, LineItemEntries } from "@components/form-builder/app/shared";
 import { randomId } from "@lib/uiUtils";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { logMessage } from "@lib/logger";
+
+// TODO: ToastContainer in DownloadTable. Move to app root if toasts are staying.
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 
 export const DialogReportProblems = ({
+  formId,
   isShowDialog,
   setIsShowDialog,
 }: {
+  formId?: string;
   isShowDialog: boolean;
   setIsShowDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const { t } = useTranslation("form-builder");
+  const router = useRouter();
   const [formNumbers, setFormNumbers] = useState<string[]>([]);
   const dialogRef = useDialogRef();
   const maxEntries = 20;
@@ -24,10 +34,30 @@ export const DialogReportProblems = ({
   };
 
   const handleSubmit = () => {
-    // TODO
-    // -confirmation will probably be a notification. something like https://www.npmjs.com/package/react-toastify
-    //http://localhost:3000/api/id/[FORM_ID]/submission/report
-    //For the report API your payload should be an array of form names: ["15-02-32f7"]
+    const url = `/api/id/${formId}/submission/report`;
+    return axios({
+      url,
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+      data: formNumbers,
+    })
+      .then((response) => {
+        // Refreshes getServerSideProps data without a full page reload
+        router.replace(router.asPath);
+        toast.info(t("confirmation.success", { formNumbers }), {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        setFormNumbers([]);
+      })
+      .catch((err) => {
+        logMessage.error(err as Error);
+        toast.error(t("confirmation.error", { formNumbers }), {
+          position: toast.POSITION.TOP_CENTER,
+        });
+      });
   };
 
   return (

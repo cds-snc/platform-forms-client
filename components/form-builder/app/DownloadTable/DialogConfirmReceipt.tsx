@@ -4,6 +4,12 @@ import { isUUID } from "@lib/validation";
 import { Button, useDialogRef, Dialog, LineItemEntries } from "@components/form-builder/app/shared";
 import { randomId } from "@lib/uiUtils";
 import axios from "axios";
+import { useRouter } from "next/router";
+import { logMessage } from "@lib/logger";
+
+// TODO: ToastContainer in DownloadTable. Move to app root if toasts are staying.
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 
 export const DialogConfirmReceipt = ({
   formId,
@@ -15,6 +21,7 @@ export const DialogConfirmReceipt = ({
   setIsShowDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const { t } = useTranslation("form-builder");
+  const router = useRouter();
   const [codes, setCodes] = useState<string[]>([]);
   const dialogRef = useDialogRef();
   const maxEntries = 20;
@@ -36,10 +43,17 @@ export const DialogConfirmReceipt = ({
       },
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       data: codes,
-    }).then((response) => {
-      //todo
-    });
-    //TODO error responses see other axios examples
+    })
+      .then((response) => {
+        // Refreshes getServerSideProps data without a full page reload
+        router.replace(router.asPath);
+        toast.info(t("confirmation.success", { codes }), { position: toast.POSITION.TOP_CENTER });
+        setCodes([]);
+      })
+      .catch((err) => {
+        logMessage.error(err as Error);
+        toast.error(t("confirmation.error", { codes }), { position: toast.POSITION.TOP_CENTER });
+      });
   };
 
   return (

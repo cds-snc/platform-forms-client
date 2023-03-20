@@ -125,6 +125,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
       />
 
       <DialogReportProblems
+        formId={formId}
         isShowDialog={isShowReportProblemsDialog}
         setIsShowDialog={setIsShowReportProblemsDialog}
       />

@@ -82,7 +82,10 @@ export const LineItemEntries = ({
         <input
           ref={inputRef}
           data-testid="value-input"
-          className="w-full border-none p-1 outline-none"
+          className={
+            "w-full p-1 outline-none " +
+            (inputs.length > 0 ? "border-2 border-dashed border-grey" : "border-none")
+          }
           type="text"
           name="value-input"
           onKeyUp={onKeyUp}
