@@ -155,7 +155,7 @@ export const SetResponseDelivery = () => {
         </div>
 
         {deliveryOption === DeliveryOption.email && (
-          <div className="mb-10">
+          <div className="mb-10 pl-8 border-l-4 ml-4 ">
             <InvalidEmailError id="invalidEmailError" isActive={IsInvalidEmailErrorActive} />
             <div className="block font-bold mb-1 text-sm">{t("settingsResponseEmailTitle")}</div>
             <HintText id="response-delivery-hint-1">{t("settingsResponseHint1")}</HintText>
