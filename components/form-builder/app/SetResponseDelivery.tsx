@@ -58,6 +58,9 @@ export const SetResponseDelivery = () => {
       updateField: s.updateField,
     }));
 
+  const initialDeliveryOption = !email ? DeliveryOption.vault : DeliveryOption.email;
+  const [deliveryOption, setDeliveryOption] = useState(initialDeliveryOption);
+
   const [inputEmail, setInputEmail] = useState(email ?? "");
   const [IsInvalidEmailErrorActive, setIsInvalidEmailErrorActive] = useState(false);
 
@@ -79,10 +82,6 @@ export const SetResponseDelivery = () => {
       setIsInvalidEmailErrorActive(true);
     }
   };
-
-  const [deliveryOption, setDeliveryOption] = useState(
-    !email ? DeliveryOption.vault : DeliveryOption.email
-  );
 
   const saveDeliveryOption = useCallback(async () => {
     const position = toast.POSITION.TOP_CENTER;
@@ -172,7 +171,11 @@ export const SetResponseDelivery = () => {
           </div>
         )}
 
-        <Button theme="secondary" onClick={saveDeliveryOption}>
+        <Button
+          disabled={initialDeliveryOption === deliveryOption}
+          theme="secondary"
+          onClick={saveDeliveryOption}
+        >
           Save changes
         </Button>
       </div>
