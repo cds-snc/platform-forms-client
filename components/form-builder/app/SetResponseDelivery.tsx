@@ -11,13 +11,17 @@ enum DeliveryOption {
 
 export const SetResponseDelivery = () => {
   const { t } = useTranslation("form-builder");
-  const { updateResponseDelivery } = usePublish();
+  const { updateResponseDelivery, uploadJson } = usePublish();
 
-  const { email, id, resetDeliveryOption } = useTemplateStore((s) => ({
-    id: s.id,
-    email: s.deliveryOption?.emailAddress,
-    resetDeliveryOption: s.resetDeliveryOption,
-  }));
+  const { email, id, resetDeliveryOption, getSchema, getName, getDeliveryOption } =
+    useTemplateStore((s) => ({
+      id: s.id,
+      email: s.deliveryOption?.emailAddress,
+      resetDeliveryOption: s.resetDeliveryOption,
+      getSchema: s.getSchema,
+      getName: s.getName,
+      getDeliveryOption: s.getDeliveryOption,
+    }));
 
   const [deliveryOption, setDeliveryOption] = useState(
     !email ? DeliveryOption.vault : DeliveryOption.email
@@ -30,7 +34,18 @@ export const SetResponseDelivery = () => {
       resetDeliveryOption();
       return;
     }
-  }, [deliveryOption, id, updateResponseDelivery, resetDeliveryOption]);
+
+    await uploadJson(getSchema(), getName(), getDeliveryOption(), id);
+  }, [
+    deliveryOption,
+    id,
+    updateResponseDelivery,
+    resetDeliveryOption,
+    uploadJson,
+    getSchema,
+    getName,
+    getDeliveryOption,
+  ]);
 
   const updateDeliveryOption = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -44,6 +59,7 @@ export const SetResponseDelivery = () => {
         <div className="block font-bold mb-4">Select a response delivery option </div>
         <div className="mb-4">
           <Radio
+            id={`delivery-option-${DeliveryOption.vault}`}
             checked={deliveryOption === DeliveryOption.vault}
             name="response-delivery"
             value={DeliveryOption.vault}
@@ -51,6 +67,7 @@ export const SetResponseDelivery = () => {
             onChange={updateDeliveryOption}
           />
           <Radio
+            id={`delivery-option-${DeliveryOption.email}`}
             checked={deliveryOption === DeliveryOption.email}
             name="response-delivery"
             value={DeliveryOption.email}
