@@ -1,6 +1,7 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState, useRef } from "react";
 import { Card, CardProps } from "@components/myforms/Card/Card";
 import { ConfirmDelete } from "@components/form-builder/app/ConfirmDelete";
+import { useRefresh } from "@lib/hooks";
 
 interface CardGridProps {
   cards: Array<CardProps>;
@@ -8,13 +9,13 @@ interface CardGridProps {
 
 export const CardGrid = (props: CardGridProps): React.ReactElement => {
   const { cards } = props;
-  const [activeCard, setActiveCard] = React.useState<CardProps | null>(null);
-  const [showConfirm, setShowConfirm] = React.useState<boolean>(false);
-  const [deletedCards, setDeletedCards] = React.useState<string[]>([]);
+  const activeCard = useRef<CardProps | null>(null);
+  const [showConfirm, setShowConfirm] = useState<boolean>(false);
+  const { refreshData } = useRefresh(cards);
 
   const handleDelete = useCallback((card: CardProps) => {
     setShowConfirm(true);
-    setActiveCard(card);
+    activeCard.current = card;
   }, []);
 
   return (
@@ -25,36 +26,32 @@ export const CardGrid = (props: CardGridProps): React.ReactElement => {
       >
         {cards &&
           cards?.length > 0 &&
-          cards
-            .filter(({ id }) => {
-              return !deletedCards.includes(id);
-            })
-            .map((card: CardProps, index: number) => {
-              return (
-                <li className="flex flex-col" key={index}>
-                  <Card
-                    id={card.id}
-                    name={card.name}
-                    titleEn={card.titleEn}
-                    titleFr={card.titleFr}
-                    url={card.url}
-                    date={card.date}
-                    isPublished={card.isPublished}
-                    handleDelete={handleDelete}
-                  ></Card>
-                </li>
-              );
-            })}
+          cards.map((card: CardProps, index: number) => {
+            return (
+              <li className="flex flex-col" key={index}>
+                <Card
+                  id={card.id}
+                  name={card.name}
+                  titleEn={card.titleEn}
+                  titleFr={card.titleFr}
+                  url={card.url}
+                  date={card.date}
+                  isPublished={card.isPublished}
+                  handleDelete={handleDelete}
+                ></Card>
+              </li>
+            );
+          })}
       </ol>
 
       <ConfirmDelete
-        onDeleted={(id: string) => {
-          setDeletedCards([...deletedCards, id]);
+        onDeleted={() => {
           setShowConfirm(false);
+          refreshData();
         }}
         show={showConfirm}
-        id={activeCard?.id || ""}
-        isPublished={activeCard?.isPublished || false}
+        id={activeCard.current?.id || ""}
+        isPublished={activeCard.current?.isPublished || false}
         handleClose={setShowConfirm}
       />
     </>
