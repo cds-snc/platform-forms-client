@@ -3,7 +3,6 @@ import { useTranslation } from "next-i18next";
 import { useMediaQuery } from "usehooks-ts";
 
 import { FormElementTypes, FormElement } from "@lib/types";
-import { Button } from "../shared";
 import { AddElementButton } from "./elements/element-dialog/AddElementButton";
 import { ElementOptionsFilter, FormElementWithIndex } from "@components/form-builder/types";
 import {
@@ -17,11 +16,7 @@ import {
 
 import { usePanelActions } from "@components/form-builder/hooks";
 import { ElementDialog } from "./elements/element-dialog/ElementDialog";
-
-const buttonClasses =
-  "group/button border-none transition duration-100 h-0 !py-5 lg:!pb-3 !pl-4 !pr-2 m-1 !bg-transparent xl:hover:!bg-gray-600 xl:hover:!text-white focus:!bg-blue-hover focus:text-black xl:focus:text-white active:text-white disabled:!bg-transparent";
-const iconClasses =
-  "group-hover/button:fill-black group-disabled/button:!fill-gray-500 group-active/button:!fill-white group-focus/button:!fill-white xl:!fill-black xl:group-hover/button:!fill-white transition duration-100";
+import { PanelActionsButton } from "./PanelActionsButton";
 
 export interface RenderMoreFunc {
   ({ item, moreButton }: { item: FormElementWithIndex; moreButton: JSX.Element | undefined }):
@@ -172,34 +167,39 @@ export const PanelActions = ({
   }, [currentFocusIndex, isInit, itemsRef]);
 
   const actions = panelButtons.map((button, loopIndex) => {
-    const Icon = button.icon;
+    // const Icon = button.icon;
     return (
-      <Button
-        key={button.txt}
-        className={`${isFirstItem ? "disabled" : ""} ${buttonClasses}`}
-        disabled={button.disabled && button.disabled}
-        theme="panelActions"
-        iconWrapperClassName="!w-7 !mr-0"
-        icon={<Icon className={`${iconClasses}`} />}
-        onClick={button.onClick}
-        tabIndex={getTabIndex(button.txt)}
-        buttonRef={setRef(`button-${loopIndex}`)}
-        dataTestId={button.txt}
-      >
-        <span className="text-sm">{t(button.txt)}</span>
-      </Button>
+      <>
+        <PanelActionsButton
+          key={button.txt}
+          className={`${isFirstItem ? "disabled" : ""}`}
+          disabled={button.disabled && button.disabled}
+          icon={button.icon}
+          onClick={button.onClick}
+          tabIndex={getTabIndex(button.txt)}
+          buttonRef={setRef(`button-${loopIndex}`)}
+          dataTestId={button.txt}
+        >
+          <span className="text-sm">{t(button.txt)}</span>
+        </PanelActionsButton>
+      </>
     );
   });
 
   const moreButton = actions.pop();
 
-  const outerPanelClasses = isSubElement
-    ? ``
-    : `absolute invisible group-[.active]:visible xl:visible xl:relative right-0 top-0 -mr-[155px] xl:mr-0`;
+  // const outerPanelClasses = isSubElement
+  //   ? ``
+  //   : `relative mr-0 laptop:absolute laptop:invisible group-[.active]:visible laptop:right-0 laptop:top-0 laptop:-mr-[155px]`;
 
+  // const innerPanelClasses = isSubElement
+  //   ? `flex flex-wrap flex-row ${lang}`
+  //   : `bg-gray-200 laptop:bg-violet-50 rounded-none laptop:rounded-lg laptop:border laptop:border-violet-400 ml-0 laptop:ml-10 px-0 laptop:px-6 py-0 laptop:py-4 flex flex-row laptop:flex-wrap laptop:flex-col ${lang}`;
+
+  const outerPanelClasses = isSubElement ? "" : "";
   const innerPanelClasses = isSubElement
-    ? `flex flex-wrap flex-row ${lang}`
-    : `bg-violet-50 rounded-lg xl:rounded-none border-violet-400 border xl:border-0 xl:bg-gray-200 ml-10 xl:ml-0 xl:px-6 xl:px-0 py-4 lg:py-0 flex flex-wrap flex-col xl:flex-row ${lang}`;
+    ? "flex flex-wrap flex-row justify-between bg-gray-200 -mx-12 px-4 pb-6 pt-4 py-2"
+    : "flex flex-wrap flex-row justify-between bg-gray-200 px-4 pb-6 pt-4 py-2";
 
   return (
     <div>
@@ -227,7 +227,7 @@ export const PanelActions = ({
       </div>
       {!isSubElement && (
         <div className="flex">
-          <div className="mx-auto bottom-0 -mb-5 xl:mr-2 z-10">
+          <div className="absolute right-0 bottom-0 -mb-6 mx-auto mr-2 z-10">
             <AddElementButton
               position={item.index}
               handleAdd={handleAdd}
