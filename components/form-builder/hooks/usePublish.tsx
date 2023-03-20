@@ -2,6 +2,30 @@ import { DeliveryOption } from "@lib/types";
 import axios, { AxiosError } from "axios";
 
 export const usePublish = () => {
+  const updateResponseDelivery = async (formID: string) => {
+    if (!formID) {
+      return;
+    }
+
+    try {
+      const url = `/api/templates/${formID}`;
+
+      await axios({
+        url: url,
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: {
+          sendResponsesToVault: true,
+        },
+        timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+      });
+    } catch (e) {
+      //no-op
+    }
+  };
+
   const uploadJson = async (
     jsonConfig: string,
     name?: string,
@@ -63,5 +87,5 @@ export const usePublish = () => {
     }
   };
 
-  return { uploadJson };
+  return { uploadJson, updateResponseDelivery };
 };
