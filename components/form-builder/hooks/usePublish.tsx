@@ -1,8 +1,10 @@
 import { DeliveryOption } from "@lib/types";
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 export const usePublish = () => {
-  const updateResponseDelivery = async (formID: string) => {
+  const updateResponseDelivery = async (
+    formID: string
+  ): Promise<AxiosResponse | { error: AxiosError } | undefined> => {
     if (!formID) {
       return;
     }

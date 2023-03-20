@@ -1,4 +1,6 @@
 import React, { useCallback, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 import { useTranslation } from "next-i18next";
 import { useTemplateStore } from "../store";
 import { Input, Radio, Button } from "./shared";
@@ -83,16 +85,33 @@ export const SetResponseDelivery = () => {
   );
 
   const saveDeliveryOption = useCallback(async () => {
-    await updateResponseDelivery(id);
+    const position = toast.POSITION.TOP_CENTER;
 
-    if (deliveryOption === DeliveryOption.vault) {
+    if (email !== "" && deliveryOption === DeliveryOption.vault) {
+      // reset local store
       resetDeliveryOption();
+
+      // reset database
+      const result = await updateResponseDelivery(id);
+
+      if (result) {
+        toast.success("success", { position });
+        return;
+      }
+      return;
+    }
+
+    if (!isValidGovEmail(inputEmail)) {
+      setIsInvalidEmailErrorActive(true);
       return;
     }
 
     updateField(`deliveryOption.emailAddress`, inputEmail);
 
-    await uploadJson(getSchema(), getName(), getDeliveryOption(), id);
+    const result = await uploadJson(getSchema(), getName(), getDeliveryOption(), id);
+    if (result) {
+      toast.success("success", { position });
+    }
   }, [
     deliveryOption,
     id,
@@ -104,6 +123,7 @@ export const SetResponseDelivery = () => {
     getDeliveryOption,
     inputEmail,
     updateField,
+    email,
   ]);
 
   const updateDeliveryOption = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -155,6 +175,10 @@ export const SetResponseDelivery = () => {
         <Button theme="secondary" onClick={saveDeliveryOption}>
           Save changes
         </Button>
+      </div>
+
+      <div className="sticky top-0">
+        <ToastContainer />
       </div>
     </>
   );
