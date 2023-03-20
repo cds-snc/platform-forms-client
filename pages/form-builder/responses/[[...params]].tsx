@@ -119,6 +119,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
       </PageTemplate>
 
       <DialogConfirmReceipt
+        formId={formId}
         isShowDialog={isShowConfirmReceiptDialog}
         setIsShowDialog={setIsShowConfirmReceiptDialog}
       />

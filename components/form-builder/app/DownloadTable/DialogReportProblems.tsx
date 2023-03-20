@@ -26,6 +26,8 @@ export const DialogReportProblems = ({
   const handleSubmit = () => {
     // TODO
     // -confirmation will probably be a notification. something like https://www.npmjs.com/package/react-toastify
+    //http://localhost:3000/api/id/[FORM_ID]/submission/report
+    //For the report API your payload should be an array of form names: ["15-02-32f7"]
   };
 
   return (

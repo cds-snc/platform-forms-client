@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useReducer } from "react";
 import { VaultSubmissionList } from "@lib/types";
 import { useTranslation } from "react-i18next";
 import { SkipLinkReusable } from "@components/globals/SkipLinkReusable";
@@ -32,42 +32,65 @@ export function getDaysPassed(date: Date): number {
   return daysPassed;
 }
 
+// Note: using a reducer to have more control over when the template is updated (reduces re-renders)
+const reducerTableItems = (state, action) => {
+  switch (action.type) {
+    case "UPDATE": {
+      if (!action.item) {
+        throw Error("Table dispatch missing item checkox state");
+      }
+      const newStatusItems = new Map(state.statusItems);
+      const newCheckedItems = new Map();
+      // NOTE: below forEach does two "things" which is messy but more efficient than two forEach's
+      // Find the related checkbox and set its checked state to match the UI
+      state.statusItems.forEach((checked: boolean, name: string) => {
+        if (name === action.item.name && checked !== action.item.checked) {
+          newStatusItems.set(name, action.item.checked);
+          // Add to checked list: case of updated checkbox and checked
+          if (action.item.checked) {
+            newCheckedItems.set(name, true);
+          }
+        } else if (checked) {
+          // Add to checked list: case of existing checkbox and checked
+          newCheckedItems.set(name, true);
+        }
+      });
+      return {
+        ...state,
+        checkedItems: newCheckedItems,
+        statusItems: newStatusItems,
+      };
+    }
+    default:
+      throw Error("Unknown action: " + action.type);
+  }
+};
+
 export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) => {
   const { t } = useTranslation("form-builder");
   const router = useRouter();
   const MAX_FILE_DOWNLOADS = 20;
   const toastPosition = toast.POSITION.TOP_CENTER;
-  const checkedItems = useRef(new Map());
-  const [selectionStatus, setSelectionStatus] = useState(
-    new Map(vaultSubmissions.map((submission) => [submission.name, false]))
-  );
-
-  useEffect(() => {
-    const checkedMap = new Map();
-    selectionStatus.forEach((checked, name) => {
-      if (checked) {
-        checkedMap.set(name, checked);
-      }
-    });
-    checkedItems.current = checkedMap;
-  }, [selectionStatus]);
+  const [tableItems, tableItemsDispatch] = useReducer(reducerTableItems, {
+    checkedItems: new Map(),
+    statusItems: new Map(vaultSubmissions.map((submission) => [submission.name, false])),
+  });
 
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.id;
     const checked: boolean = e.target.checked;
-    // Note: "new Map" Needed to clone and set so React change detection notices a change in the Map
-    setSelectionStatus(new Map(selectionStatus.set(name, checked)));
+    tableItemsDispatch({ type: "UPDATE", item: { name, checked } });
   };
 
   // NOTE: browsers have different limits for simultaneous downloads. May need to look into
   // batching file downloads (e.g. 4 at a time) if edge cases/* come up.
   const handleDownload = async () => {
-    if (checkedItems.current.size === 0) {
+    if (tableItems.checkedItems.size === 0) {
       toast.warn(t("downloadResponsesTable.download.atLeastOneFile"), { position: toastPosition });
       return;
     }
 
-    if (checkedItems.current.size > MAX_FILE_DOWNLOADS) {
+    if (tableItems.checkedItems.size > MAX_FILE_DOWNLOADS) {
       toast.warn(
         t("downloadResponsesTable.download.trySelectingLessFiles", { max: MAX_FILE_DOWNLOADS }),
         { position: toastPosition }
@@ -77,13 +100,13 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
 
     const toastDownloadingId = toast.info(
       t("downloadResponsesTable.download.downloadingXFiles", {
-        fileCount: checkedItems.current.size,
+        fileCount: tableItems.checkedItems.size,
       }),
       { position: toastPosition, autoClose: false }
     );
 
     try {
-      const downloads = Array.from(checkedItems.current, async ([submissionName]) => {
+      const downloads = Array.from(tableItems.checkedItems, async ([submissionName]) => {
         if (!submissionName) {
           throw new Error("Error downloading file from Retrieval table. SubmissionId missing.");
         }
@@ -156,7 +179,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
               key={submission.name}
               className={
                 "border-b-2 border-grey" +
-                (selectionStatus.get(submission.name) ? " bg-[#fffbf3]" : "")
+                (tableItems.statusItems.get(submission.name) ? " bg-[#fffbf3]" : "")
               }
             >
               <td className="p-4 flex">
@@ -168,7 +191,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
                       className="multiple-choice-wrapper"
                       name="responses"
                       type="checkbox"
-                      checked={selectionStatus.get(submission.name)}
+                      checked={tableItems.statusItems.get(submission.name)}
                       onChange={handleChecked}
                     />
                     <label htmlFor={submission.name}>
@@ -217,7 +240,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
           aria-live="polite"
         >
           {t("downloadResponsesTable.download.downloadXSelectedResponses", {
-            size: checkedItems.current.size,
+            size: tableItems.checkedItems.size,
           })}
         </button>
       </div>

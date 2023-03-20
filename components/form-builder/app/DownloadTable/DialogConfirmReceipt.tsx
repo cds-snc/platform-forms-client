@@ -3,11 +3,14 @@ import { useTranslation } from "next-i18next";
 import { isUUID } from "@lib/validation";
 import { Button, useDialogRef, Dialog, LineItemEntries } from "@components/form-builder/app/shared";
 import { randomId } from "@lib/uiUtils";
+import axios from "axios";
 
 export const DialogConfirmReceipt = ({
+  formId,
   isShowDialog,
   setIsShowDialog,
 }: {
+  formId?: string;
   isShowDialog: boolean;
   setIsShowDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
@@ -24,8 +27,19 @@ export const DialogConfirmReceipt = ({
   };
 
   const handleSubmit = () => {
-    //TODO
-    // -confirmation will probably be a notification. something like https://www.npmjs.com/package/react-toastify
+    const url = `/api/id/${formId}/submission/confirm`;
+    return axios({
+      url,
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+      data: codes,
+    }).then((response) => {
+      //todo
+    });
+    //TODO error responses see other axios examples
   };
 
   return (
