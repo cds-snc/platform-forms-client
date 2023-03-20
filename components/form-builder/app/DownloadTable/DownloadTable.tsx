@@ -24,6 +24,23 @@ interface DownloadTableProps {
   formId?: string;
 }
 
+enum TableActions {
+  UPDATE = "UPDATE",
+}
+
+interface ReducerTableItemsState {
+  statusItems: Map<string, boolean>;
+  checkedItems: Map<string, boolean>;
+}
+
+interface ReducerTableItemsActions {
+  type: string;
+  item: {
+    name: string;
+    checked: boolean;
+  };
+}
+
 export function getDaysPassed(date: Date): number {
   const dateCreated = new Date(date);
   const dateToday = new Date();
@@ -32,8 +49,8 @@ export function getDaysPassed(date: Date): number {
   return daysPassed;
 }
 
-// Note: using a reducer to have more control over when the template is updated (reduces re-renders)
-const reducerTableItems = (state, action) => {
+// Using a reducer to have more control over when the template is updated (reduces re-renders)
+const reducerTableItems = (state: ReducerTableItemsState, action: ReducerTableItemsActions) => {
   switch (action.type) {
     case "UPDATE": {
       if (!action.item) {
@@ -41,17 +58,18 @@ const reducerTableItems = (state, action) => {
       }
       const newStatusItems = new Map(state.statusItems);
       const newCheckedItems = new Map();
-      // NOTE: below forEach does two "things" which is messy but more efficient than two forEach's
-      // Find the related checkbox and set its checked state to match the UI
+      // Find the related checkbox and set its checked state to match the UI. Also update the list
+      // of checkedItems for later convienience. The below forEach does two "things" which is messy
+      // but more efficient than using two forEach loops.
       state.statusItems.forEach((checked: boolean, name: string) => {
         if (name === action.item.name && checked !== action.item.checked) {
           newStatusItems.set(name, action.item.checked);
-          // Add to checked list: case of updated checkbox and checked
+          // Add to checkedItems: case of updated checkbox and checked
           if (action.item.checked) {
             newCheckedItems.set(name, true);
           }
         } else if (checked) {
-          // Add to checked list: case of existing checkbox and checked
+          // Add to checkedItems: case of existing checkbox and checked
           newCheckedItems.set(name, true);
         }
       });
@@ -79,7 +97,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.id;
     const checked: boolean = e.target.checked;
-    tableItemsDispatch({ type: "UPDATE", item: { name, checked } });
+    tableItemsDispatch({ type: TableActions.UPDATE, item: { name, checked } });
   };
 
   // NOTE: browsers have different limits for simultaneous downloads. May need to look into

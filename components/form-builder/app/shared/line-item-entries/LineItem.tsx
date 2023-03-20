@@ -24,9 +24,6 @@ export const LineItem = ({ value, onRemove }: LineItemProps) => {
           aria-label={label}
         >
           <RoundThinXCloseIcon />
-          {/* <RemoveIcon /> */}
-          {/* <RoundCloseIcon /> */}
-          {/* <Close /> */}
         </button>
       </div>
     </li>
