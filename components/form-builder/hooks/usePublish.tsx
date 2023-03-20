@@ -21,6 +21,12 @@ export const usePublish = () => {
     try {
       const url = formID ? `/api/templates/${formID}` : "/api/templates";
 
+      const byEmail = true;
+      let data = {};
+      if (byEmail) {
+        data = { deliveryOption };
+      }
+
       const result = await axios({
         url: url,
         method: formID ? "PUT" : "POST",
@@ -31,7 +37,7 @@ export const usePublish = () => {
           isPublished: publish ? true : false,
           formConfig: formData,
           name: name,
-          deliveryOption: deliveryOption,
+          ...data,
         },
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       });

@@ -3,6 +3,7 @@ import { useTranslation } from "next-i18next";
 import { useTemplateStore } from "../store";
 import { Input } from "./shared";
 import { isValidGovEmail } from "@lib/validation";
+import { SetResponseDelivery } from "./SetResponseDelivery";
 
 const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element | string }) => {
   return (
@@ -77,6 +78,8 @@ export const ResponseDelivery = () => {
   return (
     <>
       <h1 className="visually-hidden">{t("formSettings")}</h1>
+
+      <SetResponseDelivery />
 
       {isPublished && (
         <div className="mb-10">
