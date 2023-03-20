@@ -692,6 +692,14 @@ export async function removeDeliveryOption(
     if (templateWithAssociatedUsers.formRecord.isPublished)
       throw new TemplateAlreadyPublishedError();
 
+    /**
+     * In case we try to delete the `deliveryOption` twice in a row.
+     * There is a limitation in Prisma https://github.com/prisma/docs/issues/1321 that forces us to do so.
+     */
+    if (templateWithAssociatedUsers.formRecord.deliveryOption === undefined) {
+      return templateWithAssociatedUsers.formRecord;
+    }
+
     const updatedTemplate = await prisma.template
       .update({
         where: {
