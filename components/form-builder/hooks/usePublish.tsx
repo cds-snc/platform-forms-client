@@ -10,7 +10,7 @@ export const usePublish = () => {
     try {
       const url = `/api/templates/${formID}`;
 
-      await axios({
+      const result = await axios({
         url: url,
         method: "PUT",
         headers: {
@@ -21,6 +21,8 @@ export const usePublish = () => {
         },
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       });
+
+      return result.data;
     } catch (e) {
       //no-op
     }
