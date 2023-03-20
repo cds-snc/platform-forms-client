@@ -89,9 +89,9 @@ export const PanelBody = ({
         </>
       ) : (
         <>
-          <div className="flex flex-row-reverse gap-x-4 xxl:flex-col justify-between text-sm">
+          <div className="flex text-sm flex-col laptop:flex-row-reverse laptop:justify-between laptop:gap-x-4">
             {selectedItem?.id && (
-              <div className="xxl:mt-4 w-2/5 xxl:w-full">
+              <div className="w-full laptop:w-2/5">
                 <ElementDropDown
                   filterElements={elIndex === -1 ? elementFilter : dynamicRowFilter}
                   item={item}
@@ -101,7 +101,7 @@ export const PanelBody = ({
                 />
               </div>
             )}
-            <div className="xxl:mt-4 w-3/5 xxl:w-full">
+            <div className="w-full mt-4 laptop:mt-0 laptop:w-3/5">
               <Question
                 questionInputRef={questionInputRef}
                 elements={elements}
@@ -112,8 +112,8 @@ export const PanelBody = ({
               />
             </div>
           </div>
-          <div className="flex gap-x-4 xxl:flex-col justify-between text-sm">
-            <div className="w-3/5 xxl:w-full">
+          <div className="flex text-sm flex-col laptop:flex-row laptop:gap-x-4 laptop:justify-between">
+            <div className="w-full laptop:w-3/5">
               <QuestionDescription item={item} describedById={describedById} />
 
               {selectedItem?.id && (
@@ -126,7 +126,7 @@ export const PanelBody = ({
                 </div>
               )}
             </div>
-            <div className="w-2/5 xxl:w-full">
+            <div className="w-full laptop:w-2/5">
               <ElementRequired onRequiredChange={onRequiredChange} item={item} />
               {item.properties.autoComplete && (
                 <div data-testid={`autocomplete-${item.id}`} className="mt-5">
