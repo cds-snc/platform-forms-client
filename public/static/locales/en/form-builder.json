@@ -498,6 +498,7 @@
   "startP2": "Edit a form uploaded from your computer.",
   "submit": "Submit",
   "submittedResponsesText": "Submitted responses will be sent to {{email}}.",
+  "submittedResponsesTextVault": "Clicking submit will send form responses to the Responses page.",
   "support": {
     "contactUs": "Contact us form",
     "description": {

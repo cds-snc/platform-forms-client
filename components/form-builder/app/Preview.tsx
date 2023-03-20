@@ -87,12 +87,14 @@ export const Preview = () => {
               {t("signInToTest", { ns: "form-builder" })}
             </Markdown>
           </div>
+        ) : email ? (
+          <div className="bg-purple-200 p-2 inline-block mb-1">
+            {t("submittedResponsesText", { ns: "form-builder", email })}
+          </div>
         ) : (
-          email && (
-            <div className="bg-purple-200 p-2 inline-block mb-1">
-              {t("submittedResponsesText", { ns: "form-builder", email })}
-            </div>
-          )
+          <div className="bg-purple-200 p-2 inline-block mb-1">
+            {t("submittedResponsesTextVault", { ns: "form-builder", email })}
+          </div>
         )}
 
         {sent && (
