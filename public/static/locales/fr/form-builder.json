@@ -301,8 +301,6 @@
   },
   "formDeletedDialogMessage": "Formulaire supprimé",
   "formDeletedDialogMessageFailed": "Échec de la suppression du formulaire",
-  "formDeletedDialogOkay": "Retourner à l’accueil",
-  "formDeletedDialogOkayFailed": "fermer",
   "formDeletedDialogTitle": "Succès",
   "formDeleteDialogTitleFailed": "Erreur",
   "formDownload": {

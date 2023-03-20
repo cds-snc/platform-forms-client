@@ -301,8 +301,6 @@
   },
   "formDeletedDialogMessage": "Form deleted",
   "formDeletedDialogMessageFailed": "Failed to delete form",
-  "formDeletedDialogOkay": "Back to home",
-  "formDeletedDialogOkayFailed": "Close",
   "formDeletedDialogTitle": "Success",
   "formDeleteDialogTitleFailed": "Error",
   "formDownload": {

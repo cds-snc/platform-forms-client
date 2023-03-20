@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import { useTranslation } from "next-i18next";
 import copy from "copy-to-clipboard";
 import {
@@ -15,6 +16,7 @@ export interface CardProps {
   url: string;
   date: string;
   isPublished: boolean;
+  handleDelete: (card: CardProps) => void;
 }
 
 export const Card = (props: CardProps): React.ReactElement => {
@@ -28,7 +30,10 @@ export const Card = (props: CardProps): React.ReactElement => {
     },
     {
       title: t("card.menu.save"),
-      url: `/${i18n.language}/form-builder/settings/${id}?downloadconfirm=true`,
+      callback: () => {
+        downloadForm(name, id);
+        return { message: "" };
+      },
     },
     {
       title: t("card.menu.settings"),
@@ -36,7 +41,12 @@ export const Card = (props: CardProps): React.ReactElement => {
     },
     {
       title: t("card.menu.delete"),
-      url: `/${i18n.language}/form-builder/settings/${id}?deleteconfirm=true`,
+      callback: () => {
+        props.handleDelete(props);
+        return {
+          message: "",
+        };
+      },
     },
   ];
 
@@ -51,6 +61,25 @@ export const Card = (props: CardProps): React.ReactElement => {
       title: t("card.menu.edit"),
       url: `/${i18n.language}/form-builder/edit/${id}`,
     });
+  }
+
+  async function downloadForm(name: string, id: string) {
+    const url = `/api/templates/${id}`;
+    const response = await axios({
+      url,
+      method: "GET",
+      responseType: "json",
+      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+    });
+
+    const fileName = `${name}.json`;
+    const data = JSON.stringify(response.data.form, null, 2);
+    const tempUrl = window.URL.createObjectURL(new Blob([data]));
+    const link = document.createElement("a");
+    link.href = tempUrl;
+    link.setAttribute("download", fileName);
+    document.body.appendChild(link);
+    link.click();
   }
 
   function copyLinkCallback(): MenuDropdownItemCallback {
