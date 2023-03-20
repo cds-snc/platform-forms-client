@@ -88,9 +88,11 @@ export const Preview = () => {
             </Markdown>
           </div>
         ) : (
-          <div className="bg-purple-200 p-2 inline-block mb-1">
-            {t("submittedResponsesText", { ns: "form-builder", email })}
-          </div>
+          email && (
+            <div className="bg-purple-200 p-2 inline-block mb-1">
+              {t("submittedResponsesText", { ns: "form-builder", email })}
+            </div>
+          )
         )}
 
         {sent && (
