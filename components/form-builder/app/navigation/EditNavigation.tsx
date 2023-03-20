@@ -15,9 +15,9 @@ export const EditNavigation = () => {
     "[&_svg]:focus:stroke-white [&_svg]:hover:stroke-white hover:bg-gray-600 hover:!text-white-default";
 
   return (
-    <div className="relative flex">
-      <div className="flex justify-content:space-between">
-        <nav className="mb-8 flex " aria-label={t("navLabelEditor")}>
+    <div className="relative flex flex-col laptop:flex-row laptop:mb-8 laptop:relative">
+      <div className="flex">
+        <nav className="flex" aria-label={t("navLabelEditor")}>
           <SubNavLink
             href="/form-builder/edit"
             className={`!text-black focus:!text-white ${svgFill} `}
@@ -42,7 +42,7 @@ export const EditNavigation = () => {
       </div>
       <div>
         {activePathname.endsWith("/edit") && (
-          <div className="absolute right-0 mr-24 top-0">
+          <div className="laptop:absolute laptop:right-0 laptop:top-0 laptop:mt-4 laptop:mr-14 desktop:mr-24">
             <LangSwitcher descriptionLangKey="editingIn" />
           </div>
         )}
