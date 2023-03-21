@@ -443,16 +443,22 @@
   "settingsNavHome": "Response delivery",
   "settingsResponseEmailTitle": "Enter the email address",
   "settingsResponseHint1": "Submitted responses will be emailed to this inbox.",
-  "settingsResponseNote": "Set response delivery before previewing delivery and publishing.",
-  "settingsResponseNotePublished": "To change the response delivery destination.",
-  "settingsResponseTitle": "Response delivery destination",
   "settingsResponseDelivery": {
     "title": "Select a response delivery option",
     "vaultOption": "Download responses from GC Forms",
     "emailOption": "Email the responses to an inbox",
     "saveButton": "Save changes",
     "savedSuccessMessage": "Your changes have been saved.",
-    "savedErrorMessage": "There was an error saving your changes. Please try again."
+    "savedErrorMessage": "There was an error saving your changes. Please try again.",
+    "card": {
+      "title": "You cannot change settings",
+      "text1": "To change the settings of this form,",
+      "text2": "sign into your account",
+      "text3": "If you do not have a GC Forms account, ",
+      "text4": "create one now",
+      "signinButton": "Sign In",
+      "createButton": "Create an account"
+    }
   },
   "share": {
     "copy": "Copy",
