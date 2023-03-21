@@ -443,8 +443,6 @@
   "settingsNavHome": "[FR] Response delivery",
   "settingsResponseEmailTitle": "[FR] Enter the email address",
   "settingsResponseHint1": "[FR] Submitted responses will be emailed to this inbox.",
-  "settingsResponseNote": " Définissez les parametres de la livraison des réponses avant de tester la livraison et de publier.",
-  "settingsResponseNotePublished": "Pour modifier la destination de livraison des réponses.",
   "settingsResponseTitle": "Destination de livraison des réponses.",
   "settingsResponseDelivery": {
     "title": "[FR] Select a response delivery option",
@@ -456,7 +454,16 @@
     "emailOption": "[FR] Email the responses to an inbox",
     "saveButton": "[FR] Save changes",
     "savedSuccessMessage": "[FR] Your changes have been saved.",
-    "savedErrorMessage": "[FR] There was an error saving your changes. Please try again."
+    "savedErrorMessage": "[FR] There was an error saving your changes. Please try again.",
+    "card": {
+      "title": "[FR] You cannot change settings",
+      "text1": "[FR] To change the settings of this form,",
+      "text2": "[FR] sign into your account",
+      "text3": "[FR] If you do not have a GC Forms account, ",
+      "text4": "[FR] create one now",
+      "signinButton": "[FR] Sign In",
+      "createButton": "[FR] Create an account"
+    }
   },
   "share": {
     "copy": "Copier",
