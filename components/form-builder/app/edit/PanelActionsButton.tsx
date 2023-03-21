@@ -31,7 +31,7 @@ export const PanelActionsButton = ({
     "group/button border-none hover:bg-gray-600 hover:text-white focus:!bg-blue-hover focus:text-black active:text-white active:bg-blue-hover transition duration-100";
 
   const responsiveButtonClasses =
-    "laptop:bg-transparent laptop:hover:text-black laptop:hover:bg-transparent laptop:hover:underline";
+    "laptop:bg-transparent laptop:hover:text-black laptop:hover:bg-transparent laptop:hover:underline laptop:px-2";
 
   const iconClasses =
     "group-hover/button:fill-black group-disabled/button:!fill-gray-500 group-active/button:!fill-white group-focus/button:!fill-white fill-black group-hover/button:fill-white transition duration-100";
