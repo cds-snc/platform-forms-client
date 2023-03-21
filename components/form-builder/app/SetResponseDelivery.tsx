@@ -17,7 +17,7 @@ enum DeliveryOption {
 }
 
 export const SetResponseDelivery = () => {
-  const { t } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation("form-builder");
   const { status } = useSession();
   const { updateResponseDelivery, uploadJson } = usePublish();
 
@@ -82,6 +82,8 @@ export const SetResponseDelivery = () => {
     setDeliveryOption(value as DeliveryOption);
   }, []);
 
+  const responsesLink = `/${i18n.language}/responses`;
+
   return (
     <>
       <h1 className="visually-hidden">{t("formSettings")}</h1>
@@ -96,7 +98,12 @@ export const SetResponseDelivery = () => {
               value={DeliveryOption.vault}
               label={t("settingsResponseDelivery.vaultOption")}
               onChange={updateDeliveryOption}
-            />
+            >
+              <span className="block ml-3 text-sm mb-1">
+                {t("settingsResponseDelivery.vaultOptionHint.text1")}{" "}
+                <a href={responsesLink}>{t("settingsResponseDelivery.vaultOptionHint.text2")}.</a>
+              </span>
+            </Radio>
             <Radio
               id={`delivery-option-${DeliveryOption.email}`}
               checked={deliveryOption === DeliveryOption.email}
