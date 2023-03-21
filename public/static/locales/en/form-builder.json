@@ -446,6 +446,14 @@
   "settingsResponseNote": "Set response delivery before previewing delivery and publishing.",
   "settingsResponseNotePublished": "To change the response delivery destination.",
   "settingsResponseTitle": "Response delivery destination",
+  "settingsResponseDelivery": {
+    "title": "Select a response delivery option",
+    "vaultOption": "Download responses from GC Forms",
+    "emailOption": "Email the responses to an inbox",
+    "saveButton": "Save changes",
+    "savedSuccessMessage": "Your changes have been saved.",
+    "savedErrorMessage": "There was an error saving your changes. Please try again."
+  },
   "share": {
     "copy": "Copy",
     "email": "Share by email",

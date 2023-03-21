@@ -37,9 +37,10 @@ export const SetResponseDelivery = () => {
   const [inputEmail, setInputEmail] = useState(email ?? "");
 
   const setToDatabaseDelivery = useCallback(async () => {
+    setInputEmail("");
     resetDeliveryOption();
     return await updateResponseDelivery(id);
-  }, [id, resetDeliveryOption, updateResponseDelivery]);
+  }, [id, resetDeliveryOption, updateResponseDelivery, setInputEmail]);
 
   const setToEmailDelivery = useCallback(async () => {
     if (!isValidGovEmail(inputEmail)) return false;
@@ -50,12 +51,14 @@ export const SetResponseDelivery = () => {
   const saveDeliveryOption = useCallback(async () => {
     let result;
 
-    if (email !== "" && deliveryOption === DeliveryOption.vault)
+    if (email !== "" && deliveryOption === DeliveryOption.vault) {
       result = await setToDatabaseDelivery();
-    else result = await setToEmailDelivery();
+    } else {
+      result = await setToEmailDelivery();
+    }
 
     if (!result || axios.isAxiosError(result)) {
-      toast.error(t("settingsDeliveryError"), {
+      toast.error(t("settingsResponseDelivery.savedErrorMessage"), {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 3000,
         hideProgressBar: true,
@@ -65,7 +68,7 @@ export const SetResponseDelivery = () => {
       return;
     }
 
-    toast.success(t("settingsDeliverySuccess"), {
+    toast.success(t("settingsResponseDelivery.savedSuccessMessage"), {
       position: toast.POSITION.TOP_CENTER,
       autoClose: 3000,
       hideProgressBar: true,
@@ -83,14 +86,14 @@ export const SetResponseDelivery = () => {
       <h1 className="visually-hidden">{t("formSettings")}</h1>
       {status === "authenticated" && (
         <div className="mb-10">
-          <div className="block font-bold mb-4">Select a response delivery option </div>
+          <div className="block font-bold mb-4">{t("settingsResponseDelivery.title")}</div>
           <div className="mb-4">
             <Radio
               id={`delivery-option-${DeliveryOption.vault}`}
               checked={deliveryOption === DeliveryOption.vault}
               name="response-delivery"
               value={DeliveryOption.vault}
-              label="Download responses from GC Forms"
+              label={t("settingsResponseDelivery.vaultOption")}
               onChange={updateDeliveryOption}
             />
             <Radio
@@ -98,7 +101,7 @@ export const SetResponseDelivery = () => {
               checked={deliveryOption === DeliveryOption.email}
               name="response-delivery"
               value={DeliveryOption.email}
-              label="Email the responses to an inbox"
+              label={t("settingsResponseDelivery.vaultOption")}
               onChange={updateDeliveryOption}
             />
           </div>
@@ -112,7 +115,7 @@ export const SetResponseDelivery = () => {
             theme="secondary"
             onClick={saveDeliveryOption}
           >
-            Save changes
+            {t("settingsResponseDelivery.saveButton")}
           </Button>
         </div>
       )}
