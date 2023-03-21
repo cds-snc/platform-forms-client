@@ -36,6 +36,7 @@ export const PanelActions = ({
   handleDuplicate,
   filterElements,
   elements,
+  lang,
 }: {
   item: FormElementWithIndex;
   subIndex?: number;
@@ -47,6 +48,7 @@ export const PanelActions = ({
   handleDuplicate: () => void;
   filterElements?: ElementOptionsFilter;
   elements: FormElement[];
+  lang: string;
 }) => {
   const { t } = useTranslation("form-builder");
 
@@ -199,8 +201,8 @@ export const PanelActions = ({
     : "laptop:absolute laptop:invisible group-[.active]:visible laptop:right-0 laptop:top-0 laptop:-mr-[180px]";
 
   const innerPanelClasses = isSubElement
-    ? "flex flex-wrap flex-row justify-between px-4 pb-6 pt-4 py-2 -mx-12 laptop:mx-0"
-    : "flex flex-wrap flex-row justify-between bg-gray-200 px-4 pb-6 pt-4 py-2";
+    ? `flex flex-wrap flex-row justify-between px-4 pb-6 pt-4 py-2 -mx-12 laptop:mx-0 ${lang}`
+    : `flex flex-wrap flex-row justify-between bg-gray-200 px-4 pb-6 pt-4 py-2 ${lang}`;
 
   const innerPanelResponsiveClasses = isSubElement
     ? ""

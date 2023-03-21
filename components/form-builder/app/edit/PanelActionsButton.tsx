@@ -24,9 +24,6 @@ export const PanelActionsButton = ({
   buttonRef?: (el: HTMLButtonElement) => void;
   dataTestId?: string;
 }) => {
-  // const buttonClasses =
-  //   "group/button border-none  hover:!bg-gray-600 hover:!text-white  focus:!bg-blue-hover focus:text-black xl:focus:text-white active:text-white disabled:!bg-transparent disabled:cursor-not-allowed disabled:text-gray-500";
-
   const baseButtonClasses =
     "py-2 px-5 rounded-lg border-2 border-solid inline-flex items-center active:top-0.5 focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:!bg-transparent disabled:cursor-not-allowed disabled:!text-gray-500 disabled:hover:no-underline";
 
