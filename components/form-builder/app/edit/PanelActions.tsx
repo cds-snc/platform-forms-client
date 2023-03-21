@@ -188,7 +188,7 @@ export const PanelActions = ({
 
   const outerPanelClasses = isSubElement
     ? ""
-    : "laptop:absolute laptop:invisible group-[.active]:visible laptop:right-0 laptop:top-0 laptop:-mr-[180px]";
+    : "laptop:absolute laptop:invisible group-[.active]:visible laptop:right-0 laptop:top-0 laptop:-mr-[170px]";
 
   const innerPanelClasses = isSubElement
     ? `flex flex-wrap flex-row justify-between px-4 pb-6 pt-4 py-2 -mx-12 laptop:mx-0 ${lang}`
