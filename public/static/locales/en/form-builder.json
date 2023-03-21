@@ -449,6 +449,10 @@
   "settingsResponseDelivery": {
     "title": "Select a response delivery option",
     "vaultOption": "Download responses from GC Forms",
+    "vaultOptionHint": {
+      "text1": "Submitted responses will appear on the",
+      "text2": "Responses page"
+    },
     "emailOption": "Email the responses to an inbox",
     "saveButton": "Save changes",
     "savedSuccessMessage": "Your changes have been saved.",
