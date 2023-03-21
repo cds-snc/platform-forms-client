@@ -462,6 +462,22 @@
       "text4": "create one now",
       "signinButton": "Sign In",
       "createButton": "Create an account"
+    },
+    "responseDeliveryHelp": {
+      "cta": "Help on choosing an option",
+      "title": "Choosing a response delivery option",
+      "description": "There are two options for getting submitted form responses. Use the chart below to help pick which option best fits your needs.",
+      "inbox": {
+        "title": "Email to an inbox",
+        "text1": "For up to Protected A forms",
+        "text2": "Responses are delivered directly to an inbox in real time",
+        "text3": "One inbox can receive response emails"
+      },
+      "vault": {
+        "title": "Download from GC Forms",
+        "text1": "For up to Protected B forms",
+        "text2": "Download responses within 30 days"
+      }
     }
   },
   "share": {
