@@ -198,7 +198,7 @@ export const PanelActions = ({
 
   const outerPanelClasses = isSubElement ? "" : "";
   const innerPanelClasses = isSubElement
-    ? "flex flex-wrap flex-row justify-between bg-gray-200 -mx-12 px-4 pb-6 pt-4 py-2"
+    ? "flex flex-wrap flex-row justify-between bg-gray-200 px-4 pb-6 pt-4 py-2 -mx-12"
     : "flex flex-wrap flex-row justify-between bg-gray-200 px-4 pb-6 pt-4 py-2";
 
   return (

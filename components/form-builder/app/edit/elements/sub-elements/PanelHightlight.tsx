@@ -12,7 +12,7 @@ export const PanelHightLight = ({
   const { focusWithinProps, isWithin } = useIsWithin();
   const hightLight = isWithin ? "bg-purple-100" : "";
   return (
-    <div {...focusWithinProps} className={`px-5 py-1 ${hightLight}`}>
+    <div {...focusWithinProps} className={`px-5 ${hightLight}`}>
       {children}
       <div className={`${isWithin ? "" : "hidden"} xl:!block`}>{conditionalChildren}</div>
     </div>
