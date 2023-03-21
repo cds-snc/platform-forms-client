@@ -169,20 +169,18 @@ export const PanelActions = ({
   const actions = panelButtons.map((button, loopIndex) => {
     // const Icon = button.icon;
     return (
-      <>
-        <PanelActionsButton
-          key={button.txt}
-          className={`${isFirstItem ? "disabled" : ""} ${isSubElement ? "!px-2" : ""}`}
-          disabled={button.disabled && button.disabled}
-          icon={button.icon}
-          onClick={button.onClick}
-          tabIndex={getTabIndex(button.txt)}
-          buttonRef={setRef(`button-${loopIndex}`)}
-          dataTestId={button.txt}
-        >
-          <span className="text-sm">{t(button.txt)}</span>
-        </PanelActionsButton>
-      </>
+      <PanelActionsButton
+        key={button.txt}
+        className={`${isFirstItem ? "disabled" : ""} ${isSubElement ? "!px-2" : ""}`}
+        disabled={button.disabled && button.disabled}
+        icon={button.icon}
+        onClick={button.onClick}
+        tabIndex={getTabIndex(button.txt)}
+        buttonRef={setRef(`button-${loopIndex}`)}
+        dataTestId={button.txt}
+      >
+        <span className="text-sm">{t(button.txt)}</span>
+      </PanelActionsButton>
     );
   });
 
