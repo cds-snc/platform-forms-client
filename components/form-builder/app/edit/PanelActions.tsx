@@ -232,7 +232,7 @@ export const PanelActions = ({
       </div>
       {!isSubElement && (
         <div className="flex">
-          <div className="absolute right-0 bottom-0 -mb-6 mx-auto mr-2 z-10">
+          <div className="mx-auto bottom-0 -mb-6 z-10">
             <AddElementButton
               position={item.index}
               handleAdd={handleAdd}
