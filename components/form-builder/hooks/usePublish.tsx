@@ -25,8 +25,8 @@ export const usePublish = () => {
       });
 
       return result.data;
-    } catch (e) {
-      //no-op
+    } catch (err) {
+      return { error: err as AxiosError };
     }
   };
 
