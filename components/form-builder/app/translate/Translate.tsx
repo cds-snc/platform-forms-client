@@ -10,7 +10,6 @@ import { DownloadCSV } from "./DownloadCSV";
 import { RichTextEditor } from "../edit/elements/lexical-editor/RichTextEditor";
 import { LanguageLabel } from "./LanguageLabel";
 import { FieldsetLegend, SectionTitle } from ".";
-import { formatEmailSubject } from "../edit/Edit";
 
 import { FormElement } from "@lib/types";
 
@@ -147,14 +146,6 @@ export const Translate = () => {
                       `form.${localizeField(LocalizedFormProperties.TITLE, primaryLanguage)}`,
                       e.target.value
                     );
-                    // Temporary fix (see function `formatEmailSubject` in Edit.tsx file)
-                    updateField(
-                      `deliveryOption.${localizeField(
-                        LocalizedFormProperties.EMAIL_SUBJECT,
-                        primaryLanguage
-                      )}`,
-                      formatEmailSubject(e.target.value, primaryLanguage)
-                    );
                   }}
                   {...getLocalizationAttribute()}
                 />
@@ -176,14 +167,6 @@ export const Translate = () => {
                     updateField(
                       `form.${localizeField(LocalizedFormProperties.TITLE, secondaryLanguage)}`,
                       e.target.value
-                    );
-                    // Temporary fix (see function `formatEmailSubject` in Edit.tsx file)
-                    updateField(
-                      `deliveryOption.${localizeField(
-                        LocalizedFormProperties.EMAIL_SUBJECT,
-                        secondaryLanguage
-                      )}`,
-                      formatEmailSubject(e.target.value, secondaryLanguage)
                     );
                   }}
                   {...getLocalizationAttribute()}
