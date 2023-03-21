@@ -37,7 +37,7 @@ export const FileNameInput = () => {
       </span>
       <input
         style={widthStyle}
-        className="px-2 max-w-[290px] laptop:min-w-[250px] laptop:max-w-[500px] border-2 border-white text-base font-bold placeholder-black hover:border-2 hover:border-gray-default"
+        className="px-2 min-w-[180px] max-w-[180px] laptop:min-w-[250px] laptop:max-w-[500px] border-2 border-white text-base font-bold placeholder-black hover:border-2 hover:border-gray-default"
         name="filename"
         placeholder={t("unnamedForm", { ns: "form-builder" })}
         value={content}
