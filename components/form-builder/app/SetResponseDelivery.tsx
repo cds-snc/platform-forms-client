@@ -1,15 +1,15 @@
 import React, { useCallback, useState } from "react";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
 import { useTranslation } from "next-i18next";
 import { useSession } from "next-auth/react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 
-import { useTemplateStore } from "../store";
+import { isValidGovEmail } from "@lib/validation";
+import { ResponseEmail } from "./ResponseEmail";
 import { Radio, Button } from "./shared";
 import { usePublish } from "../hooks";
-import { ResponseEmail } from "./ResponseEmail";
-import { isValidGovEmail } from "@lib/validation";
+import { useTemplateStore } from "../store";
 
 enum DeliveryOption {
   vault = "vault",
@@ -18,8 +18,8 @@ enum DeliveryOption {
 
 export const SetResponseDelivery = () => {
   const { t } = useTranslation("form-builder");
-  const { updateResponseDelivery, uploadJson } = usePublish();
   const { status } = useSession();
+  const { updateResponseDelivery, uploadJson } = usePublish();
 
   const { email, id, resetDeliveryOption, getSchema, getName, getDeliveryOption, updateField } =
     useTemplateStore((s) => ({
