@@ -188,14 +188,6 @@ export const PanelActions = ({
 
   const moreButton = actions.pop();
 
-  // const outerPanelClasses = isSubElement
-  //   ? ``
-  //   : `relative mr-0 laptop:absolute laptop:invisible group-[.active]:visible laptop:right-0 laptop:top-0 laptop:-mr-[155px]`;
-
-  // const innerPanelClasses = isSubElement
-  //   ? `flex flex-wrap flex-row ${lang}`
-  //   : `bg-gray-200  rounded-none ml-0 laptop:ml-10 px-0  py-0  flex flex-row  laptop:flex-col ${lang}`;
-
   const outerPanelClasses = isSubElement
     ? ""
     : "laptop:absolute laptop:invisible group-[.active]:visible laptop:right-0 laptop:top-0 laptop:-mr-[180px]";
