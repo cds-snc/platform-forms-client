@@ -101,7 +101,7 @@ export const SetResponseDelivery = () => {
               checked={deliveryOption === DeliveryOption.email}
               name="response-delivery"
               value={DeliveryOption.email}
-              label={t("settingsResponseDelivery.vaultOption")}
+              label={t("settingsResponseDelivery.emailOption")}
               onChange={updateDeliveryOption}
             />
           </div>
