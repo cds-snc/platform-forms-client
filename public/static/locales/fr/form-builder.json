@@ -301,8 +301,6 @@
   },
   "formDeletedDialogMessage": "Formulaire supprimé",
   "formDeletedDialogMessageFailed": "Échec de la suppression du formulaire",
-  "formDeletedDialogOkay": "Retourner à l’accueil",
-  "formDeletedDialogOkayFailed": "fermer",
   "formDeletedDialogTitle": "Succès",
   "formDeleteDialogTitleFailed": "Erreur",
   "formDownload": {
@@ -443,12 +441,30 @@
   "settingsInvalidEmailAlertDesc2": "pour enregistrer l'adresse courriel.",
   "settingsInvalidEmailAlertTitle": "Adresse courriel du gouvernement",
   "settingsNavHome": "[FR] Response delivery",
-  "settingsResponseEmailTitle": "Adresse courriel du gouvernement fédéral",
-  "settingsResponseHint1": "Fournissez une adresse courriel du gouvernement du Canada où envoyer les réponses aux questions du formulaire. Vous devez indiquer une adresse pour publier un formulaire.",
-  "settingsResponseHint2": "Indiquer l’adresse courriel pour la réception des réponses",
-  "settingsResponseNote": " Définissez les parametres de la livraison des réponses avant de tester la livraison et de publier.",
-  "settingsResponseNotePublished": "Pour modifier la destination de livraison des réponses.",
+  "settingsResponseEmailTitle": "[FR] Enter the email address",
+  "settingsResponseHint1": "[FR] Submitted responses will be emailed to this inbox.",
   "settingsResponseTitle": "Destination de livraison des réponses.",
+  "settingsResponseDelivery": {
+    "title": "[FR] Select a response delivery option",
+    "vaultOption": "[FR] Download responses from GC Forms",
+    "vaultOptionHint": {
+      "text1": "[FR] Submitted responses will appear on the",
+      "text2": "[FR] Responses page"
+    },
+    "emailOption": "[FR] Email the responses to an inbox",
+    "saveButton": "[FR] Save changes",
+    "savedSuccessMessage": "[FR] Your changes have been saved.",
+    "savedErrorMessage": "[FR] There was an error saving your changes. Please try again.",
+    "card": {
+      "title": "[FR] You cannot change settings",
+      "text1": "[FR] To change the settings of this form,",
+      "text2": "[FR] sign into your account",
+      "text3": "[FR] If you do not have a GC Forms account, ",
+      "text4": "[FR] create one now",
+      "signinButton": "[FR] Sign In",
+      "createButton": "[FR] Create an account"
+    }
+  },
   "share": {
     "copy": "Copier",
     "email": "Partager par courriel",
@@ -498,6 +514,7 @@
   "startP2": "Modifiez un formulaire téléversé de votre ordinateur.",
   "submit": "Soumettre",
   "submittedResponsesText": "Les réponses soumises seront envoyées à {{email}}.",
+  "submittedResponsesTextVault": "[FR] Clicking submit will send form responses to the Responses page.",
   "support": {
     "contactUs": "le formulaire \"Contactez-nous\"",
     "description": {

@@ -82,14 +82,9 @@ export const isFormTranslated = (form: FormProperties) => {
 
 export const useAllowPublish = () => {
   const { ability } = useAccessControl();
-  const { form, deliveryOption } = useTemplateStore((s) => ({
+  const { form } = useTemplateStore((s) => ({
     form: s.form,
-    deliveryOption: s.deliveryOption,
   }));
-  let email = "";
-  if (deliveryOption?.emailAddress) {
-    email = deliveryOption.emailAddress;
-  }
 
   const userCanPublish = ability?.can("update", "FormRecord", "isPublished");
 
@@ -101,9 +96,8 @@ export const useAllowPublish = () => {
       confirmationMessage:
         !!form?.confirmation?.descriptionEn || !!form?.confirmation?.descriptionFr,
       translate: isFormTranslated(form),
-      responseDelivery: !!email,
     }),
-    [form, email]
+    [form]
   );
 
   const hasData = useCallback(

@@ -623,7 +623,9 @@ describe("Template CRUD functions", () => {
       const ability = createAbility(fakeSession as Session);
 
       (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
-        ...buildPrismaResponse("formtestID", formConfiguration),
+        ...buildPrismaResponse("formtestID", formConfiguration, false, {
+          emailAddress: "test@test.com",
+        }),
         users: [{ id: "1" }],
       });
 

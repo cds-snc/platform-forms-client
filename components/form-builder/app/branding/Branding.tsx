@@ -1,8 +1,10 @@
 import React, { useCallback } from "react";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 
 import { Logos, options } from "./";
 import { useTemplateStore } from "../../store";
+import { SettingsLoggedOut } from "../SettingsLoggedOut";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
 
@@ -16,6 +18,7 @@ const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element 
 
 export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: boolean }) => {
   const { t, i18n } = useTranslation("form-builder");
+  const { status } = useSession();
   const { brandName, updateField, unsetField, brandLogoEn, brandLogoFr, logoTitleEn, logoTitleFr } =
     useTemplateStore((s) => ({
       id: s.id,
@@ -57,6 +60,10 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
     value: "",
     label: `${t("branding.defaultOption")} ${t("branding.default")}`,
   });
+
+  if (status !== "authenticated") {
+    return <SettingsLoggedOut />;
+  }
 
   return (
     <div>
