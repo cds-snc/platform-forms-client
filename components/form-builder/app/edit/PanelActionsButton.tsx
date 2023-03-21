@@ -1,4 +1,4 @@
-import React, { ComponentType, JSXElementConstructor, ReactElement } from "react";
+import React, { ComponentType, JSXElementConstructor } from "react";
 
 export const PanelActionsButton = ({
   children,
@@ -27,7 +27,7 @@ export const PanelActionsButton = ({
   // const buttonClasses =
   //   "group/button border-none laptop:bg-transparent hover:!bg-gray-600 hover:!text-white laptop:hover:!text-black laptop:hover:!bg-transparent focus:!bg-blue-hover focus:text-black xl:focus:text-white active:text-white disabled:!bg-transparent disabled:cursor-not-allowed disabled:text-gray-500";
 
-  const base =
+  const baseButtonClasses =
     "py-2 px-5 rounded-lg border-2 border-solid inline-flex items-center active:top-0.5 focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500";
 
   const buttonClasses =
@@ -35,10 +35,15 @@ export const PanelActionsButton = ({
 
   const responsiveClasses = "";
 
+  const iconClasses =
+    "group-hover/button:fill-black group-disabled/button:!fill-gray-500 group-active/button:!fill-white group-focus/button:!fill-white fill-black group-hover/button:!fill-white transition duration-100";
+
+  const responsiveIconClasses = "";
+
   return (
     <button
       onClick={onClick}
-      className={`${className} ${buttonClasses} ${base} ${responsiveClasses}`}
+      className={`${className} ${buttonClasses} ${baseButtonClasses} ${responsiveClasses}`}
       id={id}
       disabled={disabled}
       aria-label={ariaLabel}
@@ -49,7 +54,7 @@ export const PanelActionsButton = ({
     >
       {Icon && (
         <div className="inline-block">
-          <Icon className="group-hover/button:fill-black group-disabled/button:!fill-gray-500 group-active/button:!fill-white group-focus/button:!fill-white fill-black group-hover/button:!fill-white transition duration-100" />
+          <Icon className={`${iconClasses} ${responsiveIconClasses}`} />
         </div>
       )}
       {children}
