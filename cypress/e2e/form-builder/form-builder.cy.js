@@ -79,7 +79,7 @@ describe("Test FormBuilder", () => {
     cy.get("a").contains("Settings").click();
     cy.get("a").contains("Settings").should("have.class", "font-bold");
     cy.get("h1").should("contain", "Form settings");
-    cy.get("label").contains("Response delivery destination");
+    cy.get("div").contains("Select a response delivery option");
 
     // publish form
     cy.get("a").contains("Publish").click();
