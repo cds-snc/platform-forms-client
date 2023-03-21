@@ -1,7 +1,35 @@
 import { DeliveryOption } from "@lib/types";
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 export const usePublish = () => {
+  const updateResponseDelivery = async (
+    formID: string
+  ): Promise<AxiosResponse | { error: AxiosError } | undefined> => {
+    if (!formID) {
+      return;
+    }
+
+    try {
+      const url = `/api/templates/${formID}`;
+
+      const result = await axios({
+        url: url,
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: {
+          sendResponsesToVault: true,
+        },
+        timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+      });
+
+      return result.data;
+    } catch (err) {
+      return { error: err as AxiosError };
+    }
+  };
+
   const uploadJson = async (
     jsonConfig: string,
     name?: string,
@@ -21,6 +49,12 @@ export const usePublish = () => {
     try {
       const url = formID ? `/api/templates/${formID}` : "/api/templates";
 
+      const byEmail = true;
+      let data = {};
+      if (byEmail) {
+        data = { deliveryOption };
+      }
+
       const result = await axios({
         url: url,
         method: formID ? "PUT" : "POST",
@@ -31,7 +65,7 @@ export const usePublish = () => {
           isPublished: publish ? true : false,
           formConfig: formData,
           name: name,
-          deliveryOption: deliveryOption,
+          ...data,
         },
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       });
@@ -57,5 +91,5 @@ export const usePublish = () => {
     }
   };
 
-  return { uploadJson };
+  return { uploadJson, updateResponseDelivery };
 };

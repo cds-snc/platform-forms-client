@@ -44,8 +44,7 @@ export type publishRequiredFields =
   | "questions"
   | "privacyPolicy"
   | "confirmationMessage"
-  | "translate"
-  | "responseDelivery";
+  | "translate";
 
 export interface ElementOption {
   id:

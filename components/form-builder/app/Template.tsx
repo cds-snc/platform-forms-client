@@ -1,5 +1,4 @@
 import React, { ReactElement, useEffect } from "react";
-import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { useTranslation } from "next-i18next";
 
@@ -9,7 +8,7 @@ import Loader from "@components/globals/Loader";
 import { useTemplateStore, TemplateStoreProvider } from "@components/form-builder/store";
 import { LeftNavigation, Header } from "@components/form-builder/app";
 import { Language } from "../types";
-import { useActivePathname, TemplateApiProvider } from "../hooks";
+import { TemplateApiProvider } from "../hooks";
 
 export const Template = ({
   page,
@@ -55,30 +54,17 @@ export const PageTemplate = ({
   autoWidth?: boolean;
 }) => {
   const { t, i18n } = useTranslation("form-builder");
-  const { hasHydrated, form, setLang, updateField, email } = useTemplateStore((s) => ({
+  const { hasHydrated, form, setLang } = useTemplateStore((s) => ({
     form: s.form,
     hasHydrated: s._hasHydrated,
     setLang: s.setLang,
     email: s.deliveryOption?.emailAddress,
-    updateField: s.updateField,
   }));
 
   const locale = i18n.language as Language;
-  const { data } = useSession();
-  const { currentPage } = useActivePathname();
-
   useEffect(() => {
     setLang(locale);
   }, [locale, setLang]);
-
-  useEffect(() => {
-    const setEmail = () => {
-      if (data && data.user.email) {
-        updateField("deliveryOption.emailAddress", data.user.email);
-      }
-    };
-    !email && currentPage !== "settings" && setEmail();
-  }, [email, data, currentPage, updateField]);
 
   // Wait until the Template Store has fully hydrated before rendering the page
   return hasHydrated ? (
