@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "next-i18next";
 import { isValidGovEmail } from "@lib/validation";
 import { Input } from "./shared";
@@ -36,43 +36,48 @@ const InvalidEmailError = ({ id, isActive }: { id: string; isActive: boolean }) 
 export const ResponseEmail = ({
   inputEmail,
   setInputEmail,
+  isInvalidEmailError,
+  setIsInvalidEmailError,
 }: {
   inputEmail: string;
   setInputEmail: (email: string) => void;
+  isInvalidEmailError: boolean;
+  setIsInvalidEmailError: (isInvalid: boolean) => void;
 }) => {
   const { t } = useTranslation("form-builder");
-  const [IsInvalidEmailErrorActive, setIsInvalidEmailErrorActive] = useState(false);
 
   const handleEmailChange = (email: string) => {
     setInputEmail(email);
+  };
 
+  useEffect(() => {
     const completeEmailAddressRegex =
       /^([a-zA-Z0-9!#$%&'*+-/=?^_`{|}~.])+@([a-zA-Z0-9-.]+)\.([a-zA-Z0-9]{2,})+$/;
 
     // We want to make sure the email address is complete before validating it
-    if (!completeEmailAddressRegex.test(email)) {
-      setIsInvalidEmailErrorActive(false);
+    if (!completeEmailAddressRegex.test(inputEmail)) {
+      setIsInvalidEmailError(false);
       return;
     }
 
-    if (isValidGovEmail(email)) {
-      setIsInvalidEmailErrorActive(false);
+    if (inputEmail === "" || isValidGovEmail(inputEmail)) {
+      setIsInvalidEmailError(false);
     } else {
-      setIsInvalidEmailErrorActive(true);
+      setIsInvalidEmailError(true);
     }
-  };
+  }, [inputEmail, setIsInvalidEmailError]);
 
   return (
     <div className="mb-10 pl-8 border-l-4 ml-4 ">
-      <InvalidEmailError id="invalidEmailError" isActive={IsInvalidEmailErrorActive} />
+      <InvalidEmailError id="invalidEmailError" isActive={isInvalidEmailError} />
       <div className="block font-bold mb-1 text-sm">{t("settingsResponseEmailTitle")}</div>
       <HintText id="response-delivery-hint-1">{t("settingsResponseHint1")}</HintText>
       <Input
         id="response-delivery"
-        isInvalid={IsInvalidEmailErrorActive}
+        isInvalid={isInvalidEmailError}
         describedBy="response-delivery-hint-1 response-delivery-hint-2 invalidEmailError"
         value={inputEmail}
-        theme={IsInvalidEmailErrorActive ? "error" : "default"}
+        theme={isInvalidEmailError ? "error" : "default"}
         className="w-3/5"
         onChange={(e) => handleEmailChange(e.target.value)}
       />

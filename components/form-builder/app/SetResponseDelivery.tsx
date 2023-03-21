@@ -35,6 +35,7 @@ export const SetResponseDelivery = () => {
   const initialDeliveryOption = !email ? DeliveryOption.vault : DeliveryOption.email;
   const [deliveryOption, setDeliveryOption] = useState(initialDeliveryOption);
   const [inputEmail, setInputEmail] = useState(email ?? "");
+  const [isInvalidEmailError, setIsInvalidEmailError] = useState(false);
 
   const setToDatabaseDelivery = useCallback(async () => {
     setInputEmail("");
@@ -107,11 +108,20 @@ export const SetResponseDelivery = () => {
           </div>
 
           {deliveryOption === DeliveryOption.email && (
-            <ResponseEmail inputEmail={inputEmail} setInputEmail={setInputEmail} />
+            <ResponseEmail
+              inputEmail={inputEmail}
+              setInputEmail={setInputEmail}
+              isInvalidEmailError={isInvalidEmailError}
+              setIsInvalidEmailError={setIsInvalidEmailError}
+            />
           )}
 
           <Button
-            disabled={initialDeliveryOption === deliveryOption}
+            disabled={
+              initialDeliveryOption === deliveryOption ||
+              (deliveryOption === DeliveryOption.email && isInvalidEmailError) ||
+              (deliveryOption === DeliveryOption.email && inputEmail === "")
+            }
             theme="secondary"
             onClick={saveDeliveryOption}
           >
