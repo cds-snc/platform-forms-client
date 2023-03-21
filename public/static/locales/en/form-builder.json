@@ -441,12 +441,19 @@
   "settingsInvalidEmailAlertDesc2": "to register email address.",
   "settingsInvalidEmailAlertTitle": "Government email address",
   "settingsNavHome": "Response delivery",
-  "settingsResponseEmailTitle": "Government email address",
-  "settingsResponseHint1": "Provide a Government of Canada email address to send form responses to.",
-  "settingsResponseHint2": "In order to publish, you need to provide a response delivery destination.",
+  "settingsResponseEmailTitle": "Enter the email address",
+  "settingsResponseHint1": "Submitted responses will be emailed to this inbox.",
   "settingsResponseNote": "Set response delivery before previewing delivery and publishing.",
   "settingsResponseNotePublished": "To change the response delivery destination.",
   "settingsResponseTitle": "Response delivery destination",
+  "settingsResponseDelivery": {
+    "title": "Select a response delivery option",
+    "vaultOption": "Download responses from GC Forms",
+    "emailOption": "Email the responses to an inbox",
+    "saveButton": "Save changes",
+    "savedSuccessMessage": "Your changes have been saved.",
+    "savedErrorMessage": "There was an error saving your changes. Please try again."
+  },
   "share": {
     "copy": "Copy",
     "email": "Share by email",
@@ -496,6 +503,7 @@
   "startP2": "Edit a form uploaded from your computer.",
   "submit": "Submit",
   "submittedResponsesText": "Submitted responses will be sent to {{email}}.",
+  "submittedResponsesTextVault": "Clicking submit will send form responses to the Responses page.",
   "support": {
     "contactUs": "Contact us form",
     "description": {
