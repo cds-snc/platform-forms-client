@@ -25,25 +25,26 @@ export const PanelActionsButton = ({
   dataTestId?: string;
 }) => {
   // const buttonClasses =
-  //   "group/button border-none laptop:bg-transparent hover:!bg-gray-600 hover:!text-white laptop:hover:!text-black laptop:hover:!bg-transparent focus:!bg-blue-hover focus:text-black xl:focus:text-white active:text-white disabled:!bg-transparent disabled:cursor-not-allowed disabled:text-gray-500";
+  //   "group/button border-none  hover:!bg-gray-600 hover:!text-white  focus:!bg-blue-hover focus:text-black xl:focus:text-white active:text-white disabled:!bg-transparent disabled:cursor-not-allowed disabled:text-gray-500";
 
   const baseButtonClasses =
-    "py-2 px-5 rounded-lg border-2 border-solid inline-flex items-center active:top-0.5 focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500";
+    "py-2 px-5 rounded-lg border-2 border-solid inline-flex items-center active:top-0.5 focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:!bg-transparent disabled:cursor-not-allowed disabled:!text-gray-500 disabled:hover:no-underline";
 
   const buttonClasses =
-    "group/button border-none hover:!bg-gray-600 hover:!text-white focus:!bg-blue-hover focus:text-black active:text-white active:bg-blue-hover transition duration-100";
+    "group/button border-none hover:bg-gray-600 hover:text-white focus:!bg-blue-hover focus:text-black active:text-white active:bg-blue-hover transition duration-100";
 
-  const responsiveClasses = "";
+  const responsiveButtonClasses =
+    "laptop:bg-transparent laptop:hover:text-black laptop:hover:bg-transparent laptop:hover:underline";
 
   const iconClasses =
-    "group-hover/button:fill-black group-disabled/button:!fill-gray-500 group-active/button:!fill-white group-focus/button:!fill-white fill-black group-hover/button:!fill-white transition duration-100";
+    "group-hover/button:fill-black group-disabled/button:!fill-gray-500 group-active/button:!fill-white group-focus/button:!fill-white fill-black group-hover/button:fill-white transition duration-100";
 
-  const responsiveIconClasses = "";
+  const responsiveIconClasses = "laptop:group-hover/button:fill-black";
 
   return (
     <button
       onClick={onClick}
-      className={`${className} ${buttonClasses} ${baseButtonClasses} ${responsiveClasses}`}
+      className={`${className} ${buttonClasses} ${baseButtonClasses} ${responsiveButtonClasses}`}
       id={id}
       disabled={disabled}
       aria-label={ariaLabel}
