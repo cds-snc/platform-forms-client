@@ -194,7 +194,10 @@ export const PanelActions = ({
   //   ? `flex flex-wrap flex-row ${lang}`
   //   : `bg-gray-200 laptop:bg-violet-50 rounded-none laptop:rounded-lg laptop:border laptop:border-violet-400 ml-0 laptop:ml-10 px-0 laptop:px-6 py-0 laptop:py-4 flex flex-row laptop:flex-wrap laptop:flex-col ${lang}`;
 
-  const outerPanelClasses = isSubElement ? "" : "";
+  const outerPanelClasses = isSubElement
+    ? ""
+    : "laptop:absolute laptop:invisible group-[.active]:visible laptop:right-0 laptop:top-0 laptop:-mr-[155px]";
+
   const innerPanelClasses = isSubElement
     ? "flex flex-wrap flex-row justify-between px-4 pb-6 pt-4 py-2 -mx-12"
     : "flex flex-wrap flex-row justify-between bg-gray-200 px-4 pb-6 pt-4 py-2";
