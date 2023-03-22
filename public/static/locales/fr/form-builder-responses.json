@@ -42,14 +42,17 @@
       "noResponses": "You have no responses[fr]",
       "noResponsesToDownload": "There are no responses available to download.[fr]"
     },
-    "download": {
+    "notifications": {
       "downloading":"Downloading[fr]",
       "downloadComplete": "Download complete[fr]",
       "downloadingXFiles": "Downloading {{fileCount}} files[fr]",
       "downloadXSelectedResponses": "Download {{size}} selected responses[fr]",
-      "trySelectingLessFiles":"Max of {{max}} files can be downloadled at once. Please try selecting less files.[fr]",
-      "atLeastOneFile": "At least one file must be selected to download.[fr]",
-      "errorDownloadingFiles":"Error downloading selected files.[fr]"
+      "trySelectingLessFilesHeader": "Only {{max}} responses can be downloaded at a time.[fr]",
+      "trySelectingLessFiles":"You have {{max}} responses selected. Uncheck at least 1 response before downloading.[fr]",
+      "atLeastOneFileHeader": "At least one file must be selected to download.[fr]",
+      "atLeastOneFile": "Try selecting at least one file to download.[fr]",
+      "errorDownloadingFilesHeader":"Error downloading the selected files.[fr]",
+      "errorDownloadingFiles":"Try again in a few minutes. If the problem persists contact support.[fr]"
     },
     "skipLink": "Skip Download Table[fr]",
     "unknown":"Unknown[fr]"

@@ -93,7 +93,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
     maxItemsError: false,
     noItemsError: false,
   });
-  const MAX_FILE_DOWNLOADS = 2; //20;
+  const MAX_FILE_DOWNLOADS = 20;
   const [tableItems, tableItemsDispatch] = useReducer(reducerTableItems, {
     checkedItems: new Map(),
     statusItems: new Map(vaultSubmissions.map((submission) => [submission.name, false])),
@@ -140,7 +140,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
     }
 
     const toastDownloadingId = toast.info(
-      t("downloadResponsesTable.download.downloadingXFiles", {
+      t("downloadResponsesTable.notifications.downloadingXFiles", {
         fileCount: tableItems.checkedItems.size,
       })
     );
@@ -174,11 +174,12 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
           router.replace(router.asPath, undefined, { scroll: false });
 
           toast.dismiss(toastDownloadingId);
-          toast.success(t("downloadResponsesTable.download.downloadComplete"));
+          toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
         }, 400);
       });
     } catch (err) {
       logMessage.error(err as Error);
+      toast.dismiss(toastDownloadingId);
       setNotifications({ ...notifications, downloadError: true });
     }
   };
@@ -195,12 +196,14 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
             type={AttentionTypes.ERROR}
             isAlert={true}
             width="40"
-            heading={"Only 20 responses can be downloaded at a time."}
+            heading={t("downloadResponsesTable.notifications.trySelectingLessFilesHeader", {
+              max: MAX_FILE_DOWNLOADS,
+            })}
           >
             <p className="text-[#26374a] text-sm">
-              You have {MAX_FILE_DOWNLOADS} responses selected. Uncheck at least 1 response before
-              downloading.
-              {/* {t("downloadResponsesTable.download.trySelectingLessFiles", { max: MAX_FILE_DOWNLOADS })} */}
+              {t("downloadResponsesTable.notifications.trySelectingLessFiles", {
+                max: MAX_FILE_DOWNLOADS,
+              })}
             </p>
           </Attention>
         )}
@@ -209,9 +212,11 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
             type={AttentionTypes.ERROR}
             isAlert={true}
             width="40"
-            heading={"Must select one. TODO"}
+            heading={t("downloadResponsesTable.notifications.atLeastOneFileHeader")}
           >
-            <p className="text-[#26374a] text-sm">Must select one TODO</p>
+            <p className="text-[#26374a] text-sm">
+              {t("downloadResponsesTable.notifications.atLeastOneFile")}
+            </p>
           </Attention>
         )}
         {notifications.downloadError && (
@@ -219,9 +224,11 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
             type={AttentionTypes.ERROR}
             isAlert={true}
             width="32"
-            heading={"Download error TODO"}
+            heading={t("downloadResponsesTable.notifications.errorDownloadingFilesHeader")}
           >
-            <p className="text-[#26374a] text-sm mb-2">DOWNLAOD ERROR TODO</p>
+            <p className="text-[#26374a] text-sm mb-2">
+              {t("downloadResponsesTable.notifications.errorDownloadingFiles")}
+            </p>
           </Attention>
         )}
       </div>
@@ -230,7 +237,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
         <caption className="sr-only">{t("downloadResponsesTable.header.tableTitle")}</caption>
         <thead className="border-b-2 border-[#6a6d7b]">
           <tr>
-            <th className="p-4  text-center">{t("downloadResponsesTable.header.select")}</th>
+            <th className="p-4 text-center">{t("downloadResponsesTable.header.select")}</th>
             <th className="p-4 text-left">{t("downloadResponsesTable.header.number")}</th>
             <th className="p-4 text-left">{t("downloadResponsesTable.header.status")}</th>
             <th className="p-4 text-left whitespace-nowrap">
@@ -254,7 +261,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
                 (tableItems.statusItems.get(submission.name) ? " bg-[#fffbf3]" : "")
               }
             >
-              <td className="p-4 flex">
+              <td className="pl-8 pr-4 pb-2 flex">
                 <div className="gc-input-checkbox">
                   <input
                     id={submission.name}
@@ -269,29 +276,29 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
                   </label>
                 </div>
               </td>
-              <td className="p-4 whitespace-nowrap">{submission.name}</td>
-              <td className="p-4">
+              <td className="px-4 whitespace-nowrap">{submission.name}</td>
+              <td className="px-4">
                 <DownloadStatus vaultStatus={submission.status} />
               </td>
-              <td className="p-4">
+              <td className="px-4">
                 <DownloadResponseStatus
                   vaultStatus={submission.status}
                   createdAt={submission.createdAt}
                   downloadedAt={submission.downloadedAt}
                 />
               </td>
-              <td className="p-4">
+              <td className="px-4">
                 <div className="truncate w-48">
                   {submission.lastDownloadedBy || t("downloadResponsesTable.status.notDownloaded")}
                 </div>
               </td>
-              <td className="p-4">
+              <td className="px-4">
                 <ConfirmReceiptStatus
                   vaultStatus={submission.status}
                   createdAtDate={submission.createdAt}
                 />
               </td>
-              <td className="p-4">
+              <td className="px-4 pb-2">
                 <RemovalStatus vaultStatus={submission.status} removalAt={submission.removedAt} />
               </td>
             </tr>
@@ -308,11 +315,10 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
           onClick={handleDownload}
           aria-live="polite"
         >
-          {t("downloadResponsesTable.download.downloadXSelectedResponses", {
+          {t("downloadResponsesTable.notifications.downloadXSelectedResponses", {
             size: tableItems.checkedItems.size,
           })}
         </button>
-        {/* </div> */}
 
         <div id="notificationsBottom" className="ml-4">
           {tableItems.checkedItems.size > MAX_FILE_DOWNLOADS && (
@@ -320,10 +326,14 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
               type={AttentionTypes.ERROR}
               isIcon={false}
               isSmall={true}
-              heading={"Only 20 responses can be downloaded at a time."}
+              heading={t("downloadResponsesTable.notifications.trySelectingLessFilesHeader", {
+                max: MAX_FILE_DOWNLOADS,
+              })}
             >
               <p className="text-black text-sm">
-                You have {21} responses selected. Uncheck at least 1 response before downloading.
+                {t("downloadResponsesTable.notifications.trySelectingLessFiles", {
+                  max: MAX_FILE_DOWNLOADS,
+                })}
               </p>
             </Attention>
           )}
@@ -332,9 +342,11 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
               type={AttentionTypes.ERROR}
               isIcon={false}
               isSmall={true}
-              heading={"Must select item TODO"}
+              heading={t("downloadResponsesTable.notifications.atLeastOneFileHeader")}
             >
-              <p className="text-black text-sm">Must select item TODO</p>
+              <p className="text-black text-sm">
+                {t("downloadResponsesTable.notifications.atLeastOneFile")}
+              </p>
             </Attention>
           )}
           {notifications.downloadError && (
@@ -342,15 +354,17 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
               type={AttentionTypes.ERROR}
               isIcon={false}
               isSmall={true}
-              heading={"Download error TODO"}
+              heading={t("downloadResponsesTable.notifications.errorDownloadingFilesHeader")}
             >
-              <p className="text-black text-sm">Download error TODO</p>
+              <p className="text-black text-sm">
+                {t("downloadResponsesTable.notifications.errorDownloadingFiles")}
+              </p>
             </Attention>
           )}
         </div>
       </div>
 
-      {/* TODO move to the app level probably */}
+      {/* TODO move to the app top level probably */}
       <ToastContainer />
     </section>
   );

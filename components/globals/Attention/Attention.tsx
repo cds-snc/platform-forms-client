@@ -59,7 +59,7 @@ export const Attention = ({
 
   return (
     <div
-      {...(isAlert && { role: "alert" })}
+      {...(isAlert && ariaAttributes)}
       className={(isSmall ? "p-3" : "p-5") + ` flex ${backgroundColor}`}
     >
       {isIcon && (
