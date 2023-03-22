@@ -1,5 +1,4 @@
 import React, { useCallback } from "react";
-import Image from "next/image";
 import { useSession } from "next-auth/react";
 
 import { Logos, options } from "./";

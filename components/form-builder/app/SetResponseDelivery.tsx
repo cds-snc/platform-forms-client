@@ -73,7 +73,7 @@ export const SetResponseDelivery = () => {
   }, [
     inputEmail,
     subjectEn,
-    setSubjectFr,
+    subjectFr,
     id,
     uploadJson,
     getSchema,
@@ -110,7 +110,7 @@ export const SetResponseDelivery = () => {
     });
 
     refreshData && refreshData();
-  }, [deliveryOption, email, setToDatabaseDelivery, setToEmailDelivery, t]);
+  }, [refreshData, deliveryOption, email, setToDatabaseDelivery, setToEmailDelivery, t]);
 
   const updateDeliveryOption = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
