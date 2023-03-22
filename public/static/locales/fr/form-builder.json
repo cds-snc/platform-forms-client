@@ -464,6 +464,12 @@
       "signinButton": "[FR] Sign In",
       "createButton": "[FR] Create an account"
     },
+    "emailSubjectEn": {
+      "title": "[EN] Add a custom subject line to the response email"
+    },
+    "emailSubjectFr": {
+      "title": "[FR] Add a custom subject line to the response email"
+    },
     "responseDeliveryHelp": {
       "cta": "Conseils pour le choix d’une option",
       "title": "Choisir une option de livraison des réponses",

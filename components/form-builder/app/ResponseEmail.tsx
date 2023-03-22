@@ -36,11 +36,19 @@ const InvalidEmailError = ({ id, isActive }: { id: string; isActive: boolean }) 
 export const ResponseEmail = ({
   inputEmail,
   setInputEmail,
+  subjectEn,
+  setSubjectEn,
+  subjectFr,
+  setSubjectFr,
   isInvalidEmailError,
   setIsInvalidEmailError,
 }: {
   inputEmail: string;
   setInputEmail: (email: string) => void;
+  subjectEn: string;
+  setSubjectEn: (subject: string) => void;
+  subjectFr: string;
+  setSubjectFr: (subject: string) => void;
   isInvalidEmailError: boolean;
   setIsInvalidEmailError: (isInvalid: boolean) => void;
 }) => {
@@ -75,11 +83,36 @@ export const ResponseEmail = ({
       <Input
         id="response-delivery"
         isInvalid={isInvalidEmailError}
-        describedBy="response-delivery-hint-1 response-delivery-hint-2 invalidEmailError"
+        describedBy="response-delivery-hint-1 invalidEmailError"
         value={inputEmail}
         theme={isInvalidEmailError ? "error" : "default"}
         className="w-3/5"
         onChange={(e) => handleEmailChange(e.target.value)}
+      />
+
+      <div>
+        <div className="block font-bold mt-6 text-sm">
+          {t("settingsResponseDelivery.emailSubjectEn.title")}
+        </div>
+        <Input
+          id="response-delivery-subject-en"
+          describedBy="response-delivery-hint-1 invalidEmailError"
+          value={subjectEn}
+          theme={"default"}
+          className="w-3/5"
+          onChange={(e) => setSubjectEn(e.target.value)}
+        />
+      </div>
+      <div className="block font-bold mt-6 text-sm">
+        {t("settingsResponseDelivery.emailSubjectFr.title")}
+      </div>
+      <Input
+        id="response-delivery-subject-en"
+        describedBy="response-delivery-hint-1 invalidEmailError"
+        value={subjectFr}
+        theme={"default"}
+        className="w-3/5"
+        onChange={(e) => setSubjectFr(e.target.value)}
       />
     </div>
   );

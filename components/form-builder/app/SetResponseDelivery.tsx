@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from "react";
+import { LocalizedFormProperties } from "../types";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
 import { useSession } from "next-auth/react";
@@ -19,22 +20,42 @@ enum DeliveryOption {
 export const SetResponseDelivery = () => {
   const { t, i18n } = useTranslation("form-builder");
   const { status } = useSession();
+  const session = useSession();
+
   const { updateResponseDelivery, uploadJson } = usePublish();
 
-  const { email, id, resetDeliveryOption, getSchema, getName, getDeliveryOption, updateField } =
-    useTemplateStore((s) => ({
-      id: s.id,
-      email: s.deliveryOption?.emailAddress,
-      resetDeliveryOption: s.resetDeliveryOption,
-      getSchema: s.getSchema,
-      getName: s.getName,
-      getDeliveryOption: s.getDeliveryOption,
-      updateField: s.updateField,
-    }));
+  const {
+    email,
+    id,
+    resetDeliveryOption,
+    getSchema,
+    getName,
+    getDeliveryOption,
+    updateField,
+    subjectEn: initialSubjectEn,
+    subjectFr: initialSubjectFr,
+  } = useTemplateStore((s) => ({
+    id: s.id,
+    email: s.deliveryOption?.emailAddress,
+    subjectEn:
+      s.deliveryOption?.subjectEn ||
+      s.form[s.localizeField(LocalizedFormProperties.TITLE, "en")] + " - Response",
+    subjectFr:
+      s.deliveryOption?.subjectFr ||
+      s.form[s.localizeField(LocalizedFormProperties.TITLE, "fr")] + " - Réponse",
+    resetDeliveryOption: s.resetDeliveryOption,
+    getSchema: s.getSchema,
+    getName: s.getName,
+    getDeliveryOption: s.getDeliveryOption,
+    updateField: s.updateField,
+  }));
 
   const initialDeliveryOption = !email ? DeliveryOption.vault : DeliveryOption.email;
   const [deliveryOption, setDeliveryOption] = useState(initialDeliveryOption);
-  const [inputEmail, setInputEmail] = useState(email ?? "");
+  const [inputEmail, setInputEmail] = useState(email ? email : session.data?.user?.email ?? "");
+  const [subjectEn, setSubjectEn] = useState(initialSubjectEn ?? "");
+  const [subjectFr, setSubjectFr] = useState(initialSubjectFr ?? "");
+
   const [isInvalidEmailError, setIsInvalidEmailError] = useState(false);
 
   const setToDatabaseDelivery = useCallback(async () => {
@@ -45,9 +66,21 @@ export const SetResponseDelivery = () => {
 
   const setToEmailDelivery = useCallback(async () => {
     if (!isValidGovEmail(inputEmail)) return false;
-    updateField(`deliveryOption.emailAddress`, inputEmail);
+    updateField("deliveryOption.emailAddress", inputEmail);
+    updateField("deliveryOption.subjectEn", subjectEn);
+    updateField("deliveryOption.subjectFr", subjectFr);
     return await uploadJson(getSchema(), getName(), getDeliveryOption(), id);
-  }, [inputEmail, id, uploadJson, getSchema, getName, getDeliveryOption, updateField]);
+  }, [
+    inputEmail,
+    subjectEn,
+    setSubjectFr,
+    id,
+    uploadJson,
+    getSchema,
+    getName,
+    getDeliveryOption,
+    updateField,
+  ]);
 
   const saveDeliveryOption = useCallback(async () => {
     let result;
@@ -118,6 +151,10 @@ export const SetResponseDelivery = () => {
             <ResponseEmail
               inputEmail={inputEmail}
               setInputEmail={setInputEmail}
+              subjectEn={subjectEn}
+              setSubjectEn={setSubjectEn}
+              subjectFr={subjectFr}
+              setSubjectFr={setSubjectFr}
               isInvalidEmailError={isInvalidEmailError}
               setIsInvalidEmailError={setIsInvalidEmailError}
             />
@@ -125,9 +162,14 @@ export const SetResponseDelivery = () => {
 
           <Button
             disabled={
-              initialDeliveryOption === deliveryOption ||
+              (initialDeliveryOption === deliveryOption &&
+                inputEmail === email &&
+                initialSubjectEn === subjectEn &&
+                initialSubjectFr === subjectFr) ||
               (deliveryOption === DeliveryOption.email && isInvalidEmailError) ||
-              (deliveryOption === DeliveryOption.email && inputEmail === "")
+              (deliveryOption === DeliveryOption.email && inputEmail === "") ||
+              (deliveryOption === DeliveryOption.email && subjectEn === "") ||
+              (deliveryOption === DeliveryOption.email && subjectFr === "")
             }
             theme="secondary"
             onClick={saveDeliveryOption}
