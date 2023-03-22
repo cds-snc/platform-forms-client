@@ -2,17 +2,22 @@ import Link from "next/link";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useActivePathname } from "../../hooks/useActivePathname";
 
-export const SubNavLink = ({
-  href,
-  children,
-  className,
-  activeClassName,
-}: {
-  children: ReactElement;
-  href: string;
-  className: string;
-  activeClassName: string;
-}) => {
+export const SubNavLink = ({ href, children }: { children: ReactElement; href: string }) => {
+  const baseClasses =
+    "no-underline !shadow-none border-black border-1 rounded-[100px] py-2 px-5 mr-3";
+
+  const activeClasses = "!text-black focus:!text-white [&_svg]:focus:fill-white";
+  const inactiveClasses =
+    "bg-[#475569] !text-white [&_svg]:fill-white ${svgStroke} focus:text-white [&_svg]:focus:stroke-white [&_svg]:hover:stroke-white hover:bg-gray-600 hover:!text-white-default";
+
+  // active:
+  // classname: !text-black focus:!text-white ${svgFill}
+  // activeclassname: [&_svg]:fill-white
+
+  // inactive:
+  // classname: [&_svg]:stroke-black !text-black focus:!text-white ${svgStroke}
+  // activeclassname: [&_svg]:stroke-white ${svgStroke} focus:text-white
+
   const { asPath, isReady, activePathname } = useActivePathname();
   const [active, setActive] = useState(false);
 
@@ -30,9 +35,7 @@ export const SubNavLink = ({
     <Link href={href}>
       <a
         href={href}
-        className={`${
-          active ? `bg-[#475569] !text-white ${activeClassName}` : `${className}`
-        } no-underline !shadow-none border-black border-1 rounded-[100px] py-2 px-5 mr-3`}
+        className={`${active ? `${activeClasses}` : `${inactiveClasses}`} ${baseClasses}`}
       >
         {children}
       </a>
