@@ -36,7 +36,6 @@ export const PanelActions = ({
   handleDuplicate,
   filterElements,
   elements,
-  lang,
 }: {
   item: FormElementWithIndex;
   subIndex?: number;
@@ -48,15 +47,15 @@ export const PanelActions = ({
   handleDuplicate: () => void;
   filterElements?: ElementOptionsFilter;
   elements: FormElement[];
-  lang: string;
 }) => {
-  const { t } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation("form-builder");
 
   const isInit = useRef(false);
   const isLastItem = item.index === elements.length - 1;
   const isFirstItem = item.index === 0;
   const isRichText = item.type == "richText";
   const isSubElement = subIndex !== -1 && subIndex !== undefined;
+  const lang = i18n.language;
 
   const getPanelButtons = () => {
     if (isSubElement) {
@@ -188,11 +187,13 @@ export const PanelActions = ({
 
   const outerPanelClasses = isSubElement
     ? ""
-    : "laptop:absolute laptop:invisible group-[.active]:visible laptop:right-0 laptop:top-0 laptop:-mr-[170px]";
+    : `laptop:absolute laptop:invisible group-[.active]:visible laptop:right-0 laptop:top-0 ${
+        lang === "fr" ? "laptop:-mr-[230px]" : "laptop:-mr-[160px]"
+      }`;
 
   const innerPanelClasses = isSubElement
-    ? `flex flex-wrap flex-row justify-between px-4 pb-6 pt-4 py-2 -mx-12 laptop:mx-0 ${lang}`
-    : `flex flex-wrap flex-row justify-between bg-gray-200 px-4 pb-6 pt-4 py-2 ${lang}`;
+    ? `flex flex-wrap flex-row justify-between px-4 pb-6 pt-4 py-2 -mx-12 laptop:mx-0`
+    : `flex flex-wrap flex-row justify-between bg-gray-200 px-4 pb-6 pt-4 py-2`;
 
   const innerPanelResponsiveClasses = isSubElement
     ? ""
