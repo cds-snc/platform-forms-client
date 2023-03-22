@@ -58,6 +58,11 @@ export const SetResponseDelivery = () => {
   const [subjectFr, setSubjectFr] = useState(initialSubjectFr ?? "");
   const [isInvalidEmailError, setIsInvalidEmailError] = useState(false);
 
+  const isValidDeliveryOption =
+    !isInvalidEmailError && inputEmail !== "" && subjectEn !== "" && subjectFr !== "";
+  const emailDeliveryOptionsChanged =
+    inputEmail !== email || subjectEn !== initialSubjectEn || subjectFr !== initialSubjectFr;
+
   const setToDatabaseDelivery = useCallback(async () => {
     setInputEmail("");
     resetDeliveryOption();
@@ -165,13 +170,10 @@ export const SetResponseDelivery = () => {
           <Button
             disabled={
               (initialDeliveryOption === deliveryOption &&
-                inputEmail === email &&
-                initialSubjectEn === subjectEn &&
-                initialSubjectFr === subjectFr) ||
-              (deliveryOption === DeliveryOption.email && isInvalidEmailError) ||
-              (deliveryOption === DeliveryOption.email && inputEmail === "") ||
-              (deliveryOption === DeliveryOption.email && subjectEn === "") ||
-              (deliveryOption === DeliveryOption.email && subjectFr === "")
+                deliveryOption === DeliveryOption.vault) ||
+              (deliveryOption === DeliveryOption.email &&
+                isValidDeliveryOption &&
+                emailDeliveryOptionsChanged)
             }
             theme="secondary"
             onClick={saveDeliveryOption}
