@@ -22,8 +22,8 @@ export const SetResponseDelivery = () => {
   const { t, i18n } = useTranslation("form-builder");
   const { status } = useSession();
   const session = useSession();
-
   const { updateResponseDelivery, uploadJson } = usePublish();
+  const { refreshData } = useRefresh();
 
   const {
     email,
@@ -57,8 +57,6 @@ export const SetResponseDelivery = () => {
   const [subjectEn, setSubjectEn] = useState(initialSubjectEn ?? "");
   const [subjectFr, setSubjectFr] = useState(initialSubjectFr ?? "");
   const [isInvalidEmailError, setIsInvalidEmailError] = useState(false);
-
-  const { refreshData } = useRefresh();
 
   const setToDatabaseDelivery = useCallback(async () => {
     setInputEmail("");
