@@ -58,10 +58,22 @@ export const SetResponseDelivery = () => {
   const [subjectFr, setSubjectFr] = useState(initialSubjectFr ?? "");
   const [isInvalidEmailError, setIsInvalidEmailError] = useState(false);
 
-  const isValidDeliveryOption =
-    !isInvalidEmailError && inputEmail !== "" && subjectEn !== "" && subjectFr !== "";
-  const emailDeliveryOptionsChanged =
-    inputEmail !== email || subjectEn !== initialSubjectEn || subjectFr !== initialSubjectFr;
+  const isDirty = () => {
+    const isValidDeliveryOption =
+      !isInvalidEmailError && inputEmail !== "" && subjectEn !== "" && subjectFr !== "";
+    const emailDeliveryOptionsChanged =
+      inputEmail !== email || subjectEn !== initialSubjectEn || subjectFr !== initialSubjectFr;
+
+    if (deliveryOption === DeliveryOption.email) {
+      return isValidDeliveryOption && emailDeliveryOptionsChanged;
+    }
+
+    if (deliveryOption === initialDeliveryOption) {
+      return false;
+    }
+
+    return true;
+  };
 
   const setToDatabaseDelivery = useCallback(async () => {
     setInputEmail("");
@@ -167,17 +179,7 @@ export const SetResponseDelivery = () => {
             />
           )}
 
-          <Button
-            disabled={
-              (initialDeliveryOption === deliveryOption &&
-                deliveryOption === DeliveryOption.vault) ||
-              (deliveryOption === DeliveryOption.email &&
-                isValidDeliveryOption &&
-                emailDeliveryOptionsChanged)
-            }
-            theme="secondary"
-            onClick={saveDeliveryOption}
-          >
+          <Button disabled={!isDirty()} theme="secondary" onClick={saveDeliveryOption}>
             {t("settingsResponseDelivery.saveButton")}
           </Button>
 
