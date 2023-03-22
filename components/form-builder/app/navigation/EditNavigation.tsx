@@ -14,13 +14,13 @@ export const EditNavigation = () => {
       <div className="flex">
         <nav className="flex" aria-label={t("navLabelEditor")}>
           <SubNavLink href="/form-builder/edit">
-            <span>
+            <span className="text-sm laptop:text-base">
               <QuestionsIcon className="hidden laptop:inline-block laptop:mt-[-2px] laptop:mr-2" />
               {t("questions")}
             </span>
           </SubNavLink>
           <SubNavLink href="/form-builder/edit/translate">
-            <span>
+            <span className="text-sm laptop:text-base">
               <TranslateIcon className="hidden laptop:inline-block laptop:mt-[-2px] laptop:mr-2" />
               {t("translate")}
             </span>
