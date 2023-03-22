@@ -42,7 +42,7 @@ export const EditNavigation = () => {
       </div>
       <div>
         {activePathname.endsWith("/edit") && (
-          <div className="flex justify-end laptop:absolute laptop:right-0 laptop:top-0 laptop:mt-4 laptop:mr-14 desktop:mr-24">
+          <div className="flex justify-end laptop:absolute laptop:right-0 laptop:top-0 laptop:mt-4 laptop:mr-[70px] desktop:mr-24">
             <LangSwitcher descriptionLangKey="editingIn" />
           </div>
         )}
