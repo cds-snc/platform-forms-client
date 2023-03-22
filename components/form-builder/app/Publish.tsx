@@ -69,7 +69,7 @@ export const Publish = () => {
 
   return (
     <>
-      <h1 className="border-0 mb-0 md:text-h1">{t("publishYourForm")}</h1>
+      <h1 className="border-0 mb-0 text-h1">{t("publishYourForm")}</h1>
       <p className="mb-0">{t("publishYourFormInstructions")}</p>
       {!userCanPublish && (
         <div className="mt-5 mb-5 p-5 bg-purple-200 flex">
