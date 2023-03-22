@@ -12,7 +12,7 @@ export const ConfirmReceiptStatus = ({
   vaultStatus: string;
   createdAtDate: Date;
 }) => {
-  const { t } = useTranslation("form-builder");
+  const { t } = useTranslation("form-builder-responses");
   let status = null;
 
   switch (vaultStatus) {

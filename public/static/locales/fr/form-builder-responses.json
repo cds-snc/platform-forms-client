@@ -1,0 +1,73 @@
+{
+  "responses": {
+    "changeSetup": "Changer la configuration",
+    "confirmReceipt": "Confirmer la réception",
+    "navLabel": "Réponses",
+    "reportProblems": "Signaler des problèmes",
+    "title": "Télécharger les réponses",
+    "unauthenticated": {
+      "createOne": "créez-en un",
+      "noAccount": "Si vous n'avez pas de compte Formulaires GC,",
+      "signIn": "connectez-vous",
+      "title": "Se connecter pour accéder aux réponses",
+      "toAccessPagePart1": "Pour accéder à cette page,",
+      "toAccessPagePart2": "à votre compte Formulaires GC"
+    }
+  },
+  "downloadResponsesTable": {
+    "header": {
+      "tableTitle": "Download Responses Table[fr]",
+      "select": "Select[fr]",
+      "number": "Number[fr]",
+      "status": "Status[fr]",
+      "downloadResponse": "Download Response[fr]",
+      "lastDownloadedBy": "Last Downloaded By[fr]",
+      "confirmReceipt": "Confirm Receipt[fr]",
+      "removal": "Removal[fr]"
+    },
+    "status": {
+      "downloaded":"Downloaded[fr]",
+      "notDownloaded":"Not downloaded[fr]",
+      "new":"New[fr]",
+      "confirmed":"Confirmed[fr]",
+      "unconfirmed": "Unconfirmed[fr]",
+      "problem":"Problem[fr]",
+      "done": "Done[fr]",
+      "withinXDays": "Within {{daysLeft}} days[fr]",
+      "overdue":"Overdue[fr]",
+      "wontRemove": "Won't Remove[fr]",
+      "notSet": "Not set[fr]"
+    },
+    "card": {
+      "noResponses": "You have no responses[fr]",
+      "noResponsesToDownload": "There are no responses available to download.[fr]"
+    },
+    "download": {
+      "downloading":"Downloading[fr]",
+      "downloadComplete": "Download complete[fr]",
+      "downloadingXFiles": "Downloading {{fileCount}} files[fr]",
+      "downloadXSelectedResponses": "Download {{size}} selected responses[fr]",
+      "trySelectingLessFiles":"Max of {{max}} files can be downloadled at once. Please try selecting less files.[fr]",
+      "atLeastOneFile": "At least one file must be selected to download.[fr]",
+      "errorDownloadingFiles":"Error downloading selected files.[fr]"
+    },
+    "skipLink": "Skip Download Table[fr]",
+    "unknown":"Unknown[fr]"
+  },
+  "downloadResponsesModals": {
+    "confirmReceiptDialog": {
+      "title": "Confirm receipt of responses[fr]",
+      "findCode": "Find the confirmation code on the bottom of the downloaded form response. They look like, c0c42c90-b816-49da-a69a-80bfd8ba15db.[fr]",
+      "copyCode": "Copy and paste up-to {{max}} confirmation codes, one per line.[fr]",
+      "responsesAvailableFor": "After you confirm, responses are available for 7 days then automatically removed from our database.[fr]",
+      "confirmReceipt": "Confirm receipt[fr]"
+    },
+    "reportProblemsDialog": {
+      "title": "Report problems with responses[fr]",
+      "findForm": "Find the form number in the form list for any responses that won't download or open. They look like, 31-12-XCRV.[fr]",
+      "enterFormNumbers": "Enter up-to {{max}} form numbers, one per line.[fr]",
+      "problemReported": "The problem will be reported, and someone will contact you with help.[fr]",
+      "reportProblems": "Report problems[fr]"
+    }
+  }
+}

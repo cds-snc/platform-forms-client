@@ -7,10 +7,6 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { logMessage } from "@lib/logger";
 
-// TODO: ToastContainer in DownloadTable. Move to app root if toasts are staying.
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
-
 export const DialogConfirmReceipt = ({
   formId,
   isShowDialog,
@@ -20,7 +16,7 @@ export const DialogConfirmReceipt = ({
   isShowDialog: boolean;
   setIsShowDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const { t } = useTranslation("form-builder");
+  const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
   const [codes, setCodes] = useState<string[]>([]);
   const dialogRef = useDialogRef();
@@ -44,15 +40,14 @@ export const DialogConfirmReceipt = ({
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       data: codes,
     })
-      .then((response) => {
+      .then(() => {
         // Refreshes getServerSideProps data without a full page reload
         router.replace(router.asPath);
-        toast.info(t("confirmation.success", { codes }), { position: toast.POSITION.TOP_CENTER });
-        setCodes([]);
+        handleClose();
       })
       .catch((err) => {
         logMessage.error(err as Error);
-        toast.error(t("confirmation.error", { codes }), { position: toast.POSITION.TOP_CENTER });
+        // TODO: show error in dialog?
       });
   };
 

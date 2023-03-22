@@ -22,7 +22,7 @@ import {
   Description,
 } from "@components/forms";
 import { StyledLink } from "@components/globals/StyledLink/StyledLink";
-import { Attention } from "@components/globals/Attention/Attention";
+import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
 import { checkOne } from "@lib/cache/flags";
 
 export default function Contactus() {
@@ -89,7 +89,7 @@ export default function Contactus() {
           </Link>
           &nbsp;{t("contactus.gcFormsTeamPart2")}
         </p>
-        <Attention type="warning" heading={t("contactus.needSupport")}>
+        <Attention type={AttentionTypes.WARNING} heading={t("contactus.needSupport")}>
           {t("contactus.ifYouExperience")}&nbsp;
           <Link href={`/form-builder/support`}>{t("contactus.supportFormLink")}</Link>.
         </Attention>

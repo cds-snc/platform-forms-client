@@ -11,6 +11,7 @@ import { logMessage } from "@lib/logger";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
+import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
 
 export enum VaultStatus {
   NEW = "New",
@@ -85,7 +86,7 @@ const reducerTableItems = (state: ReducerTableItemsState, action: ReducerTableIt
 };
 
 export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) => {
-  const { t } = useTranslation("form-builder");
+  const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
   const MAX_FILE_DOWNLOADS = 20;
   const toastPosition = toast.POSITION.TOP_CENTER;
@@ -172,6 +173,41 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
         text={t("downloadResponsesTable.skipLink")}
         anchor="#downloadTableButtonId"
       />
+      {/* use a ref */}
+      <div id="errorsList" className="mr-20">
+        <Attention
+          type={AttentionTypes.ERROR}
+          width="40"
+          heading={"Only 20 responses can be downloaded at a time."}
+        >
+          <p className="text-[#26374a] text-sm">
+            You have {21} responses selected. Uncheck at least 1 response before downloading.
+          </p>
+        </Attention>
+        <br />
+        <br />
+        <Attention
+          type={AttentionTypes.WARNING}
+          width="40"
+          heading={"Confirm receipt of responses"}
+        >
+          <p className="text-[#26374a] text-sm mb-2">
+            There are XX unconfirmed responses older than 14 days. Confirm receipt of all overdue
+            unconfirmed responses.
+          </p>
+          <p className="text-[#26374a] text-sm font-bold">
+            Downloading will be restricted if unconfirmed responses are older than 25 days.
+          </p>
+        </Attention>
+        <br />
+        <br />
+        <Attention type={AttentionTypes.SUCCESS} width="32" heading={"Download complete"}>
+          <p className="text-[#26374a] text-sm mb-2">
+            You have successfully downloaded X submissions.
+          </p>
+        </Attention>
+      </div>
+
       <table className="text-sm">
         <caption className="sr-only">{t("downloadResponsesTable.header.tableTitle")}</caption>
         <thead className="border-b-2 border-[#6a6d7b]">
@@ -247,12 +283,12 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
           ))}
         </tbody>
       </table>
-      <div className="mt-8">
+      <div className="mt-8 flex">
         {/* NOTE: check/unchek item announcement may be enough for users and additionally announcing
             the updated Button items checked count may be too verbose. Remove live-region if so */}
         <button
           id="downloadTableButtonId"
-          className="gc-button whitespace-nowrap w-auto"
+          className="gc-button--blue whitespace-nowrap w-auto m-0"
           type="button"
           onClick={handleDownload}
           aria-live="polite"
@@ -261,6 +297,32 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
             size: tableItems.checkedItems.size,
           })}
         </button>
+
+        {/* use a ref */}
+        <div className="ml-4">
+          <Attention
+            type={AttentionTypes.ERROR}
+            isIcon={false}
+            isSmall={true}
+            heading={"Only 20 responses can be downloaded at a time."}
+          >
+            <p className="text-black text-sm">
+              You have {21} responses selected. Uncheck at least 1 response before downloading.
+            </p>
+          </Attention>
+          <br />
+          <br />
+          <Attention
+            type={AttentionTypes.SUCCESS}
+            isIcon={false}
+            isSmall={true}
+            heading={"Download complete"}
+          >
+            <p className="text-[#26374a] text-sm mb-2">
+              You have successfully downloaded X submissions.
+            </p>
+          </Attention>
+        </div>
       </div>
 
       {/* Sticky position to stop the page from scrolling to the top when showing a Toast */}

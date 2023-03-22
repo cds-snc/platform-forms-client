@@ -30,7 +30,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   vaultSubmissions,
   formId,
 }: ResponsesProps) => {
-  const { t } = useTranslation("form-builder");
+  const { t } = useTranslation("form-builder-responses");
   const { status } = useSession();
   const isAuthenticated = status === "authenticated";
   const [isShowConfirmReceiptDialog, setIsShowConfirmReceiptDialog] = useState(false);
@@ -201,7 +201,10 @@ export const getServerSideProps: GetServerSideProps = async ({
       vaultSubmissions,
       formId: FormbuilderParams.initialForm?.id,
       ...(locale &&
-        (await serverSideTranslations(locale, ["common", "form-builder"], null, ["fr", "en"]))),
+        (await serverSideTranslations(locale, ["common", "form-builder-responses"], null, [
+          "fr",
+          "en",
+        ]))),
     },
   };
 };

@@ -24,7 +24,7 @@ export const DownloadResponseStatus = ({
   createdAt: Date;
   downloadedAt?: Date;
 }) => {
-  const { t } = useTranslation("form-builder");
+  const { t } = useTranslation("form-builder-responses");
   let status = null;
 
   if (vaultStatus === "New") {

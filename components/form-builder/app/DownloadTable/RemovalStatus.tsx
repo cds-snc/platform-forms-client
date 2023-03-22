@@ -9,7 +9,7 @@ export const RemovalStatus = ({
   vaultStatus: string;
   removalAt?: Date;
 }) => {
-  const { t } = useTranslation("form-builder");
+  const { t } = useTranslation("form-builder-responses");
   let status = null;
 
   if (vaultStatus === VaultStatus.CONFIRMED && removalAt) {

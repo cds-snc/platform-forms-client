@@ -351,21 +351,6 @@
   "required": "Required",
   "allRequired": "All required",
   "responseDelivery": "Response delivery",
-  "responses": {
-    "changeSetup": "Change setup",
-    "confirmReceipt": "Confirm receipt",
-    "navLabel": "Responses",
-    "reportProblems": "Report problems",
-    "title": "Download responses",
-    "unauthenticated": {
-      "createOne": "create one",
-      "noAccount": "If you do not have a GC Forms account,",
-      "signIn": "sign in",
-      "title": "Sign in to access responses",
-      "toAccessPagePart1": "To access this page,",
-      "toAccessPagePart2": "to your GC Forms account."
-    }
-  },
   "richText": "Page text",
   "richTextConfirmationTitle": "Confirmation page and message",
   "richTextEditor": "Rich text editor",
@@ -476,62 +461,6 @@
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
   "unnamedForm": "Unnamed form file",
-  "downloadResponsesTable": {
-    "header": {
-      "tableTitle": "Download Responses Table",
-      "select": "Select",
-      "number": "Number",
-      "status": "Status",
-      "downloadResponse": "Download Response",
-      "lastDownloadedBy": "Last Downloaded By",
-      "confirmReceipt": "Confirm Receipt",
-      "removal": "Removal"
-    },
-    "status": {
-      "downloaded":"Downloaded",
-      "notDownloaded":"Not downloaded",
-      "new":"New",
-      "confirmed":"Confirmed",
-      "unconfirmed": "Unconfirmed",
-      "problem":"Problem",
-      "done": "Done",
-      "withinXDays": "Within {{daysLeft}} days",
-      "overdue":"Overdue",
-      "wontRemove": "Won't Remove",
-      "notSet": "Not set"
-    },
-    "card": {
-      "noResponses": "You have no responses",
-      "noResponsesToDownload": "There are no responses available to download."
-    },
-    "download": {
-      "downloading":"Downloading",
-      "downloadComplete": "Download complete",
-      "downloadingXFiles": "Downloading {{fileCount}} files",
-      "downloadXSelectedResponses": "Download {{size}} selected responses",
-      "trySelectingLessFiles":"Max of {{max}} files can be downloadled at once. Please try selecting less files.",
-      "atLeastOneFile": "At least one file must be selected to download.",
-      "errorDownloadingFiles":"Error downloading selected files."
-    },
-    "skipLink": "Skip Download Table",
-    "unknown":"Unknown"
-  },
-  "downloadResponsesModals": {
-    "confirmReceiptDialog": {
-      "title": "Confirm receipt of responses",
-      "findCode": "Find the confirmation code on the bottom of the downloaded form response. They look like, c0c42c90-b816-49da-a69a-80bfd8ba15db.",
-      "copyCode": "Copy and paste up-to {{max}} confirmation codes, one per line.",
-      "responsesAvailableFor": "After you confirm, responses are available for 7 days then automatically removed from our database.",
-      "confirmReceipt": "Confirm receipt"
-    },
-    "reportProblemsDialog": {
-      "title": "Report problems with responses",
-      "findForm": "Find the form number in the form list for any responses that won't download or open. They look like, 31-12-XCRV.",
-      "enterFormNumbers": "Enter up-to {{max}} form numbers, one per line.",
-      "problemReported": "The problem will be reported, and someone will contact you with help.",
-      "reportProblems": "Report problems"
-    }
-  },
   "autocompleteIsSetTo": "Autocomplete is set to:",
   "maxNumberOfRows": {
     "label": "Maximum number of answers",
