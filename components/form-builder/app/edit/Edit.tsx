@@ -75,7 +75,7 @@ export const Edit = () => {
               placeholder={t("placeHolderFormTitle")}
               value={value}
               onChange={updateValue}
-              className="w-3/4 mb-4 !text-h2 !font-sans !pb-0.5 !pt-1.5"
+              className="w-full laptop:w-3/4 mt-2 laptop:mt-0 mb-4 !text-h2 !font-sans !pb-0.5 !pt-1.5"
               theme="title"
               onBlur={updateName}
               {...getLocalizationAttribute()}
@@ -100,7 +100,7 @@ export const Edit = () => {
             ariaLabel={t("richTextPrivacyTitle")}
           >
             <div>
-              <h2 className="text-h3 pb-3">{t("richTextPrivacyTitle")}</h2>
+              <h2 className="mt-4 laptop:mt-0 text-h3 pb-3">{t("richTextPrivacyTitle")}</h2>
               <PrivacyDescription />
             </div>
           </RichTextLocked>
@@ -110,7 +110,7 @@ export const Edit = () => {
             ariaLabel={t("richTextConfirmationTitle")}
           >
             <div>
-              <h2 className="text-h3 pb-3">{t("richTextConfirmationTitle")}</h2>
+              <h2 className="mt-4 laptop:mt-0 text-h3 pb-3">{t("richTextConfirmationTitle")}</h2>
               <ConfirmationDescription />
             </div>
           </RichTextLocked>
