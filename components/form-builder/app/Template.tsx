@@ -66,7 +66,7 @@ export const PageTemplate = ({
     setLang(locale);
   }, [locale, setLang]);
 
-  // Wait until the Template Store has fully hydrated before rendering the page // lg:!mx-4 xl:!mx-8
+  // Wait until the Template Store has fully hydrated before rendering the page
   return hasHydrated ? (
     <div className="mx-4 laptop:mx-32 desktop:mx-64">
       <div>
@@ -79,7 +79,7 @@ export const PageTemplate = ({
               </Head>
               <main
                 id="content"
-                className={`${leftNav && "ml-60 xl:ml-40 md:pl-5"} ${
+                className={`${leftNav && "ml-40 laptop:ml-60"} ${
                   leftNav && !autoWidth && "max-w-4xl"
                 } form-builder`}
               >
