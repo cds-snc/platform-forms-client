@@ -66,9 +66,9 @@ export const PageTemplate = ({
     setLang(locale);
   }, [locale, setLang]);
 
-  // Wait until the Template Store has fully hydrated before rendering the page
+  // Wait until the Template Store has fully hydrated before rendering the page // lg:!mx-4 xl:!mx-8
   return hasHydrated ? (
-    <div id="page-container" className="lg:!mx-4 xl:!mx-8">
+    <div className="mx-4 laptop:mx-32">
       <div>
         {leftNav && <LeftNavigation />}
         <>
