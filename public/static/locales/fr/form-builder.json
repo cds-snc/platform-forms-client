@@ -465,10 +465,12 @@
       "createButton": "[FR] Create an account"
     },
     "emailSubjectEn": {
-      "title": "English response subject line"
+      "title": "[FR] English response subject line",
+      "hint": "[FR] When form responses are submitted in English."
     },
     "emailSubjectFr": {
-      "title": "French response subject line"
+      "title": "[FR] French response subject line",
+      "hint": "[FR] When form responses are submitted in French."
     },
     "responseDeliveryHelp": {
       "cta": "Conseils pour le choix d’une option",

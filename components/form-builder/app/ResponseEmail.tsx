@@ -91,24 +91,30 @@ export const ResponseEmail = ({
       />
 
       <div>
-        <div className="block font-bold mt-6 text-sm">
+        <div className="block font-bold mt-6 text-sm mb-1">
           {t("settingsResponseDelivery.emailSubjectEn.title")}
         </div>
+        <HintText id="response-delivery-subject-en-hint-1">
+          {t("settingsResponseDelivery.emailSubjectEn.hint")}
+        </HintText>
         <Input
           id="response-delivery-subject-en"
-          describedBy="response-delivery-hint-1 invalidEmailError"
+          describedBy="response-delivery-subject-en-hint invalidEmailError"
           value={subjectEn}
           theme={"default"}
           className="w-3/5"
           onChange={(e) => setSubjectEn(e.target.value)}
         />
       </div>
-      <div className="block font-bold mt-6 text-sm">
+      <div className="block font-bold mt-6 text-sm mb-1">
         {t("settingsResponseDelivery.emailSubjectFr.title")}
       </div>
+      <HintText id="response-delivery-subject-fr-hint">
+        {t("settingsResponseDelivery.emailSubjectFr.hint")}
+      </HintText>
       <Input
         id="response-delivery-subject-en"
-        describedBy="response-delivery-hint-1 invalidEmailError"
+        describedBy="response-delivery-subject-fr-hint invalidEmailError"
         value={subjectFr}
         theme={"default"}
         className="w-3/5"
