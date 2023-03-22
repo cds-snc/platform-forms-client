@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.min.css";
 
 import { isValidGovEmail } from "@lib/validation";
 import { ResponseEmail } from "./ResponseEmail";
-import { Radio, Button } from "./shared";
+import { Radio, Button, ResponseDeliveryHelpButton } from "./shared";
 import { usePublish } from "../hooks";
 import { useTemplateStore } from "../store";
 
@@ -134,6 +134,8 @@ export const SetResponseDelivery = () => {
           >
             {t("settingsResponseDelivery.saveButton")}
           </Button>
+
+          <ResponseDeliveryHelpButton />
         </div>
       )}
       <div className="sticky top-0">

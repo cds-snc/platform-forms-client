@@ -13,3 +13,4 @@ export { TagInput } from "./tag-input";
 export { LockedBadge } from "./LockedBadge";
 export { ExclamationText } from "./ExclamationText";
 export { InfoDetails } from "./InfoDetails";
+export { ResponseDeliveryHelpButton } from "./ResponseDeliveryHelpDialog";
