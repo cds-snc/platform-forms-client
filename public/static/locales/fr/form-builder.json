@@ -448,6 +448,22 @@
       "text4": "[FR] create one now",
       "signinButton": "[FR] Sign In",
       "createButton": "[FR] Create an account"
+    },
+    "responseDeliveryHelp": {
+      "cta": "Conseils pour le choix d’une option",
+      "title": "Choisir une option de livraison des réponses",
+      "description": "Il y a deux options pour obtenir les réponses des formulaires soumis. Le tableau ci-dessous vous aidera à choisir l’option qui répond le mieux à vos besoins.",
+      "inbox": {
+        "title": "Courriel à une boîte de réception",
+        "text1": "Pour les formulaires avec une classification jusqu’à Protégé A",
+        "text2": "Les réponses sont envoyées directement dans une boîte de réception en temps réel",
+        "text3": "Une seule boîte de réception peut recevoir les courriels de réponses"
+      },
+      "vault": {
+        "title": "Téléchargement des réponses",
+        "text1": "Pour les formulaires avec une classification jusqu’à Protégé B",
+        "text2": "Téléchargement des réponses de Formulaires GC dans un délai de 30 jours"
+      }
     }
   },
   "share": {
@@ -499,7 +515,11 @@
   "startP2": "Modifiez un formulaire téléversé de votre ordinateur.",
   "submit": "Soumettre",
   "submittedResponsesText": "Les réponses soumises seront envoyées à {{email}}.",
-  "submittedResponsesTextVault": "[FR] Clicking submit will send form responses to the Responses page.",
+  "submittedResponsesChange": "Modifier où les réponses soumises sont envoyées",
+  "submittedResponsesTextVault": {
+    "text1": "En cliquant sur « Soumettre », la réponse sera transmise à la",
+    "text2": "Réponses"
+  },
   "support": {
     "contactUs": "le formulaire \"Contactez-nous\"",
     "description": {

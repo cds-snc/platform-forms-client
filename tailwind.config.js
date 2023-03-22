@@ -140,6 +140,11 @@ module.exports = {
         input: "inset 0 0 0 2px #0535d2",
         none: "var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)",
       },
+      screens: {
+        tablet: "768px",
+        laptop: "1366px",
+        desktop: "1920px",
+      },
     },
     container: {
       center: true,

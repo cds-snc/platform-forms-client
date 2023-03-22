@@ -6,25 +6,16 @@ import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
 import { useIsWithin, useHandleAdd } from "@components/form-builder/hooks";
 
 export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
-  const {
-    lang,
-    getFocusInput,
-    setFocusInput,
-    remove,
-    moveUp,
-    moveDown,
-    duplicateElement,
-    elements,
-  } = useTemplateStore((s) => ({
-    lang: s.lang,
-    getFocusInput: s.getFocusInput,
-    setFocusInput: s.setFocusInput,
-    remove: s.remove,
-    moveUp: s.moveUp,
-    moveDown: s.moveDown,
-    duplicateElement: s.duplicateElement,
-    elements: s.form.elements,
-  }));
+  const { getFocusInput, setFocusInput, remove, moveUp, moveDown, duplicateElement, elements } =
+    useTemplateStore((s) => ({
+      getFocusInput: s.getFocusInput,
+      setFocusInput: s.setFocusInput,
+      remove: s.remove,
+      moveUp: s.moveUp,
+      moveDown: s.moveDown,
+      duplicateElement: s.duplicateElement,
+      elements: s.form.elements,
+    }));
 
   const [className, setClassName] = useState<string>("");
   const [ifFocus, setIfFocus] = useState<boolean>(false);
@@ -62,7 +53,6 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
       <PanelActions
         subIndex={-1}
         elements={elements}
-        lang={lang}
         item={item}
         handleAdd={handleAddElement}
         handleRemove={() => {

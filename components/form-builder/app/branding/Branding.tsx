@@ -86,7 +86,7 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
         {logo ? (
           <img alt={altText} src={logo} width={300} />
         ) : (
-          <Image alt={t("branding.defaultOption")} src={defaultLogo} width="360" height="33" />
+          <img alt={t("branding.defaultOption")} src={defaultLogo} width="360" height="33" />
         )}
       </div>
       {hasBrandingRequestForm && (

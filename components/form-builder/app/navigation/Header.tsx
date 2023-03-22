@@ -22,7 +22,7 @@ export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) =>
   }, []);
 
   return (
-    <header className="border-b-1 border-gray-500 mb-12 lg:px-4 xl:px-8 px-32 py-2">
+    <header className="border-b-1 border-gray-500 mb-12 py-2 px-8 laptop:px-32 desktop:px-64">
       <div className="flex justify-between">
         <div className="flex">
           <Link href="/form-builder">
@@ -45,13 +45,13 @@ export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) =>
           {isFormBuilder && <FileNameInput />}
         </div>
         <nav aria-label={t("mainNavAriaLabel", { ns: "form-builder" })}>
-          <ul className="flex text-base list-none">
+          <ul className="mt-2 px-0 flex text-base list-none">
             {isFormBuilder && (
-              <li className="md:text-small_base text-base font-normal not-italic mr-4">
+              <li className="text-base font-normal not-italic mr-4">
                 <ShareDropdown />
               </li>
             )}
-            <li className="md:text-small_base text-base font-normal not-italic mr-4 py-2">
+            <li className="text-base font-normal not-italic mr-4 py-2">
               {ability?.can("view", "FormRecord") && (
                 <Link href={`/${i18n.language}/myforms/drafts`}>
                   {t("adminNav.myForms", { ns: "common" })}
