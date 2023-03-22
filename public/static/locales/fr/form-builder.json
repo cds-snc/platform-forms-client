@@ -514,7 +514,11 @@
   "startP2": "Modifiez un formulaire téléversé de votre ordinateur.",
   "submit": "Soumettre",
   "submittedResponsesText": "Les réponses soumises seront envoyées à {{email}}.",
-  "submittedResponsesTextVault": "[FR] Clicking submit will send form responses to the Responses page.",
+  "submittedResponsesChange": "Modifier où les réponses soumises sont envoyées",
+  "submittedResponsesTextVault": {
+    "text1": "En cliquant sur « Soumettre », la réponse sera transmise à la",
+    "text2": "Réponses"
+  },
   "support": {
     "contactUs": "le formulaire \"Contactez-nous\"",
     "description": {
