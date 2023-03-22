@@ -491,8 +491,8 @@ export async function updateTemplate(
       logEvent(
         ability.userID,
         { type: "Form", id: formID },
-        "UpdateForm",
-        `Updated: ${name && `Name to ${name}`}`
+        "ChangeFormName",
+        `Updated Form name to ${name}`
       );
     deliveryOption &&
       logEvent(
