@@ -199,7 +199,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     props: {
       ...FormbuilderParams,
       vaultSubmissions,
-      formId: FormbuilderParams.initialForm?.id,
+      formId: FormbuilderParams.initialForm?.id ?? null,
       ...(locale &&
         (await serverSideTranslations(locale, ["common", "form-builder-responses"], null, [
           "fr",

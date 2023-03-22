@@ -72,6 +72,7 @@
     "login": "Se connecter",
     "logout": "Se déconnecter",
     "privileges": "Privilèges",
+    "settings": "[FR] Settings",
     "myForms": "Vos formulaires"
   },
   "formElements": {

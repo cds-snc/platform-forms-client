@@ -1,9 +1,12 @@
 import React, { useCallback } from "react";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 
 import { Logos, options } from "./";
 import { useTemplateStore } from "../../store";
+import { SettingsLoggedOut } from "../SettingsLoggedOut";
 import { useTranslation } from "next-i18next";
+import Link from "next/link";
 
 const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element | string }) => {
   return (
@@ -13,18 +16,20 @@ const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element 
   );
 };
 
-export const Branding = () => {
+export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: boolean }) => {
   const { t, i18n } = useTranslation("form-builder");
-  const { brandName, updateField, unsetField, brandLogoEn, brandLogoFr } = useTemplateStore(
-    (s) => ({
+  const { status } = useSession();
+  const { brandName, updateField, unsetField, brandLogoEn, brandLogoFr, logoTitleEn, logoTitleFr } =
+    useTemplateStore((s) => ({
       id: s.id,
       brandName: s.form?.brand?.name || "",
       brandLogoEn: s.form?.brand?.logoEn || "",
       brandLogoFr: s.form?.brand?.logoFr || "",
+      logoTitleEn: s.form?.brand?.logoTitleEn || "",
+      logoTitleFr: s.form?.brand?.logoTitleFr || "",
       unsetField: s.unsetField,
       updateField: s.updateField,
-    })
-  );
+    }));
 
   const updateBrand = useCallback(
     (type: string) => {
@@ -44,19 +49,27 @@ export const Branding = () => {
   const logo = lang === "en" ? brandLogoEn : brandLogoFr;
   const defaultLogo = lang === "en" ? "/img/sig-blk-en.svg" : "/img/sig-blk-fr.svg";
   const logoTitle = lang === "en" ? "logoTitleEn" : "logoTitleFr";
+  const altText = lang === "en" ? logoTitleEn : logoTitleFr;
 
   const brandingOptions = options.map((option) => ({
     value: option.name,
     label: option[logoTitle],
   }));
 
-  brandingOptions.unshift({ value: "", label: t("branding.defaultOption") });
+  brandingOptions.unshift({
+    value: "",
+    label: `${t("branding.defaultOption")} ${t("branding.default")}`,
+  });
+
+  if (status !== "authenticated") {
+    return <SettingsLoggedOut />;
+  }
 
   return (
     <div>
       <h1 className="visually-hidden">{t("branding.heading")}</h1>
       <h2>{t("branding.heading")}</h2>
-      <p className="block text-sm mb-5">{t("branding.text1")}</p>
+      <p className="block text-md mb-5">{t("branding.text1")}</p>
       {/* Logo select */}
       <div>
         <Label htmlFor="branding-select">{t("branding.select")}</Label>
@@ -67,15 +80,25 @@ export const Branding = () => {
         />
       </div>
       {/* Logo preview */}
-      <div>
-        <div className="font-bold mb-3 text-sm">{t("branding.preview")}</div>
+      <div className="mt-5 mb-5">
+        <div className="font-bold mb-3 text-md">{t("branding.preview")}</div>
         {/* eslint-disable @next/next/no-img-element  */}
         {logo ? (
-          <img alt={logoTitle} src={logo} width={300} />
+          <img alt={altText} src={logo} width={300} />
         ) : (
-          <Image src={defaultLogo} width="360" height="33" />
+          <Image alt={t("branding.defaultOption")} src={defaultLogo} width="360" height="33" />
         )}
       </div>
+      {hasBrandingRequestForm && (
+        <div>
+          <p className="text-md mb-5 mt-6">{t("branding.notFound")}</p>
+          <p className="text-md mb-5">
+            <Link href="/form-builder/settings/branding-request" target={"_blank"}>
+              {t("branding.submitNew")}
+            </Link>
+          </p>
+        </div>
+      )}
     </div>
   );
 };

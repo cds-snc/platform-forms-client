@@ -16,7 +16,7 @@ export const Publish = () => {
   const router = useRouter();
   const {
     userCanPublish,
-    data: { title, questions, privacyPolicy, translate, responseDelivery, confirmationMessage },
+    data: { title, questions, privacyPolicy, translate, confirmationMessage },
     isPublishable,
   } = useAllowPublish();
 
@@ -105,9 +105,6 @@ export const Publish = () => {
         </li>
         <li className="mb-4 mt-4">
           <Icon checked={translate} /> {t("translate")}
-        </li>
-        <li className="mb-4 mt-4">
-          <Icon checked={responseDelivery} /> {t("responseDelivery")}
         </li>
       </ul>
 

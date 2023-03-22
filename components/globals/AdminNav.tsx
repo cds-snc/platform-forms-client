@@ -42,6 +42,13 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
             <Link href="/admin/flags">{t("adminNav.features")}</Link>
           </li>
         )}
+
+        {ability?.can("view", "Flag") && (
+          <li className="lg:pr-0 lg:pb-4 pr-8 pb-0">
+            <Link href="/admin/settings">{t("adminNav.settings")}</Link>
+          </li>
+        )}
+
         <li className="lg:pr-0 lg:pb-4 pr-8 pb-0">
           {(!user || !user.name) && (
             <Link href="/admin/login" locale={i18n.language}>
