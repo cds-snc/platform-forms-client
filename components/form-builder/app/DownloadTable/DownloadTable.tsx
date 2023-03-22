@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useState } from "react";
 import { VaultSubmissionList } from "@lib/types";
 import { useTranslation } from "react-i18next";
 import { SkipLinkReusable } from "@components/globals/SkipLinkReusable";
@@ -42,14 +42,6 @@ interface ReducerTableItemsActions {
   };
 }
 
-export function getDaysPassed(date: Date): number {
-  const dateCreated = new Date(date);
-  const dateToday = new Date();
-  const dateDiff = Math.abs(Number(dateToday) - Number(dateCreated));
-  const daysPassed = Math.ceil(dateDiff / (1000 * 60 * 60 * 24));
-  return daysPassed;
-}
-
 // Using a reducer to have more control over when the template is updated (reduces re-renders)
 const reducerTableItems = (state: ReducerTableItemsState, action: ReducerTableItemsActions) => {
   switch (action.type) {
@@ -85,11 +77,23 @@ const reducerTableItems = (state: ReducerTableItemsState, action: ReducerTableIt
   }
 };
 
+export function getDaysPassed(date: Date): number {
+  const dateCreated = new Date(date);
+  const dateToday = new Date();
+  const dateDiff = Math.abs(Number(dateToday) - Number(dateCreated));
+  const daysPassed = Math.ceil(dateDiff / (1000 * 60 * 60 * 24));
+  return daysPassed;
+}
+
 export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) => {
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
-  const MAX_FILE_DOWNLOADS = 20;
-  const toastPosition = toast.POSITION.TOP_CENTER;
+  const [notifications, setNotifications] = useState({
+    downloadError: false,
+    maxItemsError: false,
+    noItemsError: false,
+  });
+  const MAX_FILE_DOWNLOADS = 2; //20;
   const [tableItems, tableItemsDispatch] = useReducer(reducerTableItems, {
     checkedItems: new Map(),
     statusItems: new Map(vaultSubmissions.map((submission) => [submission.name, false])),
@@ -98,30 +102,47 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.id;
     const checked: boolean = e.target.checked;
-    tableItemsDispatch({ type: TableActions.UPDATE, item: { name, checked } });
+    const dispatchAction = { type: TableActions.UPDATE, item: { name, checked } };
+    tableItemsDispatch(dispatchAction);
+
+    // Needed because of how useReducer updates state on the next render vs. inside this function..
+    const nextState = reducerTableItems(tableItems, dispatchAction);
+
+    // Show or hide notifications depending
+    if (nextState.checkedItems.size > MAX_FILE_DOWNLOADS && !notifications.maxItemsError) {
+      setNotifications({ ...notifications, maxItemsError: true });
+    } else if (notifications.maxItemsError) {
+      setNotifications({ ...notifications, maxItemsError: false });
+    }
+    if (nextState.checkedItems.size > 0 && notifications.noItemsError) {
+      setNotifications({ ...notifications, noItemsError: false });
+    }
   };
 
   // NOTE: browsers have different limits for simultaneous downloads. May need to look into
   // batching file downloads (e.g. 4 at a time) if edge cases/* come up.
   const handleDownload = async () => {
+    // Handle any errors and show/reset any notifications
     if (tableItems.checkedItems.size === 0) {
-      toast.warn(t("downloadResponsesTable.download.atLeastOneFile"), { position: toastPosition });
+      if (!notifications.noItemsError) {
+        setNotifications({ ...notifications, noItemsError: true });
+      }
       return;
     }
-
     if (tableItems.checkedItems.size > MAX_FILE_DOWNLOADS) {
-      toast.warn(
-        t("downloadResponsesTable.download.trySelectingLessFiles", { max: MAX_FILE_DOWNLOADS }),
-        { position: toastPosition }
-      );
+      if (!notifications.maxItemsError) {
+        setNotifications({ ...notifications, maxItemsError: true });
+      }
       return;
+    }
+    if (notifications.downloadError) {
+      setNotifications({ ...notifications, downloadError: false });
     }
 
     const toastDownloadingId = toast.info(
       t("downloadResponsesTable.download.downloadingXFiles", {
         fileCount: tableItems.checkedItems.size,
-      }),
-      { position: toastPosition, autoClose: false }
+      })
     );
 
     try {
@@ -150,20 +171,15 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
         // TODO: Future tech debt. See https://github.com/cds-snc/platform-forms-client/issues/1744
         setTimeout(() => {
           // Refreshes getServerSideProps data without a full page reload
-          router.replace(router.asPath);
+          router.replace(router.asPath, undefined, { scroll: false });
+
           toast.dismiss(toastDownloadingId);
-          toast.success(t("downloadResponsesTable.download.downloadComplete"), {
-            position: toastPosition,
-          });
+          toast.success(t("downloadResponsesTable.download.downloadComplete"));
         }, 400);
       });
     } catch (err) {
       logMessage.error(err as Error);
-      toast.dismiss(toastDownloadingId);
-      toast.error(t("downloadResponsesTable.download.errorDownloadingFiles"), {
-        position: toastPosition,
-        autoClose: false,
-      });
+      setNotifications({ ...notifications, downloadError: true });
     }
   };
 
@@ -173,39 +189,41 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
         text={t("downloadResponsesTable.skipLink")}
         anchor="#downloadTableButtonId"
       />
-      {/* use a ref */}
-      <div id="errorsList" className="mr-20">
-        <Attention
-          type={AttentionTypes.ERROR}
-          width="40"
-          heading={"Only 20 responses can be downloaded at a time."}
-        >
-          <p className="text-[#26374a] text-sm">
-            You have {21} responses selected. Uncheck at least 1 response before downloading.
-          </p>
-        </Attention>
-        <br />
-        <br />
-        <Attention
-          type={AttentionTypes.WARNING}
-          width="40"
-          heading={"Confirm receipt of responses"}
-        >
-          <p className="text-[#26374a] text-sm mb-2">
-            There are XX unconfirmed responses older than 14 days. Confirm receipt of all overdue
-            unconfirmed responses.
-          </p>
-          <p className="text-[#26374a] text-sm font-bold">
-            Downloading will be restricted if unconfirmed responses are older than 25 days.
-          </p>
-        </Attention>
-        <br />
-        <br />
-        <Attention type={AttentionTypes.SUCCESS} width="32" heading={"Download complete"}>
-          <p className="text-[#26374a] text-sm mb-2">
-            You have successfully downloaded X submissions.
-          </p>
-        </Attention>
+      <div id="notificationsTop" className="mr-20">
+        {tableItems.checkedItems.size > MAX_FILE_DOWNLOADS && (
+          <Attention
+            type={AttentionTypes.ERROR}
+            isAlert={true}
+            width="40"
+            heading={"Only 20 responses can be downloaded at a time."}
+          >
+            <p className="text-[#26374a] text-sm">
+              You have {MAX_FILE_DOWNLOADS} responses selected. Uncheck at least 1 response before
+              downloading.
+              {/* {t("downloadResponsesTable.download.trySelectingLessFiles", { max: MAX_FILE_DOWNLOADS })} */}
+            </p>
+          </Attention>
+        )}
+        {notifications.noItemsError && (
+          <Attention
+            type={AttentionTypes.ERROR}
+            isAlert={true}
+            width="40"
+            heading={"Must select one. TODO"}
+          >
+            <p className="text-[#26374a] text-sm">Must select one TODO</p>
+          </Attention>
+        )}
+        {notifications.downloadError && (
+          <Attention
+            type={AttentionTypes.ERROR}
+            isAlert={true}
+            width="32"
+            heading={"Download error TODO"}
+          >
+            <p className="text-[#26374a] text-sm mb-2">DOWNLAOD ERROR TODO</p>
+          </Attention>
+        )}
       </div>
 
       <table className="text-sm">
@@ -237,21 +255,18 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
               }
             >
               <td className="p-4 flex">
-                {/* TODO: Replace below with Design System checkbox */}
-                <div className="form-builder">
-                  <div className="multiple-choice-wrapper">
-                    <input
-                      id={submission.name}
-                      className="multiple-choice-wrapper"
-                      name="responses"
-                      type="checkbox"
-                      checked={tableItems.statusItems.get(submission.name)}
-                      onChange={handleChecked}
-                    />
-                    <label htmlFor={submission.name}>
-                      <span className="sr-only">{submission.name}</span>
-                    </label>
-                  </div>
+                <div className="gc-input-checkbox">
+                  <input
+                    id={submission.name}
+                    className="gc-input-checkbox__input"
+                    name="responses"
+                    type="checkbox"
+                    checked={tableItems.statusItems.get(submission.name)}
+                    onChange={handleChecked}
+                  />
+                  <label className="gc-checkbox-label" htmlFor={submission.name}>
+                    <span className="sr-only">{submission.name}</span>
+                  </label>
                 </div>
               </td>
               <td className="p-4 whitespace-nowrap">{submission.name}</td>
@@ -285,7 +300,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
       </table>
       <div className="mt-8 flex">
         {/* NOTE: check/unchek item announcement may be enough for users and additionally announcing
-            the updated Button items checked count may be too verbose. Remove live-region if so */}
+              the updated Button items checked count may be too verbose. Remove live-region if so */}
         <button
           id="downloadTableButtonId"
           className="gc-button--blue whitespace-nowrap w-auto m-0"
@@ -297,38 +312,46 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
             size: tableItems.checkedItems.size,
           })}
         </button>
+        {/* </div> */}
 
-        {/* use a ref */}
-        <div className="ml-4">
-          <Attention
-            type={AttentionTypes.ERROR}
-            isIcon={false}
-            isSmall={true}
-            heading={"Only 20 responses can be downloaded at a time."}
-          >
-            <p className="text-black text-sm">
-              You have {21} responses selected. Uncheck at least 1 response before downloading.
-            </p>
-          </Attention>
-          <br />
-          <br />
-          <Attention
-            type={AttentionTypes.SUCCESS}
-            isIcon={false}
-            isSmall={true}
-            heading={"Download complete"}
-          >
-            <p className="text-[#26374a] text-sm mb-2">
-              You have successfully downloaded X submissions.
-            </p>
-          </Attention>
+        <div id="notificationsBottom" className="ml-4">
+          {tableItems.checkedItems.size > MAX_FILE_DOWNLOADS && (
+            <Attention
+              type={AttentionTypes.ERROR}
+              isIcon={false}
+              isSmall={true}
+              heading={"Only 20 responses can be downloaded at a time."}
+            >
+              <p className="text-black text-sm">
+                You have {21} responses selected. Uncheck at least 1 response before downloading.
+              </p>
+            </Attention>
+          )}
+          {notifications.noItemsError && (
+            <Attention
+              type={AttentionTypes.ERROR}
+              isIcon={false}
+              isSmall={true}
+              heading={"Must select item TODO"}
+            >
+              <p className="text-black text-sm">Must select item TODO</p>
+            </Attention>
+          )}
+          {notifications.downloadError && (
+            <Attention
+              type={AttentionTypes.ERROR}
+              isIcon={false}
+              isSmall={true}
+              heading={"Download error TODO"}
+            >
+              <p className="text-black text-sm">Download error TODO</p>
+            </Attention>
+          )}
         </div>
       </div>
 
-      {/* Sticky position to stop the page from scrolling to the top when showing a Toast */}
-      <div className="sticky top-0">
-        <ToastContainer />
-      </div>
+      {/* TODO move to the app level probably */}
+      <ToastContainer />
     </section>
   );
 };

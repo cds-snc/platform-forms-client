@@ -14,6 +14,7 @@ interface AttentionProps {
   type?: AttentionTypes;
   heading?: React.ReactNode;
   children: React.ReactNode;
+  isAlert?: boolean;
   isIcon?: boolean;
   isSmall?: boolean;
   width?: string;
@@ -23,36 +24,44 @@ export const Attention = ({
   type = AttentionTypes.WARNING,
   heading,
   children,
+  isAlert = true,
   isIcon = true,
-  width = "50",
   isSmall = false,
+  width = "50",
 }: AttentionProps & JSX.IntrinsicElements["div"]): React.ReactElement => {
   let headingTextColor = "";
   let backgroundColor = "";
   let icon = null;
+  let ariaAttributes = {};
 
   switch (type) {
     case AttentionTypes.WARNING:
+      ariaAttributes = { role: "alert" };
       headingTextColor = "text-black";
       backgroundColor = "bg-amber-100";
       icon = <WarningIcon isFillInherit={true} title="Warning" width={width} />;
       break;
     case AttentionTypes.ERROR:
+      ariaAttributes = { role: "alert" };
       headingTextColor = "validation-message";
       backgroundColor = "bg-[#f3e9e8]";
       icon = <WarningIcon isFillInherit={true} title="Error" width={width} />;
       break;
     case AttentionTypes.SUCCESS:
+      ariaAttributes = { live: "polite" };
       headingTextColor = "text-green";
       backgroundColor = "bg-amber-100";
       icon = <CheckIcon isFillInherit={true} width={width} />;
       break;
     case AttentionTypes.INFO:
-    //TODO
+    //TODO future maybe
   }
 
   return (
-    <div className={(isSmall ? "p-3" : "p-5") + ` flex ${backgroundColor}`}>
+    <div
+      {...(isAlert && { role: "alert" })}
+      className={(isSmall ? "p-3" : "p-5") + ` flex ${backgroundColor}`}
+    >
       {isIcon && (
         <div className="flex">
           <div className={`pr-4 self-start ${headingTextColor}`}>{icon}</div>
