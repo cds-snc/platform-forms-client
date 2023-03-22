@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 
+import { useRefresh } from "@lib/hooks";
 import { isValidGovEmail } from "@lib/validation";
 import { ResponseEmail } from "./ResponseEmail";
 import { Radio, Button, ResponseDeliveryHelpButton } from "./shared";
@@ -55,8 +56,9 @@ export const SetResponseDelivery = () => {
   const [inputEmail, setInputEmail] = useState(email ? email : session.data?.user?.email ?? "");
   const [subjectEn, setSubjectEn] = useState(initialSubjectEn ?? "");
   const [subjectFr, setSubjectFr] = useState(initialSubjectFr ?? "");
-
   const [isInvalidEmailError, setIsInvalidEmailError] = useState(false);
+
+  const { refreshData } = useRefresh();
 
   const setToDatabaseDelivery = useCallback(async () => {
     setInputEmail("");
@@ -108,6 +110,8 @@ export const SetResponseDelivery = () => {
       hideProgressBar: true,
       closeOnClick: true,
     });
+
+    refreshData && refreshData();
   }, [deliveryOption, email, setToDatabaseDelivery, setToEmailDelivery, t]);
 
   const updateDeliveryOption = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
