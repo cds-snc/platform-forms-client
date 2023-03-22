@@ -9,40 +9,25 @@ export const SettingsNavigation = () => {
   const { t } = useTranslation("form-builder");
   const { activePathname } = useActivePathname();
 
-  const svgFill =
-    "[&_svg]:focus:fill-white [&_svg]:hover:fill-white hover:bg-gray-600 hover:!text-white-default";
-
   return (
     <div className="relative flex">
       <div className="flex justify-content:space-between">
         <nav className="mb-8 flex " aria-label={t("navLabelEditor")}>
-          <SubNavLink
-            href="/form-builder/settings"
-            className={`!text-black focus:!text-white ${svgFill} `}
-            activeClassName="[&_svg]:fill-white"
-          >
-            <span>
-              <EmailIcon className="inline-block mt-[-2px] mr-1" />
+          <SubNavLink href="/form-builder/settings">
+            <span className="text-sm laptop:text-base">
+              <EmailIcon className="hidden laptop:inline-block laptop:mt-[-2px] laptop:mr-2" />
               {t("settingsNavHome")}
             </span>
           </SubNavLink>
-          <SubNavLink
-            href="/form-builder/settings/branding"
-            className={`!text-black focus:!text-white ${svgFill} [&_svg]:fill-black`}
-            activeClassName={`[&_svg]:fill-white ${svgFill} focus:text-white`}
-          >
-            <span>
-              <BrandIcon className="inline-block mt-[-2px] mr-2" />
+          <SubNavLink href="/form-builder/settings/branding">
+            <span className="text-sm laptop:text-base">
+              <BrandIcon className="hidden laptop:inline-block laptop:mt-[-2px] laptop:mr-2 fill-black" />
               {t("branding.heading")}
             </span>
           </SubNavLink>
-          <SubNavLink
-            href="/form-builder/settings/form"
-            className={`!text-black focus:!text-white ${svgFill} [&_svg]:fill-black`}
-            activeClassName={`[&_svg]:fill-white ${svgFill} focus:text-white`}
-          >
-            <span>
-              <GearIcon className="inline-block mt-[-2px] mr-2" />
+          <SubNavLink href="/form-builder/settings/form">
+            <span className="text-sm laptop:text-base">
+              <GearIcon className="hidden laptop:inline-block laptop:mt-[-2px] laptop:mr-2" />
               {t("settings.formManagement")}
             </span>
           </SubNavLink>
