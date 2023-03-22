@@ -27,11 +27,9 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
     removeSubItem,
     subElements,
     localizeField,
-    lang,
     translationLanguagePriority,
     getLocalizationAttribute,
   } = useTemplateStore((s) => ({
-    lang: s.lang,
     addSubItem: s.addSubItem,
     updateField: s.updateField,
     subMoveUp: s.subMoveUp,
@@ -161,7 +159,6 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
                   }}
                   filterElements={elementFilter}
                   elements={subElements}
-                  lang={lang}
                 />
               }
             >
