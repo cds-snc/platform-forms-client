@@ -392,6 +392,11 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               state.isPublished = false;
               state.name = "";
               state.securityAttribute = "Unclassified";
+              state.deliveryOption = {
+                emailAddress: "",
+                emailSubjectEn: "",
+                emailSubjectFr: "",
+              };
             });
           },
           importTemplate: (jsonConfig) =>
@@ -402,6 +407,11 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               state.isPublished = false;
               state.name = "";
               state.securityAttribute = "Unclassified";
+              state.deliveryOption = {
+                emailAddress: "",
+                emailSubjectEn: "",
+                emailSubjectFr: "",
+              };
             }),
         }),
         {

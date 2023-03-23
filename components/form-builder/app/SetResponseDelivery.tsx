@@ -35,15 +35,15 @@ export const SetResponseDelivery = () => {
     updateField,
     subjectEn: initialSubjectEn,
     subjectFr: initialSubjectFr,
+    defaultSubjectEn,
+    defaultSubjectFr,
   } = useTemplateStore((s) => ({
     id: s.id,
     email: s.deliveryOption?.emailAddress,
-    subjectEn:
-      s.deliveryOption?.subjectEn ||
-      s.form[s.localizeField(LocalizedFormProperties.TITLE, "en")] + " - Response",
-    subjectFr:
-      s.deliveryOption?.subjectFr ||
-      s.form[s.localizeField(LocalizedFormProperties.TITLE, "fr")] + " - Réponse",
+    subjectEn: s.deliveryOption?.subjectEn,
+    subjectFr: s.deliveryOption?.subjectFr,
+    defaultSubjectEn: s.form[s.localizeField(LocalizedFormProperties.TITLE, "en")] + " - Response",
+    defaultSubjectFr: s.form[s.localizeField(LocalizedFormProperties.TITLE, "fr")] + " - Réponse",
     resetDeliveryOption: s.resetDeliveryOption,
     getSchema: s.getSchema,
     getName: s.getName,
@@ -51,11 +51,17 @@ export const SetResponseDelivery = () => {
     updateField: s.updateField,
   }));
 
+  const userEmail = session.data?.user.email ?? "";
   const initialDeliveryOption = !email ? DeliveryOption.vault : DeliveryOption.email;
+
   const [deliveryOption, setDeliveryOption] = useState(initialDeliveryOption);
-  const [inputEmail, setInputEmail] = useState(email ? email : session.data?.user?.email ?? "");
-  const [subjectEn, setSubjectEn] = useState(initialSubjectEn ?? "");
-  const [subjectFr, setSubjectFr] = useState(initialSubjectFr ?? "");
+  const [inputEmail, setInputEmail] = useState(email ? email : userEmail);
+  const [subjectEn, setSubjectEn] = useState(
+    initialSubjectEn ? initialSubjectEn : defaultSubjectEn
+  );
+  const [subjectFr, setSubjectFr] = useState(
+    initialSubjectFr ? initialSubjectFr : defaultSubjectFr
+  );
   const [isInvalidEmailError, setIsInvalidEmailError] = useState(false);
 
   const isDirty = () => {
