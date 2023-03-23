@@ -39,11 +39,6 @@ export const Edit = () => {
     useCallback(
       (val: string, lang: Language) => {
         updateField(`form.${localizeField(LocalizedFormProperties.TITLE, lang)}`, val);
-        // Temporary fix (see function `formatEmailSubject` in Edit.tsx file)
-        updateField(
-          `deliveryOption.${localizeField(LocalizedFormProperties.EMAIL_SUBJECT, lang)}`,
-          formatEmailSubject(val, lang)
-        );
       },
       [updateField, localizeField]
     ),
@@ -123,12 +118,4 @@ export const Edit = () => {
       )}
     </>
   );
-};
-
-/**
- * This is part of a temporary fix as the current email response implementation relies on the `emailSubject` property to be set.
- * The email reponse design will be reworked at some point in the future so we will probably get rid of it when we get there.
- */
-export const formatEmailSubject = (title: string, lang: Language) => {
-  return `${title} - ${lang === "en" ? "Response" : "Réponse"}`;
 };
