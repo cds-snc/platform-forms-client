@@ -376,11 +376,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
           getDeliveryOption: () => get().deliveryOption,
           resetDeliveryOption: () => {
             set((state) => {
-              state.deliveryOption = {
-                emailAddress: "",
-                emailSubjectEn: "",
-                emailSubjectFr: "",
-              };
+              state.deliveryOption = undefined;
             });
           },
           getSecurityAttribute: () => get().securityAttribute,
@@ -392,6 +388,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               state.isPublished = false;
               state.name = "";
               state.securityAttribute = "Unclassified";
+              state.deliveryOption = undefined;
             });
           },
           importTemplate: (jsonConfig) =>
@@ -402,6 +399,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               state.isPublished = false;
               state.name = "";
               state.securityAttribute = "Unclassified";
+              state.deliveryOption = undefined;
             }),
         }),
         {

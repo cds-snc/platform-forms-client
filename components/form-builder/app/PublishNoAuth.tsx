@@ -8,7 +8,7 @@ export const PublishNoAuth = () => {
   const createOne = `/${i18n.language}/signup/register`;
   return (
     <>
-      <h1 className="border-0 mb-2 md:text-h1">{t("publishNoAuthTitle")}</h1>
+      <h1 className="border-0 mb-2">{t("publishNoAuthTitle")}</h1>
       <h3 className="border-0 mb-5">{t("publishNoAuthSubTitle")}</h3>
       <div className="mb-0">
         <Markdown options={{ forceBlock: true }}>

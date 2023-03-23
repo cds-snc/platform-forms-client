@@ -448,6 +448,14 @@
       "signinButton": "Sign In",
       "createButton": "Create an account"
     },
+    "emailSubjectEn": {
+      "title": "English response subject line",
+      "hint" : "When form responses are submitted in English."
+    },
+    "emailSubjectFr": {
+      "title": "French response subject line",
+      "hint" : "When form responses are submitted in French."
+    },
     "responseDeliveryHelp": {
       "cta": "Help on choosing an option",
       "title": "Choosing a response delivery option",
