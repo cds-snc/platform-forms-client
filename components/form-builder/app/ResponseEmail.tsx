@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useTranslation } from "next-i18next";
 import { isValidGovEmail } from "@lib/validation";
 import { Input } from "./shared";
+import { completeEmailAddressRegex } from "../util";
 
 const HintText = ({ id, children }: { id: string; children?: JSX.Element | string }) => {
   return (
@@ -59,9 +60,6 @@ export const ResponseEmail = ({
   };
 
   useEffect(() => {
-    const completeEmailAddressRegex =
-      /^([a-zA-Z0-9!#$%&'*+-/=?^_`{|}~.])+@([a-zA-Z0-9-.]+)\.([a-zA-Z0-9]{2,})+$/;
-
     // We want to make sure the email address is complete before validating it
     if (!completeEmailAddressRegex.test(inputEmail)) {
       setIsInvalidEmailError(false);

@@ -12,6 +12,7 @@ import { ResponseEmail } from "./ResponseEmail";
 import { Radio, Button, ResponseDeliveryHelpButton } from "./shared";
 import { usePublish } from "../hooks";
 import { useTemplateStore } from "../store";
+import { completeEmailAddressRegex } from "../util";
 
 enum DeliveryOption {
   vault = "vault",
@@ -71,6 +72,9 @@ export const SetResponseDelivery = () => {
       inputEmail !== email || subjectEn !== initialSubjectEn || subjectFr !== initialSubjectFr;
 
     if (deliveryOption === DeliveryOption.email) {
+      if (!completeEmailAddressRegex.test(inputEmail)) {
+        return false;
+      }
       return isValidDeliveryOption && emailDeliveryOptionsChanged;
     }
 
