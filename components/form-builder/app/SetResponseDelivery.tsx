@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useMemo } from "react";
 import { LocalizedFormProperties } from "../types";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
@@ -64,7 +64,7 @@ export const SetResponseDelivery = () => {
   );
   const [isInvalidEmailError, setIsInvalidEmailError] = useState(false);
 
-  const isDirty = () => {
+  const isValid = useMemo(() => {
     const isValidDeliveryOption =
       !isInvalidEmailError && inputEmail !== "" && subjectEn !== "" && subjectFr !== "";
     const emailDeliveryOptionsChanged =
@@ -79,7 +79,17 @@ export const SetResponseDelivery = () => {
     }
 
     return true;
-  };
+  }, [
+    deliveryOption,
+    initialDeliveryOption,
+    isInvalidEmailError,
+    inputEmail,
+    email,
+    subjectEn,
+    initialSubjectEn,
+    subjectFr,
+    initialSubjectFr,
+  ]);
 
   const setToDatabaseDelivery = useCallback(async () => {
     setInputEmail("");
@@ -185,7 +195,7 @@ export const SetResponseDelivery = () => {
             />
           )}
 
-          <Button disabled={!isDirty()} theme="secondary" onClick={saveDeliveryOption}>
+          <Button disabled={!isValid} theme="secondary" onClick={saveDeliveryOption}>
             {t("settingsResponseDelivery.saveButton")}
           </Button>
 
