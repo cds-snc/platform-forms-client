@@ -10,18 +10,18 @@ export const EditNavigation = () => {
   const { activePathname } = useActivePathname();
 
   return (
-    <div className="relative flex flex-col laptop:flex-row laptop:mb-8 laptop:relative">
+    <div className="relative flex flex-col tablet:flex-row laptop:relative">
       <div className="flex">
-        <nav className="flex" aria-label={t("navLabelEditor")}>
+        <nav className="laptop:mb-4 flex flex-wrap" aria-label={t("navLabelEditor")}>
           <SubNavLink href="/form-builder/edit">
             <span className="text-sm laptop:text-base">
-              <QuestionsIcon className="hidden laptop:inline-block laptop:mt-[-2px] laptop:mr-2" />
+              <QuestionsIcon className="inline-block laptop:mt-[-2px] mr-2" />
               {t("questions")}
             </span>
           </SubNavLink>
           <SubNavLink href="/form-builder/edit/translate">
             <span className="text-sm laptop:text-base">
-              <TranslateIcon className="hidden laptop:inline-block laptop:mt-[-2px] laptop:mr-2" />
+              <TranslateIcon className="inline-block laptop:mt-[-2px] mr-2" />
               {t("translate")}
             </span>
           </SubNavLink>
@@ -29,7 +29,7 @@ export const EditNavigation = () => {
       </div>
       <div>
         {activePathname.endsWith("/edit") && (
-          <div className="flex justify-end laptop:absolute laptop:right-0 laptop:top-0 laptop:mt-4 laptop:mr-[70px] desktop:mr-24">
+          <div className="flex tablet:justify-end laptop:absolute laptop:right-0 laptop:top-0 laptop:mt-4 laptop:mr-[70px] desktop:mr-24">
             <LangSwitcher descriptionLangKey="editingIn" />
           </div>
         )}
