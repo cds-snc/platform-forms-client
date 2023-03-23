@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "id": "https://forms-formulaires.alpha.canada.ca/",
+  "type": "object",
+  "title": "GC Forms Settings Schema",
+  "description": "A schema to define a Settings configuration.",
+  "default": {},
+  "examples": [
+    {
+      "internalId": "",
+      "nameEn": "",
+      "nameFr": "",
+      "descriptionEn": "",
+      "descriptionFr": "",
+      "value": ""
+    }
+  ],
+  "properties": {
+    "internalId": {
+      "description": "The internal identified of the Setting",
+      "id": "#/properties/internalId",
+      "type": "string"
+    },
+    "nameEn": {
+      "description": "The displayed name of the Setting to the user in English",
+      "id": "#/properties/nameEn",
+      "type": "string"
+    },
+    "nameFr": {
+      "description": "The displayed name of the Setting to the user in French",
+      "id": "#/properties/nameFr",
+      "type": "string"
+    },
+    "descriptionEr": {
+      "description": "The displayed description of the Setting to the user in French",
+      "id": "#/properties/descriptionEn",
+      "type": "string"
+    },
+    "descriptionFr": {
+      "description": "The displayed description of the Setting to the user in French",
+      "id": "#/properties/descriptionFr",
+      "type": "string"
+    },
+    "value": {
+      "description": "The value of the Setting in string format",
+      "id": "#/properties/value",
+      "type": "string"
+    }
+  },
+  "required": ["internalId", "nameEn", "nameFr"],
+  "additionalProperties": false
+}
