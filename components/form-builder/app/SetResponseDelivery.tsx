@@ -154,7 +154,7 @@ export const SetResponseDelivery = () => {
     setDeliveryOption(value as DeliveryOption);
   }, []);
 
-  const responsesLink = `/${i18n.language}/responses/${id}`;
+  const responsesLink = `/${i18n.language}/form-builder/responses/${id}`;
 
   return (
     <>
