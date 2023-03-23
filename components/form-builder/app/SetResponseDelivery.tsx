@@ -1,15 +1,18 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useMemo } from "react";
+import { LocalizedFormProperties } from "../types";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
 import { useSession } from "next-auth/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 
+import { useRefresh } from "@lib/hooks";
 import { isValidGovEmail } from "@lib/validation";
 import { ResponseEmail } from "./ResponseEmail";
-import { Radio, Button } from "./shared";
+import { Radio, Button, ResponseDeliveryHelpButton } from "./shared";
 import { usePublish } from "../hooks";
 import { useTemplateStore } from "../store";
+import { completeEmailAddressRegex } from "../util";
 
 enum DeliveryOption {
   vault = "vault",
@@ -19,23 +22,78 @@ enum DeliveryOption {
 export const SetResponseDelivery = () => {
   const { t, i18n } = useTranslation("form-builder");
   const { status } = useSession();
+  const session = useSession();
   const { updateResponseDelivery, uploadJson } = usePublish();
+  const { refreshData } = useRefresh();
 
-  const { email, id, resetDeliveryOption, getSchema, getName, getDeliveryOption, updateField } =
-    useTemplateStore((s) => ({
-      id: s.id,
-      email: s.deliveryOption?.emailAddress,
-      resetDeliveryOption: s.resetDeliveryOption,
-      getSchema: s.getSchema,
-      getName: s.getName,
-      getDeliveryOption: s.getDeliveryOption,
-      updateField: s.updateField,
-    }));
+  const {
+    email,
+    id,
+    resetDeliveryOption,
+    getSchema,
+    getName,
+    getDeliveryOption,
+    updateField,
+    subjectEn: initialSubjectEn,
+    subjectFr: initialSubjectFr,
+    defaultSubjectEn,
+    defaultSubjectFr,
+  } = useTemplateStore((s) => ({
+    id: s.id,
+    email: s.deliveryOption?.emailAddress,
+    subjectEn: s.deliveryOption?.subjectEn,
+    subjectFr: s.deliveryOption?.subjectFr,
+    defaultSubjectEn: s.form[s.localizeField(LocalizedFormProperties.TITLE, "en")] + " - Response",
+    defaultSubjectFr: s.form[s.localizeField(LocalizedFormProperties.TITLE, "fr")] + " - Réponse",
+    resetDeliveryOption: s.resetDeliveryOption,
+    getSchema: s.getSchema,
+    getName: s.getName,
+    getDeliveryOption: s.getDeliveryOption,
+    updateField: s.updateField,
+  }));
 
+  const userEmail = session.data?.user.email ?? "";
   const initialDeliveryOption = !email ? DeliveryOption.vault : DeliveryOption.email;
+
   const [deliveryOption, setDeliveryOption] = useState(initialDeliveryOption);
-  const [inputEmail, setInputEmail] = useState(email ?? "");
+  const [inputEmail, setInputEmail] = useState(email ? email : userEmail);
+  const [subjectEn, setSubjectEn] = useState(
+    initialSubjectEn ? initialSubjectEn : defaultSubjectEn
+  );
+  const [subjectFr, setSubjectFr] = useState(
+    initialSubjectFr ? initialSubjectFr : defaultSubjectFr
+  );
   const [isInvalidEmailError, setIsInvalidEmailError] = useState(false);
+
+  const isValid = useMemo(() => {
+    const isValidDeliveryOption =
+      !isInvalidEmailError && inputEmail !== "" && subjectEn !== "" && subjectFr !== "";
+    const emailDeliveryOptionsChanged =
+      inputEmail !== email || subjectEn !== initialSubjectEn || subjectFr !== initialSubjectFr;
+
+    if (deliveryOption === DeliveryOption.email) {
+      if (!completeEmailAddressRegex.test(inputEmail)) {
+        return false;
+      }
+      return isValidDeliveryOption && emailDeliveryOptionsChanged;
+    }
+
+    if (deliveryOption === initialDeliveryOption) {
+      return false;
+    }
+
+    return true;
+  }, [
+    deliveryOption,
+    initialDeliveryOption,
+    isInvalidEmailError,
+    inputEmail,
+    email,
+    subjectEn,
+    initialSubjectEn,
+    subjectFr,
+    initialSubjectFr,
+  ]);
 
   const setToDatabaseDelivery = useCallback(async () => {
     setInputEmail("");
@@ -45,9 +103,21 @@ export const SetResponseDelivery = () => {
 
   const setToEmailDelivery = useCallback(async () => {
     if (!isValidGovEmail(inputEmail)) return false;
-    updateField(`deliveryOption.emailAddress`, inputEmail);
+    updateField("deliveryOption.emailAddress", inputEmail);
+    updateField("deliveryOption.subjectEn", subjectEn);
+    updateField("deliveryOption.subjectFr", subjectFr);
     return await uploadJson(getSchema(), getName(), getDeliveryOption(), id);
-  }, [inputEmail, id, uploadJson, getSchema, getName, getDeliveryOption, updateField]);
+  }, [
+    inputEmail,
+    subjectEn,
+    subjectFr,
+    id,
+    uploadJson,
+    getSchema,
+    getName,
+    getDeliveryOption,
+    updateField,
+  ]);
 
   const saveDeliveryOption = useCallback(async () => {
     let result;
@@ -75,7 +145,9 @@ export const SetResponseDelivery = () => {
       hideProgressBar: true,
       closeOnClick: true,
     });
-  }, [deliveryOption, email, setToDatabaseDelivery, setToEmailDelivery, t]);
+
+    refreshData && refreshData();
+  }, [refreshData, deliveryOption, email, setToDatabaseDelivery, setToEmailDelivery, t]);
 
   const updateDeliveryOption = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -118,22 +190,20 @@ export const SetResponseDelivery = () => {
             <ResponseEmail
               inputEmail={inputEmail}
               setInputEmail={setInputEmail}
+              subjectEn={subjectEn}
+              setSubjectEn={setSubjectEn}
+              subjectFr={subjectFr}
+              setSubjectFr={setSubjectFr}
               isInvalidEmailError={isInvalidEmailError}
               setIsInvalidEmailError={setIsInvalidEmailError}
             />
           )}
 
-          <Button
-            disabled={
-              initialDeliveryOption === deliveryOption ||
-              (deliveryOption === DeliveryOption.email && isInvalidEmailError) ||
-              (deliveryOption === DeliveryOption.email && inputEmail === "")
-            }
-            theme="secondary"
-            onClick={saveDeliveryOption}
-          >
+          <Button disabled={!isValid} theme="secondary" onClick={saveDeliveryOption}>
             {t("settingsResponseDelivery.saveButton")}
           </Button>
+
+          <ResponseDeliveryHelpButton />
         </div>
       )}
       <div className="sticky top-0">

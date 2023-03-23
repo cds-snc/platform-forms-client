@@ -14,6 +14,7 @@ import { PublicFormRecord } from "@lib/types";
 
 export const Preview = () => {
   const { status } = useSession();
+  const { i18n } = useTranslation("common");
   const { id, getSchema, getIsPublished, getSecurityAttribute } = useTemplateStore((s) => ({
     id: s.id,
     getSchema: s.getSchema,
@@ -72,6 +73,9 @@ export const Preview = () => {
     return false;
   };
 
+  const responsesLink = `/${i18n.language}/form-builder/responses/${id}`;
+  const settingsLink = `/${i18n.language}/form-builder/settings/${id}`;
+
   return (
     <>
       <div className="h-12"></div>
@@ -89,11 +93,23 @@ export const Preview = () => {
           </div>
         ) : email ? (
           <div className="bg-purple-200 p-2 inline-block mb-1">
-            {t("submittedResponsesText", { ns: "form-builder", email })}
+            {t("submittedResponsesText", { ns: "form-builder", email })}{" "}
+            <a className="visited:text-black-default" href={settingsLink}>
+              {t("submittedResponsesChange", { ns: "form-builder" })}
+            </a>
+            .
           </div>
         ) : (
           <div className="bg-purple-200 p-2 inline-block mb-1">
-            {t("submittedResponsesTextVault", { ns: "form-builder", email })}
+            {t("submittedResponsesTextVault.text1", { ns: "form-builder" })}{" "}
+            <a className="visited:text-black-default" href={responsesLink}>
+              {t("submittedResponsesTextVault.text2", { ns: "form-builder" })}
+            </a>
+            .{" "}
+            <a className="visited:text-black-default" href={settingsLink}>
+              {t("submittedResponsesChange", { ns: "form-builder" })}
+            </a>
+            .
           </div>
         )}
 
@@ -105,7 +121,7 @@ export const Preview = () => {
           </>
         )}
 
-        <h1 className="md:text-h1 mt-4">
+        <h1 className="mt-4">
           {formRecord.form[localizeField(LocalizedFormProperties.TITLE, language)] ||
             t("pagePreview", { ns: "form-builder" })}
         </h1>

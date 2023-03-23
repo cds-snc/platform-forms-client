@@ -11,8 +11,6 @@ export const themes = {
   destructive:
     "bg-red-default text-white-default border-red-default hover:bg-red-destructive hover:border-red-destructive active:bg-red-hover focus:border-blue-hover",
   link: "!p-0 !border-none text-black-default underline bg-transparent hover:no-underline focus:!text-white-default",
-  panelActions:
-    "bg-transparent text-black border-black hover:text-black hover:underline active:text-black active:bg-gray-500",
   icon: "!border-none bg-gray-selected hover:bg-gray-600 !rounded-full max-h-9 !p-1.5 ml-1.5",
 };
 
@@ -60,7 +58,7 @@ export const Button = ({
   iconWrapperClassName?: string;
   disabled?: boolean;
   "aria-label"?: string;
-  theme?: "primary" | "secondary" | "destructive" | "link" | "icon" | "panelActions";
+  theme?: "primary" | "secondary" | "destructive" | "link" | "icon";
   tabIndex?: number;
   buttonRef?: (el: HTMLButtonElement) => void;
   dataTestId?: string;

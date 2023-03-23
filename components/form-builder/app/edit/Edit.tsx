@@ -39,11 +39,6 @@ export const Edit = () => {
     useCallback(
       (val: string, lang: Language) => {
         updateField(`form.${localizeField(LocalizedFormProperties.TITLE, lang)}`, val);
-        // Temporary fix (see function `formatEmailSubject` in Edit.tsx file)
-        updateField(
-          `deliveryOption.${localizeField(LocalizedFormProperties.EMAIL_SUBJECT, lang)}`,
-          formatEmailSubject(val, lang)
-        );
       },
       [updateField, localizeField]
     ),
@@ -80,7 +75,7 @@ export const Edit = () => {
               placeholder={t("placeHolderFormTitle")}
               value={value}
               onChange={updateValue}
-              className="w-3/4 mb-4 !text-h2 !font-sans !pb-0.5 !pt-1.5"
+              className="w-full laptop:w-3/4 mt-2 laptop:mt-0 mb-4 !text-h2 !font-sans !pb-0.5 !pt-1.5"
               theme="title"
               onBlur={updateName}
               {...getLocalizationAttribute()}
@@ -105,7 +100,7 @@ export const Edit = () => {
             ariaLabel={t("richTextPrivacyTitle")}
           >
             <div>
-              <h2 className="text-h3 pb-3">{t("richTextPrivacyTitle")}</h2>
+              <h2 className="mt-4 laptop:mt-0 text-h3 pb-3">{t("richTextPrivacyTitle")}</h2>
               <PrivacyDescription />
             </div>
           </RichTextLocked>
@@ -115,7 +110,7 @@ export const Edit = () => {
             ariaLabel={t("richTextConfirmationTitle")}
           >
             <div>
-              <h2 className="text-h3 pb-3">{t("richTextConfirmationTitle")}</h2>
+              <h2 className="mt-4 laptop:mt-0 text-h3 pb-3">{t("richTextConfirmationTitle")}</h2>
               <ConfirmationDescription />
             </div>
           </RichTextLocked>
@@ -123,12 +118,4 @@ export const Edit = () => {
       )}
     </>
   );
-};
-
-/**
- * This is part of a temporary fix as the current email response implementation relies on the `emailSubject` property to be set.
- * The email reponse design will be reworked at some point in the future so we will probably get rid of it when we get there.
- */
-export const formatEmailSubject = (title: string, lang: Language) => {
-  return `${title} - ${lang === "en" ? "Response" : "Réponse"}`;
 };
