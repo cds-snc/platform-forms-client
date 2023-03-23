@@ -41,9 +41,7 @@ export const ShareDropdown = () => {
           <DropdownMenuPrimitive.Content
             align="end"
             sideOffset={5}
-            className={
-              "w-48 rounded-lg px-1.5 py-1 shadow-md md:w-56 bg-white border-1 border-black"
-            }
+            className={"w-48 rounded-lg px-1.5 py-1 shadow-md bg-white border-1 border-black"}
           >
             {/* share.email */}
             <DropdownMenuPrimitive.Item

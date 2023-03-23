@@ -49,7 +49,7 @@ export const SaveButton = () => {
   return !isStartPage && isSaveable() && status === "authenticated" ? (
     <div
       data-id={id}
-      className={`mt-12 p-4 -ml-4 w-52 xl:w-40 xl:text-sm ${
+      className={`mt-12 p-4 -ml-4 w-40 laptop:w-52 text-sm laptop:text-base ${
         id && (error ? "bg-red-100" : "bg-yellow-100")
       }`}
     >
