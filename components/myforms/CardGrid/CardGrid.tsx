@@ -26,9 +26,9 @@ export const CardGrid = (props: CardGridProps): React.ReactElement => {
       >
         {cards &&
           cards?.length > 0 &&
-          cards.map((card: CardProps, index: number) => {
+          cards.map((card: CardProps) => {
             return (
-              <li className="flex flex-col" key={index}>
+              <li className="flex flex-col" key={card.id}>
                 <Card
                   id={card.id}
                   name={card.name}
