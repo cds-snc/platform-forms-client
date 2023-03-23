@@ -166,14 +166,14 @@ export const ModalContainer = ({
 
   /* eslint-disable */
   return (
-    <dialog data-testid="modal" className="modal-dialog" tabIndex={-1} role="dialog" onClick={close} ref={modalContainer}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
-          <h2 className="modal-title">{title}</h2>
+    <dialog data-testid="modal" className="p-0 bg-clip-padding w-full h-full bg-transparent" tabIndex={-1} role="dialog" onClick={close} ref={modalContainer}>
+      <div className="mx-8 p-4 laptop:max-w-[800px] laptop:mx-auto mt-10 bg-white border-2 border-black rounded-xl" onClick={(e) => e.stopPropagation()}>
+        <div className="relative">
+          <h2>{title}</h2>
           <ModalButton isOpenButton={false}>
             <Button
               theme="link"
-              className="group justify-self-end block pl-2 pr-2"
+              className="group absolute top-0 right-0 block pl-2 pr-2"
               aria-label={t("close")}
               onClick={close}
             >
@@ -184,10 +184,10 @@ export const ModalContainer = ({
             </Button>
           </ModalButton>
         </div>
-        <div className="modal-body">
+        <div>
           {children}
         </div>
-        <div className="modal-footer">
+        <div>
           {saveButton}
           <Button theme="secondary" onClick={close}>{t("cancel")}</Button>
         </div>
