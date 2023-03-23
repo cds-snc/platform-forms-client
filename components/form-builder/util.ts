@@ -2,6 +2,9 @@ import { Language } from "./types";
 import { FormElement, FormProperties, PropertyChoices, FormElementTypes } from "@lib/types";
 import { TemplateStoreState } from "./store/useTemplateStore";
 
+export const completeEmailAddressRegex =
+  /^([a-zA-Z0-9!#$%&'*+-/=?^_`{|}~.])+@([a-zA-Z0-9-.]+)\.([a-zA-Z0-9]{2,})+$/;
+
 export const getPreviousIndex = (items: FormElement[], index: number) => {
   return index === 0 ? items.length - 1 : index - 1;
 };
