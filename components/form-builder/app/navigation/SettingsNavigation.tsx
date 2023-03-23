@@ -12,22 +12,22 @@ export const SettingsNavigation = () => {
   return (
     <div className="relative flex">
       <div className="flex justify-content:space-between">
-        <nav className="mb-8 flex " aria-label={t("navLabelEditor")}>
+        <nav className="mb-8 flex flex-col tablet:flex-row" aria-label={t("navLabelEditor")}>
           <SubNavLink href="/form-builder/settings">
             <span className="text-sm laptop:text-base">
-              <EmailIcon className="hidden laptop:inline-block laptop:mt-[-2px] laptop:mr-2" />
+              <EmailIcon className="inline-block tablet:hidden laptop:inline-block laptop:mt-[-2px] mr-2 tablet:mr-0 laptop:mr-2" />
               {t("settingsNavHome")}
             </span>
           </SubNavLink>
           <SubNavLink href="/form-builder/settings/branding">
             <span className="text-sm laptop:text-base">
-              <BrandIcon className="hidden laptop:inline-block laptop:mt-[-2px] laptop:mr-2 fill-black" />
+              <BrandIcon className="inline-block tablet:hidden laptop:inline-block laptop:mt-[-2px] mr-2 tablet:mr-0 laptop:mr-2 fill-black" />
               {t("branding.heading")}
             </span>
           </SubNavLink>
           <SubNavLink href="/form-builder/settings/form">
             <span className="text-sm laptop:text-base">
-              <GearIcon className="hidden laptop:inline-block laptop:mt-[-2px] laptop:mr-2" />
+              <GearIcon className="inline-block tablet:hidden laptop:inline-block laptop:mt-[-2px] mr-2 tablet:mr-0 laptop:mr-2" />
               {t("settings.formManagement")}
             </span>
           </SubNavLink>
