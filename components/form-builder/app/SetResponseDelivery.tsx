@@ -154,7 +154,7 @@ export const SetResponseDelivery = () => {
     setDeliveryOption(value as DeliveryOption);
   }, []);
 
-  const responsesLink = `/${i18n.language}/responses`;
+  const responsesLink = `/${i18n.language}/responses/${id}`;
 
   return (
     <>
@@ -173,7 +173,7 @@ export const SetResponseDelivery = () => {
             >
               <span className="block ml-3 text-sm mb-1">
                 {t("settingsResponseDelivery.vaultOptionHint.text1")}{" "}
-                <a href={responsesLink}>{t("settingsResponseDelivery.vaultOptionHint.text2")}.</a>
+                <a href={responsesLink}>{t("settingsResponseDelivery.vaultOptionHint.text2")}</a>.
               </span>
             </Radio>
             <Radio
