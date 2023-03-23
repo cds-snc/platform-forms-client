@@ -167,7 +167,7 @@ export const ModalContainer = ({
   /* eslint-disable */
   return (
     <dialog data-testid="modal" className="p-0 bg-clip-padding w-full h-full bg-transparent" tabIndex={-1} role="dialog" onClick={close} ref={modalContainer}>
-      <div className="mx-8 p-4 laptop:max-w-[800px] laptop:mx-auto mt-10 bg-white border-2 border-black rounded-xl" onClick={(e) => e.stopPropagation()}>
+      <div className="mx-8 p-4 laptop:max-w-[800px] h-5/6 overflow-scroll laptop:mx-auto mt-10 bg-white border-2 border-black rounded-xl" onClick={(e) => e.stopPropagation()}>
         <div className="relative">
           <h2>{title}</h2>
           <ModalButton isOpenButton={false}>
