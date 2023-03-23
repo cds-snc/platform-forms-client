@@ -109,7 +109,7 @@ export const ShareModal = ({
           {status === "ready" && (
             <>
               <p>{t("share.message")}</p>
-              <div className="mt-5">
+              <div className="mt-5 mb-5">
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                   {t("share.emailLabel")}
                 </label>

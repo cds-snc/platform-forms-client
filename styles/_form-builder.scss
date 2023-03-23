@@ -215,62 +215,7 @@
     }
   }
 
-  /*--------------------------------------------*
-  * Dialog modal (popup i.e. delete confirmation)
-  *--------------------------------------------*/
-  .modal-dialog {
-    padding: 0;
-    background: transparent;
-    margin: 0;
-    background-clip: padding-box;
-    width: 100%;
-    max-width: none;
-    max-height: none;
-    height: 100%;
-
-    .modal-content {
-      width: 750px; /* TODO: fix this for mobile */
-      margin: 1.75rem auto;
-      border: 1.5px solid #000000;
-      box-shadow: 0px 4px 0px -1px #000000;
-      background: #ffffff;
-      border-radius: 12px;
-      outline: 0;
-      max-height: none;
-      overflow-x: scroll;
-
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      pointer-events: auto;
-    }
-
-    .modal-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      padding: 15px 15px 0 15px;
-    }
-
-    .modal-title {
-      padding-bottom: 15px;
-    }
-
-    .modal-body {
-      position: relative;
-      flex: 1 1 auto;
-      padding: 0 15px 15px 15px;
-    }
-
-    .modal-footer {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      padding: 15px;
-      border-top: 1px solid #cacaca;
-    }
-  }
-
+  
   /*--------------------------------------------*
   * Rich text editor
   *--------------------------------------------*/
