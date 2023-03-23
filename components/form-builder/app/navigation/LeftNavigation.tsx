@@ -14,10 +14,10 @@ export const LeftNavigation = () => {
   const { status: vault } = useFlag("vault");
 
   const iconClassname =
-    "inline-block w-6 h-6 xl:block xl:mx-auto group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
+    "inline-block w-6 h-6 group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
 
   return (
-    <nav className="absolute xl:content-center" aria-label={t("navLabelFormBuilder")}>
+    <nav className="absolute" aria-label={t("navLabelFormBuilder")}>
       {!isPublished && (
         <LeftNavLink href="/form-builder/edit">
           <>

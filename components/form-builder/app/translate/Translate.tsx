@@ -113,11 +113,11 @@ export const Translate = () => {
   return (
     <>
       <div>
-        <h1 className="border-0 mb-0">{t("translateTitle")}</h1>
+        <h1 className="border-0 mb-0 mt-8">{t("translateTitle")}</h1>
         <p>{t("translateDescription")}</p>
         <br />
 
-        <div className="lg:mt-4">
+        <div className="mb-8">
           <DownloadCSV />
         </div>
 
