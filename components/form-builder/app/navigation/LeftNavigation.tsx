@@ -47,7 +47,7 @@ export const LeftNavigation = () => {
         <LeftNavLink href={`/form-builder/responses/${id}`}>
           <>
             <MessageIcon className={iconClassname} />
-            {t("responses.navLabel")}
+            {t("responsesNavLabel")}
           </>
         </LeftNavLink>
       )}

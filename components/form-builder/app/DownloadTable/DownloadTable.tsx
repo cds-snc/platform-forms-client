@@ -233,7 +233,8 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
         )}
       </div>
 
-      <table className="text-sm">
+      {/* TODO: come back to table live regions, updates may require a separate channel/* */}
+      <table className="text-sm" aria-live="polite">
         <caption className="sr-only">{t("downloadResponsesTable.header.tableTitle")}</caption>
         <thead className="border-b-2 border-[#6a6d7b]">
           <tr>

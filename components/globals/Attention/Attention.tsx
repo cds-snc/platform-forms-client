@@ -18,6 +18,7 @@ interface AttentionProps {
   isIcon?: boolean;
   isSmall?: boolean;
   width?: string;
+  classes?: string;
 }
 
 export const Attention = ({
@@ -28,6 +29,7 @@ export const Attention = ({
   isIcon = true,
   isSmall = false,
   width = "50",
+  classes = "",
 }: AttentionProps & JSX.IntrinsicElements["div"]): React.ReactElement => {
   let headingTextColor = "";
   let backgroundColor = "";
@@ -54,13 +56,13 @@ export const Attention = ({
       icon = <CheckIcon isFillInherit={true} width={width} />;
       break;
     case AttentionTypes.INFO:
-    //TODO future maybe
+    //TODO future
   }
 
   return (
     <div
       {...(isAlert && ariaAttributes)}
-      className={(isSmall ? "p-3" : "p-5") + ` flex ${backgroundColor}`}
+      className={(isSmall ? "p-3" : "p-5") + ` flex ${backgroundColor} ${classes}`}
     >
       {isIcon && (
         <div className="flex">

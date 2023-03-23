@@ -18,8 +18,8 @@ import { checkOne } from "@lib/cache/flags";
 import Link from "next/link";
 import { Card } from "@components/globals/card/Card";
 import { DownloadTable } from "@components/form-builder/app/DownloadTable/DownloadTable";
-import { DialogConfirmReceipt } from "@components/form-builder/app/DownloadTable/DialogConfirmReceipt";
-import { DialogReportProblems } from "@components/form-builder/app/DownloadTable/DialogReportProblems";
+import { DownloadTableDialog } from "@components/form-builder/app/DownloadTable/DownloadTableDialog";
+import { isFormId, isUUID } from "@lib/validation";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -33,6 +33,8 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   const { t } = useTranslation("form-builder-responses");
   const { status } = useSession();
   const isAuthenticated = status === "authenticated";
+  const MAX_CONFIRMATION_COUNT = 20;
+  const MAX_REPORT_COUNT = 20;
   const [isShowConfirmReceiptDialog, setIsShowConfirmReceiptDialog] = useState(false);
   const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
 
@@ -118,16 +120,34 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         )}
       </PageTemplate>
 
-      <DialogConfirmReceipt
-        formId={formId}
+      <DownloadTableDialog
         isShowDialog={isShowConfirmReceiptDialog}
         setIsShowDialog={setIsShowConfirmReceiptDialog}
+        apiUrl={`/api/id/${formId}/submission/confirm`}
+        inputRegex={isUUID}
+        maxEntries={MAX_CONFIRMATION_COUNT}
+        title={t("downloadResponsesModals.confirmReceiptDialog.title")}
+        description={t("downloadResponsesModals.confirmReceiptDialog.findCode")}
+        inputHelp={t("downloadResponsesModals.confirmReceiptDialog.copyCode", {
+          max: MAX_CONFIRMATION_COUNT,
+        })}
+        nextSteps={t("downloadResponsesModals.confirmReceiptDialog.responsesAvailableFor")}
+        submitButtonText={t("downloadResponsesModals.confirmReceiptDialog.confirmReceipt")}
       />
 
-      <DialogReportProblems
-        formId={formId}
+      <DownloadTableDialog
         isShowDialog={isShowReportProblemsDialog}
         setIsShowDialog={setIsShowReportProblemsDialog}
+        apiUrl={`/api/id/${formId}/submission/report`}
+        inputRegex={isFormId}
+        maxEntries={MAX_REPORT_COUNT}
+        title={t("downloadResponsesModals.reportProblemsDialog.title")}
+        description={t("downloadResponsesModals.reportProblemsDialog.findForm")}
+        inputHelp={t("downloadResponsesModals.reportProblemsDialog.enterFormNumbers", {
+          max: MAX_REPORT_COUNT,
+        })}
+        nextSteps={t("downloadResponsesModals.reportProblemsDialog.problemReported")}
+        submitButtonText={t("downloadResponsesModals.reportProblemsDialog.reportProblems")}
       />
     </>
   );
@@ -201,10 +221,12 @@ export const getServerSideProps: GetServerSideProps = async ({
       vaultSubmissions,
       formId: FormbuilderParams.initialForm?.id ?? null,
       ...(locale &&
-        (await serverSideTranslations(locale, ["common", "form-builder-responses"], null, [
-          "fr",
-          "en",
-        ]))),
+        (await serverSideTranslations(
+          locale,
+          ["common", "form-builder-responses", "form-builder"],
+          null,
+          ["fr", "en"]
+        ))),
     },
   };
 };

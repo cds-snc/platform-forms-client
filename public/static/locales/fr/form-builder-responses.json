@@ -51,11 +51,20 @@
       "trySelectingLessFiles":"You have {{max}} responses selected. Uncheck at least 1 response before downloading.[fr]",
       "atLeastOneFileHeader": "At least one file must be selected to download.[fr]",
       "atLeastOneFile": "Try selecting at least one file to download.[fr]",
-      "errorDownloadingFilesHeader":"Error downloading the selected files.[fr]",
-      "errorDownloadingFiles":"Try again in a few minutes. If the problem persists contact support.[fr]"
+      "errorDownloadingFilesHeader":"Error downloading the selected files.[developer][fr]",
+      "errorDownloadingFiles":"Try again in a few minutes. If the problem persists contact support.[developer][fr]"
     },
     "skipLink": "Skip Download Table[fr]",
     "unknown":"Unknown[fr]"
+  },
+  "lineItemEntries": {
+    "remove":"remove",
+    "removed":"removed",
+    "added":"added",
+    "notifications": {
+      "onlyMaxResponses":"Seulement {{max}} réponses peuvent être signalées à la fois.",
+      "reportTheseForm":"Entrez ces entrées de formulaires avant d’en saisir davantage.[developer]"
+    }
   },
   "downloadResponsesModals": {
     "confirmReceiptDialog": {
@@ -71,6 +80,14 @@
       "enterFormNumbers": "Enter up-to {{max}} form numbers, one per line.[fr]",
       "problemReported": "The problem will be reported, and someone will contact you with help.[fr]",
       "reportProblems": "Report problems[fr]"
+    },
+    "notifications": {
+      "entriesLengthHeader": "At least one entry is required[developer][fr]",
+      "entriesLengthDescription": "Please add at least one entry and try submitting again.[developer][fr]",
+      "clientEntryHeader": "An error occurred with one of the entries[developer][fr]",
+      "clientEntryDescription": "Please double check the entries are entered correct and try again.[developer][fr]",
+      "unknownErrorHeader": "An unknown error occurred[developer][fr]",
+      "unknownErrorDescription": "Please try again in a few minutes. If the problem continues, try contacting support.[developer][fr]"
     }
   }
 }

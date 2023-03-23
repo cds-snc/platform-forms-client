@@ -23,11 +23,7 @@ export const ConfirmReceiptStatus = ({
       status = t("downloadResponsesTable.status.done");
       break;
     case VaultStatus.PROBLEM:
-      status = (
-        <span className="p-2 bg-[#f3e9e8] text-[#bc3332] font-bold">
-          {t("downloadResponsesTable.status.problem")}
-        </span>
-      );
+      status = <ExclamationText text={t("downloadResponsesTable.status.problem")} />;
       break;
     case VaultStatus.DOWNLOADED: {
       const daysPassed = getDaysPassed(createdAtDate);

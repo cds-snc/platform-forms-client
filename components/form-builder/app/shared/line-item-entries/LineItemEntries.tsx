@@ -12,6 +12,8 @@ export const LineItemEntries = ({
   validateInput,
   inputLabelId,
   maxEntries = 20,
+  maxEntriesTitle,
+  maxEntriesDescription,
 }: {
   inputs: string[];
   setInputs: (tag: string[]) => void;
@@ -19,8 +21,10 @@ export const LineItemEntries = ({
   spellCheck?: boolean;
   inputLabelId: string;
   maxEntries?: number;
+  maxEntriesTitle: string;
+  maxEntriesDescription: string;
 }) => {
-  const { t } = useTranslation("form-builder");
+  const { t } = useTranslation("form-builder-responses");
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const liveRegionRef = useRef<HTMLDivElement>(null);
@@ -28,7 +32,7 @@ export const LineItemEntries = ({
   const onRemove = (text: string) => {
     setInputs(inputs.filter((input) => input !== text));
     if (liveRegionRef.current) {
-      liveRegionRef.current.textContent = `${t("responses.dialogMessages.removed")} ${text}`;
+      liveRegionRef.current.textContent = `${t("lineItemEntries.removed")} ${text}`;
     }
     inputRef.current?.focus();
   };
@@ -49,7 +53,7 @@ export const LineItemEntries = ({
       }
       setInputs([...new Set([...inputs, text])]);
       if (liveRegionRef.current) {
-        liveRegionRef.current.textContent = `${t("responses.dialogMessages.added")} ${text}`;
+        liveRegionRef.current.textContent = `${t("lineItemEntries.added")} ${text}`;
       }
       (e.target as HTMLInputElement).value = "";
     }
@@ -97,10 +101,8 @@ export const LineItemEntries = ({
       </div>
       {inputs.length >= maxEntries && (
         <div role="alert" className="px-4 py-2 m-2 bg-[#dcd6fe]">
-          <p className="font-bold">
-            {t("responses.dialogMessages.onlyMaxResponses", { max: maxEntries })}
-          </p>
-          <p>{t("responses.dialogMessages.reportTheseForm")}</p>
+          <p className="font-bold">{maxEntriesTitle}</p>
+          <p>{maxEntriesDescription}</p>
         </div>
       )}
       <div

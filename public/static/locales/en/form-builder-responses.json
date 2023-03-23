@@ -51,11 +51,20 @@
       "trySelectingLessFiles":"You have {{max}} responses selected. Uncheck at least 1 response before downloading.",
       "atLeastOneFileHeader": "At least one file must be selected to download.",
       "atLeastOneFile": "Try selecting at least one file to download.",
-      "errorDownloadingFilesHeader":"Error downloading the selected files.",
-      "errorDownloadingFiles":"Try again in a few minutes. If the problem persists contact support."
+      "errorDownloadingFilesHeader":"Error downloading the selected files.[developer]",
+      "errorDownloadingFiles":"Try again in a few minutes. If the problem persists contact support.[developer]"
     },
     "skipLink": "Skip Download Table",
     "unknown":"Unknown"
+  },
+  "lineItemEntries": {
+    "remove":"Remove",
+    "removed":"Removed",
+    "added":"Added",
+    "notifications": {
+      "maxEntriesTitle":"Only {{max}} responses can be reported at a time.",
+      "maxEntriesDescription":"Enter these form entries before entering more.[developer]"
+    }
   },
   "downloadResponsesModals": {
     "confirmReceiptDialog": {
@@ -71,6 +80,14 @@
       "enterFormNumbers": "Enter up-to {{max}} form numbers, one per line.",
       "problemReported": "The problem will be reported, and someone will contact you with help.",
       "reportProblems": "Report problems"
+    },
+    "notifications": {
+      "entriesLengthHeader": "At least one entry is required[developer]",
+      "entriesLengthDescription": "Please add at least one entry and try submitting again.[developer]",
+      "clientEntryHeader": "An error occurred with one of the entries[developer]",
+      "clientEntryDescription": "Please double check the entries are entered correct and try again.[developer]",
+      "unknownErrorHeader": "An unknown error occurred[developer]",
+      "unknownErrorDescription": "Please try again in a few minutes. If the problem continues, try contacting support.[developer]"
     }
   }
 }
