@@ -79,7 +79,7 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
               <li
                 id={`mi-${id}-${index}`}
                 role="menuitem"
-                key={index}
+                key={id}
                 className={`px-4 py-2 first:pt-4 last:pb-4 ${item?.callback ? "relative" : ""}`}
               >
                 {item.callback ? (

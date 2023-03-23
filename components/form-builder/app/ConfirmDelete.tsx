@@ -31,7 +31,6 @@ export const ConfirmDelete = ({
       return;
     }
 
-    toast.success(t("formDeletedDialogMessage"), { position });
     clearTemplateStore();
     onDeleted(id);
   }, [handleDelete, id, onDeleted, t]);
