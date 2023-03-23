@@ -62,7 +62,7 @@ export const Dialog = ({
       ref={dialogRef}
     >
       <div
-        className={`mx-8 laptop:max-w-[800px] laptop:mx-auto mt-24 bg-white border-2 border-black rounded-xl ${className}`}
+        className={`mx-8 tablet:max-w-[700px] overflow-y-scroll max-h-[80%] tablet:mx-auto mt-12 laptop:mt-24 bg-white border-2 border-black rounded-xl ${className}`}
       >
         <div className="relative">
           {title && <h2 className="pb-4 inline-block mt-4 ml-4">{title}</h2>}
