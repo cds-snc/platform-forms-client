@@ -24,7 +24,7 @@ const classificationOptions = [
   { value: "Protected A", en: "Protected A", fr: "Protégé A" },
 ] as const;
 
-type Classification = (typeof classificationOptions)[number]["value"] | "";
+type Classification = (typeof classificationOptions)[number]["value"];
 
 export const SetResponseDelivery = () => {
   const { t, i18n } = useTranslation("form-builder");
@@ -47,6 +47,7 @@ export const SetResponseDelivery = () => {
     defaultSubjectEn,
     defaultSubjectFr,
     securityAttribute,
+    updateSecurityAttribute,
   } = useTemplateStore((s) => ({
     id: s.id,
     email: s.deliveryOption?.emailAddress,
@@ -59,7 +60,8 @@ export const SetResponseDelivery = () => {
     getName: s.getName,
     getDeliveryOption: s.getDeliveryOption,
     updateField: s.updateField,
-    securityAttribute: s.securityAttribute,
+    updateSecurityAttribute: s.updateSecurityAttribute,
+    securityAttribute: s.form.securityAttribute,
   }));
 
   const userEmail = session.data?.user.email ?? "";
@@ -74,7 +76,9 @@ export const SetResponseDelivery = () => {
     initialSubjectFr ? initialSubjectFr : defaultSubjectFr
   );
 
-  const [classification, setClassification] = useState<Classification>("");
+  const [classification, setClassification] = useState<Classification>(
+    securityAttribute as Classification
+  );
 
   const [isInvalidEmailError, setIsInvalidEmailError] = useState(false);
 
@@ -117,7 +121,7 @@ export const SetResponseDelivery = () => {
   const setToDatabaseDelivery = useCallback(async () => {
     setInputEmail("");
     resetDeliveryOption();
-    updateField("securityAttribute", classification);
+    updateSecurityAttribute(classification);
     await uploadJson(getSchema(), getName(), undefined, id);
     return await updateResponseDelivery(id);
   }, [
@@ -125,11 +129,11 @@ export const SetResponseDelivery = () => {
     resetDeliveryOption,
     updateResponseDelivery,
     setInputEmail,
-    updateField,
     uploadJson,
     getSchema,
     getName,
     classification,
+    updateSecurityAttribute,
   ]);
 
   const setToEmailDelivery = useCallback(async () => {
@@ -137,7 +141,7 @@ export const SetResponseDelivery = () => {
     updateField("deliveryOption.emailAddress", inputEmail);
     updateField("deliveryOption.subjectEn", subjectEn);
     updateField("deliveryOption.subjectFr", subjectFr);
-    updateField("securityAttribute", classification);
+    updateSecurityAttribute(classification);
     return await uploadJson(getSchema(), getName(), getDeliveryOption(), id);
   }, [
     inputEmail,
@@ -150,6 +154,7 @@ export const SetResponseDelivery = () => {
     getDeliveryOption,
     updateField,
     classification,
+    updateSecurityAttribute,
   ]);
 
   const saveDeliveryOption = useCallback(async () => {

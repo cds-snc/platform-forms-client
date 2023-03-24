@@ -124,6 +124,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
     path: string,
     value: string | boolean | ElementProperties | BrandProperties
   ) => void;
+  updateSecurityAttribute: (value: SecurityAttribute) => void;
   propertyPath: (id: number, field: string, lang?: Language) => string;
   unsetField: (path: string) => void;
   duplicateElement: (elIndex: number) => void;
@@ -224,6 +225,10 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
           updateField: (path, value) =>
             set((state) => {
               update(state, path, value);
+            }),
+          updateSecurityAttribute: (value) =>
+            set((state) => {
+              state.form.securityAttribute = value;
             }),
           propertyPath: (id: number, field: string, lang?: Language) => {
             const path = getPathString(id, get().form.elements);
@@ -388,7 +393,6 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               state.form = defaultForm;
               state.isPublished = false;
               state.name = "";
-              state.securityAttribute = "Unclassified";
               state.deliveryOption = undefined;
             });
           },

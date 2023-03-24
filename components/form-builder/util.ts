@@ -104,7 +104,16 @@ export const newlineToOptions = (
 
 export const getSchemaFromState = (state: TemplateStoreState) => {
   const {
-    form: { titleEn, titleFr, introduction, privacyPolicy, confirmation, elements, brand },
+    form: {
+      titleEn,
+      titleFr,
+      introduction,
+      privacyPolicy,
+      confirmation,
+      elements,
+      brand,
+      securityAttribute,
+    },
   } = state;
 
   const form: FormProperties = {
@@ -115,6 +124,7 @@ export const getSchemaFromState = (state: TemplateStoreState) => {
     confirmation,
     layout: elements.map((element) => element.id),
     elements,
+    securityAttribute,
     brand,
   };
 
