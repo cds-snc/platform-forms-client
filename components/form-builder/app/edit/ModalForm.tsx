@@ -195,7 +195,7 @@ export const ModalForm = ({
                 }}
               />
             </div>
-            <InfoDetails summary={t("characterLimitWhenToUse.title")}>
+            <InfoDetails className="mb-4" summary={t("characterLimitWhenToUse.title")}>
               <div className="mt-4 mb-8 border-l-3 border-gray-500 pl-8">
                 <p className="text-md mb-4">{t("characterLimitWhenToUse.text1")}</p>
                 <p className="text-md mb-4">{t("characterLimitWhenToUse.text2")}</p>

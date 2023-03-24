@@ -388,6 +388,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               state.isPublished = false;
               state.name = "";
               state.securityAttribute = "Unclassified";
+              state.deliveryOption = undefined;
             });
           },
           importTemplate: (jsonConfig) =>
@@ -398,6 +399,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               state.isPublished = false;
               state.name = "";
               state.securityAttribute = "Unclassified";
+              state.deliveryOption = undefined;
             }),
         }),
         {
