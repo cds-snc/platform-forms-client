@@ -24,7 +24,7 @@ const classificationOptions = [
   { value: "Protected A", en: "Protected A", fr: "Protégé A" },
 ] as const;
 
-type Classification = typeof classificationOptions[number]["value"] | "";
+type Classification = (typeof classificationOptions)[number]["value"] | "";
 
 export const SetResponseDelivery = () => {
   const { t, i18n } = useTranslation("form-builder");
@@ -113,7 +113,17 @@ export const SetResponseDelivery = () => {
     updateField("securityAttribute", classification);
     await uploadJson(getSchema(), getName(), undefined, id);
     return await updateResponseDelivery(id);
-  }, [id, resetDeliveryOption, updateResponseDelivery, setInputEmail]);
+  }, [
+    id,
+    resetDeliveryOption,
+    updateResponseDelivery,
+    setInputEmail,
+    updateField,
+    uploadJson,
+    getSchema,
+    getName,
+    classification,
+  ]);
 
   const setToEmailDelivery = useCallback(async () => {
     if (!isValidGovEmail(inputEmail)) return false;
@@ -132,6 +142,7 @@ export const SetResponseDelivery = () => {
     getName,
     getDeliveryOption,
     updateField,
+    classification,
   ]);
 
   const saveDeliveryOption = useCallback(async () => {
@@ -171,7 +182,7 @@ export const SetResponseDelivery = () => {
 
   const responsesLink = `/${i18n.language}/form-builder/responses/${id}`;
 
-  const handleUpdateClassification = useCallback((value: SecurityAttribute) => {
+  const handleUpdateClassification = useCallback((value: Classification) => {
     setClassification(value);
   }, []);
 
@@ -183,7 +194,6 @@ export const SetResponseDelivery = () => {
           <div className="block font-bold mb-4">{t("settingsResponseDelivery.title")}</div>
           <div className="mb-4">
             Select the data classification of your form responses
-
             <select
               id="classification-select"
               value={classification}

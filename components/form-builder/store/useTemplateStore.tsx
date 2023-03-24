@@ -4,7 +4,6 @@ import { persist, StateStorage, createJSONStorage } from "zustand/middleware";
 import React, { createContext, useRef, useContext } from "react";
 import { getPathString } from "../getPath";
 
-
 import {
   moveDown,
   moveUp,
@@ -23,7 +22,7 @@ import {
   FormElementTypes,
   DeliveryOption,
   ElementProperties,
-  SecurityAttribute
+  SecurityAttribute,
 } from "@lib/types";
 import { logMessage } from "@lib/logger";
 import { BrandProperties } from "@lib/types/form-types";
@@ -165,7 +164,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
     form: defaultForm,
     isPublished: false,
     name: "",
-    securityAttribute: SecurityAttribute.unclassified,
+    securityAttribute: "Unclassified",
   };
 
   // Ensure any required properties by Form Builder are defaulted by defaultForm
@@ -389,7 +388,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               state.form = defaultForm;
               state.isPublished = false;
               state.name = "";
-              state.securityAttribute = SecurityAttribute.UNCLASSIFIED;
+              state.securityAttribute = "Unclassified";
               state.deliveryOption = undefined;
             });
           },
