@@ -46,6 +46,7 @@ export const SetResponseDelivery = () => {
     subjectFr: initialSubjectFr,
     defaultSubjectEn,
     defaultSubjectFr,
+    securityAttribute,
   } = useTemplateStore((s) => ({
     id: s.id,
     email: s.deliveryOption?.emailAddress,
@@ -78,6 +79,10 @@ export const SetResponseDelivery = () => {
   const [isInvalidEmailError, setIsInvalidEmailError] = useState(false);
 
   const isValid = useMemo(() => {
+    if (classification !== securityAttribute) {
+      return true;
+    }
+
     const isValidDeliveryOption =
       !isInvalidEmailError && inputEmail !== "" && subjectEn !== "" && subjectFr !== "";
     const emailDeliveryOptionsChanged =
@@ -105,6 +110,8 @@ export const SetResponseDelivery = () => {
     initialSubjectEn,
     subjectFr,
     initialSubjectFr,
+    classification,
+    securityAttribute,
   ]);
 
   const setToDatabaseDelivery = useCallback(async () => {
