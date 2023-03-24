@@ -18,12 +18,12 @@ const settings = async (req: NextApiRequest, res: NextApiResponse, props: Middle
       }
 
       case "POST": {
-        const { setting } = req.body;
+        const setting = req.body;
         if (!setting.nameEn || !setting.nameFr || !setting.internalId)
           return res.status(400).json({ error: "Malformed Request" });
 
         const createdSetting = await createAppSetting(ability, setting);
-        return res.status(200).json(createdSetting);
+        return res.status(201).json(createdSetting);
       }
     }
   } catch (err) {
@@ -34,10 +34,6 @@ const settings = async (req: NextApiRequest, res: NextApiResponse, props: Middle
 };
 
 export default middleware(
-  [
-    cors({ allowedMethods: ["GET", "PUT", "DELETE"] }),
-    sessionExists(),
-    jsonValidator(settingSchema),
-  ],
+  [cors({ allowedMethods: ["GET", "POST"] }), sessionExists(), jsonValidator(settingSchema)],
   settings
 );

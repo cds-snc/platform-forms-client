@@ -4,7 +4,7 @@ import settingSchema from "@lib/middleware/schemas/settings.schema.json";
 import { MiddlewareProps, WithRequired } from "@lib/types";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { logMessage } from "@lib/logger";
-import { createAppSetting, getAppSetting } from "@lib/appSettings";
+import { getAppSetting, updateAppSetting, deleteAppSetting } from "@lib/appSettings";
 
 const settings = async (req: NextApiRequest, res: NextApiResponse, props: MiddlewareProps) => {
   try {
@@ -22,12 +22,16 @@ const settings = async (req: NextApiRequest, res: NextApiResponse, props: Middle
       }
 
       case "PUT": {
-        const { setting } = req.body;
+        const setting = req.body;
         if (!setting.nameEn || !setting.nameFr || !setting.internalId)
           return res.status(400).json({ error: "Malformed Request" });
 
-        const createdSetting = await createAppSetting(ability, setting);
+        const createdSetting = await updateAppSetting(ability, internalId, setting);
         return res.status(200).json(createdSetting);
+      }
+      case "DELETE": {
+        await deleteAppSetting(ability, internalId);
+        return res.status(200).send("ok");
       }
     }
   } catch (err) {
@@ -38,6 +42,10 @@ const settings = async (req: NextApiRequest, res: NextApiResponse, props: Middle
 };
 
 export default middleware(
-  [cors({ allowedMethods: ["POST", "GET"] }), sessionExists(), jsonValidator(settingSchema)],
+  [
+    cors({ allowedMethods: ["GET", "PUT", "DELETE"] }),
+    sessionExists(["PUT", "DELETE"]),
+    jsonValidator(settingSchema),
+  ],
   settings
 );

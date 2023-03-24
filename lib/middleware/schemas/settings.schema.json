@@ -31,20 +31,20 @@
       "id": "#/properties/nameFr",
       "type": "string"
     },
-    "descriptionEr": {
+    "descriptionEn": {
       "description": "The displayed description of the Setting to the user in French",
       "id": "#/properties/descriptionEn",
-      "type": "string"
+      "type": ["string", "null"]
     },
     "descriptionFr": {
       "description": "The displayed description of the Setting to the user in French",
       "id": "#/properties/descriptionFr",
-      "type": "string"
+      "type": ["string", "null"]
     },
     "value": {
       "description": "The value of the Setting in string format",
       "id": "#/properties/value",
-      "type": "string"
+      "type": ["string", "null"]
     }
   },
   "required": ["internalId", "nameEn", "nameFr"],

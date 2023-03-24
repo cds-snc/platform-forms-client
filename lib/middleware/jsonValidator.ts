@@ -1,7 +1,14 @@
-import { Schema, Validator, ValidatorResult, PreValidatePropertyFunction } from "jsonschema";
+import {
+  Schema,
+  Validator,
+  ValidatorResult,
+  PreValidatePropertyFunction,
+  validate,
+} from "jsonschema";
 import { NextApiRequest, NextApiResponse } from "next";
 import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
 import * as htmlparser2 from "htmlparser2";
+import { logMessage } from "@lib/logger";
 
 export type ValidateOptions = {
   jsonKey: string;
@@ -40,8 +47,13 @@ export const jsonValidator = (schema: Schema, options?: ValidateOptions): Middle
         return { next: true };
       }
       const validator = new Validator();
+      const validateObject = options?.jsonKey
+        ? req.body[options.jsonKey]
+        : req.body.length > 0
+        ? req.body
+        : undefined;
       const validatorResult: ValidatorResult = validator.validate(
-        options?.jsonKey ? req.body[options.jsonKey] : req.body,
+        validateObject,
         schema,
         options?.noHTML ? { preValidateProperty: htmlChecker } : undefined
       );

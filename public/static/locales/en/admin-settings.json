@@ -2,6 +2,25 @@
   "title": "Settings",
   "brandingRequestId": "Branding request form ID",
   "success": "Data saved successfully",
-  "error": "Error saving data",
-  "loadingError": "[FR] Sorry... Something went wrong"
+  "loadingError": "[FR] Sorry... Something went wrong",
+  "manageSetting": "Manage",
+  "createSetting": "Create",
+  "viewSetting": "View",
+  "deleteSetting": "Delete",
+  "cancel": "Cancel",
+  "save": "Save",
+  "back": "Back",
+  "deleted": "Setting successfully deleted",
+  "error": {
+    "save": "Error saving data",
+    "duplicateId": "Duplicate internal ID, please select another"
+  },
+  "label": {
+    "internalId": "Internal Identifier",
+    "nameEn": "English Name",
+    "nameFr": "French Name",
+    "descriptionEn": "English Description",
+    "descriptionFr": "French Description",
+    "value": "Value for this setting"
+  }
 }
