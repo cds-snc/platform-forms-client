@@ -2,7 +2,7 @@ import React from "react";
 import { WarningIcon } from "@components/form-builder/icons";
 
 interface AttentionProps {
-  type?: "warning"; //TODO: | "info" | "error"
+  type?: "warning" | "error"; //TODO: | "info"
   heading?: React.ReactNode;
   children: React.ReactNode;
 }
@@ -20,8 +20,11 @@ export const Attention = ({
       color = "bg-amber-100";
       icon = <WarningIcon title="Warning" width="50" />;
       break;
+    case "error":
+      color = "bg-red-100";
+      icon = <WarningIcon title="Warning" width="50" />;
+      break;
     // TODO case "info":
-    // TODO case "error":
   }
 
   return (

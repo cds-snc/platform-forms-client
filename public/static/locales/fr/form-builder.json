@@ -580,5 +580,34 @@
   "translateTitle": "Entrer la traduction",
   "unlockPublishing": "Soumettre",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
-  "unnamedForm": "Formulaire sans titre"
+  "unnamedForm": "Formulaire sans titre",
+  "nagware": {
+    "restrictedDownloadAfter35Days": "Le téléchargement sera limité si les réponses non confirmées ont plus de 35 jours de retard.",
+    "unsavedSubmissionsOver21DaysOld": {
+      "title": "Téléchargez et confirmez la réception des réponses",
+      "body1": "Il y a",
+      "body2": {
+        "moreThan20Responses": "nouvelles réponses ayant plus de 21 jours de retard. Téléchargez et confirmez la réception de 20 nouvelles réponses en retard à la fois.",
+        "lessThan20Responses": "nouvelles réponses ayant plus de 21 jours de retard. Téléchargez et confirmez la réception de toute nouvelle réponse."
+      }
+    },
+    "unconfirmedSubmissionsOver21DaysOld": {
+      "title": "Confirmez la réception des réponses",
+      "body1": "Il y a",
+      "body2": "réponses non confirmées ayant plus de 21 jours de retard. Confirmez la réception de toute réponse non confirmée en retard."
+    },
+    "unsavedSubmissionsOver35DaysOld": {
+      "title": "Le téléchargement est limité jusqu'à ce que la réception des réponses soit confirmée",
+      "body1": "Il y a",
+      "body2": {
+        "moreThan20Responses": "nouvelles réponses ayant plus de 35 jours de retard. Téléchargez et confirmez 20 réponses en retard à la fois avant de continuer.",
+        "lessThan20Responses": "nouvelles réponses ayant plus de 35 jours de retard. Téléchargez et confirmez toute réponse en retard avant de continuer."
+      }
+    },
+    "unconfirmedSubmissionsOver35DaysOld": {
+      "title": "Le téléchargement est limité aux réponses en retard jusqu'à ce qu'elles soient téléchargées et confirmées",
+      "body1": "Il y a",
+      "body2": "réponses non confirmées avec 35 jours de retard ou plus. Confirmez la réception de toute réponse téléchargée en retard avant d'en enregistrer de nouvelles."
+    }
+  }
 }

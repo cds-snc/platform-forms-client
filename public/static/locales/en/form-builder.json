@@ -579,5 +579,34 @@
   "translateTitle": "Enter your translation",
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
-  "unnamedForm": "Unnamed form file"
+  "unnamedForm": "Unnamed form file",
+  "nagware": {
+    "restrictedDownloadAfter35Days": "Downloading will be restricted if unconfirmed responses are older than 35 days.",
+    "unsavedSubmissionsOver21DaysOld": {
+      "title": "Download and confirm receipt of responses",
+      "body1": "There are",
+      "body2": {
+        "moreThan20Responses": "new responses older than 21 days. Download and confirm receipt of 20 overdue new responses at a time.",
+        "lessThan20Responses": "new responses older than 21 days. Download and confirm receipt of all overdue new responses."
+      }
+    },
+    "unconfirmedSubmissionsOver21DaysOld": {
+      "title": "Confirm receipt of responses",
+      "body1": "There are",
+      "body2": "unconfirmed responses older than 21 days. Confirm receipt of all overdue unconfirmed responses."
+    },
+    "unsavedSubmissionsOver35DaysOld": {
+      "title": "Downloading is restricted to overdue responses until they are downloaded and confirmed",
+      "body1": "There are",
+      "body2": {
+        "moreThan20Responses": "new responses over 35 days old. Download and confirm 20 overdue responses at a time before continuing.",
+        "lessThan20Responses": "new responses over 35 days old. Download and confirm all overdue responses before continuing."
+      }
+    },
+    "unconfirmedSubmissionsOver35DaysOld": {
+      "title": "Downloading is restricted until receipt of responses is confirmed",
+      "body1": "There are",
+      "body2": "unconfirmed responses 35 days overdue. Confirm the receipt of all overdue downloaded responses before saving new ones."
+    }
+  }
 }
