@@ -4,6 +4,7 @@ import { persist, StateStorage, createJSONStorage } from "zustand/middleware";
 import React, { createContext, useRef, useContext } from "react";
 import { getPathString } from "../getPath";
 
+
 import {
   moveDown,
   moveUp,
@@ -22,6 +23,7 @@ import {
   FormElementTypes,
   DeliveryOption,
   ElementProperties,
+  SecurityAttribute
 } from "@lib/types";
 import { logMessage } from "@lib/logger";
 import { BrandProperties } from "@lib/types/form-types";
@@ -75,7 +77,7 @@ export interface TemplateStoreProps {
   isPublished: boolean;
   name: string;
   deliveryOption?: DeliveryOption;
-  securityAttribute: string;
+  securityAttribute: SecurityAttribute;
 }
 
 export interface InitialTemplateStoreProps extends TemplateStoreProps {
@@ -163,7 +165,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
     form: defaultForm,
     isPublished: false,
     name: "",
-    securityAttribute: "Unclassified",
+    securityAttribute: SecurityAttribute.unclassified,
   };
 
   // Ensure any required properties by Form Builder are defaulted by defaultForm
@@ -387,7 +389,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               state.form = defaultForm;
               state.isPublished = false;
               state.name = "";
-              state.securityAttribute = "Unclassified";
+              state.securityAttribute = SecurityAttribute.UNCLASSIFIED;
               state.deliveryOption = undefined;
             });
           },
