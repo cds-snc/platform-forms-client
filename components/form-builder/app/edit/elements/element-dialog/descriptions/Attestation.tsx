@@ -26,7 +26,7 @@ export const Attestation = ({ title, description }: { title: string; description
             <div>
               <CheckBoxEmptyIcon className="scale-150" />
             </div>
-            <div className="-mt-1 ml-5">{t("addElementDialog.condition1")}</div>
+            <div className="-mt-1 ml-5">{t("addElementDialog.condition2")}</div>
           </div>
           <div className="flex">
             <div>
