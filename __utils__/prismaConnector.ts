@@ -10,8 +10,10 @@ export const {
 } = Prisma;
 
 jest.mock("@lib/integration/prismaConnector", () => {
+  const originalModule = jest.requireActual("@lib/integration/prismaConnector");
   return {
     __esModule: true,
+    ...originalModule,
     prisma: mockDeep<PrismaClient>(),
   };
 });
