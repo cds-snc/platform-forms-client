@@ -51,14 +51,14 @@ export const jsonValidator = (schema: Schema, options?: ValidateOptions): Middle
         return { next: true };
       }
 
-      const validator = new Validator();
-      const validateObject = options?.jsonKey ? req.body[options.jsonKey] : req.body;
-
       // If there is no object to test, fail quickly
-      if (validateObject.constructor === Object && Object.keys(req.body).length === 0) {
+      if (req.body?.constructor === Object && Object.keys(req.body).length === 0) {
         res.status(400).json({ error: "JSON Validation Error: Object Required" });
         return { next: false };
       }
+
+      const validator = new Validator();
+      const validateObject = options?.jsonKey ? req.body[options.jsonKey] : req.body;
 
       const validatorResult: ValidatorResult = validator.validate(
         validateObject,
