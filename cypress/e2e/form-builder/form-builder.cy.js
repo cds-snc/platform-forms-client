@@ -55,7 +55,7 @@ describe("Test FormBuilder", () => {
     cy.get("#title--modal--0").type("-1");
     cy.get("#description--modal--0").type("Question 1 description");
     cy.get("#required-0-id-modal").click();
-    cy.get(".modal-content button").contains("Save").click({ force: true });
+    cy.get('[data-testid="modal-content"] button').contains("Save").click({ force: true });
 
     // re-check form editor
     cy.get("#item-1").scrollIntoView().should("have.value", "Question 1-1");

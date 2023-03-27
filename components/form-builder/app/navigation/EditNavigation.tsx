@@ -10,7 +10,7 @@ export const EditNavigation = () => {
   const { activePathname } = useActivePathname();
 
   return (
-    <div className="relative flex flex-col tablet:flex-row laptop:relative">
+    <div className="relative flex flex-col tablet:flex-row max-w-[800px]">
       <div className="flex">
         <nav className="laptop:mb-4 flex flex-wrap" aria-label={t("navLabelEditor")}>
           <SubNavLink href="/form-builder/edit">
@@ -29,7 +29,7 @@ export const EditNavigation = () => {
       </div>
       <div>
         {activePathname.endsWith("/edit") && (
-          <div className="flex tablet:justify-end laptop:absolute laptop:right-0 laptop:top-0 laptop:mt-4 laptop:mr-[70px] desktop:mr-24">
+          <div className="flex tablet:absolute tablet:right-0 tablet:top-0 tablet:mt-4">
             <LangSwitcher descriptionLangKey="editingIn" />
           </div>
         )}
