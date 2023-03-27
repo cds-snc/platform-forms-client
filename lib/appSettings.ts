@@ -3,6 +3,7 @@ import { AccessControlError, checkPrivileges } from "./privileges";
 import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
 import { UserAbility } from "./types";
+import { settingCheck, settingPut, settingDelete } from "@lib/cache/settingCache";
 
 export const getAllAppSettings = async (ability: UserAbility) => {
   try {
@@ -32,7 +33,10 @@ export const getAllAppSettings = async (ability: UserAbility) => {
 };
 
 export const getAppSetting = async (internalId: string) => {
-  return prisma.setting
+  const cachedSetting = await settingCheck(internalId);
+  if (cachedSetting) return cachedSetting;
+
+  const uncachedSetting = await prisma.setting
     .findUnique({
       where: {
         internalId,
@@ -42,6 +46,11 @@ export const getAppSetting = async (internalId: string) => {
       },
     })
     .catch((e) => prismaErrors(e, null));
+
+  if (uncachedSetting?.value) {
+    settingPut(internalId, uncachedSetting.value);
+  }
+  return uncachedSetting?.value;
 };
 
 interface SettingUpdateData {
@@ -71,6 +80,9 @@ export const updateAppSetting = async (
       "ChangeSetting",
       `Updated setting with ${JSON.stringify(settingData)}`
     );
+    if (settingData.value) {
+      settingPut(internalId, settingData.value);
+    }
     return updatedSetting;
   } catch (e) {
     if (e instanceof AccessControlError) {
@@ -105,6 +117,9 @@ export const createAppSetting = async (ability: UserAbility, settingData: Settin
       "CreateSetting",
       `Created setting with ${JSON.stringify(settingData)}`
     );
+    if (settingData.value) {
+      settingPut(settingData.internalId, settingData.value);
+    }
     return createdSetting;
   } catch (e) {
     if (e instanceof AccessControlError) {
@@ -131,6 +146,7 @@ export const deleteAppSetting = async (ability: UserAbility, internalId: string)
       "DeleteSetting",
       `Deleted setting with ${JSON.stringify(deletedSetting)}`
     );
+    settingDelete(internalId);
   } catch (e) {
     if (e instanceof AccessControlError) {
       logEvent(ability.userID, { type: "Setting" }, "AccessDenied", "Attempted to delete setting");

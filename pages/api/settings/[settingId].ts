@@ -17,8 +17,8 @@ const settings = async (req: NextApiRequest, res: NextApiResponse, props: Middle
 
     switch (req.method) {
       case "GET": {
-        const allSettings = await getAppSetting(internalId);
-        return res.status(200).json(allSettings);
+        const setting = await getAppSetting(internalId);
+        return res.status(200).json(setting);
       }
 
       case "PUT": {

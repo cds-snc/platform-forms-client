@@ -42,13 +42,13 @@ export const getServerSideProps: GetServerSideProps = async ({ locale, req, res 
 
   const brandingRequestFormSetting = await getAppSetting("brandingRequestForm");
 
-  if (!brandingRequestFormSetting?.value) {
+  if (!brandingRequestFormSetting) {
     return {
       notFound: true,
     };
   }
 
-  const brandingRequestForm = await getPublicTemplateByID(brandingRequestFormSetting.value);
+  const brandingRequestForm = await getPublicTemplateByID(brandingRequestFormSetting);
 
   return {
     props: {
