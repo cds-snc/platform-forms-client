@@ -107,7 +107,6 @@ export interface FormProperties {
   confirmation?: Record<string, string>;
   layout: number[];
   elements: FormElement[];
-  securityAttribute?: SecurityAttribute;
   brand?: BrandProperties;
   [key: string]:
     | string

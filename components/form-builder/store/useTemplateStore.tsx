@@ -136,7 +136,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   getName: () => string;
   getDeliveryOption: () => DeliveryOption | undefined;
   resetDeliveryOption: () => void;
-  getSecurityAttribute: () => string;
+  getSecurityAttribute: () => SecurityAttribute;
   initialize: () => void;
 }
 
@@ -228,7 +228,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             }),
           updateSecurityAttribute: (value) =>
             set((state) => {
-              state.form.securityAttribute = value;
+              state.securityAttribute = value;
             }),
           propertyPath: (id: number, field: string, lang?: Language) => {
             const path = getPathString(id, get().form.elements);
