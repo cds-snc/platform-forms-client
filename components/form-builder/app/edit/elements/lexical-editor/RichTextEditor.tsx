@@ -5,6 +5,10 @@ import { Language } from "../../../../types";
 import debounce from "lodash.debounce";
 import { useTranslation } from "next-i18next";
 
+const _debounced = debounce((updater) => {
+  updater();
+}, 100);
+
 export const RichTextEditor = ({
   path,
   content,
@@ -30,27 +34,12 @@ export const RichTextEditor = ({
     setValue(content);
   }, [content]);
 
-  const _debounced = debounce(
-    useCallback(
-      (value: string) => {
-        if (typeof value === "undefined") {
-          value = "";
-        }
-        updateField(path, value);
-      },
-      [updateField, path]
-    ),
-    100
-  );
-
   const updateValue = useCallback(
     (value: string) => {
       setValue(value);
-      _debounced(value);
+      _debounced(() => updateField(path, value));
     },
-    // exclude _debounced from the dependency array
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [setValue]
+    [setValue, path, updateField]
   );
 
   return (
