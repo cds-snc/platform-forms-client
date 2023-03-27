@@ -49,7 +49,7 @@ export const jsonValidator = (schema: Schema, options?: ValidateOptions): Middle
       const validator = new Validator();
       const validateObject = options?.jsonKey
         ? req.body[options.jsonKey]
-        : req.body.length > 0
+        : req.body.toString().length > 0
         ? req.body
         : undefined;
       const validatorResult: ValidatorResult = validator.validate(
