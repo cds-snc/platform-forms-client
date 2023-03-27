@@ -5,7 +5,7 @@ import { useTranslation } from "next-i18next";
 import { Language, LocalizedFormProperties } from "../../types";
 import { ElementPanel, ConfirmationDescription, PrivacyDescription } from ".";
 import { RichTextLocked } from "./elements";
-import { Input, Output } from "../shared";
+import { Input } from "../shared";
 import { useTemplateStore } from "../../store";
 
 export const Edit = () => {
@@ -91,8 +91,6 @@ export const Edit = () => {
         const item = { ...element, index };
         return <ElementPanel item={item} key={item.id} />;
       })}
-
-      <Output />
 
       {elements?.length >= 1 && (
         <>

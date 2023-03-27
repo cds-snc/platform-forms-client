@@ -445,6 +445,7 @@
   "settingsResponseHint1": "[FR] Submitted responses will be emailed to this inbox.",
   "settingsResponseTitle": "Destination de livraison des réponses.",
   "settingsResponseDelivery": {
+    "selectClassification": "[FR] Select the data classification of your form responses",
     "title": "[FR] Select a response delivery option",
     "vaultOption": "[FR] Download responses from GC Forms",
     "vaultOptionHint": {

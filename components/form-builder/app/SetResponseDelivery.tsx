@@ -205,7 +205,7 @@ export const SetResponseDelivery = () => {
         <div className="mb-10">
           <div className="block font-bold mb-4">{t("settingsResponseDelivery.title")}</div>
           <div className="mb-4">
-            Select the data classification of your form responses
+            <p>{t("settingsResponseDelivery.selectClassification")}</p>
             <select
               id="classification-select"
               value={classification}
