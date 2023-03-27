@@ -149,7 +149,12 @@ export const deleteAppSetting = async (ability: UserAbility, internalId: string)
     settingDelete(internalId);
   } catch (e) {
     if (e instanceof AccessControlError) {
-      logEvent(ability.userID, { type: "Setting" }, "AccessDenied", "Attempted to delete setting");
+      logEvent(
+        ability.userID,
+        { id: internalId, type: "Setting" },
+        "AccessDenied",
+        "Attempted to delete setting"
+      );
       throw e;
     }
     logMessage.error(e);
