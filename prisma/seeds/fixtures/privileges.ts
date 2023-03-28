@@ -109,35 +109,19 @@ const ManageApplicationSettings: PrivilegeSeed = {
   priority: 5,
 };
 
+const allLivePrivileges = [
+  Base,
+  PublishForms,
+  ManageForms,
+  ViewUserPrivileges,
+  ManageUsers,
+  ManagePrivileges,
+  ViewApplicationSettings,
+  ManageApplicationSettings,
+];
+
 export default {
-  development: [
-    Base,
-    PublishForms,
-    ManageForms,
-    ViewUserPrivileges,
-    ManageUsers,
-    ManagePrivileges,
-    ViewApplicationSettings,
-    ManageApplicationSettings,
-  ],
-  production: [
-    Base,
-    PublishForms,
-    ManageForms,
-    ViewUserPrivileges,
-    ManageUsers,
-    ManagePrivileges,
-    ViewApplicationSettings,
-    ManageApplicationSettings,
-  ],
-  test: [
-    Base,
-    PublishForms,
-    ManageForms,
-    ViewUserPrivileges,
-    ManageUsers,
-    ManagePrivileges,
-    ViewApplicationSettings,
-    ManageApplicationSettings,
-  ],
+  development: [...allLivePrivileges],
+  production: [...allLivePrivileges],
+  test: [...allLivePrivileges],
 } as PrivilegeCollection;
