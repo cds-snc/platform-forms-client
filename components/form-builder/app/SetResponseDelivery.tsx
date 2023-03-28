@@ -122,16 +122,12 @@ export const SetResponseDelivery = () => {
     setInputEmail("");
     resetDeliveryOption();
     updateSecurityAttribute(classification);
-    await uploadJson(getSchema(), getName(), undefined, id);
-    return await updateResponseDelivery(id);
+    return await updateResponseDelivery(id, classification);
   }, [
     id,
     resetDeliveryOption,
     updateResponseDelivery,
     setInputEmail,
-    uploadJson,
-    getSchema,
-    getName,
     classification,
     updateSecurityAttribute,
   ]);
@@ -142,7 +138,7 @@ export const SetResponseDelivery = () => {
     updateField("deliveryOption.subjectEn", subjectEn);
     updateField("deliveryOption.subjectFr", subjectFr);
     updateSecurityAttribute(classification);
-    return await uploadJson(getSchema(), getName(), getDeliveryOption(), id);
+    return await uploadJson(getSchema(), getName(), getDeliveryOption(), classification);
   }, [
     inputEmail,
     subjectEn,

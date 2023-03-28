@@ -1,9 +1,10 @@
-import { DeliveryOption } from "@lib/types";
+import { DeliveryOption, SecurityAttribute } from "@lib/types";
 import axios, { AxiosError, AxiosResponse } from "axios";
 
 export const usePublish = () => {
   const updateResponseDelivery = async (
-    formID: string
+    formID: string,
+    securityAttribute: SecurityAttribute
   ): Promise<AxiosResponse | { error: AxiosError } | undefined> => {
     if (!formID) {
       return;
@@ -20,6 +21,7 @@ export const usePublish = () => {
         },
         data: {
           sendResponsesToVault: true,
+          securityAttribute,
         },
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       });
@@ -34,6 +36,7 @@ export const usePublish = () => {
     jsonConfig: string,
     name?: string,
     deliveryOption?: DeliveryOption,
+    securityAttribute?: SecurityAttribute,
     formID?: string,
     publish = false
   ) => {
@@ -65,6 +68,7 @@ export const usePublish = () => {
           isPublished: publish ? true : false,
           formConfig: formData,
           name: name,
+          securityAttribute: securityAttribute,
           ...data,
         },
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
