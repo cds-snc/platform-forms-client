@@ -10,7 +10,7 @@ const contextClass = {
   default: "bg-white",
 };
 
-const ToastContainer = () => {
+export const ToastContainer = () => {
   return (
     <OriginalContainer
       toastClassName={({ type }) =>
@@ -26,5 +26,3 @@ const ToastContainer = () => {
     />
   );
 };
-
-export { ToastContainer, toast };
