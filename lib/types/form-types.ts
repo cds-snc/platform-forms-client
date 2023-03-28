@@ -126,6 +126,8 @@ export interface DeliveryOption {
   [key: string]: string | undefined;
 }
 
+export type SecurityAttribute = "Unclassified" | "Protected A" | "Protected B";
+
 // defines the fields for the form record that is available in authenticated spaces and backend processes
 export type FormRecord = {
   id: string;
@@ -135,7 +137,7 @@ export type FormRecord = {
   form: FormProperties;
   isPublished: boolean;
   deliveryOption?: DeliveryOption;
-  securityAttribute: string;
+  securityAttribute: SecurityAttribute;
   bearerToken?: string;
   reCaptchaID?: string;
   [key: string]: string | boolean | FormProperties | DeliveryOption | undefined;

@@ -9,6 +9,7 @@ export type {
   DeliveryOption,
   FormRecord,
   FormProperties,
+  SecurityAttribute,
 } from "./form-types";
 export { FormElementTypes } from "./form-types";
 

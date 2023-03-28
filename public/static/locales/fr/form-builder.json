@@ -445,6 +445,7 @@
   "settingsResponseHint1": "Les réponses soumises seront envoyées par courriel à cette boîte de réception.",
   "settingsResponseTitle": "Destination de livraison des réponses.",
   "settingsResponseDelivery": {
+    "selectClassification": "Sélectionnez la classification des données des réponses de votre formulaire",
     "title": "Sélectionnez une option de livraison des réponses",
     "vaultOption": "Télécharger les réponses de Formulaires GC",
     "vaultOptionHint": {
