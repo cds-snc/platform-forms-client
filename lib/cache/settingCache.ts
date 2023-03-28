@@ -34,7 +34,7 @@ export const settingDelete = async (internalId: string): Promise<void> => {
   try {
     const redis = await getRedisInstance();
 
-    redis.del(deleteParameter);
+    await redis.del(deleteParameter);
     logMessage.debug(`Deleting Cached Setting for ${deleteParameter}`);
   } catch (e) {
     logMessage.error(e as Error);
@@ -49,7 +49,7 @@ export const settingPut = async (internalId: string, value: string): Promise<voi
   try {
     const redis = await getRedisInstance();
 
-    redis.setex(modifyParameter, randomCacheExpiry(), value);
+    await redis.setex(modifyParameter, randomCacheExpiry(), value);
     logMessage.debug(`Updating Cached Setting for ${modifyParameter}`);
   } catch (e) {
     logMessage.error(e as Error);
