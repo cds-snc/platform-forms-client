@@ -3,7 +3,7 @@ import { LocalizedFormProperties } from "../types";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
 import { useSession } from "next-auth/react";
-import { ToastContainer, toast } from "./shared/Toast";
+import { toast } from "./shared/Toast";
 
 import { useRefresh } from "@lib/hooks";
 import { isValidGovEmail } from "@lib/validation";
@@ -280,9 +280,6 @@ export const SetResponseDelivery = () => {
           <ResponseDeliveryHelpButton />
         </div>
       )}
-      <div className="sticky top-0">
-        <ToastContainer />
-      </div>
     </>
   );
 };
