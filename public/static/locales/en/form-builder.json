@@ -441,7 +441,7 @@
   "settingsInvalidEmailAlertDesc2": "to register email address.",
   "settingsInvalidEmailAlertTitle": "Government email address",
   "settingsNavHome": "Response delivery",
-  "settingsResponseEmailTitle": "Enter the email address",
+  "settingsResponseEmailTitle": "Email address",
   "settingsResponseHint1": "Submitted responses will be emailed to this inbox.",
   "settingsResponseDelivery": {
     "title": "Select a response delivery option",
