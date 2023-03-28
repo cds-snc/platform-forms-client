@@ -61,7 +61,7 @@ export const SetResponseDelivery = () => {
     getDeliveryOption: s.getDeliveryOption,
     updateField: s.updateField,
     updateSecurityAttribute: s.updateSecurityAttribute,
-    securityAttribute: s.form.securityAttribute,
+    securityAttribute: s.securityAttribute,
   }));
 
   const userEmail = session.data?.user.email ?? "";
