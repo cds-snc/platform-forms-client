@@ -3,8 +3,7 @@ import { LocalizedFormProperties } from "../types";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
 import { useSession } from "next-auth/react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
+import { ToastContainer, toast } from "./shared/Toast";
 
 import { useRefresh } from "@lib/hooks";
 import { isValidGovEmail } from "@lib/validation";
@@ -191,22 +190,12 @@ export const SetResponseDelivery = () => {
     }
 
     if (!result || axios.isAxiosError(result)) {
-      toast.error(t("settingsResponseDelivery.savedErrorMessage"), {
-        position: toast.POSITION.TOP_CENTER,
-        autoClose: 3000,
-        hideProgressBar: true,
-        closeOnClick: true,
-      });
+      toast.error(t("settingsResponseDelivery.savedErrorMessage"));
 
       return;
     }
 
-    toast.success(t("settingsResponseDelivery.savedSuccessMessage"), {
-      position: toast.POSITION.TOP_CENTER,
-      autoClose: 3000,
-      hideProgressBar: true,
-      closeOnClick: true,
-    });
+    toast.success(t("settingsResponseDelivery.savedSuccessMessage"));
 
     refreshData && refreshData();
   }, [refreshData, deliveryOption, email, setToDatabaseDelivery, setToEmailDelivery, t]);
