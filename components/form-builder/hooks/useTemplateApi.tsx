@@ -34,14 +34,14 @@ export const useTemplateApi = () => {
     try {
       const url = formID ? `/api/templates/${formID}` : "/api/templates";
 
-      let data: TemplateConfig = {};
+      const data: TemplateConfig = {};
 
       if (deliveryOption) {
-        data = { deliveryOption };
+        data.deliveryOption = deliveryOption;
       }
 
       if (securityAttribute) {
-        data = { securityAttribute };
+        data.securityAttribute = securityAttribute;
       }
 
       const result = await axios({
