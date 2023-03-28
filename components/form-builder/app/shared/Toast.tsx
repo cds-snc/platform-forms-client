@@ -1,5 +1,5 @@
 import React from "react";
-import { ToastContainer as OriginalContainer, toast } from "react-toastify";
+import { ToastContainer as OriginalContainer, toast, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 
 const contextClass = {
@@ -17,12 +17,12 @@ export const ToastContainer = () => {
         contextClass[type || "default"] +
         " relative flex drop-shadow-md p-1 min-h-10 rounded-md justify-between overflow-hidden cursor-pointer"
       }
-      bodyClassName={() => "flex p-6 text-sm text-black"}
+      bodyClassName={() => "flex p-4 text-sm text-black"}
       position={toast.POSITION.TOP_CENTER}
       autoClose={3000}
       hideProgressBar={true}
       closeOnClick={true}
-      transition={undefined}
+      transition={Bounce}
     />
   );
 };
