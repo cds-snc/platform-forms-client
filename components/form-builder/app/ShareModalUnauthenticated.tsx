@@ -1,9 +1,8 @@
-import React, { useCallback, useRef } from "react";
+import React, { useRef } from "react";
 import { useTranslation } from "next-i18next";
 import { FormElementTypes } from "@lib/types";
 
-import { useDialogRef, Dialog, Button, InfoDetails } from "./shared";
-import { useTemplateStore } from "../store";
+import { useDialogRef, Dialog, Button, InfoDetails, DownloadFileButton } from "./shared";
 import Markdown from "markdown-to-jsx";
 
 export const ShareModalUnauthenticated = ({
@@ -17,34 +16,12 @@ export const ShareModalUnauthenticated = ({
 
   const dialog = useDialogRef();
 
-  const { getSchema } = useTemplateStore((s) => ({
-    getSchema: s.getSchema,
-  }));
-
   const handleCopyToClipboard = async () => {
     if ("clipboard" in navigator) {
       const stringified = instructions.current?.innerText || "";
       await navigator.clipboard.writeText(stringified);
     }
   };
-
-  const handleDownloadJson = useCallback(async () => {
-    async function retrieveFileBlob() {
-      try {
-        const blob = new Blob([getSchema()], { type: "application/json" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "form.json";
-        a.click();
-        URL.revokeObjectURL(url);
-      } catch (e) {
-        alert("error creating file download");
-      }
-    }
-
-    retrieveFileBlob();
-  }, [getSchema]);
 
   const actions = (
     <>
@@ -83,16 +60,8 @@ export const ShareModalUnauthenticated = ({
 
           <section className="my-8">
             <h3>{t("share.unauthenticated.step1")}</h3>
-            <p>{t("share.unauthenticated.step1Details")}</p>
-            <Button
-              theme="secondary"
-              className="mt-4"
-              onClick={() => {
-                handleDownloadJson();
-              }}
-            >
-              {t("share.unauthenticated.downloadFormFile")}
-            </Button>
+            <p className="mb-4">{t("share.unauthenticated.step1Details")}</p>
+            <DownloadFileButton showInfo={false} />
           </section>
 
           <section className="my-8">
