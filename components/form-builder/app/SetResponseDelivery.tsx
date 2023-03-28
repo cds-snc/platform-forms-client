@@ -51,8 +51,8 @@ export const SetResponseDelivery = () => {
   } = useTemplateStore((s) => ({
     id: s.id,
     email: s.deliveryOption?.emailAddress,
-    subjectEn: s.deliveryOption?.subjectEn,
-    subjectFr: s.deliveryOption?.subjectFr,
+    subjectEn: s.deliveryOption?.emailSubjectEn,
+    subjectFr: s.deliveryOption?.emailSubjectFr,
     defaultSubjectEn: s.form[s.localizeField(LocalizedFormProperties.TITLE, "en")] + " - Response",
     defaultSubjectFr: s.form[s.localizeField(LocalizedFormProperties.TITLE, "fr")] + " - Réponse",
     resetDeliveryOption: s.resetDeliveryOption,
@@ -153,8 +153,9 @@ export const SetResponseDelivery = () => {
   const setToEmailDelivery = useCallback(async () => {
     if (!isValidGovEmail(inputEmail)) return false;
     updateField("deliveryOption.emailAddress", inputEmail);
-    updateField("deliveryOption.subjectEn", subjectEn);
-    updateField("deliveryOption.subjectFr", subjectFr);
+    updateField("deliveryOption.emailSubjectEn", subjectEn);
+    updateField("deliveryOption.emailSubjectFr", subjectFr);
+
     updateSecurityAttribute(classification);
     return await save({
       jsonConfig: getSchema(),
