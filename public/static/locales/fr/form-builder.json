@@ -465,12 +465,12 @@
       "createButton": "Créer un compte"
     },
     "emailSubjectEn": {
-      "title": "[FR] English response subject line",
-      "hint": "[FR] When form responses are submitted in English."
+      "title": "Ligne d'objet en anglais",
+      "hint": "Lorsque les réponses au formulaire sont soumises en anglais."
     },
     "emailSubjectFr": {
-      "title": "[FR] French response subject line",
-      "hint": "[FR] When form responses are submitted in French."
+      "title": "Ligne d'objet en français",
+      "hint": "Lorsque les réponses au formulaire sont soumises en français."
     },
     "responseDeliveryHelp": {
       "cta": "Conseils pour le choix d’une option",
