@@ -440,37 +440,37 @@
   "settingsInvalidEmailAlertDesc1": "Doit être une adresse courriel du gouvernement du Canada.",
   "settingsInvalidEmailAlertDesc2": "pour enregistrer l'adresse courriel.",
   "settingsInvalidEmailAlertTitle": "Adresse courriel du gouvernement",
-  "settingsNavHome": "[FR] Response delivery",
-  "settingsResponseEmailTitle": "[FR] Enter the email address",
-  "settingsResponseHint1": "[FR] Submitted responses will be emailed to this inbox.",
+  "settingsNavHome": "Livraison des réponses",
+  "settingsResponseEmailTitle": "Entrez l’adresse courriel",
+  "settingsResponseHint1": "Les réponses soumises seront envoyées par courriel à cette boîte de réception.",
   "settingsResponseTitle": "Destination de livraison des réponses.",
   "settingsResponseDelivery": {
-    "title": "[FR] Select a response delivery option",
-    "vaultOption": "[FR] Download responses from GC Forms",
+    "title": "Sélectionnez une option de livraison des réponses",
+    "vaultOption": "Télécharger les réponses de Formulaires GC",
     "vaultOptionHint": {
-      "text1": "[FR] Submitted responses will appear on the",
-      "text2": "[FR] Responses page"
+      "text1": " Les réponses reçues apparaîtront à la page Réponses",
+      "text2": "la page Réponses"
     },
-    "emailOption": "[FR] Email the responses to an inbox",
-    "saveButton": "[FR] Save changes",
-    "savedSuccessMessage": "[FR] Your changes have been saved.",
-    "savedErrorMessage": "[FR] There was an error saving your changes. Please try again.",
+    "emailOption": "Les réponses soumises seront envoyées par courriel à cette boîte de réception.",
+    "saveButton": "Enregistrer les modifications",
+    "savedSuccessMessage": "Vos modifications ont été enregistrées.",
+    "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Veuillez réessayer.",
     "card": {
-      "title": "[FR] You cannot change settings",
-      "text1": "[FR] To change the settings of this form,",
-      "text2": "[FR] sign into your account",
-      "text3": "[FR] If you do not have a GC Forms account, ",
-      "text4": "[FR] create one now",
-      "signinButton": "[FR] Sign In",
-      "createButton": "[FR] Create an account"
+      "title": "Vous ne pouvez pas modifier les paramètres",
+      "text1": "Pour modifier les paramètres de ce formulaire,",
+      "text2": "connectez-vous",
+      "text3": "Si vous n’avez pas de compte Formulaires GC, ",
+      "text4": "créez-en un maintenant",
+      "signinButton": "Se connecter",
+      "createButton": "Créer un compte"
     },
     "emailSubjectEn": {
-      "title": "[FR] English response subject line",
-      "hint": "[FR] When form responses are submitted in English."
+      "title": "Ligne d'objet en anglais",
+      "hint": "Lorsque les réponses au formulaire sont soumises en anglais."
     },
     "emailSubjectFr": {
-      "title": "[FR] French response subject line",
-      "hint": "[FR] When form responses are submitted in French."
+      "title": "Ligne d'objet en français",
+      "hint": "Lorsque les réponses au formulaire sont soumises en français."
     },
     "responseDeliveryHelp": {
       "cta": "Conseils pour le choix d’une option",
