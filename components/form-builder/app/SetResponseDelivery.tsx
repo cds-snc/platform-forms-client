@@ -10,7 +10,7 @@ import { useRefresh } from "@lib/hooks";
 import { isValidGovEmail } from "@lib/validation";
 import { ResponseEmail } from "./ResponseEmail";
 import { Radio, Button, ResponseDeliveryHelpButton } from "./shared";
-import { usePublish } from "../hooks";
+import { useTemplateApi } from "../hooks";
 import { useTemplateStore } from "../store";
 import { completeEmailAddressRegex } from "../util";
 
@@ -30,7 +30,7 @@ export const SetResponseDelivery = () => {
   const { t, i18n } = useTranslation("form-builder");
   const { status } = useSession();
   const session = useSession();
-  const { updateResponseDelivery, uploadJson } = usePublish();
+  const { save } = useTemplateApi();
   const { refreshData } = useRefresh();
   const lang = i18n.language === "en" ? "en" : "fr";
 
@@ -122,14 +122,22 @@ export const SetResponseDelivery = () => {
     setInputEmail("");
     resetDeliveryOption();
     updateSecurityAttribute(classification);
-    return await updateResponseDelivery(id, classification);
+    return await save({
+      jsonConfig: getSchema(),
+      name: getName(),
+      formID: id,
+      deliveryOption: undefined,
+      securityAttribute: classification,
+    });
   }, [
     id,
     resetDeliveryOption,
-    updateResponseDelivery,
     setInputEmail,
     classification,
     updateSecurityAttribute,
+    save,
+    getSchema,
+    getName,
   ]);
 
   const setToEmailDelivery = useCallback(async () => {
@@ -138,13 +146,19 @@ export const SetResponseDelivery = () => {
     updateField("deliveryOption.subjectEn", subjectEn);
     updateField("deliveryOption.subjectFr", subjectFr);
     updateSecurityAttribute(classification);
-    return await uploadJson(getSchema(), getName(), getDeliveryOption(), classification);
+    return await save({
+      jsonConfig: getSchema(),
+      name: getName(),
+      formID: id,
+      deliveryOption: getDeliveryOption(),
+      securityAttribute: classification,
+    });
   }, [
     inputEmail,
     subjectEn,
     subjectFr,
     id,
-    uploadJson,
+    save,
     getSchema,
     getName,
     getDeliveryOption,

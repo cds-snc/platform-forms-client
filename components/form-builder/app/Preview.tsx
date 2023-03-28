@@ -8,7 +8,7 @@ import { LocalizedElementProperties, LocalizedFormProperties } from "../types";
 import { Button, Form } from "@components/forms";
 import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
-import { useTemplateApi } from "../hooks";
+import { useTemplateContext } from "../hooks";
 import { BackArrowIcon } from "../icons";
 import { PublicFormRecord } from "@lib/types";
 
@@ -43,7 +43,7 @@ export const Preview = () => {
   const { t } = useTranslation(["common", "form-builder"]);
   const language = translationLanguagePriority;
   const currentForm = getRenderedForm(formRecord, language, t);
-  const { saveForm } = useTemplateApi();
+  const { saveForm } = useTemplateContext();
   const [sent, setSent] = useState<string | null>();
   const saved = useRef(false);
 

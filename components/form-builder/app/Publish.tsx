@@ -2,7 +2,7 @@ import { useTranslation } from "next-i18next";
 import { useTemplateStore } from "../store/useTemplateStore";
 import React, { useCallback, useState } from "react";
 import { useAllowPublish } from "../hooks/useAllowPublish";
-import { usePublish } from "../hooks/usePublish";
+import { useTemplateApi } from "../hooks";
 import { CancelIcon, CircleCheckIcon, WarningIcon, LockIcon } from "../icons";
 import { Button } from "./shared/Button";
 import { useRouter } from "next/router";
@@ -22,12 +22,11 @@ export const Publish = () => {
 
   const [error, setError] = useState(false);
 
-  const { id, setId, getSchema, getName, getDeliveryOption } = useTemplateStore((s) => ({
+  const { id, setId, getSchema, getName } = useTemplateStore((s) => ({
     id: s.id,
     setId: s.setId,
     getSchema: s.getSchema,
     getName: s.getName,
-    getDeliveryOption: s.getDeliveryOption,
   }));
 
   const Icon = ({ checked }: { checked: boolean }) => {
@@ -38,10 +37,15 @@ export const Publish = () => {
     );
   };
 
-  const { uploadJson } = usePublish();
+  const { save } = useTemplateApi();
 
   const handlePublish = async () => {
-    const result = await uploadJson(getSchema(), getName(), getDeliveryOption(), id, true);
+    const result = await save({
+      jsonConfig: getSchema(),
+      name: getName(),
+      formID: id,
+      publish: true,
+    });
 
     if (result && result?.error) {
       setError(true);
@@ -53,7 +57,12 @@ export const Publish = () => {
   };
 
   const handleSaveAndRequest = useCallback(async () => {
-    const result = await uploadJson(getSchema(), getName(), getDeliveryOption(), id, false);
+    const result = await save({
+      jsonConfig: getSchema(),
+      name: getName(),
+      formID: id,
+      publish: false,
+    });
 
     if (result && result?.error) {
       setError(true);
@@ -61,7 +70,7 @@ export const Publish = () => {
     }
 
     router.push({ pathname: `/unlock-publishing` });
-  }, [getSchema, getName, getDeliveryOption, id, uploadJson, router]);
+  }, [getSchema, getName, id, save, router]);
 
   if (status !== "authenticated") {
     return <PublishNoAuth />;
