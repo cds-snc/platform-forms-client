@@ -453,7 +453,7 @@
     },
     "emailOption": "Les réponses soumises seront envoyées par courriel à cette boîte de réception.",
     "saveButton": "Enregistrer les modifications",
-    "savedSuccessMessage": "[FR] Your changes have been saved.",
+    "savedSuccessMessage": "Vos modifications ont été enregistrées.",
     "savedErrorMessage": "[FR] There was an error saving your changes. Please try again.",
     "card": {
       "title": "Vous ne pouvez pas modifier les paramètres",
