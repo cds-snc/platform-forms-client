@@ -1,4 +1,4 @@
-import React, { ReactElement, useCallback, useEffect, useState } from "react";
+import React, { ReactElement, useState } from "react";
 import axios from "axios";
 import { Setting } from "@prisma/client";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";

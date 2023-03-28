@@ -1,14 +1,7 @@
-import {
-  Schema,
-  Validator,
-  ValidatorResult,
-  PreValidatePropertyFunction,
-  validate,
-} from "jsonschema";
+import { Schema, Validator, ValidatorResult, PreValidatePropertyFunction } from "jsonschema";
 import { NextApiRequest, NextApiResponse } from "next";
 import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
 import * as htmlparser2 from "htmlparser2";
-import { logMessage } from "@lib/logger";
 
 export type ValidateOptions = {
   jsonKey?: string;

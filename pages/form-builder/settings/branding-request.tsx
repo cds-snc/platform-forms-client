@@ -3,7 +3,6 @@ import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetServerSideProps } from "next";
 import { getServerSession } from "next-auth";
-import { prisma } from "@lib/integration/prismaConnector";
 
 import { PageProps } from "@lib/types";
 import { getPublicTemplateByID } from "@lib/templates";
