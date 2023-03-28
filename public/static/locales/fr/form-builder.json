@@ -454,7 +454,7 @@
     "emailOption": "Les réponses soumises seront envoyées par courriel à cette boîte de réception.",
     "saveButton": "Enregistrer les modifications",
     "savedSuccessMessage": "Vos modifications ont été enregistrées.",
-    "savedErrorMessage": "[FR] There was an error saving your changes. Please try again.",
+    "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Veuillez réessayer.",
     "card": {
       "title": "Vous ne pouvez pas modifier les paramètres",
       "text1": "Pour modifier les paramètres de ce formulaire,",
