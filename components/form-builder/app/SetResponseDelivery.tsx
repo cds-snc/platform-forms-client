@@ -30,7 +30,7 @@ export const SetResponseDelivery = () => {
   const { t, i18n } = useTranslation("form-builder");
   const { status } = useSession();
   const session = useSession();
-  const { save } = useTemplateApi();
+  const { save, updateResponseDelivery } = useTemplateApi();
   const { refreshData } = useRefresh();
   const lang = i18n.language === "en" ? "en" : "fr";
 
@@ -82,6 +82,9 @@ export const SetResponseDelivery = () => {
 
   const [isInvalidEmailError, setIsInvalidEmailError] = useState(false);
 
+  /*--------------------------------------------*
+   * Form Validation
+   *--------------------------------------------*/
   const isValid = useMemo(() => {
     if (classification !== securityAttribute) {
       return true;
@@ -118,15 +121,18 @@ export const SetResponseDelivery = () => {
     securityAttribute,
   ]);
 
+  /*--------------------------------------------*
+   * Set as Database Storage
+   *--------------------------------------------*/
   const setToDatabaseDelivery = useCallback(async () => {
     setInputEmail("");
     resetDeliveryOption();
     updateSecurityAttribute(classification);
+    await updateResponseDelivery(id);
     return await save({
       jsonConfig: getSchema(),
       name: getName(),
       formID: id,
-      deliveryOption: undefined,
       securityAttribute: classification,
     });
   }, [
@@ -138,8 +144,12 @@ export const SetResponseDelivery = () => {
     save,
     getSchema,
     getName,
+    updateResponseDelivery,
   ]);
 
+  /*--------------------------------------------*
+   * Set as Email Delivery
+   *--------------------------------------------*/
   const setToEmailDelivery = useCallback(async () => {
     if (!isValidGovEmail(inputEmail)) return false;
     updateField("deliveryOption.emailAddress", inputEmail);
@@ -167,6 +177,9 @@ export const SetResponseDelivery = () => {
     updateSecurityAttribute,
   ]);
 
+  /*--------------------------------------------*
+   * Save Delivery Option
+   *--------------------------------------------*/
   const saveDeliveryOption = useCallback(async () => {
     let result;
 

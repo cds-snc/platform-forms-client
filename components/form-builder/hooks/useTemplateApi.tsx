@@ -1,5 +1,5 @@
 import { DeliveryOption, SecurityAttribute } from "@lib/types";
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 type TemplateConfig = {
   deliveryOption?: DeliveryOption;
@@ -80,5 +80,33 @@ export const useTemplateApi = () => {
     }
   };
 
-  return { save };
+  const updateResponseDelivery = async (
+    formID: string
+  ): Promise<AxiosResponse | { error: AxiosError } | undefined> => {
+    if (!formID) {
+      return;
+    }
+
+    try {
+      const url = `/api/templates/${formID}`;
+
+      const result = await axios({
+        url: url,
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: {
+          sendResponsesToVault: true,
+        },
+        timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+      });
+
+      return result.data;
+    } catch (err) {
+      return { error: err as AxiosError };
+    }
+  };
+
+  return { save, updateResponseDelivery };
 };
