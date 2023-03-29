@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
 import { Menu } from "./Menu";
+import { useMenuContext } from "./useMenuContext";
 
 export interface MenuDropdownItemCallback {
   message: string;
@@ -26,15 +27,19 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuListRef = useRef<HTMLUListElement>(null);
   const [menuDropdown, setMenuDropdown] = useState({} as Menu);
+  const { registerMenu } = useMenuContext();
 
   useEffect(() => {
     if (menuButtonRef.current && menuListRef.current) {
-      setMenuDropdown(
-        new Menu({
-          menuButton: menuButtonRef.current,
-          menuList: menuListRef.current,
-        })
-      );
+      const menu = new Menu({
+        menuButton: menuButtonRef.current,
+        menuList: menuListRef.current,
+      })
+      setMenuDropdown(menu);
+      registerMenu(menu);
+
+      console.log(menu);
+      console.log(menuDropdown);
     }
   }, []);
 
@@ -68,6 +73,10 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
         aria-labelledby={`button-${id}`}
         aria-activedescendant={`mi-${id}-0`}
         ref={menuListRef}
+        menuListRef={(el: HTMLUListElement)=>{
+          registerMenu(el)
+        }}
+        
         onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
           menuDropdown?.onMenuListKeydown(e as unknown as KeyboardEvent);
         }}
@@ -95,9 +104,8 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
                         const el = (e.target as HTMLElement).nextElementSibling;
                         if (el && result?.message) {
                           el.classList.remove("hidden");
-                          el.textContent = `${result.isError ? t("error") + ": " : ""} ${
-                            result.message
-                          }`;
+                          el.textContent = `${result.isError ? t("error") + ": " : ""} ${result.message
+                            }`;
                           if (result.isError) {
                             el.classList.remove("text-green-default");
                             el.classList.add("text-red-default");

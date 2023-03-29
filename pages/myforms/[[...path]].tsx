@@ -18,6 +18,8 @@ import { clearTemplateStore } from "@components/form-builder/store/useTemplateSt
 import { ResumeEditingForm } from "@components/form-builder/app/shared";
 import { Template } from "@components/form-builder/app";
 
+import { MenuProvider } from "@components/myforms/MenuDropdown/useMenuContext";
+
 interface FormsDataItem {
   id: string;
   titleEn: string;
@@ -82,46 +84,49 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
       <div className="mx-4 laptop:mx-32 desktop:mx-64 grow shrink-0 basis-auto">
         <div>
           <LeftNavigation />
-          <main id="content" className="ml-40 laptop:ml-60">
-            <h1 className="border-b-0 mb-8 text-h1">{t("title")}</h1>
-            <div className="top-40">
-              <ResumeEditingForm>
-                <StyledLink href="/form-builder/edit" className="mr-8">
-                  <span aria-hidden="true"> ← </span> {t("actions.resumeForm")}
-                </StyledLink>
-              </ResumeEditingForm>
-              <div ref={createNewFormRef} className="inline">
-                <StyledLink href="/form-builder">
-                  <span aria-hidden="true">+</span> {t("actions.createNewForm")}
-                </StyledLink>
+          <MenuProvider>
+            <main id="content" className="ml-40 laptop:ml-60">
+              <h1 className="border-b-0 mb-8 text-h1">{t("title")}</h1>
+              <div className="top-40">
+                <ResumeEditingForm>
+                  <StyledLink href="/form-builder/edit" className="mr-8">
+                    <span aria-hidden="true"> ← </span> {t("actions.resumeForm")}
+                  </StyledLink>
+                </ResumeEditingForm>
+                <div ref={createNewFormRef} className="inline">
+                  <StyledLink href="/form-builder">
+                    <span aria-hidden="true">+</span> {t("actions.createNewForm")}
+                  </StyledLink>
+                </div>
               </div>
-            </div>
-            <TabPanel id="tabpanel-drafts" labeledbyId="tab-drafts" isActive={path === "drafts"}>
-              {templatesDrafts && templatesDrafts?.length > 0 ? (
-                <CardGrid cards={templatesDrafts}></CardGrid>
-              ) : (
-                <p>{t("cards.noDraftForms")}</p>
-              )}
-            </TabPanel>
-            <TabPanel
-              id="tabpanel-published"
-              labeledbyId="tab-published"
-              isActive={path === "published"}
-            >
-              {templatesPublished && templatesPublished?.length > 0 ? (
-                <CardGrid cards={templatesPublished}></CardGrid>
-              ) : (
-                <p>{t("cards.noPublishedForms")}</p>
-              )}
-            </TabPanel>
-            <TabPanel id="tabpanel-all" labeledbyId="tab-all" isActive={path === "all"}>
-              {templatesAll && templatesAll?.length > 0 ? (
-                <CardGrid cards={templatesAll}></CardGrid>
-              ) : (
-                <p>{t("cards.noForms")}</p>
-              )}
-            </TabPanel>
-          </main>
+
+              <TabPanel id="tabpanel-drafts" labeledbyId="tab-drafts" isActive={path === "drafts"}>
+                {templatesDrafts && templatesDrafts?.length > 0 ? (
+                  <CardGrid cards={templatesDrafts}></CardGrid>
+                ) : (
+                  <p>{t("cards.noDraftForms")}</p>
+                )}
+              </TabPanel>
+              <TabPanel
+                id="tabpanel-published"
+                labeledbyId="tab-published"
+                isActive={path === "published"}
+              >
+                {templatesPublished && templatesPublished?.length > 0 ? (
+                  <CardGrid cards={templatesPublished}></CardGrid>
+                ) : (
+                  <p>{t("cards.noPublishedForms")}</p>
+                )}
+              </TabPanel>
+              <TabPanel id="tabpanel-all" labeledbyId="tab-all" isActive={path === "all"}>
+                {templatesAll && templatesAll?.length > 0 ? (
+                  <CardGrid cards={templatesAll}></CardGrid>
+                ) : (
+                  <p>{t("cards.noForms")}</p>
+                )}
+              </TabPanel>
+            </main>
+          </MenuProvider>
         </div>
       </div>
     </>

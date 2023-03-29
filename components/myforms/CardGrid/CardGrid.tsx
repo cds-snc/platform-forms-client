@@ -2,6 +2,7 @@ import React, { useCallback, useState, useRef } from "react";
 import { Card, CardProps } from "@components/myforms/Card/Card";
 import { ConfirmDelete } from "@components/form-builder/app/ConfirmDelete";
 import { useRefresh } from "@lib/hooks";
+import { useMenuContext } from "@components/myforms/MenuDropdown/useMenuContext";
 
 interface CardGridProps {
   cards: Array<CardProps>;
@@ -12,6 +13,7 @@ export const CardGrid = (props: CardGridProps): React.ReactElement => {
   const activeCard = useRef<CardProps | null>(null);
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
   const { refreshData } = useRefresh(cards);
+  const { closeAllMenus } = useMenuContext();
 
   const handleDelete = useCallback((card: CardProps) => {
     setShowConfirm(true);
@@ -20,6 +22,10 @@ export const CardGrid = (props: CardGridProps): React.ReactElement => {
 
   return (
     <>
+      <button onClick={() => {
+        closeAllMenus();
+      }
+      }>Close All</button>
       <ol
         className="grid gap-4 p-0"
         style={{ gridTemplateColumns: "repeat(auto-fill, minmax(20rem, 1fr))" }}
