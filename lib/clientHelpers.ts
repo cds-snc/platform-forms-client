@@ -13,6 +13,10 @@ import {
 import { Submission } from "@lib/types/submission-types";
 import { getCsrfToken } from "next-auth/react";
 
+/**
+ * Put any Client related global helper/utils here. The rest of /lib is for anything server related.
+ */
+
 function _buildFormDataObject(formRecord: PublicFormRecord, values: Responses) {
   const formData = {} as { [key: string]: string | FileInputResponse };
 
@@ -243,6 +247,36 @@ function _rehydrateDynamicRowResponses(responses: [string, Response][]) {
 function _rehydrateCheckBoxResponse(response: Response) {
   return response ? JSON.parse(response as string).value : [];
 }
+
+/**
+ * Scrolls an element with overflow to its bottom.
+ *
+ * @param containerEl container element that has the overflow-y set on it
+ * @returns undefined
+ */
+export const scrollToBottom = (containerEl: HTMLElement) => {
+  if (!containerEl) {
+    return;
+  }
+  const scrollHeight = containerEl.scrollHeight;
+  if (containerEl.scrollTo !== undefined) {
+    containerEl.scrollTo({
+      top: scrollHeight,
+      left: 0,
+      behavior: "smooth",
+    });
+  }
+};
+
+/**
+ * Like a UUID but smaller and not as unique. So best to append this to the element name.
+ * e.g. id = `myElementName-${randomId()}`
+ *
+ * @returns a random number
+ */
+export const randomId = () => {
+  return Math.random().toString(36).substr(2, 9);
+};
 
 export const submitToAPI = logger(_submitToAPI);
 export const buildFormDataObject = logger(_buildFormDataObject);

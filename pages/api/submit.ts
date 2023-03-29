@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
-import { rehydrateFormResponses } from "@lib/helpers";
+import { rehydrateFormResponses } from "@lib/clientHelpers";
 import { getPublicTemplateByID, getTemplateDeliveryOptionByID } from "@lib/templates";
 import { logMessage } from "@lib/logger";
 import { checkOne } from "@lib/cache/flags";

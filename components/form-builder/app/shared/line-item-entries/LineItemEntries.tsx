@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { LineItems } from "./LineItems";
-import { scrollToBottom } from "@lib/uiUtils";
+import { scrollToBottom } from "@lib/clientHelpers";
 import { useTranslation } from "react-i18next";
 
 // Note: updates are done in a DIV live region to have more control and reduce the verbosity of
