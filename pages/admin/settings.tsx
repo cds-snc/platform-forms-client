@@ -7,8 +7,7 @@ import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import { checkPrivileges } from "@lib/privileges";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
+import { ToastContainer, toast } from "@components/form-builder/app/shared/Toast";
 import { getAllAppSettings } from "@lib/appSettings";
 import { Button } from "@components/forms";
 import { useAccessControl, useRefresh } from "@lib/hooks";
@@ -30,8 +29,6 @@ const ManageSetting = ({
   const saveSetting = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const position = toast.POSITION.TOP_CENTER;
-
     try {
       const result = await axios({
         method: newSetting ? "POST" : "PUT",
@@ -41,15 +38,15 @@ const ManageSetting = ({
       });
       logMessage.debug(result);
       if (result.data === null) {
-        toast.error("Duplicate Internal Id", { position });
+        toast.error("Duplicate Internal Id");
         return;
       }
 
-      toast.success(t("success"), { position });
+      toast.success(t("success"));
       clearSelection();
     } catch (error) {
       logMessage.error(error);
-      toast.error(t("error"), { position });
+      toast.error(t("error"));
     }
   };
 
@@ -165,8 +162,6 @@ const Settings = ({ settings }: SettingsProps) => {
   };
 
   const deleteSetting = async (internalId: string) => {
-    const position = toast.POSITION.TOP_CENTER;
-
     try {
       await axios({
         url: `/api/settings/${internalId}`,
@@ -176,11 +171,11 @@ const Settings = ({ settings }: SettingsProps) => {
         },
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       });
-      toast.success(t("deleted"), { position });
+      toast.success(t("deleted"));
       refreshData();
     } catch (error) {
       logMessage.error(error);
-      toast.error(t("error"), { position });
+      toast.error(t("error"));
     }
   };
 
