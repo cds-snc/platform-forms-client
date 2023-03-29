@@ -1,23 +1,22 @@
 import { logMessage } from "@lib/logger";
 import { getRedisInstance } from "../integration/redisConnector";
-import { Permission } from "@lib/types";
 
 // If NODE_ENV is in test mode (Jest Tests) do not use the cache
 const cacheAvailable: boolean = process.env.APP_ENV !== "test" && Boolean(process.env.REDIS_URL);
 
-// Return a random number between 300 and 600  (5 - 10 minutes)
-const randomCacheExpiry = () => Math.floor(Math.random() * 300 + 300);
+// Return a random number between 30 and 60  (30 seconds <-> 1 minute)
+const randomCacheExpiry = () => Math.floor(Math.random() * 30 + 30);
 
-export const privilegeCheck = async (userID: string): Promise<Permission[] | null> => {
-  const checkParameter = `auth:privileges:${userID}`;
+export const settingCheck = async (internalId: string): Promise<string | null> => {
+  const checkParameter = `setting:${internalId}`;
 
   if (cacheAvailable) {
     try {
       const redis = await getRedisInstance();
       const value = await redis.get(checkParameter);
       if (value) {
-        logMessage.debug(`Using Cached Privileges for ${checkParameter}`);
-        return JSON.parse(value);
+        logMessage.debug(`Using Cached Setting for ${checkParameter}`);
+        return value;
       }
     } catch (e) {
       logMessage.error(e as Error);
@@ -28,42 +27,42 @@ export const privilegeCheck = async (userID: string): Promise<Permission[] | nul
   return null;
 };
 
-export const privilegeDelete = async (userID: string): Promise<void> => {
-  const deleteParameter = `auth:privileges:${userID}`;
+export const settingDelete = async (internalId: string): Promise<void> => {
+  const deleteParameter = `setting:${internalId}`;
 
   if (!cacheAvailable) return;
   try {
     const redis = await getRedisInstance();
 
     await redis.del(deleteParameter);
-    logMessage.debug(`Deleting Cached Privileges  for ${deleteParameter}`);
+    logMessage.debug(`Deleting Cached Setting for ${deleteParameter}`);
   } catch (e) {
     logMessage.error(e as Error);
     throw new Error("Could not connect to cache");
   }
 };
 
-export const privilegePut = async (userID: string, privileges: Permission[]): Promise<void> => {
-  const modifyParameter = `auth:privileges:${userID}`;
+export const settingPut = async (internalId: string, value: string): Promise<void> => {
+  const modifyParameter = `setting:${internalId}`;
 
   if (!cacheAvailable) return;
   try {
     const redis = await getRedisInstance();
 
-    await redis.setex(modifyParameter, randomCacheExpiry(), JSON.stringify(privileges));
-    logMessage.debug(`Updating Cached Privileges for ${modifyParameter}`);
+    await redis.setex(modifyParameter, randomCacheExpiry(), value);
+    logMessage.debug(`Updating Cached Setting for ${modifyParameter}`);
   } catch (e) {
     logMessage.error(e as Error);
     throw new Error("Could not connect to cache");
   }
 };
 
-export const flushValues = async () => {
+export const flushSettings = async () => {
   if (!cacheAvailable) return;
   try {
     const redis = await getRedisInstance();
     const stream = redis.scanStream({
-      match: "auth:privileges:*",
+      match: "setting:*",
     });
     stream.on("data", function (keys: string[]) {
       // `keys` is an array of strings representing key names
@@ -77,7 +76,7 @@ export const flushValues = async () => {
     });
     return new Promise<void>((resolve) =>
       stream.on("end", () => {
-        logMessage.debug("Cached Privileges have been cleared");
+        logMessage.debug("Cached Settings have been cleared");
         resolve();
       })
     );
