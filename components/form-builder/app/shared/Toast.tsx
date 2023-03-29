@@ -42,15 +42,17 @@ const contextClass = {
   },
 };
 
+type ToastContext = {
+  type?: TypeOptions;
+  defaultClassName?: string;
+  position?: ToastPosition;
+  rtl?: boolean;
+};
+
 export const ToastContainer = () => {
   return (
     <OriginalContainer
-      toastClassName={(context?: {
-        type?: TypeOptions;
-        defaultClassName?: string;
-        position?: ToastPosition;
-        rtl?: boolean;
-      }) => {
+      toastClassName={(context?: ToastContext) => {
         return `${
           contextClass[context?.type || "default"]["background"]
         } relative flex drop-shadow-md p-1 rounded-md justify-between overflow-hidden p-4 cursor-pointer`;
@@ -68,12 +70,7 @@ export const ToastContainer = () => {
       hideProgressBar={true}
       closeOnClick={true}
       transition={Bounce}
-      icon={(context?: {
-        type?: TypeOptions;
-        defaultClassName?: string;
-        position?: ToastPosition;
-        rtl?: boolean;
-      }) => {
+      icon={(context?: ToastContext) => {
         return contextClass[context?.type || "default"]["icon"];
       }}
     />
