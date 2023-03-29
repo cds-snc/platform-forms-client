@@ -278,6 +278,23 @@ export const randomId = () => {
   return Math.random().toString(36).substr(2, 9);
 };
 
+/**
+ * Format date for: YYYY-MM-DD
+ * @param date to format. Expects a Date type
+ * @returns date formatted
+ */
+export const formatDate = (date: Date): string => {
+  if (!(date instanceof Date)) {
+    return "Unknown";
+  }
+
+  const day = String(date.getDate()).length <= 1 ? `0${date.getDate()}` : date.getDate();
+  const month =
+    String(date.getMonth()).length <= 1 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
+  const year = date.getFullYear();
+  return `${year}-${month}-${day}`;
+};
+
 export const submitToAPI = logger(_submitToAPI);
 export const buildFormDataObject = logger(_buildFormDataObject);
 export const rehydrateFormResponses = logger(_rehydrateFormResponses);

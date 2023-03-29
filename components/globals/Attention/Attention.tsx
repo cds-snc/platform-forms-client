@@ -1,8 +1,6 @@
 import React from "react";
 import { CheckIcon, WarningIcon } from "@components/form-builder/icons";
 
-//TODO update any components using this component e.g. support page
-
 export enum AttentionTypes {
   INFO = "info",
   WARNING = "warning",
@@ -17,7 +15,6 @@ interface AttentionProps {
   isAlert?: boolean;
   isIcon?: boolean;
   isSmall?: boolean;
-  width?: string;
   classes?: string;
 }
 
@@ -28,7 +25,6 @@ export const Attention = ({
   isAlert = true,
   isIcon = true,
   isSmall = false,
-  width = "50",
   classes = "",
 }: AttentionProps & JSX.IntrinsicElements["div"]): React.ReactElement => {
   let headingTextColor = "";

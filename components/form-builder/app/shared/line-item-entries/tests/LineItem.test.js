@@ -24,6 +24,6 @@ describe("LineItem", () => {
     await userEvent.click(removeButtons[0]);
     expect(mockCallback).toHaveBeenCalledTimes(1);
     expect(mockCallback).toHaveBeenCalledWith("31-12-XCRV");
-    expect(removeButtons[0]).toHaveAttribute("aria-label", "remove 31-12-XCRV");
+    expect(removeButtons[0]).toHaveAttribute("aria-label", "lineItemEntries.remove 31-12-XCRV");
   });
 });
