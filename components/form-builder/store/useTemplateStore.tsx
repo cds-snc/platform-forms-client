@@ -22,6 +22,7 @@ import {
   FormElementTypes,
   DeliveryOption,
   ElementProperties,
+  SecurityAttribute,
 } from "@lib/types";
 import { logMessage } from "@lib/logger";
 import { BrandProperties } from "@lib/types/form-types";
@@ -75,7 +76,7 @@ export interface TemplateStoreProps {
   isPublished: boolean;
   name: string;
   deliveryOption?: DeliveryOption;
-  securityAttribute: string;
+  securityAttribute: SecurityAttribute;
 }
 
 export interface InitialTemplateStoreProps extends TemplateStoreProps {
@@ -123,6 +124,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
     path: string,
     value: string | boolean | ElementProperties | BrandProperties
   ) => void;
+  updateSecurityAttribute: (value: SecurityAttribute) => void;
   propertyPath: (id: number, field: string, lang?: Language) => string;
   unsetField: (path: string) => void;
   duplicateElement: (elIndex: number) => void;
@@ -134,7 +136,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   getName: () => string;
   getDeliveryOption: () => DeliveryOption | undefined;
   resetDeliveryOption: () => void;
-  getSecurityAttribute: () => string;
+  getSecurityAttribute: () => SecurityAttribute;
   initialize: () => void;
 }
 
@@ -223,6 +225,10 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
           updateField: (path, value) =>
             set((state) => {
               update(state, path, value);
+            }),
+          updateSecurityAttribute: (value) =>
+            set((state) => {
+              state.securityAttribute = value;
             }),
           propertyPath: (id: number, field: string, lang?: Language) => {
             const path = getPathString(id, get().form.elements);
@@ -387,7 +393,6 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               state.form = defaultForm;
               state.isPublished = false;
               state.name = "";
-              state.securityAttribute = "Unclassified";
               state.deliveryOption = undefined;
             });
           },

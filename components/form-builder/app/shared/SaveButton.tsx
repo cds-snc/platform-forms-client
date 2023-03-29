@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 
 import { Button } from "../shared";
 import { useTemplateStore } from "../../store";
-import { useAllowPublish, useTemplateStatus, useTemplateApi } from "../../hooks";
+import { useAllowPublish, useTemplateStatus, useTemplateContext } from "../../hooks";
 import { formatDateTime } from "../../util";
 import Markdown from "markdown-to-jsx";
 
@@ -15,7 +15,7 @@ export const SaveButton = () => {
     setId: s.setId,
   }));
 
-  const { error, saveForm } = useTemplateApi();
+  const { error, saveForm } = useTemplateContext();
 
   const { status } = useSession();
   const { t } = useTranslation(["common", "form-builder"]);

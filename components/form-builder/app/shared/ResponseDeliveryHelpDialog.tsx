@@ -25,14 +25,9 @@ const ResponseDeliveryHelpDialog = ({ handleClose }: { handleClose: () => void }
   );
 
   return (
-    <Dialog
-      dialogRef={dialog}
-      handleClose={handleClose}
-      className="overflow-y-scroll max-h-[80%]"
-      actions={actions}
-    >
+    <Dialog dialogRef={dialog} handleClose={handleClose} actions={actions}>
       <div className="p-5">
-        <div className="mt-10">
+        <div className="mt-0">
           <h2>{t("settingsResponseDelivery.responseDeliveryHelp.title")}</h2>
           <p className="mb-4 text-sm">
             {t("settingsResponseDelivery.responseDeliveryHelp.description")}
