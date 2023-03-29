@@ -25,6 +25,11 @@ const contextClass = {
     text: "text-blue-600",
     icon: <InfoIcon className="fill-blue-600" />,
   },
+  warn: {
+    background: "bg-yellow-50",
+    text: "text-yellow-700",
+    icon: <WarningIcon className="fill-yellow-700" />,
+  },
   warning: {
     background: "bg-yellow-50",
     text: "text-yellow-700",
@@ -84,6 +89,9 @@ export const toast = {
   },
   info: (message: string) => {
     originalToast.info(<p className="py-2">{message}</p>);
+  },
+  warn: (message: string) => {
+    originalToast.warn(<p className="py-2">{message}</p>);
   },
   warning: (message: string) => {
     originalToast.warning(<p className="py-2">{message}</p>);
