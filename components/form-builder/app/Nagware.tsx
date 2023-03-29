@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useTranslation } from "next-i18next";
 import { Attention } from "@components/globals/Attention/Attention";
 import { NagLevel, NagwareResult } from "@lib/types";
@@ -6,13 +6,11 @@ import { NagLevel, NagwareResult } from "@lib/types";
 export const Nagware = ({ nagwareResult }: { nagwareResult: NagwareResult }) => {
   const { t } = useTranslation("form-builder");
 
-  if (nagwareResult.level === NagLevel.None) return <></>;
-
-  const generateNotificationContent = (): {
+  const notificationContent: {
     type: "warning" | "error";
     title: string;
     body: React.ReactNode;
-  } => {
+  } | null = useMemo(() => {
     switch (nagwareResult.level) {
       case NagLevel.UnsavedSubmissionsOver21DaysOld:
         return {
@@ -90,17 +88,15 @@ export const Nagware = ({ nagwareResult }: { nagwareResult: NagwareResult }) => 
           ),
         };
       case NagLevel.None:
-        throw new Error("Case should not be reached");
+        return null;
     }
-  };
+  }, [nagwareResult, t]);
 
-  const notificationContent = generateNotificationContent();
+  if (!notificationContent) return <></>;
 
   return (
-    <>
-      <Attention type={notificationContent.type} heading={notificationContent.title}>
-        <div className="text-sm">{notificationContent.body}</div>
-      </Attention>
-    </>
+    <Attention type={notificationContent.type} heading={notificationContent.title}>
+      <div className="text-sm">{notificationContent.body}</div>
+    </Attention>
   );
 };
