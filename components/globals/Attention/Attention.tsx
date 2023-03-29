@@ -41,19 +41,19 @@ export const Attention = ({
       ariaAttributes = { role: "alert" };
       headingTextColor = "text-black";
       backgroundColor = "bg-amber-100";
-      icon = <WarningIcon isFillInherit={true} title="Warning" width={width} />;
+      icon = <WarningIcon title="Warning" />;
       break;
     case AttentionTypes.ERROR:
       ariaAttributes = { role: "alert" };
       headingTextColor = "validation-message";
       backgroundColor = "bg-[#f3e9e8]";
-      icon = <WarningIcon isFillInherit={true} title="Error" width={width} />;
+      icon = <WarningIcon title="Error" />;
       break;
     case AttentionTypes.SUCCESS:
       ariaAttributes = { live: "polite" };
       headingTextColor = "text-green";
       backgroundColor = "bg-amber-100";
-      icon = <CheckIcon isFillInherit={true} width={width} />;
+      icon = <CheckIcon />;
       break;
     case AttentionTypes.INFO:
     //TODO future
