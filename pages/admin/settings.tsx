@@ -7,8 +7,7 @@ import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import { checkPrivileges } from "@lib/privileges";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
+import { toast, ToastContainer } from "@components/form-builder/app/shared/Toast";
 
 const _get = (url: string) => fetch(url).then((response) => response.json());
 const _post = (url: string, formId: string) =>
@@ -35,17 +34,15 @@ const Settings = () => {
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
 
-      const position = toast.POSITION.TOP_CENTER;
-
       try {
         const result = await _post("/api/settings", brandingRequestFormId);
         if (result.status === 200 && result.statusText === "OK") {
-          toast.success(successMessage, { position });
+          toast.success(successMessage);
           return;
         }
         throw new Error("Error");
       } catch (error) {
-        toast.error(errorMessage, { position });
+        toast.error(errorMessage);
       }
     },
     [brandingRequestFormId, successMessage, errorMessage]
