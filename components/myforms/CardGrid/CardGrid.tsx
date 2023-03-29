@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef } from "react";
+import React, { useCallback, useState, useRef, useEffect, MouseEvent, SyntheticEvent } from "react";
 import { Card, CardProps } from "@components/myforms/Card/Card";
 import { ConfirmDelete } from "@components/form-builder/app/ConfirmDelete";
 import { useRefresh } from "@lib/hooks";
@@ -13,7 +13,7 @@ export const CardGrid = (props: CardGridProps): React.ReactElement => {
   const activeCard = useRef<CardProps | null>(null);
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
   const { refreshData } = useRefresh(cards);
-  const { closeAllMenus } = useMenuContext();
+  const { id, closeAll } = useMenuContext();
 
   const handleDelete = useCallback((card: CardProps) => {
     setShowConfirm(true);
@@ -21,9 +21,9 @@ export const CardGrid = (props: CardGridProps): React.ReactElement => {
   }, []);
 
   return (
-    <>
+    <div key={id}>
       <button onClick={() => {
-        closeAllMenus();
+        closeAll();
       }
       }>Close All</button>
       <ol
@@ -60,6 +60,6 @@ export const CardGrid = (props: CardGridProps): React.ReactElement => {
         isPublished={activeCard.current?.isPublished || false}
         handleClose={setShowConfirm}
       />
-    </>
+    </div>
   );
 };

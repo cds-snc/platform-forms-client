@@ -1,7 +1,6 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import { useTranslation } from "next-i18next";
 import { Menu } from "./Menu";
-import { useMenuContext } from "./useMenuContext";
 
 export interface MenuDropdownItemCallback {
   message: string;
@@ -26,25 +25,41 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
   const { t } = useTranslation(["common"]);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuListRef = useRef<HTMLUListElement>(null);
-  const [menuDropdown, setMenuDropdown] = useState({} as Menu);
-  const { registerMenu } = useMenuContext();
+  const parentRef = useRef<HTMLDivElement>(null);
+  const [menuDropdown, setMenuDropdown] = useState<Menu | null>(null);
 
   useEffect(() => {
     if (menuButtonRef.current && menuListRef.current) {
-      const menu = new Menu({
+      setMenuDropdown(new Menu({
         menuButton: menuButtonRef.current,
         menuList: menuListRef.current,
-      })
-      setMenuDropdown(menu);
-      registerMenu(menu);
-
-      console.log(menu);
-      console.log(menuDropdown);
+      }));
     }
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (event: any) => {
+      try {
+        const eId = event.target.id.split("-")[1];
+        if (!eId) {
+          menuDropdown && menuDropdown?.close();
+          return;
+        };
+        if (eId !== id) {
+          menuDropdown && menuDropdown?.close();
+        }
+      } catch (e) {
+        console.log(e)
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="relative">
+    <div className="relative" ref={parentRef}>
       <button
         onClick={() => {
           menuDropdown?.toggle();
@@ -65,7 +80,7 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
       <ul
         id={`menu-${id}`}
         className={
-          "hidden absolute z-10 -left-[1rem] m-0 p-0 bg-white-default border border-1 border-black-default list-none" +
+          "my-forms-menu hidden absolute z-10 -left-[1rem] m-0 p-0 bg-white-default border border-1 border-black-default list-none" +
           (direction === "up" ? " -top-[13rem]" : "")
         }
         role="menu"
@@ -73,10 +88,6 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
         aria-labelledby={`button-${id}`}
         aria-activedescendant={`mi-${id}-0`}
         ref={menuListRef}
-        menuListRef={(el: HTMLUListElement)=>{
-          registerMenu(el)
-        }}
-        
         onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
           menuDropdown?.onMenuListKeydown(e as unknown as KeyboardEvent);
         }}

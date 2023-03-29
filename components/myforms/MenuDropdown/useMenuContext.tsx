@@ -1,36 +1,26 @@
 import React, { createContext, useState, useContext, useRef } from "react";
-import { Menu } from "./Menu";
 
 interface MenuContextType {
-    registerMenu: (menu: HTMLUListElement) => void;
-    closeAllMenus: () => void;
+    id: string;
+    closeAll: () => void;
 }
 
 const defaults: MenuContextType = {
-    closeAllMenus: () => void 0,
-    registerMenu: () => void 0,
+    id: "",
+    closeAll: () => void 0,
 };
 
 const MenuContext = createContext<MenuContextType>(defaults);
 
 export function MenuProvider({ children }: { children: React.ReactNode }) {
+    const [id, setId] = useState("");
 
-    const itemsRef = useRef<[HTMLUListElement] | []>([]);
-
-    const [menus, setMenus] = useState<Menu[]>([]);
-
-    const closeAllMenus = () => {
-
-    };
-
-    const registerMenu = (el: HTMLUListElement) => {
-        if (el && itemsRef.current) {
-            itemsRef.current[0] = el;
-        }
+    const closeAll = () => {
+        setId(Math.random().toString(36).substring(7));
     };
 
     return (
-        <MenuContext.Provider value={{ registerMenu, closeAllMenus }}>
+        <MenuContext.Provider value={{ id, closeAll }}>
             {children}
         </MenuContext.Provider>
     )
