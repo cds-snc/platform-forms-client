@@ -164,7 +164,7 @@
     "defaultOption": "Government of Canada",
     "default": "(default)",
     "heading": "Branding",
-    "notFound": "Didn’t find your department or agency in the list?",
+    "notFound": "Didn’t find your department or agency on the list?",
     "preview": "Preview of logo",
     "select": "Select a different logo for the top of your form",
     "submitNew": "Submit a new branding option (opens in new tab)",
@@ -441,9 +441,10 @@
   "settingsInvalidEmailAlertDesc2": "to register email address.",
   "settingsInvalidEmailAlertTitle": "Government email address",
   "settingsNavHome": "Response delivery",
-  "settingsResponseEmailTitle": "Enter the email address",
+  "settingsResponseEmailTitle": "Email address",
   "settingsResponseHint1": "Submitted responses will be emailed to this inbox.",
   "settingsResponseDelivery": {
+    "selectClassification": "Select the data classification of your form responses",
     "title": "Select a response delivery option",
     "vaultOption": "Download responses from GC Forms",
     "vaultOptionHint": {
@@ -465,11 +466,11 @@
     },
     "emailSubjectEn": {
       "title": "English response subject line",
-      "hint" : "When form responses are submitted in English."
+      "hint": "When form responses are submitted in English."
     },
     "emailSubjectFr": {
       "title": "French response subject line",
-      "hint" : "When form responses are submitted in French."
+      "hint": "When form responses are submitted in French."
     },
     "responseDeliveryHelp": {
       "cta": "Help on choosing an option",

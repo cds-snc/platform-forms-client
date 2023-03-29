@@ -84,7 +84,11 @@ describe("Template CRUD functions", () => {
       buildPrismaResponse("formtestID", formConfiguration)
     );
 
-    const newTemplate = await createTemplate(ability, "1", formConfiguration as FormProperties);
+    const newTemplate = await createTemplate({
+      ability: ability,
+      userID: "1",
+      formConfig: formConfiguration as FormProperties,
+    });
 
     expect(prismaMock.template.create).toHaveBeenCalledWith({
       data: {
@@ -440,7 +444,11 @@ describe("Template CRUD functions", () => {
       buildPrismaResponse("test1", updatedFormConfig, true)
     );
 
-    const updatedTemplate = await updateTemplate(ability, "test1", updatedFormConfig);
+    const updatedTemplate = await updateTemplate({
+      ability: ability,
+      formID: "test1",
+      formConfig: updatedFormConfig,
+    });
 
     expect(prismaMock.template.update).toHaveBeenCalledWith({
       where: {
@@ -609,7 +617,7 @@ describe("Template CRUD functions", () => {
     );
 
     await expect(async () => {
-      await updateTemplate(ability, "test1", updatedFormConfig);
+      await updateTemplate({ ability: ability, formID: "test1", formConfig: updatedFormConfig });
     }).rejects.toThrowError(new TemplateAlreadyPublishedError());
     expect(mockedLogEvent).toBeCalledTimes(0);
   });
@@ -761,7 +769,11 @@ describe("Template CRUD functions", () => {
     });
 
     await expect(async () => {
-      await createTemplate(ability, "1", formConfiguration as FormProperties);
+      await createTemplate({
+        ability: ability,
+        userID: "1",
+        formConfig: formConfiguration as FormProperties,
+      });
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
     await expect(async () => {
@@ -773,7 +785,11 @@ describe("Template CRUD functions", () => {
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
     await expect(async () => {
-      await updateTemplate(ability, "test1", structuredClone(formConfiguration as FormProperties));
+      await updateTemplate({
+        ability: ability,
+        formID: "test1",
+        formConfig: structuredClone(formConfiguration as FormProperties),
+      });
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
     await expect(async () => {
@@ -855,7 +871,11 @@ describe("Template CRUD functions", () => {
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
     await expect(async () => {
-      await updateTemplate(ability, "test1", structuredClone(formConfiguration as FormProperties));
+      await updateTemplate({
+        ability: ability,
+        formID: "test1",
+        formConfig: structuredClone(formConfiguration as FormProperties),
+      });
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
     await expect(async () => {

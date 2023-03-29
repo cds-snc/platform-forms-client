@@ -10,6 +10,7 @@ export enum AuditLogEvent {
   PublishForm = "PublishForm",
   ChangeFormName = "ChangeFormName",
   ChangeDeliveryOption = "ChangeDeliveryOption",
+  ChangeSecurityAttribute = "ChangeSecurityAttribute",
   GrantFormAccess = "GrantFormAccess",
   RevokeFormAccess = "RevokeFormAccess",
   // Form Response Events
@@ -42,6 +43,7 @@ export enum AuditSubjectType {
   Form = "Form",
   Response = "Response",
   DeliveryOption = "DeliveryOption",
+  SecurityAttribute = "SecurityAttribute",
   Privilege = "Privilege",
   Flag = "Flag",
   Setting = "Setting",

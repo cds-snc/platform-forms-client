@@ -10,7 +10,7 @@ import { useRefresh } from "@lib/hooks";
 import { isValidGovEmail } from "@lib/validation";
 import { ResponseEmail } from "./ResponseEmail";
 import { Radio, Button, ResponseDeliveryHelpButton } from "./shared";
-import { usePublish } from "../hooks";
+import { useTemplateApi } from "../hooks";
 import { useTemplateStore } from "../store";
 import { completeEmailAddressRegex } from "../util";
 
@@ -19,12 +19,20 @@ enum DeliveryOption {
   email = "email",
 }
 
+const classificationOptions = [
+  { value: "Unclassified", en: "Unclassified", fr: "Non classifié" },
+  { value: "Protected A", en: "Protected A", fr: "Protégé A" },
+] as const;
+
+type Classification = (typeof classificationOptions)[number]["value"];
+
 export const SetResponseDelivery = () => {
   const { t, i18n } = useTranslation("form-builder");
   const { status } = useSession();
   const session = useSession();
-  const { updateResponseDelivery, uploadJson } = usePublish();
+  const { save, updateResponseDelivery } = useTemplateApi();
   const { refreshData } = useRefresh();
+  const lang = i18n.language === "en" ? "en" : "fr";
 
   const {
     email,
@@ -38,11 +46,13 @@ export const SetResponseDelivery = () => {
     subjectFr: initialSubjectFr,
     defaultSubjectEn,
     defaultSubjectFr,
+    securityAttribute,
+    updateSecurityAttribute,
   } = useTemplateStore((s) => ({
     id: s.id,
     email: s.deliveryOption?.emailAddress,
-    subjectEn: s.deliveryOption?.subjectEn,
-    subjectFr: s.deliveryOption?.subjectFr,
+    subjectEn: s.deliveryOption?.emailSubjectEn,
+    subjectFr: s.deliveryOption?.emailSubjectFr,
     defaultSubjectEn: s.form[s.localizeField(LocalizedFormProperties.TITLE, "en")] + " - Response",
     defaultSubjectFr: s.form[s.localizeField(LocalizedFormProperties.TITLE, "fr")] + " - Réponse",
     resetDeliveryOption: s.resetDeliveryOption,
@@ -50,6 +60,8 @@ export const SetResponseDelivery = () => {
     getName: s.getName,
     getDeliveryOption: s.getDeliveryOption,
     updateField: s.updateField,
+    updateSecurityAttribute: s.updateSecurityAttribute,
+    securityAttribute: s.securityAttribute,
   }));
 
   const userEmail = session.data?.user.email ?? "";
@@ -63,9 +75,21 @@ export const SetResponseDelivery = () => {
   const [subjectFr, setSubjectFr] = useState(
     initialSubjectFr ? initialSubjectFr : defaultSubjectFr
   );
+
+  const [classification, setClassification] = useState<Classification>(
+    securityAttribute as Classification
+  );
+
   const [isInvalidEmailError, setIsInvalidEmailError] = useState(false);
 
+  /*--------------------------------------------*
+   * Form Validation
+   *--------------------------------------------*/
   const isValid = useMemo(() => {
+    if (classification !== securityAttribute) {
+      return true;
+    }
+
     const isValidDeliveryOption =
       !isInvalidEmailError && inputEmail !== "" && subjectEn !== "" && subjectFr !== "";
     const emailDeliveryOptionsChanged =
@@ -93,32 +117,70 @@ export const SetResponseDelivery = () => {
     initialSubjectEn,
     subjectFr,
     initialSubjectFr,
+    classification,
+    securityAttribute,
   ]);
 
+  /*--------------------------------------------*
+   * Set as Database Storage
+   *--------------------------------------------*/
   const setToDatabaseDelivery = useCallback(async () => {
     setInputEmail("");
     resetDeliveryOption();
-    return await updateResponseDelivery(id);
-  }, [id, resetDeliveryOption, updateResponseDelivery, setInputEmail]);
+    updateSecurityAttribute(classification);
+    await updateResponseDelivery(id);
+    return await save({
+      jsonConfig: getSchema(),
+      name: getName(),
+      formID: id,
+      securityAttribute: classification,
+    });
+  }, [
+    id,
+    resetDeliveryOption,
+    setInputEmail,
+    classification,
+    updateSecurityAttribute,
+    save,
+    getSchema,
+    getName,
+    updateResponseDelivery,
+  ]);
 
+  /*--------------------------------------------*
+   * Set as Email Delivery
+   *--------------------------------------------*/
   const setToEmailDelivery = useCallback(async () => {
     if (!isValidGovEmail(inputEmail)) return false;
     updateField("deliveryOption.emailAddress", inputEmail);
-    updateField("deliveryOption.subjectEn", subjectEn);
-    updateField("deliveryOption.subjectFr", subjectFr);
-    return await uploadJson(getSchema(), getName(), getDeliveryOption(), id);
+    updateField("deliveryOption.emailSubjectEn", subjectEn);
+    updateField("deliveryOption.emailSubjectFr", subjectFr);
+
+    updateSecurityAttribute(classification);
+    return await save({
+      jsonConfig: getSchema(),
+      name: getName(),
+      formID: id,
+      deliveryOption: getDeliveryOption(),
+      securityAttribute: classification,
+    });
   }, [
     inputEmail,
     subjectEn,
     subjectFr,
     id,
-    uploadJson,
+    save,
     getSchema,
     getName,
     getDeliveryOption,
     updateField,
+    classification,
+    updateSecurityAttribute,
   ]);
 
+  /*--------------------------------------------*
+   * Save Delivery Option
+   *--------------------------------------------*/
   const saveDeliveryOption = useCallback(async () => {
     let result;
 
@@ -156,12 +218,35 @@ export const SetResponseDelivery = () => {
 
   const responsesLink = `/${i18n.language}/form-builder/responses/${id}`;
 
+  const handleUpdateClassification = useCallback((value: Classification) => {
+    setClassification(value);
+  }, []);
+
   return (
     <>
       <h1 className="visually-hidden">{t("formSettings")}</h1>
       {status === "authenticated" && (
         <div className="mb-10">
           <div className="block font-bold mb-4">{t("settingsResponseDelivery.title")}</div>
+          <div className="mb-4">
+            <p>{t("settingsResponseDelivery.selectClassification")}</p>
+            <select
+              id="classification-select"
+              value={classification}
+              className="gc-dropdown inline-block mb-5 text-black-default"
+              onChange={(evt: React.ChangeEvent<HTMLSelectElement>) => {
+                const val = evt.target.value;
+                handleUpdateClassification(val as Classification);
+              }}
+            >
+              {classificationOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option[lang]}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <div className="mb-4">
             <Radio
               id={`delivery-option-${DeliveryOption.vault}`}
