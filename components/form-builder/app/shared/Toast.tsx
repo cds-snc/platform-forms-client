@@ -48,7 +48,7 @@ export const ToastContainer = () => {
       }) => {
         return `${
           contextClass[context?.type || "default"]["background"]
-        } relative flex drop-shadow-md p-1 min-h-10 rounded-md justify-between overflow-hidden cursor-pointer`;
+        } relative flex drop-shadow-md p-1 rounded-md justify-between overflow-hidden p-4 cursor-pointer`;
       }}
       bodyClassName={(context?: {
         type?: TypeOptions;
@@ -56,7 +56,7 @@ export const ToastContainer = () => {
         position?: ToastPosition;
         rtl?: boolean;
       }) => {
-        return `${contextClass[context?.type || "default"]["text"]} flex p-4 text-base`;
+        return `${contextClass[context?.type || "default"]["text"]} flex text-base`;
       }}
       position={originalToast.POSITION.TOP_CENTER}
       autoClose={3000}
@@ -77,18 +77,18 @@ export const ToastContainer = () => {
 
 export const toast = {
   success: (message: string) => {
-    originalToast.success(message);
+    originalToast.success(<p className="py-2">{message}</p>);
   },
   error: (message: string) => {
-    originalToast.error(message);
+    originalToast.error(<p className="py-2">{message}</p>);
   },
   info: (message: string) => {
-    originalToast.info(message);
+    originalToast.info(<p className="py-2">{message}</p>);
   },
   warning: (message: string) => {
-    originalToast.warning(message);
+    originalToast.warning(<p className="py-2">{message}</p>);
   },
   default: (message: string) => {
-    originalToast(message);
+    originalToast(<p className="py-2">{message}</p>);
   },
 };
