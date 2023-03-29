@@ -7,8 +7,6 @@ import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { NextPageWithLayout } from "@pages/_app";
 import { PageTemplate, Template } from "@components/form-builder/app";
-import { Button } from "@components/form-builder/app/shared";
-import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 import { GetServerSideProps } from "next";
 import { FormRecord, VaultSubmissionList } from "@lib/types";
 import { listAllSubmissions } from "@lib/vault";
@@ -38,8 +36,8 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   const [isShowConfirmReceiptDialog, setIsShowConfirmReceiptDialog] = useState(false);
   const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
 
-  const secondaryButtonClass =
-    "whitespace-nowrap text-sm rounded-full bg-white-default text-black-default border-black-default hover:text-white-default hover:bg-gray-600 active:text-white-default active:bg-gray-500 py-2 px-5 rounded-lg border-2 border-solid inline-flex items-center active:top-0.5 focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500";
+  const navItemClasses =
+    "no-underline !shadow-none border-black border-1 rounded-[100px] pt-1 pb-2 laptop:py-2 px-5 mr-3 mb-4 text-black visited:text-black focus:bg-[#475569] hover:bg-[#475569] hover:!text-white focus:!text-white [&_svg]:focus:fill-white";
 
   return (
     <>
@@ -53,33 +51,30 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           </h1>
           <nav className="flex gap-3">
             {isAuthenticated && (
-              <Button
+              <button
                 onClick={() => setIsShowConfirmReceiptDialog(true)}
-                className="text-sm rounded-full"
-                theme="secondary"
+                className={navItemClasses}
                 disabled={status !== "authenticated"}
               >
                 {t("responses.confirmReceipt")}
-              </Button>
+              </button>
             )}
 
             {isAuthenticated && (
-              <Button
+              <button
                 onClick={() => setIsShowReportProblemsDialog(true)}
-                theme="secondary"
-                className="text-sm rounded-full"
+                className={navItemClasses}
                 disabled={status !== "authenticated"}
               >
                 {t("responses.reportProblems")}
-              </Button>
+              </button>
             )}
 
-            <StyledLink
-              href="/form-builder/settings"
-              className={`text-sm no-underline ${secondaryButtonClass} rounded-full`}
-            >
-              {t("responses.changeSetup")}
-            </StyledLink>
+            <Link href="/form-builder/settings">
+              <a href="/form-builder/settings" className={`${navItemClasses}`}>
+                {t("responses.changeSetup")}
+              </a>
+            </Link>
           </nav>
         </div>
 
