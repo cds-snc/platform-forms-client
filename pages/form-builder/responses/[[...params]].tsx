@@ -30,7 +30,7 @@ import { Nagware } from "@components/form-builder/app/Nagware";
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
   formId?: string;
-  nagwareResult?: NagwareResult;
+  nagwareResult: NagwareResult | null;
 }
 
 const Responses: NextPageWithLayout<ResponsesProps> = ({
