@@ -9,9 +9,8 @@ import { DownloadStatus } from "./DownloadStatus";
 import { useRouter } from "next/router";
 import { logMessage } from "@lib/logger";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
 import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
+import { toast } from "../shared/Toast";
 
 export enum VaultStatus {
   NEW = "New",
@@ -139,7 +138,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
       setNotifications({ ...notifications, downloadError: false });
     }
 
-    const toastDownloadingId = toast.info(
+    toast.info(
       t("downloadResponsesTable.notifications.downloadingXFiles", {
         fileCount: tableItems.checkedItems.size,
       })
@@ -173,13 +172,13 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
           // Refreshes getServerSideProps data without a full page reload
           router.replace(router.asPath, undefined, { scroll: false });
 
-          toast.dismiss(toastDownloadingId);
+          // toast.dismiss();
           toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
         }, 400);
       });
     } catch (err) {
       logMessage.error(err as Error);
-      toast.dismiss(toastDownloadingId);
+      // toast.dismiss();
       setNotifications({ ...notifications, downloadError: true });
     }
   };
@@ -364,9 +363,6 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
           )}
         </div>
       </div>
-
-      {/* TODO move to the app top level probably */}
-      <ToastContainer />
     </section>
   );
 };
