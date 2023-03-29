@@ -100,5 +100,9 @@
   },
   "continue": "Continue",
   "error": "Error",
-  "unknown": "Unknown"
+  "unknown": "Unknown",
+  "attention": {
+    "warning": "Warning",
+    "error": "Error"
+  }
 }
