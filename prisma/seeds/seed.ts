@@ -3,6 +3,7 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import { parse } from "ts-command-line-args";
 import seedTemplates from "./fixtures/templates";
 import seedPrivileges from "./fixtures/privileges";
+import seedSettings from "./fixtures/settings";
 
 type AnyObject = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -29,6 +30,13 @@ async function createPrivileges(env: string) {
   }));
   return prisma.privilege.createMany({
     data: typeSafePrivilegeData,
+    skipDuplicates: true,
+  });
+}
+
+async function createSettings(env: string) {
+  return prisma.setting.createMany({
+    data: seedSettings[env],
     skipDuplicates: true,
   });
 }
@@ -172,7 +180,11 @@ async function main() {
   });
 
   console.log(`Seeding Database for ${environment} enviroment`);
-  await Promise.all([createTemplates(environment), createPrivileges(environment)]);
+  await Promise.all([
+    createTemplates(environment),
+    createPrivileges(environment),
+    createSettings(environment),
+  ]);
 
   console.log("Running 'publishingStatus' migration");
   await publishingStatusMigration();
