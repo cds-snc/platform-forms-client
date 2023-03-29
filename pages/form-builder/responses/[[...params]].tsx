@@ -23,7 +23,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import { logMessage } from "@lib/logger";
 import axios from "axios";
-import { detectOldUnprocessedSubmissions, NagwareResult } from "@lib/nagware";
+import { NagwareResult } from "@lib/types";
+import { detectOldUnprocessedSubmissions } from "@lib/nagware";
 import { Nagware } from "@components/form-builder/app/Nagware";
 
 interface ResponsesProps {

@@ -1,20 +1,6 @@
-export enum NagLevel {
-  None,
-  UnsavedSubmissionsOver21DaysOld,
-  UnconfirmedSubmissionsOver21DaysOld,
-  UnsavedSubmissionsOver35DaysOld,
-  UnconfirmedSubmissionsOver35DaysOld,
-}
+import { NagwareSubmission, NagwareResult, NagLevel } from "@lib/types";
 
-export type NagwareSubmission = {
-  status: string;
-  createdAt: number;
-};
 
-export type NagwareResult = {
-  level: NagLevel;
-  numberOfSubmissions: number;
-};
 
 export function detectOldUnprocessedSubmissions(submissions: NagwareSubmission[]): NagwareResult {
   const results = submissions.reduce(

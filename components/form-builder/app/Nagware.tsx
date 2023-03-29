@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
 import { Attention } from "@components/globals/Attention/Attention";
-import { NagLevel, NagwareResult } from "@lib/nagware";
+import { NagLevel, NagwareResult } from "@lib/types";
 
 export const Nagware = ({ nagwareResult }: { nagwareResult: NagwareResult }) => {
   const { t } = useTranslation("form-builder");

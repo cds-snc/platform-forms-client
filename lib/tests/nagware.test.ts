@@ -2,7 +2,8 @@
  * @jest-environment node
  */
 
-import { detectOldUnprocessedSubmissions, NagLevel, NagwareSubmission } from "@lib/nagware";
+import { NagLevel, NagwareSubmission } from "@lib/types";
+import { detectOldUnprocessedSubmissions } from "@lib/nagware";
 
 enum MockStatus {
   New,
