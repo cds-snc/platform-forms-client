@@ -49,6 +49,10 @@
     "formBuilderDebug": {
       "title": "Form builder debug",
       "description": "Enable the form builder debug mode"
+    },
+    "nagware": {
+      "title": "Nagware notifications",
+      "description": "Enable the Nagware notifications"
     }
   }
 }

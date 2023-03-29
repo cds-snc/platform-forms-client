@@ -316,7 +316,12 @@ export const getServerSideProps: GetServerSideProps = async ({
       ]);
       FormbuilderParams.initialForm = initialForm;
       vaultSubmissions.push(...submissions);
-      nagwareResult = submissions.length > 0 ? detectOldUnprocessedSubmissions(submissions) : null;
+
+      const isNagwareEnabled = await checkOne("nagware");
+
+      if (isNagwareEnabled) {
+        nagwareResult = submissions.length ? detectOldUnprocessedSubmissions(submissions) : null;
+      }
     } catch (e) {
       if (e instanceof AccessControlError) {
         return {
