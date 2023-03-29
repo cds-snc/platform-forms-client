@@ -1,21 +1,40 @@
+import { CircleCheckIcon, InfoIcon, WarningIcon } from "@components/form-builder/icons";
 import React from "react";
 import {
   ToastContainer as OriginalContainer,
   toast as originalToast,
   Bounce,
-  Slide,
   TypeOptions,
   ToastPosition,
 } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
-// import "react-toastify/dist/ReactToastify.minimal.css";
 
 const contextClass = {
-  success: "bg-green-50",
-  error: "bg-red-100",
-  info: "bg-blue-50",
-  warning: "bg-yellow-50",
-  default: "bg-white",
+  success: {
+    background: "bg-green-50",
+    text: "text-green-800",
+    icon: <CircleCheckIcon className="fill-green-800" />,
+  },
+  error: {
+    background: "bg-red-100",
+    text: "text-red-800",
+    icon: <WarningIcon className="fill-red-800" />,
+  },
+  info: {
+    background: "bg-blue-50",
+    text: "text-blue-600",
+    icon: <InfoIcon className="fill-blue-600" />,
+  },
+  warning: {
+    background: "bg-yellow-50",
+    text: "text-yellow-700",
+    icon: <WarningIcon className="fill-yellow-700" />,
+  },
+  default: {
+    background: "bg-white",
+    text: "text-black",
+    icon: <InfoIcon className="fill-black" />,
+  },
 };
 
 export const ToastContainer = () => {
@@ -28,15 +47,30 @@ export const ToastContainer = () => {
         rtl?: boolean;
       }) => {
         return `${
-          contextClass[context?.type || "default"]
+          contextClass[context?.type || "default"]["background"]
         } relative flex drop-shadow-md p-1 min-h-10 rounded-md justify-between overflow-hidden cursor-pointer`;
       }}
-      bodyClassName="flex p-4 text-base text-black"
+      bodyClassName={(context?: {
+        type?: TypeOptions;
+        defaultClassName?: string;
+        position?: ToastPosition;
+        rtl?: boolean;
+      }) => {
+        return `${contextClass[context?.type || "default"]["text"]} flex p-4 text-base`;
+      }}
       position={originalToast.POSITION.TOP_CENTER}
       autoClose={3000}
       hideProgressBar={true}
       closeOnClick={true}
       transition={Bounce}
+      icon={(context?: {
+        type?: TypeOptions;
+        defaultClassName?: string;
+        position?: ToastPosition;
+        rtl?: boolean;
+      }) => {
+        return contextClass[context?.type || "default"]["icon"];
+      }}
     />
   );
 };
