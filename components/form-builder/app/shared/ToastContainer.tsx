@@ -1,5 +1,11 @@
 import React from "react";
-import { ToastContainer as OriginalContainer, toast, Bounce } from "react-toastify";
+import {
+  ToastContainer as OriginalContainer,
+  toast,
+  Bounce,
+  TypeOptions,
+  ToastPosition,
+} from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 
 const contextClass = {
@@ -10,12 +16,19 @@ const contextClass = {
   default: "bg-white",
 };
 
-type ToastType = keyof typeof contextClass;
-
-export const ToastContainer = ({ type = "default" }: { type?: ToastType }) => {
+export const ToastContainer = () => {
   return (
     <OriginalContainer
-      toastClassName={`${contextClass[type]} relative flex drop-shadow-md p-1 min-h-10 rounded-md justify-between overflow-hidden cursor-pointer`}
+      toastClassName={(context?: {
+        type?: TypeOptions;
+        defaultClassName?: string;
+        position?: ToastPosition;
+        rtl?: boolean;
+      }) => {
+        return `${
+          contextClass[context?.type || "default"]
+        } relative flex drop-shadow-md p-1 min-h-10 rounded-md justify-between overflow-hidden cursor-pointer`;
+      }}
       bodyClassName="flex p-4 text-sm text-black"
       position={toast.POSITION.TOP_CENTER}
       autoClose={3000}
