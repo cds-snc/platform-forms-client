@@ -31,7 +31,7 @@ const deleteValue = async (deleteParameter: string) => {
   try {
     const redis = await getRedisInstance();
 
-    redis.del(deleteParameter);
+    await redis.del(deleteParameter);
     logMessage.debug(`Deleting Cached value for ${deleteParameter}`);
   } catch (e) {
     logMessage.error(e as Error);
@@ -44,7 +44,7 @@ const modifyValue = async (modifyParameter: string, template: FormRecord | strin
   try {
     const redis = await getRedisInstance();
 
-    redis.setex(modifyParameter, randomCacheExpiry(), JSON.stringify(template));
+    await redis.setex(modifyParameter, randomCacheExpiry(), JSON.stringify(template));
     logMessage.debug(`Updating Cached value for ${modifyParameter}`);
   } catch (e) {
     logMessage.error(e as Error);

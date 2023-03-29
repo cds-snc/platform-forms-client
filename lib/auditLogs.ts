@@ -30,6 +30,10 @@ export enum AuditLogEvent {
   EnableFlag = "EnableFlag",
   DisableFlag = "DisableFlag",
   ListAllFlags = "ListAllFlags",
+  ListAllSettings = "ListAllSettings",
+  ChangeSetting = "ChangeSetting",
+  CreateSetting = "CreateSetting",
+  DeleteSetting = "DeleteSetting",
   AccessDenied = "AccessDenied",
 }
 export type AuditLogEventStrings = keyof typeof AuditLogEvent;
@@ -42,6 +46,7 @@ export enum AuditSubjectType {
   SecurityAttribute = "SecurityAttribute",
   Privilege = "Privilege",
   Flag = "Flag",
+  Setting = "Setting",
 }
 
 let sqsClient: SQSClient | null = null;
