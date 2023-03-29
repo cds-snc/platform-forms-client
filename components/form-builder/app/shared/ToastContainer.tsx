@@ -10,14 +10,13 @@ const contextClass = {
   default: "bg-white",
 };
 
-export const ToastContainer = () => {
+type ToastType = keyof typeof contextClass;
+
+export const ToastContainer = ({ type = "default" }: { type?: ToastType }) => {
   return (
     <OriginalContainer
-      toastClassName={({ type }) =>
-        contextClass[type || "default"] +
-        " relative flex drop-shadow-md p-1 min-h-10 rounded-md justify-between overflow-hidden cursor-pointer"
-      }
-      bodyClassName={() => "flex p-4 text-sm text-black"}
+      toastClassName={`${contextClass[type]} relative flex drop-shadow-md p-1 min-h-10 rounded-md justify-between overflow-hidden cursor-pointer`}
+      bodyClassName="flex p-4 text-sm text-black"
       position={toast.POSITION.TOP_CENTER}
       autoClose={3000}
       hideProgressBar={true}
