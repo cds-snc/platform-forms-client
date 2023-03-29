@@ -20,15 +20,15 @@ export type VaultSubmission = {
   formSubmission: Responses;
   fileAttachments?: { fileName: string }[];
   securityAttribute: string;
-  createdAt: Date;
+  createdAt: number;
   status: string;
   confirmationCode: string;
   name: string;
   lastDownloadedBy: string;
   formSubmssionLanguage?: string;
-  confirmedAt?: Date;
-  downloadedAt?: Date;
-  removedAt?: Date;
+  confirmedAt?: number;
+  downloadedAt?: number;
+  removedAt?: number;
 };
 
 export type VaultSubmissionList = TypeOmit<

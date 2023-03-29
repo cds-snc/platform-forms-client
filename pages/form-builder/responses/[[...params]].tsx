@@ -23,15 +23,20 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import { logMessage } from "@lib/logger";
 import axios from "axios";
+import { NagwareResult } from "@lib/types";
+import { detectOldUnprocessedSubmissions } from "@lib/nagware";
+import { Nagware } from "@components/form-builder/app/Nagware";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
   formId?: string;
+  nagwareResult: NagwareResult | null;
 }
 
 const Responses: NextPageWithLayout<ResponsesProps> = ({
   vaultSubmissions,
   formId,
+  nagwareResult,
 }: ResponsesProps) => {
   const { t } = useTranslation("form-builder");
   const { status } = useSession();
@@ -184,6 +189,8 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           </nav>
         </div>
 
+        {nagwareResult && <Nagware nagwareResult={nagwareResult} />}
+
         {isAuthenticated && (
           <>
             <div>
@@ -286,6 +293,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   };
 
   const vaultSubmissions: VaultSubmissionList[] = [];
+  let nagwareResult: NagwareResult | null = null;
 
   const session = await getServerSession(req, res, authOptions);
 
@@ -308,6 +316,12 @@ export const getServerSideProps: GetServerSideProps = async ({
       ]);
       FormbuilderParams.initialForm = initialForm;
       vaultSubmissions.push(...submissions);
+
+      const isNagwareEnabled = await checkOne("nagware");
+
+      if (isNagwareEnabled) {
+        nagwareResult = submissions.length ? detectOldUnprocessedSubmissions(submissions) : null;
+      }
     } catch (e) {
       if (e instanceof AccessControlError) {
         return {
@@ -325,6 +339,7 @@ export const getServerSideProps: GetServerSideProps = async ({
       ...FormbuilderParams,
       vaultSubmissions,
       formId: FormbuilderParams.initialForm?.id ?? null,
+      nagwareResult,
       ...(locale &&
         (await serverSideTranslations(locale, ["common", "form-builder"], null, ["fr", "en"]))),
     },

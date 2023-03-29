@@ -101,5 +101,9 @@
   },
   "continue": "Continuer",
   "error": "Erreur",
-  "unknown": "Inconnu"
+  "unknown": "Inconnu",
+  "attention": {
+    "warning": "Avertissement",
+    "error": "Erreur"
+  }
 }
