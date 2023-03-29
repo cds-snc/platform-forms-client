@@ -15,8 +15,8 @@ import Head from "next/head";
 import { checkOne } from "@lib/cache/flags";
 import Link from "next/link";
 import { Card } from "@components/globals/card/Card";
-import { DownloadTable } from "@components/form-builder/app/DownloadTable/DownloadTable";
-import { DownloadTableDialog } from "@components/form-builder/app/DownloadTable/DownloadTableDialog";
+import { DownloadTable } from "@components/form-builder/app/responses/DownloadTable";
+import { DownloadTableDialog } from "@components/form-builder/app/responses/DownloadTableDialog";
 import { isFormId, isUUID } from "@lib/validation";
 
 interface ResponsesProps {
