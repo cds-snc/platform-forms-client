@@ -3,7 +3,6 @@ import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetServerSideProps } from "next";
 import { getServerSession } from "next-auth";
-import { prisma } from "@lib/integration/prismaConnector";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 
 import { NextPageWithLayout } from "../../_app";
@@ -11,6 +10,7 @@ import { PageProps } from "@lib/types";
 import { Template, PageTemplate } from "@components/form-builder/app";
 import { Branding } from "@components/form-builder/app/branding";
 import { SettingsNavigation } from "@components/form-builder/app/navigation/SettingsNavigation";
+import { getAppSetting } from "@lib/appSettings";
 
 const Page: NextPageWithLayout<PageProps> = ({
   hasBrandingRequestForm,
@@ -43,11 +43,7 @@ export const getServerSideProps: GetServerSideProps = async ({ locale, req, res 
     };
   }
 
-  const result = await prisma.settings.findFirst({
-    select: { brandingRequestFormId: true },
-  });
-
-  const hasBrandingRequestForm = result?.brandingRequestFormId ?? false;
+  const hasBrandingRequestForm = Boolean(await getAppSetting("brandingRequestForm"));
 
   return {
     props: {
