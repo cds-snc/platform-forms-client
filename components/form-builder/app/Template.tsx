@@ -9,7 +9,7 @@ import { useTemplateStore, TemplateStoreProvider } from "@components/form-builde
 import { LeftNavigation, Header } from "@components/form-builder/app";
 import { Language } from "../types";
 import { TemplateApiProvider } from "../hooks";
-import { ToastContainer } from "./shared/ToastContainer";
+import { ToastContainer } from "./shared/Toast";
 
 export const Template = ({
   page,

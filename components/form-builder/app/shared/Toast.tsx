@@ -1,8 +1,9 @@
 import React from "react";
 import {
   ToastContainer as OriginalContainer,
-  toast,
+  toast as originalToast,
   Bounce,
+  Slide,
   TypeOptions,
   ToastPosition,
 } from "react-toastify";
@@ -31,11 +32,29 @@ export const ToastContainer = () => {
         } relative flex drop-shadow-md p-1 min-h-10 rounded-md justify-between overflow-hidden cursor-pointer`;
       }}
       bodyClassName="flex p-4 text-base text-black"
-      position={toast.POSITION.TOP_CENTER}
+      position={originalToast.POSITION.TOP_CENTER}
       autoClose={3000}
       hideProgressBar={true}
       closeOnClick={true}
       transition={Bounce}
     />
   );
+};
+
+export const toast = {
+  success: (message: string) => {
+    originalToast.success(message);
+  },
+  error: (message: string) => {
+    originalToast.error(message);
+  },
+  info: (message: string) => {
+    originalToast.info(message);
+  },
+  warning: (message: string) => {
+    originalToast.warning(message);
+  },
+  default: (message: string) => {
+    originalToast(message);
+  },
 };

@@ -11,7 +11,7 @@ import { Radio, Button, ResponseDeliveryHelpButton } from "./shared";
 import { useTemplateApi } from "../hooks";
 import { useTemplateStore } from "../store";
 import { completeEmailAddressRegex } from "../util";
-import { toast } from "react-toastify";
+import { toast } from "./shared/Toast";
 
 enum DeliveryOption {
   vault = "vault",
