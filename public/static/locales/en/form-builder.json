@@ -59,7 +59,7 @@
       "title": "Dropdown"
     },
     "dynamicRow": {
-      "description": "The repeating question block provides form fillers with the option to add another set of answers to the section. This block works with one question or a section of questions.",
+      "description": "The repeating question block provides form fillers with the option to add another set of answers to the section. This block works with one question or a section of related questions.",
       "title": "Repeating set"
     },
     "example": "example",

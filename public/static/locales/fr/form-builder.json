@@ -59,7 +59,7 @@
       "title": "Liste déroulante"
     },
     "dynamicRow": {
-      "description": "Le bloc de questions répétitives offre aux remplisseurs de formulaires la possibilité d'ajouter une autre série de réponse à la section. Ce bloc fonctionne avec une seule question ou une section de questions.",
+      "description": "Le bloc de questions répétitives offre aux personnes qui remplissent les formulaires la possibilité d'ajouter une série de réponses similaires à une section. Ce bloc fonctionne avec une seule question ou une section de questions connexes.",
       "title": "Série répétitive de questions"
     },
     "example": "exemple",
