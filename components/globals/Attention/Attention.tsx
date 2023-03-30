@@ -2,7 +2,6 @@ import React from "react";
 import { CheckIcon, WarningIcon } from "@components/form-builder/icons";
 
 export enum AttentionTypes {
-  INFO = "info",
   WARNING = "warning",
   ERROR = "error",
   SUCCESS = "success",
@@ -51,8 +50,6 @@ export const Attention = ({
       backgroundColor = "bg-amber-100";
       icon = <CheckIcon className="w-12 h-12 fill-green-default" />;
       break;
-    case AttentionTypes.INFO:
-    //TODO future
   }
 
   return (
