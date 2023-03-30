@@ -11,7 +11,6 @@ import {
   getFullTemplateByID,
   updateTemplate,
   deleteTemplate,
-  getTemplateDeliveryOptionByID,
   onlyIncludePublicProperties,
   updateIsPublishedForTemplate,
   getTemplateWithAssociatedUsers,
@@ -361,24 +360,6 @@ describe("Template CRUD functions", () => {
     const template = await getPublicTemplateByID("formtestID");
 
     expect(template).toBe(null);
-  });
-
-  it("Get Delivery Option object", async () => {
-    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue(
-      buildPrismaResponse("formtestID", formConfiguration, false, {
-        emailAddress: "email@test.com",
-        emailSubjectEn: "email subject in English",
-        emailSubjectFr: "email subject in French",
-      })
-    );
-
-    const deliveryOption = await getTemplateDeliveryOptionByID("formtestID");
-
-    expect(deliveryOption).toEqual({
-      emailAddress: "email@test.com",
-      emailSubjectEn: "email subject in English",
-      emailSubjectFr: "email subject in French",
-    });
   });
 
   it("Get templates with associated users", async () => {
