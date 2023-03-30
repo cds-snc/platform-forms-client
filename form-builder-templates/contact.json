@@ -35,7 +35,7 @@
         "validation": {
           "required": false
         },
-        "descriptionEn": "Enter your phone number like, 111-222-3333",
+        "descriptionEn": "Enter your phone number. For example: 111-222-3333",
         "descriptionFr": "",
         "placeholderEn": "",
         "placeholderFr": "",
@@ -58,8 +58,8 @@
           "required": false,
           "type": "email"
         },
-        "descriptionEn": "Enter an email address like, name@example.com",
-        "descriptionFr": "Entrez une adresse courriel comme name@example.com",
+        "descriptionEn": "Enter an email address. For example: name@company.com",
+        "descriptionFr": "Entrez une adresse courriel. Par exemple : nom@entreprise.com",
         "placeholderEn": "",
         "placeholderFr": "",
         "autoComplete": "email"

@@ -65,7 +65,7 @@ export const SelectedElement = ({
       }
       break;
     case "email":
-      element = <ShortAnswer data-testid="email">name@example.com</ShortAnswer>;
+      element = <ShortAnswer data-testid="email">name@company.com</ShortAnswer>;
       break;
     case "phone":
       element = <ShortAnswer data-testid="phone">111-222-3333</ShortAnswer>;

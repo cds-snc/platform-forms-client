@@ -34,7 +34,7 @@
     "contact": {
       "description": "Contact description",
       "email": {
-        "description": "Enter your email address like, name@example.com",
+        "description": "Enter your email address. For example: name@company.com",
         "label": "Email address"
       },
       "label": "Contact",
@@ -45,7 +45,7 @@
         "label": "What is your preferred language for communication?"
       },
       "phone": {
-        "description": "Enter your phone number like, 111-222-3333",
+        "description": "Enter your phone number. For example: 111-222-3333",
         "label": "Phone number"
       },
       "title": "How can we contact you?"
@@ -218,10 +218,10 @@
   "copyMessage": "(template copied)",
   "date": "Date",
   "defaultElementDescription": {
-    "date": "Enter a date like, mm/dd/yyyy",
-    "email": "Enter an email address like, name@example.com",
+    "date": "Enter a date. For example: mm/dd/yyyy",
+    "email": "Enter an email address. For example: name@company.com",
     "number": "Only enter numbers",
-    "phone": "Enter a phone number like, 111-222-3333"
+    "phone": "Enter a phone number. For example: 111-222-3333"
   },
   "description": "Description",
   "descriptionDescription": "The description appears below the label and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements.",
