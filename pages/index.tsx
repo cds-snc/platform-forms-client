@@ -15,7 +15,8 @@ const Home = () => {
       </Head>
       <div>
         <h1>
-          <span lang="en">GC Forms</span> - <span lang="fr">Formulaires GC</span>
+          <span lang="en">{t("title", { lng: "en" })}</span> -{" "}
+          <span lang="fr">{t("title", { lng: "fr" })}</span>
         </h1>
       </div>
       <div className="border-gray-400 p-10 grid grid-cols-2 gap-x-4 max-w-2xl  w-2/4 m-auto">
@@ -41,7 +42,7 @@ Home.getLayout = (page: ReactElement) => {
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   props: {
-    ...(locale && (await serverSideTranslations(locale, ["common"]))),
+    ...(locale && (await serverSideTranslations(locale, ["common"], null, ["fr", "en"]))),
   },
 });
 
