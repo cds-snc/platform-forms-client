@@ -384,7 +384,7 @@
   "questions": "Questions",
   "questionSet": {
     "addAnother": {
-      "description": "Créez une étiquette descriptive pour le bouton afin d'indiquer aux personnes remplissant le formulaire qu'elles peuvent ajouter un autre ensemble de réponses. Par exemple, ajouter « une autre adresses ».",
+      "description": "Créez une étiquette descriptive pour le bouton afin d'indiquer aux personnes remplissant le formulaire qu'elles peuvent ajouter un autre ensemble de réponses. Par exemple, ajouter « une autre adresse ».",
       "placeholder": "Ajouter",
       "title": "Bouton"
     }
