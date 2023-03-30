@@ -1,6 +1,6 @@
 import { InferSubjects, MongoQuery, MongoAbility } from "@casl/ability";
 import { FormRecord } from "@lib/types";
-import { User, Privilege as PrismaPrivilege } from "@prisma/client";
+import { User, Privilege as PrismaPrivilege, Setting } from "@prisma/client";
 
 interface CASL_FormRecord extends FormRecord {
   kind: "FormRecord";
@@ -15,13 +15,19 @@ interface CASL_Privilege extends Privilege {
   kind: "Privilege";
 }
 
+interface CASL_Setting extends Setting {
+  kind: "Setting";
+}
+
 interface CASL_Flag {
   kind: "Flag";
   [key: string]: boolean | string;
 }
 
 export type Action = "create" | "view" | "update" | "delete";
-export type Subject = InferSubjects<CASL_FormRecord | CASL_User | CASL_Privilege | CASL_Flag>;
+export type Subject = InferSubjects<
+  CASL_FormRecord | CASL_User | CASL_Privilege | CASL_Setting | CASL_Flag
+>;
 
 export type Abilities = [Action, Subject];
 

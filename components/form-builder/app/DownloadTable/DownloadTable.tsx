@@ -22,8 +22,8 @@ interface DownloadTableProps {
   handleDownload: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-export function getDaysPassed(date: Date): number {
-  const dateCreated = new Date(date);
+export function getDaysPassed(timestamp: number): number {
+  const dateCreated = new Date(timestamp);
   const dateToday = new Date();
   const dateDiff = Math.abs(Number(dateToday) - Number(dateCreated));
   const daysPassed = Math.ceil(dateDiff / (1000 * 60 * 60 * 24));

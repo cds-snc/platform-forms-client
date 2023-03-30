@@ -10,6 +10,7 @@ export enum AuditLogEvent {
   PublishForm = "PublishForm",
   ChangeFormName = "ChangeFormName",
   ChangeDeliveryOption = "ChangeDeliveryOption",
+  ChangeSecurityAttribute = "ChangeSecurityAttribute",
   GrantFormAccess = "GrantFormAccess",
   RevokeFormAccess = "RevokeFormAccess",
   // Form Response Events
@@ -29,6 +30,10 @@ export enum AuditLogEvent {
   EnableFlag = "EnableFlag",
   DisableFlag = "DisableFlag",
   ListAllFlags = "ListAllFlags",
+  ListAllSettings = "ListAllSettings",
+  ChangeSetting = "ChangeSetting",
+  CreateSetting = "CreateSetting",
+  DeleteSetting = "DeleteSetting",
   AccessDenied = "AccessDenied",
 }
 export type AuditLogEventStrings = keyof typeof AuditLogEvent;
@@ -38,8 +43,10 @@ export enum AuditSubjectType {
   Form = "Form",
   Response = "Response",
   DeliveryOption = "DeliveryOption",
+  SecurityAttribute = "SecurityAttribute",
   Privilege = "Privilege",
   Flag = "Flag",
+  Setting = "Setting",
 }
 
 let sqsClient: SQSClient | null = null;

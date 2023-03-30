@@ -34,7 +34,7 @@
     "contact": {
       "description": "Contact description",
       "email": {
-        "description": "Enter your email address like, name@example.com",
+        "description": "Enter your email address. For example: name@example.com",
         "label": "Email address"
       },
       "label": "Contact",
@@ -45,7 +45,7 @@
         "label": "What is your preferred language for communication?"
       },
       "phone": {
-        "description": "Enter your phone number like, 111-222-3333",
+        "description": "Enter your phone number. For example: 111-222-3333",
         "label": "Phone number"
       },
       "title": "How can we contact you?"
@@ -59,7 +59,7 @@
       "title": "Dropdown"
     },
     "dynamicRow": {
-      "description": "The repeating question block provides form fillers with the option to add another set of answers to the section. This block works with one question or a section of questions.",
+      "description": "The repeating question block provides form fillers with the option to add another set of answers to the section. This block works with one question or a section of related questions.",
       "title": "Repeating set"
     },
     "example": "example",
@@ -218,10 +218,10 @@
   "copyMessage": "(template copied)",
   "date": "Date",
   "defaultElementDescription": {
-    "date": "Enter a date like, mm/dd/yyyy",
-    "email": "Enter an email address like, name@example.com",
+    "date": "Enter a date. For example: mm/dd/yyyy",
+    "email": "Enter an email address. For example: name@example.com",
     "number": "Only enter numbers",
-    "phone": "Enter a phone number like, 111-222-3333"
+    "phone": "Enter a phone number. For example: 111-222-3333"
   },
   "description": "Description",
   "descriptionDescription": "The description appears below the label and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements.",
@@ -441,9 +441,10 @@
   "settingsInvalidEmailAlertDesc2": "to register email address.",
   "settingsInvalidEmailAlertTitle": "Government email address",
   "settingsNavHome": "Response delivery",
-  "settingsResponseEmailTitle": "Enter the email address",
+  "settingsResponseEmailTitle": "Email address",
   "settingsResponseHint1": "Submitted responses will be emailed to this inbox.",
   "settingsResponseDelivery": {
+    "selectClassification": "Select the data classification of your form responses",
     "title": "Select a response delivery option",
     "vaultOption": "Download responses from GC Forms",
     "vaultOptionHint": {
@@ -465,11 +466,11 @@
     },
     "emailSubjectEn": {
       "title": "English response subject line",
-      "hint" : "When form responses are submitted in English."
+      "hint": "When form responses are submitted in English."
     },
     "emailSubjectFr": {
       "title": "French response subject line",
-      "hint" : "When form responses are submitted in French."
+      "hint": "When form responses are submitted in French."
     },
     "responseDeliveryHelp": {
       "cta": "Help on choosing an option",
@@ -578,5 +579,34 @@
   "translateTitle": "Enter your translation",
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
-  "unnamedForm": "Unnamed form file"
+  "unnamedForm": "Unnamed form file",
+  "nagware": {
+    "restrictedDownloadAfter35Days": "Downloading will be restricted if unconfirmed responses are older than 35 days.",
+    "unsavedSubmissionsOver21DaysOld": {
+      "title": "Download and confirm receipt of responses",
+      "body1": "There are",
+      "body2": {
+        "moreThan20Responses": "new responses older than 21 days. Download and confirm receipt of 20 overdue new responses at a time.",
+        "lessThan20Responses": "new responses older than 21 days. Download and confirm receipt of all overdue new responses."
+      }
+    },
+    "unconfirmedSubmissionsOver21DaysOld": {
+      "title": "Confirm receipt of responses",
+      "body1": "There are",
+      "body2": "unconfirmed responses older than 21 days. Confirm receipt of all overdue unconfirmed responses."
+    },
+    "unsavedSubmissionsOver35DaysOld": {
+      "title": "Downloading is restricted to overdue responses until they are downloaded and confirmed",
+      "body1": "There are",
+      "body2": {
+        "moreThan20Responses": "new responses over 35 days old. Download and confirm 20 overdue responses at a time before continuing.",
+        "lessThan20Responses": "new responses over 35 days old. Download and confirm all overdue responses before continuing."
+      }
+    },
+    "unconfirmedSubmissionsOver35DaysOld": {
+      "title": "Downloading is restricted until receipt of responses is confirmed",
+      "body1": "There are",
+      "body2": "unconfirmed responses 35 days overdue. Confirm the receipt of all overdue downloaded responses before saving new ones."
+    }
+  }
 }

@@ -1,8 +1,9 @@
 import React from "react";
+import { useTranslation } from "next-i18next";
 import { WarningIcon } from "@components/form-builder/icons";
 
 interface AttentionProps {
-  type?: "warning"; //TODO: | "info" | "error"
+  type?: "warning" | "error"; //TODO: | "info"
   heading?: React.ReactNode;
   children: React.ReactNode;
 }
@@ -12,16 +13,21 @@ export const Attention = ({
   heading,
   children,
 }: AttentionProps & JSX.IntrinsicElements["div"]): React.ReactElement => {
+  const { t } = useTranslation("common");
+
   let color = "";
   let icon = null;
 
   switch (type) {
     case "warning":
       color = "bg-amber-100";
-      icon = <WarningIcon title="Warning" width="50" />;
+      icon = <WarningIcon title={t("attention.warning")} width="50" />;
+      break;
+    case "error":
+      color = "bg-red-100";
+      icon = <WarningIcon title={t("attention.error")} width="50" />;
       break;
     // TODO case "info":
-    // TODO case "error":
   }
 
   return (
