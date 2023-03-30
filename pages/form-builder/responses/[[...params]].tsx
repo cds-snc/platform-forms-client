@@ -18,10 +18,14 @@ import { Card } from "@components/globals/card/Card";
 import { DownloadTable } from "@components/form-builder/app/responses/DownloadTable";
 import { DownloadTableDialog } from "@components/form-builder/app/responses/DownloadTableDialog";
 import { isFormId, isUUID } from "@lib/validation";
+import { NagwareResult } from "@lib/types";
+import { detectOldUnprocessedSubmissions } from "@lib/nagware";
+import { Nagware } from "@components/form-builder/app/Nagware";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
   formId?: string;
+  nagwareResult: NagwareResult | null;
 }
 
 // TODO: move to an app setting variable
@@ -31,6 +35,7 @@ const MAX_REPORT_COUNT = 20;
 const Responses: NextPageWithLayout<ResponsesProps> = ({
   vaultSubmissions,
   formId,
+  nagwareResult,
 }: ResponsesProps) => {
   const { t } = useTranslation("form-builder-responses");
   const { status } = useSession();
@@ -79,6 +84,8 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
             </Link>
           </nav>
         </div>
+
+        {nagwareResult && <Nagware nagwareResult={nagwareResult} />}
 
         {isAuthenticated && (
           <>
@@ -178,6 +185,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   };
 
   const vaultSubmissions: VaultSubmissionList[] = [];
+  let nagwareResult: NagwareResult | null = null;
 
   const session = await getServerSession(req, res, authOptions);
 
@@ -200,6 +208,12 @@ export const getServerSideProps: GetServerSideProps = async ({
       ]);
       FormbuilderParams.initialForm = initialForm;
       vaultSubmissions.push(...submissions);
+
+      const isNagwareEnabled = await checkOne("nagware");
+
+      if (isNagwareEnabled) {
+        nagwareResult = submissions.length ? detectOldUnprocessedSubmissions(submissions) : null;
+      }
     } catch (e) {
       if (e instanceof AccessControlError) {
         return {
@@ -217,6 +231,7 @@ export const getServerSideProps: GetServerSideProps = async ({
       ...FormbuilderParams,
       vaultSubmissions,
       formId: FormbuilderParams.initialForm?.id ?? null,
+      nagwareResult,
       ...(locale &&
         (await serverSideTranslations(
           locale,

@@ -27,8 +27,10 @@ export const Contact = ({ title }: { title: string }) => {
         description={t("addElementDialog.contact.email.description")}
       />
 
-      <h3 className="mb-0 mt-8 text-[1.5rem]">{t("addElementDialog.contact.language.label")}</h3>
-      <div className="mt-8 ml-1 text-[1rem]">
+      <h3 className="mt-8 mb-4 font-bold mt-1 text-sm">
+        {t("addElementDialog.contact.language.label")}
+      </h3>
+      <div className="ml-1 text-[1rem]">
         <div className="flex flex-col">
           <div className="flex mb-5">
             <div>

@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 import { useRefresh } from "@lib/hooks";
 import { isValidGovEmail } from "@lib/validation";
 import { ResponseEmail } from "./ResponseEmail";
-import { Radio, Button, ResponseDeliveryHelpButton } from "./shared";
+import { Radio, Button } from "./shared";
 import { useTemplateApi } from "../hooks";
 import { useTemplateStore } from "../store";
 import { completeEmailAddressRegex } from "../util";
@@ -276,8 +276,8 @@ export const SetResponseDelivery = () => {
           <Button disabled={!isValid} theme="secondary" onClick={saveDeliveryOption}>
             {t("settingsResponseDelivery.saveButton")}
           </Button>
-
-          <ResponseDeliveryHelpButton />
+          {/* #1800 -- turn on when Protected B */}
+          {/* <ResponseDeliveryHelpButton /> */}
         </div>
       )}
     </>

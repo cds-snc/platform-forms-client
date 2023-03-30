@@ -72,7 +72,7 @@
     "login": "Se connecter",
     "logout": "Se déconnecter",
     "privileges": "Privilèges",
-    "settings": "[FR] Settings",
+    "settings": "Paramètres",
     "myForms": "Vos formulaires"
   },
   "formElements": {
@@ -101,5 +101,9 @@
   },
   "continue": "Continuer",
   "error": "Erreur",
-  "unknown": "Inconnu"
+  "unknown": "Inconnu",
+  "attention": {
+    "warning": "Avertissement",
+    "error": "Erreur"
+  }
 }

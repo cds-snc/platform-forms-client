@@ -34,7 +34,7 @@
     "contact": {
       "description": "Description du contact",
       "email": {
-        "description": "Entrez votre adresse courriel, comme nom@exemple.com",
+        "description": "Entrez votre adresse courriel. Par exemple : nom@exemple.com",
         "label": "Adresse courriel"
       },
       "label": "Contact",
@@ -45,7 +45,7 @@
         "label": "Quelle est votre langue préférée de communication?"
       },
       "phone": {
-        "description": "Entrez votre numéro de téléphone, comme 111-222-3333",
+        "description": "Entrez votre numéro de téléphone. Par exemple : 111-222-3333",
         "label": "Numéro de téléphone"
       },
       "title": "Comment pouvons-nous vous contacter?"
@@ -59,8 +59,8 @@
       "title": "Liste déroulante"
     },
     "dynamicRow": {
-      "description": "Le bloc de questions répétitives offre aux remplisseurs de formulaires la possibilité d'ajouter une autre série de réponse à la section. Ce bloc fonctionne avec une seule question ou une section de questions.",
-      "title": "Série répétitive de questions"
+      "description": "Le bloc de questions répétées offre aux personnes qui remplissent les formulaires la possibilité d'ajouter un ensemble de réponses similaires à une section. Ce bloc fonctionne avec une seule question ou une section de questions qui se répètent.",
+      "title": "Ensemble de question répétées"
     },
     "example": "exemple",
     "exampleElement": "exemple du bloc",
@@ -123,7 +123,7 @@
   "addOption": "Ajouter une option",
   "addOptions": "Ajouter ou modifier une liste",
   "addRules": "Ajouter des règles",
-  "addToSet": "Ajouter à la série",
+  "addToSet": "Ajouter à l'ensemble",
   "allRequired": "Tous obligatoires",
   "at": "à",
   "attestation": "Attestation légale",
@@ -218,10 +218,10 @@
   "copyMessage": "Le formulaire a été téléchargé avec succès.",
   "date": "Date",
   "defaultElementDescription": {
-    "date": "Entrez une date comme mm/dd/yyyy",
-    "email": "Entrez une adresse courriel comme name@example.com",
-    "number": "N'entrez que des nombres",
-    "phone": "Entrez un numéro de téléphone comme 111-222-3333"
+    "date": "Entrez une date. Par exemple : mm/jj/aaaa",
+    "email": "Entrez une adresse courriel. Par exemple : nom@exemple.com",
+    "number": "N'entrez que des chiffres",
+    "phone": "Entrez un numéro de téléphone. Par exemple : 111-222-3333"
   },
   "description": "Description ",
   "descriptionDescription": "La description apparaît sous l'étiquette, et avant le champ. Elle est utilisée pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de mise en forme.",
@@ -269,7 +269,7 @@
   },
   "dropdown": "Liste déroulante",
   "duplicate": "Dupliquer",
-  "dyanamicRow": "Série répétitive de questions",
+  "dyanamicRow": "Ensemble de questions répétées",
   "edit": "Modifier",
   "editingIn": "Modifier en :",
   "editLink": "Modifier un lien  ",
@@ -384,14 +384,14 @@
   "questions": "Questions",
   "questionSet": {
     "addAnother": {
-      "description": "Créez une étiquette descriptive pour le bouton afin d'indiquer aux personnes remplissant le formulaire qu'elles peuvent ajouter un autre ensemble de réponses. Par exemple, ajouter « une autre adresses ».",
+      "description": "Créez une étiquette descriptive pour le bouton afin d'indiquer aux personnes remplissant le formulaire qu'elles peuvent ajouter un autre ensemble de réponses. Par exemple, ajouter « une autre adresse ».",
       "placeholder": "Ajouter",
       "title": "Bouton"
     }
   },
   "questionTitle": "Titre de question",
   "remove": "Supprimer",
-  "removeFromSet": "Enlever de la série",
+  "removeFromSet": "Enlever de l'ensemble",
   "removeOption": "Supprimer l'option :  ",
   "requestSuccess": {
     "backToForms": "Retourner à Formulaires GC",
@@ -566,5 +566,34 @@
   "unlockPublishing": "Soumettre",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
   "unnamedForm": "Formulaire sans titre",
-  "responsesNavLabel": "Réponses"
+  "responsesNavLabel": "Réponses",
+  "nagware": {
+    "restrictedDownloadAfter35Days": "Le téléchargement sera limité si les réponses non confirmées ont plus de 35 jours de retard.",
+    "unsavedSubmissionsOver21DaysOld": {
+      "title": "Téléchargez et confirmez la réception des réponses",
+      "body1": "Il y a",
+      "body2": {
+        "moreThan20Responses": "nouvelles réponses ayant plus de 21 jours de retard. Téléchargez et confirmez la réception de 20 nouvelles réponses en retard à la fois.",
+        "lessThan20Responses": "nouvelles réponses ayant plus de 21 jours de retard. Téléchargez et confirmez la réception de toute nouvelle réponse."
+      }
+    },
+    "unconfirmedSubmissionsOver21DaysOld": {
+      "title": "Confirmez la réception des réponses",
+      "body1": "Il y a",
+      "body2": "réponses non confirmées ayant plus de 21 jours de retard. Confirmez la réception de toute réponse non confirmée en retard."
+    },
+    "unsavedSubmissionsOver35DaysOld": {
+      "title": "Le téléchargement est limité jusqu'à ce que la réception des réponses soit confirmée",
+      "body1": "Il y a",
+      "body2": {
+        "moreThan20Responses": "nouvelles réponses ayant plus de 35 jours de retard. Téléchargez et confirmez 20 réponses en retard à la fois avant de continuer.",
+        "lessThan20Responses": "nouvelles réponses ayant plus de 35 jours de retard. Téléchargez et confirmez toute réponse en retard avant de continuer."
+      }
+    },
+    "unconfirmedSubmissionsOver35DaysOld": {
+      "title": "Le téléchargement est limité aux réponses en retard jusqu'à ce qu'elles soient téléchargées et confirmées",
+      "body1": "Il y a",
+      "body2": "réponses non confirmées avec 35 jours de retard ou plus. Confirmez la réception de toute réponse téléchargée en retard avant d'en enregistrer de nouvelles."
+    }
+  }
 }
