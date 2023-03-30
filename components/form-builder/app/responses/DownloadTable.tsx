@@ -79,17 +79,10 @@ const reducerTableItems = (state: ReducerTableItemsState, action: ReducerTableIt
   }
 };
 
-export function getDaysPassed(date: Date): number {
-  const dateCreated = new Date(date);
-  const dateToday = new Date();
-  const dateDiff = Math.abs(Number(dateToday) - Number(dateCreated));
-  const daysPassed = Math.ceil(dateDiff / (1000 * 60 * 60 * 24));
-  return daysPassed;
-}
-
 export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) => {
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
+  // TODO: would be nice to use some sort of "manager" pattern to control "inline" notifications
   const [notifications, setNotifications] = useState({
     downloadError: false,
     maxItemsError: false,
@@ -173,14 +166,11 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
         setTimeout(() => {
           // Refreshes getServerSideProps data without a full page reload
           router.replace(router.asPath, undefined, { scroll: false });
-
-          // toast.dismiss();
           toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
         }, 400);
       });
     } catch (err) {
       logMessage.error(err as Error);
-      // toast.dismiss();
       setNotifications({ ...notifications, downloadError: true });
     }
   };
@@ -231,7 +221,6 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
         )}
       </div>
 
-      {/* TODO: come back to table live regions, updates may require a separate channel/* */}
       <table className="text-sm" aria-live="polite">
         <caption className="sr-only">{t("downloadResponsesTable.header.tableTitle")}</caption>
         <thead className="border-b-2 border-[#6a6d7b]">
@@ -291,7 +280,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
                   createdAtDate={submission.createdAt}
                 />
               </td>
-              <td className="px-4 pb-2 whitespace-nowrap">
+              <td className="px-4 whitespace-nowrap">
                 <RemovalStatus vaultStatus={submission.status} removalAt={submission.removedAt} />
               </td>
             </tr>
@@ -299,8 +288,6 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
         </tbody>
       </table>
       <div className="mt-8 flex">
-        {/* NOTE: check/unchek item announcement may be enough for users and additionally announcing
-              the updated Button items checked count may be too verbose. Remove live-region if so */}
         <button
           id="downloadTableButtonId"
           className="gc-button--blue whitespace-nowrap w-auto m-0"

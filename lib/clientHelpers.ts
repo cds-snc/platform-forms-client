@@ -295,6 +295,25 @@ export const formatDate = (date: Date): string => {
   return `${year}-${month}-${day}`;
 };
 
+/**
+ * Get the number of days passed between a passed date and today's date.
+ * @param date end Date to diff against today's date
+ * @returns number of days passed or -1 for an error
+ */
+export const getDaysPassed = (date: Date): number => {
+  const date1 = new Date();
+  // Allowing UTC timestamps also - do a very basic check
+  const date2 = typeof date === "number" && String(date).length === 13 ? new Date(date) : date;
+
+  if (!(date2 instanceof Date)) {
+    return -1;
+  }
+
+  const daysDiff = Math.abs(Number(date2) - Number(date1));
+  const daysPassed = Math.round(daysDiff / (1000 * 60 * 60 * 24));
+  return daysPassed;
+};
+
 export const submitToAPI = logger(_submitToAPI);
 export const buildFormDataObject = logger(_buildFormDataObject);
 export const rehydrateFormResponses = logger(_rehydrateFormResponses);

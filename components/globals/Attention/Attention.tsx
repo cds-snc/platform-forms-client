@@ -37,19 +37,19 @@ export const Attention = ({
       ariaAttributes = { role: "alert" };
       headingTextColor = "text-black";
       backgroundColor = "bg-amber-100";
-      icon = <WarningIcon title="Warning" className="w-14 h-14" />;
+      icon = <WarningIcon title="Warning" className="w-12 h-12 fill-black" />;
       break;
     case AttentionTypes.ERROR:
       ariaAttributes = { role: "alert" };
       headingTextColor = "validation-message";
       backgroundColor = "bg-[#f3e9e8]";
-      icon = <WarningIcon title="Error" className="w-14 h-14 fill-[#ef4444]" />;
+      icon = <WarningIcon title="Error" className="w-12 h-12 fill-[#ef4444]" />;
       break;
     case AttentionTypes.SUCCESS:
       ariaAttributes = { live: "polite" };
       headingTextColor = "text-green";
       backgroundColor = "bg-amber-100";
-      icon = <CheckIcon className="w-10 h-10 fill-green-default" />;
+      icon = <CheckIcon className="w-12 h-12 fill-green-default" />;
       break;
     case AttentionTypes.INFO:
     //TODO future

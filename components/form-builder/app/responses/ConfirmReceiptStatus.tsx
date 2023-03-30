@@ -1,7 +1,8 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { ExclamationText } from "../shared";
-import { VaultStatus, getDaysPassed } from "./DownloadTable";
+import { VaultStatus } from "./DownloadTable";
+import { getDaysPassed } from "@lib/clientHelpers";
 
 // TODO: move to an app setting variable
 const CONFIRM_OVERDUE = 15;
@@ -29,7 +30,9 @@ export const ConfirmReceiptStatus = ({
     case VaultStatus.DOWNLOADED: {
       const daysPassed = getDaysPassed(createdAtDate);
       const daysLeft = CONFIRM_OVERDUE - daysPassed;
-      if (daysLeft > 0) {
+      if (daysLeft < 0) {
+        status = t("downloadResponsesTable.unknown");
+      } else if (daysLeft > 0) {
         status = t("downloadResponsesTable.status.withinXDays", { daysLeft });
       } else {
         status = <ExclamationText text={t("downloadResponsesTable.status.overdue")} />;

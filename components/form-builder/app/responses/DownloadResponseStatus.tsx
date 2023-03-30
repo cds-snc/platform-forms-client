@@ -2,7 +2,7 @@ import { formatDate } from "@lib/clientHelpers";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { ExclamationText } from "../shared";
-import { getDaysPassed } from "./DownloadTable";
+import { getDaysPassed } from "@lib/clientHelpers";
 
 // TODO: move to an app setting variable
 const DOWNLOAD_OVERDUE = 15;
@@ -21,11 +21,15 @@ export const DownloadResponseStatus = ({
 
   if (vaultStatus === "New") {
     const daysPassed = getDaysPassed(createdAt);
-    const daysLeft = DOWNLOAD_OVERDUE - daysPassed;
-    if (daysLeft > 0) {
-      status = t("downloadResponsesTable.status.withinXDays", { daysLeft });
+    if (daysPassed < 0) {
+      status = t("downloadResponsesTable.unknown");
     } else {
-      status = <ExclamationText text={t("downloadResponsesTable.status.overdue")} />;
+      const daysLeft = DOWNLOAD_OVERDUE - daysPassed;
+      if (daysLeft > 0) {
+        status = t("downloadResponsesTable.status.withinXDays", { daysLeft });
+      } else {
+        status = <ExclamationText text={t("downloadResponsesTable.status.overdue")} />;
+      }
     }
   } else if (downloadedAt) {
     status = formatDate(new Date(downloadedAt));
