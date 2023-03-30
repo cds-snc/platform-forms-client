@@ -58,8 +58,8 @@
           "required": false,
           "type": "email"
         },
-        "descriptionEn": "Enter an email address. For example: name@company.com",
-        "descriptionFr": "Entrez une adresse courriel. Par exemple : nom@entreprise.com",
+        "descriptionEn": "Enter an email address. For example: name@example.com",
+        "descriptionFr": "Entrez une adresse courriel. Par exemple : nom@exemple.com",
         "placeholderEn": "",
         "placeholderFr": "",
         "autoComplete": "email"

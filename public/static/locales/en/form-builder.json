@@ -34,7 +34,7 @@
     "contact": {
       "description": "Contact description",
       "email": {
-        "description": "Enter your email address. For example: name@company.com",
+        "description": "Enter your email address. For example: name@example.com",
         "label": "Email address"
       },
       "label": "Contact",
@@ -219,7 +219,7 @@
   "date": "Date",
   "defaultElementDescription": {
     "date": "Enter a date. For example: mm/dd/yyyy",
-    "email": "Enter an email address. For example: name@company.com",
+    "email": "Enter an email address. For example: name@example.com",
     "number": "Only enter numbers",
     "phone": "Enter a phone number. For example: 111-222-3333"
   },
