@@ -1,9 +1,9 @@
 {
   "responses": {
-    "changeSetup": "Changer la configuration",
+    "changeSetup": "Modifier les paramètres",
     "confirmReceipt": "Confirmer la réception",
     "navLabel": "Réponses",
-    "reportProblems": "Signaler des problèmes",
+    "reportProblems": "Signaler un problème",
     "title": "Télécharger les réponses",
     "unauthenticated": {
       "createOne": "créez-en un",
@@ -17,30 +17,30 @@
   "downloadResponsesTable": {
     "header": {
       "tableTitle": "Download Responses Table[fr]",
-      "select": "Select[fr]",
-      "number": "Number[fr]",
-      "status": "Status[fr]",
-      "downloadResponse": "Download Response[fr]",
-      "lastDownloadedBy": "Last Downloaded By[fr]",
-      "confirmReceipt": "Confirm Receipt[fr]",
-      "removal": "Removal[fr]"
+      "select": "Sélection",
+      "number": "Numéro de formulaire",
+      "status": "État des réponses",
+      "downloadResponse": "Délai de téléchargement",
+      "lastDownloadedBy": "Réponses téléchargées par",
+      "confirmReceipt": "Confirmation de réception",
+      "removal": "Suppression des réponses"
     },
     "status": {
-      "downloaded":"Downloaded[fr]",
-      "notDownloaded":"Not downloaded[fr]",
-      "new":"New[fr]",
-      "confirmed":"Confirmed[fr]",
-      "unconfirmed": "Unconfirmed[fr]",
-      "problem":"Problem[fr]",
+      "downloaded":"Téléchargées",
+      "notDownloaded":"Non téléchargées",
+      "new":"Nouveauté",
+      "confirmed":"Confirmées",
+      "unconfirmed": "Non confirmée",
+      "problem":"Problème",
       "done": "Done[fr]",
-      "withinXDays": "Within {{daysLeft}} days[fr]",
-      "overdue":"Overdue[fr]",
-      "wontRemove": "Won't Remove[fr]",
-      "notSet": "Not set[fr]"
+      "withinXDays": "Dans {{daysLeft}} jours",
+      "overdue":"En retard",
+      "wontRemove": "Échec de la suppres",
+      "notSet": "Non réglée"
     },
     "card": {
-      "noResponses": "You have no responses[fr]",
-      "noResponsesToDownload": "There are no responses available to download.[fr]"
+      "noResponses": "Vous n’avez pas de réponses",
+      "noResponsesToDownload": "Il n’y a pas de réponses disponibles pour le téléchargement."
     },
     "notifications": {
       "downloading":"Downloading[fr]",

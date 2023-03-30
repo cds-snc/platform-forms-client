@@ -120,7 +120,6 @@ export const DownloadTableDialog = ({
               <Attention
                 type={AttentionTypes.ERROR}
                 isAlert={true}
-                width="32"
                 classes="mt-8"
                 heading={t("downloadResponsesModals.notifications.entriesLengthHeader")}
               >
@@ -133,7 +132,6 @@ export const DownloadTableDialog = ({
               <Attention
                 type={AttentionTypes.ERROR}
                 isAlert={true}
-                width="32"
                 classes="mt-8"
                 heading={t("downloadResponsesModals.notifications.clientEntryHeader")}
               >
@@ -146,7 +144,6 @@ export const DownloadTableDialog = ({
               <Attention
                 type={AttentionTypes.ERROR}
                 isAlert={true}
-                width="32"
                 classes="mt-8"
                 heading={t("downloadResponsesModals.notifications.unknownErrorHeader")}
               >

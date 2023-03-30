@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { ExclamationText } from "../shared";
 import { VaultStatus, getDaysPassed } from "./DownloadTable";
 
+// TODO: move to an app setting variable
 const CONFIRM_OVERDUE = 15;
 
 export const ConfirmReceiptStatus = ({

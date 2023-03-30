@@ -41,6 +41,9 @@ interface ReducerTableItemsActions {
   };
 }
 
+// TODO: move to an app setting variable
+const MAX_FILE_DOWNLOADS = 20;
+
 // Using a reducer to have more control over when the template is updated (reduces re-renders)
 const reducerTableItems = (state: ReducerTableItemsState, action: ReducerTableItemsActions) => {
   switch (action.type) {
@@ -92,7 +95,6 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
     maxItemsError: false,
     noItemsError: false,
   });
-  const MAX_FILE_DOWNLOADS = 20;
   const [tableItems, tableItemsDispatch] = useReducer(reducerTableItems, {
     checkedItems: new Map(),
     statusItems: new Map(vaultSubmissions.map((submission) => [submission.name, false])),
@@ -194,7 +196,6 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
           <Attention
             type={AttentionTypes.ERROR}
             isAlert={true}
-            width="40"
             heading={t("downloadResponsesTable.notifications.trySelectingLessFilesHeader", {
               max: MAX_FILE_DOWNLOADS,
             })}
@@ -210,7 +211,6 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
           <Attention
             type={AttentionTypes.ERROR}
             isAlert={true}
-            width="40"
             heading={t("downloadResponsesTable.notifications.atLeastOneFileHeader")}
           >
             <p className="text-[#26374a] text-sm">
@@ -222,7 +222,6 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
           <Attention
             type={AttentionTypes.ERROR}
             isAlert={true}
-            width="32"
             heading={t("downloadResponsesTable.notifications.errorDownloadingFilesHeader")}
           >
             <p className="text-[#26374a] text-sm mb-2">
@@ -240,15 +239,9 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
             <th className="p-4 text-center">{t("downloadResponsesTable.header.select")}</th>
             <th className="p-4 text-left">{t("downloadResponsesTable.header.number")}</th>
             <th className="p-4 text-left">{t("downloadResponsesTable.header.status")}</th>
-            <th className="p-4 text-left whitespace-nowrap">
-              {t("downloadResponsesTable.header.downloadResponse")}
-            </th>
-            <th className="p-4 text-left whitespace-nowrap">
-              {t("downloadResponsesTable.header.lastDownloadedBy")}
-            </th>
-            <th className="p-4 text-left whitespace-nowrap">
-              {t("downloadResponsesTable.header.confirmReceipt")}
-            </th>
+            <th className="p-4 text-left">{t("downloadResponsesTable.header.downloadResponse")}</th>
+            <th className="p-4 text-left">{t("downloadResponsesTable.header.lastDownloadedBy")}</th>
+            <th className="p-4 text-left">{t("downloadResponsesTable.header.confirmReceipt")}</th>
             <th className="p-4 text-left">{t("downloadResponsesTable.header.removal")}</th>
           </tr>
         </thead>
@@ -261,7 +254,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
                 (tableItems.statusItems.get(submission.name) ? " bg-[#fffbf3]" : "")
               }
             >
-              <td className="pl-8 pr-4 pb-2 flex">
+              <td className="pl-8 pr-4 pb-2 flex whitespace-nowrap">
                 <div className="gc-input-checkbox">
                   <input
                     id={submission.name}
@@ -277,28 +270,28 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
                 </div>
               </td>
               <td className="px-4 whitespace-nowrap">{submission.name}</td>
-              <td className="px-4">
+              <td className="px-4 whitespace-nowrap">
                 <DownloadStatus vaultStatus={submission.status} />
               </td>
-              <td className="px-4">
+              <td className="px-4 whitespace-nowrap">
                 <DownloadResponseStatus
                   vaultStatus={submission.status}
                   createdAt={submission.createdAt}
                   downloadedAt={submission.downloadedAt}
                 />
               </td>
-              <td className="px-4">
-                <div className="truncate w-48">
+              <td className="px-4 whitespace-nowrap">
+                <div className="truncate w-40">
                   {submission.lastDownloadedBy || t("downloadResponsesTable.status.notDownloaded")}
                 </div>
               </td>
-              <td className="px-4">
+              <td className="px-4 whitespace-nowrap">
                 <ConfirmReceiptStatus
                   vaultStatus={submission.status}
                   createdAtDate={submission.createdAt}
                 />
               </td>
-              <td className="px-4 pb-2">
+              <td className="px-4 pb-2 whitespace-nowrap">
                 <RemovalStatus vaultStatus={submission.status} removalAt={submission.removedAt} />
               </td>
             </tr>

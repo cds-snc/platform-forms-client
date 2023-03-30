@@ -1,10 +1,10 @@
 {
   "responses": {
-    "changeSetup": "Change setup",
+    "changeSetup": "Change settings",
     "confirmReceipt": "Confirm receipt",
     "navLabel": "Responses",
-    "reportProblems": "Report problems",
-    "title": "Download responses",
+    "reportProblems": "Report a problem",
+    "title": "Responses",
     "unauthenticated": {
       "createOne": "create one",
       "noAccount": "If you do not have a GC Forms account,",
@@ -18,12 +18,12 @@
     "header": {
       "tableTitle": "Download Responses Table",
       "select": "Select",
-      "number": "Number",
+      "number": "Form number",
       "status": "Status",
-      "downloadResponse": "Download Response",
-      "lastDownloadedBy": "Last Downloaded By",
-      "confirmReceipt": "Confirm Receipt",
-      "removal": "Removal"
+      "downloadResponse": "Download response",
+      "lastDownloadedBy": "Downloaded By",
+      "confirmReceipt": "Receipt confirmation",
+      "removal": "Removal of responses"
     },
     "status": {
       "downloaded":"Downloaded",
@@ -35,7 +35,7 @@
       "done": "Done",
       "withinXDays": "Within {{daysLeft}} days",
       "overdue":"Overdue",
-      "wontRemove": "Won't Remove",
+      "wontRemove": "Removal failed",
       "notSet": "Not set"
     },
     "card": {

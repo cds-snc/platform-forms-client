@@ -14,6 +14,7 @@ import { AccessControlError, createAbility } from "@lib/privileges";
 import { checkUserHasTemplateOwnership } from "@lib/templates";
 import { logEvent } from "@lib/auditLogs";
 
+// TODO: move to an app setting variable
 const MAXIMUM_CONFIRMATION_CODES_PER_REQUEST = 20;
 
 const handler = async (req: NextApiRequest, res: NextApiResponse, props: MiddlewareProps) => {

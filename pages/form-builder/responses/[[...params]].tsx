@@ -24,6 +24,10 @@ interface ResponsesProps {
   formId?: string;
 }
 
+// TODO: move to an app setting variable
+const MAX_CONFIRMATION_COUNT = 20;
+const MAX_REPORT_COUNT = 20;
+
 const Responses: NextPageWithLayout<ResponsesProps> = ({
   vaultSubmissions,
   formId,
@@ -31,8 +35,6 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   const { t } = useTranslation("form-builder-responses");
   const { status } = useSession();
   const isAuthenticated = status === "authenticated";
-  const MAX_CONFIRMATION_COUNT = 20;
-  const MAX_REPORT_COUNT = 20;
   const [isShowConfirmReceiptDialog, setIsShowConfirmReceiptDialog] = useState(false);
   const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
 

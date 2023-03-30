@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { ExclamationText } from "../shared";
 import { getDaysPassed } from "./DownloadTable";
 
+// TODO: move to an app setting variable
 const DOWNLOAD_OVERDUE = 15;
 
 export const DownloadResponseStatus = ({
