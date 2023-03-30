@@ -300,7 +300,7 @@ export const formatDate = (date: Date): string => {
  * @param date end Date to diff against today's date
  * @returns number of days passed or -1 for an error
  */
-export const getDaysPassed = (date: Date): number => {
+export const getDaysPassed = (date: Date | number): number => {
   const date1 = new Date();
   // Allowing UTC timestamps also - do a very basic check
   const date2 = typeof date === "number" && String(date).length === 13 ? new Date(date) : date;

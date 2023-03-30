@@ -13,8 +13,8 @@ export const DownloadResponseStatus = ({
   downloadedAt,
 }: {
   vaultStatus: string;
-  createdAt: Date;
-  downloadedAt?: Date;
+  createdAt: Date | number;
+  downloadedAt?: Date | number;
 }) => {
   const { t } = useTranslation("form-builder-responses");
   let status = null;

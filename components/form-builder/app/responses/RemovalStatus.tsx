@@ -8,7 +8,7 @@ export const RemovalStatus = ({
   removalAt,
 }: {
   vaultStatus: string;
-  removalAt?: number;
+  removalAt?: Date | number;
 }) => {
   const { t } = useTranslation("form-builder-responses");
   let status = null;
