@@ -239,7 +239,7 @@
       "downloadingXFiles": "Downloading {{fileCount}} files",
       "downloadXSelectedResponses": "Download {{size}} selected responses",
       "errorDownloadingFiles": "Error downloading selected files.",
-      "trySelectingLessFiles": "Max of {{max}} files can be downloadled at once. Please try selecting fewer files."
+      "trySelectingLessFiles": "Max of {{max}} files can be downloaded at once. Please try selecting fewer files."
     },
     "header": {
       "confirmReceipt": "Confirm receipt",
