@@ -379,19 +379,6 @@ export async function getFullTemplateByID(
   }
 }
 
-// Get the delivery option object for a specific form using the form ID
-// Returns => DeliveryOption object.
-export async function getTemplateDeliveryOptionByID(
-  formID: string
-): Promise<DeliveryOption | null> {
-  return _unprotectedGetTemplateByID(formID)
-    .then((formRecord) => formRecord?.deliveryOption ?? null)
-    .catch((e) => {
-      logMessage.error(e);
-      return null;
-    });
-}
-
 export async function getTemplateWithAssociatedUsers(
   ability: UserAbility,
   formID: string
