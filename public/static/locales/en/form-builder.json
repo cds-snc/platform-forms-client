@@ -229,7 +229,7 @@
   "downloadCSV": "Export as a spreadsheet",
   "downloadResponsesTable": {
     "card": {
-      "noResponses": "You have no responses",
+      "noResponses": "You have not received responses",
       "noResponsesToDownload": "There are no responses available to download."
     },
     "download": {

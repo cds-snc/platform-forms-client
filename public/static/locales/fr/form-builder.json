@@ -229,13 +229,13 @@
   "downloadCSV": "Exporter en fichier CSV",
   "downloadResponsesTable": {
     "card": {
-      "noResponses": "You have no responses[fr]",
-      "noResponsesToDownload": "There are no responses available to download.[fr]"
+      "noResponses": "Vous n'avez pas reçu de réponses",
+      "noResponsesToDownload": "Il n'y a pas de réponses disponibles pour être téléchargées."
     },
     "download": {
-      "atLeastOneFile": "At least one file must be selected to download.[fr]",
-      "downloadComplete": "Download complete[fr]",
-      "downloading": "Downloading[fr]",
+      "atLeastOneFile": "Au moins un fichier doit être sélectionné pour être téléchargé.",
+      "downloadComplete": "Téléchargement terminé",
+      "downloading": "Téléchargement en cours",
       "downloadingXFiles": "Downloading {{fileCount}} files[fr]",
       "downloadXSelectedResponses": "Download {{size}} selected responses[fr]",
       "errorDownloadingFiles": "Error downloading selected files.[fr]",
