@@ -65,9 +65,9 @@
     "example": "exemple",
     "exampleElement": "exemple du bloc",
     "fileInput": {
-      "description": "[FR] File input description",
-      "label": "[FR] File input",
-      "title": "[FR] File input"
+      "description": "Description de l'entrée du fichier",
+      "label": "Entrée de fichier",
+      "title": "Entrée de fichier"
     },
     "firstMiddleLastName": {
       "description": "Description du nom (3 champs)",
@@ -164,10 +164,10 @@
     "defaultOption": "Gouvernement du Canada",
     "default": "(par défault)",
     "heading": "Image de marque",
-    "notFound": "[FR] Didn’t find your department or agency on the list?",
+    "notFound": "Vous ne trouvez pas votre département ou votre agence dans la liste?",
     "preview": "Prévisualisation",
     "select": "Sélectionnez l’image de marque de votre formulaire",
-    "submitNew": "[FR] Submit a new branding option (opens in new tab)",
+    "submitNew": "Proposer une nouvelle option d’image de marque (ouvre un nouvel onglet)",
     "text1": "Formulaires GC affiche par défaut la signature du gouvernement du Canada dans l’en-tête de votre formulaire. Si nécessaire, vous pouvez modifier l’image de marque de ce formulaire."
   },
   "cancel": "Annuler  ",
