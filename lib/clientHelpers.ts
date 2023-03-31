@@ -301,7 +301,7 @@ export const formatDate = (date: Date): string => {
  * @param startDate (optional) Date to diff against endDate date. Defaults to today's date.
  * @returns number of days passed or -1 for an error
  */
-export const getDaysPassed = (endDate: Date | number, startDate: Date | number): number => {
+export const getDaysPassed = (endDate: Date | number, startDate?: Date | number): number => {
   // Mainly for unit testing - default to today's date if no date is passed (main case)
   const date1 = startDate
     ? typeof startDate === "number" && String(startDate).length === 13
