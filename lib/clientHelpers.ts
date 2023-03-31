@@ -297,13 +297,20 @@ export const formatDate = (date: Date): string => {
 
 /**
  * Get the number of days passed between a passed date and today's date.
- * @param date end Date to diff against today's date
+ * @param endDate Date to diff against passed startDate or if none, today's date.
+ * @param startDate (optional) Date to diff against endDate date. Defaults to today's date.
  * @returns number of days passed or -1 for an error
  */
-export const getDaysPassed = (date: Date | number): number => {
-  const date1 = new Date();
+export const getDaysPassed = (endDate: Date | number, startDate: Date | number): number => {
+  // Mainly for unit testing - default to today's date if no date is passed (main case)
+  const date1 = startDate
+    ? typeof startDate === "number" && String(startDate).length === 13
+      ? new Date(startDate)
+      : startDate
+    : new Date();
   // Allowing UTC timestamps also - do a very basic check
-  const date2 = typeof date === "number" && String(date).length === 13 ? new Date(date) : date;
+  const date2 =
+    typeof endDate === "number" && String(endDate).length === 13 ? new Date(endDate) : endDate;
 
   if (!(date2 instanceof Date)) {
     return -1;
