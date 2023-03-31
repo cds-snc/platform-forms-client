@@ -131,11 +131,23 @@ export const getSchemaFromState = (state: TemplateStoreState) => {
   return form;
 };
 
-// @todo this will need to be updated to support other locales i.e. fr-CA
+export const timeFr = (updatedAt: number | undefined, locale = "fr-CA") => {
+  const date = new Date(updatedAt || 0);
+  const timeOptions: Intl.DateTimeFormatOptions = {
+    hour: "numeric",
+    minute: "numeric",
+    hour12: false,
+  };
+
+  let timeStr = date.toLocaleDateString(locale, timeOptions);
+  timeStr = timeStr.replace(timeStr.split(" ", 1)[0], "");
+  return timeStr;
+};
+
 export const formatDateTime = (updatedAt: number | undefined, locale = "en-CA") => {
   const date = new Date(updatedAt || 0);
   const options: Intl.DateTimeFormatOptions = {
-    year: "2-digit",
+    year: "numeric",
     month: "2-digit",
     day: "2-digit",
     hour: "numeric",
@@ -143,7 +155,9 @@ export const formatDateTime = (updatedAt: number | undefined, locale = "en-CA") 
     hour12: true,
   };
 
-  const localeString = date.toLocaleDateString(locale, options);
+  // force this to be en-CA for now
+  const localeString = date.toLocaleDateString("en-CA", options);
+
   const parts = localeString.split(",");
 
   if (parts.length < 2) {
@@ -151,7 +165,14 @@ export const formatDateTime = (updatedAt: number | undefined, locale = "en-CA") 
   }
 
   const yearMonthDay = parts[0];
-  const time = parts[1].replace(/\./g, "").trim();
+
+  // en
+  let time = parts[1].replace(/\./g, "").trim();
+  // fr
+  if (locale === "fr-CA") {
+    time = timeFr(updatedAt, locale);
+  }
+
   return [yearMonthDay, time];
 };
 

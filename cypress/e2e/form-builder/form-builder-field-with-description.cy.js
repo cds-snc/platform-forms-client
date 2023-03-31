@@ -27,7 +27,7 @@ describe("Form builder description text", () => {
     cy.get("button").contains("Add block").click();
     cy.get('[data-testid="date"]').click();
     cy.get("button").contains("Select block").click();
-    cy.get(".description-text").should("exist").contains("Enter a date like, mm/dd/yyyy");
+    cy.get(".description-text").should("exist").contains("Enter a date. For example: mm/dd/yyyy");
     cy.get(".example-text").should("exist").contains("mm/dd/yyyy");
   });
 

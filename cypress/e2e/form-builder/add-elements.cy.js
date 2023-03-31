@@ -126,9 +126,11 @@ describe("Test FormBuilder Add Elements", () => {
       .should("have.attr", "type", "text")
       .should("have.attr", "placeholder", "Question");
 
-    cy.get('[data-testid="description-text"]').should("contain", "Enter a date like, mm/dd/yyyy");
+    cy.get('[data-testid="description-text"]').should(
+      "contain",
+      "Enter a date. For example: mm/dd/yyyy"
+    );
     cy.get('[data-testid="date"]').should("contain", "mm/dd/yyyy");
-
     cy.get('[data-testid="element-select-active"]').should("contain", "Date");
   });
 
