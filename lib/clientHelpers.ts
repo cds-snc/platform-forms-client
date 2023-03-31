@@ -303,17 +303,23 @@ export const formatDate = (date: Date): string => {
  */
 export const getDaysPassed = (endDate: Date | number, startDate?: Date | number): number => {
   // Mainly for unit testing - default to today's date if no date is passed (main case)
-  const date1 = startDate
-    ? typeof startDate === "number" && String(startDate).length === 13
-      ? new Date(startDate)
-      : startDate
-    : new Date();
+  let date1 = null;
+  if (!startDate) {
+    date1 = new Date();
+  } else if (startDate instanceof Date) {
+    date1 = startDate;
+  } else if (typeof startDate === "number" && String(startDate).length === 13) {
+    date1 = new Date(startDate);
+  } else {
+    return -1; // Invalid date param
+  }
+
   // Allowing UTC timestamps also - do a very basic check
   const date2 =
     typeof endDate === "number" && String(endDate).length === 13 ? new Date(endDate) : endDate;
 
   if (!(date2 instanceof Date)) {
-    return -1;
+    return -1; // Invalid date param
   }
 
   const daysDiff = Math.abs(Number(date2) - Number(date1));
