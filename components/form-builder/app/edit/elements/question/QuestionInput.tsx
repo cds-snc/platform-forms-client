@@ -28,7 +28,6 @@ export const QuestionInput = ({
     if (!refs || !refs.current || !element) {
       return null;
     }
-
     return (refs.current[id as unknown as number] = element);
   };
 
