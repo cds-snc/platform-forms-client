@@ -9,6 +9,7 @@ import { useTemplateStore, TemplateStoreProvider } from "@components/form-builde
 import { LeftNavigation, Header } from "@components/form-builder/app";
 import { Language } from "../types";
 import { TemplateApiProvider } from "../hooks";
+import { RefsProvider } from "./edit/RefsContext";
 import { ToastContainer } from "./shared/Toast";
 
 export const Template = ({
@@ -33,7 +34,7 @@ export const Template = ({
         <div className={`flex flex-col h-full ${className}`}>
           <SkipLink />
           <Header isFormBuilder={isFormBuilder} />
-          {page}
+          <RefsProvider>{page}</RefsProvider>
           <Footer displaySLAAndSupportLinks />
         </div>
       </TemplateApiProvider>

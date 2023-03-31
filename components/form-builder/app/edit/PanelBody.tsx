@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
 
 import {
@@ -39,7 +39,6 @@ export const PanelBody = ({
   const maxLength = properties?.validation?.maxLength;
   const initialSelected = useGetSelectedOption(item);
   const [selectedItem, setSelectedItem] = useState<ElementOption>();
-  const questionInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (selectedItem?.id !== initialSelected.id) {
@@ -77,7 +76,6 @@ export const PanelBody = ({
       {isRichText || isDynamicRow ? (
         <>
           <Question
-            questionInputRef={questionInputRef}
             elements={elements}
             elIndex={elIndex}
             item={item}
@@ -103,7 +101,6 @@ export const PanelBody = ({
             )}
             <div className="w-full mt-4 laptop:mt-0 laptop:w-3/5">
               <Question
-                questionInputRef={questionInputRef}
                 elements={elements}
                 elIndex={elIndex}
                 item={item}
