@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Form builder can only load form if the user has the permission to access it [#1228](https://github.com/cds-snc/platform-forms-client/issues/1228)
 - Form template JSON schema does not allow for addtional properties anymore. [#1455](https://github.com/cds-snc/platform-forms-client/issues/1455)
 - Reworked Template DB schema. [#1480](https://github.com/cds-snc/platform-forms-client/issues/1480)
+- Use template record for Delivery option [#330](https://github.com/cds-snc/forms-terraform/issues/330)
 
 ### Fixed
 
