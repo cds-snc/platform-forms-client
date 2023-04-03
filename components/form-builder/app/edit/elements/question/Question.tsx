@@ -9,14 +9,12 @@ export const Question = ({
   elements,
   elIndex,
   onQuestionChange,
-  questionInputRef,
   describedById,
 }: {
   item: FormElementWithIndex;
   elements: FormElement[];
   elIndex?: number;
   onQuestionChange: (itemIndex: number, val: string, lang: Language) => void;
-  questionInputRef: React.RefObject<HTMLInputElement>;
   describedById?: string;
 }) => {
   const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
@@ -35,7 +33,6 @@ export const Question = ({
       <QuestionNumber elIndex={elIndex} item={item} elements={elements} />
 
       <QuestionInput
-        questionInputRef={questionInputRef}
         initialValue={title}
         index={itemIndex}
         id={item.id}

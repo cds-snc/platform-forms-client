@@ -4,6 +4,7 @@ import { useTranslation } from "next-i18next";
 
 import { Language, LocalizedFormProperties } from "../../types";
 import { ElementPanel, ConfirmationDescription, PrivacyDescription } from ".";
+import { RefsProvider } from "./RefsContext";
 import { RichTextLocked } from "./elements";
 import { Input } from "../shared";
 import { useTemplateStore } from "../../store";
@@ -87,10 +88,12 @@ export const Edit = () => {
         schemaProperty="introduction"
         ariaLabel={t("richTextIntroTitle")}
       />
-      {elements.map((element, index: number) => {
-        const item = { ...element, index };
-        return <ElementPanel item={item} key={item.id} />;
-      })}
+      <RefsProvider>
+        {elements.map((element, index: number) => {
+          const item = { ...element, index };
+          return <ElementPanel item={item} key={item.id} />;
+        })}
+      </RefsProvider>
 
       {elements?.length >= 1 && (
         <>

@@ -65,9 +65,9 @@
     "example": "exemple",
     "exampleElement": "exemple du bloc",
     "fileInput": {
-      "description": "[FR] File input description",
-      "label": "[FR] File input",
-      "title": "[FR] File input"
+      "description": "Description de l'entrée du fichier",
+      "label": "Entrée de fichier",
+      "title": "Entrée de fichier"
     },
     "firstMiddleLastName": {
       "description": "Description du nom (3 champs)",
@@ -164,10 +164,10 @@
     "defaultOption": "Gouvernement du Canada",
     "default": "(par défault)",
     "heading": "Image de marque",
-    "notFound": "[FR] Didn’t find your department or agency on the list?",
+    "notFound": "Vous ne trouvez pas votre département ou votre agence dans la liste?",
     "preview": "Prévisualisation",
     "select": "Sélectionnez l’image de marque de votre formulaire",
-    "submitNew": "[FR] Submit a new branding option (opens in new tab)",
+    "submitNew": "Proposer une nouvelle option d’image de marque (ouvre un nouvel onglet)",
     "text1": "Formulaires GC affiche par défaut la signature du gouvernement du Canada dans l’en-tête de votre formulaire. Si nécessaire, vous pouvez modifier l’image de marque de ce formulaire."
   },
   "cancel": "Annuler  ",
@@ -229,43 +229,43 @@
   "downloadCSV": "Exporter en fichier CSV",
   "downloadResponsesTable": {
     "card": {
-      "noResponses": "You have no responses[fr]",
-      "noResponsesToDownload": "There are no responses available to download.[fr]"
+      "noResponses": "Vous n'avez pas reçu de réponses",
+      "noResponsesToDownload": "Il n'y a pas de réponses disponibles pour être téléchargées."
     },
     "download": {
-      "atLeastOneFile": "At least one file must be selected to download.[fr]",
-      "downloadComplete": "Download complete[fr]",
-      "downloading": "Downloading[fr]",
-      "downloadingXFiles": "Downloading {{fileCount}} files[fr]",
-      "downloadXSelectedResponses": "Download {{size}} selected responses[fr]",
-      "errorDownloadingFiles": "Error downloading selected files.[fr]",
-      "trySelectingLessFiles": "Max of {{max}} files can be downloadled at once. Please try selecting less files.[fr]"
+      "atLeastOneFile": "Au moins un fichier doit être sélectionné pour être téléchargé.",
+      "downloadComplete": "Téléchargement terminé",
+      "downloading": "Téléchargement en cours",
+      "downloadingXFiles": "Téléchargement de {{fileCount}} fichiers",
+      "downloadXSelectedResponses": "Télécharger les {{size}} réponses selectionnées",
+      "errorDownloadingFiles": "Erreur lors du téléchargement des fichiers sélectionnés",
+      "trySelectingLessFiles": "Un maximum de {{max}} fichiers peuvent être téléchargées à la fois. Veuillez sélectionner moins de fichiers."
     },
     "header": {
-      "confirmReceipt": "Confirm Receipt[fr]",
-      "downloadResponse": "Download Response[fr]",
-      "lastDownloadedBy": "Last Downloaded By[fr]",
-      "number": "Number[fr]",
-      "removal": "Removal[fr]",
-      "select": "Select[fr]",
-      "status": "Status[fr]",
-      "tableTitle": "Download Responses Table[fr]"
+      "confirmReceipt": "Confirmer la réception",
+      "downloadResponse": "Télécharger la réponse",
+      "lastDownloadedBy": "Dernier téléchargement par",
+      "number": "Numéro",
+      "removal": "Suppresssion",
+      "select": "Sélectionner",
+      "status": "État",
+      "tableTitle": "Réponses à télécharger"
     },
-    "skipLink": "Skip Download Table[fr]",
+    "skipLink": "Sauter le tableau avec les réponses à télécharger",
     "status": {
-      "confirmed": "Confirmed[fr]",
-      "done": "Done[fr]",
-      "downloaded": "Downloaded[fr]",
-      "new": "New[fr]",
-      "notDownloaded": "Not downloaded[fr]",
-      "notSet": "Not set[fr]",
-      "overdue": "Overdue[fr]",
-      "problem": "Problem[fr]",
-      "unconfirmed": "Unconfirmed[fr]",
-      "withinXDays": "Within {{daysLeft}} days[fr]",
-      "wontRemove": "Won't Remove[fr]"
+      "confirmed": "Confirmée",
+      "done": "Complétée",
+      "downloaded": "Téléchargée",
+      "new": "Nouveauté",
+      "notDownloaded": "Non téléchargée",
+      "notSet": "Non réglée",
+      "overdue": "En retard",
+      "problem": "Problème",
+      "unconfirmed": "Non confirmée",
+      "withinXDays": "Dans {{daysLeft}} jours",
+      "wontRemove": "Ne sera pas supprimée"
     },
-    "unknown": "Unknown[fr]"
+    "unknown": "Inconnue"
   },
   "dropdown": "Liste déroulante",
   "duplicate": "Dupliquer",
@@ -485,6 +485,7 @@
     "link": "Obtenir le lien",
     "message": "Les personnes avec qui vous partagez recevront un courriel avec un fichier JSON joint. Elles peuvent afficher le fichier JSON à l'aide de Formulaires GC, sans compte requis.",
     "messageSent": "Le message a été envoyé",
+    "messageError": "[FR] The message failed to send.",
     "open": "Ouvrir",
     "seePreview": "Voir un aperçu du message courriel",
     "someone": "Quelqu'un",
@@ -552,6 +553,7 @@
   },
   "test": "Tester",
   "textFormatting": "Mise en forme du texte ",
+  "title": "Titre",
   "thereWasAnErrorPublishing": "Une erreur s'est produite lors de la publication de votre formulaire",
   "tooltipFormatBold": "En gras (⌘B)",
   "tooltipFormatBulletList": "Liste à puces",
