@@ -91,31 +91,28 @@ export const Edit = () => {
         const item = { ...element, index };
         return <ElementPanel item={item} key={item.id} />;
       })}
-
-      {elements?.length >= 1 && (
-        <>
-          <RichTextLocked
-            addElement={false}
-            schemaProperty="privacyPolicy"
-            ariaLabel={t("richTextPrivacyTitle")}
-          >
-            <div>
-              <h2 className="mt-4 laptop:mt-0 text-h3 pb-3">{t("richTextPrivacyTitle")}</h2>
-              <PrivacyDescription />
-            </div>
-          </RichTextLocked>
-          <RichTextLocked
-            addElement={false}
-            schemaProperty="confirmation"
-            ariaLabel={t("richTextConfirmationTitle")}
-          >
-            <div>
-              <h2 className="mt-4 laptop:mt-0 text-h3 pb-3">{t("richTextConfirmationTitle")}</h2>
-              <ConfirmationDescription />
-            </div>
-          </RichTextLocked>
-        </>
-      )}
+      <>
+        <RichTextLocked
+          addElement={false}
+          schemaProperty="privacyPolicy"
+          ariaLabel={t("richTextPrivacyTitle")}
+        >
+          <div id="privacy-text">
+            <h2 className="mt-4 laptop:mt-0 text-h3 pb-3">{t("richTextPrivacyTitle")}</h2>
+            <PrivacyDescription />
+          </div>
+        </RichTextLocked>
+        <RichTextLocked
+          addElement={false}
+          schemaProperty="confirmation"
+          ariaLabel={t("richTextConfirmationTitle")}
+        >
+          <div id="confirmation-text">
+            <h2 className="mt-4 laptop:mt-0 text-h3 pb-3">{t("richTextConfirmationTitle")}</h2>
+            <ConfirmationDescription />
+          </div>
+        </RichTextLocked>
+      </>
     </>
   );
 };

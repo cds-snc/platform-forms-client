@@ -1,14 +1,15 @@
-import { useTranslation } from "next-i18next";
-import { useTemplateStore } from "../store/useTemplateStore";
 import React, { useCallback, useState } from "react";
-import { useAllowPublish } from "../hooks/useAllowPublish";
-import { useTemplateApi } from "../hooks";
-import { CancelIcon, CircleCheckIcon, WarningIcon, LockIcon } from "../icons";
-import { Button } from "./shared/Button";
-import { useRouter } from "next/router";
-import { PublishNoAuth } from "./PublishNoAuth";
 import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
+
+import { useTemplateStore } from "../store";
+import { useTemplateApi, useAllowPublish } from "../hooks";
+import { CancelIcon, CircleCheckIcon, WarningIcon, LockIcon } from "../icons";
+import { Button } from "./shared";
+import { PublishNoAuth } from "./PublishNoAuth";
+import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 
 export const Publish = () => {
   const { t } = useTranslation("form-builder");
@@ -21,6 +22,7 @@ export const Publish = () => {
   } = useAllowPublish();
 
   const [error, setError] = useState(false);
+  const { i18n } = useTranslation("common");
 
   const { id, setId, getSchema, getName } = useTemplateStore((s) => ({
     id: s.id,
@@ -31,9 +33,9 @@ export const Publish = () => {
 
   const Icon = ({ checked }: { checked: boolean }) => {
     return checked ? (
-      <CircleCheckIcon className="w-9 fill-green-700 inline-block" title={t("completed")} />
+      <CircleCheckIcon className="mr-2 w-9 fill-green-700 inline-block" title={t("completed")} />
     ) : (
-      <CancelIcon className="w-9 fill-red-700 w-9 h-9 inline-block" title={t("incomplete")} />
+      <CancelIcon className="mr-2 w-9 fill-red-700 w-9 h-9 inline-block" title={t("incomplete")} />
     );
   };
 
@@ -101,19 +103,32 @@ export const Publish = () => {
 
       <ul className="list-none p-0">
         <li className="mb-4 mt-4">
-          <Icon checked={title} /> {t("formTitle")}
+          <Icon checked={title} />
+          <StyledLink href={`/${i18n.language}/form-builder/edit#formTitle`}>
+            {t("formTitle")}
+          </StyledLink>
         </li>
         <li className="mb-4 mt-4">
-          <Icon checked={questions} /> {t("questions")}
+          <Icon checked={questions} />
+          <StyledLink href={`/${i18n.language}/form-builder/edit`}>{t("questions")}</StyledLink>
         </li>
         <li className="mb-4 mt-4">
-          <Icon checked={privacyPolicy} /> {t("privacyStatement")}
+          <Icon checked={privacyPolicy} />
+          <StyledLink href={`/${i18n.language}/form-builder/edit#privacy-text`}>
+            {t("privacyStatement")}
+          </StyledLink>
         </li>
         <li className="mb-4 mt-4">
-          <Icon checked={confirmationMessage} /> {t("formConfirmationMessage")}
+          <Icon checked={confirmationMessage} />
+          <StyledLink href={`/${i18n.language}/form-builder/edit#confirmation-text`}>
+            {t("formConfirmationMessage")}
+          </StyledLink>
         </li>
         <li className="mb-4 mt-4">
-          <Icon checked={translate} /> {t("translate")}
+          <Icon checked={translate} />
+          <StyledLink href={`/${i18n.language}/form-builder/edit/translate`}>
+            {t("translate")}
+          </StyledLink>
         </li>
       </ul>
 
