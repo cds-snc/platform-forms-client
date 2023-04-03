@@ -11,6 +11,7 @@ import { logMessage } from "@lib/logger";
 import axios from "axios";
 import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
 import { toast } from "../shared/Toast";
+import { useSetting } from "@lib/hooks/useSetting";
 
 export enum VaultStatus {
   NEW = "New",
@@ -92,6 +93,8 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
     checkedItems: new Map(),
     statusItems: new Map(vaultSubmissions.map((submission) => [submission.name, false])),
   });
+
+  const { value: overdueAfter } = useSetting("nagwarePhaseEncouraged");
 
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.id;
@@ -267,6 +270,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
                   vaultStatus={submission.status}
                   createdAt={submission.createdAt}
                   downloadedAt={submission.downloadedAt}
+                  overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
                 />
               </td>
               <td className="px-4 whitespace-nowrap">
@@ -278,6 +282,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
                 <ConfirmReceiptStatus
                   vaultStatus={submission.status}
                   createdAtDate={submission.createdAt}
+                  overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
                 />
               </td>
               <td className="px-4 whitespace-nowrap">

@@ -4,15 +4,14 @@ import { ExclamationText } from "../shared";
 import { VaultStatus } from "./DownloadTable";
 import { getDaysPassed } from "@lib/clientHelpers";
 
-// TODO: move to an app setting variable
-const CONFIRM_OVERDUE = 15;
-
 export const ConfirmReceiptStatus = ({
   vaultStatus,
   createdAtDate,
+  overdueAfter = 0,
 }: {
   vaultStatus: string;
   createdAtDate: Date | number;
+  overdueAfter?: number;
 }) => {
   const { t } = useTranslation("form-builder-responses");
   let status = null;
@@ -29,13 +28,12 @@ export const ConfirmReceiptStatus = ({
       break;
     case VaultStatus.DOWNLOADED: {
       const daysPassed = getDaysPassed(createdAtDate);
-      const daysLeft = CONFIRM_OVERDUE - daysPassed;
+      if (!overdueAfter) status = t("downloadResponsesTable.unknown");
+      const daysLeft = overdueAfter - daysPassed;
       if (daysLeft < 0) {
-        status = t("downloadResponsesTable.unknown");
-      } else if (daysLeft > 0) {
-        status = t("downloadResponsesTable.status.withinXDays", { daysLeft });
-      } else {
         status = <ExclamationText text={t("downloadResponsesTable.status.overdue")} />;
+      } else {
+        status = t("downloadResponsesTable.status.withinXDays", { daysLeft });
       }
       break;
     }

@@ -4,32 +4,29 @@ import { useTranslation } from "react-i18next";
 import { ExclamationText } from "../shared";
 import { getDaysPassed } from "@lib/clientHelpers";
 
-// TODO: move to an app setting variable
-const DOWNLOAD_OVERDUE = 15;
-
 export const DownloadResponseStatus = ({
   vaultStatus,
   createdAt,
   downloadedAt,
+  overdueAfter,
 }: {
   vaultStatus: string;
   createdAt: Date | number;
   downloadedAt?: Date | number;
+  overdueAfter?: number;
 }) => {
   const { t } = useTranslation("form-builder-responses");
   let status = null;
 
   if (vaultStatus === "New") {
     const daysPassed = getDaysPassed(createdAt);
-    if (daysPassed < 0) {
-      status = t("downloadResponsesTable.unknown");
+    if (!overdueAfter) return <>{t("downloadResponsesTable.unknown")}</>;
+    const daysLeft = overdueAfter - daysPassed;
+
+    if (daysLeft < 0) {
+      status = <ExclamationText text={t("downloadResponsesTable.status.overdue")} />;
     } else {
-      const daysLeft = DOWNLOAD_OVERDUE - daysPassed;
-      if (daysLeft > 0) {
-        status = t("downloadResponsesTable.status.withinXDays", { daysLeft });
-      } else {
-        status = <ExclamationText text={t("downloadResponsesTable.status.overdue")} />;
-      }
+      status = t("downloadResponsesTable.status.withinXDays", { daysLeft });
     }
   } else if (downloadedAt) {
     status = formatDate(new Date(downloadedAt));
