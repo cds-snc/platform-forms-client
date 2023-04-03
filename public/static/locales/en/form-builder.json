@@ -229,7 +229,7 @@
   "downloadCSV": "Export as a spreadsheet",
   "downloadResponsesTable": {
     "card": {
-      "noResponses": "You have no responses",
+      "noResponses": "You have not received responses",
       "noResponsesToDownload": "There are no responses available to download."
     },
     "download": {
@@ -239,19 +239,19 @@
       "downloadingXFiles": "Downloading {{fileCount}} files",
       "downloadXSelectedResponses": "Download {{size}} selected responses",
       "errorDownloadingFiles": "Error downloading selected files.",
-      "trySelectingLessFiles": "Max of {{max}} files can be downloadled at once. Please try selecting less files."
+      "trySelectingLessFiles": "Max of {{max}} files can be downloaded at once. Please try selecting fewer files."
     },
     "header": {
-      "confirmReceipt": "Confirm Receipt",
-      "downloadResponse": "Download Response",
-      "lastDownloadedBy": "Last Downloaded By",
+      "confirmReceipt": "Confirm receipt",
+      "downloadResponse": "Download response",
+      "lastDownloadedBy": "Last downloaded by",
       "number": "Number",
       "removal": "Removal",
       "select": "Select",
       "status": "Status",
-      "tableTitle": "Download Responses Table"
+      "tableTitle": "Responses for download"
     },
-    "skipLink": "Skip Download Table",
+    "skipLink": "Skip the responses for download table",
     "status": {
       "confirmed": "Confirmed",
       "done": "Done",
@@ -263,7 +263,7 @@
       "problem": "Problem",
       "unconfirmed": "Unconfirmed",
       "withinXDays": "Within {{daysLeft}} days",
-      "wontRemove": "Won't Remove"
+      "wontRemove": "Will not remove"
     },
     "unknown": "Unknown"
   },
