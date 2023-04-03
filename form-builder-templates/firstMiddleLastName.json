@@ -15,7 +15,7 @@
           "required": false
         },
         "descriptionEn": "## What is your name?",
-        "descriptionFr": "",
+        "descriptionFr": "## Titre du nom",
         "placeholderEn": "",
         "placeholderFr": ""
       }
@@ -31,7 +31,7 @@
           }
         ],
         "titleEn": "First name",
-        "titleFr": "",
+        "titleFr": "Prénom",
         "validation": {
           "required": false
         },
