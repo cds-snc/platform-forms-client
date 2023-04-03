@@ -1,4 +1,4 @@
-# Terms and conditions
+# Terms and Conditions
 
 This form is hosted by the [Treasury Board of Canada Secretariat](https://www.canada.ca/en/treasury-board-secretariat.html). When you submit a form, we send your information to the department or agency responsible for the form.
 
