@@ -10,7 +10,6 @@ import {
 import { MiddlewareProps, WithRequired } from "@lib/types";
 import { connectToDynamo } from "@lib/integration/dynamodbConnector";
 import { NotifyClient } from "notifications-node-client";
-import { checkOne } from "@lib/cache/flags";
 import { createAbility, AccessControlError } from "@lib/privileges";
 import { checkUserHasTemplateOwnership } from "@lib/templates";
 import { logEvent } from "@lib/auditLogs";
@@ -20,10 +19,6 @@ const MAXIMUM_SUBMISSION_NAMES_PER_REQUEST = 20;
 class FailedToSendEmailThroughGCNotify extends Error {}
 
 const handler = async (req: NextApiRequest, res: NextApiResponse, props: MiddlewareProps) => {
-  // Is this feature / endpoint active
-  const vaultActive = await checkOne("vault");
-  if (!vaultActive) return res.status(404).json({ error: "Vault not active" });
-
   const { session } = props as WithRequired<MiddlewareProps, "session">;
 
   const userEmail = session.user.email;
