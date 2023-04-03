@@ -34,7 +34,7 @@ export const ShareModal = ({
     setStatus("sending");
     try {
       await axios({
-        url: "/api/share/1",
+        url: "/api/share",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
