@@ -567,6 +567,7 @@
   },
   "test": "Tester",
   "textFormatting": "Mise en forme du texte ",
+  "title": "Titre",
   "thereWasAnErrorPublishing": "Une erreur s'est produite lors de la publication de votre formulaire",
   "tooltipFormatBold": "En gras (⌘B)",
   "tooltipFormatBulletList": "Liste à puces",
