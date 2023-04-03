@@ -296,9 +296,9 @@ export const formatDate = (date: Date): string => {
 };
 
 /**
- * Get the number of days passed between a passed date and today's date.
- * @param endDate Date to diff against passed startDate or if none, today's date.
- * @param startDate (optional) Date to diff against endDate date. Defaults to today's date.
+ * Get the number of days passed between two dates.
+ * @param endDate Date second or end date to use to compare against startDate
+ * @param startDate (optional) Date start date for comparison. Defaults to today's date if none passed
  * @returns number of days passed or -1 for an error
  */
 export const getDaysPassed = (endDate: Date | number, startDate?: Date | number): number => {
