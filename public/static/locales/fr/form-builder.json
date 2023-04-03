@@ -500,7 +500,7 @@
     "link": "Obtenir le lien",
     "message": "Les personnes avec qui vous partagez recevront un courriel avec un fichier JSON joint. Elles peuvent afficher le fichier JSON à l'aide de Formulaires GC, sans compte requis.",
     "messageSent": "Le message a été envoyé",
-    "messageError": "The message failed to send",
+    "messageError": "[FR] The message failed to send.",
     "open": "Ouvrir",
     "seePreview": "Voir un aperçu du message courriel",
     "someone": "Quelqu'un",
