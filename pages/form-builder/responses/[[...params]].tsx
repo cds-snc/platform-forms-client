@@ -130,6 +130,10 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         apiUrl={`/api/id/${formId}/submission/confirm`}
         inputRegex={isUUID}
         maxEntries={MAX_CONFIRMATION_COUNT}
+        minEntriesErrorTitle={t("downloadResponsesModals.notifications.entriesLengthConfirmHeader")}
+        minEntriesErrorDescription={t(
+          "downloadResponsesModals.notifications.entriesLengthConfirmDescription"
+        )}
         title={t("downloadResponsesModals.confirmReceiptDialog.title")}
         description={t("downloadResponsesModals.confirmReceiptDialog.findCode")}
         inputHelp={t("downloadResponsesModals.confirmReceiptDialog.copyCode", {
@@ -145,6 +149,10 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         apiUrl={`/api/id/${formId}/submission/report`}
         inputRegex={isFormId}
         maxEntries={MAX_REPORT_COUNT}
+        minEntriesErrorTitle={t("downloadResponsesModals.notifications.entriesLengthReportHeader")}
+        minEntriesErrorDescription={t(
+          "downloadResponsesModals.notifications.entriesLengthReportDescription"
+        )}
         title={t("downloadResponsesModals.reportProblemsDialog.title")}
         description={t("downloadResponsesModals.reportProblemsDialog.findForm")}
         inputHelp={t("downloadResponsesModals.reportProblemsDialog.enterFormNumbers", {

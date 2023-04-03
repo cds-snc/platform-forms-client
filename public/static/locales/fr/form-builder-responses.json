@@ -16,7 +16,7 @@
   },
   "downloadResponsesTable": {
     "header": {
-      "tableTitle": "Download Responses Table[fr]",
+      "tableTitle": "Download Responses Table",
       "select": "Sélection",
       "number": "Numéro de formulaire",
       "status": "État des réponses",
@@ -32,7 +32,7 @@
       "confirmed":"Confirmées",
       "unconfirmed": "Non confirmée",
       "problem":"Problème",
-      "done": "Done[fr]",
+      "done": "Confirmée",
       "withinXDays": "Dans {{daysLeft}} jours",
       "overdue":"En retard",
       "wontRemove": "Échec de la suppres",
@@ -43,16 +43,17 @@
       "noResponsesToDownload": "Il n’y a pas de réponses disponibles pour le téléchargement."
     },
     "notifications": {
-      "downloading":"Downloading[fr]",
-      "downloadComplete": "Download complete[fr]",
-      "downloadingXFiles": "Downloading {{fileCount}} files[fr]",
-      "downloadXSelectedResponses": "Download {{size}} selected responses[fr]",
-      "trySelectingLessFilesHeader": "Only {{max}} responses can be downloaded at a time.[fr]",
-      "trySelectingLessFiles":"You have {{max}} responses selected. Uncheck at least 1 response before downloading.[fr]",
-      "atLeastOneFileHeader": "At least one file must be selected to download.[fr]",
-      "atLeastOneFile": "Try selecting at least one file to download.[fr]",
-      "errorDownloadingFilesHeader":"Error downloading the selected files.[fr]",
-      "errorDownloadingFiles":"Try again in a few minutes. If the problem persists contact support.[fr]"
+      "downloading":"Téléchargement",
+      "downloadComplete": "Téléchargement complet",
+      "downloadingXFiles": "Téléchargement de {{fileCount}} fichiers",
+      "downloadXSelectedResponses": "Télécharger {{size}} réponses sélectionnées",
+      "trySelectingLessFilesHeader": "Seules {{max}} réponses peuvent être téléchargées à la fois.",
+      "trySelectingLessFiles":"Vous avez {{max}} réponses sélectionnées. Décochez au moins 1 réponse avant de télécharger.",
+      "atLeastOneFileHeader": "Au moins un fichier doit être sélectionné à télécharger.",
+      "atLeastOneFile": "Essayez de sélectionner au moins un fichier à télécharger.",
+      "errorDownloadingFilesHeader":"Erreur lors du téléchargement des fichiers sélectionnés.",
+      "errorDownloadingFiles":"Réessayez dans quelques minutes. Si le problème persiste, contactez ",
+      "errorDownloadingFilesLink":"Soutien"
     },
     "skipLink": "Skip Download Table[fr]",
     "unknown":"Unknown[fr]"
@@ -82,12 +83,15 @@
       "reportProblems": "Report problems[fr]"
     },
     "notifications": {
-      "entriesLengthHeader": "At least one entry is required[fr]",
-      "entriesLengthDescription": "Please add at least one entry and try submitting again.[fr]",
+      "entriesLengthConfirmHeader": "Au moins une réponse doit être spécifiée.",
+      "entriesLengthConfirmDescription": "Entrez les codes de confirmations pour les réponses que vous avez reçues.",
+      "entriesLengthReportHeader": "Au moins un formulaire doit être spécifiée.",
+      "entriesLengthReportDescription": "Entrez les numéros de formulaires pour les réponses qui posent un problème.",
       "clientEntryHeader": "An error occurred with one of the entries[fr]",
       "clientEntryDescription": "Please double check the entries are entered correct and try again.[fr]",
-      "unknownErrorHeader": "An unknown error occurred[fr]",
-      "unknownErrorDescription": "Please try again in a few minutes. If the problem continues, try contacting support.[fr]"
+      "unknownErrorHeader": "Un problème s'est produit.",
+      "unknownErrorDescription": "Réessayez dans quelques minutes ou contactez l'équipe de ",
+      "unknownErrorDescriptionLink": "Soutien"
     }
   }
 }

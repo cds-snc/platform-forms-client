@@ -12,6 +12,7 @@ import axios from "axios";
 import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
 import { toast } from "../shared/Toast";
 import { useSetting } from "@lib/hooks/useSetting";
+import Link from "next/link";
 
 export enum VaultStatus {
   NEW = "New",
@@ -184,7 +185,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
         text={t("downloadResponsesTable.skipLink")}
         anchor="#downloadTableButtonId"
       />
-      <div id="notificationsTop" className="mr-20">
+      <div id="notificationsTop">
         {tableItems.checkedItems.size > MAX_FILE_DOWNLOADS && (
           <Attention
             type={AttentionTypes.ERROR}
@@ -219,6 +220,10 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
           >
             <p className="text-[#26374a] text-sm mb-2">
               {t("downloadResponsesTable.notifications.errorDownloadingFiles")}
+              <Link href="/form-builder/support">
+                {t("downloadResponsesTable.notifications.errorDownloadingFilesLink")}
+              </Link>
+              .
             </p>
           </Attention>
         )}

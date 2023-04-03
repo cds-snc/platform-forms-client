@@ -6,6 +6,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { logMessage } from "@lib/logger";
 import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
+import Link from "next/link";
 
 export const DownloadTableDialog = ({
   isShowDialog,
@@ -13,6 +14,8 @@ export const DownloadTableDialog = ({
   apiUrl,
   inputRegex,
   maxEntries,
+  minEntriesErrorTitle,
+  minEntriesErrorDescription,
   title,
   description,
   inputHelp,
@@ -24,6 +27,8 @@ export const DownloadTableDialog = ({
   apiUrl: string;
   inputRegex: (field: string) => boolean;
   maxEntries: number;
+  minEntriesErrorTitle: string;
+  minEntriesErrorDescription: string;
   title: string;
   description: string;
   inputHelp: string;
@@ -98,67 +103,70 @@ export const DownloadTableDialog = ({
           handleClose={handleClose}
           headerStyle="inline-block ml-12 mt-12"
         >
-          <div className="px-10 py-4">
-            <p className="mt-2">{description}</p>
-            <p className="mt-10 mb-2 font-bold" id={confirmInstructionId}>
-              {inputHelp}
-            </p>
-            <LineItemEntries
-              inputs={entries}
-              setInputs={setEntries}
-              validateInput={inputRegex}
-              spellCheck={false}
-              inputLabelId={confirmInstructionId}
-              maxEntries={maxEntries}
-              maxEntriesTitle={t("lineItemEntries.notifications.maxEntriesTitle", {
-                max: maxEntries,
-              })}
-              maxEntriesDescription={t("lineItemEntries.notifications.maxEntriesDescription")}
-            ></LineItemEntries>
-            <p className="mt-8">{nextSteps}</p>
-            {entriesLengthError && (
-              <Attention
-                type={AttentionTypes.ERROR}
-                isAlert={true}
-                classes="mt-8"
-                heading={t("downloadResponsesModals.notifications.entriesLengthHeader")}
-              >
-                <p className="text-[#26374a] text-sm mb-2">
-                  {t("downloadResponsesModals.notifications.entriesLengthDescription")}
-                </p>
-              </Attention>
-            )}
-            {clientError && (
-              <Attention
-                type={AttentionTypes.ERROR}
-                isAlert={true}
-                classes="mt-8"
-                heading={t("downloadResponsesModals.notifications.clientEntryHeader")}
-              >
-                <p className="text-[#26374a] text-sm mb-2">
-                  {t("downloadResponsesModals.notifications.clientEntryDescription")}
-                </p>
-              </Attention>
-            )}
-            {unknownError && (
-              <Attention
-                type={AttentionTypes.ERROR}
-                isAlert={true}
-                classes="mt-8"
-                heading={t("downloadResponsesModals.notifications.unknownErrorHeader")}
-              >
-                <p className="text-[#26374a] text-sm mb-2">
-                  {t("downloadResponsesModals.notifications.unknownErrorDescription")}
-                </p>
-              </Attention>
-            )}
-            <div className="flex mt-8 mb-8">
-              <Button className="mr-4" onClick={handleSubmit}>
-                {submitButtonText}
-              </Button>
-              <Button theme="secondary" onClick={handleClose}>
-                {t("cancel")}
-              </Button>
+          <div className="px-10">
+            <div>
+              {entriesLengthError && (
+                <Attention
+                  type={AttentionTypes.ERROR}
+                  isAlert={true}
+                  heading={minEntriesErrorTitle}
+                >
+                  <p className="text-[#26374a] text-sm mb-2">{minEntriesErrorDescription}</p>
+                </Attention>
+              )}
+              {clientError && (
+                <Attention
+                  type={AttentionTypes.ERROR}
+                  isAlert={true}
+                  heading={t("downloadResponsesModals.notifications.clientEntryHeader")}
+                >
+                  <p className="text-[#26374a] text-sm mb-2">
+                    {t("downloadResponsesModals.notifications.clientEntryDescription")}
+                  </p>
+                </Attention>
+              )}
+              {unknownError && (
+                <Attention
+                  type={AttentionTypes.ERROR}
+                  isAlert={true}
+                  heading={t("downloadResponsesModals.notifications.unknownErrorHeader")}
+                >
+                  <p className="text-[#26374a] text-sm mb-2">
+                    {t("downloadResponsesModals.notifications.unknownErrorDescription")}
+                    <Link href={"/form-builder/support"}>
+                      {t("downloadResponsesModals.notifications.unknownErrorDescriptionLink")}
+                    </Link>
+                  </p>
+                </Attention>
+              )}
+            </div>
+            <div className="py-4">
+              <p className="mt-2">{description}</p>
+              <p className="mt-10 mb-2 font-bold" id={confirmInstructionId}>
+                {inputHelp}
+              </p>
+              <LineItemEntries
+                inputs={entries}
+                setInputs={setEntries}
+                validateInput={inputRegex}
+                spellCheck={false}
+                inputLabelId={confirmInstructionId}
+                maxEntries={maxEntries}
+                maxEntriesTitle={t("lineItemEntries.notifications.maxEntriesTitle", {
+                  max: maxEntries,
+                })}
+                maxEntriesDescription={t("lineItemEntries.notifications.maxEntriesDescription")}
+              ></LineItemEntries>
+              <p className="mt-8">{nextSteps}</p>
+
+              <div className="flex mt-8 mb-8">
+                <Button className="mr-4" onClick={handleSubmit}>
+                  {submitButtonText}
+                </Button>
+                <Button theme="secondary" onClick={handleClose}>
+                  {t("cancel")}
+                </Button>
+              </div>
             </div>
           </div>
         </Dialog>

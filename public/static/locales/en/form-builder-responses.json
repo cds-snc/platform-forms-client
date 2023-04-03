@@ -82,12 +82,15 @@
       "reportProblems": "Report problem"
     },
     "notifications": {
-      "entriesLengthHeader": "At least one entry is required",
-      "entriesLengthDescription": "Please add at least one entry and try submitting again.",
+      "entriesLengthConfirmHeader": "At least one response must be specified",
+      "entriesLengthConfirmDescription": "Enter the confirmation codes for responses that you've received.",
+      "entriesLengthReportHeader": "At least one form must be specified",
+      "entriesLengthReportDescription": "Enter the form numbers for responses that have a problem.",
       "clientEntryHeader": "An error occurred with one of the entries",
       "clientEntryDescription": "Please double check the entries are entered correct and try again.",
-      "unknownErrorHeader": "An unknown error occurred",
-      "unknownErrorDescription": "Please try again in a few minutes. If the problem continues, try contacting support."
+      "unknownErrorHeader": "Something went wrong",
+      "unknownErrorDescription": "Try again in a few minutes or contact ",
+      "unknownErrorDescriptionLink": "Support"
     }
   }
 }
