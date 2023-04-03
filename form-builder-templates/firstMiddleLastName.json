@@ -33,7 +33,7 @@
         "titleEn": "First name",
         "titleFr": "Prénom",
         "validation": {
-          "required": false
+          "required": true
         },
         "descriptionEn": "",
         "descriptionFr": "",
@@ -77,7 +77,7 @@
         "titleEn": "Last name",
         "titleFr": "Nom de famille",
         "validation": {
-          "required": false
+          "required": true
         },
         "descriptionEn": "",
         "descriptionFr": "",
