@@ -212,7 +212,9 @@ export const getServerSideProps: GetServerSideProps = async ({
       const isNagwareEnabled = await checkOne("nagware");
 
       if (isNagwareEnabled) {
-        nagwareResult = submissions.length ? detectOldUnprocessedSubmissions(submissions) : null;
+        nagwareResult = submissions.length
+          ? await detectOldUnprocessedSubmissions(submissions)
+          : null;
       }
     } catch (e) {
       if (e instanceof AccessControlError) {
