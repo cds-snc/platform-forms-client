@@ -32,16 +32,20 @@ export const ShareModal = ({
 
   const handleSend = async () => {
     setStatus("sending");
-    await axios({
-      url: "/api/share",
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: { form: getSchema(), emails: emails },
-      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-    });
-    setStatus("sent");
+    try {
+      await axios({
+        url: "/api/share",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: { form: getSchema(), emails: emails },
+        timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+      });
+      setStatus("sent");
+    } catch (err) {
+      setStatus("error");
+    }
   };
 
   const actions = (
@@ -101,9 +105,9 @@ export const ShareModal = ({
         className="overflow-y-scroll max-h-[80%]"
       >
         <div className="py-4">
-          {status === "sent" && (
+          {status === "error" && (
             <>
-              <p>{t("share.messageSent")}</p>
+              <p className="text-red-default">{t("share.messageError")}</p>
             </>
           )}
           {status === "ready" && (
