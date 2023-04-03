@@ -297,8 +297,8 @@ export const formatDate = (date: Date): string => {
 
 /**
  * Get the number of days passed between two dates.
- * @param endDate Date second or end date to use to compare against startDate
- * @param startDate (optional) Date start date for comparison. Defaults to today's date if none passed
+ * @param endDate Date/timestamp second or end date to use to compare against startDate
+ * @param startDate (optional) Date/timestamp start date for comparison. Defaults to today's date if none passed
  * @returns number of days passed or -1 for an error
  */
 export const getDaysPassed = (endDate: Date | number, startDate?: Date | number): number => {
@@ -311,15 +311,15 @@ export const getDaysPassed = (endDate: Date | number, startDate?: Date | number)
   } else if (typeof startDate === "number" && String(startDate).length === 13) {
     date1 = new Date(startDate);
   } else {
-    return -1; // Invalid date param
+    return -1; // Invalid date
   }
 
-  // Allowing UTC timestamps also - do a very basic check
+  // Allow UTC timestamps also - do a very basic check
   const date2 =
     typeof endDate === "number" && String(endDate).length === 13 ? new Date(endDate) : endDate;
 
   if (!(date2 instanceof Date)) {
-    return -1; // Invalid date param
+    return -1; // Invalid date
   }
 
   const daysDiff = Math.abs(Number(date2) - Number(date1));
