@@ -9,7 +9,7 @@ import { useTemplateApi, useAllowPublish } from "../hooks";
 import { CancelIcon, CircleCheckIcon, WarningIcon, LockIcon } from "../icons";
 import { Button } from "./shared";
 import { PublishNoAuth } from "./PublishNoAuth";
-import { StyledLink } from "@components/globals/StyledLink/StyledLink";
+import Link from "next/link";
 
 export const Publish = () => {
   const { t } = useTranslation("form-builder");
@@ -104,31 +104,27 @@ export const Publish = () => {
       <ul className="list-none p-0">
         <li className="mb-4 mt-4">
           <Icon checked={title} />
-          <StyledLink href={`/${i18n.language}/form-builder/edit#formTitle`}>
-            {t("formTitle")}
-          </StyledLink>
+          <Link href={`/${i18n.language}/form-builder/edit#formTitle`}>{t("formTitle")}</Link>
         </li>
         <li className="mb-4 mt-4">
           <Icon checked={questions} />
-          <StyledLink href={`/${i18n.language}/form-builder/edit`}>{t("questions")}</StyledLink>
+          <Link href={`/${i18n.language}/form-builder/edit`}>{t("questions")}</Link>
         </li>
         <li className="mb-4 mt-4">
           <Icon checked={privacyPolicy} />
-          <StyledLink href={`/${i18n.language}/form-builder/edit#privacy-text`}>
+          <Link href={`/${i18n.language}/form-builder/edit#privacy-text`}>
             {t("privacyStatement")}
-          </StyledLink>
+          </Link>
         </li>
         <li className="mb-4 mt-4">
           <Icon checked={confirmationMessage} />
-          <StyledLink href={`/${i18n.language}/form-builder/edit#confirmation-text`}>
+          <Link href={`/${i18n.language}/form-builder/edit#confirmation-text`}>
             {t("formConfirmationMessage")}
-          </StyledLink>
+          </Link>
         </li>
         <li className="mb-4 mt-4">
           <Icon checked={translate} />
-          <StyledLink href={`/${i18n.language}/form-builder/edit/translate`}>
-            {t("translate")}
-          </StyledLink>
+          <Link href={`/${i18n.language}/form-builder/edit/translate`}>{t("translate")}</Link>
         </li>
       </ul>
 
