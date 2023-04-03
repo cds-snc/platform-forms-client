@@ -25,12 +25,14 @@ export const Modal = ({
   openButton,
   saveButton,
   defaultOpen = false,
+  handleClose = () => null,
 }: {
   title: string;
   children: React.ReactNode;
   openButton?: React.ReactElement;
   saveButton?: React.ReactElement | string | undefined;
   defaultOpen?: boolean;
+  handleClose?: () => void;
 }) => {
   const { updateIsOpen } = useModalStore();
   const [isOpen, setIsOpen] = React.useState<boolean>(defaultOpen);
@@ -47,7 +49,7 @@ export const Modal = ({
         <ModalButton isOpenButton={true} />
       )}
 
-      <ModalContainer title={title} saveButton={saveButton}>
+      <ModalContainer title={title} saveButton={saveButton} handleClose={handleClose}>
         {children}
       </ModalContainer>
     </ModalContext.Provider>
@@ -106,10 +108,12 @@ export const ModalContainer = ({
   title,
   children,
   saveButton,
+  handleClose = () => null,
 }: {
   title: string;
   children: React.ReactNode;
   saveButton?: React.ReactElement | string | undefined;
+  handleClose?: () => void;
 }) => {
   const { t } = useTranslation("form-builder");
   const { isOpen, changeOpen } = useContext(ModalContext);
@@ -119,7 +123,8 @@ export const ModalContainer = ({
   const close = useCallback(() => {
     modalContainer.current?.close();
     changeOpen(false);
-  }, [changeOpen]);
+    handleClose && handleClose();
+  }, [changeOpen, handleClose]);
 
   // focus modal when opened
   useEffect(() => {

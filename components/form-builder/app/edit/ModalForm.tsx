@@ -32,7 +32,11 @@ export const ModalForm = ({
   unsetModalField: (path: string) => void;
 }) => {
   const { t } = useTranslation("form-builder");
-  const localizeField = useTemplateStore((s) => s.localizeField);
+
+  const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    translationLanguagePriority: s.translationLanguagePriority,
+  }));
 
   const autocompleteSelectedValue = properties.autoComplete || "";
 
@@ -47,12 +51,17 @@ export const ModalForm = ({
           id={`title--modal--${item.index}`}
           name={`item${item.index}`}
           placeholder={t("question")}
-          value={properties[localizeField(LocalizedElementProperties.TITLE)]}
+          value={
+            properties[localizeField(LocalizedElementProperties.TITLE, translationLanguagePriority)]
+          }
           className="w-11/12"
           onChange={(e) =>
             updateModalProperties(item.index, {
               ...properties,
-              ...{ [localizeField(LocalizedElementProperties.TITLE)]: e.target.value },
+              ...{
+                [localizeField(LocalizedElementProperties.TITLE, translationLanguagePriority)]:
+                  e.target.value,
+              },
             })
           }
         />
@@ -68,10 +77,19 @@ export const ModalForm = ({
             const description = e.target.value.replace(/[\r\n]/gm, "");
             updateModalProperties(item.index, {
               ...properties,
-              ...{ [localizeField(LocalizedElementProperties.DESCRIPTION)]: description },
+              ...{
+                [localizeField(
+                  LocalizedElementProperties.DESCRIPTION,
+                  translationLanguagePriority
+                )]: description,
+              },
             });
           }}
-          value={properties[localizeField(LocalizedElementProperties.DESCRIPTION)]}
+          value={
+            properties[
+              localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)
+            ]
+          }
         />
       </div>
       <div className="mb-2">

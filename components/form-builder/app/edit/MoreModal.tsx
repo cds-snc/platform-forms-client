@@ -6,6 +6,7 @@ import { useTemplateStore, useModalStore } from "../../store";
 import { Button } from "../shared";
 import { Modal } from "./index";
 import { ModalButton, ModalForm } from "./index";
+import { useRefsContext } from "@formbuilder/app/edit/RefsContext";
 
 export const MoreModal = ({
   item,
@@ -21,9 +22,9 @@ export const MoreModal = ({
     getFocusInput: s.getFocusInput,
   }));
 
+  const { refs } = useRefsContext();
   const { t } = useTranslation("form-builder");
   const isRichText = item.type == "richText";
-
   const { isOpen, modals, updateModalProperties, unsetModalField } = useModalStore();
 
   useEffect(() => {
@@ -54,7 +55,14 @@ export const MoreModal = ({
   };
 
   return (
-    <Modal title={t("moreOptions")} openButton={moreButton} saveButton={renderSaveButton()}>
+    <Modal
+      title={t("moreOptions")}
+      openButton={moreButton}
+      saveButton={renderSaveButton()}
+      handleClose={() => {
+        refs && refs.current && refs.current[item.id].focus();
+      }}
+    >
       {!isRichText && modals[item.index] && (
         <ModalForm
           item={item}
