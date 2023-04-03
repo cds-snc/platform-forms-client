@@ -88,7 +88,7 @@ export const Preview = () => {
         {status !== "authenticated" ? (
           <div className="bg-purple-200 p-2 inline-block mb-1">
             <Markdown options={{ forceBlock: true }}>
-              {t("signInToTest", { ns: "form-builder" })}
+              {t("signInToTest", { ns: "form-builder", lng: language })}
             </Markdown>
           </div>
         ) : email ? (
@@ -155,7 +155,7 @@ export const Preview = () => {
                       }
                     }}
                   >
-                    {t("submitButton", { ns: "common" })}
+                    {t("submitButton", { ns: "common", lng: language })}
                   </Button>
                 </span>
                 {status !== "authenticated" && (
@@ -164,7 +164,7 @@ export const Preview = () => {
                     {...getLocalizationAttribute()}
                   >
                     <Markdown options={{ forceBlock: true }}>
-                      {t("signInToTest", { ns: "form-builder" })}
+                      {t("signInToTest", { ns: "form-builder", lng: language })}
                     </Markdown>
                   </div>
                 )}
