@@ -15,7 +15,7 @@
           "required": false
         },
         "descriptionEn": "## What is your name?",
-        "descriptionFr": "",
+        "descriptionFr": "## Titre du nom",
         "placeholderEn": "",
         "placeholderFr": ""
       }
@@ -31,9 +31,9 @@
           }
         ],
         "titleEn": "First name",
-        "titleFr": "",
+        "titleFr": "Prénom",
         "validation": {
-          "required": false
+          "required": true
         },
         "descriptionEn": "",
         "descriptionFr": "",
@@ -53,7 +53,7 @@
           }
         ],
         "titleEn": "Middle names (optional)",
-        "titleFr": "",
+        "titleFr": "Deuxième prénom",
         "validation": {
           "required": false
         },
@@ -75,9 +75,9 @@
           }
         ],
         "titleEn": "Last name",
-        "titleFr": "",
+        "titleFr": "Nom de famille",
         "validation": {
-          "required": false
+          "required": true
         },
         "descriptionEn": "",
         "descriptionFr": "",
