@@ -116,8 +116,6 @@ export interface TemplateStoreState extends TemplateStoreProps {
   removeSubItem: (elIndex: number, id: number) => void;
   addChoice: (elIndex: number) => void;
   addSubChoice: (elIndex: number, subIndex: number) => void;
-  resetChoices: (elIndex: number) => void;
-  resetSubChoices: (elIndex: number, subIndex: number) => void;
   removeChoice: (elIndex: number, choiceIndex: number) => void;
   removeSubChoice: (elIndex: number, subIndex: number, choiceIndex: number) => void;
   updateField: (
@@ -323,21 +321,6 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               state.form.elements[elIndex].properties.subElements?.[
                 subIndex
               ].properties.choices?.splice(choiceIndex, 1);
-            }),
-          resetChoices: (elIndex) =>
-            set((state) => {
-              state.form.elements[elIndex].properties.choices = [];
-            }),
-          resetSubChoices: (elIndex, subIndex) =>
-            set((state) => {
-              try {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                state.form.elements[elIndex].properties.subElements[subIndex].properties.choices =
-                  [];
-              } catch (e) {
-                // do nothing
-              }
             }),
           duplicateElement: (elIndex) => {
             set((state) => {
