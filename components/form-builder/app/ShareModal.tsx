@@ -113,6 +113,11 @@ export const ShareModal = ({
               <p className="text-red-default">{t("share.messageError")}</p>
             </>
           )}
+          {status === "sent" && (
+            <>
+              <p>{t("share.messageSent")}</p>
+            </>
+          )}
           {status === "ready" && (
             <>
               <p>{t("share.message")}</p>
