@@ -4,6 +4,7 @@ import { FormElementWithIndex } from "../../types";
 import { useTemplateStore } from "../../store";
 import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
 import { useIsWithin, useHandleAdd } from "@components/form-builder/hooks";
+import { useRefsContext } from "./RefsContext";
 
 export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
   const { getFocusInput, setFocusInput, remove, moveUp, moveDown, duplicateElement, elements } =
@@ -41,6 +42,7 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
   }, [className]);
 
   const { focusWithinProps, isWithin } = useIsWithin();
+  const { refs } = useRefsContext();
 
   return (
     <div
@@ -63,9 +65,11 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
         }}
         handleMoveUp={() => {
           moveUp(item.index);
+          refs && refs.current && refs.current[item.id].focus();
         }}
         handleMoveDown={() => {
           moveDown(item.index);
+          refs && refs.current && refs.current[item.id].focus();
         }}
         handleDuplicate={() => {
           setFocusInput(true);
