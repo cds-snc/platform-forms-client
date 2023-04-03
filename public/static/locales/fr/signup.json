@@ -61,8 +61,8 @@
     "yourAccountTitle": "Ce que vous pouvez faire avec votre compte",
     "yourAccountListDescription": "Ce compte vous permet de",
     "yourAccountList": {
-      "item1": "rédiger une ébauche de formulaire",
-      "item2": "enregistrer les ébauches dans Formulaires GC",
+      "item1": "rédiger une ébauche de formulaire.",
+      "item2": "enregistrer les ébauches dans Formulaires GC.",
       "item3": "tester la livraison des réponses. "
     },
     "notIncluded": {

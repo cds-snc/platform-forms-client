@@ -1,26 +1,26 @@
 {
-  "title": "[FR] settings",
-  "brandingRequestId": "[FR] Branding request form ID",
-  "success": "[FR] Data saved successfully",
-  "loadingError": "[FR] Sorry... Something went wrong",
-  "createSetting": "[FR] Create",
-  "manageSetting": "[FR] Manage",
-  "viewSetting": "[FR] View",
-  "deleteSetting": "[FR] Delete",
+  "title": "Paramètres",
+  "brandingRequestId": "Identifiant du formulaire de demande d'image de marque",
+  "success": "Données enregistrées avec succès",
+  "loadingError": "Désolé, il y a eu un problème.",
+  "createSetting": "Créer",
+  "manageSetting": "Gérer",
+  "viewSetting": "Afficher",
+  "deleteSetting": "Supprimer",
   "cancel": "Annuler",
   "save": "Enregistrer",
   "back": "Retour",
-  "deleted": "[FR] Setting successfully deleted",
+  "deleted": "Paramètre supprimé",
   "error": {
-    "save": "[FR] Error saving data",
-    "duplicateId": "[FR] Duplicate internal ID, please select another"
+    "save": "Erreur d'enregistrement des données",
+    "duplicateId": "Il s'agit d'un double de l'identifiant interne, veuillez en sélectionner un autre."
   },
   "label": {
-    "internalId": "[FR] Internal Identifier",
-    "nameEn": "[FR] English Name",
-    "nameFr": "[FR] French Name",
-    "descriptionEn": "[FR] English Description",
-    "descriptionFr": "[FR] French Description",
-    "value": "[FR] Value for this setting"
+    "internalId": "Identifiant interne",
+    "nameEn": "Nom en anglais",
+    "nameFr": "Nom en français",
+    "descriptionEn": "Description en anglais",
+    "descriptionFr": "Description en français",
+    "value": "Valeur de ce paramètre"
   }
 }
