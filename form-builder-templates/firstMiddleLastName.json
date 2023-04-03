@@ -53,7 +53,7 @@
           }
         ],
         "titleEn": "Middle names (optional)",
-        "titleFr": "",
+        "titleFr": "Deuxième prénom",
         "validation": {
           "required": false
         },
@@ -75,7 +75,7 @@
           }
         ],
         "titleEn": "Last name",
-        "titleFr": "",
+        "titleFr": "Nom de famille",
         "validation": {
           "required": false
         },
