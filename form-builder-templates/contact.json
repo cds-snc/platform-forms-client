@@ -15,7 +15,7 @@
           "required": false
         },
         "descriptionEn": "## How can we contact you?",
-        "descriptionFr": "",
+        "descriptionFr": "## Comment pouvons-nous vous contacter?",
         "placeholderEn": "",
         "placeholderFr": ""
       }
@@ -31,12 +31,12 @@
           }
         ],
         "titleEn": "Phone number",
-        "titleFr": "",
+        "titleFr": "Numéro de téléphone",
         "validation": {
           "required": false
         },
         "descriptionEn": "Enter your phone number. For example: 111-222-3333",
-        "descriptionFr": "",
+        "descriptionFr": "Entrez votre numéro de téléphone. Par exemple : 111-222-3333",
         "placeholderEn": "",
         "placeholderFr": "",
         "autoComplete": "phone"
@@ -53,7 +53,7 @@
           }
         ],
         "titleEn": "Email address",
-        "titleFr": "",
+        "titleFr": "Adresse courriel",
         "validation": {
           "required": false,
           "type": "email"
@@ -72,20 +72,20 @@
         "choices": [
           {
             "en": "English",
-            "fr": ""
+            "fr": "English"
           },
           {
             "en": "French",
-            "fr": ""
+            "fr": "français"
           }
         ],
         "titleEn": "What is your preferred language for communication?",
-        "titleFr": "",
+        "titleFr": "Quelle est votre langue préférée de communication?",
         "validation": {
           "required": false
         },
         "descriptionEn": "We offer our services in both official languages, French and English",
-        "descriptionFr": "",
+        "descriptionFr": "Nous offrons nos services dans les deux langues officielles, le français et l'anglais.",
         "placeholderEn": "",
         "placeholderFr": ""
       }
