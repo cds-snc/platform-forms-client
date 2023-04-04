@@ -98,7 +98,12 @@ export const SelectedElement = ({
           <SubOptions elIndex={elIndex} item={item} renderIcon={() => <RadioEmptyIcon />} />
         );
       } else {
-        element = <Options item={item} renderIcon={() => <RadioEmptyIcon />} />;
+        element = (
+          <>
+            <ShortAnswer>{t("addElementDialog.radio.title")}</ShortAnswer>
+            <Options item={item} renderIcon={() => <RadioEmptyIcon />} />
+          </>
+        );
       }
       break;
     case "checkbox":
@@ -107,7 +112,12 @@ export const SelectedElement = ({
           <SubOptions elIndex={elIndex} item={item} renderIcon={() => <CheckBoxEmptyIcon />} />
         );
       } else {
-        element = <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} />;
+        element = (
+          <>
+            <ShortAnswer>{t("addElementDialog.checkbox.title")}</ShortAnswer>
+            <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} />
+          </>
+        );
       }
       break;
     case "dropdown":
@@ -116,7 +126,12 @@ export const SelectedElement = ({
           <SubOptions elIndex={elIndex} item={item} renderIcon={(index) => `${index + 1}.`} />
         );
       } else {
-        element = <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} />;
+        element = (
+          <>
+            <ShortAnswer>{t("addElementDialog.dropdown.title")}</ShortAnswer>
+            <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} />
+          </>
+        );
       }
       break;
     case "email":
