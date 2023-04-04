@@ -96,7 +96,4 @@ export const toast = {
   default: (message: string) => {
     originalToast(<p className="py-2">{message}</p>);
   },
-  dismiss: (id?: string | undefined) => {
-    return originalToast.dismiss(id);
-  },
 };
