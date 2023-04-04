@@ -404,21 +404,6 @@
   },
   "required": "Obligatoire",
   "responseDelivery": "Tester la réception des réponses",
-  "responses": {
-    "changeSetup": "Changer la configuration",
-    "confirmReceipt": "Confirmer la réception",
-    "navLabel": "Réponses",
-    "reportProblems": "Signaler des problèmes",
-    "title": "Télécharger les réponses",
-    "unauthenticated": {
-      "createOne": "créez-en un",
-      "noAccount": "Si vous n'avez pas de compte Formulaires GC,",
-      "signIn": "connectez-vous",
-      "title": "Se connecter pour accéder aux réponses",
-      "toAccessPagePart1": "Pour accéder à cette page,",
-      "toAccessPagePart2": "à votre compte Formulaires GC"
-    }
-  },
   "richText": "Section texte ",
   "richTextConfirmationTitle": "Page et message de confirmation",
   "richTextEditor": "Éditeur de texte enrichi",
@@ -583,6 +568,7 @@
   "unlockPublishing": "Soumettre",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
   "unnamedForm": "Formulaire sans titre",
+  "responsesNavLabel": "Réponses",
   "nagware": {
     "restrictedDownloadAfter35Days": "Le téléchargement sera limité si les réponses non confirmées ont plus de 35 jours de retard.",
     "unsavedSubmissionsOver21DaysOld": {

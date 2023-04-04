@@ -1,6 +1,6 @@
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
-import { Attention } from "@components/globals/Attention/Attention";
+import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
 
 jest.mock("next-i18next", () => ({
   useTranslation: () => {
@@ -18,24 +18,22 @@ describe("Attention component", () => {
 
   it("renders warning without errors", () => {
     render(
-      <Attention type="warning" heading={heading}>
+      <Attention type={AttentionTypes.WARNING} heading={heading}>
         {content}
       </Attention>
     );
 
-    expect(screen.queryByText("attention.warning")).toBeInTheDocument();
     expect(screen.queryByText(heading)).toBeInTheDocument();
     expect(screen.queryByText(content)).toBeInTheDocument();
   });
 
   it("renders warning without errors", () => {
     render(
-      <Attention type="error" heading={heading}>
+      <Attention type={AttentionTypes.ERROR} heading={heading}>
         {content}
       </Attention>
     );
 
-    expect(screen.queryByText("attention.error")).toBeInTheDocument();
     expect(screen.queryByText(heading)).toBeInTheDocument();
     expect(screen.queryByText(content)).toBeInTheDocument();
   });
@@ -43,7 +41,6 @@ describe("Attention component", () => {
   it("renders without errors using some defaults", () => {
     render(<Attention>{content}</Attention>);
 
-    expect(screen.queryByText("attention.warning")).toBeInTheDocument();
     expect(screen.queryByText(content)).toBeInTheDocument();
   });
 });

@@ -7,7 +7,7 @@ import {
   MenuDropdownItemI,
   MenuDropdownItemCallback,
 } from "@components/myforms/MenuDropdown/MenuDropdown";
-import { getDate, slugify } from "@lib/helpers";
+import { getDate, slugify } from "@lib/clientHelpers";
 
 export interface CardProps {
   id: string;

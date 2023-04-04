@@ -350,7 +350,10 @@ describe("Test Auth lib", () => {
     it("Returns null is there is a Prisma Error", async () => {
       // Mocking prisma to throw an error
       prismaMock.apiUser.findUnique.mockRejectedValue(
-        new Prisma.PrismaClientKnownRequestError("Can't reach database server", "P1001", "4.3.2")
+        new Prisma.PrismaClientKnownRequestError("Can't reach database server", {
+          code: "P1001",
+          clientVersion: "4.3.2",
+        })
       );
       const token = jwt.sign(
         { email: "test@test.ca", formID: "test0form00000id000asdf11" },

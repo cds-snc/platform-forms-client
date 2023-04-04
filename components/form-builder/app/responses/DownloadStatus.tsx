@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { VaultStatus } from "./DownloadTable";
 
 export const DownloadStatus = ({ vaultStatus }: { vaultStatus: string }) => {
-  const { t } = useTranslation("form-builder");
+  const { t } = useTranslation("form-builder-responses");
 
   switch (vaultStatus) {
     case VaultStatus.NEW:

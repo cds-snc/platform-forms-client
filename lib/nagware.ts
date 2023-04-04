@@ -1,62 +1,83 @@
 import { NagwareSubmission, NagwareResult, NagLevel } from "@lib/types";
+import { getAppSetting } from "./appSettings";
+import { logMessage } from "./logger";
 
-export function detectOldUnprocessedSubmissions(submissions: NagwareSubmission[]): NagwareResult {
-  const currentDate = Date.now();
+export async function detectOldUnprocessedSubmissions(
+  submissions: NagwareSubmission[]
+): Promise<NagwareResult> {
+  try {
+    const currentDate = Date.now();
+    const [promptPhaseDays, warnPhaseDays] = await Promise.all([
+      getAppSetting("nagwarePhasePrompted"),
+      getAppSetting("nagwarePhaseWarned"),
+    ]);
 
-  const results = submissions
-    .filter((submission) => ["New", "Downloaded"].includes(submission.status))
-    .reduce(
-      (acc, current) => {
-        const diffMs = Math.abs(currentDate - current.createdAt);
+    if (!promptPhaseDays || !warnPhaseDays) {
+      logMessage.error("Nagware settings are not configured");
+      return { level: NagLevel.None, numberOfSubmissions: 0 };
+    }
 
-        // 86400000 milliseconds = 1 Day
-        const diffDays = Math.ceil(diffMs / 86400000);
+    const promptDays = parseInt(promptPhaseDays);
+    const warnDays = parseInt(warnPhaseDays);
 
-        if (current.status === "New") {
-          if (diffDays > 35) {
-            acc.numberOfUnsavedSubmissionsOver35Days++;
-          } else if (diffDays > 21) {
-            acc.numberOfUnsavedSubmissionsOver21Days++;
+    const results = submissions
+      .filter((submission) => ["New", "Downloaded"].includes(submission.status))
+      .reduce(
+        (acc, current) => {
+          const diffMs = Math.abs(currentDate - current.createdAt);
+
+          // 86400000 milliseconds = 1 Day
+          const diffDays = Math.ceil(diffMs / 86400000);
+
+          if (current.status === "New") {
+            if (diffDays > warnDays) {
+              acc.numberOfUnsavedSubmissionsForWarn++;
+            } else if (diffDays > promptDays) {
+              acc.numberOfUnsavedSubmissionsForPrompt++;
+            }
+          } else if (current.status === "Downloaded") {
+            if (diffDays > warnDays) {
+              acc.numberOfUnconfirmedSubmissionsForWarn++;
+            } else if (diffDays > promptDays) {
+              acc.numberOfUnconfirmedSubmissionsForPrompt++;
+            }
           }
-        } else if (current.status === "Downloaded") {
-          if (diffDays > 35) {
-            acc.numberOfUnconfirmedSubmissionsOver35Days++;
-          } else if (diffDays > 21) {
-            acc.numberOfUnconfirmedSubmissionsOver21Days++;
-          }
+
+          return acc;
+        },
+        {
+          numberOfUnsavedSubmissionsForPrompt: 0,
+          numberOfUnconfirmedSubmissionsForPrompt: 0,
+          numberOfUnsavedSubmissionsForWarn: 0,
+          numberOfUnconfirmedSubmissionsForWarn: 0,
         }
+      );
 
-        return acc;
-      },
-      {
-        numberOfUnsavedSubmissionsOver21Days: 0,
-        numberOfUnconfirmedSubmissionsOver21Days: 0,
-        numberOfUnsavedSubmissionsOver35Days: 0,
-        numberOfUnconfirmedSubmissionsOver35Days: 0,
-      }
-    );
-
-  if (results.numberOfUnsavedSubmissionsOver35Days) {
-    return {
-      level: NagLevel.UnsavedSubmissionsOver35DaysOld,
-      numberOfSubmissions: results.numberOfUnsavedSubmissionsOver35Days,
-    };
-  } else if (results.numberOfUnconfirmedSubmissionsOver35Days) {
-    return {
-      level: NagLevel.UnconfirmedSubmissionsOver35DaysOld,
-      numberOfSubmissions: results.numberOfUnconfirmedSubmissionsOver35Days,
-    };
-  } else if (results.numberOfUnsavedSubmissionsOver21Days) {
-    return {
-      level: NagLevel.UnsavedSubmissionsOver21DaysOld,
-      numberOfSubmissions: results.numberOfUnsavedSubmissionsOver21Days,
-    };
-  } else if (results.numberOfUnconfirmedSubmissionsOver21Days) {
-    return {
-      level: NagLevel.UnconfirmedSubmissionsOver21DaysOld,
-      numberOfSubmissions: results.numberOfUnconfirmedSubmissionsOver21Days,
-    };
-  } else {
+    if (results.numberOfUnsavedSubmissionsForWarn) {
+      return {
+        level: NagLevel.UnsavedSubmissionsOver35DaysOld,
+        numberOfSubmissions: results.numberOfUnsavedSubmissionsForWarn,
+      };
+    } else if (results.numberOfUnconfirmedSubmissionsForWarn) {
+      return {
+        level: NagLevel.UnconfirmedSubmissionsOver35DaysOld,
+        numberOfSubmissions: results.numberOfUnconfirmedSubmissionsForWarn,
+      };
+    } else if (results.numberOfUnsavedSubmissionsForPrompt) {
+      return {
+        level: NagLevel.UnsavedSubmissionsOver21DaysOld,
+        numberOfSubmissions: results.numberOfUnsavedSubmissionsForPrompt,
+      };
+    } else if (results.numberOfUnconfirmedSubmissionsForPrompt) {
+      return {
+        level: NagLevel.UnconfirmedSubmissionsOver21DaysOld,
+        numberOfSubmissions: results.numberOfUnconfirmedSubmissionsForPrompt,
+      };
+    } else {
+      return { level: NagLevel.None, numberOfSubmissions: 0 };
+    }
+  } catch (e) {
+    logMessage.error(e);
     return { level: NagLevel.None, numberOfSubmissions: 0 };
   }
 }

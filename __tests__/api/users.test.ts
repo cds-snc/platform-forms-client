@@ -164,6 +164,7 @@ describe("Users API endpoint", () => {
           email: "forms@cds.ca",
           name: "forms",
           privileges: mockUserPrivileges(ManageUsers, {}),
+          acceptableUse: true,
         },
       };
       mockGetSession.mockReturnValue(Promise.resolve(mockSession));
@@ -216,7 +217,10 @@ describe("Users API endpoint", () => {
     it("Should return 404 if userId is not found", async () => {
       // Mocking executeQuery it returns 0 updated rows
       prismaMock.user.update.mockRejectedValue(
-        new Prisma.PrismaClientKnownRequestError("Unknown Entry", "P2025", "4.3.2")
+        new Prisma.PrismaClientKnownRequestError("Unknown Entry", {
+          code: "P2025",
+          clientVersion: "4.12.0",
+        })
       );
 
       const { req, res } = createMocks({
