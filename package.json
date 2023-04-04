@@ -91,7 +91,7 @@
     "usehooks-ts": "2.9.1",
     "uuid": "8.3.2",
     "yup": "0.32.11",
-    "zustand": "4.3.6"
+    "zustand": "4.3.7"
   },
   "devDependencies": {
     "@aws-sdk/types": "3.188.0",
