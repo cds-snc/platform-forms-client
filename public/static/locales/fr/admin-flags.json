@@ -47,8 +47,8 @@
       "description": "Activer les notifications du module Nagware"
     },
     "experimentalBlocks": {
-      "title": "[FR] Experimental blocks",
-      "description": "[FR] Enable experimental blocks"
+      "title": "Blocs expérimentaux",
+      "description": "Activer les blocs expérimentaux"
     }
   }
 }
