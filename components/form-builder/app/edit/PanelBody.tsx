@@ -1,13 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useTranslation } from "next-i18next";
 
-import {
-  ElementOption,
-  FormElementWithIndex,
-  Language,
-  LocalizedElementProperties,
-} from "../../types";
-import { SelectedElement, ElementRequired, useGetSelectedOption } from ".";
+import { FormElementWithIndex, Language, LocalizedElementProperties } from "../../types";
+import { SelectedElement, ElementRequired } from ".";
 import { Question } from "./elements";
 import { FormElement } from "@lib/types";
 import { QuestionDescription } from "./elements/question/QuestionDescription";
@@ -31,14 +26,6 @@ export const PanelBody = ({
   const isDynamicRow = item.type === "dynamicRow";
   const properties = item.properties;
   const maxLength = properties?.validation?.maxLength;
-  const initialSelected = useGetSelectedOption(item);
-  const [selectedItem, setSelectedItem] = useState<ElementOption>();
-
-  useEffect(() => {
-    if (selectedItem?.id !== initialSelected.id) {
-      setSelectedItem(initialSelected);
-    }
-  }, [initialSelected, selectedItem?.id]);
 
   const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
@@ -60,9 +47,7 @@ export const PanelBody = ({
             item={item}
             onQuestionChange={onQuestionChange}
           />
-          {selectedItem?.id && (
-            <SelectedElement item={item} selected={selectedItem} elIndex={elIndex} />
-          )}
+          <SelectedElement item={item} elIndex={elIndex} />
         </>
       ) : (
         <>
@@ -80,9 +65,7 @@ export const PanelBody = ({
           <div className="flex text-sm flex-col laptop:flex-row laptop:gap-x-4 laptop:justify-between">
             <div className="w-full laptop:w-3/5">
               <QuestionDescription item={item} describedById={describedById} />
-              {selectedItem?.id && (
-                <SelectedElement item={item} selected={selectedItem} elIndex={elIndex} />
-              )}
+              <SelectedElement item={item} elIndex={elIndex} />
               {maxLength && (
                 <div className="disabled">
                   {t("maxCharacterLength")}
