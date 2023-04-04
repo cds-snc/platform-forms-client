@@ -8,6 +8,14 @@ import { logMessage } from "@lib/logger";
 import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
 import Link from "next/link";
 
+export interface DialogErrors {
+  client: boolean;
+  unknown: boolean;
+  minEntries: boolean;
+  maxEntries: boolean;
+  invalidEntries: boolean; //TODO
+}
+
 export const DownloadTableDialog = ({
   isShowDialog,
   setIsShowDialog,
@@ -38,34 +46,46 @@ export const DownloadTableDialog = ({
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
   const [entries, setEntries] = useState<string[]>([]);
-  const [clientError, setClientError] = useState(false);
-  const [unknownError, setUnknownError] = useState(false);
-  const [entriesLengthError, setEntriesLengthError] = useState(false);
+  const [errors, setErrors] = useState({
+    client: false,
+    unknown: false,
+    minEntries: false,
+    maxEntries: false,
+    invalidEntries: false, //TODO
+  });
   const dialogRef = useDialogRef();
   const confirmInstructionId = `dialog-confirm-receipt-instruction-${randomId()}`;
 
   useEffect(() => {
-    if (entriesLengthError && entries.length > 0) {
-      setEntriesLengthError(false);
+    if (errors.minEntries && entries.length > 0) {
+      setErrors({ ...errors, minEntries: false });
     }
-  }, [entries, entriesLengthError]);
+  }, [errors, entries]);
 
   const handleClose = () => {
     setIsShowDialog(false);
     setEntries([]);
-    setClientError(false);
-    setUnknownError(false);
-    setEntriesLengthError(false);
+    setErrors({
+      client: false,
+      unknown: false,
+      minEntries: false,
+      maxEntries: false,
+      invalidEntries: false,
+    });
     dialogRef.current?.close();
   };
 
   const handleSubmit = () => {
-    setClientError(false);
-    setUnknownError(false);
-    setEntriesLengthError(false);
+    setErrors({
+      client: false,
+      unknown: false,
+      minEntries: false,
+      maxEntries: false,
+      invalidEntries: false,
+    });
 
     if (entries.length <= 0) {
-      setEntriesLengthError(true);
+      setErrors({ ...errors, minEntries: true });
       return;
     }
 
@@ -87,9 +107,9 @@ export const DownloadTableDialog = ({
       .catch((err) => {
         logMessage.error(err as Error);
         if (err?.response?.status === 400) {
-          setClientError(true);
+          setErrors({ ...errors, client: true });
         } else {
-          setUnknownError(true);
+          setErrors({ ...errors, unknown: true });
         }
       });
   };
@@ -105,7 +125,7 @@ export const DownloadTableDialog = ({
         >
           <div className="px-10">
             <div>
-              {entriesLengthError && (
+              {errors.minEntries && (
                 <Attention
                   type={AttentionTypes.ERROR}
                   isAlert={true}
@@ -114,7 +134,20 @@ export const DownloadTableDialog = ({
                   <p className="text-[#26374a] text-sm mb-2">{minEntriesErrorDescription}</p>
                 </Attention>
               )}
-              {clientError && (
+              {errors.maxEntries && (
+                <Attention
+                  type={AttentionTypes.ERROR}
+                  isAlert={true}
+                  heading={t("lineItemEntries.notifications.maxEntriesTitle", {
+                    max: maxEntries,
+                  })}
+                >
+                  <p className="text-[#26374a] text-sm mb-2">
+                    {t("lineItemEntries.notifications.maxEntriesDescription")}
+                  </p>
+                </Attention>
+              )}
+              {errors.client && (
                 <Attention
                   type={AttentionTypes.ERROR}
                   isAlert={true}
@@ -125,7 +158,7 @@ export const DownloadTableDialog = ({
                   </p>
                 </Attention>
               )}
-              {unknownError && (
+              {errors.unknown && (
                 <Attention
                   type={AttentionTypes.ERROR}
                   isAlert={true}
@@ -152,13 +185,10 @@ export const DownloadTableDialog = ({
                 spellCheck={false}
                 inputLabelId={confirmInstructionId}
                 maxEntries={maxEntries}
-                maxEntriesTitle={t("lineItemEntries.notifications.maxEntriesTitle", {
-                  max: maxEntries,
-                })}
-                maxEntriesDescription={t("lineItemEntries.notifications.maxEntriesDescription")}
+                errors={errors}
+                setErrors={setErrors}
               ></LineItemEntries>
               <p className="mt-8">{nextSteps}</p>
-
               <div className="flex mt-8 mb-8">
                 <Button className="mr-4" onClick={handleSubmit}>
                   {submitButtonText}

@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { LineItems } from "./LineItems";
 import { scrollToBottom } from "@lib/clientHelpers";
 import { useTranslation } from "react-i18next";
+import { DialogErrors } from "../../responses/DownloadTableDialog";
 
 // Note: updates are done in a DIV live region to have more control and reduce the verbosity of
 // what's announced -vs- just adding a live region on the OL which works but is painfully verbose.
@@ -12,8 +13,8 @@ export const LineItemEntries = ({
   validateInput,
   inputLabelId,
   maxEntries = 20,
-  maxEntriesTitle,
-  maxEntriesDescription,
+  errors,
+  setErrors,
 }: {
   inputs: string[];
   setInputs: (tag: string[]) => void;
@@ -21,8 +22,8 @@ export const LineItemEntries = ({
   spellCheck?: boolean;
   inputLabelId: string;
   maxEntries?: number;
-  maxEntriesTitle: string;
-  maxEntriesDescription: string;
+  errors?: DialogErrors;
+  setErrors?: React.Dispatch<React.SetStateAction<DialogErrors>>;
 }) => {
   const { t } = useTranslation("form-builder-responses");
   const containerRef = useRef<HTMLDivElement>(null);
@@ -39,6 +40,7 @@ export const LineItemEntries = ({
 
   const onKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     e.stopPropagation();
+
     const text = (e.target as HTMLInputElement).value.trim().replace(",", "");
 
     if (!text && inputs.length && e.key === "Backspace") {
@@ -48,13 +50,27 @@ export const LineItemEntries = ({
 
     if (text && ["Enter", " ", ","].includes(e.key)) {
       e.preventDefault();
+
+      // Tell parent to show an error if the maximum number of entries is reached
+      if (inputs.length >= maxEntries) {
+        // TODO: may want to disable form input as well to make it really clear
+        setErrors({ ...errors, maxEntries: true });
+        return;
+      } else if (errors?.maxEntries) {
+        setErrors({ ...errors, maxEntries: false });
+      }
+
+      // TODO: show an error if an entry is invalid
       if ((validateInput && !validateInput(text)) || inputs.length >= maxEntries) {
         return;
       }
+
+      // Add the entry to the entry list and announce this to the user as well
       setInputs([...new Set([...inputs, text])]);
       if (liveRegionRef.current) {
         liveRegionRef.current.textContent = `${t("lineItemEntries.added")} ${text}`;
       }
+
       (e.target as HTMLInputElement).value = "";
     }
   };
@@ -99,12 +115,6 @@ export const LineItemEntries = ({
           aria-labelledby={inputLabelId}
         />
       </div>
-      {inputs.length >= maxEntries && (
-        <div role="alert" className="px-4 py-2 m-2 bg-[#dcd6fe]">
-          <p className="font-bold">{maxEntriesTitle}</p>
-          <p>{maxEntriesDescription}</p>
-        </div>
-      )}
       <div
         ref={liveRegionRef}
         className="sr-only"
