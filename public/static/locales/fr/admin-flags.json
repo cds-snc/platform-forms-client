@@ -46,10 +46,6 @@
       "title": "Formulaires de support",
       "description": "Activation ou désactivation des formulaires de support"
     },
-    "formBuilderDebug": {
-      "title": "Débogage du Générateur de formulaires",
-      "description": "Activer le mode de débogage du Générateur de formulaires"
-    },
     "nagware": {
       "title": "Notifications Nagware",
       "description": "Activer les notifications du module Nagware"
