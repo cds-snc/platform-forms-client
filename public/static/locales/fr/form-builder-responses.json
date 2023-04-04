@@ -92,6 +92,7 @@
       "unknownErrorHeader": "Un problème s'est produit.",
       "unknownErrorDescription": "Réessayez dans quelques minutes ou contactez l'équipe de ",
       "unknownErrorDescriptionLink": "Soutien"
-    }
+    },
+    "cancel": "Cancel[fr]"
   }
 }

@@ -91,6 +91,7 @@
       "unknownErrorHeader": "Something went wrong",
       "unknownErrorDescription": "Try again in a few minutes or contact ",
       "unknownErrorDescriptionLink": "Support"
-    }
+    },
+    "cancel": "Cancel"
   }
 }

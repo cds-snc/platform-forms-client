@@ -164,7 +164,7 @@ export const DownloadTableDialog = ({
                   {submitButtonText}
                 </Button>
                 <Button theme="secondary" onClick={handleClose}>
-                  {t("cancel")}
+                  {t("downloadResponsesModals.cancel")}
                 </Button>
               </div>
             </div>
