@@ -6,21 +6,7 @@ import { Button } from "./Button";
 import { useTemplateStore } from "../../store";
 import { useDialogRef, Dialog } from "../shared";
 import { InfoIcon } from "../../icons";
-
-const slugify = (str: string) =>
-  str
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, "")
-    .replace(/[\s_-]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-
-const getDate = (withTime = false) => {
-  let date = new Date();
-  const offset = date.getTimezoneOffset();
-  date = new Date(date.getTime() - offset * 60 * 1000);
-  return withTime ? date.toISOString() : date.toISOString().split("T")[0];
-};
+import { getDate, slugify } from "@lib/helpers";
 
 const FormDownloadDialog = ({ handleClose }: { handleClose: () => void }) => {
   const { t } = useTranslation("form-builder");
@@ -74,10 +60,11 @@ export const DownloadFileButton = ({
   buttonText?: string;
   autoShowDialog?: boolean;
 }) => {
-  const { t } = useTranslation("form-builder");
-  const { getSchema, form } = useTemplateStore((s) => ({
+  const { t, i18n } = useTranslation("form-builder");
+  const { getSchema, form, name } = useTemplateStore((s) => ({
     getSchema: s.getSchema,
     form: s.form,
+    name: s.name,
   }));
 
   const [downloadDialog, showDownloadDialog] = useState(autoShowDialog);
@@ -88,8 +75,10 @@ export const DownloadFileButton = ({
         const blob = new Blob([getSchema()], { type: "application/json" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
+        const fileName = name ? name : i18n.language === "fr" ? form.titleFr : form.titleEn;
+
         a.href = url;
-        a.download = slugify(`${form.titleEn}-${getDate()}`);
+        a.download = slugify(`${fileName}-${getDate()}`) + ".json";
         a.click();
         URL.revokeObjectURL(url);
       } catch (e) {
@@ -98,7 +87,7 @@ export const DownloadFileButton = ({
     }
 
     retrieveFileBlob();
-  }, [getSchema, form.titleEn]);
+  }, [getSchema, name, i18n.language, form.titleFr, form.titleEn]);
 
   const handleOpenDialog = useCallback(() => {
     showDownloadDialog(true);
@@ -109,7 +98,7 @@ export const DownloadFileButton = ({
   }, []);
 
   const downloadFileEvent = () => {
-    const formTitle = slugify(form.titleEn);
+    const formTitle = slugify(name ? name : i18n.language === "fr" ? form.titleFr : form.titleEn);
 
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
