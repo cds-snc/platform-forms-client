@@ -44,7 +44,7 @@ describe("Test FormBuilder Add Elements", () => {
       .should("have.attr", "type", "text")
       .should("have.attr", "placeholder", "Question");
 
-    // cy.get('[data-testid="element-select-active"]').should("contain", "Short answer");
+    cy.get(".example-text").should("contain", "Short answer");
   });
 
   it("Adds a Long Answer element", () => {
@@ -58,7 +58,7 @@ describe("Test FormBuilder Add Elements", () => {
       .should("have.attr", "type", "text")
       .should("have.attr", "placeholder", "Question");
 
-    // cy.get('[data-testid="element-select-active"]').should("contain", "Long answer");
+    cy.get(".example-text").should("contain", "Long answer text");
   });
 
   it("Adds a Single choice element", () => {
@@ -75,8 +75,6 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get('[id="option--1--1"]')
       .should("have.attr", "type", "text")
       .should("have.attr", "placeholder", "Option 1");
-
-    // cy.get('[data-testid="element-select-active"]').should("contain", "Single choice");
   });
 
   it("Adds a Multiple choice element", () => {
@@ -93,8 +91,6 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get('[id="option--1--1"]')
       .should("have.attr", "type", "text")
       .should("have.attr", "placeholder", "Option 1");
-
-    // cy.get('[data-testid="element-select-active"]').should("contain", "Multiple choice");
   });
 
   it("Adds a Dropdown list element", () => {
@@ -131,7 +127,6 @@ describe("Test FormBuilder Add Elements", () => {
       "Enter a date. For example: mm/dd/yyyy"
     );
     cy.get('[data-testid="date"]').should("contain", "mm/dd/yyyy");
-    // cy.get('[data-testid="element-select-active"]').should("contain", "Date");
   });
 
   it("Adds a Numeric field element", () => {
@@ -147,8 +142,6 @@ describe("Test FormBuilder Add Elements", () => {
 
     cy.get('[data-testid="description-text"]').should("contain", "Only enter numbers");
     cy.get('[data-testid="number"]').should("contain", "0123456789");
-
-    // cy.get('[data-testid="element-select-active"]').should("contain", "Numeric field");
 
     cy.visit("/form-builder/preview");
     cy.get('[data-testid="textInput"]').should("have.attr", "type", "number");
