@@ -75,6 +75,8 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get('[id="option--1--1"]')
       .should("have.attr", "type", "text")
       .should("have.attr", "placeholder", "Option 1");
+
+    cy.get(".example-text").should("contain", "Radio buttons");
   });
 
   it("Adds a Multiple choice element", () => {
@@ -91,6 +93,8 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get('[id="option--1--1"]')
       .should("have.attr", "type", "text")
       .should("have.attr", "placeholder", "Option 1");
+
+    cy.get(".example-text").should("contain", "Multiple choice");
   });
 
   it("Adds a Dropdown list element", () => {
@@ -107,6 +111,8 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get('[id="option--1--1"]')
       .should("have.attr", "type", "text")
       .should("have.attr", "placeholder", "Option 1");
+
+    cy.get(".example-text").should("contain", "Dropdown");
   });
 
   it("Adds a Date element", () => {
