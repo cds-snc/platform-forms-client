@@ -64,7 +64,6 @@
   "adminNav": {
     "dashboard": "Home",
     "formbuilder": "Form builder",
-    "vault": "Vault",
     "users": "Users",
     "upload": "Template upload",
     "templates": "Templates",
