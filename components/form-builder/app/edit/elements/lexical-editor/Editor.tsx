@@ -39,8 +39,6 @@ export const Editor = ({
     undefined
   );
 
-  const [showTreeView, setShowTreeView] = useState<boolean>(false);
-
   const editorId = "editor-" + Math.random().toString(36).substr(2, 9);
 
   const onRef = (_floatingAnchorElem: HTMLDivElement) => {
@@ -68,11 +66,7 @@ export const Editor = ({
           },
         }}
       >
-        <Toolbar
-          editorId={editorId}
-          setShowTreeView={setShowTreeView}
-          showTreeView={showTreeView}
-        />
+        <Toolbar editorId={editorId} />
         <RichTextPlugin
           contentEditable={
             <div className="editor relative" ref={onRef} {...(lang && { lang: lang })}>
