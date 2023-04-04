@@ -7,7 +7,7 @@ import { ShortAnswer, Options, SubOptions, RichText, SubElement } from "./elemen
 import { ElementOption, FormElementWithIndex } from "../../types";
 import { useElementOptions } from "../../hooks";
 
-export const filterSelected = (
+const filterSelected = (
   item: FormElementWithIndex,
   currentSelectedItem: ElementOption,
   elementOptions: ElementOption[]
