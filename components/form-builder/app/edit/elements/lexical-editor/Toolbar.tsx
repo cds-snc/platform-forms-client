@@ -11,7 +11,6 @@ import {
   BulletListIcon,
   NumberedListIcon,
   LinkIcon,
-  TreeViewIcon,
 } from "@components/form-builder/icons";
 
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
@@ -38,7 +37,6 @@ import { sanitizeUrl } from "./utils/url";
 import { useEditorFocus } from "./useEditorFocus";
 import { getSelectedNode } from "./utils/getSelectedNode";
 import { ToolTip } from "./ToolTip";
-import { useFlag } from "@lib/hooks";
 
 const blockTypeToBlockName = {
   bullet: "Bulleted List",
@@ -58,15 +56,7 @@ const blockTypeToBlockName = {
 const LowPriority = 1;
 type HeadingTagType = "h2" | "h3" | "h4" | "h5";
 
-export const Toolbar = ({
-  editorId,
-  setShowTreeView,
-  showTreeView,
-}: {
-  editorId: string;
-  setShowTreeView: (arg0: boolean) => void;
-  showTreeView: boolean;
-}) => {
+export const Toolbar = ({ editorId }: { editorId: string }) => {
   const [editor] = useLexicalComposerContext();
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
@@ -75,12 +65,6 @@ export const Toolbar = ({
   const [blockType, setBlockType] = useState("paragraph");
 
   const [isEditable] = useState(() => editor.isEditable());
-
-  const { status: formBuilderDebugEnabled } = useFlag("formBuilderDebug");
-
-  const toggleTreeView = () => {
-    setShowTreeView(!showTreeView);
-  };
 
   const insertLink = useCallback(() => {
     if (!isLink) {
@@ -404,16 +388,6 @@ export const Toolbar = ({
             <LinkIcon />
           </button>
         </ToolTip>
-        {formBuilderDebugEnabled && (
-          <ToolTip text="Toggle TreeView">
-            <button
-              className={"peer toolbar-item " + (showTreeView && "active")}
-              onClick={toggleTreeView}
-            >
-              <TreeViewIcon />
-            </button>
-          </ToolTip>
-        )}
       </div>
     </>
   );

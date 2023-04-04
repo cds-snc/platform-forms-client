@@ -17,7 +17,6 @@ import { getFullTemplateByID } from "@lib/templates";
 import HTMLDownloadFile from "@components/myforms/HTMLDownload";
 import BaseApp from "@pages/_app";
 import { Router } from "next/router";
-import { checkOne } from "@lib/cache/flags";
 import { connectToDynamo } from "@lib/integration/dynamodbConnector";
 import { logEvent } from "@lib/auditLogs";
 
@@ -30,10 +29,6 @@ import { logEvent } from "@lib/auditLogs";
 const allowedMethods = ["GET"];
 
 const handler = async (req: NextApiRequest, res: NextApiResponse, props: MiddlewareProps) => {
-  // Is this feature / endpoint active
-  const vaultActive = await checkOne("vault");
-  if (!vaultActive) return res.status(404).json({ error: "Vault not active" });
-
   const formID = req.query.form;
   const submissionName = req.query.submission;
 

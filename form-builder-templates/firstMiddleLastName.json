@@ -15,7 +15,7 @@
           "required": false
         },
         "descriptionEn": "## What is your name?",
-        "descriptionFr": "## Titre du nom",
+        "descriptionFr": "## Quel est votre nom?",
         "placeholderEn": "",
         "placeholderFr": ""
       }
@@ -53,7 +53,7 @@
           }
         ],
         "titleEn": "Middle names (optional)",
-        "titleFr": "Deuxième prénom",
+        "titleFr": "Deuxième prénom (optionnel)",
         "validation": {
           "required": false
         },

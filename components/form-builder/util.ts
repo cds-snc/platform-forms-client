@@ -1,5 +1,4 @@
-import { Language } from "./types";
-import { FormElement, FormProperties, PropertyChoices, FormElementTypes } from "@lib/types";
+import { FormElement, FormProperties, FormElementTypes } from "@lib/types";
 import { TemplateStoreState } from "./store/useTemplateStore";
 
 export const completeEmailAddressRegex =
@@ -72,34 +71,6 @@ export const sortByLayout = ({
   return elements.sort((a, b) => {
     return layout.indexOf(a.id) - layout.indexOf(b.id);
   });
-};
-
-export const newlineToOptions = (
-  lang: Language,
-  currentChoices: PropertyChoices[] = [],
-  bulkChoices: string
-) => {
-  const cleanedBulkChoices = bulkChoices.endsWith("\n") ? bulkChoices.slice(0, -1) : bulkChoices;
-  const choices = cleanedBulkChoices.split("\n");
-
-  let newChoices = [...currentChoices];
-
-  choices.forEach((choice, i) => {
-    if (newChoices[i] !== undefined) {
-      newChoices[i][lang] = choice;
-    } else {
-      if (choice == "") return;
-
-      const obj = { en: "", fr: "" };
-      obj[lang] = choice;
-      newChoices.push(obj);
-    }
-  });
-
-  // truncate the "old" choices to remove left overs
-  newChoices = newChoices.slice(0, choices.length);
-
-  return newChoices;
 };
 
 export const getSchemaFromState = (state: TemplateStoreState) => {

@@ -40,7 +40,8 @@
     "file-type-invalid": "Sélectionner un autre type de fichier.",
     "too-many-characters": "Raccourcir la réponse.",
     "all-checkboxes-required": "Lisez et cochez toutes les cases pour confirmer les éléments de cette section.",
-    "validGovEmail": "Entrer une adresse courriel valide du gouvernement."
+    "validGovEmail": "Entrer une adresse courriel valide du gouvernement.",
+    "notSameAsUserEmail": "Il ne peut s'agir de votre propre adresse courriel. Entrez le courriel de la personne responsable de votre équipe."
   },
   "required": "obligatoire",
   "all-required": "toutes les cases à cocher sont obligatoires",
@@ -64,7 +65,6 @@
   "adminNav": {
     "dashboard": "Accueil",
     "formbuilder": "Générateur de formulaires",
-    "vault": "Coffre",
     "users": "Usagers",
     "upload": "Téléversement de modèle",
     "templates": "Modèles",
