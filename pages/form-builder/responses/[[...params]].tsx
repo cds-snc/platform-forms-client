@@ -276,16 +276,6 @@ export const getServerSideProps: GetServerSideProps = async ({
   res,
 }) => {
   const [formID = null] = params || [];
-  const vault = await checkOne("vault");
-
-  if (!vault) {
-    return {
-      redirect: {
-        destination: `/${locale}/404`,
-        permanent: false,
-      },
-    };
-  }
 
   const FormbuilderParams: { locale: string; initialForm: null | FormRecord } = {
     initialForm: null,

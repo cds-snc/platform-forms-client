@@ -9,7 +9,6 @@ import {
 } from "@aws-sdk/lib-dynamodb";
 import { MiddlewareProps, WithRequired } from "@lib/types";
 import { connectToDynamo } from "@lib/integration/dynamodbConnector";
-import { checkOne } from "@lib/cache/flags";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { checkUserHasTemplateOwnership } from "@lib/templates";
 import { logEvent } from "@lib/auditLogs";
@@ -17,10 +16,6 @@ import { logEvent } from "@lib/auditLogs";
 const MAXIMUM_CONFIRMATION_CODES_PER_REQUEST = 20;
 
 const handler = async (req: NextApiRequest, res: NextApiResponse, props: MiddlewareProps) => {
-  // Is this feature / endpoint active
-  const vaultActive = await checkOne("vault");
-  if (!vaultActive) return res.status(404).json({ error: "Vault not active" });
-
   const { session } = props as WithRequired<MiddlewareProps, "session">;
 
   const userEmail = session.user.email;
