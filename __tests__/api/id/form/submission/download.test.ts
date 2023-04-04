@@ -8,12 +8,10 @@ import download from "@pages/api/id/[form]/[submission]/download";
 import { Session } from "next-auth";
 import { Base, mockUserPrivileges } from "__utils__/permissions";
 import { prismaMock } from "@jestUtils";
-import Redis from "ioredis-mock";
 import { DynamoDBDocumentClient, GetCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import { mockClient } from "aws-sdk-client-mock";
 import { EventEmitter } from "events";
 import testFormConfig from "../../../../../__fixtures__/accessibilityTestForm.json";
-import initialSettings from "../../../../../flag_initialization/default_flag_settings.json";
 import { logEvent } from "@lib/auditLogs";
 
 jest.mock("next-auth/next");
@@ -27,24 +25,6 @@ jest.mock("next-i18next", () => ({
     return component;
   },
 }));
-
-const redis = new Redis();
-
-jest.mock("@lib/integration/redisConnector", () => ({
-  getRedisInstance: jest.fn(() => redis),
-}));
-
-jest.mock("@lib/cache/flags", () => {
-  const originalModule = jest.requireActual("@lib/cache/flags");
-  return {
-    __esModule: true,
-    ...originalModule,
-    checkOne: jest.fn((flag) => {
-      if (flag === "vault") return true;
-      return (initialSettings as Record<string, boolean>)[flag];
-    }),
-  };
-});
 
 //Needed in the typescript version of the test so types are inferred correctly
 const mockGetSession = jest.mocked(getServerSession, { shallow: true });

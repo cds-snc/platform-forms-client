@@ -13,32 +13,12 @@ import {
   DynamoDBDocumentClient,
   TransactWriteCommand,
 } from "@aws-sdk/lib-dynamodb";
-import Redis from "ioredis-mock";
-import initialSettings from "../../../../../flag_initialization/default_flag_settings.json";
 import { prismaMock } from "@jestUtils";
 
 import { Base, mockUserPrivileges } from "__utils__/permissions";
 jest.mock("next-auth/next");
 //Needed in the typescript version of the test so types are inferred correctly
 const mockGetSession = jest.mocked(getServerSession, { shallow: true });
-
-const redis = new Redis();
-
-jest.mock("@lib/integration/redisConnector", () => ({
-  getRedisInstance: jest.fn(() => redis),
-}));
-
-jest.mock("@lib/cache/flags", () => {
-  const originalModule = jest.requireActual("@lib/cache/flags");
-  return {
-    __esModule: true,
-    ...originalModule,
-    checkOne: jest.fn((flag) => {
-      if (flag === "vault") return true;
-      return (initialSettings as Record<string, boolean>)[flag];
-    }),
-  };
-});
 
 jest.mock("@lib/auditLogs");
 

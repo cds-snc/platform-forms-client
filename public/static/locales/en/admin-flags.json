@@ -14,10 +14,6 @@
       "title": "Sandbox Page",
       "description": "A page that displays a list of all non-published forms"
     },
-    "vault": {
-      "title": "Submission vault",
-      "description": "A page that displays a list of submissions stored in the Vault for forms enabled with that feature"
-    },
     "unpublishedForms": {
       "title": "Unpublished forms",
       "description": "Allow the access to and completion of forms that do not have a published status"
