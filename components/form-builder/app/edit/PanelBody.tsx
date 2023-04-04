@@ -51,8 +51,8 @@ export const PanelBody = ({
         </>
       ) : (
         <>
-          <div className="flex text-sm flex-col laptop:flex-row-reverse laptop:justify-between laptop:gap-x-4">
-            <div className="w-full mt-4 laptop:mt-0 laptop:w-3/5">
+          <div className="flex text-sm">
+            <div className="w-full mt-4 laptop:mt-0">
               <Question
                 elements={elements}
                 elIndex={elIndex}
@@ -62,8 +62,8 @@ export const PanelBody = ({
               />
             </div>
           </div>
-          <div className="flex text-sm flex-col laptop:flex-row laptop:gap-x-4 laptop:justify-between">
-            <div className="w-full laptop:w-3/5">
+          <div className="flex text-sm">
+            <div className="w-full">
               <QuestionDescription item={item} describedById={describedById} />
               <SelectedElement item={item} elIndex={elIndex} />
               {maxLength && (
