@@ -6,7 +6,7 @@ export { Modal, ModalButton } from "./Modal";
 export { ModalForm } from "./ModalForm";
 export { MoreModal } from "./MoreModal";
 export { PrivacyDescription } from "./PrivacyDescription";
-export { SelectedElement, useGetSelectedOption } from "./SelectedElement";
+export { SelectedElement } from "./SelectedElement";
 export { PanelBody } from "./PanelBody";
 export { PanelBodyRoot } from "./PanelBodyRoot";
 export { PanelBodySub } from "./PanelBodySub";

@@ -32,7 +32,7 @@ export const filterSelected = (
   return currentSelectedItem;
 };
 
-export const useGetSelectedOption = (item: FormElementWithIndex): ElementOption => {
+const useGetSelectedOption = (item: FormElementWithIndex): ElementOption => {
   const elementOptions = useElementOptions();
 
   const validationType = item.properties?.validation?.type;
