@@ -40,7 +40,8 @@
     "file-type-invalid": "Select a different file type.",
     "too-many-characters": "Shorten the response.",
     "all-checkboxes-required": "Read and check all boxes to confirm the items in this section.",
-    "validGovEmail": "Enter a valid government email address."
+    "validGovEmail": "Enter a valid government email address.",
+    "notSameAsUserEmail": "This cannot be your email address. Enter the email of the person in charge of your team."
   },
   "required": "required",
   "all-required": "all checkboxes required",
