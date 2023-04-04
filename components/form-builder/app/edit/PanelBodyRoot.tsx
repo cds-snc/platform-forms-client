@@ -9,7 +9,6 @@ export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
     localizeField: s.localizeField,
     elements: s.form.elements,
     updateField: s.updateField,
-    unsetField: s.unsetField,
   }));
 
   // all element state updaters should be setup at this level
