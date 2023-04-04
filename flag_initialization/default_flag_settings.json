@@ -6,6 +6,5 @@
   "accountRegistration": true,
   "passwordReset": false,
   "supportForms": false,
-  "formBuilderDebug": false,
   "nagware": false
 }

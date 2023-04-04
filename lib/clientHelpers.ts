@@ -327,6 +327,21 @@ export const getDaysPassed = (endDate: Date | number, startDate?: Date | number)
   return daysPassed;
 };
 
+export const getDate = (withTime = false) => {
+  let date = new Date();
+  const offset = date.getTimezoneOffset();
+  date = new Date(date.getTime() - offset * 60 * 1000);
+  return withTime ? date.toISOString() : date.toISOString().split("T")[0];
+};
+
+export const slugify = (str: string) =>
+  str
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/[\s_-]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
 export const submitToAPI = logger(_submitToAPI);
 export const buildFormDataObject = logger(_buildFormDataObject);
 export const rehydrateFormResponses = logger(_rehydrateFormResponses);
