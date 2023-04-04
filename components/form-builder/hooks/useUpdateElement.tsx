@@ -4,7 +4,6 @@ import { useTranslation } from "next-i18next";
 import { FormElementTypes } from "@lib/types";
 import { isValidatedTextType, isAutoCompleteField } from "@components/form-builder/util";
 
-// @todo re-factor for only add item
 export const useUpdateElement = () => {
   const { t } = useTranslation("form-builder");
   const { localizeField, updateField } = useTemplateStore((s) => ({
@@ -46,8 +45,6 @@ export const useUpdateElement = () => {
 
   const updateTextElement = (type: string, path: string) => {
     if (type === "textArea" || type === "textField") {
-      // unsetField(`${path}.properties.validation.type`);
-      // unsetField(`${path}.properties.autoComplete`);
       updateField(`${path}.type`, type);
       return;
     }
@@ -61,20 +58,17 @@ export const useUpdateElement = () => {
     }
 
     if (isAutoCompleteField(type)) {
-      // unsetField(`${path}.properties.validation.type`);
       updateField(`${path}.properties.autoComplete`, type);
       return;
     }
 
     if (isValidatedTextType(type as FormElementTypes)) {
       updateField(`${path}.properties.validation.type`, type);
-      // unsetField(`${path}.properties.autoComplete`);
       return;
     }
   };
 
   const updateElement = (type: string, path: string) => {
-    // unsetField(`${path}.properties.validation.all`);
     setDefaultDescription(type, path);
     setDefaultTitle(type, path);
 
@@ -86,12 +80,6 @@ export const useUpdateElement = () => {
       // Need to swap type because incoming `attestation` is a checkbox type
       type = FormElementTypes.checkbox;
       updateField(`${path}.properties.validation.all`, true);
-      // unsetField(`${path}.properties.validation.type`);
-      // unsetField(`${path}.properties.autoComplete`);
-    }
-
-    if (!isTextField(type as FormElementTypes)) {
-      // unsetField(`${path}.properties.validation.maxLength`);
     }
 
     updateField(`${path}.type`, type);
