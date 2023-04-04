@@ -40,7 +40,7 @@ export const PanelBody = ({
   return (
     <>
       {isRichText || isDynamicRow ? (
-        <>
+        <div className="mt-4 mb-4">
           <Question
             elements={elements}
             elIndex={elIndex}
@@ -48,7 +48,7 @@ export const PanelBody = ({
             onQuestionChange={onQuestionChange}
           />
           <SelectedElement item={item} elIndex={elIndex} />
-        </>
+        </div>
       ) : (
         <>
           <div className="flex text-sm">
@@ -62,8 +62,8 @@ export const PanelBody = ({
               />
             </div>
           </div>
-          <div className="flex text-sm">
-            <div className="w-full">
+          <div className="flex gap-4 mb-4 text-sm">
+            <div className="w-1/2">
               <QuestionDescription item={item} describedById={describedById} />
               <SelectedElement item={item} elIndex={elIndex} />
               {maxLength && (
@@ -73,14 +73,14 @@ export const PanelBody = ({
                 </div>
               )}
             </div>
-            <div className="w-full laptop:w-2/5">
-              <ElementRequired onRequiredChange={onRequiredChange} item={item} />
+            <div className="w-1/2">
               {item.properties.autoComplete && (
-                <div data-testid={`autocomplete-${item.id}`} className="mt-5">
+                <div data-testid={`autocomplete-${item.id}`} className="mt-5 text-sm">
                   <strong>{t("autocompleteIsSetTo")}</strong>{" "}
                   {t(`autocompleteOptions.${item.properties.autoComplete}`)}
                 </div>
               )}
+              <ElementRequired onRequiredChange={onRequiredChange} item={item} />
             </div>
           </div>
         </>
