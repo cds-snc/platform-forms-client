@@ -288,11 +288,12 @@ export const formatDate = (date: Date): string => {
     return "Unknown";
   }
 
-  const day = String(date.getDate()).length <= 1 ? `0${date.getDate()}` : date.getDate();
-  const month =
-    String(date.getMonth()).length <= 1 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
-  const year = date.getFullYear();
-  return `${year}-${month}-${day}`;
+  const formattedDate = date.toLocaleDateString("en-CA", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+  return formattedDate;
 };
 
 /**
@@ -318,7 +319,7 @@ export const getDaysPassed = (endDate: Date | number, startDate?: Date | number)
   const date2 =
     typeof endDate === "number" && String(endDate).length === 13 ? new Date(endDate) : endDate;
 
-  if (!(date2 instanceof Date)) {
+  if (!(date1 instanceof Date) || !(date2 instanceof Date)) {
     return -1; // Invalid date
   }
 

@@ -85,7 +85,7 @@ export const toast = {
     originalToast.error(<p className="py-2">{message}</p>);
   },
   info: (message: string) => {
-    originalToast.info(<p className="py-1">{message}</p>);
+    originalToast.info(<p className="py-2">{message}</p>);
   },
   warn: (message: string) => {
     originalToast.warn(<p className="py-2">{message}</p>);

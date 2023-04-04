@@ -3,6 +3,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { ExclamationText } from "../shared";
 import { getDaysPassed } from "@lib/clientHelpers";
+import { VaultStatus } from "./DownloadTable";
 
 export const DownloadResponseStatus = ({
   vaultStatus,
@@ -18,7 +19,7 @@ export const DownloadResponseStatus = ({
   const { t } = useTranslation("form-builder-responses");
   let status = null;
 
-  if (vaultStatus === "New") {
+  if (vaultStatus === VaultStatus.NEW) {
     const daysPassed = getDaysPassed(createdAt);
     if (!overdueAfter) return <>{t("downloadResponsesTable.unknown")}</>;
     const daysLeft = overdueAfter - daysPassed;

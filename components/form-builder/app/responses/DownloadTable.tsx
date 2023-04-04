@@ -51,7 +51,7 @@ const reducerTableItems = (state: ReducerTableItemsState, action: ReducerTableIt
   switch (action.type) {
     case "UPDATE": {
       if (!action.item) {
-        throw Error("Table dispatch missing item checkox state");
+        throw Error("Table dispatch missing item checkbox state");
       }
       const newStatusItems = new Map(state.statusItems);
       const newCheckedItems = new Map();
