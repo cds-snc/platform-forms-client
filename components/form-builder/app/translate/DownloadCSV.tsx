@@ -3,7 +3,7 @@ import { useTranslation } from "next-i18next";
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { Button } from "../shared/Button";
 import { FormElement } from "@lib/types";
-import { getDate, slugify } from "@lib/helpers";
+import { getDate, slugify } from "@lib/clientHelpers";
 
 const formatText = (str: string) => `"${str}"`;
 

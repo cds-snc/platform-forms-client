@@ -50,7 +50,7 @@ export const getAppSetting = async (internalId: string) => {
   if (uncachedSetting?.value) {
     settingPut(internalId, uncachedSetting.value);
   }
-  return uncachedSetting?.value;
+  return uncachedSetting?.value ?? null;
 };
 
 interface SettingUpdateData {

@@ -59,3 +59,4 @@ export { QuestionsIcon } from "./QuestionsIcon";
 export { TranslateIcon } from "./TranslateIcon";
 export { BrandIcon } from "./BrandIcon";
 export { UploadIcon } from "./UploadIcon";
+export { RoundThinXCloseIcon } from "./RoundThinXCloseIcon";

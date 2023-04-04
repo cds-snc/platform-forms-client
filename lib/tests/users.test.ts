@@ -19,7 +19,10 @@ describe("User query tests should fail gracefully", () => {
     prismaMock.user.findUnique.mockResolvedValue(null);
     (prismaMock.privilege.findUnique as jest.MockedFunction<any>).mockResolvedValue({ id: "2" });
     prismaMock.user.create.mockRejectedValue(
-      new Prisma.PrismaClientKnownRequestError("Timed out", "P2024", "4.3.2")
+      new Prisma.PrismaClientKnownRequestError("Timed out", {
+        code: "P2024",
+        clientVersion: "4.12.0",
+      })
     );
 
     const result = await getOrCreateUser({ email: "test-user@test.ca" });
@@ -29,11 +32,17 @@ describe("User query tests should fail gracefully", () => {
 
   it("getOrCreateUser should fail gracefully - lookup", async () => {
     prismaMock.user.findUnique.mockRejectedValue(
-      new Prisma.PrismaClientKnownRequestError("Timed out", "P2024", "4.3.2")
+      new Prisma.PrismaClientKnownRequestError("Timed out", {
+        code: "P2024",
+        clientVersion: "4.12.0",
+      })
     );
     (prismaMock.privilege.findUnique as jest.MockedFunction<any>).mockResolvedValue({ id: "2" });
     prismaMock.user.create.mockRejectedValue(
-      new Prisma.PrismaClientKnownRequestError("Timed out", "P2024", "4.3.2")
+      new Prisma.PrismaClientKnownRequestError("Timed out", {
+        code: "P2024",
+        clientVersion: "4.3.2",
+      })
     );
     const result = await getOrCreateUser({ email: "test-user@test.ca" });
     expect(result).toEqual(null);
@@ -47,7 +56,10 @@ describe("User query tests should fail gracefully", () => {
     const ability = createAbility(fakeSession as Session);
 
     prismaMock.user.findMany.mockRejectedValue(
-      new Prisma.PrismaClientKnownRequestError("Timed out", "P2024", "4.3.2")
+      new Prisma.PrismaClientKnownRequestError("Timed out", {
+        code: "P2024",
+        clientVersion: "4.12.0",
+      })
     );
 
     const result = await getUsers(ability);
