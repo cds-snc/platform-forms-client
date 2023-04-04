@@ -9,7 +9,6 @@ import {
   moveUp,
   removeElementById,
   incrementElementId,
-  newlineToOptions,
   getSchemaFromState,
   incrementSubElementId,
 } from "../util";
@@ -129,7 +128,6 @@ export interface TemplateStoreState extends TemplateStoreProps {
   unsetField: (path: string) => void;
   duplicateElement: (elIndex: number) => void;
   subDuplicateElement: (elIndex: number, subIndex: number) => void;
-  bulkAddChoices: (elIndex: number, bulkChoices: string) => void;
   importTemplate: (jsonConfig: FormProperties) => void;
   getSchema: () => string;
   getIsPublished: () => boolean;
@@ -367,13 +365,6 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                   element
                 );
               }
-            });
-          },
-          bulkAddChoices: (elIndex, bulkChoices) => {
-            set((state) => {
-              const currentChoices = state.form.elements[elIndex].properties.choices;
-              const choices = newlineToOptions(state.lang, currentChoices, bulkChoices);
-              state.form.elements[elIndex].properties.choices = choices;
             });
           },
           getSchema: () => JSON.stringify(getSchemaFromState(get()), null, 2),
