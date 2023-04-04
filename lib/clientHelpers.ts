@@ -13,6 +13,10 @@ import {
 import { Submission } from "@lib/types/submission-types";
 import { getCsrfToken } from "next-auth/react";
 
+/**
+ * Put any Client related global helper/utils here. The rest of /lib is for anything server related.
+ */
+
 function _buildFormDataObject(formRecord: PublicFormRecord, values: Responses) {
   const formData = {} as { [key: string]: string | FileInputResponse };
 
@@ -243,6 +247,86 @@ function _rehydrateDynamicRowResponses(responses: [string, Response][]) {
 function _rehydrateCheckBoxResponse(response: Response) {
   return response ? JSON.parse(response as string).value : [];
 }
+
+/**
+ * Scrolls an element with overflow to its bottom.
+ *
+ * @param containerEl container element that has the overflow-y set on it
+ * @returns undefined
+ */
+export const scrollToBottom = (containerEl: HTMLElement) => {
+  if (!containerEl) {
+    return;
+  }
+  const scrollHeight = containerEl.scrollHeight;
+  if (containerEl.scrollTo !== undefined) {
+    containerEl.scrollTo({
+      top: scrollHeight,
+      left: 0,
+      behavior: "smooth",
+    });
+  }
+};
+
+/**
+ * Like a UUID but smaller and not as unique. So best to append this to the element name.
+ * e.g. id = `myElementName-${randomId()}`
+ *
+ * @returns a random number
+ */
+export const randomId = () => {
+  return Math.random().toString(36).substr(2, 9);
+};
+
+/**
+ * Format date for: YYYY-MM-DD
+ * @param date to format. Expects a Date type
+ * @returns date formatted
+ */
+export const formatDate = (date: Date): string => {
+  if (!(date instanceof Date)) {
+    return "Unknown";
+  }
+
+  const formattedDate = date.toLocaleDateString("en-CA", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+  return formattedDate;
+};
+
+/**
+ * Get the number of days passed between two dates.
+ * @param endDate Date/timestamp second or end date to use to compare against startDate
+ * @param startDate (optional) Date/timestamp start date for comparison. Defaults to today's date if none passed
+ * @returns number of days passed or -1 for an error
+ */
+export const getDaysPassed = (endDate: Date | number, startDate?: Date | number): number => {
+  // Mainly for unit testing - default to today's date if no date is passed (main case)
+  let date1 = null;
+  if (!startDate) {
+    date1 = new Date();
+  } else if (startDate instanceof Date) {
+    date1 = startDate;
+  } else if (typeof startDate === "number" && String(startDate).length === 13) {
+    date1 = new Date(startDate);
+  } else {
+    return -1; // Invalid date
+  }
+
+  // Allow UTC timestamps also - do a very basic check
+  const date2 =
+    typeof endDate === "number" && String(endDate).length === 13 ? new Date(endDate) : endDate;
+
+  if (!(date1 instanceof Date) || !(date2 instanceof Date)) {
+    return -1; // Invalid date
+  }
+
+  const daysDiff = Math.abs(Number(date2) - Number(date1));
+  const daysPassed = Math.round(daysDiff / (1000 * 60 * 60 * 24));
+  return daysPassed;
+};
 
 export const getDate = (withTime = false) => {
   let date = new Date();

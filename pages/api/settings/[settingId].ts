@@ -18,7 +18,7 @@ const settings = async (
 
     if (!session || req.method === "GET") {
       const setting = await getAppSetting(internalId);
-      return res.status(200).json(setting);
+      return res.status(200).json({ setting });
     }
 
     const ability = createAbility(session);

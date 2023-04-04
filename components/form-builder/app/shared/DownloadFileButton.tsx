@@ -6,7 +6,7 @@ import { Button } from "./Button";
 import { useTemplateStore } from "../../store";
 import { useDialogRef, Dialog } from "../shared";
 import { InfoIcon } from "../../icons";
-import { getDate, slugify } from "@lib/helpers";
+import { getDate, slugify } from "@lib/clientHelpers";
 
 const FormDownloadDialog = ({ handleClose }: { handleClose: () => void }) => {
   const { t } = useTranslation("form-builder");

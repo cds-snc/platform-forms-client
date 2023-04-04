@@ -84,7 +84,7 @@ describe("Settings API", () => {
       mockGetAppSetting.mockResolvedValue("123");
       await settings(req, res);
       expect(res.statusCode).toBe(200);
-      expect(JSON.parse(res._getData())).toEqual("123");
+      expect(JSON.parse(res._getData())).toEqual({ setting: "123" });
     });
   });
   describe("Root settings API path functionality", () => {
@@ -301,7 +301,7 @@ describe("Settings API", () => {
       mockGetAppSetting.mockResolvedValue("123");
       await settings(req, res);
       expect(res.statusCode).toBe(200);
-      expect(JSON.parse(res._getData())).toEqual("123");
+      expect(JSON.parse(res._getData())).toEqual({ setting: "123" });
     });
     test("Can update an application setting", async () => {
       const { req, res } = createMocks({
