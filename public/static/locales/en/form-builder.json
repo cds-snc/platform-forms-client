@@ -34,7 +34,7 @@
     "contact": {
       "description": "Contact description",
       "email": {
-        "description": "Enter your email address like, name@example.com",
+        "description": "Enter your email address. For example: name@example.com",
         "label": "Email address"
       },
       "label": "Contact",
@@ -45,7 +45,7 @@
         "label": "What is your preferred language for communication?"
       },
       "phone": {
-        "description": "Enter your phone number like, 111-222-3333",
+        "description": "Enter your phone number. For example: 111-222-3333",
         "label": "Phone number"
       },
       "title": "How can we contact you?"
@@ -59,7 +59,7 @@
       "title": "Dropdown"
     },
     "dynamicRow": {
-      "description": "The repeating question block provides form fillers with the option to add another set of answers to the section. This block works with one question or a section of questions.",
+      "description": "The repeating question block provides form fillers with the option to add another set of answers to the section. This block works with one question or a section of related questions.",
       "title": "Repeating set"
     },
     "example": "example",
@@ -164,7 +164,7 @@
     "defaultOption": "Government of Canada",
     "default": "(default)",
     "heading": "Branding",
-    "notFound": "Didn’t find your department or agency in the list?",
+    "notFound": "Didn’t find your department or agency on the list?",
     "preview": "Preview of logo",
     "select": "Select a different logo for the top of your form",
     "submitNew": "Submit a new branding option (opens in new tab)",
@@ -218,10 +218,10 @@
   "copyMessage": "(template copied)",
   "date": "Date",
   "defaultElementDescription": {
-    "date": "Enter a date like, mm/dd/yyyy",
-    "email": "Enter an email address like, name@example.com",
+    "date": "Enter a date. For example: mm/dd/yyyy",
+    "email": "Enter an email address. For example: name@example.com",
     "number": "Only enter numbers",
-    "phone": "Enter a phone number like, 111-222-3333"
+    "phone": "Enter a phone number. For example: 111-222-3333"
   },
   "description": "Description",
   "descriptionDescription": "The description appears below the label and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements.",
@@ -229,7 +229,7 @@
   "downloadCSV": "Export as a spreadsheet",
   "downloadResponsesTable": {
     "card": {
-      "noResponses": "You have no responses",
+      "noResponses": "You have not received responses",
       "noResponsesToDownload": "There are no responses available to download."
     },
     "download": {
@@ -239,19 +239,19 @@
       "downloadingXFiles": "Downloading {{fileCount}} files",
       "downloadXSelectedResponses": "Download {{size}} selected responses",
       "errorDownloadingFiles": "Error downloading selected files.",
-      "trySelectingLessFiles": "Max of {{max}} files can be downloadled at once. Please try selecting less files."
+      "trySelectingLessFiles": "Max of {{max}} files can be downloaded at once. Please try selecting fewer files."
     },
     "header": {
-      "confirmReceipt": "Confirm Receipt",
-      "downloadResponse": "Download Response",
-      "lastDownloadedBy": "Last Downloaded By",
+      "confirmReceipt": "Confirm receipt",
+      "downloadResponse": "Download response",
+      "lastDownloadedBy": "Last downloaded by",
       "number": "Number",
       "removal": "Removal",
       "select": "Select",
       "status": "Status",
-      "tableTitle": "Download Responses Table"
+      "tableTitle": "Responses for download"
     },
-    "skipLink": "Skip Download Table",
+    "skipLink": "Skip the responses for download table",
     "status": {
       "confirmed": "Confirmed",
       "done": "Done",
@@ -263,7 +263,7 @@
       "problem": "Problem",
       "unconfirmed": "Unconfirmed",
       "withinXDays": "Within {{daysLeft}} days",
-      "wontRemove": "Won't Remove"
+      "wontRemove": "Will not remove"
     },
     "unknown": "Unknown"
   },
@@ -364,7 +364,7 @@
   "phoneNumber": "Phone number",
   "placeHolderFormTitle": "Form title",
   "previewingIn": "Previewing in",
-  "privacyNoticeDescription": "You are responsible for drafting privacy notices that follow the requirements of the <a href=\"https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309\" target=\"_blank\">Directive on privacy practices</a>.",
+  "privacyNoticeDescription": "<p className=\"mb-4\">Privacy notices provide people completing your form with information about how you are handling their personal information.</p><p className=\"mb-4\">You are responsible for understanding your department or agency's responsibilities related to personal information including drafting privacy notices that follow the requirements in Section 4.2.10 of the Directive on Privacy Practices.</p><p>If you are unsure about how to proceed, we recommend contacting your <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-eng.asp\" target=\"_blank\">access to information and privacy coordinator.</a></p>",
   "privacyStatement": "Privacy statement",
   "provideFeedback": "Provide feedback",
   "publish": "Publish",
@@ -404,21 +404,6 @@
   },
   "required": "Required",
   "responseDelivery": "Response delivery",
-  "responses": {
-    "changeSetup": "Change setup",
-    "confirmReceipt": "Confirm receipt",
-    "navLabel": "Responses",
-    "reportProblems": "Report problems",
-    "title": "Download responses",
-    "unauthenticated": {
-      "createOne": "create one",
-      "noAccount": "If you do not have a GC Forms account,",
-      "signIn": "sign in",
-      "title": "Sign in to access responses",
-      "toAccessPagePart1": "To access this page,",
-      "toAccessPagePart2": "to your GC Forms account."
-    }
-  },
   "richText": "Page text",
   "richTextConfirmationTitle": "Confirmation page and message",
   "richTextEditor": "Rich text editor",
@@ -441,9 +426,10 @@
   "settingsInvalidEmailAlertDesc2": "to register email address.",
   "settingsInvalidEmailAlertTitle": "Government email address",
   "settingsNavHome": "Response delivery",
-  "settingsResponseEmailTitle": "Enter the email address",
+  "settingsResponseEmailTitle": "Email address",
   "settingsResponseHint1": "Submitted responses will be emailed to this inbox.",
   "settingsResponseDelivery": {
+    "selectClassification": "Select the data classification of your form responses",
     "title": "Select a response delivery option",
     "vaultOption": "Download responses from GC Forms",
     "vaultOptionHint": {
@@ -465,11 +451,11 @@
     },
     "emailSubjectEn": {
       "title": "English response subject line",
-      "hint" : "When form responses are submitted in English."
+      "hint": "When form responses are submitted in English."
     },
     "emailSubjectFr": {
       "title": "French response subject line",
-      "hint" : "When form responses are submitted in French."
+      "hint": "When form responses are submitted in French."
     },
     "responseDeliveryHelp": {
       "cta": "Help on choosing an option",
@@ -497,7 +483,8 @@
     "frLink": "French link",
     "link": "Get the link",
     "message": "People you share to will receive an email with an attached JSON file. They can view the JSON form file using GC Forms, no account required.",
-    "messageSent": "The message has been sent",
+    "messageSent": "The message has been sent.",
+    "messageError": "The message failed to send. Please retry sharing.",
     "open": "Open",
     "seePreview": "See a preview of the email message",
     "someone": "Someone",
@@ -566,6 +553,7 @@
   "test": "Test",
   "textFormatting": "Text formatting",
   "thereWasAnErrorPublishing": "There was an error publishing the form",
+  "title": "Title",
   "tooltipFormatBold": "Bold (⌘B)",
   "tooltipFormatBulletList": "Bulleted list",
   "tooltipFormatH2": "Heading 2",
@@ -578,5 +566,35 @@
   "translateTitle": "Enter your translation",
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
-  "unnamedForm": "Unnamed form file"
+  "unnamedForm": "Unnamed form file",
+  "responsesNavLabel": "Responses",
+  "nagware": {
+    "restrictedDownloadAfter35Days": "Downloading will be restricted if unconfirmed responses are older than 35 days.",
+    "unsavedSubmissionsOver21DaysOld": {
+      "title": "Download and confirm receipt of responses",
+      "body1": "There are",
+      "body2": {
+        "moreThan20Responses": "new responses older than 21 days. Download and confirm receipt of 20 overdue new responses at a time.",
+        "lessThan20Responses": "new responses older than 21 days. Download and confirm receipt of all overdue new responses."
+      }
+    },
+    "unconfirmedSubmissionsOver21DaysOld": {
+      "title": "Confirm receipt of responses",
+      "body1": "There are",
+      "body2": "unconfirmed responses older than 21 days. Confirm receipt of all overdue unconfirmed responses."
+    },
+    "unsavedSubmissionsOver35DaysOld": {
+      "title": "Downloading is restricted to overdue responses until they are downloaded and confirmed",
+      "body1": "There are",
+      "body2": {
+        "moreThan20Responses": "new responses over 35 days old. Download and confirm 20 overdue responses at a time before continuing.",
+        "lessThan20Responses": "new responses over 35 days old. Download and confirm all overdue responses before continuing."
+      }
+    },
+    "unconfirmedSubmissionsOver35DaysOld": {
+      "title": "Downloading is restricted until receipt of responses is confirmed",
+      "body1": "There are",
+      "body2": "unconfirmed responses 35 days overdue. Confirm the receipt of all overdue downloaded responses before saving new ones."
+    }
+  }
 }

@@ -3,7 +3,6 @@ import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetServerSideProps } from "next";
 import { getServerSession } from "next-auth";
-import { prisma } from "@lib/integration/prismaConnector";
 
 import { PageProps } from "@lib/types";
 import { getPublicTemplateByID } from "@lib/templates";
@@ -11,6 +10,7 @@ import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { NextPageWithLayout } from "../../_app";
 import { Template, PageTemplate } from "@components/form-builder/app";
 import { BrandingRequestForm } from "@components/form-builder/app/branding/";
+import { getAppSetting } from "@lib/appSettings";
 
 const Page: NextPageWithLayout<PageProps> = ({ publicForm }: PageProps) => {
   const { t } = useTranslation("form-builder");
@@ -39,17 +39,15 @@ export const getServerSideProps: GetServerSideProps = async ({ locale, req, res 
     };
   }
 
-  const result = await prisma.settings.findFirst({
-    select: { brandingRequestFormId: true },
-  });
+  const brandingRequestFormSetting = await getAppSetting("brandingRequestForm");
 
-  if (!result?.brandingRequestFormId) {
+  if (!brandingRequestFormSetting) {
     return {
       notFound: true,
     };
   }
 
-  const brandingRequestForm = await getPublicTemplateByID(result.brandingRequestFormId);
+  const brandingRequestForm = await getPublicTemplateByID(brandingRequestFormSetting);
 
   return {
     props: {

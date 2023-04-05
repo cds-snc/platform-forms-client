@@ -20,12 +20,15 @@ import { isValidGovEmail } from "@lib/validation";
 import { logMessage } from "@lib/logger";
 import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 
 export default function UnlockPublishing() {
   const { t, i18n } = useTranslation(["unlock-publishing", "common"]);
   const [errorState, setErrorState] = useState({ message: "" });
   const [submitting, setSubmitting] = useState(false);
   const [hasRequestedPublishing, setHasRequestedPublishing] = useState(false);
+
+  const { data: session } = useSession();
 
   const handleRequestPublishing = async (
     managerEmail: string,
@@ -57,6 +60,11 @@ export default function UnlockPublishing() {
         "managerEmail-govEmail",
         t("input-validation.validGovEmail", { ns: "common" }),
         (value = "") => isValidGovEmail(value)
+      )
+      .test(
+        "managerEmail-notSameAsUserEmail",
+        t("input-validation.notSameAsUserEmail", { ns: "common" }),
+        (value) => value?.toUpperCase() != session?.user?.email?.toUpperCase()
       ),
     goals: Yup.string().required(t("input-validation.required", { ns: "common" })),
   });

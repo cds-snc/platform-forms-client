@@ -6,6 +6,7 @@ import {
   FormProperties,
   DeliveryOption,
   UserAbility,
+  SecurityAttribute,
 } from "@lib/types";
 import { Prisma } from "@prisma/client";
 import jwt, { Secret } from "jsonwebtoken";
@@ -52,7 +53,7 @@ const _parseTemplate = (template: {
         }),
       },
     }),
-    securityAttribute: template.securityAttribute,
+    securityAttribute: template.securityAttribute as SecurityAttribute,
     ...(process.env.RECAPTCHA_V3_SITE_KEY && {
       reCaptchaID: process.env.RECAPTCHA_V3_SITE_KEY,
     }),
@@ -149,6 +150,24 @@ async function _unprotectedGetTemplateWithAssociatedUsers(
 // Exportable Module Functions
 // ******************************************
 
+export type CreateTemplateCommand = {
+  ability: UserAbility;
+  userID: string;
+  formConfig: FormProperties;
+  name?: string;
+  deliveryOption?: DeliveryOption;
+  securityAttribute?: SecurityAttribute;
+};
+
+export type UpdateTemplateCommand = {
+  ability: UserAbility;
+  formID: string;
+  formConfig: FormProperties;
+  name?: string;
+  deliveryOption?: DeliveryOption;
+  securityAttribute?: SecurityAttribute;
+};
+
 export class TemplateAlreadyPublishedError extends Error {}
 
 /**
@@ -156,33 +175,30 @@ export class TemplateAlreadyPublishedError extends Error {}
  * @param config Form Template configuration
  * @returns Form Record or null if creation was not sucessfull.
  */
-export async function createTemplate(
-  ability: UserAbility,
-  userID: string,
-  formConfig: FormProperties,
-  name?: string,
-  deliveryOption?: DeliveryOption
-): Promise<FormRecord | null> {
+export async function createTemplate(command: CreateTemplateCommand): Promise<FormRecord | null> {
   try {
-    checkPrivileges(ability, [{ action: "create", subject: "FormRecord" }]);
+    checkPrivileges(command.ability, [{ action: "create", subject: "FormRecord" }]);
 
     const createdTemplateId = await prisma.template.create({
       data: {
-        jsonConfig: formConfig as Prisma.JsonObject,
-        ...(name && {
-          name: name,
+        jsonConfig: command.formConfig as Prisma.JsonObject,
+        ...(command.name && {
+          name: command.name,
         }),
-        ...(deliveryOption && {
+        ...(command.deliveryOption && {
           deliveryOption: {
             create: {
-              emailAddress: deliveryOption.emailAddress,
-              emailSubjectEn: deliveryOption.emailSubjectEn,
-              emailSubjectFr: deliveryOption.emailSubjectFr,
+              emailAddress: command.deliveryOption.emailAddress,
+              emailSubjectEn: command.deliveryOption.emailSubjectEn,
+              emailSubjectFr: command.deliveryOption.emailSubjectFr,
             },
           },
         }),
+        ...(command.securityAttribute && {
+          securityAttribute: command.securityAttribute as string,
+        }),
         users: {
-          connect: { id: userID },
+          connect: { id: command.userID },
         },
       },
       select: {
@@ -190,7 +206,7 @@ export async function createTemplate(
       },
     });
 
-    logEvent(ability.userID, { type: "Form", id: createdTemplateId?.id }, "CreateForm");
+    logEvent(command.ability.userID, { type: "Form", id: createdTemplateId?.id }, "CreateForm");
 
     const bearerToken = jwt.sign(
       {
@@ -224,7 +240,12 @@ export async function createTemplate(
     );
   } catch (e) {
     if (e instanceof AccessControlError)
-      logEvent(ability.userID, { type: "Form" }, "AccessDenied", "Attempted to create a Form");
+      logEvent(
+        command.ability.userID,
+        { type: "Form" },
+        "AccessDenied",
+        "Attempted to create a Form"
+      );
 
     return prismaErrors(e, null);
   }
@@ -358,19 +379,6 @@ export async function getFullTemplateByID(
   }
 }
 
-// Get the delivery option object for a specific form using the form ID
-// Returns => DeliveryOption object.
-export async function getTemplateDeliveryOptionByID(
-  formID: string
-): Promise<DeliveryOption | null> {
-  return _unprotectedGetTemplateByID(formID)
-    .then((formRecord) => formRecord?.deliveryOption ?? null)
-    .catch((e) => {
-      logMessage.error(e);
-      return null;
-    });
-}
-
 export async function getTemplateWithAssociatedUsers(
   ability: UserAbility,
   formID: string
@@ -414,18 +422,14 @@ export async function getTemplateWithAssociatedUsers(
  * @param template A Form Record containing updated information
  * @returns The updated form template or null if the record does not exist
  */
-export async function updateTemplate(
-  ability: UserAbility,
-  formID: string,
-  formConfig: FormProperties,
-  name?: string,
-  deliveryOption?: DeliveryOption
-): Promise<FormRecord | null> {
+export async function updateTemplate(command: UpdateTemplateCommand): Promise<FormRecord | null> {
   try {
-    const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(formID);
+    const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(
+      command.formID
+    );
     if (!templateWithAssociatedUsers) return null;
 
-    checkPrivileges(ability, [
+    checkPrivileges(command.ability, [
       {
         action: "update",
         subject: {
@@ -445,28 +449,31 @@ export async function updateTemplate(
     const updatedTemplate = await prisma.template
       .update({
         where: {
-          id: formID,
+          id: command.formID,
         },
         data: {
-          jsonConfig: formConfig as Prisma.JsonObject,
-          ...(name && {
-            name: name,
+          jsonConfig: command.formConfig as Prisma.JsonObject,
+          ...(command.name && {
+            name: command.name,
           }),
-          ...(deliveryOption && {
+          ...(command.deliveryOption && {
             deliveryOption: {
               upsert: {
                 create: {
-                  emailAddress: deliveryOption.emailAddress,
-                  emailSubjectEn: deliveryOption.emailSubjectEn,
-                  emailSubjectFr: deliveryOption.emailSubjectFr,
+                  emailAddress: command.deliveryOption.emailAddress,
+                  emailSubjectEn: command.deliveryOption.emailSubjectEn,
+                  emailSubjectFr: command.deliveryOption.emailSubjectFr,
                 },
                 update: {
-                  emailAddress: deliveryOption.emailAddress,
-                  emailSubjectEn: deliveryOption.emailSubjectEn,
-                  emailSubjectFr: deliveryOption.emailSubjectFr,
+                  emailAddress: command.deliveryOption.emailAddress,
+                  emailSubjectEn: command.deliveryOption.emailSubjectEn,
+                  emailSubjectFr: command.deliveryOption.emailSubjectFr,
                 },
               },
             },
+          }),
+          ...(command.securityAttribute && {
+            securityAttribute: command.securityAttribute as string,
           }),
         },
         select: {
@@ -484,33 +491,45 @@ export async function updateTemplate(
 
     if (updatedTemplate === null) return updatedTemplate;
 
-    if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
+    if (formCache.cacheAvailable) formCache.formID.invalidate(command.formID);
 
     // Log the audit events
-    name &&
+    command.name &&
       logEvent(
-        ability.userID,
-        { type: "Form", id: formID },
+        command.ability.userID,
+        { type: "Form", id: command.formID },
         "ChangeFormName",
-        `Updated Form name to ${name}`
+        `Updated Form name to ${command.name}`
       );
-    deliveryOption &&
+    command.deliveryOption &&
       logEvent(
-        ability.userID,
-        { type: "DeliveryOption", id: formID },
+        command.ability.userID,
+        { type: "DeliveryOption", id: command.formID },
         "ChangeDeliveryOption",
-        `Change Delivery Option to: ${Object.keys(deliveryOption)
-          .map((key) => `${key}: ${deliveryOption[key]}`)
+        `Change Delivery Option to: ${Object.keys(command.deliveryOption)
+          .map((key) => `${key}: ${command.deliveryOption && command.deliveryOption[key]}`)
           .join(", ")}`
       );
-    logEvent(ability.userID, { type: "Form", id: formID }, "UpdateForm", "Form content updated");
+    command.securityAttribute &&
+      logEvent(
+        command.ability.userID,
+        { type: "SecurityAttribute", id: command.formID },
+        "ChangeSecurityAttribute",
+        `Updated security attribute to ${command.securityAttribute}`
+      );
+    logEvent(
+      command.ability.userID,
+      { type: "Form", id: command.formID },
+      "UpdateForm",
+      "Form content updated"
+    );
 
     return _parseTemplate(updatedTemplate);
   } catch (e) {
     if (e instanceof AccessControlError)
       logEvent(
-        ability.userID,
-        { type: "Form", id: formID },
+        command.ability.userID,
+        { type: "Form", id: command.formID },
         "AccessDenied",
         "Attempted to update Form"
       );

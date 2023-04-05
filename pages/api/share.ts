@@ -8,14 +8,13 @@ const shareFormJSON = async (req: NextApiRequest, res: NextApiResponse, props: M
   try {
     const { session } = props as WithRequired<MiddlewareProps, "session">;
 
-    const { emails, form } = req.body;
-
-    const buffer = new Buffer(form);
-    const base64data = buffer.toString("base64");
-
-    if (!emails) {
-      return res.status(404).json({ error: "Malformed request" });
+    const { emails, form, filename }: { emails?: string[]; form?: string; filename?: string } =
+      req.body;
+    if (!emails || !form || !filename) {
+      return res.status(400).json({ error: "Malformed request" });
     }
+
+    const base64data = Buffer.from(form).toString("base64");
 
     const templateID = process.env.TEMPLATE_ID;
     const notifyClient = new NotifyClient(
@@ -24,16 +23,17 @@ const shareFormJSON = async (req: NextApiRequest, res: NextApiResponse, props: M
     );
 
     // Here is the documentation for the `sendEmail` function: https://docs.notifications.service.gov.uk/node.html#send-an-email
-    emails.forEach(async (email: string) => {
-      notifyClient.sendEmail(templateID, email, {
-        personalisation: {
-          application_file: {
-            file: base64data,
-            filename: "form.json",
-            sending_method: "attach",
-          },
-          subject: "Form shared / Formulaire partagé",
-          formResponse: `
+    await Promise.all(
+      emails.map((email: string) => {
+        return notifyClient.sendEmail(templateID, email, {
+          personalisation: {
+            application_file: {
+              file: base64data,
+              filename: `${filename}.json`,
+              sending_method: "attach",
+            },
+            subject: "Form shared | Formulaire partagé",
+            formResponse: `
 **${session.user.name} (${session.user.email}) has shared a form with you.**
 
 To preview this form:
@@ -43,11 +43,23 @@ To preview this form:
   Go to [GC Forms](https://${req.headers.host}). No account needed.
 - **Step 3**:
   Select open a form file.
-      `,
-        },
-        reference: null,
-      });
-    });
+
+****
+
+**${session.user.name} (${session.user.email}) a partagé un formulaire avec vous.**
+
+Pour prévisualiser ce formulaire :
+- **Étape 1 :**
+  Enregistrer le fichier de formulaire JSON ci-joint sur votre ordinateur.
+- **Étape 2 :**
+  Aller sur [Formulaires GC](https://${req.headers.host}). Aucun compte n'est nécessaire.
+- Étape 3 :**
+  Sélectionner "Ouvrir un formulaire".`,
+          },
+          reference: null,
+        });
+      })
+    );
 
     return res.status(200).json({});
   } catch (error) {

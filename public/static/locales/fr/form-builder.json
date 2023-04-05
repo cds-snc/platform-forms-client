@@ -34,7 +34,7 @@
     "contact": {
       "description": "Description du contact",
       "email": {
-        "description": "Entrez votre adresse courriel, comme nom@exemple.com",
+        "description": "Entrez votre adresse courriel. Par exemple : nom@exemple.com",
         "label": "Adresse courriel"
       },
       "label": "Contact",
@@ -45,7 +45,7 @@
         "label": "Quelle est votre langue préférée de communication?"
       },
       "phone": {
-        "description": "Entrez votre numéro de téléphone, comme 111-222-3333",
+        "description": "Entrez votre numéro de téléphone. Par exemple : 111-222-3333",
         "label": "Numéro de téléphone"
       },
       "title": "Comment pouvons-nous vous contacter?"
@@ -59,15 +59,15 @@
       "title": "Liste déroulante"
     },
     "dynamicRow": {
-      "description": "Le bloc de questions répétitives offre aux remplisseurs de formulaires la possibilité d'ajouter une autre série de réponse à la section. Ce bloc fonctionne avec une seule question ou une section de questions.",
-      "title": "Série répétitive de questions"
+      "description": "Le bloc de questions répétées offre aux personnes qui remplissent les formulaires la possibilité d'ajouter un ensemble de réponses similaires à une section. Ce bloc fonctionne avec une seule question ou une section de questions qui se répètent.",
+      "title": "Ensemble de question répétées"
     },
     "example": "exemple",
     "exampleElement": "exemple du bloc",
     "fileInput": {
-      "description": "[FR] File input description",
-      "label": "[FR] File input",
-      "title": "[FR] File input"
+      "description": "Description de l'entrée du fichier",
+      "label": "Entrée de fichier",
+      "title": "Entrée de fichier"
     },
     "firstMiddleLastName": {
       "description": "Description du nom (3 champs)",
@@ -123,7 +123,7 @@
   "addOption": "Ajouter une option",
   "addOptions": "Ajouter ou modifier une liste",
   "addRules": "Ajouter des règles",
-  "addToSet": "Ajouter à la série",
+  "addToSet": "Ajouter à l'ensemble",
   "allRequired": "Tous obligatoires",
   "at": "à",
   "attestation": "Attestation légale",
@@ -164,10 +164,10 @@
     "defaultOption": "Gouvernement du Canada",
     "default": "(par défault)",
     "heading": "Image de marque",
-    "notFound": "[FR] Didn’t find your department or agency in the list?",
+    "notFound": "Vous ne trouvez pas votre département ou votre agence dans la liste?",
     "preview": "Prévisualisation",
     "select": "Sélectionnez l’image de marque de votre formulaire",
-    "submitNew": "[FR] Submit a new branding option (opens in new tab)",
+    "submitNew": "Proposer une nouvelle option d’image de marque (ouvre un nouvel onglet)",
     "text1": "Formulaires GC affiche par défaut la signature du gouvernement du Canada dans l’en-tête de votre formulaire. Si nécessaire, vous pouvez modifier l’image de marque de ce formulaire."
   },
   "cancel": "Annuler  ",
@@ -218,10 +218,10 @@
   "copyMessage": "Le formulaire a été téléchargé avec succès.",
   "date": "Date",
   "defaultElementDescription": {
-    "date": "Entrez une date comme mm/dd/yyyy",
-    "email": "Entrez une adresse courriel comme name@example.com",
-    "number": "N'entrez que des nombres",
-    "phone": "Entrez un numéro de téléphone comme 111-222-3333"
+    "date": "Entrez une date. Par exemple : mm/jj/aaaa",
+    "email": "Entrez une adresse courriel. Par exemple : nom@exemple.com",
+    "number": "N'entrez que des chiffres",
+    "phone": "Entrez un numéro de téléphone. Par exemple : 111-222-3333"
   },
   "description": "Description ",
   "descriptionDescription": "La description apparaît sous l'étiquette, et avant le champ. Elle est utilisée pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de mise en forme.",
@@ -229,47 +229,47 @@
   "downloadCSV": "Exporter en fichier CSV",
   "downloadResponsesTable": {
     "card": {
-      "noResponses": "You have no responses[fr]",
-      "noResponsesToDownload": "There are no responses available to download.[fr]"
+      "noResponses": "Vous n'avez pas reçu de réponses",
+      "noResponsesToDownload": "Il n'y a pas de réponses disponibles pour être téléchargées."
     },
     "download": {
-      "atLeastOneFile": "At least one file must be selected to download.[fr]",
-      "downloadComplete": "Download complete[fr]",
-      "downloading": "Downloading[fr]",
-      "downloadingXFiles": "Downloading {{fileCount}} files[fr]",
-      "downloadXSelectedResponses": "Download {{size}} selected responses[fr]",
-      "errorDownloadingFiles": "Error downloading selected files.[fr]",
-      "trySelectingLessFiles": "Max of {{max}} files can be downloadled at once. Please try selecting less files.[fr]"
+      "atLeastOneFile": "Au moins un fichier doit être sélectionné pour être téléchargé.",
+      "downloadComplete": "Téléchargement terminé",
+      "downloading": "Téléchargement en cours",
+      "downloadingXFiles": "Téléchargement de {{fileCount}} fichiers",
+      "downloadXSelectedResponses": "Télécharger les {{size}} réponses selectionnées",
+      "errorDownloadingFiles": "Erreur lors du téléchargement des fichiers sélectionnés",
+      "trySelectingLessFiles": "Un maximum de {{max}} fichiers peuvent être téléchargées à la fois. Veuillez sélectionner moins de fichiers."
     },
     "header": {
-      "confirmReceipt": "Confirm Receipt[fr]",
-      "downloadResponse": "Download Response[fr]",
-      "lastDownloadedBy": "Last Downloaded By[fr]",
-      "number": "Number[fr]",
-      "removal": "Removal[fr]",
-      "select": "Select[fr]",
-      "status": "Status[fr]",
-      "tableTitle": "Download Responses Table[fr]"
+      "confirmReceipt": "Confirmer la réception",
+      "downloadResponse": "Télécharger la réponse",
+      "lastDownloadedBy": "Dernier téléchargement par",
+      "number": "Numéro",
+      "removal": "Suppresssion",
+      "select": "Sélectionner",
+      "status": "État",
+      "tableTitle": "Réponses à télécharger"
     },
-    "skipLink": "Skip Download Table[fr]",
+    "skipLink": "Sauter le tableau avec les réponses à télécharger",
     "status": {
-      "confirmed": "Confirmed[fr]",
-      "done": "Done[fr]",
-      "downloaded": "Downloaded[fr]",
-      "new": "New[fr]",
-      "notDownloaded": "Not downloaded[fr]",
-      "notSet": "Not set[fr]",
-      "overdue": "Overdue[fr]",
-      "problem": "Problem[fr]",
-      "unconfirmed": "Unconfirmed[fr]",
-      "withinXDays": "Within {{daysLeft}} days[fr]",
-      "wontRemove": "Won't Remove[fr]"
+      "confirmed": "Confirmée",
+      "done": "Complétée",
+      "downloaded": "Téléchargée",
+      "new": "Nouveauté",
+      "notDownloaded": "Non téléchargée",
+      "notSet": "Non réglée",
+      "overdue": "En retard",
+      "problem": "Problème",
+      "unconfirmed": "Non confirmée",
+      "withinXDays": "Dans {{daysLeft}} jours",
+      "wontRemove": "Ne sera pas supprimée"
     },
-    "unknown": "Unknown[fr]"
+    "unknown": "Inconnue"
   },
   "dropdown": "Liste déroulante",
   "duplicate": "Dupliquer",
-  "dyanamicRow": "Série répétitive de questions",
+  "dyanamicRow": "Ensemble de questions répétées",
   "edit": "Modifier",
   "editingIn": "Modifier en :",
   "editLink": "Modifier un lien  ",
@@ -364,7 +364,7 @@
   "phoneNumber": "Numéro de téléphone",
   "placeHolderFormTitle": "Titre du formulaire",
   "previewingIn": "Prévisualiser en",
-  "privacyNoticeDescription": "Vous êtes chargé de rédiger un avis de confidentialité conforme aux exigences de la <a href=\"https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309\" target=\"_blank\">directive sur les pratiques relatives à la protection de la vie privée.</a>",
+  "privacyNoticeDescription": "<p className=\"mb-4\">Les avis de confidentialité fournissent aux personnes qui remplissent votre formulaire des informations sur la manière dont vous traitez leurs informations personnelles.</p><p className=\"mb-4\">C’est votre responsabilite de bien connaitre les exigences de votre ministère ou organisme en matière de renseignements personnels, y compris la rédaction d'avis de confidentialité conformes aux obligations énoncées à la section 4.2.10 de la Directive sur les pratiques en matière de protection de la vie privée.</p><p>Si vous n'êtes pas sûr de la marche à suivre, nous vous recommandons de contacter votre <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-fra.asp\" target=\"_blank\">coordinateur de l'accès à l'information et de la protection de la vie privée</a>.</p>",
   "privacyStatement": "Déclaration de confidentialité ",
   "provideFeedback": "Donner votre avis",
   "publish": "Publier",
@@ -384,14 +384,14 @@
   "questions": "Questions",
   "questionSet": {
     "addAnother": {
-      "description": "Créez une étiquette descriptive pour le bouton afin d'indiquer aux personnes remplissant le formulaire qu'elles peuvent ajouter un autre ensemble de réponses. Par exemple, ajouter « une autre adresses ».",
+      "description": "Créez une étiquette descriptive pour le bouton afin d'indiquer aux personnes remplissant le formulaire qu'elles peuvent ajouter un autre ensemble de réponses. Par exemple, ajouter « une autre adresse ».",
       "placeholder": "Ajouter",
       "title": "Bouton"
     }
   },
   "questionTitle": "Titre de question",
   "remove": "Supprimer",
-  "removeFromSet": "Enlever de la série",
+  "removeFromSet": "Enlever de l'ensemble",
   "removeOption": "Supprimer l'option :  ",
   "requestSuccess": {
     "backToForms": "Retourner à Formulaires GC",
@@ -404,21 +404,6 @@
   },
   "required": "Obligatoire",
   "responseDelivery": "Tester la réception des réponses",
-  "responses": {
-    "changeSetup": "Changer la configuration",
-    "confirmReceipt": "Confirmer la réception",
-    "navLabel": "Réponses",
-    "reportProblems": "Signaler des problèmes",
-    "title": "Télécharger les réponses",
-    "unauthenticated": {
-      "createOne": "créez-en un",
-      "noAccount": "Si vous n'avez pas de compte Formulaires GC,",
-      "signIn": "connectez-vous",
-      "title": "Se connecter pour accéder aux réponses",
-      "toAccessPagePart1": "Pour accéder à cette page,",
-      "toAccessPagePart2": "à votre compte Formulaires GC"
-    }
-  },
   "richText": "Section texte ",
   "richTextConfirmationTitle": "Page et message de confirmation",
   "richTextEditor": "Éditeur de texte enrichi",
@@ -440,37 +425,38 @@
   "settingsInvalidEmailAlertDesc1": "Doit être une adresse courriel du gouvernement du Canada.",
   "settingsInvalidEmailAlertDesc2": "pour enregistrer l'adresse courriel.",
   "settingsInvalidEmailAlertTitle": "Adresse courriel du gouvernement",
-  "settingsNavHome": "[FR] Response delivery",
-  "settingsResponseEmailTitle": "[FR] Enter the email address",
-  "settingsResponseHint1": "[FR] Submitted responses will be emailed to this inbox.",
+  "settingsNavHome": "Livraison des réponses",
+  "settingsResponseEmailTitle": "Entrez l’adresse courriel",
+  "settingsResponseHint1": "Les réponses soumises seront envoyées par courriel à cette boîte de réception.",
   "settingsResponseTitle": "Destination de livraison des réponses.",
   "settingsResponseDelivery": {
-    "title": "[FR] Select a response delivery option",
-    "vaultOption": "[FR] Download responses from GC Forms",
+    "selectClassification": "Sélectionnez la classification des données des réponses de votre formulaire",
+    "title": "Sélectionnez une option de livraison des réponses",
+    "vaultOption": "Télécharger les réponses de Formulaires GC",
     "vaultOptionHint": {
-      "text1": "[FR] Submitted responses will appear on the",
-      "text2": "[FR] Responses page"
+      "text1": " Les réponses reçues apparaîtront à la page Réponses",
+      "text2": "la page Réponses"
     },
-    "emailOption": "[FR] Email the responses to an inbox",
-    "saveButton": "[FR] Save changes",
-    "savedSuccessMessage": "[FR] Your changes have been saved.",
-    "savedErrorMessage": "[FR] There was an error saving your changes. Please try again.",
+    "emailOption": "Les réponses soumises seront envoyées par courriel à cette boîte de réception.",
+    "saveButton": "Enregistrer les modifications",
+    "savedSuccessMessage": "Vos modifications ont été enregistrées.",
+    "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Veuillez réessayer.",
     "card": {
-      "title": "[FR] You cannot change settings",
-      "text1": "[FR] To change the settings of this form,",
-      "text2": "[FR] sign into your account",
-      "text3": "[FR] If you do not have a GC Forms account, ",
-      "text4": "[FR] create one now",
-      "signinButton": "[FR] Sign In",
-      "createButton": "[FR] Create an account"
+      "title": "Vous ne pouvez pas modifier les paramètres",
+      "text1": "Pour modifier les paramètres de ce formulaire,",
+      "text2": "connectez-vous",
+      "text3": "Si vous n’avez pas de compte Formulaires GC, ",
+      "text4": "créez-en un maintenant",
+      "signinButton": "Se connecter",
+      "createButton": "Créer un compte"
     },
     "emailSubjectEn": {
-      "title": "[FR] English response subject line",
-      "hint": "[FR] When form responses are submitted in English."
+      "title": "Ligne d'objet en anglais",
+      "hint": "Lorsque les réponses au formulaire sont soumises en anglais."
     },
     "emailSubjectFr": {
-      "title": "[FR] French response subject line",
-      "hint": "[FR] When form responses are submitted in French."
+      "title": "Ligne d'objet en français",
+      "hint": "Lorsque les réponses au formulaire sont soumises en français."
     },
     "responseDeliveryHelp": {
       "cta": "Conseils pour le choix d’une option",
@@ -498,7 +484,8 @@
     "frLink": "Lien en français",
     "link": "Obtenir le lien",
     "message": "Les personnes avec qui vous partagez recevront un courriel avec un fichier JSON joint. Elles peuvent afficher le fichier JSON à l'aide de Formulaires GC, sans compte requis.",
-    "messageSent": "Le message a été envoyé",
+    "messageSent": "Le message a été envoyé.",
+    "messageError": "Le message n'a pas pu être envoyé. Veuillez essayer de partager à nouveau.",
     "open": "Ouvrir",
     "seePreview": "Voir un aperçu du message courriel",
     "someone": "Quelqu'un",
@@ -566,6 +553,7 @@
   },
   "test": "Tester",
   "textFormatting": "Mise en forme du texte ",
+  "title": "Titre",
   "thereWasAnErrorPublishing": "Une erreur s'est produite lors de la publication de votre formulaire",
   "tooltipFormatBold": "En gras (⌘B)",
   "tooltipFormatBulletList": "Liste à puces",
@@ -579,5 +567,35 @@
   "translateTitle": "Entrer la traduction",
   "unlockPublishing": "Soumettre",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
-  "unnamedForm": "Formulaire sans titre"
+  "unnamedForm": "Formulaire sans titre",
+  "responsesNavLabel": "Réponses",
+  "nagware": {
+    "restrictedDownloadAfter35Days": "Le téléchargement sera limité si les réponses non confirmées ont plus de 35 jours de retard.",
+    "unsavedSubmissionsOver21DaysOld": {
+      "title": "Téléchargez et confirmez la réception des réponses",
+      "body1": "Il y a",
+      "body2": {
+        "moreThan20Responses": "nouvelles réponses ayant plus de 21 jours de retard. Téléchargez et confirmez la réception de 20 nouvelles réponses en retard à la fois.",
+        "lessThan20Responses": "nouvelles réponses ayant plus de 21 jours de retard. Téléchargez et confirmez la réception de toute nouvelle réponse."
+      }
+    },
+    "unconfirmedSubmissionsOver21DaysOld": {
+      "title": "Confirmez la réception des réponses",
+      "body1": "Il y a",
+      "body2": "réponses non confirmées ayant plus de 21 jours de retard. Confirmez la réception de toute réponse non confirmée en retard."
+    },
+    "unsavedSubmissionsOver35DaysOld": {
+      "title": "Le téléchargement est limité jusqu'à ce que la réception des réponses soit confirmée",
+      "body1": "Il y a",
+      "body2": {
+        "moreThan20Responses": "nouvelles réponses ayant plus de 35 jours de retard. Téléchargez et confirmez 20 réponses en retard à la fois avant de continuer.",
+        "lessThan20Responses": "nouvelles réponses ayant plus de 35 jours de retard. Téléchargez et confirmez toute réponse en retard avant de continuer."
+      }
+    },
+    "unconfirmedSubmissionsOver35DaysOld": {
+      "title": "Le téléchargement est limité aux réponses en retard jusqu'à ce qu'elles soient téléchargées et confirmées",
+      "body1": "Il y a",
+      "body2": "réponses non confirmées avec 35 jours de retard ou plus. Confirmez la réception de toute réponse téléchargée en retard avant d'en enregistrer de nouvelles."
+    }
+  }
 }

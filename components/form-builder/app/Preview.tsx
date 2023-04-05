@@ -8,7 +8,7 @@ import { LocalizedElementProperties, LocalizedFormProperties } from "../types";
 import { Button, Form } from "@components/forms";
 import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
-import { useTemplateApi } from "../hooks";
+import { useTemplateContext } from "../hooks";
 import { BackArrowIcon } from "../icons";
 import { PublicFormRecord } from "@lib/types";
 
@@ -43,7 +43,7 @@ export const Preview = () => {
   const { t } = useTranslation(["common", "form-builder"]);
   const language = translationLanguagePriority;
   const currentForm = getRenderedForm(formRecord, language, t);
-  const { saveForm } = useTemplateApi();
+  const { saveForm } = useTemplateContext();
   const [sent, setSent] = useState<string | null>();
   const saved = useRef(false);
 
@@ -88,7 +88,7 @@ export const Preview = () => {
         {status !== "authenticated" ? (
           <div className="bg-purple-200 p-2 inline-block mb-1">
             <Markdown options={{ forceBlock: true }}>
-              {t("signInToTest", { ns: "form-builder" })}
+              {t("signInToTest", { ns: "form-builder", lng: language })}
             </Markdown>
           </div>
         ) : email ? (
@@ -149,13 +149,14 @@ export const Preview = () => {
                   <Button
                     type="submit"
                     id="SubmitButton"
+                    className="mb-4"
                     onClick={(e) => {
                       if (status !== "authenticated") {
                         return preventSubmit(e);
                       }
                     }}
                   >
-                    {t("submitButton", { ns: "common" })}
+                    {t("submitButton", { ns: "common", lng: language })}
                   </Button>
                 </span>
                 {status !== "authenticated" && (
@@ -164,7 +165,7 @@ export const Preview = () => {
                     {...getLocalizationAttribute()}
                   >
                     <Markdown options={{ forceBlock: true }}>
-                      {t("signInToTest", { ns: "form-builder" })}
+                      {t("signInToTest", { ns: "form-builder", lng: language })}
                     </Markdown>
                   </div>
                 )}

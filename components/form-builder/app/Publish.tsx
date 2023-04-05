@@ -1,14 +1,15 @@
-import { useTranslation } from "next-i18next";
-import { useTemplateStore } from "../store/useTemplateStore";
 import React, { useCallback, useState } from "react";
-import { useAllowPublish } from "../hooks/useAllowPublish";
-import { usePublish } from "../hooks/usePublish";
-import { CancelIcon, CircleCheckIcon, WarningIcon, LockIcon } from "../icons";
-import { Button } from "./shared/Button";
-import { useRouter } from "next/router";
-import { PublishNoAuth } from "./PublishNoAuth";
 import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
+
+import { useTemplateStore } from "../store";
+import { useTemplateApi, useAllowPublish } from "../hooks";
+import { CancelIcon, CircleCheckIcon, WarningIcon, LockIcon } from "../icons";
+import { Button } from "./shared";
+import { PublishNoAuth } from "./PublishNoAuth";
+import Link from "next/link";
 
 export const Publish = () => {
   const { t } = useTranslation("form-builder");
@@ -21,27 +22,32 @@ export const Publish = () => {
   } = useAllowPublish();
 
   const [error, setError] = useState(false);
+  const { i18n } = useTranslation("common");
 
-  const { id, setId, getSchema, getName, getDeliveryOption } = useTemplateStore((s) => ({
+  const { id, setId, getSchema, getName } = useTemplateStore((s) => ({
     id: s.id,
     setId: s.setId,
     getSchema: s.getSchema,
     getName: s.getName,
-    getDeliveryOption: s.getDeliveryOption,
   }));
 
   const Icon = ({ checked }: { checked: boolean }) => {
     return checked ? (
-      <CircleCheckIcon className="w-9 fill-green-700 inline-block" title={t("completed")} />
+      <CircleCheckIcon className="mr-2 w-9 fill-green-700 inline-block" title={t("completed")} />
     ) : (
-      <CancelIcon className="w-9 fill-red-700 w-9 h-9 inline-block" title={t("incomplete")} />
+      <CancelIcon className="mr-2 w-9 fill-red-700 w-9 h-9 inline-block" title={t("incomplete")} />
     );
   };
 
-  const { uploadJson } = usePublish();
+  const { save } = useTemplateApi();
 
   const handlePublish = async () => {
-    const result = await uploadJson(getSchema(), getName(), getDeliveryOption(), id, true);
+    const result = await save({
+      jsonConfig: getSchema(),
+      name: getName(),
+      formID: id,
+      publish: true,
+    });
 
     if (result && result?.error) {
       setError(true);
@@ -53,7 +59,12 @@ export const Publish = () => {
   };
 
   const handleSaveAndRequest = useCallback(async () => {
-    const result = await uploadJson(getSchema(), getName(), getDeliveryOption(), id, false);
+    const result = await save({
+      jsonConfig: getSchema(),
+      name: getName(),
+      formID: id,
+      publish: false,
+    });
 
     if (result && result?.error) {
       setError(true);
@@ -61,7 +72,7 @@ export const Publish = () => {
     }
 
     router.push({ pathname: `/unlock-publishing` });
-  }, [getSchema, getName, getDeliveryOption, id, uploadJson, router]);
+  }, [getSchema, getName, id, save, router]);
 
   if (status !== "authenticated") {
     return <PublishNoAuth />;
@@ -92,19 +103,28 @@ export const Publish = () => {
 
       <ul className="list-none p-0">
         <li className="mb-4 mt-4">
-          <Icon checked={title} /> {t("formTitle")}
+          <Icon checked={title} />
+          <Link href={`/${i18n.language}/form-builder/edit#formTitle`}>{t("formTitle")}</Link>
         </li>
         <li className="mb-4 mt-4">
-          <Icon checked={questions} /> {t("questions")}
+          <Icon checked={questions} />
+          <Link href={`/${i18n.language}/form-builder/edit`}>{t("questions")}</Link>
         </li>
         <li className="mb-4 mt-4">
-          <Icon checked={privacyPolicy} /> {t("privacyStatement")}
+          <Icon checked={privacyPolicy} />
+          <Link href={`/${i18n.language}/form-builder/edit#privacy-text`}>
+            {t("privacyStatement")}
+          </Link>
         </li>
         <li className="mb-4 mt-4">
-          <Icon checked={confirmationMessage} /> {t("formConfirmationMessage")}
+          <Icon checked={confirmationMessage} />
+          <Link href={`/${i18n.language}/form-builder/edit#confirmation-text`}>
+            {t("formConfirmationMessage")}
+          </Link>
         </li>
         <li className="mb-4 mt-4">
-          <Icon checked={translate} /> {t("translate")}
+          <Icon checked={translate} />
+          <Link href={`/${i18n.language}/form-builder/edit/translate`}>{t("translate")}</Link>
         </li>
       </ul>
 

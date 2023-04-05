@@ -9,14 +9,12 @@ export const PanelBodySub = ({
   elements,
   elIndex,
   onQuestionChange,
-  onElementChange,
   onRequiredChange,
 }: {
   item: FormElementWithIndex;
   elements: FormElement[];
   elIndex: number;
   onQuestionChange: (elIndex: number, subIndex: number, val: string, lang: Language) => void;
-  onElementChange: (id: string, subIndex: number) => void;
   onRequiredChange: (subIndex: number, val: boolean) => void;
 }) => {
   const onQuestionChangeSub = (subIndex: number, val: string, lang: Language) => {
@@ -29,7 +27,6 @@ export const PanelBodySub = ({
         elements={elements}
         elIndex={elIndex}
         item={item}
-        onElementChange={onElementChange}
         onQuestionChange={onQuestionChangeSub}
         onRequiredChange={onRequiredChange}
       />

@@ -1,5 +1,4 @@
-import { Language } from "./types";
-import { FormElement, FormProperties, PropertyChoices, FormElementTypes } from "@lib/types";
+import { FormElement, FormProperties, FormElementTypes } from "@lib/types";
 import { TemplateStoreState } from "./store/useTemplateStore";
 
 export const completeEmailAddressRegex =
@@ -74,37 +73,18 @@ export const sortByLayout = ({
   });
 };
 
-export const newlineToOptions = (
-  lang: Language,
-  currentChoices: PropertyChoices[] = [],
-  bulkChoices: string
-) => {
-  const cleanedBulkChoices = bulkChoices.endsWith("\n") ? bulkChoices.slice(0, -1) : bulkChoices;
-  const choices = cleanedBulkChoices.split("\n");
-
-  let newChoices = [...currentChoices];
-
-  choices.forEach((choice, i) => {
-    if (newChoices[i] !== undefined) {
-      newChoices[i][lang] = choice;
-    } else {
-      if (choice == "") return;
-
-      const obj = { en: "", fr: "" };
-      obj[lang] = choice;
-      newChoices.push(obj);
-    }
-  });
-
-  // truncate the "old" choices to remove left overs
-  newChoices = newChoices.slice(0, choices.length);
-
-  return newChoices;
-};
-
 export const getSchemaFromState = (state: TemplateStoreState) => {
   const {
-    form: { titleEn, titleFr, introduction, privacyPolicy, confirmation, elements, brand },
+    form: {
+      titleEn,
+      titleFr,
+      introduction,
+      privacyPolicy,
+      confirmation,
+      elements,
+      brand,
+      securityAttribute,
+    },
   } = state;
 
   const form: FormProperties = {
@@ -115,17 +95,30 @@ export const getSchemaFromState = (state: TemplateStoreState) => {
     confirmation,
     layout: elements.map((element) => element.id),
     elements,
+    securityAttribute,
     brand,
   };
 
   return form;
 };
 
-// @todo this will need to be updated to support other locales i.e. fr-CA
+export const timeFr = (updatedAt: number | undefined, locale = "fr-CA") => {
+  const date = new Date(updatedAt || 0);
+  const timeOptions: Intl.DateTimeFormatOptions = {
+    hour: "numeric",
+    minute: "numeric",
+    hour12: false,
+  };
+
+  let timeStr = date.toLocaleDateString(locale, timeOptions);
+  timeStr = timeStr.replace(timeStr.split(" ", 1)[0], "");
+  return timeStr;
+};
+
 export const formatDateTime = (updatedAt: number | undefined, locale = "en-CA") => {
   const date = new Date(updatedAt || 0);
   const options: Intl.DateTimeFormatOptions = {
-    year: "2-digit",
+    year: "numeric",
     month: "2-digit",
     day: "2-digit",
     hour: "numeric",
@@ -133,7 +126,9 @@ export const formatDateTime = (updatedAt: number | undefined, locale = "en-CA") 
     hour12: true,
   };
 
-  const localeString = date.toLocaleDateString(locale, options);
+  // force this to be en-CA for now
+  const localeString = date.toLocaleDateString("en-CA", options);
+
   const parts = localeString.split(",");
 
   if (parts.length < 2) {
@@ -141,7 +136,14 @@ export const formatDateTime = (updatedAt: number | undefined, locale = "en-CA") 
   }
 
   const yearMonthDay = parts[0];
-  const time = parts[1].replace(/\./g, "").trim();
+
+  // en
+  let time = parts[1].replace(/\./g, "").trim();
+  // fr
+  if (locale === "fr-CA") {
+    time = timeFr(updatedAt, locale);
+  }
+
   return [yearMonthDay, time];
 };
 

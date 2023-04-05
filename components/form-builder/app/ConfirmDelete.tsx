@@ -1,11 +1,10 @@
 import React, { useCallback } from "react";
 import { useTranslation } from "next-i18next";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
 
 import { ConfirmFormDeleteDialog } from "./shared";
 import { clearTemplateStore } from "../store";
 import { useDeleteForm } from "../hooks";
+import { toast, ToastContainer } from "./shared/Toast";
 
 export const ConfirmDelete = ({
   show,
@@ -24,10 +23,9 @@ export const ConfirmDelete = ({
   const { handleDelete } = useDeleteForm();
 
   const handleConfirm = useCallback(async () => {
-    const position = toast.POSITION.TOP_CENTER;
     const result = await handleDelete(id);
     if (result && "error" in result) {
-      toast.error(t("formDeletedDialogMessageFailed"), { position, autoClose: false });
+      toast.error(t("formDeletedDialogMessageFailed"));
       return;
     }
 

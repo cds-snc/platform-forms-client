@@ -14,15 +14,17 @@ export const ShareModal = ({
   handleAddType?: (type?: FormElementTypes) => void;
   handleClose: () => void;
 }) => {
-  const { t } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation("form-builder");
   const [emails, setEmails] = useState<string[]>([]);
   const [status, setStatus] = useState<"ready" | "sent" | "sending" | "error">("ready");
   const { data } = useSession();
 
   const dialog = useDialogRef();
 
-  const { getSchema } = useTemplateStore((s) => ({
+  const { getSchema, name, form } = useTemplateStore((s) => ({
     getSchema: s.getSchema,
+    name: s.name,
+    form: s.form,
   }));
 
   const validateEmail = (email: string) => {
@@ -32,16 +34,21 @@ export const ShareModal = ({
 
   const handleSend = async () => {
     setStatus("sending");
-    await axios({
-      url: "/api/share",
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: { form: getSchema(), emails: emails },
-      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-    });
-    setStatus("sent");
+    const filename = name ? name : i18n.language === "fr" ? form.titleFr : form.titleEn;
+    try {
+      await axios({
+        url: "/api/share",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: { name, form: getSchema(), emails: emails, filename },
+        timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+      });
+      setStatus("sent");
+    } catch (err) {
+      setStatus("error");
+    }
   };
 
   const actions = (
@@ -101,6 +108,11 @@ export const ShareModal = ({
         className="overflow-y-scroll max-h-[80%]"
       >
         <div className="py-4">
+          {status === "error" && (
+            <>
+              <p className="text-red-default">{t("share.messageError")}</p>
+            </>
+          )}
           {status === "sent" && (
             <>
               <p>{t("share.messageSent")}</p>

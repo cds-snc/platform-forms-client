@@ -9,6 +9,7 @@ import { useTemplateStore, TemplateStoreProvider } from "@components/form-builde
 import { LeftNavigation, Header } from "@components/form-builder/app";
 import { Language } from "../types";
 import { TemplateApiProvider } from "../hooks";
+import { ToastContainer } from "./shared/Toast";
 
 export const Template = ({
   page,
@@ -69,6 +70,7 @@ export const PageTemplate = ({
   // Wait until the Template Store has fully hydrated before rendering the page
   return hasHydrated ? (
     <div className="mx-4 laptop:mx-32 desktop:mx-64 grow shrink-0 basis-auto">
+      <ToastContainer />
       <div>
         {leftNav && <LeftNavigation />}
         <>

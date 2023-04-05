@@ -9,6 +9,7 @@ export type {
   DeliveryOption,
   FormRecord,
   FormProperties,
+  SecurityAttribute,
 } from "./form-types";
 export { FormElementTypes } from "./form-types";
 
@@ -53,3 +54,6 @@ export type { Abilities, Privilege, UserAbility, Permission, AnyObject } from ".
 
 // Utility type creator
 export type TypeOmit<T, K extends PropertyKey> = { [P in keyof T as Exclude<P, K>]: T[P] };
+
+export type { NagwareSubmission, NagwareResult } from "./nagware-types";
+export { NagLevel } from "./nagware-types";

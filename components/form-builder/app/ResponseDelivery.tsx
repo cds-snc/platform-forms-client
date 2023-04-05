@@ -4,13 +4,13 @@ import { useTranslation } from "next-i18next";
 
 import { SetResponseDelivery } from "./SetResponseDelivery";
 import { SettingsLoggedOut } from "./SettingsLoggedOut";
-import { useTemplateApi } from "../hooks";
+import { useTemplateContext } from "../hooks";
 import { useTemplateStore } from "../store/useTemplateStore";
 
 export const ResponseDelivery = () => {
   const { t } = useTranslation("form-builder");
   const { status } = useSession();
-  const { saveForm } = useTemplateApi();
+  const { saveForm } = useTemplateContext();
   const saved = useRef(false);
 
   const { id, setId } = useTemplateStore((s) => ({

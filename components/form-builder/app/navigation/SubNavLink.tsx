@@ -6,9 +6,10 @@ export const SubNavLink = ({ href, children }: { children: ReactElement; href: s
   const baseClasses =
     "no-underline !shadow-none border-black border-1 rounded-[100px] pt-1 pb-2 laptop:py-2 px-5 mr-3 mb-4";
 
-  const activeClasses = "!text-black focus:!text-white [&_svg]:focus:fill-white";
   const inactiveClasses =
-    "bg-[#475569] !text-white [&_svg]:fill-white ${svgStroke} focus:text-white [&_svg]:focus:stroke-white [&_svg]:hover:stroke-white hover:bg-gray-600 hover:!text-white-default";
+    "!text-black focus:!text-white [&_svg]:focus:fill-white [&_svg]:hover:stroke-white [&_svg]:hover:fill-white hover:bg-gray-600 hover:!text-white-default";
+  const activeClasses =
+    "bg-[#475569] !text-white [&_svg]:fill-white ${svgStroke} focus:text-white [&_svg]:focus:stroke-white";
 
   const { asPath, isReady, activePathname } = useActivePathname();
   const [active, setActive] = useState(false);

@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState, useRef } from "react";
+import React, { ReactElement, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import { getFullTemplateByID } from "@lib/templates";
@@ -7,8 +7,6 @@ import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { NextPageWithLayout } from "@pages/_app";
 import { PageTemplate, Template } from "@components/form-builder/app";
-import { Button, useDialogRef, Dialog } from "@components/form-builder/app/shared";
-import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 import { GetServerSideProps } from "next";
 import { FormRecord, VaultSubmissionList } from "@lib/types";
 import { listAllSubmissions } from "@lib/vault";
@@ -17,130 +15,36 @@ import Head from "next/head";
 import { checkOne } from "@lib/cache/flags";
 import Link from "next/link";
 import { Card } from "@components/globals/card/Card";
-import { useRouter } from "next/router";
-import { DownloadTable } from "@components/form-builder/app/DownloadTable/DownloadTable";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
-import { logMessage } from "@lib/logger";
-import axios from "axios";
+import { DownloadTable } from "@components/form-builder/app/responses/DownloadTable";
+import { DownloadTableDialog } from "@components/form-builder/app/responses/DownloadTableDialog";
+import { isFormId, isUUID } from "@lib/validation";
+import { NagwareResult } from "@lib/types";
+import { detectOldUnprocessedSubmissions } from "@lib/nagware";
+import { Nagware } from "@components/form-builder/app/Nagware";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
   formId?: string;
+  nagwareResult: NagwareResult | null;
 }
+
+// TODO: move to an app setting variable
+const MAX_CONFIRMATION_COUNT = 20;
+const MAX_REPORT_COUNT = 20;
 
 const Responses: NextPageWithLayout<ResponsesProps> = ({
   vaultSubmissions,
   formId,
+  nagwareResult,
 }: ResponsesProps) => {
-  const { t } = useTranslation("form-builder");
+  const { t } = useTranslation("form-builder-responses");
   const { status } = useSession();
-  const router = useRouter();
   const isAuthenticated = status === "authenticated";
-  const toastPosition = toast.POSITION.TOP_CENTER;
-  const MAX_FILE_DOWNLOADS = 20;
-
-  const checkedItems = useRef(new Map());
-
-  const [selectionStatus, setSelectionStatus] = useState(
-    new Map(vaultSubmissions.map((submission) => [submission.name, false]))
-  );
-
-  useEffect(() => {
-    const checkedMap = new Map();
-    selectionStatus.forEach((checked, name) => {
-      if (checked) {
-        checkedMap.set(name, checked);
-      }
-    });
-    checkedItems.current = checkedMap;
-  }, [selectionStatus]);
-
-  const secondaryButtonClass =
-    "whitespace-nowrap text-sm rounded-full bg-white-default text-black-default border-black-default hover:text-white-default hover:bg-gray-600 active:text-white-default active:bg-gray-500 py-2 px-5 rounded-lg border-2 border-solid inline-flex items-center active:top-0.5 focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500";
-
-  const dialogConfirmReceipt = useDialogRef();
   const [isShowConfirmReceiptDialog, setIsShowConfirmReceiptDialog] = useState(false);
-  const dialogConfirmReceiptHandleClose = () => {
-    setIsShowConfirmReceiptDialog(false);
-    dialogConfirmReceipt.current?.close();
-  };
-
-  const dialogReportProblems = useDialogRef();
   const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
-  const dialogReportProblemsHandleClose = () => {
-    setIsShowReportProblemsDialog(false);
-    dialogReportProblems.current?.close();
-  };
-  const buttonActionsReportProblems = (
-    <Button onClick={dialogReportProblemsHandleClose}>{t("responses.reportProblems")}</Button>
-  );
 
-  // NOTE: browsers have different limits for simultaneous downloads. May need to look into
-  // batching file downloads (e.g. 4 at a time) if edge cases/* come up.
-  const handleDownload = async () => {
-    if (checkedItems.current.size === 0) {
-      toast.warn(t("downloadResponsesTable.download.atLeastOneFile"), { position: toastPosition });
-      return;
-    }
-
-    if (checkedItems.current.size > MAX_FILE_DOWNLOADS) {
-      toast.warn(
-        t("downloadResponsesTable.download.trySelectingLessFiles", { max: MAX_FILE_DOWNLOADS }),
-        { position: toastPosition }
-      );
-      return;
-    }
-
-    const toastDownloadingId = toast.info(
-      t("downloadResponsesTable.download.downloadingXFiles", {
-        fileCount: checkedItems.current.size,
-      }),
-      { position: toastPosition, autoClose: false }
-    );
-
-    try {
-      const downloads = Array.from(checkedItems.current, async ([submissionName]) => {
-        if (!submissionName) {
-          throw new Error("Error downloading file from Retrieval table. SubmissionId missing.");
-        }
-        const url = `/api/id/${formId}/${submissionName}/download`;
-        const fileName = `${submissionName}.html`;
-        return axios({
-          url,
-          method: "GET",
-          responseType: "blob",
-          timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-        }).then((response) => {
-          const url = window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement("a");
-          link.href = url;
-          link.setAttribute("download", fileName);
-          document.body.appendChild(link);
-          link.click();
-        });
-      });
-
-      await Promise.all(downloads).then(() => {
-        // TODO: Future tech debt. See https://github.com/cds-snc/platform-forms-client/issues/1744
-        setTimeout(() => {
-          // Refreshes getServerSideProps data without a full page reload
-          router.replace(router.asPath);
-          toast.dismiss(toastDownloadingId);
-          toast.success(t("downloadResponsesTable.download.downloadComplete"), {
-            position: toastPosition,
-          });
-        }, 400);
-      });
-    } catch (err) {
-      logMessage.error(err as Error);
-      toast.dismiss(toastDownloadingId);
-      toast.error(t("downloadResponsesTable.download.errorDownloadingFiles"), {
-        position: toastPosition,
-        autoClose: false,
-      });
-    }
-  };
+  const navItemClasses =
+    "no-underline !shadow-none border-black border-1 rounded-[100px] pt-1 pb-2 laptop:py-2 px-5 mr-3 mb-4 text-black visited:text-black focus:bg-[#475569] hover:bg-[#475569] hover:!text-white focus:!text-white [&_svg]:focus:fill-white";
 
   return (
     <>
@@ -154,47 +58,40 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           </h1>
           <nav className="flex gap-3">
             {isAuthenticated && (
-              <Button
+              <button
                 onClick={() => setIsShowConfirmReceiptDialog(true)}
-                className="text-sm rounded-full"
-                theme="secondary"
+                className={navItemClasses}
                 disabled={status !== "authenticated"}
               >
                 {t("responses.confirmReceipt")}
-              </Button>
+              </button>
             )}
 
             {isAuthenticated && (
-              <Button
+              <button
                 onClick={() => setIsShowReportProblemsDialog(true)}
-                theme="secondary"
-                className="text-sm rounded-full"
+                className={navItemClasses}
                 disabled={status !== "authenticated"}
               >
                 {t("responses.reportProblems")}
-              </Button>
+              </button>
             )}
 
-            <StyledLink
-              href="/form-builder/settings"
-              className={`text-sm no-underline ${secondaryButtonClass} rounded-full`}
-            >
-              {t("responses.changeSetup")}
-            </StyledLink>
+            <Link href="/form-builder/settings">
+              <a href="/form-builder/settings" className={`${navItemClasses}`}>
+                {t("responses.changeSetup")}
+              </a>
+            </Link>
           </nav>
         </div>
+
+        {nagwareResult && <Nagware nagwareResult={nagwareResult} />}
 
         {isAuthenticated && (
           <>
             <div>
               {vaultSubmissions.length > 0 && (
-                <DownloadTable
-                  submissions={vaultSubmissions}
-                  selectionStatus={selectionStatus}
-                  setSelectionStatus={setSelectionStatus}
-                  checkedItems={checkedItems.current}
-                  handleDownload={handleDownload}
-                />
+                <DownloadTable vaultSubmissions={vaultSubmissions} formId={formId} />
               )}
 
               {vaultSubmissions.length <= 0 && (
@@ -227,33 +124,43 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         )}
       </PageTemplate>
 
-      {isShowConfirmReceiptDialog && (
-        <Dialog
-          title="Confirm receipt of responses"
-          dialogRef={dialogConfirmReceipt}
-          handleClose={dialogConfirmReceiptHandleClose}
-        >
-          <>
-            <p>TODO</p>
-          </>
-        </Dialog>
-      )}
+      <DownloadTableDialog
+        isShowDialog={isShowConfirmReceiptDialog}
+        setIsShowDialog={setIsShowConfirmReceiptDialog}
+        apiUrl={`/api/id/${formId}/submission/confirm`}
+        inputRegex={isUUID}
+        maxEntries={MAX_CONFIRMATION_COUNT}
+        minEntriesErrorTitle={t("downloadResponsesModals.notifications.entriesLengthConfirmHeader")}
+        minEntriesErrorDescription={t(
+          "downloadResponsesModals.notifications.entriesLengthConfirmDescription"
+        )}
+        title={t("downloadResponsesModals.confirmReceiptDialog.title")}
+        description={t("downloadResponsesModals.confirmReceiptDialog.findCode")}
+        inputHelp={t("downloadResponsesModals.confirmReceiptDialog.copyCode", {
+          max: MAX_CONFIRMATION_COUNT,
+        })}
+        nextSteps={t("downloadResponsesModals.confirmReceiptDialog.responsesAvailableFor")}
+        submitButtonText={t("downloadResponsesModals.confirmReceiptDialog.confirmReceipt")}
+      />
 
-      {isShowReportProblemsDialog && (
-        <Dialog
-          title="Report problems with responses"
-          dialogRef={dialogReportProblems}
-          actions={buttonActionsReportProblems}
-          handleClose={dialogReportProblemsHandleClose}
-        >
-          <h2>TODO Report Problems</h2>
-        </Dialog>
-      )}
-
-      {/* Sticky position to stop the page from scrolling to the top when showing a Toast */}
-      <div className="sticky top-0">
-        <ToastContainer />
-      </div>
+      <DownloadTableDialog
+        isShowDialog={isShowReportProblemsDialog}
+        setIsShowDialog={setIsShowReportProblemsDialog}
+        apiUrl={`/api/id/${formId}/submission/report`}
+        inputRegex={isFormId}
+        maxEntries={MAX_REPORT_COUNT}
+        minEntriesErrorTitle={t("downloadResponsesModals.notifications.entriesLengthReportHeader")}
+        minEntriesErrorDescription={t(
+          "downloadResponsesModals.notifications.entriesLengthReportDescription"
+        )}
+        title={t("downloadResponsesModals.reportProblemsDialog.title")}
+        description={t("downloadResponsesModals.reportProblemsDialog.findForm")}
+        inputHelp={t("downloadResponsesModals.reportProblemsDialog.enterFormNumbers", {
+          max: MAX_REPORT_COUNT,
+        })}
+        nextSteps={t("downloadResponsesModals.reportProblemsDialog.problemReported")}
+        submitButtonText={t("downloadResponsesModals.reportProblemsDialog.reportProblems")}
+      />
     </>
   );
 };
@@ -269,16 +176,6 @@ export const getServerSideProps: GetServerSideProps = async ({
   res,
 }) => {
   const [formID = null] = params || [];
-  const vault = await checkOne("vault");
-
-  if (!vault) {
-    return {
-      redirect: {
-        destination: `/${locale}/404`,
-        permanent: false,
-      },
-    };
-  }
 
   const FormbuilderParams: { locale: string; initialForm: null | FormRecord } = {
     initialForm: null,
@@ -286,6 +183,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   };
 
   const vaultSubmissions: VaultSubmissionList[] = [];
+  let nagwareResult: NagwareResult | null = null;
 
   const session = await getServerSession(req, res, authOptions);
 
@@ -308,6 +206,14 @@ export const getServerSideProps: GetServerSideProps = async ({
       ]);
       FormbuilderParams.initialForm = initialForm;
       vaultSubmissions.push(...submissions);
+
+      const isNagwareEnabled = await checkOne("nagware");
+
+      if (isNagwareEnabled) {
+        nagwareResult = submissions.length
+          ? await detectOldUnprocessedSubmissions(submissions)
+          : null;
+      }
     } catch (e) {
       if (e instanceof AccessControlError) {
         return {
@@ -325,8 +231,14 @@ export const getServerSideProps: GetServerSideProps = async ({
       ...FormbuilderParams,
       vaultSubmissions,
       formId: FormbuilderParams.initialForm?.id ?? null,
+      nagwareResult,
       ...(locale &&
-        (await serverSideTranslations(locale, ["common", "form-builder"], null, ["fr", "en"]))),
+        (await serverSideTranslations(
+          locale,
+          ["common", "form-builder-responses", "form-builder"],
+          null,
+          ["fr", "en"]
+        ))),
     },
   };
 };

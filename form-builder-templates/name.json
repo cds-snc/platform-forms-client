@@ -11,12 +11,12 @@
             }
         ],
         "titleEn": "Full name",
-        "titleFr": "",
+        "titleFr": "Nom complet",
         "validation": {
-            "required": false
+            "required": true
         },
-        "descriptionEn": "Include your first and last names. Middle names are optional",
-        "descriptionFr": "",
+        "descriptionEn": "Include your first and last names. Middle names are optional.",
+        "descriptionFr": "Indiquez votre prénom et nom de famille. Le deuxième prénom est optionnel.",
         "placeholderEn": "",
         "placeholderFr": "",
         "autoComplete": "name"
