@@ -35,6 +35,8 @@ export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
     updateField(`form.elements[${itemIndex}].properties.validation.required`, checked);
   };
 
+  /* eslint-disable jsx-a11y/no-static-element-interactions */
+  /* eslint-disable jsx-a11y/click-events-have-key-events */
   return (
     <div
       className="mx-7 py-7"
