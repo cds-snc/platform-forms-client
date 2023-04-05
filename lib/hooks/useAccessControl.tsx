@@ -27,7 +27,7 @@ export const AccessControlProvider = ({ children }: { children: React.ReactNode 
     refreshAbility();
   }, [refreshAbility]);
 
-  /**
+  /*
    * Use this function to force a session update. This is useful if you need to ensure
    * the session is in sync with the server. For example, if you perform an action and
    * a user's privileges has changed, you can call this function to ensure the session is updated.
