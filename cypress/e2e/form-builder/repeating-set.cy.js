@@ -1,5 +1,6 @@
 describe("Test FormBuilder Repeating set", () => {
   beforeEach(() => {
+    cy.useFlag("experimentalBlocks", true);
     cy.visit("/form-builder", {
       onBeforeLoad: (win) => {
         win.sessionStorage.clear();
