@@ -44,12 +44,20 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
   const { focusWithinProps, isWithin } = useIsWithin();
   const { refs } = useRefsContext();
 
+  /* eslint-disable jsx-a11y/no-static-element-interactions */
+  /* eslint-disable jsx-a11y/click-events-have-key-events */
   return (
     <div
       {...focusWithinProps}
       className={`element-${item.index} ${className} group ${
         isWithin ? "active" : ""
-      } hover:bg-violet-50 focus:bg-violet-50 border border-t-0 border-black max-w-[800px] h-auto relative`}
+      } hover:bg-violet-50 focus-within:bg-violet-50 border border-t-0 border-black max-w-[800px] h-auto relative`}
+      onClick={(e) => {
+        const el = e.target as HTMLElement;
+        if (el.tagName === "DIV") {
+          refs?.current?.[item.id]?.focus();
+        }
+      }}
     >
       <PanelBodyRoot item={item} />
       <PanelActions
