@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useTranslation } from "next-i18next";
-import { Attention } from "@components/globals/Attention/Attention";
+import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
 import { NagLevel, NagwareResult } from "@lib/types";
 
 export const Nagware = ({ nagwareResult }: { nagwareResult: NagwareResult }) => {
@@ -95,7 +95,10 @@ export const Nagware = ({ nagwareResult }: { nagwareResult: NagwareResult }) => 
   if (!notificationContent) return <></>;
 
   return (
-    <Attention type={notificationContent.type} heading={notificationContent.title}>
+    <Attention
+      type={notificationContent.type === "warning" ? AttentionTypes.WARNING : AttentionTypes.ERROR}
+      heading={notificationContent.title}
+    >
       <div className="text-sm">{notificationContent.body}</div>
     </Attention>
   );

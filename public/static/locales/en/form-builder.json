@@ -404,21 +404,6 @@
   },
   "required": "Required",
   "responseDelivery": "Response delivery",
-  "responses": {
-    "changeSetup": "Change setup",
-    "confirmReceipt": "Confirm receipt",
-    "navLabel": "Responses",
-    "reportProblems": "Report problems",
-    "title": "Download responses",
-    "unauthenticated": {
-      "createOne": "create one",
-      "noAccount": "If you do not have a GC Forms account,",
-      "signIn": "sign in",
-      "title": "Sign in to access responses",
-      "toAccessPagePart1": "To access this page,",
-      "toAccessPagePart2": "to your GC Forms account."
-    }
-  },
   "richText": "Page text",
   "richTextConfirmationTitle": "Confirmation page and message",
   "richTextEditor": "Rich text editor",
@@ -582,6 +567,7 @@
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
   "unnamedForm": "Unnamed form file",
+  "responsesNavLabel": "Responses",
   "nagware": {
     "restrictedDownloadAfter35Days": "Downloading will be restricted if unconfirmed responses are older than 35 days.",
     "unsavedSubmissionsOver21DaysOld": {
