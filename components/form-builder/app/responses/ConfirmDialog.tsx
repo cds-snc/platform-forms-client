@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { logMessage } from "@lib/logger";
 import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
 import Link from "next/link";
+import { isUUID } from "@lib/validation";
 
 export interface DialogErrors {
   unknown: boolean;
@@ -16,52 +17,17 @@ export interface DialogErrors {
   invalidEntry: boolean;
 }
 
-// Note: Confirm and Report Problem Dialogs are very coupled, only the content changes. If the
-// behavior of one ever changes then this will need to be separated into separate dialogs.
-export const DownloadTableDialog = ({
+// TODO: move to an app setting variable
+const MAX_CONFIRMATION_COUNT = 20;
+
+export const ConfirmDialog = ({
   isShowDialog,
   setIsShowDialog,
-  apiUrl,
-  inputRegex,
-  maxEntries,
-  title,
-  description,
-  inputHelp,
-  nextSteps,
-  submitButtonText,
-  minEntriesErrorTitle,
-  minEntriesErrorDescription,
-  maxEntriesErrorTitle,
-  maxEntriesErrorDescription,
-  errorEntriesErrorTitle,
-  errorEntriesErrorDescription,
-  invalidEntryErrorTitle,
-  invalidEntryErrorDescription,
-  unknownErrorTitle,
-  unknownErrorDescription,
-  unknownErrorDescriptionLink,
+  formId,
 }: {
   isShowDialog: boolean;
   setIsShowDialog: React.Dispatch<React.SetStateAction<boolean>>;
-  apiUrl: string;
-  inputRegex: (field: string) => boolean;
-  maxEntries: number;
-  title: string;
-  description: string;
-  inputHelp: string;
-  nextSteps: string;
-  submitButtonText: string;
-  minEntriesErrorTitle: string;
-  minEntriesErrorDescription: string;
-  maxEntriesErrorTitle: string;
-  maxEntriesErrorDescription: string;
-  errorEntriesErrorTitle: string;
-  errorEntriesErrorDescription: string;
-  invalidEntryErrorTitle: string;
-  invalidEntryErrorDescription: string;
-  unknownErrorTitle: string;
-  unknownErrorDescription: string;
-  unknownErrorDescriptionLink: string;
+  formId: string | undefined;
 }) => {
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
@@ -76,6 +42,13 @@ export const DownloadTableDialog = ({
   const [errorEntriesList, setErrorEntriesList] = useState<string[]>([]);
   const dialogRef = useDialogRef();
   const confirmInstructionId = `dialog-confirm-receipt-instruction-${randomId()}`;
+
+  // Server may respond with no formId, then any submissions would pointless so let the user know
+  if (!formId) {
+    logMessage.error(Error("Form ID missing."));
+    setErrors({ ...errors, unknown: true });
+  }
+  const apiUrl = `/api/id/${formId}/submission/confirm`;
 
   useEffect(() => {
     if (errors.minEntries && entries.length > 0) {
@@ -140,12 +113,7 @@ export const DownloadTableDialog = ({
       })
       .catch((err) => {
         logMessage.error(err as Error);
-        if (err?.response?.status === 400) {
-          // Report API returns an error for 1 or more invalid Responses but not the failed codes
-          setErrors({ ...errors, errorEntries: true });
-        } else {
-          setErrors({ ...errors, unknown: true });
-        }
+        setErrors({ ...errors, unknown: true });
       });
   };
 
@@ -153,7 +121,7 @@ export const DownloadTableDialog = ({
     <>
       {isShowDialog && (
         <Dialog
-          title={title}
+          title={t("downloadResponsesModals.confirmReceiptDialog.title")}
           dialogRef={dialogRef}
           handleClose={handleClose}
           headerStyle="inline-block ml-12 mt-12"
@@ -164,78 +132,113 @@ export const DownloadTableDialog = ({
                 <Attention
                   type={AttentionTypes.ERROR}
                   isAlert={true}
-                  heading={minEntriesErrorTitle}
+                  heading={t(
+                    "downloadResponsesModals.confirmReceiptDialog.errors.minEntries.title"
+                  )}
                   classes="mb-2"
                 >
-                  <p className="text-[#26374a] text-sm mb-2">{minEntriesErrorDescription}</p>
+                  <p className="text-[#26374a] text-sm mb-2">
+                    {t(
+                      "downloadResponsesModals.confirmReceiptDialog.errors.minEntries.description"
+                    )}
+                  </p>
                 </Attention>
               )}
               {errors.maxEntries && (
                 <Attention
                   type={AttentionTypes.ERROR}
                   isAlert={true}
-                  heading={maxEntriesErrorTitle}
+                  heading={t(
+                    "downloadResponsesModals.confirmReceiptDialog.errors.maxEntries.title",
+                    { max: MAX_CONFIRMATION_COUNT }
+                  )}
                   classes="mb-2"
                 >
-                  <p className="text-[#26374a] text-sm mb-2">{maxEntriesErrorDescription}</p>
+                  <p className="text-[#26374a] text-sm mb-2">
+                    {t(
+                      "downloadResponsesModals.confirmReceiptDialog.errors.maxEntries.description"
+                    )}
+                  </p>
                 </Attention>
               )}
               {errors.errorEntries && (
                 <Attention
                   type={AttentionTypes.ERROR}
                   isAlert={true}
-                  heading={errorEntriesErrorTitle}
+                  heading={t(
+                    "downloadResponsesModals.confirmReceiptDialog.errors.errorEntries.title",
+                    { max: MAX_CONFIRMATION_COUNT }
+                  )}
                   classes="mb-2"
                 >
-                  <p className="text-[#26374a] text-sm mb-2">{errorEntriesErrorDescription}</p>
+                  <p className="text-[#26374a] text-sm mb-2">
+                    {t(
+                      "downloadResponsesModals.confirmReceiptDialog.errors.errorEntries.description"
+                    )}
+                  </p>
                 </Attention>
               )}
               {errors.invalidEntry && (
                 <Attention
                   type={AttentionTypes.ERROR}
                   isAlert={true}
-                  heading={invalidEntryErrorTitle}
+                  heading={t(
+                    "downloadResponsesModals.confirmReceiptDialog.errors.invalidEntry.title"
+                  )}
                   classes="mb-2"
                 >
-                  <p className="text-[#26374a] text-sm mb-2">{invalidEntryErrorDescription}</p>
+                  <p className="text-[#26374a] text-sm mb-2">
+                    {t(
+                      "downloadResponsesModals.confirmReceiptDialog.errors.invalidEntry.description"
+                    )}
+                  </p>
                 </Attention>
               )}
               {errors.unknown && (
                 <Attention
                   type={AttentionTypes.ERROR}
                   isAlert={true}
-                  heading={unknownErrorTitle}
+                  heading={t("downloadResponsesModals.confirmReceiptDialog.errors.unknown.title")}
                   classes="mb-2"
                 >
                   <p className="text-[#26374a] text-sm mb-2">
-                    {unknownErrorDescription}
-                    <Link href={"/form-builder/support"}>{unknownErrorDescriptionLink}</Link>.
+                    {t("downloadResponsesModals.confirmReceiptDialog.errors.unknown.description")}
+                    <Link href={"/form-builder/support"}>
+                      {t(
+                        "downloadResponsesModals.confirmReceiptDialog.errors.unknown.descriptionLink"
+                      )}
+                    </Link>
+                    .
                   </p>
                 </Attention>
               )}
             </div>
             <div className="py-4">
-              <p className="mt-2">{description}</p>
+              <p className="mt-2">{t("downloadResponsesModals.confirmReceiptDialog.findCode")}</p>
               <p className="mt-10 mb-2 font-bold" id={confirmInstructionId}>
-                {inputHelp}
+                {t("downloadResponsesModals.confirmReceiptDialog.copyCode", {
+                  max: MAX_CONFIRMATION_COUNT,
+                })}
               </p>
 
               <LineItemEntries
                 inputs={entries}
                 setInputs={setEntries}
-                validateInput={inputRegex}
+                validateInput={isUUID}
                 spellCheck={false}
                 inputLabelId={confirmInstructionId}
-                maxEntries={maxEntries}
+                maxEntries={MAX_CONFIRMATION_COUNT}
                 errors={errors}
                 setErrors={setErrors}
                 errorEntriesList={errorEntriesList}
               ></LineItemEntries>
 
-              <p className="mt-8">{nextSteps}</p>
+              <p className="mt-8">
+                {t("downloadResponsesModals.confirmReceiptDialog.responsesAvailableFor")}
+              </p>
               <div className="flex mt-8 mb-8">
                 <Button className="mr-4" onClick={handleSubmit}>
-                  {submitButtonText}
+                  {t("downloadResponsesModals.confirmReceiptDialog.confirmReceipt")}
                 </Button>
                 <Button theme="secondary" onClick={handleClose}>
                   {t("downloadResponsesModals.cancel")}

@@ -16,21 +16,17 @@ import { checkOne } from "@lib/cache/flags";
 import Link from "next/link";
 import { Card } from "@components/globals/card/Card";
 import { DownloadTable } from "@components/form-builder/app/responses/DownloadTable";
-import { DownloadTableDialog } from "@components/form-builder/app/responses/DownloadTableDialog";
-import { isFormId, isUUID } from "@lib/validation";
 import { NagwareResult } from "@lib/types";
 import { detectOldUnprocessedSubmissions } from "@lib/nagware";
 import { Nagware } from "@components/form-builder/app/Nagware";
+import { ConfirmDialog } from "@components/form-builder/app/responses/ConfirmDialog";
+import { ReportDialog } from "@components/form-builder/app/responses/ReportDialog";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
   formId?: string;
   nagwareResult: NagwareResult | null;
 }
-
-// TODO: move to an app setting variable
-const MAX_CONFIRMATION_COUNT = 20;
-const MAX_REPORT_COUNT = 20;
 
 const Responses: NextPageWithLayout<ResponsesProps> = ({
   vaultSubmissions,
@@ -124,108 +120,16 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         )}
       </PageTemplate>
 
-      <DownloadTableDialog
+      <ConfirmDialog
         isShowDialog={isShowConfirmReceiptDialog}
         setIsShowDialog={setIsShowConfirmReceiptDialog}
-        apiUrl={`/api/id/${formId}/submission/confirm`}
-        inputRegex={isUUID}
-        maxEntries={MAX_CONFIRMATION_COUNT}
-        title={t("downloadResponsesModals.confirmReceiptDialog.title")}
-        description={t("downloadResponsesModals.confirmReceiptDialog.findCode")}
-        inputHelp={t("downloadResponsesModals.confirmReceiptDialog.copyCode", {
-          max: MAX_CONFIRMATION_COUNT,
-        })}
-        nextSteps={t("downloadResponsesModals.confirmReceiptDialog.responsesAvailableFor")}
-        submitButtonText={t("downloadResponsesModals.confirmReceiptDialog.confirmReceipt")}
-        minEntriesErrorTitle={t(
-          "downloadResponsesModals.confirmReceiptDialog.errors.minEntries.title"
-        )}
-        minEntriesErrorDescription={t(
-          "downloadResponsesModals.confirmReceiptDialog.errors.minEntries.description"
-        )}
-        maxEntriesErrorTitle={t(
-          "downloadResponsesModals.confirmReceiptDialog.errors.maxEntries.title",
-          {
-            max: MAX_CONFIRMATION_COUNT,
-          }
-        )}
-        maxEntriesErrorDescription={t(
-          "downloadResponsesModals.confirmReceiptDialog.errors.maxEntries.description"
-        )}
-        errorEntriesErrorTitle={t(
-          "downloadResponsesModals.confirmReceiptDialog.errors.errorEntries.title",
-          {
-            max: MAX_CONFIRMATION_COUNT,
-          }
-        )}
-        errorEntriesErrorDescription={t(
-          "downloadResponsesModals.confirmReceiptDialog.errors.errorEntries.description"
-        )}
-        invalidEntryErrorTitle={t(
-          "downloadResponsesModals.confirmReceiptDialog.errors.invalidEntry.title"
-        )}
-        invalidEntryErrorDescription={t(
-          "downloadResponsesModals.confirmReceiptDialog.errors.invalidEntry.description"
-        )}
-        unknownErrorTitle={t("downloadResponsesModals.confirmReceiptDialog.errors.unknown.title")}
-        unknownErrorDescription={t(
-          "downloadResponsesModals.confirmReceiptDialog.errors.unknown.description"
-        )}
-        unknownErrorDescriptionLink={t(
-          "downloadResponsesModals.confirmReceiptDialog.errors.unknown.descriptionLink"
-        )}
+        formId={formId}
       />
 
-      <DownloadTableDialog
+      <ReportDialog
         isShowDialog={isShowReportProblemsDialog}
         setIsShowDialog={setIsShowReportProblemsDialog}
-        apiUrl={`/api/id/${formId}/submission/report`}
-        inputRegex={isFormId}
-        maxEntries={MAX_REPORT_COUNT}
-        title={t("downloadResponsesModals.reportProblemsDialog.title")}
-        description={t("downloadResponsesModals.reportProblemsDialog.findForm")}
-        inputHelp={t("downloadResponsesModals.reportProblemsDialog.enterFormNumbers", {
-          max: MAX_REPORT_COUNT,
-        })}
-        nextSteps={t("downloadResponsesModals.reportProblemsDialog.problemReported")}
-        submitButtonText={t("downloadResponsesModals.reportProblemsDialog.reportProblems")}
-        minEntriesErrorTitle={t(
-          "downloadResponsesModals.reportProblemsDialog.errors.minEntries.title"
-        )}
-        minEntriesErrorDescription={t(
-          "downloadResponsesModals.reportProblemsDialog.errors.minEntries.description"
-        )}
-        maxEntriesErrorTitle={t(
-          "downloadResponsesModals.reportProblemsDialog.errors.maxEntries.title",
-          {
-            max: MAX_CONFIRMATION_COUNT,
-          }
-        )}
-        maxEntriesErrorDescription={t(
-          "downloadResponsesModals.reportProblemsDialog.errors.maxEntries.description"
-        )}
-        errorEntriesErrorTitle={t(
-          "downloadResponsesModals.reportProblemsDialog.errors.errorEntries.title",
-          {
-            max: MAX_CONFIRMATION_COUNT,
-          }
-        )}
-        errorEntriesErrorDescription={t(
-          "downloadResponsesModals.reportProblemsDialog.errors.errorEntries.description"
-        )}
-        invalidEntryErrorTitle={t(
-          "downloadResponsesModals.reportProblemsDialog.errors.invalidEntry.title"
-        )}
-        invalidEntryErrorDescription={t(
-          "downloadResponsesModals.reportProblemsDialog.errors.invalidEntry.description"
-        )}
-        unknownErrorTitle={t("downloadResponsesModals.reportProblemsDialog.errors.unknown.title")}
-        unknownErrorDescription={t(
-          "downloadResponsesModals.reportProblemsDialog.errors.unknown.description"
-        )}
-        unknownErrorDescriptionLink={t(
-          "downloadResponsesModals.reportProblemsDialog.errors.unknown.descriptionLink"
-        )}
+        formId={formId}
       />
     </>
   );
