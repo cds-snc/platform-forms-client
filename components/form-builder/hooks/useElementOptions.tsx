@@ -35,6 +35,7 @@ import {
 import { useIsAdminUser } from "./useIsAdminUser";
 
 import { ElementOptionsFilter, ElementOption } from "../types";
+import { useFlag } from "@lib/hooks";
 
 export const useElementOptions = (filterElements?: ElementOptionsFilter | undefined) => {
   const { t } = useTranslation("form-builder");
@@ -47,6 +48,8 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
   // default to off unless the user is an admin
   const allowFileInput = useIsAdminUser();
 
+  const { status: experimentalBlocks } = useFlag("experimentalBlocks");
+
   const fileInputOption: ElementOption = {
     id: "fileInput",
     value: t("addElementDialog.fileInput.label"),
@@ -54,6 +57,15 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     description: FileInput,
     className: "",
     group: group.input,
+  };
+
+  const repeatingSetsOption: ElementOption = {
+    id: "dynamicRow",
+    value: t("dyanamicRow"),
+    icon: AddIcon,
+    description: QuestionSet,
+    className: "",
+    group: group.advanced,
   };
 
   const elementOptions: ElementOption[] = [
@@ -159,14 +171,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       className: "separator",
       group: group.input,
     },
-    {
-      id: "dynamicRow",
-      value: t("dyanamicRow"),
-      icon: AddIcon,
-      description: QuestionSet,
-      className: "",
-      group: group.advanced,
-    },
+    experimentalBlocks ? { ...(repeatingSetsOption as ElementOption) } : ({} as ElementOption),
   ];
 
   return filterElements ? filterElements(elementOptions) : elementOptions;
