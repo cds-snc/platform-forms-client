@@ -47,7 +47,6 @@ export const LineItemEntries = ({
     e.stopPropagation();
 
     const text = (e.target as HTMLInputElement).value.trim().replace(",", "");
-
     if (!text) {
       setErrors({ ...errors, invalidEntry: false });
     }
@@ -65,23 +64,20 @@ export const LineItemEntries = ({
       // On an entry error, tell the parent to show a related error
       if (validateInput && !validateInput(text)) {
         setErrors({ ...errors, invalidEntry: true });
-        return;
       } else if (inputs.length >= maxEntries) {
         setErrors({ ...errors, maxEntries: true });
-        return;
       } else if (errors?.maxEntries) {
         setErrors({ ...errors, maxEntries: false });
-        return;
+      } else {
+        // Success, add the entry to the entry list and announce this to the user as well
+        setInputs([...new Set([...inputs, text])]);
+        if (liveRegionRef.current) {
+          liveRegionRef.current.textContent = `${t("lineItemEntries.added")} ${text}`;
+        }
+        // Reset the form
+        setErrors({ ...errors, invalidEntry: false });
+        (e.target as HTMLInputElement).value = "";
       }
-
-      // Add the entry to the entry list and announce this to the user as well
-      setInputs([...new Set([...inputs, text])]);
-      if (liveRegionRef.current) {
-        liveRegionRef.current.textContent = `${t("lineItemEntries.added")} ${text}`;
-      }
-
-      setErrors({ ...errors, invalidEntry: false });
-      (e.target as HTMLInputElement).value = "";
     }
   };
 
