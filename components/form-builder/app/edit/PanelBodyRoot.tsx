@@ -3,16 +3,12 @@ import React from "react";
 import { PanelBody } from "./";
 import { FormElementWithIndex, Language, LocalizedElementProperties } from "../../types";
 import { useTemplateStore } from "../../store";
-import { useUpdateElement } from "../../hooks";
 
 export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
-  const { updateElement } = useUpdateElement();
-  const { localizeField, updateField, resetChoices, elements } = useTemplateStore((s) => ({
+  const { localizeField, updateField, elements } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
     elements: s.form.elements,
     updateField: s.updateField,
-    unsetField: s.unsetField,
-    resetChoices: s.resetChoices,
   }));
 
   // all element state updaters should be setup at this level
@@ -36,21 +32,11 @@ export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
     updateField(`form.elements[${itemIndex}].properties.validation.required`, checked);
   };
 
-  const onElementChange = (type: string, itemIndex: number) => {
-    const path = `form.elements[${itemIndex}]`;
-
-    updateElement(type, path);
-    if (type === "richText") {
-      resetChoices(itemIndex);
-    }
-  };
-
   return (
     <div className="mx-7 py-7">
       <PanelBody
         elements={elements}
         item={item}
-        onElementChange={onElementChange}
         onQuestionChange={onQuestionChange}
         onRequiredChange={onRequiredChange}
       />

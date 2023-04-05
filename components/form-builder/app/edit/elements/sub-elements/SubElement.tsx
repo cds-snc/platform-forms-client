@@ -19,7 +19,6 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
 
   const {
     addSubItem,
-    resetSubChoices,
     updateField,
     subMoveUp,
     subMoveDown,
@@ -37,13 +36,12 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
     subDuplicateElement: s.subDuplicateElement,
     removeSubItem: s.removeSubItem,
     subElements: s.form.elements[elIndex].properties.subElements,
-    resetSubChoices: s.resetSubChoices,
     localizeField: s.localizeField,
     translationLanguagePriority: s.translationLanguagePriority,
     getLocalizationAttribute: s.getLocalizationAttribute,
   }));
 
-  const { addElement, updateElement, isTextField } = useUpdateElement();
+  const { addElement, isTextField } = useUpdateElement();
 
   const handleAddElement = useCallback(
     (subIndex: number, type?: FormElementTypes) => {
@@ -87,14 +85,6 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
       )}`,
       val
     );
-  };
-
-  const onElementChange = (type: string, elIndex: number, subIndex: number) => {
-    const path = `form.elements[${elIndex}].properties.subElements[${subIndex}]`;
-    updateElement(type, path);
-    if (type === "richText") {
-      resetSubChoices(elIndex, subIndex);
-    }
   };
 
   const onRequiredChange = (elIndex: number, subIndex: number, checked: boolean) => {
@@ -167,9 +157,6 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
                 elIndex={elIndex}
                 item={item}
                 onQuestionChange={onQuestionChange}
-                onElementChange={(id, subIndex) => {
-                  onElementChange(id, elIndex, subIndex);
-                }}
                 onRequiredChange={(subIndex, checked) => {
                   onRequiredChange(elIndex, subIndex, checked);
                 }}
