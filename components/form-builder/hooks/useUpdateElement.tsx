@@ -49,8 +49,6 @@ export const useUpdateElement = () => {
       return;
     }
 
-    updateField(`${path}.type`, "textField");
-
     if (isValidatedTextType(type as FormElementTypes) && isAutoCompleteField(type)) {
       updateField(`${path}.properties.validation.type`, type);
       updateField(`${path}.properties.autoComplete`, type);
