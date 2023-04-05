@@ -16,6 +16,8 @@ export interface DialogErrors {
   invalidEntry: boolean;
 }
 
+// Note: Confirm and Report Problem Dialogs are very coupled, only the content changes. If the
+// behavior of one ever changes then this will need to be separated into separate dialogs.
 export const DownloadTableDialog = ({
   isShowDialog,
   setIsShowDialog,
@@ -163,6 +165,7 @@ export const DownloadTableDialog = ({
                   type={AttentionTypes.ERROR}
                   isAlert={true}
                   heading={minEntriesErrorTitle}
+                  classes="mb-2"
                 >
                   <p className="text-[#26374a] text-sm mb-2">{minEntriesErrorDescription}</p>
                 </Attention>
@@ -172,6 +175,7 @@ export const DownloadTableDialog = ({
                   type={AttentionTypes.ERROR}
                   isAlert={true}
                   heading={maxEntriesErrorTitle}
+                  classes="mb-2"
                 >
                   <p className="text-[#26374a] text-sm mb-2">{maxEntriesErrorDescription}</p>
                 </Attention>
@@ -181,6 +185,7 @@ export const DownloadTableDialog = ({
                   type={AttentionTypes.ERROR}
                   isAlert={true}
                   heading={errorEntriesErrorTitle}
+                  classes="mb-2"
                 >
                   <p className="text-[#26374a] text-sm mb-2">{errorEntriesErrorDescription}</p>
                 </Attention>
@@ -190,12 +195,18 @@ export const DownloadTableDialog = ({
                   type={AttentionTypes.ERROR}
                   isAlert={true}
                   heading={invalidEntryErrorTitle}
+                  classes="mb-2"
                 >
                   <p className="text-[#26374a] text-sm mb-2">{invalidEntryErrorDescription}</p>
                 </Attention>
               )}
               {errors.unknown && (
-                <Attention type={AttentionTypes.ERROR} isAlert={true} heading={unknownErrorTitle}>
+                <Attention
+                  type={AttentionTypes.ERROR}
+                  isAlert={true}
+                  heading={unknownErrorTitle}
+                  classes="mb-2"
+                >
                   <p className="text-[#26374a] text-sm mb-2">
                     {unknownErrorDescription}
                     <Link href={"/form-builder/support"}>{unknownErrorDescriptionLink}</Link>.
