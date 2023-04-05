@@ -7,89 +7,7 @@ import { ShortAnswer, Options, SubOptions, RichText, SubElement } from "./elemen
 import { ElementOption, FormElementWithIndex } from "../../types";
 import { useElementOptions } from "../../hooks";
 
-export const SelectedElement = ({
-  selected,
-  item,
-  elIndex = -1,
-}: {
-  selected: ElementOption;
-  item: FormElementWithIndex;
-  elIndex: number;
-}) => {
-  const { t } = useTranslation("form-builder");
-
-  let element = null;
-
-  switch (selected.id) {
-    case "textField":
-      element = <ShortAnswer>{t("shortAnswerText")}</ShortAnswer>;
-      break;
-    case "richText":
-      if (elIndex !== -1) {
-        element = <RichText elIndex={elIndex} subIndex={item.index} />;
-      } else {
-        element = <RichText elIndex={item.index} />;
-      }
-      break;
-    case "textArea":
-      element = <ShortAnswer>{t("longAnswerText")}</ShortAnswer>;
-      break;
-    case "fileInput":
-      element = <ShortAnswer>{t("addElementDialog.fileInput.label")}</ShortAnswer>;
-      break;
-    case "radio":
-      if (elIndex !== -1) {
-        element = (
-          <SubOptions elIndex={elIndex} item={item} renderIcon={() => <RadioEmptyIcon />} />
-        );
-      } else {
-        element = <Options item={item} renderIcon={() => <RadioEmptyIcon />} />;
-      }
-      break;
-    case "checkbox":
-      if (elIndex !== -1) {
-        element = (
-          <SubOptions elIndex={elIndex} item={item} renderIcon={() => <CheckBoxEmptyIcon />} />
-        );
-      } else {
-        element = <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} />;
-      }
-      break;
-    case "dropdown":
-      if (elIndex !== -1) {
-        element = (
-          <SubOptions elIndex={elIndex} item={item} renderIcon={(index) => `${index + 1}.`} />
-        );
-      } else {
-        element = <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} />;
-      }
-      break;
-    case "email":
-      element = <ShortAnswer data-testid="email">name@example.com</ShortAnswer>;
-      break;
-    case "phone":
-      element = <ShortAnswer data-testid="phone">111-222-3333</ShortAnswer>;
-      break;
-    case "date":
-      element = <ShortAnswer data-testid="date">mm/dd/yyyy</ShortAnswer>;
-      break;
-    case "number":
-      element = <ShortAnswer data-testid="number">0123456789</ShortAnswer>;
-      break;
-    case "dynamicRow":
-      element = <SubElement item={item} elIndex={item.index} />;
-      break;
-    case "attestation":
-      element = <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} />;
-      break;
-    default:
-      element = null;
-  }
-
-  return element;
-};
-
-export const filterSelected = (
+const filterSelected = (
   item: FormElementWithIndex,
   currentSelectedItem: ElementOption,
   elementOptions: ElementOption[]
@@ -114,7 +32,7 @@ export const filterSelected = (
   return currentSelectedItem;
 };
 
-export const useGetSelectedOption = (item: FormElementWithIndex): ElementOption => {
+const useGetSelectedOption = (item: FormElementWithIndex): ElementOption => {
   const elementOptions = useElementOptions();
 
   const validationType = item.properties?.validation?.type;
@@ -142,4 +60,101 @@ export const useGetSelectedOption = (item: FormElementWithIndex): ElementOption 
     selected && selected.length ? selected[0] : elementOptions[1],
     elementOptions
   );
+};
+
+export const SelectedElement = ({
+  item,
+  elIndex = -1,
+}: {
+  item: FormElementWithIndex;
+  elIndex: number;
+}) => {
+  const { t } = useTranslation("form-builder");
+
+  let element = null;
+
+  const selected = useGetSelectedOption(item);
+
+  switch (selected.id) {
+    case "textField":
+      element = <ShortAnswer>{t("shortAnswerText")}</ShortAnswer>;
+      break;
+    case "richText":
+      if (elIndex !== -1) {
+        element = <RichText elIndex={elIndex} subIndex={item.index} />;
+      } else {
+        element = <RichText elIndex={item.index} />;
+      }
+      break;
+    case "textArea":
+      element = <ShortAnswer>{t("longAnswerText")}</ShortAnswer>;
+      break;
+    case "fileInput":
+      element = <ShortAnswer>{t("addElementDialog.fileInput.label")}</ShortAnswer>;
+      break;
+    case "radio":
+      if (elIndex !== -1) {
+        element = (
+          <SubOptions elIndex={elIndex} item={item} renderIcon={() => <RadioEmptyIcon />} />
+        );
+      } else {
+        element = (
+          <>
+            <ShortAnswer>{t("addElementDialog.radio.title")}</ShortAnswer>
+            <Options item={item} renderIcon={() => <RadioEmptyIcon />} />
+          </>
+        );
+      }
+      break;
+    case "checkbox":
+      if (elIndex !== -1) {
+        element = (
+          <SubOptions elIndex={elIndex} item={item} renderIcon={() => <CheckBoxEmptyIcon />} />
+        );
+      } else {
+        element = (
+          <>
+            <ShortAnswer>{t("addElementDialog.checkbox.title")}</ShortAnswer>
+            <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} />
+          </>
+        );
+      }
+      break;
+    case "dropdown":
+      if (elIndex !== -1) {
+        element = (
+          <SubOptions elIndex={elIndex} item={item} renderIcon={(index) => `${index + 1}.`} />
+        );
+      } else {
+        element = (
+          <>
+            <ShortAnswer>{t("addElementDialog.dropdown.title")}</ShortAnswer>
+            <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} />
+          </>
+        );
+      }
+      break;
+    case "email":
+      element = <ShortAnswer data-testid="email">name@example.com</ShortAnswer>;
+      break;
+    case "phone":
+      element = <ShortAnswer data-testid="phone">111-222-3333</ShortAnswer>;
+      break;
+    case "date":
+      element = <ShortAnswer data-testid="date">mm/dd/yyyy</ShortAnswer>;
+      break;
+    case "number":
+      element = <ShortAnswer data-testid="number">0123456789</ShortAnswer>;
+      break;
+    case "dynamicRow":
+      element = <SubElement item={item} elIndex={item.index} />;
+      break;
+    case "attestation":
+      element = <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} />;
+      break;
+    default:
+      element = null;
+  }
+
+  return element;
 };
