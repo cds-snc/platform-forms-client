@@ -46,6 +46,11 @@ export const AccessControlProvider = ({ children }: { children: React.ReactNode 
   );
 };
 
+/**
+ * useAccessControl hook
+ * @returns ability - The ability object for a User
+ * @returns forceSessionUpdate - A function to force a session update.  Use this only if you need to ensure the session is in sync with the server.
+ */
 export const useAccessControl = () => {
   const { ability, forceSessionUpdate } = useContext(AbilityContext);
   return { ability, forceSessionUpdate };
