@@ -3,6 +3,7 @@ import React from "react";
 import { PanelBody } from "./";
 import { FormElementWithIndex, Language, LocalizedElementProperties } from "../../types";
 import { useTemplateStore } from "../../store";
+import { useRefsContext } from "@formbuilder/app/edit/RefsContext";
 
 export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
   const { localizeField, updateField, elements } = useTemplateStore((s) => ({
@@ -10,6 +11,8 @@ export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
     elements: s.form.elements,
     updateField: s.updateField,
   }));
+
+  const { refs } = useRefsContext();
 
   // all element state updaters should be setup at this level
   // we should be able to pass and `item` + `updaters`to build up each element panel
@@ -33,7 +36,15 @@ export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
   };
 
   return (
-    <div className="mx-7 py-7">
+    <div
+      className="mx-7 py-7"
+      onClick={(e) => {
+        const el = e.target as HTMLElement;
+        if (el.tagName === "DIV") {
+          refs?.current?.[item.id]?.focus();
+        }
+      }}
+    >
       <PanelBody
         elements={elements}
         item={item}
