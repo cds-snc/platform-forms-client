@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useAccessControl } from "@lib/hooks";
@@ -12,14 +12,8 @@ import { ShareDropdown } from "./ShareDropdown";
 
 export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) => {
   const { status } = useSession();
-  const { ability, refreshAbility } = useAccessControl();
+  const { ability } = useAccessControl();
   const { t, i18n } = useTranslation(["common", "form-builder"]);
-
-  useEffect(() => {
-    refreshAbility();
-    // we only want to run this once on mount
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <header className="border-b-1 border-gray-500 mb-12 py-2 px-4 laptop:px-32 desktop:px-64">
