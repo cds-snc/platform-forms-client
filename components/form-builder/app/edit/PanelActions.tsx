@@ -187,7 +187,7 @@ export const PanelActions = ({
 
   const outerPanelClasses = isSubElement
     ? ""
-    : `laptop:absolute laptop:invisible group-[.active]:visible group-active:visible group-focus-within:visible laptop:right-0 laptop:top-0 ${
+    : `laptop:absolute laptop:invisible laptop:group-[.active]:visible laptop:group-active:visible laptop:group-focus-within:visible laptop:right-0 laptop:top-0 ${
         lang === "fr" ? "laptop:-mr-[230px]" : "laptop:-mr-[160px]"
       }`;
 
