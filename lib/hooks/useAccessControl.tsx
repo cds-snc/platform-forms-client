@@ -20,7 +20,7 @@ export const AccessControlProvider = ({ children }: { children: React.ReactNode 
       const userAbility = createMongoAbility<MongoAbility<Abilities>>(session.user.privileges);
       setAbility(userAbility);
     }
-  }, [status, session?.user.privileges]);
+  }, [status, session]);
 
   // Ensures that the ability is refreshed when the session is updated
   useEffect(() => {
