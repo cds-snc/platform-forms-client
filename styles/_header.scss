@@ -35,7 +35,7 @@
 
 header {
   .canada-flag {
-    @apply xxs:w-flag-fold xs:w-flag-5s md:w-flag-6s lg:mt-10 w-flag-desktop mt-0;
+    @apply w-full mt-0;
 
     a:hover {
       @apply hover:bg-white-default;

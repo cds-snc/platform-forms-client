@@ -37,7 +37,7 @@ const Fip = ({
       <div className="canada-flag">
         <a href={linkUrl} aria-label={t("fip.label")}>
           <picture>
-            <img src={logo} alt={logoTitle} />
+            <img src={logo} alt={logoTitle} className="max-w-[600px] max-h-[60px]" />
           </picture>
         </a>
       </div>

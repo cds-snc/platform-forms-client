@@ -83,9 +83,13 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
         <div className="font-bold mb-3 text-md">{t("branding.preview")}</div>
         {/* eslint-disable @next/next/no-img-element  */}
         {logo ? (
-          <img alt={altText} src={logo} width={300} />
+          <img alt={altText} src={logo} className="max-h-[60px] max-w-[600px]" />
         ) : (
-          <img alt={t("branding.defaultOption")} src={defaultLogo} width="360" height="33" />
+          <img
+            alt={t("branding.defaultOption")}
+            src={defaultLogo}
+            className="max-h-[60px] max-w-[600px]"
+          />
         )}
       </div>
       {hasBrandingRequestForm && (
