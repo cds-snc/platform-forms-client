@@ -3,11 +3,11 @@ import { LineItem } from "./LineItem";
 
 type LineItemsProps = {
   values: string[];
-  listInvalidEntries: string[];
+  errorEntriesList: string[];
   onRemove: (value: string) => void;
 };
 
-export const LineItems = ({ values = [], listInvalidEntries = [], onRemove }: LineItemsProps) => {
+export const LineItems = ({ values = [], errorEntriesList = [], onRemove }: LineItemsProps) => {
   if (values.length <= 0) {
     return null;
   }
@@ -19,9 +19,7 @@ export const LineItems = ({ values = [], listInvalidEntries = [], onRemove }: Li
           value={value}
           key={value}
           onRemove={onRemove}
-          isInvalid={
-            listInvalidEntries.find((invalidValue) => value === invalidValue) ? true : false
-          }
+          isInvalid={errorEntriesList.find((valueError) => value === valueError) ? true : false}
         />
       ))}
     </>

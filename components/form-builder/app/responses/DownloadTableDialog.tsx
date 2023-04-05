@@ -12,7 +12,8 @@ export interface DialogErrors {
   unknown: boolean;
   minEntries: boolean;
   maxEntries: boolean;
-  invalidEntries: boolean;
+  errorEntries: boolean;
+  invalidEntry: boolean;
 }
 
 export const DownloadTableDialog = ({
@@ -21,37 +22,56 @@ export const DownloadTableDialog = ({
   apiUrl,
   inputRegex,
   maxEntries,
-  minEntriesErrorTitle,
-  minEntriesErrorDescription,
   title,
   description,
   inputHelp,
   nextSteps,
   submitButtonText,
+  minEntriesErrorTitle,
+  minEntriesErrorDescription,
+  maxEntriesErrorTitle,
+  maxEntriesErrorDescription,
+  errorEntriesErrorTitle,
+  errorEntriesErrorDescription,
+  invalidEntryErrorTitle,
+  invalidEntryErrorDescription,
+  unknownErrorTitle,
+  unknownErrorDescription,
+  unknownErrorDescriptionLink,
 }: {
   isShowDialog: boolean;
   setIsShowDialog: React.Dispatch<React.SetStateAction<boolean>>;
   apiUrl: string;
   inputRegex: (field: string) => boolean;
   maxEntries: number;
-  minEntriesErrorTitle: string;
-  minEntriesErrorDescription: string;
   title: string;
   description: string;
   inputHelp: string;
   nextSteps: string;
   submitButtonText: string;
+  minEntriesErrorTitle: string;
+  minEntriesErrorDescription: string;
+  maxEntriesErrorTitle: string;
+  maxEntriesErrorDescription: string;
+  errorEntriesErrorTitle: string;
+  errorEntriesErrorDescription: string;
+  invalidEntryErrorTitle: string;
+  invalidEntryErrorDescription: string;
+  unknownErrorTitle: string;
+  unknownErrorDescription: string;
+  unknownErrorDescriptionLink: string;
 }) => {
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
   const [entries, setEntries] = useState<string[]>([]);
   const [errors, setErrors] = useState({
-    unknown: false,
     minEntries: false,
     maxEntries: false,
-    invalidEntries: false,
+    errorEntries: false,
+    invalidEntry: false,
+    unknown: false,
   });
-  const [listInvalidEntries, setListInvalidEntries] = useState<string[]>([]);
+  const [errorEntriesList, setErrorEntriesList] = useState<string[]>([]);
   const dialogRef = useDialogRef();
   const confirmInstructionId = `dialog-confirm-receipt-instruction-${randomId()}`;
 
@@ -65,23 +85,25 @@ export const DownloadTableDialog = ({
     setIsShowDialog(false);
     setEntries([]);
     setErrors({
-      unknown: false,
       minEntries: false,
       maxEntries: false,
-      invalidEntries: false,
+      errorEntries: false,
+      invalidEntry: false,
+      unknown: false,
     });
-    setListInvalidEntries([]);
+    setErrorEntriesList([]);
     dialogRef.current?.close();
   };
 
   const handleSubmit = () => {
     setErrors({
-      unknown: false,
       minEntries: false,
       maxEntries: false,
-      invalidEntries: false,
+      errorEntries: false,
+      invalidEntry: false,
+      unknown: false,
     });
-    setListInvalidEntries([]);
+    setErrorEntriesList([]);
 
     if (entries.length <= 0) {
       setErrors({ ...errors, minEntries: true });
@@ -103,10 +125,10 @@ export const DownloadTableDialog = ({
         if (data?.invalidConfirmationCodes && data.invalidConfirmationCodes?.length > 0) {
           // Note: why a list of entries and another list for invalid entries? This makes showing
           // only the invalid entries a lot easier in the LineItems component
-          setListInvalidEntries(data.invalidConfirmationCodes);
+          setErrorEntriesList(data.invalidConfirmationCodes);
           setEntries(data.invalidConfirmationCodes);
 
-          setErrors({ ...errors, invalidEntries: true });
+          setErrors({ ...errors, errorEntries: true });
           return;
         }
 
@@ -118,7 +140,7 @@ export const DownloadTableDialog = ({
         logMessage.error(err as Error);
         if (err?.response?.status === 400) {
           // Report API returns an error for 1 or more invalid Responses but not the failed codes
-          setErrors({ ...errors, invalidEntries: true });
+          setErrors({ ...errors, errorEntries: true });
         } else {
           setErrors({ ...errors, unknown: true });
         }
@@ -149,37 +171,34 @@ export const DownloadTableDialog = ({
                 <Attention
                   type={AttentionTypes.ERROR}
                   isAlert={true}
-                  heading={t("lineItemEntries.notifications.maxEntriesTitle", {
-                    max: maxEntries,
-                  })}
+                  heading={maxEntriesErrorTitle}
                 >
-                  <p className="text-[#26374a] text-sm mb-2">
-                    {t("lineItemEntries.notifications.maxEntriesDescription")}
-                  </p>
+                  <p className="text-[#26374a] text-sm mb-2">{maxEntriesErrorDescription}</p>
                 </Attention>
               )}
-              {errors.invalidEntries && (
+              {errors.errorEntries && (
                 <Attention
                   type={AttentionTypes.ERROR}
                   isAlert={true}
-                  heading={t("downloadResponsesModals.notifications.clientEntryHeader")}
+                  heading={errorEntriesErrorTitle}
                 >
-                  <p className="text-[#26374a] text-sm mb-2">
-                    {t("downloadResponsesModals.notifications.clientEntryDescription")}
-                  </p>
+                  <p className="text-[#26374a] text-sm mb-2">{errorEntriesErrorDescription}</p>
+                </Attention>
+              )}
+              {errors.invalidEntry && (
+                <Attention
+                  type={AttentionTypes.ERROR}
+                  isAlert={true}
+                  heading={invalidEntryErrorTitle}
+                >
+                  <p className="text-[#26374a] text-sm mb-2">{invalidEntryErrorDescription}</p>
                 </Attention>
               )}
               {errors.unknown && (
-                <Attention
-                  type={AttentionTypes.ERROR}
-                  isAlert={true}
-                  heading={t("downloadResponsesModals.notifications.unknownErrorHeader")}
-                >
+                <Attention type={AttentionTypes.ERROR} isAlert={true} heading={unknownErrorTitle}>
                   <p className="text-[#26374a] text-sm mb-2">
-                    {t("downloadResponsesModals.notifications.unknownErrorDescription")}
-                    <Link href={"/form-builder/support"}>
-                      {t("downloadResponsesModals.notifications.unknownErrorDescriptionLink")}
-                    </Link>
+                    {unknownErrorDescription}
+                    <Link href={"/form-builder/support"}>{unknownErrorDescriptionLink}</Link>.
                   </p>
                 </Attention>
               )}
@@ -189,6 +208,7 @@ export const DownloadTableDialog = ({
               <p className="mt-10 mb-2 font-bold" id={confirmInstructionId}>
                 {inputHelp}
               </p>
+
               <LineItemEntries
                 inputs={entries}
                 setInputs={setEntries}
@@ -198,8 +218,9 @@ export const DownloadTableDialog = ({
                 maxEntries={maxEntries}
                 errors={errors}
                 setErrors={setErrors}
-                listInvalidEntries={listInvalidEntries}
+                errorEntriesList={errorEntriesList}
               ></LineItemEntries>
+
               <p className="mt-8">{nextSteps}</p>
               <div className="flex mt-8 mb-8">
                 <Button className="mr-4" onClick={handleSubmit}>

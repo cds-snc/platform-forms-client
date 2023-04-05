@@ -15,7 +15,7 @@ export const LineItemEntries = ({
   maxEntries = 20,
   errors,
   setErrors,
-  listInvalidEntries,
+  errorEntriesList,
 }: {
   inputs: string[];
   setInputs: (tag: string[]) => void;
@@ -25,7 +25,7 @@ export const LineItemEntries = ({
   maxEntries?: number;
   errors: DialogErrors;
   setErrors: React.Dispatch<React.SetStateAction<DialogErrors>>;
-  listInvalidEntries: string[];
+  errorEntriesList: string[];
 }) => {
   const { t } = useTranslation("form-builder-responses");
   const containerRef = useRef<HTMLDivElement>(null);
@@ -40,30 +40,37 @@ export const LineItemEntries = ({
     inputRef.current?.focus();
   };
 
+  // TODO: handle duplicate entries?
+  // TODO: should "backspace" on an empty input set the next entry into "edit mode"?
+  // TODO: allow a comma separated list of codes to be pasted in?
   const onKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     e.stopPropagation();
 
     const text = (e.target as HTMLInputElement).value.trim().replace(",", "");
 
+    if (!text) {
+      setErrors({ ...errors, invalidEntry: false });
+    }
+
+    // Allow backspace on an empty input to set the previous entry into "edit mode"
     if (!text && inputs.length && e.key === "Backspace") {
       (e.target as HTMLInputElement).value = `${inputs.at(-1)}`;
       setInputs([...new Set(inputs.slice(0, -1))]);
     }
 
+    // Try to add the entry to the list of intries to submit to the server
     if (text && ["Enter", " ", ","].includes(e.key)) {
       e.preventDefault();
 
-      // Tell parent to show an error if the maximum number of entries is reached
-      if (inputs.length >= maxEntries) {
-        // TODO: may want to disable form input as well to make it really clear
+      // On an entry error, tell the parent to show a related error
+      if (validateInput && !validateInput(text)) {
+        setErrors({ ...errors, invalidEntry: true });
+        return;
+      } else if (inputs.length >= maxEntries) {
         setErrors({ ...errors, maxEntries: true });
         return;
       } else if (errors?.maxEntries) {
         setErrors({ ...errors, maxEntries: false });
-      }
-
-      // TODO: show an error if an entry is invalid
-      if ((validateInput && !validateInput(text)) || inputs.length >= maxEntries) {
         return;
       }
 
@@ -73,10 +80,12 @@ export const LineItemEntries = ({
         liveRegionRef.current.textContent = `${t("lineItemEntries.added")} ${text}`;
       }
 
+      setErrors({ ...errors, invalidEntry: false });
       (e.target as HTMLInputElement).value = "";
     }
   };
 
+  // TODO: add entry error checking and showing errors here also?
   const onBlur = (e: { target: HTMLInputElement }) => {
     const text = (e.target as HTMLInputElement).value.trim().replace(",", "");
     if ((validateInput && !validateInput(text)) || inputs.length >= maxEntries) {
@@ -98,7 +107,7 @@ export const LineItemEntries = ({
       className="max-h-60 overflow-y-auto box-border border-black-default border-2 rounded-md"
     >
       <ol data-testid="values">
-        <LineItems values={inputs} onRemove={onRemove} listInvalidEntries={listInvalidEntries} />
+        <LineItems values={inputs} onRemove={onRemove} errorEntriesList={errorEntriesList} />
       </ol>
       <div className="grow p-4">
         <input
@@ -106,7 +115,8 @@ export const LineItemEntries = ({
           data-testid="value-input"
           className={
             "w-full p-1 outline-none " +
-            (inputs.length > 0 ? "border-2 border-dashed border-grey" : "border-none")
+            (inputs.length > 0 ? "border-2 border-dashed border-grey" : "border-none") +
+            (errors.invalidEntry ? " text-red" : "")
           }
           type="text"
           name="value-input"
