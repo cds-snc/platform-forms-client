@@ -21,6 +21,9 @@ export const ShareModal = ({
 
   const dialog = useDialogRef();
 
+  const currentLanguage = i18n.language;
+  const alternateLanguage = i18n.language === "en" ? "fr" : "en";
+
   const { getSchema, name, form } = useTemplateStore((s) => ({
     getSchema: s.getSchema,
     name: s.name,
@@ -134,21 +137,47 @@ export const ShareModal = ({
                     {t("share.toPreview")}
                     <ul>
                       <li className="list-disc">
-                        <strong>{t("share.stepOne")}</strong>
+                        <strong>{t("share.stepOne", { lng: currentLanguage })}</strong>
                         <br />
-                        {t("share.stepOneDetails")}.
+                        {t("share.stepOneDetails", { lng: currentLanguage })}.
                       </li>
                       <li className="list-disc">
-                        <strong>{t("share.stepTwo")}</strong>
+                        <strong>{t("share.stepTwo", { lng: currentLanguage })}</strong>
                         <br />
                         <Markdown options={{ forceBlock: true }}>
-                          {t("share.stepTwoDetails")}
+                          {t("share.stepTwoDetails", { lng: currentLanguage })}
                         </Markdown>
                       </li>
                       <li className="list-disc">
-                        <strong>{t("share.stepThree")}</strong>
+                        <strong>{t("share.stepThree", { lng: currentLanguage })}</strong>
                         <br />
-                        {t("share.stepThreeDetails")}
+                        {t("share.stepThreeDetails", { lng: currentLanguage })}
+                      </li>
+                    </ul>
+                  </div>
+
+                  <h4 className="mt-4">
+                    {t("share.someoneHasShared", { name: data?.user.name, lng: alternateLanguage })}
+                  </h4>
+                  <div className="mt-4">
+                    {t("share.toPreview", { lng: alternateLanguage })}
+                    <ul>
+                      <li className="list-disc">
+                        <strong>{t("share.stepOne", { lng: alternateLanguage })}</strong>
+                        <br />
+                        {t("share.stepOneDetails", { lng: alternateLanguage })}.
+                      </li>
+                      <li className="list-disc">
+                        <strong>{t("share.stepTwo", { lng: alternateLanguage })}</strong>
+                        <br />
+                        <Markdown options={{ forceBlock: true }}>
+                          {t("share.stepTwoDetails", { lng: alternateLanguage })}
+                        </Markdown>
+                      </li>
+                      <li className="list-disc">
+                        <strong>{t("share.stepThree", { lng: alternateLanguage })}</strong>
+                        <br />
+                        {t("share.stepThreeDetails", { lng: alternateLanguage })}
                       </li>
                     </ul>
                   </div>
