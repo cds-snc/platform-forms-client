@@ -45,6 +45,10 @@
     "nagware": {
       "title": "Nagware notifications",
       "description": "Enable the Nagware notifications"
+    },
+    "experimentalBlocks": {
+      "title": "Experimental blocks",
+      "description": "Enable experimental blocks"
     }
   }
 }
