@@ -156,6 +156,8 @@ export const ShareModal = ({
                     </ul>
                   </div>
 
+                  <hr className="my-6" />
+
                   <h4 className="mt-4">
                     {t("share.someoneHasShared", { name: data?.user.name, lng: alternateLanguage })}
                   </h4>
