@@ -9,11 +9,10 @@ import { Attention, AttentionTypes } from "@components/globals/Attention/Attenti
 import Link from "next/link";
 
 export interface DialogErrors {
-  client: boolean;
   unknown: boolean;
   minEntries: boolean;
   maxEntries: boolean;
-  invalidEntries: boolean; //TODO
+  invalidEntries: boolean;
 }
 
 export const DownloadTableDialog = ({
@@ -47,12 +46,12 @@ export const DownloadTableDialog = ({
   const router = useRouter();
   const [entries, setEntries] = useState<string[]>([]);
   const [errors, setErrors] = useState({
-    client: false,
     unknown: false,
     minEntries: false,
     maxEntries: false,
-    invalidEntries: false, //TODO
+    invalidEntries: false,
   });
+  const [listInvalidEntries, setListInvalidEntries] = useState<string[]>([]);
   const dialogRef = useDialogRef();
   const confirmInstructionId = `dialog-confirm-receipt-instruction-${randomId()}`;
 
@@ -66,23 +65,23 @@ export const DownloadTableDialog = ({
     setIsShowDialog(false);
     setEntries([]);
     setErrors({
-      client: false,
       unknown: false,
       minEntries: false,
       maxEntries: false,
       invalidEntries: false,
     });
+    setListInvalidEntries([]);
     dialogRef.current?.close();
   };
 
   const handleSubmit = () => {
     setErrors({
-      client: false,
       unknown: false,
       minEntries: false,
       maxEntries: false,
       invalidEntries: false,
     });
+    setListInvalidEntries([]);
 
     if (entries.length <= 0) {
       setErrors({ ...errors, minEntries: true });
@@ -99,7 +98,18 @@ export const DownloadTableDialog = ({
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       data: entries,
     })
-      .then(() => {
+      .then(({ data }) => {
+        // Confirmation API returns success with an error and 1 or more invalid codes
+        if (data?.invalidConfirmationCodes && data.invalidConfirmationCodes?.length > 0) {
+          // Note: why a list of entries and another list for invalid entries? This makes showing
+          // only the invalid entries a lot easier in the LineItems component
+          setListInvalidEntries(data.invalidConfirmationCodes);
+          setEntries(data.invalidConfirmationCodes);
+
+          setErrors({ ...errors, invalidEntries: true });
+          return;
+        }
+
         // Refreshes getServerSideProps data without a full page reload
         router.replace(router.asPath);
         handleClose();
@@ -107,7 +117,8 @@ export const DownloadTableDialog = ({
       .catch((err) => {
         logMessage.error(err as Error);
         if (err?.response?.status === 400) {
-          setErrors({ ...errors, client: true });
+          // Report API returns an error for 1 or more invalid Responses but not the failed codes
+          setErrors({ ...errors, invalidEntries: true });
         } else {
           setErrors({ ...errors, unknown: true });
         }
@@ -147,7 +158,7 @@ export const DownloadTableDialog = ({
                   </p>
                 </Attention>
               )}
-              {errors.client && (
+              {errors.invalidEntries && (
                 <Attention
                   type={AttentionTypes.ERROR}
                   isAlert={true}
@@ -187,6 +198,7 @@ export const DownloadTableDialog = ({
                 maxEntries={maxEntries}
                 errors={errors}
                 setErrors={setErrors}
+                listInvalidEntries={listInvalidEntries}
               ></LineItemEntries>
               <p className="mt-8">{nextSteps}</p>
               <div className="flex mt-8 mb-8">

@@ -15,6 +15,7 @@ export const LineItemEntries = ({
   maxEntries = 20,
   errors,
   setErrors,
+  listInvalidEntries,
 }: {
   inputs: string[];
   setInputs: (tag: string[]) => void;
@@ -22,8 +23,9 @@ export const LineItemEntries = ({
   spellCheck?: boolean;
   inputLabelId: string;
   maxEntries?: number;
-  errors?: DialogErrors;
-  setErrors?: React.Dispatch<React.SetStateAction<DialogErrors>>;
+  errors: DialogErrors;
+  setErrors: React.Dispatch<React.SetStateAction<DialogErrors>>;
+  listInvalidEntries: string[];
 }) => {
   const { t } = useTranslation("form-builder-responses");
   const containerRef = useRef<HTMLDivElement>(null);
@@ -96,7 +98,7 @@ export const LineItemEntries = ({
       className="max-h-60 overflow-y-auto box-border border-black-default border-2 rounded-md"
     >
       <ol data-testid="values">
-        <LineItems values={inputs} onRemove={onRemove} />
+        <LineItems values={inputs} onRemove={onRemove} listInvalidEntries={listInvalidEntries} />
       </ol>
       <div className="grow p-4">
         <input
