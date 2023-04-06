@@ -130,10 +130,6 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         apiUrl={`/api/id/${formId}/submission/confirm`}
         inputRegex={isUUID}
         maxEntries={MAX_CONFIRMATION_COUNT}
-        minEntriesErrorTitle={t("downloadResponsesModals.notifications.entriesLengthConfirmHeader")}
-        minEntriesErrorDescription={t(
-          "downloadResponsesModals.notifications.entriesLengthConfirmDescription"
-        )}
         title={t("downloadResponsesModals.confirmReceiptDialog.title")}
         description={t("downloadResponsesModals.confirmReceiptDialog.findCode")}
         inputHelp={t("downloadResponsesModals.confirmReceiptDialog.copyCode", {
@@ -141,6 +137,43 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         })}
         nextSteps={t("downloadResponsesModals.confirmReceiptDialog.responsesAvailableFor")}
         submitButtonText={t("downloadResponsesModals.confirmReceiptDialog.confirmReceipt")}
+        minEntriesErrorTitle={t(
+          "downloadResponsesModals.confirmReceiptDialog.errors.minEntries.title"
+        )}
+        minEntriesErrorDescription={t(
+          "downloadResponsesModals.confirmReceiptDialog.errors.minEntries.description"
+        )}
+        maxEntriesErrorTitle={t(
+          "downloadResponsesModals.confirmReceiptDialog.errors.maxEntries.title",
+          {
+            max: MAX_CONFIRMATION_COUNT,
+          }
+        )}
+        maxEntriesErrorDescription={t(
+          "downloadResponsesModals.confirmReceiptDialog.errors.maxEntries.description"
+        )}
+        errorEntriesErrorTitle={t(
+          "downloadResponsesModals.confirmReceiptDialog.errors.errorEntries.title",
+          {
+            max: MAX_CONFIRMATION_COUNT,
+          }
+        )}
+        errorEntriesErrorDescription={t(
+          "downloadResponsesModals.confirmReceiptDialog.errors.errorEntries.description"
+        )}
+        invalidEntryErrorTitle={t(
+          "downloadResponsesModals.confirmReceiptDialog.errors.invalidEntry.title"
+        )}
+        invalidEntryErrorDescription={t(
+          "downloadResponsesModals.confirmReceiptDialog.errors.invalidEntry.description"
+        )}
+        unknownErrorTitle={t("downloadResponsesModals.confirmReceiptDialog.errors.unknown.title")}
+        unknownErrorDescription={t(
+          "downloadResponsesModals.confirmReceiptDialog.errors.unknown.description"
+        )}
+        unknownErrorDescriptionLink={t(
+          "downloadResponsesModals.confirmReceiptDialog.errors.unknown.descriptionLink"
+        )}
       />
 
       <DownloadTableDialog
@@ -149,10 +182,6 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         apiUrl={`/api/id/${formId}/submission/report`}
         inputRegex={isFormId}
         maxEntries={MAX_REPORT_COUNT}
-        minEntriesErrorTitle={t("downloadResponsesModals.notifications.entriesLengthReportHeader")}
-        minEntriesErrorDescription={t(
-          "downloadResponsesModals.notifications.entriesLengthReportDescription"
-        )}
         title={t("downloadResponsesModals.reportProblemsDialog.title")}
         description={t("downloadResponsesModals.reportProblemsDialog.findForm")}
         inputHelp={t("downloadResponsesModals.reportProblemsDialog.enterFormNumbers", {
@@ -160,6 +189,43 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         })}
         nextSteps={t("downloadResponsesModals.reportProblemsDialog.problemReported")}
         submitButtonText={t("downloadResponsesModals.reportProblemsDialog.reportProblems")}
+        minEntriesErrorTitle={t(
+          "downloadResponsesModals.reportProblemsDialog.errors.minEntries.title"
+        )}
+        minEntriesErrorDescription={t(
+          "downloadResponsesModals.reportProblemsDialog.errors.minEntries.description"
+        )}
+        maxEntriesErrorTitle={t(
+          "downloadResponsesModals.reportProblemsDialog.errors.maxEntries.title",
+          {
+            max: MAX_CONFIRMATION_COUNT,
+          }
+        )}
+        maxEntriesErrorDescription={t(
+          "downloadResponsesModals.reportProblemsDialog.errors.maxEntries.description"
+        )}
+        errorEntriesErrorTitle={t(
+          "downloadResponsesModals.reportProblemsDialog.errors.errorEntries.title",
+          {
+            max: MAX_CONFIRMATION_COUNT,
+          }
+        )}
+        errorEntriesErrorDescription={t(
+          "downloadResponsesModals.reportProblemsDialog.errors.errorEntries.description"
+        )}
+        invalidEntryErrorTitle={t(
+          "downloadResponsesModals.reportProblemsDialog.errors.invalidEntry.title"
+        )}
+        invalidEntryErrorDescription={t(
+          "downloadResponsesModals.reportProblemsDialog.errors.invalidEntry.description"
+        )}
+        unknownErrorTitle={t("downloadResponsesModals.reportProblemsDialog.errors.unknown.title")}
+        unknownErrorDescription={t(
+          "downloadResponsesModals.reportProblemsDialog.errors.unknown.description"
+        )}
+        unknownErrorDescriptionLink={t(
+          "downloadResponsesModals.reportProblemsDialog.errors.unknown.descriptionLink"
+        )}
       />
     </>
   );

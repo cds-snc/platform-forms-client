@@ -60,11 +60,7 @@
   "lineItemEntries": {
     "remove":"Remove",
     "removed":"Removed",
-    "added":"Added",
-    "notifications": {
-      "maxEntriesTitle":"Only {{max}} responses can be reported at a time.",
-      "maxEntriesDescription":"Enter these form entries before entering more."
-    }
+    "added":"Added"
   },
   "downloadResponsesModals": {
     "confirmReceiptDialog": {
@@ -72,25 +68,60 @@
       "findCode": "Find the confirmation code on the bottom of the downloaded form response. It looks like: c0c42c90-b816-49da-a69a-80bfd8ba15db.",
       "copyCode": "Copy and paste up to {{max}} confirmation codes, one per line.",
       "responsesAvailableFor": "After you confirm receipt, responses will be available for 7 days then automatically removed from our database.",
-      "confirmReceipt": "Confirm receipt"
+      "confirmReceipt": "Confirm receipt",
+      "errors": {
+        "minEntries": {
+          "title": "At least one response must be specified",
+          "description": "Enter the confirmation codes for responses that you've received."
+        },
+        "maxEntries": {
+          "title": "Only {{max}} responses can be reported at a time.",
+          "description": "Enter these form entries before entering more."
+        },
+        "errorEntries": {
+          "title": "An error occurred with the below confirm receipt codes",
+          "description": "Please double check the entries are entered correct and try again. Any valid entries were removed from the below list and successfully submitted."
+        },
+        "invalidEntry": {
+          "title": "The confirmation code entered is invalid",
+          "description": "Please try entereing the confirmation code again."
+        },
+        "unknown": {
+          "title": "Something went wrong",
+          "description": "Try submitting the confirm receipt codes again in a few minutes or contact ",
+          "descriptionLink": "Support"
+        }
+      }
     },
     "reportProblemsDialog": {
       "title": "Report a problem with responses",
       "findForm": "Find the form number in the form list for any responses that will not download or open. They look like, 31-12-XCRV.",
       "enterFormNumbers": "Enter up-to {{max}} form numbers, one per line.",
       "problemReported": "After you report the problem, we will contact you to help resolve the problem.",
-      "reportProblems": "Report problem"
-    },
-    "notifications": {
-      "entriesLengthConfirmHeader": "At least one response must be specified",
-      "entriesLengthConfirmDescription": "Enter the confirmation codes for responses that you've received.",
-      "entriesLengthReportHeader": "At least one form must be specified",
-      "entriesLengthReportDescription": "Enter the form numbers for responses that have a problem.",
-      "clientEntryHeader": "An error occurred with one of the entries",
-      "clientEntryDescription": "Please double check the entries are entered correct and try again.",
-      "unknownErrorHeader": "Something went wrong",
-      "unknownErrorDescription": "Try again in a few minutes or contact ",
-      "unknownErrorDescriptionLink": "Support"
+      "reportProblems": "Report problem",
+      "errors": {
+        "minEntries": {
+          "title": "At least one form number must be specified",
+          "description": "Enter the form number for responses that you've received."
+        },
+        "maxEntries": {
+          "title": "Only {{max}} form number can be reported at a time.",
+          "description": "Enter these form numbers before entering more."
+        },
+        "errorEntries": {
+          "title": "An error occurred with the below form number",
+          "description": "Please double check the form numbers are entered correct and try again. Any valid form numbers were removed from the below list and successfully submitted."
+        },
+        "invalidEntry": {
+          "title": "The form number entered is invalid",
+          "description": "Please try entereing the form number again."
+        },
+        "unknown": {
+          "title": "Something went wrong",
+          "description": "Try submitting the form numbers again in a few minutes or contact ",
+          "descriptionLink": "Support"
+        }
+      }
     },
     "cancel": "Cancel"
   }

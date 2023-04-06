@@ -84,6 +84,7 @@ const reducerTableItems = (state: ReducerTableItemsState, action: ReducerTableIt
 export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) => {
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
+  // TODO: RENAME to errors/setErrors to be consistent and not confused with other Notifications
   // TODO: would be nice to use some sort of "manager" pattern to control "inline" notifications
   const [notifications, setNotifications] = useState({
     downloadError: false,
