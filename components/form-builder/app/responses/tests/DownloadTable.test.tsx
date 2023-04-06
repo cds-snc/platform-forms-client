@@ -1,7 +1,21 @@
-import { sortVaultSubmission, VaultStatus } from "../DownloadTable";
+import React from "react";
+import { render } from "@testing-library/react";
+import { DownloadTable, sortVaultSubmission, VaultStatus } from "../DownloadTable";
 import { VaultSubmissionList } from "@lib/types";
 
+jest.mock("react-i18next", () => ({
+  useTranslation: () => ({ t: (key) => key }),
+}));
+
 describe("Download Table", () => {
+  it("Download Table should render", () => {
+    const rendered = render(
+      <DownloadTable vaultSubmissions={vaultSubmissions} formId="clg17xha50008efkgfgxa8l4f" />
+    );
+    const table = rendered.getByRole("table");
+    expect(table).toHaveAttribute("aria-live", "polite");
+  });
+
   // For expected sorting behavior see:
   // https://app.zenhub.com/workspaces/gcforms-60cb8929764d71000e481cab/issues/gh/cds-snc/platform-forms-client/1865
   it("Function sortVaultSubmission() sorts correctly", () => {
@@ -24,8 +38,6 @@ describe("Download Table", () => {
     expect(sortedVaultSubmissions[13].name).toEqual("03-04-2ce6");
     expect(sortedVaultSubmissions[13].status).not.toEqual(VaultStatus.NEW.valueOf());
   });
-
-  // TODO: some basic table component tests
 });
 
 // Test Data taken from a local vault response on 2023-04-06
