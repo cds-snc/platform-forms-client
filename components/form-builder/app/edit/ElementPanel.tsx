@@ -76,10 +76,27 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
         item={item}
         handleAdd={handleAddElement}
         handleRemove={() => {
-          // if index is 0, then highlight the form title
-          const labelId = item.index === 0 ? "formTitle" : `item-${item.index - 1}`;
+          const previousElement = elements[item.index - 1];
           remove(item.id);
-          document.getElementById(labelId)?.focus();
+
+          // if index is 0, then highlight the form title
+          if (item.index === 0) {
+            document.getElementById("formTitle")?.focus();
+            return;
+          }
+
+          // If the previous element is a rich text editor, then focus on the editor
+          if (previousElement.type === "richText") {
+            (
+              document
+                .getElementById(`element-${previousElement.id}`)
+                ?.querySelector("[id^='editor-']") as HTMLElement
+            ).focus();
+            return;
+          }
+
+          // Otherwise focus on the previous question input
+          refs && refs.current && refs.current[previousElement.id].focus();
         }}
         handleMoveUp={() => {
           moveUp(item.index);
