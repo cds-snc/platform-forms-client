@@ -596,5 +596,6 @@
       "body1": "There are",
       "body2": "unconfirmed responses 35 days overdue. Confirm the receipt of all overdue downloaded responses before saving new ones."
     }
-  }
+  },
+  "beforePublishMessage": "You can change these settings anytime before publishing."
 }
