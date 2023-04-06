@@ -48,6 +48,7 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
   /* eslint-disable jsx-a11y/click-events-have-key-events */
   return (
     <div
+      id={`element-${item.id}`}
       {...focusWithinProps}
       className={`element-${item.index} ${className} group ${
         isWithin ? "active" : ""
@@ -55,6 +56,15 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
       onClick={(e) => {
         const el = e.target as HTMLElement;
         if (el.tagName === "DIV") {
+          if (item.type === "richText") {
+            if (el.querySelector("[id^='editor-']")) {
+              (el?.querySelector("[id^='editor-']") as HTMLElement).focus();
+            } else if (el?.parentElement?.querySelector("[id^='editor-']")) {
+              (el?.parentElement?.querySelector("[id^='editor-']") as HTMLElement).focus();
+            }
+            return;
+          }
+
           refs?.current?.[item.id]?.focus();
         }
       }}
@@ -67,16 +77,33 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
         handleAdd={handleAddElement}
         handleRemove={() => {
           // if index is 0, then highlight the form title
-          const labelId = item.index === 0 ? "formTitle" : `item${item.index - 1}`;
+          const labelId = item.index === 0 ? "formTitle" : `item-${item.index - 1}`;
           remove(item.id);
           document.getElementById(labelId)?.focus();
         }}
         handleMoveUp={() => {
           moveUp(item.index);
+          if (item.type === "richText") {
+            (
+              document
+                .getElementById(`element-${item.id}`)
+                ?.querySelector("[id^='editor-']") as HTMLElement
+            ).focus();
+            return;
+          }
+
           refs && refs.current && refs.current[item.id].focus();
         }}
         handleMoveDown={() => {
           moveDown(item.index);
+          if (item.type === "richText") {
+            (
+              document
+                .getElementById(`element-${item.id}`)
+                ?.querySelector("[id^='editor-']") as HTMLElement
+            ).focus();
+            return;
+          }
           refs && refs.current && refs.current[item.id].focus();
         }}
         handleDuplicate={() => {
