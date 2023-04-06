@@ -173,55 +173,56 @@ export const ModalForm = ({
           </div>
         </div>
       )}
-      {item.type === FormElementTypes.textField &&
-        (!item.properties.validation?.type || item.properties.validation?.type === "text") && (
-          <>
-            <div className="mb-2">
-              <ModalLabel htmlFor={`characterLength--modal--${item.index}`}>
-                {t("maximumCharacterLength")}
-              </ModalLabel>
-              <Hint>{t("characterLimitDescription")}</Hint>
-              <Input
-                id={`characterLength--modal--${item.index}`}
-                type="number"
-                min="1"
-                className="w-1/4"
-                value={properties.validation?.maxLength || ""}
-                onKeyDown={(e) => {
-                  if (["-", "+", ".", "e"].includes(e.key)) {
-                    e.preventDefault();
-                  }
-                }}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  // if value is "", unset the field
-                  if (e.target.value === "") {
-                    unsetModalField(`modals[${item.index}].validation.maxLength`);
-                    return;
-                  }
+      {item.type === FormElementTypes.textField ||
+        (FormElementTypes.textArea &&
+          (!item.properties.validation?.type || item.properties.validation?.type === "text") && (
+            <>
+              <div className="mb-2">
+                <ModalLabel htmlFor={`characterLength--modal--${item.index}`}>
+                  {t("maximumCharacterLength")}
+                </ModalLabel>
+                <Hint>{t("characterLimitDescription")}</Hint>
+                <Input
+                  id={`characterLength--modal--${item.index}`}
+                  type="number"
+                  min="1"
+                  className="w-1/4"
+                  value={properties.validation?.maxLength || ""}
+                  onKeyDown={(e) => {
+                    if (["-", "+", ".", "e"].includes(e.key)) {
+                      e.preventDefault();
+                    }
+                  }}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    // if value is "", unset the field
+                    if (e.target.value === "") {
+                      unsetModalField(`modals[${item.index}].validation.maxLength`);
+                      return;
+                    }
 
-                  const value = parseInt(e.target.value);
-                  if (!isNaN(value) && value >= 1) {
-                    // clone the existing properties so that we don't overwrite other keys in "validation"
-                    const validation = Object.assign({}, properties.validation, {
-                      maxLength: value,
-                    });
-                    updateModalProperties(item.index, {
-                      ...properties,
-                      ...{ validation },
-                    });
-                  }
-                }}
-              />
-            </div>
-            <InfoDetails className="mb-4" summary={t("characterLimitWhenToUse.title")}>
-              <div className="mt-4 mb-8 border-l-3 border-gray-500 pl-8">
-                <p className="text-md mb-4">{t("characterLimitWhenToUse.text1")}</p>
-                <p className="text-md mb-4">{t("characterLimitWhenToUse.text2")}</p>
-                <p className="text-md">{t("characterLimitWhenToUse.text3")}</p>
+                    const value = parseInt(e.target.value);
+                    if (!isNaN(value) && value >= 1) {
+                      // clone the existing properties so that we don't overwrite other keys in "validation"
+                      const validation = Object.assign({}, properties.validation, {
+                        maxLength: value,
+                      });
+                      updateModalProperties(item.index, {
+                        ...properties,
+                        ...{ validation },
+                      });
+                    }
+                  }}
+                />
               </div>
-            </InfoDetails>
-          </>
-        )}
+              <InfoDetails className="mb-4" summary={t("characterLimitWhenToUse.title")}>
+                <div className="mt-4 mb-8 border-l-3 border-gray-500 pl-8">
+                  <p className="text-md mb-4">{t("characterLimitWhenToUse.text1")}</p>
+                  <p className="text-md mb-4">{t("characterLimitWhenToUse.text2")}</p>
+                  <p className="text-md">{t("characterLimitWhenToUse.text3")}</p>
+                </div>
+              </InfoDetails>
+            </>
+          ))}
     </form>
   );
 };
