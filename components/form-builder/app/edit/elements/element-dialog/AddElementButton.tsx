@@ -37,7 +37,7 @@ export const AddElementButton = ({
       <Button
         onClick={handleOpenDialog}
         theme={theme}
-        className="!border-1.5 !py-2 !px-4 leading-6 text-sm bg-gray-200 group/button"
+        className="!border-1.5 !py-2 !px-4 leading-6 text-sm bg-violet-50 group/button"
         dataTestId="add-element"
       >
         <>
