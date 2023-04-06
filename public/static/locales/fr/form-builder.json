@@ -596,6 +596,7 @@
       "title": "Le téléchargement est limité aux réponses en retard jusqu'à ce qu'elles soient téléchargées et confirmées",
       "body1": "Il y a",
       "body2": "réponses non confirmées avec 35 jours de retard ou plus. Confirmez la réception de toute réponse téléchargée en retard avant d'en enregistrer de nouvelles."
-    }
+    },
+    "beforePublishMessage": "Vous pouvez modifier ces paramètres à tout moment avant de publier le formulaire."
   }
 }

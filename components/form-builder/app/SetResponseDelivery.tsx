@@ -47,6 +47,7 @@ export const SetResponseDelivery = () => {
     defaultSubjectFr,
     securityAttribute,
     updateSecurityAttribute,
+    isPublished,
   } = useTemplateStore((s) => ({
     id: s.id,
     email: s.deliveryOption?.emailAddress,
@@ -61,6 +62,7 @@ export const SetResponseDelivery = () => {
     updateField: s.updateField,
     updateSecurityAttribute: s.updateSecurityAttribute,
     securityAttribute: s.securityAttribute,
+    isPublished: s.isPublished,
   }));
 
   const userEmail = session.data?.user.email ?? "";
@@ -127,7 +129,13 @@ export const SetResponseDelivery = () => {
     setInputEmail("");
     resetDeliveryOption();
     updateSecurityAttribute(classification);
-    await updateResponseDelivery(id);
+
+    const result = await updateResponseDelivery(id);
+
+    if (!result || axios.isAxiosError(result)) {
+      return result;
+    }
+
     return await save({
       jsonConfig: getSchema(),
       name: getName(),
@@ -216,10 +224,15 @@ export const SetResponseDelivery = () => {
       <h1 className="visually-hidden">{t("formSettings")}</h1>
       {status === "authenticated" && (
         <div className="mb-10">
-          <div className="block font-bold mb-4">{t("settingsResponseDelivery.title")}</div>
           <div className="mb-4">
-            <p>{t("settingsResponseDelivery.selectClassification")}</p>
+            <p className="block mb-4 text-xl font-bold">
+              {t("settingsResponseDelivery.selectClassification")}
+            </p>
+            <p className="inline-block mb-5 p-3 bg-purple-200 font-bold text-sm">
+              {t("beforePublishMessage")}
+            </p>
             <select
+              disabled={isPublished}
               id="classification-select"
               value={classification}
               className="gc-dropdown inline-block mb-5 text-black-default"
@@ -235,9 +248,12 @@ export const SetResponseDelivery = () => {
               ))}
             </select>
           </div>
-
           <div className="mb-4">
+            <div className="block mb-4 text-xl font-bold">
+              {t("settingsResponseDelivery.title")}
+            </div>
             <Radio
+              disabled={isPublished}
               id={`delivery-option-${DeliveryOption.vault}`}
               checked={deliveryOption === DeliveryOption.vault}
               name="response-delivery"
@@ -251,6 +267,7 @@ export const SetResponseDelivery = () => {
               </span>
             </Radio>
             <Radio
+              disabled={isPublished}
               id={`delivery-option-${DeliveryOption.email}`}
               checked={deliveryOption === DeliveryOption.email}
               name="response-delivery"
@@ -273,7 +290,7 @@ export const SetResponseDelivery = () => {
             />
           )}
 
-          <Button disabled={!isValid} theme="secondary" onClick={saveDeliveryOption}>
+          <Button disabled={!isValid || isPublished} theme="secondary" onClick={saveDeliveryOption}>
             {t("settingsResponseDelivery.saveButton")}
           </Button>
           {/* #1800 -- turn on when Protected B */}

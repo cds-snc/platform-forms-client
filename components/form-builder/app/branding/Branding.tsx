@@ -1,11 +1,14 @@
 import React, { useCallback } from "react";
 import { useSession } from "next-auth/react";
+import { useTranslation } from "next-i18next";
+import Link from "next/link";
+import axios from "axios";
 
 import { Logos, options } from "./";
 import { useTemplateStore } from "../../store";
 import { SettingsLoggedOut } from "../SettingsLoggedOut";
-import { useTranslation } from "next-i18next";
-import Link from "next/link";
+import { useTemplateApi } from "../../hooks";
+import { Button, toast } from "../shared";
 
 const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element | string }) => {
   return (
@@ -18,17 +21,32 @@ const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element 
 export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: boolean }) => {
   const { t, i18n } = useTranslation("form-builder");
   const { status } = useSession();
-  const { brandName, updateField, unsetField, brandLogoEn, brandLogoFr, logoTitleEn, logoTitleFr } =
-    useTemplateStore((s) => ({
-      id: s.id,
-      brandName: s.form?.brand?.name || "",
-      brandLogoEn: s.form?.brand?.logoEn || "",
-      brandLogoFr: s.form?.brand?.logoFr || "",
-      logoTitleEn: s.form?.brand?.logoTitleEn || "",
-      logoTitleFr: s.form?.brand?.logoTitleFr || "",
-      unsetField: s.unsetField,
-      updateField: s.updateField,
-    }));
+  const { save } = useTemplateApi();
+  const {
+    id,
+    isPublished,
+    brandName,
+    updateField,
+    unsetField,
+    brandLogoEn,
+    brandLogoFr,
+    logoTitleEn,
+    logoTitleFr,
+    getSchema,
+    getName,
+  } = useTemplateStore((s) => ({
+    id: s.id,
+    brandName: s.form?.brand?.name || "",
+    brandLogoEn: s.form?.brand?.logoEn || "",
+    brandLogoFr: s.form?.brand?.logoFr || "",
+    logoTitleEn: s.form?.brand?.logoTitleEn || "",
+    logoTitleFr: s.form?.brand?.logoTitleFr || "",
+    unsetField: s.unsetField,
+    updateField: s.updateField,
+    getSchema: s.getSchema,
+    getName: s.getName,
+    isPublished: s.isPublished,
+  }));
 
   const updateBrand = useCallback(
     (type: string) => {
@@ -43,6 +61,24 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
     },
     [brandName, updateField, unsetField]
   );
+
+  const savedSuccessMessage = t("settingsResponseDelivery.savedSuccessMessage");
+  const savedErrorMessage = t("settingsResponseDelivery.savedErrorMessage");
+
+  const handleSave = useCallback(async () => {
+    const result = await save({
+      jsonConfig: getSchema(),
+      name: getName(),
+      formID: id,
+    });
+
+    if (!result || axios.isAxiosError(result)) {
+      toast.error(savedErrorMessage);
+      return;
+    }
+
+    toast.success(savedSuccessMessage);
+  }, [id, save, getSchema, getName, savedSuccessMessage, savedErrorMessage]);
 
   const lang = i18n.language;
   const logo = lang === "en" ? brandLogoEn : brandLogoFr;
@@ -67,12 +103,17 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
   return (
     <div>
       <h1 className="visually-hidden">{t("branding.heading")}</h1>
-      <h2>{t("branding.heading")}</h2>
-      <p className="block text-md mb-5">{t("branding.text1")}</p>
+      <div className="block mb-4 text-xl font-bold">{t("branding.heading")}</div>
+      <p className="block text-md">{t("branding.text1")}</p>
+      <p className="inline-block mt-5 mb-5 p-3 bg-purple-200 font-bold text-sm">
+        {t("beforePublishMessage")}
+      </p>
+
       {/* Logo select */}
       <div>
         <Label htmlFor="branding-select">{t("branding.select")}</Label>
         <Logos
+          disabled={isPublished as boolean}
           options={brandingOptions.map(({ value, label }) => ({ value, label }))}
           selected={brandName}
           handleUpdate={updateBrand}
@@ -88,6 +129,12 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
           <img alt={t("branding.defaultOption")} src={defaultLogo} width="360" height="33" />
         )}
       </div>
+      <div className="mt-10">
+        <Button disabled={isPublished as boolean} theme="secondary" onClick={handleSave}>
+          {t("settingsResponseDelivery.saveButton")}
+        </Button>
+      </div>
+
       {hasBrandingRequestForm && (
         <div>
           <p className="text-md mb-5 mt-6">{t("branding.notFound")}</p>
