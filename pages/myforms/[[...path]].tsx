@@ -24,6 +24,7 @@ interface FormsDataItem {
   titleFr: string;
   url: string;
   date: string;
+  deliveryOption: { emailAddress?: string };
   isPublished: boolean;
 }
 interface MyFormsProps {
@@ -142,6 +143,7 @@ export const getServerSideProps = requireAuthentication(
           id,
           form: { titleEn = "", titleFr = "" },
           name,
+          deliveryOption = { emailAddress: "" },
           isPublished,
           updatedAt,
         } = template;
@@ -149,6 +151,7 @@ export const getServerSideProps = requireAuthentication(
           id,
           titleEn,
           titleFr,
+          deliveryOption,
           name,
           isPublished,
           date: updatedAt,

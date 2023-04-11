@@ -17,13 +17,14 @@ export interface CardProps {
   url: string;
   date: string;
   isPublished: boolean;
+  deliveryOption?: { emailAddress?: string } | null;
   handleDelete: (card: CardProps) => void;
 }
 
 export const Card = (props: CardProps): React.ReactElement => {
-  const { id, name, titleEn, titleFr, url, date, isPublished } = props;
+  const { id, name, titleEn, titleFr, url, date, isPublished, deliveryOption } = props;
   const { t, i18n } = useTranslation(["my-forms", "common"]);
-
+  const responsesLink = `/${i18n.language}/form-builder/responses/${id}`;
   const menuItemsList: Array<MenuDropdownItemI> = [
     {
       title: t("card.menu.preview"),
@@ -137,6 +138,14 @@ export const Card = (props: CardProps): React.ReactElement => {
             </>
           )}
         </a>
+
+        {deliveryOption && deliveryOption.emailAddress && (
+          <a href={responsesLink}>Responses sent to:{deliveryOption.emailAddress}</a>
+        )}
+
+        {deliveryOption && !deliveryOption.emailAddress && (
+          <a href={responsesLink}>Form responses available for download</a>
+        )}
       </p>
       <div className="flex justify-between items-center p-3">
         <div id={`card-date-${id}`} className="text-sm">
