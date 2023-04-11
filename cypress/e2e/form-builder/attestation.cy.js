@@ -24,7 +24,7 @@ describe("Form builder attestation", () => {
   });
 
   it("Renders attestation block", () => {
-    cy.get("button").contains("Add block").click();
+    cy.get("button").contains("Add").click();
     cy.get('[data-testid="attestation"]').click();
     cy.get("button").contains("Select block").click();
     cy.get("#item-1").scrollIntoView();

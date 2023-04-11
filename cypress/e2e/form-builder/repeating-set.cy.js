@@ -26,7 +26,7 @@ describe("Test FormBuilder Repeating set", () => {
 
   it("Adds a Repeating set with a few questions", () => {
     cy.visit("/form-builder/edit");
-    cy.get("button").contains("Add block").click();
+    cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="dynamicRow"]').click();
     cy.get("button").contains("Select block").click();
@@ -55,7 +55,7 @@ describe("Test FormBuilder Repeating set", () => {
 
   it("Adds a Repeating set with custom add label", () => {
     cy.visit("/form-builder/edit");
-    cy.get("button").contains("Add block").click();
+    cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="dynamicRow"]').click();
     cy.get("button").contains("Select block").click();
@@ -73,7 +73,7 @@ describe("Test FormBuilder Repeating set", () => {
 
   it("Adds a Repeating set with max rows", () => {
     cy.visit("/form-builder/edit");
-    cy.get("button").contains("Add block").click();
+    cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="dynamicRow"]').click();
     cy.get("button").contains("Select block").click();
@@ -103,7 +103,7 @@ describe("Test FormBuilder Repeating set", () => {
 
   it("Adds multiple Repeating sets", () => {
     cy.visit("/form-builder/edit");
-    cy.get("button").contains("Add block").click();
+    cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="dynamicRow"]').click();
     cy.get("button").contains("Select block").click();
@@ -114,7 +114,7 @@ describe("Test FormBuilder Repeating set", () => {
     cy.get("button").contains("Select block").click();
     cy.get("#item-101").type("This is a short answer question");
 
-    cy.get(".element-0").find("button").contains("Add block").click();
+    cy.get(".element-0").find("button").contains("Add").click();
 
     cy.get('[data-testid="dynamicRow"]').click();
     cy.get("button").contains("Select block").click();
