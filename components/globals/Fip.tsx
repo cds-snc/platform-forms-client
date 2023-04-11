@@ -1,10 +1,9 @@
 import React from "react";
 import { useSession } from "next-auth/react";
-import { useTranslation } from "next-i18next";
 import LanguageToggle from "./LanguageToggle";
-import { getProperty } from "@lib/formBuilder";
 import Menu from "@components/auth/LoginMenu";
 import { PublicFormRecord } from "@lib/types";
+import Brand from "./Brand";
 
 const Fip = ({
   formRecord,
@@ -15,37 +14,14 @@ const Fip = ({
   showLogin?: boolean;
   showLanguageToggle?: boolean;
 }) => {
-  const { t, i18n } = useTranslation("common");
-
-  // Check if custom branding was provided, otherwise show the Government of Canada branding
-  const formTheme = formRecord?.form ? formRecord.form.brand : null;
-
-  const logo =
-    (formTheme?.[getProperty("logo", i18n.language)] as string | undefined) ??
-    "/img/sig-blk-" + i18n.language + ".svg";
-
-  let logoStyles = "max-h-[70px]";
-
-  if (logo === "/img/sig-blk-en.svg") {
-    logoStyles = "max-h-[40px]";
-  }
-
-  const linkUrl =
-    (formTheme?.[getProperty("url", i18n.language)] as string | undefined) ?? t("fip.link");
-
-  const logoTitle =
-    (formTheme?.[getProperty("logoTitle", i18n.language)] as string | undefined) ?? t("fip.text");
+  const brand = formRecord?.form ? formRecord.form.brand : null;
 
   const { status } = useSession();
 
   return (
     <div data-testid="fip" className="gc-fip">
       <div className="canada-flag">
-        <a href={linkUrl} aria-label={t("fip.label")}>
-          <picture>
-            <img src={logo} alt={logoTitle} className={logoStyles} />
-          </picture>
-        </a>
+        <Brand brand={brand} />
       </div>
       <div className="inline-flex gap-4">
         {showLogin && <Menu isAuthenticated={status === "authenticated"} />}
