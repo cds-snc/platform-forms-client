@@ -25,3 +25,5 @@ export const Description = (props: DescriptionProps): React.ReactElement => {
     </div>
   );
 };
+
+export default Description;

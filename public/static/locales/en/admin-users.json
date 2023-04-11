@@ -6,14 +6,6 @@
   "true": "True",
   "false": "False",
   "enable": "Enable",
-  "enabled": "Enabled",
   "disable": "Disable",
-  "disabled": "Disabled",
-  "a11y-diable-desc": "administrative privileges for",
-  "cancel": "Cancel",
-  "save": "Save",
-  "managePermissions": "Manage Permissions",
-  "viewPermissions": "View Permissions",
-  "managePermissionsFor": "Managing permissions of",
-  "assignUsersToTemplate": "Assign users to template"
+  "a11y-diable-desc": "administrative priveleges for"
 }

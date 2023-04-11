@@ -9,16 +9,7 @@
   "view": {
     "title": "View Form Templates",
     "update": "Edit",
-    "formID": "Form ID:",
-    "view": "View",
-    "formTitle": "Form Title",
-    "status": "Status",
-    "published": "Published",
-    "draft": "Draft",
-    "publishForm": "Publish",
-    "unpublishForm": "Draft",
-    "users": "Users",
-    "assign": "Assign"
+    "formID": "Form ID:"
   },
   "settings": {
     "title": "Form Settings",

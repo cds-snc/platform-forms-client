@@ -1,6 +1,6 @@
 import React from "react";
 import { Field } from "formik";
-import { Description } from "@components/forms";
+import { Description } from "../Description/Description";
 import { ChoiceFieldProps } from "@lib/types";
 
 export const Radio = (
@@ -31,3 +31,5 @@ export const Radio = (
     </div>
   );
 };
+
+export default Radio;

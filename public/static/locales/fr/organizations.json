@@ -1,0 +1,9 @@
+{
+  "title": "Organizations",
+  "createTitle": "Create an Organization",
+  "settings": {
+    "title": "Organization Settings",
+    "id": "Organization ID: ",
+    "name": "Name of Organization: "
+  }
+}

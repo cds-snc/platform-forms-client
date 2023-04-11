@@ -2,7 +2,7 @@ import React from "react";
 import classnames from "classnames";
 import { useField } from "formik";
 import { useTranslation } from "next-i18next";
-import { ErrorMessage } from "@components/forms";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import { InputFieldProps } from "@lib/types";
 
 interface DropdownProps extends InputFieldProps {
@@ -52,3 +52,5 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
     </>
   );
 };
+
+export default Dropdown;

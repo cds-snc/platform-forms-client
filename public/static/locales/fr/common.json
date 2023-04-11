@@ -1,18 +1,14 @@
 {
   "footer": {
     "terms": {
+      "disclaimer": "Ce formulaire est hébergé par le Service numérique canadien.",
       "link": "/fr/terms-avis",
-      "desc": "Avis"
-    },
-    "sla": {
-      "link": "/fr/sla",
-      "desc": "Accord sur les niveaux de service"
-    },
-    "support": {
-      "link": "/fr/form-builder/support",
-      "desc": "Soutien"
-    },
-    "ariaLabel": "Bas de page"
+      "desc-preface": "Pour en savoir plus, consultez les ",
+      "desc": "modalités de service"
+    }
+  },
+  "phase": {
+    "desc": "Ce site évoluera au fur et à mesure que nous testons des idées."
   },
   "skip-link": "Passer au contenu principal",
   "fip": {
@@ -39,8 +35,7 @@
     "file-size-too-large": "Veuillez sélectionner un fichier plus petit.",
     "file-type-invalid": "Veuillez sélectionner un autre type de fichier.",
     "too-many-characters": "Veuillez raccourcir votre réponse.",
-    "all-checkboxes-required": "Lisez et cochez toutes les cases pour confirmer les éléments de cette section.",
-    "validGovEmail": "Ce champ doit être une adresse courriel valide du gouvernement."
+    "all-checkboxes-required": "Lisez et cochez toutes les cases pour confirmer les éléments de cette section."
   },
   "required": "obligatoire",
   "all-required": "toutes les cases à cocher sont obligatoires",
@@ -50,8 +45,7 @@
   "file-upload-no-file-selected": "Aucun fichier actuellement sélectionné",
   "dropdown-initial-option-text": "Pas de sélection",
   "server-error": "Oups, il semble qu'un problème est survenu lors de l'envoi de votre formulaire. Veuillez réessayer plus tard.",
-  "title-full": "Formulaires GC - GC Forms",
-  "title": "Formulaires GC",
+  "title": "GC Forms - Formulaires GC",
   "loading": "Nous traitons votre soumission de formulaire. Veuillez patienter.",
   "spam-error": {
     "error-part-1": "Impossible d'utiliser le bouton avant",
@@ -63,16 +57,13 @@
   },
   "adminNav": {
     "dashboard": "Accueil",
-    "formbuilder": "Form Builder",
     "vault": "Coffre",
     "users": "Usagers",
     "upload": "Téléchargement de modèle",
     "templates": "Modèles",
     "features": "Options",
     "login": "Connexion",
-    "logout": "Déconnexion",
-    "privileges": "Privileges",
-    "myForms": "Mes formulaires"
+    "logout": "Déconnexion"
   },
   "formElements": {
     "characterCount": {
@@ -85,20 +76,5 @@
   "dynamicRow": {
     "add": "Ajouter",
     "delete": "Supprimer"
-  },
-  "acceptableUsePage": {
-    "agree": "Accepter",
-
-    "welcome": "Connaître vos responsabilités"
-  },
-  "loginMenu": {
-    "login": "Se connecter",
-    "logout": "Se déconnecter"
-  },
-  "alert": {
-    "dismissAlert": "Fermer cette alerte"
-  },
-  "continue": "Continuer",
-  "error": "Erreur",
-  "unknown": "Inconnu"
+  }
 }

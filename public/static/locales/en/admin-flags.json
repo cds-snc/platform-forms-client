@@ -26,6 +26,10 @@
       "title": "Submit to Reliability Queue",
       "description": "Submit form responses to the Reliability Queue. If disabled no form submissions will be submitted.  Usually used for testing."
     },
+    "notifyPreview": {
+      "title": "Notify Email Preview",
+      "description": "On the confirmation page after submission display a copy of the email sent to the form administrator"
+    },
     "reCaptcha": {
       "title": "I am not a robot",
       "description": "Enable protected by reCaptcha on forms before submission"
@@ -33,18 +37,6 @@
     "formTimer": {
       "title": "Form Timer",
       "description": "Wait a specific amount of time before being allowed to submit the form"
-    },
-    "accountRegistration": {
-      "title": "Account Registration",
-      "description": "Allow users to register for an account"
-    },
-    "passwordReset": {
-      "title": "Allow Password Resets",
-      "description": "Allow users to reset their passwords"
-    },
-    "supportForms": {
-      "title": "Support Forms",
-      "description": "Whether or not support forms are enabled"
     }
   }
 }

@@ -10,27 +10,29 @@ export default {
 export const defaultJSONUpload = (): React.ReactElement => <JSONUpload></JSONUpload>;
 
 const testForm = {
-  id: "test0form00000id000asdf11",
-  securityAttribute: "Unclassified",
-  submission: {
-    email: "test@test.com",
-  },
-  isPublished: true,
-  form: {
-    version: 1,
-    titleEn: "Test JSON!",
-    titleFr: "Test JSON!",
-    layout: [1],
-    elements: [
-      {
-        id: 1,
-        type: FormElementTypes.textField,
-        properties: {
-          titleEn: "test Element!",
-          titleFr: "test Element!",
+  formID: 1,
+  formConfig: {
+    publishingStatus: true,
+    securityAttribute: "Unclassified",
+    submission: {
+      email: "test@test.com",
+    },
+    form: {
+      version: "1",
+      titleEn: "Test JSON!",
+      titleFr: "Test JSON!",
+      layout: ["1"],
+      elements: [
+        {
+          id: 1,
+          type: FormElementTypes.textField,
+          properties: {
+            titleEn: "test Element!",
+            titleFr: "test Element!",
+          },
         },
-      },
-    ],
+      ],
+    },
   },
 };
 

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
+import parse from "html-react-parser";
 import { useTranslation } from "next-i18next";
-import { RichText } from "@components/forms";
+import { RichText } from "../../../components/forms";
 import { getProperty } from "@lib/formBuilder";
 import { PublicFormRecord } from "@lib/types";
 
@@ -10,6 +11,7 @@ import { PublicFormRecord } from "@lib/types";
 
 interface TextPageProps {
   formRecord: PublicFormRecord;
+  htmlEmail: string | undefined;
 }
 
 interface PageContextProps {
@@ -29,7 +31,9 @@ const PageContent = ({ pageText, urlQuery }: PageContextProps) => {
   const backToLink = urlQuery ? <a href={urlQuery}>{t("backLink")}</a> : null;
   return (
     <>
-      <h1 tabIndex={-1}>{t("title")}</h1>
+      <h1 className="gc-h1" tabIndex={-1}>
+        {t("title")}
+      </h1>
       <div>
         <p>{t("body")}</p>
       </div>
@@ -42,8 +46,11 @@ export const TextPage = (props: TextPageProps): React.ReactElement => {
   const { i18n } = useTranslation("confirmation");
   const {
     formRecord: {
-      form: { endPage },
+      formConfig: {
+        form: { endPage },
+      },
     },
+    htmlEmail,
   } = props;
   const language = i18n.language as string;
 
@@ -59,6 +66,15 @@ export const TextPage = (props: TextPageProps): React.ReactElement => {
   return (
     <>
       <PageContent pageText={pageText} urlQuery={urlQuery} />
+
+      {htmlEmail && (
+        <div className="p-5 mt-5 border-double border-gray-400 border-4">
+          <h2>Email to Form Owner Below:</h2>
+          <div className="pt-5 email-preview">{parse(htmlEmail)}</div>
+        </div>
+      )}
     </>
   );
 };
+
+export default TextPage;

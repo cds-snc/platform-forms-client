@@ -1,34 +1,10 @@
-import { unstable_getServerSession } from "next-auth/next";
-import { Session, User } from "next-auth";
-import {
-  GetServerSidePropsResult,
-  GetServerSidePropsContext,
-  NextApiRequest,
-  NextApiResponse,
-} from "next";
-import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import jwt from "jsonwebtoken";
+import { getSession, GetSessionOptions } from "next-auth/client";
+import { Session } from "next-auth";
+import { GetServerSidePropsResult, GetServerSidePropsContext } from "next";
 import { hasOwnProperty } from "./tsUtils";
-import { TemporaryTokenPayload } from "./types";
-import { authOptions } from "@pages/api/auth/[...nextauth]";
-import { AccessControlError, createAbility } from "./privileges";
-import { MongoAbility } from "@casl/ability";
-import { localPathRegEx } from "@lib/validation";
 
-interface ServerSidePropsAuthContext extends GetServerSidePropsContext {
-  user: AuthContextUser;
-}
-interface AuthContextUser extends User {
-  ability: MongoAbility;
-}
-
-/**
- * Enum used to record Logging action events
- */
-export enum LoggingAction {
-  LOGIN = "LOGIN",
-  LOGOUT = "LOGOUT",
-  LOCKED = "LOCKED",
+export interface GetServerSidePropsAuthContext extends GetServerSidePropsContext {
+  user?: Record<string, unknown>;
 }
 
 /**
@@ -38,120 +14,54 @@ export enum LoggingAction {
  */
 export function requireAuthentication(
   innerFunction: (
-    ctx: ServerSidePropsAuthContext
+    ctx: GetServerSidePropsAuthContext
   ) => Promise<GetServerSidePropsResult<Record<string, unknown>>>
 ) {
   return async (
-    context: GetServerSidePropsContext
+    context: GetServerSidePropsAuthContext
   ): Promise<GetServerSidePropsResult<Record<string, unknown>>> => {
-    try {
-      const session = await unstable_getServerSession(context.req, context.res, authOptions);
+    const session = await getSession(context);
 
-      if (!session) {
-        // If no user, redirect to login
-        return {
-          redirect: {
-            destination: `/${context.locale}/auth/login`,
-            permanent: false,
-          },
-        };
-      }
-
-      if (!session.user.acceptableUse && !context.resolvedUrl?.startsWith("/auth/policy")) {
-        // If they haven't agreed to Acceptable Use redirect to policy page for acceptance
-        // If already on the policy page don't redirect, aka endless redirect loop.
-        // Also check that the path is local and not an external URL
-        return {
-          redirect: {
-            destination: `/${context.locale}/auth/policy?referer=${
-              localPathRegEx.test(context.resolvedUrl || "") ? context.resolvedUrl : "/myforms"
-            }`,
-            permanent: false,
-          },
-        };
-      }
-
-      const innerFunctionProps = await innerFunction({
-        user: { ...session.user, ability: createAbility(session.user.privileges) },
-        ...context,
-      }); // Continue on to call `getServerSideProps` logic
-      if (hasOwnProperty(innerFunctionProps, "props")) {
-        return {
-          props: {
-            ...(innerFunctionProps.props as Record<string, unknown>),
-            user: { ...session.user },
-          },
-        };
-      }
-
-      return innerFunctionProps;
-    } catch (e) {
-      if (e instanceof AccessControlError) {
-        return {
-          redirect: {
-            destination: `/${context.locale}/admin/unauthorized`,
-            permanent: false,
-          },
-        };
-      }
-      throw e;
+    if (!session) {
+      // If no user, redirect to login
+      return {
+        redirect: {
+          destination: `/${context.locale}/admin/login/`,
+          permanent: false,
+        },
+      };
     }
+
+    if (!session.user?.admin) {
+      return {
+        redirect: {
+          destination: `/${context.locale}/admin/unauthorized/`,
+          permanent: false,
+        },
+      };
+    }
+
+    context.user = { ...session.user };
+
+    const innerFunctionProps = await innerFunction(context); // Continue on to call `getServerSideProps` logic
+    if (hasOwnProperty(innerFunctionProps, "props")) {
+      return { props: { ...innerFunctionProps.props, user: { ...session.user } } };
+    }
+
+    return innerFunctionProps;
   };
 }
 
 /**
- * Checks if session exists server side and if it belongs to a user
- * @param reqOrContext Request and Response Object
+ * Checks if session exists and if it belongs to a user with administrative priveleges
+ * @param reqOrContext Request or Context Object
  * @returns session if exists otherwise null
  */
-export const isAuthenticated = async ({
-  req,
-  res,
-}: {
-  req: NextApiRequest;
-  res: NextApiResponse;
-}): Promise<Session | null> => {
-  const session = await unstable_getServerSession(req, res, authOptions);
-  return session;
-};
-
-/**
- * Verifies a temporary token against the database
- * @param token string of temporary token
- * @returns a user or null if token / user is inactive
- */
-export const validateTemporaryToken = async (token: string) => {
-  try {
-    const { email, formID } = jwt.verify(
-      token,
-      process.env.TOKEN_SECRET || ""
-    ) as TemporaryTokenPayload;
-
-    const user = await prisma.apiUser
-      .findUnique({
-        where: {
-          templateId_email: {
-            email,
-            templateId: formID,
-          },
-        },
-        select: {
-          id: true,
-          templateId: true,
-          email: true,
-          active: true,
-          temporaryToken: true,
-        },
-      })
-      .catch((e) => prismaErrors(e, null));
-
-    // The token could be valid but user has been made inactive since
-    if (!user?.active) return null;
-    // The user has reset the token rendering old tokens invalid
-    if (user.temporaryToken !== token) return null;
-    // The user and token are valid
-    return user;
-  } catch (error) {
-    return null;
+export const isAdmin = async (reqOrContext?: GetSessionOptions): Promise<Session | null> => {
+  // If server side, 'req' must be passed to getSession
+  const session = reqOrContext ? await getSession(reqOrContext) : await getSession();
+  if (session && session.user?.admin) {
+    return session;
   }
+  return null;
 };

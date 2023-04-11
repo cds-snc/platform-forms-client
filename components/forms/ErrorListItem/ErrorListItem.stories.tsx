@@ -1,5 +1,5 @@
 import React from "react";
-import { ErrorListItem, ErrorListProps } from "./ErrorListItem";
+import ErrorListItem, { ErrorListProps } from "./ErrorListItem";
 import { Alert } from "../Alert/Alert";
 import { Story } from "@storybook/react";
 

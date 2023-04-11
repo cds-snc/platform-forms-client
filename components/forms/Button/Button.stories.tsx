@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@components/forms";
+import { Button } from "./Button";
 
 export default {
   title: "Forms/Button",

@@ -11,12 +11,9 @@ module.exports = {
 
       parser: "@typescript-eslint/parser",
       parserOptions: {
-        project: ["./tsconfig.json", "cypress/tsconfig.json"],
+        project: "./tsconfig.json",
       },
       plugins: ["@typescript-eslint", "jsx-a11y", "prettier"],
-      rules: {
-        "@typescript-eslint/await-thenable": "error",
-      },
     },
   ],
   env: {
@@ -47,9 +44,9 @@ module.exports = {
     },
   },
   plugins: ["react", "jsx-a11y", "prettier", "cypress"],
+  ignorePatterns: ["**/storybook-static/*.*"],
   rules: {
     "prettier/prettier": "error",
     "no-console": "error",
-    "no-await-in-loop": "error",
   },
 };

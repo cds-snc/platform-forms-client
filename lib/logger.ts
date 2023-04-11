@@ -1,6 +1,6 @@
 import pino from "pino";
 import Axios from "axios";
-import { getCsrfToken } from "next-auth/react";
+import { getCsrfToken } from "next-auth/client";
 // create pino loggger
 export const logMessage = pino({
   level: process.env.NODE_ENV === "development" ? "debug" : "info",

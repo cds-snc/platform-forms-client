@@ -16,9 +16,7 @@ export const middleware = (
     try {
       let props = {};
       for (const middlewareLayer of middlewareArray) {
-        // Middleware is run sequentially
-        // eslint-disable-next-line no-await-in-loop
-        const { next: pass, props: middlewareProps } = await middlewareLayer(req, res);
+        const { next: pass, props: middlewareProps } = await middlewareLayer(req, res, props);
         if (!pass) return;
 
         props = { ...props, ...middlewareProps };

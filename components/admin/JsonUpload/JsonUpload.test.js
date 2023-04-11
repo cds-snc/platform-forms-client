@@ -1,50 +1,58 @@
 import React from "react";
-import { cleanup, render, screen, fireEvent } from "@testing-library/react";
+import { cleanup, render, screen, act } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 import mockedAxios from "axios";
 import { JSONUpload } from "./JsonUpload";
 
 jest.mock("axios");
 // Mock out the useRefresh hook because without a rerender the component will be stuck in loading state
-jest.mock("@lib/hooks/useRefresh", () => ({
+jest.mock("../../../lib/hooks/useRefresh", () => ({
   useRefresh: jest.fn(() => ({ refreshData: jest.fn(), isRefreshing: false })),
 }));
 describe("JSON Upload Component", () => {
   afterEach(cleanup);
   const formConfig = { test: "test JSON" };
-  it("renders without errors", async () => {
+  test("renders without errors", () => {
     render(<JSONUpload></JSONUpload>);
     expect(screen.queryByTestId("jsonInput")).toBeInTheDocument();
-    expect(screen.queryByTestId("submitStatus")).not.toBeInTheDocument();
   });
-  it("renders existing form JSON if passed in", async () => {
+  test("renders existing form JSON if passed in", () => {
     const form = {
-      id: "test",
-      ...formConfig,
+      formConfig: formConfig,
     };
     render(<JSONUpload form={form}></JSONUpload>);
     expect(screen.queryByTestId("jsonInput").value).toBe(JSON.stringify(formConfig, null, 2));
   });
-  it("Shows an error message if unparseable JSON is entered", async () => {
-    const form = {};
-    render(<JSONUpload form={form}></JSONUpload>);
-    fireEvent.click(screen.queryByTestId("upload"));
-    expect(mockedAxios.mock.calls.length).toBe(0);
-    expect(await screen.findByTestId("alert")).toBeInTheDocument();
-  });
-  it("Shows a submit status message if successfully submitted to API", async () => {
+  test("It shows an error message if invalid json is entered", async () => {
+    userEvent.setup();
     const form = {
-      id: "test",
-      ...formConfig,
+      formConfig: undefined,
     };
-    mockedAxios.mockResolvedValue();
+    mockedAxios.mockResolvedValue({
+      status: 200,
+    });
+    render(<JSONUpload form={form}></JSONUpload>);
+    await act(async () => {
+      await userEvent.click(screen.queryByTestId("upload"));
+    });
+
+    expect(screen.queryByTestId("alert")).toBeInTheDocument();
+  });
+  test("It shows a success message if valid json is entered", async () => {
+    userEvent.setup();
+    const form = {
+      formConfig: formConfig,
+    };
+    mockedAxios.mockResolvedValue({
+      status: 200,
+    });
 
     render(<JSONUpload form={form}></JSONUpload>);
-    fireEvent.click(screen.queryByTestId("upload"));
-    expect(mockedAxios.mock.calls.length).toBe(1);
-    expect(mockedAxios).toHaveBeenCalledWith(
-      expect.objectContaining({ url: "/api/templates", method: "PUT" })
-    );
-    expect(await screen.findByTestId("submitStatus")).toBeInTheDocument();
+    await act(async () => {
+      await userEvent.click(screen.queryByTestId("upload"));
+    });
+
+    expect(screen.queryByTestId("submitStatus")).toBeInTheDocument();
   });
 });

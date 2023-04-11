@@ -13,8 +13,8 @@ export default {
 
 const inputProps = {
   key: "id",
-  id: "fileInput",
-  name: "fileInput",
+  id: "id",
+  name: "pdf",
   label: "Upload a PDF",
   value: "",
   fileType: ".pdf",
@@ -25,7 +25,7 @@ export const defaultFileInput = (): React.ReactElement => (
     onSubmit={(values) => {
       logMessage.debug(values);
     }}
-    initialValues={{ fileInput: { file: null, src: null, name: "", size: 0 } }}
+    initialValues={{ file: "" }}
   >
     <FileInput {...inputProps} />
   </Formik>

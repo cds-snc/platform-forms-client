@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import classnames from "classnames";
 import { useField } from "formik";
-import { ErrorMessage } from "@components/forms";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import { InputFieldProps, CharacterCountMessages, HTMLTextInputTypeAttribute } from "@lib/types";
 
 export interface TextInputProps extends InputFieldProps {
   type: HTMLTextInputTypeAttribute;
-  characterCountMessages?: CharacterCountMessages;
+  characterCountMessages: CharacterCountMessages;
   placeholder?: string;
 }
 
@@ -36,17 +36,15 @@ export const TextInput = (
     }
   };
 
-  const remainingCharactersMessage = characterCountMessages
-    ? characterCountMessages.part1 + " " + remainingCharacters + " " + characterCountMessages.part2
-    : "";
+  const remainingCharactersMessage =
+    characterCountMessages.part1 + " " + remainingCharacters + " " + characterCountMessages.part2;
 
-  const tooManyCharactersMessage = characterCountMessages
-    ? characterCountMessages.part1Error +
-      " " +
-      remainingCharacters * -1 +
-      " " +
-      characterCountMessages.part2Error
-    : "";
+  const tooManyCharactersMessage =
+    characterCountMessages.part1Error +
+    " " +
+    remainingCharacters * -1 +
+    " " +
+    characterCountMessages.part2Error;
 
   const ariaDescribedByIds = () => {
     const returnValue = [];
@@ -72,15 +70,12 @@ export const TextInput = (
         {...field}
         onChange={handleTextInputChange}
       />
-      {characterCountMessages &&
-        maxLength &&
-        remainingCharacters < maxLength * 0.25 &&
-        remainingCharacters >= 0 && (
-          <div id={"characterCountMessage" + id} aria-live="polite">
-            {remainingCharactersMessage}
-          </div>
-        )}
-      {characterCountMessages && maxLength && remainingCharacters < 0 && (
+      {maxLength && remainingCharacters < maxLength * 0.25 && remainingCharacters >= 0 && (
+        <div id={"characterCountMessage" + id} aria-live="polite">
+          {remainingCharactersMessage}
+        </div>
+      )}
+      {maxLength && remainingCharacters < 0 && (
         <div id={"characterCountMessage" + id} className="gc-error-message" aria-live="polite">
           {tooManyCharactersMessage}
         </div>
@@ -88,3 +83,5 @@ export const TextInput = (
     </>
   );
 };
+
+export default TextInput;

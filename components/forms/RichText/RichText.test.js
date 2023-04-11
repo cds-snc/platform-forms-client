@@ -1,6 +1,6 @@
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
-import { GenerateElement } from "@lib/formBuilder";
+import { GenerateElement } from "../../../lib/formBuilder";
 
 const richTextData = {
   id: 3,
@@ -29,7 +29,7 @@ describe("Generate a text area", () => {
           : richTextData.properties.descriptionFr;
     // Label properly renders
     expect(screen.getByText(title)).toBeInTheDocument();
-    expect(screen.getByRole("heading", { level: 3 })).toHaveTextContent(title);
+    expect(screen.getByText(title)).toHaveClass("gc-h3");
     // Description properly render
     expect(screen.getByText(description)).toBeInTheDocument();
   });
@@ -47,19 +47,5 @@ describe("Generate a text area", () => {
     render(<GenerateElement element={emptyRichTextData} language="en" t={(key) => key} />);
     expect(screen.queryByRole("label")).not.toBeInTheDocument();
     expect(screen.queryByTestId("richText")).not.toBeInTheDocument();
-  });
-  test("Should not render raw HTML in markdown", () => {
-    const richTextWithHTML = { ...richTextData };
-    richTextWithHTML.properties.descriptionEn =
-      "Testing <script data-testid='script'>alert('pwned')</script> this";
-    render(<GenerateElement element={richTextWithHTML} language="en" t={(key) => key} />);
-    expect(screen.queryByTestId("script")).not.toBeInTheDocument();
-  });
-
-  test("Renders link with target attribute", () => {
-    const richTextWithHTML = { ...richTextData };
-    richTextWithHTML.properties.descriptionEn = "Testing [link](https://google.ca) this";
-    render(<GenerateElement element={richTextWithHTML} language="en" t={(key) => key} />);
-    expect(screen.queryByRole("link")).toHaveAttribute("target");
   });
 });

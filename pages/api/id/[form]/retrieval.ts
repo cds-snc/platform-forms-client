@@ -10,7 +10,6 @@ import {
   UpdateCommand,
 } from "@aws-sdk/lib-dynamodb";
 import { MiddlewareProps } from "@lib/types";
-import { getFileAttachments } from "@lib/fileAttachments";
 
 /**
  * Handler for the retrieval API route. This function simply calls the relevant function depending on the HTTP method
@@ -93,9 +92,8 @@ async function getFormResponses(
         //You need to specify those attributes in the key condition expression, not the filter expression.
         ProjectionExpression: "FormID,SubmissionID,FormSubmission,Retrieved,SecurityAttribute",
       };
-      const queryCommand = new QueryCommand(getItemsDbParams);
-      // eslint-disable-next-line no-await-in-loop
-      const response = await documentClient.send(queryCommand);
+
+      const response = await documentClient.send(new QueryCommand(getItemsDbParams));
 
       if (response.Items?.length) {
         accumulatedResponses = accumulatedResponses.concat(
@@ -109,7 +107,6 @@ async function getFormResponses(
               formID,
               submissionID,
               formSubmission,
-              fileAttachments: getFileAttachments(submissionID, formSubmission),
               securityAttribute,
             })
           )
@@ -178,7 +175,6 @@ async function deleteFormResponses(
         ReturnValues: "NONE",
       };
       //Update one item at the time
-      // eslint-disable-next-line no-await-in-loop
       await documentClient.send(new UpdateCommand(updateItem));
       submissionIDlist.push(submissionID);
     }
@@ -203,8 +199,11 @@ async function deleteFormResponses(
   }
 }
 
-// Removing access for all Methods until this API is ready for use.
 export default middleware(
-  [cors({ allowedMethods: [] }), validTemporaryToken(), jsonValidator(retrievalSchema)],
+  [
+    cors({ allowedMethods: ["GET", "DELETE"] }),
+    validTemporaryToken(),
+    jsonValidator(retrievalSchema),
+  ],
   handler
 );

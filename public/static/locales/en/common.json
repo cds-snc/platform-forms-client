@@ -1,18 +1,14 @@
 {
   "footer": {
     "terms": {
+      "disclaimer": "This form is hosted by the Canadian Digital Service.",
       "link": "/en/terms-avis",
+      "desc-preface": "Learn more by visiting the ",
       "desc": "Terms and conditions"
-    },
-    "sla": {
-      "link": "/en/sla",
-      "desc": "Service level agreement"
-    },
-    "support": {
-      "link": "/en/form-builder/support",
-      "desc": "Support"
-    },
-    "ariaLabel": "Footer"
+    }
+  },
+  "phase": {
+    "desc": "This site will change as we test ideas."
   },
   "skip-link": "Skip to main content",
   "fip": {
@@ -39,8 +35,7 @@
     "file-size-too-large": "Please select a smaller file.",
     "file-type-invalid": "Please select a different file type.",
     "too-many-characters": "Please shorten your response.",
-    "all-checkboxes-required": "Read and check all boxes to confirm the items in this section.",
-    "validGovEmail": "This field must be a valid government email."
+    "all-checkboxes-required": "Read and check all boxes to confirm the items in this section."
   },
   "required": "required",
   "all-required": "all checkboxes required",
@@ -50,8 +45,7 @@
   "file-upload-no-file-selected": "No file currently selected",
   "dropdown-initial-option-text": "No selection",
   "server-error": "Oops, looks like there was a problem submitting your form.  Please try again later.",
-  "title-full": "GC Forms - Formulaires GC",
-  "title": "GC Forms",
+  "title": "GC Forms - Formulaires GC",
   "loading": "We are processing your form submission. Please wait.",
   "spam-error": {
     "error-part-1": "Button can not be used in less than",
@@ -63,16 +57,13 @@
   },
   "adminNav": {
     "dashboard": "Home",
-    "formbuilder": "Form Builder",
     "vault": "Vault",
     "users": "Users",
     "upload": "Template Upload",
     "templates": "Templates",
     "features": "Options",
     "login": "Login",
-    "logout": "Logout",
-    "privileges": "Privileges",
-    "myForms": "My Forms"
+    "logout": "Logout"
   },
   "formElements": {
     "characterCount": {
@@ -85,19 +76,5 @@
   "dynamicRow": {
     "add": "Add",
     "delete": "Delete"
-  },
-  "acceptableUsePage": {
-    "agree": "Agree",
-    "welcome": "Know your responsibilities"
-  },
-  "loginMenu": {
-    "login": "Sign in",
-    "logout": "Sign out"
-  },
-  "alert": {
-    "dismissAlert": "Close this alert"
-  },
-  "continue": "Continue",
-  "error": "Error",
-  "unknown": "Unknown"
+  }
 }

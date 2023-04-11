@@ -1,0 +1,29 @@
+{
+  "title": "Welcome to Forms",
+  "body": "[work in progress]",
+  "product": {
+    "title": "Product Vision",
+    "text": "Help government-users quickly and easily publish simple, accessible, online forms that the public can use to apply for or access the services or benefits they need.",
+    "preview": {
+      "title": "Preview",
+      "link": "Preview a form from configuration"
+    }
+  },
+  "formList": {
+    "title": "Forms List"
+  },
+  "design": {
+    "title": "Design",
+    "text": "Learn more about our design, research and accessibility efforts.",
+    "system": {
+      "title": "Design System on Storybook"
+    }
+  },
+  "technology": {
+    "title": "Technology",
+    "text": "Our tech stack runs on Next.js and uses AWS cloud services.",
+    "git": {
+      "title": "Forms on GitHub"
+    }
+  }
+}

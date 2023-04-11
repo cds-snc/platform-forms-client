@@ -18,5 +18,5 @@ const Template: Story<BearerRefreshProps> = (args: BearerRefreshProps) => (
 
 export const defaultBearerRefresh = Template.bind({});
 defaultBearerRefresh.args = {
-  formID: "test0form00000id000asdf11",
+  formID: 1,
 };

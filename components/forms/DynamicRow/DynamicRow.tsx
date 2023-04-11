@@ -3,7 +3,8 @@ import classnames from "classnames";
 import { useField } from "formik";
 import { GenerateElement } from "@lib/formBuilder";
 import { FormElement } from "@lib/types";
-import { Button, Description } from "@components/forms";
+import { Button } from "../index";
+import { Description } from "../index";
 import { TFunction } from "next-i18next";
 
 interface DynamicGroupProps {
@@ -160,3 +161,5 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     </div>
   );
 };
+
+export default DynamicGroup;

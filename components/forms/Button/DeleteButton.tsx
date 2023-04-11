@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Button } from "@components/forms";
+import { Button } from "./Button";
 import { useRouter } from "next/router";
-import { useTranslation } from "next-i18next";
+import { useTranslation } from "react-i18next";
 import { logMessage } from "@lib/logger";
 
 interface DeleteButtonProps {
@@ -64,3 +64,5 @@ export const DeleteButton = (props: DeleteButtonProps): React.ReactElement => {
     </>
   );
 };
+
+export default DeleteButton;

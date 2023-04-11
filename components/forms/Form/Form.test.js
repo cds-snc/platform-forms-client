@@ -1,12 +1,12 @@
 import React from "react";
-import { cleanup, render, screen, waitFor, fireEvent } from "@testing-library/react";
+import { cleanup, render, screen, act, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Form } from "@components/forms";
-import { submitToAPI } from "@lib/helpers";
+import Form from "./Form";
+import { submitToAPI } from "@lib/integration/helpers";
 import { useFlag } from "@lib/hooks/useFlag";
 
-jest.mock("@lib/helpers", () => {
-  const originalModule = jest.requireActual("@lib/helpers");
+jest.mock("@lib/integration/helpers", () => {
+  const originalModule = jest.requireActual("@lib/integration/helpers");
   return {
     __esModule: true,
     ...originalModule,
@@ -51,42 +51,44 @@ jest.mock("@lib/hooks", () => {
 });
 
 const formRecord = {
-  form: {
-    id: 1,
-    version: 1,
-    titleEn: "Test Form",
-    titleFr: "Formulaire de test",
-    layout: [1, 2],
-    elements: [
-      {
-        id: 1,
-        type: "textField",
-        properties: {
-          titleEn: "What is your full name?",
-          titleFr: "Quel est votre nom complet?",
-          validation: {
-            required: false,
+  formConfig: {
+    form: {
+      id: 1,
+      version: 1,
+      titleEn: "Test Form",
+      titleFr: "Formulaire de test",
+      layout: [1, 2],
+      elements: [
+        {
+          id: 1,
+          type: "textField",
+          properties: {
+            titleEn: "What is your full name?",
+            titleFr: "Quel est votre nom complet?",
+            validation: {
+              required: false,
+            },
+            description: "",
+            placeholderEn: "",
+            placeholderFr: "",
           },
-          description: "",
-          placeholderEn: "",
-          placeholderFr: "",
         },
-      },
-      {
-        id: 2,
-        type: "textField",
-        properties: {
-          titleEn: "What is your email address?",
-          titleFr: "Quelle est votre adresse électronique?",
-          validation: {
-            required: false,
+        {
+          id: 2,
+          type: "textField",
+          properties: {
+            titleEn: "What is your email address?",
+            titleFr: "Quelle est votre adresse électronique?",
+            validation: {
+              required: false,
+            },
+            description: "",
+            placeholderEn: "",
+            placeholderFr: "",
           },
-          description: "",
-          placeholderEn: "",
-          placeholderFr: "",
         },
-      },
-    ],
+      ],
+    },
   },
 };
 
@@ -110,38 +112,41 @@ describe("Form Functionality", () => {
   });
 
   it("there is 1 and only 1 submit button", async () => {
-    render(<Form formRecord={formRecord} language="en" t={(key) => key} />);
+    act(() => {
+      render(<Form formRecord={formRecord} language="en" t={(key) => key} />);
+    });
     expect(await screen.findAllByRole("button", { type: "submit" })).toHaveLength(1);
   });
 
   it("Form can be submitted", async () => {
-    render(<Form formRecord={formRecord} language="en" t={(key) => key} />);
+    userEvent.setup();
+    act(() => {
+      render(<Form formRecord={formRecord} language="en" t={(key) => key} />);
+    });
     expect(screen.getByRole("button", { type: "submit" })).toBeInTheDocument();
 
-    // using `fireEvent` instead of `user.click` because it triggers a Formik update,
-    // which then throws the warning:
-    // "Warning: An update to Formik inside a test was not wrapped in act(...)."
-    fireEvent.click(screen.getByRole("button", { type: "submit" }));
+    await act(async () => await userEvent.click(screen.getByRole("button", { type: "submit" })));
 
     await waitFor(() => expect(submitToAPI).toBeCalledTimes(1));
   });
 
   it("shows the alert after pressing submit if the timer hasn't expired", async () => {
-    const user = userEvent.setup();
+    userEvent.setup();
     mockFormTimerState = {
       canSubmit: false,
       remainingTime: 5,
       timerDelay: 5,
       timeLock: 0,
     };
-
-    render(<Form formRecord={formRecord} language="en" t={(key) => key} />);
+    act(() => {
+      render(<Form formRecord={formRecord} language="en" t={(key) => key} />);
+    });
     const submitButton = screen.getByRole("button", { type: "submit" });
     await waitFor(() => expect(submitButton).toBeInTheDocument());
 
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { type: "submit" }));
+    await act(async () => await userEvent.click(screen.getByRole("button", { type: "submit" })));
     expect(await screen.findByRole("alert")).toBeInTheDocument();
     expect(submitToAPI).not.toBeCalled();
   });

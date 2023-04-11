@@ -1,198 +1,97 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { getAllTemplates } from "@lib/templates";
+import { getForms } from "@lib/integration/crud";
 import { requireAuthentication } from "@lib/auth";
-import { getProperty } from "@lib/formBuilder";
 
-import React, { Fragment, ReactElement } from "react";
+import React, { Fragment } from "react";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { checkPrivileges } from "@lib/privileges";
-import { useAccessControl, useRefresh } from "@lib/hooks";
-import axios from "axios";
-import { logMessage } from "@lib/logger";
-import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
+import { FormRecord } from "@lib/types";
 
 interface DataViewProps {
-  templates: Array<{
-    id: string;
-    titleEn: string;
-    titleFr: string;
-    isPublished: boolean;
-    [key: string]: string | boolean;
-  }>;
+  templatesJSON: Array<FormRecord>;
 }
-
-enum WhereToRedirect {
-  Form,
-  Settings,
-  Users,
-}
-
-const handlePublish = async (formID: string, isPublished: boolean) => {
-  return await axios({
-    url: "/api/templates",
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    data: { formID, isPublished },
-    timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-  }).catch((err) => logMessage.error(err));
-};
 
 const DataView = (props: DataViewProps): React.ReactElement => {
-  const { t, i18n } = useTranslation("admin-templates");
-  const { templates } = props;
-  const router = useRouter();
-  const { refreshData } = useRefresh();
+  const { t } = useTranslation("admin-templates");
 
-  const redirectTo = async (where: WhereToRedirect, formID: string) => {
-    let pathname = "";
-    switch (where) {
-      case WhereToRedirect.Form:
-        pathname = `/${i18n.language}/id/${formID}`;
-        break;
-      case WhereToRedirect.Settings:
-        pathname = `/${i18n.language}/id/${formID}/settings`;
-        break;
-      case WhereToRedirect.Users:
-        pathname = `/${i18n.language}/id/${formID}/users`;
-        break;
-    }
-    await router.push({
-      pathname: pathname,
-    });
-  };
-
-  const { ability } = useAccessControl();
+  const jsonElements = props.templatesJSON.map((template): React.ReactElement => {
+    return <DataElement template={template} key={props.templatesJSON.indexOf(template)} />;
+  });
 
   return (
     <>
       <Head>
-        <title>{t("view.title")}</title>
+        <title>Data View</title>
       </Head>
 
-      <h1>{t("view.title")}</h1>
-      <table className="w-full table-auto  border border-4 border-gray-400">
-        <thead className="border border-4 border-gray-400">
-          <tr>
-            <th>{t("view.formTitle")}</th>
-            <th>{t("view.status")}</th>
-            <th className="w-1/12">{t("view.update")}</th>
-            <th className="w-1/12">{t("view.view")}</th>
-            <th className="w-1/12">{t("view.users")}</th>
-            <th className="w-1/12">{t("view.publishForm")}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {templates
-            .sort((a, b) => {
-              return (a[getProperty("title", i18n.language)] as string).localeCompare(
-                b[getProperty("title", i18n.language)] as string
-              );
-            })
-            .map((template) => {
-              return (
-                <tr key={template.id} className="border-t-4 border-b-1 border-gray-400">
-                  <td className="pl-4">{template[getProperty("title", i18n.language)]} </td>
-                  <td className="text-center">
-                    {template.isPublished ? t("view.published") : t("view.draft")}
-                  </td>
-                  <td>
-                    {ability?.can("update", "FormRecord") && (
-                      <button
-                        onClick={async () =>
-                          await redirectTo(WhereToRedirect.Settings, template.id)
-                        }
-                        className="gc-button w-full"
-                      >
-                        {t("view.update")}
-                      </button>
-                    )}
-                  </td>
-                  <td>
-                    <button
-                      onClick={async () => await redirectTo(WhereToRedirect.Form, template.id)}
-                      className="gc-button w-full"
-                    >
-                      {t("view.view")}
-                    </button>
-                  </td>
-                  {ability?.can("update", "FormRecord") && (
-                    <td>
-                      <button
-                        onClick={async () => await redirectTo(WhereToRedirect.Users, template.id)}
-                        className="gc-button w-full"
-                      >
-                        {t("view.assign")}
-                      </button>
-                    </td>
-                  )}
-                  {ability?.can("update", "FormRecord", "isPublished") && (
-                    <td>
-                      <button
-                        onClick={async () => {
-                          await handlePublish(template.id, !template.isPublished);
-                          refreshData();
-                        }}
-                        className="gc-button w-full"
-                      >
-                        {template.isPublished ? t("view.unpublishForm") : t("view.publishForm")}
-                      </button>
-                    </td>
-                  )}
-                </tr>
-              );
-            })}
-        </tbody>
-      </table>
+      <h1 className="gc-h1">{t("view.title")}</h1>
+      <ul className="data_list">
+        <Fragment>{jsonElements}</Fragment>
+      </ul>
     </>
   );
 };
 
-DataView.getLayout = (page: ReactElement) => {
-  return <AdminNavLayout user={page.props.user}>{page}</AdminNavLayout>;
+const DataElement = (props: { template: FormRecord }): React.ReactElement => {
+  const { t, i18n } = useTranslation("admin-templates");
+  const { template } = props;
+  const formID = template.formID;
+  const router = useRouter();
+
+  const redirectToSettings = (formID: number) => {
+    router.push({
+      pathname: `/${i18n.language}/id/${formID}/settings`,
+    });
+  };
+
+  let title = "";
+  if (template.formConfig) {
+    if (i18n.language === "en")
+      title = template.formConfig.internalTitleEn
+        ? template.formConfig.internalTitleEn
+        : template.formConfig.form.titleEn;
+    else if (i18n.language === "fr")
+      title = template.formConfig.internalTitleFr
+        ? template.formConfig.internalTitleFr
+        : template.formConfig.form.titleFr;
+  }
+  return (
+    <li>
+      <div className="pb-4 m-auto px-4">
+        <div className="update-buttons mr-4">
+          <button onClick={() => redirectToSettings(formID)} className="gc-button">
+            {t("view.update")}
+          </button>
+        </div>
+        <div className="inline-block break-words form-title">
+          <p>
+            {t("view.formID")} {formID}
+          </p>
+          <p>{title}</p>
+        </div>
+      </div>
+    </li>
+  );
 };
 
-export const getServerSideProps = requireAuthentication(
-  async ({ user: { ability, id }, locale }) => {
-    {
-      checkPrivileges(
-        ability,
-        [
-          { action: "view", subject: "FormRecord" },
-          { action: "update", subject: "FormRecord" },
-        ],
-        "one"
-      );
-      // getStaticProps is serverside, and therefore instead of doing a request,
-      // we import the invoke Lambda function directly
+export const getServerSideProps = requireAuthentication(async (context) => {
+  {
+    // getStaticProps is serverside, and therefore instead of doing a request,
+    // we import the invoke Lambda function directly
 
-      const templates = (await getAllTemplates(ability, id)).map((template) => {
-        const {
-          id,
-          form: { titleEn, titleFr },
-          isPublished,
-        } = template;
-        return {
-          id,
-          titleEn,
-          titleFr,
-          isPublished,
-        };
-      });
+    const templatesJSON = await getForms();
 
-      return {
-        props: {
-          templates,
-          ...(locale && (await serverSideTranslations(locale, ["common", "admin-templates"]))),
-        }, // will be passed to the page component as props
-      };
+    return {
+      props: {
+        templatesJSON: templatesJSON.data.records,
+        ...(context.locale &&
+          (await serverSideTranslations(context.locale, ["common", "admin-templates"]))),
+      }, // will be passed to the page component as props
+    };
 
-      return { props: {} };
-    }
+    return { props: {} };
   }
-);
+});
 
 export default DataView;

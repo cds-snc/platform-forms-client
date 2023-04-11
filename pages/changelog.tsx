@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { RichText } from "@components/forms";
+import { RichText } from "@components/forms/RichText/RichText";
 import axios from "axios";
 import { logMessage } from "@lib/logger";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import Head from "next/head";
 
 const Changelog = (): React.ReactElement => {
   const [version, setVersion] = useState<string>("unavailable");
@@ -30,10 +29,7 @@ const Changelog = (): React.ReactElement => {
 
   return (
     <>
-      <Head>
-        <title>Changelog</title>
-      </Head>
-      <h2>Version: {version}</h2>
+      <h2 className="gc-h2">Version: {version}</h2>
       <br />
       <RichText>{changelog}</RichText>
     </>
@@ -41,9 +37,13 @@ const Changelog = (): React.ReactElement => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  return {
-    props: { ...(context.locale && (await serverSideTranslations(context.locale, ["common"]))) },
-  };
+  if (context.locale) {
+    return {
+      props: { ...(await serverSideTranslations(context.locale, ["common"])) },
+    };
+  }
+
+  return { props: {} };
 };
 
 export default Changelog;

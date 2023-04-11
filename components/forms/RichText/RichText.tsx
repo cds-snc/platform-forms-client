@@ -6,7 +6,6 @@ interface RichTextProps {
   children?: string | undefined;
   id?: string;
   className?: string;
-  lang?: string;
 }
 
 // override the default h1 element such that to place a tabindex value of -1 to make it
@@ -19,66 +18,22 @@ const H1 = ({ children, ...props }: { children: React.ReactElement }) => {
   );
 };
 
-const A = ({ children, ...props }: { children: React.ReactElement }) => {
-  type ObjectKey = keyof typeof props;
-  const href = "href" as ObjectKey;
-  const target = (props[href] as string).startsWith("#") ? "_self" : "_blank";
-  return (
-    <a {...props} target={target}>
-      {children}
-    </a>
-  );
-};
-
-const Table = ({ children, ...props }: { children: React.ReactElement }) => {
-  return (
-    <table {...props} className="border-1 border-black-default">
-      {children}
-    </table>
-  );
-};
-
-const TableTH = ({ children, ...props }: { children: React.ReactElement }) => {
-  return (
-    <th {...props} className="p-2 border-1 border-black-default">
-      {children}
-    </th>
-  );
-};
-
-const TableTD = ({ children, ...props }: { children: React.ReactElement }) => {
-  return (
-    <td {...props} className="p-2 border-1 border-black-default">
-      {children}
-    </td>
-  );
-};
-
 export const RichText = (props: RichTextProps): React.ReactElement | null => {
-  const { children, className, id, lang } = props;
-
+  const { children, className, id } = props;
   if (!children) {
     return null;
   }
 
   const classes = classnames("gc-richText", className);
   return (
-    <div data-testid="richText" className={classes} id={id} {...(lang && { lang: lang })}>
-      <Markdown
-        options={{
-          forceBlock: true,
-          disableParsingRawHTML: true,
-          overrides: {
-            h1: { component: H1 },
-            a: { component: A },
-            table: { component: Table },
-            th: { component: TableTH },
-            td: { component: TableTD },
-          },
-        }}
-      >
-        {children}
+    <div data-testid="richText" className={classes} id={id}>
+      <Markdown options={{ forceBlock: true, overrides: { h1: { component: H1 } } }}>
+        {children
+          .replace(/<br>/g, `${String.fromCharCode(10)}`)
+          .replace(/href/g, "rel='noreferrer' target='_blank' href")}
       </Markdown>
     </div>
   );
 };
+
+export default RichText;

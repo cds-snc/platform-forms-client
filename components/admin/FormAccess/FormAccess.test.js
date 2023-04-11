@@ -1,5 +1,5 @@
 import React from "react";
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import mockedAxios from "axios";
@@ -8,7 +8,7 @@ import FormAccess from "./FormAccess";
 jest.mock("axios");
 
 describe("Form Access Component", () => {
-  const formConfig = { id: "test0form00000id000asdf11" };
+  const formConfig = { formID: 1 };
 
   afterEach(cleanup);
 
@@ -24,16 +24,12 @@ describe("Form Access Component", () => {
       ],
     });
 
-    render(<FormAccess formID={formConfig.id}></FormAccess>);
-    expect(mockedAxios.mock.calls.length).toBe(1);
-    expect(mockedAxios).toHaveBeenCalledWith(
-      expect.objectContaining({ url: `/api/id/${formConfig.id}/owners`, method: "GET" })
-    );
+    render(<FormAccess formID={formConfig.formID}></FormAccess>);
     expect(await screen.findByTestId("add-email")).toBeInTheDocument();
   });
 
   it("submits a new email address and display it in the list", async () => {
-    const user = userEvent.setup();
+    userEvent.setup();
     const testEmailAddress = "test@cds-snc.ca";
     mockedAxios.mockResolvedValue({
       status: 200,
@@ -46,11 +42,11 @@ describe("Form Access Component", () => {
       ],
     });
 
-    render(<FormAccess formID={formConfig.id}></FormAccess>);
+    render(<FormAccess formID={formConfig.formID}></FormAccess>);
 
     const input = await screen.findByLabelText("settings.formAccess.addEmailAriaLabel");
 
-    await user.type(input, testEmailAddress);
+    await userEvent.type(input, testEmailAddress);
 
     mockedAxios.mockResolvedValueOnce({
       status: 200,
@@ -61,17 +57,13 @@ describe("Form Access Component", () => {
       },
     });
 
-    await user.click(screen.getByTestId("add-email"));
-    expect(mockedAxios.mock.calls.length).toBe(2);
-    expect(mockedAxios).toHaveBeenCalledWith(
-      expect.objectContaining({ url: "/api/id/test0form00000id000asdf11/owners", method: "POST" })
-    );
+    await userEvent.click(screen.getByTestId("add-email"));
 
     expect(await screen.findByText(testEmailAddress)).toBeInTheDocument;
   });
 
   it("submits a new email address for a form that does not exist, and receives an error from the API", async () => {
-    const user = userEvent.setup();
+    userEvent.setup();
     const testEmailAddress = "test@cds-snc.ca";
     mockedAxios
       .mockResolvedValueOnce({
@@ -84,23 +76,25 @@ describe("Form Access Component", () => {
           },
         ],
       })
-      .mockRejectedValueOnce({
+      .mockResolvedValueOnce({
         status: 404,
         data: { error: "The formID does not exist" },
       });
 
-    render(<FormAccess formID={formConfig.id}></FormAccess>);
+    await act(async () => {
+      render(<FormAccess formID={formConfig.formID}></FormAccess>);
+    });
 
     const input = await screen.findByLabelText("settings.formAccess.addEmailAriaLabel");
-    await user.type(input, testEmailAddress);
+    await userEvent.type(input, testEmailAddress);
 
-    await user.click(screen.getByTestId("add-email"));
+    await userEvent.click(screen.getByTestId("add-email"));
 
     expect(await screen.findByTestId("alert")).toBeInTheDocument;
   });
 
   it("submits a new email address that is not a Government of Canada email, and receives an error from the API", async () => {
-    const user = userEvent.setup();
+    userEvent.setup();
     const testEmailAddress = "test@test.ca";
 
     mockedAxios
@@ -114,16 +108,16 @@ describe("Form Access Component", () => {
           },
         ],
       })
-      .mockRejectedValueOnce({
+      .mockResolvedValueOnce({
         status: 400,
         data: { error: "The email is not a valid GC email" },
       });
 
-    render(<FormAccess formID={formConfig.id}></FormAccess>);
+    render(<FormAccess formID={formConfig.formID}></FormAccess>);
 
     const input = await screen.findByLabelText("settings.formAccess.addEmailAriaLabel");
-    await user.type(input, testEmailAddress);
-    await user.click(screen.getByTestId("add-email"));
+    await userEvent.type(input, testEmailAddress);
+    await userEvent.click(screen.getByTestId("add-email"));
 
     expect(await screen.findByRole("alert")).toBeInTheDocument;
   });

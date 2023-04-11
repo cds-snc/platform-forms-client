@@ -1,16 +1,24 @@
+import { NotifyClient } from "notifications-node-client";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
-import { rehydrateFormResponses } from "@lib/helpers";
-import { getPublicTemplateByID, getTemplateSubmissionTypeByID } from "@lib/templates";
+import convertMessage from "@lib/markdown";
+import { rehydrateFormResponses } from "@lib/integration/helpers";
+import { getFormByID, getSubmissionByID } from "@lib/integration/crud";
 import { logMessage } from "@lib/logger";
-import { checkOne } from "@lib/cache/flags";
+import { checkOne } from "@lib/flags";
 import { pushFileToS3, deleteObject } from "@lib/s3-upload";
 import { fileTypeFromBuffer } from "file-type";
 import { Magic, MAGIC_MIME_TYPE } from "mmmagic";
 import { acceptedFileMimeTypes } from "@lib/tsUtils";
 import { Readable } from "stream";
 import { middleware, cors, csrfProtected } from "@lib/middleware";
-import { Response, Responses, FileInputResponse, SubmissionRequestBody } from "@lib/types";
+import {
+  PublicFormRecord,
+  Response,
+  Responses,
+  FileInputResponse,
+  SubmissionRequestBody,
+} from "@lib/types";
 import { ProcessedFile, SubmissionParsedRequest } from "@lib/types/submission-types";
 
 export const config = {
@@ -55,12 +63,12 @@ function streamToString(stream: Readable): Promise<string> {
 }
 
 const callLambda = async (
-  formID: string,
+  formID: number,
   fields: Responses,
   language: string,
   securityAttribute: string
 ) => {
-  const submission = await getTemplateSubmissionTypeByID(formID);
+  const submission = await getSubmissionByID(formID);
 
   const encoder = new TextEncoder();
 
@@ -88,6 +96,28 @@ const callLambda = async (
     logMessage.error(err as Error);
     throw new Error("Could not process request with Lambda Submission function");
   }
+};
+
+const previewNotify = async (form: PublicFormRecord, fields: Responses) => {
+  const templateID = process.env.TEMPLATE_ID;
+  const notify = new NotifyClient("https://api.notification.canada.ca", process.env.NOTIFY_API_KEY);
+
+  const emailBody = await convertMessage({ form, responses: fields });
+  const messageSubject = form.formConfig.form.emailSubjectEn
+    ? form.formConfig.form.emailSubjectEn
+    : form.formConfig.form.titleEn;
+  return await notify
+    .previewTemplateById(templateID, {
+      subject: messageSubject,
+      formResponse: emailBody,
+    })
+    .then((response: { data: { html: string } }) => {
+      return response.data.html;
+    })
+    .catch((err: Error) => {
+      logMessage.error(err);
+      return "<h1>Could not preview HTML / Error in processing </h2>";
+    });
 };
 
 /**
@@ -236,14 +266,7 @@ const processFormData = async (
   const uploadedFilesKeyUrlMapping: Map<string, string> = new Map();
   try {
     const submitToReliabilityQueue = await checkOne("submitToReliabilityQueue");
-
-    // Do not process if in TEST mode
-    if (process.env.APP_ENV === "test") {
-      logMessage.info(
-        `TEST MODE - Not submitting Form ID: ${reqFields ? reqFields.formID : "No form attached"}`
-      );
-      return res.status(200).json({ received: true });
-    }
+    const notifyPreview = await checkOne("notifyPreview");
 
     if (!reqFields) {
       return res.status(400).json({ error: "No form submitted with request" });
@@ -255,7 +278,15 @@ const processFormData = async (
       }`
     );
 
-    const form = await getPublicTemplateByID(reqFields.formID as string);
+    // Do not process if in TEST mode
+    if (process.env.APP_ENV === "test") {
+      logMessage.info(
+        `TEST MODE - Not submitting Form ID: ${reqFields ? reqFields.formID : "No form attached"}`
+      );
+      return res.status(200).json({ received: true });
+    }
+
+    const form = await getFormByID(reqFields.formID as number);
 
     if (!form) {
       return res.status(400).json({ error: "No form could be found with that ID" });
@@ -268,6 +299,10 @@ const processFormData = async (
 
     if (!submitToReliabilityQueue) {
       // Local development and Heroku
+      if (notifyPreview) {
+        const response = await previewNotify(form, fields);
+        return res.status(201).json({ received: true, htmlEmail: response });
+      }
       // Set this to a 200 response as it's valid if the send to reliability queue option is off.
       return res.status(200).json({ received: true });
     }
@@ -277,7 +312,6 @@ const processFormData = async (
       const fileOrArray = value;
       if (!Array.isArray(fileOrArray)) {
         if (fileOrArray.name) {
-          // eslint-disable-next-line no-await-in-loop
           const { isValid, key } = await pushFileToS3(fileOrArray);
           if (isValid) {
             uploadedFilesKeyUrlMapping.set(fileOrArray.name, key);
@@ -295,7 +329,6 @@ const processFormData = async (
         for (const fileItem of fileOrArray) {
           const index = fileOrArray.indexOf(fileItem);
           if (fileItem.name) {
-            // eslint-disable-next-line no-await-in-loop
             const { isValid, key } = await pushFileToS3(fileItem);
             if (isValid) {
               uploadedFilesKeyUrlMapping.set(fileItem.name, key);
@@ -313,7 +346,7 @@ const processFormData = async (
     }
     try {
       await callLambda(
-        form.id,
+        form.formID,
         fields,
         // pass in the language from the header content language... assume english as the default
         req.headers?.["content-language"] ? req.headers["content-language"] : "en",

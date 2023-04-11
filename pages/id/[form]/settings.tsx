@@ -1,14 +1,11 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
-import { getFullTemplateByID } from "@lib/templates";
-import { checkPrivileges } from "@lib/privileges";
-import { ReactElement } from "react";
+import { crudTemplates } from "@lib/integration/crud";
 import React from "react";
 import JSONUpload from "@components/admin/JsonUpload/JsonUpload";
 import { useTranslation } from "next-i18next";
-import { DeleteButton, Label } from "@components/forms";
+import { DeleteButton } from "@components/forms/Button/DeleteButton";
 import { useRouter } from "next/router";
-import Head from "next/head";
 import axios from "axios";
 import { logMessage } from "@lib/logger";
 import { FormRecord } from "@lib/types";
@@ -16,14 +13,12 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import BearerRefresh from "@components/admin/BearerRefresh/BearerRefresh";
 import FormAccess from "@components/admin/FormAccess/FormAccess";
-import { getProperty } from "@lib/formBuilder";
-import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 
 interface FormSettingsProps {
   form: FormRecord;
 }
 
-const handleDelete = async (formID: string) => {
+const handleDelete = async (formID: number) => {
   // redirect to view templates page on success
   const resp = await axios({
     url: "/api/templates",
@@ -48,10 +43,9 @@ const handleDelete = async (formID: string) => {
 };
 
 const FormSettings = (props: FormSettingsProps): React.ReactElement => {
-  const { form: formRecord } = props;
+  const { form } = props;
   const router = useRouter();
-  const { t, i18n } = useTranslation("admin-templates");
-  const language = i18n.language as string;
+  const { t } = useTranslation("admin-templates");
   const newText =
     router.query && router.query.newForm ? (
       <p className="gc-confirmation-banner">{t("settings.new")}</p>
@@ -61,16 +55,9 @@ const FormSettings = (props: FormSettingsProps): React.ReactElement => {
 
   return (
     <>
-      <Head>
-        <title>{t("settings.title")}</title>
-      </Head>
-      <h1>{t("settings.title")}</h1>
+      <h1 className="gc-h1">{t("settings.title")}</h1>
       <div data-testid="formID" className="mb-4">
-        <b>Form Title:</b> {formRecord.form[getProperty("title", language)] as string}
-        <br />
-        <b>Form ID:</b> {formRecord.id}
-        <br />
-        <b>Is form published:</b> {formRecord.isPublished.toString()}
+        Form ID: {form.formID}
       </div>
       <Tabs>
         <TabList>
@@ -81,67 +68,56 @@ const FormSettings = (props: FormSettingsProps): React.ReactElement => {
 
         <TabPanel>
           <div>{newText}</div>
-          <Label htmlFor="jsonInput">{t("settings.edit")}</Label>
-          <JSONUpload form={formRecord} />
+          <h2>{t("settings.edit")}</h2>
+          <JSONUpload form={form} />
           <br />
           <div>
             <DeleteButton
               action={handleDelete}
-              data={formRecord.id}
+              data={form.formID}
               redirect={`/admin/view-templates`}
             />
           </div>
         </TabPanel>
         <TabPanel>
-          <BearerRefresh formID={formRecord.id} />
+          <BearerRefresh formID={form.formID} />
         </TabPanel>
         <TabPanel>
-          <FormAccess formID={formRecord.id} />
+          <FormAccess formID={form.formID} />
         </TabPanel>
       </Tabs>
     </>
   );
 };
 
-const redirect = (locale: string | undefined) => {
+export const getServerSideProps = requireAuthentication(async (context) => {
+  const formID = context?.params?.form ? parseInt(context.params.form as string) : undefined;
+
+  if (formID && !isNaN(formID)) {
+    // get form info from db
+    const payload = {
+      method: "GET",
+      formID: formID,
+    };
+    const lambdaResult = await crudTemplates(payload);
+
+    if (context.locale && lambdaResult.data.records && lambdaResult.data.records.length > 0) {
+      return {
+        props: {
+          form: lambdaResult.data.records[0],
+          ...(await serverSideTranslations(context.locale, ["common", "admin-templates"])),
+        },
+      };
+    }
+  }
+  // if no form returned, 404
   return {
     redirect: {
       // We can redirect to a 'Form does not exist page' in the future
-      destination: `/${locale}/404`,
+      destination: `/${context.locale}/404`,
       permanent: false,
     },
   };
-};
-
-FormSettings.getLayout = (page: ReactElement) => {
-  return <AdminNavLayout user={page.props.user}>{page}</AdminNavLayout>;
-};
-
-export const getServerSideProps = requireAuthentication(
-  async ({ locale, params, user: { ability } }) => {
-    // Only users who have the ManageForms privilege can view this page for now
-    checkPrivileges(ability, [{ action: "update", subject: { type: "FormRecord", object: {} } }]);
-
-    const formID = params?.form;
-    // Needed for typechecking of a ParsedURLQuery type which can be a string or string[]
-    if (!formID || Array.isArray(formID)) return redirect(locale);
-
-    if (formID) {
-      // get form info from db
-      const template = await getFullTemplateByID(ability, formID);
-
-      if (template) {
-        return {
-          props: {
-            form: template,
-            ...(locale && (await serverSideTranslations(locale, ["common", "admin-templates"]))),
-          },
-        };
-      }
-    }
-    // if no form returned, 404
-    return redirect(locale);
-  }
-);
+});
 
 export default FormSettings;

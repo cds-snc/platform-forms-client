@@ -5,10 +5,11 @@ import axios from "axios";
 import { useTranslation } from "next-i18next";
 import React, { useEffect, useState } from "react";
 import { isValidGovEmail } from "@lib/validation";
+import emailDomainList from "../../../email.domains.json";
 import { FormOwner } from "@lib/types";
 
 export interface FormAccessProps {
-  formID: string;
+  formID: number;
 }
 
 const FormAccess = (props: FormAccessProps): React.ReactElement => {
@@ -47,7 +48,7 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
     try {
       setSubmitting(true);
       setErrorState({ message: "" });
-      await axios({
+      const serverResponse = await axios({
         url: ownersApiUrl,
         method: "POST",
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
@@ -55,8 +56,13 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
           email: email,
         },
       });
-      setFormOwners([...formOwners, { id: formID, email: email, active: true }]);
-      setNewEmail("");
+      switch (serverResponse.status) {
+        case 200:
+          setFormOwners([...formOwners, { id: formID, email: email, active: true }]);
+          break;
+        default:
+          setErrorState({ message: serverResponse.data["error"] });
+      }
     } catch (err) {
       logMessage.error(err as Error);
       setErrorState({ message: "Unable to add user to form." });
@@ -119,7 +125,7 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
   const handleEmailSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setErrorState({ message: "" });
-    if (isValidGovEmail(newEmail)) {
+    if (isValidGovEmail(newEmail, emailDomainList.domains)) {
       addEmailToForm(newEmail);
     } else {
       setErrorState({ message: t("settings.formAccess.invalidEmailError") });

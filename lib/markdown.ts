@@ -1,10 +1,10 @@
 import json2md from "json2md";
 import logger from "@lib/logger";
-import { extractFormData } from "./helpers";
+import { extractFormData } from "./integration/helpers";
 import { Submission } from "@lib/types";
 
 export default logger((formResponse: Submission): string => {
-  const formResponseFormObject = formResponse.form.form;
+  const formResponseFormObject = formResponse.form.formConfig.form;
   const subjectEn = formResponseFormObject.emailSubjectEn
     ? formResponseFormObject.emailSubjectEn
     : formResponseFormObject.titleEn;

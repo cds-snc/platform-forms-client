@@ -19,15 +19,10 @@
     "paths": {
       "@lib/*": ["lib/*"],
       "@components/*": ["components/*"],
-      "@formbuilder/*": ["components/form-builder/*"],
-      "@pages/*": ["pages/*"],
-      "@jestFixtures/*": ["__fixtures__/*"],
-      "@jestUtils": ["__utils__"]
+      "@pages/*": ["pages/*"]
     },
     "incremental": true
   },
   "include": ["next-env.d.ts", "types", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "utils", ".next", "cypress",
-    "./cypress.config.js"
-  ]
+  "exclude": ["node_modules", "utils"]
 }
