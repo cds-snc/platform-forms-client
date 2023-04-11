@@ -364,7 +364,7 @@
   "phoneNumber": "Phone number",
   "placeHolderFormTitle": "Form title",
   "previewingIn": "Previewing in",
-  "privacyNoticeDescription": "<p className=\"mb-4\">Privacy notices provide people completing your form with information about how you are handling their personal information.</p><p className=\"mb-4\">You are responsible for understanding your department or agency's responsibilities related to personal information including drafting privacy notices that follow the requirements in Section 4.2.10 of the Directive on Privacy Practices.</p><p>If you are unsure about how to proceed, we recommend contacting your <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-eng.asp\" target=\"_blank\">access to information and privacy coordinator.</a></p>",
+  "privacyNoticeDescription": "<p className=\"mb-4\">Privacy notices provide people completing your form with information about how you are handling their personal information.</p><p className=\"mb-4\">You are responsible for understanding your department or agency's responsibilities related to personal information including drafting privacy notices that follow the requirements in Section 4.2.10 of the <a href=\"https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309\" target=\"_blank\">Directive on Privacy Practices</a>.</p><p>If you are unsure about how to proceed, we recommend contacting your <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-eng.asp\" target=\"_blank\">access to information and privacy coordinator.</a></p>",
   "privacyStatement": "Privacy statement",
   "provideFeedback": "Provide feedback",
   "publish": "Publish",
