@@ -22,7 +22,7 @@ export const CardGrid = (props: CardGridProps): React.ReactElement => {
     <>
       <ol
         className="grid gap-4 p-0"
-        style={{ gridTemplateColumns: "repeat(auto-fill, minmax(25rem, 1fr))" }}
+        style={{ gridTemplateColumns: "repeat(auto-fill, minmax(30rem, 1fr))" }}
       >
         {cards &&
           cards?.length > 0 &&
