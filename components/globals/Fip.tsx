@@ -24,6 +24,12 @@ const Fip = ({
     (formTheme?.[getProperty("logo", i18n.language)] as string | undefined) ??
     "/img/sig-blk-" + i18n.language + ".svg";
 
+  let logoStyles = "max-h-[70px]";
+
+  if (logo === "/img/sig-blk-en.svg") {
+    logoStyles = "max-h-[40px]";
+  }
+
   const linkUrl =
     (formTheme?.[getProperty("url", i18n.language)] as string | undefined) ?? t("fip.link");
 
@@ -37,7 +43,7 @@ const Fip = ({
       <div className="canada-flag">
         <a href={linkUrl} aria-label={t("fip.label")}>
           <picture>
-            <img src={logo} alt={logoTitle} className="max-w-[600px] max-h-[60px]" />
+            <img src={logo} alt={logoTitle} className={logoStyles} />
           </picture>
         </a>
       </div>
