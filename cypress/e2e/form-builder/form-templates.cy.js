@@ -25,7 +25,7 @@ describe("Test FormBuilder", () => {
 
   it("Adds a Name block with autocomplete", () => {
     cy.visit("/form-builder/edit");
-    cy.get("button").contains("Add block").click();
+    cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="name"]').click();
     cy.get("button").contains("Select block").click();
@@ -38,7 +38,7 @@ describe("Test FormBuilder", () => {
 
   it("Adds a Name (3 fields) block with autocomplete", () => {
     cy.visit("/form-builder/edit");
-    cy.get("button").contains("Add block").click();
+    cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="firstMiddleLastName"]').click();
     cy.get("button").contains("Select block").click();
@@ -61,7 +61,7 @@ describe("Test FormBuilder", () => {
 
   it("Adds a Address block with autocomplete", () => {
     cy.visit("/form-builder/edit");
-    cy.get("button").contains("Add block").click();
+    cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="address"]').click();
     cy.get("button").contains("Select block").click();
@@ -87,7 +87,7 @@ describe("Test FormBuilder", () => {
 
   it("Adds a Contact block with autocomplete", () => {
     cy.visit("/form-builder/edit");
-    cy.get("button").contains("Add block").click();
+    cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="contact"]').click();
     cy.get("button").contains("Select block").click();
