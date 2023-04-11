@@ -1,11 +1,20 @@
-Your responsibilities while using GC Forms are detailed in the [Service-level agreement](#). 
+Your responsibilities while using GC Forms are detailed in the [Terms of use](#). 
 
 As a reminder, here are the highlights:
 
-- Have the necessary approval to use the GC Forms system.
-- Have the appropriate authorities to collect personal information.
-- Publish a complete and accurate translation of the form and privacy notice.
-- Ensure that you do not share your password or sign-in key with anyone.
-- Report any problems with the application.
-- Handle and save form responses in accordance with your privacy and retention policies.
-- Keep a copy of the form response for your own records.
+- Obtain the necessary approval to use GC Forms.
+- Accept all conditions and risks including our service levels. 
+- Protect and process personal and sensitive information: 
+    - Obtain the appropriate authorities to collect personal information.
+    - Manage form responses based on your department or agency’s retention and disposition schedule. 
+    - Use GC Forms to collect data classified as up to PROTECTED A. 
+- Publish in both official languages. 
+- Provide multiple channels to service and program delivery. 
+- Contribute to a trustworthy experience with consistent branding and content, and discoverable URLs.
+- Report any problems with GC Forms. 
+
+For questions related to these terms of use, [contact us](https://forms-formulaires.alpha.canada.ca/form-builder/support/contactus).
+
+
+
+ **Last update:** April 12, 2023 
