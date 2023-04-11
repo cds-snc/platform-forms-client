@@ -36,7 +36,7 @@ const Brand = ({
   }
 
   return (
-    <a href={linkUrl} aria-label={logoTitle} className="inline-block">
+    <a href={linkUrl} aria-label={logoTitle} className="!inline-block">
       <picture className="inline-block">
         <img src={logo} alt={logoTitle} className={logoStyles} />
       </picture>
