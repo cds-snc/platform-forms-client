@@ -5,6 +5,7 @@ Version 2
 GC Forms is a cloud-based service that is owned and operated by the Canadian Digital Service (CDS) at the Treasury Board of Canada Secretariat (TBS). This service enables Canadian federal departments and agencies to create and publish forms, which are hosted by CDS. 
 
 ## Responsibilities
+
 ### The Canadian Digital Service (CDS) is responsible for:
 
 - Hosting and supporting the GC Forms system.
@@ -13,7 +14,7 @@ GC Forms is a cloud-based service that is owned and operated by the Canadian Dig
 - Ensuring data transfer to the client via email is able to support Protected A data or meet the same security requirements as other email-based data delivery options.
 - Patching security vulnerabilities in a timely manner, where CDS determines the level of threat a security vulnerability possesses. Major vulnerabilities are patched as soon as possible but no more than a week after the root cause is found. External dependencies for code are subject to longer timelines. Any infrastructure-level patching is the responsibility of [Amazon Web Services (AWS)](https://aws.amazon.com/service-terms/).
 - Restoring the system to operation in case of any unplanned outages.
-- Alerting clients if GC Forms is inaccessible for whatever reasons as soon as CDS learns of this. See our real-time [Status page](https://status-statut.cds-snc.ca/).
+- Alerting clients if GC Forms is inaccessible for whatever reasons as soon as CDS learns of this. See our real-time [Status page](https://status-statut.cds-snc.ca/history/gc-forms-formulaires-gc).
 - Ensuring the GC Forms system sends form responses to clients in a timely manner, as provided by [GC Notify](https://notification.canada.ca/service-level-agreement). 
 - Ensuring the infrastructure providers do not disconnect the GC Forms or GC Notify system due to misuse by clients. 
 - Ensuring the system is available for use, with page load time less than 10 seconds in Canada on high-speed Internet, unless the product is experiencing a denial of service attack or there are issues with AWS. 
@@ -79,7 +80,7 @@ In case CDS is no longer able to support and operate GC Forms or GC Notify due t
 
 In the event that CDS needs to decommission the service, GC Forms will work with clients to ensure they have the data collected and still retained by the product, as well as provide an options analysis for alternative solutions. 
 
-GC Forms is open source and available for others to stand up their own version based on the code found in [GitHub](https://github.com/cds-snc/platform-forms-client))
+GC Forms is open source and available for others to stand up their own version based on the code found in [GitHub](https://github.com/cds-snc/platform-forms-client).
   
   
 
