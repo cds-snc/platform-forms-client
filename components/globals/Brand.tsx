@@ -36,7 +36,7 @@ const Brand = ({
   }
 
   return (
-    <a href={linkUrl} aria-label={t("fip.label")}>
+    <a href={linkUrl} aria-label={logoTitle}>
       <picture>
         <img src={logo} alt={logoTitle} className={logoStyles} />
       </picture>
