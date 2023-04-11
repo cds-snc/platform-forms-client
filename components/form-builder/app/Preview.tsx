@@ -1,16 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useTemplateStore } from "../store/useTemplateStore";
+import React, { useState } from "react";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
-import { getRenderedForm } from "@lib/formBuilder";
-import { RichText } from "@components/forms/RichText/RichText";
-import { LocalizedElementProperties, LocalizedFormProperties } from "../types";
-import { Button, Form } from "@components/forms";
 import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
-import { useTemplateContext } from "../hooks";
-import { BackArrowIcon } from "../icons";
+
+import { getRenderedForm } from "@lib/formBuilder";
 import { PublicFormRecord } from "@lib/types";
+import { Button, Form, RichText } from "@components/forms";
+import { LocalizedElementProperties, LocalizedFormProperties } from "../types";
+import { useTemplateStore } from "../store";
+import { useAutoSave } from "../hooks";
+import { BackArrowIcon } from "../icons";
 
 export const Preview = () => {
   const { status } = useSession();
@@ -29,12 +29,11 @@ export const Preview = () => {
     securityAttribute: getSecurityAttribute(),
   };
 
-  const { localizeField, translationLanguagePriority, getLocalizationAttribute, setId, email } =
+  const { localizeField, translationLanguagePriority, getLocalizationAttribute, email } =
     useTemplateStore((s) => ({
       localizeField: s.localizeField,
       translationLanguagePriority: s.translationLanguagePriority,
       getLocalizationAttribute: s.getLocalizationAttribute,
-      setId: s.setId,
       email: s.deliveryOption?.emailAddress,
     }));
 
@@ -43,35 +42,18 @@ export const Preview = () => {
   const { t } = useTranslation(["common", "form-builder"]);
   const language = translationLanguagePriority;
   const currentForm = getRenderedForm(formRecord, language, t);
-  const { saveForm } = useTemplateContext();
   const [sent, setSent] = useState<string | null>();
-  const saved = useRef(false);
 
   const clearSent = () => {
     setSent(null);
   };
 
-  useEffect(() => {
-    if (status === "authenticated" && !saved.current && !id) {
-      const save = async () => {
-        const result = await saveForm();
-        if (result) {
-          setId(result);
-        }
-      };
-
-      save();
-
-      return () => {
-        saved.current = true;
-      };
-    }
-  }, [status, id, saveForm, setId]);
-
   const preventSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     return false;
   };
+
+  useAutoSave();
 
   const responsesLink = `/${i18n.language}/form-builder/responses/${id}`;
   const settingsLink = `/${i18n.language}/form-builder/settings/${id}`;
