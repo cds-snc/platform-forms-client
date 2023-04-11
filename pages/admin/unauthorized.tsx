@@ -1,13 +1,18 @@
 import React from "react";
 import { GetServerSideProps } from "next";
+import Head from "next/head";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { getSession } from "next-auth/client";
+import { getServerSession } from "next-auth/next";
 import { useTranslation } from "next-i18next";
+import { authOptions } from "@pages/api/auth/[...nextauth]";
 
 const Unauthorized: React.FC = () => {
   const { t } = useTranslation("admin-login");
   return (
     <>
+      <Head>
+        <title>{t("unauthorized.title")}</title>
+      </Head>
       <h1>{t("unauthorized.title")}</h1>
       <div className="mt-4">{t("unauthorized.detail")}</div>
     </>
@@ -15,33 +20,22 @@ const Unauthorized: React.FC = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
-
-  if (session?.user.admin)
-    return {
-      props: {},
-      redirect: {
-        destination: `/${context.locale}/admin/`,
-        permanent: false,
-      },
-    };
+  const session = await getServerSession(context.req, context.res, authOptions);
 
   if (!session)
     return {
-      props: {},
       redirect: {
         destination: `/${context.locale}/admin/login/`,
         permanent: false,
       },
     };
 
-  if (context.locale) {
-    return {
-      props: { ...(await serverSideTranslations(context.locale, ["common", "admin-login"])) },
-    };
-  }
-
-  return { props: {} };
+  return {
+    props: {
+      ...(context.locale &&
+        (await serverSideTranslations(context.locale, ["common", "admin-login"]))),
+    },
+  };
 };
 
 export default Unauthorized;

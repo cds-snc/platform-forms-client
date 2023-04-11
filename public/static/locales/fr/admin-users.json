@@ -1,11 +1,19 @@
 {
-  "title": "Gérer les utilisateurs",
-  "username": "Nom d'utilisateur",
-  "email": "Adresse de courriel",
-  "admin": "Administrateur",
+  "title": "Gérer les utilisateur·rice·s",
+  "username": "Nom d'utilisateur·rice",
+  "email": "Adresse courriel",
+  "admin": "Administration",
   "true": "Oui",
   "false": "Non",
   "enable": "Activer",
+  "enabled": "Activé",
   "disable": "Désactiver",
-  "a11y-diable-desc": "les droits d'administrateur pour"
+  "disabled": "Désactivé",
+  "a11y-diable-desc": "les droits administratifs pour",
+  "cancel": "Annuler",
+  "save": "Enregistrer",
+  "managePermissions": "Gérer les permissions",
+  "viewPermissions": "Afficher les permissions",
+  "managePermissionsFor": "Gère les permissions de",
+  "assignUsersToTemplate": "Assigner des utilisateur·rice·s au formulaire"
 }

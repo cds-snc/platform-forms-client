@@ -4,13 +4,13 @@ import { PublicFormRecord } from "@lib/types";
 
 export const getPageClassNames = (formRecord: PublicFormRecord): string => {
   const pageNameUrl = getPageNameUrl();
-  const brandName = formRecord?.formConfig?.form?.brand
-    ? formRecord.formConfig.form.brand.name
-    : "";
+  const brandName = formRecord?.form?.brand ? formRecord.form.brand.name : "";
   return classnames("outer-container", `page${pageNameUrl.replace(/\//g, "-")}`, brandName);
 };
 
 export const getPageNameUrl = (): string => {
+  // @todo - fix this eslint error
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const router = useRouter();
   let pageNameUrl = router && router.asPath ? router.asPath.split("?")[0] : "";
   if (pageNameUrl === "/") {

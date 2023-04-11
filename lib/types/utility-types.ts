@@ -19,8 +19,7 @@ export interface MiddlewareReturn {
 
 export type MiddlewareRequest = (
   req: NextApiRequest,
-  res: NextApiResponse,
-  props?: Record<string, unknown>
+  res: NextApiResponse
 ) => Promise<MiddlewareReturn>;
 
 export interface MiddlewareProps {
@@ -30,26 +29,7 @@ export interface MiddlewareProps {
   temporaryToken?: string;
 }
 
-export enum AdminLogAction {
-  Create = "Create",
-  Read = "Read",
-  Update = "Update",
-  Delete = "Delete",
-}
-
-export enum AdminLogEvent {
-  GrantAdminRole = "GrantAdminRole",
-  RevokeAdminRole = "RevokeAdminRole",
-  UploadForm = "UploadForm",
-  UpdateForm = "UpdateForm",
-  DeleteForm = "DeleteForm",
-  RefreshBearerToken = "RefreshBearerToken",
-  GrantInitialFormAccess = "GrantInitialFormAccess",
-  GrantFormAccess = "GrantFormAccess",
-  RevokeFormAccess = "RevokeFormAccess",
-  EnableFeature = "EnableFeature",
-  DisableFeature = "DisableFeature",
-}
+export type WithRequired<T, K extends keyof T> = T & Required<Pick<T, K>>;
 
 export type HTMLTextInputTypeAttribute =
   | "text"

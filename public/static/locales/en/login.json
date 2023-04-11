@@ -1,0 +1,20 @@
+{
+  "title": "Sign in",
+  "signUpText": "If you do not have an account, you can",
+  "signUpLink": "create one now.",
+  "signInButton": "Sign in",
+  "resetPasswordText": "Reset your password",
+  "fields": {
+    "username": {
+      "label": "Email address",
+      "description": "Must be a federal government email address."
+    },
+    "password": {
+      "label": "Password",
+      "description": "Must be at least 8 characters with a capital letter, number, and symbol.",
+      "errors": {
+        "maxLength": "Password cannot exceed 50 characters."
+      }
+    }
+  }
+}

@@ -1,7 +1,7 @@
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { GenerateElement } from "../../../lib/formBuilder";
+import { GenerateElement } from "@lib/formBuilder";
 
 jest.mock("formik", () => ({
   ...jest.requireActual("formik"),
@@ -74,16 +74,16 @@ describe("Verfify character count restrictions", () => {
   });
 
   it("does not display any message when not enough characters have been typed in", async () => {
-    userEvent.setup();
+    const user = userEvent.setup();
     const textInput = screen.getByRole("textbox");
-    await userEvent.type(textInput, "This is 21 characters");
+    await user.type(textInput, "This is 21 characters");
     expect(screen.queryByText("characters left.")).not.toBeInTheDocument();
   });
 
   it("displays a message with the number of characters remaining", async () => {
-    userEvent.setup();
+    const user = userEvent.setup();
     const textInput = screen.getByRole("textbox");
-    await userEvent.type(textInput, "This is 35 characters This is 35 ch");
+    await user.type(textInput, "This is 35 characters This is 35 ch");
     expect(
       screen.getByText(
         "formElements.characterCount.part1" + " 5 " + "formElements.characterCount.part2"
@@ -92,9 +92,9 @@ describe("Verfify character count restrictions", () => {
   });
 
   it("displays an error message indicating too many characters", async () => {
-    userEvent.setup();
+    const user = userEvent.setup();
     const textInput = screen.getByRole("textbox");
-    await userEvent.type(textInput, "This is 48 characters This is 48 characters This");
+    await user.type(textInput, "This is 48 characters This is 48 characters This");
     screen.getByText(
       "formElements.characterCount.part1-error" + " 8 " + "formElements.characterCount.part2-error"
     );

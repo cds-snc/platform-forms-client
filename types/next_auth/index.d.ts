@@ -1,18 +1,30 @@
-import { DefaultSession, DefaultUser } from "next-auth";
+import { Abilities } from "@lib/types";
+import { RawRuleOf, MongoAbility } from "@casl/ability";
 
 declare module "next-auth" {
   /**
-   * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
+   * Returned by `useSession`, `getSession`, `getServerSession` and received as a prop on the `SessionProvider` React Context
    */
   interface Session {
     user: {
-      id?: string;
-      admin?: boolean;
-    } & DefaultSession["user"];
+      id: string;
+      lastLoginTime?: Date;
+      privileges: RawRuleOf<MongoAbility<Abilities>>[];
+      acceptableUse: boolean;
+      name: string | null;
+      email: string | null;
+      image?: string | null;
+    };
   }
+}
 
-  interface User extends DefaultUser {
-    id?: number;
-    admin?: boolean;
+declare module "next-auth/jwt" {
+  /** Returned by the `jwt` callback and `getToken`, when using JWT sessions */
+  interface JWT {
+    userId: string;
+    name: string;
+    lastLoginTime: Date;
+    privileges: RawRuleOf<MongoAbility<Abilities>>[];
+    acceptableUse: boolean;
   }
 }

@@ -1,9 +1,11 @@
 {
-  "sandbox": true,
-  "vault": false,
   "unpublishedForms": true,
   "submitToReliabilityQueue": false,
-  "notifyPreview": false,
   "reCaptcha": false,
-  "formTimer": false
+  "formTimer": false,
+  "accountRegistration": true,
+  "passwordReset": false,
+  "supportForms": false,
+  "nagware": false,
+  "experimentalBlocks": false
 }

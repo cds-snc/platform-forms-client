@@ -12,7 +12,6 @@ The form viewer expects a JSON with the following structure.
 {
   "internalTitleEn": "",
   "internalTitleFr": "",
-  "publishingStatus": false,
   "securityAttribute": "",
   "submission": {
     "email": ""
@@ -27,7 +26,9 @@ The form viewer expects a JSON with the following structure.
     "brand": {},
     "elements": [ ... ],
     "startPage": {},
-    "endPage": {}
+    "confirmation": {},
+    "introduction": {},
+    "privacyPolicy": {}
   }
 }
 ```
@@ -52,11 +53,7 @@ There are 2 main parts to the structure:
 
    `startPage`: Defines what appears on the first, intro page
 
-   `endPage`: Defines what appears on the confirmation page, after the form was submitted. Can write markdown within the description.
-
-   `publishingStatus`: If set to false, the link to the form will not appear on the main page, rather under "sandbox"
-
-   `displayAlphaBanner`: If set to false, the ALPHA tag will not appear in the header of the page. If not set if will be defaulted to true.
+   `confirmation`: Defines what appears on the confirmation page, after the form was submitted. Can write markdown within the description.
   
    `securityAttribute`: (Optional) It shows an administrator what proceduce should be taken when accessing a form's responses, possible value Protected B, Protected A, Unclassified
 
@@ -95,7 +92,7 @@ Example:
     "urlFr": "https://numerique.canada.ca/",
     "title": "cds-snc"
   },
-  "endPage": {
+  "confirmation": {
     "descriptionEn": "# Thank you for your enquiry  \n\r Canadian Digital Services will respond to your email within one week.",
     "descriptionFr": "# Merci pour votre demande  \n\r Le Service numérique canadien répondra à votre demande d’ici une semaine."
   },

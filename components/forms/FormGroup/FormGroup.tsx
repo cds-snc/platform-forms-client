@@ -33,5 +33,3 @@ export const FormGroup = (props: FormGroupProps): React.ReactElement => {
     </fieldset>
   );
 };
-
-export default FormGroup;

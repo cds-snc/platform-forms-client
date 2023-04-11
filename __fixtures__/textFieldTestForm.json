@@ -1,0 +1,44 @@
+{
+  "titleEn": "Text Field Test Form",
+  "titleFr": "TExt Field Test Form (FR)",
+  "confirmation": {
+    "descriptionEn": "# Submitted thank you!",
+    "descriptionFr": "# Submitted thank you (FR)",
+    "referrerUrlEn": "https://digital.canada.ca/",
+    "referrerUrlFr": "https://numerique.canada.ca/"
+  },
+  "privacyPolicy": {
+    "descriptionEn": "Privacy statement",
+    "descriptionFr": "Déclaration de confidentialité"
+  },
+  "layout": [1, 2],
+  "elements": [
+    {
+      "id": 1,
+      "type": "richText",
+      "properties": {
+        "descriptionEn": "## Test Section with Text Fields",
+        "descriptionFr": "## Test Section with Text Fields (FR)",
+        "validation": {
+          "required": false
+        }
+      }
+    },
+    {
+      "id": 2,
+      "type": "textField",
+      "properties": {
+        "titleEn": "Text Field 1",
+        "titleFr": "Text Field 1 (FR)",
+        "placeholderEn": "text field 1 placeholder",
+        "placeholderFr": "text field 1 placeholder (FR)",
+        "descriptionEn": "text field 1 description",
+        "descriptionFr": "text field 1 description (FR)",
+        "validation": {
+          "required": true,
+          "maxLength": 40
+        }
+      }
+    }
+  ]
+}

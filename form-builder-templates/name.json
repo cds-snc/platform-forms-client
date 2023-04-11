@@ -1,0 +1,25 @@
+[
+    {
+        "id": 1,
+        "type": "textField",
+        "properties": {
+        "subElements": [],
+        "choices": [
+            {
+            "en": "",
+            "fr": ""
+            }
+        ],
+        "titleEn": "Full name",
+        "titleFr": "Nom complet",
+        "validation": {
+            "required": true
+        },
+        "descriptionEn": "Include your first and last names. Middle names are optional.",
+        "descriptionFr": "Indiquez votre prénom et nom de famille. Le deuxième prénom est optionnel.",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "autoComplete": "name"
+        }
+    }
+]

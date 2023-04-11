@@ -1,14 +1,17 @@
 import useSWR from "swr";
-import React from "react";
+import React, { ReactElement } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import { useTranslation } from "next-i18next";
+import Head from "next/head";
 import Loader from "@components/globals/Loader";
 import { Button } from "@components/forms";
+import { checkPrivileges } from "@lib/privileges";
+import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 
 const fetcher = (url: string) => fetch(url).then((response) => response.json());
 
-const Flags: React.FC = () => {
+const Flags = () => {
   const { t } = useTranslation("admin-flags");
 
   const { data: flags, error, mutate: reload } = useSWR("/api/flags", fetcher);
@@ -17,7 +20,10 @@ const Flags: React.FC = () => {
 
   return (
     <>
-      <h1 className="gc-h1">{t("title")}</h1>
+      <Head>
+        <title>{t("title")}</title>
+      </Head>
+      <h1>{t("title")}</h1>
       <p className="pb-8">{t("subTitle")}</p>
       {flags ? (
         <table className="table-auto border-4">
@@ -64,15 +70,17 @@ const Flags: React.FC = () => {
   );
 };
 
-export const getServerSideProps = requireAuthentication(async (context) => {
-  if (context.locale) {
-    return {
-      props: {
-        ...(await serverSideTranslations(context.locale, ["common", "admin-flags"])),
-      },
-    };
-  }
-  return { props: {} };
+Flags.getLayout = (page: ReactElement) => {
+  return <AdminNavLayout user={page.props.user}>{page}</AdminNavLayout>;
+};
+
+export const getServerSideProps = requireAuthentication(async ({ locale, user: { ability } }) => {
+  checkPrivileges(ability, [{ action: "view", subject: "Flag" }]);
+  return {
+    props: {
+      ...(locale && (await serverSideTranslations(locale, ["common", "admin-flags"]))),
+    },
+  };
 });
 
 export default Flags;

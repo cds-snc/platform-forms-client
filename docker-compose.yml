@@ -2,7 +2,7 @@ version: '3'
 
 services:
   db:
-    image: postgres:11.2
+    image: postgres:11.16@sha256:5d2aa4a7b5f9bdadeddcf87cf7f90a176737a02a30d917de4ab2e6a329bd2d45
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -17,7 +17,7 @@ services:
     restart: always
   redis:
     restart: always
-    image: redis:latest
+    image: redis:latest@sha256:7b83a0167532d4320a87246a815a134e19e31504d85e8e55f0bb5bb9edf70448
     ports:
       - "6379:6379"
     expose:

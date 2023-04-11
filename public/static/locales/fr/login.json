@@ -1,0 +1,20 @@
+{
+  "title": "Se connecter",
+  "signUpText": "Si vous n’avez pas de compte, vous pouvez en",
+  "signUpLink": "créer un maintenant.",
+  "signInButton": "Se connecter",
+  "resetPasswordText": "Réinitialiser votre mot de passe",
+  "fields": {
+    "username": {
+      "label": "Adresse courriel",
+      "description": "Il faut fournir une adresse courriel du gouvernement fédéral."
+    },
+    "password": {
+      "label": "Mot de passe",
+      "description": "Le mot de passe doit comporter au moins 8 caractères avec une majuscule, un chiffre et un symbole.",
+      "errors": {
+        "maxLength": "Le mot de passe ne doit pas dépasser 50 caractères."
+      }
+    }
+  }
+}

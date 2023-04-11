@@ -1,38 +1,47 @@
 import "react-app-polyfill/stable";
 import type { AppProps } from "next/app";
-import React from "react";
+import React, { ReactElement, ReactNode } from "react";
 
 import { appWithTranslation } from "next-i18next";
-import { Provider } from "next-auth/client";
-import Base from "../components/globals/Base";
+import type { NextPage } from "next";
+import { SessionProvider } from "next-auth/react";
+import { AccessControlProvider } from "@lib/hooks";
+import BaseLayout from "@components/globals/layouts/BaseLayout";
 import "../styles/app.scss";
-import i18nextConfig from "../next-i18next.config";
+import { AnyObject } from "@lib/types";
+import { Session } from "next-auth";
 
-/*
-This component disables SSR when in testing mode.
-This is because in Cypress we're manipulating and mocking the API response calls
-and the SSR pages were not matching the React rendered pages (rendered with different props)
-which generates a warning in the browser console.
-*/
+export type NextPageWithLayout<P = Record<string, unknown>, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
 
-const SafeHydrate = ({ children }: { children: React.ReactNode }) => {
+type AppPropsWithLayout = AppProps<AnyObject & { session?: Session }> & {
+  Component: NextPageWithLayout;
+};
+
+const MyApp: React.FC<AppPropsWithLayout> = ({
+  Component,
+  pageProps: { session, ...pageProps },
+}: AppPropsWithLayout) => {
   return (
-    <div suppressHydrationWarning={Boolean(process.env.APP_ENV === "test")}>
-      {typeof window === "undefined" && process.env.APP_ENV === "test" ? null : children}
-    </div>
+    <SessionProvider
+      session={session}
+      // Re-fetch session every 30 minutes if no user activity
+      refetchInterval={30 * 60}
+      // Re-fetches session when window is focused
+      refetchOnWindowFocus={true}
+    >
+      <AccessControlProvider>
+        {Component.getLayout ? (
+          Component.getLayout(<Component {...pageProps} />)
+        ) : (
+          <BaseLayout>
+            <Component {...pageProps} />
+          </BaseLayout>
+        )}
+      </AccessControlProvider>
+    </SessionProvider>
   );
 };
 
-const MyApp: React.FunctionComponent<AppProps> = ({ Component, pageProps }: AppProps) => {
-  return (
-    <Provider session={pageProps.session}>
-      <SafeHydrate>
-        <Base>
-          <Component {...pageProps} />
-        </Base>
-      </SafeHydrate>
-    </Provider>
-  );
-};
-
-export default appWithTranslation(MyApp, i18nextConfig);
+export default appWithTranslation(MyApp);
