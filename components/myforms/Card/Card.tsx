@@ -8,6 +8,7 @@ import {
   MenuDropdownItemCallback,
 } from "@components/myforms/MenuDropdown/MenuDropdown";
 import { getDate, slugify } from "@lib/clientHelpers";
+import { MessageIcon, EnvelopeIcon } from "@components/form-builder/icons/";
 
 export interface CardProps {
   id: string;
@@ -17,13 +18,14 @@ export interface CardProps {
   url: string;
   date: string;
   isPublished: boolean;
+  deliveryOption?: { emailAddress?: string } | null;
   handleDelete: (card: CardProps) => void;
 }
 
 export const Card = (props: CardProps): React.ReactElement => {
-  const { id, name, titleEn, titleFr, url, date, isPublished } = props;
+  const { id, name, titleEn, titleFr, url, date, isPublished, deliveryOption } = props;
   const { t, i18n } = useTranslation(["my-forms", "common"]);
-
+  const responsesLink = `/${i18n.language}/form-builder/responses/${id}`;
   const menuItemsList: Array<MenuDropdownItemI> = [
     {
       title: t("card.menu.preview"),
@@ -125,7 +127,7 @@ export const Card = (props: CardProps): React.ReactElement => {
       <p className="h-36 px-3 pt-5 pb-8">
         <a
           href={isPublished ? url : `/${i18n.language}/form-builder/edit/${id}`}
-          className="line-clamp-3 inline-block wrap overflow-hidden inline-block"
+          className="font-bold line-clamp-3 inline-block wrap overflow-hidden inline-block"
           aria-describedby={`card-title-${id} card-date-${id}`}
         >
           {name ? name : ""}
@@ -137,6 +139,24 @@ export const Card = (props: CardProps): React.ReactElement => {
             </>
           )}
         </a>
+        {/* Email delivery */}
+        {deliveryOption && deliveryOption.emailAddress && (
+          <a className="block mt-4 focus:fill-white active:fill-white" href={responsesLink}>
+            <span>
+              <EnvelopeIcon className="inline-block mr-2" />
+              {t("card.deliveryOption.email", { ns: "my-forms" })} {deliveryOption.emailAddress}
+            </span>
+          </a>
+        )}
+        {/* Vault delivery */}
+        {deliveryOption && !deliveryOption.emailAddress && (
+          <a className="block mt-4 focus:fill-white active:fill-white" href={responsesLink}>
+            <span>
+              <MessageIcon className="inline-block mr-2" />
+              {t("card.deliveryOption.vault", { ns: "my-forms" })}{" "}
+            </span>
+          </a>
+        )}
       </p>
       <div className="flex justify-between items-center p-3">
         <div id={`card-date-${id}`} className="text-sm">
