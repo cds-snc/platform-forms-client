@@ -12,6 +12,11 @@
       "title": "Se connecter pour accéder aux réponses",
       "toAccessPagePart1": "Pour accéder à cette page,",
       "toAccessPagePart2": "à votre compte Formulaires GC"
+    },
+    "email": {
+      "title": "Paramètres de réponses courriel",
+      "submitTo": "Les réponses soumises sont envoyées à :",
+      "subjectLine": "La ligne d’objet apparaîtra comme :"
     }
   },
   "downloadResponsesTable": {
@@ -26,15 +31,15 @@
       "removal": "Suppression des réponses"
     },
     "status": {
-      "downloaded":"Téléchargées",
-      "notDownloaded":"Non téléchargées",
-      "new":"Nouveauté",
-      "confirmed":"Confirmées",
+      "downloaded": "Téléchargées",
+      "notDownloaded": "Non téléchargées",
+      "new": "Nouveauté",
+      "confirmed": "Confirmées",
       "unconfirmed": "Non confirmée",
-      "problem":"Problème",
+      "problem": "Problème",
       "done": "Confirmée",
       "withinXDays": "Dans {{daysLeft}} jours",
-      "overdue":"En retard",
+      "overdue": "En retard",
       "wontRemove": "Échec de la suppres",
       "notSet": "Non réglée"
     },
@@ -48,16 +53,16 @@
     },
     "errors": {
       "trySelectingLessFilesHeader": "Seules {{max}} réponses peuvent être téléchargées à la fois.",
-      "trySelectingLessFiles":"Vous avez {{max}} réponses sélectionnées. Décochez au moins 1 réponse avant de télécharger.",
+      "trySelectingLessFiles": "Vous avez {{max}} réponses sélectionnées. Décochez au moins 1 réponse avant de télécharger.",
       "atLeastOneFileHeader": "Au moins un fichier doit être sélectionné à télécharger.",
       "atLeastOneFile": "Essayez de sélectionner au moins un fichier à télécharger.",
-      "errorDownloadingFilesHeader":"Erreur lors du téléchargement des fichiers sélectionnés.",
-      "errorDownloadingFiles":"Réessayez dans quelques minutes. Si le problème persiste, contactez ",
-      "errorDownloadingFilesLink":"Soutien"
+      "errorDownloadingFilesHeader": "Erreur lors du téléchargement des fichiers sélectionnés.",
+      "errorDownloadingFiles": "Réessayez dans quelques minutes. Si le problème persiste, contactez ",
+      "errorDownloadingFilesLink": "Soutien"
     },
     "downloadXSelectedResponses": "Télécharger {{size}} réponses sélectionnées",
     "skipLink": "Skip Download Table[fr]",
-    "unknown":"Unknown[fr]"
+    "unknown": "Unknown[fr]"
   },
   "lineItemEntries": {
     "remove":"remove",

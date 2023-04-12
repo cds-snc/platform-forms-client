@@ -12,6 +12,11 @@
       "title": "Sign in to access responses",
       "toAccessPagePart1": "To access this page,",
       "toAccessPagePart2": "to your GC Forms account."
+    },
+    "email": {
+      "title": "Email response settings",
+      "submitTo": "Submitted responses are sent to:",
+      "subjectLine": "Subject-line will appear as:"
     }
   },
   "downloadResponsesTable": {
@@ -26,15 +31,15 @@
       "removal": "Removal of responses"
     },
     "status": {
-      "downloaded":"Downloaded",
-      "notDownloaded":"Not downloaded",
-      "new":"New",
-      "confirmed":"Confirmed",
+      "downloaded": "Downloaded",
+      "notDownloaded": "Not downloaded",
+      "new": "New",
+      "confirmed": "Confirmed",
       "unconfirmed": "Unconfirmed",
-      "problem":"Problem",
+      "problem": "Problem",
       "done": "Done",
       "withinXDays": "Within {{daysLeft}} days",
-      "overdue":"Overdue",
+      "overdue": "Overdue",
       "wontRemove": "Removal failed",
       "notSet": "Not set"
     },
@@ -48,20 +53,21 @@
     },
     "errors": {
       "trySelectingLessFilesHeader": "Only {{max}} responses can be downloaded at a time.",
-      "trySelectingLessFiles":"You have {{max}} responses selected. Uncheck at least 1 response before downloading.",
+      "trySelectingLessFiles": "You have {{max}} responses selected. Uncheck at least 1 response before downloading.",
       "atLeastOneFileHeader": "At least one file must be selected to download.",
       "atLeastOneFile": "Try selecting at least one file to download.",
-      "errorDownloadingFilesHeader":"Error downloading the selected files.",
-      "errorDownloadingFiles":"Try again in a few minutes. If the problem persists contact support."
+      "errorDownloadingFilesHeader": "Error downloading the selected files.",
+      "errorDownloadingFiles": "Try again in a few minutes. If the problem persists contact support."
     },
     "downloadXSelectedResponses": "Download {{size}} selected responses",
     "skipLink": "Skip Download Table",
-    "unknown":"Unknown"
+    "unknown": "Unknown"
   },
   "lineItemEntries": {
-    "remove":"Remove",
-    "removed":"Removed",
-    "added":"Added"
+    "notifications": {
+      "maxEntriesTitle": "Only {{max}} responses can be reported at a time.",
+      "maxEntriesDescription": "Enter these form entries before entering more."
+    }
   },
   "downloadResponsesModals": {
     "confirmReceiptDialog": {
