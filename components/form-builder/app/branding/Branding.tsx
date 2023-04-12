@@ -9,6 +9,7 @@ import { useTemplateStore } from "../../store";
 import { SettingsLoggedOut } from "../SettingsLoggedOut";
 import { useTemplateApi } from "../../hooks";
 import { Button, toast } from "../shared";
+import Brand from "@components/globals/Brand";
 
 const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element | string }) => {
   return (
@@ -22,31 +23,17 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
   const { t, i18n } = useTranslation("form-builder");
   const { status } = useSession();
   const { save } = useTemplateApi();
-  const {
-    id,
-    isPublished,
-    brandName,
-    updateField,
-    unsetField,
-    brandLogoEn,
-    brandLogoFr,
-    logoTitleEn,
-    logoTitleFr,
-    getSchema,
-    getName,
-  } = useTemplateStore((s) => ({
-    id: s.id,
-    brandName: s.form?.brand?.name || "",
-    brandLogoEn: s.form?.brand?.logoEn || "",
-    brandLogoFr: s.form?.brand?.logoFr || "",
-    logoTitleEn: s.form?.brand?.logoTitleEn || "",
-    logoTitleFr: s.form?.brand?.logoTitleFr || "",
-    unsetField: s.unsetField,
-    updateField: s.updateField,
-    getSchema: s.getSchema,
-    getName: s.getName,
-    isPublished: s.isPublished,
-  }));
+  const { id, isPublished, brandName, updateField, unsetField, getSchema, getName, brand } =
+    useTemplateStore((s) => ({
+      id: s.id,
+      brandName: s.form?.brand?.name || "",
+      unsetField: s.unsetField,
+      updateField: s.updateField,
+      getSchema: s.getSchema,
+      getName: s.getName,
+      isPublished: s.isPublished,
+      brand: s.form.brand,
+    }));
 
   const updateBrand = useCallback(
     (type: string) => {
@@ -81,10 +68,7 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
   }, [id, save, getSchema, getName, savedSuccessMessage, savedErrorMessage]);
 
   const lang = i18n.language;
-  const logo = lang === "en" ? brandLogoEn : brandLogoFr;
-  const defaultLogo = lang === "en" ? "/img/sig-blk-en.svg" : "/img/sig-blk-fr.svg";
   const logoTitle = lang === "en" ? "logoTitleEn" : "logoTitleFr";
-  const altText = lang === "en" ? logoTitleEn : logoTitleFr;
 
   const brandingOptions = options.map((option) => ({
     value: option.name,
@@ -123,11 +107,7 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
       <div className="mt-5 mb-5">
         <div className="font-bold mb-3 text-md">{t("branding.preview")}</div>
         {/* eslint-disable @next/next/no-img-element  */}
-        {logo ? (
-          <img alt={altText} src={logo} width={300} />
-        ) : (
-          <img alt={t("branding.defaultOption")} src={defaultLogo} width="360" height="33" />
-        )}
+        <Brand brand={brand} />
       </div>
       <div className="mt-10">
         <Button disabled={isPublished as boolean} theme="secondary" onClick={handleSave}>
