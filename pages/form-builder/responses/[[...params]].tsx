@@ -65,7 +65,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         </Head>
         <PageTemplate title={t("responses.email.title")} autoWidth={true}>
           <div className="flex justify-between items-baseline">
-            <h1 className="text-2xl border-none font-normal">
+            <h1 className="border-none mb-8">
               {isAuthenticated ? t("responses.email.title") : t("responses.unauthenticated.title")}
             </h1>
             <nav className="flex gap-3">
@@ -93,7 +93,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
       </Head>
       <PageTemplate title={t("responses.title")} autoWidth={true}>
         <div className="flex justify-between items-baseline">
-          <h1 className="text-2xl border-none font-normal">
+          <h1 className="border-none mb-8">
             {isAuthenticated ? t("responses.title") : t("responses.unauthenticated.title")}
           </h1>
 
