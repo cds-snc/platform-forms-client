@@ -4,16 +4,17 @@ import { useTranslation } from "next-i18next";
 
 type LineItemProps = {
   value: string;
+  isInvalid?: boolean;
   onRemove: (value: string) => void;
 };
 
-export const LineItem = ({ value, onRemove }: LineItemProps) => {
+export const LineItem = ({ value, isInvalid = false, onRemove }: LineItemProps) => {
   const { t } = useTranslation("form-builder-responses");
   const label = `${t("lineItemEntries.remove")} ${value}`;
   return (
     <li data-testid="value" className="pl-6 hover:bg-[#fffbf3]">
       <div className="flex justify-between items-center pr-4 py-2">
-        {value}
+        <span className={`${isInvalid ? " text-red" : ""}`}>{value}</span>
         <button
           className={`
             align-middle border border-black rounded-full [&_svg]:fill-white [&_rect]:fill-black mt-[5px] mb-[5px] mr-[5px]

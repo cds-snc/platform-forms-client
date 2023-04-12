@@ -37,8 +37,7 @@ enum TableActions {
 interface ReducerTableItemsState {
   statusItems: Map<string, boolean>;
   checkedItems: Map<string, boolean>;
-  vaultSubmissions: VaultSubmissionList[];
-  sortedVaultSubmissions: VaultSubmissionList[];
+  sortedItems: VaultSubmissionList[];
 }
 
 interface ReducerTableItemsActions {
@@ -119,8 +118,7 @@ export const sortVaultSubmission = (
 export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) => {
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
-  // TODO: would be nice to use some sort of "manager" pattern to control "inline" notifications
-  const [notifications, setNotifications] = useState({
+  const [errors, setErrors] = useState({
     downloadError: false,
     maxItemsError: false,
     noItemsError: false,
@@ -128,8 +126,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
   const [tableItems, tableItemsDispatch] = useReducer(reducerTableItems, {
     checkedItems: new Map(),
     statusItems: new Map(vaultSubmissions.map((submission) => [submission.name, false])),
-    vaultSubmissions,
-    sortedVaultSubmissions: sortVaultSubmission(vaultSubmissions),
+    sortedItems: sortVaultSubmission(vaultSubmissions),
   });
   const { value: overdueAfter } = useSetting("nagwarePhaseEncouraged");
 
@@ -142,35 +139,37 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
     // Needed because of how useReducer updates state on the next render vs. inside this function..
     const nextState = reducerTableItems(tableItems, dispatchAction);
 
-    // Show or hide notifications depending
-    if (nextState.checkedItems.size > MAX_FILE_DOWNLOADS && !notifications.maxItemsError) {
-      setNotifications({ ...notifications, maxItemsError: true });
-    } else if (notifications.maxItemsError) {
-      setNotifications({ ...notifications, maxItemsError: false });
+    // Show or hide errors depending
+    if (nextState.checkedItems.size > MAX_FILE_DOWNLOADS && !errors.maxItemsError) {
+      setErrors({ ...errors, maxItemsError: true });
+    } else if (errors.maxItemsError) {
+      setErrors({ ...errors, maxItemsError: false });
     }
-    if (nextState.checkedItems.size > 0 && notifications.noItemsError) {
-      setNotifications({ ...notifications, noItemsError: false });
+    if (nextState.checkedItems.size > 0 && errors.noItemsError) {
+      setErrors({ ...errors, noItemsError: false });
     }
   };
 
   // NOTE: browsers have different limits for simultaneous downloads. May need to look into
   // batching file downloads (e.g. 4 at a time) if edge cases/* come up.
   const handleDownload = async () => {
-    // Handle any errors and show/reset any notifications
+    // Reset any errors
+    if (errors.downloadError) {
+      setErrors({ ...errors, downloadError: false });
+    }
+
+    // Handle any errors and show them
     if (tableItems.checkedItems.size === 0) {
-      if (!notifications.noItemsError) {
-        setNotifications({ ...notifications, noItemsError: true });
+      if (!errors.noItemsError) {
+        setErrors({ ...errors, noItemsError: true });
       }
       return;
     }
     if (tableItems.checkedItems.size > MAX_FILE_DOWNLOADS) {
-      if (!notifications.maxItemsError) {
-        setNotifications({ ...notifications, maxItemsError: true });
+      if (!errors.maxItemsError) {
+        setErrors({ ...errors, maxItemsError: true });
       }
       return;
-    }
-    if (notifications.downloadError) {
-      setNotifications({ ...notifications, downloadError: false });
     }
 
     toast.info(
@@ -202,16 +201,17 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
       });
 
       await Promise.all(downloads).then(() => {
-        // TODO: Future tech debt. See https://github.com/cds-snc/platform-forms-client/issues/1744
+        // TODO: only occurs download more than one file at a time. Here is the issue to track
+        // https://github.com/cds-snc/platform-forms-client/issues/1744
         setTimeout(() => {
           // Refreshes getServerSideProps data without a full page reload
           router.replace(router.asPath, undefined, { scroll: false });
           toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
-        }, 400);
+        }, 500);
       });
     } catch (err) {
       logMessage.error(err as Error);
-      setNotifications({ ...notifications, downloadError: true });
+      setErrors({ ...errors, downloadError: true });
     }
   };
 
@@ -233,38 +233,38 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
           <Attention
             type={AttentionTypes.ERROR}
             isAlert={true}
-            heading={t("downloadResponsesTable.notifications.trySelectingLessFilesHeader", {
+            heading={t("downloadResponsesTable.errors.trySelectingLessFilesHeader", {
               max: MAX_FILE_DOWNLOADS,
             })}
           >
             <p className="text-[#26374a] text-sm">
-              {t("downloadResponsesTable.notifications.trySelectingLessFiles", {
+              {t("downloadResponsesTable.errors.trySelectingLessFiles", {
                 max: MAX_FILE_DOWNLOADS,
               })}
             </p>
           </Attention>
         )}
-        {notifications.noItemsError && (
+        {errors.noItemsError && (
           <Attention
             type={AttentionTypes.ERROR}
             isAlert={true}
-            heading={t("downloadResponsesTable.notifications.atLeastOneFileHeader")}
+            heading={t("downloadResponsesTable.errors.atLeastOneFileHeader")}
           >
             <p className="text-[#26374a] text-sm">
-              {t("downloadResponsesTable.notifications.atLeastOneFile")}
+              {t("downloadResponsesTable.errors.atLeastOneFile")}
             </p>
           </Attention>
         )}
-        {notifications.downloadError && (
+        {errors.downloadError && (
           <Attention
             type={AttentionTypes.ERROR}
             isAlert={true}
-            heading={t("downloadResponsesTable.notifications.errorDownloadingFilesHeader")}
+            heading={t("downloadResponsesTable.errors.errorDownloadingFilesHeader")}
           >
             <p className="text-[#26374a] text-sm mb-2">
-              {t("downloadResponsesTable.notifications.errorDownloadingFiles")}
+              {t("downloadResponsesTable.errors.errorDownloadingFiles")}
               <Link href="/form-builder/support">
-                {t("downloadResponsesTable.notifications.errorDownloadingFilesLink")}
+                {t("downloadResponsesTable.errors.errorDownloadingFilesLink")}
               </Link>
               .
             </p>
@@ -286,7 +286,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
           </tr>
         </thead>
         <tbody>
-          {tableItems.sortedVaultSubmissions.map((submission) => (
+          {tableItems.sortedItems.map((submission) => (
             <tr
               key={submission.name}
               className={
@@ -348,7 +348,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
           onClick={handleDownload}
           aria-live="polite"
         >
-          {t("downloadResponsesTable.notifications.downloadXSelectedResponses", {
+          {t("downloadResponsesTable.downloadXSelectedResponses", {
             size: tableItems.checkedItems.size,
           })}
         </button>
@@ -359,38 +359,38 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
               type={AttentionTypes.ERROR}
               isIcon={false}
               isSmall={true}
-              heading={t("downloadResponsesTable.notifications.trySelectingLessFilesHeader", {
+              heading={t("downloadResponsesTable.errors.trySelectingLessFilesHeader", {
                 max: MAX_FILE_DOWNLOADS,
               })}
             >
               <p className="text-black text-sm">
-                {t("downloadResponsesTable.notifications.trySelectingLessFiles", {
+                {t("downloadResponsesTable.errors.trySelectingLessFiles", {
                   max: MAX_FILE_DOWNLOADS,
                 })}
               </p>
             </Attention>
           )}
-          {notifications.noItemsError && (
+          {errors.noItemsError && (
             <Attention
               type={AttentionTypes.ERROR}
               isIcon={false}
               isSmall={true}
-              heading={t("downloadResponsesTable.notifications.atLeastOneFileHeader")}
+              heading={t("downloadResponsesTable.errors.atLeastOneFileHeader")}
             >
               <p className="text-black text-sm">
-                {t("downloadResponsesTable.notifications.atLeastOneFile")}
+                {t("downloadResponsesTable.errors.atLeastOneFile")}
               </p>
             </Attention>
           )}
-          {notifications.downloadError && (
+          {errors.downloadError && (
             <Attention
               type={AttentionTypes.ERROR}
               isIcon={false}
               isSmall={true}
-              heading={t("downloadResponsesTable.notifications.errorDownloadingFilesHeader")}
+              heading={t("downloadResponsesTable.errors.errorDownloadingFilesHeader")}
             >
               <p className="text-black text-sm">
-                {t("downloadResponsesTable.notifications.errorDownloadingFiles")}
+                {t("downloadResponsesTable.errors.errorDownloadingFiles")}
               </p>
             </Attention>
           )}
