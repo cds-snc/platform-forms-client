@@ -141,20 +141,16 @@ export const Card = (props: CardProps): React.ReactElement => {
         </a>
         {/* Email delivery */}
         {deliveryOption && deliveryOption.emailAddress && (
-          <a className="block mt-4 focus:fill-white active:fill-white" href={responsesLink}>
-            <span>
-              <EnvelopeIcon className="inline-block mr-2" />
-              {t("card.deliveryOption.email", { ns: "my-forms" })} {deliveryOption.emailAddress}
-            </span>
+          <a className="block mt-4 text-sm focus:fill-white active:fill-white" href={responsesLink}>
+            <EnvelopeIcon className="inline-block mr-2" />
+            {t("card.deliveryOption.email", { ns: "my-forms" })} {deliveryOption.emailAddress}
           </a>
         )}
         {/* Vault delivery */}
         {deliveryOption && !deliveryOption.emailAddress && (
-          <a className="block mt-4 focus:fill-white active:fill-white" href={responsesLink}>
-            <span>
-              <MessageIcon className="inline-block mr-2" />
-              {t("card.deliveryOption.vault", { ns: "my-forms" })}{" "}
-            </span>
+          <a className="block mt-4 text-sm focus:fill-white active:fill-white" href={responsesLink}>
+            <MessageIcon className="inline-block mr-2" />
+            {t("card.deliveryOption.vault", { ns: "my-forms" })}{" "}
           </a>
         )}
       </p>
