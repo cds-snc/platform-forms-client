@@ -46,8 +46,9 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   const [isShowConfirmReceiptDialog, setIsShowConfirmReceiptDialog] = useState(false);
   const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
 
-  const { getDeliveryOption } = useTemplateStore((s) => ({
+  const { getDeliveryOption, isPublished } = useTemplateStore((s) => ({
     getDeliveryOption: s.getDeliveryOption,
+    isPublished: s.isPublished,
   }));
 
   const deliveryOption = getDeliveryOption();
@@ -69,11 +70,13 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
               {isAuthenticated ? t("responses.email.title") : t("responses.unauthenticated.title")}
             </h1>
             <nav className="flex gap-3">
-              <Link href="/form-builder/settings">
-                <a href="/form-builder/settings" className={`${navItemClasses}`}>
-                  {t("responses.changeSetup")}
-                </a>
-              </Link>
+              {!isPublished && (
+                <Link href="/form-builder/settings">
+                  <a href="/form-builder/settings" className={`${navItemClasses}`}>
+                    {t("responses.changeSetup")}
+                  </a>
+                </Link>
+              )}
             </nav>
           </div>
           <EmailResponseSettings
@@ -118,11 +121,13 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
               </button>
             )}
 
-            <Link href="/form-builder/settings">
-              <a href="/form-builder/settings" className={`${navItemClasses}`}>
-                {t("responses.changeSetup")}
-              </a>
-            </Link>
+            {!isPublished && (
+              <Link href="/form-builder/settings">
+                <a href="/form-builder/settings" className={`${navItemClasses}`}>
+                  {t("responses.changeSetup")}
+                </a>
+              </Link>
+            )}
           </nav>
         </div>
 
