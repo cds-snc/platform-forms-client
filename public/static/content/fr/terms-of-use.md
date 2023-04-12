@@ -1,11 +1,20 @@
-Vos responsabilités relatives à l’utilisation de Formulaires GC sont décrites dans l’[entente sur les niveaux de service](#).
+Vos responsabilités relatives à l’utilisation de Formulaires GC sont décrites dans les [conditions d’utilisation](#).
 
 À titre de rappel, en voici les points saillants :
 
-- Obtenir les approbations nécessaires pour l’utilisation du système Formulaires GC.
-- Être autorisé à recueillir des renseignements personnels.
-- Publier une traduction complète et exacte du formulaire et de l'avis de confidentialité.
-- S’assurer de ne jamais partager son mot de passe ou sa clé de sécurité à quiconque.
-- Signaler tout problème lié à l'application.
-- Traiter et enregistrer les réponses aux formulaires conformément aux politiques de votre organisation en matière de confidentialité et de conservation des données.
-- Accuser réception des réponses aux formulaires et conserver une copie de toute réponse pour vos propres dossiers. 
+- Obtenir les approbations nécessaires pour l’utilisation de Formulaires GC.
+- Accepter toutes les conditions et tous les risques, y compris nos niveaux de services. 
+- Protéger et traiter les renseignements personnels et sensibles : 
+    - Obtenir les approbations nécessaires pour collecter des renseignements personnels.
+    - Gérer les réponses aux formulaires conformément au calendrier de conservation et d’élimination de votre ministère ou organisme. 
+    - Utiliser Formulaires GC pour la collecte de données classées jusqu’à PROTÉGÉ A. 
+- Publier le formulaire dans les deux langues officielles. 
+- Fournir des canaux multiples pour la prestation de services et de programmes. 
+- Contribuer à offrir une expérience fiable avec une image de marque et un contenu uniformes et des URL accessibles.
+- Signaler tout problème avec Formulaires GC. 
+
+Pour toute question en lien avec les présentes conditions d’utilisation, veuillez [nous contacter](https://forms-formulaires.alpha.canada.ca/fr/form-builder/support/contactus).
+
+
+
+ **Dernière mise à jour :** 12 avril 2023 
