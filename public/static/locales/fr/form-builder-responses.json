@@ -43,10 +43,10 @@
       "noResponsesToDownload": "Il n'y a pas de réponses disponibles pour le téléchargement."
     },
     "notifications": {
-      "downloading":"Téléchargement",
       "downloadComplete": "Téléchargement complet",
-      "downloadingXFiles": "Téléchargement de {{fileCount}} fichiers",
-      "downloadXSelectedResponses": "Télécharger {{size}} réponses sélectionnées",
+      "downloadingXFiles": "Téléchargement de {{fileCount}} fichiers"
+    },
+    "errors": {
       "trySelectingLessFilesHeader": "Seules {{max}} réponses peuvent être téléchargées à la fois.",
       "trySelectingLessFiles":"Vous avez {{max}} réponses sélectionnées. Décochez au moins 1 réponse avant de télécharger.",
       "atLeastOneFileHeader": "Au moins un fichier doit être sélectionné à télécharger.",
@@ -55,6 +55,7 @@
       "errorDownloadingFiles":"Réessayez dans quelques minutes. Si le problème persiste, contactez ",
       "errorDownloadingFilesLink":"Soutien"
     },
+    "downloadXSelectedResponses": "Télécharger {{size}} réponses sélectionnées",
     "skipLink": "Skip Download Table[fr]",
     "unknown":"Unknown[fr]"
   },

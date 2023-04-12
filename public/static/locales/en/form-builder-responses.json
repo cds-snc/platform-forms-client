@@ -43,10 +43,10 @@
       "noResponsesToDownload": "There are no responses available to download."
     },
     "notifications": {
-      "downloading":"Downloading",
       "downloadComplete": "Download complete",
-      "downloadingXFiles": "Downloading {{fileCount}} files",
-      "downloadXSelectedResponses": "Download {{size}} selected responses",
+      "downloadingXFiles": "Downloading {{fileCount}} files"
+    },
+    "errors": {
       "trySelectingLessFilesHeader": "Only {{max}} responses can be downloaded at a time.",
       "trySelectingLessFiles":"You have {{max}} responses selected. Uncheck at least 1 response before downloading.",
       "atLeastOneFileHeader": "At least one file must be selected to download.",
@@ -54,6 +54,7 @@
       "errorDownloadingFilesHeader":"Error downloading the selected files.",
       "errorDownloadingFiles":"Try again in a few minutes. If the problem persists contact support."
     },
+    "downloadXSelectedResponses": "Download {{size}} selected responses",
     "skipLink": "Skip Download Table",
     "unknown":"Unknown"
   },
