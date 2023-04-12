@@ -22,6 +22,7 @@ describe("LineItemEntries", () => {
   it("should render and handle keyboard events", async () => {
     const Container = () => {
       const [inputs, setInputs] = useState([]);
+      const [errors, setErrors] = useState([]);
 
       return (
         <LineItemEntries
@@ -29,6 +30,9 @@ describe("LineItemEntries", () => {
           setInputs={setInputs}
           validateInput={validator}
           inputLabelId="inputLabelId"
+          errors={errors}
+          setErrors={setErrors}
+          errorEntriesList={[]}
         />
       );
     };
