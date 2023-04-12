@@ -141,10 +141,10 @@ export const Card = (props: CardProps): React.ReactElement => {
         </a>
         {/* Email delivery */}
         {deliveryOption && deliveryOption.emailAddress && (
-          <div className="mt-4 text-sm">
+          <span className="block mt-4 text-sm">
             <EnvelopeIcon className="inline-block mr-2" />
             {t("card.deliveryOption.email", { ns: "my-forms" })} {deliveryOption.emailAddress}
-          </div>
+          </span>
         )}
         {/* Vault delivery */}
         {deliveryOption && !deliveryOption.emailAddress && (
