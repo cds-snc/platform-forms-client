@@ -57,8 +57,8 @@
       "atLeastOneFileHeader": "Au moins un fichier doit être sélectionné à télécharger.",
       "atLeastOneFile": "Essayez de sélectionner au moins un fichier à télécharger.",
       "errorDownloadingFilesHeader": "Erreur lors du téléchargement des fichiers sélectionnés.",
-      "errorDownloadingFiles": "Réessayez dans quelques minutes. Si le problème persiste, contactez ",
-      "errorDownloadingFilesLink": "Soutien"
+      "errorDownloadingFiles": "Réessayez dans quelques minutes. Si le problème persiste, ",
+      "errorDownloadingFilesLink": "contactez Soutien"
     },
     "downloadXSelectedResponses": "Télécharger {{size}} réponses sélectionnées",
     "skipLink": "Skip Download Table[fr]",
