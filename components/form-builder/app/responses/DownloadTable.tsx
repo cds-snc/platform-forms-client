@@ -201,11 +201,13 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
       });
 
       await Promise.all(downloads).then(() => {
-        // Refreshes getServerSideProps data without a full page reload
-        // NOTE: an issue was opened about the DB/server not updating in time, seems to have fixed
-        // itself but if not, re-open: https://github.com/cds-snc/platform-forms-client/issues/1744
-        router.replace(router.asPath, undefined, { scroll: false });
-        toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
+        // TODO: only occurs download more than one file at a time. Here is the issue to track
+        // https://github.com/cds-snc/platform-forms-client/issues/1744
+        setTimeout(() => {
+          // Refreshes getServerSideProps data without a full page reload
+          router.replace(router.asPath, undefined, { scroll: false });
+          toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
+        }, 500);
       });
     } catch (err) {
       logMessage.error(err as Error);
