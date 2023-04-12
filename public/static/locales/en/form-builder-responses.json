@@ -72,24 +72,24 @@
       "errors": {
         "minEntries": {
           "title": "At least one response must be specified",
-          "description": "Enter the confirmation codes for responses that you've received."
+          "description": "Enter confirmation codes from downloaded responses to confirm having received them."
         },
         "maxEntries": {
           "title": "Only {{max}} responses can be reported at a time.",
-          "description": "Enter these form entries before entering more."
+          "description": "Submit {{max}} confirmation codes before adding more."
         },
         "errorEntries": {
-          "title": "An error occurred with the below confirm receipt codes",
-          "description": "Please double check the entries are entered correct and try again. Any valid entries were removed from the below list and successfully submitted."
+          "title": "Some confirmation codes could not be submitted",
+          "description": "Check that the confirmation codes below are correct and try again."
         },
         "invalidEntry": {
-          "title": "The confirmation code entered is invalid",
-          "description": "Please try entereing the confirmation code again."
+          "title": "The confirmation code does not match the required format",
+          "description": "Check that the confirmation code format is correct and try again."
         },
         "unknown": {
-          "title": "Something went wrong",
-          "description": "Try submitting the confirm receipt codes again in a few minutes or contact ",
-          "descriptionLink": "Support"
+          "title": "Sorry, there’s a problem with the site",
+          "description": "Wait a few minutes and try again, or ",
+          "descriptionLink": " contact Support"
         }
       }
     },
@@ -101,25 +101,25 @@
       "reportProblems": "Report problem",
       "errors": {
         "minEntries": {
-          "title": "At least one form number must be specified",
-          "description": "Enter the form number for responses that you've received."
+          "title": "At least one form must be specified",
+          "description": "Enter form numbers for responses that have a problem."
         },
         "maxEntries": {
-          "title": "Only {{max}} form number can be reported at a time.",
-          "description": "Enter these form numbers before entering more."
+          "title": "Only {{max}} problems can be reported at a time",
+          "description": "Submit {{max}} form numbers before adding more."
         },
         "errorEntries": {
-          "title": "An error occurred with the below form number",
-          "description": "Please double check the form numbers are entered correct and try again. Any valid form numbers were removed from the below list and successfully submitted."
+          "title": "Some form numbers were not submitted",
+          "description": "Check that the form numbers below are correct and try again."
         },
         "invalidEntry": {
-          "title": "The form number entered is invalid",
-          "description": "Please try entereing the form number again."
+          "title": "The form number does not match the required format",
+          "description": "Check that the form number format is correct and try again."
         },
         "unknown": {
-          "title": "Something went wrong",
-          "description": "Try submitting the form numbers again in a few minutes or contact ",
-          "descriptionLink": "Support"
+          "title": "Sorry, there’s a problem with the site",
+          "description": "Wait a few minutes and try again, or  ",
+          "descriptionLink": "contact Support"
         }
       }
     },

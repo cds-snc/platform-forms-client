@@ -136,7 +136,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         title={t("downloadResponsesModals.confirmReceiptDialog.title")}
         description={t("downloadResponsesModals.confirmReceiptDialog.findCode")}
         inputHelp={t("downloadResponsesModals.confirmReceiptDialog.copyCode", {
-          max: MAX_CONFIRMATION_COUNT,
+          max: MAX_REPORT_COUNT,
         })}
         nextSteps={t("downloadResponsesModals.confirmReceiptDialog.responsesAvailableFor")}
         submitButtonText={t("downloadResponsesModals.confirmReceiptDialog.confirmReceipt")}
@@ -153,13 +153,13 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           }
         )}
         maxEntriesErrorDescription={t(
-          "downloadResponsesModals.confirmReceiptDialog.errors.maxEntries.description"
-        )}
-        errorEntriesErrorTitle={t(
-          "downloadResponsesModals.confirmReceiptDialog.errors.errorEntries.title",
+          "downloadResponsesModals.confirmReceiptDialog.errors.maxEntries.description",
           {
             max: MAX_CONFIRMATION_COUNT,
           }
+        )}
+        errorEntriesErrorTitle={t(
+          "downloadResponsesModals.confirmReceiptDialog.errors.errorEntries.title"
         )}
         errorEntriesErrorDescription={t(
           "downloadResponsesModals.confirmReceiptDialog.errors.errorEntries.description"
@@ -201,17 +201,17 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         maxEntriesErrorTitle={t(
           "downloadResponsesModals.reportProblemsDialog.errors.maxEntries.title",
           {
-            max: MAX_CONFIRMATION_COUNT,
+            max: MAX_REPORT_COUNT,
           }
         )}
         maxEntriesErrorDescription={t(
-          "downloadResponsesModals.reportProblemsDialog.errors.maxEntries.description"
+          "downloadResponsesModals.reportProblemsDialog.errors.maxEntries.description",
+          {
+            max: MAX_REPORT_COUNT,
+          }
         )}
         errorEntriesErrorTitle={t(
-          "downloadResponsesModals.reportProblemsDialog.errors.errorEntries.title",
-          {
-            max: MAX_CONFIRMATION_COUNT,
-          }
+          "downloadResponsesModals.reportProblemsDialog.errors.errorEntries.title"
         )}
         errorEntriesErrorDescription={t(
           "downloadResponsesModals.reportProblemsDialog.errors.errorEntries.description"
