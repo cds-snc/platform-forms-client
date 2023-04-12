@@ -26,7 +26,7 @@ export const Description = ({
     <>
       <fieldset>
         <FieldsetLegend>
-          {t(element.type)}: {t("inputDescription")}
+          {t(`addElementDialog.${element.type}.title`)}: {t("inputDescription")}
         </FieldsetLegend>
         <div className="flex gap-px border-b border-r border-t border-gray-300 mb-10 divide-x-2">
           <label
