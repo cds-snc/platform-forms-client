@@ -28,16 +28,16 @@ const Brand = ({
     (brand?.[getProperty("url", i18n.language)] as string | undefined) ?? t("fip.link");
 
   // This default height seems to work for most custom brand logos so far.
-  let logoStyles = `max-h-[90px] max-w-[600px] ${className || ""} lg:mt-10 mt-0`;
+  let logoStyles = `max-h-[80px] max-w-[600px] ${className || ""}`;
 
   // This customization applies to the default logo only. We may need to add more custom sizes in future.
   if (!themeLogo) {
-    logoStyles = `max-h-[40px] ${className || ""} lg:mt-10 mt-0`;
+    logoStyles = `max-h-[40px] ${className || ""}`;
   }
 
   return (
-    <a href={linkUrl} aria-label={logoTitle} className="!inline-block">
-      <picture className="inline-block">
+    <a href={linkUrl} aria-label={logoTitle}>
+      <picture>
         <img src={logo} alt={logoTitle} className={logoStyles} />
       </picture>
     </a>
