@@ -11,6 +11,7 @@ import { LocalizedElementProperties, LocalizedFormProperties } from "../types";
 import { useTemplateStore } from "../store";
 import { useAutoSave } from "../hooks";
 import { BackArrowIcon } from "../icons";
+import Brand from "@components/globals/Brand";
 
 export const Preview = () => {
   const { status } = useSession();
@@ -58,6 +59,8 @@ export const Preview = () => {
   const responsesLink = `/${i18n.language}/form-builder/responses/${id}`;
   const settingsLink = `/${i18n.language}/form-builder/settings/${id}`;
 
+  const brand = formRecord?.form ? formRecord.form.brand : null;
+
   return (
     <>
       <div className="h-12"></div>
@@ -103,6 +106,7 @@ export const Preview = () => {
           </>
         )}
 
+        <Brand brand={brand} className="mt-8 mb-12" />
         <h1 className="mt-4">
           {formRecord.form[localizeField(LocalizedFormProperties.TITLE, language)] ||
             t("pagePreview", { ns: "form-builder" })}
