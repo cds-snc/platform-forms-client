@@ -27,7 +27,7 @@ const MultipleChoice = ({
   onFocus?: () => void;
   checked?: boolean;
 }) => (
-  <div className={className ? `${className} "multiple-choice-wrapper` : "multiple-choice-wrapper"}>
+  <div className={className ? `${className} multiple-choice-wrapper` : "multiple-choice-wrapper"}>
     <input
       type={type}
       name={name}
