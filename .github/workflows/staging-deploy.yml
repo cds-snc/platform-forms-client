@@ -22,11 +22,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@dc323e67f16fb5f7663d20ff7941f27f5809e9b6 # v2.6.0
+        uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2.7.0
 
       - name: Configure AWS credentials
         # v1 as of Jan 28 2021
-        uses: aws-actions/configure-aws-credentials@cb1361ade3c0ad3551e7d2be86bf97afcb51e4d6
+        uses: aws-actions/configure-aws-credentials@f576cc9d9b10de24860b85ac5ab1277b4b570348
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -35,7 +35,7 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         # v1 as of Jan 28 2021
-        uses: aws-actions/amazon-ecr-login@069994d041aacb6f988e7c168179a2153b0ff878
+        uses: aws-actions/amazon-ecr-login@618a62cc6c765c39e8afd9d444194a2ffc809046
 
       - name: Get Cluster Name
         id: cluster
@@ -51,7 +51,7 @@ jobs:
       - name: Render image for form viewer service
         id: taskdef-form-viewer
         # v1.0.10
-        uses: aws-actions/amazon-ecs-render-task-definition@adf27cbda7387e685c616c92f3018519a5a593e9
+        uses: aws-actions/amazon-ecs-render-task-definition@d16432eaf330873acaa54db16c52188e496231de
         with:
           task-definition: form_viewer.json
           container-name: ${{ steps.download-taskdef-form-viewer.outputs.container_name }}

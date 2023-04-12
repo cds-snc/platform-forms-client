@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { VaultSubmissionList } from "@lib/types";
 import { useTranslation } from "react-i18next";
 import { SkipLinkReusable } from "@components/globals/SkipLinkReusable";
@@ -14,6 +14,9 @@ import { toast } from "../shared/Toast";
 import { useSetting } from "@lib/hooks/useSetting";
 import Link from "next/link";
 
+// TODO: move to an app setting variable
+const MAX_FILE_DOWNLOADS = 20;
+
 export enum VaultStatus {
   NEW = "New",
   DOWNLOADED = "Downloaded",
@@ -28,30 +31,34 @@ interface DownloadTableProps {
 
 enum TableActions {
   UPDATE = "UPDATE",
+  SORT = "SORT",
 }
 
 interface ReducerTableItemsState {
   statusItems: Map<string, boolean>;
   checkedItems: Map<string, boolean>;
+  vaultSubmissions: VaultSubmissionList[];
+  sortedVaultSubmissions: VaultSubmissionList[];
 }
 
 interface ReducerTableItemsActions {
   type: string;
-  item: {
-    name: string;
-    checked: boolean;
+  payload: {
+    item?: {
+      name: string;
+      checked: boolean;
+    };
+    vaultSubmissions?: VaultSubmissionList[];
   };
 }
 
-// TODO: move to an app setting variable
-const MAX_FILE_DOWNLOADS = 20;
-
 // Using a reducer to have more control over when the template is updated (reduces re-renders)
 const reducerTableItems = (state: ReducerTableItemsState, action: ReducerTableItemsActions) => {
-  switch (action.type) {
+  const { type, payload } = action;
+  switch (type) {
     case "UPDATE": {
-      if (!action.item) {
-        throw Error("Table dispatch missing item checkbox state");
+      if (!payload.item) {
+        throw Error("Table update dispatch missing item checkbox state");
       }
       const newStatusItems = new Map(state.statusItems);
       const newCheckedItems = new Map();
@@ -59,10 +66,10 @@ const reducerTableItems = (state: ReducerTableItemsState, action: ReducerTableIt
       // of checkedItems for later convienience. The below forEach does two "things" which is messy
       // but more efficient than using two forEach loops.
       state.statusItems.forEach((checked: boolean, name: string) => {
-        if (name === action.item.name && checked !== action.item.checked) {
-          newStatusItems.set(name, action.item.checked);
+        if (name === payload.item?.name && checked !== payload.item.checked) {
+          newStatusItems.set(name, payload.item.checked);
           // Add to checkedItems: case of updated checkbox and checked
-          if (action.item.checked) {
+          if (payload.item.checked) {
             newCheckedItems.set(name, true);
           }
         } else if (checked) {
@@ -76,9 +83,37 @@ const reducerTableItems = (state: ReducerTableItemsState, action: ReducerTableIt
         statusItems: newStatusItems,
       };
     }
+    case "SORT": {
+      if (!payload.vaultSubmissions) {
+        throw Error("Table sort dispatch missing vaultSubmissions");
+      }
+      return {
+        ...state,
+        sortedItems: sortVaultSubmission(payload.vaultSubmissions),
+      };
+    }
     default:
       throw Error("Unknown action: " + action.type);
   }
+};
+
+// Sort submissions by created date first but prioritize New submissions to the top of the list.
+// Note: This can probably be done more efficiently but the sorting behavior has not been fully
+// defined yet and for now this simple way works.
+export const sortVaultSubmission = (
+  vaultSubmissions: VaultSubmissionList[]
+): VaultSubmissionList[] => {
+  const vaultSubmissionsNew = vaultSubmissions
+    .filter((submission) => submission.status === VaultStatus.NEW.valueOf())
+    .sort((submissionA, submissionB) => {
+      return submissionB.createdAt - submissionA.createdAt;
+    });
+  const vaultSubmissionsWithoutNew = vaultSubmissions
+    .filter((submission) => submission.status !== VaultStatus.NEW.valueOf())
+    .sort((submissionA, submissionB) => {
+      return submissionB.createdAt - submissionA.createdAt;
+    });
+  return [...vaultSubmissionsNew, ...vaultSubmissionsWithoutNew];
 };
 
 export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) => {
@@ -94,14 +129,15 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
   const [tableItems, tableItemsDispatch] = useReducer(reducerTableItems, {
     checkedItems: new Map(),
     statusItems: new Map(vaultSubmissions.map((submission) => [submission.name, false])),
+    vaultSubmissions,
+    sortedVaultSubmissions: sortVaultSubmission(vaultSubmissions),
   });
-
   const { value: overdueAfter } = useSetting("nagwarePhaseEncouraged");
 
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.id;
     const checked: boolean = e.target.checked;
-    const dispatchAction = { type: TableActions.UPDATE, item: { name, checked } };
+    const dispatchAction = { type: TableActions.UPDATE, payload: { item: { name, checked } } };
     tableItemsDispatch(dispatchAction);
 
     // Needed because of how useReducer updates state on the next render vs. inside this function..
@@ -180,6 +216,13 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
     }
   };
 
+  useEffect(() => {
+    // NOTE: Table not updating when it should? May need to be more explicit in telling react
+    // what has changed in the array (e.g. a status). For now, this seems to work well.
+    const dispatchAction = { type: TableActions.SORT, payload: { vaultSubmissions } };
+    tableItemsDispatch(dispatchAction);
+  }, [vaultSubmissions]);
+
   return (
     <section>
       <SkipLinkReusable
@@ -244,7 +287,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
           </tr>
         </thead>
         <tbody>
-          {vaultSubmissions.map((submission) => (
+          {tableItems.sortedVaultSubmissions.map((submission) => (
             <tr
               key={submission.name}
               className={

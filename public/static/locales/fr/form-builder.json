@@ -1,5 +1,5 @@
 {
-  "addElement": "Ajouter un bloc",
+  "addElement": "Ajouter",
   "addElementDialog": {
     "addButton": "Sélectionner ce bloc",
     "address": {
@@ -364,7 +364,7 @@
   "phoneNumber": "Numéro de téléphone",
   "placeHolderFormTitle": "Titre du formulaire",
   "previewingIn": "Prévisualiser en",
-  "privacyNoticeDescription": "<p className=\"mb-4\">Les avis de confidentialité fournissent aux personnes qui remplissent votre formulaire des informations sur la manière dont vous traitez leurs informations personnelles.</p><p className=\"mb-4\">C’est votre responsabilite de bien connaitre les exigences de votre ministère ou organisme en matière de renseignements personnels, y compris la rédaction d'avis de confidentialité conformes aux obligations énoncées à la section 4.2.10 de la Directive sur les pratiques en matière de protection de la vie privée.</p><p>Si vous n'êtes pas sûr de la marche à suivre, nous vous recommandons de contacter votre <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-fra.asp\" target=\"_blank\">coordinateur de l'accès à l'information et de la protection de la vie privée</a>.</p>",
+  "privacyNoticeDescription": "<p className=\"mb-4\">Les avis de confidentialité fournissent aux personnes qui remplissent votre formulaire des informations sur la manière dont vous traitez leurs informations personnelles.</p><p className=\"mb-4\">C’est votre responsabilite de bien connaitre les exigences de votre ministère ou organisme en matière de renseignements personnels, y compris la rédaction d'avis de confidentialité conformes aux obligations énoncées à la section 4.2.10 de la <a href=\"https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309\" target=\"_blank\">Directive sur les pratiques en matière de protection de la vie privée</a>.</p><p>Si vous n'êtes pas sûr de la marche à suivre, nous vous recommandons de contacter votre <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-fra.asp\" target=\"_blank\">coordinateur de l'accès à l'information et de la protection de la vie privée</a>.</p>",
   "privacyStatement": "Déclaration de confidentialité ",
   "provideFeedback": "Donner votre avis",
   "publish": "Publier",
@@ -596,6 +596,7 @@
       "title": "Le téléchargement est limité aux réponses en retard jusqu'à ce qu'elles soient téléchargées et confirmées",
       "body1": "Il y a",
       "body2": "réponses non confirmées avec 35 jours de retard ou plus. Confirmez la réception de toute réponse téléchargée en retard avant d'en enregistrer de nouvelles."
-    }
+    },
+    "beforePublishMessage": "Vous pouvez modifier ces paramètres à tout moment avant de publier le formulaire."
   }
 }

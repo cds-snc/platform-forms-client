@@ -145,13 +145,15 @@ export const PanelActions = ({
     showElementDialog(false);
   }, []);
 
-  const { handleNav, getTabIndex, currentFocusIndex, itemsRef, setRef } = usePanelActions({
-    panelButtons,
-    isFirstItem,
-    isLastItem,
-    elementsLength: elements.length,
-    orientation: isSubElement ? "horizontal" : isXl ? "horizontal" : "vertical",
-  });
+  const { handleNav, getTabIndex, currentFocusIndex, itemsRef, setRef, isRoving } = usePanelActions(
+    {
+      panelButtons,
+      isFirstItem,
+      isLastItem,
+      elementsLength: elements.length,
+      orientation: isSubElement ? "horizontal" : isXl ? "horizontal" : "vertical",
+    }
+  );
 
   useEffect(() => {
     if (!isInit.current) {
@@ -160,10 +162,11 @@ export const PanelActions = ({
     }
     const index = `button-${currentFocusIndex}` as unknown as number;
     const el = itemsRef.current[index];
-    if (el) {
+    // focus the element if we're navigating the menu
+    if (el && isRoving.current) {
       el.focus();
     }
-  }, [currentFocusIndex, isInit, itemsRef]);
+  }, [currentFocusIndex, isInit, itemsRef, isRoving]);
 
   const actions = panelButtons.map((button, loopIndex) => {
     // const Icon = button.icon;

@@ -23,6 +23,7 @@ export const usePanelActions = ({
   const itemsRef = useRef<[HTMLButtonElement] | []>([]);
 
   const [currentFocusIndex, setCurrentFocusIndex] = useState(isFirstItem ? 1 : 0);
+  const isRoving = useRef(false);
 
   const [items] = useState(panelButtons.map(({ id, txt }) => ({ id, txt })));
 
@@ -51,7 +52,9 @@ export const usePanelActions = ({
         if (isLastItem && currentFocusIndex === 2) {
           step = 2;
         }
+        isRoving.current = true;
         setCurrentFocusIndex((index) => Math.max(0, index - step));
+        return;
       }
 
       if (key === forward) {
@@ -59,8 +62,13 @@ export const usePanelActions = ({
         if (isLastItem && currentFocusIndex === 0) {
           step = 2;
         }
+
+        isRoving.current = true;
         setCurrentFocusIndex((index) => Math.min(items.length - 1, index + step));
+        return;
       }
+
+      isRoving.current = false;
     },
     [orientation, isFirstItem, currentFocusIndex, isLastItem, items.length]
   );
@@ -83,5 +91,6 @@ export const usePanelActions = ({
     currentFocusIndex,
     handleNav,
     getTabIndex,
+    isRoving,
   };
 };

@@ -25,7 +25,7 @@ describe("Test FormBuilder Add Elements", () => {
 
   it("Adds a Page Text element", () => {
     cy.visit("/form-builder/edit");
-    cy.get("button").contains("Add block").click();
+    cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="richText"]').click();
     cy.get("button").contains("Select block").click();
@@ -35,7 +35,7 @@ describe("Test FormBuilder Add Elements", () => {
 
   it("Adds a Short Answer element", () => {
     cy.visit("/form-builder/edit");
-    cy.get("button").contains("Add block").click();
+    cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="textField"]').click();
     cy.get("button").contains("Select block").click();
@@ -49,7 +49,7 @@ describe("Test FormBuilder Add Elements", () => {
 
   it("Adds a Long Answer element", () => {
     cy.visit("/form-builder/edit");
-    cy.get("button").contains("Add block").click();
+    cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="textArea"]').click();
     cy.get("button").contains("Select block").click();
@@ -63,7 +63,7 @@ describe("Test FormBuilder Add Elements", () => {
 
   it("Adds a Single choice element", () => {
     cy.visit("/form-builder/edit");
-    cy.get("button").contains("Add block").click();
+    cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="radio"]').click();
     cy.get("button").contains("Select block").click();
@@ -81,7 +81,7 @@ describe("Test FormBuilder Add Elements", () => {
 
   it("Adds a Multiple choice element", () => {
     cy.visit("/form-builder/edit");
-    cy.get("button").contains("Add block").click();
+    cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="checkbox"]').click();
     cy.get("button").contains("Select block").click();
@@ -99,7 +99,7 @@ describe("Test FormBuilder Add Elements", () => {
 
   it("Adds a Dropdown list element", () => {
     cy.visit("/form-builder/edit");
-    cy.get("button").contains("Add block").click();
+    cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="dropdown"]').click();
     cy.get("button").contains("Select block").click();
@@ -117,7 +117,7 @@ describe("Test FormBuilder Add Elements", () => {
 
   it("Adds a Date element", () => {
     cy.visit("/form-builder/edit");
-    cy.get("button").contains("Add block").click();
+    cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="date"]').click();
     cy.get("button").contains("Select block").click();
@@ -135,7 +135,7 @@ describe("Test FormBuilder Add Elements", () => {
 
   it("Adds a Numeric field element", () => {
     cy.visit("/form-builder/edit");
-    cy.get("button").contains("Add block").click();
+    cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="number"]').click();
     cy.get("button").contains("Select block").click();
