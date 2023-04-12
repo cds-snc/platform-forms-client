@@ -37,8 +37,7 @@ enum TableActions {
 interface ReducerTableItemsState {
   statusItems: Map<string, boolean>;
   checkedItems: Map<string, boolean>;
-  vaultSubmissions: VaultSubmissionList[];
-  sortedVaultSubmissions: VaultSubmissionList[];
+  sortedItems: VaultSubmissionList[];
 }
 
 interface ReducerTableItemsActions {
@@ -127,8 +126,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
   const [tableItems, tableItemsDispatch] = useReducer(reducerTableItems, {
     checkedItems: new Map(),
     statusItems: new Map(vaultSubmissions.map((submission) => [submission.name, false])),
-    vaultSubmissions,
-    sortedVaultSubmissions: sortVaultSubmission(vaultSubmissions),
+    sortedItems: sortVaultSubmission(vaultSubmissions),
   });
   const { value: overdueAfter } = useSetting("nagwarePhaseEncouraged");
 
@@ -155,7 +153,12 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
   // NOTE: browsers have different limits for simultaneous downloads. May need to look into
   // batching file downloads (e.g. 4 at a time) if edge cases/* come up.
   const handleDownload = async () => {
-    // Handle any errors and show/reset any errors
+    // Reset any errors
+    if (errors.downloadError) {
+      setErrors({ ...errors, downloadError: false });
+    }
+
+    // Handle any errors and show them
     if (tableItems.checkedItems.size === 0) {
       if (!errors.noItemsError) {
         setErrors({ ...errors, noItemsError: true });
@@ -167,9 +170,6 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
         setErrors({ ...errors, maxItemsError: true });
       }
       return;
-    }
-    if (errors.downloadError) {
-      setErrors({ ...errors, downloadError: false });
     }
 
     toast.info(
@@ -201,12 +201,11 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
       });
 
       await Promise.all(downloads).then(() => {
-        // TODO: Future tech debt. See https://github.com/cds-snc/platform-forms-client/issues/1744
-        setTimeout(() => {
-          // Refreshes getServerSideProps data without a full page reload
-          router.replace(router.asPath, undefined, { scroll: false });
-          toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
-        }, 400);
+        // Refreshes getServerSideProps data without a full page reload
+        // NOTE: an issue was opened about the DB/server not updating in time, seems to have fixed
+        // itself but if not, re-open: https://github.com/cds-snc/platform-forms-client/issues/1744
+        router.replace(router.asPath, undefined, { scroll: false });
+        toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
       });
     } catch (err) {
       logMessage.error(err as Error);
@@ -285,7 +284,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
           </tr>
         </thead>
         <tbody>
-          {tableItems.sortedVaultSubmissions.map((submission) => (
+          {tableItems.sortedItems.map((submission) => (
             <tr
               key={submission.name}
               className={
