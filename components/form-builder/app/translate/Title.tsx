@@ -26,7 +26,7 @@ export const Title = ({
     <>
       <fieldset>
         <FieldsetLegend>
-          {t(element.type)}: {t("questionTitle")}
+          {t(`addElementDialog.${element.type}.title`)}: {t("questionTitle")}
         </FieldsetLegend>
         <div className="flex gap-px border-b border-r border-t border-gray-300 mb-10 divide-x-2">
           <label className="sr-only" htmlFor={`element-${element.id}-title-${primaryLanguage}`}>
