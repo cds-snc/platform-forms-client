@@ -146,7 +146,7 @@ async function templateSchemaMigration() {
 
       const deliveryOption = findDeliveryOption();
 
-      const securityAttribute = formProperties.form.securityAttribute ?? "Unclassified";
+      const securityAttribute = formProperties.form.securityAttribute ?? "Protected A";
 
       return prisma.template.update({
         where: {
