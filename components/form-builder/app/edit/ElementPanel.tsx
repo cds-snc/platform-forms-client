@@ -72,7 +72,7 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
       <PanelBodyRoot item={item} />
       <PanelActions
         subIndex={-1}
-        elements={elements}
+        elementsLength={elements.length}
         item={item}
         handleAdd={handleAddElement}
         handleRemove={() => {

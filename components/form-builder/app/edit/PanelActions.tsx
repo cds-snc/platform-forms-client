@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useTranslation } from "next-i18next";
 import { useMediaQuery } from "usehooks-ts";
 
-import { FormElementTypes, FormElement } from "@lib/types";
+import { FormElementTypes } from "@lib/types";
 import { AddElementButton } from "./elements/element-dialog/AddElementButton";
 import { ElementOptionsFilter, FormElementWithIndex } from "@components/form-builder/types";
 import {
@@ -35,7 +35,7 @@ export const PanelActions = ({
   handleMoveDown,
   handleDuplicate,
   filterElements,
-  elements,
+  elementsLength,
 }: {
   item: FormElementWithIndex;
   subIndex?: number;
@@ -46,12 +46,12 @@ export const PanelActions = ({
   handleMoveDown: () => void;
   handleDuplicate: () => void;
   filterElements?: ElementOptionsFilter;
-  elements: FormElement[];
+  elementsLength: number;
 }) => {
   const { t, i18n } = useTranslation("form-builder");
 
   const isInit = useRef(false);
-  const isLastItem = item.index === elements.length - 1;
+  const isLastItem = item.index === elementsLength - 1;
   const isFirstItem = item.index === 0;
   const isRichText = item.type == "richText";
   const isSubElement = subIndex !== -1 && subIndex !== undefined;
@@ -150,7 +150,7 @@ export const PanelActions = ({
       panelButtons,
       isFirstItem,
       isLastItem,
-      elementsLength: elements.length,
+      elementsLength,
       orientation: isSubElement ? "horizontal" : isXl ? "horizontal" : "vertical",
     }
   );

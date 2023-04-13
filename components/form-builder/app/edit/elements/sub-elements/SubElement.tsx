@@ -148,7 +148,7 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
                     );
                   }}
                   filterElements={elementFilter}
-                  elements={subElements}
+                  elementsLength={subElements.length}
                 />
               }
             >
