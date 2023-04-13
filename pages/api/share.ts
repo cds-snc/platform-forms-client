@@ -53,7 +53,7 @@ Pour prévisualiser ce formulaire :
   Enregistrer le fichier de formulaire JSON ci-joint sur votre ordinateur.
 - **Étape 2 :**
   Aller sur [Formulaires GC](https://${req.headers.host}). Aucun compte n'est nécessaire.
-- Étape 3 :**
+- **Étape 3 :**
   Sélectionner "Ouvrir un formulaire".`,
           },
           reference: null,
