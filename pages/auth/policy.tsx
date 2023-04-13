@@ -12,6 +12,7 @@ interface TermsOfUse {
   user: Session["user"];
   referer?: string;
 }
+
 const TermsOfUse = ({ content, referer }: TermsOfUse) => {
   const { t } = useTranslation(["policy", "common"]);
   return (
@@ -40,7 +41,7 @@ export const getServerSideProps = requireAuthentication(async (context) => {
   }
 
   const termsOfUseContent =
-    await require(`../../public/static/content/${context?.locale}/terms-of-use.md`);
+    await require(`../../public/static/content/${context?.locale}/responsibilities.md`);
   return {
     props: {
       ...(context.locale && (await serverSideTranslations(context?.locale, ["common", "policy"]))),

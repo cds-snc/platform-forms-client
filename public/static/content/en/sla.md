@@ -1,5 +1,4 @@
 # Service-level agreement
-
 Version 2
 
 GC Forms is a cloud-based service that is owned and operated by the Canadian Digital Service (CDS) at the Treasury Board of Canada Secretariat (TBS). This service enables Canadian federal departments and agencies to create and publish forms, which are hosted by CDS. 
@@ -36,7 +35,7 @@ CDS is not responsible for issues or outages with AWS infrastructure that may im
 
 CDS guarantees that the GC Forms system shall have 99.0% uptime with no more than 1% downtime during regular business hours in a year.
 
-CDS commits to a service availability rate of 99.0%—excluding urgent scheduled maintenance and planned maintenance periods (as defined herein)—for the hosted services across each calendar quarter in the contract period. This service-level agreement (SLA) covers infrastructure running the codebase and the database. 
+CDS commits to a service availability rate of 99.0% — excluding urgent scheduled maintenance and planned maintenance periods (as defined herein) — for the hosted services across each calendar quarter in the contract period. This service-level agreement (SLA) covers infrastructure running the codebase and the database. 
 
 Downtime is defined as an unplanned interruption to the service resulting in a user-perceptible reduction in the existing quality of service or an event that will impact the existing service to the customer.
 
@@ -48,7 +47,7 @@ This uptime guarantee excludes any downtime experienced by Amazon as they are ou
 
 CDS provides reactive support services to monitor, track, and remedy issues raised by either its own internal monitoring tools or raised via client reporting channels.
 
-### Service Availability
+### Service availability
 
 |Issue|Initial response|Ongoing updates|
 |:-|:-|:-|
@@ -58,7 +57,7 @@ CDS provides reactive support services to monitor, track, and remedy issues rais
   
 ### Service contacts and response time
 
-All support requests should be directed to [Get support](https://forms-formulaires.alpha.canada.ca/en/form-builder/support). CDS will respond within eight hours of receiving your requests, Monday to Friday from 9am to 5pm (Eastern Time). Service tickets are logged in Freshdesk. They will be closed after 10 days, if there is no response from the client. 
+All support requests should be directed to [Get support](/en/form-builder/support). CDS will respond within eight hours of receiving your requests, Monday to Friday from 9am to 5pm (Eastern Time). Service tickets are logged in Freshdesk. They will be closed after 10 days, if there is no response from the client. 
 
 |Description|Initial response|Resolution*|
 |:-|:-|:-|
@@ -84,4 +83,4 @@ GC Forms is open source and available for others to stand up their own version b
   
   
 
-**Last update**: April 12, 2023
+**Last update:** April 12, 2023
