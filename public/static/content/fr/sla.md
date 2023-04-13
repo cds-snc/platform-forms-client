@@ -1,5 +1,4 @@
 # Accord sur les niveaux de service 
-
 Version 2
 
 Formulaires GC est un service infonuagique créé et exploité par le Service numérique canadien (SNC) au sein du Secrétariat du Conseil du Trésor du Canada (SCT). Ce service permet aux ministères et organismes du gouvernement fédéral canadien de créer et de publier des formulaires hébergés par le SNC. 
@@ -84,4 +83,4 @@ Formulaires GC est un produit à code source ouvert permettant à des tiers de c
   
   
 
-**Dernière mise à jour **: 12 avril 2023
+**Dernière mise à jour :** 12 avril 2023
