@@ -34,7 +34,7 @@ export function TemplateApiProvider({ children }: { children: React.ReactNode })
   useSubscibeToTemplateStore(
     (s) => [s.form, s.isPublished, s.name, s.deliveryOption, s.securityAttribute],
     () => {
-      if (hasHydrated) {
+      if (hasHydrated && !templateIsDirty.current) {
         logMessage.debug(`TemplateContext: Local State out of sync with server`);
         templateIsDirty.current = true;
       }
