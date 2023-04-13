@@ -10,7 +10,7 @@ interface TermsOfUseProps {
 }
 
 const TermsOfUse = ({ content }: TermsOfUseProps) => {
-  const { t } = useTranslation(["common", "terms"]);
+  const { t } = useTranslation(["terms"]);
 
   return (
     <>

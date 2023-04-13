@@ -10,7 +10,7 @@ interface TermsAndConditionsProps {
 }
 
 const TermsAndConditions = ({ content }: TermsAndConditionsProps) => {
-  const { t } = useTranslation(["common", "terms"]);
+  const { t } = useTranslation(["terms"]);
 
   return (
     <>
