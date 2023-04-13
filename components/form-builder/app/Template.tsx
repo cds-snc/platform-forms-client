@@ -57,7 +57,7 @@ export const PageTemplate = ({
   const { t, i18n } = useTranslation("form-builder");
   const { hasHydrated, form, setLang } = useTemplateStore((s) => ({
     form: s.form,
-    hasHydrated: s._hasHydrated,
+    hasHydrated: s.hasHydrated,
     setLang: s.setLang,
     email: s.deliveryOption?.emailAddress,
   }));

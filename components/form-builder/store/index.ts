@@ -1,2 +1,8 @@
-export { useTemplateStore, TemplateStoreProvider, clearTemplateStore } from "./useTemplateStore";
+export {
+  useTemplateStore,
+  TemplateStoreProvider,
+  clearTemplateStore,
+  useSubscibeToTemplateStore,
+  TemplateStoreContext,
+} from "./useTemplateStore";
 export { useModalStore } from "./useModalStore";

@@ -1,7 +1,13 @@
 import { createStore, useStore } from "zustand";
 import { immer } from "zustand/middleware/immer";
-import { persist, StateStorage, createJSONStorage } from "zustand/middleware";
-import React, { createContext, useRef, useContext } from "react";
+import {
+  persist,
+  StateStorage,
+  createJSONStorage,
+  subscribeWithSelector,
+} from "zustand/middleware";
+
+import React, { createContext, useRef, useContext, useEffect } from "react";
 import { getPathString } from "../getPath";
 
 import {
@@ -70,7 +76,7 @@ export interface TemplateStoreProps {
   lang: Language;
   translationLanguagePriority: Language;
   focusInput: boolean;
-  _hasHydrated: boolean;
+  hasHydrated: boolean;
   form: FormProperties;
   isPublished: boolean;
   name: string;
@@ -84,7 +90,6 @@ export interface InitialTemplateStoreProps extends TemplateStoreProps {
 
 export interface TemplateStoreState extends TemplateStoreProps {
   focusInput: boolean;
-  _hasHydrated: boolean;
   setHasHydrated: () => void;
   getFocusInput: () => boolean;
   moveUp: (index: number) => void;
@@ -157,7 +162,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
     lang: (initProps?.locale as Language) || "en",
     translationLanguagePriority: (initProps?.locale as Language) || "en",
     focusInput: false,
-    _hasHydrated: false,
+    hasHydrated: false,
     form: defaultForm,
     isPublished: false,
     name: "",
@@ -174,13 +179,11 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
   return createStore<TemplateStoreState>()(
     immer(
       persist(
-        (set, get) => ({
+        subscribeWithSelector((set, get) => ({
           ...DEFAULT_PROPS,
           ...initProps,
           setHasHydrated: () => {
-            set((state) => {
-              state._hasHydrated = true;
-            });
+            set({ hasHydrated: true });
           },
           localizeField: (path, lang = get().lang) => {
             const langUpperCaseFirst = (lang.charAt(0).toUpperCase() +
@@ -380,7 +383,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               state.securityAttribute = "Unclassified";
               state.deliveryOption = undefined;
             }),
-        }),
+        })),
         {
           name: "form-storage",
           storage: createJSONStorage(() => storage),
@@ -430,6 +433,15 @@ export const useTemplateStore = <T,>(
   const store = useContext(TemplateStoreContext);
   if (!store) throw new Error("Missing Template Store Provider in tree");
   return useStore(store, selector, equalityFn);
+};
+
+export const useSubscibeToTemplateStore = <T,>(
+  selector: (state: TemplateStoreState) => T,
+  listener: (selectedState: T, previousSelectedState: T) => void
+) => {
+  const store = useContext(TemplateStoreContext);
+  if (!store) throw new Error("Missing Template Store Provider in tree");
+  useEffect(() => store.subscribe(selector, listener), [store, selector, listener]);
 };
 
 export const clearTemplateStore = () => {
