@@ -4,20 +4,22 @@ import { isSplashPage } from "@lib/routeUtils";
 
 interface FooterProps {
   disableGcBranding?: boolean;
-  displaySLAAndSupportLinks?: boolean;
+  displayFormBuilderFooter?: boolean;
 }
 
 const Footer = (props: FooterProps) => {
   const { t } = useTranslation("common");
 
-  const linksToDisplay = props.displaySLAAndSupportLinks ? (
+  const linksToDisplay = props.displayFormBuilderFooter ? (
     <>
+      <a href={t("footer.terms-of-use.link")}>{t("footer.terms-of-use.desc")}</a>
+      &nbsp;&nbsp;&#x2022;&nbsp;&nbsp;
       <a href={t("footer.sla.link")}>{t("footer.sla.desc")}</a>
       &nbsp;&nbsp;&#x2022;&nbsp;&nbsp;
       <a href={t("footer.support.link")}>{t("footer.support.desc")}</a>
     </>
   ) : (
-    <a href={t("footer.terms.link")}>{t("footer.terms.desc")}</a>
+    <a href={t("footer.terms-and-conditions.link")}>{t("footer.terms-and-conditions.desc")}</a>
   );
 
   return (
