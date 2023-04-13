@@ -13,7 +13,3 @@ As a reminder, here are the highlights:
 - Report any problems with GC Forms. 
 
 For questions related to these terms of use, [contact us](https://forms-formulaires.alpha.canada.ca/form-builder/support/contactus).
-
-
-
- **Last update:** April 12, 2023 

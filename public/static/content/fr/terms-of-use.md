@@ -13,7 +13,3 @@ Vos responsabilités relatives à l’utilisation de Formulaires GC sont décrit
 - Signaler tout problème avec Formulaires GC. 
 
 Pour toute question en lien avec les présentes conditions d’utilisation, veuillez [nous contacter](https://forms-formulaires.alpha.canada.ca/fr/form-builder/support/contactus).
-
-
-
- **Dernière mise à jour :** 12 avril 2023 
