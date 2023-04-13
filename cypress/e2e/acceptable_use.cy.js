@@ -17,7 +17,7 @@ describe("Test acceptable use Page", () => {
     cy.url().should("contain", "/fr");
     // Ensure page has fully loaded
     cy.get("main").should("be.visible");
-    cy.get("h1").should("contain", "Connaître vos responsabilités");
+    cy.get("h1").should("contain", "Connaissez vos responsabilités");
     cy.get("[type='button']").should("contain.text", "Accepter");
   });
 
@@ -30,7 +30,7 @@ describe("Test acceptable use Page", () => {
     cy.visitPage("/myforms");
     cy.url().should("contain", "/auth/policy");
   });
-  it("Redirects back to calling page after accpetance", () => {
+  it("Redirects back to calling page after acceptance", () => {
     cy.visitPage("/myforms");
     cy.url().should("contain", "/auth/policy");
     cy.url().should("contain", "?referer=/myforms");

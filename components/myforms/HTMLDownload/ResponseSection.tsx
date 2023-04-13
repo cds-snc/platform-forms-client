@@ -187,7 +187,7 @@ export const ResponseSection = ({
         // submissionID={submissionID}
         questionsAnswers={questionsAnswers}
         isRowTable={false}
-        lang={capitalizedLang}
+        lang={lang}
         data-clipboard-text=""
       />
 
@@ -217,7 +217,7 @@ export const ResponseSection = ({
         // submissionID={submissionID}
         questionsAnswers={questionsAnswers}
         isRowTable={true}
-        lang={capitalizedLang}
+        lang={lang}
       />
 
       <h3 id={`confirmReceipt${capitalizedLang}`} className="gc-h2 mt-20">
