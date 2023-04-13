@@ -1,7 +1,6 @@
 Vos responsabilités relatives à l’utilisation de Formulaires GC sont décrites dans les [conditions d’utilisation](#).
 
 À titre de rappel, en voici les points saillants :
-
 - Obtenir les approbations nécessaires pour l’utilisation de Formulaires GC.
 - Accepter toutes les conditions et tous les risques, y compris nos niveaux de services. 
 - Protéger et traiter les renseignements personnels et sensibles : 

@@ -1,7 +1,6 @@
 Your responsibilities while using GC Forms are detailed in the [Terms of use](#). 
 
 As a reminder, here are the highlights:
-
 - Obtain the necessary approval to use GC Forms.
 - Accept all conditions and risks including our service levels. 
 - Protect and process personal and sensitive information: 
