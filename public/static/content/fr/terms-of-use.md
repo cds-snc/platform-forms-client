@@ -58,4 +58,4 @@ Pour toute question en lien avec les présentes conditions d’utilisation, veui
 
 
 
-**Last update:** April 12, 2023 
+**Dernière mise à jour :** 12 avril 2023 
