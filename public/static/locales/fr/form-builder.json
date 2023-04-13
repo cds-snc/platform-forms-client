@@ -52,11 +52,17 @@
     },
     "date": {
       "description": "Description de la date",
-      "title": "Date"
+      "title": "Date",
+      "example": {
+        "dateValue": "mm/jj/aaaa"
+      }
     },
     "dropdown": {
       "description": "Description de la liste déroulante",
-      "title": "Liste déroulante"
+      "title": "Liste déroulante",
+      "example": {
+        "select": "Sélectionner"
+      }
     },
     "dynamicRow": {
       "description": "Le bloc de questions répétées offre aux personnes qui remplissent les formulaires la possibilité d'ajouter un ensemble de réponses similaires à une section. Ce bloc fonctionne avec une seule question ou une section de questions qui se répètent.",
