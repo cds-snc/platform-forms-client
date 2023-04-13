@@ -1,8 +1,12 @@
 {
   "footer": {
-    "terms": {
-      "link": "/fr/terms-avis",
+    "terms-and-conditions": {
+      "link": "/fr/terms-and-conditions",
       "desc": "Avis"
+    },
+    "terms-of-use": {
+      "link": "/fr/terms-of-use",
+      "desc": "Conditions d'utilisation"
     },
     "sla": {
       "link": "/fr/sla",

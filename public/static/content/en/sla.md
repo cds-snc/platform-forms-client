@@ -58,7 +58,7 @@ CDS provides reactive support services to monitor, track, and remedy issues rais
   
 ### Service contacts and response time
 
-All support requests should be directed to [Get support](https://forms-formulaires.alpha.canada.ca/en/form-builder/support). CDS will respond within eight hours of receiving your requests, Monday to Friday from 9am to 5pm (Eastern Time). Service tickets are logged in Freshdesk. They will be closed after 10 days, if there is no response from the client. 
+All support requests should be directed to [Get support](/en/form-builder/support). CDS will respond within eight hours of receiving your requests, Monday to Friday from 9am to 5pm (Eastern Time). Service tickets are logged in Freshdesk. They will be closed after 10 days, if there is no response from the client. 
 
 |Description|Initial response|Resolution*|
 |:-|:-|:-|
