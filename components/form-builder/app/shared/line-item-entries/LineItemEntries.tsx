@@ -121,7 +121,7 @@ export const LineItemEntries = ({
           onKeyUp={onKeyUp}
           onBlur={onBlur}
           spellCheck="false"
-          autoComplete="false"
+          autoComplete="off"
           aria-labelledby={inputLabelId}
         />
       </div>
