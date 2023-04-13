@@ -166,7 +166,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
     form: defaultForm,
     isPublished: false,
     name: "",
-    securityAttribute: "Unclassified",
+    securityAttribute: "Protected A",
   };
 
   // Ensure any required properties by Form Builder are defaulted by defaultForm
@@ -380,7 +380,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               state.form = { ...defaultForm, ...jsonConfig };
               state.isPublished = false;
               state.name = "";
-              state.securityAttribute = "Unclassified";
+              state.securityAttribute = "Protected A";
               state.deliveryOption = undefined;
             }),
         })),

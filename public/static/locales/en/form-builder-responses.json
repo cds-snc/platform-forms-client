@@ -48,24 +48,23 @@
       "noResponsesToDownload": "There are no responses available to download."
     },
     "notifications": {
-      "downloading": "Downloading",
       "downloadComplete": "Download complete",
-      "downloadingXFiles": "Downloading {{fileCount}} files",
-      "downloadXSelectedResponses": "Download {{size}} selected responses",
+      "downloadingXFiles": "Downloading {{fileCount}} files"
+    },
+    "errors": {
       "trySelectingLessFilesHeader": "Only {{max}} responses can be downloaded at a time.",
       "trySelectingLessFiles": "You have {{max}} responses selected. Uncheck at least 1 response before downloading.",
       "atLeastOneFileHeader": "At least one file must be selected to download.",
       "atLeastOneFile": "Try selecting at least one file to download.",
       "errorDownloadingFilesHeader": "Error downloading the selected files.",
-      "errorDownloadingFiles": "Try again in a few minutes. If the problem persists contact support."
+      "errorDownloadingFiles": "Try again in a few minutes. If the problem persists",
+      "errorDownloadingFilesLink": "contact support"
     },
+    "downloadXSelectedResponses": "Download {{size}} selected responses",
     "skipLink": "Skip Download Table",
     "unknown": "Unknown"
   },
   "lineItemEntries": {
-    "remove": "Remove",
-    "removed": "Removed",
-    "added": "Added",
     "notifications": {
       "maxEntriesTitle": "Only {{max}} responses can be reported at a time.",
       "maxEntriesDescription": "Enter these form entries before entering more."
@@ -77,25 +76,60 @@
       "findCode": "Find the confirmation code on the bottom of the downloaded form response. It looks like: c0c42c90-b816-49da-a69a-80bfd8ba15db.",
       "copyCode": "Copy and paste up to {{max}} confirmation codes, one per line.",
       "responsesAvailableFor": "After you confirm receipt, responses will be available for 7 days then automatically removed from our database.",
-      "confirmReceipt": "Confirm receipt"
+      "confirmReceipt": "Confirm receipt",
+      "errors": {
+        "minEntries": {
+          "title": "At least one response must be specified",
+          "description": "Enter confirmation codes from downloaded responses to confirm having received them."
+        },
+        "maxEntries": {
+          "title": "Only {{max}} responses can be reported at a time.",
+          "description": "Submit {{max}} confirmation codes before adding more."
+        },
+        "errorEntries": {
+          "title": "Some confirmation codes could not be submitted",
+          "description": "Check that the confirmation codes below are correct and try again."
+        },
+        "invalidEntry": {
+          "title": "The confirmation code does not match the required format",
+          "description": "Check that the confirmation code format is correct and try again."
+        },
+        "unknown": {
+          "title": "Sorry, there’s a problem with the site",
+          "description": "Wait a few minutes and try again, or ",
+          "descriptionLink": " contact Support"
+        }
+      }
     },
     "reportProblemsDialog": {
       "title": "Report a problem with responses",
       "findForm": "Find the form number in the form list for any responses that will not download or open. They look like, 31-12-XCRV.",
       "enterFormNumbers": "Enter up-to {{max}} form numbers, one per line.",
       "problemReported": "After you report the problem, we will contact you to help resolve the problem.",
-      "reportProblems": "Report problem"
-    },
-    "notifications": {
-      "entriesLengthConfirmHeader": "At least one response must be specified",
-      "entriesLengthConfirmDescription": "Enter the confirmation codes for responses that you've received.",
-      "entriesLengthReportHeader": "At least one form must be specified",
-      "entriesLengthReportDescription": "Enter the form numbers for responses that have a problem.",
-      "clientEntryHeader": "An error occurred with one of the entries",
-      "clientEntryDescription": "Please double check the entries are entered correct and try again.",
-      "unknownErrorHeader": "Something went wrong",
-      "unknownErrorDescription": "Try again in a few minutes or contact ",
-      "unknownErrorDescriptionLink": "Support"
+      "reportProblems": "Report problem",
+      "errors": {
+        "minEntries": {
+          "title": "At least one form must be specified",
+          "description": "Enter form numbers for responses that have a problem."
+        },
+        "maxEntries": {
+          "title": "Only {{max}} problems can be reported at a time",
+          "description": "Submit {{max}} form numbers before adding more."
+        },
+        "errorEntries": {
+          "title": "Some form numbers were not submitted",
+          "description": "Check that the form numbers below are correct and try again."
+        },
+        "invalidEntry": {
+          "title": "The form number does not match the required format",
+          "description": "Check that the form number format is correct and try again."
+        },
+        "unknown": {
+          "title": "Sorry, there’s a problem with the site",
+          "description": "Wait a few minutes and try again, or  ",
+          "descriptionLink": "contact Support"
+        }
+      }
     },
     "cancel": "Cancel"
   }
