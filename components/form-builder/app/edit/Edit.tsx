@@ -8,6 +8,7 @@ import { RefsProvider } from "./RefsContext";
 import { RichTextLocked } from "./elements";
 import { Input } from "../shared";
 import { useTemplateStore } from "../../store";
+import { getQuestionNumber } from "../../util";
 
 export const Edit = () => {
   const { t } = useTranslation("form-builder");
@@ -90,7 +91,8 @@ export const Edit = () => {
       />
       <RefsProvider>
         {elements.map((element, index: number) => {
-          const item = { ...element, index };
+          const questionNumber = getQuestionNumber(element, elements);
+          const item = { ...element, index, questionNumber };
           return <ElementPanel item={item} key={item.id} />;
         })}
       </RefsProvider>

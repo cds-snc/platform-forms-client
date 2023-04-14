@@ -1,23 +1,12 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
 import { FormElementWithIndex } from "@formbuilder/types";
-import { FormProperties } from "@lib/types";
-import { getQuestionNumber } from "@components/form-builder/util";
 
-export const QuestionNumber = ({
-  elements,
-  item,
-  elIndex,
-}: {
-  item: FormElementWithIndex;
-  elements: FormProperties["elements"];
-  elIndex?: number;
-}) => {
+export const QuestionNumber = ({ item }: { item: FormElementWithIndex }) => {
   const itemIndex = item.index;
-  const isSubElement = elIndex !== -1;
   const { t } = useTranslation("form-builder");
 
-  const questionNumber = getQuestionNumber(item, elements, isSubElement);
+  const questionNumber = item.questionNumber;
 
   return (
     <>

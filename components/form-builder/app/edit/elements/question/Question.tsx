@@ -2,18 +2,13 @@ import React from "react";
 import { FormElementWithIndex, LocalizedElementProperties, Language } from "@formbuilder/types";
 import { useTemplateStore } from "@formbuilder/store";
 import { QuestionInput, QuestionNumber } from "../";
-import { FormElement } from "@lib/types";
 
 export const Question = ({
   item,
-  elements,
-  elIndex,
   onQuestionChange,
   describedById,
 }: {
   item: FormElementWithIndex;
-  elements: FormElement[];
-  elIndex?: number;
   onQuestionChange: (itemIndex: number, val: string, lang: Language) => void;
   describedById?: string;
 }) => {
@@ -30,8 +25,7 @@ export const Question = ({
 
   return isRichText ? null : (
     <>
-      <QuestionNumber elIndex={elIndex} item={item} elements={elements} />
-
+      <QuestionNumber item={item} />
       <QuestionInput
         initialValue={title}
         index={itemIndex}

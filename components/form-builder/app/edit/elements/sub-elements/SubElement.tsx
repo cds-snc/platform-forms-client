@@ -12,7 +12,7 @@ import { PanelActions } from "../../PanelActions";
 import { Input, LockedBadge } from "@formbuilder/app/shared";
 import { useUpdateElement } from "../../../../hooks";
 import { blockLoader, LoaderType } from "../../../../blockLoader";
-import { allowedTemplates } from "@formbuilder/util";
+import { allowedTemplates, getQuestionNumber } from "@formbuilder/util";
 
 export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elIndex: number }) => {
   const { t } = useTranslation("form-builder");
@@ -114,7 +114,8 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
   return (
     <div {...props} className="mt-3 mb-3">
       {subElements.map((element, subIndex: number) => {
-        const item = { ...element, index: subIndex };
+        const questionNumber = getQuestionNumber(element, subElements);
+        const item = { ...element, index: subIndex, questionNumber };
         return (
           <div key={`sub-element-${item.id}-${subIndex}`}>
             <PanelHightLight
@@ -153,7 +154,6 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
               }
             >
               <PanelBodySub
-                elements={subElements}
                 elIndex={elIndex}
                 item={item}
                 onQuestionChange={onQuestionChange}
