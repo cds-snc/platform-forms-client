@@ -58,9 +58,11 @@
     "submissionID": "Submission ID",
     "copyResponse": "Copy answer row to clipboard"
   },
-  "protectedBWarning": {
+  "dataClassification": {
     "officialRecord": "This is an official record",
     "retainCopy": "Retain this copy in accordance to your retention policy.",
+    "unclassified": "UNCLASSIFIED",
+    "protectedA": "PROTECTED A",
     "protectedB": "PROTECTED B"
   }
 }

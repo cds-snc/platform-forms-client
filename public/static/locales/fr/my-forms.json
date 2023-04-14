@@ -58,9 +58,11 @@
     "submissionID": "Identifiant de la soumission",
     "copyResponse": "Copier la ligne de réponse dans le presse-papiers"
   },
-  "protectedBWarning": {
+  "dataClassification": {
     "officialRecord": "Ceci est un document officiel",
     "retainCopy": "Conservez cette copie conformément à votre politique de conservation.",
+    "unclassified": "NON CLASSIFIÉ",
+    "protectedA": "PROTÉGÉ A",
     "protectedB": "PROTÉGÉ B"
   }
 }
