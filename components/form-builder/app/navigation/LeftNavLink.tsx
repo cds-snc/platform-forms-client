@@ -38,7 +38,7 @@ export const LeftNavLink = ({ children, href }: { children: ReactElement; href: 
       {/* passHref does ensure the child a tag has the correct HREF attribute */}
       <a
         href={"will_be_replaced_by_nextjs"}
-        onClick={() => saveOnNavigate()}
+        onClick={saveOnNavigate}
         className={`${
           active ? "font-bold" : ""
         } group no-underline rounded block w-38 py-1 mb-2 pl-2 pr-0 laptop:pr-2 text-black-default hover:text-blue-hover visited:text-black-default focus:text-white-default focus:bg-blue-hover active:no-underline active:bg-blue-hover active:text-white-default !shadow-none`}
