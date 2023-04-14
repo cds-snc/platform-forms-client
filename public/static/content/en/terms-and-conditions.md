@@ -21,6 +21,7 @@ This form uses a third-party service provider, Google Inc. (Google Analytics). T
 Send questions about your personal information to the department or agency’s [Access to Information and Privacy Coordinator](https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-eng.asp).
 
 Send complaints about how your personal information has been handled to the [Office of the Privacy Commissioner of Canada](https://www.priv.gc.ca/en/):  
+
 &nbsp;&nbsp;&nbsp;&nbsp;[info@priv.gc.ca](mailto:info@priv.gc.ca)  
 &nbsp;&nbsp;&nbsp;&nbsp;1-800-282-1376
 
