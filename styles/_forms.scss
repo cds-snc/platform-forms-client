@@ -95,10 +95,14 @@
 .gc-richText {
   p {
     @extend .gc-p;
-    @apply mb-0;
   }
+
   h4 {
     @extend .gc-section-header;
+  }
+
+  p:has(+ ul, + ol) {
+    @apply mb-0;
   }
 
   ul,
