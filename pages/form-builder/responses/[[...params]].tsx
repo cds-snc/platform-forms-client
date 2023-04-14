@@ -176,7 +176,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         title={t("downloadResponsesModals.confirmReceiptDialog.title")}
         description={t("downloadResponsesModals.confirmReceiptDialog.findCode")}
         inputHelp={t("downloadResponsesModals.confirmReceiptDialog.copyCode", {
-          max: MAX_REPORT_COUNT,
+          max: MAX_CONFIRMATION_COUNT,
         })}
         nextSteps={t("downloadResponsesModals.confirmReceiptDialog.responsesAvailableFor")}
         submitButtonText={t("downloadResponsesModals.confirmReceiptDialog.confirmReceipt")}

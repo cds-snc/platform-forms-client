@@ -1,6 +1,6 @@
 describe("Terms and Conditions Page", () => {
   beforeEach(() => {
-    cy.visit("/en/terms-avis");
+    cy.visit("/en/terms-and-conditions");
   });
   it("Get page content", () => {
     cy.get("h1").should("contain", "Terms and conditions");
@@ -8,6 +8,6 @@ describe("Terms and Conditions Page", () => {
   it("Change page language to French", () => {
     cy.get("a[lang='fr']").click();
     cy.url().should("contain", "/fr");
-    cy.get("h1").should("contain", "Avis");
+    cy.get("h1").should("contain", "Conditions générales");
   });
 });

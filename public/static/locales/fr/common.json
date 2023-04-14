@@ -1,8 +1,12 @@
 {
   "footer": {
-    "terms": {
-      "link": "/fr/terms-avis",
-      "desc": "Avis"
+    "terms-and-conditions": {
+      "link": "/fr/terms-and-conditions",
+      "desc": "Conditions générales"
+    },
+    "terms-of-use": {
+      "link": "/fr/terms-of-use",
+      "desc": "Conditions d'utilisation"
     },
     "sla": {
       "link": "/fr/sla",
@@ -90,7 +94,7 @@
   "acceptableUsePage": {
     "agree": "Accepter",
 
-    "welcome": "Connaître vos responsabilités"
+    "welcome": "Connaissez vos responsabilités"
   },
   "loginMenu": {
     "login": "Se connecter",
