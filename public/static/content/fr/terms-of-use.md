@@ -50,9 +50,9 @@ Vous avez pour responsabilité :
 - d’intégrer votre formulaire dans l’architecture d’information de votre ministère ou organisme. L’URL doit donc être incorporée au formulaire afin d’en permettre l’accès par les personnes ou organismes.
 - de rédiger un brouillon du contenu du formulaire à l’aide du [guide de rédaction du contenu du site Canada.ca](https://www.canada.ca/fr/secretariat-conseil-tresor/services/communications-gouvernementales/guide-redaction-contenu-canada.html).
 - de respecter la [norme graphique du Programme fédéral de l’image de marque](https://www.canada.ca/fr/secretariat-conseil-tresor/services/communications-gouvernementales/norme-graphique.html). Votre formulaire apparaîtra par défaut avec : 
-    - l’image de marque du gouvernement du Canada dans le coin supérieur gauche de l’en-tête.
+    - la signature du gouvernement du Canada dans le coin supérieur gauche de l’en-tête.
     - le mot-symbole « Canada » dans le coin inférieur droit du pied de page.
-Vous pouvez remplacer l’image de marque du gouvernement du Canada par l’identificateur ou le logo de votre ministère ou organisme. Si vous ne connaissez pas l’identificateur ou le logo de votre ministère ou organisme, veuillez contacter [le coordonnateur ou la coordonnatrice du Programme fédéral de l’image de marque](https://www.tbs-sct.canada.ca/ap/fip-pcim/coord-fra.asp). 
+Vous pouvez remplacer la signature du gouvernement du Canada par la signature de votre ministère ou organisme. Si vous ne connaissez pas la signature de votre ministère ou organisme, veuillez contacter [le coordonnateur ou la coordonnatrice du Programme fédéral de l’image de marque](https://www.tbs-sct.canada.ca/ap/fip-pcim/coord-fra.asp). 
 
 Pour toute question en lien avec les présentes conditions d’utilisation, veuillez [nous contacter](/fr/form-builder/support/contactus).
 
