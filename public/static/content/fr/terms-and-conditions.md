@@ -20,7 +20,6 @@ Ce formulaire a recours à un fournisseur de services tiers, Google Inc. (Google
 Envoyez toute question relative à vos renseignements personnels [au coordonnateur ou à la coordonnatrice de l’accès à l’information et de la protection des renseignements personnels](https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-fra.asp) du ministère ou de l’agence dont il est question.
 
 En cas de problème lié à la gestion de vos renseignements personnels, déposez toute plainte auprès du [Commissariat à la protection de la vie privée du Canada](https://www.priv.gc.ca/fr/).  
-
 &nbsp;&nbsp;&nbsp;&nbsp;[info@priv.gc.ca](mailto:info@priv.gc.ca)  
 &nbsp;&nbsp;&nbsp;&nbsp;1 800 282-1376
 

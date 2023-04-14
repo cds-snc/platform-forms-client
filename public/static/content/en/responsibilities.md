@@ -6,7 +6,7 @@ As a reminder, here are the highlights:
 - Protect and process personal and sensitive information: 
     - Obtain the appropriate authorities to collect personal information.
     - Manage form responses based on your department or agency’s retention and disposition schedule. 
-    - Use GC Forms to collect data classified as up to **PROTECTED A**. 
+    - Use GC Forms to collect data classified as up to **Protected A**. 
 - Publish in both official languages. 
 - Provide multiple channels to service and program delivery. 
 - Contribute to a trustworthy experience with consistent branding and content, and discoverable URLs.
