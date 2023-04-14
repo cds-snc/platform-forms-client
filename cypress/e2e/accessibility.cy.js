@@ -30,7 +30,7 @@ describe("Accessibility (A11Y) Check", () => {
       { title: "Form builder edit", path: "/form-builder/edit" },
       { title: "Form builder translation", path: "/form-builder/edit/translate" },
       { title: "Form builder settings", path: "/form-builder/settings" },
-      { title: "Terms and conditions", path: "/terms-avis" },
+      { title: "Terms and conditions", path: "/terms-and-conditions" },
       { title: "Service-level agreement", path: "/sla" },
       { title: "Create an account", path: "/signup/register" },
       { title: "Sign in", path: "/auth/login" },

@@ -31,16 +31,16 @@
       "removal": "Suppression des réponses"
     },
     "status": {
-      "downloaded": "Téléchargées",
-      "notDownloaded": "Non téléchargées",
+      "downloaded": "Téléchargée",
+      "notDownloaded": "Non téléchargée",
       "new": "Nouveauté",
-      "confirmed": "Confirmées",
+      "confirmed": "Confirmée",
       "unconfirmed": "Non confirmée",
       "problem": "Problème",
       "done": "Confirmée",
       "withinXDays": "Dans {{daysLeft}} jours",
       "overdue": "En retard",
-      "wontRemove": "Échec de la suppres",
+      "wontRemove": "Échec de la suppression",
       "notSet": "Non réglée"
     },
     "card": {

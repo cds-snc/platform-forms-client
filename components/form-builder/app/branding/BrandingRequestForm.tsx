@@ -6,8 +6,8 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 
 export const BrandingRequestForm = ({ formRecord }: { formRecord: FormRecord | null }) => {
-  const { t } = useTranslation("form-builder");
-  const language = "en";
+  const { t, i18n } = useTranslation("form-builder");
+  const language = i18n.language;
   const router = useRouter();
 
   let currentForm = null;
