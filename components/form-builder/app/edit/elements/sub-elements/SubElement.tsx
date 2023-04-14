@@ -114,7 +114,7 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
   return (
     <div {...props} className="mt-3 mb-3">
       {subElements.map((element, subIndex: number) => {
-        const questionNumber = getQuestionNumber(element, subElements);
+        const questionNumber = getQuestionNumber(element, subElements, true);
         const item = { ...element, index: subIndex, questionNumber };
         return (
           <div key={`sub-element-${item.id}-${subIndex}`}>

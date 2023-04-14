@@ -202,9 +202,9 @@ export const getHost = () => {
   return `${window.location.protocol}//${window.location.host}`;
 };
 
-export const getQuestionNumber = (item: FormElement, elements: FormElement[], alpha?: boolean) => {
-  const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
+export const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
 
+export const getQuestionNumber = (item: FormElement, elements: FormElement[], alpha?: boolean) => {
   const itemIndex = elements
     .filter((object) => object.type !== "richText")
     .findIndex((object) => object.id === item.id);
