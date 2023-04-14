@@ -105,6 +105,14 @@
     @apply mb-10;
   }
 
+  ul,
+  ol {
+    ul,
+    ol {
+      @apply mb-0;
+    }
+  }
+
   ol {
     @apply list-inside;
   }
@@ -207,7 +215,7 @@
   &:active {
     @apply text-white-default top-0.5;
   }
- 
+
   &:visited {
     @apply text-white-default top-0.5;
   }
