@@ -96,13 +96,26 @@
   p {
     @extend .gc-p;
   }
+
   h4 {
     @extend .gc-section-header;
+  }
+
+  p:has(+ ul, + ol) {
+    @apply mb-0;
   }
 
   ul,
   ol {
     @apply mb-10;
+  }
+
+  ul,
+  ol {
+    ul,
+    ol {
+      @apply mb-0;
+    }
   }
 
   ol {
@@ -207,7 +220,7 @@
   &:active {
     @apply text-white-default top-0.5;
   }
- 
+
   &:visited {
     @apply text-white-default top-0.5;
   }
