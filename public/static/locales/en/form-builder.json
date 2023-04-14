@@ -1,5 +1,5 @@
 {
-  "addElement": "Add block",
+  "addElement": "Add",
   "addElementDialog": {
     "addButton": "Select block",
     "address": {
@@ -52,11 +52,17 @@
     },
     "date": {
       "description": "Date description",
-      "title": "Date"
+      "title": "Date",
+      "example": {
+        "dateValue": "mm/dd/yyyy"
+      }
     },
     "dropdown": {
       "description": "Dropdown description",
-      "title": "Dropdown"
+      "title": "Dropdown",
+      "example": {
+        "select": "Select"
+      }
     },
     "dynamicRow": {
       "description": "The repeating question block provides form fillers with the option to add another set of answers to the section. This block works with one question or a section of related questions.",
@@ -331,7 +337,7 @@
   "gcFormsSettings": "Settings",
   "gcFormsStart": "Create new",
   "gcFormsTest": "Test",
-  "gcFormsTranslate": "Translate",
+  "gcFormsTranslate": "Translations",
   "ifYouAreExperiencingProblems": "If you are experiencing any problems with your published form, please <a href=\"/en/form-builder/support\" target=\"_blank\">contact support</a>.",
   "incomplete": "Incomplete",
   "inputDescription": "Description",
@@ -356,7 +362,7 @@
   "numericField": "Numeric field",
   "openModal": "Open Modal",
   "option": "Option",
-  "optionText": "Option text",
+  "optionText": "Option",
   "pagePreview": "Preview",
   "pageSettings": "Settings",
   "pageText": "Page text",
@@ -561,7 +567,7 @@
   "tooltipFormatItalic": "Italic (⌘I)",
   "tooltipFormatNumberedList": "Numbered list",
   "tooltipInsertLink": "Insert link",
-  "translate": "Translate",
+  "translate": "Translations",
   "translateDescription": "Translate your form content side by side to provide a bilingual experience to those filling out your form.",
   "translateTitle": "Enter your translation",
   "unlockPublishing": "Unlock publishing",

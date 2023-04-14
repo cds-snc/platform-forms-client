@@ -314,7 +314,7 @@ const processFormData = async (
         fields,
         // pass in the language from the header content language... assume english as the default
         req.headers?.["content-language"] ? req.headers["content-language"] : "en",
-        reqFields.securityAttribute ? (reqFields.securityAttribute as string) : "Unclassified"
+        reqFields.securityAttribute ? (reqFields.securityAttribute as string) : "Protected A"
       );
 
       return res.status(201).json({ received: true });

@@ -22,6 +22,8 @@ import { NagwareResult } from "@lib/types";
 import { detectOldUnprocessedSubmissions } from "@lib/nagware";
 import { Nagware } from "@components/form-builder/app/Nagware";
 import { useAutoSave } from "@components/form-builder/hooks";
+import { EmailResponseSettings } from "@components/form-builder/app/shared";
+import { useTemplateStore } from "@components/form-builder/store";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -44,10 +46,48 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   const [isShowConfirmReceiptDialog, setIsShowConfirmReceiptDialog] = useState(false);
   const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
 
+  const { getDeliveryOption, isPublished } = useTemplateStore((s) => ({
+    getDeliveryOption: s.getDeliveryOption,
+    isPublished: s.isPublished,
+  }));
+
+  const deliveryOption = getDeliveryOption();
+
   useAutoSave();
 
   const navItemClasses =
-    "no-underline !shadow-none border-black border-1 rounded-[100px] pt-1 pb-2 laptop:py-2 px-5 mr-3 mb-4 text-black visited:text-black focus:bg-[#475569] hover:bg-[#475569] hover:!text-white focus:!text-white [&_svg]:focus:fill-white";
+    "no-underline !shadow-none border-black border-1 rounded-[100px] pt-1 pb-2 laptop:py-2 px-5 mr-3 mb-0 text-black visited:text-black focus:bg-[#475569] hover:bg-[#475569] hover:!text-white focus:!text-white [&_svg]:focus:fill-white";
+
+  if (deliveryOption && deliveryOption.emailAddress) {
+    return (
+      <>
+        <Head>
+          <title>{t("responses.email.title")}</title>
+        </Head>
+        <PageTemplate title={t("responses.email.title")} autoWidth={true}>
+          <div className="flex flex-wrap items-baseline mb-8">
+            <h1 className="border-none mb-0 tablet:mb-4 tablet:mr-8">
+              {isAuthenticated ? t("responses.email.title") : t("responses.unauthenticated.title")}
+            </h1>
+            <nav className="flex gap-3">
+              {!isPublished && (
+                <Link href="/form-builder/settings">
+                  <a href="/form-builder/settings" className={`${navItemClasses}`}>
+                    {t("responses.changeSetup")}
+                  </a>
+                </Link>
+              )}
+            </nav>
+          </div>
+          <EmailResponseSettings
+            emailAddress={deliveryOption.emailAddress}
+            subjectEn={deliveryOption.emailSubjectEn || ""}
+            subjectFr={deliveryOption.emailSubjectFr || ""}
+          />
+        </PageTemplate>
+      </>
+    );
+  }
 
   return (
     <>
@@ -55,11 +95,12 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         <title>{t("responses.title")}</title>
       </Head>
       <PageTemplate title={t("responses.title")} autoWidth={true}>
-        <div className="flex justify-between items-baseline">
-          <h1 className="text-2xl border-none font-normal">
+        <div className="flex flex-wrap items-baseline mb-8">
+          <h1 className="border-none mb-0 tablet:mb-4 tablet:mr-8">
             {isAuthenticated ? t("responses.title") : t("responses.unauthenticated.title")}
           </h1>
-          <nav className="flex gap-3">
+
+          <nav className="flex flex-wrap gap-3">
             {isAuthenticated && (
               <button
                 onClick={() => setIsShowConfirmReceiptDialog(true)}
@@ -80,11 +121,13 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
               </button>
             )}
 
-            <Link href="/form-builder/settings">
-              <a href="/form-builder/settings" className={`${navItemClasses}`}>
-                {t("responses.changeSetup")}
-              </a>
-            </Link>
+            {!isPublished && (
+              <Link href="/form-builder/settings">
+                <a href="/form-builder/settings" className={`${navItemClasses}`}>
+                  {t("responses.changeSetup")}
+                </a>
+              </Link>
+            )}
           </nav>
         </div>
 
@@ -133,10 +176,6 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         apiUrl={`/api/id/${formId}/submission/confirm`}
         inputRegex={isUUID}
         maxEntries={MAX_CONFIRMATION_COUNT}
-        minEntriesErrorTitle={t("downloadResponsesModals.notifications.entriesLengthConfirmHeader")}
-        minEntriesErrorDescription={t(
-          "downloadResponsesModals.notifications.entriesLengthConfirmDescription"
-        )}
         title={t("downloadResponsesModals.confirmReceiptDialog.title")}
         description={t("downloadResponsesModals.confirmReceiptDialog.findCode")}
         inputHelp={t("downloadResponsesModals.confirmReceiptDialog.copyCode", {
@@ -144,6 +183,43 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         })}
         nextSteps={t("downloadResponsesModals.confirmReceiptDialog.responsesAvailableFor")}
         submitButtonText={t("downloadResponsesModals.confirmReceiptDialog.confirmReceipt")}
+        minEntriesErrorTitle={t(
+          "downloadResponsesModals.confirmReceiptDialog.errors.minEntries.title"
+        )}
+        minEntriesErrorDescription={t(
+          "downloadResponsesModals.confirmReceiptDialog.errors.minEntries.description"
+        )}
+        maxEntriesErrorTitle={t(
+          "downloadResponsesModals.confirmReceiptDialog.errors.maxEntries.title",
+          {
+            max: MAX_CONFIRMATION_COUNT,
+          }
+        )}
+        maxEntriesErrorDescription={t(
+          "downloadResponsesModals.confirmReceiptDialog.errors.maxEntries.description",
+          {
+            max: MAX_CONFIRMATION_COUNT,
+          }
+        )}
+        errorEntriesErrorTitle={t(
+          "downloadResponsesModals.confirmReceiptDialog.errors.errorEntries.title"
+        )}
+        errorEntriesErrorDescription={t(
+          "downloadResponsesModals.confirmReceiptDialog.errors.errorEntries.description"
+        )}
+        invalidEntryErrorTitle={t(
+          "downloadResponsesModals.confirmReceiptDialog.errors.invalidEntry.title"
+        )}
+        invalidEntryErrorDescription={t(
+          "downloadResponsesModals.confirmReceiptDialog.errors.invalidEntry.description"
+        )}
+        unknownErrorTitle={t("downloadResponsesModals.confirmReceiptDialog.errors.unknown.title")}
+        unknownErrorDescription={t(
+          "downloadResponsesModals.confirmReceiptDialog.errors.unknown.description"
+        )}
+        unknownErrorDescriptionLink={t(
+          "downloadResponsesModals.confirmReceiptDialog.errors.unknown.descriptionLink"
+        )}
       />
 
       <DownloadTableDialog
@@ -152,10 +228,6 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         apiUrl={`/api/id/${formId}/submission/report`}
         inputRegex={isFormId}
         maxEntries={MAX_REPORT_COUNT}
-        minEntriesErrorTitle={t("downloadResponsesModals.notifications.entriesLengthReportHeader")}
-        minEntriesErrorDescription={t(
-          "downloadResponsesModals.notifications.entriesLengthReportDescription"
-        )}
         title={t("downloadResponsesModals.reportProblemsDialog.title")}
         description={t("downloadResponsesModals.reportProblemsDialog.findForm")}
         inputHelp={t("downloadResponsesModals.reportProblemsDialog.enterFormNumbers", {
@@ -163,6 +235,43 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         })}
         nextSteps={t("downloadResponsesModals.reportProblemsDialog.problemReported")}
         submitButtonText={t("downloadResponsesModals.reportProblemsDialog.reportProblems")}
+        minEntriesErrorTitle={t(
+          "downloadResponsesModals.reportProblemsDialog.errors.minEntries.title"
+        )}
+        minEntriesErrorDescription={t(
+          "downloadResponsesModals.reportProblemsDialog.errors.minEntries.description"
+        )}
+        maxEntriesErrorTitle={t(
+          "downloadResponsesModals.reportProblemsDialog.errors.maxEntries.title",
+          {
+            max: MAX_REPORT_COUNT,
+          }
+        )}
+        maxEntriesErrorDescription={t(
+          "downloadResponsesModals.reportProblemsDialog.errors.maxEntries.description",
+          {
+            max: MAX_REPORT_COUNT,
+          }
+        )}
+        errorEntriesErrorTitle={t(
+          "downloadResponsesModals.reportProblemsDialog.errors.errorEntries.title"
+        )}
+        errorEntriesErrorDescription={t(
+          "downloadResponsesModals.reportProblemsDialog.errors.errorEntries.description"
+        )}
+        invalidEntryErrorTitle={t(
+          "downloadResponsesModals.reportProblemsDialog.errors.invalidEntry.title"
+        )}
+        invalidEntryErrorDescription={t(
+          "downloadResponsesModals.reportProblemsDialog.errors.invalidEntry.description"
+        )}
+        unknownErrorTitle={t("downloadResponsesModals.reportProblemsDialog.errors.unknown.title")}
+        unknownErrorDescription={t(
+          "downloadResponsesModals.reportProblemsDialog.errors.unknown.description"
+        )}
+        unknownErrorDescriptionLink={t(
+          "downloadResponsesModals.reportProblemsDialog.errors.unknown.descriptionLink"
+        )}
       />
     </>
   );

@@ -1,5 +1,5 @@
 {
-  "addElement": "Ajouter un bloc",
+  "addElement": "Ajouter",
   "addElementDialog": {
     "addButton": "Sélectionner ce bloc",
     "address": {
@@ -52,11 +52,17 @@
     },
     "date": {
       "description": "Description de la date",
-      "title": "Date"
+      "title": "Date",
+      "example": {
+        "dateValue": "mm/jj/aaaa"
+      }
     },
     "dropdown": {
       "description": "Description de la liste déroulante",
-      "title": "Liste déroulante"
+      "title": "Liste déroulante",
+      "example": {
+        "select": "Sélectionner"
+      }
     },
     "dynamicRow": {
       "description": "Le bloc de questions répétées offre aux personnes qui remplissent les formulaires la possibilité d'ajouter un ensemble de réponses similaires à une section. Ce bloc fonctionne avec une seule question ou une section de questions qui se répètent.",
@@ -124,7 +130,7 @@
   "addOptions": "Ajouter ou modifier une liste",
   "addRules": "Ajouter des règles",
   "addToSet": "Ajouter à l'ensemble",
-  "allRequired": "Tous obligatoires",
+  "allRequired": "Toutes obligatoires",
   "at": "à",
   "attestation": "Attestation légale",
   "autocompleteIsSetTo": "Le remplissage automatique est réglé :",
@@ -331,7 +337,7 @@
   "gcFormsSettings": "Paramètres",
   "gcFormsStart": "Créer",
   "gcFormsTest": "Tester",
-  "gcFormsTranslate": "Traduire",
+  "gcFormsTranslate": "Traductions",
   "ifYouAreExperiencingProblems": "Si vous rencontrez des problèmes avec votre formulaire publié, <a href=\"/fr/form-builder/support\" target=\"_blank\">veuillez contacter l’équipe de soutien.</a>.",
   "incomplete": "Incomplète",
   "inputDescription": "Description",
@@ -356,10 +362,10 @@
   "numericField": "Champ numérique  ",
   "openModal": "Ouvrir fenêtre modale",
   "option": "Option",
-  "optionText": "Texte d'option",
+  "optionText": "Option",
   "pagePreview": "Prévisualiser",
   "pageSettings": "Paramètres",
-  "pageText": "Section texte ",
+  "pageText": "Texte",
   "paragraph": "Réponse longue",
   "phoneNumber": "Numéro de téléphone",
   "placeHolderFormTitle": "Titre du formulaire",
@@ -404,7 +410,7 @@
   },
   "required": "Obligatoire",
   "responseDelivery": "Tester la réception des réponses",
-  "richText": "Section texte ",
+  "richText": "Texte",
   "richTextConfirmationTitle": "Page et message de confirmation",
   "richTextEditor": "Éditeur de texte enrichi",
   "richTextIntroTitle": "Introduction du formulaire ",
@@ -562,7 +568,7 @@
   "tooltipFormatItalic": "Italique (⌘I)",
   "tooltipFormatNumberedList": "Liste numérotée",
   "tooltipInsertLink": "Insérer un lien",
-  "translate": "Traduire",
+  "translate": "Traductions",
   "translateDescription": "Traduisez le contenu de votre formulaire côte à côte pour offrir une expérience bilingue aux personnes qui remplissent votre formulaire. ",
   "translateTitle": "Entrer la traduction",
   "unlockPublishing": "Soumettre",

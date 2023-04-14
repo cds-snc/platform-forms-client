@@ -30,7 +30,7 @@ const AdminNavLayout = ({ children, user }: AdminNavLayoutProps) => {
         </main>
       </div>
 
-      <Footer displaySLAAndSupportLinks />
+      <Footer displayFormBuilderFooter />
     </div>
   );
 };

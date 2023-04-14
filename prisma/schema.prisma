@@ -55,7 +55,7 @@ model Template {
   jsonConfig        Json
   isPublished       Boolean         @default(false)
   deliveryOption    DeliveryOption?
-  securityAttribute String          @default("Unclassified")
+  securityAttribute String          @default("Protected A")
   bearerToken       String?
   ttl               DateTime?
   apiUsers          ApiUser[]

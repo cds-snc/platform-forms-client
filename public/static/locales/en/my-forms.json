@@ -24,6 +24,10 @@
       "notTranslatedFr": "No French translation"
     },
     "lastEdited": "Last edited",
+    "deliveryOption": {
+      "email": "Responses sent to :",
+      "vault": "Form responses available for download"
+    },
     "menu": {
       "more": "More",
       "save": "Save to computer",
