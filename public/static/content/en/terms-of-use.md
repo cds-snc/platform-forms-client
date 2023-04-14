@@ -1,5 +1,4 @@
 # Terms of use
-
 The following terms apply to the use of GC Forms, a product operated by the Canadian Digital Service (CDS) at the Treasury Board of Canada Secretariat (TBS). GC Forms is available for use by Canadian federal departments and agencies to create online forms.
 
 ## Accept all conditions and risks 

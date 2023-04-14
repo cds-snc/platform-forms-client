@@ -1,5 +1,4 @@
 # Terms and conditions
-
 These terms and conditions outline the roles and responsibilities of the [Treasury Board of Canada Secretariat](https://www.canada.ca/en/treasury-board-secretariat.html) in hosting this form.  To learn about how the department or agency that published this form manages your submission, return to the form you were viewing.    
 
 ## How we protect your privacy
@@ -21,6 +20,7 @@ This form uses a third-party service provider, Google Inc. (Google Analytics). T
 Send questions about your personal information to the department or agency’s [Access to Information and Privacy Coordinator](https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-eng.asp).
 
 Send complaints about how your personal information has been handled to the [Office of the Privacy Commissioner of Canada](https://www.priv.gc.ca/en/):  
+
 &nbsp;&nbsp;&nbsp;&nbsp;[info@priv.gc.ca](mailto:info@priv.gc.ca)  
 &nbsp;&nbsp;&nbsp;&nbsp;1-800-282-1376
 
@@ -35,7 +35,6 @@ The [Treasury Board of Canada Secretariat](https://www.canada.ca/en/treasury-boa
 ## Protecting the Security of Government of Canada Websites
 
 Software programs are used to monitor network traffic and to identify unauthorized attempts to upload or change information, or otherwise cause damage. When you visit a [Treasury Board of Canada Secretariat](https://www.canada.ca/en/treasury-board-secretariat.html) website, these software programs automatically receive and temporarily store information supplied by your browser in our Web server logs for 3 months. Some of the information automatically collected by our server when you browse our website includes:
-
 - the name of the form you completed (not your response).
 - the network location and the Internet Protocol (IP) address of the computer and other devices you used to contact our website.
 - the name of the domain you used to access the Internet (.com, .org, .net, .ca, etc.).
@@ -70,7 +69,6 @@ Forms on this website were created for the purpose of submitting information rel
 ### Non-commercial reproduction
 
 Unless otherwise specified you may reproduce the materials in whole or in part for non-commercial purposes, and in any format, without charge or further permission, provided you do the following:
-
 - exercise due diligence in ensuring the accuracy of the materials reproduced.
 - indicate both the complete title of the materials reproduced, as well as the author (where available).
 - indicate that the reproduction is a copy of the version available at [URL where original document is available].
