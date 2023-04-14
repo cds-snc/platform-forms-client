@@ -27,10 +27,12 @@ describe("Test RichTextEditor", () => {
     // Setup a form with one question
     cy.get("h2").first().click();
 
-    cy.get(`[aria-label="Form introduction"]`).type("Here's some text").setSelection("some text");
+    cy.get(`[aria-label="Form introduction"]`).type("Here's some text");
+    cy.get(`[aria-label="Form introduction"]`).setSelection("some text");
     cy.get('[data-testid="link-button"]').first().click();
 
-    cy.get('[data-testid="link-editor"]').first().click().type("example.com{enter}");
+    cy.get('[data-testid="link-editor"]').first().click();
+    cy.get('[data-testid="link-editor"]').first().type("example.com{enter}");
 
     cy.get('[id^="editor-"] a').first().contains("some text");
   });
