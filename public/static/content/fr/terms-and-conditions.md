@@ -1,21 +1,23 @@
 # Conditions générales
-Ce formulaire est hébergé par le [Secrétariat du Conseil du Trésor du Canada](https://www.canada.ca/fr/secretariat-conseil-tresor.html). Lorsque vous transmettez un formulaire, nous envoyons vos renseignements au ministère ou à l’organisme responsable du formulaire.
+Les présentes conditions d’utilisation définissent les rôles et responsabilités du [Secrétariat du Conseil du Trésor du Canada](https://www.canada.ca/fr/secretariat-conseil-tresor.html) quant à l’hébergement de ce formulaire. Pour savoir comment le ministère ou l’organisme qui a publié ce formulaire gère vos réponses, revenez au formulaire que vous consultiez.  
 
-## La protection de votre vie privée
+## Protection de votre vie privée
 
-Le [Secrétariat du Conseil du Trésor du Canada](https://www.canada.ca/fr/secretariat-conseil-tresor.html) n’utilise pas les renseignements personnels que vous fournissez sur un formulaire à des fins administratives. Nous ne prenons pas de décisions concernant votre personne ou votre demande. Nous prenons des mesures de sécurité, comme le chiffrement de vos renseignements et leur suppression après 30 jours. L’[article 7 de la *Loi sur la gestion des finances publiques*](https://laws-lois.justice.gc.ca/fra/lois/f-11/) nous autorise à recueillir et à stocker des renseignements personnels.
+Lorsque vous publiez un formulaire, ce dernier est temporairement conservé dans une base de données sécurisée gérée par le [Secrétariat du Conseil du Trésor du Canada](https://www.canada.ca/fr/secretariat-conseil-tresor.html) avant d’être traité par le ministère ou l’organisme qui l’a créé. Une fois le traitement effectué, vos réponses au formulaire sont supprimées de notre base de données et le ministère ou l’organisme ayant créé le formulaire protège et conserve vos réponses conformément à ses propres politiques. 
 
-Le ministère ou l’organisme avec lequel vous communiquez protège également vos renseignements personnels. L’avis de confidentialité figurant sur le formulaire précise comment ils procèdent.
+Le [Secrétariat du Conseil du Trésor du Canada](https://www.canada.ca/fr/secretariat-conseil-tresor.html) n’utilise pas les renseignements personnels que vous inscrivez au formulaire à des fins administratives, à moins qu’il n’ait créé le formulaire et l’administre lui-même. Nous ne prenons aucune décision à votre sujet ou au sujet de vos réponses et prenons des mesures de sécurité comme le chiffrage des renseignements et leur suppression après 60 jours au maximum. L’[article 7 de la *Loi sur la gestion des finances publiques*](https://laws-lois.justice.gc.ca/fra/lois/f-11/) nous autorise à recueillir et à stocker des renseignements personnels.
 
-### Nous utilisons l’analytique Web pour améliorer votre expérience
+Le ministère ou l’organisme avec lequel vous communiquez protège également vos renseignements personnels. L’avis de confidentialité figurant sur le formulaire devrait préciser comment ils procèdent.  
 
-L’analytique Web nous renseigne sur des données telles que le type de navigateur utilisé pour visiter le site Web, les pages visitées et les liens suivis. Ces renseignements nous aident à savoir comment s’utilise notre site Web ainsi qu’à améliorer votre expérience.
+### Analytique Web pour améliorer votre expérience  
 
-Ce site a recours à un fournisseur de services tiers, Google Inc. (Google Analytics). Nous n’utilisons pas l’analytique Web pour collecter des renseignements susceptibles de vous identifier ou de vous localiser, comme votre adresse IP.
+L’analytique Web nous renseigne sur des données telles que le type de navigateur utilisé pour visiter le site Web, les pages visitées et les liens suivis. Ces renseignements nous aident à savoir comment s’utilise notre site Web afin d’améliorer votre expérience.
+
+Ce formulaire a recours à un fournisseur de services tiers, Google Inc. (Google Analytics). Les données analytiques collectées ne comprennent pas de renseignements susceptibles de vous identifier ou vous localiser, comme votre adresse IP.
 
 ### Questions ou plaintes
 
-Veuillez adresser toute question concernant l’utilisation de vos renseignements personnels et sur le Service numérique canadien au [coordonnateur ou à la coordonnatrice de l’accès à l’information et de la protection des renseignements personnels](https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-fra.asp) du ministère ou de l’organisme.
+Envoyez toute question relative à vos renseignements personnels [au coordonnateur ou à la coordonnatrice de l’accès à l’information et de la protection des renseignements personnels](https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-fra.asp) du ministère ou de l’agence dont il est question.
 
 En cas de problème lié à la gestion de vos renseignements personnels, déposez toute plainte auprès du [Commissariat à la protection de la vie privée du Canada](https://www.priv.gc.ca/fr/).  
 
@@ -28,7 +30,7 @@ Le [Secrétariat du Conseil du Trésor du Canada](https://www.canada.ca/fr/secre
 
 ## Fournir du contenu dans les langues officielles du Canada
 
-Le [Secrétariat du Conseil du Trésor du Canada](https://www.canada.ca/fr/secretariat-conseil-tresor.html) permet de créer des formulaires dans les deux langues officielles, l’anglais et le français. Les ministères et les organismes peuvent également fournir du contenu dans d’autres langues. La _[Loi sur les langues officielles](https://laws-lois.justice.gc.ca/fra/lois/o-3.01/)_, le [Règlement sur les langues officielles — communications avec le public et prestation des services](https://laws.justice.gc.ca/fra/reglements/DORS-92-48/index.html), et les [exigences de la politique du Conseil du Trésor](https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=26160) prévoient l’utilisation du français et de l’anglais pour fournir des services aux membres du public ainsi que pour communiquer avec eux. Lorsqu’il n’y a pas d’obligation de fournir du contenu dans les deux langues officielles, le contenu peut être proposé dans une seule langue officielle.
+Le [Secrétariat du Conseil du Trésor du Canada](https://www.canada.ca/fr/secretariat-conseil-tresor.html) permet de créer des formulaires dans les deux langues officielles, l’anglais et le français. La _[Loi sur les langues officielles](https://laws-lois.justice.gc.ca/fra/lois/o-3.01/)_, le [Règlement sur les langues officielles — communications avec le public et prestation des services](https://laws.justice.gc.ca/fra/reglements/DORS-92-48/index.html), et les [exigences de la politique du Conseil du Trésor](https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=26160) prévoient l’utilisation du français et de l’anglais pour fournir des services aux membres du public ainsi que pour communiquer avec eux. Lorsqu’il n’y a pas d’obligation de fournir du contenu dans les deux langues officielles, le contenu peut être proposé dans une seule langue officielle.
 
 ## Protection de la sécurité des sites Web du gouvernement du Canada
 
@@ -42,7 +44,7 @@ Des logiciels sont utilisés pour surveiller le trafic réseau et pour détecter
 - les pages auxquelles vous avez accédé et les documents que vous avez téléchargés.
 - l’adresse Internet du site à partir duquel vous avez accédé directement à notre site, le cas échéant.
 
-Dans la plupart des cas, il s’agit de données statistiques anonymes et aucune tentative n’est faite pour relier ces données (ni les adresses IP des ordinateurs et des autres appareils qui ont contacté notre site Web) à l’identité des personnes qui visitent notre site, à moins qu’une tentative d’endommager le site n’ait été détectée. Les logiciels ne sont jamais utilisés pour recueillir des renseignements personnels spécifiques tels que votre nom, votre numéro de téléphone ou votre adresse courriel.
+Dans la plupart des cas, il s’agit de données statistiques anonymes. Aucune tentative n’est faite pour relier ces données (ni les adresses IP des appareils qui ont contacté notre site Web) à l’identité des personnes qui visitent notre site, à moins qu’une tentative d’endommager le site n’ait été détectée. Les logiciels ne sont jamais utilisés pour recueillir des renseignements personnels spécifiques tels que votre nom, votre numéro de téléphone ou votre adresse électronique.
 
 Lorsque l’on détecte une menace pour le site du Service numérique canadien ou les systèmes informatiques du gouvernement du Canada, on recueille des données conformément à l’article 161 de la _[Loi sur la gestion des finances publiques](https://laws-lois.justice.gc.ca/fra/lois/f-11/)_. Si des activités criminelles sont détectées, ces données peuvent être communiquées aux autorités compétentes chargées de l’application de la loi. De tels renseignements peuvent être utilisés pour établir des statistiques sur la sécurité du réseau ainsi qu’à des fins de vérification, d’évaluation, de recherche, de planification et d’établissement de rapports, et figurent dans le [fichier de renseignements personnels POU 939 Incidents de sécurité et atteintes à la vie privée](https://www.canada.ca/fr/secretariat-conseil-tresor/services/acces-information-protection-reseignements-personnels/acces-information/renseignements-programmes-fonds-renseignements/fichiers-renseignements-personnels-ordinaires.html#pou939).
 
@@ -52,7 +54,7 @@ Le [Secrétariat du Conseil du Trésor du Canada](https://www.canada.ca/fr/secre
 
 ## Emploi de fichiers situés sur des serveurs autres que ceux du gouvernement du Canada
 
-Afin d’améliorer la fonctionnalité des sites Web du gouvernement du Canada, certains fichiers (tels que les bibliothèques à code source ouvert, les images et les scripts) peuvent être téléchargés automatiquement vers votre navigateur à l’aide d’un serveur tiers ou d’un réseau de diffusion de contenu de confiance. La diffusion de ces fichiers vise à offrir une expérience utilisateur transparente en diminuant les temps de réponse et en évitant le téléchargement de ces fichiers par chaque visiteur.
+Afin d’améliorer la fonctionnalité des sites Web du gouvernement du Canada, certains fichiers (tels que les bibliothèques à code source ouvert, les images et les scripts) peuvent être téléchargés automatiquement vers votre navigateur à l’aide d’un serveur tiers ou d’un réseau de diffusion de contenu de confiance. La diffusion de ces fichiers vise à offrir une expérience utilisateur transparente en diminuant les temps de réponse et en évitant le téléchargement de ces fichiers par chaque visiteur. 
 
 ## Hyperliens vers des sites Web autres que ceux du gouvernement du Canada
 
@@ -79,19 +81,19 @@ Une partie du contenu de ce site pourrait faire l’objet du droit d’auteur d�
 
 ### Avis concernant l’image de marque
 
-La reproduction des symboles officiels du gouvernement du Canada, y compris le mot-symbole «  Canada », les armoiries du Canada et le symbole du drapeau, à des fins commerciales ou non commerciales, est interdite sans [autorisation écrite](https://www.canada.ca/fr/secretariat-conseil-tresor/sujets/communications-gouvernementales/exigences-image-marque/protection-juridique-symboles-officiels-gouvernement-canada.html) au préalable.
+La reproduction des symboles officiels du gouvernement du Canada, y compris le mot-symbole « Canada », les armoiries du Canada et le symbole du drapeau, à des fins commerciales ou non commerciales, est interdite sans [autorisation écrite](https://www.canada.ca/fr/secretariat-conseil-tresor/sujets/communications-gouvernementales/exigences-image-marque/protection-juridique-symboles-officiels-gouvernement-canada.html) au préalable.
 
-## Intéractions et partages sur les médias sociaux
+## Interaction et communication sur les médias sociaux
 
-Votre interaction avec le gouvernement du Canada sur les médias sociaux est en partie régie par les modalités de service ou d’utilisation des tiers fournisseurs de plateformes de médias sociaux concernés, ainsi que par les modalités présentées ci-dessous. Le gouvernement du Canada n’a aucun contrôle sur les modalités de service ou d’utilisation des fournisseurs de plateformes de médias sociaux, d’où l’importance pour vous d’en prendre connaissance.
+Votre interaction avec le gouvernement du Canada sur les médias sociaux est en partie régie par les modalités de service ou d’utilisation des tiers fournisseurs de plateformes de médias sociaux concernés, ainsi que par les conditions présentées ci-dessous. Le gouvernement du Canada n’a aucun contrôle sur les modalités de service ou d’utilisation des fournisseurs de plateformes de médias sociaux, d’où l’importance pour vous d’en prendre connaissance.
 
 ### Contenu et fréquence des médias sociaux
 
-Les comptes de médias sociaux du gouvernement du Canada sont un autre moyen de diffuser le contenu affiché sur son site Web et d’échanger avec les intervenants.
+Les comptes de médias sociaux du gouvernement du Canada sont un autre moyen de diffuser le contenu affiché sur ses sites Web et d’échanger avec les intervenants. 
 
 Étant donné que les plateformes de médias sociaux et leurs serveurs sont gérés par un tiers, les comptes de médias sociaux sont sujets à des interruptions de service qui échappent au contrôle du gouvernement du Canada. Le gouvernement du Canada n’assume donc aucune responsabilité en cas de non-disponibilité des plateformes.
 
-### Liens vers d’autres sites Web et publicités provenants des médias sociaux
+### Liens vers d’autres sites Web et publicités sur les médias sociaux
 
 Les comptes de médias sociaux peuvent comporter des liens ou des annonces liés à des sites Web échappant au contrôle du gouvernement du Canada. Ces liens sont fournis aux utilisateurs uniquement par souci de commodité. Le gouvernement du Canada n’assume aucune responsabilité à l’égard de l’information obtenue au moyen de ces liens ou de ces publicités, pas plus qu’il ne cautionne ces sites et leur contenu.
 
@@ -103,13 +105,14 @@ Les comptes de médias sociaux peuvent comporter des liens ou des annonces liés
 
 Le contenu publié par le gouvernement du Canada est assujetti à la _[Loi sur le droit d’auteur](https://laws-lois.justice.gc.ca/fra/lois/c-42/index.html)_.
 
-### Protection des renseignements personnels sur les médias sociaux
+### Confidentialité sur les médias sociaux
 
-Le gouvernement du Canada utilise les médias sociaux pour étendre sa présence sur le Web. Le ou les comptes de médias sociaux sont publics et ne sont pas hébergés sur les serveurs du gouvernement du Canada. Les utilisateurs qui choisissent d’interagir avec le gouvernement du Canada, y compris le Service numérique canadien, par le biais des médias sociaux doivent lire les modalités de service et les politiques de confidentialité de ces fournisseurs de services tiers et celles de toute application utilisée pour y accéder.
+Le gouvernement du Canada utilise les médias sociaux pour étendre sa présence sur le Web. Le ou les comptes de médias sociaux sont publics et ne sont pas hébergés sur les serveurs du gouvernement du Canada. Les utilisateurs qui choisissent d’interagir avec le gouvernement du Canada par le biais des médias sociaux doivent lire les modalités de service et les politiques de confidentialité de ces fournisseurs de services tiers et celles de toute application utilisée pour y accéder.
 
-### Langues officielles sur les médias sociaux
+### Langues officielles sur les réseaux sociaux
 
 Bon nombre de plateformes de médias sociaux offrent plusieurs choix de langues et donnent des instructions pour définir des préférences. Le gouvernement du Canada respecte la _[Loi sur les langues officielles](https://laws-lois.justice.gc.ca/fra/lois/o-3.01/)_ et est déterminé à prendre les moyens nécessaires pour que son contenu soit disponible en français et en anglais et pour que la qualité soit égale dans les deux versions.
+
 
 
 **Dernière mise à jour :** 12 avril 2023
