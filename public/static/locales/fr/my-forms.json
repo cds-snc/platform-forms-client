@@ -61,8 +61,8 @@
   "dataClassification": {
     "officialRecord": "Ceci est un document officiel",
     "retainCopy": "Conservez cette copie conformément à votre politique de conservation.",
-    "unclassified": "NON CLASSIFIÉ",
-    "protectedA": "PROTÉGÉ A",
-    "protectedB": "PROTÉGÉ B"
+    "unclassified": "Non classifié",
+    "protectedA": "Protégé A",
+    "protectedB": "Protégé B"
   }
 }
