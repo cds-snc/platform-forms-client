@@ -1,5 +1,4 @@
 # Accord sur les niveaux de service 
-
 Version 2
 
 Formulaires GC est un service infonuagique créé et exploité par le Service numérique canadien (SNC) au sein du Secrétariat du Conseil du Trésor du Canada (SCT). Ce service permet aux ministères et organismes du gouvernement fédéral canadien de créer et de publier des formulaires hébergés par le SNC. 
@@ -58,7 +57,7 @@ Le SNC offrira des services d’assistance réactifs afin de surveiller les prob
   
 ### Contacts relatifs au service et temps de réponse
 
-Toutes les demandes d’assistance doivent être soumises sur notre page de [soutien](https://forms-formulaires.alpha.canada.ca/fr/form-builder/support). Le SNC répondra aux demandes dans un délai de huit heures suivant la réception de ces dernières, et ce, du lundi au vendredi, de 9 h à 17 h (heure de l’Est). Les tickets de service sont consignés dans Freshdesk. Ils seront clôturés au bout de 10 jours si aucune réponse n’est reçue de la part de l’entité cliente. 
+Toutes les demandes d’assistance doivent être soumises sur notre page de [soutien](/fr/form-builder/support). Le SNC répondra aux demandes dans un délai de huit heures suivant la réception de ces dernières, et ce, du lundi au vendredi, de 9 h à 17 h (heure de l’Est). Les tickets de service sont consignés dans Freshdesk. Ils seront clôturés au bout de 10 jours si aucune réponse n’est reçue de la part de l’entité cliente. 
 
 |Description|Première intervention|Résolution*|
 |:-|:-|:-|
@@ -84,4 +83,4 @@ Formulaires GC est un produit à code source ouvert permettant à des tiers de c
   
   
 
-**Dernière mise à jour **: 12 avril 2023
+**Dernière mise à jour :** 12 avril 2023
