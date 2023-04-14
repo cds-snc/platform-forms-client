@@ -47,6 +47,9 @@ export const Edit = () => {
     100
   );
 
+  // grab only the data we need to render the question number
+  const elementTypes = elements.map((element) => ({ id: element.id, type: element.type }));
+
   const updateValue = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setValue(e.target.value);
@@ -91,7 +94,7 @@ export const Edit = () => {
       />
       <RefsProvider>
         {elements.map((element, index: number) => {
-          const questionNumber = getQuestionNumber(element, elements);
+          const questionNumber = getQuestionNumber(element, elementTypes);
           const item = { ...element, index, questionNumber };
           return <ElementPanel item={item} key={item.id} />;
         })}
