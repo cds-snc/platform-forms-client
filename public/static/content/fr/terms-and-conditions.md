@@ -1,5 +1,4 @@
 # Conditions générales
-
 Ce formulaire est hébergé par le [Secrétariat du Conseil du Trésor du Canada](https://www.canada.ca/fr/secretariat-conseil-tresor.html). Lorsque vous transmettez un formulaire, nous envoyons vos renseignements au ministère ou à l’organisme responsable du formulaire.
 
 ## La protection de votre vie privée
@@ -34,7 +33,6 @@ Le [Secrétariat du Conseil du Trésor du Canada](https://www.canada.ca/fr/secre
 ## Protection de la sécurité des sites Web du gouvernement du Canada
 
 Des logiciels sont utilisés pour surveiller le trafic réseau et pour détecter les tentatives non autorisées de télécharger ou de modifier des données, ou de causer d’autres dommages. Lorsque vous visitez un site Web du [Secrétariat du Conseil du Trésor du Canada](https://www.canada.ca/fr/secretariat-conseil-tresor.html), ces logiciels reçoivent automatiquement les données fournies par votre navigateur et les stockent temporairement dans les journaux de notre serveur Web pendant trois mois. Parmi les données recueillies automatiquement par notre serveur lorsque vous naviguez sur notre site Web on trouve :
-
 - le nom du formulaire rempli (mais non votre réponse).
 - l’emplacement du réseau et l’adresse du protocole Internet (IP) de l’ordinateur et d’autres appareils que vous avez utilisés pour contacter notre site Web.
 - le nom du domaine que vous avez utilisé pour accéder à Internet (.com, .org, .net, .ca, etc.).
@@ -69,7 +67,6 @@ Les formulaires présents sur ce site Web ont été créés dans le but de trans
 ### Reproduction non commerciale
 
 À moins d’avis contraire, vous pouvez reproduire le contenu en totalité ou en partie à des fins non commerciales, dans tout format, sans frais ni autre permission, à condition :
-
 - de faire preuve de diligence raisonnable quant à l’exactitude du contenu reproduit.
 - d’indiquer le titre complet du contenu reproduit ainsi que son auteur (s’il y a lieu).
 - de préciser qu’il s’agit d’une reproduction de la version disponible au [adresse URL de l’emplacement du document original].
