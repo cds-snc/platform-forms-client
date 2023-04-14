@@ -8,6 +8,9 @@ import { logMessage } from "@lib/logger";
 import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
 import Link from "next/link";
 
+// TODO: Tech-Debt separate into separate dialogs for Confirm and report
+// https://github.com/cds-snc/platform-forms-client/issues/1941
+
 export interface DialogErrors {
   unknown: boolean;
   minEntries: boolean;
@@ -129,6 +132,14 @@ export const DownloadTableDialog = ({
           // only the invalid entries a lot easier in the LineItems component
           setErrorEntriesList(data.invalidConfirmationCodes);
           setEntries(data.invalidConfirmationCodes);
+
+          setErrors({ ...errors, errorEntries: true });
+          return;
+        }
+        // Report API returns success with an error and 1 or more invalid codes
+        else if (data?.invalidSubmissionNames && data.invalidSubmissionNames?.length > 0) {
+          setErrorEntriesList(data.invalidSubmissionNames);
+          setEntries(data.invalidSubmissionNames);
 
           setErrors({ ...errors, errorEntries: true });
           return;

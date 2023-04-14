@@ -207,7 +207,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
           // Refreshes getServerSideProps data without a full page reload
           router.replace(router.asPath, undefined, { scroll: false });
           toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
-        }, 500);
+        }, 1000); // Increasing to 1 second to allow more time for prod - temp work around
       });
     } catch (err) {
       logMessage.error(err as Error);
