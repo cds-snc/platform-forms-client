@@ -5,7 +5,7 @@ import Fip from "./Fip";
 import { NextPageWithLayout } from "@pages/_app";
 import SkipLink from "@components/globals/SkipLink";
 import Footer from "./Footer";
-import { FormProperties, Responses } from "@lib/types";
+import { FormProperties, Responses, SecurityAttribute } from "@lib/types";
 
 interface HTMLDownloadProps {
   formTemplate: FormProperties;
@@ -14,7 +14,7 @@ interface HTMLDownloadProps {
   // submissionID: string;
   responseID: string;
   createdAt: number;
-  securityAttribute: string;
+  securityAttribute: SecurityAttribute;
 }
 
 // Note: copy-text-to-clipboard is a very simple and clean lib and works in all browsers but

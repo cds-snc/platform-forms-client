@@ -1,9 +1,10 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
+import { SecurityAttribute } from "@lib/types";
 
 // Note: use lang prop if you want to force a specific language e.g. HTMLDownload component
 interface ProtectedWarningProps {
-  securityAttribute: string;
+  securityAttribute: SecurityAttribute;
   lang?: string;
 }
 
@@ -19,8 +20,6 @@ export const ProtectedWarning = (props: ProtectedWarningProps) => {
         return t("dataClassification.protectedA", { lng: lang });
       case "Protected B":
         return t("dataClassification.protectedB", { lng: lang });
-      default:
-        throw new Error(`Unsupported security attribute ${props.securityAttribute}`);
     }
   };
 
