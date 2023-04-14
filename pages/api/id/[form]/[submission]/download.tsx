@@ -8,7 +8,7 @@ import {
   UpdateCommand,
   UpdateCommandInput,
 } from "@aws-sdk/lib-dynamodb";
-import { MiddlewareProps, WithRequired, Responses } from "@lib/types";
+import { MiddlewareProps, WithRequired, Responses, SecurityAttribute } from "@lib/types";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import React from "react";
 import { renderToStaticNodeStream } from "react-dom/server";
@@ -87,7 +87,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
       confirmReceiptCode: string;
       responseID: string;
       submissionID: string;
-      securityAttribute: string;
+      securityAttribute: SecurityAttribute;
     } => {
       return {
         formResponse: JSON.parse(vaultResult.FormSubmission),
