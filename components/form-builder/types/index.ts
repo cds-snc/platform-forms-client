@@ -6,7 +6,7 @@ import { FormElementTypes } from "@lib/types";
 
 export interface FormElementWithIndex extends FormElement {
   index: number;
-  questionNumber: number | string | undefined;
+  questionNumber: number | string;
 }
 
 export interface UpdatePayload {

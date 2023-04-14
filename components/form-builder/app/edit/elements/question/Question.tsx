@@ -25,7 +25,7 @@ export const Question = ({
 
   return isRichText ? null : (
     <>
-      <QuestionNumber item={item} />
+      <QuestionNumber index={itemIndex} questionNumber={item.questionNumber} />
       <QuestionInput
         initialValue={title}
         index={itemIndex}
