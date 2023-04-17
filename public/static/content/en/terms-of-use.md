@@ -30,7 +30,7 @@ You are responsible for:
 
 You are responsible for:
 - Adhering to your departmental guidance for acceptable device and network use.
-- Saving a copy and confirming receipt of your form responses within 46 days of receiving a submission.
+- Saving a copy and confirming receipt of your form responses within 45 days of receiving a submission.
 - Reporting any problems with saved form responses.
 - Handling and saving form responses in accordance with your retention and disposition schedule. 
 - Accepting [GC Notify's terms of use](https://notification.canada.ca/terms). 
