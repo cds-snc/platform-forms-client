@@ -1,25 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { useTranslation } from "next-i18next";
 
 import { FormElementWithIndex } from "../../types";
-import { useTemplateStore, useModalStore } from "../../store";
-import { PanelActions, ModalButton, ModalForm, PanelBodyRoot } from "./index";
-import { Button } from "../shared";
+import { useTemplateStore } from "../../store";
+import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
+import { useIsWithin, useHandleAdd } from "@components/form-builder/hooks";
+import { useRefsContext } from "./RefsContext";
 
 export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
-  const { t } = useTranslation("form-builder");
-  const isRichText = item.type == "richText";
-  const { lang, elements, getFocusInput, updateField } = useTemplateStore((s) => ({
-    lang: s.lang,
-    updateField: s.updateField,
-    elements: s.form.elements,
-    getFocusInput: s.getFocusInput,
-  }));
-
-  const { isOpen, modals, updateModalProperties, unsetModalField } = useModalStore();
+  const { getFocusInput, setFocusInput, remove, moveUp, moveDown, duplicateElement, elements } =
+    useTemplateStore((s) => ({
+      getFocusInput: s.getFocusInput,
+      setFocusInput: s.setFocusInput,
+      remove: s.remove,
+      moveUp: s.moveUp,
+      moveDown: s.moveDown,
+      duplicateElement: s.duplicateElement,
+      elements: s.form.elements,
+    }));
 
   const [className, setClassName] = useState<string>("");
   const [ifFocus, setIfFocus] = useState<boolean>(false);
+  const { handleAddElement } = useHandleAdd();
 
   if (ifFocus === false) {
     // Only run this 1 time
@@ -38,53 +39,98 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
     setClassName(className.replace("bg-yellow-100 ", ""));
     // remove the blue outline after 2.1 seconds
     setTimeout(() => setClassName(""), 2100);
-  }, [getFocusInput]);
+  }, [className]);
 
-  useEffect(() => {
-    if (item.type != "richText") {
-      updateModalProperties(item.index, elements[item.index].properties);
-    }
-  }, [item, isOpen, isRichText]);
+  const { focusWithinProps, isWithin } = useIsWithin();
+  const { refs } = useRefsContext();
 
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  const handleSubmit = ({ item, properties }: { item: FormElementWithIndex; properties: any }) => {
-    return (e: React.MouseEvent<HTMLElement>) => {
-      e.preventDefault();
-      // replace all of "properties" with the new properties set in the ModalForm
-      updateField(`form.elements[${item.index}].properties`, properties);
-    };
-  };
-
+  /* eslint-disable jsx-a11y/no-static-element-interactions */
+  /* eslint-disable jsx-a11y/click-events-have-key-events */
   return (
     <div
-      key={lang}
-      className={`element-${item.index} ${className} border border-black max-w-[800px] h-auto -mt-1`}
+      id={`element-${item.id}`}
+      {...focusWithinProps}
+      className={`element-${item.index} ${className} group ${
+        isWithin ? "active" : ""
+      } hover:bg-violet-50 focus-within:bg-violet-50 border border-t-0 border-black max-w-[800px] h-auto relative`}
+      onClick={(e) => {
+        const el = e.target as HTMLElement;
+        if (el.tagName === "DIV") {
+          if (item.type === "richText") {
+            if (el.querySelector("[id^='editor-']")) {
+              (el?.querySelector("[id^='editor-']") as HTMLElement).focus();
+            } else if (el?.parentElement?.querySelector("[id^='editor-']")) {
+              (el?.parentElement?.querySelector("[id^='editor-']") as HTMLElement).focus();
+            }
+            return;
+          }
+
+          refs?.current?.[item.id]?.focus();
+        }
+      }}
     >
       <PanelBodyRoot item={item} />
       <PanelActions
+        subIndex={-1}
+        elements={elements}
         item={item}
-        renderSaveButton={() => (
-          <ModalButton isOpenButton={false}>
-            {modals[item.index] && (
-              <Button
-                className="mr-4"
-                onClick={handleSubmit({ item, properties: modals[item.index] })}
-              >
-                {t("save")}
-              </Button>
-            )}
-          </ModalButton>
+        handleAdd={handleAddElement}
+        handleRemove={() => {
+          const previousElement = elements[item.index - 1];
+          remove(item.id);
+
+          // if index is 0, then highlight the form title
+          if (item.index === 0) {
+            document.getElementById("formTitle")?.focus();
+            return;
+          }
+
+          // If the previous element is a rich text editor, then focus on the editor
+          if (previousElement.type === "richText") {
+            (
+              document
+                .getElementById(`element-${previousElement.id}`)
+                ?.querySelector("[id^='editor-']") as HTMLElement
+            ).focus();
+            return;
+          }
+
+          // Otherwise focus on the previous question input
+          refs && refs.current && refs.current[previousElement.id].focus();
+        }}
+        handleMoveUp={() => {
+          moveUp(item.index);
+          if (item.type === "richText") {
+            (
+              document
+                .getElementById(`element-${item.id}`)
+                ?.querySelector("[id^='editor-']") as HTMLElement
+            ).focus();
+            return;
+          }
+
+          refs && refs.current && refs.current[item.id].focus();
+        }}
+        handleMoveDown={() => {
+          moveDown(item.index);
+          if (item.type === "richText") {
+            (
+              document
+                .getElementById(`element-${item.id}`)
+                ?.querySelector("[id^='editor-']") as HTMLElement
+            ).focus();
+            return;
+          }
+          refs && refs.current && refs.current[item.id].focus();
+        }}
+        handleDuplicate={() => {
+          setFocusInput(true);
+          duplicateElement(item.index);
+        }}
+        renderMoreButton={({ item, moreButton }) => (
+          <MoreModal item={item} moreButton={moreButton} />
         )}
-      >
-        {!isRichText && modals[item.index] && (
-          <ModalForm
-            item={item}
-            properties={modals[item.index]}
-            updateModalProperties={updateModalProperties}
-            unsetModalField={unsetModalField}
-          />
-        )}
-      </PanelActions>
+      />
     </div>
   );
 };

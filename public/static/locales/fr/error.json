@@ -1,16 +1,16 @@
 {
-  "title": "Formulaires - Erreur",
+  "title": "Formulaires GC - Erreur",
   "body": "Le formulaire auquel vous essayez d'accéder n'existe pas",
   "home-link": {
     "link": "/",
-    "desc": "Retournez à la page d'accueil"
+    "desc": "Retourner à la page d'accueil"
   },
   "404": {
-    "title": "Nous n'avons pas pu trouver cette page Web",
-    "body": "Nous sommes désolés que vous vous retrouviez ici. Parfois, une page est déplacée ou supprimée."
+    "title": "Nous ne pouvons pas trouver cette page Web",
+    "body": "Nous sommes désolés que vous ayez atterri ici. Il se peut que la page soit déplacée ou supprimée."
   },
   "500": {
-    "title": "Erreur",
-    "body": "Désolé, cette page ne fonctionne pas. Veuillez réessayer plus tard."
+    "title": "Erreur inattendue",
+    "body": "Cette page ne fonctionne pas présentement. Veuillez réessayer plus tard."
   }
 }

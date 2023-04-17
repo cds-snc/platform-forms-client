@@ -48,14 +48,16 @@ export const ManagePrivileges: RawRuleOf<MongoAbility<Abilities>>[] = [
 
 export const ViewApplicationSettings: RawRuleOf<MongoAbility<Abilities>>[] = [
   { action: "view", subject: "Flag" },
+  { action: "view", subject: "Setting" },
 ];
 
 export const ManageApplicationSettings: RawRuleOf<MongoAbility<Abilities>>[] = [
   { action: "view", subject: "Flag" },
   { action: "update", subject: "Flag" },
+  { action: ["create", "view", "update", "delete"], subject: "Setting" },
 ];
 
-export const getUserPrivileges = (
+export const mockUserPrivileges = (
   permissionSet: RawRuleOf<MongoAbility<Abilities>>[],
   values: AnyObject
 ) => {

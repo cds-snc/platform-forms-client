@@ -17,8 +17,14 @@ export const RichText = ({
   primaryLanguage: Language;
 }) => {
   const { t } = useTranslation("form-builder");
-  const localizeField = useTemplateStore((s) => s.localizeField);
+  const { localizeField, propertyPath } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    propertyPath: s.propertyPath,
+  }));
   const secondaryLanguage = primaryLanguage === "en" ? "fr" : "en";
+  const field = LocalizedElementProperties.DESCRIPTION;
+  const fieldEn = localizeField(field, "en");
+  const fieldFr = localizeField(field, "fr");
 
   return (
     <>
@@ -32,18 +38,12 @@ export const RichText = ({
               id={`elements-${index}-description-${primaryLanguage}-language`}
               lang={primaryLanguage}
             >
-              {t(primaryLanguage)}
+              <>{t(primaryLanguage)}</>
             </LanguageLabel>
             <RichTextEditor
               autoFocusEditor={false}
-              path={`form.elements[${index}].properties.${localizeField(
-                LocalizedElementProperties.DESCRIPTION,
-                primaryLanguage
-              )}`}
-              content={
-                element.properties[localizeField(LocalizedElementProperties.DESCRIPTION, "en")] ??
-                ""
-              }
+              path={propertyPath(element.id, field, primaryLanguage)}
+              content={element.properties[fieldEn] ?? ""}
               lang={primaryLanguage}
               ariaLabel={t("pageText") + " " + t(primaryLanguage)}
               ariaDescribedBy={`elements-${index}-description-${primaryLanguage}-language`}
@@ -54,18 +54,12 @@ export const RichText = ({
               id={`elements-${index}-description-${secondaryLanguage}-language`}
               lang={secondaryLanguage}
             >
-              {t(secondaryLanguage)}
+              <>{t(secondaryLanguage)}</>
             </LanguageLabel>
             <RichTextEditor
               autoFocusEditor={false}
-              path={`form.elements[${index}].properties.${localizeField(
-                LocalizedElementProperties.DESCRIPTION,
-                secondaryLanguage
-              )}`}
-              content={
-                element.properties[localizeField(LocalizedElementProperties.DESCRIPTION, "fr")] ??
-                ""
-              }
+              path={propertyPath(element.id, field, secondaryLanguage)}
+              content={element.properties[fieldFr] ?? ""}
               lang={secondaryLanguage}
               ariaLabel={t("pageText") + " " + t(secondaryLanguage)}
               ariaDescribedBy={`elements-${index}-description-${secondaryLanguage}-language`}

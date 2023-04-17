@@ -2,16 +2,22 @@ import React from "react";
 import { FormElementWithIndex, LocalizedElementProperties, Language } from "@formbuilder/types";
 import { useTemplateStore } from "@formbuilder/store";
 import { QuestionInput, QuestionNumber } from "../";
+import { FormElement } from "@lib/types";
 
 export const Question = ({
   item,
+  elements,
+  elIndex,
   onQuestionChange,
+  describedById,
 }: {
   item: FormElementWithIndex;
+  elements: FormElement[];
+  elIndex?: number;
   onQuestionChange: (itemIndex: number, val: string, lang: Language) => void;
+  describedById?: string;
 }) => {
-  const { elements, localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
-    elements: s.form.elements,
+  const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
     translationLanguagePriority: s.translationLanguagePriority,
   }));
@@ -19,30 +25,20 @@ export const Question = ({
   const itemIndex = item.index;
   const isRichText = item.type === "richText";
   const properties = item.properties;
-  const description =
-    properties[localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)];
   const title =
     properties[localizeField(LocalizedElementProperties.TITLE, translationLanguagePriority)];
 
   return isRichText ? null : (
     <>
-      <QuestionNumber item={item} elements={elements} />
+      <QuestionNumber elIndex={elIndex} item={item} elements={elements} />
 
       <QuestionInput
         initialValue={title}
         index={itemIndex}
-        hasDescription={description}
+        id={item.id}
+        describedById={describedById}
         onQuestionChange={onQuestionChange}
       />
-
-      {description && !isRichText && (
-        <div
-          className="mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-gray-600"
-          id={`item${itemIndex}-describedby`}
-        >
-          {description}
-        </div>
-      )}
     </>
   );
 };

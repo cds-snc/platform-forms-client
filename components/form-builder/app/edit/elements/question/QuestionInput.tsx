@@ -1,24 +1,37 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
 import debounce from "lodash.debounce";
 
 import { Input } from "@formbuilder/app/shared";
 import { Language } from "@formbuilder/types";
 import { useTemplateStore } from "@formbuilder/store";
+import { useRefsContext } from "@formbuilder/app/edit/RefsContext";
 
 export const QuestionInput = ({
   index,
-  hasDescription,
+  id,
   initialValue,
   onQuestionChange,
+  describedById,
 }: {
   index: number;
-  hasDescription: string | undefined;
+  id: number;
   initialValue: string;
   onQuestionChange: (itemIndex: number, val: string, lang: Language) => void;
+  describedById?: string;
 }) => {
   const { t } = useTranslation("form-builder");
   const [value, setValue] = useState(initialValue);
+
+  const { refs } = useRefsContext();
+  const getRef = (element: HTMLInputElement) => {
+    if (!refs || !refs.current || !element || !id) {
+      return;
+    }
+
+    return (refs.current[id] = element);
+  };
+
   const { getFocusInput, setFocusInput, translationLanguagePriority, getLocalizationAttribute } =
     useTemplateStore((s) => ({
       setFocusInput: s.setFocusInput,
@@ -27,25 +40,26 @@ export const QuestionInput = ({
       getLocalizationAttribute: s.getLocalizationAttribute,
     }));
 
-  const input = useRef<HTMLInputElement>(null);
-
   useEffect(() => {
     // see: https://github.com/cds-snc/platform-forms-client/pull/1194/commits/cf2d08676cb9dfa7bb500f713cc16cdf653c3e93
-    if (input.current && getFocusInput()) {
-      input.current.focus();
+    if (refs && refs.current && getFocusInput()) {
+      refs.current[id].focus();
       setFocusInput(false);
     }
-  }, [getFocusInput]);
+  }, [getFocusInput, setFocusInput, id, refs]);
 
   useEffect(() => {
     setValue(initialValue);
   }, [initialValue]);
 
-  const _debounced = useCallback(
-    debounce((index, val, lang) => {
-      onQuestionChange(index, val, lang);
-    }, 100),
-    [onQuestionChange]
+  const _debounced = debounce(
+    useCallback(
+      (index: number, value: string, lang: Language) => {
+        onQuestionChange(index, value, lang);
+      },
+      [onQuestionChange]
+    ),
+    100
   );
 
   const updateValue = useCallback(
@@ -53,19 +67,21 @@ export const QuestionInput = ({
       setValue(value);
       _debounced(index, value, translationLanguagePriority);
     },
+    // exclude _debounced from the dependency array
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [setValue, translationLanguagePriority]
   );
 
   return (
     <Input
-      ref={input}
+      ref={getRef}
       type="text"
-      id={`item${index}`}
+      id={`item-${id}`}
       name={`item${index}`}
       placeholder={t("question")}
       className="w-full"
       value={value}
-      aria-describedby={hasDescription ? `item${index}-describedby` : undefined}
+      describedBy={describedById ?? undefined}
       onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateValue(index, e.target.value)}
       theme="title"
       {...getLocalizationAttribute()}

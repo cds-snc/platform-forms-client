@@ -1,4 +1,4 @@
-FROM node:16@sha256:1bbd8b82f5a78b6461d3285b62293db99ad60cf4eca35c715636d7143abb057c
+FROM node:16@sha256:8f9f25b52c7ef091463be0aee212a99917efa44b9d21fa614e3b5ef34183f131
 
 ENV NODE_ENV=production
 
@@ -15,19 +15,19 @@ RUN yarn install --silent --production=false
 RUN yarn build
 RUN yarn install --production
 
-FROM node:16@sha256:1bbd8b82f5a78b6461d3285b62293db99ad60cf4eca35c715636d7143abb057c
+FROM node:16@sha256:8f9f25b52c7ef091463be0aee212a99917efa44b9d21fa614e3b5ef34183f131
 
 COPY migrations /src
 WORKDIR /src
 RUN yarn install --silent 
 
-FROM node:16@sha256:1bbd8b82f5a78b6461d3285b62293db99ad60cf4eca35c715636d7143abb057c
+FROM node:16@sha256:8f9f25b52c7ef091463be0aee212a99917efa44b9d21fa614e3b5ef34183f131
 
 COPY flag_initialization /src
 WORKDIR /src
 RUN yarn install --silent 
 
-FROM node:16@sha256:1bbd8b82f5a78b6461d3285b62293db99ad60cf4eca35c715636d7143abb057c
+FROM node:16@sha256:8f9f25b52c7ef091463be0aee212a99917efa44b9d21fa614e3b5ef34183f131
 LABEL maintainer="-"
 
 ARG GOOGLE_CLIENT_ID
@@ -62,6 +62,7 @@ COPY next.config.js .
 COPY next-i18next.config.js .
 COPY migrations ./migrations
 COPY prisma ./prisma
+COPY form-builder-templates ./form-builder-templates
 COPY flag_initialization ./flag_initialization
 COPY --from=1 /src/node_modules ./migrations/node_modules
 COPY --from=2 /src/node_modules ./flag_initialization/node_modules

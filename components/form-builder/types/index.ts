@@ -1,6 +1,8 @@
-import { ReactElement } from "react";
+import { ComponentType, JSXElementConstructor } from "react";
 import { FormElement, ElementProperties } from "@lib/types";
 export type Language = "en" | "fr";
+
+import { FormElementTypes } from "@lib/types";
 
 export interface FormElementWithIndex extends FormElement {
   index: number;
@@ -24,13 +26,13 @@ export interface Title {
 export enum LocalizedFormProperties {
   TITLE = "title",
   REFERRER = "referrerUrl",
-  INTERNAL_TITLE = "internalTitle",
   EMAIL_SUBJECT = "emailSubject",
 }
 
 export enum LocalizedElementProperties {
   TITLE = "title",
   DESCRIPTION = "description",
+  PLACEHOLDER = "placeholder",
 }
 
 export interface LocalizedProperty {
@@ -42,15 +44,31 @@ export type publishRequiredFields =
   | "questions"
   | "privacyPolicy"
   | "confirmationMessage"
-  | "translate"
-  | "responseDelivery";
+  | "translate";
 
 export interface ElementOption {
-  id: string;
-  value: string | undefined;
-  icon?: ReactElement;
+  id:
+    | keyof typeof FormElementTypes
+    | "phone"
+    | "email"
+    | "date"
+    | "number"
+    | "repeatableQuestionSet"
+    | "attestation"
+    | "firstMiddleLastName"
+    | "name"
+    | "contact"
+    | "address";
+  value: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  icon?: JSXElementConstructor<any> | ComponentType | JSX.Element | any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  description?: JSXElementConstructor<any> | ComponentType | JSX.Element | any;
   className?: string;
+  group: { id: string; value: string };
 }
+
+export type ElementOptionsFilter = (elements: ElementOption[]) => ElementOption[];
 
 export interface DropdownLabelProps {
   ishighlighted?: boolean;

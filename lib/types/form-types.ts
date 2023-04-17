@@ -4,7 +4,7 @@
  */
 import { ChangeEvent } from "react";
 import { HTMLTextInputTypeAttribute } from "./utility-types";
-import { BetterOmit } from ".";
+import { TypeOmit } from ".";
 
 /**
  * form element types which is used to configure a single field or element in a form
@@ -64,6 +64,11 @@ export enum FormElementTypes {
   fileInput = "fileInput",
   richText = "richText",
   dynamicRow = "dynamicRow",
+  attestation = "attestation",
+  address = "address",
+  name = "name",
+  firstMiddleLastName = "firstMiddleLastName",
+  contact = "contact",
 }
 // used to define attributes for a form element or field
 export interface FormElement {
@@ -72,17 +77,12 @@ export interface FormElement {
   type: FormElementTypes;
   properties: ElementProperties;
   onchange?: (event: ChangeEvent) => void;
+  brand?: BrandProperties;
 }
 
 /**
  * types to define form configuration objects
  */
-
-// defines the fields in the object that controls how form submissions are handled
-export interface SubmissionProperties {
-  email?: string;
-  vault?: boolean;
-}
 
 // defines the fields in the object that controls form branding
 export interface BrandProperties {
@@ -102,15 +102,12 @@ export interface BrandProperties {
 export interface FormProperties {
   titleEn: string;
   titleFr: string;
-  emailSubjectEn?: string;
-  emailSubjectFr?: string;
-  version: number;
-  layout: number[];
-  brand?: BrandProperties;
-  elements: FormElement[];
-  endPage?: Record<string, string>;
   introduction?: Record<string, string>;
   privacyPolicy?: Record<string, string>;
+  confirmation?: Record<string, string>;
+  layout: number[];
+  elements: FormElement[];
+  brand?: BrandProperties;
   [key: string]:
     | string
     | number
@@ -121,23 +118,30 @@ export interface FormProperties {
     | undefined;
 }
 
+// defines the fields in the object that controls how form submissions are delivered
+export interface DeliveryOption {
+  emailAddress: string;
+  emailSubjectEn?: string;
+  emailSubjectFr?: string;
+  [key: string]: string | undefined;
+}
+
+export type SecurityAttribute = "Unclassified" | "Protected A" | "Protected B";
+
 // defines the fields for the form record that is available in authenticated spaces and backend processes
 export type FormRecord = {
   id: string;
-  bearerToken?: string;
-  internalTitleEn?: string;
-  internalTitleFr?: string;
-  isPublished: boolean;
-  submission: SubmissionProperties;
+  createdAt?: string;
+  updatedAt?: string;
+  name: string;
   form: FormProperties;
-  securityAttribute: string;
+  isPublished: boolean;
+  deliveryOption?: DeliveryOption;
+  securityAttribute: SecurityAttribute;
+  bearerToken?: string;
   reCaptchaID?: string;
-  updated_at?: string | undefined;
-  [key: string]: string | boolean | SubmissionProperties | FormProperties | undefined;
+  [key: string]: string | boolean | FormProperties | DeliveryOption | undefined;
 };
 
 // defines the fields for the form record that is available to unauthenticated users
-export type PublicFormRecord = BetterOmit<
-  FormRecord,
-  "bearerToken" | "internalTitleEn" | "internalTitleFr" | "submission"
->;
+export type PublicFormRecord = TypeOmit<FormRecord, "name" | "deliveryOption" | "bearerToken">;

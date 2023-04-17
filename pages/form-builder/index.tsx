@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetServerSideProps } from "next";
-import { unstable_getServerSession } from "next-auth";
+import { getServerSession } from "next-auth";
 import { getFullTemplateByID } from "@lib/templates";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { AccessControlError, createAbility } from "@lib/privileges";
@@ -22,7 +22,7 @@ const Page: NextPageWithLayout<PageProps> = () => {
 };
 
 Page.getLayout = (page: ReactElement) => {
-  return <Template page={page} />;
+  return <Template page={page} className="form-builder-start" />;
 };
 
 export const getServerSideProps: GetServerSideProps = async ({
@@ -38,7 +38,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     locale: locale || "en",
   };
 
-  const session = await unstable_getServerSession(req, res, authOptions);
+  const session = await getServerSession(req, res, authOptions);
 
   if (session && !session.user.acceptableUse) {
     // If they haven't agreed to Acceptable Use redirect to policy page for acceptance
@@ -52,7 +52,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 
   if (formID && session) {
     try {
-      const ability = createAbility(session.user.privileges);
+      const ability = createAbility(session);
       FormbuilderParams.initialForm = await getFullTemplateByID(ability, formID);
     } catch (e) {
       if (e instanceof AccessControlError) {
@@ -80,7 +80,8 @@ export const getServerSideProps: GetServerSideProps = async ({
   return {
     props: {
       ...FormbuilderParams,
-      ...(locale && (await serverSideTranslations(locale, ["common", "form-builder"]))),
+      ...(locale &&
+        (await serverSideTranslations(locale, ["common", "form-builder"], null, ["fr", "en"]))),
     },
   };
 };

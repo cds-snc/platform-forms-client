@@ -23,7 +23,7 @@ const Page: NextPageWithLayout<PageProps> = () => {
       router.replace(`/form-builder/settings/${id}`);
       return;
     }
-  }, [isPublished]);
+  }, [router, isPublished, id]);
 
   if (isPublished) {
     return (
@@ -41,7 +41,7 @@ const Page: NextPageWithLayout<PageProps> = () => {
 };
 
 Page.getLayout = (page: ReactElement) => {
-  return <Template page={page} />;
+  return <Template page={page} isFormBuilder />;
 };
 
 export { getServerSideProps };

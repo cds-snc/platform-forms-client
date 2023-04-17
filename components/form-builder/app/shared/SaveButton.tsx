@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 
 import { Button } from "../shared";
 import { useTemplateStore } from "../../store";
-import { useAllowPublish, useTemplateStatus, useTemplateApi } from "../../hooks";
+import { useAllowPublish, useTemplateStatus, useTemplateContext } from "../../hooks";
 import { formatDateTime } from "../../util";
 import Markdown from "markdown-to-jsx";
 
@@ -15,10 +15,10 @@ export const SaveButton = () => {
     setId: s.setId,
   }));
 
-  const { error, saveForm } = useTemplateApi();
+  const { error, saveForm } = useTemplateContext();
 
   const { status } = useSession();
-  const { t } = useTranslation(["common", "form-builder"]);
+  const { t, i18n } = useTranslation(["common", "form-builder"]);
   const { isReady, asPath } = useRouter();
   const [isStartPage, setIsStartPage] = useState(false);
   const { isSaveable } = useAllowPublish();
@@ -44,13 +44,14 @@ export const SaveButton = () => {
     }
   }, [asPath, isReady]);
 
-  const dateTime = (updatedAt && formatDateTime(new Date(updatedAt).getTime())) || [];
+  const dateTime =
+    (updatedAt && formatDateTime(new Date(updatedAt).getTime(), `${i18n.language}-CA`)) || [];
 
   return !isStartPage && isSaveable() && status === "authenticated" ? (
     <div
       data-id={id}
-      className={`mt-12 p-4 -ml-4 w-52 xl:w-40 xl:text-sm ${
-        error ? "bg-red-100" : "bg-yellow-100"
+      className={`mt-12 p-4 -ml-4 w-40 laptop:w-52 text-sm laptop:text-base ${
+        id && (error ? "bg-red-100" : "bg-yellow-100")
       }`}
     >
       <Button onClick={handleSave}>{t("saveDraft", { ns: "form-builder" })}</Button>
@@ -59,14 +60,16 @@ export const SaveButton = () => {
           <Markdown options={{ forceBlock: true }}>{error}</Markdown>
         </div>
       )}
-      {dateTime.length == 2 && (
-        <div className="mt-4 " role="alert" aria-live="polite">
-          <div className="font-bold">{t("lastSaved", { ns: "form-builder" })}</div>
-          <div className="text-sm">
-            {dateTime[0]} {t("at")} {dateTime[1]}{" "}
-          </div>
-        </div>
-      )}
+      <div className="mt-4" aria-live="polite">
+        {dateTime.length == 2 && (
+          <>
+            <div className="font-bold">{t("lastSaved", { ns: "form-builder" })}</div>
+            <div className="text-sm">
+              {dateTime[0]} {t("at")} {dateTime[1]}{" "}
+            </div>
+          </>
+        )}
+      </div>
     </div>
   ) : null;
 };

@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 
 import { FormElement, FormElementTypes, FormProperties, PropertyChoices } from "@lib/types";
 import { useAccessControl } from "@lib/hooks";
@@ -68,7 +68,7 @@ export const isFormTranslated = (form: FormProperties) => {
     }
 
     isDescriptionTranslated(form.privacyPolicy ?? {});
-    isDescriptionTranslated(form.endPage ?? {});
+    isDescriptionTranslated(form.confirmation ?? {});
 
     form.elements.forEach((element) => {
       isFormElementTranslated(element);
@@ -82,25 +82,23 @@ export const isFormTranslated = (form: FormProperties) => {
 
 export const useAllowPublish = () => {
   const { ability } = useAccessControl();
-  const { form, submission } = useTemplateStore((s) => ({
+  const { form } = useTemplateStore((s) => ({
     form: s.form,
-    submission: s.submission,
   }));
-  let email = "";
-  if (submission?.email) {
-    email = submission?.email;
-  }
 
   const userCanPublish = ability?.can("update", "FormRecord", "isPublished");
 
-  const data = {
-    title: !!form?.titleEn || !!form?.titleFr,
-    questions: !!form?.elements?.length,
-    privacyPolicy: !!form?.privacyPolicy?.descriptionEn || !!form?.privacyPolicy?.descriptionFr,
-    confirmationMessage: !!form?.endPage?.descriptionEn || !!form?.endPage?.descriptionFr,
-    translate: isFormTranslated(form),
-    responseDelivery: !!email,
-  };
+  const data = useMemo(
+    () => ({
+      title: !!form?.titleEn || !!form?.titleFr,
+      questions: !!form?.elements?.length,
+      privacyPolicy: !!form?.privacyPolicy?.descriptionEn || !!form?.privacyPolicy?.descriptionFr,
+      confirmationMessage:
+        !!form?.confirmation?.descriptionEn || !!form?.confirmation?.descriptionFr,
+      translate: isFormTranslated(form),
+    }),
+    [form]
+  );
 
   const hasData = useCallback(
     (fields: publishRequiredFields[]) => {

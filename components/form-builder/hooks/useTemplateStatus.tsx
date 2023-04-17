@@ -11,20 +11,22 @@ interface FormTemplate {
 }
 
 export const byId = async (id: string): Promise<FormTemplate | null> => {
+  if (!id) {
+    return null;
+  }
+
   try {
     const result = await axios({
-      url: "/api/templates",
+      url: `/api/templates/${id}`,
       method: "GET",
       headers: { "Content-Type": "application/json" },
-      data: { formID: id },
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     });
 
     if (result.status !== 200) {
       return null;
     }
-
-    return result?.data.find((template: FormTemplate) => template.id === id);
+    return result.data;
   } catch (err) {
     logMessage.error(err);
     return null;
@@ -48,7 +50,7 @@ export const useTemplateStatus = () => {
 
   useEffect(() => {
     getTemplateById();
-  }, [id, status]);
+  }, [id, status, getTemplateById]);
 
   return { updatedAt, getTemplateById };
 };

@@ -1,46 +1,60 @@
 {
-  "form": {
-    "version": 1,
-    "layout": [],
-    "introduction": {
-      "descriptionEn": "introduction text en",
-      "descriptionFr": "introduction text fr"
-    },
-    "titleEn": "form title",
-    "titleFr": "form title fr",
-    "elements": [
-      {
-        "id": 1,
-        "type": "radio",
-        "properties": {
-          "titleEn": "question 1",
-          "titleFr": "question 1 fr",
-          "choices": [
-            { "id": 1, "en": "q1 choice 1", "fr": "q1 choice 1 fr" },
-            { "id": 2, "en": "q1 choice 2", "fr": "q1 choice 2 fr" }
-          ],
-          "validation": { "required": false },
-          "descriptionEn": "description 1 en",
-          "descriptionFr": "description 1 fr"
-        }
-      },
-      {
-        "id": 2,
-        "type": "email",
-        "properties": {
-          "titleEn": "question 2",
-          "titleFr": "question 2 fr",
-          "choices": [{ "id": 2, "en": "q2 choice 2", "fr": "q2 choice 2 fr" }],
-          "validation": { "required": false },
-          "descriptionEn": "description 2 en",
-          "descriptionFr": "description 2 fr"
-        }
-      }
-    ],
-    "privacyPolicy": { "descriptionEn": "privacy text en", "descriptionFr": "privacy text fr" },
-    "endPage": { "descriptionEn": "confirm text en", "descriptionFr": "confirm text fr" }
+  "titleEn": "form title",
+  "titleFr": "form title fr",
+  "introduction": {
+    "descriptionEn": "introduction text en",
+    "descriptionFr": "introduction text fr"
   },
-  "submission": { "email": "test@example.com" },
-  "isPublished": false,
-  "translationLanguagePriority": "en"
+  "privacyPolicy": {
+    "descriptionEn": "privacy text en",
+    "descriptionFr": "privacy text fr"
+  },
+  "confirmation": {
+    "descriptionEn": "confirm text en",
+    "descriptionFr": "confirm text fr",
+    "referrerUrlEn": "",
+    "referrerUrlFr": ""
+  },
+  "layout": [],
+  "elements": [
+    {
+      "id": 1,
+      "type": "radio",
+      "properties": {
+        "titleEn": "question 1",
+        "titleFr": "question 1 fr",
+        "choices": [
+          { "id": 1, "en": "q1 choice 1", "fr": "q1 choice 1 fr" },
+          { "id": 2, "en": "q1 choice 2", "fr": "q1 choice 2 fr" }
+        ],
+        "validation": { "required": false },
+        "descriptionEn": "description 1 en",
+        "descriptionFr": "description 1 fr"
+      }
+    },
+    {
+      "id": 2,
+      "type": "email",
+      "properties": {
+        "titleEn": "question 2",
+        "titleFr": "question 2 fr",
+        "choices": [{ "id": 2, "en": "q2 choice 2", "fr": "q2 choice 2 fr" }],
+        "validation": { "required": false },
+        "descriptionEn": "description 2 en",
+        "descriptionFr": "description 2 fr"
+      }
+    },
+    {
+      "id": 2,
+      "type": "date",
+      "properties": {
+        "titleEn": "question 3",
+        "titleFr": "question 3 fr",
+        "choices": [],
+        "validation": { "required": false },
+        "descriptionEn": "description 3 en",
+        "descriptionFr": "description 3 fr"
+      }
+    }
+  ]
 }

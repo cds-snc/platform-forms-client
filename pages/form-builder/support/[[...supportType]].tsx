@@ -22,7 +22,7 @@ import {
   Description,
 } from "@components/forms";
 import { StyledLink } from "@components/globals/StyledLink/StyledLink";
-import { Attention } from "@components/globals/Attention/Attention";
+import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
 import { checkOne } from "@lib/cache/flags";
 
 export default function Contactus() {
@@ -36,7 +36,7 @@ export default function Contactus() {
   const handleRequest = async (
     name: string,
     email: string,
-    request: string,
+    request: [string] | string,
     description: string
   ) => {
     const token: string = (await getCsrfToken()) || "";
@@ -61,7 +61,12 @@ export default function Contactus() {
     email: Yup.string()
       .required(t("input-validation.required", { ns: "common" }))
       .email(t("input-validation.email", { ns: "common" })),
-    request: Yup.string().required(t("input-validation.required", { ns: "common" })),
+    request:
+      supportType === "contactus"
+        ? Yup.array()
+            .min(1)
+            .of(Yup.string().required(t("input-validation.required", { ns: "common" })))
+        : Yup.string().required(t("input-validation.required", { ns: "common" })),
     description: Yup.string().required(t("input-validation.required", { ns: "common" })),
   });
 
@@ -84,7 +89,11 @@ export default function Contactus() {
           </Link>
           &nbsp;{t("contactus.gcFormsTeamPart2")}
         </p>
-        <Attention type="warning" heading={t("contactus.needSupport")}>
+        <Attention
+          type={AttentionTypes.WARNING}
+          isAlert={false}
+          heading={t("contactus.needSupport")}
+        >
           {t("contactus.ifYouExperience")}&nbsp;
           <Link href={`/form-builder/support`}>{t("contactus.supportFormLink")}</Link>.
         </Attention>
@@ -115,7 +124,7 @@ export default function Contactus() {
           </legend>
           <MultipleChoiceGroup
             name="request"
-            type="radio"
+            type="checkbox"
             choicesProps={[
               {
                 id: "request-question",
@@ -181,7 +190,7 @@ export default function Contactus() {
           </Link>
           &nbsp;{t("support.gcFormsTeamPart2")}
         </p>
-        <Attention type="warning" heading={t("support.lookingForADemo")}>
+        <Attention type={AttentionTypes.WARNING} heading={t("support.lookingForADemo")}>
           {t("support.ifYouWouldLike")}&nbsp;
           <Link href={`/form-builder/support/contactus`}>{t("support.contactUs")}</Link>.
         </Attention>

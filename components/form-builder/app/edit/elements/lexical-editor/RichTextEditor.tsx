@@ -5,6 +5,10 @@ import { Language } from "../../../../types";
 import debounce from "lodash.debounce";
 import { useTranslation } from "next-i18next";
 
+const _debounced = debounce((updater) => {
+  updater();
+}, 100);
+
 export const RichTextEditor = ({
   path,
   content,
@@ -26,16 +30,6 @@ export const RichTextEditor = ({
   const [value, setValue] = useState(content);
   const { t } = useTranslation("form-builder");
 
-  const _debounced = useCallback(
-    debounce((value: string) => {
-      if (typeof value === "undefined") {
-        value = "";
-      }
-      updateField(path, value);
-    }, 100),
-    []
-  );
-
   useEffect(() => {
     setValue(content);
   }, [content]);
@@ -43,13 +37,13 @@ export const RichTextEditor = ({
   const updateValue = useCallback(
     (value: string) => {
       setValue(value);
-      _debounced(value);
+      _debounced(() => updateField(path, value));
     },
-    [setValue]
+    [setValue, path, updateField]
   );
 
   return (
-    <div className="w-full">
+    <div className="w-full bg-white">
       <Editor
         autoFocusEditor={autoFocusEditor}
         content={value}

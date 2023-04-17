@@ -12,7 +12,7 @@ import {
 } from "@aws-sdk/client-cognito-identity-provider";
 import resendConfirmation from "@pages/api/signup/resendconfirmation";
 
-const mockGetCSRFToken = mocked(getCsrfToken, true);
+const mockGetCSRFToken = mocked(getCsrfToken, { shallow: true });
 
 jest.mock("next-auth/react");
 jest.mock("@aws-sdk/client-cognito-identity-provider", () => ({
@@ -67,8 +67,12 @@ describe("/signup/resendconfirmation", () => {
     });
   });
   describe("Resend Confirmation Code", () => {
-    const mockedCognitoIdentityProviderClient: any = mocked(CognitoIdentityProviderClient, true);
-    const mockedResendConfirmationCodeCommand: any = mocked(ResendConfirmationCodeCommand, true);
+    const mockedCognitoIdentityProviderClient: any = mocked(CognitoIdentityProviderClient, {
+      shallow: true,
+    });
+    const mockedResendConfirmationCodeCommand: any = mocked(ResendConfirmationCodeCommand, {
+      shallow: true,
+    });
     const sendFunctionMock = jest.fn();
     afterEach(() => {
       mockedCognitoIdentityProviderClient.mockReset();

@@ -1,10 +1,11 @@
 {
-  "vault": false,
   "unpublishedForms": true,
   "submitToReliabilityQueue": false,
   "reCaptcha": false,
   "formTimer": false,
   "accountRegistration": true,
   "passwordReset": false,
-  "supportForms": false
+  "supportForms": false,
+  "nagware": false,
+  "experimentalBlocks": false
 }

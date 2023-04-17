@@ -1,4 +1,5 @@
 const colors = require("tailwindcss/colors");
+const defaultTheme = require("tailwindcss/defaultTheme");
 
 module.exports = {
   theme: {
@@ -139,13 +140,18 @@ module.exports = {
         input: "inset 0 0 0 2px #0535d2",
         none: "var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)",
       },
+      screens: {
+        tablet: "768px",
+        laptop: "1366px",
+        desktop: "1920px",
+      },
     },
     container: {
       center: true,
     },
     fontFamily: {
-      sans: ["lato"],
-      body: ["Noto Sans"],
+      sans: ["Lato", ...defaultTheme.fontFamily.sans],
+      body: ['"Noto Sans"'],
       mono: ["monospace"],
     },
     screens: {

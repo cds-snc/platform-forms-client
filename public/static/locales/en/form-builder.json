@@ -1,21 +1,197 @@
 {
-  "addElement": "Add element",
+  "addElement": "Add",
+  "addElementDialog": {
+    "addButton": "Select block",
+    "address": {
+      "city": "City, town or community",
+      "country": "Country",
+      "description": "Address description",
+      "label": "Address",
+      "postal": "Postal or zip code",
+      "province": "Province or state",
+      "street": {
+        "description": "Include your civic number and street name, apartment or suite, and other address details.",
+        "label": "Street address"
+      },
+      "title": "What is your address?"
+    },
+    "advancedBlocks": "Advanced blocks",
+    "allRequired": "all required",
+    "answer": "Answer...",
+    "attest": "I attest to:",
+    "attestation": {
+      "description": "Use a legal attestation block when form fillers must attest to certain conditions to continue. This block allows you to add one or several required checkboxes.",
+      "title": "Legal attestation"
+    },
+    "checkbox": {
+      "description": "Multiple choice description",
+      "title": "Multiple choice"
+    },
+    "checkboxItem": "Checkbox item",
+    "condition1": "Condition 1",
+    "condition2": "Condition 2",
+    "condition3": "Condition 3",
+    "contact": {
+      "description": "Contact description",
+      "email": {
+        "description": "Enter your email address. For example: name@example.com",
+        "label": "Email address"
+      },
+      "label": "Contact",
+      "language": {
+        "description": "We offer our services in both official languages, French and English",
+        "english": "English",
+        "french": "French",
+        "label": "What is your preferred language for communication?"
+      },
+      "phone": {
+        "description": "Enter your phone number. For example: 111-222-3333",
+        "label": "Phone number"
+      },
+      "title": "How can we contact you?"
+    },
+    "date": {
+      "description": "Date description",
+      "title": "Date",
+      "example": {
+        "dateValue": "mm/dd/yyyy"
+      }
+    },
+    "dropdown": {
+      "description": "Dropdown description",
+      "title": "Dropdown",
+      "example": {
+        "select": "Select"
+      }
+    },
+    "dynamicRow": {
+      "description": "The repeating question block provides form fillers with the option to add another set of answers to the section. This block works with one question or a section of related questions.",
+      "title": "Repeating set"
+    },
+    "example": "example",
+    "exampleElement": "block example",
+    "fileInput": {
+      "description": "File input description",
+      "label": "File input",
+      "title": "File input"
+    },
+    "firstMiddleLastName": {
+      "description": "Name description",
+      "first": {
+        "description": "First name description",
+        "label": "First name"
+      },
+      "label": "Name (3 fields)",
+      "last": {
+        "description": "Last name description",
+        "label": "Last name"
+      },
+      "middle": {
+        "description": "Middle name description",
+        "label": "Middle name"
+      },
+      "title": "What is your name?"
+    },
+    "inputBlocks": "Input blocks",
+    "layoutBlocks": "Layout blocks",
+    "listItem": "List item ",
+    "name": {
+      "description": "Include your first and last names. Middle names are optional",
+      "label": "Name",
+      "title": "What is your name?"
+    },
+    "no": "No",
+    "number": {
+      "description": "Number description",
+      "title": "Number"
+    },
+    "questionElement": "Blocks",
+    "radio": {
+      "description": "Radio buttons description",
+      "title": "Radio buttons"
+    },
+    "richText": {
+      "description": "Text for paragraphs, <a tab-index=\"-1\" href=\"#\">hyperlinks</a>, and lists.",
+      "title": "Large text"
+    },
+    "sometimes": "Sometimes",
+    "textArea": {
+      "description": "Long answer question description",
+      "title": "Long answer question"
+    },
+    "textField": {
+      "description": "Short answer question description",
+      "title": "Short answer question"
+    },
+    "yes": "Yes"
+  },
   "addMultiple": "Add multiple options",
   "addOption": "Add an option",
   "addOptions": "Add options",
   "addRules": "Add rules",
+  "addToSet": "Add to set",
+  "allRequired": "All required",
   "at": "at",
+  "attestation": "Legal attestation",
+  "autocompleteIsSetTo": "Autocomplete is set to:",
+  "autocompleteOptions": {
+    "additional-name": "Middle name",
+    "address-level1": "Province, State",
+    "address-level2": "City, town, community",
+    "address-line1": "Address line 1 (civic number and street name)",
+    "address-line2": "Address line 2 (apartment or suite)",
+    "address-line3": "Address line 3 (other address details)",
+    "bday": "Date of birth",
+    "bday-day": "Birth day",
+    "bday-month": "Birth month",
+    "bday-year": "Birth year",
+    "country": "Country code (2 letter country identifier)",
+    "country-name": "Country",
+    "email": "Email address",
+    "family-name": "Last name",
+    "given-name": "First name",
+    "honorific-prefix": "Name prefix, Mr, Mrs, Dr",
+    "honorific-suffix": "Name suffix, Jr, B.Sc,",
+    "language": "Language",
+    "name": "Full name (includes first, middle and last names)",
+    "organization-title": "Job title",
+    "phone": "Phone number",
+    "postal-code": "Postal or zip code",
+    "street-address": "Full street address (includes address lines 1-3)",
+    "url": "Website address"
+  },
+  "autocompleteWhenNotToUse": {
+    "text1": "Auto complete attributes may not work well for information the form filler does not enter regularly. Things like historical or business information may not fill in correctly.",
+    "text2": "Usability testing is a good way to understand if the rules you set cause problems with filling in forms.",
+    "title": "When not to use autocomplete"
+  },
   "backToForm": "Back to form",
+  "branding": {
+    "defaultOption": "Government of Canada",
+    "default": "(default)",
+    "heading": "Branding",
+    "notFound": "Didn’t find your department or agency on the list?",
+    "preview": "Preview of logo",
+    "select": "Select a different logo for the top of your form",
+    "submitNew": "Submit a new branding option (opens in new tab)",
+    "text1": "GC Forms displays the Government of Canada signature as the default logo at the top of your form."
+  },
   "cancel": "Cancel",
   "characterLimitDescription": "Only use a character limit when there is a good reason for limiting the number of characters users can enter.",
+  "characterLimitWhenToUse": {
+    "text1": "Evidence that users are likely to enter more information than they need to.",
+    "text2": "A legal or technical reason that means an entry must be no more than a certain number of characters.",
+    "text3": "If your users keep hitting the character limit imposed by the backend of your service then try to increase the limit rather than use a character count.",
+    "title": "Reasons for using a character limit"
+  },
   "checkboxes": "Multiple choice",
   "close": "Close",
-  "closeModal": "Close Modal",
+  "closeModal": "Close modal",
   "completed": "Completed",
-  "confirmationDescriptionItem1": "details of what happens next and when",
-  "confirmationDescriptionItem2": "contact details for the service",
-  "confirmationDescriptionItem3": "links to information or services that users are likely to need next",
-  "confirmationDescriptionItem4": "a link to your feedback form. (if you don’t have one, you can set one up using GC Forms to be launched along with your main form)",
+  "confirmationDescriptionItem1": "details of what happens next and when.",
+  "confirmationDescriptionItem2": "contact details for the service.",
+  "confirmationDescriptionItem3": "links to information or services that users are likely to need next.",
+  "confirmationDescriptionItem4": "a link to your feedback form. (if you don’t have one, you can set one up using GC Forms to be launched along with your main form).",
   "confirmationDescriptionParagraph": "The confirmation message will appear on a new page once the form has been submitted. Some useful things you can add to your confirmation page are:",
   "confirmationMessage": "Confirmation message",
   "confirmationPage": "Confirmation page",
@@ -26,39 +202,80 @@
       "description": "Provide more context.",
       "title": "Additional information"
     },
-    "email": "Your Email",
-    "gcFormsTeamLink": "Canada.ca Contact",
+    "email": "Your email",
+    "gcFormsTeamLink": "Canada.ca Contact us",
     "gcFormsTeamPart1": "The GC Forms team provides services to people who work in the government. We cannot give general advice to the public about the forms that we host. For other enquiries, go to",
-    "gcFormsTeamPart2": "us to find the department or agency that can help you.",
+    "gcFormsTeamPart2": "to find the department or agency that can help you.",
     "ifYouExperience": "If you experience technical issues, please fill out the",
-    "name": "Your Name",
-    "needSupport": "Need Support?",
+    "name": "Your name",
+    "needSupport": "Need support?",
     "request": {
-      "option1": "Ask a question about the product and how it can work in your department",
-      "option2": "Give feedback",
-      "option3": "Set up a demo to learn more about GC Forms",
+      "option1": "Request a product demo",
+      "option2": "Join our mailing list",
+      "option3": "Give feedback",
       "option4": "Other",
-      "title": "How can we help?"
+      "title": "Reason for reaching out"
     },
-    "supportFormLink": "Support Form",
-    "title": "Contact Us",
+    "supportFormLink": "Support form",
+    "title": "Contact us",
     "useThisForm": "Use this form to learn more about GC Forms and how it can work in your department."
   },
   "copyButton": "Copy to clipboard",
   "copyMessage": "(template copied)",
   "date": "Date",
   "defaultElementDescription": {
-    "date": "Enter a date like, mm/dd/yyyy",
-    "email": "Enter an email address like, name@example.com",
+    "date": "Enter a date. For example: mm/dd/yyyy",
+    "email": "Enter an email address. For example: name@example.com",
     "number": "Only enter numbers",
-    "phone": "Enter a phone number like, 111-222-3333"
+    "phone": "Enter a phone number. For example: 111-222-3333"
   },
   "description": "Description",
-  "descriptionDescription": "The description appears below the label, and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements.",
+  "descriptionDescription": "The description appears below the label and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements.",
   "didYouFindThisToolHelpful": "Did you find this tool helpful? <a href=\"/en/form-builder/contactus\" target=\"_blank\">Provide feedback</a>",
   "downloadCSV": "Export as a spreadsheet",
+  "downloadResponsesTable": {
+    "card": {
+      "noResponses": "You have not received responses",
+      "noResponsesToDownload": "There are no responses available to download."
+    },
+    "download": {
+      "atLeastOneFile": "At least one file must be selected to download.",
+      "downloadComplete": "Download complete",
+      "downloading": "Downloading",
+      "downloadingXFiles": "Downloading {{fileCount}} files",
+      "downloadXSelectedResponses": "Download {{size}} selected responses",
+      "errorDownloadingFiles": "Error downloading selected files.",
+      "trySelectingLessFiles": "Max of {{max}} files can be downloaded at once. Please try selecting fewer files."
+    },
+    "header": {
+      "confirmReceipt": "Confirm receipt",
+      "downloadResponse": "Download response",
+      "lastDownloadedBy": "Last downloaded by",
+      "number": "Number",
+      "removal": "Removal",
+      "select": "Select",
+      "status": "Status",
+      "tableTitle": "Responses for download"
+    },
+    "skipLink": "Skip the responses for download table",
+    "status": {
+      "confirmed": "Confirmed",
+      "done": "Done",
+      "downloaded": "Downloaded",
+      "new": "New",
+      "notDownloaded": "Not downloaded",
+      "notSet": "Not set",
+      "overdue": "Overdue",
+      "problem": "Problem",
+      "unconfirmed": "Unconfirmed",
+      "withinXDays": "Within {{daysLeft}} days",
+      "wontRemove": "Will not remove"
+    },
+    "unknown": "Unknown"
+  },
   "dropdown": "Dropdown list",
   "duplicate": "Duplicate",
+  "dyanamicRow": "Repeating set",
   "edit": "Edit",
   "editingIn": "Editing in:",
   "editLink": "Edit link",
@@ -68,21 +285,21 @@
   "errorSaving": "There was an error saving the form. Try again or <a href=\"/en/form-builder/support\" target=\"_blank\">contact support</a>.",
   "failedToReadFormFile": "Failed to read form file",
   "formatBold": "Format bold",
-  "formatBulletList": "Format bullet list",
-  "formatH2": "Format H2",
-  "formatH3": "Format H3",
+  "formatBulletList": "Format bulleted list",
+  "formatH2": "Format Heading 2",
+  "formatH3": "Format Heading 3",
   "formatItalic": "Format italic",
   "formatNumberedList": "Format numbered list",
   "formConfirmationMessage": "Form confirmation message",
   "formDelete": {
     "downloadButtonText": "Download a copy",
     "draft": {
-      "message1": "Deleting a form can not be undone. Your form will be removed from your forms list.",
+      "message1": "Deleting a form cannot be undone. Your form will be removed from your forms list.",
       "message2": "Download a copy of this form for your records. The saved JSON form file can be uploaded again to create a new form later."
     },
     "okay": "Delete form",
     "published": {
-      "message1": "Deleting a form can not be undone. Your form will be removed from your forms list and the internet.",
+      "message1": "Deleting a form cannot be undone. Your form will be removed from your forms list and the Internet.",
       "message2": "Download a copy of this form for your records. The saved JSON form file can be uploaded again to create a new form later.",
       "message3": "The URL of your form will change if you upload your form again."
     },
@@ -90,8 +307,6 @@
   },
   "formDeletedDialogMessage": "Form deleted",
   "formDeletedDialogMessageFailed": "Failed to delete form",
-  "formDeletedDialogOkay": "Back to home",
-  "formDeletedDialogOkayFailed": "Close",
   "formDeletedDialogTitle": "Success",
   "formDeleteDialogTitleFailed": "Error",
   "formDownload": {
@@ -122,18 +337,22 @@
   "gcFormsSettings": "Settings",
   "gcFormsStart": "Create new",
   "gcFormsTest": "Test",
-  "gcFormsTranslate": "Translate",
+  "gcFormsTranslate": "Translations",
   "ifYouAreExperiencingProblems": "If you are experiencing any problems with your published form, please <a href=\"/en/form-builder/support\" target=\"_blank\">contact support</a>.",
   "incomplete": "Incomplete",
   "inputDescription": "Description",
   "insertLink": "Insert link",
   "lastSaved": "Last saved:",
   "linkUrl": "Link URL",
-  "lockedElement": "Locked element",
+  "lockedBlock": "Locked block",
   "longAnswerText": "Long answer text",
   "mainNavAriaLabel": "Main",
   "maxCharacterLength": "Max character length: ",
   "maximumCharacterLength": "Maximum character length",
+  "maxNumberOfRows": {
+    "description": "Users can provide up to this many entries for this question.",
+    "label": "Maximum number of answers"
+  },
   "more": "More",
   "moreOptions": "More options",
   "moveDown": "Move down",
@@ -143,21 +362,22 @@
   "numericField": "Numeric field",
   "openModal": "Open Modal",
   "option": "Option",
-  "optionText": "Option text",
+  "optionText": "Option",
+  "pagePreview": "Preview",
+  "pageSettings": "Settings",
   "pageText": "Page text",
   "paragraph": "Long answer",
   "phoneNumber": "Phone number",
-  "placeHolderFormTitle": "Form Title",
-  "pagePreview": "Preview",
+  "placeHolderFormTitle": "Form title",
   "previewingIn": "Previewing in",
-  "privacyNoticeDescription": "You are responsible for drafting privacy notices that follow the requirements of the <a href=\"https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309\" target=\"_blank\">Directive on Privacy Practices</a>.",
+  "privacyNoticeDescription": "<p className=\"mb-4\">Privacy notices provide people completing your form with information about how you are handling their personal information.</p><p className=\"mb-4\">You are responsible for understanding your department or agency's responsibilities related to personal information including drafting privacy notices that follow the requirements in Section 4.2.10 of the <a href=\"https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309\" target=\"_blank\">Directive on Privacy Practices</a>.</p><p>If you are unsure about how to proceed, we recommend contacting your <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-eng.asp\" target=\"_blank\">access to information and privacy coordinator.</a></p>",
   "privacyStatement": "Privacy statement",
   "provideFeedback": "Provide feedback",
   "publish": "Publish",
   "published": "Published",
-  "publishedBack": "Back to My forms",
+  "publishedBack": "Back to Your forms",
   "publishedErrors": "Published form errors",
-  "publishedTitle": "Your form is published!",
+  "publishedTitle": "Your form is published.",
   "publishedViewLinks": "View and share your published form with these links:",
   "publishingDisablesEditing": "Publishing disables editing.",
   "publishingDisablesEditingDescription": "Once you publish, you cannot make changes to this form. If changes are needed after publishing, use the form file to create and publish a new form.",
@@ -168,11 +388,19 @@
   "publishYourFormInstructions": "You need the following items completed before you publish your form.",
   "question": "Question",
   "questions": "Questions",
+  "questionSet": {
+    "addAnother": {
+      "description": "Create a descriptive button label to let form fillers know that they can add another set of answers. For example, Add “another address”.",
+      "placeholder": "Add",
+      "title": "Button"
+    }
+  },
   "questionTitle": "Question title",
   "remove": "Remove",
+  "removeFromSet": "Remove from set",
   "removeOption": "Remove option:",
   "requestSuccess": {
-    "backToForms": "Back To Forms",
+    "backToForms": "Back to forms",
     "forOtherEnquiriesLink": "Canada.ca Contact us",
     "forOtherEnquiriesPart1": "For other enquiries, go to",
     "forOtherEnquiriesPart2": "to find the department or agency that can support you.",
@@ -190,22 +418,107 @@
   "save": "Save",
   "saveAndRequest": "Save form and request publishing ability",
   "saveDraft": "Save draft",
-  "selectElement": "Select an Element type",
-  "pageSettings": "Settings",
+  "selectAutocomplete": "Select an autocomplete attribute",
+  "selectAutocompleteHint": "This option is great when the form filler is providing personal information like their address, email or phone number.",
+  "selectElement": "Select an element type",
+  "send": "Send",
+  "settings": {
+    "formManagement": "Form management"
+  },
   "settingsDeleteButton": "Delete",
   "settingsDeleteHint": "Once you delete a form, there is no way to retrieve it back again. Please save a copy before deleting your form.",
   "settingsDeleteTitle": "Delete form",
   "settingsInvalidEmailAlertDesc1": "Must be a Government of Canada email address.",
   "settingsInvalidEmailAlertDesc2": "to register email address.",
   "settingsInvalidEmailAlertTitle": "Government email address",
-  "settingsResponseEmailTitle": "Government email address",
-  "settingsResponseHint1": "Provide a Government of Canada email address to send form responses to.",
-  "settingsResponseHint2": "In order to publish, you need to provide a response delivery destination.",
-  "settingsResponseNote": "Set response delivery before previewing delivery and publishing.",
-  "settingsResponseNotePublished": "To change the response delivery destination.",
-  "settingsResponseTitle": "Response delivery destination",
+  "settingsNavHome": "Response delivery",
+  "settingsResponseEmailTitle": "Email address",
+  "settingsResponseHint1": "Submitted responses will be emailed to this inbox.",
+  "settingsResponseDelivery": {
+    "selectClassification": "Select the data classification of your form responses",
+    "title": "Select a response delivery option",
+    "vaultOption": "Download responses from GC Forms",
+    "vaultOptionHint": {
+      "text1": "Submitted responses will appear on the",
+      "text2": "Responses page"
+    },
+    "emailOption": "Email the responses to an inbox",
+    "saveButton": "Save changes",
+    "savedSuccessMessage": "Your changes have been saved.",
+    "savedErrorMessage": "There was an error saving your changes. Please try again.",
+    "card": {
+      "title": "You cannot change settings",
+      "text1": "To change the settings of this form,",
+      "text2": "sign into your account",
+      "text3": "If you do not have a GC Forms account, ",
+      "text4": "create one now",
+      "signinButton": "Sign In",
+      "createButton": "Create an account"
+    },
+    "emailSubjectEn": {
+      "title": "English response subject line",
+      "hint": "When form responses are submitted in English."
+    },
+    "emailSubjectFr": {
+      "title": "French response subject line",
+      "hint": "When form responses are submitted in French."
+    },
+    "responseDeliveryHelp": {
+      "cta": "Help on choosing an option",
+      "title": "Choosing a response delivery option",
+      "description": "There are two options for getting submitted form responses. Use the chart below to help pick which option best fits your needs.",
+      "inbox": {
+        "title": "Email to an inbox",
+        "text1": "For up to Protected A forms",
+        "text2": "Responses are delivered directly to an inbox in real time",
+        "text3": "One inbox can receive response emails"
+      },
+      "vault": {
+        "title": "Download from GC Forms",
+        "text1": "For up to Protected B forms",
+        "text2": "Download responses within 30 days"
+      }
+    }
+  },
+  "share": {
+    "copy": "Copy",
+    "email": "Share by email",
+    "emailLabel": "Email address",
+    "enLink": "English link",
+    "formUser": "A GC Forms user",
+    "frLink": "French link",
+    "link": "Get the link",
+    "message": "People you share to will receive an email with an attached JSON file. They can view the JSON form file using GC Forms, no account required.",
+    "messageSent": "The message has been sent.",
+    "messageError": "The message failed to send. Please retry sharing.",
+    "open": "Open",
+    "seePreview": "See a preview of the email message",
+    "someone": "Someone",
+    "someoneHasShared": "{{name}} has shared a form with you on GC Forms",
+    "startOver": "Start over",
+    "stepOne": "Step 1:",
+    "stepOneDetails": "Save the attached JSON form file to your computer",
+    "stepThree": "Step 3:",
+    "stepThreeDetails": "Select 'Open a form file'.",
+    "stepTwo": "Step 2:",
+    "stepTwoDetails": "Go to <a href=\"/\" target=\"_blank\">GC Forms</a>. No account needed.",
+    "stepTwoDetailsNoHTML": "Go to GC Forms (https://forms-formulaires.alpha.canada.ca/). No account needed.",
+    "title": "Share",
+    "toPreview": "To preview this form:",
+    "unauthenticated": {
+      "copyInstructions": "Copy instructions",
+      "description": "You cannot share a form directly from GC Forms without an account. <a href=\"/auth/login\">Sign in</a> or <a href=\"/signup/register\">create an account</a> to get access to this feature and more.",
+      "downloadFormFile": "Download form file",
+      "instructions": "You can download a copy of this form file to your computer and share it through your email.",
+      "step1": "Step 1",
+      "step1Details": "Download a copy of your form as a JSON form file to your computer",
+      "step2": "Step 2",
+      "step2Details": "Copy and paste the email instructions into an email and attach the form file"
+    },
+    "unpublished": "Not available for unpublished forms"
+  },
   "shortAnswer": "Short answer",
-  "shortAnswerText": "Short answer text",
+  "shortAnswerText": "Short answer",
   "signInToTest": "<a href=\"/auth/login\">Sign in</a> to test how you can submit and view responses",
   "singleChoice": "Single choice",
   "start": "Start",
@@ -213,10 +526,15 @@
   "startFormIntro": "Add a description to your form to set expectations for those filling it out.",
   "startH2": "Design a form",
   "startH3": "Open a form file",
-  "startP1": "Start with a blank form",
-  "startP2": "See and edit a form by opening it from your computer",
+  "startP1": "Start with a blank form.",
+  "startP2": "Edit a form uploaded from your computer.",
   "submit": "Submit",
   "submittedResponsesText": "Submitted responses will be sent to {{email}}.",
+  "submittedResponsesChange": "Change where submitted responses are sent",
+  "submittedResponsesTextVault": {
+    "text1": "Clicking submit will send form responses to the",
+    "text2": "Responses page"
+  },
   "support": {
     "contactUs": "Contact us form",
     "description": {
@@ -241,16 +559,49 @@
   "test": "Test",
   "textFormatting": "Text formatting",
   "thereWasAnErrorPublishing": "There was an error publishing the form",
+  "title": "Title",
   "tooltipFormatBold": "Bold (⌘B)",
-  "tooltipFormatBulletList": "Bullet list",
+  "tooltipFormatBulletList": "Bulleted list",
   "tooltipFormatH2": "Heading 2",
   "tooltipFormatH3": "Heading 3",
   "tooltipFormatItalic": "Italic (⌘I)",
   "tooltipFormatNumberedList": "Numbered list",
   "tooltipInsertLink": "Insert link",
-  "translate": "Translate",
+  "translate": "Translations",
   "translateDescription": "Translate your form content side by side to provide a bilingual experience to those filling out your form.",
   "translateTitle": "Enter your translation",
   "unlockPublishing": "Unlock publishing",
-  "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to."
+  "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
+  "unnamedForm": "Unnamed form file",
+  "responsesNavLabel": "Responses",
+  "nagware": {
+    "restrictedDownloadAfter35Days": "Downloading will be restricted if unconfirmed responses are older than 35 days.",
+    "unsavedSubmissionsOver21DaysOld": {
+      "title": "Download and confirm receipt of responses",
+      "body1": "There are",
+      "body2": {
+        "moreThan20Responses": "new responses older than 21 days. Download and confirm receipt of 20 overdue new responses at a time.",
+        "lessThan20Responses": "new responses older than 21 days. Download and confirm receipt of all overdue new responses."
+      }
+    },
+    "unconfirmedSubmissionsOver21DaysOld": {
+      "title": "Confirm receipt of responses",
+      "body1": "There are",
+      "body2": "unconfirmed responses older than 21 days. Confirm receipt of all overdue unconfirmed responses."
+    },
+    "unsavedSubmissionsOver35DaysOld": {
+      "title": "Downloading is restricted to overdue responses until they are downloaded and confirmed",
+      "body1": "There are",
+      "body2": {
+        "moreThan20Responses": "new responses over 35 days old. Download and confirm 20 overdue responses at a time before continuing.",
+        "lessThan20Responses": "new responses over 35 days old. Download and confirm all overdue responses before continuing."
+      }
+    },
+    "unconfirmedSubmissionsOver35DaysOld": {
+      "title": "Downloading is restricted until receipt of responses is confirmed",
+      "body1": "There are",
+      "body2": "unconfirmed responses 35 days overdue. Confirm the receipt of all overdue downloaded responses before saving new ones."
+    }
+  },
+  "beforePublishMessage": "You can change these settings anytime before publishing."
 }

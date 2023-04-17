@@ -46,7 +46,7 @@ jobs:
           ref: ${{ github.sha }}
 
       - name: Checkout
-        uses: actions/checkout@dc323e67f16fb5f7663d20ff7941f27f5809e9b6 # v2.6.0
+        uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2.7.0
 
       - name: Build Form Viewer
         run: |
@@ -60,7 +60,7 @@ jobs:
 
       - name: Configure Production AWS credentials
         id: aws-form-viewer
-        uses: aws-actions/configure-aws-credentials@3654529dc6db288721684d6c54fefa0c1182728f
+        uses: aws-actions/configure-aws-credentials@f576cc9d9b10de24860b85ac5ab1277b4b570348
         with:
           aws-access-key-id: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
@@ -68,7 +68,7 @@ jobs:
 
       - name: Login to Production Amazon ECR
         id: login-ecr-production
-        uses: aws-actions/amazon-ecr-login@d2897b5335975f749897eb8cb16345b12a17042f
+        uses: aws-actions/amazon-ecr-login@618a62cc6c765c39e8afd9d444194a2ffc809046
 
       - name: Tag Images for Production
         env:

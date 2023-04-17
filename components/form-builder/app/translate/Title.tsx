@@ -8,25 +8,25 @@ import { FieldsetLegend } from ".";
 
 export const Title = ({
   element,
-  index,
   primaryLanguage,
 }: {
   element: FormElement;
-  index: number;
   primaryLanguage: Language;
 }) => {
-  const { updateField, localizeField } = useTemplateStore((s) => ({
+  const { updateField, localizeField, propertyPath } = useTemplateStore((s) => ({
     updateField: s.updateField,
     localizeField: s.localizeField,
+    propertyPath: s.propertyPath,
   }));
   const { t } = useTranslation("form-builder");
   const secondaryLanguage = primaryLanguage === "en" ? "fr" : "en";
+  const field = LocalizedElementProperties.TITLE;
 
   return (
     <>
       <fieldset>
         <FieldsetLegend>
-          {t(element.type)}: {t("questionTitle")}
+          {t(`addElementDialog.${element.type}.title`)}: {t("questionTitle")}
         </FieldsetLegend>
         <div className="flex gap-px border-b border-r border-t border-gray-300 mb-10 divide-x-2">
           <label className="sr-only" htmlFor={`element-${element.id}-title-${primaryLanguage}`}>
@@ -37,23 +37,15 @@ export const Title = ({
               lang={primaryLanguage}
               id={`element-${element.id}-title-${primaryLanguage}-language`}
             >
-              {t(primaryLanguage)}
+              <>{t(primaryLanguage)}</>
             </LanguageLabel>
             <textarea
               className="w-full p-4 h-full focus:outline-blue-focus"
               id={`element-${element.id}-title-${primaryLanguage}`}
               aria-describedby={`element-${element.id}-title-${primaryLanguage}-language`}
-              value={
-                element.properties[localizeField(LocalizedElementProperties.TITLE, primaryLanguage)]
-              }
+              value={element.properties[localizeField(field, primaryLanguage)]}
               onChange={(e) => {
-                updateField(
-                  `form.elements[${index}].properties.${localizeField(
-                    LocalizedElementProperties.TITLE,
-                    primaryLanguage
-                  )}`,
-                  e.target.value
-                );
+                updateField(propertyPath(element.id, field, primaryLanguage), e.target.value);
               }}
             />
           </div>
@@ -65,25 +57,15 @@ export const Title = ({
               lang={secondaryLanguage}
               id={`element-${element.id}-title-${secondaryLanguage}-language`}
             >
-              {t(secondaryLanguage)}
+              <>{t(secondaryLanguage)}</>
             </LanguageLabel>
             <textarea
               className="w-full p-4 h-full focus:outline-blue-focus"
               id={`element-${element.id}-title-${secondaryLanguage}`}
               aria-describedby={`element-${element.id}-title-${secondaryLanguage}-language`}
-              value={
-                element.properties[
-                  localizeField(LocalizedElementProperties.TITLE, secondaryLanguage)
-                ]
-              }
+              value={element.properties[localizeField(field, secondaryLanguage)]}
               onChange={(e) => {
-                updateField(
-                  `form.elements[${index}].properties.${localizeField(
-                    LocalizedElementProperties.TITLE,
-                    secondaryLanguage
-                  )}`,
-                  e.target.value
-                );
+                updateField(propertyPath(element.id, field, secondaryLanguage), e.target.value);
               }}
             />
           </div>

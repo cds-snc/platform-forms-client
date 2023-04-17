@@ -1,12 +1,16 @@
 {
   "footer": {
-    "terms": {
-      "link": "/en/terms-avis",
+    "terms-and-conditions": {
+      "link": "/en/terms-and-conditions",
       "desc": "Terms and conditions"
+    },
+    "terms-of-use": {
+      "link": "/en/terms-of-use",
+      "desc": "Terms of use"
     },
     "sla": {
       "link": "/en/sla",
-      "desc": "Service level agreement"
+      "desc": "Service-level agreement"
     },
     "support": {
       "link": "/en/form-builder/support",
@@ -18,33 +22,34 @@
   "fip": {
     "link": "http://canada.ca/en.html",
     "text": "Symbol of the Government of Canada",
-    "label": "Government of Canada Home page"
+    "label": "Government of Canada homepage"
   },
   "preview": {
-    "title": "Preview a Form from JSON config",
+    "title": "Preview a form from JSON config",
     "button": "Preview"
   },
-  "lang-toggle": "Language Selection",
+  "lang-toggle": "Language selection",
   "submitButton": "Submit",
   "input-validation": {
     "heading": "Please correct the errors on the page.",
-    "required": "Please complete the required field to continue.",
-    "alphanumeric": "Please enter letters and numbers only.",
+    "required": "Complete the required field to continue.",
+    "alphanumeric": "Enter letters and numbers only.",
     "text": "",
-    "number": "Please enter a numeric value.",
-    "email": "Please enter a valid email.",
-    "date": "Please enter a valid date in mm/dd/yyyy format.",
-    "phone": "Please enter a valid telephone number.",
-    "regex": "Please enter the correct format.",
-    "file-size-too-large": "Please select a smaller file.",
-    "file-type-invalid": "Please select a different file type.",
-    "too-many-characters": "Please shorten your response.",
+    "number": "Enter a number.",
+    "email": "Enter a valid email address.",
+    "date": "Enter a valid date in mm/dd/yyyy format.",
+    "phone": "Enter a valid telephone number.",
+    "regex": "Enter the correct format.",
+    "file-size-too-large": "Select a smaller file.",
+    "file-type-invalid": "Select a different file type.",
+    "too-many-characters": "Shorten the response.",
     "all-checkboxes-required": "Read and check all boxes to confirm the items in this section.",
-    "validGovEmail": "This field must be a valid government email."
+    "validGovEmail": "Enter a valid government email address.",
+    "notSameAsUserEmail": "This cannot be your email address. Enter the email of the person in charge of your team. Enter the email of the person in charge of your team. If that's you, add a colleague."
   },
   "required": "required",
   "all-required": "all checkboxes required",
-  "required-field": "Required Field",
+  "required-field": "Required field",
   "file-upload-button-text": "Upload a file",
   "file-upload-sr-only-file-selected": "Currently selected file is",
   "file-upload-no-file-selected": "No file currently selected",
@@ -54,32 +59,32 @@
   "title": "GC Forms",
   "loading": "We are processing your form submission. Please wait.",
   "spam-error": {
-    "error-part-1": "Button can not be used in less than",
+    "error-part-1": "Button cannot be used in less than",
     "error-part-2": "seconds.",
     "prompt-part-1": "Try again in",
     "prompt-part-2": "seconds.",
-    "success-message": "The button's ready.",
+    "success-message": "The button is ready.",
     "success-prompt": "You can try this button again now."
   },
   "adminNav": {
     "dashboard": "Home",
-    "formbuilder": "Form Builder",
-    "vault": "Vault",
+    "formbuilder": "Form builder",
     "users": "Users",
-    "upload": "Template Upload",
+    "upload": "Template upload",
     "templates": "Templates",
     "features": "Options",
-    "login": "Login",
-    "logout": "Logout",
+    "login": "Sign in",
+    "logout": "Sign out",
     "privileges": "Privileges",
-    "myForms": "My Forms"
+    "settings": "Settings",
+    "myForms": "Your forms"
   },
   "formElements": {
     "characterCount": {
       "part1": "You have",
       "part2": "characters left.",
-      "part1-error": "You have",
-      "part2-error": "characters too many."
+      "part1-error": "You've exceeded the limit by",
+      "part2-error": "characters."
     }
   },
   "dynamicRow": {
@@ -99,5 +104,9 @@
   },
   "continue": "Continue",
   "error": "Error",
-  "unknown": "Unknown"
+  "unknown": "Unknown",
+  "attention": {
+    "warning": "Warning",
+    "error": "Error"
+  }
 }

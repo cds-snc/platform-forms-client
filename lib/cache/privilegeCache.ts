@@ -3,8 +3,7 @@ import { getRedisInstance } from "../integration/redisConnector";
 import { Permission } from "@lib/types";
 
 // If NODE_ENV is in test mode (Jest Tests) do not use the cache
-const cacheAvailable: boolean =
-  process.env.APP_ENV !== "test" && process.env.REDIS_URL ? true : false;
+const cacheAvailable: boolean = process.env.APP_ENV !== "test" && Boolean(process.env.REDIS_URL);
 
 // Return a random number between 300 and 600  (5 - 10 minutes)
 const randomCacheExpiry = () => Math.floor(Math.random() * 300 + 300);
@@ -36,7 +35,7 @@ export const privilegeDelete = async (userID: string): Promise<void> => {
   try {
     const redis = await getRedisInstance();
 
-    redis.del(deleteParameter);
+    await redis.del(deleteParameter);
     logMessage.debug(`Deleting Cached Privileges  for ${deleteParameter}`);
   } catch (e) {
     logMessage.error(e as Error);
@@ -51,7 +50,7 @@ export const privilegePut = async (userID: string, privileges: Permission[]): Pr
   try {
     const redis = await getRedisInstance();
 
-    redis.setex(modifyParameter, randomCacheExpiry(), JSON.stringify(privileges));
+    await redis.setex(modifyParameter, randomCacheExpiry(), JSON.stringify(privileges));
     logMessage.debug(`Updating Cached Privileges for ${modifyParameter}`);
   } catch (e) {
     logMessage.error(e as Error);

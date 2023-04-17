@@ -15,9 +15,14 @@ export const Options = ({
   index: number;
   primaryLanguage: Language;
 }) => {
-  const updateField = useTemplateStore((s) => s.updateField);
+  const { updateField, propertyPath } = useTemplateStore((s) => ({
+    updateField: s.updateField,
+    propertyPath: s.propertyPath,
+  }));
   const { t } = useTranslation("form-builder");
   const secondaryLanguage = primaryLanguage === "en" ? "fr" : "en";
+
+  const path = propertyPath(element.id, "choices");
 
   return (
     <>
@@ -26,7 +31,7 @@ export const Options = ({
           <div className="choice" key={`choice-${choiceIndex}`}>
             <fieldset>
               <FieldsetLegend>
-                {t(element.type)}: {t("optionText")}
+                {t(`addElementDialog.${element.type}.title`)}: {t("optionText")}
               </FieldsetLegend>
               <div className="flex gap-px border-b border-r border-t border-gray-300 mb-10 divide-x-2">
                 <label
@@ -40,7 +45,7 @@ export const Options = ({
                     id={`element-${index}-choice-${choiceIndex}-en-language`}
                     lang={primaryLanguage}
                   >
-                    {t(primaryLanguage)}
+                    <>{t(primaryLanguage)}</>
                   </LanguageLabel>
                   <input
                     className="w-full p-4"
@@ -49,10 +54,7 @@ export const Options = ({
                     type="text"
                     value={choice[primaryLanguage]}
                     onChange={(e) => {
-                      updateField(
-                        `form.elements[${index}].properties.choices[${choiceIndex}].${primaryLanguage}`,
-                        e.target.value
-                      );
+                      updateField(`${path}[${choiceIndex}].${primaryLanguage}`, e.target.value);
                     }}
                   />
                 </div>
@@ -67,7 +69,7 @@ export const Options = ({
                     id={`element-${index}-choice-${choiceIndex}-fr-language`}
                     lang={secondaryLanguage}
                   >
-                    {t(secondaryLanguage)}
+                    <>{t(secondaryLanguage)}</>
                   </LanguageLabel>
                   <input
                     className="w-full p-4"
@@ -76,10 +78,7 @@ export const Options = ({
                     type="text"
                     value={choice[secondaryLanguage]}
                     onChange={(e) => {
-                      updateField(
-                        `form.elements[${index}].properties.choices[${choiceIndex}].${secondaryLanguage}`,
-                        e.target.value
-                      );
+                      updateField(`${path}[${choiceIndex}].${secondaryLanguage}`, e.target.value);
                     }}
                   />
                 </div>

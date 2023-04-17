@@ -1,26 +1,36 @@
 import { createStore, useStore } from "zustand";
 import { immer } from "zustand/middleware/immer";
-import { persist, StateStorage } from "zustand/middleware";
+import { persist, StateStorage, createJSONStorage } from "zustand/middleware";
 import React, { createContext, useRef, useContext } from "react";
+import { getPathString } from "../getPath";
 
 import {
   moveDown,
   moveUp,
   removeElementById,
   incrementElementId,
-  newlineToOptions,
   getSchemaFromState,
+  incrementSubElementId,
 } from "../util";
 import { Language } from "../types";
 import update from "lodash.set";
 import unset from "lodash.unset";
-import { FormElement, FormProperties, FormElementTypes, FormRecord } from "@lib/types";
+import {
+  FormElement,
+  FormProperties,
+  FormElementTypes,
+  DeliveryOption,
+  ElementProperties,
+  SecurityAttribute,
+} from "@lib/types";
 import { logMessage } from "@lib/logger";
+import { BrandProperties } from "@lib/types/form-types";
 
 const defaultField: FormElement = {
   id: 0,
   type: FormElementTypes.textField,
   properties: {
+    subElements: [],
     choices: [{ en: "", fr: "" }],
     titleEn: "",
     titleFr: "",
@@ -29,21 +39,14 @@ const defaultField: FormElement = {
     },
     descriptionEn: "",
     descriptionFr: "",
+    placeholderEn: "",
+    placeholderFr: "",
   },
 };
 
 export const defaultForm = {
-  id: "",
   titleEn: "",
   titleFr: "",
-  layout: [],
-  version: 1,
-  endPage: {
-    descriptionEn: "",
-    descriptionFr: "",
-    referrerUrlEn: "",
-    referrerUrlFr: "",
-  },
   introduction: {
     descriptionEn: "",
     descriptionFr: "",
@@ -52,10 +55,14 @@ export const defaultForm = {
     descriptionEn: "",
     descriptionFr: "",
   },
+  confirmation: {
+    descriptionEn: "",
+    descriptionFr: "",
+    referrerUrlEn: "",
+    referrerUrlFr: "",
+  },
+  layout: [],
   elements: [],
-  emailSubjectEn: "",
-  emailSubjectFr: "",
-  securityAttribute: "Unclassified",
 };
 
 export interface TemplateStoreProps {
@@ -65,11 +72,10 @@ export interface TemplateStoreProps {
   focusInput: boolean;
   _hasHydrated: boolean;
   form: FormProperties;
-  submission: {
-    email?: string;
-  };
   isPublished: boolean;
-  securityAttribute: string;
+  name: string;
+  deliveryOption?: DeliveryOption;
+  securityAttribute: SecurityAttribute;
 }
 
 export interface InitialTemplateStoreProps extends TemplateStoreProps {
@@ -82,7 +88,9 @@ export interface TemplateStoreState extends TemplateStoreProps {
   setHasHydrated: () => void;
   getFocusInput: () => boolean;
   moveUp: (index: number) => void;
+  subMoveUp: (elIndex: number, subIndex?: number) => void;
   moveDown: (index: number) => void;
+  subMoveDown: (elIndex: number, subIndex?: number) => void;
   localizeField: {
     <LocalizedProperty extends string>(
       arg: LocalizedProperty,
@@ -96,17 +104,35 @@ export interface TemplateStoreState extends TemplateStoreProps {
   setTranslationLanguagePriority: (lang: Language) => void;
   setFocusInput: (isSet: boolean) => void;
   getLocalizationAttribute: () => Record<"lang", Language> | undefined;
-  add: (index?: number) => void;
+  add: (elIndex?: number, type?: FormElementTypes, data?: FormElement) => void;
+  addSubItem: (
+    elIndex: number,
+    subIndex?: number,
+    type?: FormElementTypes,
+    data?: FormElement
+  ) => void;
   remove: (id: number) => void;
-  addChoice: (index: number) => void;
-  resetChoices: (index: number) => void;
-  removeChoice: (index: number, childIndex: number) => void;
-  updateField: (path: string, value: string | boolean) => void;
+  removeSubItem: (elIndex: number, id: number) => void;
+  addChoice: (elIndex: number) => void;
+  addSubChoice: (elIndex: number, subIndex: number) => void;
+  removeChoice: (elIndex: number, choiceIndex: number) => void;
+  removeSubChoice: (elIndex: number, subIndex: number, choiceIndex: number) => void;
+  updateField: (
+    path: string,
+    value: string | boolean | ElementProperties | BrandProperties
+  ) => void;
+  updateSecurityAttribute: (value: SecurityAttribute) => void;
+  propertyPath: (id: number, field: string, lang?: Language) => string;
   unsetField: (path: string) => void;
-  duplicateElement: (index: number) => void;
-  bulkAddChoices: (index: number, bulkChoices: string) => void;
-  importTemplate: (json: FormRecord) => void;
+  duplicateElement: (elIndex: number) => void;
+  subDuplicateElement: (elIndex: number, subIndex: number) => void;
+  importTemplate: (jsonConfig: FormProperties) => void;
   getSchema: () => string;
+  getIsPublished: () => boolean;
+  getName: () => string;
+  getDeliveryOption: () => DeliveryOption | undefined;
+  resetDeliveryOption: () => void;
+  getSecurityAttribute: () => SecurityAttribute;
   initialize: () => void;
 }
 
@@ -133,11 +159,9 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
     focusInput: false,
     _hasHydrated: false,
     form: defaultForm,
-    submission: {
-      email: "",
-    },
     isPublished: false,
-    securityAttribute: "Unclassified",
+    name: "",
+    securityAttribute: "Protected A",
   };
 
   // Ensure any required properties by Form Builder are defaulted by defaultForm
@@ -198,80 +222,168 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             set((state) => {
               update(state, path, value);
             }),
+          updateSecurityAttribute: (value) =>
+            set((state) => {
+              state.securityAttribute = value;
+            }),
+          propertyPath: (id: number, field: string, lang?: Language) => {
+            const path = getPathString(id, get().form.elements);
+            if (lang) {
+              return `${path}.${get().localizeField(field, lang)}` ?? "";
+            }
+            return `${path}.${field}` ?? "";
+          },
           unsetField: (path) =>
             set((state) => {
               unset(state, path);
             }),
-          moveUp: (index) =>
+          moveUp: (elIndex) =>
             set((state) => {
-              state.form.elements = moveUp(state.form.elements, index);
+              state.form.elements = moveUp(state.form.elements, elIndex);
             }),
-          moveDown: (index) =>
+          subMoveUp: (elIndex, subIndex = 0) =>
             set((state) => {
-              state.form.elements = moveDown(state.form.elements, index);
+              const elements = state.form.elements[elIndex].properties.subElements;
+              if (elements) {
+                state.form.elements[elIndex].properties.subElements = moveUp(elements, subIndex);
+              }
             }),
-          add: (index = 0) =>
+          moveDown: (elIndex) =>
             set((state) => {
-              state.form.elements.splice(index + 1, 0, {
+              state.form.elements = moveDown(state.form.elements, elIndex);
+            }),
+          subMoveDown: (elIndex, subIndex = 0) =>
+            set((state) => {
+              const elements = state.form.elements[elIndex].properties.subElements;
+              if (elements) {
+                state.form.elements[elIndex].properties.subElements = moveDown(elements, subIndex);
+              }
+            }),
+          add: (elIndex = 0, type = FormElementTypes.radio, data) =>
+            set((state) => {
+              state.form.elements.splice(elIndex + 1, 0, {
                 ...defaultField,
                 id: incrementElementId(state.form.elements),
-                type: FormElementTypes.radio,
+                ...data,
+                type,
+              });
+            }),
+          addSubItem: (elIndex, subIndex = 0, type = FormElementTypes.radio, data) =>
+            set((state) => {
+              // remove subElements array property given we're adding a sub item
+              const subDefaultField = { ...defaultField };
+              // eslint-disable-next-line  @typescript-eslint/no-unused-vars
+              const { subElements, ...rest } = subDefaultField.properties;
+              subDefaultField.properties = rest;
+
+              state.form.elements[elIndex].properties.subElements?.splice(subIndex + 1, 0, {
+                ...subDefaultField,
+                id: incrementSubElementId(
+                  state.form.elements[elIndex].properties.subElements || [],
+                  state.form.elements[elIndex].id
+                ),
+                ...data,
+                type,
               });
             }),
           remove: (elementId) =>
             set((state) => {
               state.form.elements = removeElementById(state.form.elements, elementId);
             }),
-          addChoice: (index) =>
+          removeSubItem: (elIndex, elementId) =>
             set((state) => {
-              state.form.elements[index].properties.choices?.push({ en: "", fr: "" });
+              const subElements = state.form.elements[elIndex].properties?.subElements;
+              if (subElements) {
+                state.form.elements[elIndex].properties.subElements = removeElementById(
+                  subElements,
+                  elementId
+                );
+              }
             }),
-          removeChoice: (index, childIndex) =>
+          addChoice: (elIndex) =>
             set((state) => {
-              state.form.elements[index].properties.choices?.splice(childIndex, 1);
+              state.form.elements[elIndex].properties.choices?.push({ en: "", fr: "" });
             }),
-          resetChoices: (index) =>
+          addSubChoice: (elIndex, subIndex) =>
             set((state) => {
-              state.form.elements[index].properties.choices = [];
+              state.form.elements[elIndex].properties.subElements?.[
+                subIndex
+              ].properties.choices?.push({ en: "", fr: "" });
             }),
-          duplicateElement: (index) => {
+          removeChoice: (elIndex, choiceIndex) =>
+            set((state) => {
+              state.form.elements[elIndex].properties.choices?.splice(choiceIndex, 1);
+            }),
+          removeSubChoice: (elIndex, subIndex, choiceIndex) =>
+            set((state) => {
+              state.form.elements[elIndex].properties.subElements?.[
+                subIndex
+              ].properties.choices?.splice(choiceIndex, 1);
+            }),
+          duplicateElement: (elIndex) => {
             set((state) => {
               // deep copy the element
-              const element = JSON.parse(JSON.stringify(state.form.elements[index]));
+              const element = JSON.parse(JSON.stringify(state.form.elements[elIndex]));
               element.id = incrementElementId(state.form.elements);
               element.properties[state.localizeField("title")] = `${
                 element.properties[state.localizeField("title")]
               } copy`;
-              state.form.elements.splice(index + 1, 0, element);
+              state.form.elements.splice(elIndex + 1, 0, element);
             });
           },
-          bulkAddChoices: (index, bulkChoices) => {
+          subDuplicateElement: (elIndex, subIndex) => {
             set((state) => {
-              const currentChoices = state.form.elements[index].properties.choices;
-              const choices = newlineToOptions(state.lang, currentChoices, bulkChoices);
-              state.form.elements[index].properties.choices = choices;
+              // deep copy the element
+              const subElements = state.form.elements[elIndex].properties.subElements;
+              if (subElements) {
+                const element = JSON.parse(JSON.stringify(subElements[subIndex]));
+                element.id = incrementElementId(subElements);
+                element.properties[state.localizeField("title")] = `${
+                  element.properties[state.localizeField("title")]
+                } copy`;
+
+                state.form.elements[elIndex].properties.subElements?.splice(
+                  subIndex + 1,
+                  0,
+                  element
+                );
+              }
             });
           },
           getSchema: () => JSON.stringify(getSchemaFromState(get()), null, 2),
+          getIsPublished: () => get().isPublished,
+          getName: () => get().name,
+          getDeliveryOption: () => get().deliveryOption,
+          resetDeliveryOption: () => {
+            set((state) => {
+              state.deliveryOption = undefined;
+            });
+          },
+          getSecurityAttribute: () => get().securityAttribute,
           initialize: () => {
             set((state) => {
               state.id = "";
               state.lang = "en";
               state.form = defaultForm;
-              state.submission = { email: "" };
               state.isPublished = false;
-              state.securityAttribute = "Unclassified";
+              state.name = "";
+              state.deliveryOption = undefined;
             });
           },
-          importTemplate: (json) =>
+          importTemplate: (jsonConfig) =>
             set((state) => {
-              state.submission = { email: json.submission?.email || "" };
-              state.form = { ...defaultForm, ...json.form };
+              state.id = "";
+              state.lang = "en";
+              state.form = { ...defaultForm, ...jsonConfig };
+              state.isPublished = false;
+              state.name = "";
+              state.securityAttribute = "Protected A";
+              state.deliveryOption = undefined;
             }),
         }),
         {
           name: "form-storage",
-          getStorage: () => storage,
+          storage: createJSONStorage(() => storage),
           onRehydrateStorage: () => {
             logMessage.debug("Template Store Hydration starting");
 

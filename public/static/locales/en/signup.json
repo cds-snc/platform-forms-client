@@ -1,7 +1,7 @@
 {
   "signUpConfirmation": {
     "title": "Check your email",
-    "resendConfirmationCodeButton": "Send a new verification code",
+    "resendConfirmationCodeButton": "Send a new security code",
     "emailHasBeenSent": "An email with a security code has been sent to",
     "confirmButton": "Continue",
     "resendConfirmationCode": {
@@ -12,48 +12,48 @@
       "confirmationCode": {
         "label": "Enter the security code to finish creating your account",
         "error": {
-          "number": "This field must be a number"
+          "number": "This must be a number"
         }
       }
     }
   },
   "signUpRegistration": {
-    "title": "Sign Up to GC Forms",
+    "title": "Create an account",
     "alreadyHaveAnAccount": "If you already have an account,",
     "alreadyHaveAnAccountLink": "sign in instead.",
     "slaAgreement": "By creating an account you agree to the",
-    "slaAgreementLink": "Service Level Agreement.",
+    "slaAgreementLink": "Service-level agreement.",
     "signUpButton": "Continue",
     "fields": {
       "username": {
         "label": "Email",
         "hint": "Must be a federal government email address",
         "error": {
-          "validGovEmail": "This field must be a valid government email."
+          "validGovEmail": "This field must be a valid federal government email."
         }
       },
       "password": {
         "label": "Password",
-        "hint": "Must be at least 8 characters with a capital, number and symbol",
+        "hint": "Must be at least 8 characters with a capital letter, number, and symbol",
         "error": {
-          "minLength": "The minimum length of the value must be 8 characters.",
-          "maxLength": "The field must be no longer than 50 characters.",
-          "oneLowerCase": "The field must contain at least 1 lowercase character.",
-          "oneUpperCase": "The field must contain at least 1 uppercase character.",
-          "oneNumber": "The field must contain at least 1 number.",
-          "oneSymbol": "The field must contain at least 1 symbol."
+          "minLength": "Password must be at least 8 characters.",
+          "maxLength": "Password must not exceed 50 characters.",
+          "oneLowerCase": "Password must contain at least 1 lowercase character.",
+          "oneUpperCase": "Password must contain at least 1 uppercase character.",
+          "oneNumber": "Password must contain at least 1 number.",
+          "oneSymbol": "Password must contain at least 1 symbol."
         }
       },
       "passwordConfirmation": {
-        "label": "Password confirmation",
+        "label": "Confirm password",
         "error": {
-          "mustMatch": "The value must match the value of the password field."
+          "mustMatch": "The entries for password must match."
         }
       },
       "name": {
         "label": "Full name",
         "error": {
-          "maxLength": "The field must be no longer than 50 characters."
+          "maxLength": "This field cannot exceed 50 characters."
         }
       }
     }
@@ -70,7 +70,7 @@
     },
     "notIncluded": {
       "title": "What's not included",
-      "paragraph1": "You cannot publish forms to the internet yet."
+      "paragraph1": "You cannot publish forms online yet."
     },
     "unlockPublishing": {
       "title": "Unlock form publishing",

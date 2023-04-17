@@ -14,9 +14,7 @@ interface JSONUploadProps {
 export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
   const { t, i18n } = useTranslation("admin-templates");
   const { form } = props;
-  // extracting `isPublished` to avoid having it displayed in the JSON
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { id: formID, isPublished, ...formConfig } = form || { id: undefined };
+  const { id: formID, form: formConfig } = form || { id: undefined };
   const [jsonConfig, setJsonConfig] = useState(formID ? JSON.stringify(formConfig, null, 2) : "");
   const [submitStatus, setSubmitStatus] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -83,15 +81,16 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
    * @throws Error if the JSON is invalid
    */
   const uploadJson = async (jsonConfig: string, formID?: string) => {
+    const url = formID ? `/api/templates/${formID}` : "/api/templates";
+
     return await axios({
-      url: "/api/templates",
+      url: url,
       method: formID ? "PUT" : "POST",
       headers: {
         "Content-Type": "application/json",
       },
       data: {
         formConfig: JSON.parse(jsonConfig),
-        formID: formID,
       },
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     });

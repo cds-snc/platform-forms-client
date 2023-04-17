@@ -8,21 +8,54 @@ jobs:
   cypress-run:
     name: Cypress
     runs-on: ubuntu-latest
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      redis:
+        # Docker Hub image
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
     env:
       # Needed for Next Auth to initialize
       NEXTAUTH_URL: http://localhost:3000
       TOKEN_SECRET: testKey
-      GOOGLE_CLIENT_ID: testClientID
-      GOOGLE_CLIENT_SECRET: testClientSecret
       APP_ENV: test
+      REDIS_URL: localhost
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/formsDB
     steps:
       - name: Checkout
         uses: actions/checkout@50fbc622fc4ef5163becd7fab6573eac35f8462e # v1.2.0
-      - uses: cypress-io/github-action@d79d2d530a66e641eb4a5f227e13bc985c60b964 # v4.2.2
+      - name: Node.JS 16
+        uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3.6.0
+        with:
+          node-version: 16
+          cache: "yarn"
+      - name: "Install dependencies"
+        run: yarn install
+      - name: Cypress Tests
+        uses: cypress-io/github-action@d79d2d530a66e641eb4a5f227e13bc985c60b964 # v4.2.2
         with:
           browser: chrome
           headed: false
-          build: yarn build
+          build: yarn build:test
           start: yarn start:test
           wait-on: "http://localhost:3000"
           config: baseUrl=http://localhost:3000

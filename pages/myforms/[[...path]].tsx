@@ -24,6 +24,7 @@ interface FormsDataItem {
   titleFr: string;
   url: string;
   date: string;
+  deliveryOption: { emailAddress?: string };
   isPublished: boolean;
 }
 interface MyFormsProps {
@@ -55,7 +56,10 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
     if (!formStateRegex.test(String(path))) {
       router.push(`/${i18n.language}/myforms/drafts`, undefined, { shallow: true });
     }
-  }, [router.query?.path]);
+    // purposely not including router in the dependency array
+    // effect should re-fire only when path changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [path]);
 
   useEffect(() => {
     const handleClick = () => {
@@ -76,11 +80,11 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
       <Head>
         <title>{t("title")}</title>
       </Head>
-      <div id="page-container" className="lg:!mx-4 xl:!mx-8">
+      <div className="mx-4 laptop:mx-32 desktop:mx-64 grow shrink-0 basis-auto">
         <div>
           <LeftNavigation />
-          <main id="content" className="ml-60 xl:ml-40 md:pl-5">
-            <h1 className="border-b-0 mb-8 md:text-h1">{t("title")}</h1>
+          <main id="content" className="ml-40 laptop:ml-60">
+            <h1 className="border-b-0 mb-8 text-h1">{t("title")}</h1>
             <div className="top-40">
               <ResumeEditingForm>
                 <StyledLink href="/form-builder/edit" className="mr-8">
@@ -126,7 +130,7 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
 };
 
 RenderMyForms.getLayout = (page: ReactElement) => {
-  return <Template page={page}></Template>;
+  return <Template page={page} className="my-forms"></Template>;
 };
 
 export const getServerSideProps = requireAuthentication(
@@ -137,16 +141,20 @@ export const getServerSideProps = requireAuthentication(
       const templates = (await getAllTemplates(ability, id)).map((template) => {
         const {
           id,
-          form: { titleEn, titleFr },
+          form: { titleEn = "", titleFr = "" },
+          name,
+          deliveryOption = { emailAddress: "" },
           isPublished,
-          updated_at,
+          updatedAt,
         } = template;
         return {
           id,
           titleEn,
           titleFr,
+          deliveryOption,
+          name,
           isPublished,
-          date: updated_at,
+          date: updatedAt,
           url: `/${locale}/id/${id}`,
         };
       });

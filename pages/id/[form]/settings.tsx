@@ -14,8 +14,6 @@ import { logMessage } from "@lib/logger";
 import { FormRecord } from "@lib/types";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
-import BearerRefresh from "@components/admin/BearerRefresh/BearerRefresh";
-import FormAccess from "@components/admin/FormAccess/FormAccess";
 import { getProperty } from "@lib/formBuilder";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 
@@ -26,13 +24,10 @@ interface FormSettingsProps {
 const handleDelete = async (formID: string) => {
   // redirect to view templates page on success
   const resp = await axios({
-    url: "/api/templates",
+    url: `/api/templates/${formID}`,
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
-    },
-    data: {
-      formID: formID,
     },
     timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
   })
@@ -75,8 +70,6 @@ const FormSettings = (props: FormSettingsProps): React.ReactElement => {
       <Tabs>
         <TabList>
           <Tab>{t("settings.tabLabels.jsonUpload")}</Tab>
-          <Tab>{t("settings.tabLabels.bearerToken")}</Tab>
-          <Tab>{t("settings.tabLabels.formAccess")}</Tab>
         </TabList>
 
         <TabPanel>
@@ -91,12 +84,6 @@ const FormSettings = (props: FormSettingsProps): React.ReactElement => {
               redirect={`/admin/view-templates`}
             />
           </div>
-        </TabPanel>
-        <TabPanel>
-          <BearerRefresh formID={formRecord.id} />
-        </TabPanel>
-        <TabPanel>
-          <FormAccess formID={formRecord.id} />
         </TabPanel>
       </Tabs>
     </>

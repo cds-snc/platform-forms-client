@@ -1,3 +1,6 @@
+import { Responses } from "./form-response-types";
+import { TypeOmit } from ".";
+
 export interface BearerTokenPayload {
   formID: string;
 }
@@ -10,3 +13,25 @@ export interface TemporaryTokenPayload {
 export type BearerResponse = {
   bearerToken: string;
 };
+
+export type VaultSubmission = {
+  formID: string;
+  submissionID: string;
+  formSubmission: Responses;
+  fileAttachments?: { fileName: string }[];
+  securityAttribute: string;
+  createdAt: number;
+  status: string;
+  confirmationCode: string;
+  name: string;
+  lastDownloadedBy: string;
+  formSubmssionLanguage?: string;
+  confirmedAt?: number;
+  downloadedAt?: number;
+  removedAt?: number;
+};
+
+export type VaultSubmissionList = TypeOmit<
+  VaultSubmission,
+  "formSubmission" | "submissionID" | "confirmationCode"
+>;

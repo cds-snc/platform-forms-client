@@ -5,6 +5,7 @@ import { signOut } from "next-auth/react";
 import { User } from "next-auth";
 import { useAccessControl } from "@lib/hooks";
 import { clearTemplateStore } from "@formbuilder/store";
+import LanguageToggle from "./LanguageToggle";
 
 type AdminNavProps = {
   user: User;
@@ -42,6 +43,13 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
             <Link href="/admin/flags">{t("adminNav.features")}</Link>
           </li>
         )}
+
+        {ability?.can("view", "Flag") && (
+          <li className="lg:pr-0 lg:pb-4 pr-8 pb-0">
+            <Link href="/admin/settings">{t("adminNav.settings")}</Link>
+          </li>
+        )}
+
         <li className="lg:pr-0 lg:pb-4 pr-8 pb-0">
           {(!user || !user.name) && (
             <Link href="/admin/login" locale={i18n.language}>
@@ -59,6 +67,9 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
               {t("adminNav.logout")}
             </button>
           )}
+        </li>
+        <li>
+          <LanguageToggle />
         </li>
       </ul>
     </nav>

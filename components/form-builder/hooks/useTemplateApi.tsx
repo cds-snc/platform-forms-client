@@ -1,57 +1,112 @@
-import React, { createContext, useState, useContext } from "react";
-import { useTemplateStore } from "../store";
-import { usePublish } from "../hooks";
-import { useTranslation } from "next-i18next";
-import { logMessage } from "@lib/logger";
+import { DeliveryOption, SecurityAttribute } from "@lib/types";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
-interface TemplateApiType {
-  error: string | null;
-  saveForm: () => Promise<string | false>;
-}
-
-const defaultTemplateApi: TemplateApiType = {
-  error: null,
-  saveForm: async () => new Promise((resolve) => resolve(false)),
+type TemplateConfig = {
+  deliveryOption?: DeliveryOption;
+  securityAttribute?: SecurityAttribute;
 };
 
-const TemplateApiContext = createContext<TemplateApiType>(defaultTemplateApi);
-
-export function TemplateApiProvider({ children }: { children: React.ReactNode }) {
-  const { t } = useTranslation(["form-builder"]);
-  const [error, setError] = useState<string | null>(null);
-  const { getSchema, id } = useTemplateStore((s) => ({
-    id: s.id,
-    getSchema: s.getSchema,
-  }));
-
-  const { uploadJson } = usePublish();
-
-  const saveForm = async () => {
+export const useTemplateApi = () => {
+  const save = async ({
+    jsonConfig,
+    name,
+    formID,
+    publish = false,
+    deliveryOption,
+    securityAttribute,
+  }: {
+    jsonConfig: string;
+    name?: string;
+    formID?: string;
+    publish?: boolean;
+    deliveryOption?: DeliveryOption;
+    securityAttribute?: SecurityAttribute;
+  }) => {
+    let formData;
     try {
-      const schema = JSON.parse(getSchema());
-      delete schema.id;
-      delete schema.isPublished;
+      formData = JSON.parse(jsonConfig);
+    } catch (e) {
+      if (e instanceof SyntaxError) {
+        return { error: new Error("failed to parse form data") };
+      }
+    }
 
-      const result = await uploadJson(JSON.stringify(schema), id);
+    try {
+      const url = formID ? `/api/templates/${formID}` : "/api/templates";
 
-      if (result && result?.error) {
-        throw result?.error as Error;
+      const data: TemplateConfig = {};
+
+      if (deliveryOption) {
+        data.deliveryOption = deliveryOption;
       }
 
-      setError(null);
-      return result?.id;
+      if (securityAttribute) {
+        data.securityAttribute = securityAttribute;
+      }
+
+      const result = await axios({
+        url: url,
+        method: formID ? "PUT" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: {
+          isPublished: publish ? true : false,
+          formConfig: formData,
+          name: name,
+          ...data,
+        },
+        timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+      });
+
+      // PUT request with a { formID, isPublished } payload will update the Form Template isPublished property
+      if (publish && formID) {
+        await axios({
+          url: url,
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          data: {
+            isPublished: true,
+          },
+          timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+        });
+      }
+
+      return { id: result?.data?.id };
     } catch (err) {
-      logMessage.error(err as Error);
-      setError(t("errorSaving"));
-      return false;
+      return { error: err as AxiosError };
     }
   };
 
-  return (
-    <TemplateApiContext.Provider value={{ error, saveForm }}>
-      {children}
-    </TemplateApiContext.Provider>
-  );
-}
+  const updateResponseDelivery = async (
+    formID: string
+  ): Promise<AxiosResponse | { error: AxiosError } | undefined> => {
+    if (!formID) {
+      return;
+    }
 
-export const useTemplateApi = () => useContext(TemplateApiContext);
+    try {
+      const url = `/api/templates/${formID}`;
+
+      const result = await axios({
+        url: url,
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: {
+          sendResponsesToVault: true,
+        },
+        timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+      });
+
+      return result.data;
+    } catch (err) {
+      return { error: err as AxiosError };
+    }
+  };
+
+  return { save, updateResponseDelivery };
+};

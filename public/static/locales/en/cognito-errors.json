@@ -1,13 +1,13 @@
 {
-  "CodeMismatchException": "The confirmation code provided does not match our records",
-  "InternalServiceException": "We've encountered an error with your request. Please try again later",
-  "TooManyRequestsException": "TooManyRequestsException",
-  "UsernameExistsException": "UsernameExistsException",
-  "ExpiredCodeException": "The confirmation code has expired. Please request a new one",
+  "CodeMismatchException": "The security code provided does not match our records.",
+  "InternalServiceException": "We've encountered an error with your request. Please try again later.",
+  "TooManyRequestsException": "Too many requests. Try again later.",
+  "UsernameExistsException": "This account already exists.",
+  "ExpiredCodeException": "The confirmation code has expired. Please request a new one.",
   "InvalidPasswordException": "This password does not comply with our password policies",
   "InvalidParameterException": {
     "sendForgotPassword": {
-      "title": "In order to reset your credentials you must first verify your email"
+      "title": "To reset your password, you must first verify your email."
     }
   },
   "UsernameOrPasswordIncorrect": {

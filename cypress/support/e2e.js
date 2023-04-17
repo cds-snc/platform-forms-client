@@ -22,6 +22,8 @@ import "./commands";
 // Import Axe-Core library
 import "cypress-axe";
 
+import flagsDefault from "../../flag_initialization/default_flag_settings.json";
+
 Cypress.on("uncaught:exception", () => {
   // returning false here prevents Cypress from
   // failing the test
@@ -29,5 +31,11 @@ Cypress.on("uncaught:exception", () => {
 });
 
 beforeEach(() => {
-  cy.useFlag("reCaptcha", false);
+  cy.login()
+    .then(() => {
+      Object.keys(flagsDefault).forEach((key) => {
+        cy.useFlag(`${key}`, flagsDefault[key], true);
+      });
+    })
+    .then(() => cy.logout());
 });

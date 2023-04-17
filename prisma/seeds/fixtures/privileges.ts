@@ -89,7 +89,10 @@ const ViewApplicationSettings: PrivilegeSeed = {
   nameFr: "VisionnerParamètresApplication",
   descriptionEn: "Permission to view application settings",
   descriptionFr: "Autorisation d''afficher les paramètres de l''application",
-  permissions: [{ action: "view", subject: "Flag" }],
+  permissions: [
+    { action: "view", subject: "Flag" },
+    { action: "view", subject: "Setting" },
+  ],
   priority: 4,
 };
 
@@ -101,29 +104,24 @@ const ManageApplicationSettings: PrivilegeSeed = {
   permissions: [
     { action: "view", subject: "Flag" },
     { action: "update", subject: "Flag" },
+    { action: ["create", "view", "update", "delete"], subject: "Setting" },
   ],
   priority: 5,
 };
 
+const allLivePrivileges = [
+  Base,
+  PublishForms,
+  ManageForms,
+  ViewUserPrivileges,
+  ManageUsers,
+  ManagePrivileges,
+  ViewApplicationSettings,
+  ManageApplicationSettings,
+];
+
 export default {
-  development: [
-    Base,
-    PublishForms,
-    ManageForms,
-    ViewUserPrivileges,
-    ManageUsers,
-    ManagePrivileges,
-    ViewApplicationSettings,
-    ManageApplicationSettings,
-  ],
-  production: [
-    Base,
-    PublishForms,
-    ManageForms,
-    ViewUserPrivileges,
-    ManageUsers,
-    ManagePrivileges,
-    ViewApplicationSettings,
-    ManageApplicationSettings,
-  ],
+  development: [...allLivePrivileges],
+  production: [...allLivePrivileges],
+  test: [...allLivePrivileges],
 } as PrivilegeCollection;

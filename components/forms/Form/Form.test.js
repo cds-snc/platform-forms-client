@@ -2,11 +2,11 @@ import React from "react";
 import { cleanup, render, screen, waitFor, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Form } from "@components/forms";
-import { submitToAPI } from "@lib/helpers";
+import { submitToAPI } from "@lib/clientHelpers";
 import { useFlag } from "@lib/hooks/useFlag";
 
-jest.mock("@lib/helpers", () => {
-  const originalModule = jest.requireActual("@lib/helpers");
+jest.mock("@lib/clientHelpers", () => {
+  const originalModule = jest.requireActual("@lib/clientHelpers");
   return {
     __esModule: true,
     ...originalModule,
@@ -30,11 +30,11 @@ jest.mock("@lib/hooks", () => {
     useFlag: jest.fn((flag) => {
       switch (flag) {
         case "formTimer":
-          return true;
+          return { isLoading: false, status: true };
         case "reCaptcha":
-          return false;
+          return { isLoading: false, status: false };
         case "submitToReliabilityQueue":
-          return false;
+          return { isLoading: false, status: false };
         default:
           return useFlag(flag);
       }
@@ -77,7 +77,7 @@ const formRecord = {
         type: "textField",
         properties: {
           titleEn: "What is your email address?",
-          titleFr: "Quelle est votre adresse électronique?",
+          titleFr: "Quelle est votre adresse courriel?",
           validation: {
             required: false,
           },

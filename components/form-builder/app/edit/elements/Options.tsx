@@ -1,10 +1,9 @@
-import React, { useState, ReactElement, useCallback } from "react";
+import React, { ReactElement } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
 
 import { useTemplateStore } from "../../../store/useTemplateStore";
 import { Option } from "./Option";
-import { BulkAdd } from "./BulkAdd";
 import { Button } from "../../shared/Button";
 import { FormElementWithIndex } from "../../../types";
 
@@ -29,33 +28,7 @@ AddButton.propTypes = {
   onClick: PropTypes.func,
 };
 
-const BulkAddButton = ({ onClick }: { onClick: (onoff: boolean) => void }) => {
-  const { t } = useTranslation("form-builder");
-  return (
-    <Button
-      className="!m-0 !mt-4"
-      theme="link"
-      onClick={() => {
-        onClick(true);
-      }}
-    >
-      {t("addMultiple")}
-    </Button>
-  );
-};
-
-BulkAddButton.propTypes = {
-  index: PropTypes.number,
-  onClick: PropTypes.func,
-};
-
-const AddOptions = ({
-  index,
-}: // toggleBulkAdd,
-{
-  index: number;
-  // toggleBulkAdd: (onoff: boolean) => void;
-}) => {
+const AddOptions = ({ index }: { index: number }) => {
   const { addChoice, setFocusInput } = useTemplateStore((s) => ({
     addChoice: s.addChoice,
     setFocusInput: s.setFocusInput,
@@ -70,11 +43,6 @@ const AddOptions = ({
           addChoice(index);
         }}
       />
-
-      {/*  
-      // feature removed for now
-      <BulkAddButton index={index} onClick={toggleBulkAdd} /> 
-      */}
     </>
   );
 };
@@ -97,15 +65,6 @@ export const Options = ({
     translationLanguagePriority: s.translationLanguagePriority,
   }));
 
-  const [bulkAddAction, setBulkAddAction] = useState(false);
-
-  const toggleBulkAdd = useCallback(
-    (toggle: boolean) => {
-      setBulkAddAction(toggle);
-    },
-    [bulkAddAction]
-  );
-
   const index = item.index;
 
   if (!elements[index]?.properties) {
@@ -115,10 +74,6 @@ export const Options = ({
 
   if (!choices) {
     return <AddOptions index={index} />;
-  }
-
-  if (bulkAddAction) {
-    return <BulkAdd index={index} toggleBulkAdd={toggleBulkAdd} choices={choices} />;
   }
 
   const options = choices.map((child, index) => {
@@ -132,6 +87,7 @@ export const Options = ({
         renderIcon={renderIcon}
         parentIndex={item.index}
         key={`child-${item.id}-${index}`}
+        id={item.id}
         index={index}
         initialValue={initialValue}
       />

@@ -5,7 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [3.0.0] 2023-04-17
+
+### Added
+
+- Form Response retrieval interface
+- Branding options for specific agencies and government entities
+- Support and Contact us pages
+- Audit Logs for user triggered events
+- HTML format Form Response file
+- Editable name for a form
+- Ability to share a form through email
+- Global application settings
+
+### Changed
+
+- Updated interface for Form Builder (form creation interface)
+- Updated Form Builder navigation
+
+### Removed
+
+- Retrieval API
+- Token and temporary token authentication
 
 ## [2.0.0] 2022-12-28
 
@@ -46,6 +67,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - Option to preview form submission email to through Notify [#1021](https://github.com/cds-snc/platform-forms-client/pull/1021)
+
+## [1.3.0] 2022-07-15
+
+### Added
+
+- Make GC Branding in Footer configurable [#847](https://github.com/cds-snc/platform-forms-client/pull/847)
+
+### Fixed
+
+- Added CSRF token requirement to `api/log` endpoint [#835](https://github.com/cds-snc/platform-forms-client/pull/835)
+- Welcome page link to design system (storybook) [#844](https://github.com/cds-snc/platform-forms-client/pull/844)
+- Fix retrieval API [#845](https://github.com/cds-snc/platform-forms-client/pull/845)
+- Fix loading of csp scripts to happen after Dom is loaded [#848](https://github.com/cds-snc/platform-forms-client/pull/848)
+- Fix remaining characters display issue
+
+## [No Release Version] 2022-06-14
 
 ## [1.3.0] 2022-07-15
 
@@ -234,7 +271,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Create secure API to retrieve bearer token for a specific form [#525](https://github.com/cds-snc/platform-forms-client/pull/525)
 - Add bearer token to templates [#526](https://github.com/cds-snc/platform-forms-client/pull/526)
 
-### Fixed
+### Fixed
 
 ### Changed
 

@@ -4,13 +4,10 @@ export const useDeleteForm = () => {
   const handleDelete = async (formID?: string): Promise<AxiosResponse | { error: AxiosError }> => {
     try {
       const result = await axios({
-        url: "/api/templates",
+        url: `/api/templates/${formID}`,
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-        },
-        data: {
-          formID: formID,
         },
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       });

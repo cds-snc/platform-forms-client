@@ -19,7 +19,7 @@ export const TabsList = (props: TabsProps): React.ReactElement => {
         })
       );
     }
-  }, [tabsListRef.current]);
+  }, []);
 
   // Note: the only purpose of the tabIndex is to have the eslint tests pass
   return (

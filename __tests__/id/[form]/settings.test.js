@@ -2,7 +2,7 @@
 Refactored out into Page Component vs Server Component
 
 https://github.com/nextauthjs/next-auth/issues/4866
-unstable_getServerSession breaks Jest tests due to "node_modules/jose/" dependency
+getServerSession breaks Jest tests due to "node_modules/jose/" dependency
 
 Thile file tests a NextJS Page which requires both serverside and client side dependencies.
 The 'jose' lib in next-auth loads the browser version because the test environment is set to 'jsdom'.
@@ -41,8 +41,14 @@ describe("Form Settings Page", () => {
   afterEach(cleanup);
   const form = {
     id: "test0form00000id000asdf11",
+    form: validFormTemplate,
     isPublished: true,
-    ...validFormTemplate,
+    deliveryOption: {
+      emailAddress: "",
+      emailSubjectEn: "",
+      emailSubjectFr: "",
+    },
+    securityAttribute: "Unclassified",
   };
   test("renders without errors", () => {
     useRouter.mockImplementation(() => ({
@@ -75,7 +81,7 @@ describe("Form Settings Page", () => {
     await user.click(screen.queryByTestId("confirmDelete"));
     expect(mockedAxios.mock.calls.length).toBe(1);
     expect(mockedAxios).toHaveBeenCalledWith(
-      expect.objectContaining({ url: "/api/templates", method: "DELETE" })
+      expect.objectContaining({ url: "/api/templates/test0form00000id000asdf11", method: "DELETE" })
     );
     await waitFor(() => {
       expect(push).toHaveBeenCalled();
@@ -100,7 +106,7 @@ describe("Form Settings Page", () => {
     spy.mockRestore();
     expect(mockedAxios.mock.calls.length).toBe(1);
     expect(mockedAxios).toHaveBeenCalledWith(
-      expect.objectContaining({ url: "/api/templates", method: "DELETE" })
+      expect.objectContaining({ url: "/api/templates/test0form00000id000asdf11", method: "DELETE" })
     );
   });
 });

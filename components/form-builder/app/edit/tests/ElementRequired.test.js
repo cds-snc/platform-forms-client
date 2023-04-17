@@ -13,16 +13,16 @@ describe("ElementRequired", () => {
     const promise = Promise.resolve();
     const user = userEvent.setup();
 
-    const item = { id: 1, index: 0, ...store.form.elements[0] };
+    const item = { id: 1, index: 0, ...store.elements[0] };
     const rendered = render(
-      <Providers form={store.form}>
+      <Providers form={store}>
         <ElementRequired item={item} onRequiredChange={jest.fn} />
       </Providers>
     );
 
     const checkbox = rendered.getByRole("checkbox");
 
-    expect(checkbox).toHaveAttribute("id", "required-0-id");
+    expect(checkbox).toHaveAttribute("id", "required-1-id");
 
     await user.click(checkbox);
 

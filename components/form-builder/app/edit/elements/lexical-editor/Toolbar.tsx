@@ -85,16 +85,16 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
   ]);
 
   const itemsRef = useRef<[HTMLButtonElement] | []>([]);
-  const [currentFocusIndex, setCurrentFocusIndex] = useState(-1);
+  const [currentFocusIndex, setCurrentFocusIndex] = useState(0);
   const [toolbarInit, setToolbarInit] = useState(false);
 
   useEffect(() => {
     const index = `button-${currentFocusIndex}` as unknown as number;
     const el = itemsRef.current[index];
-    if (el) {
+    if (el && toolbarInit) {
       el.focus();
     }
-  }, [currentFocusIndex]);
+  }, [currentFocusIndex, toolbarInit]);
 
   const handleNav = useCallback(
     (evt: KeyboardEvent<HTMLInputElement>) => {
@@ -237,10 +237,11 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
         aria-label={t("textFormatting")}
         aria-controls={editorId}
         onKeyDown={handleNav}
+        data-testid="toolbar"
       >
         <ToolTip text={t("tooltipFormatH2")}>
           <button
-            tabIndex={0}
+            tabIndex={currentFocusIndex == 0 ? 0 : -1}
             ref={(el) => {
               const index = "button-0" as unknown as number;
               if (el && itemsRef.current) {
@@ -255,6 +256,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             }
             aria-label={t("formatH2")}
             aria-pressed={blockType === "h2"}
+            data-testid={`h2-button`}
           >
             <H2Icon />
           </button>
@@ -277,6 +279,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             }
             aria-label={t("formatH3")}
             aria-pressed={blockType === "h3"}
+            data-testid={`h3-button`}
           >
             <H3Icon />
           </button>
@@ -297,6 +300,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             className={"peer toolbar-item " + (isBold && editorHasFocus ? "active" : "")}
             aria-label={t("formatBold")}
             aria-pressed={isBold}
+            data-testid={`bold-button`}
           >
             <BoldIcon />
           </button>
@@ -317,6 +321,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             className={"peer toolbar-item " + (isItalic && editorHasFocus ? "active" : "")}
             aria-label={t("formatItalic")}
             aria-pressed={isItalic}
+            data-testid={`italic-button`}
           >
             <ItalicIcon />
           </button>
@@ -337,6 +342,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             }
             aria-label={t("formatBulletList")}
             aria-pressed={blockType === "bullet"}
+            data-testid={`bullet-list-button`}
           >
             <BulletListIcon />
           </button>
@@ -357,6 +363,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             }
             aria-label={t("formatNumberedList")}
             aria-pressed={blockType === "number"}
+            data-testid={`numbered-list-button`}
           >
             <NumberedListIcon />
           </button>
@@ -376,6 +383,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             className={"peer toolbar-item " + (isLink && editorHasFocus ? "active" : "")}
             aria-label={t("insertLink")}
             aria-pressed={isLink}
+            data-testid={`link-button`}
           >
             <LinkIcon />
           </button>

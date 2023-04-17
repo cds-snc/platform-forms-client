@@ -36,7 +36,7 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
         })
       );
     }
-  }, [menuButtonRef.current, menuListRef.current]);
+  }, []);
 
   return (
     <div className="relative">
@@ -79,13 +79,13 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
               <li
                 id={`mi-${id}-${index}`}
                 role="menuitem"
-                key={index}
+                key={`mo-${id}-${index}`}
                 className={`px-4 py-2 first:pt-4 last:pb-4 ${item?.callback ? "relative" : ""}`}
               >
                 {item.callback ? (
                   <>
                     <button
-                      className="action gc-button-link no-underline hover:underline"
+                      className="action gc-button-link no-underline hover:underline whitespace-nowrap"
                       onClick={(e) => {
                         // Shows a success or error status message from a callback
                         if (!item || !item.callback) {

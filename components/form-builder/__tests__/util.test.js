@@ -5,7 +5,8 @@ import {
   moveUp,
   moveDown,
   removeElementById,
-  newlineToOptions,
+  isValidatedTextType,
+  incrementSubElementId,
 } from "../util";
 
 describe("Util", () => {
@@ -42,6 +43,13 @@ describe("Util", () => {
     expect(incrementElementId([{ id: 6 }, { id: 8 }, { id: 4 }])).toBe(9);
   });
 
+  it("increments subElement id", () => {
+    expect(incrementSubElementId([], 4)).toBe(401);
+    expect(incrementSubElementId([], 5)).toBe(501);
+    expect(incrementSubElementId([{ id: 301 }], 3)).toBe(302);
+    expect(incrementSubElementId([{ id: 101 }, { id: 102 }, { id: 111 }], 1)).toBe(112);
+  });
+
   it("swaps array indexes", () => {
     expect(swap([{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }], 1, 2)).toEqual([
       { id: 1 },
@@ -75,34 +83,12 @@ describe("Util", () => {
     expect(removeElementById([{ id: 1 }, { id: 2 }, { id: 4 }], 4)).toEqual([{ id: 1 }, { id: 2 }]);
   });
 
-  it("adds options via a string", () => {
-    const result = [
-      { en: "option 1", fr: "option 1 fr" },
-      { en: "option 2", fr: "" },
-      { en: "option 3", fr: "" },
-    ];
-    expect(
-      newlineToOptions(
-        "en",
-        [{ en: "option 1", fr: "option 1 fr" }],
-        "option 1\noption 2\noption 3\n"
-      )
-    ).toEqual(result);
-  });
-
-  it("removes 'extra' options", () => {
-    const currentChoices = [
-      { en: "option 1", fr: "option 1 fr" },
-      { en: "option 2", fr: "" },
-      { en: "option 3", fr: "" },
-      { en: "option 4", fr: "" },
-    ];
-    const bulkChoices = "option 1\noption 2\n";
-    const result = [
-      { en: "option 1", fr: "option 1 fr" },
-      { en: "option 2", fr: "" },
-    ];
-
-    expect(newlineToOptions("en", currentChoices, bulkChoices)).toEqual(result);
+  it("detects text fields that have a validation type", () => {
+    expect(isValidatedTextType("textField")).toEqual(false);
+    expect(isValidatedTextType("richText")).toEqual(false);
+    expect(isValidatedTextType("email")).toEqual(true);
+    expect(isValidatedTextType("phone")).toEqual(true);
+    expect(isValidatedTextType("date")).toEqual(true);
+    expect(isValidatedTextType("number")).toEqual(true);
   });
 });

@@ -5,15 +5,17 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { createMocks, RequestMethod } from "node-mocks-http";
 import { getCsrfToken } from "next-auth/react";
-import { mocked } from "jest-mock";
+import { prismaMock } from "@jestUtils";
 import {
   CognitoIdentityProviderClient,
   ForgotPasswordCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
 import forgotpassword from "@pages/api/account/forgotpassword";
+import { logEvent } from "@lib/auditLogs";
 
-const mockGetCSRFToken = mocked(getCsrfToken, true);
-
+const mockGetCSRFToken = jest.mocked(getCsrfToken, { shallow: true });
+const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
+jest.mock("@lib/auditLogs");
 jest.mock("next-auth/react");
 jest.mock("@aws-sdk/client-cognito-identity-provider", () => ({
   CognitoIdentityProviderClient: jest.fn(),
@@ -68,8 +70,12 @@ describe("/account/confirmpassword", () => {
     });
   });
   describe("Forgot Password", () => {
-    const mockedCognitoIdentityProviderClient: any = mocked(CognitoIdentityProviderClient, true);
-    const mockedConfirmForgotPasswordCommand: any = mocked(ForgotPasswordCommand, true);
+    const mockedCognitoIdentityProviderClient: any = jest.mocked(CognitoIdentityProviderClient, {
+      shallow: true,
+    });
+    const mockedConfirmForgotPasswordCommand: any = jest.mocked(ForgotPasswordCommand, {
+      shallow: true,
+    });
     const sendFunctionMock = jest.fn();
     afterEach(() => {
       mockedCognitoIdentityProviderClient.mockReset();
@@ -105,6 +111,10 @@ describe("/account/confirmpassword", () => {
         send: sendFunctionMock,
       }));
 
+      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        id: "asefeasdf",
+      });
+
       const { req, res } = createMocks({
         method: "POST",
         headers: {
@@ -124,6 +134,11 @@ describe("/account/confirmpassword", () => {
         Username: "test",
       });
       expect(res._getData()).toEqual("");
+      expect(mockedLogEvent).toBeCalledWith(
+        "asefeasdf",
+        { id: "asefeasdf", type: "User" },
+        "UserPasswordReset"
+      );
     });
     it("handles error when the cognito send function fails", async () => {
       mockGetCSRFToken.mockResolvedValueOnce("valid_csrf");
@@ -154,6 +169,7 @@ describe("/account/confirmpassword", () => {
       expect(JSON.parse(res._getData())).toEqual({
         message: "There is an error",
       });
+      expect(mockedLogEvent).not.toHaveBeenCalled();
     });
   });
 });

@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
-import { DesignIcon, PreviewIcon, PublishIcon, GearIcon } from "../../icons";
+import { DesignIcon, PreviewIcon, PublishIcon, GearIcon, MessageIcon } from "../../icons";
 import { LeftNavLink } from "./LeftNavLink";
 import { SaveButton } from "../shared/SaveButton";
 import { useTemplateStore } from "../../store/useTemplateStore";
@@ -12,10 +12,10 @@ export const LeftNavigation = () => {
   const { status } = useSession();
 
   const iconClassname =
-    "inline-block w-6 h-6 xl:block xl:mx-auto group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
+    "inline-block w-6 h-6 group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
 
   return (
-    <nav className="absolute xl:content-center" aria-label={t("navLabelFormBuilder")}>
+    <nav className="absolute" aria-label={t("navLabelFormBuilder")}>
       {!isPublished && (
         <LeftNavLink href="/form-builder/edit">
           <>
@@ -40,6 +40,13 @@ export const LeftNavigation = () => {
           </>
         </LeftNavLink>
       )}
+
+      <LeftNavLink href={`/form-builder/responses/${id}`}>
+        <>
+          <MessageIcon className={iconClassname} />
+          {t("responsesNavLabel")}
+        </>
+      </LeftNavLink>
 
       <LeftNavLink href={`/form-builder/settings/${id}`}>
         <>

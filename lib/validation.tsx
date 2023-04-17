@@ -11,6 +11,8 @@ import { TFunction } from "next-i18next";
 import { acceptedFileMimeTypes } from "@lib/tsUtils";
 import { ErrorListItem } from "@components/forms";
 import { isServer } from "./tsUtils";
+import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
+import formNameArraySchema from "@lib/middleware/schemas/submission-name-array.schema.json";
 
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
@@ -358,3 +360,29 @@ export const isSymbol = (field: string): boolean => {
 // Helpful to check whether a referer is local vs. an external URL
 // Note: a negated version of https://stackoverflow.com/questions/10687099/how-to-test-if-a-url-string-is-absolute-or-relative
 export const localPathRegEx = new RegExp("^(?!((?:[a-z+]+:)?//))", "i");
+
+/**
+ * This function tests whether a string contains a UUID
+ * @param field A string containing a UUID
+ * @returns {boolean} The validation result
+ */
+export const isUUID = (field: string): boolean => {
+  const reg = new RegExp(uuidArraySchema.items.pattern, "i");
+  if (!field || !reg.test(field)) {
+    return false;
+  }
+  return true;
+};
+
+/**
+ * This function tests whether a string contains a Form ID (used in the UI)
+ * @param field A string containing a Form ID (used in the UI)
+ * @returns {boolean} The validation result
+ */
+export const isFormId = (field: string): boolean => {
+  const reg = new RegExp(formNameArraySchema.items.pattern, "i");
+  if (!field || !reg.test(field)) {
+    return false;
+  }
+  return true;
+};

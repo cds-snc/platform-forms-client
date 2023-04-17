@@ -6,7 +6,7 @@ import { createMocks } from "node-mocks-http";
 import acceptableUse from "@pages/api/acceptableuse";
 import { setAcceptableUse } from "@lib/acceptableUseCache";
 import { getCsrfToken } from "next-auth/react";
-import { unstable_getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth/next";
 import { Session } from "next-auth";
 
 jest.mock("next-auth/next");
@@ -14,8 +14,8 @@ jest.mock("next-auth/react");
 jest.mock("@lib/acceptableUseCache");
 const mockedSetAcceptableUse = jest.mocked(setAcceptableUse, { shallow: true });
 const mockedGetCsrfToken = jest.mocked(getCsrfToken, { shallow: true });
-//Needed in the typescript version of the test so types are inferred correclty
-const mockGetSession = jest.mocked(unstable_getServerSession, { shallow: true });
+//Needed in the typescript version of the test so types are inferred correctly
+const mockGetSession = jest.mocked(getServerSession, { shallow: true });
 
 describe("Test acceptable use endpoint", () => {
   beforeEach(() => {

@@ -6,7 +6,7 @@ describe("Register Page", () => {
   // TODO test French translation when signup form more final
 
   it("En page renders", () => {
-    cy.get("h1").should("contain", "Sign Up to GC Forms");
+    cy.get("h1").should("contain", "Create an account");
   });
 
   describe("Name validation errors when submitting a form.", () => {
@@ -14,7 +14,7 @@ describe("Register Page", () => {
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessagename']").should(
         "contain",
-        "Please complete the required field to continue"
+        "Complete the required field to continue."
       );
     });
     it("No error on submitting a form with a name", () => {
@@ -29,20 +29,20 @@ describe("Register Page", () => {
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessageusername']").should(
         "contain",
-        "Please complete the required field to continue"
+        "Complete the required field to continue."
       );
     });
     it("Error on submitting a form with an invalid email", () => {
       cy.get("input[id='username']").type("myemail@email");
       cy.get("[type='submit']").click();
-      cy.get("[id='errorMessageusername']").should("contain", "Please enter a valid email");
+      cy.get("[id='errorMessageusername']").should("contain", "Enter a valid email address.");
     });
     it("Error on submitting a form with a non government email", () => {
       cy.get("input[id='username']").type("myemail@email.com");
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessageusername']").should(
         "contain",
-        "This field must be a valid government email"
+        "This field must be a valid federal government email"
       );
     });
     it("No error on submitting a form with a valid government email", () => {
@@ -57,33 +57,27 @@ describe("Register Page", () => {
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessagepassword']").should(
         "contain",
-        "Please complete the required field to continue"
+        "Complete the required field to continue."
       );
     });
     it("Error on submitting a form with a short password", () => {
       cy.get("input[id='password']").type("pass");
       cy.get("[type='submit']").click();
-      cy.get("[id='errorMessagepassword']").should(
-        "contain",
-        "The minimum length of the value must be 8 characters"
-      );
+      cy.get("[id='errorMessagepassword']").should("contain", "must be at least 8 characters");
     });
     it("Error on submitting a form with a long password", () => {
       cy.get("input[id='password']").type(
         "passpasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspass"
       );
       cy.get("[type='submit']").click();
-      cy.get("[id='errorMessagepassword']").should(
-        "contain",
-        "The field must be no longer than 50 characters"
-      );
+      cy.get("[id='errorMessagepassword']").should("contain", "must not exceed 50 characters");
     });
     it("Error on submitting a form with no lowercase", () => {
       cy.get("input[id='password']").type("PASSWORD");
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessagepassword']").should(
         "contain",
-        "The field must contain at least 1 lowercase character"
+        "must contain at least 1 lowercase character"
       );
     });
     it("Error on submitting a form with no uppercase", () => {
@@ -91,7 +85,7 @@ describe("Register Page", () => {
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessagepassword']").should(
         "contain",
-        "The field must contain at least 1 uppercase character"
+        "must contain at least 1 uppercase character"
       );
     });
     it("Error on submitting a form with no number", () => {
@@ -99,16 +93,13 @@ describe("Register Page", () => {
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessagepassword']").should(
         "contain",
-        "The field must contain at least 1 number"
+        "Password must contain at least 1 number"
       );
     });
     it("Error on submitting a form with no symbol", () => {
       cy.get("input[id='password']").type("Password1");
       cy.get("[type='submit']").click();
-      cy.get("[id='errorMessagepassword']").should(
-        "contain",
-        "The field must contain at least 1 symbol"
-      );
+      cy.get("[id='errorMessagepassword']").should("contain", "must contain at least 1 symbol.");
     });
     it("No error on submitting a form with a valid password", () => {
       cy.get("input[id='password']").type("Password1!");
@@ -122,7 +113,7 @@ describe("Register Page", () => {
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessagepasswordConfirmation']").should(
         "contain",
-        "Please complete the required field to continue"
+        "Complete the required field to continue."
       );
     });
     it("Error on submitting a form with a non matching password confirmation field", () => {
@@ -131,7 +122,7 @@ describe("Register Page", () => {
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessagepasswordConfirmation']").should(
         "contain",
-        "The value must match the value of the password field"
+        "The entries for password must match."
       );
     });
     it("No error on submitting a form with a matching password confirmation field", () => {

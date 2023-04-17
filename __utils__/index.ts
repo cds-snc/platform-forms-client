@@ -1,2 +1,7 @@
-export { checkLogs } from "./jestUtils";
-export { prismaMock } from "./prismaConnector";
+export {
+  prismaMock,
+  PrismaClientInitializationError,
+  PrismaClientKnownRequestError,
+  PrismaClientUnknownRequestError,
+  PrismaClientValidationError,
+} from "./prismaConnector";

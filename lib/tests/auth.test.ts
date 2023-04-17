@@ -3,9 +3,9 @@
  */
 
 import { isAuthenticated, validateTemporaryToken, requireAuthentication } from "@lib/auth";
-import { Base, getUserPrivileges } from "__utils__/permissions";
+import { Base, mockUserPrivileges } from "__utils__/permissions";
 import { createMocks } from "node-mocks-http";
-import { unstable_getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth/next";
 import jwt, { Secret } from "jsonwebtoken";
 import { prismaMock } from "@jestUtils";
 import { checkPrivileges } from "@lib/privileges";
@@ -13,8 +13,8 @@ import { Prisma } from "@prisma/client";
 
 jest.mock("next-auth/next");
 
-//Needed in the typescript version of the test so types are inferred correclty
-const mockGetSession = jest.mocked(unstable_getServerSession, { shallow: true });
+//Needed in the typescript version of the test so types are inferred correctly
+const mockGetSession = jest.mocked(getServerSession, { shallow: true });
 
 describe("Test Auth lib", () => {
   describe("requireAuthentication", () => {
@@ -69,7 +69,7 @@ describe("Test Auth lib", () => {
           name: "test",
           image: "null",
           id: "1",
-          privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+          privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
           acceptableUse: false,
         },
       };
@@ -109,7 +109,7 @@ describe("Test Auth lib", () => {
           name: "test",
           image: "null",
           id: "1",
-          privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+          privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
           acceptableUse: true,
         },
       };
@@ -130,7 +130,7 @@ describe("Test Auth lib", () => {
             name: "test",
             image: "null",
             id: "1",
-            privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+            privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
             acceptableUse: true,
           },
         },
@@ -151,7 +151,7 @@ describe("Test Auth lib", () => {
           name: "test",
           image: "null",
           id: "1",
-          privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+          privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
           acceptableUse: true,
         },
       };
@@ -173,7 +173,7 @@ describe("Test Auth lib", () => {
             name: "test",
             image: "null",
             id: "1",
-            privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+            privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
             acceptableUse: true,
           },
         },
@@ -195,7 +195,7 @@ describe("Test Auth lib", () => {
         name: "test",
         image: "null",
         id: "1",
-        privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+        privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
         acceptableUse: true,
       },
     };
@@ -242,7 +242,7 @@ describe("Test Auth lib", () => {
           name: "test",
           image: "null",
           id: "1",
-          privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+          privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
         },
       };
       mockGetSession.mockResolvedValue(mockSession);
@@ -264,11 +264,9 @@ describe("Test Auth lib", () => {
   });
   describe("validateTemporaryToken", () => {
     beforeAll(() => {
-      process.env.TOKEN_SECRET = "some_secret_some_secret_some_secret_some_secret";
       process.env.TOKEN_SECRET_WRONG = "wrong_secret_wrong_secret_wrong_secret_wrong_secret";
     });
     afterAll(() => {
-      delete process.env.TOKEN_SECRET;
       delete process.env.TOKEN_SECRET_WRONG;
     });
     beforeEach(() => {
@@ -317,6 +315,7 @@ describe("Test Auth lib", () => {
         temporaryToken: "theRightTokenInTheDatabase",
         created_at: new Date(),
         updated_at: new Date(),
+        lastLogin: new Date(),
       });
       const session = await validateTemporaryToken(token);
       expect(session).toEqual(null);
@@ -337,6 +336,7 @@ describe("Test Auth lib", () => {
         temporaryToken: token,
         created_at: new Date(),
         updated_at: new Date(),
+        lastLogin: new Date(),
       });
       const session = await validateTemporaryToken(token);
       expect(session).toMatchObject({
@@ -350,7 +350,10 @@ describe("Test Auth lib", () => {
     it("Returns null is there is a Prisma Error", async () => {
       // Mocking prisma to throw an error
       prismaMock.apiUser.findUnique.mockRejectedValue(
-        new Prisma.PrismaClientKnownRequestError("Can't reach database server", "P1001", "4.3.2")
+        new Prisma.PrismaClientKnownRequestError("Can't reach database server", {
+          code: "P1001",
+          clientVersion: "4.3.2",
+        })
       );
       const token = jwt.sign(
         { email: "test@test.ca", formID: "test0form00000id000asdf11" },

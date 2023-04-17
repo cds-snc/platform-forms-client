@@ -6,7 +6,12 @@ export const csrfProtected = (protectedMethods: string[]): MiddlewareRequest => 
   return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
     try {
       if (isProtected(req, protectedMethods)) {
-        const csrfToken = await getCsrfToken({ req });
+        // Need to remove body from NextApiRequest due to Next-Auth bug
+        // Next-Auth sets the method Call based on if a Body is present on the request.
+        // This causes issues with CSRF protection so only required arguments are passed.
+        const clonedReq = { body: undefined, headers: req.headers };
+
+        const csrfToken = await getCsrfToken({ req: clonedReq });
         if (csrfToken && csrfToken === req.headers["x-csrf-token"]) {
           return { next: true };
         } else {

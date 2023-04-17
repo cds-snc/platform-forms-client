@@ -6,21 +6,7 @@ import { Button } from "./Button";
 import { useTemplateStore } from "../../store";
 import { useDialogRef, Dialog } from "../shared";
 import { InfoIcon } from "../../icons";
-
-const slugify = (str: string) =>
-  str
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, "")
-    .replace(/[\s_-]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-
-const getDate = () => {
-  let date = new Date();
-  const offset = date.getTimezoneOffset();
-  date = new Date(date.getTime() - offset * 60 * 1000);
-  return date.toISOString().split("T")[0];
-};
+import { getDate, slugify } from "@lib/clientHelpers";
 
 const FormDownloadDialog = ({ handleClose }: { handleClose: () => void }) => {
   const { t } = useTranslation("form-builder");
@@ -30,6 +16,7 @@ const FormDownloadDialog = ({ handleClose }: { handleClose: () => void }) => {
     <Dialog
       dialogRef={dialog}
       handleClose={handleClose}
+      className="overflow-y-scroll max-h-[80%]"
       actions={
         <DownloadFileButton
           showInfo={false}
@@ -73,10 +60,11 @@ export const DownloadFileButton = ({
   buttonText?: string;
   autoShowDialog?: boolean;
 }) => {
-  const { t } = useTranslation("form-builder");
-  const { getSchema, form } = useTemplateStore((s) => ({
+  const { t, i18n } = useTranslation("form-builder");
+  const { getSchema, form, name } = useTemplateStore((s) => ({
     getSchema: s.getSchema,
     form: s.form,
+    name: s.name,
   }));
 
   const [downloadDialog, showDownloadDialog] = useState(autoShowDialog);
@@ -87,8 +75,10 @@ export const DownloadFileButton = ({
         const blob = new Blob([getSchema()], { type: "application/json" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
+        const fileName = name ? name : i18n.language === "fr" ? form.titleFr : form.titleEn;
+
         a.href = url;
-        a.download = slugify(`${form.titleEn}-${getDate()}`);
+        a.download = slugify(`${fileName}-${getDate()}`) + ".json";
         a.click();
         URL.revokeObjectURL(url);
       } catch (e) {
@@ -97,7 +87,7 @@ export const DownloadFileButton = ({
     }
 
     retrieveFileBlob();
-  }, [getSchema]);
+  }, [getSchema, name, i18n.language, form.titleFr, form.titleEn]);
 
   const handleOpenDialog = useCallback(() => {
     showDownloadDialog(true);
@@ -107,6 +97,17 @@ export const DownloadFileButton = ({
     showDownloadDialog(false);
   }, []);
 
+  const downloadFileEvent = () => {
+    const formTitle = slugify(name ? name : i18n.language === "fr" ? form.titleFr : form.titleEn);
+
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "form_download",
+      formTitle,
+      submitTime: getDate(true),
+    });
+  };
+
   return (
     <div>
       <Button
@@ -114,6 +115,7 @@ export const DownloadFileButton = ({
         theme="secondary"
         onClick={() => {
           downloadfile();
+          downloadFileEvent();
           onClick && onClick();
         }}
       >

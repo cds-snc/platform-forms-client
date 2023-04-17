@@ -1,14 +1,15 @@
-import { useTranslation } from "next-i18next";
-import { useTemplateStore } from "../store/useTemplateStore";
 import React, { useCallback, useState } from "react";
-import { useAllowPublish } from "../hooks/useAllowPublish";
-import { usePublish } from "../hooks/usePublish";
-import { CancelIcon, CircleCheckIcon, WarningIcon, LockIcon } from "../icons";
-import { Button } from "./shared/Button";
-import { useRouter } from "next/router";
-import { PublishNoAuth } from "./PublishNoAuth";
 import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
+
+import { useTemplateStore } from "../store";
+import { useTemplateApi, useAllowPublish } from "../hooks";
+import { CancelIcon, CircleCheckIcon, WarningIcon, LockIcon } from "../icons";
+import { Button } from "./shared";
+import { PublishNoAuth } from "./PublishNoAuth";
+import Link from "next/link";
 
 export const Publish = () => {
   const { t } = useTranslation("form-builder");
@@ -16,34 +17,38 @@ export const Publish = () => {
   const router = useRouter();
   const {
     userCanPublish,
-    data: { title, questions, privacyPolicy, translate, responseDelivery, confirmationMessage },
+    data: { title, questions, privacyPolicy, translate, confirmationMessage },
     isPublishable,
   } = useAllowPublish();
 
   const [error, setError] = useState(false);
+  const { i18n } = useTranslation("common");
 
-  const { getSchema, id, setId } = useTemplateStore((s) => ({
-    getSchema: s.getSchema,
+  const { id, setId, getSchema, getName } = useTemplateStore((s) => ({
     id: s.id,
     setId: s.setId,
+    getSchema: s.getSchema,
+    getName: s.getName,
   }));
 
   const Icon = ({ checked }: { checked: boolean }) => {
     return checked ? (
-      <CircleCheckIcon className="w-9 fill-green-700 inline-block" title={t("completed")} />
+      <CircleCheckIcon className="mr-2 w-9 fill-green-700 inline-block" title={t("completed")} />
     ) : (
-      <CancelIcon className="w-9 fill-red-700 w-9 h-9 inline-block" title={t("incomplete")} />
+      <CancelIcon className="mr-2 w-9 fill-red-700 w-9 h-9 inline-block" title={t("incomplete")} />
     );
   };
 
-  const { uploadJson } = usePublish();
+  const { save } = useTemplateApi();
 
   const handlePublish = async () => {
-    const schema = JSON.parse(getSchema());
-    delete schema.id;
-    delete schema.isPublished;
+    const result = await save({
+      jsonConfig: getSchema(),
+      name: getName(),
+      formID: id,
+      publish: true,
+    });
 
-    const result = await uploadJson(JSON.stringify(schema), id, true);
     if (result && result?.error) {
       setError(true);
       return;
@@ -54,18 +59,20 @@ export const Publish = () => {
   };
 
   const handleSaveAndRequest = useCallback(async () => {
-    const schema = JSON.parse(getSchema());
-    delete schema.id;
-    delete schema.isPublished;
+    const result = await save({
+      jsonConfig: getSchema(),
+      name: getName(),
+      formID: id,
+      publish: false,
+    });
 
-    const result = await uploadJson(JSON.stringify(schema), id, false);
     if (result && result?.error) {
       setError(true);
       return;
     }
 
     router.push({ pathname: `/unlock-publishing` });
-  }, []);
+  }, [getSchema, getName, id, save, router]);
 
   if (status !== "authenticated") {
     return <PublishNoAuth />;
@@ -73,7 +80,7 @@ export const Publish = () => {
 
   return (
     <>
-      <h1 className="border-0 mb-0 md:text-h1">{t("publishYourForm")}</h1>
+      <h1 className="border-0 mb-0">{t("publishYourForm")}</h1>
       <p className="mb-0">{t("publishYourFormInstructions")}</p>
       {!userCanPublish && (
         <div className="mt-5 mb-5 p-5 bg-purple-200 flex">
@@ -96,22 +103,28 @@ export const Publish = () => {
 
       <ul className="list-none p-0">
         <li className="mb-4 mt-4">
-          <Icon checked={title} /> {t("formTitle")}
+          <Icon checked={title} />
+          <Link href={`/${i18n.language}/form-builder/edit#formTitle`}>{t("formTitle")}</Link>
         </li>
         <li className="mb-4 mt-4">
-          <Icon checked={questions} /> {t("questions")}
+          <Icon checked={questions} />
+          <Link href={`/${i18n.language}/form-builder/edit`}>{t("questions")}</Link>
         </li>
         <li className="mb-4 mt-4">
-          <Icon checked={privacyPolicy} /> {t("privacyStatement")}
+          <Icon checked={privacyPolicy} />
+          <Link href={`/${i18n.language}/form-builder/edit#privacy-text`}>
+            {t("privacyStatement")}
+          </Link>
         </li>
         <li className="mb-4 mt-4">
-          <Icon checked={confirmationMessage} /> {t("formConfirmationMessage")}
+          <Icon checked={confirmationMessage} />
+          <Link href={`/${i18n.language}/form-builder/edit#confirmation-text`}>
+            {t("formConfirmationMessage")}
+          </Link>
         </li>
         <li className="mb-4 mt-4">
-          <Icon checked={translate} /> {t("translate")}
-        </li>
-        <li className="mb-4 mt-4">
-          <Icon checked={responseDelivery} /> {t("responseDelivery")}
+          <Icon checked={translate} />
+          <Link href={`/${i18n.language}/form-builder/edit/translate`}>{t("translate")}</Link>
         </li>
       </ul>
 
