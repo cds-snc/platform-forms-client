@@ -18,7 +18,6 @@ describe("RichTextEditor", () => {
         <RichTextEditor
           path="path.to.content"
           content="Here is some test content"
-          autoFocusEditor={true}
           ariaLabel="AriaLabel"
         />
       </Providers>
@@ -64,7 +63,6 @@ describe("RichTextEditor", () => {
         <RichTextEditor
           path="path.to.content"
           content="Here is some test content"
-          autoFocusEditor={true}
           ariaLabel="AriaLabel"
         />
       </Providers>
@@ -130,7 +128,6 @@ describe("RichTextEditor", () => {
         <RichTextEditor
           path="path.to.content"
           content="Here is some test content"
-          autoFocusEditor={true}
           ariaLabel="AriaLabel"
         />
       </Providers>
@@ -157,33 +154,12 @@ describe("RichTextEditor", () => {
     expect(link).toHaveTextContent("Here is some test content");
   });
 
-  it("can autofocus the editor", async () => {
-    const rendered = render(
-      <Providers form={store.form}>
-        <RichTextEditor
-          path="path.to.content"
-          content="Here is some test content"
-          autoFocusEditor={true}
-          ariaLabel="AriaLabel"
-        />
-      </Providers>
-    );
-
-    await act(async () => {
-      await promise;
-    });
-
-    const contentArea = rendered.container.querySelector('[id^="editor-"]');
-    expect(contentArea).toHaveFocus();
-  });
-
   it("can keyboard navigate the RichTextEditor", async () => {
     render(
       <Providers form={store.form}>
         <RichTextEditor
           path="path.to.content"
           content="Here is some test content"
-          autoFocusEditor={false}
           ariaLabel="AriaLabel"
         />
       </Providers>
@@ -237,13 +213,5 @@ describe("RichTextEditor", () => {
     // tab back into toolbar
     await userEvent.tab();
     expect(numberedList).toHaveFocus();
-  });
-
-  it.skip("can use keyboard shortcuts to apply formatting", async () => {
-    //
-  });
-
-  it.skip("Updates field on change", async () => {
-    // Can I test to see if updateField is called and receives the content and path?
   });
 });
