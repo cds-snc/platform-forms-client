@@ -6,7 +6,6 @@ Formulaires GC est un service infonuagique créé et exploité par le Service nu
 ## Responsabilités
 
 ### Le Service numérique canadien (SNC) est responsable :
-
 - d’héberger et de maintenir le système Formulaires GC.
 - de répondre aux demandes de soutien et aux questions durant les heures normales de travail (de 9 h à 17 h, heure de l’Est). 
 - de répondre aux demandes de soutien liées à l’intégration API dans le respect des [délais fournis](#temps-de-reponse-du-service-et-mode-de-contact).
@@ -24,7 +23,6 @@ Formulaires GC est un service infonuagique créé et exploité par le Service nu
 Le SNC peut suspendre le service à tout moment en cas d’utilisation jugée inappropriée. Des avis de déconnexion justifiés seront fournis lorsque nécessaire. 
 
 ### Les fournisseurs d’infrastructure de Formulaires GC sont responsables :
-
 - d’envoyer des courriels comprenant les données des utilisateurs finaux et utilisatrices finales aux adresses courriel gouvernementales fournies.
 - de fournir l’infrastructure infonuagique d’AWS.
 - de faire appliquer les [conditions de service d'AWS](https://d1.awsstatic.com/legal/awsserviceterms/AWS_Service_Terms_French_2022-10-14.pdf).
