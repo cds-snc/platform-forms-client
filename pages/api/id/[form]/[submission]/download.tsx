@@ -8,7 +8,7 @@ import {
   UpdateCommand,
   UpdateCommandInput,
 } from "@aws-sdk/lib-dynamodb";
-import { MiddlewareProps, WithRequired, Responses } from "@lib/types";
+import { MiddlewareProps, WithRequired, Responses, SecurityAttribute } from "@lib/types";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import React from "react";
 import { renderToStaticNodeStream } from "react-dom/server";
@@ -17,7 +17,6 @@ import { getFullTemplateByID } from "@lib/templates";
 import HTMLDownloadFile from "@components/myforms/HTMLDownload";
 import BaseApp from "@pages/_app";
 import { Router } from "next/router";
-import { checkOne } from "@lib/cache/flags";
 import { connectToDynamo } from "@lib/integration/dynamodbConnector";
 import { logEvent } from "@lib/auditLogs";
 
@@ -30,10 +29,6 @@ import { logEvent } from "@lib/auditLogs";
 const allowedMethods = ["GET"];
 
 const handler = async (req: NextApiRequest, res: NextApiResponse, props: MiddlewareProps) => {
-  // Is this feature / endpoint active
-  const vaultActive = await checkOne("vault");
-  if (!vaultActive) return res.status(404).json({ error: "Vault not active" });
-
   const formID = req.query.form;
   const submissionName = req.query.submission;
 
@@ -66,8 +61,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
       ExpressionAttributeNames: {
         "#Name": "Name",
       },
-      ProjectionExpression: "SubmissionID,FormSubmission,ConfirmationCode,#Name,CreatedAt",
+      ProjectionExpression:
+        "SubmissionID,FormSubmission,ConfirmationCode,#Name,CreatedAt,SecurityAttribute",
     };
+
     const queryCommand = new GetCommand(getItemsDbParams);
 
     const response = await documentClient.send(queryCommand);
@@ -75,7 +72,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
     // If the SubmissionID does not exist return a 404
     if (response.Item === undefined) return res.status(404).json({ error: "Submission not Found" });
 
-    const { formResponse, createdAt, confirmReceiptCode, responseID, submissionID } = ((
+    const {
+      formResponse,
+      createdAt,
+      confirmReceiptCode,
+      responseID,
+      submissionID,
+      securityAttribute,
+    } = ((
       vaultResult
     ): {
       formResponse: Responses;
@@ -83,6 +87,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
       confirmReceiptCode: string;
       responseID: string;
       submissionID: string;
+      securityAttribute: SecurityAttribute;
     } => {
       return {
         formResponse: JSON.parse(vaultResult.FormSubmission),
@@ -92,6 +97,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#reserved_words
         responseID: vaultResult.Name,
         submissionID: vaultResult.SubmissionID,
+        securityAttribute: vaultResult.SecurityAttribute,
       };
     })(response.Item);
 
@@ -102,6 +108,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
       // submissionID,
       responseID,
       createdAt,
+      securityAttribute,
       pathname: "/",
       query: {},
       ...(await serverSideTranslations("en", ["my-forms", "common"], null, ["fr"])),

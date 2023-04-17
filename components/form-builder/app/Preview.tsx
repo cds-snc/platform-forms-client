@@ -1,19 +1,21 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useTemplateStore } from "../store/useTemplateStore";
+import React, { useState } from "react";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
-import { getRenderedForm } from "@lib/formBuilder";
-import { RichText } from "@components/forms/RichText/RichText";
-import { LocalizedElementProperties, LocalizedFormProperties } from "../types";
-import { Button, Form } from "@components/forms";
 import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
-import { useTemplateApi } from "../hooks";
-import { BackArrowIcon } from "../icons";
+
+import { getRenderedForm } from "@lib/formBuilder";
 import { PublicFormRecord } from "@lib/types";
+import { Button, Form, RichText } from "@components/forms";
+import { LocalizedElementProperties, LocalizedFormProperties } from "../types";
+import { useTemplateStore } from "../store";
+import { useAutoSave } from "../hooks";
+import { BackArrowIcon } from "../icons";
+import Brand from "@components/globals/Brand";
 
 export const Preview = () => {
   const { status } = useSession();
+  const { i18n } = useTranslation("common");
   const { id, getSchema, getIsPublished, getSecurityAttribute } = useTemplateStore((s) => ({
     id: s.id,
     getSchema: s.getSchema,
@@ -28,12 +30,11 @@ export const Preview = () => {
     securityAttribute: getSecurityAttribute(),
   };
 
-  const { localizeField, translationLanguagePriority, getLocalizationAttribute, setId, email } =
+  const { localizeField, translationLanguagePriority, getLocalizationAttribute, email } =
     useTemplateStore((s) => ({
       localizeField: s.localizeField,
       translationLanguagePriority: s.translationLanguagePriority,
       getLocalizationAttribute: s.getLocalizationAttribute,
-      setId: s.setId,
       email: s.deliveryOption?.emailAddress,
     }));
 
@@ -42,35 +43,23 @@ export const Preview = () => {
   const { t } = useTranslation(["common", "form-builder"]);
   const language = translationLanguagePriority;
   const currentForm = getRenderedForm(formRecord, language, t);
-  const { saveForm } = useTemplateApi();
   const [sent, setSent] = useState<string | null>();
-  const saved = useRef(false);
 
   const clearSent = () => {
     setSent(null);
   };
 
-  useEffect(() => {
-    if (status === "authenticated" && !saved.current && !id) {
-      const save = async () => {
-        const result = await saveForm();
-        if (result) {
-          setId(result);
-        }
-      };
-
-      save();
-
-      return () => {
-        saved.current = true;
-      };
-    }
-  }, [status, id, saveForm, setId]);
-
   const preventSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     return false;
   };
+
+  useAutoSave();
+
+  const responsesLink = `/${i18n.language}/form-builder/responses/${id}`;
+  const settingsLink = `/${i18n.language}/form-builder/settings/${id}`;
+
+  const brand = formRecord?.form ? formRecord.form.brand : null;
 
   return (
     <>
@@ -84,12 +73,28 @@ export const Preview = () => {
         {status !== "authenticated" ? (
           <div className="bg-purple-200 p-2 inline-block mb-1">
             <Markdown options={{ forceBlock: true }}>
-              {t("signInToTest", { ns: "form-builder" })}
+              {t("signInToTest", { ns: "form-builder", lng: language })}
             </Markdown>
+          </div>
+        ) : email ? (
+          <div className="bg-purple-200 p-2 inline-block mb-1">
+            {t("submittedResponsesText", { ns: "form-builder", email })}{" "}
+            <a className="visited:text-black-default" href={settingsLink}>
+              {t("submittedResponsesChange", { ns: "form-builder" })}
+            </a>
+            .
           </div>
         ) : (
           <div className="bg-purple-200 p-2 inline-block mb-1">
-            {t("submittedResponsesText", { ns: "form-builder", email })}
+            {t("submittedResponsesTextVault.text1", { ns: "form-builder" })}{" "}
+            <a className="visited:text-black-default" href={responsesLink}>
+              {t("submittedResponsesTextVault.text2", { ns: "form-builder" })}
+            </a>
+            .{" "}
+            <a className="visited:text-black-default" href={settingsLink}>
+              {t("submittedResponsesChange", { ns: "form-builder" })}
+            </a>
+            .
           </div>
         )}
 
@@ -101,7 +106,8 @@ export const Preview = () => {
           </>
         )}
 
-        <h1 className="md:text-h1 mt-4">
+        <Brand brand={brand} className="mt-8 mb-12" />
+        <h1 className="mt-4">
           {formRecord.form[localizeField(LocalizedFormProperties.TITLE, language)] ||
             t("pagePreview", { ns: "form-builder" })}
         </h1>
@@ -129,13 +135,14 @@ export const Preview = () => {
                   <Button
                     type="submit"
                     id="SubmitButton"
+                    className="mb-4"
                     onClick={(e) => {
                       if (status !== "authenticated") {
                         return preventSubmit(e);
                       }
                     }}
                   >
-                    {t("submitButton", { ns: "common" })}
+                    {t("submitButton", { ns: "common", lng: language })}
                   </Button>
                 </span>
                 {status !== "authenticated" && (
@@ -144,7 +151,7 @@ export const Preview = () => {
                     {...getLocalizationAttribute()}
                   >
                     <Markdown options={{ forceBlock: true }}>
-                      {t("signInToTest", { ns: "form-builder" })}
+                      {t("signInToTest", { ns: "form-builder", lng: language })}
                     </Markdown>
                   </div>
                 )}

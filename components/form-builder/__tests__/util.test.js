@@ -5,7 +5,6 @@ import {
   moveUp,
   moveDown,
   removeElementById,
-  newlineToOptions,
   isValidatedTextType,
   incrementSubElementId,
 } from "../util";
@@ -82,37 +81,6 @@ describe("Util", () => {
   it("removes element by (id) from array", () => {
     expect(removeElementById([{ id: 1 }, { id: 2 }, { id: 4 }], 2)).toEqual([{ id: 1 }, { id: 4 }]);
     expect(removeElementById([{ id: 1 }, { id: 2 }, { id: 4 }], 4)).toEqual([{ id: 1 }, { id: 2 }]);
-  });
-
-  it("adds options via a string", () => {
-    const result = [
-      { en: "option 1", fr: "option 1 fr" },
-      { en: "option 2", fr: "" },
-      { en: "option 3", fr: "" },
-    ];
-    expect(
-      newlineToOptions(
-        "en",
-        [{ en: "option 1", fr: "option 1 fr" }],
-        "option 1\noption 2\noption 3\n"
-      )
-    ).toEqual(result);
-  });
-
-  it("removes 'extra' options", () => {
-    const currentChoices = [
-      { en: "option 1", fr: "option 1 fr" },
-      { en: "option 2", fr: "" },
-      { en: "option 3", fr: "" },
-      { en: "option 4", fr: "" },
-    ];
-    const bulkChoices = "option 1\noption 2\n";
-    const result = [
-      { en: "option 1", fr: "option 1 fr" },
-      { en: "option 2", fr: "" },
-    ];
-
-    expect(newlineToOptions("en", currentChoices, bulkChoices)).toEqual(result);
   });
 
   it("detects text fields that have a validation type", () => {

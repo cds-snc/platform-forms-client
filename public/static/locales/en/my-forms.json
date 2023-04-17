@@ -24,6 +24,10 @@
       "notTranslatedFr": "No French translation"
     },
     "lastEdited": "Last edited",
+    "deliveryOption": {
+      "email": "Responses sent to :",
+      "vault": "Form responses available for download"
+    },
     "menu": {
       "more": "More",
       "save": "Save to computer",
@@ -54,9 +58,11 @@
     "submissionID": "Submission ID",
     "copyResponse": "Copy answer row to clipboard"
   },
-  "protectedBWarning": {
+  "dataClassification": {
     "officialRecord": "This is an official record",
     "retainCopy": "Retain this copy in accordance to your retention policy.",
-    "protectedB": "PROTECTED B"
+    "unclassified": "Unclassified",
+    "protectedA": "Protected A",
+    "protectedB": "Protected B"
   }
 }

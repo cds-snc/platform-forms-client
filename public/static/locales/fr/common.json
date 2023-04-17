@@ -1,8 +1,12 @@
 {
   "footer": {
-    "terms": {
-      "link": "/fr/terms-avis",
-      "desc": "Avis"
+    "terms-and-conditions": {
+      "link": "/fr/terms-and-conditions",
+      "desc": "Conditions générales"
+    },
+    "terms-of-use": {
+      "link": "/fr/terms-of-use",
+      "desc": "Conditions d'utilisation"
     },
     "sla": {
       "link": "/fr/sla",
@@ -40,7 +44,8 @@
     "file-type-invalid": "Sélectionner un autre type de fichier.",
     "too-many-characters": "Raccourcir la réponse.",
     "all-checkboxes-required": "Lisez et cochez toutes les cases pour confirmer les éléments de cette section.",
-    "validGovEmail": "Entrer une adresse courriel valide du gouvernement."
+    "validGovEmail": "Entrer une adresse courriel valide du gouvernement.",
+    "notSameAsUserEmail": "Il ne peut s'agir de votre propre adresse courriel. Entrez le courriel de la personne responsable de votre équipe. S'il s'agit de vous, ajoutez un·e collègue."
   },
   "required": "obligatoire",
   "all-required": "toutes les cases à cocher sont obligatoires",
@@ -64,7 +69,6 @@
   "adminNav": {
     "dashboard": "Accueil",
     "formbuilder": "Générateur de formulaires",
-    "vault": "Coffre",
     "users": "Usagers",
     "upload": "Téléversement de modèle",
     "templates": "Modèles",
@@ -72,7 +76,7 @@
     "login": "Se connecter",
     "logout": "Se déconnecter",
     "privileges": "Privilèges",
-    "settings": "[FR] Settings",
+    "settings": "Paramètres",
     "myForms": "Vos formulaires"
   },
   "formElements": {
@@ -90,7 +94,7 @@
   "acceptableUsePage": {
     "agree": "Accepter",
 
-    "welcome": "Connaître vos responsabilités"
+    "welcome": "Connaissez vos responsabilités"
   },
   "loginMenu": {
     "login": "Se connecter",
@@ -101,5 +105,9 @@
   },
   "continue": "Continuer",
   "error": "Erreur",
-  "unknown": "Inconnu"
+  "unknown": "Inconnu",
+  "attention": {
+    "warning": "Avertissement",
+    "error": "Erreur"
+  }
 }

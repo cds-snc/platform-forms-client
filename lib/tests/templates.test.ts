@@ -11,7 +11,6 @@ import {
   getFullTemplateByID,
   updateTemplate,
   deleteTemplate,
-  getTemplateDeliveryOptionByID,
   onlyIncludePublicProperties,
   updateIsPublishedForTemplate,
   getTemplateWithAssociatedUsers,
@@ -84,7 +83,11 @@ describe("Template CRUD functions", () => {
       buildPrismaResponse("formtestID", formConfiguration)
     );
 
-    const newTemplate = await createTemplate(ability, "1", formConfiguration as FormProperties);
+    const newTemplate = await createTemplate({
+      ability: ability,
+      userID: "1",
+      formConfig: formConfiguration as FormProperties,
+    });
 
     expect(prismaMock.template.create).toHaveBeenCalledWith({
       data: {
@@ -359,24 +362,6 @@ describe("Template CRUD functions", () => {
     expect(template).toBe(null);
   });
 
-  it("Get Delivery Option object", async () => {
-    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue(
-      buildPrismaResponse("formtestID", formConfiguration, false, {
-        emailAddress: "email@test.com",
-        emailSubjectEn: "email subject in English",
-        emailSubjectFr: "email subject in French",
-      })
-    );
-
-    const deliveryOption = await getTemplateDeliveryOptionByID("formtestID");
-
-    expect(deliveryOption).toEqual({
-      emailAddress: "email@test.com",
-      emailSubjectEn: "email subject in English",
-      emailSubjectFr: "email subject in French",
-    });
-  });
-
   it("Get templates with associated users", async () => {
     const fakeSession = {
       user: {
@@ -440,7 +425,11 @@ describe("Template CRUD functions", () => {
       buildPrismaResponse("test1", updatedFormConfig, true)
     );
 
-    const updatedTemplate = await updateTemplate(ability, "test1", updatedFormConfig);
+    const updatedTemplate = await updateTemplate({
+      ability: ability,
+      formID: "test1",
+      formConfig: updatedFormConfig,
+    });
 
     expect(prismaMock.template.update).toHaveBeenCalledWith({
       where: {
@@ -609,7 +598,7 @@ describe("Template CRUD functions", () => {
     );
 
     await expect(async () => {
-      await updateTemplate(ability, "test1", updatedFormConfig);
+      await updateTemplate({ ability: ability, formID: "test1", formConfig: updatedFormConfig });
     }).rejects.toThrowError(new TemplateAlreadyPublishedError());
     expect(mockedLogEvent).toBeCalledTimes(0);
   });
@@ -623,7 +612,9 @@ describe("Template CRUD functions", () => {
       const ability = createAbility(fakeSession as Session);
 
       (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
-        ...buildPrismaResponse("formtestID", formConfiguration),
+        ...buildPrismaResponse("formtestID", formConfiguration, false, {
+          emailAddress: "test@test.com",
+        }),
         users: [{ id: "1" }],
       });
 
@@ -759,7 +750,11 @@ describe("Template CRUD functions", () => {
     });
 
     await expect(async () => {
-      await createTemplate(ability, "1", formConfiguration as FormProperties);
+      await createTemplate({
+        ability: ability,
+        userID: "1",
+        formConfig: formConfiguration as FormProperties,
+      });
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
     await expect(async () => {
@@ -771,7 +766,11 @@ describe("Template CRUD functions", () => {
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
     await expect(async () => {
-      await updateTemplate(ability, "test1", structuredClone(formConfiguration as FormProperties));
+      await updateTemplate({
+        ability: ability,
+        formID: "test1",
+        formConfig: structuredClone(formConfiguration as FormProperties),
+      });
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
     await expect(async () => {
@@ -853,7 +852,11 @@ describe("Template CRUD functions", () => {
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
     await expect(async () => {
-      await updateTemplate(ability, "test1", structuredClone(formConfiguration as FormProperties));
+      await updateTemplate({
+        ability: ability,
+        formID: "test1",
+        formConfig: structuredClone(formConfiguration as FormProperties),
+      });
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
     await expect(async () => {

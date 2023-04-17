@@ -101,7 +101,7 @@ export const Option = ({
           updateValue(parentIndex, e.target.value)
         }
         onKeyDown={handleKeyDown}
-        className="ml-5 w-80 max-h-9 !my-0"
+        className="ml-5 w-full max-h-9 !my-0"
         {...getLocalizationAttribute()}
       />
       <Button

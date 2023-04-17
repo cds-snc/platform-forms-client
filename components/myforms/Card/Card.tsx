@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import { useTranslation } from "next-i18next";
 import copy from "copy-to-clipboard";
 import {
@@ -6,6 +7,8 @@ import {
   MenuDropdownItemI,
   MenuDropdownItemCallback,
 } from "@components/myforms/MenuDropdown/MenuDropdown";
+import { getDate, slugify } from "@lib/clientHelpers";
+import { MessageIcon, EnvelopeIcon } from "@components/form-builder/icons/";
 
 export interface CardProps {
   id: string;
@@ -15,12 +18,14 @@ export interface CardProps {
   url: string;
   date: string;
   isPublished: boolean;
+  deliveryOption?: { emailAddress?: string } | null;
+  handleDelete: (card: CardProps) => void;
 }
 
 export const Card = (props: CardProps): React.ReactElement => {
-  const { id, name, titleEn, titleFr, url, date, isPublished } = props;
+  const { id, name, titleEn, titleFr, url, date, isPublished, deliveryOption } = props;
   const { t, i18n } = useTranslation(["my-forms", "common"]);
-
+  const responsesLink = `/${i18n.language}/form-builder/responses/${id}`;
   const menuItemsList: Array<MenuDropdownItemI> = [
     {
       title: t("card.menu.preview"),
@@ -28,7 +33,10 @@ export const Card = (props: CardProps): React.ReactElement => {
     },
     {
       title: t("card.menu.save"),
-      url: `/${i18n.language}/form-builder/settings/${id}?downloadconfirm=true`,
+      callback: () => {
+        downloadForm(name, id);
+        return { message: "" };
+      },
     },
     {
       title: t("card.menu.settings"),
@@ -36,7 +44,12 @@ export const Card = (props: CardProps): React.ReactElement => {
     },
     {
       title: t("card.menu.delete"),
-      url: `/${i18n.language}/form-builder/settings/${id}?deleteconfirm=true`,
+      callback: () => {
+        props.handleDelete(props);
+        return {
+          message: "",
+        };
+      },
     },
   ];
 
@@ -51,6 +64,29 @@ export const Card = (props: CardProps): React.ReactElement => {
       title: t("card.menu.edit"),
       url: `/${i18n.language}/form-builder/edit/${id}`,
     });
+  }
+
+  async function downloadForm(name: string, id: string) {
+    const url = `/api/templates/${id}`;
+    const response = await axios({
+      url,
+      method: "GET",
+      responseType: "json",
+      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+    });
+
+    const fileName = name
+      ? name
+      : i18n.language === "fr"
+      ? response.data.form.titleFr
+      : response.data.form.titleEn;
+    const data = JSON.stringify(response.data.form, null, 2);
+    const tempUrl = window.URL.createObjectURL(new Blob([data]));
+    const link = document.createElement("a");
+    link.href = tempUrl;
+    link.setAttribute("download", slugify(`${fileName}-${getDate()}`) + ".json");
+    document.body.appendChild(link);
+    link.click();
   }
 
   function copyLinkCallback(): MenuDropdownItemCallback {
@@ -91,7 +127,7 @@ export const Card = (props: CardProps): React.ReactElement => {
       <p className="h-36 px-3 pt-5 pb-8">
         <a
           href={isPublished ? url : `/${i18n.language}/form-builder/edit/${id}`}
-          className="line-clamp-3 inline-block wrap overflow-hidden inline-block"
+          className="font-bold line-clamp-3 inline-block wrap overflow-hidden inline-block"
           aria-describedby={`card-title-${id} card-date-${id}`}
         >
           {name ? name : ""}
@@ -103,6 +139,20 @@ export const Card = (props: CardProps): React.ReactElement => {
             </>
           )}
         </a>
+        {/* Email delivery */}
+        {deliveryOption && deliveryOption.emailAddress && (
+          <span className="block mt-4 text-sm">
+            <EnvelopeIcon className="inline-block mr-2" />
+            {t("card.deliveryOption.email", { ns: "my-forms" })} {deliveryOption.emailAddress}
+          </span>
+        )}
+        {/* Vault delivery */}
+        {deliveryOption && !deliveryOption.emailAddress && (
+          <a className="block mt-4 text-sm focus:fill-white active:fill-white" href={responsesLink}>
+            <MessageIcon className="inline-block mr-2" />
+            {t("card.deliveryOption.vault", { ns: "my-forms" })}{" "}
+          </a>
+        )}
       </p>
       <div className="flex justify-between items-center p-3">
         <div id={`card-date-${id}`} className="text-sm">

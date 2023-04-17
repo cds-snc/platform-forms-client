@@ -11,7 +11,7 @@ const LanguageToggle = () => {
   return (
     <StyledLink
       href={router?.asPath}
-      className="gc-language-toggle"
+      className="text-base text-right"
       locale={locale === "en" ? "fr" : "en"}
       ariaLabel={`${t("lang-toggle")}: ${locale == "en" ? "Français" : "English"}`}
       lang={locale === "en" ? "fr" : "en"}

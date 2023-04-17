@@ -52,7 +52,7 @@ describe("Test FormBuilder autocomplete props", () => {
 
   it("Checks the autocomplete list", () => {
     cy.visit("/form-builder/edit");
-    cy.get("button").contains("Add block").click();
+    cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="textField"]').click();
     cy.get("button").contains("Select block").click();
@@ -67,7 +67,7 @@ describe("Test FormBuilder autocomplete props", () => {
   autocompleteOptions.forEach((option) => {
     it(`Adds a TextInput with ${option[0]} autocomplete`, () => {
       cy.visit("/form-builder/edit");
-      cy.get("button").contains("Add block").click();
+      cy.get("button").contains("Add").click();
 
       cy.get('[data-testid="textField"]').click();
       cy.get("button").contains("Select block").click();
@@ -76,7 +76,7 @@ describe("Test FormBuilder autocomplete props", () => {
         .should("have.attr", "type", "text")
         .should("have.attr", "placeholder", "Question");
 
-      cy.get('[data-testid="element-select-active"]').should("contain", "Short answer");
+      cy.get(".example-text").should("contain", "Short answer");
 
       cy.get('[data-testid="more"]').click();
       cy.get('[data-testid="autocomplete"]').select(option[0]);

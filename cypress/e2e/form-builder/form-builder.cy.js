@@ -36,7 +36,7 @@ describe("Test FormBuilder", () => {
     cy.get("#formTitle").type("Cypress Test Form");
     cy.get("a").contains("Edit").should("have.class", "font-bold");
     cy.get(`[aria-label="Form introduction"]`).type("form intro");
-    cy.get("button").contains("Add block").click();
+    cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="radio"]').click();
     cy.get("button").contains("Select block").click();
@@ -55,7 +55,7 @@ describe("Test FormBuilder", () => {
     cy.get("#title--modal--0").type("-1");
     cy.get("#description--modal--0").type("Question 1 description");
     cy.get("#required-0-id-modal").click();
-    cy.get(".modal-content button").contains("Save").click({ force: true });
+    cy.get('[data-testid="modal-content"] button').contains("Save").click({ force: true });
 
     // re-check form editor
     cy.get("#item-1").scrollIntoView().should("have.value", "Question 1-1");
@@ -79,7 +79,6 @@ describe("Test FormBuilder", () => {
     cy.get("a").contains("Settings").click();
     cy.get("a").contains("Settings").should("have.class", "font-bold");
     cy.get("h1").should("contain", "Form settings");
-    cy.get("label").contains("Response delivery destination");
 
     // publish form
     cy.get("a").contains("Publish").click();

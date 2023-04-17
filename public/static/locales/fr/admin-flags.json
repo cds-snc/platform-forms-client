@@ -14,10 +14,6 @@
       "title": "Page bac à sable",
       "description": "Une page qui affiche une liste de tous les formulaires non publiés"
     },
-    "vault": {
-      "title": "Coffre-fort de soumission",
-      "description": "Une page qui affiche une liste des soumissions stockées dans le coffre-fort pour les formulaires activés avec cette fonctionnalité"
-    },
     "unpublishedForms": {
       "title": "Formulaires non publiés",
       "description": "Autoriser l'accès et le remplissage de formulaires qui n'ont pas de statut publié"
@@ -46,9 +42,13 @@
       "title": "Formulaires de support",
       "description": "Activation ou désactivation des formulaires de support"
     },
-    "formBuilderDebug": {
-      "title": "Débogage du Générateur de formulaires",
-      "description": "Activer le mode de débogage du Générateur de formulaires"
+    "nagware": {
+      "title": "Notifications Nagware",
+      "description": "Activer les notifications du module Nagware"
+    },
+    "experimentalBlocks": {
+      "title": "Blocs expérimentaux",
+      "description": "Activer les blocs expérimentaux"
     }
   }
 }

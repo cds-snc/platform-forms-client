@@ -32,19 +32,23 @@ import {
   FileInput,
 } from "../app/edit/elements/element-dialog";
 
+import { useIsAdminUser } from "./useIsAdminUser";
+
 import { ElementOptionsFilter, ElementOption } from "../types";
+import { useFlag } from "@lib/hooks";
 
 export const useElementOptions = (filterElements?: ElementOptionsFilter | undefined) => {
   const { t } = useTranslation("form-builder");
-
   const group = {
     layout: { id: "layout", value: t("addElementDialog.layoutBlocks") },
     input: { id: "input", value: t("addElementDialog.inputBlocks") },
     advanced: { id: "advanced", value: t("addElementDialog.advancedBlocks") },
   };
 
-  // default to off until we add file scanning
-  const allowFileInput = false;
+  // default to off unless the user is an admin
+  const allowFileInput = useIsAdminUser();
+
+  const { status: experimentalBlocks } = useFlag("experimentalBlocks");
 
   const fileInputOption: ElementOption = {
     id: "fileInput",
@@ -53,6 +57,15 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     description: FileInput,
     className: "",
     group: group.input,
+  };
+
+  const repeatingSetsOption: ElementOption = {
+    id: "dynamicRow",
+    value: t("dyanamicRow"),
+    icon: AddIcon,
+    description: QuestionSet,
+    className: "",
+    group: group.advanced,
   };
 
   const elementOptions: ElementOption[] = [
@@ -158,14 +171,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       className: "separator",
       group: group.input,
     },
-    {
-      id: "dynamicRow",
-      value: t("dyanamicRow"),
-      icon: AddIcon,
-      description: QuestionSet,
-      className: "",
-      group: group.advanced,
-    },
+    experimentalBlocks ? { ...(repeatingSetsOption as ElementOption) } : ({} as ElementOption),
   ];
 
   return filterElements ? filterElements(elementOptions) : elementOptions;

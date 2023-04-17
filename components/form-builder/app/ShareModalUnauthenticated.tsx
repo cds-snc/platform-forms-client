@@ -1,9 +1,8 @@
-import React, { useCallback, useRef } from "react";
+import React, { useRef } from "react";
 import { useTranslation } from "next-i18next";
 import { FormElementTypes } from "@lib/types";
 
-import { useDialogRef, Dialog, Button, InfoDetails } from "./shared";
-import { useTemplateStore } from "../store";
+import { useDialogRef, Dialog, Button, InfoDetails, DownloadFileButton } from "./shared";
 import Markdown from "markdown-to-jsx";
 
 export const ShareModalUnauthenticated = ({
@@ -12,14 +11,13 @@ export const ShareModalUnauthenticated = ({
   handleAddType?: (type?: FormElementTypes) => void;
   handleClose: () => void;
 }) => {
-  const { t } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation("form-builder");
   const instructions = useRef<HTMLDivElement>(null);
 
   const dialog = useDialogRef();
 
-  const { getSchema } = useTemplateStore((s) => ({
-    getSchema: s.getSchema,
-  }));
+  const currentLanguage = i18n.language;
+  const alternateLanguage = i18n.language === "en" ? "fr" : "en";
 
   const handleCopyToClipboard = async () => {
     if ("clipboard" in navigator) {
@@ -27,24 +25,6 @@ export const ShareModalUnauthenticated = ({
       await navigator.clipboard.writeText(stringified);
     }
   };
-
-  const handleDownloadJson = useCallback(async () => {
-    async function retrieveFileBlob() {
-      try {
-        const blob = new Blob([getSchema()], { type: "application/json" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "form.json";
-        a.click();
-        URL.revokeObjectURL(url);
-      } catch (e) {
-        alert("error creating file download");
-      }
-    }
-
-    retrieveFileBlob();
-  }, [getSchema]);
 
   const actions = (
     <>
@@ -83,16 +63,8 @@ export const ShareModalUnauthenticated = ({
 
           <section className="my-8">
             <h3>{t("share.unauthenticated.step1")}</h3>
-            <p>{t("share.unauthenticated.step1Details")}</p>
-            <Button
-              theme="secondary"
-              className="mt-4"
-              onClick={() => {
-                handleDownloadJson();
-              }}
-            >
-              {t("share.unauthenticated.downloadFormFile")}
-            </Button>
+            <p className="mb-4">{t("share.unauthenticated.step1Details")}</p>
+            <DownloadFileButton showInfo={false} />
           </section>
 
           <section className="my-8">
@@ -116,19 +88,51 @@ export const ShareModalUnauthenticated = ({
                 {t("share.toPreview")}
                 <ul>
                   <li className="list-disc">
-                    <strong>{t("share.stepOne")}</strong>
+                    <strong>{t("share.stepOne", { lng: currentLanguage })}</strong>
                     <br />
-                    {t("share.stepOneDetails")}.
+                    {t("share.stepOneDetails", { lng: currentLanguage })}.
                   </li>
                   <li className="list-disc">
-                    <strong>{t("share.stepTwo")}</strong>
+                    <strong>{t("share.stepTwo", { lng: currentLanguage })}</strong>
                     <br />
-                    <Markdown options={{ forceBlock: true }}>{t("share.stepTwoDetails")}</Markdown>
+                    <Markdown options={{ forceBlock: true }}>
+                      {t("share.stepTwoDetails", { lng: currentLanguage })}
+                    </Markdown>
                   </li>
                   <li className="list-disc">
-                    <strong>{t("share.stepThree")}</strong>
+                    <strong>{t("share.stepThree", { lng: currentLanguage })}</strong>
                     <br />
-                    {t("share.stepThreeDetails")}
+                    {t("share.stepThreeDetails", { lng: currentLanguage })}
+                  </li>
+                </ul>
+              </div>
+
+              <hr className="my-6" />
+
+              <h4 className="mt-4">
+                {t("share.someoneHasShared", {
+                  name: t("share.formUser", { lng: alternateLanguage }),
+                })}
+              </h4>
+              <div className="mt-4">
+                {t("share.toPreview", { lng: alternateLanguage })}
+                <ul>
+                  <li className="list-disc">
+                    <strong>{t("share.stepOne", { lng: alternateLanguage })}</strong>
+                    <br />
+                    {t("share.stepOneDetails", { lng: alternateLanguage })}.
+                  </li>
+                  <li className="list-disc">
+                    <strong>{t("share.stepTwo", { lng: alternateLanguage })}</strong>
+                    <br />
+                    <Markdown options={{ forceBlock: true }}>
+                      {t("share.stepTwoDetails", { lng: alternateLanguage })}
+                    </Markdown>
+                  </li>
+                  <li className="list-disc">
+                    <strong>{t("share.stepThree", { lng: alternateLanguage })}</strong>
+                    <br />
+                    {t("share.stepThreeDetails", { lng: alternateLanguage })}
                   </li>
                 </ul>
               </div>
@@ -137,18 +141,31 @@ export const ShareModalUnauthenticated = ({
         </div>
       </Dialog>
       <div className="hidden" ref={instructions}>
-        {t("share.someoneHasShared", { name: t("share.formUser") })}
+        {t("share.someoneHasShared", { name: t("share.formUser", { lng: currentLanguage }) })}
         {"\n\n"}
-        {t("share.toPreview")}
-        {"\n"}- {t("share.stepOne")}
+        {t("share.toPreview", { lng: currentLanguage })}
+        {"\n"}- {t("share.stepOne", { lng: currentLanguage })}
         {"\n"}
-        {t("share.stepOneDetails")}.{"\n\n"}- {t("share.stepTwo")}
+        {t("share.stepOneDetails", { lng: currentLanguage })}.{"\n\n"}-{" "}
+        {t("share.stepTwo", { lng: currentLanguage })}
         {"\n"}
-        {t("share.stepTwoDetailsNoHTML")}
-        {"\n\n"}- {t("share.stepThree")}
+        {t("share.stepTwoDetailsNoHTML", { lng: currentLanguage })}
+        {"\n\n"}- {t("share.stepThree", { lng: currentLanguage })}
         {"\n"}
-        {t("share.stepThreeDetails")}
+        {t("share.stepThreeDetails", { lng: currentLanguage })}
+        {"\n\n ----- \n\n"}
+        {t("share.someoneHasShared", { name: t("share.formUser", { lng: alternateLanguage }) })}
+        {"\n\n"}
+        {t("share.toPreview", { lng: alternateLanguage })}
+        {"\n"}- {t("share.stepOne", { lng: alternateLanguage })}
         {"\n"}
+        {t("share.stepOneDetails", { lng: alternateLanguage })}.{"\n\n"}-{" "}
+        {t("share.stepTwo", { lng: alternateLanguage })}
+        {"\n"}
+        {t("share.stepTwoDetailsNoHTML", { lng: alternateLanguage })}
+        {"\n\n"}- {t("share.stepThree", { lng: alternateLanguage })}
+        {"\n"}
+        {t("share.stepThreeDetails", { lng: alternateLanguage })}
       </div>
     </div>
   );

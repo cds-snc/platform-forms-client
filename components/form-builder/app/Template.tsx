@@ -1,5 +1,4 @@
 import React, { ReactElement, useEffect } from "react";
-import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { useTranslation } from "next-i18next";
 
@@ -9,7 +8,8 @@ import Loader from "@components/globals/Loader";
 import { useTemplateStore, TemplateStoreProvider } from "@components/form-builder/store";
 import { LeftNavigation, Header } from "@components/form-builder/app";
 import { Language } from "../types";
-import { useActivePathname, TemplateApiProvider } from "../hooks";
+import { TemplateApiProvider } from "../hooks";
+import { ToastContainer } from "./shared/Toast";
 
 export const Template = ({
   page,
@@ -34,7 +34,7 @@ export const Template = ({
           <SkipLink />
           <Header isFormBuilder={isFormBuilder} />
           {page}
-          <Footer displaySLAAndSupportLinks />
+          <Footer displayFormBuilderFooter />
         </div>
       </TemplateApiProvider>
     </TemplateStoreProvider>
@@ -55,34 +55,22 @@ export const PageTemplate = ({
   autoWidth?: boolean;
 }) => {
   const { t, i18n } = useTranslation("form-builder");
-  const { hasHydrated, form, setLang, updateField, email } = useTemplateStore((s) => ({
+  const { hasHydrated, form, setLang } = useTemplateStore((s) => ({
     form: s.form,
     hasHydrated: s._hasHydrated,
     setLang: s.setLang,
     email: s.deliveryOption?.emailAddress,
-    updateField: s.updateField,
   }));
 
   const locale = i18n.language as Language;
-  const { data } = useSession();
-  const { currentPage } = useActivePathname();
-
   useEffect(() => {
     setLang(locale);
   }, [locale, setLang]);
 
-  useEffect(() => {
-    const setEmail = () => {
-      if (data && data.user.email) {
-        updateField("deliveryOption.emailAddress", data.user.email);
-      }
-    };
-    !email && currentPage !== "settings" && setEmail();
-  }, [email, data, currentPage, updateField]);
-
   // Wait until the Template Store has fully hydrated before rendering the page
   return hasHydrated ? (
-    <div id="page-container" className="lg:!mx-4 xl:!mx-8">
+    <div className="mx-4 laptop:mx-32 desktop:mx-64 grow shrink-0 basis-auto">
+      <ToastContainer />
       <div>
         {leftNav && <LeftNavigation />}
         <>
@@ -93,7 +81,7 @@ export const PageTemplate = ({
               </Head>
               <main
                 id="content"
-                className={`${leftNav && "ml-60 xl:ml-40 md:pl-5"} ${
+                className={`${leftNav && "ml-40 laptop:ml-60"} ${
                   leftNav && !autoWidth && "max-w-4xl"
                 } form-builder`}
               >

@@ -31,7 +31,7 @@ export const Options = ({
           <div className="choice" key={`choice-${choiceIndex}`}>
             <fieldset>
               <FieldsetLegend>
-                {t(element.type)}: {t("optionText")}
+                {t(`addElementDialog.${element.type}.title`)}: {t("optionText")}
               </FieldsetLegend>
               <div className="flex gap-px border-b border-r border-t border-gray-300 mb-10 divide-x-2">
                 <label

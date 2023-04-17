@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
-import { rehydrateFormResponses } from "@lib/helpers";
-import { getPublicTemplateByID, getTemplateDeliveryOptionByID } from "@lib/templates";
+import { rehydrateFormResponses } from "@lib/clientHelpers";
+import { getPublicTemplateByID } from "@lib/templates";
 import { logMessage } from "@lib/logger";
 import { checkOne } from "@lib/cache/flags";
 import { pushFileToS3, deleteObject } from "@lib/s3-upload";
@@ -60,8 +60,6 @@ const callLambda = async (
   language: string,
   securityAttribute: string
 ) => {
-  const deliveryOption = await getTemplateDeliveryOptionByID(formID);
-
   const encoder = new TextEncoder();
 
   const command = new InvokeCommand({
@@ -71,7 +69,6 @@ const callLambda = async (
         formID,
         language,
         responses: fields,
-        deliveryOption,
         securityAttribute,
       })
     ),
@@ -317,7 +314,7 @@ const processFormData = async (
         fields,
         // pass in the language from the header content language... assume english as the default
         req.headers?.["content-language"] ? req.headers["content-language"] : "en",
-        reqFields.securityAttribute ? (reqFields.securityAttribute as string) : "Unclassified"
+        reqFields.securityAttribute ? (reqFields.securityAttribute as string) : "Protected A"
       );
 
       return res.status(201).json({ received: true });

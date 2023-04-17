@@ -1,8 +1,12 @@
 {
   "footer": {
-    "terms": {
-      "link": "/en/terms-avis",
+    "terms-and-conditions": {
+      "link": "/en/terms-and-conditions",
       "desc": "Terms and conditions"
+    },
+    "terms-of-use": {
+      "link": "/en/terms-of-use",
+      "desc": "Terms of use"
     },
     "sla": {
       "link": "/en/sla",
@@ -40,7 +44,8 @@
     "file-type-invalid": "Select a different file type.",
     "too-many-characters": "Shorten the response.",
     "all-checkboxes-required": "Read and check all boxes to confirm the items in this section.",
-    "validGovEmail": "Enter a valid government email address."
+    "validGovEmail": "Enter a valid government email address.",
+    "notSameAsUserEmail": "This cannot be your email address. Enter the email of the person in charge of your team. Enter the email of the person in charge of your team. If that's you, add a colleague."
   },
   "required": "required",
   "all-required": "all checkboxes required",
@@ -64,7 +69,6 @@
   "adminNav": {
     "dashboard": "Home",
     "formbuilder": "Form builder",
-    "vault": "Vault",
     "users": "Users",
     "upload": "Template upload",
     "templates": "Templates",
@@ -100,5 +104,9 @@
   },
   "continue": "Continue",
   "error": "Error",
-  "unknown": "Unknown"
+  "unknown": "Unknown",
+  "attention": {
+    "warning": "Warning",
+    "error": "Error"
+  }
 }

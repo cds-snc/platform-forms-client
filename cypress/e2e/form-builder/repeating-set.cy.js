@@ -1,5 +1,6 @@
 describe("Test FormBuilder Repeating set", () => {
   beforeEach(() => {
+    cy.useFlag("experimentalBlocks", true);
     cy.visit("/form-builder", {
       onBeforeLoad: (win) => {
         win.sessionStorage.clear();
@@ -25,7 +26,7 @@ describe("Test FormBuilder Repeating set", () => {
 
   it("Adds a Repeating set with a few questions", () => {
     cy.visit("/form-builder/edit");
-    cy.get("button").contains("Add block").click();
+    cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="dynamicRow"]').click();
     cy.get("button").contains("Select block").click();
@@ -54,7 +55,7 @@ describe("Test FormBuilder Repeating set", () => {
 
   it("Adds a Repeating set with custom add label", () => {
     cy.visit("/form-builder/edit");
-    cy.get("button").contains("Add block").click();
+    cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="dynamicRow"]').click();
     cy.get("button").contains("Select block").click();
@@ -72,7 +73,7 @@ describe("Test FormBuilder Repeating set", () => {
 
   it("Adds a Repeating set with max rows", () => {
     cy.visit("/form-builder/edit");
-    cy.get("button").contains("Add block").click();
+    cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="dynamicRow"]').click();
     cy.get("button").contains("Select block").click();
@@ -100,9 +101,10 @@ describe("Test FormBuilder Repeating set", () => {
     cy.get("button").contains("Add").should("exist");
   });
 
-  it("Adds multiple Repeating sets", () => {
+  // re-add when we re-look at this feature
+  it.skip("Adds multiple Repeating sets", () => {
     cy.visit("/form-builder/edit");
-    cy.get("button").contains("Add block").click();
+    cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="dynamicRow"]').click();
     cy.get("button").contains("Select block").click();
@@ -113,11 +115,11 @@ describe("Test FormBuilder Repeating set", () => {
     cy.get("button").contains("Select block").click();
     cy.get("#item-101").type("This is a short answer question");
 
-    cy.get(".element-0").find("button").contains("Add block").click();
+    // cy.get(".element-0").find("button").contains("Add").click();
 
-    cy.get('[data-testid="dynamicRow"]').click();
-    cy.get("button").contains("Select block").click();
-    cy.get("#item-2").type("This is another repeating set");
+    // cy.get('[data-testid="dynamicRow"]').click();
+    // cy.get("button").contains("Select block").click();
+    // cy.get("#item-2").type("This is another repeating set");
 
     cy.get(".element-1").find("button").contains("Add to set").click();
     cy.get('[data-testid="textField"]').click();

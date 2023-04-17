@@ -17,7 +17,13 @@ import {
   subElementsIDValidator,
   uniqueIDValidator,
 } from "@lib/middleware/jsonIDValidator";
-import { MiddlewareProps, FormProperties, DeliveryOption, UserAbility } from "@lib/types";
+import {
+  MiddlewareProps,
+  FormProperties,
+  DeliveryOption,
+  UserAbility,
+  SecurityAttribute,
+} from "@lib/types";
 import { AccessControlError, createAbility } from "@lib/privileges";
 
 const allowedMethods = ["GET", "POST", "PUT", "DELETE"];
@@ -66,6 +72,7 @@ const templateCRUD = async ({
   name,
   formConfig,
   deliveryOption,
+  securityAttribute,
   isPublished,
   users,
   sendResponsesToVault,
@@ -76,6 +83,7 @@ const templateCRUD = async ({
   name?: string;
   formConfig?: FormProperties;
   deliveryOption?: DeliveryOption;
+  securityAttribute?: SecurityAttribute;
   isPublished?: boolean;
   users?: { id: string; action: "add" | "remove" }[];
   sendResponsesToVault?: boolean;
@@ -87,7 +95,14 @@ const templateCRUD = async ({
       break;
     case "PUT":
       if (formID && formConfig) {
-        return await updateTemplate(ability, formID, formConfig, name, deliveryOption);
+        return await updateTemplate({
+          ability: ability,
+          formID: formID,
+          formConfig: formConfig,
+          name: name,
+          deliveryOption: deliveryOption,
+          securityAttribute: securityAttribute,
+        });
       } else if (formID && isPublished) {
         return await updateIsPublishedForTemplate(ability, formID, isPublished);
       } else if (formID && users) {
@@ -112,7 +127,11 @@ export default middleware(
   [
     cors({ allowedMethods }),
     sessionExists(authenticatedMethods),
-    jsonValidator(templatesSchema, { jsonKey: "formConfig", noHTML: true }),
+    jsonValidator(templatesSchema, {
+      jsonKey: "formConfig",
+      noHTML: true,
+      noValidateMethods: ["DELETE"],
+    }),
     uniqueIDValidator({
       runValidationIf: runValidationCondition,
       jsonKey: "formConfig",

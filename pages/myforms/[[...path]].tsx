@@ -24,6 +24,7 @@ interface FormsDataItem {
   titleFr: string;
   url: string;
   date: string;
+  deliveryOption: { emailAddress?: string };
   isPublished: boolean;
 }
 interface MyFormsProps {
@@ -79,11 +80,11 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
       <Head>
         <title>{t("title")}</title>
       </Head>
-      <div id="page-container" className="lg:!mx-4 xl:!mx-8">
+      <div className="mx-4 laptop:mx-32 desktop:mx-64 grow shrink-0 basis-auto">
         <div>
           <LeftNavigation />
-          <main id="content" className="ml-60 xl:ml-40 md:pl-5">
-            <h1 className="border-b-0 mb-8 md:text-h1">{t("title")}</h1>
+          <main id="content" className="ml-40 laptop:ml-60">
+            <h1 className="border-b-0 mb-8 text-h1">{t("title")}</h1>
             <div className="top-40">
               <ResumeEditingForm>
                 <StyledLink href="/form-builder/edit" className="mr-8">
@@ -142,6 +143,7 @@ export const getServerSideProps = requireAuthentication(
           id,
           form: { titleEn = "", titleFr = "" },
           name,
+          deliveryOption = { emailAddress: "" },
           isPublished,
           updatedAt,
         } = template;
@@ -149,6 +151,7 @@ export const getServerSideProps = requireAuthentication(
           id,
           titleEn,
           titleFr,
+          deliveryOption,
           name,
           isPublished,
           date: updatedAt,

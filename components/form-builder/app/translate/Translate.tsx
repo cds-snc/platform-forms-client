@@ -10,7 +10,6 @@ import { DownloadCSV } from "./DownloadCSV";
 import { RichTextEditor } from "../edit/elements/lexical-editor/RichTextEditor";
 import { LanguageLabel } from "./LanguageLabel";
 import { FieldsetLegend, SectionTitle } from ".";
-import { formatEmailSubject } from "../edit/Edit";
 
 import { FormElement } from "@lib/types";
 
@@ -63,7 +62,7 @@ const Element = ({
         <RichText primaryLanguage={primaryLanguage} element={element} index={index} />
       )}
 
-      {["radio", "checkbox", "dropdown"].includes(element.type) && (
+      {["radio", "checkbox", "dropdown", "fileInput"].includes(element.type) && (
         <>
           <Title primaryLanguage={primaryLanguage} element={element} />
           {(element.properties.descriptionEn || element.properties.descriptionFr) && (
@@ -113,11 +112,11 @@ export const Translate = () => {
   return (
     <>
       <div>
-        <h1 className="border-0 mb-0">{t("translateTitle")}</h1>
+        <h1 className="border-0 mb-0 mt-8">{t("translateTitle")}</h1>
         <p>{t("translateDescription")}</p>
         <br />
 
-        <div className="lg:mt-4">
+        <div className="mb-8">
           <DownloadCSV />
         </div>
 
@@ -147,14 +146,6 @@ export const Translate = () => {
                       `form.${localizeField(LocalizedFormProperties.TITLE, primaryLanguage)}`,
                       e.target.value
                     );
-                    // Temporary fix (see function `formatEmailSubject` in Edit.tsx file)
-                    updateField(
-                      `deliveryOption.${localizeField(
-                        LocalizedFormProperties.EMAIL_SUBJECT,
-                        primaryLanguage
-                      )}`,
-                      formatEmailSubject(e.target.value, primaryLanguage)
-                    );
                   }}
                   {...getLocalizationAttribute()}
                 />
@@ -176,14 +167,6 @@ export const Translate = () => {
                     updateField(
                       `form.${localizeField(LocalizedFormProperties.TITLE, secondaryLanguage)}`,
                       e.target.value
-                    );
-                    // Temporary fix (see function `formatEmailSubject` in Edit.tsx file)
-                    updateField(
-                      `deliveryOption.${localizeField(
-                        LocalizedFormProperties.EMAIL_SUBJECT,
-                        secondaryLanguage
-                      )}`,
-                      formatEmailSubject(e.target.value, secondaryLanguage)
                     );
                   }}
                   {...getLocalizationAttribute()}

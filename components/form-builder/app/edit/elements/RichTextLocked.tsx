@@ -54,7 +54,7 @@ export const RichTextLocked = ({
       </div>
       <div className="flex">
         {addElement && (
-          <div className="mx-auto bottom-0 -mb-5 xl:mr-2 z-10">
+          <div className="mx-auto bottom-0 -mb-5 z-10">
             <AddElementButton position={-1} handleAdd={handleAddElement} />
           </div>
         )}

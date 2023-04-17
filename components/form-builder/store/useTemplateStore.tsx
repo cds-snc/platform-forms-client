@@ -9,7 +9,6 @@ import {
   moveUp,
   removeElementById,
   incrementElementId,
-  newlineToOptions,
   getSchemaFromState,
   incrementSubElementId,
 } from "../util";
@@ -22,6 +21,7 @@ import {
   FormElementTypes,
   DeliveryOption,
   ElementProperties,
+  SecurityAttribute,
 } from "@lib/types";
 import { logMessage } from "@lib/logger";
 import { BrandProperties } from "@lib/types/form-types";
@@ -75,7 +75,7 @@ export interface TemplateStoreProps {
   isPublished: boolean;
   name: string;
   deliveryOption?: DeliveryOption;
-  securityAttribute: string;
+  securityAttribute: SecurityAttribute;
 }
 
 export interface InitialTemplateStoreProps extends TemplateStoreProps {
@@ -115,25 +115,24 @@ export interface TemplateStoreState extends TemplateStoreProps {
   removeSubItem: (elIndex: number, id: number) => void;
   addChoice: (elIndex: number) => void;
   addSubChoice: (elIndex: number, subIndex: number) => void;
-  resetChoices: (elIndex: number) => void;
-  resetSubChoices: (elIndex: number, subIndex: number) => void;
   removeChoice: (elIndex: number, choiceIndex: number) => void;
   removeSubChoice: (elIndex: number, subIndex: number, choiceIndex: number) => void;
   updateField: (
     path: string,
     value: string | boolean | ElementProperties | BrandProperties
   ) => void;
+  updateSecurityAttribute: (value: SecurityAttribute) => void;
   propertyPath: (id: number, field: string, lang?: Language) => string;
   unsetField: (path: string) => void;
   duplicateElement: (elIndex: number) => void;
   subDuplicateElement: (elIndex: number, subIndex: number) => void;
-  bulkAddChoices: (elIndex: number, bulkChoices: string) => void;
   importTemplate: (jsonConfig: FormProperties) => void;
   getSchema: () => string;
   getIsPublished: () => boolean;
   getName: () => string;
   getDeliveryOption: () => DeliveryOption | undefined;
-  getSecurityAttribute: () => string;
+  resetDeliveryOption: () => void;
+  getSecurityAttribute: () => SecurityAttribute;
   initialize: () => void;
 }
 
@@ -162,7 +161,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
     form: defaultForm,
     isPublished: false,
     name: "",
-    securityAttribute: "Unclassified",
+    securityAttribute: "Protected A",
   };
 
   // Ensure any required properties by Form Builder are defaulted by defaultForm
@@ -222,6 +221,10 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
           updateField: (path, value) =>
             set((state) => {
               update(state, path, value);
+            }),
+          updateSecurityAttribute: (value) =>
+            set((state) => {
+              state.securityAttribute = value;
             }),
           propertyPath: (id: number, field: string, lang?: Language) => {
             const path = getPathString(id, get().form.elements);
@@ -317,21 +320,6 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 subIndex
               ].properties.choices?.splice(choiceIndex, 1);
             }),
-          resetChoices: (elIndex) =>
-            set((state) => {
-              state.form.elements[elIndex].properties.choices = [];
-            }),
-          resetSubChoices: (elIndex, subIndex) =>
-            set((state) => {
-              try {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                state.form.elements[elIndex].properties.subElements[subIndex].properties.choices =
-                  [];
-              } catch (e) {
-                // do nothing
-              }
-            }),
           duplicateElement: (elIndex) => {
             set((state) => {
               // deep copy the element
@@ -362,17 +350,15 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               }
             });
           },
-          bulkAddChoices: (elIndex, bulkChoices) => {
-            set((state) => {
-              const currentChoices = state.form.elements[elIndex].properties.choices;
-              const choices = newlineToOptions(state.lang, currentChoices, bulkChoices);
-              state.form.elements[elIndex].properties.choices = choices;
-            });
-          },
           getSchema: () => JSON.stringify(getSchemaFromState(get()), null, 2),
           getIsPublished: () => get().isPublished,
           getName: () => get().name,
           getDeliveryOption: () => get().deliveryOption,
+          resetDeliveryOption: () => {
+            set((state) => {
+              state.deliveryOption = undefined;
+            });
+          },
           getSecurityAttribute: () => get().securityAttribute,
           initialize: () => {
             set((state) => {
@@ -381,7 +367,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               state.form = defaultForm;
               state.isPublished = false;
               state.name = "";
-              state.securityAttribute = "Unclassified";
+              state.deliveryOption = undefined;
             });
           },
           importTemplate: (jsonConfig) =>
@@ -391,7 +377,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               state.form = { ...defaultForm, ...jsonConfig };
               state.isPublished = false;
               state.name = "";
-              state.securityAttribute = "Unclassified";
+              state.securityAttribute = "Protected A";
+              state.deliveryOption = undefined;
             }),
         }),
         {

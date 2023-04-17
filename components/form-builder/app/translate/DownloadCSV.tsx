@@ -3,27 +3,13 @@ import { useTranslation } from "next-i18next";
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { Button } from "../shared/Button";
 import { FormElement } from "@lib/types";
-
-const slugify = (str: string) =>
-  str
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, "")
-    .replace(/[\s_-]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-
-const getDate = () => {
-  let date = new Date();
-  const offset = date.getTimezoneOffset();
-  date = new Date(date.getTime() - offset * 60 * 1000);
-  return date.toISOString().split("T")[0];
-};
+import { getDate, slugify } from "@lib/clientHelpers";
 
 const formatText = (str: string) => `"${str}"`;
 
 export const DownloadCSV = () => {
-  const form = useTemplateStore((s) => s.form);
-  const { t } = useTranslation("form-builder");
+  const { form, name } = useTemplateStore((s) => ({ form: s.form, name: s.name }));
+  const { t, i18n } = useTranslation("form-builder");
 
   let elementIndex = 0;
   const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
@@ -106,10 +92,12 @@ export const DownloadCSV = () => {
 
     const blob = new Blob([csv], { type: "application/csv" });
 
+    const fileName = name ? name : i18n.language === "fr" ? form.titleFr : form.titleEn;
+
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = slugify(`${form.titleEn}-${getDate()}`) + ".csv";
+    a.download = slugify(`${fileName}-${getDate()}`) + ".csv";
     a.click();
     URL.revokeObjectURL(url);
   };

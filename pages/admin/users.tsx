@@ -58,12 +58,12 @@ const ManageUser = ({
     { id: string; action: "add" | "remove" }[]
   >([]);
 
-  const { ability, refreshAbility } = useAccessControl();
+  const { ability, forceSessionUpdate } = useAccessControl();
   const canManageUsers = ability?.can("update", "User") ?? false;
 
   const save = async () => {
     await updatePrivilege(user.id, changedPrivileges);
-    await refreshAbility();
+    await forceSessionUpdate();
     unselectUser();
   };
 

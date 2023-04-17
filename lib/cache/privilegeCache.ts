@@ -35,7 +35,7 @@ export const privilegeDelete = async (userID: string): Promise<void> => {
   try {
     const redis = await getRedisInstance();
 
-    redis.del(deleteParameter);
+    await redis.del(deleteParameter);
     logMessage.debug(`Deleting Cached Privileges  for ${deleteParameter}`);
   } catch (e) {
     logMessage.error(e as Error);
@@ -50,7 +50,7 @@ export const privilegePut = async (userID: string, privileges: Permission[]): Pr
   try {
     const redis = await getRedisInstance();
 
-    redis.setex(modifyParameter, randomCacheExpiry(), JSON.stringify(privileges));
+    await redis.setex(modifyParameter, randomCacheExpiry(), JSON.stringify(privileges));
     logMessage.debug(`Updating Cached Privileges for ${modifyParameter}`);
   } catch (e) {
     logMessage.error(e as Error);

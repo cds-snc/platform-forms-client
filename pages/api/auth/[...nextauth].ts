@@ -128,15 +128,13 @@ export const authOptions: NextAuthOptions = {
     // Seconds - How long until an idle session expires and is no longer valid.
     maxAge: 2 * 60 * 60, // 2 hours
   },
+  debug: process.env.NODE_ENV !== "production",
   logger: {
     error(code, metadata) {
       logMessage.error(code, metadata);
     },
     warn(code) {
       logMessage.warn(code);
-    },
-    debug(code, metadata) {
-      logMessage.debug(code, metadata);
     },
   },
 

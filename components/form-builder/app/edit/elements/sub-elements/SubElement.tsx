@@ -19,7 +19,6 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
 
   const {
     addSubItem,
-    resetSubChoices,
     updateField,
     subMoveUp,
     subMoveDown,
@@ -27,11 +26,9 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
     removeSubItem,
     subElements,
     localizeField,
-    lang,
     translationLanguagePriority,
     getLocalizationAttribute,
   } = useTemplateStore((s) => ({
-    lang: s.lang,
     addSubItem: s.addSubItem,
     updateField: s.updateField,
     subMoveUp: s.subMoveUp,
@@ -39,13 +36,12 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
     subDuplicateElement: s.subDuplicateElement,
     removeSubItem: s.removeSubItem,
     subElements: s.form.elements[elIndex].properties.subElements,
-    resetSubChoices: s.resetSubChoices,
     localizeField: s.localizeField,
     translationLanguagePriority: s.translationLanguagePriority,
     getLocalizationAttribute: s.getLocalizationAttribute,
   }));
 
-  const { addElement, updateElement, isTextField } = useUpdateElement();
+  const { addElement, isTextField } = useUpdateElement();
 
   const handleAddElement = useCallback(
     (subIndex: number, type?: FormElementTypes) => {
@@ -89,14 +85,6 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
       )}`,
       val
     );
-  };
-
-  const onElementChange = (type: string, elIndex: number, subIndex: number) => {
-    const path = `form.elements[${elIndex}].properties.subElements[${subIndex}]`;
-    updateElement(type, path);
-    if (type === "richText") {
-      resetSubChoices(elIndex, subIndex);
-    }
   };
 
   const onRequiredChange = (elIndex: number, subIndex: number, checked: boolean) => {
@@ -161,7 +149,6 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
                   }}
                   filterElements={elementFilter}
                   elements={subElements}
-                  lang={lang}
                 />
               }
             >
@@ -170,9 +157,6 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
                 elIndex={elIndex}
                 item={item}
                 onQuestionChange={onQuestionChange}
-                onElementChange={(id, subIndex) => {
-                  onElementChange(id, elIndex, subIndex);
-                }}
                 onRequiredChange={(subIndex, checked) => {
                   onRequiredChange(elIndex, subIndex, checked);
                 }}
@@ -184,7 +168,7 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
 
       {item.type === "dynamicRow" && (
         <div className="max-w-[800px] border-1 border-gray-300 h-auto mt-4 first-of-type:rounded-t-md last-of-type:rounded-b-md">
-          <LockedBadge className="absolute right-7 top-[15px]" />
+          <LockedBadge className="laptop:absolute laptop:right-7 laptop:top-[15px]" />
           <div className="mx-7 mt-5 mb-7">
             <h2 className="text-h3 pb-3">{t("questionSet.addAnother.title")}</h2>
             <p className="mb-8 text-[1rem] pt-5">{t("questionSet.addAnother.description")}</p>

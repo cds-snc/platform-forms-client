@@ -5,6 +5,7 @@ import { signOut } from "next-auth/react";
 import { User } from "next-auth";
 import { useAccessControl } from "@lib/hooks";
 import { clearTemplateStore } from "@formbuilder/store";
+import LanguageToggle from "./LanguageToggle";
 
 type AdminNavProps = {
   user: User;
@@ -66,6 +67,9 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
               {t("adminNav.logout")}
             </button>
           )}
+        </li>
+        <li>
+          <LanguageToggle />
         </li>
       </ul>
     </nav>

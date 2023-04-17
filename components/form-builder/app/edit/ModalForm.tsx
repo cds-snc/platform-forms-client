@@ -32,7 +32,11 @@ export const ModalForm = ({
   unsetModalField: (path: string) => void;
 }) => {
   const { t } = useTranslation("form-builder");
-  const localizeField = useTemplateStore((s) => s.localizeField);
+
+  const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    translationLanguagePriority: s.translationLanguagePriority,
+  }));
 
   const autocompleteSelectedValue = properties.autoComplete || "";
 
@@ -47,12 +51,17 @@ export const ModalForm = ({
           id={`title--modal--${item.index}`}
           name={`item${item.index}`}
           placeholder={t("question")}
-          value={properties[localizeField(LocalizedElementProperties.TITLE)]}
+          value={
+            properties[localizeField(LocalizedElementProperties.TITLE, translationLanguagePriority)]
+          }
           className="w-11/12"
           onChange={(e) =>
             updateModalProperties(item.index, {
               ...properties,
-              ...{ [localizeField(LocalizedElementProperties.TITLE)]: e.target.value },
+              ...{
+                [localizeField(LocalizedElementProperties.TITLE, translationLanguagePriority)]:
+                  e.target.value,
+              },
             })
           }
         />
@@ -68,10 +77,19 @@ export const ModalForm = ({
             const description = e.target.value.replace(/[\r\n]/gm, "");
             updateModalProperties(item.index, {
               ...properties,
-              ...{ [localizeField(LocalizedElementProperties.DESCRIPTION)]: description },
+              ...{
+                [localizeField(
+                  LocalizedElementProperties.DESCRIPTION,
+                  translationLanguagePriority
+                )]: description,
+              },
             });
           }}
-          value={properties[localizeField(LocalizedElementProperties.DESCRIPTION)]}
+          value={
+            properties[
+              localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)
+            ]
+          }
         />
       </div>
       <div className="mb-2">
@@ -155,55 +173,56 @@ export const ModalForm = ({
           </div>
         </div>
       )}
-      {item.type === FormElementTypes.textField &&
-        (!item.properties.validation?.type || item.properties.validation?.type === "text") && (
-          <>
-            <div className="mb-2">
-              <ModalLabel htmlFor={`characterLength--modal--${item.index}`}>
-                {t("maximumCharacterLength")}
-              </ModalLabel>
-              <Hint>{t("characterLimitDescription")}</Hint>
-              <Input
-                id={`characterLength--modal--${item.index}`}
-                type="number"
-                min="1"
-                className="w-1/4"
-                value={properties.validation?.maxLength || ""}
-                onKeyDown={(e) => {
-                  if (["-", "+", ".", "e"].includes(e.key)) {
-                    e.preventDefault();
-                  }
-                }}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  // if value is "", unset the field
-                  if (e.target.value === "") {
-                    unsetModalField(`modals[${item.index}].validation.maxLength`);
-                    return;
-                  }
+      {item.type === FormElementTypes.textField ||
+        (FormElementTypes.textArea &&
+          (!item.properties.validation?.type || item.properties.validation?.type === "text") && (
+            <>
+              <div className="mb-2">
+                <ModalLabel htmlFor={`characterLength--modal--${item.index}`}>
+                  {t("maximumCharacterLength")}
+                </ModalLabel>
+                <Hint>{t("characterLimitDescription")}</Hint>
+                <Input
+                  id={`characterLength--modal--${item.index}`}
+                  type="number"
+                  min="1"
+                  className="w-1/4"
+                  value={properties.validation?.maxLength || ""}
+                  onKeyDown={(e) => {
+                    if (["-", "+", ".", "e"].includes(e.key)) {
+                      e.preventDefault();
+                    }
+                  }}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    // if value is "", unset the field
+                    if (e.target.value === "") {
+                      unsetModalField(`modals[${item.index}].validation.maxLength`);
+                      return;
+                    }
 
-                  const value = parseInt(e.target.value);
-                  if (!isNaN(value) && value >= 1) {
-                    // clone the existing properties so that we don't overwrite other keys in "validation"
-                    const validation = Object.assign({}, properties.validation, {
-                      maxLength: value,
-                    });
-                    updateModalProperties(item.index, {
-                      ...properties,
-                      ...{ validation },
-                    });
-                  }
-                }}
-              />
-            </div>
-            <InfoDetails summary={t("characterLimitWhenToUse.title")}>
-              <div className="mt-4 mb-8 border-l-3 border-gray-500 pl-8">
-                <p className="text-md mb-4">{t("characterLimitWhenToUse.text1")}</p>
-                <p className="text-md mb-4">{t("characterLimitWhenToUse.text2")}</p>
-                <p className="text-md">{t("characterLimitWhenToUse.text3")}</p>
+                    const value = parseInt(e.target.value);
+                    if (!isNaN(value) && value >= 1) {
+                      // clone the existing properties so that we don't overwrite other keys in "validation"
+                      const validation = Object.assign({}, properties.validation, {
+                        maxLength: value,
+                      });
+                      updateModalProperties(item.index, {
+                        ...properties,
+                        ...{ validation },
+                      });
+                    }
+                  }}
+                />
               </div>
-            </InfoDetails>
-          </>
-        )}
+              <InfoDetails className="mb-4" summary={t("characterLimitWhenToUse.title")}>
+                <div className="mt-4 mb-8 border-l-3 border-gray-500 pl-8">
+                  <p className="text-md mb-4">{t("characterLimitWhenToUse.text1")}</p>
+                  <p className="text-md mb-4">{t("characterLimitWhenToUse.text2")}</p>
+                  <p className="text-md">{t("characterLimitWhenToUse.text3")}</p>
+                </div>
+              </InfoDetails>
+            </>
+          ))}
     </form>
   );
 };

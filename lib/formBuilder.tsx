@@ -77,6 +77,7 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
       required={isRequired}
       validation={element.properties.validation}
       group={["radio", "checkbox"].indexOf(element.type) !== -1}
+      lang={lang}
     >
       {labelText}
     </Label>

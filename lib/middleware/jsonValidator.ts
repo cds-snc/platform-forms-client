@@ -4,8 +4,9 @@ import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
 import * as htmlparser2 from "htmlparser2";
 
 export type ValidateOptions = {
-  jsonKey: string;
+  jsonKey?: string;
   noHTML?: boolean;
+  noValidateMethods?: string[];
 };
 
 /**
@@ -36,12 +37,24 @@ const htmlChecker: PreValidatePropertyFunction = (object, key) => {
 export const jsonValidator = (schema: Schema, options?: ValidateOptions): MiddlewareRequest => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
     try {
-      if (req.method === "GET") {
+      if (
+        req.method === "GET" ||
+        options?.noValidateMethods?.includes(req.method ?? "UNKNOWN_METHOD")
+      ) {
         return { next: true };
       }
+
+      // If there is no object to test, fail quickly
+      if (req.body?.constructor === Object && Object.keys(req.body).length === 0) {
+        res.status(400).json({ error: "JSON Validation Error: Object Required" });
+        return { next: false };
+      }
+
       const validator = new Validator();
+      const validateObject = options?.jsonKey ? req.body[options.jsonKey] : req.body;
+
       const validatorResult: ValidatorResult = validator.validate(
-        options?.jsonKey ? req.body[options.jsonKey] : req.body,
+        validateObject,
         schema,
         options?.noHTML ? { preValidateProperty: htmlChecker } : undefined
       );

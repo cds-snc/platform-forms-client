@@ -4,27 +4,19 @@ import { FormElementWithIndex } from "../../types";
 import { useTemplateStore } from "../../store";
 import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
 import { useIsWithin, useHandleAdd } from "@components/form-builder/hooks";
+import { useRefsContext } from "./RefsContext";
 
 export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
-  const {
-    lang,
-    getFocusInput,
-    setFocusInput,
-    remove,
-    moveUp,
-    moveDown,
-    duplicateElement,
-    elements,
-  } = useTemplateStore((s) => ({
-    lang: s.lang,
-    getFocusInput: s.getFocusInput,
-    setFocusInput: s.setFocusInput,
-    remove: s.remove,
-    moveUp: s.moveUp,
-    moveDown: s.moveDown,
-    duplicateElement: s.duplicateElement,
-    elements: s.form.elements,
-  }));
+  const { getFocusInput, setFocusInput, remove, moveUp, moveDown, duplicateElement, elements } =
+    useTemplateStore((s) => ({
+      getFocusInput: s.getFocusInput,
+      setFocusInput: s.setFocusInput,
+      remove: s.remove,
+      moveUp: s.moveUp,
+      moveDown: s.moveDown,
+      duplicateElement: s.duplicateElement,
+      elements: s.form.elements,
+    }));
 
   const [className, setClassName] = useState<string>("");
   const [ifFocus, setIfFocus] = useState<boolean>(false);
@@ -50,32 +42,86 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
   }, [className]);
 
   const { focusWithinProps, isWithin } = useIsWithin();
+  const { refs } = useRefsContext();
 
+  /* eslint-disable jsx-a11y/no-static-element-interactions */
+  /* eslint-disable jsx-a11y/click-events-have-key-events */
   return (
     <div
+      id={`element-${item.id}`}
       {...focusWithinProps}
       className={`element-${item.index} ${className} group ${
         isWithin ? "active" : ""
-      } hover:bg-violet-50 focus:bg-violet-50 border border-t-0 border-black max-w-[800px] h-auto relative`}
+      } hover:bg-violet-50 focus-within:bg-violet-50 border border-t-0 border-black max-w-[800px] h-auto relative`}
+      onClick={(e) => {
+        const el = e.target as HTMLElement;
+        if (el.tagName === "DIV") {
+          if (item.type === "richText") {
+            if (el.querySelector("[id^='editor-']")) {
+              (el?.querySelector("[id^='editor-']") as HTMLElement).focus();
+            } else if (el?.parentElement?.querySelector("[id^='editor-']")) {
+              (el?.parentElement?.querySelector("[id^='editor-']") as HTMLElement).focus();
+            }
+            return;
+          }
+
+          refs?.current?.[item.id]?.focus();
+        }
+      }}
     >
       <PanelBodyRoot item={item} />
       <PanelActions
         subIndex={-1}
         elements={elements}
-        lang={lang}
         item={item}
         handleAdd={handleAddElement}
         handleRemove={() => {
-          // if index is 0, then highlight the form title
-          const labelId = item.index === 0 ? "formTitle" : `item${item.index - 1}`;
+          const previousElement = elements[item.index - 1];
           remove(item.id);
-          document.getElementById(labelId)?.focus();
+
+          // if index is 0, then highlight the form title
+          if (item.index === 0) {
+            document.getElementById("formTitle")?.focus();
+            return;
+          }
+
+          // If the previous element is a rich text editor, then focus on the editor
+          if (previousElement.type === "richText") {
+            (
+              document
+                .getElementById(`element-${previousElement.id}`)
+                ?.querySelector("[id^='editor-']") as HTMLElement
+            ).focus();
+            return;
+          }
+
+          // Otherwise focus on the previous question input
+          refs && refs.current && refs.current[previousElement.id].focus();
         }}
         handleMoveUp={() => {
           moveUp(item.index);
+          if (item.type === "richText") {
+            (
+              document
+                .getElementById(`element-${item.id}`)
+                ?.querySelector("[id^='editor-']") as HTMLElement
+            ).focus();
+            return;
+          }
+
+          refs && refs.current && refs.current[item.id].focus();
         }}
         handleMoveDown={() => {
           moveDown(item.index);
+          if (item.type === "richText") {
+            (
+              document
+                .getElementById(`element-${item.id}`)
+                ?.querySelector("[id^='editor-']") as HTMLElement
+            ).focus();
+            return;
+          }
+          refs && refs.current && refs.current[item.id].focus();
         }}
         handleDuplicate={() => {
           setFocusInput(true);
