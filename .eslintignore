@@ -1,2 +1,5 @@
 # Ignore Utils Folder
 /utils
+
+# Ignore polyfills
+/public/static/scripts/
