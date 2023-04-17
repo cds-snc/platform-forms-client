@@ -5,7 +5,7 @@ import Fip from "./Fip";
 import { NextPageWithLayout } from "@pages/_app";
 import SkipLink from "@components/globals/SkipLink";
 import Footer from "./Footer";
-import { FormProperties, Responses } from "@lib/types";
+import { FormProperties, Responses, SecurityAttribute } from "@lib/types";
 
 interface HTMLDownloadProps {
   formTemplate: FormProperties;
@@ -14,6 +14,7 @@ interface HTMLDownloadProps {
   // submissionID: string;
   responseID: string;
   createdAt: number;
+  securityAttribute: SecurityAttribute;
 }
 
 // Note: copy-text-to-clipboard is a very simple and clean lib and works in all browsers but
@@ -31,6 +32,7 @@ const HTMLDownload: NextPageWithLayout<HTMLDownloadProps> = ({
   // submissionID,
   responseID,
   createdAt,
+  securityAttribute,
 }: HTMLDownloadProps) => {
   const CopyToClipboardScript = React.createElement("script", {
     dangerouslySetInnerHTML: {
@@ -75,7 +77,7 @@ const HTMLDownload: NextPageWithLayout<HTMLDownloadProps> = ({
     <>
       <h1 className="sr-only">{`${formTemplate.titleEn} - ${formTemplate.titleFr}`}</h1>
       <div className="mt-14" />
-      <ProtectedWarning lang="en" />
+      <ProtectedWarning securityAttribute={securityAttribute} lang="en" />
       <Fip language="en" />
       <div className="mt-14" />
       <ResponseSection
@@ -88,7 +90,7 @@ const HTMLDownload: NextPageWithLayout<HTMLDownloadProps> = ({
         formResponse={formResponse}
       />
       <div className="mt-20" />
-      <ProtectedWarning lang="fr" />
+      <ProtectedWarning securityAttribute={securityAttribute} lang="fr" />
       <Fip language="fr" />
       <div className="mt-14" />
       <ResponseSection

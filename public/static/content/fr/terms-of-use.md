@@ -16,7 +16,7 @@ Vous avez pour responsabilité :
 -  d’avoir l’autorisation de collecter des renseignements personnels. Si vous n’avez pas la certitude que vous possédez les pouvoirs nécessaires, contactez [le coordonnateur ou la coordonnatrice de l’accès à l’information et de la protection des renseignements personnels (AIPRP)](https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-fra.asp) de votre ministère ou organisme.
 - de protéger les renseignements personnels et sensibles soumis dans les réponses aux formulaires. Formulaires GC conserve et stocke temporairement les renseignements, mais, en fin de compte, c’est votre ministère ou organisme qui en a la garde et le contrôle.
 - d’élaborer et de publier un avis de confidentialité pour votre formulaire conformément à l’article 4.2.10 de la [*directive sur les pratiques relatives à la protection de la vie privée*](https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=18309). Nous affichons également les [conditions d’utilisation](/fr/terms-and-conditions) au bas de chaque formulaire afin de répondre aux exigences des politiques liées à l’hébergement du formulaire en votre nom. Nous communiquons des renseignements sur notre conservation et notre élimination des réponses aux formulaires dans nos bases de données, ainsi que sur les fonctionnalités permettant de protéger la sécurité des sites Web du gouvernement du Canada.
-- de déterminer le niveau de confidentialité des renseignements collectés dans vos formulaires. Formulaires GC prend en charge la collecte de données classées jusqu’à **PROTÉGÉ A**. Apprenez-en davantage sur la détermination du niveau de confidentialité en consultant la [norme sur la catégorisation de sécurité](https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=32614). 
+- de déterminer le niveau de confidentialité des renseignements collectés dans vos formulaires. Formulaires GC prend en charge la collecte de données classées jusqu’à **Protégé A**. Apprenez-en davantage sur la détermination du niveau de confidentialité en consultant la [norme sur la catégorisation de sécurité](https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=32614). 
 - de respecter la [*Loi sur la protection des renseignements personnels*](https://laws-lois.justice.gc.ca/fra/lois/p-21/) et la [*Loi sur l’accès à l’information*](https://laws-lois.justice.gc.ca/fra/lois/a-1/) concernant les renseignements personnels et sensibles contenus dans les réponses soumises dans vos formulaires en cas de demande, d’incident ou d’atteinte à la sécurité des données. 
 
 ### Réponses envoyées par courriel (jusqu’à Protégé A) 
@@ -30,7 +30,7 @@ Vous avez pour responsabilité :
 
 Vous avez pour responsabilité :
 - d’adhérer aux directives ministérielles concernant la bonne utilisation des appareils et des réseaux.
-- d’accuser réception des réponses au formulaire et d’en enregistrer une copie dans les 46 jours suivant la réception d’une réponse.
+- d’accuser réception des réponses au formulaire et d’en enregistrer une copie dans les 45 jours suivant la réception d’une réponse.
 - de signaler tout problème lié aux réponses enregistrées.
 - de traiter et d’enregistrer les réponses aux formulaires conformément à votre calendrier de conservation et d’élimination.
 - d’accepter [les conditions d’utilisation de Notification GC](https://notification.canada.ca/conditions-dutilisation). 

@@ -5,7 +5,7 @@ GC Forms is a cloud-based service that is owned and operated by the Canadian Dig
 
 ## Responsibilities
 
-### The Canadian Digital Service (CDS) is responsible for:
+### Canadian Digital Service (CDS) is responsible for:
 - Hosting and supporting the GC Forms system.
 - Handling support requests and inquiries during regular business hours (9am to 5pm Eastern Time). 
 - Responding to API integration support within the [timelines provided](#service-response-time-and-contacts).
