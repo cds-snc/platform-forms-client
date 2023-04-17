@@ -20,11 +20,13 @@ const TemplateApiContext = createContext<TemplateApiType>(defaultTemplateApi);
 export function TemplateApiProvider({ children }: { children: React.ReactNode }) {
   const { t } = useTranslation(["form-builder"]);
   const [error, setError] = useState<string | null>(null);
-  const { id, getSchema, getName, hasHydrated } = useTemplateStore((s) => ({
+  const { id, getSchema, getName, hasHydrated, setId, getIsPublished } = useTemplateStore((s) => ({
     id: s.id,
     getSchema: s.getSchema,
     getName: s.getName,
     hasHydrated: s.hasHydrated,
+    setId: s.setId,
+    getIsPublished: s.getIsPublished,
   }));
 
   const templateIsDirty = useRef(false);
@@ -45,7 +47,7 @@ export function TemplateApiProvider({ children }: { children: React.ReactNode })
 
   const saveForm = async () => {
     try {
-      if (templateIsDirty.current && status === "authenticated") {
+      if (templateIsDirty.current && status === "authenticated" && !getIsPublished()) {
         logMessage.debug("Saving Template to server");
         const result = await save({
           jsonConfig: getSchema(),
@@ -59,7 +61,7 @@ export function TemplateApiProvider({ children }: { children: React.ReactNode })
 
         setError(null);
         templateIsDirty.current = false;
-        return result?.id;
+        setId(result?.id);
       }
     } catch (err) {
       logMessage.error(err as Error);

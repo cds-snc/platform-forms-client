@@ -1,26 +1,12 @@
 import { useTemplateContext } from "@components/form-builder/hooks";
-import { useTemplateStore } from "@components/form-builder/store";
 import Link from "next/link";
-import React, { ReactElement, useEffect, useState, useCallback } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { useActivePathname, cleanPath } from "../../hooks/useActivePathname";
 
 export const LeftNavLink = ({ children, href }: { children: ReactElement; href: string }) => {
   const [active, setActive] = useState(false);
   const { isReady, activePathname } = useActivePathname();
   const { saveForm } = useTemplateContext();
-  const { setId, getIsPublished } = useTemplateStore((s) => ({
-    setId: s.setId,
-    getIsPublished: s.getIsPublished,
-  }));
-
-  const saveOnNavigate = useCallback(async () => {
-    if (!getIsPublished()) {
-      const result = await saveForm();
-      if (result) {
-        setId(result);
-      }
-    }
-  }, [saveForm, setId, getIsPublished]);
 
   useEffect(() => {
     if (isReady) {
@@ -38,7 +24,7 @@ export const LeftNavLink = ({ children, href }: { children: ReactElement; href: 
       {/* passHref does ensure the child a tag has the correct HREF attribute */}
       <a
         href={"will_be_replaced_by_nextjs"}
-        onClick={saveOnNavigate}
+        onClick={saveForm}
         className={`${
           active ? "font-bold" : ""
         } group no-underline rounded block w-38 py-1 mb-2 pl-2 pr-0 laptop:pr-2 text-black-default hover:text-blue-hover visited:text-black-default focus:text-white-default focus:bg-blue-hover active:no-underline active:bg-blue-hover active:text-white-default !shadow-none`}
