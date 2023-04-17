@@ -34,4 +34,30 @@ describe("Test RichTextEditor", () => {
 
     cy.get('[id^="editor-"] a').first().contains("some text");
   });
+
+  it("Can add some text and add styling", () => {
+    cy.get("h2").first().click();
+
+    cy.get(`[aria-label="Form introduction"]`)
+      .type("H2 heading text{enter}")
+      .type("H3 heading text{enter}")
+      .type("Let's bold part of this sentence.{enter}")
+      .type("Let's italicize part of this sentence.{enter}");
+
+    cy.get(`[aria-label="Form introduction"]`).setSelection("H2 heading text");
+    cy.get('[data-testid="h2-button"]').first().click();
+    cy.get('[id^="editor-"] h2').first().contains("H2 heading text");
+
+    cy.get(`[aria-label="Form introduction"]`).setSelection("H3 heading text");
+    cy.get('[data-testid="h3-button"]').first().click();
+    cy.get('[id^="editor-"] h3').first().contains("H3 heading text");
+
+    cy.get(`[aria-label="Form introduction"]`).setSelection("bold part of this");
+    cy.get('[data-testid="bold-button"]').first().click();
+    cy.get('[id^="editor-"] strong').first().contains("bold part of this");
+
+    cy.get(`[aria-label="Form introduction"]`).setSelection("italicize part of this");
+    cy.get('[data-testid="italic-button"]').first().click();
+    cy.get('[id^="editor-"] em').first().contains("italicize part of this");
+  });
 });
