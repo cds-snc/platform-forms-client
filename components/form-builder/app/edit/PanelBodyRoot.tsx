@@ -5,9 +5,8 @@ import { FormElementWithIndex, Language, LocalizedElementProperties } from "../.
 import { useTemplateStore } from "../../store";
 
 export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
-  const { localizeField, updateField, elements } = useTemplateStore((s) => ({
+  const { localizeField, updateField } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
-    elements: s.form.elements,
     updateField: s.updateField,
   }));
 
@@ -35,7 +34,6 @@ export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
   return (
     <div className="mx-7 py-7">
       <PanelBody
-        elements={elements}
         item={item}
         onQuestionChange={onQuestionChange}
         onRequiredChange={onRequiredChange}

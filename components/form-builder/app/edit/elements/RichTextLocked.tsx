@@ -47,7 +47,6 @@ export const RichTextLocked = ({
             path={path}
             content={content}
             lang={translationLanguagePriority}
-            autoFocusEditor={false}
             ariaLabel={ariaLabel}
           />
         </div>

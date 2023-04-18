@@ -4,20 +4,17 @@ import { useTranslation } from "next-i18next";
 import { FormElementWithIndex, Language, LocalizedElementProperties } from "../../types";
 import { SelectedElement, ElementRequired } from ".";
 import { Question } from "./elements";
-import { FormElement } from "@lib/types";
 import { QuestionDescription } from "./elements/question/QuestionDescription";
 import { useTemplateStore } from "@components/form-builder/store";
 
 export const PanelBody = ({
   item,
   elIndex = -1,
-  elements,
   onQuestionChange,
   onRequiredChange,
 }: {
   item: FormElementWithIndex;
   elIndex?: number;
-  elements: FormElement[];
   onQuestionChange: (itemIndex: number, val: string, lang: Language) => void;
   onRequiredChange: (itemIndex: number, checked: boolean) => void;
 }) => {
@@ -41,12 +38,7 @@ export const PanelBody = ({
     <>
       {isRichText || isDynamicRow ? (
         <div className="mt-4 mb-4">
-          <Question
-            elements={elements}
-            elIndex={elIndex}
-            item={item}
-            onQuestionChange={onQuestionChange}
-          />
+          <Question item={item} onQuestionChange={onQuestionChange} />
           <SelectedElement item={item} elIndex={elIndex} />
         </div>
       ) : (
@@ -54,8 +46,6 @@ export const PanelBody = ({
           <div className="flex text-sm">
             <div className="w-full mt-4 laptop:mt-0">
               <Question
-                elements={elements}
-                elIndex={elIndex}
                 item={item}
                 onQuestionChange={onQuestionChange}
                 describedById={describedById}

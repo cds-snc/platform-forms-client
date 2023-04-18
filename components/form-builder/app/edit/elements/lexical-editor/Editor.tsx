@@ -10,7 +10,6 @@ import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import { $createParagraphNode, $getRoot } from "lexical";
 import { editorConfig } from "./config";
 import { Toolbar } from "./Toolbar";
-import { FocusPlugin } from "./plugins/FocusEditor";
 import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
 import {
   $convertFromMarkdownString,
@@ -23,14 +22,12 @@ import ListMaxIndentPlugin from "./plugins/ListMaxIndentPlugin";
 export const Editor = ({
   content,
   onChange,
-  autoFocusEditor,
   ariaLabel,
   ariaDescribedBy,
   lang,
 }: {
   content: string;
   onChange: (value: string) => void;
-  autoFocusEditor?: boolean;
   ariaLabel?: string;
   ariaDescribedBy?: string;
   lang?: string;
@@ -81,7 +78,6 @@ export const Editor = ({
           placeholder={null}
           ErrorBoundary={LexicalErrorBoundary}
         />
-        <FocusPlugin autoFocusEditor={autoFocusEditor} />
         <HistoryPlugin />
         <OnChangePlugin
           onChange={(editorState) => {
