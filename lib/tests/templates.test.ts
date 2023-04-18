@@ -516,6 +516,71 @@ describe("Template CRUD functions", () => {
     );
   });
 
+  it("Set `isPublished` to false is not allowed for users with regular publish form permission", async () => {
+    const fakeSession = {
+      user: {
+        id: "1",
+        privileges: mockUserPrivileges(Base.concat(PublishForms), { user: { id: "1" } }),
+      },
+    };
+
+    const ability = createAbility(fakeSession as Session);
+
+    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      ...buildPrismaResponse("formtestID", formConfiguration),
+      users: [{ id: "1" }],
+    });
+
+    (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
+      buildPrismaResponse("formtestID", formConfiguration, true)
+    );
+
+    await expect(async () => {
+      await updateIsPublishedForTemplate(ability, "formtestID", false);
+    }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
+  });
+
+  it("Set `isPublished` to false is allowed for users with manage all forms permission", async () => {
+    const fakeSession = {
+      user: {
+        id: "1",
+        privileges: mockUserPrivileges(ManageForms, { user: { id: "1" } }),
+      },
+    };
+
+    const ability = createAbility(fakeSession as Session);
+
+    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      ...buildPrismaResponse("formtestID", formConfiguration),
+      users: [{ id: "1" }],
+    });
+
+    (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
+      buildPrismaResponse("formtestID", formConfiguration, true)
+    );
+
+    await updateIsPublishedForTemplate(ability, "formtestID", false);
+
+    expect(prismaMock.template.update).toHaveBeenCalledWith({
+      where: {
+        id: "formtestID",
+      },
+      data: {
+        isPublished: false,
+      },
+      select: {
+        id: true,
+        created_at: true,
+        updated_at: true,
+        name: true,
+        jsonConfig: true,
+        isPublished: true,
+        deliveryOption: true,
+        securityAttribute: true,
+      },
+    });
+  });
+
   it("Update assigned users for template", async () => {
     const fakeSession = {
       user: {
