@@ -6,6 +6,7 @@
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seeds/seed.ts --environment=development"
   },
   "scripts": {
+    "install:all": "yarn install && cd ./flag_initialization && yarn install && cd .. && cd ./migrations && yarn install && cd ..",
     "dev": "yarn migrate:dev && yarn initialize && NODE_OPTIONS='--inspect' next dev",
     "build": "DATABASE_URL=postgres://postgres:password@localhost:5432 next build",
     "start": "yarn migrate:prod && yarn initialize && next start -p ${PORT:-3000}",
