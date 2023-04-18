@@ -34,7 +34,7 @@ export const Template = ({
           <SkipLink />
           <Header isFormBuilder={isFormBuilder} />
           {page}
-          <Footer displaySLAAndSupportLinks />
+          <Footer displayFormBuilderFooter />
         </div>
       </TemplateApiProvider>
     </TemplateStoreProvider>

@@ -46,7 +46,8 @@ export const LineItemEntries = ({
   const onKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     e.stopPropagation();
 
-    const text = (e.target as HTMLInputElement).value.trim().replace(",", "");
+    // Since the API only accepts lowercase UUID/FormId help the user out by ensuring lower case
+    const text = (e.target as HTMLInputElement).value.trim().replace(",", "").toLowerCase();
 
     if (!text) {
       setErrors({ ...errors, invalidEntry: false });
@@ -120,7 +121,7 @@ export const LineItemEntries = ({
           onKeyUp={onKeyUp}
           onBlur={onBlur}
           spellCheck="false"
-          autoComplete="false"
+          autoComplete="off"
           aria-labelledby={inputLabelId}
         />
       </div>
