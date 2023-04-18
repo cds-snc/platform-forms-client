@@ -191,7 +191,6 @@ export const Translate = () => {
                     <>{t(primaryLanguage)}</>
                   </LanguageLabel>
                   <RichTextEditor
-                    autoFocusEditor={false}
                     path={`form.introduction.${localizeField(
                       LocalizedElementProperties.DESCRIPTION,
                       primaryLanguage
@@ -211,7 +210,6 @@ export const Translate = () => {
                     <>{t(secondaryLanguage)}</>
                   </LanguageLabel>
                   <RichTextEditor
-                    autoFocusEditor={false}
                     path={`form.introduction.${localizeField(
                       LocalizedElementProperties.DESCRIPTION,
                       secondaryLanguage
@@ -268,7 +266,6 @@ export const Translate = () => {
                   <>{t(primaryLanguage)}</>
                 </LanguageLabel>
                 <RichTextEditor
-                  autoFocusEditor={false}
                   path={`form.privacyPolicy.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
                     primaryLanguage
@@ -291,7 +288,6 @@ export const Translate = () => {
                   <>{t(secondaryLanguage)}</>
                 </LanguageLabel>
                 <RichTextEditor
-                  autoFocusEditor={false}
                   path={`form.privacyPolicy.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
                     secondaryLanguage
@@ -330,7 +326,6 @@ export const Translate = () => {
                   <>{t(primaryLanguage)}</>
                 </LanguageLabel>
                 <RichTextEditor
-                  autoFocusEditor={false}
                   path={`form.confirmation.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
                     primaryLanguage
@@ -353,7 +348,6 @@ export const Translate = () => {
                   <>{t(secondaryLanguage)}</>
                 </LanguageLabel>
                 <RichTextEditor
-                  autoFocusEditor={false}
                   path={`form.confirmation.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
                     secondaryLanguage
