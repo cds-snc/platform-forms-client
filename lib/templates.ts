@@ -546,22 +546,35 @@ export async function updateIsPublishedForTemplate(
   isPublished: boolean
 ): Promise<FormRecord | null> {
   try {
-    const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(formID);
-    if (!templateWithAssociatedUsers) return null;
+    if (isPublished) {
+      const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(formID);
+      if (!templateWithAssociatedUsers) return null;
 
-    checkPrivileges(ability, [
-      {
-        action: "update",
-        subject: {
-          type: "FormRecord",
-          object: {
-            ...templateWithAssociatedUsers.formRecord,
-            users: templateWithAssociatedUsers.users,
+      checkPrivileges(ability, [
+        {
+          action: "update",
+          subject: {
+            type: "FormRecord",
+            object: {
+              ...templateWithAssociatedUsers.formRecord,
+              users: templateWithAssociatedUsers.users,
+            },
+          },
+          field: "isPublished",
+        },
+      ]);
+    } else {
+      checkPrivileges(ability, [
+        {
+          action: "update",
+          subject: {
+            type: "FormRecord",
+            // We want to make sure the user has the permission to manage all templates
+            object: {},
           },
         },
-        field: "isPublished",
-      },
-    ]);
+      ]);
+    }
 
     const updatedTemplate = await prisma.template
       .update({
