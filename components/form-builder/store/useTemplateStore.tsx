@@ -442,6 +442,7 @@ export const useSubscibeToTemplateStore = <T,>(
   const store = useContext(TemplateStoreContext);
   if (!store) throw new Error("Missing Template Store Provider in tree");
   useEffect(() => store.subscribe(selector, listener), [store, selector, listener]);
+  useEffect(() => logMessage.debug("Template Store Subscribed"), [selector, listener]);
 };
 
 export const clearTemplateStore = () => {
