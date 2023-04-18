@@ -3,11 +3,11 @@ import { RichTextEditor } from "../RichTextEditor";
 import { defaultStore as store, Providers } from "@formbuilder/test-utils";
 
 describe("<RichTextEditor />", () => {
-  it("renders", () => {
+  it("Adds and styles text", () => {
     // see: https://on.cypress.io/mounting-react
     cy.mount(
       <Providers form={store.form}>
-        <div className="form-builder" data-testid="richText">
+        <div className="form-builder">
           <RichTextEditor
             path="path.to.content"
             content=""
