@@ -202,9 +202,15 @@ export const getHost = () => {
   return `${window.location.protocol}//${window.location.host}`;
 };
 
-export const getQuestionNumber = (item: FormElement, elements: FormElement[], alpha?: boolean) => {
-  const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
+export const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
 
+interface ElementType {
+  id: number;
+  type: string;
+}
+
+export const getQuestionNumber = (item: FormElement, elements: ElementType[], alpha?: boolean) => {
+  /* note we don't update the count when the item is richText */
   const itemIndex = elements
     .filter((object) => object.type !== "richText")
     .findIndex((object) => object.id === item.id);
