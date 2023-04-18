@@ -109,7 +109,6 @@
     "@testing-library/dom": "^8.17.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",
-    "@testing-library/react-hooks": "^8.0.1",
     "@testing-library/user-event": "^14.1.1",
     "@types/classnames": "^2.3.1",
     "@types/cors": "^2.8.12",
