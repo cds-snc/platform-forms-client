@@ -7,12 +7,12 @@ import { useSession } from "next-auth/react";
 
 interface TemplateApiType {
   error: string | null;
-  saveForm: () => Promise<string | false>;
+  saveForm: () => Promise<boolean>;
 }
 
 const defaultTemplateApi: TemplateApiType = {
   error: null,
-  saveForm: async () => new Promise((resolve) => resolve(false)),
+  saveForm: async () => false,
 };
 
 const TemplateApiContext = createContext<TemplateApiType>(defaultTemplateApi);
@@ -63,6 +63,7 @@ export function TemplateApiProvider({ children }: { children: React.ReactNode })
         templateIsDirty.current = false;
         setId(result?.id);
       }
+      return true;
     } catch (err) {
       logMessage.error(err as Error);
       setError(t("errorSaving"));
