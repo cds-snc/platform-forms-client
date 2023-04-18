@@ -44,7 +44,7 @@ jobs:
             flag_initialization/yarn.lock
             migrations/yarn.lock
       - name: Install Node Dependencies
-        run: yarn install
+        run: yarn install:all
         env:
           CI: TRUE
       - name: Test Code Linting on Pull Request
