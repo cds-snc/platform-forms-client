@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import mockedAxios from "axios";
 import AcceptableUseTerms from "./AcceptableUse";
 import { getCsrfToken, useSession } from "next-auth/react";
-
+jest.mock("next/router", () => require("next-router-mock"));
 jest.mock("axios");
 jest.mock("next-auth/react");
 jest.mock("next-i18next", () => ({

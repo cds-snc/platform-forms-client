@@ -19,7 +19,7 @@ export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) =>
     <header className="border-b-1 border-gray-500 mb-12 py-2 px-4 laptop:px-32 desktop:px-64">
       <div className="grid grid-flow-col w-full">
         <div className="flex">
-          <Link href="/form-builder">
+          <Link href="/form-builder" legacyBehavior>
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a
               id="logo"

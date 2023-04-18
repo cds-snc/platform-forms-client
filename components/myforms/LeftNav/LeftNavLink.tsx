@@ -13,7 +13,7 @@ export const LeftNavLink = ({
   isActive: boolean;
 }) => {
   return (
-    <Link href={href} id={id}>
+    <Link href={href} id={id} legacyBehavior>
       <a
         href={href}
         className={`${
