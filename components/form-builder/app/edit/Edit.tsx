@@ -8,12 +8,13 @@ import { RefsProvider } from "./RefsContext";
 import { RichTextLocked } from "./elements";
 import { Input } from "../shared";
 import { useTemplateStore } from "../../store";
-import { getQuestionNumber } from "../../util";
+import { getQuestionNumber, sortByLayout } from "../../util";
 
 export const Edit = () => {
   const { t } = useTranslation("form-builder");
   const {
     title,
+    layout,
     elements,
     localizeField,
     updateField,
@@ -23,6 +24,7 @@ export const Edit = () => {
   } = useTemplateStore((s) => ({
     title:
       s.form[s.localizeField(LocalizedFormProperties.TITLE, s.translationLanguagePriority)] ?? "",
+    layout: s.form.layout,
     elements: s.form.elements,
     localizeField: s.localizeField,
     updateField: s.updateField,
@@ -48,7 +50,10 @@ export const Edit = () => {
   );
 
   // grab only the data we need to render the question number
-  const elementTypes = elements.map((element) => ({ id: element.id, type: element.type }));
+  const elementTypes = sortByLayout({ layout, elements: [...elements] }).map((element) => ({
+    id: element.id,
+    type: element.type,
+  }));
 
   const updateValue = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,10 +98,13 @@ export const Edit = () => {
         ariaLabel={t("richTextIntroTitle")}
       />
       <RefsProvider>
-        {elements.map((element, index: number) => {
-          const questionNumber = getQuestionNumber(element, elementTypes);
-          const item = { ...element, index, questionNumber };
-          return <ElementPanel item={item} key={item.id} />;
+        {layout.map((id, index) => {
+          const element = elements.find((element) => element.id === id);
+          if (element) {
+            const questionNumber = getQuestionNumber(element, elementTypes);
+            const item = { ...element, index, questionNumber };
+            return <ElementPanel item={item} key={item.id} />;
+          }
         })}
       </RefsProvider>
       <>
