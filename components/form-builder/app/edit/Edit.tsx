@@ -8,6 +8,7 @@ import { RefsProvider } from "./RefsContext";
 import { RichTextLocked } from "./elements";
 import { Input } from "../shared";
 import { useTemplateStore } from "../../store";
+import { getQuestionNumber } from "../../util";
 
 export const Edit = () => {
   const { t } = useTranslation("form-builder");
@@ -45,6 +46,9 @@ export const Edit = () => {
     ),
     100
   );
+
+  // grab only the data we need to render the question number
+  const elementTypes = elements.map((element) => ({ id: element.id, type: element.type }));
 
   const updateValue = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,7 +94,8 @@ export const Edit = () => {
       />
       <RefsProvider>
         {elements.map((element, index: number) => {
-          const item = { ...element, index };
+          const questionNumber = getQuestionNumber(element, elementTypes);
+          const item = { ...element, index, questionNumber };
           return <ElementPanel item={item} key={item.id} />;
         })}
       </RefsProvider>

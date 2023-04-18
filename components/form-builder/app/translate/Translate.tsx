@@ -12,6 +12,7 @@ import { LanguageLabel } from "./LanguageLabel";
 import { FieldsetLegend, SectionTitle } from ".";
 
 import { FormElement } from "@lib/types";
+import { alphabet } from "../../util";
 
 const Element = ({
   element,
@@ -27,7 +28,6 @@ const Element = ({
   let subElements;
 
   const { t } = useTranslation("form-builder");
-  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
   if (element.type === "dynamicRow") {
     let subElementIndex = -1;
