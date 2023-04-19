@@ -1,6 +1,6 @@
 import axios from "axios";
 import { NextRouter } from "next/router";
-import { logger, logMessage } from "@lib/logger";
+import { logMessage } from "@lib/logger";
 import type { FormikBag } from "formik";
 import {
   FileInputResponse,
@@ -17,7 +17,7 @@ import { getCsrfToken } from "next-auth/react";
  * Put any Client related global helper/utils here. The rest of /lib is for anything server related.
  */
 
-function _buildFormDataObject(formRecord: PublicFormRecord, values: Responses) {
+export function buildFormDataObject(formRecord: PublicFormRecord, values: Responses) {
   const formData = {} as { [key: string]: string | FileInputResponse };
 
   const formElementsWithoutRichTextComponents = formRecord.form.elements.filter(
@@ -121,7 +121,7 @@ function _handleFormDataArray(key: string, value: Array<string>): [string, strin
   return [key, JSON.stringify({ value: value })];
 }
 
-async function _submitToAPI(
+export async function submitToAPI(
   values: Responses,
   formikBag: FormikBag<
     {
@@ -136,7 +136,7 @@ async function _submitToAPI(
   const { language, router, formRecord } = formikBag.props;
   const { setStatus } = formikBag;
 
-  const formDataObject = _buildFormDataObject(formRecord, values);
+  const formDataObject = buildFormDataObject(formRecord, values);
   const token = await getCsrfToken();
   if (token) {
     //making a post request to the submit API
@@ -173,7 +173,8 @@ async function _submitToAPI(
     setStatus("Error");
   }
 }
-function _rehydrateFormResponses(payload: Submission) {
+
+export function rehydrateFormResponses(payload: Submission) {
   const { form: formRecord, responses } = payload;
 
   const rehydratedResponses: Responses = {};
@@ -342,7 +343,3 @@ export const slugify = (str: string) =>
     .replace(/[^\w\s-]/g, "")
     .replace(/[\s_-]+/g, "-")
     .replace(/^-+|-+$/g, "");
-
-export const submitToAPI = logger(_submitToAPI);
-export const buildFormDataObject = logger(_buildFormDataObject);
-export const rehydrateFormResponses = logger(_rehydrateFormResponses);
