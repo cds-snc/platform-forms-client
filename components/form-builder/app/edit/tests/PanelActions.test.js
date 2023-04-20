@@ -36,7 +36,7 @@ describe("PanelActions roving index", () => {
           lang="en"
           elements={store.elements}
           item={item}
-          renderMoreButton={({ moreButton }) => <div>{moreButton}</div>}
+          renderMoreButton={(moreButton) => <div>{moreButton}</div>}
         />
       </Providers>
     );
@@ -118,7 +118,7 @@ describe("PanelActions roving index", () => {
           lang="en"
           elements={store.elements}
           item={item}
-          renderMoreButton={({ moreButton }) => <div>{moreButton}</div>}
+          renderMoreButton={(moreButton) => <div>{moreButton}</div>}
         />
       </Providers>
     );
@@ -187,7 +187,7 @@ describe("PanelActions roving index", () => {
           lang="en"
           elements={store.elements}
           item={item}
-          renderMoreButton={({ moreButton }) => <div>{moreButton}</div>}
+          renderMoreButton={(moreButton) => <div>{moreButton}</div>}
         />
       </Providers>
     );

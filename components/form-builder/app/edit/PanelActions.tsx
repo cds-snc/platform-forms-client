@@ -4,7 +4,7 @@ import { useMediaQuery } from "usehooks-ts";
 
 import { FormElementTypes } from "@lib/types";
 import { AddElementButton } from "./elements/element-dialog/AddElementButton";
-import { ElementOptionsFilter, FormElementWithIndex } from "@components/form-builder/types";
+import { ElementOptionsFilter } from "@components/form-builder/types";
 import {
   ChevronDown,
   ChevronUp,
@@ -19,10 +19,7 @@ import { ElementDialog } from "./elements/element-dialog/ElementDialog";
 import { PanelActionsButton } from "./PanelActionsButton";
 
 export interface RenderMoreFunc {
-  ({ item, moreButton }: { item: FormElementWithIndex; moreButton: JSX.Element | undefined }):
-    | React.ReactElement
-    | string
-    | undefined;
+  (moreButton: JSX.Element | undefined): React.ReactElement | string | undefined;
 }
 
 export const PanelActions = ({
@@ -39,12 +36,12 @@ export const PanelActions = ({
   handleDuplicate,
   filterElements,
 }: {
-  item: FormElementWithIndex;
+  item: { type: FormElementTypes; index: number };
   isFirstItem: boolean;
   isLastItem: boolean;
   totalItems: number;
   subIndex?: number;
-  renderMoreButton: RenderMoreFunc;
+  renderMoreButton?: RenderMoreFunc;
   handleAdd: (index: number, type?: FormElementTypes) => void;
   handleRemove: () => void;
   handleMoveUp: () => void;
@@ -215,7 +212,7 @@ export const PanelActions = ({
           data-testid="panel-actions"
         >
           {actions}
-          {!isRichText && renderMoreButton && renderMoreButton({ item, moreButton })}
+          {!isRichText && renderMoreButton && renderMoreButton(moreButton)}
         </div>
 
         {elementDialog && isSubElement && (

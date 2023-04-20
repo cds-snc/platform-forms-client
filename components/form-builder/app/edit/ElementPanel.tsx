@@ -129,9 +129,7 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
           setFocusInput(true);
           duplicateElement(item.index);
         }}
-        renderMoreButton={({ item, moreButton }) => (
-          <MoreModal item={item} moreButton={moreButton} />
-        )}
+        renderMoreButton={(moreButton) => <MoreModal item={item} moreButton={moreButton} />}
       />
     </div>
   );
