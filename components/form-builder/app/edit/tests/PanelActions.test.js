@@ -27,17 +27,9 @@ describe("PanelActions roving index", () => {
       })),
     });
 
-    // note: there are by default 3 elements in the form in this case we are rendering the middle one
-    const item = { id: 1, index: 1, ...store.elements[0] };
-
     render(
       <Providers form={store}>
-        <PanelActions
-          lang="en"
-          elements={store.elements}
-          item={item}
-          renderMoreButton={(moreButton) => <div>{moreButton}</div>}
-        />
+        <PanelActions lang="en" renderMoreButton={(moreButton) => <div>{moreButton}</div>} />
       </Providers>
     );
 
@@ -109,17 +101,9 @@ describe("PanelActions roving index", () => {
   });
 
   it("can navigate panel actions on the first element", async () => {
-    // note: there are by default 3 elements in the form in this case we are rendering the first one
-    const item = { id: 1, index: 0, ...store.elements[0] };
-
     render(
       <Providers form={store}>
-        <PanelActions
-          lang="en"
-          elements={store.elements}
-          item={item}
-          renderMoreButton={(moreButton) => <div>{moreButton}</div>}
-        />
+        <PanelActions lang="en" renderMoreButton={(moreButton) => <div>{moreButton}</div>} />
       </Providers>
     );
 
@@ -178,17 +162,9 @@ describe("PanelActions roving index", () => {
   });
 
   it("can navigate panel actions on the last element", async () => {
-    // note: there are by default 3 elements in the form in this case we are rendering the last one
-    const item = { id: 1, index: 2, ...store.elements[0] };
-
     render(
       <Providers form={store}>
-        <PanelActions
-          lang="en"
-          elements={store.elements}
-          item={item}
-          renderMoreButton={(moreButton) => <div>{moreButton}</div>}
-        />
+        <PanelActions lang="en" renderMoreButton={(moreButton) => <div>{moreButton}</div>} />
       </Providers>
     );
 
