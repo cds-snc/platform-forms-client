@@ -124,6 +124,9 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
             <PanelHightLight
               conditionalChildren={
                 <PanelActions
+                  isFirstItem={subIndex === 0}
+                  isLastItem={subIndex === subElements.length - 1}
+                  totalItems={subElements.length}
                   item={item}
                   subIndex={subIndex}
                   handleAdd={(subIndex: number, type?: FormElementTypes) => {
@@ -152,7 +155,6 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
                     );
                   }}
                   filterElements={elementFilter}
-                  elementsLength={subElements.length}
                 />
               }
             >

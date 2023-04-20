@@ -72,7 +72,9 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
       <PanelBodyRoot item={item} />
       <PanelActions
         subIndex={-1}
-        elementsLength={elements.length}
+        isFirstItem={item.index === 0}
+        isLastItem={item.index === elements.length - 1}
+        totalItems={elements.length}
         item={item}
         handleAdd={handleAddElement}
         handleRemove={() => {

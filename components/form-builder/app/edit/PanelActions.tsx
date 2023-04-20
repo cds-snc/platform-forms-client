@@ -27,6 +27,9 @@ export interface RenderMoreFunc {
 
 export const PanelActions = ({
   item,
+  isFirstItem,
+  isLastItem,
+  totalItems,
   subIndex,
   renderMoreButton,
   handleAdd,
@@ -35,9 +38,11 @@ export const PanelActions = ({
   handleMoveDown,
   handleDuplicate,
   filterElements,
-  elementsLength,
 }: {
   item: FormElementWithIndex;
+  isFirstItem: boolean;
+  isLastItem: boolean;
+  totalItems: number;
   subIndex?: number;
   renderMoreButton: RenderMoreFunc;
   handleAdd: (index: number, type?: FormElementTypes) => void;
@@ -46,13 +51,10 @@ export const PanelActions = ({
   handleMoveDown: () => void;
   handleDuplicate: () => void;
   filterElements?: ElementOptionsFilter;
-  elementsLength: number;
 }) => {
   const { t, i18n } = useTranslation("form-builder");
 
   const isInit = useRef(false);
-  const isLastItem = item.index === elementsLength - 1;
-  const isFirstItem = item.index === 0;
   const isRichText = item.type == "richText";
   const isSubElement = subIndex !== -1 && subIndex !== undefined;
   const lang = i18n.language;
@@ -150,7 +152,7 @@ export const PanelActions = ({
       panelButtons,
       isFirstItem,
       isLastItem,
-      elementsLength,
+      totalItems,
       orientation: isSubElement ? "horizontal" : isXl ? "horizontal" : "vertical",
     }
   );
