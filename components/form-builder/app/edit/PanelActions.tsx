@@ -19,7 +19,6 @@ import { ElementDialog } from "./elements/element-dialog/ElementDialog";
 import { PanelActionsButton } from "./PanelActionsButton";
 
 export const PanelActions = ({
-  item,
   isFirstItem,
   isLastItem,
   totalItems,
@@ -32,13 +31,12 @@ export const PanelActions = ({
   handleDuplicate,
   filterElements,
 }: {
-  item: { type: FormElementTypes; index: number };
   isFirstItem: boolean;
   isLastItem: boolean;
   totalItems: number;
   subIndex?: number;
   renderMoreButton?: RenderMoreFunc;
-  handleAdd: (index: number, type?: FormElementTypes) => void;
+  handleAdd: (type?: FormElementTypes) => void;
   handleRemove: () => void;
   handleMoveUp: () => void;
   handleMoveDown: () => void;
@@ -213,9 +211,7 @@ export const PanelActions = ({
         {elementDialog && isSubElement && (
           <ElementDialog
             filterElements={filterElements}
-            handleAddType={(type) => {
-              handleAdd && handleAdd(item.index, type);
-            }}
+            handleAddType={handleAdd}
             handleClose={handleCloseDialog}
           />
         )}
@@ -224,7 +220,6 @@ export const PanelActions = ({
         <div className="flex">
           <div className="absolute -bottom-5 left-1/2 transform -translate-x-1/2 z-10">
             <AddElementButton
-              position={item.index}
               handleAdd={handleAdd}
               filterElements={filterElements}
               text={t("addElement")}

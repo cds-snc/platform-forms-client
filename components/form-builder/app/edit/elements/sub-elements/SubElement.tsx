@@ -104,8 +104,9 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
       <div className="mt-10">
         <AddElementButton
           text={t("addToSet")}
-          position={-1}
-          handleAdd={handleAddElement}
+          handleAdd={(type?: FormElementTypes) => {
+            handleAddElement(0, type);
+          }}
           filterElements={elementFilter}
         />
       </div>
@@ -127,9 +128,8 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
                   isFirstItem={subIndex === 0}
                   isLastItem={subIndex === subElements.length - 1}
                   totalItems={subElements.length}
-                  item={item}
                   subIndex={subIndex}
-                  handleAdd={(subIndex: number, type?: FormElementTypes) => {
+                  handleAdd={(type?: FormElementTypes) => {
                     handleAddElement(subIndex, type);
                   }}
                   handleRemove={() => {

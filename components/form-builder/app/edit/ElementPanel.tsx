@@ -6,6 +6,7 @@ import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
 
 import { useIsWithin, useHandleAdd } from "@components/form-builder/hooks";
 import { useRefsContext } from "./RefsContext";
+import { FormElementTypes } from "@lib/types";
 
 export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
   const { getFocusInput, setFocusInput, remove, moveUp, moveDown, duplicateElement, elements } =
@@ -87,8 +88,9 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
         isFirstItem={item.index === 0}
         isLastItem={item.index === elements.length - 1}
         totalItems={elements.length}
-        item={item}
-        handleAdd={handleAddElement}
+        handleAdd={(type?: FormElementTypes) => {
+          handleAddElement(item.index, type);
+        }}
         handleRemove={() => {
           const previousElement = elements[item.index - 1];
           remove(item.id);
