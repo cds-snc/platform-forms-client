@@ -22,7 +22,7 @@ export const PanelActions = ({
   isFirstItem,
   isLastItem,
   totalItems,
-  subIndex,
+  isSubPanel,
   renderMoreButton,
   handleAdd,
   handleRemove,
@@ -34,7 +34,7 @@ export const PanelActions = ({
   isFirstItem: boolean;
   isLastItem: boolean;
   totalItems: number;
-  subIndex?: number;
+  isSubPanel?: boolean;
   renderMoreButton?: RenderMoreFunc;
   handleAdd: (type?: FormElementTypes) => void;
   handleRemove: () => void;
@@ -46,11 +46,10 @@ export const PanelActions = ({
   const { t, i18n } = useTranslation("form-builder");
 
   const isInit = useRef(false);
-  const isSubElement = subIndex !== -1 && subIndex !== undefined;
   const lang = i18n.language;
 
   const getPanelButtons = () => {
-    if (isSubElement) {
+    if (isSubPanel) {
       return [
         {
           id: 1,
@@ -143,7 +142,7 @@ export const PanelActions = ({
       isFirstItem,
       isLastItem,
       totalItems,
-      orientation: isSubElement ? "horizontal" : isXl ? "horizontal" : "vertical",
+      orientation: isSubPanel ? "horizontal" : isXl ? "horizontal" : "vertical",
     }
   );
 
@@ -165,7 +164,7 @@ export const PanelActions = ({
     return (
       <PanelActionsButton
         key={button.txt}
-        className={`${isFirstItem ? "disabled" : ""} ${isSubElement ? "!px-2" : ""}`}
+        className={`${isFirstItem ? "disabled" : ""} ${isSubPanel ? "!px-2" : ""}`}
         disabled={button.disabled && button.disabled}
         icon={button.icon}
         onClick={button.onClick}
@@ -180,17 +179,17 @@ export const PanelActions = ({
 
   const moreButton = actions.pop();
 
-  const outerPanelClasses = isSubElement
+  const outerPanelClasses = isSubPanel
     ? ""
     : `laptop:absolute laptop:invisible laptop:group-[.active]:visible laptop:group-active:visible laptop:group-focus-within:visible laptop:right-0 laptop:top-0 ${
         lang === "fr" ? "laptop:-mr-[230px]" : "laptop:-mr-[160px]"
       }`;
 
-  const innerPanelClasses = isSubElement
+  const innerPanelClasses = isSubPanel
     ? `flex flex-wrap flex-row justify-between px-4 pb-6 pt-4 py-2 -mx-12 laptop:mx-0`
     : `flex flex-wrap flex-row justify-between bg-gray-200 px-4 pb-6 pt-4 py-2`;
 
-  const innerPanelResponsiveClasses = isSubElement
+  const innerPanelResponsiveClasses = isSubPanel
     ? ""
     : "laptop:flex-col laptop:flex-wrap laptop:bg-violet-50 laptop:rounded-lg laptop:border laptop:border-violet-400 laptop:px-2 laptop:py-4";
 
@@ -208,7 +207,7 @@ export const PanelActions = ({
           {renderMoreButton && renderMoreButton(moreButton)}
         </div>
 
-        {elementDialog && isSubElement && (
+        {elementDialog && isSubPanel && (
           <ElementDialog
             filterElements={filterElements}
             handleAddType={handleAdd}
@@ -216,7 +215,7 @@ export const PanelActions = ({
           />
         )}
       </div>
-      {!isSubElement && (
+      {!isSubPanel && (
         <div className="flex">
           <div className="absolute -bottom-5 left-1/2 transform -translate-x-1/2 z-10">
             <AddElementButton
