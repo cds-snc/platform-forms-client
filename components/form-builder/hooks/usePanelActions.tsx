@@ -22,7 +22,9 @@ export const usePanelActions = ({
 }) => {
   const itemsRef = useRef<[HTMLButtonElement] | []>([]);
 
-  const [currentFocusIndex, setCurrentFocusIndex] = useState(isFirstItem ? 1 : 0);
+  const startingFocusIndex = isFirstItem && isLastItem ? 2 : isFirstItem ? 1 : 0;
+
+  const [currentFocusIndex, setCurrentFocusIndex] = useState(startingFocusIndex);
   const isRoving = useRef(false);
 
   const [items] = useState(panelButtons.map(({ id, txt }) => ({ id, txt })));
