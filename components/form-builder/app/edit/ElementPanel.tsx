@@ -49,7 +49,7 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
   const moreButton =
     item.type !== "richText"
       ? {
-          renderMoreButton: (
+          moreButtonRenderer: (
             moreButton: JSX.Element | undefined
           ): React.ReactElement | string | undefined => (
             <MoreModal item={item} moreButton={moreButton} />

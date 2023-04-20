@@ -23,7 +23,7 @@ export const PanelActions = ({
   isLastItem,
   totalItems,
   isSubPanel,
-  renderMoreButton,
+  moreButtonRenderer,
   handleAdd,
   handleRemove,
   handleMoveUp,
@@ -35,7 +35,7 @@ export const PanelActions = ({
   isLastItem: boolean;
   totalItems: number;
   isSubPanel?: boolean;
-  renderMoreButton?: RenderMoreFunc;
+  moreButtonRenderer?: RenderMoreFunc;
   handleAdd: (type?: FormElementTypes) => void;
   handleRemove: () => void;
   handleMoveUp: () => void;
@@ -47,47 +47,9 @@ export const PanelActions = ({
 
   const isInit = useRef(false);
   const lang = i18n.language;
-
-  const getPanelButtons = () => {
-    if (isSubPanel) {
-      return [
-        {
-          id: 1,
-          txt: "moveUp",
-          icon: ChevronUp,
-          onClick: handleMoveUp,
-          disabled: isFirstItem,
-        },
-        {
-          id: 2,
-          txt: "moveDown",
-          icon: ChevronDown,
-          onClick: handleMoveDown,
-          disabled: isLastItem,
-        },
-        {
-          id: 3,
-          txt: "removeFromSet",
-          icon: Close,
-          onClick: handleRemove,
-        },
-        {
-          id: 4,
-          txt: "addToSet",
-          icon: AddIcon,
-          onClick: () => {
-            handleOpenDialog();
-          },
-        },
-        {
-          id: 5,
-          txt: "more",
-          icon: ThreeDotsIcon,
-          onClick: () => null,
-        },
-      ];
-    }
-    return [
+  const hasMoreButton = moreButtonRenderer ? true : false;
+  const getPanelButtons = ({ hasMoreButton }: { hasMoreButton: boolean }) => {
+    const panelButtons = [
       {
         id: 1,
         txt: "moveUp",
@@ -102,28 +64,59 @@ export const PanelActions = ({
         onClick: handleMoveDown,
         disabled: isLastItem,
       },
-      {
-        id: 3,
-        txt: "duplicate",
-        icon: Duplicate,
-        onClick: handleDuplicate,
-      },
-      {
-        id: 4,
-        txt: "remove",
-        icon: Close,
-        onClick: handleRemove,
-      },
-      {
-        id: 5,
-        txt: "more",
-        icon: ThreeDotsIcon,
-        onClick: () => null,
-      },
     ];
+
+    if (isSubPanel) {
+      panelButtons.push(
+        {
+          id: 3,
+          txt: "removeFromSet",
+          icon: Close,
+          onClick: handleRemove,
+          disabled: false,
+        },
+        {
+          id: 4,
+          txt: "addToSet",
+          icon: AddIcon,
+          onClick: () => {
+            handleOpenDialog();
+          },
+          disabled: false,
+        }
+      );
+    } else {
+      panelButtons.push(
+        {
+          id: 3,
+          txt: "duplicate",
+          icon: Duplicate,
+          onClick: handleDuplicate,
+          disabled: false,
+        },
+        {
+          id: 4,
+          txt: "remove",
+          icon: Close,
+          onClick: handleRemove,
+          disabled: false,
+        }
+      );
+
+      if (hasMoreButton) {
+        panelButtons.push({
+          id: 5,
+          txt: "more",
+          icon: ThreeDotsIcon,
+          onClick: () => null,
+          disabled: false,
+        });
+      }
+    }
+    return panelButtons;
   };
 
-  const panelButtons = getPanelButtons();
+  const panelButtons = getPanelButtons({ hasMoreButton });
   const isXl = useMediaQuery("(max-width: 992px)");
 
   const [elementDialog, showElementDialog] = useState(false);
@@ -177,7 +170,11 @@ export const PanelActions = ({
     );
   });
 
-  const moreButton = actions.pop();
+  let moreButton = undefined;
+
+  if (hasMoreButton) {
+    moreButton = actions.pop();
+  }
 
   const outerPanelClasses = isSubPanel
     ? ""
@@ -204,7 +201,7 @@ export const PanelActions = ({
           data-testid="panel-actions"
         >
           {actions}
-          {renderMoreButton && renderMoreButton(moreButton)}
+          {moreButtonRenderer && moreButtonRenderer(moreButton)}
         </div>
 
         {elementDialog && isSubPanel && (
