@@ -4,7 +4,7 @@ export const options = [
     urlEn: "https://www.oag-bvg.gc.ca/internet/English/admin_e_41.html",
     urlFr: "https://www.oag-bvg.gc.ca/internet/Francais/admin_f_41.html",
     logoEn: "/img/branding/oag-en.svg",
-    logoFr: "/img/branding/oag-fr.png",
+    logoFr: "/img/branding/oag-fr.svg",
     logoTitleEn: "Office of the Auditor General of Canada",
     logoTitleFr: "Bureau du vérificateur général du Canada",
   },
