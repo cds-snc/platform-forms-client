@@ -48,6 +48,9 @@ export const usePanelActions = ({
 
       if (key === back) {
         evt.preventDefault();
+        if (isFirstItem && isLastItem && currentFocusIndex === 2) {
+          return;
+        }
         if (isFirstItem && currentFocusIndex === 1) {
           return;
         }
