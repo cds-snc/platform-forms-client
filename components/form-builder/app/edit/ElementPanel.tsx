@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { FormElementWithIndex } from "../../types";
 import { useTemplateStore } from "../../store";
 import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
+
 import { useIsWithin, useHandleAdd } from "@components/form-builder/hooks";
 import { useRefsContext } from "./RefsContext";
 
@@ -43,6 +44,17 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
 
   const { focusWithinProps, isWithin } = useIsWithin();
   const { refs } = useRefsContext();
+
+  const moreButton =
+    item.type !== "richText"
+      ? {
+          renderMoreButton: (
+            moreButton: JSX.Element | undefined
+          ): React.ReactElement | string | undefined => (
+            <MoreModal item={item} moreButton={moreButton} />
+          ),
+        }
+      : {};
 
   /* eslint-disable jsx-a11y/no-static-element-interactions */
   /* eslint-disable jsx-a11y/click-events-have-key-events */
@@ -129,7 +141,7 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
           setFocusInput(true);
           duplicateElement(item.index);
         }}
-        renderMoreButton={(moreButton) => <MoreModal item={item} moreButton={moreButton} />}
+        {...moreButton}
       />
     </div>
   );

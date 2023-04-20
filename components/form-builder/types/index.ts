@@ -109,3 +109,7 @@ export interface CDSHTMLDialogElement extends HTMLElement {
     options?: boolean | EventListenerOptions
   ): void;
 }
+
+export interface RenderMoreFunc {
+  (moreButton: JSX.Element | undefined): React.ReactElement | string | undefined;
+}

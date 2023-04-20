@@ -4,7 +4,7 @@ import { useMediaQuery } from "usehooks-ts";
 
 import { FormElementTypes } from "@lib/types";
 import { AddElementButton } from "./elements/element-dialog/AddElementButton";
-import { ElementOptionsFilter } from "@components/form-builder/types";
+import { ElementOptionsFilter, RenderMoreFunc } from "@components/form-builder/types";
 import {
   ChevronDown,
   ChevronUp,
@@ -17,10 +17,6 @@ import {
 import { usePanelActions } from "@components/form-builder/hooks";
 import { ElementDialog } from "./elements/element-dialog/ElementDialog";
 import { PanelActionsButton } from "./PanelActionsButton";
-
-export interface RenderMoreFunc {
-  (moreButton: JSX.Element | undefined): React.ReactElement | string | undefined;
-}
 
 export const PanelActions = ({
   item,
@@ -52,7 +48,6 @@ export const PanelActions = ({
   const { t, i18n } = useTranslation("form-builder");
 
   const isInit = useRef(false);
-  const isRichText = item.type == "richText";
   const isSubElement = subIndex !== -1 && subIndex !== undefined;
   const lang = i18n.language;
 
@@ -212,7 +207,7 @@ export const PanelActions = ({
           data-testid="panel-actions"
         >
           {actions}
-          {!isRichText && renderMoreButton && renderMoreButton(moreButton)}
+          {renderMoreButton && renderMoreButton(moreButton)}
         </div>
 
         {elementDialog && isSubElement && (
