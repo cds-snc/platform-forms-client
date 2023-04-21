@@ -64,55 +64,54 @@ export const PanelActions = ({
         onClick: handleMoveDown,
         disabled: isLastItem,
       },
+      ...(isSubPanel
+        ? [
+            {
+              id: 3,
+              txt: "removeFromSet",
+              icon: Close,
+              onClick: handleRemove,
+              disabled: false,
+            },
+            {
+              id: 4,
+              txt: "addToSet",
+              icon: AddIcon,
+              onClick: () => {
+                handleOpenDialog();
+              },
+              disabled: false,
+            },
+          ]
+        : [
+            {
+              id: 3,
+              txt: "duplicate",
+              icon: Duplicate,
+              onClick: handleDuplicate,
+              disabled: false,
+            },
+            {
+              id: 4,
+              txt: "remove",
+              icon: Close,
+              onClick: handleRemove,
+              disabled: false,
+            },
+          ]),
+      ...(hasMoreButton
+        ? [
+            {
+              id: 5,
+              txt: "more",
+              icon: ThreeDotsIcon,
+              onClick: () => null,
+              disabled: false,
+            },
+          ]
+        : []),
     ];
 
-    if (isSubPanel) {
-      panelButtons.push(
-        {
-          id: 3,
-          txt: "removeFromSet",
-          icon: Close,
-          onClick: handleRemove,
-          disabled: false,
-        },
-        {
-          id: 4,
-          txt: "addToSet",
-          icon: AddIcon,
-          onClick: () => {
-            handleOpenDialog();
-          },
-          disabled: false,
-        }
-      );
-    } else {
-      panelButtons.push(
-        {
-          id: 3,
-          txt: "duplicate",
-          icon: Duplicate,
-          onClick: handleDuplicate,
-          disabled: false,
-        },
-        {
-          id: 4,
-          txt: "remove",
-          icon: Close,
-          onClick: handleRemove,
-          disabled: false,
-        }
-      );
-
-      if (hasMoreButton) {
-        panelButtons.push({
-          id: 5,
-          txt: "more",
-          icon: ThreeDotsIcon,
-          onClick: () => null,
-          disabled: false,
-        });
-      }
-    }
     return panelButtons;
   };
 
