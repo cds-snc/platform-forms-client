@@ -401,7 +401,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
 
 type TemplateStore = ReturnType<typeof createTemplateStore>;
 
-const TemplateStoreContext = createContext<TemplateStore | null>(null);
+export const TemplateStoreContext = createContext<TemplateStore | null>(null);
 
 export const TemplateStoreProvider = ({
   children,
