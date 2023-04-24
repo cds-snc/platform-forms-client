@@ -21,7 +21,6 @@ import { isFormId, isUUID } from "@lib/validation";
 import { NagwareResult } from "@lib/types";
 import { detectOldUnprocessedSubmissions } from "@lib/nagware";
 import { Nagware } from "@components/form-builder/app/Nagware";
-import { useAutoSave } from "@components/form-builder/hooks";
 import { EmailResponseSettings } from "@components/form-builder/app/shared";
 import { useTemplateStore } from "@components/form-builder/store";
 
@@ -52,8 +51,6 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   }));
 
   const deliveryOption = getDeliveryOption();
-
-  useAutoSave();
 
   const navItemClasses =
     "no-underline !shadow-none border-black border-1 rounded-[100px] pt-1 pb-2 laptop:py-2 px-5 mr-3 mb-0 text-black visited:text-black focus:bg-[#475569] hover:bg-[#475569] hover:!text-white focus:!text-white [&_svg]:focus:fill-white";

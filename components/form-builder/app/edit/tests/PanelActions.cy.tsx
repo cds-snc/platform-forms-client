@@ -44,7 +44,7 @@ describe("<PanelActions />", () => {
         totalItems={0}
         moreButtonRenderer={(moreButton) => <>{moreButton}</>}
         handleAdd={function (type?: FormElementTypes | undefined): void {
-          throw new Error(type + " Function not implemented.");
+          throw new Error(`${type} Function not implemented.`);
         }}
         handleRemove={function (): void {
           throw new Error("Function not implemented.");
@@ -95,7 +95,7 @@ describe("<PanelActions />", () => {
           totalItems={0}
           moreButtonRenderer={(moreButton) => <>{moreButton}</>}
           handleAdd={function (type?: FormElementTypes | undefined): void {
-            throw new Error(type + " Function not implemented.");
+            throw new Error(`${type} Function not implemented.`);
           }}
           handleRemove={function (): void {
             throw new Error("Function not implemented.");

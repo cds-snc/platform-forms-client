@@ -58,7 +58,8 @@ describe("Test FormBuilder", () => {
     cy.get('[data-testid="modal-content"] button').contains("Save").click({ force: true });
 
     // re-check form editor
-    cy.get("#item-1").scrollIntoView().should("have.value", "Question 1-1");
+    cy.get("#item-1").scrollIntoView();
+    cy.get("#item-1").should("have.value", "Question 1-1");
     cy.get("#item1-describedby").should("contain", "Question 1 description");
     cy.get("#required-1-id").should("be.checked");
 
