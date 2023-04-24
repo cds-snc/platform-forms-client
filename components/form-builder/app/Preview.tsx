@@ -9,7 +9,6 @@ import { PublicFormRecord } from "@lib/types";
 import { Button, Form, RichText } from "@components/forms";
 import { LocalizedElementProperties, LocalizedFormProperties } from "../types";
 import { useTemplateStore } from "../store";
-import { useAutoSave } from "../hooks";
 import { BackArrowIcon } from "../icons";
 import Brand from "@components/globals/Brand";
 
@@ -53,8 +52,6 @@ export const Preview = () => {
     e.preventDefault();
     return false;
   };
-
-  useAutoSave();
 
   const responsesLink = `/${i18n.language}/form-builder/responses/${id}`;
   const settingsLink = `/${i18n.language}/form-builder/settings/${id}`;

@@ -33,51 +33,43 @@ describe("Test FormBuilder language switching", () => {
     cy.get("button").contains("Select block").click();
 
     // Enter English Title and Introduction
-    cy.get("#formTitle").type("Cypress Test Form").should("have.value", "Cypress Test Form");
-    cy.get(`[aria-label="Form introduction"]`)
-      .type("form intro in english")
-      .contains("form intro in english");
+    cy.get("#formTitle").type("Cypress Test Form");
+    cy.get("#formTitle").should("have.value", "Cypress Test Form");
+    cy.get(`[aria-label="Form introduction"]`).type("form intro in english");
+    cy.get(`[aria-label="Form introduction"]`).contains("form intro in english");
 
     // Enter some English "page text"
-    cy.get('[aria-label="Page text 1"]')
-      .type("page text in english")
-      .contains("page text in english");
+    cy.get('[aria-label="Page text 1"]').type("page text in english");
+    cy.get('[aria-label="Page text 1"]').contains("page text in english");
 
     // Enter English Privacy Statement
-    cy.get('[aria-label="Privacy statement"]')
-      .type("privacy text in english")
-      .contains("privacy text in english");
+    cy.get('[aria-label="Privacy statement"]').type("privacy text in english");
+    cy.get('[aria-label="Privacy statement"]').contains("privacy text in english");
 
     // Enter English Confirmation Page
-    cy.get('[aria-label="Confirmation page and message"]')
-      .type("confirmation text in english")
-      .contains("confirmation text in english");
+    cy.get('[aria-label="Confirmation page and message"]').type("confirmation text in english");
+    cy.get('[aria-label="Confirmation page and message"]').contains("confirmation text in english");
 
     // Switch to French
     cy.get('[data-testid="lang-switcher"]').click();
 
     // Enter French Title and Introduction
-    cy.get("#formTitle")
-      .type("Formulaire de test Cypress")
-      .should("have.value", "Formulaire de test Cypress");
-    cy.get(`[aria-label="Form introduction"]`)
-      .type("form intro in french")
-      .contains("form intro in french");
+    cy.get("#formTitle").type("Formulaire de test Cypress");
+    cy.get("#formTitle").should("have.value", "Formulaire de test Cypress");
+    cy.get(`[aria-label="Form introduction"]`).type("form intro in french");
+    cy.get(`[aria-label="Form introduction"]`).contains("form intro in french");
 
     // Enter some French "page text"
-    cy.get('[aria-label="Page text 1"]')
-      .type("page text in french")
-      .contains("page text in french");
+    cy.get('[aria-label="Page text 1"]').type("page text in french");
+    cy.get('[aria-label="Page text 1"]').contains("page text in french");
 
     // Enter French Privacy Statement
-    cy.get('[aria-label="Privacy statement"]')
-      .type("privacy text in french")
-      .contains("privacy text in french");
+    cy.get('[aria-label="Privacy statement"]').type("privacy text in french");
+    cy.get('[aria-label="Privacy statement"]').contains("privacy text in french");
 
     // Enter French Confirmation Page
-    cy.get('[aria-label="Confirmation page and message"]')
-      .type("confirmation text in french")
-      .contains("confirmation text in french");
+    cy.get('[aria-label="Confirmation page and message"]').type("confirmation text in french");
+    cy.get('[aria-label="Confirmation page and message"]').contains("confirmation text in french");
 
     // Switch back to English
     cy.get('[data-testid="lang-switcher"]').click();
