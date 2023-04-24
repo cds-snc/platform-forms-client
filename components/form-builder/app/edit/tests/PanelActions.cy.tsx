@@ -22,7 +22,7 @@ describe("<PanelActions />", () => {
         item={item}
         renderMoreButton={undefined}
         handleAdd={function (index: number, type?: FormElementTypes | undefined): void {
-          throw new Error("Function not implemented.");
+          throw new Error(`Function not implemented. ${index} ${type}`);
         }}
         handleRemove={function (): void {
           throw new Error("Function not implemented.");
