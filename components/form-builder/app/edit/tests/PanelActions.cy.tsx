@@ -2,18 +2,27 @@ import React from "react";
 import { PanelActions } from "../PanelActions";
 import { FormElementTypes } from "@lib/types";
 
+const item = {
+  id: 1,
+  index: 0,
+  questionNumber: 1,
+  type: FormElementTypes.textField,
+  properties: {
+    titleEn: "Title",
+    titleFr: "Titre",
+  },
+};
+
 describe("<PanelActions />", () => {
   it("enables move buttons for item that is not first or last", () => {
     cy.viewport(800, 80);
     // see: https://on.cypress.io/mounting-react
     cy.mount(
       <PanelActions
-        isFirstItem={false}
-        isLastItem={false}
-        totalItems={0}
-        moreButtonRenderer={(moreButton) => <>{moreButton}</>}
-        handleAdd={function (type?: FormElementTypes | undefined): void {
-          throw new Error(type + "Function not implemented.");
+        item={item}
+        renderMoreButton={undefined}
+        handleAdd={function (index: number, type?: FormElementTypes | undefined): void {
+          throw new Error("Function not implemented.");
         }}
         handleRemove={function (): void {
           throw new Error("Function not implemented.");
@@ -27,6 +36,7 @@ describe("<PanelActions />", () => {
         handleDuplicate={function (): void {
           throw new Error("Function not implemented.");
         }}
+        elementsLength={1}
       />
     );
 
