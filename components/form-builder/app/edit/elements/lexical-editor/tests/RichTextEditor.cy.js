@@ -20,17 +20,17 @@ describe("<RichTextEditor />", () => {
     );
 
     // Add some strings to get formatted
-    cy.get(`[id^="editor-"]`)
-      .type("H2 heading text{enter}")
-      .type("H3 heading text{enter}")
-      .type("Let's bold part of this sentence.{enter}")
-      .type("Let's italicize part of this sentence.{enter}")
-      .type("Part of his one will be a link{enter}");
+    cy.get(`[id^="editor-"]`).type("H2 heading text{enter}");
+    cy.get(`[id^="editor-"]`).type("H3 heading text{enter}");
+    cy.get(`[id^="editor-"]`).type("Let's bold part of this sentence.{enter}");
+    cy.get(`[id^="editor-"]`).type("Let's italicize part of this sentence.{enter}");
+    cy.get(`[id^="editor-"]`).type("Part of his one will be a link{enter}");
 
     // Add a link
     cy.get(`[id^="editor-"]`).setSelection("will be a link");
     cy.get('[data-testid="link-button"]').first().click();
-    cy.get('[data-testid="link-editor"]').first().click().type("example.com{enter}{esc}");
+    cy.get('[data-testid="link-editor"]').first().click();
+    cy.get('[data-testid="link-editor"]').type("example.com{enter}{esc}");
     cy.get('[id^="editor-"] a').first().contains("will be a link");
 
     // Add H2 heading

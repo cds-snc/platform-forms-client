@@ -1,7 +1,14 @@
 import { createStore, useStore } from "zustand";
 import { immer } from "zustand/middleware/immer";
-import { persist, StateStorage, createJSONStorage } from "zustand/middleware";
-import React, { createContext, useRef, useContext } from "react";
+import { shallow } from "zustand/shallow";
+import {
+  persist,
+  StateStorage,
+  createJSONStorage,
+  subscribeWithSelector,
+} from "zustand/middleware";
+
+import React, { createContext, useRef, useContext, useEffect } from "react";
 import { getPathString } from "../getPath";
 
 import {
@@ -70,7 +77,7 @@ export interface TemplateStoreProps {
   lang: Language;
   translationLanguagePriority: Language;
   focusInput: boolean;
-  _hasHydrated: boolean;
+  hasHydrated: boolean;
   form: FormProperties;
   isPublished: boolean;
   name: string;
@@ -84,7 +91,6 @@ export interface InitialTemplateStoreProps extends TemplateStoreProps {
 
 export interface TemplateStoreState extends TemplateStoreProps {
   focusInput: boolean;
-  _hasHydrated: boolean;
   setHasHydrated: () => void;
   getFocusInput: () => boolean;
   moveUp: (index: number) => void;
@@ -157,7 +163,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
     lang: (initProps?.locale as Language) || "en",
     translationLanguagePriority: (initProps?.locale as Language) || "en",
     focusInput: false,
-    _hasHydrated: false,
+    hasHydrated: false,
     form: defaultForm,
     isPublished: false,
     name: "",
@@ -173,227 +179,230 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
 
   return createStore<TemplateStoreState>()(
     immer(
-      persist(
-        (set, get) => ({
-          ...DEFAULT_PROPS,
-          ...initProps,
-          setHasHydrated: () => {
-            set((state) => {
-              state._hasHydrated = true;
-            });
-          },
-          localizeField: (path, lang = get().lang) => {
-            const langUpperCaseFirst = (lang.charAt(0).toUpperCase() +
-              lang.slice(1)) as Capitalize<Language>;
-            return `${path}${langUpperCaseFirst}`;
-          },
-          setId: (id) =>
-            set((state) => {
-              state.id = id;
-            }),
-          setLang: (lang) =>
-            set((state) => {
-              state.lang = lang;
-            }),
-          toggleLang: () =>
-            set((state) => {
-              state.lang = state.lang === "en" ? "fr" : "en";
-            }),
-          toggleTranslationLanguagePriority: () =>
-            set((state) => {
-              state.translationLanguagePriority =
-                state.translationLanguagePriority === "en" ? "fr" : "en";
-            }),
-          setTranslationLanguagePriority: (lang: Language) =>
-            set((state) => {
-              state.translationLanguagePriority = lang;
-            }),
-          setFocusInput: (isSet) =>
-            set((state) => {
-              state.focusInput = isSet;
-            }),
-          getFocusInput: () => get().focusInput,
-          // Use on a child element to declare the language when the parent element lang attribute is different
-          getLocalizationAttribute: () =>
-            get().lang !== get().translationLanguagePriority
-              ? { lang: get().translationLanguagePriority }
-              : undefined,
-          updateField: (path, value) =>
-            set((state) => {
-              update(state, path, value);
-            }),
-          updateSecurityAttribute: (value) =>
-            set((state) => {
-              state.securityAttribute = value;
-            }),
-          propertyPath: (id: number, field: string, lang?: Language) => {
-            const path = getPathString(id, get().form.elements);
-            if (lang) {
-              return `${path}.${get().localizeField(field, lang)}` ?? "";
-            }
-            return `${path}.${field}` ?? "";
-          },
-          unsetField: (path) =>
-            set((state) => {
-              unset(state, path);
-            }),
-          moveUp: (elIndex) =>
-            set((state) => {
-              state.form.elements = moveUp(state.form.elements, elIndex);
-            }),
-          subMoveUp: (elIndex, subIndex = 0) =>
-            set((state) => {
-              const elements = state.form.elements[elIndex].properties.subElements;
-              if (elements) {
-                state.form.elements[elIndex].properties.subElements = moveUp(elements, subIndex);
+      subscribeWithSelector(
+        persist(
+          (set, get) => ({
+            ...DEFAULT_PROPS,
+            ...initProps,
+            setHasHydrated: () => {
+              set({ hasHydrated: true });
+            },
+            localizeField: (path, lang = get().lang) => {
+              const langUpperCaseFirst = (lang.charAt(0).toUpperCase() +
+                lang.slice(1)) as Capitalize<Language>;
+              return `${path}${langUpperCaseFirst}`;
+            },
+            setId: (id) =>
+              set((state) => {
+                state.id = id;
+              }),
+            setLang: (lang) =>
+              set((state) => {
+                state.lang = lang;
+              }),
+            toggleLang: () =>
+              set((state) => {
+                state.lang = state.lang === "en" ? "fr" : "en";
+              }),
+            toggleTranslationLanguagePriority: () =>
+              set((state) => {
+                state.translationLanguagePriority =
+                  state.translationLanguagePriority === "en" ? "fr" : "en";
+              }),
+            setTranslationLanguagePriority: (lang: Language) =>
+              set((state) => {
+                state.translationLanguagePriority = lang;
+              }),
+            setFocusInput: (isSet) =>
+              set((state) => {
+                state.focusInput = isSet;
+              }),
+            getFocusInput: () => get().focusInput,
+            // Use on a child element to declare the language when the parent element lang attribute is different
+            getLocalizationAttribute: () =>
+              get().lang !== get().translationLanguagePriority
+                ? { lang: get().translationLanguagePriority }
+                : undefined,
+            updateField: (path, value) =>
+              set((state) => {
+                update(state, path, value);
+              }),
+            updateSecurityAttribute: (value) =>
+              set((state) => {
+                state.securityAttribute = value;
+              }),
+            propertyPath: (id: number, field: string, lang?: Language) => {
+              const path = getPathString(id, get().form.elements);
+              if (lang) {
+                return `${path}.${get().localizeField(field, lang)}` ?? "";
               }
-            }),
-          moveDown: (elIndex) =>
-            set((state) => {
-              state.form.elements = moveDown(state.form.elements, elIndex);
-            }),
-          subMoveDown: (elIndex, subIndex = 0) =>
-            set((state) => {
-              const elements = state.form.elements[elIndex].properties.subElements;
-              if (elements) {
-                state.form.elements[elIndex].properties.subElements = moveDown(elements, subIndex);
-              }
-            }),
-          add: (elIndex = 0, type = FormElementTypes.radio, data) =>
-            set((state) => {
-              state.form.elements.splice(elIndex + 1, 0, {
-                ...defaultField,
-                id: incrementElementId(state.form.elements),
-                ...data,
-                type,
-              });
-            }),
-          addSubItem: (elIndex, subIndex = 0, type = FormElementTypes.radio, data) =>
-            set((state) => {
-              // remove subElements array property given we're adding a sub item
-              const subDefaultField = { ...defaultField };
-              // eslint-disable-next-line  @typescript-eslint/no-unused-vars
-              const { subElements, ...rest } = subDefaultField.properties;
-              subDefaultField.properties = rest;
+              return `${path}.${field}` ?? "";
+            },
+            unsetField: (path) =>
+              set((state) => {
+                unset(state, path);
+              }),
+            moveUp: (elIndex) =>
+              set((state) => {
+                state.form.elements = moveUp(state.form.elements, elIndex);
+              }),
+            subMoveUp: (elIndex, subIndex = 0) =>
+              set((state) => {
+                const elements = state.form.elements[elIndex].properties.subElements;
+                if (elements) {
+                  state.form.elements[elIndex].properties.subElements = moveUp(elements, subIndex);
+                }
+              }),
+            moveDown: (elIndex) =>
+              set((state) => {
+                state.form.elements = moveDown(state.form.elements, elIndex);
+              }),
+            subMoveDown: (elIndex, subIndex = 0) =>
+              set((state) => {
+                const elements = state.form.elements[elIndex].properties.subElements;
+                if (elements) {
+                  state.form.elements[elIndex].properties.subElements = moveDown(
+                    elements,
+                    subIndex
+                  );
+                }
+              }),
+            add: (elIndex = 0, type = FormElementTypes.radio, data) =>
+              set((state) => {
+                state.form.elements.splice(elIndex + 1, 0, {
+                  ...defaultField,
+                  id: incrementElementId(state.form.elements),
+                  ...data,
+                  type,
+                });
+              }),
+            addSubItem: (elIndex, subIndex = 0, type = FormElementTypes.radio, data) =>
+              set((state) => {
+                // remove subElements array property given we're adding a sub item
+                const subDefaultField = { ...defaultField };
+                // eslint-disable-next-line  @typescript-eslint/no-unused-vars
+                const { subElements, ...rest } = subDefaultField.properties;
+                subDefaultField.properties = rest;
 
-              state.form.elements[elIndex].properties.subElements?.splice(subIndex + 1, 0, {
-                ...subDefaultField,
-                id: incrementSubElementId(
-                  state.form.elements[elIndex].properties.subElements || [],
-                  state.form.elements[elIndex].id
-                ),
-                ...data,
-                type,
-              });
-            }),
-          remove: (elementId) =>
-            set((state) => {
-              state.form.elements = removeElementById(state.form.elements, elementId);
-            }),
-          removeSubItem: (elIndex, elementId) =>
-            set((state) => {
-              const subElements = state.form.elements[elIndex].properties?.subElements;
-              if (subElements) {
-                state.form.elements[elIndex].properties.subElements = removeElementById(
-                  subElements,
-                  elementId
-                );
-              }
-            }),
-          addChoice: (elIndex) =>
-            set((state) => {
-              state.form.elements[elIndex].properties.choices?.push({ en: "", fr: "" });
-            }),
-          addSubChoice: (elIndex, subIndex) =>
-            set((state) => {
-              state.form.elements[elIndex].properties.subElements?.[
-                subIndex
-              ].properties.choices?.push({ en: "", fr: "" });
-            }),
-          removeChoice: (elIndex, choiceIndex) =>
-            set((state) => {
-              state.form.elements[elIndex].properties.choices?.splice(choiceIndex, 1);
-            }),
-          removeSubChoice: (elIndex, subIndex, choiceIndex) =>
-            set((state) => {
-              state.form.elements[elIndex].properties.subElements?.[
-                subIndex
-              ].properties.choices?.splice(choiceIndex, 1);
-            }),
-          duplicateElement: (elIndex) => {
-            set((state) => {
-              // deep copy the element
-              const element = JSON.parse(JSON.stringify(state.form.elements[elIndex]));
-              element.id = incrementElementId(state.form.elements);
-              element.properties[state.localizeField("title")] = `${
-                element.properties[state.localizeField("title")]
-              } copy`;
-              state.form.elements.splice(elIndex + 1, 0, element);
-            });
-          },
-          subDuplicateElement: (elIndex, subIndex) => {
-            set((state) => {
-              // deep copy the element
-              const subElements = state.form.elements[elIndex].properties.subElements;
-              if (subElements) {
-                const element = JSON.parse(JSON.stringify(subElements[subIndex]));
-                element.id = incrementElementId(subElements);
+                state.form.elements[elIndex].properties.subElements?.splice(subIndex + 1, 0, {
+                  ...subDefaultField,
+                  id: incrementSubElementId(
+                    state.form.elements[elIndex].properties.subElements || [],
+                    state.form.elements[elIndex].id
+                  ),
+                  ...data,
+                  type,
+                });
+              }),
+            remove: (elementId) =>
+              set((state) => {
+                state.form.elements = removeElementById(state.form.elements, elementId);
+              }),
+            removeSubItem: (elIndex, elementId) =>
+              set((state) => {
+                const subElements = state.form.elements[elIndex].properties?.subElements;
+                if (subElements) {
+                  state.form.elements[elIndex].properties.subElements = removeElementById(
+                    subElements,
+                    elementId
+                  );
+                }
+              }),
+            addChoice: (elIndex) =>
+              set((state) => {
+                state.form.elements[elIndex].properties.choices?.push({ en: "", fr: "" });
+              }),
+            addSubChoice: (elIndex, subIndex) =>
+              set((state) => {
+                state.form.elements[elIndex].properties.subElements?.[
+                  subIndex
+                ].properties.choices?.push({ en: "", fr: "" });
+              }),
+            removeChoice: (elIndex, choiceIndex) =>
+              set((state) => {
+                state.form.elements[elIndex].properties.choices?.splice(choiceIndex, 1);
+              }),
+            removeSubChoice: (elIndex, subIndex, choiceIndex) =>
+              set((state) => {
+                state.form.elements[elIndex].properties.subElements?.[
+                  subIndex
+                ].properties.choices?.splice(choiceIndex, 1);
+              }),
+            duplicateElement: (elIndex) => {
+              set((state) => {
+                // deep copy the element
+                const element = JSON.parse(JSON.stringify(state.form.elements[elIndex]));
+                element.id = incrementElementId(state.form.elements);
                 element.properties[state.localizeField("title")] = `${
                   element.properties[state.localizeField("title")]
                 } copy`;
+                state.form.elements.splice(elIndex + 1, 0, element);
+              });
+            },
+            subDuplicateElement: (elIndex, subIndex) => {
+              set((state) => {
+                // deep copy the element
+                const subElements = state.form.elements[elIndex].properties.subElements;
+                if (subElements) {
+                  const element = JSON.parse(JSON.stringify(subElements[subIndex]));
+                  element.id = incrementElementId(subElements);
+                  element.properties[state.localizeField("title")] = `${
+                    element.properties[state.localizeField("title")]
+                  } copy`;
 
-                state.form.elements[elIndex].properties.subElements?.splice(
-                  subIndex + 1,
-                  0,
-                  element
-                );
-              }
-            });
-          },
-          getSchema: () => JSON.stringify(getSchemaFromState(get()), null, 2),
-          getIsPublished: () => get().isPublished,
-          getName: () => get().name,
-          getDeliveryOption: () => get().deliveryOption,
-          resetDeliveryOption: () => {
-            set((state) => {
-              state.deliveryOption = undefined;
-            });
-          },
-          getSecurityAttribute: () => get().securityAttribute,
-          initialize: () => {
-            set((state) => {
-              state.id = "";
-              state.lang = "en";
-              state.form = defaultForm;
-              state.isPublished = false;
-              state.name = "";
-              state.deliveryOption = undefined;
-            });
-          },
-          importTemplate: (jsonConfig) =>
-            set((state) => {
-              state.id = "";
-              state.lang = "en";
-              state.form = { ...defaultForm, ...jsonConfig };
-              state.isPublished = false;
-              state.name = "";
-              state.securityAttribute = "Protected A";
-              state.deliveryOption = undefined;
-            }),
-        }),
-        {
-          name: "form-storage",
-          storage: createJSONStorage(() => storage),
-          onRehydrateStorage: () => {
-            logMessage.debug("Template Store Hydration starting");
+                  state.form.elements[elIndex].properties.subElements?.splice(
+                    subIndex + 1,
+                    0,
+                    element
+                  );
+                }
+              });
+            },
+            getSchema: () => JSON.stringify(getSchemaFromState(get()), null, 2),
+            getIsPublished: () => get().isPublished,
+            getName: () => get().name,
+            getDeliveryOption: () => get().deliveryOption,
+            resetDeliveryOption: () => {
+              set((state) => {
+                state.deliveryOption = undefined;
+              });
+            },
+            getSecurityAttribute: () => get().securityAttribute,
+            initialize: () => {
+              set((state) => {
+                state.id = "";
+                state.lang = "en";
+                state.form = defaultForm;
+                state.isPublished = false;
+                state.name = "";
+                state.deliveryOption = undefined;
+              });
+            },
+            importTemplate: (jsonConfig) =>
+              set((state) => {
+                state.id = "";
+                state.lang = "en";
+                state.form = { ...defaultForm, ...jsonConfig };
+                state.isPublished = false;
+                state.name = "";
+                state.securityAttribute = "Protected A";
+                state.deliveryOption = undefined;
+              }),
+          }),
+          {
+            name: "form-storage",
+            storage: createJSONStorage(() => storage),
+            onRehydrateStorage: () => {
+              logMessage.debug("Template Store Hydration starting");
 
-            // optional
-            return (state) => {
-              logMessage.debug("Template Store Hydrationfinished");
-              state?.setHasHydrated();
-            };
-          },
-        }
+              // optional
+              return (state) => {
+                logMessage.debug("Template Store Hydrationfinished");
+                state?.setHasHydrated();
+              };
+            },
+          }
+        )
       )
     )
   );
@@ -429,7 +438,19 @@ export const useTemplateStore = <T,>(
 ): T => {
   const store = useContext(TemplateStoreContext);
   if (!store) throw new Error("Missing Template Store Provider in tree");
-  return useStore(store, selector, equalityFn);
+  return useStore(store, selector, equalityFn ?? shallow);
+};
+
+export const useSubscibeToTemplateStore = <T,>(
+  selector: (state: TemplateStoreState) => T,
+  listener: (selectedState: T, previousSelectedState: T) => void
+) => {
+  const store = useContext(TemplateStoreContext);
+  if (!store) throw new Error("Missing Template Store Provider in tree");
+  useEffect(
+    () => store.subscribe(selector, listener, { equalityFn: shallow }),
+    [store, selector, listener]
+  );
 };
 
 export const clearTemplateStore = () => {

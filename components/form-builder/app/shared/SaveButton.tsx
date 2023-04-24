@@ -10,9 +10,8 @@ import { formatDateTime } from "../../util";
 import Markdown from "markdown-to-jsx";
 
 export const SaveButton = () => {
-  const { id, setId } = useTemplateStore((s) => ({
+  const { id } = useTemplateStore((s) => ({
     id: s.id,
-    setId: s.setId,
   }));
 
   const { error, saveForm } = useTemplateContext();
@@ -25,10 +24,9 @@ export const SaveButton = () => {
   const { updatedAt, getTemplateById } = useTemplateStatus();
 
   const handleSave = async () => {
-    const result = await saveForm();
+    const saved = await saveForm();
 
-    if (result) {
-      setId(result);
+    if (saved) {
       getTemplateById();
     }
   };
