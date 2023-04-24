@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "next-i18next";
 import { Button, useDialogRef, Dialog, LineItemEntries } from "@components/form-builder/app/shared";
 import { randomId } from "@lib/clientHelpers";
@@ -80,11 +80,10 @@ export const DownloadTableDialog = ({
   const dialogRef = useDialogRef();
   const confirmInstructionId = `dialog-confirm-receipt-instruction-${randomId()}`;
 
-  useEffect(() => {
-    if (errors.minEntries && entries.length > 0) {
-      setErrors({ ...errors, minEntries: false });
-    }
-  }, [errors, entries]);
+  // Cleanup any un-needed errors from the last render
+  if (errors.minEntries && entries.length > 0) {
+    setErrors({ ...errors, minEntries: false });
+  }
 
   const handleClose = () => {
     setIsShowDialog(false);
@@ -126,6 +125,9 @@ export const DownloadTableDialog = ({
       data: entries,
     })
       .then(({ data }) => {
+        // Refreshes data. Needed for error cases as well since may be a mix of valid/invalid codes
+        router.replace(router.asPath);
+
         // Confirmation API returns success with an error and 1 or more invalid codes
         if (data?.invalidConfirmationCodes && data.invalidConfirmationCodes?.length > 0) {
           // Note: why a list of entries and another list for invalid entries? This makes showing
@@ -145,18 +147,12 @@ export const DownloadTableDialog = ({
           return;
         }
 
-        // Refreshes getServerSideProps data without a full page reload
-        router.replace(router.asPath);
+        // Success, close the dialog
         handleClose();
       })
       .catch((err) => {
         logMessage.error(err as Error);
-        if (err?.response?.status === 400) {
-          // Report API returns an error for 1 or more invalid Responses but not the failed codes
-          setErrors({ ...errors, errorEntries: true });
-        } else {
-          setErrors({ ...errors, unknown: true });
-        }
+        setErrors({ ...errors, unknown: true });
       });
   };
 
