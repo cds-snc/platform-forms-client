@@ -75,8 +75,10 @@ describe("<PanelActions />", () => {
     // Keyboard navigation should start at duplicate
     cy.get("body").tab();
     cy.focused().should("have.attr", "data-testid", "duplicate");
-    cy.get("body").type("{leftArrow}").focused().should("have.attr", "data-testid", "duplicate");
-    cy.get("body").type("{rightArrow}").focused().should("have.attr", "data-testid", "remove");
+    cy.get("body").type("{leftArrow}");
+    cy.focused().should("have.attr", "data-testid", "duplicate");
+    cy.get("body").type("{rightArrow}");
+    cy.focused().should("have.attr", "data-testid", "remove");
   });
 
   it("can keyboard navigate", () => {
@@ -106,7 +108,8 @@ describe("<PanelActions />", () => {
         />
       </div>
     );
-    cy.get("body").tab().focused().should("have.attr", "data-testid", "moveUp");
+    cy.get("body").tab();
+    cy.focused().should("have.attr", "data-testid", "moveUp");
     cy.get("body").type("{rightArrow}");
     cy.focused().should("have.attr", "data-testid", "moveDown");
     cy.get("body").type("{rightArrow}");
