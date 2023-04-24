@@ -73,16 +73,10 @@ describe("<PanelActions />", () => {
     cy.get('[data-testid="more"]').should("have.attr", "tabindex", "-1");
 
     // Keyboard navigation should start at duplicate
-    cy.get("body")
-      .tab()
-      .focused()
-      .should("have.attr", "data-testid", "duplicate")
-      .type("{leftArrow}")
-      .focused()
-      .should("have.attr", "data-testid", "duplicate")
-      .type("{rightArrow}")
-      .focused()
-      .should("have.attr", "data-testid", "remove");
+    cy.get("body").tab();
+    cy.focused().should("have.attr", "data-testid", "duplicate");
+    cy.get("body").type("{leftArrow}").focused().should("have.attr", "data-testid", "duplicate");
+    cy.get("body").type("{rightArrow}").focused().should("have.attr", "data-testid", "remove");
   });
 
   it("can keyboard navigate", () => {
@@ -112,42 +106,28 @@ describe("<PanelActions />", () => {
         />
       </div>
     );
-    cy.get("body")
-      .tab()
-      .focused()
-      .should("have.attr", "data-testid", "moveUp")
-      .type("{rightArrow}")
-      .focused()
-      .should("have.attr", "data-testid", "moveDown")
-      .type("{rightArrow}")
-      .focused()
-      .should("have.attr", "data-testid", "duplicate")
-      .type("{rightArrow}")
-      .focused()
-      .should("have.attr", "data-testid", "remove")
-      .type("{rightArrow}")
-      .focused()
-      .should("have.attr", "data-testid", "more")
-      .type("{rightArrow}")
-      .focused()
-      .should("have.attr", "data-testid", "more")
-      .type("{leftArrow}")
-      .focused()
-      .should("have.attr", "data-testid", "remove")
-      .type("{leftArrow}")
-      .focused()
-      .should("have.attr", "data-testid", "duplicate")
-      .type("{leftArrow}")
-      .focused()
-      .should("have.attr", "data-testid", "moveDown")
-      .type("{leftArrow}")
-      .focused()
-      .should("have.attr", "data-testid", "moveUp")
-      .tab()
-      .focused()
-      .should("have.attr", "data-testid", "add-element")
-      .tab({ shift: true })
-      .focused()
-      .should("have.attr", "data-testid", "moveUp");
+    cy.get("body").tab().focused().should("have.attr", "data-testid", "moveUp");
+    cy.get("body").type("{rightArrow}");
+    cy.focused().should("have.attr", "data-testid", "moveDown");
+    cy.get("body").type("{rightArrow}");
+    cy.focused().should("have.attr", "data-testid", "duplicate");
+    cy.get("body").type("{rightArrow}");
+    cy.focused().should("have.attr", "data-testid", "remove");
+    cy.get("body").type("{rightArrow}");
+    cy.focused().should("have.attr", "data-testid", "more");
+    cy.get("body").type("{rightArrow}");
+    cy.focused().should("have.attr", "data-testid", "more");
+    cy.get("body").type("{leftArrow}");
+    cy.focused().should("have.attr", "data-testid", "remove");
+    cy.get("body").type("{leftArrow}");
+    cy.focused().should("have.attr", "data-testid", "duplicate");
+    cy.get("body").type("{leftArrow}");
+    cy.focused().should("have.attr", "data-testid", "moveDown");
+    cy.get("body").type("{leftArrow}");
+    cy.focused().should("have.attr", "data-testid", "moveUp");
+    cy.tab();
+    cy.focused().should("have.attr", "data-testid", "add-element");
+    cy.tab({ shift: true });
+    cy.focused().should("have.attr", "data-testid", "moveUp");
   });
 });
