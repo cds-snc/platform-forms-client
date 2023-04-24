@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useRef } from "react";
+import React, { createContext, useState, useContext, useRef, useCallback } from "react";
 import { useTemplateStore, useSubscibeToTemplateStore } from "../store";
 import { useTemplateApi } from "../hooks";
 import { useTranslation } from "next-i18next";
@@ -45,7 +45,7 @@ export function TemplateApiProvider({ children }: { children: React.ReactNode })
 
   const { save } = useTemplateApi();
 
-  const saveForm = async () => {
+  const saveForm = useCallback(async () => {
     try {
       if (templateIsDirty.current && status === "authenticated" && !getIsPublished()) {
         logMessage.debug("Saving Template to server");
@@ -69,7 +69,7 @@ export function TemplateApiProvider({ children }: { children: React.ReactNode })
       setError(t("errorSaving"));
       return false;
     }
-  };
+  }, [status, getIsPublished, getSchema, getName, id, save, setError, setId, t]);
 
   return (
     <TemplateApiContext.Provider value={{ error, saveForm }}>
