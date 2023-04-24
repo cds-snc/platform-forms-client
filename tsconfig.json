@@ -25,7 +25,7 @@
       "@jestUtils": ["__utils__"]
     },
     "incremental": true,
-    "types": ["cypress"]
+    "types": ["cypress", "node"]
   },
   "include": ["next-env.d.ts", "types", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules", "utils", ".next", "cypress", "./cypress.config.js"]
