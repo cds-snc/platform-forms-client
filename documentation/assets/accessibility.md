@@ -1,7 +1,3 @@
-import { Meta } from "@storybook/addon-docs/blocks";
-
-<Meta title="Forms/Docs: Accessibility Report for Forms (Alpha)" />
-
 # Accessibility Report for Forms (Alpha)
 
 _Canadian Digital Service_

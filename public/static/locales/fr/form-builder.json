@@ -170,7 +170,7 @@
     "defaultOption": "Gouvernement du Canada",
     "default": "(par défault)",
     "heading": "Image de marque",
-    "notFound": "Vous ne trouvez pas votre département ou votre agence dans la liste?",
+    "notFound": "Vous ne trouvez pas votre ministère ou votre organisme dans la liste?",
     "preview": "Prévisualisation",
     "select": "Sélectionnez l’image de marque de votre formulaire",
     "submitNew": "Proposer une nouvelle option d’image de marque (ouvre un nouvel onglet)",
@@ -218,7 +218,7 @@
     },
     "supportFormLink": "formulaire de soutien",
     "title": "Contactez-nous",
-    "useThisForm": "Utilisez ce formulaire pour en savoir plus sur Formulaires GC et sur la façon dont ce service peut être utile à votre département."
+    "useThisForm": "Utilisez ce formulaire pour en savoir plus sur Formulaires GC et sur la façon dont ce service peut être utile à votre ministère."
   },
   "copyButton": "Copié dans le presse-papiers",
   "copyMessage": "Le formulaire a été téléchargé avec succès.",

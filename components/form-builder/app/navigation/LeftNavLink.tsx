@@ -20,8 +20,7 @@ export const LeftNavLink = ({ children, href }: { children: ReactElement; href: 
     }
   }, [activePathname, isReady, href, setActive]);
   return (
-    <Link href={href} passHref>
-      {/* passHref does ensure the child a tag has the correct HREF attribute */}
+    <Link href={href} legacyBehavior passHref>
       <a
         href={"will_be_replaced_by_nextjs"}
         onClick={saveForm}

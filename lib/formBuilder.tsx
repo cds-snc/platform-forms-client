@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { logger, logMessage } from "@lib/logger";
+import { logMessage } from "@lib/logger";
 import {
   Description,
   Dropdown,
@@ -258,7 +258,7 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
  * @param formRecord
  * @param language
  */
-const _getRenderedForm = (formRecord: PublicFormRecord, language: string, t: TFunction) => {
+export const getRenderedForm = (formRecord: PublicFormRecord, language: string, t: TFunction) => {
   return formRecord.form.layout
     .map((item: number) => {
       const element = formRecord.form.elements.find((element: FormElement) => element.id === item);
@@ -270,7 +270,7 @@ const _getRenderedForm = (formRecord: PublicFormRecord, language: string, t: TFu
 };
 
 /**
- * _getFormInitialValues calls this function to set the initial value for an element
+ * getFormInitialValues calls this function to set the initial value for an element
  * @param element
  * @param language
  */
@@ -308,7 +308,7 @@ const _getElementInitialValue = (element: FormElement, language: string): Respon
  * @param formRecord
  * @param language
  */
-const _getFormInitialValues = (formRecord: PublicFormRecord, language: string): Responses => {
+export const getFormInitialValues = (formRecord: PublicFormRecord, language: string): Responses => {
   if (!formRecord?.form) {
     return {};
   }
@@ -334,6 +334,3 @@ export const GenerateElement = (props: GenerateElementProps): React.ReactElement
   const generatedElement = _buildForm(element, language, t);
   return <>{generatedElement}</>;
 };
-
-export const getFormInitialValues = logger(_getFormInitialValues);
-export const getRenderedForm = logger(_getRenderedForm);
