@@ -133,6 +133,7 @@
     "cypress": "^12.10.0",
     "cypress-axe": "^1.2.0",
     "cypress-each": "^1.13.1",
+    "cypress-plugin-tab": "^1.0.5",
     "eslint": "^8.38.0",
     "eslint-config-next": "^13.3.0",
     "eslint-config-prettier": "^8.8.0",
