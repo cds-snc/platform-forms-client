@@ -12,6 +12,7 @@ import { LanguageLabel } from "./LanguageLabel";
 import { FieldsetLegend, SectionTitle } from ".";
 
 import { FormElement } from "@lib/types";
+import { alphabet } from "../../util";
 
 const Element = ({
   element,
@@ -27,7 +28,6 @@ const Element = ({
   let subElements;
 
   const { t } = useTranslation("form-builder");
-  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
   if (element.type === "dynamicRow") {
     let subElementIndex = -1;
@@ -191,7 +191,6 @@ export const Translate = () => {
                     <>{t(primaryLanguage)}</>
                   </LanguageLabel>
                   <RichTextEditor
-                    autoFocusEditor={false}
                     path={`form.introduction.${localizeField(
                       LocalizedElementProperties.DESCRIPTION,
                       primaryLanguage
@@ -211,7 +210,6 @@ export const Translate = () => {
                     <>{t(secondaryLanguage)}</>
                   </LanguageLabel>
                   <RichTextEditor
-                    autoFocusEditor={false}
                     path={`form.introduction.${localizeField(
                       LocalizedElementProperties.DESCRIPTION,
                       secondaryLanguage
@@ -268,7 +266,6 @@ export const Translate = () => {
                   <>{t(primaryLanguage)}</>
                 </LanguageLabel>
                 <RichTextEditor
-                  autoFocusEditor={false}
                   path={`form.privacyPolicy.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
                     primaryLanguage
@@ -291,7 +288,6 @@ export const Translate = () => {
                   <>{t(secondaryLanguage)}</>
                 </LanguageLabel>
                 <RichTextEditor
-                  autoFocusEditor={false}
                   path={`form.privacyPolicy.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
                     secondaryLanguage
@@ -330,7 +326,6 @@ export const Translate = () => {
                   <>{t(primaryLanguage)}</>
                 </LanguageLabel>
                 <RichTextEditor
-                  autoFocusEditor={false}
                   path={`form.confirmation.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
                     primaryLanguage
@@ -353,7 +348,6 @@ export const Translate = () => {
                   <>{t(secondaryLanguage)}</>
                 </LanguageLabel>
                 <RichTextEditor
-                  autoFocusEditor={false}
                   path={`form.confirmation.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
                     secondaryLanguage

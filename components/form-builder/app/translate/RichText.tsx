@@ -41,7 +41,6 @@ export const RichText = ({
               <>{t(primaryLanguage)}</>
             </LanguageLabel>
             <RichTextEditor
-              autoFocusEditor={false}
               path={propertyPath(element.id, field, primaryLanguage)}
               content={element.properties[fieldEn] ?? ""}
               lang={primaryLanguage}
@@ -57,7 +56,6 @@ export const RichText = ({
               <>{t(secondaryLanguage)}</>
             </LanguageLabel>
             <RichTextEditor
-              autoFocusEditor={false}
               path={propertyPath(element.id, field, secondaryLanguage)}
               content={element.properties[fieldFr] ?? ""}
               lang={secondaryLanguage}

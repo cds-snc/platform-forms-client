@@ -65,7 +65,7 @@ export const Published = ({ id }: { id: string }) => {
       </div>
       <div>
         {ability?.can("view", "FormRecord") && (
-          <Link href="/myforms">
+          <Link href="/myforms" legacyBehavior>
             <a href="/myforms" className={`${themes.primary} ${themes.base} ${themes.htmlLink}`}>
               {t("publishedBack")}
             </a>

@@ -25,7 +25,7 @@ export const SubNavLink = ({ href, children }: { children: ReactElement; href: s
   }, [asPath, isReady, href, setActive, activePathname]);
 
   return (
-    <Link href={href}>
+    <Link href={href} legacyBehavior>
       <a
         href={href}
         className={`${active ? `${activeClasses}` : `${inactiveClasses}`} ${baseClasses}`}

@@ -26,7 +26,7 @@ const UserNavLayout = ({ children }: React.PropsWithChildren) => {
       <header className="border-b-3 border-blue-dark my-10">
         <div className="flex justify-between">
           <div>
-            <Link href="/form-builder">
+            <Link href="/form-builder" legacyBehavior>
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a className="inline-block mr-10 text-h2 mb-6 font-bold font-sans no-underline !text-black focus:bg-white !shadow-none">
                 {t("title", { ns: "common" })}

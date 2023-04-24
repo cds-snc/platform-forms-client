@@ -52,12 +52,9 @@ export const ShareModalUnauthenticated = ({
       >
         <div className="my-8">
           <section>
-            <p>
-              <Markdown options={{ forceBlock: true }}>
-                {t("share.unauthenticated.description")}
-              </Markdown>
-            </p>
-
+            <Markdown options={{ forceBlock: true }}>
+              {t("share.unauthenticated.description")}
+            </Markdown>
             <p className="mt-8">{t("share.unauthenticated.instructions")}</p>
           </section>
 

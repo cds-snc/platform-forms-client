@@ -4,6 +4,8 @@ import { TabsList } from "@components/myforms/Tabs/TabsList";
 import { Tab } from "@components/myforms/Tabs/Tab";
 import { TabPanel } from "@components/myforms/Tabs/TabPanel";
 
+jest.mock("next/router", () => require("next-router-mock"));
+
 const tabsData = {
   id: "title-tabs",
   title: "Tabs Title",

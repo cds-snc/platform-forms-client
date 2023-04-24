@@ -12,13 +12,11 @@ const _debounced = debounce((updater) => {
 export const RichTextEditor = ({
   path,
   content,
-  autoFocusEditor,
   ariaLabel,
   ariaDescribedBy,
 }: {
   path: string;
   content: string;
-  autoFocusEditor?: boolean;
   lang: Language;
   ariaLabel?: string;
   ariaDescribedBy?: string;
@@ -45,7 +43,6 @@ export const RichTextEditor = ({
   return (
     <div className="w-full bg-white">
       <Editor
-        autoFocusEditor={autoFocusEditor}
         content={value}
         onChange={updateValue}
         ariaLabel={ariaLabel || t("richTextEditor")}

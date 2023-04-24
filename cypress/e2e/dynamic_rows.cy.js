@@ -1,6 +1,7 @@
 describe("Dynamic Row Functionality", () => {
   let formID;
   before(() => {
+    cy.useFlag("experimentalBlocks", true);
     cy.useForm("../../__fixtures__/dynamicRowsTestForm.json");
     cy.get("@formID").then((createdID) => (formID = createdID));
   });
