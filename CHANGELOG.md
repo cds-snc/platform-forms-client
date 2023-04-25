@@ -92,6 +92,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [No Release Version] 2022-06-14
 
+## [1.3.0] 2022-07-15
+
+### Added
+
+- Make GC Branding in Footer configurable [#847](https://github.com/cds-snc/platform-forms-client/pull/847)
+
+### Fixed
+
+- Added CSRF token requirement to `api/log` endpoint [#835](https://github.com/cds-snc/platform-forms-client/pull/835)
+- Welcome page link to design system (storybook) [#844](https://github.com/cds-snc/platform-forms-client/pull/844)
+- Fix retrieval API [#845](https://github.com/cds-snc/platform-forms-client/pull/845)
+- Fix loading of csp scripts to happen after Dom is loaded [#848](https://github.com/cds-snc/platform-forms-client/pull/848)
+- Fix remaining characters display issue
+
+## [No Release Version] 2022-06-14
+
 ### Added
 
 - Validation of a JSON Config to check the IDs of elements [#892](https://github.com/cds-snc/platform-forms-client/pull/892)
