@@ -5,9 +5,16 @@ import { useTemplateStore } from "../../store";
 import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
 import { useIsWithin, useHandleAdd } from "@components/form-builder/hooks";
 import { useRefsContext } from "./RefsContext";
+import { FormElement } from "@lib/types";
 
-export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
-  const { getFocusInput, setFocusInput, remove, moveUp, moveDown, duplicateElement, elements } =
+export const ElementPanel = ({
+  item,
+  elements,
+}: {
+  item: FormElementWithIndex;
+  elements: FormElement[];
+}) => {
+  const { getFocusInput, setFocusInput, remove, moveUp, moveDown, duplicateElement } =
     useTemplateStore((s) => ({
       getFocusInput: s.getFocusInput,
       setFocusInput: s.setFocusInput,
@@ -15,7 +22,6 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
       moveUp: s.moveUp,
       moveDown: s.moveDown,
       duplicateElement: s.duplicateElement,
-      elements: s.form.elements,
     }));
 
   const [className, setClassName] = useState<string>("");
