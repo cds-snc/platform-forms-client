@@ -20,7 +20,7 @@ describe("<PanelActions />", () => {
     cy.mount(
       <PanelActions
         item={item}
-        renderMoreButton={undefined}
+        moreButtonRenderer={(moreButton) => <>{moreButton}</>}
         handleAdd={function (index: number, type?: FormElementTypes | undefined): void {
           throw new Error(`Function not implemented. ${index} ${type}`);
         }}
@@ -61,7 +61,7 @@ describe("<PanelActions />", () => {
     cy.mount(
       <PanelActions
         item={item}
-        renderMoreButton={undefined}
+        moreButtonRenderer={(moreButton) => <>{moreButton}</>}
         handleAdd={function (index: number, type?: FormElementTypes | undefined): void {
           throw new Error(`Function not implemented. ${index} ${type}`);
         }}
@@ -118,7 +118,7 @@ describe("<PanelActions />", () => {
       <div className="group active">
         <PanelActions
           item={item}
-          renderMoreButton={undefined}
+          moreButtonRenderer={(moreButton) => <>{moreButton}</>}
           handleAdd={function (index: number, type?: FormElementTypes | undefined): void {
             throw new Error(`Function not implemented. ${index} ${type}`);
           }}

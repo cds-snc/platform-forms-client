@@ -44,6 +44,17 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
   const { focusWithinProps, isWithin } = useIsWithin();
   const { refs } = useRefsContext();
 
+  const moreButton =
+    item.type !== "richText"
+      ? {
+          moreButtonRenderer: (
+            moreButton: JSX.Element | undefined
+          ): React.ReactElement | string | undefined => (
+            <MoreModal item={item} moreButton={moreButton} />
+          ),
+        }
+      : {};
+
   /* eslint-disable jsx-a11y/no-static-element-interactions */
   /* eslint-disable jsx-a11y/click-events-have-key-events */
   return (
@@ -127,9 +138,7 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
           setFocusInput(true);
           duplicateElement(item.index);
         }}
-        renderMoreButton={({ item, moreButton }) => (
-          <MoreModal item={item} moreButton={moreButton} />
-        )}
+        {...moreButton}
       />
     </div>
   );
