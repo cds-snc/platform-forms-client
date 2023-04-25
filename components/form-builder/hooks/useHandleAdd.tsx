@@ -30,7 +30,9 @@ export const useHandleAdd = () => {
         return;
       }
 
-      let item = createElement({ ...defaultField }, type as FormElementTypes);
+      const defaults = JSON.parse(JSON.stringify(defaultField));
+
+      let item = createElement(defaults, type as FormElementTypes);
       item = setTitle(item, "en", t([`addElementDialog.${type}.label`, ""], { lng: "en" }));
       item = setTitle(item, "fr", t([`addElementDialog.${type}.label`, ""], { lng: "fr" }));
       item = setDescription(
