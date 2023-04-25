@@ -64,11 +64,6 @@
     "skipLink": "Skip Download Table[fr]",
     "unknown": "Unknown[fr]"
   },
-  "lineItemEntries": {
-    "remove":"remove",
-    "removed":"removed",
-    "added":"added"
-  },
   "downloadResponsesModals": {
     "confirmReceiptDialog": {
       "title": "Confirmer la réception de réponses",
@@ -130,6 +125,11 @@
         }
       }
     },
+    "lineItemEntries": {
+      "added": "Added [fr]",
+      "removed": "Removed [fr]"
+    },
+    "sending": "Sending... [fr]",
     "cancel": "Annuler"
   }
 }

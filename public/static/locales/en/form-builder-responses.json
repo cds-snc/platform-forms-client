@@ -64,12 +64,6 @@
     "skipLink": "Skip Download Table",
     "unknown": "Unknown"
   },
-  "lineItemEntries": {
-    "notifications": {
-      "maxEntriesTitle": "Only {{max}} responses can be reported at a time.",
-      "maxEntriesDescription": "Enter these form entries before entering more."
-    }
-  },
   "downloadResponsesModals": {
     "confirmReceiptDialog": {
       "title": "Confirm receipt of responses",
@@ -131,6 +125,11 @@
         }
       }
     },
+    "lineItemEntries": {
+      "added": "Added",
+      "removed": "Removed"
+    },
+    "sending": "Sending...",
     "cancel": "Cancel"
   }
 }
