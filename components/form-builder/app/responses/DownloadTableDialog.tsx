@@ -8,9 +8,6 @@ import { logMessage } from "@lib/logger";
 import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
 import Link from "next/link";
 
-// TODO: Tech-Debt separate into separate dialogs for Confirm and report
-// https://github.com/cds-snc/platform-forms-client/issues/1941
-
 export interface DialogErrors {
   unknown: boolean;
   minEntries: boolean;
@@ -33,7 +30,6 @@ export enum DialogStates {
 // Note: Confirm and Report Problem Dialogs are very coupled, only the content changes. If the
 // behavior of one ever changes then this will need to be separated into separate dialogs.
 export const DownloadTableDialog = ({
-  isShowDialog,
   setIsShowDialog,
   apiUrl,
   inputRegex,
@@ -55,7 +51,6 @@ export const DownloadTableDialog = ({
   unknownErrorDescription,
   unknownErrorDescriptionLink,
 }: {
-  isShowDialog: boolean;
   setIsShowDialog: React.Dispatch<React.SetStateAction<boolean>>;
   apiUrl: string;
   inputRegex: (field: string) => boolean;
@@ -151,107 +146,105 @@ export const DownloadTableDialog = ({
 
   return (
     <>
-      {isShowDialog && (
-        <Dialog
-          title={title}
-          dialogRef={dialogRef}
-          handleClose={handleClose}
-          headerStyle="inline-block ml-12 mt-12"
-        >
-          <div className="px-10">
-            <div>
-              {status === DialogStates.MIN_ERROR && (
-                <Attention
-                  type={AttentionTypes.ERROR}
-                  isAlert={true}
-                  heading={minEntriesErrorTitle}
-                  classes="mb-2"
-                >
-                  <p className="text-[#26374a] text-sm mb-2">{minEntriesErrorDescription}</p>
-                </Attention>
-              )}
-              {status === DialogStates.MAX_ERROR && (
-                <Attention
-                  type={AttentionTypes.ERROR}
-                  isAlert={true}
-                  heading={maxEntriesErrorTitle}
-                  classes="mb-2"
-                >
-                  <p className="text-[#26374a] text-sm mb-2">{maxEntriesErrorDescription}</p>
-                </Attention>
-              )}
-              {status === DialogStates.FORMAT_ERROR && (
-                <Attention
-                  type={AttentionTypes.ERROR}
-                  isAlert={true}
-                  heading={invalidEntryErrorTitle}
-                  classes="mb-2"
-                >
-                  <p className="text-[#26374a] text-sm mb-2">{invalidEntryErrorDescription}</p>
-                </Attention>
-              )}
-              {status === DialogStates.FAILED_ERROR && (
-                <Attention
-                  type={AttentionTypes.ERROR}
-                  isAlert={true}
-                  heading={errorEntriesErrorTitle}
-                  classes="mb-2"
-                >
-                  <p className="text-[#26374a] text-sm mb-2">{errorEntriesErrorDescription}</p>
-                </Attention>
-              )}
+      <Dialog
+        title={title}
+        dialogRef={dialogRef}
+        handleClose={handleClose}
+        headerStyle="inline-block ml-12 mt-12"
+      >
+        <div className="px-10">
+          <div>
+            {status === DialogStates.MIN_ERROR && (
+              <Attention
+                type={AttentionTypes.ERROR}
+                isAlert={true}
+                heading={minEntriesErrorTitle}
+                classes="mb-2"
+              >
+                <p className="text-[#26374a] text-sm mb-2">{minEntriesErrorDescription}</p>
+              </Attention>
+            )}
+            {status === DialogStates.MAX_ERROR && (
+              <Attention
+                type={AttentionTypes.ERROR}
+                isAlert={true}
+                heading={maxEntriesErrorTitle}
+                classes="mb-2"
+              >
+                <p className="text-[#26374a] text-sm mb-2">{maxEntriesErrorDescription}</p>
+              </Attention>
+            )}
+            {status === DialogStates.FORMAT_ERROR && (
+              <Attention
+                type={AttentionTypes.ERROR}
+                isAlert={true}
+                heading={invalidEntryErrorTitle}
+                classes="mb-2"
+              >
+                <p className="text-[#26374a] text-sm mb-2">{invalidEntryErrorDescription}</p>
+              </Attention>
+            )}
+            {status === DialogStates.FAILED_ERROR && (
+              <Attention
+                type={AttentionTypes.ERROR}
+                isAlert={true}
+                heading={errorEntriesErrorTitle}
+                classes="mb-2"
+              >
+                <p className="text-[#26374a] text-sm mb-2">{errorEntriesErrorDescription}</p>
+              </Attention>
+            )}
 
-              {status === DialogStates.UNKNOWN_ERROR && (
-                <Attention
-                  type={AttentionTypes.ERROR}
-                  isAlert={true}
-                  heading={unknownErrorTitle}
-                  classes="mb-2"
-                >
-                  <p className="text-[#26374a] text-sm mb-2">
-                    {unknownErrorDescription}
-                    <Link href={"/form-builder/support"}>{unknownErrorDescriptionLink}</Link>.
-                  </p>
-                </Attention>
-              )}
-            </div>
-            <div className="py-4">
-              <p className="mt-2">{description}</p>
-              <p className="mt-10 mb-2 font-bold" id={confirmInstructionId}>
-                {inputHelp}
-              </p>
+            {status === DialogStates.UNKNOWN_ERROR && (
+              <Attention
+                type={AttentionTypes.ERROR}
+                isAlert={true}
+                heading={unknownErrorTitle}
+                classes="mb-2"
+              >
+                <p className="text-[#26374a] text-sm mb-2">
+                  {unknownErrorDescription}
+                  <Link href={"/form-builder/support"}>{unknownErrorDescriptionLink}</Link>.
+                </p>
+              </Attention>
+            )}
+          </div>
+          <div className="py-4">
+            <p className="mt-2">{description}</p>
+            <p className="mt-10 mb-2 font-bold" id={confirmInstructionId}>
+              {inputHelp}
+            </p>
 
-              <LineItemEntries
-                inputs={entries}
-                setInputs={setEntries}
-                validateInput={inputRegex}
-                spellCheck={false}
-                inputLabelId={confirmInstructionId}
-                maxEntries={maxEntries}
-                errorEntriesList={errorEntriesList}
-                status={status}
-                setStatus={setStatus}
-              ></LineItemEntries>
+            <LineItemEntries
+              inputs={entries}
+              setInputs={setEntries}
+              validateInput={inputRegex}
+              spellCheck={false}
+              inputLabelId={confirmInstructionId}
+              maxEntries={maxEntries}
+              errorEntriesList={errorEntriesList}
+              status={status}
+              setStatus={setStatus}
+            ></LineItemEntries>
 
-              <p className="mt-8">{nextSteps}</p>
-              <div className="flex mt-8 mb-8">
-                <Button
-                  className="mr-4"
-                  onClick={handleSubmit}
-                  disabled={status === DialogStates.SENDING}
-                >
-                  {status === DialogStates.SENDING
-                    ? t("downloadResponsesModals.sending")
-                    : submitButtonText}
-                </Button>
-                <Button theme="secondary" onClick={handleClose}>
-                  {t("downloadResponsesModals.cancel")}
-                </Button>
-              </div>
+            <p className="mt-8">{nextSteps}</p>
+            <div className="flex mt-8 mb-8">
+              <Button
+                className="mr-4"
+                onClick={handleSubmit}
+                disabled={status === DialogStates.SENDING}
+              >
+                {status === DialogStates.SENDING
+                  ? t("downloadResponsesModals.sending")
+                  : submitButtonText}
+              </Button>
+              <Button theme="secondary" onClick={handleClose}>
+                {t("downloadResponsesModals.cancel")}
+              </Button>
             </div>
           </div>
-        </Dialog>
-      )}
+        </div>
+      </Dialog>
     </>
   );
 };
