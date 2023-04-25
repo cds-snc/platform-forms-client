@@ -79,6 +79,31 @@ describe("Update elements", () => {
 
   it("sets properties for richText", () => {
     const item = updateElement(getItem(), "richText");
-    expect(item.type).toEqual("richText");
+    expect(item).toEqual({ ...getItem(), type: "richText" });
+  });
+
+  it("sets properties for radio", () => {
+    const item = updateElement(getItem(), "radio");
+    expect(item).toEqual({ ...getItem(), type: "radio" });
+  });
+
+  it("sets properties for checkbox", () => {
+    const item = updateElement(getItem(), "checkbox");
+    expect(item).toEqual({ ...getItem(), type: "checkbox" });
+  });
+
+  it("sets properties for dropdown", () => {
+    const item = updateElement(getItem(), "dropdown");
+    expect(item).toEqual({ ...getItem(), type: "dropdown" });
+  });
+
+  it("sets properties for textArea", () => {
+    const item = updateElement(getItem(), "textArea");
+    expect(item).toEqual({ ...getItem(), type: "textArea" });
+  });
+
+  it("sets properties for textField", () => {
+    const item = updateElement(getItem(), "textField");
+    expect(item).toEqual({ ...getItem(), type: "textField" });
   });
 });
