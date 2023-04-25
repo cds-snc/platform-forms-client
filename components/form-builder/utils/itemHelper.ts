@@ -57,8 +57,7 @@ export const setLocalizedProperty = (
 ) => {
   return {
     ...element,
-    properties: { ...element.properties },
-    [localizeField(property, lang)]: value,
+    properties: { ...element.properties, [localizeField(property, lang)]: value },
   };
 };
 
