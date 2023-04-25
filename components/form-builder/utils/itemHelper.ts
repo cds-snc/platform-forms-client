@@ -55,9 +55,11 @@ export const setLocalizedProperty = (
   property: LocalizedElementProperties,
   value: string
 ) => {
-  const newElement = { ...element };
-  newElement.properties[localizeField(property, lang)] = value;
-  return newElement;
+  return {
+    ...element,
+    properties: { ...element.properties },
+    [localizeField(property, lang)]: value,
+  };
 };
 
 export const setTitle = (

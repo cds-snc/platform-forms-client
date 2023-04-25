@@ -271,8 +271,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               set((state) => {
                 state.form.elements.splice(elIndex + 1, 0, {
                   ...defaultField,
-                  id: incrementElementId(state.form.elements),
                   ...data,
+                  id: incrementElementId(state.form.elements),
                   type,
                 });
               }),
