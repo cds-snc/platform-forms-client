@@ -5,9 +5,16 @@ import { useTemplateStore } from "../../store";
 import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
 import { useIsWithin, useHandleAdd } from "@components/form-builder/hooks";
 import { useRefsContext } from "./RefsContext";
+import { FormElement } from "@lib/types";
 
-export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
-  const { getFocusInput, setFocusInput, remove, moveUp, moveDown, duplicateElement, elements } =
+export const ElementPanel = ({
+  item,
+  elements,
+}: {
+  item: FormElementWithIndex;
+  elements: FormElement[];
+}) => {
+  const { getFocusInput, setFocusInput, remove, moveUp, moveDown, duplicateElement } =
     useTemplateStore((s) => ({
       getFocusInput: s.getFocusInput,
       setFocusInput: s.setFocusInput,
@@ -15,7 +22,6 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
       moveUp: s.moveUp,
       moveDown: s.moveDown,
       duplicateElement: s.duplicateElement,
-      elements: s.form.elements,
     }));
 
   const [className, setClassName] = useState<string>("");
@@ -43,6 +49,17 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
 
   const { focusWithinProps, isWithin } = useIsWithin();
   const { refs } = useRefsContext();
+
+  const moreButton =
+    item.type !== "richText"
+      ? {
+          moreButtonRenderer: (
+            moreButton: JSX.Element | undefined
+          ): React.ReactElement | string | undefined => (
+            <MoreModal item={item} moreButton={moreButton} />
+          ),
+        }
+      : {};
 
   /* eslint-disable jsx-a11y/no-static-element-interactions */
   /* eslint-disable jsx-a11y/click-events-have-key-events */
@@ -72,7 +89,7 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
       <PanelBodyRoot item={item} />
       <PanelActions
         subIndex={-1}
-        elements={elements}
+        elementsLength={elements.length}
         item={item}
         handleAdd={handleAddElement}
         handleRemove={() => {
@@ -127,9 +144,7 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
           setFocusInput(true);
           duplicateElement(item.index);
         }}
-        renderMoreButton={({ item, moreButton }) => (
-          <MoreModal item={item} moreButton={moreButton} />
-        )}
+        {...moreButton}
       />
     </div>
   );
