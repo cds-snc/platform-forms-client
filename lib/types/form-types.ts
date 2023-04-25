@@ -44,6 +44,7 @@ export interface ElementProperties {
   headingLevel?: string | undefined;
   isSectional?: boolean;
   maxNumberOfRows?: number;
+  autoComplete?: string;
   [key: string]:
     | string
     | number
