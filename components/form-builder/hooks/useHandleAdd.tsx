@@ -1,18 +1,26 @@
 import { useCallback } from "react";
+import { useTranslation } from "next-i18next";
 
 import { FormElementTypes } from "@lib/types";
 import { useTemplateStore } from "@components/form-builder/store";
 import { blockLoader, LoaderType } from "../blockLoader";
 import { useUpdateElement } from "@components/form-builder/hooks";
 import { allowedTemplates } from "@formbuilder/util";
+import {
+  defaultField,
+  createElement,
+  setTitle,
+  setDescription,
+} from "@formbuilder/utils/itemHelper";
 
 export const useHandleAdd = () => {
-  const { add, setFocusInput } = useTemplateStore((s) => ({
+  const { add } = useTemplateStore((s) => ({
     add: s.add,
-    setFocusInput: s.setFocusInput,
   }));
 
-  const { addElement: updateElement, isTextField } = useUpdateElement();
+  const { t } = useTranslation("form-builder");
+
+  const { isTextField } = useUpdateElement();
 
   /* Note this callback is also in ElementPanel */
   const handleAddElement = useCallback(
@@ -22,17 +30,29 @@ export const useHandleAdd = () => {
         return;
       }
 
-      setFocusInput(true);
+      let item = createElement({ ...defaultField }, type as FormElementTypes);
+      item = setTitle(item, "en", t([`addElementDialog.${type}.label`, ""], { lng: "en" }));
+      item = setTitle(item, "fr", t([`addElementDialog.${type}.label`, ""], { lng: "fr" }));
+      item = setDescription(
+        item,
+        "fr",
+        t([`defaultElementDescription.${type}`, ""], { lng: "en" })
+      );
+      item = setDescription(
+        item,
+        "fr",
+        t([`defaultElementDescription.${type}`, ""], { lng: "fr" })
+      );
+
       add(
         index,
         isTextField(type as string) && type !== FormElementTypes.textArea
           ? FormElementTypes.textField
-          : type
+          : type,
+        item
       );
-      // add 1 to index because it's a new element
-      updateElement(type as string, `form.elements[${index + 1}]`);
     },
-    [add, setFocusInput, updateElement, isTextField]
+    [add, isTextField, t]
   );
 
   return { handleAddElement };
