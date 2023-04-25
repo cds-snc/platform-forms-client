@@ -112,10 +112,12 @@ export const updateTextElement = (element: FormElement, type: ElementType) => {
 
 export const updateElement = (element: FormElement, type: string) => {
   let newElement = { ...element };
-  newElement = setTitle(newElement, "en", "title en");
-  newElement = setTitle(newElement, "fr", "title fr");
-  newElement = setDescription(newElement, "en", "desc en");
-  newElement = setDescription(newElement, "fr", "desc fr");
+  if (type !== "richText") {
+    newElement = setTitle(newElement, "en", "title en");
+    newElement = setTitle(newElement, "fr", "title fr");
+    newElement = setDescription(newElement, "en", "desc en");
+    newElement = setDescription(newElement, "fr", "desc fr");
+  }
 
   if (isTextField(type as FormElementTypes)) {
     return updateTextElement(newElement, type as ElementType);
@@ -126,8 +128,7 @@ export const updateElement = (element: FormElement, type: string) => {
     type = FormElementTypes.checkbox;
 
     newElement.properties.validation = {
-      ...newElement.properties.validation,
-      required: newElement.properties.validation?.required || false,
+      required: true,
       all: true,
     };
   }
