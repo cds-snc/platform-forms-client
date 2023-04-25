@@ -37,7 +37,7 @@ export const useHandleAdd = () => {
       item = setTitle(item, "fr", t([`addElementDialog.${type}.label`, ""], { lng: "fr" }));
       item = setDescription(
         item,
-        "fr",
+        "en",
         t([`defaultElementDescription.${type}`, ""], { lng: "en" })
       );
       item = setDescription(
