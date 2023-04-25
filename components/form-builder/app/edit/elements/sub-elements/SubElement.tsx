@@ -141,7 +141,7 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
                   handleDuplicate={() => {
                     subDuplicateElement(elIndex, subIndex);
                   }}
-                  renderMoreButton={({ item, moreButton }) => {
+                  moreButtonRenderer={(moreButton) => {
                     return (
                       <SubElementModal
                         elIndex={elIndex}
@@ -152,7 +152,7 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
                     );
                   }}
                   filterElements={elementFilter}
-                  elements={subElements}
+                  elementsLength={subElements.length}
                 />
               }
             >
