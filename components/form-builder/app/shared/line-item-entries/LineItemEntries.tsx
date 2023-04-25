@@ -2,7 +2,11 @@ import React, { useEffect, useRef } from "react";
 import { LineItems } from "./LineItems";
 import { scrollToBottom } from "@lib/clientHelpers";
 import { useTranslation } from "react-i18next";
-import { DialogErrors } from "../../responses/DownloadTableDialog";
+import { DialogStates } from "../../responses/DownloadTableDialog";
+
+// TODO: handle duplicate entries?
+// TODO: should "backspace" on an empty input set the next entry into "edit mode"?
+// TODO: allow a comma separated list of codes to be pasted in?
 
 // Note: updates are done in a DIV live region to have more control and reduce the verbosity of
 // what's announced -vs- just adding a live region on the OL which works but is painfully verbose.
@@ -13,9 +17,9 @@ export const LineItemEntries = ({
   validateInput,
   inputLabelId,
   maxEntries = 20,
-  errors,
-  setErrors,
   errorEntriesList,
+  status,
+  setStatus,
 }: {
   inputs: string[];
   setInputs: (tag: string[]) => void;
@@ -23,9 +27,9 @@ export const LineItemEntries = ({
   spellCheck?: boolean;
   inputLabelId: string;
   maxEntries?: number;
-  errors: DialogErrors;
-  setErrors: React.Dispatch<React.SetStateAction<DialogErrors>>;
   errorEntriesList: string[];
+  status: DialogStates;
+  setStatus: React.Dispatch<React.SetStateAction<DialogStates>>;
 }) => {
   const { t } = useTranslation("form-builder-responses");
   const containerRef = useRef<HTMLDivElement>(null);
@@ -35,51 +39,55 @@ export const LineItemEntries = ({
   const onRemove = (text: string) => {
     setInputs(inputs.filter((input) => input !== text));
     if (liveRegionRef.current) {
-      liveRegionRef.current.textContent = `${t("lineItemEntries.removed")} ${text}`;
+      liveRegionRef.current.textContent = `${t(
+        "downloadResponsesModals.lineItemEntries.removed"
+      )} ${text}`;
     }
     inputRef.current?.focus();
   };
 
-  // TODO: handle duplicate entries?
-  // TODO: should "backspace" on an empty input set the next entry into "edit mode"?
-  // TODO: allow a comma separated list of codes to be pasted in?
   const onKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     e.stopPropagation();
 
     // Since the API only accepts lowercase UUID/FormId help the user out by ensuring lower case
     const text = (e.target as HTMLInputElement).value.trim().replace(",", "").toLowerCase();
 
-    if (!text) {
-      setErrors({ ...errors, invalidEntry: false });
+    // Reset any errors on an empty list
+    if (!text && (status === DialogStates.MAX_ERROR || status === DialogStates.FORMAT_ERROR)) {
+      setStatus(DialogStates.EDITTING);
     }
 
-    // Allow backspace on an empty input to set the previous entry into "edit mode"
+    // Backspace on an empty input sets the previous entry into "edit mode"
     if (!text && inputs.length && e.key === "Backspace") {
       (e.target as HTMLInputElement).value = `${inputs.at(-1)}`;
       setInputs([...new Set(inputs.slice(0, -1))]);
     }
 
-    // Try to add the entry to the list of intries to submit to the server
-    if (text && ["Enter", " ", ","].includes(e.key)) {
+    // Enter or Space tries to add the entry
+    if (text && ["Enter", " "].includes(e.key)) {
       e.preventDefault();
 
-      // On an entry error, tell the parent to show a related error
       if (validateInput && !validateInput(text)) {
-        setErrors({ ...errors, invalidEntry: true });
-      } else if (inputs.length >= maxEntries) {
-        setErrors({ ...errors, maxEntries: true });
-      } else if (errors?.maxEntries) {
-        setErrors({ ...errors, maxEntries: false });
-      } else {
-        // Add the entry to the entry list and announce this to the user as well
-        setInputs([...new Set([...inputs, text])]);
-        if (liveRegionRef.current) {
-          liveRegionRef.current.textContent = `${t("lineItemEntries.added")} ${text}`;
-        }
-        // Reset the inputs
-        setErrors({ ...errors, invalidEntry: false });
-        (e.target as HTMLInputElement).value = "";
+        setStatus(DialogStates.FORMAT_ERROR);
+        return;
       }
+
+      if (inputs.length >= maxEntries) {
+        setStatus(DialogStates.MAX_ERROR);
+        return;
+      }
+
+      // Add and announce entry
+      setInputs([...new Set([...inputs, text])]);
+      if (liveRegionRef.current) {
+        liveRegionRef.current.textContent = `${t(
+          "downloadResponsesModals.lineItemEntries.added"
+        )} ${text}`;
+      }
+
+      // Reset
+      setStatus(DialogStates.EDITTING);
+      (e.target as HTMLInputElement).value = "";
     }
   };
 
@@ -113,8 +121,7 @@ export const LineItemEntries = ({
           data-testid="value-input"
           className={
             "w-full p-1 outline-none " +
-            (inputs.length > 0 ? "border-2 border-dashed border-grey" : "border-none") +
-            (errors.invalidEntry ? " text-red" : "")
+            (inputs.length > 0 ? "border-2 border-dashed border-grey" : "border-none")
           }
           type="text"
           name="value-input"
