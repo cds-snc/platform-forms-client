@@ -3,6 +3,8 @@ import { cleanup, render, screen } from "@testing-library/react";
 import BaseLayout from "./BaseLayout";
 import { SessionProvider } from "next-auth/react";
 
+jest.mock("next/router", () => require("next-router-mock"));
+
 describe("Generate the Base structure of a page", () => {
   afterEach(cleanup);
 

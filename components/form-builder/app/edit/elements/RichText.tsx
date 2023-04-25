@@ -33,7 +33,6 @@ export const RichText = ({ elIndex, subIndex = -1 }: { elIndex: number; subIndex
         path={path}
         content={content || ""}
         lang={translationLanguagePriority}
-        autoFocusEditor={false}
         ariaLabel={t("pageText") + " " + (elIndex + 1).toString()}
       />
     </div>

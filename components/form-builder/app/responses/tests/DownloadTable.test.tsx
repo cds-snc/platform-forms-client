@@ -1,10 +1,13 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import { DownloadTable, sortVaultSubmission, VaultStatus } from "../DownloadTable";
+import { DownloadTable, VaultStatus } from "../DownloadTable";
 import { VaultSubmissionList } from "@lib/types";
+import { sortVaultSubmission } from "../DownloadTableReducer";
+
+jest.mock("next/router", () => require("next-router-mock"));
 
 jest.mock("react-i18next", () => ({
-  useTranslation: () => ({ t: (key) => key }),
+  useTranslation: () => ({ t: (key: string) => key }),
 }));
 
 describe("Download Table", () => {

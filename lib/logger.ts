@@ -44,22 +44,3 @@ const sanitizeErrorObject = (log: unknown) => {
   }
   return log;
 };
-
-export const logger =
-  <A extends unknown[], R>(f: (...a: A) => R) =>
-  (...args: A): R => {
-    // Add nicer formatting for arguments being passed
-    logMessage.debug(`${f.name} function called`);
-    let value;
-    try {
-      value = f(...args);
-    } catch (error) {
-      logMessage.error(error as Error);
-      throw error;
-    }
-    // Add formatting for value being returned
-    logMessage.debug(`${f.name} function returned`);
-    return value;
-  };
-
-export default logger;

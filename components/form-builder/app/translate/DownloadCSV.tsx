@@ -4,6 +4,7 @@ import { useTemplateStore } from "../../store/useTemplateStore";
 import { Button } from "../shared/Button";
 import { FormElement } from "@lib/types";
 import { getDate, slugify } from "@lib/clientHelpers";
+import { alphabet } from "../../util";
 
 const formatText = (str: string) => `"${str}"`;
 
@@ -12,7 +13,6 @@ export const DownloadCSV = () => {
   const { t, i18n } = useTranslation("form-builder");
 
   let elementIndex = 0;
-  const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
   let data = [];
 
   const parseElement = (element: FormElement, index: string | number) => {

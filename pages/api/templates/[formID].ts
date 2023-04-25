@@ -103,7 +103,7 @@ const templateCRUD = async ({
           deliveryOption: deliveryOption,
           securityAttribute: securityAttribute,
         });
-      } else if (formID && isPublished) {
+      } else if (formID && isPublished !== undefined) {
         return await updateIsPublishedForTemplate(ability, formID, isPublished);
       } else if (formID && users) {
         return await updateAssignedUsersForTemplate(ability, formID, users);

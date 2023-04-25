@@ -1,6 +1,7 @@
 import React from "react";
 import { render, cleanup, screen } from "@testing-library/react";
 import { CardGrid } from "@components/myforms/CardGrid/CardGrid";
+jest.mock("next/router", () => require("next-router-mock"));
 
 const cardData_published = {
   id: "1",

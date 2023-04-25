@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "next-i18next";
 import { Button, useDialogRef, Dialog, LineItemEntries } from "@components/form-builder/app/shared";
 import { randomId } from "@lib/clientHelpers";
@@ -8,9 +8,6 @@ import { logMessage } from "@lib/logger";
 import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
 import Link from "next/link";
 
-// TODO: Tech-Debt separate into separate dialogs for Confirm and report
-// https://github.com/cds-snc/platform-forms-client/issues/1941
-
 export interface DialogErrors {
   unknown: boolean;
   minEntries: boolean;
@@ -19,10 +16,20 @@ export interface DialogErrors {
   invalidEntry: boolean;
 }
 
+export enum DialogStates {
+  EDITTING,
+  SENDING,
+  SENT,
+  MIN_ERROR,
+  MAX_ERROR,
+  FORMAT_ERROR,
+  FAILED_ERROR,
+  UNKNOWN_ERROR,
+}
+
 // Note: Confirm and Report Problem Dialogs are very coupled, only the content changes. If the
 // behavior of one ever changes then this will need to be separated into separate dialogs.
 export const DownloadTableDialog = ({
-  isShowDialog,
   setIsShowDialog,
   apiUrl,
   inputRegex,
@@ -44,7 +51,6 @@ export const DownloadTableDialog = ({
   unknownErrorDescription,
   unknownErrorDescriptionLink,
 }: {
-  isShowDialog: boolean;
   setIsShowDialog: React.Dispatch<React.SetStateAction<boolean>>;
   apiUrl: string;
   inputRegex: (field: string) => boolean;
@@ -69,49 +75,30 @@ export const DownloadTableDialog = ({
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
   const [entries, setEntries] = useState<string[]>([]);
-  const [errors, setErrors] = useState({
-    minEntries: false,
-    maxEntries: false,
-    errorEntries: false,
-    invalidEntry: false,
-    unknown: false,
-  });
+  const [status, setStatus] = useState<DialogStates>(DialogStates.EDITTING);
   const [errorEntriesList, setErrorEntriesList] = useState<string[]>([]);
   const dialogRef = useDialogRef();
   const confirmInstructionId = `dialog-confirm-receipt-instruction-${randomId()}`;
 
-  useEffect(() => {
-    if (errors.minEntries && entries.length > 0) {
-      setErrors({ ...errors, minEntries: false });
-    }
-  }, [errors, entries]);
+  // Cleanup any un-needed errors from the last render
+  if (status === DialogStates.MIN_ERROR && entries.length > 0) {
+    setStatus(DialogStates.EDITTING);
+  }
 
   const handleClose = () => {
     setIsShowDialog(false);
     setEntries([]);
-    setErrors({
-      minEntries: false,
-      maxEntries: false,
-      errorEntries: false,
-      invalidEntry: false,
-      unknown: false,
-    });
+    setStatus(DialogStates.EDITTING);
     setErrorEntriesList([]);
     dialogRef.current?.close();
   };
 
   const handleSubmit = () => {
-    setErrors({
-      minEntries: false,
-      maxEntries: false,
-      errorEntries: false,
-      invalidEntry: false,
-      unknown: false,
-    });
+    setStatus(DialogStates.SENDING);
     setErrorEntriesList([]);
 
     if (entries.length <= 0) {
-      setErrors({ ...errors, minEntries: true });
+      setStatus(DialogStates.MIN_ERROR);
       return;
     }
 
@@ -126,136 +113,138 @@ export const DownloadTableDialog = ({
       data: entries,
     })
       .then(({ data }) => {
+        // Refreshes data. Needed for error cases as well since may be a mix of valid/invalid codes
+        router.replace(router.asPath);
+
         // Confirmation API returns success with an error and 1 or more invalid codes
         if (data?.invalidConfirmationCodes && data.invalidConfirmationCodes?.length > 0) {
+          setStatus(DialogStates.FAILED_ERROR);
           // Note: why a list of entries and another list for invalid entries? This makes showing
           // only the invalid entries a lot easier in the LineItems component
           setErrorEntriesList(data.invalidConfirmationCodes);
           setEntries(data.invalidConfirmationCodes);
-
-          setErrors({ ...errors, errorEntries: true });
           return;
         }
+
         // Report API returns success with an error and 1 or more invalid codes
-        else if (data?.invalidSubmissionNames && data.invalidSubmissionNames?.length > 0) {
+        if (data?.invalidSubmissionNames && data.invalidSubmissionNames?.length > 0) {
+          setStatus(DialogStates.FAILED_ERROR);
           setErrorEntriesList(data.invalidSubmissionNames);
           setEntries(data.invalidSubmissionNames);
-
-          setErrors({ ...errors, errorEntries: true });
           return;
         }
 
-        // Refreshes getServerSideProps data without a full page reload
-        router.replace(router.asPath);
+        // Success, close the dialog
+        setStatus(DialogStates.SENT);
         handleClose();
       })
       .catch((err) => {
         logMessage.error(err as Error);
-        if (err?.response?.status === 400) {
-          // Report API returns an error for 1 or more invalid Responses but not the failed codes
-          setErrors({ ...errors, errorEntries: true });
-        } else {
-          setErrors({ ...errors, unknown: true });
-        }
+        setStatus(DialogStates.UNKNOWN_ERROR);
       });
   };
 
   return (
     <>
-      {isShowDialog && (
-        <Dialog
-          title={title}
-          dialogRef={dialogRef}
-          handleClose={handleClose}
-          headerStyle="inline-block ml-12 mt-12"
-        >
-          <div className="px-10">
-            <div>
-              {errors.minEntries && (
-                <Attention
-                  type={AttentionTypes.ERROR}
-                  isAlert={true}
-                  heading={minEntriesErrorTitle}
-                  classes="mb-2"
-                >
-                  <p className="text-[#26374a] text-sm mb-2">{minEntriesErrorDescription}</p>
-                </Attention>
-              )}
-              {errors.maxEntries && (
-                <Attention
-                  type={AttentionTypes.ERROR}
-                  isAlert={true}
-                  heading={maxEntriesErrorTitle}
-                  classes="mb-2"
-                >
-                  <p className="text-[#26374a] text-sm mb-2">{maxEntriesErrorDescription}</p>
-                </Attention>
-              )}
-              {errors.errorEntries && (
-                <Attention
-                  type={AttentionTypes.ERROR}
-                  isAlert={true}
-                  heading={errorEntriesErrorTitle}
-                  classes="mb-2"
-                >
-                  <p className="text-[#26374a] text-sm mb-2">{errorEntriesErrorDescription}</p>
-                </Attention>
-              )}
-              {errors.invalidEntry && (
-                <Attention
-                  type={AttentionTypes.ERROR}
-                  isAlert={true}
-                  heading={invalidEntryErrorTitle}
-                  classes="mb-2"
-                >
-                  <p className="text-[#26374a] text-sm mb-2">{invalidEntryErrorDescription}</p>
-                </Attention>
-              )}
-              {errors.unknown && (
-                <Attention
-                  type={AttentionTypes.ERROR}
-                  isAlert={true}
-                  heading={unknownErrorTitle}
-                  classes="mb-2"
-                >
-                  <p className="text-[#26374a] text-sm mb-2">
-                    {unknownErrorDescription}
-                    <Link href={"/form-builder/support"}>{unknownErrorDescriptionLink}</Link>.
-                  </p>
-                </Attention>
-              )}
-            </div>
-            <div className="py-4">
-              <p className="mt-2">{description}</p>
-              <p className="mt-10 mb-2 font-bold" id={confirmInstructionId}>
-                {inputHelp}
-              </p>
+      <Dialog
+        title={title}
+        dialogRef={dialogRef}
+        handleClose={handleClose}
+        headerStyle="inline-block ml-12 mt-12"
+      >
+        <div className="px-10">
+          <div>
+            {status === DialogStates.MIN_ERROR && (
+              <Attention
+                type={AttentionTypes.ERROR}
+                isAlert={true}
+                heading={minEntriesErrorTitle}
+                classes="mb-2"
+              >
+                <p className="text-[#26374a] text-sm mb-2">{minEntriesErrorDescription}</p>
+              </Attention>
+            )}
+            {status === DialogStates.MAX_ERROR && (
+              <Attention
+                type={AttentionTypes.ERROR}
+                isAlert={true}
+                heading={maxEntriesErrorTitle}
+                classes="mb-2"
+              >
+                <p className="text-[#26374a] text-sm mb-2">{maxEntriesErrorDescription}</p>
+              </Attention>
+            )}
+            {status === DialogStates.FORMAT_ERROR && (
+              <Attention
+                type={AttentionTypes.ERROR}
+                isAlert={true}
+                heading={invalidEntryErrorTitle}
+                classes="mb-2"
+              >
+                <p className="text-[#26374a] text-sm mb-2">{invalidEntryErrorDescription}</p>
+              </Attention>
+            )}
+            {status === DialogStates.FAILED_ERROR && (
+              <Attention
+                type={AttentionTypes.ERROR}
+                isAlert={true}
+                heading={errorEntriesErrorTitle}
+                classes="mb-2"
+              >
+                <p className="text-[#26374a] text-sm mb-2">{errorEntriesErrorDescription}</p>
+              </Attention>
+            )}
 
-              <LineItemEntries
-                inputs={entries}
-                setInputs={setEntries}
-                validateInput={inputRegex}
-                spellCheck={false}
-                inputLabelId={confirmInstructionId}
-                maxEntries={maxEntries}
-                errors={errors}
-                setErrors={setErrors}
-                errorEntriesList={errorEntriesList}
-              ></LineItemEntries>
+            {status === DialogStates.UNKNOWN_ERROR && (
+              <Attention
+                type={AttentionTypes.ERROR}
+                isAlert={true}
+                heading={unknownErrorTitle}
+                classes="mb-2"
+              >
+                <p className="text-[#26374a] text-sm mb-2">
+                  {unknownErrorDescription}
+                  <Link href={"/form-builder/support"}>{unknownErrorDescriptionLink}</Link>.
+                </p>
+              </Attention>
+            )}
+          </div>
+          <div className="py-4">
+            <p className="mt-2">{description}</p>
+            <p className="mt-10 mb-2 font-bold" id={confirmInstructionId}>
+              {inputHelp}
+            </p>
 
-              <p className="mt-8">{nextSteps}</p>
-              <div className="flex mt-8 mb-8">
-                <Button className="mr-4" onClick={handleSubmit}>
-                  {submitButtonText}
-                </Button>
-                <Button theme="secondary" onClick={handleClose}>
-                  {t("downloadResponsesModals.cancel")}
-                </Button>
-              </div>
+            <LineItemEntries
+              inputs={entries}
+              setInputs={setEntries}
+              validateInput={inputRegex}
+              spellCheck={false}
+              inputLabelId={confirmInstructionId}
+              maxEntries={maxEntries}
+              errorEntriesList={errorEntriesList}
+              status={status}
+              setStatus={setStatus}
+            ></LineItemEntries>
+
+            <p className="mt-8">{nextSteps}</p>
+            <div className="flex mt-8 mb-8">
+              <Button
+                className="mr-4"
+                onClick={handleSubmit}
+                disabled={status === DialogStates.SENDING}
+              >
+                {status === DialogStates.SENDING
+                  ? t("downloadResponsesModals.sending")
+                  : submitButtonText}
+              </Button>
+              <Button theme="secondary" onClick={handleClose}>
+                {t("downloadResponsesModals.cancel")}
+              </Button>
             </div>
           </div>
-        </Dialog>
-      )}
+        </div>
+      </Dialog>
     </>
   );
 };

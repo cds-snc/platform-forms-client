@@ -3,7 +3,7 @@ import { cleanup, render, screen, fireEvent } from "@testing-library/react";
 
 import mockedAxios from "axios";
 import { JSONUpload } from "./JsonUpload";
-
+jest.mock("next/router", () => require("next-router-mock"));
 jest.mock("axios");
 // Mock out the useRefresh hook because without a rerender the component will be stuck in loading state
 jest.mock("@lib/hooks/useRefresh", () => ({

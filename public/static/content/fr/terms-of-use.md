@@ -30,7 +30,7 @@ Vous avez pour responsabilité :
 
 Vous avez pour responsabilité :
 - d’adhérer aux directives ministérielles concernant la bonne utilisation des appareils et des réseaux.
-- d’accuser réception des réponses au formulaire et d’en enregistrer une copie dans les 46 jours suivant la réception d’une réponse.
+- d’accuser réception des réponses au formulaire et d’en enregistrer une copie dans les 45 jours suivant la réception d’une réponse.
 - de signaler tout problème lié aux réponses enregistrées.
 - de traiter et d’enregistrer les réponses aux formulaires conformément à votre calendrier de conservation et d’élimination.
 - d’accepter [les conditions d’utilisation de Notification GC](https://notification.canada.ca/conditions-dutilisation). 
