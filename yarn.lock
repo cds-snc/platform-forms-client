@@ -2160,7 +2160,7 @@
   resolved "https://registry.yarnpkg.com/@lexical/plain-text/-/plain-text-0.9.2.tgz#ad9bb89b02cccfa095c9e79fca4665abc1dacb1c"
   integrity sha512-7uCjfj3LR8GYdXfAk1FMOUGNZ+6UsxwfxDuxsXTPqOSQaA62mjGm44WQPN7sN/vPk/zQYI6IQVdkxQQBWDsrZg==
 
-"@lexical/react@^0.9.2":
+"@lexical/react@0.9.2":
   version "0.9.2"
   resolved "https://registry.yarnpkg.com/@lexical/react/-/react-0.9.2.tgz#e39f1bd0307ebd3f07703244455a24c8a1a74228"
   integrity sha512-FM8txFtUYhLqPC1qUBqH6r8TaiwI5+CFDV/FReaji/73tXMcDGNG3m1ycZ1KZDZYCeIQtj9viszNSZ4dC/H5cQ==
