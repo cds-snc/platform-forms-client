@@ -19,6 +19,17 @@ export interface DialogErrors {
   invalidEntry: boolean;
 }
 
+export enum DialogStates {
+  EDITTING,
+  SENDING,
+  SENT,
+  MIN_ERROR,
+  MAX_ERROR,
+  FORMAT_ERROR,
+  FAILED_ERROR,
+  UNKNOWN_ERROR,
+}
+
 // Note: Confirm and Report Problem Dialogs are very coupled, only the content changes. If the
 // behavior of one ever changes then this will need to be separated into separate dialogs.
 export const DownloadTableDialog = ({
@@ -69,48 +80,30 @@ export const DownloadTableDialog = ({
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
   const [entries, setEntries] = useState<string[]>([]);
-  const [errors, setErrors] = useState({
-    minEntries: false,
-    maxEntries: false,
-    errorEntries: false,
-    invalidEntry: false,
-    unknown: false,
-  });
+  const [status, setStatus] = useState<DialogStates>(DialogStates.EDITTING);
   const [errorEntriesList, setErrorEntriesList] = useState<string[]>([]);
   const dialogRef = useDialogRef();
   const confirmInstructionId = `dialog-confirm-receipt-instruction-${randomId()}`;
 
   // Cleanup any un-needed errors from the last render
-  if (errors.minEntries && entries.length > 0) {
-    setErrors({ ...errors, minEntries: false });
+  if (status === DialogStates.MIN_ERROR && entries.length > 0) {
+    setStatus(DialogStates.EDITTING);
   }
 
   const handleClose = () => {
     setIsShowDialog(false);
     setEntries([]);
-    setErrors({
-      minEntries: false,
-      maxEntries: false,
-      errorEntries: false,
-      invalidEntry: false,
-      unknown: false,
-    });
+    setStatus(DialogStates.EDITTING);
     setErrorEntriesList([]);
     dialogRef.current?.close();
   };
 
   const handleSubmit = () => {
-    setErrors({
-      minEntries: false,
-      maxEntries: false,
-      errorEntries: false,
-      invalidEntry: false,
-      unknown: false,
-    });
+    setStatus(DialogStates.SENDING);
     setErrorEntriesList([]);
 
     if (entries.length <= 0) {
-      setErrors({ ...errors, minEntries: true });
+      setStatus(DialogStates.MIN_ERROR);
       return;
     }
 
@@ -130,29 +123,29 @@ export const DownloadTableDialog = ({
 
         // Confirmation API returns success with an error and 1 or more invalid codes
         if (data?.invalidConfirmationCodes && data.invalidConfirmationCodes?.length > 0) {
+          setStatus(DialogStates.FAILED_ERROR);
           // Note: why a list of entries and another list for invalid entries? This makes showing
           // only the invalid entries a lot easier in the LineItems component
           setErrorEntriesList(data.invalidConfirmationCodes);
           setEntries(data.invalidConfirmationCodes);
-
-          setErrors({ ...errors, errorEntries: true });
           return;
         }
+
         // Report API returns success with an error and 1 or more invalid codes
-        else if (data?.invalidSubmissionNames && data.invalidSubmissionNames?.length > 0) {
+        if (data?.invalidSubmissionNames && data.invalidSubmissionNames?.length > 0) {
+          setStatus(DialogStates.FAILED_ERROR);
           setErrorEntriesList(data.invalidSubmissionNames);
           setEntries(data.invalidSubmissionNames);
-
-          setErrors({ ...errors, errorEntries: true });
           return;
         }
 
         // Success, close the dialog
+        setStatus(DialogStates.SENT);
         handleClose();
       })
       .catch((err) => {
         logMessage.error(err as Error);
-        setErrors({ ...errors, unknown: true });
+        setStatus(DialogStates.UNKNOWN_ERROR);
       });
   };
 
@@ -167,7 +160,7 @@ export const DownloadTableDialog = ({
         >
           <div className="px-10">
             <div>
-              {errors.minEntries && (
+              {status === DialogStates.MIN_ERROR && (
                 <Attention
                   type={AttentionTypes.ERROR}
                   isAlert={true}
@@ -177,7 +170,7 @@ export const DownloadTableDialog = ({
                   <p className="text-[#26374a] text-sm mb-2">{minEntriesErrorDescription}</p>
                 </Attention>
               )}
-              {errors.maxEntries && (
+              {status === DialogStates.MAX_ERROR && (
                 <Attention
                   type={AttentionTypes.ERROR}
                   isAlert={true}
@@ -187,17 +180,7 @@ export const DownloadTableDialog = ({
                   <p className="text-[#26374a] text-sm mb-2">{maxEntriesErrorDescription}</p>
                 </Attention>
               )}
-              {errors.errorEntries && (
-                <Attention
-                  type={AttentionTypes.ERROR}
-                  isAlert={true}
-                  heading={errorEntriesErrorTitle}
-                  classes="mb-2"
-                >
-                  <p className="text-[#26374a] text-sm mb-2">{errorEntriesErrorDescription}</p>
-                </Attention>
-              )}
-              {errors.invalidEntry && (
+              {status === DialogStates.FORMAT_ERROR && (
                 <Attention
                   type={AttentionTypes.ERROR}
                   isAlert={true}
@@ -207,7 +190,18 @@ export const DownloadTableDialog = ({
                   <p className="text-[#26374a] text-sm mb-2">{invalidEntryErrorDescription}</p>
                 </Attention>
               )}
-              {errors.unknown && (
+              {status === DialogStates.FAILED_ERROR && (
+                <Attention
+                  type={AttentionTypes.ERROR}
+                  isAlert={true}
+                  heading={errorEntriesErrorTitle}
+                  classes="mb-2"
+                >
+                  <p className="text-[#26374a] text-sm mb-2">{errorEntriesErrorDescription}</p>
+                </Attention>
+              )}
+
+              {status === DialogStates.UNKNOWN_ERROR && (
                 <Attention
                   type={AttentionTypes.ERROR}
                   isAlert={true}
@@ -234,15 +228,21 @@ export const DownloadTableDialog = ({
                 spellCheck={false}
                 inputLabelId={confirmInstructionId}
                 maxEntries={maxEntries}
-                errors={errors}
-                setErrors={setErrors}
                 errorEntriesList={errorEntriesList}
+                status={status}
+                setStatus={setStatus}
               ></LineItemEntries>
 
               <p className="mt-8">{nextSteps}</p>
               <div className="flex mt-8 mb-8">
-                <Button className="mr-4" onClick={handleSubmit}>
-                  {submitButtonText}
+                <Button
+                  className="mr-4"
+                  onClick={handleSubmit}
+                  disabled={status === DialogStates.SENDING}
+                >
+                  {status === DialogStates.SENDING
+                    ? t("downloadResponsesModals.sending")
+                    : submitButtonText}
                 </Button>
                 <Button theme="secondary" onClick={handleClose}>
                   {t("downloadResponsesModals.cancel")}
