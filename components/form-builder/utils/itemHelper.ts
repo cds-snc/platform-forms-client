@@ -110,14 +110,8 @@ export const updateTextElement = (element: FormElement, type: ElementType) => {
   return newElement;
 };
 
-export const updateElement = (element: FormElement, type: string) => {
-  let newElement = { ...element };
-  if (type !== "richText") {
-    newElement = setTitle(newElement, "en", "title en");
-    newElement = setTitle(newElement, "fr", "title fr");
-    newElement = setDescription(newElement, "en", "desc en");
-    newElement = setDescription(newElement, "fr", "desc fr");
-  }
+export const createElement = (element: FormElement, type: string) => {
+  const newElement = { ...element };
 
   if (isTextField(type as FormElementTypes)) {
     return updateTextElement(newElement, type as ElementType);

@@ -1,5 +1,5 @@
 import { FormElement } from "@lib/types";
-import { setDescription, setTitle, updateElement } from "./itemHelper";
+import { setDescription, setTitle, createElement } from "./itemHelper";
 
 function getItem() {
   return {
@@ -45,65 +45,65 @@ describe("Set localized Item properties", () => {
 
 describe("Update elements", () => {
   it("sets properties for phone", () => {
-    const item = updateElement(getItem(), "phone");
+    const item = createElement(getItem(), "phone");
     expect(item.type).toEqual("textField");
     expect(item.properties.validation?.type).toEqual("phone");
     expect(item.properties.autoComplete).toEqual("phone");
   });
 
   it("sets properties for email", () => {
-    const item = updateElement(getItem(), "email");
+    const item = createElement(getItem(), "email");
     expect(item.type).toEqual("textField");
     expect(item.properties.validation?.type).toEqual("email");
     expect(item.properties.autoComplete).toEqual("email");
   });
 
   it("sets properties for date field", () => {
-    const item = updateElement(getItem(), "date");
+    const item = createElement(getItem(), "date");
     expect(item.type).toEqual("textField");
     expect(item.properties.validation?.type).toEqual("date");
   });
 
   it("sets properties for number", () => {
-    const item = updateElement(getItem(), "number");
+    const item = createElement(getItem(), "number");
     expect(item.type).toEqual("textField");
     expect(item.properties.validation?.type).toEqual("number");
   });
 
   it("sets properties for attestation", () => {
-    const item = updateElement(getItem(), "attestation");
+    const item = createElement(getItem(), "attestation");
     expect(item.type).toEqual("checkbox");
     expect(item.properties.validation?.all).toEqual(true);
     expect(item.properties.validation?.required).toEqual(true);
   });
 
   it("sets properties for richText", () => {
-    const item = updateElement(getItem(), "richText");
+    const item = createElement(getItem(), "richText");
     expect(item).toEqual({ ...getItem(), type: "richText" });
   });
 
   it("sets properties for radio", () => {
-    const item = updateElement(getItem(), "radio");
+    const item = createElement(getItem(), "radio");
     expect(item).toEqual({ ...getItem(), type: "radio" });
   });
 
   it("sets properties for checkbox", () => {
-    const item = updateElement(getItem(), "checkbox");
+    const item = createElement(getItem(), "checkbox");
     expect(item).toEqual({ ...getItem(), type: "checkbox" });
   });
 
   it("sets properties for dropdown", () => {
-    const item = updateElement(getItem(), "dropdown");
+    const item = createElement(getItem(), "dropdown");
     expect(item).toEqual({ ...getItem(), type: "dropdown" });
   });
 
   it("sets properties for textArea", () => {
-    const item = updateElement(getItem(), "textArea");
+    const item = createElement(getItem(), "textArea");
     expect(item).toEqual({ ...getItem(), type: "textArea" });
   });
 
   it("sets properties for textField", () => {
-    const item = updateElement(getItem(), "textField");
+    const item = createElement(getItem(), "textField");
     expect(item).toEqual({ ...getItem(), type: "textField" });
   });
 });
