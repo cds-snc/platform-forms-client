@@ -55,9 +55,8 @@ export const PageTemplate = ({
   autoWidth?: boolean;
 }) => {
   const { t, i18n } = useTranslation("form-builder");
-  const { hasHydrated, form, setLang } = useTemplateStore((s) => ({
-    form: s.form,
-    hasHydrated: s._hasHydrated,
+  const { hasHydrated, setLang } = useTemplateStore((s) => ({
+    hasHydrated: s.hasHydrated,
     setLang: s.setLang,
     email: s.deliveryOption?.emailAddress,
   }));
@@ -74,22 +73,20 @@ export const PageTemplate = ({
       <div>
         {leftNav && <LeftNavigation />}
         <>
-          {form && (
-            <div>
-              <Head>
-                <title>{title}</title>
-              </Head>
-              <main
-                id="content"
-                className={`${leftNav && "ml-40 laptop:ml-60"} ${
-                  leftNav && !autoWidth && "max-w-4xl"
-                } form-builder`}
-              >
-                {navigation}
-                {children}
-              </main>
-            </div>
-          )}
+          <div>
+            <Head>
+              <title>{title}</title>
+            </Head>
+            <main
+              id="content"
+              className={`${leftNav && "ml-40 laptop:ml-60"} ${
+                leftNav && !autoWidth && "max-w-4xl"
+              } form-builder`}
+            >
+              {navigation}
+              {children}
+            </main>
+          </div>
         </>
       </div>
     </div>

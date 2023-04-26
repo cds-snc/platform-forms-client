@@ -3,11 +3,19 @@ import React, { useState, useEffect } from "react";
 import { FormElementWithIndex } from "../../types";
 import { useTemplateStore } from "../../store";
 import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
+
 import { useIsWithin, useHandleAdd } from "@components/form-builder/hooks";
 import { useRefsContext } from "./RefsContext";
+import { FormElementTypes, FormElement } from "@lib/types";
 
-export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
-  const { getFocusInput, setFocusInput, remove, moveUp, moveDown, duplicateElement, elements } =
+export const ElementPanel = ({
+  item,
+  elements,
+}: {
+  item: FormElementWithIndex;
+  elements: FormElement[];
+}) => {
+  const { getFocusInput, setFocusInput, remove, moveUp, moveDown, duplicateElement } =
     useTemplateStore((s) => ({
       getFocusInput: s.getFocusInput,
       setFocusInput: s.setFocusInput,
@@ -15,7 +23,6 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
       moveUp: s.moveUp,
       moveDown: s.moveDown,
       duplicateElement: s.duplicateElement,
-      elements: s.form.elements,
     }));
 
   const [className, setClassName] = useState<string>("");
@@ -44,6 +51,17 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
   const { focusWithinProps, isWithin } = useIsWithin();
   const { refs } = useRefsContext();
 
+  const moreButton =
+    item.type !== "richText"
+      ? {
+          moreButtonRenderer: (
+            moreButton: JSX.Element | undefined
+          ): React.ReactElement | string | undefined => (
+            <MoreModal item={item} moreButton={moreButton} />
+          ),
+        }
+      : {};
+
   /* eslint-disable jsx-a11y/no-static-element-interactions */
   /* eslint-disable jsx-a11y/click-events-have-key-events */
   return (
@@ -71,10 +89,12 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
     >
       <PanelBodyRoot item={item} />
       <PanelActions
-        subIndex={-1}
-        elements={elements}
-        item={item}
-        handleAdd={handleAddElement}
+        isFirstItem={item.index === 0}
+        isLastItem={item.index === elements.length - 1}
+        totalItems={elements.length}
+        handleAdd={(type?: FormElementTypes) => {
+          handleAddElement(item.index, type);
+        }}
         handleRemove={() => {
           const previousElement = elements[item.index - 1];
           remove(item.id);
@@ -127,9 +147,7 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
           setFocusInput(true);
           duplicateElement(item.index);
         }}
-        renderMoreButton={({ item, moreButton }) => (
-          <MoreModal item={item} moreButton={moreButton} />
-        )}
+        {...moreButton}
       />
     </div>
   );

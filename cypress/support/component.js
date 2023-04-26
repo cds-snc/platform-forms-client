@@ -22,6 +22,9 @@ import "./commands";
 import { mount } from "cypress/react18";
 import "../../styles/app.scss";
 
+// Add cy.tab() command
+require("cypress-plugin-tab");
+
 Cypress.Commands.add("mount", mount);
 
 // Example use:

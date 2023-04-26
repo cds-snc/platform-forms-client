@@ -103,7 +103,7 @@ export const Edit = () => {
           if (element) {
             const questionNumber = getQuestionNumber(element, elementTypes);
             const item = { ...element, index, questionNumber };
-            return <ElementPanel item={item} key={item.id} />;
+            return <ElementPanel elements={elements} item={item} key={item.id} />;
           }
         })}
       </RefsProvider>

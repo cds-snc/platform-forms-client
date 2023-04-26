@@ -4,7 +4,11 @@ import { allowedTemplates } from "@formbuilder/util";
 
 export type LoaderType = (typeof allowedTemplates)[number];
 
-export const blockLoader = async (type: LoaderType, onData: (data: FormElement) => void) => {
+export const blockLoader = async (
+  type: LoaderType,
+  startIndex: number,
+  onData: (data: FormElement, position: number) => void
+) => {
   if (!allowedTemplates.includes(type)) {
     return;
   }
@@ -18,8 +22,7 @@ export const blockLoader = async (type: LoaderType, onData: (data: FormElement) 
     timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
   });
 
-  // add the elements one at a time
-  result.data.reverse().forEach((data: FormElement) => {
-    onData(data);
+  result.data.forEach((data: FormElement, index: number) => {
+    onData(data, startIndex + index);
   });
 };
