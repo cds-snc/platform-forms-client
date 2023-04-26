@@ -11,13 +11,11 @@ export const AddElementButton = ({
   filterElements,
   handleAdd,
   theme = "secondary",
-  position, // the postion where we want to insert the new element
   text,
 }: {
   filterElements?: ElementOptionsFilter | undefined;
-  handleAdd?: (index: number, type?: FormElementTypes) => void;
+  handleAdd?: (type?: FormElementTypes) => void;
   theme?: "secondary" | "link";
-  position: number;
   text?: string;
 }) => {
   const { t } = useTranslation("form-builder");
@@ -49,7 +47,7 @@ export const AddElementButton = ({
         <ElementDialog
           filterElements={filterElements}
           handleAddType={(type) => {
-            handleAdd && handleAdd(position, type);
+            handleAdd && handleAdd(type);
           }}
           handleClose={handleCloseDialog}
         />
