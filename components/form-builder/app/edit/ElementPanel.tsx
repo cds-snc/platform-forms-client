@@ -3,9 +3,10 @@ import React, { useState, useEffect } from "react";
 import { FormElementWithIndex } from "../../types";
 import { useTemplateStore } from "../../store";
 import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
+
 import { useIsWithin, useHandleAdd } from "@components/form-builder/hooks";
 import { useRefsContext } from "./RefsContext";
-import { FormElement } from "@lib/types";
+import { FormElementTypes, FormElement } from "@lib/types";
 
 export const ElementPanel = ({
   item,
@@ -88,10 +89,12 @@ export const ElementPanel = ({
     >
       <PanelBodyRoot item={item} />
       <PanelActions
-        subIndex={-1}
-        elementsLength={elements.length}
-        item={item}
-        handleAdd={handleAddElement}
+        isFirstItem={item.index === 0}
+        isLastItem={item.index === elements.length - 1}
+        totalItems={elements.length}
+        handleAdd={(type?: FormElementTypes) => {
+          handleAddElement(item.index, type);
+        }}
         handleRemove={() => {
           const previousElement = elements[item.index - 1];
           remove(item.id);
