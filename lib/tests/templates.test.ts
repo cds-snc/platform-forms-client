@@ -17,9 +17,10 @@ import {
   updateAssignedUsersForTemplate,
   TemplateAlreadyPublishedError,
   removeDeliveryOption,
+  TemplateHasUnprocessedSubmissions,
 } from "../templates";
 
-import { DeliveryOption, FormProperties, FormRecord } from "@lib/types";
+import { DeliveryOption, FormProperties, FormRecord, VaultStatus } from "@lib/types";
 import formConfiguration from "@jestFixtures/cdsIntakeTestForm.json";
 
 // structuredClone is available starting in Node 17.
@@ -37,6 +38,7 @@ import {
 } from "__utils__/permissions";
 import { Session } from "next-auth";
 import { logEvent } from "@lib/auditLogs";
+import { listAllSubmissions } from "@lib/vault";
 
 const redis = new Redis();
 
@@ -51,6 +53,10 @@ const structuredClone = <T>(obj: T): T => {
 };
 
 const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
+
+jest.mock("@lib/vault");
+
+const mockListAllSubmissions = jest.mocked(listAllSubmissions, { shallow: true });
 
 const buildPrismaResponse = (
   id: string,
@@ -742,6 +748,20 @@ describe("Template CRUD functions", () => {
       buildPrismaResponse("formtestID", formConfiguration)
     );
 
+    mockListAllSubmissions.mockResolvedValueOnce([
+      {
+        formID: "clg17xha50008efkgfgxa8l4f",
+        status: VaultStatus.CONFIRMED,
+        securityAttribute: "Unclassified",
+        name: "03-04-0022",
+        createdAt: 1680549853671,
+        lastDownloadedBy: "test@cds-snc.ca",
+        confirmedAt: undefined,
+        downloadedAt: undefined,
+        removedAt: undefined,
+      },
+    ]);
+
     const deletedTemplate = await deleteTemplate(ability, "formtestID");
 
     expect(prismaMock.template.update).toHaveBeenCalledWith(
@@ -778,6 +798,61 @@ describe("Template CRUD functions", () => {
       "DeleteForm"
     );
   });
+
+  it.each([[Base], [Base.concat(ManageForms)]])(
+    "Template deletion should not be allowed if there are still unprocessed submissions associated to targeted form",
+    async (privileges) => {
+      const fakeSession = {
+        user: { id: "1", privileges: mockUserPrivileges(privileges, { user: { id: "1" } }) },
+      };
+      const ability = createAbility(fakeSession as Session);
+
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        ...buildPrismaResponse("formtestID", formConfiguration),
+        users: [{ id: "1" }],
+      });
+
+      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
+        buildPrismaResponse("formtestID", formConfiguration)
+      );
+
+      mockListAllSubmissions.mockResolvedValueOnce([
+        {
+          formID: "clg17xha50008efkgfgxa8l4f",
+          status: VaultStatus.NEW,
+          securityAttribute: "Unclassified",
+          name: "03-04-0022",
+          createdAt: 1680549853671,
+          lastDownloadedBy: "test@cds-snc.ca",
+          confirmedAt: undefined,
+          downloadedAt: undefined,
+          removedAt: undefined,
+        },
+      ]);
+
+      await expect(async () => {
+        await deleteTemplate(ability, "formtestID");
+      }).rejects.toThrowError(new TemplateHasUnprocessedSubmissions());
+
+      mockListAllSubmissions.mockResolvedValueOnce([
+        {
+          formID: "clg17xha50008efkgfgxa8l4f",
+          status: VaultStatus.DOWNLOADED,
+          securityAttribute: "Unclassified",
+          name: "03-04-0022",
+          createdAt: 1680549853671,
+          lastDownloadedBy: "test@cds-snc.ca",
+          confirmedAt: undefined,
+          downloadedAt: undefined,
+          removedAt: undefined,
+        },
+      ]);
+
+      await expect(async () => {
+        await deleteTemplate(ability, "formtestID");
+      }).rejects.toThrowError(new TemplateHasUnprocessedSubmissions());
+    }
+  );
 
   it("Only include public properties", async () => {
     const formRecord: FormRecord = {
