@@ -21,7 +21,7 @@
   },
   "downloadResponsesTable": {
     "header": {
-      "tableTitle": "Download Responses Table",
+      "tableTitle": "Tableau des réponses à télécharger",
       "select": "Sélection",
       "number": "Numéro de formulaire",
       "status": "État des réponses",
@@ -61,8 +61,8 @@
       "errorDownloadingFilesLink": "contactez Soutien"
     },
     "downloadXSelectedResponses": "Télécharger {{size}} réponses sélectionnées",
-    "skipLink": "Skip Download Table[fr]",
-    "unknown": "Unknown[fr]"
+    "skipLink": "Sauter le tableau de téléchargement",
+    "unknown": "Inconnue"
   },
   "downloadResponsesModals": {
     "confirmReceiptDialog": {
@@ -126,10 +126,10 @@
       }
     },
     "lineItemEntries": {
-      "added": "Added [fr]",
-      "removed": "Removed [fr]"
+      "added": "Ajoutée",
+      "removed": "Supprimée"
     },
-    "sending": "Sending... [fr]",
+    "sending": "Envoi en cours...",
     "cancel": "Annuler"
   }
 }

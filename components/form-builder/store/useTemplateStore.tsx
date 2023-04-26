@@ -13,8 +13,11 @@ import { getPathString } from "../getPath";
 
 import {
   moveDown,
+  moveElementDown,
   moveUp,
+  moveElementUp,
   removeElementById,
+  removeById,
   incrementElementId,
   getSchemaFromState,
   incrementSubElementId,
@@ -244,24 +247,27 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               }),
             moveUp: (elIndex) =>
               set((state) => {
-                state.form.elements = moveUp(state.form.elements, elIndex);
+                state.form.layout = moveUp(state.form.layout, elIndex);
               }),
             subMoveUp: (elIndex, subIndex = 0) =>
               set((state) => {
                 const elements = state.form.elements[elIndex].properties.subElements;
                 if (elements) {
-                  state.form.elements[elIndex].properties.subElements = moveUp(elements, subIndex);
+                  state.form.elements[elIndex].properties.subElements = moveElementUp(
+                    elements,
+                    subIndex
+                  );
                 }
               }),
             moveDown: (elIndex) =>
               set((state) => {
-                state.form.elements = moveDown(state.form.elements, elIndex);
+                state.form.layout = moveDown(state.form.layout, elIndex);
               }),
             subMoveDown: (elIndex, subIndex = 0) =>
               set((state) => {
                 const elements = state.form.elements[elIndex].properties.subElements;
                 if (elements) {
-                  state.form.elements[elIndex].properties.subElements = moveDown(
+                  state.form.elements[elIndex].properties.subElements = moveElementDown(
                     elements,
                     subIndex
                   );
@@ -269,12 +275,16 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               }),
             add: (elIndex = 0, type = FormElementTypes.radio, data) => {
               set((state) => {
-                state.form.elements.splice(elIndex + 1, 0, {
+                const id = incrementElementId(state.form.elements);
+                const item = {
                   ...defaultField,
                   ...data,
-                  id: incrementElementId(state.form.elements),
+                  id,
                   type,
-                });
+                };
+
+                state.form.layout.splice(elIndex + 1, 0, id);
+                state.form.elements.splice(elIndex + 1, 0, item);
               });
             },
             addSubItem: (elIndex, subIndex = 0, type = FormElementTypes.radio, data) =>
@@ -298,6 +308,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             remove: (elementId) =>
               set((state) => {
                 state.form.elements = removeElementById(state.form.elements, elementId);
+                state.form.layout = removeById(state.form.layout, elementId);
               }),
             removeSubItem: (elIndex, elementId) =>
               set((state) => {
@@ -331,13 +342,15 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               }),
             duplicateElement: (elIndex) => {
               set((state) => {
+                const id = incrementElementId(state.form.elements);
                 // deep copy the element
                 const element = JSON.parse(JSON.stringify(state.form.elements[elIndex]));
-                element.id = incrementElementId(state.form.elements);
+                element.id = id;
                 element.properties[state.localizeField("title")] = `${
                   element.properties[state.localizeField("title")]
                 } copy`;
                 state.form.elements.splice(elIndex + 1, 0, element);
+                state.form.layout.splice(elIndex + 1, 0, id);
               });
             },
             subDuplicateElement: (elIndex, subIndex) => {

@@ -9,13 +9,14 @@ import { RichTextLocked } from "./elements";
 import { Input } from "../shared";
 import { useTemplateStore } from "../../store";
 import { FormElement } from "@lib/types";
-import { getQuestionNumber } from "../../util";
+import { getQuestionNumber, sortByLayout } from "../../util";
 import { TemplateStoreContext } from "@components/form-builder/store";
 
 export const Edit = () => {
   const { t } = useTranslation("form-builder");
   const {
     title,
+    layout,
     localizeField,
     updateField,
     translationLanguagePriority,
@@ -24,6 +25,7 @@ export const Edit = () => {
   } = useTemplateStore((s) => ({
     title:
       s.form[s.localizeField(LocalizedFormProperties.TITLE, s.translationLanguagePriority)] ?? "",
+    layout: s.form.layout,
     localizeField: s.localizeField,
     updateField: s.updateField,
     translationLanguagePriority: s.translationLanguagePriority,
@@ -60,7 +62,10 @@ export const Edit = () => {
   );
 
   // grab only the data we need to render the question number
-  const elementTypes = elements.current.map((element) => ({ id: element.id, type: element.type }));
+  const elementTypes = sortByLayout({ layout, elements: [...elements.current] }).map((element) => ({
+    id: element.id,
+    type: element.type,
+  }));
 
   const updateValue = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -105,10 +110,13 @@ export const Edit = () => {
         ariaLabel={t("richTextIntroTitle")}
       />
       <RefsProvider>
-        {elements.current.map((element, index: number) => {
-          const questionNumber = getQuestionNumber(element, elementTypes);
-          const item = { ...element, index, questionNumber };
-          return <ElementPanel elements={elements.current} item={item} key={item.id} />;
+        {layout.map((id, index) => {
+          const element = elements.current.find((element) => element.id === id);
+          if (element) {
+            const questionNumber = getQuestionNumber(element, elementTypes);
+            const item = { ...element, index, questionNumber };
+            return <ElementPanel elements={elements.current} item={item} key={item.id} />;
+          }
         })}
       </RefsProvider>
       <>
