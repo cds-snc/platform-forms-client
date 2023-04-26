@@ -4,11 +4,7 @@ import { useMediaQuery } from "usehooks-ts";
 
 import { FormElementTypes } from "@lib/types";
 import { AddElementButton } from "./elements/element-dialog/AddElementButton";
-import {
-  ElementOptionsFilter,
-  FormElementWithIndex,
-  RenderMoreFunc,
-} from "@components/form-builder/types";
+import { ElementOptionsFilter, RenderMoreFunc } from "@components/form-builder/types";
 import {
   ChevronDown,
   ChevronUp,
@@ -23,8 +19,10 @@ import { ElementDialog } from "./elements/element-dialog/ElementDialog";
 import { PanelActionsButton } from "./PanelActionsButton";
 
 export const PanelActions = ({
-  item,
-  subIndex,
+  isFirstItem,
+  isLastItem,
+  totalItems,
+  isSubPanel,
   moreButtonRenderer,
   handleAdd,
   handleRemove,
@@ -32,28 +30,24 @@ export const PanelActions = ({
   handleMoveDown,
   handleDuplicate,
   filterElements,
-  elementsLength,
 }: {
-  item: FormElementWithIndex;
-  subIndex?: number;
+  isFirstItem: boolean;
+  isLastItem: boolean;
+  totalItems: number;
+  isSubPanel?: boolean;
   moreButtonRenderer?: RenderMoreFunc;
-  handleAdd: (index: number, type?: FormElementTypes) => void;
+  handleAdd: (type?: FormElementTypes) => void;
   handleRemove: () => void;
   handleMoveUp: () => void;
   handleMoveDown: () => void;
   handleDuplicate: () => void;
   filterElements?: ElementOptionsFilter;
-  elementsLength: number;
 }) => {
   const { t, i18n } = useTranslation("form-builder");
 
   const isInit = useRef(false);
-  const isLastItem = item.index === elementsLength - 1;
-  const isFirstItem = item.index === 0;
-  const isSubElement = subIndex !== -1 && subIndex !== undefined;
   const lang = i18n.language;
   const hasMoreButton = moreButtonRenderer ? true : false;
-
   const getPanelButtons = ({ hasMoreButton }: { hasMoreButton: boolean }) => {
     const panelButtons = [
       {
@@ -70,7 +64,7 @@ export const PanelActions = ({
         onClick: handleMoveDown,
         disabled: isLastItem,
       },
-      ...(isSubElement
+      ...(isSubPanel
         ? [
             {
               id: 3,
@@ -139,8 +133,8 @@ export const PanelActions = ({
       panelButtons,
       isFirstItem,
       isLastItem,
-      elementsLength: elementsLength,
-      orientation: isSubElement ? "horizontal" : isXl ? "horizontal" : "vertical",
+      totalItems,
+      orientation: isSubPanel ? "horizontal" : isXl ? "horizontal" : "vertical",
     }
   );
 
@@ -162,7 +156,7 @@ export const PanelActions = ({
     return (
       <PanelActionsButton
         key={button.txt}
-        className={`${isFirstItem ? "disabled" : ""} ${isSubElement ? "!px-2" : ""}`}
+        className={`${isFirstItem ? "disabled" : ""} ${isSubPanel ? "!px-2" : ""}`}
         disabled={button.disabled && button.disabled}
         icon={button.icon}
         onClick={button.onClick}
@@ -175,19 +169,23 @@ export const PanelActions = ({
     );
   });
 
-  const moreButton = actions.pop();
+  let moreButton = undefined;
 
-  const outerPanelClasses = isSubElement
+  if (hasMoreButton) {
+    moreButton = actions.pop();
+  }
+
+  const outerPanelClasses = isSubPanel
     ? ""
     : `laptop:absolute laptop:invisible laptop:group-[.active]:visible laptop:group-active:visible laptop:group-focus-within:visible laptop:right-0 laptop:top-0 ${
         lang === "fr" ? "laptop:-mr-[230px]" : "laptop:-mr-[160px]"
       }`;
 
-  const innerPanelClasses = isSubElement
+  const innerPanelClasses = isSubPanel
     ? `flex flex-wrap flex-row justify-between px-4 pb-6 pt-4 py-2 -mx-12 laptop:mx-0`
     : `flex flex-wrap flex-row justify-between bg-gray-200 px-4 pb-6 pt-4 py-2`;
 
-  const innerPanelResponsiveClasses = isSubElement
+  const innerPanelResponsiveClasses = isSubPanel
     ? ""
     : "laptop:flex-col laptop:flex-wrap laptop:bg-violet-50 laptop:rounded-lg laptop:border laptop:border-violet-400 laptop:px-2 laptop:py-4";
 
@@ -205,21 +203,18 @@ export const PanelActions = ({
           {moreButtonRenderer && moreButtonRenderer(moreButton)}
         </div>
 
-        {elementDialog && isSubElement && (
+        {elementDialog && isSubPanel && (
           <ElementDialog
             filterElements={filterElements}
-            handleAddType={(type) => {
-              handleAdd && handleAdd(item.index, type);
-            }}
+            handleAddType={handleAdd}
             handleClose={handleCloseDialog}
           />
         )}
       </div>
-      {!isSubElement && (
+      {!isSubPanel && (
         <div className="flex">
           <div className="absolute -bottom-5 left-1/2 transform -translate-x-1/2 z-10">
             <AddElementButton
-              position={item.index}
               handleAdd={handleAdd}
               filterElements={filterElements}
               text={t("addElement")}

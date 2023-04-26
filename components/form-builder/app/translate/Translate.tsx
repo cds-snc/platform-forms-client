@@ -12,7 +12,7 @@ import { LanguageLabel } from "./LanguageLabel";
 import { FieldsetLegend, SectionTitle } from ".";
 
 import { FormElement } from "@lib/types";
-import { alphabet } from "../../util";
+import { alphabet, sortByLayout } from "../../util";
 
 const Element = ({
   element,
@@ -232,17 +232,19 @@ export const Translate = () => {
 
         {/* ELEMENTS */}
         <section>
-          {form.elements.map((element, index) => {
-            return (
-              <div className="section" id={`section-${index}`} key={element.id}>
-                <SectionTitle>
-                  {element.type === "richText" && <>{t("pageText")}</>}
-                  {element.type !== "richText" && <>{"Question " + questionsIndex++}</>}
-                </SectionTitle>
-                <Element index={index} element={element} primaryLanguage={primaryLanguage} />
-              </div>
-            );
-          })}
+          {sortByLayout({ layout: form.layout, elements: [...form.elements] }).map(
+            (element, index) => {
+              return (
+                <div className="section" id={`section-${index}`} key={element.id}>
+                  <SectionTitle>
+                    {element.type === "richText" && <>{t("pageText")}</>}
+                    {element.type !== "richText" && <>{"Question " + questionsIndex++}</>}
+                  </SectionTitle>
+                  <Element index={index} element={element} primaryLanguage={primaryLanguage} />
+                </div>
+              );
+            }
+          )}
         </section>
         {/* END ELEMENTS */}
 
