@@ -5,6 +5,7 @@ import { AddElementButton } from "./element-dialog/AddElementButton";
 import { LocalizedElementProperties } from "../../../types";
 import { LockedBadge } from "../../shared/LockedBadge";
 import { useHandleAdd } from "@components/form-builder/hooks";
+import { FormElementTypes } from "@lib/types";
 
 export const RichTextLocked = ({
   beforeContent = null,
@@ -54,7 +55,11 @@ export const RichTextLocked = ({
       <div className="flex">
         {addElement && (
           <div className="mx-auto bottom-0 -mb-5 z-10">
-            <AddElementButton position={-1} handleAdd={handleAddElement} />
+            <AddElementButton
+              handleAdd={(type?: FormElementTypes) => {
+                handleAddElement(0, type);
+              }}
+            />
           </div>
         )}
       </div>

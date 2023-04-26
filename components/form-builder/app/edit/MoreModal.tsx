@@ -60,7 +60,7 @@ export const MoreModal = ({
       openButton={moreButton}
       saveButton={renderSaveButton()}
       handleClose={() => {
-        refs && refs.current && refs.current[item.id].focus();
+        refs && refs.current && refs.current[item.id] && refs.current[item.id].focus();
       }}
     >
       {!isRichText && modals[item.index] && (

@@ -102,7 +102,7 @@ describe("Test FormBuilder Repeating set", () => {
   });
 
   // re-add when we re-look at this feature
-  it.skip("Adds multiple Repeating sets", () => {
+  it("Adds multiple Repeating sets", () => {
     cy.visit("/form-builder/edit");
     cy.get("button").contains("Add").click();
 
@@ -115,18 +115,18 @@ describe("Test FormBuilder Repeating set", () => {
     cy.get("button").contains("Select block").click();
     cy.get("#item-101").type("This is a short answer question");
 
-    // cy.get(".element-0").find("button").contains("Add").click();
+    cy.get('#element-1 [data-testid="add-element"]').click();
 
-    // cy.get('[data-testid="dynamicRow"]').click();
-    // cy.get("button").contains("Select block").click();
-    // cy.get("#item-2").type("This is another repeating set");
+    cy.get('[data-testid="dynamicRow"]').click();
+    cy.get("button").contains("Select block").click();
+    cy.get("#item-2").type("This is another repeating set");
 
-    cy.get(".element-1").find("button").contains("Add to set").click();
+    cy.get("#element-2").find("button").contains("Add to set").click();
     cy.get('[data-testid="textField"]').click();
     cy.get("button").contains("Select block").click();
     cy.get("#item-201").type("This is a short answer question");
 
-    cy.get(".element-1").find("button").contains("Add to set").click();
+    cy.get("#element-2").find("button").contains("Add to set").click();
     cy.get('[data-testid="radio"]').click();
     cy.get("button").contains("Select block").click();
 
