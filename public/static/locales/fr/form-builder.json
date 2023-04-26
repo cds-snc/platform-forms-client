@@ -65,7 +65,7 @@
       }
     },
     "dynamicRow": {
-      "description": "Le bloc de questions répétées offre aux personnes qui remplissent les formulaires la possibilité d'ajouter une série de réponses similaires à une section. Ce bloc fonctionne avec une seule question ou une section de questions connexes.",
+      "description": "Le bloc de questions répétées offre aux personnes qui remplissent les formulaires la possibilité d'ajouter une série de réponses similaires à une section. Ce bloc fonctionne avec une seule question ou un ensemble de questions connexes.",
       "title": "Série de questions répétées"
     },
     "example": "exemple",
