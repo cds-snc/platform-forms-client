@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useContext, useRef } from "react";
 import debounce from "lodash.debounce";
 import { useTranslation } from "next-i18next";
 
@@ -8,13 +8,14 @@ import { RefsProvider } from "./RefsContext";
 import { RichTextLocked } from "./elements";
 import { Input } from "../shared";
 import { useTemplateStore } from "../../store";
+import { FormElement } from "@lib/types";
 import { getQuestionNumber } from "../../util";
+import { TemplateStoreContext } from "@components/form-builder/store";
 
 export const Edit = () => {
   const { t } = useTranslation("form-builder");
   const {
     title,
-    elements,
     localizeField,
     updateField,
     translationLanguagePriority,
@@ -23,13 +24,24 @@ export const Edit = () => {
   } = useTemplateStore((s) => ({
     title:
       s.form[s.localizeField(LocalizedFormProperties.TITLE, s.translationLanguagePriority)] ?? "",
-    elements: s.form.elements,
     localizeField: s.localizeField,
     updateField: s.updateField,
     translationLanguagePriority: s.translationLanguagePriority,
     getLocalizationAttribute: s.getLocalizationAttribute,
     getName: s.getName,
   }));
+
+  const store = useContext(TemplateStoreContext);
+
+  // https://docs.pmnd.rs/zustand/recipes/recipes#transient-updates-(for-frequent-state-changes)
+  const elements = useRef(store ? store.getState().form.elements : []) as React.MutableRefObject<
+    FormElement[]
+  >;
+
+  useEffect(() => {
+    if (!store) return;
+    store.subscribe((state) => (elements.current = state.form.elements)), [];
+  });
 
   const [value, setValue] = useState<string>(title);
 
@@ -48,7 +60,7 @@ export const Edit = () => {
   );
 
   // grab only the data we need to render the question number
-  const elementTypes = elements.map((element) => ({ id: element.id, type: element.type }));
+  const elementTypes = elements.current.map((element) => ({ id: element.id, type: element.type }));
 
   const updateValue = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,10 +105,10 @@ export const Edit = () => {
         ariaLabel={t("richTextIntroTitle")}
       />
       <RefsProvider>
-        {elements.map((element, index: number) => {
+        {elements.current.map((element, index: number) => {
           const questionNumber = getQuestionNumber(element, elementTypes);
           const item = { ...element, index, questionNumber };
-          return <ElementPanel item={item} key={item.id} />;
+          return <ElementPanel elements={elements.current} item={item} key={item.id} />;
         })}
       </RefsProvider>
       <>

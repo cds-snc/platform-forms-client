@@ -1,14 +1,20 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React, { useState, useEffect } from "react";
 
 import { FormElementWithIndex } from "../../types";
-import { FormElement } from "@lib/types";
+
 import { useTemplateStore } from "../../store";
 import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
 import { useIsWithin, useHandleAdd } from "@components/form-builder/hooks";
 import { useRefsContext } from "./RefsContext";
-import { TemplateStoreContext } from "@components/form-builder/store";
+import { FormElement } from "@lib/types";
 
-export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
+export const ElementPanel = ({
+  item,
+  elements,
+}: {
+  item: FormElementWithIndex;
+  elements: FormElement[];
+}) => {
   const { getFocusInput, setFocusInput, remove, moveUp, moveDown, duplicateElement } =
     useTemplateStore((s) => ({
       getFocusInput: s.getFocusInput,
@@ -18,18 +24,6 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
       moveDown: s.moveDown,
       duplicateElement: s.duplicateElement,
     }));
-
-  const store = useContext(TemplateStoreContext);
-
-  // https://docs.pmnd.rs/zustand/recipes/recipes#transient-updates-(for-frequent-state-changes)
-  const elements = useRef(store ? store.getState().form.elements : []) as React.MutableRefObject<
-    FormElement[]
-  >;
-
-  useEffect(() => {
-    if (!store) return;
-    store.subscribe((state) => (elements.current = state.form.elements)), [];
-  });
 
   const [className, setClassName] = useState<string>("");
   const [ifFocus, setIfFocus] = useState<boolean>(false);
@@ -85,11 +79,11 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
       <PanelBodyRoot item={item} />
       <PanelActions
         subIndex={-1}
-        elements={elements.current}
+        elements={elements}
         item={item}
         handleAdd={handleAddElement}
         handleRemove={() => {
-          const previousElement = elements.current[item.index - 1];
+          const previousElement = elements[item.index - 1];
           remove(item.id);
 
           // if index is 0, then highlight the form title
