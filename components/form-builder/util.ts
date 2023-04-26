@@ -4,12 +4,18 @@ import { TemplateStoreState } from "./store/useTemplateStore";
 export const completeEmailAddressRegex =
   /^([a-zA-Z0-9!#$%&'*+-/=?^_`{|}~.])+@([a-zA-Z0-9-.]+)\.([a-zA-Z0-9]{2,})+$/;
 
-export const getPreviousIndex = (items: FormElement[], index: number) => {
+export const getPreviousIndex = (items: number[] | FormElement[], index: number) => {
   return index === 0 ? items.length - 1 : index - 1;
 };
 
-export const getNextIndex = (items: FormElement[], index: number) => {
+export const getNextIndex = (items: number[] | FormElement[], index: number) => {
   return index === items.length - 1 ? 0 : index + 1;
+};
+
+export const removeById = (items: number[], searchId: number) => {
+  return items.filter((val) => {
+    return searchId !== val;
+  });
 };
 
 export const removeElementById = (items: FormElement[], id: number) => {
@@ -18,17 +24,32 @@ export const removeElementById = (items: FormElement[], id: number) => {
   });
 };
 
-export const moveUp = (items: FormElement[], index: number) => {
+export const moveUp = (items: number[], index: number) => {
   const previous = getPreviousIndex(items, index);
   return [...swap(items, index, previous)];
 };
 
-export const moveDown = (items: FormElement[], index: number) => {
+export const moveDown = (items: number[], index: number) => {
   const next = getNextIndex(items, index);
   return [...swap(items, index, next)];
 };
 
-export const swap = (arr: FormElement[], index1: number, index2: number) => {
+export const swap = (arr: number[], index1: number, index2: number) => {
+  [arr[index2], arr[index1]] = [arr[index1], arr[index2]];
+  return arr;
+};
+
+export const moveElementUp = (items: FormElement[], index: number) => {
+  const previous = getPreviousIndex(items, index);
+  return [...swapElement(items, index, previous)];
+};
+
+export const moveElementDown = (items: FormElement[], index: number) => {
+  const next = getNextIndex(items, index);
+  return [...swapElement(items, index, next)];
+};
+
+export const swapElement = (arr: FormElement[], index1: number, index2: number) => {
   const a = { ...arr[index1] };
   const b = { ...arr[index2] };
 
@@ -84,6 +105,7 @@ export const getSchemaFromState = (state: TemplateStoreState) => {
       elements,
       brand,
       securityAttribute,
+      layout,
     },
   } = state;
 
@@ -93,7 +115,7 @@ export const getSchemaFromState = (state: TemplateStoreState) => {
     introduction,
     privacyPolicy,
     confirmation,
-    layout: elements.map((element) => element.id),
+    layout,
     elements,
     securityAttribute,
     brand,

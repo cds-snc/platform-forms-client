@@ -217,17 +217,17 @@ describe("TemplateStore", () => {
       result.current.add(2);
     });
 
-    expect(result.current.form.elements[0].id).toBe(1);
-    expect(result.current.form.elements[1].id).toBe(2);
-    expect(result.current.form.elements[2].id).toBe(3);
+    expect(result.current.form.layout[0]).toBe(result.current.form.elements[0].id);
+    expect(result.current.form.layout[1]).toBe(result.current.form.elements[1].id);
+    expect(result.current.form.elements[2].id).toBe(result.current.form.elements[2].id);
 
     act(() => {
       result.current.moveUp(2);
     });
 
-    expect(result.current.form.elements[0].id).toBe(1);
-    expect(result.current.form.elements[1].id).toBe(3);
-    expect(result.current.form.elements[2].id).toBe(2);
+    expect(result.current.form.layout[0]).toBe(1);
+    expect(result.current.form.layout[1]).toBe(3);
+    expect(result.current.form.layout[2]).toBe(2);
 
     await act(async () => {
       await promise;
@@ -244,17 +244,17 @@ describe("TemplateStore", () => {
       result.current.add(2);
     });
 
-    expect(result.current.form.elements[0].id).toBe(1);
-    expect(result.current.form.elements[1].id).toBe(2);
-    expect(result.current.form.elements[2].id).toBe(3);
+    expect(result.current.form.layout[0]).toBe(result.current.form.elements[0].id);
+    expect(result.current.form.layout[1]).toBe(result.current.form.elements[1].id);
+    expect(result.current.form.layout[2]).toBe(result.current.form.elements[2].id);
 
     act(() => {
       result.current.moveDown(0);
     });
 
-    expect(result.current.form.elements[0].id).toBe(2);
-    expect(result.current.form.elements[1].id).toBe(1);
-    expect(result.current.form.elements[2].id).toBe(3);
+    expect(result.current.form.layout[0]).toBe(2);
+    expect(result.current.form.layout[1]).toBe(1);
+    expect(result.current.form.layout[2]).toBe(3);
 
     await act(async () => {
       await promise;
