@@ -4,25 +4,16 @@ import { FormElementTypes } from "@lib/types";
 
 describe("<PanelActions />", () => {
   it("enables move buttons for item that is not first or last", () => {
-    const item = {
-      id: 1,
-      index: 1,
-      questionNumber: 1,
-      type: FormElementTypes.textField,
-      properties: {
-        titleEn: "Title",
-        titleFr: "Titre",
-      },
-    };
-
     cy.viewport(800, 80);
     // see: https://on.cypress.io/mounting-react
     cy.mount(
       <PanelActions
-        item={item}
+        isFirstItem={false}
+        isLastItem={false}
+        totalItems={0}
         moreButtonRenderer={(moreButton) => <>{moreButton}</>}
-        handleAdd={function (index: number, type?: FormElementTypes | undefined): void {
-          throw new Error(`Function not implemented. ${index} ${type}`);
+        handleAdd={function (type?: FormElementTypes | undefined): void {
+          throw new Error(type + "Function not implemented.");
         }}
         handleRemove={function (): void {
           throw new Error("Function not implemented.");
@@ -36,7 +27,6 @@ describe("<PanelActions />", () => {
         handleDuplicate={function (): void {
           throw new Error("Function not implemented.");
         }}
-        elementsLength={3}
       />
     );
 
@@ -45,25 +35,16 @@ describe("<PanelActions />", () => {
   });
 
   it("disables move buttons for first and last item", () => {
-    const item = {
-      id: 1,
-      index: 0,
-      questionNumber: 1,
-      type: FormElementTypes.textField,
-      properties: {
-        titleEn: "Title",
-        titleFr: "Titre",
-      },
-    };
-
     cy.viewport(800, 80);
     // see: https://on.cypress.io/mounting-react
     cy.mount(
       <PanelActions
-        item={item}
+        isFirstItem={true}
+        isLastItem={true}
+        totalItems={0}
         moreButtonRenderer={(moreButton) => <>{moreButton}</>}
-        handleAdd={function (index: number, type?: FormElementTypes | undefined): void {
-          throw new Error(`Function not implemented. ${index} ${type}`);
+        handleAdd={function (type?: FormElementTypes | undefined): void {
+          throw new Error(`${type} Function not implemented.`);
         }}
         handleRemove={function (): void {
           throw new Error("Function not implemented.");
@@ -77,7 +58,6 @@ describe("<PanelActions />", () => {
         handleDuplicate={function (): void {
           throw new Error("Function not implemented.");
         }}
-        elementsLength={1}
       />
     );
 
@@ -102,25 +82,16 @@ describe("<PanelActions />", () => {
   });
 
   it("can keyboard navigate", () => {
-    const item = {
-      id: 1,
-      index: 1,
-      questionNumber: 1,
-      type: FormElementTypes.textField,
-      properties: {
-        titleEn: "Title",
-        titleFr: "Titre",
-      },
-    };
-
     cy.viewport(800, 80);
     cy.mount(
       <div className="group active">
         <PanelActions
-          item={item}
+          isFirstItem={false}
+          isLastItem={false}
+          totalItems={0}
           moreButtonRenderer={(moreButton) => <>{moreButton}</>}
-          handleAdd={function (index: number, type?: FormElementTypes | undefined): void {
-            throw new Error(`Function not implemented. ${index} ${type}`);
+          handleAdd={function (type?: FormElementTypes | undefined): void {
+            throw new Error(`${type} Function not implemented.`);
           }}
           handleRemove={function (): void {
             throw new Error("Function not implemented.");
@@ -134,7 +105,6 @@ describe("<PanelActions />", () => {
           handleDuplicate={function (): void {
             throw new Error("Function not implemented.");
           }}
-          elementsLength={3}
         />
       </div>
     );
