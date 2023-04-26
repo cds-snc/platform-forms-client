@@ -1,17 +1,18 @@
-import React, { createContext, useState, useContext } from "react";
-import { useTemplateStore } from "../store";
+import React, { createContext, useState, useContext, useRef, useCallback } from "react";
+import { useTemplateStore, useSubscibeToTemplateStore } from "../store";
 import { useTemplateApi } from "../hooks";
 import { useTranslation } from "next-i18next";
 import { logMessage } from "@lib/logger";
+import { useSession } from "next-auth/react";
 
 interface TemplateApiType {
   error: string | null;
-  saveForm: () => Promise<string | false>;
+  saveForm: () => Promise<boolean>;
 }
 
 const defaultTemplateApi: TemplateApiType = {
   error: null,
-  saveForm: async () => new Promise((resolve) => resolve(false)),
+  saveForm: async () => false,
 };
 
 const TemplateApiContext = createContext<TemplateApiType>(defaultTemplateApi);
@@ -19,34 +20,56 @@ const TemplateApiContext = createContext<TemplateApiType>(defaultTemplateApi);
 export function TemplateApiProvider({ children }: { children: React.ReactNode }) {
   const { t } = useTranslation(["form-builder"]);
   const [error, setError] = useState<string | null>(null);
-  const { id, getSchema, getName } = useTemplateStore((s) => ({
+  const { id, getSchema, getName, hasHydrated, setId, getIsPublished } = useTemplateStore((s) => ({
     id: s.id,
     getSchema: s.getSchema,
     getName: s.getName,
+    hasHydrated: s.hasHydrated,
+    setId: s.setId,
+    getIsPublished: s.getIsPublished,
   }));
+
+  const templateIsDirty = useRef(false);
+
+  const { status } = useSession();
+
+  useSubscibeToTemplateStore(
+    (s) => [s.form, s.isPublished, s.name, s.deliveryOption, s.securityAttribute],
+    () => {
+      if (hasHydrated && !templateIsDirty.current) {
+        logMessage.debug(`TemplateContext: Local State out of sync with server`);
+        templateIsDirty.current = true;
+      }
+    }
+  );
 
   const { save } = useTemplateApi();
 
-  const saveForm = async () => {
+  const saveForm = useCallback(async () => {
     try {
-      const result = await save({
-        jsonConfig: getSchema(),
-        name: getName(),
-        formID: id,
-      });
+      if (templateIsDirty.current && status === "authenticated" && !getIsPublished()) {
+        logMessage.debug("Saving Template to server");
+        const result = await save({
+          jsonConfig: getSchema(),
+          name: getName(),
+          formID: id,
+        });
 
-      if (result && result?.error) {
-        throw result?.error as Error;
+        if (result && result?.error) {
+          throw result?.error as Error;
+        }
+
+        setError(null);
+        templateIsDirty.current = false;
+        setId(result?.id);
       }
-
-      setError(null);
-      return result?.id;
+      return true;
     } catch (err) {
       logMessage.error(err as Error);
       setError(t("errorSaving"));
       return false;
     }
-  };
+  }, [status, getIsPublished, getSchema, getName, id, save, setError, setId, t]);
 
   return (
     <TemplateApiContext.Provider value={{ error, saveForm }}>

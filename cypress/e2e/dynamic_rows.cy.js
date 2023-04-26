@@ -22,9 +22,9 @@ describe("Dynamic Row Functionality", () => {
   });
 
   it("Reinitialize a dynamic row's state after an error occurs", () => {
+    cy.get("[data-testid='formGroup-3']").find("[data-testid='dropdown']").select("Artisti");
     cy.get("[data-testid='formGroup-3']")
       .find("[data-testid='dropdown']")
-      .select("Artisti")
       .should("have.value", "Artisti");
     // add second row
     cy.get("[data-testid='add-row-button-3']").click();

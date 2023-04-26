@@ -4,9 +4,10 @@ import { FormElementWithIndex } from "../../types";
 
 import { useTemplateStore } from "../../store";
 import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
+
 import { useIsWithin, useHandleAdd } from "@components/form-builder/hooks";
 import { useRefsContext } from "./RefsContext";
-import { FormElement } from "@lib/types";
+import { FormElementTypes, FormElement } from "@lib/types";
 
 export const ElementPanel = ({
   item,
@@ -51,6 +52,17 @@ export const ElementPanel = ({
   const { focusWithinProps, isWithin } = useIsWithin();
   const { refs } = useRefsContext();
 
+  const moreButton =
+    item.type !== "richText"
+      ? {
+          moreButtonRenderer: (
+            moreButton: JSX.Element | undefined
+          ): React.ReactElement | string | undefined => (
+            <MoreModal item={item} moreButton={moreButton} />
+          ),
+        }
+      : {};
+
   /* eslint-disable jsx-a11y/no-static-element-interactions */
   /* eslint-disable jsx-a11y/click-events-have-key-events */
   return (
@@ -78,10 +90,12 @@ export const ElementPanel = ({
     >
       <PanelBodyRoot item={item} />
       <PanelActions
-        subIndex={-1}
-        elements={elements}
-        item={item}
-        handleAdd={handleAddElement}
+        isFirstItem={item.index === 0}
+        isLastItem={item.index === elements.length - 1}
+        totalItems={elements.length}
+        handleAdd={(type?: FormElementTypes) => {
+          handleAddElement(item.index, type);
+        }}
         handleRemove={() => {
           const previousElement = elements[item.index - 1];
           remove(item.id);
@@ -134,9 +148,7 @@ export const ElementPanel = ({
           setFocusInput(true);
           duplicateElement(item.index);
         }}
-        renderMoreButton={({ item, moreButton }) => (
-          <MoreModal item={item} moreButton={moreButton} />
-        )}
+        {...moreButton}
       />
     </div>
   );
