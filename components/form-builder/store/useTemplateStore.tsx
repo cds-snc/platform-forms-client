@@ -267,15 +267,16 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                   );
                 }
               }),
-            add: (elIndex = 0, type = FormElementTypes.radio, data) =>
+            add: (elIndex = 0, type = FormElementTypes.radio, data) => {
               set((state) => {
                 state.form.elements.splice(elIndex + 1, 0, {
                   ...defaultField,
-                  id: incrementElementId(state.form.elements),
                   ...data,
+                  id: incrementElementId(state.form.elements),
                   type,
                 });
-              }),
+              });
+            },
             addSubItem: (elIndex, subIndex = 0, type = FormElementTypes.radio, data) =>
               set((state) => {
                 // remove subElements array property given we're adding a sub item
@@ -286,11 +287,11 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
 
                 state.form.elements[elIndex].properties.subElements?.splice(subIndex + 1, 0, {
                   ...subDefaultField,
+                  ...data,
                   id: incrementSubElementId(
                     state.form.elements[elIndex].properties.subElements || [],
                     state.form.elements[elIndex].id
                   ),
-                  ...data,
                   type,
                 });
               }),

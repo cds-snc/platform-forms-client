@@ -11,13 +11,13 @@ export const usePanelActions = ({
   panelButtons,
   isFirstItem,
   isLastItem,
-  elementsLength,
+  totalItems,
   orientation,
 }: {
   panelButtons: PanelButton[];
   isFirstItem: boolean;
   isLastItem: boolean;
-  elementsLength: number;
+  totalItems: number;
   orientation: "horizontal" | "vertical";
 }) => {
   const itemsRef = useRef<[HTMLButtonElement] | []>([]);
@@ -79,7 +79,7 @@ export const usePanelActions = ({
   );
 
   const getTabIndex = (item: string) => {
-    if (elementsLength === 1 && (item === "duplicate" || item === "removeFromSet")) return 0;
+    if (totalItems === 1 && (item === "duplicate" || item === "removeFromSet")) return 0;
 
     if (currentFocusIndex === items.findIndex((i) => i.txt === item)) return 0;
 
