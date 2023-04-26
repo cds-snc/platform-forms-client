@@ -10,21 +10,13 @@ import { SubElementModal } from "./SubElementModal";
 import { PanelHightLight } from "./PanelHightlight";
 import { PanelActions } from "../../PanelActions";
 import { Input, LockedBadge } from "@formbuilder/app/shared";
-import { useUpdateElement } from "../../../../hooks";
-import { blockLoader, LoaderType } from "../../../../blockLoader";
-import { allowedTemplates, getQuestionNumber } from "@formbuilder/util";
-import {
-  defaultField,
-  createElement,
-  setTitle,
-  setDescription,
-} from "@formbuilder/utils/itemHelper";
+import { getQuestionNumber } from "@formbuilder/util";
+import { useHandleAdd } from "@components/form-builder/hooks";
 
 export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elIndex: number }) => {
   const { t } = useTranslation("form-builder");
 
   const {
-    addSubItem,
     updateField,
     subMoveUp,
     subMoveDown,
@@ -35,7 +27,6 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
     translationLanguagePriority,
     getLocalizationAttribute,
   } = useTemplateStore((s) => ({
-    addSubItem: s.addSubItem,
     updateField: s.updateField,
     subMoveUp: s.subMoveUp,
     subMoveDown: s.subMoveDown,
@@ -47,33 +38,7 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
     getLocalizationAttribute: s.getLocalizationAttribute,
   }));
 
-  const { addElement, isTextField } = useUpdateElement();
-
-  const handleAddElement = useCallback(
-    (subIndex: number, type?: FormElementTypes) => {
-      if (allowedTemplates.includes(type as LoaderType)) {
-        blockLoader(type as LoaderType, (data: FormElement) =>
-          addSubItem(elIndex, subIndex, data.type, data)
-        );
-        return;
-      }
-
-      //
-
-      addSubItem(
-        elIndex,
-        subIndex,
-        isTextField(type as string) && type !== FormElementTypes.textArea
-          ? FormElementTypes.textField
-          : type,
-        item
-      );
-      // add 1 to index because it's a new element
-      // const path = `form.elements[${elIndex}].properties.subElements[${subIndex + 1}]`;
-      // addElement(type as string, path);
-    },
-    [addSubItem, elIndex, isTextField, addElement]
-  );
+  const { handleAddSubElement } = useHandleAdd();
 
   const handlePlaceHolderText = useCallback(
     (elIndex: number, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -114,7 +79,7 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
         <AddElementButton
           text={t("addToSet")}
           handleAdd={(type?: FormElementTypes) => {
-            handleAddElement(0, type);
+            handleAddSubElement(elIndex, 0, type);
           }}
           filterElements={elementFilter}
         />
@@ -139,7 +104,7 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
                   isLastItem={subIndex === subElements.length - 1}
                   totalItems={subElements.length}
                   handleAdd={(type?: FormElementTypes) => {
-                    handleAddElement(subIndex, type);
+                    handleAddSubElement(elIndex, subIndex, type);
                   }}
                   handleRemove={() => {
                     removeSubItem(elIndex, item.id);

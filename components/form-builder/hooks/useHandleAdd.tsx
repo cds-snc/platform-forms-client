@@ -15,7 +15,7 @@ import {
 export const useHandleAdd = () => {
   const { add, addSubItem } = useTemplateStore((s) => ({
     add: s.add,
-    addSubItem: s.addSubItem
+    addSubItem: s.addSubItem,
   }));
 
   const { t } = useTranslation("form-builder");
@@ -23,10 +23,8 @@ export const useHandleAdd = () => {
   const create = useCallback(
     (type: FormElementTypes) => {
       const defaults = JSON.parse(JSON.stringify(defaultField));
-
       const titleEn = t([`addElementDialog.${type}.label`, ""], { lng: "en" });
       const descriptionEn = t([`defaultElementDescription.${type}`, ""], { lng: "en" });
-
       const titleFr = t([`addElementDialog.${type}.label`, ""], { lng: "fr" });
       const descriptionFr = t([`defaultElementDescription.${type}`, ""], { lng: "fr" });
 
@@ -55,23 +53,18 @@ export const useHandleAdd = () => {
     [add, create]
   );
 
-  //
   const handleAddSubElement = useCallback(
-    (subIndex: number, type?: FormElementTypes) => {
+    (elIndex: number, subIndex: number, type?: FormElementTypes) => {
       if (allowedTemplates.includes(type as LoaderType)) {
-        blockLoader(type as LoaderType, (data: FormElement) =>
-          addSubItem(elIndex, subIndex, data.type, data)
-        );
+        blockLoader(type as LoaderType, (data) => addSubItem(elIndex, subIndex, data.type, data));
         return;
       }
 
       const item = create(type as FormElementTypes);
-
       addSubItem(elIndex, subIndex, item.type, item);
-
     },
-    [addSubItem, elIndex, isTextField, addElement]
+    [addSubItem, create]
   );
 
-  return { handleAddElement, create };
+  return { handleAddElement, handleAddSubElement, create };
 };
