@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 
 import { FormElementWithIndex } from "../../types";
-
 import { useTemplateStore } from "../../store";
 import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
 
