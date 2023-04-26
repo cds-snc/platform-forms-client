@@ -287,11 +287,11 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
 
                 state.form.elements[elIndex].properties.subElements?.splice(subIndex + 1, 0, {
                   ...subDefaultField,
+                  ...data,
                   id: incrementSubElementId(
                     state.form.elements[elIndex].properties.subElements || [],
                     state.form.elements[elIndex].id
                   ),
-                  ...data,
                   type,
                 });
               }),
