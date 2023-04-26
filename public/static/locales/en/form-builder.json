@@ -65,7 +65,7 @@
       }
     },
     "dynamicRow": {
-      "description": "The repeating question block provides form fillers with the option to add another set of answers to the section. This block works with one question or a section of related questions.",
+      "description": "The repeating question block provides form fillers with the option to add a set of similar answers to the section. This block works with one question or a group of related questions.",
       "title": "Repeating set"
     },
     "example": "example",
@@ -81,7 +81,7 @@
         "description": "First name description",
         "label": "First name"
       },
-      "label": "Name (3 fields)",
+      "label": "Names",
       "last": {
         "description": "Last name description",
         "label": "Last name"
@@ -97,7 +97,7 @@
     "listItem": "List item ",
     "name": {
       "description": "Include your first and last names. Middle names are optional",
-      "label": "Name",
+      "label": "Full name",
       "title": "What is your name?"
     },
     "no": "No",
@@ -359,7 +359,7 @@
   "moveUp": "Move up",
   "navLabelEditor": "Edit navigation",
   "navLabelFormBuilder": "Form builder navigation",
-  "numericField": "Numeric field",
+  "numericField": "Number",
   "openModal": "Open Modal",
   "option": "Option",
   "optionText": "Option",
