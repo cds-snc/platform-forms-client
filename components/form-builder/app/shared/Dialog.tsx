@@ -77,6 +77,7 @@ export const Dialog = ({
             className="group absolute right-0 top-0 mr-4 mt-4 z-[1000]"
             aria-label={t("close")}
             onClick={close}
+            dataTestId="close-dialog"
           >
             <span className="block w-30 mr-2">
               <Close className="group-focus:fill-white-default inline-block mr-2" />
