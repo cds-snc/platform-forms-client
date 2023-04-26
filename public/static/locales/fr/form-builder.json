@@ -423,7 +423,7 @@
   "selectElement": "Sélectionnez un type d'élément",
   "send": "Envoyer",
   "settings": {
-    "formManagement": "Form management"
+    "formManagement": "Gestion du formulaire"
   },
   "settingsDeleteButton": "Supprimer le formulaire",
   "settingsDeleteHint": "Une fois le formulaire supprimé, vous ne pourrez pas le récupérer. Veuillez enregistrer une copie du formulaire avant de le supprimer.",
