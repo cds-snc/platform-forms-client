@@ -66,23 +66,6 @@ export const useUpdateElement = () => {
     }
   };
 
-  const updateElement = (type: string, path: string) => {
-    setDefaultDescription(type, path);
-    setDefaultTitle(type, path);
-
-    if (isTextField(type as FormElementTypes)) {
-      return updateTextElement(type, path);
-    }
-
-    if (type === FormElementTypes.attestation) {
-      // Need to swap type because incoming `attestation` is a checkbox type
-      type = FormElementTypes.checkbox;
-      updateField(`${path}.properties.validation.all`, true);
-    }
-
-    updateField(`${path}.type`, type);
-  };
-
   const addElement = (type: string, path: string) => {
     if (isValidatedTextType(type as FormElementTypes)) {
       updateField(`${path}.properties.validation.type`, type);
@@ -105,5 +88,5 @@ export const useUpdateElement = () => {
     );
   };
 
-  return { isTextField, addElement, updateElement, updateTextElement, setDefaultDescription };
+  return { isTextField, addElement, updateTextElement, setDefaultDescription };
 };

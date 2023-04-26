@@ -13,6 +13,12 @@ import { Input, LockedBadge } from "@formbuilder/app/shared";
 import { useUpdateElement } from "../../../../hooks";
 import { blockLoader, LoaderType } from "../../../../blockLoader";
 import { allowedTemplates, getQuestionNumber } from "@formbuilder/util";
+import {
+  defaultField,
+  createElement,
+  setTitle,
+  setDescription,
+} from "@formbuilder/utils/itemHelper";
 
 export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elIndex: number }) => {
   const { t } = useTranslation("form-builder");
@@ -52,16 +58,19 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
         return;
       }
 
+      //
+
       addSubItem(
         elIndex,
         subIndex,
         isTextField(type as string) && type !== FormElementTypes.textArea
           ? FormElementTypes.textField
-          : type
+          : type,
+        item
       );
       // add 1 to index because it's a new element
-      const path = `form.elements[${elIndex}].properties.subElements[${subIndex + 1}]`;
-      addElement(type as string, path);
+      // const path = `form.elements[${elIndex}].properties.subElements[${subIndex + 1}]`;
+      // addElement(type as string, path);
     },
     [addSubItem, elIndex, isTextField, addElement]
   );
