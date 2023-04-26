@@ -65,7 +65,7 @@
       }
     },
     "dynamicRow": {
-      "description": "The repeating question block provides form fillers with the option to add another set of answers to the section. This block works with one question or a section of related questions.",
+      "description": "The repeating question block provides form fillers with the option to add a set of similar answers to the section. This block works with one question or a section of related questions.",
       "title": "Repeating set"
     },
     "example": "example",
@@ -359,7 +359,7 @@
   "moveUp": "Move up",
   "navLabelEditor": "Edit navigation",
   "navLabelFormBuilder": "Form builder navigation",
-  "numericField": "Numeric field",
+  "numericField": "Number",
   "openModal": "Open Modal",
   "option": "Option",
   "optionText": "Option",
