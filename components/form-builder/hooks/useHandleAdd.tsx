@@ -43,7 +43,9 @@ export const useHandleAdd = () => {
   const handleAddElement = useCallback(
     (index: number, type?: FormElementTypes) => {
       if (allowedTemplates.includes(type as LoaderType)) {
-        blockLoader(type as LoaderType, (data) => add(index, data.type, data));
+        blockLoader(type as LoaderType, index, (data, position) => {
+          add(position, data.type, data);
+        });
         return;
       }
 
@@ -56,7 +58,9 @@ export const useHandleAdd = () => {
   const handleAddSubElement = useCallback(
     (elIndex: number, subIndex: number, type?: FormElementTypes) => {
       if (allowedTemplates.includes(type as LoaderType)) {
-        blockLoader(type as LoaderType, (data) => addSubItem(elIndex, subIndex, data.type, data));
+        blockLoader(type as LoaderType, subIndex, (data, position) =>
+          addSubItem(elIndex, position, data.type, data)
+        );
         return;
       }
 
