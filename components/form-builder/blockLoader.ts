@@ -22,9 +22,6 @@ export const blockLoader = async (
     timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
   });
 
-  // the data is reversed here because we add the elements
-  // one at a time to the top of the list
-
   result.data.forEach((data: FormElement, index: number) => {
     onData(data, startIndex + index);
   });

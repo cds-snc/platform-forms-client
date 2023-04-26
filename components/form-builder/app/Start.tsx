@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useTemplateStore, clearTemplateStore } from "../store/useTemplateStore";
 import { useTranslation } from "next-i18next";
 import { DesignIcon, ExternalLinkIcon, WarningIcon } from "../icons";
-import { sortByLayout } from "../util";
 import { useRouter } from "next/router";
 import { errorMessage, validateTemplate } from "../validate";
 
@@ -55,8 +54,6 @@ export const Start = () => {
           return;
         }
 
-        // ensure elements follow layout array order
-        data.elements = sortByLayout(data);
         importTemplate(data);
         router.push({ pathname: `/form-builder/preview` });
       };
