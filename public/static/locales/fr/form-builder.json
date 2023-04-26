@@ -533,7 +533,7 @@
   "submittedResponsesText": "Les réponses soumises seront envoyées à {{email}}.",
   "submittedResponsesChange": "Modifier où les réponses soumises sont envoyées",
   "submittedResponsesTextVault": {
-    "text1": "En cliquant sur « Soumettre », la réponse sera transmise à la",
+    "text1": "En cliquant sur « Soumettre », la réponse sera transmise à la page",
     "text2": "Réponses"
   },
   "support": {

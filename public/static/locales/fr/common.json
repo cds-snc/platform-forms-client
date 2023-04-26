@@ -54,7 +54,7 @@
   "file-upload-sr-only-file-selected": "Le fichier actuellement sélectionné est",
   "file-upload-no-file-selected": "Aucun fichier actuellement sélectionné",
   "dropdown-initial-option-text": "Pas de sélection",
-  "server-error": "Oups, il semble qu'un problème est survenu lors de l'envoi de votre formulaire. Veuillez réessayer plus tard.",
+  "server-error": "Désolé, il semble qu'un problème est survenu lors de l'envoi de votre formulaire. Veuillez réessayer plus tard.",
   "title-full": "Formulaires GC - GC Forms",
   "title": "Formulaires GC",
   "loading": "Nous traitons votre soumission de formulaire. Veuillez patienter.",
