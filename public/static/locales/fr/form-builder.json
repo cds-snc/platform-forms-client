@@ -65,8 +65,8 @@
       }
     },
     "dynamicRow": {
-      "description": "Le bloc de questions répétées offre aux personnes qui remplissent les formulaires la possibilité d'ajouter un ensemble de réponses similaires à une section. Ce bloc fonctionne avec une seule question ou une section de questions qui se répètent.",
-      "title": "Ensemble de question répétées"
+      "description": "Le bloc de questions répétées offre aux personnes qui remplissent les formulaires la possibilité d'ajouter une série de réponses similaires à une section. Ce bloc fonctionne avec une seule question ou une section de questions connexes.",
+      "title": "Série de questions répétées"
     },
     "example": "exemple",
     "exampleElement": "exemple du bloc",
@@ -81,7 +81,7 @@
         "description": "Description du prénom",
         "label": "Prénom"
       },
-      "label": "Nom",
+      "label": "Noms",
       "last": {
         "description": "Description du nom de famille",
         "label": "Nom de famille"
@@ -129,7 +129,7 @@
   "addOption": "Ajouter une option",
   "addOptions": "Ajouter ou modifier une liste",
   "addRules": "Ajouter des règles",
-  "addToSet": "Ajouter à l'ensemble",
+  "addToSet": "Ajouter à la série",
   "allRequired": "Toutes obligatoires",
   "at": "à",
   "attestation": "Attestation légale",
@@ -275,7 +275,7 @@
   },
   "dropdown": "Liste déroulante",
   "duplicate": "Dupliquer",
-  "dyanamicRow": "Ensemble de questions répétées",
+  "dyanamicRow": "Série de questions répétées",
   "edit": "Modifier",
   "editingIn": "Modifier en :",
   "editLink": "Modifier un lien  ",
@@ -390,14 +390,14 @@
   "questions": "Questions",
   "questionSet": {
     "addAnother": {
-      "description": "Créez une étiquette descriptive pour le bouton afin d'indiquer aux personnes remplissant le formulaire qu'elles peuvent ajouter un autre ensemble de réponses. Par exemple, ajouter « une autre adresse ».",
+      "description": "Créez une étiquette descriptive pour le bouton afin d'indiquer aux personnes remplissant le formulaire qu'elles peuvent ajouter une autre réponses. Par exemple, ajouter « une autre adresse ».",
       "placeholder": "Ajouter",
       "title": "Bouton"
     }
   },
   "questionTitle": "Titre de question",
   "remove": "Supprimer",
-  "removeFromSet": "Enlever de l'ensemble",
+  "removeFromSet": "Enlever de la série",
   "removeOption": "Supprimer l'option :  ",
   "requestSuccess": {
     "backToForms": "Retourner à Formulaires GC",

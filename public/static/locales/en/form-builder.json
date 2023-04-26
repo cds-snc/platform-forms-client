@@ -81,7 +81,7 @@
         "description": "First name description",
         "label": "First name"
       },
-      "label": "Name (3 fields)",
+      "label": "Names",
       "last": {
         "description": "Last name description",
         "label": "Last name"
@@ -97,7 +97,7 @@
     "listItem": "List item ",
     "name": {
       "description": "Include your first and last names. Middle names are optional",
-      "label": "Name",
+      "label": "Full name",
       "title": "What is your name?"
     },
     "no": "No",
