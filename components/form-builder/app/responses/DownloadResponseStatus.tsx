@@ -3,7 +3,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { ExclamationText } from "../shared";
 import { getDaysPassed } from "@lib/clientHelpers";
-import { VaultStatus } from "./DownloadTable";
+import { VaultStatus } from "@lib/types";
 
 export const DownloadResponseStatus = ({
   vaultStatus,

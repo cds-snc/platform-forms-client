@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { VaultStatus } from "./DownloadTable";
+import { VaultStatus } from "@lib/types";
 
 export const DownloadStatus = ({ vaultStatus }: { vaultStatus: string }) => {
   const { t } = useTranslation("form-builder-responses");

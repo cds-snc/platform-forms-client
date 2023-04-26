@@ -1,3 +1,5 @@
+import { VaultStatus } from "./retrieval-types";
+
 export enum NagLevel {
   None,
   UnsavedSubmissionsOver21DaysOld,
@@ -7,7 +9,7 @@ export enum NagLevel {
 }
 
 export type NagwareSubmission = {
-  status: string;
+  status: VaultStatus;
   createdAt: number;
 };
 
