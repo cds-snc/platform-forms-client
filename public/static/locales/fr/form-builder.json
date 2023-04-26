@@ -291,7 +291,16 @@
   "formatItalic": "Mettre en italique",
   "formatNumberedList": "Mettre en liste numérotée",
   "formConfirmationMessage": "Message de confirmation du formulaire",
+  "formDeleteResponses": {
+    "title": "Retirer les réponses avant de supprimer le formulaire",
+    "message1": "Ce formulaire est publié et reçoit des réponses. Vous avez des réponses à télécharger et à confirmer.",
+    "message2": "Avant de supprimer ce formulaire :",
+    "message3": "1. Télécharger toutes les réponses.",
+    "message4": "2. Confirmer la réception des réponses téléchargées.",
+    "cta": "Accéder aux réponses"
+  },
   "formDelete": {
+    "error": "Erreur",
     "downloadButtonText": "Télécharger une copie",
     "draft": {
       "message1": "La suppression ne peut être annulée. Votre formulaire sera définitivement supprimé de votre liste de formulaires.",
@@ -603,6 +612,7 @@
       "body1": "Il y a",
       "body2": "réponses non confirmées avec 35 jours de retard ou plus. Confirmez la réception de toute réponse téléchargée en retard avant d'en enregistrer de nouvelles."
     },
-    "beforePublishMessage": "Vous pouvez modifier ces paramètres à tout moment avant de publier le formulaire."
+    "beforePublishMessage": "Vous pouvez modifier ces paramètres à tout moment avant de publier le formulaire.",
+    "loading": "Chargement..."
   }
 }

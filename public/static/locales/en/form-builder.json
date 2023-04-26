@@ -291,7 +291,16 @@
   "formatItalic": "Format italic",
   "formatNumberedList": "Format numbered list",
   "formConfirmationMessage": "Form confirmation message",
+  "formDeleteResponses": {
+    "title": "Get responses before deleting form",
+    "message1": "This form has been published and is receiving responses. You have responses to download and confirm.",
+    "message2": "Before deleting this form:",
+    "message3": "1. Download all responses.",
+    "message4": "2. Confirm the receipt of downloaded responses",
+    "cta": "Go to responses"
+  },
   "formDelete": {
+    "error": "Error",
     "downloadButtonText": "Download a copy",
     "draft": {
       "message1": "Deleting a form cannot be undone. Your form will be removed from your forms list.",
@@ -603,5 +612,6 @@
       "body2": "unconfirmed responses 35 days overdue. Confirm the receipt of all overdue downloaded responses before saving new ones."
     }
   },
-  "beforePublishMessage": "You can change these settings anytime before publishing."
+  "beforePublishMessage": "You can change these settings anytime before publishing.",
+  "loading": "Loading..."
 }
