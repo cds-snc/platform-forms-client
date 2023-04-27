@@ -214,6 +214,21 @@ describe("<ElementDialog />", () => {
     cy.get("@handleCloseSpy").should("have.been.calledOnce");
   });
 
+  it("can tab through dialog elements", () => {
+    cy.viewport(950, 900);
+
+    const handleCloseSpy = cy.spy().as("handleCloseSpy");
+    const handleAddTypeSpy = cy.spy().as("handleAddTypeSpy");
+
+    cy.mount(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
+
+    cy.focused().should("have.attr", "data-testid", "listbox");
+    cy.get('[data-testid="listbox"').tab();
+    cy.focused().should("have.attr", "data-testid", "element-description-add-element");
+    cy.get('[data-testid="element-description-add-element"').tab();
+    cy.focused().should("have.attr", "data-testid", "close-dialog");
+  });
+
   it("can keyboard navigate through the listbox", () => {
     cy.viewport(950, 900);
 
@@ -221,7 +236,7 @@ describe("<ElementDialog />", () => {
     const handleAddTypeSpy = cy.spy().as("handleAddTypeSpy");
 
     cy.mount(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
-    cy.get('[data-testid="close-dialog"]').tab();
+    cy.get("body").tab();
     cy.focused().should("have.attr", "data-testid", "listbox");
     cy.get('[data-testid="richText"]').should("have.attr", "aria-selected", "true");
 
