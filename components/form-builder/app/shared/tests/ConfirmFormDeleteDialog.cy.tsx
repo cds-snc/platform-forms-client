@@ -6,6 +6,9 @@ describe("<ConfirmFormDeleteDialog />", () => {
   it("shows unprocessed screen", () => {
     cy.viewport(800, 600);
 
+    const handleConfirmSpy = cy.spy().as("handleConfirmSpy");
+    const handleCloseSpy = cy.spy().as("handleCloseSpy");
+
     cy.intercept("GET", "/api/id/123/submission/unprocessed", {
       statusCode: 200,
       body: {
@@ -17,12 +20,8 @@ describe("<ConfirmFormDeleteDialog />", () => {
       <TemplateStoreProvider>
         <ConfirmFormDeleteDialog
           formId="123"
-          handleConfirm={function (): void {
-            throw new Error("Function not implemented.");
-          }}
-          handleClose={function (): void {
-            throw new Error("Function not implemented.");
-          }}
+          handleConfirm={handleConfirmSpy}
+          handleClose={handleCloseSpy}
           isPublished={false}
         />
       </TemplateStoreProvider>
@@ -33,6 +32,9 @@ describe("<ConfirmFormDeleteDialog />", () => {
 
   it("shows delete confirm screen", () => {
     cy.viewport(800, 600);
+
+    const handleConfirmSpy = cy.spy().as("handleConfirmSpy");
+    const handleCloseSpy = cy.spy().as("handleCloseSpy");
 
     cy.intercept("GET", "/api/id/456/submission/unprocessed", {
       statusCode: 200,
@@ -45,12 +47,8 @@ describe("<ConfirmFormDeleteDialog />", () => {
       <TemplateStoreProvider>
         <ConfirmFormDeleteDialog
           formId="456"
-          handleConfirm={function (): void {
-            throw new Error("Function not implemented.");
-          }}
-          handleClose={function (): void {
-            throw new Error("Function not implemented.");
-          }}
+          handleConfirm={handleConfirmSpy}
+          handleClose={handleCloseSpy}
           isPublished={false}
         />
       </TemplateStoreProvider>
@@ -59,8 +57,41 @@ describe("<ConfirmFormDeleteDialog />", () => {
     cy.get("h2").contains("formDelete.title");
   });
 
+  it("confirms delete and closes", () => {
+    cy.viewport(800, 600);
+
+    const handleConfirmSpy = cy.spy().as("handleConfirmSpy");
+    const handleCloseSpy = cy.spy().as("handleCloseSpy");
+
+    cy.intercept("GET", "/api/id/456/submission/unprocessed", {
+      statusCode: 200,
+      body: {
+        data: [],
+      },
+    });
+
+    cy.mount(
+      <TemplateStoreProvider>
+        <ConfirmFormDeleteDialog
+          formId="456"
+          handleConfirm={handleConfirmSpy}
+          handleClose={handleCloseSpy}
+          isPublished={false}
+        />
+      </TemplateStoreProvider>
+    );
+
+    cy.get("h2").contains("formDelete.title");
+    cy.get('[data-testid="confirm-delete"]').click();
+    cy.get("@handleConfirmSpy").should("have.been.calledOnce");
+    cy.get("@handleCloseSpy").should("have.been.calledOnce");
+  });
+
   it("shows error screen", () => {
     cy.viewport(800, 600);
+
+    const handleConfirmSpy = cy.spy().as("handleConfirmSpy");
+    const handleCloseSpy = cy.spy().as("handleCloseSpy");
 
     cy.intercept("GET", "/api/id/789/submission/unprocessed", {
       statusCode: 500,
@@ -73,12 +104,8 @@ describe("<ConfirmFormDeleteDialog />", () => {
       <TemplateStoreProvider>
         <ConfirmFormDeleteDialog
           formId="789"
-          handleConfirm={function (): void {
-            throw new Error("Function not implemented.");
-          }}
-          handleClose={function (): void {
-            throw new Error("Function not implemented.");
-          }}
+          handleConfirm={handleConfirmSpy}
+          handleClose={handleCloseSpy}
           isPublished={false}
         />
       </TemplateStoreProvider>
