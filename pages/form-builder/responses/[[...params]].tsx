@@ -311,18 +311,18 @@ export const getServerSideProps: GetServerSideProps = async ({
   if (formID && session) {
     try {
       const ability = createAbility(session);
-      const [initialForm, submissions] = await Promise.all([
+      const [initialForm, allSubmissions] = await Promise.all([
         getFullTemplateByID(ability, formID),
         listAllSubmissions(ability, formID),
       ]);
       FormbuilderParams.initialForm = initialForm;
-      vaultSubmissions.push(...submissions);
+      vaultSubmissions.push(...allSubmissions.submissions);
 
       const isNagwareEnabled = await checkOne("nagware");
 
       if (isNagwareEnabled) {
-        nagwareResult = submissions.length
-          ? await detectOldUnprocessedSubmissions(submissions)
+        nagwareResult = allSubmissions.submissions.length
+          ? await detectOldUnprocessedSubmissions(allSubmissions.submissions)
           : null;
       }
     } catch (e) {

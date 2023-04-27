@@ -2,6 +2,10 @@ import { QueryCommand, QueryCommandInput } from "@aws-sdk/lib-dynamodb";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { VaultSubmissionList, UserAbility, VaultStatus } from "@lib/types";
 import { logEvent } from "./auditLogs";
+import {
+  numberOfUnprocessedSubmissionsCacheCheck,
+  numberOfUnprocessedSubmissionsCachePut,
+} from "./cache/unprocessedSubmissionsCache";
 import { connectToDynamo } from "./integration/dynamodbConnector";
 import { logMessage } from "./logger";
 import { AccessControlError, checkPrivileges } from "./privileges";
@@ -40,7 +44,7 @@ async function getUsersForForm(formID: string) {
 export async function listAllSubmissions(
   ability: UserAbility,
   formID: string
-): Promise<VaultSubmissionList[]> {
+): Promise<{ submissions: VaultSubmissionList[]; numberOfUnprocessedSubmissions: number }> {
   // Check access control first
   try {
     const templateOwners = await getUsersForForm(formID);
@@ -135,16 +139,27 @@ export async function listAllSubmissions(
         lastEvaluatedKey = response.LastEvaluatedKey;
       }
     }
+
     logEvent(
       ability.userID,
       { type: "Response" },
       "ListResponses",
       `List all responses for form ${formID}`
     );
-    return accumulatedResponses;
+
+    const numOfUnprocessedSubmissions = accumulatedResponses.filter((submission) =>
+      [VaultStatus.NEW, VaultStatus.DOWNLOADED].includes(submission.status)
+    ).length;
+
+    await numberOfUnprocessedSubmissionsCachePut(formID, numOfUnprocessedSubmissions);
+
+    return {
+      submissions: accumulatedResponses,
+      numberOfUnprocessedSubmissions: numOfUnprocessedSubmissions,
+    };
   } catch (e) {
     logMessage.error(e);
-    return [];
+    return { submissions: [], numberOfUnprocessedSubmissions: 0 };
   }
 }
 
@@ -155,11 +170,17 @@ export async function listAllSubmissions(
 
 export async function numberOfUnprocessedSubmissions(
   ability: UserAbility,
-  formID: string
+  formID: string,
+  ignoreCache = false
 ): Promise<number> {
-  const allSubmissions = await listAllSubmissions(ability, formID);
+  const cachedNumberOfUnprocessedSubmissions = await numberOfUnprocessedSubmissionsCacheCheck(
+    formID
+  );
 
-  return allSubmissions.filter((submission) =>
-    [VaultStatus.NEW, VaultStatus.DOWNLOADED].includes(submission.status)
-  ).length;
+  if (cachedNumberOfUnprocessedSubmissions && !ignoreCache) {
+    return cachedNumberOfUnprocessedSubmissions;
+  } else {
+    const allSubmissions = await listAllSubmissions(ability, formID);
+    return allSubmissions.numberOfUnprocessedSubmissions;
+  }
 }
