@@ -2,6 +2,10 @@ import React from "react";
 import { ElementDialog } from "../ElementDialog";
 
 describe("<ElementDialog />", () => {
+  beforeEach(() => {
+    cy.intercept("/api/flags/experimentalBlocks/check", { status: true });
+  });
+
   it("adds a richText element", () => {
     cy.viewport(950, 900);
 
@@ -9,7 +13,6 @@ describe("<ElementDialog />", () => {
     const handleAddTypeSpy = cy.spy().as("handleAddTypeSpy");
 
     cy.mount(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
-
     cy.get('[data-testid="richText"]').click();
     cy.get('[data-testid="element-description-add-element"]').click();
     cy.get("@handleAddTypeSpy").should("have.been.calledWith", "richText");
@@ -184,7 +187,7 @@ describe("<ElementDialog />", () => {
     cy.get("@handleCloseSpy").should("have.been.calledOnce");
   });
 
-  it.skip("adds a dynamicRow contact element", () => {
+  it("adds a dynamicRow contact element", () => {
     cy.viewport(950, 900);
 
     const handleCloseSpy = cy.spy().as("handleCloseSpy");
