@@ -21,30 +21,6 @@ jobs:
   push-production:
     runs-on: ubuntu-latest
     steps:
-      - name: Wait for Jest tests to pass
-        uses: fountainhead/action-wait-for-check@297be350cf8393728ea4d4b39435c7d7ae167c93 # v1.1.0
-        id: wait-for-jest-tests
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          checkName: Jest
-          ref: ${{ github.sha }}
-
-      - name: Wait for Cypress tests to pass
-        uses: fountainhead/action-wait-for-check@297be350cf8393728ea4d4b39435c7d7ae167c93 # v1.1.0
-        id: wait-for-cypress-tests
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          checkName: Cypress
-          ref: ${{ github.sha }}
-
-      - name: Wait for ESLint tests to pass
-        uses: fountainhead/action-wait-for-check@297be350cf8393728ea4d4b39435c7d7ae167c93 # v1.1.0
-        id: wait-for-eslint-tests
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          checkName: eslint_merge
-          ref: ${{ github.sha }}
-
       - name: Checkout
         uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2.7.0
 
