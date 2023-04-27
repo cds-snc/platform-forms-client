@@ -228,6 +228,8 @@ export const Table = (props: TableProps): React.ReactElement => {
     lang = "en",
     // submissionID,
   } = props;
+  const formattedSubmissionDate =
+    new Date(submissionDate).toISOString().replace("T", " ").slice(0, -5) + " UTC";
 
   return (
     <>
@@ -249,9 +251,7 @@ export const Table = (props: TableProps): React.ReactElement => {
               {t("responseTemplate.submissionDate", { lng: lang })}
             </dt>
             <dd className="py-4 pl-8" style={{ maxWidth: "55rem" }}>
-              {new Date(submissionDate).toLocaleString(`${lang + "-CA"}`, {
-                timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-              })}
+              {formattedSubmissionDate}
             </dd>
           </div>
           <QuestionColumns questionsAnswers={questionsAnswers} lang={lang} />
@@ -273,11 +273,7 @@ export const Table = (props: TableProps): React.ReactElement => {
               <dt className="flex items-center font-bold border-b border-grey-default py-4">
                 {t("responseTemplate.submissionDate", { lng: lang })}
               </dt>
-              <dd className="py-4">
-                {new Date(submissionDate).toLocaleString(`${lang + "-CA"}`, {
-                  timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                })}
-              </dd>
+              <dd className="py-4">{formattedSubmissionDate}</dd>
             </div>
             <QuestionRows questionsAnswers={questionsAnswers} lang={lang} />
           </dl>
