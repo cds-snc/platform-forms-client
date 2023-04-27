@@ -30,7 +30,7 @@ module.exports = {
   swcMinify: true,
   compiler: {
     // Remove all console.* calls
-    removeConsole: false,
+    removeConsole: true,
   },
   webpack: (config) => {
     // Support reading markdown
