@@ -9,7 +9,6 @@ interface MenuProps {
 }
 
 // TODO: could also add character search on menu list in future
-// TODO: could add a layer mask to close on click outside, and or use "mouseout" event on container
 
 /**
  * Adds keybaord behavior for a HTML list element.
