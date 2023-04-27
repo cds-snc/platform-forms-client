@@ -20,7 +20,7 @@ import {
   TemplateHasUnprocessedSubmissions,
 } from "../templates";
 
-import { DeliveryOption, FormProperties, FormRecord, VaultStatus } from "@lib/types";
+import { DeliveryOption, FormProperties, FormRecord } from "@lib/types";
 import formConfiguration from "@jestFixtures/cdsIntakeTestForm.json";
 
 // structuredClone is available starting in Node 17.
@@ -38,7 +38,7 @@ import {
 } from "__utils__/permissions";
 import { Session } from "next-auth";
 import { logEvent } from "@lib/auditLogs";
-import { listAllSubmissions } from "@lib/vault";
+import { numberOfUnprocessedSubmissions } from "@lib/vault";
 
 const redis = new Redis();
 
@@ -56,7 +56,9 @@ const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
 
 jest.mock("@lib/vault");
 
-const mockListAllSubmissions = jest.mocked(listAllSubmissions, { shallow: true });
+const mockNumberOfUnprocessedSubmissions = jest.mocked(numberOfUnprocessedSubmissions, {
+  shallow: true,
+});
 
 const buildPrismaResponse = (
   id: string,
@@ -748,19 +750,7 @@ describe("Template CRUD functions", () => {
       buildPrismaResponse("formtestID", formConfiguration)
     );
 
-    mockListAllSubmissions.mockResolvedValueOnce([
-      {
-        formID: "clg17xha50008efkgfgxa8l4f",
-        status: VaultStatus.CONFIRMED,
-        securityAttribute: "Unclassified",
-        name: "03-04-0022",
-        createdAt: 1680549853671,
-        lastDownloadedBy: "test@cds-snc.ca",
-        confirmedAt: undefined,
-        downloadedAt: undefined,
-        removedAt: undefined,
-      },
-    ]);
+    mockNumberOfUnprocessedSubmissions.mockResolvedValueOnce(0);
 
     const deletedTemplate = await deleteTemplate(ability, "formtestID");
 
@@ -816,37 +806,13 @@ describe("Template CRUD functions", () => {
         buildPrismaResponse("formtestID", formConfiguration)
       );
 
-      mockListAllSubmissions.mockResolvedValueOnce([
-        {
-          formID: "clg17xha50008efkgfgxa8l4f",
-          status: VaultStatus.NEW,
-          securityAttribute: "Unclassified",
-          name: "03-04-0022",
-          createdAt: 1680549853671,
-          lastDownloadedBy: "test@cds-snc.ca",
-          confirmedAt: undefined,
-          downloadedAt: undefined,
-          removedAt: undefined,
-        },
-      ]);
+      mockNumberOfUnprocessedSubmissions.mockResolvedValueOnce(1);
 
       await expect(async () => {
         await deleteTemplate(ability, "formtestID");
       }).rejects.toThrowError(new TemplateHasUnprocessedSubmissions());
 
-      mockListAllSubmissions.mockResolvedValueOnce([
-        {
-          formID: "clg17xha50008efkgfgxa8l4f",
-          status: VaultStatus.DOWNLOADED,
-          securityAttribute: "Unclassified",
-          name: "03-04-0022",
-          createdAt: 1680549853671,
-          lastDownloadedBy: "test@cds-snc.ca",
-          confirmedAt: undefined,
-          downloadedAt: undefined,
-          removedAt: undefined,
-        },
-      ]);
+      mockNumberOfUnprocessedSubmissions.mockResolvedValueOnce(1);
 
       await expect(async () => {
         await deleteTemplate(ability, "formtestID");

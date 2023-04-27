@@ -7,14 +7,13 @@ import {
   DeliveryOption,
   UserAbility,
   SecurityAttribute,
-  VaultStatus,
 } from "@lib/types";
 import { Prisma } from "@prisma/client";
 import jwt, { Secret } from "jsonwebtoken";
 import { AccessControlError, checkPrivileges, checkPrivilegesAsBoolean } from "./privileges";
 import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
-import { listAllSubmissions } from "./vault";
+import { numberOfUnprocessedSubmissions } from "./vault";
 
 // ******************************************
 // Internal Module Functions
@@ -808,14 +807,9 @@ export async function deleteTemplate(
       },
     ]);
 
-    const formSubmissions = await listAllSubmissions(ability, formID);
+    const numOfUnprocessedSubmissions = await numberOfUnprocessedSubmissions(ability, formID);
 
-    const hasUnprocessedFormSubmissions =
-      formSubmissions.filter((submission) =>
-        [VaultStatus.NEW, VaultStatus.DOWNLOADED].includes(submission.status)
-      ).length > 0;
-
-    if (hasUnprocessedFormSubmissions) throw new TemplateHasUnprocessedSubmissions();
+    if (numOfUnprocessedSubmissions > 0) throw new TemplateHasUnprocessedSubmissions();
 
     const dateIn30Days = new Date(Date.now() + 2592000000); // 30 days = 60 (seconds) * 60 (minutes) * 24 (hours) * 30 (days) * 1000 (to ms)
 

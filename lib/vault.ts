@@ -1,6 +1,6 @@
 import { QueryCommand, QueryCommandInput } from "@aws-sdk/lib-dynamodb";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { VaultSubmissionList, UserAbility } from "@lib/types";
+import { VaultSubmissionList, UserAbility, VaultStatus } from "@lib/types";
 import { logEvent } from "./auditLogs";
 import { connectToDynamo } from "./integration/dynamodbConnector";
 import { logMessage } from "./logger";
@@ -146,4 +146,20 @@ export async function listAllSubmissions(
     logMessage.error(e);
     return [];
   }
+}
+
+/**
+ * This method returns the number of unprocessed submissions (submission with a status equal to 'New' or 'Downloaded')
+ * @param formID - The form ID from which to retrieve responses
+ */
+
+export async function numberOfUnprocessedSubmissions(
+  ability: UserAbility,
+  formID: string
+): Promise<number> {
+  const allSubmissions = await listAllSubmissions(ability, formID);
+
+  return allSubmissions.filter((submission) =>
+    [VaultStatus.NEW, VaultStatus.DOWNLOADED].includes(submission.status)
+  ).length;
 }
