@@ -69,6 +69,7 @@ export const ConfirmFormDeleteDialog = ({
           handleClose();
           handleConfirm();
         }}
+        dataTestId="confirm-delete"
       >
         {t("formDelete.okay")}
       </Button>
