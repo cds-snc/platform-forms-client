@@ -4,7 +4,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { MiddlewareProps, WithRequired } from "@lib/types";
 import { numberOfUnprocessedSubmissions } from "@lib/vault";
 
-const getUnprocessedSubmissions = async (
+const getNumberOfUnprocessedSubmissions = async (
   req: NextApiRequest,
   res: NextApiResponse,
   props: MiddlewareProps
@@ -29,5 +29,5 @@ const getUnprocessedSubmissions = async (
 
 export default middleware(
   [cors({ allowedMethods: ["GET"] }), sessionExists()],
-  getUnprocessedSubmissions
+  getNumberOfUnprocessedSubmissions
 );
