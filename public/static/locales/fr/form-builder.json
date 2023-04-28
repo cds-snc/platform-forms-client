@@ -301,6 +301,7 @@
   },
   "formDelete": {
     "error": "Erreur",
+    "somethingWentWrong": "Il y a eu un problème",
     "downloadButtonText": "Télécharger une copie",
     "draft": {
       "message1": "La suppression ne peut être annulée. Votre formulaire sera définitivement supprimé de votre liste de formulaires.",

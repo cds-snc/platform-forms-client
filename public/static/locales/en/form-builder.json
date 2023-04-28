@@ -301,6 +301,7 @@
   },
   "formDelete": {
     "error": "Error",
+    "somethingWentWrong": "Something went wrong",
     "downloadButtonText": "Download a copy",
     "draft": {
       "message1": "Deleting a form cannot be undone. Your form will be removed from your forms list.",

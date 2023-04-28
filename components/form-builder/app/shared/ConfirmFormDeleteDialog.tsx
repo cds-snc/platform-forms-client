@@ -1,6 +1,5 @@
 import React from "react";
 import useSWR from "swr";
-import axios from "axios";
 import { useTranslation } from "next-i18next";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,7 +11,26 @@ import { DownloadFileButton } from "./DownloadFileButton";
 import { themes } from "../shared/Button";
 import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
 
-const fetcher = (url: string) => axios.get(url).then((response) => response.data);
+const fetcher = async (url: string) => {
+  try {
+    const res = await fetch(url);
+    if (res.status === 405) {
+      // handle this status code with unprocessed
+      return { error: "unprocessed" };
+    }
+
+    if (res.status === 200) {
+      return { ...(await res.json()), error: "" };
+    }
+    return { error: "unknown" };
+  } catch (err) {
+    if (err instanceof Error) {
+      return { error: err.message };
+    }
+
+    return { error: "unknown" };
+  }
+};
 
 export const ConfirmFormDeleteDialog = ({
   formId,
@@ -50,7 +68,7 @@ export const ConfirmFormDeleteDialog = ({
               heading={t("formDelete.error")}
               classes="w-[100%]"
             >
-              <p className="text-[#26374a] text-sm">{error.message}</p>
+              <p className="text-[#26374a] text-sm">{t("somethingWentWrong")}</p>
             </Attention>
           </div>
         </div>
@@ -78,7 +96,7 @@ export const ConfirmFormDeleteDialog = ({
 
   const responsesLink = `/${i18n.language}/form-builder/responses/${formId}`;
 
-  if (data && data.error === "Found unprocessed submissions") {
+  if (data && data.error === "unprocessed") {
     return (
       <Dialog handleClose={handleClose} dialogRef={dialog}>
         <div className="p-5">
@@ -118,7 +136,6 @@ export const ConfirmFormDeleteDialog = ({
       <div className="p-5">
         <div className="px-10 flex justify-center">
           <Image
-            layout="fixed"
             width={"288"}
             height={"206"}
             alt=""
