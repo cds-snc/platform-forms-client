@@ -20,7 +20,8 @@ export const Overlay = ({
   hasOpacity?: boolean;
   hasCursor?: boolean;
 }) => {
-  function handleClose() {
+  // This will probably be used by the parent component to hide the overlay but can do anything
+  function handleCallback() {
     if (typeof callback === "function") {
       callback();
     }
@@ -29,7 +30,7 @@ export const Overlay = ({
   return (
     <div
       data-testid="overlay"
-      onClick={handleClose}
+      onClick={handleCallback}
       className={`z-40 w-screen h-screen fixed top-0 left-0${hasOpacity ? " bg-black/10" : ""}${
         hasCursor ? " cursor-pointer" : ""
       }`}
