@@ -111,6 +111,6 @@ describe("<ConfirmFormDeleteDialog />", () => {
       </TemplateStoreProvider>
     );
 
-    cy.get("p").contains("Request failed with status code 500");
+    cy.get("p").contains("somethingWentWrong");
   });
 });
