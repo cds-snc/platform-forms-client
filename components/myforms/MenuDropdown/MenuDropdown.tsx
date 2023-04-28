@@ -41,7 +41,7 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
   }, []);
 
   const handleToggle = () => {
-    // Using an if-else to make sure the menu and overlay states stay in sync
+    // Using an if-else vs. single toggle, to make sure the menu and overlay states stay in sync
     if (menuDropdown.isOpen()) {
       menuDropdown?.close();
       setShowOverlay(false);

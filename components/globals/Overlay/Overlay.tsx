@@ -1,7 +1,7 @@
 import React from "react";
 
 /**
- * Shows an overlay that acts to catch any clicks outside of a component to trigger "closing" the
+ * Shows an overlay that acts to catch any clicks outside of a component to trigger closing/* the
  * component.
  *
  * Note:  The overlay is set to a `z-index: 40`. The component that uses this must have a greater
@@ -9,7 +9,7 @@ import React from "react";
  * a z-index of 40.
  *
  * Future Thought: if this overlay is heavily used, it would make more sense to become a "singleton"
- * at the App root level an shared among components using something like useContent + custom hook..
+ * at the App root level and shared among components using something like useContext + custom hook..
  */
 export const Overlay = ({
   callback,
