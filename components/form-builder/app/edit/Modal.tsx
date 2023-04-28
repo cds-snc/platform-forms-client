@@ -172,13 +172,19 @@ export const ModalContainer = ({
   /* eslint-disable */
   return (
     <dialog data-testid="modal" className="p-0 bg-clip-padding w-full h-full bg-transparent" tabIndex={-1} role="dialog" onClick={close} ref={modalContainer}>
-      <div data-testid="modal-content" className="mx-8 p-4 laptop:max-w-[800px] h-5/6 overflow-scroll laptop:mx-auto mt-10 bg-white border-2 border-black rounded-xl" onClick={(e) => e.stopPropagation()}>
-        <div className="relative">
+      <div data-testid="modal-content" className="relative mx-8 p-4 laptop:max-w-[800px] h-5/6 overflow-scroll laptop:mx-auto mt-10 bg-white border-2 border-black rounded-xl" onClick={(e) => e.stopPropagation()}>
           <h2>{title}</h2>
-          <ModalButton isOpenButton={false}>
+        <div>
+          {children}
+        </div>
+        <div>
+          {saveButton}
+          <Button theme="secondary" onClick={close}>{t("cancel")}</Button>
+        </div>
+        <ModalButton isOpenButton={false}>
             <Button
               theme="link"
-              className="group absolute top-0 right-0 block pl-2 pr-2"
+              className="group absolute top-0 right-0 mt-4 mr-4 block pl-2 pr-2"
               aria-label={t("close")}
               onClick={close}
             >
@@ -188,14 +194,6 @@ export const ModalContainer = ({
               </span>
             </Button>
           </ModalButton>
-        </div>
-        <div>
-          {children}
-        </div>
-        <div>
-          {saveButton}
-          <Button theme="secondary" onClick={close}>{t("cancel")}</Button>
-        </div>
       </div>
     </dialog>
   );
