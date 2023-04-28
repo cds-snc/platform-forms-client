@@ -282,7 +282,7 @@
   "elementActions": "Actions des éléments",
   "email": "Courriel",
   "english": "anglais",
-  "errorSaving": "Le téléchargement du fichier de formulaire a échoué. <a href=\"/fr/form-builder/support\" target=\"_blank\">Contacter l’équipe de soutien</a>.",
+  "errorSaving": "Une erreur s'est produite lors de l'enregistrement du formulaire. <a href=\"/fr/form-builder/support\" target=\"_blank\">Contacter l’équipe de soutien</a>.",
   "failedToReadFormFile": "L’ouverture du fichier de formulaire a échoué",
   "formatBold": "Mettre en gras",
   "formatBulletList": "Mettre en liste à puces",
