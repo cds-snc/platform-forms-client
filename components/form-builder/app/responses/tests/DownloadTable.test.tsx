@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import { DownloadTable, VaultStatus } from "../DownloadTable";
-import { VaultSubmissionList } from "@lib/types";
+import { DownloadTable } from "../DownloadTable";
+import { VaultSubmissionList, VaultStatus } from "@lib/types";
 import { sortVaultSubmission } from "../DownloadTableReducer";
 
 jest.mock("next/router", () => require("next-router-mock"));
@@ -47,7 +47,7 @@ describe("Download Table", () => {
 const vaultSubmissions: VaultSubmissionList[] = [
   {
     formID: "clg17xha50008efkgfgxa8l4f",
-    status: "New",
+    status: VaultStatus.NEW,
     securityAttribute: "Unclassified",
     name: "03-04-0022",
     createdAt: 1680549853671,
@@ -58,7 +58,7 @@ const vaultSubmissions: VaultSubmissionList[] = [
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
-    status: "Confirmed",
+    status: VaultStatus.CONFIRMED,
     securityAttribute: "Unclassified",
     name: "03-04-0c36",
     createdAt: 1680549843373,
@@ -69,7 +69,7 @@ const vaultSubmissions: VaultSubmissionList[] = [
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
-    status: "Downloaded",
+    status: VaultStatus.DOWNLOADED,
     securityAttribute: "Unclassified",
     name: "03-04-0caa",
     createdAt: 1680549836782,
@@ -80,7 +80,7 @@ const vaultSubmissions: VaultSubmissionList[] = [
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
-    status: "Downloaded",
+    status: VaultStatus.DOWNLOADED,
     securityAttribute: "Unclassified",
     name: "03-04-0d87",
     createdAt: 1680549838736,
@@ -91,7 +91,7 @@ const vaultSubmissions: VaultSubmissionList[] = [
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
-    status: "Confirmed",
+    status: VaultStatus.CONFIRMED,
     securityAttribute: "Unclassified",
     name: "03-04-18df",
     createdAt: 1680549858548,
@@ -102,7 +102,7 @@ const vaultSubmissions: VaultSubmissionList[] = [
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
-    status: "Confirmed",
+    status: VaultStatus.CONFIRMED,
     securityAttribute: "Unclassified",
     name: "03-04-2ccc",
     createdAt: 1680549825466,
@@ -113,7 +113,7 @@ const vaultSubmissions: VaultSubmissionList[] = [
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
-    status: "Confirmed",
+    status: VaultStatus.CONFIRMED,
     securityAttribute: "Unclassified",
     name: "03-04-2ce6",
     createdAt: 1680549852237,
@@ -124,7 +124,7 @@ const vaultSubmissions: VaultSubmissionList[] = [
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
-    status: "Confirmed",
+    status: VaultStatus.CONFIRMED,
     securityAttribute: "Unclassified",
     name: "03-04-3232",
     createdAt: 1680549829065,
@@ -135,7 +135,7 @@ const vaultSubmissions: VaultSubmissionList[] = [
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
-    status: "Confirmed",
+    status: VaultStatus.CONFIRMED,
     securityAttribute: "Unclassified",
     name: "03-04-394c",
     createdAt: 1680549827470,
@@ -146,7 +146,7 @@ const vaultSubmissions: VaultSubmissionList[] = [
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
-    status: "Confirmed",
+    status: VaultStatus.CONFIRMED,
     securityAttribute: "Unclassified",
     name: "03-04-40bb",
     createdAt: 1680549846213,
@@ -157,7 +157,7 @@ const vaultSubmissions: VaultSubmissionList[] = [
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
-    status: "Problem",
+    status: VaultStatus.PROBLEM,
     securityAttribute: "Unclassified",
     name: "03-04-54de",
     createdAt: 1680549841683,
@@ -168,7 +168,7 @@ const vaultSubmissions: VaultSubmissionList[] = [
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
-    status: "Problem",
+    status: VaultStatus.PROBLEM,
     securityAttribute: "Unclassified",
     name: "03-04-6ca5",
     createdAt: 1680549856861,
@@ -179,7 +179,7 @@ const vaultSubmissions: VaultSubmissionList[] = [
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
-    status: "New",
+    status: VaultStatus.NEW,
     securityAttribute: "Unclassified",
     name: "03-04-8a87",
     createdAt: 1680549855408,
@@ -190,7 +190,7 @@ const vaultSubmissions: VaultSubmissionList[] = [
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
-    status: "New",
+    status: VaultStatus.NEW,
     securityAttribute: "Unclassified",
     name: "03-04-914b",
     createdAt: 1680549849354,
@@ -201,7 +201,7 @@ const vaultSubmissions: VaultSubmissionList[] = [
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
-    status: "New",
+    status: VaultStatus.NEW,
     securityAttribute: "Unclassified",
     name: "03-04-a4c5",
     createdAt: 1680549844830,
@@ -212,7 +212,7 @@ const vaultSubmissions: VaultSubmissionList[] = [
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
-    status: "New",
+    status: VaultStatus.NEW,
     securityAttribute: "Unclassified",
     name: "03-04-affc",
     createdAt: 1680549847443,
@@ -223,7 +223,7 @@ const vaultSubmissions: VaultSubmissionList[] = [
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
-    status: "New",
+    status: VaultStatus.NEW,
     securityAttribute: "Unclassified",
     name: "03-04-bff8",
     createdAt: 1680549819049,
@@ -234,7 +234,7 @@ const vaultSubmissions: VaultSubmissionList[] = [
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
-    status: "New",
+    status: VaultStatus.NEW,
     securityAttribute: "Unclassified",
     name: "03-04-d9b1",
     createdAt: 1680549823799,
@@ -245,7 +245,7 @@ const vaultSubmissions: VaultSubmissionList[] = [
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
-    status: "Confirmed",
+    status: VaultStatus.CONFIRMED,
     securityAttribute: "Unclassified",
     name: "03-04-e721",
     createdAt: 1680549850908,
@@ -256,7 +256,7 @@ const vaultSubmissions: VaultSubmissionList[] = [
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
-    status: "New",
+    status: VaultStatus.NEW,
     securityAttribute: "Unclassified",
     name: "03-04-fe4e",
     createdAt: 1680549834891,
@@ -267,7 +267,7 @@ const vaultSubmissions: VaultSubmissionList[] = [
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
-    status: "New",
+    status: VaultStatus.NEW,
     securityAttribute: "Unclassified",
     name: "06-04-4aab",
     createdAt: 1680794669621,
@@ -278,7 +278,7 @@ const vaultSubmissions: VaultSubmissionList[] = [
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
-    status: "New",
+    status: VaultStatus.NEW,
     securityAttribute: "Unclassified",
     name: "06-04-7f15",
     createdAt: 1680794662371,
@@ -289,7 +289,7 @@ const vaultSubmissions: VaultSubmissionList[] = [
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
-    status: "New",
+    status: VaultStatus.NEW,
     securityAttribute: "Unclassified",
     name: "06-04-c718",
     createdAt: 1680794671753,

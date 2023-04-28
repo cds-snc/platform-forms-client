@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { VaultStatus } from "./DownloadTable";
+import { VaultStatus } from "@lib/types";
 import { getDaysPassed } from "@lib/clientHelpers";
 
 export const RemovalStatus = ({

@@ -18,13 +18,6 @@ import { TableActions, reducerTableItems, sortVaultSubmission } from "./Download
 // TODO: move to an app setting variable
 const MAX_FILE_DOWNLOADS = 20;
 
-export enum VaultStatus {
-  NEW = "New",
-  DOWNLOADED = "Downloaded",
-  CONFIRMED = "Confirmed",
-  PROBLEM = "Problem",
-}
-
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
   formId?: string;
