@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Form submission timestamp is not reflecting current user timezone.[1860](https://github.com/cds-snc/platform-forms-client/issues/1860)
 - Creating and sorting of form elements
+- Content changes for clarity
 
 ## [3.0.1] 2023-04-25
 
