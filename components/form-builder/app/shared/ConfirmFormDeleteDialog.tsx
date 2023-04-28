@@ -13,15 +13,16 @@ import { Attention, AttentionTypes } from "@components/globals/Attention/Attenti
 
 const fetcher = async (url: string) => {
   const res = await fetch(url);
-  if (res.status === 405) {
-    // handle this status code with unprocessed
-    return { error: "unprocessed" };
-  }
 
   if (res.status === 200) {
-    return { ...(await res.json()), error: "" };
-  }
+    const data = { ...(await res.json()) };
 
+    if (data?.numberOfUnprocessedSubmissions > 0) {
+      return { error: "unprocessed" };
+    } else {
+      return data;
+    }
+  }
   // handle using swr error
   throw new Error("Something went wrong");
 };

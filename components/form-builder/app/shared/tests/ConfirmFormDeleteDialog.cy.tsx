@@ -10,10 +10,8 @@ describe("<ConfirmFormDeleteDialog />", () => {
     const handleCloseSpy = cy.spy().as("handleCloseSpy");
 
     cy.intercept("GET", "/api/id/123/submission/unprocessed", {
-      statusCode: 405,
-      body: {
-        error: "Found unprocessed submissions",
-      },
+      statusCode: 200,
+      body: { numberOfUnprocessedSubmissions: 20 },
     });
 
     cy.mount(
@@ -39,7 +37,7 @@ describe("<ConfirmFormDeleteDialog />", () => {
     cy.intercept("GET", "/api/id/456/submission/unprocessed", {
       statusCode: 200,
       body: {
-        data: [],
+        data: {},
       },
     });
 
@@ -66,7 +64,7 @@ describe("<ConfirmFormDeleteDialog />", () => {
     cy.intercept("GET", "/api/id/456/submission/unprocessed", {
       statusCode: 200,
       body: {
-        data: [],
+        data: {},
       },
     });
 
