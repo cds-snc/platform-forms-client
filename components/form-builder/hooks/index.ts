@@ -1,5 +1,4 @@
 export { useAllowPublish } from "./useAllowPublish";
-export { useDeleteForm } from "./useDelete";
 export { useElementOptions } from "./useElementOptions";
 export { useTemplateApi } from "./useTemplateApi";
 export { useActivePathname } from "./useActivePathname";

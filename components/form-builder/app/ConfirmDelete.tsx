@@ -3,7 +3,7 @@ import { useTranslation } from "next-i18next";
 
 import { ConfirmFormDeleteDialog } from "./shared";
 import { clearTemplateStore } from "../store";
-import { useDeleteForm } from "../hooks";
+import { handleDelete } from "../utils";
 import { toast, ToastContainer } from "./shared/Toast";
 
 export const ConfirmDelete = ({
@@ -20,18 +20,26 @@ export const ConfirmDelete = ({
   onDeleted: (arg: string) => void;
 }) => {
   const { t } = useTranslation("form-builder");
-  const { handleDelete } = useDeleteForm();
 
   const handleConfirm = useCallback(async () => {
     const result = await handleDelete(id);
     if (result && "error" in result) {
+      if (
+        result.error.response?.status === 405 &&
+        result.error.response?.data.error === "Found unprocessed submissions"
+      ) {
+        toast.error(t("formDeletedResponsesExist"));
+        return;
+      }
+
       toast.error(t("formDeletedDialogMessageFailed"));
+
       return;
     }
 
     clearTemplateStore();
     onDeleted(id);
-  }, [handleDelete, id, onDeleted, t]);
+  }, [id, onDeleted, t]);
 
   return (
     <>
@@ -44,7 +52,7 @@ export const ConfirmDelete = ({
         />
       )}
       <div className="sticky top-0">
-        <ToastContainer />
+        <ToastContainer autoClose={false} />
       </div>
     </>
   );

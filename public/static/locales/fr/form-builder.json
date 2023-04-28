@@ -317,6 +317,7 @@
   },
   "formDeletedDialogMessage": "Formulaire supprimé",
   "formDeletedDialogMessageFailed": "Échec de la suppression du formulaire",
+  "formDeletedResponsesExist": "Le formulaire n'a pas pu être supprimé. Veuillez vous assurer qu'il n'y a pas de nouvelles réponses et réessayez.",
   "formDeletedDialogTitle": "Succès",
   "formDeleteDialogTitleFailed": "Erreur",
   "formDownload": {
