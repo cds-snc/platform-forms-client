@@ -21,7 +21,7 @@ export type VaultSubmission = {
   fileAttachments?: { fileName: string }[];
   securityAttribute: string;
   createdAt: number;
-  status: string;
+  status: VaultStatus;
   confirmationCode: string;
   name: string;
   lastDownloadedBy: string;
@@ -35,3 +35,10 @@ export type VaultSubmissionList = TypeOmit<
   VaultSubmission,
   "formSubmission" | "submissionID" | "confirmationCode"
 >;
+
+export enum VaultStatus {
+  NEW = "New",
+  DOWNLOADED = "Downloaded",
+  CONFIRMED = "Confirmed",
+  PROBLEM = "Problem",
+}

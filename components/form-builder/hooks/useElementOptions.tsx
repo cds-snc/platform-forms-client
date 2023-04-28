@@ -133,7 +133,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       className: "",
       group: group.input,
     },
-    allowFileInput ? { ...(fileInputOption as ElementOption) } : ({} as ElementOption),
+    ...(allowFileInput ? [{ ...(fileInputOption as ElementOption) }] : []),
     {
       id: "attestation",
       value: t("attestation"),
@@ -171,7 +171,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       className: "separator",
       group: group.input,
     },
-    experimentalBlocks ? { ...(repeatingSetsOption as ElementOption) } : ({} as ElementOption),
+    ...(experimentalBlocks ? [{ ...(repeatingSetsOption as ElementOption) }] : []),
   ];
 
   return filterElements ? filterElements(elementOptions) : elementOptions;

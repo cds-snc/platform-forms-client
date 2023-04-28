@@ -1,5 +1,4 @@
-import { VaultSubmissionList } from "@lib/types";
-import { VaultStatus } from "./DownloadTable";
+import { VaultSubmissionList, VaultStatus } from "@lib/types";
 
 export enum TableActions {
   UPDATE = "UPDATE",

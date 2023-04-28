@@ -48,6 +48,8 @@ export type {
   VaultSubmissionList,
 } from "./retrieval-types";
 
+export { VaultStatus } from "./retrieval-types";
+
 export type { FormOwner } from "./user-types";
 
 export type { Abilities, Privilege, UserAbility, Permission, AnyObject } from "./privileges-types";

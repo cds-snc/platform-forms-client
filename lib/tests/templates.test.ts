@@ -17,6 +17,7 @@ import {
   updateAssignedUsersForTemplate,
   TemplateAlreadyPublishedError,
   removeDeliveryOption,
+  TemplateHasUnprocessedSubmissions,
 } from "../templates";
 
 import { DeliveryOption, FormProperties, FormRecord } from "@lib/types";
@@ -37,6 +38,7 @@ import {
 } from "__utils__/permissions";
 import { Session } from "next-auth";
 import { logEvent } from "@lib/auditLogs";
+import { numberOfUnprocessedSubmissions } from "@lib/vault";
 
 const redis = new Redis();
 
@@ -51,6 +53,12 @@ const structuredClone = <T>(obj: T): T => {
 };
 
 const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
+
+jest.mock("@lib/vault");
+
+const mockNumberOfUnprocessedSubmissions = jest.mocked(numberOfUnprocessedSubmissions, {
+  shallow: true,
+});
 
 const buildPrismaResponse = (
   id: string,
@@ -742,6 +750,8 @@ describe("Template CRUD functions", () => {
       buildPrismaResponse("formtestID", formConfiguration)
     );
 
+    mockNumberOfUnprocessedSubmissions.mockResolvedValueOnce(0);
+
     const deletedTemplate = await deleteTemplate(ability, "formtestID");
 
     expect(prismaMock.template.update).toHaveBeenCalledWith(
@@ -778,6 +788,31 @@ describe("Template CRUD functions", () => {
       "DeleteForm"
     );
   });
+
+  it.each([[Base], [Base.concat(ManageForms)]])(
+    "Template deletion should not be allowed if there are still unprocessed submissions associated to targeted form",
+    async (privileges) => {
+      const fakeSession = {
+        user: { id: "1", privileges: mockUserPrivileges(privileges, { user: { id: "1" } }) },
+      };
+      const ability = createAbility(fakeSession as Session);
+
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        ...buildPrismaResponse("formtestID", formConfiguration),
+        users: [{ id: "1" }],
+      });
+
+      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
+        buildPrismaResponse("formtestID", formConfiguration)
+      );
+
+      mockNumberOfUnprocessedSubmissions.mockResolvedValueOnce(1);
+
+      await expect(async () => {
+        await deleteTemplate(ability, "formtestID");
+      }).rejects.toThrowError(new TemplateHasUnprocessedSubmissions());
+    }
+  );
 
   it("Only include public properties", async () => {
     const formRecord: FormRecord = {
