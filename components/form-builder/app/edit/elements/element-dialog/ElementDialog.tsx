@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
 import { FormElementTypes } from "@lib/types";
 
@@ -39,6 +39,18 @@ export const ElementDialog = ({
     handleAddType && handleAddType(id);
     handleClose();
   }, [handleClose, handleAddType, id]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Enter") {
+        e.stopPropagation();
+        handleAdd();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [handleAdd]);
 
   return (
     <Dialog dialogRef={dialog} handleClose={handleClose}>
