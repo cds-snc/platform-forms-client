@@ -292,7 +292,7 @@
   "formatNumberedList": "Format numbered list",
   "formConfirmationMessage": "Form confirmation message",
   "formDeleteResponses": {
-    "title": "Get responses before deleting form",
+    "title": "Confirm responses before deleting form",
     "message1": "This form has been published and is receiving responses. You have responses to download and confirm.",
     "message2": "Before deleting this form:",
     "message3": "1. Download all responses.",
