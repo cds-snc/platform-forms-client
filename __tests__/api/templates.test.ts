@@ -14,6 +14,7 @@ import brokenFormTemplate from "../../__fixtures__/brokenFormTemplate.json";
 import { prismaMock } from "@jestUtils";
 import { Session } from "next-auth";
 import { Base, mockUserPrivileges, ManageForms, PublishForms } from "__utils__/permissions";
+import { numberOfUnprocessedSubmissions } from "@lib/vault";
 
 //Needed in the typescript version of the test so types are inferred correctly
 const mockGetSession = jest.mocked(getServerSession, { shallow: true });
@@ -25,6 +26,12 @@ const redis = new Redis();
 jest.mock("@lib/integration/redisConnector", () => ({
   getRedisInstance: jest.fn(() => redis),
 }));
+
+jest.mock("@lib/vault");
+
+const mockNumberOfUnprocessedSubmissions = jest.mocked(numberOfUnprocessedSubmissions, {
+  shallow: true,
+});
 
 describe("Requires a valid session to access API", () => {
   it("Should successfully handle a POST request to create a template", async () => {
@@ -215,7 +222,7 @@ describe("Test templates API functions", () => {
 
       await templates(req, res);
 
-      expect(res.statusCode).toBe(500);
+      expect(res.statusCode).toBe(409);
       expect(JSON.parse(res._getData())).toEqual(
         expect.objectContaining({ error: "Can't update published form" })
       );
@@ -355,6 +362,40 @@ describe("Test templates API functions", () => {
       await templates(req, res);
 
       expect(res.statusCode).toBe(200);
+    });
+
+    it("Should return specific error message when trying to delete form that has unprocessed submissions", async () => {
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        id: "formtestID",
+        jsonConfig: validFormTemplate,
+        users: [{ id: "1" }],
+      });
+
+      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue({
+        id: "test0form00000id000asdf11",
+        jsonConfig: validFormTemplate,
+      });
+
+      mockNumberOfUnprocessedSubmissions.mockResolvedValueOnce(1);
+
+      const { req, res } = createMocks({
+        method: "DELETE",
+        url: "/api/templates/test0form00000id000asdf11",
+        query: {
+          formID: "test0form00000id000asdf11",
+        },
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost:3000",
+        },
+      });
+
+      await templates(req, res);
+
+      expect(res.statusCode).toBe(405);
+      expect(JSON.parse(res._getData())).toEqual(
+        expect.objectContaining({ error: "Found unprocessed submissions" })
+      );
     });
   });
 });
