@@ -10,7 +10,7 @@ describe("<ConfirmFormDeleteDialog />", () => {
     const handleCloseSpy = cy.spy().as("handleCloseSpy");
 
     cy.intercept("GET", "/api/id/123/submission/unprocessed", {
-      statusCode: 200,
+      statusCode: 405,
       body: {
         error: "Found unprocessed submissions",
       },
