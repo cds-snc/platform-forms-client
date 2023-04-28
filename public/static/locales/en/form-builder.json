@@ -295,7 +295,7 @@
     "title": "Confirm responses before deleting form",
     "message1": "This form has been published and is receiving responses. You have responses to download and confirm.",
     "message2": "Before deleting this form:",
-    "message3": "1. Download all responses.",
+    "message3": "1. Download all new responses.",
     "message4": "2. Confirm the receipt of downloaded responses",
     "cta": "Go to responses"
   },
