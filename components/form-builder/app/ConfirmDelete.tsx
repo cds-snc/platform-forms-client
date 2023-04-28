@@ -37,6 +37,7 @@ export const ConfirmDelete = ({
     <>
       {show && (
         <ConfirmFormDeleteDialog
+          formId={id}
           handleClose={() => handleClose(false)}
           handleConfirm={handleConfirm}
           isPublished={isPublished}

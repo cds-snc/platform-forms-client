@@ -14,7 +14,7 @@ const getNumberOfUnprocessedSubmissions = async (
 
     const formId = req.query.form;
 
-    if (Array.isArray(formId) || !formId || !Array.isArray(req.body)) {
+    if (!formId || typeof formId !== "string") {
       return res.status(400).json({ error: "Bad request" });
     }
 
