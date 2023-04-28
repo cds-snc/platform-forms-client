@@ -148,7 +148,7 @@ export async function listAllSubmissions(
     );
 
     const numOfUnprocessedSubmissions = accumulatedResponses.filter((submission) =>
-      [VaultStatus.NEW, VaultStatus.DOWNLOADED].includes(submission.status)
+      [VaultStatus.NEW, VaultStatus.DOWNLOADED, VaultStatus.PROBLEM].includes(submission.status)
     ).length;
 
     await numberOfUnprocessedSubmissionsCachePut(formID, numOfUnprocessedSubmissions);

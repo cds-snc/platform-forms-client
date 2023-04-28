@@ -98,7 +98,7 @@ describe("Vault `numberOfUnprocessedSubmissions` function", () => {
 
     const numOfUnprocessedSubmissions = await numberOfUnprocessedSubmissions(ability, "formtestID");
 
-    expect(numOfUnprocessedSubmissions).toEqual(3);
+    expect(numOfUnprocessedSubmissions).toEqual(4);
   });
 
   it("Submissions should only be fetched once if we call the function multiple times in a row and we do not ignore the cache", async () => {

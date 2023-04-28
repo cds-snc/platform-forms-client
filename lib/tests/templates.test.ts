@@ -811,12 +811,6 @@ describe("Template CRUD functions", () => {
       await expect(async () => {
         await deleteTemplate(ability, "formtestID");
       }).rejects.toThrowError(new TemplateHasUnprocessedSubmissions());
-
-      mockNumberOfUnprocessedSubmissions.mockResolvedValueOnce(1);
-
-      await expect(async () => {
-        await deleteTemplate(ability, "formtestID");
-      }).rejects.toThrowError(new TemplateHasUnprocessedSubmissions());
     }
   );
 

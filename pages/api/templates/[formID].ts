@@ -62,11 +62,11 @@ const templates = async (
     if (err instanceof AccessControlError) {
       return res.status(403).json({ error: "Forbidden" });
     } else if (err instanceof TemplateAlreadyPublishedError) {
-      return res.status(500).json({ error: "Can't update published form" });
+      return res.status(409).json({ error: "Can't update published form" });
     } else if (err instanceof TemplateHasUnprocessedSubmissions) {
-      return res.status(500).json({ error: "Found unprocessed submissions" });
+      return res.status(405).json({ error: "Found unprocessed submissions" });
     } else {
-      return res.status(500).json({ error: "Malformed API Request" });
+      return res.status(400).json({ error: "Malformed API Request" });
     }
   }
 };

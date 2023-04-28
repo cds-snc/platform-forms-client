@@ -222,7 +222,7 @@ describe("Test templates API functions", () => {
 
       await templates(req, res);
 
-      expect(res.statusCode).toBe(500);
+      expect(res.statusCode).toBe(409);
       expect(JSON.parse(res._getData())).toEqual(
         expect.objectContaining({ error: "Can't update published form" })
       );
@@ -392,7 +392,7 @@ describe("Test templates API functions", () => {
 
       await templates(req, res);
 
-      expect(res.statusCode).toBe(500);
+      expect(res.statusCode).toBe(405);
       expect(JSON.parse(res._getData())).toEqual(
         expect.objectContaining({ error: "Found unprocessed submissions" })
       );

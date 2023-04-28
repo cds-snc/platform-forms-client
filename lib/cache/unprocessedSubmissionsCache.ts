@@ -7,7 +7,7 @@ const randomCacheExpiry = () => Math.floor(Math.random() * 180 + 120);
 export const numberOfUnprocessedSubmissionsCacheCheck = async (
   formID: string
 ): Promise<number | null> => {
-  const checkParameter = `unprocessed-submissions:${formID}`;
+  const checkParameter = `form:submissions:unprocessed:${formID}`;
 
   try {
     const redis = await getRedisInstance();
@@ -28,7 +28,7 @@ export const numberOfUnprocessedSubmissionsCachePut = async (
   formID: string,
   value: number
 ): Promise<void> => {
-  const modifyParameter = `unprocessed-submissions:${formID}`;
+  const modifyParameter = `form:submissions:unprocessed:${formID}`;
 
   try {
     const redis = await getRedisInstance();
