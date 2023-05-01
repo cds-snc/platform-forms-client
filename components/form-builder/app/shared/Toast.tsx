@@ -49,7 +49,11 @@ type ToastContext = {
   rtl?: boolean;
 };
 
-export const ToastContainer = () => {
+export const ToastContainer = ({
+  autoClose = 3000,
+}: {
+  autoClose?: number | false | undefined;
+}) => {
   return (
     <OriginalContainer
       toastClassName={(context?: ToastContext) => {
@@ -66,7 +70,7 @@ export const ToastContainer = () => {
         return `${contextClass[context?.type || "default"]["text"]} flex text-base`;
       }}
       position={originalToast.POSITION.TOP_CENTER}
-      autoClose={3000}
+      autoClose={autoClose}
       hideProgressBar={true}
       closeOnClick={true}
       transition={Bounce}

@@ -317,6 +317,7 @@
   },
   "formDeletedDialogMessage": "Form deleted",
   "formDeletedDialogMessageFailed": "Failed to delete form",
+  "formDeletedResponsesExist": "The form could not be deleted. Ensure there are no new responses and try again.",
   "formDeletedDialogTitle": "Success",
   "formDeleteDialogTitleFailed": "Error",
   "formDownload": {
