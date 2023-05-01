@@ -527,7 +527,12 @@
       "step2": "Étape 2",
       "step2Details": "Copiez et collez les instructions dans un courriel et joignez le fichier du formulaire"
     },
-    "unpublished": "Lien n'est pas disponible pour les formulaires non publiés"
+    "unpublished": "Lien n'est pas disponible pour les formulaires non publiés",
+    "missingName": {
+      "message1": "[FR] You must",
+      "message2": "[FR] name your form",
+      "message3": "[FR] before you can share"
+    }
   },
   "shortAnswer": "Réponse courte",
   "shortAnswerText": "Réponse courte",
