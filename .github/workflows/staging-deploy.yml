@@ -75,12 +75,6 @@ jobs:
           wait-for-service-stability: true
           codedeploy-appspec: ${{ github.workspace }}/form-viewer-appspec.json
 
-      - name: Run scan websites
-        run: |
-          curl -s https://scan-websites.alpha.canada.ca > /dev/null
-          sleep 60
-          curl -X GET -H 'X-API-KEY: ${{ secrets.SCAN_WEBSITES_KEY }}' -H 'X-TEMPLATE-TOKEN: ${{ secrets.SCAN_WEBSITES_TEMPLATE }}' https://scan-websites.alpha.canada.ca/scans/start
-
       - name: Logout of Amazon ECR
         if: always()
         run: docker logout ${{ steps.login-ecr.outputs.registry }}
