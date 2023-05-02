@@ -1,6 +1,7 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import debounce from "lodash.debounce";
 import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 
 import { Language, LocalizedFormProperties } from "../../types";
 import { ElementPanel, ConfirmationDescription, PrivacyDescription } from ".";
@@ -34,6 +35,9 @@ export const Edit = () => {
   }));
 
   const [value, setValue] = useState<string>(title);
+  const { query } = useRouter();
+  const focusTitle = query.focusTitle ? true : false;
+  const titleInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setValue(title);
@@ -71,6 +75,12 @@ export const Edit = () => {
     }
   }, [value, getName, updateField]);
 
+  useEffect(() => {
+    if (focusTitle) {
+      titleInput && titleInput.current && titleInput.current?.focus();
+    }
+  }, [focusTitle]);
+
   return (
     <>
       <h1 className="visually-hidden">{t("edit")}</h1>
@@ -82,6 +92,7 @@ export const Edit = () => {
             </label>
             <Input
               id="formTitle"
+              ref={titleInput}
               placeholder={t("placeHolderFormTitle")}
               value={value}
               onChange={updateValue}

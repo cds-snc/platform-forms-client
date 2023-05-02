@@ -526,7 +526,12 @@
       "step2": "Step 2",
       "step2Details": "Copy and paste the email instructions into an email and attach the form file"
     },
-    "unpublished": "Not available for unpublished forms"
+    "unpublished": "Not available for unpublished forms",
+    "missingName": {
+      "message1": "You must",
+      "message2": "name your form",
+      "message3": "before you can share."
+    }
   },
   "shortAnswer": "Short answer",
   "shortAnswerText": "Short answer",
