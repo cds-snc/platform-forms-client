@@ -531,7 +531,7 @@
     "missingName": {
       "message1": "Veuillez",
       "message2": "donner un nom à votre formulaire",
-      "message3": "avant de partager"
+      "message3": "avant de partager."
     }
   },
   "shortAnswer": "Réponse courte",
