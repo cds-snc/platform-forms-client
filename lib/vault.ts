@@ -1,7 +1,11 @@
 import { QueryCommand, QueryCommandInput } from "@aws-sdk/lib-dynamodb";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { VaultSubmissionList, UserAbility } from "@lib/types";
+import { VaultSubmissionList, UserAbility, VaultStatus } from "@lib/types";
 import { logEvent } from "./auditLogs";
+import {
+  numberOfUnprocessedSubmissionsCacheCheck,
+  numberOfUnprocessedSubmissionsCachePut,
+} from "./cache/unprocessedSubmissionsCache";
 import { connectToDynamo } from "./integration/dynamodbConnector";
 import { logMessage } from "./logger";
 import { AccessControlError, checkPrivileges } from "./privileges";
@@ -40,7 +44,7 @@ async function getUsersForForm(formID: string) {
 export async function listAllSubmissions(
   ability: UserAbility,
   formID: string
-): Promise<VaultSubmissionList[]> {
+): Promise<{ submissions: VaultSubmissionList[]; numberOfUnprocessedSubmissions: number }> {
   // Check access control first
   try {
     const templateOwners = await getUsersForForm(formID);
@@ -135,15 +139,48 @@ export async function listAllSubmissions(
         lastEvaluatedKey = response.LastEvaluatedKey;
       }
     }
+
     logEvent(
       ability.userID,
       { type: "Response" },
       "ListResponses",
       `List all responses for form ${formID}`
     );
-    return accumulatedResponses;
+
+    const numOfUnprocessedSubmissions = accumulatedResponses.filter((submission) =>
+      [VaultStatus.NEW, VaultStatus.DOWNLOADED, VaultStatus.PROBLEM].includes(submission.status)
+    ).length;
+
+    await numberOfUnprocessedSubmissionsCachePut(formID, numOfUnprocessedSubmissions);
+
+    return {
+      submissions: accumulatedResponses,
+      numberOfUnprocessedSubmissions: numOfUnprocessedSubmissions,
+    };
   } catch (e) {
     logMessage.error(e);
-    return [];
+    return { submissions: [], numberOfUnprocessedSubmissions: 0 };
+  }
+}
+
+/**
+ * This method returns the number of unprocessed submissions (submission with a status equal to 'New' or 'Downloaded')
+ * @param formID - The form ID from which to retrieve responses
+ */
+
+export async function numberOfUnprocessedSubmissions(
+  ability: UserAbility,
+  formID: string,
+  ignoreCache = false
+): Promise<number> {
+  const cachedNumberOfUnprocessedSubmissions = await numberOfUnprocessedSubmissionsCacheCheck(
+    formID
+  );
+
+  if (cachedNumberOfUnprocessedSubmissions && !ignoreCache) {
+    return cachedNumberOfUnprocessedSubmissions;
+  } else {
+    const allSubmissions = await listAllSubmissions(ability, formID);
+    return allSubmissions.numberOfUnprocessedSubmissions;
   }
 }

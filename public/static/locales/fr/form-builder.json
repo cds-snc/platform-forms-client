@@ -282,7 +282,7 @@
   "elementActions": "Actions des éléments",
   "email": "Courriel",
   "english": "anglais",
-  "errorSaving": "Le téléchargement du fichier de formulaire a échoué. <a href=\"/fr/form-builder/support\" target=\"_blank\">Contacter l’équipe de soutien</a>.",
+  "errorSaving": "Une erreur s'est produite lors de l'enregistrement du formulaire. <a href=\"/fr/form-builder/support\" target=\"_blank\">Contacter l’équipe de soutien</a>.",
   "failedToReadFormFile": "L’ouverture du fichier de formulaire a échoué",
   "formatBold": "Mettre en gras",
   "formatBulletList": "Mettre en liste à puces",
@@ -291,7 +291,17 @@
   "formatItalic": "Mettre en italique",
   "formatNumberedList": "Mettre en liste numérotée",
   "formConfirmationMessage": "Message de confirmation du formulaire",
+  "formDeleteResponses": {
+    "title": "Confirmer les réponses avant de supprimer le formulaire",
+    "message1": "Ce formulaire est publié et reçoit des réponses. Vous avez des réponses à télécharger et à confirmer.",
+    "message2": "Avant de supprimer ce formulaire :",
+    "message3": "1. Télécharger toutes les nouvelles réponses.",
+    "message4": "2. Confirmer la réception des réponses téléchargées.",
+    "cta": "Accéder aux réponses"
+  },
   "formDelete": {
+    "error": "Erreur",
+    "somethingWentWrong": "Il y a eu un problème",
     "downloadButtonText": "Télécharger une copie",
     "draft": {
       "message1": "La suppression ne peut être annulée. Votre formulaire sera définitivement supprimé de votre liste de formulaires.",
@@ -307,6 +317,7 @@
   },
   "formDeletedDialogMessage": "Formulaire supprimé",
   "formDeletedDialogMessageFailed": "Échec de la suppression du formulaire",
+  "formDeletedResponsesExist": "Le formulaire n'a pas pu être supprimé. Veuillez vous assurer qu'il n'y a pas de nouvelles réponses et réessayez.",
   "formDeletedDialogTitle": "Succès",
   "formDeleteDialogTitleFailed": "Erreur",
   "formDownload": {
@@ -516,7 +527,12 @@
       "step2": "Étape 2",
       "step2Details": "Copiez et collez les instructions dans un courriel et joignez le fichier du formulaire"
     },
-    "unpublished": "Lien n'est pas disponible pour les formulaires non publiés"
+    "unpublished": "Lien n'est pas disponible pour les formulaires non publiés",
+    "missingName": {
+      "message1": "Veuillez",
+      "message2": "donner un nom à votre formulaire",
+      "message3": "avant de partager."
+    }
   },
   "shortAnswer": "Réponse courte",
   "shortAnswerText": "Réponse courte",
@@ -603,6 +619,7 @@
       "body1": "Il y a",
       "body2": "réponses non confirmées avec 35 jours de retard ou plus. Confirmez la réception de toute réponse téléchargée en retard avant d'en enregistrer de nouvelles."
     },
-    "beforePublishMessage": "Vous pouvez modifier ces paramètres à tout moment avant de publier le formulaire."
+    "beforePublishMessage": "Vous pouvez modifier ces paramètres à tout moment avant de publier le formulaire.",
+    "loading": "Chargement..."
   }
 }

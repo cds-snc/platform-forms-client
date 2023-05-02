@@ -7,7 +7,7 @@ import {
   DynamoDBDocumentClient,
   TransactWriteCommand,
 } from "@aws-sdk/lib-dynamodb";
-import { MiddlewareProps, WithRequired } from "@lib/types";
+import { MiddlewareProps, VaultStatus, WithRequired } from "@lib/types";
 import { connectToDynamo } from "@lib/integration/dynamodbConnector";
 import { NotifyClient } from "notifications-node-client";
 import { createAbility, AccessControlError } from "@lib/privileges";
@@ -124,7 +124,7 @@ async function getSubmissionsFromSubmissionNames(
   submissionNamesNotFound: string[];
 }> {
   const accumulatedSubmissions: {
-    [name: string]: { status: string; confirmationCode: string };
+    [name: string]: { status: VaultStatus; confirmationCode: string };
   } = {};
 
   let requestedKeys = submissionNames.map((name) => {
@@ -173,7 +173,7 @@ async function getSubmissionsFromSubmissionNames(
 
       if (!submission) {
         acc.submissionNamesNotFound.push(currentSubmissionName);
-      } else if (submission.status === "Problem") {
+      } else if (submission.status === VaultStatus.PROBLEM) {
         acc.submissionNamesAlreadyUsed.push(currentSubmissionName);
       } else {
         acc.submissionsToReport.push({

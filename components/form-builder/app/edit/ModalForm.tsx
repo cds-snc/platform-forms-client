@@ -28,7 +28,7 @@ export const ModalForm = ({
 }: {
   item: FormElementWithIndex;
   properties: ElementProperties;
-  updateModalProperties: (index: number, properties: ElementProperties) => void;
+  updateModalProperties: (id: number, properties: ElementProperties) => void;
   unsetModalField: (path: string) => void;
 }) => {
   const { t } = useTranslation("form-builder");
@@ -56,7 +56,7 @@ export const ModalForm = ({
           }
           className="w-11/12"
           onChange={(e) =>
-            updateModalProperties(item.index, {
+            updateModalProperties(item.id, {
               ...properties,
               ...{
                 [localizeField(LocalizedElementProperties.TITLE, translationLanguagePriority)]:
@@ -72,10 +72,11 @@ export const ModalForm = ({
         <TextArea
           id={`description--modal--${item.index}`}
           placeholder={t("inputDescription")}
+          testId="description-input"
           className="w-11/12"
           onChange={(e) => {
             const description = e.target.value.replace(/[\r\n]/gm, "");
-            updateModalProperties(item.index, {
+            updateModalProperties(item.id, {
               ...properties,
               ...{
                 [localizeField(
@@ -105,7 +106,7 @@ export const ModalForm = ({
             const validation = Object.assign({}, properties.validation, {
               required: e.target.checked,
             });
-            updateModalProperties(item.index, {
+            updateModalProperties(item.id, {
               ...properties,
               ...{ validation },
             });
@@ -133,13 +134,13 @@ export const ModalForm = ({
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               // if value is "", unset the field
               if (e.target.value === "") {
-                unsetModalField(`modals[${item.index}].properties.maxNumberOfRows`);
+                unsetModalField(`modals[${item.id}].properties.maxNumberOfRows`);
                 return;
               }
 
               const value = parseInt(e.target.value);
               if (!isNaN(value) && value >= 1) {
-                updateModalProperties(item.index, {
+                updateModalProperties(item.id, {
                   ...properties,
                   maxNumberOfRows: value,
                 });
@@ -157,7 +158,7 @@ export const ModalForm = ({
             <AutocompleteDropdown
               handleChange={(e) => {
                 const autoComplete = e.target.value;
-                updateModalProperties(item.index, {
+                updateModalProperties(item.id, {
                   ...properties,
                   ...{ autoComplete },
                 });
@@ -196,7 +197,7 @@ export const ModalForm = ({
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     // if value is "", unset the field
                     if (e.target.value === "") {
-                      unsetModalField(`modals[${item.index}].validation.maxLength`);
+                      unsetModalField(`modals[${item.id}].validation.maxLength`);
                       return;
                     }
 
@@ -206,7 +207,7 @@ export const ModalForm = ({
                       const validation = Object.assign({}, properties.validation, {
                         maxLength: value,
                       });
-                      updateModalProperties(item.index, {
+                      updateModalProperties(item.id, {
                         ...properties,
                         ...{ validation },
                       });

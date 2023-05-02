@@ -1,7 +1,6 @@
 name: Linting Code
 on:
   pull_request:
-  push:
     branches: [develop, main]
 
 jobs:
