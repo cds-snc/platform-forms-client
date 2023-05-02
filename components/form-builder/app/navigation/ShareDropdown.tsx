@@ -1,18 +1,21 @@
 import React, { useCallback, useState } from "react";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { useTranslation } from "next-i18next";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 import { ChevronDown, ChevronRight, ShareIcon, LinkIcon } from "../../icons";
 
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { ShareModal } from "../ShareModal";
 import { LinksSubMenu } from "./LinksSubMenu";
-import { useSession } from "next-auth/react";
+import { Button } from "../shared/Button";
 import { ShareModalUnauthenticated } from "..";
 
 export const ShareDropdown = () => {
-  const { t } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation("form-builder");
   const { status } = useSession();
+  const { push } = useRouter();
 
   const [shareModal, showShareModal] = useState(false);
 
@@ -20,10 +23,18 @@ export const ShareDropdown = () => {
     showShareModal(false);
   }, []);
 
-  const { isPublished, id: formId } = useTemplateStore((s) => ({
+  const {
+    isPublished,
+    id: formId,
+    name,
+  } = useTemplateStore((s) => ({
     id: s.id,
     isPublished: s.isPublished,
+    name: s.name,
   }));
+
+  const menuWidth = name ? "w-48" : "w-[400px]";
+  const editLink = `${i18n.language}/form-builder/edit?focusTitle=true`;
 
   return (
     <div className="relative inline-block text-left">
@@ -41,23 +52,44 @@ export const ShareDropdown = () => {
           <DropdownMenuPrimitive.Content
             align="end"
             sideOffset={5}
-            className={"w-48 rounded-lg px-1.5 py-1 shadow-md bg-white border-1 border-black"}
+            className={`${menuWidth} rounded-lg px-1.5 py-1 shadow-md bg-white border-1 border-black`}
           >
+            {!name && (
+              <DropdownMenuPrimitive.Item>
+                <span className="flex-grow ml-2 text-sm inline-block w-[400px]">
+                  {t("share.missingName.message1")}{" "}
+                  {/* note: using a Button here ... using a Link doesn't close the menu */}
+                  <Button
+                    theme="link"
+                    className="inline-block"
+                    onClick={() => {
+                      push(editLink, undefined, { shallow: true });
+                    }}
+                  >
+                    {t("share.missingName.message2")}
+                  </Button>{" "}
+                  {t("share.missingName.message3")}
+                </span>
+              </DropdownMenuPrimitive.Item>
+            )}
+
             {/* share.email */}
-            <DropdownMenuPrimitive.Item
-              onClick={() => {
-                showShareModal(true);
-              }}
-              className={
-                "flex cursor-pointer items-center rounded-md px-2 py-2 text-sm outline-none hover:text-white-default hover:bg-gray-600 focus:text-white-default focus:bg-gray-600 [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
-              }
-            >
-              <ShareIcon className="" />
-              <span className="flex-grow ml-2">{t("share.email")}</span>
-            </DropdownMenuPrimitive.Item>
+            {name && (
+              <DropdownMenuPrimitive.Item
+                onClick={() => {
+                  showShareModal(true);
+                }}
+                className={
+                  "flex cursor-pointer items-center rounded-md px-2 py-2 text-sm outline-none hover:text-white-default hover:bg-gray-600 focus:text-white-default focus:bg-gray-600 [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
+                }
+              >
+                <ShareIcon className="" />
+                <span className="flex-grow ml-2">{t("share.email")}</span>
+              </DropdownMenuPrimitive.Item>
+            )}
 
             {/* share.link + sub menu */}
-            {formId && (
+            {formId && name && (
               <DropdownMenuPrimitive.Sub>
                 <DropdownMenuPrimitive.SubTrigger
                   className={

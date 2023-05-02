@@ -23,7 +23,16 @@ describe("Form builder share", () => {
     });
   });
 
+  it("Renders share flyout with name check", () => {
+    cy.get("button").contains("Share").click();
+    cy.get("[role='menuitem']").should("have.length", 1);
+    cy.get("span").contains("You must name").should("exist");
+    cy.get("span button").contains("name your form").click();
+    cy.focused().should("have.attr", "id", "formTitle");
+  });
+
   it("Renders share flyout", () => {
+    cy.get("#formTitle").type("Cypress Share Test Form");
     cy.get("button").contains("Share").click();
     cy.get("[role='menuitem']").should("have.length", 1);
     cy.get("span").contains("Share by email").click();
