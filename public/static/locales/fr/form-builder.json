@@ -529,9 +529,9 @@
     },
     "unpublished": "Lien n'est pas disponible pour les formulaires non publiés",
     "missingName": {
-      "message1": "[FR] You must",
-      "message2": "[FR] name your form",
-      "message3": "[FR] before you can share"
+      "message1": "Veuillez",
+      "message2": "donner un nom à votre formulaire",
+      "message3": "avant de partager"
     }
   },
   "shortAnswer": "Réponse courte",
