@@ -72,6 +72,7 @@ export const ModalForm = ({
         <TextArea
           id={`description--modal--${item.index}`}
           placeholder={t("inputDescription")}
+          testId="description-input"
           className="w-11/12"
           onChange={(e) => {
             const description = e.target.value.replace(/[\r\n]/gm, "");

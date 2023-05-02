@@ -30,9 +30,9 @@ export const MoreModal = ({
 
   useEffect(() => {
     if (item.type != "richText") {
-      const index = getElementIndexes(item.id, elements);
-      if (!index || !index[0]) return;
-      updateModalProperties(item.id, elements[index[0]].properties);
+      const indexes = getElementIndexes(item.id, elements);
+      if (!indexes || indexes[0] === null || indexes[0] === undefined) return;
+      updateModalProperties(item.id, elements[indexes[0]].properties);
     }
   }, [item, isOpen, isRichText, elements, updateModalProperties]);
 
