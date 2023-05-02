@@ -1,0 +1,1 @@
+export { handleDelete } from "./handleDelete";

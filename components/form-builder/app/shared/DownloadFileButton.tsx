@@ -118,6 +118,7 @@ export const DownloadFileButton = ({
           downloadFileEvent();
           onClick && onClick();
         }}
+        dataTestId="download-file-button"
       >
         {buttonText ? buttonText : t("formDownload.downloadBtnText")}
       </Button>

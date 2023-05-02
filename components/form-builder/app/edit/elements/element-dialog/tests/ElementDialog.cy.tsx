@@ -236,7 +236,7 @@ describe("<ElementDialog />", () => {
     const handleAddTypeSpy = cy.spy().as("handleAddTypeSpy");
 
     cy.mount(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
-    cy.get("body").tab();
+
     cy.focused().should("have.attr", "data-testid", "listbox");
     cy.get('[data-testid="richText"]').should("have.attr", "aria-selected", "true");
 
