@@ -7,7 +7,7 @@ type ModalStore = {
   isOpen: boolean;
   modals: ElementProperties[];
   updateIsOpen: (isOpen: boolean) => void;
-  updateModalProperties: (index: number, properties: ElementProperties) => void;
+  updateModalProperties: (id: number, properties: ElementProperties) => void;
   unsetModalField: (path: string) => void;
   initialize: () => void;
 };
@@ -31,9 +31,9 @@ export const useModalStore = create<ModalStore>()(
       set((state) => {
         state.isOpen = isOpen;
       }),
-    updateModalProperties: (index, properties) =>
+    updateModalProperties: (id, properties) =>
       set((state) => {
-        state.modals[index] = properties;
+        state.modals[id] = properties;
       }),
     unsetModalField: (path) =>
       set((state) => {
