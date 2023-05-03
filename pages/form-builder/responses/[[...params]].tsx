@@ -68,7 +68,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
             </h1>
             <nav className="flex gap-3">
               {!isPublished && (
-                <Link href="/form-builder/settings">
+                <Link href="/form-builder/settings" legacyBehavior>
                   <a href="/form-builder/settings" className={`${navItemClasses}`}>
                     {t("responses.changeSetup")}
                   </a>
@@ -119,7 +119,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
             )}
 
             {!isPublished && (
-              <Link href="/form-builder/settings">
+              <Link href="/form-builder/settings" legacyBehavior>
                 <a href="/form-builder/settings" className={`${navItemClasses}`}>
                   {t("responses.changeSetup")}
                 </a>
@@ -311,18 +311,29 @@ export const getServerSideProps: GetServerSideProps = async ({
   if (formID && session) {
     try {
       const ability = createAbility(session);
-      const [initialForm, submissions] = await Promise.all([
-        getFullTemplateByID(ability, formID),
-        listAllSubmissions(ability, formID),
-      ]);
+
+      const initialForm = await getFullTemplateByID(ability, formID);
+
+      if (initialForm === null) {
+        return {
+          redirect: {
+            // We can redirect to a 'Form does not exist page' in the future
+            destination: `/${locale}/404`,
+            permanent: false,
+          },
+        };
+      }
+
+      const allSubmissions = await listAllSubmissions(ability, formID);
+
       FormbuilderParams.initialForm = initialForm;
-      vaultSubmissions.push(...submissions);
+      vaultSubmissions.push(...allSubmissions.submissions);
 
       const isNagwareEnabled = await checkOne("nagware");
 
       if (isNagwareEnabled) {
-        nagwareResult = submissions.length
-          ? await detectOldUnprocessedSubmissions(submissions)
+        nagwareResult = allSubmissions.submissions.length
+          ? await detectOldUnprocessedSubmissions(allSubmissions.submissions)
           : null;
       }
     } catch (e) {

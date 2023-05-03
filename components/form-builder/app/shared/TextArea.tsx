@@ -10,6 +10,7 @@ export const TextArea = ({
   className,
   placeholder,
   lang,
+  testId,
 }: {
   id: string;
   name?: string;
@@ -20,10 +21,12 @@ export const TextArea = ({
   onKeyDown?: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
   className?: string;
   lang?: string;
+  testId?: string;
 }) => {
   return (
     <textarea
       id={id}
+      data-testid={testId}
       name={name}
       aria-describedby={describedBy}
       className={`${className} py-2 px-3 my-2 rounded border-1.5 border-black-default border-solid focus:outline-2 focus:outline-blue-focus focus:outline focus:border-blue-focus`}

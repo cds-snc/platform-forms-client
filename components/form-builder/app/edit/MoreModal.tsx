@@ -7,6 +7,7 @@ import { Button } from "../shared";
 import { Modal } from "./index";
 import { ModalButton, ModalForm } from "./index";
 import { useRefsContext } from "@formbuilder/app/edit/RefsContext";
+import { getPathString, getElementIndexes } from "@formbuilder/getPath";
 
 export const MoreModal = ({
   item,
@@ -29,7 +30,9 @@ export const MoreModal = ({
 
   useEffect(() => {
     if (item.type != "richText") {
-      updateModalProperties(item.index, elements[item.index].properties);
+      const indexes = getElementIndexes(item.id, elements);
+      if (!indexes || indexes[0] === null || indexes[0] === undefined) return;
+      updateModalProperties(item.id, elements[indexes[0]].properties);
     }
   }, [item, isOpen, isRichText, elements, updateModalProperties]);
 
@@ -38,15 +41,15 @@ export const MoreModal = ({
     return (e: React.MouseEvent<HTMLElement>) => {
       e.preventDefault();
       // replace all of "properties" with the new properties set in the ModalForm
-      updateField(`form.elements[${item.index}].properties`, properties);
+      updateField(getPathString(item.id, elements), properties);
     };
   };
 
   const renderSaveButton = () => {
     return (
       <ModalButton isOpenButton={false}>
-        {modals[item.index] && (
-          <Button className="mr-4" onClick={handleSubmit({ item, properties: modals[item.index] })}>
+        {modals[item.id] && (
+          <Button className="mr-4" onClick={handleSubmit({ item, properties: modals[item.id] })}>
             {t("save")}
           </Button>
         )}
@@ -63,10 +66,10 @@ export const MoreModal = ({
         refs && refs.current && refs.current[item.id] && refs.current[item.id].focus();
       }}
     >
-      {!isRichText && modals[item.index] && (
+      {!isRichText && modals[item.id] && (
         <ModalForm
           item={item}
-          properties={modals[item.index]}
+          properties={modals[item.id]}
           updateModalProperties={updateModalProperties}
           unsetModalField={unsetModalField}
         />

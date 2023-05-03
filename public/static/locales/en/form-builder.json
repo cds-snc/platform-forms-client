@@ -291,7 +291,17 @@
   "formatItalic": "Format italic",
   "formatNumberedList": "Format numbered list",
   "formConfirmationMessage": "Form confirmation message",
+  "formDeleteResponses": {
+    "title": "Confirm responses before deleting form",
+    "message1": "This form has been published and is receiving responses. You have responses to download and confirm.",
+    "message2": "Before deleting this form:",
+    "message3": "1. Download all new responses.",
+    "message4": "2. Confirm the receipt of downloaded responses",
+    "cta": "Go to responses"
+  },
   "formDelete": {
+    "error": "Error",
+    "somethingWentWrong": "Something went wrong",
     "downloadButtonText": "Download a copy",
     "draft": {
       "message1": "Deleting a form cannot be undone. Your form will be removed from your forms list.",
@@ -307,6 +317,7 @@
   },
   "formDeletedDialogMessage": "Form deleted",
   "formDeletedDialogMessageFailed": "Failed to delete form",
+  "formDeletedResponsesExist": "The form could not be deleted. Ensure there are no new responses and try again.",
   "formDeletedDialogTitle": "Success",
   "formDeleteDialogTitleFailed": "Error",
   "formDownload": {
@@ -515,7 +526,12 @@
       "step2": "Step 2",
       "step2Details": "Copy and paste the email instructions into an email and attach the form file"
     },
-    "unpublished": "Not available for unpublished forms"
+    "unpublished": "Not available for unpublished forms",
+    "missingName": {
+      "message1": "You must",
+      "message2": "name your form",
+      "message3": "before you can share."
+    }
   },
   "shortAnswer": "Short answer",
   "shortAnswerText": "Short answer",
@@ -603,5 +619,6 @@
       "body2": "unconfirmed responses 35 days overdue. Confirm the receipt of all overdue downloaded responses before saving new ones."
     }
   },
-  "beforePublishMessage": "You can change these settings anytime before publishing."
+  "beforePublishMessage": "You can change these settings anytime before publishing.",
+  "loading": "Loading..."
 }

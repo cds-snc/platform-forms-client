@@ -1,4 +1,4 @@
-import { NagwareSubmission, NagwareResult, NagLevel } from "@lib/types";
+import { NagwareSubmission, NagwareResult, NagLevel, VaultStatus } from "@lib/types";
 import { getAppSetting } from "./appSettings";
 import { logMessage } from "./logger";
 
@@ -21,7 +21,7 @@ export async function detectOldUnprocessedSubmissions(
     const warnDays = parseInt(warnPhaseDays);
 
     const results = submissions
-      .filter((submission) => ["New", "Downloaded"].includes(submission.status))
+      .filter((submission) => [VaultStatus.NEW, VaultStatus.DOWNLOADED].includes(submission.status))
       .reduce(
         (acc, current) => {
           const diffMs = Math.abs(currentDate - current.createdAt);
@@ -29,13 +29,13 @@ export async function detectOldUnprocessedSubmissions(
           // 86400000 milliseconds = 1 Day
           const diffDays = Math.ceil(diffMs / 86400000);
 
-          if (current.status === "New") {
+          if (current.status === VaultStatus.NEW) {
             if (diffDays > warnDays) {
               acc.numberOfUnsavedSubmissionsForWarn++;
             } else if (diffDays > promptDays) {
               acc.numberOfUnsavedSubmissionsForPrompt++;
             }
-          } else if (current.status === "Downloaded") {
+          } else if (current.status === VaultStatus.DOWNLOADED) {
             if (diffDays > warnDays) {
               acc.numberOfUnconfirmedSubmissionsForWarn++;
             } else if (diffDays > promptDays) {
