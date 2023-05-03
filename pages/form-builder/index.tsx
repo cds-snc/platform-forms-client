@@ -53,7 +53,20 @@ export const getServerSideProps: GetServerSideProps = async ({
   if (formID && session) {
     try {
       const ability = createAbility(session);
-      FormbuilderParams.initialForm = await getFullTemplateByID(ability, formID);
+
+      const initialForm = await getFullTemplateByID(ability, formID);
+
+      if (initialForm === null) {
+        return {
+          redirect: {
+            // We can redirect to a 'Form does not exist page' in the future
+            destination: `/${locale}/404`,
+            permanent: false,
+          },
+        };
+      }
+
+      FormbuilderParams.initialForm = initialForm;
     } catch (e) {
       if (e instanceof AccessControlError) {
         return {
