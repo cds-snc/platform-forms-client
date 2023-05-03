@@ -1,101 +1,38 @@
 .form-builder {
   /*--------------------------------------------*
-  * Element dropdown
+  * Expanding Textarea
   *--------------------------------------------*/
-  .builder-element-dropdown {
-    width: 250px;
+  // see: https://css-tricks.com/auto-growing-inputs-textareas/#aa-other-ideas
+  .input-sizer {
+    display: inline-grid;
+    vertical-align: top;
 
-    .separator {
-      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-      margin: 8px 0;
-    }
-
-    .header-button {
-      padding-left: 20px;
-      padding-top: 10px;
-      padding-bottom: 10px;
-      display: flex;
-      background-color: #fff;
-      border-radius: 4px;
-      border: 1.5px solid #000000;
-      width: 100%;
-      line-height: 24px;
-      &:focus,
-      &[aria-expanded="true"] {
-        border-color: #303fc3;
-        box-shadow: 0 0 0 2.5px #303fc3;
-        outline: 0;
+    &.stacked {
+      align-items: stretch;
+      &::after,
+      textarea {
+        grid-area: 2 / 1;
       }
     }
 
-    .selected {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-
-      svg {
-        margin-right: 20px;
-      }
+    &::after,
+    textarea {
+      min-width: 100%;
+      grid-area: 1 / 2;
+      resize: none;
+      appearance: none;
+      font-size: 30px !important;
+      line-height: 38px !important;
+      padding-top: 0.625rem;
+      padding-bottom: 0.375rem;
+      padding-left: 0.625rem;
+      padding-right: 0.625rem;
     }
 
-    ul {
-      box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 2px 6px 2px rgba(60, 64, 67, 0.15);
-      padding: 0px;
-      padding-top: 10px;
-      padding-bottom: 10px;
-      border-radius: 4px;
-      margin: 0px;
-      margin-top: 10px;
-      list-style: none;
-      background-color: #fff;
-      position: absolute;
-      width: 250px;
-    }
-
-    li {
-      display: flex;
-      align-content: flex-start;
-      cursor: pointer;
-      padding-left: 20px;
-      padding-right: 26px;
-      padding-bottom: 8px;
-      padding-top: 8px;
-
-      .text {
-        margin-left: 10px;
-        line-height: 24px;
-        color: #202124;
-      }
-      .highlighted {
-        color: #fff;
-      }
-
-      .icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: left;
-        overflow: hidden;
-        display: inline-block;
-        position: relative;
-        padding-top: 2px;
-
-        svg {
-          height: 20px;
-          width: 20px;
-        }
-      }
-      .highlighted {
-        color: #fff;
-      }
-    }
-    .highlighted {
-      background: #718096;
-      svg {
-        path {
-          fill: #fff;
-        }
-      }
+    &::after {
+      content: attr(data-value) " ";
+      visibility: hidden;
+      white-space: pre-wrap;
     }
   }
 
@@ -215,7 +152,6 @@
     }
   }
 
-  
   /*--------------------------------------------*
   * Rich text editor
   *--------------------------------------------*/
@@ -345,6 +281,6 @@
     background-color: #00000013;
     border-radius: 4px;
   }
-  
+
   /* end form builder styles */
 }

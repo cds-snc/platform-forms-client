@@ -127,7 +127,7 @@ export const Card = (props: CardProps): React.ReactElement => {
       <p className="h-36 px-3 pt-5 pb-8">
         <a
           href={isPublished ? url : `/${i18n.language}/form-builder/edit/${id}`}
-          className="font-bold line-clamp-3 inline-block wrap overflow-hidden inline-block"
+          className="font-bold line-clamp-2 wrap overflow-hidden"
           aria-describedby={`card-title-${id} card-date-${id}`}
         >
           {name ? name : ""}

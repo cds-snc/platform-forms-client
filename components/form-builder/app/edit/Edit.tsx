@@ -7,7 +7,7 @@ import { Language, LocalizedFormProperties } from "../../types";
 import { ElementPanel, ConfirmationDescription, PrivacyDescription } from ".";
 import { RefsProvider } from "./RefsContext";
 import { RichTextLocked } from "./elements";
-import { Input } from "../shared";
+import { ExpandingInput } from "../shared";
 import { useTemplateStore } from "../../store";
 import { getQuestionNumber, sortByLayout } from "../../util";
 
@@ -37,7 +37,7 @@ export const Edit = () => {
   const [value, setValue] = useState<string>(title);
   const { query } = useRouter();
   const focusTitle = query.focusTitle ? true : false;
-  const titleInput = useRef<HTMLInputElement>(null);
+  const titleInput = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     setValue(title);
@@ -60,8 +60,13 @@ export const Edit = () => {
   }));
 
   const updateValue = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       setValue(e.target.value);
+      // update the data-value attribute on the title input
+      // so that the question number can be updated
+      if (titleInput?.current) {
+        titleInput.current.dataset.value = value;
+      }
       _debounced(e.target.value, translationLanguagePriority);
     },
     // exclude _debounced from the dependency array
@@ -90,14 +95,12 @@ export const Edit = () => {
             <label htmlFor="formTitle" className="visually-hidden" {...getLocalizationAttribute()}>
               {t("formTitle")}
             </label>
-            <Input
+            <ExpandingInput
               id="formTitle"
               ref={titleInput}
               placeholder={t("placeHolderFormTitle")}
               value={value}
               onChange={updateValue}
-              className="w-full laptop:w-3/4 mt-2 laptop:mt-0 mb-4 !text-h2 !font-sans !pb-0.5 !pt-1.5"
-              theme="title"
               onBlur={updateName}
               {...getLocalizationAttribute()}
             />
