@@ -4,7 +4,7 @@
     "confirmReceipt": "Confirmer la réception",
     "navLabel": "Réponses",
     "reportProblems": "Signaler un problème",
-    "title": "Télécharger les réponses",
+    "title": "Réponses",
     "unauthenticated": {
       "createOne": "créez-en un",
       "noAccount": "Si vous n'avez pas de compte Formulaires GC,",
@@ -14,7 +14,7 @@
       "toAccessPagePart2": "à votre compte Formulaires GC"
     },
     "email": {
-      "title": "Paramètres de réponses courriel",
+      "title": "Paramètres des réponses courriel",
       "submitTo": "Les réponses soumises sont envoyées à :",
       "subjectLine": "La ligne d’objet apparaîtra comme :"
     }
@@ -24,24 +24,24 @@
       "tableTitle": "Tableau des réponses à télécharger",
       "select": "Sélection",
       "number": "Numéro de formulaire",
-      "status": "État des réponses",
+      "status": "État",
       "downloadResponse": "Délai de téléchargement",
       "lastDownloadedBy": "Réponses téléchargées par",
       "confirmReceipt": "Confirmation de réception",
-      "removal": "Suppression des réponses"
+      "removal": "Suppression des données des réponses"
     },
     "status": {
-      "downloaded": "Téléchargée",
-      "notDownloaded": "Non téléchargée",
+      "downloaded": "Téléchargé",
+      "notDownloaded": "À télécharger",
       "new": "Nouveauté",
-      "confirmed": "Confirmée",
-      "unconfirmed": "Non confirmée",
+      "confirmed": "Confirmé",
+      "unconfirmed": "À confirmer",
       "problem": "Problème",
-      "done": "Confirmée",
+      "done": "Complété",
       "withinXDays": "Dans {{daysLeft}} jours",
       "overdue": "En retard",
-      "wontRemove": "Échec de la suppression",
-      "notSet": "Non réglée"
+      "wontRemove": "Échec de suppression",
+      "notSet": "Non réglé"
     },
     "card": {
       "noResponses": "Vous n'avez pas de réponses",
@@ -62,7 +62,7 @@
     },
     "downloadXSelectedResponses": "Télécharger {{size}} réponses sélectionnées",
     "skipLink": "Sauter le tableau de téléchargement",
-    "unknown": "Inconnue"
+    "unknown": "Inconnu"
   },
   "downloadResponsesModals": {
     "confirmReceiptDialog": {
@@ -126,8 +126,8 @@
       }
     },
     "lineItemEntries": {
-      "added": "Ajoutée",
-      "removed": "Supprimée"
+      "added": "Ajouté",
+      "removed": "Supprimé"
     },
     "sending": "Envoi en cours...",
     "cancel": "Annuler"
