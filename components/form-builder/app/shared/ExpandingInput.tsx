@@ -38,6 +38,7 @@ const ExpandingInput = React.forwardRef<Ref, Props>((props, ref) => {
     >
       <textarea
         rows={1}
+        maxLength={2000}
         id={id}
         className="text-base font-bold border-b-1.5 border-black-default border-solid focus:bg-gray-default focus:outline-0 !font-sans"
         name={name}
