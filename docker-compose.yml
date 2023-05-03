@@ -17,7 +17,7 @@ services:
     restart: always
   redis:
     restart: always
-    image: redis:latest@sha256:f50031a49f41e493087fb95f96fdb3523bb25dcf6a3f0b07c588ad3cdbe1d0aa
+    image: redis:latest@sha256:93a5ed8cdfa909a12cb41e5605c147756b804a9fe38376f8afed133f427ea828
     ports:
       - "6379:6379"
     expose:
