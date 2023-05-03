@@ -311,10 +311,21 @@ export const getServerSideProps: GetServerSideProps = async ({
   if (formID && session) {
     try {
       const ability = createAbility(session);
-      const [initialForm, allSubmissions] = await Promise.all([
-        getFullTemplateByID(ability, formID),
-        listAllSubmissions(ability, formID),
-      ]);
+
+      const initialForm = await getFullTemplateByID(ability, formID);
+
+      if (initialForm === null) {
+        return {
+          redirect: {
+            // We can redirect to a 'Form does not exist page' in the future
+            destination: `/${locale}/404`,
+            permanent: false,
+          },
+        };
+      }
+
+      const allSubmissions = await listAllSubmissions(ability, formID);
+
       FormbuilderParams.initialForm = initialForm;
       vaultSubmissions.push(...allSubmissions.submissions);
 
