@@ -21,14 +21,14 @@
   },
   "downloadResponsesTable": {
     "header": {
-      "tableTitle": "Download Responses Table",
+      "tableTitle": "Download responses table",
       "select": "Select",
       "number": "Form number",
       "status": "Status",
       "downloadResponse": "Download response",
       "lastDownloadedBy": "Downloaded by",
       "confirmReceipt": "Receipt confirmation",
-      "removal": "Removal of responses"
+      "removal": "Removal of response data"
     },
     "status": {
       "downloaded": "Downloaded",
@@ -40,7 +40,7 @@
       "done": "Done",
       "withinXDays": "Within {{daysLeft}} days",
       "overdue": "Overdue",
-      "wontRemove": "Removal failed",
+      "wontRemove": "Failed to remove",
       "notSet": "Not set"
     },
     "card": {
@@ -57,11 +57,11 @@
       "atLeastOneFileHeader": "At least one file must be selected to download.",
       "atLeastOneFile": "Try selecting at least one file to download.",
       "errorDownloadingFilesHeader": "Error downloading the selected files.",
-      "errorDownloadingFiles": "Try again in a few minutes. If the problem persists",
+      "errorDownloadingFiles": "Try again in a few minutes. If the problem persists, ",
       "errorDownloadingFilesLink": "contact Support"
     },
     "downloadXSelectedResponses": "Download {{size}} selected responses",
-    "skipLink": "Skip Download Table",
+    "skipLink": "Skip the download table",
     "unknown": "Unknown"
   },
   "downloadResponsesModals": {
