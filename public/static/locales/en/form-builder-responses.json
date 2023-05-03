@@ -57,7 +57,7 @@
       "atLeastOneFileHeader": "At least one file must be selected to download.",
       "atLeastOneFile": "Try selecting at least one file to download.",
       "errorDownloadingFilesHeader": "Error downloading the selected files.",
-      "errorDownloadingFiles": "Try again in a few minutes. If the problem persists",
+      "errorDownloadingFiles": "Try again in a few minutes. If the problem persists, ",
       "errorDownloadingFilesLink": "contact Support"
     },
     "downloadXSelectedResponses": "Download {{size}} selected responses",
