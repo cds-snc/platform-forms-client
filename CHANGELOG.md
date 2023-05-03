@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Form submission timestamp is not reflecting current user timezone.[1860](https://github.com/cds-snc/platform-forms-client/issues/1860)
+- Responses page is not available if form does not exist (deleted). [2023](https://github.com/cds-snc/platform-forms-client/issues/2023)
 
 ## [3.0.1] 2023-04-25
 
