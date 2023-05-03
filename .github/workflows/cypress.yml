@@ -59,7 +59,7 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - name: "Install dependencies"
-        run: yarn install:all --prefer-offline
+        run: yarn install:all
 
       - name: Cypress Tests
         uses: cypress-io/github-action@d79d2d530a66e641eb4a5f227e13bc985c60b964 # v4.2.2

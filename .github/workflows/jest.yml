@@ -27,7 +27,7 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - name: "Install dependencies"
-        run: yarn install:all --prefer-offline
+        run: yarn install:all
 
       - name: Jest Tests
         run: yarn test --coverage
