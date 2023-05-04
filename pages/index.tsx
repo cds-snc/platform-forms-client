@@ -21,13 +21,13 @@ const Home = () => {
       </div>
       <div className="border-gray-400 p-10 grid grid-cols-2 gap-x-4 max-w-2xl  w-2/4 m-auto">
         <p>
-          <Link href="/en/form-builder" lang="en">
+          <Link href="/en/form-builder" lang="en" locale={false}>
             English
           </Link>
         </p>
 
         <p>
-          <Link href="/fr/form-builder" className="block" lang="fr">
+          <Link href="/fr/form-builder" className="block" lang="fr" locale={false}>
             Français
           </Link>
         </p>
