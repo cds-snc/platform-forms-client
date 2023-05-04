@@ -229,7 +229,7 @@ export const SetResponseDelivery = () => {
               {t("settingsResponseDelivery.selectClassification")}
             </p>
             <p className="inline-block mb-5 p-3 bg-purple-200 font-bold text-sm">
-              {t("beforePublishMessage")}
+              {t("settingsResponseDelivery.beforePublishMessage")}
             </p>
             <select
               disabled={isPublished}
