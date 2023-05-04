@@ -58,21 +58,15 @@ export const jsonValidator = (schema: Schema, options?: ValidateOptions): Middle
         schema,
         options?.noHTML ? { preValidateProperty: htmlChecker } : undefined
       );
+
       if (validatorResult.valid) {
         return { next: true };
       } else {
-        res
-          .status(400)
-          .json({ error: "JSON Validation Error: " + validatorResult.errors.toString() });
-        return { next: false };
+        throw new Error(validatorResult.errors.toString());
       }
     } catch (e) {
       const validationError = e as Error;
-      if (validationError.message === "HTML detected in JSON") {
-        res.status(400).json({ error: "JSON Validation Error: HTML detected in JSON" });
-      } else {
-        res.status(500).json({ error: "Malformed API Request" });
-      }
+      res.status(400).json({ error: `JSON Validation Error: ${validationError.message}` });
       return { next: false };
     }
   };

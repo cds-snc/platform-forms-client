@@ -57,7 +57,7 @@ export const cors = ({
       return { next: true };
     } catch (e) {
       logMessage.error(e as Error);
-      res.status(500).json({ error: "Malformed API Request" });
+      res.status(400).json({ error: "Malformed API Request" });
       return { next: false };
     }
   };
