@@ -452,7 +452,7 @@
     "title": "Sélectionnez une option de livraison des réponses",
     "vaultOption": "Télécharger les réponses de Formulaires GC",
     "vaultOptionHint": {
-      "text1": " Les réponses reçues apparaîtront",
+      "text1": " Les réponses reçues apparaîtront à",
       "text2": "la page Réponses"
     },
     "emailOption": "Les réponses soumises seront envoyées par courriel à cette boîte de réception.",
