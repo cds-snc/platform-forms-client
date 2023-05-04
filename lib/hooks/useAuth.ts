@@ -260,7 +260,7 @@ export const useAuth = () => {
   ) => {
     resetCognitoErrorState();
     try {
-      const response = await signIn<"credentials">("credentials", {
+      const response = await signIn("cognito", {
         redirect: false,
         username,
         password,

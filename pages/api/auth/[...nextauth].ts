@@ -37,6 +37,7 @@ export const authOptions: NextAuthOptions = {
     }),
     CredentialsProvider({
       name: "CognitoLogin",
+      id: "cognito",
       credentials: {
         username: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
