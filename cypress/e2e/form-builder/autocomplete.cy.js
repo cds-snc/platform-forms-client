@@ -65,7 +65,7 @@ describe("Test FormBuilder autocomplete props", () => {
   });
 
   autocompleteOptions.forEach((option) => {
-    it(`Adds a TextInput with ${option[0]} autocomplete`, () => {
+    it(`Adds a TextAreaInput with ${option[0]} autocomplete`, () => {
       cy.visit("/form-builder/edit");
       cy.get("button").contains("Add").click();
 
