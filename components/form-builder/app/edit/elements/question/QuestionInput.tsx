@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
 import debounce from "lodash.debounce";
 
-import { Input } from "@formbuilder/app/shared";
+import { ExpandingInput } from "@formbuilder/app/shared";
 import { Language } from "@formbuilder/types";
 import { useTemplateStore } from "@formbuilder/store";
 import { useRefsContext } from "@formbuilder/app/edit/RefsContext";
@@ -24,7 +24,7 @@ export const QuestionInput = ({
   const [value, setValue] = useState(initialValue);
 
   const { refs } = useRefsContext();
-  const getRef = (element: HTMLInputElement) => {
+  const getRef = (element: HTMLTextAreaElement) => {
     if (!refs || !refs.current || !element || !id) {
       return;
     }
@@ -73,17 +73,17 @@ export const QuestionInput = ({
   );
 
   return (
-    <Input
+    <ExpandingInput
       ref={getRef}
       type="text"
       id={`item-${id}`}
       name={`item${index}`}
       placeholder={t("question")}
-      className="w-full"
+      wrapperClassName="w-full text-base"
+      className="font-bold text-base"
       value={value}
       describedBy={describedById ?? undefined}
-      onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateValue(index, e.target.value)}
-      theme="title"
+      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateValue(index, e.target.value)}
       {...getLocalizationAttribute()}
     />
   );

@@ -4,6 +4,8 @@ interface Props {
   id: string;
   name?: string;
   type?: string;
+  wrapperClassName?: string;
+  className?: string;
   placeholder?: string;
   describedBy?: string;
   value: string | number;
@@ -29,18 +31,17 @@ const ExpandingInput = React.forwardRef<Ref, Props>((props, ref) => {
     isInvalid = false,
     lang,
     onBlur,
+    wrapperClassName,
+    className,
   } = props;
 
   return (
-    <div
-      className="input-sizer stacked w-full laptop:w-3/4 mt-2 laptop:mt-0 mb-4 my-2 "
-      data-value={value}
-    >
+    <div className={`input-sizer stacked ${wrapperClassName}`} data-value={value}>
       <textarea
         rows={1}
         maxLength={2000}
         id={id}
-        className="text-base font-bold border-b-1.5 border-black-default border-solid focus:bg-gray-default focus:outline-0 !font-sans"
+        className={`border-b-1.5 border-black-default border-solid focus:bg-gray-default focus:outline-0 !font-sans ${className}`}
         name={name}
         aria-describedby={describedBy}
         aria-invalid={isInvalid ? true : false}
