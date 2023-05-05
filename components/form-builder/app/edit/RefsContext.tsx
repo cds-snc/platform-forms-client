@@ -1,13 +1,13 @@
 import React, { createContext, useContext, useRef, RefObject } from "react";
 
 interface RefsContextType {
-  refs?: RefObject<HTMLInputElement[]> | undefined;
+  refs?: RefObject<HTMLTextAreaElement[]> | undefined;
 }
 
 const RefsContext = createContext<RefsContextType>({});
 
 export function RefsProvider({ children }: { children: React.ReactNode }) {
-  const refs = useRef<HTMLInputElement[]>([]);
+  const refs = useRef<HTMLTextAreaElement[]>([]);
 
   return <RefsContext.Provider value={{ refs }}>{children}</RefsContext.Provider>;
 }

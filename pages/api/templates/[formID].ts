@@ -3,7 +3,6 @@ import {
   updateTemplate,
   updateIsPublishedForTemplate,
   updateAssignedUsersForTemplate,
-  onlyIncludePublicProperties,
   TemplateAlreadyPublishedError,
   getFullTemplateByID,
   removeDeliveryOption,
@@ -24,54 +23,48 @@ import {
   DeliveryOption,
   UserAbility,
   SecurityAttribute,
+  WithRequired,
 } from "@lib/types";
 import { AccessControlError, createAbility } from "@lib/privileges";
+import { logMessage } from "@lib/logger";
 
-const allowedMethods = ["GET", "POST", "PUT", "DELETE"];
-const authenticatedMethods = ["POST", "PUT", "DELETE"];
+class MalformedAPIRequest extends Error {}
 
-const templates = async (
-  req: NextApiRequest,
-  res: NextApiResponse,
-  { session }: MiddlewareProps
-) => {
+const templates = async (req: NextApiRequest, res: NextApiResponse, props: MiddlewareProps) => {
   try {
-    if (!session) return res.status(401).json({ error: "Unauthorized" });
+    const { session } = props as WithRequired<MiddlewareProps, "session">;
 
     const ability = createAbility(session);
 
-    const response = await templateCRUD({
+    const response = await route({
       ability: ability,
       method: req.method,
       request: req,
       ...req.body,
     });
 
-    if (!response) return res.status(500).json({ error: "Error on Server Side" });
+    if (!response) throw new Error("Null operation response");
 
-    if (req.method === "GET") {
-      if (Array.isArray(response)) {
-        const publicTemplates = response.map((template) => onlyIncludePublicProperties(template));
-        return res.status(200).json(publicTemplates);
-      }
-    }
-
-    // If not GET then we're authenticated and can safely return the complete Form Record.
     return res.status(200).json(response);
-  } catch (err) {
-    if (err instanceof AccessControlError) {
+  } catch (e) {
+    const error = e as Error;
+
+    if (e instanceof AccessControlError) {
       return res.status(403).json({ error: "Forbidden" });
-    } else if (err instanceof TemplateAlreadyPublishedError) {
+    } else if (e instanceof TemplateAlreadyPublishedError) {
       return res.status(409).json({ error: "Can't update published form" });
-    } else if (err instanceof TemplateHasUnprocessedSubmissions) {
+    } else if (e instanceof TemplateHasUnprocessedSubmissions) {
       return res.status(405).json({ error: "Found unprocessed submissions" });
+    } else if (e instanceof MalformedAPIRequest) {
+      return res.status(400).json({ error: `Malformed API Request. Reason: ${error.message}.` });
     } else {
-      return res.status(400).json({ error: "Malformed API Request" });
+      logMessage.error(error);
+      return res.status(500).json({ error: `Internal server error. Reason: ${error.message}.` });
     }
   }
 };
 
-const templateCRUD = async ({
+const route = async ({
   ability,
   method,
   request,
@@ -94,13 +87,17 @@ const templateCRUD = async ({
   users?: { id: string; action: "add" | "remove" }[];
   sendResponsesToVault?: boolean;
 }) => {
-  const formID = request.query.formID as string;
+  const formID = request.query.formID;
+
+  if (!formID || typeof formID !== "string") {
+    throw new MalformedAPIRequest("Invalid or missing formID");
+  }
+
   switch (method) {
     case "GET":
-      if (formID) return await getFullTemplateByID(ability, formID);
-      break;
+      return await getFullTemplateByID(ability, formID);
     case "PUT":
-      if (formID && formConfig) {
+      if (formConfig) {
         return await updateTemplate({
           ability: ability,
           formID: formID,
@@ -109,19 +106,20 @@ const templateCRUD = async ({
           deliveryOption: deliveryOption,
           securityAttribute: securityAttribute,
         });
-      } else if (formID && isPublished !== undefined) {
+      } else if (isPublished !== undefined) {
         return await updateIsPublishedForTemplate(ability, formID, isPublished);
-      } else if (formID && users) {
+      } else if (users) {
         return await updateAssignedUsersForTemplate(ability, formID, users);
-      } else if (formID && sendResponsesToVault) {
+      } else if (sendResponsesToVault) {
         return await removeDeliveryOption(ability, formID);
       }
-      throw new Error("Missing formID and/or formConfig");
+      throw new MalformedAPIRequest(
+        "Missing additional request parameter (formConfig, isPublished, users, sendResponsesToVault)"
+      );
     case "DELETE":
-      if (formID) return await deleteTemplate(ability, formID);
-      throw new Error("Missing formID");
+      return await deleteTemplate(ability, formID);
     default:
-      throw new Error("Unsupported Method");
+      throw new MalformedAPIRequest("Unsupported method");
   }
 };
 
@@ -131,8 +129,8 @@ const runValidationCondition = (req: NextApiRequest) => {
 
 export default middleware(
   [
-    cors({ allowedMethods }),
-    sessionExists(authenticatedMethods),
+    cors({ allowedMethods: ["GET", "POST", "PUT", "DELETE"] }),
+    sessionExists(),
     jsonValidator(templatesSchema, {
       jsonKey: "formConfig",
       noHTML: true,

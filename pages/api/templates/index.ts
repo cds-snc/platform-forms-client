@@ -7,6 +7,7 @@ import {
   MiddlewareProps,
   SecurityAttribute,
   UserAbility,
+  WithRequired,
 } from "@lib/types";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-auth";
@@ -16,36 +17,36 @@ import {
   subElementsIDValidator,
   uniqueIDValidator,
 } from "@lib/middleware/jsonIDValidator";
+import { logMessage } from "@lib/logger";
 
-const allowedMethods = ["GET", "POST"];
-const authenticatedMethods = ["POST"];
+class MalformedAPIRequest extends Error {}
 
-const templates = async (
-  req: NextApiRequest,
-  res: NextApiResponse,
-  { session }: MiddlewareProps
-) => {
+const templates = async (req: NextApiRequest, res: NextApiResponse, props: MiddlewareProps) => {
   try {
-    if (!session) return res.status(401).json({ error: "Unauthorized" });
+    const { session } = props as WithRequired<MiddlewareProps, "session">;
 
     const ability = createAbility(session);
-    const user = session.user;
 
-    const response = await route({ ability: ability, user: user, method: req.method, ...req.body });
+    const response = await route({
+      ability: ability,
+      user: session.user,
+      method: req.method,
+      ...req.body,
+    });
 
-    if (!response) return res.status(500).json({ error: "Error on Server Side" });
-
-    if (req.method === "GET") {
-      if (Array.isArray(response)) {
-        const publicTemplates = response.map((template) => onlyIncludePublicProperties(template));
-        return res.status(200).json(publicTemplates);
-      }
-    }
+    if (!response) throw new Error("Null operation response");
 
     return res.status(200).json(response);
-  } catch (err) {
-    if (err instanceof AccessControlError) return res.status(403).json({ error: "Forbidden" });
-    else return res.status(500).json({ error: "Malformed API Request" });
+  } catch (e) {
+    const error = e as Error;
+    if (error instanceof AccessControlError) {
+      return res.status(403).json({ error: "Forbidden" });
+    } else if (error instanceof MalformedAPIRequest) {
+      return res.status(400).json({ error: `Malformed API Request. Reason: ${error.message}.` });
+    } else {
+      logMessage.error(error);
+      return res.status(500).json({ error: `Internal server error. Reason: ${error.message}.` });
+    }
   }
 };
 
@@ -67,10 +68,12 @@ const route = async ({
   securityAttribute?: SecurityAttribute;
 }) => {
   switch (method) {
-    case "GET":
-      return getAllTemplates(ability, user.id);
+    case "GET": {
+      const templates = await getAllTemplates(ability, user.id);
+      return templates.map((template) => onlyIncludePublicProperties(template));
+    }
     case "POST":
-      if (formConfig)
+      if (formConfig) {
         return await createTemplate({
           ability: ability,
           userID: user.id,
@@ -79,7 +82,11 @@ const route = async ({
           deliveryOption: deliveryOption,
           securityAttribute: securityAttribute,
         });
-      throw new Error("Missing Form Configuration");
+      } else {
+        throw new MalformedAPIRequest("Missing formConfig");
+      }
+    default:
+      throw new MalformedAPIRequest("Unsupported method");
   }
 };
 
@@ -89,8 +96,8 @@ const runValidationCondition = (req: NextApiRequest) => {
 
 export default middleware(
   [
-    cors({ allowedMethods }),
-    sessionExists(authenticatedMethods),
+    cors({ allowedMethods: ["GET", "POST"] }),
+    sessionExists(),
     jsonValidator(templatesSchema, { jsonKey: "formConfig", noHTML: true }),
     uniqueIDValidator({
       runValidationIf: runValidationCondition,

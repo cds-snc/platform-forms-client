@@ -448,10 +448,11 @@
   "settingsResponseTitle": "Destination de livraison des réponses.",
   "settingsResponseDelivery": {
     "selectClassification": "Sélectionnez la classification des données des réponses de votre formulaire",
+    "beforePublishMessage": "Vous pouvez modifier ces paramètres à tout moment avant de publier le formulaire.",
     "title": "Sélectionnez une option de livraison des réponses",
     "vaultOption": "Télécharger les réponses de Formulaires GC",
     "vaultOptionHint": {
-      "text1": " Les réponses reçues apparaîtront à la page Réponses",
+      "text1": " Les réponses reçues apparaîtront sur",
       "text2": "la page Réponses"
     },
     "emailOption": "Les réponses soumises seront envoyées par courriel à cette boîte de réception.",
@@ -619,7 +620,6 @@
       "body1": "Il y a",
       "body2": "réponses non confirmées avec 35 jours de retard ou plus. Confirmez la réception de toute réponse téléchargée en retard avant d'en enregistrer de nouvelles."
     },
-    "beforePublishMessage": "Vous pouvez modifier ces paramètres à tout moment avant de publier le formulaire.",
     "loading": "Chargement..."
   }
 }
