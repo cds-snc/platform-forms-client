@@ -65,16 +65,14 @@ describe("Test FormBuilder autocomplete props", () => {
   });
 
   autocompleteOptions.forEach((option) => {
-    it(`Adds a TextInput with ${option[0]} autocomplete`, () => {
+    it(`Adds a TextAreaInput with ${option[0]} autocomplete`, () => {
       cy.visit("/form-builder/edit");
       cy.get("button").contains("Add").click();
 
       cy.get('[data-testid="textField"]').click();
       cy.get("button").contains("Select block").click();
 
-      cy.get('[id="item-1"]')
-        .should("have.attr", "type", "text")
-        .should("have.attr", "placeholder", "Question");
+      cy.get('[id="item-1"]').should("have.attr", "placeholder", "Question");
 
       cy.get(".example-text").should("contain", "Short answer");
 

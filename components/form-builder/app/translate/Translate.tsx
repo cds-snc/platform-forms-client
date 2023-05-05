@@ -135,11 +135,10 @@ export const Translate = () => {
                 <LanguageLabel id="form-title-en-language" lang={primaryLanguage}>
                   <>{t(primaryLanguage)}</>
                 </LanguageLabel>
-                <input
+                <textarea
                   className="w-full p-4 h-full focus:outline-blue-focus"
                   id="form-title-en"
                   aria-describedby="form-title-en-language"
-                  type="text"
                   value={form[localizeField(LocalizedFormProperties.TITLE, primaryLanguage)]}
                   onChange={(e) => {
                     updateField(
@@ -157,11 +156,10 @@ export const Translate = () => {
                 <LanguageLabel id="form-title-fr-language" lang={secondaryLanguage}>
                   <>{t(secondaryLanguage)}</>
                 </LanguageLabel>
-                <input
+                <textarea
                   className="w-full p-4 h-full focus:outline-blue-focus"
                   id="form-title-fr"
                   aria-describedby="form-title-fr-language"
-                  type="text"
                   value={form[localizeField(LocalizedFormProperties.TITLE, secondaryLanguage)]}
                   onChange={(e) => {
                     updateField(

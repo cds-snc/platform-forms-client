@@ -107,15 +107,19 @@ export const Edit = () => {
             <label htmlFor="formTitle" className="visually-hidden" {...getLocalizationAttribute()}>
               {t("formTitle")}
             </label>
-            <ExpandingInput
-              id="formTitle"
-              ref={titleInput}
-              placeholder={t("placeHolderFormTitle")}
-              value={value}
-              onChange={updateValue}
-              onBlur={updateName}
-              {...getLocalizationAttribute()}
-            />
+            <div className="mb-4 my-2">
+              <ExpandingInput
+                id="formTitle"
+                wrapperClassName="w-full laptop:w-3/4 mt-2 laptop:mt-0 font-bold laptop:text-3xl"
+                className="font-bold laptop:text-3xl"
+                ref={titleInput}
+                placeholder={t("placeHolderFormTitle")}
+                value={value}
+                onChange={updateValue}
+                onBlur={updateName}
+                {...getLocalizationAttribute()}
+              />
+            </div>
             <p className="text-sm mb-4">{t("startFormIntro")}</p>
           </>
         }
