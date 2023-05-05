@@ -36,12 +36,15 @@ const ExpandingInput = React.forwardRef<Ref, Props>((props, ref) => {
   } = props;
 
   return (
-    <div className={`input-sizer stacked ${wrapperClassName}`} data-value={value}>
+    <div
+      className={`input-sizer stacked border-solid border-black border-b-1.5 ${wrapperClassName}`}
+      data-value={value}
+    >
       <textarea
         rows={1}
         maxLength={2000}
         id={id}
-        className={`border-b-1.5 border-black-default border-solid focus:bg-gray-default focus:outline-0 !font-sans ${className}`}
+        className={` focus:bg-gray-default focus:outline-0 !font-sans ${className} overflow-y-visible`}
         name={name}
         aria-describedby={describedBy}
         aria-invalid={isInvalid ? true : false}
