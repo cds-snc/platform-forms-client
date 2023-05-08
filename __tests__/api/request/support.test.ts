@@ -55,6 +55,7 @@ describe("Support email API tests - WITH an active session", () => {
         email: "a@b.com",
         name: "Testing Forms",
         privileges: [],
+        acceptableUse: true,
       },
     };
     IsGCNotifyServiceAvailable = true;
