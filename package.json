@@ -124,7 +124,7 @@
     "@typescript-eslint/parser": "^5.59.0",
     "add": "^2.0.6",
     "autoprefixer": "^10.4.4",
-    "aws-sdk-client-mock": "^0.6.2",
+    "aws-sdk-client-mock": "^2.1.1",
     "axe-core": "^4.5.2",
     "babel-loader": "^8.2.4",
     "babel-plugin-dynamic-import-node": "^2.3.3",

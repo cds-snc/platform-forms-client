@@ -8,7 +8,13 @@ import {
   UpdateCommand,
   UpdateCommandInput,
 } from "@aws-sdk/lib-dynamodb";
-import { MiddlewareProps, WithRequired, Responses, SecurityAttribute } from "@lib/types";
+import {
+  MiddlewareProps,
+  WithRequired,
+  Responses,
+  SecurityAttribute,
+  VaultStatus,
+} from "@lib/types";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import React from "react";
 import { renderToStaticNodeStream } from "react-dom/server";
@@ -59,10 +65,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
         NAME_OR_CONF: `NAME#${submissionName}`,
       },
       ExpressionAttributeNames: {
-        "#Name": "Name",
+        "#name": "Name",
+        "#status": "Status",
       },
       ProjectionExpression:
-        "SubmissionID,FormSubmission,ConfirmationCode,#Name,CreatedAt,SecurityAttribute",
+        "SubmissionID,FormSubmission,ConfirmationCode,#name,#status,CreatedAt,SecurityAttribute",
     };
 
     const queryCommand = new GetCommand(getItemsDbParams);
@@ -79,6 +86,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
       responseID,
       submissionID,
       securityAttribute,
+      responseStatus,
     } = ((
       vaultResult
     ): {
@@ -88,6 +96,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
       responseID: string;
       submissionID: string;
       securityAttribute: SecurityAttribute;
+      responseStatus: VaultStatus;
     } => {
       return {
         formResponse: JSON.parse(vaultResult.FormSubmission),
@@ -98,6 +107,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
         responseID: vaultResult.Name,
         submissionID: vaultResult.SubmissionID,
         securityAttribute: vaultResult.SecurityAttribute,
+        responseStatus: vaultResult.Status,
       };
     })(response.Item);
 
@@ -152,8 +162,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
     );
 
     // Setting last downloaded by on Vault Submission
-
-    await updateLastDownloadedBy(responseID, formID, userEmail);
+    await updateLastDownloadedBy(responseID, formID, userEmail, responseStatus);
   } catch (error) {
     if (error instanceof AccessControlError) {
       logEvent(
@@ -175,7 +184,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
  * @param formID Form ID the Submission is for
  * @param email Email address of the user downloading the Submission
  */
-async function updateLastDownloadedBy(responseID: string, formID: string, email: string) {
+async function updateLastDownloadedBy(
+  responseID: string,
+  formID: string,
+  email: string,
+  status: VaultStatus
+) {
   const documentClient = connectToDynamo();
 
   const updateCommandInput: UpdateCommandInput = {
@@ -184,8 +198,9 @@ async function updateLastDownloadedBy(responseID: string, formID: string, email:
       FormID: formID,
       NAME_OR_CONF: `NAME#${responseID}`,
     },
-    UpdateExpression:
-      "SET LastDownloadedBy = :email, #status = :statusUpdate, DownloadedAt = :downloadedAt",
+    UpdateExpression: "SET LastDownloadedBy = :email, DownloadedAt = :downloadedAt".concat(
+      status === VaultStatus.NEW ? ", #status = :statusUpdate" : ""
+    ),
     ExpressionAttributeValues: {
       ":email": email,
       ":downloadedAt": Date.now(),
