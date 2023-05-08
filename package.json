@@ -56,7 +56,7 @@
     "formik": "2.2.9",
     "htmlparser2": "8.0.2",
     "i18next": "22.4.15",
-    "immer": "9.0.21",
+    "immer": "10.0.1",
     "ioredis": "5.2.5",
     "json2md": "1.13.0",
     "jsonschema": "1.4.1",
@@ -70,7 +70,7 @@
     "markdown-to-jsx": "7.1.9",
     "markdown-to-txt": "2.0.1",
     "mmmagic": "0.5.3",
-    "next": "13.2.3",
+    "next": "13.4.1",
     "next-auth": "4.21.1",
     "next-i18next": "13.2.2",
     "notifications-node-client": "5.1.2",
@@ -90,7 +90,7 @@
     "usehooks-ts": "2.9.1",
     "uuid": "8.3.2",
     "yup": "0.32.11",
-    "zustand": "4.3.7"
+    "zustand": "4.3.8"
   },
   "devDependencies": {
     "@aws-sdk/types": "3.188.0",
@@ -124,7 +124,7 @@
     "@typescript-eslint/parser": "^5.59.0",
     "add": "^2.0.6",
     "autoprefixer": "^10.4.4",
-    "aws-sdk-client-mock": "^0.6.2",
+    "aws-sdk-client-mock": "^2.1.1",
     "axe-core": "^4.5.2",
     "babel-loader": "^8.2.4",
     "babel-plugin-dynamic-import-node": "^2.3.3",
