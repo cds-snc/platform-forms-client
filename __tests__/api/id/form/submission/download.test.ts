@@ -13,6 +13,8 @@ import { mockClient } from "aws-sdk-client-mock";
 import { EventEmitter } from "events";
 import testFormConfig from "../../../../../__fixtures__/accessibilityTestForm.json";
 import { logEvent } from "@lib/auditLogs";
+import { renderToStaticNodeStream } from "react-dom/server";
+import { Readable } from "node:stream";
 
 jest.mock("next-auth/next");
 jest.mock("@lib/auditLogs");
@@ -26,14 +28,20 @@ jest.mock("next-i18next", () => ({
   },
 }));
 
+jest.mock("react-dom/server");
+
+const mockRenderToStaticNodeStream = jest.mocked(renderToStaticNodeStream, { shallow: true });
+
 //Needed in the typescript version of the test so types are inferred correctly
 const mockGetSession = jest.mocked(getServerSession, { shallow: true });
 const mockLogEvent = jest.mocked(logEvent, { shallow: true });
+
 const testFormTemplate = {
   id: "testForm",
   form: testFormConfig,
   isPublished: true,
 };
+
 const testFormResponse = JSON.stringify({
   2: "Jane Doe",
   3: "English",
@@ -73,6 +81,7 @@ describe("/api/id/[form]/[submission]/download", () => {
       expect(res.statusCode).toBe(401);
       expect(JSON.parse(res._getData())).toMatchObject({ error: "Unauthorized" });
     });
+
     test.each(["POST", "DELETE", "PATCH"])(
       "Shouldn't allow an unaccepted method",
       async (httpVerb) => {
@@ -92,6 +101,7 @@ describe("/api/id/[form]/[submission]/download", () => {
       }
     );
   });
+
   describe("Download form submission as a html file", () => {
     beforeEach(() => {
       const mockSession: Session = {
@@ -111,6 +121,7 @@ describe("/api/id/[form]/[submission]/download", () => {
       mockGetSession.mockReset();
       ddbMock.reset();
     });
+
     test.each([
       { form: "a" },
       { submission: "a" },
@@ -133,6 +144,7 @@ describe("/api/id/[form]/[submission]/download", () => {
       expect(res.statusCode).toBe(400);
       expect(JSON.parse(res._getData())).toMatchObject({ error: "Bad Request" });
     });
+
     test("User can only access form responses that a user is associated to", async () => {
       (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
         id: "formTestID",
@@ -170,8 +182,8 @@ describe("/api/id/[form]/[submission]/download", () => {
         "Attemped to download response for submissionID 123456789"
       );
     });
-    test.skip("Renders a HTML file", async () => {
-      // Data mocks
+
+    test("Renders a HTML file", async () => {
       (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
         id: "formTestID",
         jsonConfig: testFormTemplate,
@@ -187,8 +199,18 @@ describe("/api/id/[form]/[submission]/download", () => {
           SecurityAttribute: "Protected B",
         },
       };
+
       ddbMock.on(GetCommand).resolves(dynamodbExpectedResponse);
       ddbMock.on(UpdateCommand).resolves;
+
+      mockRenderToStaticNodeStream.mockReturnValueOnce(
+        new Readable({
+          objectMode: true,
+          read: function () {
+            this.push(null);
+          },
+        })
+      );
 
       const { req, res } = createMocks(
         {
@@ -206,6 +228,7 @@ describe("/api/id/[form]/[submission]/download", () => {
           eventEmitter: EventEmitter,
         }
       );
+
       await download(req, res);
 
       expect(res.statusCode).toBe(200);
@@ -226,6 +249,121 @@ describe("/api/id/[form]/[submission]/download", () => {
       expect(res._getHeaders()).toMatchObject({
         "content-disposition": "attachment; filename=123-test.html",
       });
+    });
+
+    test("When downloading a response with a status equal to New the API should update that status to Downloaded", async () => {
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        id: "formTestID",
+        jsonConfig: testFormTemplate,
+        users: [{ id: "1" }],
+      });
+
+      const dynamodbExpectedResponse = {
+        Item: {
+          FormID: "formTestID",
+          Name: "123-test",
+          SubmissionID: "12",
+          FormSubmission: testFormResponse,
+          SecurityAttribute: "Protected B",
+          Status: "New",
+        },
+      };
+
+      ddbMock.on(GetCommand).resolves(dynamodbExpectedResponse);
+      ddbMock.on(UpdateCommand).resolves;
+
+      mockRenderToStaticNodeStream.mockReturnValueOnce(
+        new Readable({
+          objectMode: true,
+          read: function () {
+            this.push(null);
+          },
+        })
+      );
+
+      const { req, res } = createMocks(
+        {
+          method: "GET",
+          query: {
+            form: "formtestID",
+            submission: "12",
+          },
+          headers: {
+            "Content-Type": "application/json",
+            Origin: "http://localhost:3000",
+          },
+        },
+        {
+          eventEmitter: EventEmitter,
+        }
+      );
+
+      await download(req, res);
+
+      expect(res.statusCode).toBe(200);
+      expect(
+        ddbMock.commandCalls(UpdateCommand, {
+          UpdateExpression:
+            "SET LastDownloadedBy = :email, DownloadedAt = :downloadedAt, #status = :statusUpdate",
+        }).length
+      ).toBe(1);
+    });
+
+    test("When downloading a response with a status not equal to New the API should not update that status", async () => {
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        id: "formTestID",
+        jsonConfig: testFormTemplate,
+        users: [{ id: "1" }],
+      });
+
+      const dynamodbExpectedResponse = {
+        Item: {
+          FormID: "formTestID",
+          Name: "123-test",
+          SubmissionID: "12",
+          FormSubmission: testFormResponse,
+          SecurityAttribute: "Protected B",
+          Status: "Confirmed",
+        },
+      };
+
+      ddbMock.on(GetCommand).resolves(dynamodbExpectedResponse);
+      ddbMock.on(UpdateCommand).resolves;
+
+      mockRenderToStaticNodeStream.mockReturnValueOnce(
+        new Readable({
+          objectMode: true,
+          read: function () {
+            this.push(null);
+          },
+        })
+      );
+
+      const { req, res } = createMocks(
+        {
+          method: "GET",
+          query: {
+            form: "formtestID",
+            submission: "12",
+          },
+          headers: {
+            "Content-Type": "application/json",
+            Origin: "http://localhost:3000",
+          },
+        },
+        {
+          eventEmitter: EventEmitter,
+        }
+      );
+
+      await download(req, res);
+
+      expect(res.statusCode).toBe(200);
+      expect(
+        ddbMock.commandCalls(UpdateCommand, {
+          UpdateExpression: "SET LastDownloadedBy = :email, DownloadedAt = :downloadedAt",
+        }).length
+      ).toBe(1);
     });
   });
 });
