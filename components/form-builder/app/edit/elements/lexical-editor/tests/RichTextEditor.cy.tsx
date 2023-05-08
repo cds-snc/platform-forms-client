@@ -6,15 +6,9 @@ describe("<RichTextEditor />", () => {
   it("Adds and styles text", () => {
     // see: https://on.cypress.io/mounting-react
     cy.mount(
-      <Providers form={store.form}>
+      <Providers form={store}>
         <div className="form-builder">
-          <RichTextEditor
-            path="path.to.content"
-            content=""
-            autoFocusEditor={true}
-            ariaLabel="AriaLabel"
-            lang="en"
-          />
+          <RichTextEditor path="path.to.content" content="" ariaLabel="AriaLabel" lang="en" />
         </div>
       </Providers>
     );

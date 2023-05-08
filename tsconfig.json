@@ -26,7 +26,13 @@
     },
     "incremental": true
   },
-  "include": ["next-env.d.ts", "types", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "types",
+    "**/*.ts",
+    "**/*.tsx",
+    "cypress/support/commands/selection-command.js"
+  ],
   "exclude": [
     "node_modules",
     "utils",

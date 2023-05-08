@@ -5,12 +5,26 @@ declare global {
     interface Chainable {
       mount: typeof mount;
       tab: typeof tab;
-      useForm: (file: string) => void;
-      visitForm: (formID: string) => void;
-      visitPage: (path: string) => void;
-      login: () => void;
-      logout: () => void;
-      useFlag: (flagName: string, value: boolean, alreadyAuth?: boolean) => void;
+      useForm: (file: string) => Chainable<void>;
+      visitForm: (formID: string) => Chainable<Window>;
+      visitPage: (path: string) => Chainable<Window>;
+      login: () => Chainable<void>;
+      logout: () => Chainable<void>;
+      useFlag: (flagName: string, value: boolean, alreadyAuth?: boolean) => Chainable<void>;
+      selection: (fn: (el: JQuery<HTMLElement>) => void) => Chainable<JQuery<HTMLElement>>;
+      setSelection: (
+        query:
+          | string
+          | {
+              anchorQuery: string;
+              anchorOffset?: number;
+              focusQuery?: string;
+              focusOffset?: number;
+            }
+      ) => Chainable<JQuery<HTMLElement>>;
+      setCursor: (query: string, atStart?: boolean) => Chainable<void>;
+      setCursorBefore: (query: string) => Chainable<void>;
+      setCursorAfter: (query: string) => Chainable<void>;
     }
   }
 }

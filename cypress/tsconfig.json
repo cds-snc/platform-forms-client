@@ -18,5 +18,14 @@
       "@pages/*": ["../pages/*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", "../**/*.cy.tsx", "../**/*.cy.ts", "../cypress.config.ts"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.js",
+    "**/*.jsx",
+    "../**/*.cy.tsx",
+    "../**/*.cy.ts",
+    "../cypress.config.ts",
+    "support/commands/selection-command.js"
+  ]
 }

@@ -14,7 +14,7 @@ module.exports = {
       },
     },
     {
-      files: ["*.cy.{ts,tsx}", "cypress/**/*.{ts,tsx}", "cypress.config.ts"],
+      files: ["*.cy.{ts,tsx}", "cypress/**/*.{ts,tsx,js,jsx}", "cypress.config.ts"],
       parser: "@typescript-eslint/parser",
       parserOptions: {
         project: ["./cypress/tsconfig.json"],
