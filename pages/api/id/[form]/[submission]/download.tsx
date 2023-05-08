@@ -192,6 +192,8 @@ async function updateLastDownloadedBy(
 ) {
   const documentClient = connectToDynamo();
 
+  const isNewResponse = status === VaultStatus.NEW;
+
   const updateCommandInput: UpdateCommandInput = {
     TableName: "Vault",
     Key: {
@@ -199,18 +201,21 @@ async function updateLastDownloadedBy(
       NAME_OR_CONF: `NAME#${responseID}`,
     },
     UpdateExpression: "SET LastDownloadedBy = :email, DownloadedAt = :downloadedAt".concat(
-      status === VaultStatus.NEW ? ", #status = :statusUpdate" : ""
+      isNewResponse ? ", #status = :statusUpdate" : ""
     ),
     ExpressionAttributeValues: {
       ":email": email,
       ":downloadedAt": Date.now(),
-      ":statusUpdate": "Downloaded",
+      ...(isNewResponse && { ":statusUpdate": "Downloaded" }),
     },
-    ExpressionAttributeNames: {
-      "#status": "Status",
-    },
+    ...(isNewResponse && {
+      ExpressionAttributeNames: {
+        "#status": "Status",
+      },
+    }),
     ReturnValues: "NONE",
   };
+
   return await documentClient.send(new UpdateCommand(updateCommandInput));
 }
 
