@@ -24,7 +24,7 @@ const customJestConfig = {
     "<rootDir>/__utils__/prismaConnector.ts",
   ],
   testEnvironment: "jsdom",
-  collectCoverage: true,
+  collectCoverage: false,
   collectCoverageFrom: ["{pages,lib,components}/**/{!(*.stories),}.{ts,tsx}"],
 };
 

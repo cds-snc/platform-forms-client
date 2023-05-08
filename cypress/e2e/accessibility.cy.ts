@@ -1,6 +1,7 @@
 import "cypress-each";
+import { Options } from "cypress-axe";
 
-const A11Y_OPTIONS = {
+const A11Y_OPTIONS: Options = {
   runOnly: {
     type: "tag",
     values: ["wcag21aa", "wcag2aa", "best-practice", "section508"],
@@ -11,16 +12,16 @@ describe("Accessibility (A11Y) Check", () => {
   describe("Form Components", () => {
     it("All components page Accessibility (A11Y) Check", () => {
       cy.useForm("../../__fixtures__/accessibilityTestForm.json");
-      cy.get("@formID").then((formID) => cy.visitForm(formID));
+      cy.get("@formID").then((formID) => cy.visitForm(formID.toString()));
       cy.injectAxe();
-      cy.checkA11y(null, A11Y_OPTIONS);
+      cy.checkA11y(undefined, A11Y_OPTIONS);
     });
 
     it("Check error state accessibility", () => {
       cy.useForm("../../__fixtures__/cdsIntakeTestForm.json");
-      cy.get("@formID").then((formID) => cy.visitForm(formID));
+      cy.get("@formID").then((formID) => cy.visitForm(formID.toString()));
       cy.injectAxe();
-      cy.checkA11y(null, A11Y_OPTIONS);
+      cy.checkA11y(undefined, A11Y_OPTIONS);
     });
   });
   describe("Unauthenticated Pages", () => {
@@ -44,7 +45,7 @@ describe("Accessibility (A11Y) Check", () => {
         cy.injectAxe();
         // Ensure page has fully loaded
         cy.get("h1").should("be.visible");
-        cy.checkA11y(null, A11Y_OPTIONS);
+        cy.checkA11y(undefined, A11Y_OPTIONS);
       }
     );
   });
@@ -54,7 +55,7 @@ describe("Accessibility (A11Y) Check", () => {
       // Ensure page has fully loaded
       cy.get("h1").should("be.visible");
       cy.injectAxe();
-      cy.checkA11y(null, A11Y_OPTIONS);
+      cy.checkA11y(undefined, A11Y_OPTIONS);
     });
   });
 });

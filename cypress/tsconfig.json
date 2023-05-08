@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["es5", "dom"],
+    "types": ["cypress", "node", "cypress-axe"],
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@lib/*": ["../lib/*"],
+      "@components/*": ["../components/*"],
+      "@formbuilder/*": ["../components/form-builder/*"],
+      "@pages/*": ["../pages/*"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.tsx", "../**/*.cy.tsx", "../**/*.cy.ts", "../cypress.config.ts"]
+}

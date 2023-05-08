@@ -3,7 +3,7 @@ describe("Test FormBuilder", () => {
     cy.visit("/form-builder", {
       onBeforeLoad: (win) => {
         win.sessionStorage.clear();
-        let nextData;
+        let nextData: Record<string, unknown>;
         Object.defineProperty(win, "__NEXT_DATA__", {
           set(serverSideProps) {
             serverSideProps.context = {

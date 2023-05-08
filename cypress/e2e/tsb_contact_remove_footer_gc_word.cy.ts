@@ -1,8 +1,8 @@
 describe("TSB Contact Form functionality", () => {
-  let formID;
+  let formID: string;
   before(() => {
     cy.useForm("../../__fixtures__/tsbDisableFooterGCBranding.json");
-    cy.get("@formID").then((createdID) => (formID = createdID));
+    cy.get("@formID").then((createdID) => (formID = createdID.toString()));
   });
   beforeEach(() => cy.visitForm(formID));
 
