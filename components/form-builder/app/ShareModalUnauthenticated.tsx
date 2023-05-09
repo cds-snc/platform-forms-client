@@ -2,7 +2,8 @@ import React, { useRef } from "react";
 import { useTranslation } from "next-i18next";
 import { FormElementTypes } from "@lib/types";
 
-import { useDialogRef, Dialog, Button, InfoDetails, DownloadFileButton } from "./shared";
+import { useDialogRef, Dialog, InfoDetails, DownloadFileButton } from "./shared";
+import { Button } from "@components/globals";
 import Markdown from "markdown-to-jsx";
 
 export const ShareModalUnauthenticated = ({

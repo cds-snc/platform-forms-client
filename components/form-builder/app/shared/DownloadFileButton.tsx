@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import { useTranslation } from "next-i18next";
 import Image from "next/image";
 
-import { Button } from "./Button";
+import { Button } from "@components/globals";
 import { useTemplateStore } from "../../store";
 import { useDialogRef, Dialog } from "../shared";
 import { InfoIcon } from "../../icons";

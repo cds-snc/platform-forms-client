@@ -5,10 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 
 import Loader from "@components/globals/Loader";
-import { Button } from "./Button";
+import { Button, themes } from "@components/globals";
 import { useDialogRef, Dialog } from "./Dialog";
 import { DownloadFileButton } from "./DownloadFileButton";
-import { themes } from "../shared/Button";
 import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
 
 const fetcher = async (url: string) => {
