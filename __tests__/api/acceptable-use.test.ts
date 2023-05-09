@@ -26,6 +26,7 @@ describe("Test acceptable use endpoint", () => {
         email: "forms@cds.ca",
         name: "forms user",
         privileges: [],
+        acceptableUse: false,
       },
     };
 
