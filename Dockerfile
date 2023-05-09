@@ -1,4 +1,4 @@
-FROM node:16@sha256:e64998c9e7912aa74647c1d8779cea6dc7ff017327265fb6855522270eab80e4
+FROM node:16@sha256:550f484fc5f314b575f5e397c9e2c71d7f218e59729fcda9ffa7ea1fc825dce7
 
 ENV NODE_ENV=production
 
@@ -15,19 +15,19 @@ RUN yarn install --silent --production=false
 RUN yarn build
 RUN yarn install --production
 
-FROM node:16@sha256:e64998c9e7912aa74647c1d8779cea6dc7ff017327265fb6855522270eab80e4
+FROM node:16@sha256:550f484fc5f314b575f5e397c9e2c71d7f218e59729fcda9ffa7ea1fc825dce7
 
 COPY migrations /src
 WORKDIR /src
 RUN yarn install --silent 
 
-FROM node:16@sha256:e64998c9e7912aa74647c1d8779cea6dc7ff017327265fb6855522270eab80e4
+FROM node:16@sha256:550f484fc5f314b575f5e397c9e2c71d7f218e59729fcda9ffa7ea1fc825dce7
 
 COPY flag_initialization /src
 WORKDIR /src
 RUN yarn install --silent 
 
-FROM node:16@sha256:e64998c9e7912aa74647c1d8779cea6dc7ff017327265fb6855522270eab80e4
+FROM node:16@sha256:550f484fc5f314b575f5e397c9e2c71d7f218e59729fcda9ffa7ea1fc825dce7
 LABEL maintainer="-"
 
 ARG GOOGLE_CLIENT_ID
