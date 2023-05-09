@@ -12,6 +12,7 @@ import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { Confirmation } from "@components/auth/Confirmation/Confirmation";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import * as Yup from "yup";
+import { ErrorStatus } from "@components/forms/Alert/Alert";
 
 const Login = () => {
   const {
@@ -83,21 +84,25 @@ const Login = () => {
           <>
             {cognitoError && (
               <Alert
-                type="error"
-                heading={cognitoError}
+                type={ErrorStatus.ERROR}
+                heading={t("InternalServiceExceptionLogin.title", { ns: "cognito-errors" })}
                 onDismiss={resetCognitoErrorState}
                 id="cognitoErrors"
-                dismissible={cognitoErrorIsDismissible}
+                focussable={true}
               >
-                {cognitoErrorDescription}&nbsp;
-                {cognitoErrorCallToActionLink ? (
-                  <Link href={cognitoErrorCallToActionLink}>{cognitoErrorCallToActionText}</Link>
-                ) : undefined}
+                {/* TODO refactor to handle other server errors as well */}
+                <p className="text-red font-bold">
+                  {t("InternalServiceExceptionLogin.description", { ns: "cognito-errors" })}{" "}
+                  <Link href={t("InternalServiceExceptionLogin.link", { ns: "cognito-errors" })}>
+                    {t("InternalServiceExceptionLogin.linkText", { ns: "cognito-errors" })}
+                  </Link>
+                  .
+                </p>
               </Alert>
             )}
             {Object.keys(errors).length > 0 && !cognitoError && (
               <Alert
-                type="error"
+                type={ErrorStatus.ERROR}
                 validation={true}
                 tabIndex={0}
                 id="loginValidationErrors"

@@ -5,6 +5,7 @@ import { useAuth } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import * as Yup from "yup";
 import Link from "next/link";
+import { ErrorStatus } from "@components/forms/Alert/Alert";
 
 interface ConfirmationProps {
   username: string;
@@ -69,7 +70,7 @@ export const Confirmation = ({
         <>
           {showSentReconfirmationToast && !cognitoError && (
             <Alert
-              type="success"
+              type={ErrorStatus.SUCCESS}
               heading={t("signUpConfirmation.resendConfirmationCode.title")}
               onDismiss={() => {
                 setShowSentReconfirmationToast(false);
@@ -82,7 +83,7 @@ export const Confirmation = ({
           )}
           {cognitoError && (
             <Alert
-              type="error"
+              type={ErrorStatus.ERROR}
               heading={cognitoError}
               onDismiss={resetCognitoErrorState}
               id="cognitoErrors"
@@ -96,7 +97,7 @@ export const Confirmation = ({
           )}
           {Object.keys(errors).length > 0 && !cognitoError && (
             <Alert
-              type="error"
+              type={ErrorStatus.ERROR}
               validation={true}
               tabIndex={0}
               id="confirmationValidationErrors"
