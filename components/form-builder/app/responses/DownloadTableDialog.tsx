@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "next-i18next";
-import { Button, useDialogRef, Dialog, LineItemEntries } from "@components/form-builder/app/shared";
+import { useDialogRef, Dialog, LineItemEntries } from "@components/form-builder/app/shared";
+import { Button } from "@components/globals";
 import { randomId } from "@lib/clientHelpers";
 import axios from "axios";
 import { useRouter } from "next/router";
