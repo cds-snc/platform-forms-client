@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { RocketIcon } from "../icons/RocketIcon";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { themes } from "./shared/Button";
+import { themes } from "@components/globals";
 import { useTranslation } from "next-i18next";
 import { useTemplateStore } from "../store/useTemplateStore";
 import { useAccessControl } from "@lib/hooks";

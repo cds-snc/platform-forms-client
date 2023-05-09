@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import { useTranslation } from "next-i18next";
 
 import { FormElementTypes } from "@lib/types";
-import { Button } from "../../../shared/Button";
+import { Button } from "@components/globals";
 import { ElementDialog } from "./ElementDialog";
 import { ElementOptionsFilter } from "../../../../types";
 import { AddIcon } from "@components/form-builder/icons";

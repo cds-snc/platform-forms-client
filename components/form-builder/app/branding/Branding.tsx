@@ -8,7 +8,8 @@ import { Logos, options } from "./";
 import { useTemplateStore } from "../../store";
 import { SettingsLoggedOut } from "../SettingsLoggedOut";
 import { useTemplateApi } from "../../hooks";
-import { Button, toast } from "../shared";
+import { toast } from "../shared";
+import { Button } from "@components/globals";
 import Brand from "@components/globals/Brand";
 
 const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element | string }) => {
