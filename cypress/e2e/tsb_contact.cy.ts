@@ -2,7 +2,7 @@ describe("TSB Contact Form functionality", () => {
   let formID: string;
   before(() => {
     cy.useForm("../../__fixtures__/tsbContactTestForm.json");
-    cy.get("@formID").then((createdID) => (formID = createdID.toString()));
+    cy.get<string>("@formID").then((createdID) => (formID = createdID));
   });
   beforeEach(() => {
     cy.useFlag("formTimer", false);

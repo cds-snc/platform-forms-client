@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "typeRoots": ["../types", "../node_modules/@types", "./types"],
     "target": "es5",
     "lib": ["es5", "dom"],
     "types": ["cypress", "node", "cypress-axe"],

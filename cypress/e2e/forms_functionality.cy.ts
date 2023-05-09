@@ -2,7 +2,7 @@ describe("Forms Functionality", () => {
   let formID: string;
   before(() => {
     cy.useForm("../../__fixtures__/textFieldTestForm.json");
-    cy.get("@formID").then((createdID) => (formID = createdID.toString()));
+    cy.get<string>("@formID").then((createdID) => (formID = createdID));
   });
   describe("text field tests", () => {
     beforeEach(() => {

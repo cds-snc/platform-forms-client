@@ -31,7 +31,8 @@
     "test": "jest",
     "test:watch": "DEBUG_PRINT_LIMIT=10000  jest --watch",
     "cypress": "cypress open",
-    "cypress:headless": "cypress run --browser chrome --headless",
+    "cypress:e2e": "cypress run --browser chrome --headless --e2e",
+    "cypress:component": "cypress run --browser chrome --headless --component",
     "postinstall": "[ \"$NODE_ENV\" = production ] && exit 0; husky install"
   },
   "dependencies": {

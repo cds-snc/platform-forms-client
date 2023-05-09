@@ -12,14 +12,14 @@ describe("Accessibility (A11Y) Check", () => {
   describe("Form Components", () => {
     it("All components page Accessibility (A11Y) Check", () => {
       cy.useForm("../../__fixtures__/accessibilityTestForm.json");
-      cy.get("@formID").then((formID) => cy.visitForm(formID.toString()));
+      cy.get<string>("@formID").then((formID) => cy.visitForm(formID));
       cy.injectAxe();
       cy.checkA11y(undefined, A11Y_OPTIONS);
     });
 
     it("Check error state accessibility", () => {
       cy.useForm("../../__fixtures__/cdsIntakeTestForm.json");
-      cy.get("@formID").then((formID) => cy.visitForm(formID.toString()));
+      cy.get<string>("@formID").then((formID) => cy.visitForm(formID));
       cy.injectAxe();
       cy.checkA11y(undefined, A11Y_OPTIONS);
     });

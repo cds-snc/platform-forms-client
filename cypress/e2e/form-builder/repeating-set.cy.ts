@@ -1,10 +1,12 @@
+import { NextData } from "types";
+
 describe("Test FormBuilder Repeating set", () => {
   beforeEach(() => {
     cy.useFlag("experimentalBlocks", true);
     cy.visit("/form-builder", {
       onBeforeLoad: (win) => {
         win.sessionStorage.clear();
-        let nextData: Record<string, unknown>;
+        let nextData: NextData;
         Object.defineProperty(win, "__NEXT_DATA__", {
           set(serverSideProps) {
             serverSideProps.context = {
