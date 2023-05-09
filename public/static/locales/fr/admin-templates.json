@@ -9,18 +9,22 @@
   "view": {
     "title": "Voir le modèle des formulaires",
     "update": "Modifier",
-    "formID": "Identifiant du formulaire:",
-    "view": "Visioner",
+    "formID": "Identifiant du formulaire :",
+    "view": "Afficher",
     "formTitle": "Titre du formulaire",
     "status": "Statut",
     "published": "Publié",
-    "draft": "Brouillon"
+    "draft": "Ébauche",
+    "publishForm": "Publier",
+    "unpublishForm": "Ébauche",
+    "users": "Utilisateur·rice·s",
+    "assign": "Assigner"
   },
   "settings": {
     "title": "Paramètres du formulaire",
     "delete": "Supprimer le formulaire",
-    "delete-check": "Êtes-vous sûr de vouloir supprimer ce formulaire ?",
-    "confirm-delete": "Confirmer Supprimer",
+    "delete-check": "Êtes-vous sûr de vouloir supprimer ce formulaire?",
+    "confirm-delete": "Confirmer supprimer",
     "new": "Le formulaire a été créé avec succès",
     "formID": "Identifiant du formulaire :",
     "edit": "Modifier le formulaire :",
@@ -37,10 +41,10 @@
     },
     "formAccess": {
       "formOwnersError": "La récupération des propriétaires de formulaire n'a pas fonctionné.",
-      "invalidEmailError": "L'adresse email n'est pas une adresse valide du gouvernement du Canada.",
-      "updateError": "La modification d'accès pour l'adresse email sélectionnée n'a pas fonctionné.",
-      "addEmailButton": "Ajouter l'adresse email",
-      "addEmailAriaLabel": "Email"
+      "invalidEmailError": "L'adresse courriel n'est pas une adresse valide du gouvernement du Canada.",
+      "updateError": "La modification d'accès pour l'adresse courriel sélectionnée n'a pas fonctionné.",
+      "addEmailButton": "Ajouter l'adresse courriel",
+      "addEmailAriaLabel": "Courriel"
     }
   }
 }

@@ -1,8 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
-import { FormConfiguration, FormElement, FormElementTypes } from "@lib/types/form-types";
+import { FormElement, FormElementTypes, FormProperties } from "@lib/types/form-types";
 
 export type ValidateOptions = {
+  runValidationIf?: (req: NextApiRequest) => boolean;
   jsonKey: string;
 };
 
@@ -13,27 +14,22 @@ export type ValidateOptions = {
  */
 export const uniqueIDValidator = (options?: ValidateOptions): MiddlewareRequest => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
-    try {
-      if (req.method !== "POST" && req.method !== "PUT") {
-        return { next: true };
-      }
-      const jsonConfig: FormConfiguration = options?.jsonKey ? req.body[options.jsonKey] : req.body;
-      const elementIDs: Array<number> = jsonConfig.form.elements.map((element) => {
-        return element.id;
+    if (options?.runValidationIf?.(req) === false) {
+      return { next: true };
+    }
+    const formProperties: FormProperties = options?.jsonKey ? req.body[options.jsonKey] : req.body;
+    const elementIDs: Array<number> = formProperties.elements.map((element) => {
+      return element.id;
+    });
+    const duplicateElementIDs = elementIDs.filter(
+      (value, index, array) => array.indexOf(value) !== index
+    );
+    if (duplicateElementIDs.length === 0) {
+      return { next: true };
+    } else {
+      res.status(400).json({
+        error: `JSON Validation Error: Duplicate IDs detected: ${duplicateElementIDs.join()}`,
       });
-      const duplicateElementIDs = elementIDs.filter(
-        (value, index, array) => array.indexOf(value) !== index
-      );
-      if (duplicateElementIDs.length === 0) {
-        return { next: true };
-      } else {
-        res.status(400).json({
-          error: `JSON Validation Error: Duplicate IDs detected: ${duplicateElementIDs.join()}`,
-        });
-        return { next: false };
-      }
-    } catch {
-      res.status(500).json({ error: "Malformed API Request" });
       return { next: false };
     }
   };
@@ -46,27 +42,22 @@ export const uniqueIDValidator = (options?: ValidateOptions): MiddlewareRequest 
  */
 export const layoutIDValidator = (options?: ValidateOptions): MiddlewareRequest => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
-    try {
-      if (req.method !== "POST" && req.method !== "PUT") {
-        return { next: true };
-      }
-      const jsonConfig: FormConfiguration = options?.jsonKey ? req.body[options.jsonKey] : req.body;
-      const elementIDs: Array<number> = jsonConfig.form.elements.map((element) => {
-        return element.id;
+    if (options?.runValidationIf?.(req) === false) {
+      return { next: true };
+    }
+    const formProperties: FormProperties = options?.jsonKey ? req.body[options.jsonKey] : req.body;
+    const elementIDs: Array<number> = formProperties.elements.map((element) => {
+      return element.id;
+    });
+    const missingLayoutIDs = formProperties.layout.filter(
+      (layoutID) => elementIDs.indexOf(layoutID) === -1
+    );
+    if (missingLayoutIDs.length === 0) {
+      return { next: true };
+    } else {
+      res.status(400).json({
+        error: `JSON Validation Error: Layout IDs not found: ${missingLayoutIDs.join()}`,
       });
-      const missingLayoutIDs = jsonConfig.form.layout.filter(
-        (layoutID) => elementIDs.indexOf(layoutID) === -1
-      );
-      if (missingLayoutIDs.length === 0) {
-        return { next: true };
-      } else {
-        res.status(400).json({
-          error: `JSON Validation Error: Layout IDs not found: ${missingLayoutIDs.join()}`,
-        });
-        return { next: false };
-      }
-    } catch {
-      res.status(500).json({ error: "Malformed API Request" });
       return { next: false };
     }
   };
@@ -79,55 +70,48 @@ export const layoutIDValidator = (options?: ValidateOptions): MiddlewareRequest 
  */
 export const subElementsIDValidator = (options?: ValidateOptions): MiddlewareRequest => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
-    try {
-      if (req.method !== "POST" && req.method !== "PUT") {
-        return { next: true };
-      }
-      const jsonConfig: FormConfiguration = options?.jsonKey ? req.body[options.jsonKey] : req.body;
-
-      const dynamicRowElements: Array<FormElement> = jsonConfig.form.elements.filter((element) => {
-        return element.type === FormElementTypes.dynamicRow;
-      });
-
-      let duplicateSubElementIDs: Array<number> = [];
-      let unmatchedSubElementIDs: Array<number> = [];
-
-      dynamicRowElements.forEach((dynamicRow: FormElement) => {
-        if (dynamicRow.properties.subElements) {
-          const subElementIDs: Array<number> = dynamicRow.properties.subElements.map(
-            (subElement) => {
-              return subElement.id;
-            }
-          );
-
-          duplicateSubElementIDs = duplicateSubElementIDs.concat(
-            subElementIDs.filter((value, index, array) => array.indexOf(value) !== index)
-          );
-
-          const dynamicRowId = dynamicRow.id;
-          unmatchedSubElementIDs = unmatchedSubElementIDs.concat(
-            subElementIDs.filter((subElementID) => {
-              return subElementID.toString().startsWith(dynamicRowId.toString()) === false;
-            })
-          );
-        }
-      });
-      if (duplicateSubElementIDs.length > 0) {
-        res.status(400).json({
-          error: `JSON Validation Error: Duplicate subElement IDs detected: ${duplicateSubElementIDs.join()}`,
-        });
-        return { next: false };
-      }
-      if (unmatchedSubElementIDs.length > 0) {
-        res.status(400).json({
-          error: `JSON Validation Error: Incorrect subElement IDs detected: ${unmatchedSubElementIDs.join()}`,
-        });
-        return { next: false };
-      }
+    if (options?.runValidationIf?.(req) === false) {
       return { next: true };
-    } catch {
-      res.status(500).json({ error: "Malformed API Request" });
+    }
+    const formProperties: FormProperties = options?.jsonKey ? req.body[options.jsonKey] : req.body;
+
+    const dynamicRowElements: Array<FormElement> = formProperties.elements.filter((element) => {
+      return element.type === FormElementTypes.dynamicRow;
+    });
+
+    let duplicateSubElementIDs: Array<number> = [];
+    let unmatchedSubElementIDs: Array<number> = [];
+
+    dynamicRowElements.forEach((dynamicRow: FormElement) => {
+      if (dynamicRow.properties.subElements) {
+        const subElementIDs: Array<number> = dynamicRow.properties.subElements.map((subElement) => {
+          return subElement.id;
+        });
+
+        duplicateSubElementIDs = duplicateSubElementIDs.concat(
+          subElementIDs.filter((value, index, array) => array.indexOf(value) !== index)
+        );
+
+        const dynamicRowId = dynamicRow.id;
+        unmatchedSubElementIDs = unmatchedSubElementIDs.concat(
+          subElementIDs.filter((subElementID) => {
+            return subElementID.toString().startsWith(dynamicRowId.toString()) === false;
+          })
+        );
+      }
+    });
+    if (duplicateSubElementIDs.length > 0) {
+      res.status(400).json({
+        error: `JSON Validation Error: Duplicate subElement IDs detected: ${duplicateSubElementIDs.join()}`,
+      });
       return { next: false };
     }
+    if (unmatchedSubElementIDs.length > 0) {
+      res.status(400).json({
+        error: `JSON Validation Error: Incorrect subElement IDs detected: ${unmatchedSubElementIDs.join()}`,
+      });
+      return { next: false };
+    }
+    return { next: true };
   };
 };

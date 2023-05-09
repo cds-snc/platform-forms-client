@@ -19,8 +19,7 @@ export interface MiddlewareReturn {
 
 export type MiddlewareRequest = (
   req: NextApiRequest,
-  res: NextApiResponse,
-  props?: Record<string, unknown>
+  res: NextApiResponse
 ) => Promise<MiddlewareReturn>;
 
 export interface MiddlewareProps {
@@ -30,6 +29,8 @@ export interface MiddlewareProps {
   email?: string;
   temporaryToken?: string;
 }
+
+export type WithRequired<T, K extends keyof T> = T & Required<Pick<T, K>>;
 
 export type HTMLTextInputTypeAttribute =
   | "text"

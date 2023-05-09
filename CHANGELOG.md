@@ -5,7 +5,135 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+### Fixed
+
+- Download API will not override a response status that is different than `New`. [2052](https://github.com/cds-snc/platform-forms-client/issues/2052)
+
+## [3.0.4] 2023-05-05
+
+### Fixed
+
+- Expanding question inputs in form builder
+- Language toggle not appearing on first page visit
+
+## [3.0.3] 2023-05-03
+
+### Fixed
+
+- Responses page is not available if form does not exist (deleted). [2023](https://github.com/cds-snc/platform-forms-client/issues/2023)
+- Content Changes
+- Expanding title element in form builder
+
+## [3.0.2] 2023-04-28
+
+### Fixed
+
+- Form submission timestamp is not reflecting current user timezone.[1860](https://github.com/cds-snc/platform-forms-client/issues/1860)
+- Creating and sorting of form elements
+- Content changes for clarity
+
+## [3.0.1] 2023-04-25
+
+### Fixed
+
+- Branding options not appearing
+- Content changes
+- Performance optimizations
+
+## [3.0.0] 2023-04-17
+
+### Added
+
+- Form Response retrieval interface
+- Branding options for specific agencies and government entities
+- Support and Contact us pages
+- Audit Logs for user triggered events
+- HTML format Form Response file
+- Editable name for a form
+- Ability to share a form through email
+- Global application settings
+
+### Changed
+
+- Updated interface for Form Builder (form creation interface)
+- Updated Form Builder navigation
+
+### Removed
+
+- Retrieval API
+- Token and temporary token authentication
+
+## [2.0.0] 2022-12-28
+
+### Added
+
+- Form Builder form creation interface
+- User self registration
+- Validation of a JSON Config to check the IDs of elements [#892](https://github.com/cds-snc/platform-forms-client/pull/892)
+- Added login page [#867](https://github.com/cds-snc/platform-forms-client/issues/867)
+- Added login page for temporary token [#900](https://github.com/cds-snc/platform-forms-client/pull/900)
+- [BREAKING]: Modified the Prisma schema for the "User" table; removing the `admin` column, and adding the `role` column. After migrating, at least one user role will need to manually be set to `administrator` in order to login the Admin portion of the site. [#906](https://github.com/cds-snc/platform-forms-client/pull/906)
+- Added file attachments to retrieval API [#909](https://github.com/cds-snc/platform-forms-client/pull/909)
+- New login lockout mechanism plugged on existing temporary token API [#872](https://github.com/cds-snc/platform-forms-client/issues/872)
+- Logout Page [#847] (https://github.com/cds-snc/platform-forms-client/issues/870)
+- Admin feature to assign users to template [#1203](https://github.com/cds-snc/platform-forms-client/issues/1203)
+- New API path to request publishing permission [#1226](https://github.com/cds-snc/platform-forms-client/issues/1226)
+- Dynamic footer with SLA and Support links on admin and form builder related pages [#1080](https://github.com/cds-snc/platform-forms-client/issues/1080)
+
+### Changed
+
+- Updated Terms and conditions page + text link in the footer [#863](https://github.com/cds-snc/platform-forms-client/issues/863)
+- Modified Role Based to Asset Based Access Control [#1176](https://github.com/cds-snc/platform-forms-client/pull/1176)
+- Form templates are now marked as archived and will stay in the database for 30 more days before being deleted by a Lambda function. [#1166](https://github.com/cds-snc/platform-forms-client/issues/1166)
+- The existing `publishingStatus` field from the form JSON configuration has been replaced by a `isPublished` data field in the database. It can be switch to `true` or `false` using the Template API. A migration process will automatically happen through the Prisma seeding process. [#1181](https://github.com/cds-snc/platform-forms-client/issues/1181)
+- Form builder can only load form if the user has the permission to access it [#1228](https://github.com/cds-snc/platform-forms-client/issues/1228)
+
+### Fixed
+
+- Fix stuck "Loading..." animation after uploading a new JSON config. [#898](https://github.com/cds-snc/platform-forms-client/pull/898)
+- Fix ReCaptcha feature being broken because of missing API Key.
+- Last login time on acceptable use page was not formatted properly. [#949](https://github.com/cds-snc/platform-forms-client/issues/949)
+- Fix logout session end date [#945](https://github.com/cds-snc/platform-forms-client/issues/945)
+- Fix last login date format [#950](https://github.com/cds-snc/platform-forms-client/pull/950)
+- Cleared email input field after successfully adding an email to Form Access [#954](https://github.com/cds-snc/platform-forms-client/pull/954)
+- Returned only public properties for forms [#1038](https://github.com/cds-snc/platform-forms-client/pull/1038)
+- Can't enable/disable user permissions in admin panel
+
+### Removed
+
+- Option to preview form submission email to through Notify [#1021](https://github.com/cds-snc/platform-forms-client/pull/1021)
+
+## [1.3.0] 2022-07-15
+
+### Added
+
+- Make GC Branding in Footer configurable [#847](https://github.com/cds-snc/platform-forms-client/pull/847)
+
+### Fixed
+
+- Added CSRF token requirement to `api/log` endpoint [#835](https://github.com/cds-snc/platform-forms-client/pull/835)
+- Welcome page link to design system (storybook) [#844](https://github.com/cds-snc/platform-forms-client/pull/844)
+- Fix retrieval API [#845](https://github.com/cds-snc/platform-forms-client/pull/845)
+- Fix loading of csp scripts to happen after Dom is loaded [#848](https://github.com/cds-snc/platform-forms-client/pull/848)
+- Fix remaining characters display issue
+
+## [No Release Version] 2022-06-14
+
+## [1.3.0] 2022-07-15
+
+### Added
+
+- Make GC Branding in Footer configurable [#847](https://github.com/cds-snc/platform-forms-client/pull/847)
+
+### Fixed
+
+- Added CSRF token requirement to `api/log` endpoint [#835](https://github.com/cds-snc/platform-forms-client/pull/835)
+- Welcome page link to design system (storybook) [#844](https://github.com/cds-snc/platform-forms-client/pull/844)
+- Fix retrieval API [#845](https://github.com/cds-snc/platform-forms-client/pull/845)
+- Fix loading of csp scripts to happen after Dom is loaded [#848](https://github.com/cds-snc/platform-forms-client/pull/848)
+- Fix remaining characters display issue
+
+## [No Release Version] 2022-06-14
 
 ### Added
 
@@ -14,18 +142,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added login page for temporary token [#900](https://github.com/cds-snc/platform-forms-client/pull/900)
 - [BREAKING]: Modified the Prisma schema for the "User" table; removing the `admin` column, and adding the `role` column. After migrating, at least one user role will need to manually be set to `administrator` in order to login the Admin portion of the site. [#906](https://github.com/cds-snc/platform-forms-client/pull/906)
 - Added file attachments to retrieval API [#909](https://github.com/cds-snc/platform-forms-client/pull/909)
-- Added file attachment scan verdict endpoint to retrieval API [#932](https://github.com/cds-snc/platform-forms-client/pull/932)
+- New login lockout mechanism plugged on existing temporary token API [#872](https://github.com/cds-snc/platform-forms-client/issues/872)
+- Logout Page [#847] (https://github.com/cds-snc/platform-forms-client/issues/870)
+- Admin feature to assign users to template [#1203](https://github.com/cds-snc/platform-forms-client/issues/1203)
+- New API path to request publishing permission [#1226](https://github.com/cds-snc/platform-forms-client/issues/1226)
+- Dynamic footer with SLA and Support links on admin and form builder related pages [#1080](https://github.com/cds-snc/platform-forms-client/issues/1080)
+
+### Changed
+
+- Updated Terms and conditions page + text link in the footer [#863](https://github.com/cds-snc/platform-forms-client/issues/863)
+- Modified Role Based to Asset Based Access Control [#1176](https://github.com/cds-snc/platform-forms-client/pull/1176)
+- Form templates are now marked as archived and will stay in the database for 30 more days before being deleted by a Lambda function. [#1166](https://github.com/cds-snc/platform-forms-client/issues/1166)
+- The existing `publishingStatus` field from the form JSON configuration has been replaced by a `isPublished` data field in the database. It can be switch to `true` or `false` using the Template API. A migration process will automatically happen through the Prisma seeding process. [#1181](https://github.com/cds-snc/platform-forms-client/issues/1181)
+- Form builder can only load form if the user has the permission to access it [#1228](https://github.com/cds-snc/platform-forms-client/issues/1228)
 
 ### Fixed
 
 - Fix stuck "Loading..." animation after uploading a new JSON config. [#898](https://github.com/cds-snc/platform-forms-client/pull/898)
+- Fix ReCaptcha feature being broken because of missing API Key.
+- Last login time on acceptable use page was not formatted properly. [#949](https://github.com/cds-snc/platform-forms-client/issues/949)
+- Fix logout session end date [#945](https://github.com/cds-snc/platform-forms-client/issues/945)
+- Fix last login date format [#950](https://github.com/cds-snc/platform-forms-client/pull/950)
+- Cleared email input field after successfully adding an email to Form Access [#954](https://github.com/cds-snc/platform-forms-client/pull/954)
+- Returned only public properties for forms [#1038](https://github.com/cds-snc/platform-forms-client/pull/1038)
+- Can't enable/disable user permissions in admin panel
+
+### Removed
+
+- Option to preview form submission email to through Notify [#1021](https://github.com/cds-snc/platform-forms-client/pull/1021)
+- `displayAlphaBanner` property in JSON form template is not supported anymore. [#772](https://github.com/cds-snc/platform-forms-client/issues/772)
 
 ## [1.3.0] 2022-07-15
 
 ### Added
 
 - Make GC Branding in Footer configurable [#847](https://github.com/cds-snc/platform-forms-client/pull/847)
-- Logout Page [#847] (https://github.com/cds-snc/platform-forms-client/issues/870)
 
 ### Fixed
 
@@ -114,7 +265,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renamed `organisation` to `organization` which has an impact on the API access path
 - Modified the middleware functionality and separation of scopes between middlewares
 - A user now needs to have an enabled admin flag (user table) to access the Admin Pages
-- An admin user can now add and remove administrative priveleges from other users.
+- An admin user can now add and remove administrative privileges from other users.
 
 ### Fixed
 
@@ -155,7 +306,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Create secure API to retrieve bearer token for a specific form [#525](https://github.com/cds-snc/platform-forms-client/pull/525)
 - Add bearer token to templates [#526](https://github.com/cds-snc/platform-forms-client/pull/526)
 
-### Fixed
+### Fixed
 
 ### Changed
 

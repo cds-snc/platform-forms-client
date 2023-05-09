@@ -6,7 +6,7 @@ const verifyReCaptchaToken = async (req: NextApiRequest, res: NextApiResponse) =
   try {
     const { userToken } = req.body;
     if (userToken) {
-      const reCAPTCHASecret = process.env.RECAPTACHA_V3_SECRET_KEY;
+      const reCAPTCHASecret = process.env.RECAPTCHA_V3_SECRET_KEY;
       const response = await axios({
         url: `https://www.google.com/recaptcha/api/siteverify?secret=${reCAPTCHASecret}&response=${userToken}`,
         method: "POST",
@@ -14,10 +14,10 @@ const verifyReCaptchaToken = async (req: NextApiRequest, res: NextApiResponse) =
       });
       res.status(200).json({ ...response.data });
     } else {
-      res.status(404).json({ error: "Bad request" });
+      res.status(400).json({ error: "Malformed API Request" });
     }
   } catch (err) {
-    res.status(500).json({ error: "Malformed API Request" });
+    res.status(500).json({ error: "Failed to verify ReCaptcha token" });
   }
 };
 

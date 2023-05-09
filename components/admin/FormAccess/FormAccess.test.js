@@ -8,7 +8,7 @@ import FormAccess from "./FormAccess";
 jest.mock("axios");
 
 describe("Form Access Component", () => {
-  const formConfig = { formID: 1 };
+  const formConfig = { id: "test0form00000id000asdf11" };
 
   afterEach(cleanup);
 
@@ -24,10 +24,10 @@ describe("Form Access Component", () => {
       ],
     });
 
-    render(<FormAccess formID={formConfig.formID}></FormAccess>);
+    render(<FormAccess formID={formConfig.id}></FormAccess>);
     expect(mockedAxios.mock.calls.length).toBe(1);
     expect(mockedAxios).toHaveBeenCalledWith(
-      expect.objectContaining({ url: `/api/id/${formConfig.formID}/owners`, method: "GET" })
+      expect.objectContaining({ url: `/api/id/${formConfig.id}/owners`, method: "GET" })
     );
     expect(await screen.findByTestId("add-email")).toBeInTheDocument();
   });
@@ -46,7 +46,7 @@ describe("Form Access Component", () => {
       ],
     });
 
-    render(<FormAccess formID={formConfig.formID}></FormAccess>);
+    render(<FormAccess formID={formConfig.id}></FormAccess>);
 
     const input = await screen.findByLabelText("settings.formAccess.addEmailAriaLabel");
 
@@ -64,7 +64,7 @@ describe("Form Access Component", () => {
     await user.click(screen.getByTestId("add-email"));
     expect(mockedAxios.mock.calls.length).toBe(2);
     expect(mockedAxios).toHaveBeenCalledWith(
-      expect.objectContaining({ url: "/api/id/1/owners", method: "POST" })
+      expect.objectContaining({ url: "/api/id/test0form00000id000asdf11/owners", method: "POST" })
     );
 
     expect(await screen.findByText(testEmailAddress)).toBeInTheDocument;
@@ -84,12 +84,12 @@ describe("Form Access Component", () => {
           },
         ],
       })
-      .mockResolvedValueOnce({
+      .mockRejectedValueOnce({
         status: 404,
         data: { error: "The formID does not exist" },
       });
 
-    render(<FormAccess formID={formConfig.formID}></FormAccess>);
+    render(<FormAccess formID={formConfig.id}></FormAccess>);
 
     const input = await screen.findByLabelText("settings.formAccess.addEmailAriaLabel");
     await user.type(input, testEmailAddress);
@@ -114,12 +114,12 @@ describe("Form Access Component", () => {
           },
         ],
       })
-      .mockResolvedValueOnce({
+      .mockRejectedValueOnce({
         status: 400,
         data: { error: "The email is not a valid GC email" },
       });
 
-    render(<FormAccess formID={formConfig.formID}></FormAccess>);
+    render(<FormAccess formID={formConfig.id}></FormAccess>);
 
     const input = await screen.findByLabelText("settings.formAccess.addEmailAriaLabel");
     await user.type(input, testEmailAddress);

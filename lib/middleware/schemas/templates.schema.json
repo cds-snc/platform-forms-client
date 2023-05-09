@@ -1,117 +1,179 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "http://example.com/example.json",
+  "id": "https://forms-formulaires.alpha.canada.ca/",
   "type": "object",
-  "title": "GC Forms Alpha Schema",
+  "title": "GC Forms Schema - Alpha",
   "description": "A schema to define a Forms configuration.",
   "default": {},
-  "examples": [],
+  "examples": [
+    {
+      "titleEn": "",
+      "titleFr": "",
+      "introduction": {},
+      "privacyPolicy": {},
+      "confirmation": {},
+      "layout": [],
+      "elements": [],
+      "startPage": {},
+      "brand": {}
+    }
+  ],
   "properties": {
-    "securityAttribute": {
-      "description": "It shows an administrator what proceduce should be taken when accessing a form's responses",
-      "$id": "#/properties/securityAttribute",
-      "type": "string",
-      "enum": ["Protected A", "Protected B", "Unclassified"]
-    },
-    "internalTitleEn": {
-      "description": "The internal title of the form in English",
-      "$id": "#/properties/internalTitleEn",
+    "titleEn": {
+      "description": "The displayed title of the form to the user in English",
+      "id": "#/properties/titleEn",
       "type": "string"
     },
-    "internalTitleFr": {
-      "description": "The internal title of the form in French",
-      "$id": "#/properties/internalTitleFr",
+    "titleFr": {
+      "description": "The displayed title of the form to the user in French",
+      "id": "#/properties/titleFr",
       "type": "string"
     },
-    "publishingStatus": {
-      "description": "If set to false, the link to the form will not appear on the main page, rather under 'sandbox'",
-      "$id": "#/properties/publishingStatus",
-      "type": "boolean"
-    },
-    "form": {
+    "introduction": {
+      "description": "Form introduction",
+      "id": "#/properties/introduction",
       "type": "object",
       "properties": {
-        "elements": {
-          "description": "A list of elements contained within the form.",
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/element"
+        "descriptionEn": {
+          "type": "string"
+        },
+        "descriptionFr": {
+          "type": "string"
+        }
+      }
+    },
+    "privacyPolicy": {
+      "description": "Form privacy policy",
+      "id": "#/properties/privacyPolicy",
+      "type": "object",
+      "properties": {
+        "descriptionEn": {
+          "type": "string"
+        },
+        "descriptionFr": {
+          "type": "string"
+        }
+      }
+    },
+    "confirmation": {
+      "description": "Content that will be displayed after a form is submitted.",
+      "id": "#/properties/confirmation",
+      "type": "object",
+      "properties": {
+        "descriptionEn": {
+          "type": "string"
+        },
+        "descriptionFr": {
+          "type": "string"
+        },
+        "referrerUrlEn": {
+          "type": "string"
+        },
+        "referrerUrlFr": {
+          "type": "string"
+        }
+      }
+    },
+    "layout": {
+      "description": "A list of element IDs that determines the order or elements in the form.",
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "uniqueItems": true,
+      "examples": [[2, 3, 4, 6, 9, 5]]
+    },
+    "elements": {
+      "description": "A list of elements contained within the form.",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/element"
+      },
+      "examples": [
+        {
+          "id": 1,
+          "type": "richText",
+          "properties": {
+            "validation": {
+              "required": false
+            },
+            "descriptionEn": "#### Section 1: Nomination Category",
+            "descriptionFr": "#### Section 1: Catégorie de la nomination"
           }
         },
-        "titleEn": {
-          "description": "The displayed title of the form to the user in English",
-          "$id": "#/properties/titleEn",
-          "type": "string"
-        },
-        "titleFr": {
-          "description": "The displayed title of the form to the user in French",
-          "$id": "#/properties/titleFr",
-          "type": "string"
-        },
-        "brand": {
-          "type": "object",
+        {
+          "id": 2,
+          "type": "radio",
           "properties": {
-            "name": {
-              "description": "The brand name.",
-              "type": "string"
+            "choices": [
+              {
+                "en": "Team nomination",
+                "fr": "Mise en candidature d’une équipe"
+              },
+              {
+                "en": "Individual Nomination",
+                "fr": "Mise en candidature d’une personne"
+              }
+            ],
+            "titleEn": "Is this a Team or Individual Nomination?",
+            "titleFr": "Is this a Team or Individual Nomination?",
+            "validation": {
+              "required": true
             },
-            "urlEn": {
-              "description": "Url for english version of the site.",
-              "type": "string"
-            },
-            "urlFr": {
-              "description": "url for a french version of the site.",
-              "type": "string"
-            },
-            "logoEn": {
-              "description": "English logo path.",
-              "type": "string"
-            },
-            "logoFr": {
-              "description": "French logo path.",
-              "type": "string"
-            },
-            "logoTitleEn": {
-              "description": "logo title.",
-              "type": "string"
-            },
-            "logoTitleFr": {
-              "description": "logo title.",
-              "type": "string"
-            },
-            "disableGCBranding": {
-              "description": "If set to true, GC branding will not be rendered in the footer.",
-              "type": "boolean"
-            }
+            "descriptionEn": "",
+            "descriptionFr": ""
           }
         }
-      },
-      "required": ["elements", "titleEn", "titleFr"]
+      ]
     },
-    "submission": {
+    "brand": {
       "type": "object",
       "properties": {
-        "email": {
-          "description": "The email address to which the form submission should be sent.",
+        "name": {
+          "description": "The brand name.",
           "type": "string"
         },
-        "vault": {
-          "description": "If set to true, the form submission will be saved in the vault.",
+        "urlEn": {
+          "description": "URL for English version of the site.",
+          "type": "string"
+        },
+        "urlFr": {
+          "description": "URL for a French version of the site.",
+          "type": "string"
+        },
+        "logoEn": {
+          "description": "English logo path.",
+          "type": "string"
+        },
+        "logoFr": {
+          "description": "French logo path.",
+          "type": "string"
+        },
+        "logoTitleEn": {
+          "description": "logo title.",
+          "type": "string"
+        },
+        "logoTitleFr": {
+          "description": "logo title.",
+          "type": "string"
+        },
+        "disableGCBranding": {
+          "description": "If set to true, GC branding will not be rendered in the footer.",
           "type": "boolean"
         }
       }
     }
   },
-  "required": ["form", "submission", "publishingStatus"],
-  "additionalProperties": true,
-
-  "$defs": {
+  "required": ["titleEn", "titleFr", "privacyPolicy", "confirmation", "layout", "elements"],
+  "additionalProperties": false,
+  "definitions": {
     "element": {
       "type": "object",
       "properties": {
         "id": {
           "description": "The unique id for the object",
-          "type": "number"
+          "type": "integer",
+          "minimum": 1
         },
         "type": {
           "type": "string",
@@ -123,78 +185,116 @@
             "checkbox",
             "fileInput",
             "dynamicRow",
-            "richText"
+            "richText",
+            "attestation"
           ]
         },
         "properties": {
-          "type": "$defs/elementProperties"
+          "type": "object",
+          "properties": {
+            "titleEN": {
+              "description": "Input label in English",
+              "type": "string"
+            },
+            "titleFR": {
+              "description": "Input label in French",
+              "type": "string"
+            },
+            "placeholderEn": {
+              "description": "Text that will appear in the text input field as a placeholder in English",
+              "type": "string"
+            },
+            "placeholderFr": {
+              "description": "Text that will appear in the text input field as a placeholder in French",
+              "type": "string"
+            },
+            "descriptionEn": {
+              "description": "Secondary paragraph/text of a question or element that provides additional context beyond the label in English",
+              "type": "string"
+            },
+            "descriptionFr": {
+              "description": "Secondary paragraph/text of a question or element that provides additional context beyond the label in French",
+              "type": "string"
+            },
+            "choices": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "en": {
+                    "description": "English choice",
+                    "type": "string"
+                  },
+                  "fr": {
+                    "description": "French choice",
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "maxNumberOfRows": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "validation": {
+              "type": "object",
+              "properties": {
+                "required": {
+                  "type": "boolean"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": ["email", "alphanumeric", "text", "name", "number", "phone", "date"]
+                },
+                "regex": {
+                  "type": "string"
+                },
+                "maxLength": {
+                  "description": "The maximum number of characters that can be entered in a textinput or textarea.",
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "descriptionEN": {
+                  "type": "string"
+                },
+                "descriptionFR": {
+                  "type": "string"
+                },
+                "all": {
+                  "description": "Used only for checkboxes, ignored on other elements. When set to true, this will require that all checkboxes be selected. Used typically for the attestation section.",
+                  "type": "boolean"
+                }
+              },
+              "examples": [
+                {
+                  "validation": {
+                    "required": true,
+                    "type": "email",
+                    "descriptionEN": "Enter a valid email address.",
+                    "descriptionFR": "Veuillez entrer une adresse courriel valide."
+                  }
+                },
+                {
+                  "validation": {
+                    "required": false,
+                    "type": "alphanumeric",
+                    "descriptionEN": "Please enter your home street address.",
+                    "descriptionFR": "Veuillez entrer votre adresse postale."
+                  }
+                }
+              ]
+            },
+            "subElements": {
+              "description": "A list of subElements contained within a dynamicRow",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/element"
+              }
+            }
+          }
         }
       },
       "required": ["id", "type", "properties"]
-    },
-    "elementProperties": {
-      "type": "object",
-      "properties": {
-        "titleEN": {
-          "description": "Input label in English",
-          "type": "string"
-        },
-        "titleFR": {
-          "description": "Input label in French",
-          "type": "string"
-        },
-        "placeholderEn": {
-          "description": "Text that will appear in the text input field as a placeholder in English",
-          "type": "string"
-        },
-        "placeholderFr": {
-          "description": "Text that will appear in the text input field as a placeholder in French",
-          "type": "string"
-        },
-        "descriptionEn": {
-          "description": "Secondary paragraph/text of a question or element that provides additional context beyond the label in English",
-          "type": "string"
-        },
-        "descriptionFr": {
-          "description": "Secondary paragraph/text of a question or element that provides additional context beyond the label in French",
-          "type": "string"
-        },
-        "maxNumberOfRows": {
-          "type": "number"
-        },
-        "validation": {
-          "type": "$defs/validation"
-        }
-      }
-    },
-    "validation": {
-      "type": "object",
-      "properties": {
-        "required": {
-          "type": "boolean"
-        },
-        "type": {
-          "type": "string",
-          "enum": ["email", "alphanumeric", "text", "name", "number", "phone", "date"]
-        },
-        "regex": {
-          "type": "string"
-        },
-        "maxLegth": {
-          "description": "The maximum number of characters that can be entered in a textinput or textarea.",
-          "type": "number"
-        },
-        "descriptionEN": {
-          "type": "string"
-        },
-        "descriptionFR": {
-          "type": "string"
-        },
-        "all": {
-          "description": "Used only for checkboxes, ignored on other elements. When set to true, this will require that all checkboxes be selected. Used typically for the attestation section.",
-          "type": "boolean"
-        }
-      }
     }
   }
 }

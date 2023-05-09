@@ -1,0 +1,89 @@
+[
+    {
+      "type": "richText",
+      "properties": {
+        "subElements": [],
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "## What is your name?",
+        "descriptionFr": "## Quel est votre nom?",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "type": "textField",
+      "properties": {
+        "subElements": [],
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "First name",
+        "titleFr": "Prénom",
+        "validation": {
+          "required": true
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "autoComplete": "given-name"
+      }
+    },
+    {
+      "type": "textField",
+      "properties": {
+        "subElements": [],
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Middle names (optional)",
+        "titleFr": "Deuxième prénom (optionnel)",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "autoComplete": "additional-name"
+      }
+    },
+    {
+      "type": "textField",
+      "properties": {
+        "subElements": [],
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Last name",
+        "titleFr": "Nom de famille",
+        "validation": {
+          "required": true
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "autoComplete": "family-name"
+      }
+    }
+  ]

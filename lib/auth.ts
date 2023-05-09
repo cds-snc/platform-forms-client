@@ -1,4 +1,4 @@
-import { unstable_getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth/next";
 import { Session } from "next-auth";
 import {
   GetServerSidePropsResult,
@@ -9,12 +9,14 @@ import {
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import jwt from "jsonwebtoken";
 import { hasOwnProperty } from "./tsUtils";
-import { TemporaryTokenPayload } from "./types";
+import { TemporaryTokenPayload, UserAbility } from "./types";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
-import { UserRole } from "@prisma/client";
+import { AccessControlError, createAbility } from "./privileges";
 
-export interface GetServerSidePropsAuthContext extends GetServerSidePropsContext {
-  user?: Record<string, unknown>;
+import { localPathRegEx } from "@lib/validation";
+
+interface ServerSidePropsAuthContext extends GetServerSidePropsContext {
+  user: Session["user"] & { ability: UserAbility };
 }
 
 /**
@@ -33,60 +35,81 @@ export enum LoggingAction {
  */
 export function requireAuthentication(
   innerFunction: (
-    ctx: GetServerSidePropsAuthContext
-  ) => Promise<GetServerSidePropsResult<Record<string, unknown>>>,
-  authRole: UserRole
+    ctx: ServerSidePropsAuthContext
+  ) => Promise<GetServerSidePropsResult<Record<string, unknown>>>
 ) {
   return async (
-    context: GetServerSidePropsAuthContext
+    context: GetServerSidePropsContext
   ): Promise<GetServerSidePropsResult<Record<string, unknown>>> => {
-    const session = await unstable_getServerSession(context.req, context.res, authOptions);
+    try {
+      const session = await getServerSession(context.req, context.res, authOptions);
 
-    if (!session) {
-      // If no user, redirect to login
-      return {
-        redirect: {
-          destination: `/${context.locale}${loginUrl(authRole)}`,
-          permanent: false,
-        },
-      };
+      if (!session) {
+        // If no user, redirect to login
+        return {
+          redirect: {
+            destination: `/${context.locale}/auth/login`,
+            permanent: false,
+          },
+        };
+      }
+
+      if (!session.user.acceptableUse && !context.resolvedUrl?.startsWith("/auth/policy")) {
+        // If they haven't agreed to Acceptable Use redirect to policy page for acceptance
+        // If already on the policy page don't redirect, aka endless redirect loop.
+        // Also check that the path is local and not an external URL
+        return {
+          redirect: {
+            destination: `/${context.locale}/auth/policy?referer=${
+              localPathRegEx.test(context.resolvedUrl || "") ? context.resolvedUrl : "/myforms"
+            }`,
+            permanent: false,
+          },
+        };
+      }
+
+      const innerFunctionProps = await innerFunction({
+        user: { ...session.user, ability: createAbility(session) },
+        ...context,
+      }); // Continue on to call `getServerSideProps` logic
+      if (hasOwnProperty(innerFunctionProps, "props")) {
+        return {
+          props: {
+            ...(innerFunctionProps.props as Record<string, unknown>),
+            user: { ...session.user },
+          },
+        };
+      }
+
+      return innerFunctionProps;
+    } catch (e) {
+      if (e instanceof AccessControlError) {
+        return {
+          redirect: {
+            destination: `/${context.locale}/admin/unauthorized`,
+            permanent: false,
+          },
+        };
+      }
+      throw e;
     }
-
-    if (session.user.role !== authRole) {
-      // If improper credentials, redirect to unauthorized page
-      return {
-        redirect: {
-          destination: `/${context.locale}${unauthorizedUrl(authRole)}`,
-          permanent: false,
-        },
-      };
-    }
-
-    context.user = { ...session.user };
-
-    const innerFunctionProps = await innerFunction(context); // Continue on to call `getServerSideProps` logic
-    if (hasOwnProperty(innerFunctionProps, "props")) {
-      return { props: { ...innerFunctionProps.props, user: { ...session.user } } };
-    }
-
-    return innerFunctionProps;
   };
 }
 
 /**
- * Checks if session exists server side and if it belongs to a user with administrative priveleges
+ * Checks if session exists server side and if it belongs to a user
  * @param reqOrContext Request and Response Object
  * @returns session if exists otherwise null
  */
-export const isAdmin = async ({
+export const isAuthenticated = async ({
   req,
   res,
 }: {
   req: NextApiRequest;
   res: NextApiResponse;
 }): Promise<Session | null> => {
-  const session = await unstable_getServerSession(req, res, authOptions);
-  return session?.user.role === UserRole.ADMINISTRATOR ? session : null;
+  const session = await getServerSession(req, res, authOptions);
+  return session;
 };
 
 /**
@@ -101,21 +124,23 @@ export const validateTemporaryToken = async (token: string) => {
       process.env.TOKEN_SECRET || ""
     ) as TemporaryTokenPayload;
 
-    const user = await prisma.formUser.findUnique({
-      where: {
-        templateId_email: {
-          email,
-          templateId: formID,
+    const user = await prisma.apiUser
+      .findUnique({
+        where: {
+          templateId_email: {
+            email,
+            templateId: formID,
+          },
         },
-      },
-      select: {
-        id: true,
-        templateId: true,
-        email: true,
-        active: true,
-        temporaryToken: true,
-      },
-    });
+        select: {
+          id: true,
+          templateId: true,
+          email: true,
+          active: true,
+          temporaryToken: true,
+        },
+      })
+      .catch((e) => prismaErrors(e, null));
 
     // The token could be valid but user has been made inactive since
     if (!user?.active) return null;
@@ -124,36 +149,6 @@ export const validateTemporaryToken = async (token: string) => {
     // The user and token are valid
     return user;
   } catch (error) {
-    return prismaErrors(error, null);
-  }
-};
-
-/**
- * Returns the URL for the page if the user is not logged in
- * @param authRole string of the authRole from the current session
- * @returns string for the url
- */
-const loginUrl = (authRole: UserRole): string => {
-  switch (authRole) {
-    case UserRole.ADMINISTRATOR:
-      return "/admin/login/";
-    case UserRole.PROGRAM_ADMINISTRATOR:
-    default:
-      return "/auth/login/";
-  }
-};
-
-/**
- * Returns the URL for the page if the user is unauthorized
- * @param authRole string of the authRole from the current session
- * @returns string for the url
- */
-const unauthorizedUrl = (authRole: UserRole): string => {
-  switch (authRole) {
-    case UserRole.ADMINISTRATOR:
-      return "/admin/unauthorized/";
-    case UserRole.PROGRAM_ADMINISTRATOR:
-    default:
-      return "/auth/unauthorized/";
+    return null;
   }
 };

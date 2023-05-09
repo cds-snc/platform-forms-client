@@ -1,417 +1,401 @@
 {
-  "form": {
-    "brand": {
-      "name": "cb-cda",
-      "urlEn": "https://cb-cda.gc.ca/en/homepage",
-      "urlFr": "https://cb-cda.gc.ca/fr",
-      "logoEn": "/img/cb-cda.png",
-      "logoTitleEn": "Copyright Board of Canada",
-      "logoTitleFr": "Commission du droit d'auteur du Canada"
-    },
-    "layout": [
-      1,
-      2,
-      3,
-      6,
-      7,
-      11,
-      12
-    ],
-    "endPage": {
-      "descriptionEn": "# Thank you for your tariff. \n\r The Proposed Tariff(s) has/have been successfully filed. The Board will inform you when this proposed tariff has/have been published on the Board’s website or if we require additional information. \n\r <a href='https://cb-cda.gc.ca/en'>Go back</a>",
-      "descriptionFr": "# Merci pour votre entrée. \n\r The Proposed Tariff(s) has/have been successfully filed. The Board will inform you when this proposed tariff has/have been published on the Board’s website or if we require additional information. \n\r <a href='https://cb-cda.gc.ca/fr'>Retour</a>",
-      "referrerUrlEn": "",
-      "referrerUrlFr": ""
-    },
-    "titleEn": "Copyright Board of Canada - Proposed Tariff Filing Form",
-    "titleFr": "[fr] Copyright Board of Canada - Proposed Tariff Filing Form",
-    "version": 1,
-    "elements": [
-      {
-        "id": 1,
-        "type": "richText",
-        "properties": {
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "Find out how the Copyright Board of Canada protects you <a href='https://cb-cda.gc.ca/en/terms-and-conditions'>privacy</a>.",
-          "descriptionFr": "[FR] Find out how Copyright Board of Canada protects you <a href='https://cb-cda.gc.ca/fr/avis'>privacy</a>."
-        }
-      },
-      {
-        "id": 2,
-        "type": "richText",
-        "properties": {
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "### Collective Society or Societies",
-          "descriptionFr": "### [FR] - Collective Society or Societies"
-        }
-      },
-      {
-        "id": 3,
-        "type": "dynamicRow",
-        "properties": {
-          "titleEn": "",
-          "titleFr": "",
-          "validation": {
-            "required": true
-          },
-          "subElements": [
-            {
-              "id": 4,
-              "type": "richText",
-              "properties": {
-                "validation": {
-                  "required": false
-                },
-                "descriptionEn": "If you are filing a joint tariff, please add the other collective(s). You can add another collective society, up to ten, by clicking 'add row' below.",
-                "descriptionFr": "[FR] - If you are filing a joint tariff, please add the other collective(s). You can add another collective society, up to ten, by clicking 'add row' below."
-              }
-            },
-            {
-              "id": 5,
-              "type": "dropdown",
-              "properties": {
-                "choices": [
-                  {
-                    "en": "Access Copyright",
-                    "fr": "Access Copyright"
-                  },
-                  {
-                    "en": "Artisti",
-                    "fr": "Artisti"
-                  },
-                  {
-                    "en": "Border Broadcasters Inc",
-                    "fr": "Border Broadcasters Inc"
-                  },
-                  {
-                    "en": "Canadian Broadcasters Rights Agency",
-                    "fr": "Agences des droits des radiodiffuseurs canadiens"
-                  },
-                  {
-                    "en": "Copyright Collective of Canada",
-                    "fr": "Société de perception de droit d’auteur du Canada"
-                  },
-                  {
-                    "en": "Canadian Musical Reproduction Rights Agency",
-                    "fr": "Agence canadienne des droits de reproduction musicaux"
-                  },
-                  {
-                    "en": "Connect Music Licensing",
-                    "fr": "Connect Music Licensing"
-                  },
-                  {
-                    "en": "Canadian Private Copying Collective",
-                    "fr": "Société canadienne de perception de la copie privée"
-                  },
-                  {
-                    "en": "Canadian Retransmission Collective",
-                    "fr": "Société collective de retransmission du Canada"
-                  },
-                  {
-                    "en": "Canadian Retransmission Right Association",
-                    "fr": "Association du droit de retransmission canadien"
-                  },
-                  {
-                    "en": "Direct Response Television Collective Inc.",
-                    "fr": "Société de gestion collective de publicité directe télévisuelle inc."
-                  },
-                  {
-                    "en": "FWS Joint Sports Claimants Inc",
-                    "fr": "FWS Joint Sports Claimants Inc"
-                  },
-                  {
-                    "en": "Major League Baseball Collective of Canada, Inc.",
-                    "fr": "Société de perception de la ligue de baseball majeure du Canada, inc."
-                  },
-                  {
-                    "en": "Re:Sound Music Licensing Company",
-                    "fr": "Ré:Sonne - Société de gestion de la musique"
-                  },
-                  {
-                    "en": "Society of Composers, Authors and Music Publishers of Canada",
-                    "fr": "Société canadienne des auteurs, compositeurs et éditeurs de musique"
-                  },
-                  {
-                    "en": "Société de gestion collective des droits des producteurs de phonogrammes et vidéogrammes du Québec",
-                    "fr": "Société de gestion collective des droits des producteurs de phonogrammes et vidéogrammes du Québec"
-                  },
-                  {
-                    "en": "Société québécoise de gestion collective des droits de reproduction",
-                    "fr": "Société québécoise de gestion collective des droits de reproduction"
-                  }
-                ],
-                "titleEn": "On behalf of which Collective Society are you filing the proposed tariff(s)?",
-                "titleFr": "[fr] On behalf of which Collective Society are you filing the proposed tariff(s)?",
-                "validation": {
-                  "required": true
-                },
-                "descriptionEn": "",
-                "descriptionFr": ""
-              }
-            }
-          ]
-        }
-      },
-      {
-        "id": 6,
-        "type": "richText",
-        "properties": {
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "### Representative Information",
-          "descriptionFr": "### [FR] - Representative Information"
-        }
-      },
-      {
-        "id": 7,
-        "type": "dynamicRow",
-        "properties": {
-          "titleEn": "",
-          "titleFr": "",
-          "validation": {
-            "required": true
-          },
-          "subElements": [
-            {
-              "id": 8,
-              "type": "textField",
-              "properties": {
-                "titleEn": "Name of Representative",
-                "titleFr": "[fr] Name of Representative",
-                "validation": {
-                  "type": "text",
-                  "required": true
-                },
-                "description": "",
-                "placeholderEn": "",
-                "placeholderFr": ""
-              }
-            },
-            {
-              "id": 9,
-              "type": "textField",
-              "properties": {
-                "titleEn": "Email Address of Representative",
-                "titleFr": "[fr] Email Address of Representative",
-                "validation": {
-                  "type": "text",
-                  "required": true
-                },
-                "description": "",
-                "placeholderEn": "",
-                "placeholderFr": ""
-              }
-            },
-            {
-              "id": 10,
-              "type": "richText",
-              "properties": {
-                "validation": {
-                  "required": false
-                },
-                "descriptionEn": "You can add another representative, up to three, by clicking 'add row' below.",
-                "descriptionFr": "[FR] - You can add another representative, up to three, by clicking 'add row' below."
-              }
-            }
-          ]
-        }
-      },
-      {
-        "id": 11,
-        "type": "richText",
-        "properties": {
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "### Proposed Tariff Information",
-          "descriptionFr": "### [FR]- Proposed Tariff Information"
-        }
-      },
-      {
-        "id": 12,
-        "type": "dynamicRow",
-        "properties": {
-          "titleEn": "",
-          "titleFr": "",
-          "validation": {
-            "required": true
-          },
-          "subElements": [
-            {
-              "id": 13,
-              "type": "textField",
-              "properties": {
-                "titleEn": "Proposed Tariff Title",
-                "titleFr": "[fr] Proposed Tariff Title",
-                "validation": {
-                  "type": "text",
-                  "required": true
-                },
-                "descriptionEn": "Please provide the long title of the proposed tariff.",
-                "descriptionFr": "[fr] - Please provide the long title of the proposed tariff.",
-                "placeholderEn": "",
-                "placeholderFr": ""
-              }
-            },
-            {
-              "id": 14,
-              "type": "textField",
-              "properties": {
-                "titleEn": "Proposed Tariff Period (Start Date)",
-                "titleFr": "[fr] Proposed Tariff Period (Start Date)",
-                "validation": {
-                  "type": "date",
-                  "required": true
-                },
-                "descriptionEn": "Date format: MM/DD/YYYY",
-                "descriptionFr": "Format de la date: MM/JJ/YYYY",
-                "placeholderEn": "",
-                "placeholderFr": ""
-              }
-            },
-            {
-              "id": 15,
-              "type": "textField",
-              "properties": {
-                "titleEn": "Proposed Tariff Period (End Date)",
-                "titleFr": "[FR] - End date of the tariff",
-                "validation": {
-                  "type": "date",
-                  "required": true
-                },
-                "descriptionEn": "Date format: MM/DD/YYYY",
-                "descriptionFr": "Format de la date: MM/JJ/YYYY",
-                "placeholderEn": "",
-                "placeholderFr": ""
-              }
-            },
-            {
-              "id": 16,
-              "type": "richText",
-              "properties": {
-                "validation": {
-                  "required": false
-                },
-                "descriptionEn": "A proposed tariff must be filed in both official languages. For more information on requirements for the filing of proposed tariffs, please refer to the <a href='https://cb-cda.gc.ca/sites/default/files/inline-files/PN%202019-004.pdf'>Practice Notice</a>.",
-                "descriptionFr": "[FR] -A proposed tariff must be filed in both official languages. For more information on requirements for the filing of  proposed tariffs, please refer to the <a href='https://cb-cda.gc.ca/sites/default/files/inline-files/PN%202019-004.pdf'>Practice Notice</a>."
-              }
-            },
-            {
-              "id": 17,
-              "type": "fileInput",
-              "properties": {
-                "titleEn": "Proposed Tariff - English Version",
-                "titleFr": "[fr] - Proposed Tariff - English Version",
-                "fileType": ".docx,.doc,.pdf",
-                "validation": {
-                  "required": true
-                },
-                "descriptionEn": "Please attach the English Version. You can upload .docx, .doc, and .pdf files.",
-                "descriptionFr": "[FR] Please attach the English Version. You can upload .docx, .doc, and .pdf files."
-              }
-            },
-            {
-              "id": 18,
-              "type": "fileInput",
-              "properties": {
-                "titleEn": "Proposed Tariff - French Version",
-                "titleFr": "[fr] - Proposed Tariff - French Version",
-                "fileType": ".docx,.doc,.pdf",
-                "validation": {
-                  "required": true
-                },
-                "descriptionEn": "Please attach the French Version. You can upload .docx, .doc, and .pdf files.",
-                "descriptionFr": "[FR] Please attach the French Version. You can upload .docx, .doc, and .pdf files."
-              }
-            },
-            {
-              "id": 19,
-              "type": "textField",
-              "properties": {
-                "titleEn": "Changes From Previously Approved Tariff",
-                "titleFr": "[FR] - Changes From Previously Approved Tariff",
-                "validation": {
-                  "type": "text",
-                  "required": false
-                },
-                "descriptionEn": "Please enter the name of the previously approved or last-proposed tariff which covers the same, or substantially same, activities as the proposed tariff being filed. A comparative document does not have to be provided where the differences between the documents are so significant as to make the comparison incomprehensible, in this situation enter N/A.",
-                "descriptionFr": "[fr] - Please enter the name of the previously approved or last-proposed tariff which covers the same, or substantially same, activities as the proposed tariff being filed. A comparative document does not have to be provided where the differences between the documents are so significant as to make the comparison incomprehensible, in this situation enter N/A.",
-                "placeholderEn": "",
-                "placeholderFr": ""
-              }
-            },
-            {
-              "id": 20,
-              "type": "fileInput",
-              "properties": {
-                "titleEn": "Comparative (blackline) Version - English",
-                "titleFr": "[fr] Comparative (blackline) Version",
-                "fileType": ".docx,.doc,.pdf",
-                "validation": {
-                  "required": false
-                },
-                "descriptionEn": "The Board requires an English blackline (redline) version that shows the changes from the previously approved or last-proposed tariff identified above to the newly proposed tariff. Attach the English comparative (blackline) version here. You can upload .docx, .doc, and .pdf files.",
-                "descriptionFr": "[FR] - The Board requires an English blackline (redline) version that shows the changes from the previously approved or last-proposed tariff identified above to the newly proposed tariff. Attach the English comparative (blackline) version here. You can upload .docx, .doc, and .pdf files."
-              }
-            },
-            {
-              "id": 21,
-              "type": "fileInput",
-              "properties": {
-                "titleEn": "Comparative (blackline) Version - French",
-                "titleFr": "[fr] Comparative (blackline) Version",
-                "fileType": ".docx,.doc,.pdf",
-                "validation": {
-                  "required": false
-                },
-                "descriptionEn": "The Board requires an French blackline (redline) version that shows the changes from the previously approved or last-proposed tariff identified above to the newly proposed tariff. Attach the French comparative (blackline) version here. You can upload .docx, .doc, and .pdf files.",
-                "descriptionFr": "[FR] - The Board requires an French blackline (redline) version that shows the changes from the previously approved or last-proposed tariff identified above to the newly proposed tariff. Attach the French comparative (blackline) version here. You can upload .docx, .doc, and .pdf files."
-              }
-            },
-            {
-              "id": 22,
-              "type": "textArea",
-              "properties": {
-                "titleEn": "Additional comments",
-                "titleFr": "[FR] - Additional comments",
-                "validation": {
-                  "type": "text",
-                  "required": false
-                },
-                "descriptionEn": "Please provide any additional comments, information, or context.",
-                "descriptionFr": "[FR] - Please provide any additional comments, information, or context.",
-                "placeholderEn": "",
-                "placeholderFr": ""
-              }
-            },
-            {
-              "id": 23,
-              "type": "richText",
-              "properties": {
-                "validation": {
-                  "required": false
-                },
-                "descriptionEn": "Do you have another proposed tariff for the same collective(s)? If so, you can file it by clicking ‘add row’ below. If not, please press submit and you will be brought to the confirmation.",
-                "descriptionFr": "[FR] - Do you have another proposed tariff for the same collective(s)? If so, you can file it by clicking ‘add row’ below. If not, please press submit and you will be brought to the confirmation."
-              }
-            }
-          ]
-        }
+  "titleEn": "Copyright Board of Canada - Proposed Tariff Filing Form",
+  "titleFr": "[fr] Copyright Board of Canada - Proposed Tariff Filing Form",
+  "confirmation": {
+    "descriptionEn": "# Thank you for your tariff. \n\r The Proposed Tariff(s) has/have been successfully filed. The Board will inform you when this proposed tariff has/have been published on the Board’s website or if we require additional information. \n\r [Go Back](https://cb-cda.gc.ca/en)",
+    "descriptionFr": "# Merci pour votre entrée. \n\r The Proposed Tariff(s) has/have been successfully filed. The Board will inform you when this proposed tariff has/have been published on the Board’s website or if we require additional information. \n\r [Go Back](https://cb-cda.gc.ca/en)",
+    "referrerUrlEn": "",
+    "referrerUrlFr": ""
+  },
+  "privacyPolicy": {
+    "descriptionEn": "Privacy statement",
+    "descriptionFr": "Déclaration de confidentialité"
+  },
+  "layout": [1, 2, 3, 6, 7, 11, 12],
+  "elements": [
+    {
+      "id": 1,
+      "type": "richText",
+      "properties": {
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "Find out how the Copyright Board of Canada protects you [privacy](https://cb-cda.gc.ca/en/terms-and-conditions).",
+        "descriptionFr": "[FR] Find out how Copyright Board of Canada protects you [privacy](https://cb-cda.gc.ca/en/terms-and-conditions)."
       }
-    ],
-    "emailSubjectEn": "Proposed Tariff Submission",
-    "emailSubjectFr": "FR - Proposed Tariff Submission"
-  },
-  "submission": {
-    "email": "forms-formularies@cds-snc.ca"
-  },
-  "internalTitleEn": "Copyright Board of Canada - Proposed Tariff Filing Form",
-  "internalTitleFr": "FR - Copyright Board of Canada - Proposed Tariff Filing Form",
-  "publishingStatus": false,
-  "securityAttribute": "Unclassified"
+    },
+    {
+      "id": 2,
+      "type": "richText",
+      "properties": {
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "### Collective Society or Societies",
+        "descriptionFr": "### [FR] - Collective Society or Societies"
+      }
+    },
+    {
+      "id": 3,
+      "type": "dynamicRow",
+      "properties": {
+        "titleEn": "",
+        "titleFr": "",
+        "validation": {
+          "required": true
+        },
+        "subElements": [
+          {
+            "id": 301,
+            "type": "richText",
+            "properties": {
+              "validation": {
+                "required": false
+              },
+              "descriptionEn": "If you are filing a joint tariff, please add the other collective(s). You can add another collective society, up to ten, by clicking 'add row' below.",
+              "descriptionFr": "[FR] - If you are filing a joint tariff, please add the other collective(s). You can add another collective society, up to ten, by clicking 'add row' below."
+            }
+          },
+          {
+            "id": 302,
+            "type": "dropdown",
+            "properties": {
+              "choices": [
+                {
+                  "en": "Access Copyright",
+                  "fr": "Access Copyright"
+                },
+                {
+                  "en": "Artisti",
+                  "fr": "Artisti"
+                },
+                {
+                  "en": "Border Broadcasters Inc",
+                  "fr": "Border Broadcasters Inc"
+                },
+                {
+                  "en": "Canadian Broadcasters Rights Agency",
+                  "fr": "Agences des droits des radiodiffuseurs canadiens"
+                },
+                {
+                  "en": "Copyright Collective of Canada",
+                  "fr": "Société de perception de droit d’auteur du Canada"
+                },
+                {
+                  "en": "Canadian Musical Reproduction Rights Agency",
+                  "fr": "Agence canadienne des droits de reproduction musicaux"
+                },
+                {
+                  "en": "Connect Music Licensing",
+                  "fr": "Connect Music Licensing"
+                },
+                {
+                  "en": "Canadian Private Copying Collective",
+                  "fr": "Société canadienne de perception de la copie privée"
+                },
+                {
+                  "en": "Canadian Retransmission Collective",
+                  "fr": "Société collective de retransmission du Canada"
+                },
+                {
+                  "en": "Canadian Retransmission Right Association",
+                  "fr": "Association du droit de retransmission canadien"
+                },
+                {
+                  "en": "Direct Response Television Collective Inc.",
+                  "fr": "Société de gestion collective de publicité directe télévisuelle inc."
+                },
+                {
+                  "en": "FWS Joint Sports Claimants Inc",
+                  "fr": "FWS Joint Sports Claimants Inc"
+                },
+                {
+                  "en": "Major League Baseball Collective of Canada, Inc.",
+                  "fr": "Société de perception de la ligue de baseball majeure du Canada, inc."
+                },
+                {
+                  "en": "Re:Sound Music Licensing Company",
+                  "fr": "Ré:Sonne - Société de gestion de la musique"
+                },
+                {
+                  "en": "Society of Composers, Authors and Music Publishers of Canada",
+                  "fr": "Société canadienne des auteurs, compositeurs et éditeurs de musique"
+                },
+                {
+                  "en": "Société de gestion collective des droits des producteurs de phonogrammes et vidéogrammes du Québec",
+                  "fr": "Société de gestion collective des droits des producteurs de phonogrammes et vidéogrammes du Québec"
+                },
+                {
+                  "en": "Société québécoise de gestion collective des droits de reproduction",
+                  "fr": "Société québécoise de gestion collective des droits de reproduction"
+                }
+              ],
+              "titleEn": "On behalf of which Collective Society are you filing the proposed tariff(s)?",
+              "titleFr": "[fr] On behalf of which Collective Society are you filing the proposed tariff(s)?",
+              "validation": {
+                "required": true
+              },
+              "descriptionEn": "",
+              "descriptionFr": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 6,
+      "type": "richText",
+      "properties": {
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "### Representative Information",
+        "descriptionFr": "### [FR] - Representative Information"
+      }
+    },
+    {
+      "id": 7,
+      "type": "dynamicRow",
+      "properties": {
+        "titleEn": "",
+        "titleFr": "",
+        "validation": {
+          "required": true
+        },
+        "subElements": [
+          {
+            "id": 701,
+            "type": "textField",
+            "properties": {
+              "titleEn": "Name of Representative",
+              "titleFr": "[fr] Name of Representative",
+              "validation": {
+                "type": "text",
+                "required": true
+              },
+              "description": "",
+              "placeholderEn": "",
+              "placeholderFr": ""
+            }
+          },
+          {
+            "id": 702,
+            "type": "textField",
+            "properties": {
+              "titleEn": "Email Address of Representative",
+              "titleFr": "[fr] Email Address of Representative",
+              "validation": {
+                "type": "text",
+                "required": true
+              },
+              "description": "",
+              "placeholderEn": "",
+              "placeholderFr": ""
+            }
+          },
+          {
+            "id": 703,
+            "type": "richText",
+            "properties": {
+              "validation": {
+                "required": false
+              },
+              "descriptionEn": "You can add another representative, up to three, by clicking 'add row' below.",
+              "descriptionFr": "[FR] - You can add another representative, up to three, by clicking 'add row' below."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 11,
+      "type": "richText",
+      "properties": {
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "### Proposed Tariff Information",
+        "descriptionFr": "### [FR]- Proposed Tariff Information"
+      }
+    },
+    {
+      "id": 12,
+      "type": "dynamicRow",
+      "properties": {
+        "titleEn": "",
+        "titleFr": "",
+        "validation": {
+          "required": true
+        },
+        "subElements": [
+          {
+            "id": 1201,
+            "type": "textField",
+            "properties": {
+              "titleEn": "Proposed Tariff Title",
+              "titleFr": "[fr] Proposed Tariff Title",
+              "validation": {
+                "type": "text",
+                "required": true
+              },
+              "descriptionEn": "Please provide the long title of the proposed tariff.",
+              "descriptionFr": "[fr] - Please provide the long title of the proposed tariff.",
+              "placeholderEn": "",
+              "placeholderFr": ""
+            }
+          },
+          {
+            "id": 1202,
+            "type": "textField",
+            "properties": {
+              "titleEn": "Proposed Tariff Period (Start Date)",
+              "titleFr": "[fr] Proposed Tariff Period (Start Date)",
+              "validation": {
+                "type": "date",
+                "required": true
+              },
+              "descriptionEn": "Date format: MM/DD/YYYY",
+              "descriptionFr": "Format de la date: MM/JJ/AAAA",
+              "placeholderEn": "",
+              "placeholderFr": ""
+            }
+          },
+          {
+            "id": 1203,
+            "type": "textField",
+            "properties": {
+              "titleEn": "Proposed Tariff Period (End Date)",
+              "titleFr": "[FR] - End date of the tariff",
+              "validation": {
+                "type": "date",
+                "required": true
+              },
+              "descriptionEn": "Date format: MM/DD/YYYY",
+              "descriptionFr": "Format de la date: MM/JJ/AAAA",
+              "placeholderEn": "",
+              "placeholderFr": ""
+            }
+          },
+          {
+            "id": 1204,
+            "type": "richText",
+            "properties": {
+              "validation": {
+                "required": false
+              },
+              "descriptionEn": "A proposed tariff must be filed in both official languages. For more information on requirements for the filing of proposed tariffs, please refer to the [Practice Notice](https://cb-cda.gc.ca/sites/default/files/inline-files/PN%202019-004.pdf).",
+              "descriptionFr": "[FR] -A proposed tariff must be filed in both official languages. For more information on requirements for the filing of  proposed tariffs, please refer to the [Practice Notice](https://cb-cda.gc.ca/sites/default/files/inline-files/PN%202019-004.pdf)."
+            }
+          },
+          {
+            "id": 1205,
+            "type": "fileInput",
+            "properties": {
+              "titleEn": "Proposed Tariff - English Version",
+              "titleFr": "[fr] - Proposed Tariff - English Version",
+              "fileType": ".docx,.doc,.pdf",
+              "validation": {
+                "required": true
+              },
+              "descriptionEn": "Please attach the English Version. You can upload .docx, .doc, and .pdf files.",
+              "descriptionFr": "[FR] Please attach the English Version. You can upload .docx, .doc, and .pdf files."
+            }
+          },
+          {
+            "id": 1206,
+            "type": "fileInput",
+            "properties": {
+              "titleEn": "Proposed Tariff - French Version",
+              "titleFr": "[fr] - Proposed Tariff - French Version",
+              "fileType": ".docx,.doc,.pdf",
+              "validation": {
+                "required": true
+              },
+              "descriptionEn": "Please attach the French Version. You can upload .docx, .doc, and .pdf files.",
+              "descriptionFr": "[FR] Please attach the French Version. You can upload .docx, .doc, and .pdf files."
+            }
+          },
+          {
+            "id": 1207,
+            "type": "textField",
+            "properties": {
+              "titleEn": "Changes From Previously Approved Tariff",
+              "titleFr": "[FR] - Changes From Previously Approved Tariff",
+              "validation": {
+                "type": "text",
+                "required": false
+              },
+              "descriptionEn": "Please enter the name of the previously approved or last-proposed tariff which covers the same, or substantially same, activities as the proposed tariff being filed. A comparative document does not have to be provided where the differences between the documents are so significant as to make the comparison incomprehensible, in this situation enter N/A.",
+              "descriptionFr": "[fr] - Please enter the name of the previously approved or last-proposed tariff which covers the same, or substantially same, activities as the proposed tariff being filed. A comparative document does not have to be provided where the differences between the documents are so significant as to make the comparison incomprehensible, in this situation enter N/A.",
+              "placeholderEn": "",
+              "placeholderFr": ""
+            }
+          },
+          {
+            "id": 1208,
+            "type": "fileInput",
+            "properties": {
+              "titleEn": "Comparative (blackline) Version - English",
+              "titleFr": "[fr] Comparative (blackline) Version",
+              "fileType": ".docx,.doc,.pdf",
+              "validation": {
+                "required": false
+              },
+              "descriptionEn": "The Board requires an English blackline (redline) version that shows the changes from the previously approved or last-proposed tariff identified above to the newly proposed tariff. Attach the English comparative (blackline) version here. You can upload .docx, .doc, and .pdf files.",
+              "descriptionFr": "[FR] - The Board requires an English blackline (redline) version that shows the changes from the previously approved or last-proposed tariff identified above to the newly proposed tariff. Attach the English comparative (blackline) version here. You can upload .docx, .doc, and .pdf files."
+            }
+          },
+          {
+            "id": 1209,
+            "type": "fileInput",
+            "properties": {
+              "titleEn": "Comparative (blackline) Version - French",
+              "titleFr": "[fr] Comparative (blackline) Version",
+              "fileType": ".docx,.doc,.pdf",
+              "validation": {
+                "required": false
+              },
+              "descriptionEn": "The Board requires an French blackline (redline) version that shows the changes from the previously approved or last-proposed tariff identified above to the newly proposed tariff. Attach the French comparative (blackline) version here. You can upload .docx, .doc, and .pdf files.",
+              "descriptionFr": "[FR] - The Board requires an French blackline (redline) version that shows the changes from the previously approved or last-proposed tariff identified above to the newly proposed tariff. Attach the French comparative (blackline) version here. You can upload .docx, .doc, and .pdf files."
+            }
+          },
+          {
+            "id": 1210,
+            "type": "textArea",
+            "properties": {
+              "titleEn": "Additional comments",
+              "titleFr": "[FR] - Additional comments",
+              "validation": {
+                "type": "text",
+                "required": false
+              },
+              "descriptionEn": "Please provide any additional comments, information, or context.",
+              "descriptionFr": "[FR] - Please provide any additional comments, information, or context.",
+              "placeholderEn": "",
+              "placeholderFr": ""
+            }
+          },
+          {
+            "id": 1211,
+            "type": "richText",
+            "properties": {
+              "validation": {
+                "required": false
+              },
+              "descriptionEn": "Do you have another proposed tariff for the same collective(s)? If so, you can file it by clicking ‘add row’ below. If not, please press submit and you will be brought to the confirmation.",
+              "descriptionFr": "[FR] - Do you have another proposed tariff for the same collective(s)? If so, you can file it by clicking ‘add row’ below. If not, please press submit and you will be brought to the confirmation."
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "brand": {
+    "name": "cb-cda",
+    "urlEn": "https://cb-cda.gc.ca/en/homepage",
+    "urlFr": "https://cb-cda.gc.ca/fr",
+    "logoEn": "/img/cb-cda.png",
+    "logoTitleEn": "Copyright Board of Canada",
+    "logoTitleFr": "Commission du droit d'auteur du Canada"
+  }
 }

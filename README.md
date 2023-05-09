@@ -93,9 +93,22 @@ There are some environment variables that can optionally be configured. You can 
 
 ### Grant yourself admin access locally
 
+There are 2 ways to connect to the database. Either directly using PGAdmin or a PSQL cli tool or through Prisma Studio. Once the change is made you will need to "Log Out" using the
+
+## Connect to DataBase Directly
+
 - Login using your email via Google SSO
-- Retrieve your users id from the User table in the formsDB `SELECT * FROM "public"."User" WHERE email='$YOUR_EMAIL'`
-- Update the record to elevate yourself as an admin `UPDATE "public"."User" SET admin=true WHERE id='$YOUR_ID'`
+- Connect to the local database `psql -h db -U postgres -d formsDB`
+- Retrieve your users id from the User table in the formsDB `SELECT * FROM "public"."User" WHERE email='$YOUR_EMAIL';`
+- Update the record to elevate yourself as an admin `UPDATE "public"."User" SET role='ADMINISTRATOR' WHERE id='$YOUR_ID';`
+
+## Prisma Studio
+
+- Login using your email via Google SSO
+- Launch prisma studio with `yarn prisma:studio` or if you have prisma installed globally `prisma studio`
+- A browser window will open at `localhost:5555`. Open the model `User`
+- A table will appear. Find your username in the list and double-click on the value under the `role` column to modify to "ADMINISTRATOR".
+- Click on "Save Change" button in the top menu bar once completed.
 
 ### Notify integration
 
@@ -109,16 +122,6 @@ NOTIFY_API_KEY=
 
 For verbose debug logging set an environment variable called DEBUG to `true` before running `yarn dev`
 ex. `DEBUG=true yarn dev`
-
-### Storybook
-
-- In order to run Storybook localy, type `yarn storybook`
-- It can also be deployed to the `gh-pages` branch automatically using [storybook-deployer](https://github.com/storybookjs/storybook-deployer) via the command:
-
-```sh
-cd platform-forms-client
-yarn deploy-storybook
-```
 
 ## ---------------------------------------------------------------------
 
@@ -229,13 +232,3 @@ NOTIFY_API_KEY=
 
 Pour des logs plus verbose en fin de débougage, définissez une variable d'environnement appelée DEBUG comme `true` avant d'exécuter` yarn dev`
 ex. `DEBUG=true yarn dev`
-
-### Storybook
-
-- Pour voir Storybook exécutez `yarn storybook`
-- Pour deployer a `gh-pages` avec [storybook-deployer](https://github.com/storybookjs/storybook-deployer) exécutez:
-
-```sh
-cd platform-forms-client
-yarn deploy-storybook
-```

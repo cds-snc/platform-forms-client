@@ -4,6 +4,7 @@
  */
 import { ChangeEvent } from "react";
 import { HTMLTextInputTypeAttribute } from "./utility-types";
+import { TypeOmit } from ".";
 
 /**
  * form element types which is used to configure a single field or element in a form
@@ -37,12 +38,13 @@ export interface ElementProperties {
   descriptionEn?: string;
   descriptionFr?: string;
   validation?: ValidationProperties | undefined;
-  choices?: Array<PropertyChoices>;
-  subElements?: Array<FormElement>;
+  choices?: PropertyChoices[];
+  subElements?: FormElement[];
   fileType?: string | undefined;
   headingLevel?: string | undefined;
   isSectional?: boolean;
   maxNumberOfRows?: number;
+  autoComplete?: string;
   [key: string]:
     | string
     | number
@@ -63,6 +65,11 @@ export enum FormElementTypes {
   fileInput = "fileInput",
   richText = "richText",
   dynamicRow = "dynamicRow",
+  attestation = "attestation",
+  address = "address",
+  name = "name",
+  firstMiddleLastName = "firstMiddleLastName",
+  contact = "contact",
 }
 // used to define attributes for a form element or field
 export interface FormElement {
@@ -71,17 +78,12 @@ export interface FormElement {
   type: FormElementTypes;
   properties: ElementProperties;
   onchange?: (event: ChangeEvent) => void;
+  brand?: BrandProperties;
 }
 
 /**
  * types to define form configuration objects
  */
-
-// defines the fields in the object that controls how form submissions are handled
-export interface SubmissionProperties {
-  email?: string;
-  vault?: boolean;
-}
 
 // defines the fields in the object that controls form branding
 export interface BrandProperties {
@@ -94,21 +96,22 @@ export interface BrandProperties {
   urlFr?: string;
   // if set to true the GC branding will be removed from the footer
   disableGcBranding?: boolean;
+  [key: string]: string | boolean | undefined;
 }
 
 // defines the fields for the main form configuration object
 export interface FormProperties {
   titleEn: string;
   titleFr: string;
-  emailSubjectEn?: string;
-  emailSubjectFr?: string;
-  version: string;
-  layout: Array<number>;
+  introduction?: Record<string, string>;
+  privacyPolicy?: Record<string, string>;
+  confirmation?: Record<string, string>;
+  layout: number[];
+  elements: FormElement[];
   brand?: BrandProperties;
-  elements: Array<FormElement>;
-  endPage?: Record<string, string>;
   [key: string]:
     | string
+    | number
     | boolean
     | Array<string | number | FormElement>
     | Record<string, string>
@@ -116,36 +119,30 @@ export interface FormProperties {
     | undefined;
 }
 
-// defines the fields for the top level form object
-export interface FormConfiguration {
-  internalTitleEn?: string;
-  internalTitleFr?: string;
-  publishingStatus: boolean;
-  submission: SubmissionProperties;
-  displayAlphaBanner?: boolean;
-  form: FormProperties;
-  securityAttribute: string;
-  reCaptchaID?: string;
-  [key: string]: unknown;
+// defines the fields in the object that controls how form submissions are delivered
+export interface DeliveryOption {
+  emailAddress: string;
+  emailSubjectEn?: string;
+  emailSubjectFr?: string;
+  [key: string]: string | undefined;
 }
 
-export interface PublicFormConfiguration {
-  publishingStatus: boolean;
-  displayAlphaBanner?: boolean;
-  form: FormProperties;
-  securityAttribute: string;
-  reCaptchaID?: string;
-  [key: string]: unknown;
-}
-
-// defines the fields for the form record that is available to unauthenticated users
-export interface PublicFormRecord {
-  formID: string;
-  formConfig: PublicFormConfiguration;
-}
+export type SecurityAttribute = "Unclassified" | "Protected A" | "Protected B";
 
 // defines the fields for the form record that is available in authenticated spaces and backend processes
-export interface FormRecord extends PublicFormRecord {
-  formConfig: FormConfiguration;
+export type FormRecord = {
+  id: string;
+  createdAt?: string;
+  updatedAt?: string;
+  name: string;
+  form: FormProperties;
+  isPublished: boolean;
+  deliveryOption?: DeliveryOption;
+  securityAttribute: SecurityAttribute;
   bearerToken?: string;
-}
+  reCaptchaID?: string;
+  [key: string]: string | boolean | FormProperties | DeliveryOption | undefined;
+};
+
+// defines the fields for the form record that is available to unauthenticated users
+export type PublicFormRecord = TypeOmit<FormRecord, "name" | "deliveryOption" | "bearerToken">;

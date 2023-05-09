@@ -1,27 +1,36 @@
-import JSONUpload from "../../components/admin/JsonUpload/JsonUpload";
+import JSONUpload from "@components/admin/JsonUpload/JsonUpload";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
-import React from "react";
+import React, { ReactElement } from "react";
+import Head from "next/head";
 import { useTranslation } from "next-i18next";
-import { UserRole } from "@prisma/client";
-
-export const getServerSideProps = requireAuthentication(async (context) => {
-  return {
-    props: {
-      ...(context.locale &&
-        (await serverSideTranslations(context.locale, ["common", "admin-templates"]))),
-    },
-  };
-}, UserRole.ADMINISTRATOR);
+import { checkPrivileges } from "@lib/privileges";
+import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 
 const Upload = (): React.ReactElement => {
   const { t } = useTranslation("admin-templates");
   return (
     <>
-      <h1 className="gc-h1">{t("upload.title")}</h1>
+      <Head>
+        <title>{t("upload.title")}</title>
+      </Head>
+      <h1>{t("upload.title")}</h1>
       <JSONUpload></JSONUpload>
     </>
   );
 };
+
+Upload.getLayout = (page: ReactElement) => {
+  return <AdminNavLayout user={page.props.user}>{page}</AdminNavLayout>;
+};
+
+export const getServerSideProps = requireAuthentication(async ({ locale, user: { ability } }) => {
+  checkPrivileges(ability, [{ action: "create", subject: "FormRecord" }]);
+  return {
+    props: {
+      ...(locale && (await serverSideTranslations(locale, ["common", "admin-templates"]))),
+    },
+  };
+});
 
 export default Upload;

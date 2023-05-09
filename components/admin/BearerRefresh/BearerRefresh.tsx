@@ -1,4 +1,4 @@
-import { Button } from "@components/forms";
+import { Button, Label } from "@components/forms";
 import Loader from "@components/globals/Loader";
 import { logMessage } from "@lib/logger";
 import axios from "axios";
@@ -19,6 +19,8 @@ const BearerRefresh = (props: BearerRefreshProps): React.ReactElement => {
 
   useEffect(() => {
     getBearerToken(formID);
+    // @todo - fix this eslint error
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getBearerToken = async (formID: string) => {
@@ -75,7 +77,7 @@ const BearerRefresh = (props: BearerRefreshProps): React.ReactElement => {
               {errorState.message}
             </p>
           )}
-          <h2>{t("settings.bearerToken.current")}</h2>
+          <Label htmlFor="bearerToken">{t("settings.bearerToken.current")}</Label>
           <textarea
             id="bearerToken"
             rows={3}
@@ -84,7 +86,6 @@ const BearerRefresh = (props: BearerRefreshProps): React.ReactElement => {
             data-testid="bearerToken"
             defaultValue={bearerTokenState}
             readOnly
-            aria-label={t("settings.bearerToken.currentAriaLabel")}
           />
           <Button type="button" onClick={() => handleRefreshBearerToken(formID)}>
             {t("settings.bearerToken.refreshButton")}

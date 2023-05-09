@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
  * @returns Object containing the refreshData function and isRefreshing boolean
  */
 export const useRefresh = (
-  data: unknown[] | undefined
+  data?: unknown[]
 ): { refreshData: () => Promise<void>; isRefreshing: boolean } => {
   const router = useRouter();
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -19,7 +19,7 @@ export const useRefresh = (
 
   useEffect(() => {
     setIsRefreshing(false);
-  }, data);
+  }, [data]);
 
   return { refreshData, isRefreshing };
 };

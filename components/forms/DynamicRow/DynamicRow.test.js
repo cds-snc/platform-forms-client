@@ -1,8 +1,8 @@
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import Form from "../Form/Form";
-import { GenerateElement } from "../../../lib/formBuilder";
+import { Form } from "@components/forms";
+import { GenerateElement } from "@lib/formBuilder";
 
 const dynamicRowData = {
   id: 1,
@@ -64,16 +64,14 @@ const dynamicRowData = {
 };
 
 const formRecord = {
-  formID: 1,
-  formConfig: {
-    form: {
-      id: 1,
-      version: 1,
-      titleEn: "Test Form",
-      titleFr: "Formulaire de test",
-      layout: [1],
-      elements: [dynamicRowData],
-    },
+  id: "test0form00000id000asdf11",
+  form: {
+    id: 1,
+    version: 1,
+    titleEn: "Test Form",
+    titleFr: "Formulaire de test",
+    layout: [1],
+    elements: [dynamicRowData],
   },
 };
 
@@ -206,23 +204,28 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
       await user.click(screen.getByTestId("add-row-button-1"));
       await user.click(screen.getByTestId("add-row-button-1"));
 
-      expect(screen.queryAllByTestId("dynamic-row", { exact: false })).toHaveLength(3);
+      expect(screen.getAllByTestId("dynamic-row", { exact: false })).toHaveLength(3);
 
       // Fill Fields with Data.
 
-      screen.queryAllByRole("textbox").forEach(async (field, index) => {
+      let fields = screen.getAllByTestId("textInput");
+      let index = 0;
+      for (const field of fields) {
+        // userEvent.type needs to be run sequentially
+        // eslint-disable-next-line no-await-in-loop
         await user.type(field, index.toString());
-      });
+        index++;
+      }
 
       // Delete first Row
       await user.click(screen.getByTestId("delete-row-button-1.0"));
 
       // check values
       expect(screen.queryAllByTestId("dynamic-row", { exact: false })).toHaveLength(2);
-      const fields = screen.queryAllByRole("textbox");
+      fields = screen.getAllByTestId("textInput");
       expect(fields).toHaveLength(6);
       const fieldValues = fields.map((field) => field.value);
-      // values 1,2,3 were deleted with row 1
+      // values [0, 1, 2] were deleted with row 1
       expect(fieldValues).toEqual(["3", "4", "5", "6", "7", "8"]);
     });
 

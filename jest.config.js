@@ -13,7 +13,6 @@ const createJestConfig = nextJest({
 
 // Add any custom config to be passed to Jest
 const customJestConfig = {
-  rootDir: "./",
   testPathIgnorePatterns: ["<rootDir>/cypress/", "<rootDir>/public/static/scripts/"],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: "<rootDir>/" }),
   moduleDirectories: ["node_modules", "<rootDir>/"],
@@ -25,6 +24,8 @@ const customJestConfig = {
     "<rootDir>/__utils__/prismaConnector.ts",
   ],
   testEnvironment: "jsdom",
+  collectCoverage: false,
+  collectCoverageFrom: ["{pages,lib,components}/**/{!(*.stories),}.{ts,tsx}"],
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async

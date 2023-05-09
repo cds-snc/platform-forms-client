@@ -1,150 +1,178 @@
-import { getUsers, adminRole, getOrCreateUser, getFormUser } from "@lib/users";
+/**
+ * @jest-environment node
+ */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { prismaMock } from "@jestUtils";
+import { getUsers, getOrCreateUser } from "@lib/users";
 import { Prisma } from "@prisma/client";
+import { AccessControlError, createAbility } from "@lib/privileges";
+import { ManageUsers, ViewUserPrivileges, Base } from "__utils__/permissions";
+import { Session } from "next-auth";
+import { logEvent } from "@lib/auditLogs";
+jest.mock("@lib/auditLogs");
+const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
 
 describe("User query tests should fail gracefully", () => {
-  it("getUsers should fail silenty", async () => {
-    prismaMock.user.findMany.mockRejectedValue(new Error("Test Error"));
-    const result = await getUsers();
-    expect(result).toHaveLength(0);
-  });
-  it("adminRole should fail gracefully", async () => {
-    prismaMock.user.update.mockRejectedValue(new Error("Test Error"));
-    const result = await adminRole(false, "4");
-    expect(result).toEqual([false, false]);
-  });
-  it("getOrCreateUser should fail gracefully - lookup", async () => {
-    prismaMock.user.findUnique.mockRejectedValue(
-      new Prisma.PrismaClientKnownRequestError("Timed out", "P2024", "4.3.2")
-    );
-    const result = await getOrCreateUser({ email: "test@fail.ca" });
-    expect(result).toEqual(null);
-  });
   it("getOrCreateUser should fail gracefully - create", async () => {
-    prismaMock.user.findUnique.mockRejectedValue(null);
-
+    prismaMock.user.findUnique.mockResolvedValue(null);
+    (prismaMock.privilege.findUnique as jest.MockedFunction<any>).mockResolvedValue({ id: "2" });
     prismaMock.user.create.mockRejectedValue(
-      new Prisma.PrismaClientKnownRequestError("Timed out", "P2024", "4.3.2")
-    );
-    const result = await getOrCreateUser({ email: "test@fail.ca" });
-    expect(result).toEqual(null);
-  });
-  it("getFormUser should fail gracefully", async () => {
-    prismaMock.formUser.findUnique.mockRejectedValue(
-      new Prisma.PrismaClientKnownRequestError("Timed out", "P2024", "4.3.2")
-    );
-    const result = await getFormUser("1");
-    expect(result).toEqual(null);
-  });
-});
-
-describe("getUsers", () => {
-  it("Returns a list of users", async () => {
-    const returnedUsers = [
-      {
-        id: "3",
-        name: "user_1",
-        admin: false,
-        email: "fads@asdf.ca",
-        emailVerified: null,
-        image: null,
-      },
-      {
-        id: "5",
-        name: "user_2",
-        admin: true,
-        email: "faaass@asdf.ca",
-        emailVerified: null,
-        image: null,
-      },
-    ];
-    prismaMock.user.findMany.mockResolvedValue(returnedUsers);
-
-    const result = await getUsers();
-    expect(result).toMatchObject(returnedUsers);
-  });
-});
-describe("adminRole", () => {
-  it("Modifies an adminitrator", async () => {
-    prismaMock.user.update.mockResolvedValue({
-      id: "2",
-      name: "user_1",
-      admin: false,
-      email: "faaass@asdf.ca",
-      emailVerified: null,
-      image: null,
-    });
-
-    const result = await adminRole(false, "2");
-    expect(
-      prismaMock.user.update.calledWith({
-        where: {
-          id: "2",
-        },
-        data: {
-          admin: false,
-        },
+      new Prisma.PrismaClientKnownRequestError("Timed out", {
+        code: "P2024",
+        clientVersion: "4.12.0",
       })
     );
 
-    expect(result).toMatchObject([true, true]);
+    const result = await getOrCreateUser({ email: "test-user@test.ca" });
+    expect(result).toEqual(null);
+    expect(mockedLogEvent).not.toBeCalled();
+  });
+
+  it("getOrCreateUser should fail gracefully - lookup", async () => {
+    prismaMock.user.findUnique.mockRejectedValue(
+      new Prisma.PrismaClientKnownRequestError("Timed out", {
+        code: "P2024",
+        clientVersion: "4.12.0",
+      })
+    );
+    (prismaMock.privilege.findUnique as jest.MockedFunction<any>).mockResolvedValue({ id: "2" });
+    prismaMock.user.create.mockRejectedValue(
+      new Prisma.PrismaClientKnownRequestError("Timed out", {
+        code: "P2024",
+        clientVersion: "4.3.2",
+      })
+    );
+    const result = await getOrCreateUser({ email: "test-user@test.ca" });
+    expect(result).toEqual(null);
+    expect(mockedLogEvent).not.toBeCalled();
+  });
+
+  it("getUsers should fail silenty", async () => {
+    const fakeSession = {
+      user: { id: "1", privileges: ManageUsers },
+    };
+    const ability = createAbility(fakeSession as Session);
+
+    prismaMock.user.findMany.mockRejectedValue(
+      new Prisma.PrismaClientKnownRequestError("Timed out", {
+        code: "P2024",
+        clientVersion: "4.12.0",
+      })
+    );
+
+    const result = await getUsers(ability);
+    expect(result).toHaveLength(0);
+    expect(mockedLogEvent).not.toBeCalled();
   });
 });
+
 describe("getOrCreateUser", () => {
   it("Returns an existing User", async () => {
     const user = {
       id: "3",
       name: "user_1",
-      admin: false,
       email: "fads@asdf.ca",
-      emailVerified: null,
-      image: null,
+      privileges: ManageUsers,
     };
 
-    prismaMock.user.findUnique.mockResolvedValue(user);
+    (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue(user);
 
     const result = await getOrCreateUser({ email: "fads@asdf.ca" });
     expect(result).toMatchObject(user);
+    expect(mockedLogEvent).not.toBeCalled();
   });
+
   it("Creates a new User", async () => {
     const user = {
       id: "3",
-      name: "user_1",
-      admin: false,
+      name: "test",
       email: "fads@asdf.ca",
-      emailVerified: null,
-      image: null,
+      privileges: Base,
     };
 
     prismaMock.user.findUnique.mockResolvedValue(null);
-    prismaMock.user.create.mockResolvedValue(user);
+    (prismaMock.privilege.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      id: "2",
+    });
+    (prismaMock.user.create as jest.MockedFunction<any>).mockResolvedValue(user);
 
     const result = await getOrCreateUser({
       name: "test",
       email: "fads@asdf.ca",
-      image: "/somewhere/pic",
     });
 
     expect(result).toMatchObject(user);
+    expect(prismaMock.user.create).toBeCalledWith({
+      data: {
+        email: "fads@asdf.ca",
+        image: undefined,
+        name: "test",
+        privileges: {
+          connect: {
+            id: "2",
+          },
+        },
+      },
+      select: {
+        email: true,
+        id: true,
+        name: true,
+        privileges: true,
+      },
+    });
+    expect(mockedLogEvent).toBeCalledWith(
+      user.id,
+      { id: user.id, type: "User" },
+      "UserRegistration"
+    );
   });
 });
-describe("getFormUser", () => {
-  it("Returns a FormUsers", async () => {
-    const returnedUser = {
-      id: "3",
-      name: "user_1",
-      admin: false,
-      templateId: "2",
-      temporaryToken: "asdf",
-      active: true,
-      email: "fads@asdf.ca",
-      created_at: new Date(),
-      updated_at: new Date(),
+
+describe("getUsers", () => {
+  it.each([[ViewUserPrivileges], [ManageUsers]])("Returns a list of users", async (privileges) => {
+    const fakeSession = {
+      user: { id: "1", privileges },
     };
+    const ability = createAbility(fakeSession as Session);
+    const returnedUsers = [
+      {
+        id: "3",
+        name: "user_1",
+        email: "fads@asdf.ca",
+        privileges: Base,
+      },
+      {
+        id: "5",
+        name: "user_2",
+        email: "faaass@asdf.ca",
+        privileges: Base,
+      },
+    ];
 
-    prismaMock.formUser.findUnique.mockResolvedValue(returnedUser);
+    (prismaMock.user.findMany as jest.MockedFunction<any>).mockResolvedValue(returnedUsers);
 
-    const result = await getFormUser("3");
-    expect(result).toMatchObject(returnedUser);
+    const result = await getUsers(ability);
+    expect(result).toMatchObject(returnedUsers);
+  });
+});
+
+describe("Users CRUD functions should throw an error if user does not have any permissions", () => {
+  it("User with no permission should not be able to use CRUD functions", async () => {
+    const fakeSession = {
+      user: { id: "1", privileges: Base },
+    };
+    const ability = createAbility(fakeSession as Session);
+
+    await expect(async () => {
+      await getUsers(ability);
+    }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
+    expect(mockedLogEvent).toBeCalledWith(
+      fakeSession.user.id,
+      { type: "User" },
+      "AccessDenied",
+      "Attempted to list users"
+    );
   });
 });

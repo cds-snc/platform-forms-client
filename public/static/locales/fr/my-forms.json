@@ -1,0 +1,68 @@
+{
+  "title": "Vos formulaires ",
+  "nav": {
+    "drafts": "Ébauches",
+    "published": "Publiés",
+    "all": "Tous"
+  },
+  "actions": {
+    "resumeForm": "Reprendre la rédaction de formulaire en cours",
+    "createNewForm": "Créer un nouveau formulaire"
+  },
+  "cards": {
+    "noForms": "Vous n’avez aucun formulaire.",
+    "noDraftForms": "Vous n’avez aucune ébauche enregistrée.",
+    "noPublishedForms": "Vous n’avez aucun formulaire publié."
+  },
+  "card": {
+    "states": {
+      "draft": "Ébauche",
+      "published": "Publié"
+    },
+    "title": {
+      "notTranslatedEn": "Untitled form",
+      "notTranslatedFr": "Formulaire sans titre"
+    },
+    "lastEdited": "Dernière modification ",
+    "deliveryOption": {
+      "email": "Réponses envoyées à :",
+      "vault": "Téléchargement des réponses au formulaire"
+    },
+    "menu": {
+      "more": "Plus",
+      "save": "Enregistrer",
+      "copyLink": "Copier le lien",
+      "preview": "Prévisualiser",
+      "edit": "Modifier",
+      "settings": "Paramètres",
+      "delete": "Supprimer",
+      "coppiedToClipboard": "Copié dans le presse-papier",
+      "somethingWentWrong": "Il y a eu un problème"
+    }
+  },
+  "responseTemplate": {
+    "responseNumber": "Numéro de réponse",
+    "submissionDate": "Date de soumission",
+    "errorNoQuestionsAnswers": "Aucune question ou réponse n'a été trouvée.",
+    "jumpTo": "Passer à :",
+    "columnTable": "Tableau de colonnes",
+    "rowTable": "Tableau de lignes",
+    "rowTableInfo": "Un tableau de lignes est plus utile lorsqu'il s'agit de copier-coller dans une feuille de calcul.",
+    "confirmReceiptResponse": "Confirmer la réception de réponses",
+    "confirmReceipt": "Confirmer la réception",
+    "confirmReceiptInfo": "Copiez le code ci-dessous et collez-le dans la page Confirmation de réception des réponses du site Web.",
+    "copyCode": "Copier le code",
+    "copyCodeClipboard": "Copier le code dans le presse-papiers",
+    "copiedToCipboard": "Copié dans le presse-papiers",
+    "errorrCopyingToClipboard": "Erreur lors de la copie dans le presse-papiers",
+    "submissionID": "Identifiant de la soumission",
+    "copyResponse": "Copier la ligne de réponse dans le presse-papiers"
+  },
+  "dataClassification": {
+    "officialRecord": "Ceci est un document officiel",
+    "retainCopy": "Conservez cette copie conformément à votre politique de conservation.",
+    "unclassified": "Non classifié",
+    "protectedA": "Protégé A",
+    "protectedB": "Protégé B"
+  }
+}

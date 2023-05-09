@@ -1,0 +1,80 @@
+{
+  "signUpConfirmation": {
+    "title": "Vérifiez votre courriel",
+    "resendConfirmationCodeButton": "Envoyer un nouveau code de sécurité",
+    "emailHasBeenSent": "Un courriel ayant un code de sécurité a été envoyé à",
+    "confirmButton": "Continuer",
+    "resendConfirmationCode": {
+      "title": "Vérifiez votre courriel",
+      "body": "Un courriel avec un code de sécurité vous a été envoyé"
+    },
+    "fields": {
+      "confirmationCode": {
+        "label": "Entrer le code de sécurité pour compléter la création de votre compte",
+        "error": {
+          "number": "Ceci doit être un numéro"
+        }
+      }
+    }
+  },
+  "signUpRegistration": {
+    "title": "Créer un compte",
+    "alreadyHaveAnAccount": "Si vous avez déjà un compte,",
+    "alreadyHaveAnAccountLink": "connectez-vous.",
+    "slaAgreement": "En créant un compte, vous acceptez",
+    "slaAgreementLink": "l’accord sur les niveaux de service.",
+    "signUpButton": "Continuer",
+    "fields": {
+      "username": {
+        "label": "Adresse courriel",
+        "hint": "Il faut fournir une adresse courriel du gouvernement fédéral."
+      },
+      "password": {
+        "label": "Mot de passe",
+        "hint": "Il doit comporter au moins 8 caractères avec une majuscule, un chiffre et un symbole.",
+        "error": {
+          "minLength": "Le mot de passe doit comporter au moins 8 caractères.",
+          "maxLength": "Le mot de passe ne doit pas dépasser 50 caractères.",
+          "oneLowerCase": "Le mot de passe doit contenir au moins 1 caractère minuscule.",
+          "oneUpperCase": "Le mot de passe doit contenir au moins 1 caractère majuscule.",
+          "oneNumber": "Le mot de passe doit contenir au moins 1 chiffre.",
+          "oneSymbol": "Le mot de passe doit contenir au moins 1 symbole."
+        }
+      },
+      "passwordConfirmation": {
+        "label": "Confirmation du mot de passe",
+        "error": {
+          "mustMatch": "Les valeurs entrées pour le mot de passe doivent correspondent."
+        }
+      },
+      "name": {
+        "label": "Nom complet",
+        "error": {
+          "maxLength": "Ce champ ne doit pas dépasser 50 caractères."
+        }
+      }
+    }
+  },
+  "registrationClosed": "L'inscription est fermée pour le moment.",
+  "accountCreated": {
+    "title": "Compte créé sur Formulaires GC",
+    "yourAccountTitle": "Ce que vous pouvez faire avec votre compte",
+    "yourAccountListDescription": "Ce compte vous permet de",
+    "yourAccountList": {
+      "item1": "rédiger une ébauche de formulaire.",
+      "item2": "enregistrer les ébauches dans Formulaires GC.",
+      "item3": "tester la livraison des réponses. "
+    },
+    "notIncluded": {
+      "title": "Ce qui n'est pas compris",
+      "paragraph1": "Vous ne pouvez pas encore publier de formulaires en ligne."
+    },
+    "unlockPublishing": {
+      "title": "Déverrouiller la publication de formulaires",
+      "paragraph1": "Pour déverrouiller la publication, vous devrez fournir les coordonnées de la personne de qui vous relevez.",
+      "paragraph2": "Nous traiterons votre demande dans les 2 jours ouvrables."
+    },
+    "unlockPublishingButton": "Déverouiller la publication",
+    "skipStepButton": "Sauter cette étape pour l'instant"
+  }
+}

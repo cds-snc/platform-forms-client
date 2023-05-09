@@ -1,12 +1,12 @@
 import React from "react";
-import { cleanup, render, screen, waitFor } from "@testing-library/react";
+import { cleanup, render, screen, waitFor, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import Form from "./Form";
-import { submitToAPI } from "@lib/helpers";
+import { Form } from "@components/forms";
+import { submitToAPI } from "@lib/clientHelpers";
 import { useFlag } from "@lib/hooks/useFlag";
 
-jest.mock("@lib/helpers", () => {
-  const originalModule = jest.requireActual("@lib/helpers");
+jest.mock("@lib/clientHelpers", () => {
+  const originalModule = jest.requireActual("@lib/clientHelpers");
   return {
     __esModule: true,
     ...originalModule,
@@ -30,11 +30,11 @@ jest.mock("@lib/hooks", () => {
     useFlag: jest.fn((flag) => {
       switch (flag) {
         case "formTimer":
-          return true;
+          return { isLoading: false, status: true };
         case "reCaptcha":
-          return false;
+          return { isLoading: false, status: false };
         case "submitToReliabilityQueue":
-          return false;
+          return { isLoading: false, status: false };
         default:
           return useFlag(flag);
       }
@@ -51,44 +51,42 @@ jest.mock("@lib/hooks", () => {
 });
 
 const formRecord = {
-  formConfig: {
-    form: {
-      id: 1,
-      version: 1,
-      titleEn: "Test Form",
-      titleFr: "Formulaire de test",
-      layout: [1, 2],
-      elements: [
-        {
-          id: 1,
-          type: "textField",
-          properties: {
-            titleEn: "What is your full name?",
-            titleFr: "Quel est votre nom complet?",
-            validation: {
-              required: false,
-            },
-            description: "",
-            placeholderEn: "",
-            placeholderFr: "",
+  form: {
+    id: 1,
+    version: 1,
+    titleEn: "Test Form",
+    titleFr: "Formulaire de test",
+    layout: [1, 2],
+    elements: [
+      {
+        id: 1,
+        type: "textField",
+        properties: {
+          titleEn: "What is your full name?",
+          titleFr: "Quel est votre nom complet?",
+          validation: {
+            required: false,
           },
+          description: "",
+          placeholderEn: "",
+          placeholderFr: "",
         },
-        {
-          id: 2,
-          type: "textField",
-          properties: {
-            titleEn: "What is your email address?",
-            titleFr: "Quelle est votre adresse électronique?",
-            validation: {
-              required: false,
-            },
-            description: "",
-            placeholderEn: "",
-            placeholderFr: "",
+      },
+      {
+        id: 2,
+        type: "textField",
+        properties: {
+          titleEn: "What is your email address?",
+          titleFr: "Quelle est votre adresse courriel?",
+          validation: {
+            required: false,
           },
+          description: "",
+          placeholderEn: "",
+          placeholderFr: "",
         },
-      ],
-    },
+      },
+    ],
   },
 };
 
@@ -117,11 +115,13 @@ describe("Form Functionality", () => {
   });
 
   it("Form can be submitted", async () => {
-    const user = userEvent.setup();
     render(<Form formRecord={formRecord} language="en" t={(key) => key} />);
     expect(screen.getByRole("button", { type: "submit" })).toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { type: "submit" }));
+    // using `fireEvent` instead of `user.click` because it triggers a Formik update,
+    // which then throws the warning:
+    // "Warning: An update to Formik inside a test was not wrapped in act(...)."
+    fireEvent.click(screen.getByRole("button", { type: "submit" }));
 
     await waitFor(() => expect(submitToAPI).toBeCalledTimes(1));
   });

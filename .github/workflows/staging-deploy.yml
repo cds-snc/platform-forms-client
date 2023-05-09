@@ -22,11 +22,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2.7.0
 
       - name: Configure AWS credentials
         # v1 as of Jan 28 2021
-        uses: aws-actions/configure-aws-credentials@51e2d042f8c5cf77f151685c9338e989dc0b8fc8
+        uses: aws-actions/configure-aws-credentials@82ea2d2853906c3fe78152101e590fa6caeb5f82
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -35,7 +35,7 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         # v1 as of Jan 28 2021
-        uses: aws-actions/amazon-ecr-login@b9c809dc38d74cd0fde3c13cc4fe4ac72ebecdae
+        uses: aws-actions/amazon-ecr-login@a1d6e39e3457a150e0fff2455c74032ceeff69a6
 
       - name: Get Cluster Name
         id: cluster
@@ -51,7 +51,7 @@ jobs:
       - name: Render image for form viewer service
         id: taskdef-form-viewer
         # v1.0.10
-        uses: aws-actions/amazon-ecs-render-task-definition@9666dc9d3bf790a3a6a49737b240f17fa599a5f2
+        uses: aws-actions/amazon-ecs-render-task-definition@b451ae8d4af191e94b479ca69435c85a0bd25140
         with:
           task-definition: form_viewer.json
           container-name: ${{ steps.download-taskdef-form-viewer.outputs.container_name }}
@@ -66,20 +66,14 @@ jobs:
 
       - name: Deploy image for Form Viewer
         timeout-minutes: 10
-        # v1.4.2
-        uses: aws-actions/amazon-ecs-deploy-task-definition@c74a8ca2cd0dd04d25f469715e23cb6c2fe0f01a
+        # v1.4.11
+        uses: aws-actions/amazon-ecs-deploy-task-definition@290c43e7b1deae23e799b76e42b5cfcbc2f8f4cb
         with:
           task-definition: ${{ steps.taskdef-form-viewer.outputs.task-definition }}
           service: form-viewer
           cluster: ${{ steps.cluster.outputs.name }}
           wait-for-service-stability: true
           codedeploy-appspec: ${{ github.workspace }}/form-viewer-appspec.json
-
-      - name: Run scan websites
-        run: |
-          curl -s https://scan-websites.alpha.canada.ca > /dev/null
-          sleep 60
-          curl -X GET -H 'X-API-KEY: ${{ secrets.SCAN_WEBSITES_KEY }}' -H 'X-TEMPLATE-TOKEN: ${{ secrets.SCAN_WEBSITES_TEMPLATE }}' https://scan-websites.alpha.canada.ca/scans/start
 
       - name: Logout of Amazon ECR
         if: always()

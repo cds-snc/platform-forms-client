@@ -1,7 +1,6 @@
 name: Jest Tests
 on:
   pull_request:
-  push:
     branches: [develop, main]
 
 jobs:
@@ -9,8 +8,26 @@ jobs:
     name: Jest
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@50fbc622fc4ef5163becd7fab6573eac35f8462e # v1.2.0
+      - name: Node.JS 16
+        uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3.6.0
+        with:
+          node-version: 16
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: linux-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            linux-yarn-
+
       - name: "Install dependencies"
-        run: yarn install
+        run: yarn install:all
+
       - name: Jest Tests
-        run: yarn test --coverage
+        run: yarn test

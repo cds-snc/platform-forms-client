@@ -9,8 +9,10 @@ import {
 import { FormikProps } from "formik";
 import { TFunction } from "next-i18next";
 import { acceptedFileMimeTypes } from "@lib/tsUtils";
-import ErrorListItem from "../components/forms/ErrorListItem/ErrorListItem";
+import { ErrorListItem } from "@components/forms";
 import { isServer } from "./tsUtils";
+import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
+import formNameArraySchema from "@lib/middleware/schemas/submission-name-array.schema.json";
 
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
@@ -205,7 +207,7 @@ export const validateOnSubmit = (
   const errors: Responses = {};
 
   for (const item in values) {
-    const formElement = props.formRecord.formConfig.form.elements.find(
+    const formElement = props.formRecord.form.elements.find(
       (element) => element.id == parseInt(item)
     );
     if (!formElement) return errors;
@@ -234,12 +236,12 @@ export const validateOnSubmit = (
 export const getErrorList = (
   props: { formRecord: PublicFormRecord } & FormikProps<Responses>
 ): JSX.Element | null => {
-  if (!props.formRecord?.formConfig?.form || !props.errors) {
+  if (!props.formRecord?.form || !props.errors) {
     return null;
   }
   let errorList;
 
-  const sortedFormElementErrors = props.formRecord.formConfig.form.layout
+  const sortedFormElementErrors = props.formRecord.form.layout
     .filter((element) => {
       return element in props.errors;
     })
@@ -295,18 +297,92 @@ export const setFocusOnErrorMessage = (props: FormikProps<Responses>, errorId: s
  * This function checks if a given email is a government valid email.
  * And it returns true if the email is a valid GC email otherwise false.
  * @param email A valid government email
- * @param domains The list of GC domains
  * @returns {boolean} The validation result
  */
-export const isValidGovEmail = (email: string, domains: string[]): boolean => {
-  const reg = new RegExp(
-    "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.([a-zA-Z0-9-]{2,}))+$"
-  );
-  if (!email || !domains || !reg.test(email)) {
+export const isValidGovEmail = (email: string): boolean => {
+  const regex =
+    /^([a-zA-Z0-9!#$%&'*+-/=?^_`{|}~.])+@((?:[a-zA-Z0-9-.]+\.gc\.ca|cds-snc\.freshdesk\.com)|(canada|cds-snc|elections|rcafinnovation|canadacouncil)\.ca)$/;
+  return regex.test(email);
+};
+
+/**
+ * This function tests whether a string contains a lower case character
+ * @param field A string containing a lower case character
+ * @returns {boolean} The validation result
+ */
+export const isLowerCase = (field: string): boolean => {
+  const reg = new RegExp("^(?=.*?[a-z])");
+  if (!field || !reg.test(field)) {
     return false;
   }
-  //Get the domain from email
-  const emailDomain = email.substring(email.lastIndexOf("@") + 1);
-  //Check the email's domain against the list of domains
-  return domains.includes(emailDomain.toString());
+  return true;
+};
+
+/**
+ * This function tests whether a string contains an upper case character
+ * @param field A string containing an uppwer case character
+ * @returns {boolean} The validation result
+ */
+export const isUpperCase = (field: string): boolean => {
+  const reg = new RegExp("^(?=.*?[A-Z])");
+  if (!field || !reg.test(field)) {
+    return false;
+  }
+  return true;
+};
+
+/**
+ * This function tests whether a string contains a number
+ * @param field A string containing a number
+ * @returns {boolean} The validation result
+ */
+export const isNumber = (field: string): boolean => {
+  const reg = new RegExp("^(?=.*?[0-9])");
+  if (!field || !reg.test(field)) {
+    return false;
+  }
+  return true;
+};
+
+/**
+ * This function tests whether a string contains a symbol character
+ * @param field A string containing a symbol character
+ * @returns {boolean} The validation result
+ */
+export const isSymbol = (field: string): boolean => {
+  const reg = new RegExp("^(?=.*?[#?!@$%^&*-])");
+  if (!field || !reg.test(field)) {
+    return false;
+  }
+  return true;
+};
+
+// Helpful to check whether a referer is local vs. an external URL
+// Note: a negated version of https://stackoverflow.com/questions/10687099/how-to-test-if-a-url-string-is-absolute-or-relative
+export const localPathRegEx = new RegExp("^(?!((?:[a-z+]+:)?//))", "i");
+
+/**
+ * This function tests whether a string contains a UUID
+ * @param field A string containing a UUID
+ * @returns {boolean} The validation result
+ */
+export const isUUID = (field: string): boolean => {
+  const reg = new RegExp(uuidArraySchema.items.pattern, "i");
+  if (!field || !reg.test(field)) {
+    return false;
+  }
+  return true;
+};
+
+/**
+ * This function tests whether a string contains a Form ID (used in the UI)
+ * @param field A string containing a Form ID (used in the UI)
+ * @returns {boolean} The validation result
+ */
+export const isFormId = (field: string): boolean => {
+  const reg = new RegExp(formNameArraySchema.items.pattern, "i");
+  if (!field || !reg.test(field)) {
+    return false;
+  }
+  return true;
 };

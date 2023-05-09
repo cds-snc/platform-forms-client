@@ -1,11 +1,19 @@
 {
-  "title": "Manage Users",
-  "username": "User Name",
-  "email": "Email Address",
+  "title": "Manage users",
+  "username": "User name",
+  "email": "Email address",
   "admin": "Administrator",
-  "true": "True",
-  "false": "False",
+  "true": "Yes",
+  "false": "No",
   "enable": "Enable",
+  "enabled": "Enabled",
   "disable": "Disable",
-  "a11y-diable-desc": "administrative priveleges for"
+  "disabled": "Disabled",
+  "a11y-diable-desc": "administrative privileges for",
+  "cancel": "Cancel",
+  "save": "Save",
+  "managePermissions": "Manage permissions",
+  "viewPermissions": "View permissions",
+  "managePermissionsFor": "Managing permissions of",
+  "assignUsersToTemplate": "Assign users to template"
 }

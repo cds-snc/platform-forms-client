@@ -1,21 +1,20 @@
 {
-    "title": "Sign in",
-    "emailLabel": "Email",
-    "signInKeyLabel": "Form sign-in key",
-    "signInKeyDescription": "Enter the form sign in key emailed to you when you were provided access to the form.",
-    "signInKeyForgot": "Forgot your form sign-in key?",
-    "signInKeyReset": "Request a reset (opens in new tab)",
-    "loginErrorHeading": "Problems on this page:",
-    "loginEmailErrorMessage": "Form sign-in key and email do not match our records. Double-check your email is correct.",
-    "loginSignInErrorMessage": "Form sign-in key and email do not match our records. Double-check your sign-in key is correct.",
-    "temporaryToken": {
-        "title": "Check your email",
-        "instructions": "We've sent you a one-time-use, 6-digit verification code by email. It may take a a few minutes to arrive.",
-        "temporaryTokenLabel": "Enter verification code",
-        "submitButton": "Submit",
-        "helpText": "Didn't get the verification code?",
-        "retryPrompt": "Double-check your login key and email then",
-        "retry": "try again",
-        "errorMessage": "Incorrect verification code."
+  "title": "Sign in",
+  "signUpText": "If you do not have an account, you can",
+  "signUpLink": "create one now.",
+  "signInButton": "Sign in",
+  "resetPasswordText": "Reset your password",
+  "fields": {
+    "username": {
+      "label": "Email address",
+      "description": "Must be a federal government email address."
+    },
+    "password": {
+      "label": "Password",
+      "description": "Must be at least 8 characters with a capital letter, number, and symbol.",
+      "errors": {
+        "maxLength": "Password cannot exceed 50 characters."
+      }
     }
+  }
 }

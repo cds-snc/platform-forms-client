@@ -1,0 +1,93 @@
+[
+    {
+      "type": "richText",
+      "properties": {
+        "subElements": [],
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "## How can we contact you?",
+        "descriptionFr": "## Comment pouvons-nous vous contacter?",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "type": "textField",
+      "properties": {
+        "subElements": [],
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Phone number",
+        "titleFr": "Numéro de téléphone",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "Enter your phone number. For example: 111-222-3333",
+        "descriptionFr": "Entrez votre numéro de téléphone. Par exemple : 111-222-3333",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "autoComplete": "phone"
+      }
+    },
+    {
+      "type": "textField",
+      "properties": {
+        "subElements": [],
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Email address",
+        "titleFr": "Adresse courriel",
+        "validation": {
+          "required": false,
+          "type": "email"
+        },
+        "descriptionEn": "Enter an email address. For example: name@example.com",
+        "descriptionFr": "Entrez une adresse courriel. Par exemple : nom@exemple.com",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "autoComplete": "email"
+      }
+    },
+    {
+      "type": "radio",
+      "properties": {
+        "subElements": [],
+        "choices": [
+          {
+            "en": "English",
+            "fr": "anglais"
+          },
+          {
+            "en": "French",
+            "fr": "français"
+          }
+        ],
+        "titleEn": "What is your preferred language for communication?",
+        "titleFr": "Quelle est votre langue préférée de communication?",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "We offer our services in both official languages, French and English",
+        "descriptionFr": "Nous offrons nos services dans les deux langues officielles, le français et l'anglais.",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    }
+  ]

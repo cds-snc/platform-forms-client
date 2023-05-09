@@ -14,11 +14,23 @@ interface LabelProps {
   required?: boolean;
   validation?: ValidationProperties;
   group?: boolean;
+  lang?: string;
 }
 
 export const Label = (props: LabelProps): React.ReactElement => {
-  const { children, htmlFor, className, error, hint, srOnly, required, validation, id, group } =
-    props;
+  const {
+    children,
+    htmlFor,
+    className,
+    error,
+    hint,
+    srOnly,
+    required,
+    validation,
+    id,
+    group,
+    lang,
+  } = props;
 
   const classes = classnames(
     {
@@ -37,7 +49,7 @@ export const Label = (props: LabelProps): React.ReactElement => {
       {required && (
         <span data-testid="required" aria-hidden>
           {" "}
-          ({validation?.all ? t("all-required") : t("required")})
+          ({validation?.all ? t("all-required") : t("required", { lng: lang })})
         </span>
       )}
       {group && required && (
@@ -59,5 +71,3 @@ export const Label = (props: LabelProps): React.ReactElement => {
     </label>
   );
 };
-
-export default Label;

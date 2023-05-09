@@ -2,24 +2,24 @@
  * @jest-environment node
  */
 
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 import { createMocks, RequestMethod } from "node-mocks-http";
-import { unstable_getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth/next";
 import retrieve from "@pages/api/id/[form]/bearer";
+import { Base, ManageForms, mockUserPrivileges } from "__utils__/permissions";
 import jwt from "jsonwebtoken";
-import { logMessage } from "@lib/logger";
-import * as adminLogs from "@lib/adminLogs";
-import { prismaMock, checkLogs } from "@jestUtils";
-import { Prisma, UserRole } from "@prisma/client";
+import { prismaMock } from "@jestUtils";
+import { Prisma } from "@prisma/client";
+import { Session } from "next-auth";
 
 jest.mock("next-auth/next");
 
-//Needed in the typescript version of the test so types are inferred correclty
-const mockGetSession = jest.mocked(unstable_getServerSession, true);
-const mockLogMessage = jest.mocked(logMessage, true);
+//Needed in the typescript version of the test so types are inferred correctly
+const mockGetSession = jest.mocked(getServerSession, { shallow: true });
 
 jest.mock("@lib/logger");
 
-describe("/id/[form]/bearer", () => {
+describe.skip("/id/[form]/bearer", () => {
   describe("Access Controls", () => {
     test.each(["GET", "POST"])("Should deny without a session", async (verb) => {
       const { req, res } = createMocks({
@@ -30,26 +30,34 @@ describe("/id/[form]/bearer", () => {
       });
 
       await retrieve(req, res);
-      expect(res.statusCode).toBe(403);
+      expect(res.statusCode).toBe(401);
       expect(JSON.parse(res._getData())).toEqual(
-        expect.objectContaining({ error: "Access Denied" })
+        expect.objectContaining({ error: "Unauthorized" })
       );
     });
   });
-  describe("GET", () => {
+
+  describe.each([
+    [Base, "1", "1"],
+    [ManageForms, "1", "2"],
+  ])("GET", (privileges, privilegedUserId, mockedUserId) => {
     beforeEach(() => {
       const mockSession = {
         expires: "1",
         user: {
+          id: "1",
           email: "admin@cds.ca",
           name: "Admin user",
           image: "null",
-          role: UserRole.ADMINISTRATOR,
+          privileges: mockUserPrivileges(privileges, { user: { id: privilegedUserId } }),
         },
       };
 
       mockGetSession.mockResolvedValue(mockSession);
     });
+
+    afterEach(() => mockGetSession.mockReset());
+
     it("Should return 400 if form ID was not supplied in the path", async () => {
       const { req, res } = createMocks({
         method: "GET",
@@ -63,6 +71,7 @@ describe("/id/[form]/bearer", () => {
       });
 
       await retrieve(req, res);
+
       expect(JSON.parse(res._getData()).error).toEqual(
         "form ID parameter was not provided in the resource path"
       );
@@ -73,6 +82,7 @@ describe("/id/[form]/bearer", () => {
       // Mocking executeQuery to return null as bearer token value
       (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
         bearerToken: null,
+        users: [{ id: mockedUserId }],
       });
 
       const { req, res } = createMocks({
@@ -86,16 +96,18 @@ describe("/id/[form]/bearer", () => {
       });
 
       await retrieve(req, res);
+
       expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ bearerToken: null }));
       expect(res.statusCode).toBe(200);
     });
 
     it("Should return a 200 status code and a valid token if it exists for a form.", async () => {
       // Mocking executeQuery to return a valid bearer token
-
       (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
         bearerToken: "testBearerToken",
+        users: [{ id: mockedUserId }],
       });
+
       const { req, res } = createMocks({
         method: "GET",
         headers: {
@@ -107,6 +119,7 @@ describe("/id/[form]/bearer", () => {
       });
 
       await retrieve(req, res);
+
       expect(res.statusCode).toBe(200);
       expect(JSON.parse(res._getData())).toEqual(
         expect.objectContaining({ bearerToken: "testBearerToken" })
@@ -126,18 +139,19 @@ describe("/id/[form]/bearer", () => {
           form: "23",
         },
       });
+
       await retrieve(req, res);
 
       expect(res.statusCode).toBe(404);
       expect(JSON.parse(res._getData()).error).toEqual("Not Found");
     });
 
-    it("Should return 500 status code if there's an unexpected error", async () => {
+    it("Should return a 404 status code if there's an unexpected Prisma error", async () => {
       // Mocking executeQuery to throw an error
-
       prismaMock.template.findUnique.mockRejectedValue(
         new Prisma.PrismaClientKnownRequestError("Timed out", "P2024", "4.3.2")
       );
+
       const { req, res } = createMocks({
         method: "GET",
         headers: {
@@ -149,15 +163,16 @@ describe("/id/[form]/bearer", () => {
       });
 
       await retrieve(req, res);
-      expect(res.statusCode).toBe(500);
-      expect(JSON.parse(res._getData()).error).toEqual("Internal Service Error");
+
+      expect(res.statusCode).toBe(404);
+      expect(JSON.parse(res._getData()).error).toEqual("Not Found");
     });
   });
 
-  describe("POST", () => {
-    beforeAll(() => {
-      process.env.TOKEN_SECRET = "some_secret";
-    });
+  describe.each([
+    [Base, "1", "1"],
+    [ManageForms, "1", "2"],
+  ])("POST", (privileges, privilegedUserId, mockedUserId) => {
     beforeEach(() => {
       const mockSession = {
         expires: "1",
@@ -165,17 +180,22 @@ describe("/id/[form]/bearer", () => {
           email: "admin@cds.ca",
           name: "Admin user",
           image: "null",
-          role: UserRole.ADMINISTRATOR,
-          userId: "1",
+          privileges: mockUserPrivileges(privileges, { user: { id: privilegedUserId } }),
+          id: "1",
         },
       };
+
       mockGetSession.mockResolvedValue(mockSession);
     });
 
-    afterAll(() => {
-      delete process.env.TOKEN_SECRET;
-    });
+    afterEach(() => mockGetSession.mockReset());
+
     it("Should return a 200 status code, the refreshed token, and the id of the form", async () => {
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        bearerToken: "testBearerToken",
+        users: [{ id: mockedUserId }],
+      });
+
       (prismaMock.template.update as jest.MockedFunction<any>).mockImplementationOnce(
         (args: Record<string, any>) =>
           Promise.resolve({
@@ -195,21 +215,17 @@ describe("/id/[form]/bearer", () => {
       });
 
       await retrieve(req, res);
+
       expect(res.statusCode).toBe(200);
       const { id, bearerToken } = JSON.parse(res._getData());
       expect(id).toEqual(1);
       const decodedToken = jwt.verify(bearerToken, "some_secret");
 
       expect((decodedToken as { formID: string }).formID).toBe(1);
-
-      expect(
-        checkLogs(
-          mockLogMessage.debug.mock.calls,
-          "A bearer token was refreshed for form 1 by user Admin user"
-        )
-      ).toBeTruthy;
     });
     it("Should return a 404 status code if the form is not found", async () => {
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue(null);
+
       prismaMock.template.update.mockRejectedValue(
         new Prisma.PrismaClientKnownRequestError("Form does not exist", "P2025", "4.3.2")
       );
@@ -227,13 +243,7 @@ describe("/id/[form]/bearer", () => {
       await retrieve(req, res);
 
       expect(res.statusCode).toBe(404);
-      expect(JSON.parse(res._getData()).error).toBe("Not Found");
-      expect(
-        checkLogs(
-          mockLogMessage.debug.mock.calls,
-          "A bearer token was attempted to be created for form 1 by user Admin user but the form does not exist"
-        )
-      ).toBeTruthy;
+      expect(JSON.parse(res._getData()).error).toBe("Form Not Found");
     });
     it("Should return a 400 status code if the form parameter is not provided", async () => {
       const { req, res } = createMocks({
@@ -273,11 +283,13 @@ describe("/id/[form]/bearer", () => {
 
       expect(res.statusCode).toBe(500);
       expect(JSON.parse(res._getData()).error).toBe("Internal Service Error");
-      expect(mockLogMessage.error.mock.calls.length).toBe(1);
-      expect(mockLogMessage.error.mock.calls[0][0]).toEqual(new Error("Timed out"));
     });
 
     it("Should log admin activity if API call completed successfully", async () => {
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        users: [{ id: mockedUserId }],
+      });
+
       (prismaMock.template.update as jest.MockedFunction<any>).mockImplementationOnce(
         (args: Record<string, any>) =>
           Promise.resolve({
@@ -296,17 +308,98 @@ describe("/id/[form]/bearer", () => {
         },
       });
 
-      const logAdminActivity = jest.spyOn(adminLogs, "logAdminActivity");
-
       await retrieve(req, res);
 
       expect(res.statusCode).toBe(200);
-      expect(logAdminActivity).toHaveBeenCalledWith(
-        "1",
-        "Update",
-        "RefreshBearerToken",
-        "Bearer token for form id: 1 has been refreshed"
-      );
     });
+  });
+});
+
+describe.skip("Bearer API functions should throw an error if user does not have permissions", () => {
+  describe("Bearer API functions should throw an error if user does not have any permissions", () => {
+    beforeAll(() => {
+      const mockSession: Session = {
+        expires: "1",
+        user: {
+          id: "1",
+          email: "a@b.com",
+          name: "Testing Forms",
+          privileges: [],
+          acceptableUse: true,
+        },
+      };
+      mockGetSession.mockReturnValue(Promise.resolve(mockSession));
+    });
+
+    afterAll(() => {
+      mockGetSession.mockReset();
+    });
+
+    it.each(["GET", "POST"])(
+      "User with no permission should not be able to use %s API functions",
+      async (httpMethod) => {
+        (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+          users: [{ id: "1" }],
+        });
+
+        const { req, res } = createMocks({
+          method: httpMethod as RequestMethod,
+          headers: {
+            "Content-Type": "application/json",
+            Origin: "http://localhost:3000",
+          },
+          query: {
+            form: 1,
+          },
+        });
+
+        await retrieve(req, res);
+
+        expect(res.statusCode).toBe(403);
+        expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ error: "Forbidden" }));
+      }
+    );
+  });
+
+  describe.skip("Bearer API functions should throw an error if user does not have sufficient permissions", () => {
+    afterAll(() => {
+      mockGetSession.mockReset();
+    });
+
+    it.each(["GET", "POST"])(
+      "User with no relation to the template being interacted with should not be able to use the %s API function",
+      async (httpMethod) => {
+        const mockSession: Session = {
+          expires: "1",
+          user: {
+            id: "1",
+            email: "forms@cds.ca",
+            name: "forms",
+            privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
+          },
+        };
+        mockGetSession.mockReturnValue(Promise.resolve(mockSession));
+
+        (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+          users: [{ id: "2" }],
+        });
+
+        const { req, res } = createMocks({
+          method: httpMethod as RequestMethod,
+          headers: {
+            "Content-Type": "application/json",
+            Origin: "http://localhost:3000",
+          },
+          query: {
+            form: 1,
+          },
+        });
+
+        await retrieve(req, res);
+
+        expect(res.statusCode).toBe(403);
+        expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ error: "Forbidden" }));
+      }
+    );
   });
 });

@@ -1,0 +1,19 @@
+{
+  "CodeMismatchException": "Le code de sécurité fourni ne correspond pas à nos registres.",
+  "InternalServiceException": "Une erreur s’est produite lors de votre demande. Veuillez réessayer plus tard.",
+  "TooManyRequestsException": "Trop de demandes. Réessayez plus tard.",
+  "UsernameExistsException": "Ce compte existe déjà.",
+  "ExpiredCodeException": "Le code de confirmation a expiré. Veuillez en demander un nouveau.",
+  "InvalidPasswordException": "Ce mot de passe n'est pas conforme à notre politique en matière de mots de passe.",
+  "InvalidParameterException": {
+    "sendForgotPassword": {
+      "title": "Pour réinitialiser votre mot de passe, vous devez d'abord vérifier votre courriel."
+    }
+  },
+  "UsernameOrPasswordIncorrect": {
+    "title": "L’adresse courriel ou le mot de passe que vous avez entré est incorrect.",
+    "description": "L’adresse courriel ou le mot de passe que vous avez entré est incorrect ou le compte n’existe pas.",
+    "link": "/signup/register",
+    "linkText": "Si vous n’avez pas de compte, créez-en un maintenant."
+  }
+}

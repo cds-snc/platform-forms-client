@@ -3,8 +3,7 @@ import classnames from "classnames";
 import { useField } from "formik";
 import { GenerateElement } from "@lib/formBuilder";
 import { FormElement } from "@lib/types";
-import { Button } from "../index";
-import { Description } from "../index";
+import { Button, Description } from "@components/forms";
 import { TFunction } from "next-i18next";
 
 interface DynamicGroupProps {
@@ -62,6 +61,8 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
       //Refreshing rows from Formik's state
       setRows(Array(field.value.length).fill(rowElements));
     }
+    // @todo - fix this eslint error
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -73,6 +74,8 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     setRowRefs(newRowRefs);
 
     // Trigger on any change to the length of the rows state
+    // @todo - fix this eslint error
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rows.length]);
 
   useEffect(() => {
@@ -80,12 +83,16 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
       rowRefs[focussedRow].current?.focus();
       rowRefs[focussedRow].current?.scrollIntoView();
     }
+    // @todo - fix this eslint error
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focussedRow]);
 
   useEffect(() => {
     if (maxNumberOfRows) {
       setHasReachedMaxNumberOfRows(rows.length >= maxNumberOfRows);
     }
+    // @todo - fix this eslint error
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rows.length]);
 
   const addRow = () => {
@@ -141,7 +148,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
                   onClick={addRow}
                   testid={`add-row-button-${field.name}`}
                 >
-                  {`${t("dynamicRow.add")} ${rowLabel}`}
+                  {`${t("dynamicRow.add", { ns: "common" })} ${rowLabel}`}
                 </Button>
               )}
               {rows.length > 1 && (
@@ -151,7 +158,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
                   onClick={() => deleteRow(index)}
                   testid={`delete-row-button-${field.name}.${index}`}
                 >
-                  {`${t("dynamicRow.delete")} ${rowLabel} ${index + 1}`}
+                  {`${t("dynamicRow.delete", { ns: "common" })} ${rowLabel} ${index + 1}`}
                 </Button>
               )}
             </div>
@@ -161,5 +168,3 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     </div>
   );
 };
-
-export default DynamicGroup;

@@ -1,14 +1,22 @@
 {
   "footer": {
-    "terms": {
-      "disclaimer": "Ce formulaire est hébergé par le Service numérique canadien.",
-      "link": "/fr/terms-avis",
-      "desc-preface": "Pour en savoir plus, consultez les ",
-      "desc": "modalités de service"
-    }
-  },
-  "phase": {
-    "desc": "Ce site évoluera au fur et à mesure que nous testons des idées."
+    "terms-and-conditions": {
+      "link": "/fr/terms-and-conditions",
+      "desc": "Conditions générales"
+    },
+    "terms-of-use": {
+      "link": "/fr/terms-of-use",
+      "desc": "Conditions d'utilisation"
+    },
+    "sla": {
+      "link": "/fr/sla",
+      "desc": "Accord sur les niveaux de service"
+    },
+    "support": {
+      "link": "/fr/form-builder/support",
+      "desc": "Soutien"
+    },
+    "ariaLabel": "Bas de page"
   },
   "skip-link": "Passer au contenu principal",
   "fip": {
@@ -23,19 +31,21 @@
   "lang-toggle": "Sélection de la langue",
   "submitButton": "Soumettre",
   "input-validation": {
-    "heading": "Veuillez corriger les erreurs trouvées dans la page.",
-    "required": "Veuillez compléter les champs obligatoires afin de continuer.",
-    "number": "Veuillez entrer un numéro.",
+    "heading": "Veuillez corriger les erreurs sur la page.",
+    "required": "Compléter le champs obligatoire afin de continuer.",
+    "alphanumeric": "Entrer uniquement des lettres et des chiffres.",
     "text": "",
-    "alphanumeric": "Veuillez entrer uniquement des lettres et des chiffres.",
-    "email": "Veuillez entrer une adresse courriel valide.",
-    "date": "Veuillez utiliser le format de date mm/jj/aaaa.",
-    "phone": "Veuillez entrer un numéro de téléphone valide.",
+    "number": "Entrer un numéro.",
+    "email": "Entrer une adresse courriel valide.",
+    "date": "Utiliser le format de date mm/jj/aaaa.",
+    "phone": "Entrer un numéro de téléphone valide.",
     "regex": "Veuillez utiliser le bon format.",
-    "file-size-too-large": "Veuillez sélectionner un fichier plus petit.",
-    "file-type-invalid": "Veuillez sélectionner un autre type de fichier.",
-    "too-many-characters": "Veuillez raccourcir votre réponse.",
-    "all-checkboxes-required": "Lisez et cochez toutes les cases pour confirmer les éléments de cette section."
+    "file-size-too-large": "Sélectionner un fichier plus petit.",
+    "file-type-invalid": "Sélectionner un autre type de fichier.",
+    "too-many-characters": "Raccourcir la réponse.",
+    "all-checkboxes-required": "Lisez et cochez toutes les cases pour confirmer les éléments de cette section.",
+    "validGovEmail": "Entrer une adresse courriel valide du gouvernement.",
+    "notSameAsUserEmail": "Il ne peut s'agir de votre propre adresse courriel. Entrez le courriel de la personne responsable de votre équipe. S'il s'agit de vous, ajoutez un·e collègue."
   },
   "required": "obligatoire",
   "all-required": "toutes les cases à cocher sont obligatoires",
@@ -44,8 +54,9 @@
   "file-upload-sr-only-file-selected": "Le fichier actuellement sélectionné est",
   "file-upload-no-file-selected": "Aucun fichier actuellement sélectionné",
   "dropdown-initial-option-text": "Pas de sélection",
-  "server-error": "Oups, il semble qu'un problème est survenu lors de l'envoi de votre formulaire. Veuillez réessayer plus tard.",
-  "title": "GC Forms - Formulaires GC",
+  "server-error": "Désolé, il semble qu'un problème est survenu lors de l'envoi de votre formulaire. Veuillez réessayer plus tard.",
+  "title-full": "Formulaires GC - GC Forms",
+  "title": "Formulaires GC",
   "loading": "Nous traitons votre soumission de formulaire. Veuillez patienter.",
   "spam-error": {
     "error-part-1": "Impossible d'utiliser le bouton avant",
@@ -57,28 +68,46 @@
   },
   "adminNav": {
     "dashboard": "Accueil",
-    "vault": "Coffre",
+    "formbuilder": "Générateur de formulaires",
     "users": "Usagers",
-    "upload": "Téléchargement de modèle",
+    "upload": "Téléversement de modèle",
     "templates": "Modèles",
     "features": "Options",
-    "login": "Connexion",
-    "logout": "Déconnexion"
+    "login": "Se connecter",
+    "logout": "Se déconnecter",
+    "privileges": "Privilèges",
+    "settings": "Paramètres",
+    "myForms": "Vos formulaires"
   },
   "formElements": {
     "characterCount": {
       "part1": "Il vous reste",
       "part2": "caractères.",
-      "part1-error": "Vous avez",
-      "part2-error": "caractères de trop."
+      "part1-error": "Vous avez dépassé la limite de",
+      "part2-error": "caractères."
     }
   },
   "dynamicRow": {
     "add": "Ajouter",
     "delete": "Supprimer"
   },
-  "loginMenu":{
-    "login": "Connexion",
-    "logout": "Déconnexion"
+  "acceptableUsePage": {
+    "agree": "Accepter",
+
+    "welcome": "Connaissez vos responsabilités"
+  },
+  "loginMenu": {
+    "login": "Se connecter",
+    "logout": "Se déconnecter"
+  },
+  "alert": {
+    "dismissAlert": "Fermer cette alerte"
+  },
+  "continue": "Continuer",
+  "error": "Erreur",
+  "unknown": "Inconnu",
+  "attention": {
+    "warning": "Avertissement",
+    "error": "Erreur"
   }
 }

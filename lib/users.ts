@@ -1,106 +1,129 @@
-import { User } from "next-auth";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { FormUser, Prisma, UserRole } from "@prisma/client";
-import { JWT } from "next-auth";
-import { logMessage } from "@lib/logger";
-
-/**
- * Get all Users
- * @returns An array of all Users
- */
-export const getUsers = async (): Promise<User[]> => {
-  try {
-    const users: User[] = await prisma.user.findMany({
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-      },
-    });
-
-    return users;
-  } catch (e) {
-    return prismaErrors(e, []);
-  }
-};
-
-/**
- * Get a FormUser
- * @param userId FormUser Id
- * @returns FormUser Object
- */
-export const getFormUser = async (userId: string): Promise<FormUser | null> => {
-  try {
-    return await prisma.formUser.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-  } catch (e) {
-    return prismaErrors(e, null);
-  }
-};
+import { JWT } from "next-auth/jwt";
+import { AccessControlError, checkPrivileges } from "@lib/privileges";
+import { UserAbility } from "./types";
+import { logEvent } from "./auditLogs";
 
 /**
  * Get or Create a user if a record does not exist
  * @returns A User Object
  */
-export const getOrCreateUser = async (userToken: JWT): Promise<User | null> => {
-  try {
-    if (!userToken.email) throw new Error("Email address does not exist on token");
-    const user: User | null = await prisma.user.findUnique({
+export const getOrCreateUser = async ({ name, email, picture }: JWT) => {
+  if (!email) throw new Error("Email does not exist on token");
+  const user = await prisma.user
+    .findUnique({
       where: {
-        email: userToken.email,
+        email: email,
       },
       select: {
         id: true,
         name: true,
         email: true,
-        role: true,
+        privileges: true,
       },
-    });
+    })
+    .catch((e) => prismaErrors(e, null));
 
-    // If a user already exists return the record
-    if (user !== null) return user;
+  // If a user already exists and has privileges return the record
+  if (user !== null && user.privileges.length) return user;
 
-    // User does not exist, create and return a record
-    const { name, email, picture: image } = userToken;
-    return await prisma.user.create({
-      data: {
-        name,
-        email,
-        image,
+  // User does not exist, create and return a record or assign base privileges
+  const basePrivileges = await prisma.privilege
+    .findUnique({
+      where: {
+        nameEn: "Base",
       },
-    });
-  } catch (e) {
-    return prismaErrors(e, null);
+      select: {
+        id: true,
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (basePrivileges === null) {
+    throw new Error("Base Privileges is not set in Database");
+  }
+
+  if (!user) {
+    const newUser = await prisma.user
+      .create({
+        data: {
+          name,
+          email,
+          image: picture,
+          privileges: {
+            connect: basePrivileges,
+          },
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          privileges: true,
+        },
+      })
+      .catch((e) => prismaErrors(e, null));
+
+    if (newUser !== null)
+      logEvent(newUser.id, { type: "User", id: newUser.id }, "UserRegistration");
+
+    return newUser;
+  } else {
+    return await prisma.user
+      .update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          privileges: {
+            connect: basePrivileges,
+          },
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          privileges: true,
+        },
+      })
+      .catch((e) => prismaErrors(e, null));
   }
 };
 
 /**
- * Modifies the Admin role on a user
- * @param isAdmin
- * @param userId
- * @returns boolean that indicates success or failure and if a user exists
+ * Get all Users
+ * @returns An array of all Users
  */
-export const adminRole = async (isAdmin: boolean, userId: string): Promise<[boolean, boolean]> => {
+export const getUsers = async (ability: UserAbility) => {
   try {
-    const user = await prisma.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        role: UserRole.ADMINISTRATOR,
-      },
-    });
-    return [true, Boolean(user)];
+    checkPrivileges(ability, [{ action: "view", subject: "User" }]);
+
+    const users = await prisma.user
+      .findMany({
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          privileges: {
+            select: {
+              id: true,
+              nameEn: true,
+              nameFr: true,
+              descriptionEn: true,
+              descriptionFr: true,
+            },
+          },
+        },
+        orderBy: {
+          id: "asc",
+        },
+      })
+      .catch((e) => prismaErrors(e, []));
+
+    return users;
   } catch (e) {
-    logMessage.error(e as Error);
-    if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2025") {
-      // Error P2025: Record to update not found.
-      return [true, false];
+    if (e instanceof AccessControlError) {
+      logEvent(ability.userID, { type: "User" }, "AccessDenied", "Attempted to list users");
     }
-    return [false, false];
+    throw e;
   }
 };

@@ -1,6 +1,7 @@
 import Document, { Html, Head, Main, NextScript, OriginProps } from "next/document";
 import React from "react";
 import { googleTagManager, cspHashOf } from "@lib/cspScripts";
+import JSDisabled from "./js-disabled";
 
 const scriptHashes: Array<string> = [];
 const externalScripts: Array<string> = [];
@@ -14,9 +15,9 @@ function getCsp() {
   csp += `script-src 'self' 'strict-dynamic' ${scriptHashes.map((hash) => `'${hash}'`).join(" ")} ${
     process.env.APP_ENV === "test" ? "'unsafe-eval'" : ""
   } 'unsafe-inline' https:;`;
-  csp += `style-src 'self' fonts.googleapis.com 'unsafe-inline' data:;`;
-  csp += `img-src 'self' https: data:;`;
-  csp += `font-src 'self' fonts.gstatic.com;`;
+  csp += `style-src 'self' 'unsafe-inline' data:;`;
+  csp += `img-src 'self';`;
+  csp += `font-src 'self';`;
   csp += `frame-src www.googletagmanager.com www.google.com/recaptcha/ recaptcha.google.com/recaptcha/;`;
   csp += `connect-src 'self' www.googletagmanager.com www.google-analytics.com`;
   return csp;
@@ -216,6 +217,10 @@ class MyDocument extends Document {
           <script async type="text/javascript" src="/static/scripts/form-polyfills.js"></script>
           {GoogleTagScript}
         </CustomHead>
+        <noscript>
+          <style type="text/css">{`#__next {display:none;}`}</style>
+          <JSDisabled lang={this.props.__NEXT_DATA__.locale} />
+        </noscript>
         <body>
           {/* Will only run if Browser does not have JS enabled */}
           <noscript>

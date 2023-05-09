@@ -1,0 +1,135 @@
+{
+  "responses": {
+    "changeSetup": "Modifier les paramètres",
+    "confirmReceipt": "Confirmer la réception",
+    "navLabel": "Réponses",
+    "reportProblems": "Signaler un problème",
+    "title": "Réponses",
+    "unauthenticated": {
+      "createOne": "créez-en un",
+      "noAccount": "Si vous n'avez pas de compte Formulaires GC,",
+      "signIn": "connectez-vous",
+      "title": "Se connecter pour accéder aux réponses",
+      "toAccessPagePart1": "Pour accéder à cette page,",
+      "toAccessPagePart2": "à votre compte Formulaires GC"
+    },
+    "email": {
+      "title": "Paramètres des réponses courriel",
+      "submitTo": "Les réponses soumises sont envoyées à :",
+      "subjectLine": "La ligne d’objet apparaîtra comme :"
+    }
+  },
+  "downloadResponsesTable": {
+    "header": {
+      "tableTitle": "Tableau des réponses à télécharger",
+      "select": "Sélection",
+      "number": "Numéro de formulaire",
+      "status": "État",
+      "downloadResponse": "Délai de téléchargement",
+      "lastDownloadedBy": "Réponses téléchargées par",
+      "confirmReceipt": "Confirmation de réception",
+      "removal": "Suppression des données des réponses"
+    },
+    "status": {
+      "downloaded": "Téléchargé",
+      "notDownloaded": "À télécharger",
+      "new": "Nouveauté",
+      "confirmed": "Confirmé",
+      "unconfirmed": "À confirmer",
+      "problem": "Problème",
+      "done": "Complété",
+      "withinXDays": "Dans {{daysLeft}} jours",
+      "overdue": "En retard",
+      "wontRemove": "Échec de suppression",
+      "notSet": "Non réglé"
+    },
+    "card": {
+      "noResponses": "Vous n'avez pas de réponses",
+      "noResponsesToDownload": "Il n'y a pas de réponses disponibles pour le téléchargement."
+    },
+    "notifications": {
+      "downloadComplete": "Téléchargement complet",
+      "downloadingXFiles": "Téléchargement de {{fileCount}} fichiers"
+    },
+    "errors": {
+      "trySelectingLessFilesHeader": "Seules {{max}} réponses peuvent être téléchargées à la fois.",
+      "trySelectingLessFiles": "Vous avez {{max}} réponses sélectionnées. Décochez au moins 1 réponse avant de télécharger.",
+      "atLeastOneFileHeader": "Au moins un fichier doit être sélectionné à télécharger.",
+      "atLeastOneFile": "Essayez de sélectionner au moins un fichier à télécharger.",
+      "errorDownloadingFilesHeader": "Erreur lors du téléchargement des fichiers sélectionnés.",
+      "errorDownloadingFiles": "Réessayez dans quelques minutes. Si le problème persiste, ",
+      "errorDownloadingFilesLink": "contactez Soutien"
+    },
+    "downloadXSelectedResponses": "Télécharger {{size}} réponses sélectionnées",
+    "skipLink": "Sauter le tableau de téléchargement",
+    "unknown": "Inconnu"
+  },
+  "downloadResponsesModals": {
+    "confirmReceiptDialog": {
+      "title": "Confirmer la réception de réponses",
+      "findCode": "Trouvez le code de confirmation au bas des réponses de formulaires téléchargées. Ces codes ressemblent à : c0c42c90-b816-49da-a69a-80bfd8ba15db.",
+      "copyCode": "Copiez et collez jusqu'à 20 codes de confirmation, un par ligne.",
+      "responsesAvailableFor": "Une fois que vous aurez confirmé la réception des réponses, celles-ci seront disponibles pendant 7 jours, puis, ensuite automatiquement retirées de notre base de données.",
+      "confirmReceipt": "Confirmer la réception",
+      "errors": {
+        "minEntries": {
+          "title": "Au moins une réponse doit être spécifiée",
+          "description": "Entrez les codes de confirmation des réponses téléchargées pour confirmer leur réception."
+        },
+        "maxEntries": {
+          "title": "Seulement {{max}} réponses peuvent être confirmées à la fois",
+          "description": "Soumettez {{max}} codes de confirmation avant d'en ajouter d'autres."
+        },
+        "errorEntries": {
+          "title": "Certains code de confirmation n'ont pas été soumis",
+          "description": "Vérifiez que les codes de confirmation ci-dessous sont corrects et réessayez."
+        },
+        "invalidEntry": {
+          "title": "Le code de confirmation ne correspond pas au format requis",
+          "description": "Vérifiez que le format du code de confirmation est correct et réessayez."
+        },
+        "unknown": {
+          "title": "Désolé, il y a un problème avec le site",
+          "description": "Attendez quelques minutes et réessayez, ou ",
+          "descriptionLink": "contactez l'équipe de Soutien"
+        }
+      }
+    },
+    "reportProblemsDialog": {
+      "title": "Signaler un problème avec les réponses",
+      "findForm": "Trouvez les numéros de formulaire dans la liste des réponses qui ne se téléchargent pas ou ne s'ouvrent pas. Ces numéros ressemblent à : 31-12-XCRV.",
+      "enterFormNumbers": "Entrez jusqu'à {{max}} numéros de formulaires, un par ligne.",
+      "problemReported": "Une fois que vous aurez signalé le problème, nous vous contacterons pour vous aider à le résoudre.",
+      "reportProblems": "Signaler le problème",
+      "errors": {
+        "minEntries": {
+          "title": "Au moins un formulaire doit être spécifié",
+          "description": "Entrez les numéros de formulaires pour les réponses qui posent un problème."
+        },
+        "maxEntries": {
+          "title": "Seulement {{max}} problèmes peuvent être signalés à la fois",
+          "description": "Soumettez {{max}} numéros de formulaires avant d'en soumettre d'autres."
+        },
+        "errorEntries": {
+          "title": "Certains numéros de formulaires n'ont pas été soumis",
+          "description": "Vérifiez que les numéros de formulaires ci-dessous sont corrects et réessayez."
+        },
+        "invalidEntry": {
+          "title": "Le numéro de formulaire ne correspond pas au format requis",
+          "description": "Vérifiez que le format du numéro de formulaire est correct et réessayez."
+        },
+        "unknown": {
+          "title": "Désolé, il y a un problème avec le site",
+          "description": "Attendez quelques minutes et réessayez, ou ",
+          "descriptionLink": "contactez l'équipe de Soutien"
+        }
+      }
+    },
+    "lineItemEntries": {
+      "added": "Ajouté",
+      "removed": "Supprimé"
+    },
+    "sending": "Envoi en cours...",
+    "cancel": "Annuler"
+  }
+}

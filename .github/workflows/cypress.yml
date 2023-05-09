@@ -1,33 +1,82 @@
 name: E2E Tests
 on:
   pull_request:
-  push:
     branches: [develop, main]
 
 jobs:
   cypress-run:
     name: Cypress
     runs-on: ubuntu-latest
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      redis:
+        # Docker Hub image
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
     env:
       # Needed for Next Auth to initialize
       NEXTAUTH_URL: http://localhost:3000
       TOKEN_SECRET: testKey
-      GOOGLE_CLIENT_ID: testClientID
-      GOOGLE_CLIENT_SECRET: testClientSecret
       APP_ENV: test
+      REDIS_URL: localhost
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/formsDB
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
-      - uses: cypress-io/github-action@v2
+        uses: actions/checkout@50fbc622fc4ef5163becd7fab6573eac35f8462e # v1.2.0
+      - name: Node.JS 16
+        uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3.6.0
         with:
-          build: yarn build
+          node-version: 16
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: linux-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            linux-yarn-
+
+      - name: "Install dependencies"
+        run: yarn install:all
+
+      - name: Cypress Tests
+        uses: cypress-io/github-action@d79d2d530a66e641eb4a5f227e13bc985c60b964 # v4.2.2
+        with:
+          browser: chrome
+          headed: false
+          build: yarn build:test
           start: yarn start:test
           wait-on: "http://localhost:3000"
-          command: yarn cypress:headless
           config: baseUrl=http://localhost:3000
-          parallel: false
-          group: "Form E2E Tests"
-      - uses: actions/upload-artifact@v1
+      - name: Cypress Component Tests
+        uses: cypress-io/github-action@d79d2d530a66e641eb4a5f227e13bc985c60b964 # v4.2.2
+        with:
+          browser: chrome
+          component: true
+          headed: false
+      - uses: actions/upload-artifact@3446296876d12d4e3a0f3145a3c87e67bf0a16b5 # tag=v1
         if: failure()
         with:
           name: cypress-screenshots
