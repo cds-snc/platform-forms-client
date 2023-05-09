@@ -111,6 +111,7 @@ describe("/api/id/[form]/[submission]/download", () => {
           email: "forms@cds.ca",
           name: "forms user",
           privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
+          acceptableUse: true,
         },
       };
 

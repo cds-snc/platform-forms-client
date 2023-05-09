@@ -1,9 +1,11 @@
+import { NextData } from "types";
+
 describe("Test FormBuilder Add Elements", () => {
   beforeEach(() => {
     cy.visit("/form-builder", {
       onBeforeLoad: (win) => {
         win.sessionStorage.clear();
-        let nextData;
+        let nextData: NextData;
         Object.defineProperty(win, "__NEXT_DATA__", {
           set(serverSideProps) {
             serverSideProps.context = {
@@ -30,7 +32,7 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get('[data-testid="richText"]').click();
     cy.get("button").contains("Select block").click();
 
-    cy.get('[data-testid="richText"]').exists;
+    cy.get('[data-testid="richText"]').should("exist");
   });
 
   it("Adds a Short Answer element", () => {

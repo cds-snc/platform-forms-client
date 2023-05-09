@@ -1,4 +1,3 @@
-export { Button } from "./Button";
 export { ConfirmFormDeleteDialog } from "./ConfirmFormDeleteDialog";
 export { Dialog, useDialogRef } from "./Dialog";
 export { Input } from "./Input";

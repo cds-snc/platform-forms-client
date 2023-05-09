@@ -56,6 +56,7 @@ describe("Request publishing permission API tests (with active session)", () => 
         email: "a@b.com",
         name: "Testing Forms",
         privileges: [],
+        acceptableUse: true,
       },
     };
 

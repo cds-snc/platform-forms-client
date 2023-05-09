@@ -1,8 +1,8 @@
 describe("Attestation functionality", () => {
-  let formID;
+  let formID: string;
   before(() => {
     cy.useForm("../../__fixtures__/attestationTestForm.json");
-    cy.get("@formID").then((createdID) => (formID = createdID));
+    cy.get<string>("@formID").then((createdID) => (formID = createdID));
   });
   beforeEach(() => {
     cy.useFlag("formTimer", false);

@@ -4,7 +4,7 @@ import { useTranslation } from "next-i18next";
 
 import { useTemplateStore } from "../../../store/useTemplateStore";
 import { Option } from "./Option";
-import { Button } from "../../shared/Button";
+import { Button } from "@components/globals";
 import { FormElementWithIndex } from "../../../types";
 
 const AddButton = ({ index, onClick }: { index: number; onClick: (index: number) => void }) => {

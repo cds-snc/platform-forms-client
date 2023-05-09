@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import { useTemplateStore } from "../store";
 import { useTemplateApi, useAllowPublish } from "../hooks";
 import { CancelIcon, CircleCheckIcon, WarningIcon, LockIcon } from "../icons";
-import { Button } from "./shared";
+import { Button } from "@components/globals";
 import { PublishNoAuth } from "./PublishNoAuth";
 import Link from "next/link";
 

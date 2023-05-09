@@ -1,6 +1,5 @@
 import React from "react";
 import { PanelActions } from "../PanelActions";
-import { FormElementTypes } from "@lib/types";
 
 describe("<PanelActions />", () => {
   it("enables move buttons for item that is not first or last", () => {
@@ -12,19 +11,19 @@ describe("<PanelActions />", () => {
         isLastItem={false}
         totalItems={0}
         moreButtonRenderer={(moreButton) => <>{moreButton}</>}
-        handleAdd={function (type?: FormElementTypes | undefined): void {
+        handleAdd={function (type) {
           throw new Error(type + "Function not implemented.");
         }}
-        handleRemove={function (): void {
+        handleRemove={function () {
           throw new Error("Function not implemented.");
         }}
-        handleMoveUp={function (): void {
+        handleMoveUp={function () {
           throw new Error("Function not implemented.");
         }}
-        handleMoveDown={function (): void {
+        handleMoveDown={function () {
           throw new Error("Function not implemented.");
         }}
-        handleDuplicate={function (): void {
+        handleDuplicate={function () {
           throw new Error("Function not implemented.");
         }}
       />
@@ -43,19 +42,19 @@ describe("<PanelActions />", () => {
         isLastItem={true}
         totalItems={0}
         moreButtonRenderer={(moreButton) => <>{moreButton}</>}
-        handleAdd={function (type?: FormElementTypes | undefined): void {
+        handleAdd={function (type) {
           throw new Error(`${type} Function not implemented.`);
         }}
-        handleRemove={function (): void {
+        handleRemove={function () {
           throw new Error("Function not implemented.");
         }}
-        handleMoveUp={function (): void {
+        handleMoveUp={function () {
           throw new Error("Function not implemented.");
         }}
-        handleMoveDown={function (): void {
+        handleMoveDown={function () {
           throw new Error("Function not implemented.");
         }}
-        handleDuplicate={function (): void {
+        handleDuplicate={function () {
           throw new Error("Function not implemented.");
         }}
       />
@@ -90,19 +89,19 @@ describe("<PanelActions />", () => {
           isLastItem={false}
           totalItems={0}
           moreButtonRenderer={(moreButton) => <>{moreButton}</>}
-          handleAdd={function (type?: FormElementTypes | undefined): void {
+          handleAdd={function (type) {
             throw new Error(`${type} Function not implemented.`);
           }}
-          handleRemove={function (): void {
+          handleRemove={function () {
             throw new Error("Function not implemented.");
           }}
-          handleMoveUp={function (): void {
+          handleMoveUp={function () {
             throw new Error("Function not implemented.");
           }}
-          handleMoveDown={function (): void {
+          handleMoveDown={function () {
             throw new Error("Function not implemented.");
           }}
-          handleDuplicate={function (): void {
+          handleDuplicate={function () {
             throw new Error("Function not implemented.");
           }}
         />

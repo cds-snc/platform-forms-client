@@ -63,6 +63,7 @@ describe.skip("/id/[forms]/owners", () => {
             email: "forms@cds.ca",
             name: "forms user",
             privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
+            acceptableUse: true,
           },
         };
 
@@ -208,7 +209,10 @@ describe.skip("/id/[forms]/owners", () => {
       it("Should return 404 as statusCode if there's db's error", async () => {
         // Mocking prisma to throw an error
         prismaMock.template.findUnique.mockRejectedValue(
-          new Prisma.PrismaClientKnownRequestError("Can't reach database server", "P1001", "4.3.2")
+          new Prisma.PrismaClientKnownRequestError("Can't reach database server", {
+            code: "P1001",
+            clientVersion: "4.3.2",
+          })
         );
 
         const { req, res } = createMocks({
@@ -236,6 +240,7 @@ describe.skip("/id/[forms]/owners", () => {
             email: "forms@cds.ca",
             name: "forms user",
             privileges: mockUserPrivileges(ManageForms, { user: { id: "1" } }),
+            acceptableUse: true,
           },
         };
 
@@ -384,7 +389,10 @@ describe.skip("/id/[forms]/owners", () => {
       it("Should return 404 as statusCode if there's db's error", async () => {
         // Mocking prisma to throw an error
         prismaMock.template.findUnique.mockRejectedValue(
-          new Prisma.PrismaClientKnownRequestError("Can't reach database server", "P1001", "4.3.2")
+          new Prisma.PrismaClientKnownRequestError("Can't reach database server", {
+            code: "P1001",
+            clientVersion: "4.3.2",
+          })
         );
 
         const { req, res } = createMocks({
@@ -414,6 +422,7 @@ describe.skip("/id/[forms]/owners", () => {
             email: "forms@cds.ca",
             name: "forms user",
             privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
+            acceptableUse: true,
           },
         };
 
@@ -474,7 +483,10 @@ describe.skip("/id/[forms]/owners", () => {
         });
         // Mocking prisma to throw an error
         prismaMock.apiUser.update.mockRejectedValue(
-          new Prisma.PrismaClientKnownRequestError("Unknown User", "P2025", "4.3.2")
+          new Prisma.PrismaClientKnownRequestError("Unknown User", {
+            code: "P2025",
+            clientVersion: "4.3.2",
+          })
         );
 
         const { req, res } = createMocks({
@@ -596,6 +608,7 @@ describe.skip("/id/[forms]/owners", () => {
             email: "forms@cds.ca",
             name: "forms user",
             privileges: mockUserPrivileges(ManageForms, { user: { id: "1" } }),
+            acceptableUse: true,
           },
         };
 
@@ -656,7 +669,10 @@ describe.skip("/id/[forms]/owners", () => {
         });
         // Mocking prisma to throw an error
         prismaMock.apiUser.update.mockRejectedValue(
-          new Prisma.PrismaClientKnownRequestError("Unknown User", "P2025", "4.3.2")
+          new Prisma.PrismaClientKnownRequestError("Unknown User", {
+            code: "P2025",
+            clientVersion: "4.3.2",
+          })
         );
 
         const { req, res } = createMocks({
@@ -784,6 +800,7 @@ describe.skip("/id/[forms]/owners", () => {
             email: "forms@cds-snc.ca",
             name: "forms user",
             privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
+            acceptableUse: true,
           },
         };
 
@@ -801,7 +818,10 @@ describe.skip("/id/[forms]/owners", () => {
 
         //Mocking db result by throwing constraint violation error.
         prismaMock.apiUser.create.mockRejectedValue(
-          new Prisma.PrismaClientKnownRequestError("Unknown User", "P2003", "4.3.2")
+          new Prisma.PrismaClientKnownRequestError("Unknown User", {
+            code: "P2003",
+            clientVersion: "4.3.2",
+          })
         );
 
         const { req, res } = createMocks({
@@ -987,6 +1007,7 @@ describe.skip("/id/[forms]/owners", () => {
             email: "forms@cds.ca",
             name: "forms user",
             privileges: mockUserPrivileges(ManageForms, { user: { id: "1" } }),
+            acceptableUse: true,
           },
         };
 
@@ -1004,7 +1025,10 @@ describe.skip("/id/[forms]/owners", () => {
 
         //Mocking db result by throwing constraint violation error.
         prismaMock.apiUser.create.mockRejectedValue(
-          new Prisma.PrismaClientKnownRequestError("Unknown User", "P2003", "4.3.2")
+          new Prisma.PrismaClientKnownRequestError("Unknown User", {
+            code: "P2003",
+            clientVersion: "4.3.2",
+          })
         );
 
         const { req, res } = createMocks({

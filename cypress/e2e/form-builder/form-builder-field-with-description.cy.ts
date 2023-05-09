@@ -1,9 +1,11 @@
+import { NextData } from "types";
+
 describe("Form builder description text", () => {
   beforeEach(() => {
     cy.visit("/form-builder/edit", {
       onBeforeLoad: (win) => {
         win.sessionStorage.clear();
-        let nextData;
+        let nextData: NextData;
         Object.defineProperty(win, "__NEXT_DATA__", {
           set(serverSideProps) {
             serverSideProps.context = {
