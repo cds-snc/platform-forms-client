@@ -39,7 +39,7 @@ Cypress.Commands.add("useForm", (file) => {
       },
     }).then((response) => {
       expect(response.body).to.have.property("id");
-      cy.wrap(response.body.id).as("formID");
+      cy.wrap(response.body.id).as("formID", { type: "static" });
     });
   });
   cy.logout();
