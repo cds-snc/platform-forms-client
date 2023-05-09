@@ -1,6 +1,7 @@
 import React, { ReactElement, useState } from "react";
 import { Formik } from "formik";
-import { Button, TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
+import { TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
+import { Button } from "@components/globals";
 import { useAuth } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
@@ -307,9 +308,7 @@ const ResetPassword = () => {
                 />
               </div>
               <div className="buttons">
-                <Button className="gc-button--blue" type="submit">
-                  {t("resetPassword.resetPasswordButton")}
-                </Button>
+                <Button type="submit">{t("resetPassword.resetPasswordButton")}</Button>
               </div>
             </form>
           </>

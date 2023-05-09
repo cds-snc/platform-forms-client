@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { getCsrfToken } from "next-auth/react";
 import { localPathRegEx } from "@lib/validation";
+import { Button } from "@components/globals";
 
 interface AcceptableUseProps {
   content: string;
@@ -65,14 +66,9 @@ export const AcceptableUseTerms = ({
       </div>
       <RichText className="py-10 w-full">{content}</RichText>
 
-      <button
-        id="acceptableUse"
-        type="button"
-        className="h-16 w-32 rounded-lg py-3 px-6 text-[color:white] mx-auto bg-blue-800 shadow-default"
-        onClick={agree}
-      >
+      <Button id="acceptableUse" onClick={agree}>
         {t("acceptableUsePage.agree")}
-      </button>
+      </Button>
     </>
   ) : null;
 };
