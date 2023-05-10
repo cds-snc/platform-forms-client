@@ -2,7 +2,7 @@ import React, { useEffect, useRef, createContext, useContext, useCallback } from
 import { useTranslation } from "next-i18next";
 import PropTypes from "prop-types";
 
-import { Button } from "../shared";
+import { Button } from "@components/globals";
 import { Close } from "../../icons";
 import { CDSHTMLDialogElement } from "../../types";
 import { useModalStore } from "../../store";

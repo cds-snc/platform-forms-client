@@ -5,7 +5,7 @@ import { ElementProperties } from "@lib/types";
 import { ModalForm, ModalButton } from "../../index";
 import { FormElementWithIndex } from "../../../../types";
 import { useModalStore, useTemplateStore } from "../../../../store";
-import { Button } from "../../../shared";
+import { Button } from "@components/globals";
 import { Modal } from "../../Modal";
 
 export const SubElementModal = ({

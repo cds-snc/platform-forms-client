@@ -7,7 +7,7 @@ import React from "react";
 import { useTranslation } from "next-i18next";
 import { signIn } from "next-auth/react";
 
-import { Button } from "@components/forms";
+import { Button } from "@components/globals";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 
 const Login = (): JSX.Element => {

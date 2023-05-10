@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { useTranslation } from "next-i18next";
 
-import { Button } from "./Button";
+import { Button } from "@components/globals";
 import { useDialogRef, Dialog } from "../shared";
 import { InfoIcon } from "../../icons";
 

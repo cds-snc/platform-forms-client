@@ -2,12 +2,7 @@ module.exports = {
   overrides: [
     {
       files: ["*.{ts,tsx}"],
-      extends: [
-        "plugin:@typescript-eslint/recommended",
-        "plugin:jsx-a11y/recommended",
-        "plugin:prettier/recommended",
-        "prettier",
-      ],
+      extends: ["plugin:@typescript-eslint/recommended"],
 
       parser: "@typescript-eslint/parser",
       parserOptions: {
@@ -17,6 +12,15 @@ module.exports = {
       rules: {
         "@typescript-eslint/await-thenable": "error",
       },
+    },
+    {
+      files: ["*.cy.{ts,tsx}", "cypress/**/*.{ts,tsx,js,jsx}", "cypress.config.ts"],
+      parser: "@typescript-eslint/parser",
+      parserOptions: {
+        project: ["./cypress/tsconfig.json"],
+      },
+      extends: ["plugin:@typescript-eslint/recommended", "plugin:cypress/recommended"],
+      plugins: ["@typescript-eslint", "prettier", "cypress"],
     },
   ],
   env: {
@@ -30,7 +34,6 @@ module.exports = {
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
     "plugin:jsx-a11y/recommended",
-    "plugin:cypress/recommended",
     "plugin:prettier/recommended",
     "plugin:@next/next/recommended",
     "prettier",
@@ -47,7 +50,7 @@ module.exports = {
       version: "detect",
     },
   },
-  plugins: ["react", "jsx-a11y", "prettier", "cypress"],
+  plugins: ["react", "jsx-a11y", "prettier"],
   rules: {
     "prettier/prettier": "error",
     "no-console": "error",

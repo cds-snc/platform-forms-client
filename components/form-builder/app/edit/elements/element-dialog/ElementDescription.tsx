@@ -2,7 +2,7 @@ import React from "react";
 import { FormElementTypes } from "@lib/types";
 import { useTranslation } from "next-i18next";
 
-import { Button } from "../../../shared";
+import { Button } from "@components/globals";
 
 export const ElementDescription = ({
   id,

@@ -1,0 +1,11 @@
+{
+  "title": "Ce site Web ne fonctionne pas sur Internet Explorer 11",
+  "body1": "Pour accéder au site Web, copiez-collez le lien suivant dans un autre navigateur.",
+  "copy-link": "Copier le lien",
+  "body2": "Téléchargez l’un des navigateurs suivants si aucun n’est déjà installé :",
+  "safari-description": "(Seulement sur les appareils Apple)",
+  "chrome-link": "https://www.google.com/intl/fr/chrome/",
+  "edge-link": "https://www.microsoft.com/fr-fr/edge",
+  "mozilla-link": "https://www.mozilla.org/fr/firefox/new/",
+  "safari-link": "https://support.apple.com/fr_CA/downloads/safari"
+}

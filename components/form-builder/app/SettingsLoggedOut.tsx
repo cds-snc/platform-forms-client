@@ -1,7 +1,6 @@
 import React from "react";
 import { Card } from "@components/globals/card/Card";
-import { themes } from "./shared/Button";
-import Link from "next/link";
+import { LinkButton } from "@components/globals";
 import { useSession } from "next-auth/react";
 import { useTranslation } from "next-i18next";
 
@@ -31,22 +30,12 @@ export const SettingsLoggedOut = () => {
         <a href={createAccountLink}>{t("settingsResponseDelivery.card.text4")}</a>.
       </p>
       <p>
-        <Link href={signInLink} legacyBehavior>
-          <a
-            href={signInLink}
-            className={`${themes.primary} ${themes.base} ${themes.htmlLink} mr-4`}
-          >
-            {t("settingsResponseDelivery.card.signinButton")}
-          </a>
-        </Link>
-        <Link href={createAccountLink} legacyBehavior>
-          <a
-            href={createAccountLink}
-            className={`text-black-default active:text-black-default visited:text-black-default ${themes.secondary} ${themes.base} no-underline active:shadow-none focus:shadow-none`}
-          >
-            {t("settingsResponseDelivery.card.createButton")}
-          </a>
-        </Link>
+        <LinkButton.Primary href={signInLink} className="mr-4">
+          {t("settingsResponseDelivery.card.signinButton")}
+        </LinkButton.Primary>
+        <LinkButton.Secondary href={createAccountLink}>
+          {t("settingsResponseDelivery.card.createButton")}
+        </LinkButton.Secondary>
       </p>
     </Card>
   );

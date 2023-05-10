@@ -3,7 +3,8 @@ import { useTranslation } from "next-i18next";
 import { FormElementTypes } from "@lib/types";
 import axios from "axios";
 
-import { useDialogRef, Dialog, TagInput, Button, InfoDetails } from "./shared";
+import { useDialogRef, Dialog, TagInput, InfoDetails } from "./shared";
+import { Button } from "@components/globals";
 import { useTemplateStore } from "../store";
 import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
