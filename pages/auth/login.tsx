@@ -25,7 +25,6 @@ const Login = () => {
     cognitoErrorDescription,
     cognitoErrorCallToActionLink,
     cognitoErrorCallToActionText,
-    cognitoErrorIsDismissible,
     setCognitoErrorStates,
     resetCognitoErrorState,
     login,
@@ -79,25 +78,22 @@ const Login = () => {
         validateOnChange={false}
         validateOnBlur={false}
         validationSchema={validationSchema}
+        validate={resetCognitoErrorState}
+        onReset={resetCognitoErrorState}
       >
         {({ handleSubmit, errors }) => (
           <>
             {cognitoError && (
               <Alert
                 type={ErrorStatus.ERROR}
-                heading={t("InternalServiceExceptionLogin.title", { ns: "cognito-errors" })}
-                onDismiss={resetCognitoErrorState}
+                heading={cognitoError}
                 id="cognitoErrors"
                 focussable={true}
               >
-                {/* TODO refactor to handle other server errors as well */}
-                <p className="text-red font-bold">
-                  {t("InternalServiceExceptionLogin.description", { ns: "cognito-errors" })}{" "}
-                  <Link href={t("InternalServiceExceptionLogin.link", { ns: "cognito-errors" })}>
-                    {t("InternalServiceExceptionLogin.linkText", { ns: "cognito-errors" })}
-                  </Link>
-                  .
-                </p>
+                {cognitoErrorDescription}
+                {cognitoErrorCallToActionLink ? (
+                  <Link href={cognitoErrorCallToActionLink}>{cognitoErrorCallToActionText}</Link>
+                ) : undefined}
               </Alert>
             )}
             {Object.keys(errors).length > 0 && !cognitoError && (

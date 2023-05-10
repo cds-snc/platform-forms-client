@@ -27,7 +27,7 @@ export const Alert = ({
   children,
   className,
   validation,
-  dismissible,
+  dismissible = false, // Use only in rare cases because this will be inconsistent with other alert designs
   onDismiss,
   focussable = false,
   ...props
@@ -66,7 +66,6 @@ export const Alert = ({
       {...props}
       role="alert"
     >
-      {/* Use only in rare cases because this will be inconsistent with other alert designs */}
       {dismissible ? (
         <button
           id="dismissButton"

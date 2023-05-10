@@ -280,13 +280,13 @@ export const useAuth = () => {
           setCognitoErrorDescription(t("UsernameOrPasswordIncorrect.description"));
           setCognitoErrorCallToActionText(t("UsernameOrPasswordIncorrect.linkText"));
           setCognitoErrorCallToActionLink(t("UsernameOrPasswordIncorrect.link"));
-          setCognitoErrorIsDismissible(false);
         } else if (responseErrorMessage.includes("GoogleCredentialsExist")) {
           await router.push("/admin/login");
         } else if (responseErrorMessage.includes("PasswordResetRequiredException")) {
           await router.push("/auth/resetpassword");
         } else {
-          setCognitoError(t("InternalServiceException"));
+          // NOTE: This error was previously not logged
+          throw Error(responseErrorMessage);
         }
       } else if (response?.ok) {
         if (didConfirm.current) {
@@ -297,7 +297,10 @@ export const useAuth = () => {
       }
     } catch (err) {
       logMessage.error(err);
-      setCognitoError(t("InternalServiceException"));
+      setCognitoError(t("InternalServiceExceptionLogin.title"));
+      setCognitoErrorDescription(t("InternalServiceExceptionLogin.description"));
+      setCognitoErrorCallToActionText(t("InternalServiceExceptionLogin.linkText"));
+      setCognitoErrorCallToActionLink(t("InternalServiceExceptionLogin.link"));
     } finally {
       setSubmitting(false);
     }
