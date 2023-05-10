@@ -14,6 +14,7 @@ import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth/next";
 import Link from "next/link";
 import Head from "next/head";
+import { ErrorStatus } from "@components/forms/Alert/Alert";
 
 const Register = () => {
   const { isLoading, status: registrationOpen } = useFlag("accountRegistration");
@@ -121,7 +122,7 @@ const Register = () => {
           <>
             {cognitoError && (
               <Alert
-                type="error"
+                type={ErrorStatus.ERROR}
                 heading={cognitoError}
                 onDismiss={resetCognitoErrorState}
                 id="cognitoErrors"
@@ -135,7 +136,7 @@ const Register = () => {
             )}
             {Object.keys(errors).length > 0 && !cognitoError && (
               <Alert
-                type="error"
+                type={ErrorStatus.ERROR}
                 validation={true}
                 tabIndex={0}
                 id="registrationValidationErrors"
@@ -218,8 +219,8 @@ const Register = () => {
                 />
               </div>
               <p className="mb-10 -mt-8 gc-description">
-                {t("signUpRegistration.slaAgreement")}&nbsp;
-                <Link href={"/sla"}>{t("signUpRegistration.slaAgreementLink")}</Link>
+                {t("signUpRegistration.termsAgreement")}&nbsp;
+                <Link href={"/terms-of-use"}>{t("signUpRegistration.termsAgreementLink")}</Link>
               </p>
 
               <Button className="gc-button--blue" type="submit">
