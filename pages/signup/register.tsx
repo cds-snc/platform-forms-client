@@ -15,6 +15,7 @@ import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth/next";
 import Link from "next/link";
 import Head from "next/head";
+import { ErrorStatus } from "@components/forms/Alert/Alert";
 
 const Register = () => {
   const { isLoading, status: registrationOpen } = useFlag("accountRegistration");
@@ -122,7 +123,7 @@ const Register = () => {
           <>
             {cognitoError && (
               <Alert
-                type="error"
+                type={ErrorStatus.ERROR}
                 heading={cognitoError}
                 onDismiss={resetCognitoErrorState}
                 id="cognitoErrors"
@@ -136,7 +137,7 @@ const Register = () => {
             )}
             {Object.keys(errors).length > 0 && !cognitoError && (
               <Alert
-                type="error"
+                type={ErrorStatus.ERROR}
                 validation={true}
                 tabIndex={0}
                 id="registrationValidationErrors"

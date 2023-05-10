@@ -13,6 +13,7 @@ import Link from "next/link";
 import Head from "next/head";
 import * as Yup from "yup";
 import { isLowerCase, isNumber, isSymbol, isUpperCase, isValidGovEmail } from "@lib/validation";
+import { ErrorStatus } from "@components/forms/Alert/Alert";
 
 const ResetPassword = () => {
   const {
@@ -141,7 +142,7 @@ const ResetPassword = () => {
             <>
               {cognitoError && (
                 <Alert
-                  type="error"
+                  type={ErrorStatus.ERROR}
                   heading={cognitoError}
                   onDismiss={resetCognitoErrorState}
                   id="cognitoErrors"
@@ -155,7 +156,7 @@ const ResetPassword = () => {
               )}
               {Object.keys(errors).length > 0 && !cognitoError && (
                 <Alert
-                  type="error"
+                  type={ErrorStatus.ERROR}
                   validation={true}
                   tabIndex={0}
                   id="registrationValidationErrors"
@@ -224,7 +225,7 @@ const ResetPassword = () => {
           <>
             {cognitoError && (
               <Alert
-                type="error"
+                type={ErrorStatus.ERROR}
                 heading={cognitoError}
                 onDismiss={resetCognitoErrorState}
                 id="cognitoErrors"
@@ -238,7 +239,7 @@ const ResetPassword = () => {
             )}
             {Object.keys(errors).length > 0 && !cognitoError && (
               <Alert
-                type="error"
+                type={ErrorStatus.ERROR}
                 validation={true}
                 tabIndex={0}
                 id="registrationValidationErrors"

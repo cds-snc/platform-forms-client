@@ -12,6 +12,7 @@ import Loader from "../../globals/Loader";
 import classNames from "classnames";
 import { Responses, PublicFormRecord } from "@lib/types";
 import { NextRouter } from "next/router";
+import { ErrorStatus } from "../Alert/Alert";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -211,11 +212,11 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   ) : (
     <>
       {formStatusError && (
-        <Alert type="error" heading={formStatusError} tabIndex={0} id={serverErrorId} />
+        <Alert type={ErrorStatus.ERROR} heading={formStatusError} tabIndex={0} id={serverErrorId} />
       )}
       {errorList && (
         <Alert
-          type="error"
+          type={ErrorStatus.ERROR}
           heading={t("input-validation.heading")}
           validation={true}
           id={errorId}

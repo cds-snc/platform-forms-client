@@ -1,6 +1,12 @@
 {
   "CodeMismatchException": "Le code de sécurité fourni ne correspond pas à nos registres.",
   "InternalServiceException": "Une erreur s’est produite lors de votre demande. Veuillez réessayer plus tard.",
+  "InternalServiceExceptionLogin": {
+    "title": "Il y a eu un problème lors de la connexion.",
+    "description": "Veuillez réessayer plus tard ou contacter ",
+    "link": "/form-builder/support",
+    "linkText": "l'équipe de soutien"
+  },
   "TooManyRequestsException": "Trop de demandes. Réessayez plus tard.",
   "UsernameExistsException": "Ce compte existe déjà.",
   "ExpiredCodeException": "Le code de confirmation a expiré. Veuillez en demander un nouveau.",

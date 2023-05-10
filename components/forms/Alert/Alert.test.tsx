@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, cleanup } from "@testing-library/react";
 
-import { Alert } from "./Alert";
+import { Alert, ErrorStatus } from "./Alert";
 
 describe("Alert component", () => {
   afterEach(cleanup);
@@ -9,7 +9,7 @@ describe("Alert component", () => {
 
   test("success alert", () => {
     render(
-      <Alert type="success" heading="Success status">
+      <Alert type={ErrorStatus.SUCCESS} heading="Success status">
         {text}
       </Alert>
     );
@@ -20,7 +20,7 @@ describe("Alert component", () => {
   });
   test("success warning", () => {
     render(
-      <Alert type="warning" heading="Warning status">
+      <Alert type={ErrorStatus.WARNING} heading="Warning status">
         {text}
       </Alert>
     );
@@ -31,7 +31,7 @@ describe("Alert component", () => {
   });
   test("error alert", () => {
     render(
-      <Alert type="error" heading="Error status">
+      <Alert type={ErrorStatus.ERROR} heading="Error status">
         {text}
       </Alert>
     );
@@ -42,7 +42,7 @@ describe("Alert component", () => {
   });
   test("info alert", () => {
     render(
-      <Alert type="info" heading="Info status">
+      <Alert type={ErrorStatus.INFO} heading="Info status">
         {text}
       </Alert>
     );
@@ -53,7 +53,7 @@ describe("Alert component", () => {
   });
   test("validation alert", () => {
     render(
-      <Alert validation heading="Validation status">
+      <Alert type={ErrorStatus.ERROR} validation heading="Validation status">
         {text}
       </Alert>
     );

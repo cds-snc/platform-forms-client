@@ -24,6 +24,7 @@ import {
 import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
 import { checkOne } from "@lib/cache/flags";
+import { ErrorStatus } from "@components/forms/Alert/Alert";
 
 export default function Contactus() {
   const router = useRouter();
@@ -303,7 +304,7 @@ export default function Contactus() {
             <>
               {errorMessage && (
                 <Alert
-                  type="error"
+                  type={ErrorStatus.ERROR}
                   validation={true}
                   tabIndex={0}
                   id="requestSubmissionError"
@@ -315,7 +316,7 @@ export default function Contactus() {
 
               {Object.keys(errors).length > 0 && (
                 <Alert
-                  type="error"
+                  type={ErrorStatus.ERROR}
                   validation={true}
                   tabIndex={0}
                   id="validationErrors"
