@@ -36,7 +36,7 @@ const FormDisplayLayout = ({ children, formRecord, embedded }: FormDisplayLayout
         <div id="page-container">
           <main id="content">{children}</main>
         </div>
-        {!embedded && <Footer disableGcBranding={formRecord.form.brand?.disableGcBranding} />}
+        {!embedded && <Footer disableGcBranding={formRecord?.form.brand?.disableGcBranding} />}
       </div>
     </>
   );

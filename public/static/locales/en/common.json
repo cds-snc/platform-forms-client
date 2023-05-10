@@ -108,5 +108,14 @@
   "attention": {
     "warning": "Warning",
     "error": "Error"
+  },
+  "errorPanel": {
+    "defaultTitle": "Something went wrong",
+    "defaultMessage": "Sorry, there was a problem and we lost you.",
+    "cta": {
+      "yourForms": "Back to Your forms",
+      "home": "Back to home",
+      "support": "Get support"
+    }
   }
 }

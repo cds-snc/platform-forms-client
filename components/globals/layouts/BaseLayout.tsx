@@ -8,7 +8,22 @@ import Fip from "../Fip";
 interface BaseProps extends React.PropsWithChildren {
   showLanguageToggle?: boolean;
   showLogin?: boolean;
+  className?: string;
 }
+
+export const Layout = ({ children, showLanguageToggle, showLogin, className }: BaseProps) => {
+  return (
+    <>
+      <header>
+        <Fip {...{ showLanguageToggle, showLogin }} />
+      </header>
+      <div id="page-container" className={className}>
+        <main id="content">{children}</main>
+      </div>
+      <Footer />
+    </>
+  );
+};
 
 const Base = ({ children, showLanguageToggle, showLogin }: BaseProps) => {
   return (

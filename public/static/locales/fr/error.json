@@ -6,11 +6,11 @@
     "desc": "Retourner à la page d'accueil"
   },
   "404": {
-    "title": "Nous ne pouvons pas trouver cette page Web",
-    "body": "Nous sommes désolés que vous ayez atterri ici. Il se peut que la page soit déplacée ou supprimée."
+    "title": "Page non trouvée",
+    "body": "Désolé, la page que vous cherchez n'a pas été trouvée."
   },
   "500": {
-    "title": "Erreur inattendue",
-    "body": "Cette page ne fonctionne pas présentement. Veuillez réessayer plus tard."
+    "title": "Quelque chose a mal tourné",
+    "body": "Il y a un problème avec le service en ce moment. Veuillez réessayer plus tard."
   }
 }

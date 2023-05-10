@@ -1,24 +1,21 @@
 import React from "react";
-
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import Link from "next/link";
 import Head from "next/head";
 
+import { ErrorPanel } from "@components/globals";
+
 const PageNotFound = () => {
-  const { t, i18n } = useTranslation("error");
+  const { t } = useTranslation("error");
   return (
     <>
       <Head>
         <title>{t("404.title")}</title>
       </Head>
-      <h1>{t("404.title")}</h1>
-
-      <div>
-        <p>{t("404.body")}</p>
-        <Link href={t("home-link.link")} locale={i18n.language}>
-          {t("home-link.desc")}
-        </Link>
+      <div className="mt-10">
+        <ErrorPanel headingTag="h1" title={t("404.title")}>
+          <p>{t("404.body")}</p>
+        </ErrorPanel>
       </div>
     </>
   );
