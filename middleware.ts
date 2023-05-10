@@ -5,7 +5,9 @@ export function middleware(req: NextRequest) {
   if (req.nextUrl.pathname.match(/\/(id.+)/)) {
     const { browser } = userAgent(req);
     if (browser.name && browserNameList.includes(browser.name.toLowerCase())) {
-      return NextResponse.rewrite(`${req.nextUrl.origin}/not-supported`);
+      return NextResponse.redirect(
+        `${req.nextUrl.origin}/not-supported?referer=${req.nextUrl.origin}${req.nextUrl.pathname}`
+      );
     }
   }
   return NextResponse.next();
