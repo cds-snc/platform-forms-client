@@ -1,7 +1,7 @@
 {
   "unlockPublishing": {
     "title": "Unlock publishing",
-    "paragraph1": "Before you publish your first form, provide the contact information of your manager or the person you report to. GC Forms will not display their contact information publicly.",
+    "paragraph1": "Before you publish your first form, provide the contact information of your manager or the person you report to. We ask for their email, as a back-up, in case we cannot reach you in the future. We will not display their contact information publicly.",
     "form": {
       "field1": {
         "title": "Provide the email of your manager, or the person you report to",
