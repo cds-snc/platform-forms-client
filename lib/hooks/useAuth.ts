@@ -285,7 +285,6 @@ export const useAuth = () => {
         } else if (responseErrorMessage.includes("PasswordResetRequiredException")) {
           await router.push("/auth/resetpassword");
         } else {
-          // NOTE: This error was previously not logged
           throw Error(responseErrorMessage);
         }
       } else if (response?.ok) {
