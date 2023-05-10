@@ -1,16 +1,16 @@
 {
   "signUpConfirmation": {
     "title": "Check your email",
-    "resendConfirmationCodeButton": "Send a new security code",
-    "emailHasBeenSent": "An email with a security code has been sent to",
+    "resendConfirmationCodeButton": "Send a new verification code",
+    "emailHasBeenSent": "An email with a verification code has been sent to",
     "confirmButton": "Continue",
     "resendConfirmationCode": {
       "title": "Check your email",
-      "body": "An email with a security code has been sent to you"
+      "body": "An email with a verification code has been sent to you"
     },
     "fields": {
       "confirmationCode": {
-        "label": "Enter the security code to finish creating your account",
+        "label": "Enter the verification code to finish creating your account",
         "error": {
           "number": "This must be a number"
         }
