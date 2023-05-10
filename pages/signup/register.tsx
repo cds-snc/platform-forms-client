@@ -218,8 +218,8 @@ const Register = () => {
                 />
               </div>
               <p className="mb-10 -mt-8 gc-description">
-                {t("signUpRegistration.slaAgreement")}&nbsp;
-                <Link href={"/sla"}>{t("signUpRegistration.slaAgreementLink")}</Link>
+                {t("signUpRegistration.termsAgreement")}&nbsp;
+                <Link href={"/terms-of-use"}>{t("signUpRegistration.termsAgreementLink")}</Link>
               </p>
 
               <Button className="gc-button--blue" type="submit">
