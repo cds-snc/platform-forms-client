@@ -21,6 +21,7 @@ import { logMessage } from "@lib/logger";
 import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import { ErrorStatus } from "@components/forms/Alert/Alert";
 
 export default function UnlockPublishing() {
   const { t, i18n } = useTranslation(["unlock-publishing", "common"]);
@@ -103,7 +104,7 @@ export default function UnlockPublishing() {
               <>
                 {errorState.message && (
                   <Alert
-                    type="error"
+                    type={ErrorStatus.ERROR}
                     validation={true}
                     tabIndex={0}
                     id="unlockPublishingSubmissionError"
@@ -115,7 +116,7 @@ export default function UnlockPublishing() {
 
                 {Object.keys(errors).length > 0 && (
                   <Alert
-                    type="error"
+                    type={ErrorStatus.ERROR}
                     validation={true}
                     tabIndex={0}
                     id="unlockPublishingValidationErrors"
