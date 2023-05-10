@@ -2,10 +2,9 @@ import React from "react";
 import useSWR from "swr";
 import { useTranslation } from "next-i18next";
 import Image from "next/image";
-import Link from "next/link";
 
 import Loader from "@components/globals/Loader";
-import { Button, themes } from "@components/globals";
+import { Button, LinkButton } from "@components/globals";
 import { useDialogRef, Dialog } from "./Dialog";
 import { DownloadFileButton } from "./DownloadFileButton";
 import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
@@ -111,14 +110,9 @@ export const ConfirmFormDeleteDialog = ({
             </p>
             <p className="mb-1">{t("formDeleteResponses.message3")}</p>
             <p className="mb-6">{t("formDeleteResponses.message4")}</p>
-            <Link href={responsesLink} legacyBehavior>
-              <a
-                href={responsesLink}
-                className={`${themes.primary} ${themes.base} ${themes.htmlLink} mr-4`}
-              >
-                {t("formDeleteResponses.cta")}
-              </a>
-            </Link>
+            <LinkButton.Primary href={responsesLink}>
+              {t("formDeleteResponses.cta")}
+            </LinkButton.Primary>
           </div>
         </div>
       </Dialog>

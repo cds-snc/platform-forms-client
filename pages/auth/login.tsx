@@ -1,6 +1,7 @@
 import React, { ReactElement } from "react";
 import { Formik } from "formik";
-import { Button, TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
+import { TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
+import { Button } from "@components/globals";
 import { useAuth, useFlag } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
