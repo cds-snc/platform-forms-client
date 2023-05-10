@@ -94,6 +94,7 @@ const Login = () => {
                 {cognitoErrorCallToActionLink ? (
                   <Link href={cognitoErrorCallToActionLink}>{cognitoErrorCallToActionText}</Link>
                 ) : undefined}
+                .
               </Alert>
             )}
             {Object.keys(errors).length > 0 && !cognitoError && (
