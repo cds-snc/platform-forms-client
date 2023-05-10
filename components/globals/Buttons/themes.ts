@@ -9,4 +9,6 @@ export const themes = {
     "bg-red-destructive text-white-default border-red-destructive hover:bg-red-hover hover:border-red-hover",
   link: "!p-0 !border-none text-blue-default underline bg-transparent hover:no-underline focus:!text-white-default",
   icon: "!border-none bg-gray-selected hover:bg-gray-600 !rounded-full max-h-9 !p-1.5 ml-1.5",
-};
+} as const;
+
+export type Theme = keyof typeof themes;

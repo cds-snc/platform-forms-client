@@ -1,7 +1,8 @@
 import React, { ReactElement } from "react";
-import { themes } from "./themes";
+import { themes, Theme } from "./themes";
 
 export const Button = ({
+  type = "button",
   children,
   onClick,
   className,
@@ -15,6 +16,7 @@ export const Button = ({
   buttonRef,
   dataTestId,
 }: {
+  type?: "button" | "submit" | "reset";
   children?: JSX.Element | string;
   id?: string;
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
@@ -23,7 +25,7 @@ export const Button = ({
   iconWrapperClassName?: string;
   disabled?: boolean;
   "aria-label"?: string;
-  theme?: "primary" | "secondary" | "destructive" | "link" | "icon";
+  theme?: Theme;
   tabIndex?: number;
   buttonRef?: (el: HTMLButtonElement) => void;
   dataTestId?: string;
@@ -34,7 +36,7 @@ export const Button = ({
     id={id}
     disabled={disabled}
     aria-label={ariaLabel}
-    type="button"
+    type={type}
     tabIndex={tabIndex}
     ref={buttonRef}
     data-testid={dataTestId}

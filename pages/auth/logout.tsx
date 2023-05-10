@@ -1,10 +1,10 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
-import Link from "next/link";
 import Head from "next/head";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetServerSideProps } from "next";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
+import { LinkButton } from "@components/globals";
 
 const Logout = () => {
   const { i18n, t } = useTranslation("logout");
@@ -31,7 +31,9 @@ const Logout = () => {
           {t("logoutDate")} : {logoutDate}
         </div>
         <div className="gc-go-to-login-btn">
-          <Link href={`/${i18n.language}/auth/login`}>{t("goToSignInLabel")}</Link>
+          <LinkButton.Primary href={`/${i18n.language}/auth/login`}>
+            {t("goToSignInLabel")}
+          </LinkButton.Primary>
         </div>
       </div>
     </>
