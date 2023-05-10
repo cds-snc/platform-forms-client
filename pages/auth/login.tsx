@@ -12,6 +12,7 @@ import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { Confirmation } from "@components/auth/Confirmation/Confirmation";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import * as Yup from "yup";
+import { ErrorStatus } from "@components/forms/Alert/Alert";
 
 const Login = () => {
   const {
@@ -24,7 +25,6 @@ const Login = () => {
     cognitoErrorDescription,
     cognitoErrorCallToActionLink,
     cognitoErrorCallToActionText,
-    cognitoErrorIsDismissible,
     setCognitoErrorStates,
     resetCognitoErrorState,
     login,
@@ -78,26 +78,28 @@ const Login = () => {
         validateOnChange={false}
         validateOnBlur={false}
         validationSchema={validationSchema}
+        validate={resetCognitoErrorState}
+        onReset={resetCognitoErrorState}
       >
         {({ handleSubmit, errors }) => (
           <>
             {cognitoError && (
               <Alert
-                type="error"
+                type={ErrorStatus.ERROR}
                 heading={cognitoError}
-                onDismiss={resetCognitoErrorState}
                 id="cognitoErrors"
-                dismissible={cognitoErrorIsDismissible}
+                focussable={true}
               >
-                {cognitoErrorDescription}&nbsp;
+                {cognitoErrorDescription}
                 {cognitoErrorCallToActionLink ? (
                   <Link href={cognitoErrorCallToActionLink}>{cognitoErrorCallToActionText}</Link>
                 ) : undefined}
+                .
               </Alert>
             )}
             {Object.keys(errors).length > 0 && !cognitoError && (
               <Alert
-                type="error"
+                type={ErrorStatus.ERROR}
                 validation={true}
                 tabIndex={0}
                 id="loginValidationErrors"
