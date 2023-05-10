@@ -5,7 +5,7 @@
     "form": {
       "field1": {
         "title": "Provide the email of your manager, or the person you report to",
-        "description": "We'll notify them about your publishing ability in GC Forms and our service-level agreement."
+        "description": "We'll notify them about your publishing ability in GC Forms and our terms of use."
       },
       "field2": {
         "title": "What department or organization do you work for?"
@@ -20,7 +20,7 @@
     "title": "Request to unlock publishing submitted",
     "whatNext": {
       "title": "What happens next?",
-      "paragraph1": "We'll process your request and notify your manager about your publishing ability in GC Forms and our service-level agreement.",
+      "paragraph1": "We'll process your request and notify your manager about your publishing ability in GC Forms and our terms of use.",
       "paragraph2": "It may take up to 2 business days before you can publish. ",
       "paragraph3": "You'll receive an email notification when publishing has been unlocked.",
       "paragraph4": "While you wait, you can continue to explore and draft forms."
