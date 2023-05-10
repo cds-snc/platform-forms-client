@@ -21,8 +21,8 @@
     "title": "Créer un compte",
     "alreadyHaveAnAccount": "Si vous avez déjà un compte,",
     "alreadyHaveAnAccountLink": "connectez-vous.",
-    "slaAgreement": "En créant un compte, vous acceptez",
-    "slaAgreementLink": "les conditions d'utilisation.",
+    "termsAgreement": "En créant un compte, vous acceptez",
+    "termsAgreementLink": "les conditions d'utilisation.",
     "signUpButton": "Continuer",
     "fields": {
       "username": {
