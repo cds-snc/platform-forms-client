@@ -60,7 +60,7 @@ export const Alert = ({
   return (
     <div
       ref={refFocus}
-      tabIndex={-1}
+      {...(focussable && { tabIndex: -1 })}
       className={classes}
       data-testid="alert"
       {...props}
