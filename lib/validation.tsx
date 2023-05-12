@@ -310,7 +310,7 @@ export const isValidGovEmail = (email: string): boolean => {
  * @param field A string containing a lower case character
  * @returns {boolean} The validation result
  */
-export const isLowerCase = (field: string): boolean => {
+export const containsLowerCase = (field: string): boolean => {
   const reg = new RegExp("^(?=.*?[a-z])");
   if (!field || !reg.test(field)) {
     return false;
@@ -323,7 +323,7 @@ export const isLowerCase = (field: string): boolean => {
  * @param field A string containing an uppwer case character
  * @returns {boolean} The validation result
  */
-export const isUpperCase = (field: string): boolean => {
+export const containsUpperCase = (field: string): boolean => {
   const reg = new RegExp("^(?=.*?[A-Z])");
   if (!field || !reg.test(field)) {
     return false;
@@ -336,7 +336,7 @@ export const isUpperCase = (field: string): boolean => {
  * @param field A string containing a number
  * @returns {boolean} The validation result
  */
-export const isNumber = (field: string): boolean => {
+export const containsNumber = (field: string): boolean => {
   const reg = new RegExp("^(?=.*?[0-9])");
   if (!field || !reg.test(field)) {
     return false;
@@ -349,8 +349,34 @@ export const isNumber = (field: string): boolean => {
  * @param field A string containing a symbol character
  * @returns {boolean} The validation result
  */
-export const isSymbol = (field: string): boolean => {
-  const reg = new RegExp("^(?=.*?[#?!@$%^&*-])");
+export const containsSymbol = (field: string): boolean => {
+  const reg = new RegExp("^(?=.*?[^$*.[]{}()?\"!@#%&/\\,><':;|_~`=+- ])");
+  if (!field || !reg.test(field)) {
+    return false;
+  }
+  return true;
+};
+
+/**
+ * This function tests whether a string contains a leading space
+ * @param field A string to test
+ * @returns {boolean} The validation result
+ */
+export const containsLeadingSpace = (field: string): boolean => {
+  const reg = new RegExp("^(?!s+)");
+  if (!field || !reg.test(field)) {
+    return false;
+  }
+  return true;
+};
+
+/**
+ * This function tests whether a string contains a trailing space
+ * @param field A string to test
+ * @returns {boolean} The validation result
+ */
+export const containsTrailingSpace = (field: string): boolean => {
+  const reg = new RegExp("^(?!.*s+$)");
   if (!field || !reg.test(field)) {
     return false;
   }

@@ -12,7 +12,13 @@ import { checkOne } from "@lib/cache/flags";
 import Link from "next/link";
 import Head from "next/head";
 import * as Yup from "yup";
-import { isLowerCase, isNumber, isSymbol, isUpperCase, isValidGovEmail } from "@lib/validation";
+import {
+  containsLowerCase,
+  containsNumber,
+  containsSymbol,
+  containsUpperCase,
+  isValidGovEmail,
+} from "@lib/validation";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
 
 const ResetPassword = () => {
@@ -59,22 +65,22 @@ const ResetPassword = () => {
       .test(
         "password-valid-lowerCase",
         t("resetPassword.fields.password.error.oneLowerCase"),
-        (password = "") => isLowerCase(password)
+        (password = "") => containsLowerCase(password)
       )
       .test(
         "password-valid-upperCase",
         t("resetPassword.fields.password.error.oneUpperCase"),
-        (password = "") => isUpperCase(password)
+        (password = "") => containsUpperCase(password)
       )
       .test(
         "password-valid-number",
         t("resetPassword.fields.password.error.oneNumber"),
-        (password = "") => isNumber(password)
+        (password = "") => containsNumber(password)
       )
       .test(
         "password-valid-symbol",
         t("resetPassword.fields.password.error.oneSymbol"),
-        (password = "") => isSymbol(password)
+        (password = "") => containsSymbol(password)
       ),
     passwordConfirmation: Yup.string()
       .required(t("input-validation.required", { ns: "common" }))
