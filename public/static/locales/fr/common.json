@@ -109,5 +109,14 @@
   "attention": {
     "warning": "Avertissement",
     "error": "Erreur"
+  },
+  "errorPanel": {
+    "defaultTitle": "Quelque chose a mal tourné",
+    "defaultMessage": "Désolé, il y a un problème et nous vous avons perdu.",
+    "cta": {
+      "yourForms": "Retourner à Vos formulaires",
+      "home": "Retourner à l’accueil",
+      "support": "Obtenir du soutien"
+    }
   }
 }

@@ -1,23 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useTranslation } from "next-i18next";
-import Link from "next/link";
-import Head from "next/head";
+import { useTranslation } from "react-i18next";
+import { ErrorPanel } from "@components/globals";
 
 function Error({ statusCode }) {
   const { t } = useTranslation("error");
-  return (
-    <>
-      <Head>
-        <title>{t("500.title")}</title>
-      </Head>
-      <h1>
-        {t("500.title")} {statusCode}
-      </h1>
+  if (statusCode === 500) {
+    <ErrorPanel headingTag="h1" title={t("500.title")} className={`error-${statusCode}`}>
       <p>{t("500.body")}</p>
-      <Link href={t("home-link.link")}>{t("home-link.desc")}</Link>
-    </>
-  );
+    </ErrorPanel>;
+  }
+
+  return <ErrorPanel className={`error-${statusCode}`} />;
 }
 
 Error.getInitialProps = ({ res, err }) => {
