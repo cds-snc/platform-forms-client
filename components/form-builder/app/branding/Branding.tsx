@@ -6,7 +6,7 @@ import axios from "axios";
 
 import { Logos, options } from "./";
 import { useTemplateStore } from "../../store";
-import { SettingsLoggedOut } from "../SettingsLoggedOut";
+import { LoggedOutTabName, LoggedOutTab } from "../LoggedOutTab";
 import { useTemplateApi } from "../../hooks";
 import { toast } from "../shared";
 import { Button } from "@components/globals";
@@ -82,7 +82,7 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
   });
 
   if (status !== "authenticated") {
-    return <SettingsLoggedOut />;
+    return <LoggedOutTab tabName={LoggedOutTabName.SETTINGS} />;
   }
 
   return (

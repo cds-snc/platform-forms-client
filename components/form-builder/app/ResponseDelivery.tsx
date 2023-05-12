@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useTranslation } from "next-i18next";
 
 import { SetResponseDelivery } from "./SetResponseDelivery";
-import { SettingsLoggedOut } from "./SettingsLoggedOut";
+import { LoggedOutTabName, LoggedOutTab } from "./LoggedOutTab";
 import { useTemplateContext } from "../hooks";
 
 export const ResponseDelivery = () => {
@@ -18,7 +18,7 @@ export const ResponseDelivery = () => {
   return (
     <>
       <h1 className="visually-hidden">{t("formSettings")}</h1>
-      <SettingsLoggedOut />
+      <LoggedOutTab tabName={LoggedOutTabName.SETTINGS} />
       <SetResponseDelivery />
     </>
   );
