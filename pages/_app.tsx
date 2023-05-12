@@ -43,11 +43,7 @@ const MyApp: React.FC<AppPropsWithLayout> = ({
       >
         <AccessControlProvider>
           {Component.getLayout ? (
-            Component.getLayout(
-              <ErrorBoundary>
-                <Component {...pageProps} />
-              </ErrorBoundary>
-            )
+            <ErrorBoundary>{Component.getLayout(<Component {...pageProps} />)}</ErrorBoundary>
           ) : (
             <BaseLayout>
               <ErrorBoundary>
