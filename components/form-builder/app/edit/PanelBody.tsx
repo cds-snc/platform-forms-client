@@ -15,8 +15,8 @@ export const PanelBody = ({
 }: {
   item: FormElementWithIndex;
   elIndex?: number;
-  onQuestionChange: (itemIndex: number, val: string, lang: Language) => void;
-  onRequiredChange: (itemIndex: number, checked: boolean) => void;
+  onQuestionChange: (itemId: number, val: string, lang: Language) => void;
+  onRequiredChange: (itemId: number, checked: boolean) => void;
 }) => {
   const { t } = useTranslation("form-builder");
   const isRichText = item.type === "richText";

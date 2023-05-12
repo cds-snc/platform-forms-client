@@ -133,7 +133,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   updateSecurityAttribute: (value: SecurityAttribute) => void;
   propertyPath: (id: number, field: string, lang?: Language) => string;
   unsetField: (path: string) => void;
-  duplicateElement: (elIndex: number) => void;
+  duplicateElement: (id: number) => void;
   subDuplicateElement: (elIndex: number, subIndex: number) => void;
   importTemplate: (jsonConfig: FormProperties) => void;
   getSchema: () => string;
@@ -340,7 +340,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                   subIndex
                 ].properties.choices?.splice(choiceIndex, 1);
               }),
-            duplicateElement: (elIndex) => {
+            duplicateElement: (itemId) => {
+              const elIndex = get().form.elements.findIndex((el) => el.id === itemId);
               set((state) => {
                 const id = incrementElementId(state.form.elements);
                 // deep copy the element

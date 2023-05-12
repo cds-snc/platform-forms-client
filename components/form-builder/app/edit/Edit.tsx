@@ -53,8 +53,10 @@ export const Edit = () => {
     100
   );
 
+  const sortedElements = sortByLayout({ layout, elements: [...elements] });
+
   // grab only the data we need to render the question number
-  const elementTypes = sortByLayout({ layout, elements: [...elements] }).map((element) => ({
+  const elementTypes = sortedElements.map((element) => ({
     id: element.id,
     type: element.type,
   }));
@@ -116,14 +118,16 @@ export const Edit = () => {
         ariaLabel={t("richTextIntroTitle")}
       />
       <RefsProvider>
-        {layout.map((id, index) => {
-          const element = elements.find((element) => element.id === id);
-          if (element) {
-            const questionNumber = getQuestionNumber(element, elementTypes);
-            const item = { ...element, index, questionNumber };
-            return <ElementPanel elements={elements} item={item} key={item.id} />;
-          }
-        })}
+        {layout.length >= 1 &&
+          layout.map((id, index) => {
+            const element = sortedElements.find((element) => element.id === id);
+
+            if (element) {
+              const questionNumber = getQuestionNumber(element, elementTypes);
+              const item = { ...element, index, questionNumber };
+              return <ElementPanel elements={sortedElements} item={item} key={item.id} />;
+            }
+          })}
       </RefsProvider>
       <>
         <RichTextLocked

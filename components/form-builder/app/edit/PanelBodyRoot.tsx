@@ -5,7 +5,8 @@ import { FormElementWithIndex, Language, LocalizedElementProperties } from "../.
 import { useTemplateStore } from "../../store";
 
 export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
-  const { localizeField, updateField } = useTemplateStore((s) => ({
+  const { updateField, propertyPath } = useTemplateStore((s) => ({
+    propertyPath: s.propertyPath,
     localizeField: s.localizeField,
     updateField: s.updateField,
   }));
@@ -17,18 +18,12 @@ export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
   // the `panel body` should be the ony thing that knows about the store
   // and the only thing that should be able to update the store
 
-  const onQuestionChange = (itemIndex: number, val: string, lang: Language) => {
-    updateField(
-      `form.elements[${itemIndex}].properties.${localizeField(
-        LocalizedElementProperties.TITLE,
-        lang
-      )}`,
-      val
-    );
+  const onQuestionChange = (itemId: number, val: string, lang: Language) => {
+    updateField(propertyPath(itemId, LocalizedElementProperties.TITLE, lang), val);
   };
 
-  const onRequiredChange = (itemIndex: number, checked: boolean) => {
-    updateField(`form.elements[${itemIndex}].properties.validation.required`, checked);
+  const onRequiredChange = (itemId: number, checked: boolean) => {
+    updateField(propertyPath(itemId, "validation.required"), checked);
   };
 
   return (
