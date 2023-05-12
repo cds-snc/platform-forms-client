@@ -4,7 +4,17 @@ import { LinkButton } from "@components/globals";
 import { useSession } from "next-auth/react";
 import { useTranslation } from "next-i18next";
 
-export const SettingsLoggedOut = () => {
+export enum LoggedOutTabName {
+  PUBLISH = "publish",
+  RESPONSES = "responses",
+  SETTINGS = "settings",
+}
+
+interface LoggedOutTabProps {
+  tabName: LoggedOutTabName;
+}
+
+export const LoggedOutTab = ({ tabName }: LoggedOutTabProps) => {
   const { status } = useSession();
   const { t, i18n } = useTranslation("form-builder");
   const signInLink = `/${i18n.language}/auth/login`;
@@ -22,19 +32,17 @@ export const SettingsLoggedOut = () => {
         </picture>
       }
     >
-      <p className="gc-h2 text-[#748094]">{t("settingsResponseDelivery.card.title")}</p>
+      <p className="gc-h2 text-[#748094]">{t(`loggedOutTab.${tabName}.title`)}</p>
       <p className="mb-6">
-        {t("settingsResponseDelivery.card.text1")}{" "}
-        <a href={signInLink}>{t("settingsResponseDelivery.card.text2")}</a>.{" "}
-        {t("settingsResponseDelivery.card.text3")}{" "}
-        <a href={createAccountLink}>{t("settingsResponseDelivery.card.text4")}</a>.
+        {t(`loggedOutTab.${tabName}.text1`)} <a href={signInLink}>{t("loggedOutTab.text2")}</a>.{" "}
+        {t("loggedOutTab.text3")} <a href={createAccountLink}>{t("loggedOutTab.text4")}</a>.
       </p>
       <p>
         <LinkButton.Primary href={signInLink} className="mr-4">
-          {t("settingsResponseDelivery.card.signinButton")}
+          {t("loggedOutTab.signinButton")}
         </LinkButton.Primary>
         <LinkButton.Secondary href={createAccountLink}>
-          {t("settingsResponseDelivery.card.createButton")}
+          {t("loggedOutTab.createButton")}
         </LinkButton.Secondary>
       </p>
     </Card>
