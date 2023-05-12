@@ -32,17 +32,17 @@ export const ErrorPanel = ({
 
   return (
     <div className="flex items-center justify-center h-full mx-4">
-      <div className="inline-block py-10 px-12 border-2 border-solid border-blue rounded-md max-w-xl bg-gray-soft">
+      <div className="laptop:max-w-2xl py-10 px-12 border-2 border-solid border-blue rounded-m bg-gray-soft">
         <HeadingTag className="border-none mb-4">{title || defaultTitle}</HeadingTag>
         <div className="mb-10">{children || defaultMessage}</div>
-        <div>
+        <div className="laptop:flex">
           <LinkButton.Primary href={homeHref} className="mr-3 mb-2">
             <span>
-              <BackArrowIcon className="inline-block mr-2 fill-white " />
+              <BackArrowIcon className="inline-block mr-2 fill-white self-stretch" />
               {homeText}
             </span>
           </LinkButton.Primary>
-          <LinkButton.Secondary href={supportHref}>
+          <LinkButton.Secondary href={supportHref} className="mb-2">
             {t("errorPanel.cta.support")}
           </LinkButton.Secondary>
         </div>
