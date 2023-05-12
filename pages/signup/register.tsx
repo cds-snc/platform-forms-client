@@ -8,7 +8,13 @@ import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { Confirmation } from "@components/auth/Confirmation/Confirmation";
 import * as Yup from "yup";
-import { isValidGovEmail, isUpperCase, isLowerCase, isNumber, isSymbol } from "@lib/validation";
+import {
+  isValidGovEmail,
+  containsUpperCaseCharacter,
+  containsLowerCaseCharacter,
+  containsNumber,
+  containsSymbol,
+} from "@lib/validation";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import Loader from "@components/globals/Loader";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
@@ -52,22 +58,22 @@ const Register = () => {
       .test(
         "password-valid-lowerCase",
         t("signUpRegistration.fields.password.error.oneLowerCase"),
-        (password = "") => isLowerCase(password)
+        (password = "") => containsLowerCaseCharacter(password)
       )
       .test(
         "password-valid-upperCase",
         t("signUpRegistration.fields.password.error.oneUpperCase"),
-        (password = "") => isUpperCase(password)
+        (password = "") => containsUpperCaseCharacter(password)
       )
       .test(
         "password-valid-number",
         t("signUpRegistration.fields.password.error.oneNumber"),
-        (password = "") => isNumber(password)
+        (password = "") => containsNumber(password)
       )
       .test(
         "password-valid-symbol",
         t("signUpRegistration.fields.password.error.oneSymbol"),
-        (password = "") => isSymbol(password)
+        (password = "") => containsSymbol(password)
       ),
     passwordConfirmation: Yup.string()
       .required(t("input-validation.required", { ns: "common" }))
