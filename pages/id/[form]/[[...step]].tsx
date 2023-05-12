@@ -4,6 +4,7 @@ import { checkOne } from "@lib/cache/flags";
 import React, { ReactElement } from "react";
 import classnames from "classnames";
 import { useTranslation } from "next-i18next";
+import Head from "next/head";
 import { Form, TextPage } from "@components/forms";
 import { getProperty, getRenderedForm } from "@lib/formBuilder";
 import { useRouter } from "next/router";
@@ -39,6 +40,9 @@ const RenderForm: NextPageWithLayout<RenderFormProps> = ({
 
   return (
     <>
+      <Head>
+        <title>{formTitle}</title>
+      </Head>
       <div className={classes}>
         <h1>{formTitle}</h1>
         <Form formRecord={formRecord} language={language} router={router} t={t}>
