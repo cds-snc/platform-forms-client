@@ -26,6 +26,7 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
     localizeField,
     translationLanguagePriority,
     getLocalizationAttribute,
+    propertyPath,
   } = useTemplateStore((s) => ({
     updateField: s.updateField,
     subMoveUp: s.subMoveUp,
@@ -36,6 +37,7 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
     localizeField: s.localizeField,
     translationLanguagePriority: s.translationLanguagePriority,
     getLocalizationAttribute: s.getLocalizationAttribute,
+    propertyPath: s.propertyPath,
   }));
 
   const { handleAddSubElement } = useHandleAdd();
@@ -51,21 +53,12 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
     [updateField, localizeField, translationLanguagePriority]
   );
 
-  const onQuestionChange = (elIndex: number, subIndex: number, val: string, lang: Language) => {
-    updateField(
-      `form.elements[${elIndex}].properties.subElements[${subIndex}].properties.${localizeField(
-        LocalizedElementProperties.TITLE,
-        lang
-      )}`,
-      val
-    );
+  const onQuestionChange = (itemId: number, val: string, lang: Language) => {
+    updateField(propertyPath(itemId, LocalizedElementProperties.TITLE, lang), val);
   };
 
-  const onRequiredChange = (elIndex: number, subIndex: number, checked: boolean) => {
-    updateField(
-      `form.elements[${elIndex}].properties.subElements[${subIndex}].properties.validation.required`,
-      checked
-    );
+  const onRequiredChange = (itemId: number, checked: boolean) => {
+    updateField(propertyPath(itemId, "validation.required"), checked);
   };
 
   const elementFilter: ElementOptionsFilter = (elements) => {
@@ -136,9 +129,7 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
                 elIndex={elIndex}
                 item={item}
                 onQuestionChange={onQuestionChange}
-                onRequiredChange={(subIndex, checked) => {
-                  onRequiredChange(elIndex, subIndex, checked);
-                }}
+                onRequiredChange={onRequiredChange}
               />
             </PanelHightLight>
           </div>

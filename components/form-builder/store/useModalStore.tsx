@@ -33,7 +33,9 @@ export const useModalStore = create<ModalStore>()(
       }),
     updateModalProperties: (id, properties) =>
       set((state) => {
-        state.modals[id] = properties;
+        if (id !== -1) {
+          state.modals[id] = properties;
+        }
       }),
     unsetModalField: (path) =>
       set((state) => {
