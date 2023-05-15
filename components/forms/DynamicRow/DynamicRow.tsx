@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createRef } from "react";
+import React, { useState, useEffect, createRef, useRef } from "react";
 import classnames from "classnames";
 import { useField } from "formik";
 import { GenerateElement } from "@lib/formBuilder";
@@ -50,67 +50,57 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     maxNumberOfRows,
   } = props;
   const [field, meta, helpers] = useField(props);
-  const [rows, setRows] = useState([rowElements]);
-  const [rowRefs, setRowRefs] = useState<Array<React.RefObject<HTMLFieldSetElement>>>([]);
-  const [focussedRow, setFocussedRow] = useState<number | null>(null);
+  const [rows, setRows] = useState(Array(field.value.length).fill(rowElements));
+  const rowRefs = useRef<Array<React.RefObject<HTMLFieldSetElement>>>(
+    Array(field.value.length).fill(createRef<HTMLFieldSetElement>())
+  );
+  const focussedRow = useRef<number | null>(null);
   const [hasReachedMaxNumberOfRows, setHasReachedMaxNumberOfRows] = useState<boolean>(false);
 
   useEffect(() => {
-    //there are rows that were added to the form other than its initialvalues.
-    if (field.value.length > 1) {
-      //Refreshing rows from Formik's state
-      setRows(Array(field.value.length).fill(rowElements));
+    if (focussedRow.current !== null) {
+      rowRefs.current[focussedRow.current].current?.focus();
+      rowRefs.current[focussedRow.current].current?.scrollIntoView();
+      focussedRow.current = null;
     }
-    // @todo - fix this eslint error
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
-  useEffect(() => {
-    // Fill state will refs for each existing
-    const newRowRefs = [];
-    for (let i = 0; i <= rows.length; i++) {
-      newRowRefs[i] = rowRefs[i] || createRef();
-    }
-    setRowRefs(newRowRefs);
-
-    // Trigger on any change to the length of the rows state
-    // @todo - fix this eslint error
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // When rows are added or deleted run the useEffect again to focus on the new row
   }, [rows.length]);
-
-  useEffect(() => {
-    if (focussedRow !== null) {
-      rowRefs[focussedRow].current?.focus();
-      rowRefs[focussedRow].current?.scrollIntoView();
-    }
-    // @todo - fix this eslint error
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [focussedRow]);
 
   useEffect(() => {
     if (maxNumberOfRows) {
       setHasReachedMaxNumberOfRows(rows.length >= maxNumberOfRows);
     }
-    // @todo - fix this eslint error
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rows.length]);
+  }, [rows.length, maxNumberOfRows]);
 
   const addRow = () => {
     if (hasReachedMaxNumberOfRows) return;
-
     // Set the newly added row'initial value (plucked out of initialValues)
-    field.value.push(meta.initialValue ? meta.initialValue[0] : {});
-    helpers.setValue(field.value);
+    const newValue = [...field.value];
+    newValue.push(meta.initialValue ? meta.initialValue[0] : {});
+    helpers.setValue(newValue);
+    // Add the new row to the rows state
     setRows([...rows, rowElements]);
-    setFocussedRow(rows.length);
+    // Add a new ref to the rowRefs state
+    rowRefs.current.push(createRef<HTMLFieldSetElement>());
+    // Do not subtract one because the rows state has not yet updated it's length when this is called
+    focussedRow.current = rows.length;
   };
 
   const deleteRow = (index: number) => {
-    field.value.splice(index, 1);
-    helpers.setValue(field.value);
-    rows.splice(index, 1);
-    setRows([...rows]);
-    setFocussedRow(index > 0 ? index - 1 : 0);
+    // Remove the value from the formik state
+    const newValues = [...field.value];
+    newValues.splice(index, 1);
+    helpers.setValue(newValues);
+    // Remove the row from the rows state
+    setRows((prevState) => {
+      const newState = [...prevState];
+      newState.splice(index, 1);
+      return newState;
+    });
+    // Remove ref from the rowRefs state
+    rowRefs.current.splice(index, 1);
+    focussedRow.current = index > 0 ? index - 1 : 0;
   };
 
   const classes = classnames("gc-form-group", { "gc-form-group--error": error }, className);
@@ -127,7 +117,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
             id={`${field.name}.${index}`}
             className="gc-item-row"
             data-testid={`dynamic-row-${index + 1}`}
-            ref={rowRefs[index]}
+            ref={rowRefs.current[index]}
             tabIndex={-1}
           >
             <legend>
@@ -148,7 +138,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
                   onClick={addRow}
                   testid={`add-row-button-${field.name}`}
                 >
-                  {`${t("dynamicRow.add", { ns: "common" })} ${rowLabel}`}
+                  {`${t("dynamicRow.add")} ${rowLabel}`}
                 </Button>
               )}
               {rows.length > 1 && (
@@ -158,7 +148,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
                   onClick={() => deleteRow(index)}
                   testid={`delete-row-button-${field.name}.${index}`}
                 >
-                  {`${t("dynamicRow.delete", { ns: "common" })} ${rowLabel} ${index + 1}`}
+                  {`${t("dynamicRow.delete")} ${rowLabel} ${index + 1}`}
                 </Button>
               )}
             </div>
