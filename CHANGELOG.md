@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updated unauthenticated view on form builder tabs (publish and responses). [1869](https://github.com/cds-snc/platform-forms-client/issues/1869)
 - Allow more symbols to be used in passwords. [2095](https://github.com/cds-snc/platform-forms-client/issues/2095)
+- Unsupported browser page has been updated. It will now load when accessed within Internet Explorer. [2081](https://github.com/cds-snc/platform-forms-client/issues/2081)
 
 ## [3.0.5] 2023-05-10
 
