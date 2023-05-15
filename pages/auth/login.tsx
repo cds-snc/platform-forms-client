@@ -119,7 +119,7 @@ const Login = () => {
                 </ol>
               </Alert>
             )}
-            <h1>{t("title")}</h1>
+            <h1 className="border-b-0 mt-6 mb-12">{t("title")}</h1>
             {registrationOpen && (
               <p className="mb-10 -mt-6">
                 {t("signUpText")}&nbsp;
