@@ -35,7 +35,7 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         # v1 as of Jan 28 2021
-        uses: aws-actions/amazon-ecr-login@b97dae3ef66534f4a36bd521c0cc6ffc1e49ca50
+        uses: aws-actions/amazon-ecr-login@90fc8e6f452d3963147a5673eecc2b62fd70665a
 
       - name: Get Cluster Name
         id: cluster
@@ -51,7 +51,7 @@ jobs:
       - name: Render image for form viewer service
         id: taskdef-form-viewer
         # v1.0.10
-        uses: aws-actions/amazon-ecs-render-task-definition@b451ae8d4af191e94b479ca69435c85a0bd25140
+        uses: aws-actions/amazon-ecs-render-task-definition@085d5cf692d153f2dcac5f5db5016ebba4d3e56f
         with:
           task-definition: form_viewer.json
           container-name: ${{ steps.download-taskdef-form-viewer.outputs.container_name }}
