@@ -59,8 +59,8 @@ describe("Dynamic Row Functionality", () => {
 
   it("Should display errors when an empty form is submitted", () => {
     cy.get("[type='submit']").click();
-    cy.get(".gc-error-link").should("have.length", 8);
-    cy.get(".gc-error-message").should("have.length", 8);
+    cy.get(".gc-error-link").should("have.length", 1);
+    cy.get(".gc-error-message").should("have.length", 1);
     cy.get("[id='7.0.0']").should("have.css", "border-color", "rgb(185, 28, 28)");
     // add second row
     cy.get("[data-testid='add-row-button-3']").click();

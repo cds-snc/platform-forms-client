@@ -5,6 +5,7 @@ import { GenerateElement } from "@lib/formBuilder";
 import { FormElement } from "@lib/types";
 import { Button, Description } from "@components/forms";
 import { TFunction } from "next-i18next";
+import { logMessage } from "@lib/logger";
 
 interface DynamicGroupProps {
   name: string;
