@@ -136,6 +136,7 @@
     "cypress-axe": "^1.4.0",
     "cypress-each": "^1.13.1",
     "cypress-plugin-tab": "^1.0.5",
+    "cypress-wait-until": "^1.7.2",
     "eslint": "^8.38.0",
     "eslint-config-next": "^13.3.0",
     "eslint-config-prettier": "^8.8.0",
