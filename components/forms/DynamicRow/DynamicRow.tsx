@@ -50,7 +50,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     maxNumberOfRows,
   } = props;
   const [field, meta, helpers] = useField(props);
-  const [rows, setRows] = useState(Array(field.value.length).fill(rowElements));
+  const [rows, setRows] = useState(() => Array(field.value.length).fill(rowElements));
   const rowRefs = useRef<Array<React.RefObject<HTMLFieldSetElement>>>(
     Array(field.value.length).fill(createRef<HTMLFieldSetElement>())
   );
