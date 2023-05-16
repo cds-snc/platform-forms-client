@@ -1,11 +1,12 @@
 import { useRef } from "react";
 import { useRouter } from "next/router";
-import { getCsrfToken, signIn } from "next-auth/react";
-import axios, { AxiosError } from "axios";
+import { signIn } from "next-auth/react";
+import { AxiosError } from "axios";
 import { FormikHelpers } from "formik";
 import { logMessage } from "@lib/logger";
 import { useTranslation } from "next-i18next";
 import { useState } from "react";
+import { fetchWithCsrfToken } from "./fetchWithCsrfToken";
 
 export const useConfirm = () => {
   const router = useRouter();
@@ -53,22 +54,7 @@ export const useConfirm = () => {
 
     let confirmationSuccess = true;
     try {
-      const token = await getCsrfToken();
-      if (token) {
-        await axios({
-          url: "/api/signup/confirm",
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-Token": token,
-          },
-          data: {
-            username,
-            confirmationCode,
-          },
-          timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-        });
-      }
+      await fetchWithCsrfToken("/api/signup/confirm", { username, confirmationCode });
     } catch (err) {
       const axiosError = err as AxiosError;
       confirmationSuccess = false;
@@ -113,11 +99,11 @@ export const useConfirm = () => {
       });
 
       if (response?.error) {
-        const responseErrorMessage = response.error;
-        logMessage.error(responseErrorMessage);
+        const message = response.error;
+        logMessage.error(message);
         if (
-          responseErrorMessage.includes("UserNotFoundException") ||
-          responseErrorMessage.includes("NotAuthorizedException")
+          message.includes("UserNotFoundException") ||
+          message.includes("NotAuthorizedException")
         ) {
           confirmationAuthenticationFailedCallback(
             t("UsernameOrPasswordIncorrect.title"),
@@ -126,7 +112,7 @@ export const useConfirm = () => {
             t("UsernameOrPasswordIncorrect.linkText"),
             false
           );
-        } else if (responseErrorMessage.includes("GoogleCredentialsExist")) {
+        } else if (message.includes("GoogleCredentialsExist")) {
           await router.push("/admin/login");
         } else {
           setCognitoError(t("InternalServiceException"));
@@ -147,35 +133,22 @@ export const useConfirm = () => {
   const resendConfirmationCode = async (username: string) => {
     resetCognitoErrorState();
     try {
-      const token = await getCsrfToken();
-      if (token) {
-        await axios({
-          url: "/api/signup/resendconfirmation",
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-Token": token,
-          },
-          data: {
-            username: username,
-          },
-          timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-        });
-      }
+      await fetchWithCsrfToken("/api/signup/resendconfirmation", { username });
     } catch (err) {
+      const e = err as AxiosError;
+      const message = e.response?.data?.message;
       logMessage.error(err);
-      const axiosError = err as AxiosError;
-      if (axiosError?.response?.data?.message) {
-        const errorResponseMessage = axiosError.response.data.message;
-        if (errorResponseMessage.includes("TooManyRequestsException")) {
-          setCognitoError(t("TooManyRequestsException"));
-        } else {
-          setCognitoError(t("InternalServiceException"));
-        }
-      } else {
-        setCognitoError(t("InternalServiceException"));
+
+      // set a default error message
+      setCognitoError(t("InternalServiceException"));
+
+      if (!message) {
+        return err;
       }
-      return err;
+
+      if (message.includes("TooManyRequestsException")) {
+        setCognitoError(t("TooManyRequestsException"));
+      }
     }
   };
 
