@@ -2,7 +2,8 @@ import React, { ReactElement } from "react";
 import { Formik } from "formik";
 import { TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
 import { Button } from "@components/globals";
-import { useAuth, useFlag } from "@lib/hooks";
+import { useFlag } from "@lib/hooks";
+import { useRegister } from "@lib/hooks/auth";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -36,7 +37,7 @@ const Register = () => {
     cognitoErrorIsDismissible,
     resetCognitoErrorState,
     register,
-  } = useAuth();
+  } = useRegister();
   const { t } = useTranslation(["signup", "common"]);
 
   const validationSchema = Yup.object().shape({

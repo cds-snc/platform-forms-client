@@ -1,7 +1,7 @@
 import React, { ReactElement, useState } from "react";
 import { Formik } from "formik";
 import { Button, TextInput, Label, Alert, ErrorListItem } from "@components/forms";
-import { useAuth } from "@lib/hooks";
+import { useConfirm } from "@lib/hooks/auth";
 import { useTranslation } from "next-i18next";
 import * as Yup from "yup";
 import Link from "next/link";
@@ -37,7 +37,7 @@ export const Confirmation = ({
     resetCognitoErrorState,
     confirm,
     resendConfirmationCode,
-  } = useAuth();
+  } = useConfirm();
   const [showSentReconfirmationToast, setShowSentReconfirmationToast] = useState(false);
   const { t } = useTranslation(["signup", "cognito-errors", "common"]);
 

@@ -2,7 +2,6 @@ import React, { ReactElement, useState } from "react";
 import { Formik } from "formik";
 import { TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
 import { Button } from "@components/globals";
-import { useAuth } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
 import { Confirmation } from "@components/auth/Confirmation/Confirmation";
@@ -20,6 +19,7 @@ import {
   isValidGovEmail,
 } from "@lib/validation";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
+import { useResetPassword } from "@lib/hooks/auth";
 
 const ResetPassword = () => {
   const {
@@ -34,7 +34,7 @@ const ResetPassword = () => {
     resetCognitoErrorState,
     sendForgotPassword,
     confirmPasswordReset,
-  } = useAuth();
+  } = useResetPassword();
 
   const { t } = useTranslation(["reset-password", "common"]);
 

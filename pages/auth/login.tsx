@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import { Formik } from "formik";
 import { TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
 import { Button } from "@components/globals";
-import { useAuth, useFlag } from "@lib/hooks";
+import { useFlag } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -14,6 +14,7 @@ import { Confirmation } from "@components/auth/Confirmation/Confirmation";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import * as Yup from "yup";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
+import { useLogin } from "@lib/hooks/auth";
 
 const Login = () => {
   const {
@@ -22,14 +23,19 @@ const Login = () => {
     didConfirm,
     needsConfirmation,
     setNeedsConfirmation,
-    cognitoError,
-    cognitoErrorDescription,
-    cognitoErrorCallToActionLink,
-    cognitoErrorCallToActionText,
-    setCognitoErrorStates,
-    resetCognitoErrorState,
+
+    // cognitoError,
+    // cognitoErrorDescription,
+    // cognitoErrorCallToActionLink,
+    // cognitoErrorCallToActionText,
+    // setCognitoErrorStates,
+    // resetCognitoErrorState,
+
     login,
-  } = useAuth();
+    authErrorState,
+    authErrorsReset,
+    manualUpdate,
+  } = useLogin();
   const { t } = useTranslation(["login", "cognito-errors", "common"]);
   const { status: registrationOpen } = useFlag("accountRegistration");
   const { status: passwordResetEnabled } = useFlag("passwordReset");
@@ -46,6 +52,21 @@ const Login = () => {
   const confirmationCallback = () => {
     setNeedsConfirmation(false);
     didConfirm.current = true;
+  };
+
+  const setCognitoErrorStates = (
+    cognitoError: string,
+    cognitoErrorDescription: string,
+    cognitoErrorCallToActionLink: string,
+    cognitoErrorCallToActionText: string
+    // cognitoErrorIsDismissible: boolean
+  ) => {
+    manualUpdate({
+      title: cognitoError,
+      description: cognitoErrorDescription,
+      callToActionLink: cognitoErrorCallToActionLink,
+      callToActionText: cognitoErrorCallToActionText,
+    });
   };
 
   if (needsConfirmation) {
@@ -65,7 +86,7 @@ const Login = () => {
         <title>{t("title")}</title>
       </Head>
       <Formik
-        initialValues={{ username: cognitoError ? username.current : "", password: "" }}
+        initialValues={{ username: authErrorState.title ? username.current : "", password: "" }}
         onSubmit={async (values, helpers) => {
           username.current = values.username;
           password.current = values.password;
@@ -79,26 +100,28 @@ const Login = () => {
         validateOnChange={false}
         validateOnBlur={false}
         validationSchema={validationSchema}
-        validate={resetCognitoErrorState}
-        onReset={resetCognitoErrorState}
+        validate={authErrorsReset}
+        onReset={authErrorsReset}
       >
         {({ handleSubmit, errors }) => (
           <>
-            {cognitoError && (
+            {authErrorState.title && (
               <Alert
                 type={ErrorStatus.ERROR}
-                heading={cognitoError}
+                heading={authErrorState.title}
                 id="cognitoErrors"
                 focussable={true}
               >
-                {cognitoErrorDescription}
-                {cognitoErrorCallToActionLink ? (
-                  <Link href={cognitoErrorCallToActionLink}>{cognitoErrorCallToActionText}</Link>
+                {authErrorState.description}
+                {authErrorState.callToActionLink ? (
+                  <Link href={authErrorState.callToActionLink}>
+                    {authErrorState.callToActionText}
+                  </Link>
                 ) : undefined}
                 .
               </Alert>
             )}
-            {Object.keys(errors).length > 0 && !cognitoError && (
+            {Object.keys(errors).length > 0 && !authErrorState.title && (
               <Alert
                 type={ErrorStatus.ERROR}
                 validation={true}
