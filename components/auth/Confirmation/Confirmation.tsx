@@ -28,16 +28,7 @@ export const Confirmation = ({
   confirmationCallback,
   shouldSignIn = true,
 }: ConfirmationProps): ReactElement => {
-  const {
-    cognitoError,
-    cognitoErrorDescription,
-    cognitoErrorCallToActionLink,
-    cognitoErrorCallToActionText,
-    cognitoErrorIsDismissible,
-    resetCognitoErrorState,
-    confirm,
-    resendConfirmationCode,
-  } = useConfirm();
+  const { confirm, resendConfirmationCode, authErrorsState, authErrorsReset } = useConfirm();
   const [showSentReconfirmationToast, setShowSentReconfirmationToast] = useState(false);
   const { t } = useTranslation(["signup", "cognito-errors", "common"]);
 
@@ -68,7 +59,7 @@ export const Confirmation = ({
     >
       {({ handleSubmit, errors }) => (
         <>
-          {showSentReconfirmationToast && !cognitoError && (
+          {showSentReconfirmationToast && !authErrorsState.title && (
             <Alert
               type={ErrorStatus.SUCCESS}
               heading={t("signUpConfirmation.resendConfirmationCode.title")}
@@ -81,21 +72,23 @@ export const Confirmation = ({
               {t("signUpConfirmation.resendConfirmationCode.body")}
             </Alert>
           )}
-          {cognitoError && (
+          {authErrorsState.title && (
             <Alert
               type={ErrorStatus.ERROR}
-              heading={cognitoError}
-              onDismiss={resetCognitoErrorState}
+              heading={authErrorsState.title}
+              onDismiss={authErrorsReset}
               id="cognitoErrors"
-              dismissible={cognitoErrorIsDismissible}
+              // dismissible={cognitoErrorIsDismissible}
             >
-              {cognitoErrorDescription}&nbsp;
-              {cognitoErrorCallToActionLink ? (
-                <Link href={cognitoErrorCallToActionLink}>{cognitoErrorCallToActionText}</Link>
+              {authErrorsState.description}&nbsp;
+              {authErrorsState.callToActionLink ? (
+                <Link href={authErrorsState.callToActionLink}>
+                  {authErrorsState.callToActionText}
+                </Link>
               ) : undefined}
             </Alert>
           )}
-          {Object.keys(errors).length > 0 && !cognitoError && (
+          {Object.keys(errors).length > 0 && !authErrorsState.title && (
             <Alert
               type={ErrorStatus.ERROR}
               validation={true}

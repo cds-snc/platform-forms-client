@@ -1,5 +1,13 @@
 import { useReducer } from "react";
 import { useTranslation } from "next-i18next";
+// import { logMessage } from "@lib/logger";
+
+// TODOs
+// -instead of authErrorsState.title, add a isError for boolean logic?
+// -ask design/content to help with rest of error messages in handleErrorById().
+
+// NOTE
+// -added logging to: confirm error
 
 interface AuthErrorsState {
   title: string;
@@ -18,6 +26,7 @@ interface AuthErrorsDispatchType {
     callToActionText,
     callToActionLink,
   }: AuthErrorsState) => void;
+  handleErrorById: (id: string) => void;
 }
 
 export const useAuthErrors = (): [AuthErrorsState, AuthErrorsDispatchType] => {
@@ -28,7 +37,7 @@ export const useAuthErrors = (): [AuthErrorsState, AuthErrorsDispatchType] => {
     UPDATE = "UPDATE",
   }
 
-  const initialAuthErrorState = {
+  const initialAuthErrorsState = {
     title: "",
     description: "",
     callToActionText: "",
@@ -43,7 +52,7 @@ export const useAuthErrors = (): [AuthErrorsState, AuthErrorsDispatchType] => {
 
     switch (type) {
       case errorsActions.RESET: {
-        return initialAuthErrorState;
+        return initialAuthErrorsState;
       }
       case errorsActions.UPDATE: {
         return {
@@ -56,7 +65,10 @@ export const useAuthErrors = (): [AuthErrorsState, AuthErrorsDispatchType] => {
     }
   };
 
-  const [authErrorState, authErrorDispatch] = useReducer(authErrorsReducer, initialAuthErrorState);
+  const [authErrorsState, authErrorDispatch] = useReducer(
+    authErrorsReducer,
+    initialAuthErrorsState
+  );
 
   const authErrorsReset = () => {
     authErrorDispatch({
@@ -106,8 +118,52 @@ export const useAuthErrors = (): [AuthErrorsState, AuthErrorsDispatchType] => {
     });
   };
 
+  function handleErrorById(id: string) {
+    // logMessage.error("--------COGNITO ERROR ID:" + id); //TEMP
+
+    const errorObj = { ...initialAuthErrorsState };
+    switch (id) {
+      case "UsernameExistsException":
+        errorObj.title = t("UsernameExistsException");
+        break;
+      case "CodeMismatchException":
+        errorObj.title = t("CodeMismatchException");
+        break;
+      case "ExpiredCodeException":
+        errorObj.title = t("ExpiredCodeException");
+        break;
+      case "TooManyRequestsException":
+        errorObj.title = t("TooManyRequestsException");
+        break;
+      case "UserNotFoundException":
+      case "NotAuthorizedException":
+        errorObj.title = t("UsernameOrPasswordIncorrect.title");
+        errorObj.description = t("UsernameOrPasswordIncorrect.description");
+        errorObj.callToActionLink = t("UsernameOrPasswordIncorrect.link");
+        errorObj.callToActionText = t("UsernameOrPasswordIncorrect.linkText");
+        break;
+      default:
+        errorObj.title = t("InternalServiceException");
+    }
+    authErrorDispatch({
+      type: errorsActions.UPDATE,
+      payload: {
+        title: errorObj.title,
+        description: errorObj.description,
+        callToActionText: errorObj.callToActionText,
+        callToActionLink: errorObj.callToActionLink,
+      },
+    });
+  }
+
   return [
-    authErrorState,
-    { authErrorsReset, usernameOrPasswordIncorrect, internalServiceException, manualUpdate },
+    authErrorsState,
+    {
+      authErrorsReset,
+      usernameOrPasswordIncorrect,
+      internalServiceException,
+      manualUpdate,
+      handleErrorById,
+    },
   ];
 };

@@ -12,7 +12,7 @@ export const useLogin = () => {
   const didConfirm = useRef(false);
   const [needsConfirmation, setNeedsConfirmation] = useState(false);
   const [
-    authErrorState,
+    authErrorsState,
     { authErrorsReset, usernameOrPasswordIncorrect, internalServiceException, manualUpdate },
   ] = useAuthErrors();
 
@@ -73,7 +73,7 @@ export const useLogin = () => {
     didConfirm,
     needsConfirmation,
     setNeedsConfirmation,
-    authErrorState,
+    authErrorsState,
     authErrorsReset,
     manualUpdate,
   };

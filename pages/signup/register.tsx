@@ -26,18 +26,8 @@ import { ErrorStatus } from "@components/forms/Alert/Alert";
 
 const Register = () => {
   const { isLoading, status: registrationOpen } = useFlag("accountRegistration");
-  const {
-    username,
-    password,
-    needsConfirmation,
-    cognitoError,
-    cognitoErrorDescription,
-    cognitoErrorCallToActionLink,
-    cognitoErrorCallToActionText,
-    cognitoErrorIsDismissible,
-    resetCognitoErrorState,
-    register,
-  } = useRegister();
+  const { username, password, needsConfirmation, register, authErrorsState, authErrorsReset } =
+    useRegister();
   const { t } = useTranslation(["signup", "common"]);
 
   const validationSchema = Yup.object().shape({
@@ -101,12 +91,15 @@ const Register = () => {
 
   if (needsConfirmation) {
     return (
-      <Confirmation
-        username={username.current}
-        password={password.current}
-        confirmationAuthenticationFailedCallback={() => undefined}
-        confirmationCallback={() => undefined}
-      />
+      <>
+        <h1>HERE</h1>
+        <Confirmation
+          username={username.current}
+          password={password.current}
+          confirmationAuthenticationFailedCallback={() => undefined}
+          confirmationCallback={() => undefined}
+        />
+      </>
     );
   }
 
@@ -128,21 +121,23 @@ const Register = () => {
       >
         {({ handleSubmit, errors }) => (
           <>
-            {cognitoError && (
+            {authErrorsState.title && (
               <Alert
                 type={ErrorStatus.ERROR}
-                heading={cognitoError}
-                onDismiss={resetCognitoErrorState}
+                heading={authErrorsState.title}
+                onDismiss={authErrorsReset}
                 id="cognitoErrors"
-                dismissible={cognitoErrorIsDismissible}
+                // dismissible={cognitoErrorIsDismissible}
               >
-                {cognitoErrorDescription}&nbsp;
-                {cognitoErrorCallToActionLink ? (
-                  <Link href={cognitoErrorCallToActionLink}>{cognitoErrorCallToActionText}</Link>
+                {authErrorsState.description}&nbsp;
+                {authErrorsState.callToActionLink ? (
+                  <Link href={authErrorsState.callToActionLink}>
+                    {authErrorsState.callToActionText}
+                  </Link>
                 ) : undefined}
               </Alert>
             )}
-            {Object.keys(errors).length > 0 && !cognitoError && (
+            {Object.keys(errors).length > 0 && !authErrorsState.title && (
               <Alert
                 type={ErrorStatus.ERROR}
                 validation={true}

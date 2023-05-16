@@ -23,16 +23,8 @@ const Login = () => {
     didConfirm,
     needsConfirmation,
     setNeedsConfirmation,
-
-    // cognitoError,
-    // cognitoErrorDescription,
-    // cognitoErrorCallToActionLink,
-    // cognitoErrorCallToActionText,
-    // setCognitoErrorStates,
-    // resetCognitoErrorState,
-
     login,
-    authErrorState,
+    authErrorsState,
     authErrorsReset,
     manualUpdate,
   } = useLogin();
@@ -86,7 +78,7 @@ const Login = () => {
         <title>{t("title")}</title>
       </Head>
       <Formik
-        initialValues={{ username: authErrorState.title ? username.current : "", password: "" }}
+        initialValues={{ username: authErrorsState.title ? username.current : "", password: "" }}
         onSubmit={async (values, helpers) => {
           username.current = values.username;
           password.current = values.password;
@@ -105,23 +97,23 @@ const Login = () => {
       >
         {({ handleSubmit, errors }) => (
           <>
-            {authErrorState.title && (
+            {authErrorsState.title && (
               <Alert
                 type={ErrorStatus.ERROR}
-                heading={authErrorState.title}
+                heading={authErrorsState.title}
                 id="cognitoErrors"
                 focussable={true}
               >
-                {authErrorState.description}
-                {authErrorState.callToActionLink ? (
-                  <Link href={authErrorState.callToActionLink}>
-                    {authErrorState.callToActionText}
+                {authErrorsState.description}
+                {authErrorsState.callToActionLink ? (
+                  <Link href={authErrorsState.callToActionLink}>
+                    {authErrorsState.callToActionText}
                   </Link>
                 ) : undefined}
                 .
               </Alert>
             )}
-            {Object.keys(errors).length > 0 && !authErrorState.title && (
+            {Object.keys(errors).length > 0 && !authErrorsState.title && (
               <Alert
                 type={ErrorStatus.ERROR}
                 validation={true}
