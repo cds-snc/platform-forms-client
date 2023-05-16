@@ -162,7 +162,7 @@ const Register = () => {
                 </ol>
               </Alert>
             )}
-            <h1>{t("signUpRegistration.title")}</h1>
+            <h1 className="border-b-0 mt-6 mb-12">{t("signUpRegistration.title")}</h1>
             <p className="mb-10 -mt-6">
               {t("signUpRegistration.alreadyHaveAnAccount")}&nbsp;
               <Link href={"/auth/login"}>{t("signUpRegistration.alreadyHaveAnAccountLink")}</Link>
