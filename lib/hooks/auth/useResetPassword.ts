@@ -1,11 +1,11 @@
 import { useRef } from "react";
 import { useRouter } from "next/router";
-import { getCsrfToken } from "next-auth/react";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { FormikHelpers } from "formik";
 import { logMessage } from "@lib/logger";
 import { useTranslation } from "next-i18next";
 import { useState } from "react";
+import { fetchWithCsrfToken } from "./fetchWithCsrfToken";
 
 export const useResetPassword = () => {
   const router = useRouter();
@@ -34,37 +34,23 @@ export const useResetPassword = () => {
   ) => {
     resetCognitoErrorState();
     try {
-      const token = await getCsrfToken();
-      if (token) {
-        await axios({
-          url: "/api/account/forgotpassword",
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-Token": token,
-          },
-          data: {
-            username,
-          },
-          timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-        });
-
-        if (successCallback) successCallback();
-      }
+      await fetchWithCsrfToken("/api/account/forgotpassword", { username });
+      if (successCallback) successCallback();
     } catch (err) {
-      const axiosError = err as AxiosError;
-      logMessage.error(axiosError);
-      if (axiosError.response?.data?.message) {
-        const errorResponseMessage = axiosError.response.data.message;
+      const e = err as AxiosError;
+      const message = e.response?.data?.message;
+      logMessage.error(e);
 
-        if (errorResponseMessage.includes("InvalidParameterException") && failedCallback) {
-          failedCallback("InvalidParameterException");
-        } else if (errorResponseMessage.includes("UserNotFoundException")) {
-          await router.push("/signup/register");
-        } else {
-          setCognitoError(t("InternalServiceException"));
-          if (failedCallback) failedCallback("InternalServiceException");
-        }
+      if (!message) {
+        setCognitoError(t("InternalServiceException"));
+        if (failedCallback) failedCallback("InternalServiceException");
+        return;
+      }
+
+      if (message.includes("InvalidParameterException") && failedCallback) {
+        failedCallback("InvalidParameterException");
+      } else if (message.includes("UserNotFoundException")) {
+        await router.push("/signup/register");
       } else {
         setCognitoError(t("InternalServiceException"));
         if (failedCallback) failedCallback("InternalServiceException");
@@ -89,46 +75,35 @@ export const useResetPassword = () => {
   ) => {
     resetCognitoErrorState();
     try {
-      const token = await getCsrfToken();
-      if (token) {
-        await axios({
-          url: "/api/account/confirmpassword",
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-Token": token,
-          },
-          data: {
-            username,
-            password,
-            confirmationCode,
-          },
-          timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-        });
+      await fetchWithCsrfToken("/api/account/confirmpassword", {
+        username,
+        password,
+        confirmationCode,
+      });
 
-        await router.push("/auth/login");
-      }
+      await router.push("/auth/login");
     } catch (err) {
-      const axiosError = err as AxiosError;
-      logMessage.error(axiosError);
-      if (axiosError.response?.data?.message) {
-        const errorResponseMessage = axiosError.response.data.message;
+      const e = err as AxiosError;
+      const message = e.response?.data?.message;
+      logMessage.error(e);
 
-        if (errorResponseMessage.includes("CodeMismatchException")) {
-          setErrors({
-            confirmationCode: t("CodeMismatchException"),
-          });
-        } else if (errorResponseMessage.includes("ExpiredCodeException")) {
-          setErrors({
-            confirmationCode: t("ExpiredCodeException"),
-          });
-        } else if (errorResponseMessage.includes("InvalidPasswordException")) {
-          setErrors({
-            password: t("InvalidPasswordException"),
-          });
-        } else {
-          setCognitoError(t("InternalServiceException"));
-        }
+      if (!message) {
+        setCognitoError(t("InternalServiceException"));
+        return;
+      }
+
+      if (message.includes("CodeMismatchException")) {
+        setErrors({
+          confirmationCode: t("CodeMismatchException"),
+        });
+      } else if (message.includes("ExpiredCodeException")) {
+        setErrors({
+          confirmationCode: t("ExpiredCodeException"),
+        });
+      } else if (message.includes("InvalidPasswordException")) {
+        setErrors({
+          password: t("InvalidPasswordException"),
+        });
       } else {
         setCognitoError(t("InternalServiceException"));
       }
