@@ -145,7 +145,7 @@ export const ElementPanel = ({
         }}
         handleDuplicate={() => {
           setFocusInput(true);
-          duplicateElement(item.index);
+          duplicateElement(item.id);
         }}
         {...moreButton}
       />

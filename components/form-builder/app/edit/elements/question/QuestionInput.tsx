@@ -17,7 +17,7 @@ export const QuestionInput = ({
   index: number;
   id: number;
   initialValue: string;
-  onQuestionChange: (itemIndex: number, val: string, lang: Language) => void;
+  onQuestionChange: (itemId: number, val: string, lang: Language) => void;
   describedById?: string;
 }) => {
   const { t } = useTranslation("form-builder");
@@ -54,8 +54,8 @@ export const QuestionInput = ({
 
   const _debounced = debounce(
     useCallback(
-      (index: number, value: string, lang: Language) => {
-        onQuestionChange(index, value, lang);
+      (id: number, value: string, lang: Language) => {
+        onQuestionChange(id, value, lang);
       },
       [onQuestionChange]
     ),
@@ -63,9 +63,9 @@ export const QuestionInput = ({
   );
 
   const updateValue = useCallback(
-    (index: number, value: string) => {
+    (id: number, value: string) => {
       setValue(value);
-      _debounced(index, value, translationLanguagePriority);
+      _debounced(id, value, translationLanguagePriority);
     },
     // exclude _debounced from the dependency array
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -83,7 +83,7 @@ export const QuestionInput = ({
       className="font-bold text-base"
       value={value}
       describedBy={describedById ?? undefined}
-      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateValue(index, e.target.value)}
+      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateValue(id, e.target.value)}
       {...getLocalizationAttribute()}
     />
   );

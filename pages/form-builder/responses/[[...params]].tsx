@@ -11,7 +11,6 @@ import { GetServerSideProps } from "next";
 import { FormRecord, VaultSubmissionList } from "@lib/types";
 import { listAllSubmissions } from "@lib/vault";
 import { useSession } from "next-auth/react";
-import Head from "next/head";
 import { checkOne } from "@lib/cache/flags";
 import Link from "next/link";
 import { Card } from "@components/globals/card/Card";
@@ -23,6 +22,7 @@ import { detectOldUnprocessedSubmissions } from "@lib/nagware";
 import { Nagware } from "@components/form-builder/app/Nagware";
 import { EmailResponseSettings } from "@components/form-builder/app/shared";
 import { useTemplateStore } from "@components/form-builder/store";
+import { LoggedOutTabName, LoggedOutTab } from "@components/form-builder/app/LoggedOutTab";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -55,12 +55,19 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   const navItemClasses =
     "no-underline !shadow-none border-black border-1 rounded-[100px] pt-1 pb-2 laptop:py-2 px-5 mr-3 mb-0 text-black visited:text-black focus:bg-[#475569] hover:bg-[#475569] hover:!text-white focus:!text-white [&_svg]:focus:fill-white";
 
+  if (!isAuthenticated) {
+    return (
+      <>
+        <PageTemplate title={t("responses.title")}>
+          <LoggedOutTab tabName={LoggedOutTabName.RESPONSES} />
+        </PageTemplate>
+      </>
+    );
+  }
+
   if (deliveryOption && deliveryOption.emailAddress) {
     return (
       <>
-        <Head>
-          <title>{t("responses.email.title")}</title>
-        </Head>
         <PageTemplate title={t("responses.email.title")} autoWidth={true}>
           <div className="flex flex-wrap items-baseline mb-8">
             <h1 className="border-none mb-0 tablet:mb-4 tablet:mr-8">
@@ -88,9 +95,6 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
 
   return (
     <>
-      <Head>
-        <title>{t("responses.title")}</title>
-      </Head>
       <PageTemplate title={t("responses.title")} autoWidth={true}>
         <div className="flex flex-wrap items-baseline mb-8">
           <h1 className="border-none mb-0 tablet:mb-4 tablet:mr-8">
@@ -277,7 +281,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
 };
 
 Responses.getLayout = (page: ReactElement) => {
-  return <Template page={page} />;
+  return <Template page={page} isFormBuilder />;
 };
 
 export const getServerSideProps: GetServerSideProps = async ({

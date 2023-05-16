@@ -5,7 +5,6 @@ import Footer from "@components/globals/Footer";
 import SkipLink from "@components/globals/SkipLink";
 import Fip from "@components/globals/Fip";
 import { PublicFormRecord } from "@lib/types";
-import { useTranslation } from "next-i18next";
 
 interface FormDisplayLayoutProps extends React.PropsWithChildren {
   formRecord: PublicFormRecord;
@@ -15,12 +14,9 @@ interface FormDisplayLayoutProps extends React.PropsWithChildren {
 const FormDisplayLayout = ({ children, formRecord, embedded }: FormDisplayLayoutProps) => {
   const classes = getPageClassNames(formRecord);
 
-  const { t } = useTranslation("common");
-
   return (
     <>
       <Head>
-        <title>{t("title")}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta charSet="utf-8" />
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
@@ -36,7 +32,7 @@ const FormDisplayLayout = ({ children, formRecord, embedded }: FormDisplayLayout
         <div id="page-container">
           <main id="content">{children}</main>
         </div>
-        {!embedded && <Footer disableGcBranding={formRecord.form.brand?.disableGcBranding} />}
+        {!embedded && <Footer disableGcBranding={formRecord?.form.brand?.disableGcBranding} />}
       </div>
     </>
   );

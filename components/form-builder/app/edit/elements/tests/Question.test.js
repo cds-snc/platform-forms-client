@@ -4,6 +4,7 @@ import { Question } from "../question/Question";
 import { useTemplateStore } from "@formbuilder/store";
 import { defaultStore as store, Providers, localStorageMock } from "@formbuilder/test-utils";
 import userEvent from "@testing-library/user-event";
+import { LocalizedElementProperties } from "../../../../types";
 
 // Mock sessionStorage
 Object.defineProperty(window, "sessionStorage", {
@@ -60,13 +61,14 @@ describe("Question", () => {
     const user = userEvent.setup();
 
     const Container = () => {
-      const { elements, updateField } = useTemplateStore((s) => ({
+      const { elements, updateField, propertyPath } = useTemplateStore((s) => ({
         elements: s.form.elements,
         updateField: s.updateField,
+        propertyPath: s.propertyPath,
       }));
 
-      const onQuestionChange = (itemIndex, val) => {
-        updateField(`form.elements[${itemIndex}].properties.titleEn`, val);
+      const onQuestionChange = (itemId, val) => {
+        updateField(propertyPath(itemId, LocalizedElementProperties.TITLE, "en"), val);
       };
 
       const item = { id: 1, index: 0, ...elements[0] };

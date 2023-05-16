@@ -6,6 +6,8 @@ import { getServerSession } from "next-auth/next";
 import { useTranslation } from "next-i18next";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 
+import { ErrorPanel } from "@components/globals";
+
 const Unauthorized: React.FC = () => {
   const { t } = useTranslation("admin-login");
   return (
@@ -13,8 +15,11 @@ const Unauthorized: React.FC = () => {
       <Head>
         <title>{t("unauthorized.title")}</title>
       </Head>
-      <h1>{t("unauthorized.title")}</h1>
-      <div className="mt-4">{t("unauthorized.detail")}</div>
+      <div className="mt-10">
+        <ErrorPanel headingTag="h1" title={t("unauthorized.title")}>
+          <p>{t("unauthorized.detail")}</p>
+        </ErrorPanel>
+      </div>
     </>
   );
 };

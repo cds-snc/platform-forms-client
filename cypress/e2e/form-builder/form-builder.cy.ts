@@ -86,8 +86,8 @@ describe("Test FormBuilder", () => {
     // publish form
     cy.get("a").contains("Publish").click();
     cy.get("a").contains("Publish").should("have.class", "font-bold");
-    cy.get("h1").should("contain", "Sign in to publish your form");
-    cy.get("a").contains("create one").click();
+    cy.get("p").should("contain", "You cannot publish");
+    cy.get("a").contains("create one now").click();
 
     // can visit create account
     cy.url().should("contain", "/signup/register");

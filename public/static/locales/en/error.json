@@ -6,11 +6,11 @@
     "desc": "Return to homepage"
   },
   "404": {
-    "title": "We couldn't find that webpage",
-    "body": "We're sorry you ended up here. Sometimes a page gets moved or deleted."
+    "title": "Page not found ",
+    "body": "Sorry, the page you’re looking for was not found."
   },
   "500": {
     "title": "Something went wrong",
-    "body": "This page is not working at the moment. Please try again later."
+    "body": "There’s currently a problem with the service. Please try again later."
   }
 }
