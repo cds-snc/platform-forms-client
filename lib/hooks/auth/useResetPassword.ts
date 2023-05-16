@@ -6,33 +6,21 @@ import { logMessage } from "@lib/logger";
 import { useTranslation } from "next-i18next";
 import { useState } from "react";
 import { fetchWithCsrfToken } from "./fetchWithCsrfToken";
+import { useAuthErrors } from "./useAuthErrors";
 
 export const useResetPassword = () => {
   const router = useRouter();
   const { t } = useTranslation("cognito-errors");
   const username = useRef("");
   const [needsConfirmation, setNeedsConfirmation] = useState(false);
-
-  const [cognitoError, setCognitoError] = useState("");
-  const [cognitoErrorDescription, setCognitoErrorDescription] = useState("");
-  const [cognitoErrorIsDismissible, setCognitoErrorIsDismissible] = useState(true);
-  const [cognitoErrorCallToActionLink, setCognitoErrorCallToActionLink] = useState("");
-  const [cognitoErrorCallToActionText, setCognitoErrorCallToActionText] = useState("");
-
-  const resetCognitoErrorState = () => {
-    setCognitoError("");
-    setCognitoErrorDescription("");
-    setCognitoErrorIsDismissible(true);
-    setCognitoErrorCallToActionLink("");
-    setCognitoErrorCallToActionText("");
-  };
+  const [authErrorsState, { authErrorsReset, internalServiceException }] = useAuthErrors();
 
   const sendForgotPassword = async (
     username: string,
     successCallback?: () => void,
     failedCallback?: (error: string) => void
   ) => {
-    resetCognitoErrorState();
+    authErrorsReset();
     try {
       await fetchWithCsrfToken("/api/account/forgotpassword", { username });
       if (successCallback) successCallback();
@@ -42,7 +30,7 @@ export const useResetPassword = () => {
       logMessage.error(e);
 
       if (!message) {
-        setCognitoError(t("InternalServiceException"));
+        internalServiceException();
         if (failedCallback) failedCallback("InternalServiceException");
         return;
       }
@@ -52,7 +40,7 @@ export const useResetPassword = () => {
       } else if (message.includes("UserNotFoundException")) {
         await router.push("/signup/register");
       } else {
-        setCognitoError(t("InternalServiceException"));
+        internalServiceException();
         if (failedCallback) failedCallback("InternalServiceException");
       }
     }
@@ -73,7 +61,7 @@ export const useResetPassword = () => {
       setErrors,
     }: FormikHelpers<{ username: string; password: string; confirmationCode: string }>
   ) => {
-    resetCognitoErrorState();
+    authErrorsReset();
     try {
       await fetchWithCsrfToken("/api/account/confirmpassword", {
         username,
@@ -88,7 +76,7 @@ export const useResetPassword = () => {
       logMessage.error(e);
 
       if (!message) {
-        setCognitoError(t("InternalServiceException"));
+        internalServiceException();
         return;
       }
 
@@ -105,7 +93,8 @@ export const useResetPassword = () => {
           password: t("InvalidPasswordException"),
         });
       } else {
-        setCognitoError(t("InternalServiceException"));
+        // setCognitoError(t("InternalServiceException"));
+        internalServiceException();
       }
     } finally {
       setSubmitting(false);
@@ -116,15 +105,9 @@ export const useResetPassword = () => {
     sendForgotPassword,
     confirmPasswordReset,
     username,
-
-    cognitoError,
-    cognitoErrorDescription,
-    cognitoErrorCallToActionLink,
-    cognitoErrorCallToActionText,
-    cognitoErrorIsDismissible,
-
     needsConfirmation,
     setNeedsConfirmation,
-    resetCognitoErrorState,
+    authErrorsState,
+    authErrorsReset,
   };
 };

@@ -24,16 +24,12 @@ import { useResetPassword } from "@lib/hooks/auth";
 const ResetPassword = () => {
   const {
     username,
-    cognitoError,
-    cognitoErrorDescription,
-    cognitoErrorCallToActionLink,
-    cognitoErrorCallToActionText,
-    cognitoErrorIsDismissible,
     needsConfirmation,
     setNeedsConfirmation,
-    resetCognitoErrorState,
     sendForgotPassword,
     confirmPasswordReset,
+    authErrorsState,
+    authErrorsReset,
   } = useResetPassword();
 
   const { t } = useTranslation(["reset-password", "common"]);
@@ -146,21 +142,23 @@ const ResetPassword = () => {
         >
           {({ handleSubmit, errors }) => (
             <>
-              {cognitoError && (
+              {authErrorsState.title && (
                 <Alert
                   type={ErrorStatus.ERROR}
-                  heading={cognitoError}
-                  onDismiss={resetCognitoErrorState}
+                  heading={authErrorsState.title}
+                  onDismiss={authErrorsReset}
                   id="cognitoErrors"
-                  dismissible={cognitoErrorIsDismissible}
+                  // dismissible={cognitoErrorIsDismissible}
                 >
-                  {cognitoErrorDescription}&nbsp;
-                  {cognitoErrorCallToActionLink ? (
-                    <Link href={cognitoErrorCallToActionLink}>{cognitoErrorCallToActionText}</Link>
+                  {authErrorsState.description}&nbsp;
+                  {authErrorsState.callToActionLink ? (
+                    <Link href={authErrorsState.callToActionLink}>
+                      {authErrorsState.callToActionText}
+                    </Link>
                   ) : undefined}
                 </Alert>
               )}
-              {Object.keys(errors).length > 0 && !cognitoError && (
+              {Object.keys(errors).length > 0 && !authErrorsState.title && (
                 <Alert
                   type={ErrorStatus.ERROR}
                   validation={true}
@@ -229,21 +227,23 @@ const ResetPassword = () => {
       >
         {({ handleSubmit, errors }) => (
           <>
-            {cognitoError && (
+            {authErrorsState.title && (
               <Alert
                 type={ErrorStatus.ERROR}
-                heading={cognitoError}
-                onDismiss={resetCognitoErrorState}
+                heading={authErrorsState.title}
+                onDismiss={authErrorsReset}
                 id="cognitoErrors"
-                dismissible={cognitoErrorIsDismissible}
+                // dismissible={cognitoErrorIsDismissible}
               >
-                {cognitoErrorDescription}&nbsp;
-                {cognitoErrorCallToActionLink ? (
-                  <Link href={cognitoErrorCallToActionLink}>{cognitoErrorCallToActionText}</Link>
+                {authErrorsState.description}&nbsp;
+                {authErrorsState.callToActionLink ? (
+                  <Link href={authErrorsState.callToActionLink}>
+                    {authErrorsState.callToActionText}
+                  </Link>
                 ) : undefined}
               </Alert>
             )}
-            {Object.keys(errors).length > 0 && !cognitoError && (
+            {Object.keys(errors).length > 0 && !authErrorsState.title && (
               <Alert
                 type={ErrorStatus.ERROR}
                 validation={true}
