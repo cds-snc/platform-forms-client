@@ -54,14 +54,14 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
   const rowRefs = useRef<Array<React.RefObject<HTMLFieldSetElement>>>(
     Array(field.value.length).fill(createRef<HTMLFieldSetElement>())
   );
-  const focussedRow = useRef<number | null>(null);
+  const focusedRow = useRef<number | null>(null);
   const [hasReachedMaxNumberOfRows, setHasReachedMaxNumberOfRows] = useState<boolean>(false);
 
   useEffect(() => {
-    if (focussedRow.current !== null) {
-      rowRefs.current[focussedRow.current].current?.focus();
-      rowRefs.current[focussedRow.current].current?.scrollIntoView();
-      focussedRow.current = null;
+    if (focusedRow.current !== null) {
+      rowRefs.current[focusedRow.current].current?.focus();
+      rowRefs.current[focusedRow.current].current?.scrollIntoView();
+      focusedRow.current = null;
     }
 
     // When rows are added or deleted run the useEffect again to focus on the new row
@@ -84,7 +84,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     // Add a new ref to the rowRefs state
     rowRefs.current.push(createRef<HTMLFieldSetElement>());
     // Do not subtract one because the rows state has not yet updated it's length when this is called
-    focussedRow.current = rows.length;
+    focusedRow.current = rows.length;
   };
 
   const deleteRow = (index: number) => {
@@ -100,7 +100,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     });
     // Remove ref from the rowRefs state
     rowRefs.current.splice(index, 1);
-    focussedRow.current = index > 0 ? index - 1 : 0;
+    focusedRow.current = index > 0 ? index - 1 : 0;
   };
 
   const classes = classnames("gc-form-group", { "gc-form-group--error": error }, className);
