@@ -1,6 +1,5 @@
 import { useRef } from "react";
-import { getCsrfToken } from "next-auth/react";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { FormikHelpers } from "formik";
 import { useTranslation } from "next-i18next";
 import { useState } from "react";
@@ -38,6 +37,7 @@ export const useRegister = () => {
     { setSubmitting }: FormikHelpers<{ username: string; password: string; name: string }>
   ) => {
     resetCognitoErrorState();
+
     try {
       await fetchWithCsrfToken("/api/signup/register", {
         username,
@@ -47,17 +47,13 @@ export const useRegister = () => {
 
       setNeedsConfirmation(true);
     } catch (err) {
-      const axiosError = err as AxiosError;
-      if (axiosError.response?.data?.message) {
-        const errorResponseMessage = axiosError.response.data.message;
-        if (errorResponseMessage.includes("UsernameExistsException")) {
-          setCognitoError(t("UsernameExistsException"));
-        } else {
-          setCognitoError(t("InternalServiceException"));
-        }
-      } else {
-        setCognitoError(t("InternalServiceException"));
+      const e = err as AxiosError;
+      const message = e.response?.data?.message;
+      if (message.includes("UsernameExistsException")) {
+        setCognitoError(t("UsernameExistsException"));
+        return;
       }
+      setCognitoError(t("InternalServiceException"));
     } finally {
       setSubmitting(false);
     }
