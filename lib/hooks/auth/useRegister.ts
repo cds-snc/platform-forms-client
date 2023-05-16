@@ -4,6 +4,7 @@ import axios, { AxiosError } from "axios";
 import { FormikHelpers } from "formik";
 import { useTranslation } from "next-i18next";
 import { useState } from "react";
+import { fetchWithCsrfToken } from "./fetchWithCsrfToken";
 
 export const useRegister = () => {
   const { t } = useTranslation("cognito-errors");
@@ -38,24 +39,13 @@ export const useRegister = () => {
   ) => {
     resetCognitoErrorState();
     try {
-      const token = await getCsrfToken();
-      if (token) {
-        await axios({
-          url: "/api/signup/register",
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-Token": token,
-          },
-          data: {
-            username,
-            password,
-            name,
-          },
-          timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-        });
-        setNeedsConfirmation(true);
-      }
+      await fetchWithCsrfToken("/api/signup/register", {
+        username,
+        password,
+        name,
+      });
+
+      setNeedsConfirmation(true);
     } catch (err) {
       const axiosError = err as AxiosError;
       if (axiosError.response?.data?.message) {
