@@ -59,7 +59,7 @@ export const Confirmation = ({
     >
       {({ handleSubmit, errors }) => (
         <>
-          {showSentReconfirmationToast && !authErrorsState.title && (
+          {showSentReconfirmationToast && !authErrorsState?.title && (
             <Alert
               type={ErrorStatus.SUCCESS}
               heading={t("signUpConfirmation.resendConfirmationCode.title")}
@@ -72,7 +72,7 @@ export const Confirmation = ({
               {t("signUpConfirmation.resendConfirmationCode.body")}
             </Alert>
           )}
-          {authErrorsState.title && (
+          {authErrorsState?.title && (
             <Alert
               type={ErrorStatus.ERROR}
               heading={authErrorsState.title}
