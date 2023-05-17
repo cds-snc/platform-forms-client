@@ -1,11 +1,11 @@
 import { useRef } from "react";
-import { AxiosError } from "axios";
 import { FormikHelpers } from "formik";
 import { useTranslation } from "next-i18next";
 import { useState } from "react";
 import { fetchWithCsrfToken } from "./fetchWithCsrfToken";
 import { useAuthErrors } from "@lib/hooks/auth/useAuthErrors";
 import { logMessage } from "@lib/logger";
+import { hasError } from "@lib/hasError";
 
 export const useRegister = () => {
   const { t } = useTranslation("cognito-errors");
@@ -35,10 +35,8 @@ export const useRegister = () => {
       });
       setNeedsConfirmation(true);
     } catch (err) {
-      const e = err as AxiosError;
-      logMessage.error(e);
-      const message = e.response?.data?.message;
-      if (message?.includes("UsernameExistsException")) {
+      logMessage.error(err);
+      if (hasError("UsernameExistsException", err)) {
         handleErrorById("UsernameExistsException");
         return;
       }

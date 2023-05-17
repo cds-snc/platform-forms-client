@@ -1,12 +1,12 @@
 import { useRef } from "react";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
-import { AxiosError } from "axios";
 import { FormikHelpers } from "formik";
 import { logMessage } from "@lib/logger";
 import { useTranslation } from "next-i18next";
 import { fetchWithCsrfToken } from "./fetchWithCsrfToken";
 import { useAuthErrors } from "./useAuthErrors";
+import { hasError } from "@lib/hasError";
 
 export const useConfirm = () => {
   const router = useRouter();
@@ -37,14 +37,13 @@ export const useConfirm = () => {
       await fetchWithCsrfToken("/api/signup/confirm", { username, confirmationCode });
     } catch (err) {
       logMessage.error(err);
-      const axiosError = err as AxiosError;
       confirmationSuccess = false;
-      const message = axiosError.response?.data?.message;
-      if (message?.includes("CodeMismatchException")) {
+
+      if (hasError("CodeMismatchException", err)) {
         setErrors({ confirmationCode: t("CodeMismatchException") });
         return;
       }
-      if (message?.includes("ExpiredCodeException")) {
+      if (hasError("ExpiredCodeException", err)) {
         setErrors({ confirmationCode: t("ExpiredCodeException") });
         return;
       }
@@ -73,14 +72,11 @@ export const useConfirm = () => {
       });
 
       if (response?.error) {
-        const message = response.error;
-        logMessage.error(message);
-        if (
-          message.includes("UserNotFoundException") ||
-          message.includes("NotAuthorizedException")
-        ) {
+        const error = response.error;
+        logMessage.error(error);
+        if (hasError(["UserNotFoundException", "NotAuthorizedException"], error)) {
           handleErrorById("UsernameOrPasswordIncorrect");
-        } else if (message.includes("GoogleCredentialsExist")) {
+        } else if (hasError("GoogleCredentialsExist", error)) {
           await router.push("/admin/login");
         } else {
           handleErrorById("InternalServiceException");
@@ -104,14 +100,11 @@ export const useConfirm = () => {
       await fetchWithCsrfToken("/api/signup/resendconfirmation", { username });
     } catch (err) {
       logMessage.error(err);
-      const axiosError = err as AxiosError;
-      const message = axiosError?.response?.data?.message;
-      if (message?.includes("TooManyRequestsException")) {
+      if (hasError("TooManyRequestsException", err)) {
         handleErrorById("TooManyRequestsException");
         return;
       }
       handleErrorById("InternalServiceException");
-      // For toast notification I think
       return err;
     }
   };
