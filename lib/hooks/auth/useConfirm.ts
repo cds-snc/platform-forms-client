@@ -18,18 +18,10 @@ export const useConfirm = () => {
   const confirm = async (
     {
       confirmationCode,
-      confirmationAuthenticationFailedCallback,
       confirmationCallback,
       shouldSignIn = true,
     }: {
       confirmationCode: string;
-      confirmationAuthenticationFailedCallback: (
-        cognitoError: string,
-        cognitoErrorDescription: string,
-        cognitoErrorCallToActionLink: string,
-        cognitoErrorCallToActionText: string,
-        cognitoErrorIsDismissible: boolean
-      ) => void;
       confirmationCallback: () => void;
       shouldSignIn: boolean;
     },
@@ -87,14 +79,7 @@ export const useConfirm = () => {
           message.includes("UserNotFoundException") ||
           message.includes("NotAuthorizedException")
         ) {
-          // TODO use handleErrorById() instead
-          confirmationAuthenticationFailedCallback(
-            t("UsernameOrPasswordIncorrect.title"),
-            t("UsernameOrPasswordIncorrect.description"),
-            t("UsernameOrPasswordIncorrect.link"),
-            t("UsernameOrPasswordIncorrect.linkText"),
-            false
-          );
+          handleErrorById("UsernameOrPasswordIncorrect");
         } else if (message.includes("GoogleCredentialsExist")) {
           await router.push("/admin/login");
         } else {

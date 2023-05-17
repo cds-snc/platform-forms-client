@@ -13,7 +13,7 @@ export const useResetPassword = () => {
   const { t } = useTranslation("cognito-errors");
   const username = useRef("");
   const [needsConfirmation, setNeedsConfirmation] = useState(false);
-  const [authErrorsState, { authErrorsReset, internalServiceException }] = useAuthErrors();
+  const [authErrorsState, { authErrorsReset, handleErrorById }] = useAuthErrors();
 
   const sendForgotPassword = async (
     username: string,
@@ -30,7 +30,7 @@ export const useResetPassword = () => {
       logMessage.error(e);
 
       if (!message) {
-        internalServiceException();
+        handleErrorById("InternalServiceExceptionLogin");
         if (failedCallback) failedCallback("InternalServiceException");
         return;
       }
@@ -40,7 +40,7 @@ export const useResetPassword = () => {
       } else if (message.includes("UserNotFoundException")) {
         await router.push("/signup/register");
       } else {
-        internalServiceException();
+        handleErrorById("InternalServiceExceptionLogin");
         if (failedCallback) failedCallback("InternalServiceException");
       }
     }
@@ -76,7 +76,7 @@ export const useResetPassword = () => {
       logMessage.error(e);
 
       if (!message) {
-        internalServiceException();
+        handleErrorById("InternalServiceExceptionLogin");
         return;
       }
 
@@ -93,8 +93,7 @@ export const useResetPassword = () => {
           password: t("InvalidPasswordException"),
         });
       } else {
-        // setCognitoError(t("InternalServiceException"));
-        internalServiceException();
+        handleErrorById("InternalServiceExceptionLogin");
       }
     } finally {
       setSubmitting(false);

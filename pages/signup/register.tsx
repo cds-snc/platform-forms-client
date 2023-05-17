@@ -91,15 +91,12 @@ const Register = () => {
 
   if (needsConfirmation) {
     return (
-      <>
-        <h1>HERE</h1>
-        <Confirmation
-          username={username.current}
-          password={password.current}
-          confirmationAuthenticationFailedCallback={() => undefined}
-          confirmationCallback={() => undefined}
-        />
-      </>
+      <Confirmation
+        username={username.current}
+        password={password.current}
+        // confirmationAuthenticationFailedCallback={() => undefined}
+        confirmationCallback={() => undefined}
+      />
     );
   }
 

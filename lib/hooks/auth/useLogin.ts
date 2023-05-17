@@ -11,10 +11,7 @@ export const useLogin = () => {
   const password = useRef("");
   const didConfirm = useRef(false);
   const [needsConfirmation, setNeedsConfirmation] = useState(false);
-  const [
-    authErrorsState,
-    { authErrorsReset, usernameOrPasswordIncorrect, internalServiceException, manualUpdate },
-  ] = useAuthErrors();
+  const [authErrorsState, { authErrorsReset, handleErrorById }] = useAuthErrors();
 
   const login = async (
     {
@@ -43,7 +40,7 @@ export const useLogin = () => {
           responseErrorMessage.includes("UserNotFoundException") ||
           responseErrorMessage.includes("NotAuthorizedException")
         ) {
-          usernameOrPasswordIncorrect();
+          handleErrorById("UsernameOrPasswordIncorrect");
         } else if (responseErrorMessage.includes("GoogleCredentialsExist")) {
           await router.push("/admin/login");
         } else if (responseErrorMessage.includes("PasswordResetRequiredException")) {
@@ -60,7 +57,7 @@ export const useLogin = () => {
       }
     } catch (err) {
       logMessage.error(err);
-      internalServiceException();
+      handleErrorById("InternalServiceExceptionLogin");
     } finally {
       setSubmitting(false);
     }
@@ -75,6 +72,5 @@ export const useLogin = () => {
     setNeedsConfirmation,
     authErrorsState,
     authErrorsReset,
-    manualUpdate,
   };
 };

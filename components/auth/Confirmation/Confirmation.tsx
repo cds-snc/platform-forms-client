@@ -10,13 +10,6 @@ import { ErrorStatus } from "@components/forms/Alert/Alert";
 interface ConfirmationProps {
   username: string;
   password: string;
-  confirmationAuthenticationFailedCallback: (
-    cognitoError: string,
-    cognitoErrorDescription: string,
-    cognitoErrorCallToActionLink: string,
-    cognitoErrorCallToActionText: string,
-    cognitoErrorIsDismissible: boolean
-  ) => void;
   confirmationCallback: () => void;
   shouldSignIn?: boolean;
 }
@@ -24,7 +17,6 @@ interface ConfirmationProps {
 export const Confirmation = ({
   username,
   password,
-  confirmationAuthenticationFailedCallback,
   confirmationCallback,
   shouldSignIn = true,
 }: ConfirmationProps): ReactElement => {
@@ -49,7 +41,6 @@ export const Confirmation = ({
         await confirm(
           {
             ...values,
-            confirmationAuthenticationFailedCallback,
             confirmationCallback,
             shouldSignIn,
           },
@@ -78,7 +69,6 @@ export const Confirmation = ({
               heading={authErrorsState.title}
               onDismiss={authErrorsReset}
               id="cognitoErrors"
-              // dismissible={cognitoErrorIsDismissible}
             >
               {authErrorsState.description}&nbsp;
               {authErrorsState.callToActionLink ? (

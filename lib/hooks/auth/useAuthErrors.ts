@@ -1,38 +1,23 @@
 import { useReducer } from "react";
 import { useTranslation } from "next-i18next";
-// import { logMessage } from "@lib/logger";
-
-// TODOs
-// -instead of authErrorsState.title, add a isError for boolean logic?
-// -ask design/content to help with rest of error messages in handleErrorById().
-
-// NOTE
-// -added logging to: confirm error
+import { logMessage } from "@lib/logger";
 
 interface AuthErrorsState {
-  title: string;
+  title: string; // TODO used also for boolean logic. may want to add a isError or similar?
   description: string;
   callToActionText: string;
   callToActionLink: string;
 }
 
-interface AuthErrorsDispatchType {
+interface AuthErrorsDispatch {
   authErrorsReset: () => void;
-  usernameOrPasswordIncorrect: () => void;
-  internalServiceException: () => void;
-  manualUpdate: ({
-    title,
-    description,
-    callToActionText,
-    callToActionLink,
-  }: AuthErrorsState) => void;
   handleErrorById: (id: string) => void;
 }
 
-export const useAuthErrors = (): [AuthErrorsState, AuthErrorsDispatchType] => {
+export const useAuthErrors = (): [AuthErrorsState, AuthErrorsDispatch] => {
   const { t } = useTranslation("cognito-errors");
 
-  enum errorsActions {
+  enum AuthErrorsActions {
     RESET = "RESET",
     UPDATE = "UPDATE",
   }
@@ -51,10 +36,10 @@ export const useAuthErrors = (): [AuthErrorsState, AuthErrorsDispatchType] => {
     const { type, payload } = action;
 
     switch (type) {
-      case errorsActions.RESET: {
+      case AuthErrorsActions.RESET: {
         return initialAuthErrorsState;
       }
-      case errorsActions.UPDATE: {
+      case AuthErrorsActions.UPDATE: {
         return {
           ...state,
           ...payload,
@@ -72,69 +57,28 @@ export const useAuthErrors = (): [AuthErrorsState, AuthErrorsDispatchType] => {
 
   const authErrorsReset = () => {
     authErrorDispatch({
-      type: errorsActions.RESET,
+      type: AuthErrorsActions.RESET,
     });
   };
 
-  const usernameOrPasswordIncorrect = () => {
-    authErrorDispatch({
-      type: errorsActions.UPDATE,
-      payload: {
-        title: t("UsernameOrPasswordIncorrect.title"),
-        description: t("UsernameOrPasswordIncorrect.description"),
-        callToActionText: t("UsernameOrPasswordIncorrect.linkText"),
-        callToActionLink: t("UsernameOrPasswordIncorrect.link"),
-      },
-    });
-  };
-
-  const internalServiceException = () => {
-    authErrorDispatch({
-      type: errorsActions.UPDATE,
-      payload: {
-        title: t("InternalServiceExceptionLogin.title"),
-        description: t("InternalServiceExceptionLogin.description"),
-        callToActionText: t("InternalServiceExceptionLogin.linkText"),
-        callToActionLink: t("InternalServiceExceptionLogin.link"),
-      },
-    });
-  };
-
-  // TODO: would rather avoid this.
-  const manualUpdate = ({
-    title,
-    description,
-    callToActionText,
-    callToActionLink,
-  }: AuthErrorsState) => {
-    authErrorDispatch({
-      type: errorsActions.UPDATE,
-      payload: {
-        title,
-        description,
-        callToActionText,
-        callToActionLink,
-      },
-    });
-  };
-
+  /**
+   * Utility function to help simplify sending actions to the reducer. The passed Id is used to
+   * find the error and send the related error object to update the reducer.
+   *
+   * @param id string used to find the error. Probably but not necessarily a cognito generated error
+   */
   function handleErrorById(id: string) {
-    // logMessage.error("--------COGNITO ERROR ID:" + id); //TEMP
-
+    logMessage.info("--------COGNITO ERROR ID:" + id); //TEMP -or- could be used for logging?
     const errorObj = { ...initialAuthErrorsState };
     switch (id) {
-      case "UsernameExistsException":
-        errorObj.title = t("UsernameExistsException");
+      // Custom and specific message. Would a more generic message be better?
+      case "InternalServiceExceptionLogin":
+        errorObj.title = t("InternalServiceExceptionLogin.title");
+        errorObj.description = t("InternalServiceExceptionLogin.description");
+        errorObj.callToActionText = t("InternalServiceExceptionLogin.linkText");
+        errorObj.callToActionLink = t("InternalServiceExceptionLogin.link");
         break;
-      case "CodeMismatchException":
-        errorObj.title = t("CodeMismatchException");
-        break;
-      case "ExpiredCodeException":
-        errorObj.title = t("ExpiredCodeException");
-        break;
-      case "TooManyRequestsException":
-        errorObj.title = t("TooManyRequestsException");
-        break;
+      case "UsernameOrPasswordIncorrect":
       case "UserNotFoundException":
       case "NotAuthorizedException":
         errorObj.title = t("UsernameOrPasswordIncorrect.title");
@@ -142,11 +86,23 @@ export const useAuthErrors = (): [AuthErrorsState, AuthErrorsDispatchType] => {
         errorObj.callToActionLink = t("UsernameOrPasswordIncorrect.link");
         errorObj.callToActionText = t("UsernameOrPasswordIncorrect.linkText");
         break;
+      case "UsernameExistsException":
+        errorObj.title = t("UsernameExistsException"); // TODO ask design/content for error message
+        break;
+      case "CodeMismatchException":
+        errorObj.title = t("CodeMismatchException"); // TODO ask design/content for error message
+        break;
+      case "ExpiredCodeException":
+        errorObj.title = t("ExpiredCodeException"); // TODO ask design/content for error message
+        break;
+      case "TooManyRequestsException":
+        errorObj.title = t("TooManyRequestsException"); // TODO ask design/content for error message
+        break;
       default:
-        errorObj.title = t("InternalServiceException");
+        errorObj.title = t("InternalServiceException"); // TODO ask design/content for error message
     }
     authErrorDispatch({
-      type: errorsActions.UPDATE,
+      type: AuthErrorsActions.UPDATE,
       payload: {
         title: errorObj.title,
         description: errorObj.description,
@@ -160,9 +116,6 @@ export const useAuthErrors = (): [AuthErrorsState, AuthErrorsDispatchType] => {
     authErrorsState,
     {
       authErrorsReset,
-      usernameOrPasswordIncorrect,
-      internalServiceException,
-      manualUpdate,
       handleErrorById,
     },
   ];

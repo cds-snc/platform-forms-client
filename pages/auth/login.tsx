@@ -26,7 +26,6 @@ const Login = () => {
     login,
     authErrorsState,
     authErrorsReset,
-    manualUpdate,
   } = useLogin();
   const { t } = useTranslation(["login", "cognito-errors", "common"]);
   const { status: registrationOpen } = useFlag("accountRegistration");
@@ -46,27 +45,11 @@ const Login = () => {
     didConfirm.current = true;
   };
 
-  const setCognitoErrorStates = (
-    cognitoError: string,
-    cognitoErrorDescription: string,
-    cognitoErrorCallToActionLink: string,
-    cognitoErrorCallToActionText: string
-    // cognitoErrorIsDismissible: boolean
-  ) => {
-    manualUpdate({
-      title: cognitoError,
-      description: cognitoErrorDescription,
-      callToActionLink: cognitoErrorCallToActionLink,
-      callToActionText: cognitoErrorCallToActionText,
-    });
-  };
-
   if (needsConfirmation) {
     return (
       <Confirmation
         username={username.current}
         password={password.current}
-        confirmationAuthenticationFailedCallback={setCognitoErrorStates}
         confirmationCallback={confirmationCallback}
       />
     );
