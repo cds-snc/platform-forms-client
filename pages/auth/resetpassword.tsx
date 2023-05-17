@@ -93,7 +93,6 @@ const ResetPassword = () => {
       <Confirmation
         username={username.current}
         password={""}
-        confirmationAuthenticationFailedCallback={() => ""}
         confirmationCallback={() => {
           setNeedsConfirmation(false);
         }}
@@ -142,7 +141,7 @@ const ResetPassword = () => {
         >
           {({ handleSubmit, errors }) => (
             <>
-              {authErrorsState.title && (
+              {authErrorsState.isError && (
                 <Alert
                   type={ErrorStatus.ERROR}
                   heading={authErrorsState.title}
@@ -158,7 +157,7 @@ const ResetPassword = () => {
                   ) : undefined}
                 </Alert>
               )}
-              {Object.keys(errors).length > 0 && !authErrorsState.title && (
+              {Object.keys(errors).length > 0 && !authErrorsState.isError && (
                 <Alert
                   type={ErrorStatus.ERROR}
                   validation={true}
@@ -227,7 +226,7 @@ const ResetPassword = () => {
       >
         {({ handleSubmit, errors }) => (
           <>
-            {authErrorsState.title && (
+            {authErrorsState.isError && (
               <Alert
                 type={ErrorStatus.ERROR}
                 heading={authErrorsState.title}
@@ -243,7 +242,7 @@ const ResetPassword = () => {
                 ) : undefined}
               </Alert>
             )}
-            {Object.keys(errors).length > 0 && !authErrorsState.title && (
+            {Object.keys(errors).length > 0 && !authErrorsState.isError && (
               <Alert
                 type={ErrorStatus.ERROR}
                 validation={true}

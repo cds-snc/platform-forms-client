@@ -1,9 +1,9 @@
 import { useReducer } from "react";
 import { useTranslation } from "next-i18next";
-import { logMessage } from "@lib/logger";
 
 interface AuthErrorsState {
-  title: string; // TODO used also for boolean logic. may want to add a isError or similar?
+  isError: boolean;
+  title: string;
   description: string;
   callToActionText: string;
   callToActionLink: string;
@@ -23,6 +23,7 @@ export const useAuthErrors = (): [AuthErrorsState, AuthErrorsDispatch] => {
   }
 
   const initialAuthErrorsState = {
+    isError: false,
     title: "",
     description: "",
     callToActionText: "",
@@ -68,8 +69,10 @@ export const useAuthErrors = (): [AuthErrorsState, AuthErrorsDispatch] => {
    * @param id string used to find the error. Probably but not necessarily a cognito generated error
    */
   function handleErrorById(id: string) {
-    logMessage.info("--------COGNITO ERROR ID:" + id); //TEMP -or- could be used for logging?
-    const errorObj = { ...initialAuthErrorsState };
+    const errorObj = {
+      ...initialAuthErrorsState,
+      isError: true,
+    };
     switch (id) {
       // Custom and specific message. Would a more generic message be better?
       case "InternalServiceExceptionLogin":
@@ -103,12 +106,7 @@ export const useAuthErrors = (): [AuthErrorsState, AuthErrorsDispatch] => {
     }
     authErrorDispatch({
       type: AuthErrorsActions.UPDATE,
-      payload: {
-        title: errorObj.title,
-        description: errorObj.description,
-        callToActionText: errorObj.callToActionText,
-        callToActionLink: errorObj.callToActionLink,
-      },
+      payload: errorObj,
     });
   }
 

@@ -94,7 +94,6 @@ const Register = () => {
       <Confirmation
         username={username.current}
         password={password.current}
-        // confirmationAuthenticationFailedCallback={() => undefined}
         confirmationCallback={() => undefined}
       />
     );
@@ -118,7 +117,7 @@ const Register = () => {
       >
         {({ handleSubmit, errors }) => (
           <>
-            {authErrorsState.title && (
+            {authErrorsState.isError && (
               <Alert
                 type={ErrorStatus.ERROR}
                 heading={authErrorsState.title}
@@ -134,7 +133,7 @@ const Register = () => {
                 ) : undefined}
               </Alert>
             )}
-            {Object.keys(errors).length > 0 && !authErrorsState.title && (
+            {Object.keys(errors).length > 0 && !authErrorsState.isError && (
               <Alert
                 type={ErrorStatus.ERROR}
                 validation={true}

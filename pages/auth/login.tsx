@@ -61,7 +61,7 @@ const Login = () => {
         <title>{t("title")}</title>
       </Head>
       <Formik
-        initialValues={{ username: authErrorsState.title ? username.current : "", password: "" }}
+        initialValues={{ username: authErrorsState.isError ? username.current : "", password: "" }}
         onSubmit={async (values, helpers) => {
           username.current = values.username;
           password.current = values.password;
@@ -80,7 +80,7 @@ const Login = () => {
       >
         {({ handleSubmit, errors }) => (
           <>
-            {authErrorsState.title && (
+            {authErrorsState.isError && (
               <Alert
                 type={ErrorStatus.ERROR}
                 heading={authErrorsState.title}
@@ -96,7 +96,7 @@ const Login = () => {
                 .
               </Alert>
             )}
-            {Object.keys(errors).length > 0 && !authErrorsState.title && (
+            {Object.keys(errors).length > 0 && !authErrorsState.isError && (
               <Alert
                 type={ErrorStatus.ERROR}
                 validation={true}
