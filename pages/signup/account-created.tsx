@@ -14,7 +14,7 @@ export default function AccountCreated() {
       <Head>
         <title>{t("accountCreated.title")}</title>
       </Head>
-      <h1>{t("accountCreated.title")}</h1>
+      <h1 className="border-b-0 mt-6 mb-12">{t("accountCreated.title")}</h1>
       <h2>{t("accountCreated.yourAccountTitle")}</h2>
       <p>{t("accountCreated.yourAccountListDescription")}:</p>
       <ul>

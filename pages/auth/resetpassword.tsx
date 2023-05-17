@@ -2,7 +2,6 @@ import React, { ReactElement, useState } from "react";
 import { Formik } from "formik";
 import { TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
 import { Button } from "@components/globals";
-import { useAuth } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
 import { Confirmation } from "@components/auth/Confirmation/Confirmation";
@@ -20,21 +19,18 @@ import {
   isValidGovEmail,
 } from "@lib/validation";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
+import { useResetPassword } from "@lib/hooks/auth";
 
 const ResetPassword = () => {
   const {
     username,
-    cognitoError,
-    cognitoErrorDescription,
-    cognitoErrorCallToActionLink,
-    cognitoErrorCallToActionText,
-    cognitoErrorIsDismissible,
     needsConfirmation,
     setNeedsConfirmation,
-    resetCognitoErrorState,
     sendForgotPassword,
     confirmPasswordReset,
-  } = useAuth();
+    authErrorsState,
+    authErrorsReset,
+  } = useResetPassword();
 
   const { t } = useTranslation(["reset-password", "common"]);
 
@@ -97,7 +93,6 @@ const ResetPassword = () => {
       <Confirmation
         username={username.current}
         password={""}
-        confirmationAuthenticationFailedCallback={() => ""}
         confirmationCallback={() => {
           setNeedsConfirmation(false);
         }}
@@ -146,21 +141,23 @@ const ResetPassword = () => {
         >
           {({ handleSubmit, errors }) => (
             <>
-              {cognitoError && (
+              {authErrorsState.isError && (
                 <Alert
                   type={ErrorStatus.ERROR}
-                  heading={cognitoError}
-                  onDismiss={resetCognitoErrorState}
+                  heading={authErrorsState.title}
+                  onDismiss={authErrorsReset}
                   id="cognitoErrors"
-                  dismissible={cognitoErrorIsDismissible}
+                  // dismissible={cognitoErrorIsDismissible}
                 >
-                  {cognitoErrorDescription}&nbsp;
-                  {cognitoErrorCallToActionLink ? (
-                    <Link href={cognitoErrorCallToActionLink}>{cognitoErrorCallToActionText}</Link>
+                  {authErrorsState.description}&nbsp;
+                  {authErrorsState.callToActionLink ? (
+                    <Link href={authErrorsState.callToActionLink}>
+                      {authErrorsState.callToActionText}
+                    </Link>
                   ) : undefined}
                 </Alert>
               )}
-              {Object.keys(errors).length > 0 && !cognitoError && (
+              {Object.keys(errors).length > 0 && !authErrorsState.isError && (
                 <Alert
                   type={ErrorStatus.ERROR}
                   validation={true}
@@ -229,21 +226,23 @@ const ResetPassword = () => {
       >
         {({ handleSubmit, errors }) => (
           <>
-            {cognitoError && (
+            {authErrorsState.isError && (
               <Alert
                 type={ErrorStatus.ERROR}
-                heading={cognitoError}
-                onDismiss={resetCognitoErrorState}
+                heading={authErrorsState.title}
+                onDismiss={authErrorsReset}
                 id="cognitoErrors"
-                dismissible={cognitoErrorIsDismissible}
+                // dismissible={cognitoErrorIsDismissible}
               >
-                {cognitoErrorDescription}&nbsp;
-                {cognitoErrorCallToActionLink ? (
-                  <Link href={cognitoErrorCallToActionLink}>{cognitoErrorCallToActionText}</Link>
+                {authErrorsState.description}&nbsp;
+                {authErrorsState.callToActionLink ? (
+                  <Link href={authErrorsState.callToActionLink}>
+                    {authErrorsState.callToActionText}
+                  </Link>
                 ) : undefined}
               </Alert>
             )}
-            {Object.keys(errors).length > 0 && !cognitoError && (
+            {Object.keys(errors).length > 0 && !authErrorsState.isError && (
               <Alert
                 type={ErrorStatus.ERROR}
                 validation={true}

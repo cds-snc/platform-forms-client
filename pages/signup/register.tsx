@@ -2,7 +2,8 @@ import React, { ReactElement } from "react";
 import { Formik } from "formik";
 import { TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
 import { Button } from "@components/globals";
-import { useAuth, useFlag } from "@lib/hooks";
+import { useFlag } from "@lib/hooks";
+import { useRegister } from "@lib/hooks/auth";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -25,18 +26,8 @@ import { ErrorStatus } from "@components/forms/Alert/Alert";
 
 const Register = () => {
   const { isLoading, status: registrationOpen } = useFlag("accountRegistration");
-  const {
-    username,
-    password,
-    needsConfirmation,
-    cognitoError,
-    cognitoErrorDescription,
-    cognitoErrorCallToActionLink,
-    cognitoErrorCallToActionText,
-    cognitoErrorIsDismissible,
-    resetCognitoErrorState,
-    register,
-  } = useAuth();
+  const { username, password, needsConfirmation, register, authErrorsState, authErrorsReset } =
+    useRegister();
   const { t } = useTranslation(["signup", "common"]);
 
   const validationSchema = Yup.object().shape({
@@ -103,7 +94,6 @@ const Register = () => {
       <Confirmation
         username={username.current}
         password={password.current}
-        confirmationAuthenticationFailedCallback={() => undefined}
         confirmationCallback={() => undefined}
       />
     );
@@ -127,21 +117,23 @@ const Register = () => {
       >
         {({ handleSubmit, errors }) => (
           <>
-            {cognitoError && (
+            {authErrorsState.isError && (
               <Alert
                 type={ErrorStatus.ERROR}
-                heading={cognitoError}
-                onDismiss={resetCognitoErrorState}
+                heading={authErrorsState.title}
+                onDismiss={authErrorsReset}
                 id="cognitoErrors"
-                dismissible={cognitoErrorIsDismissible}
+                // dismissible={cognitoErrorIsDismissible}
               >
-                {cognitoErrorDescription}&nbsp;
-                {cognitoErrorCallToActionLink ? (
-                  <Link href={cognitoErrorCallToActionLink}>{cognitoErrorCallToActionText}</Link>
+                {authErrorsState.description}&nbsp;
+                {authErrorsState.callToActionLink ? (
+                  <Link href={authErrorsState.callToActionLink}>
+                    {authErrorsState.callToActionText}
+                  </Link>
                 ) : undefined}
               </Alert>
             )}
-            {Object.keys(errors).length > 0 && !cognitoError && (
+            {Object.keys(errors).length > 0 && !authErrorsState.isError && (
               <Alert
                 type={ErrorStatus.ERROR}
                 validation={true}
@@ -162,7 +154,7 @@ const Register = () => {
                 </ol>
               </Alert>
             )}
-            <h1>{t("signUpRegistration.title")}</h1>
+            <h1 className="border-b-0 mt-6 mb-12">{t("signUpRegistration.title")}</h1>
             <p className="mb-10 -mt-6">
               {t("signUpRegistration.alreadyHaveAnAccount")}&nbsp;
               <Link href={"/auth/login"}>{t("signUpRegistration.alreadyHaveAnAccountLink")}</Link>
