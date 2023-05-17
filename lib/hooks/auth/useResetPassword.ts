@@ -1,12 +1,12 @@
 import { useRef } from "react";
 import { useRouter } from "next/router";
-import { AxiosError } from "axios";
 import { FormikHelpers } from "formik";
 import { logMessage } from "@lib/logger";
 import { useTranslation } from "next-i18next";
 import { useState } from "react";
 import { fetchWithCsrfToken } from "./fetchWithCsrfToken";
 import { useAuthErrors } from "./useAuthErrors";
+import { hasError } from "@lib/hasError";
 
 export const useResetPassword = () => {
   const router = useRouter();
@@ -25,19 +25,11 @@ export const useResetPassword = () => {
       await fetchWithCsrfToken("/api/account/forgotpassword", { username });
       if (successCallback) successCallback();
     } catch (err) {
-      const e = err as AxiosError;
-      const message = e.response?.data?.message;
-      logMessage.error(e);
+      logMessage.error(err);
 
-      if (!message) {
-        handleErrorById("InternalServiceExceptionLogin");
-        if (failedCallback) failedCallback("InternalServiceException");
-        return;
-      }
-
-      if (message.includes("InvalidParameterException") && failedCallback) {
+      if (hasError("InvalidParameterException", err) && failedCallback) {
         failedCallback("InvalidParameterException");
-      } else if (message.includes("UserNotFoundException")) {
+      } else if (hasError("UserNotFoundException", err)) {
         await router.push("/signup/register");
       } else {
         handleErrorById("InternalServiceExceptionLogin");
@@ -71,24 +63,15 @@ export const useResetPassword = () => {
 
       await router.push("/auth/login");
     } catch (err) {
-      const e = err as AxiosError;
-      const message = e.response?.data?.message;
-      logMessage.error(e);
-
-      if (!message) {
-        handleErrorById("InternalServiceExceptionLogin");
-        return;
-      }
-
-      if (message.includes("CodeMismatchException")) {
+      if (hasError("CodeMismatchException", err)) {
         setErrors({
           confirmationCode: t("CodeMismatchException"),
         });
-      } else if (message.includes("ExpiredCodeException")) {
+      } else if (hasError("ExpiredCodeException", err)) {
         setErrors({
           confirmationCode: t("ExpiredCodeException"),
         });
-      } else if (message.includes("InvalidPasswordException")) {
+      } else if (hasError("InvalidPasswordException", err)) {
         setErrors({
           password: t("InvalidPasswordException"),
         });
