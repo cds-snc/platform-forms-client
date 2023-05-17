@@ -1,5 +1,4 @@
 import { hasError } from "@lib/hasError";
-import mockedAxios from "axios";
 
 describe("Handles string values", () => {
   test("error single value array", () => {
