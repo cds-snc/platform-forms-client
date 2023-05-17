@@ -4,6 +4,7 @@ import { signIn } from "next-auth/react";
 import { FormikHelpers } from "formik";
 import { logMessage } from "@lib/logger";
 import { useAuthErrors } from "@lib/hooks/auth/useAuthErrors";
+import { hasError } from "@lib/hasError";
 
 export const useLogin = () => {
   const router = useRouter();
@@ -32,21 +33,18 @@ export const useLogin = () => {
       });
 
       if (response?.error) {
-        const responseErrorMessage = response.error;
+        const error = response.error;
         setSubmitting(false);
-        if (responseErrorMessage.includes("UserNotConfirmedException")) {
+        if (hasError("UserNotConfirmedException", error)) {
           setNeedsConfirmation(true);
-        } else if (
-          responseErrorMessage.includes("UserNotFoundException") ||
-          responseErrorMessage.includes("NotAuthorizedException")
-        ) {
+        } else if (hasError(["UserNotFoundException", "NotAuthorizedException"], error)) {
           handleErrorById("UsernameOrPasswordIncorrect");
-        } else if (responseErrorMessage.includes("GoogleCredentialsExist")) {
+        } else if (hasError("GoogleCredentialsExist", error)) {
           await router.push("/admin/login");
-        } else if (responseErrorMessage.includes("PasswordResetRequiredException")) {
+        } else if (hasError("PasswordResetRequiredException", error)) {
           await router.push("/auth/resetpassword");
         } else {
-          throw Error(responseErrorMessage);
+          throw Error(error);
         }
       } else if (response?.ok) {
         if (didConfirm.current) {
