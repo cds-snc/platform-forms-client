@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import { Formik } from "formik";
 import { TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
 import { Button } from "@components/globals";
-import { useAuth, useFlag } from "@lib/hooks";
+import { useFlag } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -14,6 +14,7 @@ import { Confirmation } from "@components/auth/Confirmation/Confirmation";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import * as Yup from "yup";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
+import { useLogin } from "@lib/hooks/auth";
 
 const Login = () => {
   const {
@@ -22,14 +23,10 @@ const Login = () => {
     didConfirm,
     needsConfirmation,
     setNeedsConfirmation,
-    cognitoError,
-    cognitoErrorDescription,
-    cognitoErrorCallToActionLink,
-    cognitoErrorCallToActionText,
-    setCognitoErrorStates,
-    resetCognitoErrorState,
     login,
-  } = useAuth();
+    authErrorsState,
+    authErrorsReset,
+  } = useLogin();
   const { t } = useTranslation(["login", "cognito-errors", "common"]);
   const { status: registrationOpen } = useFlag("accountRegistration");
   const { status: passwordResetEnabled } = useFlag("passwordReset");
@@ -53,7 +50,6 @@ const Login = () => {
       <Confirmation
         username={username.current}
         password={password.current}
-        confirmationAuthenticationFailedCallback={setCognitoErrorStates}
         confirmationCallback={confirmationCallback}
       />
     );
@@ -65,7 +61,7 @@ const Login = () => {
         <title>{t("title")}</title>
       </Head>
       <Formik
-        initialValues={{ username: cognitoError ? username.current : "", password: "" }}
+        initialValues={{ username: authErrorsState.isError ? username.current : "", password: "" }}
         onSubmit={async (values, helpers) => {
           username.current = values.username;
           password.current = values.password;
@@ -79,26 +75,28 @@ const Login = () => {
         validateOnChange={false}
         validateOnBlur={false}
         validationSchema={validationSchema}
-        validate={resetCognitoErrorState}
-        onReset={resetCognitoErrorState}
+        validate={authErrorsReset}
+        onReset={authErrorsReset}
       >
         {({ handleSubmit, errors }) => (
           <>
-            {cognitoError && (
+            {authErrorsState.isError && (
               <Alert
                 type={ErrorStatus.ERROR}
-                heading={cognitoError}
+                heading={authErrorsState.title}
                 id="cognitoErrors"
                 focussable={true}
               >
-                {cognitoErrorDescription}
-                {cognitoErrorCallToActionLink ? (
-                  <Link href={cognitoErrorCallToActionLink}>{cognitoErrorCallToActionText}</Link>
+                {authErrorsState.description}
+                {authErrorsState.callToActionLink ? (
+                  <Link href={authErrorsState.callToActionLink}>
+                    {authErrorsState.callToActionText}
+                  </Link>
                 ) : undefined}
                 .
               </Alert>
             )}
-            {Object.keys(errors).length > 0 && !cognitoError && (
+            {Object.keys(errors).length > 0 && !authErrorsState.isError && (
               <Alert
                 type={ErrorStatus.ERROR}
                 validation={true}
