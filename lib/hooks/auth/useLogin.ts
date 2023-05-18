@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
+import axios from "axios";
+import { getCsrfToken } from "next-auth/react";
 import { useRouter } from "next/router";
-import { signIn } from "next-auth/react";
 import { FormikHelpers } from "formik";
 import { logMessage } from "@lib/logger";
 import { useAuthErrors } from "@lib/hooks/auth/useAuthErrors";
@@ -26,14 +27,22 @@ export const useLogin = () => {
   ) => {
     authErrorsReset();
     try {
-      const response = await signIn<"credentials">("credentials", {
-        redirect: false,
-        username,
-        password,
+      const { data } = await axios({
+        url: "/api/auth/signin/cognito",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        data: new URLSearchParams({
+          username,
+          password,
+          csrfToken: (await getCsrfToken()) ?? "noToken",
+        }),
+        timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       });
 
-      if (response?.error) {
-        const error = response.error;
+      if (data?.error) {
+        const error = data.error;
         setSubmitting(false);
         if (hasError("UserNotConfirmedException", error)) {
           setNeedsConfirmation(true);
@@ -46,7 +55,7 @@ export const useLogin = () => {
         } else {
           throw Error(error);
         }
-      } else if (response?.ok) {
+      } else if (data?.ok) {
         if (didConfirm.current) {
           await router.push("/auth/policy?referer=/signup/account-created");
         } else {
