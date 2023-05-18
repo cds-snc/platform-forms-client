@@ -39,6 +39,14 @@ model ApiUser {
   @@unique([templateId, email])
 }
 
+model Cognito {
+  id          String   @id @default(cuid())
+  email       String
+  idToken     String
+  twoFAToken  String?
+  expires     DateTime
+}
+
 model Session {
   id           String   @id @default(cuid())
   userId       String

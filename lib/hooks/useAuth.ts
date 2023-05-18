@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useRouter } from "next/router";
-import { getCsrfToken, signIn } from "next-auth/react";
+import { getCsrfToken } from "next-auth/react";
 import axios, { AxiosError } from "axios";
 import { FormikHelpers } from "formik";
 import { logMessage } from "@lib/logger";
@@ -175,14 +175,23 @@ export const useAuth = () => {
     // try and sign the user in automatically if shouldSignIn is true, otherwise just
     // call the passed in confirmationCallback
     try {
-      const response = await signIn<"credentials">("credentials", {
-        redirect: false,
-        username,
-        password,
+      const { data } = await axios({
+        url: "/api/auth/signin/cognito",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        data: {
+          username,
+          password,
+          csrfToken: await getCsrfToken(),
+          json: true,
+        },
+        timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       });
 
-      if (response?.error) {
-        const responseErrorMessage = response.error;
+      if (data?.error) {
+        const responseErrorMessage = data.error;
         logMessage.error(responseErrorMessage);
         if (
           responseErrorMessage.includes("UserNotFoundException") ||
@@ -200,7 +209,7 @@ export const useAuth = () => {
         } else {
           setCognitoError(t("InternalServiceException"));
         }
-      } else if (response?.ok) {
+      } else if (data?.ok) {
         await router.push("/auth/policy?referer=/signup/account-created");
       }
     } catch (err) {
@@ -260,14 +269,22 @@ export const useAuth = () => {
   ) => {
     resetCognitoErrorState();
     try {
-      const response = await signIn<"credentials">("credentials", {
-        redirect: false,
-        username,
-        password,
+      const { data } = await axios({
+        url: "/api/auth/signin/cognito",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        data: new URLSearchParams({
+          username,
+          password,
+          csrfToken: (await getCsrfToken()) ?? "noToken",
+        }),
+        timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       });
 
-      if (response?.error) {
-        const responseErrorMessage = response.error;
+      if (data?.error) {
+        const responseErrorMessage = data.error;
         setSubmitting(false);
 
         if (responseErrorMessage.includes("UserNotConfirmedException")) {
@@ -287,7 +304,7 @@ export const useAuth = () => {
         } else {
           throw Error(responseErrorMessage);
         }
-      } else if (response?.ok) {
+      } else if (data?.ok) {
         if (didConfirm.current) {
           await router.push("/auth/policy?referer=/signup/account-created");
         } else {
