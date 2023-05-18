@@ -10,6 +10,7 @@ import { acceptableUseCheck, removeAcceptableUse } from "@lib/acceptableUseCache
 import { getPrivilegeRulesForUser } from "@lib/privileges";
 import { logEvent } from "@lib/auditLogs";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { generateVerificationCode, sendVerificationCode } from "@lib/2fa";
 
 if (
   (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) &&
@@ -165,12 +166,19 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
     if (!username || !password)
       return res.status(400).json({ status: "error", error: "Missing username or password" });
 
+    /*
     const result = await initiateSignIn({
       username: req.body.username,
       password: req.body.password,
     });
 
     res.status(200).json(result);
+    */
+
+    const verificationCode = await generateVerificationCode();
+    await sendVerificationCode(username, verificationCode);
+
+    res.status(200).json({ status: "success", challengeState: "MFA" });
 
     return;
   }
