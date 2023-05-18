@@ -1,27 +1,37 @@
 import React, { ReactElement } from "react";
+import axios from "axios";
+import { getCsrfToken } from "next-auth/react";
 import { Formik } from "formik";
 import { TextInput, Label } from "@components/forms";
 import { Button } from "@components/globals";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
-import { signIn } from "next-auth/react";
 import { logMessage } from "@lib/logger";
 
 const Login = () => {
   return (
     <>
       <Formik
-        initialValues={{ username: "", password: "" }}
+        initialValues={{ username: "", verificationCode: "" }}
         onSubmit={async (values) => {
           values.username;
-          values.password;
-          logMessage.debug(values);
-          await signIn("cognito", {
-            username: values.username,
-            verificationCode: values.password,
-            callbackUrl: "/auth/policy",
+          values.verificationCode;
+          const { data } = await axios({
+            url: "/api/auth/callback/cognito",
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            data: new URLSearchParams({
+              username: values.username,
+              verificationCode: values.verificationCode,
+              csrfToken: (await getCsrfToken()) ?? "noToken",
+              json: "true",
+            }),
+            timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
           });
+          logMessage.debug(data);
         }}
         validateOnChange={false}
         validateOnBlur={false}
@@ -42,14 +52,19 @@ const Login = () => {
                 />
               </div>
               <div className="focus-group">
-                <Label id={"label-password"} htmlFor={"password"} className="required" required>
-                  {"fields.password.label"}
+                <Label
+                  id={"label-verificationCode"}
+                  htmlFor={"verificationCode"}
+                  className="required"
+                  required
+                >
+                  {"fields.verificationCode.label"}
                 </Label>
                 <TextInput
                   className="h-10 w-full max-w-lg rounded"
                   type={"password"}
-                  id={"password"}
-                  name={"password"}
+                  id={"verificationCode"}
+                  name={"verificationCode"}
                   required
                 />
               </div>
