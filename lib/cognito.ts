@@ -22,8 +22,6 @@ export const initiateSignIn = async ({
   username,
   password,
 }: Credentials): Promise<CognitoToken | null> => {
-  if (!username || !password) return null;
-
   const prismaUser = await prisma.user
     .findUnique({
       where: {
@@ -65,9 +63,9 @@ export const initiateSignIn = async ({
         email: cognitoIDTokenClaims.email,
         token: idToken,
       };
+    } else {
+      return null;
     }
-
-    return null;
   } catch (e) {
     if (
       e instanceof CognitoIdentityProviderServiceException &&
