@@ -18,8 +18,14 @@ type CognitoToken = {
   token: string;
 };
 
-export const decodeCognitoToken = (cognitoToken: string) => {
-  const cognitoIDTokenParts = cognitoToken.split(".");
+type DecodedCognitoToken = {
+  id: string;
+  name: string;
+  email: string;
+};
+
+export const decodeCognitoToken = (token: string): DecodedCognitoToken => {
+  const cognitoIDTokenParts = token.split(".");
   const claimsBuff = Buffer.from(cognitoIDTokenParts[1], "base64");
   const cognitoIDTokenClaims = JSON.parse(claimsBuff.toString("utf8"));
   return {
@@ -130,5 +136,49 @@ export const requestNew2FAVerificationCode = async (email: string): Promise<void
     await sendVerificationCode(email, verificationCode);
   } catch (error) {
     // handle error if hitting unique constraint
+  }
+};
+
+export const validate2FAVerificationCode = async (
+  email: string,
+  verificationCode: string
+): Promise<DecodedCognitoToken | null> => {
+  // Verify if the verification code is valid
+  const verificationCodeValid = await prisma.cognitoCustom2FA.findUnique({
+    where: {
+      email: email,
+      verificationCode: verificationCode,
+    },
+  });
+
+  // If the verification code and username do not match fail the login
+  if (verificationCodeValid === null) return null;
+
+  // If the verification code is expired remove it from the database
+  if (verificationCodeValid.expires.getTime() < new Date().getTime()) {
+    await prisma.cognitoCustom2FA.deleteMany({
+      where: {
+        email: email,
+      },
+    });
+    return null;
+  }
+
+  // 2FA is valid, remove the verification code from the database and return user info
+  await prisma.cognitoCustom2FA.deleteMany({
+    where: {
+      email: email,
+    },
+  });
+
+  if (verificationCodeValid.cognitoToken) {
+    const decodedCognitoToken = decodeCognitoToken(verificationCodeValid.cognitoToken);
+    return {
+      id: decodedCognitoToken.id,
+      name: decodedCognitoToken.name,
+      email: decodedCognitoToken.email,
+    };
+  } else {
+    return null;
   }
 };

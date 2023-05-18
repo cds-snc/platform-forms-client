@@ -1,7 +1,12 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { begin2FAAuthentication, decodeCognitoToken, initiateSignIn } from "@lib/cognito";
+import {
+  begin2FAAuthentication,
+  decodeCognitoToken,
+  initiateSignIn,
+  validate2FAVerificationCode,
+} from "@lib/cognito";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { logMessage } from "@lib/logger";
 import { getOrCreateUser } from "@lib/users";
@@ -53,44 +58,14 @@ export const authOptions: NextAuthOptions = {
         // Check to ensure all required credentials were passed in
         if (!username || !verificationCode) return null;
 
-        // Verify if the verification code is valid
-        const verificationCodeValid = await prisma.cognitoCustom2FA.findUnique({
-          where: {
-            email: username,
-            verificationCode: verificationCode,
-          },
-        });
+        const decodedCognitoToken = await validate2FAVerificationCode(username, verificationCode);
 
-        // If the verification code and username do not match fail the login
-        if (verificationCodeValid === null) return null;
-
-        // If the verification code is expired remove it from the database
-        if (verificationCodeValid.expires.getTime() < new Date().getTime()) {
-          await prisma.cognitoCustom2FA.deleteMany({
-            where: {
-              email: username,
-            },
-          });
+        if (decodedCognitoToken) {
+          return decodedCognitoToken;
+        } else {
+          // Something didn't fit - needs error handling
           return null;
         }
-
-        // 2FA is valid, remove the verification code from the database and return user info
-        await prisma.cognitoCustom2FA.deleteMany({
-          where: {
-            email: username,
-          },
-        });
-
-        if (verificationCodeValid.cognitoToken) {
-          const decodedCognitoToken = decodeCognitoToken(verificationCodeValid.cognitoToken);
-          return {
-            id: decodedCognitoToken.id,
-            name: decodedCognitoToken.name,
-            email: decodedCognitoToken.email,
-          };
-        }
-        // Something didn't fit - needs error handling
-        return null;
       },
     }),
   ],
