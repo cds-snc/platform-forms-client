@@ -113,10 +113,8 @@ model Setting {
 }
 
 model CognitoCustom2FA {
-  email             String
+  email             String    @unique
   cognitoToken      String
   verificationCode  String    @unique
   expires           DateTime
-
-  @@unique([email, verificationCode])
 }

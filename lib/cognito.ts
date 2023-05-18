@@ -6,6 +6,7 @@ import {
 } from "@aws-sdk/client-cognito-identity-provider";
 import { logEvent } from "@lib/auditLogs";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
+import { generateVerificationCode, sendVerificationCode } from "./2fa";
 
 type Credentials = {
   username: string;
@@ -85,8 +86,8 @@ export const initiateSignIn = async ({
   }
 };
 
-export const begin2FAAuthentication = async ({ email, token }: CognitoToken) => {
-  const verificationCode = "verificationCode"; // Replace with call to generate verification code
+export const begin2FAAuthentication = async ({ email, token }: CognitoToken): Promise<void> => {
+  const verificationCode = await generateVerificationCode();
 
   const dateIn15Minutes = new Date(Date.now() + 900000); // 15 minutes (= 900000 ms)
 
@@ -99,16 +100,28 @@ export const begin2FAAuthentication = async ({ email, token }: CognitoToken) => 
         expires: dateIn15Minutes,
       },
     });
+
+    await sendVerificationCode(email, verificationCode);
   } catch (error) {
     // handle error if hitting unique constraint
   }
-
-  return null;
 };
 
-export const sendNewVerificationCode = async (email: string) => {
-  /**
-   * 1. Call code to generate + send verification code
-   * 2. Update cognitoCustom2FA entry using email as unique identifier (update verification code + modify expiry date??)
-   */
+export const requestNew2FAVerificationCode = async (email: string): Promise<void> => {
+  const verificationCode = await generateVerificationCode();
+
+  try {
+    await prisma.cognitoCustom2FA.update({
+      where: {
+        email: email,
+      },
+      data: {
+        verificationCode: verificationCode,
+      },
+    });
+
+    await sendVerificationCode(email, verificationCode);
+  } catch (error) {
+    // handle error if hitting unique constraint
+  }
 };
