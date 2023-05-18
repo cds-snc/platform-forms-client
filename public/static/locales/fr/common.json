@@ -120,6 +120,9 @@
     }
   },
   "account": {
+    "actions": {
+      "backToSignIn": "Retourner à Se connecter"
+    },
     "fields": {
       "password": {
         "label": "Mot de passe",
