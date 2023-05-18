@@ -2,7 +2,8 @@ import React, { ReactElement } from "react";
 import { Formik } from "formik";
 import { TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
 import { Button } from "@components/globals";
-import { useAuth, useFlag } from "@lib/hooks";
+import { useFlag } from "@lib/hooks";
+import { useRegister } from "@lib/hooks/auth";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -25,18 +26,8 @@ import { ErrorStatus } from "@components/forms/Alert/Alert";
 
 const Register = () => {
   const { isLoading, status: registrationOpen } = useFlag("accountRegistration");
-  const {
-    username,
-    password,
-    needsConfirmation,
-    cognitoError,
-    cognitoErrorDescription,
-    cognitoErrorCallToActionLink,
-    cognitoErrorCallToActionText,
-    cognitoErrorIsDismissible,
-    resetCognitoErrorState,
-    register,
-  } = useAuth();
+  const { username, password, needsConfirmation, register, authErrorsState, authErrorsReset } =
+    useRegister();
   const { t } = useTranslation(["signup", "common"]);
 
   const validationSchema = Yup.object().shape({
@@ -53,33 +44,33 @@ const Register = () => {
       ),
     password: Yup.string()
       .required(t("input-validation.required", { ns: "common" }))
-      .min(8, t("signUpRegistration.fields.password.error.minLength"))
-      .max(50, t("signUpRegistration.fields.password.error.maxLength"))
+      .min(8, t("account.fields.password.error.minLength", { ns: "common" }))
+      .max(50, t("account.fields.password.error.maxLength", { ns: "common" }))
       .test(
         "password-valid-lowerCase",
-        t("signUpRegistration.fields.password.error.oneLowerCase"),
+        t("account.fields.password.error.oneLowerCase", { ns: "common" }),
         (password = "") => containsLowerCaseCharacter(password)
       )
       .test(
         "password-valid-upperCase",
-        t("signUpRegistration.fields.password.error.oneUpperCase"),
+        t("account.fields.password.error.oneUpperCase", { ns: "common" }),
         (password = "") => containsUpperCaseCharacter(password)
       )
       .test(
         "password-valid-number",
-        t("signUpRegistration.fields.password.error.oneNumber"),
+        t("account.fields.password.error.oneNumber", { ns: "common" }),
         (password = "") => containsNumber(password)
       )
       .test(
         "password-valid-symbol",
-        t("signUpRegistration.fields.password.error.oneSymbol"),
+        t("account.fields.password.error.oneSymbol", { ns: "common" }),
         (password = "") => containsSymbol(password)
       ),
     passwordConfirmation: Yup.string()
       .required(t("input-validation.required", { ns: "common" }))
       .oneOf(
         [Yup.ref("password"), null],
-        t("signUpRegistration.fields.passwordConfirmation.error.mustMatch")
+        t("account.fields.passwordConfirmation.error.mustMatch", { ns: "common" })
       ),
   });
 
@@ -103,7 +94,6 @@ const Register = () => {
       <Confirmation
         username={username.current}
         password={password.current}
-        confirmationAuthenticationFailedCallback={() => undefined}
         confirmationCallback={() => undefined}
       />
     );
@@ -127,21 +117,23 @@ const Register = () => {
       >
         {({ handleSubmit, errors }) => (
           <>
-            {cognitoError && (
+            {authErrorsState.isError && (
               <Alert
                 type={ErrorStatus.ERROR}
-                heading={cognitoError}
-                onDismiss={resetCognitoErrorState}
+                heading={authErrorsState.title}
+                onDismiss={authErrorsReset}
                 id="cognitoErrors"
-                dismissible={cognitoErrorIsDismissible}
+                // dismissible={cognitoErrorIsDismissible}
               >
-                {cognitoErrorDescription}&nbsp;
-                {cognitoErrorCallToActionLink ? (
-                  <Link href={cognitoErrorCallToActionLink}>{cognitoErrorCallToActionText}</Link>
+                {authErrorsState.description}&nbsp;
+                {authErrorsState.callToActionLink ? (
+                  <Link href={authErrorsState.callToActionLink}>
+                    {authErrorsState.callToActionText}
+                  </Link>
                 ) : undefined}
               </Alert>
             )}
-            {Object.keys(errors).length > 0 && !cognitoError && (
+            {Object.keys(errors).length > 0 && !authErrorsState.isError && (
               <Alert
                 type={ErrorStatus.ERROR}
                 validation={true}
@@ -196,10 +188,10 @@ const Register = () => {
               </div>
               <div className="focus-group">
                 <Label id={"label-password"} htmlFor={"password"} className="required" required>
-                  {t("signUpRegistration.fields.password.label")}
+                  {t("account.fields.password.label", { ns: "common" })}
                 </Label>
                 <Description className="text-p text-black-default" id={"password-hint"}>
-                  {t("signUpRegistration.fields.password.hint")}
+                  {t("account.fields.password.hint", { ns: "common" })}
                 </Description>
                 <TextInput
                   className="h-10 w-full max-w-lg rounded"
@@ -216,7 +208,7 @@ const Register = () => {
                   className="required"
                   required
                 >
-                  {t("signUpRegistration.fields.passwordConfirmation.label")}
+                  {t("account.fields.passwordConfirmation.label", { ns: "common" })}
                 </Label>
                 <TextInput
                   className="h-10 w-full max-w-lg rounded"

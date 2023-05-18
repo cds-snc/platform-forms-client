@@ -1,10 +1,10 @@
 import React from "react";
 import { Confirmation } from "./Confirmation";
-import { useAuth } from "../../../lib/hooks";
-import { cleanup, render, screen, act } from "@testing-library/react";
+import { useConfirm } from "../../../lib/hooks/auth";
+import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-jest.mock("../../../lib/hooks");
+jest.mock("../../../lib/hooks/auth");
 
 describe("confirmation component", () => {
   let confirmMock;
@@ -12,13 +12,13 @@ describe("confirmation component", () => {
   beforeEach(() => {
     confirmMock = jest.fn(async () => {});
     resendConfirmationMock = jest.fn(async () => {});
-    useAuth.mockImplementation(() => ({
+    useConfirm.mockImplementation(() => ({
       confirm: confirmMock,
       resendConfirmationCode: resendConfirmationMock,
     }));
   });
   afterEach(() => {
-    useAuth.mockReset();
+    useConfirm.mockReset();
     confirmMock.mockReset();
     resendConfirmationMock.mockReset();
     cleanup();
@@ -44,7 +44,6 @@ describe("confirmation component", () => {
   test("when form is submitted, the user is confirmed", async () => {
     const user = userEvent.setup();
     const confirmationCallback = jest.fn();
-    const confirmationAuthenticationFailedCallback = jest.fn();
     render(
       <Confirmation
         username={"test"}
@@ -52,13 +51,12 @@ describe("confirmation component", () => {
         language={"en"}
         t={(key) => key}
         confirmationCallback={confirmationCallback}
-        confirmationAuthenticationFailedCallback={confirmationAuthenticationFailedCallback}
       />
     );
-    await act(async () => {
-      await user.type(screen.getByRole("textbox"), "7876657");
-      await user.click(screen.getByText("signUpConfirmation.confirmButton"));
-    });
+
+    await user.type(screen.getByRole("textbox"), "7876657");
+    await user.click(screen.getByText("signUpConfirmation.confirmButton"));
+
     expect(confirmMock.mock.calls.length).toBe(1);
     expect(confirmMock.mock.calls[0][0]).toEqual({
       username: "test",
@@ -66,7 +64,6 @@ describe("confirmation component", () => {
       confirmationCode: "7876657",
       shouldSignIn: true,
       confirmationCallback,
-      confirmationAuthenticationFailedCallback,
     });
   });
 });

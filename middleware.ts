@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse, userAgent } from "next/server";
 
 export function middleware(req: NextRequest) {
-  const browserNameList = ["internet explorer 11", "ie11", "ie"];
-  if (req.nextUrl.pathname.match(/\/(id.+)/)) {
+  // Making sure we do not create an infinite ("redirect") loop when trying to load the logo on the unsupported browser page
+  if (!req.nextUrl.pathname.includes("/img")) {
     const { browser } = userAgent(req);
-    if (browser.name && browserNameList.includes(browser.name.toLowerCase())) {
-      return NextResponse.redirect(
-        `${req.nextUrl.origin}/not-supported?referer=${req.nextUrl.origin}${req.nextUrl.pathname}`
-      );
+    if (browser.name?.toLocaleLowerCase() === "ie") {
+      return NextResponse.rewrite(`${req.nextUrl.origin}/unsupported-browser.html`);
     }
   }
+
   return NextResponse.next();
 }
