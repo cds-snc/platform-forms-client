@@ -2,11 +2,11 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import {
+  Validate2FAVerificationCodeResultStatus,
   begin2FAAuthentication,
-  decodeCognitoToken,
   initiateSignIn,
   validate2FAVerificationCode,
-} from "@lib/cognito";
+} from "@lib/auth/cognito";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { logMessage } from "@lib/logger";
 import { getOrCreateUser } from "@lib/users";
@@ -58,13 +58,20 @@ export const authOptions: NextAuthOptions = {
         // Check to ensure all required credentials were passed in
         if (!username || !verificationCode) return null;
 
-        const decodedCognitoToken = await validate2FAVerificationCode(username, verificationCode);
+        const validationResult = await validate2FAVerificationCode(username, verificationCode);
 
-        if (decodedCognitoToken) {
-          return decodedCognitoToken;
-        } else {
-          // Something didn't fit - needs error handling
-          return null;
+        switch (validationResult.status) {
+          case Validate2FAVerificationCodeResultStatus.VALID: {
+            if (!validationResult.decodedCognitoToken)
+              throw new Error("Missing decoded Cognito token");
+            return validationResult.decodedCognitoToken;
+          }
+          case Validate2FAVerificationCodeResultStatus.INVALID:
+            throw new Error("2FAInvalidVerificationCode");
+          case Validate2FAVerificationCodeResultStatus.EXPIRED:
+            throw new Error("2FAExpiredSession");
+          case Validate2FAVerificationCodeResultStatus.LOCKED_OUT:
+            throw new Error("2FALockedOutSession");
         }
       },
     }),

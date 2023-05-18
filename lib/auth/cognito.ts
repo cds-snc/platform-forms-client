@@ -7,6 +7,7 @@ import {
 import { logEvent } from "@lib/auditLogs";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { generateVerificationCode, sendVerificationCode } from "./2fa";
+import { registerFailed2FAAttempt, registerSuccessful2FAAttempt } from "./2faLockout";
 
 type Credentials = {
   username: string;
@@ -22,6 +23,18 @@ type DecodedCognitoToken = {
   id: string;
   name: string;
   email: string;
+};
+
+export enum Validate2FAVerificationCodeResultStatus {
+  VALID,
+  INVALID,
+  EXPIRED,
+  LOCKED_OUT,
+}
+
+export type Validate2FAVerificationCodeResult = {
+  status: Validate2FAVerificationCodeResultStatus;
+  decodedCognitoToken?: DecodedCognitoToken;
 };
 
 export const decodeCognitoToken = (token: string): DecodedCognitoToken => {
@@ -142,7 +155,7 @@ export const requestNew2FAVerificationCode = async (email: string): Promise<void
 export const validate2FAVerificationCode = async (
   email: string,
   verificationCode: string
-): Promise<DecodedCognitoToken | null> => {
+): Promise<Validate2FAVerificationCodeResult> => {
   // Verify if the verification code is valid
   const verificationCodeValid = await prisma.cognitoCustom2FA.findUnique({
     where: {
@@ -152,7 +165,19 @@ export const validate2FAVerificationCode = async (
   });
 
   // If the verification code and username do not match fail the login
-  if (verificationCodeValid === null) return null;
+  if (verificationCodeValid === null) {
+    const lockoutResponse = await registerFailed2FAAttempt(email);
+    if (lockoutResponse.isLockedOut) {
+      await prisma.cognitoCustom2FA.deleteMany({
+        where: {
+          email: email,
+        },
+      });
+      return { status: Validate2FAVerificationCodeResultStatus.LOCKED_OUT };
+    } else {
+      return { status: Validate2FAVerificationCodeResultStatus.INVALID };
+    }
+  }
 
   // If the verification code is expired remove it from the database
   if (verificationCodeValid.expires.getTime() < new Date().getTime()) {
@@ -161,7 +186,7 @@ export const validate2FAVerificationCode = async (
         email: email,
       },
     });
-    return null;
+    return { status: Validate2FAVerificationCodeResultStatus.EXPIRED };
   }
 
   // 2FA is valid, remove the verification code from the database and return user info
@@ -171,14 +196,16 @@ export const validate2FAVerificationCode = async (
     },
   });
 
-  if (verificationCodeValid.cognitoToken) {
-    const decodedCognitoToken = decodeCognitoToken(verificationCodeValid.cognitoToken);
-    return {
+  await registerSuccessful2FAAttempt(email);
+
+  const decodedCognitoToken = decodeCognitoToken(verificationCodeValid.cognitoToken);
+
+  return {
+    status: Validate2FAVerificationCodeResultStatus.VALID,
+    decodedCognitoToken: {
       id: decodedCognitoToken.id,
       name: decodedCognitoToken.name,
       email: decodedCognitoToken.email,
-    };
-  } else {
-    return null;
-  }
+    },
+  };
 };
