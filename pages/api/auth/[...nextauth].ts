@@ -1,7 +1,7 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { initiateSignIn } from "@lib/cognito";
+import { begin2FAAuthentication, initiateSignIn } from "@lib/cognito";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { logMessage } from "@lib/logger";
 import { getOrCreateUser } from "@lib/users";
@@ -10,7 +10,6 @@ import { acceptableUseCheck, removeAcceptableUse } from "@lib/acceptableUseCache
 import { getPrivilegeRulesForUser } from "@lib/privileges";
 import { logEvent } from "@lib/auditLogs";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { generateVerificationCode, sendVerificationCode } from "@lib/2fa";
 
 if (
   (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) &&
@@ -211,26 +210,19 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
     if (!username || !password)
       return res.status(400).json({ status: "error", error: "Missing username or password" });
 
-    if (process.env.APP_ENV === "test") {
-      res.status(200).json({ status: "success", challengeState: "MFA" });
-    }
-
-    /*
-    const result = await initiateSignIn({
-      username: req.body.username,
-      password: req.body.password,
+    const cognitoToken = await initiateSignIn({
+      username: username,
+      password: password,
     });
 
-    res.status(200).json(result);
-    */
-
-    const verificationCode = await generateVerificationCode();
-    await sendVerificationCode(username, verificationCode);
-
-    res.status(200).json({ status: "success", challengeState: "MFA" });
-
-    return;
+    if (cognitoToken) {
+      await begin2FAAuthentication(cognitoToken);
+      return res.status(200).json({ status: "success", challengeState: "MFA" });
+    } else {
+      return res.status(400).json({ status: "error", error: "Cognito authentication failed" });
+    }
   }
+
   // Runs the NextAuth.js flow
   return await NextAuth(req, res, authOptions);
 }
