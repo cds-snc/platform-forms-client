@@ -32,7 +32,5 @@ export async function registerSuccessful2FAAttempt(email: string): Promise<void>
 }
 
 async function log2FALockoutEvent(email: string): Promise<void> {
-  logMessage.warn(
-    `An email address with no access to any form has been locked out. Email: ${email}`
-  );
+  logMessage.warn(`2FA session was locked out for user: ${email}`);
 }
