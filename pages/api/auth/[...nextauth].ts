@@ -1,7 +1,7 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { begin2FAAuthentication, initiateSignIn } from "@lib/cognito";
+import { begin2FAAuthentication, decodeCognitoToken, initiateSignIn } from "@lib/cognito";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { logMessage } from "@lib/logger";
 import { getOrCreateUser } from "@lib/users";
@@ -82,13 +82,11 @@ export const authOptions: NextAuthOptions = {
         });
 
         if (verificationCodeValid.cognitoToken) {
-          const cognitoIDTokenParts = verificationCodeValid.cognitoToken.split(".");
-          const claimsBuff = Buffer.from(cognitoIDTokenParts[1], "base64");
-          const cognitoIDTokenClaims = JSON.parse(claimsBuff.toString("utf8"));
+          const decodedCognitoToken = decodeCognitoToken(verificationCodeValid.cognitoToken);
           return {
-            id: cognitoIDTokenClaims.sub,
-            name: cognitoIDTokenClaims.name,
-            email: cognitoIDTokenClaims.email,
+            id: decodedCognitoToken.id,
+            name: decodedCognitoToken.name,
+            email: decodedCognitoToken.email,
           };
         }
         // Something didn't fit - needs error handling
@@ -209,6 +207,10 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
 
     if (!username || !password)
       return res.status(400).json({ status: "error", error: "Missing username or password" });
+
+    if (process.env.APP_ENV === "test") {
+      res.status(200).json({ status: "success", challengeState: "MFA" });
+    }
 
     const cognitoToken = await initiateSignIn({
       username: username,

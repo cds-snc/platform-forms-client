@@ -18,6 +18,17 @@ type CognitoToken = {
   token: string;
 };
 
+export const decodeCognitoToken = (cognitoToken: string) => {
+  const cognitoIDTokenParts = cognitoToken.split(".");
+  const claimsBuff = Buffer.from(cognitoIDTokenParts[1], "base64");
+  const cognitoIDTokenClaims = JSON.parse(claimsBuff.toString("utf8"));
+  return {
+    id: cognitoIDTokenClaims.sub,
+    name: cognitoIDTokenClaims.name,
+    email: cognitoIDTokenClaims.email,
+  };
+};
+
 export const initiateSignIn = async ({
   username,
   password,
@@ -55,12 +66,10 @@ export const initiateSignIn = async ({
     const idToken = response.AuthenticationResult?.IdToken;
 
     if (idToken) {
-      const cognitoIDTokenParts = idToken.split(".");
-      const claimsBuff = Buffer.from(cognitoIDTokenParts[1], "base64");
-      const cognitoIDTokenClaims = JSON.parse(claimsBuff.toString("utf8"));
+      const decodedCognitoToken = decodeCognitoToken(idToken);
 
       return {
-        email: cognitoIDTokenClaims.email,
+        email: decodedCognitoToken.email,
         token: idToken,
       };
     } else {
