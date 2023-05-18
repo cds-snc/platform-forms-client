@@ -1,7 +1,7 @@
 import React, { ReactElement, useState } from "react";
 import { Formik } from "formik";
 import { TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
-import { Button } from "@components/globals";
+import { Button, LinkButton } from "@components/globals";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
 import { Confirmation } from "@components/auth/Confirmation/Confirmation";
@@ -21,21 +21,10 @@ import {
 import { ErrorStatus } from "@components/forms/Alert/Alert";
 import { useResetPassword } from "@lib/hooks/auth";
 
-const ResetPassword = () => {
-  const {
-    username,
-    needsConfirmation,
-    setNeedsConfirmation,
-    sendForgotPassword,
-    confirmPasswordReset,
-    authErrorsState,
-    authErrorsReset,
-  } = useResetPassword();
-
-  const { t } = useTranslation(["reset-password", "common"]);
-
-  // we don't put this state in useAuth since its very unique to this page only
-  const [initialCodeSent, setInitialCodeSent] = useState(false);
+const Step1 = ({ setInitialCodeSent }: { setInitialCodeSent: (val: boolean) => void }) => {
+  const { t, i18n } = useTranslation(["reset-password", "common"]);
+  const { username, setNeedsConfirmation, sendForgotPassword, authErrorsState, authErrorsReset } =
+    useResetPassword();
 
   // validation schema for the initial form to send the forgot password verification code
   const sendForgotPasswordValidationSchema = Yup.object().shape({
@@ -48,6 +37,118 @@ const ResetPassword = () => {
         (value = "") => isValidGovEmail(value)
       ),
   });
+
+  return (
+    <>
+      <Head>
+        <title>{t("provideUsername.title")}</title>
+      </Head>
+      <Formik
+        initialValues={{ username: "" }}
+        validateOnChange={false}
+        validateOnBlur={false}
+        validationSchema={sendForgotPasswordValidationSchema}
+        onSubmit={async (values) => {
+          // set the username ( user's email ) to what was provided
+          username.current = values.username;
+          // call the sendForgotPassword method to attempt to send the verification code to the user
+          await sendForgotPassword(
+            values.username,
+            () => {
+              // if sending of the code succeeds we set the initialCodeSent state to true
+              // this will display the form to set the new password
+              setInitialCodeSent(true);
+            },
+            (error) => {
+              // The InvalidParameterException error will be returned in two cases
+              // 1. Where a user does not have an account
+              // 2. Where a user does not have a verified email
+              // We will show the confirmation code page in this case
+              // If a user does not have an account they will not be able to progress
+              // those that do but have not verified their email will be able to verify their
+              // email first and then return to set their passwords
+              if (error === "InvalidParameterException") {
+                setNeedsConfirmation(true);
+              }
+            }
+          );
+        }}
+      >
+        {({ handleSubmit, errors }) => (
+          <>
+            {authErrorsState.isError && (
+              <Alert
+                type={ErrorStatus.ERROR}
+                heading={authErrorsState.title}
+                onDismiss={authErrorsReset}
+                id="cognitoErrors"
+                // dismissible={cognitoErrorIsDismissible}
+              >
+                {authErrorsState.description}&nbsp;
+                {authErrorsState.callToActionLink ? (
+                  <Link href={authErrorsState.callToActionLink}>
+                    {authErrorsState.callToActionText}
+                  </Link>
+                ) : undefined}
+              </Alert>
+            )}
+            {Object.keys(errors).length > 0 && !authErrorsState.isError && (
+              <Alert
+                type={ErrorStatus.ERROR}
+                validation={true}
+                tabIndex={0}
+                id="registrationValidationErrors"
+                heading={t("input-validation.heading", { ns: "common" })}
+              >
+                <ol className="gc-ordered-list">
+                  {Object.entries(errors).map(([fieldKey, fieldValue]) => {
+                    return (
+                      <ErrorListItem
+                        key={`error-${fieldKey}`}
+                        errorKey={fieldKey}
+                        value={fieldValue}
+                      />
+                    );
+                  })}
+                </ol>
+              </Alert>
+            )}
+            <h1 className="border-b-0 mt-6 mb-12">{t("provideUsername.title")}</h1>
+            <form id="provideUsername" method="POST" onSubmit={handleSubmit} noValidate>
+              <div className="focus-group">
+                <Label id="label-username" htmlFor="username" className="required" required>
+                  {t("provideUsername.fields.username.label")}
+                </Label>
+                <Description id="username-hint" className="text-p text-black-default">
+                  {t("provideUsername.fields.username.hint")}
+                </Description>
+                <TextInput
+                  className="h-10 w-full max-w-lg rounded"
+                  type="email"
+                  id="username"
+                  name="username"
+                  ariaDescribedBy="desc-username-hint"
+                />
+              </div>
+
+              <Button theme="primary" className="mr-4" type="submit">
+                {t("provideUsername.resetPasswordButton")}
+              </Button>
+
+              <LinkButton.Secondary href={`/${i18n.language}/auth/login`}>
+                {t("account.actions.backToSignIn", { ns: "common" })}
+              </LinkButton.Secondary>
+            </form>
+          </>
+        )}
+      </Formik>
+    </>
+  );
+};
+
+const Step2 = () => {
+  const { t } = useTranslation(["reset-password", "common"]);
+  const { username, confirmPasswordReset, authErrorsState, authErrorsReset } = useResetPassword();
 
   // validation schema for password reset form
   const confirmPasswordResetValidationSchema = Yup.object().shape({
@@ -86,128 +187,6 @@ const ResetPassword = () => {
       ),
   });
 
-  // confirmation code form in case a user has not yet confirmed their account
-  // password resets are not allowed by cognito unless someone has confirmed their account
-  if (needsConfirmation) {
-    return (
-      <Confirmation
-        username={username.current}
-        password={""}
-        confirmationCallback={() => {
-          setNeedsConfirmation(false);
-        }}
-        shouldSignIn={false}
-      />
-    );
-  }
-
-  // The form to initially send a verification code needed to reset a user's password
-  if (!initialCodeSent && !needsConfirmation) {
-    return (
-      <>
-        <Head>
-          <title>{t("provideUsername.title")}</title>
-        </Head>
-        <Formik
-          initialValues={{ username: "" }}
-          validateOnChange={false}
-          validateOnBlur={false}
-          validationSchema={sendForgotPasswordValidationSchema}
-          onSubmit={async (values) => {
-            // set the username ( user's email ) to what was provided
-            username.current = values.username;
-            // call the sendForgotPassword method to attempt to send the verification code to the user
-            await sendForgotPassword(
-              values.username,
-              () => {
-                // if sending of the code succeeds we set the initialCodeSent state to true
-                // this will display the form to set the new password
-                setInitialCodeSent(true);
-              },
-              (error) => {
-                // The InvalidParameterException error will be returned in two cases
-                // 1. Where a user does not have an account
-                // 2. Where a user does not have a verified email
-                // We will show the confirmation code page in this case
-                // If a user does not have an account they will not be able to progress
-                // those that do but have not verified their email will be able to verify their
-                // email first and then return to set their passwords
-                if (error === "InvalidParameterException") {
-                  setNeedsConfirmation(true);
-                }
-              }
-            );
-          }}
-        >
-          {({ handleSubmit, errors }) => (
-            <>
-              {authErrorsState.isError && (
-                <Alert
-                  type={ErrorStatus.ERROR}
-                  heading={authErrorsState.title}
-                  onDismiss={authErrorsReset}
-                  id="cognitoErrors"
-                  // dismissible={cognitoErrorIsDismissible}
-                >
-                  {authErrorsState.description}&nbsp;
-                  {authErrorsState.callToActionLink ? (
-                    <Link href={authErrorsState.callToActionLink}>
-                      {authErrorsState.callToActionText}
-                    </Link>
-                  ) : undefined}
-                </Alert>
-              )}
-              {Object.keys(errors).length > 0 && !authErrorsState.isError && (
-                <Alert
-                  type={ErrorStatus.ERROR}
-                  validation={true}
-                  tabIndex={0}
-                  id="registrationValidationErrors"
-                  heading={t("input-validation.heading", { ns: "common" })}
-                >
-                  <ol className="gc-ordered-list">
-                    {Object.entries(errors).map(([fieldKey, fieldValue]) => {
-                      return (
-                        <ErrorListItem
-                          key={`error-${fieldKey}`}
-                          errorKey={fieldKey}
-                          value={fieldValue}
-                        />
-                      );
-                    })}
-                  </ol>
-                </Alert>
-              )}
-              <h1>{t("provideUsername.title")}</h1>
-              <form id="provideUsername" method="POST" onSubmit={handleSubmit} noValidate>
-                <div className="focus-group">
-                  <Label id="label-username" htmlFor="username" className="required" required>
-                    {t("provideUsername.fields.username.label")}
-                  </Label>
-                  <Description id="username-hint" className="text-p text-black-default">
-                    {t("provideUsername.fields.username.hint")}
-                  </Description>
-                  <TextInput
-                    className="h-10 w-full max-w-lg rounded"
-                    type="email"
-                    id="username"
-                    name="username"
-                    ariaDescribedBy="desc-username-hint"
-                  />
-                </div>
-
-                <Button className="gc-button--blue" type="submit">
-                  {t("provideUsername.resetPasswordButton")}
-                </Button>
-              </form>
-            </>
-          )}
-        </Formik>
-      </>
-    );
-  }
-
-  // the form to reset the password with the verification code
   return (
     <>
       <Head>
@@ -263,7 +242,7 @@ const ResetPassword = () => {
                 </ol>
               </Alert>
             )}
-            <h1>{t("resetPassword.title")}</h1>
+            <h1 className="border-b-0 mt-6 mb-12">{t("resetPassword.title")}</h1>
             <form id="resetPassword" method="POST" onSubmit={handleSubmit} noValidate>
               <div className="focus-group">
                 <Label
@@ -313,8 +292,11 @@ const ResetPassword = () => {
                   name="passwordConfirmation"
                 />
               </div>
+
               <div className="buttons">
-                <Button type="submit">{t("resetPassword.resetPasswordButton")}</Button>
+                <Button theme="primary" type="submit">
+                  {t("resetPassword.resetPasswordButton")}
+                </Button>
               </div>
             </form>
           </>
@@ -322,6 +304,36 @@ const ResetPassword = () => {
       </Formik>
     </>
   );
+};
+
+const ResetPassword = () => {
+  const { username, needsConfirmation, setNeedsConfirmation } = useResetPassword();
+
+  // we don't put this state in useAuth since its very unique to this page only
+  const [initialCodeSent, setInitialCodeSent] = useState(false);
+
+  // confirmation code form in case a user has not yet confirmed their account
+  // password resets are not allowed by cognito unless someone has confirmed their account
+  if (needsConfirmation) {
+    return (
+      <Confirmation
+        username={username.current}
+        password={""}
+        confirmationCallback={() => {
+          setNeedsConfirmation(false);
+        }}
+        shouldSignIn={false}
+      />
+    );
+  }
+
+  // The form to initially send a verification code needed to reset a user's password
+  if (!initialCodeSent && !needsConfirmation) {
+    return <Step1 setInitialCodeSent={setInitialCodeSent} />;
+  }
+
+  // the form to reset the password with the verification code
+  return <Step2 />;
 };
 
 ResetPassword.getLayout = (page: ReactElement) => {

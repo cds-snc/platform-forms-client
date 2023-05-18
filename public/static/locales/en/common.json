@@ -119,6 +119,9 @@
     }
   },
   "account": {
+    "actions": {
+      "backToSignIn": "Back to sign in"
+    },
     "fields": {
       "password": {
         "label": "Password",
