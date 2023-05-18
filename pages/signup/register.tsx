@@ -44,33 +44,33 @@ const Register = () => {
       ),
     password: Yup.string()
       .required(t("input-validation.required", { ns: "common" }))
-      .min(8, t("signUpRegistration.fields.password.error.minLength"))
-      .max(50, t("signUpRegistration.fields.password.error.maxLength"))
+      .min(8, t("account.fields.password.error.minLength", { ns: "common" }))
+      .max(50, t("account.fields.password.error.maxLength", { ns: "common" }))
       .test(
         "password-valid-lowerCase",
-        t("signUpRegistration.fields.password.error.oneLowerCase"),
+        t("account.fields.password.error.oneLowerCase", { ns: "common" }),
         (password = "") => containsLowerCaseCharacter(password)
       )
       .test(
         "password-valid-upperCase",
-        t("signUpRegistration.fields.password.error.oneUpperCase"),
+        t("account.fields.password.error.oneUpperCase", { ns: "common" }),
         (password = "") => containsUpperCaseCharacter(password)
       )
       .test(
         "password-valid-number",
-        t("signUpRegistration.fields.password.error.oneNumber"),
+        t("account.fields.password.error.oneNumber", { ns: "common" }),
         (password = "") => containsNumber(password)
       )
       .test(
         "password-valid-symbol",
-        t("signUpRegistration.fields.password.error.oneSymbol"),
+        t("account.fields.password.error.oneSymbol", { ns: "common" }),
         (password = "") => containsSymbol(password)
       ),
     passwordConfirmation: Yup.string()
       .required(t("input-validation.required", { ns: "common" }))
       .oneOf(
         [Yup.ref("password"), null],
-        t("signUpRegistration.fields.passwordConfirmation.error.mustMatch")
+        t("account.fields.passwordConfirmation.error.mustMatch", { ns: "common" })
       ),
   });
 
@@ -188,10 +188,10 @@ const Register = () => {
               </div>
               <div className="focus-group">
                 <Label id={"label-password"} htmlFor={"password"} className="required" required>
-                  {t("signUpRegistration.fields.password.label")}
+                  {t("account.fields.password.label", { ns: "common" })}
                 </Label>
                 <Description className="text-p text-black-default" id={"password-hint"}>
-                  {t("signUpRegistration.fields.password.hint")}
+                  {t("account.fields.password.hint", { ns: "common" })}
                 </Description>
                 <TextInput
                   className="h-10 w-full max-w-lg rounded"
@@ -208,7 +208,7 @@ const Register = () => {
                   className="required"
                   required
                 >
-                  {t("signUpRegistration.fields.passwordConfirmation.label")}
+                  {t("account.fields.passwordConfirmation.label", { ns: "common" })}
                 </Label>
                 <TextInput
                   className="h-10 w-full max-w-lg rounded"
