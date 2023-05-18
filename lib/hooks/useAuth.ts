@@ -181,12 +181,11 @@ export const useAuth = () => {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-        data: {
+        data: new URLSearchParams({
           username,
           password,
-          csrfToken: await getCsrfToken(),
-          json: true,
-        },
+          csrfToken: (await getCsrfToken()) ?? "noToken",
+        }),
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       });
 

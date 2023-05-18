@@ -157,15 +157,14 @@ export const validate2FAVerificationCode = async (
   verificationCode: string
 ): Promise<Validate2FAVerificationCodeResult> => {
   // Verify if the verification code is valid
-  const verificationCodeValid = await prisma.cognitoCustom2FA.findUnique({
+  const mfaEntry = await prisma.cognitoCustom2FA.findUnique({
     where: {
       email: email,
-      verificationCode: verificationCode,
     },
   });
 
   // If the verification code and username do not match fail the login
-  if (verificationCodeValid === null) {
+  if (mfaEntry === null || mfaEntry.verificationCode !== verificationCode) {
     const lockoutResponse = await registerFailed2FAAttempt(email);
     if (lockoutResponse.isLockedOut) {
       await prisma.cognitoCustom2FA.deleteMany({
@@ -180,7 +179,7 @@ export const validate2FAVerificationCode = async (
   }
 
   // If the verification code is expired remove it from the database
-  if (verificationCodeValid.expires.getTime() < new Date().getTime()) {
+  if (mfaEntry.expires.getTime() < new Date().getTime()) {
     await prisma.cognitoCustom2FA.deleteMany({
       where: {
         email: email,
@@ -198,7 +197,7 @@ export const validate2FAVerificationCode = async (
 
   await registerSuccessful2FAAttempt(email);
 
-  const decodedCognitoToken = decodeCognitoToken(verificationCodeValid.cognitoToken);
+  const decodedCognitoToken = decodeCognitoToken(mfaEntry.cognitoToken);
 
   return {
     status: Validate2FAVerificationCodeResultStatus.VALID,
