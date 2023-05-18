@@ -48,6 +48,51 @@ export const authOptions: NextAuthOptions = {
             email: "test.user@cds-snc.ca",
           };
         }
+
+        const { username, verificationCode } = credentials ?? {};
+
+        // Check to ensure all required credentials were passed in
+        if (!username || !verificationCode) return null;
+
+        // Verify if the verification code is valid
+        const verificationCodeValid = await prisma.cognitoCustom2FA.findUnique({
+          where: {
+            email: username,
+            verificationCode: verificationCode,
+          },
+        });
+
+        // If the verification code and username do not match fail the login
+        if (verificationCodeValid === null) return null;
+
+        // If the verification code is expired remove it from the database
+        if (verificationCodeValid.expires.getTime() < new Date().getTime()) {
+          await prisma.cognitoCustom2FA.deleteMany({
+            where: {
+              email: username,
+            },
+          });
+          return null;
+        }
+
+        // 2FA is valid, remove the verification code from the database and return user info
+        await prisma.cognitoCustom2FA.deleteMany({
+          where: {
+            email: username,
+          },
+        });
+
+        if (verificationCodeValid.cognitoToken) {
+          const cognitoIDTokenParts = verificationCodeValid.cognitoToken.split(".");
+          const claimsBuff = Buffer.from(cognitoIDTokenParts[1], "base64");
+          const cognitoIDTokenClaims = JSON.parse(claimsBuff.toString("utf8"));
+          return {
+            id: cognitoIDTokenClaims.sub,
+            name: cognitoIDTokenClaims.name,
+            email: cognitoIDTokenClaims.email,
+          };
+        }
+        // Something didn't fit - needs error handling
         return null;
       },
     }),
@@ -165,6 +210,10 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
 
     if (!username || !password)
       return res.status(400).json({ status: "error", error: "Missing username or password" });
+
+    if (process.env.APP_ENV === "test") {
+      res.status(200).json({ status: "success", challengeState: "MFA" });
+    }
 
     /*
     const result = await initiateSignIn({
