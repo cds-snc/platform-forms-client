@@ -194,16 +194,28 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
       return res.status(200).json({ status: "success", challengeState: "MFA" });
     }
 
-    const cognitoToken = await initiateSignIn({
-      username: username,
-      password: password,
-    });
+    try {
+      const cognitoToken = await initiateSignIn({
+        username: username,
+        password: password,
+      });
 
-    if (cognitoToken) {
-      await begin2FAAuthentication(cognitoToken);
-      return res.status(200).json({ status: "success", challengeState: "MFA" });
-    } else {
-      return res.status(400).json({ status: "error", error: "Cognito authentication failed" });
+      if (cognitoToken) {
+        await begin2FAAuthentication(cognitoToken);
+        return res.status(200).json({ status: "success", challengeState: "MFA" });
+      } else {
+        return res.status(400).json({
+          status: "error",
+          error: "Cognito authentication failed",
+          reason: "Missing Cognito token",
+        });
+      }
+    } catch (error) {
+      return res.status(400).json({
+        status: "error",
+        error: "Cognito authentication failed",
+        reason: (error as Error).message,
+      });
     }
   }
 

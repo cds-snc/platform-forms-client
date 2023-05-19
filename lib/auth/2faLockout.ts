@@ -26,7 +26,7 @@ export async function registerFailed2FAAttempt(email: string): Promise<Lockout2F
   };
 }
 
-export async function registerSuccessful2FAAttempt(email: string): Promise<void> {
+export async function clear2FALockout(email: string): Promise<void> {
   const redis = await getRedisInstance();
   await redis.del(`${LOCKOUT_KEY}:${email}`);
 }
