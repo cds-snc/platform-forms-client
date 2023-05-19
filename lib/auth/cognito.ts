@@ -7,7 +7,7 @@ import {
 import { logEvent } from "@lib/auditLogs";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { generateVerificationCode, sendVerificationCode } from "./2fa";
-import { registerFailed2FAAttempt, registerSuccessful2FAAttempt } from "./2faLockout";
+import { registerFailed2FAAttempt, clear2FALockout } from "./2faLockout";
 
 type Credentials = {
   username: string;
@@ -172,6 +172,7 @@ export const validate2FAVerificationCode = async (
           email: email,
         },
       });
+      await clear2FALockout(email);
       return { status: Validate2FAVerificationCodeResultStatus.LOCKED_OUT };
     } else {
       return { status: Validate2FAVerificationCodeResultStatus.INVALID };
@@ -195,7 +196,7 @@ export const validate2FAVerificationCode = async (
     },
   });
 
-  await registerSuccessful2FAAttempt(email);
+  await clear2FALockout(email);
 
   const decodedCognitoToken = decodeCognitoToken(mfaEntry.cognitoToken);
 
