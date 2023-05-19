@@ -191,7 +191,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
       return res.status(400).json({ status: "error", error: "Missing username or password" });
 
     if (process.env.APP_ENV === "test") {
-      res.status(200).json({ status: "success", challengeState: "MFA" });
+      return res.status(200).json({ status: "success", challengeState: "MFA" });
     }
 
     const cognitoToken = await initiateSignIn({
