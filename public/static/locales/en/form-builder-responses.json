@@ -25,10 +25,10 @@
       "select": "Select",
       "number": "Submission",
       "status": "Status",
-      "downloadResponse": "Download response",
+      "downloadResponse": "Download time",
       "lastDownloadedBy": "Downloaded by",
-      "confirmReceipt": "Receipt confirmation",
-      "removal": "Removal of response data"
+      "confirmReceipt": "Confirmation of receipt",
+      "removal": "Data removal"
     },
     "status": {
       "downloaded": "Downloaded",
@@ -40,7 +40,7 @@
       "done": "Done",
       "withinXDays": "Within {{daysLeft}} days",
       "overdue": "Overdue",
-      "wontRemove": "Failed to remove",
+      "wontRemove": "Cannot remove",
       "notSet": "Not set"
     },
     "card": {

@@ -25,23 +25,23 @@
       "select": "Sélection",
       "number": "Soumission",
       "status": "État",
-      "downloadResponse": "Délai de téléchargement",
-      "lastDownloadedBy": "Réponses téléchargées par",
+      "downloadResponse": "Temps de téléchargement",
+      "lastDownloadedBy": "Téléchargée par",
       "confirmReceipt": "Confirmation de réception",
-      "removal": "Suppression des données des réponses"
+      "removal": "Suppression des données"
     },
     "status": {
-      "downloaded": "Téléchargé",
+      "downloaded": "Téléchargée",
       "notDownloaded": "À télécharger",
       "new": "Nouveauté",
       "confirmed": "Confirmé",
       "unconfirmed": "À confirmer",
       "problem": "Problème",
-      "done": "Complété",
-      "withinXDays": "Dans {{daysLeft}} jours",
+      "done": "Complétée",
+      "withinXDays": "D'ici {{daysLeft}} jours",
       "overdue": "En retard",
-      "wontRemove": "Échec de suppression",
-      "notSet": "Non réglé"
+      "wontRemove": "Ne peut pas être supprimée",
+      "notSet": "Non réglée"
     },
     "card": {
       "noResponses": "Vous n'avez pas de réponses",
