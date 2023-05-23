@@ -2,8 +2,12 @@
   "title": "Se connecter",
   "signUpText": "Si vous n’avez pas de compte, vous pouvez en",
   "signUpLink": "créer un maintenant.",
-  "signInButton": "Se connecter",
+  "continueButton": "Continuer",
   "resetPasswordText": "Réinitialiser votre mot de passe",
+  "verification": {
+    "title": "Vérifiez votre courriel pour un code de sécurité",
+    "description": "Cette étape permet d’assurert la sécurité de Formulaires GC en vérifiant votre compte chaque fois que vous vous connectez."
+  },
   "fields": {
     "username": {
       "label": "Adresse courriel",
@@ -15,6 +19,10 @@
       "errors": {
         "maxLength": "Le mot de passe ne doit pas dépasser 50 caractères."
       }
+    },
+    "verificationCode": {
+      "label": "Code de sécurité",
+      "description": "Entrez le code dans un délai de 15 minutes."
     }
   }
 }

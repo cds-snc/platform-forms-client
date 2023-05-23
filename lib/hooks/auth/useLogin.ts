@@ -46,6 +46,7 @@ export const useLogin = () => {
         setSubmitting(false);
         if (hasError("UserNotConfirmedException", error)) {
           setNeedsConfirmation(true);
+          return false;
         } else if (hasError(["UserNotFoundException", "NotAuthorizedException"], error)) {
           handleErrorById("UsernameOrPasswordIncorrect");
         } else if (hasError("PasswordResetRequiredException", error)) {
@@ -53,16 +54,13 @@ export const useLogin = () => {
         } else {
           throw Error(error);
         }
-      } else if (data?.ok) {
-        if (didConfirm.current) {
-          await router.push("/auth/policy?referer=/signup/account-created");
-        } else {
-          await router.push("/auth/policy");
-        }
+      } else if (data?.challengeState === "MFA") {
+        return true;
       }
     } catch (err) {
       logMessage.error(err);
       handleErrorById("InternalServiceExceptionLogin");
+      return false;
     } finally {
       setSubmitting(false);
     }
