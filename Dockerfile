@@ -17,12 +17,6 @@ RUN yarn install --production
 
 FROM node:16@sha256:5d256e870e277b6e5533c8fdb007345657ad9e5cd95c6f710e8d0c60fed5dfc4
 
-COPY migrations /src
-WORKDIR /src
-RUN yarn install --silent 
-
-FROM node:16@sha256:5d256e870e277b6e5533c8fdb007345657ad9e5cd95c6f710e8d0c60fed5dfc4
-
 COPY flag_initialization /src
 WORKDIR /src
 RUN yarn install --silent 
@@ -60,12 +54,10 @@ COPY --from=0 /src/.next ./.next
 COPY public ./public
 COPY next.config.js .
 COPY next-i18next.config.js .
-COPY migrations ./migrations
 COPY prisma ./prisma
 COPY form-builder-templates ./form-builder-templates
 COPY flag_initialization ./flag_initialization
-COPY --from=1 /src/node_modules ./migrations/node_modules
-COPY --from=2 /src/node_modules ./flag_initialization/node_modules
+COPY --from=1 /src/node_modules ./flag_initialization/node_modules
 
 
 ENV PORT 3000
