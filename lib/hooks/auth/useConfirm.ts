@@ -85,8 +85,6 @@ export const useConfirm = () => {
         logMessage.error(error);
         if (hasError(["UserNotFoundException", "NotAuthorizedException"], error)) {
           handleErrorById("UsernameOrPasswordIncorrect");
-        } else if (hasError("GoogleCredentialsExist", error)) {
-          await router.push("/admin/login");
         } else {
           handleErrorById("InternalServiceException");
         }

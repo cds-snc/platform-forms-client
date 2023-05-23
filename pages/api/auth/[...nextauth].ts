@@ -1,5 +1,4 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import {
   Validate2FAVerificationCodeResultStatus,
@@ -10,17 +9,11 @@ import {
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { logMessage } from "@lib/logger";
 import { getOrCreateUser } from "@lib/users";
-import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
+import { prisma } from "@lib/integration/prismaConnector";
 import { acceptableUseCheck, removeAcceptableUse } from "@lib/acceptableUseCache";
 import { getPrivilegeRulesForUser } from "@lib/privileges";
 import { logEvent } from "@lib/auditLogs";
 import type { NextApiRequest, NextApiResponse } from "next";
-
-if (
-  (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) &&
-  process.env.APP_ENV !== "test"
-)
-  throw new Error("Missing Google Authentication Credentials");
 
 if (
   (!process.env.COGNITO_APP_CLIENT_ID ||
@@ -32,10 +25,6 @@ if (
 
 export const authOptions: NextAuthOptions = {
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
-    }),
     CredentialsProvider({
       id: "cognito",
       name: "CognitoLogin",
@@ -108,27 +97,6 @@ export const authOptions: NextAuthOptions = {
   },
 
   callbacks: {
-    async signIn({ account, profile }) {
-      // redirect google login if there is an existing cognito account
-      if (account?.provider === "google") {
-        const prismaUser = await prisma.user
-          .findUnique({
-            where: {
-              email: profile?.email,
-            },
-            select: {
-              accounts: true,
-            },
-          })
-          .catch((e) => prismaErrors(e, null));
-
-        // in this case we know there is an existing cognito account
-        if (prismaUser?.accounts.length === 0) {
-          return "/auth/login";
-        }
-      }
-      return true;
-    },
     async jwt({ token, account }) {
       // account is only available on the first call to the JWT function
       if (account?.provider) {
