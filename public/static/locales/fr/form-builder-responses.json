@@ -69,7 +69,7 @@
       "title": "Confirmer la réception de réponses",
       "findCode": "Trouvez le code de confirmation au bas des réponses de formulaires téléchargées. Ces codes ressemblent à : c0c42c90-b816-49da-a69a-80bfd8ba15db.",
       "copyCode": "Copiez et collez jusqu'à 20 codes de confirmation, un par ligne.",
-      "responsesAvailableFor": "Une fois que vous aurez confirmé la réception des réponses, celles-ci seront disponibles pendant 7 jours, puis, ensuite automatiquement retirées de notre base de données.",
+      "responsesAvailableFor": "Une fois que vous aurez confirmé la réception des réponses, celles-ci seront disponibles pendant 30 jours, puis, ensuite automatiquement retirées de notre base de données.",
       "confirmReceipt": "Confirmer la réception",
       "errors": {
         "minEntries": {
