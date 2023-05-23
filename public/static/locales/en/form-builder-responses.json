@@ -23,7 +23,7 @@
     "header": {
       "tableTitle": "Download responses table",
       "select": "Select",
-      "number": "Form number",
+      "number": "Submission",
       "status": "Status",
       "downloadResponse": "Download response",
       "lastDownloadedBy": "Downloaded by",
@@ -97,26 +97,26 @@
     },
     "reportProblemsDialog": {
       "title": "Report a problem with responses",
-      "findForm": "Find the form number in the form list for any responses that will not download or open. They look like, 31-12-XCRV.",
-      "enterFormNumbers": "Enter up-to {{max}} form numbers, one per line.",
+      "findForm": "Find the submission number in the list for any responses that will not download or open. They look like, 31-12-XCRV.",
+      "enterFormNumbers": "Enter up-to {{max}} submission numbers, one per line.",
       "problemReported": "After you report the problem, we will contact you to help resolve the problem.",
       "reportProblems": "Report problem",
       "errors": {
         "minEntries": {
-          "title": "At least one form must be specified",
-          "description": "Enter form numbers for responses that have a problem."
+          "title": "At least one submission must be specified",
+          "description": "Enter submission numbers for responses that have a problem."
         },
         "maxEntries": {
           "title": "Only {{max}} problems can be reported at a time",
-          "description": "Submit {{max}} form numbers before adding more."
+          "description": "Submit {{max}} submission numbers before adding more."
         },
         "errorEntries": {
-          "title": "Some form numbers were not submitted",
-          "description": "Check that the form numbers below are correct and try again."
+          "title": "Some submission numbers were not submitted",
+          "description": "Check that the submission numbers below are correct and try again."
         },
         "invalidEntry": {
-          "title": "The form number does not match the required format",
-          "description": "Check that the form number format is correct and try again."
+          "title": "The submission number does not match the required format",
+          "description": "Check that the submission number format is correct and try again."
         },
         "unknown": {
           "title": "Sorry, there’s a problem with the site",
