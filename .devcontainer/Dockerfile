@@ -2,16 +2,6 @@ ARG VARIANT=16@sha256:c94897fb8f81904dff61bc9e2f25eb66124c3b802afeb3f3ee48f82a39
 
 FROM node:${VARIANT}
 
-ARG USERNAME=node
-ARG USER_UID=1000
-ARG USER_GID=$USER_UID
-
-COPY migrations /src
-WORKDIR /src
-RUN yarn install 
-
-FROM node:${VARIANT}
-
 
 ARG USERNAME=node
 ARG USER_UID=1000
@@ -53,9 +43,8 @@ RUN apt-get update \
 
 WORKDIR /src
 
-COPY --from=0 /src/node_modules ./migrations/node_modules
-COPY --from=1 /src/node_modules ./flag_initialization/node_modules
-COPY --from=2 /src/node_modules ./node_modules
+COPY --from=0 /src/node_modules ./flag_initialization/node_modules
+COPY --from=1 /src/node_modules ./node_modules
 
 ENV PORT 3000
 
