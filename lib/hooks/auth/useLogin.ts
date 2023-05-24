@@ -38,7 +38,6 @@ export const useLogin = () => {
           username,
           password,
           csrfToken: (await getCsrfToken()) ?? "noToken",
-          authenticationFlowToken: authenticationFlowToken.current,
         }),
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       });
@@ -57,7 +56,8 @@ export const useLogin = () => {
           throw Error(error);
         }
       } else if (data?.challengeState === "MFA") {
-        authenticationFlowToken.current = data.authenticationFlowToken;
+        // @todo
+        // authenticationFlowToken.current = data.authenticationFlowToken;
         return true;
       }
     } catch (err) {
