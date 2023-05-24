@@ -3,13 +3,18 @@ import { middleware, cors, csrfProtected } from "@lib/middleware";
 import { requestNew2FAVerificationCode } from "@lib/auth/cognito";
 
 const requestNewVerificationCode = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { email } = req.body;
+  const { authenticationFlowToken, email } = req.body;
 
-  if (!email) return res.status(400).json({ error: "Malformed request" });
+  if (!authenticationFlowToken || !email)
+    return res.status(400).json({ error: "Malformed request" });
 
-  await requestNew2FAVerificationCode(email);
-
-  return res.status(200).json({});
+  try {
+    await requestNew2FAVerificationCode(authenticationFlowToken, email);
+    return res.status(200).json({});
+  } catch (error) {
+    // TODO: Proper error handling
+    return res.status(400).json({});
+  }
 };
 
 export default middleware(
