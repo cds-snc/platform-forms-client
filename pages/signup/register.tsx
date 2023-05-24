@@ -1,9 +1,8 @@
-import React, { ReactElement } from "react";
-import { Formik } from "formik";
+import React, { ReactElement, useRef, useState } from "react";
+import { Formik, FormikHelpers } from "formik";
 import { TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
 import { Button } from "@components/globals";
 import { useFlag } from "@lib/hooks";
-import { useRegister } from "@lib/hooks/auth";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -23,12 +22,50 @@ import { getServerSession } from "next-auth/next";
 import Link from "next/link";
 import Head from "next/head";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
+import { useAuthErrors } from "@lib/hooks/auth/useAuthErrors";
+import { hasError } from "@lib/hasError";
+import { fetchWithCsrfToken } from "@lib/hooks/auth/fetchWithCsrfToken";
+import { logMessage } from "@lib/logger";
 
 const Register = () => {
   const { isLoading, status: registrationOpen } = useFlag("accountRegistration");
-  const { username, password, needsConfirmation, register, authErrorsState, authErrorsReset } =
-    useRegister();
   const { t } = useTranslation(["signup", "common"]);
+  const username = useRef("");
+  const password = useRef("");
+  const [needsConfirmation, setNeedsConfirmation] = useState(false);
+  const [authErrorsState, { authErrorsReset, handleErrorById }] = useAuthErrors();
+
+  const registerAPI = async (
+    {
+      username,
+      password,
+      name,
+    }: {
+      username: string;
+      password: string;
+      name: string;
+    },
+    { setSubmitting }: FormikHelpers<{ username: string; password: string; name: string }>
+  ) => {
+    authErrorsReset();
+    try {
+      await fetchWithCsrfToken("/api/signup/register", {
+        username,
+        password,
+        name,
+      });
+      setNeedsConfirmation(true);
+    } catch (err) {
+      logMessage.error(err);
+      if (hasError("UsernameExistsException", err)) {
+        handleErrorById("UsernameExistsException");
+        return;
+      }
+      handleErrorById(t("InternalServiceException"));
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   const validationSchema = Yup.object().shape({
     name: Yup.string()
@@ -109,7 +146,7 @@ const Register = () => {
         onSubmit={async (values, formikHelpers) => {
           username.current = values.username;
           password.current = values.password;
-          await register({ ...values }, formikHelpers);
+          await registerAPI({ ...values }, formikHelpers);
         }}
         validateOnChange={false}
         validateOnBlur={false}
