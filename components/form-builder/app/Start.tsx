@@ -4,7 +4,6 @@ import { useTranslation } from "next-i18next";
 import { DesignIcon, ExternalLinkIcon, WarningIcon } from "../icons";
 import { useRouter } from "next/router";
 import { errorMessage, validateTemplate } from "../validate";
-import { useSession } from "next-auth/react";
 
 export const Start = () => {
   const { t } = useTranslation("form-builder");
@@ -15,7 +14,6 @@ export const Start = () => {
   }));
 
   const [errors, setErrors] = useState<errorMessage[]>();
-  const { status } = useSession();
 
   // Prevent prototype pollution in JSON.parse https://stackoverflow.com/a/63927372
   const cleaner = (key: string, value: string) =>
@@ -59,15 +57,9 @@ export const Start = () => {
         importTemplate(data);
 
         window.dataLayer = window.dataLayer || [];
-        if (status === "unauthenticated") {
-          window.dataLayer.push({
-            event: "unauth_open_form",
-          });
-        } else if (status === "authenticated") {
-          window.dataLayer.push({
-            event: "auth_open_form",
-          });
-        }
+        window.dataLayer.push({
+          event: "open_form_file",
+        });
         router.push({ pathname: `/form-builder/preview` });
       };
     } catch (e) {
