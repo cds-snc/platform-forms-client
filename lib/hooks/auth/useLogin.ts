@@ -56,8 +56,7 @@ export const useLogin = () => {
           throw Error(error);
         }
       } else if (data?.challengeState === "MFA") {
-        // @todo
-        // authenticationFlowToken.current = data.authenticationFlowToken;
+        authenticationFlowToken.current = data.authenticationFlowToken;
         return true;
       }
     } catch (err) {
@@ -73,6 +72,7 @@ export const useLogin = () => {
     login,
     username,
     password,
+    authenticationFlowToken,
     didConfirm,
     needsConfirmation,
     setNeedsConfirmation,

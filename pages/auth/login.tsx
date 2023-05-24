@@ -176,10 +176,12 @@ const Step1 = ({
 
 const Step2 = ({
   username,
+  authenticationFlowToken,
   authErrorsState,
   authErrorsReset,
 }: {
   username: string;
+  authenticationFlowToken: string;
   authErrorsState: AuthErrorsState;
   authErrorsReset: () => void;
 }) => {
@@ -197,7 +199,7 @@ const Step2 = ({
         initialValues={{ username, verificationCode: "" }}
         onSubmit={async (values) => {
           const { verificationCode, username } = values;
-          const data = await verify({ username, verificationCode });
+          const data = await verify({ username, authenticationFlowToken, verificationCode });
           if (data) {
             router.push({
               pathname: `/${i18n.language}/auth/policy`,
@@ -282,6 +284,7 @@ const Login = () => {
   const {
     username,
     password,
+    authenticationFlowToken,
     didConfirm,
     needsConfirmation,
     setNeedsConfirmation,
@@ -310,6 +313,7 @@ const Login = () => {
   return enterVerification ? (
     <Step2
       username={username.current}
+      authenticationFlowToken={authenticationFlowToken.current}
       authErrorsState={authErrorsState}
       authErrorsReset={authErrorsReset}
     />
