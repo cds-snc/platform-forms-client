@@ -25,6 +25,8 @@ type DecodedCognitoToken = {
   email: string;
 };
 
+export type AuthenticationFlowToken = string;
+
 export enum Validate2FAVerificationCodeResultStatus {
   VALID,
   INVALID,
@@ -118,34 +120,49 @@ export const initiateSignIn = async ({
   }
 };
 
-export const begin2FAAuthentication = async ({ email, token }: CognitoToken): Promise<void> => {
+export const begin2FAAuthentication = async ({
+  email,
+  token,
+}: CognitoToken): Promise<AuthenticationFlowToken> => {
   const verificationCode = await generateVerificationCode();
 
   const dateIn15Minutes = new Date(Date.now() + 900000); // 15 minutes (= 900000 ms)
 
   try {
-    await prisma.cognitoCustom2FA.create({
+    const result = await prisma.cognitoCustom2FA.create({
       data: {
         email: email,
         cognitoToken: token,
         verificationCode: verificationCode,
         expires: dateIn15Minutes,
       },
+      select: {
+        id: true,
+      },
     });
 
     await sendVerificationCode(email, verificationCode);
+
+    return result.id;
   } catch (error) {
     // handle error if hitting unique constraint
+    throw new Error("begin2FAAuthentication > failure");
   }
 };
 
-export const requestNew2FAVerificationCode = async (email: string): Promise<void> => {
+export const requestNew2FAVerificationCode = async (
+  authenticationFlowToken: AuthenticationFlowToken,
+  email: string
+): Promise<void> => {
   const verificationCode = await generateVerificationCode();
 
   try {
     await prisma.cognitoCustom2FA.update({
       where: {
-        email: email,
+        id_email: {
+          id: authenticationFlowToken,
+          email: email,
+        },
       },
       data: {
         verificationCode: verificationCode,
@@ -155,17 +172,22 @@ export const requestNew2FAVerificationCode = async (email: string): Promise<void
     await sendVerificationCode(email, verificationCode);
   } catch (error) {
     // handle error if hitting unique constraint
+    throw new Error("requestNew2FAVerificationCode > failure");
   }
 };
 
 export const validate2FAVerificationCode = async (
+  authenticationFlowToken: AuthenticationFlowToken,
   email: string,
   verificationCode: string
 ): Promise<Validate2FAVerificationCodeResult> => {
   // Verify if the verification code is valid
   const mfaEntry = await prisma.cognitoCustom2FA.findUnique({
     where: {
-      email: email,
+      id_email: {
+        id: authenticationFlowToken,
+        email: email,
+      },
     },
   });
 

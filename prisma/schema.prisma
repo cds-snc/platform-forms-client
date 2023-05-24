@@ -113,8 +113,11 @@ model Setting {
 }
 
 model CognitoCustom2FA {
+  id                String    @id @default(cuid())
   email             String    @unique
   cognitoToken      String
   verificationCode  String    @unique
   expires           DateTime
+
+  @@unique([id, email])
 }

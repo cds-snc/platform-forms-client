@@ -29,6 +29,7 @@ export const authOptions: NextAuthOptions = {
       id: "cognito",
       name: "CognitoLogin",
       credentials: {
+        authenticationFlowToken: { label: "Authentication flow token", type: "text" },
         username: { label: "Username", type: "text" },
         verificationCode: { label: "Verification Code", type: "text" },
       },
@@ -42,12 +43,16 @@ export const authOptions: NextAuthOptions = {
           };
         }
 
-        const { username, verificationCode } = credentials ?? {};
+        const { authenticationFlowToken, username, verificationCode } = credentials ?? {};
 
         // Check to ensure all required credentials were passed in
-        if (!username || !verificationCode) return null;
+        if (!authenticationFlowToken || !username || !verificationCode) return null;
 
-        const validationResult = await validate2FAVerificationCode(username, verificationCode);
+        const validationResult = await validate2FAVerificationCode(
+          authenticationFlowToken,
+          username,
+          verificationCode
+        );
 
         switch (validationResult.status) {
           case Validate2FAVerificationCodeResultStatus.VALID: {
@@ -169,8 +174,12 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
       });
 
       if (cognitoToken) {
-        await begin2FAAuthentication(cognitoToken);
-        return res.status(200).json({ status: "success", challengeState: "MFA" });
+        const authenticationFlowToken = await begin2FAAuthentication(cognitoToken);
+        return res.status(200).json({
+          status: "success",
+          challengeState: "MFA",
+          authenticationFlowToken: authenticationFlowToken,
+        });
       } else {
         return res.status(400).json({
           status: "error",
@@ -179,7 +188,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
         });
       }
     } catch (error) {
-      return res.status(400).json({
+      return res.status(401).json({
         status: "error",
         error: "Cognito authentication failed",
         reason: (error as Error).message,

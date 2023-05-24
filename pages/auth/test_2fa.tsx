@@ -13,8 +13,9 @@ const Login = () => {
   return (
     <>
       <Formik
-        initialValues={{ username: "", verificationCode: "" }}
+        initialValues={{ authenticationFlowToken: "", username: "", verificationCode: "" }}
         onSubmit={async (values) => {
+          values.authenticationFlowToken;
           values.username;
           values.verificationCode;
           const { data } = await axios({
@@ -24,6 +25,7 @@ const Login = () => {
               "Content-Type": "application/x-www-form-urlencoded",
             },
             data: new URLSearchParams({
+              authenticationFlowToken: values.authenticationFlowToken,
               username: values.username,
               verificationCode: values.verificationCode,
               csrfToken: (await getCsrfToken()) ?? "noToken",
@@ -39,6 +41,23 @@ const Login = () => {
         {({ handleSubmit }) => (
           <>
             <form id="login" method="POST" onSubmit={handleSubmit} noValidate>
+              <div className="focus-group">
+                <Label
+                  id={"label-authenticationFlowToken"}
+                  htmlFor={"authenticationFlowToken"}
+                  className="required"
+                  required
+                >
+                  {"fields.authenticationFlowToken.label"}
+                </Label>
+                <TextInput
+                  className="h-10 w-full max-w-lg rounded"
+                  type={"text"}
+                  id={"authenticationFlowToken"}
+                  name={"authenticationFlowToken"}
+                  required
+                />
+              </div>
               <div className="focus-group">
                 <Label id={"label-username"} htmlFor={"username"} className="required" required>
                   {"fields.username.label"}
