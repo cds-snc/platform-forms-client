@@ -48,8 +48,6 @@ export const useLogin = () => {
           setNeedsConfirmation(true);
         } else if (hasError(["UserNotFoundException", "NotAuthorizedException"], error)) {
           handleErrorById("UsernameOrPasswordIncorrect");
-        } else if (hasError("GoogleCredentialsExist", error)) {
-          await router.push("/admin/login");
         } else if (hasError("PasswordResetRequiredException", error)) {
           await router.push("/auth/resetpassword");
         } else {
