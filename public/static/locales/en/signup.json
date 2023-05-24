@@ -61,5 +61,43 @@
     },
     "unlockPublishingButton": "Unlock publishing",
     "skipStepButton": "Skip this step for now"
+  },
+  "stepAccount": {
+    "title": "Create an account",
+    "signInInstead": "If you already have an account,",
+    "signInInsteadLinkTest": "sign in instead",
+    "fullName": "Full name",
+    "emailAddress": "Email address",
+    "emailRequirements": "Must be a federal government email address.",
+    "agreeToTerms": "By creating an account you agree to the",
+    "agreeToTermsLinkText": "Terms of use"
+  },
+  "stepPassword": {
+    "title": "Create a password",
+    "requirementsList": {
+      "title": "Your password should be hard to guess with:",
+      "eightChars": "At least 8 characters",
+      "number": "A number",
+      "capital": "A capital letter",
+      "symbol": "A symbol"
+    },
+    "password": "Password",
+    "confirmPassword": "Confirm password"
+  },
+  "stepAccountCreated": {
+    "title": "Account created",
+    "youCanDoList": {
+      "title": "What can you do",
+      "draftForm": "draft a form.",
+      "saveDrafts": "save drafts within GC Forms.",
+      "testDelivery": "test the delivery of responses."
+    },
+    "notIncluded": "What's not included",
+    "cannotPublish": "You cannot publish forms online yet.",
+    "unlockPublishing": "Unlock publishing",
+    "toUnlockPublishing": "To unlock publishing, provide the contact information of the person you report to.",
+    "weProcessYour": "We'll process your request within 2 business days.",
+    "unlockPublishingButton": "Unlock publishing",
+    "skipStepButton": "Skip this step for now"
   }
 }

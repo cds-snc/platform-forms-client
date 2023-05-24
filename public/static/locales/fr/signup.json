@@ -58,5 +58,43 @@
     },
     "unlockPublishingButton": "Déverouiller la publication",
     "skipStepButton": "Sauter cette étape pour l'instant"
+  },
+  "stepAccount": {
+    "title": "Créer un compte",
+    "signInInstead": "Si vous avez déjà un compte,",
+    "signInInsteadLinkTest": "connectez-vous",
+    "fullName": "Nom complet",
+    "emailAddress": "Adresse courriel",
+    "emailRequirements": "Il faut fournir une adresse courriel du gouvernement fédéral.",
+    "agreeToTerms": "En créant un compte, vous acceptez les",
+    "agreeToTermsLinkText": "conditions d'utilisation"
+  },
+  "stepPassword": {
+    "title": "Créer un mot de passe",
+    "requirementsList": {
+      "title": "Votre mot de passe devrait être difficile à deviner avec:",
+      "eightChars": "Au moins 8 caractères",
+      "number": "Un chiffre",
+      "capital": "Une lettre majuscule",
+      "symbol": " Un symbole"
+    },
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmation du mot de passe"
+  },
+  "stepAccountCreated": {
+    "title": "Compte créé",
+    "youCanDoList": {
+      "title": "Ce que vous pouvez faire",
+      "draftForm": "rédiger une ébauche de formulaire.",
+      "saveDrafts": "enregistrer les ébauches dans Formulaires GC.",
+      "testDelivery": "tester la livraison des réponses."
+    },
+    "notIncluded": "Ce qui n'est pas compris",
+    "cannotPublish": "Vous ne pouvez pas encore publier de formulaires en ligne.",
+    "unlockPublishing": "Déverrouiller la publication de formulaires",
+    "toUnlockPublishing": "Pour déverrouiller la publication, vous devrez fournir les coordonnées de la personne de qui vous relevez.",
+    "weProcessYour": "Nous traiterons votre demande dans les 2 jours ouvrables.",
+    "unlockPublishingButton": "Dévérouiller la publication",
+    "skipStepButton": "Sauter cette étape pour l'instant"
   }
 }
