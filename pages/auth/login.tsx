@@ -199,11 +199,9 @@ const Step2 = ({
           const { verificationCode, username } = values;
           const data = await verify({ username, verificationCode });
           if (data) {
-            /*
             router.push({
               pathname: `/${i18n.language}/auth/policy`,
             });
-    */
           }
         }}
         validateOnChange={false}
