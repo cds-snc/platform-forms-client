@@ -11,6 +11,7 @@ export const useLogin = () => {
   const router = useRouter();
   const username = useRef("");
   const password = useRef("");
+  const authenticationFlowToken = useRef("");
   const didConfirm = useRef(false);
   const [needsConfirmation, setNeedsConfirmation] = useState(false);
   const [authErrorsState, { authErrorsReset, handleErrorById }] = useAuthErrors();
@@ -37,6 +38,7 @@ export const useLogin = () => {
           username,
           password,
           csrfToken: (await getCsrfToken()) ?? "noToken",
+          authenticationFlowToken: authenticationFlowToken.current,
         }),
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       });
@@ -55,6 +57,7 @@ export const useLogin = () => {
           throw Error(error);
         }
       } else if (data?.challengeState === "MFA") {
+        authenticationFlowToken.current = data.authenticationFlowToken;
         return true;
       }
     } catch (err) {
