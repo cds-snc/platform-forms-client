@@ -25,7 +25,7 @@
       "select": "Select",
       "number": "Submission",
       "status": "Status",
-      "downloadResponse": "Download time",
+      "downloadResponse": "Download window",
       "lastDownloadedBy": "Downloaded by",
       "confirmReceipt": "Confirmation of receipt",
       "removal": "Data removal"
