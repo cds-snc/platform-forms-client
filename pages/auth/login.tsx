@@ -174,10 +174,21 @@ const Step1 = ({
   );
 };
 
-const Step2 = ({ username }: { username: string }) => {
+const Step2 = ({
+  username,
+  authErrorsState,
+  authErrorsReset,
+}: {
+  username: string;
+  authErrorsState: AuthErrorsState;
+  authErrorsReset: () => void;
+}) => {
   const { t, i18n } = useTranslation(["login", "cognito-errors", "common"]);
   const { verify } = useVerify();
   const router = useRouter();
+  const validationSchema = Yup.object().shape({
+    verificationCode: Yup.string().required(t("input-validation.required", { ns: "common" })),
+  });
   return (
     <>
       <h1 className="border-b-0 mt-6 mb-6">{t("verification.title")}</h1>
@@ -197,9 +208,48 @@ const Step2 = ({ username }: { username: string }) => {
         }}
         validateOnChange={false}
         validateOnBlur={false}
+        validationSchema={validationSchema}
+        onReset={authErrorsReset}
       >
-        {({ handleSubmit }) => (
+        {({ handleSubmit, errors }) => (
           <>
+            {authErrorsState.isError && (
+              <Alert
+                type={ErrorStatus.ERROR}
+                heading={authErrorsState.title}
+                id="cognitoErrors"
+                focussable={true}
+              >
+                {authErrorsState.description}
+                {authErrorsState.callToActionLink ? (
+                  <Link href={authErrorsState.callToActionLink}>
+                    {authErrorsState.callToActionText}
+                  </Link>
+                ) : undefined}
+                .
+              </Alert>
+            )}
+            {Object.keys(errors).length > 0 && !authErrorsState.isError && (
+              <Alert
+                type={ErrorStatus.ERROR}
+                validation={true}
+                tabIndex={0}
+                id="loginValidationErrors"
+                heading={t("input-validation.heading", { ns: "common" })}
+              >
+                <ol className="gc-ordered-list">
+                  {Object.entries(errors).map(([fieldKey, fieldValue]) => {
+                    return (
+                      <ErrorListItem
+                        key={`error-${fieldKey}`}
+                        errorKey={fieldKey}
+                        value={fieldValue}
+                      />
+                    );
+                  })}
+                </ol>
+              </Alert>
+            )}
             <form id="login" method="POST" onSubmit={handleSubmit} noValidate>
               <div className="focus-group">
                 <Label
@@ -247,7 +297,7 @@ const Login = () => {
     didConfirm.current = true;
   };
 
-  const [enterVerification, setEnterVerification] = useState(false);
+  const [enterVerification, setEnterVerification] = useState(true);
 
   if (needsConfirmation) {
     return (
@@ -260,7 +310,11 @@ const Login = () => {
   }
 
   return enterVerification ? (
-    <Step2 username={username.current} />
+    <Step2
+      username={username.current}
+      authErrorsState={authErrorsState}
+      authErrorsReset={authErrorsReset}
+    />
   ) : (
     <Step1
       username={username}
