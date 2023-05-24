@@ -295,7 +295,7 @@ const Login = () => {
     didConfirm.current = true;
   };
 
-  const [enterVerification, setEnterVerification] = useState(true);
+  const [enterVerification, setEnterVerification] = useState(false);
 
   if (needsConfirmation) {
     return (
