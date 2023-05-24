@@ -13,7 +13,7 @@ GC Forms is a cloud-based service that is owned and operated by the Canadian Dig
 - Patching security vulnerabilities in a timely manner, where CDS determines the level of threat a security vulnerability possesses. Major vulnerabilities are patched as soon as possible but no more than a week after the root cause is found. External dependencies for code are subject to longer timelines. Any infrastructure-level patching is the responsibility of [Amazon Web Services (AWS)](https://aws.amazon.com/service-terms/).
 - Restoring the system to operation in case of any unplanned outages.
 - Alerting clients if GC Forms is inaccessible for whatever reasons as soon as CDS learns of this. See our real-time [Status page](https://status-statut.cds-snc.ca/history/gc-forms-formulaires-gc).
-- Ensuring the GC Forms system sends form responses to clients in a timely manner, as provided by [GC Notify](https://notification.canada.ca/service-level-agreement). 
+- Ensuring the GC Forms system sends form responses and two-factor authentication to clients in a timely manner, as provided by [GC Notify](https://notification.canada.ca/service-level-agreement). 
 - Ensuring the infrastructure providers do not disconnect the GC Forms or GC Notify system due to misuse by clients. 
 - Ensuring the system is available for use, with page load time less than 10 seconds in Canada on high-speed Internet, unless the product is experiencing a denial of service attack or there are issues with AWS. 
 - Limiting the rate at which end users can submit responses to preserve the security of CDS and client systems.

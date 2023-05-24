@@ -35,6 +35,12 @@ Vous avez pour responsabilité :
 - de traiter et d’enregistrer les réponses aux formulaires conformément à votre calendrier de conservation et d’élimination.
 - d’accepter [les conditions d’utilisation de Notification GC](https://notification.canada.ca/conditions-dutilisation). 
 
+## Practique de sécurité en continu
+
+- Utilisez une adresse courriel gouvernementale pour créer votre compte et pour l’authentification à deux facteurs.
+- Ne communiquez pas votre mot de passe à personne et ne le conservez pas dans un endroit où d’autres personnes pourraient le trouver. Si quelqu’un d’autre a besoin d’accéder à un formulaire, [contactez-nous](/fr/form-builder/support).
+- Signalez toute faille de sécurité et vulnérabilité en utilisant les étapes détaillés dans l’[avis de sécurité](https://numerique.canada.ca/transparence/avis-de-securite/).
+
 ## Publication du formulaire dans les deux langues officielles 
 
 Vous avez pour responsabilité de vous assurer que les traductions sont exhaustives et exactes.  
