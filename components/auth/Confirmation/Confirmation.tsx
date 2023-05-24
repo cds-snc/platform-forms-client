@@ -1,21 +1,15 @@
 import React, { ReactElement, useState } from "react";
 import { Formik } from "formik";
 import { Button, TextInput, Label, Alert, ErrorListItem } from "@components/forms";
-import { useAuth } from "@lib/hooks";
+import { useConfirm } from "@lib/hooks/auth";
 import { useTranslation } from "next-i18next";
 import * as Yup from "yup";
 import Link from "next/link";
+import { ErrorStatus } from "@components/forms/Alert/Alert";
 
 interface ConfirmationProps {
   username: string;
   password: string;
-  confirmationAuthenticationFailedCallback: (
-    cognitoError: string,
-    cognitoErrorDescription: string,
-    cognitoErrorCallToActionLink: string,
-    cognitoErrorCallToActionText: string,
-    cognitoErrorIsDismissible: boolean
-  ) => void;
   confirmationCallback: () => void;
   shouldSignIn?: boolean;
 }
@@ -23,20 +17,10 @@ interface ConfirmationProps {
 export const Confirmation = ({
   username,
   password,
-  confirmationAuthenticationFailedCallback,
   confirmationCallback,
   shouldSignIn = true,
 }: ConfirmationProps): ReactElement => {
-  const {
-    cognitoError,
-    cognitoErrorDescription,
-    cognitoErrorCallToActionLink,
-    cognitoErrorCallToActionText,
-    cognitoErrorIsDismissible,
-    resetCognitoErrorState,
-    confirm,
-    resendConfirmationCode,
-  } = useAuth();
+  const { confirm, resendConfirmationCode, authErrorsState, authErrorsReset } = useConfirm();
   const [showSentReconfirmationToast, setShowSentReconfirmationToast] = useState(false);
   const { t } = useTranslation(["signup", "cognito-errors", "common"]);
 
@@ -57,7 +41,6 @@ export const Confirmation = ({
         await confirm(
           {
             ...values,
-            confirmationAuthenticationFailedCallback,
             confirmationCallback,
             shouldSignIn,
           },
@@ -67,9 +50,9 @@ export const Confirmation = ({
     >
       {({ handleSubmit, errors }) => (
         <>
-          {showSentReconfirmationToast && !cognitoError && (
+          {showSentReconfirmationToast && !authErrorsState?.title && (
             <Alert
-              type="success"
+              type={ErrorStatus.SUCCESS}
               heading={t("signUpConfirmation.resendConfirmationCode.title")}
               onDismiss={() => {
                 setShowSentReconfirmationToast(false);
@@ -80,23 +63,24 @@ export const Confirmation = ({
               {t("signUpConfirmation.resendConfirmationCode.body")}
             </Alert>
           )}
-          {cognitoError && (
+          {authErrorsState?.isError && (
             <Alert
-              type="error"
-              heading={cognitoError}
-              onDismiss={resetCognitoErrorState}
+              type={ErrorStatus.ERROR}
+              heading={authErrorsState.title}
+              onDismiss={authErrorsReset}
               id="cognitoErrors"
-              dismissible={cognitoErrorIsDismissible}
             >
-              {cognitoErrorDescription}&nbsp;
-              {cognitoErrorCallToActionLink ? (
-                <Link href={cognitoErrorCallToActionLink}>{cognitoErrorCallToActionText}</Link>
+              {authErrorsState.description}&nbsp;
+              {authErrorsState.callToActionLink ? (
+                <Link href={authErrorsState.callToActionLink}>
+                  {authErrorsState.callToActionText}
+                </Link>
               ) : undefined}
             </Alert>
           )}
-          {Object.keys(errors).length > 0 && !cognitoError && (
+          {Object.keys(errors).length > 0 && !authErrorsState.isError && (
             <Alert
-              type="error"
+              type={ErrorStatus.ERROR}
               validation={true}
               tabIndex={0}
               id="confirmationValidationErrors"

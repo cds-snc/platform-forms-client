@@ -7,9 +7,9 @@ import { useRouter } from "next/router";
 import { useTemplateStore } from "../store";
 import { useTemplateApi, useAllowPublish } from "../hooks";
 import { CancelIcon, CircleCheckIcon, WarningIcon, LockIcon } from "../icons";
-import { Button } from "./shared";
-import { PublishNoAuth } from "./PublishNoAuth";
+import { Button } from "@components/globals";
 import Link from "next/link";
+import { LoggedOutTab, LoggedOutTabName } from "./LoggedOutTab";
 
 export const Publish = () => {
   const { t } = useTranslation("form-builder");
@@ -75,7 +75,7 @@ export const Publish = () => {
   }, [getSchema, getName, id, save, router]);
 
   if (status !== "authenticated") {
-    return <PublishNoAuth />;
+    return <LoggedOutTab tabName={LoggedOutTabName.PUBLISH} />;
   }
 
   return (

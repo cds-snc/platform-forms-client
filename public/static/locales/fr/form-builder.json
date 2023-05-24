@@ -392,9 +392,6 @@
   "publishedViewLinks": "Visualisez et partagez votre formulaire publié à partir de ces liens : ",
   "publishingDisablesEditing": "La publication désactive toute modification.",
   "publishingDisablesEditingDescription": "Une fois publié, vous ne pouvez plus apporter des modifications à ce formulaire. Si des modifications sont nécessaires après la publication, utilisez le fichier du formulaire pour créer et publier un nouveau formulaire.",
-  "publishNoAuthSubTitle": "Vous pouvez publier et héberger votre formulaire avec Formulaires GC.",
-  "publishNoAuthText": "Pour publier votre formulair <a href=\"{{signIn}}\"> connectez-vous</a>  à votre compte Formulaires GC. Si vous n'avez pas de compte Formulaires GC, <a href=\"{{createOne}}\">créez-en un</a>.",
-  "publishNoAuthTitle": "Pour publier votre formulaire, connectez-vous à votre compte Formulaires GC.",
   "publishYourForm": "Publier votre formulaire",
   "publishYourFormInstructions": "Vous devez franchir les étapes suivantes avant de publier votre formulaire. ",
   "question": "Question",
@@ -459,15 +456,6 @@
     "saveButton": "Enregistrer les modifications",
     "savedSuccessMessage": "Vos modifications ont été enregistrées.",
     "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Veuillez réessayer.",
-    "card": {
-      "title": "Vous ne pouvez pas modifier les paramètres",
-      "text1": "Pour modifier les paramètres de ce formulaire,",
-      "text2": "connectez-vous",
-      "text3": "Si vous n’avez pas de compte Formulaires GC, ",
-      "text4": "créez-en un maintenant",
-      "signinButton": "Se connecter",
-      "createButton": "Créer un compte"
-    },
     "emailSubjectEn": {
       "title": "Ligne d'objet en anglais",
       "hint": "Lorsque les réponses au formulaire sont soumises en anglais."
@@ -492,6 +480,25 @@
         "text2": "Téléchargement des réponses de Formulaires GC dans un délai de 30 jours"
       }
     }
+  },
+  "loggedOutTab": {
+    "publish": {
+      "title": "Vous ne pouvez pas publier",
+      "text1": "Pour publier ce formulaire,"
+    },
+    "responses": {
+      "title": "Vous ne pouvez pas accéder aux réponses",
+      "text1": "Pour accéder aux réponses du formulaire,"
+    },
+    "settings": {
+      "title": "Vous ne pouvez pas modifier les paramètres",
+      "text1": "Pour modifier les paramètres de ce formulaire,"
+    },
+    "text2": "connectez-vous",
+    "text3": "Si vous n’avez pas de compte Formulaires GC, ",
+    "text4": "créez-en un maintenant",
+    "signinButton": "Se connecter",
+    "createButton": "Créer un compte"
   },
   "share": {
     "copy": "Copier",
@@ -545,7 +552,7 @@
   "startH2": "Créer un formulaire",
   "startH3": "Ouvrir un formulaire",
   "startP1": "Commencez à partir de zéro.",
-  "startP2": "Modifiez un formulaire téléversé de votre ordinateur.",
+  "startP2": "Modifiez un formulaire qui a été créé et téléchargé à partir de Formulaires GC.",
   "submit": "Soumettre",
   "submittedResponsesText": "Les réponses soumises seront envoyées à {{email}}.",
   "submittedResponsesChange": "Modifier où les réponses soumises sont envoyées",

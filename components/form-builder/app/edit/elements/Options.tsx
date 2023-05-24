@@ -4,7 +4,7 @@ import { useTranslation } from "next-i18next";
 
 import { useTemplateStore } from "../../../store/useTemplateStore";
 import { Option } from "./Option";
-import { Button } from "../../shared/Button";
+import { Button } from "@components/globals";
 import { FormElementWithIndex } from "../../../types";
 
 const AddButton = ({ index, onClick }: { index: number; onClick: (index: number) => void }) => {
@@ -65,27 +65,27 @@ export const Options = ({
     translationLanguagePriority: s.translationLanguagePriority,
   }));
 
-  const index = item.index;
+  const parentIndex = elements.findIndex((element) => element.id === item.id);
+  const element = elements.find((element) => element.id === item.id);
 
-  if (!elements[index]?.properties) {
+  if (!element?.properties) {
     return null;
   }
-  const { choices } = elements[index].properties;
+  const { choices } = element.properties;
 
   if (!choices) {
-    return <AddOptions index={index} />;
+    return <AddOptions index={parentIndex} />;
   }
 
   const options = choices.map((child, index) => {
     if (!child || !item) return null;
 
-    const initialValue =
-      elements[item.index].properties.choices?.[index][translationLanguagePriority] ?? "";
+    const initialValue = element.properties.choices?.[index][translationLanguagePriority] ?? "";
 
     return (
       <Option
         renderIcon={renderIcon}
-        parentIndex={item.index}
+        parentIndex={parentIndex}
         key={`child-${item.id}-${index}`}
         id={item.id}
         index={index}
@@ -97,7 +97,7 @@ export const Options = ({
   return (
     <div className="mt-5">
       {options}
-      <AddOptions index={index} />
+      <AddOptions index={parentIndex} />
     </div>
   );
 };

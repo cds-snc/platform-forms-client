@@ -9,7 +9,7 @@ export const Question = ({
   describedById,
 }: {
   item: FormElementWithIndex;
-  onQuestionChange: (itemIndex: number, val: string, lang: Language) => void;
+  onQuestionChange: (itemId: number, val: string, lang: Language) => void;
   describedById?: string;
 }) => {
   const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({

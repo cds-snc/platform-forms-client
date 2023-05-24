@@ -1,7 +1,8 @@
 import React, { ReactElement } from "react";
 import { Formik } from "formik";
-import { Button, TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
-import { useAuth, useFlag } from "@lib/hooks";
+import { TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
+import { Button } from "@components/globals";
+import { useFlag } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -12,6 +13,8 @@ import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { Confirmation } from "@components/auth/Confirmation/Confirmation";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import * as Yup from "yup";
+import { ErrorStatus } from "@components/forms/Alert/Alert";
+import { useLogin } from "@lib/hooks/auth";
 
 const Login = () => {
   const {
@@ -20,15 +23,10 @@ const Login = () => {
     didConfirm,
     needsConfirmation,
     setNeedsConfirmation,
-    cognitoError,
-    cognitoErrorDescription,
-    cognitoErrorCallToActionLink,
-    cognitoErrorCallToActionText,
-    cognitoErrorIsDismissible,
-    setCognitoErrorStates,
-    resetCognitoErrorState,
     login,
-  } = useAuth();
+    authErrorsState,
+    authErrorsReset,
+  } = useLogin();
   const { t } = useTranslation(["login", "cognito-errors", "common"]);
   const { status: registrationOpen } = useFlag("accountRegistration");
   const { status: passwordResetEnabled } = useFlag("passwordReset");
@@ -52,7 +50,6 @@ const Login = () => {
       <Confirmation
         username={username.current}
         password={password.current}
-        confirmationAuthenticationFailedCallback={setCognitoErrorStates}
         confirmationCallback={confirmationCallback}
       />
     );
@@ -64,7 +61,7 @@ const Login = () => {
         <title>{t("title")}</title>
       </Head>
       <Formik
-        initialValues={{ username: cognitoError ? username.current : "", password: "" }}
+        initialValues={{ username: authErrorsState.isError ? username.current : "", password: "" }}
         onSubmit={async (values, helpers) => {
           username.current = values.username;
           password.current = values.password;
@@ -78,26 +75,30 @@ const Login = () => {
         validateOnChange={false}
         validateOnBlur={false}
         validationSchema={validationSchema}
+        validate={authErrorsReset}
+        onReset={authErrorsReset}
       >
         {({ handleSubmit, errors }) => (
           <>
-            {cognitoError && (
+            {authErrorsState.isError && (
               <Alert
-                type="error"
-                heading={cognitoError}
-                onDismiss={resetCognitoErrorState}
+                type={ErrorStatus.ERROR}
+                heading={authErrorsState.title}
                 id="cognitoErrors"
-                dismissible={cognitoErrorIsDismissible}
+                focussable={true}
               >
-                {cognitoErrorDescription}&nbsp;
-                {cognitoErrorCallToActionLink ? (
-                  <Link href={cognitoErrorCallToActionLink}>{cognitoErrorCallToActionText}</Link>
+                {authErrorsState.description}
+                {authErrorsState.callToActionLink ? (
+                  <Link href={authErrorsState.callToActionLink}>
+                    {authErrorsState.callToActionText}
+                  </Link>
                 ) : undefined}
+                .
               </Alert>
             )}
-            {Object.keys(errors).length > 0 && !cognitoError && (
+            {Object.keys(errors).length > 0 && !authErrorsState.isError && (
               <Alert
-                type="error"
+                type={ErrorStatus.ERROR}
                 validation={true}
                 tabIndex={0}
                 id="loginValidationErrors"
@@ -116,7 +117,7 @@ const Login = () => {
                 </ol>
               </Alert>
             )}
-            <h1>{t("title")}</h1>
+            <h1 className="border-b-0 mt-6 mb-12">{t("title")}</h1>
             {registrationOpen && (
               <p className="mb-10 -mt-6">
                 {t("signUpText")}&nbsp;

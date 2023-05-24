@@ -3,7 +3,7 @@ import { useTranslation } from "next-i18next";
 
 import { FormElementWithIndex } from "../../types";
 import { useTemplateStore, useModalStore } from "../../store";
-import { Button } from "../shared";
+import { Button } from "@components/globals";
 import { Modal } from "./index";
 import { ModalButton, ModalForm } from "./index";
 import { useRefsContext } from "@formbuilder/app/edit/RefsContext";

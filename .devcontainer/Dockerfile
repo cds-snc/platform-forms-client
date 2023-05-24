@@ -1,14 +1,4 @@
-ARG VARIANT=16@sha256:c94897fb8f81904dff61bc9e2f25eb66124c3b802afeb3f3ee48f82a3986fe64@sha256:b35e76ba744a975b9a5428b6c3cde1a1cf0be53b246e1e9a4874f87034222b5a@sha256:b35e76ba744a975b9a5428b6c3cde1a1cf0be53b246e1e9a4874f87034222b5a
-
-FROM node:${VARIANT}
-
-ARG USERNAME=node
-ARG USER_UID=1000
-ARG USER_GID=$USER_UID
-
-COPY migrations /src
-WORKDIR /src
-RUN yarn install 
+ARG VARIANT=16@sha256:5d256e870e277b6e5533c8fdb007345657ad9e5cd95c6f710e8d0c60fed5dfc4@sha256:b35e76ba744a975b9a5428b6c3cde1a1cf0be53b246e1e9a4874f87034222b5a@sha256:b35e76ba744a975b9a5428b6c3cde1a1cf0be53b246e1e9a4874f87034222b5a
 
 FROM node:${VARIANT}
 
@@ -53,9 +43,8 @@ RUN apt-get update \
 
 WORKDIR /src
 
-COPY --from=0 /src/node_modules ./migrations/node_modules
-COPY --from=1 /src/node_modules ./flag_initialization/node_modules
-COPY --from=2 /src/node_modules ./node_modules
+COPY --from=0 /src/node_modules ./flag_initialization/node_modules
+COPY --from=1 /src/node_modules ./node_modules
 
 ENV PORT 3000
 

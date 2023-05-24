@@ -1,7 +1,6 @@
 import Document, { Html, Head, Main, NextScript, OriginProps } from "next/document";
 import React from "react";
 import { googleTagManager, cspHashOf } from "@lib/cspScripts";
-import JSDisabled from "./js-disabled";
 
 const scriptHashes: Array<string> = [];
 const externalScripts: Array<string> = [];
@@ -219,7 +218,7 @@ class MyDocument extends Document {
         </CustomHead>
         <noscript>
           <style type="text/css">{`#__next {display:none;}`}</style>
-          <JSDisabled lang={this.props.__NEXT_DATA__.locale} />
+          <meta httpEquiv="Refresh" content="0; url='/javascript-disabled.html'" />
         </noscript>
         <body>
           {/* Will only run if Browser does not have JS enabled */}

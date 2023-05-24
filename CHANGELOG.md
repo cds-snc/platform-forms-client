@@ -5,9 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.6] 2023-05-16
+
+### Changed
+
+- Updated unauthenticated view on form builder tabs (publish and responses). [1869](https://github.com/cds-snc/platform-forms-client/issues/1869)
+- Allow more symbols to be used in passwords. [2095](https://github.com/cds-snc/platform-forms-client/issues/2095)
+- Unsupported browser page has been updated. It will now load when accessed within Internet Explorer. [2081](https://github.com/cds-snc/platform-forms-client/issues/2081)
+
+## [3.0.5] 2023-05-10
+
 ### Fixed
 
 - Download API will not override a response status that is different than `New`. [2052](https://github.com/cds-snc/platform-forms-client/issues/2052)
+- Language Toggle
+- Button styling across the product
+- Error message when a user tries to login and the service is unavailable
+- Unsupported browser page / Java Script not enable page
 
 ## [3.0.4] 2023-05-05
 

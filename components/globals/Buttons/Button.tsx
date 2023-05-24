@@ -1,0 +1,51 @@
+import React, { ReactElement } from "react";
+import { themes, Theme } from "./themes";
+
+export const Button = ({
+  type = "button",
+  children,
+  onClick,
+  className,
+  id,
+  icon,
+  iconWrapperClassName,
+  disabled = false,
+  "aria-label": ariaLabel = undefined,
+  theme = "primary",
+  tabIndex = 0,
+  buttonRef,
+  dataTestId,
+}: {
+  type?: "button" | "submit" | "reset";
+  children?: JSX.Element | string;
+  id?: string;
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
+  icon?: ReactElement;
+  className?: string;
+  iconWrapperClassName?: string;
+  disabled?: boolean;
+  "aria-label"?: string;
+  theme?: Theme;
+  tabIndex?: number;
+  buttonRef?: (el: HTMLButtonElement) => void;
+  dataTestId?: string;
+}) => (
+  <button
+    onClick={onClick}
+    className={`${className || ""} ${themes[theme]} ${themes["base"]}`}
+    id={id}
+    disabled={disabled}
+    aria-label={ariaLabel}
+    type={type}
+    tabIndex={tabIndex}
+    ref={buttonRef}
+    data-testid={dataTestId}
+  >
+    {icon && (
+      <div className={`${iconWrapperClassName || ""} ${theme === "icon" ? "" : "w-8 -ml-2 mr-2"}`}>
+        {icon}
+      </div>
+    )}
+    {children}
+  </button>
+);

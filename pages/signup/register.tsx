@@ -1,34 +1,33 @@
 import React, { ReactElement } from "react";
 import { Formik } from "formik";
-import { Button, TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
-import { useAuth, useFlag } from "@lib/hooks";
+import { TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
+import { Button } from "@components/globals";
+import { useFlag } from "@lib/hooks";
+import { useRegister } from "@lib/hooks/auth";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { Confirmation } from "@components/auth/Confirmation/Confirmation";
 import * as Yup from "yup";
-import { isValidGovEmail, isUpperCase, isLowerCase, isNumber, isSymbol } from "@lib/validation";
+import {
+  isValidGovEmail,
+  containsUpperCaseCharacter,
+  containsLowerCaseCharacter,
+  containsNumber,
+  containsSymbol,
+} from "@lib/validation";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import Loader from "@components/globals/Loader";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth/next";
 import Link from "next/link";
 import Head from "next/head";
+import { ErrorStatus } from "@components/forms/Alert/Alert";
 
 const Register = () => {
   const { isLoading, status: registrationOpen } = useFlag("accountRegistration");
-  const {
-    username,
-    password,
-    needsConfirmation,
-    cognitoError,
-    cognitoErrorDescription,
-    cognitoErrorCallToActionLink,
-    cognitoErrorCallToActionText,
-    cognitoErrorIsDismissible,
-    resetCognitoErrorState,
-    register,
-  } = useAuth();
+  const { username, password, needsConfirmation, register, authErrorsState, authErrorsReset } =
+    useRegister();
   const { t } = useTranslation(["signup", "common"]);
 
   const validationSchema = Yup.object().shape({
@@ -45,33 +44,33 @@ const Register = () => {
       ),
     password: Yup.string()
       .required(t("input-validation.required", { ns: "common" }))
-      .min(8, t("signUpRegistration.fields.password.error.minLength"))
-      .max(50, t("signUpRegistration.fields.password.error.maxLength"))
+      .min(8, t("account.fields.password.error.minLength", { ns: "common" }))
+      .max(50, t("account.fields.password.error.maxLength", { ns: "common" }))
       .test(
         "password-valid-lowerCase",
-        t("signUpRegistration.fields.password.error.oneLowerCase"),
-        (password = "") => isLowerCase(password)
+        t("account.fields.password.error.oneLowerCase", { ns: "common" }),
+        (password = "") => containsLowerCaseCharacter(password)
       )
       .test(
         "password-valid-upperCase",
-        t("signUpRegistration.fields.password.error.oneUpperCase"),
-        (password = "") => isUpperCase(password)
+        t("account.fields.password.error.oneUpperCase", { ns: "common" }),
+        (password = "") => containsUpperCaseCharacter(password)
       )
       .test(
         "password-valid-number",
-        t("signUpRegistration.fields.password.error.oneNumber"),
-        (password = "") => isNumber(password)
+        t("account.fields.password.error.oneNumber", { ns: "common" }),
+        (password = "") => containsNumber(password)
       )
       .test(
         "password-valid-symbol",
-        t("signUpRegistration.fields.password.error.oneSymbol"),
-        (password = "") => isSymbol(password)
+        t("account.fields.password.error.oneSymbol", { ns: "common" }),
+        (password = "") => containsSymbol(password)
       ),
     passwordConfirmation: Yup.string()
       .required(t("input-validation.required", { ns: "common" }))
       .oneOf(
         [Yup.ref("password"), null],
-        t("signUpRegistration.fields.passwordConfirmation.error.mustMatch")
+        t("account.fields.passwordConfirmation.error.mustMatch", { ns: "common" })
       ),
   });
 
@@ -95,7 +94,6 @@ const Register = () => {
       <Confirmation
         username={username.current}
         password={password.current}
-        confirmationAuthenticationFailedCallback={() => undefined}
         confirmationCallback={() => undefined}
       />
     );
@@ -119,23 +117,25 @@ const Register = () => {
       >
         {({ handleSubmit, errors }) => (
           <>
-            {cognitoError && (
+            {authErrorsState.isError && (
               <Alert
-                type="error"
-                heading={cognitoError}
-                onDismiss={resetCognitoErrorState}
+                type={ErrorStatus.ERROR}
+                heading={authErrorsState.title}
+                onDismiss={authErrorsReset}
                 id="cognitoErrors"
-                dismissible={cognitoErrorIsDismissible}
+                // dismissible={cognitoErrorIsDismissible}
               >
-                {cognitoErrorDescription}&nbsp;
-                {cognitoErrorCallToActionLink ? (
-                  <Link href={cognitoErrorCallToActionLink}>{cognitoErrorCallToActionText}</Link>
+                {authErrorsState.description}&nbsp;
+                {authErrorsState.callToActionLink ? (
+                  <Link href={authErrorsState.callToActionLink}>
+                    {authErrorsState.callToActionText}
+                  </Link>
                 ) : undefined}
               </Alert>
             )}
-            {Object.keys(errors).length > 0 && !cognitoError && (
+            {Object.keys(errors).length > 0 && !authErrorsState.isError && (
               <Alert
-                type="error"
+                type={ErrorStatus.ERROR}
                 validation={true}
                 tabIndex={0}
                 id="registrationValidationErrors"
@@ -154,7 +154,7 @@ const Register = () => {
                 </ol>
               </Alert>
             )}
-            <h1>{t("signUpRegistration.title")}</h1>
+            <h1 className="border-b-0 mt-6 mb-12">{t("signUpRegistration.title")}</h1>
             <p className="mb-10 -mt-6">
               {t("signUpRegistration.alreadyHaveAnAccount")}&nbsp;
               <Link href={"/auth/login"}>{t("signUpRegistration.alreadyHaveAnAccountLink")}</Link>
@@ -188,10 +188,10 @@ const Register = () => {
               </div>
               <div className="focus-group">
                 <Label id={"label-password"} htmlFor={"password"} className="required" required>
-                  {t("signUpRegistration.fields.password.label")}
+                  {t("account.fields.password.label", { ns: "common" })}
                 </Label>
                 <Description className="text-p text-black-default" id={"password-hint"}>
-                  {t("signUpRegistration.fields.password.hint")}
+                  {t("account.fields.password.hint", { ns: "common" })}
                 </Description>
                 <TextInput
                   className="h-10 w-full max-w-lg rounded"
@@ -208,7 +208,7 @@ const Register = () => {
                   className="required"
                   required
                 >
-                  {t("signUpRegistration.fields.passwordConfirmation.label")}
+                  {t("account.fields.passwordConfirmation.label", { ns: "common" })}
                 </Label>
                 <TextInput
                   className="h-10 w-full max-w-lg rounded"
@@ -218,8 +218,8 @@ const Register = () => {
                 />
               </div>
               <p className="mb-10 -mt-8 gc-description">
-                {t("signUpRegistration.slaAgreement")}&nbsp;
-                <Link href={"/sla"}>{t("signUpRegistration.slaAgreementLink")}</Link>
+                {t("signUpRegistration.termsAgreement")}&nbsp;
+                <Link href={"/terms-of-use"}>{t("signUpRegistration.termsAgreementLink")}</Link>
               </p>
 
               <Button className="gc-button--blue" type="submit">

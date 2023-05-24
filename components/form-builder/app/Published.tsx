@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import { RocketIcon } from "../icons/RocketIcon";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { themes } from "./shared/Button";
+import { LinkButton } from "@components/globals";
 import { useTranslation } from "next-i18next";
 import { useTemplateStore } from "../store/useTemplateStore";
 import { useAccessControl } from "@lib/hooks";
-import Link from "next/link";
 import Markdown from "markdown-to-jsx";
 import { getHost } from "../util";
 
@@ -65,11 +64,7 @@ export const Published = ({ id }: { id: string }) => {
       </div>
       <div>
         {ability?.can("view", "FormRecord") && (
-          <Link href="/myforms" legacyBehavior>
-            <a href="/myforms" className={`${themes.primary} ${themes.base} ${themes.htmlLink}`}>
-              {t("publishedBack")}
-            </a>
-          </Link>
+          <LinkButton.Primary href="/myforms">{t("publishedBack")}</LinkButton.Primary>
         )}
       </div>
     </div>

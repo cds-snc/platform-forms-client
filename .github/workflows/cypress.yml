@@ -50,13 +50,13 @@ jobs:
         id: yarn-cache-dir-path
         run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3.3.1
         id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          key: linux-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            linux-yarn-
 
       - name: "Install dependencies"
         run: yarn install:all
@@ -64,6 +64,8 @@ jobs:
       - name: Cypress Tests
         uses: cypress-io/github-action@d79d2d530a66e641eb4a5f227e13bc985c60b964 # v4.2.2
         with:
+          # we have already installed all dependencies above
+          install: false
           browser: chrome
           headed: false
           build: yarn build:test
@@ -73,6 +75,8 @@ jobs:
       - name: Cypress Component Tests
         uses: cypress-io/github-action@d79d2d530a66e641eb4a5f227e13bc985c60b964 # v4.2.2
         with:
+          # we have already installed all dependencies above
+          install: false
           browser: chrome
           component: true
           headed: false
