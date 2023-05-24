@@ -69,7 +69,7 @@
       "title": "Confirm receipt of responses",
       "findCode": "Find the confirmation code on the bottom of the downloaded form response. It looks like: c0c42c90-b816-49da-a69a-80bfd8ba15db.",
       "copyCode": "Copy and paste up to {{max}} confirmation codes, one per line.",
-      "responsesAvailableFor": "After you confirm receipt, responses will be available for 7 days then automatically removed from our database.",
+      "responsesAvailableFor": "After you confirm receipt, responses will be available for 30 days then automatically removed from our database.",
       "confirmReceipt": "Confirm receipt",
       "errors": {
         "minEntries": {
