@@ -57,7 +57,8 @@ export const RichTextLocked = ({
           <div className="mx-auto bottom-0 -mb-5 z-10">
             <AddElementButton
               handleAdd={(type?: FormElementTypes) => {
-                handleAddElement(0, type);
+                // Index is -1 because we want to add the element after the initial locked block and before the first element
+                handleAddElement(-1, type);
               }}
             />
           </div>
