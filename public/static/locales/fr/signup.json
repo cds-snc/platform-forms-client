@@ -1,8 +1,8 @@
 {
   "signUpConfirmation": {
-    "title": "Vérifiez votre courriel",
+    "title": "Vérifiez votre courriel pour un code de sécurité",
     "resendConfirmationCodeButton": "Envoyer un nouveau code de vérification",
-    "emailHasBeenSent": "Un courriel ayant un code de vérification a été envoyé à",
+    "emailHasBeenSent": "Cette étape permet d’assurert la sécurité de Formulaires GC en vérifiant votre compte chaque fois que vous vous connectez.",
     "confirmButton": "Continuer",
     "resendConfirmationCode": {
       "title": "Vérifiez votre courriel",
@@ -10,9 +10,13 @@
     },
     "fields": {
       "confirmationCode": {
-        "label": "Entrer le code de vérification pour compléter la création de votre compte",
+        "label": "Code de sécurité",
+        "description": "Entrez le code dans un délai de 15 minutes.",
         "error": {
-          "number": "Ceci doit être un numéro"
+          "notEmpty": "Ne peut pas être vide",
+          "fiveChars": "Doit être 5 caractères",
+          "notFound": "Code non trouvé",
+          "expired": "Code expiré. Rssayez de vous connecter à nouveau."
         }
       }
     }
@@ -53,9 +57,8 @@
   },
   "registrationClosed": "L'inscription est fermée pour le moment.",
   "accountCreated": {
-    "title": "Compte créé sur Formulaires GC",
-    "yourAccountTitle": "Ce que vous pouvez faire avec votre compte",
-    "yourAccountListDescription": "Ce compte vous permet de",
+    "title": "Compte créé",
+    "yourAccountTitle": "Ce que vous pouvez faire",
     "yourAccountList": {
       "item1": "rédiger une ébauche de formulaire.",
       "item2": "enregistrer les ébauches dans Formulaires GC.",

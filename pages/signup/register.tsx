@@ -43,17 +43,6 @@ const Register = () => {
     return <div>{t("registrationClosed")}</div>;
   }
 
-  // Note: Confirmation step = Security code step
-  if (registerStep === RegisterStep.CONFIRMATION) {
-    return (
-      <Confirmation
-        username={username.current}
-        password={password.current}
-        confirmationCallback={() => undefined}
-      />
-    );
-  }
-
   // Note: this will probably separated into two screens in the near future
   // https://github.com/cds-snc/platform-forms-client/issues/1532
   if (registerStep === RegisterStep.ACCOUNT) {
@@ -67,6 +56,22 @@ const Register = () => {
           password={password}
           name={name}
           successCallback={accountCallback}
+        />
+      </>
+    );
+  }
+
+  // Note: Confirmation step = Security code step
+  if (registerStep === RegisterStep.CONFIRMATION) {
+    return (
+      <>
+        <Head>
+          <title>{t("signUpConfirmation.title")}</title>
+        </Head>
+        <Confirmation
+          username={username.current}
+          password={password.current}
+          confirmationCallback={() => undefined}
         />
       </>
     );

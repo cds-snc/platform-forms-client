@@ -1,10 +1,11 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 
-import React from "react";
+import React, { ReactElement } from "react";
 import Head from "next/head";
 import { useTranslation } from "next-i18next";
 import { StyledLink } from "@components/globals/StyledLink/StyledLink";
+import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 
 export default function AccountCreated() {
   const { t, i18n } = useTranslation(["signup"]);
@@ -16,7 +17,6 @@ export default function AccountCreated() {
       </Head>
       <h1 className="border-b-0 mt-6 mb-12">{t("accountCreated.title")}</h1>
       <h2>{t("accountCreated.yourAccountTitle")}</h2>
-      <p>{t("accountCreated.yourAccountListDescription")}:</p>
       <ul>
         <li>{t("accountCreated.yourAccountList.item1")}</li>
         <li>{t("accountCreated.yourAccountList.item2")}</li>
@@ -54,6 +54,10 @@ export default function AccountCreated() {
     </>
   );
 }
+
+AccountCreated.getLayout = (page: ReactElement) => {
+  return <UserNavLayout>{page}</UserNavLayout>;
+};
 
 export const getServerSideProps = requireAuthentication(async ({ locale }) => {
   {
