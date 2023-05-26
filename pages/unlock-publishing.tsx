@@ -2,7 +2,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 
-import React, { useState } from "react";
+import React, { useState, ReactElement } from "react";
 import Head from "next/head";
 import { Formik } from "formik";
 import {
@@ -22,6 +22,7 @@ import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
+import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 
 export default function UnlockPublishing() {
   const { t, i18n } = useTranslation(["unlock-publishing", "common"]);
@@ -257,6 +258,10 @@ export default function UnlockPublishing() {
     </div>
   );
 }
+
+UnlockPublishing.getLayout = (page: ReactElement) => {
+  return <UserNavLayout>{page}</UserNavLayout>;
+};
 
 export const getServerSideProps = requireAuthentication(async ({ user: { ability }, locale }) => {
   {
