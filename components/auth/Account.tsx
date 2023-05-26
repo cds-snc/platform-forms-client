@@ -1,6 +1,6 @@
 import React from "react";
 import { Formik, FormikHelpers } from "formik";
-import { TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
+import { TextInput, Label, Alert, ErrorListItem } from "@components/forms";
 import { Button } from "@components/globals";
 import { useTranslation } from "next-i18next";
 import * as Yup from "yup";
@@ -178,9 +178,9 @@ export const Account = ({ username, name, password, successCallback }: AccountPr
               <Label id={"label-username"} htmlFor={"username"} className="required" required>
                 {t("signUpRegistration.fields.username.label")}
               </Label>
-              <Description className="text-p text-black-default" id={"username-hint"}>
+              <div className="text-p text-black-default mb-2" id={"username-hint"}>
                 {t("signUpRegistration.fields.username.hint")}
-              </Description>
+              </div>
               <TextInput
                 className="h-10 w-full max-w-lg rounded"
                 type={"email"}
@@ -193,9 +193,15 @@ export const Account = ({ username, name, password, successCallback }: AccountPr
               <Label id={"label-password"} htmlFor={"password"} className="required" required>
                 {t("account.fields.password.label", { ns: "common" })}
               </Label>
-              <Description className="text-p text-black-default" id={"password-hint"}>
-                {t("account.fields.password.hint", { ns: "common" })}
-              </Description>
+              <div className="text-p text-black-default" id={"password-hint"}>
+                {t("signUpRegistration.fields.password.requirementsList.title")}
+                <ul className="my-2">
+                  <li>{t("signUpRegistration.fields.password.requirementsList.eightChars")}</li>
+                  <li>{t("signUpRegistration.fields.password.requirementsList.number")}</li>
+                  <li>{t("signUpRegistration.fields.password.requirementsList.capital")}</li>
+                  <li>{t("signUpRegistration.fields.password.requirementsList.symbol")}</li>
+                </ul>
+              </div>
               <TextInput
                 className="h-10 w-full max-w-lg rounded"
                 type={"password"}
@@ -220,11 +226,11 @@ export const Account = ({ username, name, password, successCallback }: AccountPr
                 name={"passwordConfirmation"}
               />
             </div>
-            <p className="mb-10 -mt-8 gc-description">
+            <p className="mb-10 -mt-2 text-p text-black-default">
               {t("signUpRegistration.termsAgreement")}&nbsp;
               <Link href={"/terms-of-use"}>{t("signUpRegistration.termsAgreementLink")}</Link>
             </p>
-            <Button className="gc-button--blue" type="submit">
+            <Button theme="primary" type="submit">
               {t("signUpRegistration.signUpButton")}
             </Button>
           </form>
