@@ -23,7 +23,11 @@ export const ErrorPanel = ({
 
   // links
   const homeHref =
-    status === "authenticated" ? `/${i18n.language}/myforms` : `/${i18n.language}/form-builder`;
+    status === "authenticated"
+      ? `/${i18n.language}/myforms`
+      : `https://articles.alpha.canada.ca/forms-formulaires/${
+          String(i18n.language).toLowerCase() === "fr" ? "fr/" : ""
+        }`;
 
   const homeText =
     status === "authenticated" ? t("errorPanel.cta.yourForms") : t("errorPanel.cta.home");
@@ -32,7 +36,7 @@ export const ErrorPanel = ({
 
   return (
     <div className="flex items-center justify-center h-full mx-4">
-      <div className="laptop:max-w-2xl py-10 px-12 border-2 border-solid border-blue rounded-m bg-gray-soft">
+      <div className="laptop:max-w-2xl py-10 px-12 border-2 border-solid border-blue bg-gray-soft rounded-2xl">
         <HeadingTag className="border-none mb-4">{title || defaultTitle}</HeadingTag>
         <div className="mb-10">{children || defaultMessage}</div>
         <div className="laptop:flex">

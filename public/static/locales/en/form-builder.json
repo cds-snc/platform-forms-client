@@ -551,7 +551,7 @@
   "startH2": "Design a form",
   "startH3": "Open a form file",
   "startP1": "Start with a blank form.",
-  "startP2": "Edit a form uploaded from your computer.",
+  "startP2": "Edit a form that was created and downloaded from GC Forms.",
   "submit": "Submit",
   "submittedResponsesText": "Submitted responses will be sent to {{email}}.",
   "submittedResponsesChange": "Change where submitted responses are sent",

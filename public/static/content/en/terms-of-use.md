@@ -39,7 +39,7 @@ You are responsible for:
 
 You are responsible for the completeness and accuracy of translations.  
 
-## Provide multiple channels to service and program delivery 
+## Provide multiple channels for service and program delivery 
 
 GC Forms allows you to create and publish digital forms. You must ensure that there are alternative paths to program and service delivery for accessibility. 
 

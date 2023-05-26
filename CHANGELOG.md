@@ -5,12 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.0.7] 2023-05-26
+
+### Fixed
+
+- Fixes ErrorPannel home link depending on auth status [`#2167`](https://github.com/cds-snc/platform-forms-client/pull/2167)
+- Fix/Bug 2168 [`#2170`](https://github.com/cds-snc/platform-forms-client/pull/2170)
+- fix(deps): update all patch dependencies [`#2146`](https://github.com/cds-snc/platform-forms-client/pull/2146)
+- Fix/dynamic rows and acceptable_use tests [`#2111`](https://github.com/cds-snc/platform-forms-client/pull/2111)
+
+## Changed
+
+- Consistent data removal length of time [`#2156`](https://github.com/cds-snc/platform-forms-client/pull/2156)
+- chore(deps): update all non-major github action dependencies [`#2144`](https://github.com/cds-snc/platform-forms-client/pull/2144)
+- Small content tweaks to Responses page [`#2163`](https://github.com/cds-snc/platform-forms-client/pull/2163)
+- Chore/Remove migrations [`#2148`](https://github.com/cds-snc/platform-forms-client/pull/2148)
+- Clarify description for Open a form file [`#2140`](https://github.com/cds-snc/platform-forms-client/pull/2140)
+- chore(deps): update all non-major docker images [`#2145`](https://github.com/cds-snc/platform-forms-client/pull/2145)
+- chore(deps): lock file maintenance [`#2147`](https://github.com/cds-snc/platform-forms-client/pull/2147)
+- Small tweaks for reset password screens [`#2126`](https://github.com/cds-snc/platform-forms-client/pull/2126)
+- Locale file updates - for password field [`#2124`](https://github.com/cds-snc/platform-forms-client/pull/2124)
+- feat: updated unsupported browser page to be a static HTML page [`#2108`](https://github.com/cds-snc/platform-forms-client/pull/2108)
+- Small tweak to terms of use [`#2119`](https://github.com/cds-snc/platform-forms-client/pull/2119)
+- use hasError [`#2122`](https://github.com/cds-snc/platform-forms-client/pull/2122)
+- Useauth hook refactor initial [`#2117`](https://github.com/cds-snc/platform-forms-client/pull/2117)
+- Remove transmitting browser logging [`#2118`](https://github.com/cds-snc/platform-forms-client/pull/2118)
+- Update account layout [`#2109`](https://github.com/cds-snc/platform-forms-client/pull/2109)
+
 ## [3.0.6] 2023-05-16
 
 ### Changed
 
 - Updated unauthenticated view on form builder tabs (publish and responses). [1869](https://github.com/cds-snc/platform-forms-client/issues/1869)
 - Allow more symbols to be used in passwords. [2095](https://github.com/cds-snc/platform-forms-client/issues/2095)
+- Unsupported browser page has been updated. It will now load when accessed within Internet Explorer. [2081](https://github.com/cds-snc/platform-forms-client/issues/2081)
 
 ## [3.0.5] 2023-05-10
 
