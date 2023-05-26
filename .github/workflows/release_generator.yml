@@ -17,3 +17,4 @@ jobs:
         with:
           command: manifest
           release-type: node
+          default-branch: git_auto_changelog
