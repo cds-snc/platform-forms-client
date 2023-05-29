@@ -78,5 +78,6 @@ export const useLogin = () => {
     setNeedsConfirmation,
     authErrorsState,
     authErrorsReset,
+    handleErrorById,
   };
 };
