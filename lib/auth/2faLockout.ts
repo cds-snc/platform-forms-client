@@ -7,7 +7,7 @@ export interface Lockout2FAResponse {
 }
 
 const LOCKOUT_KEY = "auth:2fa:failed";
-const MAX_FAILED_ATTEMPTS_ALLOWED = 10;
+const MAX_FAILED_ATTEMPTS_ALLOWED = 3;
 
 export async function registerFailed2FAAttempt(email: string): Promise<Lockout2FAResponse> {
   const redis = await getRedisInstance();
@@ -15,7 +15,7 @@ export async function registerFailed2FAAttempt(email: string): Promise<Lockout2F
 
   const isLockedOut = incrementedNumberOfFailedLoginAttempts >= MAX_FAILED_ATTEMPTS_ALLOWED;
 
-  isLockedOut && log2FALockoutEvent(email);
+  if (isLockedOut) logMessage.warn(`2FA session was locked out for user: ${email}`);
 
   return {
     isLockedOut,
@@ -29,8 +29,4 @@ export async function registerFailed2FAAttempt(email: string): Promise<Lockout2F
 export async function clear2FALockout(email: string): Promise<void> {
   const redis = await getRedisInstance();
   await redis.del(`${LOCKOUT_KEY}:${email}`);
-}
-
-async function log2FALockoutEvent(email: string): Promise<void> {
-  logMessage.warn(`2FA session was locked out for user: ${email}`);
 }

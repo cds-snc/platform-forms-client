@@ -4,7 +4,7 @@ import crypto from "crypto";
 const TEMPLATE_ID = process.env.TEMPLATE_ID;
 const NOTIFY_API_KEY = process.env.NOTIFY_API_KEY;
 
-export const generateVerificationCode = async () => {
+export const generateVerificationCode = () => {
   // Temporary - for testing purposes
   // Will create more robust code generation in the future
   return crypto.randomBytes(5).toString("hex");
