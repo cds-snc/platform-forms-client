@@ -1,17 +1,12 @@
 name: Production — Push container to ECR
 
 on:
-  push:
-    branches: [main]
-    paths-ignore:
-      # Ignore all files and folders that start with '.'
-      - ".**"
-      # Ignore all files and folder in fixtures, tests, utils, etc.
-      - "__*/**"
+  release:
+    types: [published]
 
 env:
   ECR_REPOSITORY: form_viewer_production
-  GITHUB_SHA: ${{ github.sha }}
+  TAG_VERSION: ${{ github.ref }}
   GOOGLE_CLIENT_SECRET: ${{ secrets.PRODUCTION_GOOGLE_CLIENT_SECRET }}
   GOOGLE_CLIENT_ID: ${{ secrets.PRODUCTION_GOOGLE_CLIENT_ID }}
   COGNITO_APP_CLIENT_ID: ${{secrets.PRODUCTION_COGNITO_APP_CLIENT_ID}}
@@ -23,12 +18,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2.7.0
+        with:
+          ref: $TAG_VERSION
 
       - name: Build Form Viewer
         run: |
           docker build -t base \
           --build-arg PRODUCTION_ENV=true \
-          --build-arg GITHUB_SHA_ARG=$GITHUB_SHA \
           --build-arg GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET \
           --build-arg GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID \
           --build-arg COGNITO_APP_CLIENT_ID=$COGNITO_APP_CLIENT_ID \
@@ -50,14 +46,14 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr-production.outputs.registry }}
         run: |
-          docker tag base $ECR_REGISTRY/$ECR_REPOSITORY:$GITHUB_SHA
+          docker tag base $ECR_REGISTRY/$ECR_REPOSITORY:$TAG_VERSION
           docker tag base $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
       - name: Push containers to Production Amazon ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr-production.outputs.registry }}
         run: |
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$GITHUB_SHA
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$TAG_VERSION
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
       - name: Logout of Production Amazon ECR
