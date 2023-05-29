@@ -179,11 +179,13 @@ const Step2 = ({
   authenticationFlowToken,
   authErrorsState,
   authErrorsReset,
+  handleErrorById,
 }: {
   username: string;
   authenticationFlowToken: string;
   authErrorsState: AuthErrorsState;
   authErrorsReset: () => void;
+  handleErrorById: (id: string) => void;
 }) => {
   const { t, i18n } = useTranslation(["login", "cognito-errors", "common"]);
   const { verify } = useVerify();
@@ -200,6 +202,14 @@ const Step2 = ({
         onSubmit={async (values) => {
           const { verificationCode, username } = values;
           const data = await verify({ username, authenticationFlowToken, verificationCode });
+
+          if (data && !data?.ok) {
+            const error = data?.error;
+            if (error) {
+              handleErrorById(error);
+            }
+          }
+
           if (data) {
             router.push({
               pathname: `/${i18n.language}/auth/policy`,
@@ -226,7 +236,6 @@ const Step2 = ({
                     {authErrorsState.callToActionText}
                   </Link>
                 ) : undefined}
-                .
               </Alert>
             )}
             {Object.keys(errors).length > 0 && !authErrorsState.isError && (
@@ -291,6 +300,7 @@ const Login = () => {
     authErrorsState,
     authErrorsReset,
     login,
+    handleErrorById,
   } = useLogin();
 
   const confirmationCallback = () => {
@@ -316,6 +326,7 @@ const Login = () => {
       authenticationFlowToken={authenticationFlowToken.current}
       authErrorsState={authErrorsState}
       authErrorsReset={authErrorsReset}
+      handleErrorById={handleErrorById}
     />
   ) : (
     <Step1
