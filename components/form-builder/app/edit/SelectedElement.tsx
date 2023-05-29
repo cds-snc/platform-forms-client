@@ -80,11 +80,7 @@ export const SelectedElement = ({
       element = <ShortAnswer>{t("shortAnswerText")}</ShortAnswer>;
       break;
     case "richText":
-      if (elIndex !== -1) {
-        element = <RichText elIndex={elIndex} subIndex={item.index} />;
-      } else {
-        element = <RichText elIndex={item.index} />;
-      }
+      element = <RichText id={item.id} elIndex={item.index} />;
       break;
     case "textArea":
       element = <ShortAnswer>{t("longAnswerText")}</ShortAnswer>;

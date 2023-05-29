@@ -49,7 +49,7 @@ describe("Form builder modal description", () => {
     cy.get("button").contains("Close").click();
 
     // rearrange the first element
-    cy.get('#element-1 [data-testid="moveDown"]').click();
+    cy.get('#element-2 [data-testid="moveDown"]').click();
 
     // check that the descriptions are still correct
     cy.get('#element-1 [data-testid="more"]').click();
