@@ -116,7 +116,7 @@ describe("Test Cognito library", () => {
     it("Should generate a verification code and save it in the database", async () => {
       const mockedId = "f4f7cedb-0f0b-4390-91a2-69e8c8a29f67";
 
-      (prismaMock.cognitoCustom2FA.create as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.cognitoCustom2FA.upsert as jest.MockedFunction<any>).mockResolvedValue({
         id: mockedId,
       });
 
@@ -127,8 +127,15 @@ describe("Test Cognito library", () => {
         token: mockedCognitoToken,
       });
 
-      expect(prismaMock.cognitoCustom2FA.create).toHaveBeenCalledWith({
-        data: expect.objectContaining({
+      expect(prismaMock.cognitoCustom2FA.upsert).toHaveBeenCalledWith({
+        where: {
+          email: "test@test.com",
+        },
+        update: expect.objectContaining({
+          cognitoToken: mockedCognitoToken,
+          verificationCode: "a1é3_8",
+        }),
+        create: expect.objectContaining({
           email: "test@test.com",
           cognitoToken: mockedCognitoToken,
           verificationCode: "a1é3_8",
@@ -137,6 +144,8 @@ describe("Test Cognito library", () => {
           id: true,
         },
       });
+
+      expect(mockClear2FALockout).toHaveBeenCalled();
 
       expect(mockSendVerificationCode).toHaveBeenCalled();
 
