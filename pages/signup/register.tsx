@@ -3,17 +3,17 @@ import { useFlag } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { Confirmation } from "@components/auth/Confirmation/Confirmation";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import Loader from "@components/globals/Loader";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth/next";
 import Head from "next/head";
-import { Account } from "@components/auth/Account";
+import { Account, Confirmation, ResendConfirmation } from "@components/auth/Registration";
 
 export enum RegisterStep {
   ACCOUNT = "ACCOUNT",
   CONFIRMATION = "CONFIRMATION",
+  RESEND_CONFIRMATION = "RESEND_CONFIRMATION",
 }
 
 const Register = () => {
@@ -23,10 +23,6 @@ const Register = () => {
   const username = useRef("");
   const password = useRef("");
   const name = useRef("");
-
-  const accountCallback = () => {
-    setRegisterStep(RegisterStep.CONFIRMATION);
-  };
 
   if (isLoading) {
     return (
@@ -43,7 +39,7 @@ const Register = () => {
     return <div>{t("registrationClosed")}</div>;
   }
 
-  // Note: this will probably separated into two screens in the near future
+  // Note: this will probably be separated into two screens in the near future
   // https://github.com/cds-snc/platform-forms-client/issues/1532
   if (registerStep === RegisterStep.ACCOUNT) {
     return (
@@ -55,7 +51,9 @@ const Register = () => {
           username={username}
           password={password}
           name={name}
-          successCallback={accountCallback}
+          successCallback={() => {
+            setRegisterStep(RegisterStep.CONFIRMATION);
+          }}
         />
       </>
     );
@@ -71,7 +69,26 @@ const Register = () => {
         <Confirmation
           username={username.current}
           password={password.current}
-          confirmationCallback={() => undefined}
+          nextStepCallback={(step: RegisterStep) => {
+            setRegisterStep(step);
+          }}
+          canResendCode={true}
+        />
+      </>
+    );
+  }
+
+  if (registerStep === RegisterStep.RESEND_CONFIRMATION) {
+    return (
+      <>
+        <Head>
+          <title>{t("signUpConfirmationReSend.title")}</title>
+        </Head>
+        <ResendConfirmation
+          username={username.current}
+          nextStepCallback={(step: RegisterStep) => {
+            setRegisterStep(step);
+          }}
         />
       </>
     );

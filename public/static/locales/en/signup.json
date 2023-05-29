@@ -1,8 +1,8 @@
 {
   "signUpConfirmation": {
-    "title": "Check your email for a security code",
+    "title": "Check your email",
+    "description": "We've sent you an email with a verification code. Enter the code to finish creating your account",
     "resendConfirmationCodeButton": "Send a new verification code",
-    "emailHasBeenSent": "This step helps keep GC Forms secure by verifying your account each time you sign in.",
     "confirmButton": "Continue",
     "resendConfirmationCode": {
       "title": "Check your email",
@@ -10,15 +10,27 @@
     },
     "fields": {
       "confirmationCode": {
-        "label": "Security code",
-        "description": "Enter the code within 15 minutes.",
+        "label": "Verification code",
+        "description": "The code contains numbers.",
         "error": {
           "notEmpty": "Cannot be empty",
-          "fiveChars": "Must be 5 characters",
+          "sixNumbers": "Must be 6 numbers",
           "notFound": "Code not found",
-          "expired": "Code expired. Try signing in again."
+          "expired": "Code expired. Try signing in again.",
+          "tooManyAttempts": "Too many retry attempts. Try again later.",
+          "exception": "Something went wrong. Please try again later."
         }
       }
+    }
+  },
+  "signUpConfirmationReSend": {
+    "title": "Re-send code",
+    "sometimesEmailMessages": "Sometimes email messages take a few minutes to arrive. If you do not receive the email, you can re-send it.",
+    "reSendCode": "Re-send code",
+    "getSupport": "Get support",
+    "errors": {
+      "tooManyRequests": "Too many retry attempts. Try again later.",
+      "exception": "Something went wrong. Please try again later."
     }
   },
   "signUpRegistration": {

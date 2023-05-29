@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import Link from "next/link";
+import { themes, Theme } from "./themes";
 
 // Note: the below seems unnecessarily complex vs. just having the parent Link component pass an
 // href to a custom anchor component. But this is the recommended way, so staying with this for now.
@@ -16,17 +17,19 @@ interface StyledLinkProps {
   // Keep in mind that the aria-label will override any link text.
   ariaLabel?: string;
   lang?: string;
+  theme?: Theme;
 }
 
 export const StyledLink = (props: StyledLinkProps) => {
-  const { children, href = "", className, locale, ariaLabel, lang } = props;
+  const { children, href = "", className, locale, ariaLabel, lang, theme } = props;
   const ref = useRef<HTMLAnchorElement>(null);
+  const buttonTheme = theme && themes[theme] ? `${themes[theme]} ${themes["baseButton"]}` : "";
 
   return (
     <Link href={href} {...(locale && { locale: locale })} passHref legacyBehavior>
       <WrappedLink
         href={href}
-        className={className}
+        className={`${className || ""} ${buttonTheme}`}
         {...(ariaLabel && { ariaLabel: ariaLabel })}
         {...(lang && { lang: lang })}
         ref={ref}
