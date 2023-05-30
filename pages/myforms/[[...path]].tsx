@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 
 import { getAllTemplates } from "@lib/templates";
-import { requireAuthentication } from "@lib/auth";
+import { requireAuthentication } from "@lib/auth/auth";
 import { checkPrivileges } from "@lib/privileges";
 
 import { NextPageWithLayout } from "@pages/_app";

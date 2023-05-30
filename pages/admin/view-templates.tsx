@@ -1,6 +1,6 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { getAllTemplates } from "@lib/templates";
-import { requireAuthentication } from "@lib/auth";
+import { requireAuthentication } from "@lib/auth/auth";
 import { getProperty } from "@lib/formBuilder";
 
 import React, { Fragment, ReactElement } from "react";

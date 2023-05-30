@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
-import { validateTemporaryToken } from "@lib/auth";
+import { validateTemporaryToken } from "@lib/auth/auth";
 
 /**
  * @description

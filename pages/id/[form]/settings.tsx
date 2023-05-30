@@ -1,5 +1,5 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { requireAuthentication } from "@lib/auth";
+import { requireAuthentication } from "@lib/auth/auth";
 import { getFullTemplateByID } from "@lib/templates";
 import { checkPrivileges } from "@lib/privileges";
 import { ReactElement } from "react";

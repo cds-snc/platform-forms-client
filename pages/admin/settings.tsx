@@ -2,7 +2,7 @@ import React, { ReactElement, useState } from "react";
 import axios from "axios";
 import { Setting } from "@prisma/client";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { requireAuthentication } from "@lib/auth";
+import { requireAuthentication } from "@lib/auth/auth";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import { checkPrivileges } from "@lib/privileges";

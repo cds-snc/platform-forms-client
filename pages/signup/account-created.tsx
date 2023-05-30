@@ -1,5 +1,5 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { requireAuthentication } from "@lib/auth";
+import { requireAuthentication } from "@lib/auth/auth";
 
 import React from "react";
 import Head from "next/head";

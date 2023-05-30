@@ -1,5 +1,5 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { requireAuthentication } from "@lib/auth";
+import { requireAuthentication } from "@lib/auth/auth";
 import { checkPrivileges } from "@lib/privileges";
 import { useTranslation } from "next-i18next";
 import React, { ReactElement, useState } from "react";

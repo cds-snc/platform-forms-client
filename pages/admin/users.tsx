@@ -1,5 +1,5 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { requireAuthentication } from "@lib/auth";
+import { requireAuthentication } from "@lib/auth/auth";
 import { logMessage } from "@lib/logger";
 import { getUsers } from "@lib/users";
 import { useRefresh } from "@lib/hooks";
