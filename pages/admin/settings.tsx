@@ -9,7 +9,7 @@ import { checkPrivileges } from "@lib/privileges";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 import { ToastContainer, toast } from "@components/form-builder/app/shared/Toast";
 import { getAllAppSettings } from "@lib/appSettings";
-import { Button } from "@components/forms";
+import { Button } from "@components/globals";
 import { useAccessControl, useRefresh } from "@lib/hooks";
 import { logMessage } from "@lib/logger";
 
@@ -125,17 +125,17 @@ const ManageSetting = ({
           disabled={!canManageSettings}
         />
         {canManageSettings ? (
-          <div>
-            <Button className="" type="submit">
+          <div className="mt-4">
+            <Button className="mr-2" theme="primary" type="submit">
               {t("save")}
             </Button>
-            <Button type="button" secondary={true} onClick={() => clearSelection()}>
+            <Button type="button" theme="secondary" onClick={() => clearSelection()}>
               {t("cancel")}
             </Button>
           </div>
         ) : (
-          <div>
-            <Button type="button" secondary={true} onClick={() => clearSelection()}>
+          <div className="mt-4">
+            <Button type="button" theme="secondary" onClick={() => clearSelection()}>
               {t("back")}
             </Button>
           </div>
@@ -184,7 +184,7 @@ const Settings = ({ settings }: SettingsProps) => {
       <Head>
         <title>{t("title")}</title>
       </Head>
-      <h1>{t("title")}</h1>
+      <h1 className="border-0 mb-10">{t("title")}</h1>
       {!manageSetting ? (
         <div>
           <ul className="list-none pl-0">
@@ -199,26 +199,29 @@ const Settings = ({ settings }: SettingsProps) => {
                     {i18n.language === "fr" ? setting.descriptionFr : setting.descriptionEn}
                   </p>
                 </div>
-
-                <Button
-                  type="button"
-                  className="w-auto rounded-md shrink-0 basis-1/6"
-                  onClick={() => {
-                    setSelectedSetting(setting);
-                    setManageSetting(true);
-                  }}
-                >
-                  {canManageSettings ? t("manageSetting") : t("viewSetting")}{" "}
-                </Button>
-                {canManageSettings && (
+                <div>
                   <Button
                     type="button"
-                    className="w-auto rounded-md shrink-0 basis-1/6 bg-red-destructive hover:bg-red"
-                    onClick={() => deleteSetting(setting.internalId)}
+                    theme="secondary"
+                    className="text-sm whitespace-nowrap mr-2"
+                    onClick={() => {
+                      setSelectedSetting(setting);
+                      setManageSetting(true);
+                    }}
                   >
-                    {t("deleteSetting")}
+                    {canManageSettings ? t("manageSetting") : t("viewSetting")}
                   </Button>
-                )}
+                  {canManageSettings && (
+                    <Button
+                      type="button"
+                      theme="destructive"
+                      className="text-sm whitespace-nowrap"
+                      onClick={() => deleteSetting(setting.internalId)}
+                    >
+                      {t("deleteSetting")}
+                    </Button>
+                  )}
+                </div>
               </li>
             ))}
           </ul>
@@ -226,6 +229,7 @@ const Settings = ({ settings }: SettingsProps) => {
             <div className="pt-6">
               <Button
                 type="button"
+                theme="primary"
                 className="w-auto rounded-md"
                 onClick={() => setManageSetting(true)}
               >
@@ -267,7 +271,8 @@ export const getServerSideProps = requireAuthentication(async ({ locale, user: {
   const settings = await getAllAppSettings(ability);
   return {
     props: {
-      ...(locale && (await serverSideTranslations(locale, ["common", "admin-settings"]))),
+      ...(locale &&
+        (await serverSideTranslations(locale, ["common", "admin-settings", "admin-login"]))),
       settings,
     },
   };
