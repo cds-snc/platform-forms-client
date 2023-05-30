@@ -124,7 +124,7 @@ export const begin2FAAuthentication = async ({
   email,
   token,
 }: CognitoToken): Promise<AuthenticationFlowToken> => {
-  const verificationCode = generateVerificationCode();
+  const verificationCode = await generateVerificationCode();
 
   const dateIn15Minutes = new Date(Date.now() + 900000); // 15 minutes (= 900000 ms)
 
@@ -154,7 +154,7 @@ export const requestNew2FAVerificationCode = async (
   authenticationFlowToken: AuthenticationFlowToken,
   email: string
 ): Promise<void> => {
-  const verificationCode = generateVerificationCode();
+  const verificationCode = await generateVerificationCode();
 
   try {
     await prisma.cognitoCustom2FA.update({
