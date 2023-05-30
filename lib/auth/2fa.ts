@@ -1,13 +1,13 @@
 import { NotifyClient } from "notifications-node-client";
 import { logMessage } from "@lib/logger";
-import crypto from "crypto";
+import { generateTokenCode } from "@lib/auth/tokenGenerator";
 const TEMPLATE_ID = process.env.TEMPLATE_ID;
 const NOTIFY_API_KEY = process.env.NOTIFY_API_KEY;
 
-export const generateVerificationCode = () => {
+export const generateVerificationCode = async () => {
   // Temporary - for testing purposes
   // Will create more robust code generation in the future
-  return crypto.randomBytes(5).toString("hex");
+  return await generateTokenCode(5);
 };
 
 export const sendVerificationCode = async (email: string, verificationCode: string) => {
