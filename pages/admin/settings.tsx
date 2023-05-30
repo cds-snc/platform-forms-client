@@ -53,7 +53,7 @@ const ManageSetting = ({
   return (
     <div className="gc-form">
       <form onSubmit={saveSetting} method="POST">
-        <label htmlFor="internalId" className="gc-label">
+        <label htmlFor="internalId" className="gc-label mt-2 mb-0">
           {t("label.internalId")}
         </label>
         <input
@@ -64,7 +64,7 @@ const ManageSetting = ({
           name="internalId"
           disabled={!canManageSettings}
         />
-        <label htmlFor="nameEn" className="gc-label">
+        <label htmlFor="nameEn" className="gc-label mt-2 mb-0">
           {t("label.nameEn")}
         </label>
         <input
@@ -76,7 +76,7 @@ const ManageSetting = ({
           id="nameEn"
           disabled={!canManageSettings}
         />
-        <label htmlFor="nameFr" className="gc-label">
+        <label htmlFor="nameFr" className="gc-label mt-2 mb-0">
           {t("label.nameFr")}
         </label>
         <input
@@ -88,7 +88,7 @@ const ManageSetting = ({
           id="nameFr"
           disabled={!canManageSettings}
         />
-        <label htmlFor="descriptionEn" className="gc-label">
+        <label htmlFor="descriptionEn" className="gc-label mt-2 mb-0">
           {t("label.descriptionEn")}
         </label>
         <input
@@ -100,7 +100,7 @@ const ManageSetting = ({
           id="descriptionEn"
           disabled={!canManageSettings}
         />
-        <label htmlFor="descriptionFr" className="gc-label">
+        <label htmlFor="descriptionFr" className="gc-label mt-2 mb-0">
           {t("label.descriptionFr")}
         </label>
         <input
@@ -112,7 +112,7 @@ const ManageSetting = ({
           id="descriptionFr"
           disabled={!canManageSettings}
         />
-        <label htmlFor="value" className="gc-label">
+        <label htmlFor="value" className="gc-label mt-2 mb-0">
           {t("label.value")}
         </label>
         <input
