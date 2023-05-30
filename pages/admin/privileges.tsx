@@ -1,7 +1,7 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import { useFormik } from "formik";
-import { Button } from "@components/forms";
+import { Button } from "@components/globals";
 import React, { ReactElement, useState } from "react";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
@@ -25,44 +25,58 @@ const PrivilegeRow = ({
 
   return (
     <tr className="border-b-1">
-      <td>{i18n.language === "en" ? privilege.nameEn : privilege.nameFr}</td>
-      <td>{i18n.language === "en" ? privilege.descriptionEn : privilege.descriptionFr}</td>
-      <td>
-        <table className="table-fixed min-w-full text-center">
+      <td className="p-2 text-center">
+        {i18n.language === "en" ? privilege.nameEn : privilege.nameFr}
+      </td>
+      <td className="p-2">
+        {i18n.language === "en" ? privilege.descriptionEn : privilege.descriptionFr}
+      </td>
+      <td className="p-2">
+        <table className="min-w-full">
           <thead>
             <tr>
-              <td className="font-bold w-1/3">Action</td>
-              <td className="font-bold w-1/3">Subject</td>
-              <td className="font-bold w-1/3">Conditions</td>
+              <td className="font-bold w-1/3 text-sm text-gray-700">Action</td>
+              <td className="font-bold w-1/3 text-sm text-gray-700">Subject</td>
+              <td className="font-bold w-1/3 text-sm text-gray-700">Conditions</td>
             </tr>
           </thead>
           <tbody>
             {privilege.permissions.map((permission, index) => {
               return (
-                <tr key={index}>
-                  <td>
-                    {Array.isArray(permission.action)
-                      ? JSON.stringify(permission.action)
-                      : permission.action}
+                <tr key={index} className="text-top">
+                  <td className="text-sm">
+                    <div className="border-2 border-dashed p-1 mr-2">
+                      {Array.isArray(permission.action)
+                        ? JSON.stringify(permission.action, null, 2)
+                        : permission.action}
+                    </div>
                   </td>
-                  <td>
-                    {Array.isArray(permission.subject)
-                      ? JSON.stringify(permission.subject)
-                      : permission.subject}
+                  <td className="text-sm">
+                    <div className="border-2 border-dashed p-1 mr-2">
+                      {Array.isArray(permission.subject)
+                        ? JSON.stringify(permission.subject, null, 2)
+                        : permission.subject}
+                    </div>
                   </td>
-                  <td>{JSON.stringify(permission.conditions) ?? "none"}</td>
+                  <td className="text-sm flex">
+                    <div className="border-2 border-dashed p-1 mr-2">
+                      {JSON.stringify(permission.conditions, null, 2) ?? "none"}
+                    </div>
+                  </td>
                 </tr>
               );
             })}
           </tbody>
         </table>
       </td>
-      <td>
-        {ability?.can("update", "Privilege") && (
-          <Button type="button" className="w-32" onClick={() => edit(privilege)}>
-            Edit
-          </Button>
-        )}
+      <td className="p-2 ">
+        <div>
+          {ability?.can("update", "Privilege") && (
+            <Button type="button" className="text-sm mr-4" onClick={() => edit(privilege)}>
+              Edit
+            </Button>
+          )}
+        </div>
       </td>
     </tr>
   );
@@ -112,9 +126,9 @@ const ModifyPrivilege = ({
 
   return (
     <div>
-      <form onSubmit={formik.handleSubmit}>
+      <form onSubmit={formik.handleSubmit} className="p-10">
         <div>
-          <label htmlFor="nameEn" className="gc-label">
+          <label htmlFor="nameEn" className="gc-label mt-2 mb-0">
             English Name
           </label>
           <input
@@ -126,7 +140,7 @@ const ModifyPrivilege = ({
           />
         </div>
         <div>
-          <label htmlFor="nameFr" className="gc-label">
+          <label htmlFor="nameFr" className="gc-label mt-2 mb-0">
             French Name
           </label>
           <input
@@ -138,7 +152,7 @@ const ModifyPrivilege = ({
           />
         </div>
         <div>
-          <label htmlFor="descriptionEn" className="gc-label">
+          <label htmlFor="descriptionEn" className="gc-label mt-2 mb-0">
             English Description
           </label>
           <input
@@ -150,7 +164,7 @@ const ModifyPrivilege = ({
           />
         </div>
         <div>
-          <label htmlFor="descriptionFr" className="gc-label">
+          <label htmlFor="descriptionFr" className="gc-label mt-2 mb-0">
             French Description
           </label>
           <input
@@ -162,7 +176,7 @@ const ModifyPrivilege = ({
           />
         </div>
         <div>
-          <label htmlFor="permissions" className="gc-label">
+          <label htmlFor="permissions" className="gc-label mt-2 mb-0">
             Permissions
           </label>
           <input
@@ -173,11 +187,14 @@ const ModifyPrivilege = ({
             value={formik.values.permissions}
           />
         </div>
-
-        <Button type="submit">Submit</Button>
-        <Button type="button" onClick={backToList}>
-          Cancel
-        </Button>
+        <div className="mt-10">
+          <Button type="submit" className="mr-2">
+            Submit
+          </Button>
+          <Button type="button" theme="secondary" onClick={backToList}>
+            Cancel
+          </Button>
+        </div>
       </form>
     </div>
   );
@@ -207,18 +224,18 @@ const Privileges = ({ allPrivileges }: { allPrivileges: Privilege[] }): React.Re
       <Head>
         <title>{t("title")}</title>
       </Head>
-      <h1>{t("title")}</h1>
-      <div className="shadow-lg border-4">
+      <h1 className="border-0 mb-10">{t("title")}</h1>
+      <div className="border-4">
         {modifyMode ? (
           <ModifyPrivilege privilege={selectedPrivilege} backToList={cancelEdit} />
         ) : (
           <div>
-            <table className="table-fixed min-w-full">
-              <thead>
-                <tr className="border-b-2">
-                  <th className="w-1/6">Privilege Name</th>
-                  <th className="w-1/3">Description</th>
-                  <th className="w-3/4">Permissions</th>
+            <table className="min-w-full mb-10 text-left">
+              <thead className="sticky">
+                <tr className="border-b-2 p-2">
+                  <th className="w-1/6 p-2 text-center">Privilege Name</th>
+                  <th className="w-1/3 p-2">Description</th>
+                  <th className="w-3/4 p-2">Permissions</th>
                 </tr>
               </thead>
               <tbody>
@@ -229,17 +246,20 @@ const Privileges = ({ allPrivileges }: { allPrivileges: Privilege[] }): React.Re
                 })}
               </tbody>
             </table>
-            {ability?.can("create", "Privilege") && (
-              <Button
-                type="button"
-                onClick={() => {
-                  setSelectedPrivilege(null);
-                  setModifyMode(true);
-                }}
-              >
-                Create
-              </Button>
-            )}
+            <div className="p-5">
+              {ability?.can("create", "Privilege") && (
+                <Button
+                  type="button"
+                  theme="primary"
+                  onClick={() => {
+                    setSelectedPrivilege(null);
+                    setModifyMode(true);
+                  }}
+                >
+                  Create
+                </Button>
+              )}
+            </div>
           </div>
         )}
       </div>
@@ -257,7 +277,8 @@ export const getServerSideProps = requireAuthentication(async ({ user: { ability
 
   return {
     props: {
-      ...(locale && (await serverSideTranslations(locale, ["common", "admin-privileges"]))),
+      ...(locale &&
+        (await serverSideTranslations(locale, ["common", "admin-privileges", "admin-login"]))),
       allPrivileges,
     },
   };

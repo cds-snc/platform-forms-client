@@ -21,7 +21,7 @@ const AdminNavLayout = ({ children, user }: AdminNavLayoutProps) => {
 
       <SkipLink />
 
-      <header>
+      <header className="border-b-1 border-gray-500 mb-12 py-2 px-4 laptop:px-32 desktop:px-64">
         <AdminNav user={user} />
       </header>
       <div id="page-container">
