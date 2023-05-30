@@ -120,7 +120,7 @@ describe("Test Cognito library", () => {
         id: mockedId,
       });
 
-      mockGenerateVerificationCode.mockReturnValueOnce("a1é3_8");
+      mockGenerateVerificationCode.mockResolvedValueOnce("a1é3_8");
 
       const begin2FAAuthenticationResponse = await begin2FAAuthentication({
         email: "test@test.com",
@@ -157,7 +157,7 @@ describe("Test Cognito library", () => {
     it("Should generate a new verification code and update the database entry associated to the email address", async () => {
       const mockedId = "f4f7cedb-0f0b-4390-91a2-69e8c8a29f67";
 
-      mockGenerateVerificationCode.mockReturnValueOnce("a1é3_8");
+      mockGenerateVerificationCode.mockResolvedValueOnce("a1é3_8");
 
       await requestNew2FAVerificationCode(mockedId, "test@test.com");
 
