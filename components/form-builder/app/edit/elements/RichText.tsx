@@ -2,29 +2,32 @@ import React from "react";
 import { useTemplateStore } from "../../../store/useTemplateStore";
 import { RichTextEditor } from "./lexical-editor/RichTextEditor";
 import { LocalizedElementProperties } from "../../../types";
+import { getPath } from "../../../getPath";
 import { useTranslation } from "next-i18next";
 
-export const RichText = ({ elIndex, subIndex = -1 }: { elIndex: number; subIndex?: number }) => {
+export const RichText = ({ id, elIndex }: { id: number; elIndex: number }) => {
   const { t } = useTranslation("form-builder");
-  const { translationLanguagePriority, localizeField, form } = useTemplateStore((s) => ({
-    localizeField: s.localizeField,
-    translationLanguagePriority: s.translationLanguagePriority,
-    form: s.form,
-    lang: s.lang,
-  }));
+  const { translationLanguagePriority, localizeField, form, propertyPath } = useTemplateStore(
+    (s) => ({
+      localizeField: s.localizeField,
+      translationLanguagePriority: s.translationLanguagePriority,
+      form: s.form,
+      lang: s.lang,
+      propertyPath: s.propertyPath,
+    })
+  );
 
   const localizedField = localizeField(
     LocalizedElementProperties.DESCRIPTION,
     translationLanguagePriority
   );
 
-  let path = `form.elements[${elIndex}].properties[${localizedField}]`;
-  let content = form.elements[elIndex].properties[localizedField];
+  const path = propertyPath(id, localizedField);
+  let content = "";
 
-  if (subIndex !== -1) {
-    path = `form.elements[${elIndex}].properties.subElements[${subIndex}].properties[${localizedField}]`;
-    content =
-      form.elements[elIndex].properties.subElements?.[subIndex].properties[localizedField] || "";
+  const element = getPath(id, form);
+  if (element && element.properties && element.properties[localizedField]) {
+    content = element.properties[localizedField] || "";
   }
 
   return (
