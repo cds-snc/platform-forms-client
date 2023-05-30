@@ -129,8 +129,16 @@ export const begin2FAAuthentication = async ({
   const dateIn15Minutes = new Date(Date.now() + 900000); // 15 minutes (= 900000 ms)
 
   try {
-    const result = await prisma.cognitoCustom2FA.create({
-      data: {
+    const result = await prisma.cognitoCustom2FA.upsert({
+      where: {
+        email: email,
+      },
+      update: {
+        cognitoToken: token,
+        verificationCode: verificationCode,
+        expires: dateIn15Minutes,
+      },
+      create: {
         email: email,
         cognitoToken: token,
         verificationCode: verificationCode,
@@ -140,6 +148,8 @@ export const begin2FAAuthentication = async ({
         id: true,
       },
     });
+
+    await clear2FALockout(email);
 
     await sendVerificationCode(email, verificationCode);
 
