@@ -13,6 +13,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 /*
 The Copyrighted code was copied and modified for brevity.
+Original code :https://github.com/sindresorhus/crypto-random-string
 It's insertion directly into our codebase is a mitigation strategy against the risk of the original code being modified or removed.
 
 Entropy is calculated as log2(N^L) where N is the number of possible characters and L is the length of the string
