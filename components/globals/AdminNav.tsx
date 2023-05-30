@@ -3,76 +3,75 @@ import { useTranslation } from "next-i18next";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { User } from "next-auth";
-import { useAccessControl } from "@lib/hooks";
 import { clearTemplateStore } from "@formbuilder/store";
 import LanguageToggle from "./LanguageToggle";
+import { SiteLogo } from "@formbuilder/icons";
 
 type AdminNavProps = {
   user: User;
 };
 
 const AdminNav = (props: AdminNavProps): React.ReactElement => {
-  const { i18n, t } = useTranslation("common");
+  const { i18n, t } = useTranslation(["common", "admin-login"]);
   const user = props.user;
 
-  const { ability } = useAccessControl();
-
   return (
-    <nav className="border-t-1 border-b-1 mb-20 py-5">
-      <ul className="lg:flex-col lg:text-small_base p-0 mb-0 flex text-base list-none">
-        <li className="lg:pr-0 lg:pb-4 pr-8 pb-0">
-          <Link href="/admin/">{t("adminNav.dashboard")}</Link>
-        </li>
-        {ability?.can("view", "User") && (
-          <li className="lg:pr-0 lg:pb-4 pr-8 pb-0">
-            <Link href="/admin/users">{t("adminNav.users")}</Link>
-          </li>
-        )}
-        {ability?.can("view", "Privilege") && (
-          <li className="lg:pr-0 lg:pb-4 pr-8 pb-0">
-            <Link href="/admin/privileges">{t("adminNav.privileges")}</Link>
-          </li>
-        )}
-        {ability?.can("create", "FormRecord") && (
-          <li className="lg:pr-0 lg:pb-4 pr-8 pb-0">
-            <Link href="/admin/upload">{t("adminNav.upload")}</Link>
-          </li>
-        )}
-        {ability?.can("view", "Flag") && (
-          <li className="lg:pr-0 lg:pb-4 pr-8 pb-0">
-            <Link href="/admin/flags">{t("adminNav.features")}</Link>
-          </li>
-        )}
+    <div className="grid grid-flow-col w-full">
+      <div className="flex">
+        <Link href="/admin" legacyBehavior>
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+          <a
+            id="logo"
+            className="border-r-1 flex pr-5 mr-5 text-h2 font-bold font-sans no-underline !text-black focus:bg-white !shadow-none"
+          >
+            <div className="inline-block w-[46px] h-[45px] py-2">
+              <SiteLogo title={t("title")} />
+            </div>
+          </a>
+        </Link>
+        <div className="px-2 py-1 box-border block mt-3 h-[40px] text-base font-bold">
+          {t("title", { ns: "common" })}
+        </div>
+      </div>
+      <nav className="justify-self-end" aria-label={t("mainNavAriaLabel", { ns: "form-builder" })}>
+        <>
+          <ul className="mt-2 px-0 flex text-base list-none">
+            {user && user.name && (
+              <li className="mr-2 tablet:mr-4 py-2 text-sm pt-3">
+                {t("logged-in", { ns: "admin-login" })}: <span>{user.email}</span>
+              </li>
+            )}
 
-        {ability?.can("view", "Flag") && (
-          <li className="lg:pr-0 lg:pb-4 pr-8 pb-0">
-            <Link href="/admin/settings">{t("adminNav.settings")}</Link>
-          </li>
-        )}
-
-        <li className="lg:pr-0 lg:pb-4 pr-8 pb-0">
-          {(!user || !user.name) && (
-            <Link href="/admin/login" locale={i18n.language}>
-              {t("adminNav.login")}
-            </Link>
-          )}
-          {user && user.name && (
-            <button
-              className="gc-button-link"
-              onClick={() => {
-                clearTemplateStore();
-                signOut();
-              }}
-            >
-              {t("adminNav.logout")}
-            </button>
-          )}
-        </li>
-        <li>
-          <LanguageToggle />
-        </li>
-      </ul>
-    </nav>
+            {(!user || !user.name) && (
+              <li className="text-base mr-2 tablet:mr-4 py-2">
+                <Link href="/admin/login" locale={i18n.language}>
+                  {t("adminNav.login")}
+                </Link>
+              </li>
+            )}
+            <li className="text-base mr-2 tablet:mr-4 py-2">
+              <Link href="/myforms">Your forms</Link>
+            </li>
+            {user && user.name && (
+              <li className="text-base mr-2 tablet:mr-4 py-2">
+                <button
+                  className="gc-button-link"
+                  onClick={() => {
+                    clearTemplateStore();
+                    signOut();
+                  }}
+                >
+                  {t("adminNav.logout")}
+                </button>
+              </li>
+            )}
+            <li className="text-base mr-2 tablet:mr-4 py-2">
+              <LanguageToggle />
+            </li>
+          </ul>
+        </>
+      </nav>
+    </div>
   );
 };
 
