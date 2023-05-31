@@ -1,18 +1,23 @@
 {
   "signUpConfirmation": {
-    "title": "Check your email",
-    "resendConfirmationCodeButton": "Send a new verification code",
-    "emailHasBeenSent": "An email with a verification code has been sent to",
+    "title": "Check your email for a security code",
+    "emailHasBeenSent": "This step helps keep GC Forms secure by verifying your account each time you sign in.",
+    "resendConfirmationCodeButton": "Send a new code",
     "confirmButton": "Continue",
+    "help": "Need help?",
     "resendConfirmationCode": {
       "title": "Check your email",
       "body": "An email with a verification code has been sent to you"
     },
     "fields": {
       "confirmationCode": {
-        "label": "Enter the verification code to finish creating your account",
+        "label": "Security code",
+        "description": "Enter the code within 15 minutes.",
         "error": {
-          "number": "This must be a number"
+          "notEmpty": "Cannot be empty",
+          "length": "Must be 5 characters",
+          "notFound": "Code not found",
+          "expired": "Code expired. Try signing in again."
         }
       }
     }
@@ -32,6 +37,16 @@
           "validGovEmail": "This field must be a valid federal government email."
         }
       },
+      "password": {
+        "label": "Password",
+        "hintList": {
+          "title": "Your password should be hard to guess with:",
+          "characters": "At least 8 characters",
+          "number": "A number",
+          "capital": "A capital letter",
+          "symbol": "A symbol"
+        }
+      },
       "name": {
         "label": "Full name",
         "error": {
@@ -42,9 +57,8 @@
   },
   "registrationClosed": "Registration is closed at this time",
   "accountCreated": {
-    "title": "GC Forms account created",
-    "yourAccountTitle": "What you can do with your account",
-    "yourAccountListDescription": "With this account you can",
+    "title": "Account created",
+    "yourAccountListDescription": "What you can do",
     "yourAccountList": {
       "item1": "draft a form",
       "item2": "save drafts within GC Forms",

@@ -1,6 +1,6 @@
 import React, { ReactElement, useRef, useState } from "react";
 import { Formik } from "formik";
-import { TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
+import { TextInput, Label, Alert, ErrorListItem } from "@components/forms";
 import { Button } from "@components/globals";
 import { useFlag } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
@@ -50,7 +50,7 @@ const Register = () => {
   ) => {
     authErrorsReset();
     try {
-      await fetchWithCsrfToken("/api/signup/register", {
+      await fetchWithCsrfToken("/api/account/register", {
         username,
         password,
         name,
@@ -118,13 +118,22 @@ const Register = () => {
         <Head>
           <title>{t("signUpRegistration.title")}</title>
         </Head>
+        <h1 className="border-b-0 mt-6 mb-12">{t("signUpRegistration.title")}</h1>
         <Loader message={t("loading")} />
       </>
     );
   }
 
   if (!registrationOpen) {
-    return <div>{t("registrationClosed")}</div>;
+    return (
+      <>
+        <Head>
+          <title>{t("signUpRegistration.title")}</title>
+        </Head>
+        <h1 className="border-b-0 mt-6 mb-12">{t("signUpRegistration.title")}</h1>
+        <p>{t("registrationClosed")}</p>
+      </>
+    );
   }
 
   if (needsConfirmation) {
@@ -134,8 +143,8 @@ const Register = () => {
           <title>{t("signUpRegistration.title")}</title>
         </Head>
         <Confirmation
-          username={username.current}
-          password={password.current}
+          username={username}
+          password={password}
           confirmationCallback={() => undefined}
         />
       </>
@@ -218,9 +227,9 @@ const Register = () => {
                 <Label id={"label-username"} htmlFor={"username"} className="required" required>
                   {t("signUpRegistration.fields.username.label")}
                 </Label>
-                <Description className="text-p text-black-default" id={"username-hint"}>
+                <div className="text-p text-black-default mb-2" id={"password-hint"}>
                   {t("signUpRegistration.fields.username.hint")}
-                </Description>
+                </div>
                 <TextInput
                   className="h-10 w-full max-w-lg rounded"
                   type={"email"}
@@ -231,17 +240,23 @@ const Register = () => {
               </div>
               <div className="focus-group">
                 <Label id={"label-password"} htmlFor={"password"} className="required" required>
-                  {t("account.fields.password.label", { ns: "common" })}
+                  {t("signUpRegistration.fields.password.label")}
                 </Label>
-                <Description className="text-p text-black-default" id={"password-hint"}>
-                  {t("account.fields.password.hint", { ns: "common" })}
-                </Description>
+                <div className="text-p text-black-default mb-2" id={"password-hint"}>
+                  {t("signUpRegistration.fields.password.hintList.title")}
+                  <ul className="mt-2">
+                    <li>{t("signUpRegistration.fields.password.hintList.characters")}</li>
+                    <li>{t("signUpRegistration.fields.password.hintList.number")}</li>
+                    <li>{t("signUpRegistration.fields.password.hintList.capital")}</li>
+                    <li>{t("signUpRegistration.fields.password.hintList.symbol")}</li>
+                  </ul>
+                </div>
                 <TextInput
                   className="h-10 w-full max-w-lg rounded"
                   type={"password"}
                   id={"password"}
                   name={"password"}
-                  ariaDescribedBy={"desc-username-hint"}
+                  ariaDescribedBy={"password-hint"}
                 />
               </div>
               <div className="focus-group">
@@ -260,12 +275,12 @@ const Register = () => {
                   name={"passwordConfirmation"}
                 />
               </div>
-              <p className="mb-10 -mt-8 gc-description">
+              <p className="-mt-2 mb-10">
                 {t("signUpRegistration.termsAgreement")}&nbsp;
                 <Link href={"/terms-of-use"}>{t("signUpRegistration.termsAgreementLink")}</Link>
               </p>
 
-              <Button className="gc-button--blue" type="submit">
+              <Button theme="primary" type="submit">
                 {t("signUpRegistration.signUpButton")}
               </Button>
             </form>

@@ -1,9 +1,10 @@
 {
   "signUpConfirmation": {
-    "title": "Vérifiez votre courriel",
-    "resendConfirmationCodeButton": "Envoyer un nouveau code de vérification",
-    "emailHasBeenSent": "Un courriel ayant un code de vérification a été envoyé à",
+    "title": "Vérifiez votre courriel pour un code de sécurité",
+    "emailHasBeenSent": "Cette étape permet d’assurert la sécurité de Formulaires GC en vérifiant votre compte chaque fois que vous vous connectez.",
+    "resendConfirmationCodeButton": "Envoyer un nouveau code",
     "confirmButton": "Continuer",
+    "help": "Besoin d’aide?",
     "resendConfirmationCode": {
       "title": "Vérifiez votre courriel",
       "body": "Un courriel avec un code de vérification vous a été envoyé"
@@ -11,8 +12,12 @@
     "fields": {
       "confirmationCode": {
         "label": "Entrer le code de vérification pour compléter la création de votre compte",
+        "description": "Entrez le code dans un délai de 15 minutes.",
         "error": {
-          "number": "Ceci doit être un numéro"
+          "notEmpty": "Ne peut pas être vide",
+          "length": "Doit être 5 caractères",
+          "notFound": "Code non trouvé",
+          "expired": "Code expiré. Rssayez de vous connecter à nouveau."
         }
       }
     }
@@ -27,7 +32,20 @@
     "fields": {
       "username": {
         "label": "Adresse courriel",
-        "hint": "Il faut fournir une adresse courriel du gouvernement fédéral."
+        "hint": "Il faut fournir une adresse courriel du gouvernement fédéral.",
+        "error": {
+          "validGovEmail": "This field must be a valid federal government email.[FR]"
+        }
+      },
+      "password": {
+        "label": "Password",
+        "hintList": {
+          "title": "Votre mot de passe devrait être difficile à deviner avec :",
+          "characters": "Au moins 8 caractères",
+          "number": "Un chiffre",
+          "capital": "Une lettre majuscule",
+          "symbol": "Un symbole"
+        }
       },
       "name": {
         "label": "Nom complet",
@@ -40,7 +58,6 @@
   "registrationClosed": "L'inscription est fermée pour le moment.",
   "accountCreated": {
     "title": "Compte créé sur Formulaires GC",
-    "yourAccountTitle": "Ce que vous pouvez faire avec votre compte",
     "yourAccountListDescription": "Ce compte vous permet de",
     "yourAccountList": {
       "item1": "rédiger une ébauche de formulaire.",

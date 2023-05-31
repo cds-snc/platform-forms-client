@@ -1,7 +1,7 @@
 import React, { ReactElement, useState } from "react";
 import { useRouter } from "next/router";
 import { Formik, FormikHelpers } from "formik";
-import { Button, TextInput, Label, Alert, ErrorListItem } from "@components/forms";
+import { TextInput, Label, Alert, Description } from "@components/forms";
 import { useTranslation } from "next-i18next";
 import * as Yup from "yup";
 import Link from "next/link";
@@ -12,10 +12,11 @@ import { hasError } from "@lib/hasError";
 import { fetchWithCsrfToken } from "@lib/hooks/auth/fetchWithCsrfToken";
 import { useAuthErrors } from "@lib/hooks/auth/useAuthErrors";
 import { logMessage } from "@lib/logger";
+import { Button } from "@components/globals";
 
 interface ConfirmationProps {
-  username: string;
-  password: string;
+  username: React.MutableRefObject<string>;
+  password: React.MutableRefObject<string>;
   confirmationCallback: () => void;
   shouldSignIn?: boolean;
 }
@@ -27,7 +28,7 @@ export const Confirmation = ({
   shouldSignIn = true,
 }: ConfirmationProps): ReactElement => {
   const router = useRouter();
-  const { t } = useTranslation("cognito-errors");
+  const { t } = useTranslation(["signup", "cognito-errors"]);
   const [showSentReconfirmationToast, setShowSentReconfirmationToast] = useState(false);
   const [authErrorsState, { authErrorsReset, handleErrorById }] = useAuthErrors();
 
@@ -41,16 +42,16 @@ export const Confirmation = ({
       confirmationCallback: () => void;
       shouldSignIn: boolean;
     },
-    {
-      setSubmitting,
-      setErrors,
-    }: FormikHelpers<{ username: string; password: string; confirmationCode: string }>
+    { setSubmitting, setErrors }: FormikHelpers<{ confirmationCode: string }>
   ) => {
     authErrorsReset();
 
     let confirmationSuccess = true;
     try {
-      await fetchWithCsrfToken("/api/signup/confirm", { username, confirmationCode });
+      await fetchWithCsrfToken("/api/signup/confirm", {
+        username: username.current,
+        confirmationCode,
+      });
     } catch (err) {
       logMessage.error(err);
       confirmationSuccess = false;
@@ -132,15 +133,15 @@ export const Confirmation = ({
   };
 
   const validationSchema = Yup.object().shape({
-    confirmationCode: Yup.number()
-      .typeError(t("signUpConfirmation.fields.confirmationCode.error.number"))
-      .required(t("input-validation.required", { ns: "common" })),
+    confirmationCode: Yup.string()
+      .required(t("signUpConfirmation.fields.confirmationCode.error.notEmpty"))
+      .matches(/^[0-9a-z]{5}?$/i, t("signUpConfirmation.fields.confirmationCode.error.length")),
   });
 
   return (
     <Formik
       validationSchema={validationSchema}
-      initialValues={{ username: username, password: password, confirmationCode: "" }}
+      initialValues={{ confirmationCode: "" }}
       validateOnBlur={false}
       validateOnChange={false}
       onSubmit={async (values, formikHelpers) => {
@@ -155,7 +156,7 @@ export const Confirmation = ({
         );
       }}
     >
-      {({ handleSubmit, errors }) => (
+      {({ handleSubmit }) => (
         <>
           {showSentReconfirmationToast && !authErrorsState?.title && (
             <Alert
@@ -185,7 +186,7 @@ export const Confirmation = ({
               ) : undefined}
             </Alert>
           )}
-          {Object.keys(errors).length > 0 && !authErrorsState.isError && (
+          {/* {Object.keys(errors).length > 0 && !authErrorsState.isError && (
             <Alert
               type={ErrorStatus.ERROR}
               validation={true}
@@ -205,11 +206,9 @@ export const Confirmation = ({
                 })}
               </ol>
             </Alert>
-          )}
-          <h1>{t("signUpConfirmation.title")}</h1>
-          <p className="mb-10 -mt-6">
-            {t("signUpConfirmation.emailHasBeenSent")}&nbsp;{username}
-          </p>
+          )} */}
+          <h1 className="border-0">{t("signUpConfirmation.title")}</h1>
+          <p className="mb-10 -mt-6">{t("signUpConfirmation.emailHasBeenSent")}</p>
           <form id="confirmation" method="POST" onSubmit={handleSubmit} noValidate>
             <div className="focus-group">
               <Label
@@ -220,29 +219,36 @@ export const Confirmation = ({
               >
                 {t("signUpConfirmation.fields.confirmationCode.label")}
               </Label>
+              <Description className="text-p text-black-default" id={"confirmationCode-hint"}>
+                {t("signUpConfirmation.fields.confirmationCode.description")}
+              </Description>
               <TextInput
                 className="h-10 w-36 rounded"
                 type="text"
                 id="confirmationCode"
                 name="confirmationCode"
+                ariaDescribedBy="confirmationCode-hint"
                 required
               />
             </div>
-            <Button className="gc-button--blue" type="submit">
+            <Button theme="primary" type="submit">
               {t("signUpConfirmation.confirmButton")}
             </Button>
-            <button
-              type="button"
-              className="block my-10 shadow-none bg-transparent text-blue-dark hover:text-blue-hover underline border-0"
-              onClick={async () => {
-                const error = await resendConfirmationCode(username);
-                if (!error) {
-                  setShowSentReconfirmationToast(true);
-                }
-              }}
-            >
-              {t("signUpConfirmation.resendConfirmationCodeButton")}
-            </button>
+            <div className="flex mt-10">
+              <button
+                type="button"
+                className="block shadow-none bg-transparent text-blue-dark hover:text-blue-hover underline border-0 mr-8"
+                onClick={async () => {
+                  const error = await resendConfirmationCode(username.current);
+                  if (!error) {
+                    setShowSentReconfirmationToast(true);
+                  }
+                }}
+              >
+                {t("signUpConfirmation.resendConfirmationCodeButton")}
+              </button>
+              <Link href={"/form-builder/support"}>{t("signUpConfirmation.help")}</Link>
+            </div>
           </form>
         </>
       )}
