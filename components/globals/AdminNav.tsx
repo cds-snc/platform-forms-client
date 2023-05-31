@@ -33,7 +33,7 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
           {t("title", { ns: "common" })}
         </div>
       </div>
-      <nav className="justify-self-end" aria-label={t("mainNavAriaLabel", { ns: "form-builder" })}>
+      <nav className="justify-self-end">
         <>
           <ul className="mt-2 px-0 flex text-base list-none">
             {user && user.name && (
@@ -50,7 +50,7 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
               </li>
             )}
             <li className="text-base mr-2 tablet:mr-4 py-2">
-              <Link href="/myforms">Your forms</Link>
+              <Link href="/myforms">{t("adminNav.myForms")}</Link>
             </li>
             {user && user.name && (
               <li className="text-base mr-2 tablet:mr-4 py-2">
