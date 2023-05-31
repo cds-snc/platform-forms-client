@@ -50,8 +50,17 @@ async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void>
   }
 
   try {
+    logMessage.info(
+      `Notify Callback: Reprocessing submission id ${submissionID} due to notify status of: ${deliveryStatus}`
+    );
+
     // Remove previous process completion identifier
-    await removeProcessedMark(submissionID);
+    if (typeof submissionID === "string") {
+      await removeProcessedMark(submissionID);
+    } else {
+      logMessage.info("submissionID is not a string, forcing to string for DynamoDB call");
+      await removeProcessedMark(submissionID.toString());
+    }
 
     const reprocessQueueURL = process.env.REPROCESS_SUBMISSION_QUEUE_URL ?? (await getQueueURL());
 
@@ -63,9 +72,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void>
     });
 
     await sqsClient.send(sendMessageCommand);
-    logMessage.info(
-      `Notify Callback: Reprocessing submission id ${submissionID} due to notify status of: ${deliveryStatus}`
-    );
 
     return res.status(200).json({ status: "submission will be reprocessed" });
   } catch (error) {
