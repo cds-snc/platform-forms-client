@@ -58,6 +58,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void>
     if (typeof submissionID === "string") {
       await removeProcessedMark(submissionID);
     } else {
+      logMessage.info("submissionID is not a string, forcing to string for DynamoDB call");
       await removeProcessedMark(submissionID.toString());
     }
 
