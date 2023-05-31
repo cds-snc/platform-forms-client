@@ -43,7 +43,6 @@ const Step1 = ({
 }) => {
   const { t, i18n } = useTranslation(["reset-password", "common"]);
 
-
   // validation schema for the initial form to send the forgot password verification code
   const sendForgotPasswordValidationSchema = Yup.object().shape({
     username: Yup.string()
