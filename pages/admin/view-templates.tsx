@@ -73,7 +73,7 @@ const DataView = (props: DataViewProps): React.ReactElement => {
         <title>{t("view.title")}</title>
       </Head>
 
-      <h1>{t("view.title")}</h1>
+      <h1 className="border-0 mb-0">{t("view.title")}</h1>
       <table className="w-full table-auto  border border-4 border-gray-400">
         <thead className="border border-4 border-gray-400">
           <tr>
@@ -186,7 +186,8 @@ export const getServerSideProps = requireAuthentication(
       return {
         props: {
           templates,
-          ...(locale && (await serverSideTranslations(locale, ["common", "admin-templates"]))),
+          ...(locale &&
+            (await serverSideTranslations(locale, ["common", "admin-templates", "admin-login"]))),
         }, // will be passed to the page component as props
       };
 

@@ -1,5 +1,5 @@
-import React, { ReactElement, useState } from "react";
-import { Formik } from "formik";
+import React, { ReactElement, useState, MutableRefObject } from "react";
+import { Formik, FormikHelpers } from "formik";
 import { TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
 import { Button, LinkButton } from "@components/globals";
 import { useTranslation } from "next-i18next";
@@ -20,11 +20,28 @@ import {
 } from "@lib/validation";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
 import { useResetPassword } from "@lib/hooks/auth";
+import { AuthErrorsState } from "@lib/hooks/auth/useAuthErrors";
 
-const Step1 = ({ setInitialCodeSent }: { setInitialCodeSent: (val: boolean) => void }) => {
+const Step1 = ({
+  username,
+  setInitialCodeSent,
+  sendForgotPassword,
+  authErrorsState,
+  setNeedsConfirmation,
+  authErrorsReset,
+}: {
+  username: MutableRefObject<string>;
+  sendForgotPassword: (
+    username: string,
+    successCallback: () => void,
+    failedCallback: (error: string) => void
+  ) => void;
+  setInitialCodeSent: (val: boolean) => void;
+  authErrorsState: AuthErrorsState;
+  setNeedsConfirmation: (val: boolean) => void;
+  authErrorsReset: () => void;
+}) => {
   const { t, i18n } = useTranslation(["reset-password", "common"]);
-  const { username, setNeedsConfirmation, sendForgotPassword, authErrorsState, authErrorsReset } =
-    useResetPassword();
 
   // validation schema for the initial form to send the forgot password verification code
   const sendForgotPasswordValidationSchema = Yup.object().shape({
@@ -52,7 +69,7 @@ const Step1 = ({ setInitialCodeSent }: { setInitialCodeSent: (val: boolean) => v
           // set the username ( user's email ) to what was provided
           username.current = values.username;
           // call the sendForgotPassword method to attempt to send the verification code to the user
-          await sendForgotPassword(
+          sendForgotPassword(
             values.username,
             () => {
               // if sending of the code succeeds we set the initialCodeSent state to true
@@ -146,9 +163,21 @@ const Step1 = ({ setInitialCodeSent }: { setInitialCodeSent: (val: boolean) => v
   );
 };
 
-const Step2 = () => {
+const Step2 = ({
+  username,
+  confirmPasswordReset,
+  authErrorsState,
+  authErrorsReset,
+}: {
+  username: MutableRefObject<string>;
+  confirmPasswordReset: (
+    values: { username: string; password: string; confirmationCode: string },
+    helpers: FormikHelpers<{ username: string; password: string; confirmationCode: string }>
+  ) => Promise<void>;
+  authErrorsState: AuthErrorsState;
+  authErrorsReset: () => void;
+}) => {
   const { t } = useTranslation(["reset-password", "common"]);
-  const { username, confirmPasswordReset, authErrorsState, authErrorsReset } = useResetPassword();
 
   // validation schema for password reset form
   const confirmPasswordResetValidationSchema = Yup.object().shape({
@@ -307,7 +336,15 @@ const Step2 = () => {
 };
 
 const ResetPassword = () => {
-  const { username, needsConfirmation, setNeedsConfirmation } = useResetPassword();
+  const {
+    username,
+    sendForgotPassword,
+    confirmPasswordReset,
+    needsConfirmation,
+    setNeedsConfirmation,
+    authErrorsState,
+    authErrorsReset,
+  } = useResetPassword();
 
   // we don't put this state in useAuth since its very unique to this page only
   const [initialCodeSent, setInitialCodeSent] = useState(false);
@@ -329,11 +366,27 @@ const ResetPassword = () => {
 
   // The form to initially send a verification code needed to reset a user's password
   if (!initialCodeSent && !needsConfirmation) {
-    return <Step1 setInitialCodeSent={setInitialCodeSent} />;
+    return (
+      <Step1
+        username={username}
+        authErrorsState={authErrorsState}
+        authErrorsReset={authErrorsReset}
+        setNeedsConfirmation={setNeedsConfirmation}
+        sendForgotPassword={sendForgotPassword}
+        setInitialCodeSent={setInitialCodeSent}
+      />
+    );
   }
 
   // the form to reset the password with the verification code
-  return <Step2 />;
+  return (
+    <Step2
+      username={username}
+      authErrorsState={authErrorsState}
+      authErrorsReset={authErrorsReset}
+      confirmPasswordReset={confirmPasswordReset}
+    />
+  );
 };
 
 ResetPassword.getLayout = (page: ReactElement) => {
