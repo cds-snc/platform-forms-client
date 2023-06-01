@@ -1,12 +1,12 @@
-import React, { ReactElement, useRef, useState } from "react";
+import React, { ReactElement, useState } from "react";
 import { Formik } from "formik";
-import { TextInput, Label, Alert, ErrorListItem } from "@components/forms";
+import { TextInput, Label, Alert } from "@components/forms";
 import { Button } from "@components/globals";
 import { useFlag } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { Confirmation } from "@components/auth/Confirmation/Confirmation";
+// import { Confirmation } from "@components/auth/Confirmation/Confirmation";
 import * as Yup from "yup";
 import {
   isValidGovEmail,
@@ -25,16 +25,30 @@ import { ErrorStatus } from "@components/forms/Alert/Alert";
 import { FormikHelpers } from "formik";
 import { fetchWithCsrfToken } from "@lib/hooks/auth/fetchWithCsrfToken";
 import { hasError } from "@lib/hasError";
-import { useAuthErrors } from "@lib/hooks/auth/useAuthErrors";
 import { logMessage } from "@lib/logger";
+import { Verify } from "@components/auth/Verify";
+import { useLogin } from "@lib/hooks/auth";
+
+// TEMP: IMPORTANT:
+// After the Register step, IGNORE the EMAIL about "Your verification code" with a 6 number string..
+// Instead use the Verify email "Please find the code needed to verify.."
 
 const Register = () => {
   const { isLoading, status: registrationOpen } = useFlag("accountRegistration");
   const { t } = useTranslation(["signup", "common"]);
-  const username = useRef("");
-  const password = useRef("");
-  const [needsConfirmation, setNeedsConfirmation] = useState(false);
-  const [authErrorsState, { authErrorsReset, handleErrorById }] = useAuthErrors();
+  const [needsVerification, setNeedsVerification] = useState(false);
+  const {
+    username,
+    password,
+    authenticationFlowToken,
+    didConfirm,
+    needsConfirmation,
+    setNeedsConfirmation,
+    authErrorsState,
+    authErrorsReset,
+    login,
+    handleErrorById,
+  } = useLogin();
 
   const register = async (
     {
@@ -50,7 +64,8 @@ const Register = () => {
   ) => {
     authErrorsReset();
     try {
-      await fetchWithCsrfToken("/api/account/register", {
+      // TODO: replace with /api/account/register
+      await fetchWithCsrfToken("/api/signup/register", {
         username,
         password,
         name,
@@ -136,17 +151,30 @@ const Register = () => {
     );
   }
 
+  // TEMP: to be removed once Confirmation is removed
   if (needsConfirmation) {
     return (
       <>
-        <Head>
-          <title>{t("signUpRegistration.title")}</title>
-        </Head>
-        <Confirmation
-          username={username}
-          password={password}
-          confirmationCallback={() => undefined}
-        />
+        <Button
+          theme="secondary"
+          onClick={() => {
+            // TEMP: move below register() call once we decide how to Cognito confirm a user
+            login({ username: username.current, password: password.current });
+            setNeedsConfirmation(false);
+            setNeedsVerification(true);
+          }}
+        >
+          TEMP: First, manually confirm the user in Cognito. Then click this to verify user
+        </Button>
+      </>
+    );
+  }
+
+  // TODO: udate to work with logn's needsConfirmation once above TEMP is removed
+  if (needsVerification) {
+    return (
+      <>
+        <Verify username={username} authenticationFlowToken={authenticationFlowToken} />
       </>
     );
   }
@@ -175,7 +203,6 @@ const Register = () => {
                 heading={authErrorsState.title}
                 onDismiss={authErrorsReset}
                 id="cognitoErrors"
-                // dismissible={cognitoErrorIsDismissible}
               >
                 {authErrorsState.description}&nbsp;
                 {authErrorsState.callToActionLink ? (
@@ -185,7 +212,7 @@ const Register = () => {
                 ) : undefined}
               </Alert>
             )}
-            {Object.keys(errors).length > 0 && !authErrorsState.isError && (
+            {/* {Object.keys(errors).length > 0 && !authErrorsState.isError && (
               <Alert
                 type={ErrorStatus.ERROR}
                 validation={true}
@@ -205,7 +232,7 @@ const Register = () => {
                   })}
                 </ol>
               </Alert>
-            )}
+            )} */}
             <h1 className="border-b-0 mt-6 mb-12">{t("signUpRegistration.title")}</h1>
             <p className="mb-10 -mt-6">
               {t("signUpRegistration.alreadyHaveAnAccount")}&nbsp;

@@ -15,8 +15,8 @@ import { logMessage } from "@lib/logger";
 import { Button } from "@components/globals";
 
 interface ConfirmationProps {
-  username: React.MutableRefObject<string>;
-  password: React.MutableRefObject<string>;
+  username: string;
+  password: string;
   confirmationCallback: () => void;
   shouldSignIn?: boolean;
 }
@@ -49,7 +49,7 @@ export const Confirmation = ({
     let confirmationSuccess = true;
     try {
       await fetchWithCsrfToken("/api/signup/confirm", {
-        username: username.current,
+        username: username,
         confirmationCode,
       });
     } catch (err) {
@@ -89,8 +89,8 @@ export const Confirmation = ({
           "Content-Type": "application/x-www-form-urlencoded",
         },
         data: new URLSearchParams({
-          username: username.current,
-          password: password.current,
+          username: username,
+          password: password,
           csrfToken: (await getCsrfToken()) ?? "noToken",
         }),
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
