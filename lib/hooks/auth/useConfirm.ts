@@ -8,11 +8,9 @@ import { fetchWithCsrfToken } from "./fetchWithCsrfToken";
 import { useAuthErrors } from "./useAuthErrors";
 import { hasError } from "@lib/hasError";
 
-export const useConfirm = () => {
+export const useConfirm = ({ username, password }: { username: string; password: string }) => {
   const router = useRouter();
   const { t } = useTranslation("cognito-errors");
-  const username = useRef("");
-  const password = useRef("");
   const [authErrorsState, { authErrorsReset, handleErrorById }] = useAuthErrors();
 
   const confirm = async (
