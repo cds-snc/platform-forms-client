@@ -3,7 +3,7 @@ import { getAllTemplates } from "@lib/templates";
 import { requireAuthentication } from "@lib/auth";
 import { getProperty } from "@lib/formBuilder";
 
-import React, { Fragment, ReactElement } from "react";
+import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -12,6 +12,7 @@ import { useAccessControl, useRefresh } from "@lib/hooks";
 import axios from "axios";
 import { logMessage } from "@lib/logger";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
+import { Button } from "@components/globals";
 
 interface DataViewProps {
   templates: Array<{
@@ -74,8 +75,8 @@ const DataView = (props: DataViewProps): React.ReactElement => {
       </Head>
 
       <h1 className="border-0 mb-0">{t("view.title")}</h1>
-      <table className="w-full table-auto  border border-4 border-gray-400">
-        <thead className="border border-4 border-gray-400">
+      <table className="w-full table-auto  border-4 border-gray-400">
+        <thead className="border-4 border-gray-400">
           <tr>
             <th>{t("view.formTitle")}</th>
             <th>{t("view.status")}</th>
@@ -99,47 +100,48 @@ const DataView = (props: DataViewProps): React.ReactElement => {
                   <td className="text-center">
                     {template.isPublished ? t("view.published") : t("view.draft")}
                   </td>
-                  <td>
+                  <td className="text-center">
                     {ability?.can("update", "FormRecord") && (
-                      <button
+                      <Button
+                        theme="link"
                         onClick={async () =>
                           await redirectTo(WhereToRedirect.Settings, template.id)
                         }
-                        className="gc-button w-full"
                       >
                         {t("view.update")}
-                      </button>
+                      </Button>
                     )}
                   </td>
-                  <td>
-                    <button
+                  <td className="text-center">
+                    <Button
                       onClick={async () => await redirectTo(WhereToRedirect.Form, template.id)}
-                      className="gc-button w-full"
+                      theme="link"
                     >
                       {t("view.view")}
-                    </button>
+                    </Button>
                   </td>
                   {ability?.can("update", "FormRecord") && (
-                    <td>
-                      <button
+                    <td className="text-center">
+                      <Button
+                        theme="link"
                         onClick={async () => await redirectTo(WhereToRedirect.Users, template.id)}
-                        className="gc-button w-full"
                       >
                         {t("view.assign")}
-                      </button>
+                      </Button>
                     </td>
                   )}
                   {ability?.can("update", "FormRecord", "isPublished") && (
                     <td>
-                      <button
+                      <Button
+                        theme="link"
                         onClick={async () => {
                           await handlePublish(template.id, !template.isPublished);
                           refreshData();
                         }}
-                        className="gc-button w-full"
+                        className=""
                       >
                         {template.isPublished ? t("view.unpublishForm") : t("view.publishForm")}
-                      </button>
+                      </Button>
                     </td>
                   )}
                 </tr>
