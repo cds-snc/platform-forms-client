@@ -20,7 +20,10 @@ export const Confirmation = ({
   confirmationCallback,
   shouldSignIn = true,
 }: ConfirmationProps): ReactElement => {
-  const { confirm, resendConfirmationCode, authErrorsState, authErrorsReset } = useConfirm();
+  const { confirm, resendConfirmationCode, authErrorsState, authErrorsReset } = useConfirm({
+    username,
+    password,
+  });
   const [showSentReconfirmationToast, setShowSentReconfirmationToast] = useState(false);
   const { t } = useTranslation(["signup", "cognito-errors", "common"]);
 
