@@ -32,7 +32,7 @@ export const LeftNavigation = () => {
         </LeftNavLink>
       )}
 
-      {ability?.can("update", "Privilege") && (
+      {(ability?.can("view", "FormRecord") || ability?.can("update", "FormRecord")) && (
         <LeftNavLink
           id="privileges"
           href="/admin/view-templates"
