@@ -104,6 +104,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
               window.dataLayer.push({
                 event: "form_submission_spam_trigger",
                 formID: formID,
+                formTitle: formTitle,
                 submitTime: formTimerState.remainingTime,
               });
 
@@ -319,6 +320,7 @@ export const Form = withFormik<FormProps, Responses>({
       window.dataLayer.push({
         event: "form_submission_trigger",
         formID: formikBag.props.formRecord.id,
+        formTitle: formikBag.props.formRecord.form.titleEn,
       });
 
       formikBag.setSubmitting(false);
