@@ -45,8 +45,27 @@ async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void>
       .json({ error: "Invalid payload: missing key attributes (reference or status)" });
   }
 
-  if (deliveryStatus === "delivered" || deliveryStatus === "permanent-failure") {
-    return res.status(200).json({ status: "submission will not be reprocessed" });
+  // When there is no submission ID it means that the email was not a form submission so it can be ignored by our API
+  if (submissionID === null) {
+    return res.status(200).json({
+      status: "submission will not be reprocessed because of missing submission ID",
+    });
+  }
+
+  if (deliveryStatus === "delivered") {
+    return res
+      .status(200)
+      .json({ status: "submission will not be reprocessed because the email was delivered" });
+  }
+
+  if (deliveryStatus === "permanent-failure") {
+    logMessage.warn(
+      `Form submission ${submissionID} will never be delivered because of a permanent failure (GC Notify)`
+    );
+    await removeProcessedMark(submissionID);
+    return res.status(200).json({
+      status: "submission will not be reprocessed because the email will never be delivered",
+    });
   }
 
   try {
@@ -55,12 +74,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void>
     );
 
     // Remove previous process completion identifier
-    if (typeof submissionID === "string") {
-      await removeProcessedMark(submissionID);
-    } else {
-      logMessage.info("submissionID is not a string, forcing to string for DynamoDB call");
-      await removeProcessedMark(submissionID.toString());
-    }
+    await removeProcessedMark(submissionID);
 
     const reprocessQueueURL = process.env.REPROCESS_SUBMISSION_QUEUE_URL ?? (await getQueueURL());
 
