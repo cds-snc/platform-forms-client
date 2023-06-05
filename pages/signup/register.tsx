@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement } from "react";
 import { Formik } from "formik";
 import { TextInput, Label, Alert } from "@components/forms";
 import { Button } from "@components/globals";
@@ -29,24 +29,20 @@ import { logMessage } from "@lib/logger";
 import { Verify } from "@components/auth/Verify";
 import { useLogin } from "@lib/hooks/auth";
 
-// TEMP: IMPORTANT:
-// After the Register step, IGNORE the EMAIL about "Your verification code" with a 6 number string..
-// Instead use the Verify email "Please find the code needed to verify.."
-
 const Register = () => {
   const { isLoading, status: registrationOpen } = useFlag("accountRegistration");
   const { t } = useTranslation(["signup", "common"]);
-  const [needsVerification, setNeedsVerification] = useState(false);
+  //TODO probably rename needsConfirmation to needsVerification to avoid confusion
   const {
     username,
     password,
     authenticationFlowToken,
-    didConfirm,
+    // didConfirm,
     needsConfirmation,
     setNeedsConfirmation,
     authErrorsState,
     authErrorsReset,
-    login,
+    // login,
     handleErrorById,
   } = useLogin();
 
@@ -64,8 +60,7 @@ const Register = () => {
   ) => {
     authErrorsReset();
     try {
-      // TODO: replace with /api/account/register
-      await fetchWithCsrfToken("/api/signup/register", {
+      await fetchWithCsrfToken("/api/account/register", {
         username,
         password,
         name,
@@ -151,27 +146,7 @@ const Register = () => {
     );
   }
 
-  // TEMP: to be removed once Confirmation is removed
   if (needsConfirmation) {
-    return (
-      <>
-        <Button
-          theme="secondary"
-          onClick={() => {
-            // TEMP: move below register() call once we decide how to Cognito confirm a user
-            login({ username: username.current, password: password.current });
-            setNeedsConfirmation(false);
-            setNeedsVerification(true);
-          }}
-        >
-          TEMP: First, manually confirm the user in Cognito. Then click this to verify user
-        </Button>
-      </>
-    );
-  }
-
-  // TODO: udate to work with logn's needsConfirmation once above TEMP is removed
-  if (needsVerification) {
     return (
       <>
         <Verify username={username} authenticationFlowToken={authenticationFlowToken} />
@@ -195,7 +170,7 @@ const Register = () => {
         validateOnBlur={false}
         validationSchema={validationSchema}
       >
-        {({ handleSubmit, errors }) => (
+        {({ handleSubmit }) => (
           <>
             {authErrorsState.isError && (
               <Alert
