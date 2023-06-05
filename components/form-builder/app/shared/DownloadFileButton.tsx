@@ -98,11 +98,13 @@ export const DownloadFileButton = ({
   }, []);
 
   const downloadFileEvent = () => {
+    const formTitle = slugify(name ? name : i18n.language === "fr" ? form.titleFr : form.titleEn);
     const formId = form.id;
 
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
       event: "form_download",
+      formTitle,
       formId,
       submitTime: getDate(true),
     });
