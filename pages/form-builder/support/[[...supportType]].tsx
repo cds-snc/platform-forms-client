@@ -41,7 +41,7 @@ export default function Contactus() {
     description: string
   ) => {
     const token: string = (await getCsrfToken()) || "";
-    return await axios({
+    return axios({
       url: "/api/request/support",
       method: "POST",
       headers: {

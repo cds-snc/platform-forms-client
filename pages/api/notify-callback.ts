@@ -114,7 +114,7 @@ async function removeProcessedMark(submissionID: string) {
     ReturnValues: "NONE",
   };
 
-  return await documentClient.send(new UpdateCommand(updateItem));
+  return documentClient.send(new UpdateCommand(updateItem));
 }
 
 /**

@@ -122,6 +122,7 @@ export const Preview = () => {
         ) : (
           <Form
             formRecord={formRecord}
+            isPreview={true}
             language={language}
             router={router}
             t={t}
