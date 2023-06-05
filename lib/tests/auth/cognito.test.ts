@@ -17,7 +17,7 @@ import {
   requestNew2FAVerificationCode,
   validate2FAVerificationCode,
   Validate2FAVerificationCodeResultStatus,
-} from "@lib/auth/cognito";
+} from "@lib/auth";
 import { Base } from "__utils__/permissions";
 import { generateVerificationCode, sendVerificationCode } from "@lib/auth/2fa";
 import { registerFailed2FAAttempt, clear2FALockout } from "@lib/auth/2faLockout";
@@ -120,7 +120,8 @@ describe("Test Cognito library", () => {
         id: mockedId,
       });
 
-      mockGenerateVerificationCode.mockReturnValueOnce("a1é3_8");
+      const verificationCode = await generateVerificationCode();
+      mockGenerateVerificationCode.mockResolvedValueOnce(verificationCode);
 
       const begin2FAAuthenticationResponse = await begin2FAAuthentication({
         email: "test@test.com",
@@ -133,12 +134,12 @@ describe("Test Cognito library", () => {
         },
         update: expect.objectContaining({
           cognitoToken: mockedCognitoToken,
-          verificationCode: "a1é3_8",
+          verificationCode: verificationCode,
         }),
         create: expect.objectContaining({
           email: "test@test.com",
           cognitoToken: mockedCognitoToken,
-          verificationCode: "a1é3_8",
+          verificationCode: verificationCode,
         }),
         select: {
           id: true,
@@ -157,7 +158,8 @@ describe("Test Cognito library", () => {
     it("Should generate a new verification code and update the database entry associated to the email address", async () => {
       const mockedId = "f4f7cedb-0f0b-4390-91a2-69e8c8a29f67";
 
-      mockGenerateVerificationCode.mockReturnValueOnce("a1é3_8");
+      const verificationCode = await generateVerificationCode();
+      mockGenerateVerificationCode.mockResolvedValueOnce(verificationCode);
 
       await requestNew2FAVerificationCode(mockedId, "test@test.com");
 
@@ -169,7 +171,7 @@ describe("Test Cognito library", () => {
           },
         },
         data: {
-          verificationCode: "a1é3_8",
+          verificationCode: verificationCode,
         },
       });
 

@@ -5,7 +5,7 @@ import {
   begin2FAAuthentication,
   initiateSignIn,
   validate2FAVerificationCode,
-} from "@lib/auth/cognito";
+} from "@lib/auth/";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { logMessage } from "@lib/logger";
 import { getOrCreateUser } from "@lib/users";

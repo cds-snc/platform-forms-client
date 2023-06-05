@@ -9,7 +9,7 @@ import {
   CognitoIdentityProviderClient,
   SignUpCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
-import register from "@pages/api/signup/register";
+import register from "@pages/api/account/register";
 
 const mockGetCSRFToken = mocked(getCsrfToken, { shallow: true });
 
