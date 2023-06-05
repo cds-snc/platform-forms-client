@@ -5,7 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [v3.0.10] 2023-06-05
+### Fixed
+
+- ReCaptcha should not be loaded in form builder preview mode
+
+## [v3.0.11] 2023-06-05
 
 ### Fixed
 
