@@ -47,6 +47,7 @@ export const FileNameInput = () => {
         {content}
       </span>
       <input
+        id="fileName"
         style={widthStyle}
         ref={fileNameInput}
         className="px-2 py-1 min-w-[220px] max-w-[200px] laptop:min-w-[250px] laptop:max-w-[500px] border-2 border-white text-base font-bold hover:border-2 hover:border-gray-default text-ellipsis"
