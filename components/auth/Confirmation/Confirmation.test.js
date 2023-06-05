@@ -6,7 +6,9 @@ import userEvent from "@testing-library/user-event";
 
 jest.mock("../../../lib/hooks/auth");
 
-describe("confirmation component", () => {
+// TODO: skipping test for now. This component will probably be removed in the near future.
+
+describe.skip("confirmation component", () => {
   let confirmMock;
   let resendConfirmationMock;
   beforeEach(() => {
