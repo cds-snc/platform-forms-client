@@ -31,7 +31,7 @@ enum WhereToRedirect {
 }
 
 const handlePublish = async (formID: string, isPublished: boolean) => {
-  return await axios({
+  return axios({
     url: `/api/templates/${formID}`,
     method: "PUT",
     headers: {
@@ -104,9 +104,7 @@ const DataView = (props: DataViewProps): React.ReactElement => {
                     {ability?.can("update", "FormRecord") && (
                       <Button
                         theme="link"
-                        onClick={async () =>
-                          await redirectTo(WhereToRedirect.Settings, template.id)
-                        }
+                        onClick={async () => redirectTo(WhereToRedirect.Settings, template.id)}
                       >
                         {t("view.update")}
                       </Button>
@@ -114,7 +112,7 @@ const DataView = (props: DataViewProps): React.ReactElement => {
                   </td>
                   <td className="text-center">
                     <Button
-                      onClick={async () => await redirectTo(WhereToRedirect.Form, template.id)}
+                      onClick={async () => redirectTo(WhereToRedirect.Form, template.id)}
                       theme="link"
                     >
                       {t("view.view")}
@@ -124,7 +122,7 @@ const DataView = (props: DataViewProps): React.ReactElement => {
                     <td className="text-center">
                       <Button
                         theme="link"
-                        onClick={async () => await redirectTo(WhereToRedirect.Users, template.id)}
+                        onClick={async () => redirectTo(WhereToRedirect.Users, template.id)}
                       >
                         {t("view.assign")}
                       </Button>
