@@ -1,5 +1,5 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { requireAuthentication } from "@lib/auth/auth";
+import { requireAuthentication } from "@lib/auth";
 import { useFormik } from "formik";
 import { Button } from "@components/forms";
 import React, { ReactElement, useState } from "react";

@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import React, { ReactElement } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { requireAuthentication } from "@lib/auth/auth";
+import { requireAuthentication } from "@lib/auth";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import Loader from "@components/globals/Loader";

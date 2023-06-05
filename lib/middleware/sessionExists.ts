@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { isAuthenticated } from "@lib/auth/auth";
+import { isAuthenticated } from "@lib/auth";
 import { MiddlewareReturn } from "@lib/types";
 
 const useMethods = (req: NextApiRequest, methods?: string[]) => {

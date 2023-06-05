@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 
-import { isAuthenticated, validateTemporaryToken, requireAuthentication } from "@lib/auth/auth";
+import { isAuthenticated, validateTemporaryToken, requireAuthentication } from "@lib/auth";
 import { Base, mockUserPrivileges } from "__utils__/permissions";
 import { createMocks } from "node-mocks-http";
 import { getServerSession } from "next-auth/next";

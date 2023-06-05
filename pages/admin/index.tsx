@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { requireAuthentication } from "@lib/auth/auth";
+import { requireAuthentication } from "@lib/auth";
 import Link from "next/link";
 import Head from "next/head";
 import { User } from "next-auth";

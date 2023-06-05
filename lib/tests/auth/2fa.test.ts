@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 
-import { generateVerificationCode } from "@lib/auth/2fa";
+import { generateVerificationCode } from "@lib/auth";
 
 describe("Test 2FA library", () => {
   it("Should generate a valid and complex verification code", async () => {

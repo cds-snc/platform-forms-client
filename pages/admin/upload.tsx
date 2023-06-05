@@ -1,6 +1,6 @@
 import JSONUpload from "@components/admin/JsonUpload/JsonUpload";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { requireAuthentication } from "@lib/auth/auth";
+import { requireAuthentication } from "@lib/auth";
 import React, { ReactElement } from "react";
 import Head from "next/head";
 import { useTranslation } from "next-i18next";

@@ -3,7 +3,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import { AcceptableUseTerms } from "@components/auth/AcceptableUse";
-import { requireAuthentication } from "@lib/auth/auth";
+import { requireAuthentication } from "@lib/auth";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 
 import { Session } from "next-auth";
