@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 
 import { useTemplateStore } from "@formbuilder/store/useTemplateStore";
 import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 
 export const FileNameInput = () => {
   const { t } = useTranslation(["form-builder"]);
@@ -17,6 +18,10 @@ export const FileNameInput = () => {
   const [width, setWidth] = useState(0);
   const span = useRef<HTMLElement>(null);
 
+  const { query } = useRouter();
+  const focusFileName = query.focusFileName ? true : false;
+  const fileNameInput = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     // check if the fileName has changed from outside the component
     if (!isEditing && content === "" && fileName !== content) {
@@ -28,6 +33,12 @@ export const FileNameInput = () => {
     }
   }, [content, fileName, isEditing]);
 
+  useEffect(() => {
+    if (focusFileName) {
+      fileNameInput && fileNameInput.current && fileNameInput.current?.focus();
+    }
+  }, [focusFileName]);
+
   const widthStyle = width ? { width: `${width}px` } : {};
 
   return (
@@ -37,7 +48,8 @@ export const FileNameInput = () => {
       </span>
       <input
         style={widthStyle}
-        className="px-2 py-1 min-w-[220px] max-w-[200px] laptop:min-w-[250px] laptop:max-w-[500px] border-2 border-white text-base font-bold placeholder-black hover:border-2 hover:border-gray-default text-ellipsis"
+        ref={fileNameInput}
+        className="px-2 py-1 min-w-[220px] max-w-[200px] laptop:min-w-[250px] laptop:max-w-[500px] border-2 border-white text-base font-bold hover:border-2 hover:border-gray-default text-ellipsis"
         name="filename"
         placeholder={t("unnamedForm", { ns: "form-builder" })}
         value={content}

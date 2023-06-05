@@ -34,7 +34,7 @@ export const ShareDropdown = () => {
   }));
 
   const menuWidth = name ? "w-48" : "w-[400px]";
-  const editLink = `${i18n.language}/form-builder/edit?focusTitle=true`;
+  const editFileName = `${i18n.language}/form-builder/edit?focusFileName=true`;
 
   return (
     <div className="relative inline-block text-left">
@@ -63,7 +63,7 @@ export const ShareDropdown = () => {
                     theme="link"
                     className="inline-block"
                     onClick={() => {
-                      push(editLink, undefined, { shallow: true });
+                      push(editFileName, undefined, { shallow: true });
                     }}
                   >
                     {t("share.missingName.message2")}
