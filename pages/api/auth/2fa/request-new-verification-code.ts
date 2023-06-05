@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { middleware, cors, csrfProtected } from "@lib/middleware";
-import { requestNew2FAVerificationCode } from "@lib/auth/cognito";
+import { requestNew2FAVerificationCode } from "@lib/auth";
 
 const requestNewVerificationCode = async (req: NextApiRequest, res: NextApiResponse) => {
   const { authenticationFlowToken, email } = req.body;
