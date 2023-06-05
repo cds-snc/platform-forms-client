@@ -16,51 +16,57 @@ export const useLogin = () => {
   const [needsConfirmation, setNeedsConfirmation] = useState(false);
   const [authErrorsState, { authErrorsReset, handleErrorById }] = useAuthErrors();
 
-  const login = async ({ username, password }: { username: string; password: string }) =>
-    // TEMP: removed temporarily to simplify the Confirmation temp step in register.tsx
-    // { setSubmitting }: FormikHelpers<{ username: string; password: string }>
+  const login = async (
     {
-      authErrorsReset();
-      try {
-        const { data } = await axios({
-          url: "/api/auth/signin/cognito",
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          data: new URLSearchParams({
-            username,
-            password,
-            csrfToken: (await getCsrfToken()) ?? "noToken",
-          }),
-          timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-        });
+      username,
+      password,
+    }: {
+      username: string;
+      password: string;
+    },
+    { setSubmitting }: FormikHelpers<{ username: string; password: string }>
+  ) => {
+    authErrorsReset();
+    try {
+      const { data } = await axios({
+        url: "/api/auth/signin/cognito",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        data: new URLSearchParams({
+          username,
+          password,
+          csrfToken: (await getCsrfToken()) ?? "noToken",
+        }),
+        timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+      });
 
-        if (data?.error) {
-          const error = data.error;
-          // setSubmitting(false);
-          if (hasError("UserNotConfirmedException", error)) {
-            setNeedsConfirmation(true);
-            return false;
-          } else if (hasError(["UserNotFoundException", "NotAuthorizedException"], error)) {
-            handleErrorById("UsernameOrPasswordIncorrect");
-          } else if (hasError("PasswordResetRequiredException", error)) {
-            await router.push("/auth/resetpassword");
-          } else {
-            throw Error(error);
-          }
-        } else if (data?.challengeState === "MFA") {
-          authenticationFlowToken.current = data.authenticationFlowToken;
-          return true;
+      if (data?.error) {
+        const error = data.error;
+        setSubmitting(false);
+        if (hasError("UserNotConfirmedException", error)) {
+          setNeedsConfirmation(true);
+          return false;
+        } else if (hasError(["UserNotFoundException", "NotAuthorizedException"], error)) {
+          handleErrorById("UsernameOrPasswordIncorrect");
+        } else if (hasError("PasswordResetRequiredException", error)) {
+          await router.push("/auth/resetpassword");
+        } else {
+          throw Error(error);
         }
-      } catch (err) {
-        logMessage.error(err);
-        handleErrorById("InternalServiceExceptionLogin");
-        return false;
-      } finally {
-        // setSubmitting(false);
+      } else if (data?.challengeState === "MFA") {
+        authenticationFlowToken.current = data.authenticationFlowToken;
+        return true;
       }
-    };
+    } catch (err) {
+      logMessage.error(err);
+      handleErrorById("InternalServiceExceptionLogin");
+      return false;
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return {
     login,
