@@ -68,7 +68,7 @@ export const getOrCreateUser = async ({ name, email, picture }: JWT) => {
 
     return newUser;
   } else {
-    return await prisma.user
+    return prisma.user
       .update({
         where: {
           id: user.id,

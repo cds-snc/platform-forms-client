@@ -95,10 +95,10 @@ const route = async ({
 
   switch (method) {
     case "GET":
-      return await getFullTemplateByID(ability, formID);
+      return getFullTemplateByID(ability, formID);
     case "PUT":
       if (formConfig) {
-        return await updateTemplate({
+        return updateTemplate({
           ability: ability,
           formID: formID,
           formConfig: formConfig,
@@ -107,17 +107,17 @@ const route = async ({
           securityAttribute: securityAttribute,
         });
       } else if (isPublished !== undefined) {
-        return await updateIsPublishedForTemplate(ability, formID, isPublished);
+        return updateIsPublishedForTemplate(ability, formID, isPublished);
       } else if (users) {
-        return await updateAssignedUsersForTemplate(ability, formID, users);
+        return updateAssignedUsersForTemplate(ability, formID, users);
       } else if (sendResponsesToVault) {
-        return await removeDeliveryOption(ability, formID);
+        return removeDeliveryOption(ability, formID);
       }
       throw new MalformedAPIRequest(
         "Missing additional request parameter (formConfig, isPublished, users, sendResponsesToVault)"
       );
     case "DELETE":
-      return await deleteTemplate(ability, formID);
+      return deleteTemplate(ability, formID);
     default:
       throw new MalformedAPIRequest("Unsupported method");
   }

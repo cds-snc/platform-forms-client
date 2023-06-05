@@ -137,7 +137,7 @@ export const SetResponseDelivery = () => {
       return result;
     }
 
-    return await save({
+    return save({
       jsonConfig: getSchema(),
       name: getName(),
       formID: id,
@@ -165,7 +165,7 @@ export const SetResponseDelivery = () => {
     updateField("deliveryOption.emailSubjectFr", subjectFr);
 
     updateSecurityAttribute(classification);
-    return await save({
+    return save({
       jsonConfig: getSchema(),
       name: getName(),
       formID: id,
