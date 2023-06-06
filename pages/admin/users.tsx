@@ -10,7 +10,7 @@ import Head from "next/head";
 import { checkPrivileges, getAllPrivileges } from "@lib/privileges";
 import { Privilege } from "@prisma/client";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
-import { Button } from "@components/forms";
+import { Button } from "@components/globals";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 
 interface User {
@@ -86,44 +86,47 @@ const ManageUser = ({
               <p className="font-bold grow">
                 {i18n.language === "en" ? privilege.descriptionEn : privilege.descriptionFr}
               </p>
-              {canManageUsers ? (
-                <Button
-                  type="button"
-                  className="shrink-0"
-                  onClick={() => {
-                    setChangedPrivileges((oldState) => {
-                      // If the item alreay exists in state remove it, as this brings it back to it's initial state
-                      if (oldState.some((p) => p.id === privilege.id)) {
-                        return oldState.filter((p) => p.id !== privilege.id);
-                      } else {
-                        return [
-                          ...oldState,
-                          { id: privilege.id, action: active ? "remove" : "add" },
-                        ];
-                      }
-                    });
-                    setUserPrivileges((oldState) => {
-                      if (oldState.includes(privilege.id)) {
-                        return oldState.filter((id) => id !== privilege.id);
-                      } else {
-                        return [...oldState, privilege.id];
-                      }
-                    });
-                  }}
-                >
-                  {active ? t("disable") : t("enable")}
-                </Button>
-              ) : (
-                <div className="m-auto">{active ? t("enabled") : t("disabled")}</div>
-              )}
+              <div>
+                {canManageUsers ? (
+                  <Button
+                    type="button"
+                    theme="secondary"
+                    className="text-sm"
+                    onClick={() => {
+                      setChangedPrivileges((oldState) => {
+                        // If the item alreay exists in state remove it, as this brings it back to it's initial state
+                        if (oldState.some((p) => p.id === privilege.id)) {
+                          return oldState.filter((p) => p.id !== privilege.id);
+                        } else {
+                          return [
+                            ...oldState,
+                            { id: privilege.id, action: active ? "remove" : "add" },
+                          ];
+                        }
+                      });
+                      setUserPrivileges((oldState) => {
+                        if (oldState.includes(privilege.id)) {
+                          return oldState.filter((id) => id !== privilege.id);
+                        } else {
+                          return [...oldState, privilege.id];
+                        }
+                      });
+                    }}
+                  >
+                    {active ? t("disable") : t("enable")}
+                  </Button>
+                ) : (
+                  <div className="m-auto">{active ? t("enabled") : t("disabled")}</div>
+                )}
+              </div>
             </li>
           );
         })}
       </ul>
-      <Button className="" type="submit" onClick={() => save()}>
+      <Button className="mr-2" type="submit" onClick={() => save()}>
         {t("save")}
       </Button>
-      <Button type="button" secondary={true} onClick={() => unselectUser()}>
+      <Button type="button" theme="secondary" onClick={() => unselectUser()}>
         {t("cancel")}
       </Button>
     </div>
@@ -152,7 +155,7 @@ const Users = ({
       <Head>
         <title>{t("title")}</title>
       </Head>
-      <h1>{t("title")}</h1>
+      <h1 className="border-0 mb-10">{t("title")}</h1>
       {!selectedUser ? (
         <ul className="list-none p-0">
           {allUsers
@@ -167,14 +170,16 @@ const Users = ({
                     <p>{user.name}</p>
                     <p>{user.email}</p>
                   </div>
-
-                  <Button
-                    type="button"
-                    className="w-auto rounded-md shrink-0 basis-1/3"
-                    onClick={() => setSelectedUser(user)}
-                  >
-                    {canManageUsers ? t("managePermissions") : t("viewPermissions")}{" "}
-                  </Button>
+                  <div>
+                    <Button
+                      type="button"
+                      theme="primary"
+                      className=""
+                      onClick={() => setSelectedUser(user)}
+                    >
+                      {canManageUsers ? t("managePermissions") : t("viewPermissions")}
+                    </Button>
+                  </div>
                 </li>
               );
             })}
@@ -212,7 +217,8 @@ export const getServerSideProps = requireAuthentication(async ({ user: { ability
 
   return {
     props: {
-      ...(locale && (await serverSideTranslations(locale, ["common", "admin-users"]))),
+      ...(locale &&
+        (await serverSideTranslations(locale, ["common", "admin-users", "admin-login"]))),
       allUsers,
       allPrivileges,
     },

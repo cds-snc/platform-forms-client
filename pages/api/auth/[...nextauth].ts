@@ -201,5 +201,5 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
   }
 
   // Runs the NextAuth.js flow
-  return await NextAuth(req, res, authOptions);
+  return NextAuth(req, res, authOptions);
 }

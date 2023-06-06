@@ -5,7 +5,7 @@ import { requireAuthentication } from "@lib/auth";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import Loader from "@components/globals/Loader";
-import { Button } from "@components/forms";
+import { Button } from "@components/globals";
 import { checkPrivileges } from "@lib/privileges";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 
@@ -23,7 +23,7 @@ const Flags = () => {
       <Head>
         <title>{t("title")}</title>
       </Head>
-      <h1>{t("title")}</h1>
+      <h1 className="border-0 mb-10">{t("title")}</h1>
       <p className="pb-8">{t("subTitle")}</p>
       {flags ? (
         <table className="table-auto border-4">
@@ -47,6 +47,8 @@ const Flags = () => {
                 <td className="p-2 text-center">
                   <Button
                     type="submit"
+                    theme="primary"
+                    className="text-sm whitespace-nowrap"
                     onClick={async () => {
                       if (value) {
                         await fetch(`/api/flags/${key}/disable`);
@@ -78,7 +80,8 @@ export const getServerSideProps = requireAuthentication(async ({ locale, user: {
   checkPrivileges(ability, [{ action: "view", subject: "Flag" }]);
   return {
     props: {
-      ...(locale && (await serverSideTranslations(locale, ["common", "admin-flags"]))),
+      ...(locale &&
+        (await serverSideTranslations(locale, ["common", "admin-flags", "admin-login"]))),
     },
   };
 });

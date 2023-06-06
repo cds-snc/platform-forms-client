@@ -79,6 +79,7 @@ export const ShareDropdown = () => {
                 onClick={() => {
                   showShareModal(true);
                 }}
+                data-share="form-builder-share-email-attempt"
                 className={
                   "flex cursor-pointer items-center rounded-md px-2 py-2 text-sm outline-none hover:text-white-default hover:bg-gray-600 focus:text-white-default focus:bg-gray-600 [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
                 }

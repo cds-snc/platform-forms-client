@@ -140,7 +140,7 @@ export async function submitToAPI(
   const token = await getCsrfToken();
   if (token) {
     //making a post request to the submit API
-    return await axios({
+    return axios({
       url: "/api/submit",
       method: "POST",
       headers: {

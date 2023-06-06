@@ -23,7 +23,11 @@ export const ErrorPanel = ({
 
   // links
   const homeHref =
-    status === "authenticated" ? `/${i18n.language}/myforms` : `/${i18n.language}/form-builder`;
+    status === "authenticated"
+      ? `/${i18n.language}/myforms`
+      : `https://articles.alpha.canada.ca/forms-formulaires/${
+          String(i18n.language).toLowerCase() === "fr" ? "fr/" : ""
+        }`;
 
   const homeText =
     status === "authenticated" ? t("errorPanel.cta.yourForms") : t("errorPanel.cta.home");
