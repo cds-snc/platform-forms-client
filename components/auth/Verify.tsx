@@ -18,12 +18,16 @@ interface VerifyProps {
 export const Verify = ({ username, authenticationFlowToken }: VerifyProps): ReactElement => {
   const router = useRouter();
   const { t, i18n } = useTranslation(["auth-verify", "cognito-errors", "common"]);
-  const { verify } = useVerify();
+  const { verify, reVerify } = useVerify();
   const [authErrorsState, { authErrorsReset, handleErrorById }] = useAuthErrors();
   const [isReVerify, setIsReverify] = useState(false);
 
-  // TODO
+  // TODO - add error handling
   const handleReVerify = async () => {
+    await reVerify({
+      username: username.current,
+      authenticationFlowToken: authenticationFlowToken.current,
+    });
     setIsReverify(false);
   };
 

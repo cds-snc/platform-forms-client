@@ -13,7 +13,7 @@ export const useVerify = () => {
     authenticationFlowToken: string;
   }) => {
     try {
-      return signIn("cognito", {
+      return await signIn("cognito", {
         username: username,
         verificationCode: verificationCode,
         authenticationFlowToken,
@@ -27,7 +27,6 @@ export const useVerify = () => {
   };
 
   // TODO error handling etc.
-  // Currently requires an authenticated user I think. More work to do
   const reVerify = async ({
     username,
     authenticationFlowToken,
@@ -35,7 +34,7 @@ export const useVerify = () => {
     username: string;
     authenticationFlowToken: string;
   }) => {
-    return await axios({
+    return axios({
       url: "/api/auth/2fa/request-new-verification-code",
       method: "POST",
       headers: {
