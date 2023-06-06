@@ -32,9 +32,7 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
   };
 
   const validationSchema = Yup.object().shape({
-    verificationCode: Yup.string()
-      .required(t("verify.fields.confirmationCode.error.notEmpty"))
-      .matches(/^[0-9a-z]{5}?$/i, t("verify.fields.confirmationCode.error.length")),
+    verificationCode: Yup.string().required(t("verify.fields.confirmationCode.error.notEmpty")),
   });
 
   if (isReVerify) {
