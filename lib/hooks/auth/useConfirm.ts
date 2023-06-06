@@ -70,8 +70,8 @@ export const useConfirm = ({ username, password }: { username: string; password:
           "Content-Type": "application/x-www-form-urlencoded",
         },
         data: new URLSearchParams({
-          username: username.current,
-          password: password.current,
+          username: username,
+          password: password,
           csrfToken: (await getCsrfToken()) ?? "noToken",
         }),
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
