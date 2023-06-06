@@ -1,4 +1,22 @@
 {
+  "signUpConfirmation": {
+    "title": "Vérifiez votre courriel",
+    "resendConfirmationCodeButton": "Envoyer un nouveau code de vérification",
+    "emailHasBeenSent": "Un courriel ayant un code de vérification a été envoyé à",
+    "confirmButton": "Continuer",
+    "resendConfirmationCode": {
+      "title": "Vérifiez votre courriel",
+      "body": "Un courriel avec un code de vérification vous a été envoyé"
+    },
+    "fields": {
+      "confirmationCode": {
+        "label": "Entrer le code de vérification pour compléter la création de votre compte",
+        "error": {
+          "number": "Ceci doit être un numéro"
+        }
+      }
+    }
+  },
   "signUpRegistration": {
     "title": "Créer un compte",
     "alreadyHaveAnAccount": "Si vous avez déjà un compte,",
