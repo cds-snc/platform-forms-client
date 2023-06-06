@@ -236,7 +236,7 @@ const Register = () => {
                 <Label id={"label-username"} htmlFor={"username"} className="required" required>
                   {t("signUpRegistration.fields.username.label")}
                 </Label>
-                <div className="text-p text-black-default mb-2" id={"password-hint"}>
+                <div className="text-p text-black-default mb-2" id={"username-hint"}>
                   {t("signUpRegistration.fields.username.hint")}
                 </div>
                 <TextInput
