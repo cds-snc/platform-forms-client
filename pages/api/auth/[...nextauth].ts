@@ -157,7 +157,11 @@ const getAcceptableUseValue = async (userId: string) => {
 
 export default async function auth(req: NextApiRequest, res: NextApiResponse) {
   // Listens for the sign-in action for Cognito to initiate the sign in process
-  if (req.query.nextauth?.includes("signin") && req.query.nextauth?.includes("cognito")) {
+  if (
+    Array.isArray(req.query.nextauth) &&
+    req.query.nextauth?.includes("signin") &&
+    req.query.nextauth?.includes("cognito")
+  ) {
     const { username, password } = req.body;
 
     if (!username || !password)
