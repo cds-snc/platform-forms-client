@@ -55,6 +55,11 @@ export const Publish = () => {
     }
 
     setId(result?.id);
+
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "publish_form",
+    });
     router.push({ pathname: `/form-builder/published` });
   };
 

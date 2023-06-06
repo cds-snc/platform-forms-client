@@ -96,7 +96,7 @@ const callLambda = async (
 const parseRequestData = async (
   requestBody: SubmissionRequestBody
 ): Promise<SubmissionParsedRequest> => {
-  return await Object.keys(requestBody).reduce(
+  return Object.keys(requestBody).reduce(
     async (prev, current) => {
       const previousValueResolved = await prev;
       const keyPairValue = requestBody[current];
@@ -133,7 +133,7 @@ const parseRequestData = async (
               ...previousValueResolved.files,
               [current]: await Promise.all(
                 arrayValue.map(async (fileObj) => {
-                  return await processFileData(fileObj as FileInputResponse);
+                  return processFileData(fileObj as FileInputResponse);
                 })
               ),
             },

@@ -55,5 +55,6 @@ module.exports = {
     "prettier/prettier": "error",
     "no-console": "error",
     "no-await-in-loop": "error",
+    "no-return-await": "error",
   },
 };
