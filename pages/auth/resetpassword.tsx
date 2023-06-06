@@ -4,7 +4,6 @@ import { TextInput, Label, Alert, ErrorListItem, Description } from "@components
 import { Button, LinkButton } from "@components/globals";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
-import { Confirmation } from "@components/auth/Confirmation/Confirmation";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import { checkOne } from "@lib/cache/flags";
@@ -27,18 +26,16 @@ const Step1 = ({
   setInitialCodeSent,
   sendForgotPassword,
   authErrorsState,
-  setNeedsConfirmation,
   authErrorsReset,
 }: {
   username: MutableRefObject<string>;
   sendForgotPassword: (
     username: string,
     successCallback: () => void,
-    failedCallback: (error: string) => void
+    failedCallback?: (error: string) => void
   ) => void;
   setInitialCodeSent: (val: boolean) => void;
   authErrorsState: AuthErrorsState;
-  setNeedsConfirmation: (val: boolean) => void;
   authErrorsReset: () => void;
 }) => {
   const { t, i18n } = useTranslation(["reset-password", "common"]);
@@ -69,26 +66,11 @@ const Step1 = ({
           // set the username ( user's email ) to what was provided
           username.current = values.username;
           // call the sendForgotPassword method to attempt to send the verification code to the user
-          sendForgotPassword(
-            values.username,
-            () => {
-              // if sending of the code succeeds we set the initialCodeSent state to true
-              // this will display the form to set the new password
-              setInitialCodeSent(true);
-            },
-            (error) => {
-              // The InvalidParameterException error will be returned in two cases
-              // 1. Where a user does not have an account
-              // 2. Where a user does not have a verified email
-              // We will show the confirmation code page in this case
-              // If a user does not have an account they will not be able to progress
-              // those that do but have not verified their email will be able to verify their
-              // email first and then return to set their passwords
-              if (error === "InvalidParameterException") {
-                setNeedsConfirmation(true);
-              }
-            }
-          );
+          sendForgotPassword(values.username, () => {
+            // if sending of the code succeeds we set the initialCodeSent state to true
+            // this will display the form to set the new password
+            setInitialCodeSent(true);
+          });
         }}
       >
         {({ handleSubmit, errors }) => (
@@ -336,42 +318,19 @@ const Step2 = ({
 };
 
 const ResetPassword = () => {
-  const {
-    username,
-    sendForgotPassword,
-    confirmPasswordReset,
-    needsConfirmation,
-    setNeedsConfirmation,
-    authErrorsState,
-    authErrorsReset,
-  } = useResetPassword();
+  const { username, sendForgotPassword, confirmPasswordReset, authErrorsState, authErrorsReset } =
+    useResetPassword();
 
   // we don't put this state in useAuth since its very unique to this page only
   const [initialCodeSent, setInitialCodeSent] = useState(false);
 
-  // confirmation code form in case a user has not yet confirmed their account
-  // password resets are not allowed by cognito unless someone has confirmed their account
-  if (needsConfirmation) {
-    return (
-      <Confirmation
-        username={username.current}
-        password={""}
-        confirmationCallback={() => {
-          setNeedsConfirmation(false);
-        }}
-        shouldSignIn={false}
-      />
-    );
-  }
-
   // The form to initially send a verification code needed to reset a user's password
-  if (!initialCodeSent && !needsConfirmation) {
+  if (!initialCodeSent) {
     return (
       <Step1
         username={username}
         authErrorsState={authErrorsState}
         authErrorsReset={authErrorsReset}
-        setNeedsConfirmation={setNeedsConfirmation}
         sendForgotPassword={sendForgotPassword}
         setInitialCodeSent={setInitialCodeSent}
       />
