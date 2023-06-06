@@ -45,6 +45,15 @@ export const options = [
     logoTitleFr: "Bureau de la sécurité des transports du Canada",
   },
   {
+    name: "decced",
+    urlEn: "https://ced.canada.ca",
+    urlFr: "https://dec.canada.ca",
+    logoEn: "/img/branding/decced-en.svg",
+    logoFr: "/img/branding/decced-fr.svg",
+    logoTitleEn: "Canada Economic Development for Quebec Regions",
+    logoTitleFr: "Développement économique Canada pour les régions du Québec",
+  },
+  {
     name: "cds",
     urlEn: "https://digital.canada.ca",
     urlFr: "https://numerique.canada.ca",
