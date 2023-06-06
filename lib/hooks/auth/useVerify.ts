@@ -1,5 +1,6 @@
 import { logMessage } from "@lib/logger";
-import { signIn } from "next-auth/react";
+import axios from "axios";
+import { getCsrfToken, signIn } from "next-auth/react";
 
 export const useVerify = () => {
   const verify = async ({
@@ -25,8 +26,28 @@ export const useVerify = () => {
     }
   };
 
-  const reVerify = async ({ authenticationFlowToken }: { authenticationFlowToken: string }) => {
-    // TODO /api/auth/2fa/request-new-verification-code
+  // TODO error handling etc.
+  // Currently requires an authenticated user I think. More work to do
+  const reVerify = async ({
+    username,
+    authenticationFlowToken,
+  }: {
+    username: string;
+    authenticationFlowToken: string;
+  }) => {
+    return await axios({
+      url: "/api/auth/2fa/request-new-verification-code",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      data: new URLSearchParams({
+        email: username,
+        authenticationFlowToken,
+        csrfToken: (await getCsrfToken()) ?? "noToken",
+      }),
+      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+    });
   };
 
   return {

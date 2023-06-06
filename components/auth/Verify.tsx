@@ -22,14 +22,8 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
   const [authErrorsState, { authErrorsReset, handleErrorById }] = useAuthErrors();
   const [isReVerify, setIsReverify] = useState(false);
 
-  // TODO when API ready
+  // TODO
   const handleReVerify = async () => {
-    // const error = await reVerify({authenticationFlowToken});
-    // if (!error) {
-    //   TODO
-    // }
-
-    // TODO on success
     setIsReverify(false);
   };
 
@@ -77,6 +71,7 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
           if (data) {
             router.push({
               pathname: `/${i18n.language}/auth/policy`,
+              search: "?referer=/signup/account-created",
             });
           }
         }}
@@ -104,7 +99,7 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
             )}
             <h1 className="border-0 mt-6 mb-6">{t("verify.title")}</h1>
             <p className="mt-10 mb-12">{t("verify.emailHasBeenSent")}</p>
-            <form id="verificationCode" method="POST" onSubmit={handleSubmit} noValidate>
+            <form id="verificationCodeForm" method="POST" onSubmit={handleSubmit} noValidate>
               <div className="focus-group">
                 <Label
                   id={"label-verificationCode"}
@@ -119,7 +114,7 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
                 </Description>
                 <TextInput
                   className="h-10 w-36 rounded"
-                  type="text"
+                  type="password"
                   id="verificationCode"
                   name="verificationCode"
                   ariaDescribedBy="verificationCode-hint"
