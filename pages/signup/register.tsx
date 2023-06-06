@@ -64,10 +64,6 @@ const Register = () => {
         name,
       });
 
-      // TEMP - to remove once confirmation code removed
-      // Add a Breakpoint below, to give you time first confirm the account in cognito before login
-      logMessage.info("");
-
       // Try signing in the newly registered user
       const result = await login({ username: username, password: password });
       if (result) {
