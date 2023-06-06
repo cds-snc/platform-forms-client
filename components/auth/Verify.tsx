@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState } from "react";
 import { useRouter } from "next/router";
 import { Formik } from "formik";
 import { TextInput, Label, Alert, Description } from "@components/forms";
@@ -7,11 +7,8 @@ import * as Yup from "yup";
 import Link from "next/link";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
 import { useAuthErrors } from "@lib/hooks/auth/useAuthErrors";
-import { Button } from "@components/globals";
+import { Button, StyledLink } from "@components/globals";
 import { useVerify } from "@lib/hooks/auth";
-
-// TODO:
-// To replace Confirmation component
 
 interface VerifyProps {
   username: React.MutableRefObject<string>;
@@ -20,15 +17,44 @@ interface VerifyProps {
 
 export const Verify = ({ username, authenticationFlowToken }: VerifyProps): ReactElement => {
   const router = useRouter();
-  const { t, i18n } = useTranslation(["signup", "cognito-errors", "common"]);
+  const { t, i18n } = useTranslation(["auth-verify", "cognito-errors", "common"]);
   const { verify } = useVerify();
   const [authErrorsState, { authErrorsReset, handleErrorById }] = useAuthErrors();
+  const [isReVerify, setIsReverify] = useState(false);
+
+  // TODO when API ready
+  const handleReVerify = async () => {
+    // const error = await reVerify({authenticationFlowToken});
+    // if (!error) {
+    //   TODO
+    // }
+
+    // TODO on success
+    setIsReverify(false);
+  };
 
   const validationSchema = Yup.object().shape({
     verificationCode: Yup.string()
-      .required(t("signUpConfirmation.fields.confirmationCode.error.notEmpty"))
-      .matches(/^[0-9a-z]{5}?$/i, t("signUpConfirmation.fields.confirmationCode.error.length")),
+      .required(t("verify.fields.confirmationCode.error.notEmpty"))
+      .matches(/^[0-9a-z]{5}?$/i, t("verify.fields.confirmationCode.error.length")),
   });
+
+  if (isReVerify) {
+    return (
+      <>
+        <h1 className="border-0 mt-6 mb-6">{t("reVerify.title")}</h1>
+        <p className="mt-10">{t("reVerify.description")}</p>
+        <div className="flex mt-16">
+          <Button theme="primary" className="mr-4" onClick={handleReVerify}>
+            {t("reVerify.buttons.reSendCode")}
+          </Button>
+          <StyledLink theme="secondaryButton" href="/form-builder/support">
+            {t("reVerify.buttons.getSupport")}
+          </StyledLink>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -59,21 +85,8 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
         validationSchema={validationSchema}
         onReset={authErrorsReset}
       >
-        {({ handleSubmit /*, errors*/ }) => (
+        {({ handleSubmit }) => (
           <>
-            {/* {showSentReconfirmationToast && !authErrorsState?.title && (
-            <Alert
-              type={ErrorStatus.SUCCESS}
-              heading={t("signUpConfirmation.resendConfirmationCode.title")}
-              onDismiss={() => {
-                setShowSentReconfirmationToast(false);
-              }}
-              id="reconfirmationSuccess"
-              dismissible
-            >
-              {t("signUpConfirmation.resendConfirmationCode.body")}
-            </Alert>
-          )} */}
             {authErrorsState?.isError && (
               <Alert
                 type={ErrorStatus.ERROR}
@@ -89,8 +102,8 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
                 ) : undefined}
               </Alert>
             )}
-            <h1 className="border-0">{t("signUpConfirmation.title")}</h1>
-            <p className="mb-10 -mt-6">{t("signUpConfirmation.emailHasBeenSent")}</p>
+            <h1 className="border-0 mt-6 mb-6">{t("verify.title")}</h1>
+            <p className="mt-10 mb-12">{t("verify.emailHasBeenSent")}</p>
             <form id="verificationCode" method="POST" onSubmit={handleSubmit} noValidate>
               <div className="focus-group">
                 <Label
@@ -99,10 +112,10 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
                   className="required"
                   required
                 >
-                  {t("signUpConfirmation.fields.confirmationCode.label")}
+                  {t("verify.fields.confirmationCode.label")}
                 </Label>
                 <Description className="text-p text-black-default" id={"verificationCode-hint"}>
-                  {t("signUpConfirmation.fields.confirmationCode.description")}
+                  {t("verify.fields.confirmationCode.description")}
                 </Description>
                 <TextInput
                   className="h-10 w-36 rounded"
@@ -114,23 +127,19 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
                 />
               </div>
               <Button theme="primary" type="submit">
-                {t("signUpConfirmation.confirmButton")}
+                {t("verify.confirmButton")}
               </Button>
-              <div className="flex mt-10">
+              <div className="flex mt-12">
                 <button
                   type="button"
                   className="block shadow-none bg-transparent text-blue-dark hover:text-blue-hover underline border-0 mr-8"
-                  onClick={async () => {
-                    // TODO - New Verification Code
-                    // const error = await resendConfirmationCode(username.current);
-                    // if (!error) {
-                    //   setShowSentReconfirmationToast(true);
-                    // }
+                  onClick={() => {
+                    setIsReverify(true);
                   }}
                 >
-                  {t("signUpConfirmation.resendConfirmationCodeButton")}
+                  {t("verify.resendConfirmationCodeButton")}
                 </button>
-                <Link href={"/form-builder/support"}>{t("signUpConfirmation.help")}</Link>
+                <Link href={"/form-builder/support"}>{t("verify.help")}</Link>
               </div>
             </form>
           </>

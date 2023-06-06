@@ -2,7 +2,6 @@ import { useRef, useState } from "react";
 import axios from "axios";
 import { getCsrfToken } from "next-auth/react";
 import { useRouter } from "next/router";
-import { FormikHelpers } from "formik";
 import { logMessage } from "@lib/logger";
 import { useAuthErrors } from "@lib/hooks/auth/useAuthErrors";
 import { hasError } from "@lib/hasError";
@@ -13,19 +12,10 @@ export const useLogin = () => {
   const password = useRef("");
   const authenticationFlowToken = useRef("");
   const didConfirm = useRef(false);
-  const [needsConfirmation, setNeedsConfirmation] = useState(false);
+  const [needsVerification, setNeedsVerification] = useState(false);
   const [authErrorsState, { authErrorsReset, handleErrorById }] = useAuthErrors();
 
-  const login = async (
-    {
-      username,
-      password,
-    }: {
-      username: string;
-      password: string;
-    },
-    { setSubmitting }: FormikHelpers<{ username: string; password: string }>
-  ) => {
+  const login = async ({ username, password }: { username: string; password: string }) => {
     authErrorsReset();
     try {
       const { data } = await axios({
@@ -44,9 +34,8 @@ export const useLogin = () => {
 
       if (data?.error) {
         const error = data.error;
-        setSubmitting(false);
         if (hasError("UserNotConfirmedException", error)) {
-          setNeedsConfirmation(true);
+          setNeedsVerification(true);
           return false;
         } else if (hasError(["UserNotFoundException", "NotAuthorizedException"], error)) {
           handleErrorById("UsernameOrPasswordIncorrect");
@@ -63,8 +52,6 @@ export const useLogin = () => {
       logMessage.error(err);
       handleErrorById("InternalServiceExceptionLogin");
       return false;
-    } finally {
-      setSubmitting(false);
     }
   };
 
@@ -74,8 +61,8 @@ export const useLogin = () => {
     password,
     authenticationFlowToken,
     didConfirm,
-    needsConfirmation,
-    setNeedsConfirmation,
+    needsVerification,
+    setNeedsVerification,
     authErrorsState,
     authErrorsReset,
     handleErrorById,

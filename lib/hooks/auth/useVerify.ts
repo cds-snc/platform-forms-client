@@ -25,7 +25,12 @@ export const useVerify = () => {
     }
   };
 
+  const reVerify = async ({ authenticationFlowToken }: { authenticationFlowToken: string }) => {
+    // TODO /api/auth/2fa/request-new-verification-code
+  };
+
   return {
     verify,
+    reVerify,
   };
 };

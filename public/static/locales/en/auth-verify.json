@@ -1,0 +1,33 @@
+{
+  "verify": {
+    "title": "Check your email for a security code",
+    "emailHasBeenSent": "This step helps keep GC Forms secure by verifying your account each time you sign in.",
+    "resendConfirmationCodeButton": "Send a new code",
+    "confirmButton": "Continue",
+    "help": "Need help?",
+    "resendConfirmationCode": {
+      "title": "Check your email",
+      "body": "An email with a verification code has been sent to you"
+    },
+    "fields": {
+      "confirmationCode": {
+        "label": "Security code",
+        "description": "Enter the code within 15 minutes.",
+        "error": {
+          "notEmpty": "Cannot be empty",
+          "length": "Must be 5 characters",
+          "notFound": "Code not found",
+          "expired": "Code expired. Try signing in again."
+        }
+      }
+    }
+  },
+  "reVerify": {
+    "title": "Re-send code",
+    "description": "Sometimes email messages take a few minutes to arrive. If you do not receive the email, you can re-send it. ",
+    "buttons": {
+      "reSendCode": "Re-send code",
+      "getSupport": "Get support"
+    }
+  }
+}

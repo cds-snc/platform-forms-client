@@ -1,12 +1,11 @@
 import React, { ReactElement } from "react";
 import { Formik } from "formik";
-import { TextInput, Label, Alert } from "@components/forms";
+import { TextInput, Label, Alert, ErrorListItem } from "@components/forms";
 import { Button } from "@components/globals";
 import { useFlag } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-// import { Confirmation } from "@components/auth/Confirmation/Confirmation";
 import * as Yup from "yup";
 import {
   isValidGovEmail,
@@ -32,17 +31,15 @@ import { useLogin } from "@lib/hooks/auth";
 const Register = () => {
   const { isLoading, status: registrationOpen } = useFlag("accountRegistration");
   const { t } = useTranslation(["signup", "common"]);
-  //TODO probably rename needsConfirmation to needsVerification to avoid confusion
   const {
     username,
     password,
     authenticationFlowToken,
-    // didConfirm,
-    needsConfirmation,
-    setNeedsConfirmation,
+    needsVerification,
+    setNeedsVerification,
     authErrorsState,
     authErrorsReset,
-    // login,
+    login,
     handleErrorById,
   } = useLogin();
 
@@ -60,12 +57,22 @@ const Register = () => {
   ) => {
     authErrorsReset();
     try {
+      // Register the user. An error is thrown if the username exists etc.
       await fetchWithCsrfToken("/api/account/register", {
         username,
         password,
         name,
       });
-      setNeedsConfirmation(true);
+
+      // TEMP - to remove once confirmation code removed
+      // Add a Breakpoint below, to give you time first confirm the account in cognito before login
+      logMessage.info("");
+
+      // Try signing in the newly registered user
+      const result = await login({ username: username, password: password });
+      if (result) {
+        setNeedsVerification(true);
+      }
     } catch (err) {
       logMessage.error(err);
       if (hasError("UsernameExistsException", err)) {
@@ -146,7 +153,7 @@ const Register = () => {
     );
   }
 
-  if (needsConfirmation) {
+  if (needsVerification) {
     return (
       <>
         <Verify username={username} authenticationFlowToken={authenticationFlowToken} />
@@ -170,7 +177,7 @@ const Register = () => {
         validateOnBlur={false}
         validationSchema={validationSchema}
       >
-        {({ handleSubmit }) => (
+        {({ handleSubmit, errors }) => (
           <>
             {authErrorsState.isError && (
               <Alert
@@ -187,7 +194,7 @@ const Register = () => {
                 ) : undefined}
               </Alert>
             )}
-            {/* {Object.keys(errors).length > 0 && !authErrorsState.isError && (
+            {Object.keys(errors).length > 0 && !authErrorsState.isError && (
               <Alert
                 type={ErrorStatus.ERROR}
                 validation={true}
@@ -207,7 +214,7 @@ const Register = () => {
                   })}
                 </ol>
               </Alert>
-            )} */}
+            )}
             <h1 className="border-b-0 mt-6 mb-12">{t("signUpRegistration.title")}</h1>
             <p className="mb-10 -mt-6">
               {t("signUpRegistration.alreadyHaveAnAccount")}&nbsp;
@@ -310,7 +317,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       ...(context.locale &&
-        (await serverSideTranslations(context.locale, ["common", "cognito-errors", "signup"]))),
+        (await serverSideTranslations(context.locale, [
+          "common",
+          "cognito-errors",
+          "signup",
+          "auth-verify",
+        ]))),
     },
   };
 };

@@ -1,6 +1,4 @@
-import React, { ReactElement, useState, MutableRefObject } from "react";
-import { FormikHelpers } from "formik";
-import { useRouter } from "next/router";
+import React, { ReactElement, MutableRefObject } from "react";
 import { Formik } from "formik";
 import { TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
 import { Button } from "@components/globals";
@@ -12,29 +10,26 @@ import Link from "next/link";
 import Head from "next/head";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
-import { Confirmation } from "@components/auth/Confirmation/Confirmation";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import * as Yup from "yup";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
-import { useLogin, useVerify } from "@lib/hooks/auth";
+import { useLogin } from "@lib/hooks/auth";
 import { AuthErrorsState } from "@lib/hooks/auth/useAuthErrors";
+import { Verify } from "@components/auth/Verify";
 
-const Step1 = ({
+const LoginStep = ({
   username,
   password,
   authErrorsState,
-  setEnterVerification,
+  setNeedsVerification,
   login,
   authErrorsReset,
 }: {
   username: MutableRefObject<string>;
   password: MutableRefObject<string>;
   authErrorsState: AuthErrorsState;
-  login: (
-    values: { username: string; password: string },
-    helpers: FormikHelpers<{ username: string; password: string }>
-  ) => Promise<boolean | undefined>;
-  setEnterVerification: (val: boolean) => void;
+  login: (values: { username: string; password: string }) => Promise<boolean | undefined>;
+  setNeedsVerification: (val: boolean) => void;
   authErrorsReset: () => void;
 }) => {
   const { t } = useTranslation(["login", "cognito-errors", "common"]);
@@ -58,19 +53,16 @@ const Step1 = ({
       </Head>
       <Formik
         initialValues={{ username: authErrorsState.isError ? username.current : "", password: "" }}
-        onSubmit={async (values, helpers) => {
+        onSubmit={async (values, { setSubmitting }) => {
           username.current = values.username;
           password.current = values.password;
-          const result = await login(
-            {
-              ...values,
-            },
-            helpers
-          );
 
+          const result = await login({ username: username.current, password: password.current });
           if (result) {
-            setEnterVerification(true);
+            setNeedsVerification(true);
           }
+
+          setSubmitting(false);
         }}
         validateOnChange={false}
         validateOnBlur={false}
@@ -174,165 +166,27 @@ const Step1 = ({
   );
 };
 
-const Step2 = ({
-  username,
-  authenticationFlowToken,
-  authErrorsState,
-  authErrorsReset,
-  handleErrorById,
-}: {
-  username: string;
-  authenticationFlowToken: string;
-  authErrorsState: AuthErrorsState;
-  authErrorsReset: () => void;
-  handleErrorById: (id: string) => void;
-}) => {
-  const { t, i18n } = useTranslation(["login", "cognito-errors", "common"]);
-  const { verify } = useVerify();
-  const router = useRouter();
-  const validationSchema = Yup.object().shape({
-    verificationCode: Yup.string().required(t("input-validation.required", { ns: "common" })),
-  });
-  return (
-    <>
-      <h1 className="border-b-0 mt-6 mb-6">{t("verification.title")}</h1>
-      <p className="mb-10">{t("verification.description")}</p>
-      <Formik
-        initialValues={{ username, verificationCode: "" }}
-        onSubmit={async (values) => {
-          const { verificationCode, username } = values;
-          const data = await verify({ username, authenticationFlowToken, verificationCode });
-
-          if (data && !data?.ok) {
-            const error = data?.error;
-            if (error) {
-              handleErrorById(error);
-            }
-          }
-
-          if (data) {
-            router.push({
-              pathname: `/${i18n.language}/auth/policy`,
-            });
-          }
-        }}
-        validateOnChange={false}
-        validateOnBlur={false}
-        validationSchema={validationSchema}
-        onReset={authErrorsReset}
-      >
-        {({ handleSubmit, errors }) => (
-          <>
-            {authErrorsState.isError && (
-              <Alert
-                type={ErrorStatus.ERROR}
-                heading={authErrorsState.title}
-                id="cognitoErrors"
-                focussable={true}
-              >
-                {authErrorsState.description}
-                {authErrorsState.callToActionLink ? (
-                  <Link href={authErrorsState.callToActionLink}>
-                    {authErrorsState.callToActionText}
-                  </Link>
-                ) : undefined}
-              </Alert>
-            )}
-            {Object.keys(errors).length > 0 && !authErrorsState.isError && (
-              <Alert
-                type={ErrorStatus.ERROR}
-                validation={true}
-                tabIndex={0}
-                id="loginValidationErrors"
-                heading={t("input-validation.heading", { ns: "common" })}
-              >
-                <ol className="gc-ordered-list">
-                  {Object.entries(errors).map(([fieldKey, fieldValue]) => {
-                    return (
-                      <ErrorListItem
-                        key={`error-${fieldKey}`}
-                        errorKey={fieldKey}
-                        value={fieldValue}
-                      />
-                    );
-                  })}
-                </ol>
-              </Alert>
-            )}
-            <form id="login" method="POST" onSubmit={handleSubmit} noValidate>
-              <div className="focus-group">
-                <Label
-                  id={"label-verificationCode"}
-                  htmlFor={"verificationCode"}
-                  className="required"
-                  required
-                >
-                  {t("fields.verificationCode.label")}
-                </Label>
-                <p> {t("fields.verificationCode.description")}</p>
-                <TextInput
-                  className="h-10 w-full max-w-lg rounded"
-                  type={"password"}
-                  id={"verificationCode"}
-                  name={"verificationCode"}
-                  required
-                />
-              </div>
-              <Button theme="primary" type="submit">
-                {t("continueButton")}
-              </Button>
-            </form>
-          </>
-        )}
-      </Formik>
-    </>
-  );
-};
-
 const Login = () => {
   const {
     username,
     password,
     authenticationFlowToken,
-    didConfirm,
-    needsConfirmation,
-    setNeedsConfirmation,
+    needsVerification,
+    setNeedsVerification,
     authErrorsState,
     authErrorsReset,
     login,
-    handleErrorById,
   } = useLogin();
 
-  const confirmationCallback = () => {
-    setNeedsConfirmation(false);
-    didConfirm.current = true;
-  };
-
-  const [enterVerification, setEnterVerification] = useState(false);
-
-  if (needsConfirmation) {
-    return (
-      <Confirmation
-        username={username.current}
-        password={password.current}
-        confirmationCallback={confirmationCallback}
-      />
-    );
+  if (needsVerification) {
+    return <Verify username={username} authenticationFlowToken={authenticationFlowToken} />;
   }
 
-  return enterVerification ? (
-    <Step2
-      username={username.current}
-      authenticationFlowToken={authenticationFlowToken.current}
-      authErrorsState={authErrorsState}
-      authErrorsReset={authErrorsReset}
-      handleErrorById={handleErrorById}
-    />
-  ) : (
-    <Step1
+  return (
+    <LoginStep
       username={username}
       password={password}
-      setEnterVerification={setEnterVerification}
+      setNeedsVerification={setNeedsVerification}
       login={login}
       authErrorsState={authErrorsState}
       authErrorsReset={authErrorsReset}
@@ -363,6 +217,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           "signup",
           "login",
           "cognito-errors",
+          "auth-verify",
         ]))),
     },
   };
