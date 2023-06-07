@@ -22,7 +22,6 @@ export const useVerify = () => {
       });
     } catch (err) {
       logMessage.error(err);
-      return false;
     }
   };
 

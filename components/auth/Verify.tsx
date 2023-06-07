@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { Formik } from "formik";
 import { TextInput, Label, Alert } from "@components/forms";
@@ -9,6 +9,7 @@ import { ErrorStatus } from "@components/forms/Alert/Alert";
 import { useAuthErrors } from "@lib/hooks/auth/useAuthErrors";
 import { Button, StyledLink } from "@components/globals";
 import { useVerify } from "@lib/hooks/auth";
+import { useSession } from "next-auth/react";
 
 interface VerifyProps {
   username: React.MutableRefObject<string>;
@@ -21,6 +22,22 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
   const { verify, reVerify } = useVerify();
   const [authErrorsState, { authErrorsReset, handleErrorById }] = useAuthErrors();
   const [isReVerify, setIsReverify] = useState(false);
+  const { data: session, status: authStatus } = useSession();
+
+  useEffect(() => {
+    if (authStatus === "authenticated") {
+      if (session.user.newlyRegistered) {
+        router.push({
+          pathname: `/${i18n.language}/auth/policy`,
+          search: "?referer=/signup/account-created",
+        });
+      } else {
+        router.push({
+          pathname: `/${i18n.language}/auth/policy`,
+        });
+      }
+    }
+  }, [session, authStatus, router, i18n.language]);
 
   // TODO - add error handling
   const handleReVerify = async () => {
@@ -63,18 +80,11 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
             verificationCode,
           });
 
-          if (data && !data?.ok) {
+          if (!data?.ok) {
             const error = data?.error;
             if (error) {
               handleErrorById(error);
             }
-          }
-
-          if (data) {
-            router.push({
-              pathname: `/${i18n.language}/auth/policy`,
-              search: "?referer=/signup/account-created",
-            });
           }
         }}
         validateOnChange={false}
