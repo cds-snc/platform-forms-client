@@ -1,8 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useImperativeHandle } from "react";
 
 import { useTemplateStore } from "@formbuilder/store/useTemplateStore";
 import { useTranslation } from "next-i18next";
-import { useRouter } from "next/router";
+import { logMessage } from "@lib/logger";
+import { useRefStore } from "@lib/hooks/useRefStore";
 
 export const FileNameInput = () => {
   const { t } = useTranslation(["form-builder"]);
@@ -18,9 +19,30 @@ export const FileNameInput = () => {
   const [width, setWidth] = useState(0);
   const span = useRef<HTMLElement>(null);
 
-  const { query } = useRouter();
-  const focusFileName = query.focusFileName ? true : false;
   const fileNameInput = useRef<HTMLInputElement>(null);
+  const remoteRef = useRef<HTMLInputElement>(null);
+  const { setRef, removeRef } = useRefStore();
+
+  useEffect(() => {
+    setRef("fileNameInput", remoteRef);
+
+    return () => {
+      removeRef("fileNameInput");
+    };
+  }, [remoteRef, setRef, removeRef]);
+
+  useImperativeHandle(
+    remoteRef,
+    () => {
+      return {
+        focus() {
+          fileNameInput.current?.focus();
+          logMessage.debug("Calling focus function on fileNameInput");
+        },
+      } as HTMLInputElement;
+    },
+    [fileNameInput]
+  );
 
   useEffect(() => {
     // check if the fileName has changed from outside the component
@@ -32,12 +54,6 @@ export const FileNameInput = () => {
       setWidth(span.current?.offsetWidth + 50);
     }
   }, [content, fileName, isEditing]);
-
-  useEffect(() => {
-    if (focusFileName) {
-      fileNameInput && fileNameInput.current && fileNameInput.current?.focus();
-    }
-  }, [focusFileName]);
 
   const widthStyle = width ? { width: `${width}px` } : {};
 
