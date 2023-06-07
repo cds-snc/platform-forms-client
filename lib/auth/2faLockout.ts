@@ -7,7 +7,7 @@ export interface Lockout2FAResponse {
 }
 
 const LOCKOUT_KEY = "auth:2fa:failed";
-const MAX_FAILED_ATTEMPTS_ALLOWED = 3;
+const MAX_FAILED_ATTEMPTS_ALLOWED = 5;
 
 export async function registerFailed2FAAttempt(email: string): Promise<Lockout2FAResponse> {
   const redis = await getRedisInstance();

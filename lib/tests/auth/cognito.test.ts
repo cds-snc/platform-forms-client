@@ -214,7 +214,7 @@ describe("Test Cognito library", () => {
       expect(mockClear2FALockout).toHaveBeenCalled();
     });
 
-    it("Should return INVALID if email and/or authentication flow token code are invalid and number of attempts is below 3", async () => {
+    it("Should return INVALID if email and/or authentication flow token code are invalid and number of attempts is below maximum allowed", async () => {
       (prismaMock.cognitoCustom2FA.findUnique as jest.MockedFunction<any>).mockResolvedValue(null);
 
       mockRegisterFailed2FAAttempt.mockResolvedValueOnce({
@@ -233,7 +233,7 @@ describe("Test Cognito library", () => {
       });
     });
 
-    it("Should return INVALID if verification code is incorrect and number of attempts is below 3", async () => {
+    it("Should return INVALID if verification code is incorrect and number of attempts is below maximum allowed", async () => {
       const mockedId = "f4f7cedb-0f0b-4390-91a2-69e8c8a29f67";
       const mockedVerificationCode = "a1é3_8";
 
@@ -259,7 +259,7 @@ describe("Test Cognito library", () => {
       });
     });
 
-    it("Should return LOCKED_OUT if email and/or verification code are incorrect and number of attempts is 3 or more", async () => {
+    it("Should return LOCKED_OUT if email and/or verification code are incorrect and number of attempts is equal or greater than maximum allowed", async () => {
       (prismaMock.cognitoCustom2FA.findUnique as jest.MockedFunction<any>).mockResolvedValue(null);
 
       mockRegisterFailed2FAAttempt.mockResolvedValueOnce({
