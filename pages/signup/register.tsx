@@ -53,7 +53,14 @@ const Register = () => {
       password: string;
       name: string;
     },
-    { setSubmitting }: FormikHelpers<{ username: string; password: string; name: string }>
+    {
+      setSubmitting,
+    }: FormikHelpers<{
+      username: string;
+      password: string;
+      passwordConfirmation: string;
+      name: string;
+    }>
   ) => {
     authErrorsReset();
     try {
@@ -163,7 +170,7 @@ const Register = () => {
         <title>{t("signUpRegistration.title")}</title>
       </Head>
       <Formik
-        initialValues={{ username: "", password: "", name: "" }}
+        initialValues={{ username: "", password: "", passwordConfirmation: "", name: "" }}
         onSubmit={async (values, formikHelpers) => {
           username.current = values.username;
           password.current = values.password;
