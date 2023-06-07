@@ -10,6 +10,7 @@
     "dev": "yarn prisma:dev && yarn initialize && NODE_OPTIONS='--inspect' next dev",
     "build": "DATABASE_URL=postgres://postgres:password@localhost:5432 next build",
     "start": "yarn prisma:deploy && yarn initialize && next start -p ${PORT:-3000}",
+    "start:pr": "yarn initialize && next start -p ${PORT:-3000}",
     "initialize": "cd ./flag_initialization && yarn initialize && cd ..",
     "prisma:deploy": "prisma migrate deploy && ts-node --compiler-options {\\\"module\\\":\\\"CommonJS\\\"} prisma/seeds/seed.ts --environment=production",
     "prisma:dev": "prisma migrate dev",
