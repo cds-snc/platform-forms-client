@@ -121,7 +121,7 @@ const LoginStep = ({
                 <Label id={"label-username"} htmlFor={"username"} className="required" required>
                   {t("fields.username.label")}
                 </Label>
-                <Description className="text-p text-black-default" id="login">
+                <Description className="text-p text-black-default" id="login-description">
                   {t("fields.username.description")}
                 </Description>
                 <TextInput
@@ -130,15 +130,13 @@ const LoginStep = ({
                   id={"username"}
                   name={"username"}
                   required
+                  ariaDescribedBy="login-description"
                 />
               </div>
               <div className="focus-group">
                 <Label id={"label-password"} htmlFor={"password"} className="required" required>
                   {t("fields.password.label")}
                 </Label>
-                <Description id="password" className="text-p text-black-default">
-                  {t("fields.password.description")}
-                </Description>
                 <TextInput
                   className="h-10 w-full max-w-lg rounded"
                   type={"password"}
