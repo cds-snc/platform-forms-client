@@ -36,7 +36,7 @@ export default function UnlockPublishing() {
     department: string,
     goals: string
   ) => {
-    return await axios({
+    return axios({
       url: "/api/request/publish",
       method: "POST",
       headers: {

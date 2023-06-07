@@ -42,7 +42,7 @@ async function createSettings(env: string) {
 }
 
 async function createTestUser() {
-  return await prisma.user.create({
+  return prisma.user.create({
     data: {
       id: "1",
       name: "Test User",
