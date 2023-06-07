@@ -1,5 +1,6 @@
 import { logMessage } from "@lib/logger";
-import { signIn } from "next-auth/react";
+import axios from "axios";
+import { getCsrfToken, signIn } from "next-auth/react";
 
 export const useVerify = () => {
   const verify = async ({
@@ -12,7 +13,7 @@ export const useVerify = () => {
     authenticationFlowToken: string;
   }) => {
     try {
-      return signIn("cognito", {
+      return await signIn("cognito", {
         username: username,
         verificationCode: verificationCode,
         authenticationFlowToken,
@@ -25,7 +26,31 @@ export const useVerify = () => {
     }
   };
 
+  // TODO error handling etc.
+  const reVerify = async ({
+    username,
+    authenticationFlowToken,
+  }: {
+    username: string;
+    authenticationFlowToken: string;
+  }) => {
+    return axios({
+      url: "/api/auth/2fa/request-new-verification-code",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      data: new URLSearchParams({
+        email: username,
+        authenticationFlowToken,
+        csrfToken: (await getCsrfToken()) ?? "noToken",
+      }),
+      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+    });
+  };
+
   return {
     verify,
+    reVerify,
   };
 };

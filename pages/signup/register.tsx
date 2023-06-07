@@ -1,13 +1,11 @@
 import React, { ReactElement } from "react";
 import { Formik } from "formik";
-import { TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
+import { TextInput, Label, Alert, ErrorListItem } from "@components/forms";
 import { Button } from "@components/globals";
 import { useFlag } from "@lib/hooks";
-import { useRegister } from "@lib/hooks/auth";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { Confirmation } from "@components/auth/Confirmation/Confirmation";
 import * as Yup from "yup";
 import {
   isValidGovEmail,
@@ -23,12 +21,65 @@ import { getServerSession } from "next-auth/next";
 import Link from "next/link";
 import Head from "next/head";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
+import { FormikHelpers } from "formik";
+import { fetchWithCsrfToken } from "@lib/hooks/auth/fetchWithCsrfToken";
+import { hasError } from "@lib/hasError";
+import { logMessage } from "@lib/logger";
+import { Verify } from "@components/auth/Verify";
+import { useLogin } from "@lib/hooks/auth";
 
 const Register = () => {
   const { isLoading, status: registrationOpen } = useFlag("accountRegistration");
-  const { username, password, needsConfirmation, register, authErrorsState, authErrorsReset } =
-    useRegister();
   const { t } = useTranslation(["signup", "common"]);
+  const {
+    username,
+    password,
+    authenticationFlowToken,
+    needsVerification,
+    setNeedsVerification,
+    authErrorsState,
+    authErrorsReset,
+    login,
+    handleErrorById,
+  } = useLogin();
+
+  const register = async (
+    {
+      username,
+      password,
+      name,
+    }: {
+      username: string;
+      password: string;
+      name: string;
+    },
+    { setSubmitting }: FormikHelpers<{ username: string; password: string; name: string }>
+  ) => {
+    authErrorsReset();
+    try {
+      // Register the user. An error is thrown if the username exists etc.
+      await fetchWithCsrfToken("/api/account/register", {
+        username,
+        password,
+        name,
+      });
+
+      // Try signing in the newly registered user
+      const result = await login({ username: username, password: password });
+      if (result) {
+        setNeedsVerification(true);
+      }
+    } catch (err) {
+      logMessage.error(err);
+      if (hasError("UsernameExistsException", err)) {
+        handleErrorById("UsernameExistsException");
+        return;
+      }
+      handleErrorById(t("InternalServiceException"));
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   const validationSchema = Yup.object().shape({
     name: Yup.string()
@@ -80,22 +131,29 @@ const Register = () => {
         <Head>
           <title>{t("signUpRegistration.title")}</title>
         </Head>
+        <h1 className="border-b-0 mt-6 mb-12">{t("signUpRegistration.title")}</h1>
         <Loader message={t("loading")} />
       </>
     );
   }
 
   if (!registrationOpen) {
-    return <div>{t("registrationClosed")}</div>;
+    return (
+      <>
+        <Head>
+          <title>{t("signUpRegistration.title")}</title>
+        </Head>
+        <h1 className="border-b-0 mt-6 mb-12">{t("signUpRegistration.title")}</h1>
+        <p>{t("registrationClosed")}</p>
+      </>
+    );
   }
 
-  if (needsConfirmation) {
+  if (needsVerification) {
     return (
-      <Confirmation
-        username={username.current}
-        password={password.current}
-        confirmationCallback={() => undefined}
-      />
+      <>
+        <Verify username={username} authenticationFlowToken={authenticationFlowToken} />
+      </>
     );
   }
 
@@ -123,7 +181,6 @@ const Register = () => {
                 heading={authErrorsState.title}
                 onDismiss={authErrorsReset}
                 id="cognitoErrors"
-                // dismissible={cognitoErrorIsDismissible}
               >
                 {authErrorsState.description}&nbsp;
                 {authErrorsState.callToActionLink ? (
@@ -175,9 +232,9 @@ const Register = () => {
                 <Label id={"label-username"} htmlFor={"username"} className="required" required>
                   {t("signUpRegistration.fields.username.label")}
                 </Label>
-                <Description className="text-p text-black-default" id={"username-hint"}>
+                <div className="text-p text-black-default mb-2" id={"username-hint"}>
                   {t("signUpRegistration.fields.username.hint")}
-                </Description>
+                </div>
                 <TextInput
                   className="h-10 w-full max-w-lg rounded"
                   type={"email"}
@@ -188,17 +245,23 @@ const Register = () => {
               </div>
               <div className="focus-group">
                 <Label id={"label-password"} htmlFor={"password"} className="required" required>
-                  {t("account.fields.password.label", { ns: "common" })}
+                  {t("signUpRegistration.fields.password.label")}
                 </Label>
-                <Description className="text-p text-black-default" id={"password-hint"}>
-                  {t("account.fields.password.hint", { ns: "common" })}
-                </Description>
+                <div className="text-p text-black-default mb-2" id={"password-hint"}>
+                  {t("signUpRegistration.fields.password.hintList.title")}
+                  <ul className="mt-2">
+                    <li>{t("signUpRegistration.fields.password.hintList.characters")}</li>
+                    <li>{t("signUpRegistration.fields.password.hintList.number")}</li>
+                    <li>{t("signUpRegistration.fields.password.hintList.capital")}</li>
+                    <li>{t("signUpRegistration.fields.password.hintList.symbol")}</li>
+                  </ul>
+                </div>
                 <TextInput
                   className="h-10 w-full max-w-lg rounded"
                   type={"password"}
                   id={"password"}
                   name={"password"}
-                  ariaDescribedBy={"desc-username-hint"}
+                  ariaDescribedBy={"password-hint"}
                 />
               </div>
               <div className="focus-group">
@@ -217,12 +280,12 @@ const Register = () => {
                   name={"passwordConfirmation"}
                 />
               </div>
-              <p className="mb-10 -mt-8 gc-description">
+              <p className="-mt-2 mb-10">
                 {t("signUpRegistration.termsAgreement")}&nbsp;
                 <Link href={"/terms-of-use"}>{t("signUpRegistration.termsAgreementLink")}</Link>
               </p>
 
-              <Button className="gc-button--blue" type="submit">
+              <Button theme="primary" type="submit">
                 {t("signUpRegistration.signUpButton")}
               </Button>
             </form>
@@ -250,7 +313,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       ...(context.locale &&
-        (await serverSideTranslations(context.locale, ["common", "cognito-errors", "signup"]))),
+        (await serverSideTranslations(context.locale, [
+          "common",
+          "cognito-errors",
+          "signup",
+          "auth-verify",
+        ]))),
     },
   };
 };
