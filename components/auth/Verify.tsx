@@ -116,7 +116,7 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
                 </div>
                 <TextInput
                   className="h-10 w-36 rounded"
-                  type="password"
+                  type="text"
                   id="verificationCode"
                   name="verificationCode"
                   ariaDescribedBy="verificationCode-hint"
