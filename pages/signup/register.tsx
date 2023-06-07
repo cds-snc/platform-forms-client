@@ -21,7 +21,6 @@ import { getServerSession } from "next-auth/next";
 import Link from "next/link";
 import Head from "next/head";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
-import { FormikHelpers } from "formik";
 import { fetchWithCsrfToken } from "@lib/hooks/auth/fetchWithCsrfToken";
 import { hasError } from "@lib/hasError";
 import { logMessage } from "@lib/logger";
@@ -43,18 +42,15 @@ const Register = () => {
     handleErrorById,
   } = useLogin();
 
-  const register = async (
-    {
-      username,
-      password,
-      name,
-    }: {
-      username: string;
-      password: string;
-      name: string;
-    },
-    { setSubmitting }: FormikHelpers<{ username: string; password: string; name: string }>
-  ) => {
+  const register = async ({
+    username,
+    password,
+    name,
+  }: {
+    username: string;
+    password: string;
+    name: string;
+  }) => {
     authErrorsReset();
     try {
       // Register the user. An error is thrown if the username exists etc.
@@ -76,8 +72,6 @@ const Register = () => {
         return;
       }
       handleErrorById(t("InternalServiceException"));
-    } finally {
-      setSubmitting(false);
     }
   };
 
@@ -163,11 +157,16 @@ const Register = () => {
         <title>{t("signUpRegistration.title")}</title>
       </Head>
       <Formik
-        initialValues={{ username: "", password: "", name: "" }}
-        onSubmit={async (values, formikHelpers) => {
+        initialValues={{ username: "", password: "", passwordConfirmation: "", name: "" }}
+        onSubmit={async (values, { setSubmitting }) => {
           username.current = values.username;
           password.current = values.password;
-          await register({ ...values }, formikHelpers);
+          await register({
+            username: username.current,
+            password: password.current,
+            name: values.name,
+          });
+          setSubmitting(false);
         }}
         validateOnChange={false}
         validateOnBlur={false}
@@ -240,7 +239,7 @@ const Register = () => {
                   type={"email"}
                   id={"username"}
                   name={"username"}
-                  ariaDescribedBy={"desc-username-hint"}
+                  ariaDescribedBy={"username-hint"}
                 />
               </div>
               <div className="focus-group">

@@ -121,9 +121,9 @@ const LoginStep = ({
                 <Label id={"label-username"} htmlFor={"username"} className="required" required>
                   {t("fields.username.label")}
                 </Label>
-                <Description className="text-p text-black-default" id="login-description">
+                <div className="text-p text-black-default mb-2" id="login-description">
                   {t("fields.username.description")}
-                </Description>
+                </div>
                 <TextInput
                   className="h-10 w-full max-w-lg rounded"
                   type={"email"}

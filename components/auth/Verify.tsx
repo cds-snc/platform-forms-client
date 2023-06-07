@@ -111,9 +111,9 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
                 >
                   {t("verify.fields.confirmationCode.label")}
                 </Label>
-                <Description className="text-p text-black-default" id={"verificationCode-hint"}>
+                <div className="text-p text-black-default mb-2" id={"verificationCode-hint"}>
                   {t("verify.fields.confirmationCode.description")}
-                </Description>
+                </div>
                 <TextInput
                   className="h-10 w-36 rounded"
                   type="password"
