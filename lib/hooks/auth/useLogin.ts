@@ -18,16 +18,21 @@ export const useLogin = () => {
   const login = async ({ username, password }: { username: string; password: string }) => {
     authErrorsReset();
     try {
+      const token = await getCsrfToken();
+      if (!token) {
+        throw new Error("CSRF token not found");
+      }
+
       const { data } = await axios({
         url: "/api/auth/signin/cognito",
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
+          "X-CSRF-Token": token,
         },
         data: new URLSearchParams({
           username,
           password,
-          csrfToken: (await getCsrfToken()) ?? "noToken",
         }),
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       });
