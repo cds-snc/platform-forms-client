@@ -31,6 +31,8 @@ export const FileNameInput = () => {
     };
   }, [remoteRef, setRef, removeRef]);
 
+  // React Hook that lets you customize the handle exposed as a ref
+  // In this case we are only exposing the focus function
   useImperativeHandle(
     remoteRef,
     () => {
