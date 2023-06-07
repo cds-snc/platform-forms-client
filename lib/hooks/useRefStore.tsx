@@ -1,4 +1,4 @@
-import React, { createContext, useRef, useContext } from "react";
+import React, { createContext, useRef, useContext, useCallback } from "react";
 import { logMessage } from "@lib/logger";
 interface RefStore {
   getRef: (key: string) => React.RefObject<HTMLElement> | undefined;
@@ -11,18 +11,25 @@ const RefStoreContext = createContext<RefStore | undefined>(undefined);
 export const RefStoreProvider = ({ children }: { children: React.ReactNode }) => {
   const refStore = useRef(new Map<string, React.RefObject<HTMLElement>>());
 
-  const getRef = (key: string) => {
-    const value = refStore.current.get(key);
-    logMessage.debug(`getRef :key: ${key}, value: ${value}`);
-    return value;
-  };
-  const setRef = (key: string, ref: React.RefObject<HTMLElement>) => {
-    const store = refStore.current;
-    store.set(key, ref);
-    logMessage.debug(`setRef :key: ${key}, ref: ${ref}`);
-  };
+  const getRef = useCallback(
+    (key: string) => {
+      const value = refStore.current.get(key);
+      logMessage.debug(`getRef :key: ${key}, value: ${value}`);
+      return value;
+    },
+    [refStore]
+  );
 
-  const removeRef = (key: string) => refStore.current.delete(key);
+  const setRef = useCallback(
+    (key: string, ref: React.RefObject<HTMLElement>) => {
+      const store = refStore.current;
+      store.set(key, ref);
+      logMessage.debug(`setRef :key: ${key}, ref: ${ref}`);
+    },
+    [refStore]
+  );
+
+  const removeRef = useCallback((key: string) => refStore.current.delete(key), [refStore]);
 
   return (
     <RefStoreContext.Provider value={{ getRef, setRef, removeRef }}>
