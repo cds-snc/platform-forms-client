@@ -1,7 +1,7 @@
 import React, { ReactElement, useState } from "react";
 import { useRouter } from "next/router";
 import { Formik } from "formik";
-import { TextInput, Label, Alert, Description } from "@components/forms";
+import { TextInput, Label, Alert } from "@components/forms";
 import { useTranslation } from "next-i18next";
 import * as Yup from "yup";
 import Link from "next/link";
