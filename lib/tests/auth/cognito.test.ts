@@ -9,6 +9,7 @@ import {
   CognitoIdentityProviderClient,
   AdminInitiateAuthCommand,
   AdminInitiateAuthResponse,
+  CognitoIdentityProviderServiceException,
 } from "@aws-sdk/client-cognito-identity-provider";
 import { prismaMock } from "@jestUtils";
 import {
@@ -21,6 +22,7 @@ import {
 import { Base } from "__utils__/permissions";
 import { generateVerificationCode, sendVerificationCode } from "@lib/auth/2fa";
 import { registerFailed2FAAttempt, clear2FALockout } from "@lib/auth/2faLockout";
+import { logEvent } from "@lib/auditLogs";
 
 const redis = new Redis();
 jest.mock("@lib/integration/redisConnector", () => ({
@@ -45,6 +47,9 @@ const mockClear2FALockout = jest.mocked(clear2FALockout, {
   shallow: true,
 });
 
+jest.mock("@lib/auditLogs");
+const mockLogEvent = jest.mocked(logEvent, { shallow: true });
+
 /*
 JWT token including:
 {
@@ -63,13 +68,6 @@ describe("Test Cognito library", () => {
 
   describe("initiateSignIn", () => {
     it("Should return email with token if Cognito was able to authenticate the user", async () => {
-      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
-        id: "3",
-        name: "user_1",
-        email: "fads@asdf.ca",
-        privileges: Base,
-      });
-
       const cognitoMockedResponse: AdminInitiateAuthResponse = {
         AuthenticationResult: {
           IdToken: mockedCognitoToken,
@@ -88,13 +86,6 @@ describe("Test Cognito library", () => {
     });
 
     it("Should return null if Cognito was not able to authenticate the user", async () => {
-      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
-        id: "3",
-        name: "user_1",
-        email: "fads@asdf.ca",
-        privileges: Base,
-      });
-
       const cognitoMockedResponse: AdminInitiateAuthResponse = {
         AuthenticationResult: {
           IdToken: undefined,
@@ -109,6 +100,38 @@ describe("Test Cognito library", () => {
       });
 
       expect(signInResponse).toBeNull();
+    });
+
+    it("Should throw error and create audit log if Cognito returns Password attempts exceeded exception", async () => {
+      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        id: "3",
+        name: "user_1",
+        email: "fads@asdf.ca",
+        privileges: Base,
+      });
+
+      cognitoMock.on(AdminInitiateAuthCommand).rejects(
+        new CognitoIdentityProviderServiceException({
+          name: "NotAuthorizedException",
+          message: "Password attempts exceeded",
+          $fault: "client",
+          $metadata: {},
+        })
+      );
+
+      await expect(async () => {
+        await initiateSignIn({
+          username: "test@test.com",
+          password: "testtest",
+        });
+      }).rejects.toThrowError(new Error("NotAuthorizedException: Password attempts exceeded"));
+
+      expect(mockLogEvent).toHaveBeenCalledWith(
+        "3",
+        { id: "3", type: "User" },
+        "UserTooManyFailedAttempts",
+        "Password attempts exceeded for test@test.com"
+      );
     });
   });
 
@@ -260,6 +283,13 @@ describe("Test Cognito library", () => {
     });
 
     it("Should return LOCKED_OUT if email and/or verification code are incorrect and number of attempts is equal or greater than maximum allowed", async () => {
+      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        id: "3",
+        name: "user_1",
+        email: "fads@asdf.ca",
+        privileges: Base,
+      });
+
       (prismaMock.cognitoCustom2FA.findUnique as jest.MockedFunction<any>).mockResolvedValue(null);
 
       mockRegisterFailed2FAAttempt.mockResolvedValueOnce({
@@ -284,6 +314,13 @@ describe("Test Cognito library", () => {
       });
 
       expect(mockClear2FALockout).toHaveBeenCalled();
+
+      expect(mockLogEvent).toHaveBeenCalledWith(
+        "3",
+        { id: "3", type: "User" },
+        "UserTooManyFailedAttempts",
+        "2FA attempts exceeded for test@test.com"
+      );
     });
 
     it("Should return EXPIRED if verification code has expired (2FA session is no longer valid)", async () => {
