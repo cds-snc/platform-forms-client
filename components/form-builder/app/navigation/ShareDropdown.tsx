@@ -12,7 +12,6 @@ import { Button } from "@components/globals";
 import { ShareModalUnauthenticated } from "..";
 
 import { useRefStore } from "@lib/hooks/useRefStore";
-import { logMessage } from "@lib/logger";
 
 export const ShareDropdown = () => {
   const { t } = useTranslation("form-builder");

@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect, useImperativeHandle } from "react";
 
 import { useTemplateStore } from "@formbuilder/store/useTemplateStore";
 import { useTranslation } from "next-i18next";
-import { logMessage } from "@lib/logger";
 import { useRefStore } from "@lib/hooks/useRefStore";
 
 export const FileNameInput = () => {
