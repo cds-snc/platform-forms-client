@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { Button, StyledLink } from "@components/globals";
@@ -49,7 +49,7 @@ export const ReVerify = ({
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       });
 
-      // TODO: update to match any newe rrors API sends the future
+      // TODO: update to match any new errors API sends the future
       if (Number(status) !== 200) {
         return;
       }

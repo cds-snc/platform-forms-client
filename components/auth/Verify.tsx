@@ -104,6 +104,7 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
         username={username}
         authenticationFlowToken={authenticationFlowToken}
         callback={() => {
+          authErrorsReset();
           setIsReverify(false);
           // TODO: look into why the timeout is needed
           setTimeout(() => toast.success(t("reVerify.newCodeSent")), 40);
@@ -115,7 +116,7 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
   return (
     <>
       <div className="sticky top-0">
-        <ToastContainer autoClose={false} />
+        <ToastContainer />
       </div>
       <Formik
         initialValues={{ verificationCode: "" }}
@@ -170,14 +171,9 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
                 {t("verify.confirmButton")}
               </Button>
               <div className="flex mt-12">
-                {/* Note: this is a special button that looks like a link with specific styling. Otherwise the Button component should be used */}
-                <button
-                  type="button"
-                  className="block shadow-none bg-transparent text-blue-dark hover:text-blue-hover underline border-0 mr-8"
-                  onClick={() => setIsReverify(true)}
-                >
+                <Button theme="link" className="mr-8" onClick={() => setIsReverify(true)}>
                   {t("verify.resendConfirmationCodeButton")}
-                </button>
+                </Button>
                 <Link href={"/form-builder/support"}>{t("verify.help")}</Link>
               </div>
             </form>
