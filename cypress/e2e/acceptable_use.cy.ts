@@ -35,6 +35,7 @@ describe("Test acceptable use Page", () => {
     cy.url().should("contain", "/auth/policy");
     cy.url().should("contain", "?referer=/myforms");
     cy.get("#acceptableUse").click();
+    cy.url().should("not.contain", "/auth/policy");
     cy.url().should("contain", "/myforms");
   });
 });

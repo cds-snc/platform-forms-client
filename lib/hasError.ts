@@ -8,18 +8,22 @@ export const hasError = (
     return false;
   }
 
-  let message = "";
+  try {
+    let message = "";
 
-  if (axios.isAxiosError(error)) {
-    message = error.response?.data?.message as string;
-  } else if (error instanceof Error) {
-    message = error.message;
-  } else {
-    message = error.toString();
-  }
+    if (axios.isAxiosError(error)) {
+      message = error.response?.data?.message as string;
+    } else if (error instanceof Error) {
+      message = error.message;
+    } else {
+      message = error.toString();
+    }
 
-  if (typeof errorNames === "string") {
-    errorNames = [errorNames];
+    if (typeof errorNames === "string") {
+      errorNames = [errorNames];
+    }
+    return errorNames.some((errorName) => message.includes(errorName));
+  } catch (e) {
+    return false;
   }
-  return errorNames.some((errorName) => message.includes(errorName));
 };

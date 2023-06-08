@@ -10,7 +10,7 @@ describe("Form builder share", () => {
           set(serverSideProps) {
             serverSideProps.context = {
               user: {
-                acceptableUse: false,
+                acceptableUse: true,
                 name: null,
                 userId: "testId",
               },

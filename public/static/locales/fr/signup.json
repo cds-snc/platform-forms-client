@@ -1,22 +1,4 @@
 {
-  "signUpConfirmation": {
-    "title": "Vérifiez votre courriel",
-    "resendConfirmationCodeButton": "Envoyer un nouveau code de vérification",
-    "emailHasBeenSent": "Un courriel ayant un code de vérification a été envoyé à",
-    "confirmButton": "Continuer",
-    "resendConfirmationCode": {
-      "title": "Vérifiez votre courriel",
-      "body": "Un courriel avec un code de vérification vous a été envoyé"
-    },
-    "fields": {
-      "confirmationCode": {
-        "label": "Entrer le code de vérification pour compléter la création de votre compte",
-        "error": {
-          "number": "Ceci doit être un numéro"
-        }
-      }
-    }
-  },
   "signUpRegistration": {
     "title": "Créer un compte",
     "alreadyHaveAnAccount": "Si vous avez déjà un compte,",
@@ -27,7 +9,20 @@
     "fields": {
       "username": {
         "label": "Adresse courriel",
-        "hint": "Il faut fournir une adresse courriel du gouvernement fédéral."
+        "hint": "Il faut fournir une adresse courriel du gouvernement fédéral.",
+        "error": {
+          "validGovEmail": "This field must be a valid federal government email.[FR]"
+        }
+      },
+      "password": {
+        "label": "Password",
+        "hintList": {
+          "title": "Votre mot de passe devrait être difficile à deviner avec :",
+          "characters": "Au moins 8 caractères",
+          "number": "Un chiffre",
+          "capital": "Une lettre majuscule",
+          "symbol": "Un symbole"
+        }
       },
       "name": {
         "label": "Nom complet",
@@ -40,7 +35,6 @@
   "registrationClosed": "L'inscription est fermée pour le moment.",
   "accountCreated": {
     "title": "Compte créé sur Formulaires GC",
-    "yourAccountTitle": "Ce que vous pouvez faire avec votre compte",
     "yourAccountListDescription": "Ce compte vous permet de",
     "yourAccountList": {
       "item1": "rédiger une ébauche de formulaire.",

@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import { FormikHelpers } from "formik";
 import { logMessage } from "@lib/logger";
 import { useTranslation } from "next-i18next";
-import { useState } from "react";
 import { fetchWithCsrfToken } from "./fetchWithCsrfToken";
 import { useAuthErrors } from "./useAuthErrors";
 import { hasError } from "@lib/hasError";
@@ -12,7 +11,6 @@ export const useResetPassword = () => {
   const router = useRouter();
   const { t } = useTranslation("cognito-errors");
   const username = useRef("");
-  const [needsConfirmation, setNeedsConfirmation] = useState(false);
   const [authErrorsState, { authErrorsReset, handleErrorById }] = useAuthErrors();
 
   const sendForgotPassword = async (
@@ -87,8 +85,6 @@ export const useResetPassword = () => {
     sendForgotPassword,
     confirmPasswordReset,
     username,
-    needsConfirmation,
-    setNeedsConfirmation,
     authErrorsState,
     authErrorsReset,
   };
