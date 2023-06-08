@@ -6,9 +6,13 @@ import { useTranslation } from "next-i18next";
 import * as Yup from "yup";
 import Link from "next/link";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
-import { Button, StyledLink } from "@components/globals";
-import { useVerify } from "@lib/hooks/auth";
+import { Button } from "@components/globals";
 import { toast, ToastContainer } from "@components/form-builder/app/shared/Toast";
+import { logMessage } from "@lib/logger";
+import { signIn } from "next-auth/react";
+import { hasError } from "@lib/hasError";
+import { useAuthErrors } from "@lib/hooks/auth/useAuthErrors";
+import { ReVerify } from "./ReVerify";
 
 interface VerifyProps {
   username: React.MutableRefObject<string>;
@@ -18,40 +22,55 @@ interface VerifyProps {
 export const Verify = ({ username, authenticationFlowToken }: VerifyProps): ReactElement => {
   const router = useRouter();
   const { t, i18n } = useTranslation(["auth-verify", "cognito-errors", "common"]);
-  const { verify, reVerify, authErrorsState, authErrorsReset } = useVerify();
+  const [authErrorsState, { authErrorsReset, handleErrorById }] = useAuthErrors();
   const [isReVerify, setIsReverify] = useState(false);
 
   const handleVerify = async ({ verificationCode }: { verificationCode: string }) => {
     authErrorsReset();
-    const data = await verify({
-      username: username.current,
-      authenticationFlowToken: authenticationFlowToken.current,
-      verificationCode,
-    });
-
-    if (data) {
-      router.push({
-        pathname: `/${i18n.language}/auth/policy`,
-        search: "?referer=/signup/account-created",
+    try {
+      const data = await signIn("cognito", {
+        username: username.current,
+        verificationCode: verificationCode,
+        authenticationFlowToken: authenticationFlowToken.current,
+        redirect: false,
+        json: true,
       });
-    }
-  };
 
-  const handleReVerify = async () => {
-    authErrorsReset();
-    const result = await reVerify({
-      username: username.current,
-      authenticationFlowToken: authenticationFlowToken.current,
-      callback: () => {
-        // TODO: look into why timeout needed..
-        setTimeout(() => {
-          toast.success(t("reVerify.newCodeSent"));
-        }, 4);
-      },
-    });
+      // Failed
+      if (data && !data?.ok) {
+        const error = data?.error;
+        if (error) {
+          handleErrorById(error);
+        }
+        return;
+      }
 
-    if (result) {
-      setIsReverify(false);
+      // Success
+      if (data) {
+        router.push({
+          pathname: `/${i18n.language}/auth/policy`,
+          search: "?referer=/signup/account-created",
+        });
+      }
+    } catch (err) {
+      logMessage.error(err);
+
+      if (hasError(["CredentialsSignin", "CSRF token not found"], err)) {
+        // Missing CsrfToken or username so have the user try signing in
+        await router.push("/auth/login");
+      } else if (hasError("2FAInvalidVerificationCode", err)) {
+        handleErrorById("2FAInvalidVerificationCode");
+      } else if (hasError("CodeMismatchException", err)) {
+        handleErrorById("CodeMismatchException");
+      } else if (hasError("ExpiredCodeException", err)) {
+        handleErrorById("ExpiredCodeException");
+      } else if (hasError("2FAExpiredSession", err)) {
+        handleErrorById("2FAExpiredSession");
+      } else if (hasError("TooManyRequestsException", err)) {
+        handleErrorById("TooManyRequestsException");
+      } else {
+        handleErrorById("InternalServiceException");
+      }
     }
   };
 
@@ -64,18 +83,15 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
 
   if (isReVerify) {
     return (
-      <>
-        <h1 className="border-0 mt-6 mb-6">{t("reVerify.title")}</h1>
-        <p className="mt-10">{t("reVerify.description")}</p>
-        <div className="flex mt-16">
-          <Button theme="primary" className="mr-4" onClick={handleReVerify}>
-            {t("reVerify.buttons.reSendCode")}
-          </Button>
-          <StyledLink theme="secondaryButton" href="/form-builder/support">
-            {t("reVerify.buttons.getSupport")}
-          </StyledLink>
-        </div>
-      </>
+      <ReVerify
+        username={username}
+        authenticationFlowToken={authenticationFlowToken}
+        callback={() => {
+          setIsReverify(false);
+          // TODO: look into why the timeout is needed
+          setTimeout(() => toast.success(t("reVerify.newCodeSent")), 40);
+        }}
+      />
     );
   }
 
