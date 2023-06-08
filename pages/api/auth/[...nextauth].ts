@@ -94,11 +94,6 @@ export const authOptions: NextAuthOptions = {
     async signOut({ token }) {
       logEvent(token.userId, { type: "User", id: token.userId }, "UserSignOut");
     },
-    async createUser({ user }) {
-      // This only fires for non-credential providers
-      // CredentialProvider user registration is triggered in getOrCreateUser
-      logEvent(user.id, { type: "User", id: user.id }, "UserRegistration");
-    },
   },
 
   callbacks: {
@@ -115,6 +110,7 @@ export const authOptions: NextAuthOptions = {
         token.userId = user.id;
         token.lastLoginTime = new Date();
         token.acceptableUse = false;
+        token.newlyRegistered = user.newlyRegistered;
       }
 
       // Any logic that needs to happen after JWT initializtion needs to be below this point.
@@ -126,12 +122,17 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }) {
       // Add info like 'role' to session object
-      session.user.id = token.userId;
-      session.user.lastLoginTime = token.lastLoginTime;
-      session.user.acceptableUse = token.acceptableUse;
-      session.user.name = token.name ?? null;
-      session.user.image = session.user?.image ?? null;
-      session.user.privileges = await getPrivilegeRulesForUser(token.userId as string);
+
+      session.user = {
+        id: token.userId,
+        lastLoginTime: token.lastLoginTime,
+        acceptableUse: token.acceptableUse,
+        name: token.name ?? null,
+        email: token.email ?? null,
+        image: token.picture ?? null,
+        privileges: await getPrivilegeRulesForUser(token.userId as string),
+        ...(token.newlyRegistered && { newlyRegistered: token.newlyRegistered }),
+      };
 
       return session;
     },
