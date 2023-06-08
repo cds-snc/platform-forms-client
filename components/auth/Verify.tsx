@@ -72,8 +72,7 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
     } catch (err) {
       logMessage.error(err);
 
-      if (hasError(["CredentialsSignin", "CSRF token not found"], err)) {
-        // Missing CsrfToken or username so have the user try signing in
+      if (hasError(["CredentialsSignin", "2FALockedOutSession", "2FAExpiredSession"], err)) {
         await router.push("/auth/login");
       } else if (hasError("2FAInvalidVerificationCode", err)) {
         handleErrorById("2FAInvalidVerificationCode");
@@ -81,8 +80,6 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
         handleErrorById("CodeMismatchException");
       } else if (hasError("ExpiredCodeException", err)) {
         handleErrorById("ExpiredCodeException");
-      } else if (hasError("2FAExpiredSession", err)) {
-        handleErrorById("2FAExpiredSession");
       } else if (hasError("TooManyRequestsException", err)) {
         handleErrorById("TooManyRequestsException");
       } else {
