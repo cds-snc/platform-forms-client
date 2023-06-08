@@ -16,6 +16,7 @@
         "error": {
           "notEmpty": "Cannot be empty",
           "length": "Must be 5 characters",
+          "noSymbols": "Cannot contain symbols",
           "notFound": "Code not found",
           "expired": "Code expired. Try signing in again."
         }
@@ -28,6 +29,7 @@
     "buttons": {
       "reSendCode": "Re-send code",
       "getSupport": "Get support"
-    }
+    },
+    "newCodeSent": "New code sent"
   }
 }

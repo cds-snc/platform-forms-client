@@ -6,9 +6,13 @@ import { useTranslation } from "next-i18next";
 import * as Yup from "yup";
 import Link from "next/link";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
+import { Button } from "@components/globals";
+import { toast, ToastContainer } from "@components/form-builder/app/shared/Toast";
+import { logMessage } from "@lib/logger";
+import { signIn } from "next-auth/react";
+import { hasError } from "@lib/hasError";
 import { useAuthErrors } from "@lib/hooks/auth/useAuthErrors";
-import { Button, StyledLink } from "@components/globals";
-import { useVerify } from "@lib/hooks/auth";
+import { ReVerify } from "./ReVerify";
 import { useSession } from "next-auth/react";
 
 interface VerifyProps {
@@ -19,7 +23,6 @@ interface VerifyProps {
 export const Verify = ({ username, authenticationFlowToken }: VerifyProps): ReactElement => {
   const router = useRouter();
   const { t, i18n } = useTranslation(["auth-verify", "cognito-errors", "common"]);
-  const { verify, reVerify } = useVerify();
   const [authErrorsState, { authErrorsReset, handleErrorById }] = useAuthErrors();
   const [isReVerify, setIsReverify] = useState(false);
   const { data: session, status: authStatus } = useSession();
@@ -39,54 +42,85 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
     }
   }, [session, authStatus, router, i18n.language]);
 
-  // TODO - add error handling
-  const handleReVerify = async () => {
-    await reVerify({
-      username: username.current,
-      authenticationFlowToken: authenticationFlowToken.current,
-    });
-    setIsReverify(false);
+  const handleVerify = async ({ verificationCode }: { verificationCode: string }) => {
+    authErrorsReset();
+    try {
+      const result = await signIn("cognito", {
+        username: username.current,
+        verificationCode: verificationCode,
+        authenticationFlowToken: authenticationFlowToken.current,
+        redirect: false,
+        json: true,
+      });
+
+      // Failed
+      if (!result?.ok) {
+        const error = result?.error;
+        if (error) {
+          handleErrorById(error);
+        }
+        return;
+      }
+
+      // Success
+      if (result) {
+        router.push({
+          pathname: `/${i18n.language}/auth/policy`,
+          search: "?referer=/signup/account-created",
+        });
+      }
+    } catch (err) {
+      logMessage.error(err);
+
+      if (hasError(["CredentialsSignin", "CSRF token not found"], err)) {
+        // Missing CsrfToken or username so have the user try signing in
+        await router.push("/auth/login");
+      } else if (hasError("2FAInvalidVerificationCode", err)) {
+        handleErrorById("2FAInvalidVerificationCode");
+      } else if (hasError("CodeMismatchException", err)) {
+        handleErrorById("CodeMismatchException");
+      } else if (hasError("ExpiredCodeException", err)) {
+        handleErrorById("ExpiredCodeException");
+      } else if (hasError("2FAExpiredSession", err)) {
+        handleErrorById("2FAExpiredSession");
+      } else if (hasError("TooManyRequestsException", err)) {
+        handleErrorById("TooManyRequestsException");
+      } else {
+        handleErrorById("InternalServiceException");
+      }
+    }
   };
 
   const validationSchema = Yup.object().shape({
-    verificationCode: Yup.string().required(t("verify.fields.confirmationCode.error.notEmpty")),
+    verificationCode: Yup.string()
+      .required(t("verify.fields.confirmationCode.error.notEmpty"))
+      .matches(/^[a-z0-9]*$/i, t("verify.fields.confirmationCode.error.noSymbols"))
+      .matches(/^[a-z0-9]{5}$/i, t("verify.fields.confirmationCode.error.length")),
   });
 
   if (isReVerify) {
     return (
-      <>
-        <h1 className="border-0 mt-6 mb-6">{t("reVerify.title")}</h1>
-        <p className="mt-10">{t("reVerify.description")}</p>
-        <div className="flex mt-16">
-          <Button theme="primary" className="mr-4" onClick={handleReVerify}>
-            {t("reVerify.buttons.reSendCode")}
-          </Button>
-          <StyledLink theme="secondaryButton" href="/form-builder/support">
-            {t("reVerify.buttons.getSupport")}
-          </StyledLink>
-        </div>
-      </>
+      <ReVerify
+        username={username}
+        authenticationFlowToken={authenticationFlowToken}
+        callback={() => {
+          authErrorsReset();
+          setIsReverify(false);
+          // TODO: look into why the timeout is needed
+          setTimeout(() => toast.success(t("reVerify.newCodeSent")), 40);
+        }}
+      />
     );
   }
 
   return (
     <>
+      <div className="sticky top-0">
+        <ToastContainer />
+      </div>
       <Formik
         initialValues={{ verificationCode: "" }}
-        onSubmit={async ({ verificationCode }) => {
-          const data = await verify({
-            username: username.current,
-            authenticationFlowToken: authenticationFlowToken.current,
-            verificationCode,
-          });
-
-          if (!data?.ok) {
-            const error = data?.error;
-            if (error) {
-              handleErrorById(error);
-            }
-          }
-        }}
+        onSubmit={handleVerify}
         validateOnChange={false}
         validateOnBlur={false}
         validationSchema={validationSchema}
@@ -137,15 +171,9 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
                 {t("verify.confirmButton")}
               </Button>
               <div className="flex mt-12">
-                <button
-                  type="button"
-                  className="block shadow-none bg-transparent text-blue-dark hover:text-blue-hover underline border-0 mr-8"
-                  onClick={() => {
-                    setIsReverify(true);
-                  }}
-                >
+                <Button theme="link" className="mr-8" onClick={() => setIsReverify(true)}>
                   {t("verify.resendConfirmationCodeButton")}
-                </button>
+                </Button>
                 <Link href={"/form-builder/support"}>{t("verify.help")}</Link>
               </div>
             </form>
