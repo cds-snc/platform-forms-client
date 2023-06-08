@@ -110,7 +110,9 @@ Cypress.Commands.add("login", () => {
       },
     }).then(() => {
       // Ensure cookie is created
-      cy.waitUntil(() => cy.getCookie("next-auth.session-token").then((cookie) => !!cookie));
+      cy.waitUntil(() =>
+        cy.getCookie("next-auth.session-token").then((cookie) => Boolean(cookie && cookie.value))
+      );
     });
   });
 });
@@ -136,7 +138,9 @@ Cypress.Commands.add("logout", () => {
       },
     }).then(() => {
       // Ensure cookie is removed
-      cy.waitUntil(() => cy.getCookie("next-auth.session-token").then((cookie) => !cookie));
+      cy.waitUntil(() =>
+        cy.getCookie("next-auth.session-token").then((cookie) => !cookie || !cookie.value)
+      );
     });
   });
 });
