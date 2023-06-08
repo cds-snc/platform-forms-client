@@ -1,6 +1,4 @@
-ARG VARIANT=16@sha256:2ed6bba040f90005db9785927689c0d9a9442ca2cf9a59dc52297d684285c094@sha256:b35e76ba744a975b9a5428b6c3cde1a1cf0be53b246e1e9a4874f87034222b5a@sha256:b35e76ba744a975b9a5428b6c3cde1a1cf0be53b246e1e9a4874f87034222b5a
-
-FROM node:${VARIANT}
+FROM node:16@sha256:2ed6bba040f90005db9785927689c0d9a9442ca2cf9a59dc52297d684285c094
 
 
 ARG USERNAME=node
@@ -11,7 +9,7 @@ COPY flag_initialization /src
 WORKDIR /src
 RUN yarn install
 
-FROM node:${VARIANT}
+FROM node:16@sha256:2ed6bba040f90005db9785927689c0d9a9442ca2cf9a59dc52297d684285c094
 
 ARG USERNAME=node
 ARG USER_UID=1000
@@ -22,7 +20,7 @@ WORKDIR /src
 
 RUN yarn install 
 
-FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:0-${VARIANT}
+FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:0-16@sha256:4e8ea446290f6b2456e4bd4de6d2ea966059c28c08a2defeec830b0a90e8a275
 LABEL maintainer="-"
 
 ARG USERNAME=node
