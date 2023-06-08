@@ -1,5 +1,4 @@
 import React, { createContext, useRef, useContext, useCallback } from "react";
-import { logMessage } from "@lib/logger";
 interface RefStore {
   getRef: (key: string) => React.RefObject<HTMLElement> | undefined;
   setRef: (key: string, ref: React.RefObject<HTMLElement>) => void;
@@ -14,7 +13,6 @@ export const RefStoreProvider = ({ children }: { children: React.ReactNode }) =>
   const getRef = useCallback(
     (key: string) => {
       const value = refStore.current.get(key);
-      logMessage.debug(`getRef :key: ${key}, value: ${value}`);
       return value;
     },
     [refStore]
@@ -24,7 +22,6 @@ export const RefStoreProvider = ({ children }: { children: React.ReactNode }) =>
     (key: string, ref: React.RefObject<HTMLElement>) => {
       const store = refStore.current;
       store.set(key, ref);
-      logMessage.debug(`setRef :key: ${key}, ref: ${ref}`);
     },
     [refStore]
   );
