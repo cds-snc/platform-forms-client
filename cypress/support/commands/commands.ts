@@ -108,6 +108,7 @@ Cypress.Commands.add("login", (acceptableUse = false) => {
     }).then((response) => {
       expect(response.body).to.have.property("status", "success");
       expect(response.body).to.have.property("challengeState", "MFA");
+      expect(response.body).to.have.property("authenticationFlowToken");
 
       cy.request({
         method: "POST",
@@ -116,6 +117,7 @@ Cypress.Commands.add("login", (acceptableUse = false) => {
         body: {
           username: "test.user@cds-snc.ca",
           verificationCode: "123456",
+          authenticationFlowToken: response.body.authenticationFlowToken,
           csrfToken,
           json: true,
         },
