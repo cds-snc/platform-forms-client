@@ -8,10 +8,10 @@ import {
 } from "next";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import jwt from "jsonwebtoken";
-import { hasOwnProperty } from "./tsUtils";
-import { TemporaryTokenPayload, UserAbility } from "./types";
+import { hasOwnProperty } from "../tsUtils";
+import { TemporaryTokenPayload, UserAbility } from "../types";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
-import { AccessControlError, createAbility } from "./privileges";
+import { AccessControlError, createAbility } from "../privileges";
 
 import { localPathRegEx } from "@lib/validation";
 
