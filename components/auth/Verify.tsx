@@ -6,9 +6,9 @@ import { useTranslation } from "next-i18next";
 import * as Yup from "yup";
 import Link from "next/link";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
-import { useAuthErrors } from "@lib/hooks/auth/useAuthErrors";
 import { Button, StyledLink } from "@components/globals";
 import { useVerify } from "@lib/hooks/auth";
+import { toast, ToastContainer } from "@components/form-builder/app/shared/Toast";
 
 interface VerifyProps {
   username: React.MutableRefObject<string>;
@@ -18,21 +18,48 @@ interface VerifyProps {
 export const Verify = ({ username, authenticationFlowToken }: VerifyProps): ReactElement => {
   const router = useRouter();
   const { t, i18n } = useTranslation(["auth-verify", "cognito-errors", "common"]);
-  const { verify, reVerify } = useVerify();
-  const [authErrorsState, { authErrorsReset, handleErrorById }] = useAuthErrors();
+  const { verify, reVerify, authErrorsState, authErrorsReset } = useVerify();
   const [isReVerify, setIsReverify] = useState(false);
 
-  // TODO - add error handling
-  const handleReVerify = async () => {
-    await reVerify({
+  const handleVerify = async ({ verificationCode }: { verificationCode: string }) => {
+    authErrorsReset();
+    const data = await verify({
       username: username.current,
       authenticationFlowToken: authenticationFlowToken.current,
+      verificationCode,
     });
-    setIsReverify(false);
+
+    if (data) {
+      router.push({
+        pathname: `/${i18n.language}/auth/policy`,
+        search: "?referer=/signup/account-created",
+      });
+    }
+  };
+
+  const handleReVerify = async () => {
+    authErrorsReset();
+    const result = await reVerify({
+      username: username.current,
+      authenticationFlowToken: authenticationFlowToken.current,
+      callback: () => {
+        // TODO: look into why timeout needed..
+        setTimeout(() => {
+          toast.success(t("reVerify.newCodeSent"));
+        }, 4);
+      },
+    });
+
+    if (result) {
+      setIsReverify(false);
+    }
   };
 
   const validationSchema = Yup.object().shape({
-    verificationCode: Yup.string().required(t("verify.fields.confirmationCode.error.notEmpty")),
+    verificationCode: Yup.string()
+      .required(t("verify.fields.confirmationCode.error.notEmpty"))
+      .matches(/^[a-z0-9]*$/i, t("verify.fields.confirmationCode.error.noSymbols"))
+      .matches(/^[a-z0-9]{5}$/i, t("verify.fields.confirmationCode.error.length")),
   });
 
   if (isReVerify) {
@@ -54,29 +81,12 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
 
   return (
     <>
+      <div className="sticky top-0">
+        <ToastContainer autoClose={false} />
+      </div>
       <Formik
         initialValues={{ verificationCode: "" }}
-        onSubmit={async ({ verificationCode }) => {
-          const data = await verify({
-            username: username.current,
-            authenticationFlowToken: authenticationFlowToken.current,
-            verificationCode,
-          });
-
-          if (data && !data?.ok) {
-            const error = data?.error;
-            if (error) {
-              handleErrorById(error);
-            }
-          }
-
-          if (data) {
-            router.push({
-              pathname: `/${i18n.language}/auth/policy`,
-              search: "?referer=/signup/account-created",
-            });
-          }
-        }}
+        onSubmit={handleVerify}
         validateOnChange={false}
         validateOnBlur={false}
         validationSchema={validationSchema}
@@ -127,12 +137,11 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
                 {t("verify.confirmButton")}
               </Button>
               <div className="flex mt-12">
+                {/* Note: this is a special button that looks like a link with specific styling. Otherwise the Button component should be used */}
                 <button
                   type="button"
                   className="block shadow-none bg-transparent text-blue-dark hover:text-blue-hover underline border-0 mr-8"
-                  onClick={() => {
-                    setIsReverify(true);
-                  }}
+                  onClick={() => setIsReverify(true)}
                 >
                   {t("verify.resendConfirmationCodeButton")}
                 </button>
