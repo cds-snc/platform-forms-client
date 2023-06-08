@@ -169,7 +169,11 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
       return res.status(400).json({ status: "error", error: "Missing username or password" });
 
     if (process.env.APP_ENV === "test") {
-      return res.status(200).json({ status: "success", challengeState: "MFA" });
+      return res.status(200).json({
+        status: "success",
+        challengeState: "MFA",
+        authenticationFlowToken: "0000-1111-2222-3333",
+      });
     }
 
     try {
