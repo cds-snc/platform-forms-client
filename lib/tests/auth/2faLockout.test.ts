@@ -4,17 +4,12 @@
 
 import Redis from "ioredis-mock";
 import { registerFailed2FAAttempt, clear2FALockout } from "@lib/auth";
-import { logMessage } from "@lib/logger";
 
 const redis = new Redis();
 
 jest.mock("@lib/integration/redisConnector", () => ({
   getRedisInstance: jest.fn(() => redis),
 }));
-
-jest.mock("@lib/logger");
-
-const mockLogMessage = jest.mocked(logMessage, { shallow: false });
 
 const TEST_EMAIL = "myEmail@email.com";
 
@@ -32,31 +27,28 @@ describe("Test 2FA lockout library", () => {
     redis.flushall();
   });
 
-  it("Should not lock user out even after 2 failed attempts", async () => {
-    await registerPreviousFailedAttempts(1);
+  it("Should not lock user out if below maximum number of failed attempts", async () => {
+    await registerPreviousFailedAttempts(3);
 
     const response = await registerFailed2FAAttempt(TEST_EMAIL);
 
     expect(response.isLockedOut).toBe(false);
   });
 
-  it("Should lock user out after 3 failed attempts", async () => {
-    await registerPreviousFailedAttempts(2);
+  it("Should lock user out after maximum number of failed attempts", async () => {
+    await registerPreviousFailedAttempts(4);
 
     const response = await registerFailed2FAAttempt(TEST_EMAIL);
 
     expect(response.isLockedOut).toBe(true);
-    expect(mockLogMessage.warn).toHaveBeenCalledWith(
-      `2FA session was locked out for user: ${TEST_EMAIL}`
-    );
   });
 
   it("registerFailed2FAAttempt should return information on remaining number of attempts before lockout", async () => {
-    for (let i = 1; i < 3; i++) {
+    for (let i = 1; i < 5; i++) {
       // eslint-disable-next-line no-await-in-loop
       const lockoutResponse = await registerFailed2FAAttempt(TEST_EMAIL);
       expect(lockoutResponse.isLockedOut).toBe(false);
-      expect(lockoutResponse.remainingNumberOfAttemptsBeforeLockout).toBe(3 - i);
+      expect(lockoutResponse.remainingNumberOfAttemptsBeforeLockout).toEqual(5 - i);
     }
   });
 

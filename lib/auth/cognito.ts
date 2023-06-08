@@ -8,6 +8,7 @@ import { logEvent } from "@lib/auditLogs";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { generateVerificationCode, sendVerificationCode } from "./2fa";
 import { registerFailed2FAAttempt, clear2FALockout } from "./2faLockout";
+import { logMessage } from "@lib/logger";
 
 type Credentials = {
   username: string;
@@ -54,17 +55,6 @@ export const initiateSignIn = async ({
   username,
   password,
 }: Credentials): Promise<CognitoToken | null> => {
-  const prismaUser = await prisma.user
-    .findUnique({
-      where: {
-        email: username,
-      },
-      select: {
-        accounts: true,
-      },
-    })
-    .catch((e) => prismaErrors(e, null));
-
   const params: AdminInitiateAuthCommandInput = {
     AuthFlow: "ADMIN_USER_PASSWORD_AUTH",
     ClientId: process.env.COGNITO_APP_CLIENT_ID,
@@ -107,13 +97,27 @@ export const initiateSignIn = async ({
       e instanceof CognitoIdentityProviderServiceException &&
       e.name === "NotAuthorizedException" &&
       e.message === "Password attempts exceeded"
-    )
+    ) {
+      const prismaUser = await prisma.user
+        .findUnique({
+          where: {
+            email: username,
+          },
+          select: {
+            id: true,
+          },
+        })
+        .catch((e) => prismaErrors(e, null));
+
       logEvent(
-        prismaUser?.accounts[0].id ?? "unknown",
-        { type: "User", id: prismaUser?.accounts[0].id ?? "unknown" },
+        prismaUser?.id ?? "unknown",
+        { type: "User", id: prismaUser?.id ?? "unknown" },
         "UserTooManyFailedAttempts",
         `Password attempts exceeded for ${username}`
       );
+
+      logMessage.warn("Cognito Lockout: Password attempts exceeded");
+    }
 
     // throw new Error with cognito error converted to string so as to include the exception name
     throw new Error((e as CognitoIdentityProviderServiceException).toString());
@@ -215,6 +219,27 @@ export const validate2FAVerificationCode = async (
     if (lockoutResponse.isLockedOut) {
       await delete2FAVerificationCode();
       await clear2FALockout(email);
+
+      const prismaUser = await prisma.user
+        .findUnique({
+          where: {
+            email: email,
+          },
+          select: {
+            id: true,
+          },
+        })
+        .catch((e) => prismaErrors(e, null));
+
+      logEvent(
+        prismaUser?.id ?? "unknown",
+        { type: "User", id: prismaUser?.id ?? "unknown" },
+        "UserTooManyFailedAttempts",
+        `2FA attempts exceeded for ${email}`
+      );
+
+      logMessage.warn("2FA Lockout: Verification code attempts exceeded");
+
       return { status: Validate2FAVerificationCodeResultStatus.LOCKED_OUT };
     } else {
       return { status: Validate2FAVerificationCodeResultStatus.INVALID };
