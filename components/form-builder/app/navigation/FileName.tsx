@@ -39,7 +39,6 @@ export const FileNameInput = () => {
       return {
         focus() {
           fileNameInput.current?.focus();
-          logMessage.debug("Calling focus function on fileNameInput");
         },
       } as HTMLInputElement;
     },

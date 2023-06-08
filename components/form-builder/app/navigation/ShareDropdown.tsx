@@ -67,7 +67,6 @@ export const ShareDropdown = () => {
                     onClick={() => {
                       // Timeout is currently required because menu steals focus on close.
                       setTimeout(() => {
-                        logMessage.debug("Initiating Focus to fileNameInput");
                         getRef("fileNameInput")?.current?.focus();
                       }, 50);
                     }}
