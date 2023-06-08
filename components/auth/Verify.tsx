@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { Formik } from "formik";
 import { TextInput, Label, Alert } from "@components/forms";
@@ -13,6 +13,7 @@ import { signIn } from "next-auth/react";
 import { hasError } from "@lib/hasError";
 import { useAuthErrors } from "@lib/hooks/auth/useAuthErrors";
 import { ReVerify } from "./ReVerify";
+import { useSession } from "next-auth/react";
 
 interface VerifyProps {
   username: React.MutableRefObject<string>;
@@ -24,11 +25,27 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
   const { t, i18n } = useTranslation(["auth-verify", "cognito-errors", "common"]);
   const [authErrorsState, { authErrorsReset, handleErrorById }] = useAuthErrors();
   const [isReVerify, setIsReverify] = useState(false);
+  const { data: session, status: authStatus } = useSession();
+
+  useEffect(() => {
+    if (authStatus === "authenticated") {
+      if (session.user.newlyRegistered) {
+        router.push({
+          pathname: `/${i18n.language}/auth/policy`,
+          search: "?referer=/signup/account-created",
+        });
+      } else {
+        router.push({
+          pathname: `/${i18n.language}/auth/policy`,
+        });
+      }
+    }
+  }, [session, authStatus, router, i18n.language]);
 
   const handleVerify = async ({ verificationCode }: { verificationCode: string }) => {
     authErrorsReset();
     try {
-      const data = await signIn("cognito", {
+      const result = await signIn("cognito", {
         username: username.current,
         verificationCode: verificationCode,
         authenticationFlowToken: authenticationFlowToken.current,
@@ -37,8 +54,8 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
       });
 
       // Failed
-      if (data && !data?.ok) {
-        const error = data?.error;
+      if (!result?.ok) {
+        const error = result?.error;
         if (error) {
           handleErrorById(error);
         }
@@ -46,7 +63,7 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
       }
 
       // Success
-      if (data) {
+      if (result) {
         router.push({
           pathname: `/${i18n.language}/auth/policy`,
           search: "?referer=/signup/account-created",
