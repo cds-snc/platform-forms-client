@@ -68,17 +68,35 @@ describe("Login Page", () => {
       cy.get("input[id='username']").type("test.user@cds-snc.ca");
       cy.get("input[id='password']").type("testTesttest");
       cy.get("[type='submit']").click();
+      cy.get("[id='verificationCodeForm']").should("be.visible");
     });
     it("page renders", () => {
       cy.get("[id='verificationCodeForm']").should("be.visible");
-      cy.get("[data-testid='textInput']").should("be.visible");
+      cy.get("input[id='verificationCode']").should("be.visible");
+      cy.get("button[type='submit']").should("be.visible");
     });
     it("Displays an error message when submitting an empty form.", () => {
+      cy.get("button[type='submit']").should("be.visible");
+      cy.get("button[type='submit']").click();
+      cy.get("[data-testid='errorMessage']").should("be.visible");
+    });
+    it("Displays an error message when submitting wrong number of characters.", () => {
+      cy.get("input[id='verificationCode']").should("be.visible");
+      cy.get("input[id='verificationCode']").type("12");
+      cy.get("button[type='submit']").should("be.visible");
+      cy.get("button[type='submit']").click();
+      cy.get("[data-testid='errorMessage']").should("be.visible");
+    });
+    it("Displays an error message when submitting a symbol in the verification code.", () => {
+      cy.get("input[id='verificationCode']").should("be.visible");
+      cy.get("input[id='verificationCode']").type("12/34");
+      cy.get("button[type='submit']").should("be.visible");
       cy.get("button[type='submit']").click();
       cy.get("[data-testid='errorMessage']").should("be.visible");
     });
     it("Sucessfully submits a code", () => {
-      cy.get("input[id='verificationCode']").type("123456");
+      cy.get("input[id='verificationCode']").should("be.visible");
+      cy.get("input[id='verificationCode']").type("12345");
       cy.get("button[type='submit']").click();
       cy.url().should("contain", "/en/auth/policy");
     });
