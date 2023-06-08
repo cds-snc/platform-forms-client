@@ -4,17 +4,12 @@
 
 import Redis from "ioredis-mock";
 import { registerFailed2FAAttempt, clear2FALockout } from "@lib/auth";
-import { logMessage } from "@lib/logger";
 
 const redis = new Redis();
 
 jest.mock("@lib/integration/redisConnector", () => ({
   getRedisInstance: jest.fn(() => redis),
 }));
-
-jest.mock("@lib/logger");
-
-const mockLogMessage = jest.mocked(logMessage, { shallow: false });
 
 const TEST_EMAIL = "myEmail@email.com";
 
@@ -46,9 +41,6 @@ describe("Test 2FA lockout library", () => {
     const response = await registerFailed2FAAttempt(TEST_EMAIL);
 
     expect(response.isLockedOut).toBe(true);
-    expect(mockLogMessage.warn).toHaveBeenCalledWith(
-      `2FA session was locked out for user: ${TEST_EMAIL}`
-    );
   });
 
   it("registerFailed2FAAttempt should return information on remaining number of attempts before lockout", async () => {

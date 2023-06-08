@@ -23,6 +23,7 @@ import { Base } from "__utils__/permissions";
 import { generateVerificationCode, sendVerificationCode } from "@lib/auth/2fa";
 import { registerFailed2FAAttempt, clear2FALockout } from "@lib/auth/2faLockout";
 import { logEvent } from "@lib/auditLogs";
+import { logMessage } from "@lib/logger";
 
 const redis = new Redis();
 jest.mock("@lib/integration/redisConnector", () => ({
@@ -49,6 +50,9 @@ const mockClear2FALockout = jest.mocked(clear2FALockout, {
 
 jest.mock("@lib/auditLogs");
 const mockLogEvent = jest.mocked(logEvent, { shallow: true });
+
+jest.mock("@lib/logger");
+const mockLogMessage = jest.mocked(logMessage, { shallow: false });
 
 /*
 JWT token including:
@@ -131,6 +135,10 @@ describe("Test Cognito library", () => {
         { id: "3", type: "User" },
         "UserTooManyFailedAttempts",
         "Password attempts exceeded for test@test.com"
+      );
+
+      expect(mockLogMessage.warn).toHaveBeenCalledWith(
+        `Cognito Lockout: Password attempts exceeded`
       );
     });
   });
@@ -320,6 +328,10 @@ describe("Test Cognito library", () => {
         { id: "3", type: "User" },
         "UserTooManyFailedAttempts",
         "2FA attempts exceeded for test@test.com"
+      );
+
+      expect(mockLogMessage.warn).toHaveBeenCalledWith(
+        `2FA Lockout: Verification code attempts exceeded`
       );
     });
 

@@ -8,6 +8,7 @@ import { logEvent } from "@lib/auditLogs";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { generateVerificationCode, sendVerificationCode } from "./2fa";
 import { registerFailed2FAAttempt, clear2FALockout } from "./2faLockout";
+import { logMessage } from "@lib/logger";
 
 type Credentials = {
   username: string;
@@ -114,6 +115,8 @@ export const initiateSignIn = async ({
         "UserTooManyFailedAttempts",
         `Password attempts exceeded for ${username}`
       );
+
+      logMessage.warn("Cognito Lockout: Password attempts exceeded");
     }
 
     // throw new Error with cognito error converted to string so as to include the exception name
@@ -234,6 +237,8 @@ export const validate2FAVerificationCode = async (
         "UserTooManyFailedAttempts",
         `2FA attempts exceeded for ${email}`
       );
+
+      logMessage.warn("2FA Lockout: Verification code attempts exceeded");
 
       return { status: Validate2FAVerificationCodeResultStatus.LOCKED_OUT };
     } else {

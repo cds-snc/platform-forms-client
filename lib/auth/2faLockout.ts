@@ -1,5 +1,4 @@
 import { getRedisInstance } from "@lib/integration/redisConnector";
-import { logMessage } from "@lib/logger";
 
 export interface Lockout2FAResponse {
   isLockedOut: boolean;
@@ -14,8 +13,6 @@ export async function registerFailed2FAAttempt(email: string): Promise<Lockout2F
   const incrementedNumberOfFailedLoginAttempts = await redis.incr(`${LOCKOUT_KEY}:${email}`);
 
   const isLockedOut = incrementedNumberOfFailedLoginAttempts >= MAX_FAILED_ATTEMPTS_ALLOWED;
-
-  if (isLockedOut) logMessage.warn(`2FA session was locked out for user: ${email}`);
 
   return {
     isLockedOut,
