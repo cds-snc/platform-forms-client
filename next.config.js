@@ -1,6 +1,7 @@
 const path = require("path");
 const { i18n } = require("./next-i18next.config");
 
+const isOutputStandalone = process.env.NEXT_OUTPUT_STANDALONE === "true";
 const securityHeaders = [
   {
     key: "Strict-Transport-Security",
@@ -32,6 +33,7 @@ module.exports = {
     // Remove all console.* calls
     removeConsole: true,
   },
+  output: isOutputStandalone ? "standalone" : undefined,
   webpack: (config) => {
     // Support reading markdown
     config.module.rules.push({

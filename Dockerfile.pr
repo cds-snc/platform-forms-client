@@ -1,8 +1,9 @@
 # Form viewier that runs as a Lambda function.  It is used to create 
 # Lambda function review environments for each PR.
-FROM node:16@sha256:2ed6bba040f90005db9785927689c0d9a9442ca2cf9a59dc52297d684285c094
+FROM node:16@sha256:2ed6bba040f90005db9785927689c0d9a9442ca2cf9a59dc52297d684285c094 as build
 
 ENV NODE_ENV=production
+ENV NEXT_OUTPUT_STANDALONE=true
 
 COPY . /src
 WORKDIR /src
@@ -17,13 +18,7 @@ RUN yarn install --silent --production=false
 RUN yarn build
 RUN yarn install --production
 
-FROM node:16@sha256:2ed6bba040f90005db9785927689c0d9a9442ca2cf9a59dc52297d684285c094
-
-COPY flag_initialization /src
-WORKDIR /src
-RUN yarn install --silent 
-
-FROM node:16@sha256:2ed6bba040f90005db9785927689c0d9a9442ca2cf9a59dc52297d684285c094
+FROM node:16@sha256:2ed6bba040f90005db9785927689c0d9a9442ca2cf9a59dc52297d684285c094 as final
 LABEL maintainer="-"
 
 ARG GOOGLE_CLIENT_ID
@@ -47,24 +42,23 @@ ENV COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID
 ARG TAG_VERSION
 ENV TAG_VERSION=$TAG_VERSION
 
+ENV AWS_LWA_ENABLE_COMPRESSION=true
+ENV PORT=3000
+
 WORKDIR /src
 
-COPY package.json yarn.lock ./
+COPY --from=build /src/.next/standalone ./
+COPY --from=build /src/.next/static ./.next/static
 
-COPY --from=0 /src/node_modules ./node_modules
-COPY --from=0 /src/.next ./.next
+COPY package.json yarn.lock next.config.js next-i18next.config.js ./
 COPY public ./public
-COPY next.config.js .
-COPY next-i18next.config.js .
 COPY prisma ./prisma
 COPY form-builder-templates ./form-builder-templates
-COPY flag_initialization ./flag_initialization
-COPY --from=1 /src/node_modules ./flag_initialization/node_modules
 
 # Lambda adapter: https://github.com/awslabs/aws-lambda-web-adapter
 COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.7.0 /lambda-adapter /opt/extensions/lambda-adapter
+RUN ln -s /tmp ./.next/cache
 
-ENV PORT=3000
 EXPOSE 3000
 
-ENTRYPOINT ["yarn", "start:pr"]
+ENTRYPOINT ["node", "server.js"]
