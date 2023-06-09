@@ -19,7 +19,7 @@ export const AcceptableUseTerms = ({
 }: AcceptableUseProps): React.ReactElement | null => {
   const router = useRouter();
   const { t } = useTranslation("common");
-  const session = useSession();
+  const { data: session, status } = useSession();
 
   // An extra check just encase a malicous user sets the referer to an external URL
   if (!localPathRegEx.test(referer)) {
@@ -27,18 +27,18 @@ export const AcceptableUseTerms = ({
   }
 
   const agree = async () => {
-    const token = await getCsrfToken();
+    const csrfToken = await getCsrfToken();
     try {
-      if (token && session.data?.user.id) {
+      if (csrfToken && session?.user.id) {
         return await axios({
           url: "/api/acceptableuse",
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "X-CSRF-Token": token,
+            "X-CSRF-Token": csrfToken,
           },
           data: {
-            userID: session.data.user.id,
+            userID: session.user.id,
           },
           timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
         })
@@ -57,7 +57,7 @@ export const AcceptableUseTerms = ({
     }
   };
 
-  return session.status === "authenticated" ? (
+  return (
     <>
       <div className="border-b-2 border-red-default">
         <h1 className="md:text-small_h1 md:mb-10 border-b-0 text-h1 font-bold mb-0">
@@ -65,12 +65,13 @@ export const AcceptableUseTerms = ({
         </h1>
       </div>
       <RichText className="py-10 w-full">{content}</RichText>
-
-      <Button id="acceptableUse" onClick={agree}>
-        {t("acceptableUsePage.agree")}
-      </Button>
+      {status === "authenticated" && (
+        <Button id="acceptableUse" onClick={agree}>
+          {t("acceptableUsePage.agree")}
+        </Button>
+      )}
     </>
-  ) : null;
+  );
 };
 
 export default AcceptableUseTerms;

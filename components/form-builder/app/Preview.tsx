@@ -103,7 +103,7 @@ export const Preview = () => {
           </>
         )}
 
-        <Brand brand={brand} className="mt-8 mb-12" />
+        <Brand brand={brand} lang={language} className="mt-8 mb-12" />
         <h1 className="mt-4">
           {formRecord.form[localizeField(LocalizedFormProperties.TITLE, language)] ||
             t("pagePreview", { ns: "form-builder" })}
@@ -122,6 +122,7 @@ export const Preview = () => {
         ) : (
           <Form
             formRecord={formRecord}
+            isPreview={true}
             language={language}
             router={router}
             t={t}

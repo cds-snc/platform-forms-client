@@ -11,7 +11,7 @@ describe("Test FormBuilder Repeating set", () => {
           set(serverSideProps) {
             serverSideProps.context = {
               user: {
-                acceptableUse: false,
+                acceptableUse: true,
                 name: null,
                 userId: "testId",
               },

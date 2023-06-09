@@ -1,10 +1,9 @@
-import React, { ReactElement, useState } from "react";
-import { Formik } from "formik";
+import React, { ReactElement, useState, MutableRefObject } from "react";
+import { Formik, FormikHelpers } from "formik";
 import { TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
 import { Button, LinkButton } from "@components/globals";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
-import { Confirmation } from "@components/auth/Confirmation/Confirmation";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import { checkOne } from "@lib/cache/flags";
@@ -20,11 +19,26 @@ import {
 } from "@lib/validation";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
 import { useResetPassword } from "@lib/hooks/auth";
+import { AuthErrorsState } from "@lib/hooks/auth/useAuthErrors";
 
-const Step1 = ({ setInitialCodeSent }: { setInitialCodeSent: (val: boolean) => void }) => {
+const Step1 = ({
+  username,
+  setInitialCodeSent,
+  sendForgotPassword,
+  authErrorsState,
+  authErrorsReset,
+}: {
+  username: MutableRefObject<string>;
+  sendForgotPassword: (
+    username: string,
+    successCallback: () => void,
+    failedCallback?: (error: string) => void
+  ) => void;
+  setInitialCodeSent: (val: boolean) => void;
+  authErrorsState: AuthErrorsState;
+  authErrorsReset: () => void;
+}) => {
   const { t, i18n } = useTranslation(["reset-password", "common"]);
-  const { username, setNeedsConfirmation, sendForgotPassword, authErrorsState, authErrorsReset } =
-    useResetPassword();
 
   // validation schema for the initial form to send the forgot password verification code
   const sendForgotPasswordValidationSchema = Yup.object().shape({
@@ -52,26 +66,11 @@ const Step1 = ({ setInitialCodeSent }: { setInitialCodeSent: (val: boolean) => v
           // set the username ( user's email ) to what was provided
           username.current = values.username;
           // call the sendForgotPassword method to attempt to send the verification code to the user
-          await sendForgotPassword(
-            values.username,
-            () => {
-              // if sending of the code succeeds we set the initialCodeSent state to true
-              // this will display the form to set the new password
-              setInitialCodeSent(true);
-            },
-            (error) => {
-              // The InvalidParameterException error will be returned in two cases
-              // 1. Where a user does not have an account
-              // 2. Where a user does not have a verified email
-              // We will show the confirmation code page in this case
-              // If a user does not have an account they will not be able to progress
-              // those that do but have not verified their email will be able to verify their
-              // email first and then return to set their passwords
-              if (error === "InvalidParameterException") {
-                setNeedsConfirmation(true);
-              }
-            }
-          );
+          sendForgotPassword(values.username, () => {
+            // if sending of the code succeeds we set the initialCodeSent state to true
+            // this will display the form to set the new password
+            setInitialCodeSent(true);
+          });
         }}
       >
         {({ handleSubmit, errors }) => (
@@ -146,9 +145,21 @@ const Step1 = ({ setInitialCodeSent }: { setInitialCodeSent: (val: boolean) => v
   );
 };
 
-const Step2 = () => {
+const Step2 = ({
+  username,
+  confirmPasswordReset,
+  authErrorsState,
+  authErrorsReset,
+}: {
+  username: MutableRefObject<string>;
+  confirmPasswordReset: (
+    values: { username: string; password: string; confirmationCode: string },
+    helpers: FormikHelpers<{ username: string; password: string; confirmationCode: string }>
+  ) => Promise<void>;
+  authErrorsState: AuthErrorsState;
+  authErrorsReset: () => void;
+}) => {
   const { t } = useTranslation(["reset-password", "common"]);
-  const { username, confirmPasswordReset, authErrorsState, authErrorsReset } = useResetPassword();
 
   // validation schema for password reset form
   const confirmPasswordResetValidationSchema = Yup.object().shape({
@@ -307,33 +318,34 @@ const Step2 = () => {
 };
 
 const ResetPassword = () => {
-  const { username, needsConfirmation, setNeedsConfirmation } = useResetPassword();
+  const { username, sendForgotPassword, confirmPasswordReset, authErrorsState, authErrorsReset } =
+    useResetPassword();
 
   // we don't put this state in useAuth since its very unique to this page only
   const [initialCodeSent, setInitialCodeSent] = useState(false);
 
-  // confirmation code form in case a user has not yet confirmed their account
-  // password resets are not allowed by cognito unless someone has confirmed their account
-  if (needsConfirmation) {
+  // The form to initially send a verification code needed to reset a user's password
+  if (!initialCodeSent) {
     return (
-      <Confirmation
-        username={username.current}
-        password={""}
-        confirmationCallback={() => {
-          setNeedsConfirmation(false);
-        }}
-        shouldSignIn={false}
+      <Step1
+        username={username}
+        authErrorsState={authErrorsState}
+        authErrorsReset={authErrorsReset}
+        sendForgotPassword={sendForgotPassword}
+        setInitialCodeSent={setInitialCodeSent}
       />
     );
   }
 
-  // The form to initially send a verification code needed to reset a user's password
-  if (!initialCodeSent && !needsConfirmation) {
-    return <Step1 setInitialCodeSent={setInitialCodeSent} />;
-  }
-
   // the form to reset the password with the verification code
-  return <Step2 />;
+  return (
+    <Step2
+      username={username}
+      authErrorsState={authErrorsState}
+      authErrorsReset={authErrorsReset}
+      confirmPasswordReset={confirmPasswordReset}
+    />
+  );
 };
 
 ResetPassword.getLayout = (page: ReactElement) => {

@@ -1,9 +1,10 @@
+import React, { ReactElement } from "react";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { getServerSession } from "next-auth/next";
+import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 
-import React from "react";
 import { useTranslation } from "next-i18next";
 import { signIn } from "next-auth/react";
 
@@ -18,15 +19,19 @@ const Login = (): JSX.Element => {
       <Head>
         <title>{`${t("title")}: ${t("sub-title")}`}</title>
       </Head>
-      <h1>{t("title")}</h1>
+      <h1 className="border-b-0 mt-6 mb-12">{t("title")}</h1>
       <div>
-        <h2 className="pb-10">{t("sub-title")}</h2>
+        <p className="mb-10 -mt-6">{t("sub-title")}</p>
         <Button type="button" onClick={() => signIn("google")}>
           {t("button.login")}
         </Button>
       </div>
     </>
   );
+};
+
+Login.getLayout = (page: ReactElement) => {
+  return <UserNavLayout>{page}</UserNavLayout>;
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

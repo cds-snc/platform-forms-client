@@ -45,11 +45,34 @@ async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void>
       .json({ error: "Invalid payload: missing key attributes (reference or status)" });
   }
 
-  if (deliveryStatus === "delivered" || deliveryStatus === "permanent-failure") {
-    return res.status(200).json({ status: "submission will not be reprocessed" });
+  // When there is no submission ID it means that the email was not a form submission so it can be ignored by our API
+  if (submissionID === null) {
+    return res.status(200).json({
+      status: "submission will not be reprocessed because of missing submission ID",
+    });
+  }
+
+  if (deliveryStatus === "delivered") {
+    return res
+      .status(200)
+      .json({ status: "submission will not be reprocessed because the email was delivered" });
+  }
+
+  if (deliveryStatus === "permanent-failure") {
+    logMessage.warn(
+      `Form submission ${submissionID} will never be delivered because of a permanent failure (GC Notify)`
+    );
+    await removeProcessedMark(submissionID);
+    return res.status(200).json({
+      status: "submission will not be reprocessed because the email will never be delivered",
+    });
   }
 
   try {
+    logMessage.info(
+      `Notify Callback: Reprocessing submission id ${submissionID} due to notify status of: ${deliveryStatus}`
+    );
+
     // Remove previous process completion identifier
     await removeProcessedMark(submissionID);
 
@@ -63,9 +86,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void>
     });
 
     await sqsClient.send(sendMessageCommand);
-    logMessage.info(
-      `Notify Callback: Reprocessing submission id ${submissionID} due to notify status of: ${deliveryStatus}`
-    );
 
     return res.status(200).json({ status: "submission will be reprocessed" });
   } catch (error) {
@@ -94,7 +114,7 @@ async function removeProcessedMark(submissionID: string) {
     ReturnValues: "NONE",
   };
 
-  return await documentClient.send(new UpdateCommand(updateItem));
+  return documentClient.send(new UpdateCommand(updateItem));
 }
 
 /**

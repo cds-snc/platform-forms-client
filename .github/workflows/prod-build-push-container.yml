@@ -7,8 +7,6 @@ on:
 env:
   ECR_REPOSITORY: form_viewer_production
   TAG_VERSION: ${{ github.ref }}
-  GOOGLE_CLIENT_SECRET: ${{ secrets.PRODUCTION_GOOGLE_CLIENT_SECRET }}
-  GOOGLE_CLIENT_ID: ${{ secrets.PRODUCTION_GOOGLE_CLIENT_ID }}
   COGNITO_APP_CLIENT_ID: ${{secrets.PRODUCTION_COGNITO_APP_CLIENT_ID}}
   COGNITO_USER_POOL_ID: ${{ secrets.PRODUCTION_COGNITO_USER_POOL_ID}}
 
@@ -25,14 +23,13 @@ jobs:
         run: |
           docker build -t base \
           --build-arg PRODUCTION_ENV=true \
-          --build-arg GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET \
-          --build-arg GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID \
+          --build-arg GITHUB_SHA_ARG=$GITHUB_SHA \
           --build-arg COGNITO_APP_CLIENT_ID=$COGNITO_APP_CLIENT_ID \
           --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID .
 
       - name: Configure Production AWS credentials
         id: aws-form-viewer
-        uses: aws-actions/configure-aws-credentials@8815b6557cafe082774ec49c58d911e53c98849d
+        uses: aws-actions/configure-aws-credentials@375a690dc0af3921541e5f427167f333d7e85f67
         with:
           aws-access-key-id: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
@@ -40,7 +37,7 @@ jobs:
 
       - name: Login to Production Amazon ECR
         id: login-ecr-production
-        uses: aws-actions/amazon-ecr-login@924bdd04dc225eb81e5b761c01d34f9204162fc5
+        uses: aws-actions/amazon-ecr-login@b5f9031d829ac39b7fd26092019aeca3ee6b3ebd
 
       - name: Tag Images for Production
         env:

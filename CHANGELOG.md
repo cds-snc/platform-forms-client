@@ -5,6 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.0.12] 2023-06-07
+
+### Fixed
+
+- ReCaptcha should not be loaded in form builder preview mode
+- Add branding for Canada Economic Development for Quebec Regions
+
+## [v3.0.11] 2023-06-05
+
+### Fixed
+
+- GC Notify callback API should only handle form submission type of email
+- Put back formTitle for Google Analytics and GTM
+
+## [v3.0.10] 2023-06-01
+
+### Fixed
+
+- User Registration validation flow [`#2197`](https://github.com/cds-snc/platform-forms-client/pull/2197)
+
+## [v3.0.9] 2023-05-31
+
+### Fixed
+
+- Password reset validation flow [`#2187`](https://github.com/cds-snc/platform-forms-client/pull/2187)
+
+## [v3.0.8] 2023-05-30
+
+### Fixed
+
+- Fix bug 2168, part 2. [`#2180`](https://github.com/cds-snc/platform-forms-client/pull/2180)
+
 ## [v3.0.7] 2023-05-26
 
 ### Fixed

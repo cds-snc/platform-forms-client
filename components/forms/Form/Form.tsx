@@ -135,6 +135,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     handleSubmit,
     status,
     formRecord: { id: formID, reCaptchaID, form },
+    isPreview = false,
   }: InnerFormProps = props;
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
@@ -147,10 +148,11 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const formStatusError = props.status === "Error" ? t("server-error") : null;
 
   const { status: isReCaptchaEnableOnSite } = useFlag("reCaptcha");
+  const shouldUseRecaptcha = isPreview ? false : isReCaptchaEnableOnSite;
 
   useExternalScript(
     `https://www.google.com/recaptcha/api.js?render=${reCaptchaID}`,
-    isReCaptchaEnableOnSite
+    shouldUseRecaptcha
   );
 
   const handleSubmitReCaptcha = (evt: React.FormEvent<HTMLFormElement>) => {
@@ -245,7 +247,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             onSubmit={(e) => {
               e.preventDefault();
 
-              if (isReCaptchaEnableOnSite) {
+              if (shouldUseRecaptcha) {
                 handleSubmitReCaptcha(e);
               } else {
                 handleSubmit(e);

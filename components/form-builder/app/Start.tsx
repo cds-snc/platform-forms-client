@@ -55,6 +55,11 @@ export const Start = () => {
         }
 
         importTemplate(data);
+
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: "open_form_file",
+        });
         router.push({ pathname: `/form-builder/preview` });
       };
     } catch (e) {

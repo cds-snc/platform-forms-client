@@ -3,12 +3,23 @@ import { JWT } from "next-auth/jwt";
 import { AccessControlError, checkPrivileges } from "@lib/privileges";
 import { UserAbility } from "./types";
 import { logEvent } from "./auditLogs";
+import { Privilege } from "@prisma/client";
 
 /**
  * Get or Create a user if a record does not exist
  * @returns A User Object
  */
-export const getOrCreateUser = async ({ name, email, picture }: JWT) => {
+export const getOrCreateUser = async ({
+  name,
+  email,
+  picture,
+}: JWT): Promise<{
+  newlyRegistered?: boolean;
+  name: string | null;
+  email: string | null;
+  privileges: Privilege[];
+  id: string;
+} | null> => {
   if (!email) throw new Error("Email does not exist on token");
   const user = await prisma.user
     .findUnique({
@@ -63,12 +74,14 @@ export const getOrCreateUser = async ({ name, email, picture }: JWT) => {
       })
       .catch((e) => prismaErrors(e, null));
 
-    if (newUser !== null)
+    if (newUser !== null) {
       logEvent(newUser.id, { type: "User", id: newUser.id }, "UserRegistration");
+      return { ...newUser, newlyRegistered: true };
+    }
 
-    return newUser;
+    return null;
   } else {
-    return await prisma.user
+    return prisma.user
       .update({
         where: {
           id: user.id,

@@ -10,7 +10,7 @@ describe("Form builder share", () => {
           set(serverSideProps) {
             serverSideProps.context = {
               user: {
-                acceptableUse: false,
+                acceptableUse: true,
                 name: null,
                 userId: "testId",
               },
@@ -30,7 +30,7 @@ describe("Form builder share", () => {
     cy.get("[role='menuitem']").should("have.length", 1);
     cy.get("span").contains("You must name").should("exist");
     cy.get("span button").contains("name your form").click();
-    cy.focused().should("have.attr", "id", "formTitle");
+    cy.focused().should("have.attr", "id", "fileName");
   });
 
   it("Renders share flyout", () => {
