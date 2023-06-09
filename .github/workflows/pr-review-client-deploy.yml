@@ -3,7 +3,7 @@ name: Deploy PR Review Client environment
 on:
   pull_request:
     branches:
-      - main  
+      - develop  
     types:
       - labeled
       - opened
