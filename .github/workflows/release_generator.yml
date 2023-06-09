@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - git_auto_changelog
+      - develop
 
 permissions:
   contents: write
@@ -17,4 +17,4 @@ jobs:
         with:
           command: manifest
           release-type: node
-          default-branch: git_auto_changelog
+          default-branch: develop
