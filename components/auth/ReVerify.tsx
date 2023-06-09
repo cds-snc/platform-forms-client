@@ -10,6 +10,7 @@ import { hasError } from "@lib/hasError";
 import { Alert } from "@components/forms";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
 import Link from "next/link";
+import Head from "next/head";
 
 interface ReVerifyProps {
   username: React.MutableRefObject<string>;
@@ -71,6 +72,9 @@ export const ReVerify = ({
 
   return (
     <>
+      <Head>
+        <title>{t("reVerify.title")}</title>
+      </Head>
       {authErrorsState?.isError && (
         <Alert
           type={ErrorStatus.ERROR}

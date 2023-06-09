@@ -14,6 +14,7 @@ import { hasError } from "@lib/hasError";
 import { useAuthErrors } from "@lib/hooks/auth/useAuthErrors";
 import { ReVerify } from "./ReVerify";
 import { useSession } from "next-auth/react";
+import Head from "next/head";
 
 interface VerifyProps {
   username: React.MutableRefObject<string>;
@@ -112,6 +113,9 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
 
   return (
     <>
+      <Head>
+        <title>{t("verify.title")}</title>
+      </Head>
       <div className="sticky top-0">
         <ToastContainer />
       </div>
