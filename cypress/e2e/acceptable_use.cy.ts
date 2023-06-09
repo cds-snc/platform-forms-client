@@ -2,6 +2,8 @@ describe("Test acceptable use Page", () => {
   beforeEach(() => {
     cy.login();
     cy.visitPage("/en/auth/policy");
+    cy.url().should("contain", "/en/auth/policy");
+    cy.get("main").should("be.visible");
   });
   afterEach(() => {
     cy.logout();
@@ -23,19 +25,20 @@ describe("Test acceptable use Page", () => {
 
   it("Agree to the terms of use", () => {
     cy.get("#acceptableUse").click();
-    cy.url().should("contain", "/myforms");
+    cy.url().should("eq", Cypress.config().baseUrl + "/en/myforms/drafts");
   });
 
   it("Redirects back to terms of use if not accepted", () => {
     cy.visitPage("/myforms");
+    cy.get("main").should("be.visible");
     cy.url().should("contain", "/auth/policy");
   });
   it("Redirects back to calling page after acceptance", () => {
     cy.visitPage("/myforms");
+    cy.get("main").should("be.visible");
     cy.url().should("contain", "/auth/policy");
     cy.url().should("contain", "?referer=/myforms");
     cy.get("#acceptableUse").click();
-    cy.url().should("not.contain", "/auth/policy");
-    cy.url().should("contain", "/myforms");
+    cy.url().should("eq", Cypress.config().baseUrl + "/en/myforms/drafts");
   });
 });
