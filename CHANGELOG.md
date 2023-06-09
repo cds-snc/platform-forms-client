@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.0](https://github.com/cds-snc/platform-forms-client/compare/v3.0.12...v3.1.0) (2023-06-09)
+
+
+### Features
+
+* 2FA Authentication through Email ([#2133](https://github.com/cds-snc/platform-forms-client/issues/2133)) ([2cc568d](https://github.com/cds-snc/platform-forms-client/commit/2cc568d7b2a7c6a4dd7748c09748ddd9441b90f8))
+
+
+### Bug Fixes
+
+* cypress acceptable use page test ([#2239](https://github.com/cds-snc/platform-forms-client/issues/2239)) ([83b04e2](https://github.com/cds-snc/platform-forms-client/commit/83b04e2f526834dd998f750b7af2ed7296e31278))
+
 ## [v3.0.12] 2023-06-07
 
 ### Fixed
