@@ -2,7 +2,6 @@ import React, { useCallback, useState } from "react";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { useTranslation } from "next-i18next";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
 
 import { ChevronDown, ChevronRight, ShareIcon, LinkIcon } from "../../icons";
 
@@ -12,12 +11,15 @@ import { LinksSubMenu } from "./LinksSubMenu";
 import { Button } from "@components/globals";
 import { ShareModalUnauthenticated } from "..";
 
+import { useRefStore } from "@lib/hooks/useRefStore";
+
 export const ShareDropdown = () => {
-  const { t, i18n } = useTranslation("form-builder");
+  const { t } = useTranslation("form-builder");
   const { status } = useSession();
-  const { push } = useRouter();
 
   const [shareModal, showShareModal] = useState(false);
+
+  const { getRef } = useRefStore();
 
   const handleCloseDialog = useCallback(() => {
     showShareModal(false);
@@ -34,7 +36,6 @@ export const ShareDropdown = () => {
   }));
 
   const menuWidth = name ? "w-48" : "w-[400px]";
-  const editLink = `${i18n.language}/form-builder/edit?focusTitle=true`;
 
   return (
     <div className="relative inline-block text-left">
@@ -63,7 +64,10 @@ export const ShareDropdown = () => {
                     theme="link"
                     className="inline-block"
                     onClick={() => {
-                      push(editLink, undefined, { shallow: true });
+                      // Timeout is currently required because menu steals focus on close.
+                      setTimeout(() => {
+                        getRef("fileNameInput")?.current?.focus();
+                      }, 50);
                     }}
                   >
                     {t("share.missingName.message2")}
