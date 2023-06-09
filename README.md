@@ -42,8 +42,6 @@ SUBMISSION_API=Submission
 TEMPLATES_API=Templates
 AWS_ACCESS_KEY_ID= // Can be found in LastPass
 AWS_SECRET_ACCESS_KEY= // Can be found in LastPass
-GOOGLE_CLIENT_ID= // Can be found in LastPass
-GOOGLE_CLIENT_SECRET= // Can be found in LastPass
 NEXTAUTH_URL=http://localhost:3000
 REDIS_URL=localhost
 ```
@@ -166,8 +164,6 @@ SUBMISSION_API=Submission
 TEMPLATES_API=Templates
 AWS_ACCESS_KEY_ID= // Can be found in LastPass
 AWS_SECRET_ACCESS_KEY= // Can be found in LastPass
-GOOGLE_CLIENT_ID= // Can be found in LastPass
-GOOGLE_CLIENT_SECRET= // Can be found in LastPass
 NEXTAUTH_URL=http://localhost:3000
 REDIS_URL=localhost
 ```

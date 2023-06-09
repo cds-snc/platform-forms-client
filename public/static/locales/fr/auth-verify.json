@@ -1,0 +1,35 @@
+{
+  "verify": {
+    "title": "Vérifiez votre courriel pour un code de sécurité",
+    "emailHasBeenSent": "Cette étape permet d’assurert la sécurité de Formulaires GC en vérifiant votre compte chaque fois que vous vous connectez.",
+    "resendConfirmationCodeButton": "Envoyer un nouveau code",
+    "confirmButton": "Continuer",
+    "help": "Besoin d'aide?",
+    "resendConfirmationCode": {
+      "title": "Vérifiez votre courriel",
+      "body": "Un courriel avec un code de vérification vous a été envoyé"
+    },
+    "fields": {
+      "confirmationCode": {
+        "label": "Entrer le code de vérification pour compléter la création de votre compte",
+        "description": "Entrez le code dans un délai de 15 minutes.",
+        "error": {
+          "notEmpty": "Ne peut pas être vide",
+          "length": "Doit être 5 caractères",
+          "noSymbols": "Ne peut pas contenir de symboles",
+          "notFound": "Code non trouvé",
+          "expired": "Code expiré. Rssayez de vous connecter à nouveau."
+        }
+      }
+    }
+  },
+  "reVerify": {
+    "title": "Renvoyer le code",
+    "description": "Parfois les courriels prennent quelques minutes à parvenir à destination. Si vous ne recevez pas un courriel vous pouvez le renvoyer.",
+    "buttons": {
+      "reSendCode": "Renvoyer le code",
+      "getSupport": "Obtenir du soutien"
+    }
+  },
+  "newCodeSent": "New code sent [FR]"
+}

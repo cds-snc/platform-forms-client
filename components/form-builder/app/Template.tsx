@@ -10,6 +10,7 @@ import { LeftNavigation, Header } from "@components/form-builder/app";
 import { Language } from "../types";
 import { TemplateApiProvider } from "../hooks";
 import { ToastContainer } from "./shared/Toast";
+import { RefStoreProvider } from "@lib/hooks/useRefStore";
 
 export const Template = ({
   page,
@@ -25,17 +26,19 @@ export const Template = ({
       {...{ ...(page.props.initialForm && page.props.initialForm), locale: page.props.locale }}
     >
       <TemplateApiProvider>
-        <Head>
-          <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-          <meta charSet="utf-8" />
-          <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
-        </Head>
-        <div className={`flex flex-col h-full ${className}`}>
-          <SkipLink />
-          <Header isFormBuilder={isFormBuilder} />
-          {page}
-          <Footer displayFormBuilderFooter />
-        </div>
+        <RefStoreProvider>
+          <Head>
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+            <meta charSet="utf-8" />
+            <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
+          </Head>
+          <div className={`flex flex-col h-full ${className}`}>
+            <SkipLink />
+            <Header isFormBuilder={isFormBuilder} />
+            {page}
+            <Footer displayFormBuilderFooter />
+          </div>
+        </RefStoreProvider>
       </TemplateApiProvider>
     </TemplateStoreProvider>
   );

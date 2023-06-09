@@ -89,7 +89,7 @@ Cypress.Commands.add("useFlag", (flagName, value, alreadyAuth) => {
  * Log the test user into the application
  */
 
-Cypress.Commands.add("login", () => {
+Cypress.Commands.add("login", (acceptableUse = false) => {
   cy.request({
     method: "GET",
     url: "/api/auth/csrf",
@@ -98,21 +98,46 @@ Cypress.Commands.add("login", () => {
     const { csrfToken } = response.body;
     cy.request({
       method: "POST",
-      url: "/api/auth/callback/credentials",
+      url: "/api/auth/signin/cognito",
       form: true,
       body: {
         username: "test.user@cds-snc.ca",
         password: "testing",
-        redirect: false,
         csrfToken,
-        callbackUrl: "http://localhost:3000/en/auth/login",
-        json: true,
       },
-    }).then(() => {
-      // Ensure cookie is created
-      cy.waitUntil(() =>
-        cy.getCookie("next-auth.session-token").then((cookie) => Boolean(cookie && cookie.value))
-      );
+    }).then((response) => {
+      expect(response.body).to.have.property("status", "success");
+      expect(response.body).to.have.property("challengeState", "MFA");
+      expect(response.body).to.have.property("authenticationFlowToken");
+
+      cy.request({
+        method: "POST",
+        url: "/api/auth/callback/cognito",
+        form: true,
+        body: {
+          username: "test.user@cds-snc.ca",
+          verificationCode: "123456",
+          authenticationFlowToken: response.body.authenticationFlowToken,
+          csrfToken,
+          json: true,
+        },
+      }).then(() => {
+        // Ensure cookie is created
+        cy.waitUntil(() =>
+          cy.getCookie("next-auth.session-token").then((cookie) => Boolean(cookie && cookie.value))
+        );
+        if (acceptableUse) {
+          cy.request({
+            method: "POST",
+            url: "/api/acceptableuse",
+            headers: {
+              "x-csrf-token": csrfToken,
+            },
+          }).then((response) => {
+            expect(response.status).to.eq(200);
+          });
+        }
+      });
     });
   });
 });
