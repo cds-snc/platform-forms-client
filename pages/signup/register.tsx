@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useRef } from "react";
 import { Formik } from "formik";
 import { TextInput, Label, Alert, ErrorListItem } from "@components/forms";
 import { Button } from "@components/globals";
@@ -26,6 +26,7 @@ import { hasError } from "@lib/hasError";
 import { logMessage } from "@lib/logger";
 import { Verify } from "@components/auth/Verify";
 import { useLogin } from "@lib/hooks/auth";
+import { useFocusIt } from "@lib/hooks/useFocusIt";
 
 const Register = () => {
   const { isLoading, status: registrationOpen } = useFlag("accountRegistration");
@@ -41,6 +42,9 @@ const Register = () => {
     login,
     handleErrorById,
   } = useLogin();
+
+  const headingRef = useRef(null);
+  useFocusIt({ elRef: headingRef });
 
   const register = async ({
     username,
@@ -210,7 +214,9 @@ const Register = () => {
                 </ol>
               </Alert>
             )}
-            <h1 className="border-b-0 mt-6 mb-12">{t("signUpRegistration.title")}</h1>
+            <h1 ref={headingRef} className="border-b-0 mt-6 mb-12">
+              {t("signUpRegistration.title")}
+            </h1>
             <p className="mb-10 -mt-6">
               {t("signUpRegistration.alreadyHaveAnAccount")}&nbsp;
               <Link href={"/auth/login"}>{t("signUpRegistration.alreadyHaveAnAccountLink")}</Link>

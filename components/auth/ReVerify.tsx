@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useRef } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { Button, StyledLink } from "@components/globals";
@@ -11,6 +11,7 @@ import { Alert } from "@components/forms";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
 import Link from "next/link";
 import Head from "next/head";
+import { useFocusIt } from "@lib/hooks/useFocusIt";
 
 interface ReVerifyProps {
   username: React.MutableRefObject<string>;
@@ -26,6 +27,9 @@ export const ReVerify = ({
   const router = useRouter();
   const { t } = useTranslation(["auth-verify", "cognito-errors", "common"]);
   const [authErrorsState, { authErrorsReset, handleErrorById }] = useAuthErrors();
+
+  const headingRef = useRef(null);
+  useFocusIt({ elRef: headingRef });
 
   const handleReVerify = async () => {
     authErrorsReset();
@@ -88,7 +92,9 @@ export const ReVerify = ({
           ) : undefined}
         </Alert>
       )}
-      <h1 className="border-0 mt-6 mb-6">{t("reVerify.title")}</h1>
+      <h1 ref={headingRef} className="border-0 mt-6 mb-6">
+        {t("reVerify.title")}
+      </h1>
       <p className="mt-10">{t("reVerify.description")}</p>
       <div className="flex mt-16">
         <Button theme="primary" className="mr-4" onClick={handleReVerify}>
