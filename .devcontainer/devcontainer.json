@@ -4,20 +4,25 @@
   "service": "dev",
   "workspaceFolder": "/src",
   "shutdownAction": "stopCompose",
-  "settings": {
-    "prettier.configPath": ".prettierrc.json",
-    "prettier.useEditorConfig": false
-  },
   "features": {
     "aws-cli": {
       "version": "2.5.6"
+    },
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "prettier.configPath": ".prettierrc.json",
+        "prettier.useEditorConfig": false
+      },
+      "extensions": [
+        "mtxr.sqltools",
+        "mtxr.sqltools-driver-pg",
+        "github.copilot",
+        "github.vscode-github-actions"
+      ]
     }
   },
-  // Add the IDs of extensions you want installed when the container is created.
-  "extensions": [
-    "mtxr.sqltools",
-    "mtxr.sqltools-driver-pg",
-    "GitHub.copilot"
-  ],
   "remoteUser": "node"
 }
