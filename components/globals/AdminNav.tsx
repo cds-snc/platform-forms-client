@@ -44,7 +44,7 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
 
             {(!user || !user.name) && (
               <li className="text-base mr-2 tablet:mr-4 py-2">
-                <Link href="/admin/login" locale={i18n.language}>
+                <Link href="/auth/login" locale={i18n.language}>
                   {t("adminNav.login")}
                 </Link>
               </li>

@@ -16,7 +16,8 @@ export const sendVerificationCode = async (email: string, verificationCode: stri
         subject: "Your verification code | Votre code de vérification",
         formResponse: `
 **Your verification code | Votre code de vérification**
-- ${verificationCode}`,
+\n\n
+${verificationCode}`,
       },
     });
   } catch (err) {

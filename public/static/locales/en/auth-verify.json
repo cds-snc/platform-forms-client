@@ -24,10 +24,10 @@
     }
   },
   "reVerify": {
-    "title": "Re-send code",
-    "description": "Sometimes email messages take a few minutes to arrive. If you do not receive the email, you can re-send it. ",
+    "title": "Send new code",
+    "description": "Sometimes email messages take a few minutes to arrive. If you do not receive the email, you can send a new code.",
     "buttons": {
-      "reSendCode": "Re-send code",
+      "reSendCode": "Send new code",
       "getSupport": "Get support"
     },
     "newCodeSent": "New code sent"
