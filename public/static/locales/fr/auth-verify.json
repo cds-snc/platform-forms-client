@@ -29,7 +29,7 @@
     "buttons": {
       "reSendCode": "Renvoyer le code",
       "getSupport": "Obtenir du soutien"
-    }
-  },
-  "newCodeSent": "New code sent [FR]"
+    },
+    "newCodeSent": "New code sent [FR]"
+  }
 }
