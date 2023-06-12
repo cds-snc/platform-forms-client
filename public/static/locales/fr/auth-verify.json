@@ -24,10 +24,10 @@
     }
   },
   "reVerify": {
-    "title": "Renvoyer le code",
-    "description": "Parfois les courriels prennent quelques minutes à parvenir à destination. Si vous ne recevez pas un courriel vous pouvez le renvoyer.",
+    "title": "Envoyer un nouveau code",
+    "description": "Parfois less courriels prennent quelques minutes à parvenir à destination. Si vous ne recevez pas un courriel vous pouvez envoyer un nouveau code.",
     "buttons": {
-      "reSendCode": "Renvoyer le code",
+      "reSendCode": "Envoyer un nouveau code",
       "getSupport": "Obtenir du soutien"
     }
   },
