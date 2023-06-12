@@ -45,10 +45,10 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build \
-            --build-arg GIT_SHA=${{ github.sha }} \
-            -t ${{ env.REGISTRY }}/${{ env.IMAGE }}:${{ env.PR_NUMBER }} \
-            -f ci/Dockerfile.lambda .
+          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE }}:${{ env.PR_NUMBER }} \
+            --build-arg GITHUB_SHA_ARG=$GITHUB_SHA \
+            --build-arg COGNITO_APP_CLIENT_ID=$COGNITO_APP_CLIENT_ID \
+            --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID .
           
       - name: Push Docker image to ECR
         run: |
