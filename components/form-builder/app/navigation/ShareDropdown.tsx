@@ -57,7 +57,8 @@ export const ShareDropdown = () => {
             {!name && (
               <DropdownMenuPrimitive.Item
                 onClick={() => {
-                  // Timeout is currently required because menu steals focus on close.
+                  // Note: copied from below menu item for simplicity. Ideally refactor content back
+                  // to a button when possible. Dropdown may need to be refactored to work with it
                   setTimeout(() => {
                     getRef("fileNameInput")?.current?.focus();
                   }, 50);
@@ -66,11 +67,12 @@ export const ShareDropdown = () => {
                   "flex cursor-pointer items-center rounded-md px-2 py-2 text-sm outline-none hover:text-white-default hover:bg-gray-600 focus:text-white-default focus:bg-gray-600 [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
                 }
               >
-                {t("share.missingName.message1")}{" "}
+                {t("share.missingName.message1")}
                 <span className="text-blue-default underline mx-1">
                   {t("share.missingName.message2")}
-                </span>{" "}
+                </span>
                 {t("share.missingName.message3")}
+                <span className="sr-only">{t("share.missingName.message4")}</span>
               </DropdownMenuPrimitive.Item>
             )}
 
