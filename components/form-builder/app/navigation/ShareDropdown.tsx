@@ -8,7 +8,6 @@ import { ChevronDown, ChevronRight, ShareIcon, LinkIcon } from "../../icons";
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { ShareModal } from "../ShareModal";
 import { LinksSubMenu } from "./LinksSubMenu";
-import { Button } from "@components/globals";
 import { ShareModalUnauthenticated } from "..";
 
 import { useRefStore } from "@lib/hooks/useRefStore";
