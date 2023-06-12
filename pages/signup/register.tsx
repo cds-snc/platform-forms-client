@@ -183,6 +183,7 @@ const Register = () => {
                 type={ErrorStatus.ERROR}
                 heading={authErrorsState.title}
                 onDismiss={authErrorsReset}
+                focussable={true}
                 id="cognitoErrors"
               >
                 {authErrorsState.description}&nbsp;
@@ -198,6 +199,7 @@ const Register = () => {
                 type={ErrorStatus.ERROR}
                 validation={true}
                 tabIndex={0}
+                focussable={true}
                 id="registrationValidationErrors"
                 heading={t("input-validation.heading", { ns: "common" })}
               >
