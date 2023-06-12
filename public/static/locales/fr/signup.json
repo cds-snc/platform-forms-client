@@ -11,11 +11,11 @@
         "label": "Adresse courriel",
         "hint": "Il faut fournir une adresse courriel du gouvernement fédéral.",
         "error": {
-          "validGovEmail": "This field must be a valid federal government email.[FR]"
+          "validGovEmail": "Ce champ doit être une adresse valide du gouvernement fédéral."
         }
       },
       "password": {
-        "label": "Password",
+        "label": "Mot de passe",
         "hintList": {
           "title": "Votre mot de passe devrait être difficile à deviner avec :",
           "characters": "Au moins 8 caractères",
