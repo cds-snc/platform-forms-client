@@ -1,6 +1,6 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, MutableRefObject } from "react";
 import { Formik } from "formik";
-import { TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
+import { TextInput, Label, Alert, ErrorListItem } from "@components/forms";
 import { Button } from "@components/globals";
 import { useFlag } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
@@ -10,24 +10,30 @@ import Link from "next/link";
 import Head from "next/head";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
-import { Confirmation } from "@components/auth/Confirmation/Confirmation";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import * as Yup from "yup";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
 import { useLogin } from "@lib/hooks/auth";
+import { AuthErrorsState } from "@lib/hooks/auth/useAuthErrors";
+import { Verify } from "@components/auth/Verify";
 
-const Login = () => {
-  const {
-    username,
-    password,
-    didConfirm,
-    needsConfirmation,
-    setNeedsConfirmation,
-    login,
-    authErrorsState,
-    authErrorsReset,
-  } = useLogin();
+const LoginStep = ({
+  username,
+  password,
+  authErrorsState,
+  setNeedsVerification,
+  login,
+  authErrorsReset,
+}: {
+  username: MutableRefObject<string>;
+  password: MutableRefObject<string>;
+  authErrorsState: AuthErrorsState;
+  login: (values: { username: string; password: string }) => Promise<boolean | undefined>;
+  setNeedsVerification: (val: boolean) => void;
+  authErrorsReset: () => void;
+}) => {
   const { t } = useTranslation(["login", "cognito-errors", "common"]);
+
   const { status: registrationOpen } = useFlag("accountRegistration");
   const { status: passwordResetEnabled } = useFlag("passwordReset");
 
@@ -40,21 +46,6 @@ const Login = () => {
       .max(50, t("fields.password.errors.maxLength")),
   });
 
-  const confirmationCallback = () => {
-    setNeedsConfirmation(false);
-    didConfirm.current = true;
-  };
-
-  if (needsConfirmation) {
-    return (
-      <Confirmation
-        username={username.current}
-        password={password.current}
-        confirmationCallback={confirmationCallback}
-      />
-    );
-  }
-
   return (
     <>
       <Head>
@@ -62,15 +53,16 @@ const Login = () => {
       </Head>
       <Formik
         initialValues={{ username: authErrorsState.isError ? username.current : "", password: "" }}
-        onSubmit={async (values, helpers) => {
+        onSubmit={async (values, { setSubmitting }) => {
           username.current = values.username;
           password.current = values.password;
-          await login(
-            {
-              ...values,
-            },
-            helpers
-          );
+
+          const result = await login({ username: username.current, password: password.current });
+          if (result) {
+            setNeedsVerification(true);
+          }
+
+          setSubmitting(false);
         }}
         validateOnChange={false}
         validateOnBlur={false}
@@ -129,24 +121,22 @@ const Login = () => {
                 <Label id={"label-username"} htmlFor={"username"} className="required" required>
                   {t("fields.username.label")}
                 </Label>
-                <Description className="text-p text-black-default" id="login">
+                <div className="text-p text-black-default mb-2" id="login-description">
                   {t("fields.username.description")}
-                </Description>
+                </div>
                 <TextInput
                   className="h-10 w-full max-w-lg rounded"
                   type={"email"}
                   id={"username"}
                   name={"username"}
                   required
+                  ariaDescribedBy="login-description"
                 />
               </div>
               <div className="focus-group">
                 <Label id={"label-password"} htmlFor={"password"} className="required" required>
                   {t("fields.password.label")}
                 </Label>
-                <Description id="password" className="text-p text-black-default">
-                  {t("fields.password.description")}
-                </Description>
                 <TextInput
                   className="h-10 w-full max-w-lg rounded"
                   type={"password"}
@@ -163,14 +153,42 @@ const Login = () => {
                 </p>
               )}
 
-              <Button className="gc-button--blue" type="submit">
-                {t("signInButton")}
+              <Button theme="primary" type="submit">
+                {t("continueButton")}
               </Button>
             </form>
           </>
         )}
       </Formik>
     </>
+  );
+};
+
+const Login = () => {
+  const {
+    username,
+    password,
+    authenticationFlowToken,
+    needsVerification,
+    setNeedsVerification,
+    authErrorsState,
+    authErrorsReset,
+    login,
+  } = useLogin();
+
+  if (needsVerification) {
+    return <Verify username={username} authenticationFlowToken={authenticationFlowToken} />;
+  }
+
+  return (
+    <LoginStep
+      username={username}
+      password={password}
+      setNeedsVerification={setNeedsVerification}
+      login={login}
+      authErrorsState={authErrorsState}
+      authErrorsReset={authErrorsReset}
+    />
   );
 };
 
@@ -197,6 +215,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           "signup",
           "login",
           "cognito-errors",
+          "auth-verify",
         ]))),
     },
   };

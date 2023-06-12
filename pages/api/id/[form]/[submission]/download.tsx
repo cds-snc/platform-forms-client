@@ -216,7 +216,7 @@ async function updateLastDownloadedBy(
     ReturnValues: "NONE",
   };
 
-  return await documentClient.send(new UpdateCommand(updateCommandInput));
+  return documentClient.send(new UpdateCommand(updateCommandInput));
 }
 
 /**

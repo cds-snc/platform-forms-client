@@ -35,6 +35,12 @@ You are responsible for:
 - Handling and saving form responses in accordance with your retention and disposition schedule. 
 - Accepting [GC Notify's terms of use](https://notification.canada.ca/terms). 
 
+## Practice continuous security
+
+- Use a valid government email to create your account and for two-factor authentication (2FA).
+- Do not share your password with anyone or store it where others could find it. If someone else needs access to a form, [contact us](/en/form-builder/support). 
+- Report any security breach or vulnerability using the steps outlined in our [Security notice](https://digital.canada.ca/legal/security-notice/). 
+
 ## Publish in both Official Languages
 
 You are responsible for the completeness and accuracy of translations.  

@@ -109,12 +109,14 @@ describe("Template CRUD functions", () => {
       },
     });
 
-    expect(newTemplate).toEqual({
-      id: "formtestID",
-      form: formConfiguration,
-      isPublished: false,
-      securityAttribute: "Unclassified",
-    });
+    expect(newTemplate).toEqual(
+      expect.objectContaining({
+        id: "formtestID",
+        form: formConfiguration,
+        isPublished: false,
+        securityAttribute: "Unclassified",
+      })
+    );
 
     expect(mockedLogEvent).toHaveBeenCalledWith(
       fakeSession.user.id,
@@ -137,18 +139,18 @@ describe("Template CRUD functions", () => {
     const templates = await getAllTemplates(ability, "1");
 
     expect(templates).toEqual([
-      {
+      expect.objectContaining({
         id: "formtestID",
         form: formConfiguration,
         isPublished: false,
         securityAttribute: "Unclassified",
-      },
-      {
+      }),
+      expect.objectContaining({
         id: "formtestID2",
         form: formConfiguration,
         isPublished: false,
         securityAttribute: "Unclassified",
-      },
+      }),
     ]);
     if (
       // Can manage all forms
@@ -293,12 +295,14 @@ describe("Template CRUD functions", () => {
       },
     });
 
-    expect(template).toEqual({
-      id: "formtestID",
-      form: formConfiguration,
-      isPublished: false,
-      securityAttribute: "Unclassified",
-    });
+    expect(template).toEqual(
+      expect.objectContaining({
+        id: "formtestID",
+        form: formConfiguration,
+        isPublished: false,
+        securityAttribute: "Unclassified",
+      })
+    );
     expect(mockedLogEvent).toHaveBeenCalledTimes(0);
   });
 
@@ -338,12 +342,14 @@ describe("Template CRUD functions", () => {
       },
     });
 
-    expect(template).toEqual({
-      id: "formtestID",
-      form: formConfiguration,
-      isPublished: false,
-      securityAttribute: "Unclassified",
-    });
+    expect(template).toEqual(
+      expect.objectContaining({
+        id: "formtestID",
+        form: formConfiguration,
+        isPublished: false,
+        securityAttribute: "Unclassified",
+      })
+    );
     expect(mockedLogEvent).toHaveBeenCalledWith(
       fakeSession.user.id,
       { type: "Form", id: "formTestID" },
@@ -458,12 +464,14 @@ describe("Template CRUD functions", () => {
       },
     });
 
-    expect(updatedTemplate).toEqual({
-      id: "test1",
-      form: updatedFormConfig,
-      isPublished: true,
-      securityAttribute: "Unclassified",
-    });
+    expect(updatedTemplate).toEqual(
+      expect.objectContaining({
+        id: "test1",
+        form: updatedFormConfig,
+        isPublished: true,
+        securityAttribute: "Unclassified",
+      })
+    );
     expect(mockedLogEvent).toHaveBeenCalledWith(
       fakeSession.user.id,
       { id: "test1", type: "Form" },
@@ -511,12 +519,14 @@ describe("Template CRUD functions", () => {
       },
     });
 
-    expect(updatedTemplate).toEqual({
-      id: "formtestID",
-      form: formConfiguration,
-      isPublished: true,
-      securityAttribute: "Unclassified",
-    });
+    expect(updatedTemplate).toEqual(
+      expect.objectContaining({
+        id: "formtestID",
+        form: formConfiguration,
+        isPublished: true,
+        securityAttribute: "Unclassified",
+      })
+    );
     expect(mockedLogEvent).toHaveBeenCalledWith(
       fakeSession.user.id,
       { id: "formtestID", type: "Form" },
@@ -720,12 +730,14 @@ describe("Template CRUD functions", () => {
         })
       );
 
-      expect(updatedTemplate).toEqual({
-        id: "formtestID",
-        form: formConfiguration,
-        isPublished: false,
-        securityAttribute: "Unclassified",
-      });
+      expect(updatedTemplate).toEqual(
+        expect.objectContaining({
+          id: "formtestID",
+          form: formConfiguration,
+          isPublished: false,
+          securityAttribute: "Unclassified",
+        })
+      );
       expect(mockedLogEvent).toHaveBeenCalledWith(
         fakeSession.user.id,
         { id: "formtestID", type: "Form" },
@@ -775,12 +787,14 @@ describe("Template CRUD functions", () => {
       })
     );
 
-    expect(deletedTemplate).toEqual({
-      id: "formtestID",
-      form: formConfiguration,
-      isPublished: false,
-      securityAttribute: "Unclassified",
-    });
+    expect(deletedTemplate).toEqual(
+      expect.objectContaining({
+        id: "formtestID",
+        form: formConfiguration,
+        isPublished: false,
+        securityAttribute: "Unclassified",
+      })
+    );
 
     expect(mockedLogEvent).toHaveBeenCalledWith(
       fakeSession.user.id,

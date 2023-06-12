@@ -1,22 +1,4 @@
 {
-  "signUpConfirmation": {
-    "title": "Check your email",
-    "resendConfirmationCodeButton": "Send a new verification code",
-    "emailHasBeenSent": "An email with a verification code has been sent to",
-    "confirmButton": "Continue",
-    "resendConfirmationCode": {
-      "title": "Check your email",
-      "body": "An email with a verification code has been sent to you"
-    },
-    "fields": {
-      "confirmationCode": {
-        "label": "Enter the verification code to finish creating your account",
-        "error": {
-          "number": "This must be a number"
-        }
-      }
-    }
-  },
   "signUpRegistration": {
     "title": "Create an account",
     "alreadyHaveAnAccount": "If you already have an account,",
@@ -32,6 +14,16 @@
           "validGovEmail": "This field must be a valid federal government email."
         }
       },
+      "password": {
+        "label": "Password",
+        "hintList": {
+          "title": "Your password should be hard to guess with:",
+          "characters": "At least 8 characters",
+          "number": "A number",
+          "capital": "A capital letter",
+          "symbol": "A symbol"
+        }
+      },
       "name": {
         "label": "Full name",
         "error": {
@@ -42,9 +34,8 @@
   },
   "registrationClosed": "Registration is closed at this time",
   "accountCreated": {
-    "title": "GC Forms account created",
-    "yourAccountTitle": "What you can do with your account",
-    "yourAccountListDescription": "With this account you can",
+    "title": "Account created",
+    "yourAccountListDescription": "What you can do",
     "yourAccountList": {
       "item1": "draft a form",
       "item2": "save drafts within GC Forms",

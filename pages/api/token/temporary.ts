@@ -186,7 +186,7 @@ async function sendTemporaryTokenByEmail(email: string, temporaryToken: string) 
   );
 
   // Here is the documentation for the `sendEmail` function: https://docs.notifications.service.gov.uk/node.html#send-an-email
-  return await notifyClient
+  return notifyClient
     .sendEmail(sendTempTokenTemplateID, email, {
       personalisation: {
         temporaryToken: `\`${temporaryToken}\``,

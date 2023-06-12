@@ -15,6 +15,8 @@ export const Button = ({
   tabIndex = 0,
   buttonRef,
   dataTestId,
+  dataAttrName,
+  dataAttrValue,
 }: {
   type?: "button" | "submit" | "reset";
   children?: JSX.Element | string;
@@ -29,6 +31,8 @@ export const Button = ({
   tabIndex?: number;
   buttonRef?: (el: HTMLButtonElement) => void;
   dataTestId?: string;
+  dataAttrName?: string;
+  dataAttrValue?: string;
 }) => (
   <button
     onClick={onClick}
@@ -40,6 +44,7 @@ export const Button = ({
     tabIndex={tabIndex}
     ref={buttonRef}
     data-testid={dataTestId}
+    {...(dataAttrName && dataAttrValue ? { [`data-${dataAttrName}`]: dataAttrValue } : "")}
   >
     {icon && (
       <div className={`${iconWrapperClassName || ""} ${theme === "icon" ? "" : "w-8 -ml-2 mr-2"}`}>

@@ -1,7 +1,8 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useImperativeHandle } from "react";
 
 import { useTemplateStore } from "@formbuilder/store/useTemplateStore";
 import { useTranslation } from "next-i18next";
+import { useRefStore } from "@lib/hooks/useRefStore";
 
 export const FileNameInput = () => {
   const { t } = useTranslation(["form-builder"]);
@@ -16,6 +17,32 @@ export const FileNameInput = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [width, setWidth] = useState(0);
   const span = useRef<HTMLElement>(null);
+
+  const fileNameInput = useRef<HTMLInputElement>(null);
+  const remoteRef = useRef<HTMLInputElement>(null);
+  const { setRef, removeRef } = useRefStore();
+
+  useEffect(() => {
+    setRef("fileNameInput", remoteRef);
+
+    return () => {
+      removeRef("fileNameInput");
+    };
+  }, [remoteRef, setRef, removeRef]);
+
+  // React Hook that lets you customize the handle exposed as a ref
+  // In this case we are only exposing the focus function
+  useImperativeHandle(
+    remoteRef,
+    () => {
+      return {
+        focus() {
+          fileNameInput.current?.focus();
+        },
+      } as HTMLInputElement;
+    },
+    [fileNameInput]
+  );
 
   useEffect(() => {
     // check if the fileName has changed from outside the component
@@ -36,8 +63,10 @@ export const FileNameInput = () => {
         {content}
       </span>
       <input
+        id="fileName"
         style={widthStyle}
-        className="px-2 py-1 min-w-[220px] max-w-[200px] laptop:min-w-[250px] laptop:max-w-[500px] border-2 border-white text-base font-bold placeholder-black hover:border-2 hover:border-gray-default text-ellipsis"
+        ref={fileNameInput}
+        className="px-2 py-1 min-w-[220px] max-w-[200px] laptop:min-w-[250px] laptop:max-w-[500px] border-2 border-white text-base font-bold hover:border-2 hover:border-gray-default text-ellipsis placeholder-slate-500"
         name="filename"
         placeholder={t("unnamedForm", { ns: "form-builder" })}
         value={content}

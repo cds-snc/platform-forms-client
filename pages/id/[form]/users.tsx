@@ -142,7 +142,8 @@ export const getServerSideProps = requireAuthentication(
 
     return {
       props: {
-        ...(locale && (await serverSideTranslations(locale, ["common", "admin-users"]))),
+        ...(locale &&
+          (await serverSideTranslations(locale, ["common", "admin-users", "admin-login"]))),
         formRecord: templateWithAssociatedUsers.formRecord,
         usersAssignedToFormRecord: templateWithAssociatedUsers.users,
         allUsers,

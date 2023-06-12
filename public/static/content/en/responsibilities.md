@@ -3,6 +3,7 @@ Your responsibilities while using GC Forms are detailed in the [Terms of use](/e
 As a reminder, here are the highlights:
 - Obtain the necessary approval to use GC Forms.
 - Accept all conditions and risks including our [service levels](/en/sla). 
+- Practice continuous security.
 - Publish in both official languages. 
 - Provide multiple channels for service and program delivery. 
 - Contribute to a trustworthy experience with consistent branding and content, and discoverable URLs.
