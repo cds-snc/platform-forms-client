@@ -32,7 +32,7 @@
   "submitButton": "Soumettre",
   "input-validation": {
     "heading": "Veuillez corriger les erreurs sur la page.",
-    "required": "Compléter le champs obligatoire afin de continuer.",
+    "required": "Compléter le champ obligatoire afin de continuer.",
     "alphanumeric": "Entrer uniquement des lettres et des chiffres.",
     "text": "",
     "number": "Entrer un numéro.",
