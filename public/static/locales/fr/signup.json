@@ -27,7 +27,8 @@
     "fields": {
       "username": {
         "label": "Adresse courriel",
-        "hint": "Il faut fournir une adresse courriel du gouvernement fédéral."
+        "hint": "Il faut fournir une adresse courriel du gouvernement fédéral.",
+        "error": "Ce champ doit être une adresse valide du gouvernement fédéral."
       },
       "name": {
         "label": "Nom complet",
