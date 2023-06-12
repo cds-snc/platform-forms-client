@@ -27,7 +27,7 @@ export const useFocusIt = ({
   useEffect(() => {
     const el = elRef.current;
     if (el) {
-      // Add a tabindex if one does not exist on the element. This needed to focus an element,
+      // Add a tabindex if one doesn't exist on the element. This is needed to focus an element,
       // unless it is a form control like an input or button
       if (addTabindIndex && !el.getAttribute("tabIndex")) {
         el.setAttribute("tabIndex", "-1");
