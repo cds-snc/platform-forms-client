@@ -112,13 +112,7 @@ jobs:
             aws lambda update-function-configuration \
               --function-name $FUNCTION_NAME-$PR_NUMBER \
               --environment "Variables={\
-                NOTIFY_ENVIRONMENT=staging,\
-                FLASK_APP=application.py,\
-                IP_GEOLOCATE_SERVICE=False,\
-                REDIS_ENABLED=True,\
-                SENDING_DOMAIN=staging.notification.cdssandbox.xyz,\
-                API_HOST_NAME=https://api.staging.notification.cdssandbox.xyz,\
-                ADMIN_BASE_URL=$URL
+                ENV=pr-review,\
               }" > /dev/null 2>&1
 
             aws logs create-log-group --log-group-name /aws/lambda/$FUNCTION_NAME-$PR_NUMBER > /dev/null 2>&1
