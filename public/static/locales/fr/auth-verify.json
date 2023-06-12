@@ -1,7 +1,7 @@
 {
   "verify": {
     "title": "Vérifiez votre courriel pour un code de sécurité",
-    "emailHasBeenSent": "Cette étape permet d’assurert la sécurité de Formulaires GC en vérifiant votre compte chaque fois que vous vous connectez.",
+    "emailHasBeenSent": "Cette étape permet d’assurer la sécurité de Formulaires GC en vérifiant votre compte chaque fois que vous vous connectez.",
     "resendConfirmationCodeButton": "Envoyer un nouveau code",
     "confirmButton": "Continuer",
     "help": "Besoin d'aide?",
