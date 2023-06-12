@@ -30,7 +30,7 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
   const { data: session, status: authStatus } = useSession();
 
   const headingRef = useRef(null);
-  useFocusIt({ elRef: headingRef });
+  useFocusIt({ elRef: headingRef, dependencies: [isReVerify] });
 
   useEffect(() => {
     if (authStatus === "authenticated") {
