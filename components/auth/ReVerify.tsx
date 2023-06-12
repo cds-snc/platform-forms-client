@@ -49,7 +49,6 @@ export const ReVerify = ({
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       });
 
-      // TODO: update to match any new errors API sends the future
       if (Number(status) !== 200) {
         return;
       }
