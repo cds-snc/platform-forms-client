@@ -37,24 +37,36 @@ export const useLogin = () => {
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       });
 
-      if (data?.error) {
-        const error = data.error;
-        if (hasError("UserNotConfirmedException", error)) {
-          setNeedsVerification(true);
-          return false;
-        } else if (hasError(["UserNotFoundException", "NotAuthorizedException"], error)) {
-          handleErrorById("UsernameOrPasswordIncorrect");
-        } else if (hasError("PasswordResetRequiredException", error)) {
-          await router.push("/auth/resetpassword");
-        } else {
-          throw Error(error);
-        }
-      } else if (data?.challengeState === "MFA") {
+      // TODO: are there other challengeState/states to check for? It looks like the rest are errors (API responses)
+      if (data?.challengeState === "MFA") {
         authenticationFlowToken.current = data.authenticationFlowToken;
         return true;
       }
-    } catch (err) {
+
+      // Axios should throw an error automatically but just encase
+      throw Error(data?.error || "Unkown error from login attempt");
+    } catch (err: unknown) {
       logMessage.error(err);
+
+      if (axios.isAxiosError(err) && err.response && err.response.data) {
+        const { reason } = err.response.data;
+
+        if (hasError("UserNotConfirmedException", reason)) {
+          setNeedsVerification(true);
+          return false;
+        }
+
+        if (hasError(["UserNotFoundException", "NotAuthorizedException"], reason)) {
+          handleErrorById("UsernameOrPasswordIncorrect");
+          return false;
+        }
+
+        if (hasError("PasswordResetRequiredException", reason)) {
+          await router.push("/auth/resetpassword");
+          return false;
+        }
+      }
+
       handleErrorById("InternalServiceExceptionLogin");
       return false;
     }
