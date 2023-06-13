@@ -106,10 +106,7 @@ jobs:
             echo "URL=$URL" >> $GITHUB_ENV
 
             aws lambda update-function-configuration \
-              --function-name $FUNCTION_NAME-$PR_NUMBER \
-              --environment "Variables={\
-                ENV=pr-review,\
-              }" > /dev/null 2>&1
+              --function-name $FUNCTION_NAME-$PR_NUMBER > /dev/null 2>&1
 
             aws logs create-log-group --log-group-name /aws/lambda/$FUNCTION_NAME-$PR_NUMBER > /dev/null 2>&1
             aws logs put-retention-policy --log-group-name /aws/lambda/$FUNCTION_NAME-$PR_NUMBER --retention-in-days 14 > /dev/null 2>&1
