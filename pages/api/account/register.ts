@@ -7,6 +7,7 @@ import {
 import { NextApiRequest, NextApiResponse } from "next";
 import { middleware, cors, csrfProtected } from "@lib/middleware";
 import { isValidGovEmail } from "@lib/validation";
+import { sanitizeEmailAddressForCognito } from "@lib/auth";
 
 const register = async (req: NextApiRequest, res: NextApiResponse) => {
   const { COGNITO_REGION, COGNITO_APP_CLIENT_ID } = process.env;
@@ -24,10 +25,13 @@ const register = async (req: NextApiRequest, res: NextApiResponse) => {
       message: "username does not meet requirements",
     });
   }
+
+  const sanitizedUsername = sanitizeEmailAddressForCognito(req.body.username);
+
   const params: SignUpCommandInput = {
     ClientId: COGNITO_APP_CLIENT_ID,
     Password: req.body.password,
-    Username: req.body.username,
+    Username: sanitizedUsername,
     UserAttributes: [
       {
         Name: "name",

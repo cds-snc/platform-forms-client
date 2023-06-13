@@ -44,12 +44,14 @@ export const initiateSignIn = async ({
   username,
   password,
 }: Credentials): Promise<CognitoToken | null> => {
+  const sanitizedUsername = sanitizeEmailAddressForCognito(username);
+
   const params: AdminInitiateAuthCommandInput = {
     AuthFlow: "ADMIN_USER_PASSWORD_AUTH",
     ClientId: process.env.COGNITO_APP_CLIENT_ID,
     UserPoolId: process.env.COGNITO_USER_POOL_ID,
     AuthParameters: {
-      USERNAME: username,
+      USERNAME: sanitizedUsername,
       PASSWORD: password,
     },
   };
@@ -89,7 +91,7 @@ export const initiateSignIn = async ({
     ) {
       const prismaUser = await prisma.user.findUnique({
         where: {
-          email: username,
+          email: sanitizedUsername,
         },
         select: {
           id: true,
@@ -100,7 +102,7 @@ export const initiateSignIn = async ({
         prismaUser?.id ?? "unknown",
         { type: "User", id: prismaUser?.id ?? "unknown" },
         "UserTooManyFailedAttempts",
-        `Password attempts exceeded for ${username}`
+        `Password attempts exceeded for ${sanitizedUsername}`
       );
 
       logMessage.warn("Cognito Lockout: Password attempts exceeded");
@@ -115,6 +117,8 @@ export const begin2FAAuthentication = async ({
   email,
   token,
 }: CognitoToken): Promise<AuthenticationFlowToken> => {
+  const sanitizedEmail = sanitizeEmailAddressForCognito(email);
+
   const verificationCode = await generateVerificationCode();
 
   const dateIn15Minutes = new Date(Date.now() + 900000); // 15 minutes (= 900000 ms)
@@ -122,7 +126,7 @@ export const begin2FAAuthentication = async ({
   try {
     const result = await prisma.cognitoCustom2FA.upsert({
       where: {
-        email: email,
+        email: sanitizedEmail,
       },
       update: {
         cognitoToken: token,
@@ -130,7 +134,7 @@ export const begin2FAAuthentication = async ({
         expires: dateIn15Minutes,
       },
       create: {
-        email: email,
+        email: sanitizedEmail,
         cognitoToken: token,
         verificationCode: verificationCode,
         expires: dateIn15Minutes,
@@ -140,9 +144,9 @@ export const begin2FAAuthentication = async ({
       },
     });
 
-    await clear2FALockout(email);
+    await clear2FALockout(sanitizedEmail);
 
-    await sendVerificationCode(email, verificationCode);
+    await sendVerificationCode(sanitizedEmail, verificationCode);
 
     return result.id;
   } catch (error) {
@@ -156,6 +160,8 @@ export const requestNew2FAVerificationCode = async (
   authenticationFlowToken: AuthenticationFlowToken,
   email: string
 ): Promise<void> => {
+  const sanitizedEmail = sanitizeEmailAddressForCognito(email);
+
   const verificationCode = await generateVerificationCode();
 
   try {
@@ -164,7 +170,7 @@ export const requestNew2FAVerificationCode = async (
         where: {
           id_email: {
             id: authenticationFlowToken,
-            email: email,
+            email: sanitizedEmail,
           },
         },
         data: {
@@ -177,7 +183,7 @@ export const requestNew2FAVerificationCode = async (
       throw new Error("Update failed because of missing 2FA authentication session");
     }
 
-    await sendVerificationCode(email, verificationCode);
+    await sendVerificationCode(sanitizedEmail, verificationCode);
   } catch (error) {
     throw new Error(
       `Failed to generate and send new verification code. Reason: ${(error as Error).message}.`
@@ -190,11 +196,13 @@ export const validate2FAVerificationCode = async (
   email: string,
   verificationCode: string
 ): Promise<Validate2FAVerificationCodeResult> => {
+  const sanitizedEmail = sanitizeEmailAddressForCognito(email);
+
   try {
     const delete2FAVerificationCode = async () => {
       await prisma.cognitoCustom2FA.deleteMany({
         where: {
-          email: email,
+          email: sanitizedEmail,
         },
       });
     };
@@ -204,21 +212,21 @@ export const validate2FAVerificationCode = async (
       where: {
         id_email: {
           id: authenticationFlowToken,
-          email: email,
+          email: sanitizedEmail,
         },
       },
     });
 
     // If the verification code and username do not match fail the login
     if (mfaEntry === null || mfaEntry.verificationCode !== verificationCode) {
-      const lockoutResponse = await registerFailed2FAAttempt(email);
+      const lockoutResponse = await registerFailed2FAAttempt(sanitizedEmail);
       if (lockoutResponse.isLockedOut) {
         await delete2FAVerificationCode();
-        await clear2FALockout(email);
+        await clear2FALockout(sanitizedEmail);
 
         const prismaUser = await prisma.user.findUnique({
           where: {
-            email: email,
+            email: sanitizedEmail,
           },
           select: {
             id: true,
@@ -229,7 +237,7 @@ export const validate2FAVerificationCode = async (
           prismaUser?.id ?? "unknown",
           { type: "User", id: prismaUser?.id ?? "unknown" },
           "UserTooManyFailedAttempts",
-          `2FA attempts exceeded for ${email}`
+          `2FA attempts exceeded for ${sanitizedEmail}`
         );
 
         logMessage.warn("2FA Lockout: Verification code attempts exceeded");
@@ -243,14 +251,14 @@ export const validate2FAVerificationCode = async (
     // If the verification code is expired remove it from the database
     if (mfaEntry.expires.getTime() < new Date().getTime()) {
       await delete2FAVerificationCode();
-      await clear2FALockout(email);
+      await clear2FALockout(sanitizedEmail);
       return { status: Validate2FAVerificationCodeResultStatus.EXPIRED };
     }
 
     // 2FA is valid, remove the verification code from the database and return user info
     await delete2FAVerificationCode();
 
-    await clear2FALockout(email);
+    await clear2FALockout(sanitizedEmail);
 
     const decodedCognitoToken = decodeCognitoToken(mfaEntry.cognitoToken);
 
@@ -265,6 +273,14 @@ export const validate2FAVerificationCode = async (
   } catch (error) {
     throw new Error(`Failed to validate verification code. Reason: ${(error as Error).message}.`);
   }
+};
+
+/**
+ * Since our Cognito user pool is case sensitive we need to sanitize email addresses before we can use them in our requests.
+ * The goal is to make them lowercase and to remove any white spaces at the beginning or the end of the address.
+ */
+export const sanitizeEmailAddressForCognito = (emailAddress: string) => {
+  return emailAddress.trim().toLowerCase();
 };
 
 const decodeCognitoToken = (token: string): DecodedCognitoToken => {
