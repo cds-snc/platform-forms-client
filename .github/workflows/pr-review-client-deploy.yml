@@ -124,6 +124,11 @@ jobs:
             --function-name $FUNCTION_NAME-$PR_NUMBER \
             --reserved-concurrent-executions 5
 
+          PrUrl="$(aws lambda get-function-url-config --function-name $FUNCTION_NAME-$PR_NUMBER | jq .FunctionUrl)"
+          ExistingCallbackUrls=$(aws cognito-idp describe-user-pool-client --user-pool-id $COGNITO_USER_POOL_ID --client-id $COGNITO_APP_CLIENT_ID --output text | grep CALLBACKURLS | awk '{print $2}')
+          NewCallbackUrls="$ExistingCallbackUrls $PrUrl"
+          aws cognito-idp update-user-pool-client --user-pool-id $COGNITO_USER_POOL_ID --client-id $COGNITO_APP_CLIENT_ID --callback-urls $NewCallbackUrls --region $AWS_REGION
+
       - name: Update PR
         if: env.URL != ''
         uses: actions/github-script@98814c53be79b1d30f795b907e553d8679345975 # v6.4.0
