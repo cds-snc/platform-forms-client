@@ -55,11 +55,15 @@ COPY package.json yarn.lock next.config.js next-i18next.config.js ./
 COPY public ./public
 COPY prisma ./prisma
 COPY form-builder-templates ./form-builder-templates
+COPY bin/pr-review-entrypoint.sh ./entrypoint.sh
 
-# Lambda adapter: https://github.com/awslabs/aws-lambda-web-adapter
+# Required by the entrypoint.sh to load the SSM ParameterStore environment variables
+RUN apt-get update && apt-get install -y awscli
+
+# Lambda web adapter: https://github.com/awslabs/aws-lambda-web-adapter
 COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.7.0 /lambda-adapter /opt/extensions/lambda-adapter
 RUN ln -s /tmp ./.next/cache
 
 EXPOSE 3000
 
-ENTRYPOINT ["node", "server.js"]
+ENTRYPOINT ["./entrypoint.sh"]
