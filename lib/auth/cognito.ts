@@ -40,17 +40,6 @@ export type Validate2FAVerificationCodeResult = {
   decodedCognitoToken?: DecodedCognitoToken;
 };
 
-export const decodeCognitoToken = (token: string): DecodedCognitoToken => {
-  const cognitoIDTokenParts = token.split(".");
-  const claimsBuff = Buffer.from(cognitoIDTokenParts[1], "base64");
-  const cognitoIDTokenClaims = JSON.parse(claimsBuff.toString("utf8"));
-  return {
-    id: cognitoIDTokenClaims.sub,
-    name: cognitoIDTokenClaims.name,
-    email: cognitoIDTokenClaims.email,
-  };
-};
-
 export const initiateSignIn = async ({
   username,
   password,
@@ -98,16 +87,14 @@ export const initiateSignIn = async ({
       e.name === "NotAuthorizedException" &&
       e.message === "Password attempts exceeded"
     ) {
-      const prismaUser = await prisma.user
-        .findUnique({
-          where: {
-            email: username,
-          },
-          select: {
-            id: true,
-          },
-        })
-        .catch((e) => prismaErrors(e, null));
+      const prismaUser = await prisma.user.findUnique({
+        where: {
+          email: username,
+        },
+        select: {
+          id: true,
+        },
+      });
 
       logEvent(
         prismaUser?.id ?? "unknown",
@@ -159,8 +146,9 @@ export const begin2FAAuthentication = async ({
 
     return result.id;
   } catch (error) {
-    // handle error if hitting unique constraint
-    throw new Error("begin2FAAuthentication > failure");
+    throw new Error(
+      `Failed to generate and send initial verification code. Reason: ${(error as Error).message}.`
+    );
   }
 };
 
@@ -171,22 +159,29 @@ export const requestNew2FAVerificationCode = async (
   const verificationCode = await generateVerificationCode();
 
   try {
-    await prisma.cognitoCustom2FA.update({
-      where: {
-        id_email: {
-          id: authenticationFlowToken,
-          email: email,
+    const result = await prisma.cognitoCustom2FA
+      .update({
+        where: {
+          id_email: {
+            id: authenticationFlowToken,
+            email: email,
+          },
         },
-      },
-      data: {
-        verificationCode: verificationCode,
-      },
-    });
+        data: {
+          verificationCode: verificationCode,
+        },
+      })
+      .catch((e) => prismaErrors(e, null));
+
+    if (result === null) {
+      throw new Error("Update failed because of missing 2FA authentication session");
+    }
 
     await sendVerificationCode(email, verificationCode);
   } catch (error) {
-    // handle error if hitting unique constraint
-    throw new Error("requestNew2FAVerificationCode > failure");
+    throw new Error(
+      `Failed to generate and send new verification code. Reason: ${(error as Error).message}.`
+    );
   }
 };
 
@@ -195,77 +190,91 @@ export const validate2FAVerificationCode = async (
   email: string,
   verificationCode: string
 ): Promise<Validate2FAVerificationCodeResult> => {
-  const delete2FAVerificationCode = async () => {
-    await prisma.cognitoCustom2FA.deleteMany({
+  try {
+    const delete2FAVerificationCode = async () => {
+      await prisma.cognitoCustom2FA.deleteMany({
+        where: {
+          email: email,
+        },
+      });
+    };
+
+    // Verify if the verification code is valid
+    const mfaEntry = await prisma.cognitoCustom2FA.findUnique({
       where: {
-        email: email,
+        id_email: {
+          id: authenticationFlowToken,
+          email: email,
+        },
       },
     });
-  };
 
-  // Verify if the verification code is valid
-  const mfaEntry = await prisma.cognitoCustom2FA.findUnique({
-    where: {
-      id_email: {
-        id: authenticationFlowToken,
-        email: email,
-      },
-    },
-  });
+    // If the verification code and username do not match fail the login
+    if (mfaEntry === null || mfaEntry.verificationCode !== verificationCode) {
+      const lockoutResponse = await registerFailed2FAAttempt(email);
+      if (lockoutResponse.isLockedOut) {
+        await delete2FAVerificationCode();
+        await clear2FALockout(email);
 
-  // If the verification code and username do not match fail the login
-  if (mfaEntry === null || mfaEntry.verificationCode !== verificationCode) {
-    const lockoutResponse = await registerFailed2FAAttempt(email);
-    if (lockoutResponse.isLockedOut) {
-      await delete2FAVerificationCode();
-      await clear2FALockout(email);
-
-      const prismaUser = await prisma.user
-        .findUnique({
+        const prismaUser = await prisma.user.findUnique({
           where: {
             email: email,
           },
           select: {
             id: true,
           },
-        })
-        .catch((e) => prismaErrors(e, null));
+        });
 
-      logEvent(
-        prismaUser?.id ?? "unknown",
-        { type: "User", id: prismaUser?.id ?? "unknown" },
-        "UserTooManyFailedAttempts",
-        `2FA attempts exceeded for ${email}`
-      );
+        logEvent(
+          prismaUser?.id ?? "unknown",
+          { type: "User", id: prismaUser?.id ?? "unknown" },
+          "UserTooManyFailedAttempts",
+          `2FA attempts exceeded for ${email}`
+        );
 
-      logMessage.warn("2FA Lockout: Verification code attempts exceeded");
+        logMessage.warn("2FA Lockout: Verification code attempts exceeded");
 
-      return { status: Validate2FAVerificationCodeResultStatus.LOCKED_OUT };
-    } else {
-      return { status: Validate2FAVerificationCodeResultStatus.INVALID };
+        return { status: Validate2FAVerificationCodeResultStatus.LOCKED_OUT };
+      } else {
+        return { status: Validate2FAVerificationCodeResultStatus.INVALID };
+      }
     }
-  }
 
-  // If the verification code is expired remove it from the database
-  if (mfaEntry.expires.getTime() < new Date().getTime()) {
+    // If the verification code is expired remove it from the database
+    if (mfaEntry.expires.getTime() < new Date().getTime()) {
+      await delete2FAVerificationCode();
+      await clear2FALockout(email);
+      return { status: Validate2FAVerificationCodeResultStatus.EXPIRED };
+    }
+
+    // 2FA is valid, remove the verification code from the database and return user info
     await delete2FAVerificationCode();
+
     await clear2FALockout(email);
-    return { status: Validate2FAVerificationCodeResultStatus.EXPIRED };
+
+    const decodedCognitoToken = decodeCognitoToken(mfaEntry.cognitoToken);
+
+    return {
+      status: Validate2FAVerificationCodeResultStatus.VALID,
+      decodedCognitoToken: {
+        id: decodedCognitoToken.id,
+        name: decodedCognitoToken.name,
+        email: decodedCognitoToken.email,
+      },
+    };
+  } catch (error) {
+    throw new Error(`Failed to validate verification code. Reason: ${(error as Error).message}.`);
   }
+};
 
-  // 2FA is valid, remove the verification code from the database and return user info
-  await delete2FAVerificationCode();
-
-  await clear2FALockout(email);
-
-  const decodedCognitoToken = decodeCognitoToken(mfaEntry.cognitoToken);
+const decodeCognitoToken = (token: string): DecodedCognitoToken => {
+  const cognitoIDTokenParts = token.split(".");
+  const claimsBuff = Buffer.from(cognitoIDTokenParts[1], "base64");
+  const cognitoIDTokenClaims = JSON.parse(claimsBuff.toString("utf8"));
 
   return {
-    status: Validate2FAVerificationCodeResultStatus.VALID,
-    decodedCognitoToken: {
-      id: decodedCognitoToken.id,
-      name: decodedCognitoToken.name,
-      email: decodedCognitoToken.email,
-    },
+    id: cognitoIDTokenClaims.sub,
+    name: cognitoIDTokenClaims.name,
+    email: cognitoIDTokenClaims.email,
   };
 };
