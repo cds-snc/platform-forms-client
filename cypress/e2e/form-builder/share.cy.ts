@@ -28,8 +28,8 @@ describe("Form builder share", () => {
   it("Renders share flyout with name check", () => {
     cy.get("button").contains("Share").click();
     cy.get("[role='menuitem']").should("have.length", 1);
-    cy.get("span").contains("You must name").should("exist");
-    cy.get("span button").contains("name your form").click();
+    cy.get("[role='menuitem']").contains("You must").should("exist");
+    cy.get("[role='menuitem'] span").contains("name your form").click();
     cy.focused().should("have.attr", "id", "fileName");
   });
 
