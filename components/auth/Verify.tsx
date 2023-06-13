@@ -1,4 +1,4 @@
-import React, { ReactElement, useState, useEffect } from "react";
+import React, { ReactElement, useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import { Formik } from "formik";
 import { TextInput, Label, Alert } from "@components/forms";
@@ -29,7 +29,8 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
   const [isReVerify, setIsReverify] = useState(false);
   const { data: session, status: authStatus } = useSession();
 
-  const headingRef = useFocusIt();
+  const headingRef = useRef(null);
+  useFocusIt({ elRef: headingRef, dependencies: [isReVerify] });
 
   useEffect(() => {
     if (authStatus === "authenticated") {

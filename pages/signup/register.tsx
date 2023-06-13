@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useRef } from "react";
 import { Formik } from "formik";
 import { TextInput, Label, Alert, ErrorListItem } from "@components/forms";
 import { Button } from "@components/globals";
@@ -43,7 +43,8 @@ const Register = () => {
     handleErrorById,
   } = useLogin();
 
-  const headingRef = useFocusIt();
+  const headingRef = useRef(null);
+  useFocusIt({ elRef: headingRef });
 
   const register = async ({
     username,
