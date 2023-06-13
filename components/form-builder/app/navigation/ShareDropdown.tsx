@@ -8,7 +8,6 @@ import { ChevronDown, ChevronRight, ShareIcon, LinkIcon } from "../../icons";
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { ShareModal } from "../ShareModal";
 import { LinksSubMenu } from "./LinksSubMenu";
-import { Button } from "@components/globals";
 import { ShareModalUnauthenticated } from "..";
 
 import { useRefStore } from "@lib/hooks/useRefStore";
@@ -56,24 +55,20 @@ export const ShareDropdown = () => {
             className={`${menuWidth} rounded-lg px-1.5 py-1 shadow-md bg-white border-1 border-black`}
           >
             {!name && (
-              <DropdownMenuPrimitive.Item>
-                <span className="flex-grow ml-2 text-sm inline-block w-[400px]">
-                  {t("share.missingName.message1")}{" "}
-                  {/* note: using a Button here ... using a Link doesn't close the menu */}
-                  <Button
-                    theme="link"
-                    className="inline-block"
-                    onClick={() => {
-                      // Timeout is currently required because menu steals focus on close.
-                      setTimeout(() => {
-                        getRef("fileNameInput")?.current?.focus();
-                      }, 50);
-                    }}
-                  >
-                    {t("share.missingName.message2")}
-                  </Button>{" "}
-                  {t("share.missingName.message3")}
-                </span>
+              <DropdownMenuPrimitive.Item
+                onClick={() => {
+                  setTimeout(() => {
+                    getRef("fileNameInput")?.current?.focus();
+                  }, 50);
+                }}
+                className={
+                  "flex cursor-pointer items-center rounded-md px-2 py-2 text-sm outline-none hover:text-white-default hover:bg-gray-600 focus:text-white-default focus:bg-gray-600 [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
+                }
+              >
+                {t("share.missingName.message1")}
+                <span className="underline mx-1">{t("share.missingName.message2")}</span>
+                {t("share.missingName.message3")}
+                <span className="sr-only">{t("share.missingName.message4")}</span>
               </DropdownMenuPrimitive.Item>
             )}
 

@@ -42,6 +42,7 @@ jobs:
       - name: Build Docker image
         run: |
           docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE }}:${{ env.PR_NUMBER }} \
+            -f Dockerfile.pr \
             --build-arg GITHUB_SHA_ARG=$GITHUB_SHA \
             --build-arg COGNITO_APP_CLIENT_ID=$COGNITO_APP_CLIENT_ID \
             --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID .
