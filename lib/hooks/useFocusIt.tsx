@@ -14,7 +14,7 @@ import { useCallback } from "react";
  */
 export const useFocusIt = (addTabindIndex = true) => {
   return useCallback(
-    (el: HTMLElement) => {
+    (el: HTMLElement | null) => {
       if (el) {
         // Add a tabindex if one doesn't exist on the element. This is needed to focus an element,
         // unless it is a form control like an input or button but doesn't "hurt" to have regardless.
