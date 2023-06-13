@@ -1,4 +1,4 @@
-import React, { ReactElement, useRef } from "react";
+import React, { ReactElement } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { Button, StyledLink } from "@components/globals";
@@ -28,8 +28,7 @@ export const ReVerify = ({
   const { t } = useTranslation(["auth-verify", "cognito-errors", "common"]);
   const [authErrorsState, { authErrorsReset, handleErrorById }] = useAuthErrors();
 
-  const headingRef = useRef(null);
-  useFocusIt({ elRef: headingRef });
+  const headingRef = useFocusIt();
 
   const handleReVerify = async () => {
     authErrorsReset();
