@@ -7,7 +7,7 @@
     "help": "Need help?",
     "resendConfirmationCode": {
       "title": "Check your email",
-      "body": "An email with a verification code has been sent to you"
+      "body": "An email with a security code has been sent to you"
     },
     "fields": {
       "confirmationCode": {
