@@ -12,8 +12,7 @@ const requestNewVerificationCode = async (req: NextApiRequest, res: NextApiRespo
     await requestNew2FAVerificationCode(authenticationFlowToken, email);
     return res.status(200).json({});
   } catch (error) {
-    // TODO: Proper error handling
-    return res.status(400).json({});
+    return res.status(500).json({ error: "Server failed to send a new verification code." });
   }
 };
 

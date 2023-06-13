@@ -190,7 +190,9 @@ describe("Test Cognito library", () => {
       const mockedId = "f4f7cedb-0f0b-4390-91a2-69e8c8a29f67";
 
       const verificationCode = await generateVerificationCode();
+
       mockGenerateVerificationCode.mockResolvedValueOnce(verificationCode);
+      (prismaMock.cognitoCustom2FA.update as jest.MockedFunction<any>).mockResolvedValue({});
 
       await requestNew2FAVerificationCode(mockedId, "test@test.com");
 

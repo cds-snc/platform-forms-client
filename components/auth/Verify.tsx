@@ -130,6 +130,7 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
                 type={ErrorStatus.ERROR}
                 heading={authErrorsState.title}
                 onDismiss={authErrorsReset}
+                focussable={true}
                 id="cognitoErrors"
               >
                 {authErrorsState.description}&nbsp;
