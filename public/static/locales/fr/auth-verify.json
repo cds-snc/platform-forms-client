@@ -7,11 +7,11 @@
     "help": "Besoin d'aide?",
     "resendConfirmationCode": {
       "title": "Vérifiez votre courriel",
-      "body": "Un courriel avec un code de vérification vous a été envoyé"
+      "body": "Un courriel avec un code de sécurité vous a été envoyé"
     },
     "fields": {
       "confirmationCode": {
-        "label": "Entrer le code de vérification pour compléter la création de votre compte",
+        "label": "Code de sécurité",
         "description": "Entrez le code dans un délai de 15 minutes.",
         "error": {
           "notEmpty": "Ne peut pas être vide",

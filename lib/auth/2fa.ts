@@ -13,9 +13,9 @@ export const sendVerificationCode = async (email: string, verificationCode: stri
 
     await notify.sendEmail(TEMPLATE_ID, email, {
       personalisation: {
-        subject: "Your verification code | Votre code de vérification",
+        subject: "Your security code | Votre code de vérification",
         formResponse: `
-**Your verification code | Votre code de vérification**
+**Your security code | Votre code de vérification**
 \n\n
 ${verificationCode}`,
       },
