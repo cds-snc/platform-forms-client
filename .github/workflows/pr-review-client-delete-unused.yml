@@ -9,7 +9,7 @@ env:
   AWS_DEFAULT_REGION: ca-central-1
   DELETE_AFTER_DAYS: 21
   FUNCTION_PREFIX: "forms-client-pr"
-  IMAGE: pr_review/client
+  IMAGE: pr_review
 
 jobs:
   delete-unused-test-client:
