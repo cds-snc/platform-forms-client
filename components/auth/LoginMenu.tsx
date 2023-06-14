@@ -14,7 +14,7 @@ const LoginMenu = ({ isAuthenticated }: LoginMenuProp) => {
   const handleClick = () => {
     clearTemplateStore();
     signOut({ redirect: false, callbackUrl: "/" });
-    window.location.href = "/${i18n.language}/auth/logout";
+    window.location.href = `/${i18n.language}/auth/logout`;
   };
 
   return (
