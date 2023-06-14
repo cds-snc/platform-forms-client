@@ -47,17 +47,21 @@ export const useLogin = () => {
     } catch (err: unknown) {
       logMessage.error(err);
 
-      // 40X errors
+      // 40X Client errors
       if (axios.isAxiosError(err) && err.response && err.response.data) {
         const { reason } = err.response.data;
 
-        if (hasError("UserNotConfirmedException", reason)) {
-          setNeedsVerification(true);
+        // Handle slightly different response objects with the 400 check
+        if (
+          hasError(["UserNotFoundException", "NotAuthorizedException"], reason) ||
+          (!reason && err.response.status === 400)
+        ) {
+          handleErrorById("UsernameOrPasswordIncorrect");
           return false;
         }
 
-        if (hasError(["UserNotFoundException", "NotAuthorizedException"], reason)) {
-          handleErrorById("UsernameOrPasswordIncorrect");
+        if (hasError("UserNotConfirmedException", reason)) {
+          setNeedsVerification(true);
           return false;
         }
 
@@ -67,7 +71,8 @@ export const useLogin = () => {
         }
       }
 
-      // 500 error
+      // 500 Server/fallback related errors
+      // Note: Could also be a 400 or 401 "Cognito authentication failed"
       handleErrorById("InternalServiceExceptionLogin");
       return false;
     }
