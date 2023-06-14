@@ -21,5 +21,9 @@
     "description": "The email address or password you entered is incorrect or the account does not exist.",
     "link": "/signup/register",
     "linkText": "If you don’t have an account, create one now."
+  },
+  "2FALockedOutSession": {
+    "title": "Too many sign-in attempts ",
+    "description": "Try signing in again to generate a new security code."
   }
 }
