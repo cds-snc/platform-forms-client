@@ -55,7 +55,6 @@ export const useLogin = () => {
           return false;
         }
 
-        // 400 error
         if (hasError(["UserNotFoundException", "NotAuthorizedException"], reason)) {
           handleErrorById("UsernameOrPasswordIncorrect");
           return false;
