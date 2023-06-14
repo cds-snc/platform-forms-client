@@ -13,8 +13,8 @@ on:
 env:
   AWS_DEFAULT_REGION: ca-central-1
   FUNCTION_NAME: "forms-client-pr"
-  IMAGE: forms/client
-  REGISTRY: 687401027353.dkr.ecr.ca-central-1.amazonaws.com/pr_review
+  IMAGE: pr_review/client
+  REGISTRY: 687401027353.dkr.ecr.ca-central-1.amazonaws.com
   ROLE_ARN: arn:aws:iam::687401027353:role/forms-lambda-client
   COGNITO_APP_CLIENT_ID: ${{secrets.PRODUCTION_COGNITO_APP_CLIENT_ID}}
   COGNITO_USER_POOL_ID: ${{ secrets.PRODUCTION_COGNITO_USER_POOL_ID}}

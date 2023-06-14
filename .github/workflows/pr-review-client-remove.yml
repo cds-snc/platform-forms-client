@@ -11,8 +11,8 @@ env:
   AWS_DEFAULT_REGION: ca-central-1
   FUNCTION_NAME: "forms-client-pr"
   GITHUB_SHA: ${{ github.sha }}
-  IMAGE: forms/client
-  REGISTRY: 687401027353.dkr.ecr.ca-central-1.amazonaws.com/pr_review
+  IMAGE: pr_review/client
+  REGISTRY: 687401027353.dkr.ecr.ca-central-1.amazonaws.com
 
 jobs:
   remove-test-client:
