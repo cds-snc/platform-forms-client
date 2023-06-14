@@ -1,7 +1,7 @@
 import { defineConfig } from "cypress";
 
 export default defineConfig({
-  video: false,
+  video: true,
   defaultCommandTimeout: 10000,
 
   e2e: {
@@ -13,5 +13,13 @@ export default defineConfig({
       framework: "next",
       bundler: "webpack",
     },
+  },
+  retries: {
+    // Configure retry attempts for `cypress run`
+    // Default is 0
+    runMode: 3,
+    // Configure retry attempts for `cypress open`
+    // Default is 0
+    openMode: 0,
   },
 });
