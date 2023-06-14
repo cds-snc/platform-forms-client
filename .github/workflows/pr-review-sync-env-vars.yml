@@ -1,7 +1,6 @@
 name: PR review sync envionment variables
 
 on:
-  workflow_dispatch:
   workflow_run:
     workflows: ["Deploy to Staging"]
     types:
