@@ -120,7 +120,7 @@ jobs:
           aws lambda wait function-updated --function-name $FUNCTION_NAME-$PR_NUMBER
           aws lambda put-function-concurrency \
             --function-name $FUNCTION_NAME-$PR_NUMBER \
-            --reserved-concurrent-executions 10
+            --reserved-concurrent-executions 10 > /dev/null 2>&1
 
       - name: Update PR
         if: env.URL != ''
