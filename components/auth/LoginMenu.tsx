@@ -13,8 +13,7 @@ const LoginMenu = ({ isAuthenticated }: LoginMenuProp) => {
   const { i18n, t } = useTranslation("common");
   const handleClick = () => {
     clearTemplateStore();
-    signOut({ redirect: false, callbackUrl: "/" });
-    window.location.href = `/${i18n.language}/auth/logout`;
+    signOut({ callbackUrl: `/${i18n.language}/auth/logout` });
   };
 
   return (
