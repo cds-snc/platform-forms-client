@@ -53,7 +53,9 @@ COPY bin/pr-review-entrypoint.sh ./entrypoint.sh
 RUN apt-get update && apt-get install -y awscli
 
 # Lambda web adapter: https://github.com/awslabs/aws-lambda-web-adapter
-COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.7.0 /lambda-adapter /opt/extensions/lambda-adapter
+# The public.ecr.aws/awsguru/aws-lambda-adapter:0.7.0 image reference in the docs has
+# been pushed to the public CDS ECR to avoid rate limiting when pulling the image.
+COPY --from=public.ecr.aws/cds-snc/aws-lambda-adapter:0.7.0 /lambda-adapter /opt/extensions/lambda-adapter
 RUN ln -s /tmp ./.next/cache
 
 EXPOSE 3000
