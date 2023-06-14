@@ -120,21 +120,6 @@ describe("Login Page", () => {
       cy.get("button[type='submit']").click();
       cy.get("[data-testid='errorMessage']").should("be.visible");
     });
-  });
-  describe("User 2FA screen - submit a code", () => {
-    beforeEach(() => {
-      cy.visitPage("/en/auth/login");
-      cy.get("input[id='username']").should("be.visible");
-      cy.get("input[id='password']").should("be.visible");
-      cy.get("input[id='username']").type("test.user@cds-snc.ca");
-      cy.get("input[id='username']").should("have.value", "test.user@cds-snc.ca");
-      cy.get("input[id='password']").type("testTesttest");
-      cy.get("input[id='password']").should("have.value", "testTesttest");
-      cy.get("button[type='submit']").should("be.visible");
-      cy.get("button[type='submit']").click();
-      cy.get("[id='verificationCodeForm']").should("be.visible");
-    });
-    // This test wants to run by itself
     it("Sucessfully submits a code", () => {
       cy.get("input[id='verificationCode']").should("be.visible");
       cy.get("input[id='verificationCode']").type("12345");
