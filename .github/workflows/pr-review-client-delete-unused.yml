@@ -37,9 +37,9 @@ jobs:
               if [ $LAST_MODIFIED_EPOCH -lt $DELETE_DATE_EPOCH ]; then
                   echo "Deleting $FUNCTION_NAME"
                   PR_NUMBER="${FUNCTION_NAME##*-}"
-                  aws lambda delete-function-url-config --function-name ${{ env.FUNCTION_PREFIX }}-$PR_NUMBER
-                  aws lambda delete-function --function-name ${{ env.FUNCTION_PREFIX }}-$PR_NUMBER
-                  aws logs delete-log-group --log-group-name /aws/lambda/${{ env.FUNCTION_PREFIX }}-$PR_NUMBER
-                  aws ecr batch-delete-image --repository-name $IMAGE --image-ids imageTag=$PR_NUMBER
+                  aws lambda delete-function-url-config --function-name ${{ env.FUNCTION_PREFIX }}-$PR_NUMBER > /dev/null 2>&1
+                  aws lambda delete-function --function-name ${{ env.FUNCTION_PREFIX }}-$PR_NUMBER > /dev/null 2>&1
+                  aws logs delete-log-group --log-group-name /aws/lambda/${{ env.FUNCTION_PREFIX }}-$PR_NUMBER > /dev/null 2>&1
+                  aws ecr batch-delete-image --repository-name $IMAGE --image-ids imageTag=$PR_NUMBER > /dev/null 2>&1
               fi
           done
