@@ -44,6 +44,8 @@ export const useLogin = () => {
           return false;
         } else if (hasError(["UserNotFoundException", "NotAuthorizedException"], error)) {
           handleErrorById("UsernameOrPasswordIncorrect");
+        } else if (hasError("AccountDeactivated", error)) {
+          await router.push("/auth/account-deactivated");
         } else if (hasError("PasswordResetRequiredException", error)) {
           await router.push("/auth/resetpassword");
         } else {
@@ -55,6 +57,9 @@ export const useLogin = () => {
       }
     } catch (err) {
       logMessage.error(err);
+      if (axios.isAxiosError(err) && err.response?.data?.reason === "AccountDeactivated") {
+        await router.push("/auth/account-deactivated");
+      }
       handleErrorById("InternalServiceExceptionLogin");
       return false;
     }

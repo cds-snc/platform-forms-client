@@ -115,6 +115,21 @@ export const begin2FAAuthentication = async ({
   email,
   token,
 }: CognitoToken): Promise<AuthenticationFlowToken> => {
+  // ensure the user account is active
+  const prismaUser = await prisma.user.findUnique({
+    where: {
+      email: email,
+    },
+    select: {
+      id: true,
+      active: true,
+    },
+  });
+
+  if (prismaUser?.active === false) {
+    throw new Error("AccountDeactivated");
+  }
+
   const verificationCode = await generateVerificationCode();
 
   const dateIn15Minutes = new Date(Date.now() + 900000); // 15 minutes (= 900000 ms)
@@ -209,21 +224,28 @@ export const validate2FAVerificationCode = async (
       },
     });
 
+    // ensure the user account is active
+    const prismaUser = await prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+      select: {
+        id: true,
+        active: true,
+      },
+    });
+
+    if (prismaUser?.active === false) {
+      await delete2FAVerificationCode();
+      throw new Error("AccountDeactivated");
+    }
+
     // If the verification code and username do not match fail the login
     if (mfaEntry === null || mfaEntry.verificationCode !== verificationCode) {
       const lockoutResponse = await registerFailed2FAAttempt(email);
       if (lockoutResponse.isLockedOut) {
         await delete2FAVerificationCode();
         await clear2FALockout(email);
-
-        const prismaUser = await prisma.user.findUnique({
-          where: {
-            email: email,
-          },
-          select: {
-            id: true,
-          },
-        });
 
         logEvent(
           prismaUser?.id ?? "unknown",
