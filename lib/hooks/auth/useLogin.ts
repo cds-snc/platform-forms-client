@@ -47,6 +47,7 @@ export const useLogin = () => {
     } catch (err: unknown) {
       logMessage.error(err);
 
+      // 40X errors
       if (axios.isAxiosError(err) && err.response && err.response.data) {
         const { reason } = err.response.data;
 
@@ -66,7 +67,7 @@ export const useLogin = () => {
         }
       }
 
-      // 401 or 500 error
+      // 500 error
       handleErrorById("InternalServiceExceptionLogin");
       return false;
     }
