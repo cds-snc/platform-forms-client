@@ -1,7 +1,7 @@
 import { defineConfig } from "cypress";
 
 export default defineConfig({
-  video: true,
+  video: false,
   defaultCommandTimeout: 10000,
 
   e2e: {
