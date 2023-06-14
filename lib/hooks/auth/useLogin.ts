@@ -37,7 +37,6 @@ export const useLogin = () => {
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       });
 
-      // TODO: are there other challengeState/states to check for? It looks like the rest are errors (API responses)
       if (data?.challengeState === "MFA") {
         authenticationFlowToken.current = data.authenticationFlowToken;
         return true;
@@ -56,6 +55,7 @@ export const useLogin = () => {
           return false;
         }
 
+        // 400 error
         if (hasError(["UserNotFoundException", "NotAuthorizedException"], reason)) {
           handleErrorById("UsernameOrPasswordIncorrect");
           return false;
@@ -67,6 +67,7 @@ export const useLogin = () => {
         }
       }
 
+      // 401 or 500 error
       handleErrorById("InternalServiceExceptionLogin");
       return false;
     }
