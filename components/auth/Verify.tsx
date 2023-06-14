@@ -16,6 +16,7 @@ import { ReVerify } from "./ReVerify";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
+import { Locked2fa } from "./Locked2fa";
 
 interface VerifyProps {
   username: React.MutableRefObject<string>;
@@ -27,6 +28,7 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
   const { t, i18n } = useTranslation(["auth-verify", "cognito-errors", "common"]);
   const [authErrorsState, { authErrorsReset, handleErrorById }] = useAuthErrors();
   const [isReVerify, setIsReverify] = useState(false);
+  const [is2FAlocked, setIs2FAlocked] = useState(false);
   const { data: session, status: authStatus } = useSession();
 
   const headingRef = useRef(null);
@@ -49,6 +51,7 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
 
   const handleVerify = async ({ verificationCode }: { verificationCode: string }) => {
     authErrorsReset();
+    setIs2FAlocked(false);
     try {
       const result = await signIn("cognito", {
         username: username.current,
@@ -62,7 +65,11 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
       if (!result?.ok) {
         const error = result?.error;
         if (error) {
-          handleErrorById(error);
+          if (error === "2FALockedOutSession") {
+            setIs2FAlocked(true);
+          } else {
+            handleErrorById(error);
+          }
         }
         return;
       }
@@ -99,6 +106,10 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
       .matches(/^[a-z0-9]*$/i, t("verify.fields.confirmationCode.error.noSymbols"))
       .matches(/^[a-z0-9]{5}$/i, t("verify.fields.confirmationCode.error.length")),
   });
+
+  if (is2FAlocked) {
+    return <Locked2fa />;
+  }
 
   if (isReVerify) {
     return (
