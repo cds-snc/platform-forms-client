@@ -32,8 +32,8 @@ jobs:
 
       - name: Delete lambda function resources
         run: |
-          aws lambda wait function-active --function-name $FUNCTION_NAME-$PR_NUMBER
-          aws lambda delete-function-url-config --function-name $FUNCTION_NAME-$PR_NUMBER
-          aws lambda delete-function --function-name $FUNCTION_NAME-$PR_NUMBER
-          aws logs delete-log-group --log-group-name /aws/lambda/$FUNCTION_NAME-$PR_NUMBER
-          aws ecr batch-delete-image --repository-name $IMAGE --image-ids imageTag=$PR_NUMBER
+          aws lambda wait function-active --function-name $FUNCTION_NAME-$PR_NUMBER > /dev/null 2>&1
+          aws lambda delete-function-url-config --function-name $FUNCTION_NAME-$PR_NUMBER > /dev/null 2>&1
+          aws lambda delete-function --function-name $FUNCTION_NAME-$PR_NUMBER > /dev/null 2>&1
+          aws logs delete-log-group --log-group-name /aws/lambda/$FUNCTION_NAME-$PR_NUMBER > /dev/null 2>&1
+          aws ecr batch-delete-image --repository-name $IMAGE --image-ids imageTag=$PR_NUMBER > /dev/null 2>&1
