@@ -33,7 +33,7 @@ export const LoggedOutTab = ({ tabName }: LoggedOutTabProps) => {
       }
     >
       <p className="gc-h2 text-[#748094]">{t(`loggedOutTab.${tabName}.title`)}</p>
-      <p className="mb-6 mt-6">
+      <p className="mb-6">
         {t(`loggedOutTab.${tabName}.text1`)} <a href={signInLink}>{t("loggedOutTab.text2")}</a>.{" "}
         {t("loggedOutTab.text3")} <a href={createAccountLink}>{t("loggedOutTab.text4")}</a>.
       </p>
