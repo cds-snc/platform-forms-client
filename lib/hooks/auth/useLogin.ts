@@ -37,29 +37,47 @@ export const useLogin = () => {
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       });
 
-      if (data?.error) {
-        const error = data.error;
-        if (hasError("UserNotConfirmedException", error)) {
-          setNeedsVerification(true);
-          return false;
-        } else if (hasError(["UserNotFoundException", "NotAuthorizedException"], error)) {
-          handleErrorById("UsernameOrPasswordIncorrect");
-        } else if (hasError("AccountDeactivated", error)) {
-          await router.push("/auth/account-deactivated");
-        } else if (hasError("PasswordResetRequiredException", error)) {
-          await router.push("/auth/resetpassword");
-        } else {
-          throw Error(error);
-        }
-      } else if (data?.challengeState === "MFA") {
+      if (data?.challengeState === "MFA") {
         authenticationFlowToken.current = data.authenticationFlowToken;
         return true;
       }
-    } catch (err) {
+
+      // Axios should throw an error automatically but just encase
+      throw Error(data?.error || "Unkown error from login attempt");
+    } catch (err: unknown) {
       logMessage.error(err);
-      if (axios.isAxiosError(err) && err.response?.data?.reason === "AccountDeactivated") {
-        await router.push("/auth/account-deactivated");
+
+      // 40X Client errors
+      if (axios.isAxiosError(err) && err.response && err.response.data) {
+        const { reason } = err.response.data;
+
+        // Handle slightly different response objects with the 400 check
+        if (
+          hasError(["UserNotFoundException", "NotAuthorizedException"], reason) ||
+          (!reason && err.response.status === 400)
+        ) {
+          handleErrorById("UsernameOrPasswordIncorrect");
+          return false;
+        }
+
+        if (hasError("AccountDeactivated", reason)) {
+          await router.push("/auth/account-deactivated");
+          return false;
+        }
+
+        if (hasError("UserNotConfirmedException", reason)) {
+          setNeedsVerification(true);
+          return false;
+        }
+
+        if (hasError("PasswordResetRequiredException", reason)) {
+          await router.push("/auth/resetpassword");
+          return false;
+        }
       }
+
+      // 500 Server/fallback related errors
+      // Note: Could also be a 400 or 401 "Cognito authentication failed"
       handleErrorById("InternalServiceExceptionLogin");
       return false;
     }
