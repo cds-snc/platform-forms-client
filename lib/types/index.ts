@@ -59,3 +59,5 @@ export type TypeOmit<T, K extends PropertyKey> = { [P in keyof T as Exclude<P, K
 
 export type { NagwareSubmission, NagwareResult } from "./nagware-types";
 export { NagLevel } from "./nagware-types";
+
+export { ResponseErrors } from "./response-errors";

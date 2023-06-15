@@ -14,6 +14,8 @@ import { acceptableUseCheck, removeAcceptableUse } from "@lib/acceptableUseCache
 import { getPrivilegeRulesForUser } from "@lib/privileges";
 import { logEvent } from "@lib/auditLogs";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { ResponseErrors } from "@lib/types";
+import { ResponseStatus } from "@lib/types/response-errors";
 
 if (
   (!process.env.COGNITO_APP_CLIENT_ID ||
@@ -173,11 +175,11 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
     const { username, password } = req.body;
 
     if (!username || !password)
-      return res.status(400).json({ status: "error", error: "Missing username or password" });
+      return res.status(400).json({ status: "error", error: ResponseErrors.NotAuthorized });
 
     if (process.env.APP_ENV === "test") {
       return res.status(200).json({
-        status: "success",
+        status: ResponseStatus.success,
         challengeState: "MFA",
         authenticationFlowToken: "0000-1111-2222-3333",
       });
@@ -192,22 +194,22 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
       if (cognitoToken) {
         const authenticationFlowToken = await begin2FAAuthentication(cognitoToken);
         return res.status(200).json({
-          status: "success",
+          status: ResponseStatus.success,
           challengeState: "MFA",
           authenticationFlowToken: authenticationFlowToken,
         });
       } else {
         return res.status(400).json({
-          status: "error",
-          error: "Cognito authentication failed",
-          reason: "Missing Cognito token",
+          status: ResponseStatus.error,
+          error: ResponseErrors.NotAuthorized,
+          reason: "Missing Cognito token", // TODO make sure not cognito content
         });
       }
     } catch (error) {
       return res.status(401).json({
-        status: "error",
-        error: "Cognito authentication failed",
-        reason: (error as Error).message,
+        status: ResponseStatus.error,
+        error: ResponseErrors.NotAuthorized,
+        reason: (error as Error).message, // TODO make sure not cognito content
       });
     }
   }

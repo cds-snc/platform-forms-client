@@ -7,6 +7,8 @@ import {
 import { NextApiRequest, NextApiResponse } from "next";
 import { middleware, cors, csrfProtected } from "@lib/middleware";
 import { isValidGovEmail } from "@lib/validation";
+import { ResponseErrors } from "@lib/types";
+import { ResponseStatus } from "@lib/types/response-errors";
 
 const register = async (req: NextApiRequest, res: NextApiResponse) => {
   const { COGNITO_REGION, COGNITO_APP_CLIENT_ID } = process.env;
@@ -14,6 +16,8 @@ const register = async (req: NextApiRequest, res: NextApiResponse) => {
   // craft registration params for the SignUpCommand
   if (!req.body.username || !req.body.password || !req.body.name) {
     return res.status(400).json({
+      status: ResponseStatus.error,
+      reason: ResponseErrors.NotAuthorized,
       message: "username and password need to be provided in the body of the request",
     });
   }
@@ -21,6 +25,8 @@ const register = async (req: NextApiRequest, res: NextApiResponse) => {
   // Ensure email is part of acceptable domain list
   if (!isValidGovEmail(req.body.username)) {
     return res.status(400).json({
+      status: ResponseStatus.error,
+      reason: ResponseErrors.InvalidUsername,
       message: "username does not meet requirements",
     });
   }
