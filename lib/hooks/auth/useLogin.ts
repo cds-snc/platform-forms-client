@@ -47,7 +47,7 @@ export const useLogin = () => {
     } catch (err: unknown) {
       logMessage.error(err);
 
-      // 40X Level Client errors
+      // 40X Client errors
       if (axios.isAxiosError(err) && err.response && err.response.data) {
         const { reason } = err.response.data;
 
@@ -62,11 +62,6 @@ export const useLogin = () => {
 
         if (hasError("UserNotConfirmedException", reason)) {
           setNeedsVerification(true);
-          return false;
-        }
-
-        if (hasError("AccountDeactivated", reason)) {
-          await router.push("/auth/account-deactivated");
           return false;
         }
 
