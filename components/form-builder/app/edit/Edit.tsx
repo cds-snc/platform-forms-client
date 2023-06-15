@@ -76,12 +76,6 @@ export const Edit = () => {
     [setValue, translationLanguagePriority]
   );
 
-  const updateName = useCallback(() => {
-    if (getName() === "") {
-      updateField("name", value);
-    }
-  }, [value, getName, updateField]);
-
   useEffect(() => {
     if (focusTitle) {
       titleInput && titleInput.current && titleInput.current?.focus();
@@ -106,7 +100,6 @@ export const Edit = () => {
                 placeholder={t("placeHolderFormTitle")}
                 value={value}
                 onChange={updateValue}
-                onBlur={updateName}
                 {...getLocalizationAttribute()}
               />
             </div>
