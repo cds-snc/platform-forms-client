@@ -11,6 +11,8 @@ module.exports = {
         plugins: ["eslint-plugin-tailwindcss"],
         rules: {
           "@typescript-eslint/await-thenable": "error",
+          "tailwindcss/classnames-order": "error",
+          "tailwindcss/enforces-shorthand": "error",
         },
       },
     ],
