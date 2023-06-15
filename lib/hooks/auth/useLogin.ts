@@ -47,7 +47,7 @@ export const useLogin = () => {
     } catch (err: unknown) {
       logMessage.error(err);
 
-      // 40X Client errors
+      // 40X Level Client errors
       if (axios.isAxiosError(err) && err.response && err.response.data) {
         const { reason } = err.response.data;
 
