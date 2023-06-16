@@ -1,5 +1,6 @@
 import "react-app-polyfill/stable";
 import type { AppProps } from "next/app";
+import "../wdyr";
 import React, { ReactElement, ReactNode } from "react";
 
 import { appWithTranslation } from "next-i18next";
@@ -14,6 +15,7 @@ import { ErrorBoundary, ErrorPanel } from "@components/globals";
 
 export type NextPageWithLayout<P = Record<string, unknown>, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
+  whyDidYouRender?: boolean;
 };
 
 type AppPropsWithLayout = AppProps<AnyObject & { session?: Session }> & {
@@ -24,6 +26,7 @@ const MyApp: React.FC<AppPropsWithLayout> = ({
   Component,
   pageProps: { session, ...pageProps },
 }: AppPropsWithLayout) => {
+  Component.whyDidYouRender = true;
   return (
     <SessionProvider
       session={session}
@@ -56,5 +59,7 @@ const MyApp: React.FC<AppPropsWithLayout> = ({
     </SessionProvider>
   );
 };
+
+MyApp.whyDidYouRender = true;
 
 export default appWithTranslation(MyApp);
