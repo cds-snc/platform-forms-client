@@ -51,22 +51,26 @@ const main = async () => {
   console.log(usersToUpdate);
 
   for (const user of usersToUpdate) {
-    await cognitoClient.send(new AdminUpdateUserAttributesCommand({
-      UserPoolId: USER_POOL_ID,
-      Username: user.username,
-      UserAttributes: [
-        {
-          Name: "email",
-          Value: user.email.toLowerCase(),
-        },
-        {
-          Name: "email_verified",
-          Value: "true",
-        }
-      ]
-    }));
+    try {
+      await cognitoClient.send(new AdminUpdateUserAttributesCommand({
+        UserPoolId: USER_POOL_ID,
+        Username: user.username,
+        UserAttributes: [
+          {
+            Name: "email",
+            Value: user.email.toLowerCase(),
+          },
+          {
+            Name: "email_verified",
+            Value: "true",
+          }
+        ]
+      }));
 
-    console.log(`Converted email address ${user.email} to ${user.email.toLowerCase()} for user ${user.username}.`);
+      console.log(`Converted email address ${user.email} to ${user.email.toLowerCase()} for user ${user.username}.`);
+    } catch (e) {
+      console.log(`Failed to migrate user email address ${user.email} because of following error: ${(e as Error).message}`);
+    }
   }
 };
 

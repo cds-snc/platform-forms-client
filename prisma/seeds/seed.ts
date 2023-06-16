@@ -193,19 +193,30 @@ async function lowercaseEmailAddressMigration() {
   const usersToMigrate = users
     .filter((user) => /[A-Z]/.test(user.email))
     .map((user) => {
-      return prisma.user.update({
-        where: {
-          id: user.id,
-        },
-        data: {
-          email: user.email.toLowerCase(),
-        },
-      });
+      return prisma.user
+        .update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            email: user.email.toLowerCase(),
+          },
+        })
+        .then(() =>
+          console.log(`Converted email address ${user.email} to ${user.email.toLowerCase()}.`)
+        )
+        .catch((e: Error) =>
+          console.log(
+            `Failed to migrate user email address ${user.email} because of following error: ${e.message}`
+          )
+        );
     });
 
   await Promise.all(usersToMigrate);
 
-  console.log(`${usersToMigrate.length} were migrated to lowercase email address`);
+  console.log(
+    `${usersToMigrate.length} users required migration to lowercase email address but some may have failed (see logs above)`
+  );
 }
 
 async function main() {
