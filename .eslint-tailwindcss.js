@@ -19,5 +19,10 @@ module.exports = {
     extends: [
       ".eslintrc.js",
     ],
+    settings: {
+      tailwindcss: {
+        whitelist: ["(gc\\-).*"]
+      }
+    }
   };
   
