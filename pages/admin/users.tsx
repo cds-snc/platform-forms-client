@@ -41,6 +41,22 @@ const updatePrivilege = async (
   }
 };
 
+export const updateActiveStatus = async (userID: string, active: boolean) => {
+  try {
+    return await axios({
+      url: `/api/users`,
+      method: "PUT",
+      data: {
+        userID,
+        active,
+      },
+      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+    });
+  } catch (e) {
+    logMessage.error(e);
+  }
+};
+
 const ManageUser = ({
   user,
   privileges,

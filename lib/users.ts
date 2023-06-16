@@ -3,6 +3,7 @@ import { JWT } from "next-auth/jwt";
 import { AccessControlError, checkPrivileges } from "@lib/privileges";
 import { UserAbility } from "./types";
 import { logEvent } from "./auditLogs";
+import { logMessage } from "@lib/logger";
 import { Privilege } from "@prisma/client";
 
 /**
@@ -138,5 +139,29 @@ export const getUsers = async (ability: UserAbility) => {
       logEvent(ability.userID, { type: "User" }, "AccessDenied", "Attempted to list users");
     }
     throw e;
+  }
+};
+
+/**
+ * Update and overwrite existing User active status
+ * @param userID id of the user to be updated
+ * @param active activate or deactivate user
+ * @returns User
+ */
+export const updateActiveStatus = async (userID: string, active: boolean) => {
+  try {
+    const user = await prisma.user.update({
+      where: {
+        id: userID,
+      },
+      data: {
+        active: active,
+      },
+    });
+
+    return user;
+  } catch (error) {
+    logMessage.error(error as Error);
+    throw error;
   }
 };

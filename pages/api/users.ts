@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { middleware, cors, sessionExists } from "@lib/middleware";
-import { getUsers } from "@lib/users";
+import { getUsers, updateActiveStatus } from "@lib/users";
 import { MiddlewareProps, WithRequired, UserAbility } from "@lib/types";
 
 import { createAbility, updatePrivilegesForUser, AccessControlError } from "@lib/privileges";
@@ -53,6 +53,10 @@ const handler = async (
         await getUserList(ability, res);
         break;
       case "PUT":
+        if (req.body.active) {
+          await updateActiveStatus(req.body.userID, req.body.active);
+          break;
+        }
         await updatePrivilegeOnUser(ability, req, res);
         break;
     }
