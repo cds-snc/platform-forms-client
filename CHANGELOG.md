@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.1](https://github.com/cds-snc/platform-forms-client/compare/v3.1.0...v3.1.1) (2023-06-19)
+
+
+### Miscellaneous Chores
+
+* **deps:** lock file maintenance ([#2298](https://github.com/cds-snc/platform-forms-client/issues/2298)) ([78b36c6](https://github.com/cds-snc/platform-forms-client/commit/78b36c624ad98d6410fb2bcf10d6b5754f1d9250))
+
 ## [3.1.0](https://github.com/cds-snc/platform-forms-client/compare/v3.0.12...v3.1.0) (2023-06-19)
 
 
