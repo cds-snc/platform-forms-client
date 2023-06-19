@@ -9,6 +9,7 @@ import { middleware, cors, csrfProtected } from "@lib/middleware";
 import { isValidGovEmail } from "@lib/validation";
 import { ResponseErrors } from "@lib/types";
 import { ResponseStatus } from "@lib/types/response-errors";
+import { sanitzeCongintoError } from "@lib/auth/cognito";
 
 const register = async (req: NextApiRequest, res: NextApiResponse) => {
   const { COGNITO_REGION, COGNITO_APP_CLIENT_ID } = process.env;
@@ -53,15 +54,15 @@ const register = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     // attempt to send invoke cognito with the signup command with the user
     const response = await cognitoClient.send(signUpCommand);
-
     // forward the status code of the cognito response and send an empty body
     return res.status(response["$metadata"].httpStatusCode as number).send("");
   } catch (err) {
     // if there is an error, forward the status code and the error message as the body
     const cognitoError = err as CognitoIdentityProviderServiceException;
-    return res
-      .status(cognitoError["$metadata"].httpStatusCode as number)
-      .json({ message: cognitoError.toString() });
+    return res.status(cognitoError["$metadata"].httpStatusCode as number).json({
+      //message: cognitoError.toString()
+      reason: sanitzeCongintoError(cognitoError["name"]),
+    });
   }
 };
 

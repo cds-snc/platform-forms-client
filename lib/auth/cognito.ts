@@ -9,6 +9,8 @@ import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { generateVerificationCode, sendVerificationCode } from "./2fa";
 import { registerFailed2FAAttempt, clear2FALockout } from "./2faLockout";
 import { logMessage } from "@lib/logger";
+import { ResponseErrors } from "@lib/types";
+import { ResponseErrorsSensitive } from "@lib/types/response-errors";
 
 type Credentials = {
   username: string;
@@ -277,4 +279,31 @@ const decodeCognitoToken = (token: string): DecodedCognitoToken => {
     name: cognitoIDTokenClaims.name,
     email: cognitoIDTokenClaims.email,
   };
+};
+
+/**
+ * Receives a Cognito error, parses it, and returns a santized general error message.
+ *
+ * NOTE: example cognito response format: {"name":"UsernameExistsException","$fault":"client","$metadata":{"httpStatusCode":400,"requestId":"d1921596-febf-4b45-948a-46dd4a1ad6d7","attempts":1,"totalRetryDelay":0},"__type":"UsernameExistsException"}
+ *
+ * @param error
+ * @returns
+ */
+export const sanitzeCongintoError = (error: string): string => {
+  // TODO could include the original and sanitized error if it would help
+  logMessage.error(JSON.stringify(error));
+
+  // TODO: if the below ends up being only 1-1 association, a map/set may make more sense or keep as
+  // as is for flexibility.
+  // Sanitize error codes by "mapping" any sensitive error to a more generic one
+  switch (error) {
+    case ResponseErrorsSensitive.UsernameExistsException:
+      return ResponseErrors.InvalidUsername;
+    case ResponseErrorsSensitive.UsernotFoundException:
+      return ResponseErrors.InvalidUsername;
+  }
+
+  //default to unknown if none found
+
+  return error;
 };

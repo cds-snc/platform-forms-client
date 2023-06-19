@@ -1,32 +1,30 @@
-// TODO helpful to standardaize?
 export enum ResponseStatus {
   success = "success",
   error = "error",
 }
 
-// TODO helpful to standardaize?
 export interface ResponseErrorI {
-  status: ResponseStatus; // TODO: Or is this redundant with the HTTP status Code?
+  status: ResponseStatus;
   reason: ResponseErrors;
+  // TODO:  Drop? determine on Client using the reason (code)
   message: string;
 }
 
-// TODO probably a lot missing
+// TODO more
+// -Cognito list of auth errors: https://github.com/aws-amplify/amplify-js/blob/main/packages/auth/src/Errors.ts
+// -Cognito list of register errors: https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_SignUp.html#API_SignUp_Errors
 export enum ResponseErrors {
-  // Use in place of "UsernotFound", this shouldn't be sent to the browser.
   NotAuthorized = "NotAuthorized",
-
   PasswordResetRequired = "PasswordResetRequired",
-
   InternalServiceError = "InternalServiceError",
-
   CodeInvalid = "CodeInvalid",
-
   CodeExpired = "CodeExpired",
-
   PasswordValidationFailed = "PasswordValidationFailed",
-
-  // TODO: Ask Bryan if this makes sense?
-  // Use in place of "UserNameExists", this shouldn't be sent to the browser.
   InvalidUsername = "InvalidUsername",
+}
+
+// Note: used with sanitzeCongintoError() to map to "safe" response error
+export enum ResponseErrorsSensitive {
+  UsernameExistsException = "UsernameExistsException",
+  UsernotFoundException = "UsernotFoundException",
 }

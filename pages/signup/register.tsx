@@ -27,6 +27,7 @@ import { logMessage } from "@lib/logger";
 import { Verify } from "@components/auth/Verify";
 import { useLogin } from "@lib/hooks/auth";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
+import { ResponseErrors } from "@lib/types";
 
 const Register = () => {
   const { isLoading, status: registrationOpen } = useFlag("accountRegistration");
@@ -71,8 +72,8 @@ const Register = () => {
       }
     } catch (err) {
       logMessage.error(err);
-      if (hasError("UsernameExistsException", err)) {
-        handleErrorById("UsernameExistsException");
+      if (hasError(ResponseErrors.InvalidUsername, err)) {
+        handleErrorById(ResponseErrors.InvalidUsername);
         return;
       }
       handleErrorById(t("InternalServiceException"));

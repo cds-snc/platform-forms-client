@@ -10,9 +10,10 @@ export const hasError = (
 
   try {
     let message = "";
-
     if (axios.isAxiosError(error)) {
-      message = error.response?.data?.message as string;
+      //TODO replace "message" with "reason", or vice versa
+      message =
+        (error.response?.data?.message as string) || (error.response?.data?.reason as string) || "";
     } else if (error instanceof Error) {
       message = error.message;
     } else {

@@ -1,5 +1,6 @@
 import { useReducer } from "react";
 import { useTranslation } from "next-i18next";
+import { ResponseErrors } from "@lib/types";
 
 export interface AuthErrorsState {
   isError: boolean;
@@ -74,6 +75,7 @@ export const useAuthErrors = (): [AuthErrorsState, AuthErrorsDispatch] => {
       isError: true,
     };
     switch (id) {
+      // TODO: use error enum below
       // Custom and specific message. Would a more generic message be better?
       case "InternalServiceExceptionLogin":
         errorObj.title = t("InternalServiceExceptionLogin.title");
@@ -82,15 +84,14 @@ export const useAuthErrors = (): [AuthErrorsState, AuthErrorsDispatch] => {
         errorObj.callToActionLink = t("InternalServiceExceptionLogin.link");
         break;
       case "UsernameOrPasswordIncorrect":
-      case "UserNotFoundException":
       case "NotAuthorizedException":
         errorObj.title = t("UsernameOrPasswordIncorrect.title");
         errorObj.description = t("UsernameOrPasswordIncorrect.description");
         errorObj.callToActionLink = t("UsernameOrPasswordIncorrect.link");
         errorObj.callToActionText = t("UsernameOrPasswordIncorrect.linkText");
         break;
-      case "UsernameExistsException":
-        errorObj.title = t("UsernameExistsException"); // TODO ask design/content for error message
+      case ResponseErrors.InvalidUsername: // TEMP:NOTE: "UsernameExistsException", "UserNotFoundException"
+        errorObj.title = "TODO Invalid Username"; //t("UsernameExistsException");
         break;
       case "2FAInvalidVerificationCode":
       case "CodeMismatchException":
