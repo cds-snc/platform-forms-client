@@ -13,4 +13,5 @@ export {
   begin2FAAuthentication,
   requestNew2FAVerificationCode,
   validate2FAVerificationCode,
+  sanitizeEmailAddressForCognito,
 } from "./cognito";

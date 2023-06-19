@@ -5,6 +5,51 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.1](https://github.com/cds-snc/platform-forms-client/compare/v3.1.0...v3.1.1) (2023-06-19)
+
+
+### Miscellaneous Chores
+
+* **deps:** lock file maintenance ([#2298](https://github.com/cds-snc/platform-forms-client/issues/2298)) ([78b36c6](https://github.com/cds-snc/platform-forms-client/commit/78b36c624ad98d6410fb2bcf10d6b5754f1d9250))
+
+## [3.1.0](https://github.com/cds-snc/platform-forms-client/compare/v3.0.12...v3.1.0) (2023-06-19)
+
+
+### Features
+
+* 2FA Authentication through Email ([#2133](https://github.com/cds-snc/platform-forms-client/issues/2133)) ([2cc568d](https://github.com/cds-snc/platform-forms-client/commit/2cc568d7b2a7c6a4dd7748c09748ddd9441b90f8))
+* add Dockerfile to create Lambda PR review env ([#2221](https://github.com/cds-snc/platform-forms-client/issues/2221)) ([b15e19b](https://github.com/cds-snc/platform-forms-client/commit/b15e19b9a27aa5bf4a712e6d4087e6da0950cd74))
+* workflow to sync PR review env vars ([#2282](https://github.com/cds-snc/platform-forms-client/issues/2282)) ([d27618b](https://github.com/cds-snc/platform-forms-client/commit/d27618bd72a94a5a8c1324433f0c4e119ded4fc3))
+* workflows for PR Review environment ([#2243](https://github.com/cds-snc/platform-forms-client/issues/2243)) ([bc318e9](https://github.com/cds-snc/platform-forms-client/commit/bc318e972b72b0832c7030300d1f3d0138fe12de))
+
+
+### Bug Fixes
+
+* 2fa string updates ([#2265](https://github.com/cds-snc/platform-forms-client/issues/2265)) ([fdab140](https://github.com/cds-snc/platform-forms-client/commit/fdab1401b43d88d3d1bf26a15953cc4cff6b48c6))
+* a11y misc ([1661da3](https://github.com/cds-snc/platform-forms-client/commit/1661da357f4dcef4ab5015ca9bd6eb46bf642320))
+* add 2fa locked screen ([#2280](https://github.com/cds-snc/platform-forms-client/issues/2280)) ([b949797](https://github.com/cds-snc/platform-forms-client/commit/b9497971198a07dbb5077cc428dbba65f0626026))
+* convert email address to lowercase before any Cognito API request ([#2276](https://github.com/cds-snc/platform-forms-client/issues/2276)) ([bfd6427](https://github.com/cds-snc/platform-forms-client/commit/bfd64273d8c52d779a400512762175c20394cbb1))
+* cypress acceptable use page test ([#2239](https://github.com/cds-snc/platform-forms-client/issues/2239)) ([83b04e2](https://github.com/cds-snc/platform-forms-client/commit/83b04e2f526834dd998f750b7af2ed7296e31278))
+* give focus to alert for create account and verify screens ([#2263](https://github.com/cds-snc/platform-forms-client/issues/2263)) ([424da5c](https://github.com/cds-snc/platform-forms-client/commit/424da5cd4cb3fe3a02c48f136bc9abaf8619dcdd))
+* local devcontainer setup ([#2238](https://github.com/cds-snc/platform-forms-client/issues/2238)) ([e317299](https://github.com/cds-snc/platform-forms-client/commit/e317299346b3bcbe525465b9d1dd9f658c8dcf50))
+* manually handle logout redirect for PR Review environments ([#2285](https://github.com/cds-snc/platform-forms-client/issues/2285)) ([ca6cd17](https://github.com/cds-snc/platform-forms-client/commit/ca6cd1791c5208fc94fd81f8ceea7a9f99c58899))
+* remove AWS cli output for PR review envs ([#2286](https://github.com/cds-snc/platform-forms-client/issues/2286)) ([a6d4504](https://github.com/cds-snc/platform-forms-client/commit/a6d4504f466f573e88d336cbc4078b6d8048697b))
+* update content to use security code vs verification code ([#2267](https://github.com/cds-snc/platform-forms-client/issues/2267)) ([fbda229](https://github.com/cds-snc/platform-forms-client/commit/fbda22920586cd7233424693a4763a89b76d34e3))
+
+
+### Code Refactoring
+
+* improve Prisma/Cognito user email migration code to handle failures gracefully ([#2293](https://github.com/cds-snc/platform-forms-client/issues/2293)) ([984ff60](https://github.com/cds-snc/platform-forms-client/commit/984ff60fe80555ea79ccca541ae1e6f90cf687a9))
+* review Cognito/2FA thrown errors ([#2266](https://github.com/cds-snc/platform-forms-client/issues/2266)) ([88b0651](https://github.com/cds-snc/platform-forms-client/commit/88b0651499daf1a5a7be4b1abe15a72d93a0cdd3))
+
+
+### Miscellaneous Chores
+
+* **deps:** update all non-major docker images ([#2295](https://github.com/cds-snc/platform-forms-client/issues/2295)) ([b364f0d](https://github.com/cds-snc/platform-forms-client/commit/b364f0d31e1d6eeb1f17f2f30e51630e30a7e9d2))
+* **deps:** update all non-major github action dependencies ([#2296](https://github.com/cds-snc/platform-forms-client/issues/2296)) ([8baf049](https://github.com/cds-snc/platform-forms-client/commit/8baf049dc5e685c0beb31c76fb7a858fa593514c))
+* remove /admin/login page ([#2257](https://github.com/cds-snc/platform-forms-client/issues/2257)) ([2cb72df](https://github.com/cds-snc/platform-forms-client/commit/2cb72dff962fe182325a76b9941a237855a2e8ae))
+* remove workflow trigger ([#2283](https://github.com/cds-snc/platform-forms-client/issues/2283)) ([6cd931b](https://github.com/cds-snc/platform-forms-client/commit/6cd931b00e11830d686253184175bef83333155f))
+
 ## [v3.0.12] 2023-06-07
 
 ### Fixed

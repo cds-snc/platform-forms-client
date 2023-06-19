@@ -1,6 +1,6 @@
 # Form viewier that runs as a Lambda function.  It is used to create 
 # Lambda function review environments for each PR.
-FROM node:16@sha256:2ed6bba040f90005db9785927689c0d9a9442ca2cf9a59dc52297d684285c094 as build
+FROM node:16@sha256:07ac708c46cc7136db9d54749c541ba1dc516dc316e126a94136083b842c2db9 as build
 
 ENV NODE_ENV=production
 ENV NEXT_OUTPUT_STANDALONE=true
@@ -16,7 +16,7 @@ RUN yarn install --silent --production=false
 RUN yarn build
 RUN yarn install --production
 
-FROM node:16@sha256:2ed6bba040f90005db9785927689c0d9a9442ca2cf9a59dc52297d684285c094 as final
+FROM node:16@sha256:07ac708c46cc7136db9d54749c541ba1dc516dc316e126a94136083b842c2db9 as final
 LABEL maintainer="-"
 
 ARG GITHUB_SHA_ARG
@@ -53,7 +53,9 @@ COPY bin/pr-review-entrypoint.sh ./entrypoint.sh
 RUN apt-get update && apt-get install -y awscli
 
 # Lambda web adapter: https://github.com/awslabs/aws-lambda-web-adapter
-COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.7.0 /lambda-adapter /opt/extensions/lambda-adapter
+# The public.ecr.aws/awsguru/aws-lambda-adapter:0.7.0 image reference in the docs has
+# been pushed to the public CDS ECR to avoid rate limiting when pulling the image.
+COPY --from=public.ecr.aws/cds-snc/aws-lambda-adapter:0.7.0@sha256:00b1441858fb3f4ce3d67882ef6153bacf8ff4bb8bf271750c133667202926af /lambda-adapter /opt/extensions/lambda-adapter
 RUN ln -s /tmp ./.next/cache
 
 EXPOSE 3000
