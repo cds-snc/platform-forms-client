@@ -7,7 +7,7 @@ on:
 env:
   ECR_REPOSITORY: form_viewer_production
   GITHUB_SHA: ${{ github.sha }}
-  TAG_VERSION: ${{ github.ref }}
+  TAG_VERSION: ${{  github.ref_name }}
   COGNITO_APP_CLIENT_ID: ${{secrets.PRODUCTION_COGNITO_APP_CLIENT_ID}}
   COGNITO_USER_POOL_ID: ${{ secrets.PRODUCTION_COGNITO_USER_POOL_ID}}
 
@@ -18,7 +18,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2.7.0
         with:
-          ref: $TAG_VERSION
+          ref: ${{ env.TAG_VERSION }}
 
       - name: Build Form Viewer
         run: |
