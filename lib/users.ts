@@ -150,8 +150,12 @@ export const getUsers = async (ability: UserAbility) => {
  * @param active activate or deactivate user
  * @returns User
  */
-export const updateActiveStatus = async (userID: string, active: boolean) => {
+export const updateActiveStatus = async (ability: UserAbility, userID: string, active: boolean) => {
   try {
+    const canManageUsers = ability?.can("update", "User") ?? false;
+    if (!canManageUsers) throw new AccessControlError("Access Denied");
+
+    checkPrivileges(ability, [{ action: "update", subject: "User" }]);
     const user = await prisma.user.update({
       where: {
         id: userID,
