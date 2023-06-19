@@ -174,6 +174,51 @@ async function templateSchemaMigration() {
   console.log(`${templatesToMigrate.length} were migrated for new Template schema`);
 }
 
+async function lowercaseEmailAddressMigration() {
+  const users = (await prisma.user.findMany({
+    where: {
+      email: {
+        not: null,
+      },
+    },
+    select: {
+      id: true,
+      email: true,
+    },
+  })) as {
+    id: string;
+    email: string;
+  }[];
+
+  const usersToMigrate = users
+    .filter((user) => /[A-Z]/.test(user.email))
+    .map((user) => {
+      return prisma.user
+        .update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            email: user.email.toLowerCase(),
+          },
+        })
+        .then(() =>
+          console.log(`Converted email address ${user.email} to ${user.email.toLowerCase()}.`)
+        )
+        .catch((e: Error) =>
+          console.log(
+            `Failed to migrate user email address ${user.email} because of following error: ${e.message}`
+          )
+        );
+    });
+
+  await Promise.all(usersToMigrate);
+
+  console.log(
+    `${usersToMigrate.length} users required migration to lowercase email address but some may have failed (see logs above)`
+  );
+}
+
 async function main() {
   const { environment = "production" } = parse<{ environment?: string }>({
     environment: { type: String, optional: true },
@@ -191,6 +236,9 @@ async function main() {
 
   console.log("Running 'templateSchema' migration");
   await templateSchemaMigration();
+
+  console.log("Running 'lowercaseEmailAddress' migration");
+  await lowercaseEmailAddressMigration();
 
   if (environment === "test") {
     console.log("Creating test User");
