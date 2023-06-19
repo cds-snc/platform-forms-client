@@ -20,6 +20,7 @@
     "build:test": "APP_ENV=test next build",
     "prisma:test": "prisma migrate deploy && ts-node --compiler-options {\\\"module\\\":\\\"CommonJS\\\"} prisma/seeds/seed.ts --environment=test",
     "lint": "eslint . ",
+    "lint:tailwindcss": "eslint -c .eslint-tailwindcss.js",
     "lint:report": "eslint --output-file eslint_report.json --format json . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint --fix .",
     "format": "prettier --config .prettierrc.json --write .",
