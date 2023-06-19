@@ -7,7 +7,7 @@ on:
 env:
   ECR_REPOSITORY: form_viewer_production
   GITHUB_SHA: ${{ github.sha }}
-  TAG_VERSION: ${{ github.ref }}
+  TAG_VERSION: ${{  github.ref_name }}
   COGNITO_APP_CLIENT_ID: ${{secrets.PRODUCTION_COGNITO_APP_CLIENT_ID}}
   COGNITO_USER_POOL_ID: ${{ secrets.PRODUCTION_COGNITO_USER_POOL_ID}}
 
