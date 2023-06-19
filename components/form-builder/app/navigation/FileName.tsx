@@ -64,7 +64,7 @@ export const FileNameInput = () => {
 
       setIsInitialFocus(false);
     }
-  }, [isEditing, isInitialFocus]);
+  }, [isEditing, isInitialFocus, title]);
 
   useEffect(() => {
     // check if the fileName has changed from outside the component

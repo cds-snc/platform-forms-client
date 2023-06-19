@@ -21,7 +21,6 @@ export const Edit = () => {
     updateField,
     translationLanguagePriority,
     getLocalizationAttribute,
-    getName,
   } = useTemplateStore((s) => ({
     title:
       s.form[s.localizeField(LocalizedFormProperties.TITLE, s.translationLanguagePriority)] ?? "",
@@ -31,7 +30,6 @@ export const Edit = () => {
     updateField: s.updateField,
     translationLanguagePriority: s.translationLanguagePriority,
     getLocalizationAttribute: s.getLocalizationAttribute,
-    getName: s.getName,
   }));
 
   const [value, setValue] = useState<string>(title);

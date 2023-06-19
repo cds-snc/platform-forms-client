@@ -130,14 +130,7 @@ export const Card = (props: CardProps): React.ReactElement => {
           className="font-bold line-clamp-2 wrap overflow-hidden"
           aria-describedby={`card-title-${id} card-date-${id}`}
         >
-          {name ? name : ""}
-          {!name && (
-            <>
-              {titleEn ? titleEn : t("card.title.notTranslatedEn", { ns: "my-forms" })}
-              {" / "}
-              {titleFr ? titleFr : t("card.title.notTranslatedFr", { ns: "my-forms" })}
-            </>
-          )}
+          {name ? name : t("unnamedForm", { ns: "form-builder" })}
         </a>
         {/* Email delivery */}
         {deliveryOption && deliveryOption.emailAddress && (
