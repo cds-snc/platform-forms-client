@@ -18,7 +18,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2.7.0
         with:
-          ref: $TAG_VERSION
+          ref: ${{ env.TAG_VERSION }}
 
       - name: Build Form Viewer
         run: |
