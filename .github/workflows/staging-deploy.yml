@@ -26,7 +26,7 @@ jobs:
 
       - name: Configure AWS credentials
         # v1 as of Jan 28 2021
-        uses: aws-actions/configure-aws-credentials@375a690dc0af3921541e5f427167f333d7e85f67
+        uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -35,7 +35,7 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         # v1 as of Jan 28 2021
-        uses: aws-actions/amazon-ecr-login@b5f9031d829ac39b7fd26092019aeca3ee6b3ebd
+        uses: aws-actions/amazon-ecr-login@303ccb98e706af9cd30c38c599dd22efc261f8a8
 
       - name: Get Cluster Name
         id: cluster
@@ -51,7 +51,7 @@ jobs:
       - name: Render image for form viewer service
         id: taskdef-form-viewer
         # v1.0.10
-        uses: aws-actions/amazon-ecs-render-task-definition@965aaf231768db456e813931b69d5f4e353a964a
+        uses: aws-actions/amazon-ecs-render-task-definition@2a5669e4daeba587cb53f8b1be757a50b57e714a
         with:
           task-definition: form_viewer.json
           container-name: ${{ steps.download-taskdef-form-viewer.outputs.container_name }}
@@ -67,7 +67,7 @@ jobs:
       - name: Deploy image for Form Viewer
         timeout-minutes: 10
         # v1.4.11
-        uses: aws-actions/amazon-ecs-deploy-task-definition@d7d7893785e654beaf0a9da91de8255a5dacd745
+        uses: aws-actions/amazon-ecs-deploy-task-definition@9792267619b98def8d651ee09bc17016d836e99e
         with:
           task-definition: ${{ steps.taskdef-form-viewer.outputs.task-definition }}
           service: form-viewer
