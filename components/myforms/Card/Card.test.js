@@ -7,6 +7,7 @@ const cardData_published = {
   id: "1",
   titleEn: "Card TitleEn",
   titleFr: "Card TitleFr",
+  name: "Card Name",
   url: "/en/myurl",
   date: "Fri Nov 04 2022 10:25:44 GMT-0400 (Eastern Daylight Time)",
   isPublished: true,
@@ -16,6 +17,7 @@ const cardData_draft = {
   id: "2",
   titleEn: "Card TitleEn",
   titleFr: "Card TitleFr",
+  name: "Card Name",
   url: "/fr/myurl",
   date: "Fri Nov 04 2022 10:25:44 GMT-0400 (Eastern Daylight Time)",
   isPublished: false,
@@ -52,6 +54,7 @@ describe("Card component", () => {
 
     expect(screen.queryByTestId("card-1")).toBeInTheDocument();
     expect(screen.getByText(/card.states.published/i)).toBeInTheDocument();
+    expect(screen.getByText(/Card Name/i)).toBeInTheDocument();
     expect(screen.getByText(/Card TitleFr/i)).toBeInTheDocument();
     expect(screen.getByText(/card.lastEdited: 04\/11\/22/i)).toBeInTheDocument();
     expect(screen.getByText(/card.menu.more/i)).toBeInTheDocument();
@@ -71,6 +74,7 @@ describe("Card component", () => {
 
     expect(screen.queryByTestId("card-2")).toBeInTheDocument();
     expect(screen.getByText(/card.states.draft/i)).toBeInTheDocument();
+    expect(screen.getByText(/Card Name/i)).toBeInTheDocument();
     expect(screen.getByText(/Card TitleFr/i)).toBeInTheDocument();
     expect(screen.getByText(/card.lastEdited: 04\/11\/22/i)).toBeInTheDocument();
     expect(screen.getByText(/card.menu.more/i)).toBeInTheDocument();
