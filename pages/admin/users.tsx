@@ -18,6 +18,7 @@ interface User {
   id: string;
   name: string | null;
   email: string | null;
+  active: boolean;
 }
 
 type PrivilegeList = Omit<Privilege, "permissions">[];
@@ -185,16 +186,27 @@ const Users = ({
                   <div className="grow basis-2/3 m-auto">
                     <p>{user.name}</p>
                     <p>{user.email}</p>
+                    <p>{user.active ? "active" : "deactivated"}</p>
                   </div>
                   <div>
-                    <Button
-                      type="button"
-                      theme="primary"
-                      className=""
-                      onClick={() => setSelectedUser(user)}
-                    >
-                      {canManageUsers ? t("managePermissions") : t("viewPermissions")}
-                    </Button>
+                    <div>
+                      <Button
+                        onClick={() => {
+                          updateActiveStatus(user.id, !user.active);
+                        }}
+                      >
+                        {user.active ? t("disable") : t("enable")}
+                      </Button>
+
+                      <Button
+                        type="button"
+                        theme="primary"
+                        className=""
+                        onClick={() => setSelectedUser(user)}
+                      >
+                        {canManageUsers ? t("managePermissions") : t("viewPermissions")}
+                      </Button>
+                    </div>
                   </div>
                 </li>
               );
@@ -221,6 +233,7 @@ export const getServerSideProps = requireAuthentication(async ({ user: { ability
     "all"
   );
   const allUsers = await getUsers(ability);
+
   const allPrivileges = (await getAllPrivileges(ability)).map(
     ({ id, nameEn, nameFr, descriptionFr, descriptionEn }) => ({
       id,

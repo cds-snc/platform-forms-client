@@ -16,6 +16,18 @@ const getUserList = async (ability: UserAbility, res: NextApiResponse) => {
   }
 };
 
+const updateActiveStatusOnUser = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { userID, active } = req.body;
+  if (typeof userID === "undefined" || typeof active === "undefined") {
+    return res.status(400).json({ error: "Malformed Request" });
+  }
+
+  const result = await updateActiveStatus(userID, active);
+  if (result) {
+    return res.status(200).send("Success");
+  }
+};
+
 const updatePrivilegeOnUser = async (
   ability: UserAbility,
   req: NextApiRequest,
@@ -53,8 +65,8 @@ const handler = async (
         await getUserList(ability, res);
         break;
       case "PUT":
-        if (req.body.active) {
-          await updateActiveStatus(req.body.userID, req.body.active);
+        if ("active" in req.body) {
+          await updateActiveStatusOnUser(req, res);
           break;
         }
         await updatePrivilegeOnUser(ability, req, res);

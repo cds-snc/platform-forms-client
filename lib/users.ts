@@ -97,6 +97,7 @@ export const getOrCreateUser = async ({
           name: true,
           email: true,
           privileges: true,
+          active: true,
         },
       })
       .catch((e) => prismaErrors(e, null));
@@ -117,6 +118,7 @@ export const getUsers = async (ability: UserAbility) => {
           id: true,
           name: true,
           email: true,
+          active: true,
           privileges: {
             select: {
               id: true,
@@ -156,6 +158,10 @@ export const updateActiveStatus = async (userID: string, active: boolean) => {
       },
       data: {
         active: active,
+      },
+      select: {
+        id: true,
+        active: true,
       },
     });
 
