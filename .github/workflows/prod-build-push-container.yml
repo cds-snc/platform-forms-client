@@ -6,6 +6,7 @@ on:
 
 env:
   ECR_REPOSITORY: form_viewer_production
+  GITHUB_SHA: ${{ github.sha }}
   TAG_VERSION: ${{ github.ref }}
   COGNITO_APP_CLIENT_ID: ${{secrets.PRODUCTION_COGNITO_APP_CLIENT_ID}}
   COGNITO_USER_POOL_ID: ${{ secrets.PRODUCTION_COGNITO_USER_POOL_ID}}
@@ -17,7 +18,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2.7.0
         with:
-          ref: $TAG_VERSION
+          ref: ${{ env.TAG_VERSION }}
 
       - name: Build Form Viewer
         run: |
@@ -29,7 +30,7 @@ jobs:
 
       - name: Configure Production AWS credentials
         id: aws-form-viewer
-        uses: aws-actions/configure-aws-credentials@375a690dc0af3921541e5f427167f333d7e85f67
+        uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355
         with:
           aws-access-key-id: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
@@ -37,7 +38,7 @@ jobs:
 
       - name: Login to Production Amazon ECR
         id: login-ecr-production
-        uses: aws-actions/amazon-ecr-login@b5f9031d829ac39b7fd26092019aeca3ee6b3ebd
+        uses: aws-actions/amazon-ecr-login@303ccb98e706af9cd30c38c599dd22efc261f8a8
 
       - name: Tag Images for Production
         env:
