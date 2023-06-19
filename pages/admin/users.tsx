@@ -188,25 +188,28 @@ const Users = ({
                     <p>{user.email}</p>
                     <p>{user.active ? "active" : "deactivated"}</p>
                   </div>
-                  <div>
-                    <div>
+                  <div className="flex items-start">
+                    {canManageUsers && (
                       <Button
-                        onClick={() => {
-                          updateActiveStatus(user.id, !user.active);
+                        theme={!user.active ? "secondary" : "destructive"}
+                        className="mr-2"
+                        onClick={async () => {
+                          await updateActiveStatus(user.id, !user.active);
+                          await refreshData();
                         }}
                       >
                         {user.active ? t("disable") : t("enable")}
                       </Button>
+                    )}
 
-                      <Button
-                        type="button"
-                        theme="primary"
-                        className=""
-                        onClick={() => setSelectedUser(user)}
-                      >
-                        {canManageUsers ? t("managePermissions") : t("viewPermissions")}
-                      </Button>
-                    </div>
+                    <Button
+                      type="button"
+                      theme="primary"
+                      className=""
+                      onClick={() => setSelectedUser(user)}
+                    >
+                      {canManageUsers ? t("managePermissions") : t("viewPermissions")}
+                    </Button>
                   </div>
                 </li>
               );
