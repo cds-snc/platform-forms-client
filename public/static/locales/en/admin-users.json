@@ -15,5 +15,7 @@
   "managePermissions": "Manage permissions",
   "viewPermissions": "View permissions",
   "managePermissionsFor": "Managing permissions of",
-  "assignUsersToTemplate": "Assign users to template"
+  "assignUsersToTemplate": "Assign users to template",
+  "deactivateAccount": "Deactivate account",
+  "activateAccount": "Activer le compte"
 }

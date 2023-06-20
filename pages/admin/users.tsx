@@ -12,6 +12,7 @@ import { Privilege } from "@prisma/client";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { Button } from "@components/globals";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
+import { useSession } from "next-auth/react";
 
 interface User {
   privileges: Privilege[];
@@ -162,6 +163,10 @@ const Users = ({
   const { ability } = useAccessControl();
   const canManageUsers = ability?.can("update", "User") ?? false;
   const { refreshData } = useRefresh();
+  const { data: session } = useSession();
+  const isCurrentUser = (user: User) => {
+    return user.id === session?.user?.id;
+  };
 
   const unselectUser = async () => {
     setSelectedUser(null);
@@ -183,25 +188,28 @@ const Users = ({
                   className="border-2 hover:border-blue-hover rounded-md p-2 m-2 flex flex-row"
                   key={user.id}
                 >
-                  <div className="grow basis-2/3 m-auto">
+                  <div className="grow basis-1/3 m-auto">
                     <p>{user.name}</p>
                     <p>{user.email}</p>
-                    <p>{user.active ? "active" : "deactivated"}</p>
                   </div>
                   <div className="flex items-start">
-                    {canManageUsers && (
+                    {/* ensure perms + don't allow the current user to deactivate themeselves */}
+                    {canManageUsers && !isCurrentUser(user) && (
                       <Button
                         theme={!user.active ? "secondary" : "destructive"}
                         className="mr-2"
                         onClick={async () => {
+                          /* TODO: add confirmation modal 
+                            - check for unconfirmed responses
+                            - check for published forms (must be transferred to another use)
+                           */
                           await updateActiveStatus(user.id, !user.active);
                           await refreshData();
                         }}
                       >
-                        {user.active ? t("disable") : t("enable")}
+                        {user.active ? t("deactivateAccount") : t("activateAccount")}
                       </Button>
                     )}
-
                     <Button
                       type="button"
                       theme="primary"
@@ -251,6 +259,7 @@ export const getServerSideProps = requireAuthentication(async ({ user: { ability
     props: {
       ...(locale &&
         (await serverSideTranslations(locale, ["common", "admin-users", "admin-login"]))),
+
       allUsers,
       allPrivileges,
     },
