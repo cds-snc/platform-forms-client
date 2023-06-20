@@ -132,11 +132,11 @@ export const Card = (props: CardProps): React.ReactElement => {
         >
           {name ? name : t("unnamedForm", { ns: "form-builder" })}
         </a>
-        <p>
+        <span>
           {titleEn && titleEn}
           {titleEn && titleFr && " / "}
           {titleFr && titleFr}
-        </p>
+        </span>
         {/* Email delivery */}
         {deliveryOption && deliveryOption.emailAddress && (
           <span className="block mt-4 text-sm">
