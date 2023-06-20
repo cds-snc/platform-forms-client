@@ -131,7 +131,7 @@ yarn cypress
 # A chrome instance starts, then manually start and watch that test running
 ```
 
-The application also uses Jest for unit testing. To run the tests, run `yarn test:unit`.
+The application also uses Jest for unit testing. To run the tests, run `yarn test`.
 
 ### Notify integration
 
