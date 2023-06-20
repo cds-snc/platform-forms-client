@@ -108,6 +108,31 @@ There are 2 ways to connect to the database. Either directly using PGAdmin or a 
 - A table will appear. Find your username in the list and double-click on the value under the `role` column to modify to "ADMINISTRATOR".
 - Click on "Save Change" button in the top menu bar once completed.
 
+## Testing
+This application uses Cypress for end-to-end testing. 
+
+If you want to run a specific test:
+```
+yarn dev:test # run in a separate terminal
+yarn cypress:e2e --spec "PATH_TO_TEST"
+```
+
+If you want to run the entire test suite:
+```
+yarn dev:test
+yarn cypress:e2e
+# an error? see the screenshot in ./cypress/screenshots
+```
+
+If a test is failing, you can run the test tool:
+```
+yarn dev:test
+yarn cypress
+# A chrome instance starts, then manually start and watch that test running
+```
+
+The application also uses Jest for unit testing. To run the tests, run `yarn test`.
+
 ### Notify integration
 
 To send a form submission to an email address, you should configure the following environment variables in a `.env` file:
