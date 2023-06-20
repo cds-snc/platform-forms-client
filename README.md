@@ -124,7 +124,7 @@ yarn cypress:e2e
 # an error? see the screenshot in ./cypress/screenshots
 ```
 
-If a test is failing, you can run test tool:
+If a test is failing, you can run the test tool:
 ```
 yarn dev:test
 yarn cypress
