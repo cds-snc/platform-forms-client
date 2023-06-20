@@ -194,6 +194,7 @@ const Users = ({
                   </div>
                   <div className="flex items-start">
                     {/* ensure perms + don't allow the current user to deactivate themeselves */}
+                    {/* TODO move button into "more menu" */}
                     {canManageUsers && !isCurrentUser(user) && (
                       <Button
                         theme={!user.active ? "secondary" : "destructive"}
