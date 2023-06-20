@@ -89,7 +89,7 @@ model User {
   image         String?
   emailVerified DateTime?
   lastLogin     DateTime    @default(now()) @db.Timestamptz(6)
-  active        Boolean  @default(true)
+  active        Boolean     @default(true)
   privileges    Privilege[]
   accounts      Account[]
   sessions      Session[]
