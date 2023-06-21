@@ -17,5 +17,6 @@
   "managePermissionsFor": "Gère les permissions de",
   "assignUsersToTemplate": "Assigner des utilisateur·rice·s au formulaire",
   "deactivateAccount": "Désactiver le compte",
-  "activateAccount": "Désactiver le compte"
+  "activateAccount": "Réactiver le compte",
+  "moreMenu": "... Plus"
 }
