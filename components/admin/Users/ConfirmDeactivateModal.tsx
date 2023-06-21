@@ -4,7 +4,7 @@ import { FormElementTypes } from "@lib/types";
 import { Button } from "@components/globals";
 import { Dialog, useDialogRef } from "@components/form-builder/app/shared";
 
-export const ConfirmDeleteModal = ({
+export const ConfirmDeactivateModal = ({
   handleClose,
   handleDeactivate,
 }: {

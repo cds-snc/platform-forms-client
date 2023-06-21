@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Button } from "@components/globals";
 import { useTranslation } from "react-i18next";
-import { ConfirmDeleteModal } from "./ConfirmDeleteModal";
+import { ConfirmDeactivateModal } from "./ConfirmDeactivateModal";
 import { updateActiveStatus } from "@pages/admin/accounts";
 import { useRefresh } from "@lib/hooks";
 
-export const ConfirmDelete = ({ user }: { user: any }) => {
+export const ConfirmDeactivate = ({ user }: { user: any }) => {
   const { t } = useTranslation("admin-users");
   const [confirmDeleteModal, showConfirmDeleteModal] = useState(false);
   const { refreshData } = useRefresh();
@@ -26,7 +26,7 @@ export const ConfirmDelete = ({ user }: { user: any }) => {
         {user.active ? t("deactivateAccount") : t("activateAccount")}
       </Button>
       {confirmDeleteModal && (
-        <ConfirmDeleteModal
+        <ConfirmDeactivateModal
           handleClose={function (): void {
             showConfirmDeleteModal(false);
           }}
