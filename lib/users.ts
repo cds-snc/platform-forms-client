@@ -5,6 +5,7 @@ import { UserAbility } from "./types";
 import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
 import { Privilege } from "@prisma/client";
+import { sendDeactivationEmail } from "@lib/deactivate";
 
 /**
  * Get or Create a user if a record does not exist
@@ -166,8 +167,13 @@ export const updateActiveStatus = async (ability: UserAbility, userID: string, a
       select: {
         id: true,
         active: true,
+        email: true,
       },
     });
+
+    if (!active && user.email) {
+      sendDeactivationEmail(user.email);
+    }
 
     return user;
   } catch (error) {
