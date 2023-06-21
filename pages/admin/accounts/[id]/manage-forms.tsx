@@ -24,10 +24,9 @@ ManageForms.getLayout = (page: ReactElement) => {
 };
 
 export const getServerSideProps = requireAuthentication(
-  async ({ locale, user: { ability }, params }) => {
-    const { id } = params as { id: string };
+  async ({ locale, params, user: { ability } }) => {
+    const id = params?.id || null;
     checkPrivileges(ability, [{ action: "view", subject: "Setting" }]);
-
     return {
       props: {
         ...(locale &&
