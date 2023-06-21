@@ -125,7 +125,7 @@ export const getUser = async (id: string, ability: UserAbility) => {
           active: true,
         },
       })
-      .catch((e) => prismaErrors(e, []));
+      .catch((e) => prismaErrors(e, false));
 
     return users;
   } catch (e) {
