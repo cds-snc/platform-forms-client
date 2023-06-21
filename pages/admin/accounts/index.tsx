@@ -16,6 +16,7 @@ import { useSession } from "next-auth/react";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { Dropdown } from "@components/admin/Users/Dropdown";
 import { themes } from "@components/globals";
+import { LinkButton } from "@components/globals";
 
 interface User {
   privileges: Privilege[];
@@ -94,17 +95,15 @@ const ManageUser = ({
         <title>{`${t("managePermissionsFor")} ${user.name}`}</title>
       </Head>
       <div className="mb-8">{`${t("managePermissionsFor")} ${user.name}`}</div>
-      <ul className="flex flex-row flex-wrap gap-8 pb-8 pl-0 list-none">
+      <ul className="flex list-none flex-row flex-wrap gap-8 pb-8 pl-0">
         {privileges?.map((privilege) => {
           const active = userPrivileges.includes(privilege.id);
           return (
             <li
               key={privilege.id}
-              className={`w-72 flex flex-col gap-2 border-2 rounded-lg p-4 hover:border-blue-hover ${
-                active ? "bg-green-100" : "bg-red-100"
-              }`}
+              className={`flex w-72 max-w-4xl flex-col gap-2 rounded-lg border-2 p-4 hover:border-blue-hover`}
             >
-              <p className="font-bold grow">
+              <p className="grow font-bold">
                 {i18n.language === "en" ? privilege.descriptionEn : privilege.descriptionFr}
               </p>
               <div>
@@ -180,21 +179,28 @@ const Users = ({
       <Head>
         <title>{t("title")}</title>
       </Head>
-      <h1 className="border-0 mb-10">{t("title")}</h1>
+      <h1 className="mb-10 border-0">{t("title")}</h1>
       {!selectedUser ? (
-        <ul className="list-none p-0 m-0">
+        <ul className="m-0 list-none p-0">
           {allUsers
             .sort((a, b) => (a.name && b.name ? a.name.localeCompare(b.name) : 0))
             .map((user) => {
               return (
                 <li
-                  className="border-2 border-black rounded-md p-2 mb-4 flex flex-row max-w-xxl"
+                  className="mb-4 flex max-w-xl flex-row rounded-md border-2 border-black p-2"
                   key={user.id}
                 >
-                  <div className="grow basis-1/3 m-auto p-4">
-                    <h2 className="wrap text-base pb-6">{user.name}</h2>
+                  <div className="m-auto grow basis-1/3 p-4">
+                    <h2 className="pb-6 text-base">{user.name}</h2>
                     <p className="mb-4">{user.email}</p>
                     <div className="">
+                      <LinkButton.Secondary
+                        href={`/admin/accounts/${user.id}/manage-forms`}
+                        className="mb-2 mr-3"
+                      >
+                        {t("manageForms")}
+                      </LinkButton.Secondary>
+
                       {canManageUsers && !isCurrentUser(user) && !user.active && (
                         <Button
                           theme={"secondary"}
@@ -213,7 +219,7 @@ const Users = ({
                     {user.active && (
                       <Dropdown>
                         <DropdownMenuPrimitive.Item
-                          className={`${themes.htmlLink} ${themes.base} !block mb-4 !cursor-pointer`}
+                          className={`${themes.htmlLink} ${themes.base} mb-4 !block !cursor-pointer`}
                           onClick={() => setSelectedUser(user)}
                         >
                           {canManageUsers ? t("managePermissions") : t("viewPermissions")}

@@ -18,5 +18,6 @@
   "assignUsersToTemplate": "Assign users to template",
   "deactivateAccount": "Deactivate account",
   "activateAccount": "Reactivate account",
-  "moreMenu": "... More"
+  "moreMenu": "... More",
+  "manageForms": "Manage forms"
 }
