@@ -24,7 +24,7 @@ export const LeftNavigation = () => {
   return (
     <nav className="absolute">
       {ability?.can("view", "User") && (
-        <LeftNavLink id="users" href={`/admin/users`} isActive={path === "/admin/users"}>
+        <LeftNavLink id="users" href={`/admin/accounts`} isActive={path === "/admin/accounts"}>
           <>
             <NameIcon className={iconClassname} />
             {t("adminNav.users", { ns: "common" })}

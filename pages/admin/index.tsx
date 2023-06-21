@@ -27,7 +27,7 @@ export const getServerSideProps = requireAuthentication(async ({ user: { ability
   if (canViewUsers) {
     return {
       redirect: {
-        destination: `/admin/users`,
+        destination: `/admin/accounts`,
         permanent: false,
       },
     };
