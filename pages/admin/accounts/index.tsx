@@ -101,7 +101,7 @@ const ManageUser = ({
           return (
             <li
               key={privilege.id}
-              className={`flex w-72 max-w-4xl flex-col gap-2 rounded-lg border-2 p-4 hover:border-blue-hover`}
+              className={`flex w-72 max-w-2xl flex-col gap-2 rounded-lg border-2 p-4 hover:border-blue-hover`}
             >
               <p className="grow font-bold">
                 {i18n.language === "en" ? privilege.descriptionEn : privilege.descriptionFr}
@@ -187,7 +187,7 @@ const Users = ({
             .map((user) => {
               return (
                 <li
-                  className="mb-4 flex max-w-xl flex-row rounded-md border-2 border-black p-2"
+                  className="mb-4 flex max-w-2xl flex-row rounded-md border-2 border-black p-2"
                   key={user.id}
                 >
                   <div className="m-auto grow basis-1/3 p-4">

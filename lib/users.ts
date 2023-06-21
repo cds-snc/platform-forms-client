@@ -106,6 +106,42 @@ export const getOrCreateUser = async ({
 };
 
 /**
+ * Get User by id
+ * @returns User if found
+ */
+export const getUser = async (id: string, ability: UserAbility) => {
+  try {
+    checkPrivileges(ability, [{ action: "view", subject: "User" }]);
+
+    const users = await prisma.user
+      .findFirstOrThrow({
+        where: {
+          id: id,
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          active: true,
+        },
+      })
+      .catch((e) => prismaErrors(e, []));
+
+    return users;
+  } catch (e) {
+    if (e instanceof AccessControlError) {
+      logEvent(
+        ability.userID,
+        { type: "User" },
+        "AccessDenied",
+        `Attempted to get user by id ${id}`
+      );
+    }
+    throw e;
+  }
+};
+
+/**
  * Get all Users
  * @returns An array of all Users
  */

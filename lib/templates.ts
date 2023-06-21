@@ -326,6 +326,65 @@ export async function getAllTemplates(
 }
 
 /**
+ * Get all form templates for a specific User.
+ * @returns An array of Form Records
+ */
+export async function getAllTemplatesForUser(
+  ability: UserAbility,
+  userID: string
+): Promise<Array<FormRecord>> {
+  try {
+    checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
+
+    const templates = await prisma.template
+      .findMany({
+        where: {
+          ttl: null,
+          users: {
+            some: {
+              id: userID,
+            },
+          },
+        },
+        select: {
+          id: true,
+          created_at: true,
+          updated_at: true,
+          name: true,
+          jsonConfig: true,
+          isPublished: true,
+          deliveryOption: true,
+          securityAttribute: true,
+        },
+      })
+      .catch((e) => prismaErrors(e, []));
+
+    // Only log the event if templates are found
+    if (templates.length > 0)
+      logEvent(
+        ability.userID,
+        { type: "Form" },
+        "ReadForm",
+        `Accessed Forms: ${templates.map((template) => template.id).toString()}`
+      );
+
+    return templates.map((template) => _parseTemplate(template));
+  } catch (e) {
+    if (e instanceof AccessControlError) {
+      logEvent(
+        ability.userID,
+        { type: "Form" },
+        "AccessDenied",
+        "Attempted to list all Forms for User"
+      );
+      throw e;
+    }
+    logMessage.error(e);
+    return [];
+  }
+}
+
+/**
  * Get a form template by ID (only includes public information but does not require any permission)
  * @param formID ID of form template
  * @returns PublicFormRecord
