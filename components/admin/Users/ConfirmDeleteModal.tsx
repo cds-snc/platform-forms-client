@@ -27,7 +27,7 @@ export const ConfirmDeleteModal = ({
           handleClose();
         }}
       >
-        {t("deactivate")}
+        {t("deactivateAccount")}
       </Button>
       <Button
         className="ml-5"
