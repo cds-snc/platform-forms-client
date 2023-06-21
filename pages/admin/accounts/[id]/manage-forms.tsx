@@ -6,7 +6,7 @@ import Head from "next/head";
 import { getUser } from "@lib/users";
 import { checkPrivileges } from "@lib/privileges";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
-import { getAllTemplates } from "@lib/templates";
+import { getAllTemplatesForUser } from "@lib/templates";
 import { LinkButton } from "@components/globals";
 
 type User = {
@@ -92,7 +92,7 @@ export const getServerSideProps = requireAuthentication(
 
     let templates: Templates = [];
     if (id) {
-      templates = (await getAllTemplates(ability, id as string)).map((template) => {
+      templates = (await getAllTemplatesForUser(ability, id as string)).map((template) => {
         const {
           id,
           form: { titleEn, titleFr },
