@@ -17,5 +17,6 @@
   "managePermissionsFor": "Managing permissions of",
   "assignUsersToTemplate": "Assign users to template",
   "deactivateAccount": "Deactivate account",
-  "activateAccount": "Activer le compte"
+  "activateAccount": "Reactivate account",
+  "moreMenu": "... More"
 }
