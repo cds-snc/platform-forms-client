@@ -42,7 +42,7 @@ const ManageForms = ({ user, templates }: { user: User; templates: Templates }) 
           const bgColor = isPublished ? "#95CCA2" : "#FFD875";
           return (
             <li
-              className="mb-4 flex max-w-xl flex-row rounded-md border-2 border-black p-2"
+              className="mb-4 flex max-w-2xl flex-row rounded-md border-2 border-black p-2"
               key={id}
             >
               <div className="m-auto grow basis-1/3 p-4">
@@ -51,6 +51,13 @@ const ManageForms = ({ user, templates }: { user: User; templates: Templates }) 
                     <h2 className="text-base">
                       {titleEn} / {titleFr}
                     </h2>
+                    {/* linking to existing page for now */}
+                    <LinkButton.Secondary
+                      href={`/${i18n.language}/id/${id}/users`}
+                      className="mb-2 mr-3"
+                    >
+                      {t("manageOwnerships")}
+                    </LinkButton.Secondary>
                     <LinkButton.Secondary
                       href={`/${i18n.language}/form-builder/responses/${id}`}
                       className="mb-2 mr-3"
