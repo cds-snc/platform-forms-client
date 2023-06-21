@@ -57,6 +57,7 @@ Vous avez pour responsabilité :
 - de respecter la [norme graphique du Programme fédéral de l’image de marque](https://www.canada.ca/fr/secretariat-conseil-tresor/services/communications-gouvernementales/norme-graphique.html). Votre formulaire apparaîtra par défaut avec : 
     - la signature du gouvernement du Canada dans le coin supérieur gauche de l’en-tête.
     - le mot-symbole « Canada » dans le coin inférieur droit du pied de page.
+
  Vous pouvez remplacer la signature du gouvernement du Canada par la signature de votre ministère ou organisme. Si vous ne connaissez pas la signature de votre ministère ou organisme, veuillez contacter [le coordonnateur ou la coordonnatrice du Programme fédéral de l’image de marque](https://www.tbs-sct.canada.ca/ap/fip-pcim/coord-fra.asp). 
 
 Pour toute question en lien avec les présentes conditions d’utilisation, veuillez [nous contacter](/fr/form-builder/support/contactus).
