@@ -17,22 +17,15 @@ export const ConfirmDeactivate = ({ user }: { user: any }) => {
         className="mr-2"
         onClick={async () => {
           showConfirmDeleteModal(true);
-          /* TODO: add confirmation modal
-              - check for unconfirmed responses
-              - check for published forms (must be transferred to another use)
-             */
         }}
       >
         {user.active ? t("deactivateAccount") : t("activateAccount")}
       </Button>
       {confirmDeleteModal && (
         <ConfirmDeactivateModal
+          user={user}
           handleClose={function (): void {
             showConfirmDeleteModal(false);
-          }}
-          handleDeactivate={async () => {
-            await updateActiveStatus(user.id, !user.active);
-            await refreshData();
           }}
         />
       )}

@@ -3,18 +3,23 @@ import { useTranslation } from "next-i18next";
 import { FormElementTypes } from "@lib/types";
 import { Button } from "@components/globals";
 import { Dialog, useDialogRef } from "@components/form-builder/app/shared";
+import { updateActiveStatus } from "@pages/admin/accounts";
+import { useRefresh } from "@lib/hooks";
+import { getAllTemplates } from "@lib/templates";
+import axios from "axios";
+import { logMessage } from "@lib/logger";
 
 export const ConfirmDeactivateModal = ({
   handleClose,
-  handleDeactivate,
+  user,
 }: {
   handleAddType?: (type?: FormElementTypes) => void;
   handleClose: () => void;
-  handleDeactivate: () => void;
+  user: any;
 }) => {
   const { t } = useTranslation("admin-users");
-
   const dialog = useDialogRef();
+  const { refreshData } = useRefresh();
 
   const actions = (
     <>
@@ -22,7 +27,27 @@ export const ConfirmDeactivateModal = ({
         className=""
         theme="primary"
         onClick={async () => {
-          handleDeactivate();
+          /* TODO: add confirmation modal
+            - check for unconfirmed responses
+            - check for published forms (must be transferred to another use)
+          */
+          const resp = await axios({
+            url: `/api/account/${user.id}/forms`,
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+          });
+
+          if (resp.data.length > 0) {
+            logMessage.info("User has published forms");
+            return;
+          }
+
+          await updateActiveStatus(user.id, !user.active);
+          await refreshData();
+
           dialog.current?.close();
           handleClose();
         }}
