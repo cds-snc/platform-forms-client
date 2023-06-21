@@ -8,11 +8,9 @@ export const Dropdown = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="relative inline-block text-left">
       <DropdownMenuPrimitive.Root>
-        {/* main share button */}
         <DropdownMenuPrimitive.Trigger asChild>
           <button className={`!border-0 ${themes.base} ${themes.htmlLink}`}>{t("moreMenu")}</button>
         </DropdownMenuPrimitive.Trigger>
-        {/* end  main share button */}
         <DropdownMenuPrimitive.Portal>
           <DropdownMenuPrimitive.Content
             align="end"
