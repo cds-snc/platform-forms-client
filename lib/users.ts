@@ -113,7 +113,7 @@ export const getUser = async (id: string, ability: UserAbility) => {
   try {
     checkPrivileges(ability, [{ action: "view", subject: "User" }]);
 
-    const users = await prisma.user
+    const user = await prisma.user
       .findFirstOrThrow({
         where: {
           id: id,
@@ -127,7 +127,7 @@ export const getUser = async (id: string, ability: UserAbility) => {
       })
       .catch((e) => prismaErrors(e, []));
 
-    return users;
+    return user;
   } catch (e) {
     if (e instanceof AccessControlError) {
       logEvent(
