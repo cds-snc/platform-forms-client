@@ -11,25 +11,27 @@ export const sendDeactivationEmail = async (email: string) => {
     await notify.sendEmail(TEMPLATE_ID, email, {
       personalisation: {
         subject: "Account deactivated | Compte désactivé",
-        formResponse: `(la version française suit)
+        formResponse: `
+(la version française suit)
 
-        Hello,
-        
-        The GC Forms account for ${email} has been deactivated.
-        
-        To find out more or request account reactivation, [contact us](${HOST}/en/form-builder/support/contactus).
-        
-        Thanks,
-        The GC Forms team
-        
-        Bonjour,
-        
-        Le compte Formulaires GC de ${email} a été désactivé.
-        
-        Pour en savoir plus ou pour demander la réactivation de votre compte, n’hésitez pas à [nous contacter](${HOST}/fr/form-builder/support/contactus).
-        
-        Merci,
-        L’équipe Formulaires GC`,
+Hello,
+
+The GC Forms account for ${email} has been deactivated.
+
+To find out more or request account reactivation, [contact us](${HOST}/en/form-builder/support/contactus).
+
+Thanks,
+The GC Forms team
+
+Bonjour,
+
+Le compte Formulaires GC de ${email} a été désactivé.
+
+Pour en savoir plus ou pour demander la réactivation de votre compte, n’hésitez pas à [nous contacter](${HOST}/fr/form-builder/support/contactus).
+
+Merci,
+L’équipe Formulaires GC
+`,
       },
     });
   } catch (err) {
