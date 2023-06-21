@@ -17,6 +17,7 @@ import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { Dropdown } from "@components/admin/Users/Dropdown";
 import { themes } from "@components/globals";
 import { LinkButton } from "@components/globals";
+import { ConfirmDelete } from "@components/admin/Users/ConfirmDelete";
 
 interface User {
   privileges: Privilege[];
@@ -226,15 +227,16 @@ const Users = ({
                         </DropdownMenuPrimitive.Item>
 
                         {canManageUsers && !isCurrentUser(user) && user.active && (
-                          <DropdownMenuPrimitive.Item
-                            className={`${themes.destructive} ${themes.base} mt-4 !block !cursor-pointer`}
-                            onClick={async () => {
-                              await updateActiveStatus(user.id, false);
-                              await refreshData();
-                            }}
-                          >
-                            {t("deactivateAccount")}
-                          </DropdownMenuPrimitive.Item>
+                          <ConfirmDelete user={user} />
+                          // <DropdownMenuPrimitive.Item
+                          //   className={`${themes.destructive} ${themes.base} mt-4 !block !cursor-pointer`}
+                          //   onClick={async () => {
+                          //     await updateActiveStatus(user.id, false);
+                          //     await refreshData();
+                          //   }}
+                          // >
+                          //   {t("deactivateAccount")}
+                          // </DropdownMenuPrimitive.Item>
                         )}
                       </Dropdown>
                     )}
