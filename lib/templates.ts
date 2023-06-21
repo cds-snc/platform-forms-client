@@ -456,9 +456,7 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
         },
         data: {
           jsonConfig: command.formConfig as Prisma.JsonObject,
-          ...(command.name && {
-            name: command.name,
-          }),
+          name: command.name,
           ...(command.deliveryOption && {
             deliveryOption: {
               upsert: {
@@ -497,13 +495,12 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
     if (formCache.cacheAvailable) formCache.formID.invalidate(command.formID);
 
     // Log the audit events
-    command.name &&
-      logEvent(
-        command.ability.userID,
-        { type: "Form", id: command.formID },
-        "ChangeFormName",
-        `Updated Form name to ${command.name}`
-      );
+    logEvent(
+      command.ability.userID,
+      { type: "Form", id: command.formID },
+      "ChangeFormName",
+      `Updated Form name to ${command.name}`
+    );
     command.deliveryOption &&
       logEvent(
         command.ability.userID,
