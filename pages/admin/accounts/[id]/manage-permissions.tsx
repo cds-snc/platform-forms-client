@@ -68,10 +68,10 @@ const ManagePermissions = ({
   return (
     <div>
       <Head>
-        <title>{`${t("managePermissions")} ${formUser.name}`}</title>
+        <title>{`${t("managePermissions")} ${formUser.name} ${formUser.email}`}</title>
       </Head>
       <h1 className="mb-10 border-0">
-        {formUser.name} <br />
+        <span className="block">{`${formUser.name} ${formUser.email}`}</span>
         {t("managePermissions")}
       </h1>
       <ul className="flex list-none flex-row flex-wrap gap-8 pb-8 pl-0">
