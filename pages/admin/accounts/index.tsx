@@ -1,23 +1,23 @@
+import React, { ReactElement } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
+import axios from "axios";
+import { useSession } from "next-auth/react";
+import { useTranslation } from "next-i18next";
+import Head from "next/head";
+import { Privilege } from "@prisma/client";
+import { useAccessControl } from "@lib/hooks/useAccessControl";
+import { useRouter } from "next/router";
+
 import { requireAuthentication } from "@lib/auth";
+import { checkPrivileges, getAllPrivileges } from "@lib/privileges";
 import { logMessage } from "@lib/logger";
 import { getUsers } from "@lib/users";
 import { useRefresh } from "@lib/hooks";
-import React, { ReactElement, useState } from "react";
-import axios from "axios";
-import { useTranslation } from "next-i18next";
-import Head from "next/head";
-import { checkPrivileges, getAllPrivileges } from "@lib/privileges";
-import { Privilege } from "@prisma/client";
-import { useAccessControl } from "@lib/hooks/useAccessControl";
-import { Button } from "@components/globals";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
-import { useSession } from "next-auth/react";
-import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { Dropdown } from "@components/admin/Users/Dropdown";
-import { themes } from "@components/globals";
-import { LinkButton } from "@components/globals";
 import { ConfirmDeactivate } from "@components/admin/Users/ConfirmDeactivate";
+import { Button, themes, LinkButton } from "@components/globals";
 
 interface User {
   privileges: Privilege[];
@@ -26,27 +26,6 @@ interface User {
   email: string | null;
   active: boolean;
 }
-
-type PrivilegeList = Omit<Privilege, "permissions">[];
-
-const updatePrivilege = async (
-  userID: string,
-  privileges: { id: string; action: "add" | "remove" }[]
-) => {
-  try {
-    return await axios({
-      url: `/api/users`,
-      method: "PUT",
-      data: {
-        userID,
-        privileges,
-      },
-      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-    });
-  } catch (e) {
-    logMessage.error(e);
-  }
-};
 
 export const updateActiveStatus = async (userID: string, active: boolean) => {
   try {
@@ -64,124 +43,24 @@ export const updateActiveStatus = async (userID: string, active: boolean) => {
   }
 };
 
-const ManageUser = ({
-  user,
-  privileges,
-  unselectUser,
-}: {
-  user: User;
-  privileges: PrivilegeList;
-  unselectUser: () => void;
-}) => {
-  const { t, i18n } = useTranslation("admin-users");
-  const [userPrivileges, setUserPrivileges] = useState(() =>
-    user.privileges.map((privilege) => privilege.id)
-  );
-  const [changedPrivileges, setChangedPrivileges] = useState<
-    { id: string; action: "add" | "remove" }[]
-  >([]);
-
-  const { ability, forceSessionUpdate } = useAccessControl();
-  const canManageUsers = ability?.can("update", "User") ?? false;
-
-  const save = async () => {
-    await updatePrivilege(user.id, changedPrivileges);
-    await forceSessionUpdate();
-    unselectUser();
-  };
-
-  return (
-    <div>
-      <Head>
-        <title>{`${t("managePermissionsFor")} ${user.name}`}</title>
-      </Head>
-      <div className="mb-8">{`${t("managePermissionsFor")} ${user.name}`}</div>
-      <ul className="flex list-none flex-row flex-wrap gap-8 pb-8 pl-0">
-        {privileges?.map((privilege) => {
-          const active = userPrivileges.includes(privilege.id);
-          return (
-            <li
-              key={privilege.id}
-              className={`flex w-72 max-w-2xl flex-col gap-2 rounded-lg border-2 p-4 hover:border-blue-hover`}
-            >
-              <p className="grow font-bold">
-                {i18n.language === "en" ? privilege.descriptionEn : privilege.descriptionFr}
-              </p>
-              <div>
-                {canManageUsers ? (
-                  <Button
-                    type="button"
-                    theme="secondary"
-                    className="text-sm"
-                    onClick={() => {
-                      setChangedPrivileges((oldState) => {
-                        // If the item alreay exists in state remove it, as this brings it back to it's initial state
-                        if (oldState.some((p) => p.id === privilege.id)) {
-                          return oldState.filter((p) => p.id !== privilege.id);
-                        } else {
-                          return [
-                            ...oldState,
-                            { id: privilege.id, action: active ? "remove" : "add" },
-                          ];
-                        }
-                      });
-                      setUserPrivileges((oldState) => {
-                        if (oldState.includes(privilege.id)) {
-                          return oldState.filter((id) => id !== privilege.id);
-                        } else {
-                          return [...oldState, privilege.id];
-                        }
-                      });
-                    }}
-                  >
-                    {active ? t("disable") : t("enable")}
-                  </Button>
-                ) : (
-                  <div className="m-auto">{active ? t("enabled") : t("disabled")}</div>
-                )}
-              </div>
-            </li>
-          );
-        })}
-      </ul>
-      <Button className="mr-2" type="submit" onClick={() => save()}>
-        {t("save")}
-      </Button>
-      <Button type="button" theme="secondary" onClick={() => unselectUser()}>
-        {t("cancel")}
-      </Button>
-    </div>
-  );
-};
-
-const Users = ({
-  allUsers,
-  allPrivileges,
-}: {
-  allUsers: User[];
-  allPrivileges: PrivilegeList;
-}): React.ReactElement => {
+const Users = ({ allUsers }: { allUsers: User[] }): React.ReactElement => {
   const { t } = useTranslation("admin-users");
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const { ability } = useAccessControl();
   const canManageUsers = ability?.can("update", "User") ?? false;
   const { refreshData } = useRefresh();
   const { data: session } = useSession();
+  const router = useRouter();
   const isCurrentUser = (user: User) => {
     return user.id === session?.user?.id;
   };
 
-  const unselectUser = async () => {
-    setSelectedUser(null);
-    await refreshData();
-  };
   return (
     <>
       <Head>
         <title>{t("title")}</title>
       </Head>
-      <h1 className="mb-10 border-0">{t("title")}</h1>
-      {!selectedUser ? (
+      <>
+        <h1 className="mb-10 border-0">{t("title")}</h1>
         <ul className="m-0 list-none p-0">
           {allUsers
             .sort((a, b) => (a.name && b.name ? a.name.localeCompare(b.name) : 0))
@@ -221,7 +100,11 @@ const Users = ({
                       <Dropdown>
                         <DropdownMenuPrimitive.Item
                           className={`${themes.htmlLink} ${themes.base} mb-4 !block !cursor-pointer`}
-                          onClick={() => setSelectedUser(user)}
+                          onClick={() => {
+                            router.push({
+                              pathname: `/admin/accounts/${user.id}/manage-permissions`,
+                            });
+                          }}
                         >
                           {canManageUsers ? t("managePermissions") : t("viewPermissions")}
                         </DropdownMenuPrimitive.Item>
@@ -236,9 +119,7 @@ const Users = ({
               );
             })}
         </ul>
-      ) : (
-        <ManageUser unselectUser={unselectUser} user={selectedUser} privileges={allPrivileges} />
-      )}
+      </>
     </>
   );
 };

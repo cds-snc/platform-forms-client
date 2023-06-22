@@ -24,7 +24,7 @@ type Templates = Array<{
   [key: string]: string | boolean;
 }>;
 
-const ManageForms = ({ user, templates }: { user: User; templates: Templates }) => {
+const ManageForms = ({ formUser, templates }: { formUser: User; templates: Templates }) => {
   const { t, i18n } = useTranslation("admin-forms");
   return (
     <>
@@ -33,7 +33,7 @@ const ManageForms = ({ user, templates }: { user: User; templates: Templates }) 
       </Head>
       <div>
         <h1 className="mb-10 border-0">
-          <span className="block">{user.name}</span>
+          <span className="block">{`${formUser.name} ${formUser.email}`}</span>
           {t("title")}
         </h1>
       </div>
@@ -88,7 +88,7 @@ export const getServerSideProps = requireAuthentication(
   async ({ locale, params, user: { ability } }) => {
     const id = params?.id || null;
     checkPrivileges(ability, [{ action: "view", subject: "Setting" }]);
-    const user = await getUser(id as string, ability);
+    const formUser = await getUser(id as string, ability);
 
     let templates: Templates = [];
     if (id) {
@@ -111,7 +111,7 @@ export const getServerSideProps = requireAuthentication(
       props: {
         ...(locale &&
           (await serverSideTranslations(locale, ["common", "admin-forms", "admin-login"]))),
-        user,
+        formUser: formUser,
         templates,
       },
     };

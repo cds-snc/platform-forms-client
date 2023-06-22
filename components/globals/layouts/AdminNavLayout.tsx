@@ -14,7 +14,7 @@ interface AdminNavLayoutProps extends React.PropsWithChildren {
 
 const AdminNavLayout = ({ children, user }: AdminNavLayoutProps) => {
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex h-full flex-col">
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta charSet="utf-8" />
@@ -23,11 +23,11 @@ const AdminNavLayout = ({ children, user }: AdminNavLayoutProps) => {
 
       <SkipLink />
 
-      <header className="border-b-1 border-gray-500 mb-12 py-2 px-4 laptop:px-32 desktop:px-64">
+      <header className="mb-12 border-b-1 border-gray-500 px-4 py-2 laptop:px-32 desktop:px-64">
         <AdminNav user={user} />
       </header>
 
-      <div className="page-container mx-4 laptop:mx-32 desktop:mx-64 grow shrink-0 basis-auto">
+      <div className="page-container mx-4 shrink-0 grow basis-auto laptop:mx-32 desktop:mx-64">
         <LeftNavigation />
         <main id="content" className="ml-40 laptop:ml-60">
           {children}
