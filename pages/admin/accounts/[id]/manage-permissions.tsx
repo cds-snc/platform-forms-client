@@ -59,49 +59,48 @@ const PrivilegeList = ({
   const canManageUsers = ability?.can("update", "User") ?? false;
 
   return (
-    <ul className="flex list-none flex-row flex-wrap gap-8 pb-8 pl-0">
+    <ul className="m-0 p-0">
       {privileges?.map((privilege) => {
         const active = userPrivileges.includes(privilege.id);
         return (
-          <li
-            key={privilege.id}
-            className={`flex w-72 max-w-2xl flex-col gap-2 rounded-lg border-2 p-4 hover:border-blue-hover`}
-          >
-            <p className="grow font-bold">
-              {i18n.language === "en" ? privilege.descriptionEn : privilege.descriptionFr}
-            </p>
-            <div>
-              {canManageUsers ? (
-                <Button
-                  type="button"
-                  theme="secondary"
-                  className="text-sm"
-                  onClick={() => {
-                    setChangedPrivileges((oldState) => {
-                      // If the item alreay exists in state remove it, as this brings it back to it's initial state
-                      if (oldState.some((p) => p.id === privilege.id)) {
-                        return oldState.filter((p) => p.id !== privilege.id);
-                      } else {
-                        return [
-                          ...oldState,
-                          { id: privilege.id, action: active ? "remove" : "add" },
-                        ];
-                      }
-                    });
-                    setUserPrivileges((oldState) => {
-                      if (oldState.includes(privilege.id)) {
-                        return oldState.filter((id) => id !== privilege.id);
-                      } else {
-                        return [...oldState, privilege.id];
-                      }
-                    });
-                  }}
-                >
-                  {active ? t("disable") : t("enable")}
-                </Button>
-              ) : (
-                <div className="m-auto">{active ? t("enabled") : t("disabled")}</div>
-              )}
+          <li key={privilege.id} className="mb-4 block max-w-lg pb-4">
+            <div className="flex items-center justify-between">
+              <p className="">
+                {i18n.language === "en" ? privilege.descriptionEn : privilege.descriptionFr}
+              </p>
+              <div>
+                {canManageUsers ? (
+                  <Button
+                    type="button"
+                    theme="secondary"
+                    className="text-sm"
+                    onClick={() => {
+                      setChangedPrivileges((oldState) => {
+                        // If the item alreay exists in state remove it, as this brings it back to it's initial state
+                        if (oldState.some((p) => p.id === privilege.id)) {
+                          return oldState.filter((p) => p.id !== privilege.id);
+                        } else {
+                          return [
+                            ...oldState,
+                            { id: privilege.id, action: active ? "remove" : "add" },
+                          ];
+                        }
+                      });
+                      setUserPrivileges((oldState) => {
+                        if (oldState.includes(privilege.id)) {
+                          return oldState.filter((id) => id !== privilege.id);
+                        } else {
+                          return [...oldState, privilege.id];
+                        }
+                      });
+                    }}
+                  >
+                    {active ? t("disable") : t("enable")}
+                  </Button>
+                ) : (
+                  <div className="m-auto">{active ? t("enabled") : t("disabled")}</div>
+                )}
+              </div>
             </div>
           </li>
         );
