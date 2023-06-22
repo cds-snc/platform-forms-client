@@ -3,7 +3,7 @@ import { Privilege } from "@prisma/client";
 export interface FormOwner {
   id: string;
   email: string;
-  name: string;
+  name?: string;
   active: boolean;
 }
 

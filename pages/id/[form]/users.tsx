@@ -60,7 +60,6 @@ const Users = ({
 }: AssignUsersToTemplateProps): React.ReactElement => {
   const { t, i18n } = useTranslation("admin-users");
   const language = i18n.language as string;
-  const router = useRouter();
   const assignedToFormRecord = usersToOptions(usersAssignedToFormRecord);
   const [selectedUsers, setSelectedUsers] =
     useState<{ value: string; label: string | null }[]>(assignedToFormRecord);
