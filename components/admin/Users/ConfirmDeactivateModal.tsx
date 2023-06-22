@@ -76,7 +76,13 @@ export const ConfirmDeactivateModal = ({
         actions={actions}
         className="max-h-[80%] overflow-y-scroll"
       >
-        <div className="my-8">Huzzah</div>
+        <div className="my-8">
+          <h3>Deactivate this account?</h3>
+          <p>
+            Turning off all permissions effectively deactivates the account.<br></br>
+            Deactivating this account will notify the user.
+          </p>
+        </div>
       </Dialog>
     </div>
   );
