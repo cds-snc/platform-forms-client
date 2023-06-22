@@ -6,7 +6,7 @@ import React, { ReactElement, useState } from "react";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import { getUsers } from "@lib/users";
-import { Button } from "@components/forms";
+import { Button } from "@components/globals/Buttons";
 import { getTemplateWithAssociatedUsers } from "@lib/templates";
 import { FormRecord } from "@lib/types";
 import { getProperty } from "@lib/formBuilder";
@@ -19,6 +19,7 @@ import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 interface User {
   id: string;
   name: string | null;
+  email: string | null;
 }
 
 interface AssignUsersToTemplateProps {
@@ -47,7 +48,7 @@ const updateUsersToTemplateAssignations = async (
 
 const usersToOptions = (users: User[]): { value: string; label: string | null }[] => {
   return users.map((user) => {
-    return { value: user.id, label: user.name };
+    return { value: user.id, label: user.email };
   });
 };
 
@@ -59,10 +60,9 @@ const Users = ({
   const { t, i18n } = useTranslation("admin-users");
   const language = i18n.language as string;
   const router = useRouter();
-
-  const [selectedUsers, setSelectedUsers] = useState<{ value: string; label: string | null }[]>(
-    usersToOptions(usersAssignedToFormRecord)
-  );
+  const assignedToFormRecord = usersToOptions(usersAssignedToFormRecord);
+  const [selectedUsers, setSelectedUsers] =
+    useState<{ value: string; label: string | null }[]>(assignedToFormRecord);
 
   const saveAssignations = async () => {
     const usersToAdd: { id: string; action: "add" | "remove" }[] = selectedUsers
@@ -82,7 +82,7 @@ const Users = ({
       });
 
     await updateUsersToTemplateAssignations(formRecord.id, usersToAdd.concat(usersToRemove));
-    await router.push({ pathname: "/admin/view-templates" });
+    await router.push({ pathname: `/${i18n}/admin/accounts/${formRecord.id}/manage-forms` });
   };
 
   return (
@@ -90,8 +90,13 @@ const Users = ({
       <Head>
         <title>{t("title")}</title>
       </Head>
-      <h1 className="gc-h1">{formRecord.form[getProperty("title", language)] as string}</h1>
+
+      <h1 className="mb-0 border-b-0 text-h1 font-bold md:mb-10 md:text-small_h1">
+        Manage ownership - {formRecord.form[getProperty("title", language)] as string}
+      </h1>
+
       <div className="mb-4">{t("assignUsersToTemplate")}</div>
+      <p>{t("enterOwnersEmail")} </p>
       <Select
         isClearable
         isSearchable
@@ -102,7 +107,7 @@ const Users = ({
         onChange={(value) => setSelectedUsers(value as { value: string; label: string | null }[])}
       />
       <br />
-      <Button className="" type="submit" onClick={() => saveAssignations()}>
+      <Button theme="secondary" type="submit" onClick={() => saveAssignations()}>
         {t("save")}
       </Button>
     </>
@@ -137,7 +142,7 @@ export const getServerSideProps = requireAuthentication(
     if (!templateWithAssociatedUsers) return redirect(locale);
 
     const allUsers = (await getUsers(ability)).map((user) => {
-      return { id: user.id, name: user.name };
+      return { id: user.id, name: user.name, email: user.email };
     });
 
     return {

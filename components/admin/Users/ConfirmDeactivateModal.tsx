@@ -5,7 +5,6 @@ import { Button } from "@components/globals";
 import { Dialog, useDialogRef } from "@components/form-builder/app/shared";
 import { updateActiveStatus } from "@pages/admin/accounts";
 import { useRefresh } from "@lib/hooks";
-import { getAllTemplates } from "@lib/templates";
 import axios from "axios";
 import { logMessage } from "@lib/logger";
 
