@@ -95,11 +95,11 @@ const Users = ({
       </Head>
 
       <h1 className="mb-0 border-b-0 text-h1 font-bold md:mb-10 md:text-small_h1">
-        Manage ownership - {formRecord.form[getProperty("title", language)] as string}
+        {`${t("title")} - ${formRecord.form[getProperty("title", language)] as string}`}
       </h1>
 
-      <div className="mb-4">{t("assignUsersToTemplate")}</div>
-      <p>{t("enterOwnersEmail")} </p>
+      <p className="mb-4">{t("assignUsersToTemplate")}</p>
+      <p className="mb-4 font-bold">{t("enterOwnersEmail")} </p>
       <Select
         instanceId={useId()}
         isClearable
