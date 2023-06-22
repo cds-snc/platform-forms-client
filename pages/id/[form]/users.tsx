@@ -1,20 +1,21 @@
+import React, { ReactElement, useState, useId } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { requireAuthentication } from "@lib/auth";
-import { checkPrivileges } from "@lib/privileges";
 import { useTranslation } from "next-i18next";
-import React, { ReactElement, useState } from "react";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
-import { getUsers } from "@lib/users";
-import { Button } from "@components/globals/Buttons";
-import { getTemplateWithAssociatedUsers } from "@lib/templates";
-import { FormRecord } from "@lib/types";
-import { getProperty } from "@lib/formBuilder";
 import axios from "axios";
 import { logMessage } from "@lib/logger";
 import { useRouter } from "next/router";
 import Head from "next/head";
+
+import { getTemplateWithAssociatedUsers } from "@lib/templates";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
+import { getUsers } from "@lib/users";
+import { Button } from "@components/globals";
+import { checkPrivileges } from "@lib/privileges";
+import { requireAuthentication } from "@lib/auth";
+import { FormRecord } from "@lib/types";
+import { getProperty } from "@lib/formBuilder";
 
 interface User {
   id: string;
@@ -98,6 +99,7 @@ const Users = ({
       <div className="mb-4">{t("assignUsersToTemplate")}</div>
       <p>{t("enterOwnersEmail")} </p>
       <Select
+        instanceId={useId()}
         isClearable
         isSearchable
         isMulti
