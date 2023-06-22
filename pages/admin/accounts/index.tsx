@@ -5,7 +5,6 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
-import { Privilege } from "@prisma/client";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { useRouter } from "next/router";
 
@@ -18,14 +17,7 @@ import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 import { Dropdown } from "@components/admin/Users/Dropdown";
 import { ConfirmDeactivate } from "@components/admin/Users/ConfirmDeactivate";
 import { Button, themes, LinkButton } from "@components/globals";
-
-interface User {
-  privileges: Privilege[];
-  id: string;
-  name: string | null;
-  email: string | null;
-  active: boolean;
-}
+import { DBUser } from "@lib/types/user-types";
 
 export const updateActiveStatus = async (userID: string, active: boolean) => {
   try {
@@ -43,14 +35,14 @@ export const updateActiveStatus = async (userID: string, active: boolean) => {
   }
 };
 
-const Users = ({ allUsers }: { allUsers: User[] }): React.ReactElement => {
+const Users = ({ allUsers }: { allUsers: DBUser[] }): React.ReactElement => {
   const { t } = useTranslation("admin-users");
   const { ability } = useAccessControl();
   const canManageUsers = ability?.can("update", "User") ?? false;
   const { refreshData } = useRefresh();
   const { data: session } = useSession();
   const router = useRouter();
-  const isCurrentUser = (user: User) => {
+  const isCurrentUser = (user: DBUser) => {
     return user.id === session?.user?.id;
   };
 

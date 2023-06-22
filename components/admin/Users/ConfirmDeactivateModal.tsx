@@ -8,7 +8,7 @@ import { updateActiveStatus } from "@pages/admin/accounts";
 import { useRefresh } from "@lib/hooks";
 import Loader from "@components/globals/Loader";
 import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
-import { User } from "@prisma/client";
+import { DBUser } from "@lib/types/user-types";
 
 const fetcher = async (url: string) => {
   const res = await fetch(url);
@@ -28,7 +28,7 @@ export const ConfirmDeactivateModal = ({
 }: {
   handleAddType?: (type?: FormElementTypes) => void;
   handleClose: () => void;
-  user: User;
+  user: DBUser;
 }) => {
   const { t } = useTranslation("admin-users");
   const dialog = useDialogRef();
