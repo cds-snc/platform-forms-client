@@ -16,23 +16,23 @@ export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) =>
   const { t, i18n } = useTranslation(["common", "form-builder"]);
 
   return (
-    <header className="border-b-1 border-gray-500 mb-12 py-2 px-4 laptop:px-32 desktop:px-64">
-      <div className="grid grid-flow-col w-full">
+    <header className="mb-12 border-b-1 border-gray-500 px-4 py-2 laptop:px-32 desktop:px-64">
+      <div className="grid w-full grid-flow-col">
         <div className="flex">
           <Link href="/form-builder" legacyBehavior>
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a
               id="logo"
-              className="border-r-1 flex pr-5 mr-5 text-h2 font-bold font-sans no-underline !text-black focus:bg-white !shadow-none"
+              className="mr-5 flex border-r-1 pr-5 font-sans text-h2 font-bold !text-black no-underline !shadow-none focus:bg-white"
             >
-              <div className="inline-block w-[46px] h-[45px] py-2">
+              <div className="inline-block h-[45px] w-[46px] py-2">
                 <SiteLogo title={t("title")} />
               </div>
             </a>
           </Link>
 
           {!isFormBuilder && (
-            <div className="px-2 py-1 box-border block mt-3 h-[40px] text-base font-bold">
+            <div className="mt-3 box-border block h-[40px] px-2 py-1 text-base font-bold">
               {t("title", { ns: "common" })}
             </div>
           )}
@@ -42,13 +42,20 @@ export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) =>
           className="justify-self-end"
           aria-label={t("mainNavAriaLabel", { ns: "form-builder" })}
         >
-          <ul className="mt-2 px-0 flex text-base list-none">
+          <ul className="mt-2 flex list-none px-0 text-base">
             {isFormBuilder && (
-              <li className="text-base mr-2 tablet:mr-4">
+              <li className="mr-2 text-base tablet:mr-4">
                 <ShareDropdown />
               </li>
             )}
-            <li className="text-base mr-2 tablet:mr-4 py-2">
+
+            {ability?.can("view", "FormRecord") && (
+              <li className="mr-2 py-2 text-base tablet:mr-4">
+                <Link href="/admin">{t("adminNav.administration")}</Link>
+              </li>
+            )}
+
+            <li className="mr-2 py-2 text-base tablet:mr-4">
               {ability?.can("view", "FormRecord") && (
                 <Link href={`/${i18n.language}/myforms/drafts`}>
                   {t("adminNav.myForms", { ns: "common" })}
@@ -56,7 +63,7 @@ export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) =>
               )}
             </li>
             {
-              <li className="mr-2 tablet:mr-4 py-2">
+              <li className="mr-2 py-2 tablet:mr-4">
                 <LoginMenu isAuthenticated={status === "authenticated"} />
               </li>
             }

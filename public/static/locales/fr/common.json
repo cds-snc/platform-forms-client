@@ -76,7 +76,8 @@
     "logout": "Se déconnecter",
     "privileges": "Privilèges",
     "settings": "Paramètres",
-    "myForms": "Vos formulaires"
+    "administration": "Administration",
+    "myForms": "Formulaires"
   },
   "formElements": {
     "characterCount": {

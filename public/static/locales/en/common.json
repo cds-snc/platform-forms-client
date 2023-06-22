@@ -76,7 +76,8 @@
     "logout": "Sign out",
     "privileges": "Privileges",
     "settings": "Settings",
-    "myForms": "Your forms"
+    "administration": "Administration",
+    "myForms": "Forms"
   },
   "formElements": {
     "characterCount": {

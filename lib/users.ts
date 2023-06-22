@@ -123,6 +123,15 @@ export const getUser = async (id: string, ability: UserAbility) => {
           name: true,
           email: true,
           active: true,
+          privileges: {
+            select: {
+              id: true,
+              nameEn: true,
+              nameFr: true,
+              descriptionEn: true,
+              descriptionFr: true,
+            },
+          },
         },
       })
       .catch((e) => prismaErrors(e, []));
