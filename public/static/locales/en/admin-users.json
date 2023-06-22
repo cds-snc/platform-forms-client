@@ -22,6 +22,5 @@
   "manageForms": "Manage forms",
   "publishedFormsMustBeTransferred": "Published forms must be transferred or deleted before deactivating.",
   "deactivatingWillNotifyUser": "Deactivating this account will notify the user.",
-  "deactivateThisAccount": "Deactivate this account?",
-  "close": "Close"
+  "deactivateThisAccount": "Deactivate this account?"
 }
