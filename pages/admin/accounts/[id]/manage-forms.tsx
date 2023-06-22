@@ -33,7 +33,7 @@ const ManageForms = ({ formUser, templates }: { formUser: User; templates: Templ
       </Head>
       <div>
         <h1 className="mb-10 border-0">
-          <span className="block">{`${formUser.name} ${formUser.email}`}</span>
+          {formUser && <span className="block">{`${formUser?.name} ${formUser?.email}`}</span>}
           {t("title")}
         </h1>
       </div>
