@@ -4,13 +4,7 @@ import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { useAccessControl } from "@lib/hooks";
 
-import {
-  NameIcon,
-  FlagIcon,
-  PageIcon,
-  TreeViewIcon,
-  GearIcon,
-} from "@components/form-builder/icons";
+import { NameIcon, FlagIcon, TreeViewIcon, GearIcon } from "@components/form-builder/icons";
 
 export const LeftNavigation = () => {
   const { t } = useTranslation(["admin-login", "common"]);
@@ -28,19 +22,6 @@ export const LeftNavigation = () => {
           <>
             <NameIcon className={iconClassname} />
             {t("adminNav.users", { ns: "common" })}
-          </>
-        </LeftNavLink>
-      )}
-
-      {(ability?.can("view", "FormRecord") || ability?.can("update", "FormRecord")) && (
-        <LeftNavLink
-          id="privileges"
-          href="/admin/view-templates"
-          isActive={path === "/admin/view-templates"}
-        >
-          <>
-            <PageIcon className={iconClassname} />
-            {t("adminNav.templates", { ns: "common" })}
           </>
         </LeftNavLink>
       )}

@@ -16,44 +16,50 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
   const user = props.user;
 
   return (
-    <div className="grid grid-flow-col w-full">
+    <div className="grid w-full grid-flow-col">
       <div className="flex">
         <Link href="/admin" legacyBehavior>
           {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a
             id="logo"
-            className="border-r-1 flex pr-5 mr-5 text-h2 font-bold font-sans no-underline !text-black focus:bg-white !shadow-none"
+            className="mr-5 flex border-r-1 pr-5 font-sans text-h2 font-bold !text-black no-underline !shadow-none focus:bg-white"
           >
-            <div className="inline-block w-[46px] h-[45px] py-2">
-              <SiteLogo title={t("title")} />
+            <div className="inline-block h-[45px] w-[46px] py-2">
+              <SiteLogo title={t("title", { ns: "admin-login" })} />
             </div>
           </a>
         </Link>
-        <div className="px-2 py-1 box-border block mt-3 h-[40px] text-base font-bold">
-          {t("title", { ns: "common" })}
+        <div className="mt-3 box-border block h-[40px] px-2 py-1 text-base font-bold">
+          {t("title", { ns: "admin-login" })}
         </div>
       </div>
       <nav className="justify-self-end">
         <>
-          <ul className="mt-2 px-0 flex text-base list-none">
+          <ul className="mt-2 flex list-none px-0 text-base">
             {user && user.name && (
-              <li className="mr-2 tablet:mr-4 py-2 text-sm pt-3">
+              <li className="mr-2 py-2 pt-3 text-sm tablet:mr-4">
                 {t("logged-in", { ns: "admin-login" })}: <span>{user.email}</span>
               </li>
             )}
 
+            {user && user.name && (
+              <li className="mr-2 py-2 text-base tablet:mr-4">
+                <Link href="/admin">{t("adminNav.administration")}</Link>
+              </li>
+            )}
+
             {(!user || !user.name) && (
-              <li className="text-base mr-2 tablet:mr-4 py-2">
+              <li className="mr-2 py-2 text-base tablet:mr-4">
                 <Link href="/auth/login" locale={i18n.language}>
                   {t("adminNav.login")}
                 </Link>
               </li>
             )}
-            <li className="text-base mr-2 tablet:mr-4 py-2">
+            <li className="mr-2 py-2 text-base tablet:mr-4">
               <Link href="/myforms">{t("adminNav.myForms")}</Link>
             </li>
             {user && user.name && (
-              <li className="text-base mr-2 tablet:mr-4 py-2">
+              <li className="mr-2 py-2 text-base tablet:mr-4">
                 <button
                   className="gc-button-link"
                   onClick={() => {
@@ -65,7 +71,7 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
                 </button>
               </li>
             )}
-            <li className="text-base mr-2 tablet:mr-4 py-2">
+            <li className="mr-2 py-2 text-base tablet:mr-4">
               <LanguageToggle />
             </li>
           </ul>
