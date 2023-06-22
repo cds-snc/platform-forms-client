@@ -2,13 +2,12 @@ import React, { useState } from "react";
 import { Button } from "@components/globals";
 import { useTranslation } from "react-i18next";
 import { ConfirmDeactivateModal } from "./ConfirmDeactivateModal";
-import { updateActiveStatus } from "@pages/admin/accounts";
 import { useRefresh } from "@lib/hooks";
+import { User } from "@prisma/client";
 
-export const ConfirmDeactivate = ({ user }: { user: any }) => {
+export const ConfirmDeactivate = ({ user }: { user: User }) => {
   const { t } = useTranslation("admin-users");
   const [confirmDeleteModal, showConfirmDeleteModal] = useState(false);
-  const { refreshData } = useRefresh();
 
   return (
     <>
