@@ -23,8 +23,6 @@ const getPublishedForms = async (
 
     const templates = await getAllTemplatesForUser(ability, accountId, true);
 
-    // const result = await numberOfUnprocessedSubmissions(createAbility(session), formId);
-
     return res.status(200).json(templates);
   } catch (err) {
     if (err instanceof AccessControlError) return res.status(403).json({ error: "Forbidden" });

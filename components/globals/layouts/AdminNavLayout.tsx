@@ -7,6 +7,7 @@ import AdminNav from "../AdminNav";
 import { User } from "next-auth";
 
 import { LeftNavigation } from "@components/admin/LeftNav/LeftNavigation";
+import { ToastContainer } from "@components/form-builder/app/shared/Toast";
 
 interface AdminNavLayoutProps extends React.PropsWithChildren {
   user: User;
@@ -31,6 +32,7 @@ const AdminNavLayout = ({ children, user }: AdminNavLayoutProps) => {
         <LeftNavigation />
         <main id="content" className="ml-40 laptop:ml-60">
           {children}
+          <ToastContainer />
         </main>
       </div>
 
