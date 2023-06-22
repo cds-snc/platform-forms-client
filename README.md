@@ -111,22 +111,24 @@ There are 2 ways to connect to the database. Either directly using PGAdmin or a 
 ## Testing
 This application uses Cypress for end-to-end testing. 
 
-If you want to run a specific test:
+If you want to clear the database and run the tests in a clean slate:
 ```
 yarn dev:test # run in a separate terminal
+```
+
+If you want to run a specific test:
+```
 yarn cypress:e2e --spec "PATH_TO_TEST"
 ```
 
 If you want to run the entire test suite:
 ```
-yarn dev:test
 yarn cypress:e2e
 # an error? see the screenshot in ./cypress/screenshots
 ```
 
 If a test is failing, you can run the test tool:
 ```
-yarn dev:test
 yarn cypress
 # A chrome instance starts, then manually start and watch that test running
 ```
