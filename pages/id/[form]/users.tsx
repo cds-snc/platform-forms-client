@@ -83,9 +83,7 @@ const Users = ({
       });
 
     await updateUsersToTemplateAssignations(formRecord.id, usersToAdd.concat(usersToRemove));
-    await router.push({
-      pathname: `/${i18n.language}/admin/accounts/${formRecord.id}/manage-forms`,
-    });
+    // @todo add success / fail  message
   };
 
   return (
