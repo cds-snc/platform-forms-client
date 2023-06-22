@@ -331,7 +331,8 @@ export async function getAllTemplates(
  */
 export async function getAllTemplatesForUser(
   ability: UserAbility,
-  userID: string
+  userID: string,
+  isPublished?: boolean
 ): Promise<Array<FormRecord>> {
   try {
     checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
@@ -340,6 +341,7 @@ export async function getAllTemplatesForUser(
       .findMany({
         where: {
           ttl: null,
+          ...(typeof isPublished !== "undefined" && { isPublished: isPublished }),
           users: {
             some: {
               id: userID,

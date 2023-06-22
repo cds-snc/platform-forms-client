@@ -16,6 +16,7 @@ import { getUsers } from "@lib/users";
 import { useRefresh } from "@lib/hooks";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 import { Dropdown } from "@components/admin/Users/Dropdown";
+import { ConfirmDeactivate } from "@components/admin/Users/ConfirmDeactivate";
 import { Button, themes, LinkButton } from "@components/globals";
 
 interface User {
@@ -109,15 +110,7 @@ const Users = ({ allUsers }: { allUsers: User[] }): React.ReactElement => {
                         </DropdownMenuPrimitive.Item>
 
                         {canManageUsers && !isCurrentUser(user) && user.active && (
-                          <DropdownMenuPrimitive.Item
-                            className={`${themes.destructive} ${themes.base} mt-4 !block !cursor-pointer`}
-                            onClick={async () => {
-                              await updateActiveStatus(user.id, false);
-                              await refreshData();
-                            }}
-                          >
-                            {t("deactivateAccount")}
-                          </DropdownMenuPrimitive.Item>
+                          <ConfirmDeactivate user={user} />
                         )}
                       </Dropdown>
                     )}
