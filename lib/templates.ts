@@ -109,9 +109,10 @@ async function _unprotectedGetTemplateByID(formID: string): Promise<FormRecord |
  * This function is for internal use only since it does not require any permission.
  * There is an exported version `_getTemplateWithAssociatedUsers` that checks for permissions.
  */
-async function _unprotectedGetTemplateWithAssociatedUsers(
-  formID: string
-): Promise<{ formRecord: FormRecord; users: { id: string; name: string | null }[] } | null> {
+async function _unprotectedGetTemplateWithAssociatedUsers(formID: string): Promise<{
+  formRecord: FormRecord;
+  users: { id: string; name: string | null; email: string | null }[];
+} | null> {
   const templateWithUsers = await prisma.template
     .findUnique({
       where: {
@@ -131,6 +132,7 @@ async function _unprotectedGetTemplateWithAssociatedUsers(
           select: {
             id: true,
             name: true,
+            email: true,
           },
         },
       },

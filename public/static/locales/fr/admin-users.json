@@ -1,5 +1,5 @@
 {
-  "title": "Comptes",
+  "title": "Gérer les propriétaires",
   "username": "Nom d'utilisateur·rice",
   "email": "Adresse courriel",
   "admin": "Administration",
@@ -15,7 +15,8 @@
   "managePermissions": "Gérer les permissions",
   "viewPermissions": "Afficher les permissions",
   "managePermissionsFor": "Gère les permissions de",
-  "assignUsersToTemplate": "Assigner des utilisateur·rice·s au formulaire",
+  "assignUsersToTemplate": "Ajouter, enlever ou transférer la propriété à un autre compte Formulaires GC dans votre ministère.",
+  "enterOwnersEmail": "Entrez l’adresse courriel du propriétaire du formulaire",
   "deactivateAccount": "Désactiver le compte",
   "activateAccount": "Réactiver le compte",
   "moreMenu": "... Plus",
