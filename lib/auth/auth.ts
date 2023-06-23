@@ -13,7 +13,7 @@ import { TemporaryTokenPayload, UserAbility } from "../types";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { AccessControlError, createAbility } from "../privileges";
 
-import { localPathRegEx } from "@lib/validation";
+export const localPathRegEx = new RegExp("^(?!((?:[a-z+]+:)?//))", "i");
 
 interface ServerSidePropsAuthContext extends GetServerSidePropsContext {
   user: Session["user"] & { ability: UserAbility };
