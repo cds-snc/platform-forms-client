@@ -41,6 +41,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
   const accountEscalated = true; // TODO: get account exalated setting this is TEMP
 
   const { value: overdueAfter } = useSetting("nagwarePhaseEncouraged");
+  const { value: escalatedAfter } = useSetting("nagwarePhaseWarned");
   const [tableItems, tableItemsDispatch] = useReducer(reducerTableItems, {
     checkedItems: new Map(),
     statusItems: new Map(vaultSubmissions.map((submission) => [submission.name, false])),
@@ -213,6 +214,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
               <p className="text-[#26374a] text-sm">
                 {t("downloadResponsesTable.errors.overdueAlert.description", {
                   numberOfOverdueResponses: tableItems.numberOfOverdueResponses,
+                  escalatedAfter,
                 })}
               </p>
             </Attention>

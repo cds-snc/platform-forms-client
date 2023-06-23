@@ -61,7 +61,7 @@
       "errorDownloadingFilesLink": "contactez Soutien",
       "overdueAlert": {
         "title": "Downloading is restricted for overdue responses until they are downloaded and confirmed",
-        "description": "There are {{numberOfOverdueResponses}} unconfirmed responses 35 days overdue. Download and confirm all overdue responses before continuing."
+        "description": "There are {{numberOfOverdueResponses}} unconfirmed responses {{escalatedAfter}} days overdue. Download and confirm all overdue responses before continuing."
       }
     },
     "downloadXSelectedResponses": "Télécharger {{size}} réponses sélectionnées",

@@ -1,5 +1,5 @@
 import { getDaysPassed } from "@lib/clientHelpers";
-import { VaultSubmissionList, VaultStatus, VaultSubmission, TypeOmit } from "@lib/types";
+import { VaultSubmissionList, VaultStatus } from "@lib/types";
 
 export enum TableActions {
   UPDATE = "UPDATE",
