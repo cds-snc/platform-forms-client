@@ -57,7 +57,8 @@ You are responsible for:
 - Following the [Design Standard for the Federal Identity Program](https://www.canada.ca/en/treasury-board-secretariat/services/government-communications/design-standard.html). By default your form will appear with: 
     - the Government of Canada signature in the top left corner of the header.
     - the Canada wordmark in the bottom right corner of the footer.
-You may replace the Government of Canada signature with your  department or agency’s signature. If you are unsure about your department or agency’s signature , contact your [Federal Identity Program coordinator](https://www.tbs-sct.canada.ca/ap/fip-pcim/coord-eng.asp). 
+ 
+ You may replace the Government of Canada signature with your  department or agency’s signature. If you are unsure about your department or agency’s signature, contact your [Federal Identity Program coordinator](https://www.tbs-sct.canada.ca/ap/fip-pcim/coord-eng.asp). 
 
 For questions related to these terms of use, [contact us](/en/form-builder/support/contactus).
 
