@@ -291,7 +291,7 @@ export const checkPrivileges = (
     field?: string;
   }[],
   logic: "all" | "one" = "all"
-): void => {
+) => {
   // helper to define if we are force typing a passed object
   try {
     const result = rules.map(({ action, subject, field }) => {
