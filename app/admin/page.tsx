@@ -42,6 +42,8 @@ const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async session({ session, token }) {
+
+      
       // Add info like 'role' to session object
 
       session.user = {
