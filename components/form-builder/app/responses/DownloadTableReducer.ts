@@ -59,7 +59,7 @@ export function isSubmissionOverdue({
   if (overdueAfter === undefined) return false;
   const overdueDays = parseInt(overdueAfter);
   if (isNaN(overdueDays)) return false;
-  const isOverdue = parseInt(overdueAfter) - getDaysPassed(createdAt) < 0;
+  const isOverdue = overdueDays - getDaysPassed(createdAt) < 0;
   // Download is overdue
   if (status === VaultStatus.NEW && isOverdue) return true;
   // Confirmed is overdue
