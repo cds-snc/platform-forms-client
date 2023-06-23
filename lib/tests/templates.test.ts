@@ -336,6 +336,7 @@ describe("Template CRUD functions", () => {
         users: {
           select: {
             id: true,
+            email: true,
             name: true,
           },
         },
@@ -408,6 +409,7 @@ describe("Template CRUD functions", () => {
         ttl: true,
         users: {
           select: {
+            email: true,
             id: true,
             name: true,
           },
