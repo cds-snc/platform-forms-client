@@ -2,7 +2,6 @@ import React from "react";
 import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../pages/api/auth/[...nextauth]";
-
 import { createAbility, getAllPrivileges, checkPrivilegesAsBoolean } from "../../lib/privileges";
 
 export default async function DemoPage() {
@@ -23,7 +22,12 @@ export default async function DemoPage() {
     <>
       <h1>Admin home page</h1>
       <div>
-        <Link href="/admin/accounts">Test</Link>
+        <p>
+          {session.user.name} ({session.user.email})
+        </p>
+        <p>
+          <Link href="/admin/accounts">Test</Link>
+        </p>
         {canViewPrivileges ? "true" : "false"}
         {/* JSON.stringify(session) */}
         {/* JSON.stringify(ability) */}
