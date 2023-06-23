@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useState } from "react";
-import { VaultSubmissionList } from "@lib/types";
+import { VaultStatus, VaultSubmissionList } from "@lib/types";
 import { useTranslation } from "react-i18next";
 import { SkipLinkReusable } from "@components/globals/SkipLinkReusable";
 import { ConfirmReceiptStatus } from "./ConfirmReceiptStatus";
@@ -13,7 +13,12 @@ import { Attention, AttentionTypes } from "@components/globals/Attention/Attenti
 import { toast } from "../shared/Toast";
 import { useSetting } from "@lib/hooks/useSetting";
 import Link from "next/link";
-import { TableActions, reducerTableItems, sortVaultSubmission } from "./DownloadTableReducer";
+import {
+  TableActions,
+  isSubmissionOverdue,
+  reducerTableItems,
+  sortVaultSubmission,
+} from "./DownloadTableReducer";
 
 // TODO: move to an app setting variable
 const MAX_FILE_DOWNLOADS = 20;
@@ -31,12 +36,23 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
     maxItemsError: false,
     noItemsError: false,
   });
+
+  // TODO: PLACEHOLDER VALUE - replace with Account.escalated related var
+  const accountEscalated = true; // TODO: get account exalated setting this is TEMP
+
+  const { value: overdueAfter } = useSetting("nagwarePhaseEncouraged");
   const [tableItems, tableItemsDispatch] = useReducer(reducerTableItems, {
     checkedItems: new Map(),
     statusItems: new Map(vaultSubmissions.map((submission) => [submission.name, false])),
     sortedItems: sortVaultSubmission(vaultSubmissions),
+    numberOfOverdueResponses: vaultSubmissions.filter((submission) =>
+      isSubmissionOverdue({
+        status: submission.status,
+        createdAt: submission.createdAt,
+        overdueAfter,
+      })
+    ).length,
   });
-  const { value: overdueAfter } = useSetting("nagwarePhaseEncouraged");
 
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.id;
@@ -123,6 +139,13 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
     }
   };
 
+  const blockDownload = (status: string) => {
+    if (status === VaultStatus.NEW && accountEscalated) {
+      return true;
+    }
+    return false;
+  };
+
   useEffect(() => {
     // NOTE: Table not updating when it should? May need to be more explicit in telling react
     // what has changed in the array (e.g. a status). For now, this seems to work well.
@@ -178,6 +201,23 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
             </p>
           </Attention>
         )}
+        {accountEscalated && (
+          <>
+            <Attention
+              type={AttentionTypes.ERROR}
+              isAlert={true}
+              isSmall={true}
+              heading={t("downloadResponsesTable.errors.overdueAlert.title")}
+              classes="mt-1"
+            >
+              <p className="text-[#26374a] text-sm">
+                {t("downloadResponsesTable.errors.overdueAlert.description", {
+                  numberOfOverdueResponses: tableItems.numberOfOverdueResponses,
+                })}
+              </p>
+            </Attention>
+          </>
+        )}
       </div>
 
       <table className="text-sm" aria-live="polite">
@@ -199,7 +239,8 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
               key={submission.name}
               className={
                 "border-b-2 border-grey" +
-                (tableItems.statusItems.get(submission.name) ? " bg-[#fffbf3]" : "")
+                (tableItems.statusItems.get(submission.name) ? " bg-[#fffbf3]" : "") +
+                (blockDownload(submission.status) ? " opacity-50" : "")
               }
             >
               <td className="pl-8 pr-4 pb-2 flex whitespace-nowrap">
@@ -211,6 +252,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
                     type="checkbox"
                     checked={tableItems.statusItems.get(submission.name)}
                     onChange={handleChecked}
+                    {...(blockDownload(submission.status) && { disabled: true })}
                   />
                   <label className="gc-checkbox-label" htmlFor={submission.name}>
                     <span className="sr-only">{submission.name}</span>

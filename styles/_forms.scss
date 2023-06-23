@@ -321,6 +321,11 @@
     &:focus + .gc-checkbox-label:after {
       background-image: url("../public/img/blue-checkmark.svg");
     }
+
+    &:disabled + .gc-checkbox-label {
+      pointer-events: none;
+      opacity: .5;
+    }
   }
 }
 

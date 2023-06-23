@@ -1,4 +1,5 @@
-import { VaultSubmissionList, VaultStatus } from "@lib/types";
+import { getDaysPassed } from "@lib/clientHelpers";
+import { VaultSubmissionList, VaultStatus, VaultSubmission, TypeOmit } from "@lib/types";
 
 export enum TableActions {
   UPDATE = "UPDATE",
@@ -9,6 +10,7 @@ interface ReducerTableItemsState {
   statusItems: Map<string, boolean>;
   checkedItems: Map<string, boolean>;
   sortedItems: VaultSubmissionList[];
+  numberOfOverdueResponses: number;
 }
 
 interface ReducerTableItemsActions {
@@ -40,6 +42,30 @@ export const sortVaultSubmission = (
     });
   return [...vaultSubmissionsNew, ...vaultSubmissionsWithoutNew];
 };
+
+/**
+ * Checks whether a form submission is overdue by looking at whether the download or the confirmed
+ * user action is overdue. If so, true is returned otherwise false.
+ */
+export function isSubmissionOverdue({
+  status,
+  createdAt,
+  overdueAfter,
+}: {
+  status: string;
+  createdAt: number;
+  overdueAfter: string | undefined;
+}) {
+  if (overdueAfter === undefined) return false;
+  const overdueDays = parseInt(overdueAfter);
+  if (isNaN(overdueDays)) return false;
+  const isOverdue = parseInt(overdueAfter) - getDaysPassed(createdAt) < 0;
+  // Download is overdue
+  if (status === VaultStatus.NEW && isOverdue) return true;
+  // Confirmed is overdue
+  if (status === VaultStatus.DOWNLOADED && isOverdue) return true;
+  return false;
+}
 
 // Using a reducer to have more control over when the template is updated (reduces re-renders)
 export const reducerTableItems = (
