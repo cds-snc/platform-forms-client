@@ -8,6 +8,9 @@ import { checkPrivileges } from "@lib/privileges";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 import { getAllTemplatesForUser } from "@lib/templates";
 import { LinkButton } from "@components/globals";
+import { listAllSubmissions } from "@lib/vault";
+import { detectOldUnprocessedSubmissions } from "@lib/nagware";
+import { NagwareResult } from "@lib/types";
 
 type User = {
   id: string;
@@ -25,7 +28,28 @@ type Templates = Array<{
   [key: string]: string | boolean | number | Date;
 }>;
 
-const ManageForms = ({ formUser, templates }: { formUser: User; templates: Templates }) => {
+type Overdue = { [key: string]: NagwareResult };
+
+const OverdueStatus = ({ level }: { level: number }) => {
+  // 35 days +
+  if ([3, 4].includes(level)) {
+    return <span className="mb-2 block p-2 text-red">Overdue responses (over 35 days)</span>;
+  }
+  // 21 days +
+  if ([1, 2].includes(level)) {
+    return <span className="mb-2 block p-2 text-red">Overdue responses (over 21 days)</span>;
+  }
+};
+
+const ManageForms = ({
+  formUser,
+  templates,
+  overdue,
+}: {
+  formUser: User;
+  templates: Templates;
+  overdue: Overdue;
+}) => {
   const { t, i18n } = useTranslation("admin-forms");
   return (
     <>
@@ -39,9 +63,8 @@ const ManageForms = ({ formUser, templates }: { formUser: User; templates: Templ
         </h1>
       </div>
       <ul className="m-0 list-none p-0">
-        {templates.map(({ id, titleEn, titleFr, isPublished, createdAt }) => {
+        {templates.map(({ id, titleEn, titleFr, isPublished }) => {
           const bgColor = isPublished ? "#95CCA2" : "#FFD875";
-          // @TODO: get unprocessed/overdue days count
           return (
             <li
               className="mb-4 flex max-w-2xl flex-row rounded-md border-2 border-black p-2"
@@ -53,6 +76,9 @@ const ManageForms = ({ formUser, templates }: { formUser: User; templates: Templ
                     <h2 className="text-base">
                       {titleEn} / {titleFr}
                     </h2>
+
+                    {overdue[id] && <OverdueStatus level={overdue[id].level} />}
+
                     {/* linking to existing page for now */}
                     <LinkButton.Secondary
                       href={`/${i18n.language}/id/${id}/users`}
@@ -99,15 +125,32 @@ export const getServerSideProps = requireAuthentication(
           id,
           form: { titleEn, titleFr },
           isPublished,
+          createdAt,
         } = template;
+
         return {
           id,
           titleEn,
           titleFr,
           isPublished,
+          createdAt: Number(createdAt),
         };
       });
     }
+
+    const overdue: Overdue = {};
+
+    await Promise.all(
+      templates.map(async (template) => {
+        const allSubmissions = await listAllSubmissions(ability, template.id);
+
+        const unprocessed = await detectOldUnprocessedSubmissions(allSubmissions.submissions);
+
+        if (unprocessed.level > 0) {
+          overdue[template.id] = unprocessed;
+        }
+      })
+    );
 
     return {
       props: {
@@ -115,6 +158,7 @@ export const getServerSideProps = requireAuthentication(
           (await serverSideTranslations(locale, ["common", "admin-forms", "admin-login"]))),
         formUser: formUser,
         templates,
+        overdue,
       },
     };
   }
