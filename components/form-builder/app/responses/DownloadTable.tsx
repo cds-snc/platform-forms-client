@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useState } from "react";
-import { VaultStatus, VaultSubmissionList } from "@lib/types";
+import { TypeOmit, VaultStatus, VaultSubmission, VaultSubmissionList } from "@lib/types";
 import { useTranslation } from "react-i18next";
 import { SkipLinkReusable } from "@components/globals/SkipLinkReusable";
 import { ConfirmReceiptStatus } from "./ConfirmReceiptStatus";
@@ -19,6 +19,7 @@ import {
   reducerTableItems,
   sortVaultSubmission,
 } from "./DownloadTableReducer";
+import { getDaysPassed } from "@lib/clientHelpers";
 
 // TODO: move to an app setting variable
 const MAX_FILE_DOWNLOADS = 20;
@@ -140,8 +141,11 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
     }
   };
 
-  const blockDownload = (status: string) => {
-    if (status === VaultStatus.NEW && accountEscalated) {
+  const blockDownload = (
+    submission: TypeOmit<VaultSubmission, "formSubmission" | "submissionID" | "confirmationCode">
+  ) => {
+    const daysPast = getDaysPassed(submission.createdAt);
+    if (submission.status === VaultStatus.NEW && accountEscalated && daysPast < 35) {
       return true;
     }
     return false;
@@ -236,60 +240,64 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
           </tr>
         </thead>
         <tbody>
-          {tableItems.sortedItems.map((submission) => (
-            <tr
-              key={submission.name}
-              className={
-                "border-b-2 border-grey" +
-                (tableItems.statusItems.get(submission.name) ? " bg-[#fffbf3]" : "") +
-                (blockDownload(submission.status) ? " opacity-50" : "")
-              }
-            >
-              <td className="pl-8 pr-4 pb-2 flex whitespace-nowrap">
-                <div className="gc-input-checkbox">
-                  <input
-                    id={submission.name}
-                    className="gc-input-checkbox__input"
-                    name="responses"
-                    type="checkbox"
-                    checked={tableItems.statusItems.get(submission.name)}
-                    onChange={handleChecked}
-                    {...(blockDownload(submission.status) && { disabled: true })}
+          {tableItems.sortedItems.map((submission) => {
+            const isBlocked = blockDownload(submission);
+            return (
+              <tr
+                key={submission.name}
+                className={
+                  "border-b-2 border-grey" +
+                  (tableItems.statusItems.get(submission.name) ? " bg-[#fffbf3]" : "") +
+                  (isBlocked ? " opacity-50" : "")
+                }
+              >
+                <td className="pl-8 pr-4 pb-2 flex whitespace-nowrap">
+                  <div className="gc-input-checkbox">
+                    <input
+                      id={submission.name}
+                      className="gc-input-checkbox__input"
+                      name="responses"
+                      type="checkbox"
+                      checked={tableItems.statusItems.get(submission.name)}
+                      onChange={handleChecked}
+                      {...(isBlocked && { disabled: true })}
+                    />
+                    <label className="gc-checkbox-label" htmlFor={submission.name}>
+                      <span className="sr-only">{submission.name}</span>
+                    </label>
+                  </div>
+                </td>
+                <td className="px-4 whitespace-nowrap">{submission.name}</td>
+                <td className="px-4 whitespace-nowrap">
+                  <DownloadStatus vaultStatus={submission.status} />
+                </td>
+                <td className="px-4 whitespace-nowrap">
+                  <DownloadResponseStatus
+                    vaultStatus={submission.status}
+                    createdAt={submission.createdAt}
+                    downloadedAt={submission.downloadedAt}
+                    overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
                   />
-                  <label className="gc-checkbox-label" htmlFor={submission.name}>
-                    <span className="sr-only">{submission.name}</span>
-                  </label>
-                </div>
-              </td>
-              <td className="px-4 whitespace-nowrap">{submission.name}</td>
-              <td className="px-4 whitespace-nowrap">
-                <DownloadStatus vaultStatus={submission.status} />
-              </td>
-              <td className="px-4 whitespace-nowrap">
-                <DownloadResponseStatus
-                  vaultStatus={submission.status}
-                  createdAt={submission.createdAt}
-                  downloadedAt={submission.downloadedAt}
-                  overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
-                />
-              </td>
-              <td className="px-4 whitespace-nowrap">
-                <div className="truncate w-40">
-                  {submission.lastDownloadedBy || t("downloadResponsesTable.status.notDownloaded")}
-                </div>
-              </td>
-              <td className="px-4 whitespace-nowrap">
-                <ConfirmReceiptStatus
-                  vaultStatus={submission.status}
-                  createdAtDate={submission.createdAt}
-                  overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
-                />
-              </td>
-              <td className="px-4 whitespace-nowrap">
-                <RemovalStatus vaultStatus={submission.status} removalAt={submission.removedAt} />
-              </td>
-            </tr>
-          ))}
+                </td>
+                <td className="px-4 whitespace-nowrap">
+                  <div className="truncate w-40">
+                    {submission.lastDownloadedBy ||
+                      t("downloadResponsesTable.status.notDownloaded")}
+                  </div>
+                </td>
+                <td className="px-4 whitespace-nowrap">
+                  <ConfirmReceiptStatus
+                    vaultStatus={submission.status}
+                    createdAtDate={submission.createdAt}
+                    overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
+                  />
+                </td>
+                <td className="px-4 whitespace-nowrap">
+                  <RemovalStatus vaultStatus={submission.status} removalAt={submission.removedAt} />
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
       <div className="mt-8 flex">
