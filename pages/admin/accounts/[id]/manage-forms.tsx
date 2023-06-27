@@ -21,7 +21,8 @@ type Templates = Array<{
   titleEn: string;
   titleFr: string;
   isPublished: boolean;
-  [key: string]: string | boolean;
+  createdAt: number | Date;
+  [key: string]: string | boolean | number | Date;
 }>;
 
 const ManageForms = ({ formUser, templates }: { formUser: User; templates: Templates }) => {
@@ -38,8 +39,9 @@ const ManageForms = ({ formUser, templates }: { formUser: User; templates: Templ
         </h1>
       </div>
       <ul className="m-0 list-none p-0">
-        {templates.map(({ id, titleEn, titleFr, isPublished }) => {
+        {templates.map(({ id, titleEn, titleFr, isPublished, createdAt }) => {
           const bgColor = isPublished ? "#95CCA2" : "#FFD875";
+          // @TODO: get unprocessed/overdue days count
           return (
             <li
               className="mb-4 flex max-w-2xl flex-row rounded-md border-2 border-black p-2"
