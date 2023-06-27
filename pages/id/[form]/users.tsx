@@ -5,7 +5,6 @@ import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import axios from "axios";
 import { logMessage } from "@lib/logger";
-import { useRouter } from "next/router";
 import Head from "next/head";
 
 import { getTemplateWithAssociatedUsers } from "@lib/templates";
