@@ -1,5 +1,11 @@
 import React, { useEffect, useReducer, useState } from "react";
-import { TypeOmit, VaultStatus, VaultSubmission, VaultSubmissionList } from "@lib/types";
+import {
+  NagwareResult,
+  TypeOmit,
+  VaultStatus,
+  VaultSubmission,
+  VaultSubmissionList,
+} from "@lib/types";
 import { useTranslation } from "react-i18next";
 import { SkipLinkReusable } from "@components/globals/SkipLinkReusable";
 import { ConfirmReceiptStatus } from "./ConfirmReceiptStatus";
@@ -27,9 +33,10 @@ const MAX_FILE_DOWNLOADS = 20;
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
   formId?: string;
+  nagwareResult?: NagwareResult;
 }
 
-export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) => {
+export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: DownloadTableProps) => {
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
   const [errors, setErrors] = useState({
@@ -37,12 +44,9 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
     maxItemsError: false,
     noItemsError: false,
   });
-
-  // TODO: PLACEHOLDER VALUE - replace with Account.escalated related var
-  const accountEscalated = true; // TODO: get account exalated setting this is TEMP
+  const accountEscalated = nagwareResult && nagwareResult.level > 2;
 
   const { value: overdueAfter } = useSetting("nagwarePhaseEncouraged");
-  const { value: escalatedAfter } = useSetting("nagwarePhaseWarned");
   const [tableItems, tableItemsDispatch] = useReducer(reducerTableItems, {
     checkedItems: new Map(),
     statusItems: new Map(vaultSubmissions.map((submission) => [submission.name, false])),
@@ -205,24 +209,6 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
               .
             </p>
           </Attention>
-        )}
-        {accountEscalated && (
-          <>
-            <Attention
-              type={AttentionTypes.ERROR}
-              isAlert={true}
-              isSmall={true}
-              heading={t("downloadResponsesTable.errors.overdueAlert.title")}
-              classes="mt-1"
-            >
-              <p className="text-[#26374a] text-sm">
-                {t("downloadResponsesTable.errors.overdueAlert.description", {
-                  numberOfOverdueResponses: tableItems.numberOfOverdueResponses,
-                  escalatedAfter,
-                })}
-              </p>
-            </Attention>
-          </>
         )}
       </div>
 

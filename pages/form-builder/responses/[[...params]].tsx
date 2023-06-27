@@ -138,7 +138,11 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           <>
             <div>
               {vaultSubmissions.length > 0 && (
-                <DownloadTable vaultSubmissions={vaultSubmissions} formId={formId} />
+                <DownloadTable
+                  vaultSubmissions={vaultSubmissions}
+                  formId={formId}
+                  nagwareResult={nagwareResult}
+                />
               )}
 
               {vaultSubmissions.length <= 0 && (
@@ -333,13 +337,9 @@ export const getServerSideProps: GetServerSideProps = async ({
       FormbuilderParams.initialForm = initialForm;
       vaultSubmissions.push(...allSubmissions.submissions);
 
-      const isNagwareEnabled = await checkOne("nagware");
-
-      if (isNagwareEnabled) {
-        nagwareResult = allSubmissions.submissions.length
-          ? await detectOldUnprocessedSubmissions(allSubmissions.submissions)
-          : null;
-      }
+      nagwareResult = allSubmissions.submissions.length
+        ? await detectOldUnprocessedSubmissions(allSubmissions.submissions)
+        : null;
     } catch (e) {
       if (e instanceof AccessControlError) {
         return {
