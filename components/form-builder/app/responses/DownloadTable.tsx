@@ -177,7 +177,7 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
               max: MAX_FILE_DOWNLOADS,
             })}
           >
-            <p className="text-[#26374a] text-sm">
+            <p className="text-sm text-[#26374a]">
               {t("downloadResponsesTable.errors.trySelectingLessFiles", {
                 max: MAX_FILE_DOWNLOADS,
               })}
@@ -190,7 +190,7 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
             isAlert={true}
             heading={t("downloadResponsesTable.errors.atLeastOneFileHeader")}
           >
-            <p className="text-[#26374a] text-sm">
+            <p className="text-sm text-[#26374a]">
               {t("downloadResponsesTable.errors.atLeastOneFile")}
             </p>
           </Attention>
@@ -201,7 +201,7 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
             isAlert={true}
             heading={t("downloadResponsesTable.errors.errorDownloadingFilesHeader")}
           >
-            <p className="text-[#26374a] text-sm mb-2">
+            <p className="mb-2 text-sm text-[#26374a]">
               {t("downloadResponsesTable.errors.errorDownloadingFiles")}
               <Link href="/form-builder/support">
                 {t("downloadResponsesTable.errors.errorDownloadingFilesLink")}
@@ -237,7 +237,7 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
                   (isBlocked ? " opacity-50" : "")
                 }
               >
-                <td className="pl-8 pr-4 pb-2 flex whitespace-nowrap">
+                <td className="flex whitespace-nowrap pb-2 pl-8 pr-4">
                   <div className="gc-input-checkbox">
                     <input
                       id={submission.name}
@@ -253,11 +253,11 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
                     </label>
                   </div>
                 </td>
-                <td className="px-4 whitespace-nowrap">{submission.name}</td>
-                <td className="px-4 whitespace-nowrap">
+                <td className="whitespace-nowrap px-4">{submission.name}</td>
+                <td className="whitespace-nowrap px-4">
                   <DownloadStatus vaultStatus={submission.status} />
                 </td>
-                <td className="px-4 whitespace-nowrap">
+                <td className="whitespace-nowrap px-4">
                   <DownloadResponseStatus
                     vaultStatus={submission.status}
                     createdAt={submission.createdAt}
@@ -265,20 +265,20 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
                     overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
                   />
                 </td>
-                <td className="px-4 whitespace-nowrap">
-                  <div className="truncate w-40">
+                <td className="whitespace-nowrap px-4">
+                  <div className="w-40 truncate">
                     {submission.lastDownloadedBy ||
                       t("downloadResponsesTable.status.notDownloaded")}
                   </div>
                 </td>
-                <td className="px-4 whitespace-nowrap">
+                <td className="whitespace-nowrap px-4">
                   <ConfirmReceiptStatus
                     vaultStatus={submission.status}
                     createdAtDate={submission.createdAt}
                     overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
                   />
                 </td>
-                <td className="px-4 whitespace-nowrap">
+                <td className="whitespace-nowrap px-4">
                   <RemovalStatus vaultStatus={submission.status} removalAt={submission.removedAt} />
                 </td>
               </tr>
@@ -289,7 +289,7 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
       <div className="mt-8 flex">
         <button
           id="downloadTableButtonId"
-          className="gc-button--blue whitespace-nowrap w-auto m-0"
+          className="gc-button--blue m-0 w-auto whitespace-nowrap"
           type="button"
           onClick={handleDownload}
           aria-live="polite"
@@ -309,7 +309,7 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
                 max: MAX_FILE_DOWNLOADS,
               })}
             >
-              <p className="text-black text-sm">
+              <p className="text-sm text-black">
                 {t("downloadResponsesTable.errors.trySelectingLessFiles", {
                   max: MAX_FILE_DOWNLOADS,
                 })}
@@ -323,7 +323,7 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
               isSmall={true}
               heading={t("downloadResponsesTable.errors.atLeastOneFileHeader")}
             >
-              <p className="text-black text-sm">
+              <p className="text-sm text-black">
                 {t("downloadResponsesTable.errors.atLeastOneFile")}
               </p>
             </Attention>
@@ -335,7 +335,7 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
               isSmall={true}
               heading={t("downloadResponsesTable.errors.errorDownloadingFilesHeader")}
             >
-              <p className="text-black text-sm">
+              <p className="text-sm text-black">
                 {t("downloadResponsesTable.errors.errorDownloadingFiles")}
               </p>
             </Attention>
