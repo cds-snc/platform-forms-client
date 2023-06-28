@@ -76,6 +76,18 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
 
       // Success
       if (result) {
+        const response = await fetch("/api/account/submissions/overdue");
+        if (response.status === 200) {
+          const data = await response.json();
+
+          if (data.hasOverdueSubmissions) {
+            router.push({
+              pathname: `/${i18n.language}/auth/restricted-access`,
+            });
+            return;
+          }
+        }
+
         router.push({
           pathname: `/${i18n.language}/auth/policy`,
           search: "?referer=/signup/account-created",

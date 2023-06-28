@@ -3,5 +3,6 @@
   "gotoResponses": "Accéder aux réponses",
   "draft": "Ébauche",
   "published": "Publié",
-  "manageOwnerships": "Gérer les propriétaires"
+  "manageOwnerships": "Gérer les propriétaires",
+  "overdueResponses": "Réponses en retard (plus de {{days}} jours)"
 }

@@ -3,5 +3,6 @@
   "gotoResponses": "Go to responses",
   "draft": "Draft",
   "published": "Published",
-  "manageOwnerships": "Manage ownerships"
+  "manageOwnerships": "Manage ownerships",
+  "overdueResponses": "Overdue responses (over {{days}} days)"
 }
