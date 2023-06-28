@@ -11,6 +11,7 @@ import { LinkButton } from "@components/globals";
 import { listAllSubmissions } from "@lib/vault";
 import { detectOldUnprocessedSubmissions } from "@lib/nagware";
 import { NagwareResult } from "@lib/types";
+import { useSetting } from "@lib/hooks/useSetting";
 
 type User = {
   id: string;
@@ -31,13 +32,23 @@ type Templates = Array<{
 type Overdue = { [key: string]: NagwareResult };
 
 const OverdueStatus = ({ level }: { level: number }) => {
+  const { value: promptAfter } = useSetting("nagwarePhasePrompted");
+  const { value: warnAfter } = useSetting("nagwarePhaseWarned");
+  const { t } = useTranslation("admin-forms");
+
   // 35 days +
   if ([3, 4].includes(level)) {
-    return <span className="mb-2 block p-2 text-red">Overdue responses (over 35 days)</span>;
+    return (
+      <span className="mb-2 block p-2 text-red">{t("overdueResponses", { days: warnAfter })}</span>
+    );
   }
   // 21 days +
   if ([1, 2].includes(level)) {
-    return <span className="mb-2 block p-2 text-red">Overdue responses (over 21 days)</span>;
+    return (
+      <span className="mb-2 block p-2 text-red">
+        {t("overdueResponses", { days: promptAfter })}
+      </span>
+    );
   }
 };
 
