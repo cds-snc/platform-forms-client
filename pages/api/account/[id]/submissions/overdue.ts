@@ -15,7 +15,6 @@ const getUnprocessedEntries = async (
   try {
     const { session } = props as WithRequired<MiddlewareProps, "session">;
     const ability = createAbility(session);
-    let unprocessedSubmissions = 0;
 
     // Get user
     const accountId = req.query.id as string;
@@ -26,21 +25,24 @@ const getUnprocessedEntries = async (
     }
 
     // Get published templates for User
-    const templates = await getAllTemplatesForUser(ability, accountId, true);
+    const templates = await getAllTemplatesForUser(ability, user.id, true);
 
     const templateIds = templates.map((template) => template.id);
 
-    await Promise.all(
+    const result = await Promise.all(
       templateIds.map(async (templateId) => {
         const allSubmissions = await listAllSubmissions(ability, templateId);
 
         const unprocessed = await detectOldUnprocessedSubmissions(allSubmissions.submissions);
-        console.log({unprocessed});
-        unprocessedSubmissions += unprocessed.numberOfSubmissions;
+
+        if (unprocessed.level > 2) {
+          return true;
+        }
+        return false;
       })
     );
 
-    return res.status(200).json({ unprocessedSubmissions });
+    return res.status(200).json({ hasOverdueSubmissions: result.some((r) => r === true) });
   } catch (err) {
     if (err instanceof AccessControlError) return res.status(403).json({ error: "Forbidden" });
     else return res.status(500).json({ error: "There was an error. Please try again later." });
