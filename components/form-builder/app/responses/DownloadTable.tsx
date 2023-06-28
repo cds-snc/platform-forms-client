@@ -47,6 +47,7 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
   const accountEscalated = nagwareResult && nagwareResult.level > 2;
 
   const { value: overdueAfter } = useSetting("nagwarePhaseEncouraged");
+  const { value: warnAfter } = useSetting("nagwarePhaseWarned");
   const [tableItems, tableItemsDispatch] = useReducer(reducerTableItems, {
     checkedItems: new Map(),
     statusItems: new Map(vaultSubmissions.map((submission) => [submission.name, false])),
@@ -149,7 +150,8 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
     submission: TypeOmit<VaultSubmission, "formSubmission" | "submissionID" | "confirmationCode">
   ) => {
     const daysPast = getDaysPassed(submission.createdAt);
-    if (submission.status === VaultStatus.NEW && accountEscalated && daysPast < 35) {
+
+    if (submission.status === VaultStatus.NEW && accountEscalated && daysPast < Number(warnAfter)) {
       return true;
     }
     return false;
