@@ -3,13 +3,11 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
-import { getUser } from "@lib/users";
+import { getUnprocessedSubmissionsForUser, getUser } from "@lib/users";
 import { checkPrivileges } from "@lib/privileges";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 import { getAllTemplatesForUser } from "@lib/templates";
 import { LinkButton } from "@components/globals";
-import { listAllSubmissions } from "@lib/vault";
-import { detectOldUnprocessedSubmissions } from "@lib/nagware";
 import { NagwareResult } from "@lib/types";
 import { useSetting } from "@lib/hooks/useSetting";
 
@@ -149,19 +147,7 @@ export const getServerSideProps = requireAuthentication(
       });
     }
 
-    const overdue: Overdue = {};
-
-    await Promise.all(
-      templates.map(async (template) => {
-        const allSubmissions = await listAllSubmissions(ability, template.id);
-
-        const unprocessed = await detectOldUnprocessedSubmissions(allSubmissions.submissions);
-
-        if (unprocessed.level > 0) {
-          overdue[template.id] = unprocessed;
-        }
-      })
-    );
+    const overdue = await getUnprocessedSubmissionsForUser(ability, id as string, templates);
 
     return {
       props: {

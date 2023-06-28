@@ -1,11 +1,14 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { JWT } from "next-auth/jwt";
 import { AccessControlError, checkPrivileges } from "@lib/privileges";
-import { UserAbility } from "./types";
+import { NagwareResult, UserAbility } from "./types";
 import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
 import { Privilege } from "@prisma/client";
 import { sendDeactivationEmail } from "@lib/deactivate";
+import { getAllTemplatesForUser } from "./templates";
+import { listAllSubmissions } from "./vault";
+import { detectOldUnprocessedSubmissions } from "./nagware";
 
 /**
  * Get or Create a user if a record does not exist
@@ -225,4 +228,64 @@ export const updateActiveStatus = async (ability: UserAbility, userID: string, a
     logMessage.error(error as Error);
     throw error;
   }
+};
+
+type Overdue = { [key: string]: NagwareResult };
+
+type Templates = Array<{
+  id: string;
+  titleEn: string;
+  titleFr: string;
+  isPublished: boolean;
+  createdAt: number | Date;
+  [key: string]: string | boolean | number | Date;
+}>;
+
+export const getUnprocessedSubmissionsForUser = async (
+  ability: UserAbility,
+  userId: string,
+  templates: Templates | false = false
+) => {
+  checkPrivileges(ability, [{ action: "view", subject: "User" }]);
+  const overdue: Overdue = {};
+
+  try {
+    const user = await getUser(userId, ability);
+    if (!user) return overdue;
+
+    if (!templates) {
+      templates = (await getAllTemplatesForUser(ability, userId)).map((template) => {
+        const {
+          id,
+          form: { titleEn, titleFr },
+          isPublished,
+          createdAt,
+        } = template;
+
+        return {
+          id,
+          titleEn,
+          titleFr,
+          isPublished,
+          createdAt: Number(createdAt),
+        };
+      });
+    }
+
+    await Promise.all(
+      templates.map(async (template) => {
+        const allSubmissions = await listAllSubmissions(ability, template.id);
+
+        const unprocessed = await detectOldUnprocessedSubmissions(allSubmissions.submissions);
+
+        if (unprocessed.level > 0) {
+          overdue[template.id] = unprocessed;
+        }
+      })
+    );
+  } catch (error) {
+    // noop
+  }
+
+  return overdue;
 };
