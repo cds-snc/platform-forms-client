@@ -33,7 +33,7 @@ const MAX_FILE_DOWNLOADS = 20;
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
   formId?: string;
-  nagwareResult?: NagwareResult;
+  nagwareResult: NagwareResult | null;
 }
 
 export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: DownloadTableProps) => {
