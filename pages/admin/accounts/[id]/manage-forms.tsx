@@ -48,6 +48,8 @@ const OverdueStatus = ({ level }: { level: number }) => {
       </span>
     );
   }
+
+  return null;
 };
 
 const ManageForms = ({
