@@ -2,9 +2,7 @@ import { AccessControlError, createAbility } from "@lib/privileges";
 import { middleware, cors, sessionExists } from "@lib/middleware";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { MiddlewareProps, WithRequired } from "@lib/types";
-import { getAllTemplatesForUser } from "@lib/templates";
-import { listAllSubmissions } from "@lib/vault";
-import { detectOldUnprocessedSubmissions } from "@lib/nagware";
+import { getUnprocessedSubmissionsForUser } from "@lib/users";
 
 const getUnprocessedEntries = async (
   req: NextApiRequest,
@@ -22,25 +20,15 @@ const getUnprocessedEntries = async (
       return res.status(404).json({ error: "User not found" });
     }
 
-    // Get published templates for User
-    const templates = await getAllTemplatesForUser(ability, user.id, true);
+    const overdue = await getUnprocessedSubmissionsForUser(ability, user.id);
 
-    const templateIds = templates.map((template) => template.id);
+    Object.entries(overdue).forEach(([, value]) => {
+      if (value.level > 2) {
+        return res.status(200).json({ hasOverdueSubmissions: true });
+      }
+    });
 
-    const result = await Promise.all(
-      templateIds.map(async (templateId) => {
-        const allSubmissions = await listAllSubmissions(ability, templateId);
-
-        const unprocessed = await detectOldUnprocessedSubmissions(allSubmissions.submissions);
-
-        if (unprocessed.level > 2) {
-          return true;
-        }
-        return false;
-      })
-    );
-
-    return res.status(200).json({ hasOverdueSubmissions: result.some((r) => r === true) });
+    return res.status(200).json({ hasOverdueSubmissions: false });
   } catch (err) {
     if (err instanceof AccessControlError) return res.status(403).json({ error: "Forbidden" });
     else return res.status(500).json({ error: "There was an error. Please try again later." });
