@@ -199,8 +199,6 @@ Login.getLayout = (page: ReactElement) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerSession(context.req, context.res, authOptions);
 
-  // @TODO check for account/submissions/unprocessed > 35 submissions and redirect to /auth/restricted-access
-
   if (session)
     return {
       redirect: {
