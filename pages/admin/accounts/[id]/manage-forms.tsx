@@ -3,11 +3,13 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
-import { getUser } from "@lib/users";
+import { getUnprocessedSubmissionsForUser, getUser } from "@lib/users";
 import { checkPrivileges } from "@lib/privileges";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 import { getAllTemplatesForUser } from "@lib/templates";
 import { LinkButton } from "@components/globals";
+import { NagwareResult } from "@lib/types";
+import { useSetting } from "@lib/hooks/useSetting";
 
 type User = {
   id: string;
@@ -21,10 +23,42 @@ type Templates = Array<{
   titleEn: string;
   titleFr: string;
   isPublished: boolean;
-  [key: string]: string | boolean;
+  createdAt: number | Date;
+  [key: string]: string | boolean | number | Date;
 }>;
 
-const ManageForms = ({ formUser, templates }: { formUser: User; templates: Templates }) => {
+type Overdue = { [key: string]: NagwareResult };
+
+const OverdueStatus = ({ level }: { level: number }) => {
+  const { value: promptAfter } = useSetting("nagwarePhasePrompted");
+  const { value: warnAfter } = useSetting("nagwarePhaseWarned");
+  const { t } = useTranslation("admin-forms");
+
+  // 35 days +
+  if ([3, 4].includes(level)) {
+    return (
+      <span className="mb-2 block p-2 text-red">{t("overdueResponses", { days: warnAfter })}</span>
+    );
+  }
+  // 21 days +
+  if ([1, 2].includes(level)) {
+    return (
+      <span className="mb-2 block p-2 text-red">
+        {t("overdueResponses", { days: promptAfter })}
+      </span>
+    );
+  }
+};
+
+const ManageForms = ({
+  formUser,
+  templates,
+  overdue,
+}: {
+  formUser: User;
+  templates: Templates;
+  overdue: Overdue;
+}) => {
   const { t, i18n } = useTranslation("admin-forms");
   return (
     <>
@@ -51,6 +85,9 @@ const ManageForms = ({ formUser, templates }: { formUser: User; templates: Templ
                     <h2 className="text-base">
                       {titleEn} / {titleFr}
                     </h2>
+
+                    {overdue[id] && <OverdueStatus level={overdue[id].level} />}
+
                     {/* linking to existing page for now */}
                     <LinkButton.Secondary
                       href={`/${i18n.language}/id/${id}/users`}
@@ -97,15 +134,20 @@ export const getServerSideProps = requireAuthentication(
           id,
           form: { titleEn, titleFr },
           isPublished,
+          createdAt,
         } = template;
+
         return {
           id,
           titleEn,
           titleFr,
           isPublished,
+          createdAt: Number(createdAt),
         };
       });
     }
+
+    const overdue = await getUnprocessedSubmissionsForUser(ability, id as string, templates);
 
     return {
       props: {
@@ -113,6 +155,7 @@ export const getServerSideProps = requireAuthentication(
           (await serverSideTranslations(locale, ["common", "admin-forms", "admin-login"]))),
         formUser: formUser,
         templates,
+        overdue,
       },
     };
   }
