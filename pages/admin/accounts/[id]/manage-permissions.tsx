@@ -69,42 +69,37 @@ const PrivilegeList = ({
           i18n.language === "en" ? privilege.descriptionEn : privilege.descriptionFr;
         return (
           <li key={privilege.id} className="mb-4 block max-w-lg pb-4">
-            <div className="flex items-center justify-between">
-              <p aria-hidden="true">{description}</p>
-              <div>
-                {canManageUsers ? (
-                  <>
-                    <PermissionToggle
-                      on={active}
-                      onLabel={t("on")}
-                      offLabel={t("off")}
-                      description={description || ""}
-                      handleToggle={() => {
-                        setChangedPrivileges((oldState) => {
-                          // If the item alreay exists in state remove it, as this brings it back to it's initial state
-                          if (oldState.some((p) => p.id === privilege.id)) {
-                            return oldState.filter((p) => p.id !== privilege.id);
-                          } else {
-                            return [
-                              ...oldState,
-                              { id: privilege.id, action: active ? "remove" : "add" },
-                            ];
-                          }
-                        });
-                        setUserPrivileges((oldState) => {
-                          if (oldState.includes(privilege.id)) {
-                            return oldState.filter((id) => id !== privilege.id);
-                          } else {
-                            return [...oldState, privilege.id];
-                          }
-                        });
-                      }}
-                    />
-                  </>
-                ) : (
-                  <div className="m-auto">{active ? t("on") : t("off")}</div>
-                )}
-              </div>
+            <div>
+              {canManageUsers ? (
+                <PermissionToggle
+                  on={active}
+                  onLabel={t("on")}
+                  offLabel={t("off")}
+                  description={description || ""}
+                  handleToggle={() => {
+                    setChangedPrivileges((oldState) => {
+                      // If the item alreay exists in state remove it, as this brings it back to it's initial state
+                      if (oldState.some((p) => p.id === privilege.id)) {
+                        return oldState.filter((p) => p.id !== privilege.id);
+                      } else {
+                        return [
+                          ...oldState,
+                          { id: privilege.id, action: active ? "remove" : "add" },
+                        ];
+                      }
+                    });
+                    setUserPrivileges((oldState) => {
+                      if (oldState.includes(privilege.id)) {
+                        return oldState.filter((id) => id !== privilege.id);
+                      } else {
+                        return [...oldState, privilege.id];
+                      }
+                    });
+                  }}
+                />
+              ) : (
+                <div className="m-auto">{active ? t("on") : t("off")}</div>
+              )}
             </div>
           </li>
         );
