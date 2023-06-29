@@ -9,6 +9,7 @@ import {
 } from "@components/myforms/MenuDropdown/MenuDropdown";
 import { getDate, slugify } from "@lib/clientHelpers";
 import { MessageIcon, EnvelopeIcon } from "@components/form-builder/icons/";
+import Markdown from "markdown-to-jsx";
 
 export interface CardProps {
   id: string;
@@ -20,10 +21,11 @@ export interface CardProps {
   isPublished: boolean;
   deliveryOption?: { emailAddress?: string } | null;
   handleDelete: (card: CardProps) => void;
+  overdue: number;
 }
 
 export const Card = (props: CardProps): React.ReactElement => {
-  const { id, name, titleEn, titleFr, url, date, isPublished, deliveryOption } = props;
+  const { id, name, titleEn, titleFr, url, date, isPublished, deliveryOption, overdue } = props;
   const { t, i18n } = useTranslation(["my-forms", "common"]);
   const responsesLink = `/${i18n.language}/form-builder/responses/${id}`;
   const menuItemsList: Array<MenuDropdownItemI> = [
@@ -146,10 +148,20 @@ export const Card = (props: CardProps): React.ReactElement => {
         )}
         {/* Vault delivery */}
         {deliveryOption && !deliveryOption.emailAddress && (
-          <a className="block mt-4 text-sm focus:fill-white active:fill-white" href={responsesLink}>
-            <MessageIcon className="inline-block mr-2" />
-            {t("card.deliveryOption.vault", { ns: "my-forms" })}{" "}
-          </a>
+          <>
+            <a
+              className="block mt-4 text-sm focus:fill-white active:fill-white"
+              href={responsesLink}
+            >
+              <MessageIcon className="inline-block mr-2" />
+              {t("card.deliveryOption.vault", { ns: "my-forms" })}{" "}
+            </a>
+            <div className="text-red">
+              <Markdown options={{ forceBlock: true }}>
+                {t("card.actionRequired", { responses: overdue, link: responsesLink })}
+              </Markdown>
+            </div>
+          </>
         )}
       </p>
       <div className="flex justify-between items-center p-3">

@@ -17,6 +17,7 @@ import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 import { clearTemplateStore } from "@components/form-builder/store/useTemplateStore";
 import { ResumeEditingForm } from "@components/form-builder/app/shared";
 import { Template } from "@components/form-builder/app";
+import { getUnprocessedSubmissionsForUser } from "@lib/users";
 
 interface FormsDataItem {
   id: string;
@@ -26,6 +27,7 @@ interface FormsDataItem {
   date: string;
   deliveryOption: { emailAddress?: string };
   isPublished: boolean;
+  overdue: boolean;
 }
 interface MyFormsProps {
   templates: Array<FormsDataItem>;
@@ -156,7 +158,16 @@ export const getServerSideProps = requireAuthentication(
           isPublished,
           date: updatedAt,
           url: `/${locale}/id/${id}`,
+          overdue: 0,
         };
+      });
+
+      const overdue = await getUnprocessedSubmissionsForUser(ability, id);
+
+      templates.map((template) => {
+        if (overdue[template.id]) {
+          template.overdue = overdue[template.id].numberOfSubmissions;
+        }
       });
 
       return {

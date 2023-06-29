@@ -38,7 +38,8 @@
       "delete": "Supprimer",
       "coppiedToClipboard": "Copié dans le presse-papier",
       "somethingWentWrong": "Il y a eu un problème"
-    }
+    },
+    "actionRequired": "Action required: <a href=\"{{link}}\">Confirm receipt of {{responses}} response</a>"
   },
   "responseTemplate": {
     "responseNumber": "Numéro de réponse",

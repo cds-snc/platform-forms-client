@@ -39,6 +39,7 @@ export const CardGrid = (props: CardGridProps): React.ReactElement => {
                   isPublished={card.isPublished}
                   deliveryOption={card.deliveryOption || null}
                   handleDelete={handleDelete}
+                  overdue={card.overdue}
                 ></Card>
               </li>
             );
