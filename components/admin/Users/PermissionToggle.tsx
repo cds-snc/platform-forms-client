@@ -18,8 +18,8 @@ export const PermissionToggle = ({
   handleToggle,
 }: PermissionToggleProps) => {
   const [isChecked, setIsChecked] = useState(on);
-  const boldOn = on ? "font-normal" : "font-light";
-  const boldOff = !on ? "font-normal" : "font-light";
+  const boldOn = on ? "font-bold" : "font-normal";
+  const boldOff = !on ? "font-bold" : "font-normal";
 
   return (
     <div
@@ -41,14 +41,14 @@ export const PermissionToggle = ({
       className="flex items-center justify-between"
     >
       <p>{description}</p>
-      <div className="whitespace-nowrap cursor-pointer">
-        <span id="switch-on" className={`text-sm mr-1 ${boldOn} mr-2`} aria-hidden="true">
-          {onLabel}
-        </span>
-        {on && <ToggleLeft className="inline-block w-12 fill-[#95CCA2]" />}
-        {!on && <ToggleRight className="inline-block w-12 fill-[#95CCA2]" />}
-        <span id="switch-off" className={`text-sm ml-1 ${boldOff} ml-2`} aria-hidden="true">
+      <div className="cursor-pointer whitespace-nowrap">
+        <span id="switch-on" className={`mr-1 text-sm ${boldOff} mr-2`} aria-hidden="true">
           {offLabel}
+        </span>
+        {!on && <ToggleLeft className="inline-block w-12 fill-gray-light" />}
+        {on && <ToggleRight className="inline-block w-12 fill-green" />}
+        <span id="switch-off" className={`ml-1 text-sm ${boldOn} ml-2`} aria-hidden="true">
+          {onLabel}
         </span>
       </div>
     </div>
