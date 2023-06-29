@@ -31,5 +31,6 @@
   "responseFail": {
     "title": "Error",
     "message": "Something went wrong."
-  }
+  },
+  "backToAccounts": "Back to Accounts"
 }

@@ -13,6 +13,7 @@ import { getUser } from "@lib/users";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 import { Button } from "@components/globals";
 import { Alert, ErrorStatus } from "@components/forms/Alert/Alert";
+import { BackLink } from "@components/admin/LeftNav/BackLink";
 
 type PrivilegeList = Omit<Privilege, "permissions">[];
 interface User {
@@ -210,9 +211,14 @@ const ManagePermissions = ({
   );
 };
 
+const BackToAccounts = () => {
+  const { t } = useTranslation("admin-users");
+  return <BackLink href="/admin/accounts">{t("backToAccounts")}</BackLink>;
+};
+
 ManagePermissions.getLayout = (page: ReactElement) => {
   return (
-    <AdminNavLayout user={page.props.user} backLink={<div>back to</div>}>
+    <AdminNavLayout user={page.props.user} backLink={<BackToAccounts />}>
       {page}
     </AdminNavLayout>
   );

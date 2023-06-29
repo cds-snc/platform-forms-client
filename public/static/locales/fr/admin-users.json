@@ -31,5 +31,6 @@
   "responseFail": {
     "title": "Erreur",
     "message": "Quelque chose a mal tourné."
-  }
+  },
+  "backToAccounts": "Retourner à Comptes"
 }
