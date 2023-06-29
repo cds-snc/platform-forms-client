@@ -15,6 +15,7 @@ import { Button } from "@components/globals";
 import { Alert, ErrorStatus } from "@components/forms/Alert/Alert";
 import { BackLink } from "@components/admin/LeftNav/BackLink";
 import { PermissionToggle } from "@components/admin/Users/PermissionToggle";
+import { LinkButton } from "@components/globals";
 
 type PrivilegeList = Omit<Privilege, "permissions">[];
 interface User {
@@ -201,9 +202,11 @@ const ManagePermissions = ({
         privileges={systemPrivileges}
         setChangedPrivileges={setChangedPrivileges}
       />
-      <Button className="mr-2" type="submit" onClick={() => save()}>
+      <Button className="mr-4" type="submit" onClick={() => save()}>
         {t("save")}
       </Button>
+
+      <LinkButton.Secondary href="/admin/accounts">{t("cancel")}</LinkButton.Secondary>
     </div>
   );
 };
