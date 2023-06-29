@@ -63,7 +63,7 @@ const PrivilegeList = ({
   const canManageUsers = ability?.can("update", "User") ?? false;
 
   return (
-    <ul className="m-0 p-0">
+    <ul className="m-0 p-0 mb-12">
       {privileges?.map((privilege) => {
         const active = userPrivileges.includes(privilege.id);
         const description =
