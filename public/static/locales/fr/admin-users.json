@@ -5,6 +5,8 @@
   "admin": "Administration",
   "true": "Oui",
   "false": "Non",
+  "on": "Activé",
+  "off": "Déactivé",
   "enable": "Activer",
   "enabled": "Activé",
   "disable": "Désactiver",
@@ -23,5 +25,14 @@
   "manageForms": "Gérer les formulaires",
   "publishedFormsMustBeTransferred": "Les formulaires publiés doivent être transférrés ou supprimés avant la désactivation.",
   "deactivatingWillNotifyUser": "L’utilisateur·rice sera informé·e de la désactivation du compte.",
-  "deactivateThisAccount": "Désactiver ce compte?"
+  "deactivateThisAccount": "Désactiver ce compte?",
+  "responseSuccess": {
+    "title": "Success",
+    "message": "Vos modifications ont été enregistrées."
+  },
+  "responseFail": {
+    "title": "Erreur",
+    "message": "Quelque chose a mal tourné."
+  },
+  "backToAccounts": "Retourner à Comptes"
 }
