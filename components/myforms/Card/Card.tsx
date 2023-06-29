@@ -150,12 +150,12 @@ export const Card = (props: CardProps): React.ReactElement => {
         {deliveryOption && !deliveryOption.emailAddress && (
           <>
             {overdue > 0 ? (
-              <div className="mt-4 text-sm text-red">
+              <span className="mt-4 text-sm text-red">
                 <MessageIcon className="mr-2 inline-block" />
                 <Markdown options={{ forceBlock: false }}>
                   {t("card.actionRequired", { responses: overdue, link: responsesLink })}
                 </Markdown>
-              </div>
+              </span>
             ) : (
               <a
                 className="mt-4 block text-sm focus:fill-white active:fill-white"
