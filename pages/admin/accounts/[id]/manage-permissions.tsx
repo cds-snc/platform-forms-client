@@ -118,6 +118,8 @@ const ManagePermissions = ({
 }) => {
   const { t } = useTranslation("admin-users");
   const [message, setMessage] = useState<ReactElement | null>(null);
+  const { ability } = useAccessControl();
+  const canManageUsers = ability?.can("update", "User") ?? false;
 
   const [changedPrivileges, setChangedPrivileges] = useState<
     { id: string; action: "add" | "remove" }[]
@@ -203,9 +205,12 @@ const ManagePermissions = ({
         privileges={systemPrivileges}
         setChangedPrivileges={setChangedPrivileges}
       />
-      <Button className="mr-4" type="submit" onClick={() => save()}>
-        {t("save")}
-      </Button>
+
+      {canManageUsers && (
+        <Button className="mr-4" type="submit" onClick={() => save()}>
+          {t("save")}
+        </Button>
+      )}
 
       <LinkButton.Secondary href="/admin/accounts">{t("cancel")}</LinkButton.Secondary>
     </div>
