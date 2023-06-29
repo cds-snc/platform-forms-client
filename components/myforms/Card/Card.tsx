@@ -115,7 +115,7 @@ export const Card = (props: CardProps): React.ReactElement => {
   }
 
   return (
-    <div className="h-full border-1 border-black-default rounded" data-testid={`card-${id}`}>
+    <div className="h-full rounded border-1 border-black-default" data-testid={`card-${id}`}>
       <div
         className={
           "p-1 px-3 border-b-1 border-black-default border-solid rounded-t" +
@@ -126,10 +126,10 @@ export const Card = (props: CardProps): React.ReactElement => {
       >
         {isPublished === true ? t("card.states.published") : t("card.states.draft")}
       </div>
-      <p className="h-36 px-3 pt-5 pb-8">
+      <p className="h-36 px-3 pb-8 pt-5">
         <a
           href={isPublished ? url : `/${i18n.language}/form-builder/edit/${id}`}
-          className="font-bold line-clamp-2 wrap overflow-hidden"
+          className="wrap line-clamp-2 overflow-hidden font-bold"
           aria-describedby={`card-title-${id} card-date-${id}`}
         >
           {name ? name : t("unnamedForm", { ns: "form-builder" })}
@@ -141,30 +141,34 @@ export const Card = (props: CardProps): React.ReactElement => {
         </span>
         {/* Email delivery */}
         {deliveryOption && deliveryOption.emailAddress && (
-          <span className="block mt-4 text-sm">
-            <EnvelopeIcon className="inline-block mr-2" />
+          <span className="mt-4 block text-sm">
+            <EnvelopeIcon className="mr-2 inline-block" />
             {t("card.deliveryOption.email", { ns: "my-forms" })} {deliveryOption.emailAddress}
           </span>
         )}
         {/* Vault delivery */}
         {deliveryOption && !deliveryOption.emailAddress && (
           <>
-            <a
-              className="block mt-4 text-sm focus:fill-white active:fill-white"
-              href={responsesLink}
-            >
-              <MessageIcon className="inline-block mr-2" />
-              {t("card.deliveryOption.vault", { ns: "my-forms" })}{" "}
-            </a>
-            <div className="text-red">
-              <Markdown options={{ forceBlock: true }}>
-                {t("card.actionRequired", { responses: overdue, link: responsesLink })}
-              </Markdown>
-            </div>
+            {overdue > 0 ? (
+              <div className="mt-4 text-sm text-red">
+                <MessageIcon className="mr-2 inline-block" />
+                <Markdown options={{ forceBlock: false }}>
+                  {t("card.actionRequired", { responses: overdue, link: responsesLink })}
+                </Markdown>
+              </div>
+            ) : (
+              <a
+                className="mt-4 block text-sm focus:fill-white active:fill-white"
+                href={responsesLink}
+              >
+                <MessageIcon className="mr-2 inline-block" />
+                {t("card.deliveryOption.vault", { ns: "my-forms" })}{" "}
+              </a>
+            )}
           </>
         )}
       </p>
-      <div className="flex justify-between items-center p-3">
+      <div className="flex items-center justify-between p-3">
         <div id={`card-date-${id}`} className="text-sm">
           {t("card.lastEdited")}: {formatDate(date)}
         </div>
