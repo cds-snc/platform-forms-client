@@ -19,9 +19,9 @@ export interface CardProps {
   url: string;
   date: string;
   isPublished: boolean;
+  overdue: number;
   deliveryOption?: { emailAddress?: string } | null;
   handleDelete: (card: CardProps) => void;
-  overdue: number;
 }
 
 export const Card = (props: CardProps): React.ReactElement => {

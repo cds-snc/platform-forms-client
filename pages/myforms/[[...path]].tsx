@@ -27,7 +27,7 @@ interface FormsDataItem {
   date: string;
   deliveryOption: { emailAddress?: string };
   isPublished: boolean;
-  overdue: boolean;
+  overdue: number;
 }
 interface MyFormsProps {
   templates: Array<FormsDataItem>;
