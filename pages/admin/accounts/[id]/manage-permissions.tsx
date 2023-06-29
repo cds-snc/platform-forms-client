@@ -1,17 +1,21 @@
 import React, { ReactElement, useState, SetStateAction } from "react";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import axios from "axios";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import { Privilege } from "@prisma/client";
-import { useAccessControl } from "@lib/hooks/useAccessControl";
 
+import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { requireAuthentication } from "@lib/auth";
 import { checkPrivileges, getAllPrivileges } from "@lib/privileges";
 import { logMessage } from "@lib/logger";
 import { getUser } from "@lib/users";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 import { Button } from "@components/globals";
+import { Alert, ErrorStatus } from "@components/forms/Alert/Alert";
+import { BackLink } from "@components/admin/LeftNav/BackLink";
+import { PermissionToggle } from "@components/admin/Users/PermissionToggle";
+import { LinkButton } from "@components/globals";
 
 type PrivilegeList = Omit<Privilege, "permissions">[];
 interface User {
@@ -59,48 +63,44 @@ const PrivilegeList = ({
   const canManageUsers = ability?.can("update", "User") ?? false;
 
   return (
-    <ul className="m-0 p-0">
+    <ul className="m-0 p-0 mb-12">
       {privileges?.map((privilege) => {
         const active = userPrivileges.includes(privilege.id);
+        const description =
+          i18n.language === "en" ? privilege.descriptionEn : privilege.descriptionFr;
         return (
           <li key={privilege.id} className="mb-4 block max-w-lg pb-4">
-            <div className="flex items-center justify-between">
-              <p className="">
-                {i18n.language === "en" ? privilege.descriptionEn : privilege.descriptionFr}
-              </p>
-              <div>
-                {canManageUsers ? (
-                  <Button
-                    type="button"
-                    theme="secondary"
-                    className="text-sm"
-                    onClick={() => {
-                      setChangedPrivileges((oldState) => {
-                        // If the item alreay exists in state remove it, as this brings it back to it's initial state
-                        if (oldState.some((p) => p.id === privilege.id)) {
-                          return oldState.filter((p) => p.id !== privilege.id);
-                        } else {
-                          return [
-                            ...oldState,
-                            { id: privilege.id, action: active ? "remove" : "add" },
-                          ];
-                        }
-                      });
-                      setUserPrivileges((oldState) => {
-                        if (oldState.includes(privilege.id)) {
-                          return oldState.filter((id) => id !== privilege.id);
-                        } else {
-                          return [...oldState, privilege.id];
-                        }
-                      });
-                    }}
-                  >
-                    {active ? t("disable") : t("enable")}
-                  </Button>
-                ) : (
-                  <div className="m-auto">{active ? t("enabled") : t("disabled")}</div>
-                )}
-              </div>
+            <div>
+              {canManageUsers ? (
+                <PermissionToggle
+                  on={active}
+                  onLabel={t("on")}
+                  offLabel={t("off")}
+                  description={description || ""}
+                  handleToggle={() => {
+                    setChangedPrivileges((oldState) => {
+                      // If the item alreay exists in state remove it, as this brings it back to it's initial state
+                      if (oldState.some((p) => p.id === privilege.id)) {
+                        return oldState.filter((p) => p.id !== privilege.id);
+                      } else {
+                        return [
+                          ...oldState,
+                          { id: privilege.id, action: active ? "remove" : "add" },
+                        ];
+                      }
+                    });
+                    setUserPrivileges((oldState) => {
+                      if (oldState.includes(privilege.id)) {
+                        return oldState.filter((id) => id !== privilege.id);
+                      } else {
+                        return [...oldState, privilege.id];
+                      }
+                    });
+                  }}
+                />
+              ) : (
+                <div className="m-auto">{active ? t("on") : t("off")}</div>
+              )}
             </div>
           </li>
         );
@@ -117,6 +117,7 @@ const ManagePermissions = ({
   allPrivileges: PrivilegeList;
 }) => {
   const { t } = useTranslation("admin-users");
+  const [message, setMessage] = useState<ReactElement | null>(null);
 
   const [changedPrivileges, setChangedPrivileges] = useState<
     { id: string; action: "add" | "remove" }[]
@@ -125,11 +126,37 @@ const ManagePermissions = ({
   const { forceSessionUpdate } = useAccessControl();
 
   const save = async () => {
-    await updatePrivilege(formUser.id, changedPrivileges);
+    setMessage(null);
+    const response = await updatePrivilege(formUser.id, changedPrivileges);
+    if (response && response.status === 200) {
+      setMessage(
+        <Alert
+          type={ErrorStatus.SUCCESS}
+          focussable={true}
+          heading={t("responseSuccess.title")}
+          tabIndex={0}
+        >
+          {t("responseSuccess.message")}
+        </Alert>
+      );
+      return response.data;
+    }
+
+    setMessage(
+      <Alert
+        type={ErrorStatus.ERROR}
+        focussable={true}
+        heading={t("responseFail.title")}
+        tabIndex={0}
+      >
+        {t("responseFail.message")}
+      </Alert>
+    );
+
     await forceSessionUpdate();
   };
 
-  // @todo look to add groups for privileges vs seed data `names` to filter groups
+  // @todo look to add actual groups for privileges vs currently using seed data + `names` to filter groups
   const userPrivileges = allPrivileges.filter(
     (privilege) => privilege.nameEn === "Base" || privilege.nameEn === "PublishForms"
   );
@@ -153,9 +180,11 @@ const ManagePermissions = ({
         <title>{`${t("managePermissions")} ${formUser.name} ${formUser.email}`}</title>
       </Head>
       <h1 className="mb-10 border-0">
-        <span className="block">{`${formUser.name} ${formUser.email}`}</span>
+        <span className="block text-base">{formUser.name}</span>
+        <span className="block text-base font-normal">{formUser.email}</span>
         {t("managePermissions")}
       </h1>
+      {message && message}
       <h2>{t("User")}</h2>
       <PrivilegeList
         formUser={formUser}
@@ -174,15 +203,26 @@ const ManagePermissions = ({
         privileges={systemPrivileges}
         setChangedPrivileges={setChangedPrivileges}
       />
-      <Button className="mr-2" type="submit" onClick={() => save()}>
+      <Button className="mr-4" type="submit" onClick={() => save()}>
         {t("save")}
       </Button>
+
+      <LinkButton.Secondary href="/admin/accounts">{t("cancel")}</LinkButton.Secondary>
     </div>
   );
 };
 
+const BackToAccounts = () => {
+  const { t } = useTranslation("admin-users");
+  return <BackLink href="/admin/accounts">{t("backToAccounts")}</BackLink>;
+};
+
 ManagePermissions.getLayout = (page: ReactElement) => {
-  return <AdminNavLayout user={page.props.user}>{page}</AdminNavLayout>;
+  return (
+    <AdminNavLayout user={page.props.user} backLink={<BackToAccounts />}>
+      {page}
+    </AdminNavLayout>
+  );
 };
 
 export const getServerSideProps = requireAuthentication(

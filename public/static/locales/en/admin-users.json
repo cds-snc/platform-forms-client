@@ -5,6 +5,8 @@
   "admin": "Administrator",
   "true": "Yes",
   "false": "No",
+  "on": "On",
+  "off": "Off",
   "enable": "Enable",
   "enabled": "Enabled",
   "disable": "Disable",
@@ -23,5 +25,14 @@
   "manageForms": "Manage forms",
   "publishedFormsMustBeTransferred": "Published forms must be transferred or deleted before deactivating.",
   "deactivatingWillNotifyUser": "Deactivating this account will notify the user.",
-  "deactivateThisAccount": "Deactivate this account?"
+  "deactivateThisAccount": "Deactivate this account?",
+  "responseSuccess": {
+    "title": "Success",
+    "message": "Your changes have been saved."
+  },
+  "responseFail": {
+    "title": "Error",
+    "message": "Something went wrong."
+  },
+  "backToAccounts": "Back to Accounts"
 }
