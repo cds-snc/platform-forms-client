@@ -5,6 +5,8 @@
   "admin": "Administration",
   "true": "Oui",
   "false": "Non",
+  "on": "Activé",
+  "off": "Déactivé",
   "enable": "Activer",
   "enabled": "Activé",
   "disable": "Désactiver",

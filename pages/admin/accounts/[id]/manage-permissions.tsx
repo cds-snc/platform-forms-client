@@ -14,6 +14,7 @@ import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 import { Button } from "@components/globals";
 import { Alert, ErrorStatus } from "@components/forms/Alert/Alert";
 import { BackLink } from "@components/admin/LeftNav/BackLink";
+import { PermissionToggle } from "@components/admin/Users/PermissionToggle";
 
 type PrivilegeList = Omit<Privilege, "permissions">[];
 interface User {
@@ -64,43 +65,44 @@ const PrivilegeList = ({
     <ul className="m-0 p-0">
       {privileges?.map((privilege) => {
         const active = userPrivileges.includes(privilege.id);
+        const description =
+          i18n.language === "en" ? privilege.descriptionEn : privilege.descriptionFr;
         return (
           <li key={privilege.id} className="mb-4 block max-w-lg pb-4">
             <div className="flex items-center justify-between">
-              <p className="">
-                {i18n.language === "en" ? privilege.descriptionEn : privilege.descriptionFr}
-              </p>
+              <p aria-hidden="true">{description}</p>
               <div>
                 {canManageUsers ? (
-                  <Button
-                    type="button"
-                    theme="secondary"
-                    className="text-sm"
-                    onClick={() => {
-                      setChangedPrivileges((oldState) => {
-                        // If the item alreay exists in state remove it, as this brings it back to it's initial state
-                        if (oldState.some((p) => p.id === privilege.id)) {
-                          return oldState.filter((p) => p.id !== privilege.id);
-                        } else {
-                          return [
-                            ...oldState,
-                            { id: privilege.id, action: active ? "remove" : "add" },
-                          ];
-                        }
-                      });
-                      setUserPrivileges((oldState) => {
-                        if (oldState.includes(privilege.id)) {
-                          return oldState.filter((id) => id !== privilege.id);
-                        } else {
-                          return [...oldState, privilege.id];
-                        }
-                      });
-                    }}
-                  >
-                    {active ? t("disable") : t("enable")}
-                  </Button>
+                  <>
+                    <PermissionToggle
+                      on={active}
+                      onLabel={t("on")}
+                      offLabel={t("off")}
+                      description={description || ""}
+                      handleToggle={() => {
+                        setChangedPrivileges((oldState) => {
+                          // If the item alreay exists in state remove it, as this brings it back to it's initial state
+                          if (oldState.some((p) => p.id === privilege.id)) {
+                            return oldState.filter((p) => p.id !== privilege.id);
+                          } else {
+                            return [
+                              ...oldState,
+                              { id: privilege.id, action: active ? "remove" : "add" },
+                            ];
+                          }
+                        });
+                        setUserPrivileges((oldState) => {
+                          if (oldState.includes(privilege.id)) {
+                            return oldState.filter((id) => id !== privilege.id);
+                          } else {
+                            return [...oldState, privilege.id];
+                          }
+                        });
+                      }}
+                    />
+                  </>
                 ) : (
-                  <div className="m-auto">{active ? t("enabled") : t("disabled")}</div>
+                  <div className="m-auto">{active ? t("on") : t("off")}</div>
                 )}
               </div>
             </div>
