@@ -99,7 +99,10 @@ const PrivilegeList = ({
                   }}
                 />
               ) : (
-                <div className="m-auto">{active ? t("on") : t("off")}</div>
+                <div className="flex items-center justify-between">
+                  <p>{description} </p>
+                  <div>{active ? t("on") : t("off")}</div>
+                </div>
               )}
             </div>
           </li>
