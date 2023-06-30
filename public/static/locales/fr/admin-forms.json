@@ -4,5 +4,7 @@
   "draft": "Ébauche",
   "published": "Publié",
   "manageOwnerships": "Gérer les propriétaires",
-  "overdueResponses": "Réponses en retard (plus de {{days}} jours)"
+  "overdueResponses": "Réponses en retard (plus de {{days}} jours)",
+  "noForms": "Aucun formulaire trouvé",
+  "deleteForm": "Supprimer le formulaire"
 }

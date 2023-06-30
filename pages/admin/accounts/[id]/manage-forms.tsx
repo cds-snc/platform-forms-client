@@ -1,15 +1,23 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState, useRef } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import { useTranslation } from "next-i18next";
+import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import Head from "next/head";
 import { getUnprocessedSubmissionsForUser, getUser } from "@lib/users";
 import { checkPrivileges } from "@lib/privileges";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 import { getAllTemplatesForUser } from "@lib/templates";
 import { LinkButton } from "@components/globals";
+import { BackLink } from "@components/admin/LeftNav/BackLink";
 import { NagwareResult } from "@lib/types";
 import { useSetting } from "@lib/hooks/useSetting";
+import { Dropdown } from "@components/admin/Users/Dropdown";
+import { themes } from "@components/globals";
+import { ConfirmDelete } from "@components/form-builder/app/ConfirmDelete";
+import { TemplateStoreProvider } from "@components/form-builder/store";
+import { useAccessControl } from "@lib/hooks/useAccessControl";
+import { useRefresh } from "@lib/hooks";
 
 type User = {
   id: string;
@@ -18,14 +26,16 @@ type User = {
   active: boolean;
 };
 
-type Templates = Array<{
+type Template = {
   id: string;
   titleEn: string;
   titleFr: string;
   isPublished: boolean;
   createdAt: number | Date;
   [key: string]: string | boolean | number | Date;
-}>;
+};
+
+type Templates = Array<Template>;
 
 type Overdue = { [key: string]: NagwareResult };
 
@@ -62,6 +72,11 @@ const ManageForms = ({
   overdue: Overdue;
 }) => {
   const { t, i18n } = useTranslation("admin-forms");
+  const [showConfirm, setShowConfirm] = useState<boolean>(false);
+  const activeForm = useRef<{ id: string; isPublished: boolean } | null>(null);
+  const { ability } = useAccessControl();
+  const { refreshData } = useRefresh();
+  const canManageForms = ability?.can("update", "FormRecord");
   return (
     <>
       <Head>
@@ -69,58 +84,103 @@ const ManageForms = ({
       </Head>
       <div>
         <h1 className="mb-10 border-0">
-          {formUser && <span className="block">{`${formUser?.name} ${formUser?.email}`}</span>}
+          {formUser && <span className="block text-base">{formUser?.name}</span>}
+          {formUser && <span className="block text-base font-normal">{formUser?.email}</span>}
           {t("title")}
         </h1>
       </div>
+
+      {!templates || templates.length === 0 ? (
+        <div className="mb-4">
+          <p>{t("noForms")}</p>
+        </div>
+      ) : null}
+
       <ul className="m-0 list-none p-0">
         {templates.map(({ id, titleEn, titleFr, isPublished }) => {
-          const bgColor = isPublished ? "#95CCA2" : "#FFD875";
+          const backgroundColor = isPublished ? "#95CCA2" : "#FEE39F";
+          const borderColor = isPublished ? "#95CCA2" : "#FFD875";
           return (
-            <li
-              className="mb-4 flex max-w-2xl flex-row rounded-md border-2 border-black p-2"
-              key={id}
-            >
-              <div className="m-auto grow basis-1/3 p-4">
-                <div className="flex justify-between">
-                  <div>
-                    <h2 className="text-base">
-                      {titleEn} / {titleFr}
-                    </h2>
+            <li className="mb-4 max-w-2xl rounded-md border-2 border-black p-4" key={id}>
+              <div className="flex flex-row justify-between">
+                <h2 className="text-base mb-0 pb-0">
+                  {titleEn} / {titleFr}
+                </h2>
 
-                    {overdue[id] && <OverdueStatus level={overdue[id].level} />}
+                {overdue[id] && <OverdueStatus level={overdue[id].level} />}
 
-                    {/* linking to existing page for now */}
-                    <LinkButton.Secondary
-                      href={`/${i18n.language}/id/${id}/users`}
-                      className="mb-2 mr-3"
-                    >
-                      {t("manageOwnerships")}
-                    </LinkButton.Secondary>
-                    <LinkButton.Secondary
-                      href={`/${i18n.language}/form-builder/responses/${id}`}
-                      className="mb-2 mr-3"
-                    >
-                      {t("gotoResponses")}
-                    </LinkButton.Secondary>
-                  </div>
-                  <div>
-                    <span className="p-2" style={{ backgroundColor: bgColor }}>
-                      {isPublished ? t("published") : t("draft")}
-                    </span>
-                  </div>
+                <span
+                  className="block px-2 py-1 rounded "
+                  style={{
+                    backgroundColor: backgroundColor,
+                    border: `2px solid ${borderColor}`,
+                  }}
+                >
+                  {isPublished ? t("published") : t("draft")}
+                </span>
+              </div>
+
+              {/* linking to existing page for now */}
+              <div className="flex flex-row justify-between mt-10">
+                <div>
+                  <LinkButton.Secondary
+                    href={`/${i18n.language}/id/${id}/users`}
+                    className="mb-2 mr-3"
+                  >
+                    {t("manageOwnerships")}
+                  </LinkButton.Secondary>
+                  <LinkButton.Secondary
+                    href={`/${i18n.language}/form-builder/responses/${id}`}
+                    className="mb-2 mr-3"
+                  >
+                    {t("gotoResponses")}
+                  </LinkButton.Secondary>
+                </div>
+                <div>
+                  {canManageForms && (
+                    <Dropdown>
+                      <DropdownMenuPrimitive.Item
+                        className={`${themes.destructive} ${themes.base} !block !cursor-pointer`}
+                        onClick={() => {
+                          activeForm.current = { id, isPublished };
+                          setShowConfirm(true);
+                        }}
+                      >
+                        {t("deleteForm")}
+                      </DropdownMenuPrimitive.Item>
+                    </Dropdown>
+                  )}
                 </div>
               </div>
             </li>
           );
         })}
       </ul>
+      <ConfirmDelete
+        onDeleted={() => {
+          setShowConfirm(false);
+          refreshData();
+        }}
+        show={showConfirm}
+        id={activeForm.current?.id || ""}
+        isPublished={activeForm.current?.isPublished || false}
+        handleClose={setShowConfirm}
+      />
     </>
   );
 };
 
+const BackToAccounts = () => {
+  const { t } = useTranslation("admin-users");
+  return <BackLink href="/admin/accounts">{t("backToAccounts")}</BackLink>;
+};
+
 ManageForms.getLayout = (page: ReactElement) => {
-  return <AdminNavLayout user={page.props.user}>{page}</AdminNavLayout>;
+  return (
+    <AdminNavLayout user={page.props.user} backLink={<BackToAccounts />}>
+      <TemplateStoreProvider {...{ locale: page.props.locale }}>{page}</TemplateStoreProvider>
+    </AdminNavLayout>
+  );
 };
 
 export const getServerSideProps = requireAuthentication(
@@ -154,7 +214,13 @@ export const getServerSideProps = requireAuthentication(
     return {
       props: {
         ...(locale &&
-          (await serverSideTranslations(locale, ["common", "admin-forms", "admin-login"]))),
+          (await serverSideTranslations(locale, [
+            "common",
+            "admin-forms",
+            "admin-login",
+            "admin-users",
+            "form-builder",
+          ]))),
         formUser: formUser,
         templates,
         overdue,

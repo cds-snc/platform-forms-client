@@ -4,5 +4,7 @@
   "draft": "Draft",
   "published": "Published",
   "manageOwnerships": "Manage ownerships",
-  "overdueResponses": "Overdue responses (over {{days}} days)"
+  "overdueResponses": "Overdue responses (over {{days}} days)",
+  "noForms": "No forms found",
+  "deleteForm": "Delete form"
 }
