@@ -185,8 +185,8 @@ const ManagePermissions = ({
         <title>{`${t("managePermissions")} ${formUser.name} ${formUser.email}`}</title>
       </Head>
       <h1 className="mb-10 border-0">
-        <span className="block text-base">{formUser.name}</span>
-        <span className="block text-base font-normal">{formUser.email}</span>
+        {formUser && <span className="block text-base">{formUser?.name}</span>}
+        {formUser && <span className="block text-base font-normal">{formUser?.email}</span>}
         {t("managePermissions")}
       </h1>
       {message && message}

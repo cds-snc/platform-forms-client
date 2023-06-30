@@ -49,10 +49,10 @@ const Users = ({ allUsers }: { allUsers: DBUser[] }): React.ReactElement => {
   return (
     <>
       <Head>
-        <title>{t("title")}</title>
+        <title>{t("accounts")}</title>
       </Head>
       <>
-        <h1 className="mb-10 border-0">{t("title")}</h1>
+        <h1 className="mb-10 border-0">{t("accounts")}</h1>
         <ul className="m-0 list-none p-0">
           {allUsers
             .sort((a, b) => (a.name && b.name ? a.name.localeCompare(b.name) : 0))
