@@ -10,7 +10,6 @@ import { checkPrivileges } from "@lib/privileges";
 
 import { NextPageWithLayout } from "@pages/_app";
 import { CardGrid } from "@components/myforms/CardGrid/CardGrid";
-import { CardProps } from "@components/myforms/Card/Card";
 import { TabPanel } from "@components/myforms/Tabs/TabPanel";
 import { LeftNavigation } from "@components/myforms/LeftNav";
 import { StyledLink } from "@components/globals/StyledLink/StyledLink";
@@ -25,6 +24,7 @@ interface FormsDataItem {
   titleFr: string;
   url: string;
   date: string;
+  name: string;
   deliveryOption: { emailAddress?: string };
   isPublished: boolean;
   overdue: number;
@@ -40,15 +40,11 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
 
   const templatesAll = templates.sort((itemA, itemB) => {
     return new Date(itemB.date).getTime() - new Date(itemA.date).getTime();
-  }) as Array<CardProps>;
+  });
 
-  const templatesPublished = templatesAll?.filter(
-    (item) => item?.isPublished === true
-  ) as Array<CardProps>;
+  const templatesPublished = templatesAll?.filter((item) => item?.isPublished === true);
 
-  const templatesDrafts = templatesAll?.filter(
-    (item) => item?.isPublished === false
-  ) as Array<CardProps>;
+  const templatesDrafts = templatesAll?.filter((item) => item?.isPublished === false);
 
   const createNewFormRef = useRef<HTMLDivElement>(null);
 
