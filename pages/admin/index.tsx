@@ -16,7 +16,7 @@ const AdminWelcome: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>{t("adminNav.administration", { ns: "common" })}</title>
+        <title>{t("title")}</title>
       </Head>
       <div className="flex flex-row justify-center">
         <div className="rounded-lg border bg-white p-10">
