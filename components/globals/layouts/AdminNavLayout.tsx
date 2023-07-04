@@ -12,11 +12,12 @@ import { ToastContainer } from "@components/form-builder/app/shared/Toast";
 interface AdminNavLayoutProps extends React.PropsWithChildren {
   user: User;
   backLink?: React.ReactNode;
+  hideLeftNav?: boolean | false;
 }
 
-const AdminNavLayout = ({ children, user, backLink }: AdminNavLayoutProps) => {
+const AdminNavLayout = ({ children, user, backLink, hideLeftNav }: AdminNavLayoutProps) => {
   return (
-    <div className="flex h-full flex-col">
+    <div className={`flex h-full flex-col ${hideLeftNav && "bg-gray-50"}`}>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta charSet="utf-8" />
@@ -25,14 +26,14 @@ const AdminNavLayout = ({ children, user, backLink }: AdminNavLayoutProps) => {
 
       <SkipLink />
 
-      <header className="mb-12 border-b-1 border-gray-500 px-4 py-2 laptop:px-32 desktop:px-64">
+      <header className="mb-12 border-b-1 border-gray-500 bg-white px-4 py-2 laptop:px-32 desktop:px-64">
         <AdminNav user={user} />
       </header>
 
       <div className="page-container mx-4 shrink-0 grow basis-auto laptop:mx-32 desktop:mx-64">
         {backLink && <nav className="absolute">{backLink}</nav>}
-        {!backLink && <LeftNavigation />}
-        <main id="content" className="ml-40 laptop:ml-60">
+        {!backLink && !hideLeftNav && <LeftNavigation />}
+        <main id="content" className={!hideLeftNav ? "ml-40 laptop:ml-60" : ""}>
           {children}
           <ToastContainer />
         </main>
