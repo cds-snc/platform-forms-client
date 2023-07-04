@@ -7,13 +7,17 @@ import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Link from "next/link";
 import { ManageAccountsIcon, SettingsApplicationsIcon } from "@components/form-builder/icons";
+import Head from "next/head";
 
 // keeping this here if we want to add a welcome page
 const AdminWelcome: NextPageWithLayout = () => {
-  const { t } = useTranslation(["admin-home"]);
+  const { t } = useTranslation(["admin-home", "common"]);
 
   return (
     <>
+      <Head>
+        <title>{t("adminNav.administration", { ns: "common" })}</title>
+      </Head>
       <div className="flex flex-row justify-center">
         <div className="rounded-lg border bg-white p-10">
           <h2>
