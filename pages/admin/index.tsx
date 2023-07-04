@@ -1,7 +1,6 @@
 import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import { requireAuthentication } from "@lib/auth";
-import Head from "next/head";
 import { NextPageWithLayout } from "@pages/_app";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
@@ -11,14 +10,10 @@ import { ManageAccountsIcon, SettingsApplicationsIcon } from "@components/form-b
 
 // keeping this here if we want to add a welcome page
 const AdminWelcome: NextPageWithLayout = () => {
-  const { t } = useTranslation(["admin-home", "common"]);
+  const { t } = useTranslation(["admin-home"]);
 
   return (
     <>
-      <Head>
-        <title>{t("title")}</title>
-      </Head>
-
       <div className="flex flex-row justify-center">
         <div className="rounded-lg border bg-white p-10">
           <h2>
@@ -34,7 +29,7 @@ const AdminWelcome: NextPageWithLayout = () => {
 
         <div className="ml-20 rounded-lg border bg-white p-10">
           <h2>
-            <SettingsApplicationsIcon className="inline-block h-14 w-14" />{" "}
+            <SettingsApplicationsIcon className="inline-block h-14 w-14" />
             {t("systemAdministration")}
           </h2>
           <p>{t("configureHowTheApplicationWorks")}</p>
@@ -80,12 +75,7 @@ export const getServerSideProps = requireAuthentication(async ({ user: { ability
   return {
     props: {
       ...(locale &&
-        (await serverSideTranslations(locale, [
-          "my-forms",
-          "common",
-          "form-builder",
-          "admin-home",
-        ]))),
+        (await serverSideTranslations(locale, ["common", "admin-home", "admin-login"]))),
     },
   };
 });
