@@ -18,6 +18,7 @@ import { Dropdown } from "@components/admin/Users/Dropdown";
 import { ConfirmDeactivate } from "@components/admin/Users/ConfirmDeactivate";
 import { Button, themes, LinkButton } from "@components/globals";
 import { DBUser } from "@lib/types/user-types";
+import { Privilege } from "@prisma/client";
 
 export const updateActiveStatus = async (userID: string, active: boolean) => {
   try {
@@ -35,7 +36,32 @@ export const updateActiveStatus = async (userID: string, active: boolean) => {
   }
 };
 
-const Users = ({ allUsers }: { allUsers: DBUser[] }): React.ReactElement => {
+const updatePrivilege = async (
+  userID: string,
+  privileges: { id: string; action: "add" | "remove" }[]
+) => {
+  try {
+    return await axios({
+      url: `/api/users`,
+      method: "PUT",
+      data: {
+        userID,
+        privileges,
+      },
+      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+    });
+  } catch (e) {
+    logMessage.error(e);
+  }
+};
+
+const Users = ({
+  allUsers,
+  publishFormsId,
+}: {
+  allUsers: DBUser[];
+  publishFormsId: string;
+}): React.ReactElement => {
   const { t } = useTranslation("admin-users");
   const { ability } = useAccessControl();
   const canManageUsers = ability?.can("update", "User") ?? false;
@@ -44,6 +70,16 @@ const Users = ({ allUsers }: { allUsers: DBUser[] }): React.ReactElement => {
   const router = useRouter();
   const isCurrentUser = (user: DBUser) => {
     return user.id === session?.user?.id;
+  };
+
+  const hasPrivilege = ({
+    privileges,
+    privilegeName,
+  }: {
+    privileges: Privilege[];
+    privilegeName: string;
+  }): boolean => {
+    return Boolean(privileges?.find((privilege) => privilege.nameEn === privilegeName)?.id);
   };
 
   return (
@@ -66,6 +102,32 @@ const Users = ({ allUsers }: { allUsers: DBUser[] }): React.ReactElement => {
                     <h2 className="pb-6 text-base">{user.name}</h2>
                     <p className="mb-4">{user.email}</p>
                     <div className="">
+                      {/* {canManageUsers && !isCurrentUser(user) && !user.active && ( */}
+                      <Button
+                        theme={"secondary"}
+                        className="mr-2"
+                        onClick={async () => {
+                          // TODO: Actions enum?
+                          //
+                          const action = hasPrivilege({
+                            privileges: user.privileges,
+                            privilegeName: "PublishForms",
+                          })
+                            ? "remove"
+                            : "add";
+                          await updatePrivilege(user.id, [{ id: publishFormsId, action }]);
+                          await refreshData();
+                        }}
+                      >
+                        {hasPrivilege({
+                          privileges: user.privileges,
+                          privilegeName: "PublishForms",
+                        })
+                          ? "Lock Publishing"
+                          : "Unlock Publishing"}
+                      </Button>
+                      {/* )} */}
+
                       <LinkButton.Secondary
                         href={`/admin/accounts/${user.id}/manage-forms`}
                         className="mb-2 mr-3"
@@ -141,6 +203,11 @@ export const getServerSideProps = requireAuthentication(async ({ user: { ability
     })
   );
 
+  // TODO: Perhaps the Privileges e.g. "PublishForms" could be stored in an enum?
+  //
+  // Convenience for features, lock/unlock publishing that may or may not have the related ID
+  const publishFormsId = allPrivileges.find((privilege) => privilege.nameEn === "PublishForms")?.id;
+
   return {
     props: {
       ...(locale &&
@@ -148,6 +215,7 @@ export const getServerSideProps = requireAuthentication(async ({ user: { ability
 
       allUsers,
       allPrivileges,
+      publishFormsId,
     },
   };
 });
