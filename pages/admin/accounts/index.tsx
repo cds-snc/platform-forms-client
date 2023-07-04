@@ -102,38 +102,40 @@ const Users = ({
                     <h2 className="pb-6 text-base">{user.name}</h2>
                     <p className="mb-4">{user.email}</p>
                     <div className="">
-                      {/* {canManageUsers && !isCurrentUser(user) && !user.active && ( */}
-                      <Button
-                        theme={"secondary"}
-                        className="mr-2"
-                        onClick={async () => {
-                          // TODO: Actions enum?
-                          //
-                          const action = hasPrivilege({
+                      {canManageUsers && (
+                        <Button
+                          theme={"secondary"}
+                          className="mr-2"
+                          onClick={async () => {
+                            // TODO: Actions enum? (remove, add)
+                            //
+                            const action = hasPrivilege({
+                              privileges: user.privileges,
+                              privilegeName: "PublishForms",
+                            })
+                              ? "remove"
+                              : "add";
+                            await updatePrivilege(user.id, [{ id: publishFormsId, action }]);
+                            await refreshData();
+                          }}
+                        >
+                          {hasPrivilege({
                             privileges: user.privileges,
                             privilegeName: "PublishForms",
                           })
-                            ? "remove"
-                            : "add";
-                          await updatePrivilege(user.id, [{ id: publishFormsId, action }]);
-                          await refreshData();
-                        }}
-                      >
-                        {hasPrivilege({
-                          privileges: user.privileges,
-                          privilegeName: "PublishForms",
-                        })
-                          ? "Lock Publishing"
-                          : "Unlock Publishing"}
-                      </Button>
-                      {/* )} */}
+                            ? t("lockPublishing")
+                            : t("unlockPublishing")}
+                        </Button>
+                      )}
 
-                      <LinkButton.Secondary
-                        href={`/admin/accounts/${user.id}/manage-forms`}
-                        className="mb-2 mr-3"
-                      >
-                        {t("manageForms")}
-                      </LinkButton.Secondary>
+                      {canManageUsers && (
+                        <LinkButton.Secondary
+                          href={`/admin/accounts/${user.id}/manage-forms`}
+                          className="mb-2 mr-3"
+                        >
+                          {t("manageForms")}
+                        </LinkButton.Secondary>
+                      )}
 
                       {canManageUsers && !isCurrentUser(user) && !user.active && (
                         <Button
@@ -203,7 +205,7 @@ export const getServerSideProps = requireAuthentication(async ({ user: { ability
     })
   );
 
-  // TODO: Perhaps the Privileges e.g. "PublishForms" could be stored in an enum?
+  // TODO: Perhaps the Privileges e.g. "PublishForms" etc. could be stored in an enum?
   //
   // Convenience for features, lock/unlock publishing that may or may not have the related ID
   const publishFormsId = allPrivileges.find((privilege) => privilege.nameEn === "PublishForms")?.id;
