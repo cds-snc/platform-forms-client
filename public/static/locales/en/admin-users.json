@@ -42,6 +42,9 @@
   "accountsFilter": {
     "all": "All",
     "active": "Active",
-    "deactivated": "Deactivated"
+    "deactivated": "Deactivated",
+    "noAccounts": "No accounts",
+    "noActiveAccounts": "No active accounts",
+    "noDeactivatedAccounts": "No deactivated accounts"
   }
 }

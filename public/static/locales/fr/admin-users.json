@@ -42,6 +42,9 @@
   "accountsFilter": {
     "all": "All[FR]",
     "active": "Active[FR]",
-    "deactivated": "Deactivated[FR]"
+    "deactivated": "Deactivated[FR]",
+    "noAccounts": "No accounts[FR]",
+    "noActiveAccounts": "No active accounts[FR]",
+    "noDeactivatedAccounts": "No deactivated accounts[FR]"
   }
 }
