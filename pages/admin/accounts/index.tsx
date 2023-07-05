@@ -128,9 +128,8 @@ const Users = ({
             <li className="mr-2 py-2 pt-3 text-sm tablet:mr-4">
               <Button
                 theme={accountsFilterState === AccountsFilterState.ALL ? "primary" : "secondary"}
-                className="mr-2"
+                shape="circle"
                 onClick={() => updateAccountsFilter(AccountsFilterState.ALL)}
-                aria-describedby="accountsFilterList"
               >
                 {t("accountsFilter.all")}
               </Button>
@@ -138,7 +137,7 @@ const Users = ({
             <li className="mr-2 py-2 pt-3 text-sm tablet:mr-4">
               <Button
                 theme={accountsFilterState === AccountsFilterState.ACTIVE ? "primary" : "secondary"}
-                className="mr-2"
+                shape="circle"
                 onClick={() => updateAccountsFilter(AccountsFilterState.ACTIVE)}
               >
                 {t("accountsFilter.active")}
@@ -149,7 +148,7 @@ const Users = ({
                 theme={
                   accountsFilterState === AccountsFilterState.DEACTIVATED ? "primary" : "secondary"
                 }
-                className="mr-2"
+                shape="circle"
                 onClick={() => updateAccountsFilter(AccountsFilterState.DEACTIVATED)}
               >
                 {t("accountsFilter.deactivated")}
