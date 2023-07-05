@@ -37,5 +37,11 @@
   },
   "backToAccounts": "Retourner à Comptes",
   "lockPublishing": "Lock publishing[FR]",
-  "unlockPublishing" : "Unlock publishing[FR]"
+  "unlockPublishing" : "Unlock publishing[FR]",
+  "accountsFilterLabel": "Accounts filters[FR]",
+  "accountsFilter": {
+    "all": "All[FR]",
+    "active": "Active[FR]",
+    "deactivated": "Deactivated[FR]"
+  }
 }

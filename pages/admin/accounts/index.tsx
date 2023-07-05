@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useMemo, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import axios from "axios";
@@ -19,6 +19,12 @@ import { ConfirmDeactivate } from "@components/admin/Users/ConfirmDeactivate";
 import { Button, themes, LinkButton } from "@components/globals";
 import { DBUser } from "@lib/types/user-types";
 import { Privilege } from "@prisma/client";
+
+const enum AccountsFilterState {
+  ALL,
+  ACTIVE,
+  DEACTIVATED,
+}
 
 export const updateActiveStatus = async (userID: string, active: boolean) => {
   try {
@@ -71,6 +77,12 @@ const Users = ({
   const isCurrentUser = (user: DBUser) => {
     return user.id === session?.user?.id;
   };
+  const sortedAccounts = useMemo(
+    () => allUsers.sort((a, b) => (a.name && b.name ? a.name.localeCompare(b.name) : 0)),
+    [allUsers]
+  );
+  const [accounts, setAccounts] = useState(sortedAccounts);
+  const [accountsFilterState, setAccountsFilterState] = useState(AccountsFilterState.ALL);
 
   const hasPrivilege = ({
     privileges,
@@ -82,98 +94,151 @@ const Users = ({
     return Boolean(privileges?.find((privilege) => privilege.nameEn === privilegeName)?.id);
   };
 
+  const updateAccountsFilter = (filter: AccountsFilterState) => {
+    switch (filter) {
+      case AccountsFilterState.ACTIVE:
+        setAccountsFilterState(AccountsFilterState.ACTIVE);
+        setAccounts(sortedAccounts.filter((user) => user?.active));
+        break;
+      case AccountsFilterState.DEACTIVATED:
+        setAccountsFilterState(AccountsFilterState.DEACTIVATED);
+        setAccounts(sortedAccounts.filter((user) => !user?.active));
+        break;
+      default: //All
+        setAccountsFilterState(AccountsFilterState.ALL);
+        setAccounts(sortedAccounts);
+        break;
+    }
+  };
+
   return (
     <>
       <Head>
         <title>{t("accounts")}</title>
       </Head>
       <>
-        <h1 className="mb-10 border-0">{t("accounts")}</h1>
-        <ul className="m-0 list-none p-0">
-          {allUsers
-            .sort((a, b) => (a.name && b.name ? a.name.localeCompare(b.name) : 0))
-            .map((user) => {
-              return (
-                <li
-                  className="mb-4 flex max-w-2xl flex-row rounded-md border-2 border-black p-2"
-                  key={user.id}
-                >
-                  <div className="m-auto grow basis-1/3 p-4">
-                    <h2 className="pb-6 text-base">{user.name}</h2>
-                    <p className="mb-4">{user.email}</p>
-                    <div className="">
-                      {canManageUsers && (
-                        <Button
-                          theme={"secondary"}
-                          className="mr-2"
-                          onClick={async () => {
-                            // TODO: Actions enum? (remove, add)
-                            //
-                            const action = hasPrivilege({
-                              privileges: user.privileges,
-                              privilegeName: "PublishForms",
-                            })
-                              ? "remove"
-                              : "add";
-                            await updatePrivilege(user.id, [{ id: publishFormsId, action }]);
-                            await refreshData();
-                          }}
-                        >
-                          {hasPrivilege({
+        <h1 className="mb-0 border-0">{t("accounts")}</h1>
+        <div className="mb-5">
+          <ul
+            id="accountsFilterList"
+            className="flex list-none px-0 text-base"
+            aria-label={t("accountsFilterLabel")}
+          >
+            <li className="mr-2 py-2 pt-3 text-sm tablet:mr-4">
+              <Button
+                theme={accountsFilterState === AccountsFilterState.ALL ? "primary" : "secondary"}
+                className="mr-2"
+                onClick={() => updateAccountsFilter(AccountsFilterState.ALL)}
+                aria-describedby="accountsFilterList"
+              >
+                {t("accountsFilter.all")}
+              </Button>
+            </li>
+            <li className="mr-2 py-2 pt-3 text-sm tablet:mr-4">
+              <Button
+                theme={accountsFilterState === AccountsFilterState.ACTIVE ? "primary" : "secondary"}
+                className="mr-2"
+                onClick={() => updateAccountsFilter(AccountsFilterState.ACTIVE)}
+              >
+                {t("accountsFilter.active")}
+              </Button>
+            </li>
+            <li className="mr-2 py-2 pt-3 text-sm tablet:mr-4">
+              <Button
+                theme={
+                  accountsFilterState === AccountsFilterState.DEACTIVATED ? "primary" : "secondary"
+                }
+                className="mr-2"
+                onClick={() => updateAccountsFilter(AccountsFilterState.DEACTIVATED)}
+              >
+                {t("accountsFilter.deactivated")}
+              </Button>
+            </li>
+          </ul>
+        </div>
+        <ul className="m-0 list-none p-0" aria-live="polite">
+          {accounts.map((user) => {
+            return (
+              <li
+                className="mb-4 flex max-w-2xl flex-row rounded-md border-2 border-black p-2"
+                key={user.id}
+              >
+                <div className="m-auto grow basis-1/3 p-4">
+                  <h2 className="pb-6 text-base">{user.name}</h2>
+                  <p className="mb-4">{user.email}</p>
+                  <div className="">
+                    {canManageUsers && (
+                      <Button
+                        theme={"secondary"}
+                        className="mr-2"
+                        onClick={async () => {
+                          // TODO: Actions enum? (remove, add)
+                          //
+                          const action = hasPrivilege({
                             privileges: user.privileges,
                             privilegeName: "PublishForms",
                           })
-                            ? t("lockPublishing")
-                            : t("unlockPublishing")}
-                        </Button>
-                      )}
+                            ? "remove"
+                            : "add";
+                          await updatePrivilege(user.id, [{ id: publishFormsId, action }]);
+                          await refreshData();
+                        }}
+                      >
+                        {hasPrivilege({
+                          privileges: user.privileges,
+                          privilegeName: "PublishForms",
+                        })
+                          ? t("lockPublishing")
+                          : t("unlockPublishing")}
+                      </Button>
+                    )}
 
-                      {canManageUsers && (
-                        <LinkButton.Secondary
-                          href={`/admin/accounts/${user.id}/manage-forms`}
-                          className="mb-2 mr-3"
-                        >
-                          {t("manageForms")}
-                        </LinkButton.Secondary>
-                      )}
+                    {canManageUsers && (
+                      <LinkButton.Secondary
+                        href={`/admin/accounts/${user.id}/manage-forms`}
+                        className="mb-2 mr-3"
+                      >
+                        {t("manageForms")}
+                      </LinkButton.Secondary>
+                    )}
 
-                      {canManageUsers && !isCurrentUser(user) && !user.active && (
-                        <Button
-                          theme={"secondary"}
-                          className="mr-2"
-                          onClick={async () => {
-                            await updateActiveStatus(user.id, true);
-                            await refreshData();
-                          }}
-                        >
-                          {t("activateAccount")}
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex items-end p-2">
-                    {user.active && (
-                      <Dropdown>
-                        <DropdownMenuPrimitive.Item
-                          className={`${themes.htmlLink} ${themes.base} mb-4 !block !cursor-pointer`}
-                          onClick={() => {
-                            router.push({
-                              pathname: `/admin/accounts/${user.id}/manage-permissions`,
-                            });
-                          }}
-                        >
-                          {canManageUsers ? t("managePermissions") : t("viewPermissions")}
-                        </DropdownMenuPrimitive.Item>
-
-                        {canManageUsers && !isCurrentUser(user) && user.active && (
-                          <ConfirmDeactivate user={user} />
-                        )}
-                      </Dropdown>
+                    {canManageUsers && !isCurrentUser(user) && !user.active && (
+                      <Button
+                        theme={"secondary"}
+                        className="mr-2"
+                        onClick={async () => {
+                          await updateActiveStatus(user.id, true);
+                          await refreshData();
+                        }}
+                      >
+                        {t("activateAccount")}
+                      </Button>
                     )}
                   </div>
-                </li>
-              );
-            })}
+                </div>
+                <div className="flex items-end p-2">
+                  {user.active && (
+                    <Dropdown>
+                      <DropdownMenuPrimitive.Item
+                        className={`${themes.htmlLink} ${themes.base} mb-4 !block !cursor-pointer`}
+                        onClick={() => {
+                          router.push({
+                            pathname: `/admin/accounts/${user.id}/manage-permissions`,
+                          });
+                        }}
+                      >
+                        {canManageUsers ? t("managePermissions") : t("viewPermissions")}
+                      </DropdownMenuPrimitive.Item>
+
+                      {canManageUsers && !isCurrentUser(user) && user.active && (
+                        <ConfirmDeactivate user={user} />
+                      )}
+                    </Dropdown>
+                  )}
+                </div>
+              </li>
+            );
+          })}
         </ul>
       </>
     </>
