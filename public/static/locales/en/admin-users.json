@@ -35,5 +35,7 @@
     "title": "Error",
     "message": "Something went wrong."
   },
-  "backToAccounts": "Back to Accounts"
+  "backToAccounts": "Back to Accounts",
+  "lockPublishing": "Lock publishing",
+  "unlockPublishing" : "Unlock publishing"
 }
