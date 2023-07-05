@@ -12,10 +12,10 @@ import { logMessage } from "@lib/logger";
 import { getUser } from "@lib/users";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 import { Button } from "@components/globals";
-import { Alert, ErrorStatus } from "@components/forms/Alert/Alert";
 import { BackLink } from "@components/admin/LeftNav/BackLink";
 import { PermissionToggle } from "@components/admin/Users/PermissionToggle";
 import { LinkButton } from "@components/globals";
+import { Alert, ErrorStatus } from "@components/admin";
 
 type PrivilegeList = Omit<Privilege, "permissions">[];
 interface User {
@@ -139,6 +139,8 @@ const ManagePermissions = ({
           type={ErrorStatus.SUCCESS}
           focussable={true}
           heading={t("responseSuccess.title")}
+          dismissible={true}
+          onDismiss={() => setMessage(null)}
           tabIndex={0}
         >
           {t("responseSuccess.message")}
@@ -152,6 +154,8 @@ const ManagePermissions = ({
         type={ErrorStatus.ERROR}
         focussable={true}
         heading={t("responseFail.title")}
+        dismissible={true}
+        onDismiss={() => setMessage(null)}
         tabIndex={0}
       >
         {t("responseFail.message")}
