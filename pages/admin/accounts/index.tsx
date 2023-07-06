@@ -94,18 +94,18 @@ const Users = ({
   };
   const isFilterAll = () => accountsFilterState === AccountsFilterState.ALL;
   const isFilterActive = () => accountsFilterState === AccountsFilterState.ACTIVE;
-  const isFilterDeactived = () => accountsFilterState === AccountsFilterState.DEACTIVATED;
+  const isFilterDeactivated = () => accountsFilterState === AccountsFilterState.DEACTIVATED;
 
   const sortedAccounts = () => {
     return allUsers
       .sort((a, b) => (a.name && b.name ? a.name.localeCompare(b.name) : 0))
       .filter((user) => {
-        if (accountsFilterState === AccountsFilterState.ACTIVE) return user?.active;
-        if (accountsFilterState === AccountsFilterState.DEACTIVATED) return !user?.active;
-        return user;
+        if (isFilterActive()) return user?.active;
+        if (isFilterDeactivated()) return !user?.active;
+        return user; // Defaults to filter All
       });
   };
-  const accounts = useMemo(() => sortedAccounts(), [allUsers, accountsFilterState]);
+  const accounts = useMemo(() => sortedAccounts(), [allUsers, sortedAccounts]);
 
   const hasPrivilege = ({
     privileges,
@@ -150,7 +150,7 @@ const Users = ({
             </li>
             <li className="mr-2 py-2 pt-3 text-sm tablet:mr-4">
               <Button
-                theme={isFilterDeactived() ? "primary" : "secondary"}
+                theme={isFilterDeactivated() ? "primary" : "secondary"}
                 shape="circle"
                 onClick={() => updateAccountsFilter(AccountsFilterState.DEACTIVATED)}
               >
@@ -247,8 +247,8 @@ const Users = ({
           <Card>
             <p className="text-[#748094]">
               {isFilterAll() && t("accountsFilter.noAccounts")}
-              {isFilterAll() && t("accountsFilter.noActiveAccounts")}
-              {isFilterDeactived() && t("accountsFilter.noDeactivatedAccounts")}
+              {isFilterActive() && t("accountsFilter.noActiveAccounts")}
+              {isFilterDeactivated() && t("accountsFilter.noDeactivatedAccounts")}
             </p>
           </Card>
         )}
