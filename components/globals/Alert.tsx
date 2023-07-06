@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import classnames from "classnames";
 import { useTranslation } from "next-i18next";
-import { CircleCheckIcon, WarningIcon } from "@components/form-builder/icons";
+import { CircleCheckIcon, InfoIcon, WarningIcon } from "@components/form-builder/icons";
 
 export enum ErrorStatus {
   SUCCESS,
@@ -36,13 +36,12 @@ export const Alert = ({
   const { t } = useTranslation("common");
   const refFocus = useRef<HTMLDivElement>(null);
   const classes = classnames(
-    "gc-alert",
+    "mb-8 w-[80%] rounded-lg p-8",
     {
       "bg-emerald-50": type === ErrorStatus.SUCCESS,
-      "bg-orange-50": type === ErrorStatus.WARNING,
+      "bg-yellow-50": type === ErrorStatus.WARNING,
       "bg-red-50": type === ErrorStatus.ERROR,
-      "bg-blue-50": type === ErrorStatus.INFO,
-      "gc-alert--validation": validation,
+      "bg-indigo-50": type === ErrorStatus.INFO,
     },
     className
   );
@@ -71,9 +70,7 @@ export const Alert = ({
         <button
           id="dismissButton"
           aria-label={t("alert.dismissAlert")}
-          className={`float-right h-10 w-10 rounded-full border bg-white text-2xl ${
-            type === ErrorStatus.SUCCESS && "border-emerald-700 text-emerald-700"
-          } ${type === ErrorStatus.ERROR && "border-red-700 text-red-700"}`}
+          className="float-right h-10 w-10 rounded-full border border-slate-950 bg-white text-2xl text-slate-950"
           onClick={onDismiss}
         >
           x
@@ -82,15 +79,24 @@ export const Alert = ({
       <div className="gc-alert__body">
         {heading && (
           <h2
-            className={`text-black ${type === ErrorStatus.SUCCESS && "text-emerald-700"} ${
-              type === ErrorStatus.ERROR && "text-red-700"
-            }`}
+            className={`text-black 
+              ${type === ErrorStatus.SUCCESS && "text-emerald-700"} 
+              ${type === ErrorStatus.ERROR && "text-red-700"}
+              ${type === ErrorStatus.WARNING && "text-slate-950"}
+              ${type === ErrorStatus.INFO && "text-slate-950"}
+            `}
           >
             {type === ErrorStatus.SUCCESS && (
               <CircleCheckIcon className="mr-2 inline-block h-10 w-10 fill-emerald-700" />
             )}
             {type === ErrorStatus.ERROR && (
               <WarningIcon className="mr-2 inline-block h-10 w-10 fill-red-700" />
+            )}
+            {type === ErrorStatus.WARNING && (
+              <WarningIcon className="mr-2 inline-block h-10 w-10 fill-slate-950" />
+            )}
+            {type === ErrorStatus.INFO && (
+              <InfoIcon className="mr-2 inline-block h-10 w-10 fill-slate-950" />
             )}
             {heading}
           </h2>
