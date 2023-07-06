@@ -17,6 +17,7 @@ export const Button = ({
   dataTestId,
   dataAttrName,
   dataAttrValue,
+  shape = "rectangle",
 }: {
   type?: "button" | "submit" | "reset";
   children?: JSX.Element | string;
@@ -33,24 +34,30 @@ export const Button = ({
   dataTestId?: string;
   dataAttrName?: string;
   dataAttrValue?: string;
-}) => (
-  <button
-    onClick={onClick}
-    className={`${className || ""} ${themes[theme]} ${themes["base"]}`}
-    id={id}
-    disabled={disabled}
-    aria-label={ariaLabel}
-    type={type}
-    tabIndex={tabIndex}
-    ref={buttonRef}
-    data-testid={dataTestId}
-    {...(dataAttrName && dataAttrValue ? { [`data-${dataAttrName}`]: dataAttrValue } : "")}
-  >
-    {icon && (
-      <div className={`${iconWrapperClassName || ""} ${theme === "icon" ? "" : "w-8 -ml-2 mr-2"}`}>
-        {icon}
-      </div>
-    )}
-    {children}
-  </button>
-);
+  shape?: "rectangle" | "circle";
+}) => {
+  const baseTheme = shape === "circle" ? themes["baseCircle"] : themes["base"];
+  return (
+    <button
+      onClick={onClick}
+      className={`${className || ""} ${themes[theme]} ${baseTheme}`}
+      id={id}
+      disabled={disabled}
+      aria-label={ariaLabel}
+      type={type}
+      tabIndex={tabIndex}
+      ref={buttonRef}
+      data-testid={dataTestId}
+      {...(dataAttrName && dataAttrValue ? { [`data-${dataAttrName}`]: dataAttrValue } : "")}
+    >
+      {icon && (
+        <div
+          className={`${iconWrapperClassName || ""} ${theme === "icon" ? "" : "w-8 -ml-2 mr-2"}`}
+        >
+          {icon}
+        </div>
+      )}
+      {children}
+    </button>
+  );
+};
