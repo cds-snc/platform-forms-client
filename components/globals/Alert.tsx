@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import classnames from "classnames";
 import { useTranslation } from "next-i18next";
-import { CircleCheckIcon, ExclamationIcon, WarningIcon } from "@components/form-builder/icons";
+import { CircleCheckIcon, WarningIcon } from "@components/form-builder/icons";
 
 export enum ErrorStatus {
   SUCCESS,

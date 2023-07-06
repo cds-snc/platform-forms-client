@@ -11,11 +11,10 @@ import { checkPrivileges, getAllPrivileges } from "@lib/privileges";
 import { logMessage } from "@lib/logger";
 import { getUser } from "@lib/users";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
-import { Button } from "@components/globals";
+import { Alert, Button, ErrorStatus } from "@components/globals";
 import { BackLink } from "@components/admin/LeftNav/BackLink";
 import { PermissionToggle } from "@components/admin/Users/PermissionToggle";
 import { LinkButton } from "@components/globals";
-import { Alert, ErrorStatus } from "@components/admin";
 
 type PrivilegeList = Omit<Privilege, "permissions">[];
 interface User {
@@ -63,7 +62,7 @@ const PrivilegeList = ({
   const canManageUsers = ability?.can("update", "User") ?? false;
 
   return (
-    <ul className="m-0 p-0 mb-12">
+    <ul className="m-0 mb-12 p-0">
       {privileges?.map((privilege) => {
         const active = userPrivileges.includes(privilege.id);
         const description =
