@@ -1,4 +1,4 @@
-import React, { ReactElement, useMemo, useRef, useState } from "react";
+import React, { ReactElement, useMemo, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import axios from "axios";
@@ -176,8 +176,6 @@ const Users = ({
                           theme={"secondary"}
                           className="mr-2"
                           onClick={async () => {
-                            // TODO: Actions enum? (remove, add)
-                            //
                             const action = hasPrivilege({
                               privileges: user.privileges,
                               privilegeName: "PublishForms",
@@ -284,9 +282,7 @@ export const getServerSideProps = requireAuthentication(async ({ user: { ability
     })
   );
 
-  // TODO: Perhaps the Privileges e.g. "PublishForms" etc. could be stored in an enum?
-  //
-  // Convenience for features, lock/unlock publishing that may or may not have the related ID
+  // Convenience for features, lock/unlock publishing that may or may not have the related Id
   const publishFormsId = allPrivileges.find((privilege) => privilege.nameEn === "PublishForms")?.id;
 
   return {
