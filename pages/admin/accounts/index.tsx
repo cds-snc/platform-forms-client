@@ -96,16 +96,15 @@ const Users = ({
   const isFilterActive = () => accountsFilterState === AccountsFilterState.ACTIVE;
   const isFilterDeactivated = () => accountsFilterState === AccountsFilterState.DEACTIVATED;
 
-  const sortedAccounts = () => {
+  const accounts = useMemo(() => {
     return allUsers
       .sort((a, b) => (a.name && b.name ? a.name.localeCompare(b.name) : 0))
       .filter((user) => {
-        if (isFilterActive()) return user?.active;
-        if (isFilterDeactivated()) return !user?.active;
+        if (accountsFilterState === AccountsFilterState.ACTIVE) return user?.active;
+        if (accountsFilterState === AccountsFilterState.DEACTIVATED) return !user?.active;
         return user; // Defaults to filter All
       });
-  };
-  const accounts = useMemo(() => sortedAccounts(), [allUsers, sortedAccounts]);
+  }, [allUsers, accountsFilterState]);
 
   const hasPrivilege = ({
     privileges,
@@ -159,99 +158,101 @@ const Users = ({
             </li>
           </ul>
         </div>
-        {accounts?.length > 0 && (
-          <ul className="m-0 list-none p-0" aria-live="polite">
-            {accounts.map((user) => {
-              return (
-                <li
-                  className="mb-4 flex max-w-2xl flex-row rounded-md border-2 border-black p-2"
-                  key={user.id}
-                >
-                  <div className="m-auto grow basis-1/3 p-4">
-                    <h2 className="pb-6 text-base">{user.name}</h2>
-                    <p className="mb-4">{user.email}</p>
-                    <div className="">
-                      {canManageUsers && (
-                        <Button
-                          theme={"secondary"}
-                          className="mr-2"
-                          onClick={async () => {
-                            const action = hasPrivilege({
+        <div aria-live="polite">
+          {accounts?.length > 0 && (
+            <ul className="m-0 list-none p-0">
+              {accounts.map((user) => {
+                return (
+                  <li
+                    className="mb-4 flex max-w-2xl flex-row rounded-md border-2 border-black p-2"
+                    key={user.id}
+                  >
+                    <div className="m-auto grow basis-1/3 p-4">
+                      <h2 className="pb-6 text-base">{user.name}</h2>
+                      <p className="mb-4">{user.email}</p>
+                      <div className="">
+                        {canManageUsers && (
+                          <Button
+                            theme={"secondary"}
+                            className="mr-2"
+                            onClick={async () => {
+                              const action = hasPrivilege({
+                                privileges: user.privileges,
+                                privilegeName: "PublishForms",
+                              })
+                                ? "remove"
+                                : "add";
+                              await updatePrivilege(user.id, [{ id: publishFormsId, action }]);
+                              await refreshData();
+                            }}
+                          >
+                            {hasPrivilege({
                               privileges: user.privileges,
                               privilegeName: "PublishForms",
                             })
-                              ? "remove"
-                              : "add";
-                            await updatePrivilege(user.id, [{ id: publishFormsId, action }]);
-                            await refreshData();
-                          }}
-                        >
-                          {hasPrivilege({
-                            privileges: user.privileges,
-                            privilegeName: "PublishForms",
-                          })
-                            ? t("lockPublishing")
-                            : t("unlockPublishing")}
-                        </Button>
-                      )}
+                              ? t("lockPublishing")
+                              : t("unlockPublishing")}
+                          </Button>
+                        )}
 
-                      {canManageUsers && (
-                        <LinkButton.Secondary
-                          href={`/admin/accounts/${user.id}/manage-forms`}
-                          className="mb-2 mr-3"
-                        >
-                          {t("manageForms")}
-                        </LinkButton.Secondary>
-                      )}
+                        {canManageUsers && (
+                          <LinkButton.Secondary
+                            href={`/admin/accounts/${user.id}/manage-forms`}
+                            className="mb-2 mr-3"
+                          >
+                            {t("manageForms")}
+                          </LinkButton.Secondary>
+                        )}
 
-                      {canManageUsers && !isCurrentUser(user) && !user.active && (
-                        <Button
-                          theme={"secondary"}
-                          className="mr-2"
-                          onClick={async () => {
-                            await updateActiveStatus(user.id, true);
-                            await refreshData();
-                          }}
-                        >
-                          {t("activateAccount")}
-                        </Button>
+                        {canManageUsers && !isCurrentUser(user) && !user.active && (
+                          <Button
+                            theme={"secondary"}
+                            className="mr-2"
+                            onClick={async () => {
+                              await updateActiveStatus(user.id, true);
+                              await refreshData();
+                            }}
+                          >
+                            {t("activateAccount")}
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-end p-2">
+                      {user.active && (
+                        <Dropdown>
+                          <DropdownMenuPrimitive.Item
+                            className={`${themes.htmlLink} ${themes.base} mb-4 !block !cursor-pointer`}
+                            onClick={() => {
+                              router.push({
+                                pathname: `/admin/accounts/${user.id}/manage-permissions`,
+                              });
+                            }}
+                          >
+                            {canManageUsers ? t("managePermissions") : t("viewPermissions")}
+                          </DropdownMenuPrimitive.Item>
+
+                          {canManageUsers && !isCurrentUser(user) && user.active && (
+                            <ConfirmDeactivate user={user} />
+                          )}
+                        </Dropdown>
                       )}
                     </div>
-                  </div>
-                  <div className="flex items-end p-2">
-                    {user.active && (
-                      <Dropdown>
-                        <DropdownMenuPrimitive.Item
-                          className={`${themes.htmlLink} ${themes.base} mb-4 !block !cursor-pointer`}
-                          onClick={() => {
-                            router.push({
-                              pathname: `/admin/accounts/${user.id}/manage-permissions`,
-                            });
-                          }}
-                        >
-                          {canManageUsers ? t("managePermissions") : t("viewPermissions")}
-                        </DropdownMenuPrimitive.Item>
-
-                        {canManageUsers && !isCurrentUser(user) && user.active && (
-                          <ConfirmDeactivate user={user} />
-                        )}
-                      </Dropdown>
-                    )}
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-        {accounts?.length <= 0 && (
-          <Card>
-            <p className="text-[#748094]">
-              {isFilterAll() && t("accountsFilter.noAccounts")}
-              {isFilterActive() && t("accountsFilter.noActiveAccounts")}
-              {isFilterDeactivated() && t("accountsFilter.noDeactivatedAccounts")}
-            </p>
-          </Card>
-        )}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+          {accounts?.length <= 0 && (
+            <Card>
+              <p className="text-[#748094]">
+                {isFilterAll() && t("accountsFilter.noAccounts")}
+                {isFilterActive() && t("accountsFilter.noActiveAccounts")}
+                {isFilterDeactivated() && t("accountsFilter.noDeactivatedAccounts")}
+              </p>
+            </Card>
+          )}
+        </div>
       </>
     </>
   );
