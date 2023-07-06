@@ -103,14 +103,14 @@ const ManageForms = ({
           return (
             <li className="mb-4 max-w-2xl rounded-md border-2 border-black p-4" key={id}>
               <div className="flex flex-row justify-between">
-                <h2 className="text-base mb-0 pb-0">
+                <h2 className="mb-0 pb-0 text-base">
                   {titleEn} / {titleFr}
                 </h2>
 
                 {overdue[id] && <OverdueStatus level={overdue[id].level} />}
 
                 <span
-                  className="block px-2 py-1 rounded "
+                  className="block rounded px-2 py-1 "
                   style={{
                     backgroundColor: backgroundColor,
                     border: `2px solid ${borderColor}`,
@@ -121,7 +121,7 @@ const ManageForms = ({
               </div>
 
               {/* linking to existing page for now */}
-              <div className="flex flex-row justify-between mt-10">
+              <div className="mt-10 flex flex-row justify-between">
                 <div>
                   <LinkButton.Secondary
                     href={`/${i18n.language}/form-builder/settings/${id}/form`}
