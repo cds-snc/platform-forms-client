@@ -124,7 +124,7 @@ const ManageForms = ({
               <div className="flex flex-row justify-between mt-10">
                 <div>
                   <LinkButton.Secondary
-                    href={`/${i18n.language}/id/${id}/users`}
+                    href={`/${i18n.language}/form-builder/settings/${id}/form`}
                     className="mb-2 mr-3"
                   >
                     {t("manageOwnerships")}
