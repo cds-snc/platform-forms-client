@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import Link from "next/link";
-import { themes } from "../Buttons/themes";
+import { themes, shapes } from "../Buttons/themes";
 
 // Note: the below seems unnecessarily complex vs. just having the parent Link component pass an
 // href to a custom anchor component. But this is the recommended way, so staying with this for now.
@@ -18,6 +18,7 @@ interface StyledLinkProps {
   ariaLabel?: string;
   lang?: string;
   theme?: Theme;
+  shape?: "rectangle" | "circle";
 }
 
 // Making all the buttons look the same, even the fake ones. Pulls styles from the global Button
@@ -29,14 +30,24 @@ const linkThemes = {
 type Theme = keyof typeof linkThemes;
 
 export const StyledLink = (props: StyledLinkProps) => {
-  const { children, href = "", className, locale, ariaLabel, lang, theme = "default" } = props;
+  const {
+    children,
+    href = "",
+    className,
+    locale,
+    ariaLabel,
+    lang,
+    theme = "default",
+    shape = "rectangle",
+  } = props;
   const ref = useRef<HTMLAnchorElement>(null);
+  const shapeClass = shape === "circle" ? shapes.circle : shapes.rectangle;
 
   return (
     <Link href={href} {...(locale && { locale: locale })} passHref legacyBehavior>
       <WrappedLink
         href={href}
-        className={theme ? `${className} ${linkThemes[theme]}` : className}
+        className={(theme ? `${className} ${linkThemes[theme]}` : className) + ` ${shapeClass}`}
         {...(ariaLabel && { ariaLabel: ariaLabel })}
         {...(lang && { lang: lang })}
         ref={ref}

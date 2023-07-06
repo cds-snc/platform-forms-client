@@ -1,4 +1,4 @@
-import React, { ReactElement, useMemo, useState } from "react";
+import React, { ReactElement, useMemo, useRef, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import axios from "axios";
@@ -78,12 +78,34 @@ const Users = ({
   const isCurrentUser = (user: DBUser) => {
     return user.id === session?.user?.id;
   };
-  const sortedAccounts = useMemo(
-    () => allUsers.sort((a, b) => (a.name && b.name ? a.name.localeCompare(b.name) : 0)),
-    [allUsers]
-  );
-  const [accounts, setAccounts] = useState(sortedAccounts);
+
   const [accountsFilterState, setAccountsFilterState] = useState(AccountsFilterState.ALL);
+  const updateAccountsFilter = (filter: AccountsFilterState) => {
+    switch (filter) {
+      case AccountsFilterState.ACTIVE:
+        setAccountsFilterState(AccountsFilterState.ACTIVE);
+        break;
+      case AccountsFilterState.DEACTIVATED:
+        setAccountsFilterState(AccountsFilterState.DEACTIVATED);
+        break;
+      default:
+        setAccountsFilterState(AccountsFilterState.ALL);
+    }
+  };
+  const isFilterAll = () => accountsFilterState === AccountsFilterState.ALL;
+  const isFilterActive = () => accountsFilterState === AccountsFilterState.ACTIVE;
+  const isFilterDeactived = () => accountsFilterState === AccountsFilterState.DEACTIVATED;
+
+  const sortedAccounts = () => {
+    return allUsers
+      .sort((a, b) => (a.name && b.name ? a.name.localeCompare(b.name) : 0))
+      .filter((user) => {
+        if (accountsFilterState === AccountsFilterState.ACTIVE) return user?.active;
+        if (accountsFilterState === AccountsFilterState.DEACTIVATED) return !user?.active;
+        return user;
+      });
+  };
+  const accounts = useMemo(() => sortedAccounts(), [allUsers, accountsFilterState]);
 
   const hasPrivilege = ({
     privileges,
@@ -93,23 +115,6 @@ const Users = ({
     privilegeName: string;
   }): boolean => {
     return Boolean(privileges?.find((privilege) => privilege.nameEn === privilegeName)?.id);
-  };
-
-  const updateAccountsFilter = (filter: AccountsFilterState) => {
-    switch (filter) {
-      case AccountsFilterState.ACTIVE:
-        setAccountsFilterState(AccountsFilterState.ACTIVE);
-        setAccounts(sortedAccounts.filter((user) => user?.active));
-        break;
-      case AccountsFilterState.DEACTIVATED:
-        setAccountsFilterState(AccountsFilterState.DEACTIVATED);
-        setAccounts(sortedAccounts.filter((user) => !user?.active));
-        break;
-      default: //All
-        setAccountsFilterState(AccountsFilterState.ALL);
-        setAccounts(sortedAccounts);
-        break;
-    }
   };
 
   return (
@@ -127,7 +132,7 @@ const Users = ({
           >
             <li className="mr-2 py-2 pt-3 text-sm tablet:mr-4">
               <Button
-                theme={accountsFilterState === AccountsFilterState.ALL ? "primary" : "secondary"}
+                theme={isFilterAll() ? "primary" : "secondary"}
                 shape="circle"
                 onClick={() => updateAccountsFilter(AccountsFilterState.ALL)}
               >
@@ -136,7 +141,7 @@ const Users = ({
             </li>
             <li className="mr-2 py-2 pt-3 text-sm tablet:mr-4">
               <Button
-                theme={accountsFilterState === AccountsFilterState.ACTIVE ? "primary" : "secondary"}
+                theme={isFilterActive() ? "primary" : "secondary"}
                 shape="circle"
                 onClick={() => updateAccountsFilter(AccountsFilterState.ACTIVE)}
               >
@@ -145,9 +150,7 @@ const Users = ({
             </li>
             <li className="mr-2 py-2 pt-3 text-sm tablet:mr-4">
               <Button
-                theme={
-                  accountsFilterState === AccountsFilterState.DEACTIVATED ? "primary" : "secondary"
-                }
+                theme={isFilterDeactived() ? "primary" : "secondary"}
                 shape="circle"
                 onClick={() => updateAccountsFilter(AccountsFilterState.DEACTIVATED)}
               >
@@ -245,11 +248,9 @@ const Users = ({
         {accounts?.length <= 0 && (
           <Card>
             <p className="text-[#748094]">
-              {accountsFilterState === AccountsFilterState.ALL && t("accountsFilter.noAccounts")}
-              {accountsFilterState === AccountsFilterState.ACTIVE &&
-                t("accountsFilter.noActiveAccounts")}
-              {accountsFilterState === AccountsFilterState.DEACTIVATED &&
-                t("accountsFilter.noDeactivatedAccounts")}
+              {isFilterAll() && t("accountsFilter.noAccounts")}
+              {isFilterAll() && t("accountsFilter.noActiveAccounts")}
+              {isFilterDeactived() && t("accountsFilter.noDeactivatedAccounts")}
             </p>
           </Card>
         )}
