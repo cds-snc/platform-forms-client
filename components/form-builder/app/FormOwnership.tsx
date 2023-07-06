@@ -50,7 +50,7 @@ export const FormOwnership = ({
   usersAssignedToFormRecord,
   allUsers,
 }: AssignUsersToTemplateProps) => {
-  const { t } = useTranslation("form-builder");
+  const { t } = useTranslation(["admin-users", "form-builder"]);
 
   const [message, setMessage] = useState<ReactElement | null>(null);
   const assignedToFormRecord = usersToOptions(usersAssignedToFormRecord);
@@ -112,11 +112,6 @@ export const FormOwnership = ({
     <>
       <div className="mb-6">
         <h2>{t("Manage ownership")}</h2>
-
-        <p>
-          Add, remove, or transfer ownership to another GC Forms account within your department or
-          agency.
-        </p>
 
         {message && message}
 
