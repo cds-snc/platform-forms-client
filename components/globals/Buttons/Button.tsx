@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { themes, shapes, Theme } from "./themes";
+import { themes, Theme } from "./themes";
 
 export const Button = ({
   type = "button",
@@ -17,7 +17,6 @@ export const Button = ({
   dataTestId,
   dataAttrName,
   dataAttrValue,
-  shape = "rectangle",
 }: {
   type?: "button" | "submit" | "reset";
   children?: JSX.Element | string;
@@ -34,13 +33,10 @@ export const Button = ({
   dataTestId?: string;
   dataAttrName?: string;
   dataAttrValue?: string;
-  shape?: "rectangle" | "circle";
 }) => (
   <button
     onClick={onClick}
-    className={`${className || ""} ${themes[theme]} ${themes["base"]} ${
-      shape === "circle" ? shapes.circle : shapes.rectangle
-    }`}
+    className={`${className || ""} ${themes[theme]} ${themes["base"]}`}
     id={id}
     disabled={disabled}
     aria-label={ariaLabel}
