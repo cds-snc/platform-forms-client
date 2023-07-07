@@ -140,6 +140,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   getIsPublished: () => boolean;
   getName: () => string;
   getDeliveryOption: () => DeliveryOption | undefined;
+  isDeliveryOptionVault: () => boolean;
   resetDeliveryOption: () => void;
   getSecurityAttribute: () => SecurityAttribute;
   initialize: () => void;
@@ -377,6 +378,10 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             getIsPublished: () => get().isPublished,
             getName: () => get().name,
             getDeliveryOption: () => get().deliveryOption,
+            isDeliveryOptionVault: () => {
+              // if delivery option is undefined, then responses goes to the vault
+              return !get().deliveryOption;
+            },
             resetDeliveryOption: () => {
               set((state) => {
                 state.deliveryOption = undefined;

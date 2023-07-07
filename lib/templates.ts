@@ -13,7 +13,7 @@ import jwt, { Secret } from "jsonwebtoken";
 import { AccessControlError, checkPrivileges, checkPrivilegesAsBoolean } from "./privileges";
 import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
-import { numberOfUnprocessedSubmissions } from "./vault";
+import { deleteDraftFormTestResponses, numberOfUnprocessedSubmissions } from "./vault";
 
 // ******************************************
 // Internal Module Functions
@@ -546,6 +546,7 @@ export async function updateIsPublishedForTemplate(
   isPublished: boolean
 ): Promise<FormRecord | null> {
   try {
+    // Check if user has ability to publish or unpublish first
     if (isPublished) {
       const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(formID);
       if (!templateWithAssociatedUsers) return null;
@@ -563,6 +564,13 @@ export async function updateIsPublishedForTemplate(
           field: "isPublished",
         },
       ]);
+
+      // TODO: Prevent already published templates from being updated
+      if (templateWithAssociatedUsers.formRecord.isPublished)
+        throw new TemplateAlreadyPublishedError();
+
+      logMessage.debug("Start of deleteDraftFormTestResponses");
+      await deleteDraftFormTestResponses(ability, formID);
     } else {
       checkPrivileges(ability, [
         {
@@ -575,6 +583,13 @@ export async function updateIsPublishedForTemplate(
         },
       ]);
     }
+
+    // TODO: error out?
+    // if (!deleteTestResponses) return null;
+
+    // // Commenting out the code that updates the Publish status for now
+    // const updatedTemplate = {};
+    // /*
 
     const updatedTemplate = await prisma.template
       .update({
@@ -600,6 +615,7 @@ export async function updateIsPublishedForTemplate(
     if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
 
     logEvent(ability.userID, { type: "Form", id: formID }, "PublishForm");
+    // */
 
     return _parseTemplate(updatedTemplate);
   } catch (e) {

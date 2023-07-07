@@ -6,10 +6,11 @@ import { useRouter } from "next/router";
 
 import { useTemplateStore } from "../store";
 import { useTemplateApi, useAllowPublish } from "../hooks";
-import { CancelIcon, CircleCheckIcon, WarningIcon, LockIcon } from "../icons";
+import { CancelIcon, CircleCheckIcon, LockIcon } from "../icons";
 import { Button } from "@components/globals";
 import Link from "next/link";
 import { LoggedOutTab, LoggedOutTabName } from "./LoggedOutTab";
+import { InfoCard } from "@components/globals/InfoCard/InfoCard";
 
 export const Publish = () => {
   const { t } = useTranslation("form-builder");
@@ -24,11 +25,12 @@ export const Publish = () => {
   const [error, setError] = useState(false);
   const { i18n } = useTranslation("common");
 
-  const { id, setId, getSchema, getName } = useTemplateStore((s) => ({
+  const { id, setId, getSchema, getName, isDeliveryOptionVault } = useTemplateStore((s) => ({
     id: s.id,
     setId: s.setId,
     getSchema: s.getSchema,
     getName: s.getName,
+    isDeliveryOptionVault: s.isDeliveryOptionVault,
   }));
 
   const Icon = ({ checked }: { checked: boolean }) => {
@@ -85,83 +87,102 @@ export const Publish = () => {
 
   return (
     <>
-      <h1 className="border-0 mb-0">{t("publishYourForm")}</h1>
-      <p className="mb-0">{t("publishYourFormInstructions")}</p>
-      {!userCanPublish && (
-        <div className="mt-5 mb-5 p-5 bg-purple-200 flex">
-          <div className="flex">
-            <div className="pr-7">
-              <LockIcon className="mb-2 scale-125" />
-            </div>
-          </div>
-          <div>
-            <h3 className="mb-1">{t("unlockPublishing")}</h3>
-            <p className="mb-5">{t("unlockPublishingDescription")}</p>
-            <p>
-              <Button theme="secondary" onClick={handleSaveAndRequest}>
-                {t("saveAndRequest")}
-              </Button>
-            </p>
-          </div>
-        </div>
-      )}
-
-      <ul className="list-none p-0">
-        <li className="mb-4 mt-4">
-          <Icon checked={title} />
-          <Link href={`/${i18n.language}/form-builder/edit#formTitle`}>{t("formTitle")}</Link>
-        </li>
-        <li className="mb-4 mt-4">
-          <Icon checked={questions} />
-          <Link href={`/${i18n.language}/form-builder/edit`}>{t("questions")}</Link>
-        </li>
-        <li className="mb-4 mt-4">
-          <Icon checked={privacyPolicy} />
-          <Link href={`/${i18n.language}/form-builder/edit#privacy-text`}>
-            {t("privacyStatement")}
-          </Link>
-        </li>
-        <li className="mb-4 mt-4">
-          <Icon checked={confirmationMessage} />
-          <Link href={`/${i18n.language}/form-builder/edit#confirmation-text`}>
-            {t("formConfirmationMessage")}
-          </Link>
-        </li>
-        <li className="mb-4 mt-4">
-          <Icon checked={translate} />
-          <Link href={`/${i18n.language}/form-builder/edit/translate`}>{t("translate")}</Link>
-        </li>
-      </ul>
-
-      {userCanPublish && isPublishable() && (
-        <>
-          <div className="mt-10 p-5 bg-yellow-100 flex">
-            <div className="flex">
-              <div className="pr-7">
-                <WarningIcon />
+      <div className="flex justify-between">
+        <div className="grow border-1 rounded-lg p-5 mx-5">
+          <h1 className="border-0 mb-0">{t("publishYourForm")}</h1>
+          <p className="mb-0">{t("publishYourFormInstructions")}</p>
+          {!userCanPublish && (
+            <div className="mt-5 mb-5 p-5 bg-purple-200 flex">
+              <div className="flex">
+                <div className="pr-7">
+                  <LockIcon className="mb-2 scale-125" />
+                </div>
+              </div>
+              <div>
+                <h3 className="mb-1">{t("unlockPublishing")}</h3>
+                <p className="mb-5">{t("unlockPublishingDescription")}</p>
+                <p>
+                  <Button theme="secondary" onClick={handleSaveAndRequest}>
+                    {t("saveAndRequest")}
+                  </Button>
+                </p>
               </div>
             </div>
-            <div>
-              <h2 className="mb-1 text-h3 pb-0 mb-0">{t("publishingDisablesEditing")}</h2>
-              <p>{t("publishingDisablesEditingDescription")}</p>
-              <Markdown options={{ forceBlock: true }}>
-                {t("contactSupportIfYouHaveQuestions")}
-              </Markdown>
-            </div>
-          </div>
-          <Button className="mt-5" onClick={handlePublish}>
-            {t("publish")}
-          </Button>
-          <div
-            role="alert"
-            className={`inline-block ml-5 py-1 px-3 
+          )}
+
+          <ul className="list-none p-0">
+            <li className="mb-4 mt-4">
+              <Icon checked={title} />
+              <Link href={`/${i18n.language}/form-builder/edit#formTitle`}>{t("formTitle")}</Link>
+            </li>
+            <li className="mb-4 mt-4">
+              <Icon checked={questions} />
+              <Link href={`/${i18n.language}/form-builder/edit`}>{t("questions")}</Link>
+            </li>
+            <li className="mb-4 mt-4">
+              <Icon checked={privacyPolicy} />
+              <Link href={`/${i18n.language}/form-builder/edit#privacy-text`}>
+                {t("privacyStatement")}
+              </Link>
+            </li>
+            <li className="mb-4 mt-4">
+              <Icon checked={confirmationMessage} />
+              <Link href={`/${i18n.language}/form-builder/edit#confirmation-text`}>
+                {t("formConfirmationMessage")}
+              </Link>
+            </li>
+            <li className="mb-4 mt-4">
+              <Icon checked={translate} />
+              <Link href={`/${i18n.language}/form-builder/edit/translate`}>{t("translate")}</Link>
+            </li>
+          </ul>
+
+          {userCanPublish && isPublishable() && (
+            <>
+              <Button className="mt-5" onClick={handlePublish}>
+                {t("publish")}
+              </Button>
+              <div
+                role="alert"
+                className={`inline-block ml-5 py-1 px-3 
             ${error ? "text-red-destructive bg-red-100" : ""}
             ${!error ? "hidden" : ""}`}
-          >
-            <>{error && <p>{t("thereWasAnErrorPublishing")}</p>}</>
-          </div>
-        </>
-      )}
+              >
+                <>{error && <p>{t("thereWasAnErrorPublishing")}</p>}</>
+              </div>
+            </>
+          )}
+        </div>
+        {userCanPublish && isPublishable() && (
+          <>
+            <div className="flex-none max-w-md">
+              <InfoCard title={t("whatYouNeedToKnow")}>
+                <div className="mb-5 bg-gray-50 p-1.5">
+                  <p className="mb-1 font-bold pb-0">{t("publishingDisablesEditing")}</p>
+                  <p className="text-sm">{t("publishingDisablesEditingDescription")}</p>
+                </div>
+                <div className="mb-5 bg-gray-50 p-1.5">
+                  <p className="mb-1 font-bold pb-0">{t("publishingLocksSettings")}</p>
+                  <p className="text-sm">{t("publishingLocksSettingsDescription")}</p>
+                </div>
+                {isDeliveryOptionVault() && (
+                  <>
+                    <div className="mb-5 bg-gray-50 p-1.5">
+                      <p className="mb-1 font-bold pb-0">{t("publishingRemovesTestResponses")}</p>
+                      <p className="text-sm">{t("publishingRemovesTestResponsesDescription")}</p>
+                    </div>
+                  </>
+                )}
+                <div className="bg-gray-50 p-1.5">
+                  <Markdown options={{ forceBlock: true }} className="text-sm">
+                    {t("contactSupportIfYouHaveQuestions")}
+                  </Markdown>
+                </div>
+              </InfoCard>
+            </div>
+          </>
+        )}
+      </div>
     </>
   );
 };
