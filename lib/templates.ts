@@ -677,6 +677,91 @@ export async function updateIsPublishedForTemplate(
   }
 }
 
+export async function updateAssignedUsersForTemplate2(
+  ability: UserAbility,
+  formID: string,
+  users: { id: string }[]
+): Promise<FormRecord | null> {
+  try {
+    checkPrivileges(ability, [
+      { action: "update", subject: "FormRecord" },
+      { action: "update", subject: "User" },
+    ]);
+
+    const template = await prisma.template.findFirst({
+      where: {
+        id: formID,
+      },
+      include: {
+        users: true,
+      },
+    });
+
+    const previouslyAssigned =
+      template?.users.map((user) => {
+        return { id: user.id };
+      }) || [];
+
+    const toAdd = users.filter((n) => !previouslyAssigned.some((n2) => n.id == n2.id));
+    const toRemove = previouslyAssigned.filter((n) => !users.some((n2) => n.id == n2.id));
+
+    const updatedTemplate = await prisma.template
+      .update({
+        where: {
+          id: formID,
+        },
+        data: {
+          users: {
+            connect: toAdd,
+            disconnect: toRemove,
+          },
+        },
+        select: {
+          id: true,
+          created_at: true,
+          updated_at: true,
+          name: true,
+          jsonConfig: true,
+          isPublished: true,
+          deliveryOption: true,
+          securityAttribute: true,
+        },
+      })
+      .catch((e) => prismaErrors(e, null));
+
+    if (updatedTemplate === null) return updatedTemplate;
+
+    toAdd.length > 0 &&
+      logEvent(
+        ability.userID,
+        { type: "Form", id: formID },
+        "GrantFormAccess",
+        `Access granted to ${toAdd.map((user) => user.id).toString()}`
+      );
+
+    toRemove.length > 0 &&
+      logEvent(
+        ability.userID,
+        { type: "Form", id: formID },
+        "RevokeFormAccess",
+        `Access revoked for ${toRemove.map((user) => user.id).toString()}`
+      );
+
+    if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
+
+    return _parseTemplate(updatedTemplate);
+  } catch (e) {
+    if (e instanceof AccessControlError)
+      logEvent(
+        ability.userID,
+        { type: "Form", id: formID },
+        "AccessDenied",
+        "Attempted to update assigned users for form"
+      );
+    throw e;
+  }
+}
+
 export async function updateAssignedUsersForTemplate(
   ability: UserAbility,
   formID: string,

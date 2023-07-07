@@ -7,6 +7,7 @@ import {
   getFullTemplateByID,
   removeDeliveryOption,
   TemplateHasUnprocessedSubmissions,
+  updateAssignedUsersForTemplate2,
 } from "@lib/templates";
 
 import { middleware, jsonValidator, cors, sessionExists } from "@lib/middleware";
@@ -109,7 +110,10 @@ const route = async ({
       } else if (isPublished !== undefined) {
         return updateIsPublishedForTemplate(ability, formID, isPublished);
       } else if (users) {
-        return updateAssignedUsersForTemplate(ability, formID, users);
+        if (!users.length) {
+          return { error: true, message: "Must have at least one assigned user" };
+        }
+        return updateAssignedUsersForTemplate2(ability, formID, users);
       } else if (sendResponsesToVault) {
         return removeDeliveryOption(ability, formID);
       }

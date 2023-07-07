@@ -27,10 +27,7 @@ const usersToOptions = (users: User[]): { value: string; label: string | null }[
   });
 };
 
-const updateUsersToTemplateAssignations = async (
-  formID: string,
-  users: { id: string; action: "add" | "remove" }[]
-) => {
+const updateUsersToTemplateAssignations = async (formID: string, users: { id: string }[]) => {
   try {
     return await axios({
       url: `/api/templates/${formID}`,
@@ -41,6 +38,7 @@ const updateUsersToTemplateAssignations = async (
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     });
   } catch (e) {
+    // @TODO: Handle 400 error if users missing
     logMessage.error(e);
   }
 };
@@ -59,26 +57,26 @@ export const FormOwnership = ({
 
   const saveAssignations = async () => {
     setMessage(null);
-    const usersToAdd: { id: string; action: "add" | "remove" }[] = selectedUsers
-      .filter((user) => {
-        return !usersAssignedToFormRecord.map((u) => u.id).includes(user.value);
-      })
-      .map((user) => {
-        return { id: user.value, action: "add" };
-      });
+    const usersToAssign: { id: string }[] = selectedUsers.map((user) => {
+      return { id: user.value };
+    });
 
-    const usersToRemove: { id: string; action: "add" | "remove" }[] = usersAssignedToFormRecord
-      .filter((user) => {
-        return !selectedUsers.map((u) => u.value).includes(user.id);
-      })
-      .map((user) => {
-        return { id: user.id, action: "remove" };
-      });
+    const response = await updateUsersToTemplateAssignations(formRecord.id, usersToAssign);
 
-    const response = await updateUsersToTemplateAssignations(
-      formRecord.id,
-      usersToAdd.concat(usersToRemove)
-    );
+    if (response && response.data.error) {
+      setMessage(
+        <Alert
+          type={ErrorStatus.ERROR}
+          focussable={true}
+          heading={t("responseSuccess.title")}
+          tabIndex={0}
+          className="mb-2"
+        >
+          {response.data.message}
+        </Alert>
+      );
+      return;
+    }
 
     if (response && response.status === 200) {
       setMessage(
