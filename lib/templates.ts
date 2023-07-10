@@ -735,7 +735,9 @@ export async function updateAssignedUsersForTemplate(
 
     if (updatedTemplate === null) return updatedTemplate;
 
-    const newOwners: (string | null)[] = updatedTemplate.users.map((u) => u.name);
+    const newOwners: (string | null)[] = updatedTemplate.users
+      ? updatedTemplate.users.map((u) => u.name)
+      : [];
 
     toAdd.forEach(async (u) => {
       const user = await prisma.user.findFirst({
