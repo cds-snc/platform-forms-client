@@ -14,6 +14,7 @@ import { AccessControlError, checkPrivileges, checkPrivilegesAsBoolean } from ".
 import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
 import { numberOfUnprocessedSubmissions } from "./vault";
+import { addOwnershipEmail, transferOwnershipEmail } from "./ownership";
 
 // ******************************************
 // Internal Module Functions
@@ -732,7 +733,45 @@ export async function updateAssignedUsersForTemplate(
 
     if (updatedTemplate === null) return updatedTemplate;
 
-    // @TODO: Send changed ownership emails: https://github.com/cds-snc/platform-forms-client/issues/2346
+    const newOwners: (string | null)[] = updatedTemplate.users.map((u) => u.name);
+
+    toAdd.forEach(async (u) => {
+      const user = await prisma.user.findFirst({
+        where: {
+          id: u.id,
+        },
+      });
+
+      if (user && user.email && user.name) {
+        addOwnershipEmail({
+          emailTo: user.email,
+          formTitleEn: updatedTemplate.name,
+          formTitleFr: updatedTemplate.name,
+          formOwner: user.name,
+          formId: updatedTemplate.id,
+        });
+      }
+    });
+
+    toRemove.forEach(async (u) => {
+      const user = await prisma.user.findFirst({
+        where: {
+          id: u.id,
+        },
+      });
+
+      if (user && user.email && user.name) {
+        transferOwnershipEmail({
+          emailTo: user.email,
+          formTitleEn: updatedTemplate.name,
+          formTitleFr: updatedTemplate.name,
+          pastOwner: user.name,
+          newOwner: newOwners.join(", "),
+          formId: updatedTemplate.id,
+        });
+      }
+    });
+
     toAdd.length > 0 &&
       logEvent(
         ability.userID,
