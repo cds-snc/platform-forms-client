@@ -37,5 +37,6 @@
   },
   "backToAccounts": "Back to Accounts",
   "lockPublishing": "Lock publishing",
-  "unlockPublishing" : "Unlock publishing"
+  "unlockPublishing" : "Unlock publishing",
+  "mustHaveAtLeastOneUser": "Must assign at least one user."
 }

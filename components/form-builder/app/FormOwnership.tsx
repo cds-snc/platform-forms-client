@@ -68,11 +68,11 @@ export const FormOwnership = ({
         <Alert
           type={ErrorStatus.ERROR}
           focussable={true}
-          heading={t("responseSuccess.title")}
+          heading={t("responseFail.title")}
           tabIndex={0}
           className="mb-2"
         >
-          {response.data.message}
+          {t(response.data.message)}
         </Alert>
       );
       return;

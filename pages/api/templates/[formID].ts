@@ -110,7 +110,7 @@ const route = async ({
         return updateIsPublishedForTemplate(ability, formID, isPublished);
       } else if (users) {
         if (!users.length) {
-          return { error: true, message: "Must have at least one assigned user" };
+          return { error: true, message: "mustHaveAtLeastOneUser" };
         }
         return updateAssignedUsersForTemplate(ability, formID, users);
       } else if (sendResponsesToVault) {
