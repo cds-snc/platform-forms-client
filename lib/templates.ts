@@ -731,6 +731,7 @@ export async function updateAssignedUsersForTemplate2(
 
     if (updatedTemplate === null) return updatedTemplate;
 
+    // @TODO: Send changed ownership emails: https://github.com/cds-snc/platform-forms-client/issues/2346
     toAdd.length > 0 &&
       logEvent(
         ability.userID,
