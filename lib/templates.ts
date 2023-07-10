@@ -689,6 +689,8 @@ export async function updateAssignedUsersForTemplate(
       { action: "update", subject: "User" },
     ]);
 
+    if (!users.length) throw new Error("No users provided");
+
     const template = await prisma.template.findFirst({
       where: {
         id: formID,
