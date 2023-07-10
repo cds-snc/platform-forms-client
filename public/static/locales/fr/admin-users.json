@@ -38,5 +38,14 @@
   "backToAccounts": "Retourner à Comptes",
   "lockPublishing": "Lock publishing[FR]",
   "unlockPublishing" : "Unlock publishing[FR]",
-  "mustHaveAtLeastOneUser": "Must assign at least one user."
+  "mustHaveAtLeastOneUser": "Must assign at least one user.",
+  "accountsFilterLabel": "Accounts filters[FR]",
+  "accountsFilter": {
+    "all": "All[FR]",
+    "active": "Active[FR]",
+    "deactivated": "Deactivated[FR]",
+    "noAccounts": "No accounts[FR]",
+    "noActiveAccounts": "No active accounts[FR]",
+    "noDeactivatedAccounts": "No deactivated accounts[FR]"
+  }
 }

@@ -38,5 +38,14 @@
   "backToAccounts": "Back to Accounts",
   "lockPublishing": "Lock publishing",
   "unlockPublishing" : "Unlock publishing",
-  "mustHaveAtLeastOneUser": "Must assign at least one user."
+  "mustHaveAtLeastOneUser": "Must assign at least one user.",
+  "accountsFilterLabel": "Accounts filters",
+  "accountsFilter": {
+    "all": "All",
+    "active": "Active",
+    "deactivated": "Deactivated",
+    "noAccounts": "No accounts",
+    "noActiveAccounts": "No active accounts",
+    "noDeactivatedAccounts": "No deactivated accounts"
+  }
 }

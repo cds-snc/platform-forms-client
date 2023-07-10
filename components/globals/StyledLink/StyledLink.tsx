@@ -13,8 +13,8 @@ interface StyledLinkProps {
   href: string;
   className?: string;
   locale?: string;
-  // Note: Try not to overuse aria-label. Instead put the label info in the anchor if possible.
-  // Keep in mind that the aria-label will override any link text.
+  // Note: Try not to overuse aria-label. Instead put the label info in the anchor text if possible.
+  // Keep in mind that the aria-label will override any link text for the assistive technology.
   ariaLabel?: string;
   lang?: string;
   theme?: Theme;
@@ -31,7 +31,6 @@ type Theme = keyof typeof linkThemes;
 export const StyledLink = (props: StyledLinkProps) => {
   const { children, href = "", className, locale, ariaLabel, lang, theme = "default" } = props;
   const ref = useRef<HTMLAnchorElement>(null);
-
   return (
     <Link href={href} {...(locale && { locale: locale })} passHref legacyBehavior>
       <WrappedLink

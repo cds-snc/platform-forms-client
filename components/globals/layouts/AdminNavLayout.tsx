@@ -33,7 +33,7 @@ const AdminNavLayout = ({ children, user, backLink, hideLeftNav }: AdminNavLayou
       <div className="page-container mx-4 shrink-0 grow basis-auto laptop:mx-32 desktop:mx-64">
         {backLink && <nav className="absolute">{backLink}</nav>}
         {!backLink && !hideLeftNav && <LeftNavigation />}
-        <main id="content" className={!hideLeftNav ? "ml-40 laptop:ml-60" : ""}>
+        <main id="content" className={!hideLeftNav ? "ml-60" : ""}>
           {children}
           <ToastContainer />
         </main>
