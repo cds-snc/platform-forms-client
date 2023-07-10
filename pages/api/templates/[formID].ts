@@ -109,6 +109,9 @@ const route = async ({
       } else if (isPublished !== undefined) {
         return updateIsPublishedForTemplate(ability, formID, isPublished);
       } else if (users) {
+        if (!users.length) {
+          return { error: true, message: "mustHaveAtLeastOneUser" };
+        }
         return updateAssignedUsersForTemplate(ability, formID, users);
       } else if (sendResponsesToVault) {
         return removeDeliveryOption(ability, formID);

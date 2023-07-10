@@ -246,7 +246,6 @@ export const getUnprocessedSubmissionsForUser = async (
   userId: string,
   templates: Templates | false = false
 ) => {
-  checkPrivileges(ability, [{ action: "view", subject: "User" }]);
   const overdue: Overdue = {};
 
   try {

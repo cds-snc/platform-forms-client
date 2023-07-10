@@ -43,7 +43,7 @@ Make sure to [download and confirm all responses](${formUrlEn}) within 14 days o
 Thanks,
 The GC Forms team
 
-​​Bonjour,
+Bonjour,
 
 Le formulaire, ${formTitleFr}, et les réponses qu’il contient, a été transféré
 
@@ -76,7 +76,6 @@ export const addOwnershipEmail = async ({
   emailTo: string;
   formTitleEn: string;
   formTitleFr: string;
-  pastOwner: string;
   formOwner: string;
   formId: string;
 }) => {
@@ -105,7 +104,7 @@ ${formOwner}
 Thanks,
 The GC Forms team
 
-​​Bonjour,
+Bonjour,
 
 Le formulaire publié, ${formTitleFr}, et les réponses qu’il contient dans [Formulaires GC](${formUrlFr}), est maintenant accessible à :
 

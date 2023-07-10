@@ -38,6 +38,7 @@
   "backToAccounts": "Retourner à Comptes",
   "lockPublishing": "Lock publishing[FR]",
   "unlockPublishing" : "Unlock publishing[FR]",
+  "mustHaveAtLeastOneUser": "Must assign at least one user.",
   "accountsFilterLabel": "Accounts filters[FR]",
   "accountsFilter": {
     "all": "All[FR]",
