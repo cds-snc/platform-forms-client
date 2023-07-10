@@ -9,6 +9,7 @@ import { sendDeactivationEmail } from "@lib/deactivate";
 import { getAllTemplatesForUser } from "./templates";
 import { listAllSubmissions } from "./vault";
 import { detectOldUnprocessedSubmissions } from "./nagware";
+import { forceSignOut } from "@lib/auth/cognito";
 
 /**
  * Get or Create a user if a record does not exist
@@ -221,6 +222,7 @@ export const updateActiveStatus = async (ability: UserAbility, userID: string, a
 
     if (!active && user.email) {
       sendDeactivationEmail(user.email);
+      forceSignOut(userID);
     }
 
     return user;

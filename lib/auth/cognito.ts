@@ -3,6 +3,7 @@ import {
   AdminInitiateAuthCommand,
   AdminInitiateAuthCommandInput,
   CognitoIdentityProviderServiceException,
+  AdminUserGlobalSignOutCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
 import { logEvent } from "@lib/auditLogs";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
@@ -38,6 +39,29 @@ export enum Validate2FAVerificationCodeResultStatus {
 export type Validate2FAVerificationCodeResult = {
   status: Validate2FAVerificationCodeResultStatus;
   decodedCognitoToken?: DecodedCognitoToken;
+};
+
+export const forceSignOut = async (username: string) => {
+  const cognitoClient = new CognitoIdentityProviderClient({
+    region: process.env.COGNITO_REGION,
+    ...(process.env.NODE_ENV === "development" && {
+      credentials: {
+        accessKeyId: process.env.COGNITO_ACCESS_KEY ?? "",
+        secretAccessKey: process.env.COGNITO_SECRET_KEY ?? "",
+      },
+    }),
+  });
+
+  const params = {
+    UserPoolId: process.env.COGNITO_USER_POOL_ID ?? "",
+    Username: username,
+  };
+
+  const adminGlobalSignOutCommand = new AdminUserGlobalSignOutCommand(params);
+
+  const response = await cognitoClient.send(adminGlobalSignOutCommand);
+
+  return response;
 };
 
 export const initiateSignIn = async ({
