@@ -725,6 +725,7 @@ export async function updateAssignedUsersForTemplate(
           isPublished: true,
           deliveryOption: true,
           securityAttribute: true,
+          users: true,
         },
       })
       .catch((e) => prismaErrors(e, null));

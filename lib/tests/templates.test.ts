@@ -612,21 +612,28 @@ describe("Template CRUD functions", () => {
     };
     const ability = createAbility(fakeSession as Session);
 
+    // Template has one user assigned to it to start
+    (prismaMock.template.findFirst as jest.MockedFunction<any>).mockResolvedValue({
+      ...buildPrismaResponse("formtestID", formConfiguration, true),
+      users: [{ id: "1" }],
+    });
     (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
       buildPrismaResponse("formtestID", formConfiguration, true)
     );
 
+    // We're just adding an additional user (2)
     const users: { id: string }[] = [{ id: "1" }, { id: "2" }];
 
     await updateAssignedUsersForTemplate(ability, "formTestID", users);
 
+    // Should just connect the new user
     expect(prismaMock.template.update).toHaveBeenCalledWith({
       where: {
         id: "formTestID",
       },
       data: {
         users: {
-          connect: [{ id: "1" }, { id: "2" }],
+          connect: [{ id: "2" }],
           disconnect: [],
         },
       },
@@ -639,22 +646,76 @@ describe("Template CRUD functions", () => {
         isPublished: true,
         deliveryOption: true,
         securityAttribute: true,
+        users: true,
       },
     });
+
+    // should just log the new user
     expect(mockedLogEvent).toHaveBeenNthCalledWith(
       1,
       fakeSession.user.id,
       { id: "formTestID", type: "Form" },
       "GrantFormAccess",
-      "Access granted to 1,2"
+      "Access granted to 2"
     );
-    // expect(mockedLogEvent).toHaveBeenNthCalledWith(
-    //   2,
-    //   fakeSession.user.id,
-    //   { id: "formTestID", type: "Form" },
-    //   "RevokeFormAccess",
-    //   "Access revoked for 1"
-    // );
+
+    // Template has three users assigned to it to start
+    const templateRecord = {
+      ...buildPrismaResponse("formtestID", formConfiguration, true),
+      users: [{ id: "2" }, { id: "3" }, { id: "4" }],
+    };
+
+    (prismaMock.template.findFirst as jest.MockedFunction<any>).mockResolvedValue(templateRecord);
+    (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
+      buildPrismaResponse("formtestID", formConfiguration, true)
+    );
+
+    // We're removing two (2,4) and adding one (1)
+    const users2: { id: string }[] = [{ id: "1" }, { id: "3" }];
+
+    await updateAssignedUsersForTemplate(ability, "formTestID", users2);
+
+    // Connect 1, disconnect 2,4
+    expect(prismaMock.template.update).toHaveBeenCalledWith({
+      where: {
+        id: "formTestID",
+      },
+      data: {
+        users: {
+          connect: [{ id: "1" }],
+          disconnect: [{ id: "2" }, { id: "4" }],
+        },
+      },
+      select: {
+        id: true,
+        created_at: true,
+        updated_at: true,
+        name: true,
+        jsonConfig: true,
+        isPublished: true,
+        deliveryOption: true,
+        securityAttribute: true,
+        users: true,
+      },
+    });
+
+    // Log one added
+    expect(mockedLogEvent).toHaveBeenNthCalledWith(
+      2,
+      fakeSession.user.id,
+      { id: "formTestID", type: "Form" },
+      "GrantFormAccess",
+      "Access granted to 1"
+    );
+
+    // Log two removed
+    expect(mockedLogEvent).toHaveBeenNthCalledWith(
+      3,
+      fakeSession.user.id,
+      { id: "formTestID", type: "Form" },
+      "RevokeFormAccess",
+      "Access revoked for 2,4"
+    );
   });
 
   it("Updates to published forms are not allowed", async () => {
