@@ -677,7 +677,7 @@ export async function updateIsPublishedForTemplate(
   }
 }
 
-export async function updateAssignedUsersForTemplate2(
+export async function updateAssignedUsersForTemplate(
   ability: UserAbility,
   formID: string,
   users: { id: string }[]
@@ -758,86 +758,6 @@ export async function updateAssignedUsersForTemplate2(
         { type: "Form", id: formID },
         "AccessDenied",
         "Attempted to update assigned users for form"
-      );
-    throw e;
-  }
-}
-
-export async function updateAssignedUsersForTemplate(
-  ability: UserAbility,
-  formID: string,
-  users: { id: string; action: "add" | "remove" }[]
-): Promise<FormRecord | null> {
-  try {
-    checkPrivileges(ability, [
-      { action: "update", subject: "FormRecord" },
-      { action: "update", subject: "User" },
-    ]);
-
-    const { addUsers, removeUsers } = users.reduce(
-      (acc, current) => {
-        if (current.action === "add")
-          return { ...acc, addUsers: acc.addUsers.concat({ id: current.id }) };
-        else return { ...acc, removeUsers: acc.removeUsers.concat({ id: current.id }) };
-      },
-      {
-        addUsers: Array<{ id: string }>(),
-        removeUsers: Array<{ id: string }>(),
-      }
-    );
-
-    const updatedTemplate = await prisma.template
-      .update({
-        where: {
-          id: formID,
-        },
-        data: {
-          users: {
-            connect: addUsers,
-            disconnect: removeUsers,
-          },
-        },
-        select: {
-          id: true,
-          created_at: true,
-          updated_at: true,
-          name: true,
-          jsonConfig: true,
-          isPublished: true,
-          deliveryOption: true,
-          securityAttribute: true,
-        },
-      })
-      .catch((e) => prismaErrors(e, null));
-
-    if (updatedTemplate === null) return updatedTemplate;
-
-    addUsers.length > 0 &&
-      logEvent(
-        ability.userID,
-        { type: "Form", id: formID },
-        "GrantFormAccess",
-        `Access granted to ${addUsers.map((user) => user.id).toString()}`
-      );
-
-    removeUsers.length > 0 &&
-      logEvent(
-        ability.userID,
-        { type: "Form", id: formID },
-        "RevokeFormAccess",
-        `Access revoked for ${addUsers.map((user) => user.id).toString()}`
-      );
-
-    if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
-
-    return _parseTemplate(updatedTemplate);
-  } catch (e) {
-    if (e instanceof AccessControlError)
-      logEvent(
-        ability.userID,
-        { type: "Form", id: formID },
-        "AccessDenied",
-        "Attempted to modify Form ownership"
       );
     throw e;
   }

@@ -616,10 +616,7 @@ describe("Template CRUD functions", () => {
       buildPrismaResponse("formtestID", formConfiguration, true)
     );
 
-    const users: { id: string; action: "add" | "remove" }[] = [
-      { id: "1", action: "add" },
-      { id: "2", action: "remove" },
-    ];
+    const users: { id: string }[] = [{ id: "1" }, { id: "2" }];
 
     await updateAssignedUsersForTemplate(ability, "formTestID", users);
 
@@ -629,8 +626,8 @@ describe("Template CRUD functions", () => {
       },
       data: {
         users: {
-          connect: [{ id: "1" }],
-          disconnect: [{ id: "2" }],
+          connect: [{ id: "1" }, { id: "2" }],
+          disconnect: [],
         },
       },
       select: {
@@ -649,15 +646,15 @@ describe("Template CRUD functions", () => {
       fakeSession.user.id,
       { id: "formTestID", type: "Form" },
       "GrantFormAccess",
-      "Access granted to 1"
+      "Access granted to 1,2"
     );
-    expect(mockedLogEvent).toHaveBeenNthCalledWith(
-      2,
-      fakeSession.user.id,
-      { id: "formTestID", type: "Form" },
-      "RevokeFormAccess",
-      "Access revoked for 1"
-    );
+    // expect(mockedLogEvent).toHaveBeenNthCalledWith(
+    //   2,
+    //   fakeSession.user.id,
+    //   { id: "formTestID", type: "Form" },
+    //   "RevokeFormAccess",
+    //   "Access revoked for 1"
+    // );
   });
 
   it("Updates to published forms are not allowed", async () => {
