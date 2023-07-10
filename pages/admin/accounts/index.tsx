@@ -132,6 +132,7 @@ const Users = ({
             <li className="mr-2 py-2 pt-3 text-sm tablet:mr-4">
               <Button
                 theme={isFilterAll() ? "primary" : "secondary"}
+                shape="circle"
                 onClick={() => updateAccountsFilter(AccountsFilterState.ALL)}
               >
                 {t("accountsFilter.all")}
@@ -140,6 +141,7 @@ const Users = ({
             <li className="mr-2 py-2 pt-3 text-sm tablet:mr-4">
               <Button
                 theme={isFilterActive() ? "primary" : "secondary"}
+                shape="circle"
                 onClick={() => updateAccountsFilter(AccountsFilterState.ACTIVE)}
               >
                 {t("accountsFilter.active")}
@@ -148,6 +150,7 @@ const Users = ({
             <li className="mr-2 py-2 pt-3 text-sm tablet:mr-4">
               <Button
                 theme={isFilterDeactivated() ? "primary" : "secondary"}
+                shape="circle"
                 onClick={() => updateAccountsFilter(AccountsFilterState.DEACTIVATED)}
               >
                 {t("accountsFilter.deactivated")}
