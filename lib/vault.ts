@@ -371,7 +371,20 @@ export async function deleteResponses(
 export async function deleteDraftFormTestResponses(ability: UserAbility, formID: string) {
   try {
     // TODO: Verify that the form status is not Published (must be draft)
-    // const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(formID);
+    const formStatus = await prisma.template
+      .findUnique({
+        where: {
+          id: formID,
+        },
+        select: {
+          isPublished: true,
+        },
+      })
+      .catch((e) => prismaErrors(e, true));
+
+    if (formStatus && typeof formStatus !== "boolean" && formStatus?.isPublished) {
+      throw new Error("Form is published. Cannot delete draft form responses.");
+    }
 
     const draftFormSubmissionsList = await listAllSubmissionsAndConfirmations(ability, formID);
 
@@ -398,6 +411,6 @@ export async function deleteDraftFormTestResponses(ability: UserAbility, formID:
     };
   } catch (error) {
     logMessage.error(error as Error);
-    // return response.status(500).json({ error: "Error on server side" });
+    throw error;
   }
 }
