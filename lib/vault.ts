@@ -190,7 +190,13 @@ export async function listAllSubmissions(
     return { submissions: [], numberOfUnprocessedSubmissions: 0 };
   }
 }
-
+/**
+ * This method returns a list of all form submission and confirmations records.
+ * The list does not contain the actual submission data, only attributes
+ * @param ability - The user ability object
+ * @param formID - The form ID from which to retrieve responses
+ * @returns {Promise<{submissions: VaultSubmissionAndConfirmationList[]}>} - The list of submissions and confirmations
+ */
 export async function listAllSubmissionsAndConfirmations(
   ability: UserAbility,
   formID: string
@@ -211,67 +217,32 @@ export async function listAllSubmissionsAndConfirmations(
   try {
     const documentClient = connectToDynamo();
 
-    let accumulatedResponses: VaultSubmissionAndConfirmationList[] = [];
-    let lastEvaluatedKey = null;
+    let responses: VaultSubmissionAndConfirmationList[] = [];
+    const getItemsDbParams: QueryCommandInput = {
+      TableName: "Vault",
+      KeyConditionExpression: "FormID = :formID and begins_with(NAME_OR_CONF, :namePrefix)",
+      ExpressionAttributeValues: {
+        ":formID": formID,
+        ":namePrefix": "NAME#",
+      },
+      ExpressionAttributeNames: {
+        "#status": "Status",
+        "#name": "Name",
+      },
+      ProjectionExpression: "FormID,#status,#name,ConfirmationCode",
+    };
+    const queryCommand = new QueryCommand(getItemsDbParams);
+    const response = await documentClient.send(queryCommand);
 
-    while (lastEvaluatedKey !== undefined) {
-      const getItemsDbParams: QueryCommandInput = {
-        TableName: "Vault",
-        // Limit the amount of response to 500.  This can be changed in the future once we have pagination.
-        Limit: 500 - accumulatedResponses.length,
-        ExclusiveStartKey: lastEvaluatedKey ?? undefined,
-        KeyConditionExpression: "FormID = :formID and begins_with(NAME_OR_CONF, :namePrefix)",
-        ExpressionAttributeValues: {
-          ":formID": formID,
-          ":namePrefix": "NAME#",
-        },
-        ExpressionAttributeNames: {
-          "#status": "Status",
-          "#name": "Name",
-        },
-        ProjectionExpression:
-          // "FormID,#status,SecurityAttribute,#name,CreatedAt,LastDownloadedBy,ConfirmTimestamp,DownloadedAt,RemovalDate",
-          "FormID,#status,#name,ConfirmationCode",
-      };
-      const queryCommand = new QueryCommand(getItemsDbParams);
-      // eslint-disable-next-line no-await-in-loop
-      const response = await documentClient.send(queryCommand);
-
-      if (response.Items?.length) {
-        accumulatedResponses = accumulatedResponses.concat(
-          response.Items.map(
-            ({
-              FormID: formID,
-              SecurityAttribute: securityAttribute,
-              Status: status,
-              CreatedAt: createdAt,
-              LastDownloadedBy: lastDownloadedBy,
-              Name: name,
-              ConfirmTimestamp: confirmedAt,
-              DownloadedAt: downloadedAt,
-              RemovalDate: removedAt,
-              ConfirmationCode: confirmationCode,
-            }) => ({
-              formID,
-              status,
-              securityAttribute,
-              name,
-              createdAt,
-              lastDownloadedBy: lastDownloadedBy ?? null,
-              confirmedAt: confirmedAt ?? null,
-              downloadedAt: downloadedAt ?? null,
-              removedAt: removedAt ?? null,
-              confirmationCode: confirmationCode ?? null,
-            })
-          )
-        );
-      }
-      // We either manually stop the paginated request when we have 10 or more items or we let it finish on its own
-      if (accumulatedResponses.length >= 500) {
-        lastEvaluatedKey = undefined;
-      } else {
-        lastEvaluatedKey = response.LastEvaluatedKey;
-      }
+    if (response.Items?.length) {
+      responses = response.Items.map(
+        ({ FormID: formID, Status: status, Name: name, ConfirmationCode: confirmationCode }) => ({
+          formID,
+          status,
+          name,
+          confirmationCode: confirmationCode ?? null,
+        })
+      );
     }
 
     logEvent(
@@ -282,7 +253,7 @@ export async function listAllSubmissionsAndConfirmations(
     );
 
     return {
-      submissions: accumulatedResponses,
+      submissions: responses,
     };
   } catch (e) {
     logMessage.error(e);
