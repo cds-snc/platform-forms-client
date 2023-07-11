@@ -11,7 +11,7 @@ import { Button } from "@components/globals";
 import Link from "next/link";
 import { LoggedOutTab, LoggedOutTabName } from "./LoggedOutTab";
 import { InfoCard } from "@components/globals/InfoCard/InfoCard";
-import { isVaultDelivery } from "@formbuilder/utils";
+import { isVaultDelivery } from "@formbuilder/util";
 
 export const Publish = () => {
   const { t } = useTranslation("form-builder");

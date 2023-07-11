@@ -251,3 +251,12 @@ export const allowedTemplates = [
   FormElementTypes.firstMiddleLastName,
   FormElementTypes.contact,
 ] as const;
+
+export const isVaultDelivery = (deliveryOption?: { emailAddress?: string } | null) => {
+  return !deliveryOption;
+};
+
+export const isEmailDelivery = (deliveryOption: { emailAddress?: string } | null) => {
+  return !!(deliveryOption && deliveryOption.emailAddress);
+};
+
