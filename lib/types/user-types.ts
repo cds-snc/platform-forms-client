@@ -1,4 +1,4 @@
-import { Privilege } from "@prisma/client";
+import { Privilege, User } from "@prisma/client";
 
 export interface FormOwner {
   id: string;
@@ -7,10 +7,6 @@ export interface FormOwner {
   active: boolean;
 }
 
-export interface DBUser {
+export interface DBUser extends User {
   privileges: Privilege[];
-  id: string;
-  name: string | null;
-  email: string | null;
-  active: boolean;
 }
