@@ -2,12 +2,12 @@ import { NotifyClient } from "notifications-node-client";
 import { logMessage } from "@lib/logger";
 
 export const transferOwnershipEmail = async ({
-  emailTo,
-  formTitleEn,
-  formTitleFr,
-  pastOwner,
-  newOwner,
-  formId,
+  emailTo = "",
+  formTitleEn = "Untitled form",
+  formTitleFr = "Formulaire sans titre",
+  pastOwner = "",
+  newOwner = "",
+  formId = " ",
 }: {
   emailTo: string;
   formTitleEn: string;
@@ -67,11 +67,11 @@ L’équipe Formulaires GC`,
 };
 
 export const addOwnershipEmail = async ({
-  emailTo,
-  formTitleEn,
-  formTitleFr,
-  formOwner,
-  formId,
+  emailTo = "",
+  formTitleEn = "Untitled form",
+  formTitleFr = "Formulaire sans titre",
+  formOwner = "",
+  formId = "",
 }: {
   emailTo: string;
   formTitleEn: string;
