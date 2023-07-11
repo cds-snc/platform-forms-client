@@ -103,7 +103,7 @@ const ManageForms = ({
           return (
             <li className="mb-4 max-w-2xl rounded-md border-2 border-black p-4" key={id}>
               <div className="flex flex-row items-start justify-between">
-                <h2 className="mb-0 pb-0 text-base">
+                <h2 className="mb-0 mr-2 overflow-hidden pb-0 text-base">
                   {titleEn} / {titleFr}
                 </h2>
 
