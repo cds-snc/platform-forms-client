@@ -18,6 +18,7 @@ import { ConfirmDelete } from "@components/form-builder/app/ConfirmDelete";
 import { TemplateStoreProvider } from "@components/form-builder/store";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { useRefresh } from "@lib/hooks";
+import { ExclamationIcon } from "@components/form-builder/icons";
 
 type User = {
   id: string;
@@ -47,13 +48,17 @@ const OverdueStatus = ({ level }: { level: number }) => {
   // 35 days +
   if ([3, 4].includes(level)) {
     return (
-      <span className="mb-2 block p-2 text-red">{t("overdueResponses", { days: warnAfter })}</span>
+      <span className="mb-2 block p-2 text-red">
+        <ExclamationIcon className="mr-2 inline-block h-6 w-6" />
+        {t("overdueResponses", { days: warnAfter })}
+      </span>
     );
   }
   // 21 days +
   if ([1, 2].includes(level)) {
     return (
       <span className="mb-2 block p-2 text-red">
+        <ExclamationIcon className="mr-2 inline-block h-6 w-6" />
         {t("overdueResponses", { days: promptAfter })}
       </span>
     );
@@ -102,12 +107,10 @@ const ManageForms = ({
           const borderColor = isPublished ? "#95CCA2" : "#FFD875";
           return (
             <li className="mb-4 max-w-2xl rounded-md border-2 border-black p-4" key={id}>
-              <div className="flex flex-row justify-between">
-                <h2 className="mb-0 pb-0 text-base">
+              <div className="flex flex-row items-start justify-between">
+                <h2 className="mb-0 mr-2 overflow-hidden pb-0 text-base">
                   {titleEn} / {titleFr}
                 </h2>
-
-                {overdue[id] && <OverdueStatus level={overdue[id].level} />}
 
                 <span
                   className="block rounded px-2 py-1 "
@@ -120,8 +123,10 @@ const ManageForms = ({
                 </span>
               </div>
 
+              {overdue[id] && <OverdueStatus level={overdue[id].level} />}
+
               {/* linking to existing page for now */}
-              <div className="mt-10 flex flex-row justify-between">
+              <div className="mt-10 flex flex-row items-end justify-between">
                 <div>
                   <LinkButton.Secondary
                     href={`/${i18n.language}/form-builder/settings/${id}/form?backLink=${formUser.id}`}
