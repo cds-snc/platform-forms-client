@@ -18,14 +18,14 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
   return (
     <div className="grid w-full grid-flow-col">
       <div className="flex">
-        <Link href="/admin" legacyBehavior>
+        <Link href="/form-builder" legacyBehavior>
           {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a
             id="logo"
             className="mr-5 flex border-r-1 pr-5 font-sans text-h2 font-bold !text-black no-underline !shadow-none focus:bg-white"
           >
             <div className="inline-block h-[45px] w-[46px] py-2">
-              <SiteLogo title={t("title", { ns: "admin-login" })} />
+              <SiteLogo title={t("title", { ns: "common" })} />
             </div>
           </a>
         </Link>
