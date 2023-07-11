@@ -18,6 +18,7 @@ import { ConfirmDelete } from "@components/form-builder/app/ConfirmDelete";
 import { TemplateStoreProvider } from "@components/form-builder/store";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { useRefresh } from "@lib/hooks";
+import { ExclamationIcon } from "@components/form-builder/icons";
 
 type User = {
   id: string;
@@ -47,13 +48,17 @@ const OverdueStatus = ({ level }: { level: number }) => {
   // 35 days +
   if ([3, 4].includes(level)) {
     return (
-      <span className="mb-2 block p-2 text-red">{t("overdueResponses", { days: warnAfter })}</span>
+      <span className="mb-2 block p-2 text-red">
+        <ExclamationIcon className="inline-block h-6 w-6" />
+        {t("overdueResponses", { days: warnAfter })}
+      </span>
     );
   }
   // 21 days +
   if ([1, 2].includes(level)) {
     return (
       <span className="mb-2 block p-2 text-red">
+        <ExclamationIcon className="inline-block h-6 w-6" />
         {t("overdueResponses", { days: promptAfter })}
       </span>
     );
@@ -107,8 +112,6 @@ const ManageForms = ({
                   {titleEn} / {titleFr}
                 </h2>
 
-                {overdue[id] && <OverdueStatus level={overdue[id].level} />}
-
                 <span
                   className="block rounded px-2 py-1 "
                   style={{
@@ -119,6 +122,8 @@ const ManageForms = ({
                   {isPublished ? t("published") : t("draft")}
                 </span>
               </div>
+
+              {overdue[id] && <OverdueStatus level={overdue[id].level} />}
 
               {/* linking to existing page for now */}
               <div className="mt-10 flex flex-row items-end justify-between">
