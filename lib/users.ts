@@ -297,6 +297,7 @@ export const getUnprocessedSubmissionsForUser = async (
       })
     );
   } catch (error) {
+    logMessage.error(error as Error);
     // noop
   }
 
