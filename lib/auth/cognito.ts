@@ -117,7 +117,6 @@ export const begin2FAAuthentication = async ({
   email,
   token,
 }: CognitoToken): Promise<AuthenticationFlowToken> => {
-
   // ensure the user account is active
 
   const sanitizedEmail = sanitizeEmailAddressForCognito(email);

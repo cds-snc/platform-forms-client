@@ -145,7 +145,4 @@ export type FormRecord = {
 };
 
 // defines the fields for the form record that is available to unauthenticated users
-export type PublicFormRecord = TypeOmit<
-  FormRecord,
-  "name" | "deliveryOption" | "bearerToken" | "email"
->;
+export type PublicFormRecord = TypeOmit<FormRecord, "name" | "deliveryOption" | "bearerToken">;
