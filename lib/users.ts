@@ -116,7 +116,10 @@ export const getOrCreateUser = async ({
  * Get User by id
  * @returns User if found
  */
-export const getUser = async (id: string, ability: UserAbility): Promise<boolean | SelectedUser> => {
+export const getUser = async (
+  id: string,
+  ability: UserAbility
+): Promise<boolean | SelectedUser> => {
   try {
     checkPrivileges(ability, [{ action: "view", subject: "User" }]);
 
@@ -157,7 +160,8 @@ export const getUser = async (id: string, ability: UserAbility): Promise<boolean
   }
 };
 
-interface SelectedUser extends Omit<DBUser, "privileges" | "image" | "emailVerified" | "lastLogin"> {
+interface SelectedUser
+  extends Omit<DBUser, "privileges" | "image" | "emailVerified" | "lastLogin"> {
   privileges: {
     id: string;
     nameEn: string | null;
