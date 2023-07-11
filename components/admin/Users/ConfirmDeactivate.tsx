@@ -12,7 +12,7 @@ export const ConfirmDeactivate = ({ user }: { user: DBUser }) => {
     <>
       <Button
         theme={!user.active ? "secondary" : "destructive"}
-        className="mr-2"
+        className="w-full mt-2"
         onClick={async () => {
           showConfirmDeleteModal(true);
         }}

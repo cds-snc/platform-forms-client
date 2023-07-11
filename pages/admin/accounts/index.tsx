@@ -174,7 +174,7 @@ const Users = ({
                         {canManageUsers && (
                           <Button
                             theme={"secondary"}
-                            className="mr-2"
+                            className="mr-2 tablet:mb-2"
                             onClick={async () => {
                               const action = hasPrivilege({
                                 privileges: user.privileges,
@@ -198,7 +198,7 @@ const Users = ({
                         {canManageUsers && (
                           <LinkButton.Secondary
                             href={`/admin/accounts/${user.id}/manage-forms`}
-                            className="mb-2 mr-3"
+                            className="mb-2 mr-2"
                           >
                             {t("manageForms")}
                           </LinkButton.Secondary>
@@ -222,7 +222,7 @@ const Users = ({
                       {user.active && (
                         <Dropdown>
                           <DropdownMenuPrimitive.Item
-                            className={`${themes.htmlLink} ${themes.base} mb-4 !block !cursor-pointer`}
+                            className={`${themes.htmlLink} ${themes.base} !block !cursor-pointer`}
                             onClick={() => {
                               router.push({
                                 pathname: `/admin/accounts/${user.id}/manage-permissions`,
