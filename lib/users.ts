@@ -240,6 +240,15 @@ export const updateActiveStatus = async (ability: UserAbility, userID: string, a
 
     return user;
   } catch (error) {
+    if (error instanceof AccessControlError) {
+      logEvent(
+        ability.userID,
+        { type: "User" },
+        "AccessDenied",
+        `Attempted to get user by id ${userID}`
+      );
+    }
+
     logMessage.error(error as Error);
     throw error;
   }
