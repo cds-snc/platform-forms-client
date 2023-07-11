@@ -259,4 +259,3 @@ export const isVaultDelivery = (deliveryOption?: { emailAddress?: string } | nul
 export const isEmailDelivery = (deliveryOption: { emailAddress?: string } | null) => {
   return !!(deliveryOption && deliveryOption.emailAddress);
 };
-

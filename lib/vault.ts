@@ -307,9 +307,6 @@ export async function deleteResponses(
    * The `BatchWriteItemCommand` can only take up to 25 `DeleteRequest` at a time.
    * We have to delete 2 items from DynamoDB for each form response (12*2=24).
    */
-  logMessage.debug(`----start list form response----`);
-  logMessage.debug(formResponses);
-  logMessage.debug(`----end list form response----`);
 
   for (const formResponsesChunk of chunkArray(formResponses, 12)) {
     const deleteRequests = formResponsesChunk.flatMap(
