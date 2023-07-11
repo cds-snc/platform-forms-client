@@ -14,7 +14,10 @@ const getPublishedForms = async (
     const { session } = props as WithRequired<MiddlewareProps, "session">;
     const ability = createAbility(session);
 
-    const accountId = req.query.id as string;
+    if (Array.isArray(req.query.id) || !req.query.id) {
+      return res.status(400).json({ error: "Bad request" });
+    }
+    const accountId = req.query.id;
     const user = await getUser(ability, accountId);
 
     if (!user) {
