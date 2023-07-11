@@ -191,7 +191,20 @@ ManageForms.getLayout = (page: ReactElement) => {
 export const getServerSideProps = requireAuthentication(
   async ({ locale, params, user: { ability } }) => {
     const id = params?.id || null;
-    checkPrivileges(ability, [{ action: "view", subject: "Setting" }]);
+
+    checkPrivileges(ability, [
+      { action: "view", subject: "User" },
+      {
+        action: "view",
+        subject: {
+          type: "FormRecord",
+          // Passing an empty object here just to force CASL evaluate the condition part of a permission.
+          // Will only allow users who have privilege of Manage All Forms
+          object: {},
+        },
+      },
+    ]);
+
     const formUser = await getUser(id as string, ability);
 
     let templates: Templates = [];
