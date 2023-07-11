@@ -109,7 +109,15 @@ const ManageForms = ({
             <li className="mb-4 max-w-2xl rounded-md border-2 border-black p-4" key={id}>
               <div className="flex flex-row items-start justify-between">
                 <h2 className="mb-0 mr-2 overflow-hidden pb-0 text-base">
-                  {titleEn} / {titleFr}
+                  {i18n.language === "en" ? (
+                    <>
+                      {titleEn} / <span lang="fr">{titleFr}</span>
+                    </>
+                  ) : (
+                    <>
+                      {titleFr} / <span lang="en">{titleEn}</span>
+                    </>
+                  )}
                 </h2>
 
                 <span
