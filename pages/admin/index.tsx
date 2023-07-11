@@ -18,6 +18,7 @@ const AdminWelcome: NextPageWithLayout = () => {
       <Head>
         <title>{t("title")}</title>
       </Head>
+      <h1 className="visually-hidden">{t("title", { ns: "admin-home" })}</h1>
       <div className="flex flex-row justify-center">
         <div className="rounded-lg border bg-white p-10">
           <h2>
