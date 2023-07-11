@@ -49,7 +49,7 @@ const OverdueStatus = ({ level }: { level: number }) => {
   if ([3, 4].includes(level)) {
     return (
       <span className="mb-2 block p-2 text-red">
-        <ExclamationIcon className="inline-block h-6 w-6" />
+        <ExclamationIcon className="mr-2 inline-block h-6 w-6" />
         {t("overdueResponses", { days: warnAfter })}
       </span>
     );
@@ -58,7 +58,7 @@ const OverdueStatus = ({ level }: { level: number }) => {
   if ([1, 2].includes(level)) {
     return (
       <span className="mb-2 block p-2 text-red">
-        <ExclamationIcon className="inline-block h-6 w-6" />
+        <ExclamationIcon className="mr-2 inline-block h-6 w-6" />
         {t("overdueResponses", { days: promptAfter })}
       </span>
     );
