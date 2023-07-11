@@ -171,7 +171,7 @@ const Users = ({
                       <h2 className="pb-6 text-base">{user.name}</h2>
                       <p className="mb-4">{user.email}</p>
                       <div className="">
-                        {canManageUsers && (
+                        {canManageUsers && user.active && (
                           <Button
                             theme={"secondary"}
                             className="mr-2 tablet:mb-2"
@@ -195,7 +195,7 @@ const Users = ({
                           </Button>
                         )}
 
-                        {canManageUsers && (
+                        {canManageUsers && user.active && (
                           <LinkButton.Secondary
                             href={`/admin/accounts/${user.id}/manage-forms`}
                             className="mb-2 mr-2"
