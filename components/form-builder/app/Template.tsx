@@ -71,6 +71,8 @@ export const PageTemplate = ({
     setLang(locale);
   }, [locale, setLang]);
 
+  const leftNavMargin = backLink ? "ml-80" : "ml-60";
+
   // Wait until the Template Store has fully hydrated before rendering the page
   return hasHydrated ? (
     <div className="mx-4 laptop:mx-32 desktop:mx-64 grow shrink-0 basis-auto">
@@ -84,7 +86,7 @@ export const PageTemplate = ({
             </Head>
             <main
               id="content"
-              className={`${leftNav && "ml-40 laptop:ml-60"} ${
+              className={`${leftNav && leftNavMargin} ${
                 leftNav && !autoWidth && "max-w-4xl"
               } form-builder`}
             >

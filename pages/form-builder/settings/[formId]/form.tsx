@@ -1,4 +1,5 @@
 import React, { ReactElement } from "react";
+import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { NextPageWithLayout } from "../../../_app";
 import { Template, PageTemplate, Settings, FormOwnership } from "@components/form-builder/app";
@@ -18,13 +19,13 @@ interface AssignUsersToTemplateProps {
   allUsers: User[];
 }
 
-const BackToManageForms = ({ id }: { id: string }) => {
+const BackToManageForms = ({ id }: { id: string | string[] | undefined }) => {
   const { t } = useTranslation("admin-users");
 
   if (!id) return null;
 
   return (
-    <div className="mb-2">
+    <div className="mb-10">
       <BackLink href={`/admin/accounts/${id}/manage-forms`}>{t("backToManageForms")}</BackLink>
     </div>
   );
@@ -38,11 +39,14 @@ const Page: NextPageWithLayout<AssignUsersToTemplateProps> = ({
   const { t } = useTranslation("form-builder");
   const title = `${t("branding.heading")} — ${t("gcForms")}`;
 
+  const router = useRouter();
+  const { backLink } = router.query;
+
   return (
     <PageTemplate
       title={title}
       navigation={<SettingsNavigation />}
-      backLink={<BackToManageForms id="2" />}
+      backLink={<BackToManageForms id={backLink} />}
     >
       <FormOwnership
         formRecord={formRecord}
