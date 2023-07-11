@@ -102,7 +102,7 @@ const ManageForms = ({
           const borderColor = isPublished ? "#95CCA2" : "#FFD875";
           return (
             <li className="mb-4 max-w-2xl rounded-md border-2 border-black p-4" key={id}>
-              <div className="flex flex-row justify-between">
+              <div className="flex flex-row items-start justify-between">
                 <h2 className="mb-0 pb-0 text-base">
                   {titleEn} / {titleFr}
                 </h2>
@@ -121,7 +121,7 @@ const ManageForms = ({
               </div>
 
               {/* linking to existing page for now */}
-              <div className="mt-10 flex flex-row justify-between">
+              <div className="mt-10 flex flex-row items-end justify-between">
                 <div>
                   <LinkButton.Secondary
                     href={`/${i18n.language}/form-builder/settings/${id}/form`}
