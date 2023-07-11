@@ -1,4 +1,5 @@
 import React, { ReactElement } from "react";
+import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { NextPageWithLayout } from "../../../_app";
 import { Template, PageTemplate, Settings, FormOwnership } from "@components/form-builder/app";
@@ -10,12 +11,25 @@ import { checkPrivileges } from "@lib/privileges";
 import { getUsers } from "@lib/users";
 import { User } from "@prisma/client";
 import { FormRecord } from "@lib/types";
+import { BackLink } from "@components/admin/LeftNav/BackLink";
 
 interface AssignUsersToTemplateProps {
   formRecord: FormRecord;
   usersAssignedToFormRecord: User[];
   allUsers: User[];
 }
+
+const BackToManageForms = ({ id }: { id: string | string[] | undefined }) => {
+  const { t } = useTranslation("admin-users");
+
+  if (!id) return null;
+
+  return (
+    <div className="mb-10">
+      <BackLink href={`/admin/accounts/${id}/manage-forms`}>{t("backToManageForms")}</BackLink>
+    </div>
+  );
+};
 
 const Page: NextPageWithLayout<AssignUsersToTemplateProps> = ({
   formRecord,
@@ -25,8 +39,15 @@ const Page: NextPageWithLayout<AssignUsersToTemplateProps> = ({
   const { t } = useTranslation("form-builder");
   const title = `${t("branding.heading")} — ${t("gcForms")}`;
 
+  const router = useRouter();
+  const { backLink } = router.query;
+
   return (
-    <PageTemplate title={title} navigation={<SettingsNavigation />}>
+    <PageTemplate
+      title={title}
+      navigation={<SettingsNavigation />}
+      backLink={<BackToManageForms id={backLink} />}
+    >
       <FormOwnership
         formRecord={formRecord}
         usersAssignedToFormRecord={usersAssignedToFormRecord}

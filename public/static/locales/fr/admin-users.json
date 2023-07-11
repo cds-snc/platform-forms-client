@@ -36,6 +36,7 @@
     "message": "Quelque chose a mal tourné."
   },
   "backToAccounts": "Retourner à Comptes",
+  "backToManageForms": "Retourner à Gérer les formulaires",
   "lockPublishing": "Lock publishing[FR]",
   "unlockPublishing" : "Unlock publishing[FR]",
   "mustHaveAtLeastOneUser": "Must assign at least one user.",
