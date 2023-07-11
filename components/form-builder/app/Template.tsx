@@ -50,12 +50,14 @@ export const PageTemplate = ({
   navigation,
   leftNav = true,
   autoWidth = false,
+  backLink,
 }: {
   children: React.ReactNode;
   title: string;
   navigation?: React.ReactElement;
   leftNav?: boolean;
   autoWidth?: boolean;
+  backLink?: React.ReactElement;
 }) => {
   const { t, i18n } = useTranslation("form-builder");
   const { hasHydrated, setLang } = useTemplateStore((s) => ({
@@ -74,7 +76,7 @@ export const PageTemplate = ({
     <div className="mx-4 laptop:mx-32 desktop:mx-64 grow shrink-0 basis-auto">
       <ToastContainer />
       <div>
-        {leftNav && <LeftNavigation />}
+        {leftNav && <LeftNavigation backLink={backLink} />}
         <>
           <div>
             <Head>

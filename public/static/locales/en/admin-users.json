@@ -36,8 +36,9 @@
     "message": "Something went wrong."
   },
   "backToAccounts": "Back to Accounts",
+  "backToManageForms": "Back to Manage forms",
   "lockPublishing": "Lock publishing",
-  "unlockPublishing" : "Unlock publishing",
+  "unlockPublishing": "Unlock publishing",
   "mustHaveAtLeastOneUser": "Must assign at least one user.",
   "accountsFilterLabel": "Accounts filters",
   "accountsFilter": {

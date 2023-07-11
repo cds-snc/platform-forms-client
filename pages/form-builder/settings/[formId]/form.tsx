@@ -10,12 +10,25 @@ import { checkPrivileges } from "@lib/privileges";
 import { getUsers } from "@lib/users";
 import { User } from "@prisma/client";
 import { FormRecord } from "@lib/types";
+import { BackLink } from "@components/admin/LeftNav/BackLink";
 
 interface AssignUsersToTemplateProps {
   formRecord: FormRecord;
   usersAssignedToFormRecord: User[];
   allUsers: User[];
 }
+
+const BackToManageForms = ({ id }: { id: string }) => {
+  const { t } = useTranslation("admin-users");
+
+  if (!id) return null;
+
+  return (
+    <div className="mb-2">
+      <BackLink href={`/admin/accounts/${id}/manage-forms`}>{t("backToManageForms")}</BackLink>
+    </div>
+  );
+};
 
 const Page: NextPageWithLayout<AssignUsersToTemplateProps> = ({
   formRecord,
@@ -26,7 +39,11 @@ const Page: NextPageWithLayout<AssignUsersToTemplateProps> = ({
   const title = `${t("branding.heading")} — ${t("gcForms")}`;
 
   return (
-    <PageTemplate title={title} navigation={<SettingsNavigation />}>
+    <PageTemplate
+      title={title}
+      navigation={<SettingsNavigation />}
+      backLink={<BackToManageForms id="2" />}
+    >
       <FormOwnership
         formRecord={formRecord}
         usersAssignedToFormRecord={usersAssignedToFormRecord}

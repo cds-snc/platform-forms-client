@@ -6,7 +6,7 @@ import { SaveButton } from "../shared/SaveButton";
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { useSession } from "next-auth/react";
 
-export const LeftNavigation = () => {
+export const LeftNavigation = ({ backLink }: { backLink?: React.ReactElement }) => {
   const { t } = useTranslation("form-builder");
   const { isPublished, id } = useTemplateStore((s) => ({ id: s.id, isPublished: s.isPublished }));
   const { status } = useSession();
@@ -16,6 +16,7 @@ export const LeftNavigation = () => {
 
   return (
     <nav className="absolute" aria-label={t("navLabelFormBuilder")}>
+      {backLink && backLink}
       {!isPublished && (
         <LeftNavLink href="/form-builder/edit">
           <>
