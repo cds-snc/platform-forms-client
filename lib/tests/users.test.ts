@@ -120,6 +120,7 @@ describe("getOrCreateUser", () => {
         id: true,
         name: true,
         privileges: true,
+        active:true
       },
     });
     expect(mockedLogEvent).toBeCalledWith(
