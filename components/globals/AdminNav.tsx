@@ -36,7 +36,7 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
       <nav className="justify-self-end">
         <>
           <ul className="mt-2 flex list-none px-0 text-base">
-            {user && user.name && (
+            {user.name && (
               <li className="mr-2 py-2 pt-3 text-sm tablet:mr-4">
                 {t("logged-in", { ns: "admin-login" })}: <span>{user.email}</span>
               </li>
@@ -48,7 +48,7 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
               </li>
             )}
 
-            {(!user || !user.name) && (
+            {!user.name && (
               <li className="mr-2 py-2 text-base tablet:mr-4">
                 <Link href="/auth/login" locale={i18n.language}>
                   {t("adminNav.login")}
@@ -58,7 +58,7 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
             <li className="mr-2 py-2 text-base tablet:mr-4">
               <Link href="/myforms">{t("adminNav.myForms")}</Link>
             </li>
-            {user && user.name && (
+            {user.name && (
               <li className="mr-2 py-2 text-base tablet:mr-4">
                 <button
                   className="gc-button-link"
