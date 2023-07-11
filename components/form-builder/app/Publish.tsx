@@ -88,7 +88,7 @@ export const Publish = () => {
   return (
     <>
       <div className="flex justify-between">
-        <div className="grow border-1 rounded-lg p-5 mx-5">
+        <div className="grow border-1 rounded-lg p-5 mx-5 min-w-fit w-sm">
           <h1 className="border-0 mb-0">{t("publishYourForm")}</h1>
           <p className="mb-0">{t("publishYourFormInstructions")}</p>
           {!userCanPublish && (
