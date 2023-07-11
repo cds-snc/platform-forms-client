@@ -117,8 +117,8 @@ export const getOrCreateUser = async ({
  * @returns User if found
  */
 export const getUser = async (
-  id: string,
-  ability: UserAbility
+  ability: UserAbility,
+  id: string
 ): Promise<boolean | SelectedUser> => {
   try {
     checkPrivileges(ability, [{ action: "view", subject: "User" }]);
@@ -267,7 +267,7 @@ export const getUnprocessedSubmissionsForUser = async (
   const overdue: Overdue = {};
 
   try {
-    const user = await getUser(userId, ability);
+    const user = await getUser(ability, userId);
     if (!user) return overdue;
 
     if (!templates) {

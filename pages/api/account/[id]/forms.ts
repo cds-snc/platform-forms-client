@@ -15,7 +15,7 @@ const getPublishedForms = async (
     const ability = createAbility(session);
 
     const accountId = req.query.id as string;
-    const user = await getUser(accountId, ability);
+    const user = await getUser(ability, accountId);
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });

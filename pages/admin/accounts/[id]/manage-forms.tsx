@@ -213,7 +213,7 @@ export const getServerSideProps = requireAuthentication(
       },
     ]);
 
-    const formUser = await getUser(id as string, ability);
+    const formUser = await getUser(ability, id as string);
 
     let templates: Templates = [];
     if (id) {

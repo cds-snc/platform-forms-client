@@ -249,7 +249,7 @@ export const getServerSideProps = requireAuthentication(
 
     const id = params?.id || null;
 
-    const formUser = await getUser(id as string, ability);
+    const formUser = await getUser(ability, id as string);
 
     const allPrivileges = (await getAllPrivileges(ability)).map(
       ({ id, nameEn, nameFr, descriptionFr, descriptionEn }) => ({
