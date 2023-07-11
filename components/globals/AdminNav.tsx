@@ -42,7 +42,7 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
               </li>
             )}
 
-            {user && user.name && (
+            {user.name && (
               <li className="mr-2 py-2 text-base tablet:mr-4">
                 <Link href="/admin">{t("adminNav.administration")}</Link>
               </li>
