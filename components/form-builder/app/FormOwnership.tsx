@@ -38,7 +38,6 @@ const updateUsersToTemplateAssignations = async (formID: string, users: { id: st
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     });
   } catch (e) {
-    // @TODO: Handle 400 error if users missing
     logMessage.error(e);
   }
 };
