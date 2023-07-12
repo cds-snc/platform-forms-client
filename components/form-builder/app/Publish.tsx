@@ -88,7 +88,7 @@ export const Publish = () => {
 
   return (
     <>
-      <div className="flex justify-between">
+      <div className="flex justify-between flex-wrap laptop:flex-nowrap">
         <div className="grow border-1 rounded-lg p-5 mx-5 min-w-fit w-sm">
           <h1 className="border-0 mb-0">{t("publishYourForm")}</h1>
           <p className="mb-0">{t("publishYourFormInstructions")}</p>
@@ -156,24 +156,26 @@ export const Publish = () => {
         </div>
         {userCanPublish && isPublishable() && (
           <>
-            <div className="flex-none max-w-md">
+            <div className="flex-none max-w-md mt-8 laptop:mt-0 min-w-fit laptop:min-w-min">
               <InfoCard title={t("whatYouNeedToKnow")}>
-                <div className="mb-5 bg-gray-50 p-1.5">
-                  <p className="mb-1 font-bold pb-0">{t("publishingDisablesEditing")}</p>
-                  <p className="text-sm">{t("publishingDisablesEditingDescription")}</p>
-                </div>
-                <div className="mb-5 bg-gray-50 p-1.5">
-                  <p className="mb-1 font-bold pb-0">{t("publishingLocksSettings")}</p>
-                  <p className="text-sm">{t("publishingLocksSettingsDescription")}</p>
-                </div>
-                {isVaultDelivery(getDeliveryOption()) && (
-                  <>
-                    <div className="mb-5 bg-gray-50 p-1.5">
-                      <p className="mb-1 font-bold pb-0">{t("publishingRemovesTestResponses")}</p>
-                      <p className="text-sm">{t("publishingRemovesTestResponsesDescription")}</p>
-                    </div>
-                  </>
-                )}
+                <ul className="list-none p-0">
+                  <li className="mb-5 bg-gray-50 p-1.5">
+                    <h3 className="gc-h4 mb-1 pb-0">{t("publishingDisablesEditing")}</h3>
+                    <p className="text-sm">{t("publishingDisablesEditingDescription")}</p>
+                  </li>
+                  <li className="mb-5 bg-gray-50 p-1.5">
+                    <h3 className="gc-h4 mb-1 pb-0">{t("publishingLocksSettings")}</h3>
+                    <p className="text-sm">{t("publishingLocksSettingsDescription")}</p>
+                  </li>
+                  {isVaultDelivery(getDeliveryOption()) && (
+                    <>
+                      <li className="mb-5 bg-gray-50 p-1.5">
+                        <h3 className="gc-h4 mb-1 pb-0">{t("publishingRemovesTestResponses")}</h3>
+                        <p className="text-sm">{t("publishingRemovesTestResponsesDescription")}</p>
+                      </li>
+                    </>
+                  )}
+                </ul>
                 <div className="bg-gray-50 p-1.5">
                   <Markdown options={{ forceBlock: true }} className="text-sm">
                     {t("contactSupportIfYouHaveQuestions")}
