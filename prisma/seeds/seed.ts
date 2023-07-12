@@ -75,7 +75,6 @@ async function createAdminTestUser() {
           { nameEn: "Base" },
           { nameEn: "PublishForms" },
           { nameEn: "ManageApplicationSettings" },
-
           { nameEn: "ManageUsers" },
           { nameEn: "ManageForms" },
           { nameEn: "ViewApplicationSettings" },

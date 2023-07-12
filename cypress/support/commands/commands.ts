@@ -89,7 +89,7 @@ Cypress.Commands.add("useFlag", (flagName, value, alreadyAuth) => {
  * Log the test user into the application
  */
 
-Cypress.Commands.add("login", (acceptableUse = false) => {
+Cypress.Commands.add("login", (admin = false, acceptableUse = false) => {
   cy.request({
     method: "GET",
     url: "/api/auth/csrf",
@@ -101,7 +101,7 @@ Cypress.Commands.add("login", (acceptableUse = false) => {
       url: "/api/auth/signin/cognito",
       form: true,
       body: {
-        username: "test.user@cds-snc.ca",
+        username: `test${admin ? "admin" : ""}.user@cds-snc.ca`,
         password: "testing",
         csrfToken,
       },
@@ -115,7 +115,7 @@ Cypress.Commands.add("login", (acceptableUse = false) => {
         url: "/api/auth/callback/cognito",
         form: true,
         body: {
-          username: "test.user@cds-snc.ca",
+          username: `test${admin ? "admin" : ""}.user@cds-snc.ca`,
           verificationCode: "123456",
           authenticationFlowToken: response.body.authenticationFlowToken,
           csrfToken,
