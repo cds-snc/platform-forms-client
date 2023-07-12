@@ -283,6 +283,13 @@ export async function numberOfUnprocessedSubmissions(
   }
 }
 
+/**
+ * This method deletes all responses for a given form
+ * @param ability
+ * @param dynamoDb - DynamoDB Document Client
+ * @param formResponses - List of form submissions and confirmations
+ * @param formID
+ */
 export async function deleteResponses(
   ability: UserAbility,
   dynamoDb: DynamoDBDocumentClient,
@@ -364,7 +371,7 @@ export async function deleteResponses(
     let response;
     try {
       // eslint-disable-next-line no-await-in-loop
-      response = await dynamoDb.send(new BatchWriteItemCommand(batchWriteItemCommandInput));
+      await dynamoDb.send(new BatchWriteItemCommand(batchWriteItemCommandInput));
       responsesDeleted += deleteRequests.length / 2;
     } catch (e) {
       throw new Error(`Failed to delete form responses from DynamoDB.`);
@@ -380,7 +387,6 @@ export async function deleteResponses(
  */
 export async function deleteDraftFormTestResponses(ability: UserAbility, formID: string) {
   try {
-
     const draftFormSubmissionsList = await listAllSubmissionsAndConfirmations(ability, formID);
 
     const documentClient = connectToDynamo();

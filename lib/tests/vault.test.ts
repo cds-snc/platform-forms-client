@@ -238,4 +238,36 @@ describe("Deleting test responses (submissions)", () => {
       await deleteResponses(ability, ddbMock, [], "formtestID");
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
   });
+
+  it("Should not be able to delete responses if the form is published", async () => {
+    const fakeSession = {
+      user: {
+        id: "1",
+        privileges: mockUserPrivileges(Base.concat(ManageForms), { user: { id: "1" } }),
+      },
+    };
+    const ability = createAbility(fakeSession as Session);
+
+    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      ...buildPrismaResponse("formtestID", formConfiguration, true),
+      users: [{ id: "1" }],
+    });
+
+    const formResponses = [
+      {
+        formID: "formtestID",
+        name: "Form Test ID",
+        confirmationCode: "Form-Test-ID",
+      },
+      {
+        formID: "formtestID",
+        name: "Form Test ID 2",
+        confirmationCode: "Form-Test-ID-2",
+      },
+    ];
+
+    await expect(async () => {
+      await deleteResponses(ability, ddbMock, formResponses, "formtestID");
+    }).rejects.toThrowError(new Error("Form is published. Cannot delete draft form responses."));
+  });
 });
