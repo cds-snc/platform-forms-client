@@ -24,7 +24,10 @@
   "activateAccount": "Reactivate account",
   "moreMenu": "... More",
   "manageForms": "Manage forms",
-  "publishedFormsMustBeTransferred": "Published forms must be transferred or deleted before deactivating.",
+  "publishedFormsMustBeTransferred": {
+    "text1": "Published forms",
+    "text2": "must be transferred or deleted before deactivating."
+  },
   "deactivatingWillNotifyUser": "Deactivating this account will notify the user.",
   "deactivateThisAccount": "Deactivate this account?",
   "responseSuccess": {
