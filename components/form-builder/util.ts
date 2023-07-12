@@ -1,4 +1,9 @@
-import { FormElement, FormProperties, FormElementTypes } from "@lib/types";
+import {
+  FormElement,
+  FormProperties,
+  FormElementTypes,
+  DeliveryOption,
+} from "@lib/types";
 import { TemplateStoreState } from "./store/useTemplateStore";
 
 export const completeEmailAddressRegex =
@@ -252,10 +257,10 @@ export const allowedTemplates = [
   FormElementTypes.contact,
 ] as const;
 
-export const isVaultDelivery = (deliveryOption: { emailAddress?: string } | null) => {
+export const isVaultDelivery = (deliveryOption: DeliveryOption | undefined) => {
   return !deliveryOption;
 };
 
-export const isEmailDelivery = (deliveryOption: { emailAddress?: string } | null) => {
+export const isEmailDelivery = (deliveryOption: DeliveryOption | undefined) => {
   return !!(deliveryOption && deliveryOption.emailAddress);
 };

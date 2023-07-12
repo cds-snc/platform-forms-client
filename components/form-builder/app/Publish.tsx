@@ -26,11 +26,12 @@ export const Publish = () => {
   const [error, setError] = useState(false);
   const { i18n } = useTranslation("common");
 
-  const { id, setId, getSchema, getName } = useTemplateStore((s) => ({
+  const { id, setId, getSchema, getName, getDeliveryOption } = useTemplateStore((s) => ({
     id: s.id,
     setId: s.setId,
     getSchema: s.getSchema,
     getName: s.getName,
+    getDeliveryOption: s.getDeliveryOption,
   }));
 
   const Icon = ({ checked }: { checked: boolean }) => {
@@ -165,7 +166,7 @@ export const Publish = () => {
                   <p className="mb-1 font-bold pb-0">{t("publishingLocksSettings")}</p>
                   <p className="text-sm">{t("publishingLocksSettingsDescription")}</p>
                 </div>
-                {isVaultDelivery() && (
+                {isVaultDelivery(getDeliveryOption()) && (
                   <>
                     <div className="mb-5 bg-gray-50 p-1.5">
                       <p className="mb-1 font-bold pb-0">{t("publishingRemovesTestResponses")}</p>
