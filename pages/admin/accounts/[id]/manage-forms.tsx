@@ -1,4 +1,4 @@
-import React, { ReactElement, useState, useRef } from "react";
+import React, { ReactElement, useState, useRef, useEffect } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import { useTranslation } from "next-i18next";
@@ -19,6 +19,7 @@ import { TemplateStoreProvider } from "@components/form-builder/store";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { useRefresh } from "@lib/hooks";
 import { ExclamationIcon } from "@components/form-builder/icons";
+import { setStorageValue, LOCAL_STORAGE_KEY } from "@lib/localStorage";
 
 type User = {
   id: string;
@@ -82,6 +83,12 @@ const ManageForms = ({
   const { ability } = useAccessControl();
   const { refreshData } = useRefresh();
   const canManageForms = ability?.can("update", "FormRecord");
+
+  useEffect(() => {
+    // set the user id in local storage so auto-scroll when navigating accounts page
+    setStorageValue(LOCAL_STORAGE_KEY.USER, { id: formUser.id });
+  }, [formUser.id]);
+
   return (
     <>
       <Head>
@@ -106,7 +113,11 @@ const ManageForms = ({
           const backgroundColor = isPublished ? "#95CCA2" : "#FEE39F";
           const borderColor = isPublished ? "#95CCA2" : "#FFD875";
           return (
-            <li className="mb-4 max-w-2xl rounded-md border-2 border-black p-4" key={id}>
+            <li
+              className="mb-4 max-w-2xl rounded-md border-2 border-black p-4"
+              key={id}
+              id={`form-${id}`}
+            >
               <div className="flex flex-row items-start justify-between">
                 <h2 className="mb-0 mr-2 overflow-hidden pb-0 text-base">
                   {i18n.language === "en" ? (

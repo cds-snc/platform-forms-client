@@ -1,4 +1,4 @@
-import React, { ReactElement, useState, SetStateAction } from "react";
+import React, { ReactElement, useState, SetStateAction, useEffect } from "react";
 import axios from "axios";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
@@ -15,6 +15,7 @@ import { Alert, Button, ErrorStatus } from "@components/globals";
 import { BackLink } from "@components/admin/LeftNav/BackLink";
 import { PermissionToggle } from "@components/admin/Users/PermissionToggle";
 import { LinkButton } from "@components/globals";
+import { setStorageValue, LOCAL_STORAGE_KEY } from "@lib/localStorage";
 
 type PrivilegeList = Omit<Privilege, "permissions">[];
 interface User {
@@ -126,6 +127,11 @@ const ManagePermissions = ({
   const [changedPrivileges, setChangedPrivileges] = useState<
     { id: string; action: "add" | "remove" }[]
   >([]);
+
+  useEffect(() => {
+    // set the user id in local storage so auto-scroll when navigating accounts page
+    setStorageValue(LOCAL_STORAGE_KEY.USER, { id: formUser.id });
+  }, [formUser.id]);
 
   const { forceSessionUpdate } = useAccessControl();
 
