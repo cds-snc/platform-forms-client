@@ -306,9 +306,16 @@ export const getUnprocessedSubmissionsForUser = async (
         }
       })
     );
-  } catch (error) {
-    logMessage.error(error as Error);
-    // noop
+  } catch (e) {
+    if (e instanceof AccessControlError) {
+      logEvent(
+        ability.userID,
+        { type: "User" },
+        "AccessDenied",
+        `Attempted to get unprocessed submssions for user ${userId}`
+      );
+    }
+    throw e;
   }
 
   return overdue;
