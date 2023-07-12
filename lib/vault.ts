@@ -303,11 +303,11 @@ export async function deleteResponses(
   }
 
   let responsesDeleted = 0;
+
   /**
    * The `BatchWriteItemCommand` can only take up to 25 `DeleteRequest` at a time.
    * We have to delete 2 items from DynamoDB for each form response (12*2=24).
    */
-
   for (const formResponsesChunk of chunkArray(formResponses, 12)) {
     const deleteRequests = formResponsesChunk.flatMap(
       (formResponse: VaultSubmissionAndConfirmationList) => {
@@ -340,11 +340,6 @@ export async function deleteResponses(
       }
     );
 
-    logMessage.debug(`Deleting ${deleteRequests.length} form responses from DynamoDB.`);
-    logMessage.debug(deleteRequests);
-    logMessage.debug(`Delete requests length ${deleteRequests.length}`);
-    logMessage.debug(deleteRequests.length / 2);
-
     const batchWriteItemCommandInput = {
       RequestItems: {
         ["Vault"]: deleteRequests,
@@ -355,13 +350,8 @@ export async function deleteResponses(
     try {
       // eslint-disable-next-line no-await-in-loop
       response = await dynamoDb.send(new BatchWriteItemCommand(batchWriteItemCommandInput));
-      logMessage.debug(`------start response------`);
-      logMessage.debug(response);
       responsesDeleted += deleteRequests.length / 2;
-      logMessage.debug(`Deleted responses ${responsesDeleted}`);
-      logMessage.debug(`------end response------`);
     } catch (e) {
-      logMessage.error(e);
       throw new Error(`Failed to delete form responses from DynamoDB.`);
     }
   }
@@ -370,7 +360,6 @@ export async function deleteResponses(
 
 export async function deleteDraftFormTestResponses(ability: UserAbility, formID: string) {
   try {
-    // TODO: Verify that the form status is not Published (must be draft)
     const formStatus = await prisma.template
       .findUnique({
         where: {
@@ -389,12 +378,6 @@ export async function deleteDraftFormTestResponses(ability: UserAbility, formID:
     const draftFormSubmissionsList = await listAllSubmissionsAndConfirmations(ability, formID);
 
     const documentClient = connectToDynamo();
-
-    logMessage.debug(
-      `Deleting ${draftFormSubmissionsList.submissions.length} draft form submissions.`
-    );
-    logMessage.debug(draftFormSubmissionsList.submissions);
-    logMessage.debug("<-end of draft form submissions->");
 
     const result = await deleteResponses(
       ability,

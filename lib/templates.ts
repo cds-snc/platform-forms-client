@@ -565,7 +565,6 @@ export async function updateIsPublishedForTemplate(
         },
       ]);
 
-      // TODO: Prevent already published templates from being updated
       if (templateWithAssociatedUsers.formRecord.isPublished)
         throw new TemplateAlreadyPublishedError();
 
