@@ -166,6 +166,7 @@ const Users = ({
                 return (
                   <li
                     className="mb-4 flex max-w-2xl flex-row rounded-md border-2 border-black p-2"
+                    id={`user-${user.id}`}
                     key={user.id}
                   >
                     <div className="m-auto grow basis-1/3 p-4">
