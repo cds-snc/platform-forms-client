@@ -565,8 +565,9 @@ export async function updateIsPublishedForTemplate(
         },
       ]);
 
-      if (templateWithAssociatedUsers.formRecord.isPublished)
+      if (templateWithAssociatedUsers.formRecord.isPublished) {
         throw new TemplateAlreadyPublishedError();
+      }
 
       await deleteDraftFormTestResponses(ability, formID);
     } else {

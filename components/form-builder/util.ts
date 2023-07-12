@@ -1,9 +1,4 @@
-import {
-  FormElement,
-  FormProperties,
-  FormElementTypes,
-  DeliveryOption,
-} from "@lib/types";
+import { FormElement, FormProperties, FormElementTypes, DeliveryOption } from "@lib/types";
 import { TemplateStoreState } from "./store/useTemplateStore";
 
 export const completeEmailAddressRegex =
