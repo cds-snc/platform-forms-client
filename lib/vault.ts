@@ -12,6 +12,7 @@ import { AccessControlError, checkPrivileges } from "./privileges";
 import { BatchWriteItemCommand } from "@aws-sdk/client-dynamodb";
 import { chunkArray } from "@lib/utils";
 import { VaultSubmissionAndConfirmationList } from "@lib/types/retrieval-types";
+import { TemplateAlreadyPublishedError } from "@lib/templates";
 
 /**
  * Returns the users associated with a Template
@@ -321,7 +322,9 @@ export async function deleteResponses(
     .catch((e) => prismaErrors(e, true));
 
   if (formStatus && typeof formStatus !== "boolean" && formStatus?.isPublished) {
-    throw new Error("Form is published. Cannot delete draft form responses.");
+    throw new TemplateAlreadyPublishedError(
+      "Form is published. Cannot delete draft form responses."
+    );
   }
 
   let responsesDeleted = 0;
@@ -368,7 +371,6 @@ export async function deleteResponses(
       },
     };
 
-    let response;
     try {
       // eslint-disable-next-line no-await-in-loop
       await dynamoDb.send(new BatchWriteItemCommand(batchWriteItemCommandInput));

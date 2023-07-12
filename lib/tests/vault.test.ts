@@ -13,6 +13,7 @@ import { deleteResponses, numberOfUnprocessedSubmissions } from "@lib/vault";
 import formConfiguration from "@jestFixtures/cdsIntakeTestForm.json";
 import { DeliveryOption } from "@lib/types";
 import { BatchWriteItemCommand } from "@aws-sdk/client-dynamodb";
+import { TemplateAlreadyPublishedError } from "@lib/templates";
 
 const ddbMock = mockClient(DynamoDBDocumentClient);
 
@@ -201,8 +202,9 @@ describe("Deleting test responses (submissions)", () => {
       },
     };
     const ability = createAbility(fakeSession as Session);
+    // Mock an unpublished form
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
-      ...buildPrismaResponse("formtestID", formConfiguration),
+      ...buildPrismaResponse("formtestID", formConfiguration, false),
       users: [{ id: "1" }],
     });
 
@@ -268,6 +270,8 @@ describe("Deleting test responses (submissions)", () => {
 
     await expect(async () => {
       await deleteResponses(ability, ddbMock, formResponses, "formtestID");
-    }).rejects.toThrowError(new Error("Form is published. Cannot delete draft form responses."));
+    }).rejects.toThrowError(
+      new TemplateAlreadyPublishedError("Form is published. Cannot delete draft form responses.")
+    );
   });
 });

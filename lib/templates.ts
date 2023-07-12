@@ -568,7 +568,6 @@ export async function updateIsPublishedForTemplate(
       if (templateWithAssociatedUsers.formRecord.isPublished)
         throw new TemplateAlreadyPublishedError();
 
-      logMessage.debug("Start of deleteDraftFormTestResponses");
       await deleteDraftFormTestResponses(ability, formID);
     } else {
       checkPrivileges(ability, [
