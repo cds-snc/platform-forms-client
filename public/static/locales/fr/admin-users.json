@@ -24,7 +24,10 @@
   "activateAccount": "Réactiver le compte",
   "moreMenu": "... Plus",
   "manageForms": "Gérer les formulaires",
-  "publishedFormsMustBeTransferred": "Les formulaires publiés doivent être transférrés ou supprimés avant la désactivation.",
+  "publishedFormsMustBeTransferred": {
+    "text1": "Les formulaires publiés",
+    "text2": "doivent être transférrés ou supprimés avant la désactivation."
+  },
   "deactivatingWillNotifyUser": "L’utilisateur·rice sera informé·e de la désactivation du compte.",
   "deactivateThisAccount": "Désactiver ce compte?",
   "responseSuccess": {

@@ -15,7 +15,7 @@ import { getUsers } from "@lib/users";
 import { useRefresh } from "@lib/hooks";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 import { Dropdown } from "@components/admin/Users/Dropdown";
-import { ConfirmDeactivate } from "@components/admin/Users/ConfirmDeactivate";
+import { ConfirmDeactivateModal } from "@components/admin/Users/ConfirmDeactivateModal";
 import { Button, themes, LinkButton } from "@components/globals";
 import { DBUser } from "@lib/types/user-types";
 import { Privilege } from "@prisma/client";
@@ -78,6 +78,7 @@ const Users = ({
   const isCurrentUser = (user: DBUser) => {
     return user.id === session?.user?.id;
   };
+  const [confirmDeleteModal, showConfirmDeleteModal] = useState(false);
 
   const [accountsFilterState, setAccountsFilterState] = useState(AccountsFilterState.ALL);
   const updateAccountsFilter = (filter: AccountsFilterState) => {
@@ -233,11 +234,31 @@ const Users = ({
                           </DropdownMenuPrimitive.Item>
 
                           {canManageUsers && !isCurrentUser(user) && user.active && (
-                            <ConfirmDeactivate user={user} />
+                            <>
+                              <DropdownMenuPrimitive.Item
+                                className={`mt-2 w-full !block !cursor-pointer  ${themes.base} ${
+                                  !user.active ? themes.secondary : themes.destructive
+                                }`}
+                                onClick={async () => {
+                                  showConfirmDeleteModal(true);
+                                }}
+                              >
+                                {user.active ? t("deactivateAccount") : t("activateAccount")}
+                              </DropdownMenuPrimitive.Item>
+                            </>
                           )}
                         </Dropdown>
                       )}
                     </div>
+                    {confirmDeleteModal && (
+                      // Note: Placing this within the Dropdown will break it
+                      <ConfirmDeactivateModal
+                        user={user}
+                        handleClose={function (): void {
+                          showConfirmDeleteModal(false);
+                        }}
+                      />
+                    )}
                   </li>
                 );
               })}

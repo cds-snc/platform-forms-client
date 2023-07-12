@@ -9,6 +9,7 @@ import { useRefresh } from "@lib/hooks";
 import Loader from "@components/globals/Loader";
 import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
 import { DBUser } from "@lib/types/user-types";
+import { WarningIcon } from "@components/form-builder/icons";
 
 const fetcher = async (url: string) => {
   const res = await fetch(url);
@@ -34,7 +35,8 @@ export const ConfirmDeactivateModal = ({
   const dialog = useDialogRef();
   const { refreshData } = useRefresh();
 
-  const { data, isLoading, error } = useSWR(`/api/account/${user.id}/forms`, fetcher);
+  const userId = user.id;
+  const { data, isLoading, error } = useSWR(`/api/account/${userId}/forms`, fetcher);
 
   const actions = (
     <>
@@ -102,7 +104,20 @@ export const ConfirmDeactivateModal = ({
         title={t("deactivateAccount")}
         actions={actions}
       >
-        <div className="p-5">{t("publishedFormsMustBeTransferred")}</div>
+        <div className="my-4 flex bg-red-50">
+          <div className="pl-3 pt-3 text-red">
+            <WarningIcon className="mr-1 inline-block h-8 w-10 fill-red-700" />
+          </div>
+          <div className="p-3 text-red">
+            <a
+              className="!text-red hover:no-underline focus:bg-inherit focus:shadow-none active:bg-inherit active:shadow-none active:outline-offset-0 active:outline-inherit"
+              href={`/admin/accounts/${userId}/manage-forms`}
+            >
+              {t("publishedFormsMustBeTransferred.text1")}
+            </a>{" "}
+            {t("publishedFormsMustBeTransferred.text2")}
+          </div>
+        </div>
       </Dialog>
     );
   }
