@@ -583,13 +583,6 @@ export async function updateIsPublishedForTemplate(
       ]);
     }
 
-    // TODO: error out?
-    // if (!deleteTestResponses) return null;
-
-    // // Commenting out the code that updates the Publish status for now
-    // const updatedTemplate = {};
-    // /*
-
     const updatedTemplate = await prisma.template
       .update({
         where: {
@@ -614,7 +607,6 @@ export async function updateIsPublishedForTemplate(
     if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
 
     logEvent(ability.userID, { type: "Form", id: formID }, "PublishForm");
-    // */
 
     return _parseTemplate(updatedTemplate);
   } catch (e) {
