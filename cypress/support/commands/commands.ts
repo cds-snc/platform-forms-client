@@ -28,6 +28,9 @@
  * Creates a Template in the Database with the provided fixture
  * @param file JSON fixture file
  */
+
+import flagsDefault from "../../../flag_initialization/default_flag_settings.json";
+
 Cypress.Commands.add("useForm", (file) => {
   cy.login();
   cy.fixture(file).then((mockedForm) => {
@@ -168,4 +171,40 @@ Cypress.Commands.add("logout", () => {
       );
     });
   });
+});
+
+/**
+ * Reset the database to it's default state
+ */
+Cypress.Commands.add("resetDB", () => {
+  cy.task("db:teardown");
+  cy.task("db:seed");
+});
+
+/**
+ * Reset the flags to default values
+ */
+Cypress.Commands.add("resetFlags", () => {
+  cy.login()
+    .then(() => {
+      Object.keys(flagsDefault).forEach((key) => {
+        cy.useFlag(`${key}`, (flagsDefault as Record<string, boolean>)[key], true);
+      });
+    })
+    .then(() => cy.logout());
+});
+
+/**
+ * Reset the database and flags to their default values
+ */
+Cypress.Commands.add("resetAll", () => {
+  cy.task("db:teardown");
+  cy.task("db:seed");
+  cy.login()
+    .then(() => {
+      Object.keys(flagsDefault).forEach((key) => {
+        cy.useFlag(`${key}`, (flagsDefault as Record<string, boolean>)[key], true);
+      });
+    })
+    .then(() => cy.logout());
 });
