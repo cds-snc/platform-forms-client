@@ -302,6 +302,21 @@ export async function deleteResponses(
     throw e;
   }
 
+  const formStatus = await prisma.template
+    .findUnique({
+      where: {
+        id: formID,
+      },
+      select: {
+        isPublished: true,
+      },
+    })
+    .catch((e) => prismaErrors(e, true));
+
+  if (formStatus && typeof formStatus !== "boolean" && formStatus?.isPublished) {
+    throw new Error("Form is published. Cannot delete draft form responses.");
+  }
+
   let responsesDeleted = 0;
 
   /**
@@ -358,22 +373,13 @@ export async function deleteResponses(
   return { responsesDeleted };
 }
 
+/**
+ * This method gets all draft form responses for a given form and deletes them
+ * @param ability
+ * @param formID
+ */
 export async function deleteDraftFormTestResponses(ability: UserAbility, formID: string) {
   try {
-    const formStatus = await prisma.template
-      .findUnique({
-        where: {
-          id: formID,
-        },
-        select: {
-          isPublished: true,
-        },
-      })
-      .catch((e) => prismaErrors(e, true));
-
-    if (formStatus && typeof formStatus !== "boolean" && formStatus?.isPublished) {
-      throw new Error("Form is published. Cannot delete draft form responses.");
-    }
 
     const draftFormSubmissionsList = await listAllSubmissionsAndConfirmations(ability, formID);
 
