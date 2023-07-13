@@ -39,7 +39,7 @@ async function getUsersForForm(formID: string) {
   return templateOwners?.users;
 }
 
-export async function checkAbilityToAccessSubmissions(ability: UserAbility, formID: string) {
+async function checkAbilityToAccessSubmissions(ability: UserAbility, formID: string) {
   const templateOwners = await getUsersForForm(formID);
   if (!templateOwners)
     throw new AccessControlError(
@@ -60,7 +60,7 @@ export async function checkAbilityToAccessSubmissions(ability: UserAbility, form
   ]);
 }
 
-export async function checkAbilityToDeleteSubmissions(ability: UserAbility, formID: string) {
+async function checkAbilityToDeleteSubmissions(ability: UserAbility, formID: string) {
   const templateOwners = await getUsersForForm(formID);
   if (!templateOwners)
     throw new AccessControlError(
@@ -198,7 +198,7 @@ export async function listAllSubmissions(
  * @param formID - The form ID from which to retrieve responses
  * @returns {Promise<{submissions: VaultSubmissionAndConfirmationList[]}>} - The list of submissions and confirmations
  */
-export async function listAllSubmissionsAndConfirmations(
+async function listAllSubmissionsAndConfirmations(
   ability: UserAbility,
   formID: string
 ): Promise<{ submissions: VaultSubmissionAndConfirmationList[] }> {
