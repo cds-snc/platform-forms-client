@@ -160,7 +160,7 @@ const Users = ({
         </div>
         <div aria-live="polite">
           {accounts?.length > 0 && (
-            <ul className="m-0 list-none p-0">
+            <ul data-testid="accountsList" className="m-0 list-none p-0">
               {accounts.map((user) => {
                 return (
                   <li
