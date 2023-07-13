@@ -9,13 +9,7 @@ import { getServerSession } from "next-auth/next";
 import { Session } from "next-auth";
 import { prismaMock } from "@jestUtils";
 import validFormTemplate from "../../../../__fixtures__/validFormTemplate.json";
-import {
-  mockUserPrivileges,
-  ManageUsers,
-  ViewUserPrivileges,
-  Base,
-  ManageForms,
-} from "__utils__/permissions";
+import { mockUserPrivileges, ViewUserPrivileges, Base, ManageForms } from "__utils__/permissions";
 import { getAppSetting } from "@lib/appSettings";
 import { listAllSubmissions } from "@lib/vault";
 import { VaultStatus } from "@lib/types";
@@ -70,7 +64,7 @@ describe("/api/account/submissions/overdue", () => {
         name: "Testing Forms",
         privileges: [
           ...mockUserPrivileges(Base, { user: { id: "1" } }),
-          ...mockUserPrivileges(ManageUsers, { user: { id: "1" } }),
+          ...mockUserPrivileges(ViewUserPrivileges, { user: { id: "1" } }),
           ...mockUserPrivileges(ManageForms, { user: { id: "1" } }),
         ],
         acceptableUse: true,
