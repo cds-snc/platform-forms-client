@@ -22,13 +22,16 @@ const getUnprocessedEntries = async (
 
     const overdue = await getUnprocessedSubmissionsForUser(ability, user.id);
 
+    let hasOverdueSubmissions = false;
+
     Object.entries(overdue).forEach(([, value]) => {
       if (value.level > 2) {
-        return res.status(200).json({ hasOverdueSubmissions: true });
+        hasOverdueSubmissions = true;
+        return;
       }
     });
 
-    return res.status(200).json({ hasOverdueSubmissions: false });
+    return res.status(200).json({ hasOverdueSubmissions });
   } catch (err) {
     if (err instanceof AccessControlError) return res.status(403).json({ error: "Forbidden" });
     else return res.status(500).json({ error: "There was an error. Please try again later." });
