@@ -18,6 +18,7 @@ import {
 } from "__utils__/permissions";
 import { getAppSetting } from "@lib/appSettings";
 import { listAllSubmissions } from "@lib/vault";
+import { VaultStatus } from "@lib/types";
 
 //Needed in the typescript version of the test so types are inferred correctly
 const mockGetSession = jest.mocked(getServerSession, { shallow: true });
@@ -25,11 +26,11 @@ jest.mock("next-auth/next");
 
 const redis = new Redis();
 
-// jest.mock("@lib/vault");
+jest.mock("@lib/vault");
 
-// const mockListAllSubmissions = jest.mocked(listAllSubmissions, {
-//   shallow: true,
-// });
+const mockListAllSubmissions = jest.mocked(listAllSubmissions, {
+  shallow: true,
+});
 
 jest.mock("@lib/integration/redisConnector", () => ({
   getRedisInstance: jest.fn(() => redis),
@@ -104,7 +105,7 @@ describe("/api/account/submissions/overdue", () => {
     }
   );
 
-  it("Should do something", async () => {
+  it("Should return true for overdue submissions", async () => {
     const { req, res } = createMocks({
       method: "GET",
       headers: {
@@ -141,17 +142,86 @@ describe("/api/account/submissions/overdue", () => {
       users: [{ id: "1", name: "Test test" }],
     });
 
-    // mockNumberOfUnprocessedSubmissions.mockResolvedValueOnce(1);
+    // has overdue submissions
+    mockListAllSubmissions.mockResolvedValueOnce({
+      submissions: [
+        {
+          formID: "formTestID",
+          name: "Test test",
+          status: VaultStatus.NEW,
+          createdAt: 12345678,
+          securityAttribute: "low",
+          lastDownloadedBy: "1",
+        },
+      ],
+      numberOfUnprocessedSubmissions: 1,
+    });
 
     await overdue(req, res);
 
     const data = JSON.parse(res._getData());
 
-    expect(data.hasOverdueSubmissions).toEqual(false);
     expect(res.statusCode).toEqual(200);
+    expect(data.hasOverdueSubmissions).toEqual(true);
+  });
 
-    expect(true).toEqual(true);
+  it("Should return false when no overdue submissions", async () => {
+    const { req, res } = createMocks({
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Origin: "http://localhost:3000",
+      },
+      body: {
+        managerEmail: "manager@cds-snc.ca",
+        department: "department",
+        goals: "do something",
+      },
+    });
 
-    // @TODO: test with overdue submissions (or any submissions!)
+    (prismaMock.user.findFirstOrThrow as jest.MockedFunction<any>).mockResolvedValue({
+      id: "1",
+      email: "a@b.com",
+      name: "Testing Forms",
+      acceptableUse: true,
+    });
+
+    (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([
+      {
+        id: "formtestID",
+        jsonConfig: validFormTemplate,
+        users: [{ id: "1" }],
+      },
+    ]);
+
+    mockGetAppSetting.mockResolvedValue("25");
+
+    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      id: "formtestID",
+      jsonConfig: validFormTemplate,
+      users: [{ id: "1", name: "Test test" }],
+    });
+
+    // no overdue submissions
+    mockListAllSubmissions.mockResolvedValueOnce({
+      submissions: [
+        {
+          formID: "formTestID",
+          name: "Test test",
+          status: VaultStatus.CONFIRMED,
+          createdAt: 12345678,
+          securityAttribute: "low",
+          lastDownloadedBy: "1",
+        },
+      ],
+      numberOfUnprocessedSubmissions: 1,
+    });
+
+    await overdue(req, res);
+
+    const data2 = JSON.parse(res._getData());
+
+    expect(res.statusCode).toEqual(200);
+    expect(data2.hasOverdueSubmissions).toEqual(false);
   });
 });
