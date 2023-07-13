@@ -219,7 +219,9 @@ const ManagePermissions = ({
         </Button>
       )}
 
-      <LinkButton.Secondary href="/admin/accounts">{t("cancel")}</LinkButton.Secondary>
+      <LinkButton.Secondary href={`/admin/accounts?id=${formUser.id}`}>
+        {t("cancel")}
+      </LinkButton.Secondary>
     </div>
   );
 };
