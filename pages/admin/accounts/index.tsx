@@ -213,7 +213,7 @@ const Users = ({
 
                               // store user id and scroll position in local storage
                               // for local refresh after privilege update
-                              setStorageValue(LOCAL_STORAGE_KEY.USER, {
+                              setStorageValue(STORAGE_KEY.USER, {
                                 id: user.id,
                                 scrollY: (window && window.scrollY) || 0,
                               });
@@ -250,7 +250,7 @@ const Users = ({
                             onClick={async () => {
                               // store user id and scroll position in local storage
                               // for local refresh after privilege update
-                              setStorageValue(LOCAL_STORAGE_KEY.USER, {
+                              setStorageValue(STORAGE_KEY.USER, {
                                 id: user.id,
                                 scrollY: (window && window.scrollY) || 0,
                               });
