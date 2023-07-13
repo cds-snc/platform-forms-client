@@ -15,7 +15,7 @@ import { Alert, Button, ErrorStatus } from "@components/globals";
 import { BackLink } from "@components/admin/LeftNav/BackLink";
 import { PermissionToggle } from "@components/admin/Users/PermissionToggle";
 import { LinkButton } from "@components/globals";
-import { setStorageValue, LOCAL_STORAGE_KEY } from "@lib/localStorage";
+import { setStorageValue, STORAGE_KEY } from "@lib/sessionStorage";
 
 type PrivilegeList = Omit<Privilege, "permissions">[];
 interface User {
@@ -130,7 +130,7 @@ const ManagePermissions = ({
 
   useEffect(() => {
     // set the user id in local storage so auto-scroll when navigating back to the accounts page
-    setStorageValue(LOCAL_STORAGE_KEY.USER, { id: formUser.id });
+    setStorageValue(STORAGE_KEY.USER, { id: formUser.id });
   }, [formUser.id]);
 
   const { forceSessionUpdate } = useAccessControl();

@@ -19,7 +19,7 @@ import { TemplateStoreProvider } from "@components/form-builder/store";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { useRefresh } from "@lib/hooks";
 import { ExclamationIcon } from "@components/form-builder/icons";
-import { setStorageValue, LOCAL_STORAGE_KEY } from "@lib/localStorage";
+import { setStorageValue, STORAGE_KEY } from "@lib/sessionStorage";
 
 type User = {
   id: string;
@@ -86,7 +86,7 @@ const ManageForms = ({
 
   useEffect(() => {
     // set the user id in local storage so auto-scroll when navigating back to the accounts page
-    setStorageValue(LOCAL_STORAGE_KEY.USER, { id: formUser.id });
+    setStorageValue(STORAGE_KEY.USER, { id: formUser.id });
   }, [formUser.id]);
 
   return (

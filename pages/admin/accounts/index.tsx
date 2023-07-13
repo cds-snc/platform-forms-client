@@ -20,7 +20,7 @@ import { Button, themes, LinkButton } from "@components/globals";
 import { DBUser } from "@lib/types/user-types";
 import { Privilege } from "@prisma/client";
 import { Card } from "@components/globals/card/Card";
-import { getStorageValue, setStorageValue, LOCAL_STORAGE_KEY } from "@lib/localStorage";
+import { getStorageValue, setStorageValue, STORAGE_KEY } from "@lib/sessionStorage";
 
 const enum AccountsFilterState {
   ALL,
@@ -121,7 +121,7 @@ const Users = ({
   // auto scroll to user card when data is refreshed / page loaded
   const handleRouteChange = () => {
     // check for a user id in local storage
-    const storedUser = getStorageValue(LOCAL_STORAGE_KEY.USER);
+    const storedUser = getStorageValue(STORAGE_KEY.USER);
 
     if (storedUser.scrollY) {
       window.scrollTo(0, storedUser.scrollY);
