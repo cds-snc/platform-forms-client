@@ -273,9 +273,6 @@ export const getUnprocessedSubmissionsForUser = async (
   const overdue: Overdue = {};
 
   try {
-    const user = await getUser(ability, userId);
-    if (!user) return overdue;
-
     if (!templates) {
       templates = (await getAllTemplatesForUser(ability, userId)).map((template) => {
         const {
