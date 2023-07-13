@@ -126,7 +126,6 @@ const Users = ({
 
     if (storedUser.scrollY) {
       window.scrollTo(0, storedUser.scrollY);
-      setStorageValue(STORAGE_KEY.USER, {});
       return;
     }
 
