@@ -84,11 +84,6 @@ const ManageForms = ({
   const { refreshData } = useRefresh();
   const canManageForms = ability?.can("update", "FormRecord");
 
-  useEffect(() => {
-    // set the user id in local storage so auto-scroll when navigating back to the accounts page
-    setStorageValue(STORAGE_KEY.USER, { id: formUser.id });
-  }, [formUser.id]);
-
   return (
     <>
       <Head>
@@ -194,14 +189,14 @@ const ManageForms = ({
   );
 };
 
-const BackToAccounts = () => {
+const BackToAccounts = ({ id }: { id: string }) => {
   const { t } = useTranslation("admin-users");
-  return <BackLink href="/admin/accounts">{t("backToAccounts")}</BackLink>;
+  return <BackLink href={`/admin/accounts?id=${id}`}>{t("backToAccounts")}</BackLink>;
 };
 
 ManageForms.getLayout = (page: ReactElement) => {
   return (
-    <AdminNavLayout user={page.props.user} backLink={<BackToAccounts />}>
+    <AdminNavLayout user={page.props.user} backLink={<BackToAccounts id={page.props.formUser} />}>
       <TemplateStoreProvider {...{ locale: page.props.locale }}>{page}</TemplateStoreProvider>
     </AdminNavLayout>
   );

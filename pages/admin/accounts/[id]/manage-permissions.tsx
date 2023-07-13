@@ -128,11 +128,6 @@ const ManagePermissions = ({
     { id: string; action: "add" | "remove" }[]
   >([]);
 
-  useEffect(() => {
-    // set the user id in local storage so auto-scroll when navigating back to the accounts page
-    setStorageValue(STORAGE_KEY.USER, { id: formUser.id });
-  }, [formUser.id]);
-
   const { forceSessionUpdate } = useAccessControl();
 
   const save = async () => {
@@ -229,14 +224,17 @@ const ManagePermissions = ({
   );
 };
 
-const BackToAccounts = () => {
+const BackToAccounts = ({ id }: { id: string }) => {
   const { t } = useTranslation("admin-users");
-  return <BackLink href="/admin/accounts">{t("backToAccounts")}</BackLink>;
+  return <BackLink href={`/admin/accounts?id=${id}`}>{t("backToAccounts")}</BackLink>;
 };
 
 ManagePermissions.getLayout = (page: ReactElement) => {
   return (
-    <AdminNavLayout user={page.props.user} backLink={<BackToAccounts />}>
+    <AdminNavLayout
+      user={page.props.user}
+      backLink={<BackToAccounts id={page.props.formUser.id} />}
+    >
       {page}
     </AdminNavLayout>
   );

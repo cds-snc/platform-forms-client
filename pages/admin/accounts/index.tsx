@@ -120,20 +120,25 @@ const Users = ({
 
   // auto scroll to user card when data is refreshed / page loaded
   const handleRouteChange = () => {
+    const id = router.query.id as string;
     // check for a user id in local storage
     const storedUser = getStorageValue(STORAGE_KEY.USER);
 
     if (storedUser.scrollY) {
       window.scrollTo(0, storedUser.scrollY);
-    } else {
-      // if there is a user id in local storage, scroll to that user card
-      const element = document.getElementById(`user-${storedUser?.id}`);
+      return;
+    }
+
+    if (id) {
+      // if there is a user id in the query param, scroll to that user card
+      const element = document.getElementById(`user-${id}`);
       element?.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   useEffect(() => {
     handleRouteChange();
+
     router.events.on("routeChangeComplete", handleRouteChange);
 
     return () => {
@@ -289,7 +294,7 @@ const Users = ({
                                   showConfirmDeleteModal(true);
                                   // store user id and scroll position in local storage
                                   // for local refresh after privilege update
-                                  setStorageValue(LOCAL_STORAGE_KEY.USER, {
+                                  setStorageValue(STORAGE_KEY.USER, {
                                     id: user.id,
                                     scrollY: (window && window.scrollY) || 0,
                                   });
