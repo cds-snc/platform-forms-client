@@ -129,7 +129,7 @@ const ManagePermissions = ({
   >([]);
 
   useEffect(() => {
-    // set the user id in local storage so auto-scroll when navigating accounts page
+    // set the user id in local storage so auto-scroll when navigating back to the accounts page
     setStorageValue(LOCAL_STORAGE_KEY.USER, { id: formUser.id });
   }, [formUser.id]);
 
