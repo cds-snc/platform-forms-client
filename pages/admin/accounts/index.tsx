@@ -1,4 +1,4 @@
-import React, { ReactElement, useMemo, useState } from "react";
+import React, { ReactElement, useMemo, useState, useEffect } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import axios from "axios";
@@ -20,6 +20,7 @@ import { Button, themes, LinkButton } from "@components/globals";
 import { DBUser } from "@lib/types/user-types";
 import { Privilege } from "@prisma/client";
 import { Card } from "@components/globals/card/Card";
+import { getStorageValue, setStorageValue, STORAGE_KEY } from "@lib/sessionStorage";
 
 const enum AccountsFilterState {
   ALL,
@@ -117,6 +118,34 @@ const Users = ({
     return Boolean(privileges?.find((privilege) => privilege.nameEn === privilegeName)?.id);
   };
 
+  // auto scroll to user card when data is refreshed / page loaded
+  const handleRouteChange = () => {
+    const id = router.query.id as string;
+    // check for a user id in local storage
+    const storedUser = getStorageValue(STORAGE_KEY.USER);
+
+    if (storedUser.scrollY) {
+      window.scrollTo(0, storedUser.scrollY);
+      return;
+    }
+
+    if (id) {
+      // if there is a user id in the query param, scroll to that user card
+      const element = document.getElementById(`user-${id}`);
+      element?.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  useEffect(() => {
+    handleRouteChange();
+
+    router.events.on("routeChangeComplete", handleRouteChange);
+
+    return () => {
+      router.events.off("routeChangeComplete", handleRouteChange);
+    };
+  }, [router]);
+
   return (
     <>
       <Head>
@@ -172,8 +201,10 @@ const Users = ({
                     <div className="m-auto grow basis-1/3 p-4">
                       <h2 className="pb-6 text-base">{user.name}</h2>
                       <p className="mb-4">{user.email}</p>
+
                       <div className="">
                         {canManageUsers && user.active && (
+                          /* Lock / unlock publishing */
                           <Button
                             theme={"secondary"}
                             className="mr-2 tablet:mb-2"
@@ -184,6 +215,14 @@ const Users = ({
                               })
                                 ? "remove"
                                 : "add";
+
+                              // store user id and scroll position in local storage
+                              // for local refresh after privilege update
+                              setStorageValue(STORAGE_KEY.USER, {
+                                id: user.id,
+                                scrollY: (window && window.scrollY) || 0,
+                              });
+
                               await updatePrivilege(user.id, [{ id: publishFormsId, action }]);
                               await refreshData();
                             }}
@@ -197,8 +236,10 @@ const Users = ({
                           </Button>
                         )}
 
+                        {/* Manage Forms */}
                         {canManageUsers && user.active && (
                           <LinkButton.Secondary
+                            scroll={false}
                             href={`/admin/accounts/${user.id}/manage-forms`}
                             className="mb-2 mr-2"
                           >
@@ -206,11 +247,18 @@ const Users = ({
                           </LinkButton.Secondary>
                         )}
 
+                        {/* Activate account */}
                         {canManageUsers && !isCurrentUser(user) && !user.active && (
                           <Button
                             theme={"secondary"}
                             className="mr-2"
                             onClick={async () => {
+                              // store user id and scroll position in local storage
+                              // for local refresh after privilege update
+                              setStorageValue(STORAGE_KEY.USER, {
+                                id: user.id,
+                                scrollY: (window && window.scrollY) || 0,
+                              });
                               await updateActiveStatus(user.id, true);
                               await refreshData();
                             }}
@@ -221,6 +269,7 @@ const Users = ({
                       </div>
                     </div>
                     <div className="flex items-end p-2">
+                      {/* Manage Permissions  */}
                       {user.active && (
                         <Dropdown>
                           <DropdownMenuPrimitive.Item
@@ -234,6 +283,7 @@ const Users = ({
                             {canManageUsers ? t("managePermissions") : t("viewPermissions")}
                           </DropdownMenuPrimitive.Item>
 
+                          {/* Deactivate Account  */}
                           {canManageUsers && !isCurrentUser(user) && user.active && (
                             <>
                               <DropdownMenuPrimitive.Item
@@ -242,6 +292,12 @@ const Users = ({
                                 }`}
                                 onClick={async () => {
                                   showConfirmDeleteModal(true);
+                                  // store user id and scroll position in local storage
+                                  // for local refresh after privilege update
+                                  setStorageValue(STORAGE_KEY.USER, {
+                                    id: user.id,
+                                    scrollY: (window && window.scrollY) || 0,
+                                  });
                                 }}
                               >
                                 {user.active ? t("deactivateAccount") : t("activateAccount")}

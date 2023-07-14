@@ -1,4 +1,4 @@
-import React, { ReactElement, useState, SetStateAction } from "react";
+import React, { ReactElement, useState, SetStateAction, useEffect } from "react";
 import axios from "axios";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
@@ -15,6 +15,7 @@ import { Alert, Button, ErrorStatus } from "@components/globals";
 import { BackLink } from "@components/admin/LeftNav/BackLink";
 import { PermissionToggle } from "@components/admin/Users/PermissionToggle";
 import { LinkButton } from "@components/globals";
+import { setStorageValue, STORAGE_KEY } from "@lib/sessionStorage";
 
 type PrivilegeList = Omit<Privilege, "permissions">[];
 interface User {
@@ -218,19 +219,24 @@ const ManagePermissions = ({
         </Button>
       )}
 
-      <LinkButton.Secondary href="/admin/accounts">{t("cancel")}</LinkButton.Secondary>
+      <LinkButton.Secondary href={`/admin/accounts?id=${formUser.id}`}>
+        {t("cancel")}
+      </LinkButton.Secondary>
     </div>
   );
 };
 
-const BackToAccounts = () => {
+const BackToAccounts = ({ id }: { id: string }) => {
   const { t } = useTranslation("admin-users");
-  return <BackLink href="/admin/accounts">{t("backToAccounts")}</BackLink>;
+  return <BackLink href={`/admin/accounts?id=${id}`}>{t("backToAccounts")}</BackLink>;
 };
 
 ManagePermissions.getLayout = (page: ReactElement) => {
   return (
-    <AdminNavLayout user={page.props.user} backLink={<BackToAccounts />}>
+    <AdminNavLayout
+      user={page.props.user}
+      backLink={<BackToAccounts id={page.props.formUser.id} />}
+    >
       {page}
     </AdminNavLayout>
   );
