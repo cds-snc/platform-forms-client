@@ -75,6 +75,7 @@ const Users = ({
   const canManageUsers = ability?.can("update", "User") ?? false;
   const { refreshData } = useRefresh();
   const { data: session } = useSession();
+  const [selectedUser, setSelectedUser] = useState<DBUser | null>(null);
   const router = useRouter();
   const isCurrentUser = (user: DBUser) => {
     return user.id === session?.user?.id;
@@ -290,6 +291,7 @@ const Users = ({
                                 }`}
                                 onClick={async () => {
                                   showConfirmDeleteModal(true);
+                                  setSelectedUser(user);
                                   // store user id and scroll position in local storage
                                   // for local refresh after privilege update
                                   setStorageValue(STORAGE_KEY.USER, {
@@ -305,15 +307,6 @@ const Users = ({
                         </Dropdown>
                       )}
                     </div>
-                    {confirmDeleteModal && (
-                      // Note: Placing this within the Dropdown will break it
-                      <ConfirmDeactivateModal
-                        user={user}
-                        handleClose={function (): void {
-                          showConfirmDeleteModal(false);
-                        }}
-                      />
-                    )}
                   </li>
                 );
               })}
@@ -329,6 +322,16 @@ const Users = ({
             </Card>
           )}
         </div>
+
+        {confirmDeleteModal && selectedUser && (
+          // Note: Placing this within the Dropdown will break it
+          <ConfirmDeactivateModal
+            user={selectedUser}
+            handleClose={function (): void {
+              showConfirmDeleteModal(false);
+            }}
+          />
+        )}
       </>
     </>
   );
