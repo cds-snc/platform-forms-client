@@ -7,7 +7,7 @@ import { SettingsNavigation } from "@components/form-builder/app/navigation/Sett
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { getTemplateWithAssociatedUsers } from "@lib/templates";
 import { requireAuthentication } from "@lib/auth";
-import { checkPrivileges } from "@lib/privileges";
+import { checkPrivileges, checkPrivilegesAsBoolean } from "@lib/privileges";
 import { getUsers } from "@lib/users";
 import { User } from "@prisma/client";
 import { FormRecord } from "@lib/types";
@@ -80,12 +80,12 @@ export const getServerSideProps = requireAuthentication(
   async ({ user: { ability }, locale, params }) => {
     let adminProps;
 
-    try {
-      checkPrivileges(ability, [
+    if (
+      checkPrivilegesAsBoolean(ability, [
         { action: "update", subject: "FormRecord" },
         { action: "update", subject: "User" },
-      ]);
-
+      ])
+    ) {
       const formID = params?.formId;
       if (!formID || Array.isArray(formID)) return redirect(locale);
 
@@ -102,8 +102,6 @@ export const getServerSideProps = requireAuthentication(
         allUsers,
         canManageOwnership: true,
       };
-    } catch (e) {
-      // noop
     }
 
     return {
