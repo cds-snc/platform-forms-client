@@ -144,7 +144,7 @@ const Users = ({
     return () => {
       router.events.off("routeChangeComplete", handleRouteChange);
     };
-  }, [router]);
+  }, [router, handleRouteChange]);
 
   return (
     <>

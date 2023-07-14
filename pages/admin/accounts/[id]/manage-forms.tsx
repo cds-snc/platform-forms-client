@@ -1,4 +1,4 @@
-import React, { ReactElement, useState, useRef, useEffect } from "react";
+import React, { ReactElement, useState, useRef } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import { useTranslation } from "next-i18next";
@@ -19,7 +19,6 @@ import { TemplateStoreProvider } from "@components/form-builder/store";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { useRefresh } from "@lib/hooks";
 import { ExclamationIcon } from "@components/form-builder/icons";
-import { setStorageValue, STORAGE_KEY } from "@lib/sessionStorage";
 
 type User = {
   id: string;
