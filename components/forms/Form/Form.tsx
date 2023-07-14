@@ -318,12 +318,14 @@ export const Form = withFormik<FormProps, Responses>({
     } catch (err) {
       logMessage.error(err as Error);
     } finally {
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({
-        event: "form_submission_trigger",
-        formID: formikBag.props.formRecord.id,
-        formTitle: formikBag.props.formRecord.form.titleEn,
-      });
+      if (formikBag.props && !formikBag.props.isPreview) {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: "form_submission_trigger",
+          formID: formikBag.props.formRecord.id,
+          formTitle: formikBag.props.formRecord.form.titleEn,
+        });
+      }
 
       formikBag.setSubmitting(false);
     }
