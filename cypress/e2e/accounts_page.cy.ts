@@ -47,8 +47,11 @@ describe("Accounts Page", () => {
       // Deactivate account
       cy.get("button").contains("All").click();
       cy.get("ul[data-testid='accountsList'] li").last().contains("More").click();
-      cy.get("button").contains("Deactivate account").click();
-      cy.get("dialog").contains("Deactivate account").click();
+      cy.get("div[role='menuitem']").contains("Deactivate account").click();
+      // Note: Test Failing? Look here first.
+      // It seems like two dialogs are open here. I didn't think this was possible in a browser
+      // but getting the second one works. This may be a cypress thing with window frames/dialogs..
+      cy.get("dialog").last().contains("Deactivate account").click();
       cy.get("ul[data-testid='accountsList'] li").last().contains("Reactivate account");
 
       cy.get("button").contains("All").click();
