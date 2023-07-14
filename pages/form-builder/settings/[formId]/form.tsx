@@ -78,7 +78,6 @@ const redirect = (locale: string | undefined) => {
 
 export const getServerSideProps = requireAuthentication(
   async ({ user: { ability }, locale, params }) => {
-    let canManageOwnership = false;
     let adminProps;
 
     try {
@@ -86,15 +85,10 @@ export const getServerSideProps = requireAuthentication(
         { action: "update", subject: "FormRecord" },
         { action: "update", subject: "User" },
       ]);
-      canManageOwnership = true;
-    } catch (e) {
-      // noop
-    }
 
-    const formID = params?.formId;
-    if (!formID || Array.isArray(formID)) return redirect(locale);
+      const formID = params?.formId;
+      if (!formID || Array.isArray(formID)) return redirect(locale);
 
-    if (canManageOwnership) {
       const templateWithAssociatedUsers = await getTemplateWithAssociatedUsers(ability, formID);
       if (!templateWithAssociatedUsers) return redirect(locale);
 
@@ -108,6 +102,8 @@ export const getServerSideProps = requireAuthentication(
         allUsers,
         canManageOwnership: true,
       };
+    } catch (e) {
+      // noop
     }
 
     return {
