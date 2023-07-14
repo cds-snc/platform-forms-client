@@ -195,7 +195,10 @@ const BackToAccounts = ({ id }: { id: string }) => {
 
 ManageForms.getLayout = (page: ReactElement) => {
   return (
-    <AdminNavLayout user={page.props.user} backLink={<BackToAccounts id={page.props.formUser} />}>
+    <AdminNavLayout
+      user={page.props.user}
+      backLink={<BackToAccounts id={page.props.formUser.id} />}
+    >
       <TemplateStoreProvider {...{ locale: page.props.locale }}>{page}</TemplateStoreProvider>
     </AdminNavLayout>
   );

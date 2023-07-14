@@ -12,7 +12,6 @@ import { requireAuthentication } from "@lib/auth";
 import { checkPrivileges, getAllPrivileges } from "@lib/privileges";
 import { logMessage } from "@lib/logger";
 import { getUsers } from "@lib/users";
-import { useRefresh } from "@lib/hooks";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 import { Dropdown } from "@components/admin/Users/Dropdown";
 import { ConfirmDeactivateModal } from "@components/admin/Users/ConfirmDeactivateModal";
@@ -20,7 +19,6 @@ import { Button, themes, LinkButton } from "@components/globals";
 import { DBUser } from "@lib/types/user-types";
 import { Privilege } from "@prisma/client";
 import { Card } from "@components/globals/card/Card";
-import { getStorageValue, setStorageValue, STORAGE_KEY } from "@lib/sessionStorage";
 
 const enum AccountsFilterState {
   ALL,
@@ -66,20 +64,36 @@ const updatePrivilege = async (
 const Users = ({
   allUsers,
   publishFormsId,
+  previousUserRef,
 }: {
   allUsers: DBUser[];
   publishFormsId: string;
+  previousUserRef?: string;
 }): React.ReactElement => {
   const { t } = useTranslation("admin-users");
   const { ability } = useAccessControl();
   const canManageUsers = ability?.can("update", "User") ?? false;
-  const { refreshData } = useRefresh();
   const { data: session } = useSession();
   const router = useRouter();
   const isCurrentUser = (user: DBUser) => {
     return user.id === session?.user?.id;
   };
   const [confirmDeleteModal, showConfirmDeleteModal] = useState(false);
+
+  const [userList, setUserList] = useState(allUsers);
+
+  const refreshUserData = async () => {
+    try {
+      const userListResponse = await axios({
+        url: `/api/users`,
+        method: "GET",
+        timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+      });
+      setUserList(userListResponse.data);
+    } catch (e) {
+      logMessage.error(e);
+    }
+  };
 
   const [accountsFilterState, setAccountsFilterState] = useState(AccountsFilterState.ALL);
   const updateAccountsFilter = (filter: AccountsFilterState) => {
@@ -99,14 +113,14 @@ const Users = ({
   const isFilterDeactivated = () => accountsFilterState === AccountsFilterState.DEACTIVATED;
 
   const accounts = useMemo(() => {
-    return allUsers
+    return userList
       .sort((a, b) => (a.name && b.name ? a.name.localeCompare(b.name) : 0))
       .filter((user) => {
         if (accountsFilterState === AccountsFilterState.ACTIVE) return user?.active;
         if (accountsFilterState === AccountsFilterState.DEACTIVATED) return !user?.active;
         return user; // Defaults to filter All
       });
-  }, [allUsers, accountsFilterState]);
+  }, [userList, accountsFilterState]);
 
   const hasPrivilege = ({
     privileges,
@@ -117,32 +131,14 @@ const Users = ({
   }): boolean => {
     return Boolean(privileges?.find((privilege) => privilege.nameEn === privilegeName)?.id);
   };
-
   useEffect(() => {
-    // auto scroll to user card when data is refreshed / page loaded
-    const handleRouteChange = () => {
-      const id = router.query.id as string;
-      // check for a user id in local storage
-      const storedUser = getStorageValue(STORAGE_KEY.USER);
-
-      if (storedUser.scrollY) {
-        window.scrollTo(0, storedUser.scrollY);
-        return;
-      }
-
-      if (id) {
-        // if there is a user id in the query param, scroll to that user card
-        const element = document.getElementById(`user-${id}`);
-        element?.scrollIntoView({ behavior: "smooth" });
-      }
-    };
-
-    router.events.on("routeChangeComplete", handleRouteChange);
-
-    return () => {
-      router.events.off("routeChangeComplete", handleRouteChange);
-    };
-  }, [router]);
+    if (previousUserRef) {
+      // if there is a user id in the query param, scroll to that user card
+      const element = document.getElementById(`user-${previousUserRef}`);
+      element?.scrollIntoView({ behavior: "smooth" });
+      router.replace("/admin/accounts", undefined, { scroll: false });
+    }
+  }, [previousUserRef, router]);
 
   return (
     <>
@@ -214,15 +210,8 @@ const Users = ({
                                 ? "remove"
                                 : "add";
 
-                              // store user id and scroll position in local storage
-                              // for local refresh after privilege update
-                              setStorageValue(STORAGE_KEY.USER, {
-                                id: user.id,
-                                scrollY: (window && window.scrollY) || 0,
-                              });
-
                               await updatePrivilege(user.id, [{ id: publishFormsId, action }]);
-                              await refreshData();
+                              await refreshUserData();
                             }}
                           >
                             {hasPrivilege({
@@ -251,14 +240,8 @@ const Users = ({
                             theme={"secondary"}
                             className="mr-2"
                             onClick={async () => {
-                              // store user id and scroll position in local storage
-                              // for local refresh after privilege update
-                              setStorageValue(STORAGE_KEY.USER, {
-                                id: user.id,
-                                scrollY: (window && window.scrollY) || 0,
-                              });
                               await updateActiveStatus(user.id, true);
-                              await refreshData();
+                              await refreshUserData();
                             }}
                           >
                             {t("activateAccount")}
@@ -290,12 +273,6 @@ const Users = ({
                                 }`}
                                 onClick={async () => {
                                   showConfirmDeleteModal(true);
-                                  // store user id and scroll position in local storage
-                                  // for local refresh after privilege update
-                                  setStorageValue(STORAGE_KEY.USER, {
-                                    id: user.id,
-                                    scrollY: (window && window.scrollY) || 0,
-                                  });
                                 }}
                               >
                                 {user.active ? t("deactivateAccount") : t("activateAccount")}
@@ -338,40 +315,46 @@ Users.getLayout = (page: ReactElement) => {
   return <AdminNavLayout user={page.props.user}>{page}</AdminNavLayout>;
 };
 
-export const getServerSideProps = requireAuthentication(async ({ user: { ability }, locale }) => {
-  checkPrivileges(
-    ability,
-    [
-      { action: "view", subject: "User" },
-      { action: "view", subject: "Privilege" },
-    ],
-    "all"
-  );
-  const allUsers = await getUsers(ability);
+export const getServerSideProps = requireAuthentication(
+  async ({ user: { ability }, locale, query }) => {
+    checkPrivileges(
+      ability,
+      [
+        { action: "view", subject: "User" },
+        { action: "view", subject: "Privilege" },
+      ],
+      "all"
+    );
+    const allUsers = await getUsers(ability);
 
-  const allPrivileges = (await getAllPrivileges(ability)).map(
-    ({ id, nameEn, nameFr, descriptionFr, descriptionEn }) => ({
-      id,
-      nameEn,
-      nameFr,
-      descriptionFr,
-      descriptionEn,
-    })
-  );
+    const allPrivileges = (await getAllPrivileges(ability)).map(
+      ({ id, nameEn, nameFr, descriptionFr, descriptionEn }) => ({
+        id,
+        nameEn,
+        nameFr,
+        descriptionFr,
+        descriptionEn,
+      })
+    );
 
-  // Convenience for features, lock/unlock publishing that may or may not have the related Id
-  const publishFormsId = allPrivileges.find((privilege) => privilege.nameEn === "PublishForms")?.id;
+    // Convenience for features, lock/unlock publishing that may or may not have the related Id
+    const publishFormsId = allPrivileges.find(
+      (privilege) => privilege.nameEn === "PublishForms"
+    )?.id;
 
-  return {
-    props: {
-      ...(locale &&
-        (await serverSideTranslations(locale, ["common", "admin-users", "admin-login"]))),
+    const previousUserRef = query.id as string;
 
-      allUsers,
-      allPrivileges,
-      publishFormsId,
-    },
-  };
-});
+    return {
+      props: {
+        ...(locale &&
+          (await serverSideTranslations(locale, ["common", "admin-users", "admin-login"]))),
+        allUsers,
+        allPrivileges,
+        publishFormsId,
+        ...(previousUserRef && { previousUserRef }),
+      },
+    };
+  }
+);
 
 export default Users;
