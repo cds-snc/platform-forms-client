@@ -1,24 +1,37 @@
- {
+  {
   // Use IntelliSense to learn about possible attributes.
   // Hover to view descriptions of existing attributes.
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "chrome",
+      "name": "Next.js: server-side",
+      "type": "node-terminal",
       "request": "launch",
-      "name": "Launch Chrome",
-      "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}"
+      "command": "yarn dev"
     },
     {
-      "name": "NextJS Debugger",
-      "type": "node",
-      "request": "attach",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "port": 9229
+      "name": "Next.js: Cypress server-side",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "yarn dev:test"
+    },
+    {
+      "name": "Next.js: client-side",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000"
+    },
+    {
+      "name": "Next.js: debug full stack",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "yarn dev",
+      "serverReadyAction": {
+        "pattern": "started server on .+, url: (https?://.+)",
+        "uriFormat": "%s",
+        "action": "debugWithChrome"
+      }
     },
     {
       "type": "node",
@@ -26,7 +39,6 @@
       "request": "launch",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
-      "disableOptimisticBPs": true,
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "yarn",
       "args": [
@@ -36,10 +48,4 @@
       ]
     }
   ],
-  "compounds": [
-    {
-      "name": "Debug Next.js + Chrome",
-      "configurations": ["NextJS Debugger", "Launch Chrome"]
-    }
-  ]
 }
