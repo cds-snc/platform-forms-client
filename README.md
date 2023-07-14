@@ -109,25 +109,30 @@ There are 2 ways to connect to the database. Either directly using PGAdmin or a 
 - Click on "Save Change" button in the top menu bar once completed.
 
 ## Testing
-This application uses Cypress for end-to-end testing. 
+
+This application uses Cypress for end-to-end testing.
 
 If you want to clear the database and run the tests in a clean slate:
+
 ```
 yarn dev:test # run in a separate terminal
 ```
 
 If you want to run a specific test:
+
 ```
 yarn cypress:e2e --spec "PATH_TO_TEST"
 ```
 
 If you want to run the entire test suite:
+
 ```
 yarn cypress:e2e
 # an error? see the screenshot in ./cypress/screenshots
 ```
 
 If a test is failing, you can run the test tool:
+
 ```
 yarn cypress
 # A chrome instance starts, then manually start and watch that test running
@@ -142,11 +147,6 @@ To send a form submission to an email address, you should configure the followin
 ```sh
 NOTIFY_API_KEY=
 ```
-
-### Debugging
-
-For verbose debug logging set an environment variable called DEBUG to `true` before running `yarn dev`
-ex. `DEBUG=true yarn dev`
 
 ## ---------------------------------------------------------------------
 
@@ -250,8 +250,3 @@ Pour envoyer les réponses d'une formulaire à une adresse courriel, vous devez 
 ```sh
 NOTIFY_API_KEY=
 ```
-
-### Débougage
-
-Pour des logs plus verbose en fin de débougage, définissez une variable d'environnement appelée DEBUG comme `true` avant d'exécuter` yarn dev`
-ex. `DEBUG=true yarn dev`
