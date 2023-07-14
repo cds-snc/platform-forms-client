@@ -118,9 +118,12 @@ export const begin2FAAuthentication = async ({
   token,
 }: CognitoToken): Promise<AuthenticationFlowToken> => {
   // ensure the user account is active
+
+  const sanitizedEmail = sanitizeEmailAddressForCognito(email);
+
   const prismaUser = await prisma.user.findUnique({
     where: {
-      email: email,
+      email: sanitizedEmail,
     },
     select: {
       id: true,
@@ -131,7 +134,6 @@ export const begin2FAAuthentication = async ({
   if (prismaUser?.active === false) {
     throw new Error("AccountDeactivated");
   }
-  const sanitizedEmail = sanitizeEmailAddressForCognito(email);
 
   const verificationCode = await generateVerificationCode();
 
@@ -234,7 +236,7 @@ export const validate2FAVerificationCode = async (
     // ensure the user account is active
     const prismaUser = await prisma.user.findUnique({
       where: {
-        email: email,
+        email: sanitizedEmail,
       },
       select: {
         id: true,

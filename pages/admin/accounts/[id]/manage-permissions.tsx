@@ -1,4 +1,4 @@
-import React, { ReactElement, useState, SetStateAction } from "react";
+import React, { ReactElement, useState, SetStateAction, useEffect } from "react";
 import axios from "axios";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
@@ -11,11 +11,11 @@ import { checkPrivileges, getAllPrivileges } from "@lib/privileges";
 import { logMessage } from "@lib/logger";
 import { getUser } from "@lib/users";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
-import { Button } from "@components/globals";
-import { Alert, ErrorStatus } from "@components/forms/Alert/Alert";
+import { Alert, Button, ErrorStatus } from "@components/globals";
 import { BackLink } from "@components/admin/LeftNav/BackLink";
 import { PermissionToggle } from "@components/admin/Users/PermissionToggle";
 import { LinkButton } from "@components/globals";
+import { setStorageValue, STORAGE_KEY } from "@lib/sessionStorage";
 
 type PrivilegeList = Omit<Privilege, "permissions">[];
 interface User {
@@ -63,7 +63,7 @@ const PrivilegeList = ({
   const canManageUsers = ability?.can("update", "User") ?? false;
 
   return (
-    <ul className="m-0 p-0 mb-12">
+    <ul className="m-0 mb-12 p-0">
       {privileges?.map((privilege) => {
         const active = userPrivileges.includes(privilege.id);
         const description =
@@ -139,6 +139,8 @@ const ManagePermissions = ({
           type={ErrorStatus.SUCCESS}
           focussable={true}
           heading={t("responseSuccess.title")}
+          dismissible={true}
+          onDismiss={() => setMessage(null)}
           tabIndex={0}
         >
           {t("responseSuccess.message")}
@@ -152,6 +154,8 @@ const ManagePermissions = ({
         type={ErrorStatus.ERROR}
         focussable={true}
         heading={t("responseFail.title")}
+        dismissible={true}
+        onDismiss={() => setMessage(null)}
         tabIndex={0}
       >
         {t("responseFail.message")}
@@ -215,19 +219,24 @@ const ManagePermissions = ({
         </Button>
       )}
 
-      <LinkButton.Secondary href="/admin/accounts">{t("cancel")}</LinkButton.Secondary>
+      <LinkButton.Secondary href={`/admin/accounts?id=${formUser.id}`}>
+        {t("cancel")}
+      </LinkButton.Secondary>
     </div>
   );
 };
 
-const BackToAccounts = () => {
+const BackToAccounts = ({ id }: { id: string }) => {
   const { t } = useTranslation("admin-users");
-  return <BackLink href="/admin/accounts">{t("backToAccounts")}</BackLink>;
+  return <BackLink href={`/admin/accounts?id=${id}`}>{t("backToAccounts")}</BackLink>;
 };
 
 ManagePermissions.getLayout = (page: ReactElement) => {
   return (
-    <AdminNavLayout user={page.props.user} backLink={<BackToAccounts />}>
+    <AdminNavLayout
+      user={page.props.user}
+      backLink={<BackToAccounts id={page.props.formUser.id} />}
+    >
       {page}
     </AdminNavLayout>
   );
@@ -246,7 +255,7 @@ export const getServerSideProps = requireAuthentication(
 
     const id = params?.id || null;
 
-    const formUser = await getUser(id as string, ability);
+    const formUser = await getUser(ability, id as string);
 
     const allPrivileges = (await getAllPrivileges(ability)).map(
       ({ id, nameEn, nameFr, descriptionFr, descriptionEn }) => ({

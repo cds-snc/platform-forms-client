@@ -9,6 +9,7 @@ import { sendDeactivationEmail } from "@lib/deactivate";
 import { getAllTemplatesForUser } from "./templates";
 import { listAllSubmissions } from "./vault";
 import { detectOldUnprocessedSubmissions } from "./nagware";
+import { DBUser } from "./types/user-types";
 
 /**
  * Get or Create a user if a record does not exist
@@ -24,6 +25,7 @@ export const getOrCreateUser = async ({
   email: string | null;
   privileges: Privilege[];
   id: string;
+  active: boolean;
 } | null> => {
   if (!email) throw new Error("Email does not exist on token");
   const user = await prisma.user
@@ -36,6 +38,7 @@ export const getOrCreateUser = async ({
         name: true,
         email: true,
         privileges: true,
+        active: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -75,6 +78,7 @@ export const getOrCreateUser = async ({
           name: true,
           email: true,
           privileges: true,
+          active: true,
         },
       })
       .catch((e) => prismaErrors(e, null));
@@ -112,7 +116,10 @@ export const getOrCreateUser = async ({
  * Get User by id
  * @returns User if found
  */
-export const getUser = async (id: string, ability: UserAbility) => {
+export const getUser = async (
+  ability: UserAbility,
+  id: string
+): Promise<boolean | SelectedUser> => {
   try {
     checkPrivileges(ability, [{ action: "view", subject: "User" }]);
 
@@ -153,11 +160,22 @@ export const getUser = async (id: string, ability: UserAbility) => {
   }
 };
 
+interface SelectedUser
+  extends Omit<DBUser, "privileges" | "image" | "emailVerified" | "lastLogin"> {
+  privileges: {
+    id: string;
+    nameEn: string | null;
+    nameFr: string | null;
+    descriptionEn: string | null;
+    descriptionFr: string | null;
+  }[];
+}
+
 /**
  * Get all Users
  * @returns An array of all Users
  */
-export const getUsers = async (ability: UserAbility) => {
+export const getUsers = async (ability: UserAbility): Promise<SelectedUser[] | never[]> => {
   try {
     checkPrivileges(ability, [{ action: "view", subject: "User" }]);
 
@@ -201,9 +219,6 @@ export const getUsers = async (ability: UserAbility) => {
  */
 export const updateActiveStatus = async (ability: UserAbility, userID: string, active: boolean) => {
   try {
-    const canManageUsers = ability?.can("update", "User") ?? false;
-    if (!canManageUsers) throw new AccessControlError("Access Denied");
-
     checkPrivileges(ability, [{ action: "update", subject: "User" }]);
     const user = await prisma.user.update({
       where: {
@@ -225,6 +240,15 @@ export const updateActiveStatus = async (ability: UserAbility, userID: string, a
 
     return user;
   } catch (error) {
+    if (error instanceof AccessControlError) {
+      logEvent(
+        ability.userID,
+        { type: "User" },
+        "AccessDenied",
+        `Attempted to get user by id ${userID}`
+      );
+    }
+
     logMessage.error(error as Error);
     throw error;
   }
@@ -249,9 +273,6 @@ export const getUnprocessedSubmissionsForUser = async (
   const overdue: Overdue = {};
 
   try {
-    const user = await getUser(userId, ability);
-    if (!user) return overdue;
-
     if (!templates) {
       templates = (await getAllTemplatesForUser(ability, userId)).map((template) => {
         const {
@@ -282,8 +303,16 @@ export const getUnprocessedSubmissionsForUser = async (
         }
       })
     );
-  } catch (error) {
-    // noop
+  } catch (e) {
+    if (e instanceof AccessControlError) {
+      logEvent(
+        ability.userID,
+        { type: "User" },
+        "AccessDenied",
+        `Attempted to get unprocessed submssions for user ${userId}`
+      );
+    }
+    throw e;
   }
 
   return overdue;

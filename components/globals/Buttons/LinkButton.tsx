@@ -6,11 +6,13 @@ type LinkButtonProps = {
   href: string;
   children: JSX.Element | string;
   className?: string;
+  scroll?: boolean;
 };
 
-export const Primary = ({ href, children, className }: LinkButtonProps) => {
+export const Primary = ({ href, children, className, scroll }: LinkButtonProps) => {
   return (
     <StyledLink
+      scroll={scroll}
       href={href}
       className={`${themes.primary} ${themes.base} ${themes.htmlLink} ${className}`}
     >
@@ -19,9 +21,10 @@ export const Primary = ({ href, children, className }: LinkButtonProps) => {
   );
 };
 
-export const Secondary = ({ href, className, children }: LinkButtonProps) => {
+export const Secondary = ({ href, className, children, scroll }: LinkButtonProps) => {
   return (
     <StyledLink
+      scroll={scroll}
       href={href}
       className={`text-black-default active:text-black-default visited:text-black-default ${themes.secondary} ${themes.base} no-underline active:shadow-none focus:shadow-none ${className}`}
     >

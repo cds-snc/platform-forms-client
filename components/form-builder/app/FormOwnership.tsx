@@ -38,7 +38,6 @@ const updateUsersToTemplateAssignations = async (formID: string, users: { id: st
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     });
   } catch (e) {
-    // @TODO: Handle 400 error if users missing
     logMessage.error(e);
   }
 };
@@ -108,13 +107,13 @@ export const FormOwnership = ({
 
   return (
     <>
-      <div className="mb-6">
+      <div className="mb-20">
         <h2>{t("Manage ownership")}</h2>
 
         {message && message}
 
         <p className="mb-4">{t("assignUsersToTemplate")}</p>
-        <p className="mb-4 font-bold">{t("enterOwnersEmail")} </p>
+        <p className="mb-2 font-bold">{t("enterOwnersEmail")} </p>
         <Select
           instanceId={useId()}
           isClearable

@@ -19,6 +19,7 @@ interface StyledLinkProps {
   lang?: string;
   theme?: Theme;
   testid?: string;
+  scroll?: boolean;
 }
 
 // Making all the buttons look the same, even the fake ones. Pulls styles from the global Button
@@ -39,10 +40,11 @@ export const StyledLink = (props: StyledLinkProps) => {
     lang,
     theme = "default",
     testid = "",
+    scroll = true, // NextJS default
   } = props;
   const ref = useRef<HTMLAnchorElement>(null);
   return (
-    <Link href={href} {...(locale && { locale: locale })} passHref legacyBehavior>
+    <Link href={href} {...(locale && { locale: locale })} passHref legacyBehavior scroll={scroll}>
       <WrappedLink
         href={href}
         className={theme ? `${className} ${linkThemes[theme]}` : className}

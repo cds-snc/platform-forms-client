@@ -9,13 +9,15 @@ export const Dropdown = ({ children }: { children: React.ReactNode }) => {
     <div className="relative inline-block text-left">
       <DropdownMenuPrimitive.Root>
         <DropdownMenuPrimitive.Trigger asChild>
-          <button className={`!border-0 ${themes.base} ${themes.htmlLink}`}>{t("moreMenu")}</button>
+          <button className={`!border-0 ${themes.base} ${themes.htmlLink} whitespace-nowrap`}>
+            {t("moreMenu")}
+          </button>
         </DropdownMenuPrimitive.Trigger>
         <DropdownMenuPrimitive.Portal>
           <DropdownMenuPrimitive.Content
             align="end"
             sideOffset={5}
-            className={`rounded-lg px-4 py-4 shadow-md bg-white border-1 border-grey`}
+            className={`rounded-lg border-1 border-gray bg-white p-4 shadow-md`}
           >
             {children}
           </DropdownMenuPrimitive.Content>

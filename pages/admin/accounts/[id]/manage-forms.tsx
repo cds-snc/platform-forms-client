@@ -1,4 +1,4 @@
-import React, { ReactElement, useState, useRef } from "react";
+import React, { ReactElement, useState, useRef, useEffect } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import { useTranslation } from "next-i18next";
@@ -18,6 +18,8 @@ import { ConfirmDelete } from "@components/form-builder/app/ConfirmDelete";
 import { TemplateStoreProvider } from "@components/form-builder/store";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { useRefresh } from "@lib/hooks";
+import { ExclamationIcon } from "@components/form-builder/icons";
+import { setStorageValue, STORAGE_KEY } from "@lib/sessionStorage";
 
 type User = {
   id: string;
@@ -47,13 +49,17 @@ const OverdueStatus = ({ level }: { level: number }) => {
   // 35 days +
   if ([3, 4].includes(level)) {
     return (
-      <span className="mb-2 block p-2 text-red">{t("overdueResponses", { days: warnAfter })}</span>
+      <span className="mb-2 block p-2 text-red">
+        <ExclamationIcon className="mr-2 inline-block h-6 w-6" />
+        {t("overdueResponses", { days: warnAfter })}
+      </span>
     );
   }
   // 21 days +
   if ([1, 2].includes(level)) {
     return (
       <span className="mb-2 block p-2 text-red">
+        <ExclamationIcon className="mr-2 inline-block h-6 w-6" />
         {t("overdueResponses", { days: promptAfter })}
       </span>
     );
@@ -77,6 +83,7 @@ const ManageForms = ({
   const { ability } = useAccessControl();
   const { refreshData } = useRefresh();
   const canManageForms = ability?.can("update", "FormRecord");
+
   return (
     <>
       <Head>
@@ -101,13 +108,23 @@ const ManageForms = ({
           const backgroundColor = isPublished ? "#95CCA2" : "#FEE39F";
           const borderColor = isPublished ? "#95CCA2" : "#FFD875";
           return (
-            <li className="mb-4 max-w-2xl rounded-md border-2 border-black p-4" key={id}>
-              <div className="flex flex-row justify-between">
-                <h2 className="mb-0 pb-0 text-base">
-                  {titleEn} / {titleFr}
+            <li
+              className="mb-4 max-w-2xl rounded-md border-2 border-black p-4"
+              key={id}
+              id={`form-${id}`}
+            >
+              <div className="flex flex-row items-start justify-between">
+                <h2 className="mb-0 mr-2 overflow-hidden pb-0 text-base">
+                  {i18n.language === "en" ? (
+                    <>
+                      {titleEn} / <span lang="fr">{titleFr}</span>
+                    </>
+                  ) : (
+                    <>
+                      {titleFr} / <span lang="en">{titleEn}</span>
+                    </>
+                  )}
                 </h2>
-
-                {overdue[id] && <OverdueStatus level={overdue[id].level} />}
 
                 <span
                   className="block rounded px-2 py-1 "
@@ -120,11 +137,13 @@ const ManageForms = ({
                 </span>
               </div>
 
+              {overdue[id] && <OverdueStatus level={overdue[id].level} />}
+
               {/* linking to existing page for now */}
-              <div className="mt-10 flex flex-row justify-between">
+              <div className="mt-10 flex flex-row items-end justify-between">
                 <div>
                   <LinkButton.Secondary
-                    href={`/${i18n.language}/form-builder/settings/${id}/form`}
+                    href={`/${i18n.language}/form-builder/settings/${id}/form?backLink=${formUser.id}`}
                     className="mb-2 mr-3"
                   >
                     {t("manageOwnerships")}
@@ -170,14 +189,14 @@ const ManageForms = ({
   );
 };
 
-const BackToAccounts = () => {
+const BackToAccounts = ({ id }: { id: string }) => {
   const { t } = useTranslation("admin-users");
-  return <BackLink href="/admin/accounts">{t("backToAccounts")}</BackLink>;
+  return <BackLink href={`/admin/accounts?id=${id}`}>{t("backToAccounts")}</BackLink>;
 };
 
 ManageForms.getLayout = (page: ReactElement) => {
   return (
-    <AdminNavLayout user={page.props.user} backLink={<BackToAccounts />}>
+    <AdminNavLayout user={page.props.user} backLink={<BackToAccounts id={page.props.formUser} />}>
       <TemplateStoreProvider {...{ locale: page.props.locale }}>{page}</TemplateStoreProvider>
     </AdminNavLayout>
   );
@@ -186,8 +205,21 @@ ManageForms.getLayout = (page: ReactElement) => {
 export const getServerSideProps = requireAuthentication(
   async ({ locale, params, user: { ability } }) => {
     const id = params?.id || null;
-    checkPrivileges(ability, [{ action: "view", subject: "Setting" }]);
-    const formUser = await getUser(id as string, ability);
+
+    checkPrivileges(ability, [
+      { action: "view", subject: "User" },
+      {
+        action: "view",
+        subject: {
+          type: "FormRecord",
+          // Passing an empty object here just to force CASL evaluate the condition part of a permission.
+          // Will only allow users who have privilege of Manage All Forms
+          object: {},
+        },
+      },
+    ]);
+
+    const formUser = await getUser(ability, id as string);
 
     let templates: Templates = [];
     if (id) {
