@@ -118,33 +118,31 @@ const Users = ({
     return Boolean(privileges?.find((privilege) => privilege.nameEn === privilegeName)?.id);
   };
 
-  // auto scroll to user card when data is refreshed / page loaded
-  const handleRouteChange = () => {
-    const id = router.query.id as string;
-    // check for a user id in local storage
-    const storedUser = getStorageValue(STORAGE_KEY.USER);
-
-    if (storedUser.scrollY) {
-      window.scrollTo(0, storedUser.scrollY);
-      return;
-    }
-
-    if (id) {
-      // if there is a user id in the query param, scroll to that user card
-      const element = document.getElementById(`user-${id}`);
-      element?.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
   useEffect(() => {
-    handleRouteChange();
+    // auto scroll to user card when data is refreshed / page loaded
+    const handleRouteChange = () => {
+      const id = router.query.id as string;
+      // check for a user id in local storage
+      const storedUser = getStorageValue(STORAGE_KEY.USER);
+
+      if (storedUser.scrollY) {
+        window.scrollTo(0, storedUser.scrollY);
+        return;
+      }
+
+      if (id) {
+        // if there is a user id in the query param, scroll to that user card
+        const element = document.getElementById(`user-${id}`);
+        element?.scrollIntoView({ behavior: "smooth" });
+      }
+    };
 
     router.events.on("routeChangeComplete", handleRouteChange);
 
     return () => {
       router.events.off("routeChangeComplete", handleRouteChange);
     };
-  }, [router, handleRouteChange]);
+  }, [router]);
 
   return (
     <>
