@@ -18,6 +18,7 @@ interface StyledLinkProps {
   ariaLabel?: string;
   lang?: string;
   theme?: Theme;
+  testid?: string;
   scroll?: boolean;
 }
 
@@ -38,6 +39,7 @@ export const StyledLink = (props: StyledLinkProps) => {
     ariaLabel,
     lang,
     theme = "default",
+    testid = "",
     scroll = true, // NextJS default
   } = props;
   const ref = useRef<HTMLAnchorElement>(null);
@@ -49,6 +51,7 @@ export const StyledLink = (props: StyledLinkProps) => {
         {...(ariaLabel && { ariaLabel: ariaLabel })}
         {...(lang && { lang: lang })}
         ref={ref}
+        {...(testid && { testid })}
       >
         {children}
       </WrappedLink>
@@ -62,6 +65,7 @@ interface WrappedLinkProps {
   className?: string;
   ariaLabel?: string;
   lang?: string;
+  testid?: string;
 }
 
 const WrappedLink = React.forwardRef(
@@ -69,7 +73,7 @@ const WrappedLink = React.forwardRef(
     // Note: href is populated by passHref "magic" and is needed for the case of getting the locale
     // prefix in the url. The passed prop href is ignored it seems, so this works. The prop is
     // included above for TypeScript but otherwise not needed.
-    const { children, className, ariaLabel, lang } = props;
+    const { children, className, ariaLabel, lang, testid } = props;
 
     return (
       <a
@@ -78,6 +82,7 @@ const WrappedLink = React.forwardRef(
         {...(ariaLabel && { "aria-label": ariaLabel })}
         {...(lang && { lang: lang })}
         ref={ref}
+        {...(testid && { "data-testid": testid })}
       >
         {children}
       </a>

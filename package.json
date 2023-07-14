@@ -3,7 +3,7 @@
   "version": "3.1.1",
   "private": true,
   "prisma": {
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seeds/seed.ts --environment=development"
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seeds/seed_cli.ts --environment=development"
   },
   "scripts": {
     "install:all": "cd ./flag_initialization && yarn install --prefer-offline && cd .. && yarn install --prefer-offline",
@@ -11,14 +11,14 @@
     "build": "DATABASE_URL=postgres://postgres:password@localhost:5432 next build",
     "start": "yarn prisma:deploy && yarn initialize && next start -p ${PORT:-3000}",
     "initialize": "cd ./flag_initialization && yarn initialize && cd ..",
-    "prisma:deploy": "prisma migrate deploy && ts-node --compiler-options {\\\"module\\\":\\\"CommonJS\\\"} prisma/seeds/seed.ts --environment=production",
+    "prisma:deploy": "prisma migrate deploy && ts-node --compiler-options {\\\"module\\\":\\\"CommonJS\\\"} prisma/seeds/seed_cli.ts --environment=production",
     "prisma:dev": "prisma migrate dev",
     "prisma:reset": "prisma migrate reset",
     "prisma:studio": "prisma studio",
     "start:test": "yarn prisma:test && yarn initialize && APP_ENV=test next start",
     "dev:test": "prisma migrate reset -f --skip-seed && yarn prisma:test && yarn initialize && APP_ENV=test NODE_OPTIONS='--inspect' next dev",
     "build:test": "APP_ENV=test next build",
-    "prisma:test": "prisma migrate deploy && ts-node --compiler-options {\\\"module\\\":\\\"CommonJS\\\"} prisma/seeds/seed.ts --environment=test",
+    "prisma:test": "prisma migrate deploy && ts-node --compiler-options {\\\"module\\\":\\\"CommonJS\\\"} prisma/seeds/seed_cli.ts --environment=test",
     "lint": "eslint . ",
     "lint:tailwindcss": "eslint -c .eslint-tailwindcss.js",
     "lint:report": "eslint --output-file eslint_report.json --format json . --ext .js,.jsx,.ts,.tsx",

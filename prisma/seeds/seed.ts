@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 import { Prisma, PrismaClient } from "@prisma/client";
-import { parse } from "ts-command-line-args";
 import seedTemplates from "./fixtures/templates";
 import seedPrivileges from "./fixtures/privileges";
 import seedSettings from "./fixtures/settings";
@@ -52,6 +51,34 @@ async function createTestUser() {
           { nameEn: "Base" },
           { nameEn: "PublishForms" },
           { nameEn: "ManageApplicationSettings" },
+        ],
+      },
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      privileges: true,
+    },
+  });
+}
+
+async function createAdminTestUser() {
+  return prisma.user.create({
+    data: {
+      id: "2",
+      name: "Test Admin User",
+      email: "testadmin.user@cds-snc.ca",
+      privileges: {
+        connect: [
+          { nameEn: "Base" },
+          { nameEn: "PublishForms" },
+          { nameEn: "ManageApplicationSettings" },
+          { nameEn: "ManageUsers" },
+          { nameEn: "ManageForms" },
+          { nameEn: "ViewApplicationSettings" },
+          { nameEn: "ViewUserPrivileges" },
+          { nameEn: "ManagePrivileges" },
         ],
       },
     },
@@ -219,38 +246,38 @@ async function lowercaseEmailAddressMigration() {
   );
 }
 
-async function main() {
-  const { environment = "production" } = parse<{ environment?: string }>({
-    environment: { type: String, optional: true },
-  });
+async function main(environment: string) {
+  try {
+    console.log(`Seeding Database for ${environment} enviroment`);
+    await Promise.all([
+      createTemplates(environment),
+      createPrivileges(environment),
+      createSettings(environment),
+    ]);
 
-  console.log(`Seeding Database for ${environment} enviroment`);
-  await Promise.all([
-    createTemplates(environment),
-    createPrivileges(environment),
-    createSettings(environment),
-  ]);
+    if (environment === "test") {
+      console.log("Creating test User");
+      await createTestUser();
+      console.log("Creating admin test User");
+      await createAdminTestUser();
+      // Short Circuit
+      // No migrations need to run on pure new test database
+      return;
+    }
 
-  console.log("Running 'publishingStatus' migration");
-  await publishingStatusMigration();
+    console.log("Running 'publishingStatus' migration");
+    await publishingStatusMigration();
 
-  console.log("Running 'templateSchema' migration");
-  await templateSchemaMigration();
+    console.log("Running 'templateSchema' migration");
+    await templateSchemaMigration();
 
-  console.log("Running 'lowercaseEmailAddress' migration");
-  await lowercaseEmailAddressMigration();
-
-  if (environment === "test") {
-    console.log("Creating test User");
-    await createTestUser();
+    console.log("Running 'lowercaseEmailAddress' migration");
+    await lowercaseEmailAddressMigration();
+  } catch (e) {
+    console.error(e);
+  } finally {
+    prisma.$disconnect;
   }
 }
 
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+export default main;
