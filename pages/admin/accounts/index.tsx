@@ -304,8 +304,10 @@ const Users = ({
           // Note: Placing this within the Dropdown will break it
           <ConfirmDeactivateModal
             user={selectedUser}
-            handleClose={function (): void {
+            handleClose={async () => {
               showConfirmDeleteModal(false);
+              setSelectedUser(null);
+              await refreshUserData();
             }}
           />
         )}
