@@ -13,7 +13,7 @@ import jwt, { Secret } from "jsonwebtoken";
 import { AccessControlError, checkPrivileges, checkPrivilegesAsBoolean } from "./privileges";
 import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
-import { numberOfUnprocessedSubmissions } from "./vault";
+import { numberOfUnprocessedSubmissions, deleteDraftFormTestResponses } from "./vault";
 import { addOwnershipEmail, transferOwnershipEmail } from "./ownership";
 
 // ******************************************
@@ -610,6 +610,7 @@ export async function updateIsPublishedForTemplate(
   isPublished: boolean
 ): Promise<FormRecord | null> {
   try {
+    // Check if user has ability to publish or unpublish first
     if (isPublished) {
       const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(formID);
       if (!templateWithAssociatedUsers) return null;
@@ -627,6 +628,12 @@ export async function updateIsPublishedForTemplate(
           field: "isPublished",
         },
       ]);
+
+      if (templateWithAssociatedUsers.formRecord.isPublished) {
+        throw new TemplateAlreadyPublishedError();
+      }
+
+      await deleteDraftFormTestResponses(ability, formID);
     } else {
       checkPrivileges(ability, [
         {

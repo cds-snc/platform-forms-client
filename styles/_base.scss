@@ -129,7 +129,9 @@ h5,
 h6,
 .gc-h1,
 .gc-h2,
-.gc-h3 {
+.gc-h3,
+.gc-h4,
+.gc-h5 {
   font-family: "Lato", sans-serif;
   line-height: 1.33;
   font-weight: 600;
@@ -147,6 +149,16 @@ h3, .gc-h3 {
   @apply sm:text-small_h3 font-bold text-h3 pb-0 mb-6;
 }
 
+// TODO: will need more design input to apply to all h4's. e.g. h4, .gc-h4 {..
+.gc-h4 {
+  @apply text-base font-bold pb-0 mb-2;
+}
+
+// TODO: will need more design input to apply to all h5's. e.g. h5, .gc-h5 {..
+.gc-h5 {
+  @apply text-sm font-bold pb-0 mb-1;
+}
+  
 .gc-h2 {
   margin-bottom: 0;
   border: 0;
