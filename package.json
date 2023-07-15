@@ -59,7 +59,7 @@
     "ioredis": "5.2.5",
     "json2md": "1.13.0",
     "jsonschema": "1.4.1",
-    "jsonwebtoken": "9.0.0",
+    "jsonwebtoken": "9.0.1",
     "lexical": "^0.9.2",
     "lint-staged": "^13.2.2",
     "lodash.debounce": "4.0.8",
@@ -69,7 +69,7 @@
     "markdown-to-jsx": "7.1.9",
     "markdown-to-txt": "2.0.1",
     "mmmagic": "0.5.3",
-    "next": "13.4.8",
+    "next": "13.4.9",
     "next-auth": "4.21.1",
     "next-i18next": "13.2.2",
     "notifications-node-client": "5.1.2",
@@ -89,7 +89,7 @@
     "usehooks-ts": "2.9.1",
     "uuid": "8.3.2",
     "yup": "0.32.11",
-    "zustand": "4.3.8"
+    "zustand": "4.3.9"
   },
   "devDependencies": {
     "@aws-sdk/types": "3.188.0",
