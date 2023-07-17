@@ -3,6 +3,9 @@ import { logMessage } from "@lib/logger";
 
 export const sendDeactivationEmail = async (email: string) => {
   try {
+    // Avoids test accounts being blocked by Notify
+    if (process.env.APP_ENV === "test") return true;
+
     const HOST = process.env.NEXTAUTH_URL;
     const TEMPLATE_ID = process.env.TEMPLATE_ID;
     const NOTIFY_API_KEY = process.env.NOTIFY_API_KEY;
