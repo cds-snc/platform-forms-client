@@ -60,6 +60,5 @@ describe("Form ownership", () => {
     cy.get("[aria-label='Remove test.user@cds-snc.ca']").click();
     cy.get("[data-testid='save-ownership']").click();
     cy.get("[data-testid='alert']").contains("Must assign at least one user").should("exist");
-    // cy.get()
   });
 });
