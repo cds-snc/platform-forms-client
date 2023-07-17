@@ -241,12 +241,9 @@ async function notifySupport(
 ): Promise<void> {
   try {
     // Avoids test accounts being blocked by Notify
-    if (process.env.APP_ENV === "test") return;
-
-    const notifyClient = new NotifyClient(
-      "https://api.notification.canada.ca",
-      process.env.NOTIFY_API_KEY
-    );
+    const notifyUrl =
+      process.env.APP_ENV === "test" ? "going_no_where" : "https://api.notification.canada.ca";
+    const notifyClient = new NotifyClient(notifyUrl, process.env.NOTIFY_API_KEY);
 
     // Here is the documentation for the `sendEmail` function: https://docs.notifications.service.gov.uk/node.html#send-an-email
     await notifyClient.sendEmail(process.env.TEMPLATE_ID, process.env.EMAIL_ADDRESS_SUPPORT, {

@@ -18,14 +18,11 @@ const requestPublishingPermission = async (
       return res.status(404).json({ error: "Malformed request" });
     }
 
-    // Avoids test accounts being blocked by Notify
-    if (process.env.APP_ENV === "test") return res.status(200).json({});
-
     const templateID = process.env.TEMPLATE_ID;
-    const notifyClient = new NotifyClient(
-      "https://api.notification.canada.ca",
-      process.env.NOTIFY_API_KEY
-    );
+    // Avoids test accounts being blocked by Notify
+    const notifyUrl =
+      process.env.APP_ENV === "test" ? "going_no_where" : "https://api.notification.canada.ca";
+    const notifyClient = new NotifyClient(notifyUrl, process.env.NOTIFY_API_KEY);
 
     // Here is the documentation for the `sendEmail` function: https://docs.notifications.service.gov.uk/node.html#send-an-email
     await notifyClient.sendEmail(templateID, process.env.EMAIL_ADDRESS_SUPPORT, {

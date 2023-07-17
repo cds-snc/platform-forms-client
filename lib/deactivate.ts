@@ -3,13 +3,13 @@ import { logMessage } from "@lib/logger";
 
 export const sendDeactivationEmail = async (email: string) => {
   try {
-    // Avoids test accounts being blocked by Notify
-    if (process.env.APP_ENV === "test") return;
-
     const HOST = process.env.NEXTAUTH_URL;
     const TEMPLATE_ID = process.env.TEMPLATE_ID;
     const NOTIFY_API_KEY = process.env.NOTIFY_API_KEY;
-    const notify = new NotifyClient("https://api.notification.canada.ca", NOTIFY_API_KEY);
+    // Avoids test accounts being blocked by Notify
+    const notifyUrl =
+      process.env.APP_ENV === "test" ? "going_no_where" : "https://api.notification.canada.ca";
+    const notify = new NotifyClient(notifyUrl, NOTIFY_API_KEY);
 
     await notify.sendEmail(TEMPLATE_ID, email, {
       personalisation: {
