@@ -41,19 +41,21 @@ async function createSettings(env: string) {
 }
 
 const defaults = {
+  id: "1",
   name: "Test User",
   email: "test.user@cds-snc.ca",
   active: true,
 };
 
 async function createTestUser({
+  id,
   active,
   name,
   email,
-}: { name: string; email: string; active: boolean } = defaults) {
+}: { id: string; name: string; email: string; active: boolean } = defaults) {
   return prisma.user.create({
     data: {
-      id: "1",
+      id,
       name,
       email,
       active: active,
@@ -269,8 +271,11 @@ async function main(environment: string) {
     if (environment === "test") {
       console.log("Creating test User");
       await createTestUser();
+
+      console.log("Creating deactivated test User");
       // create a deactivated test user
       await createTestUser({
+        id: "100",
         name: "Test Deactivated",
         email: "test.deactivated@cds-snc.ca",
         active: false,
