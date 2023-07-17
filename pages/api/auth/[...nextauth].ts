@@ -40,10 +40,22 @@ export const authOptions: NextAuthOptions = {
         if (process.env.APP_ENV === "test") {
           if (
             !username ||
-            !["test.user@cds-snc.ca", "testadmin.user@cds-snc.ca"].includes(username)
+            ![
+              "test.user@cds-snc.ca",
+              "testadmin.user@cds-snc.ca",
+              "test.deactivated@cds-snc.ca",
+            ].includes(username)
           ) {
             throw new Error("Must use testing accounts when in test Mode");
           }
+
+          if (username === "test.deactivated@cds-snc.ca") {
+            return {
+              id: "100",
+              email: username,
+            };
+          }
+
           return {
             id: "1",
             email: username,

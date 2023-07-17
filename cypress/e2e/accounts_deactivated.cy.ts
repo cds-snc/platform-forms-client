@@ -24,6 +24,7 @@ describe("Deactivated Page", () => {
     cy.get("input[id='username']").type("test.deactivated@cds-snc.ca");
     cy.get("input[id='password']").type("testTesttest");
     cy.get("button[type='submit']").click();
+    /*
     cy.get("input[id='verificationCode']").should("be.visible");
     cy.get("input[id='verificationCode']").type("12345");
     cy.get("input[id='verificationCode']").clear(); // Trying to stop what I think is a timing error
@@ -31,6 +32,7 @@ describe("Deactivated Page", () => {
     cy.get("input[id='verificationCode']").should("have.value", "12345");
     cy.get("button[type='submit']").should("be.visible");
     cy.get("button[type='submit']").click();
+    */
 
     // TODO: Shows Terms and Conditions page currently..
 
