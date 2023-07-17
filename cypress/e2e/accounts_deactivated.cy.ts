@@ -13,7 +13,8 @@ describe("Deactivated Page", () => {
     cy.get("div[role='menuitem']").contains("Deactivate account").click();
     cy.get("dialog").contains("Deactivate account").click();
     cy.get(`li[data-testid='${testUserEmail}']`).contains("Reactivate account");
-    cy.visitPage("/en/auth/logout");
+    cy.logout();
+    // cy.visitPage("/en/auth/logout");
 
     // Manually log in the deactivated test user
     // -or- could just call cy.login(false, true); and cy.visitPage("/en/auth/account-deactivate");
