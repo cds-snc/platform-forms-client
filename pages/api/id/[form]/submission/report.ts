@@ -240,6 +240,9 @@ async function notifySupport(
   userEmailAddress: string
 ): Promise<void> {
   try {
+    // Avoids test accounts being blocked by Notify
+    if (process.env.APP_ENV === "test") return;
+
     const notifyClient = new NotifyClient(
       "https://api.notification.canada.ca",
       process.env.NOTIFY_API_KEY

@@ -18,6 +18,9 @@ const requestPublishingPermission = async (
       return res.status(404).json({ error: "Malformed request" });
     }
 
+    // Avoids test accounts being blocked by Notify
+    if (process.env.APP_ENV === "test") return res.status(200).json({});
+
     const templateID = process.env.TEMPLATE_ID;
     const notifyClient = new NotifyClient(
       "https://api.notification.canada.ca",

@@ -73,6 +73,9 @@ ${description}
   }
 
   try {
+    // Avoids test accounts being blocked by Notify
+    if (process.env.APP_ENV === "test") return res.status(200).json({});
+
     const templateID = process.env.TEMPLATE_ID;
     const notifyClient = new NotifyClient(
       "https://api.notification.canada.ca",
