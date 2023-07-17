@@ -15,21 +15,21 @@ describe("Deactivated Page", () => {
     cy.visitPage("/en/auth/logout");
 
     // Manually log in the deactivated test user
-    // cy.visit("/auth/login");
     cy.visitPage("/en/auth/login");
-    // cy.contains("Sign in").click();
     cy.get("input[id='username']").type("test.user@cds-snc.ca");
     cy.get("input[id='password']").type("testTesttest");
     cy.get("button[type='submit']").click();
 
-    // Do  2FA
+    // Do 2FA for test user
     cy.get("input[id='verificationCode']").should("be.visible");
-    cy.get("input[id='verificationCode']").type("12345"); // Trying to stop what I think is a timing error
-    cy.get("input[id='verificationCode']").clear();
+    cy.get("input[id='verificationCode']").type("12345");
+    cy.get("input[id='verificationCode']").clear(); // Trying to stop what I think is a timing error
     cy.get("input[id='verificationCode']").type("12345");
     cy.get("input[id='verificationCode']").should("have.value", "12345");
     cy.get("button[type='submit']").should("be.visible");
     cy.get("button[type='submit']").click();
+
+    // TODO: Shows Terms and Conditions page currently.. 
 
     // Deactivated screen shows
     cy.url().should("contain", "auth/account-deactivate");
