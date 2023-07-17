@@ -1,3 +1,7 @@
+// TODO update tests to use the below for clicking buttons and pannels, avoids future problem with adding new users
+// const adminUserEmail = "testadmin.user@cds-snc.ca";
+// const testUserEmail = "test.user@cds-snc.ca";
+
 //TODO: use data-testid's for more stable selectors in the future e.g. instead of searching for text "All"
 
 describe("Accounts Page", () => {
