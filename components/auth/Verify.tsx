@@ -21,9 +21,14 @@ import { Locked2fa } from "./Locked2fa";
 interface VerifyProps {
   username: React.MutableRefObject<string>;
   authenticationFlowToken: React.MutableRefObject<string>;
+  type: "login" | "register";
 }
 
-export const Verify = ({ username, authenticationFlowToken }: VerifyProps): ReactElement => {
+export const Verify = ({
+  username,
+  authenticationFlowToken,
+  type = "login",
+}: VerifyProps): ReactElement => {
   const router = useRouter();
   const { t, i18n } = useTranslation(["auth-verify", "cognito-errors", "common"]);
   const [authErrorsState, { authErrorsReset, handleErrorById }] = useAuthErrors();
@@ -90,7 +95,7 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
 
         router.push({
           pathname: `/${i18n.language}/auth/policy`,
-          search: "?referer=/signup/account-created",
+          search: type === "register" ? "?referer=/signup/account-created" : "",
         });
       }
     } catch (err) {

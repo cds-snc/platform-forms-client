@@ -177,7 +177,9 @@ const Login = () => {
   } = useLogin();
 
   if (needsVerification) {
-    return <Verify username={username} authenticationFlowToken={authenticationFlowToken} />;
+    return (
+      <Verify type="login" username={username} authenticationFlowToken={authenticationFlowToken} />
+    );
   }
 
   return (
