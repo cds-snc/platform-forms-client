@@ -26,7 +26,6 @@ describe("Form ownership", () => {
   });
 
   before(() => {
-    cy.resetAll();
     cy.useForm("../../__fixtures__/cdsIntakeTestForm.json");
   });
 
