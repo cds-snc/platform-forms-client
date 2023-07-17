@@ -40,12 +40,23 @@ async function createSettings(env: string) {
   });
 }
 
-async function createTestUser() {
+const defaults = {
+  name: "Test User",
+  email: "test.user@cds-snc.ca",
+  active: true,
+};
+
+async function createTestUser({
+  active,
+  name,
+  email,
+}: { name: string; email: string; active: boolean } = defaults) {
   return prisma.user.create({
     data: {
       id: "1",
-      name: "Test User",
-      email: "test.user@cds-snc.ca",
+      name,
+      email,
+      active: active,
       privileges: {
         connect: [
           { nameEn: "Base" },
@@ -258,6 +269,12 @@ async function main(environment: string) {
     if (environment === "test") {
       console.log("Creating test User");
       await createTestUser();
+      // create a deactivated test user
+      await createTestUser({
+        name: "Test Deactivated",
+        email: "test.deactivated@cds-snc.ca",
+        active: false,
+      });
       console.log("Creating admin test User");
       await createAdminTestUser();
       // Short Circuit
