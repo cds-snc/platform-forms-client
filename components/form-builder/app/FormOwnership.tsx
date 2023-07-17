@@ -125,7 +125,12 @@ export const FormOwnership = ({
           onChange={(value) => setSelectedUsers(value as { value: string; label: string | null }[])}
         />
         <br />
-        <Button theme="secondary" type="submit" onClick={() => saveAssignations()}>
+        <Button
+          dataTestId="save-ownership"
+          theme="secondary"
+          type="submit"
+          onClick={() => saveAssignations()}
+        >
           {t("save")}
         </Button>
       </div>
