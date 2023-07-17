@@ -25,10 +25,8 @@ describe("Form ownership", () => {
     });
   });
 
-  let formID: string;
   before(() => {
     cy.useForm("../../__fixtures__/cdsIntakeTestForm.json");
-    cy.get<string>("@formID").then((createdID) => (formID = createdID));
   });
 
   it("Non-Admin cannot manage Form Ownership", () => {
