@@ -25,34 +25,28 @@ describe("Form ownership", () => {
     });
   });
 
+  let formID: string;
+
   before(() => {
     cy.useForm("../../__fixtures__/cdsIntakeTestForm.json");
+    cy.get<string>("@formID").then((createdID) => (formID = createdID));
   });
 
   it("Non-Admin cannot manage Form Ownership", () => {
     cy.login(false, true);
-    cy.visit("/myforms");
-    cy.get("a").contains("Unnamed form file").click();
-    cy.get("a").contains("Settings").click();
-    cy.get("a").contains("Form management").click();
+    cy.visit(`/form-builder/settings/${formID}/form`);
     cy.get("h2").contains("Manage ownership").should("not.exist");
   });
 
   it("Admin can manage Form Ownership", () => {
     cy.login(true, true);
-    cy.visit("/myforms");
-    cy.get("a").contains("Unnamed form file").click();
-    cy.get("a").contains("Settings").click();
-    cy.get("a").contains("Form management").click();
+    cy.visit(`/form-builder/settings/${formID}/form`);
     cy.get("h2").contains("Manage ownership").should("exist");
   });
 
   it("Must have at least one owner", () => {
     cy.login(true, true);
-    cy.visit("/myforms");
-    cy.get("a").contains("Unnamed form file").click();
-    cy.get("a").contains("Settings").click();
-    cy.get("a").contains("Form management").click();
+    cy.visit(`/form-builder/settings/${formID}/form`);
     cy.get("h2").contains("Manage ownership").should("exist");
 
     cy.get("[aria-label='Remove test.user@cds-snc.ca']").click();
