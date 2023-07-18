@@ -274,7 +274,7 @@ async function main(environment: string) {
 
       console.log("Creating deactivated test User");
       // create a deactivated test user
-      // noting check for this user (via username / email) in [...nextauth].ts
+      // noting we check for this user (via username / email) in [...nextauth].ts
       // + auto-throw an error prior to the 2fa verification check
       await createTestUser({
         id: "100",
