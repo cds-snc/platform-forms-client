@@ -22,6 +22,8 @@ export enum AuditLogEvent {
   UserRegistration = "UserRegistration",
   UserSignIn = "UserSignIn",
   UserSignOut = "UserSignOut",
+  UserActivated = "UserActivated",
+  UserDeactivated = "UserDeactivated",
   UserPasswordReset = "UserPasswordReset",
   UserTooManyFailedAttempts = "UserTooManyFailedAttempts",
   GrantPrivilege = "GrantPrivilege",

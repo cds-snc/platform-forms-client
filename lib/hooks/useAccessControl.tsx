@@ -1,9 +1,10 @@
 import React, { createContext, useState, useEffect, useContext, useCallback } from "react";
 
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import { PureAbility, createMongoAbility, MongoAbility } from "@casl/ability";
 import { Abilities } from "@lib/types";
 import { logMessage } from "@lib/logger";
+import Router from "next/router";
 
 interface AccessControlInterface {
   ability: PureAbility<Abilities, unknown> | null;
@@ -16,7 +17,17 @@ export const AccessControlProvider = ({ children }: { children: React.ReactNode 
   const { data: session, status, update } = useSession();
 
   const refreshAbility = useCallback(async () => {
+    // If the user is deactivated, sign them out automatically
+    if (session?.user.deactivated) {
+      const deactivated = await signOut({
+        redirect: false,
+        callbackUrl: "/auth/account-deactivated",
+      });
+      // Not using useRouter() hook because it will cause unnecessary rerendering
+      Router.push(deactivated.url);
+    }
     if (status === "authenticated" && session.user.privileges) {
+      logMessage.debug("Refreshing Ability - useAccessControl hook - Creating ability");
       const userAbility = createMongoAbility<MongoAbility<Abilities>>(session.user.privileges);
       setAbility(userAbility);
     }
@@ -25,6 +36,7 @@ export const AccessControlProvider = ({ children }: { children: React.ReactNode 
   // Ensures that the ability is refreshed when the session is updated
   useEffect(() => {
     refreshAbility();
+    logMessage.debug("Refreshing Ability - useAccessControl hook - Session Updated");
   }, [refreshAbility]);
 
   /*
@@ -34,7 +46,7 @@ export const AccessControlProvider = ({ children }: { children: React.ReactNode 
    */
   const forceSessionUpdate = useCallback(async () => {
     logMessage.debug(
-      "Refreshing Ability - useAccessControl hook - Calling server for Updated Session"
+      "Refreshing Ability - useAccessControl hook - Forcing call to Server to updated session"
     );
     await update();
   }, [update]);

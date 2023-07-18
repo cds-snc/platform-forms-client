@@ -1,9 +1,16 @@
 {
   "compilerOptions": {
-    "typeRoots": ["./types", "./node_modules/@types"],
+    "typeRoots": [
+      "./types",
+      "./node_modules/@types"
+    ],
     "target": "es5",
     "downlevelIteration": true,
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -17,21 +24,39 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@lib/*": ["lib/*"],
-      "@components/*": ["components/*"],
-      "@formbuilder/*": ["components/form-builder/*"],
-      "@pages/*": ["pages/*"],
-      "@jestFixtures/*": ["__fixtures__/*"],
-      "@jestUtils": ["__utils__"]
+      "@lib/*": [
+        "lib/*"
+      ],
+      "@components/*": [
+        "components/*"
+      ],
+      "@formbuilder/*": [
+        "components/form-builder/*"
+      ],
+      "@pages/*": [
+        "pages/*"
+      ],
+      "@jestFixtures/*": [
+        "__fixtures__/*"
+      ],
+      "@jestUtils": [
+        "__utils__"
+      ]
     },
-    "incremental": true
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
     "next-env.d.ts",
     "types",
     "**/*.ts",
     "**/*.tsx",
-    "cypress/support/commands/selection-command.js"
+    "cypress/support/commands/selection-command.js",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",

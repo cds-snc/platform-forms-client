@@ -11,6 +11,7 @@ import { Language } from "../types";
 import { TemplateApiProvider } from "../hooks";
 import { ToastContainer } from "./shared/Toast";
 import { RefStoreProvider } from "@lib/hooks/useRefStore";
+import { useAccessControl } from "@lib/hooks/useAccessControl";
 
 export const Template = ({
   page,
@@ -65,6 +66,9 @@ export const PageTemplate = ({
     setLang: s.setLang,
     email: s.deliveryOption?.emailAddress,
   }));
+
+  // This will check to see if a user is deactivated and redirect them to the account deavtivated page
+  useAccessControl();
 
   const locale = i18n.language as Language;
   useEffect(() => {

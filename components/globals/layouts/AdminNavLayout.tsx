@@ -8,6 +8,7 @@ import { User } from "next-auth";
 
 import { LeftNavigation } from "@components/admin/LeftNav/LeftNavigation";
 import { ToastContainer } from "@components/form-builder/app/shared/Toast";
+import { useAccessControl } from "@lib/hooks";
 
 interface AdminNavLayoutProps extends React.PropsWithChildren {
   user: User;
@@ -16,6 +17,8 @@ interface AdminNavLayoutProps extends React.PropsWithChildren {
 }
 
 const AdminNavLayout = ({ children, user, backLink, hideLeftNav }: AdminNavLayoutProps) => {
+  // This will check to see if a user is deactivated and redirect them to the account deavtivated page
+  useAccessControl();
   return (
     <div className={`flex h-full flex-col ${hideLeftNav && "bg-gray-50"}`}>
       <Head>
