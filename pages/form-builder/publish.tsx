@@ -33,7 +33,7 @@ const Page: NextPageWithLayout<PageProps> = () => {
   }
 
   return (
-    <PageTemplate title={title}>
+    <PageTemplate title={title} autoWidth={true}>
       <Publish />
     </PageTemplate>
   );
