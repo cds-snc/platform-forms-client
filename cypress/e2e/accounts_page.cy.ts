@@ -1,4 +1,4 @@
-// TODO update tests to use the below for clicking buttons and pannels, avoids future problem with adding new users
+// TODO update tests to use the below for clicking buttons and panels, avoids future problem with adding new users
 // const adminUserEmail = "testadmin.user@cds-snc.ca";
 // const testUserEmail = "test.user@cds-snc.ca";
 
