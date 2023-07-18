@@ -13,6 +13,7 @@ import { useTemplateApi } from "../hooks";
 import { useTemplateStore } from "../store";
 import { completeEmailAddressRegex } from "../util";
 import { toast } from "./shared/Toast";
+import { ResponseDeliveryHelpButton } from "@formbuilder/app/shared";
 
 enum DeliveryOption {
   vault = "vault",
@@ -295,8 +296,7 @@ export const SetResponseDelivery = () => {
           <Button disabled={!isValid || isPublished} theme="secondary" onClick={saveDeliveryOption}>
             {t("settingsResponseDelivery.saveButton")}
           </Button>
-          {/* #1800 -- turn on when Protected B */}
-          {/* <ResponseDeliveryHelpButton /> */}
+          <ResponseDeliveryHelpButton />
         </div>
       )}
     </>
