@@ -193,6 +193,15 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
       return res.status(400).json({ status: "error", error: "Missing username or password" });
 
     if (process.env.APP_ENV === "test") {
+      if (username === "test.deactivated@cds-snc.ca") {
+        // mock error that would be thrown by begin2FAAuthentication
+        return res.status(401).json({
+          status: "error",
+          error: "Cognito authentication failed",
+          reason: "AccountDeactivated",
+        });
+      }
+
       return res.status(200).json({
         status: "success",
         challengeState: "MFA",
