@@ -49,6 +49,8 @@ export const authOptions: NextAuthOptions = {
             throw new Error("Must use testing accounts when in test Mode");
           }
 
+          // @todo - look into doing a local user lookup vs hardcoding the user
+
           if (username === "test.deactivated@cds-snc.ca") {
             return {
               id: "100",
@@ -194,7 +196,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
 
     if (process.env.APP_ENV === "test") {
       if (username === "test.deactivated@cds-snc.ca") {
-        // mock error that would be thrown by begin2FAAuthentication
+        // -> return error that would be thrown by begin2FAAuthentication
         return res.status(401).json({
           status: "error",
           error: "Cognito authentication failed",
