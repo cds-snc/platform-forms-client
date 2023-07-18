@@ -1,0 +1,15 @@
+{
+  "title": "Profil",
+  "accountPanel": {
+    "title": "Informations de compte",
+    "email": "Courriel",
+    "publishing": "Publication de formulaires",
+    "locked": "Fermé à clé",
+    "unlocked": "Dévérouillée"
+  },
+  "securityPanel": {
+    "title": "Questions de sécurité",
+    "question": "Question",
+    "edit": "Modifier"
+  }
+}
