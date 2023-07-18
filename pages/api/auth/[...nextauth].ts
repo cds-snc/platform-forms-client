@@ -40,10 +40,24 @@ export const authOptions: NextAuthOptions = {
         if (process.env.APP_ENV === "test") {
           if (
             !username ||
-            !["test.user@cds-snc.ca", "testadmin.user@cds-snc.ca"].includes(username)
+            ![
+              "test.user@cds-snc.ca",
+              "testadmin.user@cds-snc.ca",
+              "test.deactivated@cds-snc.ca",
+            ].includes(username)
           ) {
             throw new Error("Must use testing accounts when in test Mode");
           }
+
+          // @todo - look into doing a local user lookup vs hardcoding the user
+
+          if (username === "test.deactivated@cds-snc.ca") {
+            return {
+              id: "100",
+              email: username,
+            };
+          }
+
           return {
             id: "1",
             email: username,
@@ -181,6 +195,15 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
       return res.status(400).json({ status: "error", error: "Missing username or password" });
 
     if (process.env.APP_ENV === "test") {
+      if (username === "test.deactivated@cds-snc.ca") {
+        // -> return error that would be thrown by begin2FAAuthentication
+        return res.status(401).json({
+          status: "error",
+          error: "Cognito authentication failed",
+          reason: "AccountDeactivated",
+        });
+      }
+
       return res.status(200).json({
         status: "success",
         challengeState: "MFA",

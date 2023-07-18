@@ -192,6 +192,7 @@ const Users = ({
                     className="mb-4 flex max-w-2xl flex-row rounded-md border-2 border-black p-2"
                     id={`user-${user.id}`}
                     key={user.id}
+                    data-testid={user.email}
                   >
                     <div className="m-auto grow basis-1/3 p-4">
                       <h2 className="pb-6 text-base">{user.name}</h2>
@@ -250,7 +251,7 @@ const Users = ({
                         )}
                       </div>
                     </div>
-                    <div className="flex items-end p-2">
+                    <div className="flex items-end p-2" data-testid="managePermissionsDropdown">
                       {/* Manage Permissions  */}
                       {user.active && (
                         <Dropdown>
