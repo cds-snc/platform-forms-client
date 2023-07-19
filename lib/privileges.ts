@@ -147,7 +147,7 @@ export const updatePrivilegesForUser = async (
     });
 
     // Run prisma calls in parallel
-    const [privilegesInfo, user] = await Promise.all([
+    const [privilegesInfo, user, privilegedUser] = await Promise.all([
       prisma.privilege
         .findMany({
           select: {
@@ -170,23 +170,35 @@ export const updatePrivilegesForUser = async (
           privileges: true,
         },
       }),
+      prisma.user.findUnique({
+        where: {
+          id: userID,
+        },
+        select: {
+          email: true,
+        },
+      }),
     ]);
 
     // Logging the events asynchronously to not block the function
     addPrivileges.forEach((privilege) =>
       logEvent(
-        ability.userID,
+        userID,
         { type: "Privilege", id: privilege.id },
         "GrantPrivilege",
-        `Granted privilege : ${privilegesInfo.find((p) => p.id === privilege.id)?.nameEn}`
+        `Granted privilege : ${privilegesInfo.find((p) => p.id === privilege.id)?.nameEn} by User ${
+          privilegedUser?.email
+        } (userID: ${ability.userID})`
       )
     );
     removePrivileges.forEach((privilege) =>
       logEvent(
-        ability.userID,
+        userID,
         { type: "Privilege", id: privilege.id },
         "RevokePrivilege",
-        `Revoked privilege : ${privilegesInfo.find((p) => p.id === privilege.id)?.nameEn}`
+        `Revoked privilege : ${privilegesInfo.find((p) => p.id === privilege.id)?.nameEn} by User ${
+          privilegedUser?.email
+        } (userID: ${ability.userID})`
       )
     );
     // Remove existing values from Cache
