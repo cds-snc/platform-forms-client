@@ -32,10 +32,10 @@ const Questions = ({ questions = [] }: { questions: { text: string }[] }) => {
   }
 
   return (
-    <>
+    <ul className="list-none p-0 m-0">
       {questions.map((question, index) => {
         return (
-          <div key={index}>
+          <li key={index}>
             <div className="flex justify-between">
               <h3 className="mb-2 text-sm">
                 {t("securityPanel.question")} {index + 1}
@@ -51,10 +51,10 @@ const Questions = ({ questions = [] }: { questions: { text: string }[] }) => {
               </Button>
             </div>
             <p className="mb-4 text-sm">{question.text}</p>
-          </div>
+          </li>
         );
       })}
-    </>
+    </ul>
   );
 };
 
