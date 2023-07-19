@@ -40,12 +40,25 @@ async function createSettings(env: string) {
   });
 }
 
-async function createTestUser() {
+const defaults = {
+  id: "1",
+  name: "Test User",
+  email: "test.user@cds-snc.ca",
+  active: true,
+};
+
+async function createTestUser({
+  id,
+  active,
+  name,
+  email,
+}: { id: string; name: string; email: string; active: boolean } = defaults) {
   return prisma.user.create({
     data: {
-      id: "1",
-      name: "Test User",
-      email: "test.user@cds-snc.ca",
+      id,
+      name,
+      email,
+      active: active,
       privileges: {
         connect: [
           { nameEn: "Base" },
@@ -258,6 +271,17 @@ async function main(environment: string) {
     if (environment === "test") {
       console.log("Creating test User");
       await createTestUser();
+
+      console.log("Creating deactivated test User");
+      // create a deactivated test user
+      // noting we check for this user (via username / email) in [...nextauth].ts
+      // + auto-throw an error prior to the 2fa verification check
+      await createTestUser({
+        id: "100",
+        name: "Test Deactivated",
+        email: "test.deactivated@cds-snc.ca",
+        active: false,
+      });
       console.log("Creating admin test User");
       await createAdminTestUser();
       // Short Circuit
