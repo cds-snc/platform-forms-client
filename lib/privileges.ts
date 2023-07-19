@@ -145,28 +145,51 @@ export const updatePrivilegesForUser = async (
         removePrivileges.push({ id: privilege.id });
       }
     });
-    const user = await prisma.user.update({
-      where: {
-        id: userID,
-      },
-      data: {
-        privileges: {
-          connect: addPrivileges,
-          disconnect: removePrivileges,
+
+    // Run prisma calls in parallel
+    const [privilegesInfo, user] = await Promise.all([
+      prisma.privilege
+        .findMany({
+          select: {
+            id: true,
+            nameEn: true,
+          },
+        })
+        .catch((e) => prismaErrors(e, [])),
+      prisma.user.update({
+        where: {
+          id: userID,
         },
-      },
-      select: {
-        privileges: true,
-      },
-    });
+        data: {
+          privileges: {
+            connect: addPrivileges,
+            disconnect: removePrivileges,
+          },
+        },
+        select: {
+          privileges: true,
+        },
+      }),
+    ]);
 
     // Logging the events asynchronously to not block the function
     addPrivileges.forEach((privilege) =>
-      logEvent(ability.userID, { type: "Privilege", id: privilege.id }, "GrantPrivilege")
+      logEvent(
+        ability.userID,
+        { type: "Privilege", id: privilege.id },
+        "GrantPrivilege",
+        `Granted privilege + ${privilegesInfo.find((p) => p.id === privilege.id)?.nameEn}`
+      )
     );
     removePrivileges.forEach((privilege) =>
-      logEvent(ability.userID, { type: "Privilege", id: privilege.id }, "RevokePrivilege")
+      logEvent(
+        ability.userID,
+        { type: "Privilege", id: privilege.id },
+        "RevokePrivilege",
+        `Revoked privilege + ${privilegesInfo.find((p) => p.id === privilege.id)?.nameEn}`
+      )
     );
+    // Remove existing values from Cache
     await privilegeDelete(userID);
 
     return user.privileges;
