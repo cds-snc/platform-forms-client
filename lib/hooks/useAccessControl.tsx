@@ -23,7 +23,7 @@ export const AccessControlProvider = ({ children }: { children: React.ReactNode 
         redirect: false,
         callbackUrl: "/auth/account-deactivated",
       });
-      // Not using useRouter() hook because it will cause unnecessary rerendering
+      // Not using useRouter() hook because it will cause unnecessary re-rendering
       Router.push(deactivated.url);
     }
     if (status === "authenticated" && session.user.privileges) {
