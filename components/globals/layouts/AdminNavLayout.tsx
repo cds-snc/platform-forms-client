@@ -17,7 +17,7 @@ interface AdminNavLayoutProps extends React.PropsWithChildren {
 }
 
 const AdminNavLayout = ({ children, user, backLink, hideLeftNav }: AdminNavLayoutProps) => {
-  // This will check to see if a user is deactivated and redirect them to the account deavtivated page
+  // This will check to see if a user is deactivated and redirect them to the account deactivated page
   useAccessControl();
   return (
     <div className={`flex h-full flex-col ${hideLeftNav && "bg-gray-50"}`}>
