@@ -178,7 +178,7 @@ export const updatePrivilegesForUser = async (
         ability.userID,
         { type: "Privilege", id: privilege.id },
         "GrantPrivilege",
-        `Granted privilege + ${privilegesInfo.find((p) => p.id === privilege.id)?.nameEn}`
+        `Granted privilege : ${privilegesInfo.find((p) => p.id === privilege.id)?.nameEn}`
       )
     );
     removePrivileges.forEach((privilege) =>
@@ -186,7 +186,7 @@ export const updatePrivilegesForUser = async (
         ability.userID,
         { type: "Privilege", id: privilege.id },
         "RevokePrivilege",
-        `Revoked privilege + ${privilegesInfo.find((p) => p.id === privilege.id)?.nameEn}`
+        `Revoked privilege : ${privilegesInfo.find((p) => p.id === privilege.id)?.nameEn}`
       )
     );
     // Remove existing values from Cache
