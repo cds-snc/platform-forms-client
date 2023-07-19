@@ -33,9 +33,12 @@ export const activeStatusUpdate = async (userID: string, status: boolean): Promi
   if (!cacheAvailable) return;
   try {
     const redis = await getRedisInstance();
+    const statusNum = status ? "1" : "0";
 
-    await redis.setex(modifyParameter, randomCacheExpiry(), status ? "1" : "0");
-    logMessage.debug(`Updating Cached User Status for ${modifyParameter}`);
+    await redis.setex(modifyParameter, randomCacheExpiry(), statusNum);
+    logMessage.debug(
+      `Updating Cached User Status for ${modifyParameter} with status set to ${statusNum}`
+    );
   } catch (e) {
     logMessage.error(e as Error);
     throw new Error("Could not connect to cache");
