@@ -241,7 +241,8 @@ export const updateActiveStatus = async (ability: UserAbility, userID: string, a
     await logEvent(
       userID,
       { type: "User", id: userID },
-      active ? "UserActivated" : "UserDeactivated"
+      active ? "UserActivated" : "UserDeactivated",
+      `User ${userID} was ${active ? "activated" : "deactivated"} by user ${ability.userID}`
     );
 
     if (!active && user.email) {
