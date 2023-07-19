@@ -115,7 +115,7 @@ describe("<DownloadTable />", () => {
   });
 
   it("opens the add element dialog", () => {
-    cy.viewport(1050, 600);
+    cy.viewport(1050, 550);
     cy.mount(<DownloadTable vaultSubmissions={vaultSubmissions} nagwareResult={nagwareResult} />);
 
     cy.get("tbody tr:nth-child(1)").should("have.attr", "class").and("contain", "opacity-50");
