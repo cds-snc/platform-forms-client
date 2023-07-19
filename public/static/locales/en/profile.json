@@ -1,0 +1,15 @@
+{
+  "title": "Profile",
+  "accountPanel": {
+    "title": "Account information",
+    "email": "Email",
+    "publishing": "Form publishing",
+    "locked": "Locked",
+    "unlocked": "Unlocked"
+  },
+  "securityPanel": {
+    "title": "Security questions",
+    "question": "Question",
+    "edit": "Edit"
+  }
+}
