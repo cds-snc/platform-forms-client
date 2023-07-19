@@ -67,7 +67,7 @@ export const PageTemplate = ({
     email: s.deliveryOption?.emailAddress,
   }));
 
-  // This will check to see if a user is deactivated and redirect them to the account deavtivated page
+  // This will check to see if a user is deactivated and redirect them to the account deactivated page
   useAccessControl();
 
   const locale = i18n.language as Language;
