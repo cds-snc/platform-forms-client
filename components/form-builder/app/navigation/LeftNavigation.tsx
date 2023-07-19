@@ -17,28 +17,28 @@ export const LeftNavigation = () => {
   return (
     <nav className="absolute" aria-label={t("navLabelFormBuilder")}>
       {!isPublished && (
-        <LeftNavLink href="/form-builder/edit">
-          <>
-            <DesignIcon className={iconClassname} />
-            {t("edit")}
-          </>
-        </LeftNavLink>
-      )}
-
-      <LeftNavLink href="/form-builder/preview">
         <>
-          <PreviewIcon className={iconClassname} />
-          {status === "authenticated" ? t("test") : t("pagePreview")}
-        </>
-      </LeftNavLink>
+          <LeftNavLink href="/form-builder/edit">
+            <>
+              <DesignIcon className={iconClassname} />
+              {t("edit")}
+            </>
+          </LeftNavLink>
 
-      {!isPublished && (
-        <LeftNavLink href="/form-builder/publish">
-          <>
-            <PublishIcon className={iconClassname} />
-            {t("publish")}
-          </>
-        </LeftNavLink>
+          <LeftNavLink href="/form-builder/preview">
+            <>
+              <PreviewIcon className={iconClassname} />
+              {status === "authenticated" ? t("test") : t("pagePreview")}
+            </>
+          </LeftNavLink>
+
+          <LeftNavLink href="/form-builder/publish">
+            <>
+              <PublishIcon className={iconClassname} />
+              {t("publish")}
+            </>
+          </LeftNavLink>
+        </>
       )}
 
       <LeftNavLink href={`/form-builder/responses/${id}`}>
