@@ -18,12 +18,13 @@ import {
   isValidGovEmail,
 } from "@lib/validation";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
-import { useResetPassword } from "@lib/hooks/auth";
+import { useConfirmSecurityQuestions, useResetPassword } from "@lib/hooks/auth";
 import { AuthErrorsState } from "@lib/hooks/auth/useAuthErrors";
 
 const Step1 = ({
   username,
   setInitialCodeSent,
+  nextStep,
   sendForgotPassword,
   authErrorsState,
   authErrorsReset,
@@ -35,6 +36,7 @@ const Step1 = ({
     failedCallback?: (error: string) => void
   ) => void;
   setInitialCodeSent: (val: boolean) => void;
+  nextStep: () => void;
   authErrorsState: AuthErrorsState;
   authErrorsReset: () => void;
 }) => {
@@ -71,6 +73,8 @@ const Step1 = ({
             // this will display the form to set the new password
             setInitialCodeSent(true);
           });
+
+          nextStep();
         }}
       >
         {({ handleSubmit, errors }) => (
@@ -146,6 +150,109 @@ const Step1 = ({
 };
 
 const Step2 = ({
+  username,
+  confirmSecurityQuestions,
+  authErrorsState,
+  authErrorsReset,
+}: {
+  username: MutableRefObject<string>;
+  confirmSecurityQuestions: (
+    values: { username: string; answers: { id: string; answer: string }[] | [] },
+    helpers: FormikHelpers<{ username: string; answers: { id: string; answer: string }[] | [] }>
+  ) => Promise<void>;
+  authErrorsState: AuthErrorsState;
+  authErrorsReset: () => void;
+}) => {
+  const { t } = useTranslation(["reset-password", "common"]);
+
+  // validation schema for security questions form
+  const confirmSecurityQuestionsValidationSchema = Yup.object().shape({
+    confirmationCode: Yup.number()
+      .typeError(t("resetPassword.fields.confirmationCode.error.number"))
+      .required(t("input-validation.required", { ns: "common" })),
+  });
+
+  return (
+    <>
+      <Head>
+        <title>{t("resetPassword.title")}</title>
+      </Head>
+      <Formik
+        initialValues={{
+          username: username.current,
+          answers: [{ id: "", answer: "" }],
+        }}
+        onSubmit={confirmSecurityQuestions}
+        validationSchema={confirmSecurityQuestionsValidationSchema}
+        validateOnChange={false}
+        validateOnBlur={false}
+      >
+        {({ handleSubmit, errors }) => (
+          <>
+            {authErrorsState.isError && (
+              <Alert
+                type={ErrorStatus.ERROR}
+                heading={authErrorsState.title}
+                onDismiss={authErrorsReset}
+                id="cognitoErrors"
+              >
+                {authErrorsState.description}&nbsp;
+                {authErrorsState.callToActionLink ? (
+                  <Link href={authErrorsState.callToActionLink}>
+                    {authErrorsState.callToActionText}
+                  </Link>
+                ) : undefined}
+              </Alert>
+            )}
+            {Object.keys(errors).length > 0 && !authErrorsState.isError && (
+              <Alert
+                type={ErrorStatus.ERROR}
+                validation={true}
+                tabIndex={0}
+                id="registrationValidationErrors"
+                heading={t("input-validation.heading", { ns: "common" })}
+              >
+                <ol className="gc-ordered-list">
+                  {Object.entries(errors).map(([fieldKey, fieldValue]) => {
+                    return (
+                      <ErrorListItem
+                        key={`error-${fieldKey}`}
+                        errorKey={fieldKey}
+                        value={"Please answer all questions."}
+                      />
+                    );
+                  })}
+                </ol>
+              </Alert>
+            )}
+            <h1 className="border-b-0 mt-6 mb-12">{t("resetPassword.title")}</h1>
+            <form id="resetPassword" method="POST" onSubmit={handleSubmit} noValidate>
+              <div className="focus-group">
+                <Label id="label-question1" htmlFor="question1" className="required" required>
+                  {t("resetPassword.fields.question1.label")}
+                </Label>
+                <TextInput
+                  className="h-10 w-36 rounded"
+                  type="text"
+                  id="question1"
+                  name="question1"
+                  required
+                />
+              </div>
+              <div className="buttons">
+                <Button theme="primary" type="submit">
+                  {t("resetPassword.resetPasswordButton")}
+                </Button>
+              </div>
+            </form>
+          </>
+        )}
+      </Formik>
+    </>
+  );
+};
+
+const Step3 = ({
   username,
   confirmPasswordReset,
   authErrorsState,
@@ -321,8 +428,11 @@ const ResetPassword = () => {
   const { username, sendForgotPassword, confirmPasswordReset, authErrorsState, authErrorsReset } =
     useResetPassword();
 
+  const { confirmSecurityQuestions } = useConfirmSecurityQuestions(username.current);
+
   // we don't put this state in useAuth since its very unique to this page only
   const [initialCodeSent, setInitialCodeSent] = useState(false);
+  const [securityQuestions, setSecurityQuestions] = useState(false);
 
   // The form to initially send a verification code needed to reset a user's password
   if (!initialCodeSent) {
@@ -333,13 +443,25 @@ const ResetPassword = () => {
         authErrorsReset={authErrorsReset}
         sendForgotPassword={sendForgotPassword}
         setInitialCodeSent={setInitialCodeSent}
+        nextStep={() => setSecurityQuestions(true)}
+      />
+    );
+  }
+
+  if (securityQuestions) {
+    return (
+      <Step2
+        username={username}
+        authErrorsState={authErrorsState}
+        authErrorsReset={authErrorsReset}
+        confirmSecurityQuestions={confirmSecurityQuestions}
       />
     );
   }
 
   // the form to reset the password with the verification code
   return (
-    <Step2
+    <Step3
       username={username}
       authErrorsState={authErrorsState}
       authErrorsReset={authErrorsReset}
