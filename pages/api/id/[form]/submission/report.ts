@@ -9,10 +9,10 @@ import {
 } from "@aws-sdk/lib-dynamodb";
 import { MiddlewareProps, VaultStatus, WithRequired } from "@lib/types";
 import { connectToDynamo } from "@lib/integration/dynamodbConnector";
-import { NotifyClient } from "notifications-node-client";
 import { createAbility, AccessControlError } from "@lib/privileges";
 import { checkUserHasTemplateOwnership } from "@lib/templates";
 import { logEvent } from "@lib/auditLogs";
+import { getNotifyInstance } from "@lib/integration/notifyConnector";
 
 const MAXIMUM_SUBMISSION_NAMES_PER_REQUEST = 20;
 
@@ -240,10 +240,7 @@ async function notifySupport(
   userEmailAddress: string
 ): Promise<void> {
   try {
-    // Avoids test accounts being blocked by Notify
-    const notifyUrl =
-      process.env.APP_ENV === "test" ? "going_no_where" : "https://api.notification.canada.ca";
-    const notifyClient = new NotifyClient(notifyUrl, process.env.NOTIFY_API_KEY);
+    const notifyClient = getNotifyInstance();
 
     // Here is the documentation for the `sendEmail` function: https://docs.notifications.service.gov.uk/node.html#send-an-email
     await notifyClient.sendEmail(process.env.TEMPLATE_ID, process.env.EMAIL_ADDRESS_SUPPORT, {

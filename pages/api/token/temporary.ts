@@ -6,7 +6,6 @@ import { middleware, cors } from "@lib/middleware";
 
 import jwt, { TokenExpiredError } from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
-import { NotifyClient } from "notifications-node-client";
 import { BearerTokenPayload } from "@lib/types";
 import {
   isUserLockedOut,
@@ -14,6 +13,7 @@ import {
   registerSuccessfulLoginAttempt,
 } from "@lib/lockout";
 import { extractBearerTokenFromReq } from "@lib/middleware/validTemporaryToken";
+import { getNotifyInstance } from "@lib/integration/notifyConnector";
 
 /**
  * Verifies that the payload for the request is valid.
@@ -180,10 +180,7 @@ async function updateTemporaryToken(temporaryToken: string, email: string, templ
 
 async function sendTemporaryTokenByEmail(email: string, temporaryToken: string) {
   const sendTempTokenTemplateID = process.env.TEMPORARY_TOKEN_TEMPLATE_ID;
-  const notifyClient = new NotifyClient(
-    "https://api.notification.canada.ca",
-    process.env.NOTIFY_API_KEY
-  );
+  const notifyClient = getNotifyInstance();
 
   // Here is the documentation for the `sendEmail` function: https://docs.notifications.service.gov.uk/node.html#send-an-email
   return notifyClient
