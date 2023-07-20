@@ -135,11 +135,13 @@ const Step1 = ({
 // Security questions form
 const Step2 = ({
   username,
+  userQuestions,
   confirmSecurityQuestions,
   authErrorsState,
   authErrorsReset,
 }: {
   username: MutableRefObject<string>;
+  userQuestions: { text: string }[];
   confirmSecurityQuestions: (
     values: { username: string; question1: string },
     helpers: FormikHelpers<{ username: string; question1: string }>
@@ -201,24 +203,71 @@ const Step2 = ({
                 </ol>
               </Alert>
             )}
-            <h1 className="border-b-0 mt-6 mb-12">{t("resetPassword.title")}</h1>
+            <h1 className="border-b-0 mt-6 mb-12">{t("securityQuestions.title")}</h1>
+            <p className="mb-6 max-w-lg">{t("securityQuestions.description")}</p>
             <form id="resetPassword" method="POST" onSubmit={handleSubmit} noValidate>
               <div className="focus-group">
-                <Label id="label-question1" htmlFor="question1" className="required" required>
-                  {t("resetPassword.fields.question1.label")}
+                <Label
+                  id="label-question1"
+                  htmlFor="question1"
+                  className="required w-full max-w-lg"
+                  required
+                >
+                  {userQuestions[0].text}
                 </Label>
                 <TextInput
-                  className="h-10 w-36 rounded"
+                  className="h-10 w-[75%] rounded"
                   type="text"
                   id="question1"
                   name="question1"
                   required
                 />
               </div>
+
+              <div className="focus-group">
+                <Label
+                  id="label-question2"
+                  htmlFor="question2"
+                  className="required w-full max-w-lg"
+                  required
+                >
+                  {userQuestions[1].text}
+                </Label>
+                <TextInput
+                  className="h-10 w-[75%] rounded"
+                  type="text"
+                  id="question2"
+                  name="question2"
+                  required
+                />
+              </div>
+
+              <div className="focus-group">
+                <Label
+                  id="label-question3"
+                  htmlFor="question3"
+                  className="required w-full max-w-lg"
+                  required
+                >
+                  {userQuestions[2].text}
+                </Label>
+                <TextInput
+                  className="h-10 w-[75%] rounded"
+                  type="text"
+                  id="question3"
+                  name="question3"
+                  required
+                />
+              </div>
+
               <div className="buttons">
-                <Button theme="primary" type="submit">
-                  {t("resetPassword.resetPasswordButton")}
+                <Button theme="primary" type="submit" className="mr-4">
+                  {t("securityQuestions.resetPasswordButton")}
                 </Button>
+
+                <LinkButton.Secondary href="">
+                  {t("securityQuestions.resetPasswordButton")}
+                </LinkButton.Secondary>
               </div>
             </form>
           </>
@@ -401,7 +450,11 @@ const Step3 = ({
   );
 };
 
-const ResetPassword = () => {
+interface ResetPasswordProps {
+  userQuestions: { text: string }[];
+}
+
+const ResetPassword = ({ userQuestions }: ResetPasswordProps) => {
   const { username, sendForgotPassword, confirmPasswordReset, authErrorsState, authErrorsReset } =
     useResetPassword();
 
@@ -413,7 +466,7 @@ const ResetPassword = () => {
 
   // we don't put this state in useAuth since its very unique to this page only
   const [initialCodeSent, setInitialCodeSent] = useState(false);
-  const [securityQuestions, setSecurityQuestions] = useState(false);
+  const [securityQuestions, setSecurityQuestions] = useState(true);
 
   // The form to initially send a verification code needed to reset a user's password
   if (!initialCodeSent && !securityQuestions) {
@@ -431,6 +484,7 @@ const ResetPassword = () => {
     return (
       <Step2
         username={username}
+        userQuestions={userQuestions}
         authErrorsState={authErrorsState}
         authErrorsReset={authErrorsReset}
         confirmSecurityQuestions={confirmSecurityQuestions}
@@ -450,7 +504,11 @@ const ResetPassword = () => {
 };
 
 ResetPassword.getLayout = (page: ReactElement) => {
-  return <UserNavLayout>{page}</UserNavLayout>;
+  return (
+    <UserNavLayout>
+      <ResetPassword userQuestions={page.props.userQuestions} />
+    </UserNavLayout>
+  );
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -464,8 +522,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   }
+
+  // @todo pull from API
+  const userQuestions = [
+    { text: "Placeholder what was your favourite school subject?" },
+    { text: "Placeholder what was the name of your first manager?" },
+    { text: "Placeholder what was the make of your first car?" },
+  ];
+
   return {
     props: {
+      userQuestions,
       ...(context.locale &&
         (await serverSideTranslations(context.locale, [
           "common",
