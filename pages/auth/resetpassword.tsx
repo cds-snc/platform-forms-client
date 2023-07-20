@@ -18,7 +18,7 @@ import {
   isValidGovEmail,
 } from "@lib/validation";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
-import { useConfirmSecurityQuestions, useResetPassword } from "@lib/hooks/auth";
+import { useResetPassword } from "@lib/hooks/auth";
 import { AuthErrorsState } from "@lib/hooks/auth/useAuthErrors";
 
 const Step1 = ({
@@ -143,7 +143,12 @@ const Step2 = ({
   username: MutableRefObject<string>;
   userQuestions: { text: string }[];
   confirmSecurityQuestions: (
-    values: { username: string; question1: string; question2: string; question3: string },
+    values: {
+      username: string;
+      question1: string;
+      question2: string;
+      question3: string;
+    },
     helpers: FormikHelpers<{
       username: string;
       question1: string;
@@ -470,18 +475,24 @@ interface ResetPasswordProps {
 }
 
 const ResetPassword = ({ userQuestions }: ResetPasswordProps) => {
-  const { username, sendForgotPassword, confirmPasswordReset, authErrorsState, authErrorsReset } =
-    useResetPassword();
-
-  const { confirmSecurityQuestions } = useConfirmSecurityQuestions(() => {
-    setSecurityQuestions(false);
-    sendForgotPassword(username.current);
-    setInitialCodeSent(true);
-  });
-
   // we don't put this state in useAuth since its very unique to this page only
   const [initialCodeSent, setInitialCodeSent] = useState(false);
   const [securityQuestions, setSecurityQuestions] = useState(false);
+
+  const {
+    username,
+    sendForgotPassword,
+    confirmPasswordReset,
+    authErrorsState,
+    authErrorsReset,
+    confirmSecurityQuestions,
+  } = useResetPassword({
+    onConfirmSecurityQuestions: () => {
+      sendForgotPassword(username.current);
+      setInitialCodeSent(true);
+      setSecurityQuestions(false);
+    },
+  });
 
   // The form to initially send a verification code needed to reset a user's password
   if (!initialCodeSent && !securityQuestions) {
