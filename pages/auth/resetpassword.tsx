@@ -143,13 +143,25 @@ const Step2 = ({
   username: MutableRefObject<string>;
   userQuestions: { text: string }[];
   confirmSecurityQuestions: (
-    values: { username: string; question1: string },
-    helpers: FormikHelpers<{ username: string; question1: string }>
+    values: { username: string; question1: string; question2: string; question3: string },
+    helpers: FormikHelpers<{
+      username: string;
+      question1: string;
+      question2: string;
+      question3: string;
+    }>
   ) => Promise<void>;
   authErrorsState: AuthErrorsState;
   authErrorsReset: () => void;
 }) => {
   const { t } = useTranslation(["reset-password", "common"]);
+
+  // validation schema for the initial form to send the forgot password verification code
+  const confirmSecurityQuestionsValidationSchema = Yup.object().shape({
+    question1: Yup.string().required(t("input-validation.required", { ns: "common" })),
+    question2: Yup.string().required(t("input-validation.required", { ns: "common" })),
+    question3: Yup.string().required(t("input-validation.required", { ns: "common" })),
+  });
 
   return (
     <>
@@ -160,8 +172,11 @@ const Step2 = ({
         initialValues={{
           username: username.current,
           question1: "",
+          question2: "",
+          question3: "",
         }}
         onSubmit={confirmSecurityQuestions}
+        validationSchema={confirmSecurityQuestionsValidationSchema}
         validateOnChange={false}
         validateOnBlur={false}
       >
@@ -196,7 +211,7 @@ const Step2 = ({
                       <ErrorListItem
                         key={`error-${fieldKey}`}
                         errorKey={fieldKey}
-                        value={"Please answer all questions."}
+                        value={fieldValue}
                       />
                     );
                   })}

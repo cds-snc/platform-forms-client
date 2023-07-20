@@ -9,17 +9,25 @@ export const useConfirmSecurityQuestions = (successCallback: () => void) => {
     {
       username,
       question1,
+      question2,
+      question3,
     }: {
       username: string;
       question1: string;
+      question2: string;
+      question3: string;
     },
-    { setSubmitting }: FormikHelpers<{ username: string; question1: string }>
+    {
+      setSubmitting,
+    }: FormikHelpers<{ username: string; question1: string; question2: string; question3: string }>
   ) => {
     authErrorsReset();
     try {
       await fetchWithCsrfToken("/api/account/securityquestions", {
         username,
         question1,
+        question2,
+        question3,
       });
       successCallback();
     } catch (err) {
