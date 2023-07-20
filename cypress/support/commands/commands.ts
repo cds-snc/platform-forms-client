@@ -78,7 +78,7 @@ Cypress.Commands.add("useFlag", (flagName, value, alreadyAuth) => {
     url: `/api/flags/${flagName}/check`,
   }).then(({ body: { status } }) => {
     if (status !== value) {
-      !alreadyAuth && cy.login();
+      !alreadyAuth && cy.login({ admin: true });
       cy.request({
         method: "GET",
         url: `/api/flags/${flagName}/${value ? "enable" : "disable"}`,
@@ -92,7 +92,8 @@ Cypress.Commands.add("useFlag", (flagName, value, alreadyAuth) => {
  * Log the test user into the application
  */
 
-Cypress.Commands.add("login", (admin = false, acceptableUse = false) => {
+Cypress.Commands.add("login", (options?: { admin?: boolean; acceptableUse?: boolean }) => {
+  const { admin = false, acceptableUse = false } = options || {};
   cy.request({
     method: "GET",
     url: "/api/auth/csrf",
@@ -104,7 +105,7 @@ Cypress.Commands.add("login", (admin = false, acceptableUse = false) => {
       url: "/api/auth/signin/cognito",
       form: true,
       body: {
-        username: `test${admin ? "admin" : ""}.user@cds-snc.ca`,
+        username: `test.${admin ? "admin" : "user"}@cds-snc.ca`,
         password: "testing",
         csrfToken,
       },
@@ -118,7 +119,7 @@ Cypress.Commands.add("login", (admin = false, acceptableUse = false) => {
         url: "/api/auth/callback/cognito",
         form: true,
         body: {
-          username: `test${admin ? "admin" : ""}.user@cds-snc.ca`,
+          username: `test.${admin ? "admin" : "user"}@cds-snc.ca`,
           verificationCode: "123456",
           authenticationFlowToken: response.body.authenticationFlowToken,
           csrfToken,

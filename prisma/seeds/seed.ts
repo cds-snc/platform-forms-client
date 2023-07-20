@@ -3,6 +3,7 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import seedTemplates from "./fixtures/templates";
 import seedPrivileges from "./fixtures/privileges";
 import seedSettings from "./fixtures/settings";
+import seedUsers from "./fixtures/users";
 
 type AnyObject = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -40,27 +41,9 @@ async function createSettings(env: string) {
   });
 }
 
-async function createTestUser() {
-  return prisma.user.create({
-    data: {
-      id: "1",
-      name: "Test User",
-      email: "test.user@cds-snc.ca",
-      privileges: {
-        connect: [
-          { nameEn: "Base" },
-          { nameEn: "PublishForms" },
-          { nameEn: "ManageApplicationSettings" },
-        ],
-      },
-    },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      privileges: true,
-    },
-  });
+async function createTestUsers() {
+  const users = seedUsers["test"].map((user) => prisma.user.create({ data: user }));
+  await Promise.all(users);
 }
 
 async function createAdminTestUser() {

@@ -10,6 +10,7 @@ import { getAllTemplatesForUser } from "./templates";
 import { listAllSubmissions } from "./vault";
 import { detectOldUnprocessedSubmissions } from "./nagware";
 import { DBUser } from "./types/user-types";
+import { activeStatusUpdate } from "@lib/cache/userActiveStatus";
 
 /**
  * Get or Create a user if a record does not exist
@@ -233,6 +234,16 @@ export const updateActiveStatus = async (ability: UserAbility, userID: string, a
         email: true,
       },
     });
+
+    // Force update the cache with the new active value
+    await activeStatusUpdate(userID, active);
+    // Log the event
+    await logEvent(
+      userID,
+      { type: "User", id: userID },
+      active ? "UserActivated" : "UserDeactivated",
+      `User ${userID} was ${active ? "activated" : "deactivated"} by user ${ability.userID}`
+    );
 
     if (!active && user.email) {
       sendDeactivationEmail(user.email);

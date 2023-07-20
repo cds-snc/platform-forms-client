@@ -34,7 +34,7 @@ Cypress.on("uncaught:exception", () => {
 before(() => {
   cy.task("db:teardown");
   cy.task("db:seed");
-  cy.login()
+  cy.login({ admin: true })
     .then(() => {
       Object.keys(flagsDefault).forEach((key) => {
         cy.useFlag(`${key}`, (flagsDefault as Record<string, boolean>)[key], true);
