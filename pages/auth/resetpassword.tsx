@@ -23,18 +23,12 @@ import { AuthErrorsState } from "@lib/hooks/auth/useAuthErrors";
 
 const Step1 = ({
   username,
-  setInitialCodeSent,
-  sendForgotPassword,
+  nextStep,
   authErrorsState,
   authErrorsReset,
 }: {
   username: MutableRefObject<string>;
-  sendForgotPassword: (
-    username: string,
-    successCallback: () => void,
-    failedCallback?: (error: string) => void
-  ) => void;
-  setInitialCodeSent: (val: boolean) => void;
+  nextStep: () => void;
   authErrorsState: AuthErrorsState;
   authErrorsReset: () => void;
 }) => {
@@ -62,15 +56,9 @@ const Step1 = ({
         validateOnChange={false}
         validateOnBlur={false}
         validationSchema={sendForgotPasswordValidationSchema}
-        onSubmit={async (values) => {
-          // set the username ( user's email ) to what was provided
+        onSubmit={(values) => {
           username.current = values.username;
-          // call the sendForgotPassword method to attempt to send the verification code to the user
-          sendForgotPassword(values.username, () => {
-            // if sending of the code succeeds we set the initialCodeSent state to true
-            // this will display the form to set the new password
-            setInitialCodeSent(true);
-          });
+          nextStep();
         }}
       >
         {({ handleSubmit, errors }) => (
@@ -81,7 +69,6 @@ const Step1 = ({
                 heading={authErrorsState.title}
                 onDismiss={authErrorsReset}
                 id="cognitoErrors"
-                // dismissible={cognitoErrorIsDismissible}
               >
                 {authErrorsState.description}&nbsp;
                 {authErrorsState.callToActionLink ? (
@@ -145,7 +132,191 @@ const Step1 = ({
   );
 };
 
+// Security questions form
 const Step2 = ({
+  username,
+  userQuestions,
+  confirmSecurityQuestions,
+  authErrorsState,
+  authErrorsReset,
+}: {
+  username: MutableRefObject<string>;
+  userQuestions: { text: string }[];
+  confirmSecurityQuestions: (
+    values: {
+      username: string;
+      question1: string;
+      question2: string;
+      question3: string;
+    },
+    helpers: FormikHelpers<{
+      username: string;
+      question1: string;
+      question2: string;
+      question3: string;
+    }>
+  ) => Promise<void>;
+  authErrorsState: AuthErrorsState;
+  authErrorsReset: () => void;
+}) => {
+  const { t } = useTranslation(["reset-password", "common"]);
+
+  // validation schema for the initial form to send the forgot password verification code
+  const confirmSecurityQuestionsValidationSchema = Yup.object().shape({
+    question1: Yup.string()
+      .required(t("securityQuestions.inputValidation.required"))
+      .min(4, t("securityQuestions.inputValidation.questionLength")),
+    question2: Yup.string()
+      .required(t("securityQuestions.inputValidation.required"))
+      .min(4, t("securityQuestions.inputValidation.questionLength")),
+    question3: Yup.string()
+      .required(t("securityQuestions.inputValidation.required"))
+      .min(4, t("securityQuestions.inputValidation.questionLength")),
+  });
+
+  return (
+    <>
+      <Head>
+        <title>{t("resetPassword.title")}</title>
+      </Head>
+      <Formik
+        initialValues={{
+          username: username.current,
+          question1: "",
+          question2: "",
+          question3: "",
+        }}
+        onSubmit={confirmSecurityQuestions}
+        validationSchema={confirmSecurityQuestionsValidationSchema}
+        validateOnChange={false}
+        validateOnBlur={false}
+      >
+        {({ handleSubmit, errors }) => (
+          <>
+            {authErrorsState.isError && (
+              <Alert
+                type={ErrorStatus.ERROR}
+                heading={authErrorsState.title}
+                onDismiss={authErrorsReset}
+                id="cognitoErrors"
+              >
+                {authErrorsState.description}&nbsp;
+                {authErrorsState.callToActionLink ? (
+                  <Link href={authErrorsState.callToActionLink}>
+                    {authErrorsState.callToActionText}
+                  </Link>
+                ) : undefined}
+              </Alert>
+            )}
+            {Object.keys(errors).length > 0 && !authErrorsState.isError && (
+              <Alert
+                type={ErrorStatus.ERROR}
+                validation={true}
+                tabIndex={0}
+                id="registrationValidationErrors"
+                heading={
+                  Object.entries(errors).length === 3
+                    ? t("securityQuestions.inputValidation.allRequired.title")
+                    : t("input-validation.heading", { ns: "common" })
+                }
+              >
+                <ol className="gc-ordered-list">
+                  {Object.entries(errors).length === 3 ? (
+                    <ErrorListItem
+                      errorKey={"question1"}
+                      key={`resetPassword`}
+                      value={t("securityQuestions.inputValidation.allRequired.description")}
+                    />
+                  ) : (
+                    Object.entries(errors).map(([fieldKey, fieldValue]) => {
+                      return (
+                        <ErrorListItem
+                          key={`error-${fieldKey}`}
+                          errorKey={fieldKey}
+                          value={fieldValue}
+                        />
+                      );
+                    })
+                  )}
+                </ol>
+              </Alert>
+            )}
+            <h1 className="border-b-0 mt-6 mb-12">{t("securityQuestions.title")}</h1>
+            <p className="mb-6 max-w-lg">{t("securityQuestions.description")}</p>
+            <form id="resetPassword" method="POST" onSubmit={handleSubmit} noValidate>
+              <div className="focus-group">
+                <Label
+                  id="label-question1"
+                  htmlFor="question1"
+                  className="required w-full max-w-lg"
+                  required
+                >
+                  {userQuestions[0].text}
+                </Label>
+                <TextInput
+                  className="h-10 w-[75%] rounded"
+                  type="text"
+                  id="question1"
+                  name="question1"
+                  required
+                />
+              </div>
+
+              <div className="focus-group">
+                <Label
+                  id="label-question2"
+                  htmlFor="question2"
+                  className="required w-full max-w-lg"
+                  required
+                >
+                  {userQuestions[1].text}
+                </Label>
+                <TextInput
+                  className="h-10 w-[75%] rounded"
+                  type="text"
+                  id="question2"
+                  name="question2"
+                  required
+                />
+              </div>
+
+              <div className="focus-group">
+                <Label
+                  id="label-question3"
+                  htmlFor="question3"
+                  className="required w-full max-w-lg"
+                  required
+                >
+                  {userQuestions[2].text}
+                </Label>
+                <TextInput
+                  className="h-10 w-[75%] rounded"
+                  type="text"
+                  id="question3"
+                  name="question3"
+                  required
+                />
+              </div>
+
+              <div className="buttons">
+                <Button theme="primary" type="submit" className="mr-4">
+                  {t("securityQuestions.resetPasswordButton")}
+                </Button>
+
+                <LinkButton.Secondary href="/form-builder/support/contactus">
+                  {t("securityQuestions.support")}
+                </LinkButton.Secondary>
+              </div>
+            </form>
+          </>
+        )}
+      </Formik>
+    </>
+  );
+};
+
+// Confirm password reset form
+const Step3 = ({
   username,
   confirmPasswordReset,
   authErrorsState,
@@ -317,29 +488,57 @@ const Step2 = ({
   );
 };
 
-const ResetPassword = () => {
-  const { username, sendForgotPassword, confirmPasswordReset, authErrorsState, authErrorsReset } =
-    useResetPassword();
+interface ResetPasswordProps {
+  userQuestions: { text: string }[];
+}
 
+const ResetPassword = ({ userQuestions }: ResetPasswordProps) => {
   // we don't put this state in useAuth since its very unique to this page only
   const [initialCodeSent, setInitialCodeSent] = useState(false);
+  const [securityQuestions, setSecurityQuestions] = useState(false);
+
+  const {
+    username,
+    sendForgotPassword,
+    confirmPasswordReset,
+    authErrorsState,
+    authErrorsReset,
+    confirmSecurityQuestions,
+  } = useResetPassword({
+    onConfirmSecurityQuestions: () => {
+      sendForgotPassword(username.current);
+      setInitialCodeSent(true);
+      setSecurityQuestions(false);
+    },
+  });
 
   // The form to initially send a verification code needed to reset a user's password
-  if (!initialCodeSent) {
+  if (!initialCodeSent && !securityQuestions) {
     return (
       <Step1
         username={username}
         authErrorsState={authErrorsState}
         authErrorsReset={authErrorsReset}
-        sendForgotPassword={sendForgotPassword}
-        setInitialCodeSent={setInitialCodeSent}
+        nextStep={() => setSecurityQuestions(true)}
+      />
+    );
+  }
+
+  if (securityQuestions) {
+    return (
+      <Step2
+        username={username}
+        userQuestions={userQuestions}
+        authErrorsState={authErrorsState}
+        authErrorsReset={authErrorsReset}
+        confirmSecurityQuestions={confirmSecurityQuestions}
       />
     );
   }
 
   // the form to reset the password with the verification code
   return (
-    <Step2
+    <Step3
       username={username}
       authErrorsState={authErrorsState}
       authErrorsReset={authErrorsReset}
@@ -349,7 +548,11 @@ const ResetPassword = () => {
 };
 
 ResetPassword.getLayout = (page: ReactElement) => {
-  return <UserNavLayout>{page}</UserNavLayout>;
+  return (
+    <UserNavLayout>
+      <ResetPassword userQuestions={page.props.userQuestions} />
+    </UserNavLayout>
+  );
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -363,8 +566,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   }
+
+  // @todo pull from API
+  const userQuestions = [
+    { text: "Placeholder what was your favourite school subject?" },
+    { text: "Placeholder what was the name of your first manager?" },
+    { text: "Placeholder what was the make of your first car?" },
+  ];
+
   return {
     props: {
+      userQuestions,
       ...(context.locale &&
         (await serverSideTranslations(context.locale, [
           "common",
