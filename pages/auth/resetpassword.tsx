@@ -163,9 +163,15 @@ const Step2 = ({
 
   // validation schema for the initial form to send the forgot password verification code
   const confirmSecurityQuestionsValidationSchema = Yup.object().shape({
-    question1: Yup.string().required(t("input-validation.required", { ns: "common" })),
-    question2: Yup.string().required(t("input-validation.required", { ns: "common" })),
-    question3: Yup.string().required(t("input-validation.required", { ns: "common" })),
+    question1: Yup.string()
+      .required(t("securityQuestions.inputValidation.required"))
+      .min(4, t("securityQuestions.inputValidation.questionLength")),
+    question2: Yup.string()
+      .required(t("securityQuestions.inputValidation.required"))
+      .min(4, t("securityQuestions.inputValidation.questionLength")),
+    question3: Yup.string()
+      .required(t("securityQuestions.inputValidation.required"))
+      .min(4, t("securityQuestions.inputValidation.questionLength")),
   });
 
   return (
