@@ -69,14 +69,15 @@
   "adminNav": {
     "dashboard": "Home",
     "formbuilder": "Form builder",
-    "users": "Users",
+    "users": "Accounts",
     "templates": "Templates",
     "features": "Feature flags",
     "login": "Sign in",
     "logout": "Sign out",
     "privileges": "Privileges",
     "settings": "Settings",
-    "myForms": "Your forms"
+    "administration": "Administration",
+    "myForms": "Forms"
   },
   "formElements": {
     "characterCount": {

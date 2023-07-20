@@ -28,6 +28,9 @@
  * Creates a Template in the Database with the provided fixture
  * @param file JSON fixture file
  */
+
+import flagsDefault from "../../../flag_initialization/default_flag_settings.json";
+
 Cypress.Commands.add("useForm", (file) => {
   cy.login();
   cy.fixture(file).then((mockedForm) => {
@@ -75,7 +78,7 @@ Cypress.Commands.add("useFlag", (flagName, value, alreadyAuth) => {
     url: `/api/flags/${flagName}/check`,
   }).then(({ body: { status } }) => {
     if (status !== value) {
-      !alreadyAuth && cy.login();
+      !alreadyAuth && cy.login({ admin: true });
       cy.request({
         method: "GET",
         url: `/api/flags/${flagName}/${value ? "enable" : "disable"}`,
@@ -89,7 +92,8 @@ Cypress.Commands.add("useFlag", (flagName, value, alreadyAuth) => {
  * Log the test user into the application
  */
 
-Cypress.Commands.add("login", (acceptableUse = false) => {
+Cypress.Commands.add("login", (options?: { admin?: boolean; acceptableUse?: boolean }) => {
+  const { admin = false, acceptableUse = false } = options || {};
   cy.request({
     method: "GET",
     url: "/api/auth/csrf",
@@ -101,7 +105,7 @@ Cypress.Commands.add("login", (acceptableUse = false) => {
       url: "/api/auth/signin/cognito",
       form: true,
       body: {
-        username: "test.user@cds-snc.ca",
+        username: `test.${admin ? "admin" : "user"}@cds-snc.ca`,
         password: "testing",
         csrfToken,
       },
@@ -115,7 +119,7 @@ Cypress.Commands.add("login", (acceptableUse = false) => {
         url: "/api/auth/callback/cognito",
         form: true,
         body: {
-          username: "test.user@cds-snc.ca",
+          username: `test.${admin ? "admin" : "user"}@cds-snc.ca`,
           verificationCode: "123456",
           authenticationFlowToken: response.body.authenticationFlowToken,
           csrfToken,
@@ -168,4 +172,40 @@ Cypress.Commands.add("logout", () => {
       );
     });
   });
+});
+
+/**
+ * Reset the database to it's default state
+ */
+Cypress.Commands.add("resetDB", () => {
+  cy.task("db:teardown");
+  cy.task("db:seed");
+});
+
+/**
+ * Reset the flags to default values
+ */
+Cypress.Commands.add("resetFlags", () => {
+  cy.login()
+    .then(() => {
+      Object.keys(flagsDefault).forEach((key) => {
+        cy.useFlag(`${key}`, (flagsDefault as Record<string, boolean>)[key], true);
+      });
+    })
+    .then(() => cy.logout());
+});
+
+/**
+ * Reset the database and flags to their default values
+ */
+Cypress.Commands.add("resetAll", () => {
+  cy.task("db:teardown");
+  cy.task("db:seed");
+  cy.login()
+    .then(() => {
+      Object.keys(flagsDefault).forEach((key) => {
+        cy.useFlag(`${key}`, (flagsDefault as Record<string, boolean>)[key], true);
+      });
+    })
+    .then(() => cy.logout());
 });

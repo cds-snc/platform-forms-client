@@ -42,10 +42,6 @@
       "title": "Formulaires de support",
       "description": "Activation ou désactivation des formulaires de support"
     },
-    "nagware": {
-      "title": "Notifications Nagware",
-      "description": "Activer les notifications du module Nagware"
-    },
     "experimentalBlocks": {
       "title": "Blocs expérimentaux",
       "description": "Activer les blocs expérimentaux"

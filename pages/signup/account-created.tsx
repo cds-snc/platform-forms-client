@@ -35,7 +35,11 @@ export default function AccountCreated() {
         >
           {t("accountCreated.unlockPublishingButton")}
         </StyledLink>
-        <StyledLink href={`/${i18n.language}/myforms/`} theme="secondaryButton">
+        <StyledLink
+          href={`/${i18n.language}/myforms/`}
+          theme="secondaryButton"
+          testid="skipStepButton"
+        >
           {t("accountCreated.skipStepButton")}
         </StyledLink>
       </div>

@@ -13,11 +13,13 @@ interface StyledLinkProps {
   href: string;
   className?: string;
   locale?: string;
-  // Note: Try not to overuse aria-label. Instead put the label info in the anchor if possible.
-  // Keep in mind that the aria-label will override any link text.
+  // Note: Try not to overuse aria-label. Instead put the label info in the anchor text if possible.
+  // Keep in mind that the aria-label will override any link text for the assistive technology.
   ariaLabel?: string;
   lang?: string;
   theme?: Theme;
+  testid?: string;
+  scroll?: boolean;
 }
 
 // Making all the buttons look the same, even the fake ones. Pulls styles from the global Button
@@ -29,17 +31,27 @@ const linkThemes = {
 type Theme = keyof typeof linkThemes;
 
 export const StyledLink = (props: StyledLinkProps) => {
-  const { children, href = "", className, locale, ariaLabel, lang, theme = "default" } = props;
+  const {
+    children,
+    href = "",
+    className,
+    locale,
+    ariaLabel,
+    lang,
+    theme = "default",
+    testid = "",
+    scroll = true, // NextJS default
+  } = props;
   const ref = useRef<HTMLAnchorElement>(null);
-
   return (
-    <Link href={href} {...(locale && { locale: locale })} passHref legacyBehavior>
+    <Link href={href} {...(locale && { locale: locale })} passHref legacyBehavior scroll={scroll}>
       <WrappedLink
         href={href}
         className={theme ? `${className} ${linkThemes[theme]}` : className}
         {...(ariaLabel && { ariaLabel: ariaLabel })}
         {...(lang && { lang: lang })}
         ref={ref}
+        {...(testid && { testid })}
       >
         {children}
       </WrappedLink>
@@ -53,6 +65,7 @@ interface WrappedLinkProps {
   className?: string;
   ariaLabel?: string;
   lang?: string;
+  testid?: string;
 }
 
 const WrappedLink = React.forwardRef(
@@ -60,7 +73,7 @@ const WrappedLink = React.forwardRef(
     // Note: href is populated by passHref "magic" and is needed for the case of getting the locale
     // prefix in the url. The passed prop href is ignored it seems, so this works. The prop is
     // included above for TypeScript but otherwise not needed.
-    const { children, className, ariaLabel, lang } = props;
+    const { children, className, ariaLabel, lang, testid } = props;
 
     return (
       <a
@@ -69,6 +82,7 @@ const WrappedLink = React.forwardRef(
         {...(ariaLabel && { "aria-label": ariaLabel })}
         {...(lang && { lang: lang })}
         ref={ref}
+        {...(testid && { "data-testid": testid })}
       >
         {children}
       </a>
