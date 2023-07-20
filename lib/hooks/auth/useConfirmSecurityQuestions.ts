@@ -1,6 +1,7 @@
 import { FormikHelpers } from "formik";
 import { fetchWithCsrfToken } from "./fetchWithCsrfToken";
 import { useAuthErrors } from "./useAuthErrors";
+import { hasError } from "@lib/hasError";
 
 export const useConfirmSecurityQuestions = (successCallback: () => void) => {
   const [authErrorsState, { authErrorsReset, handleErrorById }] = useAuthErrors();
@@ -31,7 +32,11 @@ export const useConfirmSecurityQuestions = (successCallback: () => void) => {
       });
       successCallback();
     } catch (err) {
-      handleErrorById("InternalServiceExceptionLogin");
+      if ((hasError("IncorrectSecurityAnswerException"), err)) {
+        handleErrorById("IncorrectSecurityAnswerException");
+      } else {
+        handleErrorById("InternalServiceExceptionLogin");
+      }
     } finally {
       setSubmitting(false);
     }

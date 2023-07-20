@@ -10,7 +10,23 @@ const securityquestions = async (req: NextApiRequest, res: NextApiResponse) => {
     });
   }
 
+  if (!req.body.question1 || !req.body.question2 || !req.body.question3) {
+    return res.status(400).json({
+      message: "all questions need to be provided in the body of the request",
+    });
+  }
+
+  const question1 = req.body.question1;
+  const question2 = req.body.question2;
+  const question3 = req.body.question3;
+
   const sanitizedUsername = sanitizeEmailAddressForCognito(req.body.username);
+
+  if (question1 !== "a" || question2 !== "b" || question3 !== "c") {
+    return res.status(400).json({
+      message: "IncorrectSecurityAnswerException: one or more of the answers are incorrect",
+    });
+  }
 
   return res.status(200).json({ data: "success", user: sanitizedUsername });
 };

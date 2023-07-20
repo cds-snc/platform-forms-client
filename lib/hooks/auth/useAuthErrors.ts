@@ -92,6 +92,9 @@ export const useAuthErrors = (): [AuthErrorsState, AuthErrorsDispatch] => {
       case "UsernameExistsException":
         errorObj.title = t("UsernameExistsException"); // TODO ask design/content for error message
         break;
+      case "IncorrectSecurityAnswerException":
+        errorObj.title = t("IncorrectSecurityAnswerException"); // TODO ask design/content for error message
+        break;
       case "2FAInvalidVerificationCode":
       case "CodeMismatchException":
         errorObj.title = t("CodeMismatchException"); // TODO ask design/content for error message
