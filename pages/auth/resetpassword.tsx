@@ -23,19 +23,11 @@ import { AuthErrorsState } from "@lib/hooks/auth/useAuthErrors";
 
 const Step1 = ({
   username,
-  setInitialCodeSent,
   nextStep,
-  sendForgotPassword,
   authErrorsState,
   authErrorsReset,
 }: {
   username: MutableRefObject<string>;
-  sendForgotPassword: (
-    username: string,
-    successCallback: () => void,
-    failedCallback?: (error: string) => void
-  ) => void;
-  setInitialCodeSent: (val: boolean) => void;
   nextStep: () => void;
   authErrorsState: AuthErrorsState;
   authErrorsReset: () => void;
@@ -64,16 +56,8 @@ const Step1 = ({
         validateOnChange={false}
         validateOnBlur={false}
         validationSchema={sendForgotPasswordValidationSchema}
-        onSubmit={async (values) => {
-          // set the username ( user's email ) to what was provided
+        onSubmit={(values) => {
           username.current = values.username;
-          // call the sendForgotPassword method to attempt to send the verification code to the user
-          sendForgotPassword(values.username, () => {
-            // if sending of the code succeeds we set the initialCodeSent state to true
-            // this will display the form to set the new password
-            setInitialCodeSent(true);
-          });
-
           nextStep();
         }}
       >
@@ -85,7 +69,6 @@ const Step1 = ({
                 heading={authErrorsState.title}
                 onDismiss={authErrorsReset}
                 id="cognitoErrors"
-                // dismissible={cognitoErrorIsDismissible}
               >
                 {authErrorsState.description}&nbsp;
                 {authErrorsState.callToActionLink ? (
@@ -149,6 +132,7 @@ const Step1 = ({
   );
 };
 
+// Security questions form
 const Step2 = ({
   username,
   confirmSecurityQuestions,
@@ -157,20 +141,13 @@ const Step2 = ({
 }: {
   username: MutableRefObject<string>;
   confirmSecurityQuestions: (
-    values: { username: string; answers: { id: string; answer: string }[] | [] },
-    helpers: FormikHelpers<{ username: string; answers: { id: string; answer: string }[] | [] }>
+    values: { username: string; question1: string },
+    helpers: FormikHelpers<{ username: string; question1: string }>
   ) => Promise<void>;
   authErrorsState: AuthErrorsState;
   authErrorsReset: () => void;
 }) => {
   const { t } = useTranslation(["reset-password", "common"]);
-
-  // validation schema for security questions form
-  const confirmSecurityQuestionsValidationSchema = Yup.object().shape({
-    confirmationCode: Yup.number()
-      .typeError(t("resetPassword.fields.confirmationCode.error.number"))
-      .required(t("input-validation.required", { ns: "common" })),
-  });
 
   return (
     <>
@@ -180,10 +157,9 @@ const Step2 = ({
       <Formik
         initialValues={{
           username: username.current,
-          answers: [{ id: "", answer: "" }],
+          question1: "",
         }}
         onSubmit={confirmSecurityQuestions}
-        validationSchema={confirmSecurityQuestionsValidationSchema}
         validateOnChange={false}
         validateOnBlur={false}
       >
@@ -252,6 +228,7 @@ const Step2 = ({
   );
 };
 
+// Confirm password reset form
 const Step3 = ({
   username,
   confirmPasswordReset,
@@ -428,21 +405,23 @@ const ResetPassword = () => {
   const { username, sendForgotPassword, confirmPasswordReset, authErrorsState, authErrorsReset } =
     useResetPassword();
 
-  const { confirmSecurityQuestions } = useConfirmSecurityQuestions(username.current);
+  const { confirmSecurityQuestions } = useConfirmSecurityQuestions(() => {
+    setSecurityQuestions(false);
+    sendForgotPassword(username.current);
+    setInitialCodeSent(true);
+  });
 
   // we don't put this state in useAuth since its very unique to this page only
   const [initialCodeSent, setInitialCodeSent] = useState(false);
   const [securityQuestions, setSecurityQuestions] = useState(false);
 
   // The form to initially send a verification code needed to reset a user's password
-  if (!initialCodeSent) {
+  if (!initialCodeSent && !securityQuestions) {
     return (
       <Step1
         username={username}
         authErrorsState={authErrorsState}
         authErrorsReset={authErrorsReset}
-        sendForgotPassword={sendForgotPassword}
-        setInitialCodeSent={setInitialCodeSent}
         nextStep={() => setSecurityQuestions(true)}
       />
     );

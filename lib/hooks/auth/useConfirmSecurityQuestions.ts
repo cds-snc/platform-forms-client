@@ -1,30 +1,26 @@
-import { useRouter } from "next/router";
 import { FormikHelpers } from "formik";
 import { fetchWithCsrfToken } from "./fetchWithCsrfToken";
 import { useAuthErrors } from "./useAuthErrors";
 
-export const useConfirmSecurityQuestions = (username: string, successCallback: () => void) => {
+export const useConfirmSecurityQuestions = (successCallback: () => void) => {
   const [authErrorsState, { authErrorsReset, handleErrorById }] = useAuthErrors();
 
   const confirmSecurityQuestions = async (
     {
       username,
-      answers,
+      question1,
     }: {
       username: string;
-      answers: { id: string; answer: string }[] | [];
+      question1: string;
     },
-    {
-      setSubmitting,
-    }: FormikHelpers<{ username: string; answers: { id: string; answer: string }[] | [] }>
+    { setSubmitting }: FormikHelpers<{ username: string; question1: string }>
   ) => {
     authErrorsReset();
     try {
       await fetchWithCsrfToken("/api/account/securityquestions", {
         username,
-        answers,
+        question1,
       });
-
       successCallback();
     } catch (err) {
       handleErrorById("InternalServiceExceptionLogin");
@@ -35,7 +31,6 @@ export const useConfirmSecurityQuestions = (username: string, successCallback: (
 
   return {
     confirmSecurityQuestions,
-    username,
     authErrorsState,
     authErrorsReset,
   };
