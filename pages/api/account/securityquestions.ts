@@ -22,7 +22,7 @@ const securityquestions = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const sanitizedUsername = sanitizeEmailAddressForCognito(req.body.username);
 
-  if (question1 !== "a" || question2 !== "b" || question3 !== "c") {
+  if (question1 !== "aaaa" || question2 !== "bbbb" || question3 !== "cccc") {
     return res.status(400).json({
       message: "IncorrectSecurityAnswerException: one or more of the answers are incorrect",
     });
