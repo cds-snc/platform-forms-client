@@ -29,7 +29,7 @@ const mockSendEmail = {
   }),
 };
 
-jest.mock("notifications-node-client", () => ({
+jest.mock("@lib/integration/notifyConnector", () => ({
   NotifyClient: jest.fn(() => mockSendEmail),
 }));
 
