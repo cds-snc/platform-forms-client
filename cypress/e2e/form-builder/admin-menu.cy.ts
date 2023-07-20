@@ -26,14 +26,14 @@ describe("Form ownership", () => {
   });
 
   it("Shows admin menu when logged in as Admin", () => {
-    cy.login(true, true);
+    cy.login({ admin: true, acceptableUse: true });
     cy.visit("/myforms");
 
     cy.get("nav[aria-label='Main']").should("contain", "Administration");
   });
 
   it("Does not show admin menu when logged in as non-Admin", () => {
-    cy.login(false, true);
+    cy.login({ acceptableUse: true });
     cy.visit("/myforms");
 
     cy.get("nav[aria-label='Main']").should("not.contain", "Administration");

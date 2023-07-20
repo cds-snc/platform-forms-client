@@ -4,7 +4,7 @@ describe("Accounts Page", () => {
   const deactivatedUserEmail = "test.deactivated@cds-snc.ca";
 
   beforeEach(() => {
-    cy.login(true, true);
+    cy.login({ admin: true, acceptableUse: true });
     cy.visitPage("/en/admin/accounts");
   });
 
