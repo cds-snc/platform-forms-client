@@ -481,7 +481,7 @@ const ResetPassword = ({ userQuestions }: ResetPasswordProps) => {
 
   // we don't put this state in useAuth since its very unique to this page only
   const [initialCodeSent, setInitialCodeSent] = useState(false);
-  const [securityQuestions, setSecurityQuestions] = useState(true);
+  const [securityQuestions, setSecurityQuestions] = useState(false);
 
   // The form to initially send a verification code needed to reset a user's password
   if (!initialCodeSent && !securityQuestions) {
