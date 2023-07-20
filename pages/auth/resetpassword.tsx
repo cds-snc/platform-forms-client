@@ -214,18 +214,30 @@ const Step2 = ({
                 validation={true}
                 tabIndex={0}
                 id="registrationValidationErrors"
-                heading={t("input-validation.heading", { ns: "common" })}
+                heading={
+                  Object.entries(errors).length === 3
+                    ? t("securityQuestions.inputValidation.allRequired.title")
+                    : t("input-validation.heading", { ns: "common" })
+                }
               >
                 <ol className="gc-ordered-list">
-                  {Object.entries(errors).map(([fieldKey, fieldValue]) => {
-                    return (
-                      <ErrorListItem
-                        key={`error-${fieldKey}`}
-                        errorKey={fieldKey}
-                        value={fieldValue}
-                      />
-                    );
-                  })}
+                  {Object.entries(errors).length === 3 ? (
+                    <ErrorListItem
+                      errorKey={"question1"}
+                      key={`resetPassword`}
+                      value={t("securityQuestions.inputValidation.allRequired.description")}
+                    />
+                  ) : (
+                    Object.entries(errors).map(([fieldKey, fieldValue]) => {
+                      return (
+                        <ErrorListItem
+                          key={`error-${fieldKey}`}
+                          errorKey={fieldKey}
+                          value={fieldValue}
+                        />
+                      );
+                    })
+                  )}
                 </ol>
               </Alert>
             )}
