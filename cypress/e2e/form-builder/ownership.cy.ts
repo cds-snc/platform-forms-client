@@ -33,19 +33,19 @@ describe("Form ownership", () => {
   });
 
   it("Non-Admin cannot manage Form Ownership", () => {
-    cy.login(false, true);
+    cy.login({ acceptableUse: true });
     cy.visit(`/form-builder/settings/${formID}/form`);
     cy.get("h2").contains("Manage ownership").should("not.exist");
   });
 
   it("Admin can manage Form Ownership", () => {
-    cy.login(true, true);
+    cy.login({ admin: true, acceptableUse: true });
     cy.visit(`/form-builder/settings/${formID}/form`);
     cy.get("h2").contains("Manage ownership").should("exist");
   });
 
   it("Must have at least one owner", () => {
-    cy.login(true, true);
+    cy.login({ admin: true, acceptableUse: true });
     cy.visit(`/form-builder/settings/${formID}/form`);
     cy.get("h2").contains("Manage ownership").should("exist");
 

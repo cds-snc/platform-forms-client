@@ -3,6 +3,7 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import seedTemplates from "./fixtures/templates";
 import seedPrivileges from "./fixtures/privileges";
 import seedSettings from "./fixtures/settings";
+import seedUsers from "./fixtures/users";
 
 type AnyObject = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -40,68 +41,9 @@ async function createSettings(env: string) {
   });
 }
 
-const defaults = {
-  id: "1",
-  name: "Test User",
-  email: "test.user@cds-snc.ca",
-  active: true,
-};
-
-async function createTestUser({
-  id,
-  active,
-  name,
-  email,
-}: { id: string; name: string; email: string; active: boolean } = defaults) {
-  return prisma.user.create({
-    data: {
-      id,
-      name,
-      email,
-      active: active,
-      privileges: {
-        connect: [
-          { nameEn: "Base" },
-          { nameEn: "PublishForms" },
-          { nameEn: "ManageApplicationSettings" },
-        ],
-      },
-    },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      privileges: true,
-    },
-  });
-}
-
-async function createAdminTestUser() {
-  return prisma.user.create({
-    data: {
-      id: "2",
-      name: "Test Admin User",
-      email: "testadmin.user@cds-snc.ca",
-      privileges: {
-        connect: [
-          { nameEn: "Base" },
-          { nameEn: "PublishForms" },
-          { nameEn: "ManageApplicationSettings" },
-          { nameEn: "ManageUsers" },
-          { nameEn: "ManageForms" },
-          { nameEn: "ViewApplicationSettings" },
-          { nameEn: "ViewUserPrivileges" },
-          { nameEn: "ManagePrivileges" },
-        ],
-      },
-    },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      privileges: true,
-    },
-  });
+async function createTestUsers() {
+  const users = seedUsers["test"].map((user) => prisma.user.create({ data: user }));
+  await Promise.all(users);
 }
 
 //Can be removed once we know that the migration is completed
@@ -269,22 +211,9 @@ async function main(environment: string) {
     ]);
 
     if (environment === "test") {
-      console.log("Creating test User");
-      await createTestUser();
+      console.log("Creating test Users");
+      await createTestUsers();
 
-      console.log("Creating deactivated test User");
-      // create a deactivated test user
-      // noting we check for this user (via username / email) in [...nextauth].ts
-      // + auto-throw an error prior to the 2fa verification check
-      await createTestUser({
-        id: "100",
-        name: "Test Deactivated",
-        email: "test.deactivated@cds-snc.ca",
-        active: false,
-      });
-      console.log("Creating admin test User");
-      await createAdminTestUser();
-      // Short Circuit
       // No migrations need to run on pure new test database
       return;
     }

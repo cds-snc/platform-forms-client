@@ -1,10 +1,10 @@
 describe("Accounts Page", () => {
-  const adminUserEmail = "testadmin.user@cds-snc.ca";
+  const adminUserEmail = "test.admin@cds-snc.ca";
   const testUserEmail = "test.user@cds-snc.ca";
   const deactivatedUserEmail = "test.deactivated@cds-snc.ca";
 
   beforeEach(() => {
-    cy.login(true, true);
+    cy.login({ admin: true, acceptableUse: true });
     cy.visitPage("/en/admin/accounts");
   });
 

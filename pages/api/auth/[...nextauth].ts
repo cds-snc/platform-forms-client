@@ -14,6 +14,7 @@ import { acceptableUseCheck, removeAcceptableUse } from "@lib/acceptableUseCache
 import { getPrivilegeRulesForUser } from "@lib/privileges";
 import { logEvent } from "@lib/auditLogs";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { activeStatusCheck, activeStatusUpdate } from "@lib/cache/userActiveStatus";
 
 if (
   (!process.env.COGNITO_APP_CLIENT_ID ||
@@ -36,36 +37,25 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         const { authenticationFlowToken, username, verificationCode } = credentials ?? {};
 
-        // Application is in test mode, return test user
-        if (process.env.APP_ENV === "test") {
-          if (
-            !username ||
-            ![
-              "test.user@cds-snc.ca",
-              "testadmin.user@cds-snc.ca",
-              "test.deactivated@cds-snc.ca",
-            ].includes(username)
-          ) {
-            throw new Error("Must use testing accounts when in test Mode");
-          }
+        // Check to ensure all required credentials were passed in
+        if (!authenticationFlowToken || !username || !verificationCode) return null;
 
-          // @todo - look into doing a local user lookup vs hardcoding the user
-
-          if (username === "test.deactivated@cds-snc.ca") {
-            return {
-              id: "100",
-              email: username,
-            };
-          }
+        // Check for test accounts being used
+        if (
+          ["test.user@cds-snc.ca", "test.admin@cds-snc.ca", "test.deactivated@cds-snc.ca"].includes(
+            username
+          )
+        ) {
+          // If we're not in test mode throw an error
+          if (process.env.APP_ENV !== "test")
+            throw new Error("Test accounts only available in testing mode");
 
           return {
-            id: "1",
+            // id is not used by the app, but is required by next-auth
+            id: "test",
             email: username,
           };
         }
-
-        // Check to ensure all required credentials were passed in
-        if (!authenticationFlowToken || !username || !verificationCode) return null;
 
         const validationResult = await validate2FAVerificationCode(
           authenticationFlowToken,
@@ -133,8 +123,21 @@ export const authOptions: NextAuthOptions = {
       }
 
       // Any logic that needs to happen after JWT initializtion needs to be below this point.
+
+      // Check if user has accepted the Acceptable Use Policy
       if (!token.acceptableUse) {
         token.acceptableUse = await getAcceptableUseValue(token.userId as string);
+      }
+
+      // Check if user has been deactivated
+      const userActive = await checkUserActiveStatus(token.userId);
+      if (!userActive) {
+        // Client side auth lib will use this to immediately log out a user if they have been deactivated
+        // Server side API calls will be caught in sessionExists middleware
+        logMessage.warn(
+          `User ${token.userId} (${token.email}) was Deactivated during an active session`
+        );
+        token.deactivated = true;
       }
 
       return token;
@@ -151,6 +154,8 @@ export const authOptions: NextAuthOptions = {
         image: token.picture ?? null,
         privileges: await getPrivilegeRulesForUser(token.userId as string),
         ...(token.newlyRegistered && { newlyRegistered: token.newlyRegistered }),
+        // Used client side to immidiately log out a user if they have been deactivated
+        ...(token.deactivated && { deactivated: token.deactivated }),
       };
 
       return session;
@@ -182,6 +187,35 @@ const getAcceptableUseValue = async (userId: string) => {
   return acceptableUse;
 };
 
+/**
+ * Checks the active status of a user using a cache strategy
+ * @param userID id of the user to check
+ * @returns boolean active status
+ */
+const checkUserActiveStatus = async (userID: string): Promise<boolean> => {
+  // Check cache first
+  const cachedStatus = await activeStatusCheck(userID);
+  if (cachedStatus !== null) {
+    return cachedStatus;
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userID,
+    },
+    select: {
+      active: true,
+    },
+  });
+
+  // Update cache with new value
+  // Do not need to await promise.  This is an update only action that on fail will
+  // force a recheck of the database on next call
+  activeStatusUpdate(userID, user?.active ?? false);
+
+  return user?.active ?? false;
+};
+
 export default async function auth(req: NextApiRequest, res: NextApiResponse) {
   // Listens for the sign-in action for Cognito to initiate the sign in process
   if (
@@ -193,25 +227,19 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
 
     if (!username || !password)
       return res.status(400).json({ status: "error", error: "Missing username or password" });
-
-    if (process.env.APP_ENV === "test") {
-      if (username === "test.deactivated@cds-snc.ca") {
-        // -> return error that would be thrown by begin2FAAuthentication
-        return res.status(401).json({
-          status: "error",
-          error: "Cognito authentication failed",
-          reason: "AccountDeactivated",
+    try {
+      if (process.env.APP_ENV === "test") {
+        const authenticationFlowToken = await begin2FAAuthentication({
+          email: username,
+          token: "testCognitoToken",
+        });
+        return res.status(200).json({
+          status: "success",
+          challengeState: "MFA",
+          authenticationFlowToken: authenticationFlowToken,
         });
       }
 
-      return res.status(200).json({
-        status: "success",
-        challengeState: "MFA",
-        authenticationFlowToken: "0000-1111-2222-3333",
-      });
-    }
-
-    try {
       const cognitoToken = await initiateSignIn({
         username: username,
         password: password,
@@ -241,5 +269,6 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
   }
 
   // Runs the NextAuth.js flow
+
   return NextAuth(req, res, authOptions);
 }
