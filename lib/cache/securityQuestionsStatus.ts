@@ -8,14 +8,14 @@ const cacheAvailable: boolean = process.env.APP_ENV !== "test" && Boolean(proces
 const randomCacheExpiry = () => Math.floor(Math.random() * 300 + 300);
 
 export const securityQuestionsCheck = async (userID: string): Promise<boolean | null> => {
-  const checkParameter = `auth:active:${userID}`;
+  const checkParameter = `auth:securityquestions:${userID}`;
 
   if (cacheAvailable) {
     try {
       const redis = await getRedisInstance();
       const value = await redis.get(checkParameter);
       if (value) {
-        logMessage.debug(`Using Cached User Status for ${checkParameter}`);
+        logMessage.debug(`Using Cached Security Questions Status for ${checkParameter}`);
         return value === "1";
       }
     } catch (e) {
@@ -28,14 +28,14 @@ export const securityQuestionsCheck = async (userID: string): Promise<boolean | 
 };
 
 export const securityQuestionsStatusUpdate = async (userID: string, status: boolean): Promise<void> => {
-  const modifyParameter = `auth:active:${userID}`;
+  const modifyParameter = `auth:securityquestions:${userID}`;
 
   if (!cacheAvailable) return;
   try {
     const redis = await getRedisInstance();
 
     await redis.setex(modifyParameter, randomCacheExpiry(), status ? "1" : "0");
-    logMessage.debug(`Updating Cached User Status for ${modifyParameter}`);
+    logMessage.debug(`Updating Security Questions Status for ${modifyParameter}`);
   } catch (e) {
     logMessage.error(e as Error);
     throw new Error("Could not connect to cache");

@@ -237,7 +237,7 @@ const checkUserHasSecurityQuestions = async (userID: string): Promise<boolean> =
     return cachedStatus;
   }
 
-  // @todo add real check here
+  // @todo add real check here once security questions are implemented
   const hasSecurityQuestions = false;
 
   // Update cache with new value

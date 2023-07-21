@@ -63,6 +63,19 @@ export function requireAuthentication(
         };
       }
 
+      if (
+        !session.user.securityQuestions &&
+        !context.resolvedUrl?.startsWith("/auth/setup-security-questions")
+      ) {
+        // check if user has setup security questions setup
+        return {
+          redirect: {
+            destination: `/${context.locale}/auth/setup-security-questions`,
+            permanent: false,
+          },
+        };
+      }
+
       if (!session.user.acceptableUse && !context.resolvedUrl?.startsWith("/auth/policy")) {
         // If they haven't agreed to Acceptable Use redirect to policy page for acceptance
         // If already on the policy page don't redirect, aka endless redirect loop.
@@ -72,19 +85,6 @@ export function requireAuthentication(
             destination: `/${context.locale}/auth/policy?referer=${
               localPathRegEx.test(context.resolvedUrl || "") ? context.resolvedUrl : "/myforms"
             }`,
-            permanent: false,
-          },
-        };
-      }
-
-      if (
-        !session.user.securityQuestions &&
-        !context.resolvedUrl?.startsWith("/auth/setup-security-questions")
-      ) {
-        // check if user has setup security questions setup
-        return {
-          redirect: {
-            destination: `/${context.locale}/auth/setup-security-questions`,
             permanent: false,
           },
         };
