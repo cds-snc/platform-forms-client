@@ -56,15 +56,19 @@ export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) =>
                 </Link>
               )}
             </li>
+            {status !== "authenticated" && (
+              <li className="mr-2 py-2 text-base tablet:mr-4">
+                <Link href={`/${i18n.language}/auth/login`}>{t("loginMenu.login")}</Link>
+              </li>
+            )}
             {
-              <li className="mr-2 tablet:mr-4 py-2">
+              <li className="mr-2 py-2 tablet:mr-4">
                 <LanguageToggle />
               </li>
             }
             {
-              <li className="py-2">
+              <li className="py-2 text-base">
                 <YourAccountDropdown isAuthenticated={status === "authenticated"} />
-                {/* <LoginMenu isAuthenticated={status === "authenticated"} /> */}
               </li>
             }
           </ul>
