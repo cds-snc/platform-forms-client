@@ -5,10 +5,10 @@ import { useAccessControl } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 
 import LanguageToggle from "../../../globals/LanguageToggle";
-import LoginMenu from "../../../auth/LoginMenu";
 import { SiteLogo } from "@formbuilder/icons";
 import { FileNameInput } from "./FileName";
 import { ShareDropdown } from "./ShareDropdown";
+import { YourAccountDropdown } from "./YourAccountDropdown";
 
 export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) => {
   const { status } = useSession();
@@ -49,12 +49,6 @@ export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) =>
               </li>
             )}
 
-            {ability?.can("view", "User") && (
-              <li className="mr-2 py-2 text-base tablet:mr-4">
-                <Link href="/admin">{t("adminNav.administration")}</Link>
-              </li>
-            )}
-
             <li className="mr-2 py-2 text-base tablet:mr-4">
               {ability?.can("view", "FormRecord") && (
                 <Link href={`/${i18n.language}/myforms/drafts`}>
@@ -63,13 +57,14 @@ export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) =>
               )}
             </li>
             {
-              <li className="mr-2 py-2 tablet:mr-4">
-                <LoginMenu isAuthenticated={status === "authenticated"} />
+              <li className="mr-2 tablet:mr-4 py-2">
+                <LanguageToggle />
               </li>
             }
             {
               <li className="py-2">
-                <LanguageToggle />
+                <YourAccountDropdown isAuthenticated={status === "authenticated"} />
+                {/* <LoginMenu isAuthenticated={status === "authenticated"} /> */}
               </li>
             }
           </ul>
