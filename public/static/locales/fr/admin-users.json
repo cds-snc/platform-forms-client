@@ -1,10 +1,13 @@
 {
-  "title": "Gérer les utilisateur·rice·s",
+  "title": "Gérer les propriétaires",
+  "accounts": "Comptes",
   "username": "Nom d'utilisateur·rice",
   "email": "Adresse courriel",
   "admin": "Administration",
   "true": "Oui",
   "false": "Non",
+  "on": "Activé",
+  "off": "Déactivé",
   "enable": "Activer",
   "enabled": "Activé",
   "disable": "Désactiver",
@@ -15,5 +18,38 @@
   "managePermissions": "Gérer les permissions",
   "viewPermissions": "Afficher les permissions",
   "managePermissionsFor": "Gère les permissions de",
-  "assignUsersToTemplate": "Assigner des utilisateur·rice·s au formulaire"
+  "assignUsersToTemplate": "Ajouter, enlever ou transférer la propriété à un autre compte Formulaires GC dans votre ministère.",
+  "enterOwnersEmail": "Entrez l’adresse courriel du propriétaire du formulaire",
+  "deactivateAccount": "Désactiver le compte",
+  "activateAccount": "Réactiver le compte",
+  "moreMenu": "... Plus",
+  "manageForms": "Gérer les formulaires",
+  "publishedFormsMustBeTransferred": {
+    "text1": "Les formulaires publiés",
+    "text2": "doivent être transférrés ou supprimés avant la désactivation."
+  },
+  "deactivatingWillNotifyUser": "L’utilisateur·rice sera informé·e de la désactivation du compte.",
+  "deactivateThisAccount": "Désactiver ce compte?",
+  "responseSuccess": {
+    "title": "Success",
+    "message": "Vos modifications ont été enregistrées."
+  },
+  "responseFail": {
+    "title": "Erreur",
+    "message": "Quelque chose a mal tourné."
+  },
+  "backToAccounts": "Retourner à Comptes",
+  "backToManageForms": "Retourner à Gérer les formulaires",
+  "lockPublishing": "Lock publishing[FR]",
+  "unlockPublishing" : "Unlock publishing[FR]",
+  "mustHaveAtLeastOneUser": "Must assign at least one user.",
+  "accountsFilterLabel": "Accounts filters[FR]",
+  "accountsFilter": {
+    "all": "All[FR]",
+    "active": "Active[FR]",
+    "deactivated": "Deactivated[FR]",
+    "noAccounts": "No accounts[FR]",
+    "noActiveAccounts": "No active accounts[FR]",
+    "noDeactivatedAccounts": "No deactivated accounts[FR]"
+  }
 }

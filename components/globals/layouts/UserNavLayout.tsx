@@ -14,11 +14,11 @@ const SiteLink = () => {
   return (
     <Link href="/form-builder" legacyBehavior>
       {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-      <a className="inline-flex mr-10 text-h2 mb-6 font-bold font-sans no-underline !text-black focus:bg-white !shadow-none">
+      <a className="mb-6 mr-10 inline-flex font-sans text-h2 font-bold !text-black no-underline !shadow-none focus:bg-white">
         <span className="">
           <SiteLogo title={t("title")} />
         </span>
-        <span className="inline-block text-[#1B00C2] ml-3 text-[24px]">
+        <span className="ml-3 inline-block text-[24px] text-[#1B00C2]">
           {t("title", { ns: "common" })}
         </span>
       </a>
@@ -32,7 +32,7 @@ const UserNavLayout = ({ children }: React.PropsWithChildren) => {
   const { t } = useTranslation("common");
 
   return (
-    <div className="flex flex-col min-h-full bg-gray-soft">
+    <div className="flex min-h-full flex-col bg-gray-soft">
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta charSet="utf-8" />
@@ -40,13 +40,13 @@ const UserNavLayout = ({ children }: React.PropsWithChildren) => {
       </Head>
       <SkipLink />
 
-      <header className="py-6 mb-4 bg-white">
+      <header className="mb-4 bg-white py-6">
         <div className="flex justify-between">
           <div className="canada-flag">
             <Brand brand={null} />
           </div>
           <div className="inline-flex gap-4">
-            <div className="md:text-small_base text-base font-normal not-italic">
+            <div className="text-base font-normal not-italic md:text-small_base">
               {ability?.can("view", "FormRecord") && (
                 <Link href="/myforms">{t("adminNav.myForms")}</Link>
               )}
@@ -57,8 +57,8 @@ const UserNavLayout = ({ children }: React.PropsWithChildren) => {
         </div>
       </header>
       <div id="page-container">
-        <div className="flex items-center justify-center mt-10 account-wrapper">
-          <div className="bg-white px-10 py-10 border-1 border-[#D1D5DB] rounded-2xl max-w-[900px]">
+        <div className="account-wrapper mt-10 flex items-center justify-center">
+          <div className="max-w-[900px] rounded-2xl border-1 border-[#D1D5DB] bg-white p-10">
             <main id="content">
               <SiteLink />
               {children}

@@ -10,13 +10,13 @@ import { checkPrivileges } from "@lib/privileges";
 
 import { NextPageWithLayout } from "@pages/_app";
 import { CardGrid } from "@components/myforms/CardGrid/CardGrid";
-import { CardProps } from "@components/myforms/Card/Card";
 import { TabPanel } from "@components/myforms/Tabs/TabPanel";
 import { LeftNavigation } from "@components/myforms/LeftNav";
 import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 import { clearTemplateStore } from "@components/form-builder/store/useTemplateStore";
 import { ResumeEditingForm } from "@components/form-builder/app/shared";
 import { Template } from "@components/form-builder/app";
+import { getUnprocessedSubmissionsForUser } from "@lib/users";
 
 interface FormsDataItem {
   id: string;
@@ -24,8 +24,10 @@ interface FormsDataItem {
   titleFr: string;
   url: string;
   date: string;
+  name: string;
   deliveryOption: { emailAddress?: string };
   isPublished: boolean;
+  overdue: number;
 }
 interface MyFormsProps {
   templates: Array<FormsDataItem>;
@@ -38,15 +40,11 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
 
   const templatesAll = templates.sort((itemA, itemB) => {
     return new Date(itemB.date).getTime() - new Date(itemA.date).getTime();
-  }) as Array<CardProps>;
+  });
 
-  const templatesPublished = templatesAll?.filter(
-    (item) => item?.isPublished === true
-  ) as Array<CardProps>;
+  const templatesPublished = templatesAll?.filter((item) => item?.isPublished === true);
 
-  const templatesDrafts = templatesAll?.filter(
-    (item) => item?.isPublished === false
-  ) as Array<CardProps>;
+  const templatesDrafts = templatesAll?.filter((item) => item?.isPublished === false);
 
   const createNewFormRef = useRef<HTMLDivElement>(null);
 
@@ -156,7 +154,16 @@ export const getServerSideProps = requireAuthentication(
           isPublished,
           date: updatedAt,
           url: `/${locale}/id/${id}`,
+          overdue: 0,
         };
+      });
+
+      const overdue = await getUnprocessedSubmissionsForUser(ability, id);
+
+      templates.map((template) => {
+        if (overdue[template.id]) {
+          template.overdue = overdue[template.id].numberOfSubmissions;
+        }
       });
 
       return {

@@ -42,10 +42,6 @@
       "title": "Support forms",
       "description": "Whether or not support forms are enabled"
     },
-    "nagware": {
-      "title": "Nagware notifications",
-      "description": "Enable the Nagware notifications"
-    },
     "experimentalBlocks": {
       "title": "Experimental blocks",
       "description": "Enable experimental blocks"

@@ -13,6 +13,7 @@ import { Session } from "next-auth";
 import { logEvent } from "@lib/auditLogs";
 jest.mock("@lib/auditLogs");
 const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
+import { JWT } from "next-auth/jwt";
 
 describe("User query tests should fail gracefully", () => {
   it("getOrCreateUser should fail gracefully - create", async () => {
@@ -25,7 +26,7 @@ describe("User query tests should fail gracefully", () => {
       })
     );
 
-    const result = await getOrCreateUser({ email: "test-user@test.ca" });
+    const result = await getOrCreateUser({ email: "test-user@test.ca" } as JWT);
     expect(result).toEqual(null);
     expect(mockedLogEvent).not.toBeCalled();
   });
@@ -44,7 +45,7 @@ describe("User query tests should fail gracefully", () => {
         clientVersion: "4.3.2",
       })
     );
-    const result = await getOrCreateUser({ email: "test-user@test.ca" });
+    const result = await getOrCreateUser({ email: "test-user@test.ca" } as JWT);
     expect(result).toEqual(null);
     expect(mockedLogEvent).not.toBeCalled();
   });
@@ -79,7 +80,7 @@ describe("getOrCreateUser", () => {
 
     (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue(user);
 
-    const result = await getOrCreateUser({ email: "fads@asdf.ca" });
+    const result = await getOrCreateUser({ email: "fads@asdf.ca" } as JWT);
     expect(result).toMatchObject(user);
     expect(mockedLogEvent).not.toBeCalled();
   });
@@ -101,7 +102,7 @@ describe("getOrCreateUser", () => {
     const result = await getOrCreateUser({
       name: "test",
       email: "fads@asdf.ca",
-    });
+    } as JWT);
 
     expect(result).toMatchObject(user);
     expect(prismaMock.user.create).toBeCalledWith({
@@ -120,6 +121,7 @@ describe("getOrCreateUser", () => {
         id: true,
         name: true,
         privileges: true,
+        active: true,
       },
     });
     expect(mockedLogEvent).toBeCalledWith(

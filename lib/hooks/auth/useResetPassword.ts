@@ -7,7 +7,11 @@ import { fetchWithCsrfToken } from "./fetchWithCsrfToken";
 import { useAuthErrors } from "./useAuthErrors";
 import { hasError } from "@lib/hasError";
 
-export const useResetPassword = () => {
+export const useResetPassword = ({
+  onConfirmSecurityQuestions,
+}: {
+  onConfirmSecurityQuestions: () => void;
+}) => {
   const router = useRouter();
   const { t } = useTranslation("cognito-errors");
   const username = useRef("");
@@ -81,8 +85,44 @@ export const useResetPassword = () => {
     }
   };
 
+  const confirmSecurityQuestions = async (
+    {
+      username,
+      question1,
+      question2,
+      question3,
+    }: {
+      username: string;
+      question1: string;
+      question2: string;
+      question3: string;
+    },
+    {
+      setSubmitting,
+    }: FormikHelpers<{ username: string; question1: string; question2: string; question3: string }>
+  ) => {
+    try {
+      await fetchWithCsrfToken("/api/account/securityquestions", {
+        username,
+        question1,
+        question2,
+        question3,
+      });
+      if (onConfirmSecurityQuestions) onConfirmSecurityQuestions();
+    } catch (err) {
+      if ((hasError("IncorrectSecurityAnswerException"), err)) {
+        handleErrorById("IncorrectSecurityAnswerException");
+      } else {
+        handleErrorById("InternalServiceExceptionLogin");
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return {
     sendForgotPassword,
+    confirmSecurityQuestions,
     confirmPasswordReset,
     username,
     authErrorsState,
