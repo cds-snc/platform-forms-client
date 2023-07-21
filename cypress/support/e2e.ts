@@ -30,8 +30,11 @@ Cypress.on("uncaught:exception", () => {
   return false;
 });
 
-beforeEach(() => {
-  cy.login()
+// Reset the Database and Flags at a minimum between test suites
+before(() => {
+  cy.task("db:teardown");
+  cy.task("db:seed");
+  cy.login({ admin: true })
     .then(() => {
       Object.keys(flagsDefault).forEach((key) => {
         cy.useFlag(`${key}`, (flagsDefault as Record<string, boolean>)[key], true);

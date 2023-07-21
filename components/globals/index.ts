@@ -6,3 +6,4 @@ export { default as Footer } from "./Footer";
 export { default as SkipLink } from "./SkipLink";
 export { default as LanguageToggle } from "./LanguageToggle";
 export { default as Brand } from "./Brand";
+export { Alert, ErrorStatus } from "./Alert";

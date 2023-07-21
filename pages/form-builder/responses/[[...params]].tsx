@@ -11,7 +11,6 @@ import { GetServerSideProps } from "next";
 import { FormRecord, VaultSubmissionList } from "@lib/types";
 import { listAllSubmissions } from "@lib/vault";
 import { useSession } from "next-auth/react";
-import { checkOne } from "@lib/cache/flags";
 import Link from "next/link";
 import { Card } from "@components/globals/card/Card";
 import { DownloadTable } from "@components/form-builder/app/responses/DownloadTable";
@@ -138,7 +137,11 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           <>
             <div>
               {vaultSubmissions.length > 0 && (
-                <DownloadTable vaultSubmissions={vaultSubmissions} formId={formId} />
+                <DownloadTable
+                  vaultSubmissions={vaultSubmissions}
+                  formId={formId}
+                  nagwareResult={nagwareResult}
+                />
               )}
 
               {vaultSubmissions.length <= 0 && (
@@ -333,13 +336,9 @@ export const getServerSideProps: GetServerSideProps = async ({
       FormbuilderParams.initialForm = initialForm;
       vaultSubmissions.push(...allSubmissions.submissions);
 
-      const isNagwareEnabled = await checkOne("nagware");
-
-      if (isNagwareEnabled) {
-        nagwareResult = allSubmissions.submissions.length
-          ? await detectOldUnprocessedSubmissions(allSubmissions.submissions)
-          : null;
-      }
+      nagwareResult = allSubmissions.submissions.length
+        ? await detectOldUnprocessedSubmissions(allSubmissions.submissions)
+        : null;
     } catch (e) {
       if (e instanceof AccessControlError) {
         return {

@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { middleware, cors, sessionExists } from "@lib/middleware";
-import { getUsers } from "@lib/users";
+import { getUsers, updateActiveStatus } from "@lib/users";
 import { MiddlewareProps, WithRequired, UserAbility } from "@lib/types";
 
 import { createAbility, updatePrivilegesForUser, AccessControlError } from "@lib/privileges";
@@ -13,6 +13,22 @@ const getUserList = async (ability: UserAbility, res: NextApiResponse) => {
     res.status(500).json({ error: "Could not process request" });
   } else {
     res.status(200).json([...users]);
+  }
+};
+
+const updateActiveStatusOnUser = async (
+  ability: UserAbility,
+  req: NextApiRequest,
+  res: NextApiResponse
+) => {
+  const { userID, active } = req.body;
+  if (typeof userID === "undefined" || typeof active === "undefined") {
+    return res.status(400).json({ error: "Malformed Request" });
+  }
+
+  const result = await updateActiveStatus(ability, userID, active);
+  if (result) {
+    return res.status(200).send("Success");
   }
 };
 
@@ -53,6 +69,10 @@ const handler = async (
         await getUserList(ability, res);
         break;
       case "PUT":
+        if ("active" in req.body) {
+          await updateActiveStatusOnUser(ability, req, res);
+          break;
+        }
         await updatePrivilegeOnUser(ability, req, res);
         break;
     }

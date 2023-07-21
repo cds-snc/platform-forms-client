@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 import { Prisma, PrismaClient } from "@prisma/client";
-import { parse } from "ts-command-line-args";
 import seedTemplates from "./fixtures/templates";
 import seedPrivileges from "./fixtures/privileges";
 import seedSettings from "./fixtures/settings";
+import seedUsers from "./fixtures/users";
 
 type AnyObject = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -41,27 +41,9 @@ async function createSettings(env: string) {
   });
 }
 
-async function createTestUser() {
-  return prisma.user.create({
-    data: {
-      id: "1",
-      name: "Test User",
-      email: "test.user@cds-snc.ca",
-      privileges: {
-        connect: [
-          { nameEn: "Base" },
-          { nameEn: "PublishForms" },
-          { nameEn: "ManageApplicationSettings" },
-        ],
-      },
-    },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      privileges: true,
-    },
-  });
+async function createTestUsers() {
+  const users = seedUsers["test"].map((user) => prisma.user.create({ data: user }));
+  await Promise.all(users);
 }
 
 //Can be removed once we know that the migration is completed
@@ -219,38 +201,36 @@ async function lowercaseEmailAddressMigration() {
   );
 }
 
-async function main() {
-  const { environment = "production" } = parse<{ environment?: string }>({
-    environment: { type: String, optional: true },
-  });
+async function main(environment: string) {
+  try {
+    console.log(`Seeding Database for ${environment} enviroment`);
+    await Promise.all([
+      createTemplates(environment),
+      createPrivileges(environment),
+      createSettings(environment),
+    ]);
 
-  console.log(`Seeding Database for ${environment} enviroment`);
-  await Promise.all([
-    createTemplates(environment),
-    createPrivileges(environment),
-    createSettings(environment),
-  ]);
+    if (environment === "test") {
+      console.log("Creating test Users");
+      await createTestUsers();
 
-  console.log("Running 'publishingStatus' migration");
-  await publishingStatusMigration();
+      // No migrations need to run on pure new test database
+      return;
+    }
 
-  console.log("Running 'templateSchema' migration");
-  await templateSchemaMigration();
+    console.log("Running 'publishingStatus' migration");
+    await publishingStatusMigration();
 
-  console.log("Running 'lowercaseEmailAddress' migration");
-  await lowercaseEmailAddressMigration();
+    console.log("Running 'templateSchema' migration");
+    await templateSchemaMigration();
 
-  if (environment === "test") {
-    console.log("Creating test User");
-    await createTestUser();
+    console.log("Running 'lowercaseEmailAddress' migration");
+    await lowercaseEmailAddressMigration();
+  } catch (e) {
+    console.error(e);
+  } finally {
+    prisma.$disconnect;
   }
 }
 
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+export default main;

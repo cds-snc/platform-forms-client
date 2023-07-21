@@ -167,9 +167,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
     if (error instanceof AccessControlError) {
       logEvent(
         ability.userID,
-        { type: "Response" },
+        { type: "Response", id: `NAME#${submissionName}` },
         "AccessDenied",
-        `Attemped to download response for submissionID ${submissionName}`
+        `Attemped to download response`
       );
       return res.status(403).json({ error: "Forbidden" });
     }

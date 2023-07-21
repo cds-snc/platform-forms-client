@@ -13,7 +13,8 @@ import jwt, { Secret } from "jsonwebtoken";
 import { AccessControlError, checkPrivileges, checkPrivilegesAsBoolean } from "./privileges";
 import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
-import { deleteDraftFormTestResponses, numberOfUnprocessedSubmissions } from "./vault";
+import { numberOfUnprocessedSubmissions, deleteDraftFormTestResponses } from "./vault";
+import { addOwnershipEmail, transferOwnershipEmail } from "./ownership";
 
 // ******************************************
 // Internal Module Functions
@@ -109,9 +110,10 @@ async function _unprotectedGetTemplateByID(formID: string): Promise<FormRecord |
  * This function is for internal use only since it does not require any permission.
  * There is an exported version `_getTemplateWithAssociatedUsers` that checks for permissions.
  */
-async function _unprotectedGetTemplateWithAssociatedUsers(
-  formID: string
-): Promise<{ formRecord: FormRecord; users: { id: string; name: string | null }[] } | null> {
+async function _unprotectedGetTemplateWithAssociatedUsers(formID: string): Promise<{
+  formRecord: FormRecord;
+  users: { id: string; name: string | null; email: string | null }[];
+} | null> {
   const templateWithUsers = await prisma.template
     .findUnique({
       where: {
@@ -131,6 +133,7 @@ async function _unprotectedGetTemplateWithAssociatedUsers(
           select: {
             id: true,
             name: true,
+            email: true,
           },
         },
       },
@@ -318,6 +321,67 @@ export async function getAllTemplates(
   } catch (e) {
     if (e instanceof AccessControlError) {
       logEvent(ability.userID, { type: "Form" }, "AccessDenied", "Attempted to list all Forms");
+      throw e;
+    }
+    logMessage.error(e);
+    return [];
+  }
+}
+
+/**
+ * Get all form templates for a specific User.
+ * @returns An array of Form Records
+ */
+export async function getAllTemplatesForUser(
+  ability: UserAbility,
+  userID: string,
+  isPublished?: boolean
+): Promise<Array<FormRecord>> {
+  try {
+    checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
+
+    const templates = await prisma.template
+      .findMany({
+        where: {
+          ttl: null,
+          ...(typeof isPublished !== "undefined" && { isPublished: isPublished }),
+          users: {
+            some: {
+              id: userID,
+            },
+          },
+        },
+        select: {
+          id: true,
+          created_at: true,
+          updated_at: true,
+          name: true,
+          jsonConfig: true,
+          isPublished: true,
+          deliveryOption: true,
+          securityAttribute: true,
+        },
+      })
+      .catch((e) => prismaErrors(e, []));
+
+    // Only log the event if templates are found
+    if (templates.length > 0)
+      logEvent(
+        ability.userID,
+        { type: "Form" },
+        "ReadForm",
+        `Accessed Forms: ${templates.map((template) => template.id).toString()}`
+      );
+
+    return templates.map((template) => _parseTemplate(template));
+  } catch (e) {
+    if (e instanceof AccessControlError) {
+      logEvent(
+        ability.userID,
+        { type: "Form" },
+        "AccessDenied",
+        "Attempted to list all Forms for User"
+      );
       throw e;
     }
     logMessage.error(e);
@@ -624,7 +688,7 @@ export async function updateIsPublishedForTemplate(
 export async function updateAssignedUsersForTemplate(
   ability: UserAbility,
   formID: string,
-  users: { id: string; action: "add" | "remove" }[]
+  users: { id: string }[]
 ): Promise<FormRecord | null> {
   try {
     checkPrivileges(ability, [
@@ -632,17 +696,24 @@ export async function updateAssignedUsersForTemplate(
       { action: "update", subject: "User" },
     ]);
 
-    const { addUsers, removeUsers } = users.reduce(
-      (acc, current) => {
-        if (current.action === "add")
-          return { ...acc, addUsers: acc.addUsers.concat({ id: current.id }) };
-        else return { ...acc, removeUsers: acc.removeUsers.concat({ id: current.id }) };
+    if (!users.length) throw new Error("No users provided");
+
+    const template = await prisma.template.findFirst({
+      where: {
+        id: formID,
       },
-      {
-        addUsers: Array<{ id: string }>(),
-        removeUsers: Array<{ id: string }>(),
-      }
-    );
+      include: {
+        users: true,
+      },
+    });
+
+    const previouslyAssigned =
+      template?.users.map((user) => {
+        return { id: user.id };
+      }) || [];
+
+    const toAdd = users.filter((n) => !previouslyAssigned.some((n2) => n.id == n2.id));
+    const toRemove = previouslyAssigned.filter((n) => !users.some((n2) => n.id == n2.id));
 
     const updatedTemplate = await prisma.template
       .update({
@@ -651,8 +722,8 @@ export async function updateAssignedUsersForTemplate(
         },
         data: {
           users: {
-            connect: addUsers,
-            disconnect: removeUsers,
+            connect: toAdd,
+            disconnect: toRemove,
           },
         },
         select: {
@@ -664,26 +735,68 @@ export async function updateAssignedUsersForTemplate(
           isPublished: true,
           deliveryOption: true,
           securityAttribute: true,
+          users: true,
         },
       })
       .catch((e) => prismaErrors(e, null));
 
     if (updatedTemplate === null) return updatedTemplate;
 
-    addUsers.length > 0 &&
+    const newOwners: (string | null)[] = updatedTemplate.users
+      ? updatedTemplate.users.map((u) => u.name)
+      : [];
+
+    toAdd.forEach(async (u) => {
+      const user = await prisma.user.findFirst({
+        where: {
+          id: u.id,
+        },
+      });
+
+      if (user && user.email && user.name) {
+        addOwnershipEmail({
+          emailTo: user.email,
+          formTitleEn: updatedTemplate.name,
+          formTitleFr: updatedTemplate.name,
+          formOwner: user.name,
+          formId: updatedTemplate.id,
+        });
+      }
+    });
+
+    toRemove.forEach(async (u) => {
+      const user = await prisma.user.findFirst({
+        where: {
+          id: u.id,
+        },
+      });
+
+      if (user && user.email && user.name) {
+        transferOwnershipEmail({
+          emailTo: user.email,
+          formTitleEn: updatedTemplate.name,
+          formTitleFr: updatedTemplate.name,
+          pastOwner: user.name,
+          newOwner: newOwners.join(", "),
+          formId: updatedTemplate.id,
+        });
+      }
+    });
+
+    toAdd.length > 0 &&
       logEvent(
         ability.userID,
         { type: "Form", id: formID },
         "GrantFormAccess",
-        `Access granted to ${addUsers.map((user) => user.id).toString()}`
+        `Access granted to ${toAdd.map((user) => user.id).toString()}`
       );
 
-    removeUsers.length > 0 &&
+    toRemove.length > 0 &&
       logEvent(
         ability.userID,
         { type: "Form", id: formID },
         "RevokeFormAccess",
-        `Access revoked for ${addUsers.map((user) => user.id).toString()}`
+        `Access revoked for ${toRemove.map((user) => user.id).toString()}`
       );
 
     if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
@@ -695,7 +808,7 @@ export async function updateAssignedUsersForTemplate(
         ability.userID,
         { type: "Form", id: formID },
         "AccessDenied",
-        "Attempted to modify Form ownership"
+        "Attempted to update assigned users for form"
       );
     throw e;
   }

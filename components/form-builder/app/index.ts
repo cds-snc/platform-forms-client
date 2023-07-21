@@ -12,3 +12,4 @@ export { Published } from "./Published";
 export { Edit } from "./edit";
 export { ShareModal } from "./ShareModal";
 export { ShareModalUnauthenticated } from "./ShareModalUnauthenticated";
+export { FormOwnership } from "./FormOwnership";
