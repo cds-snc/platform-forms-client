@@ -15,7 +15,10 @@ import { getPrivilegeRulesForUser } from "@lib/privileges";
 import { logEvent } from "@lib/auditLogs";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { activeStatusCheck, activeStatusUpdate } from "@lib/cache/userActiveStatus";
-import { securityQuestionsCheck, securityQuestionsStatusUpdate } from "@lib/cache/securityQuestionsCheck";
+import {
+  securityQuestionsCheck,
+  securityQuestionsStatusUpdate,
+} from "@lib/cache/securityQuestionsStatus";
 
 if (
   (!process.env.COGNITO_APP_CLIENT_ID ||
@@ -141,6 +144,10 @@ export const authOptions: NextAuthOptions = {
         token.deactivated = true;
       }
 
+      if (!token.securityQuestions) {
+        token.securityQuestions = await checkUserHasSecurityQuestions(token.userId as string);
+      }
+
       return token;
     },
     async session({ session, token }) {
@@ -150,6 +157,7 @@ export const authOptions: NextAuthOptions = {
         id: token.userId,
         lastLoginTime: token.lastLoginTime,
         acceptableUse: token.acceptableUse,
+        securityQuestions: token.securityQuestions as boolean,
         name: token.name ?? null,
         email: token.email ?? null,
         image: token.picture ?? null,
