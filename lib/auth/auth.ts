@@ -77,6 +77,19 @@ export function requireAuthentication(
         };
       }
 
+      if (
+        !session.user.securityQuestions &&
+        !context.resolvedUrl?.startsWith("/auth/setup-security-questions")
+      ) {
+        // check if user has setup security questions setup
+        return {
+          redirect: {
+            destination: `/${context.locale}/auth/setup-security-questions`,
+            permanent: false,
+          },
+        };
+      }
+
       const innerFunctionProps = await innerFunction({
         user: { ...session.user, ability: createAbility(session) },
         ...context,
