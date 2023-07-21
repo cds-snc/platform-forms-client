@@ -147,15 +147,14 @@ export const updatePrivilegesForUser = async (
     });
 
     // Run prisma calls in parallel
+
     const [privilegesInfo, user, privilegedUser] = await Promise.all([
-      prisma.privilege
-        .findMany({
-          select: {
-            id: true,
-            nameEn: true,
-          },
-        })
-        .catch((e) => prismaErrors(e, [])),
+      prisma.privilege.findMany({
+        select: {
+          id: true,
+          nameEn: true,
+        },
+      }),
       prisma.user.update({
         where: {
           id: userID,
@@ -170,9 +169,9 @@ export const updatePrivilegesForUser = async (
           privileges: true,
         },
       }),
-      prisma.user.findUnique({
+      prisma.user.findUniqueOrThrow({
         where: {
-          id: userID,
+          id: ability.userID,
         },
         select: {
           email: true,
