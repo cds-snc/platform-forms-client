@@ -238,7 +238,7 @@ const checkUserHasSecurityQuestions = async (userID: string): Promise<boolean> =
   }
 
   // @todo add real check here once security questions are implemented
-  const hasSecurityQuestions = false;
+  const hasSecurityQuestions = true;
 
   // Update cache with new value
   // Do not need to await promise.  This is an update only action that on fail will
