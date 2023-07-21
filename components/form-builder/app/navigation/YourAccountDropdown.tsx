@@ -21,39 +21,39 @@ export const YourAccountDropdown = ({ isAuthenticated }: YourAccountDropdownProp
   };
 
   return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
-        <button className="flex cursor-pointer rounded border-1 border-black px-3 py-1 hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white">
-          <span className="mr-1 inline-block">{t("Your account")}</span>
-          <ChevronDown className="mt-[2px]" />
-        </button>
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Portal>
-        <DropdownMenu.Content
-          className={`rounded-lg border-1 border-black bg-white px-1.5 py-1 shadow-md`}
-        >
-          <DropdownMenu.Item className="flex cursor-pointer items-center rounded-md p-2 text-sm outline-none hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white">
-            Profile
-          </DropdownMenu.Item>
-          {ability?.can("view", "User") && (
+    <div className="-mt-2">
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger>
+          <button className="flex cursor-pointer rounded border-1 border-black px-3 py-1 hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white">
+            <span className="mr-1 inline-block">{t("Your account")}</span>
+            <ChevronDown className="mt-[2px]" />
+          </button>
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Portal>
+          <DropdownMenu.Content
+            className={`rounded-lg border-1 border-black bg-white px-1.5 py-1 shadow-md`}
+          >
             <DropdownMenu.Item className="flex cursor-pointer items-center rounded-md p-2 text-sm outline-none hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white">
-              <>
-                <Link href="/admin">{t("adminNav.administration")}</Link>
-              </>
+              <Link href="/">{t("Profile")}</Link>
             </DropdownMenu.Item>
-          )}
-          <DropdownMenu.Separator className="mb-2 border-b pt-2" />
-          <DropdownMenu.Item className="flex cursor-pointer items-center rounded-md p-2 text-sm outline-none hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white">
-            {isAuthenticated ? (
-              <Link href="#" onClick={handleLogout}>
-                Logout
-              </Link>
-            ) : (
-              <Link href={`/${i18n.language}/auth/login`}>{t("loginMenu.login")}</Link>
+            {ability?.can("view", "User") && (
+              <DropdownMenu.Item className="flex cursor-pointer items-center rounded-md p-2 text-sm outline-none hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white">
+                <Link href="/admin">{t("adminNav.administration")}</Link>
+              </DropdownMenu.Item>
             )}
-          </DropdownMenu.Item>
-        </DropdownMenu.Content>
-      </DropdownMenu.Portal>
-    </DropdownMenu.Root>
+            <DropdownMenu.Separator className="mb-2 border-b pt-2" />
+            <DropdownMenu.Item className="flex cursor-pointer items-center rounded-md p-2 text-sm outline-none hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white">
+              {isAuthenticated ? (
+                <Link href="#" onClick={handleLogout}>
+                  Logout
+                </Link>
+              ) : (
+                <Link href={`/${i18n.language}/auth/login`}>{t("loginMenu.login")}</Link>
+              )}
+            </DropdownMenu.Item>
+          </DropdownMenu.Content>
+        </DropdownMenu.Portal>
+      </DropdownMenu.Root>
+    </div>
   );
 };
