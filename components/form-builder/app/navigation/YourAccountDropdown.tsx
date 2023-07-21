@@ -60,7 +60,7 @@ export const YourAccountDropdown = ({ isAuthenticated }: YourAccountDropdownProp
             <DropdownMenu.Content
               className={`-ml-8 mt-1.5 rounded-lg border-1 border-black bg-white px-1.5 py-1 shadow-md`}
             >
-              <DropdownMenuItem href="/" text={t("Profile")} />
+              <DropdownMenuItem href={`/${i18n.language}/profile`} text={t("Profile")} />
 
               {ability?.can("view", "User") && (
                 <DropdownMenuItem href="/admin" text={t("adminNav.administration")} />
