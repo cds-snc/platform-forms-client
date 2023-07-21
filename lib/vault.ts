@@ -11,7 +11,6 @@ import { logMessage } from "./logger";
 import { AccessControlError, checkPrivileges } from "./privileges";
 import { BatchWriteItemCommand } from "@aws-sdk/client-dynamodb";
 import { chunkArray } from "@lib/utils";
-import { VaultSubmissionAndConfirmationList } from "@lib/types/retrieval-types";
 import { TemplateAlreadyPublishedError } from "@lib/templates";
 
 /**
@@ -50,27 +49,6 @@ async function checkAbilityToAccessSubmissions(ability: UserAbility, formID: str
   checkPrivileges(ability, [
     {
       action: "view",
-      subject: {
-        type: "FormRecord",
-        object: {
-          users: templateOwners,
-        },
-      },
-    },
-  ]);
-}
-
-async function checkAbilityToDeleteSubmissions(ability: UserAbility, formID: string) {
-  const templateOwners = await getUsersForForm(formID);
-  if (!templateOwners)
-    throw new AccessControlError(
-      `Template ${formID} must have associated owners to access responses`
-    );
-
-  // Will throw an access control error if not authorized to access
-  checkPrivileges(ability, [
-    {
-      action: "delete",
       subject: {
         type: "FormRecord",
         object: {
@@ -197,76 +175,6 @@ export async function listAllSubmissions(
     return { submissions: [], numberOfUnprocessedSubmissions: 0 };
   }
 }
-/**
- * This method returns a list of all form submission and confirmations records.
- * The list does not contain the actual submission data, only attributes
- * @param ability - The user ability object
- * @param formID - The form ID from which to retrieve responses
- * @returns {Promise<{submissions: VaultSubmissionAndConfirmationList[]}>} - The list of submissions and confirmations
- */
-async function listAllSubmissionsAndConfirmations(
-  ability: UserAbility,
-  formID: string
-): Promise<{ submissions: VaultSubmissionAndConfirmationList[] }> {
-  try {
-    await checkAbilityToAccessSubmissions(ability, formID);
-  } catch (e) {
-    if (e instanceof AccessControlError)
-      logEvent(
-        ability.userID,
-        { type: "Form", id: formID },
-        "AccessDenied",
-        `Attempted to access all submissions and confirmations for form ${formID}`
-      );
-    throw e;
-  }
-
-  try {
-    const documentClient = connectToDynamo();
-
-    let responses: VaultSubmissionAndConfirmationList[] = [];
-    const getItemsDbParams: QueryCommandInput = {
-      TableName: "Vault",
-      KeyConditionExpression: "FormID = :formID and begins_with(NAME_OR_CONF, :namePrefix)",
-      ExpressionAttributeValues: {
-        ":formID": formID,
-        ":namePrefix": "NAME#",
-      },
-      ExpressionAttributeNames: {
-        "#status": "Status",
-        "#name": "Name",
-      },
-      ProjectionExpression: "FormID,#status,#name,ConfirmationCode",
-    };
-    const queryCommand = new QueryCommand(getItemsDbParams);
-    const response = await documentClient.send(queryCommand);
-
-    if (response.Items?.length) {
-      responses = response.Items.map(
-        ({ FormID: formID, Status: status, Name: name, ConfirmationCode: confirmationCode }) => ({
-          formID,
-          status,
-          name,
-          confirmationCode: confirmationCode ?? null,
-        })
-      );
-    }
-
-    logEvent(
-      ability.userID,
-      { type: "Form", id: formID },
-      "ListResponses",
-      `List all responses for form ${formID}`
-    );
-
-    return {
-      submissions: responses,
-    };
-  } catch (e) {
-    logMessage.error(e);
-    return { submissions: [] };
-  }
-}
 
 /**
  * This method returns the number of unprocessed submissions (submission with a status equal to 'New' or 'Downloaded')
@@ -291,135 +199,112 @@ export async function numberOfUnprocessedSubmissions(
 }
 
 /**
- * This method deletes responses and confirmation codes
- * @param ability
- * @param dynamoDb - DynamoDB Document Client
- * @param formResponses - List of form submissions and confirmation codes
- * @param formID
- */
-export async function deleteResponses(
-  ability: UserAbility,
-  dynamoDb: DynamoDBDocumentClient,
-  formResponses: NonNullable<VaultSubmissionAndConfirmationList>[],
-  formID: string
-): Promise<{ responsesDeleted: number }> {
-  try {
-    await checkAbilityToDeleteSubmissions(ability, formID);
-  } catch (e) {
-    if (e instanceof AccessControlError)
-      logEvent(
-        ability.userID,
-        { type: "Form", id: formID },
-        "AccessDenied",
-        `Attempted to delete all responses for form ${formID}`
-      );
-    throw e;
-  }
-
-  const formStatus = await prisma.template
-    .findUnique({
-      where: {
-        id: formID,
-      },
-      select: {
-        isPublished: true,
-      },
-    })
-    .catch((e) => prismaErrors(e, true));
-
-  if (formStatus && typeof formStatus !== "boolean" && formStatus?.isPublished) {
-    throw new TemplateAlreadyPublishedError(
-      "Form is published. Cannot delete draft form responses."
-    );
-  }
-
-  let responsesDeleted = 0;
-
-  /**
-   * The `BatchWriteItemCommand` can only take up to 25 `DeleteRequest` at a time.
-   * We have to delete 2 items from DynamoDB for each form response (12*2=24).
-   */
-  for (const formResponsesChunk of chunkArray(formResponses, 12)) {
-    const deleteRequests = formResponsesChunk.flatMap(
-      (formResponse: VaultSubmissionAndConfirmationList) => {
-        return [
-          {
-            DeleteRequest: {
-              Key: {
-                FormID: {
-                  S: formResponse.formID,
-                },
-                NAME_OR_CONF: {
-                  S: `NAME#${formResponse.name}`,
-                },
-              },
-            },
-          },
-          {
-            DeleteRequest: {
-              Key: {
-                FormID: {
-                  S: formResponse.formID,
-                },
-                NAME_OR_CONF: {
-                  S: `CONF#${formResponse.confirmationCode}`,
-                },
-              },
-            },
-          },
-        ];
-      }
-    );
-
-    const batchWriteItemCommandInput = {
-      RequestItems: {
-        ["Vault"]: deleteRequests,
-      },
-    };
-
-    try {
-      // eslint-disable-next-line no-await-in-loop
-      await dynamoDb.send(new BatchWriteItemCommand(batchWriteItemCommandInput));
-      responsesDeleted += deleteRequests.length / 2;
-    } catch (e) {
-      throw new Error(`Failed to delete form responses from DynamoDB.`);
-    }
-  }
-  logEvent(
-    ability.userID,
-    { type: "Form", id: formID },
-    "DeleteResponses",
-    `Deleted responses for form ${formID}`
-  );
-  return { responsesDeleted };
-}
-
-/**
  * This method gets all draft form responses for a given form and deletes them
  * @param ability
  * @param formID
  */
-export async function deleteDraftFormTestResponses(ability: UserAbility, formID: string) {
+export async function deleteDraftFormResponses(ability: UserAbility, formID: string) {
   try {
-    const draftFormSubmissionsList = await listAllSubmissionsAndConfirmations(ability, formID);
-
     const documentClient = connectToDynamo();
 
-    const result = await deleteResponses(
-      ability,
-      documentClient,
-      draftFormSubmissionsList.submissions,
-      formID
+    // Ensure users are owners of the form
+    await checkAbilityToAccessSubmissions(ability, formID).catch((error) => {
+      if (error instanceof AccessControlError) {
+        logEvent(
+          ability.userID,
+          { type: "Form", id: formID },
+          "AccessDenied",
+          `Attempted to delete all responses for form ${formID}`
+        );
+      }
+      throw error;
+    });
+    // Ensure the form is not published
+    const template = await prisma.template
+      .findUnique({ where: { id: formID }, select: { isPublished: true } })
+      .catch((e) => prismaErrors(e, null));
+
+    if (template?.isPublished) {
+      throw new TemplateAlreadyPublishedError(
+        "Form is published. Cannot delete draft form responses."
+      );
+    }
+
+    // Internal Prisma Error / Abort action
+    if (template === null) {
+      throw new Error("Form not found or Prisma error.");
+    }
+
+    // Get all entry names for formID in vault
+
+    let accumulatedResponses: string[] = [];
+    let lastEvaluatedKey = null;
+
+    while (lastEvaluatedKey !== undefined) {
+      const getItemsDbParams: QueryCommandInput = {
+        TableName: "Vault",
+        ExclusiveStartKey: lastEvaluatedKey ?? undefined,
+        KeyConditionExpression: "FormID = :formID",
+        ExpressionAttributeValues: {
+          ":formID": formID,
+        },
+        ProjectionExpression: "NAME_OR_CONF",
+      };
+      const queryCommand = new QueryCommand(getItemsDbParams);
+      // eslint-disable-next-line no-await-in-loop
+      const response = await documentClient.send(queryCommand);
+
+      if (response.Items?.length) {
+        accumulatedResponses = accumulatedResponses.concat(
+          ...response.Items.map((item) => item.NAME_OR_CONF)
+        );
+      }
+      lastEvaluatedKey = response.LastEvaluatedKey;
+    }
+
+    logMessage.debug(`Found ${accumulatedResponses.length} draft responses for form ${formID}.`);
+    logMessage.debug(accumulatedResponses);
+
+    // Batch delete all entries
+    // The `BatchWriteItemCommand` can only take up to 25 `DeleteRequest` at a time.
+
+    const asyncDeleteRequests = chunkArray(accumulatedResponses, 25).map((request) => {
+      return documentClient.send(
+        new BatchWriteItemCommand({
+          RequestItems: {
+            ["Vault"]: request.map((entryName) => ({
+              DeleteRequest: {
+                Key: {
+                  FormID: {
+                    S: formID,
+                  },
+                  NAME_OR_CONF: {
+                    S: entryName,
+                  },
+                },
+              },
+            })),
+          },
+        })
+      );
+    });
+
+    await Promise.all(asyncDeleteRequests);
+    logEvent(
+      ability.userID,
+      { type: "Form", id: formID },
+      "DeleteResponses",
+      `Deleted draft responses for form ${formID}.`
     );
 
-    if (result.responsesDeleted !== draftFormSubmissionsList.submissions.length) {
-      throw new Error(`Failed to delete all draft form submissions.`);
-    }
     return {
-      responsesDeleted: result.responsesDeleted,
+      responsesDeleted: accumulatedResponses.length,
     };
   } catch (error) {
-    logMessage.error(error as Error);
+    logMessage.error(
+      `Failed to delete form responses from the Vault during publishing for form ${formID}.`
+    );
+    logMessage.error((error as Error).message);
     throw error;
   }
 }
