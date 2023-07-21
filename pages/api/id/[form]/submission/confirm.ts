@@ -47,7 +47,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
     if (e instanceof AccessControlError) {
       logEvent(
         ability.userID,
-        { type: "Response" },
+        { type: "Form", id: formId },
         "AccessDenied",
         `Attempted to confirm response without form ownership`
       );
