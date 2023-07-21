@@ -4,8 +4,7 @@ import { ChevronDown } from "@components/form-builder/icons";
 import { useTranslation } from "react-i18next";
 import { useAccessControl } from "@lib/hooks";
 import Link from "next/link";
-import LoginMenu from "@components/auth/LoginMenu";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import { clearTemplateStore } from "@components/form-builder/store";
 
 type YourAccountDropdownProps = {
