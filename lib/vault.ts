@@ -1,4 +1,4 @@
-import { QueryCommand, QueryCommandInput, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
+import { QueryCommand, QueryCommandInput } from "@aws-sdk/lib-dynamodb";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { VaultSubmissionList, UserAbility, VaultStatus } from "@lib/types";
 import { logEvent } from "./auditLogs";

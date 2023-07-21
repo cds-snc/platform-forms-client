@@ -7,7 +7,7 @@ import { SettingsNavigation } from "@components/form-builder/app/navigation/Sett
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { getTemplateWithAssociatedUsers } from "@lib/templates";
 import { requireAuthentication } from "@lib/auth";
-import { checkPrivileges, checkPrivilegesAsBoolean } from "@lib/privileges";
+import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { getUsers } from "@lib/users";
 import { User } from "@prisma/client";
 import { FormRecord } from "@lib/types";
