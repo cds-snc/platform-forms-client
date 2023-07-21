@@ -98,7 +98,10 @@ export async function listAllSubmissions(
     if (e instanceof AccessControlError)
       logEvent(
         ability.userID,
-        { type: "Response" },
+        {
+          type: "Form",
+          id: formID,
+        },
         "AccessDenied",
         `Attempted to list all responses for form ${formID}`
       );
@@ -171,7 +174,10 @@ export async function listAllSubmissions(
 
     logEvent(
       ability.userID,
-      { type: "Response" },
+      {
+        type: "Form",
+        id: formID,
+      },
       "ListResponses",
       `List all responses for form ${formID}`
     );
@@ -208,7 +214,7 @@ async function listAllSubmissionsAndConfirmations(
     if (e instanceof AccessControlError)
       logEvent(
         ability.userID,
-        { type: "Response" },
+        { type: "Form", id: formID },
         "AccessDenied",
         `Attempted to access all submissions and confirmations for form ${formID}`
       );
@@ -248,7 +254,7 @@ async function listAllSubmissionsAndConfirmations(
 
     logEvent(
       ability.userID,
-      { type: "Response" },
+      { type: "Form", id: formID },
       "ListResponses",
       `List all responses for form ${formID}`
     );
@@ -285,10 +291,10 @@ export async function numberOfUnprocessedSubmissions(
 }
 
 /**
- * This method deletes all responses for a given form
+ * This method deletes responses and confirmation codes
  * @param ability
  * @param dynamoDb - DynamoDB Document Client
- * @param formResponses - List of form submissions and confirmations
+ * @param formResponses - List of form submissions and confirmation codes
  * @param formID
  */
 export async function deleteResponses(
@@ -303,7 +309,7 @@ export async function deleteResponses(
     if (e instanceof AccessControlError)
       logEvent(
         ability.userID,
-        { type: "Response" },
+        { type: "Form", id: formID },
         "AccessDenied",
         `Attempted to delete all responses for form ${formID}`
       );
@@ -379,6 +385,12 @@ export async function deleteResponses(
       throw new Error(`Failed to delete form responses from DynamoDB.`);
     }
   }
+  logEvent(
+    ability.userID,
+    { type: "Form", id: formID },
+    "DeleteResponses",
+    `Deleted responses for form ${formID}`
+  );
   return { responsesDeleted };
 }
 

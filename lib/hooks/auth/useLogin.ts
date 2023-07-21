@@ -69,6 +69,16 @@ export const useLogin = () => {
           await router.push("/auth/resetpassword");
           return false;
         }
+
+        if (hasError("AccountDeactivated", reason)) {
+          await router.push("/auth/account-deactivated");
+          return false;
+        }
+
+        if (hasError("PasswordResetRequiredException", reason)) {
+          await router.push("/auth/resetpassword");
+          return false;
+        }
       }
 
       // 500 Server/fallback related errors

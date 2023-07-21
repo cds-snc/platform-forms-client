@@ -1,0 +1,11 @@
+{
+    "title": "Administration",
+    "accounts": "Accounts",
+    "systemSettings": "System settings",
+    "featureFlags": "Feature flags",
+    "permissions": "Permissions",
+    "systemAdministration": "System administration",
+    "accountAdministration": "Account administration",
+    "manageUsersAndTheirForms": "Manage users and their forms",
+    "configureHowTheApplicationWorks": " Configure how the application works"
+}
