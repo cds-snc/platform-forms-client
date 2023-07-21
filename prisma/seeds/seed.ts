@@ -240,7 +240,7 @@ async function main(environment: string) {
 
     if (environment === "test") {
       console.log("Creating test User");
-      await createTestUser();
+      await createTestUsers();
       console.log("Creating admin test User");
       await createAdminTestUser();
       // Short Circuit
