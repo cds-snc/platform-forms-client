@@ -33,10 +33,15 @@ export const YourAccountDropdown = ({ isAuthenticated }: YourAccountDropdownProp
   }) => {
     return (
       <DropdownMenu.Item
-        className={`flex cursor-pointer items-center rounded-md p-2 text-sm outline-none hover:bg-gray-600 hover:text-white focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white ${additionalClasses}`}
+        className={`group flex cursor-pointer items-center rounded-md p-2 text-sm outline-none hover:bg-gray-600 hover:text-white focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white ${additionalClasses}`}
         onClick={onClick}
       >
-        <Link href={href}>{text}</Link>
+        <Link
+          className="text-black no-underline visited:text-black group-hover:text-white"
+          href={href}
+        >
+          {text}
+        </Link>
       </DropdownMenu.Item>
     );
   };

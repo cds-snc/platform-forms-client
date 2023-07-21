@@ -67,7 +67,7 @@ export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) =>
               </li>
             }
             {
-              <li className="py-2 text-base">
+              <li className="text-base">
                 <YourAccountDropdown isAuthenticated={status === "authenticated"} />
               </li>
             }
