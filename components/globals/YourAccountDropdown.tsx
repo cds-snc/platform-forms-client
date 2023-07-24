@@ -69,7 +69,7 @@ export const YourAccountDropdown = ({ isAuthenticated }: YourAccountDropdownProp
                 <DropdownMenu.Separator className="mb-2 border-b pt-2" />
 
                 {isAuthenticated && (
-                  <DropdownMenuItem href="#" onClick={handleLogout} text={t("logout")} />
+                  <DropdownMenuItem href="#" onClick={handleLogout} text={t("adminNav.logout")} />
                 )}
               </DropdownMenu.Content>
             </DropdownMenu.Portal>
