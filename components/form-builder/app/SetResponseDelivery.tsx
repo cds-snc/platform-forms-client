@@ -84,6 +84,8 @@ export const SetResponseDelivery = () => {
     securityAttribute as Classification
   );
 
+  const protectedBSelected = classification === "Protected B";
+
   const [isInvalidEmailError, setIsInvalidEmailError] = useState(false);
 
   /*--------------------------------------------*
@@ -219,6 +221,9 @@ export const SetResponseDelivery = () => {
   const responsesLink = `/${i18n.language}/form-builder/responses/${id}`;
 
   const handleUpdateClassification = useCallback((value: Classification) => {
+    if (value === "Protected B") {
+      setDeliveryOption(DeliveryOption.vault);
+    }
     setClassification(value);
   }, []);
 
@@ -231,9 +236,11 @@ export const SetResponseDelivery = () => {
             <p className="block mb-4 text-xl font-bold">
               {t("settingsResponseDelivery.selectClassification")}
             </p>
+
             <p className="inline-block mb-5 p-3 bg-purple-200 font-bold text-sm">
               {t("settingsResponseDelivery.beforePublishMessage")}
             </p>
+
             <select
               disabled={isPublished}
               id="classification-select"
@@ -255,6 +262,11 @@ export const SetResponseDelivery = () => {
             <div className="block mb-4 text-xl font-bold">
               {t("settingsResponseDelivery.title")}
             </div>
+            {protectedBSelected && (
+              <p className="inline-block mb-5 p-3 bg-purple-200 font-bold text-sm">
+                {t("settingsResponseDelivery.protectedBMessage")}
+              </p>
+            )}
             <Radio
               disabled={isPublished}
               id={`delivery-option-${DeliveryOption.vault}`}
@@ -270,7 +282,7 @@ export const SetResponseDelivery = () => {
               </span>
             </Radio>
             <Radio
-              disabled={isPublished}
+              disabled={isPublished || protectedBSelected}
               id={`delivery-option-${DeliveryOption.email}`}
               checked={deliveryOption === DeliveryOption.email}
               name="response-delivery"

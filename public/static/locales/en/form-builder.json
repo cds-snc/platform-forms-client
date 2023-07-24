@@ -451,6 +451,7 @@
   "settingsResponseDelivery": {
     "selectClassification": "Select the data classification of your form responses",
     "beforePublishMessage": "You can change these settings anytime before publishing.",
+    "protectedBMessage":  "PROTECTED B class forms must be downloaded from GC Forms.",
     "title": "Select a response delivery option",
     "vaultOption": "Download responses from GC Forms",
     "vaultOptionHint": {
