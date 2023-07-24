@@ -9,7 +9,7 @@ import {
 } from "@aws-sdk/lib-dynamodb";
 import { MiddlewareProps, VaultStatus, WithRequired } from "@lib/types";
 import { connectToDynamo } from "@lib/integration/dynamodbConnector";
-import { NotifyClient } from "notifications-node-client";
+import { getNotifyInstance } from "@lib/integration/notifyConnector";
 import { createAbility, AccessControlError } from "@lib/privileges";
 import { checkUserHasTemplateOwnership } from "@lib/templates";
 import { logEvent } from "@lib/auditLogs";
@@ -240,10 +240,7 @@ async function notifySupport(
   userEmailAddress: string
 ): Promise<void> {
   try {
-    const notifyClient = new NotifyClient(
-      "https://api.notification.canada.ca",
-      process.env.NOTIFY_API_KEY
-    );
+    const notifyClient = getNotifyInstance();
 
     // Here is the documentation for the `sendEmail` function: https://docs.notifications.service.gov.uk/node.html#send-an-email
     await notifyClient.sendEmail(process.env.TEMPLATE_ID, process.env.EMAIL_ADDRESS_SUPPORT, {
