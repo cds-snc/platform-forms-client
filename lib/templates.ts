@@ -13,7 +13,7 @@ import jwt, { Secret } from "jsonwebtoken";
 import { AccessControlError, checkPrivileges, checkPrivilegesAsBoolean } from "./privileges";
 import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
-import { numberOfUnprocessedSubmissions, deleteDraftFormTestResponses } from "./vault";
+import { numberOfUnprocessedSubmissions, deleteDraftFormResponses } from "./vault";
 import { addOwnershipEmail, transferOwnershipEmail } from "./ownership";
 
 // ******************************************
@@ -610,7 +610,7 @@ export async function updateIsPublishedForTemplate(
   isPublished: boolean
 ): Promise<FormRecord | null> {
   try {
-    // Check if user has ability to publish or unpublish first
+    // Check ability to update the form based on publishing or unpublishing action
     if (isPublished) {
       const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(formID);
       if (!templateWithAssociatedUsers) return null;
@@ -628,12 +628,10 @@ export async function updateIsPublishedForTemplate(
           field: "isPublished",
         },
       ]);
-
+      // Check we are not trying to publish an already published form
       if (templateWithAssociatedUsers.formRecord.isPublished) {
         throw new TemplateAlreadyPublishedError();
       }
-
-      await deleteDraftFormTestResponses(ability, formID);
     } else {
       checkPrivileges(ability, [
         {
@@ -646,6 +644,9 @@ export async function updateIsPublishedForTemplate(
         },
       ]);
     }
+
+    // Delete all form responses created during draft mode before changing status to published
+    if (isPublished) await deleteDraftFormResponses(ability, formID);
 
     const updatedTemplate = await prisma.template
       .update({

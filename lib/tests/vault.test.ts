@@ -7,9 +7,9 @@ import { mockClient } from "aws-sdk-client-mock";
 import { prismaMock } from "@jestUtils";
 import { DynamoDBDocumentClient, QueryCommand } from "@aws-sdk/lib-dynamodb";
 import { AccessControlError, createAbility } from "@lib/privileges";
-import { Base, ManageForms, mockUserPrivileges } from "__utils__/permissions";
+import { Base, mockUserPrivileges } from "__utils__/permissions";
 import { Session } from "next-auth";
-import { deleteResponses, numberOfUnprocessedSubmissions } from "@lib/vault";
+import { deleteDraftFormResponses, numberOfUnprocessedSubmissions } from "@lib/vault";
 import formConfiguration from "@jestFixtures/cdsIntakeTestForm.json";
 import { DeliveryOption } from "@lib/types";
 import { BatchWriteItemCommand } from "@aws-sdk/client-dynamodb";
@@ -194,11 +194,11 @@ describe("Deleting test responses (submissions)", () => {
     ddbMock.reset();
     redis.flushall();
   });
-  it("Should be able to delete if the user has the ManageForms privileges", async () => {
+  it("Should be able to delete draft responses if the user is owner of the form", async () => {
     const fakeSession = {
       user: {
         id: "1",
-        privileges: mockUserPrivileges(Base.concat(ManageForms), { user: { id: "1" } }),
+        privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
       },
     };
     const ability = createAbility(fakeSession as Session);
@@ -208,36 +208,35 @@ describe("Deleting test responses (submissions)", () => {
       users: [{ id: "1" }],
     });
 
-    const formResponses = [
-      {
-        formID: "formtestID",
-        name: "Form Test ID",
-        confirmationCode: "Form-Test-ID",
-      },
-      {
-        formID: "formtestID",
-        name: "Form Test ID 2",
-        confirmationCode: "Form-Test-ID-2",
-      },
-    ];
-    const response = await deleteResponses(ability, ddbMock, formResponses, "formtestID");
+    const dynamodbMockedReponses = {
+      Items: [
+        { NAME_OR_CONF: "NAME#ASDF" },
+        { NAME_OR_CONF: "NAME#ASDF2" },
+        { NAME_OR_CONF: "CONF#1342" },
+        { NAME_OR_CONF: "CONF#1343" },
+      ],
+    };
+
+    ddbMock.on(QueryCommand).resolves(dynamodbMockedReponses);
+
+    const response = await deleteDraftFormResponses(ability, "formtestID");
 
     expect(ddbMock.commandCalls(BatchWriteItemCommand).length).toBe(1);
-    expect(response.responsesDeleted).toBe(2);
+    expect(response.responsesDeleted).toBe(4);
   });
 
-  it("Should not be able to delete if the user doesn't have the ManageForms privileges", async () => {
+  it("Should be able to delete draft responses if the user is not the owner of the form", async () => {
     const fakeSession = {
-      user: { id: "1", privileges: mockUserPrivileges([], { user: { id: "1" } }) },
+      user: { id: "1", privileges: mockUserPrivileges(Base, { user: { id: "1" } }) },
     };
     const ability = createAbility(fakeSession as Session);
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
       ...buildPrismaResponse("formtestID", formConfiguration),
-      users: [{ id: "1" }],
+      users: [{ id: "2" }],
     });
 
     await expect(async () => {
-      await deleteResponses(ability, ddbMock, [], "formtestID");
+      await deleteDraftFormResponses(ability, "formtestID");
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
   });
 
@@ -245,7 +244,7 @@ describe("Deleting test responses (submissions)", () => {
     const fakeSession = {
       user: {
         id: "1",
-        privileges: mockUserPrivileges(Base.concat(ManageForms), { user: { id: "1" } }),
+        privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
       },
     };
     const ability = createAbility(fakeSession as Session);
@@ -255,21 +254,8 @@ describe("Deleting test responses (submissions)", () => {
       users: [{ id: "1" }],
     });
 
-    const formResponses = [
-      {
-        formID: "formtestID",
-        name: "Form Test ID",
-        confirmationCode: "Form-Test-ID",
-      },
-      {
-        formID: "formtestID",
-        name: "Form Test ID 2",
-        confirmationCode: "Form-Test-ID-2",
-      },
-    ];
-
     await expect(async () => {
-      await deleteResponses(ability, ddbMock, formResponses, "formtestID");
+      await deleteDraftFormResponses(ability, "formtestID");
     }).rejects.toThrowError(
       new TemplateAlreadyPublishedError("Form is published. Cannot delete draft form responses.")
     );

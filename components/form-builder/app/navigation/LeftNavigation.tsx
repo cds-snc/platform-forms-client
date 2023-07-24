@@ -25,14 +25,12 @@ export const LeftNavigation = ({ backLink }: { backLink?: React.ReactElement }) 
           </>
         </LeftNavLink>
       )}
-
       <LeftNavLink href="/form-builder/preview">
         <>
           <PreviewIcon className={iconClassname} />
           {status === "authenticated" ? t("test") : t("pagePreview")}
         </>
       </LeftNavLink>
-
       {!isPublished && (
         <LeftNavLink href="/form-builder/publish">
           <>
