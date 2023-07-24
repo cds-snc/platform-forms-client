@@ -3,7 +3,6 @@ import { logMessage } from "@lib/logger";
 import { generateTokenCode } from "@lib/auth/tokenGenerator";
 
 const TEMPLATE_ID = process.env.TEMPLATE_ID;
-const NOTIFY_API_KEY = process.env.NOTIFY_API_KEY;
 
 export const generateVerificationCode = async () => generateTokenCode(5);
 
