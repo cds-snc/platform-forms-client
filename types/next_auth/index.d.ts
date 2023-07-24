@@ -16,6 +16,7 @@ declare module "next-auth" {
       image?: string | null;
       newlyRegistered?: boolean;
       deactivated?: boolean;
+      securityQuestions?: boolean;
     };
   }
 }
@@ -30,5 +31,6 @@ declare module "next-auth/jwt" {
     acceptableUse: boolean;
     newlyRegistered?: boolean;
     deactivated?: boolean;
+    securityQuestions?: boolean;
   }
 }
