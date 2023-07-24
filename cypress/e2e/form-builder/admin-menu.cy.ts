@@ -29,7 +29,7 @@ describe("Form ownership", () => {
     cy.login({ admin: true, acceptableUse: true });
     cy.visit("/myforms");
 
-    cy.get("nav[aria-label='Main']").should("contain", "Administration");
+    cy.get("div[data-testid='yourAccountDropdown']").should("contain", "Administration");
   });
 
   it("Does not show admin menu when logged in as non-Admin", () => {
