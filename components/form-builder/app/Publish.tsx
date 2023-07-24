@@ -94,10 +94,9 @@ export const Publish = () => {
       <div className="flex justify-between flex-wrap laptop:flex-nowrap">
         <div className="grow border-1 rounded-lg p-5 mx-5 min-w-fit w-sm">
           <h1 className="border-0 mb-0">{t("publishYourForm")}</h1>
-          <p className="mb-0">
-            {t("publishYourFormInstructions.text1")} {securityAttribute}{" "}
-            {t("publishYourFormInstructions.text2")}
-          </p>
+          <p className="mb-0 text-lg">{`${t(
+            "publishYourFormInstructions.text1"
+          )} ${securityAttribute} ${t("publishYourFormInstructions.text2")}`}</p>
           {!userCanPublish && (
             <div className="mt-5 mb-5 p-5 bg-purple-200 flex">
               <div className="flex">
@@ -166,17 +165,19 @@ export const Publish = () => {
               <InfoCard title={t("whatYouNeedToKnow")}>
                 <ul className="list-none p-0">
                   <li className="mb-5 bg-gray-50 p-1.5">
-                    <h3 className="gc-h4 mb-1 pb-0">{t("publishingDisablesEditing")}</h3>
+                    <h3 className="gc-h4 mb-1 pb-0 text-lg">{t("publishingDisablesEditing")}</h3>
                     <p className="text-sm">{t("publishingDisablesEditingDescription")}</p>
                   </li>
                   <li className="mb-5 bg-gray-50 p-1.5">
-                    <h3 className="gc-h4 mb-1 pb-0">{t("publishingLocksSettings")}</h3>
+                    <h3 className="gc-h4 mb-1 pb-0 text-lg">{t("publishingLocksSettings")}</h3>
                     <p className="text-sm">{t("publishingLocksSettingsDescription")}</p>
                   </li>
                   {isVaultDelivery(getDeliveryOption()) && (
                     <>
                       <li className="mb-5 bg-gray-50 p-1.5">
-                        <h3 className="gc-h4 mb-1 pb-0">{t("publishingRemovesTestResponses")}</h3>
+                        <h3 className="gc-h4 mb-1 pb-0 text-lg">
+                          {t("publishingRemovesTestResponses")}
+                        </h3>
                         <p className="text-sm">{t("publishingRemovesTestResponsesDescription")}</p>
                       </li>
                     </>
