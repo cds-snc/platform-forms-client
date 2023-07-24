@@ -35,8 +35,8 @@ const mockSendEmail = {
   }),
 };
 
-jest.mock("notifications-node-client", () => ({
-  NotifyClient: jest.fn(() => mockSendEmail),
+jest.mock("@lib/integration/notifyConnector", () => ({
+  getNotifyInstance: jest.fn(() => mockSendEmail),
 }));
 
 const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
