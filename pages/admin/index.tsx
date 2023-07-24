@@ -80,7 +80,12 @@ export const getServerSideProps = requireAuthentication(async ({ user: { ability
   return {
     props: {
       ...(locale &&
-        (await serverSideTranslations(locale, ["common", "admin-home", "admin-login"]))),
+        (await serverSideTranslations(locale, [
+          "common",
+          "admin-home",
+          "admin-login",
+          "form-builder",
+        ]))),
     },
   };
 });
