@@ -36,7 +36,7 @@ export const Template = ({
           </Head>
           <div className={`flex h-full flex-col ${className}`}>
             <SkipLink />
-            <Header context="formBuilder" />
+            <Header context={isFormBuilder ? "formBuilder" : "default"} />
             {page}
             <Footer displayFormBuilderFooter />
           </div>
