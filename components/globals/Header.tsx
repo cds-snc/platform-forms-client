@@ -4,13 +4,20 @@ import Link from "next/link";
 import { useAccessControl } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 
-import LanguageToggle from "../../../globals/LanguageToggle";
 import { SiteLogo } from "@formbuilder/icons";
-import { FileNameInput } from "./FileName";
-import { ShareDropdown } from "./ShareDropdown";
+import { FileNameInput } from "@components/form-builder/app/navigation/FileName";
+import { ShareDropdown } from "@components/form-builder/app/navigation/ShareDropdown";
+import LanguageToggle from "./LanguageToggle";
 import { YourAccountDropdown } from "./YourAccountDropdown";
 
-export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) => {
+type HeaderParams = {
+  context?: "admin" | "formBuilder" | "default";
+};
+
+export const Header = ({ context = "default" }: HeaderParams) => {
+  const isFormBuilder = context === "formBuilder";
+  const isAdmin = context === "admin";
+
   const { status } = useSession();
   const { ability } = useAccessControl();
   const { t, i18n } = useTranslation(["common", "form-builder"]);

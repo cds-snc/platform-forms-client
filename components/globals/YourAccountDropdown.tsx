@@ -47,33 +47,35 @@ export const YourAccountDropdown = ({ isAuthenticated }: YourAccountDropdownProp
   };
 
   return (
-    <div className="inline-block">
+    <>
       {isAuthenticated && (
-        <DropdownMenu.Root>
-          <DropdownMenu.Trigger>
-            <div className="flex cursor-pointer rounded border-1 border-black px-3 py-1 hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white">
-              <span className="mr-1 inline-block">{t("Your account")}</span>
-              <ChevronDown className="mt-[2px]" />
-            </div>
-          </DropdownMenu.Trigger>
-          <DropdownMenu.Portal>
-            <DropdownMenu.Content
-              className={`-ml-8 mt-1.5 rounded-lg border-1 border-black bg-white px-1.5 py-1 shadow-md`}
-            >
-              <DropdownMenuItem href={`/${i18n.language}/profile`} text={t("Profile")} />
+        <div className="inline-block">
+          <DropdownMenu.Root>
+            <DropdownMenu.Trigger>
+              <div className="flex cursor-pointer rounded border-1 border-black px-3 py-1 hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white">
+                <span className="mr-1 inline-block">{t("Your account")}</span>
+                <ChevronDown className="mt-[2px]" />
+              </div>
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Portal>
+              <DropdownMenu.Content
+                className={`-ml-8 mt-1.5 rounded-lg border-1 border-black bg-white px-1.5 py-1 shadow-md`}
+              >
+                <DropdownMenuItem href={`/${i18n.language}/profile`} text={t("Profile")} />
 
-              {ability?.can("view", "User") && (
-                <DropdownMenuItem href="/admin" text={t("adminNav.administration")} />
-              )}
-              <DropdownMenu.Separator className="mb-2 border-b pt-2" />
+                {ability?.can("view", "User") && (
+                  <DropdownMenuItem href="/admin" text={t("adminNav.administration")} />
+                )}
+                <DropdownMenu.Separator className="mb-2 border-b pt-2" />
 
-              {isAuthenticated && (
-                <DropdownMenuItem href="#" onClick={handleLogout} text={t("logout")} />
-              )}
-            </DropdownMenu.Content>
-          </DropdownMenu.Portal>
-        </DropdownMenu.Root>
+                {isAuthenticated && (
+                  <DropdownMenuItem href="#" onClick={handleLogout} text={t("logout")} />
+                )}
+              </DropdownMenu.Content>
+            </DropdownMenu.Portal>
+          </DropdownMenu.Root>
+        </div>
       )}
-    </div>
+    </>
   );
 };
