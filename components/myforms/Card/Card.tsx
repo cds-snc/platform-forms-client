@@ -30,10 +30,6 @@ export const Card = (props: CardProps): React.ReactElement => {
   const responsesLink = `/${i18n.language}/form-builder/responses/${id}`;
   const menuItemsList: Array<MenuDropdownItemI> = [
     {
-      title: t("card.menu.preview"),
-      url: `/${i18n.language}/form-builder/preview/${id} `,
-    },
-    {
       title: t("card.menu.save"),
       callback: () => {
         downloadForm(name, id);
@@ -55,17 +51,23 @@ export const Card = (props: CardProps): React.ReactElement => {
     },
   ];
 
-  // Show slightly different list items depeneding on whether a Published or Draft card
+  // Show slightly different list items depending on whether a Published or Draft card
   if (isPublished) {
     menuItemsList.unshift({
       title: t("card.menu.copyLink"),
       callback: copyLinkCallback,
     });
   } else {
-    menuItemsList.unshift({
-      title: t("card.menu.edit"),
-      url: `/${i18n.language}/form-builder/edit/${id}`,
-    });
+    menuItemsList.unshift(
+      {
+        title: t("card.menu.edit"),
+        url: `/${i18n.language}/form-builder/edit/${id}`,
+      },
+      {
+        title: t("card.menu.preview"),
+        url: `/${i18n.language}/form-builder/preview/${id} `,
+      }
+    );
   }
 
   async function downloadForm(name: string, id: string) {
