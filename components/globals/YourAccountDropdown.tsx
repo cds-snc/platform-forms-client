@@ -32,7 +32,7 @@ export const YourAccountDropdown = ({ isAuthenticated }: YourAccountDropdownProp
     return (
       <DropdownMenu.Item onClick={onClick}>
         <Link
-          className="block rounded-md p-2 text-sm text-black !no-underline outline-none visited:text-black hover:bg-gray-600 hover:text-white focus:bg-gray-600 focus:text-white-default"
+          className="block rounded-md p-2 text-sm text-black !no-underline !shadow-none outline-none visited:text-black hover:bg-gray-600 hover:text-white focus:bg-gray-600 focus:text-white-default"
           href={href}
         >
           {text}
