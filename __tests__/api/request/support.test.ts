@@ -29,8 +29,8 @@ const mockSendEmail = {
   }),
 };
 
-jest.mock("notifications-node-client", () => ({
-  NotifyClient: jest.fn(() => mockSendEmail),
+jest.mock("@lib/integration/notifyConnector", () => ({
+  getNotifyInstance: jest.fn(() => mockSendEmail),
 }));
 
 describe("Support email API tests - WITHOUT an active session", () => {
