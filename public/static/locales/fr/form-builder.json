@@ -399,7 +399,10 @@
   "publishingRemovesTestResponses": "La publication supprime les réponses test.",
   "publishingRemovesTestResponsesDescription": "Toutes les réponses antérieures seront supprimées du système.",
   "publishYourForm": "Publier votre formulaire",
-  "publishYourFormInstructions": "Vous devez franchir les étapes suivantes avant de publier votre formulaire. ",
+  "publishYourFormInstructions": {
+    "text1": "[FR] Complete the following items before you publish your",
+    "text2": "[FR] form:"
+  },
   "question": "Question",
   "questions": "Questions",
   "questionSet": {

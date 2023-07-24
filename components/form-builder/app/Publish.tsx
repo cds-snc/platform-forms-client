@@ -26,13 +26,16 @@ export const Publish = () => {
   const [error, setError] = useState(false);
   const { i18n } = useTranslation("common");
 
-  const { id, setId, getSchema, getName, getDeliveryOption } = useTemplateStore((s) => ({
-    id: s.id,
-    setId: s.setId,
-    getSchema: s.getSchema,
-    getName: s.getName,
-    getDeliveryOption: s.getDeliveryOption,
-  }));
+  const { id, setId, getSchema, getName, getDeliveryOption, securityAttribute } = useTemplateStore(
+    (s) => ({
+      id: s.id,
+      setId: s.setId,
+      getSchema: s.getSchema,
+      getName: s.getName,
+      getDeliveryOption: s.getDeliveryOption,
+      securityAttribute: s.securityAttribute,
+    })
+  );
 
   const Icon = ({ checked }: { checked: boolean }) => {
     return checked ? (
@@ -91,7 +94,10 @@ export const Publish = () => {
       <div className="flex justify-between flex-wrap laptop:flex-nowrap">
         <div className="grow border-1 rounded-lg p-5 mx-5 min-w-fit w-sm">
           <h1 className="border-0 mb-0">{t("publishYourForm")}</h1>
-          <p className="mb-0">{t("publishYourFormInstructions")}</p>
+          <p className="mb-0">
+            {t("publishYourFormInstructions.text1")} {securityAttribute}{" "}
+            {t("publishYourFormInstructions.text2")}
+          </p>
           {!userCanPublish && (
             <div className="mt-5 mb-5 p-5 bg-purple-200 flex">
               <div className="flex">

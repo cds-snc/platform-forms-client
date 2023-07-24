@@ -399,7 +399,10 @@
   "publishingRemovesTestResponses": "Publishing removes test responses.",
   "publishingRemovesTestResponsesDescription": "Any prior responses will be removed from the system.",
   "publishYourForm": "Publish your form",
-  "publishYourFormInstructions": "You need the following items completed before you publish your form.",
+  "publishYourFormInstructions": {
+    "text1": "Complete the following items before you publish your",
+    "text2": "form:"
+  },
   "question": "Question",
   "questions": "Questions",
   "questionSet": {
