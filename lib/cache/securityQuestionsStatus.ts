@@ -27,7 +27,10 @@ export const securityQuestionsCheck = async (userID: string): Promise<boolean | 
   return null;
 };
 
-export const securityQuestionsStatusUpdate = async (userID: string, status: boolean): Promise<void> => {
+export const securityQuestionsStatusUpdate = async (
+  userID: string,
+  status: boolean
+): Promise<void> => {
   const modifyParameter = `auth:securityquestions:${userID}`;
 
   if (!cacheAvailable) return;
