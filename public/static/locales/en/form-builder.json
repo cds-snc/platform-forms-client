@@ -451,7 +451,8 @@
   "settingsResponseDelivery": {
     "selectClassification": "Select the data classification of your form responses",
     "beforePublishMessage": "You can change these settings anytime before publishing.",
-    "protectedBMessage":  "PROTECTED B class forms must be downloaded from GC Forms.",
+    "protectedBMessage": "PROTECTED B class forms must be downloaded from GC Forms.",
+    "settingsMessage": "To change these settings, select the data classification of your form responses.",
     "title": "Select a response delivery option",
     "vaultOption": "Download responses from GC Forms",
     "vaultOptionHint": {
@@ -605,7 +606,7 @@
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
   "unnamedForm": "Unnamed form file",
-  "formName": "Form name", 
+  "formName": "Form name",
   "responsesNavLabel": "Responses",
   "nagware": {
     "restrictedDownloadAfter35Days": "Downloading will be restricted if unconfirmed responses are older than 35 days.",

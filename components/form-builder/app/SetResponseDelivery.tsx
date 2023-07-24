@@ -262,9 +262,13 @@ export const SetResponseDelivery = () => {
             <div className="block mb-4 text-xl font-bold">
               {t("settingsResponseDelivery.title")}
             </div>
-            {protectedBSelected && (
+            {protectedBSelected ? (
               <p className="inline-block mb-5 p-3 bg-purple-200 font-bold text-sm">
                 {t("settingsResponseDelivery.protectedBMessage")}
+              </p>
+            ) : (
+              <p className="inline-block mb-5 p-3 bg-purple-200 font-bold text-sm">
+                {t("settingsResponseDelivery.settingsMessage")}
               </p>
             )}
             <Radio

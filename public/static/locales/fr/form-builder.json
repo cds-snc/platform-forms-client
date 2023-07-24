@@ -453,6 +453,7 @@
     "selectClassification": "Sélectionnez la classification des données des réponses de votre formulaire",
     "beforePublishMessage": "Vous pouvez modifier ces paramètres à tout moment avant de publier le formulaire.",
     "protectedBMessage": "Pour modifier ces paramètres, sélectionnez la classification des réponses de votre formulaire ci-dessus.",
+    "settingsMessage": "[FR] To change these settings, select the data classification of your form responses.",
     "title": "Sélectionnez une option de livraison des réponses",
     "vaultOption": "Télécharger les réponses de Formulaires GC",
     "vaultOptionHint": {
