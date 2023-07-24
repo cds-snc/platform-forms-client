@@ -3,7 +3,8 @@ name: Remove PR Review Client deployment
 on:
   pull_request:
     branches:
-      - develop  
+      - develop
+      - feature/*
     types:
       - closed
 
