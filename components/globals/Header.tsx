@@ -50,12 +50,6 @@ export const Header = ({ context = "default" }: HeaderParams) => {
           aria-label={t("mainNavAriaLabel", { ns: "form-builder" })}
         >
           <ul className="mt-2 flex list-none px-0 text-base">
-            {isFormBuilder && (
-              <li className="mr-2 text-base tablet:mr-4">
-                <ShareDropdown />
-              </li>
-            )}
-
             <li className="mr-2 py-2 text-base tablet:mr-4">
               {ability?.can("view", "FormRecord") && (
                 <Link href={`/${i18n.language}/myforms/drafts`}>
@@ -73,6 +67,11 @@ export const Header = ({ context = "default" }: HeaderParams) => {
                 <LanguageToggle />
               </li>
             }
+            {isFormBuilder && (
+              <li className="mr-2 text-base tablet:mr-4">
+                <ShareDropdown />
+              </li>
+            )}
             {
               <li className="text-base">
                 <YourAccountDropdown isAuthenticated={status === "authenticated"} />
