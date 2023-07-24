@@ -80,7 +80,7 @@ export const PageTemplate = ({
 
   // Wait until the Template Store has fully hydrated before rendering the page
   return hasHydrated ? (
-    <div className="mx-4 laptop:mx-32 desktop:mx-64 grow shrink-0 basis-auto">
+    <div className="mx-4 shrink-0 grow basis-auto laptop:mx-32 desktop:mx-64">
       <ToastContainer />
       <div>
         {leftNav && <LeftNavigation backLink={backLink} />}
