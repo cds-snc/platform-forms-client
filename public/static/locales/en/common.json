@@ -142,5 +142,6 @@
         }
       }
     }
-  }
+  },
+  "mainNavAriaLabel": "Main"
 }

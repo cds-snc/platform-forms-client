@@ -3,12 +3,12 @@ import PropTypes from "prop-types";
 import Footer from "../Footer";
 import Head from "next/head";
 import SkipLink from "../SkipLink";
-import AdminNav from "../AdminNav";
 import { User } from "next-auth";
 
 import { LeftNavigation } from "@components/admin/LeftNav/LeftNavigation";
 import { ToastContainer } from "@components/form-builder/app/shared/Toast";
 import { useAccessControl } from "@lib/hooks";
+import { Header } from "../Header";
 
 interface AdminNavLayoutProps extends React.PropsWithChildren {
   user: User;
@@ -29,9 +29,7 @@ const AdminNavLayout = ({ children, user, backLink, hideLeftNav }: AdminNavLayou
 
       <SkipLink />
 
-      <header className="mb-12 border-b-1 border-gray-500 bg-white px-4 py-2 laptop:px-32 desktop:px-64">
-        <AdminNav user={user} />
-      </header>
+      <Header context="admin" user={user} />
 
       <div className="page-container mx-4 shrink-0 grow basis-auto laptop:mx-32 desktop:mx-64">
         {backLink && <nav className="absolute">{backLink}</nav>}
