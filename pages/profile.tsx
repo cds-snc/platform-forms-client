@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useRef, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
@@ -9,6 +9,7 @@ import { checkPrivileges, checkPrivilegesAsBoolean } from "@lib/privileges";
 import { Template } from "@components/form-builder/app";
 import { Button } from "@components/globals";
 import { CancelIcon, CircleCheckIcon } from "@components/form-builder/icons";
+import { EditSecurityQuestionModal } from "@components/admin/Profile/EditSecurityQuestionModal";
 
 interface ProfileProps {
   email: string;
@@ -24,37 +25,63 @@ const Icon = ({ checked }: { checked: boolean }) => {
   );
 };
 
-const Questions = ({ questions = [] }: { questions: { text: string }[] }) => {
+const Questions = ({ questions = [] }: { questions: { id: string; text: string }[] }) => {
   const { t } = useTranslation(["profile"]);
+  const [showEditSecurityQuestionModal, setShowEditSecurityQuestionModal] = useState(false);
+
+  // TODO: if the list of state grows, use a reducer
+  const editQuestionNumber = useRef(0);
+  const editQuestionId = useRef("");
+  // const editQuestionsList = useRef(null);
 
   if (!questions.length) {
     return null;
   }
 
   return (
-    <ul className="list-none p-0 m-0">
-      {questions.map((question, index) => {
-        return (
-          <li key={index}>
-            <div className="flex justify-between">
-              <h3 className="mb-2 text-sm">
-                {t("securityPanel.question")} {index + 1}
-              </h3>
-              <Button
-                onClick={() => {
-                  alert(`open modal for question ${index + 1}`);
-                }}
-                theme="link"
-                className="!px-2 text-sm"
-              >
-                {t("securityPanel.edit")}
-              </Button>
-            </div>
-            <p className="mb-4 text-sm">{question.text}</p>
-          </li>
-        );
-      })}
-    </ul>
+    <>
+      <ul className="list-none p-0 m-0">
+        {questions.map((question, index) => {
+          return (
+            <li key={index}>
+              <div className="flex justify-between">
+                <h3 className="mb-2 text-sm">
+                  {t("securityPanel.question")} {index + 1}
+                </h3>
+                <Button
+                  onClick={() => {
+                    // alert(`open modal for question ${index + 1}`);
+                    editQuestionNumber.current = index + 1;
+                    editQuestionId.current = question.id;
+
+                    // TODO:
+                    // -update `editQuestionsList` with filtered out already used security questions
+                    // -modal uses `editQuestionsList` then one less error/thing for the user to worry about
+
+                    setShowEditSecurityQuestionModal(true);
+                  }}
+                  theme="link"
+                  className="!px-2 text-sm"
+                >
+                  {t("securityPanel.edit")}
+                </Button>
+              </div>
+              <p className="mb-4 text-sm">{question.text}</p>
+            </li>
+          );
+        })}
+      </ul>
+      {showEditSecurityQuestionModal && (
+        <EditSecurityQuestionModal
+          questionNumber={editQuestionNumber.current}
+          questionId={editQuestionId.current}
+          questions={questions}
+          handleClose={async () => {
+            setShowEditSecurityQuestionModal(false);
+          }}
+        />
+      )}
+    </>
   );
 };
 
@@ -116,9 +143,9 @@ export const getServerSideProps = requireAuthentication(
 
       // @todo pull from API
       const userQuestions = [
-        { text: "Placeholder what was your favourite school subject?" },
-        { text: "Placeholder what was the name of your first manager?" },
-        { text: "Placeholder what was the make of your first car?" },
+        { id: "100", text: "Placeholder what was your favourite school subject?" },
+        { id: "101", text: "Placeholder what was the name of your first manager?" },
+        { id: "102", text: "Placeholder what was the make of your first car?" },
       ];
 
       return {
