@@ -23,21 +23,16 @@ export const YourAccountDropdown = ({ isAuthenticated }: YourAccountDropdownProp
   const DropdownMenuItem = ({
     href,
     text,
-    additionalClasses,
     onClick,
   }: {
     href: string;
     text: string;
-    additionalClasses?: string;
     onClick?: () => void;
   }) => {
     return (
-      <DropdownMenu.Item
-        className={`group flex cursor-pointer items-center rounded-md p-2 text-sm outline-none hover:bg-gray-600 hover:text-white focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white ${additionalClasses}`}
-        onClick={onClick}
-      >
+      <DropdownMenu.Item onClick={onClick}>
         <Link
-          className="text-black no-underline visited:text-black group-hover:text-white"
+          className="block rounded-md p-2 text-sm text-black !no-underline outline-none visited:text-black hover:bg-gray-600 hover:text-white focus:bg-gray-600 focus:text-white-default"
           href={href}
         >
           {text}
@@ -49,7 +44,7 @@ export const YourAccountDropdown = ({ isAuthenticated }: YourAccountDropdownProp
   return (
     <>
       {isAuthenticated && (
-        <div className="inline-block">
+        <div>
           <DropdownMenu.Root>
             <DropdownMenu.Trigger>
               <div className="flex cursor-pointer rounded border-1 border-black px-3 py-1 hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white">
@@ -59,7 +54,8 @@ export const YourAccountDropdown = ({ isAuthenticated }: YourAccountDropdownProp
             </DropdownMenu.Trigger>
             <DropdownMenu.Portal>
               <DropdownMenu.Content
-                className={`-ml-8 mt-1.5 rounded-lg border-1 border-black bg-white px-1.5 py-1 shadow-md`}
+                align="end"
+                className={`mt-1.5 min-w-[230px] rounded-lg border-1 border-black bg-white px-1.5 py-1 shadow-md`}
               >
                 <DropdownMenuItem href={`/${i18n.language}/profile`} text={t("Profile")} />
 
