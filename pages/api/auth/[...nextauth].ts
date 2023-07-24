@@ -37,20 +37,6 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         const { authenticationFlowToken, username, verificationCode } = credentials ?? {};
 
-        // Application is in test mode, return test user
-        if (process.env.APP_ENV === "test") {
-          if (
-            !username ||
-            !["test.user@cds-snc.ca", "testadmin.user@cds-snc.ca"].includes(username)
-          ) {
-            throw new Error("Must use testing accounts when in test Mode");
-          }
-          return {
-            id: "1",
-            email: username,
-          };
-        }
-
         // Check to ensure all required credentials were passed in
         if (!authenticationFlowToken || !username || !verificationCode) return null;
 
