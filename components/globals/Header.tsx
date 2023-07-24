@@ -53,10 +53,7 @@ export const Header = ({ context = "default", user }: HeaderParams) => {
           )}
           {isFormBuilder && <FileNameInput />}
         </div>
-        <nav
-          className="justify-self-end"
-          aria-label={t("mainNavAriaLabel", { ns: "form-builder" })}
-        >
+        <nav className="justify-self-end" aria-label={t("mainNavAriaLabel", { ns: "common" })}>
           <ul className="mt-2 flex list-none px-0 text-base">
             {user?.name && (
               <li className="mr-2 py-2 pt-3 text-sm tablet:mr-4">
