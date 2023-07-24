@@ -145,28 +145,62 @@ export const updatePrivilegesForUser = async (
         removePrivileges.push({ id: privilege.id });
       }
     });
-    const user = await prisma.user.update({
-      where: {
-        id: userID,
-      },
-      data: {
-        privileges: {
-          connect: addPrivileges,
-          disconnect: removePrivileges,
+
+    // Run prisma calls in parallel
+
+    const [privilegesInfo, user, privilegedUser] = await Promise.all([
+      prisma.privilege.findMany({
+        select: {
+          id: true,
+          nameEn: true,
         },
-      },
-      select: {
-        privileges: true,
-      },
-    });
+      }),
+      prisma.user.update({
+        where: {
+          id: userID,
+        },
+        data: {
+          privileges: {
+            connect: addPrivileges,
+            disconnect: removePrivileges,
+          },
+        },
+        select: {
+          privileges: true,
+        },
+      }),
+      prisma.user.findUniqueOrThrow({
+        where: {
+          id: ability.userID,
+        },
+        select: {
+          email: true,
+        },
+      }),
+    ]);
 
     // Logging the events asynchronously to not block the function
     addPrivileges.forEach((privilege) =>
-      logEvent(ability.userID, { type: "Privilege", id: privilege.id }, "GrantPrivilege")
+      logEvent(
+        userID,
+        { type: "Privilege", id: privilege.id },
+        "GrantPrivilege",
+        `Granted privilege : ${privilegesInfo.find((p) => p.id === privilege.id)?.nameEn} by User ${
+          privilegedUser?.email
+        } (userID: ${ability.userID})`
+      )
     );
     removePrivileges.forEach((privilege) =>
-      logEvent(ability.userID, { type: "Privilege", id: privilege.id }, "RevokePrivilege")
+      logEvent(
+        userID,
+        { type: "Privilege", id: privilege.id },
+        "RevokePrivilege",
+        `Revoked privilege : ${privilegesInfo.find((p) => p.id === privilege.id)?.nameEn} by User ${
+          privilegedUser?.email
+        } (userID: ${ability.userID})`
+      )
     );
+    // Remove existing values from Cache
     await privilegeDelete(userID);
 
     return user.privileges;

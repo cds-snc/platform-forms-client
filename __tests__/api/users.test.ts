@@ -252,6 +252,25 @@ describe("Users API endpoint", () => {
         privileges: ["1", "2"],
       });
 
+      (prismaMock.privilege.findMany as jest.MockedFunction<any>).mockResolvedValue([
+        {
+          id: "1",
+          nameEn: "View Users",
+        },
+        {
+          id: "2",
+          nameEn: "Manage Settings",
+        },
+        {
+          id: "3",
+          nameEn: "Manage Forms",
+        },
+      ]);
+
+      (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue({
+        email: "forms.admin@cds.ca",
+      });
+
       const { req, res } = createMocks({
         method: "PUT",
         headers: {
@@ -272,21 +291,24 @@ describe("Users API endpoint", () => {
       expect(res.statusCode).toBe(200);
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         1,
-        "1",
+        "2",
         { id: "1", type: "Privilege" },
-        "GrantPrivilege"
+        "GrantPrivilege",
+        "Granted privilege : View Users by User forms.admin@cds.ca (userID: 1)"
       );
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         2,
-        "1",
+        "2",
         { id: "2", type: "Privilege" },
-        "GrantPrivilege"
+        "GrantPrivilege",
+        "Granted privilege : Manage Settings by User forms.admin@cds.ca (userID: 1)"
       );
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         3,
-        "1",
+        "2",
         { id: "3", type: "Privilege" },
-        "RevokePrivilege"
+        "RevokePrivilege",
+        "Revoked privilege : Manage Forms by User forms.admin@cds.ca (userID: 1)"
       );
     });
   });
