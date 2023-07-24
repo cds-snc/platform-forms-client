@@ -47,13 +47,17 @@ export const YourAccountDropdown = ({ isAuthenticated }: YourAccountDropdownProp
         <div>
           <DropdownMenu.Root>
             <DropdownMenu.Trigger>
-              <div className="flex cursor-pointer rounded border-1 border-black px-3 py-1 hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white">
+              <div
+                className="flex cursor-pointer rounded border-1 border-black px-3 py-1 hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
+                data-testid="yourAccountDropdown"
+              >
                 <span className="mr-1 inline-block">{t("Your account")}</span>
                 <ChevronDown className="mt-[2px]" />
               </div>
             </DropdownMenu.Trigger>
             <DropdownMenu.Portal>
               <DropdownMenu.Content
+                data-testid="yourAccountDropdownContent"
                 align="end"
                 className={`mt-1.5 min-w-[230px] rounded-lg border-1 border-black bg-white px-1.5 py-1 shadow-md`}
               >
