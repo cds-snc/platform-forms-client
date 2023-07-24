@@ -69,14 +69,15 @@
   "adminNav": {
     "dashboard": "Accueil",
     "formbuilder": "Générateur de formulaires",
-    "users": "Usagers",
+    "users": "Comptes",
     "templates": "Modèles",
     "features": "Indicateurs de fonction",
     "login": "Se connecter",
     "logout": "Se déconnecter",
     "privileges": "Privilèges",
     "settings": "Paramètres",
-    "myForms": "Vos formulaires"
+    "administration": "Administration",
+    "myForms": "Formulaires"
   },
   "formElements": {
     "characterCount": {

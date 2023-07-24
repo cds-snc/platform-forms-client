@@ -26,7 +26,7 @@ const LoginMenu = ({ isAuthenticated }: LoginMenuProp) => {
         {isAuthenticated ? (
           <button
             type="button"
-            className="shadow-none bg-transparent text-blue-dark hover:text-blue-hover underline border-0"
+            className="border-0 bg-transparent text-blue-dark underline shadow-none hover:text-blue-hover"
             onClick={handleClick}
             lang={i18n.language}
           >

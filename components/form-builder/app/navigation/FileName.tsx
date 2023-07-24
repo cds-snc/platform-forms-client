@@ -102,6 +102,7 @@ export const FileNameInput = () => {
           setIsEditing(false);
         }}
         onChange={(e) => setContent(e.target.value)}
+        aria-label={t("formName", { ns: "form-builder" })}
       />
     </div>
   );

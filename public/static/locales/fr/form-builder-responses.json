@@ -58,7 +58,11 @@
       "atLeastOneFile": "Essayez de sélectionner au moins un fichier à télécharger.",
       "errorDownloadingFilesHeader": "Erreur lors du téléchargement des fichiers sélectionnés.",
       "errorDownloadingFiles": "Réessayez dans quelques minutes. Si le problème persiste, ",
-      "errorDownloadingFilesLink": "contactez Soutien"
+      "errorDownloadingFilesLink": "contactez Soutien",
+      "overdueAlert": {
+        "title": "Downloading is restricted for overdue responses until they are downloaded and confirmed[FR]",
+        "description": "There are {{numberOfOverdueResponses}} unconfirmed responses {{escalatedAfter}} days overdue. Download and confirm all overdue responses before continuing.[FR]"
+      }
     },
     "downloadXSelectedResponses": "Télécharger {{size}} réponses sélectionnées",
     "skipLink": "Sauter le tableau de téléchargement",

@@ -9,6 +9,7 @@ import { Translate } from "@components/form-builder/app/translate";
 const Page: NextPageWithLayout<PageProps> = () => {
   const { t } = useTranslation("form-builder");
   const title = `${t("gcFormsTranslate")} — ${t("gcForms")}`;
+
   return (
     <PageTemplate title={title} navigation={<EditNavigation />}>
       <Translate />

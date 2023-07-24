@@ -21,13 +21,13 @@ export const Nagware = ({ nagwareResult }: { nagwareResult: NagwareResult }) => 
               {nagwareResult.numberOfSubmissions > 20 ? (
                 <>
                   {t("nagware.unsavedSubmissionsOver21DaysOld.body1")}{" "}
-                  {nagwareResult.numberOfSubmissions}{" "}
+                  <span data-testid="numberOfSubmissions">{nagwareResult.numberOfSubmissions}</span>{" "}
                   {t("nagware.unsavedSubmissionsOver21DaysOld.body2.moreThan20Responses")}
                 </>
               ) : (
                 <>
                   {t("nagware.unsavedSubmissionsOver21DaysOld.body1")}{" "}
-                  {nagwareResult.numberOfSubmissions}{" "}
+                  <span data-testid="numberOfSubmissions">{nagwareResult.numberOfSubmissions}</span>{" "}
                   {t("nagware.unsavedSubmissionsOver21DaysOld.body2.lessThan20Responses")}
                 </>
               )}
@@ -45,7 +45,7 @@ export const Nagware = ({ nagwareResult }: { nagwareResult: NagwareResult }) => 
           body: (
             <>
               {t("nagware.unconfirmedSubmissionsOver21DaysOld.body1")}{" "}
-              {nagwareResult.numberOfSubmissions}{" "}
+              <span data-testid="numberOfSubmissions">{nagwareResult.numberOfSubmissions}</span>{" "}
               {t("nagware.unconfirmedSubmissionsOver21DaysOld.body2")}
               <br />
               <br />
@@ -62,13 +62,13 @@ export const Nagware = ({ nagwareResult }: { nagwareResult: NagwareResult }) => 
               {nagwareResult.numberOfSubmissions > 20 ? (
                 <>
                   {t("nagware.unsavedSubmissionsOver35DaysOld.body1")}{" "}
-                  {nagwareResult.numberOfSubmissions}{" "}
+                  <span data-testid="numberOfSubmissions">{nagwareResult.numberOfSubmissions}</span>{" "}
                   {t("nagware.unsavedSubmissionsOver35DaysOld.body2.moreThan20Responses")}
                 </>
               ) : (
                 <>
                   {t("nagware.unsavedSubmissionsOver35DaysOld.body1")}{" "}
-                  {nagwareResult.numberOfSubmissions}{" "}
+                  <span data-testid="numberOfSubmissions">{nagwareResult.numberOfSubmissions}</span>{" "}
                   {t("nagware.unsavedSubmissionsOver35DaysOld.body2.lessThan20Responses")}
                 </>
               )}
@@ -82,7 +82,7 @@ export const Nagware = ({ nagwareResult }: { nagwareResult: NagwareResult }) => 
           body: (
             <>
               {t("nagware.unconfirmedSubmissionsOver35DaysOld.body1")}{" "}
-              {nagwareResult.numberOfSubmissions}{" "}
+              <span data-testid="numberOfSubmissions">{nagwareResult.numberOfSubmissions}</span>{" "}
               {t("nagware.unconfirmedSubmissionsOver35DaysOld.body2")}
             </>
           ),

@@ -38,7 +38,8 @@
       "delete": "Delete",
       "coppiedToClipboard": "Copied to clipboard",
       "somethingWentWrong": "Something went wrong"
-    }
+    },
+    "actionRequired": "Action required: <a href=\"{{link}}\">Confirm receipt of {{responses}} response</a>"
   },
   "responseTemplate": {
     "responseNumber": "Response number",

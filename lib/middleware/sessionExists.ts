@@ -21,7 +21,8 @@ export const sessionExists = (methods?: string[]) => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
     const session = await isAuthenticated({ req, res });
 
-    if (useMethods(req, methods) && !session) {
+    // If user is not authenticated or has a deactivated account, return 401
+    if (useMethods(req, methods) && (!session || session.user.deactivated)) {
       res.status(401).json({ error: "Unauthorized" });
       return { next: false };
     }

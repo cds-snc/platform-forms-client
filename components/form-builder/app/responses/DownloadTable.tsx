@@ -1,5 +1,11 @@
 import React, { useEffect, useReducer, useState } from "react";
-import { VaultSubmissionList } from "@lib/types";
+import {
+  NagwareResult,
+  TypeOmit,
+  VaultStatus,
+  VaultSubmission,
+  VaultSubmissionList,
+} from "@lib/types";
 import { useTranslation } from "react-i18next";
 import { SkipLinkReusable } from "@components/globals/SkipLinkReusable";
 import { ConfirmReceiptStatus } from "./ConfirmReceiptStatus";
@@ -13,7 +19,13 @@ import { Attention, AttentionTypes } from "@components/globals/Attention/Attenti
 import { toast } from "../shared/Toast";
 import { useSetting } from "@lib/hooks/useSetting";
 import Link from "next/link";
-import { TableActions, reducerTableItems, sortVaultSubmission } from "./DownloadTableReducer";
+import {
+  TableActions,
+  isSubmissionOverdue,
+  reducerTableItems,
+  sortVaultSubmission,
+} from "./DownloadTableReducer";
+import { getDaysPassed } from "@lib/clientHelpers";
 
 // TODO: move to an app setting variable
 const MAX_FILE_DOWNLOADS = 20;
@@ -21,9 +33,10 @@ const MAX_FILE_DOWNLOADS = 20;
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
   formId?: string;
+  nagwareResult: NagwareResult | null;
 }
 
-export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) => {
+export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: DownloadTableProps) => {
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
   const [errors, setErrors] = useState({
@@ -31,12 +44,22 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
     maxItemsError: false,
     noItemsError: false,
   });
+  const accountEscalated = nagwareResult && nagwareResult.level > 2;
+
+  const { value: overdueAfter } = useSetting("nagwarePhaseEncouraged");
+  const { value: warnAfter } = useSetting("nagwarePhaseWarned");
   const [tableItems, tableItemsDispatch] = useReducer(reducerTableItems, {
     checkedItems: new Map(),
     statusItems: new Map(vaultSubmissions.map((submission) => [submission.name, false])),
     sortedItems: sortVaultSubmission(vaultSubmissions),
+    numberOfOverdueResponses: vaultSubmissions.filter((submission) =>
+      isSubmissionOverdue({
+        status: submission.status,
+        createdAt: submission.createdAt,
+        overdueAfter,
+      })
+    ).length,
   });
-  const { value: overdueAfter } = useSetting("nagwarePhaseEncouraged");
 
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.id;
@@ -123,6 +146,17 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
     }
   };
 
+  const blockDownload = (
+    submission: TypeOmit<VaultSubmission, "formSubmission" | "submissionID" | "confirmationCode">
+  ) => {
+    const daysPast = getDaysPassed(submission.createdAt);
+
+    if (submission.status === VaultStatus.NEW && accountEscalated && daysPast < Number(warnAfter)) {
+      return true;
+    }
+    return false;
+  };
+
   useEffect(() => {
     // NOTE: Table not updating when it should? May need to be more explicit in telling react
     // what has changed in the array (e.g. a status). For now, this seems to work well.
@@ -145,7 +179,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
               max: MAX_FILE_DOWNLOADS,
             })}
           >
-            <p className="text-[#26374a] text-sm">
+            <p className="text-sm text-[#26374a]">
               {t("downloadResponsesTable.errors.trySelectingLessFiles", {
                 max: MAX_FILE_DOWNLOADS,
               })}
@@ -158,7 +192,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
             isAlert={true}
             heading={t("downloadResponsesTable.errors.atLeastOneFileHeader")}
           >
-            <p className="text-[#26374a] text-sm">
+            <p className="text-sm text-[#26374a]">
               {t("downloadResponsesTable.errors.atLeastOneFile")}
             </p>
           </Attention>
@@ -169,7 +203,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
             isAlert={true}
             heading={t("downloadResponsesTable.errors.errorDownloadingFilesHeader")}
           >
-            <p className="text-[#26374a] text-sm mb-2">
+            <p className="mb-2 text-sm text-[#26374a]">
               {t("downloadResponsesTable.errors.errorDownloadingFiles")}
               <Link href="/form-builder/support">
                 {t("downloadResponsesTable.errors.errorDownloadingFilesLink")}
@@ -194,64 +228,70 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
           </tr>
         </thead>
         <tbody>
-          {tableItems.sortedItems.map((submission) => (
-            <tr
-              key={submission.name}
-              className={
-                "border-b-2 border-grey" +
-                (tableItems.statusItems.get(submission.name) ? " bg-[#fffbf3]" : "")
-              }
-            >
-              <td className="pl-8 pr-4 pb-2 flex whitespace-nowrap">
-                <div className="gc-input-checkbox">
-                  <input
-                    id={submission.name}
-                    className="gc-input-checkbox__input"
-                    name="responses"
-                    type="checkbox"
-                    checked={tableItems.statusItems.get(submission.name)}
-                    onChange={handleChecked}
+          {tableItems.sortedItems.map((submission) => {
+            const isBlocked = blockDownload(submission);
+            return (
+              <tr
+                key={submission.name}
+                className={
+                  "border-b-2 border-grey" +
+                  (tableItems.statusItems.get(submission.name) ? " bg-[#fffbf3]" : "") +
+                  (isBlocked ? " opacity-50" : "")
+                }
+              >
+                <td className="flex whitespace-nowrap pb-2 pl-8 pr-4">
+                  <div className="gc-input-checkbox">
+                    <input
+                      id={submission.name}
+                      className="gc-input-checkbox__input"
+                      name="responses"
+                      type="checkbox"
+                      checked={tableItems.statusItems.get(submission.name)}
+                      onChange={handleChecked}
+                      {...(isBlocked && { disabled: true })}
+                    />
+                    <label className="gc-checkbox-label" htmlFor={submission.name}>
+                      <span className="sr-only">{submission.name}</span>
+                    </label>
+                  </div>
+                </td>
+                <td className="whitespace-nowrap px-4">{submission.name}</td>
+                <td className="whitespace-nowrap px-4">
+                  <DownloadStatus vaultStatus={submission.status} />
+                </td>
+                <td className="whitespace-nowrap px-4">
+                  <DownloadResponseStatus
+                    vaultStatus={submission.status}
+                    createdAt={submission.createdAt}
+                    downloadedAt={submission.downloadedAt}
+                    overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
                   />
-                  <label className="gc-checkbox-label" htmlFor={submission.name}>
-                    <span className="sr-only">{submission.name}</span>
-                  </label>
-                </div>
-              </td>
-              <td className="px-4 whitespace-nowrap">{submission.name}</td>
-              <td className="px-4 whitespace-nowrap">
-                <DownloadStatus vaultStatus={submission.status} />
-              </td>
-              <td className="px-4 whitespace-nowrap">
-                <DownloadResponseStatus
-                  vaultStatus={submission.status}
-                  createdAt={submission.createdAt}
-                  downloadedAt={submission.downloadedAt}
-                  overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
-                />
-              </td>
-              <td className="px-4 whitespace-nowrap">
-                <div className="truncate w-40">
-                  {submission.lastDownloadedBy || t("downloadResponsesTable.status.notDownloaded")}
-                </div>
-              </td>
-              <td className="px-4 whitespace-nowrap">
-                <ConfirmReceiptStatus
-                  vaultStatus={submission.status}
-                  createdAtDate={submission.createdAt}
-                  overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
-                />
-              </td>
-              <td className="px-4 whitespace-nowrap">
-                <RemovalStatus vaultStatus={submission.status} removalAt={submission.removedAt} />
-              </td>
-            </tr>
-          ))}
+                </td>
+                <td className="whitespace-nowrap px-4">
+                  <div className="w-40 truncate">
+                    {submission.lastDownloadedBy ||
+                      t("downloadResponsesTable.status.notDownloaded")}
+                  </div>
+                </td>
+                <td className="whitespace-nowrap px-4">
+                  <ConfirmReceiptStatus
+                    vaultStatus={submission.status}
+                    createdAtDate={submission.createdAt}
+                    overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
+                  />
+                </td>
+                <td className="whitespace-nowrap px-4">
+                  <RemovalStatus vaultStatus={submission.status} removalAt={submission.removedAt} />
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
       <div className="mt-8 flex">
         <button
           id="downloadTableButtonId"
-          className="gc-button--blue whitespace-nowrap w-auto m-0"
+          className="gc-button--blue m-0 w-auto whitespace-nowrap"
           type="button"
           onClick={handleDownload}
           aria-live="polite"
@@ -271,7 +311,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
                 max: MAX_FILE_DOWNLOADS,
               })}
             >
-              <p className="text-black text-sm">
+              <p className="text-sm text-black">
                 {t("downloadResponsesTable.errors.trySelectingLessFiles", {
                   max: MAX_FILE_DOWNLOADS,
                 })}
@@ -285,7 +325,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
               isSmall={true}
               heading={t("downloadResponsesTable.errors.atLeastOneFileHeader")}
             >
-              <p className="text-black text-sm">
+              <p className="text-sm text-black">
                 {t("downloadResponsesTable.errors.atLeastOneFile")}
               </p>
             </Attention>
@@ -297,7 +337,7 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
               isSmall={true}
               heading={t("downloadResponsesTable.errors.errorDownloadingFilesHeader")}
             >
-              <p className="text-black text-sm">
+              <p className="text-sm text-black">
                 {t("downloadResponsesTable.errors.errorDownloadingFiles")}
               </p>
             </Attention>

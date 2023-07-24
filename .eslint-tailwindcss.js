@@ -6,7 +6,7 @@ module.exports = {
   
         parser: "@typescript-eslint/parser",
         parserOptions: {
-          project: ["./tsconfig.json"],
+          project: ["./tsconfig.json", "./cypress/tsconfig.json"],
         },
         plugins: ["eslint-plugin-tailwindcss"],
       },
@@ -16,7 +16,7 @@ module.exports = {
     ],
     settings: {
       tailwindcss: {
-        whitelist: ["(gc\\-).*"]
+        whitelist: ["(gc\\-).*", "form-builder", "page-container", "visually-hidden"]
       }
     }
   };

@@ -9,6 +9,8 @@ export const generateVerificationCode = async () => generateTokenCode(5);
 
 export const sendVerificationCode = async (email: string, verificationCode: string) => {
   try {
+    // Don't try to send during tests
+    if (process.env.APP_ENV === "test") return;
     const notify = new NotifyClient("https://api.notification.canada.ca", NOTIFY_API_KEY);
 
     await notify.sendEmail(TEMPLATE_ID, email, {

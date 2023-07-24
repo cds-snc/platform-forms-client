@@ -177,9 +177,9 @@ describe("/api/id/[form]/[submission]/download", () => {
       expect(mockLogEvent).toHaveBeenNthCalledWith(
         2,
         "1",
-        { type: "Response" },
+        { type: "Response", id: "NAME#123456789" },
         "AccessDenied",
-        "Attemped to download response for submissionID 123456789"
+        "Attemped to download response"
       );
     });
 

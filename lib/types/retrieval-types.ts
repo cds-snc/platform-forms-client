@@ -36,12 +36,6 @@ export type VaultSubmissionList = TypeOmit<
   "formSubmission" | "submissionID" | "confirmationCode"
 >;
 
-export type VaultSubmissionAndConfirmationList = {
-  formID: string;
-  confirmationCode: string;
-  name: string;
-};
-
 export enum VaultStatus {
   NEW = "New",
   DOWNLOADED = "Downloaded",
