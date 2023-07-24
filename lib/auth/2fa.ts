@@ -1,4 +1,4 @@
-import { NotifyClient } from "notifications-node-client";
+import { getNotifyInstance } from "@lib/integration/notifyConnector";
 import { logMessage } from "@lib/logger";
 import { generateTokenCode } from "@lib/auth/tokenGenerator";
 
@@ -9,9 +9,7 @@ export const generateVerificationCode = async () => generateTokenCode(5);
 
 export const sendVerificationCode = async (email: string, verificationCode: string) => {
   try {
-    // Don't try to send during tests
-    if (process.env.APP_ENV === "test") return;
-    const notify = new NotifyClient("https://api.notification.canada.ca", NOTIFY_API_KEY);
+    const notify = getNotifyInstance();
 
     await notify.sendEmail(TEMPLATE_ID, email, {
       personalisation: {

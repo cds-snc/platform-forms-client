@@ -46,6 +46,34 @@ async function createTestUsers() {
   await Promise.all(users);
 }
 
+async function createAdminTestUser() {
+  return prisma.user.create({
+    data: {
+      id: "2",
+      name: "Test Admin User",
+      email: "testadmin.user@cds-snc.ca",
+      privileges: {
+        connect: [
+          { nameEn: "Base" },
+          { nameEn: "PublishForms" },
+          { nameEn: "ManageApplicationSettings" },
+          { nameEn: "ManageUsers" },
+          { nameEn: "ManageForms" },
+          { nameEn: "ViewApplicationSettings" },
+          { nameEn: "ViewUserPrivileges" },
+          { nameEn: "ManagePrivileges" },
+        ],
+      },
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      privileges: true,
+    },
+  });
+}
+
 //Can be removed once we know that the migration is completed
 async function publishingStatusMigration() {
   const templates = await prisma.template.findMany({
@@ -211,9 +239,12 @@ async function main(environment: string) {
     ]);
 
     if (environment === "test") {
-      console.log("Creating test Users");
+      console.log("Creating test User");
       await createTestUsers();
 
+      console.log("Creating admin test User");
+      await createAdminTestUser();
+      // Short Circuit
       // No migrations need to run on pure new test database
       return;
     }

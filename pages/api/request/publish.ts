@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { cors, middleware, sessionExists } from "@lib/middleware";
-import { NotifyClient } from "notifications-node-client";
+import { getNotifyInstance } from "@lib/integration/notifyConnector";
 import { logMessage } from "@lib/logger";
 import { MiddlewareProps, WithRequired } from "@lib/types";
 
@@ -19,10 +19,7 @@ const requestPublishingPermission = async (
     }
 
     const templateID = process.env.TEMPLATE_ID;
-    const notifyClient = new NotifyClient(
-      "https://api.notification.canada.ca",
-      process.env.NOTIFY_API_KEY
-    );
+    const notifyClient = getNotifyInstance();
 
     // Here is the documentation for the `sendEmail` function: https://docs.notifications.service.gov.uk/node.html#send-an-email
     await notifyClient.sendEmail(templateID, process.env.EMAIL_ADDRESS_SUPPORT, {
