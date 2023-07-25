@@ -14,7 +14,7 @@ describe("<Alert />", () => {
       <>
         <Alert.Success>
           <Alert.Icon>
-            <CircleCheckIcon className="h-10 w-10" />
+            <CircleCheckIcon />
           </Alert.Icon>
           <Alert.Title level="h3">Test Title</Alert.Title>
           <Alert.Body>Test body</Alert.Body>

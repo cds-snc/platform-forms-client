@@ -29,8 +29,8 @@ type AlertProps = {
 };
 
 const AlertContainer = ({ children, title, body, classNames, type }: AlertProps) => {
-  let alertTitle: JSX.Element | string | undefined = title;
-  let alertBody: JSX.Element | string | undefined = body;
+  let alertTitle: JSX.Element | string | undefined = <h2>{title}</h2>;
+  let alertBody: JSX.Element | string | undefined = <p>{body}</p>;
   let alertIcon;
   const content: JSX.Element[] = [];
 
@@ -49,9 +49,9 @@ const AlertContainer = ({ children, title, body, classNames, type }: AlertProps)
   });
 
   return (
-    <div className={`relative w-[80%] rounded-lg p-8 ${classNames}`}>
-      {alertIcon && <div className="inline-block">{alertIcon}</div>}
-      <div>
+    <div className={`relative flex rounded-lg p-4 ${classNames}`}>
+      {alertIcon && <div className="mr-4">{alertIcon}</div>}
+      <div className={`${alertIcon && "mt-2"}`}>
         {alertTitle && <>{alertTitle}</>}
         {alertBody && <>{alertBody}</>}
         {content}
