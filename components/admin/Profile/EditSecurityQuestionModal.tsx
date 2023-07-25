@@ -180,9 +180,10 @@ export const EditSecurityQuestionModal = ({
             onBlur={() => {
               // NOTE: temporary work around for issue of clicking on save causing miss-click and
               // and pushing save button down (then no longer clicking save button). A better fix
-              // will probably require refactoring the how form elements work in the dialog
+              // will probably require refactoring how form elements work in the dialog.
               setTimeout(() => {
                 if (!isAnswerInputValid(answerRef.current?.value)) {
+                  setIsFormWarning(false);
                   setIsAnswerInputError(true);
                   return;
                 }
