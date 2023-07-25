@@ -4,6 +4,7 @@ import seedTemplates from "./fixtures/templates";
 import seedPrivileges from "./fixtures/privileges";
 import seedSettings from "./fixtures/settings";
 import seedUsers from "./fixtures/users";
+import seedSecurityQuestions from "./fixtures/security-questions";
 
 type AnyObject = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -44,6 +45,15 @@ async function createSettings(env: string) {
 async function createTestUsers() {
   const users = seedUsers["test"].map((user) => prisma.user.create({ data: user }));
   await Promise.all(users);
+}
+
+async function createSecurityQuestions() {
+  return prisma.securityQuestion.createMany({
+    data: seedSecurityQuestions.map((question) => {
+      return { questionEn: question.en, questionFr: question.fr };
+    }),
+    skipDuplicates: true,
+  });
 }
 
 //Can be removed once we know that the migration is completed
@@ -208,6 +218,7 @@ async function main(environment: string) {
       createTemplates(environment),
       createPrivileges(environment),
       createSettings(environment),
+      createSecurityQuestions(),
     ]);
 
     if (environment === "test") {

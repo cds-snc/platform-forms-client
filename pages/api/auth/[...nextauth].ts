@@ -4,6 +4,7 @@ import {
   Validate2FAVerificationCodeResultStatus,
   begin2FAAuthentication,
   initiateSignIn,
+  retrieveUserSecurityQuestions,
   validate2FAVerificationCode,
 } from "@lib/auth/";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
@@ -152,7 +153,6 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }) {
       // Add info like 'role' to session object
-
       session.user = {
         id: token.userId,
         lastLoginTime: token.lastLoginTime,
@@ -165,6 +165,7 @@ export const authOptions: NextAuthOptions = {
         ...(token.newlyRegistered && { newlyRegistered: token.newlyRegistered }),
         // Used client side to immidiately log out a user if they have been deactivated
         ...(token.deactivated && { deactivated: token.deactivated }),
+        securityQuestions: await retrieveUserSecurityQuestions({ userId: token.userId as string }),
       };
 
       return session;
