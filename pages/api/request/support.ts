@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { cors, middleware, csrfProtected } from "@lib/middleware";
-import { NotifyClient } from "notifications-node-client";
+import { getNotifyInstance } from "@lib/integration/notifyConnector";
 import { logMessage } from "@lib/logger";
 
 // Allows an authenticated or unauthenticated user to send an email requesting help
@@ -74,10 +74,7 @@ ${description}
 
   try {
     const templateID = process.env.TEMPLATE_ID;
-    const notifyClient = new NotifyClient(
-      "https://api.notification.canada.ca",
-      process.env.NOTIFY_API_KEY
-    );
+    const notifyClient = getNotifyInstance();
 
     // Here is the documentation for the `sendEmail` function:
     // https://docs.notifications.service.gov.uk/node.html#send-an-email

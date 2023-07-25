@@ -1,4 +1,4 @@
-import { NotifyClient } from "notifications-node-client";
+import { getNotifyInstance } from "./integration/notifyConnector";
 import { logMessage } from "@lib/logger";
 
 export const transferOwnershipEmail = async ({
@@ -19,8 +19,7 @@ export const transferOwnershipEmail = async ({
   try {
     const HOST = process.env.NEXTAUTH_URL;
     const TEMPLATE_ID = process.env.TEMPLATE_ID;
-    const NOTIFY_API_KEY = process.env.NOTIFY_API_KEY;
-    const notify = new NotifyClient("https://api.notification.canada.ca", NOTIFY_API_KEY);
+    const notify = getNotifyInstance();
 
     const formUrlEn = `${HOST}/en/form-builder/responses/${formId}`;
     const formUrlFr = `${HOST}/fr/form-builder/responses/${formId}`;
@@ -82,8 +81,7 @@ export const addOwnershipEmail = async ({
   try {
     const HOST = process.env.NEXTAUTH_URL;
     const TEMPLATE_ID = process.env.TEMPLATE_ID;
-    const NOTIFY_API_KEY = process.env.NOTIFY_API_KEY;
-    const notify = new NotifyClient("https://api.notification.canada.ca", NOTIFY_API_KEY);
+    const notify = getNotifyInstance();
 
     const formUrlEn = `${HOST}/en/form-builder/responses/${formId}`;
     const formUrlFr = `${HOST}/fr/form-builder/responses/${formId}`;
