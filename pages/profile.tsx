@@ -14,7 +14,7 @@ import { EditSecurityQuestionModal } from "@components/admin/Profile/EditSecurit
 interface ProfileProps {
   email: string;
   publishingStatus: boolean;
-  userQuestions: { text: string }[];
+  userQuestions: Question[];
 }
 
 export interface Question {
