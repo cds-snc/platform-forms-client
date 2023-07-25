@@ -1,16 +1,20 @@
-import React, { useState } from "react";
-import { Formik, Field } from "formik";
-import { TextInput, Label, Alert } from "@components/forms";
+import React, { useRef, useState } from "react";
+import { Label } from "@components/forms";
 import { Button } from "@components/globals";
 import { useTranslation } from "next-i18next";
-import * as Yup from "yup";
-import { ErrorStatus } from "@components/forms/Alert/Alert";
 import { Dialog, useDialogRef } from "@components/form-builder/app/shared";
+import { logMessage } from "@lib/logger";
+import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
 
-const updateSecurityQuestion = async (id: string, answer: string) => {
+// TODO: Dialog component currently takes actions to control the dialog behavior. Would be nice to
+// be able to wire with a form element to work with onSubmit and button type=submit to get form
+// behaviors like keying enter in an input to submit the form.
+
+const updateSecurityQuestion = async (id: string, answer: string | undefined) => {
   // TOD API Call
-  alert(`submitted id=${id}, answer=${answer}`);
-  return true;
+  alert(`TODO API POST id=${id}, answer=${answer}`);
+
+  // throw an error if any
 };
 
 export const EditSecurityQuestionModal = ({
@@ -26,15 +30,53 @@ export const EditSecurityQuestionModal = ({
 }) => {
   const { t } = useTranslation(["profile"]);
   const dialog = useDialogRef();
+  const questionRef = useRef<HTMLSelectElement>(null);
+  const answerRef = useRef<HTMLInputElement>(null);
+
+  // TODO: if state keeps growing, consider using a reducer or breakup into more components
   const [isFormError, setIsFormError] = useState(false);
   const [isFormWarning, setIsFormWarning] = useState(false);
 
-  const validationSchema = Yup.object().shape({
-    answer: Yup.string()
-      .required(t("input-validation.required", { ns: "common" }))
-      .min(4, t("error.minLength", { ns: "common" }))
-      .max(50, t("error.maxLength", { ns: "common" })), // TODO: may want to ask about a max
-  });
+  // TODO: probably move+related into a separate Field component with children slot for Input/Select..
+  const [isAnswerInputError, setIsAnswerInputError] = useState(false);
+  const isAnswerInputValid = (text: string | undefined): boolean => {
+    if (text && text.length >= 4) {
+      return true;
+    }
+    return false;
+  };
+
+  const reset = () => {
+    setIsFormError(false);
+    setIsFormWarning(false);
+    setIsAnswerInputError(false);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      reset();
+
+      const questionId = questionRef.current?.value;
+      const questionAnswer = answerRef.current?.value;
+
+      if (!questionId) {
+        throw Error("Question Id required for security question API call");
+      }
+
+      if (!isAnswerInputValid(questionAnswer)) {
+        setIsAnswerInputError(true);
+        return;
+      }
+
+      await updateSecurityQuestion(questionId, questionAnswer);
+
+      dialog.current?.close();
+      handleClose();
+    } catch (err) {
+      logMessage.error(err);
+      setIsFormError(true);
+    }
+  };
 
   if (!questionNumber || !questionId || questions?.length <= 0) {
     return (
@@ -45,79 +87,92 @@ export const EditSecurityQuestionModal = ({
   }
 
   return (
-    <Dialog handleClose={handleClose} title={t("editSecurityQuestions")} dialogRef={dialog}>
+    <Dialog
+      handleClose={handleClose}
+      title={t("editSecurityQuestions")}
+      dialogRef={dialog}
+      actions={
+        <Button theme="primary" type="submit" onClick={handleSubmit}>
+          {t("todo save")}
+        </Button>
+      }
+    >
       <>
-        <Formik
-          initialValues={{ question: "", answer: "" }}
-          onSubmit={async (values, { setSubmitting }) => {
-            const data = {
-              id: values.question,
-              answer: values.answer,
-            };
+        {isFormError && (
+          <Attention type={AttentionTypes.ERROR} isAlert={true} heading={t("todo heading")}>
+            <p className="text-sm text-[#26374a]">{t("todo content")}</p>
+          </Attention>
+        )}
+        {isFormWarning && (
+          <Attention type={AttentionTypes.WARNING} isAlert={true} isIcon={false} classes="mb-6">
+            <p className="text-sm text-[#26374a] font-bold">{t("todo title?")}</p>
+            <p className="text-sm text-[#26374a]">{t("todo content")}</p>
+          </Attention>
+        )}
 
-            // TODO think about error handling
-            await updateSecurityQuestion(data.id, data.answer);
+        <p>todo</p>
+        <ul className="mb-6">
+          <li>todo</li>
+          <li>todo</li>
+        </ul>
 
-            setSubmitting(false);
-          }}
-          validateOnChange={false}
-          validateOnBlur={false}
-          validationSchema={validationSchema}
-        >
-          {({ handleSubmit, errors }) => (
-            <>
-              {isFormError && (
-                <Alert
-                  type={ErrorStatus.ERROR}
-                  heading={"todo"}
-                  onDismiss={() => setIsFormError(false)}
-                  focussable={true}
-                  id="formError"
-                >
-                  TODO
-                </Alert>
-              )}
-              <p>todo</p>
-              <ul>
-                <li>todo</li>
-                <li>todo</li>
-              </ul>
-              <form id="editSecurityQuestion" method="POST" onSubmit={handleSubmit} noValidate>
-                <div className="focus-group">
-                  <Label id="questionLabel" htmlFor="question" className="required" required>
-                    {t("TODO question")} {questionNumber}
-                  </Label>
-                  <Field as="select" name="question" className="" id="questionLabel">
-                    {questions.map((q) => {
-                      const isSelected = questionId === q.id;
-                      return (
-                        <option key={q.id} value={q.id} {...(isSelected && { defaultValue: true })}>
-                          {q.text}
-                        </option>
-                      );
-                    })}
-                  </Field>
-                </div>
+        <div className="mb-10">
+          <Label id="questionLabel" htmlFor="question" className="required" required>
+            {t("TODO question")} {questionNumber}
+          </Label>
+          <select
+            name="question"
+            id="questionLabel"
+            className="gc-dropdown w-full rounded mb-0"
+            defaultValue={questionId}
+            ref={questionRef}
+          >
+            {questions.map((q) => (
+              <option key={q.id} value={q.id}>
+                {q.text}
+              </option>
+            ))}
+          </select>
+        </div>
 
-                <div className="focus-group">
-                  <Label id="answerLabel" htmlFor="answer" className="required" required>
-                    {t("TODO answer")} {questionNumber}
-                  </Label>
-                  <TextInput
-                    className="h-10 w-full max-w-lg rounded"
-                    id="answer"
-                    name="answer"
-                    type="text"
-                  />
-                </div>
-
-                <Button theme="primary" type="submit">
-                  {t("save")}
-                </Button>
-              </form>
-            </>
+        <div className="mb-10">
+          <Label
+            id="answerLabel"
+            htmlFor="answer"
+            className={`required ${isAnswerInputError ? "text-red" : ""}`}
+            required
+          >
+            {t("TODO answer")} {questionNumber}
+          </Label>
+          {isAnswerInputError && (
+            <Attention
+              type={AttentionTypes.ERROR}
+              isAlert={true}
+              isIcon={false}
+              isSmall={true}
+              isLeftBorder={true}
+              // heading={t("todo heading")}
+            >
+              <p className="text-sm text-[#26374a] font-bold">{t("todo content")}</p>
+            </Attention>
           )}
-        </Formik>
+          <input
+            className={`gc-input-text w-full rounded ${isAnswerInputError ? "border-red" : ""}`}
+            id="answer"
+            name="answer"
+            type="text"
+            ref={answerRef}
+            onBlur={() => {
+              if (!isAnswerInputValid(answerRef.current?.value)) {
+                setIsAnswerInputError(true);
+                return;
+              }
+
+              setIsAnswerInputError(false);
+              setIsFormWarning(true);
+            }}
+          />
+        </div>
       </>
     </Dialog>
   );

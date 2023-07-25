@@ -50,14 +50,10 @@ const Questions = ({ questions = [] }: { questions: { id: string; text: string }
                 </h3>
                 <Button
                   onClick={() => {
-                    // alert(`open modal for question ${index + 1}`);
                     editQuestionNumber.current = index + 1;
                     editQuestionId.current = question.id;
 
-                    // TODO:
-                    // -update `editQuestionsList` with filtered out already used security questions
-                    // -modal uses `editQuestionsList` then one less error/thing for the user to worry about
-
+                    // TODO: uses a list that filters out already used questions to simplify
                     setShowEditSecurityQuestionModal(true);
                   }}
                   theme="link"
