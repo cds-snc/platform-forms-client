@@ -38,7 +38,7 @@ export const EditSecurityQuestionModal = ({
   const [isFormError, setIsFormError] = useState(false);
   const [isFormWarning, setIsFormWarning] = useState(false);
 
-  // TODO: probably move+related into a new fancy reusalbe Field component with children slot for Input/Select..
+  // TODO: probably move+related into a new fancy reusable Field component with children slot for Input/Select..
   const [isAnswerInputError, setIsAnswerInputError] = useState(false);
   const isAnswerInputValid = (text: string | undefined): boolean => {
     if (text && text.length >= 4) {
