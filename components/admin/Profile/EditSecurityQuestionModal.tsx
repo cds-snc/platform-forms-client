@@ -5,6 +5,7 @@ import { useTranslation } from "next-i18next";
 import { Dialog, useDialogRef } from "@components/form-builder/app/shared";
 import { logMessage } from "@lib/logger";
 import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
+import { Question } from "pages/profile";
 
 // TODO: Dialog component currently takes actions to control the dialog behavior. Would be nice to
 // be able to wire with a form element to work with onSubmit and button type=submit to get form
@@ -25,7 +26,7 @@ export const EditSecurityQuestionModal = ({
 }: {
   questionNumber: number;
   questionId: string;
-  questions: any; // TODO
+  questions: Question[];
   handleClose: () => void;
 }) => {
   const { t } = useTranslation(["profile"]);
@@ -37,7 +38,7 @@ export const EditSecurityQuestionModal = ({
   const [isFormError, setIsFormError] = useState(false);
   const [isFormWarning, setIsFormWarning] = useState(false);
 
-  // TODO: probably move+related into a separate Field component with children slot for Input/Select..
+  // TODO: probably move+related into a new fancy reusalbe Field component with children slot for Input/Select..
   const [isAnswerInputError, setIsAnswerInputError] = useState(false);
   const isAnswerInputValid = (text: string | undefined): boolean => {
     if (text && text.length >= 4) {
@@ -78,6 +79,7 @@ export const EditSecurityQuestionModal = ({
     }
   };
 
+  // TODO: ask design about content for a Dialog fail error
   if (!questionNumber || !questionId || questions?.length <= 0) {
     return (
       <Dialog title={t("errorTodo")} dialogRef={dialog}>
@@ -89,36 +91,48 @@ export const EditSecurityQuestionModal = ({
   return (
     <Dialog
       handleClose={handleClose}
-      title={t("editSecurityQuestions")}
+      title={t("securityQuestionModal.title")}
       dialogRef={dialog}
       actions={
         <Button theme="primary" type="submit" onClick={handleSubmit}>
-          {t("todo save")}
+          {t("securityQuestionModal.save")}
         </Button>
       }
     >
       <>
+        {/* TODO: probably will not need the error since it can be removed programmatically */}
         {isFormError && (
-          <Attention type={AttentionTypes.ERROR} isAlert={true} heading={t("todo heading")}>
-            <p className="text-sm text-[#26374a]">{t("todo content")}</p>
-          </Attention>
-        )}
-        {isFormWarning && (
-          <Attention type={AttentionTypes.WARNING} isAlert={true} isIcon={false} classes="mb-6">
-            <p className="text-sm text-[#26374a] font-bold">{t("todo title?")}</p>
-            <p className="text-sm text-[#26374a]">{t("todo content")}</p>
+          <Attention
+            type={AttentionTypes.ERROR}
+            isAlert={true}
+            heading={t("securityQuestionModal.errors.formError.title")}
+          >
+            <p className="text-sm text-[#26374a]">
+              {t("securityQuestionModal.errors.formError.content")}
+            </p>
           </Attention>
         )}
 
-        <p>todo</p>
+        {isFormWarning && (
+          <Attention type={AttentionTypes.WARNING} isAlert={true} isIcon={false} classes="mb-6">
+            <p className="text-sm text-[#26374a] font-bold">
+              {t("securityQuestionModal.errors.clickSave.title")}
+            </p>
+            <p className="text-sm text-[#26374a]">
+              {t("securityQuestionModal.errors.clickSave.content")}
+            </p>
+          </Attention>
+        )}
+
+        <p>{t("securityQuestionModal.requirmentsList.title")}</p>
         <ul className="mb-6">
-          <li>todo</li>
-          <li>todo</li>
+          <li>{t("securityQuestionModal.requirmentsList.requirement1")}</li>
+          <li>{t("securityQuestionModal.requirmentsList.requirement2")}</li>
         </ul>
 
         <div className="mb-10">
           <Label id="questionLabel" htmlFor="question" className="required" required>
-            {t("TODO question")} {questionNumber}
+            {t("securityQuestionModal.questionLabel")} {questionNumber}
           </Label>
           <select
             name="question"
@@ -127,7 +141,7 @@ export const EditSecurityQuestionModal = ({
             defaultValue={questionId}
             ref={questionRef}
           >
-            {questions.map((q) => (
+            {questions.map((q: Question) => (
               <option key={q.id} value={q.id}>
                 {q.text}
               </option>
@@ -142,7 +156,7 @@ export const EditSecurityQuestionModal = ({
             className={`required ${isAnswerInputError ? "text-red" : ""}`}
             required
           >
-            {t("TODO answer")} {questionNumber}
+            {t("securityQuestionModal.answerLabel")} {questionNumber}
           </Label>
           {isAnswerInputError && (
             <Attention
@@ -151,9 +165,10 @@ export const EditSecurityQuestionModal = ({
               isIcon={false}
               isSmall={true}
               isLeftBorder={true}
-              // heading={t("todo heading")}
             >
-              <p className="text-sm text-[#26374a] font-bold">{t("todo content")}</p>
+              <p className="text-sm text-[#26374a] font-bold">
+                {t("securityQuestionModal.errors.invalidInput")}
+              </p>
             </Attention>
           )}
           <input

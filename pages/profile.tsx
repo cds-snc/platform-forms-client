@@ -17,6 +17,11 @@ interface ProfileProps {
   userQuestions: { text: string }[];
 }
 
+export interface Question {
+  id: string;
+  text: string;
+}
+
 const Icon = ({ checked }: { checked: boolean }) => {
   return checked ? (
     <CircleCheckIcon className="mr-2 inline-block w-9 fill-green-700" />
@@ -25,7 +30,7 @@ const Icon = ({ checked }: { checked: boolean }) => {
   );
 };
 
-const Questions = ({ questions = [] }: { questions: { id: string; text: string }[] }) => {
+const Questions = ({ questions = [] }: { questions: Question[] }) => {
   const { t } = useTranslation(["profile"]);
   const [showEditSecurityQuestionModal, setShowEditSecurityQuestionModal] = useState(false);
 
