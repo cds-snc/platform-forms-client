@@ -11,5 +11,27 @@
     "title": "Security questions",
     "question": "Question",
     "edit": "Edit"
+  },
+  "securityQuestionModal": {
+    "title": "Edit security questions",
+    "questionLabel": "Question",
+    "answerLabel": "Answer",
+    "requirmentsList": {
+      "title": "Your answer should be hard for others to guess:",
+      "requirement1": "At least 4 characters",
+      "requirement2": "No personal identifying information"
+    },
+    "save": "Save",
+    "errors": {
+      "formError": {
+        "title": "Select a different question",
+        "content": "You must answer 3 different security questions."
+      },
+      "clickSave": {
+        "title": "The security question has been changed",
+        "content": "Would you like to save your changes?"
+      },
+      "invalidInput": "Must be at least 4 characters."
+    }
   }
 }
