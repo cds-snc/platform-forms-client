@@ -14,17 +14,23 @@ export const Title = ({
   children: string;
   level?: "h2" | "h3" | "h4";
 }) => {
+  if (typeof children !== "string") {
+    return <>{children}</>;
+  }
   const Wrapper = `${level}` as keyof JSX.IntrinsicElements;
 
   return <Wrapper>{children}</Wrapper>;
 };
 
-export const Body = ({ children }: { children: string }) => {
-  return <p>{children}</p>;
+export const Body = ({ children }: { children: JSX.Element | string }) => {
+  return <>{children}</>;
 };
 
 export const Icon = ({ children }: { children: JSX.Element }) => {
-  return <>{children}</>;
+  if (children.type.name === "Icon") {
+    return <>{children}</>;
+  }
+  return <div className="mr-1">{children}</div>;
 };
 
 const classes = {
@@ -57,8 +63,8 @@ type AlertProps = {
 };
 
 const AlertContainer = ({ children, title, body, classNames, type }: AlertProps) => {
-  let alertTitle: JSX.Element | string | undefined = title ? <h2>{title}</h2> : "";
-  let alertBody: JSX.Element | string | undefined = <p>{body}</p>;
+  let alertTitle: JSX.Element | string | undefined = title;
+  let alertBody: JSX.Element | string | undefined = body;
   let alertIcon;
   const content: JSX.Element[] = [];
 
@@ -82,11 +88,15 @@ const AlertContainer = ({ children, title, body, classNames, type }: AlertProps)
 
   return (
     <div className={`relative flex rounded-lg p-4 ${classNames}`} data-testid="alert" role="alert">
-      {alertIcon && <div className="mr-4 ">{alertIcon}</div>}
+      {alertIcon && <Icon>{alertIcon}</Icon>}
       <div className={`${alertIcon && "mt-2"}`}>
-        {alertTitle && <>{alertTitle}</>}
-        {alertBody && <>{alertBody}</>}
-        {content}
+        {alertTitle && <Title>{alertTitle}</Title>}
+        <Body>
+          <>
+            {alertBody && <>{alertBody}</>}
+            {content}
+          </>
+        </Body>
       </div>
     </div>
   );
