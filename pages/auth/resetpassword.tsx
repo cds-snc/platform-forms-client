@@ -9,7 +9,6 @@ import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import { checkOne } from "@lib/cache/flags";
 import Link from "next/link";
 import Head from "next/head";
-import { ErrorPanel } from "@components/globals";
 import Loader from "@components/globals/Loader";
 import * as Yup from "yup";
 import {
@@ -186,16 +185,19 @@ const Step2 = ({
       setUserQuestions(questionsJson);
     } catch (error) {
       setError(true);
-      console.error("Error fetching user questions:", error);
     }
   };
 
   useEffect(() => {
     getUserQuestions();
-  }, [username]);
+  }, [username, getUserQuestions]);
 
   if (error) {
-    return <ErrorPanel />;
+    return (
+      <Alert type={ErrorStatus.ERROR} heading={t("errorPanel.defaultTitle")} id="apiErrors">
+        {t("errorPanel.defaultMessage")}
+      </Alert>
+    );
   }
 
   // validation schema for the initial form to send the forgot password verification code
