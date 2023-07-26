@@ -1,3 +1,4 @@
+import { CircleCheckIcon, InfoIcon, WarningIcon } from "@components/form-builder/icons";
 import React, { ReactNode } from "react";
 
 export enum ErrorStatus {
@@ -54,18 +55,26 @@ const classes = {
   },
 };
 
+const defaultIcons = {
+  [ErrorStatus.SUCCESS]: <CircleCheckIcon />,
+  [ErrorStatus.WARNING]: <WarningIcon />,
+  [ErrorStatus.ERROR]: <WarningIcon />,
+  [ErrorStatus.INFO]: <InfoIcon />,
+};
+
 type AlertProps = {
   children?: ReactNode | string;
   title?: string;
   body?: string;
+  icon?: JSX.Element | false | undefined;
   classNames?: string;
   type?: ErrorStatus;
 };
 
-const AlertContainer = ({ children, title, body, classNames, type }: AlertProps) => {
+const AlertContainer = ({ children, title, body, icon, classNames, type }: AlertProps) => {
   let alertTitle: JSX.Element | string | undefined = title;
   let alertBody: JSX.Element | string | undefined = body;
-  let alertIcon;
+  let alertIcon: JSX.Element | false | undefined = type ? defaultIcons[type] : icon;
   const content: JSX.Element[] = [];
 
   // Children components for title and body override props
