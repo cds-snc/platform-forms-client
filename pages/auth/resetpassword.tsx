@@ -1,4 +1,4 @@
-import React, { ReactElement, useState, MutableRefObject } from "react";
+import React, { useState, MutableRefObject, useEffect } from "react";
 import { Formik, FormikHelpers } from "formik";
 import { TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
 import { Button, LinkButton } from "@components/globals";
@@ -9,6 +9,8 @@ import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import { checkOne } from "@lib/cache/flags";
 import Link from "next/link";
 import Head from "next/head";
+import { ErrorPanel } from "@components/globals";
+import Loader from "@components/globals/Loader";
 import * as Yup from "yup";
 import {
   containsLowerCaseCharacter,
@@ -20,6 +22,13 @@ import {
 import { ErrorStatus } from "@components/forms/Alert/Alert";
 import { useResetPassword } from "@lib/hooks/auth";
 import { AuthErrorsState } from "@lib/hooks/auth/useAuthErrors";
+
+type Question = {
+  deprecated: boolean;
+  id: string;
+  questionEn: string;
+  questionFr: string;
+};
 
 const Step1 = ({
   username,
@@ -135,31 +144,59 @@ const Step1 = ({
 // Security questions form
 const Step2 = ({
   username,
-  userQuestions,
   confirmSecurityQuestions,
   authErrorsState,
   authErrorsReset,
 }: {
   username: MutableRefObject<string>;
-  userQuestions: { text: string }[];
   confirmSecurityQuestions: (
     values: {
       username: string;
       question1: string;
       question2: string;
       question3: string;
+      qIds: string;
     },
     helpers: FormikHelpers<{
       username: string;
       question1: string;
       question2: string;
       question3: string;
+      qIds: string;
     }>
   ) => Promise<void>;
   authErrorsState: AuthErrorsState;
   authErrorsReset: () => void;
 }) => {
-  const { t } = useTranslation(["reset-password", "common"]);
+  const { t, i18n } = useTranslation(["reset-password", "common"]);
+  const [userQuestions, setUserQuestions] = useState<Question[]>([]);
+  const [error, setError] = useState(false);
+  const langKey = i18n.language === "en" ? "questionEn" : "questionFr";
+
+  const getUserQuestions = async () => {
+    try {
+      const questions = await fetch(`/api/auth/security-questions?email=${username.current}}`);
+
+      if (!questions.ok || questions.status !== 200) {
+        setError(true);
+        return;
+      }
+
+      const questionsJson = await questions.json();
+      setUserQuestions(questionsJson);
+    } catch (error) {
+      setError(true);
+      console.error("Error fetching user questions:", error);
+    }
+  };
+
+  useEffect(() => {
+    getUserQuestions();
+  }, [username]);
+
+  if (error) {
+    return <ErrorPanel />;
+  }
 
   // validation schema for the initial form to send the forgot password verification code
   const confirmSecurityQuestionsValidationSchema = Yup.object().shape({
@@ -174,17 +211,32 @@ const Step2 = ({
       .min(4, t("securityQuestions.inputValidation.questionLength")),
   });
 
+  if (!userQuestions || userQuestions.length < 3) {
+    return (
+      <>
+        <Head>
+          <title>{t("resetPassword.title")}</title>
+        </Head>
+        <h1 className="border-b-0 mt-6 mb-12">{t("securityQuestions.title")}</h1>
+        <p className="mb-6 max-w-lg">{t("securityQuestions.description")}</p>
+        <Loader message={t("loading", { ns: "reset-password" })} />
+      </>
+    );
+  }
+
   return (
     <>
       <Head>
         <title>{t("resetPassword.title")}</title>
       </Head>
+
       <Formik
         initialValues={{
           username: username.current,
           question1: "",
           question2: "",
           question3: "",
+          qIds: `${userQuestions[0]?.id}, ${userQuestions[1]?.id}, ${userQuestions[2]?.id}`,
         }}
         onSubmit={confirmSecurityQuestions}
         validationSchema={confirmSecurityQuestionsValidationSchema}
@@ -251,7 +303,7 @@ const Step2 = ({
                   className="required w-full max-w-lg"
                   required
                 >
-                  {userQuestions[0].text}
+                  {userQuestions[0][langKey]}
                 </Label>
                 <TextInput
                   className="h-10 w-[75%] rounded"
@@ -269,7 +321,7 @@ const Step2 = ({
                   className="required w-full max-w-lg"
                   required
                 >
-                  {userQuestions[1].text}
+                  {userQuestions[1][langKey]}
                 </Label>
                 <TextInput
                   className="h-10 w-[75%] rounded"
@@ -287,7 +339,7 @@ const Step2 = ({
                   className="required w-full max-w-lg"
                   required
                 >
-                  {userQuestions[2].text}
+                  {userQuestions[2][langKey]}
                 </Label>
                 <TextInput
                   className="h-10 w-[75%] rounded"
@@ -488,11 +540,7 @@ const Step3 = ({
   );
 };
 
-interface ResetPasswordProps {
-  userQuestions: { text: string }[];
-}
-
-const ResetPassword = ({ userQuestions }: ResetPasswordProps) => {
+const ResetPassword = () => {
   // we don't put this state in useAuth since its very unique to this page only
   const [initialCodeSent, setInitialCodeSent] = useState(false);
   const [securityQuestions, setSecurityQuestions] = useState(false);
@@ -528,7 +576,6 @@ const ResetPassword = ({ userQuestions }: ResetPasswordProps) => {
     return (
       <Step2
         username={username}
-        userQuestions={userQuestions}
         authErrorsState={authErrorsState}
         authErrorsReset={authErrorsReset}
         confirmSecurityQuestions={confirmSecurityQuestions}
@@ -547,10 +594,10 @@ const ResetPassword = ({ userQuestions }: ResetPasswordProps) => {
   );
 };
 
-ResetPassword.getLayout = (page: ReactElement) => {
+ResetPassword.getLayout = () => {
   return (
     <UserNavLayout>
-      <ResetPassword userQuestions={page.props.userQuestions} />
+      <ResetPassword />
     </UserNavLayout>
   );
 };
@@ -567,16 +614,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
-  // @todo pull from API
-  const userQuestions = [
-    { text: "Placeholder what was your favourite school subject?" },
-    { text: "Placeholder what was the name of your first manager?" },
-    { text: "Placeholder what was the make of your first car?" },
-  ];
-
   return {
     props: {
-      userQuestions,
       ...(context.locale &&
         (await serverSideTranslations(context.locale, [
           "common",
