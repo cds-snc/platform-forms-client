@@ -64,7 +64,7 @@ export function requireAuthentication(
       }
 
       if (
-        !session.user.securityQuestions &&
+        !session.user.securityQuestions.length &&
         !context.resolvedUrl?.startsWith("/auth/setup-security-questions")
       ) {
         // check if user has setup security questions setup
