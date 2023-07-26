@@ -8,21 +8,11 @@ import {
   SecurityAnswersNotFound,
   SecurityQuestionNotFound,
   createSecurityAnswers,
-  retrieveUserSecurityQuestions,
   updateSecurityAnswer,
 } from "@lib/auth";
 import securityQuestionsWithAssociatedAnswersSchema from "@lib/middleware/schemas/security-questions-with-associated-answers.schema.json";
 import { MiddlewareProps, WithRequired } from "@lib/types";
 import { createAbility } from "@lib/privileges";
-
-async function returnUserSecurityQuestions(userId: string, res: NextApiResponse): Promise<void> {
-  try {
-    const securityQuestions = await retrieveUserSecurityQuestions({ userId });
-    return res.status(200).json(securityQuestions);
-  } catch (error) {
-    return res.status(500).json({ error: "Failed to retrieve user security questions" });
-  }
-}
 
 async function saveUserSecurityAnswers(
   userId: string,
@@ -100,10 +90,6 @@ const apiHandler = async (req: NextApiRequest, res: NextApiResponse, props: Midd
     const ability = createAbility(session);
 
     switch (req.method) {
-      case "GET": {
-        await returnUserSecurityQuestions(ability.userID, res);
-        break;
-      }
       case "POST": {
         await saveUserSecurityAnswers(ability.userID, req, res);
         break;
@@ -123,12 +109,12 @@ const apiHandler = async (req: NextApiRequest, res: NextApiResponse, props: Midd
 
 export default middleware(
   [
-    cors({ allowedMethods: ["GET", "POST", "PUT"] }),
+    cors({ allowedMethods: ["POST", "PUT"] }),
     csrfProtected(["POST", "PUT"]),
     sessionExists(),
     jsonValidator(securityQuestionsWithAssociatedAnswersSchema, {
       jsonKey: "questionsWithAssociatedAnswers",
-      noValidateMethods: ["GET", "PUT"],
+      noValidateMethods: ["PUT"],
     }),
   ],
   apiHandler
