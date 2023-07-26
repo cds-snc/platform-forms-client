@@ -77,6 +77,9 @@ const AlertContainer = ({ children, title, body, icon, classNames, type }: Alert
   let alertIcon: JSX.Element | false | undefined = type ? defaultIcons[type] : icon;
   const content: JSX.Element[] = [];
 
+  // @TODO: handle icon=false
+  // @TODO: move icon clone/add classes to Icon component
+
   // Children components for title and body override props
   React.Children.map(children, (child) => {
     if (!React.isValidElement(child)) return;

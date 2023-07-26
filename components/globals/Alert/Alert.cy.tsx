@@ -13,7 +13,7 @@ describe("<Alert />", () => {
     cy.mount(<Alert.Info body="This is a body" />);
   });
 
-  it("Renders a complex with default Icon", () => {
+  it("Renders an alert with default Icon", () => {
     cy.viewport(1000, 400);
     cy.mount(
       <>
