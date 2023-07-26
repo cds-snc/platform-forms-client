@@ -79,6 +79,9 @@ const AlertContainer = ({ children, title, body, icon, classNames, type }: Alert
 
   // @TODO: handle icon=false
   // @TODO: move icon clone/add classes to Icon component
+  // @TODO: handle dismissable alerts
+  // @TODO: handle arbitrary props (...props)
+  // @TODO: handle focusable alerts
 
   // Children components for title and body override props
   React.Children.map(children, (child) => {
