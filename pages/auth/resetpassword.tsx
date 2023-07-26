@@ -175,7 +175,7 @@ const Step2 = ({
 
   const getUserQuestions = async () => {
     try {
-      const questions = await fetch(`/api/auth/security-questions?email=${username.current}}`);
+      const questions = await fetch(`/api/auth/security-questions?email=${username.current}`);
 
       if (!questions.ok || questions.status !== 200) {
         setError(true);
