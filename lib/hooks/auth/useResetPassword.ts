@@ -91,23 +91,45 @@ export const useResetPassword = ({
       question1,
       question2,
       question3,
+      qIds,
     }: {
       username: string;
       question1: string;
       question2: string;
       question3: string;
+      qIds: string;
     },
     {
       setSubmitting,
-    }: FormikHelpers<{ username: string; question1: string; question2: string; question3: string }>
+    }: FormikHelpers<{
+      username: string;
+      question1: string;
+      question2: string;
+      question3: string;
+      qIds: string;
+    }>
   ) => {
+    const [q1Id, q2Id, q3Id] = qIds.split(",");
+
     try {
-      await fetchWithCsrfToken("/api/account/securityquestions", {
-        username,
-        question1,
-        question2,
-        question3,
+      await fetchWithCsrfToken("/api/auth/security-questions/verify-answers/ ", {
+        email: username,
+        questionsWithAssociatedAnswers: [
+          {
+            questionId: q1Id,
+            answer: question1,
+          },
+          {
+            questionId: q2Id,
+            answer: question2,
+          },
+          {
+            questionId: q3Id,
+            answer: question3,
+          },
+        ],
       });
+
       if (onConfirmSecurityQuestions) onConfirmSecurityQuestions();
     } catch (err) {
       if ((hasError("IncorrectSecurityAnswerException"), err)) {
