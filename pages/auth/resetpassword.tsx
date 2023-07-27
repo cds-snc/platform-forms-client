@@ -190,7 +190,7 @@ const Step2 = ({
 
   useEffect(() => {
     getUserQuestions();
-  }, [username, getUserQuestions]);
+  }, [getUserQuestions]);
 
   if (error) {
     return (
