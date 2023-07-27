@@ -4,7 +4,7 @@ import { useTranslation } from "next-i18next";
 import Head from "next/head";
 
 import { NextPageWithLayout } from "@pages/_app";
-import { requireAuthentication } from "@lib/auth";
+import { requireAuthentication, retrievePoolOfSecurityQuestions } from "@lib/auth";
 import { checkPrivileges, checkPrivilegesAsBoolean } from "@lib/privileges";
 import { Template } from "@components/form-builder/app";
 import { Button } from "@components/globals";
@@ -12,11 +12,13 @@ import { CancelIcon, CircleCheckIcon } from "@components/form-builder/icons";
 import { EditSecurityQuestionModal } from "@components/admin/Profile/EditSecurityQuestionModal";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
+import axios from "axios";
 
 interface ProfileProps {
   email: string;
   publishingStatus: boolean;
   userQuestions: Question[];
+  allQuestions: Question[];
 }
 
 export interface Question {
@@ -33,7 +35,13 @@ const Icon = ({ checked }: { checked: boolean }) => {
   );
 };
 
-const Questions = ({ questions = [] }: { questions: Question[] }) => {
+const Questions = ({
+  questions = [],
+  allQuestions = [],
+}: {
+  questions: Question[];
+  allQuestions: Question[];
+}) => {
   const { t } = useTranslation(["profile"]);
   const [showEditSecurityQuestionModal, setShowEditSecurityQuestionModal] = useState(false);
 
@@ -80,7 +88,7 @@ const Questions = ({ questions = [] }: { questions: Question[] }) => {
         <EditSecurityQuestionModal
           questionNumber={editQuestionNumber.current}
           questionId={editQuestionId.current}
-          questions={questions}
+          questions={allQuestions}
           handleClose={async () => {
             setShowEditSecurityQuestionModal(false);
           }}
@@ -94,6 +102,7 @@ const Profile: NextPageWithLayout<ProfileProps> = ({
   email,
   publishingStatus,
   userQuestions = [],
+  allQuestions = [],
 }: ProfileProps) => {
   const { t } = useTranslation(["profile"]);
 
@@ -123,7 +132,7 @@ const Profile: NextPageWithLayout<ProfileProps> = ({
               </div>
               <div className="w-full rounded-lg border p-4 laptop:w-1/2">
                 <h2 className="mb-6 pb-0 text-2xl">{t("securityPanel.title")}</h2>
-                <Questions questions={userQuestions} />
+                <Questions questions={userQuestions} allQuestions={allQuestions} />
               </div>
             </div>
           </main>
@@ -147,16 +156,21 @@ export const getServerSideProps = requireAuthentication(
       ]);
 
       const session = await getServerSession(req, res, authOptions);
-      // console.log("session", session?.user.securityQuestions);
-
-      // @todo pull from API
       const userQuestions = session?.user.securityQuestions;
+      const allQuestions = await retrievePoolOfSecurityQuestions();
+      // const response = await axios({
+      //   method: "get",
+      //   url: "/api/security-questions",
+      // });
+      // console.log(response.data);
+      // console.log("AllQuestions", allQuestions);
 
       return {
         props: {
           email,
           publishingStatus,
           userQuestions,
+          allQuestions,
           ...(locale && (await serverSideTranslations(locale, ["profile", "common"]))),
         },
       };

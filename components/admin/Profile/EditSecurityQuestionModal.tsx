@@ -6,16 +6,36 @@ import { Dialog, useDialogRef } from "@components/form-builder/app/shared";
 import { logMessage } from "@lib/logger";
 import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
 import { Question } from "pages/profile";
+import axios from "axios";
+import { getCsrfToken } from "next-auth/react";
 
 // TODO: Dialog component currently takes actions to control the dialog behavior. Would be nice to
 // be able to wire with a form element to work with onSubmit and button type=submit to get form
 // behaviors like keying enter in an input to submit the form.
 
-const updateSecurityQuestion = async (id: string, answer: string | undefined) => {
-  // TOD API Call
-  alert(`TODO API POST id=${id}, answer=${answer}`);
+const updateSecurityQuestion = async (
+  oldQuestionId: string,
+  newQuestionId: string,
+  answer: string | undefined
+) => {
+  const csrfToken = await getCsrfToken();
 
-  // throw an error if any
+  if (csrfToken) {
+    await axios.put(
+      "/api/account/security-questions",
+      {
+        oldQuestionId: oldQuestionId,
+        newQuestionId: newQuestionId,
+        newAnswer: answer,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": csrfToken,
+        },
+      }
+    );
+  }
 };
 
 export const EditSecurityQuestionModal = ({
@@ -33,6 +53,7 @@ export const EditSecurityQuestionModal = ({
   const dialog = useDialogRef();
   const questionRef = useRef<HTMLSelectElement>(null);
   const answerRef = useRef<HTMLInputElement>(null);
+  const originalQuestionId = questionId;
 
   // TODO: if state keeps growing, consider using a reducer or breakup into more components
   const [isFormError, setIsFormError] = useState(false);
@@ -69,7 +90,7 @@ export const EditSecurityQuestionModal = ({
         return;
       }
 
-      await updateSecurityQuestion(questionId, questionAnswer);
+      await updateSecurityQuestion(originalQuestionId, questionId, questionAnswer);
 
       dialog.current?.close();
       handleClose();
@@ -115,7 +136,7 @@ export const EditSecurityQuestionModal = ({
 
         {isFormWarning && (
           <Attention type={AttentionTypes.WARNING} isAlert={true} isIcon={false} classes="mb-6">
-            <p className="text-sm text-[#26374a] font-bold">
+            <p className="text-sm font-bold text-[#26374a]">
               {t("securityQuestionModal.errors.clickSave.title")}
             </p>
             <p className="text-sm text-[#26374a]">
@@ -137,13 +158,13 @@ export const EditSecurityQuestionModal = ({
           <select
             name="question"
             id="questionLabel"
-            className="gc-dropdown w-full rounded mb-0"
+            className="gc-dropdown mb-0 w-full rounded"
             defaultValue={questionId}
             ref={questionRef}
           >
             {questions.map((q: Question) => (
               <option key={q.id} value={q.id}>
-                {q.text}
+                {q.questionEn}
               </option>
             ))}
           </select>
@@ -166,7 +187,7 @@ export const EditSecurityQuestionModal = ({
               isSmall={true}
               isLeftBorder={true}
             >
-              <p className="text-sm text-[#26374a] font-bold">
+              <p className="text-sm font-bold text-[#26374a]">
                 {t("securityQuestionModal.errors.invalidInput")}
               </p>
             </Attention>
