@@ -8,6 +8,7 @@ import { Attention, AttentionTypes } from "@components/globals/Attention/Attenti
 import { Question } from "pages/profile";
 import axios from "axios";
 import { getCsrfToken } from "next-auth/react";
+import { useRouter } from "next/router";
 
 // TODO: Dialog component currently takes actions to control the dialog behavior. Would be nice to
 // be able to wire with a form element to work with onSubmit and button type=submit to get form
@@ -49,11 +50,12 @@ export const EditSecurityQuestionModal = ({
   questions: Question[];
   handleClose: () => void;
 }) => {
-  const { t } = useTranslation(["profile"]);
+  const { t, i18n } = useTranslation(["profile"]);
   const dialog = useDialogRef();
   const questionRef = useRef<HTMLSelectElement>(null);
   const answerRef = useRef<HTMLInputElement>(null);
   const originalQuestionId = questionId;
+  const router = useRouter();
 
   // TODO: if state keeps growing, consider using a reducer or breakup into more components
   const [isFormError, setIsFormError] = useState(false);
@@ -94,6 +96,9 @@ export const EditSecurityQuestionModal = ({
 
       dialog.current?.close();
       handleClose();
+      router.push({
+        pathname: `${i18n.language}/profile`,
+      });
     } catch (err) {
       logMessage.error(err);
       setIsFormError(true);
