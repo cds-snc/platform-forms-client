@@ -163,7 +163,7 @@ export async function validateSecurityAnswers(
   const answerValidationRequests = command.questionsWithAssociatedAnswers.map(
     async (answerToConfirm) => {
       const expectedAnswer = userSecurityAnswers.find(
-        (e) => e.question.id === answerToConfirm.questionId
+        (e) => e.question.id.trim() === answerToConfirm.questionId.trim()
       );
 
       if (!expectedAnswer) return false;

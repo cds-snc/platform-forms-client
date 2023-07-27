@@ -112,20 +112,20 @@ export const useResetPassword = ({
     const [q1Id, q2Id, q3Id] = qIds.split(",");
 
     try {
-      await fetchWithCsrfToken("/api/auth/security-questions/verify-answers/ ", {
+      await fetchWithCsrfToken("/api/auth/security-questions/verify-answers ", {
         email: username,
         questionsWithAssociatedAnswers: [
           {
             questionId: q1Id,
-            answer: question1,
+            answer: question1.trim(),
           },
           {
             questionId: q2Id,
-            answer: question2,
+            answer: question2.trim(),
           },
           {
             questionId: q3Id,
-            answer: question3,
+            answer: question3.trim(),
           },
         ],
       });
