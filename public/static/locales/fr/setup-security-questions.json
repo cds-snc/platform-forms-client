@@ -13,6 +13,9 @@
   "continue": "Continuer",
   "contact": "Nous contacter",
   "errors": {
+    "serverError": {
+      "title": "An error occurred[FR]"
+    },
     "required": "Required field[FR]",
     "answerLength": "Doit être au moins 4 caractères."
   }

@@ -25,19 +25,29 @@ export interface Answer {
   answer: string;
 }
 
-const updateSecurityQuestions = async (questionsAnswers: Answer[]): Promise<void> => {
+const updateSecurityQuestions = async (questionsAnswers: Answer[]): Promise<string> => {
   try {
-    const data = { questionsWithAssociatedAnswers: [...questionsAnswers] };
-    fetchWithCsrfToken("/api/account/security-questions", data);
-    // TODO Error handling
+    const data = { questionsWithAssociatedAnswersXXX: [...questionsAnswers] };
+    await fetchWithCsrfToken("/api/account/security-questions", data);
+    return "success";
   } catch (err) {
     logMessage.error(err);
+    // TODO may want to add "friendly" text or generalize error? Here are the response errors:
+    /*
+      return res.status(400).json({ error: "Malformed request" });
+      return res.status(400).json({ error: "Security questions have already been set up" });
+      return res.status(400).json({ error: "One or more security question identifiers are invalid" });
+      return res.status(400).json({ error: "All security questions must be different" });
+      return res.status(500).json({ error: "Failed to create user security answers" });
+    */
+    // TODO typing if we stiay with this way of showing an error
+    return err?.response.data.error;
   }
 };
 
 const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) => {
   const { t, i18n } = useTranslation(["setup-security-questions"]);
-  const [isFormError, setIsFormError] = useState(false);
+  const [formError, setFormError] = useState("");
   const supportHref = `/${i18n.language}/form-builder/support`;
 
   const validationSchema = Yup.object().shape({
@@ -65,13 +75,18 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
           answer3: "",
         }}
         onSubmit={async (values, { setSubmitting }) => {
+          setFormError("");
           const data: Answer[] = [
             { questionId: values.question1, answer: values.answer1 },
             { questionId: values.question2, answer: values.answer2 },
             { questionId: values.question3, answer: values.answer3 },
           ];
-          await updateSecurityQuestions(data);
+          const result = await updateSecurityQuestions(data);
+          if (result !== "success") {
+            setFormError(result);
+          }
 
+          // TODO redirect to next step
           setSubmitting(false);
         }}
         validateOnChange={false}
@@ -82,21 +97,14 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
       >
         {({ handleSubmit, errors }) => (
           <>
-            {isFormError && (
+            {formError && (
               <Alert
                 type={ErrorStatus.ERROR}
-                heading={t("errortitle")}
+                heading={t("errors.serverError.title")}
                 id="formError"
                 focussable={true}
               >
-                TODO form error(s)
-                {/* {authErrorsState.description}
-                {authErrorsState.callToActionLink ? (
-                  <Link href={authErrorsState.callToActionLink}>
-                    {authErrorsState.callToActionText}
-                  </Link>
-                ) : undefined}
-                . */}
+                {formError}
               </Alert>
             )}
 
