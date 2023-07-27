@@ -174,6 +174,8 @@ const Step2 = ({
 
   const getUserQuestions = async () => {
     try {
+      if (!username.current || userQuestions.length >= 1) return;
+
       const questions = await fetch(`/api/auth/security-questions?email=${username.current}`);
 
       if (!questions.ok || questions.status !== 200) {
@@ -190,7 +192,8 @@ const Step2 = ({
 
   useEffect(() => {
     getUserQuestions();
-  }, [getUserQuestions]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (error) {
     return (
