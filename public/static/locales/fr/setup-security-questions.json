@@ -1,0 +1,19 @@
+{
+  "title": "Configurer les questions de sécurité",
+  "description": "Répondez à 3 questions de sécurité pour sécuriser votre compte.",
+  "requirementsTitle": "YVos réponses devraient être difficiles à deviner:",
+  "requirements1": "Au moins 4 caractères.",
+  "requirements2": "Aucune information d'identification personnelle.",
+  "question": "Question",
+  "answer": "Réponse",
+  "firstQuestion": "Enter the first security qestion and answer[FR]",
+  "secondQuestion": "Enter the second security qestion and answer[FR]",
+  "thirdQuestion": "Enter the third security qestion and answer[FR]",
+  "questionPlaceholder": "Sélectionner une question",
+  "continue": "Continuer",
+  "contact": "Nous contacter",
+  "errors": {
+    "required": "Required field[FR]",
+    "answerLength": "Doit être au moins 4 caractères."
+  }
+}
