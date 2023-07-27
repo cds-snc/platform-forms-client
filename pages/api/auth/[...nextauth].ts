@@ -4,6 +4,7 @@ import {
   Validate2FAVerificationCodeResultStatus,
   begin2FAAuthentication,
   initiateSignIn,
+  retrieveUserSecurityQuestions,
   validate2FAVerificationCode,
 } from "@lib/auth/";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
@@ -15,10 +16,6 @@ import { getPrivilegeRulesForUser } from "@lib/privileges";
 import { logEvent } from "@lib/auditLogs";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { activeStatusCheck, activeStatusUpdate } from "@lib/cache/userActiveStatus";
-import {
-  securityQuestionsCheck,
-  securityQuestionsStatusUpdate,
-} from "@lib/cache/securityQuestionsStatus";
 
 if (
   (!process.env.COGNITO_APP_CLIENT_ID ||
@@ -144,20 +141,14 @@ export const authOptions: NextAuthOptions = {
         token.deactivated = true;
       }
 
-      if (!token.securityQuestions) {
-        token.securityQuestions = await checkUserHasSecurityQuestions(token.userId as string);
-      }
-
       return token;
     },
     async session({ session, token }) {
       // Add info like 'role' to session object
-
       session.user = {
         id: token.userId,
         lastLoginTime: token.lastLoginTime,
         acceptableUse: token.acceptableUse,
-        securityQuestions: token.securityQuestions as boolean,
         name: token.name ?? null,
         email: token.email ?? null,
         image: token.picture ?? null,
@@ -165,6 +156,7 @@ export const authOptions: NextAuthOptions = {
         ...(token.newlyRegistered && { newlyRegistered: token.newlyRegistered }),
         // Used client side to immidiately log out a user if they have been deactivated
         ...(token.deactivated && { deactivated: token.deactivated }),
+        securityQuestions: await retrieveUserSecurityQuestions({ userId: token.userId as string }),
       };
 
       return session;
@@ -223,29 +215,6 @@ const checkUserActiveStatus = async (userID: string): Promise<boolean> => {
   activeStatusUpdate(userID, user?.active ?? false);
 
   return user?.active ?? false;
-};
-
-/**
- * Check to ensure user has security questions setup using a cache strategy
- * @param userID id of the user to check
- * @returns boolean active status
- */
-const checkUserHasSecurityQuestions = async (userID: string): Promise<boolean> => {
-  // Check cache first
-  const cachedStatus = await securityQuestionsCheck(userID);
-  if (cachedStatus !== null) {
-    return cachedStatus;
-  }
-
-  // @todo add real check here once security questions are implemented
-  const hasSecurityQuestions = true;
-
-  // Update cache with new value
-  // Do not need to await promise.  This is an update only action that on fail will
-  // force a recheck of the database on next call
-  securityQuestionsStatusUpdate(userID, hasSecurityQuestions ?? false);
-
-  return hasSecurityQuestions ?? false;
 };
 
 export default async function auth(req: NextApiRequest, res: NextApiResponse) {

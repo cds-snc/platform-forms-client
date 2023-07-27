@@ -43,7 +43,7 @@ export const getServerSideProps: GetServerSideProps = async ({ locale, req, res 
     };
   }
 
-  if (session && !session.user.securityQuestions) {
+  if (session && !session.user.securityQuestions.length) {
     // If they haven't setup security questions Use redirect to policy page for acceptance
     return {
       redirect: {
