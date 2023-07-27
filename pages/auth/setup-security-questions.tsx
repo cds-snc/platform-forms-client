@@ -5,27 +5,34 @@ import Head from "next/head";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { TextInput, Label, Alert } from "@components/forms";
-import { requireAuthentication } from "@lib/auth";
+import { requireAuthentication, retrievePoolOfSecurityQuestions } from "@lib/auth";
 import { checkPrivileges } from "@lib/privileges";
 import { Button, ErrorStatus } from "@components/globals";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import { Select } from "@components/globals/Select/Select";
 import { LinkButton } from "@components/globals";
+import { logMessage } from "@lib/logger";
+import { fetchWithCsrfToken } from "@lib/hooks/auth/fetchWithCsrfToken";
 
 // TODO move to types once data structure decided on?
 export interface Question {
   id: string;
-  text: string;
-}
-export interface QuestionsAnswer {
-  id: string;
   question: string;
+}
+
+export interface Answer {
+  questionId: string;
   answer: string;
 }
 
-const updateSecurityQuestions = async (questionsAnswers: QuestionsAnswer[]) => {
-  // TODO api call
-  return true;
+const updateSecurityQuestions = async (questionsAnswers: Answer[]): Promise<void> => {
+  try {
+    const data = { questionsWithAssociatedAnswers: [...questionsAnswers] };
+    fetchWithCsrfToken("/api/account/security-questions", data);
+    // TODO Error handling
+  } catch (err) {
+    logMessage.error(err);
+  }
 };
 
 const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) => {
@@ -58,20 +65,12 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
           answer3: "",
         }}
         onSubmit={async (values, { setSubmitting }) => {
-          const data = {
-            question1: values.question1,
-            answer1: values.answer1,
-            question2: values.question2,
-            answer2: values.answer2,
-            question3: values.question3,
-            answer3: values.answer3,
-          };
-
-          alert("submitted " + JSON.stringify(data));
-          // TODO
-          // const result = await updateSecurityQuestions(data);
-          // if (result) {
-          // }
+          const data: Answer[] = [
+            { questionId: values.question1, answer: values.answer1 },
+            { questionId: values.question2, answer: values.answer2 },
+            { questionId: values.question3, answer: values.answer3 },
+          ];
+          await updateSecurityQuestions(data);
 
           setSubmitting(false);
         }}
@@ -126,8 +125,8 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
                     </option>
                   }
                   {questions.map((q) => (
-                    <option key={q.id} value={q.text}>
-                      {q.text}
+                    <option key={q.id} value={q.id}>
+                      {q.question}
                     </option>
                   ))}
                 </Select>
@@ -157,8 +156,8 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
                     </option>
                   }
                   {questions.map((q) => (
-                    <option key={q.id} value={q.text}>
-                      {q.text}
+                    <option key={q.id} value={q.id}>
+                      {q.question}
                     </option>
                   ))}
                 </Select>
@@ -188,8 +187,8 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
                     </option>
                   }
                   {questions.map((q) => (
-                    <option key={q.id} value={q.text}>
-                      {q.text}
+                    <option key={q.id} value={q.id}>
+                      {q.question}
                     </option>
                   ))}
                 </Select>
@@ -227,12 +226,15 @@ export const getServerSideProps = requireAuthentication(
     {
       checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
 
-      // @todo pull from API
-      const questions = [
-        { id: "100", text: "Placeholder what was your favourite school subject?" },
-        { id: "101", text: "Placeholder what was the name of your first manager?" },
-        { id: "102", text: "Placeholder what was the make of your first car?" },
-      ];
+      // Removes any removed (deprecated) questions and formats for the related language
+      const questions: Question[] = (await retrievePoolOfSecurityQuestions())
+        .filter((q) => !q.deprecated)
+        .map((q) => {
+          return {
+            id: q.id,
+            question: locale === "fr" ? q.questionFr : q.questionEn,
+          };
+        });
 
       return {
         props: {
