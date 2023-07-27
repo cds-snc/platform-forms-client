@@ -14,6 +14,7 @@ import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { AccessControlError, createAbility } from "../privileges";
 
 import { localPathRegEx } from "@lib/validation";
+import { logMessage } from "@lib/logger";
 
 interface ServerSidePropsAuthContext extends GetServerSidePropsContext {
   user: Session["user"] & { ability: UserAbility };
@@ -63,6 +64,7 @@ export function requireAuthentication(
         };
       }
 
+      // TODO currently causes a loop for a new user
       if (
         !session.user.securityQuestions.length &&
         !context.resolvedUrl?.startsWith("/auth/setup-security-questions")
@@ -75,8 +77,13 @@ export function requireAuthentication(
           },
         };
       }
-
-      if (!session.user.acceptableUse && !context.resolvedUrl?.startsWith("/auth/policy")) {
+      // adding a check for securityQuestions here to prevent a redirect loop
+      if (
+        session.user.securityQuestions &&
+        !session.user.acceptableUse &&
+        !context.resolvedUrl?.startsWith("/auth/policy") &&
+        !context.resolvedUrl?.startsWith("/auth/setup-security-questions")
+      ) {
         // If they haven't agreed to Acceptable Use redirect to policy page for acceptance
         // If already on the policy page don't redirect, aka endless redirect loop.
         // Also check that the path is local and not an external URL
