@@ -12,7 +12,6 @@ import { CancelIcon, CircleCheckIcon } from "@components/form-builder/icons";
 import { EditSecurityQuestionModal } from "@components/admin/Profile/EditSecurityQuestionModal";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
-import axios from "axios";
 
 interface ProfileProps {
   email: string;
