@@ -158,12 +158,6 @@ export const getServerSideProps = requireAuthentication(
       const session = await getServerSession(req, res, authOptions);
       const userQuestions = session?.user.securityQuestions;
       const allQuestions = await retrievePoolOfSecurityQuestions();
-      // const response = await axios({
-      //   method: "get",
-      //   url: "/api/security-questions",
-      // });
-      // console.log(response.data);
-      // console.log("AllQuestions", allQuestions);
 
       return {
         props: {
