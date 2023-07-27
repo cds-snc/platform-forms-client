@@ -107,7 +107,7 @@ const Step1 = ({
                 </ol>
               </Alert>
             )}
-            <h1 className="border-b-0 mt-6 mb-12">{t("provideUsername.title")}</h1>
+            <h1 className="mb-12 mt-6 border-b-0">{t("provideUsername.title")}</h1>
             <form id="provideUsername" method="POST" onSubmit={handleSubmit} noValidate>
               <div className="focus-group">
                 <Label id="label-username" htmlFor="username" className="required" required>
@@ -197,7 +197,12 @@ const Step2 = ({
 
   if (error) {
     return (
-      <Alert type={ErrorStatus.ERROR} heading={t("errorPanel.defaultTitle")} id="apiErrors">
+      <Alert
+        type={ErrorStatus.ERROR}
+        heading={t("errorPanel.defaultTitle")}
+        id="apiErrors"
+        focussable={true}
+      >
         {t("errorPanel.defaultMessage")}
       </Alert>
     );
@@ -222,7 +227,7 @@ const Step2 = ({
         <Head>
           <title>{t("resetPassword.title")}</title>
         </Head>
-        <h1 className="border-b-0 mt-6 mb-12">{t("securityQuestions.title")}</h1>
+        <h1 className="mb-12 mt-6 border-b-0">{t("securityQuestions.title")}</h1>
         <p className="mb-6 max-w-lg">{t("securityQuestions.description")}</p>
         <Loader message={t("loading", { ns: "reset-password" })} />
       </>
@@ -256,6 +261,7 @@ const Step2 = ({
                 heading={authErrorsState.title}
                 onDismiss={authErrorsReset}
                 id="cognitoErrors"
+                focussable={true}
               >
                 {authErrorsState.description}&nbsp;
                 {authErrorsState.callToActionLink ? (
@@ -276,6 +282,7 @@ const Step2 = ({
                     ? t("securityQuestions.inputValidation.allRequired.title")
                     : t("input-validation.heading", { ns: "common" })
                 }
+                focussable={true}
               >
                 <ol className="gc-ordered-list">
                   {Object.entries(errors).length === 3 ? (
@@ -298,7 +305,7 @@ const Step2 = ({
                 </ol>
               </Alert>
             )}
-            <h1 className="border-b-0 mt-6 mb-12">{t("securityQuestions.title")}</h1>
+            <h1 className="mb-12 mt-6 border-b-0">{t("securityQuestions.title")}</h1>
             <p className="mb-6 max-w-lg">{t("securityQuestions.description")}</p>
             <form id="resetPassword" method="POST" onSubmit={handleSubmit} noValidate>
               <div className="focus-group">
@@ -450,7 +457,6 @@ const Step3 = ({
                 heading={authErrorsState.title}
                 onDismiss={authErrorsReset}
                 id="cognitoErrors"
-                // dismissible={cognitoErrorIsDismissible}
               >
                 {authErrorsState.description}&nbsp;
                 {authErrorsState.callToActionLink ? (
@@ -481,7 +487,7 @@ const Step3 = ({
                 </ol>
               </Alert>
             )}
-            <h1 className="border-b-0 mt-6 mb-12">{t("resetPassword.title")}</h1>
+            <h1 className="mb-12 mt-6 border-b-0">{t("resetPassword.title")}</h1>
             <form id="resetPassword" method="POST" onSubmit={handleSubmit} noValidate>
               <div className="focus-group">
                 <Label
