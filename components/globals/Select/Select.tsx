@@ -1,7 +1,6 @@
 import React from "react";
 import classnames from "classnames";
 import { useField } from "formik";
-import { useTranslation } from "next-i18next";
 import { ErrorMessage } from "@components/forms";
 import { InputFieldProps } from "@lib/types";
 

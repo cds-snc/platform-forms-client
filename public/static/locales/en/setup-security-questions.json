@@ -9,7 +9,7 @@
   "firstQuestion": "Enter the first security qestion and answer[FR]",
   "secondQuestion": "Enter the second security qestion and answer[FR]",
   "thirdQuestion": "Enter the third security qestion and answer[FR]",
-  "questionPlaceHhlder": "Select question",
+  "questionPlaceholder": "Select question",
   "continue": "Continue",
   "contact": "Contact us",
   "errors": {
