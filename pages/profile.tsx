@@ -4,22 +4,26 @@ import { useTranslation } from "next-i18next";
 import Head from "next/head";
 
 import { NextPageWithLayout } from "@pages/_app";
-import { requireAuthentication } from "@lib/auth";
+import { requireAuthentication, retrievePoolOfSecurityQuestions } from "@lib/auth";
 import { checkPrivileges, checkPrivilegesAsBoolean } from "@lib/privileges";
 import { Template } from "@components/form-builder/app";
 import { Button } from "@components/globals";
 import { CancelIcon, CircleCheckIcon } from "@components/form-builder/icons";
 import { EditSecurityQuestionModal } from "@components/admin/Profile/EditSecurityQuestionModal";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@pages/api/auth/[...nextauth]";
 
 interface ProfileProps {
   email: string;
   publishingStatus: boolean;
   userQuestions: Question[];
+  allQuestions: Question[];
 }
 
 export interface Question {
   id: string;
-  text: string;
+  questionEn: string;
+  questionFr: string;
 }
 
 const Icon = ({ checked }: { checked: boolean }) => {
@@ -30,7 +34,13 @@ const Icon = ({ checked }: { checked: boolean }) => {
   );
 };
 
-const Questions = ({ questions = [] }: { questions: Question[] }) => {
+const Questions = ({
+  questions = [],
+  allQuestions = [],
+}: {
+  questions: Question[];
+  allQuestions: Question[];
+}) => {
   const { t } = useTranslation(["profile"]);
   const [showEditSecurityQuestionModal, setShowEditSecurityQuestionModal] = useState(false);
 
@@ -45,30 +55,31 @@ const Questions = ({ questions = [] }: { questions: Question[] }) => {
 
   return (
     <>
-      <ul className="list-none p-0 m-0">
+      <ul className="m-0 list-none p-0">
         {questions.map((question, index) => {
           return (
-            <li key={index}>
-              <div className="flex justify-between">
-                <h3 className="mb-2 text-sm">
+            <div className="flex justify-between" key={index}>
+              <div className="mb-4">
+                <h3 className="mb-2 text-xl">
                   {t("securityPanel.question")} {index + 1}
                 </h3>
-                <Button
-                  onClick={() => {
-                    editQuestionNumber.current = index + 1;
-                    editQuestionId.current = question.id;
-
-                    // TODO: uses a list that filters out already used questions to simplify
-                    setShowEditSecurityQuestionModal(true);
-                  }}
-                  theme="link"
-                  className="!px-2 text-sm"
-                >
-                  {t("securityPanel.edit")}
-                </Button>
+                <p>{question.questionEn}</p>
               </div>
-              <p className="mb-4 text-sm">{question.text}</p>
-            </li>
+
+              <Button
+                onClick={() => {
+                  editQuestionNumber.current = index + 1;
+                  editQuestionId.current = question.id;
+
+                  // TODO: uses a list that filters out already used questions to simplify
+                  setShowEditSecurityQuestionModal(true);
+                }}
+                theme="link"
+                className="!px-2 text-lg"
+              >
+                {t("securityPanel.edit")}
+              </Button>
+            </div>
           );
         })}
       </ul>
@@ -76,7 +87,7 @@ const Questions = ({ questions = [] }: { questions: Question[] }) => {
         <EditSecurityQuestionModal
           questionNumber={editQuestionNumber.current}
           questionId={editQuestionId.current}
-          questions={questions}
+          questions={allQuestions}
           handleClose={async () => {
             setShowEditSecurityQuestionModal(false);
           }}
@@ -90,6 +101,7 @@ const Profile: NextPageWithLayout<ProfileProps> = ({
   email,
   publishingStatus,
   userQuestions = [],
+  allQuestions = [],
 }: ProfileProps) => {
   const { t } = useTranslation(["profile"]);
 
@@ -101,25 +113,25 @@ const Profile: NextPageWithLayout<ProfileProps> = ({
       <div className="mx-4 shrink-0 grow basis-auto laptop:mx-32 desktop:mx-64">
         <div>
           <main className="!ml-[90px] laptop:ml-60">
-            <h1 className="mb-2 border-b-0 text-h1">{t("title")}</h1>
+            <h1 className="mb-2 border-b-0">{t("title")}</h1>
             <div className="flex flex-col gap-4 tablet:flex-row">
               <div className="w-full rounded-lg border p-4  laptop:w-1/2">
-                <h2 className="mb-6 pb-0 text-base">{t("accountPanel.title")}</h2>
+                <h2 className="mb-6 pb-0 text-2xl">{t("accountPanel.title")}</h2>
                 <div>
-                  <h3 className="mb-2 text-sm">{t("accountPanel.email")}</h3>
-                  <p className="mb-4 text-sm">{email}</p>
+                  <h3 className="mb-2 text-xl">{t("accountPanel.email")}</h3>
+                  <p className="mb-4">{email}</p>
                 </div>
                 <div>
-                  <h3 className="mb-2 text-sm">{t("accountPanel.publishing")}</h3>
-                  <p className="mb-4 text-sm">
+                  <h3 className="mb-2 text-xl">{t("accountPanel.publishing")}</h3>
+                  <p className="mb-4">
                     <Icon checked={publishingStatus} />{" "}
                     {publishingStatus ? t("accountPanel.unlocked") : t("accountPanel.locked")}
                   </p>
                 </div>
               </div>
               <div className="w-full rounded-lg border p-4 laptop:w-1/2">
-                <h2 className="mb-6 pb-0 text-base">{t("securityPanel.title")}</h2>
-                <Questions questions={userQuestions} />
+                <h2 className="mb-6 pb-0 text-2xl">{t("securityPanel.title")}</h2>
+                <Questions questions={userQuestions} allQuestions={allQuestions} />
               </div>
             </div>
           </main>
@@ -134,7 +146,7 @@ Profile.getLayout = (page: ReactElement) => {
 };
 
 export const getServerSideProps = requireAuthentication(
-  async ({ user: { ability, email }, locale }) => {
+  async ({ user: { ability, email }, locale, req, res }) => {
     {
       checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
 
@@ -142,18 +154,16 @@ export const getServerSideProps = requireAuthentication(
         { action: "update", subject: "FormRecord", field: "isPublished" },
       ]);
 
-      // @todo pull from API
-      const userQuestions = [
-        { id: "100", text: "Placeholder what was your favourite school subject?" },
-        { id: "101", text: "Placeholder what was the name of your first manager?" },
-        { id: "102", text: "Placeholder what was the make of your first car?" },
-      ];
+      const session = await getServerSession(req, res, authOptions);
+      const userQuestions = session?.user.securityQuestions;
+      const allQuestions = await retrievePoolOfSecurityQuestions();
 
       return {
         props: {
           email,
           publishingStatus,
           userQuestions,
+          allQuestions,
           ...(locale && (await serverSideTranslations(locale, ["profile", "common"]))),
         },
       };

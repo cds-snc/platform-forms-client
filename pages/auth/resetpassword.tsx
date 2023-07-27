@@ -246,7 +246,7 @@ const Step2 = ({
           question1: "",
           question2: "",
           question3: "",
-          qIds: `${userQuestions[0]?.id}, ${userQuestions[1]?.id}, ${userQuestions[2]?.id}`,
+          qIds: `${userQuestions[0]?.id},${userQuestions[1]?.id},${userQuestions[2]?.id}`,
         }}
         onSubmit={confirmSecurityQuestions}
         validationSchema={confirmSecurityQuestionsValidationSchema}
