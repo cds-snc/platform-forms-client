@@ -64,9 +64,6 @@ export function requireAuthentication(
         };
       }
 
-      logMessage.info(`session: ${JSON.stringify(session)}`);
-      logMessage.info(`resolvedUrl: ${context.resolvedUrl}`);
-
       // TODO currently causes a loop for a new user
       if (
         !session.user.securityQuestions.length &&
