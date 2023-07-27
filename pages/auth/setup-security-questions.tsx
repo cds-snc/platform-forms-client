@@ -27,7 +27,7 @@ export interface Answer {
 
 const updateSecurityQuestions = async (questionsAnswers: Answer[]): Promise<string> => {
   try {
-    const data = { questionsWithAssociatedAnswersXXX: [...questionsAnswers] };
+    const data = { questionsWithAssociatedAnswers: [...questionsAnswers] };
     await fetchWithCsrfToken("/api/account/security-questions", data);
     return "success";
   } catch (err) {
@@ -58,6 +58,24 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
     question3: Yup.string().required(t("errors.required")),
     answer3: Yup.string().required(t("errors.required")).min(4, t("errors.answerLength")),
   });
+
+  /*
+    Reducer for question set. After selecting a question, that question(id) should be removed from
+    the other two question lists.
+
+    -uses questions as source but returns UI data
+    -filter by selected question id
+
+    IF question1
+    question2: {
+      ...
+      questions: questions.filter(question1.id)
+    }
+    questions3: {
+      ...
+      questions: questions.filter(question1.id)
+    }
+  */
 
   return (
     <>
