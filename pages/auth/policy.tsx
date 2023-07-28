@@ -26,7 +26,7 @@ const TermsOfUse = ({ content, referer }: TermsOfUse) => {
 };
 
 TermsOfUse.getLayout = (page: ReactElement) => {
-  return <UserNavLayout>{page}</UserNavLayout>;
+  return <UserNavLayout contentWidth="laptop:w-[800px]">{page}</UserNavLayout>;
 };
 
 export const getServerSideProps = requireAuthentication(async (context) => {

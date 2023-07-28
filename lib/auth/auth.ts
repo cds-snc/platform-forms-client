@@ -65,6 +65,7 @@ export function requireAuthentication(
       }
 
       // TODO currently causes a loop for a new user
+      /*
       if (
         !session.user.securityQuestions.length &&
         !context.resolvedUrl?.startsWith("/auth/setup-security-questions")
@@ -77,6 +78,7 @@ export function requireAuthentication(
           },
         };
       }
+      */
       // adding a check for securityQuestions here to prevent a redirect loop
       if (
         session.user.securityQuestions &&
