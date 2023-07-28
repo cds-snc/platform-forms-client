@@ -26,7 +26,15 @@ const SiteLink = () => {
   );
 };
 
-const UserNavLayout = ({ children }: React.PropsWithChildren) => {
+type UserNavLayoutProps = {
+  contentWidth?: string; // tailwindcss width classses for content width
+  children: React.ReactNode;
+};
+
+const UserNavLayout = ({
+  children,
+  contentWidth = "max-w-[900px] laptop:min-w-[658px]",
+}: UserNavLayoutProps) => {
   const { ability } = useAccessControl();
   const { status } = useSession();
   const { t } = useTranslation("common");
@@ -58,7 +66,7 @@ const UserNavLayout = ({ children }: React.PropsWithChildren) => {
       </header>
       <div id="page-container">
         <div className="account-wrapper mt-10 flex items-center justify-center">
-          <div className="max-w-[900px] rounded-2xl border-1 border-[#D1D5DB] bg-white p-10">
+          <div className={`${contentWidth} rounded-2xl border-1 border-[#D1D5DB] bg-white p-10`}>
             <main id="content">
               <SiteLink />
               {children}
