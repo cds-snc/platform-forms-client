@@ -115,7 +115,7 @@ describe("<DownloadTable />", () => {
         status: VaultStatus.NEW,
         securityAttribute: "Unclassified",
         name: "Minus 36 days",
-        createdAt: subDays(today, 36).valueOf(), // (-23 days)
+        createdAt: subDays(today, 36).valueOf(), // (-36 days)
         lastDownloadedBy: "",
         confirmedAt: undefined,
         downloadedAt: undefined,
