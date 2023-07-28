@@ -45,14 +45,7 @@ class SecurityQuestionDatabaseOperationFailed extends Error {}
 
 export async function retrievePoolOfSecurityQuestions(): Promise<SecurityQuestion[]> {
   const securityQuestions = await prisma.securityQuestion
-    .findMany({
-      select: {
-        id: true,
-        questionEn: true,
-        questionFr: true,
-        deprecated: true,
-      },
-    })
+    .findMany()
     .catch((e) => prismaErrors(e, []));
 
   return securityQuestions.map((question) => {
@@ -84,9 +77,10 @@ export async function createSecurityAnswers(command: CreateSecurityAnswersComman
 
   const dataPayload = await Promise.all(
     command.questionsWithAssociatedAnswers.map(async (item) => {
+      const sanitizedAnswer = sanitizeAnswer(item.answer);
       return {
         question: { connect: { id: item.questionId } },
-        answer: await hashAnswer(item.answer),
+        answer: await hashAnswer(sanitizedAnswer),
       };
     })
   );
@@ -125,7 +119,8 @@ export async function updateSecurityAnswer(command: UpdateSecurityAnswerCommand)
     .includes(command.newQuestionId);
   if (hasDuplicatedQuestions) throw new DuplicatedQuestionsNotAllowed();
 
-  const hashedAnswer = await hashAnswer(command.newAnswer);
+  const sanitizedAnswer = sanitizeAnswer(command.newAnswer);
+  const hashedAnswer = await hashAnswer(sanitizedAnswer);
 
   const operationResult = await prisma.securityAnswer
     .update({
@@ -168,7 +163,8 @@ export async function validateSecurityAnswers(
 
       if (!expectedAnswer) return false;
 
-      return verifyAnswer(answerToConfirm.answer, expectedAnswer.hashedAnswer);
+      const sanitizedAnswerToConfirm = sanitizeAnswer(answerToConfirm.answer);
+      return verifyAnswer(sanitizedAnswerToConfirm, expectedAnswer.hashedAnswer);
     }
   );
 
@@ -236,10 +232,17 @@ async function areQuestionIdsValid(questionIds: SecurityQuestionId[]): Promise<b
   return questionIds.every((questionId) => validSecurityQuestionIds.includes(questionId));
 }
 
+function sanitizeAnswer(answer: string): string {
+  // Removing punctuation, french accents and capitals
+  return answer
+    .normalize("NFD")
+    .replace(/([\u0300-\u036f]|[^0-9a-zA-Z\s])/g, "")
+    .toLowerCase();
+}
+
 async function hashAnswer(answer: string): Promise<string> {
   return new Promise((resolve, reject) => {
     const salt = randomBytes(8).toString("hex");
-
     scrypt(answer, salt, 64, (err, derivedKey) => {
       if (err) reject(err);
       resolve(salt + ":" + derivedKey.toString("hex"));
