@@ -74,10 +74,10 @@ type AlertProps = {
 const AlertContainer = ({ children, title, body, icon, classNames, type }: AlertProps) => {
   let alertTitle: JSX.Element | string | undefined = title;
   let alertBody: JSX.Element | string | undefined = body;
-  let alertIcon: JSX.Element | false | undefined = type ? defaultIcons[type] : icon;
+  let alertIcon: JSX.Element | false | undefined =
+    type && icon == undefined ? defaultIcons[type] : icon;
   const content: JSX.Element[] = [];
 
-  // @TODO: handle icon=false
   // @TODO: move icon clone/add classes to Icon component
   // @TODO: handle dismissable alerts
   // @TODO: handle arbitrary props (...props)
@@ -117,33 +117,57 @@ const AlertContainer = ({ children, title, body, icon, classNames, type }: Alert
   );
 };
 
-export const Info = ({ children, title, body }: AlertProps) => {
+export const Info = ({ children, title, body, icon, classNames }: AlertProps) => {
   return (
-    <AlertContainer title={title} body={body} classNames="bg-indigo-50" type={ErrorStatus.INFO}>
+    <AlertContainer
+      title={title}
+      body={body}
+      classNames={`bg-indigo-50 ${classNames}`}
+      type={ErrorStatus.INFO}
+      icon={icon}
+    >
       {children}
     </AlertContainer>
   );
 };
 
-export const Warning = ({ children, title, body }: AlertProps) => {
+export const Warning = ({ children, title, body, icon, classNames }: AlertProps) => {
   return (
-    <AlertContainer title={title} body={body} classNames="bg-yellow-50" type={ErrorStatus.WARNING}>
+    <AlertContainer
+      title={title}
+      body={body}
+      classNames={`bg-yellow-50 ${classNames}`}
+      type={ErrorStatus.WARNING}
+      icon={icon}
+    >
       {children}
     </AlertContainer>
   );
 };
 
-export const Danger = ({ children, title, body }: AlertProps) => {
+export const Danger = ({ children, title, body, icon, classNames }: AlertProps) => {
   return (
-    <AlertContainer title={title} body={body} classNames="bg-red-50" type={ErrorStatus.ERROR}>
+    <AlertContainer
+      title={title}
+      body={body}
+      classNames={`bg-red-50 ${classNames}`}
+      type={ErrorStatus.ERROR}
+      icon={icon}
+    >
       {children}
     </AlertContainer>
   );
 };
 
-export const Success = ({ children, title, body }: AlertProps) => {
+export const Success = ({ children, title, body, icon, classNames }: AlertProps) => {
   return (
-    <AlertContainer title={title} body={body} classNames="bg-emerald-50" type={ErrorStatus.SUCCESS}>
+    <AlertContainer
+      title={title}
+      body={body}
+      classNames={`bg-emerald-50 ${classNames}`}
+      type={ErrorStatus.SUCCESS}
+      icon={icon}
+    >
       {children}
     </AlertContainer>
   );
