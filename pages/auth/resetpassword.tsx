@@ -607,7 +607,7 @@ const ResetPassword = () => {
 
 ResetPassword.getLayout = () => {
   return (
-    <UserNavLayout>
+    <UserNavLayout contentWidth="laptop:w-[658px]">
       <ResetPassword />
     </UserNavLayout>
   );
