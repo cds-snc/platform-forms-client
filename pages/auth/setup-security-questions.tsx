@@ -43,38 +43,12 @@ const updateSecurityQuestions = async (questionsAnswers: Answer[]): Promise<stri
 
 // TODO: Reducer for question set. After selecting a question, that question(id) should be removed
 // from the other two questions lists.
-const reducerQuestions = (state, action) => {
-  const { type, payload } = action;
 
-  function getFreshLists() {
-    return {
-      questions1: [...state.questions],
-      questions2: [...state.questions],
-      questions3: [...state.questions],
-    };
-  }
-
-  switch (type) {
-    case "UPDATE": {
-      const questionsLists = getFreshLists();
-
-      // TODO
-      // Remove a selected question from the other two lists
-
-      return {
-        ...state,
-        questionsLists,
-      };
-    }
-  }
-};
-
-const SetupSecurityQuestions = ({ questionsUI = [] }: { questionsUI: Question[] }) => {
+const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) => {
   const router = useRouter();
   const { t, i18n } = useTranslation(["setup-security-questions"]);
   const [formError, setFormError] = useState("");
   const supportHref = `/${i18n.language}/form-builder/support`;
-  const [questions, questionsDispatch] = useReducer(reducerQuestions, questionsUI);
 
   const validationSchema = Yup.object().shape({
     question1: Yup.string().required(t("errors.required")),
@@ -108,14 +82,14 @@ const SetupSecurityQuestions = ({ questionsUI = [] }: { questionsUI: Question[] 
             { questionId: values.question3, answer: values.answer3 },
           ];
           const result = await updateSecurityQuestions(data);
+
+          // Fail, show an error
           if (result !== "success") {
             setFormError(result);
           }
 
           // Success, go to next step
-          router.push({
-            pathname: `/${i18n.language}/myforms`,
-          });
+          router.push({ pathname: `/${i18n.language}/myforms` });
 
           setSubmitting(false);
         }}
@@ -153,27 +127,18 @@ const SetupSecurityQuestions = ({ questionsUI = [] }: { questionsUI: Question[] 
                 <Label id={"label-question1"} htmlFor={"question1"} className="required" required>
                   {t("question")} 1
                 </Label>
-                <div
-                  onChange={(e) => {
-                    // TODO: move to new Select component, onChange when refactoring
-                    const id = e.target.value;
-                    const action = { type: "UPDATE", payload: { id, listId: "questions1" } };
-                    questionsDispatch(action);
-                  }}
-                >
-                  <Select id="question1" name="question1" className="w-full rounded mb-0">
-                    {
-                      <option key={"default"} value="">
-                        {t("questionPlaceholder")}
-                      </option>
-                    }
-                    {questions.questionsLists.questions1.map((q) => (
-                      <option key={q.id} value={q.id}>
-                        {q.question}
-                      </option>
-                    ))}
-                  </Select>
-                </div>
+                <Select id="question1" name="question1" className="w-full rounded mb-0">
+                  {
+                    <option key={"default"} value="">
+                      {t("questionPlaceholder")}
+                    </option>
+                  }
+                  {questions.map((q) => (
+                    <option key={q.id} value={q.id}>
+                      {q.question}
+                    </option>
+                  ))}
+                </Select>
                 <Label id={"label-answer1"} htmlFor={"answer1"} className="required mt-6" required>
                   {t("answer")}
                 </Label>
@@ -191,27 +156,18 @@ const SetupSecurityQuestions = ({ questionsUI = [] }: { questionsUI: Question[] 
                 <Label id={"label-question2"} htmlFor={"question2"} className="required" required>
                   {t("question")} 2
                 </Label>
-                <div
-                  onChange={(e) => {
-                    // TODO: move to new Select component, onChange when refactoring
-                    const id = e.target.value;
-                    const action = { type: "UPDATE", payload: { id, listId: "questions2" } };
-                    questionsDispatch(action);
-                  }}
-                >
-                  <Select id="question2" name="question2" className="w-full rounded mb-0">
-                    {
-                      <option key={"default"} value="">
-                        {t("questionPlaceholder")}
-                      </option>
-                    }
-                    {questions.questionsLists.questions2.map((q) => (
-                      <option key={q.id} value={q.id}>
-                        {q.question}
-                      </option>
-                    ))}
-                  </Select>
-                </div>
+                <Select id="question2" name="question2" className="w-full rounded mb-0">
+                  {
+                    <option key={"default"} value="">
+                      {t("questionPlaceholder")}
+                    </option>
+                  }
+                  {questions.map((q) => (
+                    <option key={q.id} value={q.id}>
+                      {q.question}
+                    </option>
+                  ))}
+                </Select>
                 <Label id={"label-answer2"} htmlFor={"answer2"} className="required mt-6" required>
                   {t("answer")}
                 </Label>
@@ -229,27 +185,18 @@ const SetupSecurityQuestions = ({ questionsUI = [] }: { questionsUI: Question[] 
                 <Label id={"label-question3"} htmlFor={"question3"} className="required" required>
                   {t("question")} 3
                 </Label>
-                <div
-                  onChange={(e) => {
-                    // TODO: move to new Select component, onChange when refactoring
-                    const id = e.target.value;
-                    const action = { type: "UPDATE", payload: { id, listId: "questions3" } };
-                    questionsDispatch(action);
-                  }}
-                >
-                  <Select id="question3" name="question3" className="w-full rounded mb-0">
-                    {
-                      <option key={"default"} value="">
-                        {t("questionPlaceholder")}
-                      </option>
-                    }
-                    {questions.questionsLists.questions3.map((q) => (
-                      <option key={q.id} value={q.id}>
-                        {q.question}
-                      </option>
-                    ))}
-                  </Select>
-                </div>
+                <Select id="question3" name="question3" className="w-full rounded mb-0">
+                  {
+                    <option key={"default"} value="">
+                      {t("questionPlaceholder")}
+                    </option>
+                  }
+                  {questions.map((q) => (
+                    <option key={q.id} value={q.id}>
+                      {q.question}
+                    </option>
+                  ))}
+                </Select>
                 <Label id={"label-answer3"} htmlFor={"answer3"} className="required mt-6" required>
                   {t("answer")}
                 </Label>
@@ -293,19 +240,10 @@ export const getServerSideProps = requireAuthentication(
           };
         });
 
-      const questionsUI = {
-        questions,
-        questionsLists: {
-          questions1: [...questions],
-          questions2: [...questions],
-          questions3: [...questions],
-        },
-      };
-
       return {
         props: {
           email,
-          questionsUI,
+          questions,
           ...(locale &&
             (await serverSideTranslations(locale, ["setup-security-questions", "common"]))),
         },
