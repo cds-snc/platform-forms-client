@@ -14,7 +14,6 @@ import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { AccessControlError, createAbility } from "../privileges";
 
 import { localPathRegEx } from "@lib/validation";
-import { logMessage } from "@lib/logger";
 
 interface ServerSidePropsAuthContext extends GetServerSidePropsContext {
   user: Session["user"] & { ability: UserAbility };
