@@ -5,32 +5,46 @@ import Head from "next/head";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { TextInput, Label, Alert } from "@components/forms";
-import { requireAuthentication } from "@lib/auth";
+import { requireAuthentication, retrievePoolOfSecurityQuestions } from "@lib/auth";
 import { checkPrivileges } from "@lib/privileges";
 import { Button, ErrorStatus } from "@components/globals";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import { Select } from "@components/globals/Select/Select";
 import { LinkButton } from "@components/globals";
+import { logMessage } from "@lib/logger";
+import { fetchWithCsrfToken } from "@lib/hooks/auth/fetchWithCsrfToken";
+import { useRouter } from "next/router";
 
-// TODO move to types once data structure decided on?
 export interface Question {
   id: string;
-  text: string;
-}
-export interface QuestionsAnswer {
-  id: string;
   question: string;
+}
+
+export interface Answer {
+  questionId: string;
   answer: string;
 }
 
-const updateSecurityQuestions = async (questionsAnswers: QuestionsAnswer[]) => {
-  // TODO api call
-  return true;
+const updateSecurityQuestions = async (questionsAnswers: Answer[]): Promise<string> => {
+  try {
+    const data = { questionsWithAssociatedAnswers: [...questionsAnswers] };
+    await fetchWithCsrfToken("/api/account/security-questions", data);
+    return "success";
+  } catch (err) {
+    logMessage.error(err);
+
+    // TODO may want to add "friendly" text or generalize error? Here are the response errors:
+    // e.g. "Malformed request", "All security questions must be different", "Failed to create..
+
+    // TODO typing if we stay with showing errors direct from the API
+    return err?.response.data.error;
+  }
 };
 
 const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) => {
+  const router = useRouter();
   const { t, i18n } = useTranslation(["setup-security-questions"]);
-  const [isFormError, setIsFormError] = useState(false);
+  const [formError, setFormError] = useState("");
   const supportHref = `/${i18n.language}/form-builder/support`;
 
   const validationSchema = Yup.object().shape({
@@ -58,46 +72,38 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
           answer3: "",
         }}
         onSubmit={async (values, { setSubmitting }) => {
-          const data = {
-            question1: values.question1,
-            answer1: values.answer1,
-            question2: values.question2,
-            answer2: values.answer2,
-            question3: values.question3,
-            answer3: values.answer3,
-          };
+          setFormError("");
+          const data: Answer[] = [
+            { questionId: values.question1, answer: values.answer1 },
+            { questionId: values.question2, answer: values.answer2 },
+            { questionId: values.question3, answer: values.answer3 },
+          ];
+          const result = await updateSecurityQuestions(data);
 
-          alert("submitted " + JSON.stringify(data));
-          // TODO
-          // const result = await updateSecurityQuestions(data);
-          // if (result) {
-          // }
+          // Fail, show an error
+          if (result !== "success") {
+            setFormError(result);
+          }
+
+          // Success, go to next step
+          router.push({ pathname: `/${i18n.language}/myforms` });
 
           setSubmitting(false);
         }}
         validateOnChange={false}
         validateOnBlur={false}
         validationSchema={validationSchema}
-        // validate={authErrorsReset}
-        // onReset={authErrorsReset}
       >
-        {({ handleSubmit, errors }) => (
+        {({ handleSubmit }) => (
           <>
-            {isFormError && (
+            {formError && (
               <Alert
                 type={ErrorStatus.ERROR}
-                heading={t("errortitle")}
+                heading={t("errors.serverError.title")}
                 id="formError"
                 focussable={true}
               >
-                TODO form error(s)
-                {/* {authErrorsState.description}
-                {authErrorsState.callToActionLink ? (
-                  <Link href={authErrorsState.callToActionLink}>
-                    {authErrorsState.callToActionText}
-                  </Link>
-                ) : undefined}
-                . */}
+                {formError}
               </Alert>
             )}
 
@@ -115,7 +121,6 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
 
               <fieldset className="focus-group">
                 <legend className="sr-only">{t("firstQuestion")}</legend>
-
                 <Label id={"label-question1"} htmlFor={"question1"} className="required" required>
                   {t("question")} 1
                 </Label>
@@ -126,12 +131,11 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
                     </option>
                   }
                   {questions.map((q) => (
-                    <option key={q.id} value={q.text}>
-                      {q.text}
+                    <option key={q.id} value={q.id}>
+                      {q.question}
                     </option>
                   ))}
                 </Select>
-
                 <Label id={"label-answer1"} htmlFor={"answer1"} className="required mt-6" required>
                   {t("answer")}
                 </Label>
@@ -146,7 +150,6 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
 
               <fieldset className="focus-group">
                 <legend className="sr-only">{t("secondQuestion")}</legend>
-
                 <Label id={"label-question2"} htmlFor={"question2"} className="required" required>
                   {t("question")} 2
                 </Label>
@@ -157,12 +160,11 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
                     </option>
                   }
                   {questions.map((q) => (
-                    <option key={q.id} value={q.text}>
-                      {q.text}
+                    <option key={q.id} value={q.id}>
+                      {q.question}
                     </option>
                   ))}
                 </Select>
-
                 <Label id={"label-answer2"} htmlFor={"answer2"} className="required mt-6" required>
                   {t("answer")}
                 </Label>
@@ -177,7 +179,6 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
 
               <fieldset className="focus-group">
                 <legend className="sr-only">{t("thirdQuestion")}</legend>
-
                 <Label id={"label-question3"} htmlFor={"question3"} className="required" required>
                   {t("question")} 3
                 </Label>
@@ -188,12 +189,11 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
                     </option>
                   }
                   {questions.map((q) => (
-                    <option key={q.id} value={q.text}>
-                      {q.text}
+                    <option key={q.id} value={q.id}>
+                      {q.question}
                     </option>
                   ))}
                 </Select>
-
                 <Label id={"label-answer3"} htmlFor={"answer3"} className="required mt-6" required>
                   {t("answer")}
                 </Label>
@@ -227,12 +227,15 @@ export const getServerSideProps = requireAuthentication(
     {
       checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
 
-      // @todo pull from API
-      const questions = [
-        { id: "100", text: "Placeholder what was your favourite school subject?" },
-        { id: "101", text: "Placeholder what was the name of your first manager?" },
-        { id: "102", text: "Placeholder what was the make of your first car?" },
-      ];
+      // Removes any removed (deprecated) questions and formats for the related language
+      const questions: Question[] = (await retrievePoolOfSecurityQuestions())
+        .filter((q) => !q.deprecated)
+        .map((q) => {
+          return {
+            id: q.id,
+            question: locale === "fr" ? q.questionFr : q.questionEn,
+          };
+        });
 
       return {
         props: {

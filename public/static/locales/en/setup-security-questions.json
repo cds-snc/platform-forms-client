@@ -13,6 +13,9 @@
   "continue": "Continue",
   "contact": "Contact us",
   "errors": {
+    "serverError": {
+      "title": "An error occurred"
+    },
     "required": "Required field",
     "answerLength": "Must  be at least 4 characters"
   }
