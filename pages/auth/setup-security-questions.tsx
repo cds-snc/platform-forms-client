@@ -14,6 +14,7 @@ import { LinkButton } from "@components/globals";
 import { logMessage } from "@lib/logger";
 import { fetchWithCsrfToken } from "@lib/hooks/auth/fetchWithCsrfToken";
 import { useRouter } from "next/router";
+import { AxiosError } from "axios";
 
 export interface Question {
   id: string;
@@ -37,7 +38,8 @@ const updateSecurityQuestions = async (questionsAnswers: Answer[]): Promise<stri
     // e.g. "Malformed request", "All security questions must be different", "Failed to create..
 
     // TODO typing if we stay with showing errors direct from the API
-    return err?.response.data.error;
+    const error = err as AxiosError;
+    return error?.response && error?.response.data.error;
   }
 };
 
@@ -124,7 +126,7 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
                 <Label id={"label-question1"} htmlFor={"question1"} className="required" required>
                   {t("question")} 1
                 </Label>
-                <Select id="question1" name="question1" className="w-full rounded mb-0">
+                <Select id="question1" name="question1" className="mb-0 w-full rounded">
                   {
                     <option key={"default"} value="">
                       {t("questionPlaceholder")}
@@ -153,7 +155,7 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
                 <Label id={"label-question2"} htmlFor={"question2"} className="required" required>
                   {t("question")} 2
                 </Label>
-                <Select id="question2" name="question2" className="w-full rounded mb-0">
+                <Select id="question2" name="question2" className="mb-0 w-full rounded">
                   {
                     <option key={"default"} value="">
                       {t("questionPlaceholder")}
@@ -182,7 +184,7 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
                 <Label id={"label-question3"} htmlFor={"question3"} className="required" required>
                   {t("question")} 3
                 </Label>
-                <Select id="question3" name="question3" className="w-full rounded mb-0">
+                <Select id="question3" name="question3" className="mb-0 w-full rounded">
                   {
                     <option key={"default"} value="">
                       {t("questionPlaceholder")}
