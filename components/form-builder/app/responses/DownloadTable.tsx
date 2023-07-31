@@ -47,7 +47,6 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
   const accountEscalated = nagwareResult && nagwareResult.level > 2;
 
   const { value: overdueAfter } = useSetting("nagwarePhaseEncouraged");
-  const { value: warnAfter } = useSetting("nagwarePhaseWarned");
   const [tableItems, tableItemsDispatch] = useReducer(reducerTableItems, {
     checkedItems: new Map(),
     statusItems: new Map(vaultSubmissions.map((submission) => [submission.name, false])),
