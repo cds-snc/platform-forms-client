@@ -1,4 +1,4 @@
-import React, { ReactElement, useReducer, useState } from "react";
+import React, { ReactElement, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
@@ -40,9 +40,6 @@ const updateSecurityQuestions = async (questionsAnswers: Answer[]): Promise<stri
     return err?.response.data.error;
   }
 };
-
-// TODO: Reducer for question set. After selecting a question, that question(id) should be removed
-// from the other two questions lists.
 
 const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) => {
   const router = useRouter();
