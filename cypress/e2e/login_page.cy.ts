@@ -126,7 +126,7 @@ describe("Login Page", () => {
       cy.get("input[id='verificationCode']").should("have.value", "12345");
       cy.get("button[type='submit']").should("be.visible");
       cy.get("button[type='submit']").click();
-      cy.url().should("contain", "/en/auth/policy");
+      cy.url().should("contain", "/en/auth/setup-security-questions");
     });
   });
 });
