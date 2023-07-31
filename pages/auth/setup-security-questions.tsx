@@ -2,7 +2,7 @@ import React, { ReactElement, useRef, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
-import { Formik } from "formik";
+import { Formik, FormikProps } from "formik";
 import * as Yup from "yup";
 import { TextInput, Label, Alert } from "@components/forms";
 import { requireAuthentication, retrievePoolOfSecurityQuestions } from "@lib/auth";
@@ -26,6 +26,17 @@ export interface Answer {
   answer: string;
 }
 
+interface QuestionAnswerValues {
+  question1: string;
+  answer1: string;
+  question2: string;
+  answer2: string;
+  question3: string;
+  answer3: string;
+}
+
+type QuestionValuesProps = FormikProps<QuestionAnswerValues>;
+
 const updateSecurityQuestions = async (questionsAnswers: Answer[]): Promise<string> => {
   try {
     const data = { questionsWithAssociatedAnswers: [...questionsAnswers] };
@@ -48,7 +59,7 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
   const { t, i18n } = useTranslation(["setup-security-questions"]);
   const [formError, setFormError] = useState("");
   const supportHref = `/${i18n.language}/form-builder/support`;
-  const formRef = useRef(null);
+  const formRef = useRef<QuestionValuesProps>(null);
 
   const validationSchema = Yup.object().shape({
     question1: Yup.string().required(t("errors.required")),
