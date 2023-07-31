@@ -151,7 +151,11 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
   ) => {
     const daysPast = getDaysPassed(submission.createdAt);
 
-    if (submission.status === VaultStatus.NEW && accountEscalated && daysPast < Number(warnAfter)) {
+    if (
+      submission.status === VaultStatus.NEW &&
+      accountEscalated &&
+      daysPast < Number(overdueAfter)
+    ) {
       return true;
     }
     return false;
