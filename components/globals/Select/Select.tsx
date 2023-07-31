@@ -21,18 +21,21 @@ export const Select = (props: SelectProps): React.ReactElement => {
   const { children, id, className, required = false, ariaDescribedBy } = props;
   const classes = classnames("gc-dropdown", className);
   const [field, meta] = useField(props);
-
   return (
     <>
       {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
 
       <select
-        data-testid="dropdown"
-        className={classes}
         id={id}
+        data-testid={`dropdown-${id}`}
+        className={classes}
         required={required}
         {...(ariaDescribedBy && { ariaDescribedBy: ariaDescribedBy })}
         {...field}
+
+        // NOTE: onChange will take you down a Formik rabbit hole - probably wait until refactoring
+        // Formik out. I could find a way but it was not simple.
+        // {...(onChange && {onChange: onChange})}
       >
         {children}
       </select>

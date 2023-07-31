@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useReducer, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
@@ -13,8 +13,8 @@ import { Select } from "@components/globals/Select/Select";
 import { LinkButton } from "@components/globals";
 import { logMessage } from "@lib/logger";
 import { fetchWithCsrfToken } from "@lib/hooks/auth/fetchWithCsrfToken";
+import { useRouter } from "next/router";
 
-// TODO move to types once data structure decided on?
 export interface Question {
   id: string;
   question: string;
@@ -32,23 +32,49 @@ const updateSecurityQuestions = async (questionsAnswers: Answer[]): Promise<stri
     return "success";
   } catch (err) {
     logMessage.error(err);
+
     // TODO may want to add "friendly" text or generalize error? Here are the response errors:
-    /*
-      return res.status(400).json({ error: "Malformed request" });
-      return res.status(400).json({ error: "Security questions have already been set up" });
-      return res.status(400).json({ error: "One or more security question identifiers are invalid" });
-      return res.status(400).json({ error: "All security questions must be different" });
-      return res.status(500).json({ error: "Failed to create user security answers" });
-    */
-    // TODO typing if we stiay with this way of showing an error
+    // e.g. "Malformed request", "All security questions must be different", "Failed to create..
+
+    // TODO typing if we stay with showing errors direct from the API
     return err?.response.data.error;
   }
 };
 
-const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) => {
+// TODO: Reducer for question set. After selecting a question, that question(id) should be removed
+// from the other two questions lists.
+const reducerQuestions = (state, action) => {
+  const { type, payload } = action;
+
+  function getFreshLists() {
+    return {
+      questions1: [...state.questions],
+      questions2: [...state.questions],
+      questions3: [...state.questions],
+    };
+  }
+
+  switch (type) {
+    case "UPDATE": {
+      const questionsLists = getFreshLists();
+
+      // TODO
+      // Remove a selected question from the other two lists
+
+      return {
+        ...state,
+        questionsLists,
+      };
+    }
+  }
+};
+
+const SetupSecurityQuestions = ({ questionsUI = [] }: { questionsUI: Question[] }) => {
+  const router = useRouter();
   const { t, i18n } = useTranslation(["setup-security-questions"]);
   const [formError, setFormError] = useState("");
   const supportHref = `/${i18n.language}/form-builder/support`;
+  const [questions, questionsDispatch] = useReducer(reducerQuestions, questionsUI);
 
   const validationSchema = Yup.object().shape({
     question1: Yup.string().required(t("errors.required")),
@@ -58,24 +84,6 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
     question3: Yup.string().required(t("errors.required")),
     answer3: Yup.string().required(t("errors.required")).min(4, t("errors.answerLength")),
   });
-
-  /*
-    Reducer for question set. After selecting a question, that question(id) should be removed from
-    the other two question lists.
-
-    -uses questions as source but returns UI data
-    -filter by selected question id
-
-    IF question1
-    question2: {
-      ...
-      questions: questions.filter(question1.id)
-    }
-    questions3: {
-      ...
-      questions: questions.filter(question1.id)
-    }
-  */
 
   return (
     <>
@@ -104,16 +112,18 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
             setFormError(result);
           }
 
-          // TODO redirect to next step
+          // Success, go to next step
+          router.push({
+            pathname: `/${i18n.language}/myforms`,
+          });
+
           setSubmitting(false);
         }}
         validateOnChange={false}
         validateOnBlur={false}
         validationSchema={validationSchema}
-        // validate={authErrorsReset}
-        // onReset={authErrorsReset}
       >
-        {({ handleSubmit, errors }) => (
+        {({ handleSubmit }) => (
           <>
             {formError && (
               <Alert
@@ -140,23 +150,30 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
 
               <fieldset className="focus-group">
                 <legend className="sr-only">{t("firstQuestion")}</legend>
-
                 <Label id={"label-question1"} htmlFor={"question1"} className="required" required>
                   {t("question")} 1
                 </Label>
-                <Select id="question1" name="question1" className="w-full rounded mb-0">
-                  {
-                    <option key={"default"} value="">
-                      {t("questionPlaceholder")}
-                    </option>
-                  }
-                  {questions.map((q) => (
-                    <option key={q.id} value={q.id}>
-                      {q.question}
-                    </option>
-                  ))}
-                </Select>
-
+                <div
+                  onChange={(e) => {
+                    // TODO: move to new Select component, onChange when refactoring
+                    const id = e.target.value;
+                    const action = { type: "UPDATE", payload: { id, listId: "questions1" } };
+                    questionsDispatch(action);
+                  }}
+                >
+                  <Select id="question1" name="question1" className="w-full rounded mb-0">
+                    {
+                      <option key={"default"} value="">
+                        {t("questionPlaceholder")}
+                      </option>
+                    }
+                    {questions.questionsLists.questions1.map((q) => (
+                      <option key={q.id} value={q.id}>
+                        {q.question}
+                      </option>
+                    ))}
+                  </Select>
+                </div>
                 <Label id={"label-answer1"} htmlFor={"answer1"} className="required mt-6" required>
                   {t("answer")}
                 </Label>
@@ -171,23 +188,30 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
 
               <fieldset className="focus-group">
                 <legend className="sr-only">{t("secondQuestion")}</legend>
-
                 <Label id={"label-question2"} htmlFor={"question2"} className="required" required>
                   {t("question")} 2
                 </Label>
-                <Select id="question2" name="question2" className="w-full rounded mb-0">
-                  {
-                    <option key={"default"} value="">
-                      {t("questionPlaceholder")}
-                    </option>
-                  }
-                  {questions.map((q) => (
-                    <option key={q.id} value={q.id}>
-                      {q.question}
-                    </option>
-                  ))}
-                </Select>
-
+                <div
+                  onChange={(e) => {
+                    // TODO: move to new Select component, onChange when refactoring
+                    const id = e.target.value;
+                    const action = { type: "UPDATE", payload: { id, listId: "questions2" } };
+                    questionsDispatch(action);
+                  }}
+                >
+                  <Select id="question2" name="question2" className="w-full rounded mb-0">
+                    {
+                      <option key={"default"} value="">
+                        {t("questionPlaceholder")}
+                      </option>
+                    }
+                    {questions.questionsLists.questions2.map((q) => (
+                      <option key={q.id} value={q.id}>
+                        {q.question}
+                      </option>
+                    ))}
+                  </Select>
+                </div>
                 <Label id={"label-answer2"} htmlFor={"answer2"} className="required mt-6" required>
                   {t("answer")}
                 </Label>
@@ -202,23 +226,30 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
 
               <fieldset className="focus-group">
                 <legend className="sr-only">{t("thirdQuestion")}</legend>
-
                 <Label id={"label-question3"} htmlFor={"question3"} className="required" required>
                   {t("question")} 3
                 </Label>
-                <Select id="question3" name="question3" className="w-full rounded mb-0">
-                  {
-                    <option key={"default"} value="">
-                      {t("questionPlaceholder")}
-                    </option>
-                  }
-                  {questions.map((q) => (
-                    <option key={q.id} value={q.id}>
-                      {q.question}
-                    </option>
-                  ))}
-                </Select>
-
+                <div
+                  onChange={(e) => {
+                    // TODO: move to new Select component, onChange when refactoring
+                    const id = e.target.value;
+                    const action = { type: "UPDATE", payload: { id, listId: "questions3" } };
+                    questionsDispatch(action);
+                  }}
+                >
+                  <Select id="question3" name="question3" className="w-full rounded mb-0">
+                    {
+                      <option key={"default"} value="">
+                        {t("questionPlaceholder")}
+                      </option>
+                    }
+                    {questions.questionsLists.questions3.map((q) => (
+                      <option key={q.id} value={q.id}>
+                        {q.question}
+                      </option>
+                    ))}
+                  </Select>
+                </div>
                 <Label id={"label-answer3"} htmlFor={"answer3"} className="required mt-6" required>
                   {t("answer")}
                 </Label>
@@ -262,10 +293,19 @@ export const getServerSideProps = requireAuthentication(
           };
         });
 
+      const questionsUI = {
+        questions,
+        questionsLists: {
+          questions1: [...questions],
+          questions2: [...questions],
+          questions3: [...questions],
+        },
+      };
+
       return {
         props: {
           email,
-          questions,
+          questionsUI,
           ...(locale &&
             (await serverSideTranslations(locale, ["setup-security-questions", "common"]))),
         },
