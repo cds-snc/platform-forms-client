@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useRef, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
@@ -48,6 +48,7 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
   const { t, i18n } = useTranslation(["setup-security-questions"]);
   const [formError, setFormError] = useState("");
   const supportHref = `/${i18n.language}/form-builder/support`;
+  const formRef = useRef(null);
 
   const validationSchema = Yup.object().shape({
     question1: Yup.string().required(t("errors.required")),
@@ -65,6 +66,7 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
       </Head>
 
       <Formik
+        innerRef={formRef}
         initialValues={{
           question1: "",
           answer1: "",
@@ -132,11 +134,23 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
                       {t("questionPlaceholder")}
                     </option>
                   }
-                  {questions.map((q) => (
-                    <option key={q.id} value={q.id}>
-                      {q.question}
-                    </option>
-                  ))}
+                  {questions
+                    .filter((q) => {
+                      if (formRef?.current && formRef.current?.values) {
+                        if (
+                          q.id === formRef.current.values.question2 ||
+                          q.id === formRef.current.values.question3
+                        ) {
+                          return false;
+                        }
+                      }
+                      return true;
+                    })
+                    .map((q) => (
+                      <option key={q.id} value={q.id}>
+                        {q.question}
+                      </option>
+                    ))}
                 </Select>
                 <Label id={"label-answer1"} htmlFor={"answer1"} className="required mt-6" required>
                   {t("answer")}
@@ -161,11 +175,23 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
                       {t("questionPlaceholder")}
                     </option>
                   }
-                  {questions.map((q) => (
-                    <option key={q.id} value={q.id}>
-                      {q.question}
-                    </option>
-                  ))}
+                  {questions
+                    .filter((q) => {
+                      if (formRef?.current && formRef.current?.values) {
+                        if (
+                          q.id === formRef.current.values.question1 ||
+                          q.id === formRef.current.values.question3
+                        ) {
+                          return false;
+                        }
+                      }
+                      return true;
+                    })
+                    .map((q) => (
+                      <option key={q.id} value={q.id}>
+                        {q.question}
+                      </option>
+                    ))}
                 </Select>
                 <Label id={"label-answer2"} htmlFor={"answer2"} className="required mt-6" required>
                   {t("answer")}
@@ -190,11 +216,23 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
                       {t("questionPlaceholder")}
                     </option>
                   }
-                  {questions.map((q) => (
-                    <option key={q.id} value={q.id}>
-                      {q.question}
-                    </option>
-                  ))}
+                  {questions
+                    .filter((q) => {
+                      if (formRef?.current && formRef.current?.values) {
+                        if (
+                          q.id === formRef.current.values.question1 ||
+                          q.id === formRef.current.values.question2
+                        ) {
+                          return false;
+                        }
+                      }
+                      return true;
+                    })
+                    .map((q) => (
+                      <option key={q.id} value={q.id}>
+                        {q.question}
+                      </option>
+                    ))}
                 </Select>
                 <Label id={"label-answer3"} htmlFor={"answer3"} className="required mt-6" required>
                   {t("answer")}
