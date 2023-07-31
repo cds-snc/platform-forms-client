@@ -92,75 +92,112 @@ Cypress.Commands.add("useFlag", (flagName, value, alreadyAuth) => {
  * Log the test user into the application
  */
 
-Cypress.Commands.add("login", (options?: { admin?: boolean; acceptableUse?: boolean }) => {
-  const { admin = false, acceptableUse = false } = options || {};
-  cy.request({
-    method: "GET",
-    url: "/api/auth/csrf",
-  }).then((response) => {
-    expect(response.body).to.have.property("csrfToken");
-    const { csrfToken } = response.body;
+Cypress.Commands.add(
+  "login",
+  (options?: { admin?: boolean; acceptableUse?: boolean; securityQuestions?: boolean }) => {
+    const { admin = false, acceptableUse = false, securityQuestions = true } = options || {};
     cy.request({
-      method: "POST",
-      url: "/api/auth/signin/cognito",
-      form: true,
-      body: {
-        username: `test.${admin ? "admin" : "user"}@cds-snc.ca`,
-        password: "testing",
-        csrfToken,
-      },
+      method: "GET",
+      url: "/api/auth/csrf",
     }).then((response) => {
-      expect(response.body).to.have.property("status", "success");
-      expect(response.body).to.have.property("challengeState", "MFA");
-      expect(response.body).to.have.property("authenticationFlowToken");
-
+      expect(response.body).to.have.property("csrfToken");
+      const { csrfToken } = response.body;
       cy.request({
         method: "POST",
-        url: "/api/auth/callback/cognito",
+        url: "/api/auth/signin/cognito",
         form: true,
         body: {
           username: `test.${admin ? "admin" : "user"}@cds-snc.ca`,
-          verificationCode: "123456",
-          authenticationFlowToken: response.body.authenticationFlowToken,
+          password: "testing",
           csrfToken,
-          json: true,
         },
-      }).then(() => {
-        // Ensure cookie is created
-        cy.waitUntil(() =>
-          cy.getCookie("next-auth.session-token").then((cookie) => Boolean(cookie && cookie.value))
-        );
-        if (acceptableUse) {
-          cy.request({
-            method: "POST",
-            url: "/api/acceptableuse",
-            headers: {
-              "x-csrf-token": csrfToken,
+      }).then((response) => {
+        expect(response.body).to.have.property("status", "success");
+        expect(response.body).to.have.property("challengeState", "MFA");
+        expect(response.body).to.have.property("authenticationFlowToken");
+
+        cy.request({
+          method: "POST",
+          url: "/api/auth/callback/cognito",
+          form: true,
+          body: {
+            username: `test.${admin ? "admin" : "user"}@cds-snc.ca`,
+            verificationCode: "123456",
+            authenticationFlowToken: response.body.authenticationFlowToken,
+            csrfToken,
+            json: true,
+          },
+        }).then(() => {
+          // Ensure cookie is created
+          cy.waitUntil(() =>
+            cy
+              .getCookie("next-auth.session-token")
+              .then((cookie) => Boolean(cookie && cookie.value))
+          );
+          if (securityQuestions) {
+            cy.visit("/en/auth/setup-security-questions");
+            cy.securityQuestions();
+          }
+          if (acceptableUse) {
+            cy.request({
+              method: "POST",
+              url: "/api/acceptableuse",
+              headers: {
+                "x-csrf-token": csrfToken,
+              },
+            }).then((response) => {
+              expect(response.status).to.eq(200);
+            });
+          }
+        });
+      });
+    });
+  }
+);
+
+Cypress.Commands.add("securityQuestions", () => {
+  cy.request({
+    method: "GET",
+    url: "/api/security-questions",
+  }).then((response) => {
+    const question1 = response.body[0].id;
+    const question2 = response.body[1].id;
+    const question3 = response.body[2].id;
+
+    cy.request({
+      method: "GET",
+      url: "/api/auth/csrf",
+    }).then((response) => {
+      expect(response.body).to.have.property("csrfToken");
+      const { csrfToken } = response.body;
+
+      cy.request({
+        method: "POST",
+        url: "api/account/security-questions",
+        headers: {
+          "x-csrf-token": csrfToken,
+        },
+        failOnStatusCode: false,
+        body: {
+          questionsWithAssociatedAnswers: [
+            {
+              questionId: question1,
+              answer: "example-answer",
             },
-          }).then((response) => {
-            expect(response.status).to.eq(200);
-          });
-        }
+            {
+              questionId: question2,
+              answer: "example-answer",
+            },
+            {
+              questionId: question3,
+              answer: "example-answer",
+            },
+          ],
+        },
       });
     });
   });
 });
-
-Cypress.Commands.add("securityQuestions", () => {
-  cy.get("h1").contains("Set up security questions");
-  cy.get('#question1').select('What was your favourite school subject?');
-  cy.get('#answer1').type('example-answer');
-  cy.get('#question2').select('What was the name of your first manager?');
-  cy.get('#answer2').type('example-answer');
-  cy.get('#question3').select('What was the make of your first car?');
-  cy.get('#answer3').type('example-answer');
-  cy.contains("Continue").click();
-})
-
-
-
-
-
 
 /**
  * Logout the test user from the application
