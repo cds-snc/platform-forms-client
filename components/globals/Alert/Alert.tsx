@@ -69,6 +69,9 @@ type AlertProps = {
   icon?: JSX.Element | false | undefined;
   classNames?: string;
   type?: ErrorStatus;
+  dismissible?: boolean;
+  onDismiss?: React.ReactEventHandler;
+  focussable?: boolean;
 };
 
 const AlertContainer = ({ children, title, body, icon, classNames, type }: AlertProps) => {
