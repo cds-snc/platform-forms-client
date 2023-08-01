@@ -3,7 +3,7 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import seedTemplates from "./fixtures/templates";
 import seedPrivileges from "./fixtures/privileges";
 import seedSettings from "./fixtures/settings";
-import seedUsers from "./fixtures/users";
+import seedUsers, { UserWithoutSecurityAnswers } from "./fixtures/users";
 import seedSecurityQuestions from "./fixtures/security-questions";
 
 type AnyObject = {
@@ -43,7 +43,47 @@ async function createSettings(env: string) {
 }
 
 async function createTestUsers() {
-  const users = seedUsers["test"].map((user) => prisma.user.create({ data: user }));
+  await prisma.user.create({
+    data: UserWithoutSecurityAnswers,
+  });
+
+  const [q1, q2, q3] = await prisma.securityQuestion.findMany();
+
+  const users = seedUsers["test"].map((user) => {
+    return prisma.user.create({
+      data: {
+        ...user,
+        securityAnswers: {
+          create: [
+            {
+              question: {
+                connect: {
+                  id: q1.id,
+                },
+              },
+              answer: "example-answer",
+            },
+            {
+              question: {
+                connect: {
+                  id: q2.id,
+                },
+              },
+              answer: "example-answer",
+            },
+            {
+              question: {
+                connect: {
+                  id: q3.id,
+                },
+              },
+              answer: "example-answer",
+            },
+          ],
+        },
+      },
+    });
+  });
   await Promise.all(users);
 }
 

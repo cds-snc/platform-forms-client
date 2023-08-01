@@ -43,9 +43,12 @@ export const authOptions: NextAuthOptions = {
 
         // Check for test accounts being used
         if (
-          ["test.user@cds-snc.ca", "test.admin@cds-snc.ca", "test.deactivated@cds-snc.ca"].includes(
-            username
-          )
+          [
+            "test.user@cds-snc.ca",
+            "test.admin@cds-snc.ca",
+            "test.deactivated@cds-snc.ca",
+            "test.withoutSecurityAnswers@cds-snc.ca",
+          ].includes(username)
         ) {
           // If we're not in test mode throw an error
           if (process.env.APP_ENV !== "test")
