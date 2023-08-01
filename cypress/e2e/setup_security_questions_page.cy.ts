@@ -24,7 +24,6 @@ describe("Security Questions Page", () => {
   });
 
   describe("Test form validation", () => {
-
     it("Fails to submit on an empty form", () => {
       cy.get("#question1").select(questions1);
       cy.get("button[type='submit']").click();
@@ -63,16 +62,16 @@ describe("Security Questions Page", () => {
     });
   });
 
-    describe("Test questions select behavior", () => {
-      it("Select a question should update the selected 'value'", () => {
-        cy.get("#question1").select(questions1);
-        cy.get("#question1 option:selected").should("have.text", questions1);
-        cy.get("#question2").select(questions2);
-        cy.get("#question2 option:selected").should("have.text", questions2);
-        cy.get("#question3").select(questions3);
-        cy.get("#question3 option:selected").should("have.text", questions3);
-      });
+  describe("Test questions select behavior", () => {
+    it("Select a question should update the selected 'value'", () => {
+      cy.get("#question1").select(questions1);
+      cy.get("#question1 option:selected").should("have.text", questions1);
+      cy.get("#question2").select(questions2);
+      cy.get("#question2 option:selected").should("have.text", questions2);
+      cy.get("#question3").select(questions3);
+      cy.get("#question3 option:selected").should("have.text", questions3);
     });
+  });
 
   describe("Filling in the form correctly should successfully submit", () => {
     it("Select a question should update the selected 'value'", () => {
@@ -87,5 +86,4 @@ describe("Security Questions Page", () => {
       cy.url().should("contain", "/en/myforms");
     });
   });
-
 });
