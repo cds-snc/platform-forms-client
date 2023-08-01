@@ -19,7 +19,7 @@
     "requirmentsList": {
       "title": "Votre réponse devrait être difficile à deviner:",
       "requirement1": "Au moins 4 caractères.",
-      "requirement2": "Aucune information d’identification personnelle."
+      "requirement2": "Aucune information d'identification personnelle."
     },
     "save": "Enregistrer",
     "errors": {
@@ -31,7 +31,11 @@
         "title": "Cette question de sécurité a été modifiée",
         "content": "Souhaitez-vous enregistrer vos modifications?"
       },
-      "invalidInput": "Doit être au moins 4 caractères."
+      "invalidInput": "Doit être au moins 4 caractères.",
+      "unknownError": {
+        "title": "Unknown error[FR]",
+        "content": "An unknown error occurred and we could not process your request. Please try again later.[FR]"
+      }
     }
   }
 }

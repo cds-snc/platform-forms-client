@@ -31,7 +31,11 @@
         "title": "The security question has been changed",
         "content": "Would you like to save your changes?"
       },
-      "invalidInput": "Must be at least 4 characters."
+      "invalidInput": "Must be at least 4 characters.",
+      "unknownError": {
+        "title": "Unknown error",
+        "content": "An unknown error occurred and we could not process your request. Please try again later."
+      }
     }
   }
 }
