@@ -75,7 +75,7 @@ const Questions = ({
                   setShowEditSecurityQuestionModal(true);
                 }}
                 theme="link"
-                className="!px-2 text-lg"
+                className="!px-2 text-lg self-start"
               >
                 {t("securityPanel.edit")}
               </Button>
