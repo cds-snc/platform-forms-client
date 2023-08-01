@@ -17,6 +17,6 @@
       "title": "An error occurred"
     },
     "required": "Required field",
-    "answerLength": "Must  be at least 4 characters"
+    "answerLength": "Must be at least 4 characters"
   }
 }

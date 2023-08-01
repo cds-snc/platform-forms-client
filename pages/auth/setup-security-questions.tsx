@@ -1,8 +1,8 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useRef, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
-import { Formik } from "formik";
+import { Formik, FormikProps } from "formik";
 import * as Yup from "yup";
 import { TextInput, Label, Alert } from "@components/forms";
 import { requireAuthentication, retrievePoolOfSecurityQuestions } from "@lib/auth";
@@ -26,6 +26,17 @@ export interface Answer {
   answer: string;
 }
 
+interface QuestionAnswerValues {
+  question1: string;
+  answer1: string;
+  question2: string;
+  answer2: string;
+  question3: string;
+  answer3: string;
+}
+
+type QuestionValuesProps = FormikProps<QuestionAnswerValues>;
+
 const updateSecurityQuestions = async (questionsAnswers: Answer[]): Promise<string> => {
   try {
     const data = { questionsWithAssociatedAnswers: [...questionsAnswers] };
@@ -48,6 +59,7 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
   const { t, i18n } = useTranslation(["setup-security-questions"]);
   const [formError, setFormError] = useState("");
   const supportHref = `/${i18n.language}/form-builder/support`;
+  const formRef = useRef<QuestionValuesProps>(null);
 
   const validationSchema = Yup.object().shape({
     question1: Yup.string().required(t("errors.required")),
@@ -65,6 +77,7 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
       </Head>
 
       <Formik
+        innerRef={formRef}
         initialValues={{
           question1: "",
           answer1: "",
@@ -132,11 +145,23 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
                       {t("questionPlaceholder")}
                     </option>
                   }
-                  {questions.map((q) => (
-                    <option key={q.id} value={q.id}>
-                      {q.question}
-                    </option>
-                  ))}
+                  {questions
+                    .filter((q) => {
+                      if (formRef?.current && formRef.current?.values) {
+                        if (
+                          q.id === formRef.current.values.question2 ||
+                          q.id === formRef.current.values.question3
+                        ) {
+                          return false;
+                        }
+                      }
+                      return true;
+                    })
+                    .map((q) => (
+                      <option key={q.id} value={q.id}>
+                        {q.question}
+                      </option>
+                    ))}
                 </Select>
                 <Label id={"label-answer1"} htmlFor={"answer1"} className="required mt-6" required>
                   {t("answer")}
@@ -161,11 +186,23 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
                       {t("questionPlaceholder")}
                     </option>
                   }
-                  {questions.map((q) => (
-                    <option key={q.id} value={q.id}>
-                      {q.question}
-                    </option>
-                  ))}
+                  {questions
+                    .filter((q) => {
+                      if (formRef?.current && formRef.current?.values) {
+                        if (
+                          q.id === formRef.current.values.question1 ||
+                          q.id === formRef.current.values.question3
+                        ) {
+                          return false;
+                        }
+                      }
+                      return true;
+                    })
+                    .map((q) => (
+                      <option key={q.id} value={q.id}>
+                        {q.question}
+                      </option>
+                    ))}
                 </Select>
                 <Label id={"label-answer2"} htmlFor={"answer2"} className="required mt-6" required>
                   {t("answer")}
@@ -190,11 +227,23 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
                       {t("questionPlaceholder")}
                     </option>
                   }
-                  {questions.map((q) => (
-                    <option key={q.id} value={q.id}>
-                      {q.question}
-                    </option>
-                  ))}
+                  {questions
+                    .filter((q) => {
+                      if (formRef?.current && formRef.current?.values) {
+                        if (
+                          q.id === formRef.current.values.question1 ||
+                          q.id === formRef.current.values.question2
+                        ) {
+                          return false;
+                        }
+                      }
+                      return true;
+                    })
+                    .map((q) => (
+                      <option key={q.id} value={q.id}>
+                        {q.question}
+                      </option>
+                    ))}
                 </Select>
                 <Label id={"label-answer3"} htmlFor={"answer3"} className="required mt-6" required>
                   {t("answer")}
@@ -221,7 +270,7 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
 };
 
 SetupSecurityQuestions.getLayout = (page: ReactElement) => {
-  return <UserNavLayout contentWidth="laptop:w-[658px]">{page}</UserNavLayout>;
+  return <UserNavLayout contentWidth="tablet:w-[658px]">{page}</UserNavLayout>;
 };
 
 export const getServerSideProps = requireAuthentication(
