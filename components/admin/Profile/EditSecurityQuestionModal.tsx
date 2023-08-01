@@ -114,6 +114,23 @@ export const EditSecurityQuestionModal = ({
     }
   };
 
+  if (!questionNumber || !questionId || questions?.length <= 0) {
+    return (
+      <Dialog handleClose={handleClose} title={t("securityQuestionModal.title")} dialogRef={dialog}>
+        <Attention
+          type={AttentionTypes.ERROR}
+          isAlert={true}
+          classes="mb-6"
+          heading={t("securityQuestionModal.errors.unknownError.title")}
+        >
+          <p className="text-sm text-[#26374a]">
+            {t("securityQuestionModal.errors.unknownError.content")}
+          </p>
+        </Attention>
+      </Dialog>
+    );
+  }
+
   return (
     <Dialog
       handleClose={handleClose}
@@ -126,19 +143,6 @@ export const EditSecurityQuestionModal = ({
       }
     >
       <>
-        {(!questionNumber || !questionId || questions?.length <= 0) && (
-          <Attention
-            type={AttentionTypes.ERROR}
-            isAlert={true}
-            classes="mb-6"
-            heading={t("securityQuestionModal.errors.unknownError.title")}
-          >
-            <p className="text-sm text-[#26374a]">
-              {t("securityQuestionModal.errors.unknownError.content")}
-            </p>
-          </Attention>
-        )}
-
         {/* TODO: probably will not need the error since already selected questions can be removed programmatically */}
         {isFormError && (
           <Attention
