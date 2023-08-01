@@ -43,7 +43,43 @@ async function createSettings(env: string) {
 }
 
 async function createTestUsers() {
-  const users = seedUsers["test"].map((user) => prisma.user.create({ data: user }));
+  const securityQuestions = await prisma.securityQuestion.findMany();
+
+  const users = seedUsers["test"].map((user) => {
+    return prisma.user.create({
+      data: {
+        ...user,
+        securityAnswers: {
+          create: [
+            {
+              question: {
+                connect: {
+                  id: securityQuestions[0].id,
+                },
+              },
+              answer: "example-answer",
+            },
+            {
+              question: {
+                connect: {
+                  id: securityQuestions[1].id,
+                },
+              },
+              answer: "example-answer",
+            },
+            {
+              question: {
+                connect: {
+                  id: securityQuestions[2].id,
+                },
+              },
+              answer: "example-answer",
+            },
+          ],
+        },
+      },
+    });
+  });
   await Promise.all(users);
 }
 
