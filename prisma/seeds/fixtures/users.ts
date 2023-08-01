@@ -40,8 +40,8 @@ const DeactivatedRegularUser: User | { privileges: Record<string, unknown> } = {
 };
 
 export const UserWithoutSecurityAnswers: User | { privileges: Record<string, unknown> } = {
-  name: "Test User Without Scurity Questions",
-  email: "test.withoutSecurityQuestions@cds-snc.ca",
+  name: "Test User Without Scurity Answers",
+  email: "test.withoutSecurityAnswers@cds-snc.ca",
   privileges: {
     connect: [{ nameEn: "Base" }, { nameEn: "PublishForms" }],
   },

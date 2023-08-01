@@ -47,7 +47,7 @@ export const authOptions: NextAuthOptions = {
             "test.user@cds-snc.ca",
             "test.admin@cds-snc.ca",
             "test.deactivated@cds-snc.ca",
-            "test.withoutSecurityQuestions@cds-snc.ca",
+            "test.withoutSecurityAnswers@cds-snc.ca",
           ].includes(username)
         ) {
           // If we're not in test mode throw an error
