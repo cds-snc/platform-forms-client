@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useCallback } from "react";
 import { Label } from "@components/forms";
 import { Button } from "@components/globals";
 import { useTranslation } from "next-i18next";
@@ -9,6 +9,7 @@ import { Question } from "pages/profile";
 import axios from "axios";
 import { getCsrfToken } from "next-auth/react";
 import { useRouter } from "next/router";
+import debounce from "lodash.debounce";
 
 // TODO: Dialog component currently takes actions to control the dialog behavior. Would be nice to
 // be able to wire with a form element to work with onSubmit and button type=submit to get form
@@ -57,11 +58,9 @@ export const EditSecurityQuestionModal = ({
   const originalQuestionId = questionId;
   const router = useRouter();
 
-  // TODO: if state keeps growing, consider using a reducer or breakup into more components
   const [isFormError, setIsFormError] = useState(false);
   const [isFormWarning, setIsFormWarning] = useState(false);
 
-  // TODO: probably move+related into a new fancy reusable Field component with children slot for Input/Select..
   const [isAnswerInputError, setIsAnswerInputError] = useState(false);
   const isAnswerInputValid = (text: string | undefined): boolean => {
     if (text && text.length >= 4) {
@@ -69,6 +68,20 @@ export const EditSecurityQuestionModal = ({
     }
     return false;
   };
+
+  const _debouncedAnswerCheck = debounce(
+    useCallback(() => {
+      if (!isAnswerInputValid(answerRef.current?.value)) {
+        setIsFormWarning(false);
+        setIsAnswerInputError(true);
+        return;
+      }
+
+      setIsAnswerInputError(false);
+      setIsFormWarning(true);
+    }, []),
+    500
+  );
 
   const reset = () => {
     setIsFormError(false);
@@ -203,21 +216,7 @@ export const EditSecurityQuestionModal = ({
             name="answer"
             type="text"
             ref={answerRef}
-            onBlur={() => {
-              // NOTE: temporary work around for issue of clicking on save causing miss-click and
-              // and pushing save button down (then no longer clicking save button). A better fix
-              // will probably require refactoring how form elements work in the dialog.
-              setTimeout(() => {
-                if (!isAnswerInputValid(answerRef.current?.value)) {
-                  setIsFormWarning(false);
-                  setIsAnswerInputError(true);
-                  return;
-                }
-
-                setIsAnswerInputError(false);
-                setIsFormWarning(true);
-              }, 200);
-            }}
+            onChange={_debouncedAnswerCheck}
           />
         </div>
       </>
