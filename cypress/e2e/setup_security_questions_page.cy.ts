@@ -6,8 +6,14 @@ describe("Security Questions Page", () => {
   const questions3 = "What was the make of your first car?";
 
   beforeEach(() => {
-    cy.login({ admin: true, acceptableUse: true });
-    cy.visit("/en/auth/setup-security-questions");
+    cy.visitPage("/en/auth/login");
+    cy.get("input[id='username']").type("test.withoutSecurityAnswers@cds-snc.ca");
+    cy.get("input[id='password']").type("testTesttest");
+    cy.get("button[type='submit']").click();
+    cy.get("input[id='verificationCode']").should("be.visible");
+    cy.get("input[id='verificationCode']").type("12345");
+    cy.get("button[type='submit']").should("be.visible");
+    cy.get("button[type='submit']").click();
   });
   afterEach(() => {
     cy.resetAll();
@@ -18,7 +24,9 @@ describe("Security Questions Page", () => {
   });
 
   describe("Test form validation", () => {
+
     it("Fails to submit on an empty form", () => {
+      cy.get("#question1").select(questions1);
       cy.get("button[type='submit']").click();
       cy.get("p[data-testid='errorMessage'").should("contain", "Required field");
     });
@@ -55,16 +63,16 @@ describe("Security Questions Page", () => {
     });
   });
 
-  describe("Test questions select behavior", () => {
-    it("Select a question should update the selected 'value'", () => {
-      cy.get("#question1").select(questions1);
-      cy.get("#question1 option:selected").should("have.text", questions1);
-      cy.get("#question2").select(questions2);
-      cy.get("#question2 option:selected").should("have.text", questions2);
-      cy.get("#question3").select(questions3);
-      cy.get("#question3 option:selected").should("have.text", questions3);
+    describe("Test questions select behavior", () => {
+      it("Select a question should update the selected 'value'", () => {
+        cy.get("#question1").select(questions1);
+        cy.get("#question1 option:selected").should("have.text", questions1);
+        cy.get("#question2").select(questions2);
+        cy.get("#question2 option:selected").should("have.text", questions2);
+        cy.get("#question3").select(questions3);
+        cy.get("#question3 option:selected").should("have.text", questions3);
+      });
     });
-  });
 
   describe("Filling in the form correctly should successfully submit", () => {
     it("Select a question should update the selected 'value'", () => {
@@ -75,7 +83,9 @@ describe("Security Questions Page", () => {
       cy.get("#question3").select(questions3);
       cy.get("#answer3").type("123456");
       cy.get("button[type='submit']").click();
+      cy.get("#acceptableUse").click();
       cy.url().should("contain", "/en/myforms");
     });
   });
+
 });
