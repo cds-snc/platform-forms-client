@@ -43,7 +43,7 @@ async function createSettings(env: string) {
 }
 
 async function createTestUsers() {
-  const securityQuestions = await prisma.securityQuestion.findMany();
+  const [q1, q2, q3] = await prisma.securityQuestion.findMany();
 
   const users = seedUsers["test"].map((user) => {
     return prisma.user.create({
@@ -54,7 +54,7 @@ async function createTestUsers() {
             {
               question: {
                 connect: {
-                  id: securityQuestions[0].id,
+                  id: q1.id,
                 },
               },
               answer: "example-answer",
@@ -62,7 +62,7 @@ async function createTestUsers() {
             {
               question: {
                 connect: {
-                  id: securityQuestions[1].id,
+                  id: q2.id,
                 },
               },
               answer: "example-answer",
@@ -70,7 +70,7 @@ async function createTestUsers() {
             {
               question: {
                 connect: {
-                  id: securityQuestions[2].id,
+                  id: q3.id,
                 },
               },
               answer: "example-answer",
