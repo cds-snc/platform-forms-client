@@ -33,7 +33,7 @@ type UserNavLayoutProps = {
 
 const UserNavLayout = ({
   children,
-  contentWidth = "max-w-[900px] laptop:min-w-[658px]",
+  contentWidth = "max-w-[900px] tablet:min-w-[658px]",
 }: UserNavLayoutProps) => {
   const { ability } = useAccessControl();
   const { status } = useSession();

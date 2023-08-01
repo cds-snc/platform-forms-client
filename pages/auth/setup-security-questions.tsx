@@ -270,7 +270,7 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
 };
 
 SetupSecurityQuestions.getLayout = (page: ReactElement) => {
-  return <UserNavLayout contentWidth="laptop:w-[658px]">{page}</UserNavLayout>;
+  return <UserNavLayout contentWidth="tablet:w-[658px]">{page}</UserNavLayout>;
 };
 
 export const getServerSideProps = requireAuthentication(
