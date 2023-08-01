@@ -1,5 +1,4 @@
 describe("Security Questions Redirect", () => {
-
   afterEach(() => {
     cy.resetAll();
   });
