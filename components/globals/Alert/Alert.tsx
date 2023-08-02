@@ -66,25 +66,27 @@ const defaultClasses = {
   },
 };
 
+const defaultIconClasses = "h-12 w-12";
+
 const defaultIcons = {
   [ErrorStatus.SUCCESS]: (
     <Icon status={ErrorStatus.SUCCESS}>
-      <CircleCheckIcon className={`h-12 w-12`} />
+      <CircleCheckIcon className={defaultIconClasses} />
     </Icon>
   ),
   [ErrorStatus.WARNING]: (
     <Icon status={ErrorStatus.WARNING}>
-      <WarningIcon className={`h-12 w-12`} />
+      <WarningIcon className={defaultIconClasses} />
     </Icon>
   ),
   [ErrorStatus.ERROR]: (
     <Icon status={ErrorStatus.ERROR}>
-      <WarningIcon className={`h-12 w-12`} />
+      <WarningIcon className={defaultIconClasses} />
     </Icon>
   ),
   [ErrorStatus.INFO]: (
     <Icon status={ErrorStatus.INFO}>
-      <InfoIcon className={`h-12 w-12`} />
+      <InfoIcon className={defaultIconClasses} />
     </Icon>
   ),
 };
