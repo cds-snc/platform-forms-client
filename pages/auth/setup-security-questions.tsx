@@ -282,7 +282,7 @@ export const getServerSideProps = requireAuthentication(
 
       const session = await getServerSession(req, res, authOptions);
       const sessionSecurityQuestions = session && session.user.securityQuestions;
-      if (sessionSecurityQuestions) {
+      if (sessionSecurityQuestions && sessionSecurityQuestions.length >= 3) {
         return {
           redirect: {
             destination: "/profile",
