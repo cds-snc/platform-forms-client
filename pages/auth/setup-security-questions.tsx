@@ -4,12 +4,11 @@ import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import { Formik, FormikProps } from "formik";
 import * as Yup from "yup";
-import { TextInput, Label, Alert } from "@components/forms";
+import { TextInput, Label, Alert, Dropdown } from "@components/forms";
 import { requireAuthentication, retrievePoolOfSecurityQuestions } from "@lib/auth";
 import { checkPrivileges } from "@lib/privileges";
 import { Button, ErrorStatus } from "@components/globals";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
-import { Select } from "@components/globals/Select/Select";
 import { LinkButton } from "@components/globals";
 import { logMessage } from "@lib/logger";
 import { fetchWithCsrfToken } from "@lib/hooks/auth/fetchWithCsrfToken";
@@ -46,13 +45,8 @@ const updateSecurityQuestions = async (questionsAnswers: Answer[]): Promise<stri
     return "success";
   } catch (err) {
     logMessage.error(err);
-
-    // TODO may want to add "friendly" text or generalize error? Here are the response errors:
-    // e.g. "Malformed request", "All security questions must be different", "Failed to create..
-
-    // TODO typing if we stay with showing errors direct from the API
     const error = err as AxiosError;
-    return error?.response && error?.response.data.error;
+    return error?.response && error.response.data.error;
   }
 };
 
@@ -144,30 +138,30 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
                 <Label id={"label-question1"} htmlFor={"question1"} className="required" required>
                   {t("question")} 1
                 </Label>
-                <Select id="question1" name="question1" className="mb-0 w-full rounded">
-                  {
+                <Dropdown id="question1" name="question1" className="mb-0 w-full rounded">
+                  <>
                     <option key={"default"} value="">
                       {t("questionPlaceholder")}
                     </option>
-                  }
-                  {questions
-                    .filter((q) => {
-                      if (formRef?.current && formRef.current?.values) {
-                        if (
-                          q.id === formRef.current.values.question2 ||
-                          q.id === formRef.current.values.question3
-                        ) {
-                          return false;
+                    {questions
+                      .filter(({ id }) => {
+                        if (formRef?.current && formRef.current?.values) {
+                          if (
+                            id === formRef.current.values.question2 ||
+                            id === formRef.current.values.question3
+                          ) {
+                            return false;
+                          }
                         }
-                      }
-                      return true;
-                    })
-                    .map((q) => (
-                      <option key={q.id} value={q.id}>
-                        {q.question}
-                      </option>
-                    ))}
-                </Select>
+                        return true;
+                      })
+                      .map(({ id, question }) => (
+                        <option key={id} value={id}>
+                          {question}
+                        </option>
+                      ))}
+                  </>
+                </Dropdown>
                 <Label id={"label-answer1"} htmlFor={"answer1"} className="required mt-6" required>
                   {t("answer")}
                 </Label>
@@ -185,30 +179,30 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
                 <Label id={"label-question2"} htmlFor={"question2"} className="required" required>
                   {t("question")} 2
                 </Label>
-                <Select id="question2" name="question2" className="mb-0 w-full rounded">
-                  {
+                <Dropdown id="question2" name="question2" className="mb-0 w-full rounded">
+                  <>
                     <option key={"default"} value="">
                       {t("questionPlaceholder")}
                     </option>
-                  }
-                  {questions
-                    .filter((q) => {
-                      if (formRef?.current && formRef.current?.values) {
-                        if (
-                          q.id === formRef.current.values.question1 ||
-                          q.id === formRef.current.values.question3
-                        ) {
-                          return false;
+                    {questions
+                      .filter(({ id }) => {
+                        if (formRef?.current && formRef.current?.values) {
+                          if (
+                            id === formRef.current.values.question1 ||
+                            id === formRef.current.values.question3
+                          ) {
+                            return false;
+                          }
                         }
-                      }
-                      return true;
-                    })
-                    .map((q) => (
-                      <option key={q.id} value={q.id}>
-                        {q.question}
-                      </option>
-                    ))}
-                </Select>
+                        return true;
+                      })
+                      .map(({ id, question }) => (
+                        <option key={id} value={id}>
+                          {question}
+                        </option>
+                      ))}
+                  </>
+                </Dropdown>
                 <Label id={"label-answer2"} htmlFor={"answer2"} className="required mt-6" required>
                   {t("answer")}
                 </Label>
@@ -226,30 +220,30 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
                 <Label id={"label-question3"} htmlFor={"question3"} className="required" required>
                   {t("question")} 3
                 </Label>
-                <Select id="question3" name="question3" className="mb-0 w-full rounded">
-                  {
+                <Dropdown id="question3" name="question3" className="mb-0 w-full rounded">
+                  <>
                     <option key={"default"} value="">
                       {t("questionPlaceholder")}
                     </option>
-                  }
-                  {questions
-                    .filter((q) => {
-                      if (formRef?.current && formRef.current?.values) {
-                        if (
-                          q.id === formRef.current.values.question1 ||
-                          q.id === formRef.current.values.question2
-                        ) {
-                          return false;
+                    {questions
+                      .filter(({ id }) => {
+                        if (formRef?.current && formRef.current?.values) {
+                          if (
+                            id === formRef.current.values.question1 ||
+                            id === formRef.current.values.question2
+                          ) {
+                            return false;
+                          }
                         }
-                      }
-                      return true;
-                    })
-                    .map((q) => (
-                      <option key={q.id} value={q.id}>
-                        {q.question}
-                      </option>
-                    ))}
-                </Select>
+                        return true;
+                      })
+                      .map(({ id, question }) => (
+                        <option key={id} value={id}>
+                          {question}
+                        </option>
+                      ))}
+                  </>
+                </Dropdown>
                 <Label id={"label-answer3"} htmlFor={"answer3"} className="required mt-6" required>
                   {t("answer")}
                 </Label>
