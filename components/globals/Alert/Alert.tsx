@@ -23,7 +23,11 @@ export const Title = ({
   }
   const className = status ? `${defaultClasses.text[status]}` : "";
 
-  return <HeadingTag className={`${className}`}>{children}</HeadingTag>;
+  return (
+    <HeadingTag data-testid="alert-heading" className={`mb-0 pb-0 ${className}`}>
+      {children}
+    </HeadingTag>
+  );
 };
 
 export const Body = ({ children }: { children: JSX.Element | string }) => {
@@ -42,7 +46,11 @@ export const Icon = ({
   }
   const className = status ? `${defaultClasses.icon[status]}` : "";
 
-  return <div className={`mr-1 ${className}`}>{children}</div>;
+  return (
+    <div className={`mr-3 ${className}`} data-testid="alert-icon">
+      {children}
+    </div>
+  );
 };
 
 const defaultClasses = {
@@ -168,6 +176,7 @@ const AlertContainer = ({
       >
         {dismissible && (
           <button
+            data-testid="alert-dismiss"
             id="dismissButton"
             aria-label={t("alert.dismissAlert")}
             className="absolute right-0 mr-4 h-10 w-10 rounded-full border border-slate-950 bg-white text-2xl text-slate-950"
@@ -177,7 +186,7 @@ const AlertContainer = ({
           </button>
         )}
         {alertIcon && <Icon status={status}>{alertIcon}</Icon>}
-        <div className={`${alertIcon && "mt-2"}`}>
+        <div className={`${alertIcon && ""}`}>
           {alertTitle && <Title status={status}>{alertTitle}</Title>}
           <Body>
             <>
