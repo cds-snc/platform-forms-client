@@ -91,6 +91,10 @@ describe("<Alert />", () => {
     );
   });
 
+  it("Renders a dismissible alert", () => {
+    cy.mount(<Alert.Success dismissible title="This is a title" body="This is a body" />);
+  });
+
   it("Renders a complex alert", () => {
     cy.mount(
       <Alert.Success>
