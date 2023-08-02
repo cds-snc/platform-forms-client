@@ -41,8 +41,9 @@ const Questions = ({
   questions: Question[];
   allQuestions: Question[];
 }) => {
-  const { t } = useTranslation(["profile"]);
+  const { t, i18n } = useTranslation(["profile"]);
   const [showEditSecurityQuestionModal, setShowEditSecurityQuestionModal] = useState(false);
+  const langKey = i18n.language === "en" ? "questionEn" : "questionFr";
 
   // TODO: if the list of state grows, use a reducer
   const editQuestionNumber = useRef(0);
@@ -63,7 +64,7 @@ const Questions = ({
                 <h3 className="mb-2 text-xl">
                   {t("securityPanel.question")} {index + 1}
                 </h3>
-                <p>{question.questionEn}</p>
+                <p>{question[langKey]}</p>
               </div>
 
               <Button

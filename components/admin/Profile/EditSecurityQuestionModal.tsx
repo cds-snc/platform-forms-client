@@ -65,6 +65,8 @@ export const EditSecurityQuestionModal = ({
     return false;
   };
 
+  const langKey = i18n.language === "en" ? "questionEn" : "questionFr";
+
   const _debouncedAnswerCheck = debounce(
     useCallback(() => {
       if (!isAnswerInputValid(answerRef.current?.value)) {
@@ -186,7 +188,7 @@ export const EditSecurityQuestionModal = ({
           >
             {questions.map((q: Question) => (
               <option key={q.id} value={q.id}>
-                {q.questionEn}
+                {q[langKey]}
               </option>
             ))}
           </select>
