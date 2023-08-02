@@ -11,30 +11,41 @@ export enum ErrorStatus {
 export const Title = ({
   children,
   level = "h2",
+  status,
 }: {
   children: string;
   level?: "h2" | "h3" | "h4";
+  status?: ErrorStatus;
 }) => {
   if (typeof children !== "string") {
     return <>{children}</>;
   }
   const Wrapper = `${level}` as keyof JSX.IntrinsicElements;
+  const className = status ? `${defaultClasses.text[status]}` : "";
 
-  return <Wrapper>{children}</Wrapper>;
+  return <Wrapper className={`${className}`}>{children}</Wrapper>;
 };
 
 export const Body = ({ children }: { children: JSX.Element | string }) => {
   return <>{children}</>;
 };
 
-export const Icon = ({ children }: { children: JSX.Element }) => {
+export const Icon = ({
+  children,
+  status,
+}: {
+  children: JSX.Element;
+  status?: ErrorStatus | undefined;
+}) => {
   if (children.type.name === "Icon") {
     return <>{children}</>;
   }
-  return <div className="mr-1">{children}</div>;
+  const className = status ? `${defaultClasses.icon[status]}` : "";
+
+  return <div className={`mr-1 ${className}`}>{children}</div>;
 };
 
-const classes = {
+const defaultClasses = {
   background: {
     [ErrorStatus.SUCCESS]: "bg-emerald-50",
     [ErrorStatus.WARNING]: "bg-yellow-50",
@@ -42,10 +53,10 @@ const classes = {
     [ErrorStatus.INFO]: "bg-indigo-50",
   },
   icon: {
-    [ErrorStatus.SUCCESS]: "fill-emerald-700",
-    [ErrorStatus.WARNING]: "fill-yellow-700",
-    [ErrorStatus.ERROR]: "fill-red-700",
-    [ErrorStatus.INFO]: "fill-indigo-700",
+    [ErrorStatus.SUCCESS]: "[&_svg]:fill-emerald-700",
+    [ErrorStatus.WARNING]: "[&_svg]:fill-slate-950",
+    [ErrorStatus.ERROR]: "[&_svg]:fill-red-700",
+    [ErrorStatus.INFO]: "[&_svg]:fill-slate-950",
   },
   text: {
     [ErrorStatus.SUCCESS]: "text-emerald-700",
@@ -56,10 +67,26 @@ const classes = {
 };
 
 const defaultIcons = {
-  [ErrorStatus.SUCCESS]: <CircleCheckIcon />,
-  [ErrorStatus.WARNING]: <WarningIcon />,
-  [ErrorStatus.ERROR]: <WarningIcon />,
-  [ErrorStatus.INFO]: <InfoIcon />,
+  [ErrorStatus.SUCCESS]: (
+    <Icon status={ErrorStatus.SUCCESS}>
+      <CircleCheckIcon className={`h-12 w-12`} />
+    </Icon>
+  ),
+  [ErrorStatus.WARNING]: (
+    <Icon status={ErrorStatus.WARNING}>
+      <WarningIcon className={`h-12 w-12`} />
+    </Icon>
+  ),
+  [ErrorStatus.ERROR]: (
+    <Icon status={ErrorStatus.ERROR}>
+      <WarningIcon className={`h-12 w-12`} />
+    </Icon>
+  ),
+  [ErrorStatus.INFO]: (
+    <Icon status={ErrorStatus.INFO}>
+      <InfoIcon className={`h-12 w-12`} />
+    </Icon>
+  ),
 };
 
 type AlertProps = {
@@ -68,20 +95,19 @@ type AlertProps = {
   body?: string;
   icon?: JSX.Element | false | undefined;
   classNames?: string;
-  type?: ErrorStatus;
+  status?: ErrorStatus | undefined;
   dismissible?: boolean;
   onDismiss?: React.ReactEventHandler;
   focussable?: boolean;
 };
 
-const AlertContainer = ({ children, title, body, icon, classNames, type }: AlertProps) => {
+const AlertContainer = ({ children, title, body, icon, classNames, status }: AlertProps) => {
   let alertTitle: JSX.Element | string | undefined = title;
   let alertBody: JSX.Element | string | undefined = body;
   let alertIcon: JSX.Element | false | undefined =
-    type && icon == undefined ? defaultIcons[type] : icon;
+    status && icon == undefined ? defaultIcons[status] : icon;
   const content: JSX.Element[] = [];
 
-  // @TODO: move icon clone/add classes to Icon component
   // @TODO: handle dismissable alerts
   // @TODO: handle arbitrary props (...props)
   // @TODO: handle focusable alerts
@@ -90,14 +116,16 @@ const AlertContainer = ({ children, title, body, icon, classNames, type }: Alert
   React.Children.map(children, (child) => {
     if (!React.isValidElement(child)) return;
     if (child.type === Title) {
-      alertTitle = child;
+      alertTitle = React.cloneElement(child, {
+        ...child.props,
+        status: status,
+      });
     } else if (child.type === Body) {
       alertBody = child;
     } else if (child.type === Icon) {
-      // alertIcon = child;
       alertIcon = React.cloneElement(child, {
         ...child.props,
-        className: `${child.props.className} ${type && classes.icon[type]}`,
+        status: status,
       });
     } else {
       content.push(child);
@@ -106,9 +134,9 @@ const AlertContainer = ({ children, title, body, icon, classNames, type }: Alert
 
   return (
     <div className={`relative flex rounded-lg p-4 ${classNames}`} data-testid="alert" role="alert">
-      {alertIcon && <Icon>{alertIcon}</Icon>}
+      {alertIcon && <Icon status={status}>{alertIcon}</Icon>}
       <div className={`${alertIcon && "mt-2"}`}>
-        {alertTitle && <Title>{alertTitle}</Title>}
+        {alertTitle && <Title status={status}>{alertTitle}</Title>}
         <Body>
           <>
             {alertBody && <>{alertBody}</>}
@@ -126,7 +154,7 @@ export const Info = ({ children, title, body, icon, classNames }: AlertProps) =>
       title={title}
       body={body}
       classNames={`bg-indigo-50 ${classNames}`}
-      type={ErrorStatus.INFO}
+      status={ErrorStatus.INFO}
       icon={icon}
     >
       {children}
@@ -140,7 +168,7 @@ export const Warning = ({ children, title, body, icon, classNames }: AlertProps)
       title={title}
       body={body}
       classNames={`bg-yellow-50 ${classNames}`}
-      type={ErrorStatus.WARNING}
+      status={ErrorStatus.WARNING}
       icon={icon}
     >
       {children}
@@ -154,7 +182,7 @@ export const Danger = ({ children, title, body, icon, classNames }: AlertProps) 
       title={title}
       body={body}
       classNames={`bg-red-50 ${classNames}`}
-      type={ErrorStatus.ERROR}
+      status={ErrorStatus.ERROR}
       icon={icon}
     >
       {children}
@@ -168,7 +196,7 @@ export const Success = ({ children, title, body, icon, classNames }: AlertProps)
       title={title}
       body={body}
       classNames={`bg-emerald-50 ${classNames}`}
-      type={ErrorStatus.SUCCESS}
+      status={ErrorStatus.SUCCESS}
       icon={icon}
     >
       {children}
