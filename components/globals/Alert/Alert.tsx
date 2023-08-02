@@ -11,20 +11,19 @@ export enum ErrorStatus {
 
 export const Title = ({
   children,
-  level = "h2",
+  headingTag: HeadingTag = "h2",
   status,
 }: {
   children: string;
-  level?: "h2" | "h3" | "h4";
+  headingTag?: "h2" | "h3" | "h4";
   status?: ErrorStatus;
 }) => {
   if (typeof children !== "string") {
     return <>{children}</>;
   }
-  const Wrapper = `${level}` as keyof JSX.IntrinsicElements;
   const className = status ? `${defaultClasses.text[status]}` : "";
 
-  return <Wrapper className={`${className}`}>{children}</Wrapper>;
+  return <HeadingTag className={`${className}`}>{children}</HeadingTag>;
 };
 
 export const Body = ({ children }: { children: JSX.Element | string }) => {
@@ -61,9 +60,9 @@ const defaultClasses = {
   },
   text: {
     [ErrorStatus.SUCCESS]: "text-emerald-700",
-    [ErrorStatus.WARNING]: "text-yellow-700",
+    [ErrorStatus.WARNING]: "text-slate-950",
     [ErrorStatus.ERROR]: "text-red-700",
-    [ErrorStatus.INFO]: "text-indigo-700",
+    [ErrorStatus.INFO]: "text-slate-950",
   },
 };
 
