@@ -23,7 +23,7 @@ export const Select = (props: SelectProps): React.ReactElement => {
   const [field, meta] = useField(props);
   return (
     <>
-      {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
+      {meta.touched && meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
 
       <select
         id={id}

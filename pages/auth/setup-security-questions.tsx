@@ -4,12 +4,13 @@ import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import { Formik, FormikProps } from "formik";
 import * as Yup from "yup";
-import { TextInput, Label, Alert } from "@components/forms";
+import { Label, Alert } from "@components/forms";
 import { requireAuthentication, retrievePoolOfSecurityQuestions } from "@lib/auth";
 import { checkPrivileges } from "@lib/privileges";
 import { Button, ErrorStatus } from "@components/globals";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import { Select } from "@components/globals/Select/Select";
+import { Input } from "@components/globals/Input/Input";
 import { LinkButton } from "@components/globals";
 import { logMessage } from "@lib/logger";
 import { fetchWithCsrfToken } from "@lib/hooks/auth/fetchWithCsrfToken";
@@ -44,11 +45,6 @@ const updateSecurityQuestions = async (questionsAnswers: Answer[]): Promise<stri
     return "success";
   } catch (err) {
     logMessage.error(err);
-
-    // TODO may want to add "friendly" text or generalize error? Here are the response errors:
-    // e.g. "Malformed request", "All security questions must be different", "Failed to create..
-
-    // TODO typing if we stay with showing errors direct from the API
     const error = err as AxiosError;
     return error?.response && error?.response.data.error;
   }
@@ -109,7 +105,7 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
           setSubmitting(false);
         }}
         validateOnChange={false}
-        validateOnBlur={false}
+        validateOnBlur={true}
         validationSchema={validationSchema}
       >
         {({ handleSubmit, isSubmitting }) => (
@@ -169,7 +165,7 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
                 <Label id={"label-answer1"} htmlFor={"answer1"} className="required mt-6" required>
                   {t("answer")}
                 </Label>
-                <TextInput
+                <Input
                   className="gc-input-text w-full rounded"
                   type={"text"}
                   id={"answer1"}
@@ -210,7 +206,7 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
                 <Label id={"label-answer2"} htmlFor={"answer2"} className="required mt-6" required>
                   {t("answer")}
                 </Label>
-                <TextInput
+                <Input
                   className="gc-input-text w-full rounded"
                   type={"text"}
                   id={"answer2"}
@@ -251,7 +247,7 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
                 <Label id={"label-answer3"} htmlFor={"answer3"} className="required mt-6" required>
                   {t("answer")}
                 </Label>
-                <TextInput
+                <Input
                   className="gc-input-text w-full rounded"
                   type={"text"}
                   id={"answer3"}
