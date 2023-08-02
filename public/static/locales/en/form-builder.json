@@ -231,7 +231,7 @@
   },
   "description": "Description",
   "descriptionDescription": "The description appears below the label and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements.",
-  "didYouFindThisToolHelpful": "Did you find this tool helpful? <a href=\"/en/form-builder/contactus\" target=\"_blank\">Provide feedback</a>",
+  "didYouFindThisToolHelpful": "Did you find this tool helpful? <a href=\"/en/form-builder/support/contactus\" target=\"_blank\">Provide feedback</a>",
   "downloadCSV": "Export as a spreadsheet",
   "downloadResponsesTable": {
     "card": {

@@ -231,7 +231,7 @@
   },
   "description": "Description ",
   "descriptionDescription": "La description apparaît sous l'étiquette, et avant le champ. Elle est utilisée pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de mise en forme.",
-  "didYouFindThisToolHelpful": "Avez-vous trouvé cet outil pertinent? <a href=\"/fr/form-builder/contactus\" target=\"_blank\">Donner votre avis</a>",
+  "didYouFindThisToolHelpful": "Avez-vous trouvé cet outil pertinent? <a href=\"/fr/form-builder/support/contactus\" target=\"_blank\">Donner votre avis</a>",
   "downloadCSV": "Exporter en fichier CSV",
   "downloadResponsesTable": {
     "card": {
