@@ -112,6 +112,7 @@ const AlertContainer = ({
   dismissible,
   onDismiss,
   focussable,
+  ...props
 }: AlertProps) => {
   let alertTitle: JSX.Element | string | undefined = title;
   let alertBody: JSX.Element | string | undefined = body;
@@ -133,8 +134,6 @@ const AlertContainer = ({
       refFocus.current.focus();
     }
   }, [focussable]);
-
-  // @TODO: handle arbitrary props (...props)
 
   // Children components for title and body override props
   React.Children.map(children, (child) => {
@@ -164,6 +163,7 @@ const AlertContainer = ({
         className={`relative flex rounded-lg p-4 ${classNames}`}
         data-testid="alert"
         role="alert"
+        {...props}
       >
         {dismissible && (
           <button
@@ -199,6 +199,7 @@ export const Info = ({
   dismissible,
   onDismiss,
   focussable,
+  ...props
 }: AlertProps) => {
   return (
     <AlertContainer
@@ -210,6 +211,7 @@ export const Info = ({
       dismissible={dismissible}
       onDismiss={onDismiss}
       focussable={focussable}
+      {...props}
     >
       {children}
     </AlertContainer>
@@ -225,6 +227,7 @@ export const Warning = ({
   dismissible,
   onDismiss,
   focussable,
+  ...props
 }: AlertProps) => {
   return (
     <AlertContainer
@@ -236,6 +239,7 @@ export const Warning = ({
       dismissible={dismissible}
       onDismiss={onDismiss}
       focussable={focussable}
+      {...props}
     >
       {children}
     </AlertContainer>
@@ -251,6 +255,7 @@ export const Danger = ({
   dismissible,
   onDismiss,
   focussable,
+  ...props
 }: AlertProps) => {
   return (
     <AlertContainer
@@ -262,6 +267,7 @@ export const Danger = ({
       dismissible={dismissible}
       onDismiss={onDismiss}
       focussable={focussable}
+      {...props}
     >
       {children}
     </AlertContainer>
@@ -277,6 +283,7 @@ export const Success = ({
   dismissible,
   onDismiss,
   focussable,
+  ...props
 }: AlertProps) => {
   return (
     <AlertContainer
@@ -288,6 +295,7 @@ export const Success = ({
       dismissible={dismissible}
       onDismiss={onDismiss}
       focussable={focussable}
+      {...props}
     >
       {children}
     </AlertContainer>
