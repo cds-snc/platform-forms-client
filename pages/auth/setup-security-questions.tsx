@@ -15,6 +15,8 @@ import { logMessage } from "@lib/logger";
 import { fetchWithCsrfToken } from "@lib/hooks/auth/fetchWithCsrfToken";
 import { useRouter } from "next/router";
 import { AxiosError } from "axios";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@pages/api/auth/[...nextauth]";
 
 export interface Question {
   id: string;
@@ -277,9 +279,20 @@ SetupSecurityQuestions.getLayout = (page: ReactElement) => {
 };
 
 export const getServerSideProps = requireAuthentication(
-  async ({ user: { ability, email }, locale }) => {
+  async ({ user: { ability, email }, locale, req, res }) => {
     {
       checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
+
+      const session = await getServerSession(req, res, authOptions);
+      const sessionSecurityQuestions = session && session.user.securityQuestions;
+      if (sessionSecurityQuestions && sessionSecurityQuestions.length >= 3) {
+        return {
+          redirect: {
+            destination: "/profile",
+            permanent: false,
+          },
+        };
+      }
 
       // Removes any removed (deprecated) questions and formats for the related language
       const questions: Question[] = (await retrievePoolOfSecurityQuestions())
