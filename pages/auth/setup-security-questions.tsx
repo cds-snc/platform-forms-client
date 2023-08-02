@@ -38,15 +38,14 @@ interface QuestionAnswerValues {
 
 type QuestionValuesProps = FormikProps<QuestionAnswerValues>;
 
-const updateSecurityQuestions = async (questionsAnswers: Answer[]): Promise<string> => {
+const updateSecurityQuestions = async (questionsAnswers: Answer[]): Promise<Error | undefined> => {
   try {
     const data = { questionsWithAssociatedAnswers: [...questionsAnswers] };
     await fetchWithCsrfToken("/api/account/security-questions", data);
-    return "success";
   } catch (err) {
     logMessage.error(err);
     const error = err as AxiosError;
-    return error?.response && error.response.data.error;
+    return error?.response && new Error(error.response.data.error);
   }
 };
 
@@ -93,8 +92,8 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
           const result = await updateSecurityQuestions(data);
 
           // Fail, show an error
-          if (result !== "success") {
-            setFormError(result);
+          if (result && result instanceof Error) {
+            setFormError(result.message);
           } else {
             // Success, go to next step.
             // Note: Await so async call will not auto resolve and "flash" the submit to enabled
