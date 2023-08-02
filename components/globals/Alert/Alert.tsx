@@ -1,5 +1,5 @@
 import { CircleCheckIcon, InfoIcon, WarningIcon } from "@components/form-builder/icons";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export enum ErrorStatus {
@@ -119,6 +119,7 @@ const AlertContainer = ({
     status && icon == undefined ? defaultIcons[status] : icon;
   const content: JSX.Element[] = [];
   const [dismissed, setDismissed] = useState(false);
+  const refFocus = useRef<HTMLDivElement>(null);
 
   if (dismissible && !onDismiss) {
     onDismiss = () => setDismissed(true);
@@ -126,8 +127,14 @@ const AlertContainer = ({
 
   const { t } = useTranslation("common");
 
+  // Used to focus on showing. Purely for visual users, the role=alert takes care of AT users.
+  useEffect(() => {
+    if (focussable && refFocus.current) {
+      refFocus.current.focus();
+    }
+  }, [focussable]);
+
   // @TODO: handle arbitrary props (...props)
-  // @TODO: handle focusable alerts
 
   // Children components for title and body override props
   React.Children.map(children, (child) => {
@@ -152,6 +159,8 @@ const AlertContainer = ({
   return (
     !dismissed && (
       <div
+        ref={refFocus}
+        {...(focussable && { tabIndex: -1 })}
         className={`relative flex rounded-lg p-4 ${classNames}`}
         data-testid="alert"
         role="alert"
