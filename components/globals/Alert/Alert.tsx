@@ -1,5 +1,6 @@
 import { CircleCheckIcon, InfoIcon, WarningIcon } from "@components/form-builder/icons";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export enum ErrorStatus {
   SUCCESS = "SUCCESS",
@@ -101,14 +102,30 @@ type AlertProps = {
   focussable?: boolean;
 };
 
-const AlertContainer = ({ children, title, body, icon, classNames, status }: AlertProps) => {
+const AlertContainer = ({
+  children,
+  title,
+  body,
+  icon,
+  classNames,
+  status,
+  dismissible,
+  onDismiss,
+  focussable,
+}: AlertProps) => {
   let alertTitle: JSX.Element | string | undefined = title;
   let alertBody: JSX.Element | string | undefined = body;
   let alertIcon: JSX.Element | false | undefined =
     status && icon == undefined ? defaultIcons[status] : icon;
   const content: JSX.Element[] = [];
+  const [dismissed, setDismissed] = useState(false);
 
-  // @TODO: handle dismissable alerts
+  if (dismissible && !onDismiss) {
+    onDismiss = () => setDismissed(true);
+  }
+
+  const { t } = useTranslation("common");
+
   // @TODO: handle arbitrary props (...props)
   // @TODO: handle focusable alerts
 
@@ -133,22 +150,47 @@ const AlertContainer = ({ children, title, body, icon, classNames, status }: Ale
   });
 
   return (
-    <div className={`relative flex rounded-lg p-4 ${classNames}`} data-testid="alert" role="alert">
-      {alertIcon && <Icon status={status}>{alertIcon}</Icon>}
-      <div className={`${alertIcon && "mt-2"}`}>
-        {alertTitle && <Title status={status}>{alertTitle}</Title>}
-        <Body>
-          <>
-            {alertBody && <>{alertBody}</>}
-            {content}
-          </>
-        </Body>
+    !dismissed && (
+      <div
+        className={`relative flex rounded-lg p-4 ${classNames}`}
+        data-testid="alert"
+        role="alert"
+      >
+        {dismissible && (
+          <button
+            id="dismissButton"
+            aria-label={t("alert.dismissAlert")}
+            className="absolute right-0 mr-4 h-10 w-10 rounded-full border border-slate-950 bg-white text-2xl text-slate-950"
+            onClick={onDismiss}
+          >
+            x
+          </button>
+        )}
+        {alertIcon && <Icon status={status}>{alertIcon}</Icon>}
+        <div className={`${alertIcon && "mt-2"}`}>
+          {alertTitle && <Title status={status}>{alertTitle}</Title>}
+          <Body>
+            <>
+              {alertBody && <>{alertBody}</>}
+              {content}
+            </>
+          </Body>
+        </div>
       </div>
-    </div>
+    )
   );
 };
 
-export const Info = ({ children, title, body, icon, classNames }: AlertProps) => {
+export const Info = ({
+  children,
+  title,
+  body,
+  icon,
+  classNames,
+  dismissible,
+  onDismiss,
+  focussable,
+}: AlertProps) => {
   return (
     <AlertContainer
       title={title}
@@ -156,13 +198,25 @@ export const Info = ({ children, title, body, icon, classNames }: AlertProps) =>
       classNames={`bg-indigo-50 ${classNames}`}
       status={ErrorStatus.INFO}
       icon={icon}
+      dismissible={dismissible}
+      onDismiss={onDismiss}
+      focussable={focussable}
     >
       {children}
     </AlertContainer>
   );
 };
 
-export const Warning = ({ children, title, body, icon, classNames }: AlertProps) => {
+export const Warning = ({
+  children,
+  title,
+  body,
+  icon,
+  classNames,
+  dismissible,
+  onDismiss,
+  focussable,
+}: AlertProps) => {
   return (
     <AlertContainer
       title={title}
@@ -170,13 +224,25 @@ export const Warning = ({ children, title, body, icon, classNames }: AlertProps)
       classNames={`bg-yellow-50 ${classNames}`}
       status={ErrorStatus.WARNING}
       icon={icon}
+      dismissible={dismissible}
+      onDismiss={onDismiss}
+      focussable={focussable}
     >
       {children}
     </AlertContainer>
   );
 };
 
-export const Danger = ({ children, title, body, icon, classNames }: AlertProps) => {
+export const Danger = ({
+  children,
+  title,
+  body,
+  icon,
+  classNames,
+  dismissible,
+  onDismiss,
+  focussable,
+}: AlertProps) => {
   return (
     <AlertContainer
       title={title}
@@ -184,13 +250,25 @@ export const Danger = ({ children, title, body, icon, classNames }: AlertProps) 
       classNames={`bg-red-50 ${classNames}`}
       status={ErrorStatus.ERROR}
       icon={icon}
+      dismissible={dismissible}
+      onDismiss={onDismiss}
+      focussable={focussable}
     >
       {children}
     </AlertContainer>
   );
 };
 
-export const Success = ({ children, title, body, icon, classNames }: AlertProps) => {
+export const Success = ({
+  children,
+  title,
+  body,
+  icon,
+  classNames,
+  dismissible,
+  onDismiss,
+  focussable,
+}: AlertProps) => {
   return (
     <AlertContainer
       title={title}
@@ -198,6 +276,9 @@ export const Success = ({ children, title, body, icon, classNames }: AlertProps)
       classNames={`bg-emerald-50 ${classNames}`}
       status={ErrorStatus.SUCCESS}
       icon={icon}
+      dismissible={dismissible}
+      onDismiss={onDismiss}
+      focussable={focussable}
     >
       {children}
     </AlertContainer>
