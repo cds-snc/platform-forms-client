@@ -144,20 +144,20 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
                       {t("questionPlaceholder")}
                     </option>
                     {questions
-                      .filter((q) => {
+                      .filter(({ id }) => {
                         if (formRef?.current && formRef.current?.values) {
                           if (
-                            q.id === formRef.current.values.question2 ||
-                            q.id === formRef.current.values.question3
+                            id === formRef.current.values.question2 ||
+                            id === formRef.current.values.question3
                           ) {
                             return false;
                           }
                         }
                         return true;
                       })
-                      .map((q) => (
-                        <option key={q.id} value={q.id}>
-                          {q.question}
+                      .map(({ id, question }) => (
+                        <option key={id} value={id}>
+                          {question}
                         </option>
                       ))}
                   </>
@@ -185,20 +185,20 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
                       {t("questionPlaceholder")}
                     </option>
                     {questions
-                      .filter((q) => {
+                      .filter(({ id }) => {
                         if (formRef?.current && formRef.current?.values) {
                           if (
-                            q.id === formRef.current.values.question1 ||
-                            q.id === formRef.current.values.question3
+                            id === formRef.current.values.question1 ||
+                            id === formRef.current.values.question3
                           ) {
                             return false;
                           }
                         }
                         return true;
                       })
-                      .map((q) => (
-                        <option key={q.id} value={q.id}>
-                          {q.question}
+                      .map(({ id, question }) => (
+                        <option key={id} value={id}>
+                          {question}
                         </option>
                       ))}
                   </>
@@ -226,20 +226,20 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
                       {t("questionPlaceholder")}
                     </option>
                     {questions
-                      .filter((q) => {
+                      .filter(({ id }) => {
                         if (formRef?.current && formRef.current?.values) {
                           if (
-                            q.id === formRef.current.values.question1 ||
-                            q.id === formRef.current.values.question2
+                            id === formRef.current.values.question1 ||
+                            id === formRef.current.values.question2
                           ) {
                             return false;
                           }
                         }
                         return true;
                       })
-                      .map((q) => (
-                        <option key={q.id} value={q.id}>
-                          {q.question}
+                      .map(({ id, question }) => (
+                        <option key={id} value={id}>
+                          {question}
                         </option>
                       ))}
                   </>
