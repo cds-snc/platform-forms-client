@@ -6,7 +6,8 @@ import { ErrorMessage } from "@components/forms";
 import { InputFieldProps } from "@lib/types";
 
 interface DropdownProps extends InputFieldProps {
-  choices: string[];
+  children?: React.ReactElement;
+  choices?: string[];
 }
 
 interface DropdownOptionProps {
@@ -19,7 +20,7 @@ const DropdownOption = (props: DropdownOptionProps): React.ReactElement => {
 };
 
 export const Dropdown = (props: DropdownProps): React.ReactElement => {
-  const { id, className, choices, required, ariaDescribedBy } = props;
+  const { children, id, name, className, choices = [], required, ariaDescribedBy } = props;
 
   const { t } = useTranslation("common");
 
@@ -42,12 +43,19 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
         data-testid="dropdown"
         className={classes}
         id={id}
+        {...(name && { name })}
         required={required}
         aria-describedby={ariaDescribedBy}
         {...field}
       >
-        {initialDropdownOption}
-        {options}
+        {children ? (
+          children
+        ) : (
+          <>
+            {initialDropdownOption}
+            {options}
+          </>
+        )}
       </select>
     </>
   );
