@@ -11,10 +11,6 @@ import { getCsrfToken } from "next-auth/react";
 import { useRouter } from "next/router";
 import debounce from "lodash.debounce";
 
-// TODO: Dialog component currently takes actions to control the dialog behavior. Would be nice to
-// be able to wire with a form element to work with onSubmit and button type=submit to get form
-// behaviors like keying enter in an input to submit the form.
-
 const updateSecurityQuestion = async (
   oldQuestionId: string,
   newQuestionId: string,
@@ -118,11 +114,19 @@ export const EditSecurityQuestionModal = ({
     }
   };
 
-  // TODO: ask design about content for a Dialog fail error
   if (!questionNumber || !questionId || questions?.length <= 0) {
     return (
-      <Dialog title={t("errorTodo")} dialogRef={dialog}>
-        <p>TODO missing dialog data</p>
+      <Dialog handleClose={handleClose} title={t("securityQuestionModal.title")} dialogRef={dialog}>
+        <Attention
+          type={AttentionTypes.ERROR}
+          isAlert={true}
+          classes="mb-6"
+          heading={t("securityQuestionModal.errors.unknownError.title")}
+        >
+          <p className="text-sm text-[#26374a]">
+            {t("securityQuestionModal.errors.unknownError.content")}
+          </p>
+        </Attention>
       </Dialog>
     );
   }
@@ -139,7 +143,7 @@ export const EditSecurityQuestionModal = ({
       }
     >
       <>
-        {/* TODO: probably will not need the error since it can be removed programmatically */}
+        {/* TODO: probably will not need the error since already selected questions can be removed programmatically */}
         {isFormError && (
           <Attention
             type={AttentionTypes.ERROR}

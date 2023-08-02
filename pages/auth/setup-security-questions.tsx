@@ -88,6 +88,7 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
         }}
         onSubmit={async (values, { setSubmitting }) => {
           setFormError("");
+          setSubmitting(true);
           const data: Answer[] = [
             { questionId: values.question1, answer: values.answer1 },
             { questionId: values.question2, answer: values.answer2 },
@@ -98,10 +99,12 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
           // Fail, show an error
           if (result !== "success") {
             setFormError(result);
+          } else {
+            // Success, go to next step.
+            // Note: Await so async call will not auto resolve and "flash" the submit to enabled
+            // while loading.
+            await router.push({ pathname: `/${i18n.language}/myforms` });
           }
-
-          // Success, go to next step
-          router.push({ pathname: `/${i18n.language}/myforms` });
 
           setSubmitting(false);
         }}
@@ -109,7 +112,7 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
         validateOnBlur={false}
         validationSchema={validationSchema}
       >
-        {({ handleSubmit }) => (
+        {({ handleSubmit, isSubmitting }) => (
           <>
             {formError && (
               <Alert
@@ -257,7 +260,7 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
                 />
               </fieldset>
 
-              <Button theme="primary" type="submit" className="mr-4">
+              <Button theme="primary" type="submit" className="mr-4" disabled={isSubmitting}>
                 {t("continue")}
               </Button>
               <LinkButton.Secondary href={supportHref}>{t("contact")}</LinkButton.Secondary>
