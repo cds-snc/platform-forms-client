@@ -185,7 +185,7 @@ export const Verify = ({
                 ) : undefined}
               </Alert>
             )}
-            <h1 ref={headingRef} className="border-0 mt-6 mb-6">
+            <h1 data-testid="verify-title" ref={headingRef} className="border-0 mt-6 mb-6">
               {t("verify.title")}
             </h1>
             <p className="mt-10 mb-12">{t("verify.emailHasBeenSent")}</p>
