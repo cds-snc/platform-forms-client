@@ -25,5 +25,9 @@
   "2FALockedOutSession": {
     "title": "Votre session a expiré",
     "description": "Essayez de vous connecter à nouveau pour générer un nouveau code de sécurité."
+  },
+  "2FASessionExpired": {
+    "title": "[FR] Your session expired",
+    "description": "Try signing in again to generate a new security code."
   }
 }
