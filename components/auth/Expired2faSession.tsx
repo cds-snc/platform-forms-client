@@ -11,7 +11,9 @@ export const Expired2faSession = () => {
 
   return (
     <div>
-      <h2 className="mb-6 mt-4 p-0">{t("2FASessionExpired.title")}</h2>
+      <h2 className="mb-6 mt-4 p-0" data-testid="session-expired">
+        {t("2FASessionExpired.title")}
+      </h2>
       <p className="mb-10">{t("2FASessionExpired.description")}</p>
       <div className="laptop:flex">
         <LinkButton.Primary href={homeHref} className="mb-2 mr-3">

@@ -211,7 +211,7 @@ export const Verify = ({
                   required
                 />
               </div>
-              <Button theme="primary" type="submit">
+              <Button theme="primary" type="submit" dataTestId="verify-submit">
                 {t("verify.confirmButton")}
               </Button>
               <div className="flex mt-12">
