@@ -17,6 +17,7 @@ import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { Locked2fa } from "./Locked2fa";
+import { Expired2faSession } from "./Expired2faSession";
 
 interface VerifyProps {
   username: React.MutableRefObject<string>;
@@ -34,6 +35,7 @@ export const Verify = ({
   const [authErrorsState, { authErrorsReset, handleErrorById }] = useAuthErrors();
   const [isReVerify, setIsReverify] = useState(false);
   const [is2FAlocked, setIs2FAlocked] = useState(false);
+  const [is2FAExpiredSession, set2FAExpiredSession] = useState(false);
   const { data: session, status: authStatus } = useSession();
 
   const headingRef = useRef(null);
@@ -72,6 +74,8 @@ export const Verify = ({
         if (error) {
           if (error === "2FALockedOutSession") {
             setIs2FAlocked(true);
+          } else if (error === "2FAExpiredSession") {
+            set2FAExpiredSession(true);
           } else {
             handleErrorById(error);
           }
@@ -126,6 +130,10 @@ export const Verify = ({
 
   if (is2FAlocked) {
     return <Locked2fa />;
+  }
+
+  if (is2FAExpiredSession) {
+    return <Expired2faSession />;
   }
 
   if (isReVerify) {
