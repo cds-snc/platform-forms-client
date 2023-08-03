@@ -39,7 +39,6 @@ describe("<Alert />", () => {
 
   describe("Alerts using props", () => {
     it("Renders a basic alert with title, body, and custom icon", () => {
-      cy.viewport(1000, 400);
       cy.mount(
         <Alert.Success
           title="This is a title"
@@ -57,7 +56,6 @@ describe("<Alert />", () => {
     });
 
     it("Renders a basic alert with title, body, and default icon", () => {
-      cy.viewport(1000, 400);
       cy.mount(<Alert.Warning title="This is a title" body="This is a body" />);
 
       cy.get("[data-testid='alert']").should("exist");
@@ -71,7 +69,6 @@ describe("<Alert />", () => {
     });
 
     it("Renders a basic alert with title, body, and no icon", () => {
-      cy.viewport(1000, 400);
       cy.mount(<Alert.Warning title="This is a title" body="This is a body" icon={false} />);
 
       cy.get("[data-testid='alert']").should("exist");
@@ -124,7 +121,6 @@ describe("<Alert />", () => {
 
   describe("Default icons", () => {
     it("Renders an Info alert with default Icon", () => {
-      cy.viewport(1000, 400);
       cy.mount(
         <>
           <Alert.Info>
@@ -141,7 +137,6 @@ describe("<Alert />", () => {
     });
 
     it("Renders a Warning alert with default Icon", () => {
-      cy.viewport(1000, 400);
       cy.mount(
         <>
           <Alert.Warning>
@@ -158,7 +153,6 @@ describe("<Alert />", () => {
     });
 
     it("Renders a Danger alert with default Icon", () => {
-      cy.viewport(1000, 400);
       cy.mount(
         <>
           <Alert.Danger>
@@ -175,7 +169,6 @@ describe("<Alert />", () => {
     });
 
     it("Renders a Success alert with default Icon", () => {
-      cy.viewport(1000, 400);
       cy.mount(
         <>
           <Alert.Success>
@@ -194,7 +187,6 @@ describe("<Alert />", () => {
 
   describe("Complex alerts", () => {
     it("Renders an alert with mix of props and children", () => {
-      cy.viewport(1000, 400);
       // Title prop should be overridden by child Alert.Title
       // Body prop should be overridden by child Alert.Body
       // Para text should be appended after body prop
@@ -218,7 +210,6 @@ describe("<Alert />", () => {
     });
 
     it("Renders an alert with no icon", () => {
-      cy.viewport(1000, 400);
       cy.mount(
         <>
           <Alert.Success icon={false}>
@@ -234,7 +225,6 @@ describe("<Alert />", () => {
     });
 
     it("Renders an alert with default icon", () => {
-      cy.viewport(1000, 400);
       cy.mount(
         <>
           <Alert.Success>
@@ -254,7 +244,6 @@ describe("<Alert />", () => {
     });
 
     it("Renders a complex alert with custom icon", () => {
-      cy.viewport(1000, 400);
       cy.mount(
         <>
           <Alert.Warning>
@@ -329,21 +318,21 @@ describe("<Alert />", () => {
   describe("Custom classes", () => {
     it("Renders an alert with custom additional classes", () => {
       cy.mount(
-        <Alert.Success className="testClass">
-          <Alert.Title headingTag="h4" className="testHeadingClass">
+        <Alert.Success className="gc-testClass">
+          <Alert.Title headingTag="h4" className="gc-testHeadingClass">
             Test Title
           </Alert.Title>
-          <Alert.Body className="testBodyClass">Test body</Alert.Body>
+          <Alert.Body className="gc-testBodyClass">Test body</Alert.Body>
           <p>And a paragraph</p>
           <>And some text</>
           asdfasdf
         </Alert.Success>
       );
-      cy.get("[data-testid='alert']").should("exist").should("have.class", "testClass");
+      cy.get("[data-testid='alert']").should("exist").should("have.class", "gc-testClass");
       cy.get("[data-testid='alert-heading']")
         .should("exist")
-        .should("have.class", "testHeadingClass");
-      cy.get("[data-testid='alert-body']").should("exist").should("have.class", "testBodyClass");
+        .should("have.class", "gc-testHeadingClass");
+      cy.get("[data-testid='alert-body']").should("exist").should("have.class", "gc-testBodyClass");
     });
 
     it("Renders an alert with custom override classes", () => {
