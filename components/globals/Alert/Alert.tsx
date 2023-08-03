@@ -27,7 +27,7 @@ export const Title = ({
   const statusClass = status ? `${defaultClasses.text[status]}` : "";
 
   return (
-    <HeadingTag data-testid="alert-heading" className={cn("mb-0 pb-0", className, statusClass)}>
+    <HeadingTag data-testid="alert-heading" className={cn("mb-0 pb-0", statusClass, className)}>
       {children}
     </HeadingTag>
   );
