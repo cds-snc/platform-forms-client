@@ -1,6 +1,6 @@
 import React from "react";
 import * as Alert from "./Alert";
-import { CircleCheckIcon, CopyIcon } from "../../form-builder/icons";
+import { CircleCheckIcon } from "../../form-builder/icons";
 
 describe("<Alert />", () => {
   describe("Alerts by status", () => {
@@ -105,34 +105,95 @@ describe("<Alert />", () => {
     });
   });
 
-  describe("Complex alerts", () => {
-    it("Renders an alert with mix of props and children", () => {
-      cy.viewport(1000, 400);
-      // Title prop should be overridden by child Alert.Title
-      // Para text should be appended after body prop
-      // Default icon should be used
-      cy.mount(
-        <>
-          <Alert.Warning title="This is a title" body="This is a body">
-            <Alert.Title headingTag="h3">Test Title</Alert.Title>
-            <p>And a paragraph</p>
-          </Alert.Warning>
-        </>
-      );
+  describe("Focussable alerts", () => {
+    it("Renders a focussable alert", () => {
+      cy.mount(<Alert.Success focussable title="This is a title" body="This is a body" />);
+      cy.get("[data-testid='alert']").should("exist");
+      cy.focused().should("have.attr", "data-testid", "alert");
     });
+  });
 
-    it("Renders an alert with default Icon", () => {
+  describe("Default icons", () => {
+    it("Renders an Info alert with default Icon", () => {
       cy.viewport(1000, 400);
       cy.mount(
         <>
           <Alert.Info>
-            <Alert.Title headingTag="h3">Test Title</Alert.Title>
+            <Alert.Title>Test Title</Alert.Title>
             <Alert.Body>Test body</Alert.Body>
-            Just some text
-            <p>And a paragraph</p>
           </Alert.Info>
         </>
       );
+      cy.get("[data-testid='alert']").should("exist");
+      cy.get("[data-testid='alert-icon']").should("exist"); // Can we check specific icon?
+    });
+
+    it("Renders a Warning alert with default Icon", () => {
+      cy.viewport(1000, 400);
+      cy.mount(
+        <>
+          <Alert.Warning>
+            <Alert.Title>Test Title</Alert.Title>
+            <Alert.Body>Test body</Alert.Body>
+          </Alert.Warning>
+        </>
+      );
+      cy.get("[data-testid='alert']").should("exist");
+      cy.get("[data-testid='alert-icon']").should("exist"); // Can we check specific icon?
+    });
+
+    it("Renders a Danger alert with default Icon", () => {
+      cy.viewport(1000, 400);
+      cy.mount(
+        <>
+          <Alert.Danger>
+            <Alert.Title>Test Title</Alert.Title>
+            <Alert.Body>Test body</Alert.Body>
+          </Alert.Danger>
+        </>
+      );
+      cy.get("[data-testid='alert']").should("exist");
+      cy.get("[data-testid='alert-icon']").should("exist"); // Can we check specific icon?
+    });
+
+    it("Renders a Success alert with default Icon", () => {
+      cy.viewport(1000, 400);
+      cy.mount(
+        <>
+          <Alert.Success>
+            <Alert.Title>Test Title</Alert.Title>
+            <Alert.Body>Test body</Alert.Body>
+          </Alert.Success>
+        </>
+      );
+      cy.get("[data-testid='alert']").should("exist");
+      cy.get("[data-testid='alert-icon']").should("exist"); // Can we check specific icon?
+    });
+  });
+
+  describe("Complex alerts", () => {
+    it("Renders an alert with mix of props and children", () => {
+      cy.viewport(1000, 400);
+      // Title prop should be overridden by child Alert.Title
+      // Body prop should be overridden by child Alert.Body
+      // Para text should be appended after body prop
+      // Default icon should appear
+      cy.mount(
+        <>
+          <Alert.Warning title="This is a title" body="This is a body">
+            <Alert.Title>Test Title</Alert.Title>
+            <Alert.Body>Test body</Alert.Body>
+            <p>And a paragraph</p>
+          </Alert.Warning>
+        </>
+      );
+
+      cy.get("[data-testid='alert']").should("exist");
+      cy.get("[data-testid='alert-icon']").should("exist");
+      cy.get("[data-testid='alert-heading']").should("have.text", "Test Title");
+      cy.get("[data-testid='alert-body']").should("not.contain", "This is a body");
+      cy.get("[data-testid='alert-body']").should("contain", "Test body");
+      cy.get("[data-testid='alert-body']").should("contain", "And a paragraph");
     });
 
     it("Renders an alert with no icon", () => {
@@ -140,11 +201,15 @@ describe("<Alert />", () => {
       cy.mount(
         <>
           <Alert.Success icon={false}>
-            <Alert.Title headingTag="h3">Test Title</Alert.Title>
+            <Alert.Title>Test Title</Alert.Title>
             <Alert.Body>Test body</Alert.Body>
           </Alert.Success>
         </>
       );
+      cy.get("[data-testid='alert']").should("exist");
+      cy.get("[data-testid='alert-icon']").should("not.exist");
+      cy.get("[data-testid='alert-heading']").should("have.text", "Test Title");
+      cy.get("[data-testid='alert-body']").should("contain", "Test body");
     });
 
     it("Renders an alert with default icon", () => {
@@ -152,11 +217,16 @@ describe("<Alert />", () => {
       cy.mount(
         <>
           <Alert.Success>
-            <Alert.Title headingTag="h3">Test Title</Alert.Title>
+            <Alert.Title>Test Title</Alert.Title>
             <Alert.Body>Test body</Alert.Body>
           </Alert.Success>
         </>
       );
+
+      cy.get("[data-testid='alert']").should("exist");
+      cy.get("[data-testid='alert-icon']").should("exist"); // Can we check specific icon?
+      cy.get("[data-testid='alert-heading']").should("have.text", "Test Title");
+      cy.get("[data-testid='alert-body']").should("contain", "Test body");
     });
 
     it("Renders a complex alert with custom icon", () => {
@@ -167,25 +237,65 @@ describe("<Alert />", () => {
             <Alert.Icon>
               <CircleCheckIcon />
             </Alert.Icon>
-            <Alert.Title headingTag="h3">Test Title</Alert.Title>
+            <Alert.Title>Test Title</Alert.Title>
             <Alert.Body>Test body</Alert.Body>
           </Alert.Success>
         </>
       );
+      cy.get("[data-testid='alert']").should("exist");
+      cy.get("[data-testid='alert-icon']").should("exist"); // Can we check specific icon?
+      cy.get("[data-testid='alert-heading']").should("have.text", "Test Title");
+      cy.get("[data-testid='alert-body']").should("contain", "Test body");
     });
+  });
 
-    it("Renders a complex alert", () => {
+  describe("Custom heading levels", () => {
+    it("Renders an alert with default heading level h2", () => {
       cy.mount(
         <Alert.Success>
-          <Alert.Icon>
-            <CircleCheckIcon />
-          </Alert.Icon>
-          <Alert.Title headingTag="h3">Test Title</Alert.Title>
+          <Alert.Title>Test Title</Alert.Title>
           <Alert.Body>Test body</Alert.Body>
-          Just some text
-          <p>And a paragraph</p>
         </Alert.Success>
       );
+
+      cy.get("[data-testid='alert']").should("exist");
+      cy.get("[data-testid='alert-heading']").should("have.prop", "tagName", "H2");
+    });
+
+    it("Renders an alert with custom heading level H2", () => {
+      cy.mount(
+        <Alert.Success>
+          <Alert.Title headingTag="h2">Test Title</Alert.Title>
+          <Alert.Body>Test body</Alert.Body>
+        </Alert.Success>
+      );
+
+      cy.get("[data-testid='alert']").should("exist");
+      cy.get("[data-testid='alert-heading']").should("have.prop", "tagName", "H2");
+    });
+
+    it("Renders an alert with custom heading level h3", () => {
+      cy.mount(
+        <Alert.Success>
+          <Alert.Title headingTag="h3">Test Title</Alert.Title>
+          <Alert.Body>Test body</Alert.Body>
+        </Alert.Success>
+      );
+
+      cy.get("[data-testid='alert']").should("exist");
+      cy.get("[data-testid='alert-heading']").should("have.prop", "tagName", "H3");
+    });
+
+    it("Renders an alert with custom heading level h4", () => {
+      cy.mount(
+        <Alert.Success>
+          <Alert.Title headingTag="h4">Test Title</Alert.Title>
+          <Alert.Body>Test body</Alert.Body>
+        </Alert.Success>
+      );
+
+      cy.get("[data-testid='alert']").should("exist");
+      cy.get("[data-testid='alert-heading']").should("have.prop", "tagName", "H4");
     });
   });
 });
