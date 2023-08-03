@@ -27,7 +27,7 @@
     "description": "Try signing in again to generate a new security code."
   },
   "2FASessionExpired": {
-    "title": "Too many sign-in attempts ",
+    "title": "Session expired",
     "description": "Try signing in again to generate a new security code."
   }
 }
