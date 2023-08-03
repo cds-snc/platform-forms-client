@@ -5,6 +5,46 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.0](https://github.com/cds-snc/platform-forms-client/compare/v3.1.1...v3.2.0) (2023-08-03)
+
+
+### Features
+
+* Alarm on privilege escalation ([#2433](https://github.com/cds-snc/platform-forms-client/issues/2433)) ([0ef16f9](https://github.com/cds-snc/platform-forms-client/commit/0ef16f93aa28609445de65ecc25964cc3f02c309))
+* deactivate user account ([#2281](https://github.com/cds-snc/platform-forms-client/issues/2281)) ([0698f44](https://github.com/cds-snc/platform-forms-client/commit/0698f448e8827bd42f218bcf233293599eeb50ad))
+* Delete test responses on publish ([#2367](https://github.com/cds-snc/platform-forms-client/issues/2367)) ([08d91bf](https://github.com/cds-snc/platform-forms-client/commit/08d91bf13ea942d9a3a4d826e225fab2729169e2))
+* don't trigger gta event on preview submissions ([#2400](https://github.com/cds-snc/platform-forms-client/issues/2400)) ([c0f3e8c](https://github.com/cds-snc/platform-forms-client/commit/c0f3e8c3f3ec0815fa7d0d2a3d9591175097ddd3))
+* remove test/preview for published forms ([#2422](https://github.com/cds-snc/platform-forms-client/issues/2422)) ([294da5b](https://github.com/cds-snc/platform-forms-client/commit/294da5bcac4404e848f9f1363428df75866de746))
+
+
+### Bug Fixes
+
+* **deps:** update all patch dependencies ([#2407](https://github.com/cds-snc/platform-forms-client/issues/2407)) ([3694aa4](https://github.com/cds-snc/platform-forms-client/commit/3694aa4aa848ed0671caf3abf62cd25356465bf5))
+* error handling for 2FAExpiredSession ([#2491](https://github.com/cds-snc/platform-forms-client/issues/2491)) ([e066bc1](https://github.com/cds-snc/platform-forms-client/commit/e066bc133d61e47a950aad7117f1c685dd2f6c98))
+* form name not being set when title is set ([#2292](https://github.com/cds-snc/platform-forms-client/issues/2292)) ([f9acfa9](https://github.com/cds-snc/platform-forms-client/commit/f9acfa92024630d6e86ef0df529aedc330e26ad1))
+* update audit logs to be more unique ([#2430](https://github.com/cds-snc/platform-forms-client/issues/2430)) ([f0804fa](https://github.com/cds-snc/platform-forms-client/commit/f0804fa166e281483f7217b05018ea80fccc31de))
+
+
+### Documentation
+
+* add info about local testing ([#2309](https://github.com/cds-snc/platform-forms-client/issues/2309)) ([7598ef2](https://github.com/cds-snc/platform-forms-client/commit/7598ef2b4f61c01942e46b248d821248ae4f76c9))
+* update testing info ([#2327](https://github.com/cds-snc/platform-forms-client/issues/2327)) ([4969a8b](https://github.com/cds-snc/platform-forms-client/commit/4969a8b314a5cb25859fc6f484c317f592b59696))
+
+
+### Miscellaneous Chores
+
+* add tailwindcss eslint config ([888d6ee](https://github.com/cds-snc/platform-forms-client/commit/888d6eee2eab3e0141977de729a053ead7867100))
+* **deps:** update all non-major docker images ([#2332](https://github.com/cds-snc/platform-forms-client/issues/2332)) ([c880147](https://github.com/cds-snc/platform-forms-client/commit/c88014779b565d83a7db16d558425ea1dcc52fd9))
+* **deps:** update all non-major github action dependencies ([#2331](https://github.com/cds-snc/platform-forms-client/issues/2331)) ([43e0be7](https://github.com/cds-snc/platform-forms-client/commit/43e0be7a96156dea0d2461308be55d8f42e216a0))
+* **deps:** update all patch dependencies ([#2297](https://github.com/cds-snc/platform-forms-client/issues/2297)) ([f66a772](https://github.com/cds-snc/platform-forms-client/commit/f66a77267b28d962592fe27894dc7ff0868871b9))
+* fix contact us links for published page ([#2454](https://github.com/cds-snc/platform-forms-client/issues/2454)) ([aac5d5e](https://github.com/cds-snc/platform-forms-client/commit/aac5d5e8345fbf5cbe8ab006410f087590fbbb7c))
+* refactor delete responses on publish ([#2431](https://github.com/cds-snc/platform-forms-client/issues/2431)) ([3428012](https://github.com/cds-snc/platform-forms-client/commit/3428012599bd1eb5b30313bec2b213a8cbee6a50))
+* removed unused variable in DownloadTable.tsx ([#2474](https://github.com/cds-snc/platform-forms-client/issues/2474)) ([244b1a9](https://github.com/cds-snc/platform-forms-client/commit/244b1a917ff1d4a1f227026e88b0f165f670d204))
+* Terms of use typo and formatting ([fb4ddd7](https://github.com/cds-snc/platform-forms-client/commit/fb4ddd7c57b48f95de21d1bb56203922793f4415))
+* Update branding options ([#2449](https://github.com/cds-snc/platform-forms-client/issues/2449)) ([8fc26ec](https://github.com/cds-snc/platform-forms-client/commit/8fc26ecaf83d061217a517ba793e9fb80b84c58c))
+* update debug config ([#2404](https://github.com/cds-snc/platform-forms-client/issues/2404)) ([a173a88](https://github.com/cds-snc/platform-forms-client/commit/a173a888ccbec794aec339c5882c6190e53c205a))
+* update user table + add  migrations for upcoming feature ([#2310](https://github.com/cds-snc/platform-forms-client/issues/2310)) ([2d1149f](https://github.com/cds-snc/platform-forms-client/commit/2d1149fa590daa9d518485b138cad3b0a0777f7c))
+
 ## [3.1.1](https://github.com/cds-snc/platform-forms-client/compare/v3.1.0...v3.1.1) (2023-06-19)
 
 
