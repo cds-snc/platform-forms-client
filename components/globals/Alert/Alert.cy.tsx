@@ -1,6 +1,7 @@
 import React from "react";
 import * as Alert from "./Alert";
 import { CircleCheckIcon } from "../../form-builder/icons";
+import { Button } from "../../globals";
 
 describe("<Alert />", () => {
   describe("Alerts by status", () => {
@@ -387,6 +388,7 @@ describe("<Alert />", () => {
           <p>
             This paragraph <a href="/nowhere">contains a link</a>.
           </p>
+          <Button className="mt-8">And a button</Button>
         </Alert.Success>
       );
       cy.get("[data-testid='alert']").should("exist");
@@ -396,6 +398,7 @@ describe("<Alert />", () => {
         .should("contain", "Another list item")
         .should("contain", "Here is some text wrapped in a fragment")
         .should("contain", "This paragraph contains a link");
+      cy.get("[data-testid='alert-body'] button").should("exist").should("contain", "And a button");
     });
 
     it("Does not render text that is not contained in an element", () => {
