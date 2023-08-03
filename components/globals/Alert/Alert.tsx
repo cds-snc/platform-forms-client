@@ -1,4 +1,5 @@
 import { CircleCheckIcon, InfoIcon, WarningIcon } from "@components/form-builder/icons";
+import { cn } from "@lib/utils";
 import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -13,41 +14,55 @@ export const Title = ({
   children,
   headingTag: HeadingTag = "h2",
   status,
+  className,
 }: {
   children: string;
   headingTag?: "h2" | "h3" | "h4";
   status?: ErrorStatus;
+  className?: string;
 }) => {
   if (typeof children !== "string") {
     return <>{children}</>;
   }
-  const className = status ? `${defaultClasses.text[status]}` : "";
+  const statusClass = status ? `${defaultClasses.text[status]}` : "";
 
   return (
-    <HeadingTag data-testid="alert-heading" className={`mb-0 pb-0 ${className}`}>
+    <HeadingTag data-testid="alert-heading" className={cn("mb-0 pb-0", className, statusClass)}>
       {children}
     </HeadingTag>
   );
 };
 
-export const Body = ({ children }: { children: JSX.Element | string }) => {
-  return <>{children}</>;
+export const Body = ({
+  children,
+  className,
+}: {
+  children: JSX.Element | string;
+  className?: string;
+}) => {
+  return (
+    <div data-testid="alert-body" className={cn(className)}>
+      {children}
+    </div>
+  );
 };
 
 export const Icon = ({
   children,
   status,
+  className,
 }: {
   children: JSX.Element;
   status?: ErrorStatus | undefined;
+  className?: string;
 }) => {
   if (children.type.name === "Icon") {
     return <>{children}</>;
   }
-  const className = status ? `${defaultClasses.icon[status]}` : "";
+  const statusClass = status ? `${defaultClasses.icon[status]}` : "";
 
   return (
-    <div className={`mr-3 ${className}`} data-testid="alert-icon">
+    <div className={cn("mr-3", statusClass, className)} data-testid="alert-icon">
       {children}
     </div>
   );
@@ -104,7 +119,7 @@ type AlertProps = {
   title?: string;
   body?: string;
   icon?: JSX.Element | false | undefined;
-  classNames?: string;
+  className?: string;
   status?: ErrorStatus | undefined;
   dismissible?: boolean;
   onDismiss?: React.ReactEventHandler;
@@ -116,7 +131,7 @@ const AlertContainer = ({
   title,
   body,
   icon,
-  classNames,
+  className,
   status,
   dismissible,
   onDismiss,
@@ -168,7 +183,7 @@ const AlertContainer = ({
     <div
       ref={refFocus}
       {...(focussable && { tabIndex: -1 })}
-      className={`relative flex rounded-lg p-4 ${classNames}`}
+      className={cn("relative flex rounded-lg p-4", className)}
       data-testid="alert"
       role="alert"
       {...props}
@@ -188,10 +203,8 @@ const AlertContainer = ({
       <div className={`${alertIcon && ""}`}>
         {alertTitle && <Title status={status}>{alertTitle}</Title>}
         <Body>
-          <div data-testid="alert-body">
-            {alertBody && <>{alertBody}</>}
-            {content}
-          </div>
+          {alertBody && <>{alertBody}</>}
+          {content}
         </Body>
       </div>
     </div>
@@ -203,7 +216,7 @@ export const Info = ({
   title,
   body,
   icon,
-  classNames,
+  className,
   dismissible,
   onDismiss,
   focussable,
@@ -213,7 +226,7 @@ export const Info = ({
     <AlertContainer
       title={title}
       body={body}
-      classNames={`bg-indigo-50 ${classNames}`}
+      className={`bg-indigo-50 ${className}`}
       status={ErrorStatus.INFO}
       icon={icon}
       dismissible={dismissible}
@@ -231,7 +244,7 @@ export const Warning = ({
   title,
   body,
   icon,
-  classNames,
+  className,
   dismissible,
   onDismiss,
   focussable,
@@ -241,7 +254,7 @@ export const Warning = ({
     <AlertContainer
       title={title}
       body={body}
-      classNames={`bg-yellow-50 ${classNames}`}
+      className={`bg-yellow-50 ${className}`}
       status={ErrorStatus.WARNING}
       icon={icon}
       dismissible={dismissible}
@@ -259,7 +272,7 @@ export const Danger = ({
   title,
   body,
   icon,
-  classNames,
+  className,
   dismissible,
   onDismiss,
   focussable,
@@ -269,7 +282,7 @@ export const Danger = ({
     <AlertContainer
       title={title}
       body={body}
-      classNames={`bg-red-50 ${classNames}`}
+      className={`bg-red-50 ${className}`}
       status={ErrorStatus.ERROR}
       icon={icon}
       dismissible={dismissible}
@@ -287,7 +300,7 @@ export const Success = ({
   title,
   body,
   icon,
-  classNames,
+  className,
   dismissible,
   onDismiss,
   focussable,
@@ -297,7 +310,7 @@ export const Success = ({
     <AlertContainer
       title={title}
       body={body}
-      classNames={`bg-emerald-50 ${classNames}`}
+      className={`bg-emerald-50 ${className}`}
       status={ErrorStatus.SUCCESS}
       icon={icon}
       dismissible={dismissible}

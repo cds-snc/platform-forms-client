@@ -298,4 +298,24 @@ describe("<Alert />", () => {
       cy.get("[data-testid='alert-heading']").should("have.prop", "tagName", "H4");
     });
   });
+
+  describe("Custom classes", () => {
+    it("Renders an alert with custom classes", () => {
+      cy.mount(
+        <Alert.Success className="testClass">
+          <Alert.Title headingTag="h4" className="testHeadingClass">
+            Test Title
+          </Alert.Title>
+          <Alert.Body className="testBodyClass">Test body</Alert.Body>
+          <p>And a paragraph</p>
+          And some text
+        </Alert.Success>
+      );
+      cy.get("[data-testid='alert']").should("exist").should("have.class", "testClass");
+      cy.get("[data-testid='alert-heading']")
+        .should("exist")
+        .should("have.class", "testHeadingClass");
+      cy.get("[data-testid='alert-body']").should("exist").should("have.class", "testBodyClass");
+    });
+  });
 });
