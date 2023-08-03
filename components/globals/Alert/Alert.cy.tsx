@@ -355,7 +355,6 @@ describe("<Alert />", () => {
           <Alert.Body className="mt-4">Test body</Alert.Body>
           <p>And a paragraph</p>
           <>And some text</>
-          asdfasdf // will not render
         </Alert.Success>
       );
       cy.get("[data-testid='alert']")
@@ -370,6 +369,60 @@ describe("<Alert />", () => {
         .should("not.have.class", "mb-0") // The mb-8 class will override the default mb-0 class
         .should("not.have.class", "pb-0"); // The pb-8 class will override the default pb-0 class
       cy.get("[data-testid='alert-body']").should("exist").should("have.class", "mt-4"); // Additional class
+    });
+  });
+
+  describe("Alert contents", () => {
+    it("Renders an alert with Body and additional paragraph", () => {
+      cy.mount(
+        <Alert.Success>
+          <Alert.Body>Test body</Alert.Body>
+          <p>And a paragraph</p>
+        </Alert.Success>
+      );
+      cy.get("[data-testid='alert']").should("exist");
+      cy.get("[data-testid='alert-body']")
+        .should("contain", "Test body")
+        .should("contain", "And a paragraph");
+    });
+
+    it("Renders an alert with arbitrary children", () => {
+      cy.mount(
+        <Alert.Success>
+          <p>And a paragraph</p>
+          <ul>
+            <li>Here is a list</li>
+            <li>Another list item</li>
+          </ul>
+          <>Here is some text wrapped in a fragment</>
+          <p>
+            This paragraph <a href="/nowhere">contains a link</a>.
+          </p>
+        </Alert.Success>
+      );
+      cy.get("[data-testid='alert']").should("exist");
+      cy.get("[data-testid='alert-body']")
+        .should("contain", "And a paragraph")
+        .should("contain", "Here is a list")
+        .should("contain", "Another list item")
+        .should("contain", "Here is some text wrapped in a fragment")
+        .should("contain", "This paragraph contains a link");
+    });
+
+    it("Does not render text that is not contained in an element", () => {
+      cy.mount(
+        <Alert.Success>
+          <Alert.Body>Test body</Alert.Body>
+          <p>And a paragraph</p>
+          This text will not render
+        </Alert.Success>
+      );
+
+      cy.get("[data-testid='alert']").should("exist");
+      cy.get("[data-testid='alert-body']")
+        .should("contain", "Test body")
+        .should("contain", "And a paragraph")
+        .should("not.contain", "This text will not render");
     });
   });
 });
