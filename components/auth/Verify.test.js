@@ -28,7 +28,6 @@ describe("Verify Component", () => {
   });
 
   it("Should display the expired session screen", async () => {
-    const signInMock = jest.fn();
     signIn.mockReturnValue({ ok: false, error: "2FAExpiredSession" });
     getCsrfToken.mockResolvedValue("CsrfToken");
     useSession.mockReturnValue({ data: { user: { id: "1" } }, status: "" });
