@@ -164,39 +164,39 @@ const AlertContainer = ({
     }
   });
 
-  return (
-    !dismissed && (
-      <div
-        ref={refFocus}
-        {...(focussable && { tabIndex: -1 })}
-        className={`relative flex rounded-lg p-4 ${classNames}`}
-        data-testid="alert"
-        role="alert"
-        {...props}
-      >
-        {dismissible && (
-          <button
-            data-testid="alert-dismiss"
-            id="dismissButton"
-            aria-label={t("alert.dismissAlert")}
-            className="absolute right-0 mr-4 h-10 w-10 rounded-full border border-slate-950 bg-white text-2xl text-slate-950"
-            onClick={onDismiss}
-          >
-            x
-          </button>
-        )}
-        {alertIcon && <Icon status={status}>{alertIcon}</Icon>}
-        <div className={`${alertIcon && ""}`}>
-          {alertTitle && <Title status={status}>{alertTitle}</Title>}
-          <Body>
-            <div data-testid="alert-body">
-              {alertBody && <>{alertBody}</>}
-              {content}
-            </div>
-          </Body>
-        </div>
+  return !dismissed ? (
+    <div
+      ref={refFocus}
+      {...(focussable && { tabIndex: -1 })}
+      className={`relative flex rounded-lg p-4 ${classNames}`}
+      data-testid="alert"
+      role="alert"
+      {...props}
+    >
+      {dismissible && (
+        <button
+          data-testid="alert-dismiss"
+          id="dismissButton"
+          aria-label={t("alert.dismissAlert")}
+          className="absolute right-0 mr-4 h-10 w-10 rounded-full border border-slate-950 bg-white text-2xl text-slate-950"
+          onClick={onDismiss}
+        >
+          x
+        </button>
+      )}
+      {alertIcon && <Icon status={status}>{alertIcon}</Icon>}
+      <div className={`${alertIcon && ""}`}>
+        {alertTitle && <Title status={status}>{alertTitle}</Title>}
+        <Body>
+          <div data-testid="alert-body">
+            {alertBody && <>{alertBody}</>}
+            {content}
+          </div>
+        </Body>
       </div>
-    )
+    </div>
+  ) : (
+    <></>
   );
 };
 
