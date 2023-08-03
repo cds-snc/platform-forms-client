@@ -203,8 +203,10 @@ const AlertContainer = ({
       <div className={`${alertIcon && ""}`}>
         {alertTitle && <Title status={status}>{alertTitle}</Title>}
         <Body>
-          {alertBody && <>{alertBody}</>}
-          {content}
+          <>
+            {alertBody && <>{alertBody}</>}
+            {content}
+          </>
         </Body>
       </div>
     </div>
