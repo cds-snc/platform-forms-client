@@ -195,9 +195,7 @@ const AlertContainer = ({
         </Body>
       </div>
     </div>
-  ) : (
-    <></>
-  );
+  ) : null;
 };
 
 export const Info = ({
