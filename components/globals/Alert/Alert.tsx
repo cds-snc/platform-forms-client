@@ -10,6 +10,12 @@ export enum ErrorStatus {
   INFO = "INFO",
 }
 
+const headingClasses = {
+  h2: "text-2xl font-bold",
+  h3: "text-xl font-bold",
+  h4: "text-lg font-bold",
+};
+
 export const Title = ({
   children,
   headingTag: HeadingTag = "h2",
@@ -27,7 +33,10 @@ export const Title = ({
   const statusClass = status ? `${defaultClasses.text[status]}` : "";
 
   return (
-    <HeadingTag data-testid="alert-heading" className={cn("mb-0 pb-0", statusClass, className)}>
+    <HeadingTag
+      data-testid="alert-heading"
+      className={cn("mb-0 pb-0", headingClasses[HeadingTag], statusClass, className)}
+    >
       {children}
     </HeadingTag>
   );
