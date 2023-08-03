@@ -62,7 +62,9 @@ describe("<Alert />", () => {
 
       cy.get("[data-testid='alert']").should("exist");
       cy.get("[data-testid='alert-icon']").should("exist");
-      cy.get("[data-testid='alert-icon'] svg").should("exist");
+      cy.get("[data-testid='alert-icon'] svg")
+        .should("exist")
+        .should("have.attr", "data-testid", "WarningIcon");
 
       cy.get("[data-testid='alert'] h2").should("have.text", "This is a title");
       cy.get("[data-testid='alert']").should("contain", "This is a body");
@@ -89,8 +91,13 @@ describe("<Alert />", () => {
     });
 
     // @TODO: fix this test
-    it.skip("Renders a dismissible alert with custom dismiss action", () => {
-      const onDismissHandler = cy.stub();
+    it("Renders a dismissible alert with custom dismiss action", () => {
+      // const onDismissHandler = cy.stub();
+      let called = false;
+      const onDismissHandler = () => {
+        called = true;
+      };
+
       cy.mount(
         <Alert.Success
           dismissible
@@ -100,8 +107,10 @@ describe("<Alert />", () => {
         />
       );
       cy.get("[data-testid='alert']").should("exist");
-      cy.get("[data-testid='alert-dismiss']").should("exist").click();
-      expect(onDismissHandler).to.be.calledOnce;
+      cy.get("[data-testid='alert-dismiss']").click();
+      cy.get("[data-testid='alert-dismiss']").then(() => {
+        expect(called).to.be.true;
+      });
     });
   });
 
@@ -125,7 +134,10 @@ describe("<Alert />", () => {
         </>
       );
       cy.get("[data-testid='alert']").should("exist");
-      cy.get("[data-testid='alert-icon']").should("exist"); // Can we check specific icon?
+      cy.get("[data-testid='alert-icon']").should("exist");
+      cy.get("[data-testid='alert-icon'] svg")
+        .should("exist")
+        .should("have.attr", "data-testid", "InfoIcon");
     });
 
     it("Renders a Warning alert with default Icon", () => {
@@ -139,7 +151,10 @@ describe("<Alert />", () => {
         </>
       );
       cy.get("[data-testid='alert']").should("exist");
-      cy.get("[data-testid='alert-icon']").should("exist"); // Can we check specific icon?
+      cy.get("[data-testid='alert-icon']").should("exist");
+      cy.get("[data-testid='alert-icon'] svg")
+        .should("exist")
+        .should("have.attr", "data-testid", "WarningIcon");
     });
 
     it("Renders a Danger alert with default Icon", () => {
@@ -153,7 +168,10 @@ describe("<Alert />", () => {
         </>
       );
       cy.get("[data-testid='alert']").should("exist");
-      cy.get("[data-testid='alert-icon']").should("exist"); // Can we check specific icon?
+      cy.get("[data-testid='alert-icon']").should("exist");
+      cy.get("[data-testid='alert-icon'] svg")
+        .should("exist")
+        .should("have.attr", "data-testid", "WarningIcon");
     });
 
     it("Renders a Success alert with default Icon", () => {
@@ -167,7 +185,10 @@ describe("<Alert />", () => {
         </>
       );
       cy.get("[data-testid='alert']").should("exist");
-      cy.get("[data-testid='alert-icon']").should("exist"); // Can we check specific icon?
+      cy.get("[data-testid='alert-icon']").should("exist");
+      cy.get("[data-testid='alert-icon'] svg")
+        .should("exist")
+        .should("have.attr", "data-testid", "CircleCheckIcon");
     });
   });
 
@@ -224,7 +245,10 @@ describe("<Alert />", () => {
       );
 
       cy.get("[data-testid='alert']").should("exist");
-      cy.get("[data-testid='alert-icon']").should("exist"); // Can we check specific icon?
+      cy.get("[data-testid='alert-icon']").should("exist");
+      cy.get("[data-testid='alert-icon'] svg")
+        .should("exist")
+        .should("have.attr", "data-testid", "CircleCheckIcon");
       cy.get("[data-testid='alert-heading']").should("have.text", "Test Title");
       cy.get("[data-testid='alert-body']").should("contain", "Test body");
     });
@@ -233,17 +257,20 @@ describe("<Alert />", () => {
       cy.viewport(1000, 400);
       cy.mount(
         <>
-          <Alert.Success>
+          <Alert.Warning>
             <Alert.Icon>
               <CircleCheckIcon />
             </Alert.Icon>
             <Alert.Title>Test Title</Alert.Title>
             <Alert.Body>Test body</Alert.Body>
-          </Alert.Success>
+          </Alert.Warning>
         </>
       );
       cy.get("[data-testid='alert']").should("exist");
-      cy.get("[data-testid='alert-icon']").should("exist"); // Can we check specific icon?
+      cy.get("[data-testid='alert-icon']").should("exist");
+      cy.get("[data-testid='alert-icon'] svg")
+        .should("exist")
+        .should("have.attr", "data-testid", "CircleCheckIcon");
       cy.get("[data-testid='alert-heading']").should("have.text", "Test Title");
       cy.get("[data-testid='alert-body']").should("contain", "Test body");
     });
@@ -302,13 +329,14 @@ describe("<Alert />", () => {
   describe("Custom classes", () => {
     it("Renders an alert with custom classes", () => {
       cy.mount(
-        <Alert.Success className="testClass">
+        <Alert.Success className="testClass p-8">
           <Alert.Title headingTag="h4" className="testHeadingClass">
             Test Title
           </Alert.Title>
           <Alert.Body className="testBodyClass">Test body</Alert.Body>
           <p>And a paragraph</p>
-          And some text
+          <>And some text</>
+          asdfasdf
         </Alert.Success>
       );
       cy.get("[data-testid='alert']").should("exist").should("have.class", "testClass");
