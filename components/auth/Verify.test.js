@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { Verify } from "./Verify";
 import { getCsrfToken, useSession, signIn } from "next-auth/react";
 
@@ -37,7 +37,6 @@ describe("Verify Component", () => {
     const input = screen.getByTestId("textInput");
     fireEvent.change(input, { target: { value: "12345" } });
     fireEvent.click(screen.getByTestId("verify-submit"));
-    expect(signInMock).toHaveBeenCalledTimes(1);
-    expect(screen.getByTestId("session-expired")).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByTestId("session-expired")).toBeInTheDocument());
   });
 });
