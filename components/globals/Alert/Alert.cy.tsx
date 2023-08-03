@@ -379,9 +379,10 @@ describe("<Alert />", () => {
     it("Renders an alert with arbitrary children", () => {
       cy.mount(
         <Alert.Success>
-          <p>And a paragraph</p>
+          <Alert.Title>This is an Alert</Alert.Title>
+          <p>With a paragraph</p>
           <ul>
-            <li>Here is a list</li>
+            <li>And a list</li>
             <li>Another list item</li>
           </ul>
           <>Here is some text wrapped in a fragment</>
@@ -393,11 +394,14 @@ describe("<Alert />", () => {
       );
       cy.get("[data-testid='alert']").should("exist");
       cy.get("[data-testid='alert-body']")
-        .should("contain", "And a paragraph")
-        .should("contain", "Here is a list")
-        .should("contain", "Another list item")
+        .should("contain", "With a paragraph")
         .should("contain", "Here is some text wrapped in a fragment")
         .should("contain", "This paragraph contains a link");
+      cy.get("[data-testid='alert-body'] p a").should("exist").should("contain", "contains a link");
+      cy.get("[data-testid='alert-body'] ul")
+        .should("exist")
+        .should("contain", "And a list")
+        .should("contain", "Another list item");
       cy.get("[data-testid='alert-body'] button").should("exist").should("contain", "And a button");
     });
 
