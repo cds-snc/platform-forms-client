@@ -47,7 +47,7 @@ export const Body = ({
   );
 };
 
-export const Icon = ({
+export const IconWrapper = ({
   children,
   status,
   className,
@@ -56,7 +56,7 @@ export const Icon = ({
   status?: ErrorStatus | undefined;
   className?: string;
 }) => {
-  if (children.type.name === "Icon") {
+  if (children.type.name === "IconWrapper") {
     return <>{children}</>;
   }
   const statusClass = status ? `${defaultClasses.icon[status]}` : "";
@@ -93,24 +93,24 @@ const defaultIconClasses = "h-12 w-12";
 
 const defaultIcons = {
   [ErrorStatus.SUCCESS]: (
-    <Icon status={ErrorStatus.SUCCESS}>
+    <IconWrapper status={ErrorStatus.SUCCESS}>
       <CircleCheckIcon className={defaultIconClasses} />
-    </Icon>
+    </IconWrapper>
   ),
   [ErrorStatus.WARNING]: (
-    <Icon status={ErrorStatus.WARNING}>
+    <IconWrapper status={ErrorStatus.WARNING}>
       <WarningIcon className={defaultIconClasses} />
-    </Icon>
+    </IconWrapper>
   ),
   [ErrorStatus.ERROR]: (
-    <Icon status={ErrorStatus.ERROR}>
+    <IconWrapper status={ErrorStatus.ERROR}>
       <WarningIcon className={defaultIconClasses} />
-    </Icon>
+    </IconWrapper>
   ),
   [ErrorStatus.INFO]: (
-    <Icon status={ErrorStatus.INFO}>
+    <IconWrapper status={ErrorStatus.INFO}>
       <InfoIcon className={defaultIconClasses} />
-    </Icon>
+    </IconWrapper>
   ),
 };
 
@@ -169,7 +169,7 @@ const AlertContainer = ({
       });
     } else if (child.type === Body) {
       alertBody = child;
-    } else if (child.type === Icon) {
+    } else if (child.type === IconWrapper) {
       alertIcon = React.cloneElement(child, {
         ...child.props,
         status: status,
@@ -199,7 +199,7 @@ const AlertContainer = ({
           x
         </button>
       )}
-      {alertIcon && <Icon status={status}>{alertIcon}</Icon>}
+      {alertIcon && <IconWrapper status={status}>{alertIcon}</IconWrapper>}
       <div className={`${alertIcon && ""}`}>
         {alertTitle && <Title status={status}>{alertTitle}</Title>}
         <Body>

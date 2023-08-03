@@ -258,9 +258,9 @@ describe("<Alert />", () => {
       cy.mount(
         <>
           <Alert.Warning>
-            <Alert.Icon>
+            <Alert.IconWrapper>
               <CircleCheckIcon />
-            </Alert.Icon>
+            </Alert.IconWrapper>
             <Alert.Title>Test Title</Alert.Title>
             <Alert.Body>Test body</Alert.Body>
           </Alert.Warning>
