@@ -327,9 +327,9 @@ describe("<Alert />", () => {
   });
 
   describe("Custom classes", () => {
-    it("Renders an alert with custom classes", () => {
+    it("Renders an alert with custom additional classes", () => {
       cy.mount(
-        <Alert.Success className="testClass p-8">
+        <Alert.Success className="testClass">
           <Alert.Title headingTag="h4" className="testHeadingClass">
             Test Title
           </Alert.Title>
@@ -344,6 +344,32 @@ describe("<Alert />", () => {
         .should("exist")
         .should("have.class", "testHeadingClass");
       cy.get("[data-testid='alert-body']").should("exist").should("have.class", "testBodyClass");
+    });
+
+    it("Renders an alert with custom override classes", () => {
+      cy.mount(
+        <Alert.Success className="mb-8 p-8">
+          <Alert.Title headingTag="h4" className="mb-8 pb-8">
+            Test Title
+          </Alert.Title>
+          <Alert.Body className="mt-4">Test body</Alert.Body>
+          <p>And a paragraph</p>
+          <>And some text</>
+          asdfasdf // will not render
+        </Alert.Success>
+      );
+      cy.get("[data-testid='alert']")
+        .should("exist")
+        .should("have.class", "p-8") // Override class
+        .should("have.class", "mb-8") // Additional class
+        .should("not.have.class", "p-4"); // The p-8 class will override the default p-4 class
+      cy.get("[data-testid='alert-heading']")
+        .should("exist")
+        .should("have.class", "mb-8") // Override class
+        .should("have.class", "pb-8") // Override class
+        .should("not.have.class", "mb-0") // The mb-8 class will override the default mb-0 class
+        .should("not.have.class", "pb-0"); // The pb-8 class will override the default pb-0 class
+      cy.get("[data-testid='alert-body']").should("exist").should("have.class", "mt-4"); // Additional class
     });
   });
 });
