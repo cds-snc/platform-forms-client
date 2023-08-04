@@ -75,7 +75,7 @@ export function requireAuthentication(
           },
         };
       }
-      // adding a check for securityQuestions here to prevent a redirect loop
+      // Redirect to policy page only if users aren't on the policy or security questions page
       if (
         session.user.securityQuestions &&
         !session.user.acceptableUse &&
