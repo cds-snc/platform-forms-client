@@ -29,12 +29,16 @@ const SiteLink = () => {
 
 type UserNavLayoutProps = {
   contentWidth?: string; // tailwindcss width classses for content width
+  beforeContentWrapper?: React.ReactNode;
+  afterContentWrapper?: React.ReactNode;
   children: React.ReactNode;
 };
 
 const UserNavLayout = ({
   children,
   contentWidth = "max-w-[900px] tablet:min-w-[658px]",
+  beforeContentWrapper = null,
+  afterContentWrapper = null,
 }: UserNavLayoutProps) => {
   const { ability } = useAccessControl();
   const { status } = useSession();
@@ -66,6 +70,7 @@ const UserNavLayout = ({
         </div>
       </header>
       <div id="page-container">
+        {beforeContentWrapper}
         <div className="account-wrapper mt-10 flex items-center justify-center">
           <div className={`${contentWidth} rounded-2xl border-1 border-[#D1D5DB] bg-white p-10`}>
             <main id="content">
@@ -75,6 +80,7 @@ const UserNavLayout = ({
             </main>
           </div>
         </div>
+        {afterContentWrapper}
       </div>
       <Footer displayFormBuilderFooter />
     </div>

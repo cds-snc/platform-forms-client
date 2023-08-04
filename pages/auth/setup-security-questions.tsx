@@ -16,6 +16,7 @@ import { useRouter } from "next/router";
 import { AxiosError } from "axios";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
+import * as AlertBanner from "@components/globals/Alert/Alert";
 import { toast } from "@formbuilder/app/shared";
 
 export interface Question {
@@ -38,6 +39,15 @@ interface QuestionAnswerValues {
 }
 
 type QuestionValuesProps = FormikProps<QuestionAnswerValues>;
+
+const Info = () => {
+  const { t } = useTranslation(["setup-security-questions"]);
+  return (
+    <div className="mx-auto mt-10 w-[850px]">
+      <AlertBanner.Info title={t("banner.title")} body={t("banner.body")} />
+    </div>
+  );
+};
 
 const updateSecurityQuestions = async (questionsAnswers: Answer[]): Promise<Error | undefined> => {
   try {
@@ -268,7 +278,11 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
 };
 
 SetupSecurityQuestions.getLayout = (page: ReactElement) => {
-  return <UserNavLayout contentWidth="tablet:w-[658px]">{page}</UserNavLayout>;
+  return (
+    <UserNavLayout beforeContentWrapper={<Info />} contentWidth="tablet:w-[658px]">
+      {page}
+    </UserNavLayout>
+  );
 };
 
 export const getServerSideProps = requireAuthentication(

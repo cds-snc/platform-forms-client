@@ -19,6 +19,10 @@
     "required": "Required field[FR]",
     "answerLength": "Doit être au moins 4 caractères."
   },
+  "banner": {
+    "title": "Nous renforçons la sécurité de votre compte et de vos formulaires.",
+    "body": "Des questions de sécurité vous seront posées si vous réinitialisez votre mot de passe."
+  },
   "success": {
     "title": "Vos questions de sécurité ont été enregistrées"
   }
