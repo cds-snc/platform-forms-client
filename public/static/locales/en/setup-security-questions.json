@@ -18,5 +18,9 @@
     },
     "required": "Required field",
     "answerLength": "Must be at least 4 characters"
+  },
+  "banner": {
+    "title": "We’ve added protection to keep your account and forms safe.",
+    "body": "You’ll need to enter a security code to access GC Forms."
   }
 }

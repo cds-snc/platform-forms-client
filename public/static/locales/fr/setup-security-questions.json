@@ -18,5 +18,9 @@
     },
     "required": "Required field[FR]",
     "answerLength": "Doit être au moins 4 caractères."
+  },
+  "banner": {
+    "title": "[FR] We’ve added protection to keep your account and forms safe.",
+    "body": "[FR] You’ll need to enter a security code to access GC Forms."
   }
 }

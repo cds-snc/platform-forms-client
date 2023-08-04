@@ -40,12 +40,10 @@ interface QuestionAnswerValues {
 type QuestionValuesProps = FormikProps<QuestionAnswerValues>;
 
 const Info = () => {
+  const { t } = useTranslation(["setup-security-questions"]);
   return (
     <div className="mx-auto mt-10 w-[750px]">
-      <AlertBanner.Info
-        title="We’ve added protection to keep your account and forms safe."
-        body="You’ll need to enter a security code to access GC Forms."
-      />
+      <AlertBanner.Info title={t("banner.title")} body={t("banner.body")} />
     </div>
   );
 };
