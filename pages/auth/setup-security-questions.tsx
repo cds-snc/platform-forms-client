@@ -43,7 +43,7 @@ type QuestionValuesProps = FormikProps<QuestionAnswerValues>;
 const Info = () => {
   const { t } = useTranslation(["setup-security-questions"]);
   return (
-    <div className="mx-auto mt-10 w-[750px]">
+    <div className="mx-auto mt-10 w-[850px]">
       <AlertBanner.Info title={t("banner.title")} body={t("banner.body")} />
     </div>
   );
