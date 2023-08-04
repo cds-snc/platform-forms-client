@@ -20,6 +20,6 @@
     "answerLength": "Doit être au moins 4 caractères."
   },
   "success": {
-    "title": "[FR] Your security questions have been saved"
+    "title": "Vos questions de sécurité ont été enregistrées"
   }
 }
