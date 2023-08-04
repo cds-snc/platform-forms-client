@@ -22,5 +22,8 @@
   "banner": {
     "title": "We’ve added protection to keep your account and forms safe.",
     "body": "You’ll need to enter a security code to access GC Forms."
+  },
+  "success": {
+    "title": "Your security questions have been saved"
   }
 }
