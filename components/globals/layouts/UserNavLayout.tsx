@@ -8,6 +8,7 @@ import { useAccessControl } from "@lib/hooks";
 import { Footer, Brand, SkipLink, LanguageToggle } from "@components/globals";
 import LoginMenu from "@components/auth/LoginMenu";
 import { SiteLogo } from "@formbuilder/icons";
+import { ToastContainer } from "@formbuilder/app/shared/Toast";
 
 const SiteLink = () => {
   const { t } = useTranslation("common");
@@ -70,6 +71,7 @@ const UserNavLayout = ({
             <main id="content">
               <SiteLink />
               {children}
+              <ToastContainer autoClose={false} />
             </main>
           </div>
         </div>

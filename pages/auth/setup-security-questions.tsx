@@ -16,6 +16,7 @@ import { useRouter } from "next/router";
 import { AxiosError } from "axios";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
+import { toast } from "@formbuilder/app/shared";
 
 export interface Question {
   id: string;
@@ -95,9 +96,8 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
           if (result && result instanceof Error) {
             setFormError(result.message);
           } else {
-            // Success, go to next step.
-            // Note: Await so async call will not auto resolve and "flash" the submit to enabled
-            // while loading.
+            toast.success(t("success.title"));
+            // Note: Await so async call will not auto resolve and "flash" the submit to enabled while loading.
             await router.push({ pathname: `/${i18n.language}/myforms` });
           }
 

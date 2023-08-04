@@ -18,5 +18,8 @@
     },
     "required": "Required field",
     "answerLength": "Must be at least 4 characters"
+  },
+  "success": {
+    "title": "Your security questions have been saved"
   }
 }
