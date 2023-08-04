@@ -16,6 +16,7 @@ import { useRouter } from "next/router";
 import { AxiosError } from "axios";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
+import * as AlertBanner from "@components/globals/Alert/Alert";
 
 export interface Question {
   id: string;
@@ -37,6 +38,17 @@ interface QuestionAnswerValues {
 }
 
 type QuestionValuesProps = FormikProps<QuestionAnswerValues>;
+
+const Info = () => {
+  return (
+    <div className="mx-auto mt-10 w-[750px]">
+      <AlertBanner.Info
+        title="We’ve added protection to keep your account and forms safe."
+        body="You’ll need to enter a security code to access GC Forms."
+      />
+    </div>
+  );
+};
 
 const updateSecurityQuestions = async (questionsAnswers: Answer[]): Promise<Error | undefined> => {
   try {
@@ -268,7 +280,11 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
 };
 
 SetupSecurityQuestions.getLayout = (page: ReactElement) => {
-  return <UserNavLayout contentWidth="tablet:w-[658px]">{page}</UserNavLayout>;
+  return (
+    <UserNavLayout beforeContentWrapper={<Info />} contentWidth="tablet:w-[658px]">
+      {page}
+    </UserNavLayout>
+  );
 };
 
 export const getServerSideProps = requireAuthentication(
