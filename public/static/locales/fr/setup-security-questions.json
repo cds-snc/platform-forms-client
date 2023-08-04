@@ -20,8 +20,8 @@
     "answerLength": "Doit être au moins 4 caractères."
   },
   "banner": {
-    "title": "[FR] We’ve added protection to keep your account and forms safe.",
-    "body": "[FR] You’ll need to enter a security code to access GC Forms."
+    "title": "Nous renforçons la sécurité de votre compte et de vos formulaires.",
+    "body": "Des questions de sécurité vous seront posées si vous réinitialisez votre mot de passe."
   },
   "success": {
     "title": "Vos questions de sécurité ont été enregistrées"
