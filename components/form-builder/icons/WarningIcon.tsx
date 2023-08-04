@@ -9,6 +9,7 @@ export const WarningIcon = ({ className, title }: { className?: string; title?: 
     focusable="false"
     aria-hidden={title ? false : true}
     role={title ? "img" : "presentation"}
+    data-testid="WarningIcon"
     // TODO: consider but probably better to be intentional and use a fill-[COLOR]
     // fill="currentColor"
   >
