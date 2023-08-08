@@ -47,35 +47,31 @@ export const sendPasswordResetLink = async (email: string): Promise<void> => {
 export const getPasswordResetAuthenticatedUserEmailAddress = async (
   token: string
 ): Promise<string> => {
-  try {
-    const deleteMagicLinkEntry = async (identifier: string) => {
-      await prisma.magicLink.deleteMany({
-        where: {
-          identifier,
-          token,
-        },
-      });
-    };
-
-    const magicLink = await prisma.magicLink.findUnique({
+  const deleteMagicLinkEntry = async (identifier: string) => {
+    await prisma.magicLink.deleteMany({
       where: {
-        token: token,
+        identifier,
+        token,
       },
     });
+  };
 
-    if (magicLink === null) throw new PasswordResetInvalidLink();
+  const magicLink = await prisma.magicLink.findUnique({
+    where: {
+      token: token,
+    },
+  });
 
-    if (magicLink.expires.getTime() < new Date().getTime()) {
-      await deleteMagicLinkEntry(magicLink.identifier);
-      throw new PasswordResetExpiredLink();
-    }
+  if (magicLink === null) throw new PasswordResetInvalidLink();
 
+  if (magicLink.expires.getTime() < new Date().getTime()) {
     await deleteMagicLinkEntry(magicLink.identifier);
-
-    return magicLink.identifier;
-  } catch (error) {
-    throw new Error(`Failed to retrieve user email address. Reason: ${(error as Error).message}.`);
+    throw new PasswordResetExpiredLink();
   }
+
+  await deleteMagicLinkEntry(magicLink.identifier);
+
+  return magicLink.identifier;
 };
 
 const sendPasswordResetEmail = async (email: string, token: string) => {
