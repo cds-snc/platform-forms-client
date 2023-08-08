@@ -44,4 +44,6 @@ export {
 export {
   sendPasswordResetLink,
   getPasswordResetAuthenticatedUserEmailAddress,
+  PasswordResetInvalidLink,
+  PasswordResetExpiredLink,
 } from "./passwordReset";
