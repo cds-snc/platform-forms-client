@@ -631,25 +631,31 @@ ResetPassword.getLayout = (page: ReactElement) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async ({ query: { token }, locale }) => {
   // if the password reset feature flag is not enabled. Redirect to the login page
   const passwordResetEnabled = await checkOne("passwordReset");
   if (!passwordResetEnabled) {
     return {
       redirect: {
-        destination: `/${context.locale}/auth/login`,
+        destination: `/${locale}/auth/login`,
         permanent: false,
       },
     };
   }
 
-  const showSecurityQuestions = false; // pull from magic link
-  const email = ""; // todo pull to populate this
+  let showSecurityQuestions = false;
+  let email = "";
+
+  if (token) {
+    // pull email via magic link
+    showSecurityQuestions = true;
+    email = ""; // getResetPasswordAuthenticatedUserEmailAddress();
+  }
 
   return {
     props: {
-      ...(context.locale &&
-        (await serverSideTranslations(context.locale, [
+      ...(locale &&
+        (await serverSideTranslations(locale, [
           "common",
           "cognito-errors",
           "reset-password",
