@@ -84,7 +84,7 @@ const sendPasswordResetEmail = async (email: string, token: string) => {
   try {
     const notify = getNotifyInstance();
 
-    const baseUrl = `http://${process.env.APP_DOMAIN}`;
+    const baseUrl = process.env.NEXTAUTH_URL;
 
     await notify.sendEmail(process.env.TEMPLATE_ID, email, {
       personalisation: {
