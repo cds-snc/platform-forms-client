@@ -40,3 +40,8 @@ export {
   SecurityQuestionNotFound,
   InvalidSecurityQuestionId,
 } from "./securityQuestions";
+
+export {
+  sendPasswordResetLink,
+  getPasswordResetAuthenticatedUserEmailAddress,
+} from "./passwordReset";
