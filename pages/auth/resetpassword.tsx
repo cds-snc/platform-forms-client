@@ -1,4 +1,4 @@
-import React, { useState, MutableRefObject, useEffect } from "react";
+import React, { useState, MutableRefObject, useEffect, ReactElement } from "react";
 import { Formik, FormikHelpers } from "formik";
 import { TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
 import { Button, LinkButton } from "@components/globals";
@@ -10,6 +10,8 @@ import { checkOne } from "@lib/cache/flags";
 import Link from "next/link";
 import Head from "next/head";
 import Loader from "@components/globals/Loader";
+import { useRouter } from "next/router";
+
 import * as Yup from "yup";
 import {
   containsLowerCaseCharacter,
@@ -551,19 +553,29 @@ const Step3 = ({
   );
 };
 
-const ResetPassword = () => {
+const ResetPassword = ({
+  email,
+  showSecurityQuestions,
+}: {
+  email: string;
+  showSecurityQuestions: boolean;
+}) => {
   // we don't put this state in useAuth since its very unique to this page only
   const [initialCodeSent, setInitialCodeSent] = useState(false);
-  const [securityQuestions, setSecurityQuestions] = useState(false);
+  const [securityQuestions, setSecurityQuestions] = useState(showSecurityQuestions);
+  const { i18n } = useTranslation();
+  const router = useRouter();
 
   const {
     username,
+    sendResetPasswordMagicLink,
     sendForgotPassword,
     confirmPasswordReset,
     authErrorsState,
     authErrorsReset,
     confirmSecurityQuestions,
   } = useResetPassword({
+    email,
     onConfirmSecurityQuestions: () => {
       sendForgotPassword(username.current);
       setInitialCodeSent(true);
@@ -578,7 +590,10 @@ const ResetPassword = () => {
         username={username}
         authErrorsState={authErrorsState}
         authErrorsReset={authErrorsReset}
-        nextStep={() => setSecurityQuestions(true)}
+        nextStep={async () => {
+          sendResetPasswordMagicLink(username.current);
+          await router.push(`/${i18n.language}/auth/resetlink`);
+        }}
       />
     );
   }
@@ -605,10 +620,13 @@ const ResetPassword = () => {
   );
 };
 
-ResetPassword.getLayout = () => {
+ResetPassword.getLayout = (page: ReactElement) => {
   return (
     <UserNavLayout contentWidth="tablet:w-[658px]">
-      <ResetPassword />
+      <ResetPassword
+        email={page.props.email}
+        showSecurityQuestions={page.props.showSecurityQuestions}
+      />
     </UserNavLayout>
   );
 };
@@ -625,6 +643,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  const showSecurityQuestions = false; // pull from magic link
+  const email = ""; // todo pull to populate this
+
   return {
     props: {
       ...(context.locale &&
@@ -634,6 +655,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           "reset-password",
           "signup",
         ]))),
+      email,
+      showSecurityQuestions,
     },
   };
 };

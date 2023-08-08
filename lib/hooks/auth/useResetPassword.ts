@@ -9,12 +9,14 @@ import { hasError } from "@lib/hasError";
 
 export const useResetPassword = ({
   onConfirmSecurityQuestions,
+  email = "",
 }: {
   onConfirmSecurityQuestions: () => void;
+  email: string;
 }) => {
   const router = useRouter();
   const { t } = useTranslation("cognito-errors");
-  const username = useRef("");
+  const username = useRef(email);
   const [authErrorsState, { authErrorsReset, handleErrorById }] = useAuthErrors();
 
   const sendForgotPassword = async (
@@ -25,6 +27,29 @@ export const useResetPassword = ({
     authErrorsReset();
     try {
       await fetchWithCsrfToken("/api/account/forgotpassword", { username });
+      if (successCallback) successCallback();
+    } catch (err) {
+      logMessage.error(err);
+
+      if (hasError("InvalidParameterException", err) && failedCallback) {
+        failedCallback("InvalidParameterException");
+      } else if (hasError("UserNotFoundException", err)) {
+        await router.push("/signup/register");
+      } else {
+        handleErrorById("InternalServiceExceptionLogin");
+        if (failedCallback) failedCallback("InternalServiceException");
+      }
+    }
+  };
+
+  const sendResetPasswordMagicLink = async (
+    username: string,
+    successCallback?: () => void,
+    failedCallback?: (error: string) => void
+  ) => {
+    authErrorsReset();
+    try {
+      await fetchWithCsrfToken("/api/account/reset-verify", { username });
       if (successCallback) successCallback();
     } catch (err) {
       logMessage.error(err);
@@ -144,6 +169,7 @@ export const useResetPassword = ({
 
   return {
     sendForgotPassword,
+    sendResetPasswordMagicLink,
     confirmSecurityQuestions,
     confirmPasswordReset,
     username,
