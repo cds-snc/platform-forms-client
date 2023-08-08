@@ -4,8 +4,8 @@ import { logMessage } from "@lib/logger";
 import { sanitizeEmailAddressForCognito } from "./cognito";
 import { getNotifyInstance } from "@lib/integration/notifyConnector";
 
-export class PasswordResetInvalidLink extends Error {}
-export class PasswordResetExpiredLink extends Error {}
+export class PasswordResetInvalidLink extends Error { }
+export class PasswordResetExpiredLink extends Error { }
 
 export const sendPasswordResetLink = async (email: string): Promise<void> => {
   const sanitizedEmail = sanitizeEmailAddressForCognito(email);
@@ -48,7 +48,6 @@ export const getPasswordResetAuthenticatedUserEmailAddress = async (
   token: string
 ): Promise<string> => {
   try {
-    throw new PasswordResetExpiredLink();
 
     const deleteMagicLinkEntry = async (identifier: string) => {
       await prisma.magicLink.deleteMany({
@@ -101,8 +100,7 @@ Réinitialisez votre mot de passe avec ce lien :
     });
   } catch (err) {
     logMessage.error(
-      `{"status": "failed", "message": "Notify failed to send the password reset email", "error":${
-        (err as Error).message
+      `{"status": "failed", "message": "Notify failed to send the password reset email", "error":${(err as Error).message
       }}`
     );
     throw new Error("Notify failed to send the password reset email");
