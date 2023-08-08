@@ -1,6 +1,5 @@
 import { Abilities } from "@lib/types";
 import { RawRuleOf, MongoAbility } from "@casl/ability";
-import { SecurityQuestion } from "@lib/auth";
 
 declare module "next-auth" {
   /**
@@ -17,7 +16,7 @@ declare module "next-auth" {
       image?: string | null;
       newlyRegistered?: boolean;
       deactivated?: boolean;
-      securityQuestions: SecurityQuestion[];
+      hasSecurityQuestions: boolean;
     };
   }
 }
@@ -29,6 +28,7 @@ declare module "next-auth/jwt" {
     name: string;
     lastLoginTime: Date;
     acceptableUse: boolean;
+    hasSecurityQuestions: boolean;
     newlyRegistered?: boolean;
     deactivated?: boolean;
   }

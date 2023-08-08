@@ -156,7 +156,7 @@ export const getServerSideProps = requireAuthentication(
       ]);
 
       const session = await getServerSession(req, res, authOptions);
-      const userQuestions = session?.user.securityQuestions;
+      const userQuestions = session?.user.hasSecurityQuestions;
       const allQuestions = await retrievePoolOfSecurityQuestions();
 
       return {

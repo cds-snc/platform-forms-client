@@ -5,7 +5,11 @@ import Head from "next/head";
 import { Formik, FormikProps } from "formik";
 import * as Yup from "yup";
 import { TextInput, Label, Alert, Dropdown } from "@components/forms";
-import { requireAuthentication, retrievePoolOfSecurityQuestions } from "@lib/auth";
+import {
+  requireAuthentication,
+  retrievePoolOfSecurityQuestions,
+  retrieveUserSecurityQuestions,
+} from "@lib/auth";
 import { checkPrivileges } from "@lib/privileges";
 import { Button, ErrorStatus } from "@components/globals";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
@@ -14,8 +18,6 @@ import { logMessage } from "@lib/logger";
 import { fetchWithCsrfToken } from "@lib/hooks/auth/fetchWithCsrfToken";
 import { useRouter } from "next/router";
 import { AxiosError } from "axios";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@pages/api/auth/[...nextauth]";
 import * as AlertBanner from "@components/globals/Alert/Alert";
 import { toast } from "@formbuilder/app/shared";
 
@@ -286,12 +288,13 @@ SetupSecurityQuestions.getLayout = (page: ReactElement) => {
 };
 
 export const getServerSideProps = requireAuthentication(
-  async ({ user: { ability, email }, locale, req, res }) => {
+  async ({ user: { ability, email }, locale }) => {
     {
       checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
 
-      const session = await getServerSession(req, res, authOptions);
-      const sessionSecurityQuestions = session && session.user.securityQuestions;
+      const sessionSecurityQuestions = await retrieveUserSecurityQuestions({
+        userId: ability.userID,
+      });
       if (sessionSecurityQuestions && sessionSecurityQuestions.length >= 3) {
         return {
           redirect: {

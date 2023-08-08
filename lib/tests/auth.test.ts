@@ -112,7 +112,7 @@ describe("Test Auth lib", () => {
           id: "1",
           privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
           acceptableUse: false,
-          securityQuestions: [{}],
+          hasSecurityQuestions: true,
         },
       };
       mockGetSession.mockResolvedValue(mockSession);
@@ -153,7 +153,7 @@ describe("Test Auth lib", () => {
           id: "1",
           privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
           acceptableUse: true,
-          securityQuestions: [{}],
+          hasSecurityQuestions: true,
         },
       };
       mockGetSession.mockResolvedValue(mockSession);
@@ -175,7 +175,7 @@ describe("Test Auth lib", () => {
             id: "1",
             privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
             acceptableUse: true,
-            securityQuestions: [{}],
+            hasSecurityQuestions: true,
           },
         },
       });
@@ -197,7 +197,7 @@ describe("Test Auth lib", () => {
           id: "1",
           privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
           acceptableUse: true,
-          securityQuestions: [{}],
+          hasSecurityQuestions: true,
         },
       };
       mockGetSession.mockResolvedValue(mockSession);
@@ -220,7 +220,7 @@ describe("Test Auth lib", () => {
             id: "1",
             privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
             acceptableUse: true,
-            securityQuestions: [{}],
+            hasSecurityQuestions: true,
           },
         },
       });
@@ -243,7 +243,7 @@ describe("Test Auth lib", () => {
         id: "1",
         privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
         acceptableUse: true,
-        securityQuestions: [{}],
+        hasSecurityQuestions: true,
       },
     };
     mockGetSession.mockResolvedValue(mockSession);
@@ -290,7 +290,7 @@ describe("Test Auth lib", () => {
           image: "null",
           id: "1",
           privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
-          securityQuestions: [{}],
+          hasSecurityQuestions: false,
         },
       };
       mockGetSession.mockResolvedValue(mockSession);

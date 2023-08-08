@@ -64,7 +64,7 @@ export function requireAuthentication(
       }
 
       if (
-        !session.user.securityQuestions.length &&
+        !session.user.hasSecurityQuestions &&
         !context.resolvedUrl?.startsWith("/auth/setup-security-questions")
       ) {
         // check if user has setup security questions setup
@@ -77,7 +77,7 @@ export function requireAuthentication(
       }
       // Redirect to policy page only if users aren't on the policy or security questions page
       if (
-        session.user.securityQuestions &&
+        session.user.hasSecurityQuestions &&
         !session.user.acceptableUse &&
         !context.resolvedUrl?.startsWith("/auth/policy") &&
         !context.resolvedUrl?.startsWith("/auth/setup-security-questions")
