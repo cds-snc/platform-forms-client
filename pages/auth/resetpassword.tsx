@@ -620,7 +620,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query: { token },
       if (e instanceof PasswordResetInvalidLink || e instanceof PasswordResetExpiredLink) {
         return {
           redirect: {
-            destination: `${locale}/auth/expired-link`,
+            destination: `/${locale}/auth/expired-link`,
             permanent: false,
           },
         };
