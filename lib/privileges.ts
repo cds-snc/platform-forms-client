@@ -136,8 +136,10 @@ export const updatePrivilegesForUser = async (
 ) => {
   try {
     checkPrivileges(ability, [{ action: "update", subject: "User" }]);
+
     const addPrivileges: { id: string }[] = [];
     const removePrivileges: { id: string }[] = [];
+
     privileges.forEach((privilege) => {
       if (privilege.action === "add") {
         addPrivileges.push({ id: privilege.id });
@@ -166,6 +168,8 @@ export const updatePrivilegesForUser = async (
           },
         },
         select: {
+          id: true,
+          email: true,
           privileges: true,
         },
       }),
@@ -185,21 +189,23 @@ export const updatePrivilegesForUser = async (
         userID,
         { type: "Privilege", id: privilege.id },
         "GrantPrivilege",
-        `Granted privilege : ${privilegesInfo.find((p) => p.id === privilege.id)?.nameEn} by User ${
-          privilegedUser?.email
-        } (userID: ${ability.userID})`
+        `Granted privilege : ${privilegesInfo.find((p) => p.id === privilege.id)?.nameEn} to ${
+          user.email
+        } (userID: ${user.id}) by ${privilegedUser?.email} (userID: ${ability.userID})`
       )
     );
+
     removePrivileges.forEach((privilege) =>
       logEvent(
         userID,
         { type: "Privilege", id: privilege.id },
         "RevokePrivilege",
-        `Revoked privilege : ${privilegesInfo.find((p) => p.id === privilege.id)?.nameEn} by User ${
-          privilegedUser?.email
-        } (userID: ${ability.userID})`
+        `Revoked privilege : ${privilegesInfo.find((p) => p.id === privilege.id)?.nameEn} from ${
+          user.email
+        } (userID: ${user.id}) by ${privilegedUser?.email} (userID: ${ability.userID})`
       )
     );
+
     // Remove existing values from Cache
     await privilegeDelete(userID);
 
