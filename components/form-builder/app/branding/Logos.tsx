@@ -22,7 +22,7 @@ export const Logos = ({
         disabled={disabled}
         id="branding-select"
         value={selected}
-        className="gc-dropdown inline-block mb-5 text-black-default"
+        className="gc-dropdown inline-block mb-5 text-black-default w-auto"
         onChange={(evt: React.ChangeEvent<HTMLSelectElement>) => {
           const val = evt.target.value;
           handleUpdate(val);
