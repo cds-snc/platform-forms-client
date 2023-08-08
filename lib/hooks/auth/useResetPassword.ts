@@ -43,13 +43,14 @@ export const useResetPassword = ({
   };
 
   const sendResetPasswordMagicLink = async (
-    username: string,
+    email: string,
     successCallback?: () => void,
     failedCallback?: (error: string) => void
   ) => {
     authErrorsReset();
     try {
-      await fetchWithCsrfToken("/api/account/reset-verify", { username });
+      await fetchWithCsrfToken("/api/auth/password-reset", { email });
+
       if (successCallback) successCallback();
     } catch (err) {
       logMessage.error(err);
