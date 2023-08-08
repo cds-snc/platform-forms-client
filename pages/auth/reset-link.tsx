@@ -14,7 +14,7 @@ const ResetLink = () => {
   return (
     <>
       <Head>
-        <title>{t("title")}</title>
+        <title>{t("magicLink.title")}</title>
       </Head>
       <div>
         <h2 className="mt-4 mb-6 p-0">{t("magicLink.title")}</h2>

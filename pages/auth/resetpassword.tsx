@@ -14,6 +14,8 @@ import {
   getPasswordResetAuthenticatedUserEmailAddress,
   retrieveUserSecurityQuestions,
   SecurityQuestion,
+  PasswordResetInvalidLink,
+  PasswordResetExpiredLink,
 } from "@lib/auth";
 
 import * as Yup from "yup";
@@ -555,7 +557,7 @@ const ResetPassword = ({
         authErrorsReset={authErrorsReset}
         nextStep={async () => {
           sendResetPasswordMagicLink(username.current);
-          await router.push(`/${i18n.language}/auth/resetlink`);
+          await router.push(`/${i18n.language}/auth/reset-link`);
         }}
       />
     );
@@ -611,8 +613,26 @@ export const getServerSideProps: GetServerSideProps = async ({ query: { token },
   let email = "";
 
   if (token) {
-    email = await getPasswordResetAuthenticatedUserEmailAddress(token as string);
-    userSecurityQuestions = await retrieveUserSecurityQuestions({ email });
+    try {
+      email = await getPasswordResetAuthenticatedUserEmailAddress(token as string);
+      userSecurityQuestions = await retrieveUserSecurityQuestions({ email });
+    } catch (e) {
+      if (e instanceof PasswordResetInvalidLink || e instanceof PasswordResetExpiredLink) {
+        return {
+          redirect: {
+            destination: `${locale}/auth/expired-link`,
+            permanent: false,
+          },
+        };
+      }
+
+      return {
+        redirect: {
+          destination: `/${locale}/auth/login`,
+          permanent: false,
+        },
+      };
+    }
   }
 
   return {

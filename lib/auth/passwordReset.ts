@@ -48,6 +48,8 @@ export const getPasswordResetAuthenticatedUserEmailAddress = async (
   token: string
 ): Promise<string> => {
   try {
+    throw new PasswordResetExpiredLink();
+
     const deleteMagicLinkEntry = async (identifier: string) => {
       await prisma.magicLink.deleteMany({
         where: {
