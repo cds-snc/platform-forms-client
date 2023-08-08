@@ -11,7 +11,6 @@ export const sendPasswordResetLink = async (email: string): Promise<void> => {
     where: {
       email: sanitizedEmail,
     },
-    select: {},
   });
 
   if (doesUserExist === null) throw new Error("UserDoesNotExist");
