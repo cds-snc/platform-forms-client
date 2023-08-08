@@ -4,6 +4,9 @@ import { logMessage } from "@lib/logger";
 import { sanitizeEmailAddressForCognito } from "./cognito";
 import { getNotifyInstance } from "@lib/integration/notifyConnector";
 
+export class PasswordResetInvalidLink extends Error {}
+export class PasswordResetExpiredLink extends Error {}
+
 export const sendPasswordResetLink = async (email: string): Promise<void> => {
   const sanitizedEmail = sanitizeEmailAddressForCognito(email);
 
@@ -11,7 +14,6 @@ export const sendPasswordResetLink = async (email: string): Promise<void> => {
     where: {
       email: sanitizedEmail,
     },
-    select: {},
   });
 
   if (doesUserExist === null) throw new Error("UserDoesNotExist");
@@ -61,11 +63,11 @@ export const getPasswordResetAuthenticatedUserEmailAddress = async (
       },
     });
 
-    if (magicLink === null) throw new Error("Invalid password reset link");
+    if (magicLink === null) throw new PasswordResetInvalidLink();
 
     if (magicLink.expires.getTime() < new Date().getTime()) {
       await deleteMagicLinkEntry(magicLink.identifier);
-      throw new Error("Password reset link has expired");
+      throw new PasswordResetExpiredLink();
     }
 
     await deleteMagicLinkEntry(magicLink.identifier);
