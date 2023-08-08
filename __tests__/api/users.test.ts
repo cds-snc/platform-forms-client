@@ -294,21 +294,21 @@ describe("Users API endpoint", () => {
         "2",
         { id: "1", type: "Privilege" },
         "GrantPrivilege",
-        "Granted privilege : View Users by User forms.admin@cds.ca (userID: 1)"
+        "Granted privilege : View Users to forms@cds.ca (userID: 2) by forms.admin@cds.ca (userID: 1)"
       );
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         2,
         "2",
         { id: "2", type: "Privilege" },
         "GrantPrivilege",
-        "Granted privilege : Manage Settings by User forms.admin@cds.ca (userID: 1)"
+        "Granted privilege : Manage Settings to forms@cds.ca (userID: 2) by forms.admin@cds.ca (userID: 1)"
       );
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         3,
         "2",
         { id: "3", type: "Privilege" },
         "RevokePrivilege",
-        "Revoked privilege : Manage Forms by User forms.admin@cds.ca (userID: 1)"
+        "Revoked privilege : Manage Forms from forms@cds.ca (userID: 2) by forms.admin@cds.ca (userID: 1)"
       );
     });
   });

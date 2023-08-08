@@ -747,14 +747,22 @@ export async function updateAssignedUsersForTemplate(
       ? updatedTemplate.users.map((u) => u.name)
       : [];
 
-    toAdd.forEach(async (u) => {
-      const user = await prisma.user.findFirst({
-        where: {
-          id: u.id,
-        },
-      });
+    const getUsersFromUserIds = (userIds: string[]) => {
+      return Promise.all(
+        userIds.map((userId) => {
+          return prisma.user.findUniqueOrThrow({
+            where: {
+              id: userId,
+            },
+          });
+        })
+      );
+    };
 
-      if (user && user.email && user.name) {
+    const usersToAdd = await getUsersFromUserIds(toAdd.map((u) => u.id));
+
+    usersToAdd.forEach((user) => {
+      if (user.email && user.name) {
         addOwnershipEmail({
           emailTo: user.email,
           formTitleEn: updatedTemplate.name,
@@ -765,14 +773,10 @@ export async function updateAssignedUsersForTemplate(
       }
     });
 
-    toRemove.forEach(async (u) => {
-      const user = await prisma.user.findFirst({
-        where: {
-          id: u.id,
-        },
-      });
+    const usersToRemove = await getUsersFromUserIds(toRemove.map((u) => u.id));
 
-      if (user && user.email && user.name) {
+    usersToRemove.forEach((user) => {
+      if (user.email && user.name) {
         transferOwnershipEmail({
           emailTo: user.email,
           formTitleEn: updatedTemplate.name,
@@ -784,20 +788,20 @@ export async function updateAssignedUsersForTemplate(
       }
     });
 
-    toAdd.length > 0 &&
+    usersToAdd.length > 0 &&
       logEvent(
         ability.userID,
         { type: "Form", id: formID },
         "GrantFormAccess",
-        `Access granted to ${toAdd.map((user) => user.id).toString()}`
+        `Access granted to ${usersToAdd.map((user) => user.email ?? user.id).toString()}`
       );
 
-    toRemove.length > 0 &&
+    usersToRemove.length > 0 &&
       logEvent(
         ability.userID,
         { type: "Form", id: formID },
         "RevokeFormAccess",
-        `Access revoked for ${toRemove.map((user) => user.id).toString()}`
+        `Access revoked for ${usersToRemove.map((user) => user.email ?? user.id).toString()}`
       );
 
     if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
