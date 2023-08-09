@@ -600,6 +600,7 @@ ResetPassword.getLayout = (page: ReactElement) => {
 export const getServerSideProps: GetServerSideProps = async ({ query: { token }, locale }) => {
   // if the password reset feature flag is not enabled. Redirect to the login page
   const passwordResetEnabled = await checkOne("passwordReset");
+
   if (!passwordResetEnabled) {
     return {
       redirect: {
@@ -616,6 +617,15 @@ export const getServerSideProps: GetServerSideProps = async ({ query: { token },
     try {
       email = await getPasswordResetAuthenticatedUserEmailAddress(token as string);
       userSecurityQuestions = await retrieveUserSecurityQuestions({ email });
+
+      if (userSecurityQuestions.length === 0) {
+        return {
+          redirect: {
+            destination: `/${locale}/auth/reset-failed`,
+            permanent: false,
+          },
+        };
+      }
     } catch (e) {
       if (e instanceof PasswordResetExpiredLink) {
         return {
