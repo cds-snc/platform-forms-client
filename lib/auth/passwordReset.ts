@@ -16,7 +16,12 @@ export const sendPasswordResetLink = async (email: string): Promise<void> => {
     },
   });
 
-  if (doesUserExist === null) throw new Error("UserDoesNotExist");
+  if (doesUserExist === null) {
+    logMessage.warn(
+      `Someone requested a reset password link with an email address that does not exist (${email})`
+    );
+    return;
+  }
 
   const generatedToken = await generateVerificationCode();
 
