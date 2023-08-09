@@ -140,3 +140,9 @@ model SecurityAnswer {
   userId             String
   securityQuestionId String
 }
+
+model MagicLink {
+  identifier String   @unique
+  token      String   @unique
+  expires    DateTime
+}

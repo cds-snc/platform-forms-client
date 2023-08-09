@@ -1,4 +1,4 @@
-import React, { useState, MutableRefObject, useEffect } from "react";
+import React, { useState, MutableRefObject, ReactElement } from "react";
 import { Formik, FormikHelpers } from "formik";
 import { TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
 import { Button, LinkButton } from "@components/globals";
@@ -9,7 +9,15 @@ import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import { checkOne } from "@lib/cache/flags";
 import Link from "next/link";
 import Head from "next/head";
-import Loader from "@components/globals/Loader";
+import { useRouter } from "next/router";
+import {
+  getPasswordResetAuthenticatedUserEmailAddress,
+  retrieveUserSecurityQuestions,
+  SecurityQuestion,
+  PasswordResetInvalidLink,
+  PasswordResetExpiredLink,
+} from "@lib/auth";
+
 import * as Yup from "yup";
 import {
   containsLowerCaseCharacter,
@@ -21,13 +29,6 @@ import {
 import { ErrorStatus } from "@components/forms/Alert/Alert";
 import { useResetPassword } from "@lib/hooks/auth";
 import { AuthErrorsState } from "@lib/hooks/auth/useAuthErrors";
-
-type Question = {
-  deprecated: boolean;
-  id: string;
-  questionEn: string;
-  questionFr: string;
-};
 
 const Step1 = ({
   username,
@@ -146,8 +147,10 @@ const Step2 = ({
   confirmSecurityQuestions,
   authErrorsState,
   authErrorsReset,
+  userSecurityQuestions,
 }: {
   username: MutableRefObject<string>;
+  userSecurityQuestions: SecurityQuestion[];
   confirmSecurityQuestions: (
     values: {
       username: string;
@@ -168,45 +171,7 @@ const Step2 = ({
   authErrorsReset: () => void;
 }) => {
   const { t, i18n } = useTranslation(["reset-password", "common"]);
-  const [userQuestions, setUserQuestions] = useState<Question[]>([]);
-  const [error, setError] = useState(false);
   const langKey = i18n.language === "en" ? "questionEn" : "questionFr";
-
-  const getUserQuestions = async () => {
-    try {
-      if (!username.current || userQuestions.length >= 1) return;
-
-      const questions = await fetch(`/api/auth/security-questions?email=${username.current}`);
-
-      if (!questions.ok || questions.status !== 200) {
-        setError(true);
-        return;
-      }
-
-      const questionsJson = await questions.json();
-      setUserQuestions(questionsJson);
-    } catch (error) {
-      setError(true);
-    }
-  };
-
-  useEffect(() => {
-    getUserQuestions();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  if (error) {
-    return (
-      <Alert
-        type={ErrorStatus.ERROR}
-        heading={t("errorPanel.defaultTitle")}
-        id="apiErrors"
-        focussable={true}
-      >
-        {t("errorPanel.defaultMessage")}
-      </Alert>
-    );
-  }
 
   // validation schema for the initial form to send the forgot password verification code
   const confirmSecurityQuestionsValidationSchema = Yup.object().shape({
@@ -221,16 +186,16 @@ const Step2 = ({
       .min(4, t("securityQuestions.inputValidation.questionLength")),
   });
 
-  if (!userQuestions || userQuestions.length < 3) {
+  if (!userSecurityQuestions || userSecurityQuestions.length < 3) {
     return (
-      <>
-        <Head>
-          <title>{t("resetPassword.title")}</title>
-        </Head>
-        <h1 className="mb-12 mt-6 border-b-0">{t("securityQuestions.title")}</h1>
-        <p className="mb-6 max-w-lg">{t("securityQuestions.description")}</p>
-        <Loader message={t("loading", { ns: "reset-password" })} />
-      </>
+      <Alert
+        type={ErrorStatus.ERROR}
+        heading={t("errorPanel.defaultTitle")}
+        id="apiErrors"
+        focussable={true}
+      >
+        {t("errorPanel.defaultMessage")}
+      </Alert>
     );
   }
 
@@ -246,7 +211,7 @@ const Step2 = ({
           question1: "",
           question2: "",
           question3: "",
-          qIds: `${userQuestions[0]?.id},${userQuestions[1]?.id},${userQuestions[2]?.id}`,
+          qIds: `${userSecurityQuestions[0]?.id},${userSecurityQuestions[1]?.id},${userSecurityQuestions[2]?.id}`,
         }}
         onSubmit={confirmSecurityQuestions}
         validationSchema={confirmSecurityQuestionsValidationSchema}
@@ -315,7 +280,7 @@ const Step2 = ({
                   className="required w-full max-w-lg"
                   required
                 >
-                  {userQuestions[0][langKey]}
+                  {userSecurityQuestions[0][langKey]}
                 </Label>
                 <TextInput
                   className="h-10 w-[75%] rounded"
@@ -333,7 +298,7 @@ const Step2 = ({
                   className="required w-full max-w-lg"
                   required
                 >
-                  {userQuestions[1][langKey]}
+                  {userSecurityQuestions[1][langKey]}
                 </Label>
                 <TextInput
                   className="h-10 w-[75%] rounded"
@@ -351,7 +316,7 @@ const Step2 = ({
                   className="required w-full max-w-lg"
                   required
                 >
-                  {userQuestions[2][langKey]}
+                  {userSecurityQuestions[2][langKey]}
                 </Label>
                 <TextInput
                   className="h-10 w-[75%] rounded"
@@ -551,19 +516,31 @@ const Step3 = ({
   );
 };
 
-const ResetPassword = () => {
+const ResetPassword = ({
+  email,
+  userSecurityQuestions,
+}: {
+  email: string;
+  userSecurityQuestions: [];
+}) => {
   // we don't put this state in useAuth since its very unique to this page only
   const [initialCodeSent, setInitialCodeSent] = useState(false);
-  const [securityQuestions, setSecurityQuestions] = useState(false);
+  const [securityQuestions, setSecurityQuestions] = useState(
+    userSecurityQuestions.length >= 1 ? true : false
+  );
+  const { i18n } = useTranslation();
+  const router = useRouter();
 
   const {
     username,
+    sendResetPasswordMagicLink,
     sendForgotPassword,
     confirmPasswordReset,
     authErrorsState,
     authErrorsReset,
     confirmSecurityQuestions,
   } = useResetPassword({
+    email,
     onConfirmSecurityQuestions: () => {
       sendForgotPassword(username.current);
       setInitialCodeSent(true);
@@ -578,7 +555,10 @@ const ResetPassword = () => {
         username={username}
         authErrorsState={authErrorsState}
         authErrorsReset={authErrorsReset}
-        nextStep={() => setSecurityQuestions(true)}
+        nextStep={async () => {
+          sendResetPasswordMagicLink(username.current);
+          await router.push(`/${i18n.language}/auth/reset-link`);
+        }}
       />
     );
   }
@@ -590,6 +570,7 @@ const ResetPassword = () => {
         authErrorsState={authErrorsState}
         authErrorsReset={authErrorsReset}
         confirmSecurityQuestions={confirmSecurityQuestions}
+        userSecurityQuestions={userSecurityQuestions}
       />
     );
   }
@@ -605,35 +586,75 @@ const ResetPassword = () => {
   );
 };
 
-ResetPassword.getLayout = () => {
+ResetPassword.getLayout = (page: ReactElement) => {
   return (
     <UserNavLayout contentWidth="tablet:w-[658px]">
-      <ResetPassword />
+      <ResetPassword
+        email={page.props.email}
+        userSecurityQuestions={page.props.userSecurityQuestions}
+      />
     </UserNavLayout>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async ({ query: { token }, locale }) => {
   // if the password reset feature flag is not enabled. Redirect to the login page
   const passwordResetEnabled = await checkOne("passwordReset");
   if (!passwordResetEnabled) {
     return {
       redirect: {
-        destination: `/${context.locale}/auth/login`,
+        destination: `/${locale}/auth/login`,
         permanent: false,
       },
     };
   }
 
+  let userSecurityQuestions: SecurityQuestion[] = [];
+  let email = "";
+
+  if (token) {
+    try {
+      email = await getPasswordResetAuthenticatedUserEmailAddress(token as string);
+      userSecurityQuestions = await retrieveUserSecurityQuestions({ email });
+    } catch (e) {
+      if (e instanceof PasswordResetExpiredLink) {
+        return {
+          redirect: {
+            destination: `/${locale}/auth/expired-link`,
+            permanent: false,
+          },
+        };
+      }
+
+      if (e instanceof PasswordResetInvalidLink) {
+        return {
+          redirect: {
+            destination: `/${locale}/auth/invalid-link`,
+            permanent: false,
+          },
+        };
+      }
+
+      return {
+        redirect: {
+          destination: `/${locale}/auth/login`,
+          permanent: false,
+        },
+      };
+    }
+  }
+
   return {
     props: {
-      ...(context.locale &&
-        (await serverSideTranslations(context.locale, [
+      ...(locale &&
+        (await serverSideTranslations(locale, [
           "common",
           "cognito-errors",
           "reset-password",
           "signup",
         ]))),
+      email,
+      userSecurityQuestions,
     },
   };
 };

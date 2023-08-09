@@ -41,3 +41,10 @@ export {
   InvalidSecurityQuestionId,
   userHasSecurityQuestions,
 } from "./securityQuestions";
+
+export {
+  sendPasswordResetLink,
+  getPasswordResetAuthenticatedUserEmailAddress,
+  PasswordResetInvalidLink,
+  PasswordResetExpiredLink,
+} from "./passwordReset";
