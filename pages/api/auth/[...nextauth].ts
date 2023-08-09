@@ -4,14 +4,14 @@ import {
   Validate2FAVerificationCodeResultStatus,
   begin2FAAuthentication,
   initiateSignIn,
-  retrieveUserSecurityQuestions,
+  userHasSecurityQuestions,
   validate2FAVerificationCode,
 } from "@lib/auth/";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { logMessage } from "@lib/logger";
 import { getOrCreateUser } from "@lib/users";
 import { prisma } from "@lib/integration/prismaConnector";
-import { acceptableUseCheck, removeAcceptableUse } from "@lib/acceptableUseCache";
+import { acceptableUseCheck, removeAcceptableUse } from "@lib/cache/acceptableUseCache";
 import { getPrivilegeRulesForUser } from "@lib/privileges";
 import { logEvent } from "@lib/auditLogs";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -86,6 +86,8 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.TOKEN_SECRET,
   session: {
     strategy: "jwt",
+  },
+  jwt: {
     // Seconds - How long until an idle session expires and is no longer valid.
     maxAge: 2 * 60 * 60, // 2 hours
   },
@@ -122,7 +124,6 @@ export const authOptions: NextAuthOptions = {
 
         token.userId = user.id;
         token.lastLoginTime = new Date();
-        token.acceptableUse = false;
         token.newlyRegistered = user.newlyRegistered;
       }
 
@@ -130,7 +131,12 @@ export const authOptions: NextAuthOptions = {
 
       // Check if user has accepted the Acceptable Use Policy
       if (!token.acceptableUse) {
-        token.acceptableUse = await getAcceptableUseValue(token.userId as string);
+        token.acceptableUse = await getAcceptableUseValue(token.userId);
+      }
+
+      // Check if user has setup required Security Questions
+      if (!token.hasSecurityQuestions) {
+        token.hasSecurityQuestions = await userHasSecurityQuestions(token.userId);
       }
 
       // Check if user has been deactivated
@@ -159,7 +165,7 @@ export const authOptions: NextAuthOptions = {
         ...(token.newlyRegistered && { newlyRegistered: token.newlyRegistered }),
         // Used client side to immidiately log out a user if they have been deactivated
         ...(token.deactivated && { deactivated: token.deactivated }),
-        securityQuestions: await retrieveUserSecurityQuestions({ userId: token.userId as string }),
+        hasSecurityQuestions: token.hasSecurityQuestions,
       };
 
       return session;

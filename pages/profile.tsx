@@ -4,14 +4,16 @@ import { useTranslation } from "next-i18next";
 import Head from "next/head";
 
 import { NextPageWithLayout } from "@pages/_app";
-import { requireAuthentication, retrievePoolOfSecurityQuestions } from "@lib/auth";
+import {
+  requireAuthentication,
+  retrievePoolOfSecurityQuestions,
+  retrieveUserSecurityQuestions,
+} from "@lib/auth";
 import { checkPrivileges, checkPrivilegesAsBoolean } from "@lib/privileges";
 import { Template } from "@components/form-builder/app";
 import { Button } from "@components/globals";
 import { CancelIcon, CircleCheckIcon } from "@components/form-builder/icons";
 import { EditSecurityQuestionModal } from "@components/admin/Profile/EditSecurityQuestionModal";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@pages/api/auth/[...nextauth]";
 
 interface ProfileProps {
   email: string;
@@ -147,7 +149,7 @@ Profile.getLayout = (page: ReactElement) => {
 };
 
 export const getServerSideProps = requireAuthentication(
-  async ({ user: { ability, email }, locale, req, res }) => {
+  async ({ user: { ability, email }, locale }) => {
     {
       checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
 
@@ -155,9 +157,10 @@ export const getServerSideProps = requireAuthentication(
         { action: "update", subject: "FormRecord", field: "isPublished" },
       ]);
 
-      const session = await getServerSession(req, res, authOptions);
-      const userQuestions = session?.user.securityQuestions;
-      const allQuestions = await retrievePoolOfSecurityQuestions();
+      const [userQuestions, allQuestions] = await Promise.all([
+        retrieveUserSecurityQuestions({ userId: ability.userID }),
+        retrievePoolOfSecurityQuestions(),
+      ]);
 
       return {
         props: {

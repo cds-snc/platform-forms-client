@@ -39,6 +39,7 @@ export {
   SecurityAnswersNotFound,
   SecurityQuestionNotFound,
   InvalidSecurityQuestionId,
+  userHasSecurityQuestions,
 } from "./securityQuestions";
 
 export {
