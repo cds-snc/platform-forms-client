@@ -1,4 +1,4 @@
-FROM node:16@sha256:466d0a05ecb1e5b9890960592311fa10c2bc6012fc27dbfdcc74abf10fc324fc
+FROM node:16@sha256:6cd6581a9ae814ebbc8077afd63ecbf4d37f9b59ac9d9304a1b5a9e743ac13e0
 
 
 ARG USERNAME=node
@@ -9,7 +9,7 @@ COPY flag_initialization /src
 WORKDIR /src
 RUN yarn install
 
-FROM node:16@sha256:466d0a05ecb1e5b9890960592311fa10c2bc6012fc27dbfdcc74abf10fc324fc
+FROM node:16@sha256:6cd6581a9ae814ebbc8077afd63ecbf4d37f9b59ac9d9304a1b5a9e743ac13e0
 
 ARG USERNAME=node
 ARG USER_UID=1000
