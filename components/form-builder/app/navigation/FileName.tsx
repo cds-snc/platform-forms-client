@@ -7,12 +7,14 @@ import { LocalizedFormProperties } from "@formbuilder/types";
 
 export const FileNameInput = () => {
   const { t } = useTranslation(["form-builder"]);
-  const { updateField, getName } = useTemplateStore((s) => ({
+  const { updateField, getName, getIsPublished } = useTemplateStore((s) => ({
     getName: s.getName,
     updateField: s.updateField,
+    getIsPublished: s.getIsPublished,
   }));
 
   const fileName = getName();
+  const isPublished = getIsPublished();
 
   const [content, setContent] = useState(fileName);
   const [isEditing, setIsEditing] = useState(false);
@@ -103,6 +105,7 @@ export const FileNameInput = () => {
         }}
         onChange={(e) => setContent(e.target.value)}
         aria-label={t("formName", { ns: "form-builder" })}
+        disabled={isPublished && true}
       />
     </div>
   );
