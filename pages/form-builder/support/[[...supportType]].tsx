@@ -231,13 +231,13 @@ export default function Contactus() {
         </Attention>
         <div className="focus-group mt-14">
           <Label id={"label-name"} htmlFor={"name"} className="required" required>
-            {t("contactus.name")}
+            {t("support.name")}
           </Label>
           <TextInput type={"text"} id={"name"} name={"name"} className="required w-[34rem]" />
         </div>
         <div className="focus-group">
           <Label id={"label-email"} htmlFor={"email"} className="required" required>
-            {t("contactus.email")}
+            {t("support.email")}
           </Label>
           <TextInput
             type={"text"}
@@ -249,7 +249,7 @@ export default function Contactus() {
         </div>
         <div className="focus-group mt-14">
           <Label id={"label-department"} htmlFor={"department"} className="required" required>
-            {t("contactus.department")}
+            {t("support.department")}
           </Label>
           <TextInput
             type={"text"}
@@ -260,13 +260,13 @@ export default function Contactus() {
         </div>
         <div className="focus-group mt-14">
           <Label id={"label-branch"} htmlFor={"branch"} className="required" required>
-            {t("contactus.branch")}
+            {t("support.branch")}
           </Label>
           <TextInput type={"text"} id={"branch"} name={"branch"} className="required w-[34rem]" />
         </div>
         <div className="focus-group mt-14">
           <Label id={"label-jobtitle"} htmlFor={"jobtitle"} className="required" required>
-            {t("contactus.jobtitle")}
+            {t("support.jobtitle")}
           </Label>
           <TextInput
             type={"text"}

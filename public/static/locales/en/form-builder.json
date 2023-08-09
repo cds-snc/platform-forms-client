@@ -203,8 +203,8 @@
       "title": "Additional information"
     },
     "email": "Your email",
-    "department": "Department",
-    "branch": "Branch",
+    "department": "Department or agency",
+    "branch": "Branch or sector",
     "jobtitle": "Job Title",
     "gcFormsTeamLink": "Canada.ca Contact us",
     "gcFormsTeamPart1": "The GC Forms team provides services to people who work in the government. We cannot give general advice to the public about the forms that we host. For other enquiries, go to",
@@ -578,6 +578,11 @@
       "description": "Provide more context around the problem you are experiencing.",
       "title": "Additional information"
     },
+    "name": "Your name",
+    "email": "Your email",
+    "department": "Department or agency",
+    "branch": "Branch or sector",
+    "jobtitle": "Job Title",
     "gcFormsTeamLink": "Canada.ca Contact us",
     "gcFormsTeamPart1": "The GC Forms team provides services to people who work in the government. We cannot give general advice to the public about the forms that we host. For other enquiries, go to",
     "gcFormsTeamPart2": "to find the department or agency that can help you.",

@@ -36,10 +36,10 @@ const requestSupport = async (req: NextApiRequest, res: NextApiResponse) => {
     emailBody = `
 ${name} (${email}) has requested we contact them for the form-builder.
 
-Department:
+Department or agency:
 ${department}
 
-Branch: 
+Branch or sector: 
 ${branch}
 
 Job Title:
@@ -54,13 +54,13 @@ ${description}
 ****
 ${name} (${email}) a demandé que nous les contactions pour le générateur de formulaires..
 
-Department[FR]:
+Ministère ou organisme:
 ${department}
 
-Branch[FR]:
+Direction ou secteur:
 ${branch}
 
-Job Title[FR]:
+Titre de poste:
 ${jobtitle}
 
 Demande de contact soutien:
@@ -91,13 +91,13 @@ ${description}
 ****
 ${name} (${email}) a demandé de soutien des form-builder.
 
-Department[FR]:
+Ministère ou organisme:
 ${department}
 
-Branch[FR]:
+Direction ou secteur:
 ${branch}
 
-Job Title[FR]:
+Titre de poste:
 ${jobtitle}
 
 Demande de soutien:
