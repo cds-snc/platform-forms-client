@@ -149,11 +149,11 @@ Cypress.Commands.add("login", (options?: { admin?: boolean; acceptableUse?: bool
 Cypress.Commands.add("securityQuestions", () => {
   cy.get("h1").contains("Set up security questions");
   cy.get("#question1").select("What was your favourite school subject?");
-  cy.get("#answer1").type("example-answer");
+  cy.get("#answer1").type("example-answer-1");
   cy.get("#question2").select("What was the name of your first manager?");
-  cy.get("#answer2").type("example-answer");
+  cy.get("#answer2").type("example-answer-2");
   cy.get("#question3").select("What was the make of your first car?");
-  cy.get("#answer3").type("example-answer");
+  cy.get("#answer3").type("example-answer-3");
   cy.contains("Continue").click();
 });
 

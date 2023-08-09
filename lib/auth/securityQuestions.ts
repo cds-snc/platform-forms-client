@@ -148,6 +148,18 @@ export async function retrieveUserSecurityQuestions({
   return userSecurityAnswers.map((answer) => answer.question);
 }
 
+export async function userHasSecurityQuestions(userId: string): Promise<boolean> {
+  const numberOfQuestions = await prisma.securityAnswer.count({
+    where: {
+      user: {
+        id: userId,
+      },
+    },
+  });
+
+  return numberOfQuestions > 0;
+}
+
 export async function validateSecurityAnswers(
   command: ValidateSecurityAnswersCommand
 ): Promise<boolean> {
