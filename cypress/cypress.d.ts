@@ -8,6 +8,7 @@ declare global {
       useForm: (file: string) => Chainable<void>;
       visitForm: (formID: string) => Chainable<Window>;
       visitPage: (path: string) => Chainable<Window>;
+      securityQuestions: () => Chainable<void>;
       login: ({
         admin,
         acceptableUse,

@@ -3,7 +3,7 @@ module.exports = {
       {
         files: ["*.{ts,tsx}"],
         extends: ["plugin:tailwindcss/recommended"],
-  
+
         parser: "@typescript-eslint/parser",
         parserOptions: {
           project: ["./tsconfig.json", "./cypress/tsconfig.json"],
@@ -16,8 +16,7 @@ module.exports = {
     ],
     settings: {
       tailwindcss: {
-        whitelist: ["(gc\\-).*", "form-builder", "page-container", "visually-hidden"]
+        whitelist: ["(gc\\-).*", "form-builder", "page-container", "visually-hidden", "buttons", "required", "focus-group"]
       }
     }
   };
-  

@@ -48,7 +48,7 @@ export default function AccountCreated() {
 }
 
 AccountCreated.getLayout = (page: ReactElement) => {
-  return <UserNavLayout>{page}</UserNavLayout>;
+  return <UserNavLayout contentWidth="tablet:w-[658px]">{page}</UserNavLayout>;
 };
 
 export const getServerSideProps = requireAuthentication(async ({ locale }) => {

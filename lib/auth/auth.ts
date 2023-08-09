@@ -63,7 +63,25 @@ export function requireAuthentication(
         };
       }
 
-      if (!session.user.acceptableUse && !context.resolvedUrl?.startsWith("/auth/policy")) {
+      if (
+        !session.user.hasSecurityQuestions &&
+        !context.resolvedUrl?.startsWith("/auth/setup-security-questions")
+      ) {
+        // check if user has setup security questions setup
+        return {
+          redirect: {
+            destination: `/${context.locale}/auth/setup-security-questions`,
+            permanent: false,
+          },
+        };
+      }
+      // Redirect to policy page only if users aren't on the policy or security questions page
+      if (
+        session.user.hasSecurityQuestions &&
+        !session.user.acceptableUse &&
+        !context.resolvedUrl?.startsWith("/auth/policy") &&
+        !context.resolvedUrl?.startsWith("/auth/setup-security-questions")
+      ) {
         // If they haven't agreed to Acceptable Use redirect to policy page for acceptance
         // If already on the policy page don't redirect, aka endless redirect loop.
         // Also check that the path is local and not an external URL

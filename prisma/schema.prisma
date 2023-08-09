@@ -83,17 +83,18 @@ model Privilege {
 }
 
 model User {
-  id            String      @id @default(cuid())
-  name          String?
-  email         String?     @unique
-  image         String?
-  emailVerified DateTime?
-  lastLogin     DateTime    @default(now()) @db.Timestamptz(6)
-  active        Boolean     @default(true)
-  privileges    Privilege[]
-  accounts      Account[]
-  sessions      Session[]
-  templates     Template[]
+  id              String           @id @default(cuid())
+  name            String?
+  email           String?          @unique
+  image           String?
+  emailVerified   DateTime?
+  lastLogin       DateTime         @default(now()) @db.Timestamptz(6)
+  active          Boolean          @default(true)
+  privileges      Privilege[]
+  accounts        Account[]
+  sessions        Session[]
+  templates       Template[]
+  securityAnswers SecurityAnswer[]
 }
 
 model VerificationToken {
@@ -114,11 +115,34 @@ model Setting {
 }
 
 model CognitoCustom2FA {
-  id                String    @id @default(cuid())
-  email             String    @unique
-  cognitoToken      String
-  verificationCode  String    @unique
-  expires           DateTime
+  id               String   @id @default(cuid())
+  email            String   @unique
+  cognitoToken     String
+  verificationCode String   @unique
+  expires          DateTime
 
   @@unique([id, email])
+}
+
+model SecurityQuestion {
+  id             String           @id @default(cuid())
+  questionEn     String
+  questionFr     String
+  deprecated     Boolean          @default(false)
+  securityAnswer SecurityAnswer[]
+}
+
+model SecurityAnswer {
+  id                 String           @id @default(cuid())
+  user               User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question           SecurityQuestion @relation(fields: [securityQuestionId], references: [id], onDelete: Cascade)
+  answer             String
+  userId             String
+  securityQuestionId String
+}
+
+model MagicLink {
+  identifier String   @unique
+  token      String   @unique
+  expires    DateTime
 }
