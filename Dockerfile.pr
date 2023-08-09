@@ -1,6 +1,6 @@
 # Form viewier that runs as a Lambda function.  It is used to create 
 # Lambda function review environments for each PR.
-FROM node:16@sha256:466d0a05ecb1e5b9890960592311fa10c2bc6012fc27dbfdcc74abf10fc324fc as build
+FROM node:16@sha256:6cd6581a9ae814ebbc8077afd63ecbf4d37f9b59ac9d9304a1b5a9e743ac13e0 as build
 
 ENV NODE_ENV=production
 ENV NEXT_OUTPUT_STANDALONE=true
@@ -16,7 +16,7 @@ RUN yarn install --silent --production=false
 RUN yarn build
 RUN yarn install --production
 
-FROM node:16@sha256:466d0a05ecb1e5b9890960592311fa10c2bc6012fc27dbfdcc74abf10fc324fc as final
+FROM node:16@sha256:6cd6581a9ae814ebbc8077afd63ecbf4d37f9b59ac9d9304a1b5a9e743ac13e0 as final
 LABEL maintainer="-"
 
 ARG GITHUB_SHA_ARG
