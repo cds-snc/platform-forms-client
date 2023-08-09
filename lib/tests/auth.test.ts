@@ -112,6 +112,7 @@ describe("Test Auth lib", () => {
           id: "1",
           privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
           acceptableUse: false,
+          hasSecurityQuestions: true,
         },
       };
       mockGetSession.mockResolvedValue(mockSession);
@@ -152,6 +153,7 @@ describe("Test Auth lib", () => {
           id: "1",
           privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
           acceptableUse: true,
+          hasSecurityQuestions: true,
         },
       };
       mockGetSession.mockResolvedValue(mockSession);
@@ -173,6 +175,7 @@ describe("Test Auth lib", () => {
             id: "1",
             privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
             acceptableUse: true,
+            hasSecurityQuestions: true,
           },
         },
       });
@@ -194,6 +197,7 @@ describe("Test Auth lib", () => {
           id: "1",
           privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
           acceptableUse: true,
+          hasSecurityQuestions: true,
         },
       };
       mockGetSession.mockResolvedValue(mockSession);
@@ -216,6 +220,7 @@ describe("Test Auth lib", () => {
             id: "1",
             privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
             acceptableUse: true,
+            hasSecurityQuestions: true,
           },
         },
       });
@@ -238,6 +243,7 @@ describe("Test Auth lib", () => {
         id: "1",
         privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
         acceptableUse: true,
+        hasSecurityQuestions: true,
       },
     };
     mockGetSession.mockResolvedValue(mockSession);
@@ -284,6 +290,7 @@ describe("Test Auth lib", () => {
           image: "null",
           id: "1",
           privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
+          hasSecurityQuestions: false,
         },
       };
       mockGetSession.mockResolvedValue(mockSession);

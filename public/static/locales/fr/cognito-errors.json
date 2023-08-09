@@ -29,5 +29,9 @@
   "2FASessionExpired": {
     "title": "Votre session a expiré",
     "description": "Essayez de vous connecter à nouveau pour générer un nouveau code de sécurité."
+  },
+  "IncorrectSecurityAnswerException": {
+    "title": "Révisez vos réponses",
+    "description": "Les réponses fournies ne correspondent pas à nos registres."
   }
 }

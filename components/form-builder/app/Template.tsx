@@ -6,12 +6,13 @@ import SkipLink from "@components/globals/SkipLink";
 import Footer from "@components/globals/Footer";
 import Loader from "@components/globals/Loader";
 import { useTemplateStore, TemplateStoreProvider } from "@components/form-builder/store";
-import { LeftNavigation, Header } from "@components/form-builder/app";
+import { LeftNavigation } from "@components/form-builder/app";
 import { Language } from "../types";
 import { TemplateApiProvider } from "../hooks";
 import { ToastContainer } from "./shared/Toast";
 import { RefStoreProvider } from "@lib/hooks/useRefStore";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
+import { Header } from "@components/globals";
 
 export const Template = ({
   page,
@@ -33,9 +34,9 @@ export const Template = ({
             <meta charSet="utf-8" />
             <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
           </Head>
-          <div className={`flex flex-col h-full ${className}`}>
+          <div className={`flex h-full flex-col ${className}`}>
             <SkipLink />
-            <Header isFormBuilder={isFormBuilder} />
+            <Header context={isFormBuilder ? "formBuilder" : "default"} />
             {page}
             <Footer displayFormBuilderFooter />
           </div>
@@ -79,7 +80,7 @@ export const PageTemplate = ({
 
   // Wait until the Template Store has fully hydrated before rendering the page
   return hasHydrated ? (
-    <div className="mx-4 laptop:mx-32 desktop:mx-64 grow shrink-0 basis-auto">
+    <div className="mx-4 shrink-0 grow basis-auto laptop:mx-32 desktop:mx-64">
       <ToastContainer />
       <div>
         {leftNav && <LeftNavigation backLink={backLink} />}
