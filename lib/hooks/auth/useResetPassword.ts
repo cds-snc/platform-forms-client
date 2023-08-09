@@ -53,6 +53,7 @@ export const useResetPassword = ({
       await fetchWithCsrfToken("/api/auth/password-reset", { email });
       if (successCallback) successCallback();
     } catch (err) {
+      logMessage.error(err);
       if (axios.isAxiosError(err)) {
         if (err.response?.data.error === "Failed to send password reset link") {
           await router.push("/auth/reset-failed");
