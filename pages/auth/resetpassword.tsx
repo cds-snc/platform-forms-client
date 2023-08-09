@@ -617,10 +617,19 @@ export const getServerSideProps: GetServerSideProps = async ({ query: { token },
       email = await getPasswordResetAuthenticatedUserEmailAddress(token as string);
       userSecurityQuestions = await retrieveUserSecurityQuestions({ email });
     } catch (e) {
-      if (e instanceof PasswordResetInvalidLink || e instanceof PasswordResetExpiredLink) {
+      if (e instanceof PasswordResetExpiredLink) {
         return {
           redirect: {
             destination: `/${locale}/auth/expired-link`,
+            permanent: false,
+          },
+        };
+      }
+
+      if (e instanceof PasswordResetInvalidLink) {
+        return {
+          redirect: {
+            destination: `/${locale}/auth/invalid-link`,
             permanent: false,
           },
         };
