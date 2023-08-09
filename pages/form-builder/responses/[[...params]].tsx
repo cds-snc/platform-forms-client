@@ -315,6 +315,16 @@ export const getServerSideProps: GetServerSideProps = async ({
     };
   }
 
+  if (session && !session.user.hasSecurityQuestions) {
+    // If they haven't setup security questions Use redirect to policy page for acceptance
+    return {
+      redirect: {
+        destination: `/${locale}/auth/setup-security-questions`,
+        permanent: false,
+      },
+    };
+  }
+
   if (formID && session) {
     try {
       const ability = createAbility(session);

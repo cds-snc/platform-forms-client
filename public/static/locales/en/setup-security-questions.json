@@ -1,0 +1,29 @@
+{
+  "title": "Set up security questions",
+  "description": "Answer 3 security questions to help keep your account secure.",
+  "requirementsTitle": "Your answers should be hard for others to guess:",
+  "requirements1": "At least 4 characters",
+  "requirements2": "No personal identifying information",
+  "question": "Question",
+  "answer": "Answer",
+  "firstQuestion": "Enter the first security qestion and answer[FR]",
+  "secondQuestion": "Enter the second security qestion and answer[FR]",
+  "thirdQuestion": "Enter the third security qestion and answer[FR]",
+  "questionPlaceholder": "Select question",
+  "continue": "Continue",
+  "contact": "Contact us",
+  "errors": {
+    "serverError": {
+      "title": "An error occurred"
+    },
+    "required": "Required field",
+    "answerLength": "Must be at least 4 characters"
+  },
+  "banner": {
+    "title": "We’ve added protection to keep your account and forms safe.",
+    "body": "You’ll need to enter a security code to access GC Forms."
+  },
+  "success": {
+    "title": "Your security questions have been saved"
+  }
+}

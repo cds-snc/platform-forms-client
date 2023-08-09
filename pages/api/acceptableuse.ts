@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { cors, middleware, csrfProtected, sessionExists } from "@lib/middleware";
-import { setAcceptableUse } from "@lib/acceptableUseCache";
+import { setAcceptableUse } from "@lib/cache/acceptableUseCache";
 import { MiddlewareProps, WithRequired } from "@lib/types";
 
 const acceptableUse = async (

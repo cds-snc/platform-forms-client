@@ -30,7 +30,7 @@ const AccountDeactivated = () => {
 };
 
 AccountDeactivated.getLayout = (page: ReactElement) => {
-  return <UserNavLayout>{page}</UserNavLayout>;
+  return <UserNavLayout contentWidth="tablet:w-[768px] laptop:w-[850px]">{page}</UserNavLayout>;
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

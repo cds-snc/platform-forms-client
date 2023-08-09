@@ -1,0 +1,41 @@
+{
+  "title": "Profil",
+  "accountPanel": {
+    "title": "Informations de compte",
+    "email": "Courriel",
+    "publishing": "Publication de formulaires",
+    "locked": "Fermé à clé",
+    "unlocked": "Dévérouillée"
+  },
+  "securityPanel": {
+    "title": "Questions de sécurité",
+    "question": "Question",
+    "edit": "Modifier"
+  },
+  "securityQuestionModal": {
+    "title": "Modifier les questions de sécurité",
+    "questionLabel": "Question",
+    "answerLabel": "Réponse",
+    "requirmentsList": {
+      "title": "Votre réponse devrait être difficile à deviner:",
+      "requirement1": "Au moins 4 caractères.",
+      "requirement2": "Aucune information d'identification personnelle."
+    },
+    "save": "Enregistrer",
+    "errors": {
+      "formError": {
+        "title": "Sélectionnez une question différente",
+        "content": "Vous devez répondre à 3 questions de sécurité différentes."
+      },
+      "clickSave": {
+        "title": "Cette question de sécurité a été modifiée",
+        "content": "Souhaitez-vous enregistrer vos modifications?"
+      },
+      "invalidInput": "Doit être au moins 4 caractères.",
+      "unknownError": {
+        "title": "Unknown error[FR]",
+        "content": "An unknown error occurred and we could not process your request. Please try again later.[FR]"
+      }
+    }
+  }
+}
