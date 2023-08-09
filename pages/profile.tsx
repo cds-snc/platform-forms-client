@@ -149,7 +149,7 @@ Profile.getLayout = (page: ReactElement) => {
 };
 
 export const getServerSideProps = requireAuthentication(
-  async ({ user: { ability, email }, locale, req, res }) => {
+  async ({ user: { ability, email }, locale }) => {
     {
       checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
 
