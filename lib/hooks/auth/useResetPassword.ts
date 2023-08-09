@@ -6,6 +6,7 @@ import { useTranslation } from "next-i18next";
 import { fetchWithCsrfToken } from "./fetchWithCsrfToken";
 import { useAuthErrors } from "./useAuthErrors";
 import { hasError } from "@lib/hasError";
+import axios from "axios";
 
 export const useResetPassword = ({
   onConfirmSecurityQuestions,
@@ -50,10 +51,16 @@ export const useResetPassword = ({
     authErrorsReset();
     try {
       await fetchWithCsrfToken("/api/auth/password-reset", { email });
-
       if (successCallback) successCallback();
     } catch (err) {
       logMessage.error(err);
+      if (axios.isAxiosError(err)) {
+        if (err.response?.data.error === "Failed to send password reset link") {
+          await router.push("/auth/reset-failed");
+          if (failedCallback) failedCallback(err.response?.data.error);
+          return;
+        }
+      }
 
       if (hasError("InvalidParameterException", err) && failedCallback) {
         failedCallback("InvalidParameterException");
