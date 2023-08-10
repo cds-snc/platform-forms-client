@@ -90,7 +90,10 @@ export const FileNameInput = () => {
         id="fileName"
         style={widthStyle}
         ref={fileNameInput}
-        className="px-2 py-1 min-w-[220px] max-w-[200px] laptop:min-w-[250px] laptop:max-w-[500px] border-2 border-white text-base font-bold hover:border-2 hover:border-gray-default text-ellipsis placeholder-slate-500"
+        className={
+          "px-2 py-1 min-w-[220px] max-w-[200px] laptop:min-w-[250px] laptop:max-w-[500px] border-2 border-white text-base font-bold text-ellipsis placeholder-slate-500" +
+          (!isPublished && " hover:border-2 hover:border-gray-default")
+        }
         name="filename"
         placeholder={t("unnamedForm", { ns: "form-builder" })}
         value={content}
