@@ -26,21 +26,22 @@ export type {
   CreateSecurityAnswersCommand,
   UpdateSecurityAnswerCommand,
   ValidateSecurityAnswersCommand,
-} from "./securityQuestions";
+} from "./securityQuestions/securityQuestions";
 
 export {
   retrievePoolOfSecurityQuestions,
   createSecurityAnswers,
   updateSecurityAnswer,
   retrieveUserSecurityQuestions,
+  userHasSecurityQuestions,
   validateSecurityAnswers,
   AlreadyHasSecurityAnswers,
   DuplicatedQuestionsNotAllowed,
   SecurityAnswersNotFound,
   SecurityQuestionNotFound,
   InvalidSecurityQuestionId,
-  userHasSecurityQuestions,
-} from "./securityQuestions";
+  SecurityQuestionDatabaseOperationFailed,
+} from "./securityQuestions/securityQuestions";
 
 export {
   sendPasswordResetLink,

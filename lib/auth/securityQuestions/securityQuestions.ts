@@ -1,5 +1,5 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { scrypt, randomBytes } from "crypto";
+import { hash, verifyHash } from "./hashing";
 
 export type SecurityQuestionId = string;
 
@@ -32,6 +32,7 @@ export class DuplicatedQuestionsNotAllowed extends Error {}
 export class SecurityAnswersNotFound extends Error {}
 export class SecurityQuestionNotFound extends Error {}
 export class InvalidSecurityQuestionId extends Error {}
+export class SecurityQuestionDatabaseOperationFailed extends Error {}
 
 type SecurityAnswerId = string;
 
@@ -40,8 +41,6 @@ type SecurityAnswer = {
   question: SecurityQuestion;
   hashedAnswer: string;
 };
-
-class SecurityQuestionDatabaseOperationFailed extends Error {}
 
 export async function retrievePoolOfSecurityQuestions(): Promise<SecurityQuestion[]> {
   const securityQuestions = await prisma.securityQuestion
@@ -80,7 +79,7 @@ export async function createSecurityAnswers(command: CreateSecurityAnswersComman
       const sanitizedAnswer = sanitizeAnswer(item.answer);
       return {
         question: { connect: { id: item.questionId } },
-        answer: await hashAnswer(sanitizedAnswer),
+        answer: await hash(sanitizedAnswer),
       };
     })
   );
@@ -120,7 +119,7 @@ export async function updateSecurityAnswer(command: UpdateSecurityAnswerCommand)
   if (hasDuplicatedQuestions) throw new DuplicatedQuestionsNotAllowed();
 
   const sanitizedAnswer = sanitizeAnswer(command.newAnswer);
-  const hashedAnswer = await hashAnswer(sanitizedAnswer);
+  const hashedAnswer = await hash(sanitizedAnswer);
 
   const operationResult = await prisma.securityAnswer
     .update({
@@ -183,7 +182,7 @@ export async function validateSecurityAnswers(
       if (!expectedAnswer) return false;
 
       const sanitizedAnswerToConfirm = sanitizeAnswer(answerToConfirm.answer);
-      return verifyAnswer(sanitizedAnswerToConfirm, expectedAnswer.hashedAnswer);
+      return verifyHash(expectedAnswer.hashedAnswer, sanitizedAnswerToConfirm);
     }
   );
 
@@ -257,24 +256,4 @@ function sanitizeAnswer(answer: string): string {
     .normalize("NFD")
     .replace(/([\u0300-\u036f]|[^0-9a-zA-Z\s])/g, "")
     .toLowerCase();
-}
-
-async function hashAnswer(answer: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const salt = randomBytes(8).toString("hex");
-    scrypt(answer, salt, 64, (err, derivedKey) => {
-      if (err) reject(err);
-      resolve(salt + ":" + derivedKey.toString("hex"));
-    });
-  });
-}
-
-async function verifyAnswer(answer: string, hash: string): Promise<boolean> {
-  return new Promise((resolve, reject) => {
-    const [salt, key] = hash.split(":");
-    scrypt(answer, salt, 64, (err, derivedKey) => {
-      if (err) reject(err);
-      resolve(key == derivedKey.toString("hex"));
-    });
-  });
 }
