@@ -5,9 +5,9 @@ import { logMessage } from "@lib/logger";
 
 // Allows an authenticated or unauthenticated user to send an email requesting help
 const requestSupport = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { supportType, name, email, request, description, department, branch, title } = req.body;
+  const { supportType, name, email, request, description, department, branch, jobTitle } = req.body;
 
-  if (!name || !email || !request || !description || !department || !branch || !title) {
+  if (!name || !email || !request || !description || !department || !branch || !jobTitle) {
     return res.status(400).json({ error: "Malformed request" });
   }
 
@@ -43,7 +43,7 @@ Branch or sector:
 ${branch}
 
 Job Title:
-${title}
+${jobTitle}
 
 Contact request:
 ${requestParsed}
@@ -61,7 +61,7 @@ Direction ou secteur:
 ${branch}
 
 Titre de poste:
-${title}
+${jobTitle}
 
 Demande de contact soutien:
 ${requestParsed}
@@ -80,7 +80,7 @@ Branch:
 ${branch}
 
 Job Title:
-${title}
+${jobTitle}
 
 Support request:
 ${requestParsed}
@@ -98,7 +98,7 @@ Direction ou secteur:
 ${branch}
 
 Titre de poste:
-${title}
+${jobTitle}
 
 Demande de soutien:
 ${requestParsed}

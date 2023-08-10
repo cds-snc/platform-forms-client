@@ -39,7 +39,7 @@ export default function Contactus() {
     email: string,
     department: string,
     branch: string,
-    title: string,
+    jobTitle: string,
     request: [string] | string,
     description: string
   ) => {
@@ -51,7 +51,7 @@ export default function Contactus() {
         "Content-Type": "application/json",
         "X-CSRF-Token": token,
       },
-      data: { supportType, name, email, department, branch, title, request, description },
+      data: { supportType, name, email, department, branch, jobTitle, request, description },
       // If development mode disable timeout
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     }).catch((err) => {
@@ -67,7 +67,7 @@ export default function Contactus() {
       .email(t("input-validation.email", { ns: "common" })),
     department: Yup.string().required(t("input-validation.required", { ns: "common" })),
     branch: Yup.string().required(t("input-validation.required", { ns: "common" })),
-    title: Yup.string().required(t("input-validation.required", { ns: "common" })),
+    jobTitle: Yup.string().required(t("input-validation.required", { ns: "common" })),
     request:
       supportType === "contactus"
         ? Yup.array()
@@ -140,10 +140,15 @@ export default function Contactus() {
           <TextInput type={"text"} id={"branch"} name={"branch"} className="required w-[34rem]" />
         </div>
         <div className="focus-group mt-14">
-          <Label id={"label-title"} htmlFor={"title"} className="required" required>
-            {t("contactus.title")}
+          <Label id={"label-jobTitle"} htmlFor={"jobTitle"} className="required" required>
+            {t("contactus.jobTitle")}
           </Label>
-          <TextInput type={"text"} id={"title"} name={"title"} className="required w-[34rem]" />
+          <TextInput
+            type={"text"}
+            id={"jobTitle"}
+            name={"jobTitle"}
+            className="required w-[34rem]"
+          />
         </div>
         <fieldset className="focus-group">
           <legend className="gc-label required">
@@ -260,10 +265,15 @@ export default function Contactus() {
           <TextInput type={"text"} id={"branch"} name={"branch"} className="required w-[34rem]" />
         </div>
         <div className="focus-group mt-14">
-          <Label id={"label-title"} htmlFor={"title"} className="required" required>
-            {t("support.title")}
+          <Label id={"label-jobTitle"} htmlFor={"jobTitle"} className="required" required>
+            {t("support.jobTitle")}
           </Label>
-          <TextInput type={"text"} id={"title"} name={"title"} className="required w-[34rem]" />
+          <TextInput
+            type={"text"}
+            id={"jobTitle"}
+            name={"jobTitle"}
+            className="required w-[34rem]"
+          />
         </div>
         <fieldset className="focus-group">
           <legend className="gc-label required">
@@ -336,11 +346,11 @@ export default function Contactus() {
             email: "",
             department: "",
             branch: "",
-            title: "",
+            jobTitle: "",
             request: "",
             description: "",
           }}
-          onSubmit={async ({ name, email, department, branch, title, request, description }) => {
+          onSubmit={async ({ name, email, department, branch, jobTitle, request, description }) => {
             setIsSubmitting(true);
             try {
               const response = await handleRequest(
@@ -348,7 +358,7 @@ export default function Contactus() {
                 email,
                 department,
                 branch,
-                title,
+                jobTitle,
                 request,
                 description
               );
