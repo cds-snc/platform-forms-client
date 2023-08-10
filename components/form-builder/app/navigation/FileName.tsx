@@ -7,12 +7,14 @@ import { LocalizedFormProperties } from "@formbuilder/types";
 
 export const FileNameInput = () => {
   const { t } = useTranslation(["form-builder"]);
-  const { updateField, getName } = useTemplateStore((s) => ({
+  const { updateField, getName, getIsPublished } = useTemplateStore((s) => ({
     getName: s.getName,
     updateField: s.updateField,
+    getIsPublished: s.getIsPublished,
   }));
 
   const fileName = getName();
+  const isPublished = getIsPublished();
 
   const [content, setContent] = useState(fileName);
   const [isEditing, setIsEditing] = useState(false);
@@ -88,7 +90,10 @@ export const FileNameInput = () => {
         id="fileName"
         style={widthStyle}
         ref={fileNameInput}
-        className="px-2 py-1 min-w-[220px] max-w-[200px] laptop:min-w-[250px] laptop:max-w-[500px] border-2 border-white text-base font-bold hover:border-2 hover:border-gray-default text-ellipsis placeholder-slate-500"
+        className={
+          "px-2 py-1 min-w-[220px] max-w-[200px] laptop:min-w-[250px] laptop:max-w-[500px] border-2 border-white text-base font-bold text-ellipsis placeholder-slate-500" +
+          (!isPublished && " hover:border-2 hover:border-gray-default")
+        }
         name="filename"
         placeholder={t("unnamedForm", { ns: "form-builder" })}
         value={content}
@@ -103,6 +108,7 @@ export const FileNameInput = () => {
         }}
         onChange={(e) => setContent(e.target.value)}
         aria-label={t("formName", { ns: "form-builder" })}
+        disabled={isPublished && true}
       />
     </div>
   );
