@@ -136,7 +136,7 @@ export const authOptions: NextAuthOptions = {
 
       // Check if user has setup required Security Questions
       if (!token.hasSecurityQuestions) {
-        token.hasSecurityQuestions = await userHasSecurityQuestions(token.userId);
+        token.hasSecurityQuestions = await userHasSecurityQuestions({ userId: token.userId });
       }
 
       // Check if user has been deactivated
