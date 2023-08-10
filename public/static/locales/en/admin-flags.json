@@ -34,10 +34,6 @@
       "title": "Account creation",
       "description": "Allow users to register for an account"
     },
-    "passwordReset": {
-      "title": "Allow password resets",
-      "description": "Allow users to reset their passwords"
-    },
     "supportForms": {
       "title": "Support forms",
       "description": "Whether or not support forms are enabled"

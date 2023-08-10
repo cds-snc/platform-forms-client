@@ -4,7 +4,6 @@
   "reCaptcha": false,
   "formTimer": false,
   "accountRegistration": true,
-  "passwordReset": false,
   "supportForms": false,
   "experimentalBlocks": false
 }

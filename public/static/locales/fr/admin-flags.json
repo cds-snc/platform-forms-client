@@ -34,10 +34,6 @@
       "title": "Création de compte",
       "description": "Permet aux utilisateurs de créer un compte"
     },
-    "passwordReset": {
-      "title": "Autoriser les réinitialisations de mot de passe",
-      "description": "Permet aux utilisateurs de réinitialiser leurs mots de passe"
-    },
     "supportForms": {
       "title": "Formulaires de support",
       "description": "Activation ou désactivation des formulaires de support"
