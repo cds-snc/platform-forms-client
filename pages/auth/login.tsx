@@ -35,7 +35,6 @@ const LoginStep = ({
   const { t } = useTranslation(["login", "cognito-errors", "common"]);
 
   const { status: registrationOpen } = useFlag("accountRegistration");
-  const { status: passwordResetEnabled } = useFlag("passwordReset");
 
   const validationSchema = Yup.object().shape({
     username: Yup.string()
@@ -145,14 +144,11 @@ const LoginStep = ({
                   required
                 />
               </div>
-              {passwordResetEnabled && (
-                <p className="mb-10 -mt-6">
-                  <Link href={"/auth/resetpassword"} className="-mt-8 mb-10">
-                    {t("resetPasswordText")}
-                  </Link>
-                </p>
-              )}
-
+              <p className="mb-10 -mt-6">
+                <Link href={"/auth/resetpassword"} className="-mt-8 mb-10">
+                  {t("resetPasswordText")}
+                </Link>
+              </p>
               <Button theme="primary" type="submit">
                 {t("continueButton")}
               </Button>
