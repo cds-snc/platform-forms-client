@@ -1,5 +1,7 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
+import { UserAbility } from "@lib/types";
 import { scrypt, randomBytes } from "crypto";
+import { checkPrivileges } from "@lib/privileges";
 
 export type SecurityQuestionId = string;
 
@@ -10,13 +12,7 @@ export type SecurityQuestion = {
   deprecated: boolean;
 };
 
-export type CreateSecurityAnswersCommand = {
-  userId: string;
-  questionsWithAssociatedAnswers: { questionId: SecurityQuestionId; answer: string }[];
-};
-
 export type UpdateSecurityAnswerCommand = {
-  userId: string;
   oldQuestionId: SecurityQuestionId;
   newQuestionId: SecurityQuestionId;
   newAnswer: string;
@@ -58,11 +54,21 @@ export async function retrievePoolOfSecurityQuestions(): Promise<SecurityQuestio
   });
 }
 
-export async function createSecurityAnswers(command: CreateSecurityAnswersCommand): Promise<void> {
-  const userSecurityAnswers = await retrieveUserSecurityAnswers({ userId: command.userId });
+export async function createSecurityAnswers(
+  ability: UserAbility,
+  questionsWithAssociatedAnswers: { questionId: SecurityQuestionId; answer: string }[]
+): Promise<void> {
+  checkPrivileges(ability, [
+    {
+      action: "create",
+      subject: { type: "User", object: { id: ability.userID } },
+      field: "securityAnswers",
+    },
+  ]);
+  const userSecurityAnswers = await _retrieveUserSecurityAnswers({ userId: ability.userID });
   if (userSecurityAnswers.length > 0) throw new AlreadyHasSecurityAnswers();
 
-  const questionIds = command.questionsWithAssociatedAnswers.map(
+  const questionIds = questionsWithAssociatedAnswers.map(
     (questionAnswer) => questionAnswer.questionId
   );
 
@@ -76,7 +82,7 @@ export async function createSecurityAnswers(command: CreateSecurityAnswersComman
   if (hasDuplicatedQuestions) throw new DuplicatedQuestionsNotAllowed();
 
   const dataPayload = await Promise.all(
-    command.questionsWithAssociatedAnswers.map(async (item) => {
+    questionsWithAssociatedAnswers.map(async (item) => {
       const sanitizedAnswer = sanitizeAnswer(item.answer);
       return {
         question: { connect: { id: item.questionId } },
@@ -88,7 +94,7 @@ export async function createSecurityAnswers(command: CreateSecurityAnswersComman
   const operationResult = await prisma.user
     .update({
       where: {
-        id: command.userId,
+        id: ability.userID,
       },
       data: {
         securityAnswers: {
@@ -101,8 +107,18 @@ export async function createSecurityAnswers(command: CreateSecurityAnswersComman
   if (!operationResult) throw new SecurityQuestionDatabaseOperationFailed();
 }
 
-export async function updateSecurityAnswer(command: UpdateSecurityAnswerCommand): Promise<void> {
-  const userSecurityAnswers = await retrieveUserSecurityAnswers({ userId: command.userId });
+export async function updateSecurityAnswer(
+  ability: UserAbility,
+  command: UpdateSecurityAnswerCommand
+): Promise<void> {
+  checkPrivileges(ability, [
+    {
+      action: "update",
+      subject: { type: "User", object: { id: ability.userID } },
+      field: "securityAnswers",
+    },
+  ]);
+  const userSecurityAnswers = await _retrieveUserSecurityAnswers({ userId: ability.userID });
   if (userSecurityAnswers.length === 0) throw new SecurityAnswersNotFound();
 
   const areQuestionIdsValidResult = await areQuestionIdsValid([command.newQuestionId]);
@@ -144,8 +160,44 @@ export async function retrieveUserSecurityQuestions({
   userId?: string;
   email?: string;
 }): Promise<SecurityQuestion[]> {
-  const userSecurityAnswers = await retrieveUserSecurityAnswers({ userId, email });
-  return userSecurityAnswers.map((answer) => answer.question);
+  if (!userId && !email) throw new Error("Either userId or email must be provided");
+
+  const securityQuestions = await prisma.user
+    .findUnique({
+      where: {
+        id: userId,
+        email: email,
+      },
+      select: {
+        securityAnswers: {
+          select: {
+            question: {
+              select: {
+                id: true,
+                questionEn: true,
+                questionFr: true,
+                deprecated: true,
+              },
+            },
+          },
+          orderBy: {
+            id: "asc",
+          },
+        },
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (!securityQuestions) throw new SecurityQuestionDatabaseOperationFailed();
+
+  return securityQuestions.securityAnswers.map((answer) => {
+    return {
+      id: answer.question.id,
+      questionEn: answer.question.questionEn,
+      questionFr: answer.question.questionFr,
+      deprecated: answer.question.deprecated,
+    };
+  });
 }
 
 export async function userHasSecurityQuestions(userId: string): Promise<boolean> {
@@ -163,7 +215,7 @@ export async function userHasSecurityQuestions(userId: string): Promise<boolean>
 export async function validateSecurityAnswers(
   command: ValidateSecurityAnswersCommand
 ): Promise<boolean> {
-  const userSecurityAnswers = await retrieveUserSecurityAnswers({ email: command.email });
+  const userSecurityAnswers = await _retrieveUserSecurityAnswers({ email: command.email });
 
   if (userSecurityAnswers.length !== command.questionsWithAssociatedAnswers.length) return false;
 
@@ -185,13 +237,15 @@ export async function validateSecurityAnswers(
   return answerValidationsResults.includes(false) === false;
 }
 
-async function retrieveUserSecurityAnswers({
+async function _retrieveUserSecurityAnswers({
   userId,
   email,
 }: {
   userId?: string;
   email?: string;
 }): Promise<SecurityAnswer[]> {
+  if (!userId && !email) throw new Error("Either userId or email must be provided");
+
   const userSecurityAnswers = await prisma.user
     .findUnique({
       where: {

@@ -11,11 +11,11 @@ import {
   updateSecurityAnswer,
 } from "@lib/auth";
 import securityQuestionsWithAssociatedAnswersSchema from "@lib/middleware/schemas/security-questions-with-associated-answers.schema.json";
-import { MiddlewareProps, WithRequired } from "@lib/types";
+import { MiddlewareProps, UserAbility, WithRequired } from "@lib/types";
 import { createAbility } from "@lib/privileges";
 
 async function saveUserSecurityAnswers(
-  userId: string,
+  ability: UserAbility,
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<void> {
@@ -26,7 +26,7 @@ async function saveUserSecurityAnswers(
       return res.status(400).json({ error: "Malformed request" });
     }
 
-    await createSecurityAnswers({ userId, questionsWithAssociatedAnswers });
+    await createSecurityAnswers(ability, questionsWithAssociatedAnswers);
     return res.status(200).json({});
   } catch (error) {
     if (error instanceof AlreadyHasSecurityAnswers) {
@@ -44,7 +44,7 @@ async function saveUserSecurityAnswers(
 }
 
 async function updateUserSecurityAnswer(
-  userId: string,
+  ability: UserAbility,
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<void> {
@@ -62,7 +62,11 @@ async function updateUserSecurityAnswer(
       return res.status(400).json({ error: "Malformed request" });
     }
 
-    await updateSecurityAnswer({ userId, oldQuestionId, newQuestionId, newAnswer });
+    await updateSecurityAnswer(ability, {
+      oldQuestionId,
+      newQuestionId,
+      newAnswer,
+    });
     return res.status(200).json({});
   } catch (error) {
     if (error instanceof SecurityAnswersNotFound) {
@@ -91,11 +95,11 @@ const apiHandler = async (req: NextApiRequest, res: NextApiResponse, props: Midd
 
     switch (req.method) {
       case "POST": {
-        await saveUserSecurityAnswers(ability.userID, req, res);
+        await saveUserSecurityAnswers(ability, req, res);
         break;
       }
       case "PUT": {
-        await updateUserSecurityAnswer(ability.userID, req, res);
+        await updateUserSecurityAnswer(ability, req, res);
         break;
       }
     }
