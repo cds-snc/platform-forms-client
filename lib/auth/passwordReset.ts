@@ -3,7 +3,7 @@ import { generateVerificationCode } from "./2fa";
 import { logMessage } from "@lib/logger";
 import { sanitizeEmailAddressForCognito } from "./cognito";
 import { getNotifyInstance } from "@lib/integration/notifyConnector";
-import { userHasSecurityQuestions } from "./securityQuestions";
+import { userHasSecurityQuestions } from "@lib/auth";
 
 export class PasswordResetInvalidLink extends Error {}
 export class PasswordResetExpiredLink extends Error {}
@@ -28,11 +28,12 @@ export const sendPasswordResetLink = async (email: string): Promise<void> => {
 
   const dateIn15Minutes = new Date(Date.now() + 900000); // 15 minutes (= 900000 ms)
 
-  const doesUserHaveSecurityQuestions = await userHasSecurityQuestions({ email });
-
-  if (!doesUserHaveSecurityQuestions) throw new Error(`missing security questions.`);
-
   try {
+    const doesUserHaveSecurityQuestions = await userHasSecurityQuestions({ email });
+
+    if (!doesUserHaveSecurityQuestions)
+      throw new Error(`Missing security questions for user ${email}`);
+
     await prisma.magicLink.upsert({
       where: {
         identifier: sanitizedEmail,
