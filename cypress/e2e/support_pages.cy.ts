@@ -29,9 +29,6 @@ describe("Support Pages", () => {
     it("Valid submission succeeds", () => {
       cy.get("#name").type("1");
       cy.get("#email").type("good@email.com");
-      cy.get("#department").type("1");
-      cy.get("#branch").type("1");
-      cy.get("#jobTitle").type("1");
       cy.get("label[for='request-question']").click();
       cy.get("#description").type("1");
       cy.get("button[type='submit']").click();
@@ -69,6 +66,9 @@ describe("Support Pages", () => {
     it("Valid submission succeeds", () => {
       cy.get("#name").type("1");
       cy.get("#email").type("good@email.com");
+      cy.get("#department").type("1");
+      cy.get("#branch").type("1");
+      cy.get("#jobTitle").type("1");
       cy.get("label[for='request-question']").click();
       cy.get("#description").type("1");
       cy.get("button[type='submit']").click();
