@@ -71,11 +71,38 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
 
   const validationSchema = Yup.object().shape({
     question1: Yup.string().required(t("errors.required")),
-    answer1: Yup.string().required(t("errors.required")).min(4, t("errors.answerLength")),
+    answer1: Yup.string()
+      .required(t("errors.required"))
+      .min(4, t("errors.answerLength"))
+      .test("duplicate-answer1", t("errors.duplicateAnswer"), function (answer1) {
+        const values = this?.parent || {};
+        if (answer1 === values.answer2 || answer1 === values.answer3) {
+          return false;
+        }
+        return true;
+      }),
     question2: Yup.string().required(t("errors.required")),
-    answer2: Yup.string().required(t("errors.required")).min(4, t("errors.answerLength")),
+    answer2: Yup.string()
+      .required(t("errors.required"))
+      .min(4, t("errors.answerLength"))
+      .test("duplicate-answer2", t("errors.duplicateAnswer"), function (answer2) {
+        const values = this?.parent || {};
+        if (answer2 === values.answer1 || answer2 === values.answer3) {
+          return false;
+        }
+        return true;
+      }),
     question3: Yup.string().required(t("errors.required")),
-    answer3: Yup.string().required(t("errors.required")).min(4, t("errors.answerLength")),
+    answer3: Yup.string()
+      .required(t("errors.required"))
+      .min(4, t("errors.answerLength"))
+      .test("duplicate-answer3", t("errors.duplicateAnswer"), function (answer3) {
+        const values = this?.parent || {};
+        if (answer3 === values.answer1 || answer3 === values.answer2) {
+          return false;
+        }
+        return true;
+      }),
   });
 
   return (
