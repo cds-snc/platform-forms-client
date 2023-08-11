@@ -118,11 +118,12 @@ export async function updateSecurityAnswer(
       field: "securityAnswers",
     },
   ]);
-  const userSecurityAnswers = await _retrieveUserSecurityAnswers({ userId: ability.userID });
-  if (userSecurityAnswers.length === 0) throw new SecurityAnswersNotFound();
 
   const areQuestionIdsValidResult = await areQuestionIdsValid([command.newQuestionId]);
   if (!areQuestionIdsValidResult) throw new InvalidSecurityQuestionId();
+
+  const userSecurityAnswers = await _retrieveUserSecurityAnswers({ userId: ability.userID });
+  if (userSecurityAnswers.length === 0) throw new SecurityAnswersNotFound();
 
   const oldAnswer = userSecurityAnswers.find(
     (answer) => answer.question.id === command.oldQuestionId
