@@ -331,7 +331,7 @@ const Step2 = ({
                   {t("securityQuestions.resetPasswordButton")}
                 </Button>
 
-                <LinkButton.Secondary href="/form-builder/support/contactus">
+                <LinkButton.Secondary href="/form-builder/support">
                   {t("securityQuestions.support")}
                 </LinkButton.Secondary>
               </div>
