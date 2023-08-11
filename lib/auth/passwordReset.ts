@@ -28,11 +28,11 @@ export const sendPasswordResetLink = async (email: string): Promise<void> => {
 
   const dateIn15Minutes = new Date(Date.now() + 900000); // 15 minutes (= 900000 ms)
 
-  const doesUserHaveSecurityQuestions = await userHasSecurityQuestions({ email });
-
-  if (!doesUserHaveSecurityQuestions) throw new Error(`missing security questions.`);
-
   try {
+    const doesUserHaveSecurityQuestions = await userHasSecurityQuestions({ email });
+
+    if (!doesUserHaveSecurityQuestions) throw new Error(`missing security questions`);
+
     await prisma.magicLink.upsert({
       where: {
         identifier: sanitizedEmail,

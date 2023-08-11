@@ -27,7 +27,7 @@ const mockVerifyHash = jest.mocked(verifyHash, { shallow: true });
 describe("Test Security Questions library", () => {
   describe("Test retrievePoolOfSecurityQuestions function", () => {
     it("Should return complete pool of security questions", async () => {
-      (prismaMock.securityQuestion.findMany as jest.MockedFunction<any>).mockResolvedValue([
+      (prismaMock.securityQuestion.findMany as jest.MockedFunction<any>).mockResolvedValueOnce([
         {
           deprecated: false,
           id: "uuid1",
@@ -63,7 +63,7 @@ describe("Test Security Questions library", () => {
 
   describe("Test createSecurityAnswers function", () => {
     it("Cannot override existing set of answers", async () => {
-      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValueOnce({
         securityAnswers: [
           {
             id: "uuid",
@@ -85,11 +85,11 @@ describe("Test Security Questions library", () => {
     });
 
     it("Throws exception if selected question identifiers are not valid", async () => {
-      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValueOnce({
         securityAnswers: [],
       });
 
-      (prismaMock.securityQuestion.findMany as jest.MockedFunction<any>).mockResolvedValue([
+      (prismaMock.securityQuestion.findMany as jest.MockedFunction<any>).mockResolvedValueOnce([
         {
           deprecated: false,
           id: "uuid1",
@@ -109,11 +109,11 @@ describe("Test Security Questions library", () => {
     });
 
     it("Throws exception if selected question are deprecated", async () => {
-      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValueOnce({
         securityAnswers: [],
       });
 
-      (prismaMock.securityQuestion.findMany as jest.MockedFunction<any>).mockResolvedValue([
+      (prismaMock.securityQuestion.findMany as jest.MockedFunction<any>).mockResolvedValueOnce([
         {
           deprecated: false,
           id: "uuid1",
@@ -133,11 +133,11 @@ describe("Test Security Questions library", () => {
     });
 
     it("Throws exception if selected questions are the same", async () => {
-      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValueOnce({
         securityAnswers: [],
       });
 
-      (prismaMock.securityQuestion.findMany as jest.MockedFunction<any>).mockResolvedValue([
+      (prismaMock.securityQuestion.findMany as jest.MockedFunction<any>).mockResolvedValueOnce([
         {
           deprecated: false,
           id: "uuid1",
@@ -160,11 +160,11 @@ describe("Test Security Questions library", () => {
     });
 
     it("Throws exception if database update operation fails or returns null", async () => {
-      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValueOnce({
         securityAnswers: [],
       });
 
-      (prismaMock.securityQuestion.findMany as jest.MockedFunction<any>).mockResolvedValue([
+      (prismaMock.securityQuestion.findMany as jest.MockedFunction<any>).mockResolvedValueOnce([
         {
           deprecated: false,
           id: "uuid1",
@@ -175,9 +175,9 @@ describe("Test Security Questions library", () => {
         },
       ]);
 
-      (prismaMock.user.update as jest.MockedFunction<any>).mockResolvedValue(null);
+      (prismaMock.user.update as jest.MockedFunction<any>).mockResolvedValueOnce(null);
 
-      mockHash.mockResolvedValue("mockedHash");
+      mockHash.mockResolvedValueOnce("mockedHash");
 
       await expect(async () => {
         await createSecurityAnswers({
@@ -188,11 +188,11 @@ describe("Test Security Questions library", () => {
     });
 
     it("Works as expected and triggers database update", async () => {
-      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValueOnce({
         securityAnswers: [],
       });
 
-      (prismaMock.securityQuestion.findMany as jest.MockedFunction<any>).mockResolvedValue([
+      (prismaMock.securityQuestion.findMany as jest.MockedFunction<any>).mockResolvedValueOnce([
         {
           deprecated: false,
           id: "uuid1",
@@ -203,7 +203,7 @@ describe("Test Security Questions library", () => {
         },
       ]);
 
-      (prismaMock.user.update as jest.MockedFunction<any>).mockResolvedValue({});
+      (prismaMock.user.update as jest.MockedFunction<any>).mockResolvedValueOnce({});
 
       mockHash.mockResolvedValue("mockedHash");
 
@@ -247,7 +247,7 @@ describe("Test Security Questions library", () => {
 
   describe("Test updateSecurityAnswer function", () => {
     it("Throws exception if no security question exist", async () => {
-      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValueOnce({
         securityAnswers: [],
       });
 
@@ -262,7 +262,7 @@ describe("Test Security Questions library", () => {
     });
 
     it("Throws exception if selected question identifiers are not valid", async () => {
-      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValueOnce({
         securityAnswers: [
           {
             id: "uuid",
@@ -275,7 +275,7 @@ describe("Test Security Questions library", () => {
         ],
       });
 
-      (prismaMock.securityQuestion.findMany as jest.MockedFunction<any>).mockResolvedValue([
+      (prismaMock.securityQuestion.findMany as jest.MockedFunction<any>).mockResolvedValueOnce([
         {
           deprecated: false,
           id: "uuid1",
@@ -297,7 +297,7 @@ describe("Test Security Questions library", () => {
     });
 
     it("Throws exception if update is done on non selected question", async () => {
-      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValueOnce({
         securityAnswers: [
           {
             id: "uuid",
@@ -310,7 +310,7 @@ describe("Test Security Questions library", () => {
         ],
       });
 
-      (prismaMock.securityQuestion.findMany as jest.MockedFunction<any>).mockResolvedValue([
+      (prismaMock.securityQuestion.findMany as jest.MockedFunction<any>).mockResolvedValueOnce([
         {
           deprecated: false,
           id: "uuid1",
@@ -332,7 +332,7 @@ describe("Test Security Questions library", () => {
     });
 
     it("Throws exception if new selected question had already been chosen", async () => {
-      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValueOnce({
         securityAnswers: [
           {
             id: "uuid",
@@ -353,7 +353,7 @@ describe("Test Security Questions library", () => {
         ],
       });
 
-      (prismaMock.securityQuestion.findMany as jest.MockedFunction<any>).mockResolvedValue([
+      (prismaMock.securityQuestion.findMany as jest.MockedFunction<any>).mockResolvedValueOnce([
         {
           deprecated: false,
           id: "uuid2",
@@ -375,7 +375,7 @@ describe("Test Security Questions library", () => {
     });
 
     it("Throws exception if database update operation fails or returns null", async () => {
-      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValueOnce({
         securityAnswers: [
           {
             id: "uuid",
@@ -388,7 +388,7 @@ describe("Test Security Questions library", () => {
         ],
       });
 
-      (prismaMock.securityQuestion.findMany as jest.MockedFunction<any>).mockResolvedValue([
+      (prismaMock.securityQuestion.findMany as jest.MockedFunction<any>).mockResolvedValueOnce([
         {
           deprecated: false,
           id: "uuid2",
@@ -399,9 +399,9 @@ describe("Test Security Questions library", () => {
         },
       ]);
 
-      mockHash.mockResolvedValue("mockedHash");
+      mockHash.mockResolvedValueOnce("mockedHash");
 
-      (prismaMock.securityAnswer.update as jest.MockedFunction<any>).mockResolvedValue(null);
+      (prismaMock.securityAnswer.update as jest.MockedFunction<any>).mockResolvedValueOnce(null);
 
       await expect(async () => {
         await updateSecurityAnswer({
@@ -414,7 +414,7 @@ describe("Test Security Questions library", () => {
     });
 
     it("Works as expected and triggers database update", async () => {
-      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValueOnce({
         securityAnswers: [
           {
             id: "uuid",
@@ -427,7 +427,7 @@ describe("Test Security Questions library", () => {
         ],
       });
 
-      (prismaMock.securityQuestion.findMany as jest.MockedFunction<any>).mockResolvedValue([
+      (prismaMock.securityQuestion.findMany as jest.MockedFunction<any>).mockResolvedValueOnce([
         {
           deprecated: false,
           id: "uuid2",
@@ -438,9 +438,9 @@ describe("Test Security Questions library", () => {
         },
       ]);
 
-      mockHash.mockResolvedValue("mockedHash");
+      mockHash.mockResolvedValueOnce("mockedHash");
 
-      (prismaMock.securityAnswer.update as jest.MockedFunction<any>).mockResolvedValue({});
+      (prismaMock.securityAnswer.update as jest.MockedFunction<any>).mockResolvedValueOnce({});
 
       await updateSecurityAnswer({
         userId: "uuid",
@@ -467,7 +467,7 @@ describe("Test Security Questions library", () => {
 
   describe("Test retrieveUserSecurityQuestions function", () => {
     it("Should return security questions", async () => {
-      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValueOnce({
         securityAnswers: [
           {
             id: "uuid",
@@ -529,7 +529,7 @@ describe("Test Security Questions library", () => {
 
   describe("Test userHasSecurityQuestions function", () => {
     it("Returns false if no security question exist", async () => {
-      (prismaMock.securityAnswer.count as jest.MockedFunction<any>).mockResolvedValue(0);
+      (prismaMock.securityAnswer.count as jest.MockedFunction<any>).mockResolvedValueOnce(0);
 
       const sut = await userHasSecurityQuestions({
         userId: "uuid",
@@ -539,7 +539,7 @@ describe("Test Security Questions library", () => {
     });
 
     it("Returns true if security questions exist", async () => {
-      (prismaMock.securityAnswer.count as jest.MockedFunction<any>).mockResolvedValue(3);
+      (prismaMock.securityAnswer.count as jest.MockedFunction<any>).mockResolvedValueOnce(3);
 
       const sut = await userHasSecurityQuestions({
         userId: "uuid",
@@ -551,7 +551,7 @@ describe("Test Security Questions library", () => {
 
   describe("Test validateSecurityAnswers function", () => {
     it("Returns false is number of given answers does not match what is stored in the database", async () => {
-      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValueOnce({
         securityAnswers: [
           {
             id: "uuid",
@@ -582,7 +582,7 @@ describe("Test Security Questions library", () => {
     });
 
     it("Returns false is given answer values does not match what is stored in the database", async () => {
-      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValueOnce({
         securityAnswers: [
           {
             id: "uuid",
@@ -625,7 +625,7 @@ describe("Test Security Questions library", () => {
     });
 
     it("Returns true is given answer values matches what is stored in the database", async () => {
-      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValueOnce({
         securityAnswers: [
           {
             id: "uuid",
@@ -668,7 +668,7 @@ describe("Test Security Questions library", () => {
     });
 
     it("Does sanitize given answers beforehand", async () => {
-      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValueOnce({
         securityAnswers: [
           {
             id: "uuid",
