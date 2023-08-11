@@ -270,7 +270,7 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
               <Button theme="primary" type="submit" className="mr-4" disabled={isSubmitting}>
                 {t("continue")}
               </Button>
-              <LinkButton.Secondary href={supportHref}>{t("contact")}</LinkButton.Secondary>
+              <LinkButton.Secondary href={supportHref}>{t("support")}</LinkButton.Secondary>
             </form>
           </>
         )}

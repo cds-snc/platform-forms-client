@@ -11,7 +11,7 @@
   "thirdQuestion": "Enter the third security qestion and answer[FR]",
   "questionPlaceholder": "Select question",
   "continue": "Continue",
-  "contact": "Contact us",
+  "support": "Get support",
   "errors": {
     "serverError": {
       "title": "An error occurred"
