@@ -21,7 +21,7 @@ const Base: PrivilegeSeed = {
     },
     { action: "update", subject: "FormRecord", fields: ["isPublished"], inverted: true },
     {
-      action: ["view", "update"],
+      action: ["create", "view", "update"],
       subject: "User",
       fields: ["securityAnswers", "name"],
       conditions: { id: "${user.id}" },
