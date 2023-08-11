@@ -11,10 +11,12 @@ const requestSupport = async (req: NextApiRequest, res: NextApiResponse) => {
     if (!name || !email || !request || !description || !department || !branch || !jobTitle) {
       return res.status(400).json({ error: "Malformed request" });
     }
-  } else {
+  } else if (supportType === "support") {
     if (!name || !email || !request || !description) {
       return res.status(400).json({ error: "Malformed request" });
     }
+  } else {
+    return res.status(400).json({ error: "Malformed request" });
   }
 
   const to =
