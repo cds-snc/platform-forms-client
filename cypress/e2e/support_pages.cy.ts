@@ -1,5 +1,20 @@
 describe("Support Pages", () => {
-  const supportFormTests = () => {
+  describe("Support Page", () => {
+    beforeEach(() => {
+      cy.useFlag("supportForms", true);
+      cy.visit("/en/form-builder/support/");
+    });
+
+    it("English page loads", () => {
+      cy.get("h1").should("contain", "Get support");
+    });
+
+    it("French page loads", () => {
+      cy.get("a[lang='fr']").click();
+      cy.url().should("contain", "/fr");
+      cy.get("h1").should("contain", "Soutien");
+    });
+
     it("Required fields stops submission", () => {
       cy.get("button[type='submit']").click();
       cy.get("p[data-testid='errorMessage']").should("be.visible");
@@ -22,25 +37,6 @@ describe("Support Pages", () => {
       cy.get("button[type='submit']").click();
       cy.get("h1").contains("Thank you for your request");
     });
-  };
-
-  describe("Support Page", () => {
-    beforeEach(() => {
-      cy.useFlag("supportForms", true);
-      cy.visit("/en/form-builder/support/");
-    });
-
-    it("English page loads", () => {
-      cy.get("h1").should("contain", "Get support");
-    });
-
-    it("French page loads", () => {
-      cy.get("a[lang='fr']").click();
-      cy.url().should("contain", "/fr");
-      cy.get("h1").should("contain", "Soutien");
-    });
-
-    supportFormTests();
   });
 
   describe("Contact Us Page", () => {
@@ -59,6 +55,24 @@ describe("Support Pages", () => {
       cy.get("h1").should("contain", "Contactez-nous");
     });
 
-    supportFormTests();
+    it("Required fields stops submission", () => {
+      cy.get("button[type='submit']").click();
+      cy.get("p[data-testid='errorMessage']").should("be.visible");
+    });
+
+    it("Invalid email stops submission", () => {
+      cy.get("#email").type("bad@email");
+      cy.get("button[type='submit']").click();
+      cy.get("#errorMessageemail").should("be.visible");
+    });
+
+    it("Valid submission succeeds", () => {
+      cy.get("#name").type("1");
+      cy.get("#email").type("good@email.com");
+      cy.get("label[for='request-question']").click();
+      cy.get("#description").type("1");
+      cy.get("button[type='submit']").click();
+      cy.get("h1").contains("Thank you for your request");
+    });
   });
 });

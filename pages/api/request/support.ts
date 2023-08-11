@@ -7,8 +7,14 @@ import { logMessage } from "@lib/logger";
 const requestSupport = async (req: NextApiRequest, res: NextApiResponse) => {
   const { supportType, name, email, request, description, department, branch, jobTitle } = req.body;
 
-  if (!name || !email || !request || !description || !department || !branch || !jobTitle) {
-    return res.status(400).json({ error: "Malformed request" });
+  if (supportType === "contactus") {
+    if (!name || !email || !request || !description || !department || !branch || !jobTitle) {
+      return res.status(400).json({ error: "Malformed request" });
+    }
+  } else {
+    if (!name || !email || !request || !description) {
+      return res.status(400).json({ error: "Malformed request" });
+    }
   }
 
   const to =
@@ -73,15 +79,6 @@ ${description}
     emailBody = `
 ${name} (${email}) has requested support for the form-builder.
 
-Department:
-${department}
-
-Branch: 
-${branch}
-
-Job Title:
-${jobTitle}
-
 Support request:
 ${requestParsed}
 
@@ -90,15 +87,6 @@ ${description}
 
 ****
 ${name} (${email}) a demandé de soutien des form-builder.
-
-Ministère ou organisme:
-${department}
-
-Direction ou secteur:
-${branch}
-
-Titre de poste:
-${jobTitle}
 
 Demande de soutien:
 ${requestParsed}

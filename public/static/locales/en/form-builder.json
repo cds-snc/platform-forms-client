@@ -579,9 +579,6 @@
     },
     "name": "Your name",
     "email": "Your email",
-    "department": "Department or agency",
-    "branch": "Branch or sector",
-    "jobTitle": "Job Title",
     "gcFormsTeamLink": "Canada.ca Contact us",
     "gcFormsTeamPart1": "The GC Forms team provides services to people who work in the government. We cannot give general advice to the public about the forms that we host. For other enquiries, go to",
     "gcFormsTeamPart2": "to find the department or agency that can help you.",
@@ -595,7 +592,10 @@
       "title": "How can we help?"
     },
     "title": "Get support",
-    "useThisForm": "Use this form if you experience technical issues with GC Forms."
+    "useThisForm": "Use this form if you experience technical issues with GC Forms.",
+    "errors": {
+      "submissionError": "Something went wrong. Please try again later."
+    }
   },
   "test": "Test",
   "textFormatting": "Text formatting",
