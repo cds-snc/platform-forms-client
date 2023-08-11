@@ -136,7 +136,7 @@ export const Card = (props: CardProps): React.ReactElement => {
         >
           {name ? name : t("unnamedForm", { ns: "form-builder" })}
         </a>
-        <span>
+        <span className="wrap line-clamp-1 overflow-hidden">
           {titleEn && titleEn}
           {titleEn && titleFr && " / "}
           {titleFr && titleFr}
