@@ -5,10 +5,10 @@ import { logMessage } from "@lib/logger";
 
 // Allows an authenticated or unauthenticated user to send an email requesting help
 const requestSupport = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { supportType, name, email, request, description } = req.body;
+  const { supportType, name, email, request, description, department, branch, jobTitle } = req.body;
 
-  if (!name || !email || !request || !description) {
-    return res.status(404).json({ error: "Malformed request" });
+  if (!name || !email || !request || !description || !department || !branch || !jobTitle) {
+    return res.status(400).json({ error: "Malformed request" });
   }
 
   const to =
@@ -36,6 +36,15 @@ const requestSupport = async (req: NextApiRequest, res: NextApiResponse) => {
     emailBody = `
 ${name} (${email}) has requested we contact them for the form-builder.
 
+Department or agency:
+${department}
+
+Branch or sector: 
+${branch}
+
+Job Title:
+${jobTitle}
+
 Contact request:
 ${requestParsed}
 
@@ -44,6 +53,15 @@ ${description}
 
 ****
 ${name} (${email}) a demandé que nous les contactions pour le générateur de formulaires..
+
+Ministère ou organisme:
+${department}
+
+Direction ou secteur:
+${branch}
+
+Titre de poste:
+${jobTitle}
 
 Demande de contact soutien:
 ${requestParsed}
@@ -55,6 +73,15 @@ ${description}
     emailBody = `
 ${name} (${email}) has requested support for the form-builder.
 
+Department:
+${department}
+
+Branch: 
+${branch}
+
+Job Title:
+${jobTitle}
+
 Support request:
 ${requestParsed}
 
@@ -63,6 +90,15 @@ ${description}
 
 ****
 ${name} (${email}) a demandé de soutien des form-builder.
+
+Ministère ou organisme:
+${department}
+
+Direction ou secteur:
+${branch}
+
+Titre de poste:
+${jobTitle}
 
 Demande de soutien:
 ${requestParsed}

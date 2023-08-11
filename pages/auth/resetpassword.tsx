@@ -6,7 +6,6 @@ import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
-import { checkOne } from "@lib/cache/flags";
 import Link from "next/link";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -598,17 +597,6 @@ ResetPassword.getLayout = (page: ReactElement) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ query: { token }, locale }) => {
-  // if the password reset feature flag is not enabled. Redirect to the login page
-  const passwordResetEnabled = await checkOne("passwordReset");
-  if (!passwordResetEnabled) {
-    return {
-      redirect: {
-        destination: `/${locale}/auth/login`,
-        permanent: false,
-      },
-    };
-  }
-
   let userSecurityQuestions: SecurityQuestion[] = [];
   let email = "";
 
@@ -616,6 +604,15 @@ export const getServerSideProps: GetServerSideProps = async ({ query: { token },
     try {
       email = await getPasswordResetAuthenticatedUserEmailAddress(token as string);
       userSecurityQuestions = await retrieveUserSecurityQuestions({ email });
+
+      if (userSecurityQuestions.length === 0) {
+        return {
+          redirect: {
+            destination: `/${locale}/auth/reset-failed`,
+            permanent: false,
+          },
+        };
+      }
     } catch (e) {
       if (e instanceof PasswordResetExpiredLink) {
         return {

@@ -200,11 +200,18 @@ export async function retrieveUserSecurityQuestions({
   });
 }
 
-export async function userHasSecurityQuestions(userId: string): Promise<boolean> {
+export async function userHasSecurityQuestions({
+  userId,
+  email,
+}: {
+  userId?: string;
+  email?: string;
+}): Promise<boolean> {
   const numberOfQuestions = await prisma.securityAnswer.count({
     where: {
       user: {
         id: userId,
+        email,
       },
     },
   });
