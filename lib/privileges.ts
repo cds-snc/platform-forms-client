@@ -328,7 +328,7 @@ export const checkPrivileges = (
   rules: {
     action: Action;
     subject: Subject | ForcedSubjectType;
-    field?: string;
+    field?: string | string[];
   }[],
   logic: "all" | "one" = "all"
 ): void => {
@@ -336,6 +336,17 @@ export const checkPrivileges = (
   try {
     const result = rules.map(({ action, subject, field }) => {
       let ruleResult = false;
+      if (Array.isArray(field)) {
+        field.forEach((f) => {
+          try {
+            checkPrivileges(ability, [{ action, subject, field: f }], logic);
+            ruleResult = true;
+          } catch (error) {
+            ruleResult = false;
+          }
+        });
+        return ruleResult;
+      }
       if (_isForceTyping(subject)) {
         ruleResult = ability.can(action, setSubjectType(subject.type, subject.object), field);
         logMessage.debug(

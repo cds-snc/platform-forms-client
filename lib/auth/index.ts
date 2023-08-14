@@ -23,7 +23,6 @@ export {
 export type {
   SecurityQuestionId,
   SecurityQuestion,
-  CreateSecurityAnswersCommand,
   UpdateSecurityAnswerCommand,
   ValidateSecurityAnswersCommand,
 } from "./securityQuestions";

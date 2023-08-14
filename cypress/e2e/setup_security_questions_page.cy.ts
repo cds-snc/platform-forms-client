@@ -8,10 +8,14 @@ describe("Security Questions Page", () => {
   beforeEach(() => {
     cy.visitPage("/en/auth/login");
     cy.get("input[id='username']").type("test.withoutSecurityAnswers@cds-snc.ca");
+    cy.get("input[id='username']").should("have.value", "test.withoutSecurityAnswers@cds-snc.ca");
     cy.get("input[id='password']").type("testTesttest");
+    cy.get("input[id='password']").should("have.value", "testTesttest");
     cy.get("button[type='submit']").click();
     cy.get("input[id='verificationCode']").should("be.visible");
+    cy.get("input[id='verificationCode']").click();
     cy.get("input[id='verificationCode']").type("12345");
+    cy.get("input[id='verificationCode']").should("have.value", "12345");
     cy.get("button[type='submit']").should("be.visible");
     cy.get("button[type='submit']").click();
   });
@@ -26,37 +30,54 @@ describe("Security Questions Page", () => {
   describe("Test form validation", () => {
     it("Fails to submit on an empty form", () => {
       cy.get("#question1").select(questions1);
+      cy.get("#question1").find(":selected").contains(questions1);
       cy.get("button[type='submit']").click();
       cy.get("p[data-testid='errorMessage'").should("contain", "Required field");
     });
 
     it("Fails to submit when a question is not selected", () => {
       cy.get("#question1").select(questions1);
+      cy.get("#question1").find(":selected").contains(questions1);
       cy.get("#answer1").type("1234");
+      cy.get("#answer1").should("have.value", "1234");
       cy.get("#question2").select(questions2);
+      cy.get("#question2").find(":selected").contains(questions2);
       cy.get("#answer2").type("12345");
+      cy.get("#answer2").should("have.value", "12345");
       cy.get("#answer3").type("123456");
+      cy.get("#answer3").should("have.value", "123456");
       cy.get("button[type='submit']").click();
       cy.get("p[data-testid='errorMessage'").should("contain", "Required field");
     });
 
     it("Fails to submit when a answer is not filled in", () => {
       cy.get("#question1").select(questions1);
+      cy.get("#question1").find(":selected").contains(questions1);
       cy.get("#answer1").type("1234");
+      cy.get("#answer1").should("have.value", "1234");
       cy.get("#question2").select(questions2);
+      cy.get("#question2").find(":selected").contains(questions2);
       cy.get("#answer2").type("12345");
+      cy.get("#answer2").should("have.value", "12345");
       cy.get("#question3").select(questions3);
+      cy.get("#question3").find(":selected").contains(questions3);
       cy.get("button[type='submit']").click();
       cy.get("p[data-testid='errorMessage'").should("contain", "Required field");
     });
 
     it("Fails to submit when a question is too short", () => {
       cy.get("#question1").select(questions1);
+      cy.get("#question1").find(":selected").contains(questions1);
       cy.get("#answer1").type("1234");
+      cy.get("#answer1").should("have.value", "1234");
       cy.get("#question2").select(questions2);
+      cy.get("#question2").find(":selected").contains(questions2);
       cy.get("#answer2").type("12345");
+      cy.get("#answer2").should("have.value", "12345");
       cy.get("#question3").select(questions3);
+      cy.get("#question3").find(":selected").contains(questions3);
       cy.get("#answer3").type("1");
+      cy.get("#answer3").should("have.value", "1");
       cy.get("button[type='submit']").click();
       cy.get("#errorMessageanswer3").should("contain", "Must be at least 4 characters");
     });
@@ -90,11 +111,17 @@ describe("Security Questions Page", () => {
   describe("Filling in the form correctly should successfully submit", () => {
     it("Select a question should update the selected 'value'", () => {
       cy.get("#question1").select(questions1);
+      cy.get("#question1").find(":selected").contains(questions1);
       cy.get("#answer1").type("1234");
+      cy.get("#answer1").should("have.value", "1234");
       cy.get("#question2").select(questions2);
+      cy.get("#question2").find(":selected").contains(questions2);
       cy.get("#answer2").type("12345");
+      cy.get("#answer2").should("have.value", "12345");
       cy.get("#question3").select(questions3);
+      cy.get("#question3").find(":selected").contains(questions3);
       cy.get("#answer3").type("123456");
+      cy.get("#answer3").should("have.value", "123456");
       cy.get("button[type='submit']").click();
       cy.get("#acceptableUse").click();
       cy.url().should("contain", "/en/myforms");

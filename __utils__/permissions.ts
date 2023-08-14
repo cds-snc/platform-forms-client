@@ -15,6 +15,12 @@ export const Base: RawRuleOf<MongoAbility<Abilities>>[] = [
     conditions: { users: { $elemMatch: { id: "${user.id}" } } },
   },
   { action: "update", subject: "FormRecord", fields: ["isPublished"], inverted: true },
+  {
+    action: ["create", "view", "update"],
+    subject: "User",
+    fields: ["securityAnswers", "name"],
+    conditions: { id: "${user.id}" },
+  },
 ];
 
 export const PublishForms: RawRuleOf<MongoAbility<Abilities>>[] = [
