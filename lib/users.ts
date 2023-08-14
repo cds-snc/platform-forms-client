@@ -178,7 +178,16 @@ interface SelectedUser
  */
 export const getUsers = async (ability: UserAbility): Promise<SelectedUser[] | never[]> => {
   try {
-    checkPrivileges(ability, [{ action: "view", subject: "User" }]);
+    checkPrivileges(ability, [
+      {
+        action: "view",
+        subject: {
+          type: "User",
+          // Empty object to force the ability to check for any user
+          object: {},
+        },
+      },
+    ]);
 
     const users = await prisma.user
       .findMany({
