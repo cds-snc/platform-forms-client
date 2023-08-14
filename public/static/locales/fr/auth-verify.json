@@ -18,7 +18,7 @@
           "length": "Doit être 5 caractères",
           "noSymbols": "Ne peut pas contenir de symboles",
           "notFound": "Code non trouvé",
-          "expired": "Code expiré. Rssayez de vous connecter à nouveau."
+          "expired": "Code expiré. Essayez de vous connecter à nouveau."
         }
       }
     }
