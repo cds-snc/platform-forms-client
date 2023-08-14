@@ -12,6 +12,7 @@ import Link from "next/link";
 import { LoggedOutTab, LoggedOutTabName } from "./LoggedOutTab";
 import { InfoCard } from "@components/globals/InfoCard/InfoCard";
 import { isVaultDelivery } from "@formbuilder/util";
+import * as Alert from "@components/globals/Alert/Alert";
 
 export const Publish = () => {
   const { t } = useTranslation("form-builder");
@@ -93,22 +94,19 @@ export const Publish = () => {
           <h1 className="mb-0 border-0">{t("publishYourForm")}</h1>
           <p className="mb-0">{t("publishYourFormInstructions")}</p>
           {!userCanPublish && (
-            <div className="my-5 flex bg-purple-200 p-5">
-              <div className="flex">
-                <div className="pr-7">
-                  <LockIcon className="mb-2 scale-125" />
-                </div>
-              </div>
-              <div>
-                <h3 className="mb-1">{t("unlockPublishing")}</h3>
-                <p className="mb-5">{t("unlockPublishingDescription")}</p>
-                <p>
-                  <Button theme="secondary" onClick={handleSaveAndRequest}>
-                    {t("saveAndRequest")}
-                  </Button>
-                </p>
-              </div>
-            </div>
+            <Alert.Info className="my-5">
+              <Alert.IconWrapper className="mr-7">
+                <LockIcon className="mb-2 scale-125 fill-none stroke-none" />
+              </Alert.IconWrapper>
+              <Alert.Title headingTag="h2">{t("unlockPublishing")}</Alert.Title>
+
+              <p className="mb-5">{t("unlockPublishingDescription")}</p>
+              <p>
+                <Button theme="secondary" onClick={handleSaveAndRequest}>
+                  {t("saveAndRequest")}
+                </Button>
+              </p>
+            </Alert.Info>
           )}
 
           <ul className="list-none p-0">
