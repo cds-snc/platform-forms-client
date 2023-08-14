@@ -36,9 +36,9 @@ export const Publish = () => {
 
   const Icon = ({ checked }: { checked: boolean }) => {
     return checked ? (
-      <CircleCheckIcon className="mr-2 w-9 fill-green-700 inline-block" />
+      <CircleCheckIcon className="mr-2 inline-block w-9 fill-green-700" />
     ) : (
-      <CancelIcon className="mr-2 w-9 fill-red-700 w-9 h-9 inline-block" />
+      <CancelIcon className="mr-2 inline-block h-9 w-9 fill-red-700" />
     );
   };
 
@@ -88,12 +88,12 @@ export const Publish = () => {
 
   return (
     <>
-      <div className="flex justify-between flex-wrap laptop:flex-nowrap">
-        <div className="grow border-1 rounded-lg p-5 mx-5 min-w-fit w-sm">
-          <h1 className="border-0 mb-0">{t("publishYourForm")}</h1>
+      <div className="flex flex-wrap justify-between laptop:flex-nowrap">
+        <div className="mx-5 min-w-fit grow rounded-lg border-1 p-5">
+          <h1 className="mb-0 border-0">{t("publishYourForm")}</h1>
           <p className="mb-0">{t("publishYourFormInstructions")}</p>
           {!userCanPublish && (
-            <div className="mt-5 mb-5 p-5 bg-purple-200 flex">
+            <div className="my-5 flex bg-purple-200 p-5">
               <div className="flex">
                 <div className="pr-7">
                   <LockIcon className="mb-2 scale-125" />
@@ -112,27 +112,27 @@ export const Publish = () => {
           )}
 
           <ul className="list-none p-0">
-            <li className="mb-4 mt-4">
+            <li className="my-4">
               <Icon checked={title} />
               <Link href={`/${i18n.language}/form-builder/edit#formTitle`}>{t("formTitle")}</Link>
             </li>
-            <li className="mb-4 mt-4">
+            <li className="my-4">
               <Icon checked={questions} />
               <Link href={`/${i18n.language}/form-builder/edit`}>{t("questions")}</Link>
             </li>
-            <li className="mb-4 mt-4">
+            <li className="my-4">
               <Icon checked={privacyPolicy} />
               <Link href={`/${i18n.language}/form-builder/edit#privacy-text`}>
                 {t("privacyStatement")}
               </Link>
             </li>
-            <li className="mb-4 mt-4">
+            <li className="my-4">
               <Icon checked={confirmationMessage} />
               <Link href={`/${i18n.language}/form-builder/edit#confirmation-text`}>
                 {t("formConfirmationMessage")}
               </Link>
             </li>
-            <li className="mb-4 mt-4">
+            <li className="my-4">
               <Icon checked={translate} />
               <Link href={`/${i18n.language}/form-builder/edit/translate`}>{t("translate")}</Link>
             </li>
@@ -145,8 +145,8 @@ export const Publish = () => {
               </Button>
               <div
                 role="alert"
-                className={`inline-block ml-5 py-1 px-3 
-            ${error ? "text-red-destructive bg-red-100" : ""}
+                className={`ml-5 inline-block px-3 py-1 
+            ${error ? "bg-red-100 text-red-destructive" : ""}
             ${!error ? "hidden" : ""}`}
               >
                 <>{error && <p>{t("thereWasAnErrorPublishing")}</p>}</>
@@ -156,7 +156,7 @@ export const Publish = () => {
         </div>
         {userCanPublish && isPublishable() && (
           <>
-            <div className="flex-none max-w-md mt-8 laptop:mt-0 min-w-fit laptop:min-w-min">
+            <div className="mt-8 min-w-fit max-w-md flex-none laptop:mt-0 laptop:min-w-min">
               <InfoCard title={t("whatYouNeedToKnow")}>
                 <ul className="list-none p-0">
                   <li className="mb-5 bg-gray-50 p-1.5">
