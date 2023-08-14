@@ -81,6 +81,20 @@ describe("Security Questions Page", () => {
       cy.get("button[type='submit']").click();
       cy.get("#errorMessageanswer3").should("contain", "Must be at least 4 characters");
     });
+
+    it("Fails to submit when there is a duplicate answer", () => {
+      cy.get("#question1").select(questions1);
+      cy.get("#answer1").type("1234");
+      cy.get("#question2").select(questions2);
+      cy.get("#answer2").type("1234");
+      cy.get("#question3").select(questions3);
+      cy.get("#answer3").type("abcd");
+      cy.get("button[type='submit']").click();
+      cy.get("#errorMessageanswer1").should(
+        "contain",
+        "Answers cannot be the same. Create a unique answer for this question"
+      );
+    });
   });
 
   describe("Test questions select behavior", () => {
