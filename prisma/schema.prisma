@@ -126,8 +126,8 @@ model CognitoCustom2FA {
 
 model SecurityQuestion {
   id             String           @id @default(cuid())
-  questionEn     String
-  questionFr     String
+  questionEn     String           @unique
+  questionFr     String           @unique
   deprecated     Boolean          @default(false)
   securityAnswer SecurityAnswer[]
 }
