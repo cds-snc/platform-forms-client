@@ -755,7 +755,7 @@ describe("Template CRUD functions", () => {
 
     await expect(async () => {
       await updateTemplate({ ability: ability, formID: "test1", formConfig: updatedFormConfig });
-    }).rejects.toThrowError(new TemplateAlreadyPublishedError());
+    }).rejects.toThrowError(TemplateAlreadyPublishedError);
     expect(mockedLogEvent).toBeCalledTimes(0);
   });
 
@@ -897,7 +897,7 @@ describe("Template CRUD functions", () => {
 
       await expect(async () => {
         await deleteTemplate(ability, "formtestID");
-      }).rejects.toThrowError(new TemplateHasUnprocessedSubmissions());
+      }).rejects.toThrowError(TemplateHasUnprocessedSubmissions);
     }
   );
 
