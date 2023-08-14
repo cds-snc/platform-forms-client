@@ -1,7 +1,7 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetServerSideProps } from "next";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Formik } from "formik";
@@ -25,6 +25,7 @@ import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
 import { checkOne } from "@lib/cache/flags";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
+import { useFocusIt } from "@lib/hooks/useFocusIt";
 
 export default function Contactus() {
   const router = useRouter();
@@ -33,6 +34,9 @@ export default function Contactus() {
   const [isSuccessScreen, setIsSuccessScreen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const headingSuccessRef = useRef(null);
+
+  useFocusIt({ elRef: headingSuccessRef, dependencies: [isSuccessScreen] });
 
   const validationSchemaContactUs = Yup.object().shape({
     name: Yup.string().required(t("input-validation.required", { ns: "common" })),
@@ -475,11 +479,12 @@ export default function Contactus() {
   );
 
   return (
-    <div aria-live="polite">
+    <>
       {!isSuccessScreen && (supportType === "contactus" ? contactUsForm : supportForm)}
+
       {isSuccessScreen && (
         <>
-          <h1>{t("requestSuccess.title")}</h1>
+          <h1 ref={headingSuccessRef}>{t("requestSuccess.title")}</h1>
           <p className="mb-16 mt-[-2rem] font-bold">{t("requestSuccess.weWillRespond")}</p>
           <div className="mb-16">
             <StyledLink href={`/myforms`} className="gc-button--blue">
@@ -496,7 +501,7 @@ export default function Contactus() {
           <p>{t("requestSuccess.theGCFormsTeam")}</p>
         </>
       )}
-    </div>
+    </>
   );
 }
 
