@@ -11,13 +11,14 @@
   "thirdQuestion": "Enter the third security qestion and answer[FR]",
   "questionPlaceholder": "Sélectionner une question",
   "continue": "Continuer",
-  "contact": "Nous contacter",
+  "support": "Obtenir du soutien",
   "errors": {
     "serverError": {
       "title": "An error occurred[FR]"
     },
     "required": "Required field[FR]",
-    "answerLength": "Doit être au moins 4 caractères."
+    "answerLength": "Doit être au moins 4 caractères.",
+    "duplicateAnswer": "Answers cannot be the same. Create a unique answer for this question[FR]"
   },
   "banner": {
     "title": "Nous renforçons la sécurité de votre compte et de vos formulaires.",
