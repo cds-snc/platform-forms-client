@@ -173,6 +173,7 @@ const ManagePermissions = ({
     (privilege) =>
       privilege.nameEn === "ManageForms" ||
       privilege.nameEn === "ViewUserPrivileges" ||
+      privilege.nameEn === "ManagePrivileges" ||
       privilege.nameEn === "ManageUsers"
   );
 
