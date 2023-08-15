@@ -10,7 +10,7 @@ const RegularUser: User | { privileges: Record<string, unknown> } = {
   email: "test.user@cds-snc.ca",
   active: true,
   privileges: {
-    connect: [{ nameEn: "Base" }, { nameEn: "PublishForms" }],
+    connect: [{ name: "Base" }, { name: "PublishForms" }],
   },
 };
 
@@ -20,12 +20,11 @@ const AdminUser: User | { privileges: Record<string, unknown> } = {
   active: true,
   privileges: {
     connect: [
-      { nameEn: "Base" },
-      { nameEn: "PublishForms" },
-      { nameEn: "ManageApplicationSettings" },
-      { nameEn: "ManageUsers" },
-      { nameEn: "ManageForms" },
-      { nameEn: "ManagePrivileges" },
+      { name: "Base" },
+      { name: "PublishForms" },
+      { name: "ManageApplicationSettings" },
+      { name: "ManageUsers" },
+      { name: "ManageForms" },
     ],
   },
 };
@@ -35,7 +34,7 @@ const DeactivatedRegularUser: User | { privileges: Record<string, unknown> } = {
   email: "test.deactivated@cds-snc.ca",
   active: false,
   privileges: {
-    connect: [{ nameEn: "Base" }, { nameEn: "PublishForms" }],
+    connect: [{ name: "Base" }, { name: "PublishForms" }],
   },
 };
 
@@ -43,7 +42,7 @@ export const UserWithoutSecurityAnswers: User | { privileges: Record<string, unk
   name: "Test User Without Scurity Answers",
   email: "test.withoutSecurityAnswers@cds-snc.ca",
   privileges: {
-    connect: [{ nameEn: "Base" }, { nameEn: "PublishForms" }],
+    connect: [{ name: "Base" }, { name: "PublishForms" }],
   },
 };
 
