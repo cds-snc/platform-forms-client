@@ -149,7 +149,7 @@ export const updatePrivilegesForUser = async (
       prisma.privilege.findMany({
         select: {
           id: true,
-          nameEn: true,
+          name: true,
         },
       }),
       prisma.user.update({
@@ -184,7 +184,7 @@ export const updatePrivilegesForUser = async (
         userID,
         { type: "Privilege", id: privilege.id },
         "GrantPrivilege",
-        `Granted privilege : ${privilegesInfo.find((p) => p.id === privilege.id)?.nameEn} to ${
+        `Granted privilege : ${privilegesInfo.find((p) => p.id === privilege.id)?.name} to ${
           user.email
         } (userID: ${user.id}) by ${privilegedUser?.email} (userID: ${ability.userID})`
       )
@@ -195,7 +195,7 @@ export const updatePrivilegesForUser = async (
         userID,
         { type: "Privilege", id: privilege.id },
         "RevokePrivilege",
-        `Revoked privilege : ${privilegesInfo.find((p) => p.id === privilege.id)?.nameEn} from ${
+        `Revoked privilege : ${privilegesInfo.find((p) => p.id === privilege.id)?.name} from ${
           user.email
         } (userID: ${user.id}) by ${privilegedUser?.email} (userID: ${ability.userID})`
       )
@@ -233,8 +233,7 @@ export const getAllPrivileges = async (ability: UserAbility) => {
     return await prisma.privilege.findMany({
       select: {
         id: true,
-        nameEn: true,
-        nameFr: true,
+        name: true,
         descriptionEn: true,
         descriptionFr: true,
         permissions: true,

@@ -25,7 +25,6 @@ const AdminUser: User | { privileges: Record<string, unknown> } = {
       { nameEn: "ManageApplicationSettings" },
       { nameEn: "ManageUsers" },
       { nameEn: "ManageForms" },
-      { nameEn: "ManagePrivileges" },
     ],
   },
 };
