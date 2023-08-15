@@ -255,15 +255,15 @@ describe("Users API endpoint", () => {
       (prismaMock.privilege.findMany as jest.MockedFunction<any>).mockResolvedValue([
         {
           id: "1",
-          nameEn: "View Users",
+          name: "View Users",
         },
         {
           id: "2",
-          nameEn: "Manage Settings",
+          name: "Manage Settings",
         },
         {
           id: "3",
-          nameEn: "Manage Forms",
+          name: "Manage Forms",
         },
       ]);
 
