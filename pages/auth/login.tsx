@@ -2,7 +2,6 @@ import React, { ReactElement, MutableRefObject } from "react";
 import { Formik } from "formik";
 import { TextInput, Label, Alert, ErrorListItem } from "@components/forms";
 import { Button } from "@components/globals";
-import { useFlag } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -33,8 +32,6 @@ const LoginStep = ({
   authErrorsReset: () => void;
 }) => {
   const { t } = useTranslation(["login", "cognito-errors", "common"]);
-
-  const { status: registrationOpen } = useFlag("accountRegistration");
 
   const validationSchema = Yup.object().shape({
     username: Yup.string()
@@ -109,12 +106,10 @@ const LoginStep = ({
               </Alert>
             )}
             <h1 className="border-b-0 mt-6 mb-12">{t("title")}</h1>
-            {registrationOpen && (
-              <p className="mb-10 -mt-6">
-                {t("signUpText")}&nbsp;
-                <Link href={"/signup/register"}>{t("signUpLink")}</Link>
-              </p>
-            )}
+            <p className="mb-10 -mt-6">
+              {t("signUpText")}&nbsp;
+              <Link href={"/signup/register"}>{t("signUpLink")}</Link>
+            </p>
             <form id="login" method="POST" onSubmit={handleSubmit} noValidate>
               <div className="focus-group">
                 <Label id={"label-username"} htmlFor={"username"} className="required" required>

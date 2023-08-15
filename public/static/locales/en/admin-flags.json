@@ -30,10 +30,6 @@
       "title": "Form timer",
       "description": "Wait a specific amount of time before being allowed to submit the form"
     },
-    "accountRegistration": {
-      "title": "Account creation",
-      "description": "Allow users to register for an account"
-    },
     "supportForms": {
       "title": "Support forms",
       "description": "Whether or not support forms are enabled"
