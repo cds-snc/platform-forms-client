@@ -1,6 +1,5 @@
 import React, { useMemo } from "react";
 import { useTranslation } from "next-i18next";
-import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
 import * as Alert from "@components/globals/Alert/Alert";
 import { NagLevel, NagwareResult } from "@lib/types";
 
