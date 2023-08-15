@@ -20,7 +20,7 @@ import {
   TextArea,
   Description,
 } from "@components/forms";
-import { Button, StyledLink } from "@components/globals";
+import { Button, LinkButton } from "@components/globals";
 import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
 import { checkOne } from "@lib/cache/flags";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
@@ -486,9 +486,9 @@ export default function Contactus() {
           <h1 ref={headingSuccessRef}>{t("requestSuccess.title")}</h1>
           <p className="mb-16 mt-[-2rem] font-bold">{t("requestSuccess.weWillRespond")}</p>
           <div className="mb-16">
-            <StyledLink href={`/myforms`} theme="primaryButton">
+            <LinkButton.Primary href={`/myforms`}>
               {t("requestSuccess.backToForms")}
-            </StyledLink>
+            </LinkButton.Primary>
           </div>
           <p className="mb-8">
             {t("requestSuccess.forOtherEnquiriesPart1")}&nbsp;
