@@ -5,7 +5,7 @@
     "title": "There was a problem while signing in.",
     "description": "Try again later or ",
     "link": "/form-builder/support",
-    "linkText": "contact Support"
+    "linkText": "contact Support."
   },
   "TooManyRequestsException": "Too many requests. Try again later.",
   "UsernameExistsException": "This account already exists.",
@@ -18,7 +18,7 @@
   },
   "UsernameOrPasswordIncorrect": {
     "title": "The email address or password you entered is incorrect.",
-    "description": "The email address or password you entered is incorrect or the account does not exist.",
+    "description": "The email address or password you entered is incorrect or the account does not exist. ",
     "link": "/signup/register",
     "linkText": "If you don’t have an account, create one now."
   },
