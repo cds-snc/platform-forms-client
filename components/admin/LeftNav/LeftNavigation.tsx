@@ -42,18 +42,6 @@ export const LeftNavigation = () => {
           </>
         </LeftNavLink>
       )}
-      {ability?.can("view", "Privilege") && (
-        <LeftNavLink
-          id="privileges"
-          href="/admin/privileges"
-          isActive={path === "/admin/privileges"}
-        >
-          <>
-            <TreeViewIcon className={iconClassname} />
-            {t("adminNav.privileges", { ns: "common" })}
-          </>
-        </LeftNavLink>
-      )}
     </nav>
   );
 };

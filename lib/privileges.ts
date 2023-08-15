@@ -1,11 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import {
-  privilegeCheck,
-  privilegePut,
-  privilegeDelete,
-  flushValues,
-} from "@lib/cache/privilegeCache";
+import { privilegeCheck, privilegePut, privilegeDelete } from "@lib/cache/privilegeCache";
 import {
   createMongoAbility,
   MongoAbility,
@@ -251,57 +246,6 @@ export const getAllPrivileges = async (ability: UserAbility) => {
     });
   } catch (e) {
     return prismaErrors(e, []);
-  }
-};
-
-export const updatePrivilege = async (ability: UserAbility, privilege: Privilege) => {
-  try {
-    checkPrivileges(ability, [{ action: "update", subject: "Privilege" }]);
-
-    const response = await prisma.privilege.update({
-      where: {
-        id: privilege.id,
-      },
-      data: privilege,
-
-      select: {
-        id: true,
-      },
-    });
-    // Flush existing privilege cache for all users asynchronously
-    flushValues();
-    return response;
-  } catch (error) {
-    logMessage.error(error as Error);
-    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
-      // Error P2025: Record to update not found.
-      return null;
-    }
-    throw error;
-  }
-};
-
-export const createPrivilege = async (ability: UserAbility, privilege: Privilege) => {
-  try {
-    checkPrivileges(ability, [{ action: "create", subject: "Privilege" }]);
-
-    const response = await prisma.privilege.create({
-      data: privilege,
-
-      select: {
-        id: true,
-      },
-    });
-    // Flush existing privilege cache for all users asynchronously
-    flushValues();
-    return response;
-  } catch (error) {
-    logMessage.error(error as Error);
-    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
-      // Error P2025: Record to update not found.
-      return null;
-    }
-    throw error;
   }
 };
 

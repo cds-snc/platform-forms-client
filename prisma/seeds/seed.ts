@@ -29,10 +29,36 @@ async function createPrivileges(env: string) {
     ...privilege,
     permissions: privilege.permissions !== null ? privilege.permissions : Prisma.JsonNull,
   }));
+
+  const privilegePromises = typeSafePrivilegeData.map((privilege) => {
+    return prisma.privilege.upsert({
+      where: {
+        name: privilege.name,
+      },
+      update: {
+        permissions: privilege.permissions,
+        descriptionEn: privilege.descriptionEn,
+        descriptionFr: privilege.descriptionFr,
+        priority: privilege.priority,
+      },
+      create: {
+        name: privilege.name,
+        permissions: privilege.permissions,
+        descriptionEn: privilege.descriptionEn,
+        descriptionFr: privilege.descriptionFr,
+        priority: privilege.priority,
+      },
+    });
+  });
+
+  await Promise.all(privilegePromises);
+
+  /*
   return prisma.privilege.createMany({
     data: typeSafePrivilegeData,
     skipDuplicates: true,
   });
+  */
 }
 
 async function createSettings(env: string) {
