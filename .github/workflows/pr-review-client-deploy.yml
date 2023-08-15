@@ -3,13 +3,16 @@ name: Deploy PR Review Client environment
 on:
   pull_request:
     branches:
-      - develop  
+      - develop
       - feature/*
     types:
       - labeled
       - opened
       - reopened
       - synchronize
+    paths-ignore:
+      - "prisma/migrations/**"
+      - "prisma/schema.prisma"
 
 env:
   AWS_DEFAULT_REGION: ca-central-1
@@ -51,7 +54,7 @@ jobs:
             --build-arg GITHUB_SHA_ARG=$GITHUB_SHA \
             --build-arg COGNITO_APP_CLIENT_ID=$COGNITO_APP_CLIENT_ID \
             --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID .
-          
+
       - name: Push Docker image to ECR
         run: |
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE }}:${{ env.PR_NUMBER }}
