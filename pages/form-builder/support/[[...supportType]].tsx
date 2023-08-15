@@ -21,7 +21,7 @@ import {
   Description,
 } from "@components/forms";
 import { Button, LinkButton } from "@components/globals";
-import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
+import * as AlertMessage from "@components/globals/Alert/Alert";
 import { checkOne } from "@lib/cache/flags";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
@@ -151,14 +151,12 @@ export default function Contactus() {
                 </Link>
                 &nbsp;{t("contactus.gcFormsTeamPart2")}
               </p>
-              <Attention
-                type={AttentionTypes.WARNING}
-                isAlert={false}
-                heading={t("contactus.needSupport")}
-              >
-                {t("contactus.ifYouExperience")}&nbsp;
-                <Link href={`/form-builder/support`}>{t("contactus.supportFormLink")}</Link>.
-              </Attention>
+              <AlertMessage.Warning title={t("contactus.needSupport")} role="note">
+                <p>
+                  {t("contactus.ifYouExperience")}&nbsp;
+                  <Link href={`/form-builder/support`}>{t("contactus.supportFormLink")}</Link>.
+                </p>
+              </AlertMessage.Warning>
               <div className="focus-group mt-14">
                 <Label id={"label-name"} htmlFor={"name"} className="required" required>
                   {t("contactus.name")}
@@ -381,10 +379,12 @@ export default function Contactus() {
                 </Link>
                 &nbsp;{t("support.gcFormsTeamPart2")}
               </p>
-              <Attention type={AttentionTypes.WARNING} heading={t("support.lookingForADemo")}>
-                {t("support.ifYouWouldLike")}&nbsp;
-                <Link href={`/form-builder/support/contactus`}>{t("support.contactUs")}</Link>.
-              </Attention>
+              <AlertMessage.Warning title={t("support.lookingForADemo")} role="note">
+                <p>
+                  {t("support.ifYouWouldLike")}&nbsp;
+                  <Link href={`/form-builder/support/contactus`}>{t("support.contactUs")}</Link>.
+                </p>
+              </AlertMessage.Warning>
               <div className="focus-group mt-14">
                 <Label id={"label-name"} htmlFor={"name"} className="required" required>
                   {t("support.name")}
