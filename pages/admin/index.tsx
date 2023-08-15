@@ -49,11 +49,6 @@ const AdminWelcome: NextPageWithLayout = () => {
                 <a href={"/admin/flags"}>{t("featureFlags")}</a>
               </Link>
             </li>
-            <li>
-              <Link href="/admin/privileges" legacyBehavior>
-                <a href={"/admin/privileges"}>{t("permissions")}</a>
-              </Link>
-            </li>
           </ul>
         </div>
       </div>

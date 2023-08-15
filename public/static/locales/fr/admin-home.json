@@ -1,11 +1,11 @@
 {
-    "title": "Administration",
-    "accounts": "Comptes",
-    "systemSettings": "Paramètres du système",
-    "featureFlags": "Indicateurs de fonctionnalité",
-    "permissions": "Permissions",
-    "systemAdministration": "Administration du système",
-    "accountAdministration": "Administration des comptes",
-    "manageUsersAndTheirForms": "[FR] Manage users and their forms",
-    "configureHowTheApplicationWorks": "Configurer le fonctionnement de l’application."
+  "title": "Administration",
+  "accounts": "Comptes",
+  "systemSettings": "Paramètres",
+  "featureFlags": "Indicateurs de fonctionnalité",
+  "permissions": "Permissions",
+  "systemAdministration": "Administration du système",
+  "accountAdministration": "Administration des comptes",
+  "manageUsersAndTheirForms": "[FR] Manage users and their forms",
+  "configureHowTheApplicationWorks": "Configurer le fonctionnement de l’application."
 }

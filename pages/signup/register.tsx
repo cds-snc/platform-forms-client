@@ -2,7 +2,6 @@ import React, { ReactElement, useRef } from "react";
 import { Formik } from "formik";
 import { TextInput, Label, Alert, ErrorListItem } from "@components/forms";
 import { Button } from "@components/globals";
-import { useFlag } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -15,7 +14,6 @@ import {
   containsSymbol,
 } from "@lib/validation";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
-import Loader from "@components/globals/Loader";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth/next";
 import Link from "next/link";
@@ -29,7 +27,6 @@ import { useLogin } from "@lib/hooks/auth";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 
 const Register = () => {
-  const { isLoading, status: registrationOpen } = useFlag("accountRegistration");
   const { t } = useTranslation(["signup", "common"]);
   const {
     username,
@@ -122,30 +119,6 @@ const Register = () => {
         t("account.fields.passwordConfirmation.error.mustMatch", { ns: "common" })
       ),
   });
-
-  if (isLoading) {
-    return (
-      <>
-        <Head>
-          <title>{t("signUpRegistration.title")}</title>
-        </Head>
-        <h1 className="border-b-0 mt-6 mb-12">{t("signUpRegistration.title")}</h1>
-        <Loader message={t("loading")} />
-      </>
-    );
-  }
-
-  if (!registrationOpen) {
-    return (
-      <>
-        <Head>
-          <title>{t("signUpRegistration.title")}</title>
-        </Head>
-        <h1 className="border-b-0 mt-6 mb-12">{t("signUpRegistration.title")}</h1>
-        <p>{t("registrationClosed")}</p>
-      </>
-    );
-  }
 
   if (needsVerification) {
     return (

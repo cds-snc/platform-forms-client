@@ -73,8 +73,7 @@ model DeliveryOption {
 
 model Privilege {
   id            String  @id @default(cuid())
-  nameEn        String  @unique
-  nameFr        String  @unique
+  name          String  @unique
   descriptionEn String?
   descriptionFr String?
   permissions   Json
