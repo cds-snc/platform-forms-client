@@ -206,9 +206,9 @@
     "department": "Department or agency",
     "branch": "Branch or sector",
     "jobTitle": "Job Title",
-    "gcFormsTeamLink": "Canada.ca Contact us",
-    "gcFormsTeamPart1": "The GC Forms team provides services to people who work in the government. We cannot give general advice to the public about the forms that we host. For other enquiries, go to",
-    "gcFormsTeamPart2": "to find the department or agency that can help you.",
+    "gcFormsTeamLink": "contacts page",
+    "gcFormsTeamPart1": "The GC Forms team provides services to people who work in the government. We cannot give general advice to the public about the forms that we host. For other enquiries, visit the ",
+    "gcFormsTeamPart2": "to find the right department or agency to fulfill your request.",
     "ifYouExperience": "If you experience technical issues, please fill out the",
     "name": "Your name",
     "needSupport": "Need support?",
@@ -221,7 +221,7 @@
     },
     "supportFormLink": "Support form",
     "title": "Contact us",
-    "useThisForm": "Use this form to learn more about GC Forms and how it can work in your department.",
+    "useThisForm": "Use this form to learn more about GC Forms and how it can work in your department or agency.",
     "errors": {
       "submissionError": "Something went wrong. Please try again later."
     }
