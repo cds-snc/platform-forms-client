@@ -206,9 +206,9 @@
     "department": "Ministère ou organisme",
     "branch": "Direction ou secteur",
     "jobtitle": "Titre de poste",
-    "gcFormsTeamLink": "Canada.ca Contactez-nous",
-    "gcFormsTeamPart1": "L'équipe de Formulaires GC fournit des services aux personnes qui travaillent au sein du gouvernement. Nous ne pouvons pas donner de conseils généraux au public sur les formulaires que nous hébergeons. Pour toute autre question, allez à ",
-    "gcFormsTeamPart2": "pour trouver le ministère ou l'organisme qui peut vous aider. ",
+    "gcFormsTeamLink": "page de contact",
+    "gcFormsTeamPart1": "L'équipe de Formulaires GC offre ses services au personnel du gouvernement. Nous ne pouvons pas conseiller le public au sujet des formulaires que nous hébergeons. Pour toute autre demande, rendez-vous sur la",
+    "gcFormsTeamPart2": "pour trouver le ministère ou organisme le plus à même de vous répondre.",
     "ifYouExperience": "Pour obtenir du soutien technique, veuillez remplir le ",
     "name": "Votre nom",
     "needSupport": "Besoin d'aide?",
@@ -221,7 +221,7 @@
     },
     "supportFormLink": "formulaire de soutien",
     "title": "Contactez-nous",
-    "useThisForm": "Utilisez ce formulaire pour en savoir plus sur Formulaires GC et sur la façon dont ce service peut être utile à votre ministère.",
+    "useThisForm": "Utilisez ce formulaire pour en apprendre davantage sur Formulaires GC et sur la façon dont cet outil peut fonctionner au sein de votre ministère ou organisme.",
     "errors": {
       "submissionError": "Something went wrong. Please try again later.[FR]"
     }
@@ -580,9 +580,6 @@
     },
     "name": "Votre nom",
     "email": "Votre courriel",
-    "department": "Ministère ou organisme",
-    "branch": "Direction ou secteur",
-    "jobtitle": "Titre de poste",
     "gcFormsTeamLink": "Canada.ca Contactez-nous",
     "gcFormsTeamPart1": "L'équipe de Formulaires GC fournit des services aux personnes qui travaillent au sein du gouvernement. Nous ne pouvons pas donner de conseils généraux au public sur les formulaires que nous hébergeons. Pour toute autre question, allez à ",
     "gcFormsTeamPart2": "pour trouver le ministère ou l'organisme qui peut vous aider.",
@@ -596,7 +593,10 @@
       "title": "Quel est votre besoin?"
     },
     "title": "Soutien",
-    "useThisForm": "Utilisez ce formulaire pour obtenir du soutien technique ou signaler tout problème technique avec Formulaires GC."
+    "useThisForm": "Utilisez ce formulaire pour obtenir du soutien technique ou signaler tout problème technique avec Formulaires GC.",
+    "errors": {
+      "submissionError": "Something went wrong. Please try again later.[FR]"
+    }
   },
   "test": "Tester",
   "textFormatting": "Mise en forme du texte ",
