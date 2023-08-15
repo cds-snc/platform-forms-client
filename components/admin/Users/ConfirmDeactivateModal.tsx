@@ -7,10 +7,8 @@ import { Dialog, useDialogRef } from "@components/form-builder/app/shared";
 import { updateActiveStatus } from "@pages/admin/accounts";
 import { useRefresh } from "@lib/hooks";
 import Loader from "@components/globals/Loader";
-import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
 import * as Alert from "@components/globals/Alert/Alert";
 import { DBUser } from "@lib/types/user-types";
-import { WarningIcon } from "@components/form-builder/icons";
 
 const fetcher = async (url: string) => {
   const res = await fetch(url);
