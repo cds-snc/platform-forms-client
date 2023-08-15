@@ -56,6 +56,7 @@ describe("Support email API tests - WITH an active session", () => {
         name: "Testing Forms",
         privileges: [],
         acceptableUse: true,
+        hasSecurityQuestions: true,
       },
     };
     IsGCNotifyServiceAvailable = true;
@@ -83,6 +84,9 @@ function runEmailAPITests() {
         supportType: "support",
         name: "name",
         email: "email@email.com",
+        department: "Department",
+        branch: "Branch",
+        jobTitle: "Job Title",
         request: "request",
         description: "description",
       },
