@@ -5,7 +5,7 @@
     "title": "Il y a eu un problème lors de la connexion.",
     "description": "Veuillez réessayer plus tard ou contacter ",
     "link": "/form-builder/support",
-    "linkText": "l'équipe de soutien"
+    "linkText": "l'équipe de soutien."
   },
   "TooManyRequestsException": "Trop de demandes. Réessayez plus tard.",
   "UsernameExistsException": "Ce compte existe déjà.",
@@ -18,7 +18,7 @@
   },
   "UsernameOrPasswordIncorrect": {
     "title": "L’adresse courriel ou le mot de passe que vous avez entré est incorrect.",
-    "description": "L’adresse courriel ou le mot de passe que vous avez entré est incorrect ou le compte n’existe pas.",
+    "description": "L’adresse courriel ou le mot de passe que vous avez entré est incorrect ou le compte n’existe pas. ",
     "link": "/signup/register",
     "linkText": "Si vous n’avez pas de compte, créez-en un maintenant."
   },
