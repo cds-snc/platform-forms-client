@@ -14,14 +14,14 @@ import { logMessage } from "@lib/logger";
 import {
   TextInput,
   Label,
-  Alert,
+  Alert as ValidationMessage,
   ErrorListItem,
   MultipleChoiceGroup,
   TextArea,
   Description,
 } from "@components/forms";
 import { Button, LinkButton } from "@components/globals";
-import * as AlertMessage from "@components/globals/Alert/Alert";
+import * as Alert from "@components/globals/Alert/Alert";
 import { checkOne } from "@lib/cache/flags";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
@@ -110,7 +110,7 @@ export default function Contactus() {
         {({ handleSubmit, errors }) => (
           <>
             {errorMessage && (
-              <Alert
+              <ValidationMessage
                 type={ErrorStatus.ERROR}
                 validation={true}
                 tabIndex={0}
@@ -118,11 +118,11 @@ export default function Contactus() {
                 heading={t("input-validation.heading", { ns: "common" })}
               >
                 {errorMessage}
-              </Alert>
+              </ValidationMessage>
             )}
 
             {Object.keys(errors).length > 0 && (
-              <Alert
+              <ValidationMessage
                 type={ErrorStatus.ERROR}
                 validation={true}
                 tabIndex={0}
@@ -140,7 +140,7 @@ export default function Contactus() {
                     );
                   })}
                 </ol>
-              </Alert>
+              </ValidationMessage>
             )}
             <form id="contactus" method="POST" onSubmit={handleSubmit} noValidate>
               <p className="mb-6 mt-[-2rem] text-[1.6rem]">{t("contactus.useThisForm")}</p>
@@ -151,12 +151,12 @@ export default function Contactus() {
                 </Link>
                 &nbsp;{t("contactus.gcFormsTeamPart2")}
               </p>
-              <AlertMessage.Warning title={t("contactus.needSupport")} role="note">
+              <Alert.Warning title={t("contactus.needSupport")} role="note">
                 <p>
                   {t("contactus.ifYouExperience")}&nbsp;
                   <Link href={`/form-builder/support`}>{t("contactus.supportFormLink")}</Link>.
                 </p>
-              </AlertMessage.Warning>
+              </Alert.Warning>
               <div className="focus-group mt-14">
                 <Label id={"label-name"} htmlFor={"name"} className="required" required>
                   {t("contactus.name")}
@@ -338,7 +338,7 @@ export default function Contactus() {
         {({ handleSubmit, errors }) => (
           <>
             {errorMessage && (
-              <Alert
+              <ValidationMessage
                 type={ErrorStatus.ERROR}
                 validation={true}
                 tabIndex={0}
@@ -346,11 +346,11 @@ export default function Contactus() {
                 heading={t("input-validation.heading", { ns: "common" })}
               >
                 {errorMessage}
-              </Alert>
+              </ValidationMessage>
             )}
 
             {Object.keys(errors).length > 0 && (
-              <Alert
+              <ValidationMessage
                 type={ErrorStatus.ERROR}
                 validation={true}
                 tabIndex={0}
@@ -368,7 +368,7 @@ export default function Contactus() {
                     );
                   })}
                 </ol>
-              </Alert>
+              </ValidationMessage>
             )}
             <form id="support" method="POST" onSubmit={handleSubmit} noValidate>
               <p className="mb-6 mt-[-2rem] text-[1.6rem]">{t("support.useThisForm")}</p>
@@ -379,12 +379,12 @@ export default function Contactus() {
                 </Link>
                 &nbsp;{t("support.gcFormsTeamPart2")}
               </p>
-              <AlertMessage.Warning title={t("support.lookingForADemo")} role="note">
+              <Alert.Warning title={t("support.lookingForADemo")} role="note">
                 <p>
                   {t("support.ifYouWouldLike")}&nbsp;
                   <Link href={`/form-builder/support/contactus`}>{t("support.contactUs")}</Link>.
                 </p>
-              </AlertMessage.Warning>
+              </Alert.Warning>
               <div className="focus-group mt-14">
                 <Label id={"label-name"} htmlFor={"name"} className="required" required>
                   {t("support.name")}
