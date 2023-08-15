@@ -14,7 +14,6 @@ import {
   containsSymbol,
 } from "@lib/validation";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
-import Loader from "@components/globals/Loader";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth/next";
 import Link from "next/link";
