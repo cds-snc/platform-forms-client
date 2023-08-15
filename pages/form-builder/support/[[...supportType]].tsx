@@ -12,7 +12,6 @@ import * as Yup from "yup";
 import axios from "axios";
 import { logMessage } from "@lib/logger";
 import {
-  Button,
   TextInput,
   Label,
   Alert,
@@ -21,7 +20,7 @@ import {
   TextArea,
   Description,
 } from "@components/forms";
-import { StyledLink } from "@components/globals/StyledLink/StyledLink";
+import { Button, StyledLink } from "@components/globals";
 import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
 import { checkOne } from "@lib/cache/flags";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
@@ -468,7 +467,7 @@ export default function Contactus() {
                 />
               </div>
 
-              <Button type="submit" className="gc-button--blue" disabled={isSubmitting}>
+              <Button type="submit" theme="primary" disabled={isSubmitting}>
                 {t("submitButton", { ns: "common" })}
               </Button>
             </form>
@@ -487,7 +486,7 @@ export default function Contactus() {
           <h1 ref={headingSuccessRef}>{t("requestSuccess.title")}</h1>
           <p className="mb-16 mt-[-2rem] font-bold">{t("requestSuccess.weWillRespond")}</p>
           <div className="mb-16">
-            <StyledLink href={`/myforms`} className="gc-button--blue">
+            <StyledLink href={`/myforms`} theme="primaryButton">
               {t("requestSuccess.backToForms")}
             </StyledLink>
           </div>
