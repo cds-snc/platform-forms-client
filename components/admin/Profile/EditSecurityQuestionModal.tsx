@@ -196,14 +196,19 @@ export const EditSecurityQuestionModal = ({
           </Label>
 
           <div
+            role="alert"
             className={`border-l-4 border-red bg-red-50 p-3 ${
               !isAnswerInputError ? "visually-hidden" : ""
             }`}
           >
-            <p id="answerHint" className="text-sm font-bold">
-              {t("securityQuestionModal.errors.invalidInput")}
-            </p>
+            {isAnswerInputError && (
+              <p className="text-sm font-bold">{t("securityQuestionModal.errors.invalidInput")}</p>
+            )}
           </div>
+
+          <span id="answerHint" className="visually-hidden">
+            {t("securityQuestionModal.errors.invalidInput")}
+          </span>
 
           <input
             className={`gc-input-text w-full rounded ${isAnswerInputError ? "border-red" : ""}`}
