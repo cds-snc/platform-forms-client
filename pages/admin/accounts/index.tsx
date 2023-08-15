@@ -130,7 +130,7 @@ const Users = ({
     privileges: Privilege[];
     privilegeName: string;
   }): boolean => {
-    return Boolean(privileges?.find((privilege) => privilege.nameEn === privilegeName)?.id);
+    return Boolean(privileges?.find((privilege) => privilege.name === privilegeName)?.id);
   };
   useEffect(() => {
     if (previousUserRef) {
@@ -334,19 +334,16 @@ export const getServerSideProps = requireAuthentication(
     const allUsers = await getUsers(ability);
 
     const allPrivileges = (await getAllPrivileges(ability)).map(
-      ({ id, nameEn, nameFr, descriptionFr, descriptionEn }) => ({
+      ({ id, name, descriptionFr, descriptionEn }) => ({
         id,
-        nameEn,
-        nameFr,
+        name,
         descriptionFr,
         descriptionEn,
       })
     );
 
     // Convenience for features, lock/unlock publishing that may or may not have the related Id
-    const publishFormsId = allPrivileges.find(
-      (privilege) => privilege.nameEn === "PublishForms"
-    )?.id;
+    const publishFormsId = allPrivileges.find((privilege) => privilege.name === "PublishForms")?.id;
 
     const previousUserRef = query.id as string;
 

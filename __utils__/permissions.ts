@@ -48,10 +48,6 @@ export const ManageUsers: RawRuleOf<MongoAbility<Abilities>>[] = [
   { action: "update", subject: "User" },
 ];
 
-export const ManagePrivileges: RawRuleOf<MongoAbility<Abilities>>[] = [
-  { action: ["create", "view", "update", "delete"], subject: "Privilege" },
-];
-
 export const ViewApplicationSettings: RawRuleOf<MongoAbility<Abilities>>[] = [
   { action: "view", subject: "Flag" },
   { action: "view", subject: "Setting" },

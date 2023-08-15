@@ -51,7 +51,7 @@ export const getOrCreateUser = async ({
   const basePrivileges = await prisma.privilege
     .findUnique({
       where: {
-        nameEn: "Base",
+        name: "Base",
       },
       select: {
         id: true,
@@ -137,8 +137,7 @@ export const getUser = async (
           privileges: {
             select: {
               id: true,
-              nameEn: true,
-              nameFr: true,
+              name: true,
               descriptionEn: true,
               descriptionFr: true,
             },
@@ -165,8 +164,7 @@ interface SelectedUser
   extends Omit<DBUser, "privileges" | "image" | "emailVerified" | "lastLogin"> {
   privileges: {
     id: string;
-    nameEn: string | null;
-    nameFr: string | null;
+    name: string | null;
     descriptionEn: string | null;
     descriptionFr: string | null;
   }[];
@@ -199,8 +197,7 @@ export const getUsers = async (ability: UserAbility): Promise<SelectedUser[] | n
           privileges: {
             select: {
               id: true,
-              nameEn: true,
-              nameFr: true,
+              name: true,
               descriptionEn: true,
               descriptionFr: true,
             },
