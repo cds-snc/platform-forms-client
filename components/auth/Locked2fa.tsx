@@ -11,12 +11,12 @@ export const Locked2fa = () => {
 
   return (
     <div>
-      <h2 className="mt-4 mb-6 p-0">{t("2FALockedOutSession.title")}</h2>
+      <h2 className="mb-6 mt-4 p-0">{t("2FALockedOutSession.title")}</h2>
       <p className="mb-10">{t("2FALockedOutSession.description")}</p>
       <div className="laptop:flex">
-        <LinkButton.Primary href={homeHref} className="mr-3 mb-2">
+        <LinkButton.Primary href={homeHref} className="mb-2 mr-3">
           <span>
-            <BackArrowIcon className="inline-block mr-2 fill-white self-stretch" />
+            <BackArrowIcon className="mr-2 inline-block self-stretch fill-white" />
             {t("account.actions.backToSignIn", { ns: "common" })}
           </span>
         </LinkButton.Primary>

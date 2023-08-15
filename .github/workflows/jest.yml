@@ -1,7 +1,7 @@
 name: Jest Tests
 on:
   pull_request:
-    branches: [develop, main]
+    branches: [develop, main, feature/*]
 
 jobs:
   jest-run:

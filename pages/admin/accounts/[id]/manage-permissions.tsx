@@ -166,20 +166,19 @@ const ManagePermissions = ({
 
   // @todo look to add actual groups for privileges vs currently using seed data + `names` to filter groups
   const userPrivileges = allPrivileges.filter(
-    (privilege) => privilege.nameEn === "Base" || privilege.nameEn === "PublishForms"
+    (privilege) => privilege.name === "Base" || privilege.name === "PublishForms"
   );
 
   const accountPrivileges = allPrivileges.filter(
     (privilege) =>
-      privilege.nameEn === "ManageForms" ||
-      privilege.nameEn === "ViewUserPrivileges" ||
-      privilege.nameEn === "ManageUsers"
+      privilege.name === "ManageForms" ||
+      privilege.name === "ViewUserPrivileges" ||
+      privilege.name === "ManageUsers"
   );
 
   const systemPrivileges = allPrivileges.filter(
     (privilege) =>
-      privilege.nameEn === "ViewApplicationSettings" ||
-      privilege.nameEn === "ManageApplicationSettings"
+      privilege.name === "ViewApplicationSettings" || privilege.name === "ManageApplicationSettings"
   );
 
   return (
@@ -257,10 +256,9 @@ export const getServerSideProps = requireAuthentication(
     const formUser = await getUser(ability, id as string);
 
     const allPrivileges = (await getAllPrivileges(ability)).map(
-      ({ id, nameEn, nameFr, descriptionFr, descriptionEn }) => ({
+      ({ id, name, descriptionFr, descriptionEn }) => ({
         id,
-        nameEn,
-        nameFr,
+        name,
         descriptionFr,
         descriptionEn,
       })

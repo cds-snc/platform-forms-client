@@ -203,6 +203,9 @@
       "title": "Plus d'informations"
     },
     "email": "Votre courriel",
+    "department": "Ministère ou organisme",
+    "branch": "Direction ou secteur",
+    "jobtitle": "Titre de poste",
     "gcFormsTeamLink": "Canada.ca Contactez-nous",
     "gcFormsTeamPart1": "L'équipe de Formulaires GC fournit des services aux personnes qui travaillent au sein du gouvernement. Nous ne pouvons pas donner de conseils généraux au public sur les formulaires que nous hébergeons. Pour toute autre question, allez à ",
     "gcFormsTeamPart2": "pour trouver le ministère ou l'organisme qui peut vous aider. ",
@@ -218,7 +221,10 @@
     },
     "supportFormLink": "formulaire de soutien",
     "title": "Contactez-nous",
-    "useThisForm": "Utilisez ce formulaire pour en savoir plus sur Formulaires GC et sur la façon dont ce service peut être utile à votre ministère."
+    "useThisForm": "Utilisez ce formulaire pour en savoir plus sur Formulaires GC et sur la façon dont ce service peut être utile à votre ministère.",
+    "errors": {
+      "submissionError": "Something went wrong. Please try again later.[FR]"
+    }
   },
   "copyButton": "Copié dans le presse-papiers",
   "copyMessage": "Le formulaire a été téléchargé avec succès.",
@@ -231,7 +237,7 @@
   },
   "description": "Description ",
   "descriptionDescription": "La description apparaît sous l'étiquette, et avant le champ. Elle est utilisée pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de mise en forme.",
-  "didYouFindThisToolHelpful": "Avez-vous trouvé cet outil pertinent? <a href=\"/fr/form-builder/contactus\" target=\"_blank\">Donner votre avis</a>",
+  "didYouFindThisToolHelpful": "Avez-vous trouvé cet outil pertinent? <a href=\"/fr/form-builder/support/contactus\" target=\"_blank\">Donner votre avis</a>",
   "downloadCSV": "Exporter en fichier CSV",
   "downloadResponsesTable": {
     "card": {
@@ -357,7 +363,6 @@
   "linkUrl": "URL du lien",
   "lockedBlock": "Bloc verouillé",
   "longAnswerText": "Réponse longue",
-  "mainNavAriaLabel": "Navigation principale",
   "maxCharacterLength": "Longueur maximale des caractères :",
   "maximumCharacterLength": "Longueur maximale des caractères",
   "maxNumberOfRows": {
@@ -578,6 +583,11 @@
       "description": "Fournissez plus de contexte autour du problème que vous rencontrez.",
       "title": "Plus d'informations"
     },
+    "name": "Votre nom",
+    "email": "Votre courriel",
+    "department": "Ministère ou organisme",
+    "branch": "Direction ou secteur",
+    "jobtitle": "Titre de poste",
     "gcFormsTeamLink": "Canada.ca Contactez-nous",
     "gcFormsTeamPart1": "L'équipe de Formulaires GC fournit des services aux personnes qui travaillent au sein du gouvernement. Nous ne pouvons pas donner de conseils généraux au public sur les formulaires que nous hébergeons. Pour toute autre question, allez à ",
     "gcFormsTeamPart2": "pour trouver le ministère ou l'organisme qui peut vous aider.",

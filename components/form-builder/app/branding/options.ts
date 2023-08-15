@@ -62,4 +62,22 @@ export const options = [
     logoTitleEn: "Canadian Digital Service",
     logoTitleFr: "Service numérique canadien",
   },
+  {
+    name: "cnsc",
+    urlEn: "http://nuclearsafety.gc.ca/eng",
+    urlFr: "http://nuclearsafety.gc.ca/fra",
+    logoEn: "/img/branding/cnsc-en.svg",
+    logoFr: "/img/branding/cnsc-fr.svg",
+    logoTitleEn: "Canadian Nuclear Safety Commission",
+    logoTitleFr: "Commission canadienne de sûreté nucléaire",
+  },
+  {
+    name: "fintrac",
+    urlEn: "https://fintrac-canafe.canada.ca/intro-eng",
+    urlFr: "https://fintrac-canafe.canada.ca/intro-fra",
+    logoEn: "/img/branding/fintrac-en.svg",
+    logoFr: "/img/branding/fintrac-fr.svg",
+    logoTitleEn: "Financial Transactions and Reports Analysis Centre of Canada",
+    logoTitleFr: "Centre d’analyse des opérations et déclarations financières du Canada",
+  },
 ];

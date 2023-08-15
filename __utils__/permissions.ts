@@ -15,6 +15,12 @@ export const Base: RawRuleOf<MongoAbility<Abilities>>[] = [
     conditions: { users: { $elemMatch: { id: "${user.id}" } } },
   },
   { action: "update", subject: "FormRecord", fields: ["isPublished"], inverted: true },
+  {
+    action: ["create", "view", "update"],
+    subject: "User",
+    fields: ["securityAnswers", "name"],
+    conditions: { id: "${user.id}" },
+  },
 ];
 
 export const PublishForms: RawRuleOf<MongoAbility<Abilities>>[] = [
@@ -40,10 +46,6 @@ export const ViewUserPrivileges: RawRuleOf<MongoAbility<Abilities>>[] = [
 export const ManageUsers: RawRuleOf<MongoAbility<Abilities>>[] = [
   { action: "view", subject: ["User", "Privilege"] },
   { action: "update", subject: "User" },
-];
-
-export const ManagePrivileges: RawRuleOf<MongoAbility<Abilities>>[] = [
-  { action: ["create", "view", "update", "delete"], subject: "Privilege" },
 ];
 
 export const ViewApplicationSettings: RawRuleOf<MongoAbility<Abilities>>[] = [

@@ -8,8 +8,7 @@ type PrivilegeCollection = {
 };
 
 const Base: PrivilegeSeed = {
-  nameEn: "Base",
-  nameFr: "Base",
+  name: "Base",
   descriptionEn: "Base Permissions",
   descriptionFr: "Autorisations de Base",
   permissions: [
@@ -20,13 +19,18 @@ const Base: PrivilegeSeed = {
       conditions: { users: { $elemMatch: { id: "${user.id}" } } },
     },
     { action: "update", subject: "FormRecord", fields: ["isPublished"], inverted: true },
+    {
+      action: ["create", "view", "update"],
+      subject: "User",
+      fields: ["securityAnswers", "name"],
+      conditions: { id: "${user.id}" },
+    },
   ],
   priority: 0,
 };
 
 const PublishForms: PrivilegeSeed = {
-  nameEn: "PublishForms",
-  nameFr: "PublierLesFormulaires",
+  name: "PublishForms",
   descriptionEn: "Permission to Publish a Form",
   descriptionFr: "Autorisation de publier un formulaire",
   permissions: [
@@ -41,8 +45,7 @@ const PublishForms: PrivilegeSeed = {
 };
 
 const ManageForms: PrivilegeSeed = {
-  nameEn: "ManageForms",
-  nameFr: "GérerLesFormulaires",
+  name: "ManageForms",
   descriptionEn: "Permission to manage all Forms",
   descriptionFr: "Autorisation de gérer tous les formulaires",
   permissions: [{ action: ["create", "view", "update", "delete"], subject: "FormRecord" }],
@@ -50,8 +53,7 @@ const ManageForms: PrivilegeSeed = {
 };
 
 const ViewUserPrivileges: PrivilegeSeed = {
-  nameEn: "ViewUserPrivileges",
-  nameFr: "VisionnerPrivilègesUtilisateur",
+  name: "ViewUserPrivileges",
   descriptionEn: "Permission to view user privileges",
   descriptionFr: "Autorisation d''afficher les privilèges de l''utilisateurs",
   permissions: [
@@ -64,8 +66,7 @@ const ViewUserPrivileges: PrivilegeSeed = {
 };
 
 const ManageUsers: PrivilegeSeed = {
-  nameEn: "ManageUsers",
-  nameFr: "GérerUtilisateurs",
+  name: "ManageUsers",
   descriptionEn: "Permission to manage users",
   descriptionFr: "Autorisation de gérer les utilisateurs",
   permissions: [
@@ -75,18 +76,8 @@ const ManageUsers: PrivilegeSeed = {
   priority: 3,
 };
 
-const ManagePrivileges: PrivilegeSeed = {
-  nameEn: "ManagePrivileges",
-  nameFr: "GérerPrivilèges",
-  descriptionEn: "Permission to manage privileges",
-  descriptionFr: "Autorisation de gérer les privilèges",
-  permissions: [{ action: ["create", "view", "update", "delete"], subject: "Privilege" }],
-  priority: 4,
-};
-
 const ViewApplicationSettings: PrivilegeSeed = {
-  nameEn: "ViewApplicationSettings",
-  nameFr: "VisionnerParamètresApplication",
+  name: "ViewApplicationSettings",
   descriptionEn: "Permission to view application settings",
   descriptionFr: "Autorisation d''afficher les paramètres de l''application",
   permissions: [
@@ -97,8 +88,7 @@ const ViewApplicationSettings: PrivilegeSeed = {
 };
 
 const ManageApplicationSettings: PrivilegeSeed = {
-  nameEn: "ManageApplicationSettings",
-  nameFr: "GérerParamètresApplication",
+  name: "ManageApplicationSettings",
   descriptionEn: "Permission to manage application settings",
   descriptionFr: "Autorisation de gérer les paramètres de l''application",
   permissions: [
@@ -115,7 +105,6 @@ const allLivePrivileges = [
   ManageForms,
   ViewUserPrivileges,
   ManageUsers,
-  ManagePrivileges,
   ViewApplicationSettings,
   ManageApplicationSettings,
 ];

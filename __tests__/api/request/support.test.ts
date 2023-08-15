@@ -105,6 +105,9 @@ function runEmailAPITests() {
         supportType: "support",
         name: "name",
         email: "email@email.com",
+        department: "Department",
+        branch: "Branch",
+        jobTitle: "Job Title",
         request: "request",
         description: "description",
       },
@@ -129,6 +132,9 @@ function runEmailAPITests() {
           name: "name",
           email: "email@email.com",
           request: "request",
+          department: "Department",
+          branch: "Branch",
+          jobTitle: "Job Title",
           description: "description",
         },
       });
@@ -154,7 +160,7 @@ function runEmailAPITests() {
 
     await support(req, res);
 
-    expect(res.statusCode).toEqual(404);
+    expect(res.statusCode).toEqual(400);
     expect(JSON.parse(res._getData())).toMatchObject({ error: "Malformed request" });
   });
 
@@ -172,6 +178,9 @@ function runEmailAPITests() {
         supportType: "support",
         name: "name",
         email: "email@email.com",
+        department: "Department",
+        branch: "Branch",
+        jobTitle: "Job Title",
         request: "request",
         description: "description",
       },

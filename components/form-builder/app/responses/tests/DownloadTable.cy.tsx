@@ -24,7 +24,7 @@ describe("<Nagware />", () => {
       />
     );
 
-    cy.get("[role=alert]").should("have.attr", "class").and("contain", "bg-[#f3e9e8]");
+    cy.get("[role=alert]").should("have.attr", "class").and("contain", "bg-red-50");
     cy.get("[data-testid=numberOfSubmissions]").should("contain", "5");
   });
 
@@ -38,7 +38,7 @@ describe("<Nagware />", () => {
       />
     );
 
-    cy.get("[role=alert]").should("have.attr", "class").and("contain", "bg-[#f3e9e8]");
+    cy.get("[role=alert]").should("have.attr", "class").and("contain", "bg-red-50");
     cy.get("[data-testid=numberOfSubmissions]").should("contain", "3");
   });
 
@@ -125,6 +125,17 @@ describe("<DownloadTable />", () => {
         formID: "clg17xha50008efkgfgxa8l4f",
         status: VaultStatus.NEW,
         securityAttribute: "Unclassified",
+        name: "Minus 36 days",
+        createdAt: subDays(today, 36).valueOf(), // (-36 days)
+        lastDownloadedBy: "",
+        confirmedAt: undefined,
+        downloadedAt: undefined,
+        removedAt: undefined,
+      },
+      {
+        formID: "clg17xha50008efkgfgxa8l4f",
+        status: VaultStatus.NEW,
+        securityAttribute: "Unclassified",
         name: "Today",
         createdAt: today, // (today)
         lastDownloadedBy: "",
@@ -145,8 +156,14 @@ describe("<DownloadTable />", () => {
     // The -35 overdue causes the rest to be blocked
     cy.get("tbody tr:nth-child(1)").should("have.attr", "class").and("contain", "opacity-50");
     cy.get("tbody tr:nth-child(2)").should("have.attr", "class").and("contain", "opacity-50");
-    cy.get("tbody tr:nth-child(3)").should("have.attr", "class").and("contain", "opacity-50");
+    cy.get("tbody tr:nth-child(3)").should("have.attr", "class").and("not.contain", "opacity-50");
     cy.get("tbody tr:nth-child(4)").should("have.attr", "class").and("not.contain", "opacity-50");
+    cy.get("tbody tr:nth-child(5)").should("have.attr", "class").and("not.contain", "opacity-50");
+
+    cy.get("tbody tr:nth-child(5) td:nth-child(4)").should(
+      "contain",
+      "downloadResponsesTable.status.overdue"
+    );
 
     cy.get("tbody tr:nth-child(4) td:nth-child(4)").should(
       "contain",

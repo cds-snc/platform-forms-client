@@ -16,6 +16,7 @@ declare module "next-auth" {
       image?: string | null;
       newlyRegistered?: boolean;
       deactivated?: boolean;
+      hasSecurityQuestions: boolean;
     };
   }
 }
@@ -26,8 +27,8 @@ declare module "next-auth/jwt" {
     userId: string;
     name: string;
     lastLoginTime: Date;
-    privileges: RawRuleOf<MongoAbility<Abilities>>[];
     acceptableUse: boolean;
+    hasSecurityQuestions: boolean;
     newlyRegistered?: boolean;
     deactivated?: boolean;
   }

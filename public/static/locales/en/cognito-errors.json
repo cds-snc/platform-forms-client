@@ -25,5 +25,13 @@
   "2FALockedOutSession": {
     "title": "Too many sign-in attempts ",
     "description": "Try signing in again to generate a new security code."
+  },
+  "2FASessionExpired": {
+    "title": "Your session expired",
+    "description": "Try signing in again to generate a new security code."
+  },
+  "IncorrectSecurityAnswerException": {
+    "title": "Review your answers",
+    "description": "The answers provided do not match our records."
   }
 }

@@ -1,4 +1,4 @@
-import { getRedisInstance } from "./integration/redisConnector";
+import { getRedisInstance } from "../integration/redisConnector";
 import { logMessage } from "@lib/logger";
 
 export const setAcceptableUse = async (userId: string): Promise<void> => {

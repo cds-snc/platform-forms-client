@@ -4,16 +4,26 @@ import Link from "next/link";
 import { useAccessControl } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 
-import LanguageToggle from "../../../globals/LanguageToggle";
-import LoginMenu from "../../../auth/LoginMenu";
 import { SiteLogo } from "@formbuilder/icons";
-import { FileNameInput } from "./FileName";
-import { ShareDropdown } from "./ShareDropdown";
+import { FileNameInput } from "@components/form-builder/app/navigation/FileName";
+import { ShareDropdown } from "@components/form-builder/app/navigation/ShareDropdown";
+import LanguageToggle from "./LanguageToggle";
+import { YourAccountDropdown } from "./YourAccountDropdown";
+import { User } from "next-auth";
 
-export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) => {
+type HeaderParams = {
+  context?: "admin" | "formBuilder" | "default";
+  user?: User;
+};
+
+export const Header = ({ context = "default", user }: HeaderParams) => {
+  const isFormBuilder = context === "formBuilder";
+  const isAdmin = context === "admin";
+  const isDefault = context === "default";
+
   const { status } = useSession();
   const { ability } = useAccessControl();
-  const { t, i18n } = useTranslation(["common", "form-builder"]);
+  const { t, i18n } = useTranslation(["common", "form-builder", "admin-login"]);
 
   return (
     <header className="mb-12 border-b-1 border-gray-500 px-4 py-2 laptop:px-32 desktop:px-64">
@@ -31,30 +41,25 @@ export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) =>
             </a>
           </Link>
 
-          {!isFormBuilder && (
+          {isDefault && (
             <div className="mt-3 box-border block h-[40px] px-2 py-1 text-base font-bold">
               {t("title", { ns: "common" })}
             </div>
           )}
+          {isAdmin && (
+            <div className="mt-3 box-border block h-[40px] px-2 py-1 text-base font-bold">
+              {t("title", { ns: "admin-login" })}
+            </div>
+          )}
           {isFormBuilder && <FileNameInput />}
         </div>
-        <nav
-          className="justify-self-end"
-          aria-label={t("mainNavAriaLabel", { ns: "form-builder" })}
-        >
+        <nav className="justify-self-end" aria-label={t("mainNavAriaLabel", { ns: "common" })}>
           <ul className="mt-2 flex list-none px-0 text-base">
-            {isFormBuilder && (
-              <li className="mr-2 text-base tablet:mr-4">
-                <ShareDropdown />
+            {user?.name && (
+              <li className="mr-2 py-2 pt-3 text-sm tablet:mr-4">
+                {t("logged-in", { ns: "admin-login" })}: <span>{user.email}</span>
               </li>
             )}
-
-            {ability?.can("view", "User") && (
-              <li className="mr-2 py-2 text-base tablet:mr-4">
-                <Link href="/admin">{t("adminNav.administration")}</Link>
-              </li>
-            )}
-
             <li className="mr-2 py-2 text-base tablet:mr-4">
               {ability?.can("view", "FormRecord") && (
                 <Link href={`/${i18n.language}/myforms/drafts`}>
@@ -62,14 +67,24 @@ export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) =>
                 </Link>
               )}
             </li>
+            {status !== "authenticated" && (
+              <li className="mr-2 py-2 text-base tablet:mr-4">
+                <Link href={`/${i18n.language}/auth/login`}>{t("loginMenu.login")}</Link>
+              </li>
+            )}
             {
               <li className="mr-2 py-2 tablet:mr-4">
-                <LoginMenu isAuthenticated={status === "authenticated"} />
+                <LanguageToggle />
               </li>
             }
+            {isFormBuilder && (
+              <li className="mr-2 text-base tablet:mr-4">
+                <ShareDropdown />
+              </li>
+            )}
             {
-              <li className="py-2">
-                <LanguageToggle />
+              <li className="text-base">
+                <YourAccountDropdown isAuthenticated={status === "authenticated"} />
               </li>
             }
           </ul>

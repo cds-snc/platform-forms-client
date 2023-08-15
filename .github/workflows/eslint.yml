@@ -1,7 +1,7 @@
 name: Linting Code
 on:
   pull_request:
-    branches: [develop, main]
+    branches: [develop, main, feature/*]
 
 jobs:
   eslint_flow_merge:

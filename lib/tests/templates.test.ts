@@ -620,6 +620,9 @@ describe("Template CRUD functions", () => {
     (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
       buildPrismaResponse("formtestID", formConfiguration, true)
     );
+    (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValueOnce({
+      email: "user2@test.ca",
+    });
 
     // We're just adding an additional user (2)
     const users: { id: string }[] = [{ id: "1" }, { id: "2" }];
@@ -656,7 +659,7 @@ describe("Template CRUD functions", () => {
       fakeSession.user.id,
       { id: "formTestID", type: "Form" },
       "GrantFormAccess",
-      "Access granted to 2"
+      "Access granted to user2@test.ca"
     );
 
     // Template has three users assigned to it to start
@@ -669,6 +672,16 @@ describe("Template CRUD functions", () => {
     (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
       buildPrismaResponse("formtestID", formConfiguration, true)
     );
+    (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>)
+      .mockResolvedValueOnce({
+        email: "user1@test.ca",
+      })
+      .mockResolvedValueOnce({
+        email: "user2@test.ca",
+      })
+      .mockResolvedValueOnce({
+        email: "user4@test.ca",
+      });
 
     // We're removing two (2,4) and adding one (1)
     const users2: { id: string }[] = [{ id: "1" }, { id: "3" }];
@@ -705,7 +718,7 @@ describe("Template CRUD functions", () => {
       fakeSession.user.id,
       { id: "formTestID", type: "Form" },
       "GrantFormAccess",
-      "Access granted to 1"
+      "Access granted to user1@test.ca"
     );
 
     // Log two removed
@@ -714,7 +727,7 @@ describe("Template CRUD functions", () => {
       fakeSession.user.id,
       { id: "formTestID", type: "Form" },
       "RevokeFormAccess",
-      "Access revoked for 2,4"
+      "Access revoked for user2@test.ca,user4@test.ca"
     );
   });
 
@@ -742,7 +755,7 @@ describe("Template CRUD functions", () => {
 
     await expect(async () => {
       await updateTemplate({ ability: ability, formID: "test1", formConfig: updatedFormConfig });
-    }).rejects.toThrowError(new TemplateAlreadyPublishedError());
+    }).rejects.toThrowError(TemplateAlreadyPublishedError);
     expect(mockedLogEvent).toBeCalledTimes(0);
   });
 
@@ -884,7 +897,7 @@ describe("Template CRUD functions", () => {
 
       await expect(async () => {
         await deleteTemplate(ability, "formtestID");
-      }).rejects.toThrowError(new TemplateHasUnprocessedSubmissions());
+      }).rejects.toThrowError(TemplateHasUnprocessedSubmissions);
     }
   );
 

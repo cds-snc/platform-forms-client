@@ -43,6 +43,16 @@ export const getServerSideProps: GetServerSideProps = async ({ locale, req, res 
     };
   }
 
+  if (session && !session.user.hasSecurityQuestions) {
+    // If they haven't setup security questions Use redirect to policy page for acceptance
+    return {
+      redirect: {
+        destination: `/${locale}/auth/setup-security-questions`,
+        permanent: false,
+      },
+    };
+  }
+
   const hasBrandingRequestForm = Boolean(await getAppSetting("brandingRequestForm"));
 
   return {

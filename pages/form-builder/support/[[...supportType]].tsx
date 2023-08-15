@@ -37,6 +37,9 @@ export default function Contactus() {
   const handleRequest = async (
     name: string,
     email: string,
+    department: string,
+    branch: string,
+    jobTitle: string,
     request: [string] | string,
     description: string
   ) => {
@@ -48,12 +51,12 @@ export default function Contactus() {
         "Content-Type": "application/json",
         "X-CSRF-Token": token,
       },
-      data: { supportType, name, email, request, description },
+      data: { supportType, name, email, department, branch, jobTitle, request, description },
       // If development mode disable timeout
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     }).catch((err) => {
       logMessage.error(err);
-      setErrorMessage(t("submissionError"));
+      setErrorMessage(t("contactus.errors.submissionError"));
     });
   };
 
@@ -62,6 +65,9 @@ export default function Contactus() {
     email: Yup.string()
       .required(t("input-validation.required", { ns: "common" }))
       .email(t("input-validation.email", { ns: "common" })),
+    department: Yup.string().required(t("input-validation.required", { ns: "common" })),
+    branch: Yup.string().required(t("input-validation.required", { ns: "common" })),
+    jobTitle: Yup.string().required(t("input-validation.required", { ns: "common" })),
     request:
       supportType === "contactus"
         ? Yup.array()
@@ -114,6 +120,34 @@ export default function Contactus() {
             name={"email"}
             className="required w-[34rem]"
             required
+          />
+        </div>
+        <div className="focus-group mt-14">
+          <Label id={"label-department"} htmlFor={"department"} className="required" required>
+            {t("contactus.department")}
+          </Label>
+          <TextInput
+            type={"text"}
+            id={"department"}
+            name={"department"}
+            className="required w-[34rem]"
+          />
+        </div>
+        <div className="focus-group mt-14">
+          <Label id={"label-branch"} htmlFor={"branch"} className="required" required>
+            {t("contactus.branch")}
+          </Label>
+          <TextInput type={"text"} id={"branch"} name={"branch"} className="required w-[34rem]" />
+        </div>
+        <div className="focus-group mt-14">
+          <Label id={"label-jobTitle"} htmlFor={"jobTitle"} className="required" required>
+            {t("contactus.jobTitle")}
+          </Label>
+          <TextInput
+            type={"text"}
+            id={"jobTitle"}
+            name={"jobTitle"}
+            className="required w-[34rem]"
           />
         </div>
         <fieldset className="focus-group">
@@ -197,13 +231,13 @@ export default function Contactus() {
         </Attention>
         <div className="focus-group mt-14">
           <Label id={"label-name"} htmlFor={"name"} className="required" required>
-            {t("contactus.name")}
+            {t("support.name")}
           </Label>
           <TextInput type={"text"} id={"name"} name={"name"} className="required w-[34rem]" />
         </div>
         <div className="focus-group">
           <Label id={"label-email"} htmlFor={"email"} className="required" required>
-            {t("contactus.email")}
+            {t("support.email")}
           </Label>
           <TextInput
             type={"text"}
@@ -211,6 +245,34 @@ export default function Contactus() {
             name={"email"}
             className="required w-[34rem]"
             required
+          />
+        </div>
+        <div className="focus-group mt-14">
+          <Label id={"label-department"} htmlFor={"department"} className="required" required>
+            {t("support.department")}
+          </Label>
+          <TextInput
+            type={"text"}
+            id={"department"}
+            name={"department"}
+            className="required w-[34rem]"
+          />
+        </div>
+        <div className="focus-group mt-14">
+          <Label id={"label-branch"} htmlFor={"branch"} className="required" required>
+            {t("support.branch")}
+          </Label>
+          <TextInput type={"text"} id={"branch"} name={"branch"} className="required w-[34rem]" />
+        </div>
+        <div className="focus-group mt-14">
+          <Label id={"label-jobTitle"} htmlFor={"jobTitle"} className="required" required>
+            {t("support.jobTitle")}
+          </Label>
+          <TextInput
+            type={"text"}
+            id={"jobTitle"}
+            name={"jobTitle"}
+            className="required w-[34rem]"
           />
         </div>
         <fieldset className="focus-group">
@@ -279,21 +341,37 @@ export default function Contactus() {
     <div aria-live="polite">
       {!isSuccessScreen && (
         <Formik
-          initialValues={{ name: "", email: "", request: "", description: "" }}
-          onSubmit={async ({ name, email, request, description }) => {
+          initialValues={{
+            name: "",
+            email: "",
+            department: "",
+            branch: "",
+            jobTitle: "",
+            request: "",
+            description: "",
+          }}
+          onSubmit={async ({ name, email, department, branch, jobTitle, request, description }) => {
             setIsSubmitting(true);
             try {
-              const response = await handleRequest(name, email, request, description);
+              const response = await handleRequest(
+                name,
+                email,
+                department,
+                branch,
+                jobTitle,
+                request,
+                description
+              );
               setIsSubmitting(false);
               if (response?.status !== 200) {
-                throw new Error(t("submissionError"));
+                throw new Error(t("contactus.errors.submissionError"));
               }
               setErrorMessage("");
               setIsSuccessScreen(true);
             } catch (err) {
               logMessage.error(err);
               setIsSubmitting(false);
-              setErrorMessage(t("submissionError"));
+              setErrorMessage(t("contactus.errors.submissionError"));
             }
           }}
           validateOnChange={false}
