@@ -84,7 +84,6 @@ const LoginStep = ({
                     {authErrorsState.callToActionText}
                   </Link>
                 ) : undefined}
-                .
               </Alert>
             )}
             {Object.keys(errors).length > 0 && !authErrorsState.isError && (
