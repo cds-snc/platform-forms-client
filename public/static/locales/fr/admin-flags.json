@@ -30,10 +30,6 @@
       "title": "Minuteur de formulaire",
       "description": "Attendre un certain temps avant d'être autorisé à soumettre le formulaire"
     },
-    "accountRegistration": {
-      "title": "Création de compte",
-      "description": "Permet aux utilisateurs de créer un compte"
-    },
     "supportForms": {
       "title": "Formulaires de support",
       "description": "Activation ou désactivation des formulaires de support"
