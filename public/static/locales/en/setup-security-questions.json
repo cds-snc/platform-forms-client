@@ -6,9 +6,9 @@
   "requirements2": "No personal identifying information",
   "question": "Question",
   "answer": "Answer",
-  "firstQuestion": "Enter the first security qestion and answer[FR]",
-  "secondQuestion": "Enter the second security qestion and answer[FR]",
-  "thirdQuestion": "Enter the third security qestion and answer[FR]",
+  "firstQuestion": "Select a first security question and enter an answer",
+  "secondQuestion": "Select a second security question and enter an answer",
+  "thirdQuestion": "Select a third security question and enter an answer",
   "questionPlaceholder": "Select question",
   "continue": "Continue",
   "support": "Get support",
@@ -16,13 +16,13 @@
     "serverError": {
       "title": "An error occurred"
     },
-    "required": "Required field",
+    "required": "Complete the required field to continue.",
     "answerLength": "Must be at least 4 characters",
-    "duplicateAnswer": "Answers cannot be the same. Create a unique answer for this question"
+    "duplicateAnswer": "Answers cannot be the same. Create a unique answer for this question."
   },
   "banner": {
     "title": "We’ve added protection to keep your account and forms safe.",
-    "body": "You’ll need to enter a security code to access GC Forms."
+    "body": "You’ll be prompted with security questions when you reset your password."
   },
   "success": {
     "title": "Your security questions have been saved"

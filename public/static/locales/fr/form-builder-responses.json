@@ -60,8 +60,8 @@
       "errorDownloadingFiles": "Réessayez dans quelques minutes. Si le problème persiste, ",
       "errorDownloadingFilesLink": "contactez Soutien",
       "overdueAlert": {
-        "title": "Downloading is restricted for overdue responses until they are downloaded and confirmed[FR]",
-        "description": "There are {{numberOfOverdueResponses}} unconfirmed responses {{escalatedAfter}} days overdue. Download and confirm all overdue responses before continuing.[FR]"
+        "title": "L'accès aux nouvelles réponses est restreint jusqu'à ce que les réponses en retard soient téléchargées et confirmées",
+        "description": "Il y a {{numberOfOverdueResponses}} réponses qui datent de {{escalatedAfter}} jours. Téléchargez et confirmez toutes les réponses en retard pour enlever cette restriction."
       }
     },
     "downloadXSelectedResponses": "Télécharger {{size}} réponses sélectionnées",
