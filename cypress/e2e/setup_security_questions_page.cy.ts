@@ -32,7 +32,7 @@ describe("Security Questions Page", () => {
       cy.get("#question1").select(questions1);
       cy.get("#question1").find(":selected").contains(questions1);
       cy.get("button[type='submit']").click();
-      cy.get("p[data-testid='errorMessage'").should("contain", "Required field");
+      cy.get("p[data-testid='errorMessage'").should("contain", "Complete the required field to continue.");
     });
 
     it("Fails to submit when a question is not selected", () => {
@@ -47,7 +47,7 @@ describe("Security Questions Page", () => {
       cy.get("#answer3").type("123456");
       cy.get("#answer3").should("have.value", "123456");
       cy.get("button[type='submit']").click();
-      cy.get("p[data-testid='errorMessage'").should("contain", "Required field");
+      cy.get("p[data-testid='errorMessage'").should("contain", "Complete the required field to continue.");
     });
 
     it("Fails to submit when a answer is not filled in", () => {
@@ -62,7 +62,7 @@ describe("Security Questions Page", () => {
       cy.get("#question3").select(questions3);
       cy.get("#question3").find(":selected").contains(questions3);
       cy.get("button[type='submit']").click();
-      cy.get("p[data-testid='errorMessage'").should("contain", "Required field");
+      cy.get("p[data-testid='errorMessage'").should("contain", "Complete the required field to continue.");
     });
 
     it("Fails to submit when a question is too short", () => {
