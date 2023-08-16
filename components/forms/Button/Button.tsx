@@ -2,7 +2,6 @@ import React from "react";
 import classnames from "classnames";
 
 interface ButtonProps {
-  type: "button" | "submit" | "reset";
   children: React.ReactNode;
   secondary?: boolean;
   base?: boolean;
@@ -19,20 +18,7 @@ interface ButtonProps {
 export const Button = (
   props: ButtonProps & JSX.IntrinsicElements["button"]
 ): React.ReactElement => {
-  const {
-    type,
-    children,
-    secondary,
-    base,
-    onClick,
-    className,
-    testid,
-    destructive,
-    disabled,
-    ariaProps,
-    dataAttrName,
-    dataAttrValue,
-  } = props;
+  const { children, secondary, base, onClick, className, testid, destructive } = props;
 
   const classes = classnames(
     "gc-button",
@@ -46,13 +32,10 @@ export const Button = (
 
   return (
     <button
-      type={type}
       className={classes}
       onClick={onClick}
       data-testid={testid ? testid : "button"}
-      disabled={disabled}
-      {...ariaProps}
-      {...(dataAttrName && dataAttrValue ? { [`data-${dataAttrName}`]: dataAttrValue } : "")}
+      {...props}
     >
       {children}
     </button>
