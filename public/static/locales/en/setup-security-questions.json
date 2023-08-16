@@ -22,7 +22,7 @@
   },
   "banner": {
     "title": "We’ve added protection to keep your account and forms safe.",
-    "body": "You’ll need to enter a security code to access GC Forms."
+    "body": "You’ll be prompted with security questions when you reset your password."
   },
   "success": {
     "title": "Your security questions have been saved"
