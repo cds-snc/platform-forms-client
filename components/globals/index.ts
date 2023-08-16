@@ -7,3 +7,4 @@ export { default as SkipLink } from "./SkipLink";
 export { default as LanguageToggle } from "./LanguageToggle";
 export { default as Brand } from "./Brand";
 export { Header } from "./Header";
+export { Alert, ErrorStatus } from "./Alert/Alert";
