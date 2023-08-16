@@ -42,7 +42,7 @@
   "backToManageForms": "Retourner à Gérer les formulaires",
   "lockPublishing": "Vérouiller la publication",
   "unlockPublishing" : "Dévérouiller la publication",
-  "mustHaveAtLeastOneUser": "Doit assigner au moin un·e utilisateur·rice.",
+  "mustHaveAtLeastOneUser": "Doit assigner au moins un·e utilisateur·rice.",
   "accountsFilterLabel": "Filtrer les comptes",
   "accountsFilter": {
     "all": "Tous",
