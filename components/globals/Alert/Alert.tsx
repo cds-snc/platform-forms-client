@@ -133,7 +133,7 @@ type AlertProps = {
   dismissible?: boolean;
   onDismiss?: React.ReactEventHandler;
   focussable?: boolean;
-  role?: string;
+  role?: "alert" | "note  "; // use note for non-critical alerts (e.g. info)
 };
 
 const AlertContainer = ({
