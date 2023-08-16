@@ -6,9 +6,9 @@
   "requirements2": "No personal identifying information",
   "question": "Question",
   "answer": "Answer",
-  "firstQuestion": "Enter the first security qestion and answer[FR]",
-  "secondQuestion": "Enter the second security qestion and answer[FR]",
-  "thirdQuestion": "Enter the third security qestion and answer[FR]",
+  "firstQuestion": "Enter the first security qestion and answer",
+  "secondQuestion": "Enter the second security qestion and answer",
+  "thirdQuestion": "Enter the third security qestion and answer",
   "questionPlaceholder": "Select question",
   "continue": "Continue",
   "support": "Get support",
@@ -22,7 +22,7 @@
   },
   "banner": {
     "title": "We’ve added protection to keep your account and forms safe.",
-    "body": "You’ll need to enter a security code to access GC Forms."
+    "body": "You’ll be prompted with security questions when you reset your password."
   },
   "success": {
     "title": "Your security questions have been saved"
