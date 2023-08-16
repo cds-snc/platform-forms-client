@@ -16,7 +16,7 @@ export const LeftNavigation = ({ backLink }: { backLink?: React.ReactElement }) 
 
   return (
     <nav className="absolute" aria-label={t("navLabelFormBuilder")}>
-      <ol className="list-none m-0 p-0">
+      <ul className="list-none m-0 p-0">
         {backLink && <li>{backLink}</li>}
         {!isPublished && (
           <li>
@@ -67,7 +67,7 @@ export const LeftNavigation = ({ backLink }: { backLink?: React.ReactElement }) 
             <SaveButton />
           </li>
         )}
-      </ol>
+      </ul>
     </nav>
   );
 };

@@ -15,7 +15,7 @@ export const LeftNavigation = () => {
 
   return (
     <nav className="absolute">
-      <ol className="list-none m-0 p-0">
+      <ul className="list-none m-0 p-0">
         <li>
           <LeftNavLink
             id="tab-drafts"
@@ -52,7 +52,7 @@ export const LeftNavigation = () => {
             </>
           </LeftNavLink>
         </li>
-      </ol>
+      </ul>
     </nav>
   );
 };

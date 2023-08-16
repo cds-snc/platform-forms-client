@@ -17,7 +17,7 @@ export const LeftNavigation = () => {
 
   return (
     <nav className="absolute">
-      <ol className="list-none m-0 p-0">
+      <ul className="list-none m-0 p-0">
         {ability?.can("view", "User") && (
           <li>
             <LeftNavLink id="users" href={`/admin/accounts`} isActive={path === "/admin/accounts"}>
@@ -50,7 +50,7 @@ export const LeftNavigation = () => {
             </LeftNavLink>
           </li>
         )}
-      </ol>
+      </ul>
     </nav>
   );
 };
