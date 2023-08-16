@@ -1,5 +1,5 @@
 import React from "react";
-import { LeftNavLink } from "./LeftNavLink";
+import { LeftNavLink } from "@components/globals/LeftNavLink";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { useAccessControl } from "@lib/hooks";
@@ -17,31 +17,40 @@ export const LeftNavigation = () => {
 
   return (
     <nav className="absolute">
-      {ability?.can("view", "User") && (
-        <LeftNavLink id="users" href={`/admin/accounts`} isActive={path === "/admin/accounts"}>
-          <>
-            <NameIcon className={iconClassname} />
-            {t("adminNav.users", { ns: "common" })}
-          </>
-        </LeftNavLink>
-      )}
+      <ol className="list-none m-0 p-0">
+        {ability?.can("view", "User") && (
+          <li>
+            <LeftNavLink id="users" href={`/admin/accounts`} isActive={path === "/admin/accounts"}>
+              <>
+                <NameIcon className={iconClassname} />
+                {t("adminNav.users", { ns: "common" })}
+              </>
+            </LeftNavLink>
+          </li>
+        )}
 
-      {ability?.can("view", "Flag") && (
-        <LeftNavLink id="flags" href="/admin/flags" isActive={path === "/admin/flags"}>
-          <>
-            <FlagIcon className={iconClassname} />
-            {t("adminNav.features", { ns: "common" })}
-          </>
-        </LeftNavLink>
-      )}
-      {ability?.can("view", "Flag") && (
-        <LeftNavLink id="settings" href="/admin/settings" isActive={path === "/admin/settings"}>
-          <>
-            <GearIcon className={iconClassname} />
-            {t("adminNav.settings", { ns: "common" })}
-          </>
-        </LeftNavLink>
-      )}
+        {ability?.can("view", "Flag") && (
+          <li>
+            <LeftNavLink id="flags" href="/admin/flags" isActive={path === "/admin/flags"}>
+              <>
+                <FlagIcon className={iconClassname} />
+                {t("adminNav.features", { ns: "common" })}
+              </>
+            </LeftNavLink>
+          </li>
+        )}
+
+        {ability?.can("view", "Flag") && (
+          <li>
+            <LeftNavLink id="settings" href="/admin/settings" isActive={path === "/admin/settings"}>
+              <>
+                <GearIcon className={iconClassname} />
+                {t("adminNav.settings", { ns: "common" })}
+              </>
+            </LeftNavLink>
+          </li>
+        )}
+      </ol>
     </nav>
   );
 };

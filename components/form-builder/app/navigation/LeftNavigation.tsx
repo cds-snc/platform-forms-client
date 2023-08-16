@@ -16,45 +16,58 @@ export const LeftNavigation = ({ backLink }: { backLink?: React.ReactElement }) 
 
   return (
     <nav className="absolute" aria-label={t("navLabelFormBuilder")}>
-      {backLink && backLink}
-      {!isPublished && (
-        <LeftNavLink href="/form-builder/edit">
-          <>
-            <DesignIcon className={iconClassname} />
-            {t("edit")}
-          </>
-        </LeftNavLink>
-      )}
-      <LeftNavLink href="/form-builder/preview">
-        <>
-          <PreviewIcon className={iconClassname} />
-          {status === "authenticated" ? t("test") : t("pagePreview")}
-        </>
-      </LeftNavLink>
-      {!isPublished && (
-        <LeftNavLink href="/form-builder/publish">
-          <>
-            <PublishIcon className={iconClassname} />
-            {t("publish")}
-          </>
-        </LeftNavLink>
-      )}
-
-      <LeftNavLink href={`/form-builder/responses/${id}`}>
-        <>
-          <MessageIcon className={iconClassname} />
-          {t("responsesNavLabel")}
-        </>
-      </LeftNavLink>
-
-      <LeftNavLink href={`/form-builder/settings/${id}`}>
-        <>
-          <GearIcon className={iconClassname} />
-          {t("pageSettings")}
-        </>
-      </LeftNavLink>
-
-      {!isPublished && <SaveButton />}
+      <ol className="list-none m-0 p-0">
+        {backLink && <li>{backLink}</li>}
+        {!isPublished && (
+          <li>
+            <LeftNavLink href="/form-builder/edit">
+              <>
+                <DesignIcon className={iconClassname} />
+                {t("edit")}
+              </>
+            </LeftNavLink>
+          </li>
+        )}
+        <li>
+          <LeftNavLink href="/form-builder/preview">
+            <>
+              <PreviewIcon className={iconClassname} />
+              {status === "authenticated" ? t("test") : t("pagePreview")}
+            </>
+          </LeftNavLink>
+        </li>
+        {!isPublished && (
+          <li>
+            <LeftNavLink href="/form-builder/publish">
+              <>
+                <PublishIcon className={iconClassname} />
+                {t("publish")}
+              </>
+            </LeftNavLink>
+          </li>
+        )}
+        <li>
+          <LeftNavLink href={`/form-builder/responses/${id}`}>
+            <>
+              <MessageIcon className={iconClassname} />
+              {t("responsesNavLabel")}
+            </>
+          </LeftNavLink>
+        </li>
+        <li>
+          <LeftNavLink href={`/form-builder/settings/${id}`}>
+            <>
+              <GearIcon className={iconClassname} />
+              {t("pageSettings")}
+            </>
+          </LeftNavLink>
+        </li>
+        {!isPublished && (
+          <li>
+            <SaveButton />
+          </li>
+        )}
+      </ol>
     </nav>
   );
 };
