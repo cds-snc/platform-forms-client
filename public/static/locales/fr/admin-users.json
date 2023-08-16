@@ -40,16 +40,16 @@
   },
   "backToAccounts": "Retourner à Comptes",
   "backToManageForms": "Retourner à Gérer les formulaires",
-  "lockPublishing": "Lock publishing[FR]",
-  "unlockPublishing" : "Unlock publishing[FR]",
-  "mustHaveAtLeastOneUser": "Must assign at least one user.",
-  "accountsFilterLabel": "Accounts filters[FR]",
+  "lockPublishing": "Vérouiller la publication",
+  "unlockPublishing" : "Dévérouiller la publication",
+  "mustHaveAtLeastOneUser": "Doit assigner au moin un·e utilisateur·rice.",
+  "accountsFilterLabel": "Filtrer les comptes",
   "accountsFilter": {
-    "all": "All[FR]",
-    "active": "Active[FR]",
-    "deactivated": "Deactivated[FR]",
-    "noAccounts": "No accounts[FR]",
-    "noActiveAccounts": "No active accounts[FR]",
-    "noDeactivatedAccounts": "No deactivated accounts[FR]"
+    "all": "Tous",
+    "active": "Activés",
+    "deactivated": "Désactivés",
+    "noAccounts": "Aucun compte",
+    "noActiveAccounts": "Aucun compte activé",
+    "noDeactivatedAccounts": "Aucun compte désactivé"
   }
 }
