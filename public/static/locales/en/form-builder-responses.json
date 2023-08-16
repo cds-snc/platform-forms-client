@@ -60,8 +60,8 @@
       "errorDownloadingFiles": "Try again in a few minutes. If the problem persists, ",
       "errorDownloadingFilesLink": "contact Support",
       "overdueAlert": {
-        "title": "Downloading is restricted for overdue responses until they are downloaded and confirmed",
-        "description": "There are {{numberOfOverdueResponses}} unconfirmed responses {{escalatedAfter}} days overdue. Download and confirm all overdue responses before continuing."
+        "title": "Access to new responses is restricted until overdue responses are downloaded and confirmed",
+        "description": "There are {{numberOfOverdueResponses}} unconfirmed responses that are {{escalatedAfter}} days old. Download and confirm all overdue responses to remove this restriction."
       }
     },
     "downloadXSelectedResponses": "Download {{size}} selected responses",

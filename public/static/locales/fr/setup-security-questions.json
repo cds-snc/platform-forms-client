@@ -1,24 +1,24 @@
 {
   "title": "Configurer les questions de sécurité",
   "description": "Répondez à 3 questions de sécurité pour sécuriser votre compte.",
-  "requirementsTitle": "YVos réponses devraient être difficiles à deviner:",
+  "requirementsTitle": "Vos réponses devraient être difficiles à deviner:",
   "requirements1": "Au moins 4 caractères.",
   "requirements2": "Aucune information d'identification personnelle.",
   "question": "Question",
   "answer": "Réponse",
-  "firstQuestion": "Enter the first security qestion and answer[FR]",
-  "secondQuestion": "Enter the second security qestion and answer[FR]",
-  "thirdQuestion": "Enter the third security qestion and answer[FR]",
+  "firstQuestion": "Sélectionner une première question de sécurité et entrer une réponse",
+  "secondQuestion": "Sélectionner une deuxième question de sécurité et entrer une réponse",
+  "thirdQuestion": "Sélectionner une troisième question de sécurité et entrer une réponse",
   "questionPlaceholder": "Sélectionner une question",
   "continue": "Continuer",
   "support": "Obtenir du soutien",
   "errors": {
     "serverError": {
-      "title": "An error occurred[FR]"
+      "title": "Une erreur s'est produite"
     },
-    "required": "Required field[FR]",
+    "required": "Compléter le champ obligatoire afin de continuer.",
     "answerLength": "Doit être au moins 4 caractères.",
-    "duplicateAnswer": "Answers cannot be the same. Create a unique answer for this question[FR]"
+    "duplicateAnswer": "Les réponses ne peuvent pas être identiques. Créez une réponse unique pour cette question."
   },
   "banner": {
     "title": "Nous renforçons la sécurité de votre compte et de vos formulaires.",
