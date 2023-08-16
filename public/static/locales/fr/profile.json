@@ -34,7 +34,7 @@
       "invalidInput": "Doit être au moins 4 caractères.",
       "unknownError": {
         "title": "Erreur inconnue",
-        "content": "Une erreur inconnue s'est produite et nous n'avons pas pu traiter votre demand. Veillez réessayer plus tard."
+        "content": "Une erreur inconnue s'est produite et nous n'avons pas pu traiter votre demande. Veuillez réessayer plus tard."
       }
     }
   }
