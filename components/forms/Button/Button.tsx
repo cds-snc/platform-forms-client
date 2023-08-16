@@ -12,6 +12,8 @@ interface ButtonProps {
   destructive?: boolean;
   testid?: string;
   ariaProps?: React.AriaAttributes;
+  dataAttrName?: string;
+  dataAttrValue?: string;
 }
 
 export const Button = (
@@ -28,6 +30,8 @@ export const Button = (
     destructive,
     disabled,
     ariaProps,
+    dataAttrName,
+    dataAttrValue,
   } = props;
 
   const classes = classnames(
@@ -48,6 +52,7 @@ export const Button = (
       data-testid={testid ? testid : "button"}
       disabled={disabled}
       {...ariaProps}
+      {...(dataAttrName && dataAttrValue ? { [`data-${dataAttrName}`]: dataAttrValue } : "")}
     >
       {children}
     </button>

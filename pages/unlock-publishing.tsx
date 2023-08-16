@@ -200,7 +200,8 @@ export default function UnlockPublishing() {
                   <div className="flex mt-14">
                     <Button
                       type="submit"
-                      data-submit="unlock-publishing"
+                      dataAttrName="submit"
+                      dataAttrValue="unlock-publishing"
                       className={` 
                           mr-8
                           bg-blue-dark text-white-default border-black-default py-4 px-8 rounded-lg border-2 border-solid
