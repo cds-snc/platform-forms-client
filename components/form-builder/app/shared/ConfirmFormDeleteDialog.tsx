@@ -7,7 +7,7 @@ import Loader from "@components/globals/Loader";
 import { Button, LinkButton } from "@components/globals";
 import { useDialogRef, Dialog } from "./Dialog";
 import { DownloadFileButton } from "./DownloadFileButton";
-import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
+import * as Alert from "@components/globals/Alert/Alert";
 
 const fetcher = async (url: string) => {
   const res = await fetch(url);
@@ -53,16 +53,12 @@ export const ConfirmFormDeleteDialog = ({
   if (error) {
     return (
       <Dialog handleClose={handleClose} dialogRef={dialog}>
-        <div className="p-5 min-h-[150px] flex">
-          <div className="p-10 w-[100%]">
-            <Attention
-              type={AttentionTypes.ERROR}
-              isAlert={true}
-              heading={t("formDelete.error")}
-              classes="w-[100%]"
-            >
-              <p className="text-[#26374a] text-sm">{t("somethingWentWrong")}</p>
-            </Attention>
+        <div className="flex min-h-[150px] p-5">
+          <div className="w-[100%] p-10">
+            <Alert.Danger>
+              <Alert.Title>{t("formDelete.error")}</Alert.Title>
+              <p>{t("somethingWentWrong")}</p>
+            </Alert.Danger>
           </div>
         </div>
       </Dialog>
@@ -93,12 +89,12 @@ export const ConfirmFormDeleteDialog = ({
     return (
       <Dialog handleClose={handleClose} dialogRef={dialog}>
         <div className="p-5">
-          <div className="px-10 flex justify-center">
+          <div className="flex justify-center px-10">
             <Image
               width={"326"}
               height={"228"}
               alt=""
-              className="block center"
+              className="center block"
               src="/img/form-builder-download-responses.png"
             />
           </div>
@@ -122,12 +118,12 @@ export const ConfirmFormDeleteDialog = ({
   return (
     <Dialog handleClose={handleClose} dialogRef={dialog} actions={actions}>
       <div className="p-5">
-        <div className="px-10 flex justify-center">
+        <div className="flex justify-center px-10">
           <Image
             width={"288"}
             height={"206"}
             alt=""
-            className="block center"
+            className="center block"
             src="/img/form-builder-delete-dialog.svg"
           />
         </div>
