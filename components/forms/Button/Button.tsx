@@ -15,7 +15,7 @@ interface ButtonProps {
 export const Button = (
   props: ButtonProps & JSX.IntrinsicElements["button"]
 ): React.ReactElement => {
-  const { children, secondary, base, onClick, className, testid, destructive } = props;
+  const { children, secondary, base, onClick, className, testid, destructive, ...rest } = props;
 
   const classes = classnames(
     "gc-button",
@@ -32,7 +32,7 @@ export const Button = (
       className={classes}
       onClick={onClick}
       data-testid={testid ? testid : "button"}
-      {...props}
+      {...rest}
     >
       {children}
     </button>
