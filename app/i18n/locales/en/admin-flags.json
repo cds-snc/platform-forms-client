@@ -1,0 +1,54 @@
+{
+  "title": "Feature flags",
+  "subTitle": "Feature flags allow you to control the various enabled features in the application",
+  "loading": "Loading feature flags",
+  "enabled": "On",
+  "disabled": "Off",
+  "enable": "Turn On",
+  "disable": "Turn Off",
+  "featureTitle": "Feature",
+  "featureStatus": "Status",
+  "featureSwitch": "On/Off",
+  "features": {
+    "sandbox": {
+      "title": "Sandbox Page",
+      "description": "A page that displays a list of all non-published forms"
+    },
+    "unpublishedForms": {
+      "title": "Unpublished forms",
+      "description": "Allow the access to and completion of forms that do not have a published status"
+    },
+    "submitToReliabilityQueue": {
+      "title": "Submit to reliability queue",
+      "description": "Submit form responses to the Reliability Queue. If disabled no form submissions will be submitted.  Usually used for testing."
+    },
+    "reCaptcha": {
+      "title": "I am not a robot",
+      "description": "Enable protected by reCaptcha on forms before submission"
+    },
+    "formTimer": {
+      "title": "Form timer",
+      "description": "Wait a specific amount of time before being allowed to submit the form"
+    },
+    "accountRegistration": {
+      "title": "Account creation",
+      "description": "Allow users to register for an account"
+    },
+    "passwordReset": {
+      "title": "Allow password resets",
+      "description": "Allow users to reset their passwords"
+    },
+    "supportForms": {
+      "title": "Support forms",
+      "description": "Whether or not support forms are enabled"
+    },
+    "nagware": {
+      "title": "Nagware notifications",
+      "description": "Enable the Nagware notifications"
+    },
+    "experimentalBlocks": {
+      "title": "Experimental blocks",
+      "description": "Enable experimental blocks"
+    }
+  }
+}

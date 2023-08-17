@@ -1,0 +1,145 @@
+{
+  "footer": {
+    "terms-and-conditions": {
+      "link": "/en/terms-and-conditions",
+      "desc": "Terms and conditions"
+    },
+    "terms-of-use": {
+      "link": "/en/terms-of-use",
+      "desc": "Terms of use"
+    },
+    "sla": {
+      "link": "/en/sla",
+      "desc": "Service-level agreement"
+    },
+    "support": {
+      "link": "/en/form-builder/support",
+      "desc": "Support"
+    },
+    "ariaLabel": "Footer"
+  },
+  "skip-link": "Skip to main content",
+  "fip": {
+    "link": "http://canada.ca/en.html",
+    "text": "Symbol of the Government of Canada",
+    "label": "Government of Canada homepage"
+  },
+  "preview": {
+    "title": "Preview a form from JSON config",
+    "button": "Preview"
+  },
+  "lang-toggle": "Language selection",
+  "submitButton": "Submit",
+  "input-validation": {
+    "heading": "Please correct the errors on the page.",
+    "required": "Complete the required field to continue.",
+    "alphanumeric": "Enter letters and numbers only.",
+    "text": "",
+    "number": "Enter a number.",
+    "email": "Enter a valid email address.",
+    "date": "Enter a valid date in mm/dd/yyyy format.",
+    "phone": "Enter a valid telephone number.",
+    "regex": "Enter the correct format.",
+    "file-size-too-large": "Select a smaller file.",
+    "file-type-invalid": "Select a different file type.",
+    "too-many-characters": "Shorten the response.",
+    "all-checkboxes-required": "Read and check all boxes to confirm the items in this section.",
+    "validGovEmail": "Enter a valid government email address.",
+    "notSameAsUserEmail": "This cannot be your email address. Enter the email of the person in charge of your team. Enter the email of the person in charge of your team. If that's you, add a colleague."
+  },
+  "required": "required",
+  "all-required": "all checkboxes required",
+  "required-field": "Required field",
+  "file-upload-button-text": "Upload a file",
+  "file-upload-sr-only-file-selected": "Currently selected file is",
+  "file-upload-no-file-selected": "No file currently selected",
+  "dropdown-initial-option-text": "No selection",
+  "server-error": "Sorry, it seems there was a problem submitting your form. Please try again later.",
+  "title-full": "GC Forms - Formulaires GC",
+  "title": "GC Forms",
+  "loading": "We are processing your form submission. Please wait.",
+  "spam-error": {
+    "error-part-1": "Button cannot be used in less than",
+    "error-part-2": "seconds.",
+    "prompt-part-1": "Try again in",
+    "prompt-part-2": "seconds.",
+    "success-message": "The button is ready.",
+    "success-prompt": "You can try this button again now."
+  },
+  "adminNav": {
+    "dashboard": "Home",
+    "formbuilder": "Form builder",
+    "users": "Users",
+    "templates": "Templates",
+    "features": "Feature flags",
+    "login": "Sign in",
+    "logout": "Sign out",
+    "privileges": "Privileges",
+    "settings": "Settings",
+    "myForms": "Your forms"
+  },
+  "formElements": {
+    "characterCount": {
+      "part1": "You have",
+      "part2": "characters left.",
+      "part1-error": "You've exceeded the limit by",
+      "part2-error": "characters."
+    }
+  },
+  "dynamicRow": {
+    "add": "Add",
+    "delete": "Delete"
+  },
+  "acceptableUsePage": {
+    "agree": "Agree",
+    "welcome": "Know your responsibilities"
+  },
+  "loginMenu": {
+    "login": "Sign in",
+    "logout": "Sign out"
+  },
+  "alert": {
+    "dismissAlert": "Close this alert"
+  },
+  "continue": "Continue",
+  "error": "Error",
+  "unknown": "Unknown",
+  "attention": {
+    "warning": "Warning",
+    "error": "Error"
+  },
+  "errorPanel": {
+    "defaultTitle": "Something went wrong",
+    "defaultMessage": "Sorry, there was a problem and we lost you.",
+    "cta": {
+      "yourForms": "Back to Your forms",
+      "home": "Back to home",
+      "support": "Get support"
+    }
+  },
+  "account": {
+    "actions": {
+      "backToSignIn": "Back to sign in"
+    },
+    "fields": {
+      "password": {
+        "label": "Password",
+        "hint": "Must be at least 8 characters with a capital letter, number, and symbol",
+        "error": {
+          "minLength": "Password must be at least 8 characters.",
+          "maxLength": "Password must not exceed 50 characters.",
+          "oneLowerCase": "Password must contain at least 1 lowercase character.",
+          "oneUpperCase": "Password must contain at least 1 uppercase character.",
+          "oneNumber": "Password must contain at least 1 number.",
+          "oneSymbol": "Password must contain at least 1 symbol."
+        }
+      },
+      "passwordConfirmation": {
+        "label": "Confirm password",
+        "error": {
+          "mustMatch": "The entries for password must match."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "signUpRegistration": {
+    "title": "Create an account",
+    "alreadyHaveAnAccount": "If you already have an account,",
+    "alreadyHaveAnAccountLink": "sign in instead.",
+    "termsAgreement": "By creating an account you agree to the",
+    "termsAgreementLink": "Terms of use.",
+    "signUpButton": "Continue",
+    "fields": {
+      "username": {
+        "label": "Email",
+        "hint": "Must be a federal government email address",
+        "error": {
+          "validGovEmail": "This field must be a valid federal government email."
+        }
+      },
+      "password": {
+        "label": "Password",
+        "hintList": {
+          "title": "Your password should be hard to guess with:",
+          "characters": "At least 8 characters",
+          "number": "A number",
+          "capital": "A capital letter",
+          "symbol": "A symbol"
+        }
+      },
+      "name": {
+        "label": "Full name",
+        "error": {
+          "maxLength": "This field cannot exceed 50 characters."
+        }
+      }
+    }
+  },
+  "registrationClosed": "Registration is closed at this time",
+  "accountCreated": {
+    "title": "Account created",
+    "yourAccountListDescription": "What you can do",
+    "yourAccountList": {
+      "item1": "draft a form",
+      "item2": "save drafts within GC Forms",
+      "item3": "test the delivery of responses"
+    },
+    "notIncluded": {
+      "title": "What's not included",
+      "paragraph1": "You cannot publish forms online yet."
+    },
+    "unlockPublishing": {
+      "title": "Unlock form publishing",
+      "paragraph1": "To unlock publishing, provide the contact information of the person you report to.",
+      "paragraph2": "We'll process your request within 2 business days."
+    },
+    "unlockPublishingButton": "Unlock publishing",
+    "skipStepButton": "Skip this step for now"
+  }
+}

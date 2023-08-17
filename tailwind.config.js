@@ -1,3 +1,4 @@
+/** @type {import('tailwindcss').Config} */
 const colors = require("tailwindcss/colors");
 const defaultTheme = require("tailwindcss/defaultTheme");
 
@@ -167,6 +168,10 @@ module.exports = {
       xxs: { max: "290px" },
     },
   },
-  content: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
+  content: [
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./pages/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
+  ],
   plugins: [],
 };
