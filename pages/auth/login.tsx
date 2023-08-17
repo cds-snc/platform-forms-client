@@ -104,8 +104,8 @@ const LoginStep = ({
                 </ol>
               </Alert>
             )}
-            <h1 className="border-b-0 mt-6 mb-12">{t("title")}</h1>
-            <p className="mb-10 -mt-6">
+            <h1 className="mb-12 mt-6 border-b-0">{t("title")}</h1>
+            <p className="-mt-6 mb-10">
               {t("signUpText")}&nbsp;
               <Link href={"/signup/register"}>{t("signUpLink")}</Link>
             </p>
@@ -114,7 +114,7 @@ const LoginStep = ({
                 <Label id={"label-username"} htmlFor={"username"} className="required" required>
                   {t("fields.username.label")}
                 </Label>
-                <div className="text-p text-black-default mb-2" id="login-description">
+                <div className="mb-2 text-p text-black-default" id="login-description">
                   {t("fields.username.description")}
                 </div>
                 <TextInput
@@ -138,7 +138,7 @@ const LoginStep = ({
                   required
                 />
               </div>
-              <p className="mb-10 -mt-6">
+              <p className="-mt-6 mb-10">
                 <Link href={"/auth/resetpassword"} className="-mt-8 mb-10">
                   {t("resetPasswordText")}
                 </Link>
