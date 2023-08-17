@@ -20,8 +20,7 @@ import {
   TextArea,
   Description,
 } from "@components/forms";
-import { Button, LinkButton } from "@components/globals";
-import * as Alert from "@components/globals/Alert/Alert";
+import { Button, LinkButton, Alert } from "@components/globals";
 import { checkOne } from "@lib/cache/flags";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
 import { useFocusIt } from "@lib/hooks/useFocusIt";

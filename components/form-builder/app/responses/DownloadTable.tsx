@@ -25,7 +25,7 @@ import {
   sortVaultSubmission,
 } from "./DownloadTableReducer";
 import { getDaysPassed } from "@lib/clientHelpers";
-import * as Alert from "@components/globals/Alert/Alert";
+import { Alert } from "@components/globals";
 
 // TODO: move to an app setting variable
 const MAX_FILE_DOWNLOADS = 20;
