@@ -133,6 +133,7 @@ type AlertProps = {
   dismissible?: boolean;
   onDismiss?: React.ReactEventHandler;
   focussable?: boolean;
+  role?: "alert" | "note"; // use note for non-critical alerts (e.g. info)
 };
 
 const AlertContainer = ({
@@ -145,6 +146,7 @@ const AlertContainer = ({
   dismissible,
   onDismiss,
   focussable,
+  role = "alert",
   ...props
 }: AlertProps) => {
   let alertTitle: JSX.Element | string | undefined = title;
@@ -194,7 +196,7 @@ const AlertContainer = ({
       {...(focussable && { tabIndex: -1 })}
       className={cn("relative flex rounded-lg p-4", className)}
       data-testid="alert"
-      role="alert"
+      role={role}
       {...props}
     >
       {dismissible && (
