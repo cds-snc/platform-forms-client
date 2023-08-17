@@ -145,15 +145,15 @@ export default function Contactus() {
             <form id="contactus" method="POST" onSubmit={handleSubmit} noValidate>
               <p className="mb-6 mt-[-2rem] text-[1.6rem]">{t("contactus.useThisForm")}</p>
               <p className="mb-14">
-                {t("contactus.gcFormsTeamPart1")}&nbsp;
+                {t("contactus.gcFormsTeamPart1")}{" "}
                 <Link href={`https://www.canada.ca/${i18n.language}/contact.html`}>
                   {t("contactus.gcFormsTeamLink")}
-                </Link>
-                &nbsp;{t("contactus.gcFormsTeamPart2")}
+                </Link>{" "}
+                {t("contactus.gcFormsTeamPart2")}
               </p>
               <Alert.Warning title={t("contactus.needSupport")} role="note">
                 <p>
-                  {t("contactus.ifYouExperience")}&nbsp;
+                  {t("contactus.ifYouExperience")}{" "}
                   <Link href={`/form-builder/support`}>{t("contactus.supportFormLink")}</Link>.
                 </p>
               </Alert.Warning>
@@ -373,15 +373,15 @@ export default function Contactus() {
             <form id="support" method="POST" onSubmit={handleSubmit} noValidate>
               <p className="mb-6 mt-[-2rem] text-[1.6rem]">{t("support.useThisForm")}</p>
               <p className="mb-14">
-                {t("support.gcFormsTeamPart1")}&nbsp;
+                {t("support.gcFormsTeamPart1")}{" "}
                 <Link href={`https://www.canada.ca/${i18n.language}/contact.html`}>
                   {t("support.gcFormsTeamLink")}
-                </Link>
-                &nbsp;{t("support.gcFormsTeamPart2")}
+                </Link>{" "}
+                {t("support.gcFormsTeamPart2")}
               </p>
               <Alert.Warning title={t("support.lookingForADemo")} role="note">
                 <p>
-                  {t("support.ifYouWouldLike")}&nbsp;
+                  {t("support.ifYouWouldLike")}{" "}
                   <Link href={`/form-builder/support/contactus`}>{t("support.contactUs")}</Link>.
                 </p>
               </Alert.Warning>
@@ -491,11 +491,11 @@ export default function Contactus() {
             </LinkButton.Primary>
           </div>
           <p className="mb-8">
-            {t("requestSuccess.forOtherEnquiriesPart1")}&nbsp;
+            {t("requestSuccess.forOtherEnquiriesPart1")}{" "}
             <Link href={`https://www.canada.ca/${i18n.language}/contact.html`}>
               {t("requestSuccess.forOtherEnquiriesLink")}
-            </Link>
-            &nbsp;{t("requestSuccess.forOtherEnquiriesPart2")}.
+            </Link>{" "}
+            {t("requestSuccess.forOtherEnquiriesPart2")}.
           </p>
           <p>{t("requestSuccess.theGCFormsTeam")}</p>
         </>
