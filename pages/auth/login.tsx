@@ -85,6 +85,7 @@ const LoginStep = ({
             )}
             {Object.keys(errors).length > 0 && !authErrorsState.isError && (
               <Alert
+                className="w-full"
                 type={ErrorStatus.ERROR}
                 validation={true}
                 tabIndex={0}
