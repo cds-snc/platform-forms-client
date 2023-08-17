@@ -176,8 +176,9 @@ export const Verify = ({
                 onDismiss={authErrorsReset}
                 focussable={true}
                 id="cognitoErrors"
+                className="w-full [&>div>h2]:pb-0"
               >
-                {authErrorsState.description}&nbsp;
+                {authErrorsState.description}{" "}
                 {authErrorsState.callToActionLink ? (
                   <Link href={authErrorsState.callToActionLink}>
                     {authErrorsState.callToActionText}

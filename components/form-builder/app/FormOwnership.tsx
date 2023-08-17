@@ -1,6 +1,6 @@
 import React, { ReactElement, useId, useState } from "react";
 import { useTranslation } from "next-i18next";
-import { Alert } from "@components/forms";
+import * as Alert from "@components/globals/Alert/Alert";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
 import { logMessage } from "@lib/logger";
 import { Button } from "@components/globals";
@@ -64,44 +64,26 @@ export const FormOwnership = ({
 
     if (response && response.data.error) {
       setMessage(
-        <Alert
-          type={ErrorStatus.ERROR}
-          focussable={true}
-          heading={t("responseFail.title")}
-          tabIndex={0}
-          className="mb-2"
-        >
-          {t(response.data.message)}
-        </Alert>
+        <Alert.Danger focussable={true} title={t("responseFail.title")} className="mb-2">
+          <p>{t(response.data.message)}</p>
+        </Alert.Danger>
       );
       return;
     }
 
     if (response && response.status === 200) {
       setMessage(
-        <Alert
-          type={ErrorStatus.SUCCESS}
-          focussable={true}
-          heading={t("responseSuccess.title")}
-          tabIndex={0}
-          className="mb-2"
-        >
-          {t("responseSuccess.message")}
-        </Alert>
+        <Alert.Success focussable={true} title={t("responseSuccess.title")} className="mb-2">
+          <p>{t("responseSuccess.message")}</p>
+        </Alert.Success>
       );
       return response.data;
     }
 
     setMessage(
-      <Alert
-        type={ErrorStatus.ERROR}
-        focussable={true}
-        heading={t("responseFail.title")}
-        tabIndex={0}
-        className="mb-2"
-      >
-        {t("responseFail.message")}
-      </Alert>
+      <Alert.Danger focussable={true} title={t("responseFail.title")} className="mb-2">
+        <p>{t("responseFail.message")}</p>
+      </Alert.Danger>
     );
   };
 

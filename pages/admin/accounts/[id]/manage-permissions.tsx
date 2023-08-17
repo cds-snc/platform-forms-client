@@ -11,7 +11,8 @@ import { checkPrivileges, getAllPrivileges } from "@lib/privileges";
 import { logMessage } from "@lib/logger";
 import { getUser } from "@lib/users";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
-import { Alert, Button, ErrorStatus } from "@components/globals";
+import { Button } from "@components/globals";
+import * as Alert from "@components/globals/Alert/Alert";
 import { BackLink } from "@components/admin/LeftNav/BackLink";
 import { PermissionToggle } from "@components/admin/Users/PermissionToggle";
 import { LinkButton } from "@components/globals";
@@ -134,31 +135,29 @@ const ManagePermissions = ({
     const response = await updatePrivilege(formUser.id, changedPrivileges);
     if (response && response.status === 200) {
       setMessage(
-        <Alert
-          type={ErrorStatus.SUCCESS}
+        <Alert.Success
+          className="mb-4"
           focussable={true}
-          heading={t("responseSuccess.title")}
+          title={t("responseSuccess.title")}
           dismissible={true}
           onDismiss={() => setMessage(null)}
-          tabIndex={0}
         >
-          {t("responseSuccess.message")}
-        </Alert>
+          <p>{t("responseSuccess.message")}</p>
+        </Alert.Success>
       );
       return response.data;
     }
 
     setMessage(
-      <Alert
-        type={ErrorStatus.ERROR}
+      <Alert.Danger
+        className="mb-4"
         focussable={true}
-        heading={t("responseFail.title")}
+        title={t("responseFail.title")}
         dismissible={true}
         onDismiss={() => setMessage(null)}
-        tabIndex={0}
       >
-        {t("responseFail.message")}
-      </Alert>
+        <p>{t("responseFail.message")}</p>
+      </Alert.Danger>
     );
 
     await forceSessionUpdate();
@@ -186,7 +185,7 @@ const ManagePermissions = ({
       <Head>
         <title>{`${t("managePermissions")} ${formUser.name} ${formUser.email}`}</title>
       </Head>
-      <h1 className="mb-10 border-0">
+      <h1 className="mb-6 border-0">
         {formUser && <span className="block text-base">{formUser?.name}</span>}
         {formUser && <span className="block text-base font-normal">{formUser?.email}</span>}
         {t("managePermissions")}
