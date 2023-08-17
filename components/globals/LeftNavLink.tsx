@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactNode } from "react";
 import Link from "next/link";
 
 // TODO: probably should be updated to use the <LinkButton.. component some time
@@ -11,7 +11,7 @@ export const LeftNavLink = ({
   id,
   isActive,
 }: {
-  children: ReactElement;
+  children: ReactNode | ReactNode[];
   href: string;
   id: string;
   isActive: boolean;
@@ -22,7 +22,7 @@ export const LeftNavLink = ({
         href={href}
         className={`${
           isActive ? "font-bold" : ""
-        } group no-underline rounded block w-38 py-1 mb-2 pl-2 pr-0 laptop:pr-2 text-black-default hover:text-blue-hover visited:text-black-default focus:text-white-default focus:bg-blue-hover active:no-underline active:bg-blue-hover active:text-white-default !shadow-none`}
+        } group mb-2 block rounded py-1 pl-2 pr-0 text-black-default no-underline !shadow-none visited:text-black-default hover:text-blue-hover focus:bg-blue-hover focus:text-white-default active:bg-blue-hover active:text-white-default active:no-underline laptop:pr-2`}
         {...(isActive && { "aria-current": "page" })}
       >
         {children}
