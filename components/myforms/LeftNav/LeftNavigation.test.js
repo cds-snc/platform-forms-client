@@ -1,6 +1,6 @@
 import React from "react";
 import { render, cleanup, screen } from "@testing-library/react";
-import { LeftNavigation } from "@components/myforms/LeftNav";
+import { LeftNavigation } from "@components/myforms/LeftNav/LeftNavigation";
 
 const useRouter = jest.spyOn(require("next/router"), "useRouter");
 

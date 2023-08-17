@@ -223,7 +223,7 @@
     "title": "Contactez-nous",
     "useThisForm": "Utilisez ce formulaire pour en apprendre davantage sur Formulaires GC et sur la façon dont cet outil peut fonctionner au sein de votre ministère ou organisme.",
     "errors": {
-      "submissionError": "Something went wrong. Please try again later.[FR]"
+      "submissionError": "Il y a eu une erreur. Veuillez réessayer plus tard."
     }
   },
   "copyButton": "Copié dans le presse-papiers",
@@ -595,7 +595,7 @@
     "title": "Soutien",
     "useThisForm": "Utilisez ce formulaire pour obtenir du soutien technique ou signaler tout problème technique avec Formulaires GC.",
     "errors": {
-      "submissionError": "Something went wrong. Please try again later.[FR]"
+      "submissionError": "Il y a eu une erreur. Veuillez réessayer plus tard."
     }
   },
   "test": "Tester",
@@ -615,7 +615,7 @@
   "unlockPublishing": "Soumettre",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
   "unnamedForm": "Formulaire sans titre",
-  "formName": "Form name[FR]",
+  "formName": "Nom du formulaire",
   "responsesNavLabel": "Réponses",
   "nagware": {
     "restrictedDownloadAfter35Days": "Le téléchargement sera limité si les réponses non confirmées ont plus de 35 jours de retard.",
