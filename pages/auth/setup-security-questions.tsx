@@ -4,7 +4,7 @@ import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import { Formik, FormikProps } from "formik";
 import * as Yup from "yup";
-import { TextInput, Label, Alert, Dropdown } from "@components/forms";
+import { TextInput, Label, Dropdown } from "@components/forms";
 import {
   requireAuthentication,
   retrievePoolOfSecurityQuestions,
@@ -18,7 +18,7 @@ import { logMessage } from "@lib/logger";
 import { fetchWithCsrfToken } from "@lib/hooks/auth/fetchWithCsrfToken";
 import { useRouter } from "next/router";
 import { AxiosError } from "axios";
-import * as AlertBanner from "@components/globals/Alert/Alert";
+import * as Alert from "@components/globals/Alert/Alert";
 import { toast } from "@formbuilder/app/shared";
 
 export interface Question {
@@ -46,7 +46,7 @@ const Info = () => {
   const { t } = useTranslation(["setup-security-questions"]);
   return (
     <div className="mx-auto mt-10 w-[850px]">
-      <AlertBanner.Info title={t("banner.title")} body={t("banner.body")} />
+      <Alert.Info title={t("banner.title")} body={t("banner.body")} />
     </div>
   );
 };
@@ -149,14 +149,9 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
         {({ handleSubmit, isSubmitting }) => (
           <>
             {formError && (
-              <Alert
-                type={ErrorStatus.ERROR}
-                heading={t("errors.serverError.title")}
-                id="formError"
-                focussable={true}
-              >
+              <Alert.Danger title={t("errors.serverError.title")} id="formError" focussable={true}>
                 {formError}
-              </Alert>
+              </Alert.Danger>
             )}
 
             <h1 className="gc-h2">{t("title")}</h1>
