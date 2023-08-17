@@ -15,17 +15,15 @@ export const LeftNavigation = () => {
 
   return (
     <nav className="absolute">
-      <ul className="list-none m-0 p-0">
+      <ul className="m-0 list-none p-0">
         <li>
           <LeftNavLink
             id="tab-drafts"
             href={`/${i18n.language}/myforms/drafts`}
             isActive={path === "drafts"}
           >
-            <>
-              <PageIcon className={iconClassname} />
-              {t("nav.drafts")}
-            </>
+            <PageIcon className={iconClassname} />
+            {t("nav.drafts")}
           </LeftNavLink>
         </li>
         <li>
@@ -34,10 +32,8 @@ export const LeftNavigation = () => {
             href={`/${i18n.language}/myforms/published`}
             isActive={path === "published"}
           >
-            <>
-              <GlobeIcon className={iconClassname} />
-              {t("nav.published")}
-            </>
+            <GlobeIcon className={iconClassname} />
+            {t("nav.published")}
           </LeftNavLink>
         </li>
         <li>
@@ -46,10 +42,8 @@ export const LeftNavigation = () => {
             href={`/${i18n.language}/myforms/all`}
             isActive={path === "all"}
           >
-            <>
-              <FolderIcon className={iconClassname} />
-              {t("nav.all")}
-            </>
+            <FolderIcon className={iconClassname} />
+            {t("nav.all")}
           </LeftNavLink>
         </li>
       </ul>
