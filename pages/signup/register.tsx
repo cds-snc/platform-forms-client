@@ -173,6 +173,7 @@ const Register = () => {
             )}
             {Object.keys(errors).length > 0 && !authErrorsState.isError && (
               <Alert
+                className="w-full"
                 type={ErrorStatus.ERROR}
                 validation={true}
                 tabIndex={0}
@@ -180,7 +181,7 @@ const Register = () => {
                 id="registrationValidationErrors"
                 heading={t("input-validation.heading", { ns: "common" })}
               >
-                <ol className="gc-ordered-list">
+                <ol className="gc-ordered-list p-0">
                   {Object.entries(errors).map(([fieldKey, fieldValue]) => {
                     return (
                       <ErrorListItem
@@ -193,10 +194,10 @@ const Register = () => {
                 </ol>
               </Alert>
             )}
-            <h1 ref={headingRef} className="border-b-0 mt-6 mb-12">
+            <h1 ref={headingRef} className="mb-12 mt-6 border-b-0">
               {t("signUpRegistration.title")}
             </h1>
-            <p className="mb-10 -mt-6">
+            <p className="-mt-6 mb-10">
               {t("signUpRegistration.alreadyHaveAnAccount")}&nbsp;
               <Link href={"/auth/login"}>{t("signUpRegistration.alreadyHaveAnAccountLink")}</Link>
             </p>
@@ -216,7 +217,7 @@ const Register = () => {
                 <Label id={"label-username"} htmlFor={"username"} className="required" required>
                   {t("signUpRegistration.fields.username.label")}
                 </Label>
-                <div className="text-p text-black-default mb-2" id={"username-hint"}>
+                <div className="mb-2 text-p text-black-default" id={"username-hint"}>
                   {t("signUpRegistration.fields.username.hint")}
                 </div>
                 <TextInput
@@ -231,7 +232,7 @@ const Register = () => {
                 <Label id={"label-password"} htmlFor={"password"} className="required" required>
                   {t("signUpRegistration.fields.password.label")}
                 </Label>
-                <div className="text-p text-black-default mb-2" id={"password-hint"}>
+                <div className="mb-2 text-p text-black-default" id={"password-hint"}>
                   {t("signUpRegistration.fields.password.hintList.title")}
                   <ul className="mt-2">
                     <li>{t("signUpRegistration.fields.password.hintList.characters")}</li>
