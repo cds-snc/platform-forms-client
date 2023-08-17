@@ -91,7 +91,7 @@ const LoginStep = ({
                 id="loginValidationErrors"
                 heading={t("input-validation.heading", { ns: "common" })}
               >
-                <ol className="gc-ordered-list">
+                <ol className="gc-ordered-list p-0">
                   {Object.entries(errors).map(([fieldKey, fieldValue]) => {
                     return (
                       <ErrorListItem
