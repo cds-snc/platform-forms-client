@@ -173,6 +173,7 @@ const Register = () => {
             )}
             {Object.keys(errors).length > 0 && !authErrorsState.isError && (
               <Alert
+                className="w-full"
                 type={ErrorStatus.ERROR}
                 validation={true}
                 tabIndex={0}
@@ -180,7 +181,7 @@ const Register = () => {
                 id="registrationValidationErrors"
                 heading={t("input-validation.heading", { ns: "common" })}
               >
-                <ol className="gc-ordered-list">
+                <ol className="gc-ordered-list p-0">
                   {Object.entries(errors).map(([fieldKey, fieldValue]) => {
                     return (
                       <ErrorListItem
