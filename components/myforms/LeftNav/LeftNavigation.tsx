@@ -1,5 +1,5 @@
 import React from "react";
-import { LeftNavLink } from "./LeftNavLink";
+import { LeftNavLink } from "@components/globals/LeftNavLink";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 
@@ -15,34 +15,44 @@ export const LeftNavigation = () => {
 
   return (
     <nav className="absolute">
-      <LeftNavLink
-        id="tab-drafts"
-        href={`/${i18n.language}/myforms/drafts`}
-        isActive={path === "drafts"}
-      >
-        <>
-          <PageIcon className={iconClassname} />
-          {t("nav.drafts")}
-        </>
-      </LeftNavLink>
-
-      <LeftNavLink
-        id="tab-published"
-        href={`/${i18n.language}/myforms/published`}
-        isActive={path === "published"}
-      >
-        <>
-          <GlobeIcon className={iconClassname} />
-          {t("nav.published")}
-        </>
-      </LeftNavLink>
-
-      <LeftNavLink id="tab-all" href={`/${i18n.language}/myforms/all`} isActive={path === "all"}>
-        <>
-          <FolderIcon className={iconClassname} />
-          {t("nav.all")}
-        </>
-      </LeftNavLink>
+      <ul className="list-none m-0 p-0">
+        <li>
+          <LeftNavLink
+            id="tab-drafts"
+            href={`/${i18n.language}/myforms/drafts`}
+            isActive={path === "drafts"}
+          >
+            <>
+              <PageIcon className={iconClassname} />
+              {t("nav.drafts")}
+            </>
+          </LeftNavLink>
+        </li>
+        <li>
+          <LeftNavLink
+            id="tab-published"
+            href={`/${i18n.language}/myforms/published`}
+            isActive={path === "published"}
+          >
+            <>
+              <GlobeIcon className={iconClassname} />
+              {t("nav.published")}
+            </>
+          </LeftNavLink>
+        </li>
+        <li>
+          <LeftNavLink
+            id="tab-all"
+            href={`/${i18n.language}/myforms/all`}
+            isActive={path === "all"}
+          >
+            <>
+              <FolderIcon className={iconClassname} />
+              {t("nav.all")}
+            </>
+          </LeftNavLink>
+        </li>
+      </ul>
     </nav>
   );
 };
