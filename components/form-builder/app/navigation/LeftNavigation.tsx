@@ -16,50 +16,40 @@ export const LeftNavigation = ({ backLink }: { backLink?: React.ReactElement }) 
 
   return (
     <nav className="absolute" aria-label={t("navLabelFormBuilder")}>
-      <ul className="list-none m-0 p-0">
+      <ul className="m-0 list-none p-0">
         {backLink && <li>{backLink}</li>}
         {!isPublished && (
           <li>
             <LeftNavLink href="/form-builder/edit">
-              <>
-                <DesignIcon className={iconClassname} />
-                {t("edit")}
-              </>
+              <DesignIcon className={iconClassname} />
+              {t("edit")}
             </LeftNavLink>
           </li>
         )}
         <li>
           <LeftNavLink href="/form-builder/preview">
-            <>
-              <PreviewIcon className={iconClassname} />
-              {status === "authenticated" ? t("test") : t("pagePreview")}
-            </>
+            <PreviewIcon className={iconClassname} />
+            {status === "authenticated" ? t("test") : t("pagePreview")}
           </LeftNavLink>
         </li>
         {!isPublished && (
           <li>
             <LeftNavLink href="/form-builder/publish">
-              <>
-                <PublishIcon className={iconClassname} />
-                {t("publish")}
-              </>
+              <PublishIcon className={iconClassname} />
+              {t("publish")}
             </LeftNavLink>
           </li>
         )}
         <li>
           <LeftNavLink href={`/form-builder/responses/${id}`}>
-            <>
-              <MessageIcon className={iconClassname} />
-              {t("responsesNavLabel")}
-            </>
+            <MessageIcon className={iconClassname} />
+            {t("responsesNavLabel")}
           </LeftNavLink>
         </li>
         <li>
           <LeftNavLink href={`/form-builder/settings/${id}`}>
-            <>
-              <GearIcon className={iconClassname} />
-              {t("pageSettings")}
-            </>
+            <GearIcon className={iconClassname} />
+            {t("pageSettings")}
           </LeftNavLink>
         </li>
         {!isPublished && (
