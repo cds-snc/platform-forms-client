@@ -10,9 +10,6 @@ interface ButtonProps {
   disabled?: boolean;
   destructive?: boolean;
   testid?: string;
-  ariaProps?: React.AriaAttributes;
-  dataAttrName?: string;
-  dataAttrValue?: string;
 }
 
 export const Button = (
