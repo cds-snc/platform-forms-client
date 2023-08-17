@@ -5,6 +5,43 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.0](https://github.com/cds-snc/platform-forms-client/compare/v3.2.0...v3.3.0) (2023-08-16)
+
+
+### Features
+
+* added unit tests around password reset library ([#2518](https://github.com/cds-snc/platform-forms-client/issues/2518)) ([ef1755b](https://github.com/cds-snc/platform-forms-client/commit/ef1755b35f65b34aa1b943ae50e4d56087ea06a8))
+* added user email to ownership and privilege audit logs ([#2459](https://github.com/cds-snc/platform-forms-client/issues/2459)) ([5315839](https://github.com/cds-snc/platform-forms-client/commit/5315839fec49fd077decc418a1c23d92df56710a))
+* Alerts refactor - create new Alert component for admin/FormBuilder ([#2446](https://github.com/cds-snc/platform-forms-client/issues/2446)) ([3122649](https://github.com/cds-snc/platform-forms-client/commit/3122649730b8a3cb7985a766e8e869e47bb23fca))
+
+
+### Bug Fixes
+
+* auth errors copy edits ([#2538](https://github.com/cds-snc/platform-forms-client/issues/2538)) ([0adec47](https://github.com/cds-snc/platform-forms-client/commit/0adec475bec3ff001b53fbeba98ae75ce27ccb45))
+* check user privileges when setting security questions ([#2517](https://github.com/cds-snc/platform-forms-client/issues/2517)) ([f5e67bd](https://github.com/cds-snc/platform-forms-client/commit/f5e67bd5761c10d69e73a5ebf8de76f6b1ac8e2d))
+* **deps:** update all patch dependencies ([#2529](https://github.com/cds-snc/platform-forms-client/issues/2529)) ([3ed8a5c](https://github.com/cds-snc/platform-forms-client/commit/3ed8a5ca40fab40cb85d8a75127021be345043d7))
+* disables input field for form name on published forms ([#2507](https://github.com/cds-snc/platform-forms-client/issues/2507)) ([8c3caa0](https://github.com/cds-snc/platform-forms-client/commit/8c3caa0ff8cea46df77cdd33b905c1cb77473e23))
+* display missing privilege in admin panel ([#2536](https://github.com/cds-snc/platform-forms-client/issues/2536)) ([6e08697](https://github.com/cds-snc/platform-forms-client/commit/6e08697ed7ce01c69514619571b131a78101eba6))
+* make security questions unique in database schema ([#2516](https://github.com/cds-snc/platform-forms-client/issues/2516)) ([943ca22](https://github.com/cds-snc/platform-forms-client/commit/943ca2200adca0650553bfcd6d522e96245c20ca))
+* privilege seeding ([#2541](https://github.com/cds-snc/platform-forms-client/issues/2541)) ([10d7436](https://github.com/cds-snc/platform-forms-client/commit/10d7436296eaae1d8ebe109cfe2109311811795c))
+* Publish page heading levels ([#2537](https://github.com/cds-snc/platform-forms-client/issues/2537)) ([5d3ab43](https://github.com/cds-snc/platform-forms-client/commit/5d3ab43403df1797447cc7145a7b896be883a35a))
+* Skip to main content redundant nav landmark region ([#2534](https://github.com/cds-snc/platform-forms-client/issues/2534)) ([dee9ea0](https://github.com/cds-snc/platform-forms-client/commit/dee9ea04850fcff54a24f1309f7d8702bee15f3a))
+* token session ([#2531](https://github.com/cds-snc/platform-forms-client/issues/2531)) ([d1437a9](https://github.com/cds-snc/platform-forms-client/commit/d1437a912fd21d3cc4509914e9245d947e944f8a))
+
+
+### Miscellaneous Chores
+
+* Add Get Support link to Answer Security Questions ([#2525](https://github.com/cds-snc/platform-forms-client/issues/2525)) ([9dfa6c7](https://github.com/cds-snc/platform-forms-client/commit/9dfa6c75f5a84626aa4d2f9e585857749625bd28))
+* Add Permissions-Policy header ([#2532](https://github.com/cds-snc/platform-forms-client/issues/2532)) ([315f5c0](https://github.com/cds-snc/platform-forms-client/commit/315f5c0ad4801ea5a9b3ab6e0be5f755babf57b9))
+* **deps:** pin dependencies ([#2369](https://github.com/cds-snc/platform-forms-client/issues/2369)) ([5bf9ed3](https://github.com/cds-snc/platform-forms-client/commit/5bf9ed3ed6f2e698f2601d750bbe80fd999b4c5a))
+* **deps:** update all non-major docker images ([#2527](https://github.com/cds-snc/platform-forms-client/issues/2527)) ([83febef](https://github.com/cds-snc/platform-forms-client/commit/83febef64fbf5137f4dd4b15b6dfcae87e2fa892))
+* **deps:** update all non-major github action dependencies ([#2368](https://github.com/cds-snc/platform-forms-client/issues/2368)) ([bb8b43c](https://github.com/cds-snc/platform-forms-client/commit/bb8b43c3f1a9d4e41830e113a1e715c5fb059d20))
+* **deps:** update all non-major github action dependencies ([#2528](https://github.com/cds-snc/platform-forms-client/issues/2528)) ([5c0c636](https://github.com/cds-snc/platform-forms-client/commit/5c0c636218f1d0f4e35be2dc8b74f345a9fe02f7))
+* **deps:** update all patch dependencies ([#2434](https://github.com/cds-snc/platform-forms-client/issues/2434)) ([4d75fa7](https://github.com/cds-snc/platform-forms-client/commit/4d75fa7bd4aba197a16066206120aadff8cd2eff))
+* fix security questions banner text ([#2550](https://github.com/cds-snc/platform-forms-client/issues/2550)) ([301fd35](https://github.com/cds-snc/platform-forms-client/commit/301fd350ad6899e31d12331268a920f7e1bb0dba))
+* Form title line wrap ([#2526](https://github.com/cds-snc/platform-forms-client/issues/2526)) ([b27db37](https://github.com/cds-snc/platform-forms-client/commit/b27db3776ef1173fd9dcebd7911d1a80237bd45d))
+* Remove password reset feature flag ([#2509](https://github.com/cds-snc/platform-forms-client/issues/2509)) ([c361d93](https://github.com/cds-snc/platform-forms-client/commit/c361d935498cef16cd4adc582eb48ac607efc1c4))
+
 ## [3.2.0](https://github.com/cds-snc/platform-forms-client/compare/v3.1.1...v3.2.0) (2023-08-03)
 
 

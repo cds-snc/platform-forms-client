@@ -11,7 +11,7 @@ import { checkPrivileges } from "@lib/privileges";
 import { NextPageWithLayout } from "@pages/_app";
 import { CardGrid } from "@components/myforms/CardGrid/CardGrid";
 import { TabPanel } from "@components/myforms/Tabs/TabPanel";
-import { LeftNavigation } from "@components/myforms/LeftNav";
+import { LeftNavigation } from "@components/myforms/LeftNav/LeftNavigation";
 import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 import { clearTemplateStore } from "@components/form-builder/store/useTemplateStore";
 import { ResumeEditingForm } from "@components/form-builder/app/shared";
