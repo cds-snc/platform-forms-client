@@ -4,7 +4,7 @@ import { Button } from "@components/globals";
 import { useTranslation } from "next-i18next";
 import { Dialog, useDialogRef } from "@components/form-builder/app/shared";
 import { logMessage } from "@lib/logger";
-import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
+import * as Alert from "@components/globals/Alert/Alert";
 import { Question } from "pages/profile";
 import axios from "axios";
 import { getCsrfToken } from "next-auth/react";
@@ -119,16 +119,14 @@ export const EditSecurityQuestionModal = ({
   if (!questionNumber || !questionId || questions?.length <= 0) {
     return (
       <Dialog handleClose={handleClose} title={t("securityQuestionModal.title")} dialogRef={dialog}>
-        <Attention
-          type={AttentionTypes.ERROR}
-          isAlert={true}
-          classes="mb-6"
-          heading={t("securityQuestionModal.errors.unknownError.title")}
-        >
+        <Alert.Danger className="mb-4">
+          <Alert.Title headingTag="h3">
+            {t("securityQuestionModal.errors.unknownError.title")}
+          </Alert.Title>
           <p className="text-sm text-[#26374a]">
             {t("securityQuestionModal.errors.unknownError.content")}
           </p>
-        </Attention>
+        </Alert.Danger>
       </Dialog>
     );
   }
@@ -147,26 +145,19 @@ export const EditSecurityQuestionModal = ({
       <>
         {/* TODO: probably will not need the error since already selected questions can be removed programmatically */}
         {isFormError && (
-          <Attention
-            type={AttentionTypes.ERROR}
-            isAlert={true}
-            heading={t("securityQuestionModal.errors.formError.title")}
-          >
-            <p className="text-sm text-[#26374a]">
-              {t("securityQuestionModal.errors.formError.content")}
-            </p>
-          </Attention>
+          <Alert.Danger>
+            <Alert.Title headingTag="h3">
+              {t("securityQuestionModal.errors.formError.title")}
+            </Alert.Title>
+            <p className="text-sm">{t("securityQuestionModal.errors.formError.content")}</p>
+          </Alert.Danger>
         )}
 
         {isFormWarning && (
-          <Attention type={AttentionTypes.WARNING} isAlert={true} isIcon={false} classes="mb-6">
-            <p className="text-sm font-bold text-[#26374a]">
-              {t("securityQuestionModal.errors.clickSave.title")}
-            </p>
-            <p className="text-sm text-[#26374a]">
-              {t("securityQuestionModal.errors.clickSave.content")}
-            </p>
-          </Attention>
+          <Alert.Warning icon={false} className="mb-4">
+            <p className="text-sm font-bold">{t("securityQuestionModal.errors.clickSave.title")}</p>
+            <p className="text-sm">{t("securityQuestionModal.errors.clickSave.content")}</p>
+          </Alert.Warning>
         )}
 
         <p>{t("securityQuestionModal.requirmentsList.title")}</p>
@@ -203,24 +194,29 @@ export const EditSecurityQuestionModal = ({
           >
             {t("securityQuestionModal.answerLabel")} {questionNumber}
           </Label>
-          {isAnswerInputError && (
-            <Attention
-              type={AttentionTypes.ERROR}
-              isAlert={true}
-              isIcon={false}
-              isSmall={true}
-              isLeftBorder={true}
-            >
-              <p className="text-sm font-bold text-[#26374a]">
-                {t("securityQuestionModal.errors.invalidInput")}
-              </p>
-            </Attention>
-          )}
+
+          <div
+            role="alert"
+            className={`border-l-4 border-red bg-red-50 p-3 ${
+              !isAnswerInputError ? "visually-hidden" : ""
+            }`}
+          >
+            {isAnswerInputError && (
+              <p className="text-sm font-bold">{t("securityQuestionModal.errors.invalidInput")}</p>
+            )}
+          </div>
+
+          <span id="answerHint" className="visually-hidden">
+            {t("securityQuestionModal.errors.invalidInput")}
+          </span>
+
           <input
             className={`gc-input-text w-full rounded ${isAnswerInputError ? "border-red" : ""}`}
             id="answer"
             name="answer"
             type="text"
+            aria-invalid={isAnswerInputError}
+            aria-describedby="answerHint"
             ref={answerRef}
             onChange={_debouncedAnswerCheck}
           />
