@@ -1,5 +1,5 @@
 import React from "react";
-import * as Alert from "./Alert";
+import { Alert } from "../../globals";
 import { CircleCheckIcon } from "../../form-builder/icons";
 import { Button } from "../../globals";
 
