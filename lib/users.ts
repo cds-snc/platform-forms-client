@@ -227,28 +227,42 @@ export const getUsers = async (ability: UserAbility): Promise<SelectedUser[] | n
 export const updateActiveStatus = async (ability: UserAbility, userID: string, active: boolean) => {
   try {
     checkPrivileges(ability, [{ action: "update", subject: "User" }]);
-    const user = await prisma.user.update({
-      where: {
-        id: userID,
-      },
-      data: {
-        active: active,
-      },
-      select: {
-        id: true,
-        active: true,
-        email: true,
-      },
-    });
+
+    const [user, privilegedUser] = await Promise.all([
+      prisma.user.update({
+        where: {
+          id: userID,
+        },
+        data: {
+          active: active,
+        },
+        select: {
+          id: true,
+          active: true,
+          email: true,
+        },
+      }),
+      prisma.user.findUniqueOrThrow({
+        where: {
+          id: ability.userID,
+        },
+        select: {
+          email: true,
+        },
+      }),
+    ]);
 
     // Force update the cache with the new active value
     await activeStatusUpdate(userID, active);
+
     // Log the event
     await logEvent(
       userID,
       { type: "User", id: userID },
       active ? "UserActivated" : "UserDeactivated",
-      `User ${userID} was ${active ? "activated" : "deactivated"} by user ${ability.userID}`
+      `User ${user.email} (userID: ${userID}) was ${active ? "activated" : "deactivated"} by user ${
+        privilegedUser.email
+      } (userID: ${ability.userID})`
     );
 
     if (!active && user.email) {
