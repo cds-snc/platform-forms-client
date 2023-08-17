@@ -17,14 +17,12 @@ export const LeftNavigation = () => {
 
   return (
     <nav className="absolute">
-      <ul className="list-none m-0 p-0">
+      <ul className="m-0 list-none p-0">
         {ability?.can("view", "User") && (
           <li>
             <LeftNavLink id="users" href={`/admin/accounts`} isActive={path === "/admin/accounts"}>
-              <>
-                <NameIcon className={iconClassname} />
-                {t("adminNav.users", { ns: "common" })}
-              </>
+              <NameIcon className={iconClassname} />
+              {t("adminNav.users", { ns: "common" })}
             </LeftNavLink>
           </li>
         )}
@@ -32,10 +30,8 @@ export const LeftNavigation = () => {
         {ability?.can("view", "Flag") && (
           <li>
             <LeftNavLink id="flags" href="/admin/flags" isActive={path === "/admin/flags"}>
-              <>
-                <FlagIcon className={iconClassname} />
-                {t("adminNav.features", { ns: "common" })}
-              </>
+              <FlagIcon className={iconClassname} />
+              {t("adminNav.features", { ns: "common" })}
             </LeftNavLink>
           </li>
         )}
@@ -43,10 +39,8 @@ export const LeftNavigation = () => {
         {ability?.can("view", "Flag") && (
           <li>
             <LeftNavLink id="settings" href="/admin/settings" isActive={path === "/admin/settings"}>
-              <>
-                <GearIcon className={iconClassname} />
-                {t("adminNav.settings", { ns: "common" })}
-              </>
+              <GearIcon className={iconClassname} />
+              {t("adminNav.settings", { ns: "common" })}
             </LeftNavLink>
           </li>
         )}
