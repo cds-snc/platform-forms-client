@@ -63,7 +63,7 @@ export const YourAccountDropdown = ({ isAuthenticated }: YourAccountDropdownProp
               >
                 <DropdownMenuItem href={`/${i18n.language}/profile`} text={t("Profile")} />
 
-                {(ability?.can("view", "Flag") || ability?.can("update", "User")) && (
+                {(ability?.can("view", "Flag") || ability?.can("view", "User", "Privilege")) && (
                   <DropdownMenuItem href="/admin" text={t("adminNav.administration")} />
                 )}
                 <DropdownMenu.Separator className="mb-2 border-b pt-2" />
