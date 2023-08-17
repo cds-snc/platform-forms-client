@@ -6,7 +6,7 @@ import { randomId } from "@lib/clientHelpers";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { logMessage } from "@lib/logger";
-import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
+import * as Alert from "@components/globals/Alert/Alert";
 import Link from "next/link";
 
 export interface DialogErrors {
@@ -156,63 +156,43 @@ export const DownloadTableDialog = ({
         <div className="px-10">
           <div>
             {status === DialogStates.MIN_ERROR && (
-              <Attention
-                type={AttentionTypes.ERROR}
-                isAlert={true}
-                heading={minEntriesErrorTitle}
-                classes="mb-2"
-              >
-                <p className="text-[#26374a] text-sm mb-2">{minEntriesErrorDescription}</p>
-              </Attention>
+              <Alert.Danger className="mb-2">
+                <Alert.Title headingTag="h3">{minEntriesErrorTitle}</Alert.Title>
+                <p>{minEntriesErrorDescription}</p>
+              </Alert.Danger>
             )}
             {status === DialogStates.MAX_ERROR && (
-              <Attention
-                type={AttentionTypes.ERROR}
-                isAlert={true}
-                heading={maxEntriesErrorTitle}
-                classes="mb-2"
-              >
-                <p className="text-[#26374a] text-sm mb-2">{maxEntriesErrorDescription}</p>
-              </Attention>
+              <Alert.Danger className="mb-2">
+                <Alert.Title headingTag="h3">{maxEntriesErrorTitle}</Alert.Title>
+                <p>{maxEntriesErrorDescription}</p>
+              </Alert.Danger>
             )}
             {status === DialogStates.FORMAT_ERROR && (
-              <Attention
-                type={AttentionTypes.ERROR}
-                isAlert={true}
-                heading={invalidEntryErrorTitle}
-                classes="mb-2"
-              >
-                <p className="text-[#26374a] text-sm mb-2">{invalidEntryErrorDescription}</p>
-              </Attention>
+              <Alert.Danger className="mb-2">
+                <Alert.Title headingTag="h3">{invalidEntryErrorTitle}</Alert.Title>
+                <p>{invalidEntryErrorDescription}</p>
+              </Alert.Danger>
             )}
             {status === DialogStates.FAILED_ERROR && (
-              <Attention
-                type={AttentionTypes.ERROR}
-                isAlert={true}
-                heading={errorEntriesErrorTitle}
-                classes="mb-2"
-              >
-                <p className="text-[#26374a] text-sm mb-2">{errorEntriesErrorDescription}</p>
-              </Attention>
+              <Alert.Danger className="mb-2">
+                <Alert.Title headingTag="h3">{errorEntriesErrorTitle}</Alert.Title>
+                <p>{errorEntriesErrorDescription}</p>
+              </Alert.Danger>
             )}
 
             {status === DialogStates.UNKNOWN_ERROR && (
-              <Attention
-                type={AttentionTypes.ERROR}
-                isAlert={true}
-                heading={unknownErrorTitle}
-                classes="mb-2"
-              >
-                <p className="text-[#26374a] text-sm mb-2">
+              <Alert.Danger className="mb-2">
+                <Alert.Title headingTag="h3">{unknownErrorTitle}</Alert.Title>
+                <p>
                   {unknownErrorDescription}
                   <Link href={"/form-builder/support"}>{unknownErrorDescriptionLink}</Link>.
                 </p>
-              </Attention>
+              </Alert.Danger>
             )}
           </div>
           <div className="py-4">
             <p className="mt-2">{description}</p>
-            <p className="mt-10 mb-2 font-bold" id={confirmInstructionId}>
+            <p className="mb-2 mt-10 font-bold" id={confirmInstructionId}>
               {inputHelp}
             </p>
 
@@ -229,7 +209,7 @@ export const DownloadTableDialog = ({
             ></LineItemEntries>
 
             <p className="mt-8">{nextSteps}</p>
-            <div className="flex mt-8 mb-8">
+            <div className="my-8 flex">
               <Button
                 className="mr-4"
                 onClick={handleSubmit}
