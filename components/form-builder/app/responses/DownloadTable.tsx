@@ -15,7 +15,6 @@ import { DownloadStatus } from "./DownloadStatus";
 import { useRouter } from "next/router";
 import { logMessage } from "@lib/logger";
 import axios from "axios";
-import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
 import { toast } from "../shared/Toast";
 import { useSetting } from "@lib/hooks/useSetting";
 import Link from "next/link";
@@ -26,6 +25,7 @@ import {
   sortVaultSubmission,
 } from "./DownloadTableReducer";
 import { getDaysPassed } from "@lib/clientHelpers";
+import * as Alert from "@components/globals/Alert/Alert";
 
 // TODO: move to an app setting variable
 const MAX_FILE_DOWNLOADS = 20;
@@ -175,37 +175,32 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
       />
       <div id="notificationsTop">
         {tableItems.checkedItems.size > MAX_FILE_DOWNLOADS && (
-          <Attention
-            type={AttentionTypes.ERROR}
-            isAlert={true}
-            heading={t("downloadResponsesTable.errors.trySelectingLessFilesHeader", {
-              max: MAX_FILE_DOWNLOADS,
-            })}
-          >
+          <Alert.Danger>
+            <Alert.Title>
+              {t("downloadResponsesTable.errors.trySelectingLessFilesHeader", {
+                max: MAX_FILE_DOWNLOADS,
+              })}
+            </Alert.Title>
             <p className="text-sm text-[#26374a]">
               {t("downloadResponsesTable.errors.trySelectingLessFiles", {
                 max: MAX_FILE_DOWNLOADS,
               })}
             </p>
-          </Attention>
+          </Alert.Danger>
         )}
         {errors.noItemsError && (
-          <Attention
-            type={AttentionTypes.ERROR}
-            isAlert={true}
-            heading={t("downloadResponsesTable.errors.atLeastOneFileHeader")}
-          >
+          <Alert.Danger>
+            <Alert.Title>{t("downloadResponsesTable.errors.atLeastOneFileHeader")}</Alert.Title>
             <p className="text-sm text-[#26374a]">
               {t("downloadResponsesTable.errors.atLeastOneFile")}
             </p>
-          </Attention>
+          </Alert.Danger>
         )}
         {errors.downloadError && (
-          <Attention
-            type={AttentionTypes.ERROR}
-            isAlert={true}
-            heading={t("downloadResponsesTable.errors.errorDownloadingFilesHeader")}
-          >
+          <Alert.Danger>
+            <Alert.Title>
+              {t("downloadResponsesTable.errors.errorDownloadingFilesHeader")}
+            </Alert.Title>
             <p className="mb-2 text-sm text-[#26374a]">
               {t("downloadResponsesTable.errors.errorDownloadingFiles")}
               <Link href="/form-builder/support">
@@ -213,7 +208,7 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
               </Link>
               .
             </p>
-          </Attention>
+          </Alert.Danger>
         )}
       </div>
 
@@ -306,44 +301,38 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
 
         <div id="notificationsBottom" className="ml-4">
           {tableItems.checkedItems.size > MAX_FILE_DOWNLOADS && (
-            <Attention
-              type={AttentionTypes.ERROR}
-              isIcon={false}
-              isSmall={true}
-              heading={t("downloadResponsesTable.errors.trySelectingLessFilesHeader", {
-                max: MAX_FILE_DOWNLOADS,
-              })}
-            >
+            <Alert.Danger icon={false}>
+              <Alert.Title headingTag="h3">
+                {t("downloadResponsesTable.errors.trySelectingLessFilesHeader", {
+                  max: MAX_FILE_DOWNLOADS,
+                })}
+              </Alert.Title>
               <p className="text-sm text-black">
                 {t("downloadResponsesTable.errors.trySelectingLessFiles", {
                   max: MAX_FILE_DOWNLOADS,
                 })}
               </p>
-            </Attention>
+            </Alert.Danger>
           )}
           {errors.noItemsError && (
-            <Attention
-              type={AttentionTypes.ERROR}
-              isIcon={false}
-              isSmall={true}
-              heading={t("downloadResponsesTable.errors.atLeastOneFileHeader")}
-            >
+            <Alert.Danger icon={false}>
+              <Alert.Title headingTag="h3">
+                {t("downloadResponsesTable.errors.atLeastOneFileHeader")}
+              </Alert.Title>
               <p className="text-sm text-black">
                 {t("downloadResponsesTable.errors.atLeastOneFile")}
               </p>
-            </Attention>
+            </Alert.Danger>
           )}
           {errors.downloadError && (
-            <Attention
-              type={AttentionTypes.ERROR}
-              isIcon={false}
-              isSmall={true}
-              heading={t("downloadResponsesTable.errors.errorDownloadingFilesHeader")}
-            >
+            <Alert.Danger icon={false}>
+              <Alert.Title headingTag="h3">
+                {t("downloadResponsesTable.errors.errorDownloadingFilesHeader")}
+              </Alert.Title>
               <p className="text-sm text-black">
                 {t("downloadResponsesTable.errors.errorDownloadingFiles")}
               </p>
-            </Attention>
+            </Alert.Danger>
           )}
         </div>
       </div>

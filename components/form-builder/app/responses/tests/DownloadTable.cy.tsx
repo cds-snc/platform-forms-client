@@ -52,7 +52,7 @@ describe("<Nagware />", () => {
       />
     );
 
-    cy.get("[role=alert]").should("have.attr", "class").and("contain", "bg-amber-100");
+    cy.get("[role=alert]").should("have.attr", "class").and("contain", "bg-yellow-50");
     cy.get("[data-testid=numberOfSubmissions]").should("contain", "1");
   });
 
@@ -66,7 +66,7 @@ describe("<Nagware />", () => {
       />
     );
 
-    cy.get("[role=alert]").should("have.attr", "class").and("contain", "bg-amber-100");
+    cy.get("[role=alert]").should("have.attr", "class").and("contain", "bg-yellow-50");
     cy.get("[data-testid=numberOfSubmissions]").should("contain", "2");
   });
 });
