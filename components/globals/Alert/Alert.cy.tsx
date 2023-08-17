@@ -421,4 +421,30 @@ describe("<Alert />", () => {
         .should("not.contain", "This text will not render");
     });
   });
+
+  describe("Alert role", () => {
+    it("Renders an alert with default role", () => {
+      cy.mount(
+        <Alert.Success>
+          <Alert.Body>Test body</Alert.Body>
+          <p>And a paragraph</p>
+          This text will not render
+        </Alert.Success>
+      );
+
+      cy.get("[data-testid='alert']").should("exist").should("have.attr", "role", "alert");
+    });
+
+    it("Renders an alert with an alternate role", () => {
+      cy.mount(
+        <Alert.Success role="note">
+          <Alert.Body>Test body</Alert.Body>
+          <p>And a paragraph</p>
+          This text will not render
+        </Alert.Success>
+      );
+
+      cy.get("[data-testid='alert']").should("exist").should("have.attr", "role", "note");
+    });
+  });
 });
