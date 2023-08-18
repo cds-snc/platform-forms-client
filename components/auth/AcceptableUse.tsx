@@ -66,7 +66,7 @@ export const AcceptableUseTerms = ({
       </div>
       <RichText className="py-10 w-full">{content}</RichText>
       {status === "authenticated" && (
-        <Button id="acceptableUse" type="button" onClick={agree}>
+        <Button id="acceptableUse" onClick={agree}>
           {t("acceptableUsePage.agree")}
         </Button>
       )}

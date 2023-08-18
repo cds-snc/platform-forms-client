@@ -18,6 +18,7 @@ interface ButtonProps {
 }
 
 export const Button = ({
+  type = "button",
   children,
   onClick,
   className,
@@ -32,6 +33,7 @@ export const Button = ({
 }: ButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   return (
     <button
+      type={type}
       onClick={onClick}
       className={cn(themes["base"], themes[theme], className)}
       disabled={disabled}
