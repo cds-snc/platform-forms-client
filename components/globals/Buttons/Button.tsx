@@ -15,7 +15,6 @@ interface ButtonProps {
   tabIndex?: number;
   buttonRef?: (el: HTMLButtonElement) => void;
   dataTestId?: string;
-  shape?: "rectangle" | "circle";
 }
 
 export const Button = ({
@@ -29,18 +28,12 @@ export const Button = ({
   tabIndex = 0,
   buttonRef,
   dataTestId,
-  shape = "rectangle",
   ...rest
 }: ButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   return (
     <button
       onClick={onClick}
-      className={cn(
-        themes["base"],
-        themes[theme],
-        className,
-        shape === "circle" && "rounded-[100px]"
-      )}
+      className={cn(themes["base"], themes[theme], className)}
       disabled={disabled}
       aria-label={ariaLabel}
       tabIndex={tabIndex}
@@ -53,3 +46,7 @@ export const Button = ({
     </button>
   );
 };
+
+export const RoundedButton = ({ className, ...props }: ButtonProps) => (
+  <Button {...props} className={cn(className, "rounded-[100px]")} />
+);
