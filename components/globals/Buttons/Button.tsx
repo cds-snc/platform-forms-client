@@ -1,6 +1,23 @@
 import React, { ReactElement } from "react";
 import { themes, Theme } from "./themes";
 
+interface ButtonProps {
+  type?: "button" | "submit" | "reset";
+  children?: JSX.Element | string;
+  id?: string;
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
+  icon?: ReactElement;
+  className?: string;
+  iconWrapperClassName?: string;
+  disabled?: boolean;
+  "aria-label"?: string;
+  theme?: Theme;
+  tabIndex?: number;
+  buttonRef?: (el: HTMLButtonElement) => void;
+  dataTestId?: string;
+  shape?: "rectangle" | "circle";
+}
+
 export const Button = ({
   type = "button",
   children,
@@ -15,27 +32,9 @@ export const Button = ({
   tabIndex = 0,
   buttonRef,
   dataTestId,
-  dataAttrName,
-  dataAttrValue,
   shape = "rectangle",
-}: {
-  type?: "button" | "submit" | "reset";
-  children?: JSX.Element | string;
-  id?: string;
-  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
-  icon?: ReactElement;
-  className?: string;
-  iconWrapperClassName?: string;
-  disabled?: boolean;
-  "aria-label"?: string;
-  theme?: Theme;
-  tabIndex?: number;
-  buttonRef?: (el: HTMLButtonElement) => void;
-  dataTestId?: string;
-  dataAttrName?: string;
-  dataAttrValue?: string;
-  shape?: "rectangle" | "circle";
-}) => {
+  ...rest
+}: ButtonProps & JSX.IntrinsicElements["button"]) => {
   const baseTheme = shape === "circle" ? themes["baseCircle"] : themes["base"];
   return (
     <button
@@ -48,11 +47,11 @@ export const Button = ({
       tabIndex={tabIndex}
       ref={buttonRef}
       data-testid={dataTestId}
-      {...(dataAttrName && dataAttrValue ? { [`data-${dataAttrName}`]: dataAttrValue } : "")}
+      {...rest}
     >
       {icon && (
         <div
-          className={`${iconWrapperClassName || ""} ${theme === "icon" ? "" : "w-8 -ml-2 mr-2"}`}
+          className={`${iconWrapperClassName || ""} ${theme === "icon" ? "" : "-ml-2 mr-2 w-8"}`}
         >
           {icon}
         </div>

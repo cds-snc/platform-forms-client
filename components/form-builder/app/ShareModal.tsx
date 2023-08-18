@@ -58,8 +58,7 @@ export const ShareModal = ({
   const actions = (
     <>
       <Button
-        dataAttrName="share"
-        dataAttrValue="form-builder-email"
+        data-share="form-builder-email"
         theme="primary"
         onClick={() => {
           handleSend();
