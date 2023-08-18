@@ -1,5 +1,3 @@
-import crypto from "crypto";
-
 const prodGTM = "GTM-W3ZVVX5";
 const devGTM = "GTM-KNMJRS8";
 // Values are currently hardcoded because nextjs and CSP and GTM don't play well together
@@ -25,6 +23,25 @@ if (window.location.host === "forms-formulaires.alpha.canada.ca") {
   selfDestruct();
 }
 `;
+
+export const generateCSP = (): { csp: string; nonce: string } => {
+  const nonce = crypto.randomUUID();
+  let csp = ``;
+  csp += `object-src 'none';`;
+  csp += `base-uri 'self';`;
+  csp += `form-action 'self';`;
+  csp += `default-src 'self';`;
+  csp += `script-src 'self' 'strict-dynamic' 'nonce-${nonce}' ${
+    process.env.NODE_ENV === "production" ? "" : "'unsafe-eval'"
+  } 'unsafe-inline' https:;`;
+  csp += `style-src 'self' 'unsafe-inline' data:;`;
+  csp += `img-src 'self';`;
+  csp += `font-src 'self';`;
+  csp += `frame-src www.googletagmanager.com www.google.com/recaptcha/ recaptcha.google.com/recaptcha/;`;
+  csp += `connect-src 'self' www.googletagmanager.com www.google-analytics.com`;
+
+  return { csp, nonce };
+};
 
 export const cspHashOf = (text: string): string => {
   const hash = crypto.createHash("sha256");
