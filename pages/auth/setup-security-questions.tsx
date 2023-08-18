@@ -11,14 +11,13 @@ import {
   retrieveUserSecurityQuestions,
 } from "@lib/auth";
 import { checkPrivileges } from "@lib/privileges";
-import { Button, ErrorStatus } from "@components/globals";
+import { Button, Alert } from "@components/globals";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import { LinkButton } from "@components/globals";
 import { logMessage } from "@lib/logger";
 import { fetchWithCsrfToken } from "@lib/hooks/auth/fetchWithCsrfToken";
 import { useRouter } from "next/router";
 import { AxiosError } from "axios";
-import * as Alert from "@components/globals/Alert/Alert";
 import { toast } from "@formbuilder/app/shared";
 
 export interface Question {

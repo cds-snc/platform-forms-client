@@ -1,10 +1,9 @@
 import React, { useRef, useState, useCallback } from "react";
 import { Label } from "@components/forms";
-import { Button } from "@components/globals";
+import { Button, Alert } from "@components/globals";
 import { useTranslation } from "next-i18next";
 import { Dialog, useDialogRef } from "@components/form-builder/app/shared";
 import { logMessage } from "@lib/logger";
-import * as Alert from "@components/globals/Alert/Alert";
 import { Question } from "pages/profile";
 import axios from "axios";
 import { getCsrfToken } from "next-auth/react";
