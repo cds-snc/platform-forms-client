@@ -1,5 +1,6 @@
 import React, { ReactElement } from "react";
 import { themes, Theme } from "./themes";
+import { cn } from "@lib/utils";
 
 interface ButtonProps {
   type?: "button" | "submit" | "reset";
@@ -34,12 +35,12 @@ export const Button = ({
   dataTestId,
   shape = "rectangle",
   ...rest
-}: ButtonProps & JSX.IntrinsicElements["button"]) => {
+}: ButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   const baseTheme = shape === "circle" ? themes["baseCircle"] : themes["base"];
   return (
     <button
       onClick={onClick}
-      className={`${className || ""} ${themes[theme]} ${baseTheme}`}
+      className={cn(baseTheme, themes[theme], className)}
       id={id}
       disabled={disabled}
       aria-label={ariaLabel}
@@ -51,7 +52,10 @@ export const Button = ({
     >
       {icon && (
         <div
-          className={`${iconWrapperClassName || ""} ${theme === "icon" ? "" : "-ml-2 mr-2 w-8"}`}
+          className={cn(
+            iconWrapperClassName && iconWrapperClassName,
+            theme !== "icon" && "-ml-2 mr-2 w-8"
+          )}
         >
           {icon}
         </div>
