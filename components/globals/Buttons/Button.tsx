@@ -9,7 +9,6 @@ interface ButtonProps {
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   icon?: ReactElement;
   className?: string;
-  iconWrapperClassName?: string;
   disabled?: boolean;
   "aria-label"?: string;
   theme?: Theme;
@@ -26,7 +25,6 @@ export const Button = ({
   className,
   id,
   icon,
-  iconWrapperClassName,
   disabled = false,
   "aria-label": ariaLabel = undefined,
   theme = "primary",
@@ -50,16 +48,7 @@ export const Button = ({
       data-testid={dataTestId}
       {...rest}
     >
-      {icon && (
-        <div
-          className={cn(
-            iconWrapperClassName && iconWrapperClassName,
-            theme !== "icon" && "-ml-2 mr-2 w-8"
-          )}
-        >
-          {icon}
-        </div>
-      )}
+      {icon && <div className={cn(theme !== "icon" && "-ml-2 mr-2 w-8")}>{icon}</div>}
       {children}
     </button>
   );
