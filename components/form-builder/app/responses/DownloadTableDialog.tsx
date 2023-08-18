@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { useTranslation } from "next-i18next";
 import { useDialogRef, Dialog, LineItemEntries } from "@components/form-builder/app/shared";
-import { Button } from "@components/globals";
+import { Button, Alert } from "@components/globals";
 import { randomId } from "@lib/clientHelpers";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { logMessage } from "@lib/logger";
-import * as Alert from "@components/globals/Alert/Alert";
 import Link from "next/link";
 
 export interface DialogErrors {

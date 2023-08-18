@@ -447,4 +447,30 @@ describe("<Alert />", () => {
       cy.get("[data-testid='alert']").should("exist").should("have.attr", "role", "note");
     });
   });
+
+  describe("Alert id", () => {
+    it("Does not add an id to the alert by default", () => {
+      cy.mount(
+        <Alert.Success role="note">
+          <Alert.Body>Test body</Alert.Body>
+          <p>And a paragraph</p>
+          This text will not render
+        </Alert.Success>
+      );
+
+      cy.get("[data-testid='alert']").should("exist").should("not.have.attr", "id");
+    });
+
+    it("Adds an id to the alert", () => {
+      cy.mount(
+        <Alert.Success role="note" id="testId">
+          <Alert.Body>Test body</Alert.Body>
+          <p>And a paragraph</p>
+          This text will not render
+        </Alert.Success>
+      );
+
+      cy.get("[data-testid='alert']").should("exist").should("have.attr", "id", "testId");
+    });
+  });
 });

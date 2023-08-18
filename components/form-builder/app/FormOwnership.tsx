@@ -1,7 +1,6 @@
 import React, { ReactElement, useId, useState } from "react";
 import { useTranslation } from "next-i18next";
-import * as Alert from "@components/globals/Alert/Alert";
-import { ErrorStatus } from "@components/forms/Alert/Alert";
+import { Alert } from "@components/globals";
 import { logMessage } from "@lib/logger";
 import { Button } from "@components/globals";
 import Select from "react-select";
