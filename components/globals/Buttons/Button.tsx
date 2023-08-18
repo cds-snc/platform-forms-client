@@ -34,11 +34,15 @@ export const Button = ({
   shape = "rectangle",
   ...rest
 }: ButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
-  const baseTheme = shape === "circle" ? themes["baseCircle"] : themes["base"];
   return (
     <button
       onClick={onClick}
-      className={cn(baseTheme, themes[theme], className)}
+      className={cn(
+        themes["base"],
+        themes[theme],
+        className,
+        shape === "circle" && "rounded-[100px]"
+      )}
       id={id}
       disabled={disabled}
       aria-label={ariaLabel}
