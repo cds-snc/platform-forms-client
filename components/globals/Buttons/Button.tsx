@@ -19,11 +19,9 @@ interface ButtonProps {
 }
 
 export const Button = ({
-  type = "button",
   children,
   onClick,
   className,
-  id,
   icon,
   disabled = false,
   "aria-label": ariaLabel = undefined,
@@ -43,10 +41,8 @@ export const Button = ({
         className,
         shape === "circle" && "rounded-[100px]"
       )}
-      id={id}
       disabled={disabled}
       aria-label={ariaLabel}
-      type={type}
       tabIndex={tabIndex}
       ref={buttonRef}
       data-testid={dataTestId}
