@@ -11,6 +11,7 @@ const cookieName = "i18next";
 
 export function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
+  const locale = req.nextUrl.locale;
 
   // Content Security Policy needs to be first as it creates the NextResponse
   const { csp } = generateCSP();
@@ -44,15 +45,21 @@ export function middleware(req: NextRequest) {
 
   const i18nRegEx = new RegExp(`/((?!api|_next|.*\\..*).*)`);
 
-  if (i18nRegEx.test(pathname)) {
-    logMessage.debug(`Middleware - i18n supported page detected: : ${pathname}`);
+  if (i18nRegEx.test(pathname) && pathname !== "/" && !locale) {
+    logMessage.debug(
+      `Middleware - i18n supported page detected: : pathname = ${pathname} , detected locale = ${locale}`
+    );
     let lng;
     if (req.cookies.has(cookieName)) lng = acceptLanguage.get(req.cookies.get(cookieName)?.value);
     if (!lng) lng = acceptLanguage.get(req.headers.get("Accept-Language"));
     if (!lng) lng = fallbackLng;
 
     // Redirect to fallback language if lng in path is not present or supported
-    if (!languages.some((loc) => req.nextUrl.pathname.startsWith(`/${loc}`))) {
+    if (
+      !languages.some((loc) => loc === locale) &&
+      !languages.some((loc) => req.nextUrl.pathname.startsWith(`/${loc}`))
+    ) {
+      logMessage.debug(`Middleware - Redirecting to fallback language: : ${pathname}`);
       return NextResponse.redirect(new URL(`/${lng}${req.nextUrl.pathname}`, req.url));
     }
 
@@ -60,12 +67,12 @@ export function middleware(req: NextRequest) {
     if (req.headers.has("referer")) {
       const refererUrl = new URL(req.headers.get("referer") || "");
       const lngInReferer = languages.find((l) => refererUrl.pathname.startsWith(`/${l}`));
-
+      logMessage.debug(`Middleware - Referer detected: : ${pathname}`);
       if (lngInReferer) response.cookies.set(cookieName, lngInReferer);
     }
   }
 
-  logMessage.debug(`Set headers for CSP: : ${pathname}`);
+  logMessage.debug(`Middleware - Set headers for CSP: : ${pathname}`);
 
   return response;
 }

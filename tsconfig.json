@@ -19,8 +19,9 @@
     "paths": {
       "@lib/*": ["lib/*"],
       "@components/*": ["components/*"],
+      "@appComponents/*": ["app/_components/*"],
       "@formbuilder/*": ["components/form-builder/*"],
-      "@pages/*": ["pages/*"],
+      "@pages/*": ["_pages/*"],
       "@jestFixtures/*": ["__fixtures__/*"],
       "@jestUtils": ["__utils__"],
       "@i18n": ["app/i18n"],
