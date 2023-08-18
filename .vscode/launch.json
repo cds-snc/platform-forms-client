@@ -11,6 +11,18 @@
       "command": "yarn dev"
     },
     {
+      "type": "node",
+      "request": "launch",
+      "name": "Test Server Launch",
+      "skipFiles": [
+          "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/node_modules/next/dist/bin/next",
+      "runtimeArgs": [
+          "--inspect"
+      ]
+    },
+    {
       "name": "Next.js: Cypress server-side",
       "type": "node-terminal",
       "request": "launch",
