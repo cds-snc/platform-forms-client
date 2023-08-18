@@ -19,7 +19,6 @@
     "start:test": "yarn prisma:test && yarn initialize && APP_ENV=test next start",
     "dev:test": "prisma migrate reset -f --skip-seed && yarn prisma:test && yarn initialize && APP_ENV=test next dev",
     "build:test": "APP_ENV=test next build",
-    "prisma:test": "prisma migrate deploy && ts-node --compiler-options {\\\"module\\\":\\\"CommonJS\\\"} prisma/seeds/seed.ts --environment=test",
     "lint": "next lint",
     "lint:tailwindcss": "eslint -c .eslint-tailwindcss.js",
     "lint:report": "eslint --output-file eslint_report.json --format json . --ext .js,.jsx,.ts,.tsx",
