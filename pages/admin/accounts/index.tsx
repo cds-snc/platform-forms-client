@@ -15,7 +15,7 @@ import { getUsers } from "@lib/users";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 import { Dropdown } from "@components/admin/Users/Dropdown";
 import { ConfirmDeactivateModal } from "@components/admin/Users/ConfirmDeactivateModal";
-import { Button, themes, LinkButton } from "@components/globals";
+import { RoundedButton, Button, themes, LinkButton } from "@components/globals";
 import { DBUser } from "@lib/types/user-types";
 import { Privilege } from "@prisma/client";
 import { Card } from "@components/globals/card/Card";
@@ -155,31 +155,28 @@ const Users = ({
             aria-label={t("accountsFilterLabel")}
           >
             <li className="mr-2 py-2 pt-3 text-sm tablet:mr-4">
-              <Button
+              <RoundedButton
                 theme={isFilterAll() ? "primary" : "secondary"}
-                shape="circle"
                 onClick={() => updateAccountsFilter(AccountsFilterState.ALL)}
               >
                 {t("accountsFilter.all")}
-              </Button>
+              </RoundedButton>
             </li>
             <li className="mr-2 py-2 pt-3 text-sm tablet:mr-4">
-              <Button
+              <RoundedButton
                 theme={isFilterActive() ? "primary" : "secondary"}
-                shape="circle"
                 onClick={() => updateAccountsFilter(AccountsFilterState.ACTIVE)}
               >
                 {t("accountsFilter.active")}
-              </Button>
+              </RoundedButton>
             </li>
             <li className="mr-2 py-2 pt-3 text-sm tablet:mr-4">
-              <Button
+              <RoundedButton
                 theme={isFilterDeactivated() ? "primary" : "secondary"}
-                shape="circle"
                 onClick={() => updateAccountsFilter(AccountsFilterState.DEACTIVATED)}
               >
                 {t("accountsFilter.deactivated")}
-              </Button>
+              </RoundedButton>
             </li>
           </ul>
         </div>

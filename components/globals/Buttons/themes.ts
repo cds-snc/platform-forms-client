@@ -1,16 +1,14 @@
 export const themes = {
-  base: "rounded-lg py-2 px-5 border-2 border-solid inline-flex items-center active:top-0.5 focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:border-blue-active focus:text-white-default active:text-white-default active:bg-blue-active active:outline-[3px] active:outline-blue-focus active:outline-offset-2 active:bg-blue-focus disabled:cursor-not-allowed disabled:text-gray-dark disabled:bg-gray-light disabled:!border-none",
-  baseCircle:
-    "rounded-[100px] py-2 px-5 border-2 border-solid inline-flex items-center active:top-0.5 focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:border-blue-active focus:text-white-default active:text-white-default active:bg-blue-active active:outline-[3px] active:outline-blue-focus active:outline-offset-2 active:bg-blue-focus disabled:cursor-not-allowed disabled:text-gray-dark disabled:bg-gray-light disabled:!border-none",
-  htmlLink: "visited:text-white-default no-underline active:shadow-none focus:shadow-none",
+  base: "inline-flex items-center rounded-lg border-2 border-solid px-5 py-2 focus:border-blue-active focus:bg-blue-focus focus:text-white-default focus:outline focus:outline-[3px] focus:outline-offset-2 focus:outline-blue-focus active:top-0.5 active:bg-blue-active active:text-white-default active:outline-[3px] active:outline-offset-2 active:outline-blue-focus disabled:cursor-not-allowed disabled:!border-none disabled:bg-gray-light disabled:text-gray-dark",
+  htmlLink: "no-underline visited:text-white-default focus:shadow-none active:shadow-none",
   primary:
-    "bg-blue-default border-blue text-white-default hover:text-white-default hover:bg-blue-light hover:border-blue-light",
+    "border-blue bg-blue-default text-white-default hover:border-blue-light hover:bg-blue-light hover:text-white-default",
   secondary:
-    "bg-white-default text-blue-default visited:text-blue-default border-blue-default hover:text-white-default hover:bg-gray-600",
+    "border-blue-default bg-white-default text-blue-default visited:text-blue-default hover:bg-gray-600 hover:text-white-default",
   destructive:
-    "bg-red-destructive text-white-default border-red-destructive hover:bg-red-hover hover:border-red-hover",
-  link: "!p-0 !border-none text-blue-default underline bg-transparent hover:no-underline focus:!text-white-default",
-  icon: "!border-none bg-gray-selected hover:bg-gray-600 !rounded-full max-h-9 !p-1.5 ml-1.5",
+    "border-red-destructive bg-red-destructive text-white-default hover:border-red-hover hover:bg-red-hover",
+  link: "!border-none bg-transparent !p-0 text-blue-default underline hover:no-underline focus:!text-white-default",
+  icon: "ml-1.5 max-h-9 !rounded-full !border-none bg-gray-selected !p-1.5 hover:bg-gray-600",
 } as const;
 
 export type Theme = keyof typeof themes;
