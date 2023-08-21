@@ -7,7 +7,7 @@ import { Dialog, useDialogRef } from "@components/form-builder/app/shared";
 import { updateActiveStatus } from "pages/admin/accounts";
 import { useRefresh } from "@lib/hooks";
 import Loader from "@components/globals/Loader";
-import * as Alert from "@components/globals/Alert/Alert";
+import { Alert } from "@components/globals";
 import { DBUser } from "@lib/types/user-types";
 
 const fetcher = async (url: string) => {

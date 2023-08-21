@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.4.0](https://github.com/cds-snc/platform-forms-client/compare/v3.3.0...v3.4.0) (2023-08-21)
+
+
+### Features
+
+* adding new gtm tag for unlocking publishing (request) ([#2539](https://github.com/cds-snc/platform-forms-client/issues/2539)) ([77c77ab](https://github.com/cds-snc/platform-forms-client/commit/77c77ab3db89c476f9fc005c93694253739b9c8a))
+* Protected B updates ([#2374](https://github.com/cds-snc/platform-forms-client/issues/2374)) ([ed68e9f](https://github.com/cds-snc/platform-forms-client/commit/ed68e9ff8a5ef4a8c9ef5ac932f0874cdf5cce57))
+
+
+### Bug Fixes
+
+* Update account dropdown ([b0886ed](https://github.com/cds-snc/platform-forms-client/commit/b0886edee667b362292787431fae7d1f42880c77))
+
+
+### Miscellaneous Chores
+
+* add user email to account enable/disable Slack notifications ([#2558](https://github.com/cds-snc/platform-forms-client/issues/2558)) ([a950e0b](https://github.com/cds-snc/platform-forms-client/commit/a950e0b54ebde11140546b10651f12fc4cf805a3))
+* added more context to NextAuth error logs ([#2562](https://github.com/cds-snc/platform-forms-client/issues/2562)) ([360b918](https://github.com/cds-snc/platform-forms-client/commit/360b918ded5138d1c5a8c42032cb5898a725420b))
+* cleanup for left navigation ([#2556](https://github.com/cds-snc/platform-forms-client/issues/2556)) ([b783172](https://github.com/cds-snc/platform-forms-client/commit/b783172d9f374c2474c8dedde24cfce94933e421))
+* Convert Attention components to new Alert ([#2547](https://github.com/cds-snc/platform-forms-client/issues/2547)) ([40efe5c](https://github.com/cds-snc/platform-forms-client/commit/40efe5c9c870a777d686b1d3cada3c83feb5117b))
+* Convert forms/Alert components to new Alert ([#2557](https://github.com/cds-snc/platform-forms-client/issues/2557)) ([e821f39](https://github.com/cds-snc/platform-forms-client/commit/e821f39a267374ef948f935acb1bd588f7cd8b20))
+* Convert globals/Alert components to new Alert ([#2552](https://github.com/cds-snc/platform-forms-client/issues/2552)) ([bc53f52](https://github.com/cds-snc/platform-forms-client/commit/bc53f52de7bcfbdf836e0ba7567687c9ff215088))
+* simplify Alert imports ([#2560](https://github.com/cds-snc/platform-forms-client/issues/2560)) ([5cf7b24](https://github.com/cds-snc/platform-forms-client/commit/5cf7b24c3d51d6d433bce1b51ac66b5ae0781b7a))
+* update global button ([#2561](https://github.com/cds-snc/platform-forms-client/issues/2561)) ([d40f264](https://github.com/cds-snc/platform-forms-client/commit/d40f264058e75c7a58df81fa15a958acc2fe27cc))
+* Updates left nav to be more semantic ([#2553](https://github.com/cds-snc/platform-forms-client/issues/2553)) ([5907c6f](https://github.com/cds-snc/platform-forms-client/commit/5907c6fb7ed7481bb87f1259d6c2de860f1fb717))
+
 ## [3.3.0](https://github.com/cds-snc/platform-forms-client/compare/v3.2.0...v3.3.0) (2023-08-16)
 
 

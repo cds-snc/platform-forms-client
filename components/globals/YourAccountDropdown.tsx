@@ -51,7 +51,7 @@ export const YourAccountDropdown = ({ isAuthenticated }: YourAccountDropdownProp
                 className="flex cursor-pointer rounded border-1 border-black px-3 py-1 hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
                 data-testid="yourAccountDropdown"
               >
-                <span className="mr-1 inline-block">{t("Your account")}</span>
+                <span className="mr-1 inline-block">{t("yourAccount")}</span>
                 <ChevronDown className="mt-[2px]" />
               </div>
             </DropdownMenu.Trigger>
@@ -63,7 +63,7 @@ export const YourAccountDropdown = ({ isAuthenticated }: YourAccountDropdownProp
               >
                 <DropdownMenuItem href={`/${i18n.language}/profile`} text={t("Profile")} />
 
-                {ability?.can("view", "Flag") && (
+                {(ability?.can("view", "Flag") || ability?.can("view", "User", "Privilege")) && (
                   <DropdownMenuItem href="/admin" text={t("adminNav.administration")} />
                 )}
                 <DropdownMenu.Separator className="mb-2 border-b pt-2" />

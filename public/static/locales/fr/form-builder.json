@@ -404,7 +404,10 @@
   "publishingRemovesTestResponses": "La publication supprime les réponses test.",
   "publishingRemovesTestResponsesDescription": "Toutes les réponses antérieures seront supprimées du système.",
   "publishYourForm": "Publier votre formulaire",
-  "publishYourFormInstructions": "Vous devez franchir les étapes suivantes avant de publier votre formulaire. ",
+  "publishYourFormInstructions": {
+    "text1": "Veuillez franchir les étapes suivantes avant de publier votre formulaire",
+    "text2": " :"
+  },
   "question": "Question",
   "questions": "Questions",
   "questionSet": {
@@ -457,6 +460,8 @@
   "settingsResponseDelivery": {
     "selectClassification": "Sélectionnez la classification des données des réponses de votre formulaire",
     "beforePublishMessage": "Vous pouvez modifier ces paramètres à tout moment avant de publier le formulaire.",
+    "protectedBMessage": "Les réponses classifiées PROTÉGÉ B doivent être téléchargées de Formulaires GC.",
+    "settingsMessage": "Pour modifier ces paramètres, sélectionnez la classification des données de vos réponses au formulaire.",
     "title": "Sélectionnez une option de livraison des réponses",
     "vaultOption": "Télécharger les réponses de Formulaires GC",
     "vaultOptionHint": {
