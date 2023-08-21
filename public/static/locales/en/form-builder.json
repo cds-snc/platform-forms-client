@@ -404,7 +404,10 @@
   "publishingRemovesTestResponses": "Publishing removes test responses.",
   "publishingRemovesTestResponsesDescription": "Any prior responses will be removed from the system.",
   "publishYourForm": "Publish your form",
-  "publishYourFormInstructions": "You need the following items completed before you publish your form.",
+  "publishYourFormInstructions": {
+    "text1": "Complete the following items before you publish your",
+    "text2": "form:"
+  },
   "question": "Question",
   "questions": "Questions",
   "questionSet": {
@@ -456,6 +459,8 @@
   "settingsResponseDelivery": {
     "selectClassification": "Select the data classification of your form responses",
     "beforePublishMessage": "You can change these settings anytime before publishing.",
+    "protectedBMessage": "PROTECTED B responses must be downloaded from GC Forms.",
+    "settingsMessage": "To change these settings, select the data classification of your form responses.",
     "title": "Select a response delivery option",
     "vaultOption": "Download responses from GC Forms",
     "vaultOptionHint": {
@@ -614,7 +619,7 @@
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
   "unnamedForm": "Unnamed form file",
-  "formName": "Form name", 
+  "formName": "Form name",
   "responsesNavLabel": "Responses",
   "nagware": {
     "restrictedDownloadAfter35Days": "Downloading will be restricted if unconfirmed responses are older than 35 days.",

@@ -13,6 +13,7 @@ import { useTemplateApi } from "../hooks";
 import { useTemplateStore } from "../store";
 import { completeEmailAddressRegex } from "../util";
 import { toast } from "./shared/Toast";
+import { ResponseDeliveryHelpButton } from "@formbuilder/app/shared";
 
 enum DeliveryOption {
   vault = "vault",
@@ -22,6 +23,7 @@ enum DeliveryOption {
 const classificationOptions = [
   { value: "Unclassified", en: "Unclassified", fr: "Non classifié" },
   { value: "Protected A", en: "Protected A", fr: "Protégé A" },
+  { value: "Protected B", en: "Protected B", fr: "Protégé B" },
 ] as const;
 
 type Classification = (typeof classificationOptions)[number]["value"];
@@ -79,8 +81,10 @@ export const SetResponseDelivery = () => {
   );
 
   const [classification, setClassification] = useState<Classification>(
-    securityAttribute as Classification
+    securityAttribute ? (securityAttribute as Classification) : "Protected A"
   );
+
+  const protectedBSelected = classification === "Protected B";
 
   const [isInvalidEmailError, setIsInvalidEmailError] = useState(false);
 
@@ -217,6 +221,9 @@ export const SetResponseDelivery = () => {
   const responsesLink = `/${i18n.language}/form-builder/responses/${id}`;
 
   const handleUpdateClassification = useCallback((value: Classification) => {
+    if (value === "Protected B") {
+      setDeliveryOption(DeliveryOption.vault);
+    }
     setClassification(value);
   }, []);
 
@@ -229,9 +236,11 @@ export const SetResponseDelivery = () => {
             <p className="block mb-4 text-xl font-bold">
               {t("settingsResponseDelivery.selectClassification")}
             </p>
+
             <p className="inline-block mb-5 p-3 bg-purple-200 font-bold text-sm">
               {t("settingsResponseDelivery.beforePublishMessage")}
             </p>
+
             <select
               disabled={isPublished}
               id="classification-select"
@@ -253,6 +262,15 @@ export const SetResponseDelivery = () => {
             <div className="block mb-4 text-xl font-bold">
               {t("settingsResponseDelivery.title")}
             </div>
+            {protectedBSelected ? (
+              <p className="inline-block mb-5 p-3 bg-purple-200 font-bold text-sm">
+                {t("settingsResponseDelivery.protectedBMessage")}
+              </p>
+            ) : (
+              <p className="inline-block mb-5 p-3 bg-purple-200 font-bold text-sm">
+                {t("settingsResponseDelivery.settingsMessage")}
+              </p>
+            )}
             <Radio
               disabled={isPublished}
               id={`delivery-option-${DeliveryOption.vault}`}
@@ -268,7 +286,7 @@ export const SetResponseDelivery = () => {
               </span>
             </Radio>
             <Radio
-              disabled={isPublished}
+              disabled={isPublished || protectedBSelected}
               id={`delivery-option-${DeliveryOption.email}`}
               checked={deliveryOption === DeliveryOption.email}
               name="response-delivery"
@@ -294,8 +312,7 @@ export const SetResponseDelivery = () => {
           <Button disabled={!isValid || isPublished} theme="secondary" onClick={saveDeliveryOption}>
             {t("settingsResponseDelivery.saveButton")}
           </Button>
-          {/* #1800 -- turn on when Protected B */}
-          {/* <ResponseDeliveryHelpButton /> */}
+          <ResponseDeliveryHelpButton />
         </div>
       )}
     </>

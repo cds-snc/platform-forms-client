@@ -11,6 +11,6 @@ Vos responsabilités relatives à l’utilisation de Formulaires GC sont décrit
 - Protéger et traiter les renseignements personnels et sensibles : 
     - Obtenir les approbations nécessaires pour collecter des renseignements personnels.
     - Gérer les réponses aux formulaires conformément au calendrier de conservation et d’élimination de votre ministère ou organisme. 
-    - Utiliser Formulaires GC pour la collecte de données classées jusqu’à **Protégé A**. 
+    - Utiliser Formulaires GC pour la collecte de données classées jusqu’à Protégé B. 
 
 Pour toute question en lien avec les présentes conditions d’utilisation, veuillez [nous contacter](/fr/form-builder/support/contactus).

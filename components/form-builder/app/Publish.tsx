@@ -26,13 +26,16 @@ export const Publish = () => {
   const [error, setError] = useState(false);
   const { i18n } = useTranslation("common");
 
-  const { id, setId, getSchema, getName, getDeliveryOption } = useTemplateStore((s) => ({
-    id: s.id,
-    setId: s.setId,
-    getSchema: s.getSchema,
-    getName: s.getName,
-    getDeliveryOption: s.getDeliveryOption,
-  }));
+  const { id, setId, getSchema, getName, getDeliveryOption, securityAttribute } = useTemplateStore(
+    (s) => ({
+      id: s.id,
+      setId: s.setId,
+      getSchema: s.getSchema,
+      getName: s.getName,
+      getDeliveryOption: s.getDeliveryOption,
+      securityAttribute: s.securityAttribute,
+    })
+  );
 
   const Icon = ({ checked }: { checked: boolean }) => {
     return checked ? (
@@ -91,7 +94,9 @@ export const Publish = () => {
       <div className="flex flex-wrap justify-between laptop:flex-nowrap">
         <div className="mx-5 min-w-fit grow rounded-lg border-1 p-5">
           <h1 className="mb-0 border-0">{t("publishYourForm")}</h1>
-          <p className="mb-0">{t("publishYourFormInstructions")}</p>
+          <p className="mb-0 text-lg">{`${t(
+            "publishYourFormInstructions.text1"
+          )} ${securityAttribute} ${t("publishYourFormInstructions.text2")}`}</p>
           {!userCanPublish && (
             <Alert.Info className="my-5">
               <Alert.IconWrapper className="mr-7">
@@ -157,17 +162,19 @@ export const Publish = () => {
               <InfoCard title={t("whatYouNeedToKnow")}>
                 <ul className="list-none p-0">
                   <li className="mb-5 bg-gray-50 p-1.5">
-                    <h3 className="gc-h4 mb-1 pb-0">{t("publishingDisablesEditing")}</h3>
+                    <h3 className="gc-h4 mb-1 pb-0 text-lg">{t("publishingDisablesEditing")}</h3>
                     <p className="text-sm">{t("publishingDisablesEditingDescription")}</p>
                   </li>
                   <li className="mb-5 bg-gray-50 p-1.5">
-                    <h3 className="gc-h4 mb-1 pb-0">{t("publishingLocksSettings")}</h3>
+                    <h3 className="gc-h4 mb-1 pb-0 text-lg">{t("publishingLocksSettings")}</h3>
                     <p className="text-sm">{t("publishingLocksSettingsDescription")}</p>
                   </li>
                   {isVaultDelivery(getDeliveryOption()) && (
                     <>
                       <li className="mb-5 bg-gray-50 p-1.5">
-                        <h3 className="gc-h4 mb-1 pb-0">{t("publishingRemovesTestResponses")}</h3>
+                        <h3 className="gc-h4 mb-1 pb-0 text-lg">
+                          {t("publishingRemovesTestResponses")}
+                        </h3>
                         <p className="text-sm">{t("publishingRemovesTestResponsesDescription")}</p>
                       </li>
                     </>
