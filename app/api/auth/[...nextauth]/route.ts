@@ -15,7 +15,7 @@ if (
 )
   throw new Error("Missing Cognito Credentials");
 
-async function handler(req: NextRequest) {
+async function handler(req: NextRequest, context: never) {
   // Listens for the sign-in action for Cognito to initiate the sign in process
 
   logMessage.debug(
@@ -84,6 +84,6 @@ async function handler(req: NextRequest) {
     }
   }
 
-  return NextAuth({ ...authOptions });
+  return NextAuth(req, context, authOptions);
 }
 export { handler as GET, handler as POST };
