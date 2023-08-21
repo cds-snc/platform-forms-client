@@ -81,7 +81,7 @@ export const SetResponseDelivery = () => {
   );
 
   const [classification, setClassification] = useState<Classification>(
-    securityAttribute as Classification
+    securityAttribute ? (securityAttribute as Classification) : "Protected A"
   );
 
   const protectedBSelected = classification === "Protected B";
