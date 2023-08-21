@@ -1,63 +1,54 @@
 import React, { ReactElement } from "react";
 import { themes, Theme } from "./themes";
+import { cn } from "@lib/utils";
 
-export const Button = ({
-  type = "button",
-  children,
-  onClick,
-  className,
-  id,
-  icon,
-  iconWrapperClassName,
-  disabled = false,
-  "aria-label": ariaLabel = undefined,
-  theme = "primary",
-  tabIndex = 0,
-  buttonRef,
-  dataTestId,
-  dataAttrName,
-  dataAttrValue,
-  shape = "rectangle",
-}: {
+interface ButtonProps {
   type?: "button" | "submit" | "reset";
   children?: JSX.Element | string;
   id?: string;
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   icon?: ReactElement;
   className?: string;
-  iconWrapperClassName?: string;
   disabled?: boolean;
   "aria-label"?: string;
   theme?: Theme;
   tabIndex?: number;
   buttonRef?: (el: HTMLButtonElement) => void;
   dataTestId?: string;
-  dataAttrName?: string;
-  dataAttrValue?: string;
-  shape?: "rectangle" | "circle";
-}) => {
-  const baseTheme = shape === "circle" ? themes["baseCircle"] : themes["base"];
+}
+
+export const Button = ({
+  type = "button",
+  children,
+  onClick,
+  className,
+  icon,
+  disabled = false,
+  "aria-label": ariaLabel = undefined,
+  theme = "primary",
+  tabIndex = 0,
+  buttonRef,
+  dataTestId,
+  ...rest
+}: ButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   return (
     <button
+      type={type}
       onClick={onClick}
-      className={`${className || ""} ${themes[theme]} ${baseTheme}`}
-      id={id}
+      className={cn(themes["base"], themes[theme], className)}
       disabled={disabled}
       aria-label={ariaLabel}
-      type={type}
       tabIndex={tabIndex}
       ref={buttonRef}
       data-testid={dataTestId}
-      {...(dataAttrName && dataAttrValue ? { [`data-${dataAttrName}`]: dataAttrValue } : "")}
+      {...rest}
     >
-      {icon && (
-        <div
-          className={`${iconWrapperClassName || ""} ${theme === "icon" ? "" : "w-8 -ml-2 mr-2"}`}
-        >
-          {icon}
-        </div>
-      )}
+      {icon && <div className={cn(theme !== "icon" && "-ml-2 mr-2 w-8")}>{icon}</div>}
       {children}
     </button>
   );
 };
+
+export const RoundedButton = ({ className, ...props }: ButtonProps) => (
+  <Button {...props} className={cn(className, "rounded-[100px]")} />
+);
