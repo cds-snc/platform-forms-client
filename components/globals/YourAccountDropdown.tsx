@@ -30,7 +30,7 @@ export const YourAccountDropdown = ({ isAuthenticated }: YourAccountDropdownProp
     onClick?: () => void;
   }) => {
     return (
-      <DropdownMenu.Item onClick={onClick}>
+      <DropdownMenu.Item onClick={onClick} asChild>
         <Link
           className="block rounded-md p-2 text-sm text-black !no-underline !shadow-none outline-none visited:text-black hover:bg-gray-600 hover:text-white focus:bg-gray-600 focus:text-white-default"
           href={href}
