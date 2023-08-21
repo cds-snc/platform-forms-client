@@ -20,7 +20,7 @@ export const LoggedOutTab = ({ tabName }: LoggedOutTabProps) => {
   const signInLink = `/${i18n.language}/auth/login`;
   const createAccountLink = `/${i18n.language}/signup/register`;
 
-  if (status === "authenticated") {
+  if (status === "authenticated" || status === "loading") {
     return null;
   }
 
