@@ -4,7 +4,7 @@ import Head from "next/head";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { getServerSession } from "next-auth/next";
 import { useTranslation } from "next-i18next";
-import { authOptions } from "@pages/api/auth/[...nextauth]";
+import { authOptions } from "@app/api/auth/authConfig";
 
 import { ErrorPanel } from "@components/globals";
 

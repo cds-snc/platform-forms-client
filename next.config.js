@@ -19,10 +19,6 @@ const securityHeaders = [
     key: "X-Content-Type-Options",
     value: "nosniff",
   },
-  {
-    key: "Permissions-Policy",
-    value: "browsing-topics=()",
-  },
 ];
 
 module.exports = {
@@ -50,6 +46,7 @@ module.exports = {
       test: /VERSION$/,
       type: "asset/source",
     });
+
     return config;
   },
 

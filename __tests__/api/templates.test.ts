@@ -5,8 +5,8 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { createMocks, RequestMethod } from "node-mocks-http";
 import Redis from "ioredis-mock";
-import templates from "@pages/api/templates/[formID]";
-import templatesRoot from "@pages/api/templates/index";
+import templates from "pages/api/templates/[formID]";
+import templatesRoot from "pages/api/templates/index";
 import { getServerSession } from "next-auth/next";
 import validFormTemplate from "../../__fixtures__/validFormTemplate.json";
 import validFormTemplateWithHTMLInDynamicRow from "../../__fixtures__/validFormTemplateWithHTMLInDynamicRow.json";

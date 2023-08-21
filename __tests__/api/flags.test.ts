@@ -3,10 +3,10 @@
  */
 import { createMocks } from "node-mocks-http";
 import { getServerSession } from "next-auth/next";
-import enable from "@pages/api/flags/[key]/enable";
-import disable from "@pages/api/flags/[key]/disable";
-import check from "@pages/api/flags/[key]/check";
-import checkAllFlags from "@pages/api/flags";
+import enable from "pages/api/flags/[key]/enable";
+import disable from "pages/api/flags/[key]/disable";
+import check from "pages/api/flags/[key]/check";
+import checkAllFlags from "pages/api/flags";
 import { Base, ViewApplicationSettings, ManageApplicationSettings } from "__utils__/permissions";
 import Redis from "ioredis-mock";
 import { logEvent } from "@lib/auditLogs";

@@ -4,7 +4,7 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import Redis from "ioredis-mock";
 import { createMocks } from "node-mocks-http";
-import temporary from "@pages/api/token/temporary";
+import temporary from "pages/api/token/temporary";
 import jwt, { Secret } from "jsonwebtoken";
 import { prismaMock } from "@jestUtils";
 

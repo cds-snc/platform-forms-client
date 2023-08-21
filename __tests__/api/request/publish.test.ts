@@ -3,7 +3,7 @@
  */
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { createMocks, RequestMethod } from "node-mocks-http";
-import publish from "@pages/api/request/publish";
+import publish from "pages/api/request/publish";
 import { getServerSession } from "next-auth/next";
 import { Session } from "next-auth";
 

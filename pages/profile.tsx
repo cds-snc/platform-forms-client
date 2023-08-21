@@ -3,7 +3,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
 
-import { NextPageWithLayout } from "@pages/_app";
+import { NextPageWithLayout } from "pages/_app";
 import {
   requireAuthentication,
   retrievePoolOfSecurityQuestions,

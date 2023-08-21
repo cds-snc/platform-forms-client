@@ -4,7 +4,7 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { createMocks, RequestMethod } from "node-mocks-http";
 import { getServerSession } from "next-auth/next";
-import download from "@pages/api/id/[form]/[submission]/download";
+import download from "pages/api/id/[form]/[submission]/download";
 import { Session } from "next-auth";
 import { Base, mockUserPrivileges } from "__utils__/permissions";
 import { prismaMock } from "@jestUtils";

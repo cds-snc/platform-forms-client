@@ -2,8 +2,8 @@
  * @jest-environment node
  */
 import { createMocks, RequestMethod } from "node-mocks-http";
-import settings from "@pages/api/settings/[settingId]";
-import settingsRoot from "@pages/api/settings/index";
+import settings from "pages/api/settings/[settingId]";
+import settingsRoot from "pages/api/settings/index";
 import { getServerSession } from "next-auth/next";
 import {
   getAllAppSettings,

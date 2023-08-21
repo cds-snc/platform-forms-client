@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import { requireAuthentication } from "@lib/auth";
-import { NextPageWithLayout } from "@pages/_app";
+import { NextPageWithLayout } from "pages/_app";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";

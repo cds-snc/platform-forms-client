@@ -10,7 +10,7 @@ import { getProperty, getRenderedForm } from "@lib/formBuilder";
 import { useRouter } from "next/router";
 import { PublicFormRecord } from "@lib/types";
 import { GetServerSideProps } from "next";
-import { NextPageWithLayout } from "@pages/_app";
+import { NextPageWithLayout } from "pages/_app";
 
 import FormDisplayLayout from "@components/globals/layouts/FormDisplayLayout";
 

@@ -5,7 +5,7 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { createMocks, RequestMethod } from "node-mocks-http";
 import { getServerSession } from "next-auth/next";
-import retrieve from "@pages/api/id/[form]/bearer";
+import retrieve from "pages/api/id/[form]/bearer";
 import { Base, ManageForms, mockUserPrivileges } from "__utils__/permissions";
 import jwt from "jsonwebtoken";
 import { prismaMock } from "@jestUtils";

@@ -3,7 +3,7 @@
  */
 
 import { createMocks } from "node-mocks-http";
-import retrieval from "@pages/api/id/[form]/retrieval";
+import retrieval from "pages/api/id/[form]/retrieval";
 import { mockClient } from "aws-sdk-client-mock";
 import { DynamoDBDocumentClient, QueryCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import { prismaMock } from "@jestUtils";

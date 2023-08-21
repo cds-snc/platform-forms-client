@@ -6,7 +6,7 @@
 import { createMocks } from "node-mocks-http";
 import Redis from "ioredis-mock";
 import { getServerSession } from "next-auth/next";
-import users from "@pages/api/users";
+import users from "pages/api/users";
 import { prismaMock } from "@jestUtils";
 import { Prisma } from "@prisma/client";
 import { Session } from "next-auth";

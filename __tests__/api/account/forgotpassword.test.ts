@@ -10,7 +10,7 @@ import {
   CognitoIdentityProviderClient,
   ForgotPasswordCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
-import forgotpassword from "@pages/api/account/forgotpassword";
+import forgotpassword from "pages/api/account/forgotpassword";
 import { logEvent } from "@lib/auditLogs";
 
 const mockGetCSRFToken = jest.mocked(getCsrfToken, { shallow: true });

@@ -4,19 +4,19 @@ import Fip from "@appComponents/globals/Fip";
 
 export default async function Layout({
   children,
-  params: { lang },
+  params: { locale },
 }: {
   children: React.ReactNode;
-  params: { lang: string };
+  params: { locale: string };
 }) {
   return (
     <>
-      <SkipLink lang={lang} />
+      <SkipLink locale={locale} />
       <header>
-        <Fip lang={lang} showLanguageToggle={false} showLogin={false} />
+        <Fip locale={locale} showLanguageToggle={false} showLogin={false} />
       </header>
       {children}
-      <Footer lang={lang} />
+      <Footer locale={locale} />
     </>
   );
 }

@@ -8,7 +8,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Link from "next/link";
 import Head from "next/head";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@pages/api/auth/[...nextauth]";
+import { authOptions } from "@app/api/auth/authConfig";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import * as Yup from "yup";
 import { ErrorStatus } from "@components/forms/Alert/Alert";

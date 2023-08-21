@@ -8,7 +8,7 @@ import { getAllTemplates } from "@lib/templates";
 import { requireAuthentication } from "@lib/auth";
 import { checkPrivileges } from "@lib/privileges";
 
-import { NextPageWithLayout } from "@pages/_app";
+import { NextPageWithLayout } from "pages/_app";
 import { CardGrid } from "@components/myforms/CardGrid/CardGrid";
 import { TabPanel } from "@components/myforms/Tabs/TabPanel";
 import { LeftNavigation } from "@components/myforms/LeftNav/LeftNavigation";

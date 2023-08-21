@@ -4,7 +4,7 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { createMocks, RequestMethod } from "node-mocks-http";
 import Redis from "ioredis-mock";
-import overdue from "@pages/api/account/submissions/overdue";
+import overdue from "pages/api/account/submissions/overdue";
 import { getServerSession } from "next-auth/next";
 import { Session } from "next-auth";
 import { prismaMock } from "@jestUtils";

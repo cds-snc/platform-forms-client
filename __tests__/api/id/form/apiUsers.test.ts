@@ -6,7 +6,7 @@
 
 import { createMocks, RequestMethod } from "node-mocks-http";
 import { getServerSession } from "next-auth/next";
-import apiUsers from "@pages/api/id/[form]/apiusers";
+import apiUsers from "pages/api/id/[form]/apiusers";
 import { prismaMock } from "@jestUtils";
 import { Prisma } from "@prisma/client";
 import { Session } from "next-auth";

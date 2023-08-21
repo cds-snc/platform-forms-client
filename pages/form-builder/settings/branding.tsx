@@ -3,7 +3,7 @@ import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetServerSideProps } from "next";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@pages/api/auth/[...nextauth]";
+import { authOptions } from "@app/api/auth/authConfig";
 
 import { NextPageWithLayout } from "../../_app";
 import { PageProps } from "@lib/types";

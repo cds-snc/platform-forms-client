@@ -3,7 +3,7 @@
  */
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { createMocks, RequestMethod } from "node-mocks-http";
-import report from "@pages/api/id/[form]/submission/report";
+import report from "pages/api/id/[form]/submission/report";
 import { getServerSession } from "next-auth/next";
 import { Session } from "next-auth";
 import { mockClient } from "aws-sdk-client-mock";

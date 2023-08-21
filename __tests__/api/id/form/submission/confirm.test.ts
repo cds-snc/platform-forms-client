@@ -3,7 +3,7 @@
  */
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { createMocks, RequestMethod } from "node-mocks-http";
-import confirm from "@pages/api/id/[form]/submission/confirm";
+import confirm from "pages/api/id/[form]/submission/confirm";
 import { getServerSession } from "next-auth/next";
 import { Session } from "next-auth";
 import { mockClient } from "aws-sdk-client-mock";

@@ -21,7 +21,7 @@ import { renderToStaticNodeStream } from "react-dom/server";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { getFullTemplateByID } from "@lib/templates";
 import HTMLDownloadFile from "@components/myforms/HTMLDownload";
-import BaseApp from "@pages/_app";
+import BaseApp from "pages/_app";
 import { Router } from "next/router";
 import { connectToDynamo } from "@lib/integration/dynamodbConnector";
 import { logEvent } from "@lib/auditLogs";

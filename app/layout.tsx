@@ -1,7 +1,7 @@
 import { dir } from "i18next";
 import { languages } from "./i18n/settings";
 import "react-app-polyfill/stable";
-import "../../styles/app.scss";
+import "../styles/app.scss";
 import { Metadata } from "next";
 import { logMessage } from "@lib/logger";
 

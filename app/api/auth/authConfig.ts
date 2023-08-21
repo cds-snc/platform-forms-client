@@ -1,11 +1,9 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import {
   Validate2FAVerificationCodeResultStatus,
-  begin2FAAuthentication,
-  initiateSignIn,
-  userHasSecurityQuestions,
   validate2FAVerificationCode,
+  userHasSecurityQuestions,
 } from "@lib/auth/";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { logMessage } from "@lib/logger";
@@ -14,16 +12,7 @@ import { prisma } from "@lib/integration/prismaConnector";
 import { acceptableUseCheck, removeAcceptableUse } from "@lib/cache/acceptableUseCache";
 import { getPrivilegeRulesForUser } from "@lib/privileges";
 import { logEvent } from "@lib/auditLogs";
-import type { NextApiRequest, NextApiResponse } from "next";
 import { activeStatusCheck, activeStatusUpdate } from "@lib/cache/userActiveStatus";
-
-if (
-  (!process.env.COGNITO_APP_CLIENT_ID ||
-    !process.env.COGNITO_REGION ||
-    !process.env.COGNITO_USER_POOL_ID) &&
-  process.env.APP_ENV !== "test"
-)
-  throw new Error("Missing Cognito Credentials");
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -92,8 +81,8 @@ export const authOptions: NextAuthOptions = {
 
   debug: process.env.NODE_ENV !== "production",
   logger: {
-    error(code, metadata) {
-      logMessage.error(code, metadata);
+    error(code) {
+      logMessage.error(code);
     },
     warn(code) {
       logMessage.warn(code);
@@ -224,60 +213,3 @@ const checkUserActiveStatus = async (userID: string): Promise<boolean> => {
 
   return user?.active ?? false;
 };
-
-export default async function auth(req: NextApiRequest, res: NextApiResponse) {
-  // Listens for the sign-in action for Cognito to initiate the sign in process
-  if (
-    Array.isArray(req.query.nextauth) &&
-    req.query.nextauth?.includes("signin") &&
-    req.query.nextauth?.includes("cognito")
-  ) {
-    const { username, password } = req.body;
-
-    if (!username || !password)
-      return res.status(400).json({ status: "error", error: "Missing username or password" });
-    try {
-      if (process.env.APP_ENV === "test") {
-        const authenticationFlowToken = await begin2FAAuthentication({
-          email: username,
-          token: "testCognitoToken",
-        });
-        return res.status(200).json({
-          status: "success",
-          challengeState: "MFA",
-          authenticationFlowToken: authenticationFlowToken,
-        });
-      }
-
-      const cognitoToken = await initiateSignIn({
-        username: username,
-        password: password,
-      });
-
-      if (cognitoToken) {
-        const authenticationFlowToken = await begin2FAAuthentication(cognitoToken);
-        return res.status(200).json({
-          status: "success",
-          challengeState: "MFA",
-          authenticationFlowToken: authenticationFlowToken,
-        });
-      } else {
-        return res.status(400).json({
-          status: "error",
-          error: "Cognito authentication failed",
-          reason: "Missing Cognito token",
-        });
-      }
-    } catch (error) {
-      return res.status(401).json({
-        status: "error",
-        error: "Cognito authentication failed",
-        reason: (error as Error).message,
-      });
-    }
-  }
-
-  // Runs the NextAuth.js flow
-
-  return NextAuth(req, res, authOptions);
-}

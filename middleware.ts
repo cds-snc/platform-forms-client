@@ -14,10 +14,10 @@ export function middleware(req: NextRequest) {
   const locale = req.nextUrl.locale;
 
   // Content Security Policy needs to be first as it creates the NextResponse
-  const { csp } = generateCSP();
+  //const { csp } = generateCSP();
   const requestHeaders = new Headers(req.headers);
   // Set the CSP header so that `app-render` can read it and generate tags with the nonce
-  requestHeaders.set("content-security-policy", csp);
+  //requestHeaders.set("content-security-policy", csp);
 
   const response = NextResponse.next({
     request: {
@@ -25,7 +25,7 @@ export function middleware(req: NextRequest) {
     },
   });
 
-  response.headers.set("content-security-policy", csp);
+  //response.headers.set("content-security-policy", csp);
 
   /************************
    * Redirects
@@ -34,7 +34,6 @@ export function middleware(req: NextRequest) {
   // Making sure we do not create an infinite ("redirect") loop when trying to load the logo on the unsupported browser page
   const imgPathRegEx = new RegExp(`/(img)/*`);
   if (imgPathRegEx.test(pathname)) {
-    logMessage.debug(`Middleware - /img path detected: ${pathname}`);
     const { browser } = userAgent(req);
     if (browser.name?.toLocaleLowerCase() === "ie") {
       return NextResponse.rewrite(`${req.nextUrl.origin}/unsupported-browser.html`);
@@ -71,8 +70,6 @@ export function middleware(req: NextRequest) {
       if (lngInReferer) response.cookies.set(cookieName, lngInReferer);
     }
   }
-
-  logMessage.debug(`Middleware - Set headers for CSP: : ${pathname}`);
 
   return response;
 }

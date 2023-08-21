@@ -1,7 +1,7 @@
-import React from "react";
-import { useSession } from "next-auth/react";
+"use client";
+import { SessionProvider, useSession } from "next-auth/react";
 import LanguageToggle from "./LanguageToggle";
-import Menu from "@components/auth/LoginMenu";
+import Menu from "@appComponents/auth/LoginMenu";
 import { PublicFormRecord } from "@lib/types";
 import Brand from "./Brand";
 
@@ -13,21 +13,22 @@ const Fip = ({
   formRecord?: PublicFormRecord;
   showLogin?: boolean;
   showLanguageToggle?: boolean;
+  locale: string;
 }) => {
   const brand = formRecord?.form ? formRecord.form.brand : null;
 
-  const { status } = useSession();
-
   return (
-    <div data-testid="fip" className="gc-fip">
-      <div className="canada-flag">
-        <Brand brand={brand} />
+    <SessionProvider>
+      <div data-testid="fip" className="gc-fip">
+        <div className="canada-flag">
+          <Brand brand={brand} />
+        </div>
+        <div className="inline-flex gap-4">
+          {showLogin && <Menu />}
+          {showLanguageToggle && <LanguageToggle />}
+        </div>
       </div>
-      <div className="inline-flex gap-4">
-        {showLogin && <Menu isAuthenticated={status === "authenticated"} />}
-        {showLanguageToggle && <LanguageToggle />}
-      </div>
-    </div>
+    </SessionProvider>
   );
 };
 

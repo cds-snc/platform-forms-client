@@ -4,7 +4,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetServerSideProps } from "next";
 import { getServerSession } from "next-auth";
 import { getFullTemplateByID } from "@lib/templates";
-import { authOptions } from "@pages/api/auth/[...nextauth]";
+import { authOptions } from "@app/api/auth/authConfig";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { NextPageWithLayout } from "../_app";
 import { PageProps, FormRecord } from "@lib/types";

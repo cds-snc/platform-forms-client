@@ -10,7 +10,7 @@ import {
   CognitoIdentityProviderClient,
   ConfirmForgotPasswordCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
-import confirmpassword from "@pages/api/account/confirmpassword";
+import confirmpassword from "pages/api/account/confirmpassword";
 
 const mockGetCSRFToken = mocked(getCsrfToken, { shallow: true });
 
