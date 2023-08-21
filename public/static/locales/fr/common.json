@@ -144,5 +144,6 @@
       }
     }
   },
-  "mainNavAriaLabel": "Navigation principale"
+  "mainNavAriaLabel": "Navigation principale",
+  "yourAccount": "Votre compte"
 }
