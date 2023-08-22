@@ -4,7 +4,7 @@ import { useTranslation } from "next-i18next";
 import { FormElementTypes } from "@lib/types";
 import { Button } from "@components/globals";
 import { Dialog, useDialogRef } from "@components/form-builder/app/shared";
-import { updateActiveStatus } from "pages/admin/accounts";
+import { updateActiveStatus } from "@pages/[locale]/admin/accounts";
 import { useRefresh } from "@lib/hooks";
 import Loader from "@components/globals/Loader";
 import * as Alert from "@components/globals/Alert/Alert";

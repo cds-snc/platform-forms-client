@@ -5,7 +5,7 @@ import { GetServerSideProps } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@app/api/auth/authConfig";
 
-import { NextPageWithLayout } from "../../_app";
+import { NextPageWithLayout } from "../../../_app";
 import { PageProps } from "@lib/types";
 import { Template, PageTemplate } from "@components/form-builder/app";
 import { Branding } from "@components/form-builder/app/branding";

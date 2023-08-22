@@ -5,7 +5,7 @@ import { useTranslation } from "next-i18next";
 import { Dialog, useDialogRef } from "@components/form-builder/app/shared";
 import { logMessage } from "@lib/logger";
 import * as Alert from "@components/globals/Alert/Alert";
-import { Question } from "pages/profile";
+import { Question } from "@pages/[locale]/profile";
 import axios from "axios";
 import { getCsrfToken } from "next-auth/react";
 import { useRouter } from "next/router";

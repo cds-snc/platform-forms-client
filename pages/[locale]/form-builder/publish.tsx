@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect } from "react";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
-import { NextPageWithLayout } from "../_app";
+import { NextPageWithLayout } from "../../_app";
 import { PageProps } from "@lib/types";
 import { getServerSideProps } from "./index";
 import { Publish, Template, PageTemplate } from "@components/form-builder/app";

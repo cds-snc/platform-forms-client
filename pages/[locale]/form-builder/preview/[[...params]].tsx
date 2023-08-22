@@ -1,6 +1,6 @@
 import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
-import { NextPageWithLayout } from "../../_app";
+import { NextPageWithLayout } from "../../../_app";
 import { PageProps } from "@lib/types";
 import { getServerSideProps } from "../index";
 import { PreviewNavigation, PageTemplate, Template, Preview } from "@components/form-builder/app";

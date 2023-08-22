@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
-import { NextPageWithLayout } from "../../../_app";
+import { NextPageWithLayout } from "../../../../_app";
 import { Template, PageTemplate, Settings, FormOwnership } from "@components/form-builder/app";
 import { SettingsNavigation } from "@components/form-builder/app/navigation/SettingsNavigation";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";

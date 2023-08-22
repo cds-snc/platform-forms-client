@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import { PageProps } from "@lib/types";
 import { getServerSideProps } from "../index";
-import { NextPageWithLayout } from "../../_app";
+import { NextPageWithLayout } from "../../../_app";
 import { ResponseDelivery, Template, PageTemplate } from "@components/form-builder/app";
 import { SettingsNavigation } from "@components/form-builder/app/navigation/SettingsNavigation";
 

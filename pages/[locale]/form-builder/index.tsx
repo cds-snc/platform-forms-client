@@ -6,7 +6,7 @@ import { getServerSession } from "next-auth";
 import { getFullTemplateByID } from "@lib/templates";
 import { authOptions } from "@app/api/auth/authConfig";
 import { AccessControlError, createAbility } from "@lib/privileges";
-import { NextPageWithLayout } from "../_app";
+import { NextPageWithLayout } from "../../_app";
 import { PageProps, FormRecord } from "@lib/types";
 import { Template, PageTemplate, Start } from "@components/form-builder/app";
 

@@ -7,7 +7,7 @@ import { getServerSession } from "next-auth";
 import { PageProps } from "@lib/types";
 import { getPublicTemplateByID } from "@lib/templates";
 import { authOptions } from "@app/api/auth/authConfig";
-import { NextPageWithLayout } from "../../_app";
+import { NextPageWithLayout } from "../../../_app";
 import { Template, PageTemplate } from "@components/form-builder/app";
 import { BrandingRequestForm } from "@components/form-builder/app/branding/";
 import { getAppSetting } from "@lib/appSettings";
