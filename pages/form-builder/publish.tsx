@@ -6,6 +6,7 @@ import { PageProps } from "@lib/types";
 import { getServerSideProps } from "./index";
 import { Publish, Template, PageTemplate } from "@components/form-builder/app";
 import { useTemplateStore } from "@formbuilder/store";
+import FormBuilderLayout from "@components/globals/layouts/FormBuilderLayout";
 
 const Page: NextPageWithLayout<PageProps> = () => {
   const { t } = useTranslation("form-builder");
@@ -33,9 +34,9 @@ const Page: NextPageWithLayout<PageProps> = () => {
   }
 
   return (
-    <PageTemplate title={title} autoWidth={true}>
+    <FormBuilderLayout title={title}>
       <Publish />
-    </PageTemplate>
+    </FormBuilderLayout>
   );
 };
 
