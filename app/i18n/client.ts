@@ -46,6 +46,7 @@ export function useTranslation(ns?: string | string[], options?: Record<string, 
   }, [locale, i18n]);
 
   // If we're rendering on the server and the language is different from the resolved language,
+  // This prevents hydration mismatches
   if (runsOnServerSide && i18n.resolvedLanguage !== locale) {
     i18n.changeLanguage(locale);
   }
