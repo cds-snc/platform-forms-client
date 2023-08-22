@@ -1,17 +1,17 @@
 import React from "react";
-import { RichText } from "@components/forms";
+import { RichText } from "@appComponents/forms/RichText/RichText";
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import frContent from "@content/fr/sla.md";
 import enContent from "@content/en/sla.md";
 import { logMessage } from "@lib/logger";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { lang: string };
-}): Promise<Metadata> {
-  const lang = params.lang;
+interface SLAProps {
+  params: { locale: string };
+}
+
+export async function generateMetadata({ params }: SLAProps): Promise<Metadata> {
+  const lang = params.locale ?? "en";
 
   logMessage.debug(`SLA page lang: ${lang}`);
 
@@ -21,12 +21,8 @@ export async function generateMetadata({
   };
 }
 
-interface SLAProps {
-  params: { lang: string };
-}
-
-const SLA = async ({ params: { lang } }: SLAProps) => {
-  return <RichText>{lang === "fr" ? frContent : enContent}</RichText>;
+const SLA = async ({ params: { locale } }: SLAProps) => {
+  return <RichText>{locale === "fr" ? frContent : enContent}</RichText>;
 };
 
 export default SLA;

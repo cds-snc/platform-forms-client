@@ -1,24 +1,33 @@
-import React, { Suspense } from "react";
-import { useTranslation } from "@i18n/client";
+"use client";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "next-i18next";
+
+import { usePathname, useParams } from "next/navigation";
 import { StyledLink } from "./StyledLink/StyledLink";
-import { usePathname } from "next/navigation";
 
 const LanguageToggle = () => {
-  const { t, i18n } = useTranslation("common");
-  const href = usePathname();
-  const locale = i18n.language;
+  const { t } = useTranslation("common");
+  const pathname = usePathname();
+  const [href, setHref] = useState(pathname ?? "/");
+
+  const currentLang = useParams()?.locale;
+
+  useEffect(() => {
+    if (pathname !== null && href === pathname) {
+      setHref(pathname.replace(`/${currentLang}`, `/${currentLang === "en" ? "fr" : "en"}`));
+    }
+  }, [pathname, currentLang, href]);
 
   return (
-    <Suspense fallback={null}>
-      <StyledLink
-        href={href ?? ""}
-        className="text-base text-right"
-        ariaLabel={`${t("lang-toggle")}: ${locale == "en" ? "Français" : "English"}`}
-        lang={locale === "en" ? "fr" : "en"}
-      >
-        {locale === "en" ? "Français" : "English"}
-      </StyledLink>
-    </Suspense>
+    <StyledLink
+      href={href}
+      className="text-base text-right"
+      locale={currentLang === "en" ? "fr" : "en"}
+      ariaLabel={`${t("lang-toggle")}: ${currentLang == "en" ? "Français" : "English"}`}
+      lang={currentLang === "en" ? "fr" : "en"}
+    >
+      {currentLang === "en" ? "Français" : "English"}
+    </StyledLink>
   );
 };
 

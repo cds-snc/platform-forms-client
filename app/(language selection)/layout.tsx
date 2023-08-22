@@ -13,7 +13,7 @@ export default async function Layout({
     <>
       <SkipLink locale={locale} />
       <header>
-        <Fip locale={locale} showLanguageToggle={false} showLogin={false} />
+        <Fip showLanguageToggle={false} showLogin={false} />
       </header>
       {children}
       <Footer locale={locale} />

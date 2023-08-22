@@ -83,7 +83,7 @@ export const authOptions: NextAuthOptions = {
   logger: {
     error(code, metadata) {
       if (metadata instanceof Error) {
-        logMessage.error(`NextAuth error - Code: ${code}. Error: ${JSON.stringify(metadata)}`);
+        logMessage.error(`NextAuth error - Code: ${code}. Metadata: ${JSON.stringify(metadata)}`);
       } else {
         const metadataClone: Record<string, unknown> = { ...metadata };
         delete metadataClone.error;
@@ -92,6 +92,7 @@ export const authOptions: NextAuthOptions = {
             metadata.error
           )}. Metadata: ${JSON.stringify(metadataClone)}`
         );
+        logMessage.error(metadata.error);
       }
     },
     warn(code) {

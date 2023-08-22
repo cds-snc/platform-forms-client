@@ -44,31 +44,20 @@ export function middleware(req: NextRequest) {
   const interalRoute = new RegExp("/(api|_next/static|_next/image|favicon.ico|img|static).*");
 
   if (!interalRoute.test(pathname) && pathname !== "/") {
-    const locale = req.nextUrl.locale;
+    let locale;
+    if (req.cookies.has(cookieName))
+      locale = acceptLanguage.get(req.cookies.get(cookieName)?.value);
+    if (!locale) locale = acceptLanguage.get(req.headers.get("Accept-Language"));
+    if (!locale) locale = fallbackLng;
+
     logMessage.debug(
       `Middleware - i18n supported page detected: : pathname = ${pathname} , detected locale = ${locale}`
     );
-    // Temporary check until we completely remove next-i18next with the /pages directory
-    if (req.nextUrl.locale === "default") {
-      const cookieLocale = req.cookies.get(cookieName)?.value;
-      logMessage.debug(`Default locale detected - rewriting to ${cookieLocale}`);
-      return NextResponse.redirect(
-        new URL(`/${cookieLocale}${req.nextUrl.pathname}${req.nextUrl.search}`, req.url)
-      );
-    }
-
-    let lng;
-    if (req.cookies.has(cookieName)) lng = acceptLanguage.get(req.cookies.get(cookieName)?.value);
-    if (!lng) lng = acceptLanguage.get(req.headers.get("Accept-Language"));
-    if (!lng) lng = fallbackLng;
 
     // Redirect to fallback language if lng in path is not present or supported
-    if (
-      !languages.some((loc) => loc === locale) &&
-      !languages.some((loc) => req.nextUrl.pathname.startsWith(`/${loc}`))
-    ) {
+    if (!languages.some((loc) => req.nextUrl.pathname.startsWith(`/${loc}`))) {
       logMessage.debug(`Middleware - Redirecting to fallback language: : ${pathname}`);
-      return NextResponse.redirect(new URL(`/${lng}${req.nextUrl.pathname}`, req.url));
+      return NextResponse.redirect(new URL(`/${locale}${req.nextUrl.pathname}`, req.url));
     }
   }
 

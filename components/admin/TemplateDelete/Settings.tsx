@@ -10,7 +10,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import BearerRefresh from "@components/admin/BearerRefresh/BearerRefresh";
 import FormAccess from "@components/admin/FormAccess/FormAccess";
-import { getProperty } from "@lib/formBuilder";
+import { getProperty } from "@lib/utils";
 
 interface FormSettingsProps {
   form: FormRecord;

@@ -4,7 +4,7 @@ import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage, validateOnSubmit } from "@lib/validation";
 import { submitToAPI } from "@lib/clientHelpers";
 import { useExternalScript, useFlag, useFormTimer } from "@lib/hooks";
-import { Alert, Button, RichText } from "@components/forms";
+import { Alert, Button, RichText } from "@appComponents/forms";
 import { logMessage } from "@lib/logger";
 import { useTranslation, TFunction } from "next-i18next";
 import axios from "axios";

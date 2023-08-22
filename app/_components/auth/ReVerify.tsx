@@ -1,13 +1,13 @@
 import React, { ReactElement, useRef } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
-import { Button, StyledLink } from "@components/globals";
+import { Button, StyledLink } from "@appComponents/globals";
 import { useAuthErrors } from "@lib/hooks/auth/useAuthErrors";
 import { logMessage } from "@lib/logger";
 import axios from "axios";
 import { getCsrfToken } from "next-auth/react";
 import { hasError } from "@lib/hasError";
-import { Alert } from "@components/forms";
+import { Alert } from "@appComponents/forms";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
 import Link from "next/link";
 import Head from "next/head";

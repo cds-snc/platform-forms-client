@@ -1,8 +1,8 @@
 import React from "react";
 import { BrandProperties } from "@lib/types/form-types";
-import { getProperty } from "@lib/formBuilder";
+import { getProperty } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
-import { Language } from "@components/form-builder/types";
+import { Language } from "@appComponents/form-builder/types";
 import { logMessage } from "@lib/logger";
 
 const Brand = ({

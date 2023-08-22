@@ -1,4 +1,3 @@
-"use client";
 import { signOut, useSession } from "next-auth/react";
 import PropTypes from "prop-types";
 import { useTranslation } from "@i18n/client";

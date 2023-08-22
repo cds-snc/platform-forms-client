@@ -6,7 +6,7 @@ import { Metadata } from "next";
 import { logMessage } from "@lib/logger";
 
 export async function generateStaticParams() {
-  return languages.map((lang) => ({ lang }));
+  return languages.map((locale) => ({ locale }));
 }
 
 export const metadata: Metadata = {
@@ -15,14 +15,14 @@ export const metadata: Metadata = {
 
 export default async function Layout({
   children,
-  params: { lang },
+  params: { locale },
 }: {
   children: React.ReactNode;
-  params: { lang: string };
+  params: { locale: string };
 }) {
-  logMessage.debug(`Global Layout lang: ${lang}`);
+  logMessage.debug(`Global Layout locale: ${locale ?? "en"}`);
   return (
-    <html lang={lang} dir={dir(lang)}>
+    <html lang={locale ?? "en"} dir={dir(locale ?? "en")}>
       <head />
       <body suppressHydrationWarning={true}>{children}</body>
     </html>

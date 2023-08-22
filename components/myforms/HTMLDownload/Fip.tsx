@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
-import { getProperty } from "@lib/formBuilder";
+import { getProperty } from "@lib/utils";
 
 // Base64 Images to simplify creating portable HTML files
 const logoBase64En =

@@ -5,10 +5,10 @@ import { logMessage } from "@lib/logger";
 
 export default async function Layout({
   children,
-  params: { lang: locale },
+  params: { locale },
 }: {
   children: React.ReactNode;
-  params: { lang: string };
+  params: { locale: string };
 }) {
   logMessage.debug(`Static Page Layout lang: ${locale}`);
   return (

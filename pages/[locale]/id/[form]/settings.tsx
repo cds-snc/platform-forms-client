@@ -14,7 +14,7 @@ import { logMessage } from "@lib/logger";
 import { FormRecord } from "@lib/types";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
-import { getProperty } from "@lib/formBuilder";
+import { getProperty } from "@lib/utils";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 
 interface FormSettingsProps {

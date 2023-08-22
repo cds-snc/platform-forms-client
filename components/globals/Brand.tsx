@@ -1,6 +1,6 @@
 import React from "react";
 import { BrandProperties } from "@lib/types/form-types";
-import { getProperty } from "@lib/formBuilder";
+import { getProperty } from "@lib/utils";
 import { useTranslation } from "next-i18next";
 import { Language } from "@components/form-builder/types";
 
