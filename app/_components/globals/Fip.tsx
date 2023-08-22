@@ -1,5 +1,5 @@
 "use client";
-import { SessionProvider, useSession } from "next-auth/react";
+import { SessionProvider } from "next-auth/react";
 import LanguageToggle from "./LanguageToggle";
 import Menu from "@appComponents/auth/LoginMenu";
 import { PublicFormRecord } from "@lib/types";
@@ -13,7 +13,6 @@ const Fip = ({
   formRecord?: PublicFormRecord;
   showLogin?: boolean;
   showLanguageToggle?: boolean;
-  locale: string;
 }) => {
   const brand = formRecord?.form ? formRecord.form.brand : null;
 

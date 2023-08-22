@@ -1,6 +1,7 @@
-import Footer from "@components/globals/Footer";
-import SkipLink from "@components/globals/SkipLink";
-import Fip from "@components/globals/Fip";
+import Footer from "@appComponents/globals/Footer";
+import SkipLink from "@appComponents/globals/SkipLink";
+import Fip from "@appComponents/globals/Fip";
+import { logMessage } from "@lib/logger";
 
 export default async function Layout({
   children,
@@ -9,11 +10,12 @@ export default async function Layout({
   children: React.ReactNode;
   params: { lang: string };
 }) {
+  logMessage.debug(`Static Page Layout lang: ${locale}`);
   return (
     <>
       <SkipLink locale={locale} />
       <header>
-        <Fip locale={locale} showLanguageToggle={true} />
+        <Fip showLanguageToggle={true} />
       </header>
       <div id="page-container">
         <main id="content">{children}</main>

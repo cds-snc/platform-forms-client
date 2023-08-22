@@ -1,21 +1,21 @@
 import React from "react";
 import { BrandProperties } from "@lib/types/form-types";
 import { getProperty } from "@lib/formBuilder";
-import { useTranslation } from "next-i18next";
+import { useTranslation } from "@i18n/client";
 import { Language } from "@components/form-builder/types";
+import { logMessage } from "@lib/logger";
 
 const Brand = ({
   brand,
   className,
-  lang,
 }: {
   brand: BrandProperties | undefined | null;
   className?: string;
-  lang?: Language;
 }) => {
   const { t, i18n } = useTranslation("common");
 
-  const language = lang ? lang : (i18n.language as Language);
+  const language = i18n.language as Language;
+  logMessage.debug(`Brand lang: ${language}`);
   const themeLogo = brand?.[getProperty("logo", language)] as string | undefined;
 
   // Check if custom branding was provided, otherwise show the Government of Canada branding

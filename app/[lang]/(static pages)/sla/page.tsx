@@ -4,6 +4,7 @@ import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import frContent from "@content/fr/sla.md";
 import enContent from "@content/en/sla.md";
+import { logMessage } from "@lib/logger";
 
 export async function generateMetadata({
   params,
@@ -11,6 +12,8 @@ export async function generateMetadata({
   params: { lang: string };
 }): Promise<Metadata> {
   const lang = params.lang;
+
+  logMessage.debug(`SLA page lang: ${lang}`);
 
   const { t } = await serverTranslation(lang, ["sla"]);
   return {

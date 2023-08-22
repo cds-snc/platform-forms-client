@@ -11,7 +11,6 @@ const cookieName = "i18next";
 
 export function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
-  const locale = req.nextUrl.locale;
 
   // Content Security Policy needs to be first as it creates the NextResponse
   //const { csp } = generateCSP();
@@ -42,12 +41,23 @@ export function middleware(req: NextRequest) {
 
   // Internationalized Pages
 
-  const i18nRegEx = new RegExp(`/((?!api|_next|.*\\..*).*)`);
+  const interalRoute = new RegExp("/(api|_next/static|_next/image|favicon.ico|img|static).*");
+  logMessage.debug(` Path: ${pathname} is I18N Internal Route = ${interalRoute.test(pathname)}`);
 
-  if (i18nRegEx.test(pathname) && pathname !== "/" && !locale) {
+  if (!interalRoute.test(pathname) && pathname !== "/") {
+    const locale = req.nextUrl.locale;
     logMessage.debug(
       `Middleware - i18n supported page detected: : pathname = ${pathname} , detected locale = ${locale}`
     );
+    // Temporary check until we completely remove next-i18next with the /pages directory
+    if (req.nextUrl.locale === "default") {
+      const cookieLocale = req.cookies.get(cookieName)?.value;
+      logMessage.debug(`Default locale detected - rewriting to ${cookieLocale}`);
+      return NextResponse.redirect(
+        new URL(`/${cookieLocale}${req.nextUrl.pathname}${req.nextUrl.search}`, req.url)
+      );
+    }
+
     let lng;
     if (req.cookies.has(cookieName)) lng = acceptLanguage.get(req.cookies.get(cookieName)?.value);
     if (!lng) lng = acceptLanguage.get(req.headers.get("Accept-Language"));
@@ -60,14 +70,6 @@ export function middleware(req: NextRequest) {
     ) {
       logMessage.debug(`Middleware - Redirecting to fallback language: : ${pathname}`);
       return NextResponse.redirect(new URL(`/${lng}${req.nextUrl.pathname}`, req.url));
-    }
-
-    // Set language cookie based on referer
-    if (req.headers.has("referer")) {
-      const refererUrl = new URL(req.headers.get("referer") || "");
-      const lngInReferer = languages.find((l) => refererUrl.pathname.startsWith(`/${l}`));
-      logMessage.debug(`Middleware - Referer detected: : ${pathname}`);
-      if (lngInReferer) response.cookies.set(cookieName, lngInReferer);
     }
   }
 

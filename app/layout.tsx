@@ -20,7 +20,7 @@ export default async function Layout({
   children: React.ReactNode;
   params: { lang: string };
 }) {
-  logMessage.debug("Layout", { lang });
+  logMessage.debug(`Global Layout lang: ${lang}`);
   return (
     <html lang={lang} dir={dir(lang)}>
       <head />
