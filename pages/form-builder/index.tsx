@@ -8,21 +8,22 @@ import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { NextPageWithLayout } from "../_app";
 import { PageProps, FormRecord } from "@lib/types";
-import { Template, PageTemplate, Start } from "@components/form-builder/app";
+import { Template, Start } from "@components/form-builder/app";
+import { FullWidthLayout } from "@components/globals/layouts";
 
 const Page: NextPageWithLayout<PageProps> = () => {
   const { t } = useTranslation("form-builder");
 
   const title = `${t("gcFormsStart")} — ${t("gcForms")}`;
   return (
-    <PageTemplate title={title} leftNav={false}>
+    <FullWidthLayout title={title}>
       <Start />
-    </PageTemplate>
+    </FullWidthLayout>
   );
 };
 
 Page.getLayout = (page: ReactElement) => {
-  return <Template page={page} className="form-builder-start" />;
+  return <Template page={page} />;
 };
 
 export const getServerSideProps: GetServerSideProps = async ({

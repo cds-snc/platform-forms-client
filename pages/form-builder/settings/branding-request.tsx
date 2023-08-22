@@ -8,17 +8,18 @@ import { PageProps } from "@lib/types";
 import { getPublicTemplateByID } from "@lib/templates";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { NextPageWithLayout } from "../../_app";
-import { Template, PageTemplate } from "@components/form-builder/app";
+import { Template } from "@components/form-builder/app";
 import { BrandingRequestForm } from "@components/form-builder/app/branding/";
 import { getAppSetting } from "@lib/appSettings";
+import { FullWidthLayout } from "@components/globals/layouts";
 
 const Page: NextPageWithLayout<PageProps> = ({ publicForm }: PageProps) => {
   const { t } = useTranslation("form-builder");
   const title = `${t("branding.heading")} — ${t("gcForms")}`;
   return (
-    <PageTemplate title={title} leftNav={false}>
+    <FullWidthLayout title={title}>
       <BrandingRequestForm formRecord={publicForm} />
-    </PageTemplate>
+    </FullWidthLayout>
   );
 };
 

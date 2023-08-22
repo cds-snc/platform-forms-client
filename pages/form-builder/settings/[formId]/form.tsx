@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { NextPageWithLayout } from "../../../_app";
-import { Template, PageTemplate, Settings, FormOwnership } from "@components/form-builder/app";
+import { Template, Settings, FormOwnership, LeftNavigation } from "@components/form-builder/app";
 import { SettingsNavigation } from "@components/form-builder/app/navigation/SettingsNavigation";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { getTemplateWithAssociatedUsers } from "@lib/templates";
@@ -12,6 +12,7 @@ import { getUsers } from "@lib/users";
 import { User } from "@prisma/client";
 import { FormRecord } from "@lib/types";
 import { BackLink } from "@components/admin/LeftNav/BackLink";
+import { TwoColumnLayout } from "@components/globals/layouts/TwoColumnLayout";
 
 interface AssignUsersToTemplateProps {
   formRecord: FormRecord;
@@ -45,11 +46,11 @@ const Page: NextPageWithLayout<AssignUsersToTemplateProps> = ({
   const { backLink } = router.query;
 
   return (
-    <PageTemplate
+    <TwoColumnLayout
       title={title}
-      navigation={<SettingsNavigation />}
-      backLink={<BackToManageForms id={backLink} />}
+      leftNav={<LeftNavigation backLink={<BackToManageForms id={backLink} />} />}
     >
+      <SettingsNavigation />
       {canManageOwnership && (
         <FormOwnership
           formRecord={formRecord}
@@ -58,7 +59,7 @@ const Page: NextPageWithLayout<AssignUsersToTemplateProps> = ({
         />
       )}
       <Settings />
-    </PageTemplate>
+    </TwoColumnLayout>
   );
 };
 

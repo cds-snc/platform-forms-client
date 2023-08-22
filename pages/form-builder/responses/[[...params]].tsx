@@ -6,7 +6,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { NextPageWithLayout } from "@pages/_app";
-import { PageTemplate, Template } from "@components/form-builder/app";
+import { LeftNavigation, Template } from "@components/form-builder/app";
 import { GetServerSideProps } from "next";
 import { FormRecord, VaultSubmissionList } from "@lib/types";
 import { listAllSubmissions } from "@lib/vault";
@@ -22,6 +22,7 @@ import { Nagware } from "@components/form-builder/app/Nagware";
 import { EmailResponseSettings } from "@components/form-builder/app/shared";
 import { useTemplateStore } from "@components/form-builder/store";
 import { LoggedOutTabName, LoggedOutTab } from "@components/form-builder/app/LoggedOutTab";
+import { TwoColumnLayout } from "@components/globals/layouts";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -57,9 +58,9 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   if (!isAuthenticated) {
     return (
       <>
-        <PageTemplate title={t("responses.title")}>
+        <TwoColumnLayout title={t("responses.title")} leftNav={<LeftNavigation />}>
           <LoggedOutTab tabName={LoggedOutTabName.RESPONSES} />
-        </PageTemplate>
+        </TwoColumnLayout>
       </>
     );
   }
@@ -67,7 +68,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   if (deliveryOption && deliveryOption.emailAddress) {
     return (
       <>
-        <PageTemplate title={t("responses.email.title")} autoWidth={true}>
+        <TwoColumnLayout title={t("responses.email.title")} leftNav={<LeftNavigation />}>
           <div className="flex flex-wrap items-baseline mb-8">
             <h1 className="border-none mb-0 tablet:mb-4 tablet:mr-8">
               {isAuthenticated ? t("responses.email.title") : t("responses.unauthenticated.title")}
@@ -87,14 +88,14 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
             subjectEn={deliveryOption.emailSubjectEn || ""}
             subjectFr={deliveryOption.emailSubjectFr || ""}
           />
-        </PageTemplate>
+        </TwoColumnLayout>
       </>
     );
   }
 
   return (
     <>
-      <PageTemplate title={t("responses.title")} autoWidth={true}>
+      <TwoColumnLayout title={t("responses.title")} leftNav={<LeftNavigation />}>
         <div className="flex flex-wrap items-baseline mb-8">
           <h1 className="border-none mb-0 tablet:mb-4 tablet:mr-8">
             {isAuthenticated ? t("responses.title") : t("responses.unauthenticated.title")}
@@ -172,7 +173,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
             </p>
           </>
         )}
-      </PageTemplate>
+      </TwoColumnLayout>
 
       {isShowConfirmReceiptDialog && (
         <DownloadTableDialog

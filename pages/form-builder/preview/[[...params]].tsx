@@ -3,10 +3,11 @@ import { useTranslation } from "next-i18next";
 import { NextPageWithLayout } from "../../_app";
 import { PageProps } from "@lib/types";
 import { getServerSideProps } from "../index";
-import { PreviewNavigation, PageTemplate, Template, Preview } from "@components/form-builder/app";
+import { PreviewNavigation, Template, Preview, LeftNavigation } from "@components/form-builder/app";
 import { useTemplateStore } from "@components/form-builder/store";
 import { LockIcon } from "@formbuilder/icons";
 import Markdown from "markdown-to-jsx";
+import { TwoColumnLayout } from "@components/globals/layouts";
 
 const Page: NextPageWithLayout<PageProps> = () => {
   const { t } = useTranslation("form-builder");
@@ -19,7 +20,7 @@ const Page: NextPageWithLayout<PageProps> = () => {
   return (
     <>
       {isPublished() ? (
-        <PageTemplate title={title}>
+        <TwoColumnLayout title={title} leftNav={<LeftNavigation />}>
           <div className="mt-5 mb-5 p-5 bg-purple-200 flex">
             <div className="flex">
               <div className="pr-7">
@@ -32,11 +33,12 @@ const Page: NextPageWithLayout<PageProps> = () => {
               </div>
             </div>
           </div>
-        </PageTemplate>
+        </TwoColumnLayout>
       ) : (
-        <PageTemplate title={title} navigation={<PreviewNavigation />}>
+        <TwoColumnLayout title={title} leftNav={<LeftNavigation />}>
+          <PreviewNavigation />
           <Preview />
-        </PageTemplate>
+        </TwoColumnLayout>
       )}
     </>
   );

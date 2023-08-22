@@ -7,10 +7,11 @@ import { authOptions } from "@pages/api/auth/[...nextauth]";
 
 import { NextPageWithLayout } from "../../_app";
 import { PageProps } from "@lib/types";
-import { Template, PageTemplate } from "@components/form-builder/app";
+import { Template, LeftNavigation } from "@components/form-builder/app";
 import { Branding } from "@components/form-builder/app/branding";
 import { SettingsNavigation } from "@components/form-builder/app/navigation/SettingsNavigation";
 import { getAppSetting } from "@lib/appSettings";
+import { TwoColumnLayout } from "@components/globals/layouts";
 
 const Page: NextPageWithLayout<PageProps> = ({
   hasBrandingRequestForm,
@@ -20,9 +21,10 @@ const Page: NextPageWithLayout<PageProps> = ({
   const { t } = useTranslation("form-builder");
   const title = `${t("branding.heading")} — ${t("gcForms")}`;
   return (
-    <PageTemplate title={title} navigation={<SettingsNavigation />}>
+    <TwoColumnLayout title={title} leftNav={<LeftNavigation />}>
+      <SettingsNavigation />
       <Branding hasBrandingRequestForm={hasBrandingRequestForm} />
-    </PageTemplate>
+    </TwoColumnLayout>
   );
 };
 

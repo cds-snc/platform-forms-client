@@ -4,9 +4,10 @@ import { useRouter } from "next/router";
 import { NextPageWithLayout } from "../../_app";
 import { PageProps } from "@lib/types";
 import { getServerSideProps } from "../index";
-import { EditNavigation, Template, PageTemplate } from "@components/form-builder/app";
+import { EditNavigation, Template, LeftNavigation } from "@components/form-builder/app";
 import { Edit } from "@components/form-builder/app/edit";
 import { useTemplateStore } from "@formbuilder/store";
+import { TwoColumnLayout } from "@components/globals/layouts";
 
 const Page: NextPageWithLayout<PageProps> = () => {
   const { t } = useTranslation("form-builder");
@@ -27,16 +28,17 @@ const Page: NextPageWithLayout<PageProps> = () => {
 
   if (isPublished) {
     return (
-      <PageTemplate title={title}>
+      <TwoColumnLayout title={title} leftNav={<LeftNavigation />}>
         <div />
-      </PageTemplate>
+      </TwoColumnLayout>
     );
   }
 
   return (
-    <PageTemplate title={title} navigation={<EditNavigation />}>
+    <TwoColumnLayout title={title} leftNav={<LeftNavigation />}>
+      <EditNavigation />
       <Edit />
-    </PageTemplate>
+    </TwoColumnLayout>
   );
 };
 

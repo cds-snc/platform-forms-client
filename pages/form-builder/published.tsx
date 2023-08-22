@@ -3,8 +3,9 @@ import { useTranslation } from "next-i18next";
 import { NextPageWithLayout } from "../_app";
 import { PageProps } from "@lib/types";
 import { getServerSideProps } from "./index";
-import { Published, Template, PageTemplate } from "@components/form-builder/app";
+import { LeftNavigation, Published, Template } from "@components/form-builder/app";
 import { useTemplateStore } from "@formbuilder/store/useTemplateStore";
+import { TwoColumnLayout } from "@components/globals/layouts";
 
 const Page: NextPageWithLayout<PageProps> = () => {
   const { t } = useTranslation("form-builder");
@@ -17,9 +18,9 @@ const Page: NextPageWithLayout<PageProps> = () => {
   }));
 
   return (
-    <PageTemplate title={title} leftNav={false}>
+    <TwoColumnLayout title={title} leftNav={<LeftNavigation />}>
       <Published id={id} />
-    </PageTemplate>
+    </TwoColumnLayout>
   );
 };
 

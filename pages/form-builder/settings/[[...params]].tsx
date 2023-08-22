@@ -3,16 +3,18 @@ import { useTranslation } from "next-i18next";
 import { PageProps } from "@lib/types";
 import { getServerSideProps } from "../index";
 import { NextPageWithLayout } from "../../_app";
-import { ResponseDelivery, Template, PageTemplate } from "@components/form-builder/app";
+import { LeftNavigation, ResponseDelivery, Template } from "@components/form-builder/app";
 import { SettingsNavigation } from "@components/form-builder/app/navigation/SettingsNavigation";
+import { TwoColumnLayout } from "@components/globals/layouts";
 
 const Page: NextPageWithLayout<PageProps> = () => {
   const { t } = useTranslation("form-builder");
   const title = `${t("gcFormsSettings")} — ${t("gcForms")}`;
   return (
-    <PageTemplate title={title} navigation={<SettingsNavigation />}>
+    <TwoColumnLayout title={title} leftNav={<LeftNavigation />}>
+      <SettingsNavigation />
       <ResponseDelivery />
-    </PageTemplate>
+    </TwoColumnLayout>
   );
 };
 
