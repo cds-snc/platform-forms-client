@@ -15,9 +15,9 @@ export const LeftNavigation = ({ backLink }: { backLink?: React.ReactElement }) 
     "inline-block w-6 h-6 group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
 
   return (
-    <nav className="absolute" aria-label={t("navLabelFormBuilder")}>
+    <nav aria-label={t("navLabelFormBuilder")}>
       <ul className="m-0 list-none p-0">
-        {backLink && <li>{backLink}</li>}
+        {backLink && <li className="mb-10">{backLink}</li>}
         {!isPublished && (
           <li>
             <LeftNavLink href="/form-builder/edit">
