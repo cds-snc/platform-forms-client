@@ -14,7 +14,7 @@ export const LeftNavigation = () => {
     "inline-block w-6 h-6 group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
 
   return (
-    <nav className="absolute">
+    <nav>
       <ul className="m-0 list-none p-0">
         <li>
           <LeftNavLink
