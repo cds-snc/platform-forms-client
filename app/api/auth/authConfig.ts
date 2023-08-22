@@ -82,18 +82,19 @@ export const authOptions: NextAuthOptions = {
   debug: process.env.NODE_ENV !== "production",
   logger: {
     error(code, metadata) {
-      if (metadata instanceof Error) {
-        logMessage.error(`NextAuth error - Code: ${code}. Metadata: ${JSON.stringify(metadata)}`);
-      } else {
-        const metadataClone: Record<string, unknown> = { ...metadata };
-        delete metadataClone.error;
-        logMessage.error(
-          `NextAuth error - Code: ${code}. Error: ${JSON.stringify(
-            metadata.error
-          )}. Metadata: ${JSON.stringify(metadataClone)}`
-        );
-        logMessage.error(metadata.error);
-      }
+      logMessage.error(
+        `NextAuth error - Code: ${code}. Error: ${JSON.stringify(metadata, (_, value) => {
+          if (value?.constructor.name === "Error") {
+            return {
+              name: value.name,
+              message: value.message,
+              stack: value.stack,
+              cause: value.cause,
+            };
+          }
+          return value;
+        })}`
+      );
     },
     warn(code) {
       logMessage.warn(`NextAuth warning - Code: ${code}`);
