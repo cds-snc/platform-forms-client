@@ -93,7 +93,19 @@ export const authOptions: NextAuthOptions = {
   debug: process.env.NODE_ENV !== "production",
   logger: {
     error(code, metadata) {
-      logMessage.error(`NextAuth error - Code: ${code}. Metadata: ${JSON.stringify(metadata)}`);
+      logMessage.error(
+        `NextAuth error - Code: ${code}. Error: ${JSON.stringify(metadata, (_, value) => {
+          if (value?.constructor.name === "Error") {
+            return {
+              name: value.name,
+              message: value.message,
+              stack: value.stack,
+              cause: value.cause,
+            };
+          }
+          return value;
+        })}`
+      );
     },
     warn(code) {
       logMessage.warn(`NextAuth warning - Code: ${code}`);
