@@ -1,18 +1,16 @@
-import React, { ReactElement, useEffect } from "react";
+import React, { ReactElement } from "react";
 import Head from "next/head";
-import { useTranslation } from "next-i18next";
 
 import SkipLink from "@components/globals/SkipLink";
 import Footer from "@components/globals/Footer";
-import Loader from "@components/globals/Loader";
-import { useTemplateStore, TemplateStoreProvider } from "@components/form-builder/store";
+import { TemplateStoreProvider } from "@components/form-builder/store";
 import { LeftNavigation } from "@components/form-builder/app";
-import { Language } from "../types";
 import { TemplateApiProvider } from "../hooks";
 import { ToastContainer } from "./shared/Toast";
 import { RefStoreProvider } from "@lib/hooks/useRefStore";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { Header } from "@components/globals";
+import { PageLoader } from "@components/globals/layouts/PageLoader";
 
 export const Template = ({
   page,
@@ -37,7 +35,7 @@ export const Template = ({
           <div className={`flex h-full flex-col ${className}`}>
             <SkipLink />
             <Header context={isFormBuilder ? "formBuilder" : "default"} />
-            {page}
+            <PageLoader page={page} />
             <Footer displayFormBuilderFooter />
           </div>
         </RefStoreProvider>
@@ -61,25 +59,13 @@ export const PageTemplate = ({
   autoWidth?: boolean;
   backLink?: React.ReactElement;
 }) => {
-  const { t, i18n } = useTranslation("form-builder");
-  const { hasHydrated, setLang } = useTemplateStore((s) => ({
-    hasHydrated: s.hasHydrated,
-    setLang: s.setLang,
-    email: s.deliveryOption?.emailAddress,
-  }));
-
   // This will check to see if a user is deactivated and redirect them to the account deactivated page
   useAccessControl();
-
-  const locale = i18n.language as Language;
-  useEffect(() => {
-    setLang(locale);
-  }, [locale, setLang]);
 
   const leftNavMargin = backLink ? "ml-80" : "ml-60";
 
   // Wait until the Template Store has fully hydrated before rendering the page
-  return hasHydrated ? (
+  return (
     <div className="mx-4 shrink-0 grow basis-auto laptop:mx-32 desktop:mx-64">
       <ToastContainer />
       <div>
@@ -102,7 +88,5 @@ export const PageTemplate = ({
         </>
       </div>
     </div>
-  ) : (
-    <Loader message={t("loading")} />
   );
 };
