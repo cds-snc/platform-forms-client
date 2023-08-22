@@ -42,7 +42,6 @@ export function middleware(req: NextRequest) {
   // Internationalized Pages
 
   const interalRoute = new RegExp("/(api|_next/static|_next/image|favicon.ico|img|static).*");
-  logMessage.debug(` Path: ${pathname} is I18N Internal Route = ${interalRoute.test(pathname)}`);
 
   if (!interalRoute.test(pathname) && pathname !== "/") {
     const locale = req.nextUrl.locale;

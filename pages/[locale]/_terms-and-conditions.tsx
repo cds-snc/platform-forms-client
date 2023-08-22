@@ -5,17 +5,17 @@ import { useTranslation } from "next-i18next";
 import { GetStaticProps } from "next";
 import Head from "next/head";
 
-interface TermsOfUseProps {
+interface TermsAndConditionsProps {
   content: string;
 }
 
-const TermsOfUse = ({ content }: TermsOfUseProps) => {
+const TermsAndConditions = ({ content }: TermsAndConditionsProps) => {
   const { t } = useTranslation(["terms"]);
 
   return (
     <>
       <Head>
-        <title>{t("terms-of-use.title")}</title>
+        <title>{t("terms-and-conditions.title")}</title>
       </Head>
       <RichText>{content}</RichText>
     </>
@@ -23,14 +23,15 @@ const TermsOfUse = ({ content }: TermsOfUseProps) => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  const termsOfUseContent = await require(`../public/static/content/${locale}/terms-of-use.md`);
+  const termsAndConditionsContent =
+    await require(`../../public/static/content/${locale}/terms-and-conditions.md`);
 
   return {
     props: {
       ...(locale && (await serverSideTranslations(locale, ["common", "terms"]))),
-      content: termsOfUseContent,
+      content: termsAndConditionsContent,
     },
   };
 };
 
-export default TermsOfUse;
+export default TermsAndConditions;

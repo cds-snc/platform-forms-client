@@ -4,26 +4,33 @@ import { useRouter } from "next/router";
 import { StyledLink } from "./StyledLink/StyledLink";
 
 const LanguageToggle = () => {
-  const { t, i18n } = useTranslation("common");
-  const locale = i18n.language;
-  const { pathname, asPath, isReady } = useRouter();
-  const [href, setHref] = useState(pathname);
+  const { t } = useTranslation("common");
+
+  const { asPath, isReady, query } = useRouter();
+  const [href, setHref] = useState(asPath);
+  const [currentLang, setCurrentLang] = useState(query.locale);
 
   useEffect(() => {
-    if (isReady && href !== asPath) {
-      setHref(asPath);
+    if (isReady && href === asPath) {
+      setHref(asPath.replace(`/${currentLang}`, `/${currentLang === "en" ? "fr" : "en"}`));
     }
-  }, [pathname, href, asPath, isReady]);
+  }, [asPath, currentLang, href, isReady]);
+
+  useEffect(() => {
+    if (currentLang !== query.locale) {
+      setCurrentLang(query.locale);
+    }
+  }, [query.locale, currentLang]);
 
   return (
     <StyledLink
       href={href}
       className="text-base text-right"
-      locale={locale === "en" ? "fr" : "en"}
-      ariaLabel={`${t("lang-toggle")}: ${locale == "en" ? "Français" : "English"}`}
-      lang={locale === "en" ? "fr" : "en"}
+      locale={currentLang === "en" ? "fr" : "en"}
+      ariaLabel={`${t("lang-toggle")}: ${currentLang == "en" ? "Français" : "English"}`}
+      lang={currentLang === "en" ? "fr" : "en"}
     >
-      {locale === "en" ? "Français" : "English"}
+      {currentLang === "en" ? "Français" : "English"}
     </StyledLink>
   );
 };
