@@ -101,7 +101,7 @@ export const authOptions: NextAuthOptions = {
         logMessage.error(
           `NextAuth error - Code: ${code}. Error: ${JSON.stringify(
             metadata.error
-          )}. Metadata: ${metadataClone}`
+          )}. Metadata: ${JSON.stringify(metadataClone)}`
         );
       }
     },
