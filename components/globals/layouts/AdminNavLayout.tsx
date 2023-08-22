@@ -6,13 +6,14 @@ import SkipLink from "../SkipLink";
 import { User } from "next-auth";
 
 import { LeftNavigation } from "@components/admin/LeftNav/LeftNavigation";
-import { ToastContainer } from "@components/form-builder/app/shared/Toast";
 import { useAccessControl } from "@lib/hooks";
 import { Header } from "../Header";
+import { TwoColumnLayout } from "./TwoColumnLayout";
+import { FullWidthLayout } from "./FullWidthLayout";
 
 interface AdminNavLayoutProps extends React.PropsWithChildren {
   user: User;
-  backLink?: React.ReactNode;
+  backLink?: React.ReactElement;
   hideLeftNav?: boolean | false;
 }
 
@@ -31,14 +32,13 @@ const AdminNavLayout = ({ children, user, backLink, hideLeftNav }: AdminNavLayou
 
       <Header context="admin" user={user} />
 
-      <div className="page-container mx-4 shrink-0 grow basis-auto laptop:mx-32 desktop:mx-64">
-        {backLink && <nav className="absolute">{backLink}</nav>}
-        {!backLink && !hideLeftNav && <LeftNavigation />}
-        <main id="content" className={!hideLeftNav ? "ml-60" : ""}>
+      {hideLeftNav ? (
+        <FullWidthLayout title="title">{children}</FullWidthLayout>
+      ) : (
+        <TwoColumnLayout title="title" leftNav={<LeftNavigation />}>
           {children}
-          <ToastContainer />
-        </main>
-      </div>
+        </TwoColumnLayout>
+      )}
 
       <Footer displayFormBuilderFooter />
     </div>
