@@ -16,6 +16,7 @@ import { getPrivilegeRulesForUser } from "@lib/privileges";
 import { logEvent } from "@lib/auditLogs";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { activeStatusCheck, activeStatusUpdate } from "@lib/cache/userActiveStatus";
+import { deepStringify } from "@lib/utils";
 
 if (
   (!process.env.COGNITO_APP_CLIENT_ID ||
@@ -93,7 +94,7 @@ export const authOptions: NextAuthOptions = {
   debug: process.env.NODE_ENV !== "production",
   logger: {
     error(code, metadata) {
-      logMessage.error(`NextAuth error - Code: ${code}. Metadata: ${JSON.stringify(metadata)}`);
+      logMessage.error(`NextAuth error - Code: ${code}. Metadata: ${deepStringify(metadata)}`);
     },
     warn(code) {
       logMessage.warn(`NextAuth warning - Code: ${code}`);

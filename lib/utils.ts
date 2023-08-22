@@ -10,3 +10,12 @@ export function chunkArray<T>(arr: T[], size: number): T[][] {
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+export const deepStringify = <T>(obj: T): string => {
+  return JSON.stringify(obj, (key, value) => {
+    if (typeof value === "object" && value !== null) {
+      return deepStringify(value);
+    }
+    return value;
+  });
+};
