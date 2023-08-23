@@ -27,7 +27,7 @@ const AdminNavLayout = ({ children, user, backLink, hideLeftNav }: AdminNavLayou
         <TwoColumnLayout
           user={user}
           context="admin"
-          leftNav={
+          leftColumnContent={
             <>
               {backLink}
               <LeftNavigation />

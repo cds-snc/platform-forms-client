@@ -117,7 +117,7 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
 };
 
 RenderMyForms.getLayout = (page: ReactElement) => {
-  return <TwoColumnLayout leftNav={<LeftNavigation />}>{page}</TwoColumnLayout>;
+  return <TwoColumnLayout leftColumnContent={<LeftNavigation />}>{page}</TwoColumnLayout>;
 };
 
 export const getServerSideProps = requireAuthentication(

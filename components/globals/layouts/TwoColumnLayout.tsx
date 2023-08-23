@@ -8,12 +8,12 @@ import { HeadMeta } from "./HeadMeta";
 
 export const TwoColumnLayout = ({
   children,
-  leftNav,
+  leftColumnContent,
   user,
   context,
 }: {
   children: React.ReactNode;
-  leftNav?: React.ReactNode;
+  leftColumnContent?: React.ReactNode;
   user?: User;
   context?: "admin" | "formBuilder" | "default";
 }) => {
@@ -29,7 +29,7 @@ export const TwoColumnLayout = ({
         <>
           <div>
             <div className="flex flex-row gap-16">
-              <div className="min-w-[175px]">{leftNav}</div>
+              <div className="min-w-[175px]">{leftColumnContent}</div>
 
               <main id="content" className="form-builder w-full">
                 {children}

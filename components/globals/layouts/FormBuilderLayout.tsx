@@ -24,7 +24,7 @@ const PageLayout = ({
       ) : (
         <TwoColumnLayout
           context="formBuilder"
-          leftNav={
+          leftColumnContent={
             <>
               {backLink && <>{backLink}</>}
               <LeftNavigation />
