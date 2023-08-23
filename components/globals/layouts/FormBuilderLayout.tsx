@@ -15,16 +15,25 @@ import { TwoColumnLayout } from "./TwoColumnLayout";
 const PageLayout = ({
   page,
   hideLeftNav,
+  backLink,
 }: {
   page: ReactElement;
   hideLeftNav?: boolean | false;
+  backLink?: ReactElement;
 }) => {
   return (
     <>
       {hideLeftNav ? (
-        <FullWidthLayout title={page.props.title}>{page}</FullWidthLayout>
+        <FullWidthLayout>{page}</FullWidthLayout>
       ) : (
-        <TwoColumnLayout title={page.props.title} leftNav={<LeftNavigation />}>
+        <TwoColumnLayout
+          leftNav={
+            <>
+              {backLink && <>{backLink}</>}
+              <LeftNavigation />
+            </>
+          }
+        >
           {page}
         </TwoColumnLayout>
       )}
@@ -34,14 +43,14 @@ const PageLayout = ({
 
 export const FormBuilderLayout = ({
   page,
-  isFormBuilder = false,
   className = "",
   hideLeftNav,
+  backLink,
 }: {
   page: ReactElement;
-  isFormBuilder?: boolean;
   className?: string;
   hideLeftNav?: boolean | false;
+  backLink?: ReactElement;
 }) => {
   return (
     <TemplateStoreProvider
@@ -56,8 +65,10 @@ export const FormBuilderLayout = ({
           </Head>
           <div className={`flex h-full flex-col ${className}`}>
             <SkipLink />
-            <Header context={isFormBuilder ? "formBuilder" : "default"} />
-            <PageLoader page={<PageLayout page={page} hideLeftNav={hideLeftNav} />} />
+            <Header context="formBuilder" />
+            <PageLoader
+              page={<PageLayout page={page} hideLeftNav={hideLeftNav} backLink={backLink} />}
+            />
             <Footer displayFormBuilderFooter />
           </div>
         </RefStoreProvider>
