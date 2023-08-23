@@ -28,6 +28,8 @@ const BackToManageForms = () => {
   const router = useRouter();
   const { backLink } = router.query;
 
+  if (!backLink) return null;
+
   return (
     <div className="mb-10">
       <BackLink href={`/admin/accounts/${backLink}/manage-forms`}>
@@ -51,15 +53,17 @@ const Page: NextPageWithLayout<AssignUsersToTemplateProps> = ({
       <Head>
         <title>{title}</title>
       </Head>
-      <SettingsNavigation />
-      {canManageOwnership && (
-        <FormOwnership
-          formRecord={formRecord}
-          usersAssignedToFormRecord={usersAssignedToFormRecord}
-          allUsers={allUsers}
-        />
-      )}
-      <Settings />
+      <div className="max-w-4xl">
+        <SettingsNavigation />
+        {canManageOwnership && (
+          <FormOwnership
+            formRecord={formRecord}
+            usersAssignedToFormRecord={usersAssignedToFormRecord}
+            allUsers={allUsers}
+          />
+        )}
+        <Settings />
+      </div>
     </>
   );
 };
