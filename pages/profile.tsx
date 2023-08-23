@@ -113,25 +113,27 @@ const Profile: NextPageWithLayout<ProfileProps> = ({
       <Head>
         <title>{t("title")}</title>
       </Head>
-      <h1 className="mb-2 border-b-0">{t("title")}</h1>
-      <div className="flex flex-col gap-4 tablet:flex-row">
-        <div className="w-full rounded-lg border p-4  laptop:w-1/2">
-          <h2 className="mb-6 pb-0 text-2xl">{t("accountPanel.title")}</h2>
-          <div>
-            <h3 className="mb-2 text-xl">{t("accountPanel.email")}</h3>
-            <p className="mb-4">{email}</p>
+      <div className="!ml-[90px] laptop:ml-60">
+        <h1 className="mb-2 border-b-0">{t("title")}</h1>
+        <div className="flex flex-col gap-4 tablet:flex-row">
+          <div className="w-full rounded-lg border p-4  laptop:w-1/2">
+            <h2 className="mb-6 pb-0 text-2xl">{t("accountPanel.title")}</h2>
+            <div>
+              <h3 className="mb-2 text-xl">{t("accountPanel.email")}</h3>
+              <p className="mb-4">{email}</p>
+            </div>
+            <div>
+              <h3 className="mb-2 text-xl">{t("accountPanel.publishing")}</h3>
+              <p className="mb-4">
+                <Icon checked={publishingStatus} />{" "}
+                {publishingStatus ? t("accountPanel.unlocked") : t("accountPanel.locked")}
+              </p>
+            </div>
           </div>
-          <div>
-            <h3 className="mb-2 text-xl">{t("accountPanel.publishing")}</h3>
-            <p className="mb-4">
-              <Icon checked={publishingStatus} />{" "}
-              {publishingStatus ? t("accountPanel.unlocked") : t("accountPanel.locked")}
-            </p>
+          <div className="w-full rounded-lg border p-4 laptop:w-1/2">
+            <h2 className="mb-6 pb-0 text-2xl">{t("securityPanel.title")}</h2>
+            <Questions questions={userQuestions} allQuestions={allQuestions} />
           </div>
-        </div>
-        <div className="w-full rounded-lg border p-4 laptop:w-1/2">
-          <h2 className="mb-6 pb-0 text-2xl">{t("securityPanel.title")}</h2>
-          <Questions questions={userQuestions} allQuestions={allQuestions} />
         </div>
       </div>
     </>

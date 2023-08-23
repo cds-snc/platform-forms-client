@@ -31,9 +31,7 @@ export const FullWidthLayout = ({
         <ToastContainer />
         <>
           <div>
-            <main id="content" className="!ml-[90px] laptop:ml-60">
-              {children}
-            </main>
+            <main id="content">{children}</main>
           </div>
         </>
       </div>
