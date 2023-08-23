@@ -5,13 +5,18 @@ import SkipLink from "../SkipLink";
 import Fip from "../Fip";
 import { HeadMeta } from "./HeadMeta";
 
-interface BaseProps extends React.PropsWithChildren {
+interface DefaultLayoutProps extends React.PropsWithChildren {
   showLanguageToggle?: boolean;
   showLogin?: boolean;
   className?: string;
 }
 
-export const Layout = ({ children, showLanguageToggle, showLogin, className }: BaseProps) => {
+export const Layout = ({
+  children,
+  showLanguageToggle,
+  showLogin,
+  className,
+}: DefaultLayoutProps) => {
   return (
     <>
       <header>
@@ -25,9 +30,9 @@ export const Layout = ({ children, showLanguageToggle, showLogin, className }: B
   );
 };
 
-const Base = ({ children, showLanguageToggle, showLogin }: BaseProps) => {
+const DefaultLayout = ({ children, showLanguageToggle, showLogin }: DefaultLayoutProps) => {
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex h-full flex-col">
       <HeadMeta />
       <SkipLink />
 
@@ -43,8 +48,8 @@ const Base = ({ children, showLanguageToggle, showLogin }: BaseProps) => {
   );
 };
 
-Base.propTypes = {
+DefaultLayout.propTypes = {
   children: PropTypes.object.isRequired,
 };
 
-export default Base;
+export default DefaultLayout;
