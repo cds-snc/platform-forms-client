@@ -1,3 +1,4 @@
+import { useSpeechToText } from "@lib/hooks/useSpeechToText";
 import React, { FocusEventHandler } from "react";
 
 interface Props {
@@ -45,6 +46,8 @@ const Input = React.forwardRef<Ref, Props>((props, ref) => {
     error:
       "py-2 px-3 my-2 rounded border-1.5 border-red-default border-solid focus:outline-2 focus:outline-red-focus focus:outline-red focus:border-red-focus",
   };
+
+  useSpeechToText({ elRef: ref });
 
   return (
     <input

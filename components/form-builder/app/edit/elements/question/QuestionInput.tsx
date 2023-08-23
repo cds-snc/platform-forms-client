@@ -6,6 +6,7 @@ import { ExpandingInput } from "@formbuilder/app/shared";
 import { Language } from "@formbuilder/types";
 import { useTemplateStore } from "@formbuilder/store";
 import { useRefsContext } from "@formbuilder/app/edit/RefsContext";
+import { useSpeechToText } from "@lib/hooks/useSpeechToText";
 
 export const QuestionInput = ({
   index,
@@ -39,6 +40,12 @@ export const QuestionInput = ({
       translationLanguagePriority: s.translationLanguagePriority,
       getLocalizationAttribute: s.getLocalizationAttribute,
     }));
+
+  //
+  //
+  // Expects a ref, so needs more thought
+  // useSpeechToText({elRef: getRef()})
+  //
 
   useEffect(() => {
     // see: https://github.com/cds-snc/platform-forms-client/pull/1194/commits/cf2d08676cb9dfa7bb500f713cc16cdf653c3e93

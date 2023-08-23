@@ -1,4 +1,5 @@
 import React, { FocusEventHandler } from "react";
+import { useSpeechToText } from "@lib/hooks/useSpeechToText";
 
 interface Props {
   id: string;
@@ -34,6 +35,8 @@ const ExpandingInput = React.forwardRef<Ref, Props>((props, ref) => {
     wrapperClassName,
     className,
   } = props;
+
+  useSpeechToText({ elRef: ref });
 
   return (
     <div

@@ -4,6 +4,7 @@ import { useTemplateStore } from "@formbuilder/store/useTemplateStore";
 import { useTranslation } from "next-i18next";
 import { useRefStore } from "@lib/hooks/useRefStore";
 import { LocalizedFormProperties } from "@formbuilder/types";
+import { useSpeechToText } from "@lib/hooks/useSpeechToText";
 
 export const FileNameInput = () => {
   const { t } = useTranslation(["form-builder"]);
@@ -30,6 +31,13 @@ export const FileNameInput = () => {
     title:
       s.form[s.localizeField(LocalizedFormProperties.TITLE, s.translationLanguagePriority)] ?? "",
   }));
+
+  //
+  // Error "uncaught ReferenceError: webkitSpeechRecognition is not defined"
+  // Is this rendered on the Server statically?
+  //
+  // useSpeechToText({elRef: fileNameInput});
+  //
 
   useEffect(() => {
     setRef("fileNameInput", remoteRef);
