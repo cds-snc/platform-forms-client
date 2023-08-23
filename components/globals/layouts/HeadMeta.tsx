@@ -3,7 +3,7 @@ import React from "react";
 
 const css = `
     a:active {
-        box-shadow: 4px 0 0 0 #303fc3, -4px 0 0 0 #303fc3 !important;
+        box-shadow: none !important;
     }
 `;
 
