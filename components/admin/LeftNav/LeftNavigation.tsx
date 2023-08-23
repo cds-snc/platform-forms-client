@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React from "react";
 import { NavLink } from "@components/globals/NavLink";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
@@ -6,7 +6,7 @@ import { useAccessControl } from "@lib/hooks";
 
 import { NameIcon, FlagIcon, GearIcon } from "@components/form-builder/icons";
 
-export const LeftNavigation = ({ backLink }: { backLink?: ReactElement }) => {
+export const LeftNavigation = () => {
   const { t } = useTranslation(["admin-login", "common"]);
   const { ability } = useAccessControl();
   const router = useRouter();
@@ -18,7 +18,6 @@ export const LeftNavigation = ({ backLink }: { backLink?: ReactElement }) => {
   return (
     <nav>
       <ul className="m-0 list-none p-0">
-        {backLink && <li className="mb-10">{backLink}</li>}
         {ability?.can("view", "User") && (
           <li>
             <NavLink id="users" href={`/admin/accounts`} isActive={path === "/admin/accounts"}>
