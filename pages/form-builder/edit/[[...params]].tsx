@@ -4,10 +4,9 @@ import { useRouter } from "next/router";
 import { NextPageWithLayout } from "../../_app";
 import { PageProps } from "@lib/types";
 import { getServerSideProps } from "../index";
-import { EditNavigation, Template, LeftNavigation } from "@components/form-builder/app";
+import { EditNavigation } from "@components/form-builder/app";
 import { Edit } from "@components/form-builder/app/edit";
 import { useTemplateStore } from "@formbuilder/store";
-import { TwoColumnLayout } from "@components/globals/layouts";
 import Head from "next/head";
 import { FormBuilderLayout } from "@components/globals/layouts/FormBuilderLayout";
 
