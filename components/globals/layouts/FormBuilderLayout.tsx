@@ -20,7 +20,7 @@ const PageLayout = ({
   return (
     <>
       {hideLeftNav ? (
-        <FullWidthLayout context="formBuilder">{page}</FullWidthLayout>
+        <FullWidthLayout context="default">{page}</FullWidthLayout>
       ) : (
         <TwoColumnLayout
           context="formBuilder"
