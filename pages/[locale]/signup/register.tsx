@@ -288,17 +288,19 @@ Register.getLayout = (page: ReactElement) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerSession(context.req, context.res, authOptions);
 
+  const { locale = "en" }: { locale?: string } = context.params ?? {};
+
   if (session)
     return {
       redirect: {
-        destination: `/${context.locale}/myforms/`,
+        destination: `/${locale}/myforms/`,
         permanent: false,
       },
     };
   return {
     props: {
-      ...(context.locale &&
-        (await serverSideTranslations(context.locale, [
+      ...(locale &&
+        (await serverSideTranslations(locale, [
           "common",
           "cognito-errors",
           "signup",

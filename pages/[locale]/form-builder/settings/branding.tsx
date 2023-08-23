@@ -30,8 +30,9 @@ Page.getLayout = (page: ReactElement) => {
   return <Template page={page} isFormBuilder />;
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ locale, req, res }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params, req, res }) => {
   const session = await getServerSession(req, res, authOptions);
+  const { locale = "en" }: { locale?: string } = params ?? {};
 
   if (session && !session.user.acceptableUse) {
     // If they haven't agreed to Acceptable Use redirect to policy page for acceptance

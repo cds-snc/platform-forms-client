@@ -76,8 +76,9 @@ Flags.getLayout = (page: ReactElement) => {
   return <AdminNavLayout user={page.props.user}>{page}</AdminNavLayout>;
 };
 
-export const getServerSideProps = requireAuthentication(async ({ locale, user: { ability } }) => {
+export const getServerSideProps = requireAuthentication(async ({ params, user: { ability } }) => {
   checkPrivileges(ability, [{ action: "view", subject: "Flag" }]);
+  const { locale = "en" }: { locale?: string } = params ?? {};
   return {
     props: {
       ...(locale &&

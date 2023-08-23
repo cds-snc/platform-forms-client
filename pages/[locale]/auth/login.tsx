@@ -190,20 +190,21 @@ Login.getLayout = (page: ReactElement) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { locale = "en" }: { locale?: string } = context.params ?? {};
   const session = await getServerSession(context.req, context.res, authOptions);
 
   if (session)
     return {
       redirect: {
-        destination: `/${context.locale}/myforms/`,
+        destination: `/${locale}/myforms/`,
         permanent: false,
       },
     };
 
   return {
     props: {
-      ...(context.locale &&
-        (await serverSideTranslations(context.locale, [
+      ...(locale &&
+        (await serverSideTranslations(locale, [
           "common",
           "signup",
           "login",

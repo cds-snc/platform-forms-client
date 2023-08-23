@@ -44,10 +44,10 @@ InvalidMagicLink.getLayout = (page: ReactElement) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { locale = "en" }: { locale?: string } = context.params ?? {};
   return {
     props: {
-      ...(context.locale &&
-        (await serverSideTranslations(context.locale, ["common", "reset-password"]))),
+      ...(locale && (await serverSideTranslations(locale, ["common", "reset-password"]))),
     },
   };
 };

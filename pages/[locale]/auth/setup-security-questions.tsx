@@ -309,41 +309,41 @@ SetupSecurityQuestions.getLayout = (page: ReactElement) => {
 };
 
 export const getServerSideProps = requireAuthentication(
-  async ({ user: { ability, email }, locale }) => {
-    {
-      checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
+  async ({ user: { ability, email }, params }) => {
+    const { locale = "en" }: { locale?: string } = params ?? {};
 
-      const sessionSecurityQuestions = await retrieveUserSecurityQuestions({
-        userId: ability.userID,
-      });
-      if (sessionSecurityQuestions && sessionSecurityQuestions.length >= 3) {
-        return {
-          redirect: {
-            destination: "/profile",
-            permanent: false,
-          },
-        };
-      }
+    checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
 
-      // Removes any removed (deprecated) questions and formats for the related language
-      const questions: Question[] = (await retrievePoolOfSecurityQuestions())
-        .filter((q) => !q.deprecated)
-        .map((q) => {
-          return {
-            id: q.id,
-            question: locale === "fr" ? q.questionFr : q.questionEn,
-          };
-        });
-
+    const sessionSecurityQuestions = await retrieveUserSecurityQuestions({
+      userId: ability.userID,
+    });
+    if (sessionSecurityQuestions && sessionSecurityQuestions.length >= 3) {
       return {
-        props: {
-          email,
-          questions,
-          ...(locale &&
-            (await serverSideTranslations(locale, ["setup-security-questions", "common"]))),
+        redirect: {
+          destination: "/profile",
+          permanent: false,
         },
       };
     }
+
+    // Removes any removed (deprecated) questions and formats for the related language
+    const questions: Question[] = (await retrievePoolOfSecurityQuestions())
+      .filter((q) => !q.deprecated)
+      .map((q) => {
+        return {
+          id: q.id,
+          question: locale === "fr" ? q.questionFr : q.questionEn,
+        };
+      });
+
+    return {
+      props: {
+        email,
+        questions,
+        ...(locale &&
+          (await serverSideTranslations(locale, ["setup-security-questions", "common"]))),
+      },
+    };
   }
 );
 

@@ -45,12 +45,14 @@ export function requireAuthentication(
   ): Promise<GetServerSidePropsResult<Record<string, unknown>>> => {
     try {
       const session = await getServerSession(context.req, context.res, authOptions);
+      const { locale = "en" }: { locale?: string } = context.params ?? {};
+      const url = context.resolvedUrl.replace(`/${locale}`, "");
 
       if (!session) {
         // If no user, redirect to login
         return {
           redirect: {
-            destination: `/${context.locale}/auth/login`,
+            destination: `/${locale}/auth/login`,
             permanent: false,
           },
         };
@@ -59,20 +61,17 @@ export function requireAuthentication(
       if (session.user.deactivated) {
         return {
           redirect: {
-            destination: `/${context.locale}/auth/account-deactivated`,
+            destination: `/${locale}/auth/account-deactivated`,
             permanent: false,
           },
         };
       }
 
-      if (
-        !session.user.hasSecurityQuestions &&
-        !context.resolvedUrl?.startsWith("/auth/setup-security-questions")
-      ) {
+      if (!session.user.hasSecurityQuestions && !url.startsWith("/auth/setup-security-questions")) {
         // check if user has setup security questions setup
         return {
           redirect: {
-            destination: `/${context.locale}/auth/setup-security-questions`,
+            destination: `/${locale}/auth/setup-security-questions`,
             permanent: false,
           },
         };
@@ -81,16 +80,16 @@ export function requireAuthentication(
       if (
         session.user.hasSecurityQuestions &&
         !session.user.acceptableUse &&
-        !context.resolvedUrl?.startsWith("/auth/policy") &&
-        !context.resolvedUrl?.startsWith("/auth/setup-security-questions")
+        !url.startsWith("/auth/policy") &&
+        !url.startsWith("/auth/setup-security-questions")
       ) {
         // If they haven't agreed to Acceptable Use redirect to policy page for acceptance
         // If already on the policy page don't redirect, aka endless redirect loop.
         // Also check that the path is local and not an external URL
         return {
           redirect: {
-            destination: `/${context.locale}/auth/policy?referer=${
-              localPathRegEx.test(context.resolvedUrl || "") ? context.resolvedUrl : "/myforms"
+            destination: `/${locale}/auth/policy?referer=${
+              localPathRegEx.test(url) ? url : "/myforms"
             }`,
             permanent: false,
           },
@@ -113,9 +112,10 @@ export function requireAuthentication(
       return innerFunctionProps;
     } catch (e) {
       if (e instanceof AccessControlError) {
+        const { locale = "en" }: { locale?: string } = context.params ?? {};
         return {
           redirect: {
-            destination: `/${context.locale}/admin/unauthorized`,
+            destination: `/${locale}/admin/unauthorized`,
             permanent: false,
           },
         };

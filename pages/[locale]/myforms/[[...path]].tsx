@@ -132,7 +132,8 @@ RenderMyForms.getLayout = (page: ReactElement) => {
 };
 
 export const getServerSideProps = requireAuthentication(
-  async ({ user: { ability, id }, locale }) => {
+  async ({ user: { ability, id }, params }) => {
+    const { locale = "en" }: { locale?: string } = params ?? {};
     {
       checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
 

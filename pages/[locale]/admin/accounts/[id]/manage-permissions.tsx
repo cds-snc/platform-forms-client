@@ -238,39 +238,38 @@ ManagePermissions.getLayout = (page: ReactElement) => {
   );
 };
 
-export const getServerSideProps = requireAuthentication(
-  async ({ user: { ability }, params, locale }) => {
-    checkPrivileges(
-      ability,
-      [
-        { action: "view", subject: "User" },
-        { action: "view", subject: "Privilege" },
-      ],
-      "all"
-    );
+export const getServerSideProps = requireAuthentication(async ({ user: { ability }, params }) => {
+  checkPrivileges(
+    ability,
+    [
+      { action: "view", subject: "User" },
+      { action: "view", subject: "Privilege" },
+    ],
+    "all"
+  );
 
-    const id = params?.id || null;
+  const id = params?.id || null;
+  const { locale = "en" }: { locale?: string } = params ?? {};
 
-    const formUser = await getUser(ability, id as string);
+  const formUser = await getUser(ability, id as string);
 
-    const allPrivileges = (await getAllPrivileges(ability)).map(
-      ({ id, name, descriptionFr, descriptionEn }) => ({
-        id,
-        name,
-        descriptionFr,
-        descriptionEn,
-      })
-    );
+  const allPrivileges = (await getAllPrivileges(ability)).map(
+    ({ id, name, descriptionFr, descriptionEn }) => ({
+      id,
+      name,
+      descriptionFr,
+      descriptionEn,
+    })
+  );
 
-    return {
-      props: {
-        ...(locale &&
-          (await serverSideTranslations(locale, ["common", "admin-users", "admin-login"]))),
-        formUser,
-        allPrivileges,
-      },
-    };
-  }
-);
+  return {
+    props: {
+      ...(locale &&
+        (await serverSideTranslations(locale, ["common", "admin-users", "admin-login"]))),
+      formUser,
+      allPrivileges,
+    },
+  };
+});
 
 export default ManagePermissions;

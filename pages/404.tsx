@@ -2,6 +2,7 @@ import React from "react";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Head from "next/head";
+import { GetStaticProps } from "next";
 
 import { ErrorPanel } from "@components/globals";
 
@@ -21,10 +22,13 @@ const PageNotFound = () => {
   );
 };
 
-export const getStaticProps = async ({ locale }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ["common", "error"])),
-  },
-});
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const { locale = "en" }: { locale?: string } = params ?? {};
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common", "error"])),
+    },
+  };
+};
 
 export default PageNotFound;

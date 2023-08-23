@@ -74,6 +74,7 @@ RenderForm.getLayout = function getLayout(page: ReactElement) {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { locale = "en" }: { locale?: string } = context.params ?? {};
   const unpublishedForms = await checkOne("unpublishedForms");
   let publicForm: PublicFormRecord | null = null;
   const formID = context.params?.form;
@@ -83,14 +84,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     // If we're previewing a form, get the object from the query string
 
     // If more then one formObject param is passed in short circuit back to 404
-    if (Array.isArray(context.query?.formObject)) return redirect(context.locale);
+    if (Array.isArray(context.query?.formObject)) return redirect(locale);
     const queryObj = context.query.formObject;
     const parsedForm = JSON.parse(queryObj);
     publicForm = parsedForm.form ?? null;
   } else {
     //Otherwise, get the form object via the dataLayer library
     // Needed for typechecking of a ParsedURLQuery type which can be a string or string[]
-    if (!formID || Array.isArray(formID)) return redirect(context.locale);
+    if (!formID || Array.isArray(formID)) return redirect(locale);
 
     publicForm = await getPublicTemplateByID(formID);
   }

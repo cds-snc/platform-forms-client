@@ -27,10 +27,11 @@ Page.getLayout = (page: ReactElement) => {
 
 export const getServerSideProps: GetServerSideProps = async ({
   query: { params },
-  locale,
+  params: dynamicRoute,
   req,
   res,
 }) => {
+  const { locale = "en" }: { locale?: string } = dynamicRoute ?? {};
   const [formID = null] = params || [];
 
   const FormbuilderParams: { locale: string; initialForm: null | FormRecord } = {

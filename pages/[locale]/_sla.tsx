@@ -42,7 +42,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { locale = "en" }: { locale?: string } = params ?? {};
-  logMessage.debug(`SLA page lang: ${locale}`);
   const SLAContent = await require(`../../public/static/content/${locale}/sla.md`);
   return {
     props: {

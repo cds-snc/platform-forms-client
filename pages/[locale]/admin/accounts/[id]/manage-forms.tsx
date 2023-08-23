@@ -204,63 +204,62 @@ ManageForms.getLayout = (page: ReactElement) => {
   );
 };
 
-export const getServerSideProps = requireAuthentication(
-  async ({ locale, params, user: { ability } }) => {
-    const id = params?.id || null;
+export const getServerSideProps = requireAuthentication(async ({ params, user: { ability } }) => {
+  const id = params?.id || null;
+  const { locale = "en" }: { locale?: string } = params ?? {};
 
-    checkPrivileges(ability, [
-      { action: "view", subject: "User" },
-      {
-        action: "view",
-        subject: {
-          type: "FormRecord",
-          // Passing an empty object here just to force CASL evaluate the condition part of a permission.
-          // Will only allow users who have privilege of Manage All Forms
-          object: {},
-        },
+  checkPrivileges(ability, [
+    { action: "view", subject: "User" },
+    {
+      action: "view",
+      subject: {
+        type: "FormRecord",
+        // Passing an empty object here just to force CASL evaluate the condition part of a permission.
+        // Will only allow users who have privilege of Manage All Forms
+        object: {},
       },
-    ]);
+    },
+  ]);
 
-    const formUser = await getUser(ability, id as string);
+  const formUser = await getUser(ability, id as string);
 
-    let templates: Templates = [];
-    if (id) {
-      templates = (await getAllTemplatesForUser(ability, id as string)).map((template) => {
-        const {
-          id,
-          form: { titleEn, titleFr },
-          isPublished,
-          createdAt,
-        } = template;
+  let templates: Templates = [];
+  if (id) {
+    templates = (await getAllTemplatesForUser(ability, id as string)).map((template) => {
+      const {
+        id,
+        form: { titleEn, titleFr },
+        isPublished,
+        createdAt,
+      } = template;
 
-        return {
-          id,
-          titleEn,
-          titleFr,
-          isPublished,
-          createdAt: Number(createdAt),
-        };
-      });
-    }
-
-    const overdue = await getUnprocessedSubmissionsForUser(ability, id as string, templates);
-
-    return {
-      props: {
-        ...(locale &&
-          (await serverSideTranslations(locale, [
-            "common",
-            "admin-forms",
-            "admin-login",
-            "admin-users",
-            "form-builder",
-          ]))),
-        formUser: formUser,
-        templates,
-        overdue,
-      },
-    };
+      return {
+        id,
+        titleEn,
+        titleFr,
+        isPublished,
+        createdAt: Number(createdAt),
+      };
+    });
   }
-);
+
+  const overdue = await getUnprocessedSubmissionsForUser(ability, id as string, templates);
+
+  return {
+    props: {
+      ...(locale &&
+        (await serverSideTranslations(locale, [
+          "common",
+          "admin-forms",
+          "admin-login",
+          "admin-users",
+          "form-builder",
+        ]))),
+      formUser: formUser,
+      templates,
+      overdue,
+    },
+  };
+});
 
 export default ManageForms;

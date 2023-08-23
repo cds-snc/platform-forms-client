@@ -104,32 +104,31 @@ FormSettings.getLayout = (page: ReactElement) => {
   return <AdminNavLayout user={page.props.user}>{page}</AdminNavLayout>;
 };
 
-export const getServerSideProps = requireAuthentication(
-  async ({ locale, params, user: { ability } }) => {
-    // Only users who have the ManageForms privilege can view this page for now
-    checkPrivileges(ability, [{ action: "update", subject: { type: "FormRecord", object: {} } }]);
+export const getServerSideProps = requireAuthentication(async ({ params, user: { ability } }) => {
+  const { locale = "en" }: { locale?: string } = params ?? {};
+  // Only users who have the ManageForms privilege can view this page for now
+  checkPrivileges(ability, [{ action: "update", subject: { type: "FormRecord", object: {} } }]);
 
-    const formID = params?.form;
-    // Needed for typechecking of a ParsedURLQuery type which can be a string or string[]
-    if (!formID || Array.isArray(formID)) return redirect(locale);
+  const formID = params?.form;
+  // Needed for typechecking of a ParsedURLQuery type which can be a string or string[]
+  if (!formID || Array.isArray(formID)) return redirect(locale);
 
-    if (formID) {
-      // get form info from db
-      const template = await getFullTemplateByID(ability, formID);
+  if (formID) {
+    // get form info from db
+    const template = await getFullTemplateByID(ability, formID);
 
-      if (template) {
-        return {
-          props: {
-            form: template,
-            ...(locale &&
-              (await serverSideTranslations(locale, ["common", "admin-templates", "admin-login"]))),
-          },
-        };
-      }
+    if (template) {
+      return {
+        props: {
+          form: template,
+          ...(locale &&
+            (await serverSideTranslations(locale, ["common", "admin-templates", "admin-login"]))),
+        },
+      };
     }
-    // if no form returned, 404
-    return redirect(locale);
   }
-);
+  // if no form returned, 404
+  return redirect(locale);
+});
 
 export default FormSettings;

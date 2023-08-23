@@ -22,7 +22,8 @@ const TermsOfUse = ({ content }: TermsOfUseProps) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => {
+export const getStaticProps: GetStaticProps = async (params) => {
+  const { locale = "en" }: { locale?: string } = params ?? {};
   const termsOfUseContent = await require(`../../public/static/content/${locale}/terms-of-use.md`);
 
   return {

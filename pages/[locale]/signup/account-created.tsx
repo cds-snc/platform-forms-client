@@ -51,8 +51,9 @@ AccountCreated.getLayout = (page: ReactElement) => {
   return <UserNavLayout contentWidth="tablet:w-[658px]">{page}</UserNavLayout>;
 };
 
-export const getServerSideProps = requireAuthentication(async ({ locale }) => {
+export const getServerSideProps = requireAuthentication(async (params) => {
   {
+    const { locale = "en" }: { locale?: string } = params ?? {};
     return {
       props: {
         ...(locale && (await serverSideTranslations(locale, ["signup", "common"]))),

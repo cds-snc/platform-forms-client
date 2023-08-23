@@ -156,43 +156,40 @@ DataView.getLayout = (page: ReactElement) => {
 };
 
 export const getServerSideProps = requireAuthentication(
-  async ({ user: { ability, id }, locale }) => {
-    {
-      checkPrivileges(
-        ability,
-        [
-          { action: "view", subject: "FormRecord" },
-          { action: "update", subject: "FormRecord" },
-        ],
-        "one"
-      );
-      // getStaticProps is serverside, and therefore instead of doing a request,
-      // we import the invoke Lambda function directly
+  async ({ user: { ability, id }, params }) => {
+    const { locale = "en" }: { locale?: string } = params ?? {};
+    checkPrivileges(
+      ability,
+      [
+        { action: "view", subject: "FormRecord" },
+        { action: "update", subject: "FormRecord" },
+      ],
+      "one"
+    );
+    // getStaticProps is serverside, and therefore instead of doing a request,
+    // we import the invoke Lambda function directly
 
-      const templates = (await getAllTemplates(ability, id)).map((template) => {
-        const {
-          id,
-          form: { titleEn, titleFr },
-          isPublished,
-        } = template;
-        return {
-          id,
-          titleEn,
-          titleFr,
-          isPublished,
-        };
-      });
-
+    const templates = (await getAllTemplates(ability, id)).map((template) => {
+      const {
+        id,
+        form: { titleEn, titleFr },
+        isPublished,
+      } = template;
       return {
-        props: {
-          templates,
-          ...(locale &&
-            (await serverSideTranslations(locale, ["common", "admin-templates", "admin-login"]))),
-        }, // will be passed to the page component as props
+        id,
+        titleEn,
+        titleFr,
+        isPublished,
       };
+    });
 
-      return { props: {} };
-    }
+    return {
+      props: {
+        templates,
+        ...(locale &&
+          (await serverSideTranslations(locale, ["common", "admin-templates", "admin-login"]))),
+      }, // will be passed to the page component as props
+    };
   }
 );
 

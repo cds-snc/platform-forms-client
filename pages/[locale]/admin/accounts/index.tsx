@@ -319,7 +319,8 @@ Users.getLayout = (page: ReactElement) => {
 };
 
 export const getServerSideProps = requireAuthentication(
-  async ({ user: { ability }, locale, query }) => {
+  async ({ user: { ability }, params, query }) => {
+    const { locale = "en" }: { locale?: string } = params ?? {};
     checkPrivileges(
       ability,
       [

@@ -1,7 +1,7 @@
 import { dir } from "i18next";
-import { languages } from "./i18n/settings";
+import { languages } from "@i18n/settings";
 import "react-app-polyfill/stable";
-import "../styles/app.scss";
+import "../../styles/app.scss";
 import { Metadata } from "next";
 import { logMessage } from "@lib/logger";
 
@@ -20,7 +20,7 @@ export default async function Layout({
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  logMessage.debug(`Global Layout locale: ${locale ?? "en"}`);
+  logMessage.debug(`Global App Page Layout lang: ${locale}`);
   return (
     <html lang={locale ?? "en"} dir={dir(locale ?? "en")}>
       <head />

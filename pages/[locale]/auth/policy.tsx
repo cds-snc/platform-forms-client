@@ -30,21 +30,22 @@ TermsOfUse.getLayout = (page: ReactElement) => {
 };
 
 export const getServerSideProps = requireAuthentication(async (context) => {
+  const { locale = "en" }: { locale?: string } = context.params ?? {};
   if (context.user?.acceptableUse) {
     return {
       redirect: {
         //redirect to user landing page
-        destination: `/${context.locale}/myforms`,
+        destination: `/${locale}/myforms`,
         permanent: false,
       },
     };
   }
 
   const termsOfUseContent =
-    await require(`../../public/static/content/${context?.locale}/responsibilities.md`);
+    await require(`../../../public/static/content/${locale}/responsibilities.md`);
   return {
     props: {
-      ...(context.locale && (await serverSideTranslations(context?.locale, ["common", "policy"]))),
+      ...(locale && (await serverSideTranslations(locale, ["common", "policy"]))),
       content: termsOfUseContent ?? null,
       ...(context.query.referer && { referer: context.query.referer }),
     },

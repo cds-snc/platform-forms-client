@@ -45,9 +45,10 @@ Logout.getLayout = (page: ReactElement) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { locale = "en" }: { locale?: string } = context.params ?? {};
   return {
     props: {
-      ...(context.locale && (await serverSideTranslations(context.locale, ["common", "logout"]))),
+      ...(locale && (await serverSideTranslations(locale, ["common", "logout"]))),
     },
   };
 };

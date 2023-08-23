@@ -33,12 +33,12 @@
     "postinstall": "[ \"$NODE_ENV\" = production ] && exit 0; husky install"
   },
   "dependencies": {
-    "@aws-sdk/client-cognito-identity-provider": "3.188.0",
-    "@aws-sdk/client-dynamodb": "3.188.0",
-    "@aws-sdk/client-lambda": "3.188.0",
-    "@aws-sdk/client-s3": "3.188.0",
-    "@aws-sdk/client-sqs": "3.188.0",
-    "@aws-sdk/lib-dynamodb": "3.188.0",
+    "@aws-sdk/client-cognito-identity-provider": "3.395.0",
+    "@aws-sdk/client-dynamodb": "3.395.0",
+    "@aws-sdk/client-lambda": "3.395.0",
+    "@aws-sdk/client-s3": "3.395.0",
+    "@aws-sdk/client-sqs": "3.395.0",
+    "@aws-sdk/lib-dynamodb": "3.395.0",
     "@casl/ability": "6.3.3",
     "@lexical/react": "0.9.2",
     "@next-auth/prisma-adapter": "1.0.7",

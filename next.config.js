@@ -32,7 +32,7 @@ module.exports = {
     removeConsole: true,
   },
   output: isOutputStandalone ? "standalone" : undefined,
-  webpack: (config) => {
+  webpack: (config, { isServer, nextRuntime, webpack }) => {
     // Support reading markdown
     config.module.rules.push({
       test: /\.md$/,
@@ -44,6 +44,10 @@ module.exports = {
       test: /VERSION$/,
       type: "asset/source",
     });
+
+    // Silences a repeated warning from the aws-sdk
+    if (isServer && nextRuntime === "nodejs")
+      config.plugins.push(new webpack.IgnorePlugin({ resourceRegExp: /^aws-crt$/ }));
 
     return config;
   },

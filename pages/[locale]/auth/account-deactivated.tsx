@@ -34,10 +34,10 @@ AccountDeactivated.getLayout = (page: ReactElement) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { locale = "en" }: { locale?: string } = context.params ?? {};
   return {
     props: {
-      ...(context.locale &&
-        (await serverSideTranslations(context.locale, ["common", "deactivated"]))),
+      ...(locale && (await serverSideTranslations(locale, ["common", "deactivated"]))),
     },
   };
 };

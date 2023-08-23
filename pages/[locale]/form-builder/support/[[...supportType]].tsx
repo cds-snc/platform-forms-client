@@ -505,10 +505,11 @@ export default function Contactus() {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const supportFormsEnabled = await checkOne("supportForms");
+  const { locale = "en" }: { locale?: string } = context.params ?? {};
   if (!supportFormsEnabled) {
     return {
       redirect: {
-        destination: `/${context.locale}/myforms`,
+        destination: `/${locale}/myforms`,
         permanent: false,
       },
     };
@@ -525,8 +526,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      ...(context.locale &&
-        (await serverSideTranslations(context.locale, ["common", "form-builder"]))),
+      ...(locale && (await serverSideTranslations(locale, ["common", "form-builder"]))),
     },
   };
 };

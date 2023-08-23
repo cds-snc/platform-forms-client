@@ -259,8 +259,9 @@ export default function UnlockPublishing() {
   );
 }
 
-export const getServerSideProps = requireAuthentication(async ({ user: { ability }, locale }) => {
+export const getServerSideProps = requireAuthentication(async ({ user: { ability }, params }) => {
   {
+    const { locale = "en" }: { locale?: string } = params ?? {};
     // If the user already has the Publishing Privilege redirect back to MyForms
     if (
       checkPrivilegesAsBoolean(ability, [

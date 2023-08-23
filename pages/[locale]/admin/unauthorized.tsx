@@ -27,18 +27,19 @@ const Unauthorized: React.FC = () => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerSession(context.req, context.res, authOptions);
 
+  const { locale = "en" }: { locale?: string } = context.params ?? {};
+
   if (!session)
     return {
       redirect: {
-        destination: `/${context.locale}/auth/login/`,
+        destination: `/${locale}/auth/login/`,
         permanent: false,
       },
     };
 
   return {
     props: {
-      ...(context.locale &&
-        (await serverSideTranslations(context.locale, ["common", "admin-login"]))),
+      ...(locale && (await serverSideTranslations(locale, ["common", "admin-login"]))),
     },
   };
 };

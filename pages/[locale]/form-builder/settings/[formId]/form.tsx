@@ -76,47 +76,45 @@ const redirect = (locale: string | undefined) => {
   };
 };
 
-export const getServerSideProps = requireAuthentication(
-  async ({ user: { ability }, locale, params }) => {
-    let adminProps;
+export const getServerSideProps = requireAuthentication(async ({ user: { ability }, params }) => {
+  const { locale = "en" }: { locale?: string } = params ?? {};
+  let adminProps;
+  if (
+    checkPrivilegesAsBoolean(ability, [
+      { action: "update", subject: "FormRecord" },
+      { action: "update", subject: "User" },
+    ])
+  ) {
+    const formID = params?.formId;
+    if (!formID || Array.isArray(formID)) return redirect(locale);
 
-    if (
-      checkPrivilegesAsBoolean(ability, [
-        { action: "update", subject: "FormRecord" },
-        { action: "update", subject: "User" },
-      ])
-    ) {
-      const formID = params?.formId;
-      if (!formID || Array.isArray(formID)) return redirect(locale);
+    const templateWithAssociatedUsers = await getTemplateWithAssociatedUsers(ability, formID);
+    if (!templateWithAssociatedUsers) return redirect(locale);
 
-      const templateWithAssociatedUsers = await getTemplateWithAssociatedUsers(ability, formID);
-      if (!templateWithAssociatedUsers) return redirect(locale);
+    const allUsers = (await getUsers(ability)).map((user) => {
+      return { id: user.id, name: user.name, email: user.email };
+    });
 
-      const allUsers = (await getUsers(ability)).map((user) => {
-        return { id: user.id, name: user.name, email: user.email };
-      });
-
-      adminProps = {
-        formRecord: templateWithAssociatedUsers.formRecord,
-        usersAssignedToFormRecord: templateWithAssociatedUsers.users,
-        allUsers,
-        canManageOwnership: true,
-      };
-    }
-
-    return {
-      props: {
-        ...(locale &&
-          (await serverSideTranslations(locale, [
-            "common",
-            "form-builder",
-            "admin-users",
-            "admin-login",
-          ]))),
-        ...adminProps,
-      },
+    adminProps = {
+      formRecord: templateWithAssociatedUsers.formRecord,
+      usersAssignedToFormRecord: templateWithAssociatedUsers.users,
+      allUsers,
+      canManageOwnership: true,
     };
   }
-);
+
+  return {
+    props: {
+      ...(locale &&
+        (await serverSideTranslations(locale, [
+          "common",
+          "form-builder",
+          "admin-users",
+          "admin-login",
+        ]))),
+      ...adminProps,
+    },
+  };
+});
 
 export default Page;

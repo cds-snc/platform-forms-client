@@ -597,9 +597,10 @@ ResetPassword.getLayout = (page: ReactElement) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ query: { token }, locale }) => {
+export const getServerSideProps: GetServerSideProps = async ({ query: { token }, params }) => {
   let userSecurityQuestions: SecurityQuestion[] = [];
   let email = "";
+  const { locale = "en" }: { locale?: string } = params ?? {};
 
   if (token) {
     try {

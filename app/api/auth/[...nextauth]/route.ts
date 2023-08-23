@@ -5,7 +5,6 @@ import { begin2FAAuthentication, initiateSignIn } from "@lib/auth/";
 import { NextRequest, NextResponse } from "next/server";
 
 import { authOptions } from "@app/api/auth/authConfig";
-import { logMessage } from "@lib/logger";
 
 if (
   (!process.env.COGNITO_APP_CLIENT_ID ||
@@ -15,18 +14,13 @@ if (
 )
   throw new Error("Missing Cognito Credentials");
 
-async function handler(req: NextRequest, context: never) {
+async function handler(req: NextRequest, context: { params: { nextauth: string[] } }) {
   // Listens for the sign-in action for Cognito to initiate the sign in process
 
-  logMessage.debug(
-    `Next Auth Search Params ${JSON.stringify(req.nextUrl.searchParams.get("nextauth"))}`
-  );
-  logMessage.debug(`Next Auth Path: ${req.nextUrl.pathname}`);
-  if (
-    req.nextUrl.searchParams.get("nextauth")?.includes("signin") &&
-    req.nextUrl.searchParams.get("nextauth")?.includes("cognito")
-  ) {
-    const { username, password } = await req.json();
+  if (context.params.nextauth.includes("signin") && context.params.nextauth.includes("cognito")) {
+    const formData = await req.formData();
+    const username = formData.get("username")?.toString();
+    const password = formData.get("password")?.toString();
 
     if (!username || !password)
       return NextResponse.json(

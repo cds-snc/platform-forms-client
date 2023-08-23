@@ -62,8 +62,9 @@ AdminWelcome.getLayout = (page: ReactElement) => {
     </AdminNavLayout>
   );
 };
-export const getServerSideProps = requireAuthentication(async ({ user: { ability }, locale }) => {
+export const getServerSideProps = requireAuthentication(async ({ user: { ability }, params }) => {
   const canViewUsers = checkPrivilegesAsBoolean(ability, [{ action: "view", subject: "User" }]);
+  const { locale = "en" }: { locale?: string } = params ?? {};
   if (!canViewUsers) {
     return {
       redirect: {

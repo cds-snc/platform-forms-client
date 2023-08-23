@@ -40,10 +40,13 @@ Home.getLayout = (page: ReactElement) => {
   return <BaseLayout showLanguageToggle={false}>{page}</BaseLayout>;
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    ...(locale && (await serverSideTranslations(locale, ["common"], null, ["fr", "en"]))),
-  },
-});
+export const getStaticProps: GetStaticProps = async (params) => {
+  const { locale = "en" }: { locale?: string } = params ?? {};
+  return {
+    props: {
+      ...(locale && (await serverSideTranslations(locale, ["common"], null, ["fr", "en"]))),
+    },
+  };
+};
 
 export default Home;

@@ -22,7 +22,8 @@ const TermsAndConditions = ({ content }: TermsAndConditionsProps) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => {
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const { locale = "en" }: { locale?: string } = params ?? {};
   const termsAndConditionsContent =
     await require(`../../public/static/content/${locale}/terms-and-conditions.md`);
 
