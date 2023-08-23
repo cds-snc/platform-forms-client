@@ -4,11 +4,8 @@ import Head from "next/head";
 import SkipLink from "@components/globals/SkipLink";
 import Footer from "@components/globals/Footer";
 import { TemplateStoreProvider } from "@components/form-builder/store";
-import { LeftNavigation } from "@components/form-builder/app";
 import { TemplateApiProvider } from "../hooks";
-import { ToastContainer } from "./shared/Toast";
 import { RefStoreProvider } from "@lib/hooks/useRefStore";
-import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { Header } from "@components/globals";
 import { PageLoader } from "@components/globals/layouts/PageLoader";
 
@@ -41,52 +38,5 @@ export const Template = ({
         </RefStoreProvider>
       </TemplateApiProvider>
     </TemplateStoreProvider>
-  );
-};
-
-export const PageTemplate = ({
-  children,
-  title,
-  navigation,
-  leftNav = true,
-  autoWidth = false,
-  backLink,
-}: {
-  children: React.ReactNode;
-  title: string;
-  navigation?: React.ReactElement;
-  leftNav?: boolean;
-  autoWidth?: boolean;
-  backLink?: React.ReactElement;
-}) => {
-  // This will check to see if a user is deactivated and redirect them to the account deactivated page
-  useAccessControl();
-
-  const leftNavMargin = backLink ? "ml-80" : "ml-60";
-
-  // Wait until the Template Store has fully hydrated before rendering the page
-  return (
-    <div className="mx-4 shrink-0 grow basis-auto laptop:mx-32 desktop:mx-64">
-      <ToastContainer />
-      <div>
-        {leftNav && <LeftNavigation backLink={backLink} />}
-        <>
-          <div>
-            <Head>
-              <title>{title}</title>
-            </Head>
-            <main
-              id="content"
-              className={`${leftNav && leftNavMargin} ${
-                leftNav && !autoWidth && "max-w-4xl"
-              } form-builder`}
-            >
-              {navigation}
-              {children}
-            </main>
-          </div>
-        </>
-      </div>
-    </div>
   );
 };
