@@ -5,6 +5,7 @@ import SkipLink from "../SkipLink";
 import { Header } from "../Header";
 import { User } from "next-auth";
 import { HeadMeta } from "./HeadMeta";
+import { cn } from "@lib/utils";
 
 export const TwoColumnLayout = ({
   children,
@@ -31,7 +32,10 @@ export const TwoColumnLayout = ({
             <div className="flex flex-row gap-16">
               <div className="min-w-[175px]">{leftColumnContent}</div>
 
-              <main id="content" className="form-builder w-full">
+              <main
+                id="content"
+                className={cn("w-full", context === "formBuilder" && "form-builder")}
+              >
                 {children}
               </main>
             </div>
