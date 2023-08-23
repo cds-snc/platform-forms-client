@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Footer from "../Footer";
-import Head from "next/head";
 import SkipLink from "../SkipLink";
 import Fip from "../Fip";
+import { HeadMeta } from "./HeadMeta";
 
 interface BaseProps extends React.PropsWithChildren {
   showLanguageToggle?: boolean;
@@ -28,12 +28,7 @@ export const Layout = ({ children, showLanguageToggle, showLogin, className }: B
 const Base = ({ children, showLanguageToggle, showLogin }: BaseProps) => {
   return (
     <div className="flex flex-col h-full">
-      <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta charSet="utf-8" />
-        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
-      </Head>
-
+      <HeadMeta />
       <SkipLink />
 
       <header>

@@ -1,10 +1,10 @@
 import React from "react";
 import { getPageClassNames } from "@lib/routeUtils";
-import Head from "next/head";
 import Footer from "@components/globals/Footer";
 import SkipLink from "@components/globals/SkipLink";
 import Fip from "@components/globals/Fip";
 import { PublicFormRecord } from "@lib/types";
+import { HeadMeta } from "./HeadMeta";
 
 interface FormDisplayLayoutProps extends React.PropsWithChildren {
   formRecord: PublicFormRecord;
@@ -16,13 +16,9 @@ const FormDisplayLayout = ({ children, formRecord, embedded }: FormDisplayLayout
 
   return (
     <>
-      <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta charSet="utf-8" />
-        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
-      </Head>
-
+      <HeadMeta />
       <SkipLink />
+
       <div className={classes}>
         {!embedded && (
           <header>
