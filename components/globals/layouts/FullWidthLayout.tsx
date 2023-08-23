@@ -2,7 +2,6 @@ import React from "react";
 
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { ToastContainer } from "@components/form-builder/app/shared/Toast";
-import Head from "next/head";
 import SkipLink from "../SkipLink";
 import { Header } from "../Header";
 import { User } from "next-auth";
