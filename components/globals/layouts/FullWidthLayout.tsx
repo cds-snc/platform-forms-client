@@ -31,7 +31,7 @@ export const FullWidthLayout = ({
         <ToastContainer />
         <>
           <div>
-            <main id="content" className="form-builder">
+            <main id="content" className="!ml-[90px] laptop:ml-60">
               {children}
             </main>
           </div>
