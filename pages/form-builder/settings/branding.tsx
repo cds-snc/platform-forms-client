@@ -25,8 +25,10 @@ const Page: NextPageWithLayout<PageProps> = ({
       <Head>
         <title>{title}</title>
       </Head>
-      <SettingsNavigation />
-      <Branding hasBrandingRequestForm={hasBrandingRequestForm} />
+      <div className="max-w-4xl">
+        <SettingsNavigation />
+        <Branding hasBrandingRequestForm={hasBrandingRequestForm} />
+      </div>
     </>
   );
 };

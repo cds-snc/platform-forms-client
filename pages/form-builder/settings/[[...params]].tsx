@@ -16,8 +16,10 @@ const Page: NextPageWithLayout<PageProps> = () => {
       <Head>
         <title>{title}</title>
       </Head>
-      <SettingsNavigation />
-      <ResponseDelivery />
+      <div className="max-w-4xl">
+        <SettingsNavigation />
+        <ResponseDelivery />
+      </div>
     </>
   );
 };

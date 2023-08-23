@@ -43,8 +43,10 @@ const Page: NextPageWithLayout<PageProps> = () => {
           <Head>
             <title>{title}</title>
           </Head>
-          <PreviewNavigation />
-          <Preview />
+          <div className="max-w-4xl">
+            <PreviewNavigation />
+            <Preview />
+          </div>
         </>
       )}
     </>
