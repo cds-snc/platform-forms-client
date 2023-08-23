@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import Loader from "../Loader";
 
 export const PageLoader = ({ page }: { page: ReactElement }) => {
-  const { t, i18n } = useTranslation("form-builder");
+  const { i18n } = useTranslation("form-builder");
 
   const { hasHydrated, setLang } = useTemplateStore((s) => ({
     hasHydrated: s.hasHydrated,
