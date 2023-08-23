@@ -29,7 +29,7 @@ const Page: NextPageWithLayout<PageProps> = () => {
 
   if (isPublished) {
     return (
-      <TwoColumnLayout title={title}>
+      <TwoColumnLayout>
         <div />
       </TwoColumnLayout>
     );
