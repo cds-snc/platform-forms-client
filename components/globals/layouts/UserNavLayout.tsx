@@ -2,7 +2,6 @@ import React from "react";
 import { useTranslation } from "next-i18next";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import Head from "next/head";
 
 import { useAccessControl } from "@lib/hooks";
 import { Footer, Brand, SkipLink, LanguageToggle } from "@components/globals";
