@@ -7,11 +7,11 @@ import { authOptions } from "@pages/api/auth/[...nextauth]";
 
 import { NextPageWithLayout } from "../../_app";
 import { PageProps } from "@lib/types";
-import { Template, LeftNavigation } from "@components/form-builder/app";
 import { Branding } from "@components/form-builder/app/branding";
 import { SettingsNavigation } from "@components/form-builder/app/navigation/SettingsNavigation";
 import { getAppSetting } from "@lib/appSettings";
-import { TwoColumnLayout } from "@components/globals/layouts";
+import Head from "next/head";
+import { FormBuilderLayout } from "@components/globals/layouts/FormBuilderLayout";
 
 const Page: NextPageWithLayout<PageProps> = ({
   hasBrandingRequestForm,
@@ -21,15 +21,18 @@ const Page: NextPageWithLayout<PageProps> = ({
   const { t } = useTranslation("form-builder");
   const title = `${t("branding.heading")} — ${t("gcForms")}`;
   return (
-    <TwoColumnLayout title={title} leftNav={<LeftNavigation />}>
+    <>
+      <Head>
+        <title>{title}</title>
+      </Head>
       <SettingsNavigation />
       <Branding hasBrandingRequestForm={hasBrandingRequestForm} />
-    </TwoColumnLayout>
+    </>
   );
 };
 
 Page.getLayout = (page: ReactElement) => {
-  return <Template page={page} isFormBuilder />;
+  return <FormBuilderLayout page={page} />;
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ locale, req, res }) => {

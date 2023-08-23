@@ -8,6 +8,8 @@ import { EditNavigation, Template, LeftNavigation } from "@components/form-build
 import { Edit } from "@components/form-builder/app/edit";
 import { useTemplateStore } from "@formbuilder/store";
 import { TwoColumnLayout } from "@components/globals/layouts";
+import Head from "next/head";
+import { FormBuilderLayout } from "@components/globals/layouts/FormBuilderLayout";
 
 const Page: NextPageWithLayout<PageProps> = () => {
   const { t } = useTranslation("form-builder");
@@ -27,23 +29,22 @@ const Page: NextPageWithLayout<PageProps> = () => {
   }, [router, isPublished, id]);
 
   if (isPublished) {
-    return (
-      <TwoColumnLayout title={title} leftNav={<LeftNavigation />}>
-        <div />
-      </TwoColumnLayout>
-    );
+    return <div />;
   }
 
   return (
-    <TwoColumnLayout title={title} leftNav={<LeftNavigation />}>
+    <>
+      <Head>
+        <title>{title}</title>
+      </Head>
       <EditNavigation />
       <Edit />
-    </TwoColumnLayout>
+    </>
   );
 };
 
 Page.getLayout = (page: ReactElement) => {
-  return <Template page={page} isFormBuilder />;
+  return <FormBuilderLayout page={page} />;
 };
 
 export { getServerSideProps };

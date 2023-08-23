@@ -32,7 +32,6 @@ export const LeftNavigation = ({ backLink }: { backLink?: React.ReactElement }) 
   return (
     <nav aria-label={t("navLabelFormBuilder")}>
       <ul className="m-0 list-none p-0">
-        {backLink && <li className="mb-10">{backLink}</li>}
         {!isPublished && (
           <li>
             <NavLink {...linkHelper("/edit", activePathname)} onClick={saveForm}>

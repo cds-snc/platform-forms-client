@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { NextPageWithLayout } from "../../../_app";
-import { Template, Settings, FormOwnership, LeftNavigation } from "@components/form-builder/app";
+import { Settings, FormOwnership } from "@components/form-builder/app";
 import { SettingsNavigation } from "@components/form-builder/app/navigation/SettingsNavigation";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { getTemplateWithAssociatedUsers } from "@lib/templates";
@@ -12,7 +12,8 @@ import { getUsers } from "@lib/users";
 import { User } from "@prisma/client";
 import { FormRecord } from "@lib/types";
 import { BackLink } from "@components/admin/LeftNav/BackLink";
-import { TwoColumnLayout } from "@components/globals/layouts/TwoColumnLayout";
+import Head from "next/head";
+import { FormBuilderLayout } from "@components/globals/layouts/FormBuilderLayout";
 
 interface AssignUsersToTemplateProps {
   formRecord: FormRecord;
@@ -21,14 +22,17 @@ interface AssignUsersToTemplateProps {
   canManageOwnership: boolean;
 }
 
-const BackToManageForms = ({ id }: { id: string | string[] | undefined }) => {
+const BackToManageForms = () => {
   const { t } = useTranslation("admin-users");
 
-  if (!id) return null;
+  const router = useRouter();
+  const { backLink } = router.query;
 
   return (
     <div className="mb-10">
-      <BackLink href={`/admin/accounts/${id}/manage-forms`}>{t("backToManageForms")}</BackLink>
+      <BackLink href={`/admin/accounts/${backLink}/manage-forms`}>
+        {t("backToManageForms")}
+      </BackLink>
     </div>
   );
 };
@@ -42,14 +46,11 @@ const Page: NextPageWithLayout<AssignUsersToTemplateProps> = ({
   const { t } = useTranslation("form-builder");
   const title = `${t("branding.heading")} — ${t("gcForms")}`;
 
-  const router = useRouter();
-  const { backLink } = router.query;
-
   return (
-    <TwoColumnLayout
-      title={title}
-      leftNav={<LeftNavigation backLink={<BackToManageForms id={backLink} />} />}
-    >
+    <>
+      <Head>
+        <title>{title}</title>
+      </Head>
       <SettingsNavigation />
       {canManageOwnership && (
         <FormOwnership
@@ -59,12 +60,12 @@ const Page: NextPageWithLayout<AssignUsersToTemplateProps> = ({
         />
       )}
       <Settings />
-    </TwoColumnLayout>
+    </>
   );
 };
 
 Page.getLayout = (page: ReactElement) => {
-  return <Template page={page} isFormBuilder />;
+  return <FormBuilderLayout page={page} backLink={<BackToManageForms />} />;
 };
 
 const redirect = (locale: string | undefined) => {
