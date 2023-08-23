@@ -14,9 +14,9 @@ import { LeftNavigation } from "@components/myforms/LeftNav/LeftNavigation";
 import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 import { clearTemplateStore } from "@components/form-builder/store/useTemplateStore";
 import { ResumeEditingForm } from "@components/form-builder/app/shared";
-import { Template } from "@components/form-builder/app";
 import { getUnprocessedSubmissionsForUser } from "@lib/users";
 import { TwoColumnLayout } from "@components/globals/layouts";
+import Head from "next/head";
 
 interface FormsDataItem {
   id: string;
@@ -74,7 +74,10 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
   }, []);
 
   return (
-    <TwoColumnLayout title={t("title")} leftNav={<LeftNavigation />}>
+    <>
+      <Head>
+        <title>{t("title")}</title>
+      </Head>
       <h1 className="border-b-0 mb-8 text-h1">{t("title")}</h1>
       <div className="top-40">
         <ResumeEditingForm>
@@ -109,12 +112,12 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
           <p>{t("cards.noForms")}</p>
         )}
       </TabPanel>
-    </TwoColumnLayout>
+    </>
   );
 };
 
 RenderMyForms.getLayout = (page: ReactElement) => {
-  return <Template page={page} className="my-forms"></Template>;
+  return <TwoColumnLayout leftNav={<LeftNavigation />}>{page}</TwoColumnLayout>;
 };
 
 export const getServerSideProps = requireAuthentication(
