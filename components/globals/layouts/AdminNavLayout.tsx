@@ -33,9 +33,16 @@ const AdminNavLayout = ({ children, user, backLink, hideLeftNav }: AdminNavLayou
       <Header context="admin" user={user} />
 
       {hideLeftNav ? (
-        <FullWidthLayout title="title">{children}</FullWidthLayout>
+        <FullWidthLayout>{children}</FullWidthLayout>
       ) : (
-        <TwoColumnLayout title="title" leftNav={<LeftNavigation backLink={backLink} />}>
+        <TwoColumnLayout
+          leftNav={
+            <>
+              {backLink}
+              <LeftNavigation />
+            </>
+          }
+        >
           {children}
         </TwoColumnLayout>
       )}

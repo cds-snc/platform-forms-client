@@ -1,16 +1,9 @@
 import React from "react";
-import Head from "next/head";
 
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { ToastContainer } from "@components/form-builder/app/shared/Toast";
 
-export const FullWidthLayout = ({
-  children,
-  title,
-}: {
-  children: React.ReactNode;
-  title: string;
-}) => {
+export const FullWidthLayout = ({ children }: { children: React.ReactNode }) => {
   // This will check to see if a user is deactivated and redirect them to the account deactivated page
   useAccessControl(); // @TODO: this belongs somewhere else
 
@@ -20,9 +13,6 @@ export const FullWidthLayout = ({
       <ToastContainer />
       <>
         <div>
-          <Head>
-            <title>{title}</title>
-          </Head>
           <main id="content" className="form-builder">
             {children}
           </main>
