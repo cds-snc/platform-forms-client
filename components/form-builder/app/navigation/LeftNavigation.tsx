@@ -19,7 +19,7 @@ const linkHelper = (url: string, activePathname: string) => {
   };
 };
 
-export const LeftNavigation = ({ backLink }: { backLink?: React.ReactElement }) => {
+export const LeftNavigation = () => {
   const { t } = useTranslation("form-builder");
   const { isPublished, id } = useTemplateStore((s) => ({ id: s.id, isPublished: s.isPublished }));
   const { status } = useSession();
