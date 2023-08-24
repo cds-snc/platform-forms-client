@@ -13,7 +13,7 @@ export const LeftNavigation = () => {
   const path = String(router.pathname);
 
   const iconClassname =
-    "inline-block w-6 h-6 group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
+    "block box-border mt-1 w-8 h-8 group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default";
 
   return (
     <nav>
@@ -21,24 +21,36 @@ export const LeftNavigation = () => {
         {ability?.can("view", "User") && (
           <li>
             <NavLink id="users" href={`/admin/accounts`} isActive={path === "/admin/accounts"}>
-              <NameIcon className={iconClassname} />
-              {t("adminNav.users", { ns: "common" })}
+              <div className="flex items-start gap-2">
+                <div>
+                  <NameIcon className={iconClassname} />
+                </div>
+                <div>{t("adminNav.users", { ns: "common" })}</div>
+              </div>
             </NavLink>
           </li>
         )}
         {ability?.can("view", "Flag") && (
           <li>
             <NavLink id="flags" href="/admin/flags" isActive={path === "/admin/flags"}>
-              <FlagIcon className={iconClassname} />
-              {t("adminNav.features", { ns: "common" })}
+              <div className="flex items-start gap-2">
+                <div>
+                  <FlagIcon className={`${iconClassname}`} />
+                </div>
+                <div>{t("adminNav.features", { ns: "common" })}</div>
+              </div>
             </NavLink>
           </li>
         )}
         {ability?.can("view", "Flag") && (
           <li>
             <NavLink id="settings" href="/admin/settings" isActive={path === "/admin/settings"}>
-              <GearIcon className={iconClassname} />
-              {t("adminNav.settings", { ns: "common" })}
+              <div className="flex items-start gap-2">
+                <div>
+                  <GearIcon className={iconClassname} />
+                </div>
+                <div>{t("adminNav.settings", { ns: "common" })}</div>
+              </div>
             </NavLink>
           </li>
         )}
