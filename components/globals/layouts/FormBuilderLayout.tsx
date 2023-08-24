@@ -1,5 +1,4 @@
 import React, { ReactElement } from "react";
-import Footer from "@components/globals/Footer";
 import { TemplateStoreProvider } from "@components/form-builder/store";
 import { RefStoreProvider } from "@lib/hooks/useRefStore";
 import { PageLoader } from "@components/globals/layouts/PageLoader";
