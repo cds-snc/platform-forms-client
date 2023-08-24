@@ -6,7 +6,6 @@ import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import Head from "next/head";
 import { getUnprocessedSubmissionsForUser, getUser } from "@lib/users";
 import { checkPrivileges } from "@lib/privileges";
-import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 import { getAllTemplatesForUser } from "@lib/templates";
 import { LinkButton } from "@components/globals";
 import { BackLink } from "@components/admin/LeftNav/BackLink";
