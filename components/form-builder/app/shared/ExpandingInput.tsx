@@ -1,5 +1,5 @@
 import React, { FocusEventHandler } from "react";
-import { useSpeechToText } from "@lib/hooks/useSpeechToText";
+import { SpeechToText } from "@components/globals/SpeechToText";
 
 interface Props {
   id: string;
@@ -36,8 +36,6 @@ const ExpandingInput = React.forwardRef<Ref, Props>((props, ref) => {
     className,
   } = props;
 
-  useSpeechToText({ elRef: ref });
-
   return (
     <div
       className={`input-sizer stacked border-solid border-black border-b-1.5 ${wrapperClassName}`}
@@ -62,6 +60,11 @@ const ExpandingInput = React.forwardRef<Ref, Props>((props, ref) => {
       >
         {value}
       </textarea>
+      <SpeechToText
+        callback={(result) => {
+          ref.current.value = result;
+        }}
+      />
     </div>
   );
 });
