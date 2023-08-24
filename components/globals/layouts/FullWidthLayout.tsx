@@ -24,18 +24,20 @@ export const FullWidthLayout = ({
   return (
     <>
       <HeadMeta />
-      <SkipLink />
+      <div className="flex h-full flex-col">
+        <SkipLink />
 
-      <Header context={context} user={user} />
-      <div className="mx-4 shrink-0 grow basis-auto laptop:mx-32 desktop:mx-64">
-        <ToastContainer />
-        <>
-          <div>
-            <main id="content">{children}</main>
-          </div>
-        </>
+        <Header context={context} user={user} />
+        <div className="mx-4 shrink-0 grow basis-auto laptop:mx-32 desktop:mx-64">
+          <ToastContainer />
+          <>
+            <div>
+              <main id="content">{children}</main>
+            </div>
+          </>
+        </div>
+        <Footer displayFormBuilderFooter />
       </div>
-      <Footer displayFormBuilderFooter />
     </>
   );
 };

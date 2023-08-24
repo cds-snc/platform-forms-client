@@ -22,28 +22,30 @@ export const TwoColumnLayout = ({
   return (
     <>
       <HeadMeta />
-      <SkipLink />
+      <div className="flex h-full flex-col">
+        <SkipLink />
 
-      <Header context={context} user={user} />
+        <Header context={context} user={user} />
 
-      <div className="mx-4 shrink-0 grow basis-auto laptop:mx-32 desktop:mx-64">
-        <ToastContainer />
-        <>
-          <div>
-            <div className="flex flex-row gap-16">
-              <div className="min-w-[175px]">{leftColumnContent}</div>
+        <div className="mx-4 shrink-0 grow basis-auto laptop:mx-32 desktop:mx-64">
+          <ToastContainer />
+          <>
+            <div>
+              <div className="flex flex-row gap-16">
+                <div className="min-w-[175px]">{leftColumnContent}</div>
 
-              <main
-                id="content"
-                className={cn("w-full", context === "formBuilder" && "form-builder")}
-              >
-                {children}
-              </main>
+                <main
+                  id="content"
+                  className={cn("w-full", context === "formBuilder" && "form-builder")}
+                >
+                  {children}
+                </main>
+              </div>
             </div>
-          </div>
-        </>
+          </>
+        </div>
+        <Footer displayFormBuilderFooter />
       </div>
-      <Footer displayFormBuilderFooter />
     </>
   );
 };
