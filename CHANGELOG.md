@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.4.1](https://github.com/cds-snc/platform-forms-client/compare/v3.4.0...v3.4.1) (2023-08-24)
+
+
+### Bug Fixes
+
+* auth error reporting take 2 ([#2586](https://github.com/cds-snc/platform-forms-client/issues/2586)) ([69fa719](https://github.com/cds-snc/platform-forms-client/commit/69fa719b01d4dc256fbcae79e0cc68da71024890))
+* next-auth error reporting ([#2581](https://github.com/cds-snc/platform-forms-client/issues/2581)) ([f770faf](https://github.com/cds-snc/platform-forms-client/commit/f770faf77d20eda5a209a96305b7689a4e2b6375))
+
+
+### Miscellaneous Chores
+
+* check session loading state on settings page ([#2576](https://github.com/cds-snc/platform-forms-client/issues/2576)) ([120474a](https://github.com/cds-snc/platform-forms-client/commit/120474a95c1f9f3fc9bf6ead3aa777c8e1ab9a3b))
+* fix your account dropdown "hiding" ([#2574](https://github.com/cds-snc/platform-forms-client/issues/2574)) ([73695b1](https://github.com/cds-snc/platform-forms-client/commit/73695b10a5f08484d6192961319cc230d6a9c5fa))
+* make left hand navigation links reusable ([#2588](https://github.com/cds-snc/platform-forms-client/issues/2588)) ([79ab967](https://github.com/cds-snc/platform-forms-client/commit/79ab967ade3bde7c02c9d4954cb02c11f2c5babc))
+* new gtm tag for sign_up ([51cb5e5](https://github.com/cds-snc/platform-forms-client/commit/51cb5e5f5ad266ef407ec26dc5d34f0d8edde449))
+
 ## [3.4.0](https://github.com/cds-snc/platform-forms-client/compare/v3.3.0...v3.4.0) (2023-08-21)
 
 
