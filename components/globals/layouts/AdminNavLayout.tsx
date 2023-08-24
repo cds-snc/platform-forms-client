@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Footer from "../Footer";
 import { User } from "next-auth";
 
 import { LeftNavigation } from "@components/admin/LeftNav/LeftNavigation";
