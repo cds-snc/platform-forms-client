@@ -2,7 +2,6 @@ import React, { ReactElement, useEffect, useRef } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
-import Head from "next/head";
 
 import { getAllTemplates } from "@lib/templates";
 import { requireAuthentication } from "@lib/auth";
@@ -15,8 +14,9 @@ import { LeftNavigation } from "@components/myforms/LeftNav/LeftNavigation";
 import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 import { clearTemplateStore } from "@components/form-builder/store/useTemplateStore";
 import { ResumeEditingForm } from "@components/form-builder/app/shared";
-import { Template } from "@components/form-builder/app";
 import { getUnprocessedSubmissionsForUser } from "@lib/users";
+import { TwoColumnLayout } from "@components/globals/layouts";
+import Head from "next/head";
 
 interface FormsDataItem {
   id: string;
@@ -78,57 +78,46 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
       <Head>
         <title>{t("title")}</title>
       </Head>
-      <div className="mx-4 laptop:mx-32 desktop:mx-64 grow shrink-0 basis-auto">
-        <div>
-          <LeftNavigation />
-          <main id="content" className="ml-40 laptop:ml-60">
-            <h1 className="border-b-0 mb-8 text-h1">{t("title")}</h1>
-            <div className="top-40">
-              <ResumeEditingForm>
-                <StyledLink href="/form-builder/edit" className="mr-8">
-                  <span aria-hidden="true"> ← </span> {t("actions.resumeForm")}
-                </StyledLink>
-              </ResumeEditingForm>
-              <div ref={createNewFormRef} className="inline">
-                <StyledLink href="/form-builder">
-                  <span aria-hidden="true">+</span> {t("actions.createNewForm")}
-                </StyledLink>
-              </div>
-            </div>
-            <TabPanel id="tabpanel-drafts" labeledbyId="tab-drafts" isActive={path === "drafts"}>
-              {templatesDrafts && templatesDrafts?.length > 0 ? (
-                <CardGrid cards={templatesDrafts}></CardGrid>
-              ) : (
-                <p>{t("cards.noDraftForms")}</p>
-              )}
-            </TabPanel>
-            <TabPanel
-              id="tabpanel-published"
-              labeledbyId="tab-published"
-              isActive={path === "published"}
-            >
-              {templatesPublished && templatesPublished?.length > 0 ? (
-                <CardGrid cards={templatesPublished}></CardGrid>
-              ) : (
-                <p>{t("cards.noPublishedForms")}</p>
-              )}
-            </TabPanel>
-            <TabPanel id="tabpanel-all" labeledbyId="tab-all" isActive={path === "all"}>
-              {templatesAll && templatesAll?.length > 0 ? (
-                <CardGrid cards={templatesAll}></CardGrid>
-              ) : (
-                <p>{t("cards.noForms")}</p>
-              )}
-            </TabPanel>
-          </main>
+      <h1 className="border-b-0 mb-8 text-h1">{t("title")}</h1>
+      <div className="top-40">
+        <ResumeEditingForm>
+          <StyledLink href="/form-builder/edit" className="mr-8">
+            <span aria-hidden="true"> ← </span> {t("actions.resumeForm")}
+          </StyledLink>
+        </ResumeEditingForm>
+        <div ref={createNewFormRef} className="inline">
+          <StyledLink href="/form-builder">
+            <span aria-hidden="true">+</span> {t("actions.createNewForm")}
+          </StyledLink>
         </div>
       </div>
+      <TabPanel id="tabpanel-drafts" labeledbyId="tab-drafts" isActive={path === "drafts"}>
+        {templatesDrafts && templatesDrafts?.length > 0 ? (
+          <CardGrid cards={templatesDrafts}></CardGrid>
+        ) : (
+          <p>{t("cards.noDraftForms")}</p>
+        )}
+      </TabPanel>
+      <TabPanel id="tabpanel-published" labeledbyId="tab-published" isActive={path === "published"}>
+        {templatesPublished && templatesPublished?.length > 0 ? (
+          <CardGrid cards={templatesPublished}></CardGrid>
+        ) : (
+          <p>{t("cards.noPublishedForms")}</p>
+        )}
+      </TabPanel>
+      <TabPanel id="tabpanel-all" labeledbyId="tab-all" isActive={path === "all"}>
+        {templatesAll && templatesAll?.length > 0 ? (
+          <CardGrid cards={templatesAll}></CardGrid>
+        ) : (
+          <p>{t("cards.noForms")}</p>
+        )}
+      </TabPanel>
     </>
   );
 };
 
 RenderMyForms.getLayout = (page: ReactElement) => {
-  return <Template page={page} className="my-forms"></Template>;
+  return <TwoColumnLayout leftColumnContent={<LeftNavigation />}>{page}</TwoColumnLayout>;
 };
 
 export const getServerSideProps = requireAuthentication(

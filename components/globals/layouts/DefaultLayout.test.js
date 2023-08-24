@@ -1,6 +1,6 @@
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
-import BaseLayout from "./BaseLayout";
+import DefaultLayout from "./DefaultLayout";
 import { SessionProvider } from "next-auth/react";
 
 jest.mock("next/router", () => require("next-router-mock"));
@@ -11,9 +11,9 @@ describe("Generate the Base structure of a page", () => {
   test("FIP should be displayed", () => {
     render(
       <SessionProvider session={null}>
-        <BaseLayout>
+        <DefaultLayout>
           <div>test</div>
-        </BaseLayout>
+        </DefaultLayout>
       </SessionProvider>
     );
 
