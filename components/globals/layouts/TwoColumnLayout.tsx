@@ -6,6 +6,7 @@ import { Header } from "../Header";
 import { User } from "next-auth";
 import { HeadMeta } from "./HeadMeta";
 import { cn } from "@lib/utils";
+import Footer from "../Footer";
 
 export const TwoColumnLayout = ({
   children,
@@ -42,6 +43,7 @@ export const TwoColumnLayout = ({
           </div>
         </>
       </div>
+      <Footer displayFormBuilderFooter />
     </>
   );
 };

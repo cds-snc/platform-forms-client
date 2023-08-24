@@ -59,7 +59,6 @@ export const FormBuilderLayout = ({
             <PageLoader
               page={<PageLayout page={page} hideLeftNav={hideLeftNav} backLink={backLink} />}
             />
-            <Footer displayFormBuilderFooter />
           </div>
         </RefStoreProvider>
       </TemplateApiProvider>

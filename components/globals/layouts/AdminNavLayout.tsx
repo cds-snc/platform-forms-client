@@ -37,8 +37,6 @@ const AdminNavLayout = ({ children, user, backLink, hideLeftNav }: AdminNavLayou
           {children}
         </TwoColumnLayout>
       )}
-
-      <Footer displayFormBuilderFooter />
     </div>
   );
 };

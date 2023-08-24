@@ -6,6 +6,7 @@ import SkipLink from "../SkipLink";
 import { Header } from "../Header";
 import { User } from "next-auth";
 import { HeadMeta } from "./HeadMeta";
+import Footer from "../Footer";
 
 export const FullWidthLayout = ({
   children,
@@ -34,6 +35,7 @@ export const FullWidthLayout = ({
           </div>
         </>
       </div>
+      <Footer displayFormBuilderFooter />
     </>
   );
 };
