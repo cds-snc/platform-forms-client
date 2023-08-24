@@ -21,10 +21,8 @@ export const LeftNavigation = () => {
         {ability?.can("view", "User") && (
           <li>
             <NavLink id="users" href={`/admin/accounts`} isActive={path === "/admin/accounts"}>
-              <div className="flex items-start gap-2">
-                <div>
-                  <NameIcon className={iconClassname} />
-                </div>
+              <div className="flex gap-2">
+                <NameIcon className={iconClassname} />
                 <div>{t("adminNav.users", { ns: "common" })}</div>
               </div>
             </NavLink>
@@ -34,9 +32,7 @@ export const LeftNavigation = () => {
           <li>
             <NavLink id="flags" href="/admin/flags" isActive={path === "/admin/flags"}>
               <div className="flex items-start gap-2">
-                <div>
-                  <FlagIcon className={`${iconClassname}`} />
-                </div>
+                <FlagIcon className={`${iconClassname}`} />
                 <div>{t("adminNav.features", { ns: "common" })}</div>
               </div>
             </NavLink>
@@ -46,9 +42,7 @@ export const LeftNavigation = () => {
           <li>
             <NavLink id="settings" href="/admin/settings" isActive={path === "/admin/settings"}>
               <div className="flex items-start gap-2">
-                <div>
-                  <GearIcon className={iconClassname} />
-                </div>
+                <GearIcon className={iconClassname} />
                 <div>{t("adminNav.settings", { ns: "common" })}</div>
               </div>
             </NavLink>
