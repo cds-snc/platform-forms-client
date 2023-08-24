@@ -31,8 +31,8 @@ export const TwoColumnLayout = ({
           <ToastContainer />
           <>
             <div>
-              <div className="flex flex-row gap-16">
-                <div className="min-w-[175px]">{leftColumnContent}</div>
+              <div className="flex flex-row gap-10">
+                <div className="min-w-[181px]">{leftColumnContent}</div>
 
                 <main
                   id="content"
