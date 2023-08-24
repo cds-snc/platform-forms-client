@@ -61,7 +61,9 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         <Head>
           <title>{t("responses.title")}</title>
         </Head>
-        <LoggedOutTab tabName={LoggedOutTabName.RESPONSES} />
+        <div className="max-w-4xl">
+          <LoggedOutTab tabName={LoggedOutTabName.RESPONSES} />
+        </div>
       </>
     );
   }
