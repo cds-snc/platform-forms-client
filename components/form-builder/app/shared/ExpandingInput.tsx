@@ -61,8 +61,12 @@ const ExpandingInput = React.forwardRef<Ref, Props>((props, ref) => {
         {value}
       </textarea>
       <SpeechToText
+        lang={lang}
         callback={(result) => {
-          ref.current.value = result;
+          //TODO not really a ref for some cases?
+          if (ref && ref.current) {
+            ref.current.value += result;
+          }
         }}
       />
     </div>

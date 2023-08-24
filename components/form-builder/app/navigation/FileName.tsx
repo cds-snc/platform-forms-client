@@ -4,10 +4,10 @@ import { useTemplateStore } from "@formbuilder/store/useTemplateStore";
 import { useTranslation } from "next-i18next";
 import { useRefStore } from "@lib/hooks/useRefStore";
 import { LocalizedFormProperties } from "@formbuilder/types";
-import { useSpeechToText } from "@lib/hooks/useSpeechToText";
+import { SpeechToText } from "@components/globals/SpeechToText";
 
 export const FileNameInput = () => {
-  const { t } = useTranslation(["form-builder"]);
+  const { t, i18n } = useTranslation(["form-builder"]);
   const { updateField, getName, getIsPublished } = useTemplateStore((s) => ({
     getName: s.getName,
     updateField: s.updateField,
@@ -31,13 +31,6 @@ export const FileNameInput = () => {
     title:
       s.form[s.localizeField(LocalizedFormProperties.TITLE, s.translationLanguagePriority)] ?? "",
   }));
-
-  //
-  // Error "uncaught ReferenceError: webkitSpeechRecognition is not defined"
-  // Is this rendered on the Server statically?
-  //
-  // useSpeechToText({elRef: fileNameInput});
-  //
 
   useEffect(() => {
     setRef("fileNameInput", remoteRef);
@@ -117,6 +110,14 @@ export const FileNameInput = () => {
         onChange={(e) => setContent(e.target.value)}
         aria-label={t("formName", { ns: "form-builder" })}
         disabled={isPublished && true}
+      />
+      <SpeechToText
+        lang={i18n.language}
+        callback={(result) => {
+          if (fileNameInput && fileNameInput.current) {
+            fileNameInput.current.value += result;
+          }
+        }}
       />
     </div>
   );

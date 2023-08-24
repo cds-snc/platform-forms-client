@@ -1,4 +1,4 @@
-import { useSpeechToText } from "@lib/hooks/useSpeechToText";
+import { SpeechToText } from "@components/globals/SpeechToText";
 import React, { FocusEventHandler } from "react";
 
 interface Props {
@@ -47,26 +47,33 @@ const Input = React.forwardRef<Ref, Props>((props, ref) => {
       "py-2 px-3 my-2 rounded border-1.5 border-red-default border-solid focus:outline-2 focus:outline-red-focus focus:outline-red focus:border-red-focus",
   };
 
-  useSpeechToText({ elRef: ref });
-
   return (
-    <input
-      id={id}
-      name={name}
-      aria-describedby={describedBy}
-      aria-invalid={isInvalid ? true : false}
-      type={type}
-      min={min}
-      className={`${className} ${themes[theme]}`}
-      value={value}
-      placeholder={placeholder}
-      onChange={onChange}
-      onKeyDown={onKeyDown}
-      onBlur={onBlur && onBlur}
-      ref={ref}
-      {...(lang && { lang: lang })}
-      autoComplete="off"
-    />
+    <>
+      <input
+        id={id}
+        name={name}
+        aria-describedby={describedBy}
+        aria-invalid={isInvalid ? true : false}
+        type={type}
+        min={min}
+        className={`${className} ${themes[theme]}`}
+        value={value}
+        placeholder={placeholder}
+        onChange={onChange}
+        onKeyDown={onKeyDown}
+        onBlur={onBlur && onBlur}
+        ref={ref}
+        {...(lang && { lang: lang })}
+        autoComplete="off"
+      />
+      <SpeechToText
+        lang={lang}
+        callback={(result) => {
+          //TODO not really a ref?
+          ref.current.value += result;
+        }}
+      />
+    </>
   );
 });
 

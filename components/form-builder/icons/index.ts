@@ -64,3 +64,4 @@ export { EnvelopeIcon } from "./EnvelopeIcon";
 export { FlagIcon } from "./FlagIcon";
 export { ManageAccountsIcon } from "./ManageAccountsIcon";
 export { SettingsApplicationsIcon } from "./SettingsApplicationsIcon";
+export { MicrophoneIcon } from "./MicrophoneIcon";

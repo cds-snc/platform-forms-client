@@ -1,19 +1,22 @@
 import React, { useRef, useState } from "react";
 import { logMessage } from "@lib/logger";
 import { useTranslation } from "next-i18next";
+import { MicrophoneIcon } from "@components/form-builder/icons";
 
 // NOTE: this began as a Hook where you'd pass in a ref to bind to that added events to in on a use
 // effect. But since a static button is being used to control the speech, a component probably
 // makes the most sense.
 
-// TODO: future refactor could allow children to be passed instead of a button
+interface SRProps {
+  // keeps recording until stopped, otherwise if false will end after a brief timeout
+  continuous?: boolean;
+  lang?: string;
+  callback: (result: string) => void;
+}
 
-/**
- * continuous keeps recording until stopped, otherwise if false will end after a brief timeout
- * interimResults returns results as they are "parsed" vs waiting until the recording stopped
- */
+// TODO probably make a singleton
 class SR {
-  constructor({ continuous, lang, callback }) {
+  constructor({ continuous, lang, callback }: SRProps) {
     try {
       this.sr = this.createSR();
     } catch (e) {
@@ -33,6 +36,7 @@ class SR {
       return;
     }
 
+    // API Docs: https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition
     this.sr.continuous = continuous === false ? false : true;
     this.sr.lang = lang || "en-US";
     this.sr.interimResults = true;
@@ -54,19 +58,31 @@ class SR {
   }
 
   addBehaviorSR() {
-    // Handle case of speech going on for a while and eventually "timing out?"
+    this.sr.onstart = function () {
+      logMessage.info("SR started.");
+    };
+
     this.sr.onspeechend = function () {
-      this.stop();
+      logMessage.info("SR stopped.");
     }.bind(this);
 
-    //
-    // TODO PICK UP HERE. Now get the next results beyond [0][0]
-    //
     this.sr.onresult = function (e) {
       // NOTE: Could add a confidence check so e.g. below 70% ask to try again
       // if (sr.results[0][0].confidence < .70) { do something }
-      const result = e.results[0][0].transcript;
+
+      let result = "";
+
+      // NOTE: Could work with interim results to show quicker results
+      // e.g. if (e.results[i].isFinal) { .. } else { *here* }
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        if (e.results[i].isFinal) {
+          result += e.results[i][0].transcript;
+        }
+      }
+
       this.callback(result);
+
+      logMessage.info("SR result=" + result);
     }.bind(this);
 
     this.sr.onnomatch = function () {
@@ -78,7 +94,6 @@ class SR {
   start() {
     try {
       this.sr.start();
-      logMessage.info("SR started.");
     } catch (e) {
       // probably already started
       logMessage.error(e);
@@ -88,7 +103,6 @@ class SR {
   stop() {
     try {
       this.sr.stop();
-      logMessage.info("SR stopped.");
     } catch (e) {
       // probably not started
       logMessage.error(e);
@@ -107,22 +121,27 @@ class SR {
 
 interface SpeechToTextProps {
   callback: (result: string) => void;
+  lang?: string;
 }
 
-export const SpeechToText = ({ callback }: SpeechToTextProps) => {
-  const { t } = useTranslation("common");
+// TODO: future refactor could allow children to be passed instead of a button
+export const SpeechToText = ({ callback, lang }: SpeechToTextProps) => {
+  const { t, i18n } = useTranslation("common");
   const [recording, setRecording] = useState(false);
 
   const sr = useRef(
     new SR({
       continuous: true,
-      lang: "en-US", // TODO
+      lang: lang || i18n.language || "en-US",
       callback,
     })
   );
 
-  // TODO hanlder for key down with space/button and double event fire
   const handleActivate = () => {
+    if (!sr) {
+      return;
+    }
+
     if (recording) {
       sr.current.stop();
       setRecording(false);
@@ -135,8 +154,20 @@ export const SpeechToText = ({ callback }: SpeechToTextProps) => {
 
   return (
     <div data-test-id="speech-to-text-button" className="relative">
-      <button className="absolute right-0" onClick={handleActivate} onKeyDown={handleActivate}>
-        {recording ? t("Stop") : t("Start")}
+      <button
+        className={`absolute right-0 top-2`}
+        onClick={handleActivate}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            handleActivate();
+            e.preventDefault();
+          }
+        }}
+      >
+        <MicrophoneIcon
+          title={recording ? t("Stop") : t("Start")}
+          className={`rounded-full ${recording ? "bg-red-500" : "bg-gray"}`}
+        />
       </button>
     </div>
   );
