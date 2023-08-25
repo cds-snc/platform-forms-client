@@ -200,7 +200,7 @@ ManageForms.getLayout = (page: ReactElement) => {
       context="admin"
       leftColumnContent={<BackToAccounts id={page.props.formUser.id} />}
     >
-      <TemplateStoreProvider {...{ locale: page.props.locale }}>{page}</TemplateStoreProvider>
+      {page}
     </TwoColumnLayout>
   );
 };
