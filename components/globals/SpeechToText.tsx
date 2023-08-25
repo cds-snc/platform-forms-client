@@ -8,14 +8,14 @@ import { MicrophoneIcon } from "@components/form-builder/icons";
 // form input, a component probably makes the most sense.
 
 interface SRProps {
-  // keeps recording until stopped, otherwise if false will end after a brief timeout
-  continuous?: boolean;
+  continuous?: boolean; // True keeps recording until stopped. False will end after a brief timeout.
   lang?: string;
   callback: (result: string) => void;
 }
 
-// Avoids creating more than one ScreenRecognition object.
 // TODO: add types https://www.npmjs.com/package/@types/dom-speech-recognition
+
+// Singleton avoids creating more than one ScreenRecognition object.
 const createSR = () => {
   // Note: other APIs exist but all supporting browser are using Webkits version so these are
   // redundant and removed: mozSpeechRecognition, msSpeechRecognition, oSpeechRecognition
@@ -130,7 +130,15 @@ interface SpeechToTextProps {
   lang?: string;
 }
 
-// TODO: future refactor could allow children to be passed instead of a button
+// TODO: future refactor component to allow children to be passed instead of a button
+/**
+ * Example using in a component:
+ *   <SpeechToText lang={lang}
+ *     callback={(result) => {
+ *       if (ref && ref.current) { ref.current.value += result; }
+ *     }}
+ *   />
+ */
 export const SpeechToText = ({ callback, lang }: SpeechToTextProps) => {
   const { t, i18n } = useTranslation("common");
   const [recording, setRecording] = useState(false);
