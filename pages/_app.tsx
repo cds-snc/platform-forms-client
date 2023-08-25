@@ -6,7 +6,7 @@ import { appWithTranslation } from "next-i18next";
 import type { NextPage } from "next";
 import { SessionProvider } from "next-auth/react";
 import { AccessControlProvider } from "@lib/hooks";
-import BaseLayout, { Layout } from "@components/globals/layouts/BaseLayout";
+import DefaultLayout, { Layout } from "@components/globals/layouts/DefaultLayout";
 import "../styles/app.scss";
 import { AnyObject } from "@lib/types";
 import { Session } from "next-auth";
@@ -34,7 +34,7 @@ const MyApp: React.FC<AppPropsWithLayout> = ({
     >
       <ErrorBoundary
         fallback={
-          <div className="flex flex-col h-full">
+          <div className="flex h-full flex-col">
             <Layout className="flex flex-col items-center justify-center">
               <ErrorPanel />
             </Layout>
@@ -45,11 +45,11 @@ const MyApp: React.FC<AppPropsWithLayout> = ({
           {Component.getLayout ? (
             <ErrorBoundary>{Component.getLayout(<Component {...pageProps} />)}</ErrorBoundary>
           ) : (
-            <BaseLayout>
+            <DefaultLayout>
               <ErrorBoundary>
                 <Component {...pageProps} />
               </ErrorBoundary>
-            </BaseLayout>
+            </DefaultLayout>
           )}
         </AccessControlProvider>
       </ErrorBoundary>

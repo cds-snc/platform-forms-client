@@ -1,5 +1,5 @@
 import React from "react";
-import { LeftNavLink } from "@components/globals/LeftNavLink";
+import { NavLink } from "@components/globals/NavLink";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 
@@ -14,37 +14,33 @@ export const LeftNavigation = () => {
     "inline-block w-6 h-6 group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
 
   return (
-    <nav className="absolute">
+    <nav>
       <ul className="m-0 list-none p-0">
         <li>
-          <LeftNavLink
+          <NavLink
             id="tab-drafts"
             href={`/${i18n.language}/myforms/drafts`}
             isActive={path === "drafts"}
           >
             <PageIcon className={iconClassname} />
             {t("nav.drafts")}
-          </LeftNavLink>
+          </NavLink>
         </li>
         <li>
-          <LeftNavLink
+          <NavLink
             id="tab-published"
             href={`/${i18n.language}/myforms/published`}
             isActive={path === "published"}
           >
             <GlobeIcon className={iconClassname} />
             {t("nav.published")}
-          </LeftNavLink>
+          </NavLink>
         </li>
         <li>
-          <LeftNavLink
-            id="tab-all"
-            href={`/${i18n.language}/myforms/all`}
-            isActive={path === "all"}
-          >
+          <NavLink id="tab-all" href={`/${i18n.language}/myforms/all`} isActive={path === "all"}>
             <FolderIcon className={iconClassname} />
             {t("nav.all")}
-          </LeftNavLink>
+          </NavLink>
         </li>
       </ul>
     </nav>

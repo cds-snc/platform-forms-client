@@ -8,22 +8,26 @@ import { PageProps } from "@lib/types";
 import { getPublicTemplateByID } from "@lib/templates";
 import { authOptions } from "@app/api/auth/authConfig";
 import { NextPageWithLayout } from "../../../_app";
-import { Template, PageTemplate } from "@components/form-builder/app";
 import { BrandingRequestForm } from "@components/form-builder/app/branding/";
 import { getAppSetting } from "@lib/appSettings";
+import Head from "next/head";
+import { FormBuilderLayout } from "@components/globals/layouts/FormBuilderLayout";
 
 const Page: NextPageWithLayout<PageProps> = ({ publicForm }: PageProps) => {
   const { t } = useTranslation("form-builder");
   const title = `${t("branding.heading")} — ${t("gcForms")}`;
   return (
-    <PageTemplate title={title} leftNav={false}>
+    <>
+      <Head>
+        <title>{title}</title>
+      </Head>
       <BrandingRequestForm formRecord={publicForm} />
-    </PageTemplate>
+    </>
   );
 };
 
 Page.getLayout = (page: ReactElement) => {
-  return <Template page={page} />;
+  return <FormBuilderLayout hideLeftNav={true} page={page} />;
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ params, req, res }) => {

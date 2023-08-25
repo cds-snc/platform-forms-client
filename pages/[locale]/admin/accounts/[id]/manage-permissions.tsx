@@ -10,11 +10,12 @@ import { requireAuthentication } from "@lib/auth";
 import { checkPrivileges, getAllPrivileges } from "@lib/privileges";
 import { logMessage } from "@lib/logger";
 import { getUser } from "@lib/users";
-import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 import { Button, Alert } from "@components/globals";
 import { BackLink } from "@components/admin/LeftNav/BackLink";
 import { PermissionToggle } from "@components/admin/Users/PermissionToggle";
 import { LinkButton } from "@components/globals";
+import { TwoColumnLayout } from "@components/globals/layouts";
+import { TemplateStoreProvider } from "@components/form-builder/store";
 
 type PrivilegeList = Omit<Privilege, "permissions">[];
 interface User {
@@ -229,12 +230,13 @@ const BackToAccounts = ({ id }: { id: string }) => {
 
 ManagePermissions.getLayout = (page: ReactElement) => {
   return (
-    <AdminNavLayout
+    <TwoColumnLayout
       user={page.props.user}
-      backLink={<BackToAccounts id={page.props.formUser.id} />}
+      context="admin"
+      leftColumnContent={<BackToAccounts id={page.props.formUser.id} />}
     >
       {page}
-    </AdminNavLayout>
+    </TwoColumnLayout>
   );
 };
 

@@ -2,8 +2,8 @@ import React from "react";
 export const FlagIcon = ({ className, title }: { className?: string; title?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    height="34"
-    width="34"
+    height="24"
+    width="24"
     viewBox="0 -960 960 960"
     className={className}
     focusable="false"

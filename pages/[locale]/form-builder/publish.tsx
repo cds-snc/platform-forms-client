@@ -4,8 +4,11 @@ import { useRouter } from "next/router";
 import { NextPageWithLayout } from "../../_app";
 import { PageProps } from "@lib/types";
 import { getServerSideProps } from "./index";
-import { Publish, Template, PageTemplate } from "@components/form-builder/app";
+import { Publish } from "@components/form-builder/app";
 import { useTemplateStore } from "@formbuilder/store";
+import { TwoColumnLayout } from "@components/globals/layouts";
+import { FormBuilderLayout } from "@components/globals/layouts/FormBuilderLayout";
+import Head from "next/head";
 
 const Page: NextPageWithLayout<PageProps> = () => {
   const { t } = useTranslation("form-builder");
@@ -26,21 +29,24 @@ const Page: NextPageWithLayout<PageProps> = () => {
 
   if (isPublished) {
     return (
-      <PageTemplate title={title}>
+      <TwoColumnLayout>
         <div />
-      </PageTemplate>
+      </TwoColumnLayout>
     );
   }
 
   return (
-    <PageTemplate title={title} autoWidth={true}>
+    <>
+      <Head>
+        <title>{title}</title>
+      </Head>
       <Publish />
-    </PageTemplate>
+    </>
   );
 };
 
 Page.getLayout = (page: ReactElement) => {
-  return <Template page={page} isFormBuilder />;
+  return <FormBuilderLayout page={page} />;
 };
 
 export { getServerSideProps };

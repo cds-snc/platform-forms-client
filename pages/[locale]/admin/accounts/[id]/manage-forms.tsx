@@ -6,7 +6,6 @@ import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import Head from "next/head";
 import { getUnprocessedSubmissionsForUser, getUser } from "@lib/users";
 import { checkPrivileges } from "@lib/privileges";
-import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 import { getAllTemplatesForUser } from "@lib/templates";
 import { LinkButton } from "@components/globals";
 import { BackLink } from "@components/admin/LeftNav/BackLink";
@@ -19,6 +18,7 @@ import { TemplateStoreProvider } from "@components/form-builder/store";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { useRefresh } from "@lib/hooks";
 import { ExclamationIcon } from "@components/form-builder/icons";
+import { TwoColumnLayout } from "@components/globals/layouts";
 
 type User = {
   id: string;
@@ -195,12 +195,13 @@ const BackToAccounts = ({ id }: { id: string }) => {
 
 ManageForms.getLayout = (page: ReactElement) => {
   return (
-    <AdminNavLayout
+    <TwoColumnLayout
       user={page.props.user}
-      backLink={<BackToAccounts id={page.props.formUser.id} />}
+      context="admin"
+      leftColumnContent={<BackToAccounts id={page.props.formUser.id} />}
     >
-      <TemplateStoreProvider {...{ locale: page.props.locale }}>{page}</TemplateStoreProvider>
-    </AdminNavLayout>
+      {page}
+    </TwoColumnLayout>
   );
 };
 
