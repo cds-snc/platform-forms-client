@@ -6,7 +6,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { NextPageWithLayout } from "@pages/_app";
-import { PageTemplate, Template } from "@components/form-builder/app";
 import { GetServerSideProps } from "next";
 import { FormRecord, VaultSubmissionList } from "@lib/types";
 import { listAllSubmissions } from "@lib/vault";
@@ -22,6 +21,8 @@ import { Nagware } from "@components/form-builder/app/Nagware";
 import { EmailResponseSettings } from "@components/form-builder/app/shared";
 import { useTemplateStore } from "@components/form-builder/store";
 import { LoggedOutTabName, LoggedOutTab } from "@components/form-builder/app/LoggedOutTab";
+import Head from "next/head";
+import { FormBuilderLayout } from "@components/globals/layouts/FormBuilderLayout";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -57,9 +58,12 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   if (!isAuthenticated) {
     return (
       <>
-        <PageTemplate title={t("responses.title")}>
+        <Head>
+          <title>{t("responses.title")}</title>
+        </Head>
+        <div className="max-w-4xl">
           <LoggedOutTab tabName={LoggedOutTabName.RESPONSES} />
-        </PageTemplate>
+        </div>
       </>
     );
   }
@@ -67,60 +71,14 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   if (deliveryOption && deliveryOption.emailAddress) {
     return (
       <>
-        <PageTemplate title={t("responses.email.title")} autoWidth={true}>
-          <div className="flex flex-wrap items-baseline mb-8">
-            <h1 className="border-none mb-0 tablet:mb-4 tablet:mr-8">
-              {isAuthenticated ? t("responses.email.title") : t("responses.unauthenticated.title")}
-            </h1>
-            <nav className="flex gap-3">
-              {!isPublished && (
-                <Link href="/form-builder/settings" legacyBehavior>
-                  <a href="/form-builder/settings" className={`${navItemClasses}`}>
-                    {t("responses.changeSetup")}
-                  </a>
-                </Link>
-              )}
-            </nav>
-          </div>
-          <EmailResponseSettings
-            emailAddress={deliveryOption.emailAddress}
-            subjectEn={deliveryOption.emailSubjectEn || ""}
-            subjectFr={deliveryOption.emailSubjectFr || ""}
-          />
-        </PageTemplate>
-      </>
-    );
-  }
-
-  return (
-    <>
-      <PageTemplate title={t("responses.title")} autoWidth={true}>
+        <Head>
+          <title>{t("responses.email.title")}</title>
+        </Head>
         <div className="flex flex-wrap items-baseline mb-8">
           <h1 className="border-none mb-0 tablet:mb-4 tablet:mr-8">
-            {isAuthenticated ? t("responses.title") : t("responses.unauthenticated.title")}
+            {isAuthenticated ? t("responses.email.title") : t("responses.unauthenticated.title")}
           </h1>
-
-          <nav className="flex flex-wrap gap-3">
-            {isAuthenticated && (
-              <button
-                onClick={() => setIsShowConfirmReceiptDialog(true)}
-                className={navItemClasses}
-                disabled={status !== "authenticated"}
-              >
-                {t("responses.confirmReceipt")}
-              </button>
-            )}
-
-            {isAuthenticated && (
-              <button
-                onClick={() => setIsShowReportProblemsDialog(true)}
-                className={navItemClasses}
-                disabled={status !== "authenticated"}
-              >
-                {t("responses.reportProblems")}
-              </button>
-            )}
-
+          <nav className="flex gap-3">
             {!isPublished && (
               <Link href="/form-builder/settings" legacyBehavior>
                 <a href="/form-builder/settings" className={`${navItemClasses}`}>
@@ -130,49 +88,97 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
             )}
           </nav>
         </div>
+        <EmailResponseSettings
+          emailAddress={deliveryOption.emailAddress}
+          subjectEn={deliveryOption.emailSubjectEn || ""}
+          subjectFr={deliveryOption.emailSubjectFr || ""}
+        />
+      </>
+    );
+  }
 
-        {nagwareResult && <Nagware nagwareResult={nagwareResult} />}
+  return (
+    <>
+      <Head>
+        <title>{t("responses.title")}</title>
+      </Head>
+      <div className="flex flex-wrap items-baseline mb-8">
+        <h1 className="border-none mb-0 tablet:mb-4 tablet:mr-8">
+          {isAuthenticated ? t("responses.title") : t("responses.unauthenticated.title")}
+        </h1>
 
-        {isAuthenticated && (
-          <>
-            <div>
-              {vaultSubmissions.length > 0 && (
-                <DownloadTable
-                  vaultSubmissions={vaultSubmissions}
-                  formId={formId}
-                  nagwareResult={nagwareResult}
-                />
-              )}
+        <nav className="flex flex-wrap gap-3">
+          {isAuthenticated && (
+            <button
+              onClick={() => setIsShowConfirmReceiptDialog(true)}
+              className={navItemClasses}
+              disabled={status !== "authenticated"}
+            >
+              {t("responses.confirmReceipt")}
+            </button>
+          )}
 
-              {vaultSubmissions.length <= 0 && (
-                <Card
-                  icon={
-                    <picture>
-                      <img src="/img/mailbox.png" width="193" height="200" alt="" />
-                    </picture>
-                  }
-                  title={t("downloadResponsesTable.card.noResponses")}
-                  content={t("downloadResponsesTable.card.noResponsesToDownload")}
-                />
-              )}
-            </div>
-          </>
-        )}
+          {isAuthenticated && (
+            <button
+              onClick={() => setIsShowReportProblemsDialog(true)}
+              className={navItemClasses}
+              disabled={status !== "authenticated"}
+            >
+              {t("responses.reportProblems")}
+            </button>
+          )}
 
-        {!isAuthenticated && (
-          <>
-            <p>
-              {t("responses.unauthenticated.toAccessPagePart1")}{" "}
-              <Link href={"/auth/login"}>{t("responses.unauthenticated.signIn")}</Link>{" "}
-              {t("responses.unauthenticated.toAccessPagePart2")}
-            </p>
-            <p className="mt-8">
-              {t("responses.unauthenticated.noAccount")}{" "}
-              <Link href={"/signup/register"}>{t("responses.unauthenticated.createOne")}</Link>.
-            </p>
-          </>
-        )}
-      </PageTemplate>
+          {!isPublished && (
+            <Link href="/form-builder/settings" legacyBehavior>
+              <a href="/form-builder/settings" className={`${navItemClasses}`}>
+                {t("responses.changeSetup")}
+              </a>
+            </Link>
+          )}
+        </nav>
+      </div>
+
+      {nagwareResult && <Nagware nagwareResult={nagwareResult} />}
+
+      {isAuthenticated && (
+        <>
+          <div>
+            {vaultSubmissions.length > 0 && (
+              <DownloadTable
+                vaultSubmissions={vaultSubmissions}
+                formId={formId}
+                nagwareResult={nagwareResult}
+              />
+            )}
+
+            {vaultSubmissions.length <= 0 && (
+              <Card
+                icon={
+                  <picture>
+                    <img src="/img/mailbox.png" width="193" height="200" alt="" />
+                  </picture>
+                }
+                title={t("downloadResponsesTable.card.noResponses")}
+                content={t("downloadResponsesTable.card.noResponsesToDownload")}
+              />
+            )}
+          </div>
+        </>
+      )}
+
+      {!isAuthenticated && (
+        <>
+          <p>
+            {t("responses.unauthenticated.toAccessPagePart1")}{" "}
+            <Link href={"/auth/login"}>{t("responses.unauthenticated.signIn")}</Link>{" "}
+            {t("responses.unauthenticated.toAccessPagePart2")}
+          </p>
+          <p className="mt-8">
+            {t("responses.unauthenticated.noAccount")}{" "}
+            <Link href={"/signup/register"}>{t("responses.unauthenticated.createOne")}</Link>.
+          </p>
+        </>
+      )}
 
       {isShowConfirmReceiptDialog && (
         <DownloadTableDialog
@@ -284,7 +290,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
 };
 
 Responses.getLayout = (page: ReactElement) => {
-  return <Template page={page} isFormBuilder />;
+  return <FormBuilderLayout page={page} />;
 };
 
 export const getServerSideProps: GetServerSideProps = async ({

@@ -9,11 +9,11 @@ type BackLinkProps = {
 
 export const BackLink = ({ href, children }: BackLinkProps) => {
   return (
-    <>
+    <div className="mb-10">
       <BackArrowIcon className="inline-block mr-2" />
       <StyledLink className="text-[18px]" href={href}>
         {children}
       </StyledLink>
-    </>
+    </div>
   );
 };

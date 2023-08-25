@@ -19,7 +19,7 @@ const linkHelper = (url: string, activePathname: string) => {
   };
 };
 
-export const LeftNavigation = ({ backLink }: { backLink?: React.ReactElement }) => {
+export const LeftNavigation = () => {
   const { t } = useTranslation("form-builder");
   const { isPublished, id } = useTemplateStore((s) => ({ id: s.id, isPublished: s.isPublished }));
   const { status } = useSession();
@@ -30,9 +30,8 @@ export const LeftNavigation = ({ backLink }: { backLink?: React.ReactElement }) 
     "inline-block w-6 h-6 group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
 
   return (
-    <nav className="absolute" aria-label={t("navLabelFormBuilder")}>
+    <nav aria-label={t("navLabelFormBuilder")}>
       <ul className="m-0 list-none p-0">
-        {backLink && <li>{backLink}</li>}
         {!isPublished && (
           <li>
             <NavLink {...linkHelper("/edit", activePathname)} onClick={saveForm}>

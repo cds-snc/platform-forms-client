@@ -2,13 +2,13 @@ import React from "react";
 import { useTranslation } from "next-i18next";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import Head from "next/head";
 
 import { useAccessControl } from "@lib/hooks";
 import { Footer, Brand, SkipLink, LanguageToggle } from "@components/globals";
 import LoginMenu from "@components/auth/LoginMenu";
 import { SiteLogo } from "@formbuilder/icons";
 import { ToastContainer } from "@formbuilder/app/shared/Toast";
+import { HeadMeta } from "./HeadMeta";
 
 const SiteLink = () => {
   const { t } = useTranslation("common");
@@ -46,11 +46,7 @@ const UserNavLayout = ({
 
   return (
     <div className="flex min-h-full flex-col bg-gray-soft">
-      <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta charSet="utf-8" />
-        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
-      </Head>
+      <HeadMeta />
       <SkipLink />
 
       <header className="mb-4 bg-white py-6">

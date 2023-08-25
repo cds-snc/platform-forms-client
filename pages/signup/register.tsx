@@ -64,6 +64,12 @@ const Register = () => {
       // Try signing in the newly registered user
       const result = await login({ username: username, password: password });
       if (result) {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: "sign_up",
+          method: "cognito",
+        });
+
         setNeedsVerification(true);
       }
     } catch (err) {

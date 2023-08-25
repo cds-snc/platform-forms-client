@@ -4,7 +4,7 @@ import { useTranslation } from "next-i18next";
 import Link from "next/link";
 import { GetStaticProps } from "next";
 import Head from "next/head";
-import BaseLayout from "@components/globals/layouts/BaseLayout";
+import DefaultLayout from "@components/globals/layouts/DefaultLayout";
 
 const Home = () => {
   const { t } = useTranslation("common");
@@ -19,7 +19,7 @@ const Home = () => {
           <span lang="fr">{t("title", { lng: "fr" })}</span>
         </h1>
       </div>
-      <div className="border-gray-400 p-10 grid grid-cols-2 gap-x-4 max-w-2xl  w-2/4 m-auto">
+      <div className="m-auto grid w-2/4 max-w-2xl grid-cols-2 gap-x-4  border-gray-400 p-10">
         <p>
           <Link href="/en/form-builder" lang="en" locale={false}>
             English
@@ -37,7 +37,7 @@ const Home = () => {
 };
 
 Home.getLayout = (page: ReactElement) => {
-  return <BaseLayout showLanguageToggle={false}>{page}</BaseLayout>;
+  return <DefaultLayout showLanguageToggle={false}>{page}</DefaultLayout>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
