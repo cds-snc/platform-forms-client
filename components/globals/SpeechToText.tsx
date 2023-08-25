@@ -132,7 +132,7 @@ interface SpeechToTextProps {
 
 // TODO: future refactor component to allow children to be passed instead of a button
 /**
- * Example using in a component:
+ * Example use:
  *   <SpeechToText lang={lang}
  *     callback={(result) => {
  *       if (ref && ref.current) { ref.current.value += result; }

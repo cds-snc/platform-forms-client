@@ -69,7 +69,6 @@ const Input = React.forwardRef<Ref, Props>((props, ref) => {
       <SpeechToText
         lang={lang}
         callback={(result) => {
-          //TODO not really a ref?
           ref.current.value += result;
         }}
       />
