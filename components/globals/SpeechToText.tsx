@@ -3,9 +3,9 @@ import { logMessage } from "@lib/logger";
 import { useTranslation } from "next-i18next";
 import { MicrophoneIcon } from "@components/form-builder/icons";
 
-// NOTE: this began as a Hook where you'd pass in a ref to bind to that added events to in on a use
-// effect. But since a static button is being used to control the speech, a component probably
-// makes the most sense.
+// NOTE: this began as a Hook where you'd pass in a ref to bind to. Then it added events to use in a
+// useEffect. But since a static button is being used to control the speech -vs- enabled on any
+// form input, a component probably makes the most sense.
 
 interface SRProps {
   // keeps recording until stopped, otherwise if false will end after a brief timeout
@@ -14,11 +14,28 @@ interface SRProps {
   callback: (result: string) => void;
 }
 
-// TODO probably make a singleton
+// Avoids creating more than one ScreenRecognition object.
+// TODO: add types https://www.npmjs.com/package/@types/dom-speech-recognition
+const createSR = () => {
+  // Note: other APIs exist but all supporting browser are using Webkits version so these are
+  // redundant and removed: mozSpeechRecognition, msSpeechRecognition, oSpeechRecognition
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const sr = new SR();
+  return sr;
+};
+let sr = null;
+const getSR = () => {
+  if (sr) {
+    return sr;
+  }
+  sr = createSR();
+  return sr;
+};
+
 class SR {
   constructor({ continuous, lang, callback }: SRProps) {
     try {
-      this.sr = this.createSR();
+      this.sr = getSR();
     } catch (e) {
       // TODO error handling
       logMessage.error("SR failed to create");
@@ -44,17 +61,6 @@ class SR {
     this.callback = callback;
 
     this.addBehaviorSR();
-  }
-
-  createSR() {
-    const SR =
-      window.SpeechRecognition ||
-      window.webkitSpeechRecognition ||
-      window.mozSpeechRecognition ||
-      window.msSpeechRecognition ||
-      window.oSpeechRecognition;
-    const sr = new SR();
-    return sr;
   }
 
   addBehaviorSR() {
@@ -95,7 +101,7 @@ class SR {
     try {
       this.sr.start();
     } catch (e) {
-      // probably already started
+      // Error: probably already started
       logMessage.error(e);
     }
   }
@@ -104,7 +110,7 @@ class SR {
     try {
       this.sr.stop();
     } catch (e) {
-      // probably not started
+      // Error: probably not started
       logMessage.error(e);
     }
   }
