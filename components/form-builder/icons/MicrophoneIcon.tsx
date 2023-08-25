@@ -3,14 +3,14 @@ import React from "react";
 export const MicrophoneIcon = ({ className, title }: { className?: string; title?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    height="32"
-    width="32"
+    height="42"
+    width="42"
     className={className}
     viewBox="0 0 32 32"
     focusable="false"
     aria-hidden={title ? false : true}
     role={title ? "img" : "presentation"}
-    data-testid="WarningIcon"
+    data-testid="MicrophoneIcon"
   >
     {title && <title>{title}</title>}
 

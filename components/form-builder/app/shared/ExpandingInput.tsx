@@ -1,4 +1,4 @@
-import React, { FocusEventHandler } from "react";
+import React, { FocusEventHandler, useRef } from "react";
 import { SpeechToText } from "@components/globals/SpeechToText";
 
 interface Props {
@@ -36,6 +36,17 @@ const ExpandingInput = React.forwardRef<Ref, Props>((props, ref) => {
     className,
   } = props;
 
+  // TODO probably a better way to do this. Currently the ref is passed as a function, not an
+  // actual ref. The below basically allows assiging two refs to the same element for use with
+  // speechToText.
+  const textRef = useRef(null);
+  const wrapRef = (el) => {
+    textRef.current = el;
+    if (ref && ref.current) {
+      return ref(el);
+    }
+  };
+
   return (
     <div
       className={`input-sizer stacked border-solid border-black border-b-1.5 ${wrapperClassName}`}
@@ -54,7 +65,7 @@ const ExpandingInput = React.forwardRef<Ref, Props>((props, ref) => {
         onChange={onChange}
         onKeyDown={onKeyDown}
         onBlur={onBlur && onBlur}
-        ref={ref}
+        ref={wrapRef}
         {...(lang && { lang: lang })}
         autoComplete="off"
       >
@@ -63,9 +74,8 @@ const ExpandingInput = React.forwardRef<Ref, Props>((props, ref) => {
       <SpeechToText
         lang={lang}
         callback={(result) => {
-          //TODO not really a ref for some cases?
-          if (ref && ref.current) {
-            ref.current.value += result;
+          if (textRef && textRef.current) {
+            textRef.current.value += result;
           }
         }}
       />

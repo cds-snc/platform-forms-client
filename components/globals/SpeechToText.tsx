@@ -155,7 +155,7 @@ export const SpeechToText = ({ callback, lang }: SpeechToTextProps) => {
   return (
     <div data-test-id="speech-to-text-button" className="relative">
       <button
-        className={`absolute right-0 top-2`}
+        className={`absolute right-0`}
         onClick={handleActivate}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
