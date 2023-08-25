@@ -4,23 +4,20 @@ import { useRouter } from "next/router";
 import { StyledLink } from "./StyledLink/StyledLink";
 
 const LanguageToggle = () => {
-  const { t } = useTranslation("common");
+  const {
+    t,
+    i18n: { language: currentLang },
+  } = useTranslation("common");
 
-  const { asPath, isReady, query } = useRouter();
-  const [href, setHref] = useState(asPath);
-  const [currentLang, setCurrentLang] = useState(query.locale);
+  const { asPath, isReady } = useRouter();
+  const [href, setHref] = useState(
+    asPath.replace(`/${currentLang}`, `/${currentLang === "en" ? "fr" : "en"}`)
+  );
 
   useEffect(() => {
-    if (isReady && href === asPath) {
+    if (isReady)
       setHref(asPath.replace(`/${currentLang}`, `/${currentLang === "en" ? "fr" : "en"}`));
-    }
-  }, [asPath, currentLang, href, isReady]);
-
-  useEffect(() => {
-    if (currentLang !== query.locale) {
-      setCurrentLang(query.locale);
-    }
-  }, [query.locale, currentLang]);
+  }, [asPath, currentLang, isReady]);
 
   return (
     <StyledLink
