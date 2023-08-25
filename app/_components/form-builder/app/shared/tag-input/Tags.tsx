@@ -1,6 +1,6 @@
 import React from "react";
 
-import { RoundCloseIcon } from "@components/form-builder/icons";
+import { RoundCloseIcon } from "@appComponents/form-builder/icons";
 import { useTranslation } from "next-i18next";
 
 type TagProps = {

@@ -1,4 +1,4 @@
-import { AddIcon, RemoveIcon } from "@components/form-builder/icons";
+import { AddIcon, RemoveIcon } from "@appComponents/form-builder/icons";
 import React from "react";
 
 export const InfoDetails = ({

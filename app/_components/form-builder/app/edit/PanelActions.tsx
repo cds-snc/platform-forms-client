@@ -4,7 +4,7 @@ import { useMediaQuery } from "usehooks-ts";
 
 import { FormElementTypes } from "@lib/types";
 import { AddElementButton } from "./elements/element-dialog/AddElementButton";
-import { ElementOptionsFilter, RenderMoreFunc } from "@components/form-builder/types";
+import { ElementOptionsFilter, RenderMoreFunc } from "@appComponents/form-builder/types";
 import {
   ChevronDown,
   ChevronUp,
@@ -12,9 +12,9 @@ import {
   Duplicate,
   ThreeDotsIcon,
   AddIcon,
-} from "@components/form-builder/icons";
+} from "@appComponents/form-builder/icons";
 
-import { usePanelActions } from "@components/form-builder/hooks";
+import { usePanelActions } from "@appComponents/form-builder/hooks";
 import { ElementDialog } from "./elements/element-dialog/ElementDialog";
 import { PanelActionsButton } from "./PanelActionsButton";
 

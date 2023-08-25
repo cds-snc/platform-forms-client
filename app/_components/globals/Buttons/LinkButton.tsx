@@ -1,6 +1,6 @@
 import React from "react";
-import { StyledLink } from "@components/globals/";
-import { themes } from "@components/globals";
+import { StyledLink } from "@appComponents/globals/";
+import { themes } from "@appComponents/globals";
 
 type LinkButtonProps = {
   href: string;

@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useTranslation } from "next-i18next";
-import * as Alert from "@components/globals/Alert/Alert";
+import * as Alert from "@appComponents/globals/Alert/Alert";
 import { NagLevel, NagwareResult } from "@lib/types";
 
 export const Nagware = ({ nagwareResult }: { nagwareResult: NagwareResult }) => {

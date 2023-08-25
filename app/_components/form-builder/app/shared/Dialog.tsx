@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { CDSHTMLDialogElement } from "../../types";
 import { useTranslation } from "next-i18next";
-import { Button } from "@components/globals";
+import { Button } from "@appComponents/globals";
 import { Close } from "../../icons/Close";
 
 export const useDialogRef = () => {

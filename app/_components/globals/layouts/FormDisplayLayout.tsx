@@ -1,9 +1,9 @@
 import React from "react";
 import { getPageClassNames } from "@lib/routeUtils";
 import Head from "next/head";
-import Footer from "@components/globals/Footer";
-import SkipLink from "@components/globals/SkipLink";
-import Fip from "@components/globals/Fip";
+import Footer from "@appComponents/globals/Footer";
+import SkipLink from "@appComponents/globals/SkipLink";
+import Fip from "@appComponents/globals/Fip";
 import { PublicFormRecord } from "@lib/types";
 
 interface FormDisplayLayoutProps extends React.PropsWithChildren {

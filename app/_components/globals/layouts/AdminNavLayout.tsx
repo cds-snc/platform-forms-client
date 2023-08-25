@@ -5,8 +5,8 @@ import Head from "next/head";
 import SkipLink from "../SkipLink";
 import { User } from "next-auth";
 
-import { LeftNavigation } from "@components/admin/LeftNav/LeftNavigation";
-import { ToastContainer } from "@components/form-builder/app/shared/Toast";
+import { LeftNavigation } from "@appComponents/admin/LeftNav/LeftNavigation";
+import { ToastContainer } from "@appComponents/form-builder/app/shared/Toast";
 import { useAccessControl } from "@lib/hooks";
 import { Header } from "../Header";
 

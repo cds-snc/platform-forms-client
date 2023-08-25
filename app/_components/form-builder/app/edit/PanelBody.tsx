@@ -5,7 +5,7 @@ import { FormElementWithIndex, Language, LocalizedElementProperties } from "../.
 import { SelectedElement, ElementRequired } from ".";
 import { Question } from "./elements";
 import { QuestionDescription } from "./elements/question/QuestionDescription";
-import { useTemplateStore } from "@components/form-builder/store";
+import { useTemplateStore } from "@appComponents/form-builder/store";
 
 export const PanelBody = ({
   item,

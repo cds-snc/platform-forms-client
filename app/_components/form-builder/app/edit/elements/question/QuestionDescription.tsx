@@ -1,5 +1,8 @@
-import { useTemplateStore } from "@components/form-builder/store";
-import { FormElementWithIndex, LocalizedElementProperties } from "@components/form-builder/types";
+import { useTemplateStore } from "@appComponents/form-builder/store";
+import {
+  FormElementWithIndex,
+  LocalizedElementProperties,
+} from "@appComponents/form-builder/types";
 import React from "react";
 
 export const QuestionDescription = ({

@@ -1,8 +1,8 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
 import { SubNavLink } from "./SubNavLink";
-import { EmailIcon, BrandIcon, GearIcon } from "@components/form-builder/icons";
-import { useTemplateStore } from "@components/form-builder/store";
+import { EmailIcon, BrandIcon, GearIcon } from "@appComponents/form-builder/icons";
+import { useTemplateStore } from "@appComponents/form-builder/store";
 
 export const SettingsNavigation = () => {
   const { t } = useTranslation("form-builder");

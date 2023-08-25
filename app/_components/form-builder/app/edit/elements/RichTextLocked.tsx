@@ -4,7 +4,7 @@ import { RichTextEditor } from "./lexical-editor/RichTextEditor";
 import { AddElementButton } from "./element-dialog/AddElementButton";
 import { LocalizedElementProperties } from "../../../types";
 import { LockedBadge } from "../../shared/LockedBadge";
-import { useHandleAdd } from "@components/form-builder/hooks";
+import { useHandleAdd } from "@appComponents/form-builder/hooks";
 import { FormElementTypes } from "@lib/types";
 
 export const RichTextLocked = ({

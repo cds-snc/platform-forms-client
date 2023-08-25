@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
-import { RadioEmptyIcon } from "@components/form-builder/icons";
+import { RadioEmptyIcon } from "@appComponents/form-builder/icons";
 
 const Text = ({ label, description }: { label: string; description?: string }) => {
   return (

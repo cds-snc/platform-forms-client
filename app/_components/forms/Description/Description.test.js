@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 
-import { Description } from "@components/forms";
+import { Description } from "@appComponents/forms";
 
 describe("Description component", () => {
   const text = "This is a description";

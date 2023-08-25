@@ -1,7 +1,7 @@
 import React from "react";
 import { render, cleanup, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Card } from "@components/myforms/Card/Card";
+import { Card } from "@appComponents/myforms/Card/Card";
 
 const cardData_published = {
   id: "1",

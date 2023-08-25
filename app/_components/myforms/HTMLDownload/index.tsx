@@ -3,7 +3,7 @@ import { ResponseSection } from "./ResponseSection";
 import { ProtectedWarning } from "./ProtectedWarning";
 import Fip from "./Fip";
 import { NextPageWithLayout } from "pages/_app";
-import SkipLink from "@components/globals/SkipLink";
+import SkipLink from "@appComponents/globals/SkipLink";
 import Footer from "./Footer";
 import { FormProperties, Responses, SecurityAttribute } from "@lib/types";
 

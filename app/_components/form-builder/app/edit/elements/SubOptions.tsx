@@ -3,7 +3,7 @@ import { useTranslation } from "next-i18next";
 
 import { useTemplateStore } from "../../../store/useTemplateStore";
 import { SubOption } from "./SubOption";
-import { Button } from "@components/globals";
+import { Button } from "@appComponents/globals";
 import { FormElementWithIndex } from "../../../types";
 
 const AddButton = ({

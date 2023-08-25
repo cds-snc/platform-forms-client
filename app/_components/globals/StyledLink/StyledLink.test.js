@@ -1,6 +1,6 @@
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
-import { StyledLink } from "@components/globals/StyledLink/StyledLink";
+import { StyledLink } from "@appComponents/globals/StyledLink/StyledLink";
 
 describe("StyledLink component", () => {
   afterEach(cleanup);

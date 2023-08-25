@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from "react";
 import { t } from "i18next";
 
-import { useAutocompleteOptions } from "@components/form-builder/hooks/useAutocompleteOptions";
+import { useAutocompleteOptions } from "@appComponents/form-builder/hooks/useAutocompleteOptions";
 
 interface DropdownOptionProps {
   label: string;

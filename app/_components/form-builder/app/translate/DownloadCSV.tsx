@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
 import { useTemplateStore } from "../../store/useTemplateStore";
-import { Button } from "@components/globals";
+import { Button } from "@appComponents/globals";
 import { FormElement } from "@lib/types";
 import { getDate, slugify } from "@lib/clientHelpers";
 import { alphabet } from "../../util";

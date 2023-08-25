@@ -5,8 +5,8 @@ import { useAccessControl } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 
 import { SiteLogo } from "@formbuilder/icons";
-import { FileNameInput } from "@components/form-builder/app/navigation/FileName";
-import { ShareDropdown } from "@components/form-builder/app/navigation/ShareDropdown";
+import { FileNameInput } from "@appComponents/form-builder/app/navigation/FileName";
+import { ShareDropdown } from "@appComponents/form-builder/app/navigation/ShareDropdown";
 import LanguageToggle from "./LanguageToggle";
 import { YourAccountDropdown } from "./YourAccountDropdown";
 import { User } from "next-auth";

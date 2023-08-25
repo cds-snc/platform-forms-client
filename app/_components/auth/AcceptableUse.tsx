@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { getCsrfToken } from "next-auth/react";
 import { localPathRegEx } from "@lib/validation";
-import { Button } from "@components/globals";
+import { Button } from "@appComponents/globals";
 
 interface AcceptableUseProps {
   content: string;

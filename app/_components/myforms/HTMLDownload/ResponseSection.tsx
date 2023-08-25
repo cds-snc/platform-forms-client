@@ -1,5 +1,5 @@
 import React from "react";
-import { Table } from "@components/myforms/HTMLDownload/Table";
+import { Table } from "@appComponents/myforms/HTMLDownload/Table";
 import { useTranslation } from "next-i18next";
 import { FormProperties, Response, Responses, FormElementTypes } from "@lib/types";
 import { filterUndef } from "@lib/tsUtils";

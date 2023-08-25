@@ -1,9 +1,9 @@
 import React from "react";
-import { LeftNavLink } from "@components/globals/LeftNavLink";
+import { LeftNavLink } from "@appComponents/globals/LeftNavLink";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 
-import { PageIcon, GlobeIcon, FolderIcon } from "@components/form-builder/icons";
+import { PageIcon, GlobeIcon, FolderIcon } from "@appComponents/form-builder/icons";
 
 export const LeftNavigation = () => {
   const { t, i18n } = useTranslation(["my-forms", "form-builder"]);

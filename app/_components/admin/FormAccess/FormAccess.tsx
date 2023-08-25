@@ -1,6 +1,6 @@
-import { Button } from "@components/forms";
+import { Button } from "@appComponents/forms";
 import { logMessage } from "@lib/logger";
-import Loader from "@components/globals/Loader";
+import Loader from "@appComponents/globals/Loader";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
 import React, { useEffect, useState } from "react";

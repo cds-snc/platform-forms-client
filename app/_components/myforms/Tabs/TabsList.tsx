@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { TabsKeynav } from "@components/myforms/Tabs/TabsKeynav";
+import { TabsKeynav } from "@appComponents/myforms/Tabs/TabsKeynav";
 
 export interface TabsProps {
   children: Array<React.ReactNode>;

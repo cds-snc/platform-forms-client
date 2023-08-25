@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useTranslation } from "next-i18next";
-import { RichText } from "@components/forms";
+import { RichText } from "@appComponents/forms";
 import { getProperty } from "@lib/utils";
 import { PublicFormRecord } from "@lib/types";
 

@@ -7,28 +7,33 @@ import { logMessage } from "@lib/logger";
 
 acceptLanguage.languages(languages);
 
-const cookieName = "i18next";
-
 export function middleware(req: NextRequest) {
-  const pathname = req.nextUrl.pathname;
-
   // Content Security Policy needs to be first as it creates the NextResponse
-  //const { csp } = generateCSP();
-  const requestHeaders = new Headers(req.headers);
-  // Set the CSP header so that `app-render` can read it and generate tags with the nonce
-  //requestHeaders.set("content-security-policy", csp);
 
+  const requestHeaders = new Headers(req.headers);
   const response = NextResponse.next({
     request: {
       headers: requestHeaders,
     },
   });
 
-  //response.headers.set("content-security-policy", csp);
+  if (process.env.NODE_ENV === "production") {
+    const { csp, nonce } = generateCSP();
+
+    // Set the CSP header so that `app-render` can read it and generate tags with the nonce
+    requestHeaders.set("content-security-policy", csp);
+
+    // Set the nonce on the request header so that /pages can access
+    requestHeaders.set("x-nonce", nonce);
+
+    response.headers.set("content-security-policy", csp);
+  }
 
   /************************
    * Redirects
    ***********************/
+
+  const pathname = req.nextUrl.pathname;
 
   // Making sure we do not create an infinite ("redirect") loop when trying to load the logo on the unsupported browser page
   const imgPathRegEx = new RegExp(`/(img)/*`);
@@ -39,25 +44,15 @@ export function middleware(req: NextRequest) {
     }
   }
 
-  // Internationalized Pages
+  // Reroute to internationalize page is no language is set in the path
 
   const interalRoute = new RegExp("/(api|_next/static|_next/image|favicon.ico|img|static).*");
 
   if (!interalRoute.test(pathname) && pathname !== "/") {
-    let locale;
-    if (req.cookies.has(cookieName))
-      locale = acceptLanguage.get(req.cookies.get(cookieName)?.value);
-    if (!locale) locale = acceptLanguage.get(req.headers.get("Accept-Language"));
-    if (!locale) locale = fallbackLng;
-
-    logMessage.debug(
-      `Middleware - i18n supported page detected: : pathname = ${pathname} , detected locale = ${locale}`
-    );
-
     // Redirect to fallback language if lng in path is not present or supported
     if (!languages.some((loc) => req.nextUrl.pathname.startsWith(`/${loc}`))) {
       logMessage.debug(`Middleware - Redirecting to fallback language: : ${pathname}`);
-      return NextResponse.redirect(new URL(`/${locale}${req.nextUrl.pathname}`, req.url));
+      return NextResponse.redirect(new URL(`/${fallbackLng}${req.nextUrl.pathname}`, req.url));
     }
   }
 

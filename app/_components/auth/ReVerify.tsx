@@ -8,7 +8,7 @@ import axios from "axios";
 import { getCsrfToken } from "next-auth/react";
 import { hasError } from "@lib/hasError";
 import { Alert } from "@appComponents/forms";
-import { ErrorStatus } from "@components/forms/Alert/Alert";
+import { ErrorStatus } from "@appComponents/forms/Alert/Alert";
 import Link from "next/link";
 import Head from "next/head";
 import { useFocusIt } from "@lib/hooks/useFocusIt";

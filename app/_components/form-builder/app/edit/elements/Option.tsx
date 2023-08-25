@@ -4,7 +4,7 @@ import { useTranslation } from "next-i18next";
 import debounce from "lodash.debounce";
 
 import { Close } from "../../../icons";
-import { Button } from "@components/globals";
+import { Button } from "@appComponents/globals";
 import { Input } from "../../shared/Input";
 import { useTemplateStore } from "../../../store/useTemplateStore";
 import { Language } from "../../../types";

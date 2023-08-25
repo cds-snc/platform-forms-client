@@ -1,9 +1,9 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
 import { SubNavLink } from "./SubNavLink";
-import { useActivePathname } from "@components/form-builder/hooks";
+import { useActivePathname } from "@appComponents/form-builder/hooks";
 import { LangSwitcher } from "../shared/LangSwitcher";
-import { QuestionsIcon, TranslateIcon } from "@components/form-builder/icons";
+import { QuestionsIcon, TranslateIcon } from "@appComponents/form-builder/icons";
 
 export const EditNavigation = () => {
   const { t } = useTranslation("form-builder");

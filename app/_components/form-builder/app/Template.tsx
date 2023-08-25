@@ -2,17 +2,17 @@ import React, { ReactElement, useEffect } from "react";
 import Head from "next/head";
 import { useTranslation } from "next-i18next";
 
-import SkipLink from "@components/globals/SkipLink";
-import Footer from "@components/globals/Footer";
-import Loader from "@components/globals/Loader";
-import { useTemplateStore, TemplateStoreProvider } from "@components/form-builder/store";
-import { LeftNavigation } from "@components/form-builder/app";
+import SkipLink from "@appComponents/globals/SkipLink";
+import Footer from "@appComponents/globals/Footer";
+import Loader from "@appComponents/globals/Loader";
+import { useTemplateStore, TemplateStoreProvider } from "@appComponents/form-builder/store";
+import { LeftNavigation } from "@appComponents/form-builder/app";
 import { Language } from "../types";
 import { TemplateApiProvider } from "../hooks";
 import { ToastContainer } from "./shared/Toast";
 import { RefStoreProvider } from "@lib/hooks/useRefStore";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
-import { Header } from "@components/globals";
+import { Header } from "@appComponents/globals";
 
 export const Template = ({
   page,

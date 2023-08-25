@@ -8,7 +8,7 @@ import React, {
   JSXElementConstructor,
 } from "react";
 
-import { ChevronRight } from "@components/form-builder/icons";
+import { ChevronRight } from "@appComponents/form-builder/icons";
 
 // for specs see:
 // https://www.w3.org/WAI/ARIA/apg/patterns/listbox

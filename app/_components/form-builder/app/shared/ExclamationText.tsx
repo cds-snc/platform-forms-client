@@ -1,5 +1,5 @@
 import React from "react";
-import { ExclamationIcon } from "@components/form-builder/icons";
+import { ExclamationIcon } from "@appComponents/form-builder/icons";
 
 export const ExclamationText = ({
   text,

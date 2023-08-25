@@ -8,7 +8,7 @@ import { useRefresh } from "@lib/hooks";
 import { isValidGovEmail } from "@lib/validation";
 import { ResponseEmail } from "./ResponseEmail";
 import { Radio } from "./shared";
-import { Button } from "@components/globals";
+import { Button } from "@appComponents/globals";
 import { useTemplateApi } from "../hooks";
 import { useTemplateStore } from "../store";
 import { completeEmailAddressRegex } from "../util";

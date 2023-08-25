@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { useTranslation } from "next-i18next";
 
 import { FormElementTypes } from "@lib/types";
-import { useTemplateStore } from "@components/form-builder/store";
+import { useTemplateStore } from "@appComponents/form-builder/store";
 import { blockLoader, LoaderType } from "../blockLoader";
 import { allowedTemplates } from "@formbuilder/util";
 import {

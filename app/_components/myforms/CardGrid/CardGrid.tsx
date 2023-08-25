@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useRef } from "react";
-import { Card, CardProps } from "@components/myforms/Card/Card";
-import { ConfirmDelete } from "@components/form-builder/app/ConfirmDelete";
+import { Card, CardProps } from "@appComponents/myforms/Card/Card";
+import { ConfirmDelete } from "@appComponents/form-builder/app/ConfirmDelete";
 import { useRefresh } from "@lib/hooks";
 
 /* handle delete gets added via the CardGrid component */

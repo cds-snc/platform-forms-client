@@ -5,8 +5,8 @@ import Link from "next/link";
 import Head from "next/head";
 
 import { useAccessControl } from "@lib/hooks";
-import { Footer, Brand, SkipLink, LanguageToggle } from "@components/globals";
-import LoginMenu from "@components/auth/LoginMenu";
+import { Footer, Brand, SkipLink, LanguageToggle } from "@appComponents/globals";
+import LoginMenu from "@appComponents/auth/LoginMenu";
 import { SiteLogo } from "@formbuilder/icons";
 import { ToastContainer } from "@formbuilder/app/shared/Toast";
 

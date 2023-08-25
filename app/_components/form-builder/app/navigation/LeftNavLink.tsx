@@ -1,4 +1,4 @@
-import { useTemplateContext } from "@components/form-builder/hooks";
+import { useTemplateContext } from "@appComponents/form-builder/hooks";
 import Link from "next/link";
 import React, { ReactNode, useEffect, useState } from "react";
 import { useActivePathname, cleanPath } from "../../hooks/useActivePathname";

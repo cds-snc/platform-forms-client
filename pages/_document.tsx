@@ -1,4 +1,12 @@
-import Document, { Html, Head, Main, NextScript, OriginProps } from "next/document";
+import Document, {
+  Html,
+  Head,
+  Main,
+  NextScript,
+  OriginProps,
+  DocumentContext,
+  DocumentInitialProps,
+} from "next/document";
 import React from "react";
 import { googleTagManager, cspHashOf } from "@lib/cspScripts";
 
@@ -22,12 +30,14 @@ function getCsp() {
   return csp;
 }
 
-const GoogleTagScript = React.createElement("script", {
-  defer: true,
-  dangerouslySetInnerHTML: {
-    __html: googleTagManager,
-  },
-});
+const GoogleTagScript = (nonce: string) =>
+  React.createElement("script", {
+    defer: true,
+    nonce,
+    dangerouslySetInnerHTML: {
+      __html: googleTagManager,
+    },
+  });
 
 class StrictStaticCSP extends Head {
   constructor(
@@ -207,15 +217,29 @@ class StrictStaticCSP extends Head {
 
 // Actual main Document being rendered
 
-const CustomHead = process.env.NODE_ENV === "production" ? StrictStaticCSP : Head;
-class MyDocument extends Document {
+class MyDocument extends Document<{ nonce: string }> {
+  static async getInitialProps(
+    ctx: DocumentContext
+  ): Promise<DocumentInitialProps & { nonce: string }> {
+    const initialProps = await Document.getInitialProps(ctx);
+
+    const nonce = !Array.isArray(ctx?.req?.headers["x-nonce"])
+      ? ctx?.req?.headers["x-nonce"] ?? ""
+      : "";
+    return { ...initialProps, nonce };
+  }
   render() {
     return (
       <Html>
-        <CustomHead>
-          <script async type="text/javascript" src="/static/scripts/form-polyfills.js"></script>
-          {GoogleTagScript}
-        </CustomHead>
+        <Head nonce={this.props.nonce}>
+          <script
+            async
+            type="text/javascript"
+            src="/static/scripts/form-polyfills.js"
+            nonce={this.props.nonce}
+          ></script>
+          {GoogleTagScript(this.props.nonce)}
+        </Head>
         <noscript>
           <style type="text/css">{`#__next {display:none;}`}</style>
           <meta httpEquiv="Refresh" content="0; url='/javascript-disabled.html'" />
@@ -233,7 +257,7 @@ class MyDocument extends Document {
           </noscript>
 
           <Main />
-          <NextScript />
+          <NextScript nonce={this.props.nonce} />
         </body>
       </Html>
     );

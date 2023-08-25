@@ -3,7 +3,7 @@ import classnames from "classnames";
 import { useField } from "formik";
 import { GenerateElement } from "@lib/formBuilder";
 import { FormElement } from "@lib/types";
-import { Button, Description } from "@components/forms";
+import { Button, Description } from "@appComponents/forms";
 import { TFunction } from "next-i18next";
 
 interface DynamicGroupProps {

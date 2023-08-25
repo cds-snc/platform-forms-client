@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
-import { useTemplateStore } from "@components/form-builder/store";
-import { ToggleLeft, ToggleRight } from "@components/form-builder/icons";
+import { useTemplateStore } from "@appComponents/form-builder/store";
+import { ToggleLeft, ToggleRight } from "@appComponents/form-builder/icons";
 
 interface LangSwitcherProps {
   descriptionLangKey: string;

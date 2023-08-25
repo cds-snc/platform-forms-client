@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ToggleLeft, ToggleRight } from "@components/form-builder/icons";
+import { ToggleLeft, ToggleRight } from "@appComponents/form-builder/icons";
 
 interface PermissionToggleProps {
   on: boolean;

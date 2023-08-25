@@ -7,7 +7,7 @@ import {
   VaultSubmissionList,
 } from "@lib/types";
 import { useTranslation } from "react-i18next";
-import { SkipLinkReusable } from "@components/globals/SkipLinkReusable";
+import { SkipLinkReusable } from "@appComponents/globals/SkipLinkReusable";
 import { ConfirmReceiptStatus } from "./ConfirmReceiptStatus";
 import { DownloadResponseStatus } from "./DownloadResponseStatus";
 import { RemovalStatus } from "./RemovalStatus";
@@ -25,7 +25,7 @@ import {
   sortVaultSubmission,
 } from "./DownloadTableReducer";
 import { getDaysPassed } from "@lib/clientHelpers";
-import * as Alert from "@components/globals/Alert/Alert";
+import * as Alert from "@appComponents/globals/Alert/Alert";
 
 // TODO: move to an app setting variable
 const MAX_FILE_DOWNLOADS = 20;

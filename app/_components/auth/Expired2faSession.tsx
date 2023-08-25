@@ -1,8 +1,8 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
 
-import { LinkButton } from "@components/globals";
-import { BackArrowIcon } from "@components/form-builder/icons";
+import { LinkButton } from "@appComponents/globals";
+import { BackArrowIcon } from "@appComponents/form-builder/icons";
 
 export const Expired2faSession = () => {
   const { t, i18n } = useTranslation(["cognito-errors", "common"]);

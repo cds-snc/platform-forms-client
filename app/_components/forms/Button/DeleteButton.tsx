@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button } from "@components/forms";
+import { Button } from "@appComponents/forms";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { logMessage } from "@lib/logger";

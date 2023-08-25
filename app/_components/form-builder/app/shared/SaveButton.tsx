@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { useSession } from "next-auth/react";
 
-import { Button } from "@components/globals";
+import { Button } from "@appComponents/globals";
 import { useTemplateStore } from "../../store";
 import { useAllowPublish, useTemplateStatus, useTemplateContext } from "../../hooks";
 import { formatDateTime } from "../../util";

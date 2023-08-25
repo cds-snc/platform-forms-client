@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
 import { Menu } from "./Menu";
-import { Overlay } from "@components/globals/Overlay/Overlay";
+import { Overlay } from "@appComponents/globals/Overlay/Overlay";
 
 export interface MenuDropdownItemCallback {
   message: string;

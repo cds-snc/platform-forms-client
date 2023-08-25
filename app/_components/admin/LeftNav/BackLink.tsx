@@ -1,6 +1,6 @@
 import React from "react";
-import { StyledLink } from "@components/globals";
-import { BackArrowIcon } from "@components/form-builder/icons";
+import { StyledLink } from "@appComponents/globals";
+import { BackArrowIcon } from "@appComponents/form-builder/icons";
 
 type BackLinkProps = {
   href: string;

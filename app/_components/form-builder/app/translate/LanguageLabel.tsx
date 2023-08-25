@@ -1,4 +1,4 @@
-import { Language } from "@components/form-builder/types";
+import { Language } from "@appComponents/form-builder/types";
 import React, { ReactElement } from "react";
 
 // Original: absolute right-0 text-sm top-0 pl-2 pr-2 bg-purple-100 border-purple-200 border mr-1 -mt-6

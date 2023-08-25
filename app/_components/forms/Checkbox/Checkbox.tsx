@@ -1,6 +1,6 @@
 import React from "react";
 import { Field } from "formik";
-import { Description } from "@components/forms";
+import { Description } from "@appComponents/forms";
 import { ChoiceFieldProps } from "@lib/types";
 
 export const Checkbox = (

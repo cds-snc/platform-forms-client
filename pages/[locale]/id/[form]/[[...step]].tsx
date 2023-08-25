@@ -74,10 +74,10 @@ RenderForm.getLayout = function getLayout(page: ReactElement) {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { locale = "en" }: { locale?: string } = context.params ?? {};
+  const { locale = "en", form: formID }: { locale?: string; form?: string } = context.params ?? {};
   const unpublishedForms = await checkOne("unpublishedForms");
   let publicForm: PublicFormRecord | null = null;
-  const formID = context.params?.form;
+
   const isEmbeddable = context.query?.embed == "true" || null;
 
   if (formID === "preview-form" && context.query?.formObject) {
@@ -99,14 +99,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   // Redirect if form doesn't exist and
   // Only retrieve publish ready forms if isProduction
   if (!publicForm || (!publicForm?.isPublished && !unpublishedForms)) {
-    return redirect(context.locale);
+    return redirect(locale);
   }
   return {
     props: {
       formRecord: publicForm,
       isEmbeddable: isEmbeddable,
-      ...(context.locale &&
-        (await serverSideTranslations(context.locale, ["common", "welcome", "confirmation"]))),
+      ...(locale && (await serverSideTranslations(locale, ["common", "welcome", "confirmation"]))),
     }, // will be passed to the page component as props
   };
 };

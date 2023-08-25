@@ -9,9 +9,10 @@ import "react-app-polyfill/stable";
 export const metadata: Metadata = {
   viewport: "width=device-width, initial-scale=1, shrink-to-fit=no",
 };
+
 export default async function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" dir={dir("en")}>
+    <html lang={"en"} dir={dir("en")}>
       <head />
       <body suppressHydrationWarning={true}>
         <SkipLink locale="en" />

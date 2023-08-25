@@ -6,9 +6,9 @@ import {
   MenuDropdown,
   MenuDropdownItemI,
   MenuDropdownItemCallback,
-} from "@components/myforms/MenuDropdown/MenuDropdown";
+} from "@appComponents/myforms/MenuDropdown/MenuDropdown";
 import { getDate, slugify } from "@lib/clientHelpers";
-import { MessageIcon, EnvelopeIcon } from "@components/form-builder/icons/";
+import { MessageIcon, EnvelopeIcon } from "@appComponents/form-builder/icons/";
 import Markdown from "markdown-to-jsx";
 
 export interface CardProps {

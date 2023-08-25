@@ -1,4 +1,4 @@
-import { CircleCheckIcon, InfoIcon, WarningIcon } from "@components/form-builder/icons";
+import { CircleCheckIcon, InfoIcon, WarningIcon } from "@appComponents/form-builder/icons";
 import React from "react";
 import {
   ToastContainer as OriginalContainer,

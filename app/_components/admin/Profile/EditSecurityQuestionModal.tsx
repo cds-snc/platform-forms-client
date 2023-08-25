@@ -1,10 +1,10 @@
 import React, { useRef, useState, useCallback } from "react";
-import { Label } from "@components/forms";
-import { Button } from "@components/globals";
+import { Label } from "@appComponents/forms";
+import { Button } from "@appComponents/globals";
 import { useTranslation } from "next-i18next";
-import { Dialog, useDialogRef } from "@components/form-builder/app/shared";
+import { Dialog, useDialogRef } from "@appComponents/form-builder/app/shared";
 import { logMessage } from "@lib/logger";
-import * as Alert from "@components/globals/Alert/Alert";
+import * as Alert from "@appComponents/globals/Alert/Alert";
 import { Question } from "@pages/[locale]/profile";
 import axios from "axios";
 import { getCsrfToken } from "next-auth/react";

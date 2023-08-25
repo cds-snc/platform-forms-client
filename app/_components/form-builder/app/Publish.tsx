@@ -7,12 +7,12 @@ import { useRouter } from "next/router";
 import { useTemplateStore } from "../store";
 import { useTemplateApi, useAllowPublish } from "../hooks";
 import { CancelIcon, CircleCheckIcon, LockIcon } from "../icons";
-import { Button } from "@components/globals";
+import { Button } from "@appComponents/globals";
 import Link from "next/link";
 import { LoggedOutTab, LoggedOutTabName } from "./LoggedOutTab";
-import { InfoCard } from "@components/globals/InfoCard/InfoCard";
+import { InfoCard } from "@appComponents/globals/InfoCard/InfoCard";
 import { isVaultDelivery } from "@formbuilder/util";
-import * as Alert from "@components/globals/Alert/Alert";
+import * as Alert from "@appComponents/globals/Alert/Alert";
 
 export const Publish = () => {
   const { t } = useTranslation("form-builder");

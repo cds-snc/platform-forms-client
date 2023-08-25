@@ -1,6 +1,6 @@
 import React from "react";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
-import { themes } from "@components/globals";
+import { themes } from "@appComponents/globals";
 import { useTranslation } from "next-i18next";
 
 export const Dropdown = ({ children }: { children: React.ReactNode }) => {

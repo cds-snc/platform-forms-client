@@ -4,7 +4,7 @@ import { FormElementTypes } from "@lib/types";
 import axios from "axios";
 
 import { useDialogRef, Dialog, TagInput, InfoDetails } from "./shared";
-import { Button } from "@components/globals";
+import { Button } from "@appComponents/globals";
 import { useTemplateStore } from "../store";
 import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";

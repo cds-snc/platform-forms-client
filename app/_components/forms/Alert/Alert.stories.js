@@ -1,7 +1,7 @@
 import React from "react";
 import { Alert } from "./Alert";
 
-import { Button } from "@components/forms";
+import { Button } from "@appComponents/forms";
 
 export default {
   title: "Forms/Alert",

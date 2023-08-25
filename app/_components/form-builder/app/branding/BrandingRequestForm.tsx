@@ -1,4 +1,4 @@
-import { Form } from "@components/forms";
+import { Form } from "@appComponents/forms";
 import { getRenderedForm } from "@lib/formBuilder";
 import { FormRecord } from "@lib/types";
 import { useRouter } from "next/router";

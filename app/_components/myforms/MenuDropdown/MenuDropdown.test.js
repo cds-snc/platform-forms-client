@@ -1,7 +1,7 @@
 import React from "react";
 import { render, cleanup, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MenuDropdown } from "@components/myforms/MenuDropdown/MenuDropdown";
+import { MenuDropdown } from "@appComponents/myforms/MenuDropdown/MenuDropdown";
 
 const menuData = {
   id: "1",

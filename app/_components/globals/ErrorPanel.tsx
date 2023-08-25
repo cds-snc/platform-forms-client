@@ -2,8 +2,8 @@ import React from "react";
 import { useTranslation } from "next-i18next";
 import { useSession } from "next-auth/react";
 
-import { LinkButton } from "@components/globals";
-import { BackArrowIcon } from "@components/form-builder/icons";
+import { LinkButton } from "@appComponents/globals";
+import { BackArrowIcon } from "@appComponents/form-builder/icons";
 
 export const ErrorPanel = ({
   title,

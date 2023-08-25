@@ -9,8 +9,8 @@ import { useTemplateStore } from "../../store";
 import { LoggedOutTabName, LoggedOutTab } from "../LoggedOutTab";
 import { useTemplateApi } from "../../hooks";
 import { toast } from "../shared";
-import { Button } from "@components/globals";
-import Brand from "@components/globals/Brand";
+import { Button } from "@appComponents/globals";
+import Brand from "@appComponents/globals/Brand";
 
 const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element | string }) => {
   return (

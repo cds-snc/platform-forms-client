@@ -1,4 +1,4 @@
-import { CircleCheckIcon, InfoIcon, WarningIcon } from "@components/form-builder/icons";
+import { CircleCheckIcon, InfoIcon, WarningIcon } from "@appComponents/form-builder/icons";
 import { cn } from "@lib/utils";
 import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

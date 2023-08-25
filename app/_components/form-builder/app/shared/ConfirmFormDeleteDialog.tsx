@@ -3,11 +3,11 @@ import useSWR from "swr";
 import { useTranslation } from "next-i18next";
 import Image from "next/image";
 
-import Loader from "@components/globals/Loader";
-import { Button, LinkButton } from "@components/globals";
+import Loader from "@appComponents/globals/Loader";
+import { Button, LinkButton } from "@appComponents/globals";
 import { useDialogRef, Dialog } from "./Dialog";
 import { DownloadFileButton } from "./DownloadFileButton";
-import * as Alert from "@components/globals/Alert/Alert";
+import * as Alert from "@appComponents/globals/Alert/Alert";
 
 const fetcher = async (url: string) => {
   const res = await fetch(url);

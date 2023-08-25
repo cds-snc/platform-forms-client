@@ -1,6 +1,6 @@
 import React from "react";
-import { Card } from "@components/globals/card/Card";
-import { LinkButton } from "@components/globals";
+import { Card } from "@appComponents/globals/card/Card";
+import { LinkButton } from "@appComponents/globals";
 import { useSession } from "next-auth/react";
 import { useTranslation } from "next-i18next";
 

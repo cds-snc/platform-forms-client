@@ -1,5 +1,5 @@
-import { Button, Label } from "@components/forms";
-import Loader from "@components/globals/Loader";
+import { Button, Label } from "@appComponents/forms";
+import Loader from "@appComponents/globals/Loader";
 import { logMessage } from "@lib/logger";
 import axios from "axios";
 import { useTranslation } from "next-i18next";

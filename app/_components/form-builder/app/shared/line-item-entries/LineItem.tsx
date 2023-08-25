@@ -1,5 +1,5 @@
 import React from "react";
-import { RoundThinXCloseIcon } from "@components/form-builder/icons";
+import { RoundThinXCloseIcon } from "@appComponents/form-builder/icons";
 import { useTranslation } from "next-i18next";
 
 type LineItemProps = {

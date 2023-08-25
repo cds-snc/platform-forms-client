@@ -1,8 +1,8 @@
 import React from "react";
 import { render, cleanup, screen } from "@testing-library/react";
-import { TabsList } from "@components/myforms/Tabs/TabsList";
-import { Tab } from "@components/myforms/Tabs/Tab";
-import { TabPanel } from "@components/myforms/Tabs/TabPanel";
+import { TabsList } from "@appComponents/myforms/Tabs/TabsList";
+import { Tab } from "@appComponents/myforms/Tabs/Tab";
+import { TabPanel } from "@appComponents/myforms/Tabs/TabPanel";
 
 jest.mock("next/router", () => require("next-router-mock"));
 

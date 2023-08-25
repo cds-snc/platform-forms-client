@@ -1,6 +1,6 @@
 import React from "react";
 import { ConfirmFormDeleteDialog } from "../ConfirmFormDeleteDialog";
-import { TemplateStoreProvider } from "@components/form-builder/store";
+import { TemplateStoreProvider } from "@appComponents/form-builder/store";
 
 describe("<ConfirmFormDeleteDialog />", () => {
   it("shows unprocessed screen", () => {

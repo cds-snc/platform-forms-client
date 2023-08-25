@@ -3,7 +3,7 @@ import { useTranslation } from "next-i18next";
 import { FormElementTypes } from "@lib/types";
 
 import { useDialogRef, Dialog, InfoDetails, DownloadFileButton } from "./shared";
-import { Button } from "@components/globals";
+import { Button } from "@appComponents/globals";
 import Markdown from "markdown-to-jsx";
 
 export const ShareModalUnauthenticated = ({

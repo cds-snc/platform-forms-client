@@ -1,6 +1,6 @@
 import React from "react";
 import { useField } from "formik";
-import { ErrorMessage, Checkbox, Radio } from "@components/forms";
+import { ErrorMessage, Checkbox, Radio } from "@appComponents/forms";
 import { ChoiceFieldProps, InputFieldProps } from "@lib/types";
 
 interface MultipleChoiceGroupProps extends InputFieldProps {

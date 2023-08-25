@@ -11,7 +11,7 @@ import {
   BulletListIcon,
   NumberedListIcon,
   LinkIcon,
-} from "@components/form-builder/icons";
+} from "@appComponents/form-builder/icons";
 
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
 import { useTranslation } from "next-i18next";

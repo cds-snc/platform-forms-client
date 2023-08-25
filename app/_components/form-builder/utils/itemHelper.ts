@@ -1,6 +1,6 @@
 import { FormElement, FormElementTypes, HTMLTextInputTypeAttribute } from "@lib/types";
 import { Language, LocalizedElementProperties } from "../types";
-import { isValidatedTextType, isAutoCompleteField } from "@components/form-builder/util";
+import { isValidatedTextType, isAutoCompleteField } from "@appComponents/form-builder/util";
 
 type ElementType =
   | keyof typeof FormElementTypes

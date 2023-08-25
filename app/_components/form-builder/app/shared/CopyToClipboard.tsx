@@ -3,7 +3,7 @@ import { useTranslation } from "next-i18next";
 
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { withMessage } from "./WithMessage";
-import { Button } from "@components/globals";
+import { Button } from "@appComponents/globals";
 
 export const CopyToClipboard = () => {
   const { t } = useTranslation("form-builder");

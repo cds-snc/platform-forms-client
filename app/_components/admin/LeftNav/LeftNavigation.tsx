@@ -1,10 +1,10 @@
 import React from "react";
-import { LeftNavLink } from "@components/globals/LeftNavLink";
+import { LeftNavLink } from "@appComponents/globals/LeftNavLink";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { useAccessControl } from "@lib/hooks";
 
-import { NameIcon, FlagIcon, GearIcon } from "@components/form-builder/icons";
+import { NameIcon, FlagIcon, GearIcon } from "@appComponents/form-builder/icons";
 
 export const LeftNavigation = () => {
   const { t } = useTranslation(["admin-login", "common"]);

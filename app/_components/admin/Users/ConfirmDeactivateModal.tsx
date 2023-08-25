@@ -2,12 +2,12 @@ import React from "react";
 import useSWR from "swr";
 import { useTranslation } from "next-i18next";
 import { FormElementTypes } from "@lib/types";
-import { Button } from "@components/globals";
-import { Dialog, useDialogRef } from "@components/form-builder/app/shared";
+import { Button } from "@appComponents/globals";
+import { Dialog, useDialogRef } from "@appComponents/form-builder/app/shared";
 import { updateActiveStatus } from "@pages/[locale]/admin/accounts";
 import { useRefresh } from "@lib/hooks";
-import Loader from "@components/globals/Loader";
-import * as Alert from "@components/globals/Alert/Alert";
+import Loader from "@appComponents/globals/Loader";
+import * as Alert from "@appComponents/globals/Alert/Alert";
 import { DBUser } from "@lib/types/user-types";
 
 const fetcher = async (url: string) => {

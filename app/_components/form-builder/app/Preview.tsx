@@ -6,11 +6,11 @@ import Markdown from "markdown-to-jsx";
 
 import { getRenderedForm } from "@lib/formBuilder";
 import { PublicFormRecord } from "@lib/types";
-import { Button, Form, RichText } from "@components/forms";
+import { Button, Form, RichText } from "@appComponents/forms";
 import { LocalizedElementProperties, LocalizedFormProperties } from "../types";
 import { useTemplateStore } from "../store";
 import { BackArrowIcon } from "../icons";
-import Brand from "@components/globals/Brand";
+import Brand from "@appComponents/globals/Brand";
 
 export const Preview = () => {
   const { status } = useSession();

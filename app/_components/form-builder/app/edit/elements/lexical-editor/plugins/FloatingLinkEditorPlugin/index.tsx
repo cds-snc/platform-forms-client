@@ -34,7 +34,7 @@ import { createPortal } from "react-dom";
 import { getSelectedNode } from "../../utils/getSelectedNode";
 import { setFloatingElemPosition } from "../../utils/setFloatingElemPosition";
 import { sanitizeUrl } from "../../utils/url";
-import { EditIcon } from "@components/form-builder/icons/EditIcon";
+import { EditIcon } from "@appComponents/form-builder/icons/EditIcon";
 import { useTranslation } from "react-i18next";
 
 function FloatingLinkEditor({
