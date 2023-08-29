@@ -28,9 +28,9 @@ export const NavLink = ({
 
   const linkHref = languages.some((loc) => href.startsWith(`/${loc}`))
     ? href
-    : `${language}${href}`;
+    : `/${language}${href}`;
 
-  logMessage.debug(`NavLink: linkHref: ${`${language}${href}`} language=${language}`);
+  logMessage.debug(`NavLink: linkHref: ${href} language=${language}`);
 
   return (
     <Link
