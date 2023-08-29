@@ -8,31 +8,7 @@ import { logMessage } from "@lib/logger";
 acceptLanguage.languages(languages);
 
 export function middleware(req: NextRequest) {
-  // Content Security Policy needs to be first as it creates the NextResponse
-
-  const requestHeaders = new Headers(req.headers);
-  const response = NextResponse.next({
-    request: {
-      headers: requestHeaders,
-    },
-  });
-
-  if (process.env.NODE_ENV === "production") {
-    const { csp, nonce } = generateCSP();
-
-    // Set the CSP header so that `app-render` can read it and generate tags with the nonce
-    requestHeaders.set("content-security-policy", csp);
-
-    // Set the nonce on the request header so that /pages can access
-    requestHeaders.set("x-nonce", nonce);
-
-    response.headers.set("content-security-policy", csp);
-  }
-
-  /************************
-   * Redirects
-   ***********************/
-
+  const interalRoute = new RegExp("/(api|_next/static|_next/image|favicon.ico|img|static).*");
   const pathname = req.nextUrl.pathname;
 
   // Making sure we do not create an infinite ("redirect") loop when trying to load the logo on the unsupported browser page
@@ -44,17 +20,32 @@ export function middleware(req: NextRequest) {
     }
   }
 
-  // Reroute to internationalize page is no language is set in the path
-
-  const interalRoute = new RegExp("/(api|_next/static|_next/image|favicon.ico|img|static).*");
-
-  if (!interalRoute.test(pathname) && pathname !== "/") {
+  if (!interalRoute.test(pathname)) {
     // Redirect to fallback language if lng in path is not present or supported
-    if (!languages.some((loc) => req.nextUrl.pathname.startsWith(`/${loc}`))) {
+    if (pathname !== "/" && !languages.some((loc) => pathname.startsWith(`/${loc}`))) {
       logMessage.debug(`Middleware - Redirecting to fallback language: : ${pathname}`);
-      return NextResponse.redirect(new URL(`/${fallbackLng}${req.nextUrl.pathname}`, req.url));
+      return NextResponse.redirect(new URL(`/${fallbackLng}${pathname}`, req.url));
     }
+
+    // Set the Content Security Policy (CSP) header
+    const { csp, nonce } = generateCSP();
+
+    const requestHeaders = new Headers(req.headers);
+
+    // Set the CSP header on the request to the server
+    requestHeaders.set("content-security-policy", csp);
+
+    const response = NextResponse.next({
+      headers: requestHeaders,
+    });
+
+    logMessage.info(`Added nonce: ${nonce} for path: ${req.nextUrl.pathname}`);
+
+    // Set the CSP header on the response to the browser
+    response.headers.set("content-security-policy", csp);
+
+    return response;
   }
 
-  return response;
+  return NextResponse.next();
 }

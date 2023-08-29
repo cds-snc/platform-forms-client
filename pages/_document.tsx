@@ -222,10 +222,10 @@ class MyDocument extends Document<{ nonce: string }> {
     ctx: DocumentContext
   ): Promise<DocumentInitialProps & { nonce: string }> {
     const initialProps = await Document.getInitialProps(ctx);
-
-    const nonce = !Array.isArray(ctx?.req?.headers["x-nonce"])
-      ? ctx?.req?.headers["x-nonce"] ?? ""
+    const csp = !Array.isArray(ctx?.req?.headers["content-security-policy"])
+      ? ctx?.req?.headers["content-security-policy"] ?? ""
       : "";
+    const nonce = csp.indexOf("nonce-") > -1 ? csp.split("nonce-")[1].split("'")[0] : "";
     return { ...initialProps, nonce };
   }
   render() {
