@@ -49,7 +49,7 @@ describe("Test Auth lib", () => {
       }))(context);
       expect(result).toEqual({
         redirect: {
-          destination: `/undefined/auth/login`,
+          destination: `/en/auth/login`,
           permanent: false,
         },
       });
@@ -90,7 +90,7 @@ describe("Test Auth lib", () => {
       }))(context);
       expect(result).toEqual({
         redirect: {
-          destination: "/undefined/auth/account-deactivated",
+          destination: "/en/auth/account-deactivated",
           permanent: false,
         },
       });
@@ -131,7 +131,7 @@ describe("Test Auth lib", () => {
       }))(context);
       expect(result).toEqual({
         redirect: {
-          destination: `/undefined/auth/policy?referer=`,
+          destination: `/en/auth/policy?referer=`,
           permanent: false,
         },
       });
@@ -263,7 +263,7 @@ describe("Test Auth lib", () => {
     })(context);
     expect(result).toEqual({
       redirect: {
-        destination: "/undefined/admin/unauthorized",
+        destination: "/en/admin/unauthorized",
         permanent: false,
       },
     });

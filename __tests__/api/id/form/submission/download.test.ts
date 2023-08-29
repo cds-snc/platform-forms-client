@@ -13,7 +13,6 @@ import { mockClient } from "aws-sdk-client-mock";
 import { EventEmitter } from "events";
 import testFormConfig from "../../../../../__fixtures__/accessibilityTestForm.json";
 import { logEvent } from "@lib/auditLogs";
-import { renderToStaticNodeStream } from "react-dom/server";
 import { Readable } from "node:stream";
 
 jest.mock("next-auth/next");
@@ -30,7 +29,9 @@ jest.mock("next-i18next", () => ({
 
 jest.mock("react-dom/server");
 
-const mockRenderToStaticNodeStream = jest.mocked(renderToStaticNodeStream, { shallow: true });
+const mockRenderToStaticNodeStream = import("react-dom/server").then((reactDom) =>
+  jest.mocked(reactDom.renderToStaticNodeStream, { shallow: true })
+);
 
 //Needed in the typescript version of the test so types are inferred correctly
 const mockGetSession = jest.mocked(getServerSession, { shallow: true });
@@ -190,6 +191,8 @@ describe("/api/id/[form]/[submission]/download", () => {
         users: [{ id: "1" }],
       });
 
+      const mockedRender = await mockRenderToStaticNodeStream;
+
       const dynamodbExpectedResponse = {
         Item: {
           FormID: "formTestID",
@@ -203,7 +206,7 @@ describe("/api/id/[form]/[submission]/download", () => {
       ddbMock.on(GetCommand).resolves(dynamodbExpectedResponse);
       ddbMock.on(UpdateCommand).resolves;
 
-      mockRenderToStaticNodeStream.mockReturnValueOnce(
+      mockedRender.mockReturnValueOnce(
         new Readable({
           objectMode: true,
           read: function () {
@@ -257,6 +260,7 @@ describe("/api/id/[form]/[submission]/download", () => {
         jsonConfig: testFormTemplate,
         users: [{ id: "1" }],
       });
+      const mockedRender = await mockRenderToStaticNodeStream;
 
       const dynamodbExpectedResponse = {
         Item: {
@@ -272,7 +276,7 @@ describe("/api/id/[form]/[submission]/download", () => {
       ddbMock.on(GetCommand).resolves(dynamodbExpectedResponse);
       ddbMock.on(UpdateCommand).resolves;
 
-      mockRenderToStaticNodeStream.mockReturnValueOnce(
+      mockedRender.mockReturnValueOnce(
         new Readable({
           objectMode: true,
           read: function () {
@@ -315,7 +319,7 @@ describe("/api/id/[form]/[submission]/download", () => {
         jsonConfig: testFormTemplate,
         users: [{ id: "1" }],
       });
-
+      const mockedRender = await mockRenderToStaticNodeStream;
       const dynamodbExpectedResponse = {
         Item: {
           FormID: "formTestID",
@@ -330,7 +334,7 @@ describe("/api/id/[form]/[submission]/download", () => {
       ddbMock.on(GetCommand).resolves(dynamodbExpectedResponse);
       ddbMock.on(UpdateCommand).resolves;
 
-      mockRenderToStaticNodeStream.mockReturnValueOnce(
+      mockedRender.mockReturnValueOnce(
         new Readable({
           objectMode: true,
           read: function () {

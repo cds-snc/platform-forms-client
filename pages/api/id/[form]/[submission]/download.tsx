@@ -17,7 +17,6 @@ import {
 } from "@lib/types";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import React from "react";
-import { renderToStaticNodeStream } from "react-dom/server";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { getFullTemplateByID } from "@lib/templates";
 import HTMLDownloadFile from "@components/myforms/HTMLDownload";
@@ -35,6 +34,7 @@ import { logEvent } from "@lib/auditLogs";
 const allowedMethods = ["GET"];
 
 const handler = async (req: NextApiRequest, res: NextApiResponse, props: MiddlewareProps) => {
+  const { renderToStaticNodeStream } = await import("react-dom/server");
   const formID = req.query.form;
   const submissionName = req.query.submission;
 
