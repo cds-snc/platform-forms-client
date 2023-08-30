@@ -3,7 +3,6 @@ import { BrandProperties } from "@lib/types/form-types";
 import { getProperty } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { Language } from "@appComponents/form-builder/types";
-
 const Brand = ({
   brand,
   className,

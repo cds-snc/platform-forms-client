@@ -12,7 +12,7 @@ export default async function Layout({
 }) {
   logMessage.debug(`Static Page Layout lang: ${locale}`);
   return (
-    <>
+    <div className="flex h-full flex-col">
       <SkipLink locale={locale} />
       <header>
         <Fip showLanguageToggle={true} />
@@ -21,6 +21,6 @@ export default async function Layout({
         <main id="content">{children}</main>
       </div>
       <Footer locale={locale} displayFormBuilderFooter={true} />
-    </>
+    </div>
   );
 }

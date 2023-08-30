@@ -8,8 +8,8 @@ import { getOptions, languages } from "./settings";
 import { useParams } from "next/navigation";
 
 const runsOnServerSide = typeof window === "undefined";
+const pathname = window.location.pathname;
 
-//
 i18next
   .use(initReactI18next)
   .use(LanguageDetector)
@@ -23,10 +23,11 @@ i18next
     ...getOptions(),
     lng: undefined, // detect the language on client side
     detection: {
-      order: ["path", "htmlTag", "cookie", "navigator"],
+      order: ["htmlTag", "path", "navigator"],
     },
     // Important on server-side to assert translations are loaded before rendering views.
-    preload: runsOnServerSide ? languages : [],
+    // Important to ensure that both languages are available for the / path simultaneously
+    preload: runsOnServerSide || pathname === "/" ? languages : [],
   });
 
 export function useTranslation(ns?: string | string[], options?: Record<string, unknown>) {

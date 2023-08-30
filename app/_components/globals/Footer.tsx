@@ -11,8 +11,7 @@ const Footer = async (props: FooterProps) => {
   const { locale, disableGcBranding, displayFormBuilderFooter } = props;
   const { t } = await serverTranslation(locale, "common");
   const headersList = headers();
-
-  const pathname = headersList.get("x-invoke-path") || "";
+  const pathname = headersList.get("x-invoke-path");
 
   const linksToDisplay = displayFormBuilderFooter ? (
     <>
@@ -30,7 +29,7 @@ const Footer = async (props: FooterProps) => {
     <footer className="lg:mt-10 border-0 bg-gray-100 mt-16 flex-none" data-testid="footer">
       <div className="lg:flex-col lg:items-start lg:gap-4 flex pt-10 pb-5 flex-row items-center justify-between">
         <div>
-          {pathname === "/" && <nav aria-label={t("footer.ariaLabel")}>{linksToDisplay}</nav>}
+          {pathname !== "/" && <nav aria-label={t("footer.ariaLabel")}>{linksToDisplay}</nav>}
         </div>
         {!disableGcBranding && (
           <div>

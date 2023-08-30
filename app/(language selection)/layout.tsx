@@ -15,12 +15,14 @@ export default async function Layout({ children }: { children: React.ReactNode }
     <html lang={"en"} dir={dir("en")}>
       <head />
       <body suppressHydrationWarning={true}>
-        <SkipLink locale="en" />
-        <header>
-          <Fip showLanguageToggle={false} showLogin={false} />
-        </header>
-        {children}
-        <Footer locale="en" />
+        <div className="flex h-full flex-col">
+          <SkipLink locale="en" />
+          <header>
+            <Fip showLanguageToggle={false} showLogin={false} />
+          </header>
+          {children}
+          <Footer locale="en" />
+        </div>
       </body>
     </html>
   );
