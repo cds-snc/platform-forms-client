@@ -488,7 +488,7 @@
         "title": "Courriel à une boîte de réception",
         "text1": "Pour les formulaires avec une classification jusqu’à Protégé A",
         "text2": "Les réponses sont envoyées directement dans une boîte de réception en temps réel",
-        "text3": "Une seule boîte de réception peut recevoir les courriels de réponses"
+        "text3": "Une seule adresse courriel peut recevoir les courriel de réponses. Il peut s'agir d'une boîte de réception partagée."
       },
       "vault": {
         "title": "Téléchargement des réponses",
