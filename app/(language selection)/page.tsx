@@ -12,7 +12,11 @@ const Home = () => {
   const browserLanguage = i18n.language;
   const secondLanguage = i18n.language === "en" ? "fr" : "en";
 
-  const languageT = languages.map((lang) => i18n.getFixedT(lang, "common"));
+  const languageT = languages
+    .map((lang) => ({ [lang]: i18n.getFixedT(lang, "common") }))
+    .reduce((acc, lang) => {
+      return { ...acc, ...lang };
+    });
 
   return (
     <div className="flex flex-col h-full">
@@ -20,14 +24,8 @@ const Home = () => {
         <main id="content">
           <div>
             <h1>
-              {languages.map((lang, index) => {
-                return (
-                  <span lang={lang} key={lang}>
-                    {index !== 0 && " - "}
-                    {languageT[index]("title")}
-                  </span>
-                );
-              })}
+              <span lang={browserLanguage}>{languageT[browserLanguage]("title")}</span> -{" "}
+              <span lang={secondLanguage}>{languageT[secondLanguage]("title")}</span>
             </h1>
           </div>
           <div className="border-gray-400 p-10 grid grid-cols-2 gap-x-4 max-w-2xl  w-2/4 m-auto">

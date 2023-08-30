@@ -3,6 +3,7 @@ import { BrandProperties } from "@lib/types/form-types";
 import { getProperty } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { Language } from "@appComponents/form-builder/types";
+import { logMessage } from "@lib/logger";
 const Brand = ({
   brand,
   className,
@@ -13,6 +14,7 @@ const Brand = ({
   const { t, i18n } = useTranslation("common");
 
   const language = i18n.language as Language;
+  logMessage.debug("Brand language: " + language);
 
   const themeLogo = brand?.[getProperty("logo", language)] as string | undefined;
 

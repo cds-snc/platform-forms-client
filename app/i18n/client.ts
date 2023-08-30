@@ -6,6 +6,7 @@ import resourcesToBackend from "i18next-resources-to-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
 import { getOptions, languages } from "./settings";
 import { useParams } from "next/navigation";
+import { logMessage } from "@lib/logger";
 
 const runsOnServerSide = typeof window === "undefined";
 const pathname = runsOnServerSide ? "" : window.location.pathname;
@@ -23,34 +24,28 @@ i18next
     ...getOptions(),
     lng: undefined, // detect the language on client side
     detection: {
-      order: ["htmlTag", "path", "navigator"],
+      order: ["path", "localstorage", "cookie", "navigator"],
+      lookupCookie: "i18next",
+      lookupLocalStorage: "i18nextLng",
+      caches: ["localStorage", "cookie"],
     },
     // Important on server-side to assert translations are loaded before rendering views.
     // Important to ensure that both languages are available for the / path simultaneously
     preload: runsOnServerSide || pathname === "/" ? languages : [],
+    debug: process.env.NODE_ENV === "development" && !runsOnServerSide,
   });
 
 export function useTranslation(ns?: string | string[], options?: Record<string, unknown>) {
   const ret = useClientTranslation(ns, options);
-  const locale = (useParams()?.locale as string) ?? languages[0];
+  /*
+  const locale = (useParams()?.locale as string) ?? localStorage.getItem("i18nextLng");
+
   const { i18n } = ret;
-
-  const [activeLng, setActiveLng] = useState(i18n.resolvedLanguage);
-
-  useEffect(() => {
-    if (activeLng === i18n.resolvedLanguage) return;
-    setActiveLng(i18n.resolvedLanguage);
-  }, [activeLng, i18n.resolvedLanguage]);
 
   useEffect(() => {
     if (i18n.resolvedLanguage === locale) return;
     i18n.changeLanguage(locale);
   }, [locale, i18n]);
-
-  // If we're rendering on the server and the language is different from the resolved language,
-  // This prevents hydration mismatches
-  if (runsOnServerSide && i18n.resolvedLanguage !== locale) {
-    i18n.changeLanguage(locale);
-  }
+*/
   return ret;
 }
