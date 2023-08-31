@@ -1,7 +1,9 @@
 import { createInstance } from "i18next";
 import resourcesToBackend from "i18next-resources-to-backend";
 import { initReactI18next } from "react-i18next/initReactI18next";
-import { getOptions } from "./settings";
+import { getOptions, languages } from "./settings";
+import { cookies } from "next/headers";
+import { logMessage } from "@lib/logger";
 
 const initI18next = async (lang: string) => {
   const i18nInstance = createInstance();
@@ -18,13 +20,14 @@ const initI18next = async (lang: string) => {
 };
 
 export async function serverTranslation(
-  lang: string,
   ns: string | string[],
-  options?: { keyPrefix?: string }
+  options?: { keyPrefix?: string; lang?: string }
 ) {
-  const i18nextInstance = await initI18next(lang);
+  const detectedLang = cookies().get("i18next")?.value;
+  const i18nLang = options?.lang ?? detectedLang ?? languages[0];
+  const i18nextInstance = await initI18next(i18nLang);
   return {
-    t: i18nextInstance.getFixedT(lang, ns, options?.keyPrefix),
+    t: i18nextInstance.getFixedT(i18nLang, ns, options?.keyPrefix),
     i18n: i18nextInstance,
   };
 }

@@ -30,8 +30,6 @@ export const NavLink = ({
     ? href
     : `/${language}${href}`;
 
-  logMessage.debug(`NavLink: linkHref: ${href} language=${language}`);
-
   return (
     <Link
       id={id}

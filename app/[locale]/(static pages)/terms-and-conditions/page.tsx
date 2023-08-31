@@ -5,12 +5,8 @@ import { serverTranslation } from "@i18n";
 import frContent from "@content/fr/terms-and-conditions.md";
 import enContent from "@content/en/terms-and-conditions.md";
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
-  const { t } = await serverTranslation(locale, ["terms"]);
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await serverTranslation(["terms"]);
   return {
     title: t("terms-and-conditions.title"),
   };

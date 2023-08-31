@@ -9,10 +9,8 @@ interface SLAProps {
   params: { locale: string };
 }
 
-export async function generateMetadata({ params }: SLAProps): Promise<Metadata> {
-  const lang = params.locale ?? "en";
-
-  const { t } = await serverTranslation(lang, ["sla"]);
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await serverTranslation(["sla"]);
   return {
     title: t("title"),
   };

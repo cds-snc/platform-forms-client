@@ -20,7 +20,6 @@ export default async function Layout({
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  logMessage.debug(`Global App Page Layout lang: ${locale}`);
   return (
     <html lang={locale ?? "en"} dir={dir(locale ?? "en")}>
       <head />

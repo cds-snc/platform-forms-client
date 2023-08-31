@@ -19,12 +19,12 @@ export default async function Layout({ children }: { children: React.ReactNode }
       <head />
       <body suppressHydrationWarning={true}>
         <div className="flex h-full flex-col">
-          <SkipLink locale={locale} />
+          <SkipLink />
           <header>
             <Fip showLanguageToggle={false} showLogin={false} />
           </header>
           {children}
-          <Footer locale={locale} />
+          <Footer />
         </div>
       </body>
     </html>

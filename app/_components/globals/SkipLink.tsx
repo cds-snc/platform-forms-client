@@ -1,8 +1,8 @@
 import React from "react";
 import { serverTranslation } from "@i18n";
 
-const SkipLink = async ({ locale }: { locale: string }) => {
-  const { t } = await serverTranslation(locale, ["common"]);
+const SkipLink = async () => {
+  const { t } = await serverTranslation(["common"]);
   return (
     <div id="skip-link-container">
       <a href="#content" id="skip-link">

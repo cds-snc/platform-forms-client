@@ -4,12 +4,11 @@ import { headers } from "next/headers";
 interface FooterProps {
   disableGcBranding?: boolean;
   displayFormBuilderFooter?: boolean;
-  locale: string;
 }
 
 const Footer = async (props: FooterProps) => {
-  const { locale, disableGcBranding, displayFormBuilderFooter } = props;
-  const { t } = await serverTranslation(locale, "common");
+  const { disableGcBranding, displayFormBuilderFooter } = props;
+  const { t } = await serverTranslation("common");
   const headersList = headers();
   const pathname = headersList.get("x-invoke-path");
 

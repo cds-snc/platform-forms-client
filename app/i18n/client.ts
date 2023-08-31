@@ -1,19 +1,23 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import i18next from "i18next";
-import { initReactI18next, useTranslation as useClientTranslation } from "react-i18next";
+import { initReactI18next, useTranslation as reactUseTranslation } from "react-i18next";
 import resourcesToBackend from "i18next-resources-to-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
 import { getOptions, languages } from "./settings";
+import ssrDetector from "./ssrDetector";
 import { useParams } from "next/navigation";
 import { logMessage } from "@lib/logger";
 
 const runsOnServerSide = typeof window === "undefined";
 const pathname = runsOnServerSide ? "" : window.location.pathname;
 
+const languageDetector = new LanguageDetector();
+languageDetector.addDetector(ssrDetector);
+
 i18next
   .use(initReactI18next)
-  .use(LanguageDetector)
+  .use(languageDetector)
   .use(
     resourcesToBackend(
       (language: string, namespace: string) =>
@@ -24,7 +28,7 @@ i18next
     ...getOptions(),
     lng: undefined, // detect the language on client side
     detection: {
-      order: ["path", "localstorage", "cookie", "navigator"],
+      order: ["path", "localstorage", "cookie", "ssrDetector"],
       lookupCookie: "i18next",
       lookupLocalStorage: "i18nextLng",
       caches: ["localStorage", "cookie"],
@@ -36,16 +40,25 @@ i18next
   });
 
 export function useTranslation(ns?: string | string[], options?: Record<string, unknown>) {
-  const ret = useClientTranslation(ns, options);
-  /*
-  const locale = (useParams()?.locale as string) ?? localStorage.getItem("i18nextLng");
+  const clientHook = reactUseTranslation(ns, options);
+  const {
+    i18n: { resolvedLanguage },
+  } = clientHook;
+  const locale = (useParams()?.locale as string) ?? null;
 
-  const { i18n } = ret;
-
+  // If we're rendering on the client and the language is different from the resolved language,
+  // change the language to match the locale in url
   useEffect(() => {
-    if (i18n.resolvedLanguage === locale) return;
-    i18n.changeLanguage(locale);
-  }, [locale, i18n]);
-*/
-  return ret;
+    if (resolvedLanguage !== locale && locale !== null) {
+      clientHook.i18n.changeLanguage(locale);
+    }
+  });
+
+  // If we're rendering on the server and the language is different from the resolved language,
+  // This prevents hydration mismatches
+  if (runsOnServerSide && resolvedLanguage !== locale && locale !== null) {
+    clientHook.i18n.changeLanguage(locale);
+  }
+
+  return clientHook;
 }

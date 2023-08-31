@@ -14,7 +14,6 @@ const Brand = ({
   const { t, i18n } = useTranslation("common");
 
   const language = i18n.language as Language;
-  logMessage.debug("Brand language: " + language);
 
   const themeLogo = brand?.[getProperty("logo", language)] as string | undefined;
 
