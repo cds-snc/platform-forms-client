@@ -4,9 +4,13 @@ import { useTranslation } from "next-i18next";
 import { DesignIcon, ExternalLinkIcon, WarningIcon } from "../icons";
 import { useRouter } from "next/router";
 import { errorMessage, validateTemplate } from "../validate";
+import Link from "next/link";
 
 export const Start = () => {
-  const { t } = useTranslation("form-builder");
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation("form-builder");
   const router = useRouter();
   const { importTemplate, initialize } = useTemplateStore((s) => ({
     importTemplate: s.importTemplate,
@@ -60,7 +64,7 @@ export const Start = () => {
         window.dataLayer.push({
           event: "open_form_file",
         });
-        router.push({ pathname: `/form-builder/preview` });
+        router.push({ pathname: `/${language}/form-builder/preview` });
       };
     } catch (e) {
       if (e instanceof Error) {
@@ -92,9 +96,9 @@ export const Start = () => {
                   );
                 })}
               </ul>
-              <a href="/form-builder/support" className="ml-6">
+              <Link href={`/${language}/form-builder/support`} className="ml-6">
                 {t("contactSupport")}
-              </a>
+              </Link>
             </div>
           </div>
         )}
@@ -107,7 +111,7 @@ export const Start = () => {
             // clear any existing form data
             clearTemplateStore();
             initialize();
-            router.push({ pathname: `/form-builder/edit` });
+            router.push({ pathname: `/${language}/form-builder/edit` });
           }}
         >
           <DesignIcon className="mb-2 scale-125" />
