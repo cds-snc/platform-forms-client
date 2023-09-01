@@ -1,9 +1,14 @@
-import React from "react";
-import { useTranslation } from "next-i18next";
-import { useSession } from "next-auth/react";
+"use client";
+import React, { useState, useEffect } from "react";
+import { useTranslation } from "@i18n/client";
+import { getSession } from "next-auth/react";
+import { Session } from "next-auth";
 
-import { LinkButton } from "@appComponents/globals";
+import { LinkButton } from "@appComponents/globals/Buttons/LinkButton";
 import { BackArrowIcon } from "@appComponents/form-builder/icons";
+
+// Start the async call before the component renders
+const getSessionPromise = getSession();
 
 export const ErrorPanel = ({
   title,
@@ -15,7 +20,12 @@ export const ErrorPanel = ({
   headingTag?: "h1" | "h2";
 }) => {
   const { t, i18n } = useTranslation("common");
-  const { status } = useSession();
+  const [session, setSession] = useState<Session | null>(null);
+  useEffect(() => {
+    getSessionPromise.then((session) => {
+      setSession(session);
+    });
+  });
 
   // default content
   const defaultTitle = t("errorPanel.defaultTitle");
@@ -23,14 +33,13 @@ export const ErrorPanel = ({
 
   // links
   const homeHref =
-    status === "authenticated"
+    session !== null
       ? `/${i18n.language}/myforms`
       : `https://articles.alpha.canada.ca/forms-formulaires/${
           String(i18n.language).toLowerCase() === "fr" ? "fr/" : ""
         }`;
 
-  const homeText =
-    status === "authenticated" ? t("errorPanel.cta.yourForms") : t("errorPanel.cta.home");
+  const homeText = session !== null ? t("errorPanel.cta.yourForms") : t("errorPanel.cta.home");
 
   const supportHref = `/${i18n.language}/form-builder/support`;
 

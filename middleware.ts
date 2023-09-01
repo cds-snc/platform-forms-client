@@ -21,10 +21,19 @@ export function middleware(req: NextRequest) {
   }
 
   if (!interalRoute.test(pathname)) {
-    // Redirect to fallback language if lng in path is not present or supported
+    // Redirect to language if lng in path is not present or supported
     if (pathname !== "/" && !languages.some((loc) => pathname.startsWith(`/${loc}`))) {
-      logMessage.debug(`Middleware - Redirecting to fallback language: : ${pathname}`);
-      return NextResponse.redirect(new URL(`/${fallbackLng}${pathname}`, req.url));
+      // Check to see if language cookie is present
+      const cookieLang = req.cookies.get("i18next")?.value;
+      if (languages.some((lang) => lang === cookieLang)) {
+        // Cookies language is already supported, redirect to that language
+        logMessage.debug(`Middleware - Redirecting to cookie language: ${cookieLang}`);
+        return NextResponse.redirect(new URL(`/${cookieLang}${pathname}`, req.url));
+      } else {
+        // Redirect to fallback language
+        logMessage.debug(`Middleware - Redirecting to fallback language: : ${pathname}`);
+        return NextResponse.redirect(new URL(`/${fallbackLng}${pathname}`, req.url));
+      }
     }
 
     // Set the Content Security Policy (CSP) header
