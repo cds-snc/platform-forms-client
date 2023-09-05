@@ -6,9 +6,9 @@ export const pathLanguageDetection = (path: string, languages: string[]) => {
   return match ? match[1] : null;
 };
 
-export const languageParamSanitization = (locale: string | string[]) => {
+export const languageParamSanitization = (locale: string | string[] | undefined) => {
   // If provided with an array, return the first the default locale
-  if (Array.isArray(locale)) {
+  if (Array.isArray(locale) || locale === undefined) {
     return languages[0];
   }
   if (languages.includes(locale)) {

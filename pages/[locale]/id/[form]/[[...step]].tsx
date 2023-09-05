@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import { PublicFormRecord } from "@lib/types";
 import { GetServerSideProps } from "next";
 import { NextPageWithLayout } from "pages/_app";
+import { languageParamSanitization } from "@app/i18n/utils";
 
 import FormDisplayLayout from "@components/globals/layouts/FormDisplayLayout";
 
@@ -74,9 +75,11 @@ RenderForm.getLayout = function getLayout(page: ReactElement) {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { locale = "en", form: formID }: { locale?: string; form?: string } = context.params ?? {};
+  const { locale: localeParam, form: formID }: { locale?: string; form?: string } =
+    context.params ?? {};
   const unpublishedForms = await checkOne("unpublishedForms");
   let publicForm: PublicFormRecord | null = null;
+  const locale = languageParamSanitization(localeParam);
 
   const isEmbeddable = context.query?.embed == "true" || null;
 
