@@ -15,7 +15,6 @@ import { BackLink } from "@components/admin/LeftNav/BackLink";
 import { PermissionToggle } from "@components/admin/Users/PermissionToggle";
 import { LinkButton } from "@components/globals";
 import { TwoColumnLayout } from "@components/globals/layouts";
-import { TemplateStoreProvider } from "@components/form-builder/store";
 
 type PrivilegeList = Omit<Privilege, "permissions">[];
 interface User {

@@ -48,7 +48,7 @@ export function middleware(req: NextRequest) {
       headers: requestHeaders,
     });
 
-    logMessage.info(`Added nonce: ${nonce} for path: ${req.nextUrl.pathname}`);
+    logMessage.debug(`Middleware - Added CSP nonce: ${nonce} for path: ${req.nextUrl.pathname}`);
 
     // Set the CSP header on the response to the browser
     response.headers.set("content-security-policy", csp);

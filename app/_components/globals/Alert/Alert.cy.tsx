@@ -2,6 +2,7 @@ import React from "react";
 import { Alert } from "../../globals";
 import { CircleCheckIcon } from "../../form-builder/icons";
 import { Button } from "../../globals";
+import { Link } from "next/link";
 
 describe("<Alert />", () => {
   describe("Alerts by status", () => {
@@ -387,7 +388,7 @@ describe("<Alert />", () => {
           </ul>
           <>Here is some text wrapped in a fragment</>
           <p>
-            This paragraph <a href="/nowhere">contains a link</a>.
+            This paragraph <Link href="/nowhere">contains a link</Link>.
           </p>
           <Button className="mt-8">And a button</Button>
         </Alert.Success>

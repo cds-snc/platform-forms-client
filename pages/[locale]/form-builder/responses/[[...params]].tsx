@@ -80,10 +80,8 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           </h1>
           <nav className="flex gap-3">
             {!isPublished && (
-              <Link href="/form-builder/settings" legacyBehavior>
-                <a href="/form-builder/settings" className={`${navItemClasses}`}>
-                  {t("responses.changeSetup")}
-                </a>
+              <Link href="/form-builder/settings" className={`${navItemClasses}`}>
+                {t("responses.changeSetup")}
               </Link>
             )}
           </nav>
@@ -129,10 +127,8 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           )}
 
           {!isPublished && (
-            <Link href="/form-builder/settings" legacyBehavior>
-              <a href="/form-builder/settings" className={`${navItemClasses}`}>
-                {t("responses.changeSetup")}
-              </a>
+            <Link href="/form-builder/settings" className={`${navItemClasses}`}>
+              {t("responses.changeSetup")}
             </Link>
           )}
         </nav>

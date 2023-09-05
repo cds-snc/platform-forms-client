@@ -3,7 +3,6 @@ import Link from "next/link";
 import { cn } from "@lib/utils";
 import { useTranslation } from "next-i18next";
 import { languages } from "@app/i18n/settings";
-import { logMessage } from "@lib/logger";
 
 // TODO: probably should be updated to use the <LinkButton.. component some time
 

@@ -3,15 +3,26 @@ import Document, {
   Head,
   Main,
   NextScript,
-  OriginProps,
   DocumentContext,
   DocumentInitialProps,
 } from "next/document";
 import React from "react";
-import { googleTagManager, cspHashOf } from "@lib/cspScripts";
+import { googleTagManager } from "@lib/cspScripts";
+
+const GoogleTagScript = (nonce: string) =>
+  React.createElement("script", {
+    defer: true,
+    nonce,
+    dangerouslySetInnerHTML: {
+      __html: googleTagManager,
+    },
+  });
+
+/************************
+ * 
+ * Previous CSP solution
 
 const scriptHashes: Array<string> = [];
-const externalScripts: Array<string> = [];
 
 function getCsp() {
   let csp = ``;
@@ -30,14 +41,8 @@ function getCsp() {
   return csp;
 }
 
-const GoogleTagScript = (nonce: string) =>
-  React.createElement("script", {
-    defer: true,
-    nonce,
-    dangerouslySetInnerHTML: {
-      __html: googleTagManager,
-    },
-  });
+
+
 
 class StrictStaticCSP extends Head {
   constructor(
@@ -214,6 +219,8 @@ class StrictStaticCSP extends Head {
     ]);
   }
 }
+
+*/
 
 // Actual main Document being rendered
 

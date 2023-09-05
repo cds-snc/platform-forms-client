@@ -7,7 +7,6 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import { getOptions, languages } from "./settings";
 import ssrDetector from "./ssrDetector";
 import { useParams } from "next/navigation";
-import { logMessage } from "@lib/logger";
 
 const runsOnServerSide = typeof window === "undefined";
 const pathname = runsOnServerSide ? "" : window.location.pathname;
