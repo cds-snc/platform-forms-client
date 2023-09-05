@@ -14,7 +14,6 @@ import { useSetting } from "@lib/hooks/useSetting";
 import { Dropdown } from "@components/admin/Users/Dropdown";
 import { themes } from "@components/globals";
 import { ConfirmDelete } from "@components/form-builder/app/ConfirmDelete";
-import { TemplateStoreProvider } from "@components/form-builder/store";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { useRefresh } from "@lib/hooks";
 import { ExclamationIcon } from "@components/form-builder/icons";
