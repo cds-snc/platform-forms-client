@@ -23,6 +23,7 @@ import { useTemplateStore } from "@components/form-builder/store";
 import { LoggedOutTabName, LoggedOutTab } from "@components/form-builder/app/LoggedOutTab";
 import Head from "next/head";
 import { FormBuilderLayout } from "@components/globals/layouts/FormBuilderLayout";
+import { languageParamSanitization } from "@app/i18n/utils";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -289,14 +290,20 @@ Responses.getLayout = (page: ReactElement) => {
   return <FormBuilderLayout page={page} />;
 };
 
-export const getServerSideProps: GetServerSideProps = async ({
-  query: { params },
-  params: dynamicRoute,
-  req,
-  res,
-}) => {
-  const { locale = "en" }: { locale?: string } = dynamicRoute ?? {};
-  const [formID = null] = params || [];
+export const getServerSideProps: GetServerSideProps = async ({ query, req, res }) => {
+  const { formID = null, localeParam = "en" } = query;
+  const locale = languageParamSanitization(localeParam);
+
+  if (Array.isArray(formID)) {
+    // Redirect to 404 if bad parameters
+    return {
+      redirect: {
+        // We can redirect to a 'Form does not exist page' in the future
+        destination: `/${locale}/404`,
+        permanent: false,
+      },
+    };
+  }
 
   const FormbuilderParams: { locale: string; initialForm: null | FormRecord } = {
     initialForm: null,
