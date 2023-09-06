@@ -1,7 +1,8 @@
+"use client";
 import { CircleCheckIcon, InfoIcon, WarningIcon } from "@appComponents/form-builder/icons";
 import { cn } from "@lib/utils";
 import React, { ReactNode, useEffect, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@i18n/client";
 
 export enum ErrorStatus {
   SUCCESS = "SUCCESS",

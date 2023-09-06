@@ -2,7 +2,7 @@ import React from "react";
 import { Alert } from "../../globals";
 import { CircleCheckIcon } from "../../form-builder/icons";
 import { Button } from "../../globals";
-import { Link } from "next/link";
+import Link from "next/link";
 
 describe("<Alert />", () => {
   describe("Alerts by status", () => {
