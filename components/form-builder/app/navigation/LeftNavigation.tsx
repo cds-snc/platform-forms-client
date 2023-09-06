@@ -10,9 +10,10 @@ import { NavLink } from "@components/globals/NavLink";
 
 const linkHelper = (url: string, activePathname: string) => {
   const baseUrl = "/form-builder";
-  const href = `${baseUrl}${url}`;
+  // Remove possible trailing slash
+  const href = `${baseUrl}${url}`.replace(/\/$/, "");
 
-  const pathTest = new RegExp(`/(en|fr)${href}(/w*)?`);
+  const pathTest = new RegExp(`/(en|fr)${href}(.*)?`);
 
   return {
     href,
