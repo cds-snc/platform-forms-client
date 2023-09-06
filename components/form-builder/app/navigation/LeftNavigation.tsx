@@ -8,15 +8,11 @@ import { useSession } from "next-auth/react";
 import { useActivePathname } from "../../hooks/useActivePathname";
 import { NavLink } from "@components/globals/NavLink";
 
-const linkHelper = (url: string, activePathname: string) => {
-  const baseUrl = "/form-builder";
-  // Remove possible trailing slash
-  const href = `${baseUrl}${url}`.replace(/\/$/, "");
-
-  const pathTest = new RegExp(`/(en|fr)${href}(.*)?`);
+const linkHelper = (route: string, activePathname: string, id?: string) => {
+  const pathTest = new RegExp(`/(en|fr)/form-builder/${route}(.*)?`);
 
   return {
-    href,
+    href: `/form-builder/${route}${id ? `/${id}` : ""}`,
     isActive: pathTest.test(activePathname),
   };
 };
@@ -36,34 +32,34 @@ export const LeftNavigation = () => {
       <ul className="m-0 list-none p-0">
         {!isPublished && (
           <li>
-            <NavLink {...linkHelper("/edit", activePathname)} onClick={saveForm}>
+            <NavLink {...linkHelper("edit", activePathname)} onClick={saveForm}>
               <DesignIcon className={iconClassname} />
               {t("edit")}
             </NavLink>
           </li>
         )}
         <li>
-          <NavLink {...linkHelper("/preview", activePathname)} onClick={saveForm}>
+          <NavLink {...linkHelper("preview", activePathname)} onClick={saveForm}>
             <PreviewIcon className={iconClassname} />
             {status === "authenticated" ? t("test") : t("pagePreview")}
           </NavLink>
         </li>
         {!isPublished && (
           <li>
-            <NavLink {...linkHelper("/publish", activePathname)} onClick={saveForm}>
+            <NavLink {...linkHelper("publish", activePathname)} onClick={saveForm}>
               <PublishIcon className={iconClassname} />
               {t("publish")}
             </NavLink>
           </li>
         )}
         <li>
-          <NavLink {...linkHelper(`/responses/${id}`, activePathname)} onClick={saveForm}>
+          <NavLink {...linkHelper("responses", activePathname, id)} onClick={saveForm}>
             <MessageIcon className={iconClassname} />
             {t("responsesNavLabel")}
           </NavLink>
         </li>
         <li>
-          <NavLink {...linkHelper(`/settings/${id}`, activePathname)} onClick={saveForm}>
+          <NavLink {...linkHelper("settings", activePathname, id)} onClick={saveForm}>
             <GearIcon className={iconClassname} />
             {t("pageSettings")}
           </NavLink>
