@@ -37,7 +37,7 @@ jobs:
 
   build-and-push-container:
     needs: [run-check]
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'Renovate') && !needs.run-check.outputs.has-migrations }}
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'Renovate') && needs.run-check.outputs.has-migrations == 'false' }}
     runs-on: ubuntu-latest
     steps:
       - name: Set envs
