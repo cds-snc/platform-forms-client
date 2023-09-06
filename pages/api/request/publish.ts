@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { cors, middleware, sessionExists } from "@lib/middleware";
-import { getNotifyInstance } from "@lib/integration/notifyConnector";
 import { logMessage } from "@lib/logger";
 import { MiddlewareProps, WithRequired } from "@lib/types";
+import { createTicket } from "@lib/integration/freshdesk";
 
 const requestPublishingPermission = async (
   req: NextApiRequest,
@@ -12,36 +12,38 @@ const requestPublishingPermission = async (
   try {
     const { session } = props as WithRequired<MiddlewareProps, "session">;
 
-    const { managerEmail, department, goals } = req.body;
+    const { managerEmail, department, goals, language } = req.body;
 
     if (!managerEmail || !department || !goals) {
       return res.status(404).json({ error: "Malformed request" });
     }
 
-    const templateID = process.env.TEMPLATE_ID;
-    const notifyClient = getNotifyInstance();
+    const description = `
+${session.user.name} (${session.user.email}) from ${department} has requested permission to publish forms.<br/>
+<br/>
+Goals:<br/>
+${goals}<br/>
+<br/>
+Manager email address: ${managerEmail} .<br/><br/>
+****<br/><br/>
+${session.user.name} (${session.user.email}) du ${department} a demandé l'autorisation de publier des formulaires.<br/>
+<br/>
+Objectifs:<br/>
+${goals}<br/>
+<br/>
+Adresse email du responsable: ${managerEmail} .<br/>
+`;
 
-    // Here is the documentation for the `sendEmail` function: https://docs.notifications.service.gov.uk/node.html#send-an-email
-    await notifyClient.sendEmail(templateID, process.env.EMAIL_ADDRESS_SUPPORT, {
-      personalisation: {
-        subject: "Publishing permission request / Demande d'autorisation de publication",
-        formResponse: `
-${session.user.name} (${session.user.email}) from ${department} has requested permission to publish forms.
+    if (!session.user.name || !session.user.email) {
+      throw new Error("User name or email not found");
+    }
 
-Goals:
-${goals}
-
-Manager email address: ${managerEmail} .
-****
-${session.user.name} (${session.user.email}) du ${department} a demandé l'autorisation de publier des formulaires.
-
-Objectifs:
-${goals}
-
-Adresse email du responsable: ${managerEmail} .
-`,
-      },
-      reference: null,
+    await createTicket({
+      type: "publishing",
+      name: session.user.name,
+      email: session.user.email,
+      description,
+      language: language,
     });
 
     return res.status(200).json({});

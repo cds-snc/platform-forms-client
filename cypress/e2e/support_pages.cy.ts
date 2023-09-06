@@ -1,7 +1,6 @@
 describe("Support Pages", () => {
   describe("Support Page", () => {
     beforeEach(() => {
-      cy.useFlag("supportForms", true);
       cy.visit("/en/form-builder/support/");
     });
 
@@ -38,7 +37,6 @@ describe("Support Pages", () => {
 
   describe("Contact Us Page", () => {
     beforeEach(() => {
-      cy.useFlag("supportForms", true);
       cy.visit("/en/form-builder/support/contactus");
     });
 

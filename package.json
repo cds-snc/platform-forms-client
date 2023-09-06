@@ -73,6 +73,7 @@
     "next": "13.4.12",
     "next-auth": "4.22.5",
     "next-i18next": "13.2.2",
+    "node-fetch": "^3.3.2",
     "notifications-node-client": "5.1.2",
     "pino": "8.8.0",
     "prisma": "4.12.0",

@@ -21,7 +21,6 @@ import {
   Description,
 } from "@components/forms";
 import { Button, LinkButton, Alert } from "@components/globals";
-import { checkOne } from "@lib/cache/flags";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 
@@ -86,6 +85,7 @@ export default function Contactus() {
                 jobTitle,
                 request,
                 description,
+                language: i18n.language,
               },
               // If development mode disable timeout
               timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
@@ -504,15 +504,6 @@ export default function Contactus() {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const supportFormsEnabled = await checkOne("supportForms");
-  if (!supportFormsEnabled) {
-    return {
-      redirect: {
-        destination: `/${context.locale}/myforms`,
-        permanent: false,
-      },
-    };
-  }
   // For any URLs other than /support and /support/contactus, redirect the user to the 404 page
   if (
     context.query?.supportType !== undefined &&

@@ -30,10 +30,6 @@
       "title": "Form timer",
       "description": "Wait a specific amount of time before being allowed to submit the form"
     },
-    "supportForms": {
-      "title": "Support forms",
-      "description": "Whether or not support forms are enabled"
-    },
     "experimentalBlocks": {
       "title": "Experimental blocks",
       "description": "Enable experimental blocks"
