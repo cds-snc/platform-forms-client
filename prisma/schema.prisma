@@ -94,6 +94,7 @@ model User {
   sessions        Session[]
   templates       Template[]
   securityAnswers SecurityAnswer[]
+  test            String?
 }
 
 model VerificationToken {
