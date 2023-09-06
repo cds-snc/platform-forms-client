@@ -5,17 +5,18 @@ import { useTemplateContext } from "@components/form-builder/hooks";
 import { SaveButton } from "../shared/SaveButton";
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { useSession } from "next-auth/react";
-import { useActivePathname, cleanPath } from "../../hooks/useActivePathname";
+import { useActivePathname } from "../../hooks/useActivePathname";
 import { NavLink } from "@components/globals/NavLink";
 
 const linkHelper = (url: string, activePathname: string) => {
   const baseUrl = "/form-builder";
   const href = `${baseUrl}${url}`;
-  const matchPathWithoutTrailingSlash = cleanPath(href).replace(/\/$/, "");
+
+  const pathTest = new RegExp(`/(en|fr)${href}(/w*)?`);
 
   return {
     href,
-    isActive: activePathname.startsWith(matchPathWithoutTrailingSlash),
+    isActive: pathTest.test(activePathname),
   };
 };
 
