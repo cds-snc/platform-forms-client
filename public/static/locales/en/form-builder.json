@@ -455,7 +455,7 @@
   "settingsInvalidEmailAlertTitle": "Government email address",
   "settingsNavHome": "Response delivery",
   "settingsResponseEmailTitle": "Email address",
-  "settingsResponseHint1": "Submitted responses will be emailed to this inbox.",
+  "settingsResponseHint1": "Submitted responses will be emailed to this inbox. This can be a shared inbox.",
   "settingsResponseDelivery": {
     "selectClassification": "Select the data classification of your form responses",
     "beforePublishMessage": "You can change these settings anytime before publishing.",
@@ -467,7 +467,7 @@
       "text1": "Submitted responses will appear on the",
       "text2": "Responses page"
     },
-    "emailOption": "Email the responses to an inbox",
+    "emailOption": "Receive the responses by email",
     "saveButton": "Save changes",
     "savedSuccessMessage": "Your changes have been saved.",
     "savedErrorMessage": "There was an error saving your changes. Please try again.",
@@ -487,7 +487,7 @@
         "title": "Email to an inbox",
         "text1": "For up to Protected A forms",
         "text2": "Responses are delivered directly to an inbox in real time",
-        "text3": "One inbox can receive response emails"
+        "text3": "One email address can receive response emails. This can be a shared inbox."
       },
       "vault": {
         "title": "Download from GC Forms",

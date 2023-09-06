@@ -454,8 +454,8 @@
   "settingsInvalidEmailAlertDesc2": "pour enregistrer l'adresse courriel.",
   "settingsInvalidEmailAlertTitle": "Adresse courriel du gouvernement",
   "settingsNavHome": "Livraison des réponses",
-  "settingsResponseEmailTitle": "Entrez l’adresse courriel",
-  "settingsResponseHint1": "Les réponses soumises seront envoyées par courriel à cette boîte de réception.",
+  "settingsResponseEmailTitle": "Adresse courriel",
+  "settingsResponseHint1": "Les réponses seront envoyées par courriel à cette boîte de réception. Il peut s'agir d'une boîte de réception partagée.",
   "settingsResponseTitle": "Destination de livraison des réponses.",
   "settingsResponseDelivery": {
     "selectClassification": "Sélectionnez la classification des données des réponses de votre formulaire",
@@ -465,10 +465,10 @@
     "title": "Sélectionnez une option de livraison des réponses",
     "vaultOption": "Télécharger les réponses de Formulaires GC",
     "vaultOptionHint": {
-      "text1": " Les réponses reçues apparaîtront sur",
+      "text1": " Les réponses soumises apparaîtront sur",
       "text2": "la page Réponses"
     },
-    "emailOption": "Les réponses soumises seront envoyées par courriel à cette boîte de réception.",
+    "emailOption": "Recevoir les réponses par courriel",
     "saveButton": "Enregistrer les modifications",
     "savedSuccessMessage": "Vos modifications ont été enregistrées.",
     "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Veuillez réessayer.",
@@ -488,7 +488,7 @@
         "title": "Courriel à une boîte de réception",
         "text1": "Pour les formulaires avec une classification jusqu’à Protégé A",
         "text2": "Les réponses sont envoyées directement dans une boîte de réception en temps réel",
-        "text3": "Une seule boîte de réception peut recevoir les courriels de réponses"
+        "text3": "Une seule adresse courriel peut recevoir les courriel de réponses. Il peut s'agir d'une boîte de réception partagée."
       },
       "vault": {
         "title": "Téléchargement des réponses",

@@ -9,7 +9,7 @@
     "fields": {
       "username": {
         "label": "Adresse courriel",
-        "hint": "Il faut fournir une adresse courriel du gouvernement fédéral.",
+        "hint": "Entrez votre courriel du gouvernement fédéral, et non une boîte de réception partagée.",
         "error": {
           "validGovEmail": "Ce champ doit être une adresse valide du gouvernement fédéral."
         }
