@@ -13,10 +13,17 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@lib/*": ["../lib/*"],
-      "@components/*": ["../components/*"],
-      "@formbuilder/*": ["../components/form-builder/*"],
-      "@pages/*": ["../pages/*"]
+      "@lib/*": ["lib/*"],
+      "@components/*": ["components/*"],
+      "@appComponents/*": ["app/_components/*"],
+      "@formbuilder/*": ["components/form-builder/*"],
+      "@pages/*": ["pages/*"],
+      "@app/*": ["app/*"],
+      "@jestFixtures/*": ["__fixtures__/*"],
+      "@jestUtils": ["__utils__"],
+      "@i18n": ["app/i18n"],
+      "@i18n/*": ["app/i18n/*"],
+      "@content/*": ["public/static/content/*"]
     }
   },
   "include": [

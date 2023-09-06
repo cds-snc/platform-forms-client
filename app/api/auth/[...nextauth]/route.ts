@@ -27,19 +27,22 @@ async function handler(req: NextRequest, context: { params: { nextauth: string[]
         { status: "error", error: "Missing username or password" },
         { status: 400 }
       );
-
-    if (process.env.APP_ENV === "test") {
-      return NextResponse.json(
-        {
-          status: "success",
-          challengeState: "MFA",
-          authenticationFlowToken: "0000-1111-2222-3333",
-        },
-        { status: 200 }
-      );
-    }
-
     try {
+      if (process.env.APP_ENV === "test") {
+        const authenticationFlowToken = await begin2FAAuthentication({
+          email: username,
+          token: "testCognitoToken",
+        });
+        return NextResponse.json(
+          {
+            status: "success",
+            challengeState: "MFA",
+            authenticationFlowToken: authenticationFlowToken,
+          },
+          { status: 200 }
+        );
+      }
+
       const cognitoToken = await initiateSignIn({
         username: username,
         password: password,

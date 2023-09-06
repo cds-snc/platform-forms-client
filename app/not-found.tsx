@@ -15,11 +15,11 @@ export async function generateMetadata(): Promise<Metadata> {
 const PageNotFound = async () => {
   const { t } = await serverTranslation(["error"]);
   return (
-    <div className="mt-10">
+    <main className="mt-10">
       <ErrorPanel headingTag="h1" title={t("404.title")}>
         <p>{t("404.body")}</p>
       </ErrorPanel>
-    </div>
+    </main>
   );
 };
 
