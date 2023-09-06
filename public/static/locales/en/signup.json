@@ -8,8 +8,8 @@
     "signUpButton": "Continue",
     "fields": {
       "username": {
-        "label": "Email",
-        "hint": "Must be a federal government email address",
+        "label": "Email address",
+        "hint": "Enter your federal government email, not a shared inbox.",
         "error": {
           "validGovEmail": "This field must be a valid federal government email."
         }
