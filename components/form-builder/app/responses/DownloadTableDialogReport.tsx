@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "next-i18next";
-import { useDialogRef, Dialog, LineItemEntries } from "@components/form-builder/app/shared";
+import { useDialogRef, Dialog } from "@components/form-builder/app/shared";
+import { LineItemEntries } from "./line-item-entries";
 import { Button, Alert } from "@components/globals";
 import { randomId } from "@lib/clientHelpers";
 import axios from "axios";
@@ -8,25 +9,7 @@ import { useRouter } from "next/router";
 import { logMessage } from "@lib/logger";
 import Link from "next/link";
 import { isFormId } from "@lib/validation";
-
-export interface DialogErrors {
-  unknown: boolean;
-  minEntries: boolean;
-  maxEntries: boolean;
-  errorEntries: boolean;
-  invalidEntry: boolean;
-}
-
-export enum DialogStates {
-  EDITTING,
-  SENDING,
-  SENT,
-  MIN_ERROR,
-  MAX_ERROR,
-  FORMAT_ERROR,
-  FAILED_ERROR,
-  UNKNOWN_ERROR,
-}
+import { DialogStates } from "./DownloadTableDialogTypes";
 
 export const DownloadTableDialogReport = ({
   isShow,
@@ -47,6 +30,7 @@ export const DownloadTableDialogReport = ({
   const [status, setStatus] = useState<DialogStates>(DialogStates.EDITTING);
   const [errorEntriesList, setErrorEntriesList] = useState<string[]>([]);
   const dialogRef = useDialogRef();
+  // TODO rename to report but check tests first
   const confirmInstructionId = `dialog-confirm-receipt-instruction-${randomId()}`;
 
   // Cleanup any un-needed errors from the last render
@@ -85,17 +69,7 @@ export const DownloadTableDialogReport = ({
         // Refreshes data. Needed for error cases as well since may be a mix of valid/invalid codes
         router.replace(router.asPath);
 
-        // Confirmation API returns success with an error and 1 or more invalid codes
-        if (data?.invalidConfirmationCodes && data.invalidConfirmationCodes?.length > 0) {
-          setStatus(DialogStates.FAILED_ERROR);
-          // Note: why a list of entries and another list for invalid entries? This makes showing
-          // only the invalid entries a lot easier in the LineItems component
-          setErrorEntriesList(data.invalidConfirmationCodes);
-          setEntries(data.invalidConfirmationCodes);
-          return;
-        }
-
-        // Report API returns success with an error and 1 or more invalid codes
+        // Report error
         if (data?.invalidSubmissionNames && data.invalidSubmissionNames?.length > 0) {
           setStatus(DialogStates.FAILED_ERROR);
           setErrorEntriesList(data.invalidSubmissionNames);
