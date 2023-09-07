@@ -13,8 +13,8 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { Card } from "@components/globals/card/Card";
 import { DownloadTable } from "@components/form-builder/app/responses/DownloadTable";
-import { DownloadTableDialog } from "@components/form-builder/app/responses/DownloadTableDialog";
-import { isUUID } from "@lib/validation";
+import { DownloadTableDialogReport } from "@components/form-builder/app/responses/DownloadTableDialogReport";
+import { DownloadTableDialogConfirm } from "@components/form-builder/app/responses/DownloadTableDialogConfirm";
 import { NagwareResult } from "@lib/types";
 import { detectOldUnprocessedSubmissions } from "@lib/nagware";
 import { Nagware } from "@components/form-builder/app/Nagware";
@@ -23,7 +23,6 @@ import { useTemplateStore } from "@components/form-builder/store";
 import { LoggedOutTabName, LoggedOutTab } from "@components/form-builder/app/LoggedOutTab";
 import Head from "next/head";
 import { FormBuilderLayout } from "@components/globals/layouts/FormBuilderLayout";
-import { DownloadTableDialogReport } from "@components/form-builder/app/responses/DownloadTableDialogReport";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -181,58 +180,12 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         </>
       )}
 
-      {isShowConfirmReceiptDialog && (
-        <DownloadTableDialog
-          setIsShowDialog={setIsShowConfirmReceiptDialog}
-          apiUrl={`/api/id/${formId}/submission/confirm`}
-          inputRegex={isUUID}
-          maxEntries={MAX_CONFIRMATION_COUNT}
-          title={t("downloadResponsesModals.confirmReceiptDialog.title")}
-          description={t("downloadResponsesModals.confirmReceiptDialog.findCode")}
-          inputHelp={t("downloadResponsesModals.confirmReceiptDialog.copyCode", {
-            max: MAX_CONFIRMATION_COUNT,
-          })}
-          nextSteps={t("downloadResponsesModals.confirmReceiptDialog.responsesAvailableFor")}
-          submitButtonText={t("downloadResponsesModals.confirmReceiptDialog.confirmReceipt")}
-          minEntriesErrorTitle={t(
-            "downloadResponsesModals.confirmReceiptDialog.errors.minEntries.title"
-          )}
-          minEntriesErrorDescription={t(
-            "downloadResponsesModals.confirmReceiptDialog.errors.minEntries.description"
-          )}
-          maxEntriesErrorTitle={t(
-            "downloadResponsesModals.confirmReceiptDialog.errors.maxEntries.title",
-            {
-              max: MAX_CONFIRMATION_COUNT,
-            }
-          )}
-          maxEntriesErrorDescription={t(
-            "downloadResponsesModals.confirmReceiptDialog.errors.maxEntries.description",
-            {
-              max: MAX_CONFIRMATION_COUNT,
-            }
-          )}
-          errorEntriesErrorTitle={t(
-            "downloadResponsesModals.confirmReceiptDialog.errors.errorEntries.title"
-          )}
-          errorEntriesErrorDescription={t(
-            "downloadResponsesModals.confirmReceiptDialog.errors.errorEntries.description"
-          )}
-          invalidEntryErrorTitle={t(
-            "downloadResponsesModals.confirmReceiptDialog.errors.invalidEntry.title"
-          )}
-          invalidEntryErrorDescription={t(
-            "downloadResponsesModals.confirmReceiptDialog.errors.invalidEntry.description"
-          )}
-          unknownErrorTitle={t("downloadResponsesModals.confirmReceiptDialog.errors.unknown.title")}
-          unknownErrorDescription={t(
-            "downloadResponsesModals.confirmReceiptDialog.errors.unknown.description"
-          )}
-          unknownErrorDescriptionLink={t(
-            "downloadResponsesModals.confirmReceiptDialog.errors.unknown.descriptionLink"
-          )}
-        />
-      )}
+      <DownloadTableDialogConfirm
+        isShow={isShowConfirmReceiptDialog}
+        setIsShow={setIsShowConfirmReceiptDialog}
+        apiUrl={`/api/id/${formId}/submission/confirm`}
+        maxEntries={MAX_CONFIRMATION_COUNT}
+      />
 
       <DownloadTableDialogReport
         isShow={isShowReportProblemsDialog}
