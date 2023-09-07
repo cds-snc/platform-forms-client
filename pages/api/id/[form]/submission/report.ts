@@ -1,7 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { logMessage } from "@lib/logger";
 import { middleware, cors, jsonValidator, sessionExists } from "@lib/middleware";
-import submissionNamesArraySchema from "@lib/middleware/schemas/submission-name-array.schema.json";
+// import submissionNamesArraySchema from "@lib/middleware/schemas/submission-name-array.schema.json";
+import downloadReportProblemSchema from "@lib/middleware/schemas/download-report-problem.schema.json";
 import {
   BatchGetCommand,
   DynamoDBDocumentClient,
@@ -29,11 +30,18 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
 
   const formId = req.query.form;
 
-  if (Array.isArray(formId) || !formId || !Array.isArray(req.body)) {
+  if (
+    Array.isArray(formId) ||
+    !formId ||
+    !Array.isArray(req.body.entries) ||
+    !req.body.description
+  ) {
     return res.status(400).json({ error: "Bad request" });
   }
 
-  const submissionNames = req.body as string[];
+  const submissionNames = req.body.entries as string[];
+
+  const description: string = req.body.description;
 
   if (submissionNames.length > MAXIMUM_SUBMISSION_NAMES_PER_REQUEST) {
     return res.status(400).json({
@@ -74,7 +82,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
       await notifySupport(
         formId,
         submissionsFromSubmissionNames.submissionsToReport.map((submission) => submission.name),
-        userEmail
+        userEmail,
+        description
       );
       submissionsFromSubmissionNames.submissionsToReport.forEach((problem) =>
         logEvent(
@@ -237,7 +246,8 @@ async function report(
 async function notifySupport(
   formId: string,
   submissionNames: string[],
-  userEmailAddress: string
+  userEmailAddress: string,
+  description: string
 ): Promise<void> {
   try {
     const notifyClient = getNotifyInstance();
@@ -251,11 +261,17 @@ async function notifySupport(
 
   Submission names:
   ${submissionNames.map((submissionName) => `\`${submissionName}\``).join(" ; ")}
+
+  Description:
+  ${description}
   ****
   L'utilisateur (${userEmailAddress}) a signalé avoir rencontré des problèmes avec certaines des soumissions du formulaire \`${formId}\`.
 
   Nom des soumissions:
   ${submissionNames.map((submissionName) => `\`${submissionName}\``).join(" ; ")}
+
+  Description:
+  ${description}
   `,
       },
       reference: null,
@@ -266,6 +282,6 @@ async function notifySupport(
 }
 
 export default middleware(
-  [cors({ allowedMethods: ["PUT"] }), sessionExists(), jsonValidator(submissionNamesArraySchema)],
+  [cors({ allowedMethods: ["PUT"] }), sessionExists(), jsonValidator(downloadReportProblemSchema)],
   handler
 );

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useTranslation } from "next-i18next";
-import { useDialogRef, Dialog } from "@components/form-builder/app/shared";
+import { useDialogRef, Dialog, TextArea } from "@components/form-builder/app/shared";
 import { LineItemEntries } from "./line-item-entries";
 import { Button, Alert } from "@components/globals";
 import { randomId } from "@lib/clientHelpers";
@@ -27,6 +27,7 @@ export const DownloadTableDialogReport = ({
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
   const [entries, setEntries] = useState<string[]>([]);
+  const descriptionRef = useRef("");
   const [status, setStatus] = useState<DialogStates>(DialogStates.EDITTING);
   const [errorEntriesList, setErrorEntriesList] = useState<string[]>([]);
   const dialogRef = useDialogRef();
@@ -55,6 +56,8 @@ export const DownloadTableDialogReport = ({
       return;
     }
 
+    // TODO description empty error
+
     const url = apiUrl;
     return axios({
       url,
@@ -63,7 +66,10 @@ export const DownloadTableDialogReport = ({
         "Content-Type": "application/json",
       },
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-      data: entries,
+      data: {
+        entries,
+        description: descriptionRef.current,
+      },
     })
       .then(({ data }) => {
         // Refreshes data. Needed for error cases as well since may be a mix of valid/invalid codes
@@ -187,6 +193,25 @@ export const DownloadTableDialogReport = ({
                 status={status}
                 setStatus={setStatus}
               ></LineItemEntries>
+
+              <label
+                data-testid="label"
+                className="block mb-2 mt-10 font-bold"
+                htmlFor="description"
+                id="description-label"
+              >
+                TODO Describe the problem <span className="text-[#bc3332]">(required)</span>
+              </label>
+              <TextArea
+                id="description"
+                name="description"
+                className="h-32 w-full box-border border-black-default border-2 rounded-md"
+                onChange={(e) => {
+                  if (descriptionRef.current !== undefined) {
+                    descriptionRef.current = e.target.value;
+                  }
+                }}
+              />
 
               <p className="mt-8">
                 {t("downloadResponsesModals.reportProblemsDialog.problemReported")}
