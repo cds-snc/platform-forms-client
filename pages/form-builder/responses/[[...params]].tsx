@@ -14,7 +14,7 @@ import Link from "next/link";
 import { Card } from "@components/globals/card/Card";
 import { DownloadTable } from "@components/form-builder/app/responses/DownloadTable";
 import { DownloadTableDialog } from "@components/form-builder/app/responses/DownloadTableDialog";
-import { isFormId, isUUID } from "@lib/validation";
+import { isUUID } from "@lib/validation";
 import { NagwareResult } from "@lib/types";
 import { detectOldUnprocessedSubmissions } from "@lib/nagware";
 import { Nagware } from "@components/form-builder/app/Nagware";
@@ -23,6 +23,7 @@ import { useTemplateStore } from "@components/form-builder/store";
 import { LoggedOutTabName, LoggedOutTab } from "@components/form-builder/app/LoggedOutTab";
 import Head from "next/head";
 import { FormBuilderLayout } from "@components/globals/layouts/FormBuilderLayout";
+import { DownloadTableDialogReport } from "@components/form-builder/app/responses/DownloadTableDialogReport";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -233,58 +234,12 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         />
       )}
 
-      {isShowReportProblemsDialog && (
-        <DownloadTableDialog
-          setIsShowDialog={setIsShowReportProblemsDialog}
-          apiUrl={`/api/id/${formId}/submission/report`}
-          inputRegex={isFormId}
-          maxEntries={MAX_REPORT_COUNT}
-          title={t("downloadResponsesModals.reportProblemsDialog.title")}
-          description={t("downloadResponsesModals.reportProblemsDialog.findForm")}
-          inputHelp={t("downloadResponsesModals.reportProblemsDialog.enterFormNumbers", {
-            max: MAX_REPORT_COUNT,
-          })}
-          nextSteps={t("downloadResponsesModals.reportProblemsDialog.problemReported")}
-          submitButtonText={t("downloadResponsesModals.reportProblemsDialog.reportProblems")}
-          minEntriesErrorTitle={t(
-            "downloadResponsesModals.reportProblemsDialog.errors.minEntries.title"
-          )}
-          minEntriesErrorDescription={t(
-            "downloadResponsesModals.reportProblemsDialog.errors.minEntries.description"
-          )}
-          maxEntriesErrorTitle={t(
-            "downloadResponsesModals.reportProblemsDialog.errors.maxEntries.title",
-            {
-              max: MAX_REPORT_COUNT,
-            }
-          )}
-          maxEntriesErrorDescription={t(
-            "downloadResponsesModals.reportProblemsDialog.errors.maxEntries.description",
-            {
-              max: MAX_REPORT_COUNT,
-            }
-          )}
-          errorEntriesErrorTitle={t(
-            "downloadResponsesModals.reportProblemsDialog.errors.errorEntries.title"
-          )}
-          errorEntriesErrorDescription={t(
-            "downloadResponsesModals.reportProblemsDialog.errors.errorEntries.description"
-          )}
-          invalidEntryErrorTitle={t(
-            "downloadResponsesModals.reportProblemsDialog.errors.invalidEntry.title"
-          )}
-          invalidEntryErrorDescription={t(
-            "downloadResponsesModals.reportProblemsDialog.errors.invalidEntry.description"
-          )}
-          unknownErrorTitle={t("downloadResponsesModals.reportProblemsDialog.errors.unknown.title")}
-          unknownErrorDescription={t(
-            "downloadResponsesModals.reportProblemsDialog.errors.unknown.description"
-          )}
-          unknownErrorDescriptionLink={t(
-            "downloadResponsesModals.reportProblemsDialog.errors.unknown.descriptionLink"
-          )}
-        />
-      )}
+      <DownloadTableDialogReport
+        isShow={isShowReportProblemsDialog}
+        setIsShow={setIsShowReportProblemsDialog}
+        apiUrl={`/api/id/${formId}/submission/report`}
+        maxEntries={MAX_REPORT_COUNT}
+      />
     </>
   );
 };
