@@ -101,7 +101,7 @@
     },
     "reportProblemsDialog": {
       "title": "Signaler un problème avec les réponses",
-      "findForm": "Trouvez les numéros de soumission dans la liste des réponses qui ne se téléchargent pas ou ne s'ouvrent pas. Ces numéros ressemblent à : 31-12-XCRV.",
+      "findForm": "Trouvez les numéros de soumissions dans la liste des réponses qui ne se téléchargent pas ou ne s'ouvrent pas. Ces numéros ressemblent à : 31-12-XCRV.",
       "enterFormNumbers": "Entrez jusqu'à {{max}} numéros de soumission, un par ligne.",
       "problemReported": "Une fois que vous aurez signalé le problème, nous vous contacterons pour vous aider à le résoudre.",
       "reportProblems": "Signaler le problème",
@@ -127,7 +127,8 @@
           "title": "Désolé, il y a un problème avec le site",
           "description": "Attendez quelques minutes et réessayez, ou ",
           "descriptionLink": "contactez l'équipe de Soutien"
-        }
+        },
+        "notEmpty": "Ne peut pas être vide."
       }
     },
     "lineItemEntries": {

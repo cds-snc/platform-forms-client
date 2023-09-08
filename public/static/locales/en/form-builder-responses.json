@@ -101,7 +101,7 @@
     },
     "reportProblemsDialog": {
       "title": "Report a problem with responses",
-      "findForm": "Find the submission number in the list for any responses that will not download or open. They look like, 31-12-XCRV.",
+      "findForm": "Find the submission numbers in the list for any responses that will not download or open. They look like 31-12-XCRV.",
       "enterFormNumbers": "Enter up-to {{max}} submission numbers, one per line.",
       "problemReported": "After you report the problem, we will contact you to help resolve the problem.",
       "reportProblems": "Report problem",
@@ -127,7 +127,8 @@
           "title": "Sorry, there’s a problem with the site",
           "description": "Wait a few minutes and try again, or  ",
           "descriptionLink": "contact Support"
-        }
+        },
+        "notEmpty": "Cannot be empty."
       }
     },
     "lineItemEntries": {
