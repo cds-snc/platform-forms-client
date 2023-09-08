@@ -56,7 +56,10 @@ export const DownloadTableDialogReport = ({
       return;
     }
 
-    // TODO description empty error
+    if (descriptionRef.current === "") {
+      setStatus(DialogStates.DESCRIPTION_EMPTY_ERROR);
+      return;
+    }
 
     const url = apiUrl;
     return axios({
@@ -204,6 +207,18 @@ export const DownloadTableDialogReport = ({
                 {t("downloadResponsesModals.reportProblemsDialog.describeProblem")}{" "}
                 <span className="text-[#bc3332]">({t("required", { ns: "common" })})</span>
               </label>
+              <div
+                role="alert"
+                className={`border-l-4 border-red bg-red-50 p-3 ${
+                  status !== DialogStates.DESCRIPTION_EMPTY_ERROR ? "visually-hidden" : ""
+                }`}
+              >
+                {status === DialogStates.DESCRIPTION_EMPTY_ERROR && (
+                  <p className="text-sm font-bold">
+                    {t("downloadResponsesModals.reportProblemsDialog.errors.notEmpty")}
+                  </p>
+                )}
+              </div>
               <TextArea
                 id="description"
                 name="description"

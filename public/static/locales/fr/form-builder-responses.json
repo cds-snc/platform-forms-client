@@ -105,7 +105,7 @@
       "enterFormNumbers": "Entrez jusqu'à {{max}} numéros de soumission, un par ligne.",
       "problemReported": "Une fois que vous aurez signalé le problème, nous vous contacterons pour vous aider à le résoudre.",
       "reportProblems": "Signaler le problème",
-      "describeProblem": "Describe the problem[FR]",
+      "describeProblem": "Décrivez le problème",
       "errors": {
         "minEntries": {
           "title": "Au moins un formulaire doit être spécifié",

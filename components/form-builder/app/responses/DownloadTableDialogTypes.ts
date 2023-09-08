@@ -6,5 +6,6 @@ export enum DialogStates {
   MAX_ERROR,
   FORMAT_ERROR,
   FAILED_ERROR,
+  DESCRIPTION_EMPTY_ERROR,
   UNKNOWN_ERROR,
 }
