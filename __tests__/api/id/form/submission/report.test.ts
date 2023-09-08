@@ -103,7 +103,7 @@ describe("Report problem with form submissions (with active session)", () => {
     }
   );
 
-  it("API should reject request if payload is not valid (not an array)", async () => {
+  it("API should reject request if payload it does not contain entries and a description", async () => {
     const { req, res } = createMocks({
       method: "PUT",
       headers: {
@@ -119,7 +119,29 @@ describe("Report problem with form submissions (with active session)", () => {
 
     expect(res.statusCode).toEqual(400);
     expect(JSON.parse(res._getData())).toMatchObject({
-      error: "JSON Validation Error: instance is not of a type(s) array",
+      error:
+        'JSON Validation Error: instance requires property "entries",instance requires property "description",instance is not allowed to have the additional property "key"',
+    });
+  });
+
+  it("API should reject request if payload entries object is not valid (not an array)", async () => {
+    const { req, res } = createMocks({
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Origin: "http://localhost:3000",
+      },
+      body: {
+        entries: "value",
+        description: "value",
+      },
+    });
+
+    await report(req, res);
+
+    expect(res.statusCode).toEqual(400);
+    expect(JSON.parse(res._getData())).toMatchObject({
+      error: "JSON Validation Error: instance.entries is not of a type(s) array",
     });
   });
 
@@ -130,7 +152,10 @@ describe("Report problem with form submissions (with active session)", () => {
         "Content-Type": "application/json",
         Origin: "http://localhost:3000",
       },
-      body: ["value1", "value2", "value3"],
+      body: {
+        entries: ["value1", "value2", "value3"],
+        description: "value",
+      },
     });
 
     await report(req, res);
@@ -149,7 +174,10 @@ describe("Report problem with form submissions (with active session)", () => {
       query: {
         form: 8,
       },
-      body: Array(21).map(() => "06-02-a1b2"),
+      body: {
+        entries: Array(21).map(() => "06-02-a1b2"),
+        description: "value",
+      },
     });
 
     await report(req, res);
@@ -168,7 +196,10 @@ describe("Report problem with form submissions (with active session)", () => {
       query: {
         form: 8,
       },
-      body: ["06-02-a1b2"],
+      body: {
+        entries: ["06-02-a1b2"],
+        description: "value",
+      },
     });
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
@@ -217,7 +248,10 @@ describe("Report problem with form submissions (with active session)", () => {
       query: {
         form: 8,
       },
-      body: ["06-02-a1b2"],
+      body: {
+        entries: ["06-02-a1b2"],
+        description: "value",
+      },
     });
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
@@ -262,7 +296,10 @@ describe("Report problem with form submissions (with active session)", () => {
       query: {
         form: 8,
       },
-      body: ["06-02-a1b2"],
+      body: {
+        entries: ["06-02-a1b2"],
+        description: "value",
+      },
     });
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
@@ -301,7 +338,10 @@ describe("Report problem with form submissions (with active session)", () => {
       query: {
         form: 8,
       },
-      body: ["06-02-a1b2"],
+      body: {
+        entries: ["06-02-a1b2"],
+        description: "value",
+      },
     });
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
@@ -346,7 +386,10 @@ describe("Report problem with form submissions (with active session)", () => {
       query: {
         form: 8,
       },
-      body: ["06-02-a1b2"],
+      body: {
+        entries: ["06-02-a1b2"],
+        description: "value",
+      },
     });
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
