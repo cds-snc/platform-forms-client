@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { logMessage } from "@lib/logger";
 import { middleware, cors, jsonValidator, sessionExists } from "@lib/middleware";
-// import submissionNamesArraySchema from "@lib/middleware/schemas/submission-name-array.schema.json";
 import downloadReportProblemSchema from "@lib/middleware/schemas/download-report-problem.schema.json";
 import {
   BatchGetCommand,

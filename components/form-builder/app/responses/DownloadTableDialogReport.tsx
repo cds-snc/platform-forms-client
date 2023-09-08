@@ -24,7 +24,7 @@ export const DownloadTableDialogReport = ({
   inputRegex?: (field: string) => boolean;
   maxEntries?: number;
 }) => {
-  const { t } = useTranslation("form-builder-responses");
+  const { t } = useTranslation(["form-builder-responses", "common"]);
   const router = useRouter();
   const [entries, setEntries] = useState<string[]>([]);
   const descriptionRef = useRef("");
@@ -179,7 +179,8 @@ export const DownloadTableDialogReport = ({
               <p className="mb-2 mt-10 font-bold" id={confirmInstructionId}>
                 {t("downloadResponsesModals.reportProblemsDialog.enterFormNumbers", {
                   max: maxEntries,
-                })}
+                })}{" "}
+                <span className="text-[#bc3332]">({t("required", { ns: "common" })})</span>
               </p>
 
               <LineItemEntries
@@ -200,7 +201,8 @@ export const DownloadTableDialogReport = ({
                 htmlFor="description"
                 id="description-label"
               >
-                TODO Describe the problem <span className="text-[#bc3332]">(required)</span>
+                {t("downloadResponsesModals.reportProblemsDialog.describeProblem")}{" "}
+                <span className="text-[#bc3332]">({t("required", { ns: "common" })})</span>
               </label>
               <TextArea
                 id="description"

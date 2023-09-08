@@ -105,6 +105,7 @@
       "enterFormNumbers": "Enter up-to {{max}} submission numbers, one per line.",
       "problemReported": "After you report the problem, we will contact you to help resolve the problem.",
       "reportProblems": "Report problem",
+      "describeProblem": "Describe the problem",
       "errors": {
         "minEntries": {
           "title": "At least one submission must be specified",
