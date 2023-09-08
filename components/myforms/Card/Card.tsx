@@ -155,7 +155,16 @@ export const Card = (props: CardProps): React.ReactElement => {
               <span className="mt-4 block text-sm text-red">
                 <MessageIcon className="mr-2 inline-block" />
                 <Markdown options={{ forceBlock: false }}>
-                  {t("card.actionRequired", { responses: overdue, link: responsesLink })}
+                  {t("card.actionRequired.description") +
+                    (overdue > 1
+                      ? t("card.actionRequired.linkPlural", {
+                          responses: overdue,
+                          link: responsesLink,
+                        })
+                      : t("card.actionRequired.linkSingular", {
+                          responses: overdue,
+                          link: responsesLink,
+                        }))}
                 </Markdown>
               </span>
             ) : (

@@ -39,7 +39,11 @@
       "coppiedToClipboard": "Copied to clipboard",
       "somethingWentWrong": "Something went wrong"
     },
-    "actionRequired": "Action required: <a href=\"{{link}}\">Confirm receipt of {{responses}} response</a>"
+    "actionRequired": {
+      "description": "Action required: ",
+      "linkSingular": "<a href=\"{{link}}\">Confirm receipt of {{responses}} response</a>",
+      "linkPlural": "<a href=\"{{link}}\">Confirm receipt of {{responses}} responses</a>"
+    }
   },
   "responseTemplate": {
     "responseNumber": "Response number",
