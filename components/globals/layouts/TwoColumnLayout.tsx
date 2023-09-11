@@ -25,6 +25,7 @@ export const TwoColumnLayout = ({
         <SkipLink />
 
         <Header context={context} user={user} />
+        {/* Noting the provider is needed here for deleting forms */}
         <TemplateStoreProvider>
           <div className="mx-4 shrink-0 grow basis-auto laptop:mx-32 desktop:mx-64">
             <ToastContainer />
