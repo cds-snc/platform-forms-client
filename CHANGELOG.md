@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.4.2](https://github.com/cds-snc/platform-forms-client/compare/v3.4.1...v3.4.2) (2023-09-07)
+
+
+### Bug Fixes
+
+* Remove sub element parsing as it causes problems with long forms ([#2626](https://github.com/cds-snc/platform-forms-client/issues/2626)) ([8e7e9e5](https://github.com/cds-snc/platform-forms-client/commit/8e7e9e5bf873173efd82508fb11e8a4ed1d7876b))
+
+
+### Miscellaneous Chores
+
+* add meta tag for data variable (authenticated) on gtm ([#2597](https://github.com/cds-snc/platform-forms-client/issues/2597)) ([462881c](https://github.com/cds-snc/platform-forms-client/commit/462881ccec07a3d74678f453fef8c933ca8a6cd5))
+* Refactor layouts ([#2587](https://github.com/cds-snc/platform-forms-client/issues/2587)) ([5437d4d](https://github.com/cds-snc/platform-forms-client/commit/5437d4d84f4a0cb62bb1eb13a16f2927022c9036))
+* Remove common HeadMeta from frontend layout ([#2620](https://github.com/cds-snc/platform-forms-client/issues/2620)) ([34d0e75](https://github.com/cds-snc/platform-forms-client/commit/34d0e756047c100bb3ab7981a396b17f6138e02a))
+* Remove leftnav from manage-permissions ([#2595](https://github.com/cds-snc/platform-forms-client/issues/2595)) ([20c3a05](https://github.com/cds-snc/platform-forms-client/commit/20c3a059e2f903b30fc807e2c30a70a6d0773229))
+
 ## [3.4.1](https://github.com/cds-snc/platform-forms-client/compare/v3.4.0...v3.4.1) (2023-08-24)
 
 

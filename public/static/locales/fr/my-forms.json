@@ -39,7 +39,11 @@
       "coppiedToClipboard": "Copié dans le presse-papier",
       "somethingWentWrong": "Il y a eu un problème"
     },
-    "actionRequired": "Action required: <a href=\"{{link}}\">Confirm receipt of {{responses}} response</a>"
+    "actionRequired": {
+      "description": "Action requise:: ",
+      "linkSingular": "<a href=\"{{link}}\">Confirmer la réception de {{responses}} réponse</a>",
+      "linkPlural": "<a href=\"{{link}}\">Confirmer la réception de {{responses}} réponses</a>"
+    }
   },
   "responseTemplate": {
     "responseNumber": "Numéro de réponse",
