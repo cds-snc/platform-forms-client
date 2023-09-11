@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.4.3](https://github.com/cds-snc/platform-forms-client/compare/v3.4.2...v3.4.3) (2023-09-11)
+
+
+### Bug Fixes
+
+* Could not delete form ([38e13fd](https://github.com/cds-snc/platform-forms-client/commit/38e13fdde3deadd24a947e90f7755cf70e4a7c31))
+
+
+### Miscellaneous Chores
+
+* synced file(s) with cds-snc/site-reliability-engineering ([#2603](https://github.com/cds-snc/platform-forms-client/issues/2603)) ([66954ee](https://github.com/cds-snc/platform-forms-client/commit/66954ee27361f0b7832262bc715025d785f3aab1))
+
 ## [3.4.2](https://github.com/cds-snc/platform-forms-client/compare/v3.4.1...v3.4.2) (2023-09-07)
 
 
