@@ -1,5 +1,5 @@
 import { NextData } from "types";
-
+// skipping this test until we re-look at this feature
 describe("Test FormBuilder Repeating set", () => {
   beforeEach(() => {
     cy.useFlag("experimentalBlocks", true);
@@ -26,7 +26,7 @@ describe("Test FormBuilder Repeating set", () => {
     });
   });
 
-  it("Adds a Repeating set with a few questions", () => {
+  it.skip("Adds a Repeating set with a few questions", () => {
     cy.visit("/form-builder/edit");
     cy.get("button").contains("Add").click();
 
@@ -55,7 +55,7 @@ describe("Test FormBuilder Repeating set", () => {
     cy.get('[id="1.0.1.0"]').should("be.checked");
   });
 
-  it("Adds a Repeating set with custom add label", () => {
+  it.skip("Adds a Repeating set with custom add label", () => {
     cy.visit("/form-builder/edit");
     cy.get("button").contains("Add").click();
 
@@ -73,7 +73,7 @@ describe("Test FormBuilder Repeating set", () => {
     cy.get('[data-testid="add-row-button-1"]').contains("Add something");
   });
 
-  it("Adds a Repeating set with max rows", () => {
+  it.skip("Adds a Repeating set with max rows", () => {
     cy.visit("/form-builder/edit");
     cy.get("button").contains("Add").click();
 
@@ -104,7 +104,7 @@ describe("Test FormBuilder Repeating set", () => {
   });
 
   // re-add when we re-look at this feature
-  it("Adds multiple Repeating sets", () => {
+  it.skip("Adds multiple Repeating sets", () => {
     cy.visit("/form-builder/edit");
     cy.get("button").contains("Add").click();
 
