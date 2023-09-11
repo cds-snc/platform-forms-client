@@ -1,5 +1,4 @@
 import React from "react";
-
 import { ToastContainer } from "@components/form-builder/app/shared/Toast";
 import SkipLink from "../SkipLink";
 import { Header } from "../Header";
@@ -7,7 +6,6 @@ import { User } from "next-auth";
 import { HeadMeta } from "./HeadMeta";
 import { cn } from "@lib/utils";
 import Footer from "../Footer";
-
 export const TwoColumnLayout = ({
   children,
   leftColumnContent,
@@ -26,7 +24,6 @@ export const TwoColumnLayout = ({
         <SkipLink />
 
         <Header context={context} user={user} />
-
         <div className="mx-4 shrink-0 grow basis-auto laptop:mx-32 desktop:mx-64">
           <ToastContainer />
           <>
@@ -44,6 +41,7 @@ export const TwoColumnLayout = ({
             </div>
           </>
         </div>
+
         <Footer displayFormBuilderFooter />
       </div>
     </>
