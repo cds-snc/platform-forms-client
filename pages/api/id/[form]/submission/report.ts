@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { logMessage } from "@lib/logger";
 import { middleware, cors, jsonValidator, sessionExists } from "@lib/middleware";
 import { createTicket } from "@lib/integration/freshdesk";
-import submissionNamesArraySchema from "@lib/middleware/schemas/submission-name-array.schema.json";
+import downloadReportProblemSchema from "@lib/middleware/schemas/download-report-problem-schema.json";
 import {
   BatchGetCommand,
   DynamoDBDocumentClient,
@@ -27,17 +27,20 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
 
   const formId = req.query.form;
 
-  if (Array.isArray(formId) || !formId || !Array.isArray(req.body)) {
+  if (Array.isArray(formId) || !formId || !Array.isArray(req.body.entries)) {
     return res.status(400).json({ error: "Bad request" });
   }
 
-  const submissionNames = req.body as string[];
+  const submissionNames = req.body.entries as string[];
 
   if (submissionNames.length > MAXIMUM_SUBMISSION_NAMES_PER_REQUEST) {
     return res.status(400).json({
       error: `Too many submission names. Limit is ${MAXIMUM_SUBMISSION_NAMES_PER_REQUEST}.`,
     });
   }
+
+  // Allows setting manually. Could also potentially get from the request header or add to session
+  const language = req.body.language || "en";
 
   const ability = createAbility(session);
 
@@ -72,7 +75,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
       await notifySupport(
         formId,
         submissionsFromSubmissionNames.submissionsToReport.map((submission) => submission.name),
-        userEmail
+        userEmail,
+        language
       );
       submissionsFromSubmissionNames.submissionsToReport.forEach((problem) =>
         logEvent(
@@ -235,7 +239,8 @@ async function report(
 async function notifySupport(
   formId: string,
   submissionNames: string[],
-  userEmailAddress: string
+  userEmailAddress: string,
+  language = "en"
 ): Promise<void> {
   try {
     const description = `
@@ -255,7 +260,7 @@ async function notifySupport(
       name: userEmailAddress,
       email: userEmailAddress,
       description,
-      language: "en",
+      language,
     });
   } catch (error) {
     logMessage.error(
@@ -267,6 +272,6 @@ async function notifySupport(
 }
 
 export default middleware(
-  [cors({ allowedMethods: ["PUT"] }), sessionExists(), jsonValidator(submissionNamesArraySchema)],
+  [cors({ allowedMethods: ["PUT"] }), sessionExists(), jsonValidator(downloadReportProblemSchema)],
   handler
 );
