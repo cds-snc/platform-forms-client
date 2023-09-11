@@ -314,7 +314,7 @@ export default function Contactus() {
                 "Content-Type": "application/json",
                 "X-CSRF-Token": token,
               },
-              data: { supportType, name, email, request, description },
+              data: { supportType, name, email, request, description, language: i18n.language },
               // If development mode disable timeout
               timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
             });
