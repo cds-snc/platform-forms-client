@@ -72,7 +72,7 @@ export const DownloadTableDialog = ({
   unknownErrorDescription: string;
   unknownErrorDescriptionLink: string;
 }) => {
-  const { t } = useTranslation("form-builder-responses");
+  const { t, i18n } = useTranslation("form-builder-responses");
   const router = useRouter();
   const [entries, setEntries] = useState<string[]>([]);
   const [status, setStatus] = useState<DialogStates>(DialogStates.EDITTING);
@@ -110,7 +110,7 @@ export const DownloadTableDialog = ({
         "Content-Type": "application/json",
       },
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-      data: entries,
+      data: { entries, language: i18n.language },
     })
       .then(({ data }) => {
         // Refreshes data. Needed for error cases as well since may be a mix of valid/invalid codes

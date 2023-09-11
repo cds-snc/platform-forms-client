@@ -1,7 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { logMessage } from "@lib/logger";
 import { middleware, cors, jsonValidator, sessionExists } from "@lib/middleware";
-import submissionNamesArraySchema from "@lib/middleware/schemas/submission-name-array.schema.json";
+import { createTicket } from "@lib/integration/freshdesk";
+import downloadReportProblemSchema from "@lib/middleware/schemas/download-report-problem-schema.json";
 import {
   BatchGetCommand,
   DynamoDBDocumentClient,
@@ -9,14 +10,11 @@ import {
 } from "@aws-sdk/lib-dynamodb";
 import { MiddlewareProps, VaultStatus, WithRequired } from "@lib/types";
 import { connectToDynamo } from "@lib/integration/dynamodbConnector";
-import { getNotifyInstance } from "@lib/integration/notifyConnector";
 import { createAbility, AccessControlError } from "@lib/privileges";
 import { checkUserHasTemplateOwnership } from "@lib/templates";
 import { logEvent } from "@lib/auditLogs";
 
 const MAXIMUM_SUBMISSION_NAMES_PER_REQUEST = 20;
-
-class FailedToSendEmailThroughGCNotify extends Error {}
 
 const handler = async (req: NextApiRequest, res: NextApiResponse, props: MiddlewareProps) => {
   const { session } = props as WithRequired<MiddlewareProps, "session">;
@@ -29,17 +27,20 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
 
   const formId = req.query.form;
 
-  if (Array.isArray(formId) || !formId || !Array.isArray(req.body)) {
+  if (Array.isArray(formId) || !formId || !Array.isArray(req.body.entries)) {
     return res.status(400).json({ error: "Bad request" });
   }
 
-  const submissionNames = req.body as string[];
+  const submissionNames = req.body.entries as string[];
 
   if (submissionNames.length > MAXIMUM_SUBMISSION_NAMES_PER_REQUEST) {
     return res.status(400).json({
       error: `Too many submission names. Limit is ${MAXIMUM_SUBMISSION_NAMES_PER_REQUEST}.`,
     });
   }
+
+  // Allows setting manually. Could also potentially get from the request header or add to session
+  const language = req.body.language || "en";
 
   const ability = createAbility(session);
 
@@ -74,7 +75,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
       await notifySupport(
         formId,
         submissionsFromSubmissionNames.submissionsToReport.map((submission) => submission.name),
-        userEmail
+        userEmail,
+        language
       );
       submissionsFromSubmissionNames.submissionsToReport.forEach((problem) =>
         logEvent(
@@ -100,9 +102,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
       }),
     });
   } catch (error) {
-    if (error instanceof FailedToSendEmailThroughGCNotify) {
+    if (error) {
       logMessage.error(
-        `Failed to notify the support team that user:${userEmail} reported problems with form submissions [${submissionNames.map(
+        `Failed to create ticket / contact the support team that user:${userEmail} reported problems with form submissions [${submissionNames.map(
           (submissionName) => submissionName
         )}] on form \`${formId}\` at:${Date.now()}`
       );
@@ -237,35 +239,39 @@ async function report(
 async function notifySupport(
   formId: string,
   submissionNames: string[],
-  userEmailAddress: string
+  userEmailAddress: string,
+  language = "en"
 ): Promise<void> {
   try {
-    const notifyClient = getNotifyInstance();
+    const description = `
+  User (${userEmailAddress}) reported problems with some of the submissions for form \`${formId}\`.<br/>
+  <br/>
+  Submission names:<br/>
+  ${submissionNames.map((submissionName) => `\`${submissionName}\``).join(" ; ")}<br/>
+  ****<br/>
+  L'utilisateur (${userEmailAddress}) a signalé avoir rencontré des problèmes avec certaines des soumissions du formulaire \`${formId}\`.<br/>
+  <br/>
+  Nom des soumissions:<br/>
+  ${submissionNames.map((submissionName) => `\`${submissionName}\``).join(" ; ")}<br/>
+  `;
 
-    // Here is the documentation for the `sendEmail` function: https://docs.notifications.service.gov.uk/node.html#send-an-email
-    await notifyClient.sendEmail(process.env.TEMPLATE_ID, process.env.EMAIL_ADDRESS_SUPPORT, {
-      personalisation: {
-        subject: "Problem with form submissions / Problème avec les soumissions de formulaire",
-        formResponse: `
-  User (${userEmailAddress}) reported problems with some of the submissions for form \`${formId}\`.
-
-  Submission names:
-  ${submissionNames.map((submissionName) => `\`${submissionName}\``).join(" ; ")}
-  ****
-  L'utilisateur (${userEmailAddress}) a signalé avoir rencontré des problèmes avec certaines des soumissions du formulaire \`${formId}\`.
-
-  Nom des soumissions:
-  ${submissionNames.map((submissionName) => `\`${submissionName}\``).join(" ; ")}
-  `,
-      },
-      reference: null,
+    createTicket({
+      type: "problem",
+      name: userEmailAddress,
+      email: userEmailAddress,
+      description,
+      language,
     });
   } catch (error) {
-    throw new FailedToSendEmailThroughGCNotify();
+    logMessage.error(
+      `Failed to create ticket / contact the support team that user:${userEmailAddress} reported problems with form submissions [${submissionNames.map(
+        (submissionName) => submissionName
+      )}] on form \`${formId}\` at:${Date.now()}`
+    );
   }
 }
 
 export default middleware(
-  [cors({ allowedMethods: ["PUT"] }), sessionExists(), jsonValidator(submissionNamesArraySchema)],
+  [cors({ allowedMethods: ["PUT"] }), sessionExists(), jsonValidator(downloadReportProblemSchema)],
   handler
 );

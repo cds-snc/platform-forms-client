@@ -42,7 +42,7 @@ export default function UnlockPublishing() {
       headers: {
         "Content-Type": "application/json",
       },
-      data: { managerEmail, department, goals },
+      data: { managerEmail, department, goals, language: i18n.language },
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     }).catch((err) => {
       logMessage.error(err);
