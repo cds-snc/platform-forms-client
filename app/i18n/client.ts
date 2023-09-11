@@ -41,21 +41,21 @@ i18next
 export function useTranslation(ns?: string | string[], options?: Record<string, unknown>) {
   const clientHook = reactUseTranslation(ns, options);
   const {
-    i18n: { resolvedLanguage },
+    i18n: { language },
   } = clientHook;
   const locale = (useParams()?.locale as string) ?? null;
 
   // If we're rendering on the client and the language is different from the resolved language,
   // change the language to match the locale in url
   useEffect(() => {
-    if (resolvedLanguage !== locale && locale !== null) {
+    if (language !== locale && locale !== null) {
       clientHook.i18n.changeLanguage(locale);
     }
   });
 
   // If we're rendering on the server and the language is different from the resolved language,
   // This prevents hydration mismatches
-  if (runsOnServerSide && resolvedLanguage !== locale && locale !== null) {
+  if (runsOnServerSide && language !== locale && locale !== null) {
     clientHook.i18n.changeLanguage(locale);
   }
 
