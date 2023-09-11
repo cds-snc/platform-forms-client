@@ -27,7 +27,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
 
   const formId = req.query.form;
 
-  if (Array.isArray(formId) || !formId || !Array.isArray(req.body.entries)) {
+  if (
+    Array.isArray(formId) ||
+    !formId ||
+    !Array.isArray(req.body.entries) ||
+    !req.body.description
+  ) {
     return res.status(400).json({ error: "Bad request" });
   }
 
@@ -38,6 +43,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
       error: `Too many submission names. Limit is ${MAXIMUM_SUBMISSION_NAMES_PER_REQUEST}.`,
     });
   }
+
+  const description: string = req.body.description;
 
   // Allows setting manually. Could also potentially get from the request header or add to session
   const language = req.body.language || "en";
@@ -76,6 +83,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
         formId,
         submissionsFromSubmissionNames.submissionsToReport.map((submission) => submission.name),
         userEmail,
+        description,
         language
       );
       submissionsFromSubmissionNames.submissionsToReport.forEach((problem) =>
@@ -240,6 +248,7 @@ async function notifySupport(
   formId: string,
   submissionNames: string[],
   userEmailAddress: string,
+  userDescription: string,
   language = "en"
 ): Promise<void> {
   try {
@@ -248,11 +257,17 @@ async function notifySupport(
   <br/>
   Submission names:<br/>
   ${submissionNames.map((submissionName) => `\`${submissionName}\``).join(" ; ")}<br/>
+  <br/>
+  Description:<br/>
+  ${userDescription}<br/>
   ****<br/>
   L'utilisateur (${userEmailAddress}) a signalé avoir rencontré des problèmes avec certaines des soumissions du formulaire \`${formId}\`.<br/>
   <br/>
   Nom des soumissions:<br/>
   ${submissionNames.map((submissionName) => `\`${submissionName}\``).join(" ; ")}<br/>
+  <br/>
+  Description:<br/>
+  ${userDescription}<br/>
   `;
 
     createTicket({

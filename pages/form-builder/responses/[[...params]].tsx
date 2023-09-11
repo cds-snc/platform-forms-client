@@ -283,6 +283,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           unknownErrorDescriptionLink={t(
             "downloadResponsesModals.reportProblemsDialog.errors.unknown.descriptionLink"
           )}
+          tempType="report"
         />
       )}
     </>

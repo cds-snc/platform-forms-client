@@ -15,8 +15,11 @@
     },
     "language": {
       "type": "string"
+    },
+    "description": {
+      "type": "string"
     }
   },
-  "required": ["entries"],
+  "required": ["entries", "description"],
   "additionalProperties": false
 }
