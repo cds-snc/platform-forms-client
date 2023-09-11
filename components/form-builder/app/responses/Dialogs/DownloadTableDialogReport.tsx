@@ -10,6 +10,10 @@ import { logMessage } from "@lib/logger";
 import Link from "next/link";
 import { isFormId } from "@lib/validation";
 import { DialogStates } from "./DownloadTableDialogTypes";
+import {
+  MessageType,
+  ValidationMessage,
+} from "@components/globals/ValidationMessage/ValidationMessage";
 
 export const DownloadTableDialogReport = ({
   isShow,
@@ -207,18 +211,12 @@ export const DownloadTableDialogReport = ({
                 {t("downloadResponsesModals.reportProblemsDialog.describeProblem")}{" "}
                 <span className="text-[#bc3332]">({t("required", { ns: "common" })})</span>
               </label>
-              <div
-                role="alert"
-                className={`border-l-4 border-red bg-red-50 p-3 ${
-                  status !== DialogStates.DESCRIPTION_EMPTY_ERROR ? "visually-hidden" : ""
-                }`}
+              <ValidationMessage
+                show={status === DialogStates.DESCRIPTION_EMPTY_ERROR}
+                messageType={MessageType.ERROR}
               >
-                {status === DialogStates.DESCRIPTION_EMPTY_ERROR && (
-                  <p className="text-sm font-bold">
-                    {t("downloadResponsesModals.reportProblemsDialog.errors.notEmpty")}
-                  </p>
-                )}
-              </div>
+                {t("downloadResponsesModals.reportProblemsDialog.errors.notEmpty")}
+              </ValidationMessage>
               <TextArea
                 id="description"
                 name="description"
