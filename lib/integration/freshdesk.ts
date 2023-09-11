@@ -81,8 +81,6 @@ export const createTicket = async ({
   description,
   language,
 }: createTicketProps) => {
-  if (process.env.NODE_ENV !== "production") return;
-
   try {
     const username = process.env.FRESHDESK_API_KEY;
     const password = "X";
