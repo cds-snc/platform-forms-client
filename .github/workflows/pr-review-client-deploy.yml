@@ -22,8 +22,22 @@ env:
   GITHUB_SHA: ${{ github.sha }}
 
 jobs:
+  run-check:
+    runs-on: ubuntu-latest
+    outputs:
+      has-migrations: ${{ steps.filter.outputs.migrations }}
+    steps:
+      - name: path-filter
+        uses: cds-snc/paths-filter@b316143212d841aed668b7b29240c719d603a9b9 # tag=v2.10.4
+        id: filter
+        with:
+          filters: |
+            migrations:
+              - 'prisma/migrations/**'
+
   build-and-push-container:
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'Renovate') }}
+    needs: [run-check]
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'Renovate') && needs.run-check.outputs.has-migrations == 'false' }}
     runs-on: ubuntu-latest
     steps:
       - name: Set envs
