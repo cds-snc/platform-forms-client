@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useTranslation } from "next-i18next";
 import { useSession } from "next-auth/react";
 
 import { LinkButton } from "@components/globals";
 import { BackArrowIcon } from "@components/form-builder/icons";
+import { useFocusIt } from "@lib/hooks/useFocusIt";
 
 export const ErrorPanel = ({
   title,
@@ -18,6 +19,7 @@ export const ErrorPanel = ({
 }) => {
   const { t, i18n } = useTranslation("common");
   const { status } = useSession();
+  const headingRef = useRef(null);
 
   // default content
   const defaultTitle = t("errorPanel.defaultTitle");
@@ -36,10 +38,14 @@ export const ErrorPanel = ({
 
   const supportHref = `/${i18n.language}/form-builder/support`;
 
+  useFocusIt({ elRef: headingRef });
+
   return (
     <div className="mx-4 flex h-full items-center justify-center">
       <div className="rounded-2xl border-2 border-solid border-blue bg-gray-soft px-12 py-10 laptop:max-w-2xl">
-        <HeadingTag className="mb-4 border-none">{title || defaultTitle}</HeadingTag>
+        <HeadingTag className="mb-4 border-none" ref={headingRef}>
+          {title || defaultTitle}
+        </HeadingTag>
         <div className="mb-10">{children || defaultMessage}</div>
         <div className="laptop:flex">
           <LinkButton.Primary href={homeHref} className="mb-2 mr-3">
