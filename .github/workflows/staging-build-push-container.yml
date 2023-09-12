@@ -31,7 +31,7 @@ jobs:
 
       - name: Configure Staging AWS credentials
         id: aws-form-viewer
-        uses: aws-actions/configure-aws-credentials@360ea313a73f8d3b7839fb5db64aecf801ad5fda
+        uses: aws-actions/configure-aws-credentials@8c3f20df09ac63af7b3ae3d7c91f105f857d8497
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -39,7 +39,7 @@ jobs:
 
       - name: Login to Staging Amazon ECR
         id: login-ecr-staging
-        uses: aws-actions/amazon-ecr-login@e20c7e407b9882916b0967c1ea26eeee047fe7fc
+        uses: aws-actions/amazon-ecr-login@865664b3240e20b35d3528593d496632704f48af
 
       - name: Tag Images for Staging
         env:
@@ -56,7 +56,7 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
       - name: Docker generate SBOM
-        uses: cds-snc/security-tools/.github/actions/generate-sbom@cfec0943e40dbb78cee115bbbe89dc17f07b7a0f # v2.1.3
+        uses: cds-snc/security-tools/.github/actions/generate-sbom@eecd7a02a0294b379411c126b61e5c29e253676a # v2.1.4
         env:
           ECR_REGISTRY: ${{ steps.login-ecr-staging.outputs.registry }}
         with:
