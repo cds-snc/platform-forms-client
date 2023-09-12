@@ -35,14 +35,14 @@ export const ErrorPanel = ({
   const supportHref = `/${i18n.language}/form-builder/support`;
 
   return (
-    <div className="flex items-center justify-center h-full mx-4">
-      <div className="laptop:max-w-2xl py-10 px-12 border-2 border-solid border-blue bg-gray-soft rounded-2xl">
-        <HeadingTag className="border-none mb-4">{title || defaultTitle}</HeadingTag>
+    <div className="mx-4 flex h-full items-center justify-center">
+      <div className="rounded-2xl border-2 border-solid border-blue bg-gray-soft px-12 py-10 laptop:max-w-2xl">
+        <HeadingTag className="mb-4 border-none">{title || defaultTitle}</HeadingTag>
         <div className="mb-10">{children || defaultMessage}</div>
         <div className="laptop:flex">
-          <LinkButton.Primary href={homeHref} className="mr-3 mb-2">
+          <LinkButton.Primary href={homeHref} className="mb-2 mr-3">
             <span>
-              <BackArrowIcon className="inline-block mr-2 fill-white self-stretch" />
+              <BackArrowIcon className="mr-2 inline-block self-stretch fill-white" />
               {homeText}
             </span>
           </LinkButton.Primary>
