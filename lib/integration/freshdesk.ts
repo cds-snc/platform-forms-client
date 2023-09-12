@@ -1,5 +1,4 @@
 import fetch from "node-fetch";
-import { logMessage } from "@lib/logger";
 
 interface createTicketProps {
   type: "branding" | "publishing" | "contact" | "problem";
