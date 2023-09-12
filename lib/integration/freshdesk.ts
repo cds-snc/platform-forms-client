@@ -1,5 +1,4 @@
 import fetch from "node-fetch";
-import { logMessage } from "@lib/logger";
 
 interface createTicketProps {
   type: "branding" | "publishing" | "contact" | "problem";
@@ -81,21 +80,24 @@ export const createTicket = async ({
   description,
   language,
 }: createTicketProps) => {
-  try {
-    const username = process.env.FRESHDESK_API_KEY;
-    const password = "X";
-    const data = formatTicketData({ type, name, email, description, language });
-    const result = await fetch("https://cds-snc.freshdesk.com/api/v2/tickets", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Basic " + btoa(username + ":" + password),
-      },
-      body: JSON.stringify(data),
-    });
-
-    return result;
-  } catch (error) {
-    logMessage.error("create ticket failed:" + error);
+  if (process.env.APP_ENV === "test") {
+    return { status: 200 };
   }
+
+  const username = process.env.FRESHDESK_API_KEY;
+  const password = "X";
+  const data = formatTicketData({ type, name, email, description, language });
+
+  if (!username) throw new Error("Freshdesk API key not found");
+
+  const result = await fetch("https://cds-snc.freshdesk.com/api/v2/tickets", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Basic " + btoa(username + ":" + password),
+    },
+    body: JSON.stringify(data),
+  });
+
+  return result;
 };
