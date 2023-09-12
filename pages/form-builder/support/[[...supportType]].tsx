@@ -109,7 +109,9 @@ export default function Contactus() {
       >
         {({ handleSubmit, errors }) => (
           <>
-            {errorMessage && <ErrorPanel>{t("server-error", { ns: "common" })}</ErrorPanel>}
+            {errorMessage && (
+              <ErrorPanel supportLink={false}>{t("server-error", { ns: "common" })}</ErrorPanel>
+            )}
             {Object.keys(errors).length > 0 && (
               <ValidationMessage
                 type={ErrorStatus.ERROR}
@@ -338,7 +340,9 @@ export default function Contactus() {
       >
         {({ handleSubmit, errors }) => (
           <>
-            {errorMessage && <ErrorPanel>{t("server-error", { ns: "common" })}</ErrorPanel>}
+            {errorMessage && (
+              <ErrorPanel supportLink={false}>{t("server-error", { ns: "common" })}</ErrorPanel>
+            )}
             {Object.keys(errors).length > 0 && (
               <ValidationMessage
                 type={ErrorStatus.ERROR}

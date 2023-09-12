@@ -9,10 +9,12 @@ export const ErrorPanel = ({
   title,
   children,
   headingTag: HeadingTag = "h2",
+  supportLink = true,
 }: {
   title?: string;
   children?: JSX.Element | string;
   headingTag?: "h1" | "h2";
+  supportLink?: boolean;
 }) => {
   const { t, i18n } = useTranslation("common");
   const { status } = useSession();
@@ -46,9 +48,11 @@ export const ErrorPanel = ({
               {homeText}
             </span>
           </LinkButton.Primary>
-          <LinkButton.Secondary href={supportHref} className="mb-2">
-            {t("errorPanel.cta.support")}
-          </LinkButton.Secondary>
+          {supportLink && (
+            <LinkButton.Secondary href={supportHref} className="mb-2">
+              {t("errorPanel.cta.support")}
+            </LinkButton.Secondary>
+          )}
         </div>
       </div>
     </div>
