@@ -80,6 +80,10 @@ export const createTicket = async ({
   description,
   language,
 }: createTicketProps) => {
+  if (process.env.APP_ENV === "test") {
+    return { status: 200 };
+  }
+
   const username = process.env.FRESHDESK_API_KEY;
   const password = "X";
   const data = formatTicketData({ type, name, email, description, language });
