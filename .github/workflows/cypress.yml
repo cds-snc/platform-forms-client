@@ -11,7 +11,7 @@ jobs:
       # Label used to access the service container
       postgres:
         # Docker Hub image
-        image: postgres@sha256:86817d5b3096e71d26bb5328e5f5d9d184c02bc3e511b252ed6cffaae9e3f745
+        image: postgres@sha256:d0c68cd506cde10ddd890e77f98339a4f05810ffba99c881061a12b30a0525c9
         env:
           POSTGRES_PASSWORD: postgres
         # Set health checks to wait until postgres has started
@@ -24,7 +24,7 @@ jobs:
           - 5432:5432
       redis:
         # Docker Hub image
-        image: redis@sha256:b0bdc1a83caf43f9eb74afca0fcfd6f09bea38bb87f6add4a858f06ef4617538
+        image: redis@sha256:f92a0be0ba8c085e6a5e2d2bea386365443485bcd67ced5ca8ddcdacdd4656d2
         options: >-
           --health-cmd "redis-cli ping"
           --health-interval 10s
@@ -43,7 +43,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@50fbc622fc4ef5163becd7fab6573eac35f8462e # v1.2.0
       - name: Node.JS 16
-        uses: actions/setup-node@e33196f7422957bea03ed53f6fbb155025ffc7b8 # v3.7.0
+        uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d # v3.8.1
         with:
           node-version: 16
       - name: Get yarn cache directory path

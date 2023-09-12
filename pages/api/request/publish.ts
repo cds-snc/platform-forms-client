@@ -38,13 +38,17 @@ Adresse email du responsable: ${managerEmail} .<br/>
       throw new Error("User name or email not found");
     }
 
-    await createTicket({
+    const result = await createTicket({
       type: "publishing",
       name: session.user.name,
       email: session.user.email,
       description,
       language: language,
     });
+
+    if (result && result?.status >= 400) {
+      throw new Error(`Freshdesk error: ${result.status}`);
+    }
 
     return res.status(200).json({});
   } catch (error) {

@@ -11,6 +11,7 @@ import Head from "next/head";
 import * as Yup from "yup";
 import axios from "axios";
 import { logMessage } from "@lib/logger";
+import { ErrorPanel } from "@components/globals/ErrorPanel";
 import {
   TextInput,
   Label,
@@ -109,17 +110,8 @@ export default function Contactus() {
         {({ handleSubmit, errors }) => (
           <>
             {errorMessage && (
-              <ValidationMessage
-                type={ErrorStatus.ERROR}
-                validation={true}
-                tabIndex={0}
-                id="requestSubmissionError"
-                heading={t("input-validation.heading", { ns: "common" })}
-              >
-                {errorMessage}
-              </ValidationMessage>
+              <ErrorPanel supportLink={false}>{t("server-error", { ns: "common" })}</ErrorPanel>
             )}
-
             {Object.keys(errors).length > 0 && (
               <ValidationMessage
                 type={ErrorStatus.ERROR}
@@ -141,140 +133,152 @@ export default function Contactus() {
                 </ol>
               </ValidationMessage>
             )}
-            <form id="contactus" method="POST" onSubmit={handleSubmit} noValidate>
-              <p className="mb-6 mt-[-2rem] text-[1.6rem]">{t("contactus.useThisForm")}</p>
-              <p className="mb-14">
-                {t("contactus.gcFormsTeamPart1")}{" "}
-                <Link href={`https://www.canada.ca/${i18n.language}/contact.html`}>
-                  {t("contactus.gcFormsTeamLink")}
-                </Link>{" "}
-                {t("contactus.gcFormsTeamPart2")}
-              </p>
-              <Alert.Warning title={t("contactus.needSupport")} role="note">
-                <p>
-                  {t("contactus.ifYouExperience")}{" "}
-                  <Link href={`/form-builder/support`}>{t("contactus.supportFormLink")}</Link>.
+            {!errorMessage && (
+              <form id="contactus" method="POST" onSubmit={handleSubmit} noValidate>
+                <p className="mb-6 mt-[-2rem] text-[1.6rem]">{t("contactus.useThisForm")}</p>
+                <p className="mb-14">
+                  {t("contactus.gcFormsTeamPart1")}{" "}
+                  <Link href={`https://www.canada.ca/${i18n.language}/contact.html`}>
+                    {t("contactus.gcFormsTeamLink")}
+                  </Link>{" "}
+                  {t("contactus.gcFormsTeamPart2")}
                 </p>
-              </Alert.Warning>
-              <div className="focus-group mt-14">
-                <Label id={"label-name"} htmlFor={"name"} className="required" required>
-                  {t("contactus.name")}
-                </Label>
-                <TextInput type={"text"} id={"name"} name={"name"} className="required w-[34rem]" />
-              </div>
-              <div className="focus-group">
-                <Label id={"label-email"} htmlFor={"email"} className="required" required>
-                  {t("contactus.email")}
-                </Label>
-                <TextInput
-                  type={"text"}
-                  id={"email"}
-                  name={"email"}
-                  className="required w-[34rem]"
-                  required
-                />
-              </div>
-              <div className="focus-group mt-14">
-                <Label id={"label-department"} htmlFor={"department"} className="required" required>
-                  {t("contactus.department")}
-                </Label>
-                <TextInput
-                  type={"text"}
-                  id={"department"}
-                  name={"department"}
-                  className="required w-[34rem]"
-                />
-              </div>
-              <div className="focus-group mt-14">
-                <Label id={"label-branch"} htmlFor={"branch"} className="required" required>
-                  {t("contactus.branch")}
-                </Label>
-                <TextInput
-                  type={"text"}
-                  id={"branch"}
-                  name={"branch"}
-                  className="required w-[34rem]"
-                />
-              </div>
-              <div className="focus-group mt-14">
-                <Label id={"label-jobTitle"} htmlFor={"jobTitle"} className="required" required>
-                  {t("contactus.jobTitle")}
-                </Label>
-                <TextInput
-                  type={"text"}
-                  id={"jobTitle"}
-                  name={"jobTitle"}
-                  className="required w-[34rem]"
-                />
-              </div>
-              <fieldset className="focus-group">
-                <legend className="gc-label required">
-                  {t("contactus.request.title")}{" "}
-                  <span data-testid="required" aria-hidden>
-                    ({t("required")})
-                  </span>
-                </legend>
-                <MultipleChoiceGroup
-                  name="request"
-                  type="checkbox"
-                  choicesProps={[
-                    {
-                      id: "request-question",
-                      name: "question",
-                      label: t("contactus.request.option1"),
-                      required: true,
-                    },
-                    {
-                      id: "request-feedback",
-                      name: "feedback",
-                      label: t("contactus.request.option2"),
-                      required: true,
-                    },
-                    {
-                      id: "request-demo",
-                      name: "demo",
-                      label: t("contactus.request.option3"),
-                      required: true,
-                    },
-                    {
-                      id: "request-other",
-                      name: "other",
-                      label: t("contactus.request.option4"),
-                      required: true,
-                    },
-                  ]}
-                ></MultipleChoiceGroup>
-              </fieldset>
-              <div className="focus-group">
-                <Label
-                  id={"label-description"}
-                  htmlFor={"description"}
-                  className="required"
-                  required
-                >
-                  {t("contactus.description.title")}
-                </Label>
-                <Description id={"description-description"}>
-                  {t("contactus.description.description")}
-                </Description>
-                <TextArea
-                  id={"description"}
-                  name={"description"}
-                  className="required w-[34rem] mt-4"
-                  required
-                  characterCountMessages={{
-                    part1: t("formElements.characterCount.part1"),
-                    part2: t("formElements.characterCount.part2"),
-                    part1Error: t("formElements.characterCount.part1-error"),
-                    part2Error: t("formElements.characterCount.part2-error"),
-                  }}
-                />
-              </div>
+                <Alert.Warning title={t("contactus.needSupport")} role="note">
+                  <p>
+                    {t("contactus.ifYouExperience")}{" "}
+                    <Link href={`/form-builder/support`}>{t("contactus.supportFormLink")}</Link>.
+                  </p>
+                </Alert.Warning>
+                <div className="focus-group mt-14">
+                  <Label id={"label-name"} htmlFor={"name"} className="required" required>
+                    {t("contactus.name")}
+                  </Label>
+                  <TextInput
+                    type={"text"}
+                    id={"name"}
+                    name={"name"}
+                    className="required w-[34rem]"
+                  />
+                </div>
+                <div className="focus-group">
+                  <Label id={"label-email"} htmlFor={"email"} className="required" required>
+                    {t("contactus.email")}
+                  </Label>
+                  <TextInput
+                    type={"text"}
+                    id={"email"}
+                    name={"email"}
+                    className="required w-[34rem]"
+                    required
+                  />
+                </div>
+                <div className="focus-group mt-14">
+                  <Label
+                    id={"label-department"}
+                    htmlFor={"department"}
+                    className="required"
+                    required
+                  >
+                    {t("contactus.department")}
+                  </Label>
+                  <TextInput
+                    type={"text"}
+                    id={"department"}
+                    name={"department"}
+                    className="required w-[34rem]"
+                  />
+                </div>
+                <div className="focus-group mt-14">
+                  <Label id={"label-branch"} htmlFor={"branch"} className="required" required>
+                    {t("contactus.branch")}
+                  </Label>
+                  <TextInput
+                    type={"text"}
+                    id={"branch"}
+                    name={"branch"}
+                    className="required w-[34rem]"
+                  />
+                </div>
+                <div className="focus-group mt-14">
+                  <Label id={"label-jobTitle"} htmlFor={"jobTitle"} className="required" required>
+                    {t("contactus.jobTitle")}
+                  </Label>
+                  <TextInput
+                    type={"text"}
+                    id={"jobTitle"}
+                    name={"jobTitle"}
+                    className="required w-[34rem]"
+                  />
+                </div>
+                <fieldset className="focus-group">
+                  <legend className="gc-label required">
+                    {t("contactus.request.title")}{" "}
+                    <span data-testid="required" aria-hidden>
+                      ({t("required")})
+                    </span>
+                  </legend>
+                  <MultipleChoiceGroup
+                    name="request"
+                    type="checkbox"
+                    choicesProps={[
+                      {
+                        id: "request-question",
+                        name: "question",
+                        label: t("contactus.request.option1"),
+                        required: true,
+                      },
+                      {
+                        id: "request-feedback",
+                        name: "feedback",
+                        label: t("contactus.request.option2"),
+                        required: true,
+                      },
+                      {
+                        id: "request-demo",
+                        name: "demo",
+                        label: t("contactus.request.option3"),
+                        required: true,
+                      },
+                      {
+                        id: "request-other",
+                        name: "other",
+                        label: t("contactus.request.option4"),
+                        required: true,
+                      },
+                    ]}
+                  ></MultipleChoiceGroup>
+                </fieldset>
+                <div className="focus-group">
+                  <Label
+                    id={"label-description"}
+                    htmlFor={"description"}
+                    className="required"
+                    required
+                  >
+                    {t("contactus.description.title")}
+                  </Label>
+                  <Description id={"description-description"}>
+                    {t("contactus.description.description")}
+                  </Description>
+                  <TextArea
+                    id={"description"}
+                    name={"description"}
+                    className="required mt-4 w-[34rem]"
+                    required
+                    characterCountMessages={{
+                      part1: t("formElements.characterCount.part1"),
+                      part2: t("formElements.characterCount.part2"),
+                      part1Error: t("formElements.characterCount.part1-error"),
+                      part2Error: t("formElements.characterCount.part2-error"),
+                    }}
+                  />
+                </div>
 
-              <Button type="submit" className="gc-button--blue" disabled={isSubmitting}>
-                {t("submitButton", { ns: "common" })}
-              </Button>
-            </form>
+                <Button type="submit" className="gc-button--blue" disabled={isSubmitting}>
+                  {t("submitButton", { ns: "common" })}
+                </Button>
+              </form>
+            )}
           </>
         )}
       </Formik>
@@ -337,17 +341,8 @@ export default function Contactus() {
         {({ handleSubmit, errors }) => (
           <>
             {errorMessage && (
-              <ValidationMessage
-                type={ErrorStatus.ERROR}
-                validation={true}
-                tabIndex={0}
-                id="requestSubmissionError"
-                heading={t("input-validation.heading", { ns: "common" })}
-              >
-                {errorMessage}
-              </ValidationMessage>
+              <ErrorPanel supportLink={false}>{t("server-error", { ns: "common" })}</ErrorPanel>
             )}
-
             {Object.keys(errors).length > 0 && (
               <ValidationMessage
                 type={ErrorStatus.ERROR}
@@ -369,107 +364,114 @@ export default function Contactus() {
                 </ol>
               </ValidationMessage>
             )}
-            <form id="support" method="POST" onSubmit={handleSubmit} noValidate>
-              <p className="mb-6 mt-[-2rem] text-[1.6rem]">{t("support.useThisForm")}</p>
-              <p className="mb-14">
-                {t("support.gcFormsTeamPart1")}{" "}
-                <Link href={`https://www.canada.ca/${i18n.language}/contact.html`}>
-                  {t("support.gcFormsTeamLink")}
-                </Link>{" "}
-                {t("support.gcFormsTeamPart2")}
-              </p>
-              <Alert.Warning title={t("support.lookingForADemo")} role="note">
-                <p>
-                  {t("support.ifYouWouldLike")}{" "}
-                  <Link href={`/form-builder/support/contactus`}>{t("support.contactUs")}</Link>.
+            {!errorMessage && (
+              <form id="support" method="POST" onSubmit={handleSubmit} noValidate>
+                <p className="mb-6 mt-[-2rem] text-[1.6rem]">{t("support.useThisForm")}</p>
+                <p className="mb-14">
+                  {t("support.gcFormsTeamPart1")}{" "}
+                  <Link href={`https://www.canada.ca/${i18n.language}/contact.html`}>
+                    {t("support.gcFormsTeamLink")}
+                  </Link>{" "}
+                  {t("support.gcFormsTeamPart2")}
                 </p>
-              </Alert.Warning>
-              <div className="focus-group mt-14">
-                <Label id={"label-name"} htmlFor={"name"} className="required" required>
-                  {t("support.name")}
-                </Label>
-                <TextInput type={"text"} id={"name"} name={"name"} className="required w-[34rem]" />
-              </div>
-              <div className="focus-group">
-                <Label id={"label-email"} htmlFor={"email"} className="required" required>
-                  {t("support.email")}
-                </Label>
-                <TextInput
-                  type={"text"}
-                  id={"email"}
-                  name={"email"}
-                  className="required w-[34rem]"
-                  required
-                />
-              </div>
-              <fieldset className="focus-group">
-                <legend className="gc-label required">
-                  {t("support.request.title")}{" "}
-                  <span data-testid="required" aria-hidden>
-                    ({t("required", { ns: "common" })})
-                  </span>
-                </legend>
-                <MultipleChoiceGroup
-                  name="request"
-                  type="radio"
-                  choicesProps={[
-                    {
-                      id: "request-question",
-                      name: "question",
-                      label: t("support.request.option1"),
-                      required: true,
-                    },
-                    {
-                      id: "request-technical",
-                      name: "technical",
-                      label: t("support.request.option2"),
-                      required: true,
-                    },
-                    {
-                      id: "request-form",
-                      name: "form",
-                      label: t("support.request.option3"),
-                      required: true,
-                    },
-                    {
-                      id: "request-other",
-                      name: "other",
-                      label: t("support.request.option4"),
-                      required: true,
-                    },
-                  ]}
-                ></MultipleChoiceGroup>
-              </fieldset>
-              <div className="focus-group">
-                <Label
-                  id={"label-description"}
-                  htmlFor={"description"}
-                  className="required"
-                  required
-                >
-                  {t("support.description.title")}
-                </Label>
-                <Description id={"description-description"}>
-                  {t("support.description.description")}
-                </Description>
-                <TextArea
-                  id={"description"}
-                  name={"description"}
-                  className="required w-[34rem] mt-4"
-                  required
-                  characterCountMessages={{
-                    part1: t("formElements.characterCount.part1"),
-                    part2: t("formElements.characterCount.part2"),
-                    part1Error: t("formElements.characterCount.part1-error"),
-                    part2Error: t("formElements.characterCount.part2-error"),
-                  }}
-                />
-              </div>
+                <Alert.Warning title={t("support.lookingForADemo")} role="note">
+                  <p>
+                    {t("support.ifYouWouldLike")}{" "}
+                    <Link href={`/form-builder/support/contactus`}>{t("support.contactUs")}</Link>.
+                  </p>
+                </Alert.Warning>
+                <div className="focus-group mt-14">
+                  <Label id={"label-name"} htmlFor={"name"} className="required" required>
+                    {t("support.name")}
+                  </Label>
+                  <TextInput
+                    type={"text"}
+                    id={"name"}
+                    name={"name"}
+                    className="required w-[34rem]"
+                  />
+                </div>
+                <div className="focus-group">
+                  <Label id={"label-email"} htmlFor={"email"} className="required" required>
+                    {t("support.email")}
+                  </Label>
+                  <TextInput
+                    type={"text"}
+                    id={"email"}
+                    name={"email"}
+                    className="required w-[34rem]"
+                    required
+                  />
+                </div>
+                <fieldset className="focus-group">
+                  <legend className="gc-label required">
+                    {t("support.request.title")}{" "}
+                    <span data-testid="required" aria-hidden>
+                      ({t("required", { ns: "common" })})
+                    </span>
+                  </legend>
+                  <MultipleChoiceGroup
+                    name="request"
+                    type="radio"
+                    choicesProps={[
+                      {
+                        id: "request-question",
+                        name: "question",
+                        label: t("support.request.option1"),
+                        required: true,
+                      },
+                      {
+                        id: "request-technical",
+                        name: "technical",
+                        label: t("support.request.option2"),
+                        required: true,
+                      },
+                      {
+                        id: "request-form",
+                        name: "form",
+                        label: t("support.request.option3"),
+                        required: true,
+                      },
+                      {
+                        id: "request-other",
+                        name: "other",
+                        label: t("support.request.option4"),
+                        required: true,
+                      },
+                    ]}
+                  ></MultipleChoiceGroup>
+                </fieldset>
+                <div className="focus-group">
+                  <Label
+                    id={"label-description"}
+                    htmlFor={"description"}
+                    className="required"
+                    required
+                  >
+                    {t("support.description.title")}
+                  </Label>
+                  <Description id={"description-description"}>
+                    {t("support.description.description")}
+                  </Description>
+                  <TextArea
+                    id={"description"}
+                    name={"description"}
+                    className="required w-[34rem] mt-4"
+                    required
+                    characterCountMessages={{
+                      part1: t("formElements.characterCount.part1"),
+                      part2: t("formElements.characterCount.part2"),
+                      part1Error: t("formElements.characterCount.part1-error"),
+                      part2Error: t("formElements.characterCount.part2-error"),
+                    }}
+                  />
+                </div>
 
-              <Button type="submit" theme="primary" disabled={isSubmitting}>
-                {t("submitButton", { ns: "common" })}
-              </Button>
-            </form>
+                <Button type="submit" theme="primary" disabled={isSubmitting}>
+                  {t("submitButton", { ns: "common" })}
+                </Button>
+              </form>
+            )}
           </>
         )}
       </Formik>

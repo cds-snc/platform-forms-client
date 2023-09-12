@@ -1,4 +1,4 @@
-FROM node:16@sha256:8c3c7e253d9484a35ed9db3e6ba296d859a382f48602d0321e4734a91311ac95
+FROM node:16@sha256:f77a1aef2da8d83e45ec990f45df50f1a286c5fe8bbfb8c6e4246c6389705c0b
 
 ENV NODE_ENV=production
 
@@ -14,13 +14,13 @@ RUN yarn install --silent --production=false
 RUN yarn build
 RUN yarn install --production
 
-FROM node:16@sha256:8c3c7e253d9484a35ed9db3e6ba296d859a382f48602d0321e4734a91311ac95
+FROM node:16@sha256:f77a1aef2da8d83e45ec990f45df50f1a286c5fe8bbfb8c6e4246c6389705c0b
 
 COPY flag_initialization /src
 WORKDIR /src
 RUN yarn install --silent 
 
-FROM node:16@sha256:8c3c7e253d9484a35ed9db3e6ba296d859a382f48602d0321e4734a91311ac95
+FROM node:16@sha256:f77a1aef2da8d83e45ec990f45df50f1a286c5fe8bbfb8c6e4246c6389705c0b
 LABEL maintainer="-"
 
 ARG GITHUB_SHA_ARG

@@ -22,6 +22,7 @@ import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
+import { ErrorPanel } from "@components/globals/ErrorPanel";
 
 export default function UnlockPublishing() {
   const { t, i18n } = useTranslation(["unlock-publishing", "common"]);
@@ -103,127 +104,121 @@ export default function UnlockPublishing() {
             {({ handleSubmit, errors }) => (
               <>
                 {errorState.message && (
-                  <Alert
-                    type={ErrorStatus.ERROR}
-                    validation={true}
-                    tabIndex={0}
-                    id="unlockPublishingSubmissionError"
-                    heading={t("input-validation.heading", { ns: "common" })}
-                  >
-                    {errorState.message}
-                  </Alert>
+                  <ErrorPanel supportLink={false}>{t("server-error", { ns: "common" })}</ErrorPanel>
                 )}
 
-                {Object.keys(errors).length > 0 && (
-                  <Alert
-                    type={ErrorStatus.ERROR}
-                    validation={true}
-                    tabIndex={0}
-                    id="unlockPublishingValidationErrors"
-                    heading={t("input-validation.heading", { ns: "common" })}
-                  >
-                    <ol className="gc-ordered-list">
-                      {Object.entries(errors).map(([fieldKey, fieldValue]) => {
-                        return (
-                          <ErrorListItem
-                            key={`error-${fieldKey}`}
-                            errorKey={fieldKey}
-                            value={fieldValue}
-                          />
-                        );
-                      })}
-                    </ol>
-                  </Alert>
-                )}
+                {!errorState.message && (
+                  <>
+                    {Object.keys(errors).length > 0 && (
+                      <Alert
+                        type={ErrorStatus.ERROR}
+                        validation={true}
+                        tabIndex={0}
+                        id="unlockPublishingValidationErrors"
+                        heading={t("input-validation.heading", { ns: "common" })}
+                      >
+                        <ol className="gc-ordered-list">
+                          {Object.entries(errors).map(([fieldKey, fieldValue]) => {
+                            return (
+                              <ErrorListItem
+                                key={`error-${fieldKey}`}
+                                errorKey={fieldKey}
+                                value={fieldValue}
+                              />
+                            );
+                          })}
+                        </ol>
+                      </Alert>
+                    )}
+                    <h1>{t("unlockPublishing.title")}</h1>
+                    <p className="mb-14">{t("unlockPublishing.paragraph1")}</p>
+                    <form id="unlock-publishing" method="POST" onSubmit={handleSubmit} noValidate>
+                      <div className="focus-group">
+                        <Label
+                          id={"label-managerEmail"}
+                          htmlFor={"managerEmail"}
+                          className="required"
+                          required
+                        >
+                          {t("unlockPublishing.form.field1.title")}
+                        </Label>
+                        <Description id={"unlock-publishing-description"}>
+                          {t("unlockPublishing.form.field1.description")}
+                        </Description>
+                        <TextInput
+                          type={"text"}
+                          id={"managerEmail"}
+                          name={"managerEmail"}
+                          className="required w-[34rem]"
+                          ariaDescribedBy={"unlock-publishing-description"}
+                        />
+                      </div>
 
-                <h1>{t("unlockPublishing.title")}</h1>
-                <p className="mb-14">{t("unlockPublishing.paragraph1")}</p>
+                      <div className="focus-group">
+                        <Label
+                          id={"label-department"}
+                          htmlFor={"department"}
+                          className="required"
+                          required
+                        >
+                          {t("unlockPublishing.form.field2.title")}
+                        </Label>
+                        <TextInput
+                          type={"text"}
+                          id={"department"}
+                          name={"department"}
+                          className="required w-[34rem]"
+                          required
+                        />
+                      </div>
 
-                <form id="unlock-publishing" method="POST" onSubmit={handleSubmit} noValidate>
-                  <div className="focus-group">
-                    <Label
-                      id={"label-managerEmail"}
-                      htmlFor={"managerEmail"}
-                      className="required"
-                      required
-                    >
-                      {t("unlockPublishing.form.field1.title")}
-                    </Label>
-                    <Description id={"unlock-publishing-description"}>
-                      {t("unlockPublishing.form.field1.description")}
-                    </Description>
-                    <TextInput
-                      type={"text"}
-                      id={"managerEmail"}
-                      name={"managerEmail"}
-                      className="required w-[34rem]"
-                      ariaDescribedBy={"unlock-publishing-description"}
-                    />
-                  </div>
+                      <div className="focus-group">
+                        <Label id={"label-goals"} htmlFor={"goals"} className="required" required>
+                          {t("unlockPublishing.form.field3.title")}
+                        </Label>
+                        <TextArea
+                          id={"goals"}
+                          name={"goals"}
+                          className="required w-[34rem] mt-4"
+                          required
+                          characterCountMessages={{
+                            part1: t("formElements.characterCount.part1"),
+                            part2: t("formElements.characterCount.part2"),
+                            part1Error: t("formElements.characterCount.part1-error"),
+                            part2Error: t("formElements.characterCount.part2-error"),
+                          }}
+                        />
+                      </div>
 
-                  <div className="focus-group">
-                    <Label
-                      id={"label-department"}
-                      htmlFor={"department"}
-                      className="required"
-                      required
-                    >
-                      {t("unlockPublishing.form.field2.title")}
-                    </Label>
-                    <TextInput
-                      type={"text"}
-                      id={"department"}
-                      name={"department"}
-                      className="required w-[34rem]"
-                      required
-                    />
-                  </div>
-
-                  <div className="focus-group">
-                    <Label id={"label-goals"} htmlFor={"goals"} className="required" required>
-                      {t("unlockPublishing.form.field3.title")}
-                    </Label>
-                    <TextArea
-                      id={"goals"}
-                      name={"goals"}
-                      className="required w-[34rem] mt-4"
-                      required
-                      characterCountMessages={{
-                        part1: t("formElements.characterCount.part1"),
-                        part2: t("formElements.characterCount.part2"),
-                        part1Error: t("formElements.characterCount.part1-error"),
-                        part2Error: t("formElements.characterCount.part2-error"),
-                      }}
-                    />
-                  </div>
-
-                  <div className="flex mt-14">
-                    <Button
-                      type="submit"
-                      data-submit="unlock-publishing"
-                      className={` 
+                      <div className="flex mt-14">
+                        <Button
+                          type="submit"
+                          data-submit="unlock-publishing"
+                          className={` 
                           mr-8
                           bg-blue-dark text-white-default border-black-default py-4 px-8 rounded-lg border-2 border-solid
                           hover:text-white-default hover:bg-blue-light active:text-white-default active:bg-blue-active active:top-0.5
                           focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500
                         `}
-                      disabled={submitting}
-                    >
-                      {t("submitButton", { ns: "common" })}
-                    </Button>
-                    <StyledLink
-                      href={`/${i18n.language}/myforms/`}
-                      className={` 
+                          disabled={submitting}
+                        >
+                          {t("submitButton", { ns: "common" })}
+                        </Button>
+                        <StyledLink
+                          href={`/${i18n.language}/myforms/`}
+                          className={` 
                             no-underline visited:text-black-default 
                             bg-white-default text-black-default border-black-default py-4 px-8 rounded-lg border-2 border-solid
                             hover:text-white-default hover:bg-blue-light active:text-white-default active:bg-blue-active active:top-0.5
                             focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500
                           `}
-                    >
-                      {t("unlockPublishing.skipStepButton")}
-                    </StyledLink>
-                  </div>
-                </form>
+                        >
+                          {t("unlockPublishing.skipStepButton")}
+                        </StyledLink>
+                      </div>
+                    </form>
+                  </>
+                )}
               </>
             )}
           </Formik>
@@ -240,14 +235,14 @@ export default function UnlockPublishing() {
           <p className="mt-8 font-bold">{t("unlockPublishingSubmitted.whatNext.paragraph2")}</p>
           <p>{t("unlockPublishingSubmitted.whatNext.paragraph3")}</p>
           <p className="mt-8">{t("unlockPublishingSubmitted.whatNext.paragraph4")}</p>
-          <div className="flex mt-14">
+          <div className="mt-14 flex">
             <StyledLink
               href={`/${i18n.language}/myforms/`}
               className={` 
-                no-underline visited:text-white-default mr-8
-                bg-blue-dark text-white-default border-black-default py-4 px-8 rounded-lg border-2 border-solid
-                hover:text-white-default hover:bg-blue-light active:text-white-default active:bg-blue-active active:top-0.5
-                focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500
+                mr-8 rounded-lg border-2
+                border-solid border-black-default bg-blue-dark px-8 py-4 text-white-default no-underline visited:text-white-default
+                hover:bg-blue-light hover:text-white-default focus:bg-blue-focus focus:text-white-default focus:outline
+                focus:outline-[3px] focus:outline-offset-2 focus:outline-blue-focus active:top-0.5 active:bg-blue-active active:text-white-default disabled:cursor-not-allowed disabled:text-gray-500
               `}
             >
               {t("continue", { ns: "common" })}
