@@ -11,20 +11,8 @@ import { Session } from "next-auth";
 const mockGetSession = jest.mocked(getServerSession, { shallow: true });
 jest.mock("next-auth/next");
 
-let IsGCNotifyServiceAvailable = true;
-
-const mockSendEmail = {
-  sendEmail: jest.fn(() => {
-    if (IsGCNotifyServiceAvailable) {
-      return Promise.resolve();
-    } else {
-      return Promise.reject(new Error("something went wrong"));
-    }
-  }),
-};
-
-jest.mock("@lib/integration/notifyConnector", () => ({
-  getNotifyInstance: jest.fn(() => mockSendEmail),
+jest.mock("@lib/integration/freshdesk", () => ({
+  createTicket: jest.fn(() => Promise.resolve()),
 }));
 
 describe("Request publishing permission API tests (without active session)", () => {
@@ -57,6 +45,7 @@ describe("Request publishing permission API tests (with active session)", () => 
         name: "Testing Forms",
         privileges: [],
         acceptableUse: true,
+        hasSecurityQuestions: true,
       },
     };
 
@@ -123,27 +112,5 @@ describe("Request publishing permission API tests (with active session)", () => 
     await publish(req, res);
 
     expect(res.statusCode).toEqual(200);
-  });
-
-  it("Should fail if GC Notify service is unavailable", async () => {
-    IsGCNotifyServiceAvailable = false;
-
-    const { req, res } = createMocks({
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Origin: "http://localhost:3000",
-      },
-      body: {
-        managerEmail: "manager@cds-snc.ca",
-        department: "department",
-        goals: "do something",
-      },
-    });
-
-    await publish(req, res);
-
-    expect(res.statusCode).toEqual(500);
-    expect(JSON.parse(res._getData())).toMatchObject({ error: "Failed to send request" });
   });
 });

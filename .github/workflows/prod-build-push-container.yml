@@ -30,7 +30,7 @@ jobs:
 
       - name: Configure Production AWS credentials
         id: aws-form-viewer
-        uses: aws-actions/configure-aws-credentials@360ea313a73f8d3b7839fb5db64aecf801ad5fda
+        uses: aws-actions/configure-aws-credentials@8c3f20df09ac63af7b3ae3d7c91f105f857d8497
         with:
           aws-access-key-id: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
@@ -38,7 +38,7 @@ jobs:
 
       - name: Login to Production Amazon ECR
         id: login-ecr-production
-        uses: aws-actions/amazon-ecr-login@e20c7e407b9882916b0967c1ea26eeee047fe7fc
+        uses: aws-actions/amazon-ecr-login@865664b3240e20b35d3528593d496632704f48af
 
       - name: Tag Images for Production
         env:

@@ -3,6 +3,5 @@
   "submitToReliabilityQueue": false,
   "reCaptcha": false,
   "formTimer": false,
-  "supportForms": false,
   "experimentalBlocks": false
 }

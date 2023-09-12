@@ -23,21 +23,15 @@ const mockGetSession = jest.mocked(getServerSession, { shallow: true });
 
 const ddbMock = mockClient(DynamoDBDocumentClient);
 
-let IsGCNotifyServiceAvailable = true;
+const mockFunc = jest.fn();
 
-const mockSendEmail = {
-  sendEmail: jest.fn(() => {
-    if (IsGCNotifyServiceAvailable) {
-      return Promise.resolve();
-    } else {
-      return Promise.reject(new Error("something went wrong"));
-    }
+jest.mock("@lib/integration/freshdesk", () => ({
+  createTicket: jest.fn(() => {
+    mockFunc();
   }),
-};
-
-jest.mock("@lib/integration/notifyConnector", () => ({
-  getNotifyInstance: jest.fn(() => mockSendEmail),
 }));
+
+//
 
 const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
 
@@ -71,6 +65,7 @@ describe("Report problem with form submissions (with active session)", () => {
         name: "Testing Forms",
         privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
         acceptableUse: true,
+        hasSecurityQuestions: true,
       },
     };
 
@@ -103,7 +98,7 @@ describe("Report problem with form submissions (with active session)", () => {
     }
   );
 
-  it("API should reject request if payload is not valid (not an array)", async () => {
+  it("API should reject request if payload object entries is not valid (not an array)", async () => {
     const { req, res } = createMocks({
       method: "PUT",
       headers: {
@@ -111,7 +106,9 @@ describe("Report problem with form submissions (with active session)", () => {
         Origin: "http://localhost:3000",
       },
       body: {
-        key: "value",
+        entries: {
+          key: "value",
+        },
       },
     });
 
@@ -119,7 +116,7 @@ describe("Report problem with form submissions (with active session)", () => {
 
     expect(res.statusCode).toEqual(400);
     expect(JSON.parse(res._getData())).toMatchObject({
-      error: "JSON Validation Error: instance is not of a type(s) array",
+      error: "JSON Validation Error: instance.entries is not of a type(s) array",
     });
   });
 
@@ -130,7 +127,7 @@ describe("Report problem with form submissions (with active session)", () => {
         "Content-Type": "application/json",
         Origin: "http://localhost:3000",
       },
-      body: ["value1", "value2", "value3"],
+      body: { entries: ["value1", "value2", "value3"] },
     });
 
     await report(req, res);
@@ -149,7 +146,7 @@ describe("Report problem with form submissions (with active session)", () => {
       query: {
         form: 8,
       },
-      body: Array(21).map(() => "06-02-a1b2"),
+      body: { entries: Array(21).map(() => "06-02-a1b2") },
     });
 
     await report(req, res);
@@ -168,7 +165,7 @@ describe("Report problem with form submissions (with active session)", () => {
       query: {
         form: 8,
       },
-      body: ["06-02-a1b2"],
+      body: { entries: ["06-02-a1b2"] },
     });
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
@@ -198,7 +195,56 @@ describe("Report problem with form submissions (with active session)", () => {
     expect(JSON.parse(res._getData())).toEqual({
       reportedSubmissions: ["06-02-a1b2"],
     });
-    expect(mockSendEmail.sendEmail).toHaveBeenCalled();
+    expect(mockFunc).toHaveBeenCalled();
+    expect(mockedLogEvent).toHaveBeenCalledWith(
+      "1",
+      { id: "06-02-a1b2", type: "Response" },
+      "IdentifyProblemResponse",
+      "Identified problem response for form 8"
+    );
+  });
+
+  it("API should accept request if payload is valid and contains optional language parameter", async () => {
+    const { req, res } = createMocks({
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Origin: "http://localhost:3000",
+      },
+      query: {
+        form: 8,
+      },
+      body: { entries: ["06-02-a1b2"], language: "fr" },
+    });
+
+    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      users: [
+        {
+          id: "1",
+          name: "test",
+        },
+      ],
+    });
+
+    ddbMock.on(BatchGetCommand).resolves({
+      Responses: {
+        Vault: [
+          {
+            Name: "06-02-a1b2",
+            Status: "New",
+            ConfirmationCode: "c3f1277b-df86-4132-af7c-75bcee90db19",
+          },
+        ],
+      },
+    });
+
+    await report(req, res);
+
+    expect(res.statusCode).toEqual(200);
+    expect(JSON.parse(res._getData())).toEqual({
+      reportedSubmissions: ["06-02-a1b2"],
+    });
+    expect(mockFunc).toHaveBeenCalled();
     expect(mockedLogEvent).toHaveBeenCalledWith(
       "1",
       { id: "06-02-a1b2", type: "Response" },
@@ -217,7 +263,7 @@ describe("Report problem with form submissions (with active session)", () => {
       query: {
         form: 8,
       },
-      body: ["06-02-a1b2"],
+      body: { entries: ["06-02-a1b2"] },
     });
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
@@ -248,7 +294,7 @@ describe("Report problem with form submissions (with active session)", () => {
       submissionNamesAlreadyReported: ["06-02-a1b2"],
     });
     expect(ddbMock.commandCalls(TransactWriteCommand)).toStrictEqual([]);
-    expect(mockSendEmail.sendEmail).not.toHaveBeenCalled();
+    expect(mockFunc).not.toHaveBeenCalled();
     expect(mockedLogEvent).not.toHaveBeenCalled();
   });
 
@@ -262,7 +308,7 @@ describe("Report problem with form submissions (with active session)", () => {
       query: {
         form: 8,
       },
-      body: ["06-02-a1b2"],
+      body: { entries: ["06-02-a1b2"] },
     });
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
@@ -287,7 +333,7 @@ describe("Report problem with form submissions (with active session)", () => {
       invalidSubmissionNames: ["06-02-a1b2"],
     });
     expect(ddbMock.commandCalls(TransactWriteCommand)).toStrictEqual([]);
-    expect(mockSendEmail.sendEmail).not.toHaveBeenCalled();
+    expect(mockFunc).not.toHaveBeenCalled();
     expect(mockedLogEvent).not.toHaveBeenCalled();
   });
 
@@ -301,7 +347,7 @@ describe("Report problem with form submissions (with active session)", () => {
       query: {
         form: 8,
       },
-      body: ["06-02-a1b2"],
+      body: { entries: ["06-02-a1b2"] },
     });
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
@@ -331,49 +377,6 @@ describe("Report problem with form submissions (with active session)", () => {
 
     expect(res.statusCode).toEqual(500);
     expect(JSON.parse(res._getData()).error).toContain("Error on server side");
-    expect(mockedLogEvent).not.toHaveBeenCalled();
-  });
-
-  it("API should return an error if GC Notify service is unavailable", async () => {
-    IsGCNotifyServiceAvailable = false;
-
-    const { req, res } = createMocks({
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Origin: "http://localhost:3000",
-      },
-      query: {
-        form: 8,
-      },
-      body: ["06-02-a1b2"],
-    });
-
-    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
-      users: [
-        {
-          id: "1",
-          name: "test",
-        },
-      ],
-    });
-
-    ddbMock.on(BatchGetCommand).resolves({
-      Responses: {
-        Vault: [
-          {
-            Name: "06-02-a1b2",
-            Status: "New",
-            ConfirmationCode: "c3f1277b-df86-4132-af7c-75bcee90db19",
-          },
-        ],
-      },
-    });
-
-    await report(req, res);
-
-    expect(res.statusCode).toEqual(500);
-    expect(JSON.parse(res._getData())).toMatchObject({ error: "Error on server side" });
     expect(mockedLogEvent).not.toHaveBeenCalled();
   });
 });

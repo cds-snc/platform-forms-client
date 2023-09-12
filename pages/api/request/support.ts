@@ -1,11 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { cors, middleware, csrfProtected } from "@lib/middleware";
-import { getNotifyInstance } from "@lib/integration/notifyConnector";
 import { logMessage } from "@lib/logger";
+import { createTicket } from "@lib/integration/freshdesk";
 
 // Allows an authenticated or unauthenticated user to send an email requesting help
 const requestSupport = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { supportType, name, email, request, description, department, branch, jobTitle } = req.body;
+  const { supportType, name, email, request, description, department, branch, jobTitle, language } =
+    req.body;
 
   if (supportType === "contactus") {
     if (!name || !email || !request || !description || !department || !branch || !jobTitle) {
@@ -18,16 +19,6 @@ const requestSupport = async (req: NextApiRequest, res: NextApiResponse) => {
   } else {
     return res.status(400).json({ error: "Malformed request" });
   }
-
-  const to =
-    supportType === "contactus"
-      ? process.env.EMAIL_ADDRESS_CONTACT_US
-      : process.env.EMAIL_ADDRESS_SUPPORT;
-
-  const subject =
-    supportType === "contactus"
-      ? "Contact request / Demande de soutien"
-      : "Support request / Demande de soutien";
 
   // Request may be a list of strings (checkbox), format it a bit if so, or just a string (radio)
   const requestParsed =
@@ -42,77 +33,78 @@ const requestSupport = async (req: NextApiRequest, res: NextApiResponse) => {
   let emailBody = "";
   if (supportType === "contactus") {
     emailBody = `
-${name} (${email}) has requested we contact them for the form-builder.
+${name} (${email}) has requested we contact them for the form-builder.<br/>
+<br/>
+Department or agency:<br/>
+${department}<br/>
 
-Department or agency:
-${department}
-
-Branch or sector: 
-${branch}
-
-Job Title:
-${jobTitle}
-
-Contact request:
-${requestParsed}
-
-Additional details:
-${description}
-
+Branch or sector:<br/>
+${branch}<br/>
+<br/>
+Job Title:<br/>
+${jobTitle}<br/>
+<br/>
+Contact request:<br/>
+${requestParsed}<br/>
+<br/>
+Additional details:<br/>
+${description}<br/>
+<br/>
 ****
-${name} (${email}) a demandé que nous les contactions pour le générateur de formulaires..
-
-Ministère ou organisme:
-${department}
-
-Direction ou secteur:
-${branch}
-
-Titre de poste:
-${jobTitle}
-
-Demande de contact soutien:
-${requestParsed}
-
-Détails supplémentaires:
-${description}
+${name} (${email}) a demandé que nous les contactions pour le générateur de formulaires..<br/>
+<br/>
+Ministère ou organisme:<br/>
+${department}<br/>
+<br/>
+Direction ou secteur:<br/>
+${branch}<br/>
+<br/>
+Titre de poste:<br/>
+${jobTitle}<br/>
+<br/>
+Demande de contact soutien:<br/>
+${requestParsed}<br/>
+<br/>
+Détails supplémentaires:<br/>
+${description}<br/>
     `;
   } else {
     emailBody = `
-${name} (${email}) has requested support for the form-builder.
-
-Support request:
-${requestParsed}
-
-Additional details:
-${description}
-
-****
-${name} (${email}) a demandé de soutien des form-builder.
-
-Demande de soutien:
-${requestParsed}
-
-Détails supplémentaires:
-${description}
+${name} (${email}) has requested support for the form-builder.<br/>
+<br/>
+Support request:<br/>
+${requestParsed}<br/>
+<br/>
+Additional details:<br/>
+${description}<br/>
+<br/>
+****<br/>
+${name} (${email}) a demandé de soutien des form-builder.<br/>
+<br/>
+Demande de soutien:<br/>
+${requestParsed}<br/>
+<br/>
+Détails supplémentaires:<br/>
+${description}<br/>
 `;
   }
 
-  try {
-    const templateID = process.env.TEMPLATE_ID;
-    const notifyClient = getNotifyInstance();
+  const parsedSupportType = supportType === "contactus" ? "contact" : "problem";
 
-    // Here is the documentation for the `sendEmail` function:
-    // https://docs.notifications.service.gov.uk/node.html#send-an-email
-    await notifyClient.sendEmail(templateID, to, {
-      personalisation: {
-        subject: subject,
-        formResponse: emailBody,
-      },
-      reference: null,
+  try {
+    const result = await createTicket({
+      type: parsedSupportType,
+      name,
+      email,
+      description: emailBody,
+      language,
     });
 
-    return res.status(200).json({});
+    if (result && result?.status >= 400) {
+      throw new Error(`Freshdesk error: ${result.status}`);
+    }
+
+    return res.status(200).json(result);
   } catch (error) {
     logMessage.error(error);
     return res.status(500).json({ error: "Internal Service Error: Failed to send request" });

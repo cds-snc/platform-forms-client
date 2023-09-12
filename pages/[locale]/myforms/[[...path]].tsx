@@ -12,7 +12,10 @@ import { CardGrid } from "@components/myforms/CardGrid/CardGrid";
 import { TabPanel } from "@components/myforms/Tabs/TabPanel";
 import { LeftNavigation } from "@components/myforms/LeftNav/LeftNavigation";
 import { StyledLink } from "@components/globals/StyledLink/StyledLink";
-import { clearTemplateStore } from "@components/form-builder/store/useTemplateStore";
+import {
+  TemplateStoreProvider,
+  clearTemplateStore,
+} from "@components/form-builder/store/useTemplateStore";
 import { ResumeEditingForm } from "@components/form-builder/app/shared";
 import { getUnprocessedSubmissionsForUser } from "@lib/users";
 import { TwoColumnLayout } from "@components/globals/layouts";
@@ -117,7 +120,13 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
 };
 
 RenderMyForms.getLayout = (page: ReactElement) => {
-  return <TwoColumnLayout leftColumnContent={<LeftNavigation />}>{page}</TwoColumnLayout>;
+  return (
+    <TemplateStoreProvider
+      {...{ ...(page.props.initialForm && page.props.initialForm), locale: page.props.locale }}
+    >
+      <TwoColumnLayout leftColumnContent={<LeftNavigation />}>{page}</TwoColumnLayout>
+    </TemplateStoreProvider>
+  );
 };
 
 export const getServerSideProps = requireAuthentication(
