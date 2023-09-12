@@ -79,6 +79,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
 
     if (submissionsFromSubmissionNames.submissionsToReport.length > 0) {
       await report(formId, submissionsFromSubmissionNames.submissionsToReport, dynamoDbClient);
+      // Note: may throw an error and handled in below catch e.g. if api key missing
       await notifySupport(
         formId,
         submissionsFromSubmissionNames.submissionsToReport.map((submission) => submission.name),
@@ -251,8 +252,7 @@ async function notifySupport(
   userDescription: string,
   language = "en"
 ): Promise<void> {
-  try {
-    const description = `
+  const description = `
   User (${userEmailAddress}) reported problems with some of the submissions for form \`${formId}\`.<br/>
   <br/>
   Submission names:<br/>
@@ -270,19 +270,16 @@ async function notifySupport(
   ${userDescription}<br/>
   `;
 
-    createTicket({
-      type: "problem",
-      name: userEmailAddress,
-      email: userEmailAddress,
-      description,
-      language,
-    });
-  } catch (error) {
-    logMessage.error(
-      `Failed to create ticket / contact the support team that user:${userEmailAddress} reported problems with form submissions [${submissionNames.map(
-        (submissionName) => submissionName
-      )}] on form \`${formId}\` at:${Date.now()}`
-    );
+  const result = await createTicket({
+    type: "problem",
+    name: userEmailAddress,
+    email: userEmailAddress,
+    description,
+    language,
+  });
+
+  if (result && result?.status >= 400) {
+    throw new Error(`Freshdesk error: ${result.status}`);
   }
 }
 

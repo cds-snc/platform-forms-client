@@ -57,6 +57,7 @@ export const DownloadTableDialog = ({
   unknownErrorDescription,
   unknownErrorDescriptionLink,
   tempType,
+  setIsServerError,
 }: {
   setIsShowDialog: React.Dispatch<React.SetStateAction<boolean>>;
   apiUrl: string;
@@ -79,6 +80,7 @@ export const DownloadTableDialog = ({
   unknownErrorDescription: string;
   unknownErrorDescriptionLink: string;
   tempType?: string;
+  setIsServerError?: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const { t, i18n } = useTranslation("form-builder-responses");
   const router = useRouter();
@@ -159,7 +161,12 @@ export const DownloadTableDialog = ({
       })
       .catch((err) => {
         logMessage.error(err as Error);
-        setStatus(DialogStates.UNKNOWN_ERROR);
+        if (tempType === "report" && setIsServerError) {
+          handleClose();
+          setIsServerError(true);
+        } else {
+          setStatus(DialogStates.UNKNOWN_ERROR);
+        }
       });
   };
 
