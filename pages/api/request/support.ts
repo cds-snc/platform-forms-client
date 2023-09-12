@@ -99,6 +99,11 @@ ${description}<br/>
       description: emailBody,
       language,
     });
+
+    if (result && result?.status >= 400) {
+      throw new Error(`Freshdesk error: ${result.status} ${result.statusText}`);
+    }
+
     return res.status(200).json(result);
   } catch (error) {
     logMessage.error(error);

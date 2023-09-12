@@ -81,21 +81,20 @@ export const createTicket = async ({
   description,
   language,
 }: createTicketProps) => {
-  try {
-    const username = process.env.FRESHDESK_API_KEY;
-    const password = "X";
-    const data = formatTicketData({ type, name, email, description, language });
-    const result = await fetch("https://cds-snc.freshdesk.com/api/v2/tickets", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Basic " + btoa(username + ":" + password),
-      },
-      body: JSON.stringify(data),
-    });
+  const username = process.env.FRESHDESK_API_KEY;
+  const password = "X";
+  const data = formatTicketData({ type, name, email, description, language });
 
-    return result;
-  } catch (error) {
-    logMessage.error("create ticket failed:" + error);
-  }
+  if (!username) throw new Error("Freshdesk API key not found");
+
+  const result = await fetch("https://cds-snc.freshdesk.com/api/v2/tickets", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Basic " + btoa(username + ":" + password),
+    },
+    body: JSON.stringify(data),
+  });
+
+  return result;
 };
