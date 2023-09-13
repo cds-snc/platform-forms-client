@@ -7,14 +7,18 @@ interface FooterProps {
   displayFormBuilderFooter?: boolean;
 }
 
+const BulletPoint = () => {
+  return <span className="px-3">&#x2022;</span>;
+};
+
 export const FormBuilderLinks = () => {
   const { t } = useTranslation("common");
   return (
     <>
       <a href={t("footer.terms-of-use.link")}>{t("footer.terms-of-use.desc")}</a>
-      &nbsp;&nbsp;&#x2022;&nbsp;&nbsp;
+      <BulletPoint />
       <a href={t("footer.sla.link")}>{t("footer.sla.desc")}</a>
-      &nbsp;&nbsp;&#x2022;&nbsp;&nbsp;
+      <BulletPoint />
       <a href={t("footer.support.link")}>{t("footer.support.desc")}</a>
     </>
   );
@@ -23,9 +27,7 @@ export const FormBuilderLinks = () => {
 const DefaultLinks = () => {
   const { t } = useTranslation("common");
   return (
-    <>
-      <a href={t("footer.terms-and-conditions.link")}>{t("footer.terms-and-conditions.desc")}</a>
-    </>
+    <a href={t("footer.terms-and-conditions.link")}>{t("footer.terms-and-conditions.desc")}</a>
   );
 };
 
