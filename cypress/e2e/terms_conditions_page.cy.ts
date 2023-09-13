@@ -1,6 +1,6 @@
 describe("Terms and Conditions Page", () => {
   beforeEach(() => {
-    cy.visit("/en/terms-and-conditions");
+    cy.visitPage("/en/terms-and-conditions");
   });
   it("Get page content", () => {
     cy.get("h1").should("contain", "Terms and conditions");

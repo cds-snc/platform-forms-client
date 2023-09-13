@@ -2,7 +2,7 @@ import { NextData } from "types";
 
 describe("Form builder names and titles", () => {
   beforeEach(() => {
-    cy.visit("/form-builder/edit", {
+    cy.visitPage("/form-builder/edit", {
       onBeforeLoad: (win) => {
         win.sessionStorage.clear();
         let nextData: NextData;

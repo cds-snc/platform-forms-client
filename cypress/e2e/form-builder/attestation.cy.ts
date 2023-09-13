@@ -1,7 +1,7 @@
 import { NextData } from "types";
 describe("Form builder attestation", () => {
   beforeEach(() => {
-    cy.visit("/form-builder/edit", {
+    cy.visitPage("/form-builder/edit", {
       onBeforeLoad: (win) => {
         win.sessionStorage.clear();
         let nextData: NextData;
@@ -36,7 +36,7 @@ describe("Form builder attestation", () => {
     cy.get("#required-1-id").should("be.disabled");
     cy.get("#required-1-id").should("be.checked");
 
-    cy.visit("/form-builder/preview");
+    cy.visitPage("/form-builder/preview");
     cy.get("#label-1").contains("all checkboxes required").should("exist");
     cy.get("label").contains("Condition 1").should("exist");
     cy.get("label").contains("Condition 2").should("exist");
