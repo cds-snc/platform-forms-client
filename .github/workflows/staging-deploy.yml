@@ -40,11 +40,6 @@ jobs:
         # v1 as of Jan 28 2021
         uses: aws-actions/amazon-ecr-login@865664b3240e20b35d3528593d496632704f48af
 
-      - name: Get Cluster Name
-        id: cluster
-        run: |
-          echo "##[set-output name=name;]$(aws ecs list-clusters | jq -r '.clusterArns[0]' | cut -f 2 -d "/" )"
-
       - name: Download Form Viewer task definition
         id: download-taskdef-form-viewer
         run: |
@@ -74,7 +69,7 @@ jobs:
         with:
           task-definition: ${{ steps.taskdef-form-viewer.outputs.task-definition }}
           service: form-viewer
-          cluster: ${{ steps.cluster.outputs.name }}
+          cluster: Forms
           wait-for-service-stability: true
           codedeploy-appspec: ${{ github.workspace }}/form-viewer-appspec.json
 

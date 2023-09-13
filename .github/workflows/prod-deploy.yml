@@ -61,17 +61,22 @@ jobs:
           CONTAINER_NAME=${{ steps.download-taskdef-form-viewer.outputs.container_name }}
           TASKDEF_ARN=`jq -r '.taskDefinitionArn' form_viewer.json | cut -f 1-6 -d "/"`
           jq --argjson port "$CONTAINER_PORT" --arg cname "$CONTAINER_NAME" --arg taskdefarn "$TASKDEF_ARN" '.Resources[0].TargetService.Properties.TaskDefinition = $taskdefarn | .Resources[0].TargetService.Properties.LoadBalancerInfo.ContainerName = $cname | .Resources[0].TargetService.Properties.LoadBalancerInfo.ContainerPort = $port' config/infrastructure/aws/appspec-template.json > form-viewer-appspec.json
+          
+      - name: Sanity test appspec and form viewer task definition
+        run: |
+          aws s3 cp ${{ github.workspace }}/form-viewer-appspec.json s3://forms-production-vault-file-storage/${{ github.run_id }}/form-viewer-appspec.json
+          aws s3 cp ${{ steps.taskdef-form-viewer.outputs.task-definition }} s3://forms-production-vault-file-storage/${{ github.run_id }}/form-viewer-task-def.json
 
-      - name: Deploy image for Form Viewer
-        timeout-minutes: 10
-        # v1.4.11
-        uses: aws-actions/amazon-ecs-deploy-task-definition@37ec59d6c3e314c12279ab3e75395e72da65f1c6
-        with:
-          task-definition: ${{ steps.taskdef-form-viewer.outputs.task-definition }}
-          service: form-viewer
-          cluster: Forms
-          wait-for-service-stability: true
-          codedeploy-appspec: ${{ github.workspace }}/form-viewer-appspec.json
+      # - name: Deploy image for Form Viewer
+      #   timeout-minutes: 10
+      #   # v1.4.11
+      #   uses: aws-actions/amazon-ecs-deploy-task-definition@37ec59d6c3e314c12279ab3e75395e72da65f1c6
+      #   with:
+      #     task-definition: ${{ steps.taskdef-form-viewer.outputs.task-definition }}
+      #     service: form-viewer
+      #     cluster: Forms
+      #     wait-for-service-stability: true
+      #     codedeploy-appspec: ${{ github.workspace }}/form-viewer-appspec.json
 
       - name: Logout of Amazon ECR
         if: always()
