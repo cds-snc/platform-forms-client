@@ -27,7 +27,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
 
   const formId = req.query.form;
 
-  if (Array.isArray(formId) || !formId || !Array.isArray(req.body.entries)) {
+  if (
+    Array.isArray(formId) ||
+    !formId ||
+    !Array.isArray(req.body.entries) ||
+    !req.body.description
+  ) {
     return res.status(400).json({ error: "Bad request" });
   }
 
@@ -38,6 +43,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
       error: `Too many submission names. Limit is ${MAXIMUM_SUBMISSION_NAMES_PER_REQUEST}.`,
     });
   }
+
+  const description: string = req.body.description;
 
   // Allows setting manually. Could also potentially get from the request header or add to session
   const language = req.body.language || "en";
@@ -72,10 +79,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
 
     if (submissionsFromSubmissionNames.submissionsToReport.length > 0) {
       await report(formId, submissionsFromSubmissionNames.submissionsToReport, dynamoDbClient);
+      // Note: may throw an error and handled in below catch e.g. if api key missing
       await notifySupport(
         formId,
         submissionsFromSubmissionNames.submissionsToReport.map((submission) => submission.name),
         userEmail,
+        description,
         language
       );
       submissionsFromSubmissionNames.submissionsToReport.forEach((problem) =>
@@ -240,34 +249,37 @@ async function notifySupport(
   formId: string,
   submissionNames: string[],
   userEmailAddress: string,
+  userDescription: string,
   language = "en"
 ): Promise<void> {
-  try {
-    const description = `
+  const description = `
   User (${userEmailAddress}) reported problems with some of the submissions for form \`${formId}\`.<br/>
   <br/>
   Submission names:<br/>
   ${submissionNames.map((submissionName) => `\`${submissionName}\``).join(" ; ")}<br/>
+  <br/>
+  Description:<br/>
+  ${userDescription}<br/>
   ****<br/>
   L'utilisateur (${userEmailAddress}) a signalé avoir rencontré des problèmes avec certaines des soumissions du formulaire \`${formId}\`.<br/>
   <br/>
   Nom des soumissions:<br/>
   ${submissionNames.map((submissionName) => `\`${submissionName}\``).join(" ; ")}<br/>
+  <br/>
+  Description:<br/>
+  ${userDescription}<br/>
   `;
 
-    createTicket({
-      type: "problem",
-      name: userEmailAddress,
-      email: userEmailAddress,
-      description,
-      language,
-    });
-  } catch (error) {
-    logMessage.error(
-      `Failed to create ticket / contact the support team that user:${userEmailAddress} reported problems with form submissions [${submissionNames.map(
-        (submissionName) => submissionName
-      )}] on form \`${formId}\` at:${Date.now()}`
-    );
+  const result = await createTicket({
+    type: "problem",
+    name: userEmailAddress,
+    email: userEmailAddress,
+    description,
+    language,
+  });
+
+  if (result && result?.status >= 400) {
+    throw new Error(`Freshdesk error: ${result.status}`);
   }
 }
 

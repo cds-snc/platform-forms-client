@@ -1,6 +1,11 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useTranslation } from "next-i18next";
-import { useDialogRef, Dialog, LineItemEntries } from "@components/form-builder/app/shared";
+import {
+  useDialogRef,
+  Dialog,
+  LineItemEntries,
+  TextArea,
+} from "@components/form-builder/app/shared";
 import { Button, Alert } from "@components/globals";
 import { randomId } from "@lib/clientHelpers";
 import axios from "axios";
@@ -23,6 +28,7 @@ export enum DialogStates {
   MIN_ERROR,
   MAX_ERROR,
   FORMAT_ERROR,
+  DESCRIPTION_EMPTY_ERROR,
   FAILED_ERROR,
   UNKNOWN_ERROR,
 }
@@ -50,6 +56,8 @@ export const DownloadTableDialog = ({
   unknownErrorTitle,
   unknownErrorDescription,
   unknownErrorDescriptionLink,
+  tempType,
+  setIsServerError,
 }: {
   setIsShowDialog: React.Dispatch<React.SetStateAction<boolean>>;
   apiUrl: string;
@@ -71,10 +79,13 @@ export const DownloadTableDialog = ({
   unknownErrorTitle: string;
   unknownErrorDescription: string;
   unknownErrorDescriptionLink: string;
+  tempType?: string;
+  setIsServerError?: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const { t, i18n } = useTranslation("form-builder-responses");
   const router = useRouter();
   const [entries, setEntries] = useState<string[]>([]);
+  const descriptionRef = useRef("");
   const [status, setStatus] = useState<DialogStates>(DialogStates.EDITTING);
   const [errorEntriesList, setErrorEntriesList] = useState<string[]>([]);
   const dialogRef = useDialogRef();
@@ -102,6 +113,16 @@ export const DownloadTableDialog = ({
       return;
     }
 
+    // TEMP
+    if (tempType === "report" && descriptionRef.current === "") {
+      setStatus(DialogStates.DESCRIPTION_EMPTY_ERROR);
+      return;
+    }
+    const data =
+      tempType === "report"
+        ? { entries, language: i18n.language, description: descriptionRef.current }
+        : entries;
+
     const url = apiUrl;
     return axios({
       url,
@@ -110,7 +131,7 @@ export const DownloadTableDialog = ({
         "Content-Type": "application/json",
       },
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-      data: { entries, language: i18n.language },
+      data,
     })
       .then(({ data }) => {
         // Refreshes data. Needed for error cases as well since may be a mix of valid/invalid codes
@@ -140,7 +161,12 @@ export const DownloadTableDialog = ({
       })
       .catch((err) => {
         logMessage.error(err as Error);
-        setStatus(DialogStates.UNKNOWN_ERROR);
+        if (tempType === "report" && setIsServerError) {
+          handleClose();
+          setIsServerError(true);
+        } else {
+          setStatus(DialogStates.UNKNOWN_ERROR);
+        }
       });
   };
 
@@ -206,6 +232,42 @@ export const DownloadTableDialog = ({
               status={status}
               setStatus={setStatus}
             ></LineItemEntries>
+
+            {tempType === "report" && (
+              <>
+                <label
+                  data-testid="label"
+                  className="block mb-2 mt-10 font-bold"
+                  htmlFor="description"
+                  id="description-label"
+                >
+                  {t("downloadResponsesModals.reportProblemsDialog.describeProblem")}{" "}
+                  <span className="text-[#bc3332]">({t("required", { ns: "common" })})</span>
+                </label>
+                <div
+                  role="alert"
+                  className={`border-l-4 border-red bg-red-50 p-3 ${
+                    status === DialogStates.DESCRIPTION_EMPTY_ERROR ? "" : "visually-hidden"
+                  }`}
+                >
+                  {status === DialogStates.DESCRIPTION_EMPTY_ERROR && (
+                    <p className="text-sm font-bold">
+                      {t("downloadResponsesModals.reportProblemsDialog.errors.notEmpty")}
+                    </p>
+                  )}
+                </div>
+                <TextArea
+                  id="description"
+                  name="description"
+                  className="h-32 w-full box-border border-black-default border-2 rounded-md"
+                  onChange={(e) => {
+                    if (descriptionRef.current !== undefined) {
+                      descriptionRef.current = e.target.value;
+                    }
+                  }}
+                />
+              </>
+            )}
 
             <p className="mt-8">{nextSteps}</p>
             <div className="my-8 flex">

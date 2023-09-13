@@ -30,12 +30,12 @@ export const formatTicketData = ({
       tags: [hostTag, "Forms_Request_GoLive"],
     },
     contact: {
-      subject: "Question from GC Forms Portal",
+      subject: "Question from GC Forms Portal / Question du portail Formulaires GC",
       type: "Question",
       tags: [hostTag],
     },
     problem: {
-      subject: "Problem with GC Forms",
+      subject: "Problem with GC Forms / Problème avec Formulaires GC",
       type: "Problem",
       tags: [hostTag],
     },

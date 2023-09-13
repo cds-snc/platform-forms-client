@@ -116,7 +116,8 @@ describe("Report problem with form submissions (with active session)", () => {
 
     expect(res.statusCode).toEqual(400);
     expect(JSON.parse(res._getData())).toMatchObject({
-      error: "JSON Validation Error: instance.entries is not of a type(s) array",
+      error:
+        'JSON Validation Error: instance.entries is not of a type(s) array,instance requires property "description"',
     });
   });
 
@@ -146,7 +147,7 @@ describe("Report problem with form submissions (with active session)", () => {
       query: {
         form: 8,
       },
-      body: { entries: Array(21).map(() => "06-02-a1b2") },
+      body: { entries: Array(21).map(() => "06-02-a1b2"), description: "test" },
     });
 
     await report(req, res);
@@ -165,7 +166,7 @@ describe("Report problem with form submissions (with active session)", () => {
       query: {
         form: 8,
       },
-      body: { entries: ["06-02-a1b2"] },
+      body: { entries: ["06-02-a1b2"], description: "test" },
     });
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
@@ -214,7 +215,7 @@ describe("Report problem with form submissions (with active session)", () => {
       query: {
         form: 8,
       },
-      body: { entries: ["06-02-a1b2"], language: "fr" },
+      body: { entries: ["06-02-a1b2"], description: "test", language: "fr" },
     });
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
@@ -263,7 +264,7 @@ describe("Report problem with form submissions (with active session)", () => {
       query: {
         form: 8,
       },
-      body: { entries: ["06-02-a1b2"] },
+      body: { entries: ["06-02-a1b2"], description: "test" },
     });
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
@@ -308,7 +309,7 @@ describe("Report problem with form submissions (with active session)", () => {
       query: {
         form: 8,
       },
-      body: { entries: ["06-02-a1b2"] },
+      body: { entries: ["06-02-a1b2"], description: "test" },
     });
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
@@ -347,7 +348,7 @@ describe("Report problem with form submissions (with active session)", () => {
       query: {
         form: 8,
       },
-      body: { entries: ["06-02-a1b2"] },
+      body: { entries: ["06-02-a1b2"], description: "test" },
     });
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
