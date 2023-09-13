@@ -31,16 +31,14 @@ describe("Login Page", () => {
       );
     });
     it("Displays an error message when submitting an invalid email", () => {
-      cy.get("input[id='username']").type("myemail@cds-snc");
-      cy.get("input[id='username']").should("have.value", "myemail@cds-snc");
+      cy.typeInField("input[id='username']", "myemail@cds-snc");
       cy.get("button[type='submit']").should("be.visible");
       cy.get("button[type='submit']").click();
       cy.get("[id='errorMessageusername']").should("be.visible");
       cy.get("[id='errorMessageusername']").should("contain", "Enter a valid email address.");
     });
     it("Displays no error message when submitting a valid email", () => {
-      cy.get("input[id='username']").type("test@cds-snc.ca");
-      cy.get("input[id='username']").should("have.value", "test@cds-snc.ca");
+      cy.typeInField("input[id='username']", "test@cds-snc.ca");
       cy.get("button[type='submit']").should("be.visible");
       cy.get("button[type='submit']").click();
       cy.get("[id='errorMessageusername']").should("not.exist");
@@ -57,11 +55,7 @@ describe("Login Page", () => {
     });
 
     it("Displays an error message when submitting a password greater than 50 characters", () => {
-      cy.get("input[id='password']").type("AAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaH");
-      cy.get("input[id='password']").should(
-        "have.value",
-        "AAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaH"
-      );
+      cy.typeInField("input[id='password']", "AAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaH");
       cy.get("button[type='submit']").should("be.visible");
       cy.get("button[type='submit']").click();
       cy.get("[id='errorMessagepassword']").should(
@@ -71,11 +65,7 @@ describe("Login Page", () => {
     });
 
     it("Displays no error message when submitting a valid password", () => {
-      cy.get("input[id='password']").type("AAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-      cy.get("input[id='password']").should(
-        "have.value",
-        "AAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-      );
+      cy.typeInField("input[id='password']", "AAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
       cy.get("button[type='submit']").should("be.visible");
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessagepassword']").should("not.exist");
@@ -86,10 +76,8 @@ describe("Login Page", () => {
       cy.visitPage("/en/auth/login");
       cy.get("input[id='username']").should("be.visible");
       cy.get("input[id='password']").should("be.visible");
-      cy.get("input[id='username']").type("test.user@cds-snc.ca");
-      cy.get("input[id='username']").should("have.value", "test.user@cds-snc.ca");
-      cy.get("input[id='password']").type("testTesttest");
-      cy.get("input[id='password']").should("have.value", "testTesttest");
+      cy.typeInField("input[id='username']", "test.user@cds-snc.ca");
+      cy.typeInField("input[id='password']", "testTesttest");
       cy.get("button[type='submit']").should("be.visible");
       cy.get("button[type='submit']").click();
       cy.get("[id='verificationCodeForm']").should("be.visible");
@@ -106,24 +94,21 @@ describe("Login Page", () => {
     });
     it("Displays an error message when submitting wrong number of characters.", () => {
       cy.get("input[id='verificationCode']").should("be.visible");
-      cy.get("input[id='verificationCode']").type("12");
-      cy.get("input[id='verificationCode']").should("have.value", "12");
+      cy.typeInField("input[id='verificationCode']", "12");
       cy.get("button[type='submit']").should("be.visible");
       cy.get("button[type='submit']").click();
       cy.get("[data-testid='errorMessage']").should("be.visible");
     });
     it("Displays an error message when submitting a symbol in the verification code.", () => {
       cy.get("input[id='verificationCode']").should("be.visible");
-      cy.get("input[id='verificationCode']").type("12/34");
-      cy.get("input[id='verificationCode']").should("have.value", "12/34");
+      cy.typeInField("input[id='verificationCode']", "12/34");
       cy.get("button[type='submit']").should("be.visible");
       cy.get("button[type='submit']").click();
       cy.get("[data-testid='errorMessage']").should("be.visible");
     });
     it("Sucessfully submits a code", () => {
       cy.get("input[id='verificationCode']").should("be.visible");
-      cy.get("input[id='verificationCode']").type("12345");
-      cy.get("input[id='verificationCode']").should("have.value", "12345");
+      cy.typeInField("input[id='verificationCode']", "12345");
       cy.get("button[type='submit']").should("be.visible");
       cy.get("button[type='submit']").click();
       cy.url().should("contain", "/en/auth/policy");

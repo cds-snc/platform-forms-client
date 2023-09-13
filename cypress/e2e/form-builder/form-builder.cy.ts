@@ -35,27 +35,27 @@ describe("Test FormBuilder", () => {
 
   it("Designs a form", () => {
     cy.visitPage("/form-builder/edit");
-    cy.get("#formTitle").type("Cypress Test Form");
+    cy.typeInField("#formTitle", "Cypress Test Form");
     cy.get("a").contains("Edit").should("have.class", "font-bold");
-    cy.get(`[aria-label="Form introduction"]`).type("form intro");
+    cy.typeInField(`[aria-label="Form introduction"]`, "form intro");
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="radio"]').click();
     cy.get("button").contains("Select block").click();
 
-    cy.get("#item-1").type("Question 1");
-    cy.get("#option--1--1").type("option 1");
+    cy.typeInField("#item-1", "Question 1");
+    cy.typeInField("#option--1--1", "option 1");
     cy.get("button").contains("Add an option").click();
-    cy.get("#option--1--2").type("option 2");
-    cy.get(`[aria-label="Privacy statement"]`).type("privacy statement");
-    cy.get(`[aria-label="Confirmation page and message"]`).type("confirmation page");
+    cy.typeInField("#option--1--2", "option 2");
+    cy.typeInField(`[aria-label="Privacy statement"]`, "privacy statement");
+    cy.typeInField(`[aria-label="Confirmation page and message"]`, "confirmation page");
     cy.get("#item-1").click();
     cy.get("button").contains("More").click();
     // open modal
     cy.get("h2").should("contain", "More options");
     cy.get("#title--modal--0").should("have.value", "Question 1");
-    cy.get("#title--modal--0").type("-1");
-    cy.get("#description--modal--0").type("Question 1 description");
+    cy.typeInField("#title--modal--0", "-1", "Question 1-1");
+    cy.typeInField("#description--modal--0", "Question 1 description");
     cy.get("#required-0-id-modal").click();
     cy.get('[data-testid="modal-content"] button').contains("Save").click({ force: true });
 

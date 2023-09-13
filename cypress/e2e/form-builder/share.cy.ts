@@ -34,7 +34,7 @@ describe("Form builder share", () => {
   });
 
   it("Renders share flyout", () => {
-    cy.get("#fileName").type("Cypress Share Test Form");
+    cy.typeInField("#fileName", "Cypress Share Test Form");
     cy.get("button").contains("Share").click();
     cy.get("[role='menuitem']").should("have.length", 1);
     cy.get("span").contains("Share by email").click();

@@ -5,8 +5,8 @@ describe("Deactivated Page", () => {
 
   it("Reaches deactivated page after login", () => {
     cy.visitPage("/en/auth/login");
-    cy.get("input[id='username']").type("test.deactivated@cds-snc.ca");
-    cy.get("input[id='password']").type("testTesttest");
+    cy.typeInField("input[id='username']", "test.deactivated@cds-snc.ca");
+    cy.typeInField("input[id='password']", "testTesttest");
     cy.get("button[type='submit']").click();
 
     // Deactivated screen shows

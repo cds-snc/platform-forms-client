@@ -18,8 +18,7 @@ describe("Forms Functionality", () => {
       cy.get(".gc-error-message").contains("Complete the required field to continue.");
     });
     it("fills the text field successfully and submits the form", () => {
-      cy.get("input[id='2']").type("Test Value");
-      cy.get("input[id='2']").should("have.value", "Test Value");
+      cy.typeInField("input[id='2']", "Test Value");
       cy.get("[type='submit']").click();
       cy.get("#submitted-thank-you").contains("Submitted thank you!");
     });
@@ -31,16 +30,14 @@ describe("Forms Functionality", () => {
       cy.visitForm(formID);
     });
     it("should display alert message when submitting too quickly", () => {
-      cy.get("input[id='2']").type("Test Value");
-      cy.get("input[id='2']").should("have.value", "Test Value");
+      cy.typeInField("input[id='2']", "Test Value");
       cy.get("[type='submit']").click();
       cy.get("[role='alert']").should("be.visible");
       cy.get("[role='alert']").contains("Button cannot be used");
     });
     it("should display the 'button ready' alert after waiting for delay", () => {
       cy.clock();
-      cy.get("input[id='2']").type("Test Value");
-      cy.get("input[id='2']").should("have.value", "Test Value");
+      cy.typeInField("input[id='2']", "Test Value");
       cy.tick(1000);
       cy.get("[type='submit']").click();
       cy.get("[role='alert']").should("be.visible");
@@ -51,8 +48,7 @@ describe("Forms Functionality", () => {
     it("should submit the button after the proper delay", () => {
       cy.clock();
       cy.tick(1000);
-      cy.get("input[id='2']").type("Test Value");
-      cy.get("input[id='2']").should("have.value", "Test Value");
+      cy.typeInField("input[id='2']", "Test Value");
       cy.get("[type='submit']").click();
       cy.get("[role='alert']").should("be.visible");
       cy.get("[role='alert']").contains("Button cannot be used");

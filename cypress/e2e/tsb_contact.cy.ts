@@ -13,13 +13,10 @@ describe("TSB Contact Form functionality", () => {
     cy.get("h1").contains("Transportation Safety Board of Canada general enquiries");
   });
   it("Fill out and Submit the form", () => {
-    cy.get("input[id='2']").type("Santa");
-    cy.get("input[id='2']").should("have.value", "Santa");
-    cy.get("input[id='3']").type("santa@northpole.global");
-    cy.get("input[id='3']").should("have.value", "santa@northpole.global");
+    cy.typeInField("input[id='2']", "Santa");
+    cy.typeInField("input[id='3']", "santa@northpole.global");
     cy.get(".gc-checkbox-label").click({ multiple: true });
-    cy.get("input[id='5']").type("Specifying what 'other' means");
-    cy.get("input[id='5']").should("have.value", "Specifying what 'other' means");
+    cy.typeInField("input[id='5']", "Specifying what 'other' means");
     cy.get("textarea[id='6']").type(
       "Contacting the Transportation Safety Board for a personal inquiry"
     );

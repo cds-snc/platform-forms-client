@@ -26,13 +26,13 @@ describe("Form builder names and titles", () => {
   });
 
   it("Autocompletes name with title on focus", () => {
-    cy.get("#formTitle").type("Cypress Share Test Form");
+    cy.typeInField("#formTitle", "Cypress Share Test Form");
     cy.get("#fileName").click();
     cy.get("#fileName").should("have.value", "Cypress Share Test Form");
   });
 
   it("Accepts a blank name", () => {
-    cy.get("#formTitle").type("Cypress Share Test Form");
+    cy.typeInField("#formTitle", "Cypress Share Test Form");
     cy.get("#fileName").click();
     cy.get("#fileName").clear();
     cy.get("#fileName").should("have.value", "");

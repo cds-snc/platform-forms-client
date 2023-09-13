@@ -18,7 +18,7 @@ describe("Register Page", () => {
       );
     });
     it("No error on submitting a form with a name", () => {
-      cy.get("input[id='name']").type("My Name");
+      cy.typeInField("input[id='name']", "My Name");
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessagename']").should("not.exist");
     });
@@ -33,12 +33,12 @@ describe("Register Page", () => {
       );
     });
     it("Error on submitting a form with an invalid email", () => {
-      cy.get("input[id='username']").type("myemail@email");
+      cy.typeInField("input[id='username']", "myemail@email");
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessageusername']").should("contain", "Enter a valid email address.");
     });
     it("Error on submitting a form with a non government email", () => {
-      cy.get("input[id='username']").type("myemail@email.com");
+      cy.typeInField("input[id='username']", "myemail@email.com");
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessageusername']").should(
         "contain",
@@ -46,7 +46,7 @@ describe("Register Page", () => {
       );
     });
     it("No error on submitting a form with a valid government email", () => {
-      cy.get("input[id='username']").type("myemail@cds-snc.ca");
+      cy.typeInField("input[id='username']", "myemail@cds-snc.ca");
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessageusername']").should("not.exist");
     });
@@ -61,7 +61,7 @@ describe("Register Page", () => {
       );
     });
     it("Error on submitting a form with a short password", () => {
-      cy.get("input[id='password']").type("pass");
+      cy.typeInField("input[id='password']", "pass");
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessagepassword']").should("contain", "must be at least 8 characters");
     });
@@ -73,7 +73,7 @@ describe("Register Page", () => {
       cy.get("[id='errorMessagepassword']").should("contain", "must not exceed 50 characters");
     });
     it("Error on submitting a form with no lowercase", () => {
-      cy.get("input[id='password']").type("PASSWORD");
+      cy.typeInField("input[id='password']", "PASSWORD");
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessagepassword']").should(
         "contain",
@@ -81,7 +81,7 @@ describe("Register Page", () => {
       );
     });
     it("Error on submitting a form with no uppercase", () => {
-      cy.get("input[id='password']").type("password");
+      cy.typeInField("input[id='password']", "password");
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessagepassword']").should(
         "contain",
@@ -89,7 +89,7 @@ describe("Register Page", () => {
       );
     });
     it("Error on submitting a form with no number", () => {
-      cy.get("input[id='password']").type("Password");
+      cy.typeInField("input[id='password']", "Password");
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessagepassword']").should(
         "contain",
@@ -97,12 +97,12 @@ describe("Register Page", () => {
       );
     });
     it("Error on submitting a form with no symbol", () => {
-      cy.get("input[id='password']").type("Password1");
+      cy.typeInField("input[id='password']", "Password1");
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessagepassword']").should("contain", "must contain at least 1 symbol.");
     });
     it("No error on submitting a form with a valid password", () => {
-      cy.get("input[id='password']").type("Password1!");
+      cy.typeInField("input[id='password']", "Password1!");
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessagepassword']").should("not.exist");
     });
@@ -117,8 +117,8 @@ describe("Register Page", () => {
       );
     });
     it("Error on submitting a form with a non matching password confirmation field", () => {
-      cy.get("input[id='password']").type("Password1!");
-      cy.get("input[id='passwordConfirmation']").type("Password1!!!!!!!");
+      cy.typeInField("input[id='password']", "Password1!");
+      cy.typeInField("input[id='passwordConfirmation']", "Password1!!!!!!!");
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessagepasswordConfirmation']").should(
         "contain",
@@ -126,8 +126,8 @@ describe("Register Page", () => {
       );
     });
     it("No error on submitting a form with a matching password confirmation field", () => {
-      cy.get("input[id='password']").type("Password1!");
-      cy.get("input[id='passwordConfirmation']").type("Password1!");
+      cy.typeInField("input[id='password']", "Password1!");
+      cy.typeInField("input[id='passwordConfirmation']", "Password1!");
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessagepasswordConfirmation']").should("not.exist");
     });
