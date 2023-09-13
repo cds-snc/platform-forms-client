@@ -96,7 +96,7 @@ describe("Formats ticket data", () => {
       name: "Test Name - contact",
       email: "test-contact@example.com",
       type: "Question",
-      subject: "Question from GC Forms Portal",
+      subject: "Question from GC Forms Portal / Question du portail Formulaires GC",
       tags: ["Forms_Dev"],
       description: "Test contact description",
       custom_fields: {
@@ -120,7 +120,7 @@ describe("Formats ticket data", () => {
       name: "Test Name - problem",
       email: "test-problem@example.com",
       type: "Problem",
-      subject: "Problem with GC Forms",
+      subject: "Problem with GC Forms / Problème avec Formulaires GC",
       tags: ["Forms_Dev"],
       description: "Test problem description",
       custom_fields: {

@@ -24,6 +24,7 @@ import { LoggedOutTabName, LoggedOutTab } from "@components/form-builder/app/Log
 import Head from "next/head";
 import { FormBuilderLayout } from "@components/globals/layouts/FormBuilderLayout";
 import { languageParamSanitization } from "@app/i18n/utils";
+import { ErrorPanel } from "@components/globals";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -45,6 +46,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   const isAuthenticated = status === "authenticated";
   const [isShowConfirmReceiptDialog, setIsShowConfirmReceiptDialog] = useState(false);
   const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
+  const [isServerError, setIsServerError] = useState(false);
 
   const { getDeliveryOption, isPublished } = useTemplateStore((s) => ({
     getDeliveryOption: s.getDeliveryOption,
@@ -92,6 +94,20 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           subjectEn={deliveryOption.emailSubjectEn || ""}
           subjectFr={deliveryOption.emailSubjectFr || ""}
         />
+      </>
+    );
+  }
+
+  if (isServerError) {
+    return (
+      <>
+        <Head>
+          <title>{t("responses.title")}</title>
+        </Head>
+        <div className="flex flex-wrap items-baseline mb-8">
+          <h1 className="border-none mb-0 tablet:mb-4 tablet:mr-8">{t("responses.title")}</h1>
+          <ErrorPanel supportLink={false}>{t("server-error", { ns: "common" })}</ErrorPanel>
+        </div>
       </>
     );
   }
@@ -280,6 +296,8 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           unknownErrorDescriptionLink={t(
             "downloadResponsesModals.reportProblemsDialog.errors.unknown.descriptionLink"
           )}
+          tempType="report"
+          setIsServerError={setIsServerError}
         />
       )}
     </>
