@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { LineItems } from "./LineItems";
 import { scrollToBottom } from "@lib/clientHelpers";
 import { useTranslation } from "react-i18next";
-import { DialogStates } from "../ConfirmDialog";
+import { DialogStates } from "../DialogStates";
 
 // TODO: handle duplicate entries?
 // TODO: should "backspace" on an empty input set the next entry into "edit mode"?
@@ -24,7 +24,6 @@ export const LineItemEntries = ({
   inputs: string[];
   setInputs: (tag: string[]) => void;
   validateInput?: (tag: string) => boolean;
-  spellCheck?: boolean;
   inputLabelId: string;
   maxEntries?: number;
   errorEntriesList: string[];

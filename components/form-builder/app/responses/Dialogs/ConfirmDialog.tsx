@@ -9,17 +9,7 @@ import { useRouter } from "next/router";
 import { logMessage } from "@lib/logger";
 import Link from "next/link";
 import { isUUID } from "@lib/validation";
-
-export enum DialogStates {
-  EDITTING,
-  SENDING,
-  SENT,
-  MIN_ERROR,
-  MAX_ERROR,
-  FORMAT_ERROR,
-  FAILED_ERROR,
-  UNKNOWN_ERROR,
-}
+import { DialogStates } from "./DialogStates";
 
 export const ConfirmDialog = ({
   isShow,
@@ -192,7 +182,6 @@ export const ConfirmDialog = ({
                 inputs={entries}
                 setInputs={setEntries}
                 validateInput={inputRegex}
-                spellCheck={false}
                 inputLabelId={confirmInstructionId}
                 maxEntries={maxEntries}
                 errorEntriesList={errorEntriesList}

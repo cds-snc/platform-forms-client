@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { render, cleanup } from "@testing-library/react";
 import { LineItemEntries } from "../LineItemEntries";
 import userEvent from "@testing-library/user-event";
-import { DialogStates } from "../../ConfirmDialog";
+import { DialogStates } from "../../DialogStates";
 
 jest.mock("react-i18next", () => ({
   useTranslation: () => ({ t: (key: string) => key }),

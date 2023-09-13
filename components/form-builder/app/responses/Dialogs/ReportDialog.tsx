@@ -13,18 +13,7 @@ import {
   ValidationMessage,
   MessageType,
 } from "@components/globals/ValidationMessage/ValidationMessage";
-
-export enum DialogStates {
-  EDITTING,
-  SENDING,
-  SENT,
-  MIN_ERROR,
-  MAX_ERROR,
-  FORMAT_ERROR,
-  FAILED_ERROR,
-  UNKNOWN_ERROR,
-  DESCRIPTION_EMPTY_ERROR,
-}
+import { DialogStates } from "./DialogStates";
 
 export const ReportDialog = ({
   isShow,
@@ -213,7 +202,6 @@ export const ReportDialog = ({
                 inputs={entries}
                 setInputs={setEntries}
                 validateInput={inputRegex}
-                spellCheck={false}
                 inputLabelId={reportInstructionId}
                 maxEntries={maxEntries}
                 errorEntriesList={errorEntriesList}
