@@ -1,7 +1,7 @@
 describe("Support Pages", () => {
   describe("Support Page", () => {
     beforeEach(() => {
-      cy.visit("/en/form-builder/support/");
+      cy.visitPage("/en/form-builder/support/");
     });
 
     it("English page loads", () => {
@@ -37,7 +37,7 @@ describe("Support Pages", () => {
 
   describe("Contact Us Page", () => {
     beforeEach(() => {
-      cy.visit("/en/form-builder/support/contactus");
+      cy.visitPage("/en/form-builder/support/contactus");
     });
 
     it("English page loads", () => {

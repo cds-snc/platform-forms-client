@@ -2,7 +2,7 @@ import { NextData } from "types";
 
 describe("Test FormBuilder", () => {
   beforeEach(() => {
-    cy.visit("/form-builder", {
+    cy.visitPage("/form-builder", {
       onBeforeLoad: (win) => {
         win.sessionStorage.clear();
         let nextData: NextData;
@@ -34,7 +34,7 @@ describe("Test FormBuilder", () => {
   });
 
   it("Designs a form", () => {
-    cy.visit("/form-builder/edit");
+    cy.visitPage("/form-builder/edit");
     cy.get("#formTitle").type("Cypress Test Form");
     cy.get("a").contains("Edit").should("have.class", "font-bold");
     cy.get(`[aria-label="Form introduction"]`).type("form intro");

@@ -1,7 +1,7 @@
 describe("User profile", () => {
   it("Renders the My Account dropdown as non-admin", () => {
     cy.login({ acceptableUse: true });
-    cy.visit("/en/myforms");
+    cy.visitPage("/en/myforms");
     cy.get("[data-testid='yourAccountDropdownContent']").should("not.exist");
     cy.get("button[id^='radix-']").click();
     cy.get("[data-testid='yourAccountDropdownContent']").should("be.visible");
@@ -12,7 +12,7 @@ describe("User profile", () => {
 
   it("Renders the My Account dropdown as admin", () => {
     cy.login({ admin: true, acceptableUse: true });
-    cy.visit("/en/myforms");
+    cy.visitPage("/en/myforms");
     cy.get("[data-testid='yourAccountDropdownContent']").should("not.exist");
     cy.get("button[id^='radix-']").click();
     cy.get("[data-testid='yourAccountDropdownContent']").should("be.visible");
@@ -23,7 +23,7 @@ describe("User profile", () => {
 
   it("Can navigate to Profile page", () => {
     cy.login({ acceptableUse: true });
-    cy.visit("/en/myforms");
+    cy.visitPage("/en/myforms");
     cy.get("button[id^='radix-']").click();
     cy.get("[data-testid='yourAccountDropdownContent']").contains("Profile").click();
     cy.url().should("include", "/profile");

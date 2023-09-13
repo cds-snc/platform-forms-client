@@ -2,7 +2,7 @@ import { NextData } from "types";
 
 describe("Form ownership", () => {
   beforeEach(() => {
-    cy.visit("/form-builder", {
+    cy.visitPage("/form-builder", {
       onBeforeLoad: (win) => {
         win.sessionStorage.clear();
         let nextData: NextData;
@@ -34,19 +34,19 @@ describe("Form ownership", () => {
 
   it("Non-Admin cannot manage Form Ownership", () => {
     cy.login({ acceptableUse: true });
-    cy.visit(`/form-builder/settings/${formID}/form`);
+    cy.visitPage(`/form-builder/settings/${formID}/form`);
     cy.url().should("contain", "/en/admin/unauthorized");
   });
 
   it("Admin can manage Form Ownership", () => {
     cy.login({ admin: true, acceptableUse: true });
-    cy.visit(`/form-builder/settings/${formID}/form`);
+    cy.visitPage(`/form-builder/settings/${formID}/form`);
     cy.get("h2").contains("Manage ownership").should("exist");
   });
 
   it("Must have at least one owner", () => {
     cy.login({ admin: true, acceptableUse: true });
-    cy.visit(`/form-builder/settings/${formID}/form`);
+    cy.visitPage(`/form-builder/settings/${formID}/form`);
     cy.get("h2").contains("Manage ownership").should("exist");
 
     cy.get("[aria-label='Remove test.user@cds-snc.ca']").click();

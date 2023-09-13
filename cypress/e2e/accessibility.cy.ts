@@ -41,7 +41,7 @@ describe("Accessibility (A11Y) Check", () => {
       ({ path }) => {
         // There should not be a user logged in
         cy.getCookie("next-auth.session-token").should("not.exist");
-        cy.visit(path);
+        cy.visitPage(path);
         cy.injectAxe();
         // Ensure page has fully loaded
         cy.get("h1").should("be.visible");
@@ -51,7 +51,7 @@ describe("Accessibility (A11Y) Check", () => {
   });
   describe("Error Pages", () => {
     it("404 Page", () => {
-      cy.visit({ url: "i_do_not_exist_or_should_not", failOnStatusCode: false });
+      cy.visitPage({ url: "i_do_not_exist_or_should_not", failOnStatusCode: false });
       // Ensure page has fully loaded
       cy.get("h1").should("be.visible");
       cy.injectAxe();

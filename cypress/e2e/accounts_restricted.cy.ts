@@ -9,7 +9,7 @@ describe("Restricted Access Page", () => {
       body: { hasOverdueSubmissions: true },
     });
 
-    cy.visit("/auth/login");
+    cy.visitPage("/auth/login");
     cy.contains("Sign in").click();
     cy.get("input[id='username']").type("test.user@cds-snc.ca");
     cy.get("input[id='password']").type("testTesttest");

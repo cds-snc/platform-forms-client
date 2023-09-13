@@ -1,6 +1,6 @@
 describe("Logout Page test", () => {
   beforeEach(() => {
-    cy.visit("/en/auth/logout");
+    cy.visitPage("/en/auth/logout");
   });
 
   it("Display french page version", () => {

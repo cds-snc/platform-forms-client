@@ -2,7 +2,7 @@ import { NextData } from "types";
 
 describe("Test FormBuilder", () => {
   beforeEach(() => {
-    cy.visit("/form-builder", {
+    cy.visitPage("/form-builder", {
       onBeforeLoad: (win) => {
         win.sessionStorage.clear();
         let nextData: NextData;
@@ -26,7 +26,7 @@ describe("Test FormBuilder", () => {
   });
 
   it("Adds a Name block with autocomplete", () => {
-    cy.visit("/form-builder/edit");
+    cy.visitPage("/form-builder/edit");
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="name"]').click();
@@ -34,12 +34,12 @@ describe("Test FormBuilder", () => {
 
     cy.get('[data-testid="autocomplete-1"]').should("contain", "Full name");
 
-    cy.visit("/form-builder/preview");
+    cy.visitPage("/form-builder/preview");
     cy.get('[data-testid="textInput"]').should("have.attr", "autocomplete", "name");
   });
 
   it("Adds a Name (3 fields) block with autocomplete", () => {
-    cy.visit("/form-builder/edit");
+    cy.visitPage("/form-builder/edit");
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="firstMiddleLastName"]').click();
@@ -49,7 +49,7 @@ describe("Test FormBuilder", () => {
     cy.get('[data-testid="autocomplete-3"]').should("contain", "Middle name");
     cy.get('[data-testid="autocomplete-4"]').should("contain", "Last name");
 
-    cy.visit("/form-builder/preview");
+    cy.visitPage("/form-builder/preview");
     cy.get('[data-testid="textInput"]').each(($el, index) => {
       if (index === 0) {
         cy.wrap($el).should("have.attr", "autocomplete", "given-name");
@@ -62,7 +62,7 @@ describe("Test FormBuilder", () => {
   });
 
   it("Adds a Address block with autocomplete", () => {
-    cy.visit("/form-builder/edit");
+    cy.visitPage("/form-builder/edit");
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="address"]').click();
@@ -73,7 +73,7 @@ describe("Test FormBuilder", () => {
     cy.get('[data-testid="autocomplete-4"]').should("contain", "Province, State");
     cy.get('[data-testid="autocomplete-5"]').should("contain", "Postal or zip");
 
-    cy.visit("/form-builder/preview");
+    cy.visitPage("/form-builder/preview");
     cy.get('[data-testid="textInput"]').each(($el, index) => {
       if (index === 0) {
         cy.wrap($el).should("have.attr", "autocomplete", "street-address");
@@ -88,7 +88,7 @@ describe("Test FormBuilder", () => {
   });
 
   it("Adds a Contact block with autocomplete", () => {
-    cy.visit("/form-builder/edit");
+    cy.visitPage("/form-builder/edit");
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="contact"]').click();
@@ -97,7 +97,7 @@ describe("Test FormBuilder", () => {
     cy.get('[data-testid="autocomplete-2"]').should("contain", "Phone number");
     cy.get('[data-testid="autocomplete-3"]').should("contain", "Email address");
 
-    cy.visit("/form-builder/preview");
+    cy.visitPage("/form-builder/preview");
     cy.get('[data-testid="textInput"]').each(($el, index) => {
       if (index === 0) {
         cy.wrap($el).should("have.attr", "autocomplete", "phone");

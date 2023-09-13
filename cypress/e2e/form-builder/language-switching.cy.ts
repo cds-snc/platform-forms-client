@@ -2,7 +2,7 @@ import { NextData } from "types";
 
 describe("Test FormBuilder language switching", () => {
   beforeEach(() => {
-    cy.visit("/form-builder", {
+    cy.visitPage("/form-builder", {
       onBeforeLoad: (win) => {
         win.sessionStorage.clear();
         let nextData: NextData;
