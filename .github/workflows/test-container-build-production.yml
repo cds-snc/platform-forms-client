@@ -18,6 +18,5 @@ jobs:
       - name: Build Container
         run: |
           docker build -t base \
-          --build-arg PRODUCTION_ENV=true \
           --build-arg COGNITO_APP_CLIENT_ID=$COGNITO_APP_CLIENT_ID \
           --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID .
