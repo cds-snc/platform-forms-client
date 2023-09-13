@@ -11,7 +11,6 @@ on:
 env:
   AWS_DEFAULT_REGION: ca-central-1
   FUNCTION_NAME: "forms-client-pr"
-  GITHUB_SHA: ${{ github.sha }}
   IMAGE: pr_review
   REGISTRY: 687401027353.dkr.ecr.ca-central-1.amazonaws.com
 
