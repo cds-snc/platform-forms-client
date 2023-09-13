@@ -233,7 +233,7 @@ export const DownloadTableDialog = ({
               setStatus={setStatus}
             ></LineItemEntries>
 
-            {tempType && (
+            {tempType === "report" && (
               <>
                 <label
                   data-testid="label"
