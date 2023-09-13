@@ -14,13 +14,17 @@ const BulletPoint = () => {
 export const FormBuilderLinks = () => {
   const { t } = useTranslation("common");
   return (
-    <>
-      <a href={t("footer.terms-of-use.link")}>{t("footer.terms-of-use.desc")}</a>
+    <span className="mr-10 inline-block">
+      <a className="whitespace-nowrap" href={t("footer.terms-of-use.link")}>
+        {t("footer.terms-of-use.desc")}
+      </a>
       <BulletPoint />
-      <a href={t("footer.sla.link")}>{t("footer.sla.desc")}</a>
+      <a className="whitespace-nowrap" href={t("footer.sla.link")}>
+        {t("footer.sla.desc")}
+      </a>
       <BulletPoint />
       <a href={t("footer.support.link")}>{t("footer.support.desc")}</a>
-    </>
+    </span>
   );
 };
 
