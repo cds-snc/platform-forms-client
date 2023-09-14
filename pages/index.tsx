@@ -6,6 +6,27 @@ import { GetStaticProps } from "next";
 import Head from "next/head";
 import DefaultLayout from "@components/globals/layouts/DefaultLayout";
 
+import { themes } from "@components/globals";
+
+import { SiteLogo } from "@formbuilder/icons";
+
+const SiteLink = () => {
+  const { t } = useTranslation("common");
+  return (
+    <Link href="/form-builder" legacyBehavior>
+      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+      <a className="mb-6 mr-10 inline-flex font-sans text-h2 font-bold !text-black no-underline !shadow-none focus:bg-white">
+        <span className="">
+          <SiteLogo title={t("title")} />
+        </span>
+        <span className="ml-3 inline-block text-[24px] text-[#1B00C2]">
+          {t("title-full", { ns: "common" })}
+        </span>
+      </a>
+    </Link>
+  );
+};
+
 const Home = () => {
   const { t } = useTranslation("common");
   return (
@@ -13,24 +34,33 @@ const Home = () => {
       <Head>
         <title>{t("title-full")}</title>
       </Head>
-      <div>
-        <h1>
-          <span lang="en">{t("title", { lng: "en" })}</span> -{" "}
-          <span lang="fr">{t("title", { lng: "fr" })}</span>
-        </h1>
-      </div>
-      <div className="m-auto grid w-2/4 max-w-2xl grid-cols-2 gap-x-4  border-gray-400 p-10">
-        <p>
-          <Link href="/en/form-builder" lang="en" locale={false}>
-            English
-          </Link>
-        </p>
+      <div className="mt-10 flex items-center justify-center">
+        <div className="w-[800px] rounded-2xl border-1 border-[#D1D5DB] bg-white p-10">
+          <main id="content" className="flex  flex-col items-center">
+            <div className="mb-10">
+              <SiteLink />
+            </div>
+            <div className="flex justify-center gap-8">
+              <Link
+                href="/en/form-builder"
+                className={`${themes.primary} ${themes.base} ${themes.htmlLink}`}
+                lang="en"
+                locale={false}
+              >
+                English
+              </Link>
 
-        <p>
-          <Link href="/fr/form-builder" className="block" lang="fr" locale={false}>
-            Français
-          </Link>
-        </p>
+              <Link
+                href="/fr/form-builder"
+                className={`${themes.primary} ${themes.base} ${themes.htmlLink}`}
+                lang="fr"
+                locale={false}
+              >
+                Français
+              </Link>
+            </div>
+          </main>
+        </div>
       </div>
     </>
   );
