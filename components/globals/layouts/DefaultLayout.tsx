@@ -4,11 +4,14 @@ import Footer from "../Footer";
 import SkipLink from "../SkipLink";
 import Fip from "../Fip";
 import { HeadMeta } from "./HeadMeta";
+import LanguageToggle from "../LanguageToggle";
+import LoginMenu from "@components/auth/LoginMenu";
 
 interface DefaultLayoutProps extends React.PropsWithChildren {
   showLanguageToggle?: boolean;
   showLogin?: boolean;
   className?: string;
+  isSplashPage?: boolean;
 }
 
 export const Layout = ({
@@ -16,34 +19,44 @@ export const Layout = ({
   showLanguageToggle,
   showLogin,
   className,
+  isSplashPage = false,
 }: DefaultLayoutProps) => {
   return (
     <>
       <header>
-        <Fip {...{ showLanguageToggle, showLogin }} />
+        <Fip>
+          {showLanguageToggle && <LanguageToggle />}
+          {showLogin && <LoginMenu />}
+        </Fip>
       </header>
       <div id="page-container" className={className}>
         <main id="content">{children}</main>
       </div>
-      <Footer />
+      <Footer isSplashPage={isSplashPage} />
     </>
   );
 };
 
-const DefaultLayout = ({ children, showLanguageToggle, showLogin }: DefaultLayoutProps) => {
+const DefaultLayout = ({
+  children,
+  showLanguageToggle,
+  showLogin,
+  isSplashPage,
+}: DefaultLayoutProps) => {
   return (
     <div className="flex h-full flex-col">
       <HeadMeta />
       <SkipLink />
-
       <header>
-        <Fip {...{ showLanguageToggle, showLogin }} />
+        <Fip>
+          {showLanguageToggle && <LanguageToggle />}
+          {showLogin && <LoginMenu />}
+        </Fip>
       </header>
       <div id="page-container">
         <main id="content">{children}</main>
       </div>
-
-      <Footer />
+      <Footer isSplashPage={isSplashPage} />
     </div>
   );
 };

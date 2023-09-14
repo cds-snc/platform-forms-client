@@ -37,7 +37,11 @@ const Home = () => {
 };
 
 Home.getLayout = (page: ReactElement) => {
-  return <DefaultLayout showLanguageToggle={false}>{page}</DefaultLayout>;
+  return (
+    <DefaultLayout showLanguageToggle={false} isSplashPage={true}>
+      {page}
+    </DefaultLayout>
+  );
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
