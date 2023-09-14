@@ -48,7 +48,7 @@ const DefaultLayout = ({
       <HeadMeta />
       <SkipLink />
       <header>
-        <Fip className={isSplashPage ? "my-0 py-8" : ""}>
+        <Fip className={isSplashPage ? "my-0 py-6" : ""}>
           {showLanguageToggle && <LanguageToggle />}
           {showLogin && <LoginMenu />}
         </Fip>
