@@ -10,6 +10,13 @@ import { themes } from "@components/globals";
 
 import { SiteLogo } from "@formbuilder/icons";
 
+import { Noto_Sans } from "next/font/google";
+
+const nato = Noto_Sans({
+  weight: "600",
+  subsets: ["latin"],
+});
+
 const SiteLink = () => {
   const { t } = useTranslation("common");
   return (
@@ -19,7 +26,7 @@ const SiteLink = () => {
         <span className="">
           <SiteLogo title={t("title")} />
         </span>
-        <span className="ml-3 inline-block text-[24px] text-[#1B00C2]">
+        <span className={`ml-3 inline-block text-[24px] text-[#1B00C2] ${nato.className}`}>
           {t("title-full", { ns: "common" })}
         </span>
       </a>

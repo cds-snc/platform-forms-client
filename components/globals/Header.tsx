@@ -16,6 +16,13 @@ type HeaderParams = {
   user?: User;
 };
 
+import { Noto_Sans } from "next/font/google";
+
+const nato = Noto_Sans({
+  weight: "600",
+  subsets: ["latin"],
+});
+
 export const Header = ({ context = "default", user }: HeaderParams) => {
   const isFormBuilder = context === "formBuilder";
   const isAdmin = context === "admin";
@@ -42,7 +49,9 @@ export const Header = ({ context = "default", user }: HeaderParams) => {
           </Link>
 
           {isDefault && (
-            <div className="mt-3 box-border block h-[40px] px-2 py-1 text-base font-bold">
+            <div
+              className={`mt-3 box-border block h-[40px] px-2 py-1 text-base font-bold ${nato.className}`}
+            >
               {t("title", { ns: "common" })}
             </div>
           )}
