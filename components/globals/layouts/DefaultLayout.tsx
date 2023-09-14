@@ -11,6 +11,7 @@ interface DefaultLayoutProps extends React.PropsWithChildren {
   showLanguageToggle?: boolean;
   showLogin?: boolean;
   className?: string;
+  isSplashPage?: boolean;
 }
 
 export const Layout = ({
@@ -18,6 +19,7 @@ export const Layout = ({
   showLanguageToggle,
   showLogin,
   className,
+  isSplashPage = false,
 }: DefaultLayoutProps) => {
   return (
     <>
@@ -30,12 +32,17 @@ export const Layout = ({
       <div id="page-container" className={className}>
         <main id="content">{children}</main>
       </div>
-      <Footer />
+      <Footer isSplashPage={isSplashPage} />
     </>
   );
 };
 
-const DefaultLayout = ({ children, showLanguageToggle, showLogin }: DefaultLayoutProps) => {
+const DefaultLayout = ({
+  children,
+  showLanguageToggle,
+  showLogin,
+  isSplashPage,
+}: DefaultLayoutProps) => {
   return (
     <div className="flex h-full flex-col">
       <HeadMeta />
@@ -49,7 +56,7 @@ const DefaultLayout = ({ children, showLanguageToggle, showLogin }: DefaultLayou
       <div id="page-container">
         <main id="content">{children}</main>
       </div>
-      <Footer />
+      <Footer isSplashPage={isSplashPage} />
     </div>
   );
 };
