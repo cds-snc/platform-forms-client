@@ -41,7 +41,7 @@ const getSubmissions = async (
               "#name": "Name",
             },
             KeyConditionExpression: "FormID = :FormID AND begins_with(NAME_OR_CONF, :name)",
-            ProjectionExpression: "#name, FormSubmission",
+            ProjectionExpression: "#name, FormSubmission, CreatedAt",
           });
 
           queryResult = await documentClient.send(queryCommand);
@@ -77,7 +77,7 @@ const getSubmissions = async (
           },
           KeyConditionExpression: "FormID = :FormID AND begins_with(NAME_OR_CONF, :name)",
           FilterExpression: `#name IN (${idParams})`,
-          ProjectionExpression: "#name, FormSubmission",
+          ProjectionExpression: "#name, FormSubmission CreatedAt",
         });
 
         queryResult = await documentClient.send(queryCommand);
@@ -89,9 +89,21 @@ const getSubmissions = async (
       return res.status(500).json({ error: "There was an error. Please try again later." });
 
     const responses = queryResult?.Items?.map((item) => {
+      const submission = Object.entries(JSON.parse(item.FormSubmission)).map(
+        ([questionId, answer]) => {
+          return {
+            question: fullFormTemplate.form.elements.find(
+              (element) => element.id === Number(questionId)
+            )?.properties?.titleEn,
+            answer: answer,
+          };
+        }
+      );
+
       return {
         id: item.Name,
-        submission: JSON.parse(item.FormSubmission),
+        created_at: item.CreatedAt,
+        submission: submission,
       };
     });
 
@@ -113,9 +125,8 @@ const getSubmissions = async (
     // Default repsonse format is JSON
     return res.status(200).json({ responses: responses });
   } catch (err) {
-    return res.status(500).json({ error: err });
     if (err instanceof AccessControlError) return res.status(403).json({ error: "Forbidden" });
-    else return res.status(500).json({ error: "There was an error. Please try again later." });
+    else return res.status(500).json({ message: "There was an error. Please try again later." });
   }
 };
 
