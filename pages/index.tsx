@@ -27,12 +27,19 @@ const SiteLink = () => {
   );
 };
 
+const css = `
+    body {
+       background-color: #F9FAFB;
+    }
+`;
+
 const Home = () => {
   const { t } = useTranslation("common");
   return (
     <>
       <Head>
         <title>{t("title-full")}</title>
+        <style>{css}</style>
       </Head>
       <div className="mt-10 flex items-center justify-center">
         <div className="w-[800px] rounded-2xl border-1 border-[#D1D5DB] bg-white p-10">

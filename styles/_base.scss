@@ -11,6 +11,7 @@ body,
 footer,
 header {
   @apply xs:px-4 md:px-8 lg:px-16 px-32;
+  background-color: #fff;
 }
 
 #page-container {
@@ -117,7 +118,7 @@ body {
   line-height: 1.65;
 }
 
-// gc-h# 
+// gc-h#
 // Allow styling an h1 like an h2 or h3 or an h3 like an etc. similar to how bootstrap does it
 // e.g. Make this h2 look like an h1 `<h2 className="gc-h1">...`
 
@@ -137,15 +138,18 @@ h6,
   font-weight: 600;
 }
 
-h1, .gc-h1 {
+h1,
+.gc-h1 {
   @apply md:text-small_h1 md:mb-10 border-b-2 border-red-default text-h1 font-bold pb-2 mb-16;
 }
 
-h2, .gc-h2  {
+h2,
+.gc-h2 {
   @apply md:text-small_h2 font-bold text-h2 pb-6;
 }
 
-h3, .gc-h3 {
+h3,
+.gc-h3 {
   @apply sm:text-small_h3 font-bold text-h3 pb-0 mb-6;
 }
 
@@ -158,7 +162,7 @@ h3, .gc-h3 {
 .gc-h5 {
   @apply text-sm font-bold pb-0 mb-1;
 }
-  
+
 .gc-h2 {
   margin-bottom: 0;
   border: 0;
