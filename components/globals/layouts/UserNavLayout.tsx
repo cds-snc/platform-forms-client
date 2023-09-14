@@ -1,6 +1,5 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 import { useAccessControl } from "@lib/hooks";
@@ -41,7 +40,6 @@ const UserNavLayout = ({
   afterContentWrapper = null,
 }: UserNavLayoutProps) => {
   const { ability } = useAccessControl();
-  const { status } = useSession();
   const { t } = useTranslation("common");
 
   return (
@@ -60,8 +58,8 @@ const UserNavLayout = ({
                 <Link href="/myforms">{t("adminNav.myForms")}</Link>
               )}
             </div>
-            {<LoginMenu isAuthenticated={status === "authenticated"} />}
-            {<LanguageToggle />}
+            <LoginMenu />
+            <LanguageToggle />
           </div>
         </div>
       </header>

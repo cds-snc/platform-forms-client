@@ -25,7 +25,6 @@ jobs:
       - name: Build Form Viewer
         run: |
           docker build -t base \
-            --build-arg GITHUB_SHA_ARG=$GITHUB_SHA \
             --build-arg COGNITO_APP_CLIENT_ID=$COGNITO_APP_CLIENT_ID \
             --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID .
 
