@@ -4,7 +4,7 @@
     "title": "Informations de compte",
     "email": "Courriel",
     "publishing": "Publication de formulaires",
-    "locked": "Fermé à clé",
+    "locked": "Vérouillé",
     "unlocked": "Dévérouillée"
   },
   "securityPanel": {
