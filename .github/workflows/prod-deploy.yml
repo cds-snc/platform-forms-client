@@ -1,8 +1,8 @@
-name: Deploy to Staging
+name: Deploy to Production
 
 on:
   workflow_run:
-    workflows: ["Staging — Push container to ECR"]
+    workflows: ["Production — Push container to ECR"]
     types:
       - completed
 
@@ -16,9 +16,9 @@ jobs:
           WORKFLOW_URL: "${{ github.event.workflow_run.html_url }}"
           WORKFLOW_NAME: "${{ github.event.workflow_run.name }}"
         run: |
-          json='{"channel":"#forms-staging-events", "blocks":[{"type":"section","text":{"type":"mrkdwn","text":":red: GitHub workflow failure: <${{ env.WORKFLOW_URL }}|${{ env.WORKFLOW_NAME }}>"}}]}'
-          curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.STAGING_SLACK_WEBHOOK }}
-          exit 1
+          json='{"channel":"#forms-production-events", "blocks":[{"type":"section","text":{"type":"mrkdwn","text":":red: GitHub workflow failure: <${{ env.WORKFLOW_URL }}|${{ env.WORKFLOW_NAME }}>"}}]}'
+          curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.PRODUCTION_SLACK_WEBHOOK }}
+          exit 1   
 
   deploy-form-viewer-service:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
@@ -53,25 +53,30 @@ jobs:
         with:
           task-definition: form_viewer.json
           container-name: ${{ steps.download-taskdef-form-viewer.outputs.container_name }}
-          image: ${{ steps.login-ecr.outputs.registry }}/form_viewer_staging:${{ github.event.workflow_run.head_sha }}
+          image: ${{ steps.login-ecr.outputs.registry }}/form_viewer_production:${{ github.event.workflow_run.head_branch }}
 
       - name: Render appspec for form viewer service
         run: |
           CONTAINER_PORT=`jq '.containerDefinitions[0].portMappings[0].containerPort' form_viewer.json`
           CONTAINER_NAME=${{ steps.download-taskdef-form-viewer.outputs.container_name }}
           TASKDEF_ARN=`jq -r '.taskDefinitionArn' form_viewer.json | cut -f 1-6 -d "/"`
-          jq  --argjson port "$CONTAINER_PORT" --arg cname "$CONTAINER_NAME" --arg taskdefarn "$TASKDEF_ARN" '.Resources[0].TargetService.Properties.TaskDefinition = $taskdefarn | .Resources[0].TargetService.Properties.LoadBalancerInfo.ContainerName = $cname | .Resources[0].TargetService.Properties.LoadBalancerInfo.ContainerPort = $port' config/infrastructure/aws/appspec-template.json > form-viewer-appspec.json
+          jq --argjson port "$CONTAINER_PORT" --arg cname "$CONTAINER_NAME" --arg taskdefarn "$TASKDEF_ARN" '.Resources[0].TargetService.Properties.TaskDefinition = $taskdefarn | .Resources[0].TargetService.Properties.LoadBalancerInfo.ContainerName = $cname | .Resources[0].TargetService.Properties.LoadBalancerInfo.ContainerPort = $port' config/infrastructure/aws/appspec-template.json > form-viewer-appspec.json
+          
+      - name: Sanity test appspec and form viewer task definition
+        run: |
+          aws s3 cp ${{ github.workspace }}/form-viewer-appspec.json s3://forms-production-vault-file-storage/${{ github.run_id }}/form-viewer-appspec.json
+          aws s3 cp ${{ steps.taskdef-form-viewer.outputs.task-definition }} s3://forms-production-vault-file-storage/${{ github.run_id }}/form-viewer-task-def.json
 
-      - name: Deploy image for Form Viewer
-        timeout-minutes: 10
-        # v1.4.11
-        uses: aws-actions/amazon-ecs-deploy-task-definition@37ec59d6c3e314c12279ab3e75395e72da65f1c6
-        with:
-          task-definition: ${{ steps.taskdef-form-viewer.outputs.task-definition }}
-          service: form-viewer
-          cluster: Forms
-          wait-for-service-stability: true
-          codedeploy-appspec: ${{ github.workspace }}/form-viewer-appspec.json
+      # - name: Deploy image for Form Viewer
+      #   timeout-minutes: 10
+      #   # v1.4.11
+      #   uses: aws-actions/amazon-ecs-deploy-task-definition@37ec59d6c3e314c12279ab3e75395e72da65f1c6
+      #   with:
+      #     task-definition: ${{ steps.taskdef-form-viewer.outputs.task-definition }}
+      #     service: form-viewer
+      #     cluster: Forms
+      #     wait-for-service-stability: true
+      #     codedeploy-appspec: ${{ github.workspace }}/form-viewer-appspec.json
 
       - name: Logout of Amazon ECR
         if: always()
@@ -81,7 +86,7 @@ jobs:
         if: always()
         uses: cds-snc/sentinel-forward-data-action@main
         with:
-          input_data: '{"product": "articles", "sha": "${{ github.sha }}", "version": "${{ github.sha }}", "repository": "${{ github.repository }}", "environment": "staging", "status": "${{ job.status }}"}'
+          input_data: '{"product": "articles", "sha": "${{ github.sha }}", "version": "${{ github.event.workflow_run.head_branch }}", "repository": "${{ github.repository }}", "environment": "production", "status": "${{ job.status }}"}'
           log_type: CDS_Product_Deployment_Data
           log_analytics_workspace_id: ${{ secrets.LOG_ANALYTICS_WORKSPACE_ID }}
           log_analytics_workspace_key: ${{ secrets.LOG_ANALYTICS_WORKSPACE_KEY }}
