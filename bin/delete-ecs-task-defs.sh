@@ -22,9 +22,26 @@ set -euo pipefail
 
 TASK_ARNS="$1"
 AWS_REGION="ca-central-1"
+CLUSTER_NAME="Forms"
+SERVICE_NAME="form-viewer"
+
+# Get the currently active task definition ARN as a safety check
+ACTIVE_TASK_ARN="$(aws ecs describe-services \
+    --cluster $CLUSTER_NAME \
+    --services $SERVICE_NAME \
+    --query 'services[0].taskDefinition' \
+    --no-cli-pager \
+    --output text \
+    --region $AWS_REGION)"
 
 while read -r TASK_ARN
 do
+
+    if [ "$TASK_ARN" == "$ACTIVE_TASK_ARN" ]; then
+        echo  "🚫 Skipping active task definition: $TASK_ARN"
+        continue
+    fi
+
     echo  "🧹 Deleting: $TASK_ARN"
 
     # Task definitions must be set to INACTIVE before they can be deleted
@@ -32,14 +49,14 @@ do
         --task-definition "$TASK_ARN" \
         --region "$AWS_REGION" \
         --no-cli-pager > /dev/null 2>&1
-    sleep 3
+    sleep 2
 
     # Delete the INACTIVE task definition
     aws ecs delete-task-definitions \
         --task-definitions "$TASK_ARN" \
         --region "$AWS_REGION" \
         --no-cli-pager > /dev/null 2>&1
-    sleep 3
+    sleep 2
 done < "$TASK_ARNS"
 
 echo  "🎉 All done!"

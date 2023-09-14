@@ -109,7 +109,7 @@ const HTMLDownload: NextPageWithLayout<HTMLDownloadProps> = ({
 
 HTMLDownload.getLayout = (page: ReactElement) => {
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex h-full flex-col">
       <SkipLink />
 
       <div id="page-container">

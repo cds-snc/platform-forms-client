@@ -1,10 +1,13 @@
 import React from "react";
+import Head from "next/head";
+
 import { getPageClassNames } from "@lib/routeUtils";
+import { PublicFormRecord } from "@lib/types";
+
 import Footer from "@components/globals/Footer";
 import SkipLink from "@components/globals/SkipLink";
 import Fip from "@components/globals/Fip";
-import { PublicFormRecord } from "@lib/types";
-import Head from "next/head";
+import LanguageToggle from "../LanguageToggle";
 
 interface FormDisplayLayoutProps extends React.PropsWithChildren {
   formRecord: PublicFormRecord;
@@ -26,7 +29,9 @@ const FormDisplayLayout = ({ children, formRecord, embedded }: FormDisplayLayout
       <div className={classes}>
         {!embedded && (
           <header>
-            <Fip formRecord={formRecord} showLogin={false} showLanguageToggle={true} />
+            <Fip formRecord={formRecord}>
+              <LanguageToggle />
+            </Fip>
           </header>
         )}
         <div id="page-container">

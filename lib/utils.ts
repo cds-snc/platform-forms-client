@@ -10,3 +10,7 @@ export function chunkArray<T>(arr: T[], size: number): T[][] {
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+export function getLocalizedProperty(field = "", lang = "en"): string {
+  return field + lang.charAt(0).toUpperCase() + lang.slice(1);
+}

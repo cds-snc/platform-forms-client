@@ -1,6 +1,5 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 import { useAccessControl } from "@lib/hooks";
@@ -9,6 +8,13 @@ import LoginMenu from "@components/auth/LoginMenu";
 import { SiteLogo } from "@formbuilder/icons";
 import { ToastContainer } from "@formbuilder/app/shared/Toast";
 import { HeadMeta } from "./HeadMeta";
+
+import { Noto_Sans } from "next/font/google";
+
+const nato = Noto_Sans({
+  weight: "600",
+  subsets: ["latin"],
+});
 
 const SiteLink = () => {
   const { t } = useTranslation("common");
@@ -19,7 +25,7 @@ const SiteLink = () => {
         <span className="">
           <SiteLogo title={t("title")} />
         </span>
-        <span className="ml-3 inline-block text-[24px] text-[#1B00C2]">
+        <span className={`ml-3 inline-block text-[24px] text-[#1B00C2] ${nato.className}`}>
           {t("title", { ns: "common" })}
         </span>
       </a>
@@ -41,7 +47,6 @@ const UserNavLayout = ({
   afterContentWrapper = null,
 }: UserNavLayoutProps) => {
   const { ability } = useAccessControl();
-  const { status } = useSession();
   const { t } = useTranslation("common");
 
   return (
@@ -60,8 +65,8 @@ const UserNavLayout = ({
                 <Link href="/myforms">{t("adminNav.myForms")}</Link>
               )}
             </div>
-            {<LoginMenu isAuthenticated={status === "authenticated"} />}
-            {<LanguageToggle />}
+            <LoginMenu />
+            <LanguageToggle />
           </div>
         </div>
       </header>
