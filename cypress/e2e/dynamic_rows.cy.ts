@@ -13,8 +13,8 @@ describe("Dynamic Row Functionality", () => {
     cy.get("[data-testid='add-row-button-3']").click();
     cy.get("[data-testid='formGroup-3']").find("[data-testid='dropdown']").should("have.length", 2);
     cy.get("[data-testid='add-row-button-3']").should("have.length", 1);
-    cy.get("[data-testid='delete-row-button-3.0']").should("exist");
-    cy.get("[data-testid='delete-row-button-3.1']").should("exist");
+    cy.get("[data-testid='delete-row-button-3.0']").should("be.visible");
+    cy.get("[data-testid='delete-row-button-3.1']").should("be.visible");
     cy.get("[data-testid='delete-row-button-3.1']").click();
     cy.get("[data-testid='formGroup-3']").find("[data-testid='dropdown']").should("have.length", 1);
     cy.get("[data-testid='delete-row-button-3.0']").should("not.exist");
