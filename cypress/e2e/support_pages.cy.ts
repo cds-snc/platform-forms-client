@@ -1,7 +1,7 @@
 describe("Support Pages", () => {
   describe("Support Page", () => {
     beforeEach(() => {
-      cy.visit("/en/form-builder/support/");
+      cy.visitPage("/en/form-builder/support/");
     });
 
     it("English page loads", () => {
@@ -20,16 +20,16 @@ describe("Support Pages", () => {
     });
 
     it("Invalid email stops submission", () => {
-      cy.get("#email").type("bad@email");
+      cy.typeInField("#email", "bad@email");
       cy.get("button[type='submit']").click();
       cy.get("#errorMessageemail").should("be.visible");
     });
 
     it("Valid submission succeeds", () => {
-      cy.get("#name").type("1");
-      cy.get("#email").type("good@email.com");
+      cy.typeInField("#name", "1");
+      cy.typeInField("#email", "good@email.com");
       cy.get("label[for='request-question']").click();
-      cy.get("#description").type("1");
+      cy.typeInField("#description", "1");
       cy.get("button[type='submit']").click();
       cy.get("h1").contains("Thank you for your request");
     });
@@ -37,7 +37,7 @@ describe("Support Pages", () => {
 
   describe("Contact Us Page", () => {
     beforeEach(() => {
-      cy.visit("/en/form-builder/support/contactus");
+      cy.visitPage("/en/form-builder/support/contactus");
     });
 
     it("English page loads", () => {
@@ -56,19 +56,19 @@ describe("Support Pages", () => {
     });
 
     it("Invalid email stops submission", () => {
-      cy.get("#email").type("bad@email");
+      cy.typeInField("#email", "bad@email");
       cy.get("button[type='submit']").click();
       cy.get("#errorMessageemail").should("be.visible");
     });
 
     it("Valid submission succeeds", () => {
-      cy.get("#name").type("1");
-      cy.get("#email").type("good@email.com");
-      cy.get("#department").type("1");
-      cy.get("#branch").type("1");
-      cy.get("#jobTitle").type("1");
+      cy.typeInField("#name", "1");
+      cy.typeInField("#email", "good@email.com");
+      cy.typeInField("#department", "1");
+      cy.typeInField("#branch", "1");
+      cy.typeInField("#jobTitle", "1");
       cy.get("label[for='request-question']").click();
-      cy.get("#description").type("1");
+      cy.typeInField("#description", "1");
       cy.get("button[type='submit']").click();
       cy.get("h1").contains("Thank you for your request");
     });
