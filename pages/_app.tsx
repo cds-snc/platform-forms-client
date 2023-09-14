@@ -45,7 +45,7 @@ const MyApp: React.FC<AppPropsWithLayout> = ({
           {Component.getLayout ? (
             <ErrorBoundary>{Component.getLayout(<Component {...pageProps} />)}</ErrorBoundary>
           ) : (
-            <DefaultLayout>
+            <DefaultLayout showLanguageToggle={true}>
               <ErrorBoundary>
                 <Component {...pageProps} />
               </ErrorBoundary>
