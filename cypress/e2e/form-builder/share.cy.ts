@@ -12,9 +12,12 @@ describe("Form builder share", () => {
     cy.focused().should("have.attr", "id", "fileName");
   });
   it("Renders share flyout for authenticated", () => {
+    // @todo replace with typeInField
+    // Getting weird error in GitHub actions where text is missing first character
+    // "Cypress Share Test Form" is rendered as "ypress Share Test Form"
     cy.get("#fileName")
       .should("have.attr", "placeholder", "Unnamed form file")
-      .typeInField("#fileName", "Cypress Share Test Form");
+      .type("Cypress Share Test Form");
     cy.get("button").contains("Share").click();
     cy.get("[role='menuitem']").should("have.length", 1);
     cy.get("span").contains("Share by email").click();
@@ -30,7 +33,7 @@ describe("Form builder share", () => {
     cy.visitPage("/form-builder/edit");
     cy.get("#fileName")
       .should("have.attr", "placeholder", "Unnamed form file")
-      .typeInField("#fileName", "Cypress Share Test Form");
+      .type("Cypress Share Test Form");
     cy.get("button").contains("Share").click();
     cy.get("[role='menuitem']").should("have.length", 1);
     cy.get("span").contains("Share by email").click();
