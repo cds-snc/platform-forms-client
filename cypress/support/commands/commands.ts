@@ -226,20 +226,18 @@ Cypress.Commands.add("resetAll", () => {
  */
 Cypress.Commands.add("typeInField", (field, typedText, outputText) => {
   cy.get(field).type(typedText);
-  // Remove actions in brackets from text
-  cy.get(field).then(($el) => {
-    if ($el.attr("value") !== undefined) {
-      if (outputText) {
-        cy.get(field).should("have.value", outputText);
+
+  // Use passed in outputText or Remove actions in brackets from typedText
+  const text = outputText ?? typedText.replace(/\{.*\}/, "");
+
+  // If there is text to verify and not just an action
+  if (text) {
+    cy.get(field).then(($el) => {
+      if ($el.attr("value") !== undefined) {
+        cy.get(field).should("have.value", text);
       } else {
-        cy.get(field).should("have.value", typedText.replace(/\{.*\}/, ""));
+        cy.get(field).should("have.text", text);
       }
-    } else {
-      if (outputText) {
-        cy.get(field).should("have.text", outputText);
-      } else {
-        cy.get(field).should("have.text", typedText.replace(/\{.*\}/, ""));
-      }
-    }
-  });
+    });
+  }
 });

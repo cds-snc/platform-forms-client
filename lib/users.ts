@@ -29,6 +29,7 @@ export const getOrCreateUser = async ({
   active: boolean;
 } | null> => {
   if (!email) throw new Error("Email does not exist on token");
+  logMessage.info(`getOrCreateUser - email: ${email}`);
   const user = await prisma.user
     .findUnique({
       where: {
@@ -43,6 +44,8 @@ export const getOrCreateUser = async ({
       },
     })
     .catch((e) => prismaErrors(e, null));
+
+  logMessage.info(`getOrCreateUser -find user: ${user?.id ?? "none"}`);
 
   // If a user already exists and has privileges return the record
   if (user !== null && user.privileges.length) return user;

@@ -1,28 +1,7 @@
-import { NextData } from "types";
-
 describe("Test FormBuilder", () => {
   beforeEach(() => {
-    cy.visitPage("/form-builder", {
-      onBeforeLoad: (win) => {
-        win.sessionStorage.clear();
-        let nextData: NextData;
-        Object.defineProperty(win, "__NEXT_DATA__", {
-          set(serverSideProps) {
-            serverSideProps.context = {
-              user: {
-                acceptableUse: true,
-                name: null,
-                userId: "testId",
-              },
-            };
-            nextData = serverSideProps;
-          },
-          get() {
-            return nextData;
-          },
-        });
-      },
-    });
+    cy.login({ acceptableUse: true });
+    cy.visitPage("/form-builder");
   });
 
   it("Renders form builder home page", () => {

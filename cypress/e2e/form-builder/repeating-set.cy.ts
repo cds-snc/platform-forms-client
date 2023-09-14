@@ -1,29 +1,9 @@
-import { NextData } from "types";
 // skipping this test until we re-look at this feature
 describe("Test FormBuilder Repeating set", () => {
   beforeEach(() => {
     cy.useFlag("experimentalBlocks", true);
-    cy.visitPage("/form-builder", {
-      onBeforeLoad: (win) => {
-        win.sessionStorage.clear();
-        let nextData: NextData;
-        Object.defineProperty(win, "__NEXT_DATA__", {
-          set(serverSideProps) {
-            serverSideProps.context = {
-              user: {
-                acceptableUse: true,
-                name: null,
-                userId: "testId",
-              },
-            };
-            nextData = serverSideProps;
-          },
-          get() {
-            return nextData;
-          },
-        });
-      },
-    });
+    cy.login({ acceptableUse: true });
+    cy.visitPage("/form-builder");
   });
 
   it.skip("Adds a Repeating set with a few questions", () => {
@@ -100,7 +80,7 @@ describe("Test FormBuilder Repeating set", () => {
     cy.get("button").contains("Add").should("not.exist");
 
     cy.get("button").contains("Delete 2").click();
-    cy.get("button").contains("Add").should("exist");
+    cy.get("button").contains("Add").should("be.visible");
   });
 
   // re-add when we re-look at this feature

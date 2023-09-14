@@ -1,28 +1,7 @@
-import { NextData } from "types";
-
 describe("Form builder modal description", () => {
   beforeEach(() => {
-    cy.visitPage("/form-builder/edit", {
-      onBeforeLoad: (win) => {
-        win.sessionStorage.clear();
-        let nextData: NextData;
-        Object.defineProperty(win, "__NEXT_DATA__", {
-          set(serverSideProps) {
-            serverSideProps.context = {
-              user: {
-                acceptableUse: true,
-                name: null,
-                userId: "testId",
-              },
-            };
-            nextData = serverSideProps;
-          },
-          get() {
-            return nextData;
-          },
-        });
-      },
-    });
+    cy.login({ acceptableUse: true });
+    cy.visitPage("/form-builder/edit");
   });
 
   it("Renders matching element description in more modal", () => {
@@ -31,8 +10,10 @@ describe("Form builder modal description", () => {
     cy.get("button").contains("Add").click();
     cy.get('[data-testid="date"]').click();
     cy.get("button").contains("Select block").click();
-    cy.get(".description-text").should("exist").contains("Enter a date. For example: mm/dd/yyyy");
-    cy.get(".example-text").should("exist").contains("mm/dd/yyyy");
+    cy.get(".description-text")
+      .should("be.visible")
+      .contains("Enter a date. For example: mm/dd/yyyy");
+    cy.get(".example-text").should("be.visible").contains("mm/dd/yyyy");
 
     cy.get('#element-1 [data-testid="more"]').click();
     cy.get('[data-testid="description-input"]').contains("mm/dd/yyyy");
@@ -41,8 +22,8 @@ describe("Form builder modal description", () => {
     cy.get("button").contains("Add").click();
     cy.get('[data-testid="number"]').click();
     cy.get("button").contains("Select block").click();
-    cy.get(".description-text").should("exist").contains("Only enter numbers");
-    cy.get(".example-text").should("exist").contains("0123456789");
+    cy.get(".description-text").should("be.visible").contains("Only enter numbers");
+    cy.get(".example-text").should("be.visible").contains("0123456789");
 
     cy.get('#element-2 [data-testid="more"]').click();
     cy.get('[data-testid="description-input"]').contains("Only enter numbers");

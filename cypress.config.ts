@@ -11,14 +11,14 @@ export default defineConfig({
       on("task", {
         "db:teardown": async () => {
           logMessage.info("Tearing down database");
-          await import("./__utils__/dbTearDown").then((dbTearDown) => dbTearDown.default());
-          // Return arbitrary value to let Cypress know that promise resolved
+          const dbTearDown = await import("./__utils__/dbTearDown");
+          await dbTearDown.default();
           return null;
         },
         "db:seed": async () => {
           logMessage.info("Seeding database");
-          import("./prisma/seeds/seed").then((seed) => seed.default("test"));
-          // Return arbitrary value to let Cypress know that promise resolved
+          const seed = await import("./prisma/seeds/seed");
+          await seed.default("test");
           return null;
         },
       });

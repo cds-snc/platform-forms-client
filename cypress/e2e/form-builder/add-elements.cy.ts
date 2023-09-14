@@ -1,28 +1,7 @@
-import { NextData } from "types";
-
 describe("Test FormBuilder Add Elements", () => {
   beforeEach(() => {
-    cy.visitPage("/form-builder", {
-      onBeforeLoad: (win) => {
-        win.sessionStorage.clear();
-        let nextData: NextData;
-        Object.defineProperty(win, "__NEXT_DATA__", {
-          set(serverSideProps) {
-            serverSideProps.context = {
-              user: {
-                acceptableUse: true,
-                name: null,
-                userId: "testId",
-              },
-            };
-            nextData = serverSideProps;
-          },
-          get() {
-            return nextData;
-          },
-        });
-      },
-    });
+    cy.login({ acceptableUse: true });
+    cy.visitPage("/form-builder");
   });
 
   it("Adds a Page Text element", () => {
@@ -32,7 +11,7 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get('[data-testid="richText"]').click();
     cy.get("button").contains("Select block").click();
 
-    cy.get('[data-testid="richText"]').should("exist");
+    cy.get('[data-testid="richText"]').should("be.visible");
   });
 
   it("Adds a Short Answer element", () => {
