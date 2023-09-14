@@ -12,7 +12,9 @@ describe("Form builder share", () => {
     cy.focused().should("have.attr", "id", "fileName");
   });
   it("Renders share flyout for authenticated", () => {
-    cy.typeInField("#fileName", "Share Test Form");
+    cy.get("#fileName")
+      .should("have.attr", "placeholder", "Unnamed form file")
+      .typeInField("#fileName", "Cypress Share Test Form");
     cy.get("button").contains("Share").click();
     cy.get("[role='menuitem']").should("have.length", 1);
     cy.get("span").contains("Share by email").click();
@@ -26,7 +28,9 @@ describe("Form builder share", () => {
   it("Renders share flyout for unAuthenticated", () => {
     cy.logout();
     cy.visitPage("/form-builder/edit");
-    cy.typeInField("#fileName", "Share Test Form");
+    cy.get("#fileName")
+      .should("have.attr", "placeholder", "Unnamed form file")
+      .typeInField("#fileName", "Cypress Share Test Form");
     cy.get("button").contains("Share").click();
     cy.get("[role='menuitem']").should("have.length", 1);
     cy.get("span").contains("Share by email").click();
