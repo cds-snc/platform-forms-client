@@ -42,7 +42,7 @@ const Home = () => {
         <style>{css}</style>
       </Head>
       <div className="mt-10 flex items-center justify-center">
-        <div className="w-[800px] rounded-2xl border-1 border-[#D1D5DB] bg-white p-10">
+        <div className="w-[622px] rounded-2xl border-1 border-[#D1D5DB] bg-white p-8">
           <main id="content" className="flex  flex-col items-center">
             <div className="mb-10">
               <SiteLink />
