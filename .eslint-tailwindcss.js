@@ -16,7 +16,7 @@ module.exports = {
     ],
     settings: {
       tailwindcss: {
-        whitelist: ["(gc\\-).*", "form-builder", "page-container", "visually-hidden", "buttons", "required", "focus-group"]
+        whitelist: ["(gc\\-).*", "form-builder", "page-container", "visually-hidden", "buttons", "required", "focus-group", "canada-flag"]
       }
     }
   };

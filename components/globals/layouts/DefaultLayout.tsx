@@ -4,6 +4,8 @@ import Footer from "../Footer";
 import SkipLink from "../SkipLink";
 import Fip from "../Fip";
 import { HeadMeta } from "./HeadMeta";
+import LanguageToggle from "../LanguageToggle";
+import Menu from "@components/auth/LoginMenu";
 
 interface DefaultLayoutProps extends React.PropsWithChildren {
   showLanguageToggle?: boolean;
@@ -20,7 +22,10 @@ export const Layout = ({
   return (
     <>
       <header>
-        <Fip {...{ showLanguageToggle, showLogin }} />
+        <Fip>
+          {showLanguageToggle && <LanguageToggle />}
+          {showLogin && <Menu />}
+        </Fip>
       </header>
       <div id="page-container" className={className}>
         <main id="content">{children}</main>
@@ -35,14 +40,15 @@ const DefaultLayout = ({ children, showLanguageToggle, showLogin }: DefaultLayou
     <div className="flex h-full flex-col">
       <HeadMeta />
       <SkipLink />
-
       <header>
-        <Fip {...{ showLanguageToggle, showLogin }} />
+        <Fip>
+          {showLanguageToggle && <LanguageToggle />}
+          {showLogin && <Menu />}
+        </Fip>
       </header>
       <div id="page-container">
         <main id="content">{children}</main>
       </div>
-
       <Footer />
     </div>
   );
