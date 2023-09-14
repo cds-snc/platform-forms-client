@@ -1,0 +1,39 @@
+name: Delete ECS task definitions
+
+on:
+  workflow_dispatch:
+
+env:
+  AWS_REGION: ca-central-1
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  delete-ecs-task-definitions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+
+      - name: Configure Staging AWS credentials using OIDC
+        uses: aws-actions/configure-aws-credentials@8c3f20df09ac63af7b3ae3d7c91f105f857d8497 # v4.0.0
+        with:
+          role-to-assume: arn:aws:iam::687401027353:role/platform-forms-client-apply
+          role-session-name: ECSTaskDefDelete
+          aws-region: ${{ env.AWS_REGION }}
+
+      # Retrieves all ACTIVE task definitions except for the 5 most recent
+      - name: Get ECS task definitions
+        run: |
+            aws ecs list-task-definitions \
+                --sort ASC \
+                --status ACTIVE \
+                --region ${{ env.AWS_REGION }} \
+                --no-cli-pager \
+                | jq -r '(.taskDefinitionArns[:length-6])[]' > task-def-arns.txt
+
+      - name: Delete ECS task definitions
+        run: |
+          ./bin/delete-ecs-task-defs.sh task-def-arns.txt
