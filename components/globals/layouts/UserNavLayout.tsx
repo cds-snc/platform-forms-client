@@ -58,8 +58,8 @@ const UserNavLayout = ({
                 <Link href="/myforms">{t("adminNav.myForms")}</Link>
               )}
             </div>
-            {<LoginMenu />}
-            {<LanguageToggle />}
+            <LoginMenu />
+            <LanguageToggle />
           </div>
         </div>
       </header>
