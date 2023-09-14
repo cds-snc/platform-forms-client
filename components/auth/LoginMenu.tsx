@@ -14,11 +14,7 @@ const LoginMenu = () => {
   };
 
   return (
-    <div
-      id="login-menu"
-      className="text-base font-normal not-italic"
-      data-authenticated={`${isAuthenticated}`}
-    >
+    <div id="login-menu" className="text-base font-normal not-italic">
       {isAuthenticated ? (
         <button
           type="button"
