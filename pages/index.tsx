@@ -27,7 +27,7 @@ const SiteLink = () => {
           <SiteLogo title={t("title")} />
         </span>
         <h1
-          className={`ml-3 inline-block text-[24px] text-[#1B00C2] ${nato.className} mb-0 border-none pb-0 leading-[38px]`}
+          className={`ml-3 inline-block text-[24px] text-[#1B00C2] ${nato.className} mb-0 whitespace-nowrap border-none pb-0 leading-[38px]`}
         >
           {t("title-full", { ns: "common" })}
         </h1>
