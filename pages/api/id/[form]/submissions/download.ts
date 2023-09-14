@@ -91,10 +91,12 @@ const getSubmissions = async (
     const responses = queryResult?.Items?.map((item) => {
       const submission = Object.entries(JSON.parse(item.FormSubmission)).map(
         ([questionId, answer]) => {
+          const question = fullFormTemplate.form.elements.find(
+            (element) => element.id === Number(questionId)
+          );
           return {
-            question: fullFormTemplate.form.elements.find(
-              (element) => element.id === Number(questionId)
-            )?.properties?.titleEn,
+            questionEn: question?.properties.titleEn,
+            questionFr: question?.properties.titleFr,
             answer: answer,
           };
         }
@@ -119,6 +121,7 @@ const getSubmissions = async (
       if (req.query.format === "html") {
         //
       }
+
       return res.status(200).json("format requested: " + req.query.format);
     }
 
