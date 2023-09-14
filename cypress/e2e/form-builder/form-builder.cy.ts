@@ -1,6 +1,5 @@
 describe("Test FormBuilder", () => {
   beforeEach(() => {
-    cy.login({ acceptableUse: true });
     cy.visitPage("/form-builder");
   });
 
