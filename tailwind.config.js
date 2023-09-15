@@ -73,6 +73,24 @@ module.exports = {
           700: "#335075",
           800: "#26374a",
         },
+        indigo: {
+          50: "#EEF2FF",
+          500: "#6366F1",
+          700: "#4338CA",
+        },
+        violet: {
+          50: "#EDE9FE",
+          500: "#A78BFA",
+          700: "#7C3AED",
+        },
+        slate: {
+          50: "#F8FAFC",
+          100: "#F3F4F6",
+          300: "#CBD5E1",
+          500: "#64748B",
+          800: "#1E293B",
+          950: "#020617",
+        },
         gray: {
           DEFAULT: "#EEE",
           default: "#EEE",
@@ -82,6 +100,7 @@ module.exports = {
           light: "#E2E8EF",
           dark: "#748094",
           soft: "#F9FAFB",
+          50: "#F9FAFB",
           100: "#F1F2F3",
           500: "#a0aec0",
           600: "#718096",
