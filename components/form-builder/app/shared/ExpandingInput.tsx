@@ -1,5 +1,7 @@
 import React, { FocusEventHandler } from "react";
 
+import { cn } from "@lib/utils";
+
 interface Props {
   id: string;
   name?: string;
@@ -37,14 +39,20 @@ const ExpandingInput = React.forwardRef<Ref, Props>((props, ref) => {
 
   return (
     <div
-      className={`input-sizer stacked border-solid border-black border-b-1.5 ${wrapperClassName}`}
+      className={cn(
+        "input-sizer stacked border-b-1.5 border-solid border-slate-500 ",
+        wrapperClassName
+      )}
       data-value={value}
     >
       <textarea
         rows={1}
         maxLength={2000}
         id={id}
-        className={` focus:bg-gray-default focus:outline-0 !font-sans ${className} overflow-y-visible`}
+        className={cn(
+          "!font-sans focus:bg-gray-default focus:outline-0 overflow-y-visible",
+          className
+        )}
         name={name}
         aria-describedby={describedBy}
         aria-invalid={isInvalid ? true : false}

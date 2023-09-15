@@ -38,12 +38,12 @@ export const RichTextLocked = ({
   const { handleAddElement } = useHandleAdd();
 
   return (
-    <div className="max-w-[800px] border-1 border-black h-auto -mt-px x-[10000] first-of-type:rounded-t-md last-of-type:rounded-b-md">
-      <div className="mx-7 mt-5 mb-7">
+    <div className="-mt-px h-auto max-w-[800px] border-1 border-slate-500 first-of-type:rounded-t-md last-of-type:rounded-b-md">
+      <div className="mx-7 mb-7 mt-5">
         <LockedBadge />
         {beforeContent && beforeContent}
         <div className="flex">{children}</div>
-        <div key={translationLanguagePriority} className="flex border-2 rounded">
+        <div key={translationLanguagePriority} className="flex rounded border-2">
           <RichTextEditor
             path={path}
             content={content}
@@ -54,7 +54,7 @@ export const RichTextLocked = ({
       </div>
       <div className="flex">
         {addElement && (
-          <div className="mx-auto bottom-0 -mb-5 z-10">
+          <div className="bottom-0 z-10 mx-auto -mb-5">
             <AddElementButton
               handleAdd={(type?: FormElementTypes) => {
                 // Index is -1 because we want to add the element after the initial locked block and before the first element
