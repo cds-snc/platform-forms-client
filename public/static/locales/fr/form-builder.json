@@ -597,8 +597,8 @@
       "option4": "Autre",
       "title": "Dites-nous en plus"
     },
-    "title": "Soutien",
-    "useThisForm": "Utilisez ce formulaire pour obtenir du soutien technique ou signaler tout problème technique avec Formulaires GC.",
+    "title": "Obtenir du soutien",
+    "useThisForm": "Utilisez ce formulaire pour obtenir du soutien pour tout problème technique avec Formulaires GC.",
     "errors": {
       "submissionError": "Il y a eu une erreur. Veuillez réessayer plus tard."
     }
