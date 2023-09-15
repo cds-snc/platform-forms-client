@@ -202,26 +202,26 @@
       "description": "Ajouter plus d'informations.",
       "title": "Plus d'informations"
     },
-    "email": "Votre courriel",
+    "email": "Adresse courriel",
     "department": "Ministère ou organisme",
     "branch": "Direction ou secteur",
-    "jobtitle": "Titre de poste",
+    "jobTitle": "Titre de poste",
     "gcFormsTeamLink": "page de contact",
-    "gcFormsTeamPart1": "L'équipe de Formulaires GC offre ses services au personnel du gouvernement. Nous ne pouvons pas conseiller le public au sujet des formulaires que nous hébergeons. Pour toute autre demande, rendez-vous sur la",
+    "gcFormsTeamPart1": "L'équipe de Formulaires GC offre ses services au personnel du gouvernement. Nous ne pouvons pas conseiller le public au sujet des formulaires que nous hébergeons. Pour toute autre demande, allez à la",
     "gcFormsTeamPart2": "pour trouver le ministère ou organisme le plus à même de vous répondre.",
     "ifYouExperience": "Pour obtenir du soutien technique, veuillez remplir le ",
-    "name": "Votre nom",
-    "needSupport": "Besoin d'aide?",
+    "name": "Nom",
+    "needSupport": "Besoin d'aide pour l'utilisation de Formulaires GC?",
     "request": {
-      "option1": "Demandez une démonstration du produit",
-      "option2": "Inscrivez-vous à notre liste de diffusion",
-      "option3": "Donnez votre avis",
+      "option1": "Demander une démonstration du produit",
+      "option2": "S'inscrire à la liste de diffusion",
+      "option3": "Donner un avis",
       "option4": "Autre",
       "title": "Raison pour laquelle vous nous contactez"
     },
     "supportFormLink": "formulaire de soutien",
     "title": "Contactez-nous",
-    "useThisForm": "Utilisez ce formulaire pour en apprendre davantage sur Formulaires GC et sur la façon dont cet outil peut fonctionner au sein de votre ministère ou organisme.",
+    "useThisForm": "Utilisez ce formulaire pour en apprendre davantage sur Formulaires GC et sur la façon dont cet outil peut fonctionner au sein de votre ministère ou organisme gouvernemental.",
     "errors": {
       "submissionError": "Il y a eu une erreur. Veuillez réessayer plus tard."
     }
