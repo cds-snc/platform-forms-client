@@ -200,7 +200,7 @@
   "contactus": {
     "description": {
       "description": "Ajouter plus d'informations.",
-      "title": "Plus d'informations"
+      "title": "Dites-nous en plus"
     },
     "email": "Adresse courriel",
     "department": "Ministère ou organisme",
@@ -220,7 +220,7 @@
       "title": "Raison pour laquelle vous nous contactez"
     },
     "supportFormLink": "formulaire de soutien",
-    "title": "Contactez-nous",
+    "title": "Nous contacter",
     "useThisForm": "Utilisez ce formulaire pour en apprendre davantage sur Formulaires GC et sur la façon dont cet outil peut fonctionner au sein de votre ministère ou organisme gouvernemental.",
     "errors": {
       "submissionError": "Il y a eu une erreur. Veuillez réessayer plus tard."
@@ -595,7 +595,7 @@
       "option2": "Obtenir du soutien technique",
       "option3": "Signaler un problème avec un formulaire publié",
       "option4": "Autre",
-      "title": "Dites-nous en plus"
+      "title": "Raison pour laquelle vous nous contactez"
     },
     "title": "Obtenir du soutien",
     "useThisForm": "Utilisez ce formulaire pour obtenir du soutien pour tout problème technique avec Formulaires GC.",

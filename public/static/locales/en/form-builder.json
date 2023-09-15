@@ -200,7 +200,7 @@
   "contactus": {
     "description": {
       "description": "Provide more context.",
-      "title": "Additional information"
+      "title": "Tell us more"
     },
     "email": "Email address",
     "department": "Department or agency",
@@ -594,7 +594,7 @@
       "option2": "Get technical support",
       "option3": "Report a problem with a published form",
       "option4": "Other",
-      "title": "Tell us more"
+      "title": "Reason for reaching out"
     },
     "title": "Get support",
     "useThisForm": "Use this form if you experience technical issues with GC Forms.",
