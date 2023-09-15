@@ -196,21 +196,22 @@
   "confirmationMessage": "Message de confirmation",
   "confirmationPage": "Page de confirmation",
   "contactSupport": "Contacter l’équipe de soutien",
-  "contactSupportIfYouHaveQuestions": "<a href=\"/fr/form-builder/support\" target=\"_blank\">Veuillez contacter</a>  l’équipe de soutien si vous avez des questions. ",
+  "contactSupportIfYouHaveQuestions": "<a href=\"/fr/form-builder/support\" target=\"_blank\">Veuillez contacter</a> l’équipe de soutien si vous avez des questions. ",
   "contactus": {
     "description": {
       "description": "Ajouter plus d'informations.",
       "title": "Dites-nous en plus"
     },
+    "name": "Nom",
     "email": "Adresse courriel",
     "department": "Ministère ou organisme",
     "branch": "Direction ou secteur",
     "jobTitle": "Titre de poste",
-    "gcFormsTeamLink": "page de contact",
-    "gcFormsTeamPart1": "L'équipe de Formulaires GC offre ses services au personnel du gouvernement. Nous ne pouvons pas conseiller le public au sujet des formulaires que nous hébergeons. Pour toute autre demande, allez à la",
-    "gcFormsTeamPart2": "pour trouver le ministère ou organisme le plus à même de vous répondre.",
+    "gcFormsTeamLink": "Coordonnées du Gouvernement du Canada",
+    "gcFormsTeamPart1": "L'équipe de Formulaires GC offre ses services au personnel du gouvernement. Nous ne pouvons pas conseiller le public au sujet des formulaires que nous hébergeons. Pour toute autre demande, allez à la page",
+    "gcFormsTeamPart2": "pour trouver le ministère ou l'organisme qui peut vous aider.",
     "ifYouExperience": "Pour obtenir du soutien technique, veuillez remplir le ",
-    "name": "Nom",
+
     "needSupport": "Besoin d'aide pour l'utilisation de Formulaires GC?",
     "request": {
       "option1": "Demander une démonstration du produit",
@@ -578,10 +579,10 @@
     "text2": "Réponses"
   },
   "support": {
-    "contactUs": "le formulaire \"Contactez-nous\"",
+    "contactUs": "le formulaire de contact",
     "description": {
       "description": "Fournissez plus de contexte autour du problème que vous rencontrez.",
-      "title": "Plus d'informations"
+      "title": "Dites-nous en plus"
     },
     "name": "Votre nom",
     "email": "Votre adresse courriel",

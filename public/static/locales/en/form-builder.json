@@ -202,15 +202,16 @@
       "description": "Provide more context.",
       "title": "Tell us more"
     },
+    "name": "Name",
     "email": "Email address",
     "department": "Department or agency",
     "branch": "Branch or sector",
     "jobTitle": "Job title",
-    "gcFormsTeamLink": "contacts page",
+    "gcFormsTeamLink": "Government of Canada contacts",
     "gcFormsTeamPart1": "The GC Forms team provides services to people who work in the government. We cannot give general advice to the public about the forms that we host. For other enquiries, go to the",
-    "gcFormsTeamPart2": "to find the right department or agency to fulfill your request.",
+    "gcFormsTeamPart2": "page to find the department or agency that can help.",
     "ifYouExperience": "To get technical support, use the",
-    "name": "Name",
+
     "needSupport": "Need help using GC Forms?",
     "request": {
       "option1": "Request a product demo",
@@ -577,10 +578,10 @@
     "text2": "Responses page"
   },
   "support": {
-    "contactUs": "Contact us form",
+    "contactUs": "contact form",
     "description": {
       "description": "Provide more context around the problem you are experiencing.",
-      "title": "Additional information"
+      "title": "Tell us more"
     },
     "name": "Your name",
     "email": "Your email address",
