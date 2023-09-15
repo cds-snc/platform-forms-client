@@ -11,7 +11,7 @@ describe("Support Pages", () => {
     it("French page loads", () => {
       cy.get("a[lang='fr']").click();
       cy.url().should("contain", "/fr");
-      cy.get("h1").should("contain", "Soutien");
+      cy.get("h1").should("contain", "Obtenir du soutien");
     });
 
     it("Required fields stops submission", () => {
@@ -31,7 +31,7 @@ describe("Support Pages", () => {
       cy.get("label[for='request-question']").click();
       cy.typeInField("#description", "1");
       cy.get("button[type='submit']").click();
-      cy.get("h1").contains("Thank you for your request");
+      cy.get("h1").contains("Thank you for your submission");
     });
   });
 
@@ -47,7 +47,7 @@ describe("Support Pages", () => {
     it("French page loads", () => {
       cy.get("a[lang='fr']").click();
       cy.url().should("contain", "/fr");
-      cy.get("h1").should("contain", "Contactez-nous");
+      cy.get("h1").should("contain", "Nous contacter");
     });
 
     it("Required fields stops submission", () => {
@@ -70,7 +70,7 @@ describe("Support Pages", () => {
       cy.get("label[for='request-question']").click();
       cy.typeInField("#description", "1");
       cy.get("button[type='submit']").click();
-      cy.get("h1").contains("Thank you for your request");
+      cy.get("h1").contains("Thank you for your submission");
     });
   });
 });
