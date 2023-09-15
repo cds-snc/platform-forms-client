@@ -10,7 +10,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import BearerRefresh from "@components/admin/BearerRefresh/BearerRefresh";
 import FormAccess from "@components/admin/FormAccess/FormAccess";
-import { getProperty } from "@lib/utils";
+import { getLocalizedProperty } from "@lib/utils";
 
 interface FormSettingsProps {
   form: FormRecord;
@@ -53,7 +53,7 @@ const FormSettings = (props: FormSettingsProps): React.ReactElement => {
     <>
       <h1>{t("settings.title")}</h1>
       <div data-testid="formID" className="mb-4">
-        <b>Form Title:</b> {formRecord.form[getProperty("title", language)] as string}
+        <b>Form Title:</b> {formRecord.form[getLocalizedProperty("title", language)] as string}
         <br />
         <b>Form ID:</b> {formRecord.id}
         <br />

@@ -21,19 +21,7 @@ import {
   Response,
 } from "@lib/types";
 import { TFunction } from "next-i18next";
-
-// This function is used for the i18n change of form labels
-export function getProperty(field: string, lang: string): string {
-  try {
-    if (!field) {
-      return lang;
-    }
-    return field + lang.charAt(0).toUpperCase() + lang.slice(1);
-  } catch (err) {
-    logMessage.error(err as Error);
-    throw err;
-  }
-}
+import { getLocalizedProperty } from "@lib/utils";
 
 // This function is used for select/radio/checkbox i18n change of form labels
 function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: string) {
@@ -67,7 +55,7 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
     ? element.properties.validation.required
     : false;
 
-  const labelText = element.properties[getProperty("title", lang)]?.toString();
+  const labelText = element.properties[getLocalizedProperty("title", lang)]?.toString();
   const labelComponent = labelText ? (
     <Label
       key={`label-${id}`}
@@ -91,10 +79,10 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
       ? element.properties.validation.type
       : "text";
 
-  const placeHolderPerLocale = element.properties[getProperty("placeholder", lang)];
+  const placeHolderPerLocale = element.properties[getLocalizedProperty("placeholder", lang)];
   const placeHolder = placeHolderPerLocale ? placeHolderPerLocale.toString() : "";
 
-  const descriptionPerLocale = element.properties[getProperty("description", lang)];
+  const descriptionPerLocale = element.properties[getLocalizedProperty("description", lang)];
   const description = descriptionPerLocale ? descriptionPerLocale.toString() : "";
 
   switch (element.type) {

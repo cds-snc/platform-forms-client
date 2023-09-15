@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useTranslation } from "next-i18next";
 import { RichText } from "@components/forms";
-import { getProperty } from "@lib/utils";
+import { getLocalizedProperty } from "@lib/utils";
 import { PublicFormRecord } from "@lib/types";
 
 /*
@@ -47,9 +47,11 @@ export const TextPage = (props: TextPageProps): React.ReactElement => {
   } = props;
   const language = i18n.language as string;
 
-  const pageText = confirmation ? confirmation[getProperty("description", language)] : "";
+  const pageText = confirmation ? confirmation[getLocalizedProperty("description", language)] : "";
 
-  const urlQuery = confirmation ? confirmation[getProperty("referrerUrl", language)] : null;
+  const urlQuery = confirmation
+    ? confirmation[getLocalizedProperty("referrerUrl", language)]
+    : null;
 
   // autoFocus h1 element of page to ensure its read out
   useEffect(() => {

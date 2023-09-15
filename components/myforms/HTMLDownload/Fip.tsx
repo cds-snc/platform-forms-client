@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
-import { getProperty } from "@lib/utils";
+import { getLocalizedProperty } from "@lib/utils";
 
 // Base64 Images to simplify creating portable HTML files
 const logoBase64En =
@@ -15,15 +15,18 @@ const Fip = ({ language }: { language: string }) => {
   const formTheme = null;
 
   const logo =
-    (formTheme?.[getProperty("logo", i18n.language)] as string | undefined) ?? language === "en"
+    (formTheme?.[getLocalizedProperty("logo", i18n.language)] as string | undefined) ??
+    language === "en"
       ? logoBase64En
       : logoBase64Fr;
 
   const linkUrl =
-    (formTheme?.[getProperty("url", i18n.language)] as string | undefined) ?? t("fip.link");
+    (formTheme?.[getLocalizedProperty("url", i18n.language)] as string | undefined) ??
+    t("fip.link");
 
   const logoTitle =
-    (formTheme?.[getProperty("logoTitle", i18n.language)] as string | undefined) ?? t("fip.text");
+    (formTheme?.[getLocalizedProperty("logoTitle", i18n.language)] as string | undefined) ??
+    t("fip.text");
 
   return (
     <div data-testid="fip" className="gc-fip">

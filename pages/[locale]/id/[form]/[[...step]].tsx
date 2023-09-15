@@ -6,12 +6,13 @@ import classnames from "classnames";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import { Form, TextPage } from "@components/forms";
-import { getProperty, getRenderedForm } from "@lib/formBuilder";
+import { getRenderedForm } from "@lib/formBuilder";
 import { useRouter } from "next/router";
 import { PublicFormRecord } from "@lib/types";
 import { GetServerSideProps } from "next";
 import { NextPageWithLayout } from "pages/_app";
 import { languageParamSanitization } from "@app/i18n/utils";
+import { getLocalizedProperty } from "@lib/utils";
 
 import FormDisplayLayout from "@components/globals/layouts/FormDisplayLayout";
 
@@ -30,7 +31,7 @@ const RenderForm: NextPageWithLayout<RenderFormProps> = ({
   const language = i18n.language as string;
   const classes = classnames("gc-form-wrapper");
   const currentForm = getRenderedForm(formRecord, language, t);
-  const formTitle = formRecord.form[getProperty("title", language)] as string;
+  const formTitle = formRecord.form[getLocalizedProperty("title", language)] as string;
   const router = useRouter();
   const { step } = router.query;
 

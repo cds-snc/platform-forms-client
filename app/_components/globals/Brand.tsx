@@ -1,6 +1,6 @@
 import React from "react";
 import { BrandProperties } from "@lib/types/form-types";
-import { getProperty } from "@lib/utils";
+import { getLocalizedProperty } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { Language } from "@appComponents/form-builder/types";
 
@@ -15,17 +15,18 @@ const Brand = ({
 
   const language = i18n.language as Language;
 
-  const themeLogo = brand?.[getProperty("logo", language)] as string | undefined;
+  const themeLogo = brand?.[getLocalizedProperty("logo", language)] as string | undefined;
 
   // Check if custom branding was provided, otherwise show the Government of Canada branding
   const logo = themeLogo ?? "/img/sig-blk-" + language + ".svg";
 
   // Custom title or default
   const logoTitle =
-    (brand?.[getProperty("logoTitle", language)] as string | undefined) ?? t("fip.text");
+    (brand?.[getLocalizedProperty("logoTitle", language)] as string | undefined) ?? t("fip.text");
 
   // Custom link or default
-  const linkUrl = (brand?.[getProperty("url", language)] as string | undefined) ?? t("fip.link");
+  const linkUrl =
+    (brand?.[getLocalizedProperty("url", language)] as string | undefined) ?? t("fip.link");
 
   // This default height seems to work for most custom brand logos so far.
   let logoStyles = `max-h-[80px] max-w-[600px] ${className || ""}`;

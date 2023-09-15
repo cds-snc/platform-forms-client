@@ -14,7 +14,7 @@ import { logMessage } from "@lib/logger";
 import { FormRecord } from "@lib/types";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
-import { getProperty } from "@lib/utils";
+import { getLocalizedProperty } from "@lib/utils";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 
 interface FormSettingsProps {
@@ -61,7 +61,7 @@ const FormSettings = (props: FormSettingsProps): React.ReactElement => {
       </Head>
       <h1>{t("settings.title")}</h1>
       <div data-testid="formID" className="mb-4">
-        <b>Form Title:</b> {formRecord.form[getProperty("title", language)] as string}
+        <b>Form Title:</b> {formRecord.form[getLocalizedProperty("title", language)] as string}
         <br />
         <b>Form ID:</b> {formRecord.id}
         <br />

@@ -3,6 +3,7 @@ import { Table } from "@components/myforms/HTMLDownload/Table";
 import { useTranslation } from "next-i18next";
 import { FormProperties, Response, Responses, FormElementTypes } from "@lib/types";
 import { filterUndef } from "@lib/tsUtils";
+import { getLocalizedProperty } from "@lib/utils";
 
 export interface ResponseSectionProps {
   confirmReceiptCode: string;
@@ -16,13 +17,6 @@ export interface ResponseSectionProps {
 
 export function capitalize(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-function getProperty(field: string, lang: string): string {
-  if (!field) {
-    throw new Error("Field does not exist");
-  }
-  return field + lang.charAt(0).toUpperCase() + lang.slice(1);
 }
 
 const parseQuestionsAndAnswers = (
@@ -48,7 +42,7 @@ const parseQuestionsAndAnswers = (
   return filterUndef(
     formTemplate.layout.map((elementID, index) => {
       const question = questionsOnly.filter((element) => element.id === elementID)[0]?.properties[
-        getProperty("title", lang)
+        getLocalizedProperty("title", lang)
       ] as string;
 
       // If the question type does not have a possible response it will return undefined here.
@@ -70,7 +64,7 @@ const parseQuestionsAndAnswers = (
         }
 
         const dynamicRowResponse = nonRichTextElements.map((element, index) => {
-          const question = element.properties[getProperty("title", lang)] as string;
+          const question = element.properties[getLocalizedProperty("title", lang)] as string;
           const response = (formResponse[elementID] as Record<string, Response>[]).map((answer) => {
             return answer[index];
           });
@@ -177,7 +171,9 @@ export const ResponseSection = ({
         </ul>
       </nav>
 
-      <h2 className="gc-h1 mt-20">{formTemplate[getProperty("title", lang)]?.toString()}</h2>
+      <h2 className="gc-h1 mt-20">
+        {formTemplate[getLocalizedProperty("title", lang)]?.toString()}
+      </h2>
       <h3 id={`columnTable${capitalizedLang}`} className="gc-h2 mt-20" tabIndex={-1}>
         {t("responseTemplate.columnTable", { lng: lang })}
       </h3>

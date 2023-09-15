@@ -1,7 +1,7 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { getAllTemplates } from "@lib/templates";
 import { requireAuthentication } from "@lib/auth";
-import { getProperty } from "@lib/utils";
+import { getLocalizedProperty } from "@lib/utils";
 
 import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
@@ -89,14 +89,16 @@ const DataView = (props: DataViewProps): React.ReactElement => {
         <tbody>
           {templates
             .sort((a, b) => {
-              return (a[getProperty("title", i18n.language)] as string).localeCompare(
-                b[getProperty("title", i18n.language)] as string
+              return (a[getLocalizedProperty("title", i18n.language)] as string).localeCompare(
+                b[getLocalizedProperty("title", i18n.language)] as string
               );
             })
             .map((template) => {
               return (
                 <tr key={template.id} className="border-t-4 border-b-1 border-gray-400">
-                  <td className="pl-4">{template[getProperty("title", i18n.language)]} </td>
+                  <td className="pl-4">
+                    {template[getLocalizedProperty("title", i18n.language)]}{" "}
+                  </td>
                   <td className="text-center">
                     {template.isPublished ? t("view.published") : t("view.draft")}
                   </td>
