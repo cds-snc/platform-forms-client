@@ -14,11 +14,15 @@ describe("<RichTextEditor />", () => {
     );
 
     // Add some strings to get formatted
-    cy.get(`[id^="editor-"]`).type("H2 heading text{enter}");
-    cy.get(`[id^="editor-"]`).type("H3 heading text{enter}");
-    cy.get(`[id^="editor-"]`).type("Let's bold part of this sentence.{enter}");
-    cy.get(`[id^="editor-"]`).type("Let's italicize part of this sentence.{enter}");
-    cy.get(`[id^="editor-"]`).type("Part of his one will be a link{enter}");
+    cy.get(`[id^="editor-"]`).type(
+      `
+    H2 heading text
+    H3 heading text
+    Let's bold part of this sentence.
+    Let's italicize part of this sentence.
+    Part of his one will be a link    
+    `
+    );
 
     // Add a link
     cy.get(`[id^="editor-"]`).setSelection("will be a link");

@@ -11,11 +11,11 @@ describe("Restricted Access Page", () => {
 
     cy.visitPage("/auth/login");
     cy.contains("Sign in").click();
-    cy.get("input[id='username']").type("test.user@cds-snc.ca");
-    cy.get("input[id='password']").type("testTesttest");
+    cy.typeInField("input[id='username']", "test.user@cds-snc.ca");
+    cy.typeInField("input[id='password']", "testTesttest");
     cy.get("button[type='submit']").click();
     cy.get("input[id='verificationCode']").should("be.visible");
-    cy.get("input[id='verificationCode']").type("12345");
+    cy.typeInField("input[id='verificationCode']", "12345");
     cy.get("button[type='submit']").click();
     cy.url().should("contain", "auth/restricted-access");
     cy.get("h2").contains("Restricted access to responses");

@@ -8,7 +8,7 @@ describe("<Alert />", () => {
   describe("Alerts by status", () => {
     it("Renders a SUCCESS alert", () => {
       cy.mount(<Alert.Success title="This is a title" body="This is a body" />);
-      cy.get("[data-testid='alert']").should("exist");
+      cy.get("[data-testid='alert']").should("be.visible");
       cy.get("[data-testid='alert']").should("have.class", "bg-emerald-50");
       cy.get("[data-testid='alert-icon']").should("have.class", "[&_svg]:fill-emerald-700");
       cy.get("[data-testid='alert-heading']").should("have.class", "text-emerald-700");
@@ -16,7 +16,7 @@ describe("<Alert />", () => {
 
     it("Renders a WARNING alert", () => {
       cy.mount(<Alert.Warning title="This is a title" body="This is a body" />);
-      cy.get("[data-testid='alert']").should("exist");
+      cy.get("[data-testid='alert']").should("be.visible");
       cy.get("[data-testid='alert']").should("have.class", "bg-yellow-50");
       cy.get("[data-testid='alert-icon']").should("have.class", "[&_svg]:fill-slate-950");
       cy.get("[data-testid='alert-heading']").should("have.class", "text-slate-950");
@@ -24,7 +24,7 @@ describe("<Alert />", () => {
 
     it("Renders am INFO alert", () => {
       cy.mount(<Alert.Info title="This is a title" body="This is a body" />);
-      cy.get("[data-testid='alert']").should("exist");
+      cy.get("[data-testid='alert']").should("be.visible");
       cy.get("[data-testid='alert']").should("have.class", "bg-indigo-50");
       cy.get("[data-testid='alert-icon']").should("have.class", "[&_svg]:fill-slate-950");
       cy.get("[data-testid='alert-heading']").should("have.class", "text-slate-950");
@@ -32,7 +32,7 @@ describe("<Alert />", () => {
 
     it("Renders am DANGER alert", () => {
       cy.mount(<Alert.Danger title="This is a title" body="This is a body" />);
-      cy.get("[data-testid='alert']").should("exist");
+      cy.get("[data-testid='alert']").should("be.visible");
       cy.get("[data-testid='alert']").should("have.class", "bg-red-50");
       cy.get("[data-testid='alert-icon']").should("have.class", "[&_svg]:fill-red-700");
       cy.get("[data-testid='alert-heading']").should("have.class", "text-red-700");
@@ -49,9 +49,9 @@ describe("<Alert />", () => {
         />
       );
 
-      cy.get("[data-testid='alert']").should("exist");
-      cy.get("[data-testid='alert-icon']").should("exist");
-      cy.get("[data-testid='alert-icon'] svg").should("exist");
+      cy.get("[data-testid='alert']").should("be.visible");
+      cy.get("[data-testid='alert-icon']").should("be.visible");
+      cy.get("[data-testid='alert-icon'] svg").should("be.visible");
 
       cy.get("[data-testid='alert'] h2").should("have.text", "This is a title");
       cy.get("[data-testid='alert']").should("contain", "This is a body");
@@ -60,10 +60,10 @@ describe("<Alert />", () => {
     it("Renders a basic alert with title, body, and default icon", () => {
       cy.mount(<Alert.Warning title="This is a title" body="This is a body" />);
 
-      cy.get("[data-testid='alert']").should("exist");
-      cy.get("[data-testid='alert-icon']").should("exist");
+      cy.get("[data-testid='alert']").should("be.visible");
+      cy.get("[data-testid='alert-icon']").should("be.visible");
       cy.get("[data-testid='alert-icon'] svg")
-        .should("exist")
+        .should("be.visible")
         .should("have.attr", "data-testid", "WarningIcon");
 
       cy.get("[data-testid='alert'] h2").should("have.text", "This is a title");
@@ -73,7 +73,7 @@ describe("<Alert />", () => {
     it("Renders a basic alert with title, body, and no icon", () => {
       cy.mount(<Alert.Warning title="This is a title" body="This is a body" icon={false} />);
 
-      cy.get("[data-testid='alert']").should("exist");
+      cy.get("[data-testid='alert']").should("be.visible");
       cy.get("[data-testid='alert-icon']").should("not.exist");
 
       cy.get("[data-testid='alert'] h2").should("have.text", "This is a title");
@@ -84,8 +84,8 @@ describe("<Alert />", () => {
   describe("Dismissible alerts", () => {
     it("Renders a dismissible alert", () => {
       cy.mount(<Alert.Success dismissible title="This is a title" body="This is a body" />);
-      cy.get("[data-testid='alert']").should("exist");
-      cy.get("[data-testid='alert-dismiss']").should("exist").click();
+      cy.get("[data-testid='alert']").should("be.visible");
+      cy.get("[data-testid='alert-dismiss']").should("be.visible").click();
       cy.get("[data-testid='alert']").should("not.exist");
     });
 
@@ -105,7 +105,7 @@ describe("<Alert />", () => {
           body="This is a body"
         />
       );
-      cy.get("[data-testid='alert']").should("exist");
+      cy.get("[data-testid='alert']").should("be.visible");
       cy.get("[data-testid='alert-dismiss']").click();
       cy.get("[data-testid='alert-dismiss']").then(() => {
         expect(called).to.be.true;
@@ -116,7 +116,7 @@ describe("<Alert />", () => {
   describe("Focussable alerts", () => {
     it("Renders a focussable alert", () => {
       cy.mount(<Alert.Success focussable title="This is a title" body="This is a body" />);
-      cy.get("[data-testid='alert']").should("exist");
+      cy.get("[data-testid='alert']").should("be.visible");
       cy.focused().should("have.attr", "data-testid", "alert");
     });
   });
@@ -131,10 +131,10 @@ describe("<Alert />", () => {
           </Alert.Info>
         </>
       );
-      cy.get("[data-testid='alert']").should("exist");
-      cy.get("[data-testid='alert-icon']").should("exist");
+      cy.get("[data-testid='alert']").should("be.visible");
+      cy.get("[data-testid='alert-icon']").should("be.visible");
       cy.get("[data-testid='alert-icon'] svg")
-        .should("exist")
+        .should("be.visible")
         .should("have.attr", "data-testid", "InfoIcon");
     });
 
@@ -147,10 +147,10 @@ describe("<Alert />", () => {
           </Alert.Warning>
         </>
       );
-      cy.get("[data-testid='alert']").should("exist");
-      cy.get("[data-testid='alert-icon']").should("exist");
+      cy.get("[data-testid='alert']").should("be.visible");
+      cy.get("[data-testid='alert-icon']").should("be.visible");
       cy.get("[data-testid='alert-icon'] svg")
-        .should("exist")
+        .should("be.visible")
         .should("have.attr", "data-testid", "WarningIcon");
     });
 
@@ -163,10 +163,10 @@ describe("<Alert />", () => {
           </Alert.Danger>
         </>
       );
-      cy.get("[data-testid='alert']").should("exist");
-      cy.get("[data-testid='alert-icon']").should("exist");
+      cy.get("[data-testid='alert']").should("be.visible");
+      cy.get("[data-testid='alert-icon']").should("be.visible");
       cy.get("[data-testid='alert-icon'] svg")
-        .should("exist")
+        .should("be.visible")
         .should("have.attr", "data-testid", "WarningIcon");
     });
 
@@ -179,10 +179,10 @@ describe("<Alert />", () => {
           </Alert.Success>
         </>
       );
-      cy.get("[data-testid='alert']").should("exist");
-      cy.get("[data-testid='alert-icon']").should("exist");
+      cy.get("[data-testid='alert']").should("be.visible");
+      cy.get("[data-testid='alert-icon']").should("be.visible");
       cy.get("[data-testid='alert-icon'] svg")
-        .should("exist")
+        .should("be.visible")
         .should("have.attr", "data-testid", "CircleCheckIcon");
     });
   });
@@ -203,8 +203,8 @@ describe("<Alert />", () => {
         </>
       );
 
-      cy.get("[data-testid='alert']").should("exist");
-      cy.get("[data-testid='alert-icon']").should("exist");
+      cy.get("[data-testid='alert']").should("be.visible");
+      cy.get("[data-testid='alert-icon']").should("be.visible");
       cy.get("[data-testid='alert-heading']").should("have.text", "Test Title");
       cy.get("[data-testid='alert-body']").should("not.contain", "This is a body");
       cy.get("[data-testid='alert-body']").should("contain", "Test body");
@@ -220,7 +220,7 @@ describe("<Alert />", () => {
           </Alert.Success>
         </>
       );
-      cy.get("[data-testid='alert']").should("exist");
+      cy.get("[data-testid='alert']").should("be.visible");
       cy.get("[data-testid='alert-icon']").should("not.exist");
       cy.get("[data-testid='alert-heading']").should("have.text", "Test Title");
       cy.get("[data-testid='alert-body']").should("contain", "Test body");
@@ -236,10 +236,10 @@ describe("<Alert />", () => {
         </>
       );
 
-      cy.get("[data-testid='alert']").should("exist");
-      cy.get("[data-testid='alert-icon']").should("exist");
+      cy.get("[data-testid='alert']").should("be.visible");
+      cy.get("[data-testid='alert-icon']").should("be.visible");
       cy.get("[data-testid='alert-icon'] svg")
-        .should("exist")
+        .should("be.visible")
         .should("have.attr", "data-testid", "CircleCheckIcon");
       cy.get("[data-testid='alert-heading']").should("have.text", "Test Title");
       cy.get("[data-testid='alert-body']").should("contain", "Test body");
@@ -257,10 +257,10 @@ describe("<Alert />", () => {
           </Alert.Warning>
         </>
       );
-      cy.get("[data-testid='alert']").should("exist");
-      cy.get("[data-testid='alert-icon']").should("exist");
+      cy.get("[data-testid='alert']").should("be.visible");
+      cy.get("[data-testid='alert-icon']").should("be.visible");
       cy.get("[data-testid='alert-icon'] svg")
-        .should("exist")
+        .should("be.visible")
         .should("have.attr", "data-testid", "CircleCheckIcon");
       cy.get("[data-testid='alert-heading']").should("have.text", "Test Title");
       cy.get("[data-testid='alert-body']").should("contain", "Test body");
@@ -276,7 +276,7 @@ describe("<Alert />", () => {
         </Alert.Success>
       );
 
-      cy.get("[data-testid='alert']").should("exist");
+      cy.get("[data-testid='alert']").should("be.visible");
       cy.get("[data-testid='alert-heading']").should("have.prop", "tagName", "H2");
     });
 
@@ -288,7 +288,7 @@ describe("<Alert />", () => {
         </Alert.Success>
       );
 
-      cy.get("[data-testid='alert']").should("exist");
+      cy.get("[data-testid='alert']").should("be.visible");
       cy.get("[data-testid='alert-heading']").should("have.prop", "tagName", "H2");
     });
 
@@ -300,7 +300,7 @@ describe("<Alert />", () => {
         </Alert.Success>
       );
 
-      cy.get("[data-testid='alert']").should("exist");
+      cy.get("[data-testid='alert']").should("be.visible");
       cy.get("[data-testid='alert-heading']").should("have.prop", "tagName", "H3");
     });
 
@@ -312,7 +312,7 @@ describe("<Alert />", () => {
         </Alert.Success>
       );
 
-      cy.get("[data-testid='alert']").should("exist");
+      cy.get("[data-testid='alert']").should("be.visible");
       cy.get("[data-testid='alert-heading']").should("have.prop", "tagName", "H4");
     });
   });
@@ -330,11 +330,13 @@ describe("<Alert />", () => {
           asdfasdf
         </Alert.Success>
       );
-      cy.get("[data-testid='alert']").should("exist").should("have.class", "gc-testClass");
+      cy.get("[data-testid='alert']").should("be.visible").should("have.class", "gc-testClass");
       cy.get("[data-testid='alert-heading']")
-        .should("exist")
+        .should("be.visible")
         .should("have.class", "gc-testHeadingClass");
-      cy.get("[data-testid='alert-body']").should("exist").should("have.class", "gc-testBodyClass");
+      cy.get("[data-testid='alert-body']")
+        .should("be.visible")
+        .should("have.class", "gc-testBodyClass");
     });
 
     it("Renders an alert with custom override classes", () => {
@@ -349,17 +351,17 @@ describe("<Alert />", () => {
         </Alert.Success>
       );
       cy.get("[data-testid='alert']")
-        .should("exist")
+        .should("be.visible")
         .should("have.class", "p-8") // Override class
         .should("have.class", "mb-8") // Additional class
         .should("not.have.class", "p-4"); // The p-8 class will override the default p-4 class
       cy.get("[data-testid='alert-heading']")
-        .should("exist")
+        .should("be.visible")
         .should("have.class", "mb-8") // Override class
         .should("have.class", "pb-8") // Override class
         .should("not.have.class", "mb-0") // The mb-8 class will override the default mb-0 class
         .should("not.have.class", "pb-0"); // The pb-8 class will override the default pb-0 class
-      cy.get("[data-testid='alert-body']").should("exist").should("have.class", "mt-4"); // Additional class
+      cy.get("[data-testid='alert-body']").should("be.visible").should("have.class", "mt-4"); // Additional class
     });
   });
 
@@ -371,7 +373,7 @@ describe("<Alert />", () => {
           <p>And a paragraph</p>
         </Alert.Success>
       );
-      cy.get("[data-testid='alert']").should("exist");
+      cy.get("[data-testid='alert']").should("be.visible");
       cy.get("[data-testid='alert-body']")
         .should("contain", "Test body")
         .should("contain", "And a paragraph");
@@ -393,17 +395,21 @@ describe("<Alert />", () => {
           <Button className="mt-8">And a button</Button>
         </Alert.Success>
       );
-      cy.get("[data-testid='alert']").should("exist");
+      cy.get("[data-testid='alert']").should("be.visible");
       cy.get("[data-testid='alert-body']")
         .should("contain", "With a paragraph")
         .should("contain", "Here is some text wrapped in a fragment")
         .should("contain", "This paragraph contains a link");
-      cy.get("[data-testid='alert-body'] p a").should("exist").should("contain", "contains a link");
+      cy.get("[data-testid='alert-body'] p a")
+        .should("be.visible")
+        .should("contain", "contains a link");
       cy.get("[data-testid='alert-body'] ul")
-        .should("exist")
+        .should("be.visible")
         .should("contain", "And a list")
         .should("contain", "Another list item");
-      cy.get("[data-testid='alert-body'] button").should("exist").should("contain", "And a button");
+      cy.get("[data-testid='alert-body'] button")
+        .should("be.visible")
+        .should("contain", "And a button");
     });
 
     it("Does not render text that is not contained in an element", () => {
@@ -415,7 +421,7 @@ describe("<Alert />", () => {
         </Alert.Success>
       );
 
-      cy.get("[data-testid='alert']").should("exist");
+      cy.get("[data-testid='alert']").should("be.visible");
       cy.get("[data-testid='alert-body']")
         .should("contain", "Test body")
         .should("contain", "And a paragraph")
@@ -433,7 +439,7 @@ describe("<Alert />", () => {
         </Alert.Success>
       );
 
-      cy.get("[data-testid='alert']").should("exist").should("have.attr", "role", "alert");
+      cy.get("[data-testid='alert']").should("be.visible").should("have.attr", "role", "alert");
     });
 
     it("Renders an alert with an alternate role", () => {
@@ -445,7 +451,7 @@ describe("<Alert />", () => {
         </Alert.Success>
       );
 
-      cy.get("[data-testid='alert']").should("exist").should("have.attr", "role", "note");
+      cy.get("[data-testid='alert']").should("be.visible").should("have.attr", "role", "note");
     });
   });
 
@@ -459,7 +465,7 @@ describe("<Alert />", () => {
         </Alert.Success>
       );
 
-      cy.get("[data-testid='alert']").should("exist").should("not.have.attr", "id");
+      cy.get("[data-testid='alert']").should("be.visible").should("not.have.attr", "id");
     });
 
     it("Adds an id to the alert", () => {
@@ -471,7 +477,7 @@ describe("<Alert />", () => {
         </Alert.Success>
       );
 
-      cy.get("[data-testid='alert']").should("exist").should("have.attr", "id", "testId");
+      cy.get("[data-testid='alert']").should("be.visible").should("have.attr", "id", "testId");
     });
   });
 });

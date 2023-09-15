@@ -12,15 +12,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-// This function is used for the i18n change of form labels
-export function getProperty(field: string, lang: string): string {
-  try {
-    if (!field) {
-      return lang;
-    }
-    return field + lang.charAt(0).toUpperCase() + lang.slice(1);
-  } catch (err) {
-    logMessage.error(err as Error);
-    throw err;
-  }
+export function getLocalizedProperty(field = "", lang = "en"): string {
+  return field + lang.charAt(0).toUpperCase() + lang.slice(1);
 }

@@ -6,7 +6,6 @@ on:
 
 env:
   ECR_REPOSITORY: form_viewer_production
-  GITHUB_SHA: ${{ github.sha }}
   TAG_VERSION: ${{  github.ref_name }}
   COGNITO_APP_CLIENT_ID: ${{secrets.PRODUCTION_COGNITO_APP_CLIENT_ID}}
   COGNITO_USER_POOL_ID: ${{ secrets.PRODUCTION_COGNITO_USER_POOL_ID}}
@@ -23,8 +22,6 @@ jobs:
       - name: Build Form Viewer
         run: |
           docker build -t base \
-          --build-arg PRODUCTION_ENV=true \
-          --build-arg GITHUB_SHA_ARG=$GITHUB_SHA \
           --build-arg COGNITO_APP_CLIENT_ID=$COGNITO_APP_CLIENT_ID \
           --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID .
 
