@@ -37,7 +37,7 @@ describe("Test acceptable use Page", () => {
     cy.visitPage("en/myforms");
     cy.get("main").should("be.visible");
     cy.url().should("contain", "en/auth/policy");
-    cy.url().should("contain", "?referer=en/myforms");
+    cy.url().should("contain", "?referer=/myforms");
     cy.get("#acceptableUse").click();
     cy.url().should("eq", Cypress.config().baseUrl + "/en/myforms/drafts");
   });
