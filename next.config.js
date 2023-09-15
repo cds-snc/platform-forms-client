@@ -39,12 +39,6 @@ module.exports = {
       type: "asset/source",
     });
 
-    // Load version file
-    config.module.rules.push({
-      test: /VERSION$/,
-      type: "asset/source",
-    });
-
     // Silences a repeated warning from the aws-sdk
     if (isServer && nextRuntime === "nodejs")
       config.plugins.push(new webpack.IgnorePlugin({ resourceRegExp: /^aws-crt$/ }));
