@@ -77,7 +77,8 @@
     "privileges": "Privilèges",
     "settings": "Paramètres",
     "administration": "Administration",
-    "myForms": "Formulaires"
+    "myForms": "Formulaires",
+    "profile": "Profil"
   },
   "formElements": {
     "characterCount": {

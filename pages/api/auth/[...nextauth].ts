@@ -136,6 +136,10 @@ export const authOptions: NextAuthOptions = {
         token.userId = user.id;
         token.lastLoginTime = new Date();
         token.newlyRegistered = user.newlyRegistered;
+        // If name isn't passed in by the provider, use the name from the database
+        if (!token.name) {
+          token.name = user.name ?? "";
+        }
       }
 
       // Any logic that needs to happen after JWT initializtion needs to be below this point.

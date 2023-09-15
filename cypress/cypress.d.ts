@@ -35,6 +35,7 @@ declare global {
       resetDB: () => Chainable<void>;
       resetFlags: () => Chainable<void>;
       resetAll: () => Chainable<void>;
+      typeInField: (query: string, typedText: string, outputText?: string) => Chainable<void>;
     }
   }
 }
