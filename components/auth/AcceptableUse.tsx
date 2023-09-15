@@ -15,22 +15,24 @@ interface AcceptableUseProps {
 }
 export const AcceptableUseTerms = ({
   content,
-  referer = "/myforms",
+  referer,
 }: AcceptableUseProps): React.ReactElement | null => {
   const router = useRouter();
   const { t } = useTranslation("common");
   const { data: session, status } = useSession();
 
+  const defaultRoute = `/myforms`;
+
   // An extra check just encase a malicous user sets the referer to an external URL
-  if (!localPathRegEx.test(referer)) {
-    referer = "/myforms";
+  if (referer && !localPathRegEx.test(referer)) {
+    referer = defaultRoute;
   }
 
   const agree = async () => {
     const csrfToken = await getCsrfToken();
     try {
       if (csrfToken && session?.user.id) {
-        return await axios({
+        await axios({
           url: "/api/acceptableuse",
           method: "POST",
           headers: {
@@ -41,14 +43,10 @@ export const AcceptableUseTerms = ({
             userID: session.user.id,
           },
           timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-        })
-          .then(() => {
-            // Go back to the page the user was redirected from.
-            router.replace(referer);
-          })
-          .catch((err) => {
-            logMessage.error(err);
-          });
+        });
+
+        // Go back to the page the user was redirected from.
+        router.push(referer ?? defaultRoute);
       } else {
         logMessage.error("Undefined CSRF Token or Session");
       }

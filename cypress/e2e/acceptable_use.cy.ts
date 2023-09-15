@@ -29,15 +29,15 @@ describe("Test acceptable use Page", () => {
   });
 
   it("Redirects back to terms of use if not accepted", () => {
-    cy.visitPage("/myforms");
+    cy.visitPage("en/myforms");
     cy.get("main").should("be.visible");
     cy.url().should("contain", "/auth/policy");
   });
   it("Redirects back to calling page after acceptance", () => {
-    cy.visitPage("/myforms");
+    cy.visitPage("en/myforms");
     cy.get("main").should("be.visible");
-    cy.url().should("contain", "/auth/policy");
-    cy.url().should("contain", "?referer=/myforms");
+    cy.url().should("contain", "en/auth/policy");
+    cy.url().should("contain", "?referer=en/myforms");
     cy.get("#acceptableUse").click();
     cy.url().should("eq", Cypress.config().baseUrl + "/en/myforms/drafts");
   });
