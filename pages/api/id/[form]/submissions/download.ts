@@ -5,7 +5,7 @@ import { MiddlewareProps, WithRequired } from "@lib/types";
 import { getFullTemplateByID } from "@lib/templates";
 import { connectToDynamo } from "@lib/integration/dynamodbConnector";
 import { QueryCommand } from "@aws-sdk/lib-dynamodb";
-import { createObjectCsvStringifier as createCsvStringifier } from "csv-writer";
+import { createArrayCsvStringifier as createCsvStringifier } from "csv-writer";
 
 const getSubmissions = async (
   req: NextApiRequest,
@@ -103,11 +103,20 @@ const getSubmissions = async (
         }
       );
 
+      const answers: Record<string, string> = {};
+
+      submission.forEach((answer) => {
+        if (answer.questionEn) {
+          const key = answer.questionEn;
+          answers[key] = answer.answer as string;
+        }
+      });
+
       return {
         id: item.Name,
         created_at: item.CreatedAt,
         confirmation_code: item.ConfirmationCode,
-        submission: submission,
+        ...answers,
       };
     });
 
@@ -117,38 +126,12 @@ const getSubmissions = async (
 
     if (req.query.format) {
       if (req.query.format === "csv") {
-        const questionHeaders = fullFormTemplate.form.elements.map((element) => {
-          return {
-            id: element.properties.titleEn.replaceAll(" ", ""),
-            title: element.properties.titleEn,
-          };
-        });
-
         const csvStringifier = createCsvStringifier({
-          header: [
-            { id: "id", title: "Response ID" },
-            { id: "createdAt", title: "Date" },
-            { id: "confirmationCode", title: "Confirmation Code" },
-            ...questionHeaders,
-          ],
+          header: Object.keys(responses[0]),
         });
 
         const records = responses.map((response) => {
-          const answers: Record<string, string> = {};
-
-          response.submission.forEach((answer) => {
-            if (answer.questionEn) {
-              const key = answer.questionEn.replaceAll(" ", "");
-              answers[key] = answer.answer as string;
-            }
-          });
-
-          return {
-            id: response.id,
-            createdAt: response.created_at,
-            confirmationCode: response.confirmation_code,
-            ...answers,
-          };
+          return Object.values(response);
         });
 
         return res
