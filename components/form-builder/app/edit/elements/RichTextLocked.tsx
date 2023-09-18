@@ -47,7 +47,7 @@ export const RichTextLocked = ({
         className
       )}
     >
-      <div className="mx-7 mb-7 mt-5">
+      <div className="mx-5 mb-7 mt-5">
         <LockedBadge />
         {beforeContent && beforeContent}
         <div className="flex">{children}</div>
