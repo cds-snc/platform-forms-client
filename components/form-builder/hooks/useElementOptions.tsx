@@ -158,7 +158,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     },
     {
       id: "address",
-      value: "Address",
+      value: t("addElementDialog.address.label"),
       icon: AddressIcon,
       description: Address,
       group: group.input,
