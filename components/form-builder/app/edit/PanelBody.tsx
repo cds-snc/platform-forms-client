@@ -37,14 +37,14 @@ export const PanelBody = ({
   return (
     <>
       {isRichText || isDynamicRow ? (
-        <div className="mt-4 mb-4">
+        <div className="my-4">
           <Question item={item} onQuestionChange={onQuestionChange} />
           <SelectedElement item={item} elIndex={elIndex} />
         </div>
       ) : (
         <>
           <div className="flex text-sm">
-            <div className="w-full mt-4 laptop:mt-0">
+            <div className="mt-4 w-full laptop:mt-0">
               <Question
                 item={item}
                 onQuestionChange={onQuestionChange}
@@ -52,7 +52,7 @@ export const PanelBody = ({
               />
             </div>
           </div>
-          <div className="flex gap-4 mb-4 text-sm">
+          <div className="mb-4 flex gap-4 text-sm">
             <div className="w-1/2">
               <QuestionDescription item={item} describedById={describedById} />
               <SelectedElement item={item} elIndex={elIndex} />

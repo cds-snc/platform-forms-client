@@ -41,8 +41,8 @@ export const ShareDropdown = () => {
       <DropdownMenuPrimitive.Root>
         {/* main share button */}
         <DropdownMenuPrimitive.Trigger asChild>
-          <button className="cursor-pointer flex border-black rounded border-1 py-1 px-3 hover:text-white-default hover:bg-gray-600 focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white">
-            <span className="inline-block mr-1">{t("share.title")}</span>
+          <button className="flex cursor-pointer rounded border-1 border-slate-500 px-3 py-1 hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white">
+            <span className="mr-1 inline-block">{t("share.title")}</span>
             <ChevronDown className="mt-[2px]" />
           </button>
         </DropdownMenuPrimitive.Trigger>
@@ -52,7 +52,7 @@ export const ShareDropdown = () => {
           <DropdownMenuPrimitive.Content
             align="end"
             sideOffset={5}
-            className={`${menuWidth} rounded-lg px-1.5 py-1 shadow-md bg-white border-1 border-black`}
+            className={`${menuWidth} rounded-lg border-1 border-black bg-white px-1.5 py-1 shadow-md`}
           >
             {!name && (
               <DropdownMenuPrimitive.Item
@@ -62,11 +62,11 @@ export const ShareDropdown = () => {
                   }, 50);
                 }}
                 className={
-                  "flex cursor-pointer items-center rounded-md px-2 py-2 text-sm outline-none hover:text-white-default hover:bg-gray-600 focus:text-white-default focus:bg-gray-600 [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
+                  "flex cursor-pointer items-center rounded-md p-2 text-sm outline-none hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
                 }
               >
                 {t("share.missingName.message1")}
-                <span className="underline mx-1">{t("share.missingName.message2")}</span>
+                <span className="mx-1 underline">{t("share.missingName.message2")}</span>
                 {t("share.missingName.message3")}
                 <span className="sr-only">{t("share.missingName.message4")}</span>
               </DropdownMenuPrimitive.Item>
@@ -80,11 +80,11 @@ export const ShareDropdown = () => {
                 }}
                 data-share="form-builder-share-email-attempt"
                 className={
-                  "flex cursor-pointer items-center rounded-md px-2 py-2 text-sm outline-none hover:text-white-default hover:bg-gray-600 focus:text-white-default focus:bg-gray-600 [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
+                  "flex cursor-pointer items-center rounded-md p-2 text-sm outline-none hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
                 }
               >
                 <ShareIcon className="" />
-                <span className="flex-grow ml-2">{t("share.email")}</span>
+                <span className="ml-2 grow">{t("share.email")}</span>
               </DropdownMenuPrimitive.Item>
             )}
 
@@ -93,24 +93,24 @@ export const ShareDropdown = () => {
               <DropdownMenuPrimitive.Sub>
                 <DropdownMenuPrimitive.SubTrigger
                   className={
-                    "flex w-full cursor-pointer select-none items-center rounded-md px-2 py-2 text-sm outline-none hover:text-white-default hover:bg-gray-600 focus:text-white-default focus:bg-gray-600 [&_svg]:hover:fill-white [&_svg]:focus:fill-white [&_svg]:fill-black-default"
+                    "flex w-full cursor-pointer select-none items-center rounded-md p-2 text-sm outline-none hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:fill-black-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
                   }
                 >
-                  <LinkIcon className="scale-125 mr-3" />
-                  <span className="flex-grow">{t("share.link")}</span>
+                  <LinkIcon className="mr-3 scale-125" />
+                  <span className="grow">{t("share.link")}</span>
                   <ChevronRight />
                 </DropdownMenuPrimitive.SubTrigger>
 
                 <DropdownMenuPrimitive.Portal>
                   <DropdownMenuPrimitive.SubContent
                     className={
-                      "border-1 border-black origin-radix-dropdown-menu w-full rounded-md px-1 py-1 text-sm shadow-md bg-white ml-1"
+                      "origin-radix-dropdown-menu ml-1 w-full rounded-md border-1 border-slate-500 bg-white p-1 text-sm shadow-md"
                     }
                   >
                     {isPublished ? (
                       <LinksSubMenu />
                     ) : (
-                      <div className="px-2 py-2 select-none">{t("share.unpublished")}</div>
+                      <div className="select-none p-2">{t("share.unpublished")}</div>
                     )}
                   </DropdownMenuPrimitive.SubContent>
                 </DropdownMenuPrimitive.Portal>
