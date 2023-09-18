@@ -27,6 +27,7 @@ module.exports = {
         "input-sizer",
         "stacked",
         "disabled",
+        "origin-radix-dropdown-menu",
       ],
     },
   },

@@ -33,7 +33,7 @@ export const Header = ({ context = "default", user }: HeaderParams) => {
   const { t, i18n } = useTranslation(["common", "form-builder", "admin-login"]);
 
   return (
-    <header className="mb-12 border-b-1 border-gray-500 bg-gray-50 px-4 py-2 laptop:px-32 desktop:px-64">
+    <header className="mb-12 border-b-1 border-gray-500 bg-white px-4 py-2 laptop:px-32 desktop:px-64">
       <div className="grid w-full grid-flow-col">
         <div className="flex">
           <Link href="/form-builder" legacyBehavior>
