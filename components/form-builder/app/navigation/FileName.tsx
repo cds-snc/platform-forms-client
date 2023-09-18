@@ -93,7 +93,7 @@ export const FileNameInput = () => {
         ref={fileNameInput}
         className={cn(
           "border-1 border-[#1B00C2] rounded-md px-2 py-1 min-w-[220px] max-w-[200px] laptop:min-w-[250px] laptop:max-w-[500px] text-base font-bold text-ellipsis placeholder-slate-500",
-          !isPublished && "hover:border-2 hover:border-gray-default"
+          !isPublished && "hover:border-1 hover:border-gray-default"
         )}
         name="filename"
         placeholder={t("unnamedForm", { ns: "form-builder" })}
