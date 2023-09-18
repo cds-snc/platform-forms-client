@@ -26,6 +26,8 @@ import {
 } from "./DownloadTableReducer";
 import { getDaysPassed } from "@lib/clientHelpers";
 import { Alert } from "@components/globals";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { ChevronDown } from "@components/form-builder/icons";
 
 // TODO: move to an app setting variable
 const MAX_FILE_DOWNLOADS = 20;
@@ -78,6 +80,76 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
     if (nextState.checkedItems.size > 0 && errors.noItemsError) {
       setErrors({ ...errors, noItemsError: false });
     }
+  };
+
+  const handleDownloadAsCsv = async () => {
+    // Handle any errors and show them
+    if (tableItems.checkedItems.size === 0) {
+      if (!errors.noItemsError) {
+        setErrors({ ...errors, noItemsError: true });
+      }
+      return;
+    }
+
+    const url = `/api/id/${formId}/submissions/download?format=csv`;
+    const ids = Array.from(tableItems.checkedItems.keys());
+
+    return axios({
+      url,
+      method: "POST",
+      responseType: "blob",
+      data: {
+        ids: ids.join(","),
+      },
+    }).then((response) => {
+      const href = window.URL.createObjectURL(response.data);
+
+      const anchorElement = document.createElement("a");
+
+      anchorElement.href = href;
+      anchorElement.download = "records.csv";
+
+      document.body.appendChild(anchorElement);
+      anchorElement.click();
+
+      document.body.removeChild(anchorElement);
+      window.URL.revokeObjectURL(href);
+    });
+  };
+
+  const handleDownloadAsExcel = async () => {
+    // Handle any errors and show them
+    if (tableItems.checkedItems.size === 0) {
+      if (!errors.noItemsError) {
+        setErrors({ ...errors, noItemsError: true });
+      }
+      return;
+    }
+
+    const url = `/api/id/${formId}/submissions/download?format=xlsx`;
+    const ids = Array.from(tableItems.checkedItems.keys());
+
+    return axios({
+      url,
+      method: "POST",
+      responseType: "blob",
+      data: {
+        ids: ids.join(","),
+      },
+    }).then((response) => {
+      const href = window.URL.createObjectURL(response.data);
+
+      const anchorElement = document.createElement("a");
+
+      anchorElement.href = href;
+      anchorElement.download = "records.xlsx";
+
+      document.body.appendChild(anchorElement);
+      anchorElement.click();
+
+      document.body.removeChild(anchorElement);
+      window.URL.revokeObjectURL(href);
+    });
   };
 
   // NOTE: browsers have different limits for simultaneous downloads. May need to look into
@@ -287,17 +359,57 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
         </tbody>
       </table>
       <div className="mt-8 flex">
-        <button
-          id="downloadTableButtonId"
-          className="gc-button--blue m-0 w-auto whitespace-nowrap"
-          type="button"
-          onClick={handleDownload}
-          aria-live="polite"
-        >
-          {t("downloadResponsesTable.downloadXSelectedResponses", {
-            size: tableItems.checkedItems.size,
-          })}
-        </button>
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            <div
+              className="gc-button--blue m-0 w-auto whitespace-nowrap"
+              data-testid="yourAccountDropdown"
+            >
+              <span className="mr-1 inline-block">
+                {t("downloadResponsesTable.downloadXSelectedResponses", {
+                  size: tableItems.checkedItems.size,
+                })}
+              </span>
+              <ChevronDown className="mt-[2px]" />
+            </div>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Portal>
+            <DropdownMenu.Content
+              data-testid="yourAccountDropdownContent"
+              align="end"
+              className={`mt-1.5 min-w-[230px] rounded-lg border-1 border-black bg-white px-1.5 py-1 shadow-md`}
+            >
+              <DropdownMenu.Item onClick={handleDownload} asChild>
+                <Link
+                  className="block rounded-md p-2 text-sm text-black !no-underline !shadow-none outline-none visited:text-black hover:bg-gray-600 hover:text-white focus:bg-gray-600 focus:text-white-default"
+                  href="#"
+                >
+                  Download as HTML
+                </Link>
+              </DropdownMenu.Item>
+
+              <DropdownMenu.Separator className="mb-2 border-b pt-2" />
+
+              <DropdownMenu.Item onClick={handleDownloadAsCsv} asChild>
+                <Link
+                  className="block rounded-md p-2 text-sm text-black !no-underline !shadow-none outline-none visited:text-black hover:bg-gray-600 hover:text-white focus:bg-gray-600 focus:text-white-default"
+                  href="#"
+                >
+                  Download as CSV
+                </Link>
+              </DropdownMenu.Item>
+
+              <DropdownMenu.Item onClick={handleDownloadAsExcel} asChild>
+                <Link
+                  className="block rounded-md p-2 text-sm text-black !no-underline !shadow-none outline-none visited:text-black hover:bg-gray-600 hover:text-white focus:bg-gray-600 focus:text-white-default"
+                  href="#"
+                >
+                  Download as Excel
+                </Link>
+              </DropdownMenu.Item>
+            </DropdownMenu.Content>
+          </DropdownMenu.Portal>
+        </DropdownMenu.Root>
 
         <div id="notificationsBottom" className="ml-4">
           {tableItems.checkedItems.size > MAX_FILE_DOWNLOADS && (
