@@ -90,7 +90,7 @@ export const DownloadCSV = () => {
 
     const csv = data.map((row) => row.join(",")).join("\n");
 
-    // Windows saves CSV files by default as ANSI. This foces UTF-8.
+    // Windows saves CSV files by default as ANSI. This forces UTF-8.
     // More info: https://github.com/cds-snc/platform-forms-client/issues/2616
     const forceUTF8 = "\uFEFF";
 
