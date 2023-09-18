@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { cn } from "@lib/utils";
 
 const MultipleChoice = ({
   label,
@@ -27,7 +28,7 @@ const MultipleChoice = ({
   onFocus?: () => void;
   checked?: boolean;
 }) => (
-  <div className={className ? `${className} multiple-choice-wrapper` : "multiple-choice-wrapper"}>
+  <div className={cn(className, "multiple-choice-wrapper")}>
     <input
       type={type}
       name={name}
