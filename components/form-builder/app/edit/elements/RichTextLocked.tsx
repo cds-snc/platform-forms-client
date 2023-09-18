@@ -6,6 +6,7 @@ import { LocalizedElementProperties } from "../../../types";
 import { LockedBadge } from "../../shared/LockedBadge";
 import { useHandleAdd } from "@components/form-builder/hooks";
 import { FormElementTypes } from "@lib/types";
+import { cn } from "@lib/utils";
 
 export const RichTextLocked = ({
   beforeContent = null,
@@ -13,12 +14,14 @@ export const RichTextLocked = ({
   children,
   schemaProperty,
   ariaLabel,
+  className,
 }: {
   beforeContent?: React.ReactElement | null;
   addElement: boolean;
   children?: React.ReactElement;
   schemaProperty: "introduction" | "privacyPolicy" | "confirmation";
   ariaLabel?: string;
+  className?: string;
 }) => {
   const { localizeField, form, translationLanguagePriority } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
@@ -38,7 +41,12 @@ export const RichTextLocked = ({
   const { handleAddElement } = useHandleAdd();
 
   return (
-    <div className="-mt-px h-auto max-w-[800px] border-1 border-slate-500 first-of-type:rounded-t-md last-of-type:rounded-b-md">
+    <div
+      className={cn(
+        "-mt-px h-auto max-w-[800px] border-1 border-slate-500 bg-white last-of-type:rounded-b-lg",
+        className
+      )}
+    >
       <div className="mx-7 mb-7 mt-5">
         <LockedBadge />
         {beforeContent && beforeContent}

@@ -76,7 +76,7 @@ export const ElementPanel = ({
         className,
         "group",
         isWithin && "active",
-        "relative h-auto max-w-[800px] border-1 border-t-0 border-slate-500 focus-within:bg-violet-50 hover:bg-violet-50"
+        "relative h-auto max-w-[800px] border-1 border-t-0 border-slate-500 focus-within:bg-violet-50 hover:bg-violet-50 bg-white"
       )}
       onClick={(e) => {
         const el = e.target as HTMLElement;

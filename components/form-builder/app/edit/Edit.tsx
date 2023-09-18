@@ -84,6 +84,7 @@ export const Edit = () => {
     <>
       <h1 className="visually-hidden">{t("edit")}</h1>
       <RichTextLocked
+        className="rounded-t-lg"
         beforeContent={
           <>
             <label htmlFor="formTitle" className="visually-hidden" {...getLocalizationAttribute()}>
