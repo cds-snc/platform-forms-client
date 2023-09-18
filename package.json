@@ -50,6 +50,7 @@
     "clsx": "^2.0.0",
     "copy-to-clipboard": "3.3.3",
     "cors": "2.8.5",
+    "csv-writer": "^1.6.0",
     "cypress-plugin-tab": "^1.0.5",
     "eslint-plugin-tailwindcss": "^3.12.1",
     "file-type": "17.1.6",

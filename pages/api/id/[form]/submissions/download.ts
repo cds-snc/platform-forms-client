@@ -5,6 +5,7 @@ import { MiddlewareProps, WithRequired } from "@lib/types";
 import { getFullTemplateByID } from "@lib/templates";
 import { connectToDynamo } from "@lib/integration/dynamodbConnector";
 import { QueryCommand } from "@aws-sdk/lib-dynamodb";
+import { createObjectCsvStringifier as createCsvStringifier } from "csv-writer";
 
 const getSubmissions = async (
   req: NextApiRequest,
@@ -41,7 +42,7 @@ const getSubmissions = async (
               "#name": "Name",
             },
             KeyConditionExpression: "FormID = :FormID AND begins_with(NAME_OR_CONF, :name)",
-            ProjectionExpression: "#name, FormSubmission, CreatedAt",
+            ProjectionExpression: "#name, FormSubmission, CreatedAt, ConfirmationCode",
           });
 
           queryResult = await documentClient.send(queryCommand);
@@ -77,7 +78,7 @@ const getSubmissions = async (
           },
           KeyConditionExpression: "FormID = :FormID AND begins_with(NAME_OR_CONF, :name)",
           FilterExpression: `#name IN (${idParams})`,
-          ProjectionExpression: "#name, FormSubmission CreatedAt",
+          ProjectionExpression: "#name, FormSubmission, CreatedAt, ConfirmationCode",
         });
 
         queryResult = await documentClient.send(queryCommand);
@@ -88,7 +89,7 @@ const getSubmissions = async (
     if (!queryResult)
       return res.status(500).json({ error: "There was an error. Please try again later." });
 
-    const responses = queryResult?.Items?.map((item) => {
+    const responses = queryResult.Items?.map((item) => {
       const submission = Object.entries(JSON.parse(item.FormSubmission)).map(
         ([questionId, answer]) => {
           const question = fullFormTemplate.form.elements.find(
@@ -105,13 +106,56 @@ const getSubmissions = async (
       return {
         id: item.Name,
         created_at: item.CreatedAt,
+        confirmation_code: item.ConfirmationCode,
         submission: submission,
       };
     });
 
+    if (!responses) {
+      return res.status(500).json({ error: "There was an error. Please try again later." });
+    }
+
     if (req.query.format) {
       if (req.query.format === "csv") {
-        //
+        const questionHeaders = fullFormTemplate.form.elements.map((element) => {
+          return {
+            id: element.properties.titleEn.replaceAll(" ", ""),
+            title: element.properties.titleEn,
+          };
+        });
+
+        const csvStringifier = createCsvStringifier({
+          header: [
+            { id: "id", title: "Response ID" },
+            { id: "createdAt", title: "Date" },
+            { id: "confirmationCode", title: "Confirmation Code" },
+            ...questionHeaders,
+          ],
+        });
+
+        const records = responses.map((response) => {
+          const answers: Record<string, string> = {};
+
+          response.submission.forEach((answer) => {
+            if (answer.questionEn) {
+              const key = answer.questionEn.replaceAll(" ", "");
+              answers[key] = answer.answer as string;
+            }
+          });
+
+          return {
+            id: response.id,
+            createdAt: response.created_at,
+            confirmationCode: response.confirmation_code,
+            ...answers,
+          };
+        });
+
+        return res
+          .status(200)
+          .setHeader("Content-Type", "text/csv")
+          .setHeader("Content-Disposition", `attachment; filename=records.csv`)
+          .send(csvStringifier.getHeaderString() + csvStringifier.stringifyRecords(records));
       }
 
       if (req.query.format === "xlsx") {
@@ -129,7 +173,10 @@ const getSubmissions = async (
     return res.status(200).json({ responses: responses });
   } catch (err) {
     if (err instanceof AccessControlError) return res.status(403).json({ error: "Forbidden" });
-    else return res.status(500).json({ message: "There was an error. Please try again later." });
+    else
+      return res
+        .status(500)
+        .json({ message: "There was an error. Please try again later.", error: err });
   }
 };
 
