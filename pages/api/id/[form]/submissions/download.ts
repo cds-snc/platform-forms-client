@@ -6,6 +6,7 @@ import { getFullTemplateByID } from "@lib/templates";
 import { connectToDynamo } from "@lib/integration/dynamodbConnector";
 import { QueryCommand } from "@aws-sdk/lib-dynamodb";
 import { createArrayCsvStringifier as createCsvStringifier } from "csv-writer";
+import xlsx from "node-xlsx";
 
 const getSubmissions = async (
   req: NextApiRequest,
@@ -98,7 +99,7 @@ const getSubmissions = async (
           return {
             questionEn: question?.properties.titleEn,
             questionFr: question?.properties.titleFr,
-            answer: answer,
+            answer: Array.isArray(answer) ? answer.join(",") : answer,
           };
         }
       );
@@ -142,7 +143,22 @@ const getSubmissions = async (
       }
 
       if (req.query.format === "xlsx") {
-        //
+        const records = responses.map((response) => {
+          return Object.values(response);
+        });
+
+        records.unshift(Object.keys(responses[0]));
+
+        const buffer = xlsx.build([{ name: "Responses", data: records, options: {} }]);
+
+        return res
+          .status(200)
+          .setHeader(
+            "Content-Type",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          )
+          .setHeader("Content-Disposition", `attachment; filename=records.xlsx`)
+          .send(buffer);
       }
 
       if (req.query.format === "html") {
