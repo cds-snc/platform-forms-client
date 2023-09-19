@@ -83,7 +83,6 @@ export const Dialog = ({
         >
           <span className="mr-2 block">
             <Close className="mr-2 inline-block group-focus:fill-white-default" />
-            {t("close")}
           </span>
         </Button>
       </div>
