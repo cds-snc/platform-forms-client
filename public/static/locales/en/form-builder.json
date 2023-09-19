@@ -319,7 +319,7 @@
       "message2": "Download a copy of this form for your records. The saved JSON form file can be uploaded again to create a new form later.",
       "message3": "The URL of your form will change if you upload your form again."
     },
-    "title": "Are you sure you want to delete your form?"
+    "title": "Delete this form?"
   },
   "formDeletedDialogMessage": "Form deleted",
   "formDeletedDialogMessageFailed": "Failed to delete form",
