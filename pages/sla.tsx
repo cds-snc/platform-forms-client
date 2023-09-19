@@ -16,7 +16,7 @@ const SLA = ({ content }: SLAProps) => {
       <Head>
         <title>{t("title")}</title>
       </Head>
-      <RichText>{content}</RichText>
+      <RichText className="w-[100%]">{content}</RichText>
     </>
   );
 };
