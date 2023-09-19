@@ -48,7 +48,7 @@ export const YourAccountDropdown = ({ isAuthenticated }: YourAccountDropdownProp
           <DropdownMenu.Root>
             <DropdownMenu.Trigger>
               <div
-                className="flex cursor-pointer rounded border-1 border-black px-3 py-1 hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
+                className="flex cursor-pointer rounded border-1 border-slate-500 px-3 py-1 hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
                 data-testid="yourAccountDropdown"
               >
                 <span className="mr-1 inline-block">{t("yourAccount")}</span>
@@ -59,7 +59,7 @@ export const YourAccountDropdown = ({ isAuthenticated }: YourAccountDropdownProp
               <DropdownMenu.Content
                 data-testid="yourAccountDropdownContent"
                 align="end"
-                className={`mt-1.5 min-w-[230px] rounded-lg border-1 border-black bg-white px-1.5 py-1 shadow-md`}
+                className={`mt-1.5 min-w-[230px] rounded-lg border-1 border-slate-500 bg-white px-1.5 py-1 shadow-md`}
               >
                 <DropdownMenuItem href={`/${i18n.language}/profile`} text={t("adminNav.profile")} />
 

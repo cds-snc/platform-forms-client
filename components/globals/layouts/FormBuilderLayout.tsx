@@ -1,4 +1,6 @@
 import React, { ReactElement } from "react";
+import Head from "next/head";
+
 import { TemplateStoreProvider } from "@components/form-builder/store";
 import { RefStoreProvider } from "@lib/hooks/useRefStore";
 import { PageLoader } from "@components/globals/layouts/PageLoader";
@@ -6,6 +8,12 @@ import { TemplateApiProvider } from "@components/form-builder/hooks";
 import { LeftNavigation } from "@components/form-builder/app";
 import { FullWidthLayout } from "./FullWidthLayout";
 import { TwoColumnLayout } from "./TwoColumnLayout";
+
+const css = `
+body {
+   background-color: #F9FAFB;
+}
+`;
 
 const PageLayout = ({
   page,
@@ -18,6 +26,9 @@ const PageLayout = ({
 }) => {
   return (
     <>
+      <Head>
+        <style>{css}</style>
+      </Head>
       {hideLeftNav ? (
         <FullWidthLayout context="default">{page}</FullWidthLayout>
       ) : (
