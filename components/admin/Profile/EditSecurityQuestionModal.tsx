@@ -163,7 +163,7 @@ export const EditSecurityQuestionModal = ({
           </Alert.Warning>
         )}
 
-        <p>{t("securityQuestionModal.requirmentsList.title")}</p>
+        <p className="mt-4">{t("securityQuestionModal.requirmentsList.title")}</p>
         <ul className="mb-6">
           <li>{t("securityQuestionModal.requirmentsList.requirement1")}</li>
           <li>{t("securityQuestionModal.requirmentsList.requirement2")}</li>
