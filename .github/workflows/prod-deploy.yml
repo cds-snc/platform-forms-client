@@ -6,6 +6,13 @@ on:
     types:
       - completed
 
+env:
+  AWS_REGION: ca-central-1
+
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   unable-to-deploy:
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}
@@ -27,13 +34,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2.7.0
 
-      - name: Configure AWS credentials
-        # v1 as of Jan 28 2021
-        uses: aws-actions/configure-aws-credentials@fbaaea849082b09c6da098c397edb77cf7d2875a
+      - name: Configure AWS credentials using OIDC
+        uses: aws-actions/configure-aws-credentials@8c3f20df09ac63af7b3ae3d7c91f105f857d8497 # v4.0.0
         with:
-          aws-access-key-id: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
-          aws-region: ca-central-1
+          role-to-assume: arn:aws:iam::957818836222:role/platform-forms-client-apply
+          role-session-name: ECSDeploy
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
         id: login-ecr
