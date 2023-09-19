@@ -31,10 +31,11 @@ const FormDisplayLayout = ({ children, formRecord, embedded }: FormDisplayLayout
           </header>
         )}
         <div id="page-container">
-          <main id="content">{children}</main>
-          <DateModified updatedAt={formRecord.updatedAt} />
+          <main id="content">
+            {children}
+            <DateModified updatedAt={formRecord.updatedAt} />
+          </main>
         </div>
-
         {!embedded && (
           <Footer className="mt-4" disableGcBranding={formRecord?.form.brand?.disableGcBranding} />
         )}
