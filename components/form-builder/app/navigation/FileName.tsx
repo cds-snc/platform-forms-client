@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useImperativeHandle } from "react";
+import { cn } from "@lib/utils";
 
 import { useTemplateStore } from "@formbuilder/store/useTemplateStore";
 import { useTranslation } from "next-i18next";
@@ -83,17 +84,17 @@ export const FileNameInput = () => {
 
   return (
     <div className="flex py-2">
-      <span className={`px-2 invisible absolute`} ref={span}>
+      <span className={`invisible absolute px-2`} ref={span}>
         {content}
       </span>
       <input
         id="fileName"
         style={widthStyle}
         ref={fileNameInput}
-        className={
-          "px-2 py-1 min-w-[220px] max-w-[200px] laptop:min-w-[250px] laptop:max-w-[500px] border-2 border-white text-base font-bold text-ellipsis placeholder-slate-500" +
-          (!isPublished && " hover:border-2 hover:border-gray-default")
-        }
+        className={cn(
+          "border-1 border-[#1B00C2] rounded-md px-2 py-1 min-w-[220px] max-w-[200px] laptop:min-w-[250px] laptop:max-w-[500px] text-base font-bold text-ellipsis placeholder-slate-500",
+          !isPublished && "hover:border-1 hover:border-gray-default"
+        )}
         name="filename"
         placeholder={t("unnamedForm", { ns: "form-builder" })}
         value={content}

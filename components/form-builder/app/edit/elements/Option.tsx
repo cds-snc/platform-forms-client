@@ -89,8 +89,8 @@ export const Option = ({
   );
 
   return (
-    <div className="flex mt-3">
-      <div className="flex mt-2 w-5 justify-end">{icon}</div>
+    <div className="mt-3 flex">
+      <div className="mt-2 flex w-5 justify-end">{icon}</div>
       <Input
         id={`option--${id}--${index + 1}`}
         ref={input}
@@ -101,7 +101,7 @@ export const Option = ({
           updateValue(parentIndex, e.target.value)
         }
         onKeyDown={handleKeyDown}
-        className="ml-5 w-full max-h-9 !my-0"
+        className="!my-0 ml-5 max-h-9 w-full"
         {...getLocalizationAttribute()}
       />
       <Button
