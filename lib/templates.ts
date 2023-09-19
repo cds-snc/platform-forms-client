@@ -339,6 +339,16 @@ export async function getAllTemplatesForUser(
 ): Promise<Array<FormRecord>> {
   try {
     checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
+    const canUserAccessAllTemplates = checkPrivilegesAsBoolean(ability, [
+      {
+        action: "view",
+        subject: {
+          type: "FormRecord",
+          // Passing an empty object here just to force CASL evaluate the condition part of a permission.
+          object: {},
+        },
+      },
+    ]);
 
     const templates = await prisma.template
       .findMany({
@@ -370,7 +380,11 @@ export async function getAllTemplatesForUser(
         ability.userID,
         { type: "Form" },
         "ReadForm",
-        `Accessed Forms: ${templates.map((template) => template.id).toString()}`
+        `Accessed Forms: ${
+          canUserAccessAllTemplates
+            ? "All System Forms"
+            : templates.map((template) => template.id).toString()
+        }`
       );
 
     return templates.map((template) => _parseTemplate(template));
