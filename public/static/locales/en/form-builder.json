@@ -69,7 +69,7 @@
       "title": "Repeating set"
     },
     "example": "example",
-    "exampleElement": "block example",
+    "exampleElement": "Example",
     "fileInput": {
       "description": "File input description",
       "label": "File input",

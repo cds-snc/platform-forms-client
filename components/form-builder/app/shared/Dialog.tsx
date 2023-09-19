@@ -72,7 +72,7 @@ export const Dialog = ({
           </h2>
         )}
 
-        <div className={`px-4 ${title ? "" : "mt-10"}`}>{children}</div>
+        <div className="px-4">{children}</div>
         {actions && <div className="flex border-t-1 border-gray-400 p-4">{actions}</div>}
         <Button
           theme="link"
