@@ -9,6 +9,10 @@ import axios from "axios";
 import { getCsrfToken } from "next-auth/react";
 import { useRouter } from "next/router";
 import debounce from "lodash.debounce";
+import {
+  MessageType,
+  ValidationMessage,
+} from "@components/globals/ValidationMessage/ValidationMessage";
 
 const updateSecurityQuestion = async (
   oldQuestionId: string,
@@ -194,16 +198,9 @@ export const EditSecurityQuestionModal = ({
             {t("securityQuestionModal.answerLabel")} {questionNumber}
           </Label>
 
-          <div
-            role="alert"
-            className={`border-l-4 border-red bg-red-50 p-3 ${
-              !isAnswerInputError ? "visually-hidden" : ""
-            }`}
-          >
-            {isAnswerInputError && (
-              <p className="text-sm font-bold">{t("securityQuestionModal.errors.invalidInput")}</p>
-            )}
-          </div>
+          <ValidationMessage show={isAnswerInputError} messageType={MessageType.ERROR}>
+            {t("securityQuestionModal.errors.invalidInput")}
+          </ValidationMessage>
 
           <span id="answerHint" className="visually-hidden">
             {t("securityQuestionModal.errors.invalidInput")}

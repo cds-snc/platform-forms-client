@@ -1,5 +1,6 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
+import { cn } from "@lib/utils";
 
 export const QuestionNumber = ({
   index,
@@ -13,14 +14,15 @@ export const QuestionNumber = ({
   return (
     <>
       <span
-        className={`absolute left-0 bg-gray-default py-2.5 rounded-r ${
+        className={cn(
+          "absolute left-0 rounded-r bg-slate-300 py-2.5",
           index < 9 ? "px-1.5" : "pl-0.5 pr-1 tracking-tighter"
-        }`}
+        )}
       >
         {questionNumber}
       </span>
       <label
-        className="mb-1 sr-only block font-[700] absolute w-px h-px p-0 -m-px overflow-hidden whitespace-no-wrap border-0"
+        className="sr-only absolute -m-px mb-1 block h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 font-[700]"
         style={{ clip: "rect(0, 0, 0, 0)" }}
         htmlFor={`item${index}`}
       >
