@@ -1,9 +1,7 @@
 import React from "react";
 import Head from "next/head";
 
-import { getPageClassNames } from "@lib/routeUtils";
 import { PublicFormRecord } from "@lib/types";
-
 import Footer from "@components/globals/Footer";
 import SkipLink from "@components/globals/SkipLink";
 import Fip from "@components/globals/Fip";
@@ -15,8 +13,6 @@ interface FormDisplayLayoutProps extends React.PropsWithChildren {
 }
 
 const FormDisplayLayout = ({ children, formRecord, embedded }: FormDisplayLayoutProps) => {
-  const classes = getPageClassNames(formRecord);
-
   return (
     <>
       <Head>
@@ -25,11 +21,13 @@ const FormDisplayLayout = ({ children, formRecord, embedded }: FormDisplayLayout
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
       </Head>
       <SkipLink />
-
-      <div className={classes}>
+      <div>
         {!embedded && (
           <header>
-            <Fip formRecord={formRecord}>
+            <Fip
+              formRecord={formRecord}
+              className="mb-20 mt-0 border-b-4 border-blue-dark px-32 py-9"
+            >
               <LanguageToggle />
             </Fip>
           </header>

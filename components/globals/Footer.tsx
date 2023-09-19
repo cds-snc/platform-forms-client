@@ -42,7 +42,7 @@ const Footer = ({
 }: FooterProps) => {
   const { t } = useTranslation("common");
   return (
-    <footer className="mt-16 flex-none border-0 bg-gray-100 lg:mt-10" data-testid="footer">
+    <footer className="mt-16 flex-none border-0 bg-gray-100 px-32 lg:mt-10" data-testid="footer">
       <div className="flex flex-row items-center justify-between pb-5 pt-10 lg:flex-col lg:items-start lg:gap-4">
         <div>
           {!isSplashPage && (

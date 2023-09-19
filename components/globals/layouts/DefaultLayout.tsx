@@ -48,7 +48,11 @@ const DefaultLayout = ({
       <HeadMeta />
       <SkipLink />
       <header>
-        <Fip className={isSplashPage ? "my-0 py-6" : ""}>
+        <Fip
+          className={
+            isSplashPage ? "my-0 py-6" : "mb-20 mt-0 border-b-4 border-blue-dark px-32 py-9"
+          }
+        >
           {showLanguageToggle && <LanguageToggle />}
           {showLogin && <LoginMenu />}
         </Fip>
