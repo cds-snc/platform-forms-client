@@ -24,10 +24,7 @@ const FormDisplayLayout = ({ children, formRecord, embedded }: FormDisplayLayout
       <div>
         {!embedded && (
           <header>
-            <Fip
-              formRecord={formRecord}
-              className="mb-20 mt-0 border-b-4 border-blue-dark px-32 py-9"
-            >
+            <Fip formRecord={formRecord} className="mb-20 mt-0 border-b-4 border-blue-dark py-9">
               <LanguageToggle />
             </Fip>
           </header>
