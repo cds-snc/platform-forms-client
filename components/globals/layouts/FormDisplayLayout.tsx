@@ -6,6 +6,7 @@ import Footer from "@components/globals/Footer";
 import SkipLink from "@components/globals/SkipLink";
 import Fip from "@components/globals/Fip";
 import LanguageToggle from "../LanguageToggle";
+import { DateModified } from "../DateModified";
 
 interface FormDisplayLayoutProps extends React.PropsWithChildren {
   formRecord: PublicFormRecord;
@@ -31,8 +32,12 @@ const FormDisplayLayout = ({ children, formRecord, embedded }: FormDisplayLayout
         )}
         <div id="page-container">
           <main id="content">{children}</main>
+          <DateModified updatedAt={formRecord.updatedAt} />
         </div>
-        {!embedded && <Footer disableGcBranding={formRecord?.form.brand?.disableGcBranding} />}
+
+        {!embedded && (
+          <Footer className="mt-4" disableGcBranding={formRecord?.form.brand?.disableGcBranding} />
+        )}
       </div>
     </>
   );

@@ -146,5 +146,6 @@
     }
   },
   "mainNavAriaLabel": "Navigation principale",
-  "yourAccount": "Votre compte"
+  "yourAccount": "Votre compte",
+  "dateModified": "Date modified"
 }

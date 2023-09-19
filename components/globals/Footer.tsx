@@ -1,10 +1,12 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
+import { cn } from "@lib/utils";
 
 interface FooterProps {
   isSplashPage?: boolean;
   disableGcBranding?: boolean;
   displayFormBuilderFooter?: boolean;
+  className?: string;
 }
 
 const BulletPoint = () => {
@@ -39,11 +41,15 @@ const Footer = ({
   isSplashPage = false,
   disableGcBranding,
   displayFormBuilderFooter = false,
+  className = "",
 }: FooterProps) => {
   const { t } = useTranslation("common");
   return (
     <footer
-      className="mt-16 flex-none border-0 bg-gray-100 px-[4rem] py-0 lg:mt-10 laptop:px-32"
+      className={cn(
+        "mt-16 flex-none border-0 bg-gray-100 px-[4rem] py-0 lg:mt-10 laptop:px-32",
+        className
+      )}
       data-testid="footer"
     >
       <div className="flex flex-row items-center justify-between pb-5 pt-10 lg:flex-col lg:items-start lg:gap-4">
