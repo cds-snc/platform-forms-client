@@ -351,6 +351,7 @@ export const slugify = (str: string) =>
  * https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL_static
  *
  * TODO: Look into why Blob() seems to set to the mime type to "text/xml" even if e.g. type: "text/html"
+ * Helpful reference here https://javascript.info/blob
  *
  * Example usage:
  * fileDownload({content: HTML_CONTENT_AS_STRING, fileName: "hello.html"});
@@ -383,7 +384,8 @@ export const fileDownload = ({
     const anchor = document.createElement("a");
     anchor.href = url;
     anchor.setAttribute("download", fileName);
-    document.body.appendChild(anchor);
+    // Note: if a browser ever fails doing this, try adding the below. currently works without.
+    // document.body.appendChild(anchor);
     anchor.click();
     // Removes the URL object from the DOM. Just a BP.
     URL.revokeObjectURL(url);
