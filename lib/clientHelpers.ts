@@ -377,17 +377,16 @@ export const fileDownload = ({
       throw new Error("fileDownload requires both content and fileName to be passed.");
     }
 
-    // Prepending the below sets the charencoding to UTF-8. Of the ways possible, this worked consistently. 
+    // Prepending the below sets the char encoding to UTF-8. Of the ways possible, this worked consistently
     const blobContent = forceUTF8 ? "\uFEFF" + content : content;
-    // Blob can also be passed a {type: MIME_TYPE} but see above.
     const url = window.URL.createObjectURL(new Blob([blobContent]));
     const anchor = document.createElement("a");
     anchor.href = url;
     anchor.setAttribute("download", fileName);
-    // Note: if a browser ever fails doing this, try adding the below. currently works without.
+    // Note: if a browser ever fails doing this, try adding the below. currently works without
     // document.body.appendChild(anchor);
     anchor.click();
-    // Removes the URL object from the DOM. Just a BP.
+    // Removes the URL object from the DOM. Just a BP
     URL.revokeObjectURL(url);
   } catch (err) {
     logMessage.error(`Failed to download file with error: ${err}`);
