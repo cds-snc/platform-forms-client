@@ -41,7 +41,7 @@ ${department}<br/>
 Branch or sector:<br/>
 ${branch}<br/>
 <br/>
-Job Title:<br/>
+Job title:<br/>
 ${jobTitle}<br/>
 <br/>
 Contact request:<br/>
