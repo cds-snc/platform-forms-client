@@ -2,10 +2,11 @@
 set -euo pipefail
 
 # 
-# Deletes ECS task definitions in an AWS account.  It expects as input a
-# file path that contains a list of ECS task definition ARNs (one per line):
+# Deregisters and deletes ECS task definitions in an AWS account.  It expects as 
+# input the action to perform (DEREGISTER or DELETE) and a file path that contains 
+# a list of ECS task definition ARNs (one per line):
 #
-#   ./delete-ecs-task-defs.sh task-arns.txt
+#   ./delete-ecs-task-defs.sh DEREGISTER task-arns.txt
 #
 # This file can be created with the following command which will generate
 # a `task-arns.txt` file with all but the last 5 most recent task definitions:
@@ -51,7 +52,7 @@ do
 
     # To delete a task, it must be deregistered first
     if [ "$ACTION" == "DEREGISTER" ] || [ "$ACTION" == "DELETE" ]; then
-        echo  "🗑️ Deregistering: $TASK_ARN"
+        echo  "🗑️  Deregistering: $TASK_ARN"
         aws ecs deregister-task-definition \
             --task-definition "$TASK_ARN" \
             --region "$AWS_REGION" \
