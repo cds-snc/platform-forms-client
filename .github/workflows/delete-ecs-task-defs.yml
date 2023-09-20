@@ -20,7 +20,6 @@ jobs:
       matrix:
         include:
           - account: '687401027353'
-          - account: '957818836222'
 
     steps:
       - name: Checkout
@@ -34,15 +33,35 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       # Retrieves all ACTIVE task definitions except for the 5 most recent
-      - name: Get ECS task definitions
+      - name: Get ACTIVE ECS task definitions
+        env:
+          TASK_STATUS: ACTIVE
+          TASKS_TO_KEEP: 6 # 1 greater than number to keep
         run: |
             aws ecs list-task-definitions \
                 --sort ASC \
-                --status ACTIVE \
+                --status ${{ env.TASK_STATUS }} \
                 --region ${{ env.AWS_REGION }} \
                 --no-cli-pager \
-                | jq -r '(.taskDefinitionArns[:length-6])[]' > task-def-arns.txt
+                | jq -r '(.taskDefinitionArns[:length-${{ env.TASKS_TO_KEEP }}])[]' > task-def-active-arns.txt
 
-      - name: Delete ECS task definitions
+      - name: Set ECS tasks to INACTIVE
         run: |
-          ./bin/delete-ecs-task-defs.sh task-def-arns.txt
+          ./bin/delete-ecs-task-defs.sh DEREGISTER task-def-active-arns.txt
+
+      # Retrieves all INACTIVE task definitions except for the 100 most recent
+      - name: Get INACTIVE ECS task definitions
+        env:
+          TASK_STATUS: INACTIVE
+          TASKS_TO_KEEP: 101 # 1 greater than number to keep
+        run: |
+            aws ecs list-task-definitions \
+                --sort ASC \
+                --status ${{ env.TASK_STATUS }} \
+                --region ${{ env.AWS_REGION }} \
+                --no-cli-pager \
+                | jq -r '(.taskDefinitionArns[:length-${{ env.TASKS_TO_KEEP }}])[]' > task-def-inactive-arns.txt
+
+      - name: Delete INACTIVE ECS task definitions
+        run: |
+          ./bin/delete-ecs-task-defs.sh DELETE task-def-inactive-arns.txt          

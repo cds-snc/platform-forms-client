@@ -95,9 +95,8 @@ export const ConfirmDialog = ({
           title={t("downloadResponsesModals.confirmReceiptDialog.title")}
           dialogRef={dialogRef}
           handleClose={handleClose}
-          headerStyle="inline-block ml-12 mt-12"
         >
-          <div className="px-10">
+          <div className="px-4">
             <div>
               {status === DialogStates.MIN_ERROR && (
                 <Alert.Danger className="mb-2">
@@ -192,7 +191,7 @@ export const ConfirmDialog = ({
               <p className="mt-8">
                 {t("downloadResponsesModals.confirmReceiptDialog.responsesAvailableFor")}
               </p>
-              <div className="my-8 flex">
+              <div className="mt-4 flex">
                 <Button
                   className="mr-4"
                   onClick={handleSubmit}

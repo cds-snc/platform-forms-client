@@ -115,9 +115,8 @@ export const ReportDialog = ({
           title={t("downloadResponsesModals.reportProblemsDialog.title")}
           dialogRef={dialogRef}
           handleClose={handleClose}
-          headerStyle="inline-block ml-12 mt-12"
         >
-          <div className="px-10">
+          <div className="px-4">
             <div>
               {status === DialogStates.MIN_ERROR && (
                 <Alert.Danger className="mb-2">
@@ -211,7 +210,7 @@ export const ReportDialog = ({
 
               <label
                 data-testid="label"
-                className="block mb-2 mt-10 font-bold"
+                className="mb-2 mt-10 block font-bold"
                 htmlFor="description"
                 id="description-label"
               >
@@ -229,7 +228,7 @@ export const ReportDialog = ({
               <TextArea
                 id="description"
                 name="description"
-                className="h-32 w-full box-border border-black-default border-2 rounded-md"
+                className="box-border h-32 w-full rounded-md border-2 border-black-default"
                 onChange={(e) => {
                   if (descriptionRef.current !== undefined) {
                     descriptionRef.current = e.target.value;
@@ -240,7 +239,7 @@ export const ReportDialog = ({
               <p className="mt-8">
                 {t("downloadResponsesModals.reportProblemsDialog.problemReported")}
               </p>
-              <div className="my-8 flex">
+              <div className="mt-4 flex">
                 <Button
                   className="mr-4"
                   onClick={handleSubmit}
