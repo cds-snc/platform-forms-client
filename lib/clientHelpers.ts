@@ -347,21 +347,18 @@ export const slugify = (str: string) =>
 /**
  * Use to download a file to a users's local file system using a browser.
  *
- * Note: Careful with media objects like videos
- * https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL_static
- *
+ * Example usage:
+ * fileDownload({content: HTML_CONTENT_AS_STRING, fileName: "hello.html"});
+ * 
  * TODO: Look into why Blob() seems to set to the mime type to "text/xml" even if e.g. type: "text/html"
  * Helpful reference here https://javascript.info/blob
  *
- * Example usage:
- * fileDownload({content: HTML_CONTENT_AS_STRING, fileName: "hello.html"});
- *
  * @param param.content File contents as a string to be converted into a blob
- * @param param.fileName Downloaded file will have this file name. Include the extension.
- * @param param.forceUTF8 boolean whether the file should be written as UFT-8. False by default.
+ * @param param.fileName Downloaded file will have this file name. Include the extension
+ * @param param.forceUTF8 boolean whether the file should be written as UFT-8. False by default
  *    Use case: Windows saves CSV files by default as ANSI. Setting to true would force the file
- *    type to be UTF-8.
- * @throws Error if the file fails to download.
+ *    type to be UTF-8
+ * @throws Error if the file fails to download
  */
 export const fileDownload = ({
   content,
@@ -377,17 +374,16 @@ export const fileDownload = ({
       throw new Error("fileDownload requires both content and fileName to be passed.");
     }
 
-    // Prepending the below sets the char encoding to UTF-8. Of the ways possible, this worked consistently
     const blobContent = forceUTF8 ? "\uFEFF" + content : content;
     const url = window.URL.createObjectURL(new Blob([blobContent]));
     const anchor = document.createElement("a");
+
     anchor.href = url;
     anchor.setAttribute("download", fileName);
     // Note: if a browser ever fails doing this, try adding the below. currently works without
     // document.body.appendChild(anchor);
     anchor.click();
-    // Removes the URL object from the DOM. Just a BP
-    URL.revokeObjectURL(url);
+    URL.revokeObjectURL(url); // Removes the URL object from the DOM. Just a BP
   } catch (err) {
     logMessage.error(`Failed to download file with error: ${err}`);
     throw err;
