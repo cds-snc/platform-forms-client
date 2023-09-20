@@ -3,7 +3,6 @@ import { CDSHTMLDialogElement } from "../../types";
 import { useTranslation } from "next-i18next";
 import { Button } from "@components/globals";
 import { Close } from "../../icons/Close";
-import { noto_sans } from "@lib/fonts";
 
 export const useDialogRef = () => {
   const ref = useRef<CDSHTMLDialogElement>(null);
@@ -67,10 +66,7 @@ export const Dialog = ({
       >
         {title && (
           <div className="border-b-[0.5px] border-slate-500 bg-slate-50">
-            <h2
-              className={`ml-4 mt-4 inline-block pb-4 text-2xl ${noto_sans.className}`}
-              tabIndex={-1}
-            >
+            <h2 className="ml-4 mt-4 inline-block pb-4 text-2xl" tabIndex={-1}>
               {title}
             </h2>
           </div>
