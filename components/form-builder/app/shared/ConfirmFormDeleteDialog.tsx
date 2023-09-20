@@ -115,7 +115,12 @@ export const ConfirmFormDeleteDialog = ({
   }
 
   return (
-    <Dialog handleClose={handleClose} dialogRef={dialog} actions={actions}>
+    <Dialog
+      handleClose={handleClose}
+      dialogRef={dialog}
+      actions={actions}
+      title={t("formDelete.title")}
+    >
       <div className="p-5">
         <div className="flex justify-center px-10">
           <Image
@@ -127,7 +132,6 @@ export const ConfirmFormDeleteDialog = ({
           />
         </div>
         <div className="mt-10">
-          <h2>{t("formDelete.title")}</h2>
           {isPublished ? (
             <>
               <p className="mb-6">{t("formDelete.published.message1")}</p>

@@ -12,7 +12,6 @@ const ResponseDeliveryHelpDialog = ({ handleClose }: { handleClose: () => void }
   const actions = (
     <>
       <Button
-        className="ml-5"
         theme="primary"
         onClick={() => {
           dialog.current?.close();
@@ -25,10 +24,14 @@ const ResponseDeliveryHelpDialog = ({ handleClose }: { handleClose: () => void }
   );
 
   return (
-    <Dialog dialogRef={dialog} handleClose={handleClose} actions={actions}>
+    <Dialog
+      dialogRef={dialog}
+      handleClose={handleClose}
+      actions={actions}
+      title={t("settingsResponseDelivery.responseDeliveryHelp.title")}
+    >
       <div className="p-5">
         <div className="mt-0">
-          <h2>{t("settingsResponseDelivery.responseDeliveryHelp.title")}</h2>
           <p className="mb-4 text-sm">
             {t("settingsResponseDelivery.responseDeliveryHelp.description")}
           </p>

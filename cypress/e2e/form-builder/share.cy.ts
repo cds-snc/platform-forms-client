@@ -26,7 +26,7 @@ describe("Form builder share", () => {
     cy.get("h4")
       .contains("Regular Test User has shared a form with you on GC Forms")
       .should("exist");
-    cy.get("button").contains("Close").click();
+    cy.get("[data-testid='close-dialog']").click();
   });
   it("Renders share flyout for unAuthenticated", () => {
     cy.logout();
