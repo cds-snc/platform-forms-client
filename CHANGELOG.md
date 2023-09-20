@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.4.6](https://github.com/cds-snc/platform-forms-client/compare/v3.4.5...v3.4.6) (2023-09-20)
+
+
+### Miscellaneous Chores
+
+* Contact and Support form - Content tweaks ([#2651](https://github.com/cds-snc/platform-forms-client/issues/2651)) ([931c564](https://github.com/cds-snc/platform-forms-client/commit/931c564326da1048f5bcaff6181c166e3b63918c))
+* enable automated Production ECS deploy ([#2669](https://github.com/cds-snc/platform-forms-client/issues/2669)) ([a5d9ef4](https://github.com/cds-snc/platform-forms-client/commit/a5d9ef4d32e82b1d4a04dd530aea7f97af67dfdb))
+
+
+### Code Refactoring
+
+* Modal design improvements ([#2666](https://github.com/cds-snc/platform-forms-client/issues/2666)) ([77b2405](https://github.com/cds-snc/platform-forms-client/commit/77b2405d51e1d73dc4cf60d01dbe40777baa4b66))
+
 ## [3.4.5](https://github.com/cds-snc/platform-forms-client/compare/v3.4.4...v3.4.5) (2023-09-19)
 
 
