@@ -52,7 +52,7 @@ do
 
     # To delete a task, it must be deregistered first
     if [ "$ACTION" == "DEREGISTER" ] || [ "$ACTION" == "DELETE" ]; then
-        echo  "🗑️  Deregistering: $TASK_ARN"
+        echo  "🗑️ Deregistering: $TASK_ARN"
         aws ecs deregister-task-definition \
             --task-definition "$TASK_ARN" \
             --region "$AWS_REGION" \
