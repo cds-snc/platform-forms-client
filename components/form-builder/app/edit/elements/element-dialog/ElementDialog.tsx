@@ -69,7 +69,7 @@ export const ElementDialog = ({
             handleChange={handleChange}
           />
         </div>
-        <div className="max-h-[620px] w-2/3 border-l-1 border-black p-4">
+        <div className="max-h-[620px] w-2/3 border-l-1 border-slate-500 p-4">
           <ElementDescription
             id={id}
             title={`${value} ${t("addElementDialog.example")}`}
