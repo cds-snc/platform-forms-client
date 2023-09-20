@@ -343,3 +343,52 @@ export const slugify = (str: string) =>
     .replace(/[^\w\s-]/g, "")
     .replace(/[\s_-]+/g, "-")
     .replace(/^-+|-+$/g, "");
+
+/**
+ * Use to download a file to a users's local file system using a browser.
+ *
+ * Note: Careful with media objects like videos
+ * https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL_static
+ *
+ * TODO: Look into why Blob() seems to set to the mime type to "text/xml" even if e.g. type: "text/html"
+ *
+ * Example usage:
+ * fileDownload({content: HTML_CONTENT_AS_STRING, fileName: "hello.html"});
+ *
+ * @param param.content File contents as a string to be converted into a blob
+ * @param param.fileName Downloaded file will have this file name. Include the extension.
+ * @param param.forceUTF8 boolean whether the file should be written as UFT-8. False by default.
+ *    Use case: Windows saves CSV files by default as ANSI. Setting to true would force the file
+ *    type to be UTF-8.
+ * @throws Error if the file fails to download.
+ */
+export const fileDownload = ({
+  content,
+  fileName,
+  forceUTF8 = false,
+}: {
+  content: string;
+  fileName: string;
+  forceUTF8?: boolean;
+}) => {
+  try {
+    if (!content || !fileName) {
+      throw new Error("fileDownload requires both content and fileName to be passed.");
+    }
+
+    // Prepending the below sets the charencoding to UTF-8. Of the ways possible, this worked consistently. 
+    const blobContent = forceUTF8 ? "\uFEFF" + content : content;
+    // Blob can also be passed a {type: MIME_TYPE} but see above.
+    const url = window.URL.createObjectURL(new Blob([blobContent]));
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.setAttribute("download", fileName);
+    document.body.appendChild(anchor);
+    anchor.click();
+    // Removes the URL object from the DOM. Just a BP.
+    URL.revokeObjectURL(url);
+  } catch (err) {
+    logMessage.error(`Failed to download file with error: ${err}`);
+    throw err;
+  }
+};

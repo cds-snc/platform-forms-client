@@ -3,7 +3,7 @@ import { useTranslation } from "next-i18next";
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { Button } from "@components/globals";
 import { FormElement } from "@lib/types";
-import { getDate, slugify } from "@lib/clientHelpers";
+import { fileDownload, getDate, slugify } from "@lib/clientHelpers";
 import { alphabet } from "../../util";
 
 const formatText = (str: string) => `"${str}"`;
@@ -89,21 +89,9 @@ export const DownloadCSV = () => {
     }
 
     const csv = data.map((row) => row.join(",")).join("\n");
-
-    // Windows saves CSV files by default as ANSI. This forces UTF-8.
-    // More info: https://github.com/cds-snc/platform-forms-client/issues/2616
-    const forceUTF8 = "\uFEFF";
-
-    const blob = new Blob([forceUTF8 + csv], { type: "application/csv" });
-
     const fileName = name ? name : i18n.language === "fr" ? form.titleFr : form.titleEn;
-
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = slugify(`${fileName}-${getDate()}`) + ".csv";
-    a.click();
-    URL.revokeObjectURL(url);
+    const fullFileName = slugify(`${fileName}-${getDate()}`) + ".csv";
+    fileDownload({ content: csv, fileName: fullFileName, forceUTF8: true });
   };
 
   return (

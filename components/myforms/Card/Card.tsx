@@ -7,7 +7,7 @@ import {
   MenuDropdownItemI,
   MenuDropdownItemCallback,
 } from "@components/myforms/MenuDropdown/MenuDropdown";
-import { getDate, slugify } from "@lib/clientHelpers";
+import { fileDownload, getDate, slugify } from "@lib/clientHelpers";
 import { MessageIcon, EnvelopeIcon } from "@components/form-builder/icons/";
 import Markdown from "markdown-to-jsx";
 
@@ -84,13 +84,9 @@ export const Card = (props: CardProps): React.ReactElement => {
       : i18n.language === "fr"
       ? response.data.form.titleFr
       : response.data.form.titleEn;
+    const fullFileName = slugify(`${fileName}-${getDate()}`) + ".json";
     const data = JSON.stringify(response.data.form, null, 2);
-    const tempUrl = window.URL.createObjectURL(new Blob([data]));
-    const link = document.createElement("a");
-    link.href = tempUrl;
-    link.setAttribute("download", slugify(`${fileName}-${getDate()}`) + ".json");
-    document.body.appendChild(link);
-    link.click();
+    fileDownload({ content: data, fileName: fullFileName });
   }
 
   function copyLinkCallback(): MenuDropdownItemCallback {

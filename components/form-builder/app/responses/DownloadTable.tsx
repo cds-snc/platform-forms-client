@@ -24,7 +24,7 @@ import {
   reducerTableItems,
   sortVaultSubmission,
 } from "./DownloadTableReducer";
-import { getDaysPassed } from "@lib/clientHelpers";
+import { fileDownload, getDaysPassed } from "@lib/clientHelpers";
 import { Alert } from "@components/globals";
 
 // TODO: move to an app setting variable
@@ -121,12 +121,7 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
           responseType: "blob",
           timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
         }).then((response) => {
-          const url = window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement("a");
-          link.href = url;
-          link.setAttribute("download", fileName);
-          document.body.appendChild(link);
-          link.click();
+          fileDownload({ content: response.data, fileName });
         });
       });
 
