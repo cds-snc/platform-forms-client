@@ -2,10 +2,11 @@
 set -euo pipefail
 
 # 
-# Deletes ECS task definitions in an AWS account.  It expects as input a
-# file path that contains a list of ECS task definition ARNs (one per line):
+# Deregisters and deletes ECS task definitions in an AWS account.  It expects as 
+# input the action to perform (DEREGISTER or DELETE) and a file path that contains 
+# a list of ECS task definition ARNs (one per line):
 #
-#   ./delete-ecs-task-defs.sh task-arns.txt
+#   ./delete-ecs-task-defs.sh DEREGISTER task-arns.txt
 #
 # This file can be created with the following command which will generate
 # a `task-arns.txt` file with all but the last 5 most recent task definitions:
@@ -20,10 +21,17 @@ set -euo pipefail
 # The sleep commands in the script are to avoid API throttling issues.
 #
 
-TASK_ARNS="$1"
+ACTION="$1"
+TASK_ARNS="$2"
 AWS_REGION="ca-central-1"
 CLUSTER_NAME="Forms"
 SERVICE_NAME="form-viewer"
+
+# Exit if the ACTION is invalid
+if [ "$ACTION" != "DEREGISTER" ] && [ "$ACTION" != "DELETE" ]; then
+    echo "❌ Invalid action: $ACTION"
+    exit 1
+fi
 
 # Get the currently active task definition ARN as a safety check
 ACTIVE_TASK_ARN="$(aws ecs describe-services \
@@ -42,21 +50,25 @@ do
         continue
     fi
 
-    echo  "🧹 Deleting: $TASK_ARN"
+    # To delete a task, it must be deregistered first
+    if [ "$ACTION" == "DEREGISTER" ] || [ "$ACTION" == "DELETE" ]; then
+        echo  "🗑️  Deregistering: $TASK_ARN"
+        aws ecs deregister-task-definition \
+            --task-definition "$TASK_ARN" \
+            --region "$AWS_REGION" \
+            --no-cli-pager > /dev/null 2>&1
+        sleep 2
+    fi
 
-    # Task definitions must be set to INACTIVE before they can be deleted
-    aws ecs deregister-task-definition \
-        --task-definition "$TASK_ARN" \
-        --region "$AWS_REGION" \
-        --no-cli-pager > /dev/null 2>&1
-    sleep 2
-
-    # Delete the INACTIVE task definition
-    aws ecs delete-task-definitions \
-        --task-definitions "$TASK_ARN" \
-        --region "$AWS_REGION" \
-        --no-cli-pager > /dev/null 2>&1
-    sleep 2
+    if [ "$ACTION" == "DELETE" ]; then
+        echo  "🧹 Deleting: $TASK_ARN"
+        aws ecs delete-task-definitions \
+            --task-definitions "$TASK_ARN" \
+            --region "$AWS_REGION" \
+            --no-cli-pager > /dev/null 2>&1
+        sleep 2
+    
+    fi
 done < "$TASK_ARNS"
 
 echo  "🎉 All done!"

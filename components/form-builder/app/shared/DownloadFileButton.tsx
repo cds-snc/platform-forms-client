@@ -16,7 +16,8 @@ const FormDownloadDialog = ({ handleClose }: { handleClose: () => void }) => {
     <Dialog
       dialogRef={dialog}
       handleClose={handleClose}
-      className="overflow-y-scroll max-h-[80%]"
+      title={t("formDownload.dialog.title")}
+      className="max-h-[80%] overflow-y-scroll"
       actions={
         <DownloadFileButton
           showInfo={false}
@@ -36,10 +37,9 @@ const FormDownloadDialog = ({ handleClose }: { handleClose: () => void }) => {
           />
         </div>
         <div className="mt-10">
-          <h2>{t("formDownload.dialog.title")}</h2>
           <h3 className="mb-1">{t("formDownload.dialog.subtitle1")}</h3>
           <p className="mb-10">{t("formDownload.dialog.message1")}</p>
-          <h3 className="mt-6 mb-1">{t("formDownload.dialog.subtitle2")}</h3>
+          <h3 className="mb-1 mt-6">{t("formDownload.dialog.subtitle2")}</h3>
           <p className="mb-2">{t("formDownload.dialog.message2")}</p>
         </div>
       </div>

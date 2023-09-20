@@ -69,7 +69,7 @@
       "title": "Repeating set"
     },
     "example": "example",
-    "exampleElement": "block example",
+    "exampleElement": "Example",
     "fileInput": {
       "description": "File input description",
       "label": "File input",
@@ -199,29 +199,30 @@
   "contactSupportIfYouHaveQuestions": "<a href=\"/en/form-builder/support\" target=\"_blank\">Contact support</a> if you have any questions.",
   "contactus": {
     "description": {
-      "description": "Provide more context.",
-      "title": "Additional information"
+      "description": "Provide more information or context.",
+      "title": "Tell us more"
     },
-    "email": "Your email",
+    "name": "Name",
+    "email": "Email address",
     "department": "Department or agency",
     "branch": "Branch or sector",
-    "jobTitle": "Job Title",
-    "gcFormsTeamLink": "contacts page",
-    "gcFormsTeamPart1": "The GC Forms team provides services to people who work in the government. We cannot give general advice to the public about the forms that we host. For other enquiries, visit the",
-    "gcFormsTeamPart2": "to find the right department or agency to fulfill your request.",
-    "ifYouExperience": "If you experience technical issues, please fill out the",
-    "name": "Your name",
-    "needSupport": "Need support?",
+    "jobTitle": "Job title",
+    "gcFormsTeamLink": "Government of Canada contacts",
+    "gcFormsTeamPart1": "The GC Forms team provides services to people who work in the government. We cannot give general advice to the public about the forms that we host. For other enquiries, go to the",
+    "gcFormsTeamPart2": "page to find the department or agency that can help.",
+    "ifYouExperience": "To get technical support, use the",
+
+    "needSupport": "Need help using GC Forms?",
     "request": {
       "option1": "Request a product demo",
-      "option2": "Join our mailing list",
+      "option2": "Join the mailing list",
       "option3": "Give feedback",
       "option4": "Other",
       "title": "Reason for reaching out"
     },
-    "supportFormLink": "Support form",
+    "supportFormLink": "support form",
     "title": "Contact us",
-    "useThisForm": "Use this form to learn more about GC Forms and how it can work in your department or agency.",
+    "useThisForm": "Use this form to learn more about GC Forms and how it can work in your government department or agency.",
     "errors": {
       "submissionError": "Something went wrong. Please try again later."
     }
@@ -319,7 +320,7 @@
       "message2": "Download a copy of this form for your records. The saved JSON form file can be uploaded again to create a new form later.",
       "message3": "The URL of your form will change if you upload your form again."
     },
-    "title": "Are you sure you want to delete your form?"
+    "title": "Delete this form?"
   },
   "formDeletedDialogMessage": "Form deleted",
   "formDeletedDialogMessageFailed": "Failed to delete form",
@@ -422,15 +423,15 @@
   "removeFromSet": "Remove from set",
   "removeOption": "Remove option:",
   "requestSuccess": {
-    "backToForms": "Back to forms",
-    "forOtherEnquiriesLink": "Canada.ca Contact us",
-    "forOtherEnquiriesPart1": "For other enquiries, go to",
-    "forOtherEnquiriesPart2": "to find the department or agency that can support you.",
-    "theGCFormsTeam": "The GC Forms team provides support to people who work in the government. We cannot give general advice to the public about the forms that we host.",
-    "title": "Thank you for your request",
-    "weWillRespond": "We will respond to you in 2 business days."
+    "backToForms": "Back to GC Forms",
+    "forOtherEnquiriesLink": "Government of Canada contacts",
+    "forOtherEnquiriesPart1": "For other enquiries, go to the",
+    "forOtherEnquiriesPart2": "page to find the department or agency that can help",
+    "theGCFormsTeam": "We cannot give general advice to the public about the forms that we host.",
+    "title": "Thank you for your submission",
+    "weWillRespond": "We will respond to you within 2 business days."
   },
-  "required": "Required",
+  "required": "required",
   "responseDelivery": "Response delivery",
   "richText": "Page text",
   "richTextConfirmationTitle": "Confirmation page and message",
@@ -577,24 +578,24 @@
     "text2": "Responses page"
   },
   "support": {
-    "contactUs": "Contact us form",
+    "contactUs": "contact form",
     "description": {
       "description": "Provide more context around the problem you are experiencing.",
-      "title": "Additional information"
+      "title": "Tell us more"
     },
     "name": "Your name",
-    "email": "Your email",
-    "gcFormsTeamLink": "Canada.ca Contact us",
-    "gcFormsTeamPart1": "The GC Forms team provides services to people who work in the government. We cannot give general advice to the public about the forms that we host. For other enquiries, go to",
-    "gcFormsTeamPart2": "to find the department or agency that can help you.",
-    "ifYouWouldLike": "If you would like to learn more about GC Forms or set up a demo, please fill out the ",
+    "email": "Your email address",
+    "gcFormsTeamLink": "Government of Canada contacts",
+    "gcFormsTeamPart1": "We cannot give general advice to the public about the forms that we host. For other enquiries, go to the",
+    "gcFormsTeamPart2": "page to find the department or agency that can help.",
+    "ifYouWouldLike": "To learn more about GC Forms, fill out the ",
     "lookingForADemo": "Looking for a product demo?",
     "request": {
       "option1": "Ask a question",
       "option2": "Get technical support",
-      "option3": "Problem with a published form",
+      "option3": "Report a problem with a published form",
       "option4": "Other",
-      "title": "How can we help?"
+      "title": "Reason for reaching out"
     },
     "title": "Get support",
     "useThisForm": "Use this form if you experience technical issues with GC Forms.",

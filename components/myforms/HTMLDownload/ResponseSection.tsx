@@ -8,7 +8,6 @@ export interface ResponseSectionProps {
   confirmReceiptCode: string;
   lang: string;
   responseID: string;
-  // submissionID: string;
   submissionDate: number;
   formTemplate: FormProperties;
   formResponse: Responses;
@@ -87,7 +86,6 @@ export const ResponseSection = ({
   confirmReceiptCode,
   lang,
   responseID,
-  // submissionID,
   submissionDate,
   formTemplate,
   formResponse,
@@ -104,15 +102,19 @@ export const ResponseSection = ({
             var btnCopyCode = document.getElementById("copyCodeButton${capitalizedLang}");
             var outputCopyCode = document.getElementById("copyCodeOutput${capitalizedLang}");
             var clipboardCode = new ClipboardJS("#copyCodeButton${capitalizedLang}");
-            clipboardCode.on('success', function () {
+            clipboardCode.on('success', function (e) {
               outputCopyCode.classList.remove("hidden");
-              outputCopyCode.textContent = "${t("responseTemplate.copiedToCipboard")}";
+              outputCopyCode.textContent = "${t("responseTemplate.copiedToCipboard", {
+                lng: lang || "en",
+              })}";
               e.clearSelection();
             });
-            clipboardCode.on('error', function (e) {
+            clipboardCode.on('error', function () {
               outputCopyCode.classList.remove("hidden");
               outputCopyCode.classList.add("text-red-default");
-              outputCopyCode.textContent = "${t("responseTemplate.errorrCopyingToClipboard")}";
+              outputCopyCode.textContent = "${t("responseTemplate.errorrCopyingToClipboard", {
+                lng: lang || "en",
+              })}";
             });
 
             // Copy Row Response
@@ -129,15 +131,19 @@ export const ResponseSection = ({
             }).join(String.fromCharCode(9));
             btnCopyResponse.dataset.clipboardText = responseText;
             var clipboardResponse = new ClipboardJS("#copyResponseButton${capitalizedLang}");
-            clipboardResponse.on('success', function () {
+            clipboardResponse.on('success', function (e) {
               outputCopyResponse.classList.remove("hidden");
-              outputCopyResponse.textContent = "${t("responseTemplate.copiedToCipboard")}";
+              outputCopyResponse.textContent = "${t("responseTemplate.copiedToCipboard", {
+                lng: lang || "en",
+              })}";
               e.clearSelection();
             });
-            clipboardResponse.on('error', function (e) {
+            clipboardResponse.on('error', function () {
               outputCopyResponse.classList.remove("hidden");
               outputCopyResponse.classList.add("text-red-default");
-              outputCopyResponse.textContent = "${t("responseTemplate.errorrCopyingToClipboard")}";
+              outputCopyResponse.textContent = "${t("responseTemplate.errorrCopyingToClipboard", {
+                lng: lang || "en",
+              })}";
             });
           });
       `,
@@ -184,7 +190,6 @@ export const ResponseSection = ({
       <Table
         responseID={responseID}
         submissionDate={submissionDate}
-        // submissionID={submissionID}
         questionsAnswers={questionsAnswers}
         isRowTable={false}
         lang={lang}
@@ -214,7 +219,6 @@ export const ResponseSection = ({
       <Table
         responseID={responseID}
         submissionDate={submissionDate}
-        // submissionID={submissionID}
         questionsAnswers={questionsAnswers}
         isRowTable={true}
         lang={lang}

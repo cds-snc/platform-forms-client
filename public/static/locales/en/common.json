@@ -145,5 +145,6 @@
     }
   },
   "mainNavAriaLabel": "Main",
-  "yourAccount": "Your account"
+  "yourAccount": "Your account",
+  "dateModified": "Date modified"
 }
