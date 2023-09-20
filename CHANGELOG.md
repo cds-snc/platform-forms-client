@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.4.5](https://github.com/cds-snc/platform-forms-client/compare/v3.4.4...v3.4.5) (2023-09-19)
+
+
+### Bug Fixes
+
+* switch to OIDC role for prod deploy workflow ([#2667](https://github.com/cds-snc/platform-forms-client/issues/2667)) ([24b2ea8](https://github.com/cds-snc/platform-forms-client/commit/24b2ea80eb81da16cfee09f3ad8c9fdee33bab0a))
+
 ## [3.4.4](https://github.com/cds-snc/platform-forms-client/compare/v3.4.3...v3.4.4) (2023-09-19)
 
 
