@@ -54,7 +54,7 @@ const UserNavLayout = ({
       <HeadMeta />
       <SkipLink />
 
-      <header className="mb-4 bg-white py-6">
+      <header className="mb-4 bg-white px-[4rem] py-6 laptop:px-32">
         <div className="flex justify-between">
           <div className="canada-flag">
             <Brand brand={null} />
