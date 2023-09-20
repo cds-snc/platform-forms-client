@@ -6,11 +6,12 @@ import { useRouter } from "next/router";
 import { getAllTemplates } from "@lib/templates";
 import { requireAuthentication } from "@lib/auth";
 import { checkPrivileges } from "@lib/privileges";
+import { FilterNavigation } from "@components/myforms/FilterNav/FilterNavigation";
+import { LinkButton } from "@components/globals";
 
 import { NextPageWithLayout } from "@pages/_app";
 import { CardGrid } from "@components/myforms/CardGrid/CardGrid";
 import { TabPanel } from "@components/myforms/Tabs/TabPanel";
-import { LeftNavigation } from "@components/myforms/LeftNav/LeftNavigation";
 import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 import {
   TemplateStoreProvider,
@@ -18,7 +19,7 @@ import {
 } from "@components/form-builder/store/useTemplateStore";
 import { ResumeEditingForm } from "@components/form-builder/app/shared";
 import { getUnprocessedSubmissionsForUser } from "@lib/users";
-import { TwoColumnLayout } from "@components/globals/layouts";
+import { FullWidthLayout } from "@components/globals/layouts";
 import Head from "next/head";
 
 interface FormsDataItem {
@@ -51,11 +52,17 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
 
   const createNewFormRef = useRef<HTMLDivElement>(null);
 
+  const css = `
+    body {
+       background-color: #F9FAFB;
+    }
+`;
+
   useEffect(() => {
     // Default route is "drafts". Done here vs getServerSideProps to avoid extra data fetch
     const formStateRegex = /^(drafts|published|all)$/gi;
     if (!formStateRegex.test(String(path))) {
-      router.push(`/${i18n.language}/myforms/drafts`, undefined, { shallow: true });
+      router.push(`/${i18n.language}/myforms/all`, undefined, { shallow: true });
     }
     // purposely not including router in the dependency array
     // effect should re-fire only when path changes
@@ -80,41 +87,60 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
     <>
       <Head>
         <title>{t("title")}</title>
+        <style>{css}</style>
       </Head>
-      <h1 className="border-b-0 mb-8 text-h1">{t("title")}</h1>
-      <div className="top-40">
+
+      <div className="center mx-auto w-[980px]">
+        <h1 className="mb-8 border-b-0 text-h1">{t("title")}</h1>
+
+        <div className="flex w-full justify-between">
+          <FilterNavigation />
+          <div ref={createNewFormRef} className="inline">
+            <LinkButton.Primary href="/form-builder">
+              <>
+                <span aria-hidden="true" className="mr-2 inline-block">
+                  +
+                </span>{" "}
+                {t("actions.createNewForm")}
+              </>
+            </LinkButton.Primary>
+          </div>
+        </div>
+
         <ResumeEditingForm>
-          <StyledLink href="/form-builder/edit" className="mr-8">
+          <StyledLink href="/form-builder/edit" className="mb-4 inline-block">
             <span aria-hidden="true"> ← </span> {t("actions.resumeForm")}
           </StyledLink>
         </ResumeEditingForm>
-        <div ref={createNewFormRef} className="inline">
-          <StyledLink href="/form-builder">
-            <span aria-hidden="true">+</span> {t("actions.createNewForm")}
-          </StyledLink>
+
+        <div>
+          <TabPanel id="tabpanel-drafts" labeledbyId="tab-drafts" isActive={path === "drafts"}>
+            {templatesDrafts && templatesDrafts?.length > 0 ? (
+              <CardGrid cards={templatesDrafts}></CardGrid>
+            ) : (
+              <p>{t("cards.noDraftForms")}</p>
+            )}
+          </TabPanel>
+          <TabPanel
+            id="tabpanel-published"
+            labeledbyId="tab-published"
+            isActive={path === "published"}
+          >
+            {templatesPublished && templatesPublished?.length > 0 ? (
+              <CardGrid cards={templatesPublished}></CardGrid>
+            ) : (
+              <p>{t("cards.noPublishedForms")}</p>
+            )}
+          </TabPanel>
+          <TabPanel id="tabpanel-all" labeledbyId="tab-all" isActive={path === "all"}>
+            {templatesAll && templatesAll?.length > 0 ? (
+              <CardGrid cards={templatesAll}></CardGrid>
+            ) : (
+              <p>{t("cards.noForms")}</p>
+            )}
+          </TabPanel>
         </div>
       </div>
-      <TabPanel id="tabpanel-drafts" labeledbyId="tab-drafts" isActive={path === "drafts"}>
-        {templatesDrafts && templatesDrafts?.length > 0 ? (
-          <CardGrid cards={templatesDrafts}></CardGrid>
-        ) : (
-          <p>{t("cards.noDraftForms")}</p>
-        )}
-      </TabPanel>
-      <TabPanel id="tabpanel-published" labeledbyId="tab-published" isActive={path === "published"}>
-        {templatesPublished && templatesPublished?.length > 0 ? (
-          <CardGrid cards={templatesPublished}></CardGrid>
-        ) : (
-          <p>{t("cards.noPublishedForms")}</p>
-        )}
-      </TabPanel>
-      <TabPanel id="tabpanel-all" labeledbyId="tab-all" isActive={path === "all"}>
-        {templatesAll && templatesAll?.length > 0 ? (
-          <CardGrid cards={templatesAll}></CardGrid>
-        ) : (
-          <p>{t("cards.noForms")}</p>
-        )}
-      </TabPanel>
     </>
   );
 };
@@ -124,7 +150,7 @@ RenderMyForms.getLayout = (page: ReactElement) => {
     <TemplateStoreProvider
       {...{ ...(page.props.initialForm && page.props.initialForm), locale: page.props.locale }}
     >
-      <TwoColumnLayout leftColumnContent={<LeftNavigation />}>{page}</TwoColumnLayout>
+      <FullWidthLayout>{page}</FullWidthLayout>
     </TemplateStoreProvider>
   );
 };

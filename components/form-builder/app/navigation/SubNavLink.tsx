@@ -17,9 +17,15 @@ export const SubNavLink = ({ href, children }: { children: ReactElement; href: s
   useEffect(() => {
     // Check if the router fields are updated client-side
     if (isReady) {
-      const linkPathname = new URL(href as string, location.href).pathname;
+      let linkPathname = new URL(href as string, location.href).pathname;
+
+      const langRegex = /\/(en|fr)\//;
+      linkPathname = linkPathname.replace(langRegex, "/");
+
       if (linkPathname === activePathname) {
         setActive(true);
+      } else {
+        setActive(false);
       }
     }
   }, [asPath, isReady, href, setActive, activePathname]);

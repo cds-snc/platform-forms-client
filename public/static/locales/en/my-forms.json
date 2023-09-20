@@ -1,5 +1,5 @@
 {
-  "title": "Your forms",
+  "title": "All forms",
   "nav": {
     "drafts": "Drafts",
     "published": "Published",
@@ -69,5 +69,7 @@
     "unclassified": "Unclassified",
     "protectedA": "Protected A",
     "protectedB": "Protected B"
-  }
+  },
+  "viewForm": "View form (opens in new tab)",
+  "editForm": "Edit form"
 }
