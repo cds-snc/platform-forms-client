@@ -349,7 +349,7 @@ export const slugify = (str: string) =>
  *
  * Example usage:
  * fileDownload({content: HTML_CONTENT_AS_STRING, fileName: "hello.html"});
- * 
+ *
  * TODO: Look into why Blob() seems to set to the mime type to "text/xml" even if e.g. type: "text/html"
  * Helpful reference here https://javascript.info/blob
  *
