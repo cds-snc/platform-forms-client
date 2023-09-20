@@ -98,7 +98,7 @@ export const ListBox = ({
               groupOption = (
                 <li
                   role="presentation"
-                  className="mb-2 pl-1 text-[1.1rem] font-bold uppercase text-[#6A6D7B]"
+                  className="mb-2 pl-4 text-[1.1rem] font-bold uppercase text-[#6A6D7B]"
                 >
                   {group.value}
                 </li>
@@ -124,7 +124,7 @@ export const ListBox = ({
                     focussed
                       ? "border-[0.5px] border-indigo-700 bg-indigo-50 font-bold"
                       : "font-normal"
-                  } group mb-2 cursor-pointer py-2 pl-1 pr-2 text-lg text-black hover:font-bold hover:text-indigo-700`}
+                  } group mb-2 cursor-pointer py-2 pl-4 pr-2 text-lg text-black hover:font-bold hover:text-indigo-700`}
                   tabIndex={-1}
                   role="option"
                   onClick={() => setFocusIndex(index)}

@@ -12,7 +12,6 @@ const ResponseDeliveryHelpDialog = ({ handleClose }: { handleClose: () => void }
   const actions = (
     <>
       <Button
-        className="ml-5"
         theme="primary"
         onClick={() => {
           dialog.current?.close();

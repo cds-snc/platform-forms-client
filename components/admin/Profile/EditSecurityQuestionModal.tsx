@@ -145,7 +145,7 @@ export const EditSecurityQuestionModal = ({
         </Button>
       }
     >
-      <>
+      <div className="px-4">
         {/* TODO: probably will not need the error since already selected questions can be removed programmatically */}
         {isFormError && (
           <Alert.Danger>
@@ -217,7 +217,7 @@ export const EditSecurityQuestionModal = ({
             onChange={_debouncedAnswerCheck}
           />
         </div>
-      </>
+      </div>
     </Dialog>
   );
 };

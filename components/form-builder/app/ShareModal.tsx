@@ -112,7 +112,7 @@ export const ShareModal = ({
         actions={status === "ready" ? actions : doneActions}
         className="max-h-[80%]"
       >
-        <div className="py-4">
+        <div className="p-4">
           {status === "error" && (
             <>
               <p className="text-red-default">{t("share.messageError")}</p>

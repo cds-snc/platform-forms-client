@@ -16,7 +16,6 @@ export const Dialog = ({
   actions,
   className,
   handleClose,
-  headerStyle,
 }: {
   dialogRef: React.RefObject<CDSHTMLDialogElement>;
   children: React.ReactElement;
@@ -24,7 +23,6 @@ export const Dialog = ({
   actions?: React.ReactElement;
   className?: string;
   handleClose?: () => void;
-  headerStyle?: string;
 }) => {
   const { t } = useTranslation("form-builder");
   const [isOpen, changeOpen] = useState(true);
@@ -68,13 +66,13 @@ export const Dialog = ({
       >
         {title && (
           <div className="border-b-[0.5px] border-slate-500 bg-slate-50">
-            <h2 className={headerStyle ? headerStyle : "ml-4 mt-4 inline-block pb-4"} tabIndex={-1}>
+            <h2 className="ml-4 mt-4 inline-block pb-4" tabIndex={-1}>
               {title}
             </h2>
           </div>
         )}
 
-        <div className="px-4">{children}</div>
+        <div>{children}</div>
         {actions && <div className="flex p-4">{actions}</div>}
         <Button
           theme="link"
