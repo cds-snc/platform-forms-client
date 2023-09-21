@@ -9,13 +9,6 @@ import { SiteLogo } from "@formbuilder/icons";
 import { ToastContainer } from "@formbuilder/app/shared/Toast";
 import { HeadMeta } from "./HeadMeta";
 
-import { Noto_Sans } from "next/font/google";
-
-const nato = Noto_Sans({
-  weight: "600",
-  subsets: ["latin"],
-});
-
 const SiteLink = () => {
   const { t } = useTranslation("common");
   return (
@@ -25,7 +18,7 @@ const SiteLink = () => {
         <span className="">
           <SiteLogo title={t("title")} />
         </span>
-        <span className={`ml-3 inline-block text-[24px] text-[#1B00C2] ${nato.className}`}>
+        <span className="ml-3 inline-block text-[24px] text-[#1B00C2]">
           {t("title", { ns: "common" })}
         </span>
       </a>
