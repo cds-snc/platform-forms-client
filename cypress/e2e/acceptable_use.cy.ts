@@ -25,7 +25,7 @@ describe("Test acceptable use Page", () => {
 
   it("Agree to the terms of use", () => {
     cy.get("#acceptableUse").click();
-    cy.url().should("eq", Cypress.config().baseUrl + "/en/myforms/drafts");
+    cy.url().should("eq", Cypress.config().baseUrl + "/en/myforms/all");
   });
 
   it("Redirects back to terms of use if not accepted", () => {
@@ -39,6 +39,6 @@ describe("Test acceptable use Page", () => {
     cy.url().should("contain", "/auth/policy");
     cy.url().should("contain", "?referer=/myforms");
     cy.get("#acceptableUse").click();
-    cy.url().should("eq", Cypress.config().baseUrl + "/en/myforms/drafts");
+    cy.url().should("eq", Cypress.config().baseUrl + "/en/myforms/all");
   });
 });
