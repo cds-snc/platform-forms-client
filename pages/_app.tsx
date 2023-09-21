@@ -11,6 +11,19 @@ import "../styles/app.scss";
 import { AnyObject } from "@lib/types";
 import { Session } from "next-auth";
 import { ErrorBoundary, ErrorPanel } from "@components/globals";
+import { Noto_Sans, Lato } from "next/font/google";
+
+const notoSans = Noto_Sans({
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-noto-sans",
+  subsets: ["latin"],
+});
+
+const lato = Lato({
+  weight: "400",
+  variable: "--font-lato",
+  subsets: ["latin"],
+});
 
 export type NextPageWithLayout<P = Record<string, unknown>, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -32,27 +45,29 @@ const MyApp: React.FC<AppPropsWithLayout> = ({
       // Re-fetches session when window is focused
       refetchOnWindowFocus={true}
     >
-      <ErrorBoundary
-        fallback={
-          <div className="flex h-full flex-col">
-            <Layout className="flex flex-col items-center justify-center">
-              <ErrorPanel />
-            </Layout>
-          </div>
-        }
-      >
-        <AccessControlProvider>
-          {Component.getLayout ? (
-            <ErrorBoundary>{Component.getLayout(<Component {...pageProps} />)}</ErrorBoundary>
-          ) : (
-            <DefaultLayout showLanguageToggle={true}>
-              <ErrorBoundary>
-                <Component {...pageProps} />
-              </ErrorBoundary>
-            </DefaultLayout>
-          )}
-        </AccessControlProvider>
-      </ErrorBoundary>
+      <div className={`${notoSans.variable} ${lato.variable} font-noto-sans`}>
+        <ErrorBoundary
+          fallback={
+            <div className="flex h-full flex-col">
+              <Layout className="flex flex-col items-center justify-center">
+                <ErrorPanel />
+              </Layout>
+            </div>
+          }
+        >
+          <AccessControlProvider>
+            {Component.getLayout ? (
+              <ErrorBoundary>{Component.getLayout(<Component {...pageProps} />)}</ErrorBoundary>
+            ) : (
+              <DefaultLayout showLanguageToggle={true}>
+                <ErrorBoundary>
+                  <Component {...pageProps} />
+                </ErrorBoundary>
+              </DefaultLayout>
+            )}
+          </AccessControlProvider>
+        </ErrorBoundary>
+      </div>
     </SessionProvider>
   );
 };

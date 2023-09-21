@@ -1,9 +1,13 @@
 const colors = require("tailwindcss/colors");
-const defaultTheme = require("tailwindcss/defaultTheme");
 
 module.exports = {
   theme: {
     extend: {
+      fontFamily: {
+        "noto-sans": "var(--font-noto-sans)",
+        lato: "var(--font-lato)",
+        mono: ["monospace"],
+      },
       width: {
         "cr-label-desktop": "50rem",
         "cr-label-1025": "30rem",
@@ -170,11 +174,6 @@ module.exports = {
     },
     container: {
       center: true,
-    },
-    fontFamily: {
-      sans: ["Lato", ...defaultTheme.fontFamily.sans],
-      body: ['"Noto Sans"'],
-      mono: ["monospace"],
     },
     screens: {
       xxl: { max: "1200px" },
