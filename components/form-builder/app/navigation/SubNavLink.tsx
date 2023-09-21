@@ -1,13 +1,14 @@
 import Link from "next/link";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useActivePathname } from "../../hooks/useActivePathname";
+import { cn } from "@lib/utils";
 
 export const SubNavLink = ({ href, children }: { children: ReactElement; href: string }) => {
   const baseClasses =
     "mb-4 mr-3 rounded-[100px] border-1 border-black bg-white px-5 pb-2 pt-1 no-underline !shadow-none laptop:py-2";
 
   const inactiveClasses =
-    "!text-black focus:!text-white [&_svg]:focus:fill-white [&_svg]:hover:stroke-white [&_svg]:hover:fill-white hover:bg-gray-600 hover:!text-white-default";
+    "!text-black hover:bg-gray-600 hover:!text-white-default focus:!text-white [&_svg]:hover:fill-white [&_svg]:hover:stroke-white [&_svg]:focus:fill-white";
   const activeClasses =
     "bg-[#475569] !text-white [&_svg]:fill-white ${svgStroke} focus:text-white [&_svg]:focus:stroke-white";
 
@@ -32,10 +33,7 @@ export const SubNavLink = ({ href, children }: { children: ReactElement; href: s
 
   return (
     <Link href={href} legacyBehavior>
-      <a
-        href={href}
-        className={`${active ? `${activeClasses}` : `${inactiveClasses}`} ${baseClasses}`}
-      >
+      <a href={href} className={cn(baseClasses, inactiveClasses, active && activeClasses)}>
         {children}
       </a>
     </Link>
