@@ -21,32 +21,6 @@ header {
   @apply xxs:w-cr-label-fold xs:w-cr-label-5s sm:w-cr-label-6s md:w-cr-label-duo md:mt-10px lg:w-cr-label-ipad xl:w-cr-label-1025 w-cr-label-desktop mt-2;
 }
 
-.gc-homepage {
-  @apply md:text-small_base text-base;
-
-  div {
-    @apply md:mb-12 mb-14 max-w-prose;
-  }
-
-  div:last-of-type {
-    @apply md:mb-14 mb-20;
-  }
-
-  h2 {
-    @apply md:text-small_h2 text-h2 mb-5;
-  }
-}
-
-.gc-ul {
-  @apply md:text-small_base list-disc text-base;
-}
-
-.gc-ul {
-  li {
-    @apply ml-6 block;
-  }
-}
-
 ul.custom {
   list-style: none;
   padding-left: 1em;
@@ -59,10 +33,6 @@ ul.custom {
     margin: 0 0.5em 0.1em -0.9em;
     font-size: 22px;
   }
-}
-
-.gc-ul li:last-of-type {
-  @apply mb-12;
 }
 
 /* Adjustments for tailwind defaults that conflict with the node-starter-app defaults */
