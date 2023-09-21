@@ -1,11 +1,11 @@
 .gc-formview {
     h1, h2, h3, h4, h5, h6 {
-        font-family: "Lato", sans-serif;
+        @apply font-lato;
     }
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: "Noto sans", sans-serif;
+    @apply font-noto-sans;
 }
 
 h1, .gc-h1 {
