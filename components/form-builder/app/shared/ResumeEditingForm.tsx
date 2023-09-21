@@ -33,5 +33,5 @@ export const ResumeEditingForm = ({ children }: { children: ReactElement }) => {
     }
   }, []);
 
-  return hasSession ? <div className="inline">{children}</div> : null;
+  return hasSession ? <div>{children}</div> : null;
 };

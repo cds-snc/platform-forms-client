@@ -62,7 +62,7 @@ export const Header = ({ context = "default", user }: HeaderParams) => {
             )}
             <li className="mr-2 py-2 text-base tablet:mr-4">
               {ability?.can("view", "FormRecord") && (
-                <Link href={`/${i18n.language}/myforms/drafts`}>
+                <Link href={`/${i18n.language}/myforms`}>
                   {t("adminNav.myForms", { ns: "common" })}
                 </Link>
               )}
