@@ -127,7 +127,6 @@ module.exports = {
         transparent: "transparent",
       },
       fontSize: {
-        badge: ["14px", "14px"],
         sm: ["16px", "22px"],
         base: ["20px", "28px"],
         p: ["20px", "28px"],
