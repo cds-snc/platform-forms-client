@@ -1,0 +1,32 @@
+body {
+  @apply text-base;
+}
+
+// Wrapper for frontend forms and pages
+.gc-formview {
+  @apply text-xl;
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-lato;
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  @apply font-noto-sans;
+}
+
+h1, .gc-h1 {
+  @apply md:text-small_h1 md:mb-10 border-b-2 border-red-default text-h1 font-semibold pb-2 mb-16;
+}
+
+h2, .gc-h2 {
+  @apply text-3xl font-semibold mb-6;
+}
+
+h3, .gc-h3 {
+  @apply text-2xl font-semibold mb-6;
+}
+
+h4, .gc-h4 {
+  @apply text-xl font-semibold;
+}

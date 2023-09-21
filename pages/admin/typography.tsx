@@ -15,21 +15,25 @@ const Heading = ({ title }: { title: string }) => {
 const Typography: NextPageWithLayout = () => {
   return (
     <>
-      <Heading title="Headings (Form builder + Admin)" />
-      <h1>H1 Heading</h1>
-      <h2>H2 Heading</h2>
-      <h3>H3 Heading</h3>
-      <h4>H4 Heading</h4>
-      <h5>H5 Heading</h5>
-
-      <Heading title="Headings (Public forms + pages)" />
+      <Heading title="Public forms + pages" />
       <div className="gc-formview">
+        <p className="mb-4">Default (base) text size (20px)</p>
+
         <h1>H1 Heading</h1>
         <h2>H2 Heading</h2>
         <h3>H3 Heading</h3>
         <h4>H4 Heading</h4>
         <h5>H5 Heading</h5>
       </div>
+
+      <Heading title="Form builder + Admin" />
+      <p className="mb-4">Default (base) text size (18px)</p>
+
+      <h1>H1 Heading</h1>
+      <h2>H2 Heading</h2>
+      <h3>H3 Heading</h3>
+      <h4>H4 Heading</h4>
+      <h5>H5 Heading</h5>
 
       <Heading title="Text sizes" />
       <p className="text-xs">text-xs</p>
