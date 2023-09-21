@@ -8,7 +8,7 @@ import {
   MenuDropdownItemCallback,
 } from "@components/myforms/MenuDropdown/MenuDropdown";
 import { getDate, slugify } from "@lib/clientHelpers";
-import { MessageIcon, EnvelopeIcon, PreviewIcon } from "@components/form-builder/icons/";
+import { MessageIcon, EnvelopeIcon, PreviewIcon, EditIcon } from "@components/form-builder/icons/";
 import Markdown from "markdown-to-jsx";
 
 const CardBanner = ({ id, isPublished }: { id: string; isPublished: boolean }) => {
@@ -55,7 +55,11 @@ const CardLinks = ({ isPublished, url, id, deliveryOption, overdue }: CardLinksP
         aria-describedby={`card-title-${id} card-date-${id}`}
         rel="noreferrer"
       >
-        <PreviewIcon className="mr-2 inline-block" />
+        {isPublished ? (
+          <PreviewIcon className="mr-2 inline-block" />
+        ) : (
+          <EditIcon className="mr-2 inline-block" />
+        )}
         {isPublished ? t("viewForm") : t("editForm")}
       </a>
 

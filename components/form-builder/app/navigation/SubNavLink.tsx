@@ -4,7 +4,7 @@ import { useActivePathname } from "../../hooks/useActivePathname";
 
 export const SubNavLink = ({ href, children }: { children: ReactElement; href: string }) => {
   const baseClasses =
-    "no-underline !shadow-none border-black border-1 rounded-[100px] pt-1 pb-2 laptop:py-2 px-5 mr-3 mb-4";
+    "mb-4 mr-3 rounded-[100px] border-1 border-black bg-white px-5 pb-2 pt-1 no-underline !shadow-none laptop:py-2";
 
   const inactiveClasses =
     "!text-black focus:!text-white [&_svg]:focus:fill-white [&_svg]:hover:stroke-white [&_svg]:hover:fill-white hover:bg-gray-600 hover:!text-white-default";
