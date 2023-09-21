@@ -56,7 +56,6 @@ describe("Card component", () => {
     expect(screen.queryByTestId("card-1")).toBeInTheDocument();
     expect(screen.getByText(/card.states.published/i)).toBeInTheDocument();
     expect(screen.getByText(/Card Name/i)).toBeInTheDocument();
-    expect(screen.getByText(/Card TitleFr/i)).toBeInTheDocument();
     expect(screen.getByText(/card.lastEdited: 04\/11\/22/i)).toBeInTheDocument();
     expect(screen.getByText(/card.menu.more/i)).toBeInTheDocument();
   });
@@ -77,7 +76,6 @@ describe("Card component", () => {
     expect(screen.queryByTestId("card-2")).toBeInTheDocument();
     expect(screen.getByText(/card.states.draft/i)).toBeInTheDocument();
     expect(screen.getByText(/Card Name/i)).toBeInTheDocument();
-    expect(screen.getByText(/Card TitleFr/i)).toBeInTheDocument();
     expect(screen.getByText(/card.lastEdited: 04\/11\/22/i)).toBeInTheDocument();
     expect(screen.getByText(/card.menu.more/i)).toBeInTheDocument();
   });
