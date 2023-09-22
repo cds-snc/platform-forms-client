@@ -16,7 +16,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1, .gc-h1 {
-  @apply md:text-small_h1 md:mb-10 border-b-2 border-red-default text-h1 font-semibold pb-2 mb-16;
+  @apply text-2xl tablet:text-4xl border-b-2 border-red-default font-semibold pb-2 mb-16;
 }
 
 h2, .gc-h2 {
