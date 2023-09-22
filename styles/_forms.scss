@@ -163,6 +163,10 @@
   }
 }
 
+.gc-section-header {
+  @apply md:text-small_h2 font-bold text-3xl mb-16 mt-12 p-6 bg-gray-background;
+}
+
 .gc-button {
   @apply md:w-full md:text-small_base cursor-pointer border-b-4 border-gray-900 py-3 px-5 mr-2 m-0 font-bold text-base no-underline text-gray-50 bg-green-default outline-none w-60;
 
