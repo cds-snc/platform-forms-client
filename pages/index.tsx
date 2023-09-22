@@ -15,11 +15,11 @@ const SiteLink = () => {
   return (
     <Link href="/form-builder" legacyBehavior>
       {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-      <a className="mb-6 mr-10 inline-flex font-sans text-h2 font-bold !text-black no-underline !shadow-none focus:bg-white">
+      <a className="mb-6 mr-10 inline-flex no-underline !shadow-none focus:bg-white">
         <span className="">
           <SiteLogo title={t("title")} />
         </span>
-        <h1 className="mb-0 ml-3 inline-block whitespace-nowrap border-none pb-0 text-[24px] leading-[38px] text-[#1B00C2]">
+        <h1 className="mb-0 ml-3 inline-block whitespace-nowrap border-none !font-noto-sans text-[24px] font-semibold leading-10 text-[#1B00C2]">
           {t("title-full", { ns: "common" })}
         </h1>
       </a>

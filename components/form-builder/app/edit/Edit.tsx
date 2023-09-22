@@ -128,7 +128,7 @@ export const Edit = () => {
           ariaLabel={t("richTextPrivacyTitle")}
         >
           <div id="privacy-text">
-            <h2 className="mt-4 pb-3 text-h3 laptop:mt-0">{t("richTextPrivacyTitle")}</h2>
+            <h2 className="mt-4 pb-3 text-2xl laptop:mt-0">{t("richTextPrivacyTitle")}</h2>
             <PrivacyDescription />
           </div>
         </RichTextLocked>
@@ -138,7 +138,7 @@ export const Edit = () => {
           ariaLabel={t("richTextConfirmationTitle")}
         >
           <div id="confirmation-text">
-            <h2 className="mt-4 pb-3 text-h3 laptop:mt-0">{t("richTextConfirmationTitle")}</h2>
+            <h2 className="mt-4 pb-3 text-2xl laptop:mt-0">{t("richTextConfirmationTitle")}</h2>
             <ConfirmationDescription />
           </div>
         </RichTextLocked>
