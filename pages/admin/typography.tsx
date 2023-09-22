@@ -17,8 +17,9 @@ const Typography: NextPageWithLayout = () => {
     <>
       <Heading title="Public forms + pages" />
       <div className="gc-formview">
-        <p className="mb-4">Default (base) text size (20px)</p>
+        <p className="mb-4">Default (base) text size (20px) Noto Sans</p>
 
+        <p className="mb-4 font-lato">Heading font: Lato</p>
         <h1>H1 Heading</h1>
         <h2>H2 Heading</h2>
         <h3>H3 Heading</h3>
@@ -27,7 +28,8 @@ const Typography: NextPageWithLayout = () => {
       </div>
 
       <Heading title="Form builder + Admin" />
-      <p className="mb-4">Default (base) text size (18px)</p>
+      <p className="mb-4">Default (base) text size (18px) Noto Sans</p>
+      <p className="mb-4 font-noto-sans">Heading font: Noto Sans</p>
 
       <h1>H1 Heading</h1>
       <h2>H2 Heading</h2>
