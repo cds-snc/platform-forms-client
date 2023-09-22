@@ -59,12 +59,8 @@ export const AcceptableUseTerms = ({
 
   return (
     <>
-      <div className="border-b-2 border-red-default">
-        <h1 className="md:text-small_h1 md:mb-10 border-b-0 text-h1 font-bold mb-0">
-          {t("acceptableUsePage.welcome")}
-        </h1>
-      </div>
-      <RichText className="py-10 w-full">{content}</RichText>
+      <h1 className="mb-0 md:mb-10">{t("acceptableUsePage.welcome")}</h1>
+      <RichText className="w-full py-10">{content}</RichText>
       {status === "authenticated" && (
         <Button id="acceptableUse" onClick={agree}>
           {t("acceptableUsePage.agree")}
