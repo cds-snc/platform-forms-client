@@ -88,7 +88,7 @@ export function requireAuthentication(
         return {
           redirect: {
             destination: `/${context.locale}/auth/policy?referer=${
-              localPathRegEx.test(context.resolvedUrl || "") ? context.resolvedUrl : "/myforms"
+              localPathRegEx.test(context.resolvedUrl || "") ? context.resolvedUrl : "/forms"
             }`,
             permanent: false,
           },

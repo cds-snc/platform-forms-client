@@ -28,7 +28,7 @@ export const ErrorPanel = ({
   // links
   const homeHref =
     status === "authenticated"
-      ? `/${i18n.language}/myforms`
+      ? `/${i18n.language}/forms`
       : `https://articles.alpha.canada.ca/forms-formulaires/${
           String(i18n.language).toLowerCase() === "fr" ? "fr/" : ""
         }`;
