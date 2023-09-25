@@ -64,7 +64,7 @@ export const Published = ({ id }: { id: string }) => {
       </div>
       <div>
         {ability?.can("view", "FormRecord") && (
-          <LinkButton.Primary href="/myforms">{t("publishedBack")}</LinkButton.Primary>
+          <LinkButton.Primary href="/forms">{t("publishedBack")}</LinkButton.Primary>
         )}
       </div>
     </div>

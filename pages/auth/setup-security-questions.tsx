@@ -136,7 +136,7 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
           } else {
             toast.success(t("success.title"));
             // Note: Await so async call will not auto resolve and "flash" the submit to enabled while loading.
-            await router.push({ pathname: `/${i18n.language}/myforms` });
+            await router.push({ pathname: `/${i18n.language}/forms` });
           }
 
           setSubmitting(false);
