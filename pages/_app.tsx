@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property */
 import "react-app-polyfill/stable";
 import type { AppProps } from "next/app";
 import React, { ReactElement, ReactNode } from "react";
