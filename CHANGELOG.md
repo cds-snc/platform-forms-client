@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.4.7](https://github.com/cds-snc/platform-forms-client/compare/v3.4.6...v3.4.7) (2023-09-25)
+
+
+### Bug Fixes
+
+* radio button on settings page ([#2693](https://github.com/cds-snc/platform-forms-client/issues/2693)) ([f0915b2](https://github.com/cds-snc/platform-forms-client/commit/f0915b24b58b917b990a70889982ddf71bda8a87))
+* Sentinel deploy metric product name ([#2676](https://github.com/cds-snc/platform-forms-client/issues/2676)) ([423e462](https://github.com/cds-snc/platform-forms-client/commit/423e462bcb411c452ab58d682cd987f8658c3996))
+* Update ECS task def delete to set inactive ([#2671](https://github.com/cds-snc/platform-forms-client/issues/2671)) ([0c9b8b0](https://github.com/cds-snc/platform-forms-client/commit/0c9b8b01ab77d77bb6f54b09d0f8a6f8435047c3))
+
+
+### Miscellaneous Chores
+
+* Add release manifest code owners ([#2680](https://github.com/cds-snc/platform-forms-client/issues/2680)) ([0b5e278](https://github.com/cds-snc/platform-forms-client/commit/0b5e2781e4c9e1fe1e0960575de1730a91222d2d))
+* Enable Prod ECS task def delete ([#2675](https://github.com/cds-snc/platform-forms-client/issues/2675)) ([414cc1d](https://github.com/cds-snc/platform-forms-client/commit/414cc1daae04a7535f67d2e49133d3f6f512a66f))
+* Update (My/Your) Forms title for consistency ([#2679](https://github.com/cds-snc/platform-forms-client/issues/2679)) ([a81717d](https://github.com/cds-snc/platform-forms-client/commit/a81717d7a8090a2b9c53d03045d2ccb31f183870))
+* Update Cypress to latest  ([#2681](https://github.com/cds-snc/platform-forms-client/issues/2681)) ([fa17d85](https://github.com/cds-snc/platform-forms-client/commit/fa17d85a4e95ebd6ea14741f0f85a2a37b38cc40))
+* update ticket subject lines ([#2690](https://github.com/cds-snc/platform-forms-client/issues/2690)) ([98f5212](https://github.com/cds-snc/platform-forms-client/commit/98f52128c2b2f77d54618e8b30b377f5adec1c1d))
+
+
+### Code Refactoring
+
+* change "/myforms" url to "/forms" ([#2683](https://github.com/cds-snc/platform-forms-client/issues/2683)) ([614fdf6](https://github.com/cds-snc/platform-forms-client/commit/614fdf617b4e06e67a07513af8a4e8bbe9284cb1))
+* Update "forms" landing page  ([#2678](https://github.com/cds-snc/platform-forms-client/issues/2678)) ([ab8e7da](https://github.com/cds-snc/platform-forms-client/commit/ab8e7da301ad5edfb9f5976c3b85126fec4227b5))
+
 ## [3.4.6](https://github.com/cds-snc/platform-forms-client/compare/v3.4.5...v3.4.6) (2023-09-20)
 
 
