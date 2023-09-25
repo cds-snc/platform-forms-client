@@ -82,7 +82,7 @@ const defaultClasses = {
     [ErrorStatus.SUCCESS]: "bg-emerald-50",
     [ErrorStatus.WARNING]: "bg-yellow-50",
     [ErrorStatus.ERROR]: "bg-red-50",
-    [ErrorStatus.INFO]: "bg-indigo-50",
+    [ErrorStatus.INFO]: "bg-violet-50",
   },
   icon: {
     [ErrorStatus.SUCCESS]: "[&_svg]:fill-emerald-700",
@@ -195,7 +195,7 @@ const AlertContainer = ({
     <div
       ref={refFocus}
       {...(focussable && { tabIndex: -1 })}
-      className={cn("relative flex rounded-lg p-4", className)}
+      className={cn("relative flex laptop:rounded-md rounded-sm p-4", className)}
       data-testid="alert"
       role={role}
       {...props}
