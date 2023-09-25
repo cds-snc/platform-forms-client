@@ -7,7 +7,7 @@ body {
   @apply text-xl;
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-lato;
+    @apply font-lato font-semibold;
   }
 
   h1, .gc-h1 {
@@ -28,11 +28,11 @@ h1, .gc-h1 {
 }
 
 h2, .gc-h2 {
-  @apply text-3xl font-semibold;
+  @apply text-3xl font-semibold mb-4;
 }
 
 h3, .gc-h3 {
-  @apply text-2xl font-semibold;
+  @apply text-2xl font-semibold mb-2;
 }
 
 h4, .gc-h4 {

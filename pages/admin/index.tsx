@@ -21,7 +21,7 @@ const AdminWelcome: NextPageWithLayout = () => {
       <h1 className="visually-hidden">{t("title", { ns: "admin-home" })}</h1>
       <div className="flex flex-row justify-center">
         <div className="rounded-lg border bg-white p-10">
-          <h2 className="mb-4">
+          <h2>
             <ManageAccountsIcon className="inline-block h-14 w-14" /> {t("accountAdministration")}
           </h2>
           <p>{t("manageUsersAndTheirForms")}</p>
@@ -33,7 +33,7 @@ const AdminWelcome: NextPageWithLayout = () => {
         </div>
 
         <div className="ml-20 rounded-lg border bg-white p-10">
-          <h2 className="mb-4">
+          <h2>
             <SettingsApplicationsIcon className="inline-block h-14 w-14" />
             {t("systemAdministration")}
           </h2>
