@@ -9,6 +9,14 @@ body {
   h1, h2, h3, h4, h5, h6 {
     @apply font-lato;
   }
+
+  h1, .gc-h1 {
+    @apply border-b-2 border-red-default pb-2 mb-16
+  }
+
+  h2, .gc-h2, h3, .gc-h3 {
+    @apply mb-6;
+  }
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -16,15 +24,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1, .gc-h1 {
-  @apply text-2xl tablet:text-4xl border-b-2 border-red-default font-semibold pb-2 mb-16;
+  @apply text-2xl tablet:text-4xl font-semibold mb-6;
 }
 
 h2, .gc-h2 {
-  @apply text-3xl font-semibold mb-6;
+  @apply text-3xl font-semibold;
 }
 
 h3, .gc-h3 {
-  @apply text-2xl font-semibold mb-6;
+  @apply text-2xl font-semibold;
 }
 
 h4, .gc-h4 {
