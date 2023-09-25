@@ -8,8 +8,125 @@ import {
   MenuDropdownItemCallback,
 } from "@components/myforms/MenuDropdown/MenuDropdown";
 import { fileDownload, getDate, slugify } from "@lib/clientHelpers";
-import { MessageIcon, EnvelopeIcon } from "@components/form-builder/icons/";
+import {
+  MessageIcon,
+  EnvelopeIcon,
+  PreviewIcon,
+  DesignIcon,
+} from "@components/form-builder/icons/";
 import Markdown from "markdown-to-jsx";
+
+const CardBanner = ({ id, isPublished }: { id: string; isPublished: boolean }) => {
+  const { t } = useTranslation(["my-forms", "common"]);
+  return (
+    <div
+      className={
+        "self-start p-1 px-2 text-sm border-solid rounded" +
+        (isPublished
+          ? " bg-emerald-500 border-emerald-700 text-white"
+          : " bg-yellow-300 border-yellow-700")
+      }
+      aria-hidden="true"
+      id={`card-title-${id}`}
+    >
+      {isPublished ? t("card.states.published") : t("card.states.draft")}
+    </div>
+  );
+};
+
+interface CardLinksProps {
+  id: string;
+  url: string;
+  isPublished: boolean;
+  overdue: number;
+  deliveryOption?: { emailAddress?: string } | null;
+}
+
+const CardLinks = ({ isPublished, url, id, deliveryOption, overdue }: CardLinksProps) => {
+  const { t, i18n } = useTranslation(["my-forms", "common"]);
+  const responsesLink = `/${i18n.language}/form-builder/responses/${id}`;
+
+  const textData = {
+    responses: overdue,
+    link: responsesLink,
+  };
+
+  return (
+    <div className="mb-4 px-3">
+      <a
+        href={isPublished ? url : `/${i18n.language}/form-builder/edit/${id}`}
+        className="my-4 block text-sm focus:fill-white active:fill-white"
+        target={isPublished ? "_blank" : "_self"}
+        aria-describedby={`card-title-${id} card-date-${id}`}
+        rel="noreferrer"
+      >
+        {isPublished ? (
+          <PreviewIcon className="mr-2 inline-block" />
+        ) : (
+          <DesignIcon className="mr-2 inline-block" />
+        )}
+        {isPublished ? t("viewForm") : t("editForm")}
+      </a>
+
+      {/* Email delivery */}
+      {deliveryOption && deliveryOption.emailAddress && (
+        <span className="mt-4 block text-sm">
+          <EnvelopeIcon className="mr-2 inline-block" />
+          {t("card.deliveryOption.email", { ns: "my-forms" })} {deliveryOption.emailAddress}
+        </span>
+      )}
+      {/* Vault delivery */}
+      {deliveryOption && !deliveryOption.emailAddress && (
+        <>
+          {overdue > 0 ? (
+            <span className="mt-4 block text-sm text-red">
+              <MessageIcon className="mr-2 inline-block" />
+              <Markdown options={{ forceBlock: false }}>
+                {t("card.actionRequired.description") +
+                  (overdue > 1
+                    ? t("card.actionRequired.linkPlural", textData)
+                    : t("card.actionRequired.linkSingular", textData))}
+              </Markdown>
+            </span>
+          ) : (
+            <a
+              className="mt-4 block text-sm focus:fill-white active:fill-white"
+              href={responsesLink}
+            >
+              <MessageIcon className="ml-[1px] mr-2 inline-block" />
+              {t("card.deliveryOption.vault", { ns: "my-forms" })}{" "}
+            </a>
+          )}
+        </>
+      )}
+    </div>
+  );
+};
+
+const CardTitle = ({ name }: { name: string }) => {
+  const { t } = useTranslation(["my-forms", "common"]);
+  const classes = "mb-0 mr-2 overflow-hidden pb-0 text-base font-bold";
+  return <h2 className={classes}>{name ? name : t("unnamedForm", { ns: "form-builder" })}</h2>;
+};
+
+const CardDate = ({ id, date }: { id: string; date: string }) => {
+  const { t } = useTranslation(["my-forms", "common"]);
+  function formatDate(date: string) {
+    try {
+      const dateParts = new Date(date).toLocaleDateString("en-GB").split("/");
+      const shortYear = dateParts[2].split("").slice(2).join("");
+      return `${dateParts[0]}/${dateParts[1]}/${shortYear}`;
+    } catch (err) {
+      return t("unknown", { ns: "common" });
+    }
+  }
+
+  return (
+    <div id={`card-date-${id}`} className="text-sm">
+      {t("card.lastEdited")}: {formatDate(date)}
+    </div>
+  );
+};
 
 export interface CardProps {
   id: string;
@@ -25,9 +142,9 @@ export interface CardProps {
 }
 
 export const Card = (props: CardProps): React.ReactElement => {
-  const { id, name, titleEn, titleFr, url, date, isPublished, deliveryOption, overdue } = props;
+  const { id, name, url, date, isPublished, deliveryOption, overdue } = props;
   const { t, i18n } = useTranslation(["my-forms", "common"]);
-  const responsesLink = `/${i18n.language}/form-builder/responses/${id}`;
+
   const menuItemsList: Array<MenuDropdownItemI> = [
     {
       title: t("card.menu.save"),
@@ -102,83 +219,30 @@ export const Card = (props: CardProps): React.ReactElement => {
     };
   }
 
-  function formatDate(date: string) {
-    try {
-      const dateParts = new Date(date).toLocaleDateString("en-GB").split("/");
-      const shortYear = dateParts[2].split("").slice(2).join("");
-      return `${dateParts[0]}/${dateParts[1]}/${shortYear}`;
-    } catch (err) {
-      return t("unknown", { ns: "common" });
-    }
-  }
-
   return (
-    <div className="h-full rounded border-1 border-black-default" data-testid={`card-${id}`}>
-      <div
-        className={
-          "p-1 px-3 border-b-1 border-black-default border-solid rounded-t" +
-          (isPublished ? " bg-green-500" : " bg-yellow-300")
-        }
-        aria-hidden="true"
-        id={`card-title-${id}`}
-      >
-        {isPublished === true ? t("card.states.published") : t("card.states.draft")}
-      </div>
-      <p className="h-36 px-3 pb-8 pt-5">
-        <a
-          href={isPublished ? url : `/${i18n.language}/form-builder/edit/${id}`}
-          className="wrap line-clamp-2 overflow-hidden font-bold"
-          aria-describedby={`card-title-${id} card-date-${id}`}
-        >
-          {name ? name : t("unnamedForm", { ns: "form-builder" })}
-        </a>
-        <span className="wrap line-clamp-1 overflow-hidden">
-          {titleEn && titleEn}
-          {titleEn && titleFr && " / "}
-          {titleFr && titleFr}
-        </span>
-        {/* Email delivery */}
-        {deliveryOption && deliveryOption.emailAddress && (
-          <span className="block mt-4 text-sm whitespace-nowrap text-ellipsis overflow-hidden">
-            <EnvelopeIcon className="mr-2 inline-block" />
-            {t("card.deliveryOption.email", { ns: "my-forms" })} {deliveryOption.emailAddress}
-          </span>
-        )}
-        {/* Vault delivery */}
-        {deliveryOption && !deliveryOption.emailAddress && (
-          <>
-            {overdue > 0 ? (
-              <span className="mt-4 block text-sm text-red">
-                <MessageIcon className="mr-2 inline-block" />
-                <Markdown options={{ forceBlock: false }}>
-                  {t("card.actionRequired.description") +
-                    (overdue > 1
-                      ? t("card.actionRequired.linkPlural", {
-                          responses: overdue,
-                          link: responsesLink,
-                        })
-                      : t("card.actionRequired.linkSingular", {
-                          responses: overdue,
-                          link: responsesLink,
-                        }))}
-                </Markdown>
-              </span>
-            ) : (
-              <a
-                className="mt-4 block text-sm focus:fill-white active:fill-white"
-                href={responsesLink}
-              >
-                <MessageIcon className="mr-2 inline-block" />
-                {t("card.deliveryOption.vault", { ns: "my-forms" })}{" "}
-              </a>
-            )}
-          </>
-        )}
-      </p>
-      <div className="flex items-center justify-between p-3">
-        <div id={`card-date-${id}`} className="text-sm">
-          {t("card.lastEdited")}: {formatDate(date)}
+    <div
+      className="flex h-full flex-col justify-between rounded border-1 border-slate-500 bg-white"
+      data-testid={`card-${id}`}
+    >
+      <div className="mt-3 flex flex-col justify-between">
+        <div className="flex flex-col px-3">
+          <div className="flex h-full justify-between">
+            <CardTitle name={name} />
+            <CardBanner id={id} isPublished={isPublished} />
+          </div>
         </div>
+
+        <CardLinks
+          overdue={overdue}
+          isPublished={isPublished}
+          url={url}
+          id={id}
+          deliveryOption={deliveryOption}
+        />
+      </div>
+
+      <div className="mb-4 flex items-center justify-between px-3">
+        <CardDate id={id} date={date} />
         <div className="flex items-center text-sm">
           <MenuDropdown id={id} items={menuItemsList} direction={"up"}>
             <span className="mr-1 text-[2rem]" aria-hidden="true">

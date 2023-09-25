@@ -119,7 +119,7 @@ describe("Security Questions Page", () => {
       cy.typeInField("#answer3", "123456");
       cy.get("button[type='submit']").click();
       cy.get("#acceptableUse").click();
-      cy.url().should("contain", "/en/myforms");
+      cy.url().should("contain", "/forms");
     });
   });
 });
