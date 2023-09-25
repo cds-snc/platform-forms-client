@@ -11,9 +11,9 @@ export enum ErrorStatus {
 }
 
 const headingClasses = {
-  h2: "text-2xl font-sans font-semibold",
-  h3: "text-xl font-sans font-semibold",
-  h4: "text-lg font-sans font-semibold",
+  h2: "text-2xl font-semibold",
+  h3: "text-xl font-semibold",
+  h4: "text-lg font-semibold",
 };
 
 export const Title = ({
