@@ -62,19 +62,19 @@ export const Preview = () => {
     <>
       <div className="h-12"></div>
       <div
-        className={`border-3 border-dashed border-blue-focus p-4 mb-8 ${
+        className={`mb-8 border-3 border-dashed border-blue-focus p-4 ${
           status !== "authenticated" && ""
         }`}
         {...getLocalizationAttribute()}
       >
         {status !== "authenticated" ? (
-          <div className="bg-purple-200 p-2 inline-block mb-1">
+          <div className="mb-1 inline-block bg-purple-200 p-2">
             <Markdown options={{ forceBlock: true }}>
               {t("signInToTest", { ns: "form-builder", lng: language })}
             </Markdown>
           </div>
         ) : email ? (
-          <div className="bg-purple-200 p-2 inline-block mb-1">
+          <div className="mb-1 inline-block bg-purple-200 p-2">
             {t("submittedResponsesText", { ns: "form-builder", email })}{" "}
             <a className="visited:text-black-default" href={settingsLink}>
               {t("submittedResponsesChange", { ns: "form-builder" })}
@@ -82,7 +82,7 @@ export const Preview = () => {
             .
           </div>
         ) : (
-          <div className="bg-purple-200 p-2 inline-block mb-1">
+          <div className="mb-1 inline-block bg-purple-200 p-2">
             {t("submittedResponsesTextVault.text1", { ns: "form-builder" })}{" "}
             <a className="visited:text-black-default" href={responsesLink}>
               {t("submittedResponsesTextVault.text2", { ns: "form-builder" })}
@@ -97,13 +97,13 @@ export const Preview = () => {
 
         {sent && (
           <>
-            <button className="mt-4 clear-both block" onClick={() => clearSent()}>
+            <button className="clear-both mt-4 block" onClick={() => clearSent()}>
               <BackArrowIcon className="inline-block" /> {t("backToForm", { ns: "form-builder" })}
             </button>
           </>
         )}
 
-        <Brand brand={brand} lang={language} className="mt-8 mb-12" />
+        <Brand brand={brand} lang={language} className="mb-12 mt-8" />
         <h1 className="mt-4">
           {formRecord.form[localizeField(LocalizedFormProperties.TITLE, language)] ||
             t("pagePreview", { ns: "form-builder" })}
@@ -120,53 +120,55 @@ export const Preview = () => {
             </RichText>
           </>
         ) : (
-          <Form
-            formRecord={formRecord}
-            isPreview={true}
-            language={language}
-            router={router}
-            t={t}
-            onSuccess={setSent}
-            renderSubmit={() => (
-              <div id="PreviewSubmitButton">
-                <span {...getLocalizationAttribute()}>
-                  <Button
-                    type="submit"
-                    id="SubmitButton"
-                    className="mb-4"
-                    onClick={(e) => {
-                      if (status !== "authenticated") {
-                        return preventSubmit(e);
-                      }
-                    }}
-                  >
-                    {t("submitButton", { ns: "common", lng: language })}
-                  </Button>
-                </span>
-                {status !== "authenticated" && (
-                  <div
-                    className="inline-block py-1 px-4 bg-purple-200"
-                    {...getLocalizationAttribute()}
-                  >
-                    <Markdown options={{ forceBlock: true }}>
-                      {t("signInToTest", { ns: "form-builder", lng: language })}
-                    </Markdown>
-                  </div>
-                )}
-              </div>
-            )}
-          >
-            {currentForm}
-          </Form>
+          <div className="gc-formview">
+            <Form
+              formRecord={formRecord}
+              isPreview={true}
+              language={language}
+              router={router}
+              t={t}
+              onSuccess={setSent}
+              renderSubmit={() => (
+                <div id="PreviewSubmitButton">
+                  <span {...getLocalizationAttribute()}>
+                    <Button
+                      type="submit"
+                      id="SubmitButton"
+                      className="mb-4"
+                      onClick={(e) => {
+                        if (status !== "authenticated") {
+                          return preventSubmit(e);
+                        }
+                      }}
+                    >
+                      {t("submitButton", { ns: "common", lng: language })}
+                    </Button>
+                  </span>
+                  {status !== "authenticated" && (
+                    <div
+                      className="inline-block bg-purple-200 px-4 py-1"
+                      {...getLocalizationAttribute()}
+                    >
+                      <Markdown options={{ forceBlock: true }}>
+                        {t("signInToTest", { ns: "form-builder", lng: language })}
+                      </Markdown>
+                    </div>
+                  )}
+                </div>
+              )}
+            >
+              {currentForm}
+            </Form>
+          </div>
         )}
       </div>
 
       {status !== "authenticated" && (
         <>
-          <span className="bg-slate-200 p-2 inline-block mb-1">
+          <span className="mb-1 inline-block bg-slate-200 p-2">
             {t("confirmationPage", { ns: "form-builder" })}
           </span>
-          <div className="border-3 border-dashed border-blue-focus p-4 mb-8">
+          <div className="mb-8 border-3 border-dashed border-blue-focus p-4">
             <RichText {...getLocalizationAttribute()}>
               {formRecord.form.confirmation
                 ? formRecord.form.confirmation[
