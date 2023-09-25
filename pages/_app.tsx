@@ -45,10 +45,10 @@ const MyApp: React.FC<AppPropsWithLayout> = ({
       // Re-fetches session when window is focused
       refetchOnWindowFocus={true}
     >
-      <div className={`${notoSans.variable} ${lato.variable} font-noto-sans`}>
+      <div className={`${notoSans.variable} ${lato.variable} h-full font-noto-sans`}>
         <ErrorBoundary
           fallback={
-            <div className="flex h-full flex-col">
+            <div className="h-full">
               <Layout className="flex flex-col items-center justify-center">
                 <ErrorPanel />
               </Layout>
