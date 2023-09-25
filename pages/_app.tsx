@@ -38,37 +38,44 @@ const MyApp: React.FC<AppPropsWithLayout> = ({
   pageProps: { session, ...pageProps },
 }: AppPropsWithLayout) => {
   return (
-    <SessionProvider
-      session={session}
-      // Re-fetch session every 30 minutes if no user activity
-      refetchInterval={30 * 60}
-      // Re-fetches session when window is focused
-      refetchOnWindowFocus={true}
-    >
-      <div className={`${notoSans.variable} ${lato.variable} h-full font-noto-sans`}>
-        <ErrorBoundary
-          fallback={
-            <div className="h-full">
-              <Layout className="flex flex-col items-center justify-center">
-                <ErrorPanel />
-              </Layout>
-            </div>
-          }
-        >
-          <AccessControlProvider>
-            {Component.getLayout ? (
-              <ErrorBoundary>{Component.getLayout(<Component {...pageProps} />)}</ErrorBoundary>
-            ) : (
-              <DefaultLayout showLanguageToggle={true}>
-                <ErrorBoundary>
-                  <Component {...pageProps} />
-                </ErrorBoundary>
-              </DefaultLayout>
-            )}
-          </AccessControlProvider>
-        </ErrorBoundary>
-      </div>
-    </SessionProvider>
+    <>
+      <style jsx global>{`
+        html {
+          font-family: ${notoSans.style.fontFamily};
+        }
+      `}</style>
+      <SessionProvider
+        session={session}
+        // Re-fetch session every 30 minutes if no user activity
+        refetchInterval={30 * 60}
+        // Re-fetches session when window is focused
+        refetchOnWindowFocus={true}
+      >
+        <div className={`${notoSans.variable} ${lato.variable} h-full`}>
+          <ErrorBoundary
+            fallback={
+              <div className="h-full">
+                <Layout className="flex flex-col items-center justify-center">
+                  <ErrorPanel />
+                </Layout>
+              </div>
+            }
+          >
+            <AccessControlProvider>
+              {Component.getLayout ? (
+                <ErrorBoundary>{Component.getLayout(<Component {...pageProps} />)}</ErrorBoundary>
+              ) : (
+                <DefaultLayout showLanguageToggle={true}>
+                  <ErrorBoundary>
+                    <Component {...pageProps} />
+                  </ErrorBoundary>
+                </DefaultLayout>
+              )}
+            </AccessControlProvider>
+          </ErrorBoundary>
+        </div>
+      </SessionProvider>
+    </>
   );
 };
 
