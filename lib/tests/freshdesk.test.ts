@@ -48,7 +48,7 @@ describe("Formats ticket data", () => {
       name: "Test Name - brand",
       email: "test-branding@example.com",
       type: "Branding Request",
-      subject: "Submit a new branding option for XYZ",
+      subject: "Submit a new branding option / Proposer une nouvelle option d’image de marque",
       tags: ["Forms_Dev", "Forms_Request_Logo"],
       description: "Test branding description",
       custom_fields: {
@@ -72,7 +72,7 @@ describe("Formats ticket data", () => {
       name: "Test Name - publishing",
       email: "test-publishing@example.com",
       type: "Go Live Request",
-      subject: "Publishing permission request for XYZ",
+      subject: "Publishing permission request / Demande d’autorisation de publication",
       tags: ["Forms_Dev", "Forms_Request_GoLive"],
       description: "Test publishing description",
       custom_fields: {
