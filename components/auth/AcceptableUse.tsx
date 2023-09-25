@@ -15,7 +15,7 @@ interface AcceptableUseProps {
 }
 export const AcceptableUseTerms = ({
   content,
-  referer = "/myforms",
+  referer = "/forms",
 }: AcceptableUseProps): React.ReactElement | null => {
   const router = useRouter();
   const { t } = useTranslation("common");
@@ -23,7 +23,7 @@ export const AcceptableUseTerms = ({
 
   // An extra check just encase a malicous user sets the referer to an external URL
   if (!localPathRegEx.test(referer)) {
-    referer = "/myforms";
+    referer = "/forms";
   }
 
   const agree = async () => {

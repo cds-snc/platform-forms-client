@@ -12,21 +12,21 @@ export const FilterNavigation = () => {
 
   return (
     <nav className="flex flex-wrap laptop:mb-4" aria-label={t("navLabelEditor")}>
-      <SubNavLink href={`/${i18n.language}/myforms/all`}>
+      <SubNavLink href={`/${i18n.language}/forms`}>
         <>
           <FolderIcon className={iconClassname} />
           {t("nav.all")}
         </>
       </SubNavLink>
 
-      <SubNavLink href={`/${i18n.language}/myforms/drafts`}>
+      <SubNavLink href={`/${i18n.language}/forms/drafts`}>
         <>
           <PageIcon className={iconClassname} />
           {t("nav.drafts")}
         </>
       </SubNavLink>
 
-      <SubNavLink href={`/${i18n.language}/myforms/published`}>
+      <SubNavLink href={`/${i18n.language}/forms/published`}>
         <>
           <GlobeIcon className={iconClassname} />
           {t("nav.published")}

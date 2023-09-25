@@ -40,7 +40,7 @@ interface MyFormsProps {
 const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsProps) => {
   const router = useRouter();
   const path = String(router.query?.path);
-  const { t, i18n } = useTranslation(["my-forms"]);
+  const { t } = useTranslation(["my-forms"]);
 
   const templatesAll = templates.sort((itemA, itemB) => {
     return new Date(itemB.date).getTime() - new Date(itemA.date).getTime();
@@ -57,17 +57,6 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
        background-color: #F9FAFB;
     }
 `;
-
-  useEffect(() => {
-    // Default route is "drafts". Done here vs getServerSideProps to avoid extra data fetch
-    const formStateRegex = /^(drafts|published|all)$/gi;
-    if (!formStateRegex.test(String(path))) {
-      router.push(`/${i18n.language}/myforms/all`, undefined, { shallow: true });
-    }
-    // purposely not including router in the dependency array
-    // effect should re-fire only when path changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [path]);
 
   useEffect(() => {
     const handleClick = () => {
@@ -132,7 +121,11 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
               <p>{t("cards.noPublishedForms")}</p>
             )}
           </TabPanel>
-          <TabPanel id="tabpanel-all" labeledbyId="tab-all" isActive={path === "all"}>
+          <TabPanel
+            id="tabpanel-all"
+            labeledbyId="tab-all"
+            isActive={path === "all" || path === "undefined"}
+          >
             {templatesAll && templatesAll?.length > 0 ? (
               <CardGrid cards={templatesAll}></CardGrid>
             ) : (
