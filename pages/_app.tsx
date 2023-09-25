@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unknown-property */
 import "react-app-polyfill/stable";
 import type { AppProps } from "next/app";
 import React, { ReactElement, ReactNode } from "react";
@@ -40,6 +39,7 @@ const MyApp: React.FC<AppPropsWithLayout> = ({
 }: AppPropsWithLayout) => {
   return (
     <>
+      {/* eslint-disable-next-line react/no-unknown-property */}
       <style jsx global>{`
         html {
           font-family: ${notoSans.style.fontFamily};
