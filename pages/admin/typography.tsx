@@ -43,8 +43,8 @@ const Typography: NextPageWithLayout = () => {
 
       <Heading title="Text sizes" />
       <p className="text-xs">text-xs</p>
-      <p className="text-sm">text-sm</p>
-      <p className="text-base">text-base</p>
+      <p className="text-sm">text-sm *</p>
+      <p className="text-base">text-base *</p>
       <p className="text-lg">text-lg</p>
       <p className="text-xl">text-xl</p>
       <p className="text-2xl">text-2xl</p>
@@ -55,6 +55,7 @@ const Typography: NextPageWithLayout = () => {
       <p className="text-7xl">text-7xl</p>
       <p className="text-8xl">text-8xl</p>
       <p className="text-9xl">text-9xl</p>
+      <p className="mt-4">* = customized (not tailwind default)</p>
 
       <Heading title="Font weights" />
       <p className="font-thin">font-thin</p>
