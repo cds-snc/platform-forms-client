@@ -15,7 +15,7 @@ const SiteLink = () => {
   return (
     <Link href="/form-builder" legacyBehavior>
       {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-      <a className="mb-6 mr-10 inline-flex no-underline !shadow-none focus:bg-white">
+      <a className="mr-10 inline-flex no-underline !shadow-none focus:bg-white">
         <span className="">
           <SiteLogo title={t("title")} />
         </span>
@@ -44,9 +44,7 @@ const Home = () => {
       <div className="mt-10 flex items-center justify-center">
         <div className="w-[622px] rounded-2xl border-1 border-[#D1D5DB] bg-white p-8">
           <div className="flex  flex-col items-center">
-            <div className="mb-10">
-              <SiteLink />
-            </div>
+            <SiteLink />
             <div className="flex justify-center gap-8">
               <Link
                 href="/en/form-builder"
