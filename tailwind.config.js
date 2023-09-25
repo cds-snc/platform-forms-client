@@ -39,8 +39,6 @@ module.exports = {
         prose: "75ch",
       },
       listStyleType: {
-        disc: "disc",
-        decimal: "decimal",
         circle: "circle",
       },
       colors: {
