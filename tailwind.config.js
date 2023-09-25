@@ -134,13 +134,6 @@ module.exports = {
       fontSize: {
         sm: ["16px", "22px"],
         base: ["18px", "28px"],
-        p: ["20px", "28px"],
-        small_sm: ["12px", "14px"],
-        small_base: ["16px", "22px"],
-        small_p: ["16px", "22px"],
-        small_h3: ["18px", "22px"],
-        small_h2: ["20px", "28px"],
-        small_h1: ["24px", "28px"],
       },
       zIndex: {
         "-1": "-1,",
