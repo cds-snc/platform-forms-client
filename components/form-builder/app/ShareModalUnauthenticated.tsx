@@ -51,7 +51,7 @@ export const ShareModalUnauthenticated = ({
         actions={actions}
         className="overflow-y-scroll max-h-[80%]"
       >
-        <div className="my-8">
+        <div className="my-8 p-4">
           <section>
             <Markdown options={{ forceBlock: true }}>
               {t("share.unauthenticated.description")}
