@@ -104,7 +104,7 @@ export const Preview = () => {
         )}
 
         <div className="gc-formview">
-          <Brand brand={brand} lang={language} className="mb-12 mt-8" />
+          <Brand brand={brand} lang={language} className="mb-12 mt-8 max-w-[360px]" />
           <h1 className="mt-4">
             {formRecord.form[localizeField(LocalizedFormProperties.TITLE, language)] ||
               t("pagePreview", { ns: "form-builder" })}
