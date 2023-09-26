@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.4.8](https://github.com/cds-snc/platform-forms-client/compare/v3.4.7...v3.4.8) (2023-09-26)
+
+
+### Bug Fixes
+
+* Forms nav fix aria label and ids ([#2705](https://github.com/cds-snc/platform-forms-client/issues/2705)) ([aa01774](https://github.com/cds-snc/platform-forms-client/commit/aa01774410f1458d9c61f5ac3096521cc2bf7976))
+* unauthenticated share modal padding ([#2708](https://github.com/cds-snc/platform-forms-client/issues/2708)) ([b01c844](https://github.com/cds-snc/platform-forms-client/commit/b01c844ff9ba5410497307e4f2375de8eec0bb59))
+
+
+### Miscellaneous Chores
+
+* a11y update card banner text colour ([#2709](https://github.com/cds-snc/platform-forms-client/issues/2709)) ([0e5ed17](https://github.com/cds-snc/platform-forms-client/commit/0e5ed17425e6bb5023d82fad6b58dbadd32e0795))
+* fix typo in Forms page ([#2701](https://github.com/cds-snc/platform-forms-client/issues/2701)) ([789eda7](https://github.com/cds-snc/platform-forms-client/commit/789eda74ecca5bc2450ec44a0ffba1ee2d19f71e))
+* update icons to fix alignment issues ([#2704](https://github.com/cds-snc/platform-forms-client/issues/2704)) ([1fa5888](https://github.com/cds-snc/platform-forms-client/commit/1fa588880201352ac8453770c816195a2651d7e2))
+
+
+### Code Refactoring
+
+* update alert styles ([#2700](https://github.com/cds-snc/platform-forms-client/issues/2700)) ([aded1bc](https://github.com/cds-snc/platform-forms-client/commit/aded1bc364fcf72f5afc5cafb8e21e7eb7b3ac5f))
+
 ## [3.4.7](https://github.com/cds-snc/platform-forms-client/compare/v3.4.6...v3.4.7) (2023-09-25)
 
 
