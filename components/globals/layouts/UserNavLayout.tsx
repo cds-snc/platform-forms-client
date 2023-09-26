@@ -9,23 +9,16 @@ import { SiteLogo } from "@formbuilder/icons";
 import { ToastContainer } from "@formbuilder/app/shared/Toast";
 import { HeadMeta } from "./HeadMeta";
 
-import { Noto_Sans } from "next/font/google";
-
-const nato = Noto_Sans({
-  weight: "600",
-  subsets: ["latin"],
-});
-
 const SiteLink = () => {
   const { t } = useTranslation("common");
   return (
     <Link href="/form-builder" legacyBehavior>
       {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-      <a className="mb-6 mr-10 inline-flex font-sans text-h2 font-bold !text-black no-underline !shadow-none focus:bg-white">
+      <a className="mb-6 mr-10 inline-flex no-underline !shadow-none focus:bg-white">
         <span className="">
           <SiteLogo title={t("title")} />
         </span>
-        <span className={`ml-3 inline-block text-[24px] text-[#1B00C2] ${nato.className}`}>
+        <span className="ml-3 inline-block text-[24px] font-semibold leading-10 text-[#1B00C2]">
           {t("title", { ns: "common" })}
         </span>
       </a>
@@ -60,7 +53,7 @@ const UserNavLayout = ({
             <Brand brand={null} />
           </div>
           <div className="inline-flex gap-4">
-            <div className="text-base font-normal not-italic md:text-small_base">
+            <div className="text-base font-normal not-italic md:text-sm">
               {ability?.can("view", "FormRecord") && (
                 <Link href="/forms">{t("adminNav.myForms")}</Link>
               )}

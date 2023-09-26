@@ -24,7 +24,7 @@ export const TabsList = (props: TabsProps): React.ReactElement => {
   // Note: the only purpose of the tabIndex is to have the eslint tests pass
   return (
     <div
-      className="lg:flex-col lg:text-small_base p-0 flex text-base list-none mb-14"
+      className="lg:flex-col lg:text-sm p-0 flex text-base list-none mb-14"
       ref={tabsListRef}
       role="tablist"
       aria-labelledby={labeledby}

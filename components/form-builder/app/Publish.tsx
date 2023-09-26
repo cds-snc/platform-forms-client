@@ -93,7 +93,7 @@ export const Publish = () => {
     <>
       <div className="flex flex-wrap justify-between laptop:flex-nowrap">
         <div className="mx-5 min-w-fit grow rounded-lg border-1 p-5">
-          <h1 className="mb-0 border-0">{t("publishYourForm")}</h1>
+          <h1 className="mb-2 border-0">{t("publishYourForm")}</h1>
           <p className="mb-0 text-lg">{`${t(
             "publishYourFormInstructions.text1"
           )} ${securityAttribute} ${t("publishYourFormInstructions.text2")}`}</p>

@@ -49,10 +49,7 @@ const ExpandingInput = React.forwardRef<Ref, Props>((props, ref) => {
         rows={1}
         maxLength={2000}
         id={id}
-        className={cn(
-          "!font-sans focus:bg-gray-default focus:outline-0 overflow-y-visible",
-          className
-        )}
+        className={cn("focus:bg-gray-default focus:outline-0 overflow-y-visible", className)}
         name={name}
         aria-describedby={describedBy}
         aria-invalid={isInvalid ? true : false}

@@ -53,7 +53,7 @@ const DefaultLayout = ({
           {showLogin && <LoginMenu />}
         </Fip>
       </header>
-      <div id="page-container">
+      <div id="page-container" className="gc-formview">
         <main id="content">{children}</main>
       </div>
       <Footer isSplashPage={isSplashPage} />
