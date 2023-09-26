@@ -128,16 +128,19 @@ export const LineItemEntries = ({
           onBlur={onBlur}
           spellCheck="false"
           autoComplete="off"
+          onPaste={(e) => {
+            const pastedText = e.clipboardData.getData("Text");
+            const pastedTextArray = pastedText.split(/\r?\n/);
+            const cleanedText = pastedTextArray.map((text) =>
+              text.trim().replace(",", "").toLowerCase()
+            );
+            setInputs([...new Set([...inputs, ...cleanedText])]);
+            e.preventDefault();
+          }}
           aria-labelledby={inputLabelId}
         />
       </div>
-      <div
-        ref={liveRegionRef}
-        className="sr-only"
-        aria-live="polite"
-        aria-atomic="false"
-        // aria-relevant="text additions" -- Note: default
-      ></div>
+      <div ref={liveRegionRef} className="sr-only" aria-live="polite" aria-atomic="false"></div>
     </div>
   );
 };
