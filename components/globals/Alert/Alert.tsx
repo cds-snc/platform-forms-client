@@ -195,7 +195,7 @@ const AlertContainer = ({
     <div
       ref={refFocus}
       {...(focussable && { tabIndex: -1 })}
-      className={cn("relative flex laptop:rounded-md rounded-sm p-4", className)}
+      className={cn("relative flex rounded-sm laptop:rounded-md p-4", className)}
       data-testid="alert"
       role={role}
       {...props}
