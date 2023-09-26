@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.4.9](https://github.com/cds-snc/platform-forms-client/compare/v3.4.8...v3.4.9) (2023-09-26)
+
+
+### Bug Fixes
+
+* Remove grid type from formID ([#2710](https://github.com/cds-snc/platform-forms-client/issues/2710)) ([3dbe449](https://github.com/cds-snc/platform-forms-client/commit/3dbe44903a45ebc495ea362fe55be4ed120f5087))
+
 ## [3.4.8](https://github.com/cds-snc/platform-forms-client/compare/v3.4.7...v3.4.8) (2023-09-26)
 
 
