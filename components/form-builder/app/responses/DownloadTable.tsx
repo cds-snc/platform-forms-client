@@ -152,6 +152,41 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
     });
   };
 
+  const handleDownloadAsHtmlTable = async () => {
+    // Handle any errors and show them
+    if (tableItems.checkedItems.size === 0) {
+      if (!errors.noItemsError) {
+        setErrors({ ...errors, noItemsError: true });
+      }
+      return;
+    }
+
+    const url = `/api/id/${formId}/submissions/download?format=html-table`;
+    const ids = Array.from(tableItems.checkedItems.keys());
+
+    return axios({
+      url,
+      method: "POST",
+      responseType: "blob",
+      data: {
+        ids: ids.join(","),
+      },
+    }).then((response) => {
+      const href = window.URL.createObjectURL(response.data);
+
+      const anchorElement = document.createElement("a");
+
+      anchorElement.href = href;
+      anchorElement.download = "records.html";
+
+      document.body.appendChild(anchorElement);
+      anchorElement.click();
+
+      document.body.removeChild(anchorElement);
+      window.URL.revokeObjectURL(href);
+    });
+  };
+
   // NOTE: browsers have different limits for simultaneous downloads. May need to look into
   // batching file downloads (e.g. 4 at a time) if edge cases/* come up.
   const handleDownload = async () => {
@@ -405,6 +440,15 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
                   href="#"
                 >
                   Download as Excel
+                </Link>
+              </DropdownMenu.Item>
+
+              <DropdownMenu.Item onClick={handleDownloadAsHtmlTable} asChild>
+                <Link
+                  className="block rounded-md p-2 text-sm text-black !no-underline !shadow-none outline-none visited:text-black hover:bg-gray-600 hover:text-white focus:bg-gray-600 focus:text-white-default"
+                  href="#"
+                >
+                  Download as HTML Table
                 </Link>
               </DropdownMenu.Item>
             </DropdownMenu.Content>

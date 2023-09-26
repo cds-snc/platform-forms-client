@@ -161,8 +161,25 @@ const getSubmissions = async (
           .send(buffer);
       }
 
-      if (req.query.format === "html") {
-        //
+      if (req.query.format === "html-table") {
+        const records = responses.map((response) => {
+          return Object.values(response);
+        });
+
+        let table = "<!DOCTYPE html><html><table><thead><tr>";
+        table = table + Object.keys(responses[0]).map((key) => "<th>" + key + "</th>");
+        table = table + "</tr></thead><tbody>";
+        table =
+          table +
+          records.map((response) => {
+            return (
+              "<tr>" + Object.values(response).map((value) => "<td>" + value + "</td>") + "</tr>"
+            );
+          });
+
+        table = table + "</tbody></table></html>";
+
+        return res.status(200).setHeader("Content-Type", "text/html").send(table);
       }
 
       return res.status(200).json("format requested: " + req.query.format);
