@@ -23,7 +23,7 @@ const CardBanner = ({ id, isPublished }: { id: string; isPublished: boolean }) =
       className={
         "self-start p-1 px-2 text-sm border-solid rounded" +
         (isPublished
-          ? " bg-emerald-500 border-emerald-700 text-white"
+          ? " bg-emerald-500 border-emerald-700 text-black"
           : " bg-yellow-300 border-yellow-700")
       }
       aria-hidden="true"
