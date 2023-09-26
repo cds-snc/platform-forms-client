@@ -19,10 +19,6 @@ body {
   }
 }
 
-h1, h2, h3, h4, h5, h6 {
-  @apply font-noto-sans;
-}
-
 h1, .gc-h1 {
   @apply text-2xl tablet:text-4xl font-semibold mb-6;
 }
