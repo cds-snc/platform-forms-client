@@ -19,7 +19,7 @@ export const FilterNavigation = () => {
         </>
       </SubNavLink>
 
-      <SubNavLink href={`/${i18n.language}/forms/drafts`} setAriaCurrent={true} id="tab-draft">
+      <SubNavLink href={`/${i18n.language}/forms/drafts`} setAriaCurrent={true} id="tab-drafts">
         <>
           <PageIcon className={iconClassname} />
           {t("nav.drafts")}
