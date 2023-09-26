@@ -3,7 +3,15 @@ import React, { ReactElement, useEffect, useState } from "react";
 import { useActivePathname } from "../../hooks/useActivePathname";
 import { cn } from "@lib/utils";
 
-export const SubNavLink = ({ href, children }: { children: ReactElement; href: string }) => {
+export const SubNavLink = ({
+  href,
+  children,
+  setAriaCurrent = false,
+}: {
+  children: ReactElement;
+  href: string;
+  setAriaCurrent?: boolean;
+}) => {
   const baseClasses =
     "mb-4 mr-3 rounded-[100px] border-1 border-black bg-white px-5 pb-2 pt-1 no-underline !shadow-none laptop:py-2";
 
@@ -33,7 +41,11 @@ export const SubNavLink = ({ href, children }: { children: ReactElement; href: s
 
   return (
     <Link href={href} legacyBehavior>
-      <a href={href} className={cn(baseClasses, inactiveClasses, active && activeClasses)}>
+      <a
+        href={href}
+        className={cn(baseClasses, inactiveClasses, active && activeClasses)}
+        {...(setAriaCurrent && active && { "aria-current": "page" })}
+      >
         {children}
       </a>
     </Link>
