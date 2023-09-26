@@ -1,5 +1,5 @@
 {
-  "title": "Vos formulaires ",
+  "title": "Formulaires",
   "nav": {
     "drafts": "Ébauches",
     "published": "Publiés",
@@ -69,5 +69,8 @@
     "unclassified": "Non classifié",
     "protectedA": "Protégé A",
     "protectedB": "Protégé B"
-  }
+  },
+  "viewForm": "Afficher le formulaire (ouvre un nouvel onglet)",
+  "editForm": "Modifier le formulaire",
+  "navLabel": "Forms navigation [fr]"
 }

@@ -30,7 +30,6 @@ export const ShareModalUnauthenticated = ({
   const actions = (
     <>
       <Button
-        className="ml-5"
         theme="secondary"
         onClick={() => {
           dialog.current?.close();
@@ -51,7 +50,7 @@ export const ShareModalUnauthenticated = ({
         actions={actions}
         className="overflow-y-scroll max-h-[80%]"
       >
-        <div className="my-8">
+        <div className="p-4">
           <section>
             <Markdown options={{ forceBlock: true }}>
               {t("share.unauthenticated.description")}

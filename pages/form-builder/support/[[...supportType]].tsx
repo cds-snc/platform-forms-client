@@ -487,7 +487,7 @@ export default function Contactus() {
           <h1 ref={headingSuccessRef}>{t("requestSuccess.title")}</h1>
           <p className="mb-16 mt-[-2rem] font-bold">{t("requestSuccess.weWillRespond")}</p>
           <div className="mb-16">
-            <LinkButton.Primary href={`/myforms`}>
+            <LinkButton.Primary href={`/forms`}>
               {t("requestSuccess.backToForms")}
             </LinkButton.Primary>
           </div>

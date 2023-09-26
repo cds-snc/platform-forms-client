@@ -62,7 +62,7 @@ const UserNavLayout = ({
           <div className="inline-flex gap-4">
             <div className="text-base font-normal not-italic md:text-small_base">
               {ability?.can("view", "FormRecord") && (
-                <Link href="/myforms">{t("adminNav.myForms")}</Link>
+                <Link href="/forms">{t("adminNav.myForms")}</Link>
               )}
             </div>
             <LoginMenu />
