@@ -62,7 +62,7 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
           }}
           type="button"
           id={`button-${id}`}
-          className="flex border border-2 border-white-default py-1 pr-1 pl-0 aria-expanded:border-black-default"
+          className="flex border-2 border-white-default py-1 pl-0 pr-1 aria-expanded:border-black-default"
           aria-haspopup="true"
           aria-controls={`menu-${id}`}
           ref={menuButtonRef}
@@ -72,7 +72,7 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
         <ul
           id={`menu-${id}`}
           className={
-            "hidden absolute z-50 -left-[1rem] m-0 p-0 bg-white-default border border-1 border-black-default list-none" +
+            "hidden absolute z-50 -left-[1rem] m-0 p-0 bg-white-default border border-black-default list-none" +
             (direction === "up" ? " -top-[13rem]" : "")
           }
           role="menu"
@@ -121,13 +121,13 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
                       </button>
                       <div
                         aria-live="polite"
-                        className="hidden line-clamp-1 absolute top-8 text-[.7rem] text-green-default"
+                        className="absolute top-8 line-clamp-1 hidden text-[.7rem] text-green-default"
                       ></div>
                     </>
                   ) : (
                     <a
                       href={item.url}
-                      className="action no-underline whitespace-nowrap hover:underline active:underline"
+                      className="action whitespace-nowrap no-underline hover:underline active:underline"
                     >
                       {item.title}
                     </a>

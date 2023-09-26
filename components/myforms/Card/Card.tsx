@@ -16,18 +16,17 @@ import {
 } from "@components/form-builder/icons/";
 import Markdown from "markdown-to-jsx";
 
-const CardBanner = ({ id, isPublished }: { id: string; isPublished: boolean }) => {
+const CardBanner = ({ isPublished }: { isPublished: boolean }) => {
   const { t } = useTranslation(["my-forms", "common"]);
   return (
     <div
       className={
         "self-start p-1 px-2 text-sm border-solid rounded" +
         (isPublished
-          ? " bg-emerald-500 border-emerald-700 text-white"
+          ? " bg-emerald-500 border-emerald-700 text-black"
           : " bg-yellow-300 border-yellow-700")
       }
       aria-hidden="true"
-      id={`card-title-${id}`}
     >
       {isPublished ? t("card.states.published") : t("card.states.draft")}
     </div>
@@ -232,7 +231,7 @@ export const Card = (props: CardProps): React.ReactElement => {
         <div className="flex flex-col px-3">
           <div className="flex h-full justify-between">
             <CardTitle name={name} />
-            <CardBanner id={id} isPublished={isPublished} />
+            <CardBanner isPublished={isPublished} />
           </div>
         </div>
 
