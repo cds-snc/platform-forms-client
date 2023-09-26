@@ -80,7 +80,7 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
       </Head>
 
       <div className="center mx-auto w-[980px]">
-        <h1 className="mb-8 border-b-0 text-h1">{t("title")}</h1>
+        <h1 className="mb-8 border-b-0">{t("title")}</h1>
 
         <div className="flex w-full justify-between">
           <FilterNavigation />

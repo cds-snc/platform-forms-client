@@ -186,10 +186,10 @@ export const Verify = ({
                 ) : undefined}
               </Alert>
             )}
-            <h1 data-testid="verify-title" ref={headingRef} className="border-0 mt-6 mb-6">
+            <h1 data-testid="verify-title" ref={headingRef} className="mb-6 mt-6 border-0">
               {t("verify.title")}
             </h1>
-            <p className="mt-10 mb-12">{t("verify.emailHasBeenSent")}</p>
+            <p className="mb-12 mt-10">{t("verify.emailHasBeenSent")}</p>
             <form id="verificationCodeForm" method="POST" onSubmit={handleSubmit} noValidate>
               <div className="focus-group">
                 <Label
@@ -200,7 +200,7 @@ export const Verify = ({
                 >
                   {t("verify.fields.confirmationCode.label")}
                 </Label>
-                <div className="text-p text-black-default mb-2" id={"verificationCode-hint"}>
+                <div className="mb-2 text-xl text-black-default" id={"verificationCode-hint"}>
                   {t("verify.fields.confirmationCode.description")}
                 </div>
                 <TextInput
@@ -215,7 +215,7 @@ export const Verify = ({
               <Button theme="primary" type="submit" dataTestId="verify-submit">
                 {t("verify.confirmButton")}
               </Button>
-              <div className="flex mt-12">
+              <div className="mt-12 flex">
                 <Button theme="link" className="mr-8" onClick={() => setIsReverify(true)}>
                   {t("verify.resendConfirmationCodeButton")}
                 </Button>

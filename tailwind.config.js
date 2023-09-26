@@ -1,9 +1,13 @@
 const colors = require("tailwindcss/colors");
-const defaultTheme = require("tailwindcss/defaultTheme");
 
 module.exports = {
   theme: {
     extend: {
+      fontFamily: {
+        "noto-sans": "var(--font-noto-sans)",
+        lato: "var(--font-lato)",
+        mono: ["monospace"],
+      },
       width: {
         "cr-label-desktop": "50rem",
         "cr-label-1025": "30rem",
@@ -34,8 +38,6 @@ module.exports = {
         prose: "75ch",
       },
       listStyleType: {
-        disc: "disc",
-        decimal: "decimal",
         circle: "circle",
       },
       colors: {
@@ -127,19 +129,8 @@ module.exports = {
         transparent: "transparent",
       },
       fontSize: {
-        badge: ["14px", "14px"],
         sm: ["16px", "22px"],
-        base: ["20px", "28px"],
-        p: ["20px", "28px"],
-        h3: ["26px", "32px"],
-        h2: ["30px", "38px"],
-        h1: ["34px", "44px"],
-        small_sm: ["12px", "14px"],
-        small_base: ["16px", "22px"],
-        small_p: ["16px", "22px"],
-        small_h3: ["18px", "22px"],
-        small_h2: ["20px", "28px"],
-        small_h1: ["24px", "28px"],
+        base: ["18px", "28px"],
       },
       zIndex: {
         "-1": "-1,",
@@ -171,11 +162,6 @@ module.exports = {
     },
     container: {
       center: true,
-    },
-    fontFamily: {
-      sans: ["Lato", ...defaultTheme.fontFamily.sans],
-      body: ['"Noto Sans"'],
-      mono: ["monospace"],
     },
     screens: {
       xxl: { max: "1200px" },

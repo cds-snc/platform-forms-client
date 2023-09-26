@@ -30,7 +30,7 @@ const FormDisplayLayout = ({ children, formRecord, embedded }: FormDisplayLayout
             </Fip>
           </header>
         )}
-        <div id="page-container">
+        <div id="page-container" className="gc-formview">
           <main id="content">
             {children}
             <DateModified updatedAt={formRecord.updatedAt} />
