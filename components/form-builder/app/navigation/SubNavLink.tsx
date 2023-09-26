@@ -8,11 +8,13 @@ export const SubNavLink = ({
   children,
   setAriaCurrent = false,
   id,
+  defaultActive = false,
 }: {
   children: ReactElement;
   href: string;
   setAriaCurrent?: boolean;
   id?: string;
+  defaultActive?: boolean;
 }) => {
   const baseClasses =
     "mb-4 mr-3 rounded-[100px] border-1 border-black bg-white px-5 pb-2 pt-1 no-underline !shadow-none laptop:py-2";
@@ -23,7 +25,7 @@ export const SubNavLink = ({
     "bg-[#475569] !text-white [&_svg]:fill-white ${svgStroke} focus:text-white [&_svg]:focus:stroke-white";
 
   const { asPath, isReady, activePathname } = useActivePathname();
-  const [active, setActive] = useState(false);
+  const [active, setActive] = useState(defaultActive);
 
   useEffect(() => {
     // Check if the router fields are updated client-side
@@ -35,8 +37,6 @@ export const SubNavLink = ({
 
       if (linkPathname === activePathname) {
         setActive(true);
-      } else {
-        setActive(false);
       }
     }
   }, [asPath, isReady, href, setActive, activePathname]);

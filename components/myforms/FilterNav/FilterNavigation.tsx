@@ -12,7 +12,12 @@ export const FilterNavigation = () => {
 
   return (
     <nav className="flex flex-wrap laptop:mb-4" aria-label={t("navLabel")}>
-      <SubNavLink href={`/${i18n.language}/forms`} setAriaCurrent={true} id="tab-all">
+      <SubNavLink
+        href={`/${i18n.language}/forms`}
+        setAriaCurrent={true}
+        id="tab-all"
+        defaultActive={true}
+      >
         <>
           <FolderIcon className={iconClassname} />
           {t("nav.all")}
