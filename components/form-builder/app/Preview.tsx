@@ -103,11 +103,13 @@ export const Preview = () => {
           </>
         )}
 
-        <Brand brand={brand} lang={language} className="mb-12 mt-8" />
-        <h1 className="mt-4">
-          {formRecord.form[localizeField(LocalizedFormProperties.TITLE, language)] ||
-            t("pagePreview", { ns: "form-builder" })}
-        </h1>
+        <div className="gc-formview">
+          <Brand brand={brand} lang={language} className="mb-12 mt-8" />
+          <h1 className="mt-4">
+            {formRecord.form[localizeField(LocalizedFormProperties.TITLE, language)] ||
+              t("pagePreview", { ns: "form-builder" })}
+          </h1>
+        </div>
 
         {sent ? (
           <>
