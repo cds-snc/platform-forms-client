@@ -35,7 +35,7 @@ export const Title = ({
   return (
     <HeadingTag
       data-testid="alert-heading"
-      className={cn("mb-0 pb-0", headingClasses[HeadingTag], statusClass, className)}
+      className={cn("!mb-0 pb-0", headingClasses[HeadingTag], statusClass, className)}
     >
       {children}
     </HeadingTag>
