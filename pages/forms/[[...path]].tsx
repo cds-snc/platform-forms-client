@@ -105,7 +105,7 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
         <div>
           <TabPanel id="tabpanel-drafts" labeledbyId="tab-drafts" isActive={path === "drafts"}>
             {templatesDrafts && templatesDrafts?.length > 0 ? (
-              <CardGrid cards={templatesDrafts}></CardGrid>
+              <CardGrid cards={templatesDrafts} gridType="drafts"></CardGrid>
             ) : (
               <p>{t("cards.noDraftForms")}</p>
             )}
@@ -116,7 +116,7 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
             isActive={path === "published"}
           >
             {templatesPublished && templatesPublished?.length > 0 ? (
-              <CardGrid cards={templatesPublished}></CardGrid>
+              <CardGrid cards={templatesPublished} gridType="published"></CardGrid>
             ) : (
               <p>{t("cards.noPublishedForms")}</p>
             )}
@@ -127,7 +127,7 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
             isActive={path === "all" || path === "undefined"}
           >
             {templatesAll && templatesAll?.length > 0 ? (
-              <CardGrid cards={templatesAll}></CardGrid>
+              <CardGrid cards={templatesAll} gridType="all"></CardGrid>
             ) : (
               <p>{t("cards.noForms")}</p>
             )}

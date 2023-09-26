@@ -38,7 +38,7 @@
   }
 
   &.gc-alert--success {
-    @apply bg-green-100;
+    @apply bg-emerald-50 text-emerald-700 rounded-sm laptop:rounded-md ;
   }
 
   .gc-alert__body {

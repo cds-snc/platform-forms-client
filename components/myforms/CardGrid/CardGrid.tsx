@@ -8,10 +8,11 @@ type CardWithoutHandleDelete = Omit<CardProps, "handleDelete">;
 
 interface CardGridProps {
   cards: Array<CardWithoutHandleDelete>;
+  gridType: "all" | "published" | "drafts";
 }
 
 export const CardGrid = (props: CardGridProps): React.ReactElement => {
-  const { cards } = props;
+  const { cards, gridType } = props;
   const activeCard = useRef<CardProps | null>(null);
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
   const { refreshData } = useRefresh(cards);
@@ -33,7 +34,7 @@ export const CardGrid = (props: CardGridProps): React.ReactElement => {
             return (
               <li className="flex flex-col" key={card.id}>
                 <Card
-                  id={card.id}
+                  id={`${card.id}-${gridType}`}
                   name={card.name}
                   titleEn={card.titleEn}
                   titleFr={card.titleFr}
