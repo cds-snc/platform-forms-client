@@ -11,22 +11,26 @@ export const FilterNavigation = () => {
     "inline-block w-6 h-6 group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
 
   return (
-    <nav className="flex flex-wrap laptop:mb-4" aria-label={t("navLabelEditor")}>
-      <SubNavLink href={`/${i18n.language}/forms`}>
+    <nav className="flex flex-wrap laptop:mb-4" aria-label={t("navLabel")}>
+      <SubNavLink href={`/${i18n.language}/forms`} setAriaCurrent={true} id="tab-all">
         <>
           <FolderIcon className={iconClassname} />
           {t("nav.all")}
         </>
       </SubNavLink>
 
-      <SubNavLink href={`/${i18n.language}/forms/drafts`}>
+      <SubNavLink href={`/${i18n.language}/forms/drafts`} setAriaCurrent={true} id="tab-draft">
         <>
           <PageIcon className={iconClassname} />
           {t("nav.drafts")}
         </>
       </SubNavLink>
 
-      <SubNavLink href={`/${i18n.language}/forms/published`}>
+      <SubNavLink
+        href={`/${i18n.language}/forms/published`}
+        setAriaCurrent={true}
+        id="tab-published"
+      >
         <>
           <GlobeIcon className={iconClassname} />
           {t("nav.published")}
