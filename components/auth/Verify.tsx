@@ -200,7 +200,7 @@ export const Verify = ({
                 >
                   {t("verify.fields.confirmationCode.label")}
                 </Label>
-                <div className="mb-2 text-xl text-black-default" id={"verificationCode-hint"}>
+                <div className="mb-2 text-sm text-black-default" id={"verificationCode-hint"}>
                   {t("verify.fields.confirmationCode.description")}
                 </div>
                 <TextInput
