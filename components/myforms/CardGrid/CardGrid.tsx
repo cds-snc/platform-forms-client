@@ -12,7 +12,7 @@ interface CardGridProps {
 }
 
 export const CardGrid = (props: CardGridProps): React.ReactElement => {
-  const { cards, gridType } = props;
+  const { cards } = props;
   const activeCard = useRef<CardProps | null>(null);
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
   const { refreshData } = useRefresh(cards);
@@ -34,7 +34,7 @@ export const CardGrid = (props: CardGridProps): React.ReactElement => {
             return (
               <li className="flex flex-col" key={card.id}>
                 <Card
-                  id={`${card.id}-${gridType}`}
+                  id={`${card.id}`}
                   name={card.name}
                   titleEn={card.titleEn}
                   titleFr={card.titleFr}
