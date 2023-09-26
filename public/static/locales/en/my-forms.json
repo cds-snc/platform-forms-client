@@ -71,5 +71,6 @@
     "protectedB": "Protected B"
   },
   "viewForm": "View form (opens in new tab)",
-  "editForm": "Edit form"
+  "editForm": "Edit form",
+  "navLabel": "Forms navigation"
 }
