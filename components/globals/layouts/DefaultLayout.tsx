@@ -6,6 +6,7 @@ import Fip from "../Fip";
 import { HeadMeta } from "./HeadMeta";
 import LanguageToggle from "../LanguageToggle";
 import LoginMenu from "@components/auth/LoginMenu";
+import { cn } from "@lib/utils";
 
 interface DefaultLayoutProps extends React.PropsWithChildren {
   showLanguageToggle?: boolean;
@@ -29,7 +30,7 @@ export const Layout = ({
           {showLogin && <LoginMenu />}
         </Fip>
       </header>
-      <div id="page-container" className={className}>
+      <div id="page-container-1" className={cn(className, "my-20 py-0 px-[4rem] laptop:px-32")}>
         <main id="content">{children}</main>
       </div>
       <Footer isSplashPage={isSplashPage} />
@@ -53,7 +54,7 @@ const DefaultLayout = ({
           {showLogin && <LoginMenu />}
         </Fip>
       </header>
-      <div id="page-container" className="gc-formview">
+      <div className={cn("gc-formview", "py-0 px-[4rem] laptop:px-32")}>
         <main id="content">{children}</main>
       </div>
       <Footer isSplashPage={isSplashPage} />
