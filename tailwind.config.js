@@ -95,6 +95,7 @@ module.exports = {
           950: "#020617",
         },
         gray: {
+          front: "#333333", // for frontend pages/forms
           DEFAULT: "#EEE",
           default: "#EEE",
           selected: "#e1e4e7",

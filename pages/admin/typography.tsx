@@ -22,11 +22,12 @@ const Typography: NextPageWithLayout = () => {
         <p className="mb-4 font-lato">
           <strong>Heading font</strong>: Lato
         </p>
-        <h1>H1 Heading</h1>
-        <h2>H2 Heading</h2>
-        <h3>H3 Heading</h3>
-        <h4>H4 Heading</h4>
-        <h5>H5 Heading</h5>
+        <h1>H1 Heading (small: 34px, bold; large: 38px bold;)</h1>
+        <h2>H2 Heading (small: 32px, bold; large: 36px bold;)</h2>
+        <h3>H3 Heading (small: 24px, bold; large: 24px bold;)</h3>
+        <h4>H4 Heading (small: 22px, bold; large: 22px bold;)</h4>
+        <h5>H5 Heading (small: 20px, bold; large: 20px bold;)</h5>
+        <h6>H6 Heading (small: 19px, normal; large: 19px normal;)</h6>
       </div>
 
       <Heading title="Form builder + Admin" />

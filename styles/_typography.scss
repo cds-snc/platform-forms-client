@@ -1,22 +1,40 @@
 // Note: default font applied to html tag in _app.tsx
 body {
-  @apply text-base;
+  @apply text-base text-slate-800;
 }
 
 // Wrapper for frontend forms and pages
 .gc-formview {
-  @apply text-xl;
+  @apply text-xl text-gray-front;
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-lato font-semibold;
+    font-variant-ligatures: no-common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    @apply font-lato font-bold;
   }
 
   h1, .gc-h1 {
-    @apply border-b border-red pb-2 mb-16
+    @apply border-b border-red pb-2 mb-16 text-[34px] tablet:text-[38px];
   }
 
-  h2, .gc-h2, h3, .gc-h3 {
-    @apply mb-6;
+  h2, .gc-h2 {
+    @apply mb-6 text-[32px] tablet:text-[36px];
+  }
+
+  h3, .gc-h3 {
+    @apply mb-6 text-[24px];
+  }
+
+  h4, .gc-h4 {
+    @apply text-[22px];
+  }
+
+  h5, .gc-h5 {
+    @apply text-[20px];
+  }
+
+  h6, .gc-h6 {
+    @apply text-[19px] font-normal;
   }
 }
 
