@@ -36,11 +36,11 @@ const Typography: NextPageWithLayout = () => {
         <strong>Heading font</strong>: Noto Sans
       </p>
 
-      <h1>H1 Heading</h1>
-      <h2>H2 Heading</h2>
-      <h3>H3 Heading</h3>
-      <h4>H4 Heading</h4>
-      <h5>H5 Heading</h5>
+      <h1>H1 Heading (font-semibold small: text-3xl large: text-4xl)</h1>
+      <h2>H2 Heading (font-semibold small: text-2xl large: text-3xl)</h2>
+      <h3>H3 Heading (font-semibold small: text-xl large: text-2xl)</h3>
+      <h4>H4 Heading (font-semibold small: text-lg large: text-xl)</h4>
+      <h5>H5 Heading (font-normal small: text-base large: text-lg)</h5>
 
       <Heading title="Text sizes" />
       <p className="text-xs">text-xs</p>
