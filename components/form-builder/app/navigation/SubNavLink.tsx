@@ -35,8 +35,11 @@ export const SubNavLink = ({
       const langRegex = /\/(en|fr)\//;
       linkPathname = linkPathname.replace(langRegex, "/");
 
+      // Only one nav link can be active at a time
       if (linkPathname === activePathname) {
         setActive(true);
+      } else {
+        setActive(false);
       }
     }
   }, [asPath, isReady, href, setActive, activePathname]);
