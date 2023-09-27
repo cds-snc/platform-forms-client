@@ -3,6 +3,22 @@ body {
   @apply text-base text-slate-800;
 }
 
+h1, .gc-h1 {
+  @apply text-3xl tablet:text-4xl font-semibold mb-6;
+}
+
+h2, .gc-h2 {
+  @apply text-2xl tablet:text-3xl font-semibold mb-4;
+}
+
+h3, .gc-h3 {
+  @apply text-xl tablet:text-2xl font-semibold mb-2;
+}
+
+h4, .gc-h4 {
+  @apply text-lg tablet:text-xl font-semibold;
+}
+
 // Wrapper for frontend forms and pages
 .gc-formview {
   @apply text-xl text-gray-front;
@@ -36,20 +52,4 @@ body {
   h6, .gc-h6 {
     @apply text-[19px] font-normal;
   }
-}
-
-h1, .gc-h1 {
-  @apply text-2xl tablet:text-4xl font-semibold mb-6;
-}
-
-h2, .gc-h2 {
-  @apply text-3xl font-semibold mb-4;
-}
-
-h3, .gc-h3 {
-  @apply text-2xl font-semibold mb-2;
-}
-
-h4, .gc-h4 {
-  @apply text-xl font-semibold;
 }
