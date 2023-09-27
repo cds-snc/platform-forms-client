@@ -102,7 +102,7 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
           </StyledLink>
         </ResumeEditingForm>
 
-        <div>
+        <div aria-live="polite">
           <TabPanel id="tabpanel-drafts" labeledbyId="tab-drafts" isActive={path === "drafts"}>
             {templatesDrafts && templatesDrafts?.length > 0 ? (
               <CardGrid cards={templatesDrafts} gridType="drafts"></CardGrid>
