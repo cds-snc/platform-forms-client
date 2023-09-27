@@ -233,7 +233,7 @@
 .gc-label {
   @apply md:text-sm block mb-2 text-base font-bold w-3/4 xl:w-full;
   &.required > span {
-    @apply text-red-700;
+    @apply text-red-required;
     content: " *";
   }
 }
