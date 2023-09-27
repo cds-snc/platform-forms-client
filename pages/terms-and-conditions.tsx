@@ -17,7 +17,7 @@ const TermsAndConditions = ({ content }: TermsAndConditionsProps) => {
       <Head>
         <title>{t("terms-and-conditions.title")}</title>
       </Head>
-      <RichText className="w-[100%]">{content}</RichText>
+      <RichText className="w-[100%] tablet:w-[90%] laptop:w-[70%]">{content}</RichText>
     </>
   );
 };
