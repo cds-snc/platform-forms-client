@@ -31,7 +31,7 @@ const FormDisplayLayout = ({ children, formRecord, embedded }: FormDisplayLayout
             </Fip>
           </header>
         )}
-        <div className={cn("gc-formview", "py-0 px-[4rem] laptop:px-32")}>
+        <div className={cn("gc-formview", "shrink-0 grow basis-auto px-[4rem] py-0 laptop:px-32")}>
           <main id="content">
             {children}
             <DateModified updatedAt={formRecord.updatedAt} />

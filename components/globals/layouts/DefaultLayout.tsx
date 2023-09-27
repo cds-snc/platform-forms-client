@@ -30,7 +30,7 @@ export const Layout = ({
           {showLogin && <LoginMenu />}
         </Fip>
       </header>
-      <div id="page-container-1" className={cn(className, "my-20 py-0 px-[4rem] laptop:px-32")}>
+      <div id="page-container" className={className}>
         <main id="content">{children}</main>
       </div>
       <Footer isSplashPage={isSplashPage} />
@@ -54,7 +54,7 @@ const DefaultLayout = ({
           {showLogin && <LoginMenu />}
         </Fip>
       </header>
-      <div className={cn("gc-formview", "py-0 px-[4rem] laptop:px-32")}>
+      <div className={cn("gc-formview", "shrink-0 grow basis-auto px-[4rem] py-0 laptop:px-32")}>
         <main id="content">{children}</main>
       </div>
       <Footer isSplashPage={isSplashPage} />
