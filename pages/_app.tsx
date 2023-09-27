@@ -20,7 +20,7 @@ const notoSans = Noto_Sans({
 });
 
 const lato = Lato({
-  weight: ["400", "700"],
+  weight: ["100", "300", "400", "700", "900"],
   variable: "--font-lato",
   subsets: ["latin"],
 });
