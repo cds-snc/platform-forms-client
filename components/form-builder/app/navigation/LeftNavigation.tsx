@@ -7,6 +7,7 @@ import { useTemplateStore } from "../../store/useTemplateStore";
 import { useSession } from "next-auth/react";
 import { useActivePathname, cleanPath } from "../../hooks/useActivePathname";
 import { NavLink } from "@components/globals/NavLink";
+import { cn } from "@lib/utils";
 
 const linkHelper = (url: string, activePathname: string) => {
   const baseUrl = "/form-builder";
@@ -56,7 +57,7 @@ export const LeftNavigation = () => {
         )}
         <li>
           <NavLink {...linkHelper(`/responses/${id}`, activePathname)} onClick={saveForm}>
-            <MessageIcon className={iconClassname} />
+            <MessageIcon className={cn(iconClassname, "mt-[6px] ml-[2px]")} />
             {t("responsesNavLabel")}
           </NavLink>
         </li>
