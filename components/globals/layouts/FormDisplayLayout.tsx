@@ -7,6 +7,7 @@ import SkipLink from "@components/globals/SkipLink";
 import Fip from "@components/globals/Fip";
 import LanguageToggle from "../LanguageToggle";
 import { DateModified } from "../DateModified";
+import { cn } from "@lib/utils";
 
 interface FormDisplayLayoutProps extends React.PropsWithChildren {
   formRecord: PublicFormRecord;
@@ -30,7 +31,7 @@ const FormDisplayLayout = ({ children, formRecord, embedded }: FormDisplayLayout
             </Fip>
           </header>
         )}
-        <div id="page-container" className="gc-formview">
+        <div className={cn("gc-formview", "py-0 px-[4rem] laptop:px-32")}>
           <main id="content">
             {children}
             <DateModified updatedAt={formRecord.updatedAt} />
