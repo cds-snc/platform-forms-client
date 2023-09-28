@@ -407,7 +407,8 @@
   "publishYourForm": "Publier votre formulaire",
   "publishYourFormInstructions": {
     "text1": "Veuillez franchir les étapes suivantes avant de publier votre formulaire",
-    "text2": " :"
+    "text2": " :",
+    "text3": "change classification"
   },
   "question": "Question",
   "questions": "Questions",

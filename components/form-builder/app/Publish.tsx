@@ -12,6 +12,7 @@ import Link from "next/link";
 import { LoggedOutTab, LoggedOutTabName } from "./LoggedOutTab";
 import { InfoCard } from "@components/globals/InfoCard/InfoCard";
 import { isVaultDelivery } from "@formbuilder/util";
+import { StyledLink } from "@components/globals";
 
 export const Publish = () => {
   const { t } = useTranslation("form-builder");
@@ -94,9 +95,14 @@ export const Publish = () => {
       <div className="flex flex-wrap justify-between laptop:flex-nowrap">
         <div className="mx-5 min-w-fit grow rounded-lg border-1 p-5">
           <h1 className="mb-2 border-0">{t("publishYourForm")}</h1>
-          <p className="mb-0 text-lg">{`${t(
-            "publishYourFormInstructions.text1"
-          )} ${securityAttribute} ${t("publishYourFormInstructions.text2")}`}</p>
+          <p className="mb-0 text-lg">
+            {t("publishYourFormInstructions.text1")} <strong>{securityAttribute} </strong>{" "}
+            {t("publishYourFormInstructions.text2")} <br /> {" - "}
+            <StyledLink href={`/form-builder/settings/${id}`}>
+              {" "}
+              {t("publishYourFormInstructions.text3")}
+            </StyledLink>
+          </p>
           {!userCanPublish && (
             <Alert.Info className="my-5">
               <Alert.IconWrapper className="mr-7">

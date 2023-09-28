@@ -47,6 +47,12 @@ export const LeftNavigation = () => {
             {status === "authenticated" ? t("test") : t("pagePreview")}
           </NavLink>
         </li>
+        <li>
+          <NavLink {...linkHelper(`/settings/${id}`, activePathname)} onClick={saveForm}>
+            <GearIcon className={iconClassname} />
+            {t("pageSettings")}
+          </NavLink>
+        </li>
         {!isPublished && (
           <li>
             <NavLink {...linkHelper("/publish", activePathname)} onClick={saveForm}>
@@ -59,12 +65,6 @@ export const LeftNavigation = () => {
           <NavLink {...linkHelper(`/responses/${id}`, activePathname)} onClick={saveForm}>
             <MessageIcon className={cn(iconClassname, "mt-[6px] ml-[2px]")} />
             {t("responsesNavLabel")}
-          </NavLink>
-        </li>
-        <li>
-          <NavLink {...linkHelper(`/settings/${id}`, activePathname)} onClick={saveForm}>
-            <GearIcon className={iconClassname} />
-            {t("pageSettings")}
           </NavLink>
         </li>
         {!isPublished && (
