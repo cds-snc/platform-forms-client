@@ -5,8 +5,9 @@ import { MiddlewareProps, WithRequired } from "@lib/types";
 import { getFullTemplateByID } from "@lib/templates";
 import { connectToDynamo } from "@lib/integration/dynamodbConnector";
 import { QueryCommand } from "@aws-sdk/lib-dynamodb";
-import { createArrayCsvStringifier as createCsvStringifier } from "csv-writer";
-import xlsx from "node-xlsx";
+import { transform as csvTransform } from "@lib/api/submissions/download/transformers/csv";
+import { transform as xlsxTransform } from "@lib/api/submissions/download/transformers/xlsx";
+import { transform as htmlTableTransform } from "@lib/api/submissions/download/transformers/html-table";
 
 const getSubmissions = async (
   req: NextApiRequest,
@@ -127,30 +128,14 @@ const getSubmissions = async (
 
     if (req.query.format) {
       if (req.query.format === "csv") {
-        const csvStringifier = createCsvStringifier({
-          header: Object.keys(responses[0]),
-        });
-
-        const records = responses.map((response) => {
-          return Object.values(response);
-        });
-
         return res
           .status(200)
           .setHeader("Content-Type", "text/csv")
           .setHeader("Content-Disposition", `attachment; filename=records.csv`)
-          .send(csvStringifier.getHeaderString() + csvStringifier.stringifyRecords(records));
+          .send(csvTransform(responses));
       }
 
       if (req.query.format === "xlsx") {
-        const records = responses.map((response) => {
-          return Object.values(response);
-        });
-
-        records.unshift(Object.keys(responses[0]));
-
-        const buffer = xlsx.build([{ name: "Responses", data: records, options: {} }]);
-
         return res
           .status(200)
           .setHeader(
@@ -158,28 +143,14 @@ const getSubmissions = async (
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
           )
           .setHeader("Content-Disposition", `attachment; filename=records.xlsx`)
-          .send(buffer);
+          .send(xlsxTransform(responses));
       }
 
       if (req.query.format === "html-table") {
-        const records = responses.map((response) => {
-          return Object.values(response);
-        });
-
-        let table = "<!DOCTYPE html><html><table><thead><tr>";
-        table = table + Object.keys(responses[0]).map((key) => "<th>" + key + "</th>");
-        table = table + "</tr></thead><tbody>";
-        table =
-          table +
-          records.map((response) => {
-            return (
-              "<tr>" + Object.values(response).map((value) => "<td>" + value + "</td>") + "</tr>"
-            );
-          });
-
-        table = table + "</tbody></table></html>";
-
-        return res.status(200).setHeader("Content-Type", "text/html").send(table);
+        return res
+          .status(200)
+          .setHeader("Content-Type", "text/html")
+          .send(htmlTableTransform(responses));
       }
 
       return res.status(200).json("format requested: " + req.query.format);
