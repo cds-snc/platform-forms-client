@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.4.11](https://github.com/cds-snc/platform-forms-client/compare/v3.4.10...v3.4.11) (2023-09-28)
+
+
+### Miscellaneous Chores
+
+* Add RCMP branding ([#2726](https://github.com/cds-snc/platform-forms-client/issues/2726)) ([a6b6075](https://github.com/cds-snc/platform-forms-client/commit/a6b607565c2b596f28f13cfcba738038ba754e91))
+
 ## [3.4.10](https://github.com/cds-snc/platform-forms-client/compare/v3.4.9...v3.4.10) (2023-09-28)
 
 
