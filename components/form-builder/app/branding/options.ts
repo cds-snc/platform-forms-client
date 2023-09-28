@@ -80,4 +80,13 @@ export const options = [
     logoTitleEn: "Financial Transactions and Reports Analysis Centre of Canada",
     logoTitleFr: "Centre d’analyse des opérations et déclarations financières du Canada",
   },
+  {
+    name: "rcmp",
+    urlEn: "https://www.rcmp-grc.gc.ca/en",
+    urlFr: "https://www.rcmp-grc.gc.ca/fr",
+    logoEn: "/img/branding/rcmp-en.svg",
+    logoFr: "/img/branding/rcmp-fr.svg",
+    logoTitleEn: "Royal Canadian Mounted Police",
+    logoTitleFr: "Gendarmerie royale du Canada",
+  },
 ];
