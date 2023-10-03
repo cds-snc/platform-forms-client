@@ -63,7 +63,7 @@ const UserNavLayout = ({
           </div>
         </div>
       </header>
-      <div id="page-container">
+      <div id="page-container" className="gc-formview">
         {beforeContentWrapper}
         <div className="account-wrapper mt-10 flex items-center justify-center">
           <div className={`${contentWidth} rounded-2xl border-1 border-[#D1D5DB] bg-white p-10`}>
