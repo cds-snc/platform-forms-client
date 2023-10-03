@@ -2,7 +2,7 @@ import React from "react";
 import { FormElementTypes, HTMLTextInputTypeAttribute } from "@lib/types";
 import { useTranslation } from "next-i18next";
 
-import { CheckBoxEmptyIcon, RadioEmptyIcon } from "../../icons";
+import { CheckBoxEmptyIcon, CheckIcon, RadioEmptyIcon } from "../../icons";
 import { ShortAnswer, Options, SubOptions, RichText, SubElement } from "./elements";
 import { ElementOption, FormElementWithIndex } from "../../types";
 import { useElementOptions } from "../../hooks";
@@ -110,7 +110,12 @@ export const SelectedElement = ({
       } else {
         element = (
           <>
-            <ShortAnswer>{t("addElementDialog.checkbox.title")}</ShortAnswer>
+            <ShortAnswer>
+              <div className="flex items-center ">
+                <CheckIcon />
+                <span className="ml-2 text-lg">{t("addElementDialog.checkbox.title")}</span>
+              </div>
+            </ShortAnswer>
             <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} />
           </>
         );
