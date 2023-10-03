@@ -25,7 +25,7 @@
   }
 
   // Wrapper for frontend forms and pages
-  .gc-formview {
+  .gc-formview, .gc-authpages {
     .text-base {
       @apply text-xl leading-7;
     }
@@ -60,6 +60,12 @@
 
     h6, .gc-h6 {
       @apply text-[19px] font-normal;
+    }
+  }
+
+  .gc-authpages {
+    h1, .gc-h1 {
+      @apply border-b-0 pb-2 mb-12;
     }
   }
 }
