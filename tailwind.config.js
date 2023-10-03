@@ -47,6 +47,7 @@ module.exports = {
           default: "#b10e1e",
           100: "#f3e9e8",
           destructive: "#BC3331",
+          required: "#D3080C", // DTO requirement for required labels
           hover: "#892406",
         },
         purple: {
@@ -94,6 +95,7 @@ module.exports = {
           950: "#020617",
         },
         gray: {
+          front: "#333333", // DTO requirement for frontend pages/forms
           DEFAULT: "#EEE",
           default: "#EEE",
           selected: "#e1e4e7",

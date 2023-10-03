@@ -71,10 +71,13 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
   const lang = i18n.language;
   const logoTitle = lang === "en" ? "logoTitleEn" : "logoTitleFr";
 
-  const brandingOptions = options.map((option) => ({
+  let brandingOptions = options.map((option) => ({
     value: option.name,
     label: option[logoTitle],
   }));
+
+  // Sort by label
+  brandingOptions = brandingOptions.sort((a, b) => a.label.localeCompare(b.label));
 
   brandingOptions.unshift({
     value: "",

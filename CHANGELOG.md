@@ -5,6 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.4.11](https://github.com/cds-snc/platform-forms-client/compare/v3.4.10...v3.4.11) (2023-09-28)
+
+
+### Miscellaneous Chores
+
+* Add RCMP branding ([#2726](https://github.com/cds-snc/platform-forms-client/issues/2726)) ([a6b6075](https://github.com/cds-snc/platform-forms-client/commit/a6b607565c2b596f28f13cfcba738038ba754e91))
+
+## [3.4.10](https://github.com/cds-snc/platform-forms-client/compare/v3.4.9...v3.4.10) (2023-09-28)
+
+
+### Bug Fixes
+
+* Adjust title and FIP in Preview on Test page to more closely match frontend styles ([#2718](https://github.com/cds-snc/platform-forms-client/issues/2718)) ([2c0b13a](https://github.com/cds-snc/platform-forms-client/commit/2c0b13a72903a5213d4fbeb19ef9789a6ee3b9e9))
+
+
+### Miscellaneous Chores
+
+* Fix support form duplicate word ([#2712](https://github.com/cds-snc/platform-forms-client/issues/2712)) ([5703568](https://github.com/cds-snc/platform-forms-client/commit/570356877e45d95315bfc5ff833200d8ada482de))
+* text sizing and colour adjustments ([5ea0bb6](https://github.com/cds-snc/platform-forms-client/commit/5ea0bb663f8527c0d79146de09c1b37f43a3e0cb))
+* Typography improvements and cleanup ([#2677](https://github.com/cds-snc/platform-forms-client/issues/2677)) ([56998db](https://github.com/cds-snc/platform-forms-client/commit/56998db04b92ac40e34092e923707ee638c6e93b))
+* update preview header ([#2723](https://github.com/cds-snc/platform-forms-client/issues/2723)) ([c385162](https://github.com/cds-snc/platform-forms-client/commit/c38516245bd0e55ddee2256d8ae859a2a8d6ac82))
+* update responses icon alignment ([#2724](https://github.com/cds-snc/platform-forms-client/issues/2724)) ([88d2e13](https://github.com/cds-snc/platform-forms-client/commit/88d2e1373e1e15781720d43e23760e418bfc4db6))
+
+
+### Code Refactoring
+
+* default forms to "all"  ([#2713](https://github.com/cds-snc/platform-forms-client/issues/2713)) ([20143dc](https://github.com/cds-snc/platform-forms-client/commit/20143dc2c99041c4ed041904b1d57bf046f7bb81))
+* update max with for static pages ([#2721](https://github.com/cds-snc/platform-forms-client/issues/2721)) ([c971db4](https://github.com/cds-snc/platform-forms-client/commit/c971db4367d0fb1c82aa1a54526e616f190ca05b))
+
 ## [3.4.9](https://github.com/cds-snc/platform-forms-client/compare/v3.4.8...v3.4.9) (2023-09-26)
 
 
