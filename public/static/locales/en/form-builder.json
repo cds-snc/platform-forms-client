@@ -407,7 +407,10 @@
   "publishYourForm": "Publish your form",
   "publishYourFormInstructions": {
     "text1": "Complete the following items before you publish your",
-    "text2": "form:"
+    "text2": "form",
+    "vaultOption": "responses to be downloaded - ",
+    "emailOption": "responses delivered by email - ",
+    "change": "change"
   },
   "question": "Question",
   "questions": "Questions",
@@ -458,17 +461,18 @@
   "settingsResponseEmailTitle": "Email address",
   "settingsResponseHint1": "Submitted responses will be emailed to this inbox. This can be a shared inbox.",
   "settingsResponseDelivery": {
-    "selectClassification": "Select the data classification of your form responses",
+    "selectClassification": "Data classification",
     "beforePublishMessage": "You can change these settings anytime before publishing.",
     "protectedBMessage": "PROTECTED B responses must be downloaded from GC Forms.",
     "settingsMessage": "To change these settings, select the data classification of your form responses.",
-    "title": "Select a response delivery option",
+    "title": "Response delivery option ",
     "vaultOption": "Download responses from GC Forms",
     "vaultOptionHint": {
       "text1": "Submitted responses will appear on the",
       "text2": "Responses page"
     },
     "emailOption": "Receive the responses by email",
+
     "saveButton": "Save changes",
     "savedSuccessMessage": "Your changes have been saved.",
     "savedErrorMessage": "There was an error saving your changes. Please try again.",
@@ -651,5 +655,32 @@
       "body2": "unconfirmed responses 35 days overdue. Confirm the receipt of all overdue downloaded responses before saving new ones."
     }
   },
-  "loading": "Loading..."
+  "loading": "Loading...",
+  "formSettingsModal": {
+    "title": "Form set up",
+    "okay": "Save",
+    "cancel": "Cancel",
+    "classification": "Classification",
+    "branding": "Branding",
+    "responseDelivery": "Set up response delivery",
+    "emailOption": {
+      "label": "Email the responses to an inbox",
+      "note": "-- unavailable for protected B class forms --"
+    },
+    "vaultNote": {
+      "text1": "PROTECTED B class forms must be downloaded from GC Forms.",
+      "text2": "Email delivery is not available for this classification"
+    },
+    "saveNote": {
+      "text1": "Save changes to form settings before closing?",
+      "text2": "Save or Cancel"
+    },
+    "more": "More"
+  },
+  "classificationSelect": {
+    "label": "Select the data classification of your form responses"
+  },
+  "brandingSelect": {
+    "label": "Select branding for your form"
+  }
 }

@@ -407,7 +407,10 @@
   "publishYourForm": "Publier votre formulaire",
   "publishYourFormInstructions": {
     "text1": "Veuillez franchir les étapes suivantes avant de publier votre formulaire",
-    "text2": " :"
+    "text2": "",
+    "vaultOption": "responses to be downloaded - [fr]",
+    "emailOption": "responses delivered by email - [fr]",
+    "change": "change [fr]"
   },
   "question": "Question",
   "questions": "Questions",
@@ -459,11 +462,11 @@
   "settingsResponseHint1": "Les réponses seront envoyées par courriel à cette boîte de réception. Il peut s'agir d'une boîte de réception partagée.",
   "settingsResponseTitle": "Destination de livraison des réponses.",
   "settingsResponseDelivery": {
-    "selectClassification": "Sélectionnez la classification des données des réponses de votre formulaire",
+    "selectClassification": "Data classification [fr]",
     "beforePublishMessage": "Vous pouvez modifier ces paramètres à tout moment avant de publier le formulaire.",
     "protectedBMessage": "Les réponses classifiées PROTÉGÉ B doivent être téléchargées de Formulaires GC.",
     "settingsMessage": "Pour modifier ces paramètres, sélectionnez la classification des données de vos réponses au formulaire.",
-    "title": "Sélectionnez une option de livraison des réponses",
+    "title": "Response delivery option [fr]",
     "vaultOption": "Télécharger les réponses de Formulaires GC",
     "vaultOptionHint": {
       "text1": " Les réponses soumises apparaîtront sur",
@@ -652,5 +655,32 @@
       "body2": "réponses non confirmées avec 35 jours de retard ou plus. Confirmez la réception de toute réponse téléchargée en retard avant d'en enregistrer de nouvelles."
     },
     "loading": "Chargement..."
+  },
+  "formSettingsModal": {
+    "title": "Form set up [fr]",
+    "okay": "Save [fr]",
+    "cancel": "Cancel [fr]",
+    "classification": "Classification [fr]",
+    "branding": "Branding [fr]",
+    "responseDelivery": "Set up response delivery [fr]",
+    "emailOption": {
+      "label": "Email the responses to an inbox [fr]",
+      "note": "-- unavailable for protected B class forms -- [fr]"
+    },
+    "vaultNote": {
+      "text1": "PROTECTED B class forms must be downloaded from GC Forms. [fr]",
+      "text2": "Email delivery is not available for this classification [fr]"
+    },
+    "saveNote": {
+      "text1": "Save changes to form settings before closing? [fr]",
+      "text2": "Save or Cancel [fr]"
+    },
+    "more": "More [fr]"
+  },
+  "classificationSelect": {
+    "label": "Select the data classification of your form responses [fr]"
+  },
+  "brandingSelect": {
+    "label": "Select branding for your form [fr]"
   }
 }

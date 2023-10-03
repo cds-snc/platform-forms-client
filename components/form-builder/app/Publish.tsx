@@ -12,6 +12,7 @@ import Link from "next/link";
 import { LoggedOutTab, LoggedOutTabName } from "./LoggedOutTab";
 import { InfoCard } from "@components/globals/InfoCard/InfoCard";
 import { isVaultDelivery } from "@formbuilder/util";
+import { StyledLink } from "@components/globals";
 
 export const Publish = () => {
   const { t } = useTranslation("form-builder");
@@ -94,9 +95,7 @@ export const Publish = () => {
       <div className="flex flex-wrap justify-between laptop:flex-nowrap">
         <div className="mx-5 min-w-fit grow rounded-lg border-1 p-5">
           <h1 className="mb-2 border-0">{t("publishYourForm")}</h1>
-          <p className="mb-0 text-lg">{`${t(
-            "publishYourFormInstructions.text1"
-          )} ${securityAttribute} ${t("publishYourFormInstructions.text2")}`}</p>
+          <p className="mb-0 text-lg">{t("publishYourFormInstructions.text1")}</p>
           {!userCanPublish && (
             <Alert.Info className="my-5">
               <Alert.IconWrapper className="mr-7">
@@ -137,6 +136,21 @@ export const Publish = () => {
             <li className="my-4">
               <Icon checked={translate} />
               <Link href={`/${i18n.language}/form-builder/edit/translate`}>{t("translate")}</Link>
+            </li>
+
+            <li className="my-4">
+              <Icon checked />
+              <strong>
+                {securityAttribute} {t("publishYourFormInstructions.text2")},{" "}
+              </strong>
+              {isVaultDelivery(getDeliveryOption()) ? (
+                <span>{t("publishYourFormInstructions.vaultOption")}</span>
+              ) : (
+                <span>{t("publishYourFormInstructions.emailOption")}</span>
+              )}
+              <StyledLink href={`/${i18n.language}/form-builder/settings`}>
+                {t("publishYourFormInstructions.change")}
+              </StyledLink>
             </li>
           </ul>
 
