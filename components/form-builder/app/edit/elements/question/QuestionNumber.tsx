@@ -15,7 +15,7 @@ export const QuestionNumber = ({
     <>
       <span
         className={cn(
-          "absolute left-0 rounded-r bg-slate-300 py-2.5",
+          "absolute left-0 rounded-r bg-slate-800 py-2.5 text-white border-slate-50",
           index < 9 ? "px-1.5" : "pl-0.5 pr-1 tracking-tighter"
         )}
       >
