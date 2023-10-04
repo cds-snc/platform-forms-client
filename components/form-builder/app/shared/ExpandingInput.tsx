@@ -40,7 +40,7 @@ const ExpandingInput = React.forwardRef<Ref, Props>((props, ref) => {
   return (
     <div
       className={cn(
-        "input-sizer stacked border-b-1.5 border-solid border-slate-500 ",
+        "input-sizer stacked border-2 border-solid border-slate-500 rounded-s ",
         wrapperClassName
       )}
       data-value={value}
@@ -49,7 +49,10 @@ const ExpandingInput = React.forwardRef<Ref, Props>((props, ref) => {
         rows={1}
         maxLength={2000}
         id={id}
-        className={cn("focus:bg-gray-default focus:outline-0 overflow-y-visible", className)}
+        className={cn(
+          "focus:bg-gray-default focus:outline-0 overflow-y-visible rounded-s",
+          className
+        )}
         name={name}
         aria-describedby={describedBy}
         aria-invalid={isInvalid ? true : false}
