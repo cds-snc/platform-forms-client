@@ -208,11 +208,17 @@ class StrictStaticCSP extends Head {
 // Actual main Document being rendered
 
 const CustomHead = process.env.NODE_ENV === "production" ? StrictStaticCSP : Head;
+
+const NoIndexMetaTag = process.env.NEXTAUTH_URL?.includes("staging") ? (
+  <meta name="robots" content="noindex,nofollow" />
+) : null;
+
 class MyDocument extends Document {
   render() {
     return (
       <Html>
         <CustomHead>
+          {NoIndexMetaTag}
           <script async type="text/javascript" src="/static/scripts/form-polyfills.js"></script>
           {GoogleTagScript}
         </CustomHead>

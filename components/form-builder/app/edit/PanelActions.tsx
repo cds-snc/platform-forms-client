@@ -183,7 +183,7 @@ export const PanelActions = ({
 
   const innerPanelClasses = isSubPanel
     ? `flex flex-wrap flex-row justify-between px-4 pb-6 pt-4 py-2 -mx-12 laptop:mx-0`
-    : `flex flex-wrap flex-row justify-between bg-gray-200 px-4 pb-6 pt-4 py-2`;
+    : `flex flex-wrap flex-row justify-between bg-slate-800 px-4 pb-6 pt-4 py-2`;
 
   const innerPanelResponsiveClasses = isSubPanel
     ? ""
