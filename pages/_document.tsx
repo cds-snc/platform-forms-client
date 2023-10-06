@@ -213,6 +213,9 @@ class MyDocument extends Document {
     return (
       <Html>
         <CustomHead>
+          {process.env.NEXTAUTH_URL?.includes("staging") && (
+            <meta name="robots" content="noindex,nofollow" />
+          )}
           <script async type="text/javascript" src="/static/scripts/form-polyfills.js"></script>
           {GoogleTagScript}
         </CustomHead>
