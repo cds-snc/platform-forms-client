@@ -1,6 +1,7 @@
 import xlsx from "node-xlsx";
 
-export const transform = (responses) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const transform = (responses: any[]) => {
   const records = responses.map((response) => {
     return Object.values(response);
   });
