@@ -98,10 +98,6 @@
     @apply text-base;
   }
 
-  h4 {
-    @extend .gc-section-header;
-  }
-
   p:has(+ ul, + ol) {
     @apply mb-0;
   }
