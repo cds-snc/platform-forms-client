@@ -114,7 +114,7 @@ const Step1 = ({
                 <Label id="label-username" htmlFor="username" className="required" required>
                   {t("provideUsername.fields.username.label")}
                 </Label>
-                <Description id="username-hint" className="text-xl text-black-default">
+                <Description id="username-hint" className="text-black">
                   {t("provideUsername.fields.username.hint")}
                 </Description>
                 <TextInput
