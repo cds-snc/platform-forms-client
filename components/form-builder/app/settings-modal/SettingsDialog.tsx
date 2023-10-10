@@ -354,7 +354,7 @@ export const SettingsDialog = ({
         <div className="p-5">
           {status === "authenticated" && (
             <div className="mb-10">
-              <div className="mb-4">
+              <div className="mb-9">
                 <h3 className="mb-4">{t("formSettingsModal.classification")}</h3>
                 <ClassificationSelect
                   className="max-w-[400px] truncate border-none p-1 pr-10"
@@ -364,22 +364,22 @@ export const SettingsDialog = ({
                   handleUpdateClassification={handleUpdateClassification}
                 />
               </div>
-              <div>
+              <div className="mb-9">
                 <h3 className="mb-4">{t("formSettingsModal.branding")}</h3>
                 <Logos
-                  className="max-w-[350px] truncate p-1 pr-10"
+                  className="mb-4 max-w-[350px] truncate p-1 pr-10"
                   disabled={isPublished as boolean}
                   options={brandingOptions.map(({ value, label }) => ({ value, label }))}
                   selected={brandName}
                   handleUpdate={setBrandName}
                   aria-label={t("brandingSelect.label")}
                 />
-              </div>
-              {/* Logo preview */}
-              <div className="mb-8 mt-4">
-                <div className="mb-3 text-sm font-bold">{t("branding.preview")}</div>
-                {/* eslint-disable @next/next/no-img-element  */}
-                <Brand brand={brand} />
+                {/* Logo preview */}
+                <div>
+                  <div className="mb-3 text-sm font-bold">{t("branding.preview")}</div>
+                  {/* eslint-disable @next/next/no-img-element  */}
+                  <Brand brand={brand} />
+                </div>
               </div>
               <h3 className="mb-4">{t("responseDelivery")}</h3>
               <div>
