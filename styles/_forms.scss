@@ -95,10 +95,7 @@
 .gc-richText {
   p {
     @extend .gc-p;
-  }
-
-  h4 {
-    @extend .gc-section-header;
+    @apply text-base;
   }
 
   p:has(+ ul, + ol) {
@@ -446,18 +443,5 @@
 
   p:last-of-type {
     @apply font-bold md:text-sm;
-  }
-}
-
-.gc-last-logout-time {
-  @apply text-sm not-italic items-center font-normal pb-10 pt-3;
-  line-height: 125%;
-}
-
-.gc-go-to-login-btn {
-  a {
-    @apply bg-blue-500 hover:bg-blue-700 text-white-default font-bold py-2 px-4 rounded;
-    text-decoration: none !important;
-    background-color: #26374a;
   }
 }
