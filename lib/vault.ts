@@ -1,6 +1,6 @@
 import { QueryCommand, QueryCommandInput } from "@aws-sdk/lib-dynamodb";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { VaultSubmissionList, UserAbility, VaultStatus } from "@lib/types";
+import { VaultSubmissionList, UserAbility, VaultStatus, VaultSubmission } from "@lib/types";
 import { logEvent } from "./auditLogs";
 import {
   numberOfUnprocessedSubmissionsCacheCheck,
@@ -158,6 +158,139 @@ export async function listAllSubmissions(
       },
       "ListResponses",
       `List all responses for form ${formID}`
+    );
+
+    const numOfUnprocessedSubmissions = accumulatedResponses.filter((submission) =>
+      [VaultStatus.NEW, VaultStatus.DOWNLOADED, VaultStatus.PROBLEM].includes(submission.status)
+    ).length;
+
+    await numberOfUnprocessedSubmissionsCachePut(formID, numOfUnprocessedSubmissions);
+
+    return {
+      submissions: accumulatedResponses,
+      numberOfUnprocessedSubmissions: numOfUnprocessedSubmissions,
+    };
+  } catch (e) {
+    logMessage.error(e);
+    return { submissions: [], numberOfUnprocessedSubmissions: 0 };
+  }
+}
+
+/**
+ * This method returns a list of all or selected form submission records.
+ * The list contains the actual submission data
+ * @param formID - The form ID from which to retrieve responses
+ */
+
+export async function retrieveSubmissions(
+  ability: UserAbility,
+  formID: string,
+  ids: string[]
+): Promise<{ submissions: VaultSubmission[]; numberOfUnprocessedSubmissions: number }> {
+  // Check access control first
+  try {
+    await checkAbilityToAccessSubmissions(ability, formID);
+  } catch (e) {
+    if (e instanceof AccessControlError)
+      logEvent(
+        ability.userID,
+        {
+          type: "Form",
+          id: formID,
+        },
+        "AccessDenied",
+        `Attempted to retrieve responses for form ${formID}`
+      );
+    throw e;
+  }
+
+  try {
+    let accumulatedResponses: VaultSubmission[] = [];
+    let lastEvaluatedKey = null;
+
+    while (lastEvaluatedKey !== undefined) {
+      const documentClient = connectToDynamo();
+      const expressionAttributeValues: { [key: string]: string } = {};
+
+      const idParams = ids
+        .map((id: string, index: number) => {
+          const idParam = `:id${index}`;
+          expressionAttributeValues[idParam] = id;
+          return idParam;
+        })
+        .join(",");
+
+      const getItemsDbParams: QueryCommandInput = {
+        TableName: "Vault",
+        KeyConditionExpression: "FormID = :formID and begins_with(NAME_OR_CONF, :namePrefix)",
+        ExpressionAttributeValues: {
+          ":formID": formID,
+          ":namePrefix": "NAME#",
+          ...expressionAttributeValues,
+        },
+        ExpressionAttributeNames: {
+          "#status": "Status",
+          "#name": "Name",
+        },
+        FilterExpression: `#name IN (${idParams})`,
+        ProjectionExpression:
+          "FormID,SubmissionID,FormSubmission,ConfirmationCode,#status,SecurityAttribute,#name,CreatedAt,LastDownloadedBy,ConfirmTimestamp,DownloadedAt,RemovalDate",
+      };
+      const queryCommand = new QueryCommand(getItemsDbParams);
+
+      // eslint-disable-next-line no-await-in-loop
+      const response = await documentClient.send(queryCommand);
+
+      if (response.Items?.length) {
+        accumulatedResponses = accumulatedResponses.concat(
+          response.Items.map(
+            ({
+              FormID: formID,
+              SubmissionID: submissionID,
+              FormSubmission: formSubmission,
+              ConfirmationCode: confirmationCode,
+              SecurityAttribute: securityAttribute,
+              Status: status,
+              CreatedAt: createdAt,
+              LastDownloadedBy: lastDownloadedBy,
+              Name: name,
+              ConfirmTimestamp: confirmedAt,
+              DownloadedAt: downloadedAt,
+              RemovalDate: removedAt,
+            }) => ({
+              formID,
+              submissionID,
+              formSubmission,
+              confirmationCode,
+              status,
+              securityAttribute,
+              name,
+              createdAt,
+              lastDownloadedBy: lastDownloadedBy ?? null,
+              confirmedAt: confirmedAt ?? null,
+              downloadedAt: downloadedAt ?? null,
+              removedAt: removedAt ?? null,
+            })
+          )
+        );
+      }
+
+      // We either manually stop the paginated request when we have 10 or more items or we let it finish on its own
+      if (accumulatedResponses.length >= 500) {
+        lastEvaluatedKey = undefined;
+      } else {
+        lastEvaluatedKey = response.LastEvaluatedKey;
+      }
+    }
+
+    logEvent(
+      ability.userID,
+      {
+        type: "Form",
+        id: formID,
+      },
+      "RetrieveResponses",
+      `Retrieve selected responses for form ${formID} with IDs ${ids}`
     );
 
     const numOfUnprocessedSubmissions = accumulatedResponses.filter((submission) =>

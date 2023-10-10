@@ -3,11 +3,10 @@ import { middleware, cors, sessionExists } from "@lib/middleware";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { MiddlewareProps, WithRequired } from "@lib/types";
 import { getFullTemplateByID } from "@lib/templates";
-import { connectToDynamo } from "@lib/integration/dynamodbConnector";
-import { QueryCommand } from "@aws-sdk/lib-dynamodb";
 import { transform as csvTransform } from "@lib/api/submissions/download/transformers/csv";
 import { transform as xlsxTransform } from "@lib/api/submissions/download/transformers/xlsx";
 import { transform as htmlTableTransform } from "@lib/api/submissions/download/transformers/html-table";
+import { retrieveSubmissions } from "@lib/vault";
 
 const getSubmissions = async (
   req: NextApiRequest,
@@ -27,83 +26,25 @@ const getSubmissions = async (
 
     if (fullFormTemplate === null) return res.status(404).json({ error: "Form Not Found" });
 
-    const documentClient = connectToDynamo();
-    let queryResult;
+    const data = req.body;
+    const ids = data.ids.split(",");
 
-    switch (req.method) {
-      // Download all responses
-      case "GET": {
-        try {
-          const queryCommand = new QueryCommand({
-            TableName: "Vault",
-            ExpressionAttributeValues: {
-              ":FormID": formId,
-              ":name": "NAME#",
-            },
-            ExpressionAttributeNames: {
-              "#name": "Name",
-            },
-            KeyConditionExpression: "FormID = :FormID AND begins_with(NAME_OR_CONF, :name)",
-            ProjectionExpression: "#name, FormSubmission, CreatedAt, ConfirmationCode",
-          });
-
-          queryResult = await documentClient.send(queryCommand);
-          break;
-        } catch (err) {
-          return res.status(500).json(err);
-        }
-      }
-
-      // Download specific responses, ids in POST body
-      case "POST": {
-        const data = req.body;
-        const ids = data.ids.split(",");
-        const expressionAttributeValues: { [key: string]: string } = {};
-
-        const idParams = ids
-          .map((id: string, index: number) => {
-            const idParam = `:id${index}`;
-            expressionAttributeValues[idParam] = id;
-            return idParam;
-          })
-          .join(",");
-
-        const queryCommand = new QueryCommand({
-          TableName: "Vault",
-          ExpressionAttributeValues: {
-            ":FormID": formId,
-            ":name": "NAME#",
-            ...expressionAttributeValues,
-          },
-          ExpressionAttributeNames: {
-            "#name": "Name",
-          },
-          KeyConditionExpression: "FormID = :FormID AND begins_with(NAME_OR_CONF, :name)",
-          FilterExpression: `#name IN (${idParams})`,
-          ProjectionExpression: "#name, FormSubmission, CreatedAt, ConfirmationCode",
-        });
-
-        queryResult = await documentClient.send(queryCommand);
-        break;
-      }
-    }
+    const queryResult = await retrieveSubmissions(ability, formId, ids);
 
     if (!queryResult)
       return res.status(500).json({ error: "There was an error. Please try again later." });
 
-    const responses = queryResult.Items?.map((item) => {
-      const submission = Object.entries(JSON.parse(item.FormSubmission)).map(
-        ([questionId, answer]) => {
-          const question = fullFormTemplate.form.elements.find(
-            (element) => element.id === Number(questionId)
-          );
-          return {
-            questionEn: question?.properties.titleEn,
-            questionFr: question?.properties.titleFr,
-            answer: Array.isArray(answer) ? answer.join(",") : answer,
-          };
-        }
-      );
+    const responses = queryResult.submissions.map((item) => {
+      const submission = Object.entries(item.formSubmission).map(([questionId, answer]) => {
+        const question = fullFormTemplate.form.elements.find(
+          (element) => element.id === Number(questionId)
+        );
+        return {
+          questionEn: question?.properties.titleEn,
+          questionFr: question?.properties.titleFr,
+          answer: Array.isArray(answer) ? answer.join(",") : answer,
+        };
+      });
 
       const answers: Record<string, string> = {};
 
@@ -115,9 +56,9 @@ const getSubmissions = async (
       });
 
       return {
-        id: item.Name,
-        created_at: item.CreatedAt,
-        confirmation_code: item.ConfirmationCode,
+        id: item.name,
+        created_at: item.createdAt,
+        confirmation_code: item.confirmationCode,
         ...answers,
       };
     });
@@ -167,7 +108,4 @@ const getSubmissions = async (
   }
 };
 
-export default middleware(
-  [cors({ allowedMethods: ["GET", "POST"] }), sessionExists()],
-  getSubmissions
-);
+export default middleware([cors({ allowedMethods: ["POST"] }), sessionExists()], getSubmissions);
