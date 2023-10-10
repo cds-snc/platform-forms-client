@@ -1,7 +1,7 @@
 // Note: default font applied to html tag in _app.tsx
 @layer base {
   body {
-    @apply text-base text-slate-800;
+    @apply text-base leading-7 text-slate-800;
   }
 
   h1, .gc-h1 {
@@ -25,7 +25,11 @@
   }
 
   // Wrapper for frontend forms and pages
-  .gc-formview {
+  .gc-formview, .gc-authpages {
+    .text-base {
+      @apply text-xl leading-7;
+    }
+
     @apply text-xl text-gray-front;
 
     h1, h2, h3, h4, h5, h6 {
@@ -56,6 +60,12 @@
 
     h6, .gc-h6 {
       @apply text-[19px] font-normal;
+    }
+  }
+
+  .gc-authpages {
+    h1, .gc-h1 {
+      @apply border-b-0 pb-2 mb-12;
     }
   }
 }
