@@ -209,9 +209,8 @@ class StrictStaticCSP extends Head {
 
 const CustomHead = process.env.NODE_ENV === "production" ? StrictStaticCSP : Head;
 
-const NoIndexMetaTag = process.env.NEXTAUTH_URL?.includes("staging") ? (
-  <meta name="robots" content="noindex,nofollow" />
-) : null;
+const NoIndexMetaTag =
+  process.env.NO_INDEX === "false" ? null : <meta name="robots" content="noindex,nofollow" />;
 
 class MyDocument extends Document {
   render() {
