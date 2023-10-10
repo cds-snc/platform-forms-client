@@ -30,7 +30,7 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { ChevronDown } from "@components/form-builder/icons";
 
 // TODO: move to an app setting variable
-const MAX_FILE_DOWNLOADS = 20;
+const MAX_FILE_DOWNLOADS = 100;
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -61,6 +61,25 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
       })
     ).length,
   });
+
+  const handleCheckAll = () => {
+    vaultSubmissions.forEach((submission) => {
+      tableItemsDispatch({
+        type: TableActions.UPDATE,
+        payload: { item: { name: submission.name, checked: true } },
+      });
+    });
+
+    // Show or hide errors depending
+    if (tableItems.checkedItems.size > MAX_FILE_DOWNLOADS && !errors.maxItemsError) {
+      setErrors({ ...errors, maxItemsError: true });
+    } else if (errors.maxItemsError) {
+      setErrors({ ...errors, maxItemsError: false });
+    }
+    if (tableItems.checkedItems.size > 0 && errors.noItemsError) {
+      setErrors({ ...errors, noItemsError: false });
+    }
+  };
 
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.id;
@@ -234,6 +253,7 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
           link.setAttribute("download", fileName);
           document.body.appendChild(link);
           link.click();
+          link.remove();
         });
       });
 
@@ -323,7 +343,9 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
         <caption className="sr-only">{t("downloadResponsesTable.header.tableTitle")}</caption>
         <thead className="border-b-2 border-[#6a6d7b]">
           <tr>
-            <th className="p-4 text-center">{t("downloadResponsesTable.header.select")}</th>
+            <th className="p-4 text-center" onClick={handleCheckAll}>
+              {t("downloadResponsesTable.header.select")}
+            </th>
             <th className="p-4 text-left">{t("downloadResponsesTable.header.number")}</th>
             <th className="p-4 text-left">{t("downloadResponsesTable.header.status")}</th>
             <th className="p-4 text-left">{t("downloadResponsesTable.header.downloadResponse")}</th>
