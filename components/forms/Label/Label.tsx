@@ -49,7 +49,7 @@ export const Label = (props: LabelProps): React.ReactElement => {
       {required && (
         <span data-testid="required" aria-hidden>
           {" "}
-          ({validation?.all ? t("all-required") : t("required", { lng: lang })})
+          ({validation?.all ? t("all-required", { lng: lang }) : t("required", { lng: lang })})
         </span>
       )}
       {group && required && (
