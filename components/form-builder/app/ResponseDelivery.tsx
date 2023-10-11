@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
 
-import { useTranslation } from "next-i18next";
-
 import { SetResponseDelivery } from "./SetResponseDelivery";
 import { LoggedOutTabName, LoggedOutTab } from "./LoggedOutTab";
 import { useTemplateContext } from "../hooks";
