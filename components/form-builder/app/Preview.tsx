@@ -62,7 +62,7 @@ export const Preview = () => {
     <>
       <div className="h-12"></div>
       <div
-        className={`mb-8 border-3 border-dashed border-blue-focus p-4 ${
+        className={`mb-8 border-3 border-dashed border-blue-focus bg-white p-4 ${
           status !== "authenticated" && ""
         }`}
         {...getLocalizationAttribute()}
@@ -172,7 +172,7 @@ export const Preview = () => {
           <span className="mb-1 inline-block bg-slate-200 p-2">
             {t("confirmationPage", { ns: "form-builder" })}
           </span>
-          <div className="mb-8 border-3 border-dashed border-blue-focus p-4">
+          <div className="mb-8 border-3 border-dashed border-blue-focus bg-white p-4">
             <RichText {...getLocalizationAttribute()}>
               {formRecord.form.confirmation
                 ? formRecord.form.confirmation[
