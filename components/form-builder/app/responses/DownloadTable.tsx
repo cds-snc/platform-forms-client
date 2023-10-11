@@ -254,7 +254,6 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
           link.setAttribute("download", fileName);
           document.body.appendChild(link);
           link.click();
-          link.remove();
           await timer(1000);
         });
       });
