@@ -246,19 +246,16 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
           method: "GET",
           responseType: "blob",
           timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-        }).then((response) => {
-          const download = () => {
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement("a");
-            link.href = url;
-            link.setAttribute("download", fileName);
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-            clearInterval(interval);
-          };
-
-          const interval = setInterval(download, 300);
+        }).then(async (response) => {
+          const timer = (ms: number) => new Promise((res) => setTimeout(res, ms));
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", fileName);
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+          await timer(1000);
         });
       });
 
