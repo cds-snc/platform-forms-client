@@ -20,4 +20,4 @@ jobs:
           docker build -t base \
           --build-arg COGNITO_APP_CLIENT_ID=$COGNITO_APP_CLIENT_ID \
           --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID . \
-          --build-arg SITE_INDEX=true
+          --build-arg INDEX_SITE=true
