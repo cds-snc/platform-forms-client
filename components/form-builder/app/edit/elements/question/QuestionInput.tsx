@@ -80,7 +80,7 @@ export const QuestionInput = ({
       name={`item${index}`}
       placeholder={t("question")}
       wrapperClassName="w-full font-bold text-base"
-      className="font-bold text-slate-800 laptop:text-2xl"
+      className="font-bold text-slate-800 laptop:text-lg"
       value={value}
       describedBy={describedById ?? undefined}
       onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateValue(id, e.target.value)}
