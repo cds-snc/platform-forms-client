@@ -663,7 +663,7 @@
     "branding": "Branding",
     "responseDelivery": "Set up form response delivery",
     "emailOption": {
-      "label": "Email the responses to an inbox",
+      "label": "Receive responses by email",
       "note": "-- unavailable for protected B class forms --"
     },
     "vaultNote": {
