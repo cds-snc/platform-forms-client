@@ -67,7 +67,7 @@ export const LeftNavigation = () => {
             {t("pageSettings")}
           </NavLink>
         </li>
-        {!isPublished && (
+        {!isPublished && activePathname === "/form-builder/edit" && (
           <li>
             <SaveButton />
           </li>
