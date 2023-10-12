@@ -381,7 +381,7 @@ export const SettingsDialog = ({
                   <Brand brand={brand} />
                 </div>
               </div>
-              <h3 className="mb-4">{t("responseDelivery")}</h3>
+              <h3 className="mb-4">{t("settingsResponseDelivery.title")}</h3>
               <div>
                 <Radio
                   disabled={isPublished}
