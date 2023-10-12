@@ -223,7 +223,7 @@ const Register = () => {
                 <Label id={"label-username"} htmlFor={"username"} className="required" required>
                   {t("signUpRegistration.fields.username.label")}
                 </Label>
-                <div className="mb-2 text-p text-black-default" id={"username-hint"}>
+                <div className="mb-2 text-sm" id={"username-hint"}>
                   {t("signUpRegistration.fields.username.hint")}
                 </div>
                 <TextInput
@@ -238,7 +238,7 @@ const Register = () => {
                 <Label id={"label-password"} htmlFor={"password"} className="required" required>
                   {t("signUpRegistration.fields.password.label")}
                 </Label>
-                <div className="mb-2 text-p text-black-default" id={"password-hint"}>
+                <div className="mb-2 text-sm text-black" id={"password-hint"}>
                   {t("signUpRegistration.fields.password.hintList.title")}
                   <ul className="mt-2">
                     <li>{t("signUpRegistration.fields.password.hintList.characters")}</li>
@@ -299,7 +299,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (session)
     return {
       redirect: {
-        destination: `/${locale}/myforms/`,
+        destination: `/${locale}/forms/`,
         permanent: false,
       },
     };

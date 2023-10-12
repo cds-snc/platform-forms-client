@@ -205,7 +205,7 @@ export default function UnlockPublishing() {
                           {t("submitButton", { ns: "common" })}
                         </Button>
                         <StyledLink
-                          href={`/${i18n.language}/myforms/`}
+                          href={`/${i18n.language}/forms/`}
                           className={` 
                             no-underline visited:text-black-default 
                             bg-white-default text-black-default border-black-default py-4 px-8 rounded-lg border-2 border-solid
@@ -237,7 +237,7 @@ export default function UnlockPublishing() {
           <p className="mt-8">{t("unlockPublishingSubmitted.whatNext.paragraph4")}</p>
           <div className="mt-14 flex">
             <StyledLink
-              href={`/${i18n.language}/myforms/`}
+              href={`/${i18n.language}/forms/`}
               className={` 
                 mr-8 rounded-lg border-2
                 border-solid border-black-default bg-blue-dark px-8 py-4 text-white-default no-underline visited:text-white-default
@@ -265,7 +265,7 @@ export const getServerSideProps = requireAuthentication(async ({ user: { ability
     ) {
       return {
         redirect: {
-          destination: `${locale}/myforms`,
+          destination: `${locale}/forms`,
           permanent: false,
         },
       };

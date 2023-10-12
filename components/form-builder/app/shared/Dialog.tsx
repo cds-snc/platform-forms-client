@@ -16,7 +16,6 @@ export const Dialog = ({
   actions,
   className,
   handleClose,
-  headerStyle,
 }: {
   dialogRef: React.RefObject<CDSHTMLDialogElement>;
   children: React.ReactElement;
@@ -24,7 +23,6 @@ export const Dialog = ({
   actions?: React.ReactElement;
   className?: string;
   handleClose?: () => void;
-  headerStyle?: string;
 }) => {
   const { t } = useTranslation("form-builder");
   const [isOpen, changeOpen] = useState(true);
@@ -64,16 +62,18 @@ export const Dialog = ({
       ref={dialogRef}
     >
       <div
-        className={`relative mx-8 mt-12 max-h-[80%] overflow-y-auto rounded-xl border-2 border-black bg-white tablet:mx-auto tablet:max-w-[700px] laptop:mt-24 ${className}`}
+        className={`relative max-h-[80%] overflow-y-auto rounded-xl border-1 border-slate-500 bg-white tablet:mx-auto tablet:max-w-[700px] laptop:mt-24 ${className}`}
       >
         {title && (
-          <h2 className={headerStyle ? headerStyle : "ml-4 mt-4 inline-block pb-4"} tabIndex={-1}>
-            {title}
-          </h2>
+          <div className="border-b-[0.5px] border-slate-500 bg-slate-50">
+            <h2 className="ml-4 mt-4 inline-block pb-4 text-2xl" tabIndex={-1}>
+              {title}
+            </h2>
+          </div>
         )}
 
-        <div className={`px-4 ${title ? "" : "mt-10"}`}>{children}</div>
-        {actions && <div className="flex border-t-1 border-gray-400 p-4">{actions}</div>}
+        <div>{children}</div>
+        {actions && <div className="flex p-4">{actions}</div>}
         <Button
           theme="link"
           className="group absolute right-0 top-0 z-[1000] mr-4 mt-4"
@@ -81,9 +81,8 @@ export const Dialog = ({
           onClick={close}
           dataTestId="close-dialog"
         >
-          <span className="mr-2 block">
-            <Close className="mr-2 inline-block group-focus:fill-white-default" />
-            {t("close")}
+          <span className="block">
+            <Close className="inline-block group-focus:fill-white-default" />
           </span>
         </Button>
       </div>

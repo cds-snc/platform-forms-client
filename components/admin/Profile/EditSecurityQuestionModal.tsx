@@ -9,6 +9,10 @@ import axios from "axios";
 import { getCsrfToken } from "next-auth/react";
 import { useRouter } from "next/router";
 import debounce from "lodash.debounce";
+import {
+  MessageType,
+  ValidationMessage,
+} from "@components/globals/ValidationMessage/ValidationMessage";
 
 const updateSecurityQuestion = async (
   oldQuestionId: string,
@@ -141,7 +145,7 @@ export const EditSecurityQuestionModal = ({
         </Button>
       }
     >
-      <>
+      <div className="px-4">
         {/* TODO: probably will not need the error since already selected questions can be removed programmatically */}
         {isFormError && (
           <Alert.Danger>
@@ -159,7 +163,7 @@ export const EditSecurityQuestionModal = ({
           </Alert.Warning>
         )}
 
-        <p>{t("securityQuestionModal.requirmentsList.title")}</p>
+        <p className="mt-4">{t("securityQuestionModal.requirmentsList.title")}</p>
         <ul className="mb-6">
           <li>{t("securityQuestionModal.requirmentsList.requirement1")}</li>
           <li>{t("securityQuestionModal.requirmentsList.requirement2")}</li>
@@ -194,16 +198,9 @@ export const EditSecurityQuestionModal = ({
             {t("securityQuestionModal.answerLabel")} {questionNumber}
           </Label>
 
-          <div
-            role="alert"
-            className={`border-l-4 border-red bg-red-50 p-3 ${
-              !isAnswerInputError ? "visually-hidden" : ""
-            }`}
-          >
-            {isAnswerInputError && (
-              <p className="text-sm font-bold">{t("securityQuestionModal.errors.invalidInput")}</p>
-            )}
-          </div>
+          <ValidationMessage show={isAnswerInputError} messageType={MessageType.ERROR}>
+            {t("securityQuestionModal.errors.invalidInput")}
+          </ValidationMessage>
 
           <span id="answerHint" className="visually-hidden">
             {t("securityQuestionModal.errors.invalidInput")}
@@ -220,7 +217,7 @@ export const EditSecurityQuestionModal = ({
             onChange={_debouncedAnswerCheck}
           />
         </div>
-      </>
+      </div>
     </Dialog>
   );
 };

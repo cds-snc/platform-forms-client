@@ -10,25 +10,16 @@ import { themes } from "@components/globals";
 
 import { SiteLogo } from "@formbuilder/icons";
 
-import { Noto_Sans } from "next/font/google";
-
-const nato = Noto_Sans({
-  weight: "600",
-  subsets: ["latin"],
-});
-
 const SiteLink = () => {
   const { t } = useTranslation("common");
   return (
     <Link href="/form-builder" legacyBehavior>
       {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-      <a className="mb-6 mr-10 inline-flex font-sans text-h2 font-bold !text-black no-underline !shadow-none focus:bg-white">
+      <a className="mr-10 inline-flex no-underline !shadow-none focus:bg-white">
         <span className="">
           <SiteLogo title={t("title")} />
         </span>
-        <h1
-          className={`ml-3 inline-block text-[24px] text-[#1B00C2] ${nato.className} mb-0 whitespace-nowrap border-none pb-0 leading-[38px]`}
-        >
+        <h1 className="!mb-6 !ml-3 inline-block whitespace-nowrap border-none !font-noto-sans !text-[24px] font-semibold leading-10 text-[#1B00C2]">
           {t("title-full", { ns: "common" })}
         </h1>
       </a>
@@ -53,9 +44,7 @@ const Home = () => {
       <div className="mt-10 flex items-center justify-center">
         <div className="w-[622px] rounded-2xl border-1 border-[#D1D5DB] bg-white p-8">
           <div className="flex  flex-col items-center">
-            <div className="mb-10">
-              <SiteLink />
-            </div>
+            <SiteLink />
             <div className="flex justify-center gap-8">
               <Link
                 href="/en/form-builder"

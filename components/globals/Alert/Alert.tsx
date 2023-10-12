@@ -11,9 +11,9 @@ export enum ErrorStatus {
 }
 
 const headingClasses = {
-  h2: "text-2xl font-sans font-semibold",
-  h3: "text-xl font-sans font-semibold",
-  h4: "text-lg font-sans font-semibold",
+  h2: "text-2xl font-semibold",
+  h3: "text-xl font-semibold",
+  h4: "text-lg font-semibold",
 };
 
 export const Title = ({
@@ -35,7 +35,7 @@ export const Title = ({
   return (
     <HeadingTag
       data-testid="alert-heading"
-      className={cn("mb-0 pb-0", headingClasses[HeadingTag], statusClass, className)}
+      className={cn("!mb-0 pb-0", headingClasses[HeadingTag], statusClass, className)}
     >
       {children}
     </HeadingTag>
@@ -82,7 +82,7 @@ const defaultClasses = {
     [ErrorStatus.SUCCESS]: "bg-emerald-50",
     [ErrorStatus.WARNING]: "bg-yellow-50",
     [ErrorStatus.ERROR]: "bg-red-50",
-    [ErrorStatus.INFO]: "bg-indigo-50",
+    [ErrorStatus.INFO]: "bg-violet-50",
   },
   icon: {
     [ErrorStatus.SUCCESS]: "[&_svg]:fill-emerald-700",
@@ -195,7 +195,7 @@ const AlertContainer = ({
     <div
       ref={refFocus}
       {...(focussable && { tabIndex: -1 })}
-      className={cn("relative flex rounded-lg p-4", className)}
+      className={cn("relative flex rounded-sm laptop:rounded-md p-4", className)}
       data-testid="alert"
       role={role}
       {...props}

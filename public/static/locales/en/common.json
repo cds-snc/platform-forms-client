@@ -114,7 +114,7 @@
     "defaultTitle": "Something went wrong",
     "defaultMessage": "Sorry, there was a problem and we lost you.",
     "cta": {
-      "yourForms": "Back to Your forms",
+      "yourForms": "Back to Forms",
       "home": "Back to home",
       "support": "Get support"
     }
@@ -145,5 +145,6 @@
     }
   },
   "mainNavAriaLabel": "Main",
-  "yourAccount": "Your account"
+  "yourAccount": "Your account",
+  "dateModified": "Date modified"
 }

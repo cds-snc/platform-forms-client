@@ -14,7 +14,7 @@ describe("Form ownership", () => {
   it("Non-Admin cannot manage Form Ownership", () => {
     cy.login({ acceptableUse: true });
     cy.visitPage(`/form-builder/settings/${formID}/form`);
-    cy.url().should("contain", "/en/admin/unauthorized");
+    cy.get("[data-testid='form-ownership']").should("not.exist");
   });
 
   it("Admin can manage Form Ownership", () => {

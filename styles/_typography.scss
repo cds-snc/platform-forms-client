@@ -1,0 +1,71 @@
+// Note: default font applied to html tag in _app.tsx
+@layer base {
+  body {
+    @apply text-base leading-7 text-slate-800;
+  }
+
+  h1, .gc-h1 {
+    @apply text-3xl tablet:text-4xl font-semibold mb-6;
+  }
+
+  h2, .gc-h2 {
+    @apply text-2xl tablet:text-3xl font-semibold mb-4;
+  }
+
+  h3, .gc-h3 {
+    @apply text-xl tablet:text-2xl font-semibold mb-2;
+  }
+
+  h4, .gc-h4 {
+    @apply text-lg tablet:text-xl font-semibold;
+  }
+
+  h5 .gc-h5 {
+    @apply text-base tablet:text-lg font-normal;
+  }
+
+  // Wrapper for frontend forms and pages
+  .gc-formview, .gc-authpages {
+    .text-base {
+      @apply text-xl leading-7;
+    }
+
+    @apply text-xl text-gray-front;
+
+    h1, h2, h3, h4, h5, h6 {
+      font-variant-ligatures: no-common-ligatures;
+      -webkit-font-smoothing: antialiased;
+      @apply font-lato font-bold;
+    }
+
+    h1, .gc-h1 {
+      @apply border-b border-red pb-2 mb-16 text-[34px] tablet:text-[38px];
+    }
+
+    h2, .gc-h2 {
+      @apply mb-6 text-[32px] tablet:text-[36px];
+    }
+
+    h3, .gc-h3 {
+      @apply mb-6 text-[24px];
+    }
+
+    h4, .gc-h4 {
+      @apply mb-4 text-[22px];
+    }
+
+    h5, .gc-h5 {
+      @apply text-[20px];
+    }
+
+    h6, .gc-h6 {
+      @apply text-[19px] font-normal;
+    }
+  }
+
+  .gc-authpages {
+    h1, .gc-h1 {
+      @apply border-b-0 pb-2 mb-12;
+    }
+  }
+}

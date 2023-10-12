@@ -115,7 +115,7 @@
     "defaultTitle": "Quelque chose a mal tourné",
     "defaultMessage": "Désolé, il y a un problème et nous vous avons perdu.",
     "cta": {
-      "yourForms": "Retourner à Vos formulaires",
+      "yourForms": "Retourner aux formulaires",
       "home": "Retourner à l’accueil",
       "support": "Obtenir du soutien"
     }
@@ -146,5 +146,6 @@
     }
   },
   "mainNavAriaLabel": "Navigation principale",
-  "yourAccount": "Votre compte"
+  "yourAccount": "Votre compte",
+  "dateModified": "Date de modification"
 }

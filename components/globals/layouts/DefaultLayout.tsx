@@ -6,6 +6,7 @@ import Fip from "../Fip";
 import { HeadMeta } from "./HeadMeta";
 import LanguageToggle from "../LanguageToggle";
 import LoginMenu from "@components/auth/LoginMenu";
+import { cn } from "@lib/utils";
 
 interface DefaultLayoutProps extends React.PropsWithChildren {
   showLanguageToggle?: boolean;
@@ -48,12 +49,12 @@ const DefaultLayout = ({
       <HeadMeta />
       <SkipLink />
       <header>
-        <Fip className={isSplashPage ? "my-0 py-6" : ""}>
+        <Fip className={isSplashPage ? "my-0 py-6" : "mb-20 mt-0 border-b-4 border-blue-dark py-9"}>
           {showLanguageToggle && <LanguageToggle />}
           {showLogin && <LoginMenu />}
         </Fip>
       </header>
-      <div id="page-container">
+      <div className={cn("gc-formview", "shrink-0 grow basis-auto px-[4rem] py-0 laptop:px-32")}>
         <main id="content">{children}</main>
       </div>
       <Footer isSplashPage={isSplashPage} />

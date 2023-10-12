@@ -16,10 +16,18 @@ const Page: NextPageWithLayout<PageProps> = () => {
   const { t } = useTranslation("form-builder");
 
   const title = `${t("gcFormsStart")} — ${t("gcForms")}`;
+
+  const css = `
+  body {
+     background-color: #F9FAFB;
+  }
+`;
+
   return (
     <>
       <Head>
         <title>{title}</title>
+        <style>{css}</style>
       </Head>
       <Start />
     </>

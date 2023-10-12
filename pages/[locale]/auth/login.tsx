@@ -115,7 +115,7 @@ const LoginStep = ({
                 <Label id={"label-username"} htmlFor={"username"} className="required" required>
                   {t("fields.username.label")}
                 </Label>
-                <div className="mb-2 text-p text-black-default" id="login-description">
+                <div className="mb-2 text-sm text-black" id="login-description">
                   {t("fields.username.description")}
                 </div>
                 <TextInput
@@ -196,7 +196,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (session)
     return {
       redirect: {
-        destination: `/${locale}/myforms/`,
+        destination: `/${locale}/forms/`,
         permanent: false,
       },
     };

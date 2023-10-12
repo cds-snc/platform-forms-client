@@ -35,7 +35,7 @@ export const getServerSideProps = requireAuthentication(async (context) => {
     return {
       redirect: {
         //redirect to user landing page
-        destination: `/${locale}/myforms`,
+        destination: `/${locale}/forms`,
         permanent: false,
       },
     };

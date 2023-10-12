@@ -55,10 +55,8 @@ export const ElementDialog = ({
   return (
     <Dialog dialogRef={dialog} handleClose={handleClose}>
       <div className="flex">
-        <div className="w-1/3 pr-2 py-4 overflow-y-auto max-h-[620px]">
-          <h4 className="mb-5 text-2xl font-bold bg-white-default">
-            {t("addElementDialog.questionElement")}
-          </h4>
+        <div className="max-h-[620px] w-1/3 overflow-y-auto bg-slate-50 py-4 pr-2">
+          <h4 className="mb-5 pl-4 text-2xl font-bold">{t("addElementDialog.questionElement")}</h4>
           <ListBox
             ariaLabel={t("addElementDialog.questionElement")}
             options={elementOptions.map(({ id, value, group, className, icon }) => ({
@@ -71,13 +69,13 @@ export const ElementDialog = ({
             handleChange={handleChange}
           />
         </div>
-        <div className="border-l-1 border-black pl-4 py-4 w-2/3 max-h-[620px]">
+        <div className="max-h-[620px] w-2/3 border-l-1 border-slate-500 p-4">
           <ElementDescription
             id={id}
             title={`${value} ${t("addElementDialog.example")}`}
             handleAdd={handleAdd}
           >
-            <div className="mb-5 rounded border-1 border-gray-900 px-4 py-1 -mt-2 inline-block bg-gray-background">
+            <div className="-mt-2 mb-5 inline-block rounded border-1 border-gray-900 bg-gray-background px-4 py-1">
               {t("addElementDialog.exampleElement")}
             </div>
             <Description

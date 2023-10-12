@@ -1,6 +1,7 @@
 import React from "react";
 import { StyledLink } from "@components/globals/";
 import { themes } from "@components/globals";
+import { cn } from "@lib/utils";
 
 type LinkButtonProps = {
   href: string;
@@ -14,7 +15,7 @@ export const Primary = ({ href, children, className, scroll }: LinkButtonProps) 
     <StyledLink
       scroll={scroll}
       href={href}
-      className={`${themes.primary} ${themes.base} ${themes.htmlLink} ${className}`}
+      className={cn(themes.primary, themes.base, themes.htmlLink, className)}
     >
       {children}
     </StyledLink>
@@ -26,7 +27,12 @@ export const Secondary = ({ href, className, children, scroll }: LinkButtonProps
     <StyledLink
       scroll={scroll}
       href={href}
-      className={`text-black-default active:text-black-default visited:text-black-default ${themes.secondary} ${themes.base} no-underline active:shadow-none focus:shadow-none ${className}`}
+      className={cn(
+        "text-black-default visited:text-black-default active:text-black-default no-underline focus:shadow-none active:shadow-none",
+        themes.secondary,
+        themes.base,
+        className
+      )}
     >
       {children}
     </StyledLink>

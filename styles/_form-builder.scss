@@ -68,7 +68,7 @@
     }
     input[type="radio"] + label::before {
       content: "";
-      border: 2px solid;
+      border: 1px solid #64748B; // slate-500
       background: transparent;
       width: 34px;
       height: 34px;
@@ -81,7 +81,7 @@
     }
     input[type="radio"] + label::after {
       content: "";
-      border: 10px solid;
+      border: 10px solid #64748B; // slate-500 
       width: 0;
       height: 0;
       position: absolute;
@@ -96,7 +96,7 @@
     }
     input[type="checkbox"] + label::before {
       content: "";
-      border: 2px solid;
+      border: 2px solid #64748B; // slate-500
       background: transparent;
       width: 34px;
       height: 34px;

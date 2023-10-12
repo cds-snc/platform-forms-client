@@ -114,7 +114,7 @@ const Step1 = ({
                 <Label id="label-username" htmlFor="username" className="required" required>
                   {t("provideUsername.fields.username.label")}
                 </Label>
-                <Description id="username-hint" className="text-p text-black-default">
+                <Description id="username-hint" className="text-black">
                   {t("provideUsername.fields.username.hint")}
                 </Description>
                 <TextInput
@@ -475,7 +475,7 @@ const Step3 = ({
                 <Label id="label-password" htmlFor="password" className="required" required>
                   {t("account.fields.password.label", { ns: "common" })}
                 </Label>
-                <Description className="text-p text-black-default" id="password-hint">
+                <Description className="text-xl text-black-default" id="password-hint">
                   {t("account.fields.password.hint", { ns: "common" })}
                 </Description>
                 <TextInput

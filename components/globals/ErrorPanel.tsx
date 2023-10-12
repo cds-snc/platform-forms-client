@@ -28,7 +28,7 @@ export const ErrorPanel = ({
   // links
   const homeHref =
     status === "authenticated"
-      ? `/${i18n.language}/myforms`
+      ? `/${i18n.language}/forms`
       : `https://articles.alpha.canada.ca/forms-formulaires/${
           String(i18n.language).toLowerCase() === "fr" ? "fr/" : ""
         }`;
@@ -43,7 +43,7 @@ export const ErrorPanel = ({
   return (
     <div className="mx-4 flex h-full items-center justify-center">
       <div className="rounded-2xl border-2 border-solid border-blue bg-gray-soft px-12 py-10 laptop:max-w-2xl">
-        <HeadingTag className="mb-4 border-none" ref={headingRef}>
+        <HeadingTag className="!mb-4 border-none" ref={headingRef}>
           {title || defaultTitle}
         </HeadingTag>
         <div className="mb-10">{children || defaultMessage}</div>

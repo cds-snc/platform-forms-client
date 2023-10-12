@@ -223,6 +223,8 @@ class StrictStaticCSP extends Head {
 */
 
 // Actual main Document being rendered
+const NoIndexMetaTag =
+  process.env.INDEX_SITE === "true" ? null : <meta name="robots" content="noindex,nofollow" />;
 
 class MyDocument extends Document<{ nonce: string }> {
   static async getInitialProps(
@@ -245,6 +247,7 @@ class MyDocument extends Document<{ nonce: string }> {
             src="/static/scripts/form-polyfills.js"
             nonce={this.props.nonce}
           ></script>
+          {NoIndexMetaTag}
           {GoogleTagScript(this.props.nonce)}
         </Head>
         <noscript>

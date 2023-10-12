@@ -20,12 +20,12 @@ export const formatTicketData = ({
 
   const ticket = {
     branding: {
-      subject: "Submit a new branding option for XYZ",
+      subject: "Submit a new branding option / Proposer une nouvelle option d’image de marque",
       type: "Branding Request",
       tags: [hostTag, "Forms_Request_Logo"],
     },
     publishing: {
-      subject: "Publishing permission request for XYZ",
+      subject: "Publishing permission request / Demande d’autorisation de publication",
       type: "Go Live Request",
       tags: [hostTag, "Forms_Request_GoLive"],
     },

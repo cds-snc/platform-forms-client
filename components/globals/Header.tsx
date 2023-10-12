@@ -16,13 +16,6 @@ type HeaderParams = {
   user?: User;
 };
 
-import { Noto_Sans } from "next/font/google";
-
-const nato = Noto_Sans({
-  weight: "600",
-  subsets: ["latin"],
-});
-
 export const Header = ({ context = "default", user }: HeaderParams) => {
   const isFormBuilder = context === "formBuilder";
   const isAdmin = context === "admin";
@@ -33,14 +26,14 @@ export const Header = ({ context = "default", user }: HeaderParams) => {
   const { t, i18n } = useTranslation(["common", "form-builder", "admin-login"]);
 
   return (
-    <header className="mb-12 border-b-1 border-gray-500 px-4 py-2 laptop:px-32 desktop:px-64">
+    <header className="mb-12 border-b-1 border-gray-500 bg-white px-4 py-2 laptop:px-32 desktop:px-64">
       <div className="grid w-full grid-flow-col">
         <div className="flex">
           <Link href="/form-builder" legacyBehavior>
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a
               id="logo"
-              className="mr-5 flex border-r-1 pr-5 font-sans text-h2 font-bold !text-black no-underline !shadow-none focus:bg-white"
+              className="mr-5 flex border-r-1 pr-5 text-3xl font-semibold !text-black no-underline !shadow-none focus:bg-white"
             >
               <div className="inline-block h-[45px] w-[46px] py-2">
                 <SiteLogo title={t("title")} />
@@ -49,14 +42,12 @@ export const Header = ({ context = "default", user }: HeaderParams) => {
           </Link>
 
           {isDefault && (
-            <div
-              className={`mt-3 box-border block h-[40px] px-2 py-1 text-base font-bold ${nato.className}`}
-            >
+            <div className="mt-3 box-border block h-[40px] px-2 py-1 text-xl font-semibold">
               {t("title", { ns: "common" })}
             </div>
           )}
           {isAdmin && (
-            <div className="mt-3 box-border block h-[40px] px-2 py-1 text-base font-bold">
+            <div className="mt-3 box-border block h-[40px] px-2 py-1 text-xl font-semibold">
               {t("title", { ns: "admin-login" })}
             </div>
           )}
@@ -71,7 +62,7 @@ export const Header = ({ context = "default", user }: HeaderParams) => {
             )}
             <li className="mr-2 py-2 text-base tablet:mr-4">
               {ability?.can("view", "FormRecord") && (
-                <Link href={`/${i18n.language}/myforms/drafts`}>
+                <Link href={`/${i18n.language}/forms`}>
                   {t("adminNav.myForms", { ns: "common" })}
                 </Link>
               )}
