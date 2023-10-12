@@ -13,7 +13,7 @@ import { LoggedOutTab, LoggedOutTabName } from "./LoggedOutTab";
 import { InfoCard } from "@components/globals/InfoCard/InfoCard";
 import { isVaultDelivery } from "@formbuilder/util";
 import { StyledLink } from "@components/globals";
-import { classificationOptions, ClassificationOption } from "./ClassificationSelect";
+import { classificationOptions } from "./ClassificationSelect";
 
 export const Publish = () => {
   const { t, i18n } = useTranslation("form-builder");
@@ -49,7 +49,9 @@ export const Publish = () => {
     value: string;
   }
 
-  const securityAttributeText: string = securityOption?.[lang] || securityAttribute;
+  let securityAttributeText: string = securityOption?.[lang] || securityAttribute;
+  // remove (default) from the string
+  securityAttributeText = securityAttributeText.replace(/\(.*?\)/g, "");
 
   const Icon = ({ checked }: { checked: boolean }) => {
     return checked ? (
@@ -154,7 +156,8 @@ export const Publish = () => {
             <li className="my-4">
               <Icon checked />
               <strong>
-                {securityAttributeText} {t("publishYourFormInstructions.text2")},{" "}
+                {securityAttributeText}
+                {t("publishYourFormInstructions.text2")},{" "}
               </strong>
               {isVaultDelivery(getDeliveryOption()) ? (
                 <span>{t("publishYourFormInstructions.vaultOption")}</span>
