@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.5.1](https://github.com/cds-snc/platform-forms-client/compare/v3.5.0...v3.5.1) (2023-10-12)
+
+
+### Miscellaneous Chores
+
+* Add SSC branding ([#2767](https://github.com/cds-snc/platform-forms-client/issues/2767)) ([e650a07](https://github.com/cds-snc/platform-forms-client/commit/e650a07844f668bd35ef9b97e08533f79acda903))
+* add verification files instead of meta tags for Google and Bing search engines inspection tools ([#2765](https://github.com/cds-snc/platform-forms-client/issues/2765)) ([0d1b4aa](https://github.com/cds-snc/platform-forms-client/commit/0d1b4aabfa37a9360e513e038f39970b0b75ef26))
+
 ## [3.5.0](https://github.com/cds-snc/platform-forms-client/compare/v3.4.11...v3.5.0) (2023-10-11)
 
 
