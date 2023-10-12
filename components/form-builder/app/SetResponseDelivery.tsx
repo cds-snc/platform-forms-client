@@ -21,9 +21,9 @@ enum DeliveryOption {
 }
 
 const classificationOptions = [
-  { value: "Unclassified", en: "Unclassified", fr: "Non classifié" },
-  { value: "Protected A", en: "Protected A", fr: "Protégé A" },
-  { value: "Protected B", en: "Protected B", fr: "Protégé B" },
+  { value: "Unclassified", en: "UNCLASSIFIED", fr: "NON CLASSIFIÉ" },
+  { value: "Protected A", en: "PROTECTED A", fr: "PROTÉGÉ A" },
+  { value: "Protected B", en: "PROTECTED B", fr: "PROTÉGÉ B" },
 ] as const;
 
 type Classification = (typeof classificationOptions)[number]["value"];
