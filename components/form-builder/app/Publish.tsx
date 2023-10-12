@@ -13,9 +13,10 @@ import { LoggedOutTab, LoggedOutTabName } from "./LoggedOutTab";
 import { InfoCard } from "@components/globals/InfoCard/InfoCard";
 import { isVaultDelivery } from "@formbuilder/util";
 import { StyledLink } from "@components/globals";
+import { classificationOptions, ClassificationOption } from "./ClassificationSelect";
 
 export const Publish = () => {
-  const { t } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation("form-builder");
   const { status } = useSession();
   const router = useRouter();
   const {
@@ -25,7 +26,7 @@ export const Publish = () => {
   } = useAllowPublish();
 
   const [error, setError] = useState(false);
-  const { i18n } = useTranslation("common");
+  const lang = i18n.language;
 
   const { id, setId, getSchema, getName, getDeliveryOption, securityAttribute } = useTemplateStore(
     (s) => ({
@@ -37,6 +38,18 @@ export const Publish = () => {
       securityAttribute: s.securityAttribute,
     })
   );
+
+  const securityOption: ClassificationOption | undefined = classificationOptions.find(
+    (item) => item.value === securityAttribute
+  );
+
+  // Add an index signature to the ClassificationOption type to allow indexing with a string
+  interface ClassificationOption {
+    [key: string]: string;
+    value: string;
+  }
+
+  const securityAttributeText: string = securityOption?.[lang] || securityAttribute;
 
   const Icon = ({ checked }: { checked: boolean }) => {
     return checked ? (
@@ -141,7 +154,7 @@ export const Publish = () => {
             <li className="my-4">
               <Icon checked />
               <strong>
-                {securityAttribute} {t("publishYourFormInstructions.text2")},{" "}
+                {securityAttributeText} {t("publishYourFormInstructions.text2")},{" "}
               </strong>
               {isVaultDelivery(getDeliveryOption()) ? (
                 <span>{t("publishYourFormInstructions.vaultOption")}</span>

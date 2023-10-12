@@ -2,13 +2,18 @@ import React from "react";
 import { cn } from "@lib/utils";
 import { ProtectedIcon } from "@formbuilder/icons";
 
-const classificationOptions = [
+export const classificationOptions = [
   { value: "Unclassified", en: "UNCLASSIFIED", fr: "NON CLASSIFIÉ" },
   { value: "Protected A", en: "PROTECTED A (default)", fr: "PROTÉGÉ A (par défaut)" },
   { value: "Protected B", en: "PROTECTED B", fr: "PROTÉGÉ B" },
 ] as const;
 
 export type ClassificationType = (typeof classificationOptions)[number]["value"];
+export interface ClassificationOption {
+  value: ClassificationType;
+  en: string;
+  fr: string;
+}
 
 export interface ClassificationSelectProps {
   lang: "en" | "fr";
