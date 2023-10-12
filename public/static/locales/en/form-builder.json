@@ -407,7 +407,7 @@
   "publishYourForm": "Publish your form",
   "publishYourFormInstructions": {
     "text1": "Complete the following items before you publish your",
-    "text2": "form",
+    "text2": "",
     "vaultOption": "responses to be downloaded - ",
     "emailOption": "responses delivered by email - ",
     "change": "change"
