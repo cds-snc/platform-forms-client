@@ -462,7 +462,7 @@
   "settingsResponseHint1": "Les réponses seront envoyées par courriel à cette boîte de réception. Il peut s'agir d'une boîte de réception partagée.",
   "settingsResponseTitle": "Destination de livraison des réponses.",
   "settingsResponseDelivery": {
-    "selectClassification": "Data classification [fr]",
+    "selectClassification": "Classification des données",
     "beforePublishMessage": "Vous pouvez modifier ces paramètres à tout moment avant de publier le formulaire.",
     "protectedBMessage": "Les réponses classifiées PROTÉGÉ B doivent être téléchargées de Formulaires GC.",
     "settingsMessage": "Pour modifier ces paramètres, sélectionnez la classification des données de vos réponses au formulaire.",
