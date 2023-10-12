@@ -661,7 +661,7 @@
     "cancel": "Cancel",
     "classification": "Data classification",
     "branding": "Branding",
-    "responseDelivery": "Set up response delivery",
+    "responseDelivery": "Set up form response delivery",
     "emailOption": {
       "label": "Email the responses to an inbox",
       "note": "-- unavailable for protected B class forms --"
