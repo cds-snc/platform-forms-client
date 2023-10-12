@@ -486,13 +486,13 @@
       "description": "There are two options for getting submitted form responses. Use the chart below to help pick which option best fits your needs.",
       "inbox": {
         "title": "Email to an inbox",
-        "text1": "For up to Protected A forms",
+        "text1": "For up to PROTECTED A forms",
         "text2": "Responses are delivered directly to an inbox in real time",
         "text3": "One email address can receive response emails. This can be a shared inbox."
       },
       "vault": {
         "title": "Download from GC Forms",
-        "text1": "For up to Protected B forms",
+        "text1": "For up to PROTECTED B forms",
         "text2": "Download responses within 30 days"
       }
     }
