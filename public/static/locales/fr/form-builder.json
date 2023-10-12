@@ -662,7 +662,7 @@
     "cancel": "Annuler",
     "classification": "Classification des données",
     "branding": "Image de marque",
-    "responseDelivery": "Set up response delivery [fr]",
+    "responseDelivery": "Configurer la livraison des réponses au formulaire",
     "emailOption": {
       "label": "Recevoir les réponses par courriel",
       "note": "Non disponible pour PROTÉGÉ B"
