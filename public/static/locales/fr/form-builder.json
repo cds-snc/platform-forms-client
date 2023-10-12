@@ -408,9 +408,9 @@
   "publishYourFormInstructions": {
     "text1": "Veuillez franchir les étapes suivantes avant de publier votre formulaire.",
     "text2": "",
-    "vaultOption": "— Réponses à télécharger",
-    "emailOption": "— Réponses envoyées par courriel",
-    "change": "<br>Modifier ces paramètres"
+    "vaultOption": "Réponses à télécharger — ",
+    "emailOption": "Réponses envoyées par courriel — ",
+    "change": "Modifier ces paramètres"
   },
   "question": "Question",
   "questions": "Questions",
