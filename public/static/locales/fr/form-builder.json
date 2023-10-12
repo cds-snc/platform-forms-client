@@ -664,8 +664,8 @@
     "branding": "Branding [fr]",
     "responseDelivery": "Set up response delivery [fr]",
     "emailOption": {
-      "label": "Email the responses to an inbox [fr]",
-      "note": "-- unavailable for protected B class forms -- [fr]"
+      "label": "Recevoir les réponses par courriel",
+      "note": "Non disponible pour PROTÉGÉ B"
     },
     "vaultNote": {
       "text1": "PROTECTED B class forms must be downloaded from GC Forms. [fr]",
