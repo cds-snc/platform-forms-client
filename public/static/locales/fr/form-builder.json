@@ -672,8 +672,8 @@
       "text2": "Email delivery is not available for this classification [fr]"
     },
     "saveNote": {
-      "text1": "Save changes to form settings before closing? [fr]",
-      "text2": "Save or Cancel [fr]"
+      "text1": "Enregistrer les modifications apportées?",
+      "text2": "Enregistrer ou Annuler"
     },
     "more": "More [fr]"
   },
