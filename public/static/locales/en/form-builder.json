@@ -406,7 +406,7 @@
   "publishingRemovesTestResponsesDescription": "Any prior responses will be removed from the system.",
   "publishYourForm": "Publish your form",
   "publishYourFormInstructions": {
-    "text1": "Complete the following items before you publish your",
+    "text1": "Complete the following items before you publish your form.",
     "text2": "",
     "vaultOption": "responses to be downloaded - ",
     "emailOption": "responses delivered by email - ",
