@@ -406,7 +406,7 @@
   "publishingRemovesTestResponsesDescription": "Toutes les réponses antérieures seront supprimées du système.",
   "publishYourForm": "Publier votre formulaire",
   "publishYourFormInstructions": {
-    "text1": "Veuillez franchir les étapes suivantes avant de publier votre formulaire",
+    "text1": "Veuillez franchir les étapes suivantes avant de publier votre formulaire.",
     "text2": "",
     "vaultOption": "— Réponses à télécharger",
     "emailOption": "— Réponses envoyées par courriel",
