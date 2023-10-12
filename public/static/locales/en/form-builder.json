@@ -297,7 +297,7 @@
   "formatH3": "Format Heading 3",
   "formatItalic": "Format italic",
   "formatNumberedList": "Format numbered list",
-  "formConfirmationMessage": "Form confirmation message",
+  "formConfirmationMessage": "Confirmation message",
   "formDeleteResponses": {
     "title": "Confirm responses before deleting form",
     "message1": "This form has been published and is receiving responses. You have responses to download and confirm.",

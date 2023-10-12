@@ -297,7 +297,7 @@
   "formatH3": "Mettre en en-tête niveau 3",
   "formatItalic": "Mettre en italique",
   "formatNumberedList": "Mettre en liste numérotée",
-  "formConfirmationMessage": "Message de confirmation du formulaire",
+  "formConfirmationMessage": "Message de confirmation",
   "formDeleteResponses": {
     "title": "Confirmer les réponses avant de supprimer le formulaire",
     "message1": "Ce formulaire est publié et reçoit des réponses. Vous avez des réponses à télécharger et à confirmer.",
