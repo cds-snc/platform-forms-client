@@ -664,7 +664,7 @@
     "responseDelivery": "Set up form response delivery",
     "emailOption": {
       "label": "Receive responses by email",
-      "note": "-- unavailable for protected B class forms --"
+      "note": "Not available for PROTECTED B"
     },
     "vaultNote": {
       "text1": "PROTECTED B form responses must be downloaded from GC Forms.",
