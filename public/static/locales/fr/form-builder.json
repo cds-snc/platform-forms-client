@@ -410,7 +410,7 @@
     "text2": "",
     "vaultOption": "responses to be downloaded - [fr]",
     "emailOption": "responses delivered by email - [fr]",
-    "change": "change [fr]"
+    "change": "<br>Modifier ces paramètres"
   },
   "question": "Question",
   "questions": "Questions",
