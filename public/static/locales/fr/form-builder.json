@@ -657,7 +657,7 @@
     "loading": "Chargement..."
   },
   "formSettingsModal": {
-    "title": "Form set up [fr]",
+    "title": "Configurer le formulaire",
     "okay": "Enregistrer",
     "cancel": "Annuler",
     "classification": "Classification des données",
