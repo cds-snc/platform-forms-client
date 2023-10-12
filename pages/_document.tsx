@@ -210,13 +210,7 @@ class StrictStaticCSP extends Head {
 const CustomHead = process.env.NODE_ENV === "production" ? StrictStaticCSP : Head;
 
 const NoIndexMetaTag =
-  process.env.INDEX_SITE === "true" ? null : (
-    <>
-      <meta name="robots" content="noindex,nofollow" />
-      {/* The google-site-verification meta tag is used to accelerate the removal of our staging website from Google search results.*/}
-      <meta name="google-site-verification" content="bdK-TPSaVF-l967L-5AN5ZTUPFZz2mUYwBusMM7P6J0" />
-    </>
-  );
+  process.env.INDEX_SITE === "true" ? null : <meta name="robots" content="noindex,nofollow" />;
 
 class MyDocument extends Document {
   render() {
