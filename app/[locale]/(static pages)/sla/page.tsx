@@ -17,7 +17,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const SLA = async ({ params: { locale } }: SLAProps) => {
-  return <RichText>{locale === "fr" ? frContent : enContent}</RichText>;
+  return (
+    <RichText className="w-[100%] tablet:w-[90%] laptop:w-[70%]">
+      {locale === "fr" ? frContent : enContent}
+    </RichText>
+  );
 };
 
 export default SLA;

@@ -13,7 +13,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const TermsAndConditions = async ({ params: { locale } }: { params: { locale: string } }) => {
-  return <RichText>{locale === "fr" ? frContent : enContent}</RichText>;
+  return (
+    <RichText className="w-[100%] tablet:w-[90%] laptop:w-[70%]">
+      {locale === "fr" ? frContent : enContent}
+    </RichText>
+  );
 };
 
 export default TermsAndConditions;
