@@ -171,10 +171,10 @@
     "default": "(par défaut)",
     "heading": "Image de marque",
     "notFound": "Vous ne trouvez pas votre ministère ou votre organisme dans la liste?",
-    "preview": "Prévisualisation",
+    "preview": "Prévisualisation de l'image de marque",
     "select": "Sélectionnez l’image de marque de votre formulaire",
     "submitNew": "Proposer une nouvelle option d’image de marque (ouvre un nouvel onglet)",
-    "text1": "Formulaires GC affiche par défaut la signature du gouvernement du Canada dans l’en-tête de votre formulaire. Si nécessaire, vous pouvez modifier l’image de marque de ce formulaire."
+    "text1": "Formulaires GC affiche par défaut la signature du gouvernement du Canada dans l’en-tête de votre formulaire."
   },
   "cancel": "Annuler  ",
   "characterLimitDescription": "N'utilisez une limite de caractères que lorsqu'il existe une bonne raison de limiter le nombre de caractères que les utilisateur·rice·s peuvent entrer.",
@@ -238,7 +238,7 @@
   },
   "description": "Description ",
   "descriptionDescription": "La description apparaît sous l'étiquette, et avant le champ. Elle est utilisée pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de mise en forme.",
-  "didYouFindThisToolHelpful": "Avez-vous trouvé cet outil pertinent? <a href=\"/fr/form-builder/support/contactus\" target=\"_blank\">Donner votre avis</a>",
+  "didYouFindThisToolHelpful": "Avez-vous trouvé Formulaires GC pertinent comme outil? <a href=\"/fr/form-builder/support/contactus\" target=\"_blank\">Donner votre avis</a>",
   "downloadCSV": "Exporter en fichier CSV",
   "downloadResponsesTable": {
     "card": {
@@ -390,12 +390,12 @@
   "previewDisabledForPublishedForm": "La prévisualisation est désactivée pour les formulaires publiés",
   "privacyNoticeDescription": "<p className=\"mb-4\">Les avis de confidentialité fournissent aux personnes qui remplissent votre formulaire des informations sur la manière dont vous traitez leurs informations personnelles.</p><p className=\"mb-4\">C’est votre responsabilite de bien connaitre les exigences de votre ministère ou organisme en matière de renseignements personnels, y compris la rédaction d'avis de confidentialité conformes aux obligations énoncées à la section 4.2.10 de la <a href=\"https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309\" target=\"_blank\">Directive sur les pratiques en matière de protection de la vie privée</a>.</p><p>Si vous n'êtes pas sûr de la marche à suivre, nous vous recommandons de contacter votre <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-fra.asp\" target=\"_blank\">coordinateur de l'accès à l'information et de la protection de la vie privée</a>.</p>",
   "privacyStatement": "Déclaration de confidentialité ",
-  "provideFeedback": "Donner votre avis",
+  "provideFeedback": "Aidez-nous à nous améliorer",
   "publish": "Publier",
   "published": "Publié",
   "publishedBack": "Retourner aux formulaires",
-  "publishedErrors": "Erreurs du formulaire publiés",
-  "publishedTitle": "Votre formulaire est publié.",
+  "publishedErrors": "Obtenir du soutien",
+  "publishedTitle": "Votre formulaire est publié",
   "publishedViewLinks": "Visualisez et partagez votre formulaire publié à partir de ces liens : ",
   "whatYouNeedToKnow": "Ce qu’il faut savoir",
   "publishingDisablesEditing": "La publication désactive toute modification.",
