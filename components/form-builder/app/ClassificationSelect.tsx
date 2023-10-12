@@ -3,7 +3,7 @@ import { cn } from "@lib/utils";
 import { ProtectedIcon } from "@formbuilder/icons";
 
 const classificationOptions = [
-  { value: "Unclassified", en: "Unclassified", fr: "Non classifié" },
+  { value: "Unclassified", en: "UNCLASSIFIED", fr: "NON CLASSIFIÉ" },
   { value: "Protected A", en: "PROTECTED A (default)", fr: "PROTÉGÉ A (par défaut)" },
   { value: "Protected B", en: "Protected B", fr: "Protégé B" },
 ] as const;
