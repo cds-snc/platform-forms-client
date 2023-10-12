@@ -5,7 +5,7 @@ import { ProtectedIcon } from "@formbuilder/icons";
 const classificationOptions = [
   { value: "Unclassified", en: "UNCLASSIFIED", fr: "NON CLASSIFIÉ" },
   { value: "Protected A", en: "PROTECTED A (default)", fr: "PROTÉGÉ A (par défaut)" },
-  { value: "Protected B", en: "Protected B", fr: "Protégé B" },
+  { value: "Protected B", en: "PROTECTED B", fr: "PROTÉGÉ B" },
 ] as const;
 
 export type ClassificationType = (typeof classificationOptions)[number]["value"];
