@@ -481,7 +481,7 @@
       "hint": "When form responses are submitted in French."
     },
     "responseDeliveryHelp": {
-      "cta": "Help on choosing an option",
+      "cta": "Help choosing an option",
       "title": "Choosing a response delivery option",
       "description": "There are two options for getting submitted form responses. Use the chart below to help pick which option best fits your needs.",
       "inbox": {
