@@ -408,9 +408,9 @@
   "publishYourFormInstructions": {
     "text1": "Complete the following items before you publish your form.",
     "text2": "",
-    "vaultOption": "— Responses to be downloaded ",
-    "emailOption": "— Responses delivered by email ",
-    "change": "<br>Change settings"
+    "vaultOption": "Responses to be downloaded — ",
+    "emailOption": "Responses delivered by email — ",
+    "change": "Change settings"
   },
   "question": "Question",
   "questions": "Questions",
