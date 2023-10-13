@@ -32,7 +32,7 @@ import { get, set } from "idb-keyval";
 
 // TODO: move to an app setting variable
 const MAX_FILE_DOWNLOADS = 20;
-const nativeFs = "showDirectoryPicker" in window;
+const nativeFs = window ?? "showDirectoryPicker" in window;
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
   formId?: string;
