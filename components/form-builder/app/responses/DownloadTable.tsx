@@ -235,6 +235,8 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
     );
 
     try {
+      const dhandle = await (window as any).showDirectoryPicker();
+      await dhandle.requestPermission({ writable: true });
       const downloads = Array.from(tableItems.checkedItems, async ([submissionName]) => {
         if (!submissionName) {
           throw new Error("Error downloading file from Retrieval table. SubmissionId missing.");
@@ -247,14 +249,19 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
           responseType: "blob",
           timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
         }).then(async (response) => {
-          const timer = (ms: number) => new Promise((res) => setTimeout(res, ms));
-          const url = window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement("a");
-          link.href = url;
-          link.setAttribute("download", fileName);
-          document.body.appendChild(link);
-          link.click();
-          await timer(1000);
+          const blob = new Blob([response.data]);
+
+          const fhandle = await dhandle.getFileHandle(fileName, { create: true });
+          const writable = await fhandle.createWritable();
+          await writable.write(blob);
+          await writable.close();
+          // const url = window.URL.createObjectURL(new Blob([response.data]));
+          // const link = document.createElement("a");
+          // link.href = url;
+          // link.setAttribute("download", fileName);
+          // document.body.appendChild(link);
+          // link.click();
+          // link.remove();
         });
       });
 
