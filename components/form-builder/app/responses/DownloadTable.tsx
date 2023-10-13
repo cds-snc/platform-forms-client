@@ -119,9 +119,6 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
             mode: "readwrite",
           })} permission for form ${formId}`
         );
-        if ((await storedDirHandle.queryPermission({ mode: "readwrite" })) !== "granted")
-          await storedDirHandle.requestPermission({ mode: "readwrite" });
-        return storedDirHandle;
       }
 
       const newDirHandle = await showDirectoryPicker({
