@@ -53,6 +53,7 @@
     "cors": "2.8.5",
     "cypress-plugin-tab": "^1.0.5",
     "eslint-plugin-tailwindcss": "^3.12.1",
+    "file-system-access": "^1.0.4",
     "file-type": "17.1.6",
     "formik": "2.2.9",
     "htmlparser2": "8.0.2",

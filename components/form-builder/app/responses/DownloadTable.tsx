@@ -26,6 +26,8 @@ import {
 } from "./DownloadTableReducer";
 import { getDaysPassed } from "@lib/clientHelpers";
 import { Alert } from "@components/globals";
+import { showDirectoryPicker } from "file-system-access";
+import { CustomDirectoryPickerOptions } from "file-system-access/lib/showDirectoryPicker";
 
 // TODO: move to an app setting variable
 const MAX_FILE_DOWNLOADS = 20;
@@ -108,6 +110,12 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
       })
     );
 
+    const dirHandle = await showDirectoryPicker({
+      _preferPolyfill: false,
+      id: formId,
+      mode: "readwrite",
+    } as CustomDirectoryPickerOptions);
+
     try {
       const downloads = Array.from(tableItems.checkedItems, async ([submissionName]) => {
         if (!submissionName) {
@@ -120,13 +128,11 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
           method: "GET",
           responseType: "blob",
           timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-        }).then((response) => {
-          const url = window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement("a");
-          link.href = url;
-          link.setAttribute("download", fileName);
-          document.body.appendChild(link);
-          link.click();
+        }).then(async (response) => {
+          const fileHandle = await dirHandle.getFileHandle(fileName, { create: true });
+          const writable = await fileHandle.createWritable();
+          await writable.write(response.data);
+          await writable.close();
         });
       });
 
