@@ -7,10 +7,8 @@ export const Settings = () => {
   const { t } = useTranslation("form-builder");
   const router = useRouter();
   const { downloadconfirm } = router.query;
-
   return (
     <>
-      <h1 className="visually-hidden">{t("formSettings")}</h1>
       <div id="download-form" className="mb-6">
         <h2>{t("formDownload.title")}</h2>
         <p className="mb-4" id="download-hint">
