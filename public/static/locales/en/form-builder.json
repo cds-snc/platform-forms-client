@@ -406,8 +406,11 @@
   "publishingRemovesTestResponsesDescription": "Any prior responses will be removed from the system.",
   "publishYourForm": "Publish your form",
   "publishYourFormInstructions": {
-    "text1": "Complete the following items before you publish your",
-    "text2": "form:"
+    "text1": "Complete the following items before you publish your form.",
+    "text2": "",
+    "vaultOption": "Responses to be downloaded — ",
+    "emailOption": "Responses delivered by email — ",
+    "change": "Change settings"
   },
   "question": "Question",
   "questions": "Questions",
@@ -458,17 +461,17 @@
   "settingsResponseEmailTitle": "Email address",
   "settingsResponseHint1": "Submitted responses will be emailed to this inbox. This can be a shared inbox.",
   "settingsResponseDelivery": {
-    "selectClassification": "Select the data classification of your form responses",
+    "selectClassification": "Data classification",
     "beforePublishMessage": "You can change these settings anytime before publishing.",
     "protectedBMessage": "PROTECTED B responses must be downloaded from GC Forms.",
     "settingsMessage": "To change these settings, select the data classification of your form responses.",
-    "title": "Select a response delivery option",
+    "title": "Response delivery option ",
     "vaultOption": "Download responses from GC Forms",
     "vaultOptionHint": {
       "text1": "Submitted responses will appear on the",
       "text2": "Responses page"
     },
-    "emailOption": "Receive the responses by email",
+    "emailOption": "Receive responses by email",
     "saveButton": "Save changes",
     "savedSuccessMessage": "Your changes have been saved.",
     "savedErrorMessage": "There was an error saving your changes. Please try again.",
@@ -651,5 +654,32 @@
       "body2": "unconfirmed responses 35 days overdue. Confirm the receipt of all overdue downloaded responses before saving new ones."
     }
   },
-  "loading": "Loading..."
+  "loading": "Loading...",
+  "formSettingsModal": {
+    "title": "Form set-up",
+    "okay": "Save",
+    "cancel": "Cancel",
+    "classification": "Data classification",
+    "branding": "Branding",
+    "responseDelivery": "Set up form response delivery",
+    "emailOption": {
+      "label": "Receive responses by email",
+      "note": "Not available for PROTECTED B"
+    },
+    "vaultNote": {
+      "text1": "PROTECTED B form responses must be downloaded from GC Forms.",
+      "text2": "Email delivery is not available for this data classification"
+    },
+    "saveNote": {
+      "text1": "Save changes before closing?",
+      "text2": "Save or Cancel"
+    },
+    "more": "More"
+  },
+  "classificationSelect": {
+    "label": "Select the data classification of your form responses"
+  },
+  "brandingSelect": {
+    "label": "Select branding for your form"
+  }
 }

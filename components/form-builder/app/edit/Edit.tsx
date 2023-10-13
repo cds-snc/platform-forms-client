@@ -10,6 +10,7 @@ import { RichTextLocked } from "./elements";
 import { ExpandingInput } from "../shared";
 import { useTemplateStore } from "../../store";
 import { getQuestionNumber, sortByLayout } from "../../util";
+import { Panel } from "../settings-modal/panel";
 
 export const Edit = () => {
   const { t } = useTranslation("form-builder");
@@ -83,6 +84,7 @@ export const Edit = () => {
   return (
     <>
       <h1 className="visually-hidden">{t("edit")}</h1>
+      <Panel />
       <RichTextLocked
         className="rounded-t-lg"
         beforeContent={
