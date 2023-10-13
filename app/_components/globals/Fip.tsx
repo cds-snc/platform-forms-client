@@ -1,31 +1,31 @@
 "use client";
+import React from "react";
 import { SessionProvider } from "next-auth/react";
-import LanguageToggle from "./LanguageToggle";
-import Menu from "@appComponents/auth/LoginMenu";
 import { PublicFormRecord } from "@lib/types";
 import Brand from "./Brand";
+import { cn } from "@lib/utils";
 
 const Fip = ({
   formRecord,
-  showLogin = false,
-  showLanguageToggle = true,
+  children,
+  className,
 }: {
   formRecord?: PublicFormRecord;
-  showLogin?: boolean;
-  showLanguageToggle?: boolean;
+  children?: React.ReactNode;
+  className?: string;
 }) => {
   const brand = formRecord?.form ? formRecord.form.brand : null;
 
   return (
     <SessionProvider>
-      <div data-testid="fip" className="gc-fip">
+      <div
+        data-testid="fip"
+        className={cn("gc-fip", "my-20 py-0 px-[4rem] laptop:px-32", className)}
+      >
         <div className="canada-flag">
           <Brand brand={brand} />
         </div>
-        <div className="inline-flex gap-4">
-          {showLogin && <Menu />}
-          {showLanguageToggle && <LanguageToggle />}
-        </div>
+        <div className="inline-flex gap-4">{children}</div>
       </div>
     </SessionProvider>
   );

@@ -8,12 +8,6 @@ import { themes } from "@components/globals";
 
 import { SiteLogo } from "@formbuilder/icons";
 
-const css = `
-    body {
-       background-color: #F9FAFB;
-    }
-`;
-
 const Home = () => {
   // With the automatic language detection we can hopefully remove this page in the
   // near future
@@ -57,7 +51,7 @@ const Home = () => {
 
   return (
     <>
-      <header>{clientRender && <Fip showLanguageToggle={false} showLogin={false} />}</header>
+      <header>{clientRender && <Fip className="my-0 py-6" />}</header>
       <div className="flex flex-col h-full">
         <div id="page-container">
           <main id="content">
