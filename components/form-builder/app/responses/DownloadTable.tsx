@@ -28,6 +28,7 @@ import { getDaysPassed } from "@lib/clientHelpers";
 import { Alert } from "@components/globals";
 import { showDirectoryPicker } from "file-system-access";
 import { CustomDirectoryPickerOptions } from "file-system-access/lib/showDirectoryPicker";
+import { get, set } from "idb-keyval";
 
 // TODO: move to an app setting variable
 const MAX_FILE_DOWNLOADS = 20;
@@ -110,11 +111,26 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
       })
     );
 
-    const dirHandle = await showDirectoryPicker({
-      _preferPolyfill: false,
-      id: formId,
-      mode: "readwrite",
-    } as CustomDirectoryPickerOptions);
+    const getDirHandle = async (): Promise<FileSystemDirectoryHandle> => {
+      const storedDirHandle = await get(`dirHandle-${formId}`);
+      if (storedDirHandle) {
+        if ((await storedDirHandle.queryPermission({ mode: "readwrite" })) !== "granted")
+          await storedDirHandle.requestPermission({ mode: "readwrite" });
+        return storedDirHandle;
+      }
+
+      const newDirHandle = await showDirectoryPicker({
+        _preferPolyfill: false,
+        id: formId,
+        mode: "readwrite",
+      } as CustomDirectoryPickerOptions);
+
+      await set(`dirHandle-${formId}`, newDirHandle);
+
+      return newDirHandle;
+    };
+
+    const dirHandle = await getDirHandle();
 
     try {
       const downloads = Array.from(tableItems.checkedItems, async ([submissionName]) => {

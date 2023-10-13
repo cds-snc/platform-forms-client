@@ -58,6 +58,7 @@
     "formik": "2.2.9",
     "htmlparser2": "8.0.2",
     "i18next": "22.4.15",
+    "idb-keyval": "^6.2.1",
     "immer": "10.0.2",
     "ioredis": "5.2.5",
     "json2md": "1.13.0",
