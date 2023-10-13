@@ -148,6 +148,9 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
           timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
         }).then(async (response) => {
           const fileHandle = await dirHandle.getFileHandle(fileName, { create: true });
+          const permission = await fileHandle.queryPermission({ mode: "readwrite" });
+          if (permission !== "granted") await fileHandle.requestPermission({ mode: "readwrite" });
+
           const writable = await fileHandle.createWritable();
           await writable.write(response.data);
           await writable.close();
