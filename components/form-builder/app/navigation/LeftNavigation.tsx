@@ -45,6 +45,12 @@ export const LeftNavigation = () => {
             {status === "authenticated" ? t("test") : t("pagePreview")}
           </NavLink>
         </li>
+        <li>
+          <NavLink {...linkHelper(`/settings/${id}`, activePathname)} onClick={saveForm}>
+            <GearIcon className={iconClassname} />
+            {t("pageSettings")}
+          </NavLink>
+        </li>
         {!isPublished && (
           <li>
             <NavLink {...linkHelper("publish", activePathname)} onClick={saveForm}>
@@ -65,7 +71,7 @@ export const LeftNavigation = () => {
             {t("pageSettings")}
           </NavLink>
         </li>
-        {!isPublished && (
+        {!isPublished && activePathname === "/form-builder/edit" && (
           <li>
             <SaveButton />
           </li>

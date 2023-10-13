@@ -54,6 +54,7 @@ const Page: NextPageWithLayout<AssignUsersToTemplateProps> = ({
         <title>{title}</title>
       </Head>
       <div className="max-w-4xl">
+        <h1>{t("gcFormsSettings")}</h1>
         <SettingsNavigation />
         {canManageOwnership && (
           <FormOwnership
