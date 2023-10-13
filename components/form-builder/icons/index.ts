@@ -65,3 +65,5 @@ export { FlagIcon } from "./FlagIcon";
 export { ManageAccountsIcon } from "./ManageAccountsIcon";
 export { SettingsApplicationsIcon } from "./SettingsApplicationsIcon";
 export { EditIcon } from "./EditIcon";
+export { ProtectedIcon } from "./ProtectedIcon";
+export { BrandingIcon } from "./BrandingIcon";

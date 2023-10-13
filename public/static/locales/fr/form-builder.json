@@ -406,8 +406,11 @@
   "publishingRemovesTestResponsesDescription": "Toutes les réponses antérieures seront supprimées du système.",
   "publishYourForm": "Publier votre formulaire",
   "publishYourFormInstructions": {
-    "text1": "Veuillez franchir les étapes suivantes avant de publier votre formulaire",
-    "text2": " :"
+    "text1": "Veuillez franchir les étapes suivantes avant de publier votre formulaire.",
+    "text2": "",
+    "vaultOption": "Réponses à télécharger — ",
+    "emailOption": "Réponses envoyées par courriel — ",
+    "change": "Modifier ces paramètres"
   },
   "question": "Question",
   "questions": "Questions",
@@ -459,11 +462,11 @@
   "settingsResponseHint1": "Les réponses seront envoyées par courriel à cette boîte de réception. Il peut s'agir d'une boîte de réception partagée.",
   "settingsResponseTitle": "Destination de livraison des réponses.",
   "settingsResponseDelivery": {
-    "selectClassification": "Sélectionnez la classification des données des réponses de votre formulaire",
+    "selectClassification": "Classification des données",
     "beforePublishMessage": "Vous pouvez modifier ces paramètres à tout moment avant de publier le formulaire.",
     "protectedBMessage": "Les réponses classifiées PROTÉGÉ B doivent être téléchargées de Formulaires GC.",
     "settingsMessage": "Pour modifier ces paramètres, sélectionnez la classification des données de vos réponses au formulaire.",
-    "title": "Sélectionnez une option de livraison des réponses",
+    "title": "Option de livraison des réponses",
     "vaultOption": "Télécharger les réponses de Formulaires GC",
     "vaultOptionHint": {
       "text1": " Les réponses soumises apparaîtront sur",
@@ -652,5 +655,32 @@
       "body2": "réponses non confirmées avec 35 jours de retard ou plus. Confirmez la réception de toute réponse téléchargée en retard avant d'en enregistrer de nouvelles."
     },
     "loading": "Chargement..."
+  },
+  "formSettingsModal": {
+    "title": "Configurer le formulaire",
+    "okay": "Enregistrer",
+    "cancel": "Annuler",
+    "classification": "Classification des données",
+    "branding": "Image de marque",
+    "responseDelivery": "Configurer la livraison des réponses au formulaire",
+    "emailOption": {
+      "label": "Recevoir les réponses par courriel",
+      "note": "Non disponible pour PROTÉGÉ B"
+    },
+    "vaultNote": {
+      "text1": "Les réponses aux formulaires PROTÉGÉ B doivent être téléchargées de Formulaires GC",
+      "text2": "La livraison des réponses n'est pas disponible pour cette classification de données"
+    },
+    "saveNote": {
+      "text1": "Enregistrer les modifications apportées?",
+      "text2": "Enregistrer ou Annuler"
+    },
+    "more": "Plus"
+  },
+  "classificationSelect": {
+    "label": "Sélectionnez la classification des données des réponses de votre formulaire"
+  },
+  "brandingSelect": {
+    "label": "Sélectionnez l'image de marque de votre formulaire"
   }
 }
