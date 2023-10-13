@@ -114,6 +114,11 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
     const getDirHandle = async (): Promise<FileSystemDirectoryHandle> => {
       const storedDirHandle = await get(`dirHandle-${formId}`);
       if (storedDirHandle) {
+        logMessage.info(
+          `Using stored directory handle with ${await storedDirHandle.queryPermission({
+            mode: "readwrite",
+          })} permission for form ${formId}`
+        );
         if ((await storedDirHandle.queryPermission({ mode: "readwrite" })) !== "granted")
           await storedDirHandle.requestPermission({ mode: "readwrite" });
         return storedDirHandle;
