@@ -32,7 +32,7 @@ import { get, set } from "idb-keyval";
 
 // TODO: move to an app setting variable
 const MAX_FILE_DOWNLOADS = 20;
-
+const nativeFs = "showDirectoryPicker" in window;
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
   formId?: string;
@@ -112,12 +112,13 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
     );
 
     const getDirHandle = async (): Promise<FileSystemDirectoryHandle> => {
+      // Todo: move this logic into a Context Provider to reduce permission requests
       const storedDirHandle = await get(`dirHandle-${formId}`);
       if (storedDirHandle) {
         logMessage.info(
-          `Using stored directory handle with ${await storedDirHandle.queryPermission({
-            mode: "readwrite",
-          })} permission for form ${formId}`
+          `Using stored directory handle ${storedDirHandle} ${
+            nativeFs && `with permissions ${storedDirHandle.queryPermission({ mode: "readwrite" })}`
+          }`
         );
       }
 
