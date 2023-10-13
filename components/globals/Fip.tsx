@@ -9,8 +9,6 @@ const Fip = ({
   className,
 }: {
   formRecord?: PublicFormRecord;
-  showLogin?: boolean;
-  showLanguageToggle?: boolean;
   children?: React.ReactNode;
   className?: string;
 }) => {
