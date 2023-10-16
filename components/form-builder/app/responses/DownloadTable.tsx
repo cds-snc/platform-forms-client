@@ -28,7 +28,6 @@ import { getDaysPassed } from "@lib/clientHelpers";
 import { Alert } from "@components/globals";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { ChevronDown } from "@components/form-builder/icons";
-import { showDirectoryPicker } from "file-system-access";
 
 // TODO: move to an app setting variable
 const MAX_FILE_DOWNLOADS = 100;
