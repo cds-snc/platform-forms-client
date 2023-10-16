@@ -239,32 +239,41 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
       // await dhandle.requestPermission({ writable: true });
       // console.log(tableItems.checkedItems);
       // Array.from(tableItems.checkedItems, async ([submissionName]) => {
+      const interval = 1000;
+      let promise = Promise.resolve();
       tableItems.checkedItems.forEach((value, submissionName) => {
         if (!submissionName) {
           throw new Error("Error downloading file from Retrieval table. SubmissionId missing.");
         }
-        const url = `/api/id/${formId}/${submissionName}/download`;
-        const fileName = `${submissionName}.html`;
 
-        axios({
-          url,
-          method: "GET",
-          responseType: "blob",
-          timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-        }).then(async (response) => {
-          const linkurl = window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement("a");
-          link.href = linkurl;
-          link.setAttribute("download", fileName);
-          document.body.appendChild(link);
+        promise = promise.then(() => {
+          return new Promise(function (resolve) {
+            const url = `/api/id/${formId}/${submissionName}/download`;
+            const fileName = `${submissionName}.html`;
 
-          link.click();
-          link.remove();
+            axios({
+              url,
+              method: "GET",
+              responseType: "blob",
+              timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+            }).then(async (response) => {
+              const linkurl = window.URL.createObjectURL(new Blob([response.data]));
+              const link = document.createElement("a");
+              link.href = linkurl;
+              link.setAttribute("download", fileName);
+              document.body.appendChild(link);
+
+              link.click();
+              link.remove();
+            });
+            setTimeout(resolve, interval);
+          });
         });
       });
-
-      router.replace(router.asPath, undefined, { scroll: false });
-      toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
+      promise.then(function () {
+        router.replace(router.asPath, undefined, { scroll: false });
+        toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
+      });
 
       // await Promise.all(downloads).then(() => {
       //   // TODO: only occurs download more than one file at a time. Here is the issue to track
