@@ -28,6 +28,7 @@ import { getDaysPassed } from "@lib/clientHelpers";
 import { Alert } from "@components/globals";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { ChevronDown } from "@components/form-builder/icons";
+import { showDirectoryPicker } from "file-system-access";
 
 // TODO: move to an app setting variable
 const MAX_FILE_DOWNLOADS = 100;
@@ -235,45 +236,46 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
     );
 
     try {
-      const dhandle = await (window as any).showDirectoryPicker();
-      await dhandle.requestPermission({ writable: true });
-      const downloads = Array.from(tableItems.checkedItems, async ([submissionName]) => {
+      // const dhandle = await showDirectoryPicker();
+      // await dhandle.requestPermission({ writable: true });
+      // console.log(tableItems.checkedItems);
+      // Array.from(tableItems.checkedItems, async ([submissionName]) => {
+      tableItems.checkedItems.forEach((value, submissionName) => {
         if (!submissionName) {
           throw new Error("Error downloading file from Retrieval table. SubmissionId missing.");
         }
         const url = `/api/id/${formId}/${submissionName}/download`;
         const fileName = `${submissionName}.html`;
-        return axios({
+
+        axios({
           url,
           method: "GET",
           responseType: "blob",
           timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
         }).then(async (response) => {
-          const blob = new Blob([response.data]);
+          const linkurl = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement("a");
+          link.href = linkurl;
+          link.setAttribute("download", fileName);
+          document.body.appendChild(link);
 
-          const fhandle = await dhandle.getFileHandle(fileName, { create: true });
-          const writable = await fhandle.createWritable();
-          await writable.write(blob);
-          await writable.close();
-          // const url = window.URL.createObjectURL(new Blob([response.data]));
-          // const link = document.createElement("a");
-          // link.href = url;
-          // link.setAttribute("download", fileName);
-          // document.body.appendChild(link);
-          // link.click();
-          // link.remove();
+          link.click();
+          link.remove();
         });
       });
 
-      await Promise.all(downloads).then(() => {
-        // TODO: only occurs download more than one file at a time. Here is the issue to track
-        // https://github.com/cds-snc/platform-forms-client/issues/1744
-        setTimeout(() => {
-          // Refreshes getServerSideProps data without a full page reload
-          router.replace(router.asPath, undefined, { scroll: false });
-          toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
-        }, 1000); // Increasing to 1 second to allow more time for prod - temp work around
-      });
+      router.replace(router.asPath, undefined, { scroll: false });
+      toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
+
+      // await Promise.all(downloads).then(() => {
+      //   // TODO: only occurs download more than one file at a time. Here is the issue to track
+      //   // https://github.com/cds-snc/platform-forms-client/issues/1744
+      //   setTimeout(() => {
+      //     // Refreshes getServerSideProps data without a full page reload
+      //     router.replace(router.asPath, undefined, { scroll: false });
+      //     toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
+      //   }, 1000); // Increasing to 1 second to allow more time for prod - temp work around
+      // });
     } catch (err) {
       logMessage.error(err as Error);
       setErrors({ ...errors, downloadError: true });
