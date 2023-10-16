@@ -238,7 +238,7 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
       const interval = 200;
       let promise = Promise.resolve();
 
-      Array.from(tableItems.checkedItems, async ([submissionName]) => {
+      Array.from(tableItems.checkedItems, ([submissionName]) => {
         if (!submissionName) {
           throw new Error("Error downloading file from Retrieval table. SubmissionId missing.");
         }
