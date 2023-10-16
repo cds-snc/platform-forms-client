@@ -235,13 +235,10 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
     );
 
     try {
-      // const dhandle = await showDirectoryPicker();
-      // await dhandle.requestPermission({ writable: true });
-      // console.log(tableItems.checkedItems);
-      // Array.from(tableItems.checkedItems, async ([submissionName]) => {
       const interval = 200;
       let promise = Promise.resolve();
-      tableItems.checkedItems.forEach((value, submissionName) => {
+
+      Array.from(tableItems.checkedItems, async ([submissionName]) => {
         if (!submissionName) {
           throw new Error("Error downloading file from Retrieval table. SubmissionId missing.");
         }
@@ -270,20 +267,11 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
           });
         });
       });
+
       promise.then(function () {
         router.replace(router.asPath, undefined, { scroll: false });
         toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
       });
-
-      // await Promise.all(downloads).then(() => {
-      //   // TODO: only occurs download more than one file at a time. Here is the issue to track
-      //   // https://github.com/cds-snc/platform-forms-client/issues/1744
-      //   setTimeout(() => {
-      //     // Refreshes getServerSideProps data without a full page reload
-      //     router.replace(router.asPath, undefined, { scroll: false });
-      //     toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
-      //   }, 1000); // Increasing to 1 second to allow more time for prod - temp work around
-      // });
     } catch (err) {
       logMessage.error(err as Error);
       setErrors({ ...errors, downloadError: true });
