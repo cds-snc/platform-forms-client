@@ -19,6 +19,7 @@ export enum AuditLogEvent {
   IdentifyProblemResponse = "IdentifyProblemResponse",
   ListResponses = "ListResponses",
   DeleteResponses = "DeleteResponses",
+  RetrieveResponses = "RetrieveResponses",
   // User Events
   UserRegistration = "UserRegistration",
   UserSignIn = "UserSignIn",
