@@ -54,6 +54,7 @@ const Page: NextPageWithLayout<AssignUsersToTemplateProps> = ({
         <title>{title}</title>
       </Head>
       <div className="max-w-4xl">
+        <h1>{t("gcFormsSettings")}</h1>
         <SettingsNavigation />
         {canManageOwnership && (
           <FormOwnership
@@ -84,12 +85,26 @@ const redirect = (locale: string | undefined) => {
 
 export const getServerSideProps = requireAuthentication(
   async ({ user: { ability }, locale, params }) => {
-    let adminProps;
+    let adminProps = {};
 
     if (
       checkPrivilegesAsBoolean(ability, [
-        { action: "update", subject: "FormRecord" },
-        { action: "update", subject: "User" },
+        {
+          action: "view",
+          subject: {
+            type: "User",
+            // Empty object to force the ability to check for any user
+            object: {},
+          },
+        },
+        {
+          action: "view",
+          subject: {
+            type: "FormRecord",
+            // We want to make sure the user has the permission to view all templates
+            object: {},
+          },
+        },
       ])
     ) {
       const formID = params?.formId;

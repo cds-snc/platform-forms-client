@@ -12,9 +12,11 @@ import Link from "next/link";
 import { LoggedOutTab, LoggedOutTabName } from "./LoggedOutTab";
 import { InfoCard } from "@components/globals/InfoCard/InfoCard";
 import { isVaultDelivery } from "@formbuilder/util";
+import { StyledLink } from "@components/globals";
+import { classificationOptions } from "./ClassificationSelect";
 
 export const Publish = () => {
-  const { t } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation("form-builder");
   const { status } = useSession();
   const router = useRouter();
   const {
@@ -24,7 +26,7 @@ export const Publish = () => {
   } = useAllowPublish();
 
   const [error, setError] = useState(false);
-  const { i18n } = useTranslation("common");
+  const lang = i18n.language;
 
   const { id, setId, getSchema, getName, getDeliveryOption, securityAttribute } = useTemplateStore(
     (s) => ({
@@ -36,6 +38,20 @@ export const Publish = () => {
       securityAttribute: s.securityAttribute,
     })
   );
+
+  const securityOption: ClassificationOption | undefined = classificationOptions.find(
+    (item) => item.value === securityAttribute
+  );
+
+  // Add an index signature to the ClassificationOption type to allow indexing with a string
+  interface ClassificationOption {
+    [key: string]: string;
+    value: string;
+  }
+
+  let securityAttributeText: string = securityOption?.[lang] || securityAttribute;
+  // remove (default) from the string
+  securityAttributeText = securityAttributeText.replace(/\(.*?\)/g, "");
 
   const Icon = ({ checked }: { checked: boolean }) => {
     return checked ? (
@@ -94,9 +110,7 @@ export const Publish = () => {
       <div className="flex flex-wrap justify-between laptop:flex-nowrap">
         <div className="mx-5 min-w-fit grow rounded-lg border-1 p-5">
           <h1 className="mb-2 border-0">{t("publishYourForm")}</h1>
-          <p className="mb-0 text-lg">{`${t(
-            "publishYourFormInstructions.text1"
-          )} ${securityAttribute} ${t("publishYourFormInstructions.text2")}`}</p>
+          <p className="mb-0 text-lg">{t("publishYourFormInstructions.text1")}</p>
           {!userCanPublish && (
             <Alert.Info className="my-5">
               <Alert.IconWrapper className="mr-7">
@@ -137,6 +151,22 @@ export const Publish = () => {
             <li className="my-4">
               <Icon checked={translate} />
               <Link href={`/${i18n.language}/form-builder/edit/translate`}>{t("translate")}</Link>
+            </li>
+
+            <li className="my-4">
+              <Icon checked />
+              <strong>
+                {securityAttributeText}
+                {t("publishYourFormInstructions.text2")},{" "}
+              </strong>
+              {isVaultDelivery(getDeliveryOption()) ? (
+                <span>{t("publishYourFormInstructions.vaultOption")}</span>
+              ) : (
+                <span>{t("publishYourFormInstructions.emailOption")}</span>
+              )}
+              <StyledLink href={`/${i18n.language}/form-builder/settings`}>
+                {t("publishYourFormInstructions.change")}
+              </StyledLink>
             </li>
           </ul>
 

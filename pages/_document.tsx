@@ -212,9 +212,9 @@ const CustomHead = process.env.NODE_ENV === "production" ? StrictStaticCSP : Hea
 const NoIndexMetaTag =
   process.env.INDEX_SITE === "true" ? null : (
     <>
+      {/* The msvalidate.01 meta tag is used to verify ownership of the website for Bing in order to get the staging URL out of search results.*/}
+      <meta name="msvalidate.01" content="90CA81AA34C5B1B1F53A42906A93992A" />
       <meta name="robots" content="noindex,nofollow" />
-      {/* The google-site-verification meta tag is used to accelerate the removal of our staging website from Google search results.*/}
-      <meta name="google-site-verification" content="bdK-TPSaVF-l967L-5AN5ZTUPFZz2mUYwBusMM7P6J0" />
     </>
   );
 

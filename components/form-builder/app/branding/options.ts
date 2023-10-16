@@ -89,4 +89,13 @@ export const options = [
     logoTitleEn: "Royal Canadian Mounted Police",
     logoTitleFr: "Gendarmerie royale du Canada",
   },
+  {
+    name: "ssc",
+    urlEn: "https://plus.ssc-spc.gc.ca/en",
+    urlFr: "https://plus.ssc-spc.gc.ca/fr",
+    logoEn: "/img/branding/ssc-en.svg",
+    logoFr: "/img/branding/ssc-fr.svg",
+    logoTitleEn: "Shared Services Canada",
+    logoTitleFr: "Services partagés Canada",
+  },
 ];

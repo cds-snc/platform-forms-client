@@ -5,6 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.5.1](https://github.com/cds-snc/platform-forms-client/compare/v3.5.0...v3.5.1) (2023-10-12)
+
+
+### Miscellaneous Chores
+
+* Add SSC branding ([#2767](https://github.com/cds-snc/platform-forms-client/issues/2767)) ([e650a07](https://github.com/cds-snc/platform-forms-client/commit/e650a07844f668bd35ef9b97e08533f79acda903))
+* add verification files instead of meta tags for Google and Bing search engines inspection tools ([#2765](https://github.com/cds-snc/platform-forms-client/issues/2765)) ([0d1b4aa](https://github.com/cds-snc/platform-forms-client/commit/0d1b4aabfa37a9360e513e038f39970b0b75ef26))
+
+## [3.5.0](https://github.com/cds-snc/platform-forms-client/compare/v3.4.11...v3.5.0) (2023-10-11)
+
+
+### Features
+
+* add noindex, nofollow instructions for search engine robots ([#2746](https://github.com/cds-snc/platform-forms-client/issues/2746)) ([e396be1](https://github.com/cds-snc/platform-forms-client/commit/e396be1ad9f70780f79f44f372cea1e6c5f52053))
+
+
+### Bug Fixes
+
+* add noindex meta tag in Staging on all pages including root index ([#2750](https://github.com/cds-snc/platform-forms-client/issues/2750)) ([4cfd5af](https://github.com/cds-snc/platform-forms-client/commit/4cfd5afe57e6af3c6e28a39250c10fd81da200bb))
+* all required message ([#2764](https://github.com/cds-snc/platform-forms-client/issues/2764)) ([52c6b19](https://github.com/cds-snc/platform-forms-client/commit/52c6b19ab2246daf9f8e0ec38c7fc3bbfdf398d0))
+* Ensure no indexing all sites except production ([#2757](https://github.com/cds-snc/platform-forms-client/issues/2757)) ([fbaa351](https://github.com/cds-snc/platform-forms-client/commit/fbaa351b2c8f398e4265e577aa5b175f98747c84))
+
+
+### Miscellaneous Chores
+
+* add google site verification meta tag ([#2762](https://github.com/cds-snc/platform-forms-client/issues/2762)) ([d1562ef](https://github.com/cds-snc/platform-forms-client/commit/d1562ef3e0dc1ce7d8be31c53a79519bb315e0b6))
+* Add tooltip component ([#2755](https://github.com/cds-snc/platform-forms-client/issues/2755)) ([b24cfc5](https://github.com/cds-snc/platform-forms-client/commit/b24cfc59d32d252c08eecf847ecbc1cf5b06066f))
+* ensure white background for preview screen ([#2761](https://github.com/cds-snc/platform-forms-client/issues/2761)) ([8ea6d4a](https://github.com/cds-snc/platform-forms-client/commit/8ea6d4aa039664c2ea2398747dd8f454bd8ea153))
+* Remove section-header default styling on h4 and add margin ([#2749](https://github.com/cds-snc/platform-forms-client/issues/2749)) ([561b0ca](https://github.com/cds-snc/platform-forms-client/commit/561b0cab56a461b9d0baef5862dd4cdf0945f767))
+* text sizing updates ([#2732](https://github.com/cds-snc/platform-forms-client/issues/2732)) ([cf0bcee](https://github.com/cds-snc/platform-forms-client/commit/cf0bceefd19e4771169f6d5834d6aa14f5e39143))
+
 ## [3.4.11](https://github.com/cds-snc/platform-forms-client/compare/v3.4.10...v3.4.11) (2023-09-28)
 
 

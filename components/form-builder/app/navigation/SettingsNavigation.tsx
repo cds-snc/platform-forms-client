@@ -16,7 +16,7 @@ export const SettingsNavigation = () => {
   return (
     <div className="relative flex">
       <div className="flex">
-        <nav className="mb-8 flex flex-wrap" aria-label={t("navLabelEditor")}>
+        <nav className="mb-6 flex flex-wrap" aria-label={t("navLabelEditor")}>
           <SubNavLink href="/form-builder/settings">
             <span className="text-sm laptop:text-base">
               <EmailIcon className="mr-2 inline-block laptop:mt-[-2px]" />
