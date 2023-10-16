@@ -239,7 +239,7 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
       // await dhandle.requestPermission({ writable: true });
       // console.log(tableItems.checkedItems);
       // Array.from(tableItems.checkedItems, async ([submissionName]) => {
-      const interval = 125;
+      const interval = 150;
       let promise = Promise.resolve();
       tableItems.checkedItems.forEach((value, submissionName) => {
         if (!submissionName) {
