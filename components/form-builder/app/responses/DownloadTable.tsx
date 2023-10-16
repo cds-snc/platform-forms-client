@@ -114,7 +114,7 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
           throw new Error("Error downloading file from Retrieval table. SubmissionId missing.");
         }
         const url = `/api/id/${formId}/${submissionName}/download`;
-        const fileName = `${submissionName}.html`;
+        const fileName = `${submissionName}.zip`;
         return axios({
           url,
           method: "GET",

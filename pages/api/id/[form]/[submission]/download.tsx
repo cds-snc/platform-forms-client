@@ -25,6 +25,7 @@ import BaseApp from "@pages/_app";
 import { Router } from "next/router";
 import { connectToDynamo } from "@lib/integration/dynamodbConnector";
 import { logEvent } from "@lib/auditLogs";
+import JSZip from "jszip";
 
 /**
  * Handler for the retrieval API route. This function simply calls the relevant function depending on the HTTP method
@@ -33,10 +34,10 @@ import { logEvent } from "@lib/auditLogs";
  */
 
 const allowedMethods = ["GET"];
-
 const handler = async (req: NextApiRequest, res: NextApiResponse, props: MiddlewareProps) => {
   const formID = req.query.form;
   const submissionName = req.query.submission;
+  const zip = new JSZip();
 
   const { session } = props as WithRequired<MiddlewareProps, "session">;
 
@@ -147,13 +148,22 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
       </>
     );
 
+    zip.file(`${responseID}.html`, stream);
+    zip
+      .generateNodeStream({ type: "nodebuffer", streamFiles: true })
+      .pipe(res)
+      .on("finish", function () {
+        logMessage.debug(`Zip file created and sent to client`);
+      });
+
+    /*
     await renderPageToClient(res, stream).catch((err) => {
       logMessage.error(err);
       throw new Error(
         `Download Form Response could not be rendered for response name: ${responseID},submissionID: ${submissionID}, formID:${formID}`
       );
     });
-
+*/
     logEvent(
       ability.userID,
       { type: "Response", id: responseID },
