@@ -269,8 +269,10 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
       });
 
       promise = promise.finally(function () {
-        router.replace(router.asPath, undefined, { scroll: false });
-        toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
+        setTimeout(() => {
+          router.replace(router.asPath, undefined, { scroll: false });
+          toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
+        }, interval * tableItems.checkedItems.size);
       });
     } catch (err) {
       logMessage.error(err as Error);
