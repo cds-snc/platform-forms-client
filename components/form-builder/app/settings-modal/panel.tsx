@@ -143,7 +143,7 @@ export const Panel = () => {
               onClick={() => {
                 setShowShowSettings(true);
               }}
-              className="flex h-full rounded-r-sm bg-indigo-500 p-1 pt-3 text-white"
+              className="flex h-full rounded-r-sm bg-indigo-500 p-1 pt-2 text-white"
             >
               {"..."}
             </button>
