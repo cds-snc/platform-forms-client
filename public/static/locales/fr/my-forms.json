@@ -66,11 +66,11 @@
   "dataClassification": {
     "officialRecord": "Ceci est un document officiel",
     "retainCopy": "Conservez cette copie conformément à votre politique de conservation.",
-    "unclassified": "Non classifié",
-    "protectedA": "Protégé A",
-    "protectedB": "Protégé B"
+    "unclassified": "NON CLASSIFIÉ",
+    "protectedA": "PROTÉGÉ A",
+    "protectedB": "PROTÉGÉ B"
   },
   "viewForm": "Afficher le formulaire (ouvre un nouvel onglet)",
   "editForm": "Modifier le formulaire",
-  "navLabel": "Forms navigation [fr]"
+  "navLabel": "Navigation des formulaires"
 }

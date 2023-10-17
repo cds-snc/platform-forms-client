@@ -171,10 +171,10 @@
     "default": "(default)",
     "heading": "Branding",
     "notFound": "Didn’t find your department or agency on the list?",
-    "preview": "Preview of logo",
-    "select": "Select a different logo for the top of your form",
+    "preview": "Preview of branding",
+    "select": "Select a different branding option for the top of your form",
     "submitNew": "Submit a new branding option (opens in new tab)",
-    "text1": "GC Forms displays the Government of Canada signature as the default logo at the top of your form."
+    "text1": "GC Forms displays the Government of Canada signature at the top of your form by default."
   },
   "cancel": "Cancel",
   "characterLimitDescription": "Only use a character limit when there is a good reason for limiting the number of characters users can enter.",
@@ -238,7 +238,7 @@
   },
   "description": "Description",
   "descriptionDescription": "The description appears below the label and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements.",
-  "didYouFindThisToolHelpful": "Did you find this tool helpful? <a href=\"/en/form-builder/support/contactus\" target=\"_blank\">Provide feedback</a>",
+  "didYouFindThisToolHelpful": "Did you find GC Forms helpful? <a href=\"/en/form-builder/support/contactus\" target=\"_blank\">Provide feedback</a>",
   "downloadCSV": "Export as a spreadsheet",
   "downloadResponsesTable": {
     "card": {
@@ -297,7 +297,7 @@
   "formatH3": "Format Heading 3",
   "formatItalic": "Format italic",
   "formatNumberedList": "Format numbered list",
-  "formConfirmationMessage": "Form confirmation message",
+  "formConfirmationMessage": "Confirmation message",
   "formDeleteResponses": {
     "title": "Confirm responses before deleting form",
     "message1": "This form has been published and is receiving responses. You have responses to download and confirm.",
@@ -390,12 +390,12 @@
   "previewDisabledForPublishedForm": "Preview is disabled for published forms",
   "privacyNoticeDescription": "<p className=\"mb-4\">Privacy notices provide people completing your form with information about how you are handling their personal information.</p><p className=\"mb-4\">You are responsible for understanding your department or agency's responsibilities related to personal information including drafting privacy notices that follow the requirements in Section 4.2.10 of the <a href=\"https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309\" target=\"_blank\">Directive on Privacy Practices</a>.</p><p>If you are unsure about how to proceed, we recommend contacting your <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-eng.asp\" target=\"_blank\">access to information and privacy coordinator.</a></p>",
   "privacyStatement": "Privacy statement",
-  "provideFeedback": "Provide feedback",
+  "provideFeedback": "Help us improve",
   "publish": "Publish",
   "published": "Published",
   "publishedBack": "Back to Forms",
-  "publishedErrors": "Published form errors",
-  "publishedTitle": "Your form is published.",
+  "publishedErrors": "Get support",
+  "publishedTitle": "Your form is published",
   "publishedViewLinks": "View and share your published form with these links:",
   "whatYouNeedToKnow": "What you need to know",
   "publishingDisablesEditing": "Publishing disables editing.",
@@ -442,7 +442,7 @@
   "richTextIntroTitle": "Form introduction",
   "richTextPrivacyTitle": "Privacy statement",
   "save": "Save",
-  "saveAndRequest": "Save form and request publishing ability",
+  "saveAndRequest": "Request publishing ability",
   "saveDraft": "Save draft",
   "selectAutocomplete": "Select an autocomplete attribute",
   "selectAutocompleteHint": "This option is great when the form filler is providing personal information like their address, email or phone number.",
@@ -484,18 +484,18 @@
       "hint": "When form responses are submitted in French."
     },
     "responseDeliveryHelp": {
-      "cta": "Help on choosing an option",
+      "cta": "Help choosing an option",
       "title": "Choosing a response delivery option",
       "description": "There are two options for getting submitted form responses. Use the chart below to help pick which option best fits your needs.",
       "inbox": {
         "title": "Email to an inbox",
-        "text1": "For up to Protected A forms",
+        "text1": "For up to PROTECTED A forms",
         "text2": "Responses are delivered directly to an inbox in real time",
         "text3": "One email address can receive response emails. This can be a shared inbox."
       },
       "vault": {
         "title": "Download from GC Forms",
-        "text1": "For up to Protected B forms",
+        "text1": "For up to PROTECTED B forms",
         "text2": "Download responses within 30 days"
       }
     }
