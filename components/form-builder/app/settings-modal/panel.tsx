@@ -112,26 +112,30 @@ export const Panel = () => {
 
   return (
     <>
-      <div className="mb-4 flex w-[800px] justify-between rounded-md border-1 border-indigo-500 bg-violet-50">
+      <div className="mb-4 flex w-[800px] justify-between rounded-lg border-1 border-indigo-500 bg-violet-50">
         <div className="flex w-full justify-between">
           <div className="ml-4 inline-block">
-            <ClassificationSelect
-              className="my-2 w-auto max-w-[400px] truncate border-none bg-violet-50 p-1 text-sm"
-              lang={lang}
-              isPublished={isPublished}
-              classification={classification}
-              handleUpdateClassification={handleUpdateClassification}
-              aria-label={t("classificationSelect.label")}
+            <div className="my-[6px] border-[.5px] border-violet-50 p-1 px-2 hover:border-[.5px] hover:border-slate-800">
+              <ClassificationSelect
+                className="w-auto max-w-[400px] truncate border-none bg-violet-50 p-1 text-sm"
+                lang={lang}
+                isPublished={isPublished}
+                classification={classification}
+                handleUpdateClassification={handleUpdateClassification}
+                aria-label={t("classificationSelect.label")}
+              />
+            </div>
+          </div>
+          <div className="my-[6px] mr-6 border-[.5px] border-violet-50 p-1 px-2 hover:border-[.5px] hover:border-slate-800 ">
+            <Logos
+              className="w-auto max-w-[350px] truncate bg-violet-50 p-1 pr-10 text-sm"
+              disabled={isPublished as boolean}
+              options={brandingOptions.map(({ value, label }) => ({ value, label }))}
+              selected={brandName}
+              handleUpdate={updateBrand}
+              aria-label={t("brandingSelect.label")}
             />
           </div>
-          <Logos
-            className="m-2 w-auto max-w-[350px] truncate bg-violet-50 p-1 pr-10 text-sm"
-            disabled={isPublished as boolean}
-            options={brandingOptions.map(({ value, label }) => ({ value, label }))}
-            selected={brandName}
-            handleUpdate={updateBrand}
-            aria-label={t("brandingSelect.label")}
-          />
         </div>
         <div>
           <Tooltip text={t("formSettingsModal.more")}>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { cn } from "@lib/utils";
 import { ProtectedIcon } from "@formbuilder/icons";
 
@@ -31,6 +31,7 @@ export const ClassificationSelect = ({
   className,
   ...rest
 }: ClassificationSelectProps) => {
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <div>
       <ProtectedIcon className="mr-2 inline-block" />
@@ -46,6 +47,7 @@ export const ClassificationSelect = ({
           const val = evt.target.value;
           handleUpdateClassification(val as ClassificationType);
         }}
+        onClick={() => setIsOpen(!isOpen)}
         {...rest}
       >
         {classificationOptions.map((option) => (
