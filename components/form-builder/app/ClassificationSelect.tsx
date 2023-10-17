@@ -46,7 +46,6 @@ export const ClassificationSelect = ({
           const val = evt.target.value;
           handleUpdateClassification(val as ClassificationType);
         }}
-        onClick={() => setIsOpen(!isOpen)}
         {...rest}
       >
         {classificationOptions.map((option) => (
