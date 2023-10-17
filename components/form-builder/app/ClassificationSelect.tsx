@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { cn } from "@lib/utils";
 import { ProtectedIcon } from "@formbuilder/icons";
 
@@ -31,7 +31,6 @@ export const ClassificationSelect = ({
   className,
   ...rest
 }: ClassificationSelectProps) => {
-  const [isOpen, setIsOpen] = useState(false);
   return (
     <div>
       <ProtectedIcon className="mr-2 inline-block" />
