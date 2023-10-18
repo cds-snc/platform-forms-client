@@ -67,7 +67,8 @@ async function checkAbilityToAccessSubmissions(ability: UserAbility, formID: str
 
 export async function listAllSubmissions(
   ability: UserAbility,
-  formID: string
+  formID: string,
+  status?: VaultStatus
 ): Promise<{ submissions: VaultSubmissionList[]; numberOfUnprocessedSubmissions: number }> {
   // Check access control first
   try {
@@ -81,7 +82,7 @@ export async function listAllSubmissions(
           id: formID,
         },
         "AccessDenied",
-        `Attempted to list all responses for form ${formID}`
+        `Attempted to list responses for form ${formID}`
       );
     throw e;
   }
@@ -95,13 +96,16 @@ export async function listAllSubmissions(
     while (lastEvaluatedKey !== undefined) {
       const getItemsDbParams: QueryCommandInput = {
         TableName: "Vault",
+        IndexName: "Status",
         // Limit the amount of response to 500.  This can be changed in the future once we have pagination.
         Limit: 500 - accumulatedResponses.length,
         ExclusiveStartKey: lastEvaluatedKey ?? undefined,
-        KeyConditionExpression: "FormID = :formID and begins_with(NAME_OR_CONF, :namePrefix)",
+        KeyConditionExpression: "FormID = :formID" + (status ? " AND #status = :status" : ""),
+        // Sort by descending order of Status
+        ScanIndexForward: false,
         ExpressionAttributeValues: {
           ":formID": formID,
-          ":namePrefix": "NAME#",
+          ...(status && { ":status": status }),
         },
         ExpressionAttributeNames: {
           "#status": "Status",
@@ -142,7 +146,7 @@ export async function listAllSubmissions(
         );
       }
 
-      // We either manually stop the paginated request when we have 10 or more items or we let it finish on its own
+      // We either manually stop the paginated request when we have 500 items or we let it finish on its own
       if (accumulatedResponses.length >= 500) {
         lastEvaluatedKey = undefined;
       } else {
