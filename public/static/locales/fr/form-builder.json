@@ -682,5 +682,15 @@
   },
   "brandingSelect": {
     "label": "Sélectionnez l'image de marque de votre formulaire"
+  },
+  "closingDate": {
+    "title": "Accepter les soumissions de formulaires",
+    "description": "Une fois que vous avez publié un formulaire, il est ouvert aux soumissions. Vous pouvez fermer le formulaire pour empêcher les soumissions.",
+    "status": "Status",
+    "open": "Ouvert",
+    "closed": "Fermé",
+    "saveButton": "Enregistrer les modifications",
+    "savedSuccessMessage": "Vos modifications ont été enregistrées.",
+    "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Veuillez réessayer."
   }
 }

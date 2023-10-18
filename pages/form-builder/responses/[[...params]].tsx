@@ -24,6 +24,7 @@ import { LoggedOutTabName, LoggedOutTab } from "@components/form-builder/app/Log
 import Head from "next/head";
 import { FormBuilderLayout } from "@components/globals/layouts/FormBuilderLayout";
 import { ErrorPanel } from "@components/globals";
+import { ClosedBanner } from "@components/form-builder/app/shared/ClosedBanner";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -90,6 +91,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
             )}
           </nav>
         </div>
+        <ClosedBanner id={formId} />
         <EmailResponseSettings
           emailAddress={deliveryOption.emailAddress}
           subjectEn={deliveryOption.emailSubjectEn || ""}
@@ -159,6 +161,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
       {isAuthenticated && (
         <>
           <div>
+            <ClosedBanner id={formId} />
             {vaultSubmissions.length > 0 && (
               <DownloadTable
                 vaultSubmissions={vaultSubmissions}
@@ -301,7 +304,7 @@ export const getServerSideProps: GetServerSideProps = async ({
       ...(locale &&
         (await serverSideTranslations(
           locale,
-          ["common", "form-builder-responses", "form-builder"],
+          ["common", "form-builder-responses", "form-builder", "form-closed"],
           null,
           ["fr", "en"]
         ))),

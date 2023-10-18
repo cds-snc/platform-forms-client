@@ -106,6 +106,7 @@ export interface FormProperties {
   introduction?: Record<string, string>;
   privacyPolicy?: Record<string, string>;
   confirmation?: Record<string, string>;
+  closedMessage?: Record<string, string>;
   layout: number[];
   elements: FormElement[];
   brand?: BrandProperties;
@@ -139,6 +140,7 @@ export type FormRecord = {
   isPublished: boolean;
   deliveryOption?: DeliveryOption;
   securityAttribute: SecurityAttribute;
+  closingDate?: string;
   bearerToken?: string;
   reCaptchaID?: string;
   [key: string]: string | boolean | FormProperties | DeliveryOption | undefined;
