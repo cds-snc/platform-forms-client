@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.6.0](https://github.com/cds-snc/platform-forms-client/compare/v3.5.1...v3.6.0) (2023-10-18)
+
+
+### Features
+
+* Settings modal + quick select panel ([#2739](https://github.com/cds-snc/platform-forms-client/issues/2739)) ([3eacebe](https://github.com/cds-snc/platform-forms-client/commit/3eacebefe8b7378ac4513c95649ce835f8b9dc49))
+
+
+### Miscellaneous Chores
+
+* added Bing ownership verification meta tag for staging env ([#2770](https://github.com/cds-snc/platform-forms-client/issues/2770)) ([d4a23a6](https://github.com/cds-snc/platform-forms-client/commit/d4a23a63452d61aa4406db0de193300fb061efc0))
+* **deps:** update all non-major docker images ([#2687](https://github.com/cds-snc/platform-forms-client/issues/2687)) ([928458f](https://github.com/cds-snc/platform-forms-client/commit/928458f08145e8cd88c646da8def972593106423))
+* fix acceptable use heading margin ([#2774](https://github.com/cds-snc/platform-forms-client/issues/2774)) ([f865101](https://github.com/cds-snc/platform-forms-client/commit/f8651017f3e7cacc37bbe7863ea0d2e8909b3b45))
+* synced file(s) with cds-snc/site-reliability-engineering ([#2684](https://github.com/cds-snc/platform-forms-client/issues/2684)) ([67fdf3e](https://github.com/cds-snc/platform-forms-client/commit/67fdf3e5260bd46a348b6ad01cafc1a74ba378c2))
+* Update privacy notice content ([#2754](https://github.com/cds-snc/platform-forms-client/issues/2754)) ([32a77f5](https://github.com/cds-snc/platform-forms-client/commit/32a77f51e74a31961b7585e11877886eda2ee7e0))
+* update save button to only show on edit page ([#2769](https://github.com/cds-snc/platform-forms-client/issues/2769)) ([470025a](https://github.com/cds-snc/platform-forms-client/commit/470025a43bbc40eb5827ae1639a1316bb6745f03))
+* Update/tweak content strings ([#2775](https://github.com/cds-snc/platform-forms-client/issues/2775)) ([f72282f](https://github.com/cds-snc/platform-forms-client/commit/f72282f0cf61af8fae55445fd236820c653f6116))
+
 ## [3.5.1](https://github.com/cds-snc/platform-forms-client/compare/v3.5.0...v3.5.1) (2023-10-12)
 
 
