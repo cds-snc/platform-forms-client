@@ -1,5 +1,5 @@
 import { createArrayCsvStringifier as createCsvStringifier } from "csv-writer";
-import { ResponseSubmission } from "./types";
+import { ResponseSubmission } from "../types";
 
 export const transform = (responses: ResponseSubmission[]) => {
   const csvStringifier = createCsvStringifier({

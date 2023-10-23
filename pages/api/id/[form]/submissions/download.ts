@@ -3,10 +3,10 @@ import { middleware, cors, sessionExists } from "@lib/middleware";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { MiddlewareProps, WithRequired } from "@lib/types";
 import { getFullTemplateByID } from "@lib/templates";
-import { transform as csvTransform } from "@lib/transformers/csv";
-import { transform as xlsxTransform } from "@lib/transformers/xlsx";
-import { transform as htmlTableTransform } from "@lib/transformers/html-table";
-import { transform as htmlTransform } from "@lib/transformers/html";
+import { transform as csvTransform } from "@lib/responseDownloadFormats/csv";
+import { transform as xlsxTransform } from "@lib/responseDownloadFormats/xlsx";
+import { transform as htmlTableTransform } from "@lib/responseDownloadFormats/html-table";
+import { transform as htmlTransform } from "@lib/responseDownloadFormats/html";
 import { retrieveSubmissions } from "@lib/vault";
 
 const getSubmissions = async (

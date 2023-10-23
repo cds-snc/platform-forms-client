@@ -1,4 +1,4 @@
-import { ResponseSubmission } from "./types";
+import { ResponseSubmission } from "../types";
 
 export const transform = (responses: ResponseSubmission[]) => {
   const records = responses.map((response) => {
