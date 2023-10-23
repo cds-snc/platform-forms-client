@@ -5,7 +5,7 @@ import commonEn from "../../public/static/locales/en/common.json";
 import commonFr from "../../public/static/locales/fr/common.json";
 import { Translations } from "./types";
 
-export default function customTranslate(translationFile: "my-forms" | "common") {
+export const customTranslate = (translationFile: "my-forms" | "common") => {
   let translations: Translations = {
     en: {},
     fr: {},
@@ -30,4 +30,4 @@ export default function customTranslate(translationFile: "my-forms" | "common") 
   };
 
   return { t };
-}
+};

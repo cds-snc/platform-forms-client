@@ -2,7 +2,7 @@ import React from "react";
 import { Table } from "./Table";
 import { FormProperties, Response, Responses, FormElementTypes } from "@lib/types";
 import { filterUndef } from "@lib/tsUtils";
-import customTranslate from "../helpers";
+import { customTranslate } from "../helpers";
 
 export interface ResponseSectionProps {
   confirmReceiptCode: string;

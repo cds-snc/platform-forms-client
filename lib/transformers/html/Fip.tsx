@@ -1,6 +1,6 @@
 import React from "react";
 import { getProperty } from "@lib/formBuilder";
-import customTranslate from "../helpers";
+import { customTranslate } from "../helpers";
 
 // Base64 Images to simplify creating portable HTML files
 const logoBase64En =

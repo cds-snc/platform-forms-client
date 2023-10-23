@@ -1,7 +1,7 @@
 import React from "react";
 import { FormElementTypes, Response } from "@lib/types";
 import { capitalize } from "./ResponseSection";
-import customTranslate from "../helpers";
+import { customTranslate } from "../helpers";
 
 // Note: For the layout why DL or Table? The DL element fits a list structure better and is
 // announced as a list by most screen readers when nested. A Table with 1 row/col of data is a bit
