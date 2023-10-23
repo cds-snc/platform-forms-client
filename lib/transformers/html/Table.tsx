@@ -1,7 +1,7 @@
 import React from "react";
-import { useTranslation } from "next-i18next";
 import { FormElementTypes, Response } from "@lib/types";
 import { capitalize } from "./ResponseSection";
+import customTranslate from "../helpers";
 
 // Note: For the layout why DL or Table? The DL element fits a list structure better and is
 // announced as a list by most screen readers when nested. A Table with 1 row/col of data is a bit
@@ -219,7 +219,7 @@ const QuestionColumns = ({
 };
 
 export const Table = (props: TableProps): React.ReactElement => {
-  const { t } = useTranslation(["my-forms"]);
+  const { t } = customTranslate("my-forms");
   const {
     responseID,
     submissionDate,

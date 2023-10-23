@@ -1,8 +1,8 @@
 import React from "react";
 import { Table } from "./Table";
-import { useTranslation } from "next-i18next";
 import { FormProperties, Response, Responses, FormElementTypes } from "@lib/types";
 import { filterUndef } from "@lib/tsUtils";
+import customTranslate from "../helpers";
 
 export interface ResponseSectionProps {
   confirmReceiptCode: string;
@@ -90,7 +90,7 @@ export const ResponseSection = ({
   formTemplate,
   formResponse,
 }: ResponseSectionProps) => {
-  const { t } = useTranslation(["my-forms"]);
+  const { t } = customTranslate("my-forms");
   const capitalizedLang = capitalize(lang);
   const questionsAnswers = parseQuestionsAndAnswers(formTemplate, formResponse, lang);
 
