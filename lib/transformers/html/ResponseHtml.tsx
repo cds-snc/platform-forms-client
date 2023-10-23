@@ -4,7 +4,7 @@ import { CopyToClipboardScript } from "./scripts";
 import { ProtectedWarning } from "./ProtectedWarning";
 import Fip from "./Fip";
 import { ResponseSection } from "./ResponseSection";
-import { css } from "./styles";
+import { css } from "./css/styles";
 
 interface HTMLDownloadProps {
   form: FormProperties;
@@ -34,30 +34,42 @@ export const ResponseHtml = ({
         <style dangerouslySetInnerHTML={{ __html: css }}></style>
       </head>
       <body>
-        <h1 className="sr-only">{`${form.titleEn} - ${form.titleFr}`}</h1>
-        <ProtectedWarning securityAttribute={securityAttribute} lang="en" />
-        <Fip language="en" />
-        <ResponseSection
-          confirmReceiptCode={confirmationCode}
-          lang={"en"}
-          responseID={responseID}
-          // submissionID={submissionID}
-          submissionDate={createdAt}
-          formTemplate={form}
-          formResponse={response}
-        />
-        <ProtectedWarning securityAttribute={securityAttribute} lang="fr" />
-        <Fip language="fr" />
-        <div className="mt-14" />
-        <ResponseSection
-          confirmReceiptCode={confirmationCode}
-          lang={"fr"}
-          responseID={responseID}
-          // submissionID={submissionID}
-          submissionDate={createdAt}
-          formTemplate={form}
-          formResponse={response}
-        />
+        <div id="skip-link-container">
+          <a href="#content" id="skip-link">
+            Skip to main content
+          </a>
+        </div>
+        <div id="page-container">
+          <main id="content">
+            <h1 className="sr-only">{`${form.titleEn} - ${form.titleFr}`}</h1>
+            <div className="mt-14" />
+            <ProtectedWarning securityAttribute={securityAttribute} lang="en" />
+            <Fip language="en" />
+            <div className="mt-14" />
+            <ResponseSection
+              confirmReceiptCode={confirmationCode}
+              lang={"en"}
+              responseID={responseID}
+              // submissionID={submissionID}
+              submissionDate={createdAt}
+              formTemplate={form}
+              formResponse={response}
+            />
+            <div className="mt-20" />
+            <ProtectedWarning securityAttribute={securityAttribute} lang="fr" />
+            <Fip language="fr" />
+            <div className="mt-14" />
+            <ResponseSection
+              confirmReceiptCode={confirmationCode}
+              lang={"fr"}
+              responseID={responseID}
+              // submissionID={submissionID}
+              submissionDate={createdAt}
+              formTemplate={form}
+              formResponse={response}
+            />
+          </main>
+        </div>
       </body>
       {CopyToClipboardScript}
     </html>
