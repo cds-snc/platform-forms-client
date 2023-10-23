@@ -1,5 +1,6 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const transform = (responses: any[]) => {
+import { ResponseSubmission } from "./types";
+
+export const transform = (responses: ResponseSubmission[]) => {
   const records = responses.map((response) => {
     return Object.values(response);
   });

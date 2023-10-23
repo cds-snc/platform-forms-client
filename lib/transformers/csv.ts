@@ -1,7 +1,7 @@
 import { createArrayCsvStringifier as createCsvStringifier } from "csv-writer";
+import { ResponseSubmission } from "./types";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const transform = (responses: any[]) => {
+export const transform = (responses: ResponseSubmission[]) => {
   const csvStringifier = createCsvStringifier({
     header: Object.keys(responses[0]),
   });

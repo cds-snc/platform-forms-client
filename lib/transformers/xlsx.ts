@@ -1,7 +1,7 @@
 import xlsx from "node-xlsx";
+import { ResponseSubmission } from "./types";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const transform = (responses: any[]) => {
+export const transform = (responses: ResponseSubmission[]) => {
   const records = responses.map((response) => {
     return Object.values(response);
   });

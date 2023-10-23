@@ -1,8 +1,9 @@
 import { FormRecord } from "@lib/types";
 import { ResponseHtml } from "./ResponseHtml";
 import { renderToStaticMarkup } from "react-dom/server";
+import { ResponseSubmission } from "../types";
 
-export const transform = (responses: any[], fullFormTemplate: FormRecord) => {
+export const transform = (responses: ResponseSubmission[], fullFormTemplate: FormRecord) => {
   const records = responses.map((response) => {
     return {
       id: response.id,
