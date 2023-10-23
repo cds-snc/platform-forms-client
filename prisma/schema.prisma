@@ -60,6 +60,7 @@ model Template {
   ttl               DateTime?
   apiUsers          ApiUser[]
   users             User[]
+  closingDate       DateTime?       @db.Timestamptz(6)    
 }
 
 model DeliveryOption {
