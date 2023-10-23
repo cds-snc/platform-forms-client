@@ -6,6 +6,7 @@ import { getFullTemplateByID } from "@lib/templates";
 import { transform as csvTransform } from "@lib/transformers/csv";
 import { transform as xlsxTransform } from "@lib/transformers/xlsx";
 import { transform as htmlTableTransform } from "@lib/transformers/html-table";
+import { transform as htmlTransform } from "@lib/transformers/html";
 import { retrieveSubmissions } from "@lib/vault";
 
 const getSubmissions = async (
@@ -92,6 +93,13 @@ const getSubmissions = async (
           .status(200)
           .setHeader("Content-Type", "text/html")
           .send(htmlTableTransform(responses));
+      }
+
+      if (req.query.format === "html") {
+        return res
+          .status(200)
+          .setHeader("Content-Type", "text/json")
+          .send(htmlTransform(responses, fullFormTemplate));
       }
 
       return res.status(200).json("format requested: " + req.query.format);
