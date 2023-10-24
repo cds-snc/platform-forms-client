@@ -161,19 +161,30 @@ export async function listAllSubmissions(
         id: formID,
       },
       "ListResponses",
-      `List all responses for form ${formID}`
+      `List all responses ${status ? `of status ${status} ` : ""}for form ${formID}`
     );
 
-    const numOfUnprocessedSubmissions = accumulatedResponses.filter((submission) =>
-      [VaultStatus.NEW, VaultStatus.DOWNLOADED, VaultStatus.PROBLEM].includes(submission.status)
-    ).length;
+    if (!status) {
+      // Only update value when we are not filtering by status
+      // Will need to rework logic once filtering is implemented on client side
+      const numOfUnprocessedSubmissions = accumulatedResponses.filter((submission) =>
+        [VaultStatus.NEW, VaultStatus.DOWNLOADED, VaultStatus.PROBLEM].includes(submission.status)
+      ).length;
 
-    await numberOfUnprocessedSubmissionsCachePut(formID, numOfUnprocessedSubmissions);
-
-    return {
-      submissions: accumulatedResponses,
-      numberOfUnprocessedSubmissions: numOfUnprocessedSubmissions,
-    };
+      await numberOfUnprocessedSubmissionsCachePut(formID, numOfUnprocessedSubmissions);
+      return {
+        submissions: accumulatedResponses,
+        numberOfUnprocessedSubmissions: numOfUnprocessedSubmissions,
+      };
+    } else {
+      // This should never be triggered in the applications current state but is used as a fallback
+      // to ensure typescript is happy
+      const numOfUnprocessedSubmissions = await numberOfUnprocessedSubmissionsCacheCheck(formID);
+      return {
+        submissions: accumulatedResponses,
+        numberOfUnprocessedSubmissions: numOfUnprocessedSubmissions ?? 0,
+      };
+    }
   } catch (e) {
     logMessage.error(e);
     return { submissions: [], numberOfUnprocessedSubmissions: 0 };
