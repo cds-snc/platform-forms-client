@@ -213,7 +213,7 @@ export const ResponseSection = ({
         <span
           id={`copyResponseOutput${capitalizedLang}`}
           aria-live="polite"
-          className="hidden text-green-default ml-8"
+          className="hidden text-green ml-8"
         ></span>
       </div>
       <Table
@@ -246,7 +246,7 @@ export const ResponseSection = ({
         <span
           id={`copyCodeOutput${capitalizedLang}`}
           aria-live="polite"
-          className="hidden text-green-default ml-8"
+          className="hidden text-green ml-8"
         ></span>
       </div>
 
