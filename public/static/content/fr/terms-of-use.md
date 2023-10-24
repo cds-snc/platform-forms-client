@@ -19,7 +19,7 @@ Vous avez pour responsabilité :
 - de déterminer le niveau de confidentialité des renseignements collectés dans vos formulaires. Formulaires GC prend en charge la collecte de données classées jusqu’à Protégé B. Apprenez-en davantage sur la détermination du niveau de confidentialité en consultant la [norme sur la catégorisation de sécurité](https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=32614). 
 - de respecter la [*Loi sur la protection des renseignements personnels*](https://laws-lois.justice.gc.ca/fra/lois/p-21/) et la [*Loi sur l’accès à l’information*](https://laws-lois.justice.gc.ca/fra/lois/a-1/) concernant les renseignements personnels et sensibles contenus dans les réponses soumises dans vos formulaires en cas de demande, d’incident ou d’atteinte à la sécurité des données. 
 
-### Réponses envoyées par courriel (jusqu’à Protégé A) 
+### Réponses envoyées par courriel (jusqu’à PROTÉGÉ A) 
 
 Vous avez pour responsabilité :
 - de gérer tout document illégitime téléversé et soumis par les utilisateurs finaux ou utilisatrices finales (p. ex. : du contenu inapproprié ou dérangeant).
