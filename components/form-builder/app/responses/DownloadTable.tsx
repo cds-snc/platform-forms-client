@@ -7,7 +7,7 @@ import {
   VaultSubmissionList,
 } from "@lib/types";
 import { useTranslation } from "react-i18next";
-import { SkipLinkReusable } from "@components/globals/SkipLinkReusable";
+import { SkipLinkFormBuilder } from "@components/globals";
 import { ConfirmReceiptStatus } from "./ConfirmReceiptStatus";
 import { DownloadResponseStatus } from "./DownloadResponseStatus";
 import { RemovalStatus } from "./RemovalStatus";
@@ -169,7 +169,7 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
 
   return (
     <section>
-      <SkipLinkReusable
+      <SkipLinkFormBuilder
         text={t("downloadResponsesTable.skipLink")}
         anchor="#downloadTableButtonId"
       />

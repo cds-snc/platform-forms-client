@@ -9,3 +9,4 @@ export { default as Brand } from "./Brand";
 export { Header } from "./Header";
 export * as Alert from "./Alert/Alert";
 export { ErrorStatus } from "./Alert/Alert";
+export { SkipLinkFormBuilder } from "./SkipLinkFormBuilder";

@@ -3,7 +3,7 @@ import { ResponseSection } from "./ResponseSection";
 import { ProtectedWarning } from "./ProtectedWarning";
 import Fip from "./Fip";
 import { NextPageWithLayout } from "@pages/_app";
-import SkipLink from "@components/globals/SkipLink";
+import { SkipLinkFormBuilder } from "@components/globals";
 import Footer from "./Footer";
 import { FormProperties, Responses, SecurityAttribute } from "@lib/types";
 
@@ -110,7 +110,7 @@ const HTMLDownload: NextPageWithLayout<HTMLDownloadProps> = ({
 HTMLDownload.getLayout = (page: ReactElement) => {
   return (
     <div className="flex h-full flex-col">
-      <SkipLink />
+      <SkipLinkFormBuilder />
 
       <div id="page-container">
         <main id="content">{page}</main>

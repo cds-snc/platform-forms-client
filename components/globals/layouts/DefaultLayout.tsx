@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Footer from "../Footer";
-import SkipLink from "../SkipLink";
+import { SkipLinkFormBuilder } from "@components/globals";
 import Fip from "../Fip";
 import { HeadMeta } from "./HeadMeta";
 import LanguageToggle from "../LanguageToggle";
@@ -47,7 +47,7 @@ const DefaultLayout = ({
   return (
     <div className="flex h-full flex-col">
       <HeadMeta />
-      <SkipLink />
+      <SkipLinkFormBuilder />
       <header>
         <Fip className={isSplashPage ? "my-0 py-6" : "mb-20 mt-0 border-b-4 border-blue-dark py-9"}>
           {showLanguageToggle && <LanguageToggle />}

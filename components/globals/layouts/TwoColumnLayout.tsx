@@ -1,11 +1,12 @@
 import React from "react";
 import { ToastContainer } from "@components/form-builder/app/shared/Toast";
-import SkipLink from "../SkipLink";
+import { SkipLinkFormBuilder } from "@components/globals";
 import { Header } from "../Header";
 import { User } from "next-auth";
 import { HeadMeta } from "./HeadMeta";
 import { cn } from "@lib/utils";
 import Footer from "../Footer";
+
 export const TwoColumnLayout = ({
   children,
   leftColumnContent,
@@ -21,7 +22,7 @@ export const TwoColumnLayout = ({
     <>
       <HeadMeta />
       <div className="flex h-full flex-col">
-        <SkipLink />
+        <SkipLinkFormBuilder />
 
         <Header context={context} user={user} />
         <div className="mx-4 shrink-0 grow basis-auto laptop:mx-32 desktop:mx-64">
