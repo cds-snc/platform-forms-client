@@ -11,21 +11,9 @@ const logoBase64Fr =
 const Fip = ({ language }: { language: string }) => {
   const { t } = customTranslate("common");
 
-  // ToDo in the future, Custom branding otherwise show the Government of Canada branding
-  const formTheme = null;
-
-  const logo =
-    (formTheme?.[getProperty("logo", language)] as string | undefined) ?? language === "en"
-      ? logoBase64En
-      : logoBase64Fr;
-
-  const linkUrl =
-    (formTheme?.[getProperty("url", language)] as string | undefined) ??
-    t("fip.link", { lng: language });
-
-  const logoTitle =
-    (formTheme?.[getProperty("logoTitle", language)] as string | undefined) ??
-    t("fip.text", { lng: language });
+  const logo = language === "en" ? logoBase64En : logoBase64Fr;
+  const linkUrl = t("fip.link", { lng: language });
+  const logoTitle = t("fip.text", { lng: language });
 
   return (
     <div data-testid="fip" className="gc-fip my-20">
