@@ -215,7 +215,7 @@ export async function retrieveSubmissions(
       const idParams = ids
         .map((id: string, index: number) => {
           const idParam = `:id${index}`;
-          expressionAttributeValues[idParam] = id;
+          expressionAttributeValues[idParam] = id.trim();
           return idParam;
         })
         .join(",");
