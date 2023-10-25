@@ -102,6 +102,10 @@ const getSubmissions = async (
           .send(htmlTransform(responses, fullFormTemplate));
       }
 
+      if (req.query.format === "json") {
+        return res.status(200).json({ responses });
+      }
+
       return res.status(200).json("format requested: " + req.query.format);
     }
 
