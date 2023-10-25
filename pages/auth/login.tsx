@@ -15,6 +15,7 @@ import { ErrorStatus } from "@components/forms/Alert/Alert";
 import { useLogin } from "@lib/hooks/auth";
 import { AuthErrorsState } from "@lib/hooks/auth/useAuthErrors";
 import { Verify } from "@components/auth/Verify";
+import { PageHeading } from "@components/globals/PageHeading";
 
 const LoginStep = ({
   username,
@@ -105,7 +106,7 @@ const LoginStep = ({
                 </ol>
               </Alert>
             )}
-            <h1 className="mb-12 mt-6 border-b-0">{t("title")}</h1>
+            <PageHeading className="mb-12 mt-6 border-b-0">{t("title")}</PageHeading>
             <p className="-mt-6 mb-10">
               {t("signUpText")}&nbsp;
               <Link href={"/signup/register"}>{t("signUpLink")}</Link>

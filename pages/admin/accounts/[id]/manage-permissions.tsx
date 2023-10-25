@@ -15,6 +15,7 @@ import { BackLink } from "@components/admin/LeftNav/BackLink";
 import { PermissionToggle } from "@components/admin/Users/PermissionToggle";
 import { LinkButton } from "@components/globals";
 import { TwoColumnLayout } from "@components/globals/layouts";
+import { PageHeading } from "@components/globals/PageHeading";
 
 type PrivilegeList = Omit<Privilege, "permissions">[];
 interface User {
@@ -184,11 +185,11 @@ const ManagePermissions = ({
       <Head>
         <title>{`${t("managePermissions")} ${formUser.name} ${formUser.email}`}</title>
       </Head>
-      <h1 className="mb-6 border-0">
+      <PageHeading className="mb-6 border-0">
         {formUser && <span className="block text-base">{formUser?.name}</span>}
         {formUser && <span className="block text-base font-normal">{formUser?.email}</span>}
         {t("managePermissions")}
-      </h1>
+      </PageHeading>
       {message && message}
       <h2>{t("User")}</h2>
       <PrivilegeList

@@ -13,6 +13,7 @@ import { FieldsetLegend, SectionTitle } from ".";
 
 import { FormElement } from "@lib/types";
 import { alphabet, sortByLayout } from "../../util";
+import { PageHeading } from "@components/globals/PageHeading";
 
 const Element = ({
   element,
@@ -112,7 +113,7 @@ export const Translate = () => {
   return (
     <>
       <div>
-        <h1 className="border-0 mb-0 mt-8">{t("translateTitle")}</h1>
+        <PageHeading className="border-0 mb-0 mt-8">{t("translateTitle")}</PageHeading>
         <p>{t("translateDescription")}</p>
         <br />
 

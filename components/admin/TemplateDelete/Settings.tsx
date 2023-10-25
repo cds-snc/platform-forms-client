@@ -11,6 +11,7 @@ import "react-tabs/style/react-tabs.css";
 import BearerRefresh from "@components/admin/BearerRefresh/BearerRefresh";
 import FormAccess from "@components/admin/FormAccess/FormAccess";
 import { getProperty } from "@lib/formBuilder";
+import { PageHeading } from "@components/globals/PageHeading";
 
 interface FormSettingsProps {
   form: FormRecord;
@@ -51,7 +52,7 @@ const FormSettings = (props: FormSettingsProps): React.ReactElement => {
 
   return (
     <>
-      <h1>{t("settings.title")}</h1>
+      <PageHeading>{t("settings.title")}</PageHeading>
       <div data-testid="formID" className="mb-4">
         <b>Form Title:</b> {formRecord.form[getProperty("title", language)] as string}
         <br />

@@ -5,6 +5,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetServerSideProps } from "next";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import { LinkButton } from "@components/globals";
+import { PageHeading } from "@components/globals/PageHeading";
 
 const Logout = () => {
   const { i18n, t } = useTranslation("logout");
@@ -26,7 +27,7 @@ const Logout = () => {
         <title>{t("title")}</title>
       </Head>
       <div>
-        <h1 className="mb-12 mt-6 border-b-0">{t("messageContent")}</h1>
+        <PageHeading className="mb-12 mt-6 border-b-0">{t("messageContent")}</PageHeading>
         <div className="items-center pb-10 pt-3 text-sm font-normal not-italic">
           {t("logoutDate")} : {logoutDate}
         </div>

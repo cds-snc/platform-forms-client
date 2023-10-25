@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useTemplateStore, clearTemplateStore } from "../store/useTemplateStore";
 import { DesignIcon, ExternalLinkIcon, WarningIcon } from "../icons";
 import { errorMessage, validateTemplate } from "../validate";
+import { PageHeading } from "@components/globals/PageHeading";
 
 export const Start = () => {
   const { t } = useTranslation("form-builder");
@@ -77,7 +78,7 @@ export const Start = () => {
   /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
   return (
     <>
-      <h1 className="visually-hidden">{t("start")}</h1>
+      <PageHeading className="visually-hidden">{t("start")}</PageHeading>
       <div role="alert">
         {errors && (
           <div className="m-auto mb-8 flex w-5/12 bg-red-100 p-6">

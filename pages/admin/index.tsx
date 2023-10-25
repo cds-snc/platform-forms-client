@@ -8,6 +8,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Link from "next/link";
 import { ManageAccountsIcon, SettingsApplicationsIcon } from "@components/form-builder/icons";
 import Head from "next/head";
+import { PageHeading } from "@components/globals/PageHeading";
 
 // keeping this here if we want to add a welcome page
 const AdminWelcome: NextPageWithLayout = () => {
@@ -18,7 +19,7 @@ const AdminWelcome: NextPageWithLayout = () => {
       <Head>
         <title>{t("title")}</title>
       </Head>
-      <h1 className="visually-hidden">{t("title", { ns: "admin-home" })}</h1>
+      <PageHeading className="visually-hidden">{t("title", { ns: "admin-home" })}</PageHeading>
       <div className="flex flex-row justify-center">
         <div className="rounded-lg border bg-white p-10">
           <h2>

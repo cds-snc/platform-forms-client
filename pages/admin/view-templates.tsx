@@ -13,6 +13,7 @@ import axios from "axios";
 import { logMessage } from "@lib/logger";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 import { Button } from "@components/globals";
+import { PageHeading } from "@components/globals/PageHeading";
 
 interface DataViewProps {
   templates: Array<{
@@ -74,7 +75,7 @@ const DataView = (props: DataViewProps): React.ReactElement => {
         <title>{t("view.title")}</title>
       </Head>
 
-      <h1 className="border-0 mb-0">{t("view.title")}</h1>
+      <PageHeading className="border-0 mb-0">{t("view.title")}</PageHeading>
       <table className="w-full table-auto  border-4 border-gray-400">
         <thead className="border-4 border-gray-400">
           <tr>

@@ -8,6 +8,7 @@ import { useTemplateStore } from "../store/useTemplateStore";
 import { useAccessControl } from "@lib/hooks";
 import Markdown from "markdown-to-jsx";
 import { getHost } from "../util";
+import { PageHeading } from "@components/globals/PageHeading";
 
 export const Published = ({ id }: { id: string }) => {
   const { t } = useTranslation("form-builder");
@@ -36,7 +37,7 @@ export const Published = ({ id }: { id: string }) => {
 
   return (
     <div>
-      <h1 className="visually-hidden">{t("published")}</h1>
+      <PageHeading className="visually-hidden">{t("published")}</PageHeading>
       <div className="p-7 mb-10 flex bg-green-50">
         <div className="flex">
           <div className="flex p-7">

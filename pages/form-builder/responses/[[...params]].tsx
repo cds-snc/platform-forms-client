@@ -78,10 +78,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           <title>{t("responses.email.title")}</title>
         </Head>
         <div className="flex flex-wrap items-baseline mb-8">
-          {/* <h1 className="border-none mb-0 tablet:mb-4 tablet:mr-8" id="pageHeading" tabIndex={-1}>
-            
-          </h1> */}
-          <PageHeading>
+          <PageHeading className="border-none mb-0 tablet:mb-4 tablet:mr-8">
             {isAuthenticated ? t("responses.email.title") : t("responses.unauthenticated.title")}
           </PageHeading>
           <nav className="flex gap-3">
@@ -110,8 +107,9 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           <title>{t("responses.title")}</title>
         </Head>
         <div className="flex flex-wrap items-baseline mb-8">
-          {/* <h1 className="border-none mb-0 tablet:mb-4 tablet:mr-8">{t("responses.title")}</h1> */}
-          <PageHeading>{t("responses.title")}</PageHeading>
+          <PageHeading className="border-none mb-0 tablet:mb-4 tablet:mr-8">
+            {t("responses.title")}
+          </PageHeading>
           <ErrorPanel supportLink={false}>{t("server-error", { ns: "common" })}</ErrorPanel>
         </div>
       </>
@@ -124,10 +122,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         <title>{t("responses.title")}</title>
       </Head>
       <div className="flex flex-wrap items-baseline mb-8">
-        {/* <h1 className="border-none mb-0 tablet:mb-4 tablet:mr-8">
-          {isAuthenticated ? t("responses.title") : t("responses.unauthenticated.title")}
-        </h1> */}
-        <PageHeading>
+        <PageHeading className="border-none mb-0 tablet:mb-4 tablet:mr-8">
           {isAuthenticated ? t("responses.title") : t("responses.unauthenticated.title")}
         </PageHeading>
 

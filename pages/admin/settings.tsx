@@ -12,6 +12,7 @@ import { getAllAppSettings } from "@lib/appSettings";
 import { Button } from "@components/globals";
 import { useAccessControl, useRefresh } from "@lib/hooks";
 import { logMessage } from "@lib/logger";
+import { PageHeading } from "@components/globals/PageHeading";
 
 const ManageSetting = ({
   setting,
@@ -184,7 +185,7 @@ const Settings = ({ settings }: SettingsProps) => {
       <Head>
         <title>{t("title")}</title>
       </Head>
-      <h1 className="border-0 mb-10">{t("title")}</h1>
+      <PageHeading className="border-0 mb-10">{t("title")}</PageHeading>
       {!manageSetting ? (
         <div>
           <ul className="list-none pl-0">

@@ -14,6 +14,7 @@ import { Button } from "@components/globals";
 import { CancelIcon, CircleCheckIcon } from "@components/form-builder/icons";
 import { EditSecurityQuestionModal } from "@components/admin/Profile/EditSecurityQuestionModal";
 import { FullWidthLayout } from "@components/globals/layouts";
+import { PageHeading } from "@components/globals/PageHeading";
 
 interface ProfileProps {
   email: string;
@@ -114,7 +115,7 @@ const Profile: NextPageWithLayout<ProfileProps> = ({
         <title>{t("title")}</title>
       </Head>
       <div className="!ml-[90px] laptop:ml-60">
-        <h1 className="mb-2 border-b-0">{t("title")}</h1>
+        <PageHeading className="mb-2 border-b-0">{t("title")}</PageHeading>
         <div className="flex flex-col gap-4 tablet:flex-row">
           <div className="w-full rounded-lg border p-4  laptop:w-1/2">
             <h2 className="mb-6 pb-0 text-2xl">{t("accountPanel.title")}</h2>

@@ -18,6 +18,7 @@ import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { useRefresh } from "@lib/hooks";
 import { ExclamationIcon } from "@components/form-builder/icons";
 import { TwoColumnLayout } from "@components/globals/layouts";
+import { PageHeading } from "@components/globals/PageHeading";
 
 type User = {
   id: string;
@@ -88,11 +89,11 @@ const ManageForms = ({
         <title>{t("title")}</title>
       </Head>
       <div>
-        <h1 className="mb-10 border-0">
+        <PageHeading className="mb-10 border-0">
           {formUser && <span className="block text-base">{formUser?.name}</span>}
           {formUser && <span className="block text-base font-normal">{formUser?.email}</span>}
           {t("title")}
-        </h1>
+        </PageHeading>
       </div>
 
       {!templates || templates.length === 0 ? (

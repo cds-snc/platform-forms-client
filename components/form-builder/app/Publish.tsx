@@ -14,6 +14,7 @@ import { InfoCard } from "@components/globals/InfoCard/InfoCard";
 import { isVaultDelivery } from "@formbuilder/util";
 import { StyledLink } from "@components/globals";
 import { classificationOptions } from "./ClassificationSelect";
+import { PageHeading } from "@components/globals/PageHeading";
 
 export const Publish = () => {
   const { t, i18n } = useTranslation("form-builder");
@@ -109,7 +110,7 @@ export const Publish = () => {
     <>
       <div className="flex flex-wrap justify-between laptop:flex-nowrap">
         <div className="mx-5 min-w-fit grow rounded-lg border-1 p-5">
-          <h1 className="mb-2 border-0">{t("publishYourForm")}</h1>
+          <PageHeading className="mb-2 border-0">{t("publishYourForm")}</PageHeading>
           <p className="mb-0 text-lg">{t("publishYourFormInstructions.text1")}</p>
           {!userCanPublish && (
             <Alert.Info className="my-5">

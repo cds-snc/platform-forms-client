@@ -28,6 +28,7 @@ import {
 import { ErrorStatus } from "@components/forms/Alert/Alert";
 import { useResetPassword } from "@lib/hooks/auth";
 import { AuthErrorsState } from "@lib/hooks/auth/useAuthErrors";
+import { PageHeading } from "@components/globals/PageHeading";
 
 const Step1 = ({
   username,
@@ -108,7 +109,9 @@ const Step1 = ({
                 </ol>
               </Alert>
             )}
-            <h1 className="mb-12 mt-6 border-b-0">{t("provideUsername.title")}</h1>
+            <PageHeading className="mb-12 mt-6 border-b-0">
+              {t("provideUsername.title")}
+            </PageHeading>
             <form id="provideUsername" method="POST" onSubmit={handleSubmit} noValidate>
               <div className="focus-group">
                 <Label id="label-username" htmlFor="username" className="required" required>
@@ -270,7 +273,9 @@ const Step2 = ({
                 </ol>
               </Alert>
             )}
-            <h1 className="mb-12 mt-6 border-b-0">{t("securityQuestions.title")}</h1>
+            <PageHeading className="mb-12 mt-6 border-b-0">
+              {t("securityQuestions.title")}
+            </PageHeading>
             <p className="mb-6 max-w-lg">{t("securityQuestions.description")}</p>
             <form id="resetPassword" method="POST" onSubmit={handleSubmit} noValidate>
               <div className="focus-group">
@@ -452,7 +457,7 @@ const Step3 = ({
                 </ol>
               </Alert>
             )}
-            <h1 className="mb-12 mt-6 border-b-0">{t("resetPassword.title")}</h1>
+            <PageHeading className="mb-12 mt-6 border-b-0">{t("resetPassword.title")}</PageHeading>
             <form id="resetPassword" method="POST" onSubmit={handleSubmit} noValidate>
               <div className="focus-group">
                 <Label

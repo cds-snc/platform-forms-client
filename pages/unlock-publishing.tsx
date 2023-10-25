@@ -23,6 +23,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
 import { ErrorPanel } from "@components/globals/ErrorPanel";
+import { PageHeading } from "@components/globals/PageHeading";
 
 export default function UnlockPublishing() {
   const { t, i18n } = useTranslation(["unlock-publishing", "common"]);
@@ -130,7 +131,7 @@ export default function UnlockPublishing() {
                         </ol>
                       </Alert>
                     )}
-                    <h1>{t("unlockPublishing.title")}</h1>
+                    <PageHeading>{t("unlockPublishing.title")}</PageHeading>
                     <p className="mb-14">{t("unlockPublishing.paragraph1")}</p>
                     <form id="unlock-publishing" method="POST" onSubmit={handleSubmit} noValidate>
                       <div className="focus-group">
@@ -229,7 +230,7 @@ export default function UnlockPublishing() {
           <Head>
             <title>{t("unlockPublishingSubmitted.title")}</title>
           </Head>
-          <h1>{t("unlockPublishingSubmitted.title")}</h1>
+          <PageHeading>{t("unlockPublishingSubmitted.title")}</PageHeading>
           <h2>{t("unlockPublishingSubmitted.whatNext.title")}</h2>
           <p>{t("unlockPublishingSubmitted.whatNext.paragraph1")}</p>
           <p className="mt-8 font-bold">{t("unlockPublishingSubmitted.whatNext.paragraph2")}</p>
