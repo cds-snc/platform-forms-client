@@ -1,8 +1,14 @@
+export type Answer = {
+  questionEn: string | undefined;
+  questionFr: string | undefined;
+  answer: string | Answer[];
+};
+
 export interface ResponseSubmission {
   id: string;
   created_at: number;
   confirmation_code: string;
-  [key: string]: string | number;
+  submission: Answer[];
 }
 
 export type JSONValue = string | number | boolean | { [x: string]: JSONValue } | Array<JSONValue>;

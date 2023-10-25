@@ -1,13 +1,14 @@
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { middleware, cors, sessionExists } from "@lib/middleware";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { MiddlewareProps, WithRequired } from "@lib/types";
+import { FormElementTypes, MiddlewareProps, WithRequired } from "@lib/types";
 import { getFullTemplateByID } from "@lib/templates";
 import { transform as csvTransform } from "@lib/responseDownloadFormats/csv";
 import { transform as xlsxTransform } from "@lib/responseDownloadFormats/xlsx";
 import { transform as htmlTableTransform } from "@lib/responseDownloadFormats/html-table";
 import { transform as htmlTransform } from "@lib/responseDownloadFormats/html";
 import { retrieveSubmissions } from "@lib/vault";
+import { ResponseSubmission, Answer } from "@lib/responseDownloadFormats/types";
 
 const getSubmissions = async (
   req: NextApiRequest,
@@ -36,33 +37,45 @@ const getSubmissions = async (
       return res.status(500).json({ error: "There was an error. Please try again later." });
 
     const responses = queryResult.submissions.map((item) => {
-      const submission = Object.entries(item.formSubmission).map(([questionId, answer]) => {
-        const question = fullFormTemplate.form.elements.find(
-          (element) => element.id === Number(questionId)
-        );
-        return {
-          questionEn: question?.properties.titleEn,
-          questionFr: question?.properties.titleFr,
-          answer: Array.isArray(answer) ? answer.join(",") : answer,
-        };
-      });
+      const submission = Object.entries(JSON.parse(String(item.formSubmission))).map(
+        ([questionId, answer]) => {
+          const question = fullFormTemplate.form.elements.find(
+            (element) => element.id === Number(questionId)
+          );
 
-      const answers: Record<string, string> = {};
+          if (question?.type === FormElementTypes.dynamicRow && answer instanceof Array) {
+            return {
+              questionEn: question?.properties.titleEn,
+              questionFr: question?.properties.titleFr,
+              answer: answer.map((item) => {
+                return Object.values(item).map((value, index) => {
+                  if (question?.properties.subElements) {
+                    return {
+                      questionEn: question?.properties.subElements[index].properties.titleEn,
+                      questionFr: question?.properties.subElements[index].properties.titleFr,
+                      answer: value as Answer,
+                    };
+                  }
+                });
+              }),
+            };
+          }
 
-      submission.forEach((answer) => {
-        if (answer.questionEn) {
-          const key = answer.questionEn;
-          answers[key] = answer.answer as string;
+          return {
+            questionEn: question?.properties.titleEn,
+            questionFr: question?.properties.titleFr,
+            answer: answer,
+          };
         }
-      });
+      );
 
       return {
         id: item.name,
         created_at: item.createdAt,
         confirmation_code: item.confirmationCode,
-        ...answers,
+        submission,
       };
-    });
+    }) as ResponseSubmission[];
 
     if (!responses) {
       return res.status(500).json({ error: "There was an error. Please try again later." });
