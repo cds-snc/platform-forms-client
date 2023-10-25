@@ -67,7 +67,8 @@ async function checkAbilityToAccessSubmissions(ability: UserAbility, formID: str
 
 export async function listAllSubmissions(
   ability: UserAbility,
-  formID: string
+  formID: string,
+  status?: VaultStatus
 ): Promise<{ submissions: VaultSubmissionList[]; numberOfUnprocessedSubmissions: number }> {
   // Check access control first
   try {
@@ -81,7 +82,7 @@ export async function listAllSubmissions(
           id: formID,
         },
         "AccessDenied",
-        `Attempted to list all responses for form ${formID}`
+        `Attempted to list responses for form ${formID}`
       );
     throw e;
   }
@@ -95,13 +96,16 @@ export async function listAllSubmissions(
     while (lastEvaluatedKey !== undefined) {
       const getItemsDbParams: QueryCommandInput = {
         TableName: "Vault",
+        IndexName: "Status",
         // Limit the amount of response to 500.  This can be changed in the future once we have pagination.
         Limit: 500 - accumulatedResponses.length,
         ExclusiveStartKey: lastEvaluatedKey ?? undefined,
-        KeyConditionExpression: "FormID = :formID and begins_with(NAME_OR_CONF, :namePrefix)",
+        KeyConditionExpression: "FormID = :formID" + (status ? " AND #status = :status" : ""),
+        // Sort by descending order of Status
+        ScanIndexForward: false,
         ExpressionAttributeValues: {
           ":formID": formID,
-          ":namePrefix": "NAME#",
+          ...(status && { ":status": status }),
         },
         ExpressionAttributeNames: {
           "#status": "Status",
@@ -142,7 +146,7 @@ export async function listAllSubmissions(
         );
       }
 
-      // We either manually stop the paginated request when we have 10 or more items or we let it finish on its own
+      // We either manually stop the paginated request when we have 500 items or we let it finish on its own
       if (accumulatedResponses.length >= 500) {
         lastEvaluatedKey = undefined;
       } else {
@@ -157,19 +161,30 @@ export async function listAllSubmissions(
         id: formID,
       },
       "ListResponses",
-      `List all responses for form ${formID}`
+      `List all responses ${status ? `of status ${status} ` : ""}for form ${formID}`
     );
 
-    const numOfUnprocessedSubmissions = accumulatedResponses.filter((submission) =>
-      [VaultStatus.NEW, VaultStatus.DOWNLOADED, VaultStatus.PROBLEM].includes(submission.status)
-    ).length;
+    if (!status) {
+      // Only update value when we are not filtering by status
+      // Will need to rework logic once filtering is implemented on client side
+      const numOfUnprocessedSubmissions = accumulatedResponses.filter((submission) =>
+        [VaultStatus.NEW, VaultStatus.DOWNLOADED, VaultStatus.PROBLEM].includes(submission.status)
+      ).length;
 
-    await numberOfUnprocessedSubmissionsCachePut(formID, numOfUnprocessedSubmissions);
-
-    return {
-      submissions: accumulatedResponses,
-      numberOfUnprocessedSubmissions: numOfUnprocessedSubmissions,
-    };
+      await numberOfUnprocessedSubmissionsCachePut(formID, numOfUnprocessedSubmissions);
+      return {
+        submissions: accumulatedResponses,
+        numberOfUnprocessedSubmissions: numOfUnprocessedSubmissions,
+      };
+    } else {
+      // This should never be triggered in the applications current state but is used as a fallback
+      // to ensure typescript is happy
+      const numOfUnprocessedSubmissions = await numberOfUnprocessedSubmissionsCacheCheck(formID);
+      return {
+        submissions: accumulatedResponses,
+        numberOfUnprocessedSubmissions: numOfUnprocessedSubmissions ?? 0,
+      };
+    }
   } catch (e) {
     logMessage.error(e);
     return { submissions: [], numberOfUnprocessedSubmissions: 0 };
