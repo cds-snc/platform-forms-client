@@ -53,7 +53,7 @@ const getSubmissions = async (
                     return {
                       questionEn: question?.properties.subElements[index].properties.titleEn,
                       questionFr: question?.properties.subElements[index].properties.titleFr,
-                      answer: value as Answer,
+                      answer: value,
                     };
                   }
                 });
