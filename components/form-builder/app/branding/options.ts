@@ -98,4 +98,13 @@ export const options = [
     logoTitleEn: "Shared Services Canada",
     logoTitleFr: "Services partagés Canada",
   },
+  {
+    name: "ircc",
+    urlEn: "https://www.canada.ca/en/immigration-refugees-citizenship.html",
+    urlFr: "https://www.canada.ca/fr/immigration-refugies-citoyennete.html",
+    logoEn: "/img/branding/ircc-en.png",
+    logoFr: "/img/branding/ircc-fr.png",
+    logoTitleEn: "Immigration, Refugees and Citizenship Canada",
+    logoTitleFr: "Immigration, Réfugiés et Citoyenneté Canada",
+  },
 ];
