@@ -45,12 +45,14 @@ const getSubmissions = async (
 
           if (question?.type === FormElementTypes.dynamicRow && answer instanceof Array) {
             return {
+              type: question?.type,
               questionEn: question?.properties.titleEn,
               questionFr: question?.properties.titleFr,
               answer: answer.map((item) => {
                 return Object.values(item).map((value, index) => {
                   if (question?.properties.subElements) {
                     return {
+                      type: question?.properties.subElements[index].type,
                       questionEn: question?.properties.subElements[index].properties.titleEn,
                       questionFr: question?.properties.subElements[index].properties.titleFr,
                       answer: value,
@@ -62,9 +64,10 @@ const getSubmissions = async (
           }
 
           return {
+            type: question?.type,
             questionEn: question?.properties.titleEn,
             questionFr: question?.properties.titleFr,
-            answer: answer,
+            answer: question?.type === "checkbox" ? Array(answer).join(", ") : answer,
           };
         }
       );
