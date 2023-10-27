@@ -13,7 +13,6 @@ import { DownloadResponseStatus } from "./DownloadResponseStatus";
 import { RemovalStatus } from "./RemovalStatus";
 import { DownloadStatus } from "./DownloadStatus";
 import { useRouter } from "next/router";
-import { logMessage } from "@lib/logger";
 import axios from "axios";
 import { toast } from "../shared/Toast";
 import { useSetting } from "@lib/hooks/useSetting";
@@ -108,41 +107,30 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
       })
     );
 
-    try {
-      const downloads = Array.from(tableItems.checkedItems, async ([submissionName]) => {
-        if (!submissionName) {
-          throw new Error("Error downloading file from Retrieval table. SubmissionId missing.");
-        }
-        const url = `/api/id/${formId}/${submissionName}/download`;
-        const fileName = `${submissionName}.html`;
-        return axios({
-          url,
-          method: "GET",
-          responseType: "blob",
-          timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-        }).then((response) => {
-          const url = window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement("a");
-          link.href = url;
-          link.setAttribute("download", fileName);
-          document.body.appendChild(link);
-          link.click();
-        });
-      });
+    const url = `/api/id/${formId}/submissions/download?format=html`;
+    const ids = Array.from(tableItems.checkedItems.keys());
 
-      await Promise.all(downloads).then(() => {
-        // TODO: only occurs download more than one file at a time. Here is the issue to track
-        // https://github.com/cds-snc/platform-forms-client/issues/1744
-        setTimeout(() => {
-          // Refreshes getServerSideProps data without a full page reload
-          router.replace(router.asPath, undefined, { scroll: false });
-          toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
-        }, 1000); // Increasing to 1 second to allow more time for prod - temp work around
+    axios({
+      url,
+      method: "POST",
+      data: {
+        ids: ids.join(","),
+      },
+    }).then((response) => {
+      response.data.forEach((submission: { id: string; html: string }) => {
+        const fileName = `${submission.id}.html`;
+        const href = window.URL.createObjectURL(new Blob([submission.html]));
+        const anchorElement = document.createElement("a");
+        anchorElement.href = href;
+        anchorElement.download = fileName;
+        document.body.appendChild(anchorElement);
+        anchorElement.click();
+        document.body.removeChild(anchorElement);
+        window.URL.revokeObjectURL(href);
       });
-    } catch (err) {
-      logMessage.error(err as Error);
-      setErrors({ ...errors, downloadError: true });
-    }
+      router.replace(router.asPath, undefined, { scroll: false });
+      toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
+    });
   };
 
   const blockDownload = (
