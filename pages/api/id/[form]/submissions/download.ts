@@ -8,7 +8,7 @@ import { transform as xlsxTransform } from "@lib/responseDownloadFormats/xlsx";
 import { transform as htmlTableTransform } from "@lib/responseDownloadFormats/html-table";
 import { transform as htmlTransform } from "@lib/responseDownloadFormats/html";
 import { retrieveSubmissions } from "@lib/vault";
-import { ResponseSubmission, Answer } from "@lib/responseDownloadFormats/types";
+import { ResponseSubmission } from "@lib/responseDownloadFormats/types";
 
 const getSubmissions = async (
   req: NextApiRequest,
@@ -118,11 +118,7 @@ const getSubmissions = async (
           .send(htmlTransform(responses, fullFormTemplate));
       }
 
-      if (req.query.format === "json") {
-        return res.status(200).json({ responses });
-      }
-
-      return res.status(200).json("format requested: " + req.query.format);
+      return res.status(200).json({ responses });
     }
 
     // Default repsonse format is JSON
