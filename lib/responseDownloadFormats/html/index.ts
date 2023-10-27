@@ -1,5 +1,5 @@
 import { FormRecord } from "@lib/types";
-import { ResponseHtml } from "./ResponseHtml";
+import { ResponseHtml } from "./components/ResponseHtml";
 import { renderToStaticMarkup } from "react-dom/server";
 import { ResponseSubmission } from "../types";
 

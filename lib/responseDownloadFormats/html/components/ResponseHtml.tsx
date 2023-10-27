@@ -1,11 +1,11 @@
 import { FormProperties, Responses, SecurityAttribute } from "@lib/types";
 import React from "react";
-import { CopyToClipboardScript } from "./scripts";
+import { CopyToClipboardScript } from "../scripts";
 import { ProtectedWarning } from "./ProtectedWarning";
 import Fip from "./Fip";
 import { ResponseSection } from "./ResponseSection";
-import { css } from "./css/styles";
-import { ResponseSubmission } from "../types";
+import { css } from "../css/styles";
+import { ResponseSubmission } from "../../types";
 
 interface HTMLDownloadProps {
   form: FormProperties;

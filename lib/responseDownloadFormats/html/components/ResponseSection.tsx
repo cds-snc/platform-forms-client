@@ -1,7 +1,7 @@
 import React from "react";
 import { FormProperties } from "@lib/types";
-import { customTranslate } from "../helpers";
-import { ResponseSubmission } from "../types";
+import { customTranslate } from "../../helpers";
+import { ResponseSubmission } from "../../types";
 import { ColumnTable } from "./ColumnTable";
 import { RowTable } from "./RowTable";
 
