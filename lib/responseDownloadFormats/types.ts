@@ -1,8 +1,9 @@
-export type Answer = {
+export interface Answer {
   questionEn: string | undefined;
   questionFr: string | undefined;
-  answer: string | Answer[];
-};
+  answer: string | Array<Answer[]>;
+  [key: string]: string | Array<Answer[]> | undefined;
+}
 
 export interface ResponseSubmission {
   id: string;
