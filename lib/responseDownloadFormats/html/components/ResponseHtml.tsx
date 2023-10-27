@@ -1,4 +1,4 @@
-import { FormProperties, Responses, SecurityAttribute } from "@lib/types";
+import { FormProperties, SecurityAttribute } from "@lib/types";
 import React from "react";
 import { CopyToClipboardScript } from "../scripts";
 import { ProtectedWarning } from "./ProtectedWarning";
