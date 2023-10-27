@@ -5,10 +5,11 @@ import { ProtectedWarning } from "./ProtectedWarning";
 import Fip from "./Fip";
 import { ResponseSection } from "./ResponseSection";
 import { css } from "./css/styles";
+import { ResponseSubmission } from "../types";
 
 interface HTMLDownloadProps {
   form: FormProperties;
-  response: Responses;
+  response: ResponseSubmission;
   confirmationCode: string;
   // submissionID: string;
   responseID: string;
