@@ -87,8 +87,8 @@ const getSubmissions = async (
       };
     }) as ResponseSubmission[];
 
-    if (!responses) {
-      return res.status(500).json({ error: "There was an error. Please try again later." });
+    if (!responses.length) {
+      return res.status(404).json({ error: "No responses found." });
     }
 
     if (req.query.format) {
@@ -143,10 +143,7 @@ const getSubmissions = async (
     return res.status(200).json({ responses: responses });
   } catch (err) {
     if (err instanceof AccessControlError) return res.status(403).json({ error: "Forbidden" });
-    else
-      return res
-        .status(500)
-        .json({ message: "There was an error. Please try again later.", error: err });
+    else return res.status(500).json({ message: "There was an error. Please try again later." });
   }
 };
 
