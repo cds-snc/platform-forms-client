@@ -28,9 +28,8 @@ export const transform = (responses: ResponseSubmission[]) => {
                 .join("");
             })
             .join("\n");
-        } else {
-          return item.answer;
         }
+        return item.answer;
       }),
     ];
   });
