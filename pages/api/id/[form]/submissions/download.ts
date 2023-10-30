@@ -7,8 +7,9 @@ import { transform as csvTransform } from "@lib/responseDownloadFormats/csv";
 import { transform as xlsxTransform } from "@lib/responseDownloadFormats/xlsx";
 import { transform as htmlTableTransform } from "@lib/responseDownloadFormats/html-table";
 import { transform as htmlTransform } from "@lib/responseDownloadFormats/html";
-import { retrieveSubmissions } from "@lib/vault";
+import { retrieveSubmissions, updateLastDownloadedBy } from "@lib/vault";
 import { ResponseSubmission } from "@lib/responseDownloadFormats/types";
+import { logEvent } from "@lib/auditLogs";
 
 const getSubmissions = async (
   req: NextApiRequest,
@@ -18,6 +19,12 @@ const getSubmissions = async (
   try {
     const { session } = props as WithRequired<MiddlewareProps, "session">;
     const formId = req.query.form;
+
+    const userEmail = session.user.email;
+    if (userEmail === null)
+      throw new Error(
+        `User does not have an associated email address: ${JSON.stringify(session.user)} `
+      );
 
     if (!formId || typeof formId !== "string") {
       return res.status(400).json({ error: "Bad request" });
@@ -85,6 +92,25 @@ const getSubmissions = async (
     }
 
     if (req.query.format) {
+      logEvent(
+        ability.userID,
+        { type: "Response", id: ids.join(",") },
+        "DownloadResponses",
+        `Downloaded form responses for formID ${formId} with IDs ${ids.join(",")}`
+      );
+
+      // return res.status(200).json({
+      //   submissionID: queryResult.submissions[0].submissionID,
+      //   formId: formId,
+      //   userEmail: userEmail,
+      //   status: queryResult.submissions[0].status,
+      //   count: queryResult.submissions.length,
+      // });
+
+      // queryResult.submissions.forEach(async (response) => {
+      //   await updateLastDownloadedBy(response.submissionID, formId, userEmail, response.status);
+      // });
+
       if (req.query.format === "csv") {
         return res
           .status(200)

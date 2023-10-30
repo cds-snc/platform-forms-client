@@ -15,6 +15,7 @@ export enum AuditLogEvent {
   RevokeFormAccess = "RevokeFormAccess",
   // Form Response Events
   DownloadResponse = "DownloadResponse",
+  DownloadResponses = "DownloadResponses",
   ConfirmResponse = "ConfirmResponse",
   IdentifyProblemResponse = "IdentifyProblemResponse",
   ListResponses = "ListResponses",

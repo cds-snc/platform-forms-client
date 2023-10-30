@@ -1,4 +1,9 @@
-import { QueryCommand, QueryCommandInput } from "@aws-sdk/lib-dynamodb";
+import {
+  QueryCommand,
+  QueryCommandInput,
+  UpdateCommand,
+  UpdateCommandInput,
+} from "@aws-sdk/lib-dynamodb";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { VaultSubmissionList, UserAbility, VaultStatus, VaultSubmission } from "@lib/types";
 import { logEvent } from "./auditLogs";
@@ -192,7 +197,7 @@ export async function listAllSubmissions(
 }
 
 /**
- * This method returns a list of all or selected form submission records.
+ * This method returns a list of selected form submission records.
  * The list contains the actual submission data
  * @param formID - The form ID from which to retrieve responses
  */
@@ -305,7 +310,7 @@ export async function retrieveSubmissions(
         id: formID,
       },
       "RetrieveResponses",
-      `Retrieve selected responses for form ${formID} with IDs ${ids}`
+      `Retrieve selected responses for form ${formID} with IDs ${ids.join(",")}`
     );
 
     const numOfUnprocessedSubmissions = accumulatedResponses.filter((submission) =>
@@ -322,6 +327,47 @@ export async function retrieveSubmissions(
     logMessage.error(e);
     return { submissions: [], numberOfUnprocessedSubmissions: 0 };
   }
+}
+
+/**
+ * Sets who last downloaded the Form Submission on the Vault Submission record
+ * @param submissionID Submission ID of the form response
+ * @param formID Form ID the Submission is for
+ * @param email Email address of the user downloading the Submission
+ */
+export async function updateLastDownloadedBy(
+  responseID: string,
+  formID: string,
+  email: string,
+  status: VaultStatus
+) {
+  const documentClient = connectToDynamo();
+
+  const isNewResponse = status === VaultStatus.NEW;
+
+  const updateCommandInput: UpdateCommandInput = {
+    TableName: "Vault",
+    Key: {
+      FormID: formID,
+      NAME_OR_CONF: `NAME#${responseID}`,
+    },
+    UpdateExpression: "SET LastDownloadedBy = :email, DownloadedAt = :downloadedAt".concat(
+      isNewResponse ? ", #status = :statusUpdate" : ""
+    ),
+    ExpressionAttributeValues: {
+      ":email": email,
+      ":downloadedAt": Date.now(),
+      ...(isNewResponse && { ":statusUpdate": "Downloaded" }),
+    },
+    ...(isNewResponse && {
+      ExpressionAttributeNames: {
+        "#status": "Status",
+      },
+    }),
+    ReturnValues: "NONE",
+  };
+
+  return documentClient.send(new UpdateCommand(updateCommandInput));
 }
 
 /**
