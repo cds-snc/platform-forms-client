@@ -99,17 +99,9 @@ const getSubmissions = async (
         `Downloaded form responses for formID ${formId} with IDs ${ids.join(",")}`
       );
 
-      // return res.status(200).json({
-      //   submissionID: queryResult.submissions[0].submissionID,
-      //   formId: formId,
-      //   userEmail: userEmail,
-      //   status: queryResult.submissions[0].status,
-      //   count: queryResult.submissions.length,
-      // });
-
-      // queryResult.submissions.forEach(async (response) => {
-      //   await updateLastDownloadedBy(response.submissionID, formId, userEmail, response.status);
-      // });
+      queryResult.submissions.forEach(async (response) => {
+        await updateLastDownloadedBy(response.name, formId, userEmail, response.status);
+      });
 
       if (req.query.format === "csv") {
         return res
