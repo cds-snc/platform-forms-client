@@ -38,12 +38,12 @@ export const ClosingDateToggle = ({
     >
       <div className="cursor-pointer whitespace-nowrap">
         <span id="switch-on" className={`mr-1 text-sm ${boldOff} mr-2`} aria-hidden="true">
-          {offLabel}
+          {onLabel}
         </span>
         {!isChecked && <ToggleLeft className="inline-block w-12 fill-emerald-500" />}
         {isChecked && <ToggleRight className="inline-block w-12 fill-slate-500" />}
         <span id="switch-off" className={`ml-1 text-sm ${boldOn} ml-2`} aria-hidden="true">
-          {onLabel}
+          {offLabel}
         </span>
       </div>
     </div>
