@@ -686,7 +686,7 @@
   "closingDate": {
     "title": "Accepter les soumissions de formulaires",
     "description": "Une fois que vous avez publié un formulaire, il est ouvert aux soumissions. Vous pouvez fermer le formulaire pour empêcher les soumissions.",
-    "status": "Status",
+    "status": "État du formulaire",
     "open": "Ouvert",
     "closed": "Fermé",
     "saveButton": "Enregistrer les modifications",
