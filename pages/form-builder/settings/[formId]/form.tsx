@@ -14,6 +14,7 @@ import { FormRecord } from "@lib/types";
 import { BackLink } from "@components/admin/LeftNav/BackLink";
 import Head from "next/head";
 import { FormBuilderLayout } from "@components/globals/layouts/FormBuilderLayout";
+import { PageHeading } from "@components/globals/PageHeading";
 
 interface AssignUsersToTemplateProps {
   formRecord: FormRecord;
@@ -54,7 +55,7 @@ const Page: NextPageWithLayout<AssignUsersToTemplateProps> = ({
         <title>{title}</title>
       </Head>
       <div className="max-w-4xl">
-        <h1>{t("gcFormsSettings")}</h1>
+        <PageHeading>{t("gcFormsSettings")}</PageHeading>
         <SettingsNavigation />
         {canManageOwnership && (
           <FormOwnership

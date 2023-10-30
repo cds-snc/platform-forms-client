@@ -8,6 +8,7 @@ import Loader from "@components/globals/Loader";
 import { Button } from "@components/globals";
 import { checkPrivileges } from "@lib/privileges";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
+import { PageHeading } from "@components/globals/PageHeading";
 
 const fetcher = (url: string) => fetch(url).then((response) => response.json());
 
@@ -23,7 +24,7 @@ const Flags = () => {
       <Head>
         <title>{t("title")}</title>
       </Head>
-      <h1 className="border-0 mb-10">{t("title")}</h1>
+      <PageHeading className="border-0 mb-10">{t("title")}</PageHeading>
       <p className="pb-8">{t("subTitle")}</p>
       {flags ? (
         <table className="table-auto border-4">

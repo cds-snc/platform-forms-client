@@ -19,6 +19,7 @@ import { fetchWithCsrfToken } from "@lib/hooks/auth/fetchWithCsrfToken";
 import { useRouter } from "next/router";
 import { AxiosError } from "axios";
 import { toast } from "@formbuilder/app/shared";
+import { PageHeading } from "@components/globals/PageHeading";
 
 export interface Question {
   id: string;
@@ -153,7 +154,7 @@ const SetupSecurityQuestions = ({ questions = [] }: { questions: Question[] }) =
               </Alert.Danger>
             )}
 
-            <h1 className="gc-h2">{t("title")}</h1>
+            <PageHeading className="gc-h2">{t("title")}</PageHeading>
 
             <form id="updateSecurityQuestionsForm" method="POST" onSubmit={handleSubmit} noValidate>
               <div className="mb-10 mt-4">

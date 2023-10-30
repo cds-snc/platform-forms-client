@@ -24,6 +24,7 @@ import {
 import { Button, LinkButton, Alert } from "@components/globals";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
+import { PageHeading } from "@components/globals/PageHeading";
 
 export default function Contactus() {
   const router = useRouter();
@@ -55,7 +56,7 @@ export default function Contactus() {
       <Head>
         <title>{t("contactus.title")}</title>
       </Head>
-      <h1>{t("contactus.title")}</h1>
+      <PageHeading>{t("contactus.title")}</PageHeading>
       <Formik
         initialValues={{
           name: "",
@@ -299,7 +300,7 @@ export default function Contactus() {
       <Head>
         <title>{t("support.title")}</title>
       </Head>
-      <h1>{t("support.title")}</h1>
+      <PageHeading>{t("support.title")}</PageHeading>
       <Formik
         initialValues={{
           name: "",
@@ -484,7 +485,7 @@ export default function Contactus() {
 
       {isSuccessScreen && (
         <>
-          <h1 ref={headingSuccessRef}>{t("requestSuccess.title")}</h1>
+          <PageHeading ref={headingSuccessRef}>{t("requestSuccess.title")}</PageHeading>
           <p className="mb-16 mt-[-2rem] font-bold">{t("requestSuccess.weWillRespond")}</p>
           <div className="mb-16">
             <LinkButton.Primary href={`/forms`}>

@@ -6,6 +6,7 @@ import Head from "next/head";
 import { useTranslation } from "next-i18next";
 import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
+import { PageHeading } from "@components/globals/PageHeading";
 
 export default function AccountCreated() {
   const { t, i18n } = useTranslation(["signup"]);
@@ -15,7 +16,7 @@ export default function AccountCreated() {
       <Head>
         <title>{t("accountCreated.title")}</title>
       </Head>
-      <h1 className="border-b-0 mt-6 mb-12">{t("accountCreated.title")}</h1>
+      <PageHeading className="border-b-0 mt-6 mb-12">{t("accountCreated.title")}</PageHeading>
       <h2>{t("accountCreated.yourAccountListDescription")}</h2>
       <ul>
         <li>{t("accountCreated.yourAccountList.item1")}</li>

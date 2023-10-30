@@ -19,6 +19,7 @@ import { RoundedButton, Button, themes, LinkButton } from "@components/globals";
 import { DBUser } from "@lib/types/user-types";
 import { Privilege } from "@prisma/client";
 import { Card } from "@components/globals/card/Card";
+import { PageHeading } from "@components/globals/PageHeading";
 
 const enum AccountsFilterState {
   ALL,
@@ -147,7 +148,7 @@ const Users = ({
         <title>{t("accounts")}</title>
       </Head>
       <>
-        <h1 className="mb-0 border-0">{t("accounts")}</h1>
+        <PageHeading className="mb-0 border-0">{t("accounts")}</PageHeading>
         <div className="mb-5">
           <ul
             id="accountsFilterList"

@@ -25,6 +25,7 @@ import { logMessage } from "@lib/logger";
 import { Verify } from "@components/auth/Verify";
 import { useLogin } from "@lib/hooks/auth";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
+import { PageHeading } from "@components/globals/PageHeading";
 
 const Register = () => {
   const { t } = useTranslation(["signup", "common"]);
@@ -200,9 +201,9 @@ const Register = () => {
                 </ol>
               </Alert>
             )}
-            <h1 ref={headingRef} className="mb-12 mt-6 border-b-0">
+            <PageHeading ref={headingRef} className="mb-12 mt-6 border-b-0">
               {t("signUpRegistration.title")}
-            </h1>
+            </PageHeading>
             <p className="-mt-6 mb-10">
               {t("signUpRegistration.alreadyHaveAnAccount")}&nbsp;
               <Link href={"/auth/login"}>{t("signUpRegistration.alreadyHaveAnAccountLink")}</Link>

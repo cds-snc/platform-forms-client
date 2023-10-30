@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { getCsrfToken } from "next-auth/react";
 import { localPathRegEx } from "@lib/validation";
 import { Button } from "@components/globals";
+import { PageHeading } from "@components/globals/PageHeading";
 
 interface AcceptableUseProps {
   content: string;
@@ -59,7 +60,7 @@ export const AcceptableUseTerms = ({
 
   return (
     <>
-      <h1 className="pb-2">{t("acceptableUsePage.welcome")}</h1>
+      <PageHeading className="pb-2">{t("acceptableUsePage.welcome")}</PageHeading>
       <RichText className="w-full pb-10">{content}</RichText>
       {status === "authenticated" && (
         <Button id="acceptableUse" onClick={agree}>

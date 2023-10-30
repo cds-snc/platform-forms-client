@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 // TODO: Consider replacing or merging this fancier viersion with the existing <SkipLink> used in
-// Forms-Forms and HTMLDownload. But really make sure this works *perfectly* with 0 edge cases first
+// Forms-Forms but really make sure this works *perfectly* with 0 edge cases first
 
 /**
  * Creates a hidden link that when focussed becomes visible. When the user activates the link, the

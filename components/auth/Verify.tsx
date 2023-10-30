@@ -18,6 +18,7 @@ import Head from "next/head";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { Locked2fa } from "./Locked2fa";
 import { Expired2faSession } from "./Expired2faSession";
+import { PageHeading } from "@components/globals/PageHeading";
 
 interface VerifyProps {
   username: React.MutableRefObject<string>;
@@ -186,9 +187,9 @@ export const Verify = ({
                 ) : undefined}
               </Alert>
             )}
-            <h1 data-testid="verify-title" ref={headingRef} className="mb-6 mt-6 border-0">
+            <PageHeading data-testid="verify-title" ref={headingRef} className="mb-6 mt-6 border-0">
               {t("verify.title")}
-            </h1>
+            </PageHeading>
             <p className="mb-12 mt-10">{t("verify.emailHasBeenSent")}</p>
             <form id="verificationCodeForm" method="POST" onSubmit={handleSubmit} noValidate>
               <div className="focus-group">
