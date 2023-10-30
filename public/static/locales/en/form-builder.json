@@ -685,7 +685,7 @@
   "closingDate": {
     "title": "Accept form submissions",
     "description": "Once you publish a form, it is open to accept form submissions. You can close the form to prevent submissions.",
-    "status": "Status",
+    "status": "Form status",
     "open": "Open",
     "closed": "Closed",
     "saveButton": "Save changes",
