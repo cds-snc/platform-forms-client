@@ -19,9 +19,18 @@ export const transform = (responses: ResponseSubmission[]) => {
       response.confirmation_code,
       ...response.submission.map((item) => {
         if (item.answer instanceof Array) {
-          return JSON.stringify(item.answer); // need to massage this more
+          return item.answer
+            .map((answer) => {
+              return answer
+                .map((subAnswer) => {
+                  return subAnswer.questionEn + ": " + subAnswer.answer + "\n";
+                })
+                .join("");
+            })
+            .join("\n");
+        } else {
+          return item.answer;
         }
-        return item.answer;
       }),
     ];
   });
