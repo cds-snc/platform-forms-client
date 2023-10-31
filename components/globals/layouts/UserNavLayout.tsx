@@ -3,7 +3,7 @@ import { useTranslation } from "next-i18next";
 import Link from "next/link";
 
 import { useAccessControl } from "@lib/hooks";
-import { Footer, Brand, SkipLinkFormBuilder, LanguageToggle } from "@components/globals";
+import { Footer, Brand, SkipLink, LanguageToggle } from "@components/globals";
 import LoginMenu from "@components/auth/LoginMenu";
 import { SiteLogo } from "@formbuilder/icons";
 import { ToastContainer } from "@formbuilder/app/shared/Toast";
@@ -45,7 +45,7 @@ const UserNavLayout = ({
   return (
     <div className="flex min-h-full flex-col bg-gray-soft">
       <HeadMeta />
-      <SkipLinkFormBuilder />
+      <SkipLink />
 
       <header className="mb-4 bg-white px-[4rem] py-6 laptop:px-32">
         <div className="flex justify-between">

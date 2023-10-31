@@ -24,7 +24,7 @@ import {
   sortVaultSubmission,
 } from "./DownloadTableReducer";
 import { getDaysPassed } from "@lib/clientHelpers";
-import { Alert, SkipLinkFormBuilder } from "@components/globals";
+import { Alert, SkipLink } from "@components/globals";
 
 // TODO: move to an app setting variable
 const MAX_FILE_DOWNLOADS = 20;
@@ -168,7 +168,7 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
 
   return (
     <section>
-      <SkipLinkFormBuilder
+      <SkipLink
         text={t("downloadResponsesTable.skipLink")}
         anchor="#downloadTableButtonId"
         classNameContainer="relative h-2 mt-[-2rem]"

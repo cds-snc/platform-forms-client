@@ -22,7 +22,7 @@ type Ref = HTMLHeadingElement;
 const PageHeading = React.forwardRef<Ref, Props>((props, ref) => {
   const { children, id = "pageHeading", "data-testid": dataTestid, className } = props;
 
-  // The default "id" is used by SkipLinkFormbuilder, only change the id if it's NOT being used as
+  // The default "id" is used by SkipLink, only change the id if it's NOT being used as
   // the main H1 heading. e.g. to focus a button
   return (
     <h1

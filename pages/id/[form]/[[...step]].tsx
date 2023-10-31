@@ -44,7 +44,9 @@ const RenderForm: NextPageWithLayout<RenderFormProps> = ({
         <title>{formTitle}</title>
       </Head>
       <div className={classes}>
-        <h1>{formTitle}</h1>
+        <h1 id="pageHeading" tabIndex={-1}>
+          {formTitle}
+        </h1>
         <Form formRecord={formRecord} language={language} router={router} t={t}>
           {currentForm}
         </Form>

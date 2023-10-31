@@ -3,7 +3,7 @@ import Head from "next/head";
 
 import { PublicFormRecord } from "@lib/types";
 import Footer from "@components/globals/Footer";
-import SkipLink from "@components/globals/SkipLink";
+import { SkipLink } from "@components/globals/SkipLink";
 import Fip from "@components/globals/Fip";
 import LanguageToggle from "../LanguageToggle";
 import { DateModified } from "../DateModified";

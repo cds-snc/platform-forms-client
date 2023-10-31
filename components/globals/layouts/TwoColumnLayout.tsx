@@ -1,6 +1,6 @@
 import React from "react";
 import { ToastContainer } from "@components/form-builder/app/shared/Toast";
-import { SkipLinkFormBuilder } from "@components/globals";
+import { SkipLink } from "@components/globals";
 import { Header } from "../Header";
 import { User } from "next-auth";
 import { HeadMeta } from "./HeadMeta";
@@ -22,7 +22,7 @@ export const TwoColumnLayout = ({
     <>
       <HeadMeta />
       <div className="flex h-full flex-col">
-        <SkipLinkFormBuilder />
+        <SkipLink />
 
         <Header context={context} user={user} />
         <div className="mx-4 shrink-0 grow basis-auto laptop:mx-32 desktop:mx-64">
