@@ -19,17 +19,8 @@ export function dateHasPast(timestamp: number) {
   // Get the current time in UTC
   const now = new Date();
 
-  // Get the local timezone offset in minutes
-  const timezoneOffset = now.getTimezoneOffset();
-
-  // Convert the timestamp to a Date object
-  const date = new Date(timestamp);
-
-  // Adjust the timestamp for the local timezone
-  const localTimestamp = new Date(date.getTime() - timezoneOffset * 60 * 1000);
-
-  // Compare the local timestamp to the current time in UTC
-  if (localTimestamp.getTime() < now.getTime()) {
+  // Compare utc time to timestamp
+  if (now.getTime() > timestamp) {
     return true;
   }
 
