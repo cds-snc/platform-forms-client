@@ -81,7 +81,7 @@ const getSubmissions = async (
 
       return {
         id: item.name,
-        created_at: item.createdAt,
+        created_at: parseInt(item.createdAt.toString()),
         confirmation_code: item.confirmationCode,
         submission,
       };
