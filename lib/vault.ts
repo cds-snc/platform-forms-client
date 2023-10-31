@@ -14,7 +14,7 @@ import {
 import { connectToDynamo } from "./integration/dynamodbConnector";
 import { logMessage } from "./logger";
 import { AccessControlError, checkPrivileges } from "./privileges";
-import { BatchWriteItemCommand } from "@aws-sdk/client-dynamodb";
+import { BatchGetItemCommand, BatchWriteItemCommand } from "@aws-sdk/client-dynamodb";
 import { chunkArray } from "@lib/utils";
 import { TemplateAlreadyPublishedError } from "@lib/templates";
 
@@ -206,7 +206,7 @@ export async function retrieveSubmissions(
   ability: UserAbility,
   formID: string,
   ids: string[]
-): Promise<{ submissions: VaultSubmission[]; numberOfUnprocessedSubmissions: number }> {
+): Promise<{ submissions: VaultSubmission[] }> {
   // Check access control first
   try {
     await checkAbilityToAccessSubmissions(ability, formID);
@@ -225,82 +225,53 @@ export async function retrieveSubmissions(
   }
 
   try {
-    let accumulatedResponses: VaultSubmission[] = [];
-    let lastEvaluatedKey = null;
-
-    while (lastEvaluatedKey !== undefined) {
-      const documentClient = connectToDynamo();
-      const expressionAttributeValues: { [key: string]: string } = {};
-
-      const idParams = ids
-        .map((id: string, index: number) => {
-          const idParam = `:id${index}`;
-          expressionAttributeValues[idParam] = id.trim();
-          return idParam;
-        })
-        .join(",");
-
-      const getItemsDbParams: QueryCommandInput = {
-        TableName: "Vault",
-        KeyConditionExpression: "FormID = :formID and begins_with(NAME_OR_CONF, :namePrefix)",
-        ExpressionAttributeValues: {
-          ":formID": formID,
-          ":namePrefix": "NAME#",
-          ...expressionAttributeValues,
+    const documentClient = connectToDynamo();
+    const keys = ids.map((id) => {
+      id = id.trim();
+      return {
+        NAME_OR_CONF: {
+          S: `NAME#${id}`,
         },
-        ExpressionAttributeNames: {
-          "#status": "Status",
-          "#name": "Name",
+        FormID: {
+          S: formID.trim(),
         },
-        FilterExpression: `#name IN (${idParams})`,
-        ProjectionExpression:
-          "FormID,SubmissionID,FormSubmission,ConfirmationCode,#status,SecurityAttribute,#name,CreatedAt,LastDownloadedBy,ConfirmTimestamp,DownloadedAt,RemovalDate",
       };
-      const queryCommand = new QueryCommand(getItemsDbParams);
+    });
 
-      // eslint-disable-next-line no-await-in-loop
-      const response = await documentClient.send(queryCommand);
+    const input = {
+      RequestItems: {
+        Vault: {
+          Keys: keys,
+        },
+      },
+      ProjectionExpression:
+        "FormID,SubmissionID,FormSubmission,ConfirmationCode,#status,SecurityAttribute,#name,CreatedAt,LastDownloadedBy,ConfirmTimestamp,DownloadedAt,RemovalDate",
+    };
 
-      if (response.Items?.length) {
-        accumulatedResponses = accumulatedResponses.concat(
-          response.Items.map(
-            ({
-              FormID: formID,
-              SubmissionID: submissionID,
-              FormSubmission: formSubmission,
-              ConfirmationCode: confirmationCode,
-              SecurityAttribute: securityAttribute,
-              Status: status,
-              CreatedAt: createdAt,
-              LastDownloadedBy: lastDownloadedBy,
-              Name: name,
-              ConfirmTimestamp: confirmedAt,
-              DownloadedAt: downloadedAt,
-              RemovalDate: removedAt,
-            }) => ({
-              formID,
-              submissionID,
-              formSubmission,
-              confirmationCode,
-              status,
-              securityAttribute,
-              name,
-              createdAt,
-              lastDownloadedBy: lastDownloadedBy ?? null,
-              confirmedAt: confirmedAt ?? null,
-              downloadedAt: downloadedAt ?? null,
-              removedAt: removedAt ?? null,
-            })
-          )
-        );
-      }
+    const queryCommand = new BatchGetItemCommand(input);
 
-      // We either manually stop the paginated request when we have 10 or more items or we let it finish on its own
-      if (accumulatedResponses.length >= 500) {
-        lastEvaluatedKey = undefined;
-      } else {
-        lastEvaluatedKey = response.LastEvaluatedKey;
-      }
+    // eslint-disable-next-line no-await-in-loop
+    const response = await documentClient.send(queryCommand);
+
+    let accumulatedResponses: VaultSubmission[] = [];
+
+    if (response.Responses?.Vault.length) {
+      accumulatedResponses = response.Responses.Vault.map((item) => {
+        return {
+          formID: item.FormID.S,
+          submissionID: item.SubmissionID.S,
+          formSubmission: item.FormSubmission.S,
+          confirmationCode: item.ConfirmationCode.S,
+          status: item.Status.S as VaultStatus,
+          securityAttribute: item.SecurityAttribute.S,
+          name: item.Name.S,
+          createdAt: item.CreatedAt.N,
+          lastDownloadedBy: item.LastDownloadedBy?.S ?? null,
+          confirmedAt: item.ConfirmTimestamp?.N ?? null,
+          downloadedAt: item.DownloadedAt?.N ?? null,
+          removedAt: item.RemovalDate?.N ?? null,
+        } as unknown as VaultSubmission;
+      });
     }
 
     logEvent(
@@ -313,19 +284,12 @@ export async function retrieveSubmissions(
       `Retrieve selected responses for form ${formID} with IDs ${ids.join(",")}`
     );
 
-    const numOfUnprocessedSubmissions = accumulatedResponses.filter((submission) =>
-      [VaultStatus.NEW, VaultStatus.DOWNLOADED, VaultStatus.PROBLEM].includes(submission.status)
-    ).length;
-
-    await numberOfUnprocessedSubmissionsCachePut(formID, numOfUnprocessedSubmissions);
-
     return {
       submissions: accumulatedResponses,
-      numberOfUnprocessedSubmissions: numOfUnprocessedSubmissions,
     };
   } catch (e) {
     logMessage.error(e);
-    return { submissions: [], numberOfUnprocessedSubmissions: 0 };
+    return { submissions: [] };
   }
 }
 
