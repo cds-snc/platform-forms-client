@@ -21,6 +21,7 @@ import { ResumeEditingForm } from "@components/form-builder/app/shared";
 import { getUnprocessedSubmissionsForUser } from "@lib/users";
 import { FullWidthLayout } from "@components/globals/layouts";
 import Head from "next/head";
+import { PageHeading } from "@components/globals/PageHeading";
 
 interface FormsDataItem {
   id: string;
@@ -80,7 +81,7 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
       </Head>
 
       <div className="center mx-auto w-[980px]">
-        <h1 className="mb-8 border-b-0">{t("title")}</h1>
+        <PageHeading className="mb-8 border-b-0">{t("title")}</PageHeading>
 
         <div className="flex w-full justify-between">
           <FilterNavigation />

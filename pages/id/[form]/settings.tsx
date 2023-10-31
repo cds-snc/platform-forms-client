@@ -16,6 +16,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import { getProperty } from "@lib/formBuilder";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
+import { PageHeading } from "@components/globals/PageHeading";
 
 interface FormSettingsProps {
   form: FormRecord;
@@ -59,7 +60,7 @@ const FormSettings = (props: FormSettingsProps): React.ReactElement => {
       <Head>
         <title>{t("settings.title")}</title>
       </Head>
-      <h1>{t("settings.title")}</h1>
+      <PageHeading>{t("settings.title")}</PageHeading>
       <div data-testid="formID" className="mb-4">
         <b>Form Title:</b> {formRecord.form[getProperty("title", language)] as string}
         <br />

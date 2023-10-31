@@ -3,6 +3,7 @@ import { Card } from "@components/globals/card/Card";
 import { LinkButton } from "@components/globals";
 import { useSession } from "next-auth/react";
 import { useTranslation } from "next-i18next";
+import { PageHeading } from "@components/globals/PageHeading";
 
 export enum LoggedOutTabName {
   PUBLISH = "publish",
@@ -32,7 +33,9 @@ export const LoggedOutTab = ({ tabName }: LoggedOutTabProps) => {
         </picture>
       }
     >
-      <h1 className="gc-h2 text-[#748094]">{t(`loggedOutTab.${tabName}.title`)}</h1>
+      <PageHeading className="gc-h2 text-[#748094]">
+        {t(`loggedOutTab.${tabName}.title`)}
+      </PageHeading>
       <p className="mb-6">
         {t(`loggedOutTab.${tabName}.text1`)} <a href={signInLink}>{t("loggedOutTab.text2")}</a>.{" "}
         {t("loggedOutTab.text3")} <a href={createAccountLink}>{t("loggedOutTab.text4")}</a>.

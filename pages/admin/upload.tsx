@@ -6,6 +6,7 @@ import Head from "next/head";
 import { useTranslation } from "next-i18next";
 import { checkPrivileges } from "@lib/privileges";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
+import { PageHeading } from "@components/globals/PageHeading";
 
 const Upload = (): React.ReactElement => {
   const { t } = useTranslation("admin-templates");
@@ -14,7 +15,7 @@ const Upload = (): React.ReactElement => {
       <Head>
         <title>{t("upload.title")}</title>
       </Head>
-      <h1>{t("upload.title")}</h1>
+      <PageHeading>{t("upload.title")}</PageHeading>
       <JSONUpload></JSONUpload>
     </>
   );

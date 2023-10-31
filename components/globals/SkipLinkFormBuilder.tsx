@@ -5,10 +5,12 @@ import { useTranslation } from "react-i18next";
 
 /**
  * Creates a hidden link that when focussed becomes visible. When the user activates the link, the
- * browser focuses the provided anchor id.
- * This is mainly to help screen reader users by skipping "unimportant" content and going right to
- * the main content that is ideally a heading. The heading gives extra context to the user.
- * Another use to send focus to another part of the app like a form control.
+ * browser focuses the provided anchor id. This is mainly to help screen reader users by skipping
+ * "unimportant" content and going right to the main content that is ideally a heading. The heading
+ * gives extra context to the user.
+ *
+ * Another use is to send focus to another part of the app like a form control.
+ * e.g. see DownloadTable.tsx
  */
 export const SkipLinkFormBuilder = ({
   text,

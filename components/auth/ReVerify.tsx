@@ -12,6 +12,7 @@ import { ErrorStatus } from "@components/forms/Alert/Alert";
 import Link from "next/link";
 import Head from "next/head";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
+import { PageHeading } from "@components/globals/PageHeading";
 
 interface ReVerifyProps {
   username: React.MutableRefObject<string>;
@@ -91,9 +92,9 @@ export const ReVerify = ({
           ) : undefined}
         </Alert>
       )}
-      <h1 ref={headingRef} className="border-0 mt-6 mb-6">
+      <PageHeading ref={headingRef} className="border-0 mt-6 mb-6">
         {t("reVerify.title")}
-      </h1>
+      </PageHeading>
       <p className="mt-10">{t("reVerify.description")}</p>
       <div className="flex mt-16">
         <Button theme="primary" className="mr-4" onClick={handleReVerify}>
