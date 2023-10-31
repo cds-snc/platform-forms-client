@@ -7,6 +7,7 @@ interface ClosingDateToggleProps {
   onLabel: string;
   offLabel: string;
   tabIndex?: number;
+  description?: string;
 }
 
 export const ClosingDateToggle = ({
@@ -14,6 +15,7 @@ export const ClosingDateToggle = ({
   setIsChecked,
   onLabel,
   offLabel,
+  description,
 }: ClosingDateToggleProps) => {
   const boldOn = isChecked ? "font-bold" : "font-normal";
   const boldOff = !isChecked ? "font-bold" : "font-normal";
@@ -37,6 +39,7 @@ export const ClosingDateToggle = ({
       }}
     >
       <div className="cursor-pointer whitespace-nowrap">
+        <span className="sr-only">{description && description}</span>
         <span id="switch-on" className={`mr-1 text-sm ${boldOff} mr-2`} aria-hidden="true">
           {onLabel}
         </span>

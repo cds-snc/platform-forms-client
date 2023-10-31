@@ -60,6 +60,7 @@ export const SetClosingDate = ({ formID }: { formID: string }) => {
           setIsChecked={handleToggle}
           onLabel={t("closingDate.closed")}
           offLabel={t("closingDate.open")}
+          description={t("closingDate.status")}
         />
       </div>
       <Button theme="secondary" onClick={saveFormStatus}>
