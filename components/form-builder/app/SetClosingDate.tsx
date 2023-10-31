@@ -17,7 +17,7 @@ export const SetClosingDate = ({ formID }: { formID: string }) => {
   const [status, setStatus] = useState(closingDate ? "closed" : "open");
 
   const handleToggle = (value: boolean) => {
-    setStatus(value == true ? "open" : "closed");
+    setStatus(value == true ? "closed" : "open");
   };
 
   const saveFormStatus = useCallback(async () => {
@@ -56,7 +56,7 @@ export const SetClosingDate = ({ formID }: { formID: string }) => {
       <p className="mb-6">{t("closingDate.description")}</p>
       <div className="mb-4">
         <ClosingDateToggle
-          isChecked={status === "closed" ? true : false}
+          isChecked={status === "closed" ? false : true}
           setIsChecked={handleToggle}
           onLabel={t("closingDate.closed")}
           offLabel={t("closingDate.open")}
