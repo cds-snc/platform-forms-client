@@ -258,6 +258,11 @@ const processFormData = async (
       return res.status(400).json({ error: "No form could be found with that ID" });
     }
 
+    // Check to see if form is closed and block response submission
+    if (form.closingDate && new Date(form.closingDate) < new Date()) {
+      return res.status(400).json({ error: "Form is closed and not accepting submissions" });
+    }
+
     const fields = rehydrateFormResponses({
       form,
       responses: reqFields,
