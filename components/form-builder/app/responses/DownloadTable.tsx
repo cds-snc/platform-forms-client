@@ -7,7 +7,6 @@ import {
   VaultSubmissionList,
 } from "@lib/types";
 import { useTranslation } from "react-i18next";
-import { SkipLinkFormBuilder } from "@components/globals";
 import { ConfirmReceiptStatus } from "./ConfirmReceiptStatus";
 import { DownloadResponseStatus } from "./DownloadResponseStatus";
 import { RemovalStatus } from "./RemovalStatus";
@@ -25,7 +24,7 @@ import {
   sortVaultSubmission,
 } from "./DownloadTableReducer";
 import { getDaysPassed } from "@lib/clientHelpers";
-import { Alert } from "@components/globals";
+import { Alert, SkipLinkFormBuilder } from "@components/globals";
 
 // TODO: move to an app setting variable
 const MAX_FILE_DOWNLOADS = 20;
@@ -172,6 +171,7 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
       <SkipLinkFormBuilder
         text={t("downloadResponsesTable.skipLink")}
         anchor="#downloadTableButtonId"
+        classNameContainer="relative h-2 mt-[-2rem]"
       />
       <div id="notificationsTop">
         {tableItems.checkedItems.size > MAX_FILE_DOWNLOADS && (
