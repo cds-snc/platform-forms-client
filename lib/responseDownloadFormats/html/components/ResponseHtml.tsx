@@ -57,18 +57,20 @@ export const ResponseHtml = ({
               formResponse={response}
             />
             <div className="mt-20" />
-            <ProtectedWarning securityAttribute={securityAttribute} lang="fr" />
-            <Fip language="fr" />
-            <div className="mt-14" />
-            <ResponseSection
-              confirmReceiptCode={confirmationCode}
-              lang={"fr"}
-              responseID={responseID}
-              // submissionID={submissionID}
-              submissionDate={createdAt}
-              formTemplate={form}
-              formResponse={response}
-            />
+            <div lang="fr">
+              <ProtectedWarning securityAttribute={securityAttribute} lang="fr" />
+              <Fip language="fr" />
+              <div className="mt-14" />
+              <ResponseSection
+                confirmReceiptCode={confirmationCode}
+                lang={"fr"}
+                responseID={responseID}
+                // submissionID={submissionID}
+                submissionDate={createdAt}
+                formTemplate={form}
+                formResponse={response}
+              />
+            </div>
           </main>
         </div>
       </body>
