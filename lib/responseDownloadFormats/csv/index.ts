@@ -20,13 +20,9 @@ export const transform = (responses: ResponseSubmission[]) => {
       ...response.submission.map((item) => {
         if (item.answer instanceof Array) {
           return item.answer
-            .map((answer) => {
-              return answer
-                .map((subAnswer) => {
-                  return subAnswer.questionEn + ": " + subAnswer.answer + "\n";
-                })
-                .join("");
-            })
+            .map((answer) =>
+              answer.map((subAnswer) => `${subAnswer.questionEn}: ${subAnswer.answer}\n`).join("")
+            )
             .join("\n");
         }
         return item.answer;
