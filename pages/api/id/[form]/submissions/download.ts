@@ -99,9 +99,16 @@ const getSubmissions = async (
         `Downloaded form responses for formID ${formId} with IDs ${ids.join(",")}`
       );
 
-      queryResult.submissions.forEach(async (response) => {
-        await updateLastDownloadedBy(response.name, formId, userEmail, response.status);
-      });
+      await updateLastDownloadedBy(
+        queryResult.submissions.map((item) => {
+          return {
+            id: item.name,
+            status: item.status,
+          };
+        }),
+        formId,
+        userEmail
+      );
 
       if (req.query.format === "csv") {
         return res

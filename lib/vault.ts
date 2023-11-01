@@ -1,9 +1,4 @@
-import {
-  QueryCommand,
-  QueryCommandInput,
-  UpdateCommand,
-  UpdateCommandInput,
-} from "@aws-sdk/lib-dynamodb";
+import { QueryCommand, QueryCommandInput } from "@aws-sdk/lib-dynamodb";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { VaultSubmissionList, UserAbility, VaultStatus, VaultSubmission } from "@lib/types";
 import { logEvent } from "./auditLogs";
@@ -14,7 +9,12 @@ import {
 import { connectToDynamo } from "./integration/dynamodbConnector";
 import { logMessage } from "./logger";
 import { AccessControlError, checkPrivileges } from "./privileges";
-import { BatchGetItemCommand, BatchWriteItemCommand } from "@aws-sdk/client-dynamodb";
+import {
+  BatchGetItemCommand,
+  BatchWriteItemCommand,
+  TransactWriteItemsCommand,
+  TransactWriteItemsCommandInput,
+} from "@aws-sdk/client-dynamodb";
 import { chunkArray } from "@lib/utils";
 import { TemplateAlreadyPublishedError } from "@lib/templates";
 
@@ -300,38 +300,46 @@ export async function retrieveSubmissions(
  * @param email Email address of the user downloading the Submission
  */
 export async function updateLastDownloadedBy(
-  responseID: string,
+  responses: Array<{ id: string; status: string }>,
   formID: string,
-  email: string,
-  status: VaultStatus
+  email: string
 ) {
   const documentClient = connectToDynamo();
 
-  const isNewResponse = status === VaultStatus.NEW;
+  const input: TransactWriteItemsCommandInput = {
+    TransactItems: responses.map((response) => {
+      const isNewResponse = response.status === VaultStatus.NEW;
 
-  const updateCommandInput: UpdateCommandInput = {
-    TableName: "Vault",
-    Key: {
-      FormID: formID,
-      NAME_OR_CONF: `NAME#${responseID}`,
-    },
-    UpdateExpression: "SET LastDownloadedBy = :email, DownloadedAt = :downloadedAt".concat(
-      isNewResponse ? ", #status = :statusUpdate" : ""
-    ),
-    ExpressionAttributeValues: {
-      ":email": email,
-      ":downloadedAt": Date.now(),
-      ...(isNewResponse && { ":statusUpdate": "Downloaded" }),
-    },
-    ...(isNewResponse && {
-      ExpressionAttributeNames: {
-        "#status": "Status",
-      },
+      return {
+        Update: {
+          TableName: "Vault",
+          Key: {
+            FormID: {
+              S: formID,
+            },
+            NAME_OR_CONF: {
+              S: `NAME#${response.id}`,
+            },
+          },
+          UpdateExpression: "SET LastDownloadedBy = :email, DownloadedAt = :downloadedAt".concat(
+            isNewResponse ? ", #status = :statusUpdate" : ""
+          ),
+          ExpressionAttributeValues: {
+            ":email": { S: email ?? "" },
+            ":downloadedAt": { N: Date.now() as unknown as string },
+            ...(isNewResponse && { ":statusUpdate": { S: "Downloaded" } }),
+          },
+          ...(isNewResponse && {
+            ExpressionAttributeNames: {
+              "#status": "Status",
+            },
+          }),
+        },
+      };
     }),
-    ReturnValues: "NONE",
   };
 
-  return documentClient.send(new UpdateCommand(updateCommandInput));
+  return documentClient.send(new TransactWriteItemsCommand(input));
 }
 
 /**
