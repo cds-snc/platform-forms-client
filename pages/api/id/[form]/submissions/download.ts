@@ -92,23 +92,21 @@ const getSubmissions = async (
     }
 
     if (req.query.format) {
-      logEvent(
-        ability.userID,
-        { type: "Response", id: ids.join(",") },
-        "DownloadResponses",
-        `Downloaded form responses for formID ${formId} with IDs ${ids.join(",")}`
-      );
+      const responseIdStatusArray = queryResult.submissions.map((item) => {
+        logEvent(
+          ability.userID,
+          { type: "Response", id: item.submissionID },
+          "DownloadResponse",
+          `Downloaded form response for submission ID ${item.submissionID}`
+        );
 
-      await updateLastDownloadedBy(
-        queryResult.submissions.map((item) => {
-          return {
-            id: item.name,
-            status: item.status,
-          };
-        }),
-        formId,
-        userEmail
-      );
+        return {
+          id: item.name,
+          status: item.status,
+        };
+      });
+
+      await updateLastDownloadedBy(responseIdStatusArray, formId, userEmail);
 
       if (req.query.format === "csv") {
         return res
