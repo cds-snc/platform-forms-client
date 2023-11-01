@@ -12,6 +12,7 @@ import { AccessControlError, checkPrivileges } from "./privileges";
 import {
   BatchGetItemCommand,
   BatchWriteItemCommand,
+  KeysAndAttributes,
   TransactWriteItemsCommand,
   TransactWriteItemsCommandInput,
 } from "@aws-sdk/client-dynamodb";
@@ -225,64 +226,72 @@ export async function retrieveSubmissions(
   }
 
   try {
+    let accumulatedResponses: VaultSubmission[] = [];
     const documentClient = connectToDynamo();
-    const keys = ids.map((id) => {
-      id = id.trim();
+    let keys = ids.map((id) => {
       return {
         NAME_OR_CONF: {
-          S: `NAME#${id}`,
+          S: `NAME#${id.trim()}`,
         },
         FormID: {
-          S: formID.trim(),
+          S: formID,
         },
       };
-    });
+    }) as KeysAndAttributes["Keys"];
 
-    const input = {
-      RequestItems: {
-        Vault: {
-          Keys: keys,
+    while (keys && keys.length > 0) {
+      const input = {
+        RequestItems: {
+          Vault: {
+            Keys: keys,
+          },
         },
-      },
-      ProjectionExpression:
-        "FormID,SubmissionID,FormSubmission,ConfirmationCode,#status,SecurityAttribute,#name,CreatedAt,LastDownloadedBy,ConfirmTimestamp,DownloadedAt,RemovalDate",
-    };
+        ProjectionExpression:
+          "FormID,SubmissionID,FormSubmission,ConfirmationCode,#status,SecurityAttribute,#name,CreatedAt,LastDownloadedBy,ConfirmTimestamp,DownloadedAt,RemovalDate",
+      };
 
-    const queryCommand = new BatchGetItemCommand(input);
+      const queryCommand = new BatchGetItemCommand(input);
 
-    // eslint-disable-next-line no-await-in-loop
-    const response = await documentClient.send(queryCommand);
+      // eslint-disable-next-line no-await-in-loop
+      const response = await documentClient.send(queryCommand);
 
-    let accumulatedResponses: VaultSubmission[] = [];
+      if (response.Responses?.Vault.length) {
+        accumulatedResponses = accumulatedResponses = accumulatedResponses.concat(
+          response.Responses.Vault.map((item) => {
+            return {
+              formID: item.FormID.S,
+              submissionID: item.SubmissionID.S,
+              formSubmission: item.FormSubmission.S,
+              confirmationCode: item.ConfirmationCode.S,
+              status: item.Status.S as VaultStatus,
+              securityAttribute: item.SecurityAttribute.S,
+              name: item.Name.S,
+              createdAt: item.CreatedAt.N,
+              lastDownloadedBy: item.LastDownloadedBy?.S ?? null,
+              confirmedAt: item.ConfirmTimestamp?.N ?? null,
+              downloadedAt: item.DownloadedAt?.N ?? null,
+              removedAt: item.RemovalDate?.N ?? null,
+            } as unknown as VaultSubmission;
+          })
+        );
+      }
 
-    if (response.Responses?.Vault.length) {
-      accumulatedResponses = response.Responses.Vault.map((item) => {
-        return {
-          formID: item.FormID.S,
-          submissionID: item.SubmissionID.S,
-          formSubmission: item.FormSubmission.S,
-          confirmationCode: item.ConfirmationCode.S,
-          status: item.Status.S as VaultStatus,
-          securityAttribute: item.SecurityAttribute.S,
-          name: item.Name.S,
-          createdAt: item.CreatedAt.N,
-          lastDownloadedBy: item.LastDownloadedBy?.S ?? null,
-          confirmedAt: item.ConfirmTimestamp?.N ?? null,
-          downloadedAt: item.DownloadedAt?.N ?? null,
-          removedAt: item.RemovalDate?.N ?? null,
-        } as unknown as VaultSubmission;
-      });
+      if (response.UnprocessedKeys) {
+        keys = response.UnprocessedKeys.Vault.Keys;
+      }
     }
 
-    logEvent(
-      ability.userID,
-      {
-        type: "Form",
-        id: formID,
-      },
-      "RetrieveResponses",
-      `Retrieve selected responses for form ${formID} with IDs ${ids.join(",")}`
-    );
+    accumulatedResponses.forEach((item) => {
+      logEvent(
+        ability.userID,
+        {
+          type: "Response",
+          id: item.submissionID,
+        },
+        "RetrieveResponses",
+        `Retrieve selected responses for form ${formID} with ID ${item.submissionID}`
+      );
+    });
 
     return {
       submissions: accumulatedResponses,
