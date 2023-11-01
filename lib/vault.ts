@@ -315,40 +315,42 @@ export async function updateLastDownloadedBy(
 ) {
   const documentClient = connectToDynamo();
 
-  const input: TransactWriteItemsCommandInput = {
-    TransactItems: responses.map((response) => {
-      const isNewResponse = response.status === VaultStatus.NEW;
-
-      return {
-        Update: {
-          TableName: "Vault",
-          Key: {
-            FormID: {
-              S: formID,
+  const asyncUpdateRequests = chunkArray(responses, 100).map((chunkedResponses) => {
+    const input: TransactWriteItemsCommandInput = {
+      TransactItems: chunkedResponses.map((response) => {
+        const isNewResponse = response.status === VaultStatus.NEW;
+        return {
+          Update: {
+            TableName: "Vault",
+            Key: {
+              FormID: {
+                S: formID,
+              },
+              NAME_OR_CONF: {
+                S: `NAME#${response.id}`,
+              },
             },
-            NAME_OR_CONF: {
-              S: `NAME#${response.id}`,
+            UpdateExpression: "SET LastDownloadedBy = :email, DownloadedAt = :downloadedAt".concat(
+              isNewResponse ? ", #status = :statusUpdate" : ""
+            ),
+            ExpressionAttributeValues: {
+              ":email": { S: email ?? "" },
+              ":downloadedAt": { N: Date.now() as unknown as string },
+              ...(isNewResponse && { ":statusUpdate": { S: "Downloaded" } }),
             },
+            ...(isNewResponse && {
+              ExpressionAttributeNames: {
+                "#status": "Status",
+              },
+            }),
           },
-          UpdateExpression: "SET LastDownloadedBy = :email, DownloadedAt = :downloadedAt".concat(
-            isNewResponse ? ", #status = :statusUpdate" : ""
-          ),
-          ExpressionAttributeValues: {
-            ":email": { S: email ?? "" },
-            ":downloadedAt": { N: Date.now() as unknown as string },
-            ...(isNewResponse && { ":statusUpdate": { S: "Downloaded" } }),
-          },
-          ...(isNewResponse && {
-            ExpressionAttributeNames: {
-              "#status": "Status",
-            },
-          }),
-        },
-      };
-    }),
-  };
+        };
+      }),
+    };
+    return documentClient.send(new TransactWriteItemsCommand(input));
+  });
 
-  return documentClient.send(new TransactWriteItemsCommand(input));
+  return Promise.all(asyncUpdateRequests);
 }
 
 /**
