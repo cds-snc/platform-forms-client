@@ -256,7 +256,7 @@ export async function retrieveSubmissions(
       const response = await documentClient.send(queryCommand);
 
       if (response.Responses?.Vault.length) {
-        accumulatedResponses = accumulatedResponses = accumulatedResponses.concat(
+        accumulatedResponses = accumulatedResponses.concat(
           response.Responses.Vault.map((item) => {
             return {
               formID: item.FormID.S,
