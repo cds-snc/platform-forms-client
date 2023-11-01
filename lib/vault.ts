@@ -276,9 +276,7 @@ export async function retrieveSubmissions(
         );
       }
 
-      if (response.UnprocessedKeys) {
-        keys = response.UnprocessedKeys.Vault.Keys;
-      }
+      keys = response.UnprocessedKeys?.Vault?.Keys || [];
     }
 
     accumulatedResponses.forEach((item) => {
