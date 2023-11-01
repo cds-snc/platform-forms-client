@@ -25,6 +25,7 @@ import {
 } from "./DownloadTableReducer";
 import { getDaysPassed } from "@lib/clientHelpers";
 import { Alert } from "@components/globals";
+import { logMessage } from "@lib/logger";
 
 // TODO: move to an app setting variable
 const MAX_FILE_DOWNLOADS = 20;
@@ -116,26 +117,31 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
       data: {
         ids: ids.join(","),
       },
-    }).then((response) => {
-      const interval = 200;
-      response.data.forEach((submission: { id: string; html: string }, i: number) => {
+    })
+      .then((response) => {
+        const interval = 200;
+        response.data.forEach((submission: { id: string; html: string }, i: number) => {
+          setTimeout(() => {
+            const fileName = `${submission.id}.html`;
+            const href = window.URL.createObjectURL(new Blob([submission.html]));
+            const anchorElement = document.createElement("a");
+            anchorElement.href = href;
+            anchorElement.download = fileName;
+            document.body.appendChild(anchorElement);
+            anchorElement.click();
+            document.body.removeChild(anchorElement);
+            window.URL.revokeObjectURL(href);
+          }, interval * i);
+        });
         setTimeout(() => {
-          const fileName = `${submission.id}.html`;
-          const href = window.URL.createObjectURL(new Blob([submission.html]));
-          const anchorElement = document.createElement("a");
-          anchorElement.href = href;
-          anchorElement.download = fileName;
-          document.body.appendChild(anchorElement);
-          anchorElement.click();
-          document.body.removeChild(anchorElement);
-          window.URL.revokeObjectURL(href);
-        }, interval * i);
+          router.replace(router.asPath, undefined, { scroll: false });
+          toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
+        }, interval * response.data.length);
+      })
+      .catch((err) => {
+        logMessage.error(err as Error);
+        setErrors({ ...errors, downloadError: true });
       });
-      setTimeout(() => {
-        router.replace(router.asPath, undefined, { scroll: false });
-        toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
-      }, interval * response.data.length);
-    });
   };
 
   const blockDownload = (
