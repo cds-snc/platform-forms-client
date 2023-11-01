@@ -10,6 +10,7 @@ import { transform as htmlTransform } from "@lib/responseDownloadFormats/html";
 import { retrieveSubmissions, updateLastDownloadedBy } from "@lib/vault";
 import { ResponseSubmission } from "@lib/responseDownloadFormats/types";
 import { logEvent } from "@lib/auditLogs";
+import { logMessage } from "@lib/logger";
 
 const getSubmissions = async (
   req: NextApiRequest,
@@ -151,8 +152,12 @@ const getSubmissions = async (
     // Default repsonse format is JSON
     return res.status(200).json({ responses: responses });
   } catch (err) {
-    if (err instanceof AccessControlError) return res.status(403).json({ error: "Forbidden" });
-    else return res.status(500).json({ message: "There was an error. Please try again later." });
+    if (err instanceof AccessControlError) {
+      return res.status(403).json({ error: "Forbidden" });
+    } else {
+      logMessage.error(err);
+      return res.status(500).json({ message: "There was an error. Please try again later." });
+    }
   }
 };
 
