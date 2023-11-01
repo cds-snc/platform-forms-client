@@ -6,6 +6,7 @@ import { User } from "next-auth";
 import { HeadMeta } from "./HeadMeta";
 import { cn } from "@lib/utils";
 import Footer from "../Footer";
+import { useSkipLink } from "@lib/hooks/useSkipLink";
 export const TwoColumnLayout = ({
   children,
   leftColumnContent,
@@ -17,6 +18,7 @@ export const TwoColumnLayout = ({
   user?: User;
   context?: "admin" | "formBuilder" | "default";
 }) => {
+  useSkipLink();
   return (
     <>
       <HeadMeta />
@@ -31,10 +33,7 @@ export const TwoColumnLayout = ({
               <div className="flex flex-row gap-10">
                 <div className="min-w-[181px]">{leftColumnContent}</div>
 
-                <main
-                  id="content"
-                  className={cn("w-full", context === "formBuilder" && "form-builder")}
-                >
+                <main className={cn("w-full", context === "formBuilder" && "form-builder")}>
                   {children}
                 </main>
               </div>
