@@ -67,3 +67,4 @@ export { SettingsApplicationsIcon } from "./SettingsApplicationsIcon";
 export { EditIcon } from "./EditIcon";
 export { ProtectedIcon } from "./ProtectedIcon";
 export { BrandingIcon } from "./BrandingIcon";
+export { ClosedFormIcon } from "./ClosedFormIcon";

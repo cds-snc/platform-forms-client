@@ -284,6 +284,7 @@ describe("Template CRUD functions", () => {
       },
       select: {
         id: true,
+        closingDate: true,
         created_at: true,
         updated_at: true,
         name: true,
@@ -297,6 +298,7 @@ describe("Template CRUD functions", () => {
 
     expect(template).toEqual(
       expect.objectContaining({
+        closingDate: undefined,
         id: "formtestID",
         form: formConfiguration,
         isPublished: false,
@@ -325,6 +327,7 @@ describe("Template CRUD functions", () => {
       },
       select: {
         id: true,
+        closingDate: true,
         created_at: true,
         updated_at: true,
         name: true,
@@ -399,6 +402,7 @@ describe("Template CRUD functions", () => {
       },
       select: {
         id: true,
+        closingDate: true,
         created_at: true,
         updated_at: true,
         name: true,

@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { NextPageWithLayout } from "../../../_app";
-import { Settings, FormOwnership } from "@components/form-builder/app";
+import { Settings, FormOwnership, SetClosingDate } from "@components/form-builder/app";
 import { SettingsNavigation } from "@components/form-builder/app/navigation/SettingsNavigation";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { getTemplateWithAssociatedUsers } from "@lib/templates";
@@ -14,6 +14,8 @@ import { FormRecord } from "@lib/types";
 import { BackLink } from "@components/admin/LeftNav/BackLink";
 import Head from "next/head";
 import { FormBuilderLayout } from "@components/globals/layouts/FormBuilderLayout";
+import { useTemplateStore } from "@formbuilder/store";
+import { useSession } from "next-auth/react";
 
 interface AssignUsersToTemplateProps {
   formRecord: FormRecord;
@@ -45,8 +47,12 @@ const Page: NextPageWithLayout<AssignUsersToTemplateProps> = ({
   allUsers,
   canManageOwnership,
 }: AssignUsersToTemplateProps) => {
+  const { status } = useSession();
   const { t } = useTranslation("form-builder");
   const title = `${t("branding.heading")} — ${t("gcForms")}`;
+  const { id } = useTemplateStore((s) => ({
+    id: s.id,
+  }));
 
   return (
     <>
@@ -56,6 +62,7 @@ const Page: NextPageWithLayout<AssignUsersToTemplateProps> = ({
       <div className="max-w-4xl">
         <h1>{t("gcFormsSettings")}</h1>
         <SettingsNavigation />
+        {status === "authenticated" && <SetClosingDate formID={id} />}
         {canManageOwnership && (
           <FormOwnership
             formRecord={formRecord}

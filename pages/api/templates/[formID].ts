@@ -7,6 +7,7 @@ import {
   getFullTemplateByID,
   removeDeliveryOption,
   TemplateHasUnprocessedSubmissions,
+  updateClosingDateForTemplate,
 } from "@lib/templates";
 
 import { middleware, jsonValidator, cors, sessionExists } from "@lib/middleware";
@@ -73,6 +74,7 @@ const route = async ({
   deliveryOption,
   securityAttribute,
   isPublished,
+  closingDate,
   users,
   sendResponsesToVault,
 }: {
@@ -84,6 +86,7 @@ const route = async ({
   deliveryOption?: DeliveryOption;
   securityAttribute?: SecurityAttribute;
   isPublished?: boolean;
+  closingDate?: string;
   users?: { id: string; action: "add" | "remove" }[];
   sendResponsesToVault?: boolean;
 }) => {
@@ -108,6 +111,8 @@ const route = async ({
         });
       } else if (isPublished !== undefined) {
         return updateIsPublishedForTemplate(ability, formID, isPublished);
+      } else if (closingDate) {
+        return updateClosingDateForTemplate(ability, formID, closingDate);
       } else if (users) {
         if (!users.length) {
           return { error: true, message: "mustHaveAtLeastOneUser" };
