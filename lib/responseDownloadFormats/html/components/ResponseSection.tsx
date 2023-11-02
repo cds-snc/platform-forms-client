@@ -1,6 +1,6 @@
 import React from "react";
 import { FormProperties } from "@lib/types";
-import { customTranslate } from "../../helpers";
+import { customTranslate, getProperty } from "../../helpers";
 import { ResponseSubmission } from "../../types";
 import { ColumnTable } from "./ColumnTable";
 import { RowTable } from "./RowTable";
@@ -16,13 +16,6 @@ export interface ResponseSectionProps {
 
 export function capitalize(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-function getProperty(field: string, lang: string): string {
-  if (!field) {
-    throw new Error("Field does not exist");
-  }
-  return field + lang.charAt(0).toUpperCase() + lang.slice(1);
 }
 
 export const ResponseSection = ({

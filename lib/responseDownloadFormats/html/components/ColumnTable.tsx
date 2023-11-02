@@ -1,9 +1,8 @@
 import React from "react";
 import { capitalize } from "./ResponseSection";
-import { customTranslate } from "../../helpers";
+import { customTranslate, getProperty } from "../../helpers";
 import { Answer, ResponseSubmission } from "../../types";
 import { TableProps } from "../types";
-import { getProperty } from "../helpers";
 
 const QuestionColumns = ({
   formResponse,
