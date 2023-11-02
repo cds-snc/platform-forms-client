@@ -46,6 +46,7 @@ const getSubmissions = async (
     if (!queryResult)
       return res.status(500).json({ error: "There was an error. Please try again later." });
 
+    // Get responses into a ResponseSubmission array containing questions and answers that can be easily transformed
     const responses = queryResult.submissions.map((item) => {
       const submission = Object.entries(JSON.parse(String(item.formSubmission))).map(
         ([questionId, answer]) => {
@@ -96,13 +97,6 @@ const getSubmissions = async (
 
     if (req.query.format) {
       const responseIdStatusArray = queryResult.submissions.map((item) => {
-        logEvent(
-          ability.userID,
-          { type: "Response", id: item.submissionID },
-          "DownloadResponse",
-          `Downloaded form response for submission ID ${item.submissionID}`
-        );
-
         return {
           id: item.name,
           status: item.status,
@@ -110,6 +104,15 @@ const getSubmissions = async (
       });
 
       await updateLastDownloadedBy(responseIdStatusArray, formId, userEmail);
+
+      responseIdStatusArray.forEach((item) => {
+        logEvent(
+          ability.userID,
+          { type: "Response", id: item.id },
+          "DownloadResponse",
+          `Downloaded form response for submission ID ${item.id}`
+        );
+      });
 
       if (req.query.format === "csv") {
         return res
