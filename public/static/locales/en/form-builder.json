@@ -693,9 +693,9 @@
     "savedErrorMessage": "There was an error saving your changes. Please try again."
   },
   "errorSavingForm":{
-    "title": "Error saving form",
-    "description": "There was an error saving the form. Try again or",
-    "supportLink": "contact support",
+    "title": "There was an error saving the form",
+    "description": "Download a copy of the form and try again or",
+    "supportLink": "contact Support",
     "errorCode": "Error code: {{code}}"
   }
 }
