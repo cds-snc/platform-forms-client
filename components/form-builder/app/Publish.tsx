@@ -103,7 +103,7 @@ export const Publish = () => {
     if (result && result?.error) {
       logMessage.error(result?.error as Error);
       setError(true);
-      setErrorCode(500);
+      setErrorCode(result.error.response?.status || 400);
       return;
     }
 
