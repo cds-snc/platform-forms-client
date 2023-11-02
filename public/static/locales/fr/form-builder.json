@@ -694,9 +694,9 @@
     "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Veuillez réessayer."
   },
   "errorSavingForm":{
-    "title": "Error saving form [FR]",
-    "description": "There was an error saving the form. Try again or [FR]",
-    "supportLink": "contact support [FR]",
-    "errorCode": "Error code: {{code}} [FR]"
+    "title": "Une erreur s'est produite lors de l'enregistrement du formulaire",
+    "description": "Veuillez télécharger une copie du formulaire et réessayer ou",
+    "supportLink": "contacter l'équipe de soutien",
+    "errorCode": "Code d'erreur : {{code}}"
   }
 }
