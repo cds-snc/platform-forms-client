@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "compile": "node ./scripts/compilecss.js"
+    "compile": "node ./css/compile.js"
   },
   "type": "module",
   "dependencies": {
