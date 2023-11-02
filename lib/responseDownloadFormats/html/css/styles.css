@@ -6,7 +6,7 @@
     @apply text-xl leading-7 text-gray-front;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1, h2, h3 {
     font-variant-ligatures: no-common-ligatures;
     -webkit-font-smoothing: antialiased;
     @apply font-lato font-bold;
@@ -22,18 +22,6 @@
 
   h3, .gc-h3 {
     @apply mb-6 text-[24px];
-  }
-
-  h4, .gc-h4 {
-    @apply mb-4 text-[22px];
-  }
-
-  h5, .gc-h5 {
-    @apply text-[20px];
-  }
-
-  h6, .gc-h6 {
-    @apply text-[19px] font-normal;
   }
 
   #skip-link-container {
