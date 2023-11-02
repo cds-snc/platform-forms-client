@@ -21,7 +21,12 @@ export const transform = (responses: ResponseSubmission[]) => {
         if (item.answer instanceof Array) {
           return item.answer
             .map((answer) =>
-              answer.map((subAnswer) => `${subAnswer.questionEn}: ${subAnswer.answer}\n`).join("")
+              answer
+                .map(
+                  (subAnswer) =>
+                    `${subAnswer.questionEn}\n${subAnswer.questionFr}: ${subAnswer.answer}\n`
+                )
+                .join("")
             )
             .join("\n");
         }
