@@ -202,7 +202,6 @@ export async function listAllSubmissions(
  * The list contains the actual submission data
  * @param formID - The form ID from which to retrieve responses
  */
-
 export async function retrieveSubmissions(
   ability: UserAbility,
   formID: string,
@@ -239,6 +238,7 @@ export async function retrieveSubmissions(
       };
     }) as KeysAndAttributes["Keys"];
 
+    // DynamoDB BatchGetItem can only retrieve 100 items at a time
     while (keys && keys.length > 0) {
       const input = {
         RequestItems: {
@@ -276,9 +276,11 @@ export async function retrieveSubmissions(
         );
       }
 
+      // If there are unprocessed keys, we need to make another request
       keys = response.UnprocessedKeys?.Vault?.Keys || [];
     }
 
+    // Log each response retrieved
     accumulatedResponses.forEach((item) => {
       logEvent(
         ability.userID,
@@ -302,6 +304,7 @@ export async function retrieveSubmissions(
 
 /**
  * Sets who last downloaded the Form Submission on the Vault Submission record
+ * Note that if any single update fails, the entire transaction will fail
  * @param submissionID Submission ID of the form response
  * @param formID Form ID the Submission is for
  * @param email Email address of the user downloading the Submission
@@ -313,6 +316,7 @@ export async function updateLastDownloadedBy(
 ) {
   const documentClient = connectToDynamo();
 
+  // Chunk respoonses into groups of 100 (limitation of TransactWriteItems)
   const asyncUpdateRequests = chunkArray(responses, 100).map((chunkedResponses) => {
     const input: TransactWriteItemsCommandInput = {
       TransactItems: chunkedResponses.map((response) => {
