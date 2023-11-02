@@ -114,7 +114,7 @@ const getSubmissions = async (
       if (req.query.format === "csv") {
         return res
           .status(200)
-          .setHeader("Content-Type", "text/csv")
+          .setHeader("Content-Type", "text/csv charset=utf-8")
           .setHeader("Content-Disposition", `attachment; filename=records.csv`)
           .send(csvTransform(responses));
       }
@@ -154,7 +154,7 @@ const getSubmissions = async (
           .send(zip.generateNodeStream({ type: "nodebuffer", streamFiles: true }));
       }
 
-      return res.status(200).json({ responses });
+      return res.status(400).json({ error: "Bad request invalid format" });
     }
 
     // Default repsonse format is JSON
