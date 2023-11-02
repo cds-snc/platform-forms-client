@@ -86,6 +86,7 @@ export interface TemplateStoreProps {
   name: string;
   deliveryOption?: DeliveryOption;
   securityAttribute: SecurityAttribute;
+  closingDate?: string | null;
 }
 
 export interface InitialTemplateStoreProps extends TemplateStoreProps {
@@ -142,6 +143,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   getDeliveryOption: () => DeliveryOption | undefined;
   resetDeliveryOption: () => void;
   getSecurityAttribute: () => SecurityAttribute;
+  setClosingDate: (closingDate: string | null) => void;
   initialize: () => void;
 }
 
@@ -171,6 +173,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
     isPublished: false,
     name: "",
     securityAttribute: "Protected A",
+    closingDate: initProps?.closingDate,
   };
 
   // Ensure any required properties by Form Builder are defaulted by defaultForm
@@ -383,6 +386,11 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               });
             },
             getSecurityAttribute: () => get().securityAttribute,
+            setClosingDate: (value) => {
+              set((state) => {
+                state.closingDate = value;
+              });
+            },
             initialize: () => {
               set((state) => {
                 state.id = "";
@@ -391,6 +399,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.isPublished = false;
                 state.name = "";
                 state.deliveryOption = undefined;
+                state.closingDate = null;
               });
             },
             importTemplate: (jsonConfig) =>
@@ -402,6 +411,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.name = "";
                 state.securityAttribute = "Protected A";
                 state.deliveryOption = undefined;
+                state.closingDate = null;
               }),
           }),
           {
