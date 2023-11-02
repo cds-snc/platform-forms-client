@@ -305,7 +305,7 @@ export async function retrieveSubmissions(
 /**
  * Sets who last downloaded the Form Submission on the Vault Submission record
  * Note that if any single update fails, the entire transaction will fail
- * @param submissionID Submission ID of the form response
+ * @param responses Array of responses (id, status) to update
  * @param formID Form ID the Submission is for
  * @param email Email address of the user downloading the Submission
  */
@@ -316,7 +316,7 @@ export async function updateLastDownloadedBy(
 ) {
   const documentClient = connectToDynamo();
 
-  // Chunk respoonses into groups of 100 (limitation of TransactWriteItems)
+  // TransactWriteItem can only update 100 items at a time
   const asyncUpdateRequests = chunkArray(responses, 100).map((chunkedResponses) => {
     const input: TransactWriteItemsCommandInput = {
       TransactItems: chunkedResponses.map((response) => {
