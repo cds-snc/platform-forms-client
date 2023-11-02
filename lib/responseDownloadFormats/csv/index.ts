@@ -3,7 +3,7 @@ import { ResponseSubmission } from "../types";
 
 export const transform = (responses: ResponseSubmission[]) => {
   const header = responses[0].submission.map((item) => {
-    return item.questionEn || "";
+    return `${item.questionEn} \n ${item.questionFr}`;
   });
 
   header.unshift("id", "created_at", "confirmation_code");
