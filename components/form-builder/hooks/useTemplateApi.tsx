@@ -23,6 +23,8 @@ export const useTemplateApi = () => {
     securityAttribute?: SecurityAttribute;
   }) => {
     let formData;
+    return { error: new Error("failed to parse form data") };
+
     try {
       formData = JSON.parse(jsonConfig);
     } catch (e) {
