@@ -7,10 +7,12 @@ import { transform as csvTransform } from "@lib/responseDownloadFormats/csv";
 import { transform as xlsxTransform } from "@lib/responseDownloadFormats/xlsx";
 import { transform as htmlTableTransform } from "@lib/responseDownloadFormats/html-table";
 import { transform as htmlTransform } from "@lib/responseDownloadFormats/html";
+import { transform as zipTransform } from "@lib/responseDownloadFormats/html-zipped";
 import { retrieveSubmissions, updateLastDownloadedBy } from "@lib/vault";
 import { ResponseSubmission } from "@lib/responseDownloadFormats/types";
 import { logEvent } from "@lib/auditLogs";
 import { logMessage } from "@lib/logger";
+import fs from "fs";
 
 const getSubmissions = async (
   req: NextApiRequest,
@@ -143,7 +145,13 @@ const getSubmissions = async (
       }
 
       if (req.query.format === "html-zipped") {
-        return res.status(200).json({ responses });
+        const zip = zipTransform(responses, fullFormTemplate);
+
+        return res
+          .status(200)
+          .setHeader("Content-Type", "application/zip")
+          .setHeader("Content-Disposition", `attachment; filename=records.zip`)
+          .send(zip.generateNodeStream({ type: "nodebuffer", streamFiles: true }));
       }
 
       return res.status(200).json({ responses });
