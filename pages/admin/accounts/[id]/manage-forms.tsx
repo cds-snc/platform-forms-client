@@ -18,6 +18,7 @@ import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { useRefresh } from "@lib/hooks";
 import { ExclamationIcon } from "@components/form-builder/icons";
 import { TwoColumnLayout } from "@components/globals/layouts";
+import { TemplateStoreProvider } from "@components/form-builder/store/useTemplateStore";
 
 type User = {
   id: string;
@@ -194,13 +195,17 @@ const BackToAccounts = ({ id }: { id: string }) => {
 
 ManageForms.getLayout = (page: ReactElement) => {
   return (
-    <TwoColumnLayout
-      user={page.props.user}
-      context="admin"
-      leftColumnContent={<BackToAccounts id={page.props.formUser.id} />}
+    <TemplateStoreProvider
+      {...{ ...(page.props.initialForm && page.props.initialForm), locale: page.props.locale }}
     >
-      {page}
-    </TwoColumnLayout>
+      <TwoColumnLayout
+        user={page.props.user}
+        context="admin"
+        leftColumnContent={<BackToAccounts id={page.props.formUser.id} />}
+      >
+        {page}
+      </TwoColumnLayout>
+    </TemplateStoreProvider>
   );
 };
 
