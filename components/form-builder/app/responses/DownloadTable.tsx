@@ -82,7 +82,7 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
 
   // NOTE: browsers have different limits for simultaneous downloads. May need to look into
   // batching file downloads (e.g. 4 at a time) if edge cases/* come up.
-  const handleDownload = async () => {
+  const handleDownload = async (format: "html" | "zip") => {
     // Reset any errors
     if (errors.downloadError) {
       setErrors({ ...errors, downloadError: false });
@@ -102,46 +102,79 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
       return;
     }
 
-    toast.info(
-      t("downloadResponsesTable.notifications.downloadingXFiles", {
-        fileCount: tableItems.checkedItems.size,
-      })
-    );
-
-    const url = `/api/id/${formId}/submissions/download?format=html`;
     const ids = Array.from(tableItems.checkedItems.keys());
 
-    axios({
-      url,
-      method: "POST",
-      data: {
-        ids: ids.join(","),
-      },
-    })
-      .then((response) => {
-        const interval = 200;
-        response.data.forEach((submission: { id: string; html: string }, i: number) => {
-          setTimeout(() => {
-            const fileName = `${submission.id}.html`;
-            const href = window.URL.createObjectURL(new Blob([submission.html]));
-            const anchorElement = document.createElement("a");
-            anchorElement.href = href;
-            anchorElement.download = fileName;
-            document.body.appendChild(anchorElement);
-            anchorElement.click();
-            document.body.removeChild(anchorElement);
-            window.URL.revokeObjectURL(href);
-          }, interval * i);
-        });
-        setTimeout(() => {
-          router.replace(router.asPath, undefined, { scroll: false });
-          toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
-        }, interval * response.data.length);
+    if (format === "html") {
+      toast.info(
+        t("downloadResponsesTable.notifications.downloadingXFiles", {
+          fileCount: tableItems.checkedItems.size,
+        })
+      );
+
+      const url = `/api/id/${formId}/submissions/download?format=html`;
+      axios({
+        url,
+        method: "POST",
+        data: {
+          ids: ids.join(","),
+        },
       })
-      .catch((err) => {
-        logMessage.error(err as Error);
-        setErrors({ ...errors, downloadError: true });
+        .then((response) => {
+          const interval = 200;
+          response.data.forEach((submission: { id: string; html: string }, i: number) => {
+            setTimeout(() => {
+              const fileName = `${submission.id}.html`;
+              const href = window.URL.createObjectURL(new Blob([submission.html]));
+              const anchorElement = document.createElement("a");
+              anchorElement.href = href;
+              anchorElement.download = fileName;
+              document.body.appendChild(anchorElement);
+              anchorElement.click();
+              document.body.removeChild(anchorElement);
+              window.URL.revokeObjectURL(href);
+            }, interval * i);
+          });
+          setTimeout(() => {
+            router.replace(router.asPath, undefined, { scroll: false });
+            toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
+          }, interval * response.data.length);
+        })
+        .catch((err) => {
+          logMessage.error(err as Error);
+          setErrors({ ...errors, downloadError: true });
+        });
+    }
+
+    if (format === "zip") {
+      toast.info(
+        t("downloadResponsesTable.notifications.downloadingXFiles", {
+          fileCount: 1,
+        })
+      );
+
+      const url = `/api/id/${formId}/submissions/download?format=html-zipped`;
+      axios({
+        url,
+        method: "POST",
+        responseType: "blob",
+        data: {
+          ids: ids.join(","),
+        },
+      }).then((response) => {
+        const href = window.URL.createObjectURL(response.data);
+        const anchorElement = document.createElement("a");
+        anchorElement.href = href;
+        anchorElement.download = "records.zip";
+        document.body.appendChild(anchorElement);
+        anchorElement.click();
+
+        document.body.removeChild(anchorElement);
+        window.URL.revokeObjectURL(href);
+
+        router.replace(router.asPath, undefined, { scroll: false });
+        toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
       });
+    }
   };
 
   const blockDownload = (
@@ -290,7 +323,7 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
           id="downloadTableButtonId"
           className="gc-button--blue m-0 w-auto whitespace-nowrap"
           type="button"
-          onClick={handleDownload}
+          onClick={() => handleDownload("html")}
           aria-live="polite"
         >
           {t("downloadResponsesTable.downloadXSelectedResponses", {
