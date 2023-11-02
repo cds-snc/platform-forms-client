@@ -4,7 +4,7 @@ import { CopyToClipboardScript } from "../scripts";
 import { ProtectedWarning } from "./ProtectedWarning";
 import Fip from "./Fip";
 import { ResponseSection } from "./ResponseSection";
-import { css } from "../css/styles";
+import { css } from "../css/compiled";
 import { ResponseSubmission } from "../../types";
 
 interface HTMLDownloadProps {
