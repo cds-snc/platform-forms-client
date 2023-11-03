@@ -9,10 +9,9 @@ import { transform as htmlTableTransform } from "@lib/responseDownloadFormats/ht
 import { transform as htmlTransform } from "@lib/responseDownloadFormats/html";
 import { transform as zipTransform } from "@lib/responseDownloadFormats/html-zipped";
 import { retrieveSubmissions, updateLastDownloadedBy } from "@lib/vault";
-import { ResponseSubmission } from "@lib/responseDownloadFormats/types";
+import { FormResponseSubmissions } from "@lib/responseDownloadFormats/types";
 import { logEvent } from "@lib/auditLogs";
 import { logMessage } from "@lib/logger";
-import fs from "fs";
 
 const getSubmissions = async (
   req: NextApiRequest,
@@ -82,14 +81,23 @@ const getSubmissions = async (
           };
         }
       );
-
       return {
         id: item.name,
-        created_at: parseInt(item.createdAt.toString()),
-        confirmation_code: item.confirmationCode,
-        submission,
+        createdAt: parseInt(item.createdAt.toString()),
+        confirmationCode: item.confirmationCode,
+        answers: submission,
       };
-    }) as ResponseSubmission[];
+    }) as FormResponseSubmissions["submissions"];
+
+    const formResponse = {
+      form: {
+        id: fullFormTemplate.form.id,
+        titleEn: fullFormTemplate.form.titleEn,
+        titleFr: fullFormTemplate.form.titleFr,
+        securityAttribute: fullFormTemplate.securityAttribute,
+      },
+      submissions: responses,
+    } as FormResponseSubmissions;
 
     if (!responses.length) {
       return res.status(404).json({ error: "No responses found." });
@@ -119,7 +127,7 @@ const getSubmissions = async (
           .status(200)
           .setHeader("Content-Type", "text/csv charset=utf-8")
           .setHeader("Content-Disposition", `attachment; filename=records.csv`)
-          .send(csvTransform(responses));
+          .send(csvTransform(formResponse));
       }
 
       if (req.query.format === "xlsx") {
@@ -130,25 +138,25 @@ const getSubmissions = async (
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
           )
           .setHeader("Content-Disposition", `attachment; filename=records.xlsx`)
-          .send(xlsxTransform(responses));
+          .send(xlsxTransform(formResponse));
       }
 
       if (req.query.format === "html-table") {
         return res
           .status(200)
           .setHeader("Content-Type", "text/html")
-          .send(htmlTableTransform(responses));
+          .send(htmlTableTransform(formResponse));
       }
 
       if (req.query.format === "html") {
         return res
           .status(200)
           .setHeader("Content-Type", "text/json")
-          .send(htmlTransform(responses, fullFormTemplate));
+          .send(htmlTransform(formResponse));
       }
 
       if (req.query.format === "html-zipped") {
-        const zip = zipTransform(responses, fullFormTemplate);
+        const zip = zipTransform(formResponse);
 
         return res
           .status(200)
@@ -157,11 +165,11 @@ const getSubmissions = async (
           .send(zip.generateNodeStream({ type: "nodebuffer", streamFiles: true }));
       }
 
-      return res.status(400).json({ error: "Bad request invalid format" });
+      return res.status(400).json({ error: `Bad request invalid format ${req.query.format}` });
     }
 
     // Default repsonse format is JSON
-    return res.status(200).json({ responses: responses });
+    return res.status(200).json({ ...formResponse });
   } catch (err) {
     if (err instanceof AccessControlError) {
       return res.status(403).json({ error: "Forbidden" });

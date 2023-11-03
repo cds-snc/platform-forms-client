@@ -1,9 +1,9 @@
-import { ResponseSubmission } from "../types";
+import { Submission } from "../types";
 
 export interface TableProps {
   isRowTable?: boolean;
   lang?: string;
   responseID: string;
   submissionDate: number;
-  formResponse: ResponseSubmission;
+  submission: Submission;
 }

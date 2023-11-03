@@ -1,18 +1,18 @@
-import { ResponseSubmission } from "../types";
+import { FormResponseSubmissions } from "../types";
 
-export const transform = (responses: ResponseSubmission[]) => {
-  const header = responses[0].submission.map((item) => {
+export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
+  const header = formResponseSubmissions.submissions[0].answers.map((item) => {
     return item.questionEn || "";
   });
 
   header.unshift("id", "created_at", "confirmation_code");
 
-  const records = responses.map((response) => {
+  const records = formResponseSubmissions.submissions.map((response) => {
     return [
       response.id,
-      response.created_at,
-      response.confirmation_code,
-      ...response.submission.map((item) => {
+      response.createdAt,
+      response.confirmationCode,
+      ...response.answers.map((item) => {
         if (item.answer instanceof Array) {
           return JSON.stringify(item.answer); // need to massage this more
         }

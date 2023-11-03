@@ -2,7 +2,6 @@ import React from "react";
 import { SecurityAttribute } from "@lib/types";
 import { customTranslate } from "../../helpers";
 
-// Note: use lang prop if you want to force a specific language e.g. HTMLDownload component
 interface ProtectedWarningProps {
   securityAttribute: SecurityAttribute;
   lang: string;

@@ -1,21 +1,20 @@
-import { FormRecord } from "@lib/types";
 import { ResponseHtml } from "./components/ResponseHtml";
 import { renderToStaticMarkup } from "react-dom/server";
-import { ResponseSubmission } from "../types";
+import { FormResponseSubmissions } from "../types";
 
-export const transform = (responses: ResponseSubmission[], fullFormTemplate: FormRecord) => {
-  const records = responses.map((response) => {
+export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
+  const records = formResponseSubmissions.submissions.map((response) => {
     return {
       id: response.id,
-      created_at: response.created_at,
+      created_at: response.createdAt,
       html: renderToStaticMarkup(
         ResponseHtml({
-          form: fullFormTemplate.form,
           response: response,
-          confirmationCode: response.confirmation_code,
+          form: formResponseSubmissions.form,
+          confirmationCode: response.confirmationCode,
           responseID: response.id,
-          createdAt: response.created_at,
-          securityAttribute: fullFormTemplate.securityAttribute,
+          createdAt: response.createdAt,
+          securityAttribute: formResponseSubmissions.form.securityAttribute,
         })
       ),
     };

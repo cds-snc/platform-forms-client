@@ -1,14 +1,14 @@
 import React from "react";
 import { capitalize } from "./ResponseSection";
 import { customTranslate, getProperty } from "../../helpers";
-import { Answer, ResponseSubmission } from "../../types";
+import { Answer, Submission } from "../../types";
 import { TableProps } from "../types";
 
 const QuestionColumns = ({
-  formResponse,
+  submission,
   lang,
 }: {
-  formResponse: ResponseSubmission;
+  submission: Submission;
   lang: string;
 }): JSX.Element => {
   const renderRow = (index: number, lang: string, item: Answer) => {
@@ -20,7 +20,7 @@ const QuestionColumns = ({
     );
   };
 
-  const answers = formResponse.submission.map((item, index) => {
+  const answers = submission.answers.map((item, index) => {
     if (typeof item.answer === "string") {
       return renderRow(index, lang, item);
     } else {
@@ -46,13 +46,7 @@ const QuestionColumns = ({
 
 export const ColumnTable = (props: TableProps): React.ReactElement => {
   const { t } = customTranslate("my-forms");
-  const {
-    responseID,
-    submissionDate,
-    formResponse,
-    lang = "en",
-    // submissionID,
-  } = props;
+  const { responseID, submissionDate, submission, lang = "en" } = props;
   const formattedSubmissionDate =
     new Date(submissionDate).toISOString().replace("T", " ").slice(0, -5) + " UTC";
 
@@ -70,7 +64,7 @@ export const ColumnTable = (props: TableProps): React.ReactElement => {
         </dt>
         <dd className="py-4 pl-8">{formattedSubmissionDate}</dd>
       </div>
-      <QuestionColumns formResponse={formResponse} lang={lang} />
+      <QuestionColumns submission={submission} lang={lang} />
     </dl>
   );
 };

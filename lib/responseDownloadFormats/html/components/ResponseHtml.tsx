@@ -1,27 +1,25 @@
-import { FormProperties, SecurityAttribute } from "@lib/types";
+import { SecurityAttribute } from "@lib/types";
 import React from "react";
 import { CopyToClipboardScript } from "../scripts";
 import { ProtectedWarning } from "./ProtectedWarning";
 import Fip from "./Fip";
 import { ResponseSection } from "./ResponseSection";
 import { css } from "../css/compiled";
-import { ResponseSubmission } from "../../types";
+import { Form, Submission } from "../../types";
 
 interface HTMLDownloadProps {
-  form: FormProperties;
-  response: ResponseSubmission;
+  response: Submission;
+  form: Form;
   confirmationCode: string;
-  // submissionID: string;
   responseID: string;
   createdAt: number;
   securityAttribute: SecurityAttribute;
 }
 
 export const ResponseHtml = ({
-  form,
   response,
+  form,
   confirmationCode,
-  // submissionID,
   responseID,
   createdAt,
   securityAttribute,
@@ -51,9 +49,7 @@ export const ResponseHtml = ({
               confirmReceiptCode={confirmationCode}
               lang={"en"}
               responseID={responseID}
-              // submissionID={submissionID}
               submissionDate={createdAt}
-              formTemplate={form}
               formResponse={response}
             />
             <div className="mt-20" />
@@ -65,9 +61,7 @@ export const ResponseHtml = ({
                 confirmReceiptCode={confirmationCode}
                 lang={"fr"}
                 responseID={responseID}
-                // submissionID={submissionID}
                 submissionDate={createdAt}
-                formTemplate={form}
                 formResponse={response}
               />
             </div>

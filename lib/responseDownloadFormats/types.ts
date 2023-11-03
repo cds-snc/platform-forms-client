@@ -1,3 +1,5 @@
+import { SecurityAttribute } from "@lib/types";
+
 export interface Answer {
   questionEn: string | undefined;
   questionFr: string | undefined;
@@ -5,11 +7,24 @@ export interface Answer {
   [key: string]: string | Array<Answer[]> | undefined;
 }
 
-export interface ResponseSubmission {
+export interface Submission {
   id: string;
-  created_at: number;
-  confirmation_code: string;
-  submission: Answer[];
+  createdAt: number;
+  confirmationCode: string;
+  answers: Answer[];
+}
+
+export interface Form {
+  id: string;
+  titleEn: string;
+  titleFr: string;
+  securityAttribute: SecurityAttribute;
+  [key: string]: string | Array<Answer[]> | undefined;
+}
+
+export interface FormResponseSubmissions {
+  form: Form;
+  submissions: Submission[];
 }
 
 export type JSONValue = string | number | boolean | { [x: string]: JSONValue } | Array<JSONValue>;
