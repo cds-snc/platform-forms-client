@@ -165,6 +165,10 @@ const getSubmissions = async (
           .send(zip.generateNodeStream({ type: "nodebuffer", streamFiles: true }));
       }
 
+      if (req.query.format === "json") {
+        return res.status(200).json({ ...formResponse });
+      }
+
       return res.status(400).json({ error: `Bad request invalid format ${req.query.format}` });
     }
 
