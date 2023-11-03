@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.7.0](https://github.com/cds-snc/platform-forms-client/compare/v3.6.0...v3.7.0) (2023-11-01)
+
+
+### Features
+
+* Add SVG mime type on branding requests ([f2fd5ab](https://github.com/cds-snc/platform-forms-client/commit/f2fd5abf432f5c9f19407167342b14d0d6e54601))
+
+
+### Miscellaneous Chores
+
+* Add closing date to db ([#2799](https://github.com/cds-snc/platform-forms-client/issues/2799)) ([e12570f](https://github.com/cds-snc/platform-forms-client/commit/e12570ff35ba49e346aa96bcd1218a1e075fc627))
+* Prep for response filtering and pagination ([#2800](https://github.com/cds-snc/platform-forms-client/issues/2800)) ([4511e73](https://github.com/cds-snc/platform-forms-client/commit/4511e730d630729812d27da75edcedb151f195a2))
+* Utility to generate responses for development environment ([#2790](https://github.com/cds-snc/platform-forms-client/issues/2790)) ([f5044f6](https://github.com/cds-snc/platform-forms-client/commit/f5044f63b9f5e53c9421b26deffa2800f7734171))
+
 ## [3.6.0](https://github.com/cds-snc/platform-forms-client/compare/v3.5.1...v3.6.0) (2023-10-18)
 
 

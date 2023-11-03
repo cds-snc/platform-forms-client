@@ -117,7 +117,10 @@ export const getServerSideProps: GetServerSideProps = async ({
     props: {
       ...FormbuilderParams,
       ...(locale &&
-        (await serverSideTranslations(locale, ["common", "form-builder"], null, ["fr", "en"]))),
+        (await serverSideTranslations(locale, ["common", "form-builder", "form-closed"], null, [
+          "fr",
+          "en",
+        ]))),
     },
   };
 };

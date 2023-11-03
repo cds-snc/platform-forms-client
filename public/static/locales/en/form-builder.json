@@ -681,5 +681,21 @@
   },
   "brandingSelect": {
     "label": "Select branding for your form"
+  },
+  "closingDate": {
+    "title": "Accept form submissions",
+    "description": "Once you publish a form, it is open to accept form submissions. You can close the form to prevent submissions.",
+    "status": "Form status",
+    "open": "Open",
+    "closed": "Closed",
+    "saveButton": "Save changes",
+    "savedSuccessMessage": "Your changes have been saved.",
+    "savedErrorMessage": "There was an error saving your changes. Please try again."
+  },
+  "errorSavingForm":{
+    "title": "There was an error saving the form",
+    "description": "Download a copy of the form and try again or",
+    "supportLink": "contact Support",
+    "errorCode": "Error code: {{code}}"
   }
 }

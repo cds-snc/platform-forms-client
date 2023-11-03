@@ -14,9 +14,9 @@ export const Settings = () => {
         <p className="mb-4" id="download-hint">
           {t("formDownload.description")}
         </p>
-        <p className="mb-4">
+        <div className="mb-4">
           <DownloadFileButton autoShowDialog={Boolean(downloadconfirm) || false} />
-        </p>
+        </div>
       </div>
     </>
   );
