@@ -692,5 +692,11 @@
     "saveButton": "Enregistrer les modifications",
     "savedSuccessMessage": "Vos modifications ont été enregistrées.",
     "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Veuillez réessayer."
+  },
+  "errorSavingForm":{
+    "title": "Une erreur s'est produite lors de l'enregistrement du formulaire",
+    "description": "Veuillez télécharger une copie du formulaire et réessayer ou",
+    "supportLink": "contacter l'équipe de soutien",
+    "errorCode": "Code d'erreur : {{code}}"
   }
 }
