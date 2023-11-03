@@ -30,7 +30,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
   const [submitTooEarly, setSubmitTooEarly] = useState(false);
   const screenReaderRemainingTime = useRef(formTimerState.remainingTime);
   useEffect(() => {
-    let intervalID: NodeJS.Timer;
+    let intervalID: NodeJS.Timeout;
     // calculate initial delay for submit timer
     if (timerActive) {
       const secondsBaseDelay = 2;
