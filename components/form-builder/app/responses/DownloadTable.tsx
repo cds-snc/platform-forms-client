@@ -82,7 +82,7 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
 
   // NOTE: browsers have different limits for simultaneous downloads. May need to look into
   // batching file downloads (e.g. 4 at a time) if edge cases/* come up.
-  const handleDownload = async (format: "html" | "zip") => {
+  const handleDownload = async (format: "html" | "zip" | "csv") => {
     // Reset any errors
     if (errors.downloadError) {
       setErrors({ ...errors, downloadError: false });
@@ -165,6 +165,37 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
         const anchorElement = document.createElement("a");
         anchorElement.href = href;
         anchorElement.download = "records.zip";
+        document.body.appendChild(anchorElement);
+        anchorElement.click();
+
+        document.body.removeChild(anchorElement);
+        window.URL.revokeObjectURL(href);
+
+        router.replace(router.asPath, undefined, { scroll: false });
+        toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
+      });
+    }
+
+    if (format === "csv") {
+      toast.info(
+        t("downloadResponsesTable.notifications.downloadingXFiles", {
+          fileCount: 1,
+        })
+      );
+
+      const url = `/api/id/${formId}/submissions/download?format=csv`;
+      axios({
+        url,
+        method: "POST",
+        responseType: "blob",
+        data: {
+          ids: ids.join(","),
+        },
+      }).then((response) => {
+        const href = window.URL.createObjectURL(response.data);
+        const anchorElement = document.createElement("a");
+        anchorElement.href = href;
+        anchorElement.download = "records.csv";
         document.body.appendChild(anchorElement);
         anchorElement.click();
 
@@ -319,17 +350,46 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
         </tbody>
       </table>
       <div className="mt-8 flex">
-        <button
-          id="downloadTableButtonId"
-          className="gc-button--blue m-0 w-auto whitespace-nowrap"
-          type="button"
-          onClick={() => handleDownload("html")}
-          aria-live="polite"
-        >
-          {t("downloadResponsesTable.downloadXSelectedResponses", {
-            size: tableItems.checkedItems.size,
-          })}
-        </button>
+        <div className="flex flex-col">
+          <button
+            id="downloadTableButtonId"
+            className="gc-button--blue m-0 w-auto whitespace-nowrap"
+            type="button"
+            onClick={() => handleDownload("html")}
+            aria-live="polite"
+          >
+            {t("downloadResponsesTable.downloadXSelectedResponses", {
+              size: tableItems.checkedItems.size,
+            })}{" "}
+            (html)
+          </button>
+
+          <button
+            id="downloadTableButtonId"
+            className="gc-button--blue m-0 mt-4 w-auto whitespace-nowrap"
+            type="button"
+            onClick={() => handleDownload("zip")}
+            aria-live="polite"
+          >
+            {t("downloadResponsesTable.downloadXSelectedResponses", {
+              size: tableItems.checkedItems.size,
+            })}{" "}
+            (zipped)
+          </button>
+
+          <button
+            id="downloadTableButtonId"
+            className="gc-button--blue m-0 mt-4 w-auto whitespace-nowrap"
+            type="button"
+            onClick={() => handleDownload("csv")}
+            aria-live="polite"
+          >
+            {t("downloadResponsesTable.downloadXSelectedResponses", {
+              size: tableItems.checkedItems.size,
+            })}{" "}
+            (csv)
+          </button>
+        </div>
 
         <div id="notificationsBottom" className="ml-4">
           {tableItems.checkedItems.size > MAX_FILE_DOWNLOADS && (
