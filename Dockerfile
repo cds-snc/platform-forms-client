@@ -1,5 +1,4 @@
-FROM node:16@sha256:f77a1aef2da8d83e45ec990f45df50f1a286c5fe8bbfb8c6e4246c6389705c0b
-
+FROM node:18
 ENV NODE_ENV=production
 
 COPY . /src
@@ -17,13 +16,13 @@ RUN yarn install --silent --production=false
 RUN yarn build
 RUN yarn install --production
 
-FROM node:16@sha256:f77a1aef2da8d83e45ec990f45df50f1a286c5fe8bbfb8c6e4246c6389705c0b
+FROM node:18
 
 COPY flag_initialization /src
 WORKDIR /src
 RUN yarn install --silent 
 
-FROM node:16@sha256:f77a1aef2da8d83e45ec990f45df50f1a286c5fe8bbfb8c6e4246c6389705c0b
+FROM node:18
 LABEL maintainer="-"
 
 ARG COGNITO_REGION="ca-central-1"
