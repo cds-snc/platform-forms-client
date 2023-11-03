@@ -15,6 +15,7 @@ import { isVaultDelivery } from "@formbuilder/util";
 import { StyledLink } from "@components/globals";
 import { classificationOptions } from "./ClassificationSelect";
 import { logMessage } from "@lib/logger";
+import { DownloadFileButton } from "./shared";
 
 export const Publish = () => {
   const { t, i18n } = useTranslation("form-builder");
@@ -127,9 +128,10 @@ export const Publish = () => {
                 {t("errorSavingForm.description")}{" "}
                 <StyledLink href={supportHref}>{t("errorSavingForm.supportLink")}.</StyledLink>
               </p>
-              <p className="text-sm">
+              <p className="mb-5 text-sm">
                 {errorCode && t("errorSavingForm.errorCode", { code: errorCode })}
               </p>
+              <DownloadFileButton showInfo={false} autoShowDialog={false} />
             </Alert.Danger>
           )}
 
