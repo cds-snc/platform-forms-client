@@ -338,7 +338,7 @@ export async function updateLastDownloadedBy(
             ),
             ExpressionAttributeValues: {
               ":email": { S: email },
-              ":downloadedAt": { N: Date.now() as unknown as string },
+              ":downloadedAt": { N: Date.now().toString() },
               ...(isNewResponse && { ":statusUpdate": { S: "Downloaded" } }),
             },
             ...(isNewResponse && {
