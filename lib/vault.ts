@@ -1,4 +1,9 @@
-import { BatchGetCommand, QueryCommand, QueryCommandInput } from "@aws-sdk/lib-dynamodb";
+import {
+  BatchGetCommand,
+  QueryCommand,
+  QueryCommandInput,
+  TransactWriteCommand,
+} from "@aws-sdk/lib-dynamodb";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { VaultSubmissionList, UserAbility, VaultStatus, VaultSubmission } from "@lib/types";
 import { logEvent } from "./auditLogs";
@@ -9,12 +14,7 @@ import {
 import { connectToDynamo } from "./integration/dynamodbConnector";
 import { logMessage } from "./logger";
 import { AccessControlError, checkPrivileges } from "./privileges";
-import {
-  BatchWriteItemCommand,
-  KeysAndAttributes,
-  TransactWriteItemsCommand,
-  TransactWriteItemsCommandInput,
-} from "@aws-sdk/client-dynamodb";
+import { BatchWriteItemCommand, KeysAndAttributes } from "@aws-sdk/client-dynamodb";
 import { chunkArray } from "@lib/utils";
 import { TemplateAlreadyPublishedError } from "@lib/templates";
 
@@ -311,27 +311,23 @@ export async function updateLastDownloadedBy(
 
   // TransactWriteItem can only update 100 items at a time
   const asyncUpdateRequests = chunkArray(responses, 100).map((chunkedResponses) => {
-    const input: TransactWriteItemsCommandInput = {
+    const request = new TransactWriteCommand({
       TransactItems: chunkedResponses.map((response) => {
         const isNewResponse = response.status === VaultStatus.NEW;
         return {
           Update: {
             TableName: "Vault",
             Key: {
-              FormID: {
-                S: formID,
-              },
-              NAME_OR_CONF: {
-                S: `NAME#${response.id}`,
-              },
+              FormID: formID,
+              NAME_OR_CONF: `NAME#${response.id}`,
             },
             UpdateExpression: "SET LastDownloadedBy = :email, DownloadedAt = :downloadedAt".concat(
               isNewResponse ? ", #status = :statusUpdate" : ""
             ),
             ExpressionAttributeValues: {
-              ":email": { S: email },
-              ":downloadedAt": { N: Date.now().toString() },
-              ...(isNewResponse && { ":statusUpdate": { S: "Downloaded" } }),
+              ":email": email,
+              ":downloadedAt": Date.now().toString(),
+              ...(isNewResponse && { ":statusUpdate": "Downloaded" }),
             },
             ...(isNewResponse && {
               ExpressionAttributeNames: {
@@ -341,8 +337,8 @@ export async function updateLastDownloadedBy(
           },
         };
       }),
-    };
-    return documentClient.send(new TransactWriteItemsCommand(input));
+    });
+    return documentClient.send(request);
   });
 
   return Promise.all(asyncUpdateRequests);
