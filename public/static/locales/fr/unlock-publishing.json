@@ -1,7 +1,7 @@
 {
   "unlockPublishing": {
     "title": "Déverrouiller la publication de formulaires",
-    "paragraph1": "Avant de publier votre premier formulaire, veuillez fournir les coordonnées de votre gestionnaire ou de la personne a qui vous relevez. Nous vous demandons leur courriel, comme deuxième point de contact, au case où nous ne parviendrons pas à vous contacter à l'avenir. Nous n'afficherons pas leurs coordonnées publiquement.",
+    "paragraph1": "Avant de publier votre premier formulaire, veuillez fournir les coordonnées de votre gestionnaire ou de la personne de qui vous relevez. Nous vous demandons leur courriel, comme coordonnées additionnelles, au cas où nous ne parviendrions pas à vous contacter. Nous n'afficherons pas leurs coordonnées publiquement.",
     "form": {
       "field1": {
         "title": "Fournissez l’adresse courriel de votre gestionnaire ou de votre supérieur·e direct·e",
@@ -20,9 +20,9 @@
     "title": "Demande de déverrouillage soumise pour la publication de formulaires",
     "whatNext": {
       "title": "Quelle est la suite?",
-      "paragraph1": "Nous traiterons votre demande et informerons votre gestionnaire de l’état de votre capacité de publication dans Formulaires GC et de nos conditions d'utilisation.",
+      "paragraph1": "Nous traiterons votre demande et informerons votre gestionnaire de votre droit de publier dans Formulaires GC et de nos conditions d'utilisation.",
       "paragraph2": "Cela pourrait prendre jusqu'à 2 jours ouvrables avant que vous puissiez publier. ",
-      "paragraph3": "Vous recevrez une notification par courriel lorsque nous aurons déverouillé la publication.",
+      "paragraph3": "Vous recevrez une notification par courriel lorsque nous aurons déverrouillé la publication.",
       "paragraph4": "Entre-temps, vous pouvez continuer à explorer et rédiger des formulaires."
     }
   },

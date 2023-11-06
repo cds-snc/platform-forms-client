@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.8.0](https://github.com/cds-snc/platform-forms-client/compare/v3.7.0...v3.8.0) (2023-11-06)
+
+
+### Features
+
+* form closing date ([#2792](https://github.com/cds-snc/platform-forms-client/issues/2792)) ([949c804](https://github.com/cds-snc/platform-forms-client/commit/949c804717fc3a6da566ffbf5905424a52463f61))
+
+
+### Bug Fixes
+
+* Fix manage forms delete ([#2816](https://github.com/cds-snc/platform-forms-client/issues/2816)) ([9df1f8a](https://github.com/cds-snc/platform-forms-client/commit/9df1f8a382de2437c706a5e458df8fab07791e8c))
+* Handle publish error ([#2817](https://github.com/cds-snc/platform-forms-client/issues/2817)) ([faffec3](https://github.com/cds-snc/platform-forms-client/commit/faffec398c1ebc61d22f68c4a1709151b37c5c47))
+
+
+### Miscellaneous Chores
+
+* Add node-gyp ([#2822](https://github.com/cds-snc/platform-forms-client/issues/2822)) ([580ddd7](https://github.com/cds-snc/platform-forms-client/commit/580ddd7ca199161cd108415ecf002d3548284951))
+* Federal Economic Development Agency for Southern Ontario branding ([#2818](https://github.com/cds-snc/platform-forms-client/issues/2818)) ([057382b](https://github.com/cds-snc/platform-forms-client/commit/057382b368275e5761ed2d3d2b8040227f499fcb))
+* update node version ([#2820](https://github.com/cds-snc/platform-forms-client/issues/2820)) ([2ddb535](https://github.com/cds-snc/platform-forms-client/commit/2ddb535c7a9d859926f911de8b1ac1ddd2694eb6))
+
 ## [3.7.0](https://github.com/cds-snc/platform-forms-client/compare/v3.6.0...v3.7.0) (2023-11-01)
 
 
