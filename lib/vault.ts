@@ -248,6 +248,9 @@ export async function retrieveSubmissions(
         },
         ProjectionExpression:
           "FormID,SubmissionID,FormSubmission,ConfirmationCode,#status,SecurityAttribute,#name,CreatedAt,LastDownloadedBy,ConfirmTimestamp,DownloadedAt,RemovalDate",
+        ExpressionAttributeNames: {
+          "#name": "Name",
+        },
       };
 
       const queryCommand = new BatchGetItemCommand(input);
