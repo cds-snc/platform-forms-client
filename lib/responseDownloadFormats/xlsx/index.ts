@@ -3,7 +3,7 @@ import { FormResponseSubmissions } from "../types";
 
 export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
   const header = formResponseSubmissions.submissions[0].answers.map((item) => {
-    return item.questionEn || "";
+    return `${item.questionEn || ""}\n ${item.questionFr || ""}`;
   });
 
   header.unshift("id", "created_at", "confirmation_code");
