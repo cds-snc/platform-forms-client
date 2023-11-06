@@ -14,6 +14,8 @@ import { InfoCard } from "@components/globals/InfoCard/InfoCard";
 import { isVaultDelivery } from "@formbuilder/util";
 import { StyledLink } from "@components/globals";
 import { classificationOptions } from "./ClassificationSelect";
+import { logMessage } from "@lib/logger";
+import { DownloadFileButton } from "./shared";
 
 export const Publish = () => {
   const { t, i18n } = useTranslation("form-builder");
@@ -26,6 +28,7 @@ export const Publish = () => {
   } = useAllowPublish();
 
   const [error, setError] = useState(false);
+  const [errorCode, setErrorCode] = useState<null | number>(null);
   const lang = i18n.language;
 
   const { id, setId, getSchema, getName, getDeliveryOption, securityAttribute } = useTemplateStore(
@@ -62,8 +65,11 @@ export const Publish = () => {
   };
 
   const { save } = useTemplateApi();
+  const supportHref = `/${i18n.language}/form-builder/support`;
 
   const handlePublish = async () => {
+    setError(false);
+    setErrorCode(null);
     const result = await save({
       jsonConfig: getSchema(),
       name: getName(),
@@ -86,6 +92,8 @@ export const Publish = () => {
   };
 
   const handleSaveAndRequest = useCallback(async () => {
+    setError(false);
+    setErrorCode(null);
     const result = await save({
       jsonConfig: getSchema(),
       name: getName(),
@@ -94,7 +102,9 @@ export const Publish = () => {
     });
 
     if (result && result?.error) {
+      logMessage.error(result?.error as Error);
       setError(true);
+      setErrorCode(result.error.response?.status || 400);
       return;
     }
 
@@ -110,6 +120,21 @@ export const Publish = () => {
       <div className="flex flex-wrap justify-between laptop:flex-nowrap">
         <div className="mx-5 min-w-fit grow rounded-lg border-1 p-5">
           <h1 className="mb-2 border-0">{t("publishYourForm")}</h1>
+
+          {!userCanPublish && error && (
+            <Alert.Danger focussable={true} className="mb-5">
+              <Alert.Title headingTag="h3">{t("errorSavingForm.title")}</Alert.Title>
+              <p className="mb-2">
+                {t("errorSavingForm.description")}{" "}
+                <StyledLink href={supportHref}>{t("errorSavingForm.supportLink")}.</StyledLink>
+              </p>
+              <p className="mb-5 text-sm">
+                {errorCode && t("errorSavingForm.errorCode", { code: errorCode })}
+              </p>
+              <DownloadFileButton showInfo={false} autoShowDialog={false} />
+            </Alert.Danger>
+          )}
+
           <p className="mb-0 text-lg">{t("publishYourFormInstructions.text1")}</p>
           {!userCanPublish && (
             <Alert.Info className="my-5">

@@ -2,19 +2,25 @@
  * For a detailed explanation regarding each configuration property and type check, visit:
  * https://jestjs.io/docs/en/configuration.html
  */
-const nextJest = require("next/jest");
-const { pathsToModuleNameMapper } = require("ts-jest");
-const { compilerOptions } = require("./tsconfig");
+import nextJest from "next/jest.js";
+import { pathsToModuleNameMapper } from "ts-jest";
+import { createRequire } from "node:module";
 
+const require = createRequire(import.meta.url);
+const { compilerOptions } = require("./tsconfig.json");
 const createJestConfig = nextJest({
   // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
   dir: "./",
 });
 
 // Add any custom config to be passed to Jest
+/** @type {import('jest').Config} */
 const customJestConfig = {
+  workerIdleMemoryLimit: "1G",
   testPathIgnorePatterns: ["<rootDir>/cypress/", "<rootDir>/public/static/scripts/"],
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: "<rootDir>/" }),
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
+    prefix: "<rootDir>/",
+  }),
   moduleDirectories: ["node_modules", "<rootDir>/"],
   clearMocks: true,
   preset: "ts-jest/presets/js-with-ts",
@@ -23,10 +29,8 @@ const customJestConfig = {
     "<rootDir>/__utils__/setupTests.ts",
     "<rootDir>/__utils__/prismaConnector.ts",
   ],
-  testEnvironment: "jsdom",
-  collectCoverage: false,
-  collectCoverageFrom: ["{pages,lib,components}/**/{!(*.stories),}.{ts,tsx}"],
+  testEnvironment: "jest-environment-jsdom",
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
-module.exports = createJestConfig(customJestConfig);
+export default createJestConfig(customJestConfig);

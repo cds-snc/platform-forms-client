@@ -1,6 +1,6 @@
 # Form viewier that runs as a Lambda function.  It is used to create 
 # Lambda function review environments for each PR.
-FROM node:16@sha256:f77a1aef2da8d83e45ec990f45df50f1a286c5fe8bbfb8c6e4246c6389705c0b as build
+FROM node:18 as build
 
 ENV NODE_ENV=production
 ENV NEXT_OUTPUT_STANDALONE=true
@@ -19,7 +19,7 @@ RUN yarn install --silent --production=false
 RUN yarn build
 RUN yarn install --production
 
-FROM node:16@sha256:f77a1aef2da8d83e45ec990f45df50f1a286c5fe8bbfb8c6e4246c6389705c0b as final
+FROM node:18 as final
 LABEL maintainer="-"
 
 ARG COGNITO_REGION="ca-central-1"
