@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.8.1](https://github.com/cds-snc/platform-forms-client/compare/v3.8.0...v3.8.1) (2023-11-06)
+
+
+### Miscellaneous Chores
+
+* Fix typos and improve French content ([#2801](https://github.com/cds-snc/platform-forms-client/issues/2801)) ([1b7a9c3](https://github.com/cds-snc/platform-forms-client/commit/1b7a9c337f2c24c358f54a060e14962a52c1ef18))
+* Remove isSaveable check ([#2823](https://github.com/cds-snc/platform-forms-client/issues/2823)) ([1671edd](https://github.com/cds-snc/platform-forms-client/commit/1671edd268566681623d53229ef84ec322c1ea38))
+
 ## [3.8.0](https://github.com/cds-snc/platform-forms-client/compare/v3.7.0...v3.8.0) (2023-11-06)
 
 
