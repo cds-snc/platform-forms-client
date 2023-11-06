@@ -46,7 +46,7 @@ const getSubmissions = async (
       return res.status(500).json({ error: "There was an error. Please try again later." });
 
     // Get responses into a ResponseSubmission array containing questions and answers that can be easily transformed
-    const responses = queryResult.submissions.map((item) => {
+    const responses = queryResult.map((item) => {
       const submission = Object.entries(JSON.parse(String(item.formSubmission))).map(
         ([questionId, answer]) => {
           const question = fullFormTemplate.form.elements.find(
@@ -104,7 +104,7 @@ const getSubmissions = async (
     }
 
     if (req.query.format) {
-      const responseIdStatusArray = queryResult.submissions.map((item) => {
+      const responseIdStatusArray = queryResult.map((item) => {
         return {
           id: item.name,
           status: item.status,

@@ -206,7 +206,7 @@ export async function retrieveSubmissions(
   ability: UserAbility,
   formID: string,
   ids: string[]
-): Promise<{ submissions: VaultSubmission[] }> {
+): Promise<VaultSubmission[]> {
   // Check access control first
   try {
     await checkAbilityToAccessSubmissions(ability, formID);
@@ -296,12 +296,10 @@ export async function retrieveSubmissions(
       );
     });
 
-    return {
-      submissions: accumulatedResponses,
-    };
+    return accumulatedResponses;
   } catch (e) {
     logMessage.error(e);
-    return { submissions: [] };
+    return [];
   }
 }
 
