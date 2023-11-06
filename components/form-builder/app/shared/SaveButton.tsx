@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 
 import { Button } from "@components/globals";
 import { useTemplateStore } from "../../store";
-import { useAllowPublish, useTemplateStatus, useTemplateContext } from "../../hooks";
+import { useTemplateStatus, useTemplateContext } from "../../hooks";
 import { formatDateTime } from "../../util";
 import Markdown from "markdown-to-jsx";
 
@@ -20,7 +20,6 @@ export const SaveButton = () => {
   const { t, i18n } = useTranslation(["common", "form-builder"]);
   const { isReady, asPath } = useRouter();
   const [isStartPage, setIsStartPage] = useState(false);
-  const { isSaveable } = useAllowPublish();
   const { updatedAt, getTemplateById } = useTemplateStatus();
 
   const handleSave = async () => {
@@ -45,16 +44,16 @@ export const SaveButton = () => {
   const dateTime =
     (updatedAt && formatDateTime(new Date(updatedAt).getTime(), `${i18n.language}-CA`)) || [];
 
-  return !isStartPage && isSaveable() && status === "authenticated" ? (
+  return !isStartPage && status === "authenticated" ? (
     <div
       data-id={id}
-      className={`mt-12 p-4 -ml-4 w-40 laptop:w-52 text-sm laptop:text-base ${
+      className={`-ml-4 mt-12 w-40 p-4 text-sm laptop:w-52 laptop:text-base ${
         id && (error ? "bg-red-100" : "bg-yellow-100")
       }`}
     >
       <Button onClick={handleSave}>{t("saveDraft", { ns: "form-builder" })}</Button>
       {error && (
-        <div className="text-red-500 pt-4 text-sm">
+        <div className="pt-4 text-sm text-red-500">
           <Markdown options={{ forceBlock: true }}>{error}</Markdown>
         </div>
       )}
