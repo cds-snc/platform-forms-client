@@ -229,7 +229,7 @@ export async function retrieveSubmissions(
 
     let keys = ids.map((id) => {
       return { FormID: formID, NAME_OR_CONF: `NAME#${id.trim()}` };
-    }) as unknown as KeysAndAttributes["Keys"];
+    }) as Record<string, string>[];
 
     // DynamoDB BatchGetItem can only retrieve 100 items at a time
     while (keys && keys.length > 0) {
@@ -266,7 +266,7 @@ export async function retrieveSubmissions(
               confirmedAt: item.ConfirmTimestamp ?? null,
               downloadedAt: item.DownloadedAt ?? null,
               removedAt: item.RemovalDate ?? null,
-            } as unknown as VaultSubmission;
+            } as VaultSubmission;
           })
         );
       }
