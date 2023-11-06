@@ -1,4 +1,4 @@
-import { QueryCommand, QueryCommandInput } from "@aws-sdk/lib-dynamodb";
+import { BatchGetCommand, QueryCommand, QueryCommandInput } from "@aws-sdk/lib-dynamodb";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { VaultSubmissionList, UserAbility, VaultStatus, VaultSubmission } from "@lib/types";
 import { logEvent } from "./auditLogs";
@@ -10,7 +10,6 @@ import { connectToDynamo } from "./integration/dynamodbConnector";
 import { logMessage } from "./logger";
 import { AccessControlError, checkPrivileges } from "./privileges";
 import {
-  BatchGetItemCommand,
   BatchWriteItemCommand,
   KeysAndAttributes,
   TransactWriteItemsCommand,
@@ -227,33 +226,26 @@ export async function retrieveSubmissions(
   try {
     let accumulatedResponses: VaultSubmission[] = [];
     const documentClient = connectToDynamo();
+
     let keys = ids.map((id) => {
-      return {
-        NAME_OR_CONF: {
-          S: `NAME#${id.trim()}`,
-        },
-        FormID: {
-          S: formID,
-        },
-      };
-    }) as KeysAndAttributes["Keys"];
+      return { FormID: formID, NAME_OR_CONF: `NAME#${id.trim()}` };
+    }) as unknown as KeysAndAttributes["Keys"];
 
     // DynamoDB BatchGetItem can only retrieve 100 items at a time
     while (keys && keys.length > 0) {
-      const input = {
+      const queryCommand = new BatchGetCommand({
         RequestItems: {
           Vault: {
             Keys: keys,
+            ProjectionExpression:
+              "FormID,SubmissionID,FormSubmission,ConfirmationCode,#status,SecurityAttribute,#name,CreatedAt,LastDownloadedBy,ConfirmTimestamp,DownloadedAt,RemovalDate",
+            ExpressionAttributeNames: {
+              "#name": "Name",
+              "#status": "Status",
+            },
           },
         },
-        ProjectionExpression:
-          "FormID,SubmissionID,FormSubmission,ConfirmationCode,#status,SecurityAttribute,#name,CreatedAt,LastDownloadedBy,ConfirmTimestamp,DownloadedAt,RemovalDate",
-        ExpressionAttributeNames: {
-          "#name": "Name",
-        },
-      };
-
-      const queryCommand = new BatchGetItemCommand(input);
+      });
 
       // eslint-disable-next-line no-await-in-loop
       const response = await documentClient.send(queryCommand);
@@ -262,18 +254,18 @@ export async function retrieveSubmissions(
         accumulatedResponses = accumulatedResponses.concat(
           response.Responses.Vault.map((item) => {
             return {
-              formID: item.FormID.S,
-              submissionID: item.SubmissionID.S,
-              formSubmission: item.FormSubmission.S,
-              confirmationCode: item.ConfirmationCode.S,
-              status: item.Status.S as VaultStatus,
-              securityAttribute: item.SecurityAttribute.S,
-              name: item.Name.S,
-              createdAt: item.CreatedAt.N,
-              lastDownloadedBy: item.LastDownloadedBy?.S ?? null,
-              confirmedAt: item.ConfirmTimestamp?.N ?? null,
-              downloadedAt: item.DownloadedAt?.N ?? null,
-              removedAt: item.RemovalDate?.N ?? null,
+              formID: item.FormID,
+              submissionID: item.SubmissionID,
+              formSubmission: item.FormSubmission,
+              confirmationCode: item.ConfirmationCode,
+              status: item.Status as VaultStatus,
+              securityAttribute: item.SecurityAttribute,
+              name: item.Name,
+              createdAt: item.CreatedAt,
+              lastDownloadedBy: item.LastDownloadedBy ?? null,
+              confirmedAt: item.ConfirmTimestamp ?? null,
+              downloadedAt: item.DownloadedAt ?? null,
+              removedAt: item.RemovalDate ?? null,
             } as unknown as VaultSubmission;
           })
         );
