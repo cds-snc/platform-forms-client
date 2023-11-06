@@ -49,7 +49,11 @@ export const MoreModal = ({
     return (
       <ModalButton isOpenButton={false}>
         {modals[item.id] && (
-          <Button className="mr-4" onClick={handleSubmit({ item, properties: modals[item.id] })}>
+          <Button
+            data-testid="more-modal-save-button"
+            className="mr-4"
+            onClick={handleSubmit({ item, properties: modals[item.id] })}
+          >
             {t("save")}
           </Button>
         )}
