@@ -1,35 +1,37 @@
-import { get } from "lodash";
-import myFormsEn from "../../public/static/locales/en/my-forms.json";
-import myFormsFr from "../../public/static/locales/fr/my-forms.json";
-import commonEn from "../../public/static/locales/en/common.json";
-import commonFr from "../../public/static/locales/fr/common.json";
-import { Translations } from "./types";
+import i18next from "i18next";
+import myFormsEn from "@public/static/locales/en/my-forms.json";
+import myFormsFr from "@public/static/locales/fr/my-forms.json";
+import commonEn from "@public/static/locales/en/common.json";
+import commonFr from "@public/static/locales/fr/common.json";
 
+/**
+ * This custom translation function works like useTranslation() from react-i18next which was not working in this context.
+ * The language resources are hard coded to avoid having to async load them from the file system.
+ * @param translationFile
+ */
 export const customTranslate = (translationFile: "my-forms" | "common") => {
-  let translations: Translations = {
-    en: {},
-    fr: {},
-  };
-
-  if (translationFile === "my-forms") {
-    translations = {
-      en: myFormsEn,
-      fr: myFormsFr,
-    };
+  if (!i18next.isInitialized) {
+    i18next.init({
+      fallbackLng: "en",
+      supportedLngs: ["en", "fr"],
+      preload: ["en", "fr"],
+      debug: true,
+      ns: ["my-forms", "common"],
+      resources: {
+        en: {
+          "my-forms": myFormsEn,
+          common: commonEn,
+        },
+        fr: {
+          "my-forms": myFormsFr,
+          common: commonFr,
+        },
+      },
+    });
   }
 
-  if (translationFile === "common") {
-    translations = {
-      en: commonEn,
-      fr: commonFr,
-    };
-  }
-
-  const t = (key: string, { lng }: { lng: string }) => {
-    return get(translations[lng as keyof Translations], key);
-  };
-
-  return { t };
+  i18next.setDefaultNamespace(translationFile);
+  return { t: i18next.t };
 };
 
 export const getProperty = (field: string, lang: string): string => {

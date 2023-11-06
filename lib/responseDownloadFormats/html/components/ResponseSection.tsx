@@ -1,8 +1,8 @@
 import React from "react";
-import { customTranslate } from "../../helpers";
 import { Submission } from "../../types";
 import { ColumnTable } from "./ColumnTable";
 import { RowTable } from "./RowTable";
+import { customTranslate } from "@lib/responseDownloadFormats/helpers";
 
 export interface ResponseSectionProps {
   confirmReceiptCode: string;
@@ -24,6 +24,7 @@ export const ResponseSection = ({
   formResponse,
 }: ResponseSectionProps) => {
   const { t } = customTranslate("my-forms");
+
   const capitalizedLang = capitalize(lang);
 
   const CopyToClipboardScripts = React.createElement("script", {
