@@ -1,8 +1,17 @@
 import { ValidationError, Validator, ValidatorResult } from "jsonschema";
 import templatesSchema from "@lib/middleware/schemas/templates.schema.json";
 import { FormRecord } from "@lib/types";
+import * as htmlparser2 from "htmlparser2";
 
 export type errorMessage = { property?: string; message: string };
+
+Validator.prototype.customFormats.noHTML = function (input) {
+  const parsedString = htmlparser2.parseDocument(input);
+  if (parsedString.children.length === 0) {
+    return true;
+  }
+  return false;
+};
 
 const getErrorMessageTranslationString = (error: ValidationError) => {
   let property = error.path[error.path.length - 1]

@@ -61,10 +61,12 @@
       "type": "object",
       "properties": {
         "descriptionEn": {
-          "type": "string"
+          "type": "string",
+          "format": "noHTML"
         },
         "descriptionFr": {
-          "type": "string"
+          "type": "string",
+          "format": "noHTML"
         },
         "referrerUrlEn": {
           "type": "string"
