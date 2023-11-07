@@ -13,7 +13,6 @@ import { DownloadResponseStatus } from "./DownloadResponseStatus";
 import { RemovalStatus } from "./RemovalStatus";
 import { DownloadStatus } from "./DownloadStatus";
 import { useRouter } from "next/router";
-import { logMessage } from "@lib/logger";
 import axios from "axios";
 import { toast } from "../shared/Toast";
 import { useSetting } from "@lib/hooks/useSetting";
@@ -26,17 +25,21 @@ import {
 } from "./DownloadTableReducer";
 import { getDaysPassed } from "@lib/clientHelpers";
 import { Alert } from "@components/globals";
-
-// TODO: move to an app setting variable
-const MAX_FILE_DOWNLOADS = 20;
+import { logMessage } from "@lib/logger";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
   formId?: string;
   nagwareResult: NagwareResult | null;
+  responseDownloadLimit: number;
 }
 
-export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: DownloadTableProps) => {
+export const DownloadTable = ({
+  vaultSubmissions,
+  formId,
+  nagwareResult,
+  responseDownloadLimit,
+}: DownloadTableProps) => {
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
   const [errors, setErrors] = useState({
@@ -59,6 +62,8 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
       })
     ).length,
   });
+
+  const MAX_FILE_DOWNLOADS = responseDownloadLimit;
 
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.id;
@@ -108,41 +113,40 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
       })
     );
 
-    try {
-      const downloads = Array.from(tableItems.checkedItems, async ([submissionName]) => {
-        if (!submissionName) {
-          throw new Error("Error downloading file from Retrieval table. SubmissionId missing.");
-        }
-        const url = `/api/id/${formId}/${submissionName}/download`;
-        const fileName = `${submissionName}.html`;
-        return axios({
-          url,
-          method: "GET",
-          responseType: "blob",
-          timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-        }).then((response) => {
-          const url = window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement("a");
-          link.href = url;
-          link.setAttribute("download", fileName);
-          document.body.appendChild(link);
-          link.click();
-        });
-      });
+    const url = `/api/id/${formId}/submissions/download?format=html`;
+    const ids = Array.from(tableItems.checkedItems.keys());
 
-      await Promise.all(downloads).then(() => {
-        // TODO: only occurs download more than one file at a time. Here is the issue to track
-        // https://github.com/cds-snc/platform-forms-client/issues/1744
+    axios({
+      url,
+      method: "POST",
+      data: {
+        ids: ids.join(","),
+      },
+    })
+      .then((response) => {
+        const interval = 200;
+        response.data.forEach((submission: { id: string; html: string }, i: number) => {
+          setTimeout(() => {
+            const fileName = `${submission.id}.html`;
+            const href = window.URL.createObjectURL(new Blob([submission.html]));
+            const anchorElement = document.createElement("a");
+            anchorElement.href = href;
+            anchorElement.download = fileName;
+            document.body.appendChild(anchorElement);
+            anchorElement.click();
+            document.body.removeChild(anchorElement);
+            window.URL.revokeObjectURL(href);
+          }, interval * i);
+        });
         setTimeout(() => {
-          // Refreshes getServerSideProps data without a full page reload
           router.replace(router.asPath, undefined, { scroll: false });
           toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
-        }, 1000); // Increasing to 1 second to allow more time for prod - temp work around
+        }, interval * response.data.length);
+      })
+      .catch((err) => {
+        logMessage.error(err as Error);
+        setErrors({ ...errors, downloadError: true });
       });
-    } catch (err) {
-      logMessage.error(err as Error);
-      setErrors({ ...errors, downloadError: true });
-    }
   };
 
   const blockDownload = (
@@ -211,7 +215,6 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
           </Alert.Danger>
         )}
       </div>
-
       <table className="text-sm" aria-live="polite">
         <caption className="sr-only">{t("downloadResponsesTable.header.tableTitle")}</caption>
         <thead className="border-b-2 border-[#6a6d7b]">
