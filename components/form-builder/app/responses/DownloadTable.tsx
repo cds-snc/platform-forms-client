@@ -27,16 +27,19 @@ import { getDaysPassed } from "@lib/clientHelpers";
 import { Alert } from "@components/globals";
 import { logMessage } from "@lib/logger";
 
-// TODO: move to an app setting variable
-const MAX_FILE_DOWNLOADS = 20;
-
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
   formId?: string;
   nagwareResult: NagwareResult | null;
+  responseDownloadLimit: number;
 }
 
-export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: DownloadTableProps) => {
+export const DownloadTable = ({
+  vaultSubmissions,
+  formId,
+  nagwareResult,
+  responseDownloadLimit,
+}: DownloadTableProps) => {
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
   const [errors, setErrors] = useState({
@@ -59,6 +62,8 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
       })
     ).length,
   });
+
+  const MAX_FILE_DOWNLOADS = responseDownloadLimit;
 
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.id;
@@ -210,7 +215,6 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
           </Alert.Danger>
         )}
       </div>
-
       <table className="text-sm" aria-live="polite">
         <caption className="sr-only">{t("downloadResponsesTable.header.tableTitle")}</caption>
         <thead className="border-b-2 border-[#6a6d7b]">

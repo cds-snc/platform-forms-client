@@ -25,11 +25,13 @@ import Head from "next/head";
 import { FormBuilderLayout } from "@components/globals/layouts/FormBuilderLayout";
 import { ErrorPanel } from "@components/globals";
 import { ClosedBanner } from "@components/form-builder/app/shared/ClosedBanner";
+import { getAppSetting } from "@lib/appSettings";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
   formId?: string;
   nagwareResult: NagwareResult | null;
+  responseDownloadLimit: number;
 }
 
 // TODO: move to an app setting variable
@@ -40,6 +42,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   vaultSubmissions,
   formId,
   nagwareResult,
+  responseDownloadLimit = 25,
 }: ResponsesProps) => {
   const { t } = useTranslation("form-builder-responses");
   const { status } = useSession();
@@ -167,6 +170,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
                 vaultSubmissions={vaultSubmissions}
                 formId={formId}
                 nagwareResult={nagwareResult}
+                responseDownloadLimit={responseDownloadLimit}
               />
             )}
 
@@ -295,11 +299,14 @@ export const getServerSideProps: GetServerSideProps = async ({
     }
   }
 
+  const responseDownloadLimit = Number(await getAppSetting("responseDownloadLimit"));
+
   return {
     props: {
       ...FormbuilderParams,
       vaultSubmissions,
       formId: FormbuilderParams.initialForm?.id ?? null,
+      responseDownloadLimit: responseDownloadLimit,
       nagwareResult,
       ...(locale &&
         (await serverSideTranslations(
