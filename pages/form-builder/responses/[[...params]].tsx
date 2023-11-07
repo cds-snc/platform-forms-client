@@ -42,7 +42,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   vaultSubmissions,
   formId,
   nagwareResult,
-  responseDownloadLimit = 25,
+  responseDownloadLimit,
 }: ResponsesProps) => {
   const { t } = useTranslation("form-builder-responses");
   const { status } = useSession();
@@ -299,7 +299,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     }
   }
 
-  const responseDownloadLimit = Number(await getAppSetting("responseDownloadLimit"));
+  const responseDownloadLimit = Number(await getAppSetting("responseDownloadLimit")) || 20;
 
   return {
     props: {
