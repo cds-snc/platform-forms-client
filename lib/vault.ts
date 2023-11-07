@@ -1,6 +1,11 @@
-import { QueryCommand, QueryCommandInput } from "@aws-sdk/lib-dynamodb";
+import {
+  BatchGetCommand,
+  QueryCommand,
+  QueryCommandInput,
+  TransactWriteCommand,
+} from "@aws-sdk/lib-dynamodb";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { VaultSubmissionList, UserAbility, VaultStatus } from "@lib/types";
+import { VaultSubmissionList, UserAbility, VaultStatus, VaultSubmission } from "@lib/types";
 import { logEvent } from "./auditLogs";
 import {
   numberOfUnprocessedSubmissionsCacheCheck,
@@ -189,6 +194,154 @@ export async function listAllSubmissions(
     logMessage.error(e);
     return { submissions: [], numberOfUnprocessedSubmissions: 0 };
   }
+}
+
+/**
+ * This method returns a list of selected form submission records.
+ * The list contains the actual submission data
+ * @param formID - The form ID from which to retrieve responses
+ */
+export async function retrieveSubmissions(
+  ability: UserAbility,
+  formID: string,
+  ids: string[]
+): Promise<VaultSubmission[]> {
+  // Check access control first
+  try {
+    await checkAbilityToAccessSubmissions(ability, formID);
+  } catch (e) {
+    if (e instanceof AccessControlError)
+      logEvent(
+        ability.userID,
+        {
+          type: "Form",
+          id: formID,
+        },
+        "AccessDenied",
+        `Attempted to retrieve responses for form ${formID}`
+      );
+    throw e;
+  }
+
+  try {
+    let accumulatedResponses: VaultSubmission[] = [];
+    const documentClient = connectToDynamo();
+
+    let keys = ids.map((id) => {
+      return { FormID: formID, NAME_OR_CONF: `NAME#${id.trim()}` };
+    }) as Record<string, string>[];
+
+    // DynamoDB BatchGetItem can only retrieve 100 items at a time
+    while (keys && keys.length > 0) {
+      const queryCommand = new BatchGetCommand({
+        RequestItems: {
+          Vault: {
+            Keys: keys,
+            ProjectionExpression:
+              "FormID,SubmissionID,FormSubmission,ConfirmationCode,#status,SecurityAttribute,#name,CreatedAt,LastDownloadedBy,ConfirmTimestamp,DownloadedAt,RemovalDate",
+            ExpressionAttributeNames: {
+              "#name": "Name",
+              "#status": "Status",
+            },
+          },
+        },
+      });
+
+      // eslint-disable-next-line no-await-in-loop
+      const response = await documentClient.send(queryCommand);
+
+      if (response.Responses?.Vault.length) {
+        accumulatedResponses = accumulatedResponses.concat(
+          response.Responses.Vault.map((item) => {
+            return {
+              formID: item.FormID,
+              submissionID: item.SubmissionID,
+              formSubmission: item.FormSubmission,
+              confirmationCode: item.ConfirmationCode,
+              status: item.Status as VaultStatus,
+              securityAttribute: item.SecurityAttribute,
+              name: item.Name,
+              createdAt: item.CreatedAt,
+              lastDownloadedBy: item.LastDownloadedBy ?? null,
+              confirmedAt: item.ConfirmTimestamp ?? null,
+              downloadedAt: item.DownloadedAt ?? null,
+              removedAt: item.RemovalDate ?? null,
+            } as VaultSubmission;
+          })
+        );
+      }
+
+      // If there are unprocessed keys, we need to make another request
+      keys = response.UnprocessedKeys?.Vault?.Keys || [];
+    }
+
+    // Log each response retrieved
+    accumulatedResponses.forEach((item) => {
+      logEvent(
+        ability.userID,
+        {
+          type: "Response",
+          id: item.submissionID,
+        },
+        "RetrieveResponses",
+        `Retrieve selected responses for form ${formID} with ID ${item.submissionID}`
+      );
+    });
+
+    return accumulatedResponses;
+  } catch (e) {
+    logMessage.error(e);
+    return [];
+  }
+}
+
+/**
+ * Sets who last downloaded the Form Submission on the Vault Submission record
+ * Note that if any single update fails, the entire transaction will fail
+ * @param responses Array of responses (id, status) to update
+ * @param formID Form ID the Submission is for
+ * @param email Email address of the user downloading the Submission
+ */
+export async function updateLastDownloadedBy(
+  responses: Array<{ id: string; status: string }>,
+  formID: string,
+  email: string
+) {
+  const documentClient = connectToDynamo();
+
+  // TransactWriteItem can only update 100 items at a time
+  const asyncUpdateRequests = chunkArray(responses, 100).map((chunkedResponses) => {
+    const request = new TransactWriteCommand({
+      TransactItems: chunkedResponses.map((response) => {
+        const isNewResponse = response.status === VaultStatus.NEW;
+        return {
+          Update: {
+            TableName: "Vault",
+            Key: {
+              FormID: formID,
+              NAME_OR_CONF: `NAME#${response.id}`,
+            },
+            UpdateExpression: "SET LastDownloadedBy = :email, DownloadedAt = :downloadedAt".concat(
+              isNewResponse ? ", #status = :statusUpdate" : ""
+            ),
+            ExpressionAttributeValues: {
+              ":email": email,
+              ":downloadedAt": Date.now(),
+              ...(isNewResponse && { ":statusUpdate": "Downloaded" }),
+            },
+            ...(isNewResponse && {
+              ExpressionAttributeNames: {
+                "#status": "Status",
+              },
+            }),
+          },
+        };
+      }),
+    });
+    return documentClient.send(request);
+  });
+
+  return Promise.all(asyncUpdateRequests);
 }
 
 /**
