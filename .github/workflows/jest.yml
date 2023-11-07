@@ -14,9 +14,12 @@ jobs:
         with:
           node-version: 18
 
+      - name: Yarn update to V4
+        run: corepack enable && yarn set version berry
+
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
-        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
 
       - uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84 # v3.3.2
         id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
@@ -27,7 +30,7 @@ jobs:
             linux-yarn-
 
       - name: "Install dependencies"
-        run: yarn install:all
+        run: yarn workspace gcforms install --immutable
 
       - name: Jest Tests
         run: yarn test
