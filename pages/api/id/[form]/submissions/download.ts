@@ -5,7 +5,7 @@ import { FormElementTypes, MiddlewareProps, WithRequired } from "@lib/types";
 import { getFullTemplateByID } from "@lib/templates";
 import { transform as csvTransform } from "@lib/responseDownloadFormats/csv";
 import { transform as xlsxTransform } from "@lib/responseDownloadFormats/xlsx";
-import { transform as htmlTableTransform } from "@lib/responseDownloadFormats/html-table";
+import { transform as htmlAggregatedTransform } from "@lib/responseDownloadFormats/html-aggregated";
 import { transform as htmlTransform } from "@lib/responseDownloadFormats/html";
 import { transform as zipTransform } from "@lib/responseDownloadFormats/html-zipped";
 import { retrieveSubmissions, updateLastDownloadedBy } from "@lib/vault";
@@ -91,7 +91,7 @@ const getSubmissions = async (
 
     const formResponse = {
       form: {
-        id: fullFormTemplate.form.id,
+        id: fullFormTemplate.id,
         titleEn: fullFormTemplate.form.titleEn,
         titleFr: fullFormTemplate.form.titleFr,
         securityAttribute: fullFormTemplate.securityAttribute,
@@ -141,11 +141,11 @@ const getSubmissions = async (
           .send(xlsxTransform(formResponse));
       }
 
-      if (req.query.format === "html-table") {
+      if (req.query.format === "html-aggregated") {
         return res
           .status(200)
           .setHeader("Content-Type", "text/html")
-          .send(htmlTableTransform(formResponse));
+          .send(htmlAggregatedTransform(formResponse));
       }
 
       if (req.query.format === "html") {

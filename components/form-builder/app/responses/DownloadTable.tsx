@@ -108,6 +108,35 @@ export const DownloadTable = ({ vaultSubmissions, formId, nagwareResult }: Downl
       })
     );
 
+    // Generate and download an aggregated version of all the records
+    if (tableItems.checkedItems.size > 1) {
+      const urlAggregated = `/api/id/${formId}/submissions/download?format=html-aggregated`;
+      const ids = Array.from(tableItems.checkedItems.keys());
+
+      axios({
+        url: urlAggregated,
+        method: "POST",
+        data: {
+          ids: ids.join(","),
+        },
+      }).then((response) => {
+        // debugger;
+
+        const fileName = `${response.data.id}.html`;
+        const href = window.URL.createObjectURL(new Blob([response.data.html]));
+        const anchorElement = document.createElement("a");
+        anchorElement.href = href;
+        anchorElement.download = fileName;
+        document.body.appendChild(anchorElement);
+        anchorElement.click();
+        document.body.removeChild(anchorElement);
+        window.URL.revokeObjectURL(href);
+      });
+
+      return;
+    }
+
+    // Generate and download a single official version
     try {
       const downloads = Array.from(tableItems.checkedItems, async ([submissionName]) => {
         if (!submissionName) {
