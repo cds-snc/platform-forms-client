@@ -12,9 +12,9 @@ ARG INDEX_SITE="false"
 ENV INDEX_SITE=$INDEX_SITE
 
 RUN corepack enable && yarn set version berry
-RUN yarn workspace gcforms install --immutable --silent
+RUN yarn workspaces focus gcforms flag_initialization
 RUN yarn build
-RUN yarn workspaces focus gcforms --production
+RUN yarn workspaces focus gcforms flag_initialization --production
 
 FROM node:18 as final
 LABEL maintainer="-"
@@ -35,18 +35,17 @@ ENV INDEX_SITE=$INDEX_SITE
 
 WORKDIR /src
 
+COPY package.json yarn.lock .yarnrc.yml next-i18next.config.js next.config.js ./
 # Update to latest yarn version
 RUN corepack enable && yarn set version berry
-
-COPY package.json yarn.lock .yarnrc.yml next-i18next.config.js next.config.js ./
 COPY .yarn ./.yarn
 COPY public ./public
-COPY flag_initialization ./flag_initialization
 COPY prisma ./prisma
+COPY flag_initialization ./flag_initialization
 COPY --from=build /src/node_modules ./node_modules
 COPY --from=build /src/.next ./.next
 COPY form-builder-templates ./form-builder-templates
-RUN yarn workspace flag_initialization install
+
 
 
 ENV PORT 3000
