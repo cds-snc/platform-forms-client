@@ -15,7 +15,7 @@ ARG COGNITO_USER_POOL_ID
 ARG INDEX_SITE="false"
 ENV INDEX_SITE=$INDEX_SITE
 RUN corepack enable && yarn set version berry
-RUN yarn workspace gcforms install
+RUN yarn workspaces focus gcforms flag_initialization
 RUN yarn build
 
 FROM node:18 as final
