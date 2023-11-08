@@ -1,33 +1,9 @@
-import {
-  PreValidatePropertyFunction,
-  ValidationError,
-  Validator,
-  ValidatorResult,
-} from "jsonschema";
+import { ValidationError, Validator, ValidatorResult } from "jsonschema";
 import templatesSchema from "@lib/middleware/schemas/templates.schema.json";
 import { FormRecord } from "@lib/types";
+import { cleanAngleBrackets } from "@lib/middleware/jsonValidator";
 
 export type errorMessage = { property?: string; message: string };
-
-/**
- * Cleans up the provided JSON to remove any opening/closing angle brackets
- * without preceding or trailing spaces (ie <something> becomes < something >)
- * @param object
- * @param key
- */
-const cleanAngleBrackets: PreValidatePropertyFunction = (object, key) => {
-  const value = object[key];
-
-  if (typeof value === "undefined") return;
-
-  if (typeof value === "string") {
-    const openRegex = /<(?!\s)/g;
-    const closeRegex = /(?<!\s)>/g;
-    object[key] = value.replaceAll(openRegex, "< ").replaceAll(closeRegex, " >");
-  }
-
-  return;
-};
 
 const getErrorMessageTranslationString = (error: ValidationError) => {
   let property = error.path[error.path.length - 1]

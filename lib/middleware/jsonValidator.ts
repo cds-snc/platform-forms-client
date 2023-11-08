@@ -1,7 +1,7 @@
 import { Schema, Validator, ValidatorResult, PreValidatePropertyFunction } from "jsonschema";
 import { NextApiRequest, NextApiResponse } from "next";
 import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
-import * as htmlparser2 from "htmlparser2";
+import { escapeAngleBrackets } from "@components/form-builder/util";
 
 export type ValidateOptions = {
   jsonKey?: string;
@@ -10,28 +10,21 @@ export type ValidateOptions = {
 };
 
 /**
- * This function when passed into the jsonschema validate function
- * will receive all possible key value pairs defined in the schema
- * and will check string values to ensure that there is not HTML
+ * Cleans up the provided JSON to remove any opening/closing angle brackets
+ * without preceding or trailing spaces (ie <something> becomes < something >)
  * @param object
  * @param key
  */
-const htmlChecker: PreValidatePropertyFunction = (object, key) => {
+export const cleanAngleBrackets: PreValidatePropertyFunction = (object, key) => {
   const value = object[key];
+
+  if (typeof value === "undefined") return;
+
   if (typeof value === "string") {
-    // we assume all strings can be valid html
-    // use htmlparse2 to construct document
-    // we want to ensure that the only thing in the document is a text element
-    const parsedString = htmlparser2.parseDocument(value);
-
-    // if there are zero children its an empty string, if there is more than one child there is html
-    if (parsedString.children.length === 0) return;
-    else if (parsedString.children.length !== 1) throw new Error(`HTML detected in JSON`);
-
-    const element = parsedString.children[0];
-    // if the element detected does not have a text type then it is html
-    if (element?.type !== "text") throw new Error(`HTML detected in JSON`);
+    object[key] = escapeAngleBrackets(value);
   }
+
+  return;
 };
 
 export const jsonValidator = (schema: Schema, options?: ValidateOptions): MiddlewareRequest => {
@@ -56,7 +49,7 @@ export const jsonValidator = (schema: Schema, options?: ValidateOptions): Middle
       const validatorResult: ValidatorResult = validator.validate(
         validateObject,
         schema,
-        options?.noHTML ? { preValidateProperty: htmlChecker } : undefined
+        options?.noHTML ? { preValidateProperty: cleanAngleBrackets } : undefined
       );
 
       if (validatorResult.valid) {

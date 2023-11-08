@@ -259,3 +259,31 @@ export const isVaultDelivery = (deliveryOption: DeliveryOption | undefined) => {
 export const isEmailDelivery = (deliveryOption: DeliveryOption | undefined) => {
   return !!(deliveryOption && deliveryOption.emailAddress);
 };
+
+export const escapeAngleBrackets = (value: string) => {
+  const openRegex = /<(?!\s)/g;
+  const closeRegex = /(?<!\s)>/g;
+  return value.replaceAll(openRegex, "< ").replaceAll(closeRegex, " >");
+};
+
+export const cleanInput = (input: any) => {
+  if (typeof input === "string") {
+    return escapeAngleBrackets(input);
+  }
+
+  if (typeof input === "object" && input !== null) {
+    const obj = Array.isArray(input) ? [...input] : { ...input };
+
+    for (const key in obj) {
+      if (typeof obj[key] === "object" && obj[key] !== null) {
+        obj[key] = cleanInput(obj[key]);
+      } else if (typeof obj[key] === "string") {
+        obj[key] = escapeAngleBrackets(obj[key]);
+      }
+    }
+
+    return obj;
+  }
+
+  return input;
+};
