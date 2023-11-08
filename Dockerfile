@@ -38,7 +38,7 @@ WORKDIR /src
 # Update to latest yarn version
 RUN corepack enable && yarn set version berry
 
-COPY package.json yarn.lock ./
+COPY package.json yarn.lock .yarn .yarnrc.yml ./
 COPY --from=build /src/node_modules ./node_modules
 COPY flag_initialization ./flag_initialization
 RUN yarn workspace flag_initialization install
