@@ -14,10 +14,9 @@ ARG COGNITO_USER_POOL_ID
 
 ARG INDEX_SITE="false"
 ENV INDEX_SITE=$INDEX_SITE
-
-RUN yarn install --silent --production=false
+RUN corepack enable && yarn set version berry
+RUN yarn workspaces focus gcforms flag_initialization
 RUN yarn build
-RUN yarn install --production
 
 FROM node:18 as final
 LABEL maintainer="-"
@@ -46,12 +45,14 @@ WORKDIR /src
 COPY --from=build /src/.next/standalone ./
 COPY --from=build /src/.next/static ./.next/static
 
-COPY package.json yarn.lock next.config.js next-i18next.config.js ./
+COPY package.json yarn.lock .yarnrc.yml next.config.js next-i18next.config.js ./
+COPY .yarn ./.yarn
 COPY public ./public
 COPY prisma ./prisma
 COPY form-builder-templates ./form-builder-templates
 COPY bin/pr-review-entrypoint.sh ./entrypoint.sh
-
+# Update to latest yarn version
+RUN corepack enable && yarn set version berry
 # Required by the entrypoint.sh to load the SSM ParameterStore environment variables
 RUN apt-get update && apt-get install -y awscli
 

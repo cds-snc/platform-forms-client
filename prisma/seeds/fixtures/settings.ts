@@ -57,12 +57,22 @@ const nagwarePhaseEscalated: Setting = {
   value: "46",
 };
 
+const responseDownloadLimit: Setting = {
+  internalId: "responseDownloadLimit",
+  nameEn: "Limit the number of responses that can be downloaded at once",
+  nameFr: "[FR] Limit the number of responses that can be downloaded at once",
+  descriptionEn: null,
+  descriptionFr: null,
+  value: "20",
+};
+
 const allSettings = [
   brandingRequestFormSetting,
   nagwarePhaseEncouraged,
   nagwarePhasePrompted,
   nagwarePhaseWarned,
   nagwarePhaseEscalated,
+  responseDownloadLimit,
 ];
 
 export default {
