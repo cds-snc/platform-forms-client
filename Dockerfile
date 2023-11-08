@@ -38,15 +38,14 @@ WORKDIR /src
 # Update to latest yarn version
 RUN corepack enable && yarn set version berry
 
-COPY package.json yarn.lock .yarn .yarnrc.yml ./
-COPY --from=build /src/node_modules ./node_modules
-COPY flag_initialization ./flag_initialization
-RUN yarn workspace flag_initialization install
-COPY --from=build /src/.next ./.next
+COPY package.json yarn.lock .yarnrc.yml next-i18next.config.js next.config.js ./
+COPY .yarn ./.yarn
 COPY public ./public
-COPY next.config.js .
-COPY next-i18next.config.js .
+COPY flag_initialization ./flag_initialization
 COPY prisma ./prisma
+COPY --from=build /src/node_modules ./node_modules
+COPY --from=build /src/.next ./.next
+RUN yarn workspace flag_initialization install
 COPY form-builder-templates ./form-builder-templates
 
 
