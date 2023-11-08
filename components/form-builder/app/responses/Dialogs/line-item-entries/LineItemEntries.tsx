@@ -131,9 +131,12 @@ export const LineItemEntries = ({
           onPaste={(e) => {
             const pastedText = e.clipboardData.getData("Text");
             const pastedTextArray = pastedText.split(/\r?\n/);
-            const cleanedText = pastedTextArray.map((text) =>
-              text.trim().replace(",", "").toLowerCase()
-            );
+            const cleanedText = pastedTextArray.flatMap((text) => {
+              if (text.trim() === "confirmation_code" || text.trim() === "") {
+                return [];
+              }
+              return text.trim().replace(",", "").toLowerCase();
+            });
             setInputs([...new Set([...inputs, ...cleanedText])]);
             e.preventDefault();
           }}
