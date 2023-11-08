@@ -30,7 +30,7 @@ jobs:
             linux-yarn-
 
       - name: "Install dependencies"
-        run: yarn workspace gcforms install
+        run: yarn workspaces focus gcforms flag_initialization
 
       - name: Jest Tests
         run: yarn test
