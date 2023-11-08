@@ -45,8 +45,8 @@ COPY flag_initialization ./flag_initialization
 COPY prisma ./prisma
 COPY --from=build /src/node_modules ./node_modules
 COPY --from=build /src/.next ./.next
-RUN yarn workspace flag_initialization install
 COPY form-builder-templates ./form-builder-templates
+RUN yarn workspace flag_initialization install
 
 
 ENV PORT 3000
