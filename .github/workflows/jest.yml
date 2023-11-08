@@ -30,7 +30,7 @@ jobs:
             linux-yarn-
 
       - name: "Install dependencies"
-        run: yarn workspace gcforms install --immutable
+        run: yarn workspace gcforms install
 
       - name: Jest Tests
         run: yarn test
