@@ -1,16 +1,33 @@
-import { ValidationError, Validator, ValidatorResult } from "jsonschema";
+import {
+  PreValidatePropertyFunction,
+  ValidationError,
+  Validator,
+  ValidatorResult,
+} from "jsonschema";
 import templatesSchema from "@lib/middleware/schemas/templates.schema.json";
 import { FormRecord } from "@lib/types";
-import * as htmlparser2 from "htmlparser2";
 
 export type errorMessage = { property?: string; message: string };
 
-Validator.prototype.customFormats.noHTML = function (input) {
-  const parsedString = htmlparser2.parseDocument(input);
-  if (parsedString.children.length === 0) {
-    return true;
+/**
+ * This function when passed into the jsonschema validate function
+ * will receive all possible key value pairs defined in the schema
+ * and will check string values to ensure that there is not HTML
+ * @param object
+ * @param key
+ */
+const htmlChecker: PreValidatePropertyFunction = (object, key) => {
+  const value = object[key];
+
+  if (typeof value === "undefined") return;
+
+  if (typeof value === "string") {
+    const openRegex = /<(?!\s)/g;
+    const closeRegex = /(?<!\s)>/g;
+    object[key] = value.replaceAll(openRegex, "< ").replaceAll(closeRegex, " >");
   }
-  return false;
+
+  return;
 };
 
 const getErrorMessageTranslationString = (error: ValidationError) => {
@@ -32,7 +49,9 @@ const getErrorMessageTranslationString = (error: ValidationError) => {
 
 export const validateTemplate = (data: FormRecord) => {
   const validator = new Validator();
-  const validatorResult: ValidatorResult = validator.validate(data, templatesSchema);
+  const validatorResult: ValidatorResult = validator.validate(data, templatesSchema, {
+    preValidateProperty: htmlChecker,
+  });
   const errors: errorMessage[] = validatorResult.errors.map(getErrorMessageTranslationString);
 
   return {
