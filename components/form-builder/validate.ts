@@ -10,13 +10,12 @@ import { FormRecord } from "@lib/types";
 export type errorMessage = { property?: string; message: string };
 
 /**
- * This function when passed into the jsonschema validate function
- * will receive all possible key value pairs defined in the schema
- * and will check string values to ensure that there is not HTML
+ * Cleans up the provided JSON to remove any opening/closing angle brackets
+ * without preceding or trailing spaces (ie <something> becomes < something >)
  * @param object
  * @param key
  */
-const htmlChecker: PreValidatePropertyFunction = (object, key) => {
+const cleanAngleBrackets: PreValidatePropertyFunction = (object, key) => {
   const value = object[key];
 
   if (typeof value === "undefined") return;
@@ -50,7 +49,7 @@ const getErrorMessageTranslationString = (error: ValidationError) => {
 export const validateTemplate = (data: FormRecord) => {
   const validator = new Validator();
   const validatorResult: ValidatorResult = validator.validate(data, templatesSchema, {
-    preValidateProperty: htmlChecker,
+    preValidateProperty: cleanAngleBrackets,
   });
   const errors: errorMessage[] = validatorResult.errors.map(getErrorMessageTranslationString);
 
