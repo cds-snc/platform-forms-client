@@ -36,9 +36,9 @@ ENV INDEX_SITE=$INDEX_SITE
 WORKDIR /src
 
 COPY package.json yarn.lock .yarnrc.yml next-i18next.config.js next.config.js ./
+COPY .yarn ./.yarn
 # Update to latest yarn version
 RUN corepack enable && yarn set version berry
-COPY .yarn ./.yarn
 COPY public ./public
 COPY prisma ./prisma
 COPY flag_initialization ./flag_initialization
