@@ -1,12 +1,13 @@
 import { createArrayCsvStringifier as createCsvStringifier } from "csv-writer";
 import { FormResponseSubmissions } from "../types";
+import { csvHeaderRow } from "./csvHeaderRow";
 
 export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
   const header = formResponseSubmissions.submissions[0].answers.map((item) => {
     return `${item.questionEn} \n ${item.questionFr}`;
   });
 
-  header.unshift("id", "created_at", "confirmation_code");
+  header.unshift(...csvHeaderRow);
 
   const csvStringifier = createCsvStringifier({
     header: header,

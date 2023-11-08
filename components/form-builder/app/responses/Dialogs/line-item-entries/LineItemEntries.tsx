@@ -3,6 +3,7 @@ import { LineItems } from "./LineItems";
 import { scrollToBottom } from "@lib/clientHelpers";
 import { useTranslation } from "react-i18next";
 import { DialogStates } from "../DialogStates";
+import { csvHeaderRow } from "@lib/responseDownloadFormats/csv/csvHeaderRow";
 
 // TODO: handle duplicate entries?
 // TODO: should "backspace" on an empty input set the next entry into "edit mode"?
@@ -132,7 +133,7 @@ export const LineItemEntries = ({
             const pastedText = e.clipboardData.getData("Text");
             const pastedTextArray = pastedText.split(/\r?\n/);
             const cleanedText = pastedTextArray.flatMap((text) => {
-              if (text.trim() === "confirmation_code" || text.trim() === "") {
+              if (csvHeaderRow.includes(text.trim()) || text.trim() === "") {
                 return [];
               }
               return text.trim().replace(",", "").toLowerCase();
