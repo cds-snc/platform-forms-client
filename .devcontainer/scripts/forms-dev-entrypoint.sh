@@ -8,4 +8,4 @@ set -ex
 ###################################################################
 
 cd /src 
-yarn install --production=false
+yarn install

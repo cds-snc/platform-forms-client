@@ -14,10 +14,9 @@ ARG COGNITO_USER_POOL_ID
 
 ARG INDEX_SITE="false"
 ENV INDEX_SITE=$INDEX_SITE
-
-RUN yarn install --silent --production=false
+RUN corepack enable && yarn set version berry
+RUN yarn workspace gcforms install
 RUN yarn build
-RUN yarn install --production
 
 FROM node:18 as final
 LABEL maintainer="-"
@@ -51,7 +50,8 @@ COPY public ./public
 COPY prisma ./prisma
 COPY form-builder-templates ./form-builder-templates
 COPY bin/pr-review-entrypoint.sh ./entrypoint.sh
-
+# Update to latest yarn version
+RUN corepack enable && yarn set version berry
 # Required by the entrypoint.sh to load the SSM ParameterStore environment variables
 RUN apt-get update && apt-get install -y awscli
 

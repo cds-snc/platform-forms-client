@@ -156,7 +156,7 @@ async function deleteFormResponses(
           ":retrieved": 1,
           ":submission": submissionID,
         },
-        ReturnValues: "NONE",
+        ReturnValues: "NONE" as const,
       };
       //Update one item at the time
       // eslint-disable-next-line no-await-in-loop
