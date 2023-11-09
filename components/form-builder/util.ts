@@ -266,24 +266,22 @@ export const escapeAngleBrackets = (value: string) => {
   return value.replaceAll(openRegex, "< ").replaceAll(closeRegex, " >");
 };
 
-export const cleanInput = (input: any) => {
-  if (typeof input === "string") {
-    return escapeAngleBrackets(input);
-  }
+type Cleanable = string | Cleanable[] | { [key: string]: Cleanable } | unknown;
 
-  if (typeof input === "object" && input !== null) {
-    const obj = Array.isArray(input) ? [...input] : { ...input };
-
-    for (const key in obj) {
-      if (typeof obj[key] === "object" && obj[key] !== null) {
-        obj[key] = cleanInput(obj[key]);
-      } else if (typeof obj[key] === "string") {
-        obj[key] = escapeAngleBrackets(obj[key]);
-      }
+export const cleanInput = (input: Cleanable) => {
+    if (typeof input === "string") {
+        return escapeAngleBrackets(input);
     }
-
-    return obj;
-  }
-
-  return input;
+    if ( Array.isArray(input) ) {
+        return input.map((elem) => cleanInput(elem));
+    }
+    if ( input instanceof Object ) {
+        return Object.fromEntries(
+            Object.entries(input).map(
+                ([key, value]) => [key, cleanInput(value)]
+            )
+        )
+    }
+    return input;
 };
+
