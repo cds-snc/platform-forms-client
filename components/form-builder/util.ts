@@ -266,7 +266,7 @@ export const escapeAngleBrackets = (value: string) => {
   return value.replaceAll(openRegex, "< ").replaceAll(closeRegex, " >");
 };
 
-type Cleanable = string | Cleanable[] | { [key: string]: Cleanable };
+type Cleanable = string | Cleanable[] | { [key: string]: Cleanable } | unknown;
 
 export const cleanInput = <T extends Cleanable>(input: T): T => {
   if (typeof input === "string") {
