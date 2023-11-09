@@ -261,9 +261,8 @@ export const isEmailDelivery = (deliveryOption: DeliveryOption | undefined) => {
 };
 
 export const escapeAngleBrackets = (value: string) => {
-  const openRegex = /<(?!\s)/g;
-  const closeRegex = /(?<!\s)>/g;
-  return value.replaceAll(openRegex, "< ").replaceAll(closeRegex, " >");
+  const regex = /<(?!\s)(.*?)(?<!\s)>/g;
+  return value.replace(regex, "< $1 >");
 };
 
 type Cleanable = string | Cleanable[] | { [key: string]: Cleanable } | unknown;
