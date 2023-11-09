@@ -265,7 +265,7 @@ export const DownloadTable = ({
                   (isBlocked ? " opacity-50" : "")
                 }
               >
-                <td className="flex whitespace-nowrap pb-2 pl-8 pr-4">
+                <td className="flex whitespace-nowrap pb-2 pl-9 pr-4">
                   <div className="gc-input-checkbox">
                     <input
                       id={submission.name}
