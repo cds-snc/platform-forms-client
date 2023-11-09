@@ -70,25 +70,41 @@ export const DownloadTable = ({
 
   const MAX_FILE_DOWNLOADS = responseDownloadLimit;
 
-  const allCheckedState = () => {
+  enum allCheckedState {
+    NONE = "NONE",
+    SOME = "SOME",
+    ALL = "ALL",
+  }
+
+  const checkAllChecked = () => {
     if (tableItems.checkedItems.size === 0) {
-      return 0;
+      return allCheckedState.NONE; // none checked
     }
     if (tableItems.checkedItems.size < tableItems.sortedItems.length) {
-      return 1;
+      return allCheckedState.SOME; // some checked
     }
     if (tableItems.checkedItems.size === tableItems.sortedItems.length) {
-      return 2;
+      return allCheckedState.ALL; // all checked
     }
+    return allCheckedState.NONE;
   };
 
   const handleCheckAll = () => {
-    vaultSubmissions.forEach((submission) => {
-      tableItemsDispatch({
-        type: TableActions.UPDATE,
-        payload: { item: { name: submission.name, checked: true } },
+    if (checkAllChecked() === allCheckedState.NONE) {
+      vaultSubmissions.forEach((submission) => {
+        tableItemsDispatch({
+          type: TableActions.UPDATE,
+          payload: { item: { name: submission.name, checked: true } },
+        });
       });
-    });
+    } else {
+      tableItems.checkedItems.forEach((_, key) => {
+        tableItemsDispatch({
+          type: TableActions.UPDATE,
+          payload: { item: { name: key, checked: false } },
+        });
+      });
+    }
 
     // Show or hide errors depending
     if (tableItems.checkedItems.size > MAX_FILE_DOWNLOADS && !errors.maxItemsError) {
@@ -256,13 +272,13 @@ export const DownloadTable = ({
         <thead className="border-b-2 border-[#6a6d7b]">
           <tr>
             <th className="p-4 text-center" onClick={handleCheckAll}>
-              {allCheckedState() === 2 && (
+              {checkAllChecked() === allCheckedState.ALL && (
                 <CheckAllIcon className="m-auto h-6 w-6 cursor-pointer" />
               )}
-              {allCheckedState() === 1 && (
+              {checkAllChecked() === allCheckedState.SOME && (
                 <CheckIndeterminateIcon className="m-auto h-6 w-6 cursor-pointer" />
               )}
-              {allCheckedState() === 0 && (
+              {checkAllChecked() === allCheckedState.NONE && (
                 <CheckBoxEmptyIcon className="m-auto h-6 w-6 cursor-pointer" />
               )}
             </th>
