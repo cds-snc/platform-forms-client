@@ -277,13 +277,22 @@ export const DownloadTable = ({
           <tr>
             <th className="p-4 text-center" onClick={handleCheckAll}>
               {checkAllStatus() === allCheckedState.ALL && (
-                <CheckAllIcon className="m-auto h-6 w-6 cursor-pointer" />
+                <CheckAllIcon
+                  title={t("downloadResponsesTable.header.deselectAll")}
+                  className="m-auto h-6 w-6 cursor-pointer"
+                />
               )}
               {checkAllStatus() === allCheckedState.SOME && (
-                <CheckIndeterminateIcon className="m-auto h-6 w-6 cursor-pointer" />
+                <CheckIndeterminateIcon
+                  title={t("downloadResponsesTable.header.deselectAll")}
+                  className="m-auto h-6 w-6 cursor-pointer"
+                />
               )}
               {checkAllStatus() === allCheckedState.NONE && (
-                <CheckBoxEmptyIcon className="m-auto h-6 w-6 cursor-pointer" />
+                <CheckBoxEmptyIcon
+                  title={t("downloadResponsesTable.header.selectAll")}
+                  className="m-auto h-6 w-6 cursor-pointer"
+                />
               )}
             </th>
             <th className="p-4 text-left">{t("downloadResponsesTable.header.number")}</th>

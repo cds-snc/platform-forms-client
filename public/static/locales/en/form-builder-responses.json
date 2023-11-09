@@ -23,6 +23,8 @@
     "header": {
       "tableTitle": "Download responses table",
       "select": "Select",
+      "selectAll": "Select all",
+      "deselectAll": "Deselect all",
       "number": "Submission",
       "status": "Status",
       "downloadResponse": "Download window",
