@@ -1,5 +1,18 @@
 import { cleanInput } from "../util";
 
+const template = {
+  layout: [1],
+  brand: {
+    name: "cds",
+    urlEn: "https://digital.canada.ca",
+    urlFr: "https://numerique.canada.ca",
+    logoEn: "/img/branding/cds-en.svg",
+    logoFr: "/img/branding/cds-fr.svg",
+    logoTitleEn: "Canadian Digital Service",
+    logoTitleFr: "Service numérique canadien",
+  },
+};
+
 describe("cleanInput", () => {
   it("adds spaces when angle brackets detected for string", () => {
     const cleaned = cleanInput("<mystring> more text");
@@ -34,5 +47,20 @@ describe("cleanInput", () => {
   it("handles undefined", () => {
     const cleaned = cleanInput(undefined);
     expect(cleaned).toEqual(undefined);
+  });
+
+  it("handles boolean", () => {
+    const cleaned = cleanInput(true);
+    expect(cleaned).toEqual(true);
+  });
+
+  it("handles number", () => {
+    const cleaned = cleanInput(1);
+    expect(cleaned).toEqual(1);
+  });
+
+  it("handles template with branding", () => {
+    const cleaned = cleanInput(template);
+    expect(cleaned).toEqual(template);
   });
 });
