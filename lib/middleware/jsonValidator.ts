@@ -1,7 +1,6 @@
 import { Schema, Validator, ValidatorResult, PreValidatePropertyFunction } from "jsonschema";
 import { NextApiRequest, NextApiResponse } from "next";
 import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
-import { escapeAngleBrackets } from "@components/form-builder/util";
 import * as htmlparser2 from "htmlparser2";
 
 export type ValidateOptions = {
@@ -33,24 +32,6 @@ const htmlChecker: PreValidatePropertyFunction = (object, key) => {
     // if the element detected does not have a text type then it is html
     if (element?.type !== "text") throw new Error(`HTML detected in JSON`);
   }
-};
-
-/**
- * Cleans up the provided JSON to remove any opening/closing angle brackets
- * without preceding or trailing spaces (ie <something> becomes < something >)
- * @param object
- * @param key
- */
-export const cleanAngleBrackets: PreValidatePropertyFunction = (object, key) => {
-  const value = object[key];
-
-  if (typeof value === "undefined") return;
-
-  if (typeof value === "string") {
-    object[key] = escapeAngleBrackets(value);
-  }
-
-  return;
 };
 
 export const jsonValidator = (schema: Schema, options?: ValidateOptions): MiddlewareRequest => {
