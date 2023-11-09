@@ -26,7 +26,11 @@ import {
 import { getDaysPassed } from "@lib/clientHelpers";
 import { Alert } from "@components/globals";
 import { logMessage } from "@lib/logger";
-import { CheckAllIcon } from "../../icons/CheckAllIcon";
+import {
+  CheckAllIcon,
+  CheckBoxEmptyIcon,
+  CheckIndeterminateIcon,
+} from "@components/form-builder/icons";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -65,6 +69,18 @@ export const DownloadTable = ({
   });
 
   const MAX_FILE_DOWNLOADS = responseDownloadLimit;
+
+  const allCheckedState = () => {
+    if (tableItems.checkedItems.size === 0) {
+      return 0;
+    }
+    if (tableItems.checkedItems.size < tableItems.sortedItems.length) {
+      return 1;
+    }
+    if (tableItems.checkedItems.size === tableItems.sortedItems.length) {
+      return 2;
+    }
+  };
 
   const handleCheckAll = () => {
     vaultSubmissions.forEach((submission) => {
@@ -240,10 +256,15 @@ export const DownloadTable = ({
         <thead className="border-b-2 border-[#6a6d7b]">
           <tr>
             <th className="p-4 text-center" onClick={handleCheckAll}>
-              <CheckAllIcon
-                className="m-auto h-6 w-6"
-                title={t("downloadResponsesTable.header.select")}
-              />
+              {allCheckedState() === 2 && (
+                <CheckAllIcon className="m-auto h-6 w-6 cursor-pointer" />
+              )}
+              {allCheckedState() === 1 && (
+                <CheckIndeterminateIcon className="m-auto h-6 w-6 cursor-pointer" />
+              )}
+              {allCheckedState() === 0 && (
+                <CheckBoxEmptyIcon className="m-auto h-6 w-6 cursor-pointer" />
+              )}
             </th>
             <th className="p-4 text-left">{t("downloadResponsesTable.header.number")}</th>
             <th className="p-4 text-left">{t("downloadResponsesTable.header.status")}</th>
