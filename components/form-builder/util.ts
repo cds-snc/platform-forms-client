@@ -266,19 +266,19 @@ export const escapeAngleBrackets = (value: string) => {
   return value.replaceAll(openRegex, "< ").replaceAll(closeRegex, " >");
 };
 
-type Cleanable = string | Cleanable[] | { [key: string]: Cleanable } | unknown;
+type Cleanable = string | Cleanable[] | { [key: string]: Cleanable };
 
-export const cleanInput = (input: Cleanable): Cleanable => {
+export const cleanInput = <T extends Cleanable>(input: T): T => {
   if (typeof input === "string") {
-    return escapeAngleBrackets(input);
+    return escapeAngleBrackets(input) as T;
   }
   if (Array.isArray(input)) {
-    return input.map((elem) => cleanInput(elem));
+    return input.map((elem) => cleanInput(elem)) as T;
   }
   if (input instanceof Object) {
     return Object.fromEntries(
       Object.entries(input).map(([key, value]) => [key, cleanInput(value)])
-    );
+    ) as T;
   }
   return input;
 };
