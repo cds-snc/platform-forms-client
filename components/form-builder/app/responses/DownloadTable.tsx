@@ -26,6 +26,7 @@ import {
 import { getDaysPassed } from "@lib/clientHelpers";
 import { Alert } from "@components/globals";
 import { logMessage } from "@lib/logger";
+import { CheckAllIcon } from "../../icons/CheckAllIcon";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -64,6 +65,25 @@ export const DownloadTable = ({
   });
 
   const MAX_FILE_DOWNLOADS = responseDownloadLimit;
+
+  const handleCheckAll = () => {
+    vaultSubmissions.forEach((submission) => {
+      tableItemsDispatch({
+        type: TableActions.UPDATE,
+        payload: { item: { name: submission.name, checked: true } },
+      });
+    });
+
+    // Show or hide errors depending
+    if (tableItems.checkedItems.size > MAX_FILE_DOWNLOADS && !errors.maxItemsError) {
+      setErrors({ ...errors, maxItemsError: true });
+    } else if (errors.maxItemsError) {
+      setErrors({ ...errors, maxItemsError: false });
+    }
+    if (tableItems.checkedItems.size > 0 && errors.noItemsError) {
+      setErrors({ ...errors, noItemsError: false });
+    }
+  };
 
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.id;
@@ -219,7 +239,12 @@ export const DownloadTable = ({
         <caption className="sr-only">{t("downloadResponsesTable.header.tableTitle")}</caption>
         <thead className="border-b-2 border-[#6a6d7b]">
           <tr>
-            <th className="p-4 text-center">{t("downloadResponsesTable.header.select")}</th>
+            <th className="p-4 text-center" onClick={handleCheckAll}>
+              <CheckAllIcon
+                className="m-auto h-6 w-6"
+                title={t("downloadResponsesTable.header.select")}
+              />
+            </th>
             <th className="p-4 text-left">{t("downloadResponsesTable.header.number")}</th>
             <th className="p-4 text-left">{t("downloadResponsesTable.header.status")}</th>
             <th className="p-4 text-left">{t("downloadResponsesTable.header.downloadResponse")}</th>
