@@ -20,8 +20,13 @@ describe("cleanInput", () => {
   });
 
   it("adds spaces when angle brackets detected for string with a number", () => {
-    const cleaned = cleanInput("<123> more text");
+    const cleaned = cleanInput("<123 > more text");
     expect(cleaned).toEqual("< 123 > more text");
+  });
+
+  it("adds spaces when angle brackets detected and string contains non alphanum chars", () => {
+    const cleaned = cleanInput("<mystr.,*$% ing> more text");
+    expect(cleaned).toEqual("< mystr.,*$% ing > more text");
   });
 
   it("adds spaces when angle brackets detected for boolean", () => {
@@ -29,14 +34,29 @@ describe("cleanInput", () => {
     expect(cleaned).toEqual("< true > more text");
   });
 
+  it("leaves string alone if opening angle bracket has a space after", () => {
+    const cleaned = cleanInput("< mystring> more text");
+    expect(cleaned).toEqual("< mystring> more text");
+  });
+
   it("adds spaces when angle brackets detected for array of strings", () => {
-    const cleaned = cleanInput(["<1>", "<2 >", "< 3>"]);
-    expect(cleaned).toEqual(["< 1 >", "< 2 >", "< 3 >"]);
+    const cleaned = cleanInput(["<1>", "<2 >", "< 3>", "<3"]);
+    expect(cleaned).toEqual(["< 1 >", "< 2 >", "< 3>", "<3"]);
   });
 
   it("adds spaces when angle brackets detected for object", () => {
-    const cleaned = cleanInput({ a: "a string", b: "<b string>", c: "< c string>" });
-    expect(cleaned).toEqual({ a: "a string", b: "< b string >", c: "< c string >" });
+    const cleaned = cleanInput({
+      a: "a string",
+      b: "<b string>",
+      c: "< c string>",
+      d: "<d string >",
+    });
+    expect(cleaned).toEqual({
+      a: "a string",
+      b: "< b string >",
+      c: "< c string>",
+      d: "< d string >",
+    });
   });
 
   it("handles null", () => {
