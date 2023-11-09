@@ -260,7 +260,7 @@ export const isEmailDelivery = (deliveryOption: DeliveryOption | undefined) => {
   return !!(deliveryOption && deliveryOption.emailAddress);
 };
 
-export const escapeAngleBrackets = (value: string) => {
+export const padAngleBrackets = (value: string) => {
   const regex = /<(?!\s)(.*?)(?=\s*)>/g;
   return value.replace(regex, (match, p1) => {
     return `< ${p1.trim()} >`;
@@ -271,7 +271,7 @@ type Cleanable = string | Cleanable[] | { [key: string]: Cleanable } | unknown;
 
 export const cleanInput = <T extends Cleanable>(input: T): T => {
   if (typeof input === "string") {
-    return escapeAngleBrackets(input) as T;
+    return padAngleBrackets(input) as T;
   }
   if (Array.isArray(input)) {
     return input.map((elem) => cleanInput(elem)) as T;
