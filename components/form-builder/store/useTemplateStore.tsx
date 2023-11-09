@@ -21,6 +21,7 @@ import {
   incrementElementId,
   getSchemaFromState,
   incrementSubElementId,
+  cleanInput,
 } from "../util";
 import { Language } from "../types";
 import update from "lodash.set";
@@ -231,7 +232,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 : undefined,
             updateField: (path, value) =>
               set((state) => {
-                update(state, path, value);
+                update(state, path, cleanInput(value));
               }),
             updateSecurityAttribute: (value) =>
               set((state) => {
