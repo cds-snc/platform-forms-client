@@ -268,20 +268,17 @@ export const escapeAngleBrackets = (value: string) => {
 
 type Cleanable = string | Cleanable[] | { [key: string]: Cleanable } | unknown;
 
-export const cleanInput = (input: Cleanable) => {
-    if (typeof input === "string") {
-        return escapeAngleBrackets(input);
-    }
-    if ( Array.isArray(input) ) {
-        return input.map((elem) => cleanInput(elem));
-    }
-    if ( input instanceof Object ) {
-        return Object.fromEntries(
-            Object.entries(input).map(
-                ([key, value]) => [key, cleanInput(value)]
-            )
-        )
-    }
-    return input;
+export const cleanInput = (input: Cleanable): Cleanable => {
+  if (typeof input === "string") {
+    return escapeAngleBrackets(input);
+  }
+  if (Array.isArray(input)) {
+    return input.map((elem) => cleanInput(elem));
+  }
+  if (input instanceof Object) {
+    return Object.fromEntries(
+      Object.entries(input).map(([key, value]) => [key, cleanInput(value)])
+    );
+  }
+  return input;
 };
-
