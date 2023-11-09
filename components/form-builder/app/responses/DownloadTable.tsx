@@ -76,19 +76,23 @@ export const DownloadTable = ({
     ALL = "ALL",
   }
 
+  /**
+   * Are all items checked, some items checked, or no items checked?
+   * @returns {allCheckedState} The current state of the checked items.
+   */
   const checkAllStatus = () => {
     if (tableItems.checkedItems.size === 0) {
       return allCheckedState.NONE;
     }
-    if (tableItems.checkedItems.size < tableItems.sortedItems.length) {
-      return allCheckedState.SOME;
-    }
     if (tableItems.checkedItems.size === tableItems.sortedItems.length) {
       return allCheckedState.ALL;
     }
-    return allCheckedState.NONE;
+    return allCheckedState.SOME;
   };
 
+  /**
+   * Check all items if none are checked, otherwise uncheck all items.
+   */
   const handleCheckAll = () => {
     if (checkAllStatus() === allCheckedState.NONE) {
       vaultSubmissions.forEach((submission) => {
