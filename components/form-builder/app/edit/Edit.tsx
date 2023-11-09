@@ -11,6 +11,7 @@ import { ExpandingInput } from "../shared";
 import { useTemplateStore } from "../../store";
 import { getQuestionNumber, sortByLayout } from "../../util";
 import { Panel } from "../settings-modal/panel";
+import { cleanInput } from "@formbuilder/util";
 
 export const Edit = () => {
   const { t } = useTranslation("form-builder");
@@ -100,6 +101,9 @@ export const Edit = () => {
                 ref={titleInput}
                 placeholder={t("placeHolderFormTitle")}
                 value={value}
+                onBlur={() => {
+                  setValue(cleanInput(value));
+                }}
                 onChange={updateValue}
                 {...getLocalizationAttribute()}
               />
