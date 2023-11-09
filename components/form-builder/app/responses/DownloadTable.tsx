@@ -76,21 +76,21 @@ export const DownloadTable = ({
     ALL = "ALL",
   }
 
-  const checkAllChecked = () => {
+  const checkAllStatus = () => {
     if (tableItems.checkedItems.size === 0) {
-      return allCheckedState.NONE; // none checked
+      return allCheckedState.NONE;
     }
     if (tableItems.checkedItems.size < tableItems.sortedItems.length) {
-      return allCheckedState.SOME; // some checked
+      return allCheckedState.SOME;
     }
     if (tableItems.checkedItems.size === tableItems.sortedItems.length) {
-      return allCheckedState.ALL; // all checked
+      return allCheckedState.ALL;
     }
     return allCheckedState.NONE;
   };
 
   const handleCheckAll = () => {
-    if (checkAllChecked() === allCheckedState.NONE) {
+    if (checkAllStatus() === allCheckedState.NONE) {
       vaultSubmissions.forEach((submission) => {
         tableItemsDispatch({
           type: TableActions.UPDATE,
@@ -272,13 +272,13 @@ export const DownloadTable = ({
         <thead className="border-b-2 border-[#6a6d7b]">
           <tr>
             <th className="p-4 text-center" onClick={handleCheckAll}>
-              {checkAllChecked() === allCheckedState.ALL && (
+              {checkAllStatus() === allCheckedState.ALL && (
                 <CheckAllIcon className="m-auto h-6 w-6 cursor-pointer" />
               )}
-              {checkAllChecked() === allCheckedState.SOME && (
+              {checkAllStatus() === allCheckedState.SOME && (
                 <CheckIndeterminateIcon className="m-auto h-6 w-6 cursor-pointer" />
               )}
-              {checkAllChecked() === allCheckedState.NONE && (
+              {checkAllStatus() === allCheckedState.NONE && (
                 <CheckBoxEmptyIcon className="m-auto h-6 w-6 cursor-pointer" />
               )}
             </th>
