@@ -39,6 +39,11 @@ describe("cleanInput", () => {
     expect(cleaned).toEqual("< mystring> more text");
   });
 
+  it("leaves the string alone if there's only one bracket", () => {
+    const cleaned = cleanInput("<mystring more text");
+    expect(cleaned).toEqual("<mystring more text");
+  });
+
   it("adds spaces when angle brackets detected for array of strings", () => {
     const cleaned = cleanInput(["<1>", "<2 >", "< 3>", "<3"]);
     expect(cleaned).toEqual(["< 1 >", "< 2 >", "< 3>", "<3"]);
@@ -50,12 +55,16 @@ describe("cleanInput", () => {
       b: "<b string>",
       c: "< c string>",
       d: "<d string >",
+      e: "< string",
+      f: "string >",
     });
     expect(cleaned).toEqual({
       a: "a string",
       b: "< b string >",
       c: "< c string>",
       d: "< d string >",
+      e: "< string",
+      f: "string >",
     });
   });
 
