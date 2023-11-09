@@ -113,11 +113,10 @@ export const DownloadTable = ({
       })
     );
 
-    // Generate and download an aggregated version of all the records
+    // Download an aggregated version of all the records
     if (tableItems.checkedItems.size > 1) {
       const urlAggregated = `/api/id/${formId}/submissions/download?format=html-aggregated`;
       const ids = Array.from(tableItems.checkedItems.keys());
-
       axios({
         url: urlAggregated,
         method: "POST",
@@ -125,8 +124,8 @@ export const DownloadTable = ({
           ids: ids.join(","),
         },
       }).then((response) => {
-        const fileName = `${response.data.id}.html`;
-        const href = window.URL.createObjectURL(new Blob([response.data.html]));
+        const fileName = `${formId}.html`;
+        const href = window.URL.createObjectURL(new Blob([response.data]));
         const anchorElement = document.createElement("a");
         anchorElement.href = href;
         anchorElement.download = fileName;
@@ -139,6 +138,7 @@ export const DownloadTable = ({
       return; //TODO TEMP
     }
 
+    // Download each record as a separate file
     const url = `/api/id/${formId}/submissions/download?format=html`;
     const ids = Array.from(tableItems.checkedItems.keys());
 
