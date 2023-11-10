@@ -2,7 +2,7 @@ import React from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { DeleteIcon, DownloadIcon, MoreIcon } from "@components/form-builder/icons";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast } from "../shared/Toast";
 import { useTranslation } from "react-i18next";
 import { NextRouter } from "next/router";
 import { logMessage } from "@lib/logger";
