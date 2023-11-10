@@ -277,6 +277,7 @@ export const DownloadTable = ({
           <tr>
             <th className="p-4 text-center" onClick={handleCheckAll}>
               <span
+                className="cursor-pointer"
                 role="checkbox"
                 aria-checked={
                   checkAllStatus() === allCheckedState.ALL
@@ -289,19 +290,19 @@ export const DownloadTable = ({
                 {checkAllStatus() === allCheckedState.ALL && (
                   <CheckAllIcon
                     title={t("downloadResponsesTable.header.deselectAll")}
-                    className="m-auto h-6 w-6 cursor-pointer"
+                    className="m-auto h-6 w-6"
                   />
                 )}
                 {checkAllStatus() === allCheckedState.SOME && (
                   <CheckIndeterminateIcon
                     title={t("downloadResponsesTable.header.deselectAll")}
-                    className="m-auto h-6 w-6 cursor-pointer"
+                    className="m-auto h-6 w-6"
                   />
                 )}
                 {checkAllStatus() === allCheckedState.NONE && (
                   <CheckBoxEmptyIcon
                     title={t("downloadResponsesTable.header.selectAll")}
-                    className="m-auto h-6 w-6 cursor-pointer"
+                    className="m-auto h-6 w-6"
                   />
                 )}
               </span>
