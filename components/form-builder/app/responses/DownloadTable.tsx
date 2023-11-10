@@ -276,24 +276,35 @@ export const DownloadTable = ({
         <thead className="border-b-2 border-[#6a6d7b]">
           <tr>
             <th className="p-4 text-center" onClick={handleCheckAll}>
-              {checkAllStatus() === allCheckedState.ALL && (
-                <CheckAllIcon
-                  title={t("downloadResponsesTable.header.deselectAll")}
-                  className="m-auto h-6 w-6 cursor-pointer"
-                />
-              )}
-              {checkAllStatus() === allCheckedState.SOME && (
-                <CheckIndeterminateIcon
-                  title={t("downloadResponsesTable.header.deselectAll")}
-                  className="m-auto h-6 w-6 cursor-pointer"
-                />
-              )}
-              {checkAllStatus() === allCheckedState.NONE && (
-                <CheckBoxEmptyIcon
-                  title={t("downloadResponsesTable.header.selectAll")}
-                  className="m-auto h-6 w-6 cursor-pointer"
-                />
-              )}
+              <span
+                role="checkbox"
+                aria-checked={
+                  checkAllStatus() === allCheckedState.ALL
+                    ? "true"
+                    : checkAllStatus() === allCheckedState.SOME
+                    ? "mixed"
+                    : "false"
+                }
+              >
+                {checkAllStatus() === allCheckedState.ALL && (
+                  <CheckAllIcon
+                    title={t("downloadResponsesTable.header.deselectAll")}
+                    className="m-auto h-6 w-6 cursor-pointer"
+                  />
+                )}
+                {checkAllStatus() === allCheckedState.SOME && (
+                  <CheckIndeterminateIcon
+                    title={t("downloadResponsesTable.header.deselectAll")}
+                    className="m-auto h-6 w-6 cursor-pointer"
+                  />
+                )}
+                {checkAllStatus() === allCheckedState.NONE && (
+                  <CheckBoxEmptyIcon
+                    title={t("downloadResponsesTable.header.selectAll")}
+                    className="m-auto h-6 w-6 cursor-pointer"
+                  />
+                )}
+              </span>
             </th>
             <th className="p-4 text-left">{t("downloadResponsesTable.header.number")}</th>
             <th className="p-4 text-left">{t("downloadResponsesTable.header.status")}</th>
