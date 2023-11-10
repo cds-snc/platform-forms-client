@@ -20,6 +20,8 @@
     }
   },
   "downloadResponsesTable": {
+    "download": "Téléchargement",
+    "delete": "Supprimer",
     "header": {
       "tableTitle": "Tableau des réponses à télécharger",
       "select": "Sélection",

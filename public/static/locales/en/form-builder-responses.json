@@ -20,6 +20,8 @@
     }
   },
   "downloadResponsesTable": {
+    "download": "Download",
+    "delete": "Delete",
     "header": {
       "tableTitle": "Download responses table",
       "select": "Select",

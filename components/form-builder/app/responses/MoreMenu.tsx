@@ -88,14 +88,14 @@ export const MoreMenu = ({
               className="flex cursor-pointer items-center rounded-md pr-4 text-sm outline-none hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
             >
               <DownloadIcon className="scale-50" />
-              Download
+              {t("downloadResponsesTable.download")}
             </DropdownMenu.Item>
             <DropdownMenu.Item
               onClick={handleDelete}
               className="flex cursor-pointer items-center rounded-md pr-4 text-sm outline-none hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
             >
               <DeleteIcon className="scale-50" />
-              Delete
+              {t("downloadResponsesTable.delete")}
             </DropdownMenu.Item>
           </DropdownMenu.Content>
         </DropdownMenu.Portal>
