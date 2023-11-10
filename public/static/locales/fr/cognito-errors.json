@@ -7,7 +7,7 @@
     "link": "/form-builder/support",
     "linkText": "contacter l'équipe de soutien."
   },
-  "TooManyRequestsException": "Trop de demandes. Réessayez plus tard ou contacter l'équipe de soutien.",
+  "TooManyRequestsException": "Trop de demandes. Réessayez plus tard ou <a href=\"/fr/form-builder/support\" target=\"_blank\">contacter l’équipe de soutien</a>",
   "UsernameExistsException": "Ce compte existe déjà.",
   "ExpiredCodeException": "Le code de confirmation a expiré. Veuillez en demander un nouveau.",
   "InvalidPasswordException": "Ce mot de passe n'est pas conforme à notre politique en matière de mots de passe.",
