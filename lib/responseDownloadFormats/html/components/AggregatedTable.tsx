@@ -16,6 +16,7 @@ export const AggregatedTable = ({
     return answer || "-";
   }
 
+  // TODO below may be a bit brittle, could use some refactoring
   return (
     <table id={`responseTableRow${capitalizedLang}`}>
       <thead>
