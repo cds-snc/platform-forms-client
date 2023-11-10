@@ -380,7 +380,7 @@ export const DownloadTable = ({
                 <td className="whitespace-nowrap px-4">
                   <RemovalStatus vaultStatus={submission.status} removalAt={submission.removedAt} />
                 </td>
-                <td>
+                <td className="px-4">
                   <MoreMenu
                     formId={submission.formID}
                     responseId={submission.name}
