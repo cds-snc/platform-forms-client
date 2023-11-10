@@ -275,7 +275,7 @@ export const DownloadTable = ({
         <caption className="sr-only">{t("downloadResponsesTable.header.tableTitle")}</caption>
         <thead className="border-b-2 border-[#6a6d7b]">
           <tr>
-            <th className="p-4 text-center" onClick={handleCheckAll}>
+            <th className="p-4 text-center">
               <span
                 className="cursor-pointer"
                 role="checkbox"
@@ -286,6 +286,13 @@ export const DownloadTable = ({
                     ? "mixed"
                     : "false"
                 }
+                tabIndex={0}
+                onClick={handleCheckAll}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    handleCheckAll();
+                  }
+                }}
               >
                 {checkAllStatus() === allCheckedState.ALL && (
                   <CheckAllIcon
