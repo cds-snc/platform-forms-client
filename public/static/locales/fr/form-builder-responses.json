@@ -23,6 +23,8 @@
     "header": {
       "tableTitle": "Tableau des réponses à télécharger",
       "select": "Sélection",
+      "selectAll": "[FR] Select all",
+      "deselectAll": "[FR] Deselect all",
       "number": "Soumission",
       "status": "État",
       "downloadResponse": "Période de téléchargement",

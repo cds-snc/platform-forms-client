@@ -68,3 +68,5 @@ export { EditIcon } from "./EditIcon";
 export { ProtectedIcon } from "./ProtectedIcon";
 export { BrandingIcon } from "./BrandingIcon";
 export { ClosedFormIcon } from "./ClosedFormIcon";
+export { CheckIndeterminateIcon } from "./CheckIndeterminateIcon";
+export { CheckAllIcon } from "./CheckAllIcon";
