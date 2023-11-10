@@ -7,7 +7,7 @@
     "link": "/form-builder/support",
     "linkText": "contact Support."
   },
-  "TooManyRequestsException": "Too many requests. Try again later or contact Support.",
+  "TooManyRequestsException": "Too many requests. Try again later or <a href=\"/en/form-builder/support\" target=\"_blank\">contact Support</a>",
   "UsernameExistsException": "This account already exists.",
   "ExpiredCodeException": "The confirmation code has expired. Please request a new one.",
   "InvalidPasswordException": "This password does not comply with our password policies",
