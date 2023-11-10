@@ -31,6 +31,7 @@ import {
   CheckBoxEmptyIcon,
   CheckIndeterminateIcon,
 } from "@components/form-builder/icons";
+import { MoreMenu } from "./MoreMenu";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -320,6 +321,7 @@ export const DownloadTable = ({
             <th className="p-4 text-left">{t("downloadResponsesTable.header.lastDownloadedBy")}</th>
             <th className="p-4 text-left">{t("downloadResponsesTable.header.confirmReceipt")}</th>
             <th className="p-4 text-left">{t("downloadResponsesTable.header.removal")}</th>
+            <th className="p-4 text-left">{t("downloadResponsesTable.header.more")}</th>
           </tr>
         </thead>
         <tbody>
@@ -377,6 +379,15 @@ export const DownloadTable = ({
                 </td>
                 <td className="whitespace-nowrap px-4">
                   <RemovalStatus vaultStatus={submission.status} removalAt={submission.removedAt} />
+                </td>
+                <td>
+                  <MoreMenu
+                    formId={submission.formID}
+                    responseId={submission.name}
+                    router={router}
+                    setErrors={setErrors}
+                    errors={errors}
+                  />
                 </td>
               </tr>
             );

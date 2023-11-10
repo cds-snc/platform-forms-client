@@ -30,7 +30,8 @@
       "downloadResponse": "Download window",
       "lastDownloadedBy": "Downloaded by",
       "confirmReceipt": "Confirmation of receipt",
-      "removal": "Data removal"
+      "removal": "Data removal",
+      "more": "More"
     },
     "status": {
       "downloaded": "Downloaded",
