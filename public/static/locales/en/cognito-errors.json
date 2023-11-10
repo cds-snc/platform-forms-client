@@ -1,5 +1,5 @@
 {
-  "CodeMismatchException": "The security code provided does not match our records.",
+  "CodeMismatchException": "The security code provided does not match our records. Double check your email or request a new code.",
   "InternalServiceException": "We've encountered an error with your request. Please try again later.",
   "InternalServiceExceptionLogin": {
     "title": "There was a problem while signing in.",
@@ -7,7 +7,7 @@
     "link": "/form-builder/support",
     "linkText": "contact Support."
   },
-  "TooManyRequestsException": "Too many requests. Try again later.",
+  "TooManyRequestsException": "Too many requests. Try again later or contact Support.",
   "UsernameExistsException": "This account already exists.",
   "ExpiredCodeException": "The confirmation code has expired. Please request a new one.",
   "InvalidPasswordException": "This password does not comply with our password policies",

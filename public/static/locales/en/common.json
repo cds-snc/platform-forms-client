@@ -112,7 +112,7 @@
   },
   "errorPanel": {
     "defaultTitle": "Something went wrong",
-    "defaultMessage": "Sorry, there was a problem and we lost you.",
+    "defaultMessage": "Sorry, there was a problem and we lost you. Please try again later.",
     "cta": {
       "yourForms": "Back to Forms",
       "home": "Back to home",

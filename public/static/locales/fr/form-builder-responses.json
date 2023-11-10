@@ -95,7 +95,7 @@
         "unknown": {
           "title": "Désolé, il y a un problème avec le site",
           "description": "Attendez quelques minutes et réessayez, ou ",
-          "descriptionLink": "contactez l'équipe de Soutien"
+          "descriptionLink": "contactez l'équipe de soutien"
         }
       }
     },
@@ -126,7 +126,7 @@
         "unknown": {
           "title": "Désolé, il y a un problème avec le site",
           "description": "Attendez quelques minutes et réessayez, ou ",
-          "descriptionLink": "contactez l'équipe de Soutien"
+          "descriptionLink": "contactez l'équipe de soutien"
         },
         "notEmpty": "Ne peut pas être vide."
       }
