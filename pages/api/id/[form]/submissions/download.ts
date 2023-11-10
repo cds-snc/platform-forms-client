@@ -8,6 +8,7 @@ import { transform as xlsxTransform } from "@lib/responseDownloadFormats/xlsx";
 import { transform as htmlTableTransform } from "@lib/responseDownloadFormats/html-table";
 import { transform as htmlTransform } from "@lib/responseDownloadFormats/html";
 import { transform as zipTransform } from "@lib/responseDownloadFormats/html-zipped";
+import { transform as jsonTransform } from "@lib/responseDownloadFormats/json";
 import { retrieveSubmissions, updateLastDownloadedBy } from "@lib/vault";
 import { FormResponseSubmissions } from "@lib/responseDownloadFormats/types";
 import { logEvent } from "@lib/auditLogs";
@@ -166,7 +167,7 @@ const getSubmissions = async (
       }
 
       if (req.query.format === "json") {
-        return res.status(200).json({ ...formResponse });
+        return res.status(200).json(jsonTransform(formResponse));
       }
 
       return res.status(400).json({ error: `Bad request invalid format ${req.query.format}` });
