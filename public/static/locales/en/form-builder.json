@@ -690,7 +690,7 @@
     "closed": "Closed",
     "saveButton": "Save changes",
     "savedSuccessMessage": "Your changes have been saved.",
-    "savedErrorMessage": "There was an error saving your changes. Please try again or contact Support."
+    "savedErrorMessage": "There was an error saving your changes. Try again later or <a href=\"/en/form-builder/support\" target=\"_blank\">contact Support</a>"
   },
   "errorSavingForm":{
     "title": "There was an error saving the form",
