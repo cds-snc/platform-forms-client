@@ -1,11 +1,12 @@
 import React from "react";
-import { CopyToClipboardScript } from "../scripts";
+import { CopyToClipboardScript, copyCodeToClipboardScript } from "../scripts";
 import { ProtectedWarning } from "./ProtectedWarning";
 import Fip from "./Fip";
 import { css } from "../css/compiled";
 import { ColumnTable } from "./ColumnTable";
 import { AggregatedTable } from "./AggregatedTable";
 import { FormResponseSubmissions, Submission } from "@lib/responseDownloadFormats/types";
+import { customTranslate } from "@lib/responseDownloadFormats/helpers";
 
 interface HTMLDownloadProps {
   lang: string;
@@ -16,21 +17,25 @@ export const ResponseHtmlAggregated = ({
   lang = "en",
   formResponseSubmissions,
 }: HTMLDownloadProps) => {
-  // "questionEn" : "questionFr"
-  const langKey = lang === "en" ? "En" : "Fr";
+  const { t } = customTranslate("my-forms");
+  const capitalizedLang = lang === "en" ? "En" : "Fr";
 
   const form = formResponseSubmissions.form;
 
-  const confirmationCodes = formResponseSubmissions.submissions.map(
-    (submission) => submission.confirmationCode
-  );
+  // Newline deliniated will work to paste multiple codes in the confirmation dialog.
+  // Note: The "\r\n" delimiter may be OS dependent. If so use an actual newline with .join(`
+  // `)
+  const confirmationCodes = formResponseSubmissions.submissions
+    .map((submission) => submission.confirmationCode)
+    .join(`\r\n`);
+
   const submissions = formResponseSubmissions.submissions as Submission[];
 
   const headersForTable = [
     "Submission number / [fr]Submission number",
     "Submission date / [fr]Submission date",
     ...formResponseSubmissions.submissions[0].answers.map((answer) =>
-      String(answer["question" + langKey])
+      String(answer["question" + capitalizedLang])
     ),
   ];
 
@@ -57,7 +62,22 @@ export const ResponseHtmlAggregated = ({
             <div className="mt-14" />
 
             <h2>TODO: ResponseSection reuse with Confirmation codes</h2>
-            {confirmationCodes && confirmationCodes.join(", ")}
+            <div className="mb-32 mt-4">
+              <button
+                id={`copyCodeButton${capitalizedLang}`}
+                className="gc-button--blue"
+                type="button"
+                aria-labelledby={`confirmReceiptInfo${capitalizedLang}`}
+                data-clipboard-text={confirmationCodes}
+              >
+                {t("responseTemplate.copyCode", { lng: lang })}
+              </button>
+              <span
+                id={`copyCodeOutput${capitalizedLang}`}
+                aria-live="polite"
+                className="ml-8 hidden text-green"
+              ></span>
+            </div>
 
             <h2>Form responses: combined table of selected responses</h2>
             <AggregatedTable headers={headersForTable} submissions={submissions} />
@@ -80,6 +100,8 @@ export const ResponseHtmlAggregated = ({
         </div>
       </body>
       {CopyToClipboardScript}
+
+      {copyCodeToClipboardScript(lang)}
     </html>
   );
 };
