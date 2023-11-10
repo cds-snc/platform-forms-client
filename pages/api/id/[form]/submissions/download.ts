@@ -123,58 +123,62 @@ const getSubmissions = async (
         );
       });
 
-      if (req.query.format === "csv") {
-        return res
-          .status(200)
-          .setHeader("Content-Type", "text/csv charset=utf-8")
-          .setHeader("Content-Disposition", `attachment; filename=records.csv`)
-          .send(csvTransform(formResponse));
+      switch (req.query.format) {
+        case "csv":
+          return res
+            .status(200)
+            .setHeader("Content-Type", "text/csv charset=utf-8")
+            .setHeader("Content-Disposition", `attachment; filename=records.csv`)
+            .send(csvTransform(formResponse));
+          break;
+
+        case "xlsx":
+          return res
+            .status(200)
+            .setHeader(
+              "Content-Type",
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
+            .setHeader("Content-Disposition", `attachment; filename=records.xlsx`)
+            .send(xlsxTransform(formResponse));
+          break;
+
+        case "html-table":
+          return res
+            .status(200)
+            .setHeader("Content-Type", "text/html")
+            .send(htmlTableTransform(formResponse));
+          break;
+
+        case "html":
+          return res
+            .status(200)
+            .setHeader("Content-Type", "text/json")
+            .send(htmlTransform(formResponse));
+          break;
+
+        case "html-zipped": {
+          const zip = zipTransform(formResponse);
+
+          return res
+            .status(200)
+            .setHeader("Content-Type", "application/zip")
+            .setHeader("Content-Disposition", `attachment; filename=records.zip`)
+            .send(zip.generateNodeStream({ type: "nodebuffer", streamFiles: true }));
+          break;
+        }
+
+        case "json":
+          return res.status(200).json(jsonTransform(formResponse));
+          break;
+
+        default:
+          return res.status(400).json({ error: `Bad request invalid format ${req.query.format}` });
       }
-
-      if (req.query.format === "xlsx") {
-        return res
-          .status(200)
-          .setHeader(
-            "Content-Type",
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-          )
-          .setHeader("Content-Disposition", `attachment; filename=records.xlsx`)
-          .send(xlsxTransform(formResponse));
-      }
-
-      if (req.query.format === "html-table") {
-        return res
-          .status(200)
-          .setHeader("Content-Type", "text/html")
-          .send(htmlTableTransform(formResponse));
-      }
-
-      if (req.query.format === "html") {
-        return res
-          .status(200)
-          .setHeader("Content-Type", "text/json")
-          .send(htmlTransform(formResponse));
-      }
-
-      if (req.query.format === "html-zipped") {
-        const zip = zipTransform(formResponse);
-
-        return res
-          .status(200)
-          .setHeader("Content-Type", "application/zip")
-          .setHeader("Content-Disposition", `attachment; filename=records.zip`)
-          .send(zip.generateNodeStream({ type: "nodebuffer", streamFiles: true }));
-      }
-
-      if (req.query.format === "json") {
-        return res.status(200).json(jsonTransform(formResponse));
-      }
-
-      return res.status(400).json({ error: `Bad request invalid format ${req.query.format}` });
     }
 
     // Default repsonse format is JSON
-    return res.status(200).json({ ...formResponse });
+    return res.status(200).json(jsonTransform(formResponse));
   } catch (err) {
     if (err instanceof AccessControlError) {
       return res.status(403).json({ error: "Forbidden" });
