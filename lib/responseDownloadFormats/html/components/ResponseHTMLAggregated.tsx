@@ -1,5 +1,5 @@
 import React from "react";
-import { CopyToClipboardScript, copyCodeToClipboardScript } from "../scripts";
+import { CopyToClipboardScript, copyCodeAndResponseFromTableToClipboardScript } from "../scripts";
 import { ProtectedWarning } from "./ProtectedWarning";
 import Fip from "./Fip";
 import { css } from "../css/compiled";
@@ -61,6 +61,27 @@ export const ResponseHtmlAggregated = ({
             <Fip language="en" />
             <div className="mt-14" />
 
+            <h3 id={`rowTable${capitalizedLang}`} className="gc-h2 mt-20" tabIndex={-1}>
+              {t("responseTemplate.rowTable", { lng: lang })}
+            </h3>
+            <p className="mt-8">{t("responseTemplate.rowTableInfo", { lng: lang })}</p>
+            <div className="mb-8 mt-4">
+              <button
+                id={`copyResponseButton${capitalizedLang}`}
+                aria-labelledby={`copyResponseLabel${capitalizedLang}`}
+                className="gc-button--blue"
+                type="button"
+                data-clipboard-text=""
+              >
+                {t("responseTemplate.copyResponse", { lng: lang })}
+              </button>
+              <span
+                id={`copyResponseOutput${capitalizedLang}`}
+                aria-live="polite"
+                className="ml-8 hidden text-green"
+              ></span>
+            </div>
+
             <h2>TODO: ResponseSection reuse with Confirmation codes</h2>
             <div className="mb-32 mt-4">
               <button
@@ -80,7 +101,7 @@ export const ResponseHtmlAggregated = ({
             </div>
 
             <h2>Form responses: combined table of selected responses</h2>
-            <AggregatedTable headers={headersForTable} submissions={submissions} />
+            <AggregatedTable lang={lang} headers={headersForTable} submissions={submissions} />
 
             {submissions &&
               submissions.map((submission) => {
@@ -101,7 +122,7 @@ export const ResponseHtmlAggregated = ({
       </body>
       {CopyToClipboardScript}
 
-      {copyCodeToClipboardScript(lang)}
+      {copyCodeAndResponseFromTableToClipboardScript(lang)}
     </html>
   );
 };

@@ -41,7 +41,9 @@ export const CopyToClipboardScript = React.createElement("script", {
   },
 });
 
-export const copyCodeToClipboardScript = function (lang = "en") {
+// TODO "Copy Row Response" will need a lot more work e.g. escaping dangerous characters etc.
+// TODO refactor code and response code into separate functions
+export const copyCodeAndResponseFromTableToClipboardScript = function (lang = "en") {
   const { t } = customTranslate("my-forms");
 
   const capitalizedLang = lang === "en" ? "En" : "Fr";
@@ -68,11 +70,11 @@ export const copyCodeToClipboardScript = function (lang = "en") {
                 lng: lang || "en",
               })}";
             });
-  
-            // Copy Row Response
+
+            // Copy Row Response From Table
             var btnCopyResponse = document.getElementById("copyResponseButton${capitalizedLang}");
             var outputCopyResponse = document.getElementById("copyResponseOutput${capitalizedLang}");
-            var responseItems = Array.from(document.querySelectorAll("#responseTableRow${capitalizedLang} dd"));
+            var responseItems = Array.from(document.querySelectorAll("#responseTableRow${capitalizedLang} tr"));
             // Format with tab separators for Excel copy+paste
             var responseText = responseItems.map(item => {
               var text = item.textContent;

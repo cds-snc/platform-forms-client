@@ -2,18 +2,22 @@ import React from "react";
 import { Submission } from "@lib/responseDownloadFormats/types";
 
 export const AggregatedTable = ({
+  lang = "en",
   headers,
   submissions,
 }: {
+  lang?: string;
   headers: string[];
   submissions: Submission[];
 }) => {
+  const capitalizedLang = lang === "en" ? "En" : "Fr";
+
   function formatAnswer(answer: string) {
     return answer || "-";
   }
 
   return (
-    <table>
+    <table id={`responseTableRow${capitalizedLang}`}>
       <thead>
         <tr key="headers">
           {headers.map((heading, index) => (
