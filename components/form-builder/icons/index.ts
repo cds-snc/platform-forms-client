@@ -73,3 +73,4 @@ export { CheckAllIcon } from "./CheckAllIcon";
 export { MoreIcon } from "./MoreIcon";
 export { DownloadIcon } from "./DownloadIcon";
 export { DeleteIcon } from "./DeleteIcon";
+export { InboxIcon } from "./InboxIcon";

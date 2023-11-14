@@ -26,6 +26,7 @@ import { FormBuilderLayout } from "@components/globals/layouts/FormBuilderLayout
 import { ErrorPanel } from "@components/globals";
 import { ClosedBanner } from "@components/form-builder/app/shared/ClosedBanner";
 import { getAppSetting } from "@lib/appSettings";
+import { DeleteIcon, FolderIcon, InboxIcon } from "@components/form-builder/icons";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -59,7 +60,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   const deliveryOption = getDeliveryOption();
 
   const navItemClasses =
-    "no-underline !shadow-none border-black border-1 rounded-[100px] pt-1 pb-2 laptop:py-2 px-5 mr-3 mb-0 text-black visited:text-black focus:bg-[#475569] hover:bg-[#475569] hover:!text-white focus:!text-white [&_svg]:focus:fill-white";
+    "group no-underline !shadow-none border-black border-1 rounded-[100px] pt-1 pb-2 laptop:py-2 px-5 mr-3 mb-0 text-black visited:text-black focus:bg-[#475569] hover:bg-[#475569] hover:!text-white focus:!text-white [&_svg]:focus:fill-white flex flex-row align-baseline items-center gap-2";
 
   if (!isAuthenticated) {
     return (
@@ -80,8 +81,8 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         <Head>
           <title>{t("responses.email.title")}</title>
         </Head>
-        <div className="flex flex-wrap items-baseline mb-8">
-          <h1 className="border-none mb-0 tablet:mb-4 tablet:mr-8">
+        <div className="mb-8 flex flex-wrap items-baseline">
+          <h1 className="mb-0 border-none tablet:mb-4 tablet:mr-8">
             {isAuthenticated ? t("responses.email.title") : t("responses.unauthenticated.title")}
           </h1>
           <nav className="flex gap-3">
@@ -110,8 +111,8 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         <Head>
           <title>{t("responses.title")}</title>
         </Head>
-        <div className="flex flex-wrap items-baseline mb-8">
-          <h1 className="border-none mb-0 tablet:mb-4 tablet:mr-8">{t("responses.title")}</h1>
+        <div className="mb-8 flex flex-wrap items-baseline">
+          <h1 className="mb-0 border-none tablet:mb-4 tablet:mr-8">{t("responses.title")}</h1>
           <ErrorPanel supportLink={false}>{t("server-error", { ns: "common" })}</ErrorPanel>
         </div>
       </>
@@ -123,41 +124,53 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
       <Head>
         <title>{t("responses.title")}</title>
       </Head>
-      <div className="flex flex-wrap items-baseline mb-8">
-        <h1 className="border-none mb-0 tablet:mb-4 tablet:mr-8">
-          {isAuthenticated ? t("responses.title") : t("responses.unauthenticated.title")}
-        </h1>
 
-        <nav className="flex flex-wrap gap-3">
-          {isAuthenticated && (
-            <button
-              onClick={() => setIsShowConfirmReceiptDialog(true)}
-              className={navItemClasses}
-              disabled={status !== "authenticated"}
-            >
-              {t("responses.confirmReceipt")}
-            </button>
-          )}
+      <h1 className="mb-0 border-none tablet:mb-4 tablet:mr-8">
+        {isAuthenticated ? t("responses.title") : t("responses.unauthenticated.title")}
+      </h1>
 
-          {isAuthenticated && (
-            <button
-              onClick={() => setIsShowReportProblemsDialog(true)}
-              className={navItemClasses}
-              disabled={status !== "authenticated"}
-            >
-              {t("responses.reportProblems")}
-            </button>
-          )}
+      <nav className="my-8 flex gap-3">
+        <button className={navItemClasses}>
+          <InboxIcon className="h-7 w-7 group-hover:fill-white" /> New
+        </button>
+        <button className={navItemClasses}>
+          <FolderIcon className="h-7 w-7 group-hover:fill-white" /> Downloaded
+        </button>
+        <button className={navItemClasses}>
+          <DeleteIcon className="h-7 w-7 group-hover:fill-white" /> Deleted
+        </button>
+      </nav>
 
-          {!isPublished && (
-            <Link href="/form-builder/settings" legacyBehavior>
-              <a href="/form-builder/settings" className={`${navItemClasses}`}>
-                {t("responses.changeSetup")}
-              </a>
-            </Link>
-          )}
-        </nav>
-      </div>
+      {/* @TODO: This functionality gets moved elsewhere */}
+      {/* <nav className="flex flex-wrap gap-3">
+        {isAuthenticated && (
+          <button
+            onClick={() => setIsShowConfirmReceiptDialog(true)}
+            className={navItemClasses}
+            disabled={status !== "authenticated"}
+          >
+            {t("responses.confirmReceipt")}
+          </button>
+        )}
+
+        {isAuthenticated && (
+          <button
+            onClick={() => setIsShowReportProblemsDialog(true)}
+            className={navItemClasses}
+            disabled={status !== "authenticated"}
+          >
+            {t("responses.reportProblems")}
+          </button>
+        )}
+
+        {!isPublished && (
+          <Link href="/form-builder/settings" legacyBehavior>
+            <a href="/form-builder/settings" className={`${navItemClasses}`}>
+              {t("responses.changeSetup")}
+            </a>
+          </Link>
+        )}
+      </nav> */}
 
       {nagwareResult && <Nagware nagwareResult={nagwareResult} />}
 
