@@ -12,7 +12,7 @@ export const DownloadButton = ({
   setDownloadError,
   noSelectedItemsError,
   setNoSelectedItemsError,
-  tableItems,
+  checkedItems,
   responseDownloadLimit,
 }: {
   formId: string;
@@ -21,15 +21,7 @@ export const DownloadButton = ({
   setDownloadError: React.Dispatch<React.SetStateAction<boolean>>;
   noSelectedItemsError: boolean;
   setNoSelectedItemsError: React.Dispatch<React.SetStateAction<boolean>>;
-  tableItems: {
-    checkedItems: Map<string, boolean>;
-    statusItems: Map<string, boolean>;
-    sortedItems: TypeOmit<
-      VaultSubmission,
-      "formSubmission" | "submissionID" | "confirmationCode"
-    >[];
-    numberOfOverdueResponses: number;
-  };
+  checkedItems: Map<string, boolean>;
   responseDownloadLimit: number;
 }) => {
   const { t } = useTranslation("form-builder-responses");
@@ -44,7 +36,7 @@ export const DownloadButton = ({
     }
 
     // Can't download if none selected
-    if (tableItems.checkedItems.size === 0) {
+    if (checkedItems.size === 0) {
       if (!noSelectedItemsError) {
         setNoSelectedItemsError(true);
       }
@@ -52,18 +44,18 @@ export const DownloadButton = ({
     }
 
     // Don't download if too many selected
-    if (tableItems.checkedItems.size > MAX_FILE_DOWNLOADS) {
+    if (checkedItems.size > MAX_FILE_DOWNLOADS) {
       return;
     }
 
     toast.info(
       t("downloadResponsesTable.notifications.downloadingXFiles", {
-        fileCount: tableItems.checkedItems.size,
+        fileCount: checkedItems.size,
       })
     );
 
     const url = `/api/id/${formId}/submissions/download?format=html`;
-    const ids = Array.from(tableItems.checkedItems.keys());
+    const ids = Array.from(checkedItems.keys());
 
     axios({
       url,
@@ -104,7 +96,7 @@ export const DownloadButton = ({
       onClick={handleDownload}
     >
       {t("downloadResponsesTable.downloadXSelectedResponses", {
-        size: tableItems.checkedItems.size,
+        size: checkedItems.size,
       })}
     </button>
   );

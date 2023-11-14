@@ -322,7 +322,7 @@ export const DownloadTable = ({
           setDownloadError={setDownloadError}
           noSelectedItemsError={noSelectedItemsError}
           setNoSelectedItemsError={setNoSelectedItemsError}
-          tableItems={tableItems}
+          checkedItems={tableItems.checkedItems}
           responseDownloadLimit={MAX_FILE_DOWNLOADS}
           onSuccessfulDownload={() => {
             router.replace(router.asPath, undefined, { scroll: false });
