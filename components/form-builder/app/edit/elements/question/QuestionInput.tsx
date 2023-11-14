@@ -6,6 +6,7 @@ import { ExpandingInput } from "@formbuilder/app/shared";
 import { Language } from "@formbuilder/types";
 import { useTemplateStore } from "@formbuilder/store";
 import { useRefsContext } from "@formbuilder/app/edit/RefsContext";
+import { cleanInput } from "@formbuilder/util";
 
 export const QuestionInput = ({
   index,
@@ -83,6 +84,9 @@ export const QuestionInput = ({
       className="font-bold text-slate-800 laptop:text-lg"
       value={value}
       describedBy={describedById ?? undefined}
+      onBlur={() => {
+        updateValue(id, cleanInput(value));
+      }}
       onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateValue(id, e.target.value)}
       {...getLocalizationAttribute()}
     />
