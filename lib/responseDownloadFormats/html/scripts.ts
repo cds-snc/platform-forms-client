@@ -42,7 +42,6 @@ export const CopyToClipboardScript = React.createElement("script", {
   },
 });
 
-// TODO "Copy Row Response" will need a lot more work e.g. escaping dangerous characters etc.
 // TODO refactor code and response code into separate functions
 export const copyCodeAndResponseFromTableToClipboardScript = function (lang = "en") {
   const { t } = customTranslate("my-forms");
