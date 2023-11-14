@@ -16,27 +16,32 @@ export const AggregatedTable = ({
     return answer || "-";
   }
 
-  // TODO below may be a bit brittle, could use some refactoring
   return (
-    <table id={`responseTableRow${capitalizedLang}`} className="table-fixed">
+    <table id={`responseTableRow${capitalizedLang}`} className="table-fixed text-left">
       <thead>
-        <tr key="headers">
+        <tr key="headers" className="flex">
           {headers.map((heading, index) => (
-            <th key={`heading-${heading}-${index}`}>{heading}</th>
+            <th key={`heading-${heading}-${index}`} className="w-64 p-4 font-bold">
+              {heading}
+            </th>
           ))}
         </tr>
       </thead>
       <tbody>
-        {submissions.map((submission: Submission) => {
+        {submissions.map((submission: Submission, index) => {
+          // TODO "odd:bg-slate-50" was working so went with JS way
           return (
-            <tr key={submission.id} className={`border-t-2 border-t-grey-300 odd:bg-slate-50`}>
-              <td className="min-w-64">{submission.id}</td>
-              <td className="min-w-64">{submission.createdAt}</td>
+            <tr
+              key={submission.id}
+              className={`flex border-t-2 border-t-grey-300 ${index % 2 != 0 ? "bg-slate-50" : ""}`}
+            >
+              <td className="w-64 p-4">{submission.id}</td>
+              <td className="w-64 p-4">{submission.createdAt}</td>
               {submission.answers &&
                 submission.answers.map((answer, index) => {
                   if (Array.isArray(answer.answer)) {
                     return (
-                      <td key={`answer-col-${index}`} className="min-w-64">
+                      <td key={`answer-col-${index}`} className="w-64 p-4">
                         <table>
                           {answer.answer.map((subAnswer) => {
                             return subAnswer.map((subSubAnswer) => {
@@ -55,7 +60,7 @@ export const AggregatedTable = ({
                     );
                   }
                   return (
-                    <td key={`answer-col-${index}`} className="min-w-64">
+                    <td key={`answer-col-${index}`} className="w-64 p-4">
                       {formatAnswer(answer.answer)}
                     </td>
                   );

@@ -1,9 +1,12 @@
 import React from "react";
-import { CopyToClipboardScript, copyCodeAndResponseFromTableToClipboardScript } from "../scripts";
-import { ProtectedWarning } from "./ProtectedWarning";
-import Fip from "./Fip";
-import { css } from "../css/compiled";
-import { ColumnTable } from "./ColumnTable";
+import {
+  CopyToClipboardScript,
+  copyCodeAndResponseFromTableToClipboardScript,
+} from "../../html/scripts";
+import { ProtectedWarning } from "../../html/components/ProtectedWarning";
+import Fip from "../../html/components/Fip";
+import { css } from "../../html/css/compiled";
+import { ColumnTable } from "../../html/components/ColumnTable";
 import { AggregatedTable } from "./AggregatedTable";
 import { FormResponseSubmissions, Submission } from "@lib/responseDownloadFormats/types";
 import { customTranslate } from "@lib/responseDownloadFormats/helpers";
@@ -106,7 +109,7 @@ export const ResponseHtmlAggregated = ({
               ></span>
             </div>
 
-            <div className="mt-14 overlow-x-auto">
+            <div className="mt-14 overflow-x-auto">
               <AggregatedTable lang={lang} headers={headersForTable} submissions={submissions} />
             </div>
 

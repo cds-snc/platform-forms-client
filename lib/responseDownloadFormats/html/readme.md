@@ -7,3 +7,5 @@ When making any changes to `className` properties in components, or to the `css/
 To do that, you can run the script `npm run compile`. 
 
 You should then commit the changes along with `css/styles.ts` as that will contain the updated compiled styles.
+
+**Note this also updates ../html-aggregated**
