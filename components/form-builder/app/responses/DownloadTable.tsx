@@ -367,9 +367,11 @@ export const DownloadTable = ({
                   <MoreMenu
                     formId={submission.formID}
                     responseId={submission.name}
-                    router={router}
-                    setErrors={setErrors}
-                    errors={errors}
+                    onDownloadSuccess={() => {
+                      router.replace(router.asPath, undefined, { scroll: false });
+                      toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
+                    }}
+                    setDownloadError={setDownloadError}
                   />
                 </td>
               </tr>

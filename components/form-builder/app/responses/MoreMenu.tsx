@@ -10,25 +10,13 @@ import { logMessage } from "@lib/logger";
 export const MoreMenu = ({
   formId,
   responseId,
-  router,
-  errors,
-  setErrors,
+  setDownloadError,
+  onDownloadSuccess,
 }: {
   formId: string;
   responseId: string;
-  router: NextRouter;
-  errors: {
-    downloadError: boolean;
-    maxItemsError: boolean;
-    noItemsError: boolean;
-  };
-  setErrors: React.Dispatch<
-    React.SetStateAction<{
-      downloadError: boolean;
-      maxItemsError: boolean;
-      noItemsError: boolean;
-    }>
-  >;
+  setDownloadError: (downloadError: boolean) => void;
+  onDownloadSuccess: () => void;
 }) => {
   const { t } = useTranslation("form-builder-responses");
 
@@ -56,13 +44,12 @@ export const MoreMenu = ({
         window.URL.revokeObjectURL(href);
 
         setTimeout(() => {
-          router.replace(router.asPath, undefined, { scroll: false });
-          toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
+          onDownloadSuccess();
         }, interval);
       })
       .catch((err) => {
         logMessage.error(err as Error);
-        setErrors({ ...errors, downloadError: true });
+        setDownloadError(true);
       });
   };
 
