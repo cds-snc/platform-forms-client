@@ -48,11 +48,10 @@ export const DownloadTable = ({
 }: DownloadTableProps) => {
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
-  const [errors, setErrors] = useState({
-    downloadError: false,
-    maxItemsError: false,
-    noItemsError: false,
-  });
+
+  const [downloadError, setDownloadError] = useState(false);
+  const [noSelectedItemsError, setNoSelectedItemsError] = useState(false);
+
   const accountEscalated = nagwareResult && nagwareResult.level > 2;
 
   const { value: overdueAfter } = useSetting("nagwarePhaseEncouraged");
@@ -110,16 +109,6 @@ export const DownloadTable = ({
         });
       });
     }
-
-    // Show or hide errors depending
-    if (tableItems.checkedItems.size > MAX_FILE_DOWNLOADS && !errors.maxItemsError) {
-      setErrors({ ...errors, maxItemsError: true });
-    } else if (errors.maxItemsError) {
-      setErrors({ ...errors, maxItemsError: false });
-    }
-    if (tableItems.checkedItems.size > 0 && errors.noItemsError) {
-      setErrors({ ...errors, noItemsError: false });
-    }
   };
 
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -132,13 +121,8 @@ export const DownloadTable = ({
     const nextState = reducerTableItems(tableItems, dispatchAction);
 
     // Show or hide errors depending
-    if (nextState.checkedItems.size > MAX_FILE_DOWNLOADS && !errors.maxItemsError) {
-      setErrors({ ...errors, maxItemsError: true });
-    } else if (errors.maxItemsError) {
-      setErrors({ ...errors, maxItemsError: false });
-    }
-    if (nextState.checkedItems.size > 0 && errors.noItemsError) {
-      setErrors({ ...errors, noItemsError: false });
+    if (nextState.checkedItems.size > 0 && noSelectedItemsError) {
+      setNoSelectedItemsError(false);
     }
   };
 
@@ -146,21 +130,20 @@ export const DownloadTable = ({
   // batching file downloads (e.g. 4 at a time) if edge cases/* come up.
   const handleDownload = async () => {
     // Reset any errors
-    if (errors.downloadError) {
-      setErrors({ ...errors, downloadError: false });
+    if (downloadError) {
+      setDownloadError(false);
     }
 
-    // Handle any errors and show them
+    // Can't download if none selected
     if (tableItems.checkedItems.size === 0) {
-      if (!errors.noItemsError) {
-        setErrors({ ...errors, noItemsError: true });
+      if (!noSelectedItemsError) {
+        setNoSelectedItemsError(true);
       }
       return;
     }
+
+    // Don't download if too many selected
     if (tableItems.checkedItems.size > MAX_FILE_DOWNLOADS) {
-      if (!errors.maxItemsError) {
-        setErrors({ ...errors, maxItemsError: true });
-      }
       return;
     }
 
@@ -202,7 +185,7 @@ export const DownloadTable = ({
       })
       .catch((err) => {
         logMessage.error(err as Error);
-        setErrors({ ...errors, downloadError: true });
+        setDownloadError(true);
       });
   };
 
@@ -249,7 +232,7 @@ export const DownloadTable = ({
             </p>
           </Alert.Danger>
         )}
-        {errors.noItemsError && (
+        {noSelectedItemsError && (
           <Alert.Danger>
             <Alert.Title>{t("downloadResponsesTable.errors.atLeastOneFileHeader")}</Alert.Title>
             <p className="text-sm text-[#26374a]">
@@ -257,7 +240,7 @@ export const DownloadTable = ({
             </p>
           </Alert.Danger>
         )}
-        {errors.downloadError && (
+        {downloadError && (
           <Alert.Danger>
             <Alert.Title>
               {t("downloadResponsesTable.errors.errorDownloadingFilesHeader")}
@@ -422,7 +405,7 @@ export const DownloadTable = ({
               </p>
             </Alert.Danger>
           )}
-          {errors.noItemsError && (
+          {noSelectedItemsError && (
             <Alert.Danger icon={false}>
               <Alert.Title headingTag="h3">
                 {t("downloadResponsesTable.errors.atLeastOneFileHeader")}
@@ -432,7 +415,7 @@ export const DownloadTable = ({
               </p>
             </Alert.Danger>
           )}
-          {errors.downloadError && (
+          {downloadError && (
             <Alert.Danger icon={false}>
               <Alert.Title headingTag="h3">
                 {t("downloadResponsesTable.errors.errorDownloadingFilesHeader")}
