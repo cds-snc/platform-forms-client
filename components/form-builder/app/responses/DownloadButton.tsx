@@ -27,8 +27,6 @@ export const DownloadButton = ({
   const { t } = useTranslation("form-builder-responses");
   const MAX_FILE_DOWNLOADS = responseDownloadLimit;
 
-  // NOTE: browsers have different limits for simultaneous downloads. May need to look into
-  // batching file downloads (e.g. 4 at a time) if edge cases/* come up.
   const handleDownload = async () => {
     // Reset any errors
     if (downloadError) {
