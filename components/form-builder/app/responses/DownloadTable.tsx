@@ -322,7 +322,7 @@ export const DownloadTable = ({
           setDownloadError={setDownloadError}
           setNoSelectedItemsError={setNoSelectedItemsError}
           checkedItems={tableItems.checkedItems}
-          responseDownloadLimit={MAX_FILE_DOWNLOADS}
+          canDownload={tableItems.checkedItems.size <= MAX_FILE_DOWNLOADS}
           onSuccessfulDownload={() => {
             router.replace(router.asPath, undefined, { scroll: false });
             toast.success(t("downloadResponsesTable.notifications.downloadComplete"));

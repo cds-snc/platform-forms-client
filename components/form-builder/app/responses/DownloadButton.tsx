@@ -7,22 +7,21 @@ import { logMessage } from "@lib/logger";
 export const DownloadButton = ({
   formId,
   onSuccessfulDownload,
+  canDownload,
   downloadError,
   setDownloadError,
   setNoSelectedItemsError,
   checkedItems,
-  responseDownloadLimit,
 }: {
   formId: string;
   onSuccessfulDownload: () => void;
+  canDownload: boolean;
   downloadError: boolean;
   setDownloadError: React.Dispatch<React.SetStateAction<boolean>>;
   setNoSelectedItemsError: React.Dispatch<React.SetStateAction<boolean>>;
   checkedItems: Map<string, boolean>;
-  responseDownloadLimit: number;
 }) => {
   const { t } = useTranslation("form-builder-responses");
-  const MAX_FILE_DOWNLOADS = responseDownloadLimit;
 
   const handleDownload = async () => {
     // Reset any errors
@@ -37,7 +36,7 @@ export const DownloadButton = ({
     }
 
     // Don't download if too many selected
-    if (checkedItems.size > MAX_FILE_DOWNLOADS) {
+    if (!canDownload) {
       return;
     }
 
