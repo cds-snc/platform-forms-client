@@ -13,7 +13,7 @@ interface ReducerTableItemsState {
   numberOfOverdueResponses: number;
 }
 
-interface ReducerTableItemsActions {
+export interface ReducerTableItemsActions {
   type: string;
   payload: {
     item?: {
