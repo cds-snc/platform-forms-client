@@ -1,5 +1,4 @@
 import { TypeOmit, VaultSubmission } from "@lib/types";
-import { NextRouter } from "next/router";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "../shared";
@@ -8,26 +7,20 @@ import { logMessage } from "@lib/logger";
 
 export const DownloadButton = ({
   formId,
-  router,
-  errors,
-  setErrors,
+  onSuccessfulDownload,
+  downloadError,
+  setDownloadError,
+  noSelectedItemsError,
+  setNoSelectedItemsError,
   tableItems,
   responseDownloadLimit,
 }: {
   formId: string;
-  router: NextRouter;
-  errors: {
-    downloadError: boolean;
-    maxItemsError: boolean;
-    noItemsError: boolean;
-  };
-  setErrors: React.Dispatch<
-    React.SetStateAction<{
-      downloadError: boolean;
-      maxItemsError: boolean;
-      noItemsError: boolean;
-    }>
-  >;
+  onSuccessfulDownload: () => void;
+  downloadError: boolean;
+  setDownloadError: React.Dispatch<React.SetStateAction<boolean>>;
+  noSelectedItemsError: boolean;
+  setNoSelectedItemsError: React.Dispatch<React.SetStateAction<boolean>>;
   tableItems: {
     checkedItems: Map<string, boolean>;
     statusItems: Map<string, boolean>;
@@ -46,21 +39,20 @@ export const DownloadButton = ({
   // batching file downloads (e.g. 4 at a time) if edge cases/* come up.
   const handleDownload = async () => {
     // Reset any errors
-    if (errors.downloadError) {
-      setErrors({ ...errors, downloadError: false });
+    if (downloadError) {
+      setDownloadError(false);
     }
 
-    // Handle any errors and show them
+    // Can't download if none selected
     if (tableItems.checkedItems.size === 0) {
-      if (!errors.noItemsError) {
-        setErrors({ ...errors, noItemsError: true });
+      if (!noSelectedItemsError) {
+        setNoSelectedItemsError(true);
       }
       return;
     }
+
+    // Don't download if too many selected
     if (tableItems.checkedItems.size > MAX_FILE_DOWNLOADS) {
-      if (!errors.maxItemsError) {
-        setErrors({ ...errors, maxItemsError: true });
-      }
       return;
     }
 
@@ -96,13 +88,12 @@ export const DownloadButton = ({
           }, interval * i);
         });
         setTimeout(() => {
-          router.replace(router.asPath, undefined, { scroll: false });
-          toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
+          onSuccessfulDownload();
         }, interval * response.data.length);
       })
       .catch((err) => {
         logMessage.error(err as Error);
-        setErrors({ ...errors, downloadError: true });
+        setDownloadError(true);
       });
   };
 
