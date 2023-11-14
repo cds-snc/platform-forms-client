@@ -27,11 +27,6 @@ import { getDaysPassed } from "@lib/clientHelpers";
 import { Alert } from "@components/globals";
 import { logMessage } from "@lib/logger";
 import { CheckAll } from "./CheckAll";
-import {
-  CheckAllIcon,
-  CheckBoxEmptyIcon,
-  CheckIndeterminateIcon,
-} from "@components/form-builder/icons";
 import { MoreMenu } from "./MoreMenu";
 
 interface DownloadTableProps {
