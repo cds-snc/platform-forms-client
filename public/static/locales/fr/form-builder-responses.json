@@ -20,6 +20,8 @@
     }
   },
   "downloadResponsesTable": {
+    "download": "Téléchargement",
+    "delete": "Supprimer",
     "header": {
       "tableTitle": "Tableau des réponses à télécharger",
       "select": "Sélection",
@@ -30,7 +32,8 @@
       "downloadResponse": "Période de téléchargement",
       "lastDownloadedBy": "Téléchargée par",
       "confirmReceipt": "Confirmation de réception",
-      "removal": "Suppression des données"
+      "removal": "Suppression des données",
+      "more": "Plus"
     },
     "status": {
       "downloaded": "Téléchargée",
