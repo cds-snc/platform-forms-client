@@ -41,6 +41,10 @@ const getSubmissions = async (
     const data = req.body;
     const ids = data.ids.split(",");
 
+    // TODO figure out what we want to do with the localization. Return two versions, return 1 version.
+    // if one version, set by request url e.g. /fr/ form-bu.. or by cookie accept-language..
+    const lang = data.lang || "en";
+
     const queryResult = await retrieveSubmissions(ability, formId, ids);
 
     if (!queryResult)
@@ -147,7 +151,7 @@ const getSubmissions = async (
           return res
             .status(200)
             .setHeader("Content-Type", "text/html")
-            .send(htmlAggregatedTransform(formResponse));
+            .send(htmlAggregatedTransform(formResponse, lang));
           break;
 
         case "html":

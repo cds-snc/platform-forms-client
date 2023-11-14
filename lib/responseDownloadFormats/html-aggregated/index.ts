@@ -3,10 +3,10 @@ import { FormResponseSubmissions } from "../types";
 import { ResponseHtmlAggregated } from "../html/components/ResponseHTMLAggregated";
 
 // TODO add language param to API call probably as a query or from header info
-export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
+export const transform = (formResponseSubmissions: FormResponseSubmissions, lang = "en") => {
   const response = renderToStaticMarkup(
     ResponseHtmlAggregated({
-      lang: "en",
+      lang,
       formResponseSubmissions,
     })
   );

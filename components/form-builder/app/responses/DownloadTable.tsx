@@ -178,6 +178,8 @@ export const DownloadTable = ({
         method: "POST",
         data: {
           ids: ids.join(","),
+          // TODO temp for testing. need to determin how to handle languages
+          lang: "fr",
         },
       }).then((response) => {
         const fileName = `${formId}.html`;

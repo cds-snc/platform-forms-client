@@ -55,16 +55,17 @@ export const ResponseHtmlAggregated = ({
         </div>
         <div id="page-container">
           <main id="content">
-            <h1 className="sr-only">{`${form.titleEn} - ${form.titleFr}`}</h1>
-            <div className="mt-14" />
-            <ProtectedWarning securityAttribute={form.securityAttribute} lang="en" />
             <Fip language="en" />
-            <div className="mt-14" />
+            <ProtectedWarning securityAttribute={form.securityAttribute} lang={lang} />
+            <h1 className="mt-14">{`${form.titleEn} - ${form.titleFr}`}</h1>
 
+            <h2>{t("responseAggregatedTemplate.title", { lng: lang })}</h2>
             <h3 id={`rowTable${capitalizedLang}`} className="gc-h2 mt-20" tabIndex={-1}>
-              {t("responseTemplate.rowTable", { lng: lang })}
+              {t("responseAggregatedTemplate.copyTable.title", { lng: lang })}
             </h3>
-            <p className="mt-8">{t("responseTemplate.rowTableInfo", { lng: lang })}</p>
+            <p className="mt-8">
+              {t("responseAggregatedTemplate.copyTable.description", { lng: lang })}
+            </p>
             <div className="mb-8 mt-4">
               <button
                 id={`copyResponseButton${capitalizedLang}`}
@@ -73,7 +74,7 @@ export const ResponseHtmlAggregated = ({
                 type="button"
                 data-clipboard-text=""
               >
-                {t("responseTemplate.copyResponse", { lng: lang })}
+                {t("responseAggregatedTemplate.copyTable.copyButton", { lng: lang })}
               </button>
               <span
                 id={`copyResponseOutput${capitalizedLang}`}
@@ -82,7 +83,10 @@ export const ResponseHtmlAggregated = ({
               ></span>
             </div>
 
-            <h2>TODO: ResponseSection reuse with Confirmation codes</h2>
+            <h2>{t("responseAggregatedTemplate.copyCodes.title", { lng: lang })}</h2>
+            <p className="mt-8">
+              {t("responseAggregatedTemplate.copyCodes.description", { lng: lang })}
+            </p>
             <div className="mb-32 mt-4">
               <button
                 id={`copyCodeButton${capitalizedLang}`}
@@ -91,7 +95,7 @@ export const ResponseHtmlAggregated = ({
                 aria-labelledby={`confirmReceiptInfo${capitalizedLang}`}
                 data-clipboard-text={confirmationCodes}
               >
-                {t("responseTemplate.copyCode", { lng: lang })}
+                {t("responseAggregatedTemplate.copyCodes.copyButton", { lng: lang })}
               </button>
               <span
                 id={`copyCodeOutput${capitalizedLang}`}
@@ -100,9 +104,9 @@ export const ResponseHtmlAggregated = ({
               ></span>
             </div>
 
-            <h2>Form responses: combined table of selected responses</h2>
             <AggregatedTable lang={lang} headers={headersForTable} submissions={submissions} />
 
+            <h2>{t("responseAggregatedTemplate.formResponse", { lng: lang })}</h2>
             {submissions &&
               submissions.map((submission) => {
                 return (
@@ -112,7 +116,7 @@ export const ResponseHtmlAggregated = ({
                       responseID={submission.id}
                       submissionDate={submission.createdAt}
                       submission={submission}
-                      lang={"en"}
+                      lang={lang}
                     />
                   </>
                 );
