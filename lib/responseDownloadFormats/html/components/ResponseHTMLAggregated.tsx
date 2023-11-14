@@ -83,11 +83,13 @@ export const ResponseHtmlAggregated = ({
               ></span>
             </div>
 
-            <h2>{t("responseAggregatedTemplate.copyCodes.title", { lng: lang })}</h2>
+            <h3 className="mt-14">
+              {t("responseAggregatedTemplate.copyCodes.title", { lng: lang })}
+            </h3>
             <p className="mt-8">
               {t("responseAggregatedTemplate.copyCodes.description", { lng: lang })}
             </p>
-            <div className="mb-32 mt-4">
+            <div className="mt-4 mb-14">
               <button
                 id={`copyCodeButton${capitalizedLang}`}
                 className="gc-button--blue"
@@ -106,12 +108,17 @@ export const ResponseHtmlAggregated = ({
 
             <AggregatedTable lang={lang} headers={headersForTable} submissions={submissions} />
 
-            <h2>{t("responseAggregatedTemplate.formResponse", { lng: lang })}</h2>
+            <h2 className="sr-only">
+              {t("responseAggregatedTemplate.dataList.title", { lng: lang })}
+            </h2>
             {submissions &&
               submissions.map((submission) => {
                 return (
                   <>
-                    <h2>Form Response: {submission.id}</h2>
+                    <h3 className="mt-20">
+                      {t("responseAggregatedTemplate.dataList.formResponse", { lng: lang })}{" "}
+                      {submission.id}
+                    </h3>
                     <ColumnTable
                       responseID={submission.id}
                       submissionDate={submission.createdAt}

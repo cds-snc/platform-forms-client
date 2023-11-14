@@ -75,7 +75,10 @@
       "description": "Once you've checked the downloaded responses, and are ready to delete these from GC Forms, copy and paste the confirmation codes. This helps us know when responses have been transferred to you so we can remove the data from our system.",
       "copyButton": "Copy confirmation codes"
     },
-    "formResponse": "Form response:"
+    "dataList": {
+      "title": "Form responses: data list of each selected response",
+      "formResponse": "Form response:"
+    }
   },
   "dataClassification": {
     "officialRecord": "This is an official record",

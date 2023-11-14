@@ -75,7 +75,10 @@
       "description": "Une fois que vous avez vérifié les réponses téléchargées et que vous êtes prêt à les supprimer de Formulaires GC, copiez et collez les codes de confirmation. Cela nous permet de savoir quand les réponses vous ont été transférées et d’enlever les données de notre système.",
       "copyButton": "Copier les codes de confirmation"
     },
-    "formResponse": "Réponse au formulaire:"
+    "dataList": {
+      "title": "[FR]Form responses: data list of each selected response",
+      "formResponse": "Form response:"
+    }
   },
   "dataClassification": {
     "officialRecord": "Ceci est un document officiel",

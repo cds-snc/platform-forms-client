@@ -29,7 +29,7 @@ export const AggregatedTable = ({
       <tbody>
         {submissions.map((submission: Submission) => {
           return (
-            <tr key={submission.id}>
+            <tr key={submission.id} className="border-t-2 border-t-grey-300">
               <td>{submission.id}</td>
               <td>{submission.createdAt}</td>
               {submission.answers &&
