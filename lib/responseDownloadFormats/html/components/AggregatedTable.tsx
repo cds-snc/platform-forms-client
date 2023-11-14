@@ -27,7 +27,7 @@ export const AggregatedTable = ({
         </tr>
       </thead>
       <tbody>
-        {submissions.map((submission: Submission, index) => {
+        {submissions.map((submission: Submission) => {
           return (
             <tr key={submission.id} className={`border-t-2 border-t-grey-300 odd:bg-slate-50`}>
               <td className="min-w-64">{submission.id}</td>
