@@ -13,7 +13,6 @@ export const CheckAll = ({
   tableItemsDispatch,
   noSelectedItemsError,
   setNoSelectedItemsError,
-  responseDownloadLimit,
 }: {
   tableItems: {
     checkedItems: Map<string, boolean>;
@@ -27,7 +26,6 @@ export const CheckAll = ({
   tableItemsDispatch: React.Dispatch<ReducerTableItemsActions>;
   noSelectedItemsError: boolean;
   setNoSelectedItemsError: (noSelectedItemsError: boolean) => void;
-  responseDownloadLimit: number;
 }) => {
   const { t } = useTranslation("form-builder-responses");
 
@@ -36,8 +34,6 @@ export const CheckAll = ({
     SOME = "SOME",
     ALL = "ALL",
   }
-
-  const MAX_FILE_DOWNLOADS = responseDownloadLimit;
 
   /**
    * Are all items checked, some items checked, or no items checked?

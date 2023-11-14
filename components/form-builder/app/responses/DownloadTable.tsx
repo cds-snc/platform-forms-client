@@ -216,7 +216,6 @@ export const DownloadTable = ({
           <tr>
             <th className="p-4 text-center">
               <CheckAll
-                responseDownloadLimit={responseDownloadLimit}
                 tableItems={tableItems}
                 tableItemsDispatch={tableItemsDispatch}
                 noSelectedItemsError={noSelectedItemsError}
