@@ -17,7 +17,6 @@ import { LinkButton } from "@components/globals";
 import { logMessage } from "@lib/logger";
 import { fetchWithCsrfToken } from "@lib/hooks/auth/fetchWithCsrfToken";
 import { useRouter } from "next/router";
-import { AxiosError } from "axios";
 import { toast } from "@formbuilder/app/shared";
 
 export interface Question {
@@ -41,6 +40,14 @@ interface QuestionAnswerValues {
 
 type QuestionValuesProps = FormikProps<QuestionAnswerValues>;
 
+type ErrorResult = {
+  response: {
+    data: {
+      error: string;
+    };
+  };
+};
+
 const Info = () => {
   const { t } = useTranslation(["setup-security-questions"]);
   return (
@@ -56,8 +63,8 @@ const updateSecurityQuestions = async (questionsAnswers: Answer[]): Promise<Erro
     await fetchWithCsrfToken("/api/account/security-questions", data);
   } catch (err) {
     logMessage.error(err);
-    const error = err as AxiosError;
-    return error?.response && new Error(error.response.data.error);
+    const error = err as ErrorResult;
+    return error?.response && new Error(error?.response?.data?.error);
   }
 };
 
