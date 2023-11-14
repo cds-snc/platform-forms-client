@@ -29,7 +29,7 @@ import { getAppSetting } from "@lib/appSettings";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
-  formId?: string;
+  formId: string;
   nagwareResult: NagwareResult | null;
   responseDownloadLimit: number;
 }
