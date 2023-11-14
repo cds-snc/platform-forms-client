@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.8.2](https://github.com/cds-snc/platform-forms-client/compare/v3.8.1...v3.8.2) (2023-11-14)
+
+
+### Bug Fixes
+
+* docker file build and yarn ([#2836](https://github.com/cds-snc/platform-forms-client/issues/2836)) ([011b5f7](https://github.com/cds-snc/platform-forms-client/commit/011b5f7747569d0a38e332650be8aa72b8920b2a))
+* Pad angle brackets in user uploaded json or text input to avoid html exception ([#2832](https://github.com/cds-snc/platform-forms-client/issues/2832)) ([8eff2ba](https://github.com/cds-snc/platform-forms-client/commit/8eff2ba51ef5bb9ec47c404e359c47eb9abd886c))
+
+
+### Miscellaneous Chores
+
+* Update Axios to 1.6.1 ([#2851](https://github.com/cds-snc/platform-forms-client/issues/2851)) ([db1809e](https://github.com/cds-snc/platform-forms-client/commit/db1809e53cd798337bff6fd315072d0598f0c481))
+* upgrade to yarn 4 ([#2827](https://github.com/cds-snc/platform-forms-client/issues/2827)) ([bf7ea6c](https://github.com/cds-snc/platform-forms-client/commit/bf7ea6c650a02159773a9fb83cf4c3d8837d40e5))
+
 ## [3.8.1](https://github.com/cds-snc/platform-forms-client/compare/v3.8.0...v3.8.1) (2023-11-06)
 
 
