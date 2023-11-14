@@ -70,3 +70,6 @@ export { BrandingIcon } from "./BrandingIcon";
 export { ClosedFormIcon } from "./ClosedFormIcon";
 export { CheckIndeterminateIcon } from "./CheckIndeterminateIcon";
 export { CheckAllIcon } from "./CheckAllIcon";
+export { MoreIcon } from "./MoreIcon";
+export { DownloadIcon } from "./DownloadIcon";
+export { DeleteIcon } from "./DeleteIcon";

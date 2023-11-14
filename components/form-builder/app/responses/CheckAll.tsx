@@ -11,8 +11,8 @@ import { ReducerTableItemsActions, TableActions } from "./DownloadTableReducer";
 export const CheckAll = ({
   tableItems,
   tableItemsDispatch,
-  errors,
-  setErrors,
+  noSelectedItemsError,
+  setNoSelectedItemsError,
   responseDownloadLimit,
 }: {
   tableItems: {
@@ -25,18 +25,8 @@ export const CheckAll = ({
     numberOfOverdueResponses: number;
   };
   tableItemsDispatch: React.Dispatch<ReducerTableItemsActions>;
-  errors: {
-    downloadError: boolean;
-    maxItemsError: boolean;
-    noItemsError: boolean;
-  };
-  setErrors: React.Dispatch<
-    React.SetStateAction<{
-      downloadError: boolean;
-      maxItemsError: boolean;
-      noItemsError: boolean;
-    }>
-  >;
+  noSelectedItemsError: boolean;
+  setNoSelectedItemsError: (noSelectedItemsError: boolean) => void;
   responseDownloadLimit: number;
 }) => {
   const { t } = useTranslation("form-builder-responses");
@@ -74,6 +64,9 @@ export const CheckAll = ({
           payload: { item: { name: submission.name, checked: true } },
         });
       });
+      if (noSelectedItemsError) {
+        setNoSelectedItemsError(false);
+      }
     } else {
       tableItems.checkedItems.forEach((_, key) => {
         tableItemsDispatch({
@@ -81,16 +74,6 @@ export const CheckAll = ({
           payload: { item: { name: key, checked: false } },
         });
       });
-    }
-
-    // Show or hide errors depending
-    if (tableItems.checkedItems.size > MAX_FILE_DOWNLOADS && !errors.maxItemsError) {
-      setErrors({ ...errors, maxItemsError: true });
-    } else if (errors.maxItemsError) {
-      setErrors({ ...errors, maxItemsError: false });
-    }
-    if (tableItems.checkedItems.size > 0 && errors.noItemsError) {
-      setErrors({ ...errors, noItemsError: false });
     }
   };
 

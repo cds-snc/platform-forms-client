@@ -27,6 +27,12 @@ import { getDaysPassed } from "@lib/clientHelpers";
 import { Alert } from "@components/globals";
 import { logMessage } from "@lib/logger";
 import { CheckAll } from "./CheckAll";
+import {
+  CheckAllIcon,
+  CheckBoxEmptyIcon,
+  CheckIndeterminateIcon,
+} from "@components/form-builder/icons";
+import { MoreMenu } from "./MoreMenu";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -43,11 +49,10 @@ export const DownloadTable = ({
 }: DownloadTableProps) => {
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
-  const [errors, setErrors] = useState({
-    downloadError: false,
-    maxItemsError: false,
-    noItemsError: false,
-  });
+
+  const [downloadError, setDownloadError] = useState(false);
+  const [noSelectedItemsError, setNoSelectedItemsError] = useState(false);
+
   const accountEscalated = nagwareResult && nagwareResult.level > 2;
 
   const { value: overdueAfter } = useSetting("nagwarePhaseEncouraged");
@@ -76,13 +81,8 @@ export const DownloadTable = ({
     const nextState = reducerTableItems(tableItems, dispatchAction);
 
     // Show or hide errors depending
-    if (nextState.checkedItems.size > MAX_FILE_DOWNLOADS && !errors.maxItemsError) {
-      setErrors({ ...errors, maxItemsError: true });
-    } else if (errors.maxItemsError) {
-      setErrors({ ...errors, maxItemsError: false });
-    }
-    if (nextState.checkedItems.size > 0 && errors.noItemsError) {
-      setErrors({ ...errors, noItemsError: false });
+    if (nextState.checkedItems.size > 0 && noSelectedItemsError) {
+      setNoSelectedItemsError(false);
     }
   };
 
@@ -90,21 +90,20 @@ export const DownloadTable = ({
   // batching file downloads (e.g. 4 at a time) if edge cases/* come up.
   const handleDownload = async () => {
     // Reset any errors
-    if (errors.downloadError) {
-      setErrors({ ...errors, downloadError: false });
+    if (downloadError) {
+      setDownloadError(false);
     }
 
-    // Handle any errors and show them
+    // Can't download if none selected
     if (tableItems.checkedItems.size === 0) {
-      if (!errors.noItemsError) {
-        setErrors({ ...errors, noItemsError: true });
+      if (!noSelectedItemsError) {
+        setNoSelectedItemsError(true);
       }
       return;
     }
+
+    // Don't download if too many selected
     if (tableItems.checkedItems.size > MAX_FILE_DOWNLOADS) {
-      if (!errors.maxItemsError) {
-        setErrors({ ...errors, maxItemsError: true });
-      }
       return;
     }
 
@@ -146,7 +145,7 @@ export const DownloadTable = ({
       })
       .catch((err) => {
         logMessage.error(err as Error);
-        setErrors({ ...errors, downloadError: true });
+        setDownloadError(true);
       });
   };
 
@@ -193,7 +192,7 @@ export const DownloadTable = ({
             </p>
           </Alert.Danger>
         )}
-        {errors.noItemsError && (
+        {noSelectedItemsError && (
           <Alert.Danger>
             <Alert.Title>{t("downloadResponsesTable.errors.atLeastOneFileHeader")}</Alert.Title>
             <p className="text-sm text-[#26374a]">
@@ -201,7 +200,7 @@ export const DownloadTable = ({
             </p>
           </Alert.Danger>
         )}
-        {errors.downloadError && (
+        {downloadError && (
           <Alert.Danger>
             <Alert.Title>
               {t("downloadResponsesTable.errors.errorDownloadingFilesHeader")}
@@ -225,8 +224,8 @@ export const DownloadTable = ({
                 responseDownloadLimit={responseDownloadLimit}
                 tableItems={tableItems}
                 tableItemsDispatch={tableItemsDispatch}
-                errors={errors}
-                setErrors={setErrors}
+                noSelectedItemsError={noSelectedItemsError}
+                setNoSelectedItemsError={setNoSelectedItemsError}
               />
             </th>
             <th className="p-4 text-left">{t("downloadResponsesTable.header.number")}</th>
@@ -235,6 +234,7 @@ export const DownloadTable = ({
             <th className="p-4 text-left">{t("downloadResponsesTable.header.lastDownloadedBy")}</th>
             <th className="p-4 text-left">{t("downloadResponsesTable.header.confirmReceipt")}</th>
             <th className="p-4 text-left">{t("downloadResponsesTable.header.removal")}</th>
+            <th className="p-4 text-left">{t("downloadResponsesTable.header.more")}</th>
           </tr>
         </thead>
         <tbody>
@@ -293,6 +293,17 @@ export const DownloadTable = ({
                 <td className="whitespace-nowrap px-4">
                   <RemovalStatus vaultStatus={submission.status} removalAt={submission.removedAt} />
                 </td>
+                <td className="px-4">
+                  <MoreMenu
+                    formId={submission.formID}
+                    responseId={submission.name}
+                    onDownloadSuccess={() => {
+                      router.replace(router.asPath, undefined, { scroll: false });
+                      toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
+                    }}
+                    setDownloadError={setDownloadError}
+                  />
+                </td>
               </tr>
             );
           })}
@@ -326,7 +337,7 @@ export const DownloadTable = ({
               </p>
             </Alert.Danger>
           )}
-          {errors.noItemsError && (
+          {noSelectedItemsError && (
             <Alert.Danger icon={false}>
               <Alert.Title headingTag="h3">
                 {t("downloadResponsesTable.errors.atLeastOneFileHeader")}
@@ -336,7 +347,7 @@ export const DownloadTable = ({
               </p>
             </Alert.Danger>
           )}
-          {errors.downloadError && (
+          {downloadError && (
             <Alert.Danger icon={false}>
               <Alert.Title headingTag="h3">
                 {t("downloadResponsesTable.errors.errorDownloadingFilesHeader")}
