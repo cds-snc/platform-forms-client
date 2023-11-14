@@ -18,7 +18,7 @@ export const AggregatedTable = ({
 
   // TODO below may be a bit brittle, could use some refactoring
   return (
-    <table id={`responseTableRow${capitalizedLang}`}>
+    <table id={`responseTableRow${capitalizedLang}`} className="table-fixed">
       <thead>
         <tr key="headers">
           {headers.map((heading, index) => (
@@ -27,16 +27,16 @@ export const AggregatedTable = ({
         </tr>
       </thead>
       <tbody>
-        {submissions.map((submission: Submission) => {
+        {submissions.map((submission: Submission, index) => {
           return (
-            <tr key={submission.id} className="border-t-2 border-t-grey-300">
-              <td>{submission.id}</td>
-              <td>{submission.createdAt}</td>
+            <tr key={submission.id} className={`border-t-2 border-t-grey-300 odd:bg-slate-50`}>
+              <td className="min-w-64">{submission.id}</td>
+              <td className="min-w-64">{submission.createdAt}</td>
               {submission.answers &&
                 submission.answers.map((answer, index) => {
                   if (Array.isArray(answer.answer)) {
                     return (
-                      <td key={`answer-col-${index}`}>
+                      <td key={`answer-col-${index}`} className="min-w-64">
                         <table>
                           {answer.answer.map((subAnswer) => {
                             return subAnswer.map((subSubAnswer) => {
@@ -54,7 +54,11 @@ export const AggregatedTable = ({
                       </td>
                     );
                   }
-                  return <td key={`answer-col-${index}`}>{formatAnswer(answer.answer)}</td>;
+                  return (
+                    <td key={`answer-col-${index}`} className="min-w-64">
+                      {formatAnswer(answer.answer)}
+                    </td>
+                  );
                 })}
             </tr>
           );

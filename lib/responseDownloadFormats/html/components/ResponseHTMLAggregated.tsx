@@ -106,7 +106,9 @@ export const ResponseHtmlAggregated = ({
               ></span>
             </div>
 
-            <AggregatedTable lang={lang} headers={headersForTable} submissions={submissions} />
+            <div className="mt-14 overlow-x-auto">
+              <AggregatedTable lang={lang} headers={headersForTable} submissions={submissions} />
+            </div>
 
             <h2 className="sr-only">
               {t("responseAggregatedTemplate.dataList.title", { lng: lang })}
