@@ -9,7 +9,6 @@ export const DownloadButton = ({
   onSuccessfulDownload,
   downloadError,
   setDownloadError,
-  noSelectedItemsError,
   setNoSelectedItemsError,
   checkedItems,
   responseDownloadLimit,
@@ -18,7 +17,6 @@ export const DownloadButton = ({
   onSuccessfulDownload: () => void;
   downloadError: boolean;
   setDownloadError: React.Dispatch<React.SetStateAction<boolean>>;
-  noSelectedItemsError: boolean;
   setNoSelectedItemsError: React.Dispatch<React.SetStateAction<boolean>>;
   checkedItems: Map<string, boolean>;
   responseDownloadLimit: number;
@@ -34,9 +32,7 @@ export const DownloadButton = ({
 
     // Can't download if none selected
     if (checkedItems.size === 0) {
-      if (!noSelectedItemsError) {
-        setNoSelectedItemsError(true);
-      }
+      setNoSelectedItemsError(true);
       return;
     }
 

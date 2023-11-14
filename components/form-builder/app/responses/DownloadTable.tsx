@@ -320,7 +320,6 @@ export const DownloadTable = ({
           formId={formId}
           downloadError={downloadError}
           setDownloadError={setDownloadError}
-          noSelectedItemsError={noSelectedItemsError}
           setNoSelectedItemsError={setNoSelectedItemsError}
           checkedItems={tableItems.checkedItems}
           responseDownloadLimit={MAX_FILE_DOWNLOADS}
