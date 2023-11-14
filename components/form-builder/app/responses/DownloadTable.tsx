@@ -47,9 +47,9 @@ export const DownloadTable = ({
 }: DownloadTableProps) => {
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
+
   const [errors, setErrors] = useState({
     downloadError: false,
-    maxItemsError: false,
     noItemsError: false,
   });
   const accountEscalated = nagwareResult && nagwareResult.level > 2;
@@ -111,11 +111,6 @@ export const DownloadTable = ({
     }
 
     // Show or hide errors depending
-    if (tableItems.checkedItems.size > MAX_FILE_DOWNLOADS && !errors.maxItemsError) {
-      setErrors({ ...errors, maxItemsError: true });
-    } else if (errors.maxItemsError) {
-      setErrors({ ...errors, maxItemsError: false });
-    }
     if (tableItems.checkedItems.size > 0 && errors.noItemsError) {
       setErrors({ ...errors, noItemsError: false });
     }
@@ -131,11 +126,6 @@ export const DownloadTable = ({
     const nextState = reducerTableItems(tableItems, dispatchAction);
 
     // Show or hide errors depending
-    if (nextState.checkedItems.size > MAX_FILE_DOWNLOADS && !errors.maxItemsError) {
-      setErrors({ ...errors, maxItemsError: true });
-    } else if (errors.maxItemsError) {
-      setErrors({ ...errors, maxItemsError: false });
-    }
     if (nextState.checkedItems.size > 0 && errors.noItemsError) {
       setErrors({ ...errors, noItemsError: false });
     }
@@ -157,9 +147,6 @@ export const DownloadTable = ({
       return;
     }
     if (tableItems.checkedItems.size > MAX_FILE_DOWNLOADS) {
-      if (!errors.maxItemsError) {
-        setErrors({ ...errors, maxItemsError: true });
-      }
       return;
     }
 
