@@ -7,7 +7,7 @@ import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { NextPageWithLayout } from "@pages/_app";
 import { GetServerSideProps } from "next";
-import { FormRecord, VaultSubmissionList } from "@lib/types";
+import { FormRecord, VaultStatus, VaultSubmissionList } from "@lib/types";
 import { listAllSubmissions } from "@lib/vault";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -27,6 +27,8 @@ import { ErrorPanel } from "@components/globals";
 import { ClosedBanner } from "@components/form-builder/app/shared/ClosedBanner";
 import { getAppSetting } from "@lib/appSettings";
 import { DeleteIcon, FolderIcon, InboxIcon } from "@components/form-builder/icons";
+import { logMessage } from "@lib/logger";
+import { useRouter } from "next/router";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -51,6 +53,9 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   const [isShowConfirmReceiptDialog, setIsShowConfirmReceiptDialog] = useState(false);
   const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
   const [isServerError, setIsServerError] = useState(false);
+
+  const router = useRouter();
+  const currentPath = router.asPath;
 
   const { getDeliveryOption, isPublished } = useTemplateStore((s) => ({
     getDeliveryOption: s.getDeliveryOption,
@@ -130,15 +135,15 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
       </h1>
 
       <nav className="my-8 flex gap-3">
-        <button className={navItemClasses}>
+        <Link className={navItemClasses} href={`${currentPath}?status=new`}>
           <InboxIcon className="h-7 w-7 group-hover:fill-white" /> New
-        </button>
-        <button className={navItemClasses}>
+        </Link>
+        <Link className={navItemClasses} href={`${currentPath}?status=downloaded`}>
           <FolderIcon className="h-7 w-7 group-hover:fill-white" /> Downloaded
-        </button>
-        <button className={navItemClasses}>
+        </Link>
+        <Link className={navItemClasses} href={`${currentPath}?status=confirmed`}>
           <DeleteIcon className="h-7 w-7 group-hover:fill-white" /> Deleted
-        </button>
+        </Link>
       </nav>
 
       {/* @TODO: This functionality gets moved elsewhere */}
@@ -239,7 +244,7 @@ Responses.getLayout = (page: ReactElement) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({
-  query: { params },
+  query: { params, ...query },
   locale,
   req,
   res,
@@ -292,7 +297,16 @@ export const getServerSideProps: GetServerSideProps = async ({
         };
       }
 
-      const allSubmissions = await listAllSubmissions(ability, formID);
+      const ucfirst = (string: string) => {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+      };
+
+      let status = VaultStatus.NEW;
+      if (query.status) {
+        status = ucfirst(String(query.status)) as VaultStatus;
+      }
+
+      const allSubmissions = await listAllSubmissions(ability, formID, status);
 
       FormbuilderParams.initialForm = initialForm;
       vaultSubmissions.push(...allSubmissions.submissions);
