@@ -62,7 +62,7 @@ export const AggregatedTable = ({
                                   className="flex"
                                 >
                                   <th className="w-64 p-4">{question}</th>
-                                  <td className="p-4">{formatAnswer(response)}</td>
+                                  <td className="p-4">{formatAnswer(response as string)}</td>
                                 </tr>
                               );
                             });
