@@ -35,11 +35,11 @@ export const ResponseHtmlAggregated = ({
   const submissions = formResponseSubmissions.submissions as Submission[];
 
   const headersForTable = [
-    "Submission number / [fr]Submission number",
-    "Submission date / [fr]Submission date",
-    ...formResponseSubmissions.submissions[0].answers.map((answer) =>
-      String(answer["question" + capitalizedLang])
-    ),
+    { title: "Submission number / [fr]Submission number", type: "formData" },
+    { title: "Submission date / [fr]Submission date", type: "formData" },
+    ...formResponseSubmissions.submissions[0].answers.map((answer) => {
+      return { title: String(answer["question" + capitalizedLang]), type: answer.type };
+    }),
   ];
 
   return (
