@@ -1,7 +1,7 @@
 import React from "react";
 import { Submission } from "@lib/responseDownloadFormats/types";
 
-interface TableHeader {
+export interface TableHeader {
   title: string;
   type: string;
 }

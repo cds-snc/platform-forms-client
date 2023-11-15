@@ -8,6 +8,7 @@ import { AggregatedTable } from "./AggregatedTable";
 import { FormResponseSubmissions, Submission } from "@lib/responseDownloadFormats/types";
 import { customTranslate } from "@lib/responseDownloadFormats/helpers";
 import { copyCodeAndResponseFromTableToClipboardScript } from "../scripts";
+import { TableHeader } from "./AggregatedTable";
 
 interface HTMLDownloadProps {
   lang: string;
@@ -38,7 +39,7 @@ export const ResponseHtmlAggregated = ({
     ...formResponseSubmissions.submissions[0].answers.map((answer) => {
       return { title: String(answer["question" + capitalizedLang]), type: answer.type };
     }),
-  ];
+  ] as TableHeader[];
 
   return (
     <html lang="en">
