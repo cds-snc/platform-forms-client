@@ -51,10 +51,10 @@ const StatusFilterLink = ({
   const [, statusQuery = "new"] = router.query.params || [];
 
   const navItemClasses =
-    "group no-underline !shadow-none border-black border-1 rounded-[100px] pt-1 pb-2 laptop:py-2 px-5 mr-3 mb-0 text-black visited:text-black focus:bg-[#475569] hover:bg-[#475569] hover:!text-white focus:!text-white [&_svg]:focus:fill-white flex flex-row align-baseline items-center gap-2";
+    "group mb-0 mr-3 flex flex-row items-center gap-2 rounded-[100px] border-1 border-black px-5 pb-2 pt-1 align-baseline text-black no-underline !shadow-none visited:text-black hover:bg-[#475569] hover:!text-white focus:bg-[#475569] focus:!text-white laptop:py-2 [&_svg]:focus:fill-white";
 
   const navItemActiveClasses =
-    "group no-underline !shadow-none border-black border-1 rounded-[100px] pt-1 pb-2 laptop:py-2 px-5 mr-3 mb-0 !text-white [&_svg]:fill-white bg-[#26374A] focus:bg-[#26374A] visited:text-black flex flex-row align-baseline items-center gap-2";
+    "group mb-0 mr-3 flex flex-row items-center gap-2 rounded-[100px] border-1 border-black bg-[#26374A] px-5 pb-2 pt-1 align-baseline !text-white no-underline !shadow-none visited:text-black focus:bg-[#26374A] laptop:py-2 [&_svg]:fill-white";
 
   return (
     <Link
