@@ -27,7 +27,6 @@ import { ErrorPanel } from "@components/globals";
 import { ClosedBanner } from "@components/form-builder/app/shared/ClosedBanner";
 import { getAppSetting } from "@lib/appSettings";
 import { DeleteIcon, FolderIcon, InboxIcon } from "@components/form-builder/icons";
-import { logMessage } from "@lib/logger";
 import { useRouter } from "next/router";
 
 interface ResponsesProps {
