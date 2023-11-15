@@ -33,11 +33,16 @@ export const CheckAll = ({
     ALL = "ALL",
   }
 
+  const { checkedItems, sortedItems } = tableItems;
+
+  const checkedItemsCount = checkedItems.size;
+  const sortedItemsCount = sortedItems.length;
+
   // Are all items checked, some items checked, or no items checked?
   const checkAllStatus =
-    tableItems.checkedItems.size === 0
+    checkedItemsCount === 0
       ? allCheckedState.NONE
-      : tableItems.checkedItems.size === tableItems.sortedItems.length
+      : checkedItemsCount === sortedItemsCount
       ? allCheckedState.ALL
       : allCheckedState.SOME;
 
@@ -46,7 +51,7 @@ export const CheckAll = ({
    */
   const handleCheckAll = () => {
     if (checkAllStatus === allCheckedState.NONE) {
-      tableItems.sortedItems.forEach((submission) => {
+      sortedItems.forEach((submission) => {
         tableItemsDispatch({
           type: TableActions.UPDATE,
           payload: { item: { name: submission.name, checked: true } },
@@ -56,7 +61,7 @@ export const CheckAll = ({
         setNoSelectedItemsError(false);
       }
     } else {
-      tableItems.checkedItems.forEach((_, key) => {
+      checkedItems.forEach((_, key) => {
         tableItemsDispatch({
           type: TableActions.UPDATE,
           payload: { item: { name: key, checked: false } },
