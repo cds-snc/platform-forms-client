@@ -27,8 +27,6 @@ import { ErrorPanel } from "@components/globals";
 import { ClosedBanner } from "@components/form-builder/app/shared/ClosedBanner";
 import { getAppSetting } from "@lib/appSettings";
 import { DeleteIcon, FolderIcon, InboxIcon } from "@components/form-builder/icons";
-import { logMessage } from "@lib/logger";
-import { useRouter } from "next/router";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -47,15 +45,12 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   nagwareResult,
   responseDownloadLimit,
 }: ResponsesProps) => {
-  const { t } = useTranslation("form-builder-responses");
+  const { t, i18n } = useTranslation("form-builder-responses");
   const { status } = useSession();
   const isAuthenticated = status === "authenticated";
   const [isShowConfirmReceiptDialog, setIsShowConfirmReceiptDialog] = useState(false);
   const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
   const [isServerError, setIsServerError] = useState(false);
-
-  const router = useRouter();
-  const currentPath = router.asPath;
 
   const { getDeliveryOption, isPublished } = useTemplateStore((s) => ({
     getDeliveryOption: s.getDeliveryOption,
@@ -135,47 +130,25 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
       </h1>
 
       <nav className="my-8 flex gap-3">
-        <Link className={navItemClasses} href={`${currentPath}?status=new`}>
+        <Link
+          className={navItemClasses}
+          href={`/${i18n.language}/form-builder/responses/${formId}/new`}
+        >
           <InboxIcon className="h-7 w-7 group-hover:fill-white" /> New
         </Link>
-        <Link className={navItemClasses} href={`${currentPath}?status=downloaded`}>
+        <Link
+          className={navItemClasses}
+          href={`/${i18n.language}/form-builder/responses/${formId}/downloaded`}
+        >
           <FolderIcon className="h-7 w-7 group-hover:fill-white" /> Downloaded
         </Link>
-        <Link className={navItemClasses} href={`${currentPath}?status=confirmed`}>
+        <Link
+          className={navItemClasses}
+          href={`/${i18n.language}/form-builder/responses/${formId}/deleted`}
+        >
           <DeleteIcon className="h-7 w-7 group-hover:fill-white" /> Deleted
         </Link>
       </nav>
-
-      {/* @TODO: This functionality gets moved elsewhere */}
-      {/* <nav className="flex flex-wrap gap-3">
-        {isAuthenticated && (
-          <button
-            onClick={() => setIsShowConfirmReceiptDialog(true)}
-            className={navItemClasses}
-            disabled={status !== "authenticated"}
-          >
-            {t("responses.confirmReceipt")}
-          </button>
-        )}
-
-        {isAuthenticated && (
-          <button
-            onClick={() => setIsShowReportProblemsDialog(true)}
-            className={navItemClasses}
-            disabled={status !== "authenticated"}
-          >
-            {t("responses.reportProblems")}
-          </button>
-        )}
-
-        {!isPublished && (
-          <Link href="/form-builder/settings" legacyBehavior>
-            <a href="/form-builder/settings" className={`${navItemClasses}`}>
-              {t("responses.changeSetup")}
-            </a>
-          </Link>
-        )}
-      </nav> */}
 
       {nagwareResult && <Nagware nagwareResult={nagwareResult} />}
 
@@ -244,12 +217,12 @@ Responses.getLayout = (page: ReactElement) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({
-  query: { params, ...query },
+  query: { params },
   locale,
   req,
   res,
 }) => {
-  const [formID = null] = params || [];
+  const [formID = null, statusQuery = "new"] = params || [];
 
   const FormbuilderParams: { locale: string; initialForm: null | FormRecord } = {
     initialForm: null,
@@ -301,10 +274,8 @@ export const getServerSideProps: GetServerSideProps = async ({
         return string.charAt(0).toUpperCase() + string.slice(1);
       };
 
-      let status = VaultStatus.NEW;
-      if (query.status) {
-        status = ucfirst(String(query.status)) as VaultStatus;
-      }
+      // get status from url params (default = new) and capitalize/cast to VaultStatus
+      const status = ucfirst(String(statusQuery)) as VaultStatus;
 
       const allSubmissions = await listAllSubmissions(ability, formID, status);
 
