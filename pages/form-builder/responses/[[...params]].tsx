@@ -29,6 +29,7 @@ import { getAppSetting } from "@lib/appSettings";
 import { DeleteIcon, FolderIcon, InboxIcon } from "@components/form-builder/icons";
 import { SubNavLink } from "@components/form-builder/app/navigation/SubNavLink";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -180,15 +181,27 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
               />
             )}
 
-            {vaultSubmissions.length <= 0 && (
+            {vaultSubmissions.length <= 0 && statusQuery === "new" && (
               <Card
-                icon={
-                  <picture>
-                    <img src="/img/mailbox.png" width="193" height="200" alt="" />
-                  </picture>
-                }
-                title={t("downloadResponsesTable.card.noResponses")}
-                content={t("downloadResponsesTable.card.noResponsesToDownload")}
+                icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+                title={t("downloadResponsesTable.card.noNewResponses")}
+                content={t("downloadResponsesTable.card.noNewResponsesMessage")}
+              />
+            )}
+
+            {vaultSubmissions.length <= 0 && statusQuery === "downloaded" && (
+              <Card
+                icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+                title={t("downloadResponsesTable.card.noDownloadedResponses")}
+                content={t("downloadResponsesTable.card.noDownloadedResponsesMessage")}
+              />
+            )}
+
+            {vaultSubmissions.length <= 0 && statusQuery === "deleted" && (
+              <Card
+                icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+                title={t("downloadResponsesTable.card.noDeletedResponses")}
+                content={t("downloadResponsesTable.card.noDeletedResponsesMessage")}
               />
             )}
           </div>

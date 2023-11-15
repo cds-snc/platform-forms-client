@@ -54,8 +54,12 @@
       "notSet": "Non réglée"
     },
     "card": {
-      "noResponses": "Vous n'avez pas de réponses",
-      "noResponsesToDownload": "Il n'y a pas de réponses disponibles pour le téléchargement."
+      "noNewResponses": "Aucune nouvelle réponse",
+      "noNewResponsesMessage": "Les réponses aux formulaires soumis seront disponible dans Formulaires GC pendant 45 jours.",
+      "noDownloadedResponses": "Aucune réponse supprimée",
+      "noDownloadedResponsesMessage": "Une fois les réponses téléchargées, vous devez confirmer leur réception et les supprimer de Formulaires GC.",
+      "noDeletedResponses": "Aucune réponse supprimée",
+      "noDeletedResponsesMessage": "Une fois que vous avez supprimé les réponses, elles restent disponibles pendant 30 jours."
     },
     "notifications": {
       "downloadComplete": "Téléchargement complet",

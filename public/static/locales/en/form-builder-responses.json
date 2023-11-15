@@ -54,8 +54,12 @@
       "notSet": "Not set"
     },
     "card": {
-      "noResponses": "You have no responses",
-      "noResponsesToDownload": "There are no responses available to download."
+      "noNewResponses": "No new new responses",
+      "noNewResponsesMessage": "Submitted form responses will be available in GC Forms to retrieve for 45 days.",
+      "noDownloadedResponses": "No downloaded responses",
+      "noDownloadedResponsesMessage": "Once you’ve downloaded responses, you’ll need to confirm their receipt and delete them from GC Forms.",
+      "noDeletedResponses": "No deleted responses",
+      "noDeletedResponsesMessage": "Once you’ve deleted responses, they will be available for 30 days."
     },
     "notifications": {
       "downloadComplete": "Download complete",
