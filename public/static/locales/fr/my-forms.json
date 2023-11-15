@@ -65,11 +65,6 @@
   },
   "responseAggregatedTemplate": {
     "title": "Réponse au formulaire",
-    "copyTable": {
-      "title":"Récupérez les réponses au formulaire",
-      "description": "Transférez les réponses au formulaire sélectionné dans une feuille de calcul en copiant l'ensemble du tableau.",
-      "copyButton": "Copier le tableau de réponses"
-    },
     "copyCodes": {
       "title":"Confirmez et supprimez les réponses de Formulaires GC",
       "description": "Une fois que vous avez vérifié les réponses téléchargées et que vous êtes prêt à les supprimer de Formulaires GC, copiez et collez les codes de confirmation. Cela nous permet de savoir quand les réponses vous ont été transférées et d’enlever les données de notre système.",

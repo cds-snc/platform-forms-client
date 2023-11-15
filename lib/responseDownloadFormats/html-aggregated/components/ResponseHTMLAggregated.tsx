@@ -61,28 +61,6 @@ export const ResponseHtmlAggregated = ({
             <h1 className="mt-14">{`${form.titleEn} - ${form.titleFr}`}</h1>
 
             <h2>{t("responseAggregatedTemplate.title", { lng: lang })}</h2>
-            <h3 id={`rowTable${capitalizedLang}`} className="gc-h2 mt-20" tabIndex={-1}>
-              {t("responseAggregatedTemplate.copyTable.title", { lng: lang })}
-            </h3>
-            <p className="mt-8">
-              {t("responseAggregatedTemplate.copyTable.description", { lng: lang })}
-            </p>
-            <div className="mb-8 mt-4">
-              <button
-                id={`copyResponseButton${capitalizedLang}`}
-                aria-labelledby={`copyResponseLabel${capitalizedLang}`}
-                className="gc-button--blue"
-                type="button"
-                data-clipboard-text=""
-              >
-                {t("responseAggregatedTemplate.copyTable.copyButton", { lng: lang })}
-              </button>
-              <span
-                id={`copyResponseOutput${capitalizedLang}`}
-                aria-live="polite"
-                className="ml-8 hidden text-green"
-              ></span>
-            </div>
 
             <h3 className="mt-14">
               {t("responseAggregatedTemplate.copyCodes.title", { lng: lang })}
@@ -90,7 +68,7 @@ export const ResponseHtmlAggregated = ({
             <p className="mt-8">
               {t("responseAggregatedTemplate.copyCodes.description", { lng: lang })}
             </p>
-            <div className="mt-4 mb-14">
+            <div className="mt-8 mb-14">
               <button
                 id={`copyCodeButton${capitalizedLang}`}
                 className="gc-button--blue"

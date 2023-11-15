@@ -1,5 +1,4 @@
 import React from "react";
-import { customTranslate } from "../helpers";
 
 // TODO refactor clipboardjs and javascript styling code into separate functions
 export const CopyToClipboardScript = React.createElement("script", {
