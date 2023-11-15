@@ -44,7 +44,7 @@ export const SubNavLink = ({
         }
       }
     }
-  }, [asPath, isReady, href, setActive, activePathname]);
+  }, [asPath, isReady, href, setActive, activePathname, defaultActive]);
 
   return (
     <Link href={href} legacyBehavior>
