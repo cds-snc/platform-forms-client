@@ -1,5 +1,5 @@
 import React from "react";
-import { CopyToClipboardScript } from "../../html/scripts";
+import { ClipboardJSScript } from "../../html/scripts";
 import { ProtectedWarning } from "../../html/components/ProtectedWarning";
 import Fip from "../../html/components/Fip";
 import { css } from "../../html/css/compiled";
@@ -7,7 +7,7 @@ import { ColumnTable } from "../../html/components/ColumnTable";
 import { AggregatedTable } from "./AggregatedTable";
 import { FormResponseSubmissions, Submission } from "@lib/responseDownloadFormats/types";
 import { customTranslate } from "@lib/responseDownloadFormats/helpers";
-import { copyCodeAndResponseFromTableToClipboardScript } from "../scripts";
+import { copyCodeToClipboardScript } from "../scripts";
 import { TableHeader } from "./AggregatedTable";
 
 interface HTMLDownloadProps {
@@ -112,10 +112,11 @@ export const ResponseHtmlAggregated = ({
               })}
           </main>
         </div>
-      </body>
-      {CopyToClipboardScript}
 
-      {copyCodeAndResponseFromTableToClipboardScript(lang)}
+        {ClipboardJSScript}
+
+        {copyCodeToClipboardScript(lang)}
+      </body>
     </html>
   );
 };
