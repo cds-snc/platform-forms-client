@@ -170,7 +170,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
 
       {isAuthenticated && (
         <>
-          <div>
+          <div aria-live="polite">
             <ClosedBanner id={formId} />
             {vaultSubmissions.length > 0 && (
               <DownloadTable
