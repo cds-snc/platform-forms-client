@@ -5,7 +5,7 @@ import { cn } from "@lib/utils";
 interface TooltipProps {
   text: string;
   className?: string;
-  children: React.ReactNode;
+  children: React.ReactNode | string;
   side?: "left" | "right" | "top" | "bottom";
 }
 
@@ -13,7 +13,9 @@ export const Tooltip = ({ text, children, className = "", side = "left" }: Toolt
   return (
     <TooltipPrimitive.Provider>
       <TooltipPrimitive.Root>
-        <TooltipPrimitive.Trigger asChild>{children}</TooltipPrimitive.Trigger>
+        <TooltipPrimitive.Trigger asChild>
+          <span>{children}</span>
+        </TooltipPrimitive.Trigger>
         <TooltipPrimitive.Content
           sideOffset={4}
           side={side}
