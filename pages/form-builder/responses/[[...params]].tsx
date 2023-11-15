@@ -36,6 +36,36 @@ interface ResponsesProps {
   responseDownloadLimit: number;
 }
 
+const StatusFilterLink = ({
+  status,
+  children,
+  language,
+  formId,
+}: {
+  status: string;
+  children: React.ReactNode;
+  language: string;
+  formId: string;
+}) => {
+  const router = useRouter();
+  const [, statusQuery = "new"] = router.query.params || [];
+
+  const navItemClasses =
+    "group no-underline !shadow-none border-black border-1 rounded-[100px] pt-1 pb-2 laptop:py-2 px-5 mr-3 mb-0 text-black visited:text-black focus:bg-[#475569] hover:bg-[#475569] hover:!text-white focus:!text-white [&_svg]:focus:fill-white flex flex-row align-baseline items-center gap-2";
+
+  const navItemActiveClasses =
+    "group no-underline !shadow-none border-black border-1 rounded-[100px] pt-1 pb-2 laptop:py-2 px-5 mr-3 mb-0 !text-white [&_svg]:fill-white bg-[#26374A] focus:bg-[#26374A] visited:text-black flex flex-row align-baseline items-center gap-2";
+
+  return (
+    <Link
+      className={`${statusQuery === status ? navItemActiveClasses : navItemClasses}`}
+      href={`/${language}/form-builder/responses/${formId}/${status}`}
+    >
+      {children}
+    </Link>
+  );
+};
+
 // TODO: move to an app setting variable
 const MAX_CONFIRMATION_COUNT = 20;
 const MAX_REPORT_COUNT = 20;
@@ -59,15 +89,6 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   }));
 
   const deliveryOption = getDeliveryOption();
-
-  const navItemClasses =
-    "group no-underline !shadow-none border-black border-1 rounded-[100px] pt-1 pb-2 laptop:py-2 px-5 mr-3 mb-0 text-black visited:text-black focus:bg-[#475569] hover:bg-[#475569] hover:!text-white focus:!text-white [&_svg]:focus:fill-white flex flex-row align-baseline items-center gap-2";
-
-  const navItemActiveClasses =
-    "group no-underline !shadow-none border-black border-1 rounded-[100px] pt-1 pb-2 laptop:py-2 px-5 mr-3 mb-0 !text-white [&_svg]:fill-white bg-[#26374A] focus:bg-[#26374A] visited:text-black flex flex-row align-baseline items-center gap-2";
-
-  const router = useRouter();
-  const [, statusQuery = "new"] = router.query.params || [];
 
   if (!isAuthenticated) {
     return (
@@ -95,7 +116,10 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           <nav className="flex gap-3">
             {!isPublished && (
               <Link href="/form-builder/settings" legacyBehavior>
-                <a href="/form-builder/settings" className={`${navItemClasses}`}>
+                <a
+                  href="/form-builder/settings"
+                  className="mb-0 mr-3 rounded-[100px] border-1 border-black px-5 pb-2 pt-1 text-black no-underline !shadow-none visited:text-black hover:bg-[#475569] hover:!text-white focus:bg-[#475569] focus:!text-white laptop:py-2 [&_svg]:focus:fill-white"
+                >
                   {t("responses.changeSetup")}
                 </a>
               </Link>
@@ -137,24 +161,15 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
       </h1>
 
       <nav className="my-8 flex gap-3">
-        <Link
-          className={`${statusQuery === "new" ? navItemActiveClasses : navItemClasses}`}
-          href={`/${i18n.language}/form-builder/responses/${formId}/new`}
-        >
+        <StatusFilterLink status="new" language={i18n.language} formId={formId}>
           <InboxIcon className="h-7 w-7 group-hover:fill-white" /> New
-        </Link>
-        <Link
-          className={`${statusQuery === "downloaded" ? navItemActiveClasses : navItemClasses}`}
-          href={`/${i18n.language}/form-builder/responses/${formId}/downloaded`}
-        >
+        </StatusFilterLink>
+        <StatusFilterLink status="downloaded" language={i18n.language} formId={formId}>
           <FolderIcon className="h-7 w-7 group-hover:fill-white" /> Downloaded
-        </Link>
-        <Link
-          className={`${statusQuery === "deleted" ? navItemActiveClasses : navItemClasses}`}
-          href={`/${i18n.language}/form-builder/responses/${formId}/deleted`}
-        >
+        </StatusFilterLink>
+        <StatusFilterLink status="deleted" language={i18n.language} formId={formId}>
           <DeleteIcon className="h-7 w-7 group-hover:fill-white" /> Deleted
-        </Link>
+        </StatusFilterLink>
       </nav>
 
       {nagwareResult && <Nagware nagwareResult={nagwareResult} />}
