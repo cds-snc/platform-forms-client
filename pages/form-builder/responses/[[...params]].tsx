@@ -166,7 +166,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         </StatusFilterLink>
         <StatusFilterLink status="downloaded" language={i18n.language} formId={formId}>
           <FolderIcon className="h-7 w-7 group-hover:fill-white" />{" "}
-          {t("responses.status.dowmloaded")}
+          {t("responses.status.downloaded")}
         </StatusFilterLink>
         <StatusFilterLink status="deleted" language={i18n.language} formId={formId}>
           <DeleteIcon className="h-7 w-7 group-hover:fill-white" /> {t("responses.status.deleted")}
