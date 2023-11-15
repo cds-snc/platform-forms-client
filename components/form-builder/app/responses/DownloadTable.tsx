@@ -27,12 +27,14 @@ import { CheckAll } from "./CheckAll";
 import { DownloadButton } from "./DownloadButton";
 import { toast } from "../shared";
 import { MoreMenu } from "./MoreMenu";
+import { logMessage } from "@lib/logger";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
   formId: string;
   nagwareResult: NagwareResult | null;
   responseDownloadLimit: number;
+  setShowBottomPanel: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const DownloadTable = ({
@@ -40,6 +42,7 @@ export const DownloadTable = ({
   formId,
   nagwareResult,
   responseDownloadLimit,
+  setShowBottomPanel,
 }: DownloadTableProps) => {
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
@@ -74,9 +77,11 @@ export const DownloadTable = ({
     // Needed because of how useReducer updates state on the next render vs. inside this function..
     const nextState = reducerTableItems(tableItems, dispatchAction);
 
-    // Show or hide errors depending
-    if (nextState.checkedItems.size > 0 && noSelectedItemsError) {
+    if (nextState.checkedItems.size > 0) {
       setNoSelectedItemsError(false);
+      setShowBottomPanel(true);
+    } else {
+      setShowBottomPanel(false);
     }
   };
 

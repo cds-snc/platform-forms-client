@@ -23,7 +23,7 @@ import { useTemplateStore } from "@components/form-builder/store";
 import { LoggedOutTabName, LoggedOutTab } from "@components/form-builder/app/LoggedOutTab";
 import Head from "next/head";
 import { FormBuilderLayout } from "@components/globals/layouts/FormBuilderLayout";
-import { ErrorPanel } from "@components/globals";
+import { Button, ErrorPanel } from "@components/globals";
 import { ClosedBanner } from "@components/form-builder/app/shared/ClosedBanner";
 import { getAppSetting } from "@lib/appSettings";
 import { DeleteIcon, FolderIcon, InboxIcon } from "@components/form-builder/icons";
@@ -53,6 +53,8 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   const isAuthenticated = status === "authenticated";
   const [isShowConfirmReceiptDialog, setIsShowConfirmReceiptDialog] = useState(false);
   const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
+  const [showBottomPanel, setShowBottomPanel] = useState(false);
+
   const [isServerError, setIsServerError] = useState(false);
 
   const router = useRouter();
@@ -178,6 +180,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
                 formId={formId}
                 nagwareResult={nagwareResult}
                 responseDownloadLimit={responseDownloadLimit}
+                setShowBottomPanel={setShowBottomPanel}
               />
             )}
 
@@ -236,6 +239,17 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         apiUrl={`/api/id/${formId}/submission/report`}
         maxEntries={MAX_REPORT_COUNT}
       />
+
+      {showBottomPanel && (
+        <section className="fixed bottom-0 left-0 h-32 w-full border-t-2 border-black bg-white py-8">
+          <div className="mx-4 laptop:mx-32 desktop:mx-64">
+            <div className="ml-[210px] flex gap-4">
+              <Button theme="primary">Download selected</Button>
+              <Button theme="destructive">Delete selected</Button>
+            </div>
+          </div>
+        </section>
+      )}
     </>
   );
 };
