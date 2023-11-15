@@ -162,13 +162,14 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
 
       <nav className="my-8 flex gap-3">
         <StatusFilterLink status="new" language={i18n.language} formId={formId}>
-          <InboxIcon className="h-7 w-7 group-hover:fill-white" /> New
+          <InboxIcon className="h-7 w-7 group-hover:fill-white" /> {t("responses.status.new")}
         </StatusFilterLink>
         <StatusFilterLink status="downloaded" language={i18n.language} formId={formId}>
-          <FolderIcon className="h-7 w-7 group-hover:fill-white" /> Downloaded
+          <FolderIcon className="h-7 w-7 group-hover:fill-white" />{" "}
+          {t("responses.status.dowmloaded")}
         </StatusFilterLink>
         <StatusFilterLink status="deleted" language={i18n.language} formId={formId}>
-          <DeleteIcon className="h-7 w-7 group-hover:fill-white" /> Deleted
+          <DeleteIcon className="h-7 w-7 group-hover:fill-white" /> {t("responses.status.deleted")}
         </StatusFilterLink>
       </nav>
 

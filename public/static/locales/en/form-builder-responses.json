@@ -17,6 +17,11 @@
       "title": "Email response settings",
       "submitTo": "Submitted responses are sent to:",
       "subjectLine": "Subject line will appear as:"
+    },
+    "status": {
+      "new": "New",
+      "downloaded": "Downloaded",
+      "deleted": "Deleted"
     }
   },
   "downloadResponsesTable": {

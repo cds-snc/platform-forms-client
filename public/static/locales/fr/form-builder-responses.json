@@ -17,6 +17,11 @@
       "title": "Paramètres des réponses courriel",
       "submitTo": "Les réponses soumises sont envoyées à :",
       "subjectLine": "La ligne d’objet apparaîtra comme :"
+    },
+    "status": {
+      "new": "Nouveautés",
+      "downloaded": "Téléchargements",
+      "deleted": "Supprimés"
     }
   },
   "downloadResponsesTable": {
