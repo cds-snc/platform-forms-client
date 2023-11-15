@@ -6,16 +6,17 @@ interface TooltipProps {
   text: string;
   className?: string;
   children: React.ReactNode;
+  side?: "left" | "right" | "top" | "bottom";
 }
 
-export const Tooltip = ({ text, children, className = "" }: TooltipProps) => {
+export const Tooltip = ({ text, children, className = "", side = "left" }: TooltipProps) => {
   return (
     <TooltipPrimitive.Provider>
       <TooltipPrimitive.Root>
         <TooltipPrimitive.Trigger asChild>{children}</TooltipPrimitive.Trigger>
         <TooltipPrimitive.Content
           sideOffset={4}
-          side="left"
+          side={side}
           className={cn("inline-flex items-center rounded-md px-4 py-2 bg-slate-800", className)}
         >
           <TooltipPrimitive.Arrow className="fill-current" />

@@ -3,10 +3,11 @@ import {
   CheckBoxEmptyIcon,
   CheckIndeterminateIcon,
 } from "@components/form-builder/icons";
-import { TypeOmit, VaultSubmission } from "@lib/types";
+import { VaultSubmissionList } from "@lib/types";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { ReducerTableItemsActions, TableActions } from "./DownloadTableReducer";
+import { Tooltip } from "../shared/Tooltip";
 
 export const CheckAll = ({
   tableItems,
@@ -17,10 +18,7 @@ export const CheckAll = ({
   tableItems: {
     checkedItems: Map<string, boolean>;
     statusItems: Map<string, boolean>;
-    sortedItems: TypeOmit<
-      VaultSubmission,
-      "formSubmission" | "submissionID" | "confirmationCode"
-    >[];
+    sortedItems: VaultSubmissionList[];
     numberOfOverdueResponses: number;
   };
   tableItemsDispatch: React.Dispatch<ReducerTableItemsActions>;
@@ -35,25 +33,19 @@ export const CheckAll = ({
     ALL = "ALL",
   }
 
-  /**
-   * Are all items checked, some items checked, or no items checked?
-   * @returns {allCheckedState} The current state of the checked items.
-   */
-  const checkAllStatus = () => {
-    if (tableItems.checkedItems.size === 0) {
-      return allCheckedState.NONE;
-    }
-    if (tableItems.checkedItems.size === tableItems.sortedItems.length) {
-      return allCheckedState.ALL;
-    }
-    return allCheckedState.SOME;
-  };
+  // Are all items checked, some items checked, or no items checked?
+  const checkAllStatus =
+    tableItems.checkedItems.size === 0
+      ? allCheckedState.NONE
+      : tableItems.checkedItems.size === tableItems.sortedItems.length
+      ? allCheckedState.ALL
+      : allCheckedState.SOME;
 
   /**
    * Check all items if none are checked, otherwise uncheck all items.
    */
   const handleCheckAll = () => {
-    if (checkAllStatus() === allCheckedState.NONE) {
+    if (checkAllStatus === allCheckedState.NONE) {
       tableItems.sortedItems.forEach((submission) => {
         tableItemsDispatch({
           type: TableActions.UPDATE,
@@ -73,43 +65,41 @@ export const CheckAll = ({
     }
   };
 
+  const tooltip =
+    checkAllStatus === allCheckedState.NONE
+      ? t("downloadResponsesTable.header.selectAll")
+      : t("downloadResponsesTable.header.deselectAll");
+
   return (
-    <span
-      className="cursor-pointer"
-      role="checkbox"
-      aria-checked={
-        checkAllStatus() === allCheckedState.ALL
-          ? "true"
-          : checkAllStatus() === allCheckedState.SOME
-          ? "mixed"
-          : "false"
-      }
-      tabIndex={0}
-      onClick={handleCheckAll}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          handleCheckAll();
+    <Tooltip text={tooltip} side="top">
+      <span
+        className="m-auto inline-block cursor-pointer"
+        role="checkbox"
+        aria-checked={
+          checkAllStatus === allCheckedState.ALL
+            ? "true"
+            : checkAllStatus === allCheckedState.SOME
+            ? "mixed"
+            : "false"
         }
-      }}
-    >
-      {checkAllStatus() === allCheckedState.ALL && (
-        <CheckAllIcon
-          title={t("downloadResponsesTable.header.deselectAll")}
-          className="m-auto h-6 w-6"
-        />
-      )}
-      {checkAllStatus() === allCheckedState.SOME && (
-        <CheckIndeterminateIcon
-          title={t("downloadResponsesTable.header.deselectAll")}
-          className="m-auto h-6 w-6"
-        />
-      )}
-      {checkAllStatus() === allCheckedState.NONE && (
-        <CheckBoxEmptyIcon
-          title={t("downloadResponsesTable.header.selectAll")}
-          className="m-auto h-6 w-6"
-        />
-      )}
-    </span>
+        tabIndex={0}
+        onClick={handleCheckAll}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            handleCheckAll();
+          }
+        }}
+      >
+        {checkAllStatus === allCheckedState.ALL && (
+          <CheckAllIcon title={tooltip} className="h-6 w-6" />
+        )}
+        {checkAllStatus === allCheckedState.SOME && (
+          <CheckIndeterminateIcon title={tooltip} className="h-6 w-6" />
+        )}
+        {checkAllStatus === allCheckedState.NONE && (
+          <CheckBoxEmptyIcon title={tooltip} className="h-6 w-6" />
+        )}
+      </span>
+    </Tooltip>
   );
 };
