@@ -46,33 +46,6 @@ export const DownloadButton = ({
       })
     );
 
-    // Download an aggregated version of all the records
-    if (checkedItems.size > 1) {
-      const urlAggregated = `/api/id/${formId}/submissions/download?format=html-aggregated`;
-      const ids = Array.from(checkedItems.keys());
-      axios({
-        url: urlAggregated,
-        method: "POST",
-        data: {
-          ids: ids.join(","),
-          // TODO temp for testing. need to determin how to handle languages
-          lang: "fr",
-        },
-      }).then((response) => {
-        const fileName = `${formId}.html`;
-        const href = window.URL.createObjectURL(new Blob([response.data]));
-        const anchorElement = document.createElement("a");
-        anchorElement.href = href;
-        anchorElement.download = fileName;
-        document.body.appendChild(anchorElement);
-        anchorElement.click();
-        document.body.removeChild(anchorElement);
-        window.URL.revokeObjectURL(href);
-      });
-
-      return; //TODO TEMP - when/where to download the aggregated file
-    }
-
     const url = `/api/id/${formId}/submissions/download?format=html`;
     const ids = Array.from(checkedItems.keys());
 
