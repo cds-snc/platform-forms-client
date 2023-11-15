@@ -2,7 +2,6 @@ import Link from "next/link";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useActivePathname } from "../../hooks/useActivePathname";
 import { cn } from "@lib/utils";
-import { logMessage } from "@lib/logger";
 
 export const SubNavLink = ({
   href,
