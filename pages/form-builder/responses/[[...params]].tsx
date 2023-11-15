@@ -110,7 +110,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           <title>{t("responses.email.title")}</title>
         </Head>
         <div className="mb-8 flex flex-wrap items-baseline">
-          <h1 className="mb-0 border-none tablet:mb-4 tablet:mr-8">
+          <h1 className="mb-0 border-none tablet:mb-4">
             {isAuthenticated ? t("responses.email.title") : t("responses.unauthenticated.title")}
           </h1>
           <nav className="flex gap-3">
