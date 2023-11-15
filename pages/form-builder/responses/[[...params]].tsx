@@ -27,6 +27,7 @@ import { ErrorPanel } from "@components/globals";
 import { ClosedBanner } from "@components/form-builder/app/shared/ClosedBanner";
 import { getAppSetting } from "@lib/appSettings";
 import { DeleteIcon, FolderIcon, InboxIcon } from "@components/form-builder/icons";
+import { SubNavLink } from "@components/form-builder/app/navigation/SubNavLink";
 import { useRouter } from "next/router";
 
 interface ResponsesProps {
@@ -35,36 +36,6 @@ interface ResponsesProps {
   nagwareResult: NagwareResult | null;
   responseDownloadLimit: number;
 }
-
-const StatusFilterLink = ({
-  status,
-  children,
-  language,
-  formId,
-}: {
-  status: string;
-  children: React.ReactNode;
-  language: string;
-  formId: string;
-}) => {
-  const router = useRouter();
-  const [, statusQuery = "new"] = router.query.params || [];
-
-  const navItemClasses =
-    "group mb-0 mr-3 flex flex-row items-center gap-2 rounded-[100px] border-1 border-black px-5 pb-2 pt-1 align-baseline text-black no-underline !shadow-none visited:text-black hover:bg-[#475569] hover:!text-white focus:bg-[#475569] focus:!text-white laptop:py-2 [&_svg]:focus:fill-white";
-
-  const navItemActiveClasses =
-    "group mb-0 mr-3 flex flex-row items-center gap-2 rounded-[100px] border-1 border-black bg-[#26374A] px-5 pb-2 pt-1 align-baseline !text-white no-underline !shadow-none visited:text-black focus:bg-[#26374A] laptop:py-2 [&_svg]:fill-white";
-
-  return (
-    <Link
-      className={`${statusQuery === status ? navItemActiveClasses : navItemClasses}`}
-      href={`/${language}/form-builder/responses/${formId}/${status}`}
-    >
-      {children}
-    </Link>
-  );
-};
 
 // TODO: move to an app setting variable
 const MAX_CONFIRMATION_COUNT = 20;
@@ -76,12 +47,15 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   nagwareResult,
   responseDownloadLimit,
 }: ResponsesProps) => {
-  const { t, i18n } = useTranslation("form-builder-responses");
+  const { t } = useTranslation("form-builder-responses");
   const { status } = useSession();
   const isAuthenticated = status === "authenticated";
   const [isShowConfirmReceiptDialog, setIsShowConfirmReceiptDialog] = useState(false);
   const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
   const [isServerError, setIsServerError] = useState(false);
+
+  const router = useRouter();
+  const [, statusQuery = "new"] = router.query.params || [];
 
   const { getDeliveryOption, isPublished } = useTemplateStore((s) => ({
     getDeliveryOption: s.getDeliveryOption,
@@ -160,17 +134,31 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         {isAuthenticated ? t("responses.title") : t("responses.unauthenticated.title")}
       </h1>
 
-      <nav className="my-8 flex gap-3">
-        <StatusFilterLink status="new" language={i18n.language} formId={formId}>
-          <InboxIcon className="h-7 w-7 group-hover:fill-white" /> {t("responses.status.new")}
-        </StatusFilterLink>
-        <StatusFilterLink status="downloaded" language={i18n.language} formId={formId}>
-          <FolderIcon className="h-7 w-7 group-hover:fill-white" />{" "}
-          {t("responses.status.downloaded")}
-        </StatusFilterLink>
-        <StatusFilterLink status="deleted" language={i18n.language} formId={formId}>
-          <DeleteIcon className="h-7 w-7 group-hover:fill-white" /> {t("responses.status.deleted")}
-        </StatusFilterLink>
+      <nav className="my-8 flex flex-wrap" aria-label={t("responses.navLabel")}>
+        <SubNavLink
+          href={`/form-builder/responses/${formId}/new`}
+          setAriaCurrent={statusQuery === "new"}
+        >
+          <span className="text-sm laptop:text-base">
+            <InboxIcon className="inline-block h-7 w-7" /> {t("responses.status.new")}
+          </span>
+        </SubNavLink>
+        <SubNavLink
+          href={`/form-builder/responses/${formId}/downloaded`}
+          setAriaCurrent={statusQuery === "downloaded"}
+        >
+          <span className="text-sm laptop:text-base">
+            <FolderIcon className="inline-block h-7 w-7" /> {t("responses.status.downloaded")}
+          </span>
+        </SubNavLink>
+        <SubNavLink
+          href={`/form-builder/responses/${formId}/deleted`}
+          setAriaCurrent={statusQuery === "deleted"}
+        >
+          <span className="text-sm laptop:text-base">
+            <DeleteIcon className="inline-block h-7 w-7" /> {t("responses.status.deleted")}
+          </span>
+        </SubNavLink>
       </nav>
 
       {nagwareResult && <Nagware nagwareResult={nagwareResult} />}
