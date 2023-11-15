@@ -39,10 +39,12 @@ export const SubNavLink = ({
       if (linkPathname === activePathname) {
         setActive(true);
       } else {
-        setActive(false);
+        if (!defaultActive) {
+          setActive(false);
+        }
       }
     }
-  }, [asPath, isReady, href, setActive, activePathname]);
+  }, [asPath, isReady, href, setActive, activePathname, defaultActive]);
 
   return (
     <Link href={href} legacyBehavior>

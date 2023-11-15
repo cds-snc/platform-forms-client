@@ -83,6 +83,7 @@ export const DownloadButton = ({
 
   return (
     <button
+      id="downloadTableButtonId"
       className="gc-button--blue m-0 w-auto whitespace-nowrap"
       aria-live="polite"
       onClick={handleDownload}

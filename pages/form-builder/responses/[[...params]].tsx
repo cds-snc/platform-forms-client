@@ -7,7 +7,7 @@ import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { NextPageWithLayout } from "@pages/_app";
 import { GetServerSideProps } from "next";
-import { FormRecord, VaultSubmissionList } from "@lib/types";
+import { FormRecord, VaultStatus, VaultSubmissionList } from "@lib/types";
 import { listAllSubmissions } from "@lib/vault";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -26,6 +26,10 @@ import { FormBuilderLayout } from "@components/globals/layouts/FormBuilderLayout
 import { ErrorPanel } from "@components/globals";
 import { ClosedBanner } from "@components/form-builder/app/shared/ClosedBanner";
 import { getAppSetting } from "@lib/appSettings";
+import { DeleteIcon, FolderIcon, InboxIcon } from "@components/form-builder/icons";
+import { SubNavLink } from "@components/form-builder/app/navigation/SubNavLink";
+import { useRouter } from "next/router";
+import Image from "next/image";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -51,15 +55,15 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
   const [isServerError, setIsServerError] = useState(false);
 
+  const router = useRouter();
+  const [, statusQuery = "new"] = router.query.params || [];
+
   const { getDeliveryOption, isPublished } = useTemplateStore((s) => ({
     getDeliveryOption: s.getDeliveryOption,
     isPublished: s.isPublished,
   }));
 
   const deliveryOption = getDeliveryOption();
-
-  const navItemClasses =
-    "no-underline !shadow-none border-black border-1 rounded-[100px] pt-1 pb-2 laptop:py-2 px-5 mr-3 mb-0 text-black visited:text-black focus:bg-[#475569] hover:bg-[#475569] hover:!text-white focus:!text-white [&_svg]:focus:fill-white";
 
   if (!isAuthenticated) {
     return (
@@ -80,14 +84,17 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         <Head>
           <title>{t("responses.email.title")}</title>
         </Head>
-        <div className="flex flex-wrap items-baseline mb-8">
-          <h1 className="border-none mb-0 tablet:mb-4 tablet:mr-8">
+        <div className="mb-8 flex flex-wrap items-baseline">
+          <h1 className="mb-0 border-none tablet:mb-4">
             {isAuthenticated ? t("responses.email.title") : t("responses.unauthenticated.title")}
           </h1>
           <nav className="flex gap-3">
             {!isPublished && (
               <Link href="/form-builder/settings" legacyBehavior>
-                <a href="/form-builder/settings" className={`${navItemClasses}`}>
+                <a
+                  href="/form-builder/settings"
+                  className="mb-0 mr-3 rounded-[100px] border-1 border-black px-5 pb-2 pt-1 text-black no-underline !shadow-none visited:text-black hover:bg-[#475569] hover:!text-white focus:bg-[#475569] focus:!text-white laptop:py-2 [&_svg]:focus:fill-white"
+                >
                   {t("responses.changeSetup")}
                 </a>
               </Link>
@@ -110,8 +117,8 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         <Head>
           <title>{t("responses.title")}</title>
         </Head>
-        <div className="flex flex-wrap items-baseline mb-8">
-          <h1 className="border-none mb-0 tablet:mb-4 tablet:mr-8">{t("responses.title")}</h1>
+        <div className="mb-8 flex flex-wrap items-baseline">
+          <h1 className="mb-0 border-none tablet:mb-4 tablet:mr-8">{t("responses.title")}</h1>
           <ErrorPanel supportLink={false}>{t("server-error", { ns: "common" })}</ErrorPanel>
         </div>
       </>
@@ -123,47 +130,47 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
       <Head>
         <title>{t("responses.title")}</title>
       </Head>
-      <div className="flex flex-wrap items-baseline mb-8">
-        <h1 className="border-none mb-0 tablet:mb-4 tablet:mr-8">
-          {isAuthenticated ? t("responses.title") : t("responses.unauthenticated.title")}
-        </h1>
 
-        <nav className="flex flex-wrap gap-3">
-          {isAuthenticated && (
-            <button
-              onClick={() => setIsShowConfirmReceiptDialog(true)}
-              className={navItemClasses}
-              disabled={status !== "authenticated"}
-            >
-              {t("responses.confirmReceipt")}
-            </button>
-          )}
+      <h1 className="mb-0 border-none tablet:mb-4 tablet:mr-8">
+        {isAuthenticated ? t("responses.title") : t("responses.unauthenticated.title")}
+      </h1>
 
-          {isAuthenticated && (
-            <button
-              onClick={() => setIsShowReportProblemsDialog(true)}
-              className={navItemClasses}
-              disabled={status !== "authenticated"}
-            >
-              {t("responses.reportProblems")}
-            </button>
-          )}
-
-          {!isPublished && (
-            <Link href="/form-builder/settings" legacyBehavior>
-              <a href="/form-builder/settings" className={`${navItemClasses}`}>
-                {t("responses.changeSetup")}
-              </a>
-            </Link>
-          )}
-        </nav>
-      </div>
+      <nav className="my-8 flex flex-wrap" aria-label={t("responses.navLabel")}>
+        <SubNavLink
+          id="new-responses"
+          defaultActive={statusQuery === "new"}
+          href={`/form-builder/responses/${formId}/new`}
+          setAriaCurrent={true}
+        >
+          <span className="text-sm laptop:text-base">
+            <InboxIcon className="inline-block h-7 w-7" /> {t("responses.status.new")}
+          </span>
+        </SubNavLink>
+        <SubNavLink
+          id="downloaded-responses"
+          href={`/form-builder/responses/${formId}/downloaded`}
+          setAriaCurrent={true}
+        >
+          <span className="text-sm laptop:text-base">
+            <FolderIcon className="inline-block h-7 w-7" /> {t("responses.status.downloaded")}
+          </span>
+        </SubNavLink>
+        <SubNavLink
+          id="deleted-responses"
+          href={`/form-builder/responses/${formId}/deleted`}
+          setAriaCurrent={true}
+        >
+          <span className="text-sm laptop:text-base">
+            <DeleteIcon className="inline-block h-7 w-7" /> {t("responses.status.deleted")}
+          </span>
+        </SubNavLink>
+      </nav>
 
       {nagwareResult && <Nagware nagwareResult={nagwareResult} />}
 
       {isAuthenticated && (
         <>
-          <div>
+          <div aria-live="polite">
             <ClosedBanner id={formId} />
             {vaultSubmissions.length > 0 && (
               <DownloadTable
@@ -174,15 +181,27 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
               />
             )}
 
-            {vaultSubmissions.length <= 0 && (
+            {vaultSubmissions.length <= 0 && statusQuery === "new" && (
               <Card
-                icon={
-                  <picture>
-                    <img src="/img/mailbox.png" width="193" height="200" alt="" />
-                  </picture>
-                }
-                title={t("downloadResponsesTable.card.noResponses")}
-                content={t("downloadResponsesTable.card.noResponsesToDownload")}
+                icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+                title={t("downloadResponsesTable.card.noNewResponses")}
+                content={t("downloadResponsesTable.card.noNewResponsesMessage")}
+              />
+            )}
+
+            {vaultSubmissions.length <= 0 && statusQuery === "downloaded" && (
+              <Card
+                icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+                title={t("downloadResponsesTable.card.noDownloadedResponses")}
+                content={t("downloadResponsesTable.card.noDownloadedResponsesMessage")}
+              />
+            )}
+
+            {vaultSubmissions.length <= 0 && statusQuery === "deleted" && (
+              <Card
+                icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+                title={t("downloadResponsesTable.card.noDeletedResponses")}
+                content={t("downloadResponsesTable.card.noDeletedResponsesMessage")}
               />
             )}
           </div>
@@ -231,7 +250,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   req,
   res,
 }) => {
-  const [formID = null] = params || [];
+  const [formID = null, statusQuery = "new"] = params || [];
 
   const FormbuilderParams: { locale: string; initialForm: null | FormRecord } = {
     initialForm: null,
@@ -279,7 +298,14 @@ export const getServerSideProps: GetServerSideProps = async ({
         };
       }
 
-      const allSubmissions = await listAllSubmissions(ability, formID);
+      const ucfirst = (string: string) => {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+      };
+
+      // get status from url params (default = new) and capitalize/cast to VaultStatus
+      const status = ucfirst(String(statusQuery)) as VaultStatus;
+
+      const allSubmissions = await listAllSubmissions(ability, formID, status);
 
       FormbuilderParams.initialForm = initialForm;
       vaultSubmissions.push(...allSubmissions.submissions);
