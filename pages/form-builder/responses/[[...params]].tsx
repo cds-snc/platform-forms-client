@@ -136,6 +136,8 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
 
       <nav className="my-8 flex flex-wrap" aria-label={t("responses.navLabel")}>
         <SubNavLink
+          id="new-responses"
+          defaultActive={statusQuery === "new"}
           href={`/form-builder/responses/${formId}/new`}
           setAriaCurrent={statusQuery === "new"}
         >
@@ -144,6 +146,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           </span>
         </SubNavLink>
         <SubNavLink
+          id="downloaded-responses"
           href={`/form-builder/responses/${formId}/downloaded`}
           setAriaCurrent={statusQuery === "downloaded"}
         >
@@ -152,6 +155,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           </span>
         </SubNavLink>
         <SubNavLink
+          id="deleted-responses"
           href={`/form-builder/responses/${formId}/deleted`}
           setAriaCurrent={statusQuery === "deleted"}
         >
