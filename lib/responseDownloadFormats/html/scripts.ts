@@ -1,6 +1,5 @@
 import React from "react";
 
-// TODO refactor clipboardjs and javascript styling code into separate functions
 export const ClipboardJSScript = React.createElement("script", {
   dangerouslySetInnerHTML: {
     // eslint-disable-next-line no-useless-escape

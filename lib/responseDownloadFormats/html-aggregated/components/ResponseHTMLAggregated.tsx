@@ -6,7 +6,7 @@ import { css } from "../../html/css/compiled";
 import { ColumnTable } from "../../html/components/ColumnTable";
 import { AggregatedTable } from "./AggregatedTable";
 import { FormResponseSubmissions, Submission } from "@lib/responseDownloadFormats/types";
-import { customTranslate } from "@lib/responseDownloadFormats/helpers";
+import { customTranslate, getProperty } from "@lib/responseDownloadFormats/helpers";
 import { copyCodeToClipboardScript } from "../scripts";
 import { TableHeader } from "./AggregatedTable";
 
@@ -20,6 +20,8 @@ export const ResponseHtmlAggregated = ({
   formResponseSubmissions,
 }: HTMLDownloadProps) => {
   const { t } = customTranslate("my-forms");
+
+  // Used by copy code script that expects Ids set with lang for user messages
   const capitalizedLang = lang === "en" ? "En" : "Fr";
 
   const form = formResponseSubmissions.form;
@@ -37,7 +39,7 @@ export const ResponseHtmlAggregated = ({
     { title: "Submission number / [fr]Submission number", type: "formData" },
     { title: "Submission date / [fr]Submission date", type: "formData" },
     ...formResponseSubmissions.submissions[0].answers.map((answer) => {
-      return { title: String(answer["question" + capitalizedLang]), type: answer.type };
+      return { title: String(answer[getProperty("question", lang)]), type: answer.type };
     }),
   ] as TableHeader[];
 
@@ -96,7 +98,7 @@ export const ResponseHtmlAggregated = ({
             {submissions &&
               submissions.map((submission) => {
                 return (
-                  <>
+                  <div key="" className="break-before-page">
                     <h3 className="mt-20">
                       {t("responseAggregatedTemplate.dataList.formResponse", { lng: lang })}{" "}
                       {submission.id}
@@ -107,7 +109,7 @@ export const ResponseHtmlAggregated = ({
                       submission={submission}
                       lang={lang}
                     />
-                  </>
+                  </div>
                 );
               })}
           </main>

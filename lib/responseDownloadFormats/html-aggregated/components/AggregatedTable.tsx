@@ -1,5 +1,6 @@
 import React from "react";
 import { Submission } from "@lib/responseDownloadFormats/types";
+import { getProperty } from "@lib/formBuilder";
 
 export interface TableHeader {
   title: string;
@@ -24,7 +25,7 @@ export const AggregatedTable = ({
   return (
     <table id={`responseTableRow${capitalizedLang}`} className="table-fixed text-left">
       <thead>
-        <tr key="headers" className="flex">
+        <tr key="" className="flex">
           {headers.map(({ title, type }, index) => (
             <th
               key={`heading-${title}-${index}`}
@@ -39,7 +40,7 @@ export const AggregatedTable = ({
         {submissions.map((submission: Submission, index) => {
           return (
             <tr
-              key={submission.id}
+              key=""
               className={`flex border-t-2 border-t-grey-300 ${
                 index % 2 !== 0 ? "bg-slate-50" : ""
               }`}
@@ -47,14 +48,14 @@ export const AggregatedTable = ({
               <td className="w-64 p-4">{submission.id}</td>
               <td className="w-64 p-4">{submission.createdAt}</td>
               {submission.answers &&
-                submission.answers.map((answer, index) => {
+                submission.answers.map((answer) => {
                   if (Array.isArray(answer.answer)) {
                     return (
-                      <td key={`answer-col-${index}`} className="w-120 pl-4">
+                      <td key="" className="w-120 pl-4">
                         <table className="table-fixed text-left ml-4">
                           {answer.answer.map((subAnswer) => {
                             return subAnswer.map((subSubAnswer) => {
-                              const question = String(subSubAnswer["question" + capitalizedLang]);
+                              const question = String(subSubAnswer[getProperty("question", lang)]);
                               const response = subSubAnswer.answer;
                               return (
                                 <tr
@@ -72,7 +73,7 @@ export const AggregatedTable = ({
                     );
                   }
                   return (
-                    <td key={`answer-col-${index}`} className="w-64 p-4">
+                    <td key="" className="w-64 p-4">
                       {formatAnswer(answer.answer)}
                     </td>
                   );

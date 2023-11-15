@@ -41,9 +41,10 @@ const getSubmissions = async (
     const data = req.body;
     const ids = data.ids.split(",");
 
-    // TODO figure out what we want to do with the localization. Return two versions, return 1 version.
-    // if one version, set by request url e.g. /fr/ form-bu.. or by cookie accept-language..
-    const lang = data.lang || "en";
+    // Note: if we decided in the future to try to detect the user's language, it would make the
+    // most sense to use the form submission language vs sesion/*. If not, the output could have
+    // e.g. French questions and English answers etc.
+    const lang = req.query?.lang === "fr" ? "fr" : "en";
 
     const queryResult = await retrieveSubmissions(ability, formId, ids);
 
