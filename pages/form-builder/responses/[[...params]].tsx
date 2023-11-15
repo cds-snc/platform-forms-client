@@ -139,7 +139,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           id="new-responses"
           defaultActive={statusQuery === "new"}
           href={`/form-builder/responses/${formId}/new`}
-          setAriaCurrent={statusQuery === "new"}
+          setAriaCurrent={true}
         >
           <span className="text-sm laptop:text-base">
             <InboxIcon className="inline-block h-7 w-7" /> {t("responses.status.new")}
@@ -148,7 +148,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         <SubNavLink
           id="downloaded-responses"
           href={`/form-builder/responses/${formId}/downloaded`}
-          setAriaCurrent={statusQuery === "downloaded"}
+          setAriaCurrent={true}
         >
           <span className="text-sm laptop:text-base">
             <FolderIcon className="inline-block h-7 w-7" /> {t("responses.status.downloaded")}
@@ -157,7 +157,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         <SubNavLink
           id="deleted-responses"
           href={`/form-builder/responses/${formId}/deleted`}
-          setAriaCurrent={statusQuery === "deleted"}
+          setAriaCurrent={true}
         >
           <span className="text-sm laptop:text-base">
             <DeleteIcon className="inline-block h-7 w-7" /> {t("responses.status.deleted")}
