@@ -27,6 +27,8 @@ import { ErrorPanel } from "@components/globals";
 import { ClosedBanner } from "@components/form-builder/app/shared/ClosedBanner";
 import { getAppSetting } from "@lib/appSettings";
 import { DeleteIcon, FolderIcon, InboxIcon } from "@components/form-builder/icons";
+import { logMessage } from "@lib/logger";
+import { useRouter } from "next/router";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -61,6 +63,12 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
 
   const navItemClasses =
     "group no-underline !shadow-none border-black border-1 rounded-[100px] pt-1 pb-2 laptop:py-2 px-5 mr-3 mb-0 text-black visited:text-black focus:bg-[#475569] hover:bg-[#475569] hover:!text-white focus:!text-white [&_svg]:focus:fill-white flex flex-row align-baseline items-center gap-2";
+
+  const navItemActiveClasses =
+    "group no-underline !shadow-none border-black border-1 rounded-[100px] pt-1 pb-2 laptop:py-2 px-5 mr-3 mb-0 !text-white [&_svg]:fill-white bg-[#26374A] focus:bg-[#26374A] visited:text-black flex flex-row align-baseline items-center gap-2";
+
+  const router = useRouter();
+  const [, statusQuery = "new"] = router.query.params || [];
 
   if (!isAuthenticated) {
     return (
@@ -131,19 +139,19 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
 
       <nav className="my-8 flex gap-3">
         <Link
-          className={navItemClasses}
+          className={`${statusQuery === "new" ? navItemActiveClasses : navItemClasses}`}
           href={`/${i18n.language}/form-builder/responses/${formId}/new`}
         >
           <InboxIcon className="h-7 w-7 group-hover:fill-white" /> New
         </Link>
         <Link
-          className={navItemClasses}
+          className={`${statusQuery === "downloaded" ? navItemActiveClasses : navItemClasses}`}
           href={`/${i18n.language}/form-builder/responses/${formId}/downloaded`}
         >
           <FolderIcon className="h-7 w-7 group-hover:fill-white" /> Downloaded
         </Link>
         <Link
-          className={navItemClasses}
+          className={`${statusQuery === "deleted" ? navItemActiveClasses : navItemClasses}`}
           href={`/${i18n.language}/form-builder/responses/${formId}/deleted`}
         >
           <DeleteIcon className="h-7 w-7 group-hover:fill-white" /> Deleted
