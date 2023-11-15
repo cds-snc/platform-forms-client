@@ -19,7 +19,7 @@ export const MoreMenu = ({
   const { t } = useTranslation("form-builder-responses");
 
   const handleDownload = () => {
-    const url = `/api/id/${formId}/submissions/download?format=html`;
+    const url = `/api/id/${formId}/submission/download?format=html`;
 
     axios({
       url,

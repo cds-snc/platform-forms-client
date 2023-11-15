@@ -46,7 +46,7 @@ export const DownloadButton = ({
       })
     );
 
-    const url = `/api/id/${formId}/submissions/download?format=html`;
+    const url = `/api/id/${formId}/submission/download?format=html`;
     const ids = Array.from(checkedItems.keys());
 
     axios({
