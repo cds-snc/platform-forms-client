@@ -39,7 +39,6 @@ interface ResponsesProps {
 }
 
 // TODO: move to an app setting variable
-const MAX_CONFIRMATION_COUNT = 20;
 const MAX_REPORT_COUNT = 20;
 
 const Responses: NextPageWithLayout<ResponsesProps> = ({
@@ -240,7 +239,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         isShow={isShowConfirmReceiptDialog}
         setIsShow={setIsShowConfirmReceiptDialog}
         apiUrl={`/api/id/${formId}/submission/confirm`}
-        maxEntries={MAX_CONFIRMATION_COUNT}
+        maxEntries={responseDownloadLimit}
       />
 
       <ReportDialog
