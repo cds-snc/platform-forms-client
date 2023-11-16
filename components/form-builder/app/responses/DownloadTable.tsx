@@ -27,7 +27,6 @@ import { CheckAll } from "./CheckAll";
 import { DownloadButton } from "./DownloadButton";
 import { toast } from "../shared";
 import { MoreMenu } from "./MoreMenu";
-import { logMessage } from "@lib/logger";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -64,6 +63,7 @@ export const DownloadTable = ({
         overdueAfter,
       })
     ).length,
+    overdueAfter,
   });
 
   const MAX_FILE_DOWNLOADS = responseDownloadLimit;
@@ -103,7 +103,7 @@ export const DownloadTable = ({
   useEffect(() => {
     // NOTE: Table not updating when it should? May need to be more explicit in telling react
     // what has changed in the array (e.g. a status). For now, this seems to work well.
-    const dispatchAction = { type: TableActions.SORT, payload: { vaultSubmissions } };
+    const dispatchAction = { type: TableActions.RESET, payload: { vaultSubmissions } };
     tableItemsDispatch(dispatchAction);
   }, [vaultSubmissions]);
 

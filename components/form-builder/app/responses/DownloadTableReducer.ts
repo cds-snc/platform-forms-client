@@ -4,6 +4,7 @@ import { VaultSubmissionList, VaultStatus } from "@lib/types";
 export enum TableActions {
   UPDATE = "UPDATE",
   SORT = "SORT",
+  RESET = "RESET",
 }
 
 interface ReducerTableItemsState {
@@ -11,6 +12,7 @@ interface ReducerTableItemsState {
   checkedItems: Map<string, boolean>;
   sortedItems: VaultSubmissionList[];
   numberOfOverdueResponses: number;
+  overdueAfter: string | undefined;
 }
 
 export interface ReducerTableItemsActions {
@@ -95,6 +97,8 @@ export const reducerTableItems = (
           newCheckedItems.set(name, true);
         }
       });
+
+
       return {
         ...state,
         checkedItems: newCheckedItems,
@@ -108,6 +112,27 @@ export const reducerTableItems = (
       return {
         ...state,
         sortedItems: sortVaultSubmission(payload.vaultSubmissions),
+      };
+    }
+
+    case "RESET": {
+      if (!payload.vaultSubmissions) {
+        throw Error("Table sort dispatch missing vaultSubmissions");
+      }
+      return {
+        ...state,
+        checkedItems: new Map(),
+        statusItems: new Map(
+          payload.vaultSubmissions.map((submission) => [submission.name, false])
+        ),
+        sortedItems: sortVaultSubmission(payload.vaultSubmissions),
+        numberOfOverdueResponses: payload.vaultSubmissions.filter((submission) =>
+          isSubmissionOverdue({
+            status: submission.status,
+            createdAt: submission.createdAt,
+            overdueAfter: state.overdueAfter,
+          })
+        ).length,
       };
     }
     default:
