@@ -17,12 +17,13 @@ import { useSetting } from "@lib/hooks/useSetting";
 import Link from "next/link";
 import { TableActions, initialTableItemsState, reducerTableItems } from "./DownloadTableReducer";
 import { getDaysPassed } from "@lib/clientHelpers";
-import { Alert } from "@components/globals";
+import { Alert, Button } from "@components/globals";
 import { CheckAll } from "./CheckAll";
 import { DownloadButton } from "./DownloadButton";
 import { toast } from "../shared";
 import { MoreMenu } from "./MoreMenu";
 import { ActionsPanel } from "./ActionsPanel";
+import { DeleteButton } from "./DeleteButton";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -235,20 +236,6 @@ export const DownloadTable = ({
         </table>
         <div className="mt-8 flex">
           <div id="notificationsBottom" className="ml-4">
-            {tableItems.checkedItems.size > MAX_FILE_DOWNLOADS && (
-              <Alert.Danger icon={false}>
-                <Alert.Title headingTag="h3">
-                  {t("downloadResponsesTable.errors.trySelectingLessFilesHeader", {
-                    max: MAX_FILE_DOWNLOADS,
-                  })}
-                </Alert.Title>
-                <p className="text-sm text-black">
-                  {t("downloadResponsesTable.errors.trySelectingLessFiles", {
-                    max: MAX_FILE_DOWNLOADS,
-                  })}
-                </p>
-              </Alert.Danger>
-            )}
             {noSelectedItemsError && (
               <Alert.Danger icon={false}>
                 <Alert.Title headingTag="h3">
@@ -275,18 +262,36 @@ export const DownloadTable = ({
 
       {tableItems.checkedItems.size > 0 && (
         <ActionsPanel>
-          <DownloadButton
-            formId={formId}
-            downloadError={downloadError}
-            setDownloadError={setDownloadError}
-            setNoSelectedItemsError={setNoSelectedItemsError}
-            checkedItems={tableItems.checkedItems}
-            canDownload={tableItems.checkedItems.size <= MAX_FILE_DOWNLOADS}
-            onSuccessfulDownload={() => {
-              router.replace(router.asPath, undefined, { scroll: false });
-              toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
-            }}
-          />
+          <div className="py-4">
+            <DownloadButton
+              disabled={tableItems.checkedItems.size > MAX_FILE_DOWNLOADS}
+              formId={formId}
+              downloadError={downloadError}
+              setDownloadError={setDownloadError}
+              setNoSelectedItemsError={setNoSelectedItemsError}
+              checkedItems={tableItems.checkedItems}
+              canDownload={tableItems.checkedItems.size <= MAX_FILE_DOWNLOADS}
+              onSuccessfulDownload={() => {
+                router.replace(router.asPath, undefined, { scroll: false });
+                toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
+              }}
+            />
+            <DeleteButton />
+          </div>
+          {tableItems.checkedItems.size > MAX_FILE_DOWNLOADS && (
+            <Alert.Danger className="inline-block" icon={false}>
+              <Alert.Title headingTag="h3">
+                {t("downloadResponsesTable.errors.trySelectingLessFilesHeader", {
+                  max: MAX_FILE_DOWNLOADS,
+                })}
+              </Alert.Title>
+              <p className="text-sm text-black">
+                {t("downloadResponsesTable.errors.trySelectingLessFiles", {
+                  max: MAX_FILE_DOWNLOADS,
+                })}
+              </p>
+            </Alert.Danger>
+          )}
         </ActionsPanel>
       )}
     </>

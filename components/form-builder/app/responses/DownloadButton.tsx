@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "../shared";
 import axios from "axios";
 import { logMessage } from "@lib/logger";
+import { Button } from "@components/globals";
 
 export const DownloadButton = ({
   formId,
@@ -12,6 +13,7 @@ export const DownloadButton = ({
   setDownloadError,
   setNoSelectedItemsError,
   checkedItems,
+  disabled = false,
 }: {
   formId: string;
   onSuccessfulDownload: () => void;
@@ -20,6 +22,7 @@ export const DownloadButton = ({
   setDownloadError: React.Dispatch<React.SetStateAction<boolean>>;
   setNoSelectedItemsError: React.Dispatch<React.SetStateAction<boolean>>;
   checkedItems: Map<string, boolean>;
+  disabled?: boolean;
 }) => {
   const { t } = useTranslation("form-builder-responses");
 
@@ -82,13 +85,14 @@ export const DownloadButton = ({
   };
 
   return (
-    <button
+    <Button
+      disabled={disabled}
       id="downloadTableButtonId"
-      className="gc-button--blue m-0 w-auto whitespace-nowrap"
-      aria-live="polite"
+      theme={disabled ? "disabled" : "primary"}
+      className="mr-4 inline-block"
       onClick={handleDownload}
     >
       {t("downloadResponsesTable.downloadSelectedResponses")}
-    </button>
+    </Button>
   );
 };
