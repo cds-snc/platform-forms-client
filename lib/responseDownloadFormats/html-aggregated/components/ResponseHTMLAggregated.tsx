@@ -36,10 +36,22 @@ export const ResponseHtmlAggregated = ({
   const submissions = formResponseSubmissions.submissions as Submission[];
 
   const headersForTable = [
-    { title: t("responseTemplate.responseNumber"), type: "formData" },
-    { title: t("responseTemplate.submissionDate"), type: "formData" },
+    {
+      title: `${t("responseTemplate.responseNumber", { lng: "en" })} / ${t(
+        "responseTemplate.responseNumber",
+        { lng: "fr" }
+      )}`,
+      type: "formData",
+    },
+    {
+      title: `${t("responseTemplate.submissionDate", { lng: "en" })} / ${t(
+        "responseTemplate.submissionDate",
+        { lng: "fr" }
+      )} `,
+      type: "formData",
+    },
     ...formResponseSubmissions.submissions[0].answers.map((answer) => {
-      return { title: String(answer[getProperty("question", lang)]), type: answer.type };
+      return { title: `${answer.questionEn} / ${answer.questionFr}`, type: answer.type };
     }),
   ] as TableHeader[];
 

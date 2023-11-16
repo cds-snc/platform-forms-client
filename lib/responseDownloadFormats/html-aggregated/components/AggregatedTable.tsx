@@ -26,11 +26,8 @@ export const AggregatedTable = ({
     <table id={`responseTableRow${capitalizedLang}`} className="table-fixed text-left">
       <thead>
         <tr key="" className="flex">
-          {headers.map(({ title, type }, index) => (
-            <th
-              key={`heading-${title}-${index}`}
-              className={`${type === "dynamicRow" ? "w-120" : "w-64"} p-4 font-bold`}
-            >
+          {headers.map(({ title, type }) => (
+            <th key="" className={`${type === "dynamicRow" ? "w-120" : "w-64"} p-4 font-bold`}>
               {title}
             </th>
           ))}
@@ -58,10 +55,7 @@ export const AggregatedTable = ({
                               const question = String(subSubAnswer[getProperty("question", lang)]);
                               const response = subSubAnswer.answer;
                               return (
-                                <tr
-                                  key={`sub-answer-row-${subSubAnswer.questionEn}-${subSubAnswer.answer}`}
-                                  className="flex"
-                                >
+                                <tr key="" className="flex">
                                   <th className="w-64 p-4">{question}</th>
                                   <td className="p-4">{formatAnswer(response as string)}</td>
                                 </tr>

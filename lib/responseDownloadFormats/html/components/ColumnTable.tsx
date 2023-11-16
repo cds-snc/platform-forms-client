@@ -1,6 +1,6 @@
 import React from "react";
 import { capitalize } from "./ResponseSection";
-import { customTranslate, getProperty } from "../../helpers";
+import { customTranslate } from "../../helpers";
 import { Answer, Submission } from "../../types";
 import { TableProps } from "../types";
 
@@ -14,8 +14,12 @@ const QuestionColumns = ({
   const renderRow = (index: number, lang: string, item: Answer) => {
     return (
       <div className="flex w-full flex-row border-b border-gray">
-        <dt className="w-120 py-4 font-bold">{String(item[getProperty("question", lang)])}</dt>
-        <dd className={`py-4 pl-8`}>{String(item.answer) || "-"}</dd>
+        <dt className="w-120 py-4 font-bold">
+          {String(item.questionEn)} / {String(item.questionFr)}
+        </dt>
+        <dd key="" className={`py-4 pl-8`}>
+          {String(item.answer) || "-"}
+        </dd>
       </div>
     );
   };
@@ -26,7 +30,9 @@ const QuestionColumns = ({
     } else {
       return (
         <div key={`col-${index}-${lang}`}>
-          <dt className="w-full py-4 font-bold">{String(item[getProperty("question", lang)])}</dt>
+          <dt className="w-full py-4 font-bold">
+            {String(item.questionEn)} / {String(item.questionFr)}
+          </dt>
           <dd className="w-full py-4 pl-16">
             <dl className="ml-8">
               {item.answer.map((subItem) => {
@@ -54,13 +60,15 @@ export const ColumnTable = (props: TableProps): React.ReactElement => {
     <dl id={`responseTableCol${capitalize(lang)}`} className="border-y-2 border-gray">
       <div className="flex border-b border-gray">
         <dt className="w-120 py-4 font-bold">
-          {t("responseTemplate.responseNumber", { lng: lang })}
+          {t("responseTemplate.responseNumber", { lng: "en" })} /{" "}
+          {t("responseTemplate.responseNumber", { lng: "fr" })}
         </dt>
         <dd className="py-4 pl-8">{responseID}</dd>
       </div>
       <div className="flex border-b border-gray">
         <dt className="w-120 py-4 font-bold">
-          {t("responseTemplate.submissionDate", { lng: lang })}
+          {t("responseTemplate.submissionDate", { lng: "en" })} /{" "}
+          {t("responseTemplate.submissionDate", { lng: "fr" })}
         </dt>
         <dd className="py-4 pl-8">{formattedSubmissionDate}</dd>
       </div>
