@@ -83,8 +83,7 @@ export const DownloadTable = ({
   };
 
   useEffect(() => {
-    // NOTE: Table not updating when it should? May need to be more explicit in telling react
-    // what has changed in the array (e.g. a status). For now, this seems to work well.
+    // Reset tableItems when vaultSubmissions changes (ie, when switching between Status tabs)
     const dispatchAction = { type: TableActions.RESET, payload: { vaultSubmissions } };
     tableItemsDispatch(dispatchAction);
   }, [vaultSubmissions]);
