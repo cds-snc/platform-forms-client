@@ -53,6 +53,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   const isAuthenticated = status === "authenticated";
   const [isShowConfirmReceiptDialog, setIsShowConfirmReceiptDialog] = useState(false);
   const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
+
   const [isServerError, setIsServerError] = useState(false);
 
   const router = useRouter();
