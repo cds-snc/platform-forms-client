@@ -13,6 +13,7 @@ import { ErrorListItem } from "@components/forms";
 import { isServer } from "./tsUtils";
 import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
 import formNameArraySchema from "@lib/middleware/schemas/submission-name-array.schema.json";
+import { matchRule, FormValues } from "@lib/formContext";
 
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
@@ -211,6 +212,14 @@ export const validateOnSubmit = (
       (element) => element.id == parseInt(item)
     );
     if (!formElement) return errors;
+
+    if (formElement.properties.conditionalRules) {
+      // check if a conditional rule is met
+      const rules = formElement.properties.conditionalRules;
+      if (!rules.some((rule) => matchRule(rule, props.formRecord, values as FormValues))) {
+        continue;
+      }
+    }
 
     if (formElement.properties.validation) {
       const result = isFieldResponseValid(
