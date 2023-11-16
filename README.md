@@ -5,7 +5,6 @@
 This repository is work-in-progress for the GC Forms platform product. "Alpha" will be arriving in Spring 2021.
 
 - Explore it here: [https://forms-staging.cdssandbox.xyz/](https://forms-staging.cdssandbox.xyz/).
-- View our UI inventory and documentation on [Storybook](https://cds-snc.github.io/platform-forms-client/?path=/story/introduction--page)
 
 ## Built with
 
@@ -155,7 +154,6 @@ NOTIFY_API_KEY=
 Ce dépôt est un travail en cours pour le produit de la plate-forme GC Forms. "Alpha" arrivera au printemps 2021.
 
 - Explorez le ici : [https://forms-staging.cdssandbox.xyz/](https://forms-staging.cdssandbox.xyz/).
-- Explorez le [Storybook](https://cds-snc.github.io/platform-forms-client/?path=/story/introduction--page)
 
 ## Contributions
 
