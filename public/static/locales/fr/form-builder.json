@@ -214,10 +214,9 @@
 
     "needSupport": "Besoin d'aide pour l'utilisation de Formulaires GC?",
     "request": {
-      "option1": "Demander une démonstration du produit",
-      "option2": "S'inscrire à la liste de diffusion",
-      "option3": "Donner un avis",
-      "option4": "Autre",
+      "option1": "S'inscrire à la liste de diffusion",
+      "option2": "Donner un avis",
+      "option3": "Autre",
       "title": "Raison pour laquelle vous nous contactez"
     },
     "supportFormLink": "formulaire de soutien",
@@ -693,7 +692,7 @@
     "savedSuccessMessage": "Vos modifications ont été enregistrées.",
     "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Veuillez réessayer."
   },
-  "errorSavingForm":{
+  "errorSavingForm": {
     "title": "Une erreur s'est produite lors de l'enregistrement du formulaire",
     "description": "Veuillez télécharger une copie du formulaire et réessayer ou",
     "supportLink": "contacter l'équipe de soutien",

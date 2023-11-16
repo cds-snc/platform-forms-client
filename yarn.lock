@@ -7179,12 +7179,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:0.26.1":
-  version: 0.26.1
-  resolution: "axios@npm:0.26.1"
+"axios@npm:1.6.1":
+  version: 1.6.1
+  resolution: "axios@npm:1.6.1"
   dependencies:
-    follow-redirects: "npm:^1.14.8"
-  checksum: 77ad7f1e6ca04fcd3fa8af1795b09d8b7c005b71a31f28d99ba40cda0bdcc12a4627801d7fac5efa62b9f667a8402bd54c669039694373bc8d44f6be611f785c
+    follow-redirects: "npm:^1.15.0"
+    form-data: "npm:^4.0.0"
+    proxy-from-env: "npm:^1.1.0"
+  checksum: ca2c6f56659a7f19e4a99082f549fe151952f6fd8aa72ed148559ab2d6a32ce37cd5dc72ce6d4d3cd91f0c1e2617c7c95c20077e5e244a79f319a6c0ce41204f
   languageName: node
   linkType: hard
 
@@ -9896,7 +9898,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.14.7, follow-redirects@npm:^1.14.8, follow-redirects@npm:^1.15.0":
+"follow-redirects@npm:^1.14.7, follow-redirects@npm:^1.15.0":
   version: 1.15.3
   resolution: "follow-redirects@npm:1.15.3"
   peerDependenciesMeta:
@@ -10127,7 +10129,7 @@ __metadata:
     autoprefixer: "npm:^10.4.4"
     aws-sdk-client-mock: "npm:^2.1.1"
     axe-core: "npm:^4.5.2"
-    axios: "npm:0.26.1"
+    axios: "npm:1.6.1"
     babel-loader: "npm:^8.2.4"
     babel-plugin-dynamic-import-node: "npm:^2.3.3"
     babel-plugin-transform-require-context: "npm:^0.1.1"
