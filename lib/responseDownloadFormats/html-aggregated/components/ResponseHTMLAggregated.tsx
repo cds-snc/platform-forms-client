@@ -48,7 +48,7 @@ export const ResponseHtmlAggregated = ({
       {/* eslint-disable-next-line @next/next/no-head-element */}
       <head>
         <meta charSet="utf-8" />
-        <title>{`${form[getProperty("title", lang)]}}`}</title>
+        <title>{`${form[getProperty("title", lang)]}`}</title>
         <style dangerouslySetInnerHTML={{ __html: css }}></style>
       </head>
       <body>
