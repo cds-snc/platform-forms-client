@@ -88,9 +88,7 @@ export const DownloadButton = ({
       aria-live="polite"
       onClick={handleDownload}
     >
-      {t("downloadResponsesTable.downloadXSelectedResponses", {
-        size: checkedItems.size,
-      })}
+      {t("downloadResponsesTable.downloadSelectedResponses")}
     </button>
   );
 };

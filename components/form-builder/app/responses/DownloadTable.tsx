@@ -235,19 +235,6 @@ export const DownloadTable = ({
           </tbody>
         </table>
         <div className="mt-8 flex">
-          <DownloadButton
-            formId={formId}
-            downloadError={downloadError}
-            setDownloadError={setDownloadError}
-            setNoSelectedItemsError={setNoSelectedItemsError}
-            checkedItems={tableItems.checkedItems}
-            canDownload={tableItems.checkedItems.size <= MAX_FILE_DOWNLOADS}
-            onSuccessfulDownload={() => {
-              router.replace(router.asPath, undefined, { scroll: false });
-              toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
-            }}
-          />
-
           <div id="notificationsBottom" className="ml-4">
             {tableItems.checkedItems.size > MAX_FILE_DOWNLOADS && (
               <Alert.Danger icon={false}>
@@ -287,7 +274,22 @@ export const DownloadTable = ({
         </div>
       </section>
 
-      {tableItems.checkedItems.size > 0 && <BottomActionsPanel />}
+      {tableItems.checkedItems.size > 0 && (
+        <BottomActionsPanel>
+          <DownloadButton
+            formId={formId}
+            downloadError={downloadError}
+            setDownloadError={setDownloadError}
+            setNoSelectedItemsError={setNoSelectedItemsError}
+            checkedItems={tableItems.checkedItems}
+            canDownload={tableItems.checkedItems.size <= MAX_FILE_DOWNLOADS}
+            onSuccessfulDownload={() => {
+              router.replace(router.asPath, undefined, { scroll: false });
+              toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
+            }}
+          />
+        </BottomActionsPanel>
+      )}
     </>
   );
 };

@@ -78,7 +78,8 @@
         "description": "There are {{numberOfOverdueResponses}} unconfirmed responses that are {{escalatedAfter}} days old. Download and confirm all overdue responses to remove this restriction."
       }
     },
-    "downloadXSelectedResponses": "Download {{size}} selected responses",
+    "downloadSelectedResponses": "Download selected",
+    "deleteSelectedResponses": "Delete selected",
     "skipLink": "Skip the download table",
     "unknown": "Unknown"
   },

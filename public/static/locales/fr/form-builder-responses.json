@@ -78,7 +78,8 @@
         "description": "Il y a {{numberOfOverdueResponses}} réponses qui datent de {{escalatedAfter}} jours. Téléchargez et confirmez toutes les réponses en retard pour enlever cette restriction."
       }
     },
-    "downloadXSelectedResponses": "Télécharger {{size}} réponses sélectionnées",
+    "downloadSelectedResponses": "Télécharger les réponses sélectionnées",
+    "deleteSelectedResponses": "Supprimer les réponses sélectionnées",
     "skipLink": "Sauter le tableau de téléchargement",
     "unknown": "Inconnu"
   },
