@@ -126,7 +126,7 @@
     "yes": "Yes"
   },
   "addMultiple": "Add multiple options",
-  "addOption": "Add an option",
+  "addOption": "Add option",
   "addOptions": "Add options",
   "addRules": "Add rules",
   "addToSet": "Add to set",
@@ -699,5 +699,20 @@
     "description": "Download a copy of the form and try again or",
     "supportLink": "contact Support",
     "errorCode": "Error code: {{code}}"
+  },
+  "addConditionalRules": {
+    "modalTitle": "Add a rule to a question",
+    "modalDescription": "Allow an option in your question to show an additional short or long answer input field when selected. Only drop downs, single choice, and multi-select blocks can apply a rule.",
+    "optionTitle": "If this option is selected:",
+    "questionTitle": "Show question:",
+    "text1": "Show when: ",
+    "text2": "Has value:",
+    "defaultQuestion": "No conditions always show",
+    "addCustomRules": "Add a rule",
+    "addAnotherRule": "Add another rule",
+    "removeRule": "remove",
+    "addOther": "Add 'if other' option",
+    "other": "Other",
+    "show": "Show:"
   }
 }
