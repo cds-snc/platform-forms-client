@@ -46,7 +46,7 @@ export const DownloadButton = ({
       })
     );
 
-    const url = `/api/id/${formId}/submissions/download?format=html`;
+    const url = `/api/id/${formId}/submission/download?format=html`;
     const ids = Array.from(checkedItems.keys());
 
     axios({
@@ -83,6 +83,7 @@ export const DownloadButton = ({
 
   return (
     <button
+      id="downloadTableButtonId"
       className="gc-button--blue m-0 w-auto whitespace-nowrap"
       aria-live="polite"
       onClick={handleDownload}
