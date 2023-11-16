@@ -36,8 +36,8 @@ export const ResponseHtmlAggregated = ({
   const submissions = formResponseSubmissions.submissions as Submission[];
 
   const headersForTable = [
-    { title: "Submission number / [fr]Submission number", type: "formData" },
-    { title: "Submission date / [fr]Submission date", type: "formData" },
+    { title: t("responseTemplate.responseNumber"), type: "formData" },
+    { title: t("responseTemplate.submissionDate"), type: "formData" },
     ...formResponseSubmissions.submissions[0].answers.map((answer) => {
       return { title: String(answer[getProperty("question", lang)]), type: answer.type };
     }),
@@ -48,7 +48,7 @@ export const ResponseHtmlAggregated = ({
       {/* eslint-disable-next-line @next/next/no-head-element */}
       <head>
         <meta charSet="utf-8" />
-        <title>{`${form.titleEn} - ${form.titleFr}`}</title>
+        <title>{`${form[getProperty("title", lang)]}}`}</title>
         <style dangerouslySetInnerHTML={{ __html: css }}></style>
       </head>
       <body>
@@ -61,7 +61,7 @@ export const ResponseHtmlAggregated = ({
           <main id="content">
             <Fip language="en" />
             <ProtectedWarning securityAttribute={form.securityAttribute} lang={lang} />
-            <h1 className="mt-14">{`${form.titleEn} - ${form.titleFr}`}</h1>
+            <h1 className="mt-14">{`${form[getProperty("title", lang)]}`}</h1>
 
             <h2>{t("responseAggregatedTemplate.title", { lng: lang })}</h2>
 
