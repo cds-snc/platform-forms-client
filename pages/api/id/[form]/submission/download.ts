@@ -5,7 +5,7 @@ import { FormElementTypes, MiddlewareProps, WithRequired } from "@lib/types";
 import { getFullTemplateByID } from "@lib/templates";
 import { transform as csvTransform } from "@lib/responseDownloadFormats/csv";
 import { transform as xlsxTransform } from "@lib/responseDownloadFormats/xlsx";
-import { transform as htmlTableTransform } from "@lib/responseDownloadFormats/html-table";
+import { transform as htmlAggregatedTransform } from "@lib/responseDownloadFormats/html-aggregated";
 import { transform as htmlTransform } from "@lib/responseDownloadFormats/html";
 import { transform as zipTransform } from "@lib/responseDownloadFormats/html-zipped";
 import { transform as jsonTransform } from "@lib/responseDownloadFormats/json";
@@ -40,6 +40,11 @@ const getSubmissions = async (
 
     const data = req.body;
     const ids = data.ids.split(",");
+
+    // Note: if we decided in the future to try to detect the user's language, it would make the
+    // most sense to use the form submission language vs sesion/*. If not, the output could have
+    // e.g. French questions and English answers etc.
+    const lang = req.query?.lang === "fr" ? "fr" : "en";
 
     const queryResult = await retrieveSubmissions(ability, formId, ids);
 
@@ -92,7 +97,7 @@ const getSubmissions = async (
 
     const formResponse = {
       form: {
-        id: fullFormTemplate.form.id,
+        id: fullFormTemplate.id,
         titleEn: fullFormTemplate.form.titleEn,
         titleFr: fullFormTemplate.form.titleFr,
         securityAttribute: fullFormTemplate.securityAttribute,
@@ -143,11 +148,11 @@ const getSubmissions = async (
             .send(xlsxTransform(formResponse));
           break;
 
-        case "html-table":
+        case "html-aggregated":
           return res
             .status(200)
             .setHeader("Content-Type", "text/html")
-            .send(htmlTableTransform(formResponse));
+            .send(htmlAggregatedTransform(formResponse, lang));
           break;
 
         case "html":

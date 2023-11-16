@@ -27,7 +27,7 @@ const QuestionColumns = ({
       return (
         <div key={`col-${index}-${lang}`}>
           <dt className="w-full py-4 font-bold">{String(item[getProperty("question", lang)])}</dt>
-          <dd className="w-full py-4 pl-8">
+          <dd className="w-full py-4 pl-16">
             <dl className="ml-8">
               {item.answer.map((subItem) => {
                 return subItem.map((subSubItem, subIndex) => {

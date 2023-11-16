@@ -63,6 +63,18 @@
     "submissionID": "Submission ID",
     "copyResponse": "Copy answer row to clipboard"
   },
+  "responseAggregatedTemplate": {
+    "title": "Form responses: combined table of selected responses",
+    "copyCodes": {
+      "title":"Confirm and delete responses from GC Forms",
+      "description": "Once you've checked the downloaded responses, and are ready to delete these from GC Forms, copy and paste the confirmation codes. This helps us know when responses have been transferred to you so we can remove the data from our system.",
+      "copyButton": "Copy confirmation codes"
+    },
+    "dataList": {
+      "title": "Form responses: data list of each selected response",
+      "formResponse": "Form response:"
+    }
+  },
   "dataClassification": {
     "officialRecord": "This is an official record",
     "retainCopy": "Retain this copy in accordance to your retention policy.",

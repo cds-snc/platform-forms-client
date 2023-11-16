@@ -1,6 +1,6 @@
 import { SecurityAttribute } from "@lib/types";
 import React from "react";
-import { CopyToClipboardScript } from "../scripts";
+import { ClipboardJSScript, UpdateDLStylesScript } from "../scripts";
 import { ProtectedWarning } from "./ProtectedWarning";
 import Fip from "./Fip";
 import { ResponseSection } from "./ResponseSection";
@@ -67,8 +67,11 @@ export const ResponseHtml = ({
             </div>
           </main>
         </div>
+
+        {ClipboardJSScript}
+
+        {UpdateDLStylesScript}
       </body>
-      {CopyToClipboardScript}
     </html>
   );
 };
