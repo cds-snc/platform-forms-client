@@ -59,7 +59,7 @@ export const ResponseHtmlAggregated = ({
         </div>
         <div id="page-container">
           <main id="content">
-            <Fip language="en" />
+            <Fip language="en" showLangLink={false} />
             <ProtectedWarning securityAttribute={form.securityAttribute} lang={lang} />
             <h1 className="mt-14">{`${form[getProperty("title", lang)]}`}</h1>
 
