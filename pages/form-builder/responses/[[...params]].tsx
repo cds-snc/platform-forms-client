@@ -158,7 +158,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         </SubNavLink>
         <SubNavLink
           id="deleted-responses"
-          href={`/form-builder/responses/${formId}/deleted`}
+          href={`/form-builder/responses/${formId}/confirmed`}
           setAriaCurrent={true}
         >
           <span className="text-sm laptop:text-base">
@@ -198,7 +198,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
               />
             )}
 
-            {vaultSubmissions.length <= 0 && statusQuery === "deleted" && (
+            {vaultSubmissions.length <= 0 && statusQuery === "confirmed" && (
               <Card
                 icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
                 title={t("downloadResponsesTable.card.noDeletedResponses")}
