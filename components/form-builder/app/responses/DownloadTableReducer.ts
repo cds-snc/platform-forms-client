@@ -26,6 +26,25 @@ export interface ReducerTableItemsActions {
   };
 }
 
+export const initialTableItemsState = (
+  vaultSubmissions: VaultSubmissionList[],
+  overdueAfter: string | undefined
+) => {
+  return {
+    checkedItems: new Map(),
+    statusItems: new Map(vaultSubmissions.map((submission) => [submission.name, false])),
+    sortedItems: sortVaultSubmission(vaultSubmissions),
+    numberOfOverdueResponses: vaultSubmissions.filter((submission) =>
+      isSubmissionOverdue({
+        status: submission.status,
+        createdAt: submission.createdAt,
+        overdueAfter,
+      })
+    ).length,
+    overdueAfter,
+  };
+};
+
 // Sort submissions by created date first but prioritize New submissions to the top of the list.
 // Note: This can probably be done more efficiently but the sorting behavior has not been fully
 // defined yet and for now this simple way works.
@@ -98,7 +117,6 @@ export const reducerTableItems = (
         }
       });
 
-
       return {
         ...state,
         checkedItems: newCheckedItems,
@@ -119,21 +137,7 @@ export const reducerTableItems = (
       if (!payload.vaultSubmissions) {
         throw Error("Table sort dispatch missing vaultSubmissions");
       }
-      return {
-        ...state,
-        checkedItems: new Map(),
-        statusItems: new Map(
-          payload.vaultSubmissions.map((submission) => [submission.name, false])
-        ),
-        sortedItems: sortVaultSubmission(payload.vaultSubmissions),
-        numberOfOverdueResponses: payload.vaultSubmissions.filter((submission) =>
-          isSubmissionOverdue({
-            status: submission.status,
-            createdAt: submission.createdAt,
-            overdueAfter: state.overdueAfter,
-          })
-        ).length,
-      };
+      return initialTableItemsState(payload.vaultSubmissions, state.overdueAfter);
     }
     default:
       throw Error("Unknown action: " + action.type);
