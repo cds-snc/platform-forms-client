@@ -41,7 +41,7 @@ export const AggregatedTable = ({
           return (
             <tr
               key=""
-              className={`flex border-t-2 border-t-grey-300 ${
+              className={`flex border-t-2 border-t-gray-300 ${
                 index % 2 !== 0 ? "bg-slate-50" : ""
               }`}
             >
