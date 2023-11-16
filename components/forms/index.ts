@@ -19,3 +19,5 @@ export { DynamicGroup } from "./DynamicRow/DynamicRow";
 export { Description } from "./Description/Description";
 export { MultipleChoiceGroup } from "./MultipleChoiceGroup/MultipleChoiceGroup";
 export { Form } from "./Form/Form";
+export { ConditionalWrapper } from "./ConditionalWrapper/ConditionalWrapper";
+export { NextButton } from "./NextButton/NextButton";

@@ -7,7 +7,6 @@ export const Checkbox = (
   props: ChoiceFieldProps & JSX.IntrinsicElements["input"]
 ): React.ReactElement => {
   const { id, label, required, name, ariaDescribedBy } = props;
-
   return (
     <div className="gc-input-checkbox" data-testid={id}>
       {ariaDescribedBy && (

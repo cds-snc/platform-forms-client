@@ -52,6 +52,7 @@ const defaultField: FormElement = {
     descriptionFr: "",
     placeholderEn: "",
     placeholderFr: "",
+    conditionalRules: undefined,
   },
 };
 
@@ -74,6 +75,7 @@ export const defaultForm = {
   },
   layout: [],
   elements: [],
+  groups: {},
 };
 
 export interface TemplateStoreProps {
@@ -128,6 +130,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   addSubChoice: (elIndex: number, subIndex: number) => void;
   removeChoice: (elIndex: number, choiceIndex: number) => void;
   removeSubChoice: (elIndex: number, subIndex: number, choiceIndex: number) => void;
+  getChoice: (elIndex: number, choiceIndex: number) => { en: string; fr: string } | undefined;
   updateField: (
     path: string,
     value: string | boolean | ElementProperties | BrandProperties
@@ -344,6 +347,10 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                   subIndex
                 ].properties.choices?.splice(choiceIndex, 1);
               }),
+            getChoice: (elId, choiceIndex) => {
+              const elIndex = get().form.elements.findIndex((el) => el.id === elId);
+              return get().form.elements[elIndex].properties.choices?.[choiceIndex];
+            },
             duplicateElement: (itemId) => {
               const elIndex = get().form.elements.findIndex((el) => el.id === itemId);
               set((state) => {

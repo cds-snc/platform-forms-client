@@ -83,6 +83,19 @@
       "uniqueItems": true,
       "examples": [[2, 3, 4, 6, 9, 5]]
     },
+    "groups": {
+      "type": "object",
+      "properties": {
+        "nextAction": {
+          "description": "The next action to take i.e. next group or submit.",
+          "type": "string"
+        },
+        "elements": {
+          "description": "A list of elements contained within the form group.",
+          "type": "array"
+        }
+      }
+    },
     "elements": {
       "description": "A list of elements contained within the form.",
       "type": "array",
@@ -229,6 +242,16 @@
                     "description": "French choice",
                     "type": "string"
                   }
+                }
+              }
+            },
+            "conditionalRules": {
+              "type": "object",
+              "properties": {
+                "whenId": {
+                  "description": "The id of the element that will trigger the conditional rule",
+                  "type": "string",
+                  "minimum": 1
                 }
               }
             },
