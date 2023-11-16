@@ -63,7 +63,7 @@ const callLambda = async (
   const encoder = new TextEncoder();
 
   const command = new InvokeCommand({
-    FunctionName: process.env.SUBMISSION_API ?? "Submission",
+    FunctionName: "Submission",
     Payload: encoder.encode(
       JSON.stringify({
         formID,
