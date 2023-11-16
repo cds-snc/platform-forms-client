@@ -22,7 +22,7 @@ import { CheckAll } from "./CheckAll";
 import { DownloadButton } from "./DownloadButton";
 import { toast } from "../shared";
 import { MoreMenu } from "./MoreMenu";
-import { BottomActionsPanel } from "./BottomActionsPanel";
+import { ActionsPanel } from "./ActionsPanel";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -275,7 +275,7 @@ export const DownloadTable = ({
       </section>
 
       {tableItems.checkedItems.size > 0 && (
-        <BottomActionsPanel>
+        <ActionsPanel>
           <DownloadButton
             formId={formId}
             downloadError={downloadError}
@@ -288,7 +288,7 @@ export const DownloadTable = ({
               toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
             }}
           />
-        </BottomActionsPanel>
+        </ActionsPanel>
       )}
     </>
   );
