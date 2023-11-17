@@ -9,13 +9,9 @@ export const DeleteButton = ({
 }) => {
   const { t } = useTranslation("form-builder-responses");
 
-  const handleDelete = () => {
-    setShowConfirmNewDialog(true);
-  };
-
   return (
     <>
-      <Button theme="destructive" onClick={handleDelete}>
+      <Button theme="destructive" onClick={() => setShowConfirmNewDialog(true)}>
         {t("downloadResponsesTable.deleteSelectedResponses")}
       </Button>
     </>

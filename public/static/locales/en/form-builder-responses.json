@@ -84,6 +84,18 @@
     "unknown": "Unknown"
   },
   "downloadResponsesModals": {
+    "downloadDialog": {
+      "title": "Download responses",
+      "configureDownloadSettings": "Configure download settings",
+      "individualResponseFiles": "Individual response files",
+      "getSeparateHtmlFiles": "Get separate HTML files for each form submission",
+      "combinedResponseFiles": "Combined response files",
+      "getHtmlAndCsv": "Get an HTML file and CSV spreadsheet of multiple submissions.",
+      "downloadAsZip": "Download all as ZIP (compressed) file",
+      "mayNotBeAvailable": "May not be available in all departments and agencies",
+      "cancel": "Cancel",
+      "download": "Download"
+    },
     "confirmDeleteNewDialog": {
       "confirmAndDelete": "Confirm and delete new responses",
       "responsesNotYetDownloaded": "Responses not yet downloaded",
