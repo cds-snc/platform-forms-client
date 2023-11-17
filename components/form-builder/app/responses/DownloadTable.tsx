@@ -289,7 +289,7 @@ export const DownloadTable = ({
               toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
             }}
           />
-          {statusQuery === "new" && <DeleteButton />}
+          {/* {statusQuery === "new" && <DeleteButton />} */}
         </ActionsPanel>
       )}
     </>
