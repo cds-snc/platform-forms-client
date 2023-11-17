@@ -117,17 +117,6 @@ const getSubmissions = async (
         };
       });
 
-      await updateLastDownloadedBy(responseIdStatusArray, formId, userEmail);
-
-      responseIdStatusArray.forEach((item) => {
-        logEvent(
-          ability.userID,
-          { type: "Response", id: item.id },
-          "DownloadResponse",
-          `Downloaded form response for submission ID ${item.id}`
-        );
-      });
-
       switch (req.query.format) {
         case "csv":
           return res
@@ -149,6 +138,17 @@ const getSubmissions = async (
           break;
 
         case "html-aggregated":
+          await updateLastDownloadedBy(responseIdStatusArray, formId, userEmail);
+
+          responseIdStatusArray.forEach((item) => {
+            logEvent(
+              ability.userID,
+              { type: "Response", id: item.id },
+              "DownloadResponse",
+              `Downloaded form response for submission ID ${item.id}`
+            );
+          });
+
           return res
             .status(200)
             .setHeader("Content-Type", "text/html")
@@ -156,6 +156,17 @@ const getSubmissions = async (
           break;
 
         case "html":
+          await updateLastDownloadedBy(responseIdStatusArray, formId, userEmail);
+
+          responseIdStatusArray.forEach((item) => {
+            logEvent(
+              ability.userID,
+              { type: "Response", id: item.id },
+              "DownloadResponse",
+              `Downloaded form response for submission ID ${item.id}`
+            );
+          });
+
           return res
             .status(200)
             .setHeader("Content-Type", "text/json")
@@ -163,6 +174,17 @@ const getSubmissions = async (
           break;
 
         case "html-zipped": {
+          await updateLastDownloadedBy(responseIdStatusArray, formId, userEmail);
+
+          responseIdStatusArray.forEach((item) => {
+            logEvent(
+              ability.userID,
+              { type: "Response", id: item.id },
+              "DownloadResponse",
+              `Downloaded form response for submission ID ${item.id}`
+            );
+          });
+
           const zip = zipTransform(formResponse);
 
           return res
