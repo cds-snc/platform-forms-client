@@ -133,11 +133,11 @@ export const DownloadTable = ({
             </Alert.Danger>
           )}
         </div>
-        <table className="text-sm" aria-live="polite">
+        <table className="w-full text-sm" aria-live="polite">
           <caption className="sr-only">{t("downloadResponsesTable.header.tableTitle")}</caption>
           <thead className="border-b-2 border-[#6a6d7b]">
             <tr>
-              <th className="p-4 text-center">
+              <th className="py-4 pr-3 text-center">
                 <CheckAll
                   tableItems={tableItems}
                   tableItemsDispatch={tableItemsDispatch}

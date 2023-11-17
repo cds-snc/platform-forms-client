@@ -23,10 +23,10 @@ import { useTemplateStore } from "@components/form-builder/store";
 import { LoggedOutTabName, LoggedOutTab } from "@components/form-builder/app/LoggedOutTab";
 import Head from "next/head";
 import { FormBuilderLayout } from "@components/globals/layouts/FormBuilderLayout";
-import { ErrorPanel } from "@components/globals";
+import { Button, ErrorPanel } from "@components/globals";
 import { ClosedBanner } from "@components/form-builder/app/shared/ClosedBanner";
 import { getAppSetting } from "@lib/appSettings";
-import { DeleteIcon, FolderIcon, InboxIcon } from "@components/form-builder/icons";
+import { Close, DeleteIcon, FolderIcon, InboxIcon } from "@components/form-builder/icons";
 import { SubNavLink } from "@components/form-builder/app/navigation/SubNavLink";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -39,7 +39,6 @@ interface ResponsesProps {
 }
 
 // TODO: move to an app setting variable
-const MAX_CONFIRMATION_COUNT = 20;
 const MAX_REPORT_COUNT = 20;
 
 const Responses: NextPageWithLayout<ResponsesProps> = ({
@@ -136,7 +135,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         {isAuthenticated ? t("responses.title") : t("responses.unauthenticated.title")}
       </h1>
 
-      <nav className="my-8 flex flex-wrap" aria-label={t("responses.navLabel")}>
+      <nav className="my-8 flex relative" aria-label={t("responses.navLabel")}>
         <SubNavLink
           id="new-responses"
           defaultActive={statusQuery === "new"}
@@ -165,6 +164,19 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
             <DeleteIcon className="inline-block h-7 w-7" /> {t("responses.status.deleted")}
           </span>
         </SubNavLink>
+        <div className="absolute right-0">
+          {isAuthenticated && statusQuery === "downloaded" && (
+            <Button
+              onClick={() => setIsShowConfirmReceiptDialog(true)}
+              theme="destructive"
+              className="float-right"
+              disabled={status !== "authenticated"}
+              icon={<Close className="fill-white" />}
+            >
+              {t("responses.confirmReceipt")}
+            </Button>
+          )}
+        </div>
       </nav>
 
       {nagwareResult && <Nagware nagwareResult={nagwareResult} />}
@@ -227,7 +239,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         isShow={isShowConfirmReceiptDialog}
         setIsShow={setIsShowConfirmReceiptDialog}
         apiUrl={`/api/id/${formId}/submission/confirm`}
-        maxEntries={MAX_CONFIRMATION_COUNT}
+        maxEntries={responseDownloadLimit}
       />
 
       <ReportDialog
