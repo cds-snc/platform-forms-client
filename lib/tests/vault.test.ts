@@ -14,6 +14,11 @@ import formConfiguration from "@jestFixtures/cdsIntakeTestForm.json";
 import { DeliveryOption } from "@lib/types";
 import { BatchWriteItemCommand } from "@aws-sdk/client-dynamodb";
 import { TemplateAlreadyPublishedError } from "@lib/templates";
+import { getAppSetting } from "@lib/appSettings";
+
+jest.mock("@lib/appSettings");
+
+const mockedGetAppSetting = jest.mocked(getAppSetting, { shallow: true });
 
 const ddbMock = mockClient(DynamoDBDocumentClient);
 
@@ -63,6 +68,13 @@ describe("Vault `numberOfUnprocessedSubmissions` function", () => {
         privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
       },
     };
+
+    mockedGetAppSetting.mockImplementation((key) => {
+      if (key === "responseDownloadLimit") {
+        return Promise.resolve("500");
+      }
+      return Promise.resolve(null);
+    });
 
     const ability = createAbility(fakeSession as Session);
 
