@@ -4,6 +4,7 @@ import { DeleteIcon, DownloadIcon, MoreIcon } from "@components/form-builder/ico
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { logMessage } from "@lib/logger";
+import { useRouter } from "next/router";
 
 export const MoreMenu = ({
   formId,
@@ -17,6 +18,9 @@ export const MoreMenu = ({
   onDownloadSuccess: () => void;
 }) => {
   const { t } = useTranslation("form-builder-responses");
+
+  const router = useRouter();
+  const [, statusQuery = "new"] = router.query?.params || [];
 
   const handleDownload = () => {
     const url = `/api/id/${formId}/submission/download?format=html`;
@@ -75,13 +79,15 @@ export const MoreMenu = ({
               <DownloadIcon className="scale-50" />
               {t("downloadResponsesTable.download")}
             </DropdownMenu.Item>
-            <DropdownMenu.Item
-              onClick={handleDelete}
-              className="flex cursor-pointer items-center rounded-md pr-4 text-sm outline-none hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
-            >
-              <DeleteIcon className="scale-50" />
-              {t("downloadResponsesTable.delete")}
-            </DropdownMenu.Item>
+            {statusQuery !== "confirmed" && (
+              <DropdownMenu.Item
+                onClick={handleDelete}
+                className="flex cursor-pointer items-center rounded-md pr-4 text-sm outline-none hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
+              >
+                <DeleteIcon className="scale-50" />
+                {t("downloadResponsesTable.delete")}
+              </DropdownMenu.Item>
+            )}
           </DropdownMenu.Content>
         </DropdownMenu.Portal>
       </DropdownMenu.Root>
