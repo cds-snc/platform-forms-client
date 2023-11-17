@@ -14,6 +14,27 @@ import { FormResponseSubmissions } from "@lib/responseDownloadFormats/types";
 import { logEvent } from "@lib/auditLogs";
 import { logMessage } from "@lib/logger";
 
+const logDownload = async (
+  responseIdStatusArray: { id: string; status: string }[],
+  format: string,
+  formId: string,
+  ability: ReturnType<typeof createAbility>,
+  userEmail: string,
+  markDownloaded = false
+) => {
+  if (markDownloaded) {
+    await updateLastDownloadedBy(responseIdStatusArray, formId, userEmail);
+  }
+  responseIdStatusArray.forEach((item) => {
+    logEvent(
+      ability.userID,
+      { type: "Response", id: item.id },
+      "DownloadResponse",
+      `Downloaded form response in ${format} for submission ID ${item.id}`
+    );
+  });
+};
+
 const getSubmissions = async (
   req: NextApiRequest,
   res: NextApiResponse,
@@ -119,6 +140,7 @@ const getSubmissions = async (
 
       switch (req.query.format) {
         case "csv":
+          await logDownload(responseIdStatusArray, "csv", formId, ability, userEmail);
           return res
             .status(200)
             .setHeader("Content-Type", "text/csv charset=utf-8")
@@ -127,6 +149,7 @@ const getSubmissions = async (
           break;
 
         case "xlsx":
+          await logDownload(responseIdStatusArray, "xlsx", formId, ability, userEmail);
           return res
             .status(200)
             .setHeader(
@@ -138,14 +161,21 @@ const getSubmissions = async (
           break;
 
         case "html-aggregated":
-          await updateLastDownloadedBy(responseIdStatusArray, formId, userEmail);
+          await logDownload(
+            responseIdStatusArray,
+            "html-aggregated",
+            formId,
+            ability,
+            userEmail,
+            true
+          );
 
           responseIdStatusArray.forEach((item) => {
             logEvent(
               ability.userID,
               { type: "Response", id: item.id },
               "DownloadResponse",
-              `Downloaded form response for submission ID ${item.id}`
+              `Downloaded form response in html-aggregated for submission ID ${item.id}`
             );
           });
 
@@ -156,7 +186,14 @@ const getSubmissions = async (
           break;
 
         case "html":
-          await updateLastDownloadedBy(responseIdStatusArray, formId, userEmail);
+          await logDownload(
+            responseIdStatusArray,
+            "html-aggregated",
+            formId,
+            ability,
+            userEmail,
+            true
+          );
 
           responseIdStatusArray.forEach((item) => {
             logEvent(
@@ -174,7 +211,14 @@ const getSubmissions = async (
           break;
 
         case "html-zipped": {
-          await updateLastDownloadedBy(responseIdStatusArray, formId, userEmail);
+          await logDownload(
+            responseIdStatusArray,
+            "html-aggregated",
+            formId,
+            ability,
+            userEmail,
+            true
+          );
 
           responseIdStatusArray.forEach((item) => {
             logEvent(
@@ -196,6 +240,7 @@ const getSubmissions = async (
         }
 
         case "json":
+          await logDownload(responseIdStatusArray, "html-aggregated", formId, ability, userEmail);
           return res.status(200).json(jsonTransform(formResponse));
           break;
 
@@ -204,8 +249,8 @@ const getSubmissions = async (
       }
     }
 
-    // Default repsonse format is JSON
-    return res.status(200).json(jsonTransform(formResponse));
+    // Format not specified
+    return res.status(400).json({ error: "Bad request please specify a format" });
   } catch (err) {
     if (err instanceof AccessControlError) {
       return res.status(403).json({ error: "Forbidden" });
