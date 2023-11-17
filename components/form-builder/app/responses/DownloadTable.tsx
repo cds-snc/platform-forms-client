@@ -23,6 +23,7 @@ import { DownloadButton } from "./DownloadButton";
 import { toast } from "../shared";
 import { MoreMenu } from "./MoreMenu";
 import { ActionsPanel } from "./ActionsPanel";
+import { DeleteButton } from "./DeleteButton";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -39,6 +40,7 @@ export const DownloadTable = ({
 }: DownloadTableProps) => {
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
+  const [, statusQuery = "new"] = router.query?.params || [];
 
   const [downloadError, setDownloadError] = useState(false);
   const [noSelectedItemsError, setNoSelectedItemsError] = useState(false);
@@ -287,6 +289,7 @@ export const DownloadTable = ({
               toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
             }}
           />
+          {statusQuery === "new" && <DeleteButton />}
         </ActionsPanel>
       )}
     </>
