@@ -216,6 +216,20 @@ export const DownloadTable = ({
             })}
           </tbody>
         </table>
+        <div className="mt-8 flex">
+          <div id="notificationsBottom" className="ml-4">
+            {downloadError && (
+              <Alert.Danger icon={false}>
+                <Alert.Title headingTag="h3">
+                  {t("downloadResponsesTable.errors.errorDownloadingFilesHeader")}
+                </Alert.Title>
+                <p className="text-sm text-black">
+                  {t("downloadResponsesTable.errors.errorDownloadingFiles")}
+                </p>
+              </Alert.Danger>
+            )}
+          </div>
+        </div>
       </section>
 
       {tableItems.checkedItems.size > 0 && (
