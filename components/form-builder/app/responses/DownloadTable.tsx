@@ -17,7 +17,7 @@ import { useSetting } from "@lib/hooks/useSetting";
 import Link from "next/link";
 import { TableActions, initialTableItemsState, reducerTableItems } from "./DownloadTableReducer";
 import { getDaysPassed } from "@lib/clientHelpers";
-import { Alert } from "@components/globals";
+import { Alert, Button } from "@components/globals";
 import { CheckAll } from "./CheckAll";
 import { DownloadButton } from "./DownloadButton";
 import { toast } from "../shared";
@@ -80,6 +80,10 @@ export const DownloadTable = ({
       return true;
     }
     return false;
+  };
+
+  const handleDelete = () => {
+    alert("Not yet implemented");
   };
 
   useEffect(() => {
@@ -287,6 +291,9 @@ export const DownloadTable = ({
               toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
             }}
           />
+          <Button theme="destructive" onClick={handleDelete}>
+            {t("downloadResponsesTable.deleteSelectedResponses")}
+          </Button>
         </ActionsPanel>
       )}
     </>
