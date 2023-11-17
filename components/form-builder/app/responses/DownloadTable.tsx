@@ -23,6 +23,8 @@ import { DownloadButton } from "./DownloadButton";
 import { toast } from "../shared";
 import { MoreMenu } from "./MoreMenu";
 import { ActionsPanel } from "./ActionsPanel";
+import { DeleteButton } from "./DeleteButton";
+import { ConfirmDeleteNewDialog } from "./Dialogs/ConfirmDeleteNewDialog";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -39,9 +41,11 @@ export const DownloadTable = ({
 }: DownloadTableProps) => {
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
+  const [, statusQuery = "new"] = router.query?.params || [];
 
   const [downloadError, setDownloadError] = useState(false);
   const [noSelectedItemsError, setNoSelectedItemsError] = useState(false);
+  const [showConfirmNewtDialog, setShowConfirmNewDialog] = useState(false);
 
   const accountEscalated = nagwareResult && nagwareResult.level > 2;
 
@@ -226,6 +230,7 @@ export const DownloadTable = ({
                         toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
                       }}
                       setDownloadError={setDownloadError}
+                      setShowConfirmNewDialog={setShowConfirmNewDialog}
                     />
                   </td>
                 </tr>
@@ -287,8 +292,16 @@ export const DownloadTable = ({
               toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
             }}
           />
+          {statusQuery === "new" && (
+            <DeleteButton setShowConfirmNewDialog={setShowConfirmNewDialog} />
+          )}
         </ActionsPanel>
       )}
+
+      <ConfirmDeleteNewDialog
+        isVisible={showConfirmNewtDialog}
+        setIsVisible={setShowConfirmNewDialog}
+      />
     </>
   );
 };

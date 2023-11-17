@@ -11,11 +11,13 @@ export const MoreMenu = ({
   responseId,
   setDownloadError,
   onDownloadSuccess,
+  setShowConfirmNewDialog,
 }: {
   formId: string;
   responseId: string;
   setDownloadError: (downloadError: boolean) => void;
   onDownloadSuccess: () => void;
+  setShowConfirmNewDialog: (showConfirmNewDialog: boolean) => void;
 }) => {
   const { t } = useTranslation("form-builder-responses");
 
@@ -56,7 +58,7 @@ export const MoreMenu = ({
   };
 
   const handleDelete = () => {
-    alert("Not implemented yet");
+    setShowConfirmNewDialog(true);
   };
 
   return (
