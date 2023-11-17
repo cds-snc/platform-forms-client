@@ -20,7 +20,7 @@ export const MoreMenu = ({
   const { t } = useTranslation("form-builder-responses");
 
   const router = useRouter();
-  const [, statusQuery = "new"] = router.query.params || [];
+  const [, statusQuery = "new"] = router.query?.params || [];
 
   const handleDownload = () => {
     const url = `/api/id/${formId}/submission/download?format=html`;
