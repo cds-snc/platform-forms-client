@@ -170,15 +170,6 @@ const getSubmissions = async (
             true
           );
 
-          responseIdStatusArray.forEach((item) => {
-            logEvent(
-              ability.userID,
-              { type: "Response", id: item.id },
-              "DownloadResponse",
-              `Downloaded form response in html-aggregated for submission ID ${item.id}`
-            );
-          });
-
           return res
             .status(200)
             .setHeader("Content-Type", "text/html")
@@ -195,15 +186,6 @@ const getSubmissions = async (
             true
           );
 
-          responseIdStatusArray.forEach((item) => {
-            logEvent(
-              ability.userID,
-              { type: "Response", id: item.id },
-              "DownloadResponse",
-              `Downloaded form response for submission ID ${item.id}`
-            );
-          });
-
           return res
             .status(200)
             .setHeader("Content-Type", "text/json")
@@ -219,15 +201,6 @@ const getSubmissions = async (
             userEmail,
             true
           );
-
-          responseIdStatusArray.forEach((item) => {
-            logEvent(
-              ability.userID,
-              { type: "Response", id: item.id },
-              "DownloadResponse",
-              `Downloaded form response for submission ID ${item.id}`
-            );
-          });
 
           const zip = zipTransform(formResponse);
 
