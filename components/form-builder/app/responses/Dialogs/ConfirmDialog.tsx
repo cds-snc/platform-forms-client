@@ -170,11 +170,15 @@ export const ConfirmDialog = ({
               )}
             </div>
             <div className="py-4">
-              <p className="mt-2">{t("downloadResponsesModals.confirmReceiptDialog.findCode")}</p>
+              <h3>{t("downloadResponsesModals.confirmReceiptDialog.toDeleteHeading")}</h3>
+              <ol>
+                <li>{t("downloadResponsesModals.confirmReceiptDialog.toDelete1")}</li>
+                <li>{t("downloadResponsesModals.confirmReceiptDialog.toDelete2")}</li>
+                <li>{t("downloadResponsesModals.confirmReceiptDialog.toDelete3")}</li>
+                <li>{t("downloadResponsesModals.confirmReceiptDialog.toDelete4")}</li>
+              </ol>
               <p className="mb-2 mt-10 font-bold" id={confirmInstructionId}>
-                {t("downloadResponsesModals.confirmReceiptDialog.copyCode", {
-                  max: maxEntries,
-                })}
+                {t("downloadResponsesModals.confirmReceiptDialog.copyCode")}
               </p>
 
               <LineItemEntries
@@ -188,9 +192,15 @@ export const ConfirmDialog = ({
                 setStatus={setStatus}
               ></LineItemEntries>
 
-              <p className="mt-8">
-                {t("downloadResponsesModals.confirmReceiptDialog.responsesAvailableFor")}
-              </p>
+              <Alert.Warning className="my-4">
+                <Alert.Title headingTag="h4">
+                  {t("downloadResponsesModals.confirmReceiptDialog.warningTitle")}
+                </Alert.Title>
+                <Alert.Body>
+                  {t("downloadResponsesModals.confirmReceiptDialog.warningBody")}
+                </Alert.Body>
+              </Alert.Warning>
+
               <div className="mt-4 flex">
                 <Button
                   className="mr-4"
