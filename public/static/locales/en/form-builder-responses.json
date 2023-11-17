@@ -84,6 +84,16 @@
     "unknown": "Unknown"
   },
   "downloadResponsesModals": {
+    "confirmDeleteNewDialog": {
+      "confirmAndDelete": "Confirm and delete new responses",
+      "responsesNotYetDownloaded": "Responses not yet downloaded",
+      "alertBody": "You’ve not downloaded the responses you’re about to delete. If you delete these responses, they will be removed permanently from GC Forms after 30 days.",
+      "deletePrompt": "To proceed with deleting non-downloaded responses enter the word “DELETE” below.",
+      "required": "Required",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "deleteConfirmationString": "DELETE"
+    },
     "confirmReceiptDialog": {
       "title": "Confirm and delete responses",
       "toDeleteHeading": "To delete responses:",
