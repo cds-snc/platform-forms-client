@@ -3,86 +3,130 @@ import { Dialog, useDialogRef } from "../../shared";
 import { useTranslation } from "react-i18next";
 import { Label } from "@components/forms";
 import { Button } from "@components/globals";
+import { logMessage } from "@lib/logger";
+import axios from "axios";
+
+enum DownloadFormat {
+  HTML = "html",
+  HTML_ZIPPED = "html-zipped",
+  HTML_AGGREGATED = "html-aggregated",
+}
 
 export const DownloadDialog = ({
+  checkedItems,
   isVisible,
   setIsVisible,
+  downloadError,
+  setDownloadError,
+  formId,
+  onSuccessfulDownload,
 }: {
+  checkedItems: Map<string, boolean>;
   isVisible: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  downloadError: boolean;
+  setDownloadError: React.Dispatch<React.SetStateAction<boolean>>;
+  formId: string;
+  onSuccessfulDownload: () => void;
 }) => {
   const dialogRef = useDialogRef();
   const { t } = useTranslation("form-builder-responses");
+  const [selectedFormat, setSelectedFormat] = React.useState<DownloadFormat>();
+
+  if (downloadError) {
+    setDownloadError(false);
+  }
 
   const handleClose = () => {
     setIsVisible(false);
     dialogRef.current?.close();
   };
 
-  const handleDownload = () => {
-    alert("not yet implemented");
+  const handleDownload = async () => {
+    const url = `/api/id/${formId}/submission/download?format=${selectedFormat}`;
+    const ids = Array.from(checkedItems.keys());
+
+    try {
+      if (selectedFormat === "html") {
+        const response = await axios({
+          url,
+          method: "POST",
+          data: {
+            ids: ids.join(","),
+          },
+        });
+
+        const interval = 200;
+
+        response.data.forEach((submission: { id: string; html: string }, i: number) => {
+          setTimeout(() => {
+            const fileName = `${submission.id}.html`;
+            const href = window.URL.createObjectURL(new Blob([submission.html]));
+            const anchorElement = document.createElement("a");
+            anchorElement.href = href;
+            anchorElement.download = fileName;
+            document.body.appendChild(anchorElement);
+            anchorElement.click();
+            document.body.removeChild(anchorElement);
+            window.URL.revokeObjectURL(href);
+          }, interval * i);
+        });
+        setTimeout(() => {
+          onSuccessfulDownload();
+          handleClose();
+        }, interval * response.data.length);
+      }
+
+      if (selectedFormat === "html-zipped") {
+        const response = await axios({
+          url,
+          method: "POST",
+          responseType: "blob",
+          data: {
+            ids: ids.join(","),
+          },
+        });
+
+        const fileName = `records.zip`;
+        const href = window.URL.createObjectURL(new Blob([response.data]));
+        const anchorElement = document.createElement("a");
+        anchorElement.href = href;
+        anchorElement.download = fileName;
+        document.body.appendChild(anchorElement);
+        anchorElement.click();
+        document.body.removeChild(anchorElement);
+        window.URL.revokeObjectURL(href);
+        onSuccessfulDownload();
+        handleClose();
+      }
+
+      if (selectedFormat === "html-aggregated") {
+        const response = await axios({
+          url,
+          method: "POST",
+          responseType: "blob",
+          data: {
+            ids: ids.join(","),
+          },
+        });
+
+        const href = window.URL.createObjectURL(response.data);
+        const anchorElement = document.createElement("a");
+        anchorElement.href = href;
+        anchorElement.download = "records.html";
+        document.body.appendChild(anchorElement);
+        anchorElement.click();
+        document.body.removeChild(anchorElement);
+        window.URL.revokeObjectURL(href);
+
+        onSuccessfulDownload();
+        handleClose();
+      }
+    } catch (err) {
+      logMessage.error(err as Error);
+      setDownloadError(true);
+    }
   };
-
-  // The following was saved from DownloadButton to be adapted for use here.
-  //
-  //
-  // const handleDownload = async () => {
-  //   // Reset any errors
-  //   if (downloadError) {
-  //     setDownloadError(false);
-  //   }
-
-  //   // Can't download if none selected
-  //   if (checkedItems.size === 0) {
-  //     setNoSelectedItemsError(true);
-  //     return;
-  //   }
-
-  //   // Don't download if too many selected
-  //   if (!canDownload) {
-  //     return;
-  //   }
-
-  //   toast.info(
-  //     t("downloadResponsesTable.notifications.downloadingXFiles", {
-  //       fileCount: checkedItems.size,
-  //     })
-  //   );
-
-  //   const url = `/api/id/${formId}/submission/download?format=html`;
-  //   const ids = Array.from(checkedItems.keys());
-
-  //   axios({
-  //     url,
-  //     method: "POST",
-  //     data: {
-  //       ids: ids.join(","),
-  //     },
-  //   })
-  //     .then((response) => {
-  //       const interval = 200;
-  //       response.data.forEach((submission: { id: string; html: string }, i: number) => {
-  //         setTimeout(() => {
-  //           const fileName = `${submission.id}.html`;
-  //           const href = window.URL.createObjectURL(new Blob([submission.html]));
-  //           const anchorElement = document.createElement("a");
-  //           anchorElement.href = href;
-  //           anchorElement.download = fileName;
-  //           document.body.appendChild(anchorElement);
-  //           anchorElement.click();
-  //           document.body.removeChild(anchorElement);
-  //           window.URL.revokeObjectURL(href);
-  //         }, interval * i);
-  //       });
-  //       setTimeout(() => {
-  //         onSuccessfulDownload();
-  //       }, interval * response.data.length);
-  //     })
-  //     .catch((err) => {
-  //       logMessage.error(err as Error);
-  //       setDownloadError(true);
-  //     });
-  // };
 
   return (
     <>
@@ -101,8 +145,9 @@ export const DownloadDialog = ({
                 type="radio"
                 name="downloadFormat"
                 id="individual"
-                value="individual"
+                value={DownloadFormat.HTML}
                 className="gc-radio__input"
+                onChange={(e) => setSelectedFormat(e.target.value as DownloadFormat)}
               />
               <label htmlFor="individual" className="ml-14 inline-block">
                 <span className="block font-semibold">
@@ -118,8 +163,9 @@ export const DownloadDialog = ({
                 type="radio"
                 name="downloadFormat"
                 id="combined"
-                value="combined"
+                value={DownloadFormat.HTML_AGGREGATED}
                 className="gc-radio__input"
+                onChange={(e) => setSelectedFormat(e.target.value as DownloadFormat)}
               />
               <label htmlFor="combined" className="ml-14 inline-block">
                 <span className="block font-semibold">
@@ -136,8 +182,9 @@ export const DownloadDialog = ({
                 type="radio"
                 name="downloadFormat"
                 id="zip"
-                value="zip"
+                value={DownloadFormat.HTML_ZIPPED}
                 className="gc-radio__input"
+                onChange={(e) => setSelectedFormat(e.target.value as DownloadFormat)}
               />
               <label htmlFor="zip" className="ml-14 inline-block">
                 <span className="block font-semibold">
@@ -153,7 +200,7 @@ export const DownloadDialog = ({
               <Button theme="secondary" onClick={handleClose}>
                 {t("downloadResponsesModals.downloadDialog.cancel")}
               </Button>
-              <Button theme="primary" onClick={handleDownload}>
+              <Button theme="primary" onClick={handleDownload} disabled={!selectedFormat}>
                 {t("downloadResponsesModals.downloadDialog.download")}
               </Button>
             </div>

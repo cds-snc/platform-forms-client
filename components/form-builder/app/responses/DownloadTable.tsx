@@ -294,7 +294,18 @@ export const DownloadTable = ({
         setIsVisible={setShowConfirmNewDialog}
       />
 
-      <DownloadDialog isVisible={showDownloadDialog} setIsVisible={setShowDownloadDialog} />
+      <DownloadDialog
+        checkedItems={tableItems.checkedItems}
+        isVisible={showDownloadDialog}
+        setIsVisible={setShowDownloadDialog}
+        formId={formId}
+        onSuccessfulDownload={() => {
+          router.replace(router.asPath, undefined, { scroll: false });
+          toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
+        }}
+        downloadError={downloadError}
+        setDownloadError={setDownloadError}
+      />
     </>
   );
 };
