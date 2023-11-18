@@ -1,7 +1,6 @@
 import React from "react";
 import { Dialog, useDialogRef } from "../../shared";
 import { useTranslation } from "react-i18next";
-import { Label } from "@components/forms";
 import { Button } from "@components/globals";
 import { logMessage } from "@lib/logger";
 import axios from "axios";
