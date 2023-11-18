@@ -1,6 +1,6 @@
 import React from "react";
 import { capitalize } from "./ResponseSection";
-import { customTranslate } from "../../helpers";
+import { customTranslate, orderLangugeStrings } from "../../helpers";
 import { Answer, Submission } from "../../types";
 import { TableProps } from "../types";
 
@@ -15,7 +15,7 @@ const QuestionColumns = ({
     return (
       <div className="flex w-full flex-row border-b border-gray">
         <dt className="w-120 py-4 font-bold">
-          {String(item.questionEn)} / {String(item.questionFr)}
+          {orderLangugeStrings({ stringEn: item.questionEn, stringFr: item.questionFr, lang })}
         </dt>
         <dd key="" className={`py-4 pl-8`}>
           {String(item.answer) || "-"}
@@ -31,7 +31,7 @@ const QuestionColumns = ({
       return (
         <div key={`col-${index}-${lang}`}>
           <dt className="w-full py-4 font-bold">
-            {String(item.questionEn)} / {String(item.questionFr)}
+            {orderLangugeStrings({ stringEn: item.questionEn, stringFr: item.questionFr, lang })}
           </dt>
           <dd className="w-full py-4 pl-16">
             <dl className="ml-8">
@@ -60,15 +60,21 @@ export const ColumnTable = (props: TableProps): React.ReactElement => {
     <dl id={`responseTableCol${capitalize(lang)}`} className="border-y-2 border-gray">
       <div className="flex border-b border-gray">
         <dt className="w-120 py-4 font-bold">
-          {t("responseTemplate.responseNumber", { lng: "en" })} /{" "}
-          {t("responseTemplate.responseNumber", { lng: "fr" })}
+          {orderLangugeStrings({
+            stringEn: t("responseTemplate.responseNumber", { lng: "en" }),
+            stringFr: t("responseTemplate.responseNumber", { lng: "fr" }),
+            lang,
+          })}
         </dt>
         <dd className="py-4 pl-8">{responseID}</dd>
       </div>
       <div className="flex border-b border-gray">
         <dt className="w-120 py-4 font-bold">
-          {t("responseTemplate.submissionDate", { lng: "en" })} /{" "}
-          {t("responseTemplate.submissionDate", { lng: "fr" })}
+          {orderLangugeStrings({
+            stringEn: t("responseTemplate.submissionDate", { lng: "en" }),
+            stringFr: t("responseTemplate.submissionDate", { lng: "fr" }),
+            lang,
+          })}
         </dt>
         <dd className="py-4 pl-8">{formattedSubmissionDate}</dd>
       </div>

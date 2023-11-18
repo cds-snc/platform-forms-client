@@ -6,7 +6,11 @@ import { css } from "../../html/css/compiled";
 import { ColumnTable } from "../../html/components/ColumnTable";
 import { AggregatedTable } from "./AggregatedTable";
 import { FormResponseSubmissions, Submission } from "@lib/responseDownloadFormats/types";
-import { customTranslate, getProperty } from "@lib/responseDownloadFormats/helpers";
+import {
+  customTranslate,
+  getProperty,
+  orderLangugeStrings,
+} from "@lib/responseDownloadFormats/helpers";
 import { copyCodeToClipboardScript } from "../scripts";
 import { TableHeader } from "./AggregatedTable";
 
@@ -37,21 +41,30 @@ export const ResponseHtmlAggregated = ({
 
   const headersForTable = [
     {
-      title: `${t("responseTemplate.responseNumber", { lng: "en" })} / ${t(
-        "responseTemplate.responseNumber",
-        { lng: "fr" }
-      )}`,
+      title: orderLangugeStrings({
+        stringEn: t("responseTemplate.responseNumber", { lng: "en" }),
+        stringFr: t("responseTemplate.responseNumber", { lng: "fr" }),
+        lang,
+      }),
       type: "formData",
     },
     {
-      title: `${t("responseTemplate.submissionDate", { lng: "en" })} / ${t(
-        "responseTemplate.submissionDate",
-        { lng: "fr" }
-      )} `,
+      title: orderLangugeStrings({
+        stringEn: t("responseTemplate.submissionDate", { lng: "en" }),
+        stringFr: t("responseTemplate.submissionDate", { lng: "fr" }),
+        lang,
+      }),
       type: "formData",
     },
     ...formResponseSubmissions.submissions[0].answers.map((answer) => {
-      return { title: `${answer.questionEn} / ${answer.questionFr}`, type: answer.type };
+      return {
+        title: orderLangugeStrings({
+          stringEn: answer.questionEn,
+          stringFr: answer.questionFr,
+          lang,
+        }),
+        type: answer.type,
+      };
     }),
   ] as TableHeader[];
 

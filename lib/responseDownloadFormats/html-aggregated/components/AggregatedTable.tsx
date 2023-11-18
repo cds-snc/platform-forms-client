@@ -1,6 +1,7 @@
 import React from "react";
 import { Submission } from "@lib/responseDownloadFormats/types";
 import { getProperty } from "@lib/formBuilder";
+import { formatDate } from "@lib/clientHelpers";
 
 export interface TableHeader {
   title: string;
@@ -43,7 +44,7 @@ export const AggregatedTable = ({
               }`}
             >
               <td className="w-64 p-4">{submission.id}</td>
-              <td className="w-64 p-4">{submission.createdAt}</td>
+              <td className="w-64 p-4">{formatDate(new Date(submission.createdAt))}</td>
               {submission.answers &&
                 submission.answers.map((answer) => {
                   if (Array.isArray(answer.answer)) {
