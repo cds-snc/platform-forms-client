@@ -90,15 +90,15 @@ export const DownloadDialog = ({
 
         if (zip) {
           const file = new JSZip();
-          file.file("receipt.html", response.data.html);
-          file.file("records.csv", response.data.csv);
+          file.file("receipt.html", response.data.receipt);
+          file.file("records.csv", response.data.responses);
           file.generateAsync({ type: "nodebuffer", streamFiles: true }).then((buffer) => {
             const fileName = `records.zip`;
             downloadFileFromBlob(new Blob([buffer]), fileName);
           });
         } else {
-          downloadFileFromBlob(new Blob([response.data.html]), "receipt.html");
-          downloadFileFromBlob(new Blob([response.data.csv]), "records.csv");
+          downloadFileFromBlob(new Blob([response.data.receipt]), "receipt.html");
+          downloadFileFromBlob(new Blob([response.data.responses]), "records.csv");
         }
         onSuccessfulDownload();
         handleClose();
