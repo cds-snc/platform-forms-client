@@ -4,12 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@components/globals";
 import { logMessage } from "@lib/logger";
 import axios from "axios";
-
-enum DownloadFormat {
-  HTML = "html",
-  HTML_ZIPPED = "html-zipped",
-  HTML_AGGREGATED = "html-aggregated",
-}
+import { DownloadFormat } from "@pages/api/id/[form]/submission/download";
 
 export const DownloadDialog = ({
   checkedItems,
@@ -41,42 +36,46 @@ export const DownloadDialog = ({
     dialogRef.current?.close();
   };
 
+  const downloadFileFromBlob = (data: Blob, fileName: string) => {
+    const href = window.URL.createObjectURL(data);
+    const anchorElement = document.createElement("a");
+    anchorElement.href = href;
+    anchorElement.download = fileName;
+    document.body.appendChild(anchorElement);
+    anchorElement.click();
+    document.body.removeChild(anchorElement);
+    window.URL.revokeObjectURL(href);
+  };
+
   const handleDownload = async () => {
     const url = `/api/id/${formId}/submission/download?format=${selectedFormat}`;
     const ids = Array.from(checkedItems.keys());
 
     try {
-      if (selectedFormat === "html") {
-        const response = await axios({
-          url,
-          method: "POST",
-          data: {
-            ids: ids.join(","),
-          },
-        });
+      // if (selectedFormat === DownloadFormat.HTML) {
+      //   const response = await axios({
+      //     url,
+      //     method: "POST",
+      //     data: {
+      //       ids: ids.join(","),
+      //     },
+      //   });
 
-        const interval = 200;
+      //   const interval = 200;
 
-        response.data.forEach((submission: { id: string; html: string }, i: number) => {
-          setTimeout(() => {
-            const fileName = `${submission.id}.html`;
-            const href = window.URL.createObjectURL(new Blob([submission.html]));
-            const anchorElement = document.createElement("a");
-            anchorElement.href = href;
-            anchorElement.download = fileName;
-            document.body.appendChild(anchorElement);
-            anchorElement.click();
-            document.body.removeChild(anchorElement);
-            window.URL.revokeObjectURL(href);
-          }, interval * i);
-        });
-        setTimeout(() => {
-          onSuccessfulDownload();
-          handleClose();
-        }, interval * response.data.length);
-      }
+      //   response.data.forEach((submission: { id: string; html: string }, i: number) => {
+      //     setTimeout(() => {
+      //       const fileName = `${submission.id}.html`;
+      //       downloadFileFromBlob(new Blob([submission.html]), fileName);
+      //     }, interval * i);
+      //   });
+      //   setTimeout(() => {
+      //     onSuccessfulDownload();
+      //     handleClose();
+      //   }, interval * response.data.length);
+      // }
 
-      if (selectedFormat === "html-zipped") {
+      if (selectedFormat === DownloadFormat.HTML_ZIPPED) {
         const response = await axios({
           url,
           method: "POST",
@@ -87,36 +86,20 @@ export const DownloadDialog = ({
         });
 
         const fileName = `records.zip`;
-        const href = window.URL.createObjectURL(new Blob([response.data]));
-        const anchorElement = document.createElement("a");
-        anchorElement.href = href;
-        anchorElement.download = fileName;
-        document.body.appendChild(anchorElement);
-        anchorElement.click();
-        document.body.removeChild(anchorElement);
-        window.URL.revokeObjectURL(href);
-        onSuccessfulDownload();
-        handleClose();
+        downloadFileFromBlob(new Blob([response.data]), fileName);
       }
 
-      if (selectedFormat === "html-aggregated") {
+      if (selectedFormat === DownloadFormat.HTML_CSV_AGGREGATED) {
         const response = await axios({
           url,
           method: "POST",
-          responseType: "blob",
           data: {
             ids: ids.join(","),
           },
         });
 
-        const href = window.URL.createObjectURL(response.data);
-        const anchorElement = document.createElement("a");
-        anchorElement.href = href;
-        anchorElement.download = "records.html";
-        document.body.appendChild(anchorElement);
-        anchorElement.click();
-        document.body.removeChild(anchorElement);
-        window.URL.revokeObjectURL(href);
+        downloadFileFromBlob(new Blob([response.data.html]), "records.html");
+        downloadFileFromBlob(new Blob([response.data.csv]), "records.csv");
 
         onSuccessfulDownload();
         handleClose();
@@ -163,7 +146,7 @@ export const DownloadDialog = ({
                 type="radio"
                 name="downloadFormat"
                 id="combined"
-                value={DownloadFormat.HTML_AGGREGATED}
+                value={DownloadFormat.HTML_CSV_AGGREGATED}
                 className="gc-radio__input"
                 onChange={(e) => setSelectedFormat(e.target.value as DownloadFormat)}
               />

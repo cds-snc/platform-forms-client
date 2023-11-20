@@ -14,9 +14,25 @@ import { FormResponseSubmissions } from "@lib/responseDownloadFormats/types";
 import { logEvent } from "@lib/auditLogs";
 import { logMessage } from "@lib/logger";
 
+export enum DownloadFormat {
+  HTML = "html",
+  CSV = "csv",
+  XLSX = "xlsx",
+  HTML_ZIPPED = "html-zipped",
+  HTML_AGGREGATED = "html-aggregated",
+  HTML_CSV_AGGREGATED = "html-csv-aggregated",
+}
+
+const officialRecordsFormats = [
+  DownloadFormat.HTML,
+  DownloadFormat.HTML_ZIPPED,
+  DownloadFormat.HTML_AGGREGATED,
+  DownloadFormat.HTML_CSV_AGGREGATED,
+];
+
 const logDownload = async (
   responseIdStatusArray: { id: string; status: string }[],
-  format: string,
+  format: DownloadFormat,
   formId: string,
   ability: ReturnType<typeof createAbility>,
   userEmail: string,
@@ -131,6 +147,11 @@ const getSubmissions = async (
     }
 
     if (req.query.format) {
+      // Only accept the specified formats
+      if (!Object.values(DownloadFormat).includes(req.query.format as DownloadFormat)) {
+        return res.status(400).json({ error: `Bad request invalid format ${req.query.format}` });
+      }
+
       const responseIdStatusArray = queryResult.map((item) => {
         return {
           id: item.name,
@@ -138,9 +159,17 @@ const getSubmissions = async (
         };
       });
 
+      await logDownload(
+        responseIdStatusArray,
+        req.query.format as DownloadFormat,
+        formId,
+        ability,
+        userEmail,
+        officialRecordsFormats.includes(req.query.format as DownloadFormat)
+      );
+
       switch (req.query.format) {
-        case "csv":
-          await logDownload(responseIdStatusArray, "csv", formId, ability, userEmail);
+        case DownloadFormat.CSV:
           return res
             .status(200)
             .setHeader("Content-Type", "text/csv charset=utf-8")
@@ -148,8 +177,7 @@ const getSubmissions = async (
             .send(csvTransform(formResponse));
           break;
 
-        case "xlsx":
-          await logDownload(responseIdStatusArray, "xlsx", formId, ability, userEmail);
+        case DownloadFormat.XLSX:
           return res
             .status(200)
             .setHeader(
@@ -160,32 +188,24 @@ const getSubmissions = async (
             .send(xlsxTransform(formResponse));
           break;
 
-        case "html-aggregated":
-          await logDownload(
-            responseIdStatusArray,
-            "html-aggregated",
-            formId,
-            ability,
-            userEmail,
-            true
-          );
-
+        case DownloadFormat.HTML_AGGREGATED:
           return res
             .status(200)
             .setHeader("Content-Type", "text/html")
             .send(htmlAggregatedTransform(formResponse, lang));
           break;
 
-        case "html":
-          await logDownload(
-            responseIdStatusArray,
-            "html-aggregated",
-            formId,
-            ability,
-            userEmail,
-            true
-          );
+        case DownloadFormat.HTML_CSV_AGGREGATED:
+          return res
+            .status(200)
+            .setHeader("Content-Type", "text/json")
+            .send({
+              html: htmlAggregatedTransform(formResponse),
+              csv: csvTransform(formResponse),
+            });
+          break;
 
+        case DownloadFormat.HTML:
           return res
             .status(200)
             .setHeader("Content-Type", "text/json")
@@ -193,15 +213,6 @@ const getSubmissions = async (
           break;
 
         case "html-zipped": {
-          await logDownload(
-            responseIdStatusArray,
-            "html-aggregated",
-            formId,
-            ability,
-            userEmail,
-            true
-          );
-
           const zip = zipTransform(formResponse);
 
           return res
@@ -213,7 +224,6 @@ const getSubmissions = async (
         }
 
         case "json":
-          await logDownload(responseIdStatusArray, "html-aggregated", formId, ability, userEmail);
           return res.status(200).json(jsonTransform(formResponse));
           break;
 
