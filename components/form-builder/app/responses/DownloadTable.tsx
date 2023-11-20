@@ -45,11 +45,17 @@ export const DownloadTable = ({
   const [, statusQuery = "new"] = router.query?.params || [];
 
   const [downloadError, setDownloadError] = useState(false);
+  const [showDownloadSuccess, setShowDownloadSuccess] = useState(false);
   const [noSelectedItemsError, setNoSelectedItemsError] = useState(false);
   const [showConfirmNewtDialog, setShowConfirmNewDialog] = useState(false);
   const [showDownloadDialog, setShowDownloadDialog] = useState(false);
 
   const accountEscalated = nagwareResult && nagwareResult.level > 2;
+
+  const downloadSuccessMessage =
+    statusQuery === "new"
+      ? "downloadResponsesTable.notifications.downloadCompleteNew"
+      : "downloadResponsesTable.notifications.downloadComplete";
 
   const { value: overdueAfter } = useSetting("nagwarePhaseEncouraged");
   const [tableItems, tableItemsDispatch] = useReducer(
@@ -102,6 +108,12 @@ export const DownloadTable = ({
           anchor="#downloadTableButtonId"
         />
         <div id="notificationsTop">
+          {showDownloadSuccess && (
+            <Alert.Success>
+              <Alert.Title>{t(downloadSuccessMessage)}</Alert.Title>
+              <Alert.Body>{t(downloadSuccessMessage)}</Alert.Body>
+            </Alert.Success>
+          )}
           {tableItems.checkedItems.size > MAX_FILE_DOWNLOADS && (
             <Alert.Danger>
               <Alert.Title>
@@ -301,7 +313,7 @@ export const DownloadTable = ({
         formId={formId}
         onSuccessfulDownload={() => {
           router.replace(router.asPath, undefined, { scroll: false });
-          toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
+          setShowDownloadSuccess(true);
         }}
         downloadError={downloadError}
         setDownloadError={setDownloadError}

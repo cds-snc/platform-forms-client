@@ -62,7 +62,8 @@
       "noDeletedResponsesMessage": "Once you’ve deleted responses, they will be available for 30 days."
     },
     "notifications": {
-      "downloadComplete": "Download complete",
+      "downloadComplete": "Responses were downloaded",
+      "downloadCompleteNew": "Responses were downloaded and moved to “Downloaded”",
       "downloadingXFiles": "Downloading {{fileCount}} files"
     },
     "errors": {
