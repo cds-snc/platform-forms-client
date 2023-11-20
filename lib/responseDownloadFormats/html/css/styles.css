@@ -86,6 +86,24 @@
       @apply text-white top-0.5;
     }
   }
+
+  a.tableLink {
+    color: #303f9f;
+    text-decoration: underline;
+  } 
+
+  a.tableLink:hover,
+  a.tableLink:focus {
+    color: #FFF !important;
+    text-decoration: underline;
+    background: #0d47a1;
+  }
+
+  a.tableLink:visited {
+    color: #9c27b0;
+    text-decoration: underline;
+  }
+
 }
 
 @tailwind utilities;
