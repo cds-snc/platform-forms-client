@@ -87,9 +87,6 @@
     }
   }
 
-  /* The compile script was having trouble with SCSS stuff like complex applies including hover and
-  with nested properties but the below simple css works */
-
   a.tableLink {
     color: #303f9f;
     text-decoration: underline;
