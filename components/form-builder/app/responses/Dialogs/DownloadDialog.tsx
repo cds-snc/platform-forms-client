@@ -40,6 +40,8 @@ export const DownloadDialog = ({
   }
 
   const handleClose = () => {
+    setSelectedFormat(undefined);
+    setZip(true);
     setIsVisible(false);
     dialogRef.current?.close();
   };
