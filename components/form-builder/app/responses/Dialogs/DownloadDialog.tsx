@@ -77,7 +77,7 @@ export const DownloadDialog = ({
         handleClose();
       }
 
-      if (selectedFormat === DownloadFormat.HTML_CSV_AGGREGATED) {
+      if (selectedFormat === DownloadFormat.CSV) {
         const response = await axios({
           url,
           method: "POST",
@@ -168,7 +168,7 @@ export const DownloadDialog = ({
                   type="radio"
                   name="downloadFormat"
                   id="combined"
-                  value={DownloadFormat.HTML_CSV_AGGREGATED}
+                  value={DownloadFormat.CSV}
                   className="gc-radio__input"
                   onChange={(e) => setSelectedFormat(e.target.value as DownloadFormat)}
                 />

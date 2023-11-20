@@ -18,7 +18,8 @@ const officialRecordsFormats = [
   DownloadFormat.HTML,
   DownloadFormat.HTML_ZIPPED,
   DownloadFormat.HTML_AGGREGATED,
-  DownloadFormat.HTML_CSV_AGGREGATED,
+  DownloadFormat.CSV,
+  DownloadFormat.JSON,
 ];
 
 const logDownload = async (
@@ -163,9 +164,11 @@ const getSubmissions = async (
         case DownloadFormat.CSV:
           return res
             .status(200)
-            .setHeader("Content-Type", "text/csv charset=utf-8")
-            .setHeader("Content-Disposition", `attachment; filename=records.csv`)
-            .send(csvTransform(formResponse));
+            .setHeader("Content-Type", "text/json")
+            .send({
+              receipt: htmlAggregatedTransform(formResponse),
+              responses: csvTransform(formResponse),
+            });
           break;
 
         case DownloadFormat.XLSX:
@@ -184,16 +187,6 @@ const getSubmissions = async (
             .status(200)
             .setHeader("Content-Type", "text/html")
             .send(htmlAggregatedTransform(formResponse, lang));
-          break;
-
-        case DownloadFormat.HTML_CSV_AGGREGATED:
-          return res
-            .status(200)
-            .setHeader("Content-Type", "text/json")
-            .send({
-              html: htmlAggregatedTransform(formResponse),
-              csv: csvTransform(formResponse),
-            });
           break;
 
         case DownloadFormat.HTML:

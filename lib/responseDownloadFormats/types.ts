@@ -41,5 +41,4 @@ export enum DownloadFormat {
   JSON = "json",
   HTML_ZIPPED = "html-zipped",
   HTML_AGGREGATED = "html-aggregated",
-  HTML_CSV_AGGREGATED = "html-csv-aggregated",
 }
