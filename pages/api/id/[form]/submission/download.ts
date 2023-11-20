@@ -59,15 +59,22 @@ const getSubmissions = async (
 
     if (fullFormTemplate === null) return res.status(404).json({ error: "Form Not Found" });
 
-    const data = req.body;
-    const ids = data.ids.split(",");
+    let queryResult;
 
-    // Note: if we decided in the future to try to detect the user's language, it would make the
-    // most sense to use the form submission language vs sesion/*. If not, the output could have
-    // e.g. French questions and English answers etc.
-    const lang = req.query?.lang === "fr" ? "fr" : "en";
+    switch (req.method) {
+      // TODO: modify vault to allow the following
+      case "GET":
+        queryResult = await retrieveSubmissions(ability, formId);
+        break;
 
-    const queryResult = await retrieveSubmissions(ability, formId, ids);
+      case "POST": {
+        const data = req.body;
+        const ids = data.ids.split(",");
+
+        queryResult = await retrieveSubmissions(ability, formId, ids);
+        break;
+      }
+    }
 
     if (!queryResult)
       return res.status(500).json({ error: "There was an error. Please try again later." });
@@ -173,7 +180,7 @@ const getSubmissions = async (
           return res
             .status(200)
             .setHeader("Content-Type", "text/html")
-            .send(htmlAggregatedTransform(formResponse, lang));
+            .send(htmlAggregatedTransform(formResponse));
           break;
 
         case "html":
@@ -234,4 +241,7 @@ const getSubmissions = async (
   }
 };
 
-export default middleware([cors({ allowedMethods: ["POST"] }), sessionExists()], getSubmissions);
+export default middleware(
+  [cors({ allowedMethods: ["GET", "POST"] }), sessionExists()],
+  getSubmissions
+);

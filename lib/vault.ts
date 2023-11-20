@@ -204,7 +204,7 @@ export async function listAllSubmissions(
 export async function retrieveSubmissions(
   ability: UserAbility,
   formID: string,
-  ids: string[]
+  ids?: string[]
 ): Promise<VaultSubmission[]> {
   // Check access control first
   try {
@@ -227,32 +227,75 @@ export async function retrieveSubmissions(
     let accumulatedResponses: VaultSubmission[] = [];
     const documentClient = connectToDynamo();
 
-    let keys = ids.map((id) => {
-      return { FormID: formID, NAME_OR_CONF: `NAME#${id.trim()}` };
-    }) as Record<string, string>[];
+    if (ids) {
+      let keys = ids.map((id) => {
+        return { FormID: formID, NAME_OR_CONF: `NAME#${id.trim()}` };
+      }) as Record<string, string>[];
 
-    // DynamoDB BatchGetItem can only retrieve 100 items at a time
-    while (keys && keys.length > 0) {
-      const queryCommand = new BatchGetCommand({
-        RequestItems: {
-          Vault: {
-            Keys: keys,
-            ProjectionExpression:
-              "FormID,SubmissionID,FormSubmission,ConfirmationCode,#status,SecurityAttribute,#name,CreatedAt,LastDownloadedBy,ConfirmTimestamp,DownloadedAt,RemovalDate",
-            ExpressionAttributeNames: {
-              "#name": "Name",
-              "#status": "Status",
+      // DynamoDB BatchGetItem can only retrieve 100 items at a time
+      while (keys && keys.length > 0) {
+        const queryCommand = new BatchGetCommand({
+          RequestItems: {
+            Vault: {
+              Keys: keys,
+              ProjectionExpression:
+                "FormID,SubmissionID,FormSubmission,ConfirmationCode,#status,SecurityAttribute,#name,CreatedAt,LastDownloadedBy,ConfirmTimestamp,DownloadedAt,RemovalDate",
+              ExpressionAttributeNames: {
+                "#name": "Name",
+                "#status": "Status",
+              },
             },
           },
+        });
+
+        // eslint-disable-next-line no-await-in-loop
+        const response = await documentClient.send(queryCommand);
+
+        if (response.Responses?.Vault.length) {
+          accumulatedResponses = accumulatedResponses.concat(
+            response.Responses.Vault.map((item) => {
+              return {
+                formID: item.FormID,
+                submissionID: item.SubmissionID,
+                formSubmission: item.FormSubmission,
+                confirmationCode: item.ConfirmationCode,
+                status: item.Status as VaultStatus,
+                securityAttribute: item.SecurityAttribute,
+                name: item.Name,
+                createdAt: item.CreatedAt,
+                lastDownloadedBy: item.LastDownloadedBy ?? null,
+                confirmedAt: item.ConfirmTimestamp ?? null,
+                downloadedAt: item.DownloadedAt ?? null,
+                removedAt: item.RemovalDate ?? null,
+              } as VaultSubmission;
+            })
+          );
+        }
+
+        // If there are unprocessed keys, we need to make another request
+        keys = response.UnprocessedKeys?.Vault?.Keys || [];
+      }
+    } else {
+      const queryCommand = new QueryCommand({
+        TableName: "Vault",
+        ExpressionAttributeValues: {
+          ":FormID": formID,
+          ":name": "NAME#",
         },
+        ExpressionAttributeNames: {
+          "#name": "Name",
+          "#status": "Status",
+        },
+        KeyConditionExpression: "FormID = :FormID AND begins_with(NAME_OR_CONF, :name)",
+        ProjectionExpression:
+          "FormID,SubmissionID,FormSubmission,ConfirmationCode,#status,SecurityAttribute,#name,CreatedAt,LastDownloadedBy,ConfirmTimestamp,DownloadedAt,RemovalDate",
       });
 
-      // eslint-disable-next-line no-await-in-loop
       const response = await documentClient.send(queryCommand);
 
-      if (response.Responses?.Vault.length) {
+      if (response.Items?.length) {
         accumulatedResponses = accumulatedResponses.concat(
-          response.Responses.Vault.map((item) => {
+          response.Items.map((item) => {
             return {
               formID: item.FormID,
               submissionID: item.SubmissionID,
@@ -270,9 +313,6 @@ export async function retrieveSubmissions(
           })
         );
       }
-
-      // If there are unprocessed keys, we need to make another request
-      keys = response.UnprocessedKeys?.Vault?.Keys || [];
     }
 
     // Log each response retrieved
