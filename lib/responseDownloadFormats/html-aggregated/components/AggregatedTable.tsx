@@ -43,7 +43,11 @@ export const AggregatedTable = ({
                 index % 2 !== 0 ? "bg-slate-50" : ""
               }`}
             >
-              <td className="w-64 p-4">{submission.id}</td>
+              <td className="w-64 p-4">
+                <a href={`#${submission.id}`} className="tableLink">
+                  {submission.id}
+                </a>
+              </td>
               <td className="w-64 p-4">{formatDate(new Date(submission.createdAt))}</td>
               {submission.answers &&
                 submission.answers.map((answer) => {

@@ -86,6 +86,26 @@
       @apply text-white top-0.5;
     }
   }
+
+  /* The compile script was having trouble with SCSS stuff like complex applies including hover and
+  with nested properties but the below simple css works */
+
+  a.tableLink {
+    color: #303f9f;
+    text-decoration: underline;
+  } 
+
+  a.tableLink:hover,
+  a.tableLink:focus {
+    color: #FFF;
+    text-decoration: underline;
+  }
+
+  a.tableLink:visited {
+    color: #9c27b0;
+    text-decoration: underline;
+  }
+
 }
 
 @tailwind utilities;

@@ -14,7 +14,7 @@ const QuestionColumns = ({
   const renderRow = (index: number, lang: string, item: Answer) => {
     return (
       <div className="flex w-full flex-row border-b border-gray">
-        <dt className="w-120 py-4 font-bold">
+        <dt key="" className="w-120 py-4 font-bold">
           {orderLangugeStrings({ stringEn: item.questionEn, stringFr: item.questionFr, lang })}
         </dt>
         <dd key="" className={`py-4 pl-8`}>
