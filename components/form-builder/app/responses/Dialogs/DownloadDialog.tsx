@@ -160,8 +160,12 @@ export const DownloadDialog = ({
                   onChange={(e) => setSelectedFormat(e.target.value as DownloadFormat)}
                 />
                 <label htmlFor="zip" className="ml-14 inline-block">
-                  <span className="block font-semibold">Individual response files</span>
-                  <span className="">Separate HTML files for each form submission.</span>
+                  <span className="block font-semibold">
+                    {t("downloadResponsesModals.downloadDialog.html")}
+                  </span>
+                  <span className="">
+                    {t("downloadResponsesModals.downloadDialog.htmlDescription")}
+                  </span>
                 </label>
               </div>
 
@@ -175,8 +179,12 @@ export const DownloadDialog = ({
                   onChange={(e) => setSelectedFormat(e.target.value as DownloadFormat)}
                 />
                 <label htmlFor="combined" className="ml-14 inline-block">
-                  <span className="block font-semibold">CSV</span>
-                  <span className="">For lists, spreadsheets or tables</span>
+                  <span className="block font-semibold">
+                    {t("downloadResponsesModals.downloadDialog.csv")}
+                  </span>
+                  <span className="">
+                    {t("downloadResponsesModals.downloadDialog.csvDescription")}
+                  </span>
                 </label>
               </div>
 
@@ -190,8 +198,12 @@ export const DownloadDialog = ({
                   onChange={(e) => setSelectedFormat(e.target.value as DownloadFormat)}
                 />
                 <label htmlFor="combined" className="ml-14 inline-block">
-                  <span className="block font-semibold">JSON</span>
-                  <span className="">For API or data configuration</span>
+                  <span className="block font-semibold">
+                    {t("downloadResponsesModals.downloadDialog.json")}
+                  </span>
+                  <span className="">
+                    {t("downloadResponsesModals.downloadDialog.jsonDescription")}
+                  </span>
                 </label>
               </div>
 
@@ -209,8 +221,12 @@ export const DownloadDialog = ({
                     onChange={() => setZip(zip === true ? false : true)}
                   />
                   <label htmlFor="combined" className="ml-14 inline-block">
-                    <span className="block font-semibold">Download as ZIP (compressed) file</span>
-                    <span className="">May not be available in all departments or agencies.</span>
+                    <span className="block font-semibold">
+                      {t("downloadResponsesModals.downloadDialog.downloadAllAsZip")}
+                    </span>
+                    <span className="">
+                      {t("downloadResponsesModals.downloadDialog.mayNotBeAvailable")}
+                    </span>
                   </label>
                 </div>
               </div>

@@ -87,11 +87,13 @@
     "downloadDialog": {
       "title": "Download responses",
       "configureDownloadSettings": "Configure download settings",
-      "individualResponseFiles": "Individual response files",
-      "getSeparateHtmlFiles": "Get separate HTML files for each form submission",
-      "combinedResponseFiles": "Combined response files",
-      "getHtmlAndCsv": "Get an HTML file and CSV spreadsheet of multiple submissions.",
-      "downloadAsZip": "Download all as ZIP (compressed) file",
+      "html": "Individual response files",
+      "htmlDescription": "Get separate HTML files for each form submission",
+      "csv": "CSV",
+      "csvDescription": "For lists, spreadsheets, or tables",
+      "json": "JSON",
+      "jsonDescription": "For API or data configuration",
+      "downloadAllAsZip": "Download all as ZIP (compressed) file",
       "mayNotBeAvailable": "May not be available in all departments and agencies",
       "cancel": "Cancel",
       "download": "Download"
