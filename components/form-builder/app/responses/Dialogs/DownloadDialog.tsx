@@ -85,6 +85,7 @@ export const DownloadDialog = ({
           },
         });
 
+        // @TODO: include html-aggregated in zip file
         const fileName = `records.zip`;
         downloadFileFromBlob(new Blob([response.data]), fileName);
 
@@ -101,11 +102,27 @@ export const DownloadDialog = ({
           },
         });
 
-        downloadFileFromBlob(new Blob([response.data.html]), "records.html");
+        downloadFileFromBlob(new Blob([response.data.html]), "receipt.html");
         downloadFileFromBlob(new Blob([response.data.csv]), "records.csv");
 
         onSuccessfulDownload();
         handleClose();
+      }
+
+      if (selectedFormat === DownloadFormat.JSON) {
+        const response = await axios({
+          url,
+          method: "POST",
+          data: {
+            ids: ids.join(","),
+          },
+        });
+
+        downloadFileFromBlob(
+          new Blob([JSON.stringify(response.data.responses)], { type: "application/json" }),
+          "records.json"
+        );
+        downloadFileFromBlob(new Blob([response.data.receipt]), "receipt.html");
       }
     } catch (err) {
       logMessage.error(err as Error);
@@ -144,42 +161,70 @@ export const DownloadDialog = ({
                 </span>
               </label>
             </div> */}
-            <div>
-              <input
-                type="radio"
-                name="downloadFormat"
-                id="combined"
-                value={DownloadFormat.HTML_CSV_AGGREGATED}
-                className="gc-radio__input"
-                onChange={(e) => setSelectedFormat(e.target.value as DownloadFormat)}
-              />
-              <label htmlFor="combined" className="ml-14 inline-block">
-                <span className="block font-semibold">
-                  {t("downloadResponsesModals.downloadDialog.combinedResponseFiles")}
-                </span>
-                <span className="">
-                  {t("downloadResponsesModals.downloadDialog.getHtmlAndCsv")}
-                </span>
-              </label>
-            </div>
-            <hr className="my-8" />
-            <div>
-              <input
-                type="radio"
-                name="downloadFormat"
-                id="zip"
-                value={DownloadFormat.HTML_ZIPPED}
-                className="gc-radio__input"
-                onChange={(e) => setSelectedFormat(e.target.value as DownloadFormat)}
-              />
-              <label htmlFor="zip" className="ml-14 inline-block">
-                <span className="block font-semibold">
-                  {t("downloadResponsesModals.downloadDialog.downloadAsZip")}
-                </span>
-                <span className="">
-                  {t("downloadResponsesModals.downloadDialog.mayNotBeAvailable")}
-                </span>
-              </label>
+            <div className="mt-4 flex flex-col gap-6">
+              <div>
+                <input
+                  type="radio"
+                  name="downloadFormat"
+                  id="zip"
+                  value={DownloadFormat.HTML_ZIPPED}
+                  className="gc-radio__input"
+                  onChange={(e) => setSelectedFormat(e.target.value as DownloadFormat)}
+                />
+                <label htmlFor="zip" className="ml-14 inline-block">
+                  <span className="block font-semibold">Individual response files</span>
+                  <span className="">Separate HTML files for each form submission.</span>
+                </label>
+              </div>
+
+              <div>
+                <input
+                  type="radio"
+                  name="downloadFormat"
+                  id="combined"
+                  value={DownloadFormat.HTML_CSV_AGGREGATED}
+                  className="gc-radio__input"
+                  onChange={(e) => setSelectedFormat(e.target.value as DownloadFormat)}
+                />
+                <label htmlFor="combined" className="ml-14 inline-block">
+                  <span className="block font-semibold">CSV</span>
+                  <span className="">For lists, spreadsheets or tables</span>
+                </label>
+              </div>
+
+              <div>
+                <input
+                  type="radio"
+                  name="downloadFormat"
+                  id="json"
+                  value={DownloadFormat.JSON}
+                  className="gc-radio__input"
+                  onChange={(e) => setSelectedFormat(e.target.value as DownloadFormat)}
+                />
+                <label htmlFor="combined" className="ml-14 inline-block">
+                  <span className="block font-semibold">JSON</span>
+                  <span className="">For API or data configuration</span>
+                </label>
+              </div>
+
+              <hr />
+
+              <div>
+                <div className="gc-input-checkbox">
+                  <input
+                    type="checkbox"
+                    name="downloadFormat"
+                    id="zipped"
+                    value={DownloadFormat.JSON}
+                    className="gc-input-checkbox__input"
+                    onChange={(e) => setSelectedFormat(e.target.value as DownloadFormat)}
+                  />
+                  <label htmlFor="combined" className="ml-14 inline-block">
+                    <span className="block font-semibold">Download as ZIP (compressed) file</span>
+                    <span className="">May not be available in all departments or agencies.</span>
+                  </label>
+                </div>
+              </div>
             </div>
 
             <div className="mt-8 flex gap-4">
