@@ -69,7 +69,7 @@ export const ResponseHtmlAggregated = ({
   ] as TableHeader[];
 
   return (
-    <html lang="en">
+    <html lang={lang}>
       {/* eslint-disable-next-line @next/next/no-head-element */}
       <head>
         <meta charSet="utf-8" />
@@ -78,7 +78,7 @@ export const ResponseHtmlAggregated = ({
       </head>
       <body>
         <div id="skip-link-container">
-          <a href="#content" id="skip-link">
+          <a href="#main-header" id="skip-link">
             Skip to main content
           </a>
         </div>
@@ -86,7 +86,7 @@ export const ResponseHtmlAggregated = ({
           <main id="content">
             <Fip language="en" showLangLink={false} />
             <ProtectedWarning securityAttribute={form.securityAttribute} lang={lang} />
-            <h1 className="mt-14">{`${form[getProperty("title", lang)]}`}</h1>
+            <h1 id="main-header" className="mt-14">{`${form[getProperty("title", lang)]}`}</h1>
 
             <h2>{t("responseAggregatedTemplate.title", { lng: lang })}</h2>
 
