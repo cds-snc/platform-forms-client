@@ -18,8 +18,8 @@ const officialRecordsFormats = [
   DownloadFormat.HTML,
   DownloadFormat.HTML_ZIPPED,
   DownloadFormat.HTML_AGGREGATED,
-  DownloadFormat.CSV,
-  DownloadFormat.JSON,
+  DownloadFormat.CSV, // includes receipt.html
+  DownloadFormat.JSON, // includes receipt.html
 ];
 
 const logDownload = async (
