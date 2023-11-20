@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Dialog, useDialogRef } from "../../shared";
 import { useTranslation } from "react-i18next";
 import { Button } from "@components/globals";
@@ -29,7 +29,7 @@ export const DownloadDialog = ({
   const [selectedFormat, setSelectedFormat] = React.useState<DownloadFormat>();
   const [zip, setZip] = React.useState<boolean>(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (selectedFormat === DownloadFormat.HTML_ZIPPED) {
       setZip(true);
     }
