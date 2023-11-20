@@ -26,6 +26,7 @@ import { ActionsPanel } from "./ActionsPanel";
 import { DeleteButton } from "./DeleteButton";
 import { ConfirmDeleteNewDialog } from "./Dialogs/ConfirmDeleteNewDialog";
 import { formatDateTime } from "@components/form-builder/util";
+import { NextStep } from "./NextStep";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -198,7 +199,9 @@ export const DownloadTable = ({
                   </td>
                   <td className="whitespace-nowrap px-4">{submission.name}</td>
                   <td className="whitespace-nowrap px-4">{`${yearMonthDay} ${time}`}</td>
-                  <td className="whitespace-nowrap px-4">TODO Next step</td>
+                  <td className="whitespace-nowrap px-4">
+                    <NextStep submission={submission} overdueAfter={overdueAfter} />
+                  </td>
 
                   {/* <td className="whitespace-nowrap px-4">
                     <DownloadStatus vaultStatus={submission.status} />

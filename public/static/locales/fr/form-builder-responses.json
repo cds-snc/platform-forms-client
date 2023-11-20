@@ -38,7 +38,9 @@
       "lastDownloadedBy": "Téléchargée par",
       "confirmReceipt": "Confirmation de réception",
       "removal": "Suppression des données",
-      "more": "Plus"
+      "more": "Plus",
+      "date": "[FR]Date",
+      "nextStep": "[FR]Next step"
     },
     "status": {
       "downloaded": "Téléchargée",
