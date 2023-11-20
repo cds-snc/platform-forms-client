@@ -25,6 +25,7 @@ import { MoreMenu } from "./MoreMenu";
 import { ActionsPanel } from "./ActionsPanel";
 import { DeleteButton } from "./DeleteButton";
 import { ConfirmDeleteNewDialog } from "./Dialogs/ConfirmDeleteNewDialog";
+import { formatDateTime } from "@components/form-builder/util";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -150,7 +151,10 @@ export const DownloadTable = ({
                 />
               </th>
               <th className="p-4 text-left">{t("downloadResponsesTable.header.number")}</th>
-              <th className="p-4 text-left">{t("downloadResponsesTable.header.status")}</th>
+              <th className="p-4 text-left">{t("downloadResponsesTable.header.date")}</th>
+              <th className="p-4 text-left">{t("downloadResponsesTable.header.nextStep")}</th>
+
+              {/* <th className="p-4 text-left">{t("downloadResponsesTable.header.status")}</th>
               <th className="p-4 text-left">
                 {t("downloadResponsesTable.header.downloadResponse")}
               </th>
@@ -158,13 +162,15 @@ export const DownloadTable = ({
                 {t("downloadResponsesTable.header.lastDownloadedBy")}
               </th>
               <th className="p-4 text-left">{t("downloadResponsesTable.header.confirmReceipt")}</th>
-              <th className="p-4 text-left">{t("downloadResponsesTable.header.removal")}</th>
+              <th className="p-4 text-left">{t("downloadResponsesTable.header.removal")}</th> */}
+
               <th className="p-4 text-left">{t("downloadResponsesTable.header.more")}</th>
             </tr>
           </thead>
           <tbody>
             {tableItems.sortedItems.map((submission) => {
               const isBlocked = blockDownload(submission);
+              const [yearMonthDay, time] = formatDateTime(submission.createdAt);
               return (
                 <tr
                   key={submission.name}
@@ -191,7 +197,10 @@ export const DownloadTable = ({
                     </div>
                   </td>
                   <td className="whitespace-nowrap px-4">{submission.name}</td>
-                  <td className="whitespace-nowrap px-4">
+                  <td className="whitespace-nowrap px-4">{`${yearMonthDay} ${time}`}</td>
+                  <td className="whitespace-nowrap px-4">TODO Next step</td>
+
+                  {/* <td className="whitespace-nowrap px-4">
                     <DownloadStatus vaultStatus={submission.status} />
                   </td>
                   <td className="whitespace-nowrap px-4">
@@ -220,7 +229,8 @@ export const DownloadTable = ({
                       vaultStatus={submission.status}
                       removalAt={submission.removedAt}
                     />
-                  </td>
+                  </td> */}
+
                   <td className="px-4">
                     <MoreMenu
                       formId={submission.formID}
