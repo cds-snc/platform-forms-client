@@ -87,6 +87,9 @@ export const DownloadDialog = ({
 
         const fileName = `records.zip`;
         downloadFileFromBlob(new Blob([response.data]), fileName);
+
+        onSuccessfulDownload();
+        handleClose();
       }
 
       if (selectedFormat === DownloadFormat.HTML_CSV_AGGREGATED) {
