@@ -215,7 +215,10 @@ const getSubmissions = async (
         }
 
         case "json":
-          return res.status(200).json(jsonTransform(formResponse));
+          return res.status(200).json({
+            receipt: htmlAggregatedTransform(formResponse),
+            responses: jsonTransform(formResponse),
+          });
           break;
 
         default:
