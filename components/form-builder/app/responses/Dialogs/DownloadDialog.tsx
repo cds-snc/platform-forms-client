@@ -5,6 +5,7 @@ import { Button } from "@components/globals";
 import { logMessage } from "@lib/logger";
 import axios from "axios";
 import { DownloadFormat } from "@lib/responseDownloadFormats/types";
+import JSZip from "jszip";
 
 export const DownloadDialog = ({
   checkedItems,
@@ -26,6 +27,13 @@ export const DownloadDialog = ({
   const dialogRef = useDialogRef();
   const { t } = useTranslation("form-builder-responses");
   const [selectedFormat, setSelectedFormat] = React.useState<DownloadFormat>();
+  const [zip, setZip] = React.useState<boolean>(true);
+
+  React.useEffect(() => {
+    if (selectedFormat === DownloadFormat.HTML_ZIPPED) {
+      setZip(true);
+    }
+  }, [selectedFormat]);
 
   if (downloadError) {
     setDownloadError(false);
@@ -102,9 +110,18 @@ export const DownloadDialog = ({
           },
         });
 
-        downloadFileFromBlob(new Blob([response.data.html]), "receipt.html");
-        downloadFileFromBlob(new Blob([response.data.csv]), "records.csv");
-
+        if (zip) {
+          const file = new JSZip();
+          file.file("receipt.html", response.data.html);
+          file.file("records.csv", response.data.csv);
+          file.generateAsync({ type: "nodebuffer", streamFiles: true }).then((buffer) => {
+            const fileName = `records.zip`;
+            downloadFileFromBlob(new Blob([buffer]), fileName);
+          });
+        } else {
+          downloadFileFromBlob(new Blob([response.data.html]), "receipt.html");
+          downloadFileFromBlob(new Blob([response.data.csv]), "records.csv");
+        }
         onSuccessfulDownload();
         handleClose();
       }
@@ -118,11 +135,23 @@ export const DownloadDialog = ({
           },
         });
 
-        downloadFileFromBlob(
-          new Blob([JSON.stringify(response.data.responses)], { type: "application/json" }),
-          "records.json"
-        );
-        downloadFileFromBlob(new Blob([response.data.receipt]), "receipt.html");
+        if (zip) {
+          const file = new JSZip();
+          file.file("receipt.html", response.data.receipt);
+          file.file("records.json", JSON.stringify(response.data.responses));
+          file.generateAsync({ type: "nodebuffer", streamFiles: true }).then((buffer) => {
+            const fileName = `records.zip`;
+            downloadFileFromBlob(new Blob([buffer]), fileName);
+          });
+        } else {
+          downloadFileFromBlob(
+            new Blob([JSON.stringify(response.data.responses)], { type: "application/json" }),
+            "records.json"
+          );
+          downloadFileFromBlob(new Blob([response.data.receipt]), "receipt.html");
+        }
+        onSuccessfulDownload();
+        handleClose();
       }
     } catch (err) {
       logMessage.error(err as Error);
@@ -215,9 +244,10 @@ export const DownloadDialog = ({
                     type="checkbox"
                     name="downloadFormat"
                     id="zipped"
-                    value={DownloadFormat.JSON}
+                    checked={zip}
+                    disabled={selectedFormat === DownloadFormat.HTML_ZIPPED}
                     className="gc-input-checkbox__input"
-                    onChange={(e) => setSelectedFormat(e.target.value as DownloadFormat)}
+                    onChange={() => setZip(zip === true ? false : true)}
                   />
                   <label htmlFor="combined" className="ml-14 inline-block">
                     <span className="block font-semibold">Download as ZIP (compressed) file</span>
