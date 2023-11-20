@@ -123,8 +123,8 @@ export const ResponseHtmlAggregated = ({
             {submissions &&
               submissions.map((submission) => {
                 return (
-                  <div key="" className="break-before-page">
-                    <h3 id={submission.id} tabIndex={-1} className="mt-20">
+                  <div key="" className="break-before-page mt-32">
+                    <h3 id={submission.id} tabIndex={-1}>
                       {t("responseAggregatedTemplate.dataList.formResponse", { lng: lang })}{" "}
                       {submission.id}
                     </h3>

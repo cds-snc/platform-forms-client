@@ -13,13 +13,11 @@ const QuestionColumns = ({
 }): JSX.Element => {
   const renderRow = (index: number, lang: string, item: Answer) => {
     return (
-      <div className="flex w-full flex-row border-b border-gray">
+      <div className="flex w-full flex-row border-b border-gray py-4">
         <dt key="" className="w-120 py-4 font-bold">
           {orderLangugeStrings({ stringEn: item.questionEn, stringFr: item.questionFr, lang })}
         </dt>
-        <dd key="" className={`py-4 pl-8`}>
-          {String(item.answer) || "-"}
-        </dd>
+        <dd className={`py-4 pl-8`}>{String(item.answer) || "-"}</dd>
       </div>
     );
   };
@@ -58,7 +56,7 @@ export const ColumnTable = (props: TableProps): React.ReactElement => {
 
   return (
     <dl id={`responseTableCol${capitalize(lang)}`} className="border-y-2 border-gray">
-      <div className="flex border-b border-gray">
+      <div className="flex border-b border-gray py-4">
         <dt className="w-120 py-4 font-bold">
           {orderLangugeStrings({
             stringEn: t("responseTemplate.responseNumber", { lng: "en" }),
@@ -68,7 +66,7 @@ export const ColumnTable = (props: TableProps): React.ReactElement => {
         </dt>
         <dd className="py-4 pl-8">{responseID}</dd>
       </div>
-      <div className="flex border-b border-gray">
+      <div className="flex border-b border-gray py-4">
         <dt className="w-120 py-4 font-bold">
           {orderLangugeStrings({
             stringEn: t("responseTemplate.submissionDate", { lng: "en" }),
