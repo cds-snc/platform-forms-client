@@ -139,7 +139,8 @@ export const DownloadDialog = ({
             <h3 className="mb-4 block font-semibold">
               {t("downloadResponsesModals.downloadDialog.configureDownloadSettings")}
             </h3>
-            <div className="mb-4">
+            {/* Commenting out this option for now, to be revisited later. */}
+            {/* <div className="mb-4">
               <input
                 type="radio"
                 name="downloadFormat"
@@ -156,7 +157,7 @@ export const DownloadDialog = ({
                   {t("downloadResponsesModals.downloadDialog.getSeparateHtmlFiles")}
                 </span>
               </label>
-            </div>
+            </div> */}
             <div>
               <input
                 type="radio"
