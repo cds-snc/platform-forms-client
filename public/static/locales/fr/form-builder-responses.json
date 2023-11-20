@@ -1,7 +1,7 @@
 {
   "responses": {
     "changeSetup": "Modifier les paramètres",
-    "confirmReceipt": "Confirmer la réception",
+    "confirmReceipt": "Confirmer et supprimer",
     "navLabel": "Réponses",
     "reportProblems": "Signaler un problème",
     "title": "Réponses",
@@ -84,11 +84,26 @@
     "unknown": "Inconnu"
   },
   "downloadResponsesModals": {
+    "confirmDeleteNewDialog": {
+      "confirmAndDelete": "Confirmer et supprimer de nouvelles réponses",
+      "responsesNotYetDownloaded": "Ces réponses n’ont pas encore été téléchargées",
+      "alertBody": "Vous n’avez pas téléchargé les réponses que vous tentez de supprimer. Si vous supprimez ces réponses, elles seront retirées du système après 30 jours.",
+      "deletePrompt": "Si vous souhaitez procéder à la suppression des réponses non téléchargées, entrez le mot « SUPPRIMER » ci-dessous.",
+      "required": "Obligatoire",
+      "cancel": "Annuler",
+      "delete": "Supprimer",
+      "deleteConfirmationString": "SUPPRIMER"
+    },
     "confirmReceiptDialog": {
-      "title": "Confirmer la réception de réponses",
-      "findCode": "Trouvez le code de confirmation au bas des réponses de formulaires téléchargées. Ces codes ressemblent à : c0c42c90-b816-49da-a69a-80bfd8ba15db.",
-      "copyCode": "Copiez et collez jusqu'à 20 codes de confirmation, un par ligne.",
-      "responsesAvailableFor": "Une fois que vous aurez confirmé la réception des réponses, celles-ci seront disponibles pendant 30 jours, puis, ensuite automatiquement retirées de notre base de données.",
+      "title": "Confirmer et supprimer les réponses",
+      "toDeleteHeading": "Pour supprimer les réponses :",
+      "toDelete1": "Confirmer que vous disposez d’une copie de chaque réponse.",
+      "toDelete2": "Ouvrir le fichier de réponse en format HTML téléchargé.",
+      "toDelete3": "S’assurer que les réponses s’affichent comme prévu.",
+      "toDelete4": "Copier et coller les codes de confirmation ci-bas.",
+      "copyCode": "Entrez les codes de confirmation des réponses à supprimer :",
+      "warningTitle": "La suppression ne peut être annulée.",
+      "warningBody": "Les réponses seront déplacées vers « Supprimés » et retirées du système après 30 jours.",
       "confirmReceipt": "Confirmer la réception",
       "errors": {
         "minEntries": {
