@@ -33,3 +33,12 @@ export interface Translations {
   en: JSONValue;
   fr: JSONValue;
 }
+
+export enum DownloadFormat {
+  HTML = "html",
+  CSV = "csv",
+  XLSX = "xlsx",
+  HTML_ZIPPED = "html-zipped",
+  HTML_AGGREGATED = "html-aggregated",
+  HTML_CSV_AGGREGATED = "html-csv-aggregated",
+}

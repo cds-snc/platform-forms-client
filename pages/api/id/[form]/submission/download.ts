@@ -10,18 +10,9 @@ import { transform as htmlTransform } from "@lib/responseDownloadFormats/html";
 import { transform as zipTransform } from "@lib/responseDownloadFormats/html-zipped";
 import { transform as jsonTransform } from "@lib/responseDownloadFormats/json";
 import { retrieveSubmissions, updateLastDownloadedBy } from "@lib/vault";
-import { FormResponseSubmissions } from "@lib/responseDownloadFormats/types";
+import { DownloadFormat, FormResponseSubmissions } from "@lib/responseDownloadFormats/types";
 import { logEvent } from "@lib/auditLogs";
 import { logMessage } from "@lib/logger";
-
-export enum DownloadFormat {
-  HTML = "html",
-  CSV = "csv",
-  XLSX = "xlsx",
-  HTML_ZIPPED = "html-zipped",
-  HTML_AGGREGATED = "html-aggregated",
-  HTML_CSV_AGGREGATED = "html-csv-aggregated",
-}
 
 const officialRecordsFormats = [
   DownloadFormat.HTML,

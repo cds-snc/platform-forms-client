@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@components/globals";
 import { logMessage } from "@lib/logger";
 import axios from "axios";
-import { DownloadFormat } from "@pages/api/id/[form]/submission/download";
+import { DownloadFormat } from "@lib/responseDownloadFormats/types";
 
 export const DownloadDialog = ({
   checkedItems,
