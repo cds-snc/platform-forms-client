@@ -17,6 +17,7 @@ import { AccessControlError, checkPrivileges } from "./privileges";
 import { BatchWriteItemCommand } from "@aws-sdk/client-dynamodb";
 import { chunkArray } from "@lib/utils";
 import { TemplateAlreadyPublishedError } from "@lib/templates";
+import { getAppSetting } from "./appSettings";
 
 /**
  * Returns the users associated with a Template
@@ -69,7 +70,6 @@ async function checkAbilityToAccessSubmissions(ability: UserAbility, formID: str
  * The list does not contain the actual submission data, only attributes
  * @param formID - The form ID from which to retrieve responses
  */
-
 export async function listAllSubmissions(
   ability: UserAbility,
   formID: string,
@@ -93,6 +93,8 @@ export async function listAllSubmissions(
   }
 
   try {
+    const responseDownloadLimit = Number(await getAppSetting("responseDownloadLimit"));
+
     const documentClient = connectToDynamo();
 
     let accumulatedResponses: VaultSubmissionList[] = [];
@@ -102,8 +104,8 @@ export async function listAllSubmissions(
       const getItemsDbParams: QueryCommandInput = {
         TableName: "Vault",
         IndexName: "Status",
-        // Limit the amount of response to 500.  This can be changed in the future once we have pagination.
-        Limit: 500 - accumulatedResponses.length,
+        // Limit the amount of response to responseDownloadLimit.  This can be changed in settings.
+        Limit: responseDownloadLimit - accumulatedResponses.length,
         ExclusiveStartKey: lastEvaluatedKey ?? undefined,
         KeyConditionExpression: "FormID = :formID" + (status ? " AND #status = :status" : ""),
         // Sort by descending order of Status
@@ -151,8 +153,8 @@ export async function listAllSubmissions(
         );
       }
 
-      // We either manually stop the paginated request when we have 500 items or we let it finish on its own
-      if (accumulatedResponses.length >= 500) {
+      // We either manually stop the paginated request when we have (responseDownloadLimit) items or we let it finish on its own
+      if (accumulatedResponses.length >= responseDownloadLimit) {
         lastEvaluatedKey = undefined;
       } else {
         lastEvaluatedKey = response.LastEvaluatedKey;
