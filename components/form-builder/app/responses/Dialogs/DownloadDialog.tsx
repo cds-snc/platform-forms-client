@@ -70,7 +70,6 @@ export const DownloadDialog = ({
           },
         });
 
-        // @TODO: include html-aggregated in zip file
         const fileName = `records.zip`;
         downloadFileFromBlob(new Blob([response.data]), fileName);
 
