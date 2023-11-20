@@ -60,29 +60,6 @@ export const DownloadDialog = ({
     const ids = Array.from(checkedItems.keys());
 
     try {
-      // if (selectedFormat === DownloadFormat.HTML) {
-      //   const response = await axios({
-      //     url,
-      //     method: "POST",
-      //     data: {
-      //       ids: ids.join(","),
-      //     },
-      //   });
-
-      //   const interval = 200;
-
-      //   response.data.forEach((submission: { id: string; html: string }, i: number) => {
-      //     setTimeout(() => {
-      //       const fileName = `${submission.id}.html`;
-      //       downloadFileFromBlob(new Blob([submission.html]), fileName);
-      //     }, interval * i);
-      //   });
-      //   setTimeout(() => {
-      //     onSuccessfulDownload();
-      //     handleClose();
-      //   }, interval * response.data.length);
-      // }
-
       if (selectedFormat === DownloadFormat.HTML_ZIPPED) {
         const response = await axios({
           url,
@@ -171,25 +148,6 @@ export const DownloadDialog = ({
             <h3 className="mb-4 block font-semibold">
               {t("downloadResponsesModals.downloadDialog.configureDownloadSettings")}
             </h3>
-            {/* Commenting out this option for now, to be revisited later. */}
-            {/* <div className="mb-4">
-              <input
-                type="radio"
-                name="downloadFormat"
-                id="individual"
-                value={DownloadFormat.HTML}
-                className="gc-radio__input"
-                onChange={(e) => setSelectedFormat(e.target.value as DownloadFormat)}
-              />
-              <label htmlFor="individual" className="ml-14 inline-block">
-                <span className="block font-semibold">
-                  {t("downloadResponsesModals.downloadDialog.individualResponseFiles")}
-                </span>
-                <span className="block">
-                  {t("downloadResponsesModals.downloadDialog.getSeparateHtmlFiles")}
-                </span>
-              </label>
-            </div> */}
             <div className="mt-4 flex flex-col gap-6">
               <div>
                 <input
