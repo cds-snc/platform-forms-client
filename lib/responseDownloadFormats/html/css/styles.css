@@ -94,7 +94,7 @@
 
   a.tableLink:hover,
   a.tableLink:focus {
-    color: #FFF;
+    color: #FFF !important;
     text-decoration: underline;
     background: #0d47a1;
   }
