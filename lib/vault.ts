@@ -151,8 +151,9 @@ export async function listAllSubmissions(
         TableName: "Vault",
         IndexName: "Status",
         ExclusiveStartKey: lastEvaluatedKey ?? undefined,
+        // Limit the amount of response to responseDownloadLimit.  This can be changed in settings.
+        Limit: responseDownloadLimit - accumulatedResponses.length,
         KeyConditionExpression: "FormID = :formID" + (status ? " AND #status = :status" : ""),
-        Limit: responseDownloadLimit,
         // Sort by descending order of Status
         ScanIndexForward: false,
         ExpressionAttributeValues: {
