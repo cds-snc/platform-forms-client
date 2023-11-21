@@ -31,6 +31,7 @@ interface DownloadTableProps {
   formId: string;
   nagwareResult: NagwareResult | null;
   responseDownloadLimit: number;
+  responsesRemaining: boolean;
 }
 
 export const DownloadTable = ({
@@ -38,6 +39,7 @@ export const DownloadTable = ({
   formId,
   nagwareResult,
   responseDownloadLimit,
+  responsesRemaining,
 }: DownloadTableProps) => {
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
@@ -240,19 +242,16 @@ export const DownloadTable = ({
         </table>
         <div className="mt-8 flex">
           <div id="notificationsBottom" className="ml-4">
-            {tableItems.checkedItems.size > MAX_FILE_DOWNLOADS && (
-              <Alert.Danger icon={false}>
+            {responsesRemaining && (
+              <Alert.Warning icon={false}>
                 <Alert.Title headingTag="h3">
-                  {t("downloadResponsesTable.errors.trySelectingLessFilesHeader", {
-                    max: MAX_FILE_DOWNLOADS,
-                  })}
+                  TEMP - There are remaining responses on the server
                 </Alert.Title>
                 <p className="text-sm text-black">
-                  {t("downloadResponsesTable.errors.trySelectingLessFiles", {
-                    max: MAX_FILE_DOWNLOADS,
-                  })}
+                  TEMP - Not all responses can be shown on the screen. Please download responses to
+                  see more responses.
                 </p>
-              </Alert.Danger>
+              </Alert.Warning>
             )}
             {noSelectedItemsError && (
               <Alert.Danger icon={false}>
