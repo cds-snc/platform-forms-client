@@ -25,7 +25,13 @@ import { FormBuilderLayout } from "@components/globals/layouts/FormBuilderLayout
 import { Button, ErrorPanel } from "@components/globals";
 import { ClosedBanner } from "@components/form-builder/app/shared/ClosedBanner";
 import { getAppSetting } from "@lib/appSettings";
-import { Close, DeleteIcon, FolderIcon, InboxIcon } from "@components/form-builder/icons";
+import {
+  Close,
+  DeleteIcon,
+  FolderIcon,
+  InboxIcon,
+  WarningIcon,
+} from "@components/form-builder/icons";
 import { SubNavLink } from "@components/form-builder/app/navigation/SubNavLink";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -219,6 +225,16 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
                 content={t("downloadResponsesTable.card.noDeletedResponsesMessage")}
               />
             )}
+          </div>
+          <div className="mt-8">
+            <Link
+              onClick={() => setIsShowReportProblemsDialog(true)}
+              href={"#"}
+              className="text-black visited:text-black"
+            >
+              <WarningIcon className="mr-2 inline-block" />
+              Report a problem with responses
+            </Link>
           </div>
         </>
       )}
