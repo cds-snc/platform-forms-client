@@ -52,7 +52,14 @@ export const DownloadDialog = ({
     window.URL.revokeObjectURL(href);
   };
 
+  // Note: The API can provide additional formats, see DownloadFormat enum and update this array if needed
+  const availableFormats = [DownloadFormat.CSV, DownloadFormat.JSON, DownloadFormat.HTML_ZIPPED];
+
   const handleDownload = async () => {
+    if (!selectedFormat || !availableFormats.includes(selectedFormat)) {
+      setDownloadError(true);
+      return;
+    }
     const url = `/api/id/${formId}/submission/download?format=${selectedFormat}`;
 
     if (!checkedItems.size) {
