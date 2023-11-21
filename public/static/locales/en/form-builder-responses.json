@@ -1,7 +1,10 @@
 {
   "responses": {
+    "newResponses": "New responses",
+    "previouslyDownloaded": "Previously downloaded",
+    "deleted": "Signed off for removal",
     "changeSetup": "Change settings",
-    "confirmReceipt": "Confirm and delete",
+    "confirmReceipt": "Sign off on removal with receipt codes",
     "navLabel": "Responses",
     "reportProblems": "Report a problem with responses",
     "title": "Responses",
@@ -21,12 +24,14 @@
     "status": {
       "new": "New",
       "downloaded": "Downloaded",
-      "deleted": "Deleted"
+      "deleted": "Signed off for removal"
     }
   },
   "downloadResponsesTable": {
     "download": "Download",
     "delete": "Delete",
+    "confirmReceiptMessage1": "You must sign off on the removal of responses from GC Forms within the time indicated.",
+    "confirmReceiptMessage2": "Response files will be available for an additional 30 days after sign-off.",
     "header": {
       "tableTitle": "Download responses table",
       "select": "Select",

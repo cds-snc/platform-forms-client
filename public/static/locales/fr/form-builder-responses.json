@@ -1,7 +1,10 @@
 {
   "responses": {
+    "newResponses": "[FR] New responses",
+    "previouslyDownloaded": "[FR] Previously downloaded",
+    "deleted": "[FR] Signed off for removal",
     "changeSetup": "Modifier les paramètres",
-    "confirmReceipt": "Confirmer et supprimer",
+    "confirmReceipt": "[FR] Sign off on removal with receipt codes",
     "navLabel": "Réponses",
     "reportProblems": "Signaler un problème avec les réponses",
     "title": "Réponses",
@@ -21,12 +24,14 @@
     "status": {
       "new": "Nouveautés",
       "downloaded": "Téléchargements",
-      "deleted": "Supprimés"
+      "deleted": "[FR] Signed off for removal"
     }
   },
   "downloadResponsesTable": {
     "download": "Téléchargement",
     "delete": "Supprimer",
+    "confirmReceiptMessage1": "[FR] You must sign off on the removal of responses from GC Forms within the time indicated.",
+    "confirmReceiptMessage2": "[FR] Response files will be available for an additional 30 days after sign-off.",
     "header": {
       "tableTitle": "Tableau des réponses à télécharger",
       "select": "Sélection",

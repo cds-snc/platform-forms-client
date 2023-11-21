@@ -13,7 +13,6 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { Card } from "@components/globals/card/Card";
 import { DownloadTable } from "@components/form-builder/app/responses/DownloadTable";
-import { ConfirmDialog } from "@components/form-builder/app/responses/Dialogs/ConfirmDialog";
 import { ReportDialog } from "@components/form-builder/app/responses/Dialogs/ReportDialog";
 import { NagwareResult } from "@lib/types";
 import { Nagware } from "@components/form-builder/app/Nagware";
@@ -25,16 +24,11 @@ import { FormBuilderLayout } from "@components/globals/layouts/FormBuilderLayout
 import { Button, ErrorPanel } from "@components/globals";
 import { ClosedBanner } from "@components/form-builder/app/shared/ClosedBanner";
 import { getAppSetting } from "@lib/appSettings";
-import {
-  Close,
-  DeleteIcon,
-  FolderIcon,
-  InboxIcon,
-  WarningIcon,
-} from "@components/form-builder/icons";
+import { DeleteIcon, FolderIcon, InboxIcon, WarningIcon } from "@components/form-builder/icons";
 import { SubNavLink } from "@components/form-builder/app/navigation/SubNavLink";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import { ConfirmDialog } from "@components/form-builder/app/responses/Dialogs/ConfirmDialog";
 
 interface ResponsesProps {
   initialForm: FormRecord | null;
@@ -59,8 +53,9 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   const { t, i18n } = useTranslation("form-builder-responses");
   const { status } = useSession();
   const isAuthenticated = status === "authenticated";
-  const [isShowConfirmReceiptDialog, setIsShowConfirmReceiptDialog] = useState(false);
   const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
+  const [showConfirmReceiptDialog, setShowConfirmReceiptDialog] = useState(false);
+
   const [isServerError, setIsServerError] = useState(false);
 
   const router = useRouter();
@@ -148,11 +143,13 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         <title>{t("responses.title")}</title>
       </Head>
 
-      <h1 className="mb-0 border-none tablet:mb-4 tablet:mr-8">
-        {isAuthenticated ? t("responses.title") : t("responses.unauthenticated.title")}
-      </h1>
+      {!isAuthenticated && (
+        <h1 className="mb-0 border-none tablet:mb-4 tablet:mr-8">
+          {t("responses.unauthenticated.title")}
+        </h1>
+      )}
 
-      <nav className="my-8 flex relative" aria-label={t("responses.navLabel")}>
+      <nav className="relative mb-4 flex" aria-label={t("responses.navLabel")}>
         <SubNavLink
           id="new-responses"
           defaultActive={statusQuery === "new"}
@@ -181,20 +178,31 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
             <DeleteIcon className="inline-block h-7 w-7" /> {t("responses.status.deleted")}
           </span>
         </SubNavLink>
-        <div className="absolute right-0">
-          {isAuthenticated && statusQuery === "downloaded" && (
-            <Button
-              onClick={() => setIsShowConfirmReceiptDialog(true)}
-              theme="destructive"
-              className="float-right"
-              disabled={status !== "authenticated"}
-              icon={<Close className="fill-white" />}
-            >
+      </nav>
+
+      {isAuthenticated && statusQuery === "downloaded" && vaultSubmissions.length > 0 && (
+        <>
+          <h1>{t("responses.previouslyDownloaded")}</h1>
+          <div className="mb-4">
+            <p className="mb-4">
+              {t("downloadResponsesTable.confirmReceiptMessage1")}
+              <br />
+              {t("downloadResponsesTable.confirmReceiptMessage2")}
+            </p>
+            <Button onClick={() => setShowConfirmReceiptDialog(true)} theme="secondary">
               {t("responses.confirmReceipt")}
             </Button>
-          )}
-        </div>
-      </nav>
+          </div>
+        </>
+      )}
+
+      {isAuthenticated && statusQuery === "new" && vaultSubmissions.length > 0 && (
+        <h1>{t("responses.newResponses")}</h1>
+      )}
+
+      {isAuthenticated && statusQuery === "confirmed" && vaultSubmissions.length > 0 && (
+        <h1>{t("responses.deleted")}</h1>
+      )}
 
       {nagwareResult && <Nagware nagwareResult={nagwareResult} />}
 
@@ -214,27 +222,36 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
             )}
 
             {vaultSubmissions.length <= 0 && statusQuery === "new" && (
-              <Card
-                icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
-                title={t("downloadResponsesTable.card.noNewResponses")}
-                content={t("downloadResponsesTable.card.noNewResponsesMessage")}
-              />
+              <>
+                <h1 className="visually-hidden">{t("responses.newResponses")}</h1>
+                <Card
+                  icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+                  title={t("downloadResponsesTable.card.noNewResponses")}
+                  content={t("downloadResponsesTable.card.noNewResponsesMessage")}
+                />
+              </>
             )}
 
             {vaultSubmissions.length <= 0 && statusQuery === "downloaded" && (
-              <Card
-                icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
-                title={t("downloadResponsesTable.card.noDownloadedResponses")}
-                content={t("downloadResponsesTable.card.noDownloadedResponsesMessage")}
-              />
+              <>
+                <h1 className="visually-hidden">{t("responses.previouslyDownloaded")}</h1>
+                <Card
+                  icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+                  title={t("downloadResponsesTable.card.noDownloadedResponses")}
+                  content={t("downloadResponsesTable.card.noDownloadedResponsesMessage")}
+                />
+              </>
             )}
 
             {vaultSubmissions.length <= 0 && statusQuery === "confirmed" && (
-              <Card
-                icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
-                title={t("downloadResponsesTable.card.noDeletedResponses")}
-                content={t("downloadResponsesTable.card.noDeletedResponsesMessage")}
-              />
+              <>
+                <h1 className="visually-hidden">{t("responses.deleted")}</h1>
+                <Card
+                  icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+                  title={t("downloadResponsesTable.card.noDeletedResponses")}
+                  content={t("downloadResponsesTable.card.noDeletedResponsesMessage")}
+                />
+              </>
             )}
           </div>
           <div className="mt-8">
@@ -264,19 +281,19 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         </>
       )}
 
-      <ConfirmDialog
-        isShow={isShowConfirmReceiptDialog}
-        setIsShow={setIsShowConfirmReceiptDialog}
-        apiUrl={`/api/id/${formId}/submission/confirm`}
-        maxEntries={responseDownloadLimit}
-      />
-
       <ReportDialog
         isShow={isShowReportProblemsDialog}
         setIsShow={setIsShowReportProblemsDialog}
         setIsServerError={setIsServerError}
         apiUrl={`/api/id/${formId}/submission/report`}
         maxEntries={MAX_REPORT_COUNT}
+      />
+
+      <ConfirmDialog
+        isShow={showConfirmReceiptDialog}
+        setIsShow={setShowConfirmReceiptDialog}
+        apiUrl={`/api/id/${formId}/submission/confirm`}
+        maxEntries={responseDownloadLimit}
       />
     </>
   );
