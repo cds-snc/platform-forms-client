@@ -31,6 +31,7 @@ import Image from "next/image";
 import { ConfirmDialog } from "@components/form-builder/app/responses/Dialogs/ConfirmDialog";
 
 interface ResponsesProps {
+  initialForm: FormRecord | null;
   vaultSubmissions: VaultSubmissionList[];
   formId: string;
   nagwareResult: NagwareResult | null;
@@ -42,13 +43,14 @@ interface ResponsesProps {
 const MAX_REPORT_COUNT = 20;
 
 const Responses: NextPageWithLayout<ResponsesProps> = ({
+  initialForm,
   vaultSubmissions,
   formId,
   nagwareResult,
   responseDownloadLimit,
   responsesRemaining,
 }: ResponsesProps) => {
-  const { t } = useTranslation("form-builder-responses");
+  const { t, i18n } = useTranslation("form-builder-responses");
   const { status } = useSession();
   const isAuthenticated = status === "authenticated";
   const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
@@ -65,6 +67,15 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   }));
 
   const deliveryOption = getDeliveryOption();
+
+  let formName = "";
+  if (initialForm) {
+    formName = initialForm.name
+      ? initialForm.name
+      : i18n.language === "fr"
+      ? initialForm.form.titleFr
+      : initialForm.form.titleEn;
+  }
 
   if (!isAuthenticated) {
     return (
@@ -202,6 +213,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
             {vaultSubmissions.length > 0 && (
               <DownloadTable
                 vaultSubmissions={vaultSubmissions}
+                formName={formName}
                 formId={formId}
                 nagwareResult={nagwareResult}
                 responseDownloadLimit={responseDownloadLimit}

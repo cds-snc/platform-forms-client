@@ -29,6 +29,7 @@ import { DownloadDialog } from "./Dialogs/DownloadDialog";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
+  formName: string;
   formId: string;
   nagwareResult: NagwareResult | null;
   responseDownloadLimit: number;
@@ -37,6 +38,7 @@ interface DownloadTableProps {
 
 export const DownloadTable = ({
   vaultSubmissions,
+  formName,
   formId,
   nagwareResult,
   responseDownloadLimit,
@@ -281,6 +283,7 @@ export const DownloadTable = ({
         isDialogVisible={showDownloadDialog}
         setIsDialogVisible={setShowDownloadDialog}
         formId={formId}
+        formName={formName}
         onSuccessfulDownload={() => {
           router.replace(router.asPath, undefined, { scroll: false });
           setShowDownloadSuccess(true);
