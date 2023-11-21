@@ -62,12 +62,13 @@ export const DownloadTable = ({
       : "downloadResponsesTable.notifications.downloadComplete";
 
   const { value: overdueAfter } = useSetting("nagwarePhaseEncouraged");
+  const { value: overdueAfterDelete } = useSetting("nagwarePhaseWarned"); // TODO: double check using right
+  const { value: escalatedAfter } = useSetting("nagwarePhaseEscalated"); // TODO: double check using right
+
   const [tableItems, tableItemsDispatch] = useReducer(
     reducerTableItems,
     initialTableItemsState(vaultSubmissions, overdueAfter)
   );
-
-  const MAX_FILE_DOWNLOADS = responseDownloadLimit;
 
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.id;
@@ -147,7 +148,9 @@ export const DownloadTable = ({
               </th>
               <th className="p-4 text-left">{t("downloadResponsesTable.header.number")}</th>
               <th className="p-4 text-left">{t("downloadResponsesTable.header.date")}</th>
-              <th className="p-4 text-left">{t("downloadResponsesTable.header.nextStep")}</th>
+              <th className="w-full p-4 text-left">
+                {t("downloadResponsesTable.header.nextStep")}
+              </th>
 
               {/* <th className="p-4 text-left">{t("downloadResponsesTable.header.status")}</th>
               <th className="p-4 text-left">
@@ -193,8 +196,13 @@ export const DownloadTable = ({
                   </td>
                   <td className="whitespace-nowrap px-4">{submission.name}</td>
                   <td className="whitespace-nowrap px-4">{`${yearMonthDay} ${time}`}</td>
-                  <td className="whitespace-nowrap px-4">
-                    <NextStep submission={submission} overdueAfter={overdueAfter} />
+                  <td className="w-full whitespace-nowrap px-4">
+                    <NextStep
+                      submission={submission}
+                      overdueAfterDownload={overdueAfter}
+                      overdueAfterDelete={overdueAfterDelete}
+                      escalatedAfter={escalatedAfter}
+                    />
                   </td>
 
                   {/* <td className="whitespace-nowrap px-4">
