@@ -338,7 +338,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     }
   }
 
-  const responseDownloadLimit = Number(await getAppSetting("responseDownloadLimit")) || 20;
+  const responseDownloadLimit = Number(await getAppSetting("responseDownloadLimit"));
 
   return {
     props: {

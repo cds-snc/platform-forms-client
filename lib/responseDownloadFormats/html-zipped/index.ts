@@ -2,8 +2,10 @@ import { ResponseHtml } from "../html/components/ResponseHtml";
 import { renderToStaticMarkup } from "react-dom/server";
 import { FormResponseSubmissions } from "../types";
 import JSZip from "jszip";
+import { transform as transformAggregated } from "../html-aggregated";
 
 export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
+  const aggregated = transformAggregated(formResponseSubmissions);
   const records = formResponseSubmissions.submissions.map((response) => {
     return {
       id: response.id,
@@ -22,6 +24,7 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
   });
 
   const zip = new JSZip();
+  zip.file("receipt.html", aggregated);
   records.forEach((response) => {
     zip.file(`${response.id}.html`, response.html);
   });

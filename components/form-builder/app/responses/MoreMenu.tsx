@@ -81,7 +81,7 @@ export const MoreMenu = ({
               <DownloadIcon className="scale-50" />
               {t("downloadResponsesTable.download")}
             </DropdownMenu.Item>
-            {statusQuery === "new" && (
+            {statusQuery === "new" && false && (
               <DropdownMenu.Item
                 onClick={handleDelete}
                 className="flex cursor-pointer items-center rounded-md pr-4 text-sm outline-none hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white"

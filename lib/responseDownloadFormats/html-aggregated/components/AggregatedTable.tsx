@@ -1,6 +1,7 @@
 import React from "react";
 import { Submission } from "@lib/responseDownloadFormats/types";
 import { getProperty } from "@lib/formBuilder";
+import { formatDate } from "@lib/clientHelpers";
 
 export interface TableHeader {
   title: string;
@@ -26,11 +27,8 @@ export const AggregatedTable = ({
     <table id={`responseTableRow${capitalizedLang}`} className="table-fixed text-left">
       <thead>
         <tr key="" className="flex">
-          {headers.map(({ title, type }, index) => (
-            <th
-              key={`heading-${title}-${index}`}
-              className={`${type === "dynamicRow" ? "w-120" : "w-64"} p-4 font-bold`}
-            >
+          {headers.map(({ title, type }) => (
+            <th key="" className={`${type === "dynamicRow" ? "w-120" : "w-64"} p-4 font-bold`}>
               {title}
             </th>
           ))}
@@ -45,8 +43,12 @@ export const AggregatedTable = ({
                 index % 2 !== 0 ? "bg-slate-50" : ""
               }`}
             >
-              <td className="w-64 p-4">{submission.id}</td>
-              <td className="w-64 p-4">{submission.createdAt}</td>
+              <td className="w-64 p-4">
+                <a href={`#${submission.id}`} className="tableLink">
+                  {submission.id}
+                </a>
+              </td>
+              <td className="w-64 p-4">{formatDate(new Date(submission.createdAt))}</td>
               {submission.answers &&
                 submission.answers.map((answer) => {
                   if (Array.isArray(answer.answer)) {
@@ -58,10 +60,7 @@ export const AggregatedTable = ({
                               const question = String(subSubAnswer[getProperty("question", lang)]);
                               const response = subSubAnswer.answer;
                               return (
-                                <tr
-                                  key={`sub-answer-row-${subSubAnswer.questionEn}-${subSubAnswer.answer}`}
-                                  className="flex"
-                                >
+                                <tr key="" className="flex">
                                   <th className="w-64 p-4">{question}</th>
                                   <td className="p-4">{formatAnswer(response as string)}</td>
                                 </tr>

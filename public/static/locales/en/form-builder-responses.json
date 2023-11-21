@@ -62,7 +62,8 @@
       "noDeletedResponsesMessage": "Once you’ve deleted responses, they will be available for 30 days."
     },
     "notifications": {
-      "downloadComplete": "Download complete",
+      "downloadComplete": "Responses were downloaded",
+      "downloadCompleteNew": "Responses were downloaded and moved to “Downloaded”",
       "downloadingXFiles": "Downloading {{fileCount}} files"
     },
     "errors": {
@@ -84,6 +85,20 @@
     "unknown": "Unknown"
   },
   "downloadResponsesModals": {
+    "downloadDialog": {
+      "title": "Download responses",
+      "configureDownloadSettings": "Configure download settings",
+      "html": "Individual response files",
+      "htmlDescription": "Get separate HTML files for each form submission",
+      "csv": "CSV",
+      "csvDescription": "For lists, spreadsheets, or tables",
+      "json": "JSON",
+      "jsonDescription": "For API or data configuration",
+      "downloadAllAsZip": "Download all as ZIP (compressed) file",
+      "mayNotBeAvailable": "May not be available in all departments and agencies",
+      "cancel": "Cancel",
+      "download": "Download"
+    },
     "confirmDeleteNewDialog": {
       "confirmAndDelete": "Confirm and delete new responses",
       "responsesNotYetDownloaded": "Responses not yet downloaded",

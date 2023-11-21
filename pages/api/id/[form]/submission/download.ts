@@ -10,9 +10,38 @@ import { transform as htmlTransform } from "@lib/responseDownloadFormats/html";
 import { transform as zipTransform } from "@lib/responseDownloadFormats/html-zipped";
 import { transform as jsonTransform } from "@lib/responseDownloadFormats/json";
 import { retrieveSubmissions, updateLastDownloadedBy } from "@lib/vault";
-import { FormResponseSubmissions } from "@lib/responseDownloadFormats/types";
+import { DownloadFormat, FormResponseSubmissions } from "@lib/responseDownloadFormats/types";
 import { logEvent } from "@lib/auditLogs";
 import { logMessage } from "@lib/logger";
+
+const officialRecordsFormats = [
+  DownloadFormat.HTML,
+  DownloadFormat.HTML_ZIPPED,
+  DownloadFormat.HTML_AGGREGATED,
+  DownloadFormat.CSV, // includes receipt.html
+  DownloadFormat.JSON, // includes receipt.html
+];
+
+const logDownload = async (
+  responseIdStatusArray: { id: string; status: string }[],
+  format: DownloadFormat,
+  formId: string,
+  ability: ReturnType<typeof createAbility>,
+  userEmail: string,
+  markDownloaded = false
+) => {
+  if (markDownloaded) {
+    await updateLastDownloadedBy(responseIdStatusArray, formId, userEmail);
+  }
+  responseIdStatusArray.forEach((item) => {
+    logEvent(
+      ability.userID,
+      { type: "Response", id: item.id },
+      "DownloadResponse",
+      `Downloaded form response in ${format} for submission ID ${item.id}`
+    );
+  });
+};
 
 const getSubmissions = async (
   req: NextApiRequest,
@@ -110,6 +139,11 @@ const getSubmissions = async (
     }
 
     if (req.query.format) {
+      // Only accept the specified formats
+      if (!Object.values(DownloadFormat).includes(req.query.format as DownloadFormat)) {
+        return res.status(400).json({ error: `Bad request invalid format ${req.query.format}` });
+      }
+
       const responseIdStatusArray = queryResult.map((item) => {
         return {
           id: item.name,
@@ -117,27 +151,27 @@ const getSubmissions = async (
         };
       });
 
-      await updateLastDownloadedBy(responseIdStatusArray, formId, userEmail);
-
-      responseIdStatusArray.forEach((item) => {
-        logEvent(
-          ability.userID,
-          { type: "Response", id: item.id },
-          "DownloadResponse",
-          `Downloaded form response for submission ID ${item.id}`
-        );
-      });
+      await logDownload(
+        responseIdStatusArray,
+        req.query.format as DownloadFormat,
+        formId,
+        ability,
+        userEmail,
+        officialRecordsFormats.includes(req.query.format as DownloadFormat)
+      );
 
       switch (req.query.format) {
-        case "csv":
+        case DownloadFormat.CSV:
           return res
             .status(200)
-            .setHeader("Content-Type", "text/csv charset=utf-8")
-            .setHeader("Content-Disposition", `attachment; filename=records.csv`)
-            .send(csvTransform(formResponse));
+            .setHeader("Content-Type", "text/json")
+            .send({
+              receipt: htmlAggregatedTransform(formResponse),
+              responses: csvTransform(formResponse),
+            });
           break;
 
-        case "xlsx":
+        case DownloadFormat.XLSX:
           return res
             .status(200)
             .setHeader(
@@ -148,14 +182,14 @@ const getSubmissions = async (
             .send(xlsxTransform(formResponse));
           break;
 
-        case "html-aggregated":
+        case DownloadFormat.HTML_AGGREGATED:
           return res
             .status(200)
             .setHeader("Content-Type", "text/html")
             .send(htmlAggregatedTransform(formResponse, lang));
           break;
 
-        case "html":
+        case DownloadFormat.HTML:
           return res
             .status(200)
             .setHeader("Content-Type", "text/json")
@@ -174,7 +208,10 @@ const getSubmissions = async (
         }
 
         case "json":
-          return res.status(200).json(jsonTransform(formResponse));
+          return res.status(200).json({
+            receipt: htmlAggregatedTransform(formResponse),
+            responses: jsonTransform(formResponse),
+          });
           break;
 
         default:
@@ -182,8 +219,8 @@ const getSubmissions = async (
       }
     }
 
-    // Default repsonse format is JSON
-    return res.status(200).json(jsonTransform(formResponse));
+    // Format not specified
+    return res.status(400).json({ error: "Bad request please specify a format" });
   } catch (err) {
     if (err instanceof AccessControlError) {
       return res.status(403).json({ error: "Forbidden" });

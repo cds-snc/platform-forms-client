@@ -5,7 +5,6 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
     return {
       id: response.id,
       createdAt: new Date(response.createdAt).toISOString(),
-      confirmationCode: response.confirmationCode,
       answers: response.answers,
     };
   });

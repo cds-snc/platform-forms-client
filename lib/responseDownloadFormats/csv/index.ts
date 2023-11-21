@@ -6,7 +6,7 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
     return `${item.questionEn} \n ${item.questionFr}`;
   });
 
-  header.unshift("id", "created_at", "confirmation_code");
+  header.unshift("id", "created_at");
 
   const csvStringifier = createCsvStringifier({
     header: header,
@@ -15,8 +15,7 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
   const records = formResponseSubmissions.submissions.map((response) => {
     return [
       response.id,
-      response.createdAt,
-      response.confirmationCode,
+      new Date(response.createdAt).toISOString(),
       ...response.answers.map((item) => {
         if (item.answer instanceof Array) {
           return item.answer
