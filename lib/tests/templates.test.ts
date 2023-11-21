@@ -38,7 +38,7 @@ import {
 } from "__utils__/permissions";
 import { Session } from "next-auth";
 import { logEvent } from "@lib/auditLogs";
-import { numberOfUnprocessedSubmissions } from "@lib/vault";
+import { unprocessedSubmissions } from "@lib/vault";
 
 const redis = new Redis();
 
@@ -56,7 +56,7 @@ const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
 
 jest.mock("@lib/vault");
 
-const mockNumberOfUnprocessedSubmissions = jest.mocked(numberOfUnprocessedSubmissions, {
+const mockNumberOfUnprocessedSubmissions = jest.mocked(unprocessedSubmissions, {
   shallow: true,
 });
 
