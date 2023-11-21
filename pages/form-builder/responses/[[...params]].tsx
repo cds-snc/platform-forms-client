@@ -169,7 +169,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         </SubNavLink>
       </nav>
 
-      {isAuthenticated && statusQuery === "downloaded" && (
+      {isAuthenticated && statusQuery === "downloaded" && vaultSubmissions.length > 0 && (
         <>
           <h1>{t("responses.previouslyDownloaded")}</h1>
           <div className="mb-4">
@@ -185,9 +185,13 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         </>
       )}
 
-      {isAuthenticated && statusQuery === "new" && <h1>{t("responses.newResponses")}</h1>}
+      {isAuthenticated && statusQuery === "new" && vaultSubmissions.length > 0 && (
+        <h1>{t("responses.newResponses")}</h1>
+      )}
 
-      {isAuthenticated && statusQuery === "confirmed" && <h1>{t("responses.deleted")}</h1>}
+      {isAuthenticated && statusQuery === "confirmed" && vaultSubmissions.length > 0 && (
+        <h1>{t("responses.deleted")}</h1>
+      )}
 
       {nagwareResult && <Nagware nagwareResult={nagwareResult} />}
 
@@ -206,27 +210,36 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
             )}
 
             {vaultSubmissions.length <= 0 && statusQuery === "new" && (
-              <Card
-                icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
-                title={t("downloadResponsesTable.card.noNewResponses")}
-                content={t("downloadResponsesTable.card.noNewResponsesMessage")}
-              />
+              <>
+                <h1 className="visually-hidden">{t("responses.newResponses")}</h1>
+                <Card
+                  icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+                  title={t("downloadResponsesTable.card.noNewResponses")}
+                  content={t("downloadResponsesTable.card.noNewResponsesMessage")}
+                />
+              </>
             )}
 
             {vaultSubmissions.length <= 0 && statusQuery === "downloaded" && (
-              <Card
-                icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
-                title={t("downloadResponsesTable.card.noDownloadedResponses")}
-                content={t("downloadResponsesTable.card.noDownloadedResponsesMessage")}
-              />
+              <>
+                <h1 className="visually-hidden">{t("responses.previouslyDownloaded")}</h1>
+                <Card
+                  icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+                  title={t("downloadResponsesTable.card.noDownloadedResponses")}
+                  content={t("downloadResponsesTable.card.noDownloadedResponsesMessage")}
+                />
+              </>
             )}
 
             {vaultSubmissions.length <= 0 && statusQuery === "confirmed" && (
-              <Card
-                icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
-                title={t("downloadResponsesTable.card.noDeletedResponses")}
-                content={t("downloadResponsesTable.card.noDeletedResponsesMessage")}
-              />
+              <>
+                <h1 className="visually-hidden">{t("responses.deleted")}</h1>
+                <Card
+                  icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+                  title={t("downloadResponsesTable.card.noDeletedResponses")}
+                  content={t("downloadResponsesTable.card.noDeletedResponsesMessage")}
+                />
+              </>
             )}
           </div>
           <div className="mt-8">
