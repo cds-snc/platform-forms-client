@@ -1,6 +1,5 @@
 import React from "react";
 import { ClipboardJSScript } from "../../html/scripts";
-import { ProtectedWarning } from "../../html/components/ProtectedWarning";
 import Fip from "../../html/components/Fip";
 import { css } from "../../html/css/compiled";
 import { ColumnTable } from "../../html/components/ColumnTable";
@@ -89,7 +88,7 @@ export const ResponseHtmlAggregated = ({
             <h1 id="main-header" className="mt-14">{`${form[getProperty("title", lang)]}`}</h1>
 
             <div className="border-2 border-dashed border-black bg-slate-50 p-8 mb-14">
-              <div className="flex justify-between mb-8">
+              <div className="flex justify-between mb-4">
                 <h2>{t("responseAggregatedTemplate.officialReceipt", { lng: lang })}</h2>
                 <ProtectedLevel securityAttribute={form.securityAttribute} lang={lang} />
               </div>
