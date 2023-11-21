@@ -40,3 +40,20 @@ export const getProperty = (field: string, lang: string): string => {
   }
   return field + lang.charAt(0).toUpperCase() + lang.slice(1);
 };
+
+// For bilingual content.
+// Note: i18n t() was left out to keep this more portable
+export function orderLangugeStrings({
+  stringEn,
+  stringFr,
+  lang,
+}: {
+  stringEn: string | undefined;
+  stringFr: string | undefined;
+  lang: string | undefined;
+}) {
+  if (!stringFr && !stringEn) return "unknown";
+  if (stringFr && !stringEn) return stringFr;
+  if (stringEn && !stringFr) return stringEn;
+  return lang === "fr" ? `${stringFr} / ${stringEn}` : `${stringEn} / ${stringFr}`;
+}

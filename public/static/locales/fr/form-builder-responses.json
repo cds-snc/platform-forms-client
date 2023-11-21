@@ -3,7 +3,7 @@
     "changeSetup": "Modifier les paramètres",
     "confirmReceipt": "Confirmer et supprimer",
     "navLabel": "Réponses",
-    "reportProblems": "Signaler un problème",
+    "reportProblems": "Signaler un problème avec les réponses",
     "title": "Réponses",
     "unauthenticated": {
       "createOne": "créez-en un",
@@ -64,7 +64,8 @@
       "noDeletedResponsesMessage": "Une fois que vous avez supprimé les réponses, elles restent disponibles pendant 30 jours."
     },
     "notifications": {
-      "downloadComplete": "Téléchargement complet",
+      "downloadComplete": "[FR] Responses were downloaded",
+      "downloadCompleteNew": "[FR] Responses were downloaded and moved to “Downloaded”",
       "downloadingXFiles": "Téléchargement de {{fileCount}} fichiers"
     },
     "errors": {
@@ -86,6 +87,20 @@
     "unknown": "Inconnu"
   },
   "downloadResponsesModals": {
+    "downloadDialog": {
+      "title": "[FR] Download responses",
+      "configureDownloadSettings": "[FR] Configure download settings",
+      "html": "[FR] Individual response files",
+      "htmlDescription": "[FR] Get separate HTML files for each form submission",
+      "csv": "CSV",
+      "csvDescription": "[FR] For lists, spreadsheets, or tables",
+      "json": "JSON",
+      "jsonDescription": "[FR] For API or data configuration",
+      "downloadAllAsZip": "[FR] Download all as ZIP (compressed) file",
+      "mayNotBeAvailable": "[FR] May not be available in all departments and agencies",
+      "cancel": "[FR] Cancel",
+      "download": "[FR] Download"
+    },
     "confirmDeleteNewDialog": {
       "confirmAndDelete": "Confirmer et supprimer de nouvelles réponses",
       "responsesNotYetDownloaded": "Ces réponses n’ont pas encore été téléchargées",

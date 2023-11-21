@@ -16,7 +16,6 @@ import { DownloadTable } from "@components/form-builder/app/responses/DownloadTa
 import { ConfirmDialog } from "@components/form-builder/app/responses/Dialogs/ConfirmDialog";
 import { ReportDialog } from "@components/form-builder/app/responses/Dialogs/ReportDialog";
 import { NagwareResult } from "@lib/types";
-import { detectOldUnprocessedSubmissions } from "@lib/nagware";
 import { Nagware } from "@components/form-builder/app/Nagware";
 import { EmailResponseSettings } from "@components/form-builder/app/shared";
 import { useTemplateStore } from "@components/form-builder/store";
@@ -26,7 +25,13 @@ import { FormBuilderLayout } from "@components/globals/layouts/FormBuilderLayout
 import { Button, ErrorPanel } from "@components/globals";
 import { ClosedBanner } from "@components/form-builder/app/shared/ClosedBanner";
 import { getAppSetting } from "@lib/appSettings";
-import { Close, DeleteIcon, FolderIcon, InboxIcon } from "@components/form-builder/icons";
+import {
+  Close,
+  DeleteIcon,
+  FolderIcon,
+  InboxIcon,
+  WarningIcon,
+} from "@components/form-builder/icons";
 import { SubNavLink } from "@components/form-builder/app/navigation/SubNavLink";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -36,6 +41,7 @@ interface ResponsesProps {
   formId: string;
   nagwareResult: NagwareResult | null;
   responseDownloadLimit: number;
+  responsesRemaining: boolean;
 }
 
 // TODO: move to an app setting variable
@@ -46,6 +52,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   formId,
   nagwareResult,
   responseDownloadLimit,
+  responsesRemaining,
 }: ResponsesProps) => {
   const { t } = useTranslation("form-builder-responses");
   const { status } = useSession();
@@ -191,6 +198,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
                 formId={formId}
                 nagwareResult={nagwareResult}
                 responseDownloadLimit={responseDownloadLimit}
+                responsesRemaining={responsesRemaining}
               />
             )}
 
@@ -217,6 +225,16 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
                 content={t("downloadResponsesTable.card.noDeletedResponsesMessage")}
               />
             )}
+          </div>
+          <div className="mt-8">
+            <Link
+              onClick={() => setIsShowReportProblemsDialog(true)}
+              href={"#"}
+              className="text-black visited:text-black"
+            >
+              <WarningIcon className="mr-2 inline-block" />
+              {t("responses.reportProblems")}
+            </Link>
           </div>
         </>
       )}
@@ -263,40 +281,39 @@ export const getServerSideProps: GetServerSideProps = async ({
   req,
   res,
 }) => {
-  const [formID = null, statusQuery = "new"] = params || [];
+  try {
+    const [formID = null, statusQuery = "new"] = params || [];
 
-  const FormbuilderParams: { locale: string; initialForm: null | FormRecord } = {
-    initialForm: null,
-    locale: locale || "en",
-  };
-
-  const vaultSubmissions: VaultSubmissionList[] = [];
-  let nagwareResult: NagwareResult | null = null;
-
-  const session = await getServerSession(req, res, authOptions);
-
-  if (session && !session.user.acceptableUse) {
-    // If they haven't agreed to Acceptable Use redirect to policy page for acceptance
-    return {
-      redirect: {
-        destination: `/${locale}/auth/policy`,
-        permanent: false,
-      },
+    const FormbuilderParams: { locale: string; initialForm: null | FormRecord } = {
+      initialForm: null,
+      locale: locale || "en",
     };
-  }
 
-  if (session && !session.user.hasSecurityQuestions) {
-    // If they haven't setup security questions Use redirect to policy page for acceptance
-    return {
-      redirect: {
-        destination: `/${locale}/auth/setup-security-questions`,
-        permanent: false,
-      },
-    };
-  }
+    let nagwareResult: NagwareResult | null = null;
 
-  if (formID && session) {
-    try {
+    const session = await getServerSession(req, res, authOptions);
+
+    if (session && !session.user.acceptableUse) {
+      // If they haven't agreed to Acceptable Use redirect to policy page for acceptance
+      return {
+        redirect: {
+          destination: `/${locale}/auth/policy`,
+          permanent: false,
+        },
+      };
+    }
+
+    if (session && !session.user.hasSecurityQuestions) {
+      // If they haven't setup security questions Use redirect to policy page for acceptance
+      return {
+        redirect: {
+          destination: `/${locale}/auth/setup-security-questions`,
+          permanent: false,
+        },
+      };
+    }
+
+    if (formID && session) {
       const ability = createAbility(session);
 
       const initialForm = await getFullTemplateByID(ability, formID);
@@ -318,44 +335,67 @@ export const getServerSideProps: GetServerSideProps = async ({
       // get status from url params (default = new) and capitalize/cast to VaultStatus
       const status = ucfirst(String(statusQuery)) as VaultStatus;
 
-      const allSubmissions = await listAllSubmissions(ability, formID, status);
+      const { submissions, submissionsRemaining } = await listAllSubmissions(
+        ability,
+        formID,
+        status
+      );
 
       FormbuilderParams.initialForm = initialForm;
-      vaultSubmissions.push(...allSubmissions.submissions);
 
+      // TODO: re-enable nagware when we have a better solution for how to handle filtered statuses
+      nagwareResult = null;
+      /*
       nagwareResult = allSubmissions.submissions.length
         ? await detectOldUnprocessedSubmissions(allSubmissions.submissions)
         : null;
-    } catch (e) {
-      if (e instanceof AccessControlError) {
-        return {
-          redirect: {
-            destination: `/${locale}/admin/unauthorized`,
-            permanent: false,
-          },
-        };
-      }
+        */
+      const responseDownloadLimit = Number(await getAppSetting("responseDownloadLimit"));
+
+      return {
+        props: {
+          ...FormbuilderParams,
+          vaultSubmissions: submissions,
+          formId: FormbuilderParams.initialForm?.id ?? null,
+          responseDownloadLimit: responseDownloadLimit,
+          responsesRemaining: submissionsRemaining,
+          nagwareResult,
+          ...(locale &&
+            (await serverSideTranslations(
+              locale,
+              ["common", "form-builder-responses", "form-builder", "form-closed"],
+              null,
+              ["fr", "en"]
+            ))),
+        },
+      };
+    } else {
+      return {
+        props: {
+          ...FormbuilderParams,
+          vaultSubmissions: [],
+          formId: formID,
+          ...(locale &&
+            (await serverSideTranslations(
+              locale,
+              ["common", "form-builder-responses", "form-builder", "form-closed"],
+              null,
+              ["fr", "en"]
+            ))),
+        },
+      };
     }
+  } catch (e) {
+    if (e instanceof AccessControlError) {
+      return {
+        redirect: {
+          destination: `/${locale}/admin/unauthorized`,
+          permanent: false,
+        },
+      };
+    }
+    throw e;
   }
-
-  const responseDownloadLimit = Number(await getAppSetting("responseDownloadLimit"));
-
-  return {
-    props: {
-      ...FormbuilderParams,
-      vaultSubmissions,
-      formId: FormbuilderParams.initialForm?.id ?? null,
-      responseDownloadLimit: responseDownloadLimit,
-      nagwareResult,
-      ...(locale &&
-        (await serverSideTranslations(
-          locale,
-          ["common", "form-builder-responses", "form-builder", "form-closed"],
-          null,
-          ["fr", "en"]
-        ))),
-    },
-  };
 };
 
 export default Responses;

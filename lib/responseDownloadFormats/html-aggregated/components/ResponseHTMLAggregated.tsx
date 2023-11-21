@@ -1,14 +1,20 @@
 import React from "react";
 import { ClipboardJSScript } from "../../html/scripts";
-import { ProtectedWarning } from "../../html/components/ProtectedWarning";
 import Fip from "../../html/components/Fip";
 import { css } from "../../html/css/compiled";
 import { ColumnTable } from "../../html/components/ColumnTable";
 import { AggregatedTable } from "./AggregatedTable";
 import { FormResponseSubmissions, Submission } from "@lib/responseDownloadFormats/types";
-import { customTranslate, getProperty } from "@lib/responseDownloadFormats/helpers";
+import {
+  customTranslate,
+  getProperty,
+  orderLangugeStrings,
+} from "@lib/responseDownloadFormats/helpers";
 import { copyCodeToClipboardScript } from "../scripts";
 import { TableHeader } from "./AggregatedTable";
+import { CopyCodes } from "./CopyCodes";
+import { ProtectedLevel } from "./ProtectedLevel";
+import { formatDateTime } from "@components/form-builder/util";
 
 interface HTMLDownloadProps {
   lang: string;
@@ -20,11 +26,8 @@ export const ResponseHtmlAggregated = ({
   formResponseSubmissions,
 }: HTMLDownloadProps) => {
   const { t } = customTranslate("my-forms");
-
-  // Used by copy code script that expects Ids set with lang for user messages
-  const capitalizedLang = lang === "en" ? "En" : "Fr";
-
   const form = formResponseSubmissions.form;
+  const [yearMonthDay, time] = formatDateTime(Date.now());
 
   // Newline deliniated will work to paste multiple codes in the confirmation dialog.
   // Note: The "\r\n" delimiter may be OS dependent. If so use an actual newline with .join(`
@@ -36,15 +39,36 @@ export const ResponseHtmlAggregated = ({
   const submissions = formResponseSubmissions.submissions as Submission[];
 
   const headersForTable = [
-    { title: t("responseTemplate.responseNumber"), type: "formData" },
-    { title: t("responseTemplate.submissionDate"), type: "formData" },
+    {
+      title: orderLangugeStrings({
+        stringEn: t("responseTemplate.responseNumber", { lng: "en" }),
+        stringFr: t("responseTemplate.responseNumber", { lng: "fr" }),
+        lang,
+      }),
+      type: "formData",
+    },
+    {
+      title: orderLangugeStrings({
+        stringEn: t("responseTemplate.submissionDate", { lng: "en" }),
+        stringFr: t("responseTemplate.submissionDate", { lng: "fr" }),
+        lang,
+      }),
+      type: "formData",
+    },
     ...formResponseSubmissions.submissions[0].answers.map((answer) => {
-      return { title: String(answer[getProperty("question", lang)]), type: answer.type };
+      return {
+        title: orderLangugeStrings({
+          stringEn: answer.questionEn,
+          stringFr: answer.questionFr,
+          lang,
+        }),
+        type: answer.type,
+      };
     }),
   ] as TableHeader[];
 
   return (
-    <html lang="en">
+    <html lang={lang}>
       {/* eslint-disable-next-line @next/next/no-head-element */}
       <head>
         <meta charSet="utf-8" />
@@ -53,40 +77,36 @@ export const ResponseHtmlAggregated = ({
       </head>
       <body>
         <div id="skip-link-container">
-          <a href="#content" id="skip-link">
+          <a href="#main-header" id="skip-link">
             Skip to main content
           </a>
         </div>
         <div id="page-container">
           <main id="content">
             <Fip language="en" showLangLink={false} />
-            <ProtectedWarning securityAttribute={form.securityAttribute} lang={lang} />
-            <h1 className="mt-14">{`${form[getProperty("title", lang)]}`}</h1>
+
+            <h1 id="main-header" className="mt-14">{`${form[getProperty("title", lang)]}`}</h1>
+
+            <div className="border-2 border-dashed border-black bg-slate-50 p-8 mb-14">
+              <div className="flex justify-between mb-4">
+                <h2>{t("responseAggregatedTemplate.officialReceipt", { lng: lang })}</h2>
+                <ProtectedLevel securityAttribute={form.securityAttribute} lang={lang} />
+              </div>
+              <p className="mb-4">
+                <strong>{submissions.length}</strong>{" "}
+                {t("responseAggregatedTemplate.responsesDownloaded", { lng: lang })} {yearMonthDay}{" "}
+                {time}
+              </p>
+              <p className="mb-4">{t("responseAggregatedTemplate.needToVerify", { lng: lang })}</p>
+              <p className="mb-8">{t("responseAggregatedTemplate.useTheCopy", { lng: lang })}</p>
+              <CopyCodes confirmationCodes={confirmationCodes} lang={lang} />
+            </div>
 
             <h2>{t("responseAggregatedTemplate.title", { lng: lang })}</h2>
 
             <h3 className="mt-14">
               {t("responseAggregatedTemplate.copyCodes.title", { lng: lang })}
             </h3>
-            <p className="mt-8">
-              {t("responseAggregatedTemplate.copyCodes.description", { lng: lang })}
-            </p>
-            <div className="mt-8 mb-14">
-              <button
-                id={`copyCodeButton${capitalizedLang}`}
-                className="gc-button--blue"
-                type="button"
-                aria-labelledby={`confirmReceiptInfo${capitalizedLang}`}
-                data-clipboard-text={confirmationCodes}
-              >
-                {t("responseAggregatedTemplate.copyCodes.copyButton", { lng: lang })}
-              </button>
-              <span
-                id={`copyCodeOutput${capitalizedLang}`}
-                aria-live="polite"
-                className="ml-8 hidden text-green"
-              ></span>
-            </div>
 
             <div className="mt-14 overflow-x-auto">
               <AggregatedTable lang={lang} headers={headersForTable} submissions={submissions} />
@@ -98,8 +118,8 @@ export const ResponseHtmlAggregated = ({
             {submissions &&
               submissions.map((submission) => {
                 return (
-                  <div key="" className="break-before-page">
-                    <h3 className="mt-20">
+                  <div key="" className="break-before-page mt-32">
+                    <h3 id={submission.id} tabIndex={-1}>
                       {t("responseAggregatedTemplate.dataList.formResponse", { lng: lang })}{" "}
                       {submission.id}
                     </h3>
