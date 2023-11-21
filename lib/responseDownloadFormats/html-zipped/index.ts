@@ -24,7 +24,7 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
   });
 
   const zip = new JSZip();
-  zip.file("receipt.html", aggregated);
+  zip.file("receipt-recu.html", aggregated);
   records.forEach((response) => {
     zip.file(`${response.id}.html`, response.html);
   });
