@@ -1,6 +1,5 @@
 import React from "react";
 import { ClipboardJSScript } from "../../html/scripts";
-import { ProtectedWarning } from "../../html/components/ProtectedWarning";
 import Fip from "../../html/components/Fip";
 import { css } from "../../html/css/compiled";
 import { ColumnTable } from "../../html/components/ColumnTable";
@@ -13,6 +12,9 @@ import {
 } from "@lib/responseDownloadFormats/helpers";
 import { copyCodeToClipboardScript } from "../scripts";
 import { TableHeader } from "./AggregatedTable";
+import { CopyCodes } from "./CopyCodes";
+import { ProtectedLevel } from "./ProtectedLevel";
+import { formatDateTime } from "@components/form-builder/util";
 
 interface HTMLDownloadProps {
   lang: string;
@@ -24,11 +26,8 @@ export const ResponseHtmlAggregated = ({
   formResponseSubmissions,
 }: HTMLDownloadProps) => {
   const { t } = customTranslate("my-forms");
-
-  // Used by copy code script that expects Ids set with lang for user messages
-  const capitalizedLang = lang === "en" ? "En" : "Fr";
-
   const form = formResponseSubmissions.form;
+  const [yearMonthDay, time] = formatDateTime(Date.now());
 
   // Newline deliniated will work to paste multiple codes in the confirmation dialog.
   // Note: The "\r\n" delimiter may be OS dependent. If so use an actual newline with .join(`
@@ -85,33 +84,29 @@ export const ResponseHtmlAggregated = ({
         <div id="page-container">
           <main id="content">
             <Fip language="en" showLangLink={false} />
-            <ProtectedWarning securityAttribute={form.securityAttribute} lang={lang} />
+
             <h1 id="main-header" className="mt-14">{`${form[getProperty("title", lang)]}`}</h1>
+
+            <div className="border-2 border-dashed border-black bg-slate-50 p-8 mb-14">
+              <div className="flex justify-between mb-4">
+                <h2>{t("responseAggregatedTemplate.officialReceipt", { lng: lang })}</h2>
+                <ProtectedLevel securityAttribute={form.securityAttribute} lang={lang} />
+              </div>
+              <p className="mb-4">
+                <strong>{submissions.length}</strong>{" "}
+                {t("responseAggregatedTemplate.responsesDownloaded", { lng: lang })} {yearMonthDay}{" "}
+                {time}
+              </p>
+              <p className="mb-4">{t("responseAggregatedTemplate.needToVerify", { lng: lang })}</p>
+              <p className="mb-8">{t("responseAggregatedTemplate.useTheCopy", { lng: lang })}</p>
+              <CopyCodes confirmationCodes={confirmationCodes} lang={lang} />
+            </div>
 
             <h2>{t("responseAggregatedTemplate.title", { lng: lang })}</h2>
 
             <h3 className="mt-14">
               {t("responseAggregatedTemplate.copyCodes.title", { lng: lang })}
             </h3>
-            <p className="mt-8">
-              {t("responseAggregatedTemplate.copyCodes.description", { lng: lang })}
-            </p>
-            <div className="mt-8 mb-14">
-              <button
-                id={`copyCodeButton${capitalizedLang}`}
-                className="gc-button--blue"
-                type="button"
-                aria-labelledby={`confirmReceiptInfo${capitalizedLang}`}
-                data-clipboard-text={confirmationCodes}
-              >
-                {t("responseAggregatedTemplate.copyCodes.copyButton", { lng: lang })}
-              </button>
-              <span
-                id={`copyCodeOutput${capitalizedLang}`}
-                aria-live="polite"
-                className="ml-8 hidden text-green"
-              ></span>
-            </div>
 
             <div className="mt-14 overflow-x-auto">
               <AggregatedTable lang={lang} headers={headersForTable} submissions={submissions} />
