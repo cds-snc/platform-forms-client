@@ -114,28 +114,6 @@ export const DownloadTable = ({
               <Alert.Body>{t(downloadSuccessMessage)}</Alert.Body>
             </Alert.Success>
           )}
-          {tableItems.checkedItems.size > MAX_FILE_DOWNLOADS && (
-            <Alert.Danger>
-              <Alert.Title>
-                {t("downloadResponsesTable.errors.trySelectingLessFilesHeader", {
-                  max: MAX_FILE_DOWNLOADS,
-                })}
-              </Alert.Title>
-              <p className="text-sm text-[#26374a]">
-                {t("downloadResponsesTable.errors.trySelectingLessFiles", {
-                  max: MAX_FILE_DOWNLOADS,
-                })}
-              </p>
-            </Alert.Danger>
-          )}
-          {noSelectedItemsError && (
-            <Alert.Danger>
-              <Alert.Title>{t("downloadResponsesTable.errors.atLeastOneFileHeader")}</Alert.Title>
-              <p className="text-sm text-[#26374a]">
-                {t("downloadResponsesTable.errors.atLeastOneFile")}
-              </p>
-            </Alert.Danger>
-          )}
           {downloadError && (
             <Alert.Danger>
               <Alert.Title>
@@ -254,30 +232,6 @@ export const DownloadTable = ({
         </table>
         <div className="mt-8 flex">
           <div id="notificationsBottom" className="ml-4">
-            {tableItems.checkedItems.size > MAX_FILE_DOWNLOADS && (
-              <Alert.Danger icon={false}>
-                <Alert.Title headingTag="h3">
-                  {t("downloadResponsesTable.errors.trySelectingLessFilesHeader", {
-                    max: MAX_FILE_DOWNLOADS,
-                  })}
-                </Alert.Title>
-                <p className="text-sm text-black">
-                  {t("downloadResponsesTable.errors.trySelectingLessFiles", {
-                    max: MAX_FILE_DOWNLOADS,
-                  })}
-                </p>
-              </Alert.Danger>
-            )}
-            {noSelectedItemsError && (
-              <Alert.Danger icon={false}>
-                <Alert.Title headingTag="h3">
-                  {t("downloadResponsesTable.errors.atLeastOneFileHeader")}
-                </Alert.Title>
-                <p className="text-sm text-black">
-                  {t("downloadResponsesTable.errors.atLeastOneFile")}
-                </p>
-              </Alert.Danger>
-            )}
             {downloadError && (
               <Alert.Danger icon={false}>
                 <Alert.Title headingTag="h3">
