@@ -11,7 +11,6 @@ export const DownloadDialog = ({
   checkedItems,
   isDialogVisible,
   setIsDialogVisible,
-  downloadError,
   setDownloadError,
   formId,
   onSuccessfulDownload,
@@ -55,6 +54,12 @@ export const DownloadDialog = ({
 
   const handleDownload = async () => {
     const url = `/api/id/${formId}/submission/download?format=${selectedFormat}`;
+
+    if (!checkedItems.size) {
+      setDownloadError(true);
+      return;
+    }
+
     const ids = Array.from(checkedItems.keys());
 
     try {
@@ -83,9 +88,6 @@ export const DownloadDialog = ({
             ids: ids.join(","),
           },
         });
-
-        setDownloadError(true);
-        return;
 
         if (zipAllFiles) {
           const file = new JSZip();
