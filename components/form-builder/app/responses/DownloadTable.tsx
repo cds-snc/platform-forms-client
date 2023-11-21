@@ -17,7 +17,7 @@ import { useSetting } from "@lib/hooks/useSetting";
 import Link from "next/link";
 import { TableActions, initialTableItemsState, reducerTableItems } from "./DownloadTableReducer";
 import { getDaysPassed } from "@lib/clientHelpers";
-import { Alert } from "@components/globals";
+import { Alert, Button } from "@components/globals";
 import { CheckAll } from "./CheckAll";
 import { DownloadButton } from "./DownloadButton";
 import { toast } from "../shared";
@@ -26,6 +26,8 @@ import { ActionsPanel } from "./ActionsPanel";
 import { DeleteButton } from "./DeleteButton";
 import { ConfirmDeleteNewDialog } from "./Dialogs/ConfirmDeleteNewDialog";
 import { DownloadDialog } from "./Dialogs/DownloadDialog";
+import { ConfirmDialog } from "./Dialogs/ConfirmDialog";
+import { Close } from "@components/form-builder/icons";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
