@@ -308,8 +308,8 @@ export const DownloadTable = ({
 
       <DownloadDialog
         checkedItems={tableItems.checkedItems}
-        isVisible={showDownloadDialog}
-        setIsVisible={setShowDownloadDialog}
+        isDialogVisible={showDownloadDialog}
+        setIsDialogVisible={setShowDownloadDialog}
         formId={formId}
         onSuccessfulDownload={() => {
           router.replace(router.asPath, undefined, { scroll: false });

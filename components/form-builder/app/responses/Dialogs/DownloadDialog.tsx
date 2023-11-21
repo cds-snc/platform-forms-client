@@ -10,7 +10,7 @@ import JSZip from "jszip";
 export const DownloadDialog = ({
   checkedItems,
   isDialogVisible,
-  setisDialogVisible,
+  setIsDialogVisible,
   downloadError,
   setDownloadError,
   formId,
@@ -18,7 +18,7 @@ export const DownloadDialog = ({
 }: {
   checkedItems: Map<string, boolean>;
   isDialogVisible: boolean;
-  setisDialogVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsDialogVisible: React.Dispatch<React.SetStateAction<boolean>>;
   downloadError: boolean;
   setDownloadError: React.Dispatch<React.SetStateAction<boolean>>;
   formId: string;
@@ -42,7 +42,7 @@ export const DownloadDialog = ({
   const handleClose = () => {
     setSelectedFormat(undefined);
     setZipAllFiles(true);
-    setisDialogVisible(false);
+    setIsDialogVisible(false);
     dialogRef.current?.close();
   };
 
