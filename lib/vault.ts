@@ -8,8 +8,8 @@ import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { VaultSubmissionList, UserAbility, VaultStatus, VaultSubmission } from "@lib/types";
 import { logEvent } from "./auditLogs";
 import {
-  numberOfUnprocessedSubmissionsCacheCheck,
-  numberOfUnprocessedSubmissionsCachePut,
+  unprocessedSubmissionsCacheCheck,
+  unprocessedSubmissionsCachePut,
 } from "./cache/unprocessedSubmissionsCache";
 import { connectToDynamo } from "./integration/dynamodbConnector";
 import { logMessage } from "./logger";
@@ -66,19 +66,13 @@ async function checkAbilityToAccessSubmissions(ability: UserAbility, formID: str
 }
 
 /**
- * This method returns a list of all form submission records.
- * The list does not contain the actual submission data, only attributes
- * @param formID - The form ID from which to retrieve responses
+ * Checks if any submissions exist for a given form and type
+ * @param formID - The form ID to check for submissions
+ * @param status - The vault status to verify
  */
-export async function listAllSubmissions(
-  ability: UserAbility,
-  formID: string,
-  status?: VaultStatus
-): Promise<{ submissions: VaultSubmissionList[]; numberOfUnprocessedSubmissions: number }> {
-  // Check access control first
-  try {
-    await checkAbilityToAccessSubmissions(ability, formID);
-  } catch (e) {
+
+const submissionTypeExists = async (ability: UserAbility, formID: string, status: VaultStatus) => {
+  await checkAbilityToAccessSubmissions(ability, formID).catch((e) => {
     if (e instanceof AccessControlError)
       logEvent(
         ability.userID,
@@ -90,23 +84,75 @@ export async function listAllSubmissions(
         `Attempted to list responses for form ${formID}`
       );
     throw e;
-  }
+  });
+  const documentClient = connectToDynamo();
+
+  const getItemsDbParams: QueryCommandInput = {
+    TableName: "Vault",
+    IndexName: "Status",
+    // Limit the amount of responses 1.
+    // A single record existing is enough to trigger the boolean
+    Limit: 1,
+    KeyConditionExpression: "FormID = :formID AND #status = :status",
+    // Sort by descending order of Status
+    ScanIndexForward: false,
+    ExpressionAttributeValues: {
+      ":formID": formID,
+      ":status": status,
+    },
+    ExpressionAttributeNames: {
+      "#status": "Status",
+      "#name": "Name",
+    },
+    ProjectionExpression: "FormID,#status,#name",
+  };
+  const queryCommand = new QueryCommand(getItemsDbParams);
+  // eslint-disable-next-line no-await-in-loop
+  const response = await documentClient.send(queryCommand);
+  return Boolean(response.Items?.length);
+};
+
+/**
+ * This method returns a list of all form submission records.
+ * The list does not contain the actual submission data, only attributes
+ * @param formID - The form ID from which to retrieve responses
+ */
+export async function listAllSubmissions(
+  ability: UserAbility,
+  formID: string,
+  status?: VaultStatus
+): Promise<{ submissions: VaultSubmissionList[]; submissionsRemaining: boolean }> {
+  // Check access control first
 
   try {
+    await checkAbilityToAccessSubmissions(ability, formID).catch((e) => {
+      if (e instanceof AccessControlError)
+        logEvent(
+          ability.userID,
+          {
+            type: "Form",
+            id: formID,
+          },
+          "AccessDenied",
+          `Attempted to list responses for form ${formID}`
+        );
+      throw e;
+    });
     const responseDownloadLimit = Number(await getAppSetting("responseDownloadLimit"));
 
     const documentClient = connectToDynamo();
 
     let accumulatedResponses: VaultSubmissionList[] = [];
     let lastEvaluatedKey = null;
+    let submissionsRemaining = false;
 
     while (lastEvaluatedKey !== undefined) {
       const getItemsDbParams: QueryCommandInput = {
         TableName: "Vault",
         IndexName: "Status",
+        ExclusiveStartKey: lastEvaluatedKey ?? undefined,
         // Limit the amount of response to responseDownloadLimit.  This can be changed in settings.
         Limit: responseDownloadLimit - accumulatedResponses.length,
-        ExclusiveStartKey: lastEvaluatedKey ?? undefined,
         KeyConditionExpression: "FormID = :formID" + (status ? " AND #status = :status" : ""),
         // Sort by descending order of Status
         ScanIndexForward: false,
@@ -156,6 +202,7 @@ export async function listAllSubmissions(
       // We either manually stop the paginated request when we have (responseDownloadLimit) items or we let it finish on its own
       if (accumulatedResponses.length >= responseDownloadLimit) {
         lastEvaluatedKey = undefined;
+        submissionsRemaining = true;
       } else {
         lastEvaluatedKey = response.LastEvaluatedKey;
       }
@@ -170,31 +217,13 @@ export async function listAllSubmissions(
       "ListResponses",
       `List all responses ${status ? `of status ${status} ` : ""}for form ${formID}`
     );
-
-    if (!status) {
-      // Only update value when we are not filtering by status
-      // Will need to rework logic once filtering is implemented on client side
-      const numOfUnprocessedSubmissions = accumulatedResponses.filter((submission) =>
-        [VaultStatus.NEW, VaultStatus.DOWNLOADED, VaultStatus.PROBLEM].includes(submission.status)
-      ).length;
-
-      await numberOfUnprocessedSubmissionsCachePut(formID, numOfUnprocessedSubmissions);
-      return {
-        submissions: accumulatedResponses,
-        numberOfUnprocessedSubmissions: numOfUnprocessedSubmissions,
-      };
-    } else {
-      // This should never be triggered in the applications current state but is used as a fallback
-      // to ensure typescript is happy
-      const numOfUnprocessedSubmissions = await numberOfUnprocessedSubmissionsCacheCheck(formID);
-      return {
-        submissions: accumulatedResponses,
-        numberOfUnprocessedSubmissions: numOfUnprocessedSubmissions ?? 0,
-      };
-    }
+    return {
+      submissions: accumulatedResponses,
+      submissionsRemaining: submissionsRemaining,
+    };
   } catch (e) {
     logMessage.error(e);
-    return { submissions: [], numberOfUnprocessedSubmissions: 0 };
+    return { submissions: [], submissionsRemaining: true };
   }
 }
 
@@ -347,24 +376,30 @@ export async function updateLastDownloadedBy(
 }
 
 /**
- * This method returns the number of unprocessed submissions (submission with a status equal to 'New' or 'Downloaded')
+ * This method returns a boolean dependent if unprocessed submissions (submission with a status equal to 'New' or 'Downloaded') exist.
  * @param formID - The form ID from which to retrieve responses
  */
 
-export async function numberOfUnprocessedSubmissions(
+export async function unprocessedSubmissions(
   ability: UserAbility,
   formID: string,
   ignoreCache = false
-): Promise<number> {
-  const cachedNumberOfUnprocessedSubmissions = await numberOfUnprocessedSubmissionsCacheCheck(
-    formID
-  );
+): Promise<boolean> {
+  const cachedUnprocessedSubmissions = await unprocessedSubmissionsCacheCheck(formID);
 
-  if (cachedNumberOfUnprocessedSubmissions && !ignoreCache) {
-    return cachedNumberOfUnprocessedSubmissions;
+  if (cachedUnprocessedSubmissions && !ignoreCache) {
+    return cachedUnprocessedSubmissions;
   } else {
-    const allSubmissions = await listAllSubmissions(ability, formID);
-    return allSubmissions.numberOfUnprocessedSubmissions;
+    const responseArray = await Promise.all([
+      submissionTypeExists(ability, formID, VaultStatus.NEW),
+      submissionTypeExists(ability, formID, VaultStatus.DOWNLOADED),
+    ]);
+
+    // If one of the responses is true then there are unprocessed submissions
+    const unprocessedSubmissions = responseArray.some((response) => response);
+
+    await unprocessedSubmissionsCachePut(formID, unprocessedSubmissions);
+    return unprocessedSubmissions;
   }
 }
 

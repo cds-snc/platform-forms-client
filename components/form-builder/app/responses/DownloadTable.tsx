@@ -32,6 +32,7 @@ interface DownloadTableProps {
   formId: string;
   nagwareResult: NagwareResult | null;
   responseDownloadLimit: number;
+  responsesRemaining: boolean;
 }
 
 export const DownloadTable = ({
@@ -39,6 +40,7 @@ export const DownloadTable = ({
   formId,
   nagwareResult,
   responseDownloadLimit,
+  responsesRemaining,
 }: DownloadTableProps) => {
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
@@ -232,6 +234,17 @@ export const DownloadTable = ({
         </table>
         <div className="mt-8 flex">
           <div id="notificationsBottom" className="ml-4">
+            {responsesRemaining && (
+              <Alert.Warning icon={false}>
+                <Alert.Title headingTag="h3">
+                  TEMP - There are remaining responses on the server
+                </Alert.Title>
+                <p className="text-sm text-black">
+                  TEMP - Not all responses can be shown on the screen. Please download responses to
+                  see more responses.
+                </p>
+              </Alert.Warning>
+            )}
             {downloadError && (
               <Alert.Danger icon={false}>
                 <Alert.Title headingTag="h3">

@@ -9,7 +9,7 @@ import { DynamoDBDocumentClient, QueryCommand } from "@aws-sdk/lib-dynamodb";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { Base, mockUserPrivileges } from "__utils__/permissions";
 import { Session } from "next-auth";
-import { deleteDraftFormResponses, numberOfUnprocessedSubmissions } from "@lib/vault";
+import { deleteDraftFormResponses, unprocessedSubmissions } from "@lib/vault";
 import formConfiguration from "@jestFixtures/cdsIntakeTestForm.json";
 import { DeliveryOption } from "@lib/types";
 import { BatchWriteItemCommand } from "@aws-sdk/client-dynamodb";
@@ -56,9 +56,9 @@ describe("Vault `numberOfUnprocessedSubmissions` function", () => {
 
     ddbMock.on(QueryCommand).resolves(dynamodbMockedReponses);
 
-    const numOfUnprocessedSubmissions = await numberOfUnprocessedSubmissions(ability, "formtestID");
+    const numOfUnprocessedSubmissions = await unprocessedSubmissions(ability, "formtestID");
 
-    expect(numOfUnprocessedSubmissions).toEqual(0);
+    expect(numOfUnprocessedSubmissions).toEqual(false);
   });
 
   it("Should return the correct number of unprocessed submissions", async () => {
@@ -111,9 +111,9 @@ describe("Vault `numberOfUnprocessedSubmissions` function", () => {
 
     ddbMock.on(QueryCommand).resolves(dynamodbMockedReponses);
 
-    const numOfUnprocessedSubmissions = await numberOfUnprocessedSubmissions(ability, "formtestID");
+    const numOfUnprocessedSubmissions = await unprocessedSubmissions(ability, "formtestID");
 
-    expect(numOfUnprocessedSubmissions).toEqual(4);
+    expect(numOfUnprocessedSubmissions).toEqual(true);
   });
 
   it("Submissions should only be fetched once if we call the function multiple times in a row and we do not ignore the cache", async () => {
@@ -143,12 +143,12 @@ describe("Vault `numberOfUnprocessedSubmissions` function", () => {
 
     ddbMock.on(QueryCommand).resolves(dynamodbMockedReponses);
 
-    await numberOfUnprocessedSubmissions(ability, "formtestID");
-    await numberOfUnprocessedSubmissions(ability, "formtestID");
-    await numberOfUnprocessedSubmissions(ability, "formtestID");
-    await numberOfUnprocessedSubmissions(ability, "formtestID");
+    await unprocessedSubmissions(ability, "formtestID");
+    await unprocessedSubmissions(ability, "formtestID");
+    await unprocessedSubmissions(ability, "formtestID");
+    await unprocessedSubmissions(ability, "formtestID");
 
-    expect(ddbMock.commandCalls(QueryCommand).length).toBe(1);
+    expect(ddbMock.commandCalls(QueryCommand).length).toBe(2);
   });
 
   it("Submissions should be fetched on every function call if we decide to ignore the cache", async () => {
@@ -178,12 +178,12 @@ describe("Vault `numberOfUnprocessedSubmissions` function", () => {
 
     ddbMock.on(QueryCommand).resolves(dynamodbMockedReponses);
 
-    await numberOfUnprocessedSubmissions(ability, "formtestID", true);
-    await numberOfUnprocessedSubmissions(ability, "formtestID", true);
-    await numberOfUnprocessedSubmissions(ability, "formtestID", true);
-    await numberOfUnprocessedSubmissions(ability, "formtestID", true);
+    await unprocessedSubmissions(ability, "formtestID", true);
+    await unprocessedSubmissions(ability, "formtestID", true);
+    await unprocessedSubmissions(ability, "formtestID", true);
+    await unprocessedSubmissions(ability, "formtestID", true);
 
-    expect(ddbMock.commandCalls(QueryCommand).length).toBe(4);
+    expect(ddbMock.commandCalls(QueryCommand).length).toBe(8);
   });
 });
 const buildPrismaResponse = (
