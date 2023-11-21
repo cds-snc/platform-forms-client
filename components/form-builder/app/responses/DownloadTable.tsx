@@ -155,7 +155,7 @@ export const DownloadTable = ({
               </th>
               <th className="p-4 text-left">{t("downloadResponsesTable.header.confirmReceipt")}</th>
               <th className="p-4 text-left">{t("downloadResponsesTable.header.removal")}</th>
-              <th className="p-4 text-left">{t("downloadResponsesTable.header.more")}</th>
+              <th className="p-4 text-left">{t("downloadResponsesTable.header.download")}</th>
             </tr>
           </thead>
           <tbody>
@@ -217,7 +217,7 @@ export const DownloadTable = ({
                       removalAt={submission.removedAt}
                     />
                   </td>
-                  <td className="px-4">
+                  <td>
                     <MoreMenu
                       formId={submission.formID}
                       responseId={submission.name}

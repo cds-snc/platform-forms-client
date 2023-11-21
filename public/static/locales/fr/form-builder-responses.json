@@ -43,7 +43,8 @@
       "lastDownloadedBy": "Téléchargée par",
       "confirmReceipt": "Confirmation de réception",
       "removal": "Suppression des données",
-      "more": "Plus"
+      "more": "Plus",
+      "download": "Téléchargement"
     },
     "status": {
       "downloaded": "Téléchargée",
