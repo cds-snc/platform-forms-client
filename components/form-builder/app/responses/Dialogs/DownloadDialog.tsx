@@ -35,10 +35,6 @@ export const DownloadDialog = ({
     }
   }, [selectedFormat]);
 
-  if (downloadError) {
-    setDownloadError(false);
-  }
-
   const handleClose = () => {
     setSelectedFormat(undefined);
     setZipAllFiles(true);
@@ -87,6 +83,9 @@ export const DownloadDialog = ({
             ids: ids.join(","),
           },
         });
+
+        setDownloadError(true);
+        return;
 
         if (zipAllFiles) {
           const file = new JSZip();

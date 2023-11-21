@@ -294,7 +294,10 @@ export const DownloadTable = ({
 
       {tableItems.checkedItems.size > 0 && (
         <ActionsPanel>
-          <DownloadButton setShowDownloadDialog={setShowDownloadDialog} />
+          <DownloadButton
+            setShowDownloadDialog={setShowDownloadDialog}
+            onClick={() => setDownloadError(false)}
+          />
           {statusQuery === "new" && false && (
             <DeleteButton setShowConfirmNewDialog={setShowConfirmNewDialog} />
           )}
