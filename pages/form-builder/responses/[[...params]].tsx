@@ -233,7 +233,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
               className="text-black visited:text-black"
             >
               <WarningIcon className="mr-2 inline-block" />
-              Report a problem with responses
+              {t("responses.reportProblems")}
             </Link>
           </div>
         </>
