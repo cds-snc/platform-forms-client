@@ -25,6 +25,7 @@ import { MoreMenu } from "./MoreMenu";
 import { ActionsPanel } from "./ActionsPanel";
 import { DeleteButton } from "./DeleteButton";
 import { ConfirmDeleteNewDialog } from "./Dialogs/ConfirmDeleteNewDialog";
+import { DownloadDialog } from "./Dialogs/DownloadDialog";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -46,10 +47,17 @@ export const DownloadTable = ({
   const [, statusQuery = "new"] = router.query?.params || [];
 
   const [downloadError, setDownloadError] = useState(false);
+  const [showDownloadSuccess, setShowDownloadSuccess] = useState(false);
   const [noSelectedItemsError, setNoSelectedItemsError] = useState(false);
   const [showConfirmNewtDialog, setShowConfirmNewDialog] = useState(false);
+  const [showDownloadDialog, setShowDownloadDialog] = useState(false);
 
   const accountEscalated = nagwareResult && nagwareResult.level > 2;
+
+  const downloadSuccessMessage =
+    statusQuery === "new"
+      ? "downloadResponsesTable.notifications.downloadCompleteNew"
+      : "downloadResponsesTable.notifications.downloadComplete";
 
   const { value: overdueAfter } = useSetting("nagwarePhaseEncouraged");
   const [tableItems, tableItemsDispatch] = useReducer(
@@ -102,27 +110,11 @@ export const DownloadTable = ({
           anchor="#downloadTableButtonId"
         />
         <div id="notificationsTop">
-          {tableItems.checkedItems.size > MAX_FILE_DOWNLOADS && (
-            <Alert.Danger>
-              <Alert.Title>
-                {t("downloadResponsesTable.errors.trySelectingLessFilesHeader", {
-                  max: MAX_FILE_DOWNLOADS,
-                })}
-              </Alert.Title>
-              <p className="text-sm text-[#26374a]">
-                {t("downloadResponsesTable.errors.trySelectingLessFiles", {
-                  max: MAX_FILE_DOWNLOADS,
-                })}
-              </p>
-            </Alert.Danger>
-          )}
-          {noSelectedItemsError && (
-            <Alert.Danger>
-              <Alert.Title>{t("downloadResponsesTable.errors.atLeastOneFileHeader")}</Alert.Title>
-              <p className="text-sm text-[#26374a]">
-                {t("downloadResponsesTable.errors.atLeastOneFile")}
-              </p>
-            </Alert.Danger>
+          {showDownloadSuccess && (
+            <Alert.Success>
+              <Alert.Title>{t(downloadSuccessMessage)}</Alert.Title>
+              <Alert.Body>{t(downloadSuccessMessage)}</Alert.Body>
+            </Alert.Success>
           )}
           {downloadError && (
             <Alert.Danger>
@@ -253,16 +245,6 @@ export const DownloadTable = ({
                 </p>
               </Alert.Warning>
             )}
-            {noSelectedItemsError && (
-              <Alert.Danger icon={false}>
-                <Alert.Title headingTag="h3">
-                  {t("downloadResponsesTable.errors.atLeastOneFileHeader")}
-                </Alert.Title>
-                <p className="text-sm text-black">
-                  {t("downloadResponsesTable.errors.atLeastOneFile")}
-                </p>
-              </Alert.Danger>
-            )}
             {downloadError && (
               <Alert.Danger icon={false}>
                 <Alert.Title headingTag="h3">
@@ -280,16 +262,8 @@ export const DownloadTable = ({
       {tableItems.checkedItems.size > 0 && (
         <ActionsPanel>
           <DownloadButton
-            formId={formId}
-            downloadError={downloadError}
-            setDownloadError={setDownloadError}
-            setNoSelectedItemsError={setNoSelectedItemsError}
-            checkedItems={tableItems.checkedItems}
-            canDownload={tableItems.checkedItems.size <= MAX_FILE_DOWNLOADS}
-            onSuccessfulDownload={() => {
-              router.replace(router.asPath, undefined, { scroll: false });
-              toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
-            }}
+            setShowDownloadDialog={setShowDownloadDialog}
+            onClick={() => setDownloadError(false)}
           />
           {statusQuery === "new" && false && (
             <DeleteButton setShowConfirmNewDialog={setShowConfirmNewDialog} />
@@ -300,6 +274,19 @@ export const DownloadTable = ({
       <ConfirmDeleteNewDialog
         isVisible={showConfirmNewtDialog}
         setIsVisible={setShowConfirmNewDialog}
+      />
+
+      <DownloadDialog
+        checkedItems={tableItems.checkedItems}
+        isDialogVisible={showDownloadDialog}
+        setIsDialogVisible={setShowDownloadDialog}
+        formId={formId}
+        onSuccessfulDownload={() => {
+          router.replace(router.asPath, undefined, { scroll: false });
+          setShowDownloadSuccess(true);
+        }}
+        downloadError={downloadError}
+        setDownloadError={setDownloadError}
       />
     </>
   );

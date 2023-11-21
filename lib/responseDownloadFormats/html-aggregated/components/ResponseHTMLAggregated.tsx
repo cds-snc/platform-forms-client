@@ -6,7 +6,11 @@ import { css } from "../../html/css/compiled";
 import { ColumnTable } from "../../html/components/ColumnTable";
 import { AggregatedTable } from "./AggregatedTable";
 import { FormResponseSubmissions, Submission } from "@lib/responseDownloadFormats/types";
-import { customTranslate, getProperty } from "@lib/responseDownloadFormats/helpers";
+import {
+  customTranslate,
+  getProperty,
+  orderLangugeStrings,
+} from "@lib/responseDownloadFormats/helpers";
 import { copyCodeToClipboardScript } from "../scripts";
 import { TableHeader } from "./AggregatedTable";
 
@@ -36,15 +40,36 @@ export const ResponseHtmlAggregated = ({
   const submissions = formResponseSubmissions.submissions as Submission[];
 
   const headersForTable = [
-    { title: t("responseTemplate.responseNumber"), type: "formData" },
-    { title: t("responseTemplate.submissionDate"), type: "formData" },
+    {
+      title: orderLangugeStrings({
+        stringEn: t("responseTemplate.responseNumber", { lng: "en" }),
+        stringFr: t("responseTemplate.responseNumber", { lng: "fr" }),
+        lang,
+      }),
+      type: "formData",
+    },
+    {
+      title: orderLangugeStrings({
+        stringEn: t("responseTemplate.submissionDate", { lng: "en" }),
+        stringFr: t("responseTemplate.submissionDate", { lng: "fr" }),
+        lang,
+      }),
+      type: "formData",
+    },
     ...formResponseSubmissions.submissions[0].answers.map((answer) => {
-      return { title: String(answer[getProperty("question", lang)]), type: answer.type };
+      return {
+        title: orderLangugeStrings({
+          stringEn: answer.questionEn,
+          stringFr: answer.questionFr,
+          lang,
+        }),
+        type: answer.type,
+      };
     }),
   ] as TableHeader[];
 
   return (
-    <html lang="en">
+    <html lang={lang}>
       {/* eslint-disable-next-line @next/next/no-head-element */}
       <head>
         <meta charSet="utf-8" />
@@ -53,7 +78,7 @@ export const ResponseHtmlAggregated = ({
       </head>
       <body>
         <div id="skip-link-container">
-          <a href="#content" id="skip-link">
+          <a href="#main-header" id="skip-link">
             Skip to main content
           </a>
         </div>
@@ -61,7 +86,7 @@ export const ResponseHtmlAggregated = ({
           <main id="content">
             <Fip language="en" showLangLink={false} />
             <ProtectedWarning securityAttribute={form.securityAttribute} lang={lang} />
-            <h1 className="mt-14">{`${form[getProperty("title", lang)]}`}</h1>
+            <h1 id="main-header" className="mt-14">{`${form[getProperty("title", lang)]}`}</h1>
 
             <h2>{t("responseAggregatedTemplate.title", { lng: lang })}</h2>
 
@@ -98,8 +123,8 @@ export const ResponseHtmlAggregated = ({
             {submissions &&
               submissions.map((submission) => {
                 return (
-                  <div key="" className="break-before-page">
-                    <h3 className="mt-20">
+                  <div key="" className="break-before-page mt-32">
+                    <h3 id={submission.id} tabIndex={-1}>
                       {t("responseAggregatedTemplate.dataList.formResponse", { lng: lang })}{" "}
                       {submission.id}
                     </h3>
