@@ -27,11 +27,11 @@ export const DownloadDialog = ({
   const dialogRef = useDialogRef();
   const { t } = useTranslation("form-builder-responses");
   const [selectedFormat, setSelectedFormat] = React.useState<DownloadFormat>();
-  const [zip, setZip] = React.useState<boolean>(true);
+  const [zipAllFiles, setZipAllFiles] = React.useState<boolean>(true);
 
   useEffect(() => {
     if (selectedFormat === DownloadFormat.HTML_ZIPPED) {
-      setZip(true);
+      setZipAllFiles(true);
     }
   }, [selectedFormat]);
 
@@ -41,7 +41,7 @@ export const DownloadDialog = ({
 
   const handleClose = () => {
     setSelectedFormat(undefined);
-    setZip(true);
+    setZipAllFiles(true);
     setIsVisible(false);
     dialogRef.current?.close();
   };
@@ -88,7 +88,7 @@ export const DownloadDialog = ({
           },
         });
 
-        if (zip) {
+        if (zipAllFiles) {
           const file = new JSZip();
           file.file("receipt.html", response.data.receipt);
           file.file("records.csv", response.data.responses);
@@ -113,7 +113,7 @@ export const DownloadDialog = ({
           },
         });
 
-        if (zip) {
+        if (zipAllFiles) {
           const file = new JSZip();
           file.file("receipt.html", response.data.receipt);
           file.file("records.json", JSON.stringify(response.data.responses));
@@ -215,10 +215,10 @@ export const DownloadDialog = ({
                     type="checkbox"
                     name="downloadFormat"
                     id="zipped"
-                    checked={zip}
+                    checked={zipAllFiles}
                     disabled={selectedFormat === DownloadFormat.HTML_ZIPPED}
                     className="gc-input-checkbox__input"
-                    onChange={() => setZip(zip === true ? false : true)}
+                    onChange={() => setZipAllFiles(zipAllFiles === true ? false : true)}
                   />
                   <label htmlFor="combined" className="ml-14 inline-block">
                     <span className="block font-semibold">
