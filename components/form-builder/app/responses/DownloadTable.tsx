@@ -237,11 +237,12 @@ export const DownloadTable = ({
             {responsesRemaining && (
               <Alert.Warning icon={false}>
                 <Alert.Title headingTag="h3">
-                  TEMP - There are remaining responses on the server
+                  {t("downloadResponsesTable.errors.remainingResponses")}
                 </Alert.Title>
                 <p className="text-sm text-black">
-                  TEMP - Not all responses can be shown on the screen. Please download responses to
-                  see more responses.
+                  {t("downloadResponsesTable.errors.remainingResponsesBody", {
+                    max: responseDownloadLimit,
+                  })}
                 </p>
               </Alert.Warning>
             )}
