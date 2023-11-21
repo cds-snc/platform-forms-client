@@ -6,6 +6,7 @@ import { logMessage } from "@lib/logger";
 import axios from "axios";
 import { DownloadFormat } from "@lib/responseDownloadFormats/types";
 import JSZip from "jszip";
+import { isUUID } from "@lib/validation";
 
 export const DownloadDialog = ({
   checkedItems,
@@ -56,10 +57,11 @@ export const DownloadDialog = ({
   const availableFormats = [DownloadFormat.CSV, DownloadFormat.JSON, DownloadFormat.HTML_ZIPPED];
 
   const handleDownload = async () => {
-    if (!selectedFormat || !availableFormats.includes(selectedFormat)) {
+    if (!selectedFormat || !availableFormats.includes(selectedFormat) || !isUUID(formId)) {
       setDownloadError(true);
       return;
     }
+
     const url = `/api/id/${formId}/submission/download?format=${selectedFormat}`;
 
     if (!checkedItems.size) {
