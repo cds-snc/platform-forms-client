@@ -158,13 +158,6 @@ export const DownloadTable = ({
                   {t("downloadResponsesTable.header.nextStep")}
                 </th>
               )}
-              {[VaultStatus.DOWNLOADED, VaultStatus.CONFIRMED].includes(
-                ucfirst(statusQuery) as VaultStatus
-              ) && (
-                <th scope="col" className="p-4 text-left">
-                  {t("downloadResponsesTable.header.lastDownloadedBy")}
-                </th>
-              )}
               {ucfirst(statusQuery) === VaultStatus.DOWNLOADED && (
                 <th scope="col" className="w-full p-4 text-left">
                   {t("downloadResponsesTable.header.nextStep")}
@@ -187,10 +180,7 @@ export const DownloadTable = ({
                   <WarningIcon className="mx-8 mt-1 inline-block scale-150" />{" "}
                   <span className="sr-only">{t("downloadResponsesTable.header.warning")}</span>
                 </th>
-                <td
-                  className="px-4 py-2"
-                  colSpan={ucfirst(statusQuery) === VaultStatus.NEW ? 4 : 5}
-                >
+                <td className="px-4 py-2" colSpan={4}>
                   <p>
                     <strong>
                       {t("downloadResponsesTable.errors.remainingResponses", {
@@ -257,14 +247,6 @@ export const DownloadTable = ({
                         downloadedAt={submission.downloadedAt}
                         overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
                       />
-                    </td>
-                  )}
-                  {[VaultStatus.DOWNLOADED, VaultStatus.CONFIRMED].includes(
-                    ucfirst(statusQuery) as VaultStatus
-                  ) && (
-                    <td className="whitespace-nowrap px-4">
-                      {submission.lastDownloadedBy ||
-                        t("downloadResponsesTable.status.notDownloaded")}
                     </td>
                   )}
                   {ucfirst(statusQuery) === VaultStatus.DOWNLOADED && (
