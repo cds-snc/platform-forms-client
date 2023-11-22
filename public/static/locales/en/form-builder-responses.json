@@ -43,7 +43,8 @@
       "lastDownloadedBy": "Downloaded by",
       "confirmReceipt": "Confirmation of receipt",
       "removal": "Data removal",
-      "more": "More"
+      "more": "More",
+      "download": "Download"
     },
     "status": {
       "downloaded": "Downloaded",

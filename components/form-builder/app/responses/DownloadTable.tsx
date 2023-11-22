@@ -67,8 +67,6 @@ export const DownloadTable = ({
     initialTableItemsState(vaultSubmissions, overdueAfter)
   );
 
-  const MAX_FILE_DOWNLOADS = responseDownloadLimit;
-
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.id;
     const checked: boolean = e.target.checked;
@@ -155,7 +153,7 @@ export const DownloadTable = ({
               </th>
               <th className="p-4 text-left">{t("downloadResponsesTable.header.confirmReceipt")}</th>
               <th className="p-4 text-left">{t("downloadResponsesTable.header.removal")}</th>
-              <th className="p-4 text-left">{t("downloadResponsesTable.header.more")}</th>
+              <th className="p-4 text-left">{t("downloadResponsesTable.header.download")}</th>
             </tr>
           </thead>
           <tbody>
@@ -217,7 +215,7 @@ export const DownloadTable = ({
                       removalAt={submission.removedAt}
                     />
                   </td>
-                  <td className="px-4">
+                  <td>
                     <MoreMenu
                       formId={submission.formID}
                       responseId={submission.name}
@@ -291,6 +289,7 @@ export const DownloadTable = ({
         }}
         downloadError={downloadError}
         setDownloadError={setDownloadError}
+        responseDownloadLimit={responseDownloadLimit}
       />
     </>
   );

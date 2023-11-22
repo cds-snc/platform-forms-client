@@ -63,36 +63,45 @@ export const MoreMenu = ({
 
   return (
     <>
-      <DropdownMenu.Root>
-        <DropdownMenu.Trigger>
-          <MoreIcon className="h-10 w-10" />
-        </DropdownMenu.Trigger>
-        <DropdownMenu.Portal>
-          <DropdownMenu.Content
-            side="right"
-            sideOffset={15}
-            align="start"
-            className="rounded-lg border-1 border-black bg-white px-1.5 py-1 shadow-md"
-          >
-            <DropdownMenu.Item
-              onClick={handleDownload}
-              className="flex cursor-pointer items-center rounded-md pr-4 text-sm outline-none hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
+      <button
+        onClick={handleDownload}
+        className="rounded border-2 border-white pr-4 hover:underline active:border-blue-focus"
+      >
+        <DownloadIcon className="inline-block scale-50" />
+        <span className="pt-2">{t("downloadResponsesTable.download")}</span>
+      </button>
+      {false && (
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            <MoreIcon className="h-10 w-10" />
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Portal>
+            <DropdownMenu.Content
+              side="right"
+              sideOffset={15}
+              align="start"
+              className="rounded-lg border-1 border-black bg-white px-1.5 py-1 shadow-md"
             >
-              <DownloadIcon className="scale-50" />
-              {t("downloadResponsesTable.download")}
-            </DropdownMenu.Item>
-            {statusQuery === "new" && false && (
               <DropdownMenu.Item
-                onClick={handleDelete}
+                onClick={handleDownload}
                 className="flex cursor-pointer items-center rounded-md pr-4 text-sm outline-none hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
               >
-                <DeleteIcon className="scale-50" />
-                {t("downloadResponsesTable.delete")}
+                <DownloadIcon className="scale-50" />
+                {t("downloadResponsesTable.download")}
               </DropdownMenu.Item>
-            )}
-          </DropdownMenu.Content>
-        </DropdownMenu.Portal>
-      </DropdownMenu.Root>
+              {statusQuery === "new" && false && (
+                <DropdownMenu.Item
+                  onClick={handleDelete}
+                  className="flex cursor-pointer items-center rounded-md pr-4 text-sm outline-none hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
+                >
+                  <DeleteIcon className="scale-50" />
+                  {t("downloadResponsesTable.delete")}
+                </DropdownMenu.Item>
+              )}
+            </DropdownMenu.Content>
+          </DropdownMenu.Portal>
+        </DropdownMenu.Root>
+      )}
     </>
   );
 };
