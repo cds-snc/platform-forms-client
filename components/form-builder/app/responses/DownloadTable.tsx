@@ -67,8 +67,6 @@ export const DownloadTable = ({
     initialTableItemsState(vaultSubmissions, overdueAfter)
   );
 
-  const MAX_FILE_DOWNLOADS = responseDownloadLimit;
-
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.id;
     const checked: boolean = e.target.checked;
