@@ -221,7 +221,7 @@ export const DownloadTable = ({
                       responseId={submission.name}
                       onDownloadSuccess={() => {
                         router.replace(router.asPath, undefined, { scroll: false });
-                        toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
+                        setShowDownloadSuccess(true);
                       }}
                       setDownloadError={setDownloadError}
                       setShowConfirmNewDialog={setShowConfirmNewDialog}
