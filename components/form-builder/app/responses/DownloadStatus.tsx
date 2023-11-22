@@ -36,7 +36,7 @@ export const DownloadStatus = ({
   const daysToEscalateDelete =
     escalatedAfter && parseInt(escalatedAfter, 10) - daysPassedDownloaded;
 
-  if (daysToEscalateDelete) {
+  if (daysToEscalateDelete && daysToEscalateDelete > 0) {
     return (
       <StatusMessage
         primaryMessage={t("downloadResponsesTable.deleteOverdue.deleteImmediately")}
