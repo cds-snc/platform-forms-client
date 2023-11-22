@@ -57,7 +57,7 @@
       "problem": "Problem",
       "done": "Done",
       "downloadWithinXDays": "Download within {{daysLeft}} days",
-      "confirmWithinXDays": "Sign off within {{daysLeft}} days",
+      "confirmWithinXDays": "Sign off on response removal within {{daysLeft}} days",
       "removeWithinXDays": "Will be removed permanently in {{daysLeft}} days",
       "overdue": "Overdue",
       "wontRemove": "Cannot remove",

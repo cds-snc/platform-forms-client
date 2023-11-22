@@ -56,9 +56,9 @@
       "unconfirmed": "À confirmer",
       "problem": "Problème",
       "done": "Complétée",
-      "downloadWithinXDays": "Download within {{daysLeft}} days",
-      "confirmWithinXDays": "Sign off within {{daysLeft}} days",
-      "removeWithinXDays": "Will be removed permanently in {{daysLeft}} days",
+      "downloadWithinXDays": "[FR] Download within {{daysLeft}} days",
+      "confirmWithinXDays": "[FR] Sign off on response removal within {{daysLeft}} days",
+      "removeWithinXDays": "[FR] Will be removed permanently in {{daysLeft}} days",
       "overdue": "En retard",
       "wontRemove": "Ne peut pas être supprimée",
       "notSet": "Non réglée"
