@@ -234,9 +234,15 @@ export default function Contactus() {
                         required: true,
                       },
                       {
+                        id: "request-feature",
+                        name: "feature",
+                        label: t("contactus.request.option3"),
+                        required: true,
+                      },
+                      {
                         id: "request-other",
                         name: "other",
-                        label: t("contactus.request.option3"),
+                        label: t("contactus.request.option4"),
                         required: true,
                       },
                     ]}
