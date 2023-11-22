@@ -8,10 +8,6 @@ import {
 } from "@lib/types";
 import { useTranslation } from "react-i18next";
 import { SkipLinkReusable } from "@components/globals/SkipLinkReusable";
-import { ConfirmReceiptStatus } from "./ConfirmReceiptStatus";
-import { DownloadResponseStatus } from "./DownloadResponseStatus";
-import { RemovalStatus } from "./RemovalStatus";
-import { DownloadStatus } from "./DownloadStatus";
 import { useRouter } from "next/router";
 import { useSetting } from "@lib/hooks/useSetting";
 import Link from "next/link";

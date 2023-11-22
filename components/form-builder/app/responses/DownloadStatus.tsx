@@ -1,36 +1,52 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { VaultStatus } from "@lib/types";
+import { getDaysPassed } from "@lib/clientHelpers";
+import { StatusMessage, StatusMessageLevel } from "./StatusMessage";
 
-export const DownloadStatus = ({ vaultStatus }: { vaultStatus: string }) => {
+export const DownloadStatus = ({
+  downloadedAt,
+  overdueAfter,
+  escalatedAfter,
+}: {
+  downloadedAt: number | undefined;
+  overdueAfter: string | undefined;
+  escalatedAfter: string | undefined;
+}) => {
   const { t } = useTranslation("form-builder-responses");
+  const daysPassedDownloaded = downloadedAt && getDaysPassed(downloadedAt);
 
-  switch (vaultStatus) {
-    case VaultStatus.NEW:
-      return (
-        <span className="p-2 bg-[#ecf3eb] text-[#0c6722]">
-          {t("downloadResponsesTable.status.new")}
-        </span>
-      );
-    case VaultStatus.DOWNLOADED:
-      return (
-        <span className="p-2 bg-[#dcd6fe]">{t("downloadResponsesTable.status.downloaded")}</span>
-      );
-    case VaultStatus.CONFIRMED:
-      return (
-        <span className="p-2 bg-[#e2e8ef]">{t("downloadResponsesTable.status.confirmed")}</span>
-      );
-    case VaultStatus.PROBLEM:
-      return (
-        <span className="p-2 bg-[#f3e9e8] text-[#bc3332]">
-          {t("downloadResponsesTable.status.problem")}
-        </span>
-      );
-    default:
-      return (
-        <span className="p-2 bg-[#f3e9e8] text-[#bc3332]">
-          {t("downloadResponsesTable.unknown")}
-        </span>
-      );
+  if (!daysPassedDownloaded) {
+    return <StatusMessage primaryMessage={t("downloadResponsesTable.unknown")} />;
   }
+
+  const daysToDelete = overdueAfter && parseInt(overdueAfter, 10) - daysPassedDownloaded;
+
+  if (!daysToDelete) {
+    return <StatusMessage primaryMessage={t("downloadResponsesTable.unknown")} />;
+  }
+
+  if (daysToDelete && daysToDelete > 0) {
+    return (
+      <StatusMessage
+        primaryMessage={t("downloadResponsesTable.deleteWithin", { days: daysToDelete })}
+      />
+    );
+  }
+
+  const daysToEscalateDelete =
+    escalatedAfter && parseInt(escalatedAfter, 10) - daysPassedDownloaded;
+
+  if (daysToEscalateDelete) {
+    return (
+      <StatusMessage
+        primaryMessage={t("downloadResponsesTable.deleteOverdue.deleteImmediately")}
+        secondaryMessage={t("downloadResponsesTable.deleteOverdue.accountRestricted", {
+          days: daysToEscalateDelete,
+        })}
+        level={StatusMessageLevel.ERROR}
+      />
+    );
+  }
+
+  return <StatusMessage primaryMessage={t("downloadResponsesTable.unknown")} />;
 };
