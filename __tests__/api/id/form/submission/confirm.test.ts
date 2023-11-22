@@ -14,6 +14,10 @@ import {
   TransactWriteCommand,
 } from "@aws-sdk/lib-dynamodb";
 import { prismaMock } from "@jestUtils";
+import { getAppSetting } from "@lib/appSettings";
+
+jest.mock("@lib/appSettings");
+const mockedGetAppSetting = jest.mocked(getAppSetting, { shallow: true });
 
 import { Base, mockUserPrivileges } from "__utils__/permissions";
 jest.mock("next-auth/next");
@@ -25,6 +29,13 @@ jest.mock("@lib/auditLogs");
 const mockLogEvent = jest.mocked(logEvent, { shallow: true });
 
 const ddbMock = mockClient(DynamoDBDocumentClient);
+
+mockedGetAppSetting.mockImplementation((key) => {
+  if (key === "responseDownloadLimit") {
+    return Promise.resolve("20");
+  }
+  return Promise.resolve(null);
+});
 
 describe("Confirm form submissions (without active session)", () => {
   it("Should not be able to use the API without an active session", async () => {
@@ -164,7 +175,7 @@ describe("Confirm form submissions (with active session)", () => {
     expect(JSON.parse(res._getData()).error).toContain("does not match pattern");
   });
 
-  it("API should reject request if payload contains more than 20 confirmation codes", async () => {
+  it("API should reject request if payload contains more than [responseDownloadLimit] confirmation codes", async () => {
     const { req, res } = createMocks({
       method: "PUT",
       headers: {
