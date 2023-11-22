@@ -53,6 +53,7 @@ export const DownloadTable = ({
   const [noSelectedItemsError, setNoSelectedItemsError] = useState(false);
   const [showConfirmNewtDialog, setShowConfirmNewDialog] = useState(false);
   const [showDownloadDialog, setShowDownloadDialog] = useState(false);
+  const [removedRow, setRemovedRow] = useState("");
 
   const accountEscalated = nagwareResult && nagwareResult.level > 2;
 
@@ -163,10 +164,14 @@ export const DownloadTable = ({
                 <tr
                   key={submission.name}
                   className={
-                    "border-b-2 border-grey" +
+                    "border-b-2 border-grey " +
                     (tableItems.statusItems.get(submission.name) ? " bg-[#fffbf3]" : "") +
-                    (isBlocked ? " opacity-50" : "")
+                    (isBlocked ? " opacity-50" : "") +
+                    (removedRow === submission.name && statusQuery === "new"
+                      ? " transition-opacity opacity-0 ease-in-out duration-500"
+                      : "")
                   }
+                  onTransitionEnd={(e) => statusQuery === "new" && e.target.classList.add("hidden")}
                 >
                   <td className="flex whitespace-nowrap pb-2 pl-9 pr-4">
                     <div className="gc-input-checkbox">
@@ -220,8 +225,8 @@ export const DownloadTable = ({
                       formId={submission.formID}
                       responseId={submission.name}
                       onDownloadSuccess={() => {
-                        router.replace(router.asPath, undefined, { scroll: false });
-                        toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
+                        setRemovedRow(submission.name);
+                        // router.replace(router.asPath, undefined, { scroll: false });
                       }}
                       setDownloadError={setDownloadError}
                       setShowConfirmNewDialog={setShowConfirmNewDialog}
