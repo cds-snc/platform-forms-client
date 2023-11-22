@@ -46,7 +46,8 @@
       "more": "Plus",
       "download": "Téléchargement",
       "nextStep": "Prochaine étape",
-      "date": "Date"
+      "date": "Date",
+      "warning": "Avertissement"
     },
     "status": {
       "downloaded": "Téléchargée",
@@ -84,8 +85,8 @@
       "errorDownloadingFilesHeader": "Erreur lors du téléchargement des fichiers sélectionnés.",
       "errorDownloadingFiles": "Réessayez dans quelques minutes. Si le problème persiste, ",
       "errorDownloadingFilesLink": "contactez Soutien",
-      "remainingResponses": "[FR] There are remaining responses on the server",
-      "remainingResponsesBody": "[FR] Showing {{max}} responses. Not all responses can be shown, please download responses to see more.",
+      "remainingResponses": "You have over {{max}} new responses available.",
+      "remainingResponsesBody": "Showing 1-{{max}}. More will load as displayed responses are downloaded.",
       "overdueAlert": {
         "title": "L'accès aux nouvelles réponses est restreint jusqu'à ce que les réponses en retard soient téléchargées et confirmées",
         "description": "Il y a {{numberOfOverdueResponses}} réponses qui datent de {{escalatedAfter}} jours. Téléchargez et confirmez toutes les réponses en retard pour enlever cette restriction."

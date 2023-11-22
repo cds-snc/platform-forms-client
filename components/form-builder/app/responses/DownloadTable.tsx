@@ -27,6 +27,7 @@ import { DeleteButton } from "./DeleteButton";
 import { ConfirmDeleteNewDialog } from "./Dialogs/ConfirmDeleteNewDialog";
 import { DownloadDialog } from "./Dialogs/DownloadDialog";
 import { formatDateTime } from "@components/form-builder/util";
+import { WarningIcon } from "@components/form-builder/icons";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -133,10 +134,12 @@ export const DownloadTable = ({
           )}
         </div>
         <table className="w-full text-sm" aria-live="polite">
-          <caption className="sr-only">{t("downloadResponsesTable.header.tableTitle")}</caption>
-          <thead className="border-b-2 border-[#6a6d7b]">
+          <caption>
+            <span className="sr-only">{t("downloadResponsesTable.header.tableTitle")}</span>
+          </caption>
+          <thead className="border-b-1 border-slate-400">
             <tr>
-              <th className="py-4 pr-3 text-center">
+              <th scope="col" className="py-4 text-center">
                 <CheckAll
                   tableItems={tableItems}
                   tableItemsDispatch={tableItemsDispatch}
@@ -144,8 +147,12 @@ export const DownloadTable = ({
                   setNoSelectedItemsError={setNoSelectedItemsError}
                 />
               </th>
-              <th className="p-4 text-left">{t("downloadResponsesTable.header.number")}</th>
-              <th className="p-4 text-left">{t("downloadResponsesTable.header.date")}</th>
+              <th scope="col" className="p-4 text-left">
+                {t("downloadResponsesTable.header.number")}
+              </th>
+              <th scope="col" className="p-4 text-left">
+                {t("downloadResponsesTable.header.date")}
+              </th>
               {ucfirst(statusQuery) === VaultStatus.NEW && (
                 <th className="w-full p-4 text-left">
                   {t("downloadResponsesTable.header.nextStep")}
@@ -154,24 +161,50 @@ export const DownloadTable = ({
               {[VaultStatus.DOWNLOADED, VaultStatus.CONFIRMED].includes(
                 ucfirst(statusQuery) as VaultStatus
               ) && (
-                <th className="p-4 text-left">
+                <th scope="col" className="p-4 text-left">
                   {t("downloadResponsesTable.header.lastDownloadedBy")}
                 </th>
               )}
               {ucfirst(statusQuery) === VaultStatus.DOWNLOADED && (
-                <th className="w-full p-4 text-left">
+                <th scope="col" className="w-full p-4 text-left">
                   {t("downloadResponsesTable.header.nextStep")}
                 </th>
               )}
               {ucfirst(statusQuery) === VaultStatus.CONFIRMED && (
-                <th className="w-full p-4 text-left">
+                <th scope="col" className="w-full p-4 text-left">
                   {t("downloadResponsesTable.header.nextStep")}
                 </th>
               )}
-              <th className="p-4 text-left">{t("downloadResponsesTable.header.download")}</th>
+              <th scope="col" className="p-4 text-left">
+                {t("downloadResponsesTable.header.download")}
+              </th>
             </tr>
           </thead>
           <tbody>
+            {responsesRemaining && (
+              <tr className="border-b-1 border-slate-300 bg-yellow-50">
+                <th scope="row">
+                  <WarningIcon className="mx-8 mt-1 inline-block scale-150" />{" "}
+                  <span className="sr-only">{t("downloadResponsesTable.header.warning")}</span>
+                </th>
+                <td
+                  className="px-4 py-2"
+                  colSpan={ucfirst(statusQuery) === VaultStatus.NEW ? 4 : 5}
+                >
+                  <p>
+                    <strong>
+                      {t("downloadResponsesTable.errors.remainingResponses", {
+                        max: responseDownloadLimit,
+                      })}
+                    </strong>
+                    <br />
+                    {t("downloadResponsesTable.errors.remainingResponsesBody", {
+                      max: responseDownloadLimit,
+                    })}
+                  </p>
+                </td>
+              </tr>
+            )}
             {tableItems.sortedItems.map((submission) => {
               const isBlocked = blockDownload(submission);
               const createdDateTime = formatDateTime(submission.createdAt).join(" ");
@@ -270,18 +303,6 @@ export const DownloadTable = ({
         </table>
         <div className="mt-8 flex">
           <div id="notificationsBottom" className="ml-4">
-            {responsesRemaining && (
-              <Alert.Warning icon={false}>
-                <Alert.Title headingTag="h3">
-                  {t("downloadResponsesTable.errors.remainingResponses")}
-                </Alert.Title>
-                <p className="text-sm text-black">
-                  {t("downloadResponsesTable.errors.remainingResponsesBody", {
-                    max: responseDownloadLimit,
-                  })}
-                </p>
-              </Alert.Warning>
-            )}
             {downloadError && (
               <Alert.Danger icon={false}>
                 <Alert.Title headingTag="h3">
