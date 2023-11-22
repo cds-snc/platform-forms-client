@@ -5,7 +5,6 @@ import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { logMessage } from "@lib/logger";
 import { useRouter } from "next/router";
-import { Button } from "@components/globals";
 
 export const MoreMenu = ({
   formId,
@@ -64,7 +63,10 @@ export const MoreMenu = ({
 
   return (
     <>
-      <button onClick={handleDownload}>
+      <button
+        onClick={handleDownload}
+        className="rounded border-2 border-white pr-4 hover:underline active:border-blue-focus"
+      >
         <DownloadIcon className="inline-block scale-50" />
         <span className="pt-2">{t("downloadResponsesTable.download")}</span>
       </button>
