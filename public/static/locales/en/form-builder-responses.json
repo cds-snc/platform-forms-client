@@ -42,6 +42,21 @@
       "date": "Date",
       "nextStep": "Next step"
     },
+    "problem": {
+      "supportWill":"Support will contact you",
+      "responseReported": "Response reported as a problem"
+    },
+    "downloadWithin": "Download within {{days}} days",
+    "downloadOverdue": {
+      "downloadImeddiately": "Download immediately (overdue)",
+      "accountRestricted":"Account restricted in {{days}} days"
+    },
+    "deleteWithin":"Delete within {{days}} days",
+    "deleteOverdue": {
+      "deleteImmediately":"Delete immediately (overdue)",
+      "accountRestricted":"Account restricted in {{days}} days"
+    },
+    "willBeRemoved":"Will be removed permanently in {{days}} days",
     "status": {
       "downloaded": "Downloaded",
       "notDownloaded": "Not downloaded",

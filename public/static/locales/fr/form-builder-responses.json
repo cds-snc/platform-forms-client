@@ -42,6 +42,21 @@
       "date": "[FR]Date",
       "nextStep": "[FR]Next step"
     },
+    "problem": {
+      "supportWill":"L'équipe de soutien vous contactera",
+      "responseReported": "Réponse signalée comme étant un problème"
+    },
+    "downloadWithin": "Télécharger d'ici {{days}} jours",
+    "downloadOverdue": {
+      "downloadImeddiately": "Télécharger immédiatement (en retard)",
+      "accountRestricted":"Compte restreint dans X {{days}} jours"
+    },
+    "deleteWithin":"Supprimer d'ici {{days}} jours",
+    "deleteOverdue": {
+      "deleteImmediately":"Supprimer immédiatement (en retard)",
+      "accountRestricted":"Compte restreint dans {{days}} jours"
+    },
+    "willBeRemoved":"Sera retirée du système dans {{days}} jours",
     "status": {
       "downloaded": "Téléchargée",
       "notDownloaded": "À télécharger",

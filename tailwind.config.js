@@ -46,6 +46,7 @@ module.exports = {
           DEFAULT: "#b10e1e",
           default: "#b10e1e",
           100: "#f3e9e8",
+          700: "#B91C1C",
           destructive: "#BC3331",
           required: "#D3080C", // DTO requirement for required labels
           hover: "#892406",
