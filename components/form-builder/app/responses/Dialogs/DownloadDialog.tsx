@@ -16,6 +16,7 @@ export const DownloadDialog = ({
   formId,
   formName,
   onSuccessfulDownload,
+  responseDownloadLimit,
 }: {
   checkedItems: Map<string, boolean>;
   isDialogVisible: boolean;
@@ -25,6 +26,7 @@ export const DownloadDialog = ({
   formId: string;
   formName: string;
   onSuccessfulDownload: () => void;
+  responseDownloadLimit: number;
 }) => {
   const dialogRef = useDialogRef();
   const { t } = useTranslation("form-builder-responses");
@@ -66,7 +68,7 @@ export const DownloadDialog = ({
 
     const url = `/api/id/${formId}/submission/download?format=${selectedFormat}`;
 
-    if (!checkedItems.size) {
+    if (!checkedItems.size || checkedItems.size > responseDownloadLimit) {
       setDownloadError(true);
       return;
     }

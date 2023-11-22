@@ -288,6 +288,7 @@ export const DownloadTable = ({
         }}
         downloadError={downloadError}
         setDownloadError={setDownloadError}
+        responseDownloadLimit={responseDownloadLimit}
       />
     </>
   );
