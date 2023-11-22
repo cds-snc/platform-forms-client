@@ -44,7 +44,9 @@
       "confirmReceipt": "Confirmation of receipt",
       "removal": "Data removal",
       "more": "More",
-      "download": "Download"
+      "download": "Download",
+      "nextStep": "Next step",
+      "date": "Date"
     },
     "status": {
       "downloaded": "Downloaded",
@@ -54,7 +56,9 @@
       "unconfirmed": "Unconfirmed",
       "problem": "Problem",
       "done": "Done",
-      "withinXDays": "Within {{daysLeft}} days",
+      "downloadWithinXDays": "Download within {{daysLeft}} days",
+      "confirmWithinXDays": "Sign off within {{daysLeft}} days",
+      "removeWithinXDays": "Will be removed permanently in {{daysLeft}} days",
       "overdue": "Overdue",
       "wontRemove": "Cannot remove",
       "notSet": "Not set"

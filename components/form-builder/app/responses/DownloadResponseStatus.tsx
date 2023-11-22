@@ -27,7 +27,7 @@ export const DownloadResponseStatus = ({
     if (daysLeft < 0) {
       status = <ExclamationText text={t("downloadResponsesTable.status.overdue")} />;
     } else {
-      status = t("downloadResponsesTable.status.withinXDays", { daysLeft });
+      status = t("downloadResponsesTable.status.downloadWithinXDays", { daysLeft });
     }
   } else if (downloadedAt) {
     status = formatDate(new Date(downloadedAt));

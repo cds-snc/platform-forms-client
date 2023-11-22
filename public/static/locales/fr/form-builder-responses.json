@@ -44,7 +44,9 @@
       "confirmReceipt": "Confirmation de réception",
       "removal": "Suppression des données",
       "more": "Plus",
-      "download": "Téléchargement"
+      "download": "Téléchargement",
+      "nextStep": "Prochaine étape",
+      "date": "Date"
     },
     "status": {
       "downloaded": "Téléchargée",
@@ -54,7 +56,9 @@
       "unconfirmed": "À confirmer",
       "problem": "Problème",
       "done": "Complétée",
-      "withinXDays": "D'ici {{daysLeft}} jours",
+      "downloadWithinXDays": "Download within {{daysLeft}} days",
+      "confirmWithinXDays": "Sign off within {{daysLeft}} days",
+      "removeWithinXDays": "Will be removed permanently in {{daysLeft}} days",
       "overdue": "En retard",
       "wontRemove": "Ne peut pas être supprimée",
       "notSet": "Non réglée"

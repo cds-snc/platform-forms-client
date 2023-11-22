@@ -16,7 +16,7 @@ import { useRouter } from "next/router";
 import { useSetting } from "@lib/hooks/useSetting";
 import Link from "next/link";
 import { TableActions, initialTableItemsState, reducerTableItems } from "./DownloadTableReducer";
-import { getDaysPassed } from "@lib/clientHelpers";
+import { getDaysPassed, ucfirst } from "@lib/clientHelpers";
 import { Alert } from "@components/globals";
 import { CheckAll } from "./CheckAll";
 import { DownloadButton } from "./DownloadButton";
@@ -26,6 +26,7 @@ import { ActionsPanel } from "./ActionsPanel";
 import { DeleteButton } from "./DeleteButton";
 import { ConfirmDeleteNewDialog } from "./Dialogs/ConfirmDeleteNewDialog";
 import { DownloadDialog } from "./Dialogs/DownloadDialog";
+import { formatDateTime } from "@components/form-builder/util";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -57,7 +58,7 @@ export const DownloadTable = ({
   const accountEscalated = nagwareResult && nagwareResult.level > 2;
 
   const downloadSuccessMessage =
-    statusQuery === "new"
+    ucfirst(statusQuery) === VaultStatus.NEW
       ? "downloadResponsesTable.notifications.downloadCompleteNew"
       : "downloadResponsesTable.notifications.downloadComplete";
 
@@ -144,21 +145,42 @@ export const DownloadTable = ({
                 />
               </th>
               <th className="p-4 text-left">{t("downloadResponsesTable.header.number")}</th>
-              <th className="p-4 text-left">{t("downloadResponsesTable.header.status")}</th>
-              <th className="p-4 text-left">
-                {t("downloadResponsesTable.header.downloadResponse")}
-              </th>
-              <th className="p-4 text-left">
-                {t("downloadResponsesTable.header.lastDownloadedBy")}
-              </th>
-              <th className="p-4 text-left">{t("downloadResponsesTable.header.confirmReceipt")}</th>
-              <th className="p-4 text-left">{t("downloadResponsesTable.header.removal")}</th>
+              <th className="p-4 text-left">{t("downloadResponsesTable.header.date")}</th>
+              {ucfirst(statusQuery) === VaultStatus.NEW && (
+                <th className="w-full p-4 text-left">
+                  {t("downloadResponsesTable.header.nextStep")}
+                </th>
+              )}
+              {[VaultStatus.DOWNLOADED, VaultStatus.CONFIRMED].includes(
+                ucfirst(statusQuery) as VaultStatus
+              ) && (
+                <th className="p-4 text-left">
+                  {t("downloadResponsesTable.header.lastDownloadedBy")}
+                </th>
+              )}
+              {ucfirst(statusQuery) === VaultStatus.DOWNLOADED && (
+                <th className="w-full p-4 text-left">
+                  {t("downloadResponsesTable.header.nextStep")}
+                </th>
+              )}
+              {ucfirst(statusQuery) === VaultStatus.CONFIRMED && (
+                <th className="w-full p-4 text-left">
+                  {t("downloadResponsesTable.header.nextStep")}
+                </th>
+              )}
               <th className="p-4 text-left">{t("downloadResponsesTable.header.download")}</th>
             </tr>
           </thead>
           <tbody>
             {tableItems.sortedItems.map((submission) => {
               const isBlocked = blockDownload(submission);
+              const createdDateTime = formatDateTime(submission.createdAt).join(" ");
+              const downloadedDateTime = submission.downloadedAt
+                ? formatDateTime(submission.downloadedAt).join(" ")
+                : "";
+              const confirmedDateTime = submission.confirmedAt
+                ? formatDateTime(submission.confirmedAt).join(" ")
+                : "";
               return (
                 <tr
                   key={submission.name}
@@ -186,36 +208,50 @@ export const DownloadTable = ({
                   </td>
                   <td className="whitespace-nowrap px-4">{submission.name}</td>
                   <td className="whitespace-nowrap px-4">
-                    <DownloadStatus vaultStatus={submission.status} />
+                    {ucfirst(statusQuery) === VaultStatus.NEW && <span>{createdDateTime}</span>}
+                    {ucfirst(statusQuery) === VaultStatus.DOWNLOADED && (
+                      <span>{downloadedDateTime}</span>
+                    )}
+                    {ucfirst(statusQuery) === VaultStatus.CONFIRMED && (
+                      <span>{confirmedDateTime}</span>
+                    )}
                   </td>
-                  <td className="whitespace-nowrap px-4">
-                    <DownloadResponseStatus
-                      vaultStatus={submission.status}
-                      createdAt={submission.createdAt}
-                      downloadedAt={submission.downloadedAt}
-                      overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
-                    />
-                  </td>
-                  <td className="whitespace-nowrap px-4">
-                    <div className="w-40 truncate">
+                  {ucfirst(statusQuery) === VaultStatus.NEW && (
+                    <td className="whitespace-nowrap px-4">
+                      <DownloadResponseStatus
+                        vaultStatus={submission.status}
+                        createdAt={submission.createdAt}
+                        downloadedAt={submission.downloadedAt}
+                        overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
+                      />
+                    </td>
+                  )}
+                  {[VaultStatus.DOWNLOADED, VaultStatus.CONFIRMED].includes(
+                    ucfirst(statusQuery) as VaultStatus
+                  ) && (
+                    <td className="whitespace-nowrap px-4">
                       {submission.lastDownloadedBy ||
                         t("downloadResponsesTable.status.notDownloaded")}
-                    </div>
-                  </td>
-                  <td className="whitespace-nowrap px-4">
-                    <ConfirmReceiptStatus
-                      vaultStatus={submission.status}
-                      createdAtDate={submission.createdAt}
-                      overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
-                    />
-                  </td>
-                  <td className="whitespace-nowrap px-4">
-                    <RemovalStatus
-                      vaultStatus={submission.status}
-                      removalAt={submission.removedAt}
-                    />
-                  </td>
-                  <td>
+                    </td>
+                  )}
+                  {ucfirst(statusQuery) === VaultStatus.DOWNLOADED && (
+                    <td className="whitespace-nowrap px-4">
+                      <ConfirmReceiptStatus
+                        vaultStatus={submission.status}
+                        createdAtDate={submission.createdAt}
+                        overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
+                      />
+                    </td>
+                  )}
+                  {ucfirst(statusQuery) === VaultStatus.CONFIRMED && (
+                    <td className="whitespace-nowrap px-4">
+                      <RemovalStatus
+                        vaultStatus={submission.status}
+                        removalAt={submission.removedAt}
+                      />
+                    </td>
+                  )}
+                  <td className="whitespace-nowrap">
                     <MoreMenu
                       formId={submission.formID}
                       responseId={submission.name}
@@ -266,7 +302,7 @@ export const DownloadTable = ({
             setShowDownloadDialog={setShowDownloadDialog}
             onClick={() => setDownloadError(false)}
           />
-          {statusQuery === "new" && false && (
+          {ucfirst(statusQuery) === VaultStatus.NEW && false && (
             <DeleteButton setShowConfirmNewDialog={setShowConfirmNewDialog} />
           )}
         </ActionsPanel>
