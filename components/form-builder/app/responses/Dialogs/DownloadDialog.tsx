@@ -6,6 +6,7 @@ import { logMessage } from "@lib/logger";
 import axios from "axios";
 import { DownloadFormat } from "@lib/responseDownloadFormats/types";
 import JSZip from "jszip";
+import { getDate, slugify } from "@lib/clientHelpers";
 
 export const DownloadDialog = ({
   checkedItems,
@@ -13,7 +14,9 @@ export const DownloadDialog = ({
   setIsDialogVisible,
   setDownloadError,
   formId,
+  formName,
   onSuccessfulDownload,
+  responseDownloadLimit,
 }: {
   checkedItems: Map<string, boolean>;
   isDialogVisible: boolean;
@@ -21,7 +24,9 @@ export const DownloadDialog = ({
   downloadError: boolean;
   setDownloadError: React.Dispatch<React.SetStateAction<boolean>>;
   formId: string;
+  formName: string;
   onSuccessfulDownload: () => void;
+  responseDownloadLimit: number;
 }) => {
   const dialogRef = useDialogRef();
   const { t } = useTranslation("form-builder-responses");
@@ -63,12 +68,14 @@ export const DownloadDialog = ({
 
     const url = `/api/id/${formId}/submission/download?format=${selectedFormat}`;
 
-    if (!checkedItems.size) {
+    if (!checkedItems.size || checkedItems.size > responseDownloadLimit) {
       setDownloadError(true);
       return;
     }
 
     const ids = Array.from(checkedItems.keys());
+
+    const filePrefix = slugify(`${formName}-${getDate()}`) + "-";
 
     try {
       if (selectedFormat === DownloadFormat.HTML_ZIPPED) {
@@ -81,7 +88,7 @@ export const DownloadDialog = ({
           },
         });
 
-        const fileName = `records.zip`;
+        const fileName = `${filePrefix}responses-reponses.zip`;
         downloadFileFromBlob(new Blob([response.data]), fileName);
 
         onSuccessfulDownload();
@@ -99,15 +106,18 @@ export const DownloadDialog = ({
 
         if (zipAllFiles) {
           const file = new JSZip();
-          file.file("receipt.html", response.data.receipt);
-          file.file("records.csv", response.data.responses);
+          file.file("receipt-recu.html", response.data.receipt);
+          file.file("responses-reponses.csv", response.data.responses);
           file.generateAsync({ type: "nodebuffer", streamFiles: true }).then((buffer) => {
-            const fileName = `records.zip`;
+            const fileName = `${filePrefix}responses-reponses.zip`;
             downloadFileFromBlob(new Blob([buffer]), fileName);
           });
         } else {
-          downloadFileFromBlob(new Blob([response.data.receipt]), "receipt.html");
-          downloadFileFromBlob(new Blob([response.data.responses]), "records.csv");
+          downloadFileFromBlob(new Blob([response.data.receipt]), `${filePrefix}receipt-recu.html`);
+          downloadFileFromBlob(
+            new Blob([response.data.responses]),
+            `${filePrefix}responses-reponses.csv`
+          );
         }
         onSuccessfulDownload();
         handleClose();
@@ -124,18 +134,18 @@ export const DownloadDialog = ({
 
         if (zipAllFiles) {
           const file = new JSZip();
-          file.file("receipt.html", response.data.receipt);
-          file.file("records.json", JSON.stringify(response.data.responses));
+          file.file("receipt-recu.html", response.data.receipt);
+          file.file("responses-reponses.json", JSON.stringify(response.data.responses));
           file.generateAsync({ type: "nodebuffer", streamFiles: true }).then((buffer) => {
-            const fileName = `records.zip`;
+            const fileName = `${filePrefix}responses-reponses.zip`;
             downloadFileFromBlob(new Blob([buffer]), fileName);
           });
         } else {
           downloadFileFromBlob(
             new Blob([JSON.stringify(response.data.responses)], { type: "application/json" }),
-            "records.json"
+            `${filePrefix}responses-reponses.json`
           );
-          downloadFileFromBlob(new Blob([response.data.receipt]), "receipt.html");
+          downloadFileFromBlob(new Blob([response.data.receipt]), `${filePrefix}receipt-recu.html`);
         }
         onSuccessfulDownload();
         handleClose();
@@ -206,7 +216,7 @@ export const DownloadDialog = ({
                   className="gc-radio__input"
                   onChange={(e) => setSelectedFormat(e.target.value as DownloadFormat)}
                 />
-                <label htmlFor="combined" className="ml-14 inline-block">
+                <label htmlFor="json" className="ml-14 inline-block">
                   <span className="block font-semibold">
                     {t("downloadResponsesModals.downloadDialog.json")}
                   </span>

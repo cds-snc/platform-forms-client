@@ -27,6 +27,7 @@ import { DownloadDialog } from "./Dialogs/DownloadDialog";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
+  formName: string;
   formId: string;
   nagwareResult: NagwareResult | null;
   responseDownloadLimit: number;
@@ -35,6 +36,7 @@ interface DownloadTableProps {
 
 export const DownloadTable = ({
   vaultSubmissions,
+  formName,
   formId,
   nagwareResult,
   responseDownloadLimit,
@@ -147,7 +149,7 @@ export const DownloadTable = ({
               <th className="w-full p-4 text-left">
                 {t("downloadResponsesTable.header.nextStep")}
               </th>
-              <th className="p-4 text-left">{t("downloadResponsesTable.header.more")}</th>
+              <th className="p-4 text-left">{t("downloadResponsesTable.header.download")}</th>
             </tr>
           </thead>
           <tbody>
@@ -189,7 +191,7 @@ export const DownloadTable = ({
                       escalatedAfter={escalatedAfter}
                     />
                   </td>
-                  <td className="px-4">
+                  <td>
                     <MoreMenu
                       formId={submission.formID}
                       responseId={submission.name}
@@ -211,11 +213,12 @@ export const DownloadTable = ({
             {responsesRemaining && (
               <Alert.Warning icon={false}>
                 <Alert.Title headingTag="h3">
-                  TEMP - There are remaining responses on the server
+                  {t("downloadResponsesTable.errors.remainingResponses")}
                 </Alert.Title>
                 <p className="text-sm text-black">
-                  TEMP - Not all responses can be shown on the screen. Please download responses to
-                  see more responses.
+                  {t("downloadResponsesTable.errors.remainingResponsesBody", {
+                    max: responseDownloadLimit,
+                  })}
                 </p>
               </Alert.Warning>
             )}
@@ -255,12 +258,14 @@ export const DownloadTable = ({
         isDialogVisible={showDownloadDialog}
         setIsDialogVisible={setShowDownloadDialog}
         formId={formId}
+        formName={formName}
         onSuccessfulDownload={() => {
           router.replace(router.asPath, undefined, { scroll: false });
           setShowDownloadSuccess(true);
         }}
         downloadError={downloadError}
         setDownloadError={setDownloadError}
+        responseDownloadLimit={responseDownloadLimit}
       />
     </>
   );
