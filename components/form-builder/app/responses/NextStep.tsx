@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { VaultStatus, VaultSubmissionList } from "@lib/types";
 import { NewStatus } from "./NewStatus";
 import { DownloadStatus } from "./DownloadStatus";
-import { ConfirmStatus } from "./ConfirmStatus";
+import { DeleteStatus } from "./DeleteStatus";
 import { StatusMessage, StatusMessageLevel } from "./StatusMessage";
 
 export const NextStep = ({
@@ -18,17 +18,6 @@ export const NextStep = ({
   escalatedAfter: string | undefined;
 }) => {
   const { t } = useTranslation("form-builder-responses");
-
-  // ALL "tabs"
-  if (submission.status === VaultStatus.PROBLEM) {
-    return (
-      <StatusMessage
-        primaryMessage={t("downloadResponsesTable.problem.supportWill")}
-        secondaryMessage={t("downloadResponsesTable.problem.responseReported")}
-        level={StatusMessageLevel.ERROR}
-      />
-    );
-  }
 
   // New "tab"
   if (submission.status === VaultStatus.NEW) {
@@ -54,7 +43,18 @@ export const NextStep = ({
 
   // Deleted "tab"
   if (submission.status === VaultStatus.CONFIRMED) {
-    return <ConfirmStatus removedAt={submission.removedAt} />;
+    return <DeleteStatus removedAt={submission.removedAt} />;
+  }
+
+  // ALL "tabs"
+  if (submission.status === VaultStatus.PROBLEM) {
+    return (
+      <StatusMessage
+        primaryMessage={t("downloadResponsesTable.problem.supportWill")}
+        secondaryMessage={t("downloadResponsesTable.problem.responseReported")}
+        level={StatusMessageLevel.ERROR}
+      />
+    );
   }
 
   return <StatusMessage primaryMessage={t("downloadResponsesTable.unknown")} />;
