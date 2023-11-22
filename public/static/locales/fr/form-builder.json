@@ -208,20 +208,20 @@
     "branch": "Direction ou secteur",
     "jobTitle": "Titre de poste",
     "gcFormsTeamLink": "Coordonnées du Gouvernement du Canada",
-    "gcFormsTeamPart1": "Nous ne pouvons pas conseiller le public au sujet des formulaires que nous hébergeons. Pour toute autre demande, allez à la page",
+    "gcFormsTeamPart1": "Veuillez noter que l'équipe Formulaires GC fournit des services aux personnes qui travaillent au sein du gouvernement. Nous ne pouvons pas conseiller le public au sujet des formulaires que nous hébergeons. Pour toute autre demande, allez à la page",
     "gcFormsTeamPart2": "pour trouver le ministère ou l'organisme qui peut vous aider.",
     "ifYouExperience": "Pour obtenir du soutien technique, veuillez remplir le ",
 
     "needSupport": "Besoin d'aide pour l'utilisation de Formulaires GC?",
     "request": {
       "option1": "S'inscrire à la liste de diffusion",
-      "option2": "Donner un avis",
+      "option2": "Donner un avis sur le produit",
       "option3": "Autre",
-      "title": "Raison pour laquelle vous nous contactez"
+      "title": "Que souhaitez-vous faire?"
     },
     "supportFormLink": "formulaire de soutien",
     "title": "Nous contacter",
-    "useThisForm": "Utilisez ce formulaire pour en apprendre davantage sur Formulaires GC et sur la façon dont cet outil peut fonctionner au sein de votre ministère ou organisme gouvernemental.",
+    "useThisForm": "Utilisez ce formulaire pour vous inscrire à notre infolettre, nous faire part de vos commentaires ou suggérer une nouvelle fonctionnalité pour Formulaires GC.",
     "errors": {
       "submissionError": "Il y a eu une erreur. Veuillez réessayer plus tard."
     }
@@ -429,7 +429,7 @@
     "forOtherEnquiriesLink": "Coordonnées du Gouvernement du Canada",
     "forOtherEnquiriesPart1": "Pour toute autre question, allez à ",
     "forOtherEnquiriesPart2": "pour trouver le ministère ou l'organisme qui peut vous aider",
-    "theGCFormsTeam": "Nous ne pouvons pas donner de conseils généraux au public sur les formulaires que nous hébergeons.",
+    "theGCFormsTeam": "Veuillez noter que l'équipe Formulaires GC fournit des services aux personnes qui travaillent au sein du gouvernement. Nous ne pouvons pas donner de conseils généraux au public sur les formulaires que nous hébergeons.",
     "title": "Merci pour votre soumission",
     "weWillRespond": "Nous vous répondrons dans les 2 prochains jours ouvrables."
   },
@@ -583,13 +583,13 @@
   "support": {
     "contactUs": "formulaire de contact",
     "description": {
-      "description": "Fournissez plus de contexte autour du problème que vous rencontrez.",
+      "description": "Fournissez plus d'informations ou de contexte.",
       "title": "Dites-nous en plus"
     },
     "name": "Votre nom",
     "email": "Votre adresse courriel",
     "gcFormsTeamLink": "Coordonnées du Gouvernement du Canada",
-    "gcFormsTeamPart1": "Nous ne pouvons pas donner de conseils généraux au public sur les formulaires que nous hébergeons. Pour toute autre question, allez à la page ",
+    "gcFormsTeamPart1": "Veuillez noter que l'équipe Formulaires GC fournit des services aux personnes qui travaillent au sein du gouvernement. Nous ne pouvons pas donner de conseils généraux au public sur les formulaires que nous hébergeons. Pour toute autre question, allez à la page ",
     "gcFormsTeamPart2": "pour trouver le ministère ou l'organisme qui peut vous aider.",
     "ifYouWouldLike": "Veuillez remplir le ",
     "lookingForADemo": "Vous cherchez à en savoir plus sur Formulaires GC?",
