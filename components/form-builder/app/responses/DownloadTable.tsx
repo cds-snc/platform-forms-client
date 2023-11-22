@@ -147,17 +147,6 @@ export const DownloadTable = ({
               <th className="w-full p-4 text-left">
                 {t("downloadResponsesTable.header.nextStep")}
               </th>
-
-              {/* <th className="p-4 text-left">{t("downloadResponsesTable.header.status")}</th>
-              <th className="p-4 text-left">
-                {t("downloadResponsesTable.header.downloadResponse")}
-              </th>
-              <th className="p-4 text-left">
-                {t("downloadResponsesTable.header.lastDownloadedBy")}
-              </th>
-              <th className="p-4 text-left">{t("downloadResponsesTable.header.confirmReceipt")}</th>
-              <th className="p-4 text-left">{t("downloadResponsesTable.header.removal")}</th> */}
-
               <th className="p-4 text-left">{t("downloadResponsesTable.header.more")}</th>
             </tr>
           </thead>
@@ -200,38 +189,6 @@ export const DownloadTable = ({
                       escalatedAfter={escalatedAfter}
                     />
                   </td>
-
-                  {/* <td className="whitespace-nowrap px-4">
-                    <DownloadStatus vaultStatus={submission.status} />
-                  </td>
-                  <td className="whitespace-nowrap px-4">
-                    <DownloadResponseStatus
-                      vaultStatus={submission.status}
-                      createdAt={submission.createdAt}
-                      downloadedAt={submission.downloadedAt}
-                      overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
-                    />
-                  </td>
-                  <td className="whitespace-nowrap px-4">
-                    <div className="w-40 truncate">
-                      {submission.lastDownloadedBy ||
-                        t("downloadResponsesTable.status.notDownloaded")}
-                    </div>
-                  </td>
-                  <td className="whitespace-nowrap px-4">
-                    <ConfirmReceiptStatus
-                      vaultStatus={submission.status}
-                      createdAtDate={submission.createdAt}
-                      overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
-                    />
-                  </td>
-                  <td className="whitespace-nowrap px-4">
-                    <RemovalStatus
-                      vaultStatus={submission.status}
-                      removalAt={submission.removedAt}
-                    />
-                  </td> */}
-
                   <td className="px-4">
                     <MoreMenu
                       formId={submission.formID}
