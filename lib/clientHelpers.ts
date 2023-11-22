@@ -343,3 +343,7 @@ export const slugify = (str: string) =>
     .replace(/[^\w\s-]/g, "")
     .replace(/[\s_-]+/g, "-")
     .replace(/^-+|-+$/g, "");
+
+export const ucfirst = (string: string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};

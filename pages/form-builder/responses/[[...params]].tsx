@@ -29,6 +29,7 @@ import { SubNavLink } from "@components/form-builder/app/navigation/SubNavLink";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { ConfirmDialog } from "@components/form-builder/app/responses/Dialogs/ConfirmDialog";
+import { ucfirst } from "@lib/clientHelpers";
 
 interface ResponsesProps {
   initialForm: FormRecord | null;
@@ -355,10 +356,6 @@ export const getServerSideProps: GetServerSideProps = async ({
           },
         };
       }
-
-      const ucfirst = (string: string) => {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-      };
 
       // get status from url params (default = new) and capitalize/cast to VaultStatus
       const status = ucfirst(String(statusQuery)) as VaultStatus;
