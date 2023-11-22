@@ -12,12 +12,13 @@ import { connectToDynamo } from "@lib/integration/dynamodbConnector";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { checkUserHasTemplateOwnership } from "@lib/templates";
 import { logEvent } from "@lib/auditLogs";
-
-// TODO: move to an app setting variable
-const MAXIMUM_CONFIRMATION_CODES_PER_REQUEST = 20;
+import { getAppSetting } from "@lib/appSettings";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse, props: MiddlewareProps) => {
   const { session } = props as WithRequired<MiddlewareProps, "session">;
+  const MAXIMUM_CONFIRMATION_CODES_PER_REQUEST = Number(
+    await getAppSetting("responseDownloadLimit")
+  );
 
   const userEmail = session.user.email;
   if (userEmail === null)
