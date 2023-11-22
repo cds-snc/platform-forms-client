@@ -216,7 +216,8 @@
     "request": {
       "option1": "S'inscrire à la liste de diffusion",
       "option2": "Donner un avis sur le produit",
-      "option3": "Autre",
+      "option3": "Suggérer une nouvelle fonctionnalité",
+      "option4": "Autre",
       "title": "Que souhaitez-vous faire?"
     },
     "supportFormLink": "formulaire de soutien",

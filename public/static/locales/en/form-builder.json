@@ -216,7 +216,8 @@
     "request": {
       "option1": "Join the mailing list",
       "option2": "Give feedback on the product",
-      "option3": "Other",
+      "option3": "Suggest a new feature",
+      "option4": "Other",
       "title": "What would you like to do?"
     },
     "supportFormLink": "support form",
