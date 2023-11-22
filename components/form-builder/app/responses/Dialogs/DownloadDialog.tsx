@@ -214,7 +214,7 @@ export const DownloadDialog = ({
                   className="gc-radio__input"
                   onChange={(e) => setSelectedFormat(e.target.value as DownloadFormat)}
                 />
-                <label htmlFor="combined" className="ml-14 inline-block">
+                <label htmlFor="json" className="ml-14 inline-block">
                   <span className="block font-semibold">
                     {t("downloadResponsesModals.downloadDialog.json")}
                   </span>
