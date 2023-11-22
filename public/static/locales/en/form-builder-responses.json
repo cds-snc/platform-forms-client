@@ -1,6 +1,21 @@
 {
+  "tabs": {
+    "newResponses": {
+      "title": "New responses available",
+      "message1": "GC Forms stores responses temporarily.",
+      "message2": "Download responses and sign off for their removal from GC Forms. "
+    },
+    "downloadedResponses": {
+      "title": "Recently downloaded",
+      "message1": "You must sign off on the removal of responses from GC Forms within the time indicated.",
+      "message2": "Response files will be available for an additional 30 days after sign off."
+    },
+    "confirmedResponses": {
+      "title": "Signed off for removal",
+      "message1": "Signed off responses will be automatically removed after 30 days."
+    }
+  },
   "responses": {
-    "newResponses": "New responses",
     "previouslyDownloaded": "Previously downloaded",
     "deleted": "Signed off for removal",
     "changeSetup": "Change settings",
@@ -30,8 +45,6 @@
   "downloadResponsesTable": {
     "download": "Download",
     "delete": "Delete",
-    "confirmReceiptMessage1": "You must sign off on the removal of responses from GC Forms within the time indicated.",
-    "confirmReceiptMessage2": "Response files will be available for an additional 30 days after sign-off.",
     "header": {
       "tableTitle": "Download responses table",
       "select": "Select",
