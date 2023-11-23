@@ -107,4 +107,13 @@ export const options = [
     logoTitleEn: "Federal Economic Development Agency for Southern Ontario",
     logoTitleFr: "Agence fédérale de développement économique pour le Sud de l’Ontario",
   },
+  {
+    name: "hc",
+    urlEn: "https://feddev-ontario.canada.ca/en",
+    urlFr: "https://feddev-ontario.canada.ca/fr",
+    logoEn: "/img/branding/hc-canada-en.svg",
+    logoFr: "/img/branding/hc-canada-fr.svg",
+    logoTitleEn: "Corporate logo Health Canada",
+    logoTitleFr: "Logo corporatif Santé Canada",
+  },
 ];
