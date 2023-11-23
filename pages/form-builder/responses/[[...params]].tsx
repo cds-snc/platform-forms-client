@@ -29,7 +29,7 @@ import { SubNavLink } from "@components/form-builder/app/navigation/SubNavLink";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { ConfirmDialog } from "@components/form-builder/app/responses/Dialogs/ConfirmDialog";
-import { ucfirst } from "@lib/clientHelpers";
+import { isStatus, ucfirst } from "@lib/clientHelpers";
 
 interface ResponsesProps {
   initialForm: FormRecord | null;
@@ -183,7 +183,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
 
       {isAuthenticated && vaultSubmissions.length > 0 && (
         <>
-          {statusQuery === "new" && (
+          {isStatus(statusQuery, VaultStatus.NEW) && (
             <>
               <h1>{t("tabs.newResponses.title")}</h1>
               <div className="mb-4">
@@ -195,7 +195,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
               </div>
             </>
           )}
-          {statusQuery === "downloaded" && (
+          {isStatus(statusQuery, VaultStatus.DOWNLOADED) && (
             <>
               <h1>{t("tabs.downloadedResponses.title")}</h1>
               <div className="mb-4">
@@ -210,7 +210,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
               </div>
             </>
           )}
-          {statusQuery === "confirmed" && (
+          {isStatus(statusQuery, VaultStatus.CONFIRMED) && (
             <>
               <h1>{t("tabs.confirmedResponses.title")}</h1>
               <div className="mb-4">

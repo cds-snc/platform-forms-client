@@ -15,7 +15,7 @@ import { useRouter } from "next/router";
 import { useSetting } from "@lib/hooks/useSetting";
 import Link from "next/link";
 import { TableActions, initialTableItemsState, reducerTableItems } from "./DownloadTableReducer";
-import { getDaysPassed, ucfirst } from "@lib/clientHelpers";
+import { getDaysPassed, isStatus, ucfirst } from "@lib/clientHelpers";
 import { Alert } from "@components/globals";
 import { CheckAll } from "./CheckAll";
 import { DownloadButton } from "./DownloadButton";
@@ -56,16 +56,6 @@ export const DownloadTable = ({
   const [showDownloadDialog, setShowDownloadDialog] = useState(false);
 
   const accountEscalated = nagwareResult && nagwareResult.level > 2;
-
-  const isStatus = (query: string, status: VaultStatus | VaultStatus[]): boolean => {
-    const ucQuery = ucfirst(query);
-    if (Array.isArray(status)) {
-      return [VaultStatus.NEW, VaultStatus.DOWNLOADED, VaultStatus.CONFIRMED].includes(
-        ucQuery as VaultStatus
-      );
-    }
-    return ucQuery === status;
-  };
 
   const downloadSuccessMessage = isStatus(statusQuery, VaultStatus.NEW)
     ? "downloadResponsesTable.notifications.downloadCompleteNew"
@@ -147,7 +137,7 @@ export const DownloadTable = ({
           </caption>
           <thead className="border-b-1 border-slate-400">
             <tr>
-              <th scope="col" className="py-4 text-center">
+              <th scope="col" className="py-4 pr-3 text-center">
                 <CheckAll
                   tableItems={tableItems}
                   tableItemsDispatch={tableItemsDispatch}
