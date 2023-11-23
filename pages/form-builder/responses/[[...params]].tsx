@@ -29,6 +29,7 @@ import { SubNavLink } from "@components/form-builder/app/navigation/SubNavLink";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { ConfirmDialog } from "@components/form-builder/app/responses/Dialogs/ConfirmDialog";
+import { isStatus, ucfirst } from "@lib/clientHelpers";
 
 interface ResponsesProps {
   initialForm: FormRecord | null;
@@ -180,28 +181,44 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         </SubNavLink>
       </nav>
 
-      {isAuthenticated && statusQuery === "downloaded" && vaultSubmissions.length > 0 && (
+      {isAuthenticated && vaultSubmissions.length > 0 && (
         <>
-          <h1>{t("responses.previouslyDownloaded")}</h1>
-          <div className="mb-4">
-            <p className="mb-4">
-              {t("downloadResponsesTable.confirmReceiptMessage1")}
-              <br />
-              {t("downloadResponsesTable.confirmReceiptMessage2")}
-            </p>
-            <Button onClick={() => setShowConfirmReceiptDialog(true)} theme="secondary">
-              {t("responses.confirmReceipt")}
-            </Button>
-          </div>
+          {isStatus(statusQuery, VaultStatus.NEW) && (
+            <>
+              <h1>{t("tabs.newResponses.title")}</h1>
+              <div className="mb-4">
+                <p className="mb-4">
+                  {t("tabs.newResponses.message1")}
+                  <br />
+                  {t("tabs.newResponses.message2")}
+                </p>
+              </div>
+            </>
+          )}
+          {isStatus(statusQuery, VaultStatus.DOWNLOADED) && (
+            <>
+              <h1>{t("tabs.downloadedResponses.title")}</h1>
+              <div className="mb-4">
+                <p className="mb-4">
+                  {t("tabs.downloadedResponses.message1")}
+                  <br />
+                  {t("tabs.downloadedResponses.message2")}
+                </p>
+                <Button onClick={() => setShowConfirmReceiptDialog(true)} theme="secondary">
+                  {t("responses.confirmReceipt")}
+                </Button>
+              </div>
+            </>
+          )}
+          {isStatus(statusQuery, VaultStatus.CONFIRMED) && (
+            <>
+              <h1>{t("tabs.confirmedResponses.title")}</h1>
+              <div className="mb-4">
+                <p className="mb-4">{t("tabs.confirmedResponses.message1")}</p>
+              </div>
+            </>
+          )}
         </>
-      )}
-
-      {isAuthenticated && statusQuery === "new" && vaultSubmissions.length > 0 && (
-        <h1>{t("responses.newResponses")}</h1>
-      )}
-
-      {isAuthenticated && statusQuery === "confirmed" && vaultSubmissions.length > 0 && (
-        <h1>{t("responses.deleted")}</h1>
       )}
 
       {nagwareResult && <Nagware nagwareResult={nagwareResult} />}
@@ -223,7 +240,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
 
             {vaultSubmissions.length <= 0 && statusQuery === "new" && (
               <>
-                <h1 className="visually-hidden">{t("responses.newResponses")}</h1>
+                <h1 className="visually-hidden">{t("tabs.newResponses.title")}</h1>
                 <Card
                   icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
                   title={t("downloadResponsesTable.card.noNewResponses")}
@@ -234,7 +251,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
 
             {vaultSubmissions.length <= 0 && statusQuery === "downloaded" && (
               <>
-                <h1 className="visually-hidden">{t("responses.previouslyDownloaded")}</h1>
+                <h1 className="visually-hidden">{t("tabs.downloadedResponses.title")}</h1>
                 <Card
                   icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
                   title={t("downloadResponsesTable.card.noDownloadedResponses")}
@@ -245,7 +262,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
 
             {vaultSubmissions.length <= 0 && statusQuery === "confirmed" && (
               <>
-                <h1 className="visually-hidden">{t("responses.deleted")}</h1>
+                <h1 className="visually-hidden">{t("tabs.confirmedResponses.title")}</h1>
                 <Card
                   icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
                   title={t("downloadResponsesTable.card.noDeletedResponses")}
@@ -355,10 +372,6 @@ export const getServerSideProps: GetServerSideProps = async ({
           },
         };
       }
-
-      const ucfirst = (string: string) => {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-      };
 
       // get status from url params (default = new) and capitalize/cast to VaultStatus
       const status = ucfirst(String(statusQuery)) as VaultStatus;
