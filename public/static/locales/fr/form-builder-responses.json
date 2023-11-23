@@ -42,6 +42,14 @@
       "deleted": "[FR] Signed off for removal"
     }
   },
+  "downloadSuccess": {
+    "title": "Réponses déplacées vers Téléchargements",
+    "body": "Prochaine étape : autorisez la suppression des réponses de Formulaires GC."
+  },
+  "confirmSuccess": {
+    "title": "Réponses déplacées vers Pour suppression",
+    "body": "Les réponses seront supprimées dans 30 jours."
+  },
   "downloadResponsesTable": {
     "download": "Téléchargement",
     "delete": "Supprimer",
@@ -86,8 +94,6 @@
       "noDeletedResponsesMessage": "Une fois que vous avez supprimé les réponses, elles restent disponibles pendant 30 jours."
     },
     "notifications": {
-      "downloadComplete": "[FR] Responses were downloaded",
-      "downloadCompleteNew": "[FR] Responses were downloaded and moved to “Downloaded”",
       "downloadingXFiles": "Téléchargement de {{fileCount}} fichiers"
     },
     "errors": {

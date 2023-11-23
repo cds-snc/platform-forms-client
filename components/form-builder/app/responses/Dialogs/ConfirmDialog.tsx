@@ -5,7 +5,6 @@ import { LineItemEntries } from "./line-item-entries";
 import { Button, Alert } from "@components/globals";
 import { randomId } from "@lib/clientHelpers";
 import axios from "axios";
-import { useRouter } from "next/router";
 import { logMessage } from "@lib/logger";
 import Link from "next/link";
 import { isUUID } from "@lib/validation";
@@ -17,15 +16,16 @@ export const ConfirmDialog = ({
   apiUrl,
   inputRegex = isUUID,
   maxEntries = 20,
+  onSuccessfulConfirm,
 }: {
   isShow: boolean;
   setIsShow: React.Dispatch<React.SetStateAction<boolean>>;
   apiUrl: string;
   inputRegex?: (field: string) => boolean;
   maxEntries?: number;
+  onSuccessfulConfirm: () => void;
 }) => {
   const { t } = useTranslation("form-builder-responses");
-  const router = useRouter();
   const [entries, setEntries] = useState<string[]>([]);
   const [status, setStatus] = useState<DialogStates>(DialogStates.EDITTING);
   const [errorEntriesList, setErrorEntriesList] = useState<string[]>([]);
@@ -65,9 +65,6 @@ export const ConfirmDialog = ({
       data: entries,
     })
       .then(({ data }) => {
-        // Refreshes data. Needed for error cases as well since may be a mix of valid/invalid codes
-        router.replace(router.asPath);
-
         // Confirmation error
         if (data?.invalidConfirmationCodes && data.invalidConfirmationCodes?.length > 0) {
           setStatus(DialogStates.FAILED_ERROR);
@@ -80,6 +77,7 @@ export const ConfirmDialog = ({
 
         // Success, close the dialog
         setStatus(DialogStates.SENT);
+        onSuccessfulConfirm();
         handleClose();
       })
       .catch((err) => {

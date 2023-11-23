@@ -42,6 +42,14 @@
       "deleted": "Signed off for removal"
     }
   },
+  "downloadSuccess": {
+    "title": "Responses moved to Downloaded",
+    "body": "Next: sign off on the removal of responses from GC Forms."
+  },
+  "confirmSuccess": {
+    "title": "Responses moved to Signed off for removal",
+    "body": "Responses will be removed in 30 days."
+  },
   "downloadResponsesTable": {
     "download": "Download",
     "delete": "Delete",
@@ -86,8 +94,6 @@
       "noDeletedResponsesMessage": "Once you’ve deleted responses, they will be available for 30 days."
     },
     "notifications": {
-      "downloadComplete": "Responses were downloaded",
-      "downloadCompleteNew": "Responses were downloaded and moved to “Downloaded”",
       "downloadingXFiles": "Downloading {{fileCount}} files"
     },
     "errors": {
