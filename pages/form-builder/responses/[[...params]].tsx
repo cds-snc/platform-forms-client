@@ -70,11 +70,6 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
 
   const deliveryOption = getDeliveryOption();
 
-  const downloadSuccessMessage =
-    statusQuery === "new"
-      ? "downloadResponsesTable.notifications.downloadCompleteNew"
-      : "downloadResponsesTable.notifications.downloadComplete";
-
   let formName = "";
   if (initialForm) {
     formName = initialForm.name
@@ -162,6 +157,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           defaultActive={statusQuery === "new"}
           href={`/form-builder/responses/${formId}/new`}
           setAriaCurrent={true}
+          onClick={() => setShowSuccessAlert(false)}
         >
           <span className="text-sm laptop:text-base">
             <InboxIcon className="inline-block h-7 w-7" /> {t("responses.status.new")}
@@ -171,6 +167,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           id="downloaded-responses"
           href={`/form-builder/responses/${formId}/downloaded`}
           setAriaCurrent={true}
+          onClick={() => setShowSuccessAlert(false)}
         >
           <span className="text-sm laptop:text-base">
             <FolderIcon className="inline-block h-7 w-7" /> {t("responses.status.downloaded")}
@@ -180,6 +177,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           id="deleted-responses"
           href={`/form-builder/responses/${formId}/confirmed`}
           setAriaCurrent={true}
+          onClick={() => setShowSuccessAlert(false)}
         >
           <span className="text-sm laptop:text-base">
             <DeleteIcon className="inline-block h-7 w-7" /> {t("responses.status.deleted")}
@@ -229,8 +227,8 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
 
       {successAlertMessage && (
         <Alert.Success className="mb-4">
-          <Alert.Title>{t("")}</Alert.Title>
-          <Alert.Body>{t("")}</Alert.Body>
+          <Alert.Title>{t(`${successAlertMessage}.title`)}</Alert.Title>
+          <Alert.Body>{t(`${successAlertMessage}.body`)}</Alert.Body>
         </Alert.Success>
       )}
 

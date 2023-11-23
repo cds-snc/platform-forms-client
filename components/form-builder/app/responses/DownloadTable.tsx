@@ -246,7 +246,9 @@ export const DownloadTable = ({
                       responseId={submission.name}
                       onDownloadSuccess={() => {
                         router.replace(router.asPath, undefined, { scroll: false });
-                        setShowDownloadSuccess("The file has been downloaded");
+                        if (isStatus(statusQuery, VaultStatus.NEW)) {
+                          setShowDownloadSuccess("downloadSuccess");
+                        }
                       }}
                       setDownloadError={setDownloadError}
                       setShowConfirmNewDialog={setShowConfirmNewDialog}
@@ -298,7 +300,9 @@ export const DownloadTable = ({
         formName={formName}
         onSuccessfulDownload={() => {
           router.replace(router.asPath, undefined, { scroll: false });
-          setShowDownloadSuccess("The files have been downloaded");
+          if (isStatus(statusQuery, VaultStatus.NEW)) {
+            setShowDownloadSuccess("downloadSuccess");
+          }
         }}
         downloadError={downloadError}
         setDownloadError={setDownloadError}
