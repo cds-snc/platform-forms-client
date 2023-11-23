@@ -109,8 +109,8 @@ export const options = [
   },
   {
     name: "hc",
-    urlEn: "https://feddev-ontario.canada.ca/en",
-    urlFr: "https://feddev-ontario.canada.ca/fr",
+    urlEn: "https://www.canada.ca/en/health-canada.html",
+    urlFr: "https://www.canada.ca/fr/sante-canada.html",
     logoEn: "/img/branding/hc-canada-en.svg",
     logoFr: "/img/branding/hc-canada-fr.svg",
     logoTitleEn: "Corporate logo Health Canada",
