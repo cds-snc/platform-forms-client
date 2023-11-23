@@ -33,7 +33,7 @@ export const ConfirmReceiptStatus = ({
       if (daysLeft < 0) {
         status = <ExclamationText text={t("downloadResponsesTable.status.overdue")} />;
       } else {
-        status = t("downloadResponsesTable.status.withinXDays", { daysLeft });
+        status = t("downloadResponsesTable.status.confirmWithinXDays", { daysLeft });
       }
       break;
     }
