@@ -27,7 +27,6 @@ export const ConfirmDialog = ({
   onSuccessfulConfirm: () => void;
 }) => {
   const { t } = useTranslation("form-builder-responses");
-  const router = useRouter();
   const [entries, setEntries] = useState<string[]>([]);
   const [status, setStatus] = useState<DialogStates>(DialogStates.EDITTING);
   const [errorEntriesList, setErrorEntriesList] = useState<string[]>([]);
