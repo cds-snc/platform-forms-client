@@ -45,7 +45,6 @@ export const DownloadTable = ({
   nagwareResult,
   responseDownloadLimit,
   responsesRemaining,
-  showDownloadSuccess,
   setShowDownloadSuccess,
 }: DownloadTableProps) => {
   const { t } = useTranslation("form-builder-responses");
