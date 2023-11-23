@@ -66,9 +66,6 @@ export const ConfirmDialog = ({
       data: entries,
     })
       .then(({ data }) => {
-        // Refreshes data. Needed for error cases as well since may be a mix of valid/invalid codes
-        // router.replace(router.asPath);
-
         // Confirmation error
         if (data?.invalidConfirmationCodes && data.invalidConfirmationCodes?.length > 0) {
           setStatus(DialogStates.FAILED_ERROR);
