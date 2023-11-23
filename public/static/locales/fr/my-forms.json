@@ -71,8 +71,8 @@
     "useTheCopy": "[FR]Use the “Copy receipt codes” button to copy all the codes to your clipboard then paste them into GC Forms. This lets us know that a full set of records made it safely to your computer. These official records should be saved in accordance to your departments retention policies.",
     "copyCodes": {
       "title":"Confirmez et supprimez les réponses de Formulaires GC",
-      "description": "Une fois que vous avez vérifié les réponses téléchargées et que vous êtes prêt à les supprimer de Formulaires GC, copiez et collez les codes de confirmation. Cela nous permet de savoir quand les réponses vous ont été transférées et d’enlever les données de notre système.",
-      "copyButton": "Copier les codes de confirmation"
+      "description": "Une fois que vous avez vérifié les réponses téléchargées et que vous êtes prêt à les supprimer de Formulaires GC, copiez et collez les codes de réception. Cela nous permet de savoir quand les réponses vous ont été transférées et d’enlever les données de notre système.",
+      "copyButton": "Copier les codes de réception"
     },
     "dataList": {
       "title": "[FR]Form responses: data list of each selected response",

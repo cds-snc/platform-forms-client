@@ -35,7 +35,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
 
   if (confirmationCodes.length > MAXIMUM_CONFIRMATION_CODES_PER_REQUEST) {
     return res.status(400).json({
-      error: `Too many confirmation codes. Limit is ${MAXIMUM_CONFIRMATION_CODES_PER_REQUEST}.`,
+      error: `Too many receipt codes. Limit is ${MAXIMUM_CONFIRMATION_CODES_PER_REQUEST}.`,
     });
   }
   const ability = createAbility(session);

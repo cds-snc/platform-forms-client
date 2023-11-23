@@ -86,8 +86,8 @@
       "noDeletedResponsesMessage": "Une fois que vous aurez téléchargé et approuvé la suppression des réponses, celles-ci seront disponibles ici pendant 30 jours."
     },
     "notifications": {
-      "downloadComplete": "[FR] Responses were downloaded",
-      "downloadCompleteNew": "[FR] Responses were downloaded and moved to “Downloaded”",
+      "downloadComplete": "Réponses déplacées vers « Téléchargements »",
+      "downloadCompleteNew": "Prochaine étape : Autorisez la suppression des réponses de Formulaires GC",
       "downloadingXFiles": "Téléchargement de {{fileCount}} fichiers"
     },
     "errors": {
@@ -141,27 +141,27 @@
       "toDelete1": "Confirmer que vous disposez d’une copie de chaque réponse.",
       "toDelete2": "Ouvrir le fichier de réponse en format HTML téléchargé.",
       "toDelete3": "S’assurer que les réponses s’affichent comme prévu.",
-      "toDelete4": "Copier et coller les codes de confirmation ci-bas.",
-      "copyCode": "Entrez les codes de confirmation des réponses à supprimer :",
+      "toDelete4": "Copier et coller les codes de réception ci-bas.",
+      "copyCode": "Entrez les codes de réception des réponses à supprimer :",
       "warningTitle": "La suppression ne peut être annulée.",
       "warningBody": "Les réponses seront déplacées vers « Supprimés » et retirées du système après 30 jours.",
       "confirmReceipt": "Confirmer la réception",
       "errors": {
         "minEntries": {
           "title": "Au moins une réponse doit être spécifiée",
-          "description": "Entrez les codes de confirmation des réponses téléchargées pour confirmer leur réception."
+          "description": "Entrez les codes de réception des réponses téléchargées pour confirmer leur réception."
         },
         "maxEntries": {
           "title": "Seulement {{max}} réponses peuvent être confirmées à la fois",
-          "description": "Soumettez {{max}} codes de confirmation avant d'en ajouter d'autres."
+          "description": "Soumettez {{max}} codes de réception avant d'en ajouter d'autres."
         },
         "errorEntries": {
-          "title": "Certains code de confirmation n'ont pas été soumis",
-          "description": "Vérifiez que les codes de confirmation ci-dessous sont corrects et réessayez."
+          "title": "Certains code de réception n'ont pas été soumis",
+          "description": "Vérifiez que les codes de réception ci-dessous sont corrects et réessayez."
         },
         "invalidEntry": {
-          "title": "Le code de confirmation ne correspond pas au format requis",
-          "description": "Vérifiez que le format du code de confirmation est correct et réessayez."
+          "title": "Le code de réception ne correspond pas au format requis",
+          "description": "Vérifiez que le format du code de réception est correct et réessayez."
         },
         "unknown": {
           "title": "Désolé, il y a un problème avec le site",

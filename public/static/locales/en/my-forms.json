@@ -71,8 +71,8 @@
     "useTheCopy": "Use the “Copy receipt codes” button to copy all the codes to your clipboard then paste them into GC Forms. This lets us know that a full set of records made it safely to your computer. These official records should be saved in accordance to your departments retention policies.",
     "copyCodes": {
       "title":"Confirm and delete responses from GC Forms",
-      "description": "Once you've checked the downloaded responses, and are ready to delete these from GC Forms, copy and paste the confirmation codes. This helps us know when responses have been transferred to you so we can remove the data from our system.",
-      "copyButton": "Copy confirmation codes"
+      "description": "Once you've checked the downloaded responses, and are ready to delete these from GC Forms, copy and paste the receipt codes. This helps us know when responses have been transferred to you so we can remove the data from our system.",
+      "copyButton": "Copy receipt codes"
     },
     "dataList": {
       "title": "Form responses: data list of each selected response",

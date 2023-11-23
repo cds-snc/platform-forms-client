@@ -9,7 +9,7 @@
   },
   "TooManyRequestsException": "Trop de demandes. Réessayez plus tard.",
   "UsernameExistsException": "Ce compte existe déjà.",
-  "ExpiredCodeException": "Le code de confirmation a expiré. Veuillez en demander un nouveau.",
+  "ExpiredCodeException": "Le code de sécurité a expiré. Veuillez en demander un nouveau.",
   "InvalidPasswordException": "Ce mot de passe n'est pas conforme à notre politique en matière de mots de passe.",
   "InvalidParameterException": {
     "sendForgotPassword": {
