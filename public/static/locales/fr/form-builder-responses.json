@@ -94,8 +94,6 @@
       "noDeletedResponsesMessage": "Une fois que vous avez supprimé les réponses, elles restent disponibles pendant 30 jours."
     },
     "notifications": {
-      "downloadComplete": "[FR] Responses were downloaded",
-      "downloadCompleteNew": "[FR] Responses were downloaded and moved to “Downloaded”",
       "downloadingXFiles": "Téléchargement de {{fileCount}} fichiers"
     },
     "errors": {
