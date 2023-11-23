@@ -29,6 +29,7 @@ import { SubNavLink } from "@components/form-builder/app/navigation/SubNavLink";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { ConfirmDialog } from "@components/form-builder/app/responses/Dialogs/ConfirmDialog";
+import { Alert } from "@components/globals";
 
 interface ResponsesProps {
   initialForm: FormRecord | null;
@@ -55,7 +56,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   const isAuthenticated = status === "authenticated";
   const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
   const [showConfirmReceiptDialog, setShowConfirmReceiptDialog] = useState(false);
-
+  const [successAlertMessage, setShowSuccessAlert] = useState<false | string>(false);
   const [isServerError, setIsServerError] = useState(false);
 
   const router = useRouter();
@@ -67,6 +68,11 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   }));
 
   const deliveryOption = getDeliveryOption();
+
+  const downloadSuccessMessage =
+    statusQuery === "new"
+      ? "downloadResponsesTable.notifications.downloadCompleteNew"
+      : "downloadResponsesTable.notifications.downloadComplete";
 
   let formName = "";
   if (initialForm) {
@@ -204,6 +210,13 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         <h1>{t("responses.deleted")}</h1>
       )}
 
+      {successAlertMessage && (
+        <Alert.Success className="mb-4">
+          <Alert.Title>{t("")}</Alert.Title>
+          <Alert.Body>{t("")}</Alert.Body>
+        </Alert.Success>
+      )}
+
       {nagwareResult && <Nagware nagwareResult={nagwareResult} />}
 
       {isAuthenticated && (
@@ -218,6 +231,8 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
                 nagwareResult={nagwareResult}
                 responseDownloadLimit={responseDownloadLimit}
                 responsesRemaining={responsesRemaining}
+                showDownloadSuccess={successAlertMessage}
+                setShowDownloadSuccess={setShowSuccessAlert}
               />
             )}
 

@@ -33,6 +33,8 @@ interface DownloadTableProps {
   nagwareResult: NagwareResult | null;
   responseDownloadLimit: number;
   responsesRemaining: boolean;
+  showDownloadSuccess: false | string;
+  setShowDownloadSuccess: React.Dispatch<React.SetStateAction<false | string>>;
 }
 
 export const DownloadTable = ({
@@ -42,23 +44,19 @@ export const DownloadTable = ({
   nagwareResult,
   responseDownloadLimit,
   responsesRemaining,
+  showDownloadSuccess,
+  setShowDownloadSuccess,
 }: DownloadTableProps) => {
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
   const [, statusQuery = "new"] = router.query?.params || [];
 
   const [downloadError, setDownloadError] = useState(false);
-  const [showDownloadSuccess, setShowDownloadSuccess] = useState(false);
   const [noSelectedItemsError, setNoSelectedItemsError] = useState(false);
   const [showConfirmNewtDialog, setShowConfirmNewDialog] = useState(false);
   const [showDownloadDialog, setShowDownloadDialog] = useState(false);
 
   const accountEscalated = nagwareResult && nagwareResult.level > 2;
-
-  const downloadSuccessMessage =
-    statusQuery === "new"
-      ? "downloadResponsesTable.notifications.downloadCompleteNew"
-      : "downloadResponsesTable.notifications.downloadComplete";
 
   const { value: overdueAfter } = useSetting("nagwarePhaseEncouraged");
   const [tableItems, tableItemsDispatch] = useReducer(
@@ -109,12 +107,6 @@ export const DownloadTable = ({
           anchor="#downloadTableButtonId"
         />
         <div id="notificationsTop">
-          {showDownloadSuccess && (
-            <Alert.Success>
-              <Alert.Title>{t(downloadSuccessMessage)}</Alert.Title>
-              <Alert.Body>{t(downloadSuccessMessage)}</Alert.Body>
-            </Alert.Success>
-          )}
           {downloadError && (
             <Alert.Danger>
               <Alert.Title>
@@ -220,7 +212,7 @@ export const DownloadTable = ({
                       responseId={submission.name}
                       onDownloadSuccess={() => {
                         router.replace(router.asPath, undefined, { scroll: false });
-                        setShowDownloadSuccess(true);
+                        setShowDownloadSuccess("The file has been downloaded");
                       }}
                       setDownloadError={setDownloadError}
                       setShowConfirmNewDialog={setShowConfirmNewDialog}
@@ -284,7 +276,7 @@ export const DownloadTable = ({
         formName={formName}
         onSuccessfulDownload={() => {
           router.replace(router.asPath, undefined, { scroll: false });
-          setShowDownloadSuccess(true);
+          setShowDownloadSuccess("The files have been downloaded");
         }}
         downloadError={downloadError}
         setDownloadError={setDownloadError}
