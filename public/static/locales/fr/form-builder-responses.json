@@ -1,25 +1,25 @@
 {
   "tabs": {
     "newResponses": {
-      "title": "[FR] New responses available",
-      "message1": "[FR] GC Forms stores responses temporarily.",
-      "message2": "[FR] Download responses and sign off for their removal from GC Forms. "
+      "title": "Nouvelles réponses disponibles",
+      "message1": "Formulaires GC conserve temporairement les réponses.",
+      "message2": "Commencez par télécharger les réponses, puis autorisez leur suppression de Formulaires GC."
     },
     "downloadedResponses": {
-      "title": "[FR] Recently downloaded",
-      "message1": "[FR] You must sign off on the removal of responses from GC Forms within the time indicated.",
-      "message2": "[FR] Response files will be available for an additional 30 days after sign off."
+      "title": "Réponses téléchargées récemment",
+      "message1": "Formulaires GC conserve temporairement les réponses. Vous devez approuver la suppression des réponses de Formulaires GC dans le délai indiqué.",
+      "message2": "Les fichiers de réponses resteront disponibles pendant 30 jours supplémentaires après l’autorisation."
     },
     "confirmedResponses": {
-      "title": "[FR] Signed off for removal",
-      "message1": "[FR] Signed off responses will be automatically removed after 30 days."
+      "title": "Réponses autorisées pour suppression",
+      "message1": "Formulaires GC conserve temporairement les réponses. Ces réponses seront définitivement supprimées après 30 jours."
     }
   },
   "responses": {
-    "previouslyDownloaded": "[FR] Previously downloaded",
-    "deleted": "[FR] Signed off for removal",
+    "recentlyDownloaded": "Téléchargements récents",
+    "deleted": "Pour suppression",
     "changeSetup": "Modifier les paramètres",
-    "confirmReceipt": "[FR] Sign off on removal with receipt codes",
+    "confirmReceipt": "Autoriser la suppression avec les codes de réception",
     "navLabel": "Réponses",
     "reportProblems": "Signaler un problème avec les réponses",
     "title": "Réponses",
@@ -39,17 +39,17 @@
     "status": {
       "new": "Nouveautés",
       "downloaded": "Téléchargements",
-      "deleted": "[FR] Signed off for removal"
+      "deleted": "Pour suppression"
     }
   },
   "downloadResponsesTable": {
-    "download": "Téléchargement",
+    "download": "Télécharger",
     "delete": "Supprimer",
     "header": {
       "tableTitle": "Tableau des réponses à télécharger",
-      "select": "Sélection",
-      "selectAll": "[FR] Select all",
-      "deselectAll": "[FR] Deselect all",
+      "select": "Sélectionner",
+      "selectAll": "Sélectionner tout",
+      "deselectAll": "Désélectionner tout",
       "number": "Soumission",
       "status": "État",
       "downloadResponse": "Période de téléchargement",
@@ -57,33 +57,33 @@
       "confirmReceipt": "Confirmation de réception",
       "removal": "Suppression des données",
       "more": "Plus",
-      "download": "Téléchargement",
+      "download": "Télécharger",
       "nextStep": "Prochaine étape",
       "date": "Date",
       "warning": "Avertissement"
     },
     "status": {
-      "downloaded": "Téléchargée",
+      "downloaded": "Téléchargé",
       "notDownloaded": "À télécharger",
       "new": "Nouveauté",
       "confirmed": "Confirmé",
       "unconfirmed": "À confirmer",
       "problem": "Problème",
-      "done": "Complétée",
-      "downloadWithinXDays": "[FR] Download within {{daysLeft}} days",
-      "confirmWithinXDays": "[FR] Sign off on response removal within {{daysLeft}} days",
-      "removeWithinXDays": "[FR] Will be removed permanently in {{daysLeft}} days",
+      "done": "Complété",
+      "downloadWithinXDays": "À téléchargez d'ici {{daysLeft}} jours",
+      "confirmWithinXDays": "À autoriser pour supression d’ici {{daysLeft}} jours",
+      "removeWithinXDays": "Sera supprimée de manière permanente dans {{daysLeft}} jours",
       "overdue": "En retard",
       "wontRemove": "Ne peut pas être supprimée",
       "notSet": "Non réglée"
     },
     "card": {
       "noNewResponses": "Aucune nouvelle réponse",
-      "noNewResponsesMessage": "Les réponses aux formulaires soumis seront disponible dans Formulaires GC pendant 45 jours.",
-      "noDownloadedResponses": "Aucune réponse supprimée",
-      "noDownloadedResponsesMessage": "Une fois les réponses téléchargées, vous devez confirmer leur réception et les supprimer de Formulaires GC.",
-      "noDeletedResponses": "Aucune réponse supprimée",
-      "noDeletedResponsesMessage": "Une fois que vous avez supprimé les réponses, elles restent disponibles pendant 30 jours."
+      "noNewResponsesMessage": "Les réponses aux formulaires soumis apparaîtront ici et seront disponible dans Formulaires GC pendant 45 jours.",
+      "noDownloadedResponses": "Aucune réponse téléchargée récemment",
+      "noDownloadedResponsesMessage": "Les réponses téléchargées apparaîtront ici jusqu'à ce que vous approuviez leur suppression de Formulaires GC.",
+      "noDeletedResponses": "Aucune réponse à supprimer",
+      "noDeletedResponsesMessage": "Une fois que vous aurez téléchargé et approuvé la suppression des réponses, celles-ci seront disponibles ici pendant 30 jours."
     },
     "notifications": {
       "downloadComplete": "[FR] Responses were downloaded",

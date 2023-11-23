@@ -3,20 +3,20 @@
     "newResponses": {
       "title": "New responses available",
       "message1": "GC Forms stores responses temporarily.",
-      "message2": "Download responses and sign off for their removal from GC Forms. "
+      "message2": "Start by downloading responses and then sign off for their removal from GC Forms."
     },
     "downloadedResponses": {
-      "title": "Recently downloaded",
-      "message1": "You must sign off on the removal of responses from GC Forms within the time indicated.",
-      "message2": "Response files will be available for an additional 30 days after sign off."
+      "title": "Recently downloaded responses",
+      "message1": "GC Forms stores responses temporarily. You must sign off on the removal of responses from GC Forms within the time indicated.",
+      "message2": "Response files will continue to be available for an additional 30 days after sign off."
     },
     "confirmedResponses": {
-      "title": "Signed off for removal",
-      "message1": "Signed off responses will be automatically removed after 30 days."
+      "title": "Responses signed off for removal",
+      "message1": "GC Forms stores responses temporarily. These responses will be removed permanently after 30 days."
     }
   },
   "responses": {
-    "previouslyDownloaded": "Previously downloaded",
+    "recentlyDownloaded": "Recently downloaded",
     "deleted": "Signed off for removal",
     "changeSetup": "Change settings",
     "confirmReceipt": "Sign off on removal with receipt codes",
@@ -71,19 +71,19 @@
       "problem": "Problem",
       "done": "Done",
       "downloadWithinXDays": "Download within {{daysLeft}} days",
-      "confirmWithinXDays": "Sign off on response removal within {{daysLeft}} days",
+      "confirmWithinXDays": "Sign off on removal within {{daysLeft}} days",
       "removeWithinXDays": "Will be removed permanently in {{daysLeft}} days",
       "overdue": "Overdue",
       "wontRemove": "Cannot remove",
       "notSet": "Not set"
     },
     "card": {
-      "noNewResponses": "No new new responses",
-      "noNewResponsesMessage": "Submitted form responses will be available in GC Forms to retrieve for 45 days.",
-      "noDownloadedResponses": "No downloaded responses",
-      "noDownloadedResponsesMessage": "Once you’ve downloaded responses, you’ll need to confirm their receipt and delete them from GC Forms.",
-      "noDeletedResponses": "No deleted responses",
-      "noDeletedResponsesMessage": "Once you’ve deleted responses, they will be available for 30 days."
+      "noNewResponses": "No new responses",
+      "noNewResponsesMessage": "Submitted form responses will appear here and be available in GC Forms for 45 days.",
+      "noDownloadedResponses": "No recently downloaded responses",
+      "noDownloadedResponsesMessage": "Downloaded responses will appear here until you sign off on their removal from GC Forms.",
+      "noDeletedResponses": "No responses for removal",
+      "noDeletedResponsesMessage": "Once you’ve downloaded and signed off on the removal of responses, they will be available here for 30 days."
     },
     "notifications": {
       "downloadComplete": "Responses were downloaded",
