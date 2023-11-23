@@ -324,6 +324,10 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         setIsShow={setShowConfirmReceiptDialog}
         apiUrl={`/api/id/${formId}/submission/confirm`}
         maxEntries={responseDownloadLimit}
+        onSuccessfulConfirm={() => {
+          router.replace(router.asPath, undefined, { scroll: false });
+          setShowSuccessAlert("confirmSuccess");
+        }}
       />
     </>
   );

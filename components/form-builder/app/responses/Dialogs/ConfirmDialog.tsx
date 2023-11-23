@@ -17,12 +17,14 @@ export const ConfirmDialog = ({
   apiUrl,
   inputRegex = isUUID,
   maxEntries = 20,
+  onSuccessfulConfirm,
 }: {
   isShow: boolean;
   setIsShow: React.Dispatch<React.SetStateAction<boolean>>;
   apiUrl: string;
   inputRegex?: (field: string) => boolean;
   maxEntries?: number;
+  onSuccessfulConfirm: () => void;
 }) => {
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
@@ -66,7 +68,7 @@ export const ConfirmDialog = ({
     })
       .then(({ data }) => {
         // Refreshes data. Needed for error cases as well since may be a mix of valid/invalid codes
-        router.replace(router.asPath);
+        // router.replace(router.asPath);
 
         // Confirmation error
         if (data?.invalidConfirmationCodes && data.invalidConfirmationCodes?.length > 0) {
@@ -80,6 +82,7 @@ export const ConfirmDialog = ({
 
         // Success, close the dialog
         setStatus(DialogStates.SENT);
+        onSuccessfulConfirm();
         handleClose();
       })
       .catch((err) => {
