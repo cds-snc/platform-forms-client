@@ -46,7 +46,7 @@
     "download": "Télécharger",
     "delete": "Supprimer",
     "header": {
-      "tableTitle": "Tableau des réponses à télécharger",
+      "tableTitle": "Tableau de réponses",
       "select": "Sélectionner",
       "selectAll": "Sélectionner tout",
       "deselectAll": "Désélectionner tout",
@@ -107,23 +107,24 @@
     },
     "downloadSelectedResponses": "Télécharger les réponses sélectionnées",
     "deleteSelectedResponses": "Supprimer les réponses sélectionnées",
-    "skipLink": "Sauter le tableau de téléchargement",
+    "skipLink": "Sauter le tableau de réponses",
     "unknown": "Inconnu"
   },
   "downloadResponsesModals": {
     "downloadDialog": {
-      "title": "[FR] Download responses",
-      "configureDownloadSettings": "[FR] Configure download settings",
-      "html": "[FR] Individual response files",
-      "htmlDescription": "[FR] Get separate HTML files for each form submission",
+      "title": "Télécharger les réponses",
+      "chooseDownloadFormat": "Choisissez le format des fichiers de réponses",
+      "downloadFormatContext": "En plus des fichiers de réponses, vous recevrez également un record officiel des réponses. Vous devrez conserver ce reçu pour vérifier que toutes les réponses sont bien passées de Formulaires GC à votre ordinateur.",
+      "html": "Réponses individuelles en HTML",
+      "htmlDescription": "Des fichiers distincts pour chaque soumission de formulaire",
       "csv": "CSV",
-      "csvDescription": "[FR] For lists, spreadsheets, or tables",
+      "csvDescription": "Pour des listes, feuilles de calcul ou tableaux",
       "json": "JSON",
-      "jsonDescription": "[FR] For API or data configuration",
-      "downloadAllAsZip": "[FR] Download all as ZIP (compressed) file",
-      "mayNotBeAvailable": "[FR] May not be available in all departments and agencies",
-      "cancel": "[FR] Cancel",
-      "download": "[FR] Download"
+      "jsonDescription": "Pour API ou configuration des données",
+      "downloadAllAsZip": "Télécharger tout sous forme de fichier ZIP (compressé)",
+      "mayNotBeAvailable": "Pourrait ne pas être disponible dans certains ministères ou organismes",
+      "cancel": "Annuler",
+      "download": "Télécharger"
     },
     "confirmDeleteNewDialog": {
       "confirmAndDelete": "Confirmer et supprimer de nouvelles réponses",

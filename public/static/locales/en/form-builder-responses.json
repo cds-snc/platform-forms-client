@@ -46,7 +46,7 @@
     "download": "Download",
     "delete": "Delete",
     "header": {
-      "tableTitle": "Download responses table",
+      "tableTitle": "Responses table",
       "select": "Select",
       "selectAll": "Select all",
       "deselectAll": "Deselect all",
@@ -107,21 +107,22 @@
     },
     "downloadSelectedResponses": "Download selected",
     "deleteSelectedResponses": "Delete selected",
-    "skipLink": "Skip the download table",
+    "skipLink": "Skip the response table",
     "unknown": "Unknown"
   },
   "downloadResponsesModals": {
     "downloadDialog": {
       "title": "Download responses",
-      "configureDownloadSettings": "Configure download settings",
+      "chooseDownloadFormat": "Choose the format of response files",
+      "downloadFormatContext": "Along with response files, you’ll also get an Official record of responses. You’ll need to keep this receipt to verify all responses made it safely from GC Forms to your computer.",
       "html": "Individual response files",
-      "htmlDescription": "Get separate HTML files for each form submission",
+      "htmlDescription": "Separate files for each form submission",
       "csv": "CSV",
       "csvDescription": "For lists, spreadsheets, or tables",
       "json": "JSON",
       "jsonDescription": "For API or data configuration",
-      "downloadAllAsZip": "Download all as ZIP (compressed) file",
-      "mayNotBeAvailable": "May not be available in all departments and agencies",
+      "downloadAllAsZip": "Download all files as ZIP (compressed) file",
+      "mayNotBeAvailable": "May not be available in some departments and agencies",
       "cancel": "Cancel",
       "download": "Download"
     },
