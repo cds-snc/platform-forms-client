@@ -57,10 +57,13 @@ export const DownloadTable = ({
 
   const accountEscalated = nagwareResult && nagwareResult.level > 2;
 
-  const downloadSuccessMessage =
-    ucfirst(statusQuery) === VaultStatus.NEW
-      ? "downloadResponsesTable.notifications.downloadCompleteNew"
-      : "downloadResponsesTable.notifications.downloadComplete";
+  const isStatus = (query: string, status: VaultStatus): boolean => {
+    return ucfirst(query) === status;
+  };
+
+  const downloadSuccessMessage = isStatus(statusQuery, VaultStatus.NEW)
+    ? "downloadResponsesTable.notifications.downloadCompleteNew"
+    : "downloadResponsesTable.notifications.downloadComplete";
 
   const { value: overdueAfter } = useSetting("nagwarePhaseEncouraged");
   const [tableItems, tableItemsDispatch] = useReducer(
@@ -88,7 +91,7 @@ export const DownloadTable = ({
     const daysPast = getDaysPassed(submission.createdAt);
 
     if (
-      submission.status === VaultStatus.NEW &&
+      isStatus(submission.status, VaultStatus.NEW) &&
       accountEscalated &&
       daysPast < Number(overdueAfter)
     ) {
@@ -152,17 +155,17 @@ export const DownloadTable = ({
               <th scope="col" className="p-4 text-left">
                 {t("downloadResponsesTable.header.date")}
               </th>
-              {ucfirst(statusQuery) === VaultStatus.NEW && (
+              {isStatus(statusQuery, VaultStatus.NEW) && (
                 <th className="w-full p-4 text-left">
                   {t("downloadResponsesTable.header.nextStep")}
                 </th>
               )}
-              {ucfirst(statusQuery) === VaultStatus.DOWNLOADED && (
+              {isStatus(statusQuery, VaultStatus.DOWNLOADED) && (
                 <th scope="col" className="w-full p-4 text-left">
                   {t("downloadResponsesTable.header.nextStep")}
                 </th>
               )}
-              {ucfirst(statusQuery) === VaultStatus.CONFIRMED && (
+              {isStatus(statusQuery, VaultStatus.CONFIRMED) && (
                 <th scope="col" className="w-full p-4 text-left">
                   {t("downloadResponsesTable.header.nextStep")}
                 </th>
@@ -230,15 +233,15 @@ export const DownloadTable = ({
                   </td>
                   <td className="whitespace-nowrap px-4">{submission.name}</td>
                   <td className="whitespace-nowrap px-4">
-                    {ucfirst(statusQuery) === VaultStatus.NEW && <span>{createdDateTime}</span>}
-                    {ucfirst(statusQuery) === VaultStatus.DOWNLOADED && (
+                    {isStatus(statusQuery, VaultStatus.NEW) && <span>{createdDateTime}</span>}
+                    {isStatus(statusQuery, VaultStatus.DOWNLOADED) && (
                       <span>{downloadedDateTime}</span>
                     )}
-                    {ucfirst(statusQuery) === VaultStatus.CONFIRMED && (
+                    {isStatus(statusQuery, VaultStatus.CONFIRMED) && (
                       <span>{confirmedDateTime}</span>
                     )}
                   </td>
-                  {ucfirst(statusQuery) === VaultStatus.NEW && (
+                  {isStatus(statusQuery, VaultStatus.NEW) && (
                     <td className="whitespace-nowrap px-4">
                       <DownloadResponseStatus
                         vaultStatus={submission.status}
@@ -248,7 +251,7 @@ export const DownloadTable = ({
                       />
                     </td>
                   )}
-                  {ucfirst(statusQuery) === VaultStatus.DOWNLOADED && (
+                  {isStatus(statusQuery, VaultStatus.DOWNLOADED) && (
                     <td className="whitespace-nowrap px-4">
                       <ConfirmReceiptStatus
                         vaultStatus={submission.status}
@@ -257,7 +260,7 @@ export const DownloadTable = ({
                       />
                     </td>
                   )}
-                  {ucfirst(statusQuery) === VaultStatus.CONFIRMED && (
+                  {isStatus(statusQuery, VaultStatus.CONFIRMED) && (
                     <td className="whitespace-nowrap px-4">
                       <RemovalStatus
                         vaultStatus={submission.status}
@@ -304,7 +307,7 @@ export const DownloadTable = ({
             setShowDownloadDialog={setShowDownloadDialog}
             onClick={() => setDownloadError(false)}
           />
-          {ucfirst(statusQuery) === VaultStatus.NEW && false && (
+          {isStatus(statusQuery, VaultStatus.NEW) && false && (
             <DeleteButton setShowConfirmNewDialog={setShowConfirmNewDialog} />
           )}
         </ActionsPanel>
