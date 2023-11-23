@@ -167,7 +167,7 @@ export const DownloadTable = ({
                   {t("downloadResponsesTable.header.nextStep")}
                 </th>
               )}
-              <th scope="col" className="p-4 text-left">
+              <th scope="col" className="py-4 pr-4 pl-12 text-left">
                 {t("downloadResponsesTable.header.download")}
               </th>
             </tr>
