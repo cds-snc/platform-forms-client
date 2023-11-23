@@ -1,6 +1,21 @@
 {
+  "tabs": {
+    "newResponses": {
+      "title": "New responses available",
+      "message1": "GC Forms stores responses temporarily.",
+      "message2": "Download responses and sign off for their removal from GC Forms. "
+    },
+    "downloadedResponses": {
+      "title": "Recently downloaded",
+      "message1": "You must sign off on the removal of responses from GC Forms within the time indicated.",
+      "message2": "Response files will be available for an additional 30 days after sign off."
+    },
+    "confirmedResponses": {
+      "title": "Signed off for removal",
+      "message1": "Signed off responses will be automatically removed after 30 days."
+    }
+  },
   "responses": {
-    "newResponses": "New responses",
     "previouslyDownloaded": "Previously downloaded",
     "deleted": "Signed off for removal",
     "changeSetup": "Change settings",
@@ -38,8 +53,6 @@
   "downloadResponsesTable": {
     "download": "Download",
     "delete": "Delete",
-    "confirmReceiptMessage1": "You must sign off on the removal of responses from GC Forms within the time indicated.",
-    "confirmReceiptMessage2": "Response files will be available for an additional 30 days after sign-off.",
     "header": {
       "tableTitle": "Download responses table",
       "select": "Select",
@@ -52,7 +65,10 @@
       "confirmReceipt": "Confirmation of receipt",
       "removal": "Data removal",
       "more": "More",
-      "download": "Download"
+      "download": "Download",
+      "nextStep": "Next step",
+      "date": "Date",
+      "warning": "Warning"
     },
     "status": {
       "downloaded": "Downloaded",
@@ -62,7 +78,9 @@
       "unconfirmed": "Unconfirmed",
       "problem": "Problem",
       "done": "Done",
-      "withinXDays": "Within {{daysLeft}} days",
+      "downloadWithinXDays": "Download within {{daysLeft}} days",
+      "confirmWithinXDays": "Sign off on response removal within {{daysLeft}} days",
+      "removeWithinXDays": "Will be removed permanently in {{daysLeft}} days",
       "overdue": "Overdue",
       "wontRemove": "Cannot remove",
       "notSet": "Not set"
@@ -88,8 +106,8 @@
       "errorDownloadingFilesHeader": "Error downloading the selected files.",
       "errorDownloadingFiles": "Try again in a few minutes. If the problem persists, ",
       "errorDownloadingFilesLink": "contact Support",
-      "remainingResponses": "There are remaining responses on the server",
-      "remainingResponsesBody": "Showing {{max}} responses. Not all responses can be shown, download responses to see more.",
+      "remainingResponses": "You have over {{max}} new responses available.",
+      "remainingResponsesBody": "Showing 1-{{max}}. More will load as displayed responses are downloaded.",
       "overdueAlert": {
         "title": "Access to new responses is restricted until overdue responses are downloaded and confirmed",
         "description": "There are {{numberOfOverdueResponses}} unconfirmed responses that are {{escalatedAfter}} days old. Download and confirm all overdue responses to remove this restriction."

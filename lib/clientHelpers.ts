@@ -9,6 +9,7 @@ import {
   PublicFormRecord,
   Response,
   Responses,
+  VaultStatus,
 } from "@lib/types";
 import { Submission } from "@lib/types/submission-types";
 import { getCsrfToken } from "next-auth/react";
@@ -343,3 +344,19 @@ export const slugify = (str: string) =>
     .replace(/[^\w\s-]/g, "")
     .replace(/[\s_-]+/g, "-")
     .replace(/^-+|-+$/g, "");
+
+export const ucfirst = (string: string) => {
+  if (!string) {
+    return "";
+  }
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
+export const isStatus = (query: string, status: VaultStatus | VaultStatus[]): boolean => {
+  const ucQuery = ucfirst(query);
+  if (Array.isArray(status)) {
+    status.includes(ucQuery as VaultStatus);
+  }
+
+  return ucQuery === status;
+};

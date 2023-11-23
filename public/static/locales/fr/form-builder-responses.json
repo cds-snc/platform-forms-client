@@ -1,6 +1,21 @@
 {
+  "tabs": {
+    "newResponses": {
+      "title": "[FR] New responses available",
+      "message1": "[FR] GC Forms stores responses temporarily.",
+      "message2": "[FR] Download responses and sign off for their removal from GC Forms. "
+    },
+    "downloadedResponses": {
+      "title": "[FR] Recently downloaded",
+      "message1": "[FR] You must sign off on the removal of responses from GC Forms within the time indicated.",
+      "message2": "[FR] Response files will be available for an additional 30 days after sign off."
+    },
+    "confirmedResponses": {
+      "title": "[FR] Signed off for removal",
+      "message1": "[FR] Signed off responses will be automatically removed after 30 days."
+    }
+  },
   "responses": {
-    "newResponses": "[FR] New responses",
     "previouslyDownloaded": "[FR] Previously downloaded",
     "deleted": "[FR] Signed off for removal",
     "changeSetup": "Modifier les paramètres",
@@ -38,8 +53,6 @@
   "downloadResponsesTable": {
     "download": "Téléchargement",
     "delete": "Supprimer",
-    "confirmReceiptMessage1": "[FR] You must sign off on the removal of responses from GC Forms within the time indicated.",
-    "confirmReceiptMessage2": "[FR] Response files will be available for an additional 30 days after sign-off.",
     "header": {
       "tableTitle": "Tableau des réponses à télécharger",
       "select": "Sélection",
@@ -52,7 +65,10 @@
       "confirmReceipt": "Confirmation de réception",
       "removal": "Suppression des données",
       "more": "Plus",
-      "download": "Téléchargement"
+      "download": "Téléchargement",
+      "nextStep": "Prochaine étape",
+      "date": "Date",
+      "warning": "Avertissement"
     },
     "status": {
       "downloaded": "Téléchargée",
@@ -62,7 +78,9 @@
       "unconfirmed": "À confirmer",
       "problem": "Problème",
       "done": "Complétée",
-      "withinXDays": "D'ici {{daysLeft}} jours",
+      "downloadWithinXDays": "[FR] Download within {{daysLeft}} days",
+      "confirmWithinXDays": "[FR] Sign off on response removal within {{daysLeft}} days",
+      "removeWithinXDays": "[FR] Will be removed permanently in {{daysLeft}} days",
       "overdue": "En retard",
       "wontRemove": "Ne peut pas être supprimée",
       "notSet": "Non réglée"
@@ -88,8 +106,8 @@
       "errorDownloadingFilesHeader": "Erreur lors du téléchargement des fichiers sélectionnés.",
       "errorDownloadingFiles": "Réessayez dans quelques minutes. Si le problème persiste, ",
       "errorDownloadingFilesLink": "contactez Soutien",
-      "remainingResponses": "[FR] There are remaining responses on the server",
-      "remainingResponsesBody": "[FR] Showing {{max}} responses. Not all responses can be shown, please download responses to see more.",
+      "remainingResponses": "You have over {{max}} new responses available.",
+      "remainingResponsesBody": "Showing 1-{{max}}. More will load as displayed responses are downloaded.",
       "overdueAlert": {
         "title": "L'accès aux nouvelles réponses est restreint jusqu'à ce que les réponses en retard soient téléchargées et confirmées",
         "description": "Il y a {{numberOfOverdueResponses}} réponses qui datent de {{escalatedAfter}} jours. Téléchargez et confirmez toutes les réponses en retard pour enlever cette restriction."
