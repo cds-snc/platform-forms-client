@@ -15,7 +15,7 @@ import { useRouter } from "next/router";
 import { useSetting } from "@lib/hooks/useSetting";
 import Link from "next/link";
 import { TableActions, initialTableItemsState, reducerTableItems } from "./DownloadTableReducer";
-import { getDaysPassed, isStatus, ucfirst } from "@lib/clientHelpers";
+import { getDaysPassed, isStatus } from "@lib/clientHelpers";
 import { Alert } from "@components/globals";
 import { CheckAll } from "./CheckAll";
 import { DownloadButton } from "./DownloadButton";
@@ -151,15 +151,9 @@ export const DownloadTable = ({
               <th scope="col" className="p-4 text-left">
                 {t("downloadResponsesTable.header.date")}
               </th>
-              {isStatus(statusQuery, [
-                VaultStatus.NEW,
-                VaultStatus.DOWNLOADED,
-                VaultStatus.CONFIRMED,
-              ]) && (
-                <th scope="col" className="w-full p-4 text-left">
-                  {t("downloadResponsesTable.header.nextStep")}
-                </th>
-              )}
+              <th scope="col" className="w-full p-4 text-left">
+                {t("downloadResponsesTable.header.nextStep")}
+              </th>
               <th scope="col" className="py-4 pl-12 pr-4 text-left">
                 {t("downloadResponsesTable.header.download")}
               </th>

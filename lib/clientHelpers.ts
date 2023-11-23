@@ -355,9 +355,12 @@ export const ucfirst = (string: string) => {
 export const isStatus = (query: string, status: VaultStatus | VaultStatus[]): boolean => {
   const ucQuery = ucfirst(query);
   if (Array.isArray(status)) {
-    return [VaultStatus.NEW, VaultStatus.DOWNLOADED, VaultStatus.CONFIRMED].includes(
-      ucQuery as VaultStatus
-    );
+    return [
+      VaultStatus.NEW,
+      VaultStatus.DOWNLOADED,
+      VaultStatus.CONFIRMED,
+      VaultStatus.PROBLEM,
+    ].includes(ucQuery as VaultStatus);
   }
   return ucQuery === status;
 };
