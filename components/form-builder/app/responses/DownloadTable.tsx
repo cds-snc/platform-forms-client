@@ -57,8 +57,14 @@ export const DownloadTable = ({
 
   const accountEscalated = nagwareResult && nagwareResult.level > 2;
 
-  const isStatus = (query: string, status: VaultStatus): boolean => {
-    return ucfirst(query) === status;
+  const isStatus = (query: string, status: VaultStatus | VaultStatus[]): boolean => {
+    const ucQuery = ucfirst(query);
+    if (Array.isArray(status)) {
+      return [VaultStatus.NEW, VaultStatus.DOWNLOADED, VaultStatus.CONFIRMED].includes(
+        ucQuery as VaultStatus
+      );
+    }
+    return ucQuery === status;
   };
 
   const downloadSuccessMessage = isStatus(statusQuery, VaultStatus.NEW)
@@ -155,17 +161,11 @@ export const DownloadTable = ({
               <th scope="col" className="p-4 text-left">
                 {t("downloadResponsesTable.header.date")}
               </th>
-              {isStatus(statusQuery, VaultStatus.NEW) && (
-                <th className="w-full p-4 text-left">
-                  {t("downloadResponsesTable.header.nextStep")}
-                </th>
-              )}
-              {isStatus(statusQuery, VaultStatus.DOWNLOADED) && (
-                <th scope="col" className="w-full p-4 text-left">
-                  {t("downloadResponsesTable.header.nextStep")}
-                </th>
-              )}
-              {isStatus(statusQuery, VaultStatus.CONFIRMED) && (
+              {isStatus(statusQuery, [
+                VaultStatus.NEW,
+                VaultStatus.DOWNLOADED,
+                VaultStatus.CONFIRMED,
+              ]) && (
                 <th scope="col" className="w-full p-4 text-left">
                   {t("downloadResponsesTable.header.nextStep")}
                 </th>
@@ -241,33 +241,29 @@ export const DownloadTable = ({
                       <span>{confirmedDateTime}</span>
                     )}
                   </td>
-                  {isStatus(statusQuery, VaultStatus.NEW) && (
-                    <td className="whitespace-nowrap px-4">
+                  <td className="whitespace-nowrap px-4">
+                    {isStatus(statusQuery, VaultStatus.NEW) && (
                       <DownloadResponseStatus
                         vaultStatus={submission.status}
                         createdAt={submission.createdAt}
                         downloadedAt={submission.downloadedAt}
                         overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
                       />
-                    </td>
-                  )}
-                  {isStatus(statusQuery, VaultStatus.DOWNLOADED) && (
-                    <td className="whitespace-nowrap px-4">
+                    )}
+                    {isStatus(statusQuery, VaultStatus.DOWNLOADED) && (
                       <ConfirmReceiptStatus
                         vaultStatus={submission.status}
                         createdAtDate={submission.createdAt}
                         overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
                       />
-                    </td>
-                  )}
-                  {isStatus(statusQuery, VaultStatus.CONFIRMED) && (
-                    <td className="whitespace-nowrap px-4">
+                    )}
+                    {isStatus(statusQuery, VaultStatus.CONFIRMED) && (
                       <RemovalStatus
                         vaultStatus={submission.status}
                         removalAt={submission.removedAt}
                       />
-                    </td>
-                  )}
+                    )}
+                  </td>
                   <td className="whitespace-nowrap">
                     <MoreMenu
                       formId={submission.formID}
