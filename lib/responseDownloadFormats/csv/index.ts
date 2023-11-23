@@ -16,7 +16,7 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
     return [
       response.id,
       new Date(response.createdAt).toISOString(),
-      "Use the “Official receipt and response record” file to get a copy of all receipt codes when signing off on removal.",
+      'Use the "Official receipt and response record" file to get a copy of all receipt codes when signing off on removal.',
       ...response.answers.map((item) => {
         if (item.answer instanceof Array) {
           return item.answer
