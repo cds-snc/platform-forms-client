@@ -690,7 +690,7 @@
     "closed": "Fermé",
     "saveButton": "Enregistrer les modifications",
     "savedSuccessMessage": "Vos modifications ont été enregistrées.",
-    "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Réessayez plus tard ou <a href=\"/fr/form-builder/support\" target=\"_blank\">contacter l’équipe de soutien</a>"
+    "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Réessayez plus tard ou contacter l’équipe de soutien."
   },
   "errorSavingForm": {
     "title": "Une erreur s'est produite lors de l'enregistrement du formulaire",
