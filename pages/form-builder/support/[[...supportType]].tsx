@@ -252,16 +252,26 @@ export default function Contactus() {
                   />
                 </div>
                 <div className="focus-group mt-14">
-                  <Label id={"label-branch"} htmlFor={"branch"}>
+                  <Label id={"label-branch"} htmlFor={"branch"} className="required" required>
                     {t("contactus.branch")}
                   </Label>
-                  <TextInput type={"text"} id={"branch"} name={"branch"} />
+                  <TextInput
+                    type={"text"}
+                    id={"branch"}
+                    name={"branch"}
+                    className="required w-[34rem]"
+                  />
                 </div>
                 <div className="focus-group mt-14">
-                  <Label id={"label-jobTitle"} htmlFor={"jobTitle"}>
+                  <Label id={"label-jobTitle"} htmlFor={"jobTitle"} className="required" required>
                     {t("contactus.jobTitle")}
                   </Label>
-                  <TextInput type={"text"} id={"jobTitle"} name={"jobTitle"} />
+                  <TextInput
+                    type={"text"}
+                    id={"jobTitle"}
+                    name={"jobTitle"}
+                    className="required w-[34rem]"
+                  />
                 </div>
                 <Button type="submit" className="gc-button--blue" disabled={isSubmitting}>
                   {t("submitButton", { ns: "common" })}
