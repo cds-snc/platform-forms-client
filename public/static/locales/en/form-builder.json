@@ -473,7 +473,7 @@
     "emailOption": "Receive responses by email",
     "saveButton": "Save changes",
     "savedSuccessMessage": "Your changes have been saved.",
-    "savedErrorMessage": "There was an error saving your changes. Try again later or <a href=\"/en/form-builder/support\" target=\"_blank\">contact Support</a>",
+    "savedErrorMessage": "There was an error saving your changes. Try again later or contact Support.",
     "emailSubjectEn": {
       "title": "English response subject line",
       "hint": "When form responses are submitted in English."
