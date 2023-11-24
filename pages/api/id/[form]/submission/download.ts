@@ -13,6 +13,7 @@ import { retrieveSubmissions, updateLastDownloadedBy } from "@lib/vault";
 import { DownloadFormat, FormResponseSubmissions } from "@lib/responseDownloadFormats/types";
 import { logEvent } from "@lib/auditLogs";
 import { logMessage } from "@lib/logger";
+import { chunkArray } from "@lib/utils";
 
 const officialRecordsFormats = [
   DownloadFormat.HTML,
@@ -68,7 +69,7 @@ const getSubmissions = async (
     if (fullFormTemplate === null) return res.status(404).json({ error: "Form Not Found" });
 
     const data = req.body;
-    const ids = data.ids.split(",");
+    const ids: string[] = data.ids.split(",");
 
     // Note: if we decided in the future to try to detect the user's language, it would make the
     // most sense to use the form submission language vs sesion/*. If not, the output could have
