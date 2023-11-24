@@ -156,9 +156,10 @@ export default function Contactus() {
                       ({t("required")})
                     </span>
                   </legend>
-                  <MultipleChoiceGroup name="request" type="checkbox">
-                    choicesProps=
-                    {[
+                  <MultipleChoiceGroup
+                    name="request"
+                    type="checkbox"
+                    choicesProps={[
                       {
                         id: "request-question",
                         name: "question",
@@ -184,7 +185,7 @@ export default function Contactus() {
                         required: true,
                       },
                     ]}
-                  </MultipleChoiceGroup>
+                  ></MultipleChoiceGroup>
                 </fieldset>
                 <div className="focus-group">
                   <Label
