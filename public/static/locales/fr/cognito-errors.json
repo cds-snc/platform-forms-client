@@ -8,10 +8,10 @@
     "linkText": "contacter l'équipe de soutien."
   },
   "TooManyRequestsException": {
-    "title": "Too many requests. [FR]",
-    "description": "Try again later or [FR]",
+    "title": "Trop de demandes.",
+    "description": "Réessayez plus tard ou ",
     "link": "fr/form-builder/support",
-    "linkText": "contact Support [FR]."
+    "linkText": "contactez l'équipe de soutien."
   },
   "UsernameExistsException": "Ce compte existe déjà.",
   "ExpiredCodeException": "Le code de confirmation a expiré. Veuillez en demander un nouveau.",
