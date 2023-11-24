@@ -6,7 +6,8 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
     return `${item.questionEn}\n${item.questionFr}`;
   });
 
-  header.unshift("id", "created_at", "confirmation_code");
+  header.unshift("id", "created_at");
+  header.push("code");
 
   const csvStringifier = createCsvStringifier({
     header: header,
@@ -16,7 +17,6 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
     return [
       response.id,
       new Date(response.createdAt).toISOString(),
-      'Use the "Official receipt and response record" file to get a copy of all receipt codes when signing off on removal.',
       ...response.answers.map((item) => {
         if (item.answer instanceof Array) {
           return item.answer
@@ -32,6 +32,8 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
         }
         return item.answer;
       }),
+      "Get receipt codes in the Official record of responses to sign off on the removal of responses from GC Forms\n" +
+        "Obtenez les codes de réception dans le registre officiel des réponses afin d'autoriser la suppression de réponses de Formulaires GC",
     ];
   });
 
