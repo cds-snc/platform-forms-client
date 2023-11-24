@@ -2,6 +2,7 @@ import { DownloadIcon } from "@components/form-builder/icons";
 import { logMessage } from "@lib/logger";
 import axios from "axios";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 export const DownloadSingleButton = ({
   id,
@@ -18,6 +19,8 @@ export const DownloadSingleButton = ({
   onDownloadSuccess: () => void;
   ariaLabelledBy: string;
 }) => {
+  const { t } = useTranslation("form-builder-responses");
+
   const handleDownload = () => {
     const url = `/api/id/${formId}/submission/download?format=html`;
 
@@ -59,6 +62,7 @@ export const DownloadSingleButton = ({
       aria-labelledby={`${id} ${ariaLabelledBy}`}
     >
       <DownloadIcon className="inline-block scale-50" />
+      <span className="sr-only">{t("downloadResponsesTable.header.download")}</span>
     </button>
   );
 };
