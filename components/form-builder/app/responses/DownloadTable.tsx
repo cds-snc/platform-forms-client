@@ -211,6 +211,7 @@ export const DownloadTable = ({
                     id={submission.name}
                     className="whitespace-nowrap px-4 font-normal"
                   >
+                    <span className="sr-only">{t("downloadResponsesTable.header.download")}</span>
                     {submission.name}
                   </th>
                   <td className="whitespace-nowrap px-4">
