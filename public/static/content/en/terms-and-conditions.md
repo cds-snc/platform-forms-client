@@ -49,7 +49,7 @@ When a threat to the website or computer systems of the Government of Canada is 
 
 This website uses a third-party service provider, Google Inc. to reduce malicious activity and detect fraud. Information about visits to this website is transferred to Google Inc. through the reCAPTCHA service. This information may include: IP addresses, mouse movements, and the length of a visit. This information is used to determine whether or not the visit is from a human being or a bot. 
 
-The [Treasury Board of Canada Secretariat](https://www.canada.ca/en/treasury-board-secretariat.html) is an advocate of responsible vulnerability disclosure. If you’ve found a vulnerability, let us know so we can fix it as soon as possible. Please visit the [Security Notice](https://digital.canada.ca/legal/security-notice/) to learn more about that process.
+The [Treasury Board of Canada Secretariat](https://www.canada.ca/en/treasury-board-secretariat.html) is an advocate of responsible vulnerability disclosure. If you’ve found a vulnerability, let us know so we can fix it as soon as possible. Please visit the [Security Notice](https://digital.canada.ca/security-notice/) to learn more about that process.
 
 ## Using files located on non-Government of Canada servers
 
