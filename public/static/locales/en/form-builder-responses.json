@@ -107,7 +107,7 @@
       "errorDownloadingFilesHeader": "Error downloading the selected files.",
       "errorDownloadingFiles": "Try again in a few minutes. If the problem persists, ",
       "errorDownloadingFilesLink": "contact Support",
-      "remainingResponses": "You have over {{max}} new responses available.",
+      "remainingResponses": "You have over {{max}} responses available.",
       "remainingResponsesBody": "Showing 1-{{max}}. More will load as displayed responses are downloaded.",
       "overdueAlert": {
         "title": "Access to new responses is restricted until overdue responses are downloaded and confirmed",

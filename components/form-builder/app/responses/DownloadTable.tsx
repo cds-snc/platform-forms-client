@@ -19,13 +19,13 @@ import { getDaysPassed, isStatus } from "@lib/clientHelpers";
 import { Alert } from "@components/globals";
 import { CheckAll } from "./CheckAll";
 import { DownloadButton } from "./DownloadButton";
-import { MoreMenu } from "./MoreMenu";
 import { ActionsPanel } from "./ActionsPanel";
 import { DeleteButton } from "./DeleteButton";
 import { ConfirmDeleteNewDialog } from "./Dialogs/ConfirmDeleteNewDialog";
 import { DownloadDialog } from "./Dialogs/DownloadDialog";
 import { formatDateTime } from "@components/form-builder/util";
 import { WarningIcon } from "@components/form-builder/icons";
+import { DownloadSingleButton } from "./DownloadSingleButton";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -145,7 +145,7 @@ export const DownloadTable = ({
               <th scope="col" className="w-full p-4 text-left">
                 {t("downloadResponsesTable.header.nextStep")}
               </th>
-              <th scope="col" className="py-4 pl-12 pr-4 text-left">
+              <th scope="col" className="py-4 text-center">
                 {t("downloadResponsesTable.header.download")}
               </th>
             </tr>
@@ -206,7 +206,14 @@ export const DownloadTable = ({
                       </label>
                     </div>
                   </td>
-                  <td className="whitespace-nowrap px-4">{submission.name}</td>
+                  <th
+                    scope="row"
+                    id={submission.name}
+                    className="whitespace-nowrap px-4 font-normal"
+                  >
+                    <span className="sr-only">{t("downloadResponsesTable.header.download")}</span>
+                    {submission.name}
+                  </th>
                   <td className="whitespace-nowrap px-4">
                     {isStatus(statusQuery, VaultStatus.NEW) && <span>{createdDateTime}</span>}
                     {isStatus(statusQuery, VaultStatus.DOWNLOADED) && (
@@ -239,8 +246,9 @@ export const DownloadTable = ({
                       />
                     )}
                   </td>
-                  <td className="whitespace-nowrap">
-                    <MoreMenu
+                  <td className="whitespace-nowrap text-center">
+                    <DownloadSingleButton
+                      id={`button-${submission.name}`}
                       formId={submission.formID}
                       responseId={submission.name}
                       onDownloadSuccess={() => {
@@ -250,7 +258,7 @@ export const DownloadTable = ({
                         }
                       }}
                       setDownloadError={setDownloadError}
-                      setShowConfirmNewDialog={setShowConfirmNewDialog}
+                      ariaLabelledBy={submission.name}
                     />
                   </td>
                 </tr>
