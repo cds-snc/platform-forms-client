@@ -39,7 +39,7 @@ You are responsible for:
 
 - Use a valid government email to create your account and for two-factor authentication (2FA).
 - Do not share your password with anyone or store it where others could find it. If someone else needs access to a form, [contact us](/en/form-builder/support). 
-- Report any security breach or vulnerability using the steps outlined in our [Security notice](https://digital.canada.ca/legal/security-notice/). 
+- Report any security breach or vulnerability using the steps outlined in our [Security notice](https://digital.canada.ca/security-notice/). 
 
 ## Publish in both Official Languages
 
