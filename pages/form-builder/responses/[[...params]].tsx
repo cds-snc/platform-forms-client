@@ -29,6 +29,7 @@ import { SubNavLink } from "@components/form-builder/app/navigation/SubNavLink";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { ConfirmDialog } from "@components/form-builder/app/responses/Dialogs/ConfirmDialog";
+import { Alert } from "@components/globals";
 import { isStatus, ucfirst } from "@lib/clientHelpers";
 
 interface ResponsesProps {
@@ -56,7 +57,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   const isAuthenticated = status === "authenticated";
   const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
   const [showConfirmReceiptDialog, setShowConfirmReceiptDialog] = useState(false);
-
+  const [successAlertMessage, setShowSuccessAlert] = useState<false | string>(false);
   const [isServerError, setIsServerError] = useState(false);
 
   const router = useRouter();
@@ -156,6 +157,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           defaultActive={statusQuery === "new"}
           href={`/form-builder/responses/${formId}/new`}
           setAriaCurrent={true}
+          onClick={() => setShowSuccessAlert(false)}
         >
           <span className="text-sm laptop:text-base">
             <InboxIcon className="inline-block h-7 w-7" /> {t("responses.status.new")}
@@ -165,6 +167,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           id="downloaded-responses"
           href={`/form-builder/responses/${formId}/downloaded`}
           setAriaCurrent={true}
+          onClick={() => setShowSuccessAlert(false)}
         >
           <span className="text-sm laptop:text-base">
             <FolderIcon className="inline-block h-7 w-7" /> {t("responses.status.downloaded")}
@@ -174,6 +177,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           id="deleted-responses"
           href={`/form-builder/responses/${formId}/confirmed`}
           setAriaCurrent={true}
+          onClick={() => setShowSuccessAlert(false)}
         >
           <span className="text-sm laptop:text-base">
             <DeleteIcon className="inline-block h-7 w-7" /> {t("responses.status.deleted")}
@@ -221,6 +225,13 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         </>
       )}
 
+      {successAlertMessage && (
+        <Alert.Success className="mb-4">
+          <Alert.Title>{t(`${successAlertMessage}.title`)}</Alert.Title>
+          <Alert.Body>{t(`${successAlertMessage}.body`)}</Alert.Body>
+        </Alert.Success>
+      )}
+
       {nagwareResult && <Nagware nagwareResult={nagwareResult} />}
 
       {isAuthenticated && (
@@ -235,6 +246,8 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
                 nagwareResult={nagwareResult}
                 responseDownloadLimit={responseDownloadLimit}
                 responsesRemaining={responsesRemaining}
+                showDownloadSuccess={successAlertMessage}
+                setShowDownloadSuccess={setShowSuccessAlert}
               />
             )}
 
@@ -311,6 +324,10 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         setIsShow={setShowConfirmReceiptDialog}
         apiUrl={`/api/id/${formId}/submission/confirm`}
         maxEntries={responseDownloadLimit}
+        onSuccessfulConfirm={() => {
+          router.replace(router.asPath, undefined, { scroll: false });
+          setShowSuccessAlert("confirmSuccess");
+        }}
       />
     </>
   );

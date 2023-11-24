@@ -19,7 +19,6 @@ import { getDaysPassed, isStatus } from "@lib/clientHelpers";
 import { Alert } from "@components/globals";
 import { CheckAll } from "./CheckAll";
 import { DownloadButton } from "./DownloadButton";
-import { toast } from "../shared";
 import { MoreMenu } from "./MoreMenu";
 import { ActionsPanel } from "./ActionsPanel";
 import { DeleteButton } from "./DeleteButton";
@@ -35,6 +34,8 @@ interface DownloadTableProps {
   nagwareResult: NagwareResult | null;
   responseDownloadLimit: number;
   responsesRemaining: boolean;
+  showDownloadSuccess: false | string;
+  setShowDownloadSuccess: React.Dispatch<React.SetStateAction<false | string>>;
 }
 
 export const DownloadTable = ({
@@ -44,22 +45,18 @@ export const DownloadTable = ({
   nagwareResult,
   responseDownloadLimit,
   responsesRemaining,
+  setShowDownloadSuccess,
 }: DownloadTableProps) => {
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
   const [, statusQuery = "new"] = router.query?.params || [];
 
   const [downloadError, setDownloadError] = useState(false);
-  const [showDownloadSuccess, setShowDownloadSuccess] = useState(false);
   const [noSelectedItemsError, setNoSelectedItemsError] = useState(false);
   const [showConfirmNewtDialog, setShowConfirmNewDialog] = useState(false);
   const [showDownloadDialog, setShowDownloadDialog] = useState(false);
 
   const accountEscalated = nagwareResult && nagwareResult.level > 2;
-
-  const downloadSuccessMessage = isStatus(statusQuery, VaultStatus.NEW)
-    ? "downloadResponsesTable.notifications.downloadCompleteNew"
-    : "downloadResponsesTable.notifications.downloadComplete";
 
   const { value: overdueAfter } = useSetting("nagwarePhaseEncouraged");
   const [tableItems, tableItemsDispatch] = useReducer(
@@ -110,12 +107,6 @@ export const DownloadTable = ({
           anchor="#downloadTableButtonId"
         />
         <div id="notificationsTop">
-          {showDownloadSuccess && (
-            <Alert.Success>
-              <Alert.Title>{t(downloadSuccessMessage)}</Alert.Title>
-              <Alert.Body>{t(downloadSuccessMessage)}</Alert.Body>
-            </Alert.Success>
-          )}
           {downloadError && (
             <Alert.Danger>
               <Alert.Title>
@@ -254,7 +245,9 @@ export const DownloadTable = ({
                       responseId={submission.name}
                       onDownloadSuccess={() => {
                         router.replace(router.asPath, undefined, { scroll: false });
-                        toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
+                        if (isStatus(statusQuery, VaultStatus.NEW)) {
+                          setShowDownloadSuccess("downloadSuccess");
+                        }
                       }}
                       setDownloadError={setDownloadError}
                       setShowConfirmNewDialog={setShowConfirmNewDialog}
@@ -306,7 +299,9 @@ export const DownloadTable = ({
         formName={formName}
         onSuccessfulDownload={() => {
           router.replace(router.asPath, undefined, { scroll: false });
-          setShowDownloadSuccess(true);
+          if (isStatus(statusQuery, VaultStatus.NEW)) {
+            setShowDownloadSuccess("downloadSuccess");
+          }
         }}
         downloadError={downloadError}
         setDownloadError={setDownloadError}
