@@ -149,17 +149,16 @@ export default function Contactus() {
                     <Link href={`/form-builder/support`}>{t("contactus.supportFormLink")}</Link>.
                   </p>
                 </Alert.Warning>
-                <fieldset className="focus-group">
+                <fieldset className="focus-group mt-14">
                   <legend className="gc-label required">
                     {t("contactus.request.title")}{" "}
                     <span data-testid="required" aria-hidden>
                       ({t("required")})
                     </span>
                   </legend>
-                  <MultipleChoiceGroup
-                    name="request"
-                    type="checkbox"
-                    choicesProps={[
+                  <MultipleChoiceGroup name="request" type="checkbox">
+                    choicesProps=
+                    {[
                       {
                         id: "request-question",
                         name: "question",
@@ -185,7 +184,7 @@ export default function Contactus() {
                         required: true,
                       },
                     ]}
-                  ></MultipleChoiceGroup>
+                  </MultipleChoiceGroup>
                 </fieldset>
                 <div className="focus-group">
                   <Label
@@ -212,6 +211,7 @@ export default function Contactus() {
                     }}
                   />
                 </div>
+                <p className="mt-14 text-[1.6rem]">{t("contactus.followUp")}</p>
                 <div className="focus-group mt-14">
                   <Label id={"label-name"} htmlFor={"name"} className="required" required>
                     {t("contactus.name")}
@@ -252,26 +252,16 @@ export default function Contactus() {
                   />
                 </div>
                 <div className="focus-group mt-14">
-                  <Label id={"label-branch"} htmlFor={"branch"} className="required" required>
+                  <Label id={"label-branch"} htmlFor={"branch"}>
                     {t("contactus.branch")}
                   </Label>
-                  <TextInput
-                    type={"text"}
-                    id={"branch"}
-                    name={"branch"}
-                    className="required w-[34rem]"
-                  />
+                  <TextInput type={"text"} id={"branch"} name={"branch"} />
                 </div>
                 <div className="focus-group mt-14">
-                  <Label id={"label-jobTitle"} htmlFor={"jobTitle"} className="required" required>
+                  <Label id={"label-jobTitle"} htmlFor={"jobTitle"}>
                     {t("contactus.jobTitle")}
                   </Label>
-                  <TextInput
-                    type={"text"}
-                    id={"jobTitle"}
-                    name={"jobTitle"}
-                    className="required w-[34rem]"
-                  />
+                  <TextInput type={"text"} id={"jobTitle"} name={"jobTitle"} />
                 </div>
                 <Button type="submit" className="gc-button--blue" disabled={isSubmitting}>
                   {t("submitButton", { ns: "common" })}
