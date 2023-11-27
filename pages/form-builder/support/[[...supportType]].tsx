@@ -41,8 +41,6 @@ export default function Contactus() {
     email: Yup.string()
       .required(t("input-validation.required", { ns: "common" }))
       .email(t("input-validation.email", { ns: "common" })),
-    department: Yup.string().required(t("input-validation.required", { ns: "common" })),
-    branch: Yup.string().required(t("input-validation.required", { ns: "common" })),
     jobTitle: Yup.string().required(t("input-validation.required", { ns: "common" })),
     request: Yup.array()
       .min(1)
