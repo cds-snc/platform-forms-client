@@ -145,16 +145,12 @@
       "deleteConfirmationString": "SUPPRIMER"
     },
     "confirmReceiptDialog": {
-      "title": "Confirmer et supprimer les réponses",
-      "toDeleteHeading": "Pour supprimer les réponses :",
-      "toDelete1": "Confirmer que vous disposez d’une copie de chaque réponse.",
-      "toDelete2": "Ouvrir le fichier de réponse en format HTML téléchargé.",
-      "toDelete3": "S’assurer que les réponses s’affichent comme prévu.",
-      "toDelete4": "Copier et coller les codes de réception ci-bas.",
-      "copyCode": "Entrez les codes de réception des réponses à supprimer :",
-      "warningTitle": "La suppression ne peut être annulée.",
-      "warningBody": "Les réponses seront déplacées vers « Supprimés » et retirées du système après 30 jours.",
-      "confirmReceipt": "Confirmer la réception",
+      "title": "Autoriser la suppression des réponses de Formulaires GC",
+      "contentHeading": "Formulaires GC doit vérifier que les réponses ont bien été téléchargées.",
+      "contentBody": "Pourquoi? Parce que les choses peuvent mal tourner lorsque des fichiers numériques passent d’un ordinateur à un autre. Formulaires GC ne supprimera pas de réponses de la base de données sans avoir vérifié que les fichiers ont été téléchargés en toute sécurité sur votre ordinateur.",
+      "copyCode": "Collez les codes de réception du Reçu et registre officiel des réponses pour confirmer que vous avez bien reçu les réponses.",
+      "copyCodeNote": "Utilisez le bouton « Copier les codes de réception » en haut du fichier de reçu HTML.",
+      "confirmReceipt": "Autoriser la suppression de réponses",
       "errors": {
         "minEntries": {
           "title": "Au moins une réponse doit être spécifiée",

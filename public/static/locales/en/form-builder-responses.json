@@ -146,16 +146,12 @@
       "deleteConfirmationString": "DELETE"
     },
     "confirmReceiptDialog": {
-      "title": "Confirm and delete responses",
-      "toDeleteHeading": "To delete responses:",
-      "toDelete1": "Confirm you have a copy of each response.",
-      "toDelete2": "Open the downloaded HTML response file.",
-      "toDelete3": "Ensure the responses show up as expected.",
-      "toDelete4": "Use the button in the HTML response file to copy and paste receipt codes into the space below.",
-      "copyCode": "Enter the receipt codes of responses to be deleted:",
-      "warningTitle": "Deleting cannot be undone.",
-      "warningBody": "Responses will be moved to “Deleted” and permanently removed from GC Forms in 30 days.",
-      "confirmReceipt": "Confirm receipt",
+      "title": "Sign off on the removal of responses from GC Forms",
+      "contentHeading": "GC Forms requires verification that responses were downloaded successfully",
+      "contentBody": "Why? Because things can go wrong when digital files move between computers. GC Forms will not remove responses from the database without having verified that all files made it safely to your computer.",
+      "copyCode": "Paste receipt codes from the Official receipt and record of responses to confirm you have responses.",
+      "copyCodeNote": "Use the “Copy receipt codes” button at the top of the receipt file.",
+      "confirmReceipt": "Sign off on removal of responses",
       "errors": {
         "minEntries": {
           "title": "At least one response must be specified",

@@ -110,7 +110,7 @@ export const ConfirmDialog = ({
           dialogRef={dialogRef}
           handleClose={handleClose}
         >
-          <div className="px-4">
+          <div className="px-8 py-4">
             <div>
               {status === DialogStates.MIN_ERROR && (
                 <Alert.Danger className="mb-2">
@@ -184,15 +184,13 @@ export const ConfirmDialog = ({
               )}
             </div>
             <div className="py-4">
-              <h3>{t("downloadResponsesModals.confirmReceiptDialog.toDeleteHeading")}</h3>
-              <ol>
-                <li>{t("downloadResponsesModals.confirmReceiptDialog.toDelete1")}</li>
-                <li>{t("downloadResponsesModals.confirmReceiptDialog.toDelete2")}</li>
-                <li>{t("downloadResponsesModals.confirmReceiptDialog.toDelete3")}</li>
-                <li>{t("downloadResponsesModals.confirmReceiptDialog.toDelete4")}</li>
-              </ol>
+              <h4>{t("downloadResponsesModals.confirmReceiptDialog.contentHeading")}</h4>
+              <p>{t("downloadResponsesModals.confirmReceiptDialog.contentBody")}</p>
               <p className="mb-2 mt-10 font-bold" id={confirmInstructionId}>
                 {t("downloadResponsesModals.confirmReceiptDialog.copyCode")}
+              </p>
+              <p className="mb-4">
+                {t("downloadResponsesModals.confirmReceiptDialog.copyCodeNote")}
               </p>
 
               <LineItemEntries
@@ -206,27 +204,14 @@ export const ConfirmDialog = ({
                 setStatus={setStatus}
               ></LineItemEntries>
 
-              <Alert.Warning className="my-4">
-                <Alert.Title headingTag="h4">
-                  {t("downloadResponsesModals.confirmReceiptDialog.warningTitle")}
-                </Alert.Title>
-                <Alert.Body>
-                  {t("downloadResponsesModals.confirmReceiptDialog.warningBody")}
-                </Alert.Body>
-              </Alert.Warning>
-
-              <div className="mt-4 flex">
-                <Button
-                  className="mr-4"
-                  onClick={handleSubmit}
-                  disabled={status === DialogStates.SENDING}
-                >
+              <div className="mt-4 flex gap-4">
+                <Button theme="secondary" onClick={handleClose}>
+                  {t("downloadResponsesModals.cancel")}
+                </Button>
+                <Button onClick={handleSubmit} disabled={status === DialogStates.SENDING}>
                   {status === DialogStates.SENDING
                     ? t("downloadResponsesModals.sending")
                     : t("downloadResponsesModals.confirmReceiptDialog.confirmReceipt")}
-                </Button>
-                <Button theme="secondary" onClick={handleClose}>
-                  {t("downloadResponsesModals.cancel")}
                 </Button>
               </div>
             </div>

@@ -66,7 +66,7 @@ export const Dialog = ({
       >
         {title && (
           <div className="border-b-[0.5px] border-slate-500 bg-slate-50">
-            <h2 className="ml-4 mt-4 inline-block pb-4 text-2xl" tabIndex={-1}>
+            <h2 className="ml-4 mt-4 inline-block text-2xl" tabIndex={-1}>
               {title}
             </h2>
           </div>
