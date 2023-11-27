@@ -46,7 +46,8 @@
       "downloaded": "Downloaded",
       "deleted": "Signed off for removal",
       "problem": "Problems"
-    }
+    },
+    "viewAllProblemResponses": "View All Problem Responses"
   },
   "supportWillContact": "Support will contact you",
   "reportedAsProblem": "Response reported as a problem",

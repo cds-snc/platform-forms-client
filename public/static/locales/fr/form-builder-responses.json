@@ -46,7 +46,8 @@
       "downloaded": "Téléchargements",
       "deleted": "Pour suppression",
       "problem": "Problème"
-    }
+    },
+    "viewAllProblemResponses": "[FR] View All Problem Responses"
   },
   "supportWillContact": "L’équipe de soutien vous contactera",
   "reportedAsProblem": "Réponse signalée avec problème",
