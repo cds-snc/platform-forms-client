@@ -13,7 +13,7 @@ import { retrieveSubmissions, updateLastDownloadedBy } from "@lib/vault";
 import { DownloadFormat, FormResponseSubmissions } from "@lib/responseDownloadFormats/types";
 import { logEvent } from "@lib/auditLogs";
 import { logMessage } from "@lib/logger";
-import { chunkArray } from "@lib/utils";
+import { getAppSetting } from "@lib/appSettings";
 
 const officialRecordsFormats = [
   DownloadFormat.HTML,
@@ -51,6 +51,7 @@ const getSubmissions = async (
 ) => {
   try {
     const { session } = props as WithRequired<MiddlewareProps, "session">;
+    const responseConfirmLimit = Number(await getAppSetting("responseDownloadLimit"));
     const formId = req.query.form;
 
     const userEmail = session.user.email;
@@ -70,6 +71,12 @@ const getSubmissions = async (
 
     const data = req.body;
     const ids: string[] = data.ids.split(",");
+
+    if (ids.length > responseConfirmLimit) {
+      return res.status(400).json({
+        error: `You can only confirm a maximum of ${responseConfirmLimit} responses at a time.`,
+      });
+    }
 
     // Note: if we decided in the future to try to detect the user's language, it would make the
     // most sense to use the form submission language vs sesion/*. If not, the output could have
