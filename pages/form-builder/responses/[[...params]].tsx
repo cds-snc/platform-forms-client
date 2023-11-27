@@ -183,6 +183,16 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
             <DeleteIcon className="inline-block h-7 w-7" /> {t("responses.status.deleted")}
           </span>
         </SubNavLink>
+        <SubNavLink
+          id="problem-responses"
+          href={`/form-builder/responses/${formId}/problem`}
+          setAriaCurrent={true}
+          onClick={() => setShowSuccessAlert(false)}
+        >
+          <span className="text-sm laptop:text-base">
+            <WarningIcon className="inline-block h-7 w-7" /> {t("responses.status.problem")}
+          </span>
+        </SubNavLink>
       </nav>
 
       {isAuthenticated && vaultSubmissions.length > 0 && (

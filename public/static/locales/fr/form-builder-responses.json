@@ -39,9 +39,12 @@
     "status": {
       "new": "Nouveautés",
       "downloaded": "Téléchargements",
-      "deleted": "Pour suppression"
+      "deleted": "Pour suppression",
+      "problem": "Problème"
     }
   },
+  "supportWillContact": "[FR] Support will contact you",
+  "reportedAsProblem": "[FR] Response reported as a problem",
   "downloadSuccess": {
     "title": "Réponses déplacées vers Téléchargements",
     "body": "Prochaine étape : autorisez la suppression des réponses de Formulaires GC."

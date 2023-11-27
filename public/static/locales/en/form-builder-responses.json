@@ -39,9 +39,12 @@
     "status": {
       "new": "New",
       "downloaded": "Downloaded",
-      "deleted": "Signed off for removal"
+      "deleted": "Signed off for removal",
+      "problem": "Problems"
     }
   },
+  "supportWillContact": "Support will contact you",
+  "reportedAsProblem": "Response reported as a problem",
   "downloadSuccess": {
     "title": "Responses moved to Downloaded",
     "body": "Next: sign off on the removal of responses from GC Forms."
