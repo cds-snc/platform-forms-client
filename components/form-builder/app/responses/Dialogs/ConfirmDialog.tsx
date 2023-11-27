@@ -109,6 +109,7 @@ export const ConfirmDialog = ({
           title={t("downloadResponsesModals.confirmReceiptDialog.title")}
           dialogRef={dialogRef}
           handleClose={handleClose}
+          className="max-w-[800px]"
         >
           <div className="px-8 py-4">
             <div>
