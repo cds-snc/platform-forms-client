@@ -298,6 +298,17 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
                 />
               </>
             )}
+
+            {vaultSubmissions.length <= 0 && statusQuery === "problem" && (
+              <>
+                <h1 className="visually-hidden">{t("tabs.problemResponses.title")}</h1>
+                <Card
+                  icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+                  title={t("downloadResponsesTable.card.noProblemResponses")}
+                  content={t("downloadResponsesTable.card.noProblemResponsesMessage")}
+                />
+              </>
+            )}
           </div>
           <div className="mt-8">
             <Link

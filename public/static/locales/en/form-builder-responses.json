@@ -100,7 +100,9 @@
       "noDownloadedResponses": "No recently downloaded responses",
       "noDownloadedResponsesMessage": "Downloaded responses will appear here until you sign off on their removal from GC Forms.",
       "noDeletedResponses": "No responses for removal",
-      "noDeletedResponsesMessage": "Once you’ve downloaded and signed off on the removal of responses, they will be available here for 30 days."
+      "noDeletedResponsesMessage": "Once you’ve downloaded and signed off on the removal of responses, they will be available here for 30 days.",
+      "noProblemResponses": "No problem responses",
+      "noProblemResponsesMessage": "Responses reported with problems will appear here until you sign off on their removal from GC Forms."
     },
     "notifications": {
 
