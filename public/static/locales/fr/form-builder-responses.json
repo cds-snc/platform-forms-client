@@ -13,6 +13,11 @@
     "confirmedResponses": {
       "title": "Réponses autorisées pour suppression",
       "message1": "Formulaires GC conserve temporairement les réponses. Ces réponses seront définitivement supprimées après 30 jours."
+    },
+    "problemResponses": {
+      "title": "Réponses signalées avec problèmes",
+      "message1": "L’équipe de soutien de Formulaires GC a été informée.",
+      "message2": "Quelqu’un communiquera avec vous pour aider à résoudre le problème."
     }
   },
   "responses": {
@@ -43,8 +48,8 @@
       "problem": "Problème"
     }
   },
-  "supportWillContact": "[FR] Support will contact you",
-  "reportedAsProblem": "[FR] Response reported as a problem",
+  "supportWillContact": "L’équipe de soutien vous contactera",
+  "reportedAsProblem": "Réponse signalée avec problème",
   "downloadSuccess": {
     "title": "Réponses déplacées vers Téléchargements",
     "body": "Prochaine étape : autorisez la suppression des réponses de Formulaires GC."
