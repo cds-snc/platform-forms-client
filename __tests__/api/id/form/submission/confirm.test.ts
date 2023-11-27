@@ -191,7 +191,7 @@ describe("Confirm form submissions (with active session)", () => {
     await confirm(req, res);
 
     expect(res.statusCode).toEqual(400);
-    expect(JSON.parse(res._getData()).error).toContain("Too many confirmation codes. Limit is 20.");
+    expect(JSON.parse(res._getData()).error).toContain("Too many receipt codes. Limit is 20.");
   });
 
   it("API should accept request if payload is valid", async () => {

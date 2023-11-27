@@ -106,8 +106,9 @@ export const DownloadDialog = ({
 
         if (zipAllFiles) {
           const file = new JSZip();
+          const universalBOMForUTF8 = "\uFEFF";
           file.file("receipt-recu.html", response.data.receipt);
-          file.file("responses-reponses.csv", response.data.responses);
+          file.file("responses-reponses.csv", universalBOMForUTF8 + response.data.responses);
           file.generateAsync({ type: "nodebuffer", streamFiles: true }).then((buffer) => {
             const fileName = `${filePrefix}responses-reponses.zip`;
             downloadFileFromBlob(new Blob([buffer]), fileName);
@@ -166,8 +167,9 @@ export const DownloadDialog = ({
         >
           <div className="p-8">
             <h3 className="mb-4 block font-semibold">
-              {t("downloadResponsesModals.downloadDialog.configureDownloadSettings")}
+              {t("downloadResponsesModals.downloadDialog.chooseDownloadFormat")}
             </h3>
+            <p>{t("downloadResponsesModals.downloadDialog.downloadFormatContext")}</p>
             <div className="mt-4 flex flex-col gap-6">
               <div>
                 <input

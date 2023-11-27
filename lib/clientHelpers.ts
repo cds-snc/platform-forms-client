@@ -290,11 +290,7 @@ export const formatDate = (date: Date): string => {
     return "Unknown";
   }
 
-  const formattedDate = date.toLocaleDateString("en-CA", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  });
+  const formattedDate = date.toISOString().split("T")[0];
   return formattedDate;
 };
 

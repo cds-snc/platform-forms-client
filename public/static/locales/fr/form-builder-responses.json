@@ -1,25 +1,25 @@
 {
   "tabs": {
     "newResponses": {
-      "title": "[FR] New responses available",
-      "message1": "[FR] GC Forms stores responses temporarily.",
-      "message2": "[FR] Download responses and sign off for their removal from GC Forms. "
+      "title": "Nouvelles réponses disponibles",
+      "message1": "Formulaires GC conserve temporairement les réponses.",
+      "message2": "Commencez par télécharger les réponses, puis autorisez leur suppression de Formulaires GC."
     },
     "downloadedResponses": {
-      "title": "[FR] Recently downloaded",
-      "message1": "[FR] You must sign off on the removal of responses from GC Forms within the time indicated.",
-      "message2": "[FR] Response files will be available for an additional 30 days after sign off."
+      "title": "Réponses téléchargées récemment",
+      "message1": "Formulaires GC conserve temporairement les réponses. Vous devez approuver la suppression des réponses de Formulaires GC dans le délai indiqué.",
+      "message2": "Les fichiers de réponses resteront disponibles pendant 30 jours supplémentaires après l’autorisation."
     },
     "confirmedResponses": {
-      "title": "[FR] Signed off for removal",
-      "message1": "[FR] Signed off responses will be automatically removed after 30 days."
+      "title": "Réponses autorisées pour suppression",
+      "message1": "Formulaires GC conserve temporairement les réponses. Ces réponses seront définitivement supprimées après 30 jours."
     }
   },
   "responses": {
-    "previouslyDownloaded": "[FR] Previously downloaded",
-    "deleted": "[FR] Signed off for removal",
+    "recentlyDownloaded": "Téléchargements récents",
+    "deleted": "Pour suppression",
     "changeSetup": "Modifier les paramètres",
-    "confirmReceipt": "[FR] Sign off on removal with receipt codes",
+    "confirmReceipt": "Autoriser la suppression avec les codes de réception",
     "navLabel": "Réponses",
     "reportProblems": "Signaler un problème avec les réponses",
     "title": "Réponses",
@@ -39,17 +39,25 @@
     "status": {
       "new": "Nouveautés",
       "downloaded": "Téléchargements",
-      "deleted": "[FR] Signed off for removal"
+      "deleted": "Pour suppression"
     }
   },
+  "downloadSuccess": {
+    "title": "Réponses déplacées vers Téléchargements",
+    "body": "Prochaine étape : autorisez la suppression des réponses de Formulaires GC."
+  },
+  "confirmSuccess": {
+    "title": "Réponses déplacées vers Pour suppression",
+    "body": "Les réponses seront supprimées dans 30 jours."
+  },
   "downloadResponsesTable": {
-    "download": "Téléchargement",
+    "download": "Télécharger",
     "delete": "Supprimer",
     "header": {
-      "tableTitle": "Tableau des réponses à télécharger",
-      "select": "Sélection",
-      "selectAll": "[FR] Select all",
-      "deselectAll": "[FR] Deselect all",
+      "tableTitle": "Tableau de réponses",
+      "select": "Sélectionner",
+      "selectAll": "Sélectionner tout",
+      "deselectAll": "Désélectionner tout",
       "number": "Soumission",
       "status": "État",
       "downloadResponse": "Période de téléchargement",
@@ -57,37 +65,37 @@
       "confirmReceipt": "Confirmation de réception",
       "removal": "Suppression des données",
       "more": "Plus",
-      "download": "Téléchargement",
+      "download": "Télécharger",
       "nextStep": "Prochaine étape",
       "date": "Date",
       "warning": "Avertissement"
     },
     "status": {
-      "downloaded": "Téléchargée",
+      "downloaded": "Téléchargé",
       "notDownloaded": "À télécharger",
       "new": "Nouveauté",
       "confirmed": "Confirmé",
       "unconfirmed": "À confirmer",
       "problem": "Problème",
-      "done": "Complétée",
-      "downloadWithinXDays": "[FR] Download within {{daysLeft}} days",
-      "confirmWithinXDays": "[FR] Sign off on response removal within {{daysLeft}} days",
-      "removeWithinXDays": "[FR] Will be removed permanently in {{daysLeft}} days",
+      "done": "Complété",
+      "downloadWithinXDays": "À téléchargez d'ici {{daysLeft}} jours",
+      "confirmWithinXDays": "À autoriser pour supression d’ici {{daysLeft}} jours",
+      "removeWithinXDays": "Sera supprimée de manière permanente dans {{daysLeft}} jours",
       "overdue": "En retard",
       "wontRemove": "Ne peut pas être supprimée",
       "notSet": "Non réglée"
     },
     "card": {
       "noNewResponses": "Aucune nouvelle réponse",
-      "noNewResponsesMessage": "Les réponses aux formulaires soumis seront disponible dans Formulaires GC pendant 45 jours.",
-      "noDownloadedResponses": "Aucune réponse supprimée",
-      "noDownloadedResponsesMessage": "Une fois les réponses téléchargées, vous devez confirmer leur réception et les supprimer de Formulaires GC.",
-      "noDeletedResponses": "Aucune réponse supprimée",
-      "noDeletedResponsesMessage": "Une fois que vous avez supprimé les réponses, elles restent disponibles pendant 30 jours."
+      "noNewResponsesMessage": "Les réponses aux formulaires soumis apparaîtront ici et seront disponible dans Formulaires GC pendant 45 jours.",
+      "noDownloadedResponses": "Aucune réponse téléchargée récemment",
+      "noDownloadedResponsesMessage": "Les réponses téléchargées apparaîtront ici jusqu'à ce que vous approuviez leur suppression de Formulaires GC.",
+      "noDeletedResponses": "Aucune réponse à supprimer",
+      "noDeletedResponsesMessage": "Une fois que vous aurez téléchargé et approuvé la suppression des réponses, celles-ci seront disponibles ici pendant 30 jours."
     },
     "notifications": {
-      "downloadComplete": "[FR] Responses were downloaded",
-      "downloadCompleteNew": "[FR] Responses were downloaded and moved to “Downloaded”",
+      "downloadComplete": "Réponses déplacées vers « Téléchargements »",
+      "downloadCompleteNew": "Prochaine étape : Autorisez la suppression des réponses de Formulaires GC",
       "downloadingXFiles": "Téléchargement de {{fileCount}} fichiers"
     },
     "errors": {
@@ -98,8 +106,8 @@
       "errorDownloadingFilesHeader": "Erreur lors du téléchargement des fichiers sélectionnés.",
       "errorDownloadingFiles": "Réessayez dans quelques minutes. Si le problème persiste, ",
       "errorDownloadingFilesLink": "contactez Soutien",
-      "remainingResponses": "You have over {{max}} new responses available.",
-      "remainingResponsesBody": "Showing 1-{{max}}. More will load as displayed responses are downloaded.",
+      "remainingResponses": "Vous avez plus de {{max}} nouvelles réponses disponibles.",
+      "remainingResponsesBody": "Affichage de 1 à {{max}}. D'autres seront ajoutées au fur et à mesure que celles-ci seront téléchargées.",
       "overdueAlert": {
         "title": "L'accès aux nouvelles réponses est restreint jusqu'à ce que les réponses en retard soient téléchargées et confirmées",
         "description": "Il y a {{numberOfOverdueResponses}} réponses qui datent de {{escalatedAfter}} jours. Téléchargez et confirmez toutes les réponses en retard pour enlever cette restriction."
@@ -107,23 +115,24 @@
     },
     "downloadSelectedResponses": "Télécharger les réponses sélectionnées",
     "deleteSelectedResponses": "Supprimer les réponses sélectionnées",
-    "skipLink": "Sauter le tableau de téléchargement",
+    "skipLink": "Sauter le tableau de réponses",
     "unknown": "Inconnu"
   },
   "downloadResponsesModals": {
     "downloadDialog": {
-      "title": "[FR] Download responses",
-      "configureDownloadSettings": "[FR] Configure download settings",
-      "html": "[FR] Individual response files",
-      "htmlDescription": "[FR] Get separate HTML files for each form submission",
+      "title": "Télécharger les réponses",
+      "chooseDownloadFormat": "Choisissez le format des fichiers de réponses",
+      "downloadFormatContext": "En plus des fichiers de réponses, vous recevrez également un record officiel des réponses. Vous devrez conserver ce reçu pour vérifier que toutes les réponses sont bien passées de Formulaires GC à votre ordinateur.",
+      "html": "Réponses individuelles en HTML",
+      "htmlDescription": "Des fichiers distincts pour chaque soumission de formulaire",
       "csv": "CSV",
-      "csvDescription": "[FR] For lists, spreadsheets, or tables",
+      "csvDescription": "Pour des listes, feuilles de calcul ou tableaux",
       "json": "JSON",
-      "jsonDescription": "[FR] For API or data configuration",
-      "downloadAllAsZip": "[FR] Download all as ZIP (compressed) file",
-      "mayNotBeAvailable": "[FR] May not be available in all departments and agencies",
-      "cancel": "[FR] Cancel",
-      "download": "[FR] Download"
+      "jsonDescription": "Pour API ou configuration des données",
+      "downloadAllAsZip": "Télécharger tout sous forme de fichier ZIP (compressé)",
+      "mayNotBeAvailable": "Pourrait ne pas être disponible dans certains ministères ou organismes",
+      "cancel": "Annuler",
+      "download": "Télécharger"
     },
     "confirmDeleteNewDialog": {
       "confirmAndDelete": "Confirmer et supprimer de nouvelles réponses",
@@ -141,27 +150,27 @@
       "toDelete1": "Confirmer que vous disposez d’une copie de chaque réponse.",
       "toDelete2": "Ouvrir le fichier de réponse en format HTML téléchargé.",
       "toDelete3": "S’assurer que les réponses s’affichent comme prévu.",
-      "toDelete4": "Copier et coller les codes de confirmation ci-bas.",
-      "copyCode": "Entrez les codes de confirmation des réponses à supprimer :",
+      "toDelete4": "Copier et coller les codes de réception ci-bas.",
+      "copyCode": "Entrez les codes de réception des réponses à supprimer :",
       "warningTitle": "La suppression ne peut être annulée.",
       "warningBody": "Les réponses seront déplacées vers « Supprimés » et retirées du système après 30 jours.",
       "confirmReceipt": "Confirmer la réception",
       "errors": {
         "minEntries": {
           "title": "Au moins une réponse doit être spécifiée",
-          "description": "Entrez les codes de confirmation des réponses téléchargées pour confirmer leur réception."
+          "description": "Entrez les codes de réception des réponses téléchargées pour confirmer leur réception."
         },
         "maxEntries": {
           "title": "Seulement {{max}} réponses peuvent être confirmées à la fois",
-          "description": "Soumettez {{max}} codes de confirmation avant d'en ajouter d'autres."
+          "description": "Soumettez {{max}} codes de réception avant d'en ajouter d'autres."
         },
         "errorEntries": {
-          "title": "Certains code de confirmation n'ont pas été soumis",
-          "description": "Vérifiez que les codes de confirmation ci-dessous sont corrects et réessayez."
+          "title": "Certains code de réception n'ont pas été soumis",
+          "description": "Vérifiez que les codes de réception ci-dessous sont corrects et réessayez."
         },
         "invalidEntry": {
-          "title": "Le code de confirmation ne correspond pas au format requis",
-          "description": "Vérifiez que le format du code de confirmation est correct et réessayez."
+          "title": "Le code de réception ne correspond pas au format requis",
+          "description": "Vérifiez que le format du code de réception est correct et réessayez."
         },
         "unknown": {
           "title": "Désolé, il y a un problème avec le site",

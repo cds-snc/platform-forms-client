@@ -5,8 +5,6 @@ import { LineItemEntries } from "./line-item-entries";
 import { Button, Alert } from "@components/globals";
 import { randomId } from "@lib/clientHelpers";
 import axios from "axios";
-import { useRouter } from "next/router";
-import { logMessage } from "@lib/logger";
 import Link from "next/link";
 import { isUUID } from "@lib/validation";
 import { DialogStates } from "./DialogStates";
@@ -18,15 +16,16 @@ export const ConfirmDialog = ({
   apiUrl,
   inputRegex = isUUID,
   maxEntries = 20,
+  onSuccessfulConfirm,
 }: {
   isShow: boolean;
   setIsShow: React.Dispatch<React.SetStateAction<boolean>>;
   apiUrl: string;
   inputRegex?: (field: string) => boolean;
   maxEntries?: number;
+  onSuccessfulConfirm: () => void;
 }) => {
   const { t } = useTranslation("form-builder-responses");
-  const router = useRouter();
   const [entries, setEntries] = useState<string[]>([]);
   const [status, setStatus] = useState<DialogStates>(DialogStates.EDITING);
   const [errorEntriesList, setErrorEntriesList] = useState<string[]>([]);
@@ -71,9 +70,6 @@ export const ConfirmDialog = ({
       )
     );
 
-    // Refreshes the page data from getServerSideProps so confirmed responses are removed
-    router.replace(router.asPath);
-
     // Check batched results for errors
 
     const invalidEntries: string[] = [];
@@ -102,6 +98,7 @@ export const ConfirmDialog = ({
 
     // Success, close the dialog
     setStatus(DialogStates.SENT);
+    onSuccessfulConfirm();
     handleClose();
   };
 

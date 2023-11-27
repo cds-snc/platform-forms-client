@@ -19,14 +19,13 @@ import { getDaysPassed, isStatus } from "@lib/clientHelpers";
 import { Alert } from "@components/globals";
 import { CheckAll } from "./CheckAll";
 import { DownloadButton } from "./DownloadButton";
-import { toast } from "../shared";
-import { MoreMenu } from "./MoreMenu";
 import { ActionsPanel } from "./ActionsPanel";
 import { DeleteButton } from "./DeleteButton";
 import { ConfirmDeleteNewDialog } from "./Dialogs/ConfirmDeleteNewDialog";
 import { DownloadDialog } from "./Dialogs/DownloadDialog";
 import { formatDateTime } from "@components/form-builder/util";
 import { WarningIcon } from "@components/form-builder/icons";
+import { DownloadSingleButton } from "./DownloadSingleButton";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -35,6 +34,8 @@ interface DownloadTableProps {
   nagwareResult: NagwareResult | null;
   responseDownloadLimit: number;
   responsesRemaining: boolean;
+  showDownloadSuccess: false | string;
+  setShowDownloadSuccess: React.Dispatch<React.SetStateAction<false | string>>;
 }
 
 export const DownloadTable = ({
@@ -44,22 +45,18 @@ export const DownloadTable = ({
   nagwareResult,
   responseDownloadLimit,
   responsesRemaining,
+  setShowDownloadSuccess,
 }: DownloadTableProps) => {
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
   const [, statusQuery = "new"] = router.query?.params || [];
 
   const [downloadError, setDownloadError] = useState(false);
-  const [showDownloadSuccess, setShowDownloadSuccess] = useState(false);
   const [noSelectedItemsError, setNoSelectedItemsError] = useState(false);
   const [showConfirmNewtDialog, setShowConfirmNewDialog] = useState(false);
   const [showDownloadDialog, setShowDownloadDialog] = useState(false);
 
   const accountEscalated = nagwareResult && nagwareResult.level > 2;
-
-  const downloadSuccessMessage = isStatus(statusQuery, VaultStatus.NEW)
-    ? "downloadResponsesTable.notifications.downloadCompleteNew"
-    : "downloadResponsesTable.notifications.downloadComplete";
 
   const { value: overdueAfter } = useSetting("nagwarePhaseEncouraged");
   const [tableItems, tableItemsDispatch] = useReducer(
@@ -110,12 +107,6 @@ export const DownloadTable = ({
           anchor="#downloadTableButtonId"
         />
         <div id="notificationsTop">
-          {showDownloadSuccess && (
-            <Alert.Success>
-              <Alert.Title>{t(downloadSuccessMessage)}</Alert.Title>
-              <Alert.Body>{t(downloadSuccessMessage)}</Alert.Body>
-            </Alert.Success>
-          )}
           {downloadError && (
             <Alert.Danger>
               <Alert.Title>
@@ -154,7 +145,7 @@ export const DownloadTable = ({
               <th scope="col" className="w-full p-4 text-left">
                 {t("downloadResponsesTable.header.nextStep")}
               </th>
-              <th scope="col" className="py-4 pl-12 pr-4 text-left">
+              <th scope="col" className="py-4 text-center">
                 {t("downloadResponsesTable.header.download")}
               </th>
             </tr>
@@ -215,7 +206,14 @@ export const DownloadTable = ({
                       </label>
                     </div>
                   </td>
-                  <td className="whitespace-nowrap px-4">{submission.name}</td>
+                  <th
+                    scope="row"
+                    id={submission.name}
+                    className="whitespace-nowrap px-4 font-normal"
+                  >
+                    <span className="sr-only">{t("downloadResponsesTable.header.download")}</span>
+                    {submission.name}
+                  </th>
                   <td className="whitespace-nowrap px-4">
                     {isStatus(statusQuery, VaultStatus.NEW) && <span>{createdDateTime}</span>}
                     {isStatus(statusQuery, VaultStatus.DOWNLOADED) && (
@@ -248,16 +246,19 @@ export const DownloadTable = ({
                       />
                     )}
                   </td>
-                  <td className="whitespace-nowrap">
-                    <MoreMenu
+                  <td className="whitespace-nowrap text-center">
+                    <DownloadSingleButton
+                      id={`button-${submission.name}`}
                       formId={submission.formID}
                       responseId={submission.name}
                       onDownloadSuccess={() => {
                         router.replace(router.asPath, undefined, { scroll: false });
-                        toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
+                        if (isStatus(statusQuery, VaultStatus.NEW)) {
+                          setShowDownloadSuccess("downloadSuccess");
+                        }
                       }}
                       setDownloadError={setDownloadError}
-                      setShowConfirmNewDialog={setShowConfirmNewDialog}
+                      ariaLabelledBy={submission.name}
                     />
                   </td>
                 </tr>
@@ -306,7 +307,9 @@ export const DownloadTable = ({
         formName={formName}
         onSuccessfulDownload={() => {
           router.replace(router.asPath, undefined, { scroll: false });
-          setShowDownloadSuccess(true);
+          if (isStatus(statusQuery, VaultStatus.NEW)) {
+            setShowDownloadSuccess("downloadSuccess");
+          }
         }}
         downloadError={downloadError}
         setDownloadError={setDownloadError}
