@@ -101,8 +101,8 @@
       "noDownloadedResponsesMessage": "Les réponses téléchargées apparaîtront ici jusqu'à ce que vous approuviez leur suppression de Formulaires GC.",
       "noDeletedResponses": "Aucune réponse à supprimer",
       "noDeletedResponsesMessage": "Une fois que vous aurez téléchargé et approuvé la suppression des réponses, celles-ci seront disponibles ici pendant 30 jours.",
-      "noProblemResponses": "No problem responses",
-      "noProblemResponsesMessage": "Responses reported with problems will appear here until you sign off on their removal from GC Forms."
+      "noProblemResponses": "[FR] No problem responses",
+      "noProblemResponsesMessage": "[FR] Problem responses will appear here until you sign off on their removal from GC Forms."
     },
     "notifications": {
       "downloadComplete": "Réponses déplacées vers « Téléchargements »",
