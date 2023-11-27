@@ -13,11 +13,10 @@ import {
   DynamoDBDocumentClient,
   TransactWriteCommand,
 } from "@aws-sdk/lib-dynamodb";
+
 import { prismaMock } from "@jestUtils";
-import { getAppSetting } from "@lib/appSettings";
 
 jest.mock("@lib/appSettings");
-const mockedGetAppSetting = jest.mocked(getAppSetting, { shallow: true });
 
 import { Base, mockUserPrivileges } from "__utils__/permissions";
 jest.mock("next-auth/next");
@@ -29,13 +28,6 @@ jest.mock("@lib/auditLogs");
 const mockLogEvent = jest.mocked(logEvent, { shallow: true });
 
 const ddbMock = mockClient(DynamoDBDocumentClient);
-
-mockedGetAppSetting.mockImplementation((key) => {
-  if (key === "responseDownloadLimit") {
-    return Promise.resolve("20");
-  }
-  return Promise.resolve(null);
-});
 
 describe("Confirm form submissions (without active session)", () => {
   it("Should not be able to use the API without an active session", async () => {

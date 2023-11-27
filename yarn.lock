@@ -7140,14 +7140,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"aws-sdk-client-mock@npm:^2.1.1":
-  version: 2.2.0
-  resolution: "aws-sdk-client-mock@npm:2.2.0"
+"aws-sdk-client-mock@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "aws-sdk-client-mock@npm:3.0.0"
   dependencies:
     "@types/sinon": "npm:^10.0.10"
     sinon: "npm:^14.0.2"
     tslib: "npm:^2.1.0"
-  checksum: a7ba4c472023322c9f96419d9c33e29ead602c8071e4e58a8889fe62d18ea2a59b7a3d3d7b7255a446b0b792c593ebd0d75ec5341053d22b82591bf34cab86bc
+  checksum: 3e1377de9dbd1fd115a0cc6f1b7459625a59f7beaa2dc3800deb64c15c6ce696717f615dd9611be7fc591f0362b4597246a4111f188425ae93d745efa8e08616
   languageName: node
   linkType: hard
 
@@ -10134,7 +10134,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:^5.59.11"
     add: "npm:^2.0.6"
     autoprefixer: "npm:^10.4.4"
-    aws-sdk-client-mock: "npm:^2.1.1"
+    aws-sdk-client-mock: "npm:^3.0.0"
     axe-core: "npm:^4.5.2"
     axios: "npm:1.6.1"
     babel-loader: "npm:^8.2.4"
