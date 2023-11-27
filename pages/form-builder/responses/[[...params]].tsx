@@ -183,16 +183,6 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
             <DeleteIcon className="inline-block h-7 w-7" /> {t("responses.status.deleted")}
           </span>
         </SubNavLink>
-        <SubNavLink
-          id="problem-responses"
-          href={`/form-builder/responses/${formId}/problem`}
-          setAriaCurrent={true}
-          onClick={() => setShowSuccessAlert(false)}
-        >
-          <span className="text-sm laptop:text-base">
-            <WarningIcon className="inline-block h-7 w-7" /> {t("responses.status.problem")}
-          </span>
-        </SubNavLink>
       </nav>
 
       {isAuthenticated && vaultSubmissions.length > 0 && (
@@ -314,6 +304,13 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
             >
               <WarningIcon className="mr-2 inline-block" />
               {t("responses.reportProblems")}
+            </Link>
+
+            <Link
+              href={`/form-builder/responses/${formId}/problem`}
+              className="ml-12 text-black visited:text-black"
+            >
+              {t("responses.viewAllProblemResponses")}
             </Link>
           </div>
         </>
