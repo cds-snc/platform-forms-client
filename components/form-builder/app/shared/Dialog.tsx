@@ -3,6 +3,7 @@ import { CDSHTMLDialogElement } from "../../types";
 import { useTranslation } from "next-i18next";
 import { Button } from "@components/globals";
 import { Close } from "../../icons/Close";
+import { cn } from "@lib/utils";
 
 export const useDialogRef = () => {
   const ref = useRef<CDSHTMLDialogElement>(null);
@@ -62,7 +63,10 @@ export const Dialog = ({
       ref={dialogRef}
     >
       <div
-        className={`relative max-h-[80%] overflow-y-auto rounded-xl border-1 border-slate-500 bg-white tablet:mx-auto tablet:max-w-[700px] laptop:mt-24 ${className}`}
+        className={cn(
+          `relative max-h-[80%] overflow-y-auto rounded-xl border-1 border-slate-500 bg-white tablet:mx-auto max-w-[700px] laptop:mt-24`,
+          className
+        )}
       >
         {title && (
           <div className="border-b-[0.5px] border-slate-500 bg-slate-50">
