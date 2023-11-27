@@ -231,6 +231,9 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
                   <br />
                   {t("tabs.problemResponses.message2")}
                 </p>
+                <Button onClick={() => setShowConfirmReceiptDialog(true)} theme="secondary">
+                  {t("responses.confirmReceipt")}
+                </Button>
               </div>
             </>
           )}
