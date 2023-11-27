@@ -1,5 +1,5 @@
 export enum DialogStates {
-  EDITTING,
+  EDITING,
   SENDING,
   SENT,
   MIN_ERROR,

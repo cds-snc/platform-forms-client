@@ -240,74 +240,67 @@ export async function retrieveSubmissions(
   // Check access control first
   try {
     await checkAbilityToAccessSubmissions(ability, formID);
-  } catch (e) {
-    if (e instanceof AccessControlError)
-      logEvent(
-        ability.userID,
-        {
-          type: "Form",
-          id: formID,
-        },
-        "AccessDenied",
-        `Attempted to retrieve responses for form ${formID}`
-      );
-    throw e;
-  }
 
-  try {
-    let accumulatedResponses: VaultSubmission[] = [];
-    const documentClient = connectToDynamo();
-
-    let keys = ids.map((id) => {
+    const keys = ids.map((id) => {
       return { FormID: formID, NAME_OR_CONF: `NAME#${id.trim()}` };
     }) as Record<string, string>[];
 
+    const chunkedKeys = chunkArray(keys, 100);
+
     // DynamoDB BatchGetItem can only retrieve 100 items at a time
-    while (keys && keys.length > 0) {
-      const queryCommand = new BatchGetCommand({
-        RequestItems: {
-          Vault: {
-            Keys: keys,
-            ProjectionExpression:
-              "FormID,SubmissionID,FormSubmission,ConfirmationCode,#status,SecurityAttribute,#name,CreatedAt,LastDownloadedBy,ConfirmTimestamp,DownloadedAt,RemovalDate",
-            ExpressionAttributeNames: {
-              "#name": "Name",
-              "#status": "Status",
+    // Create function that will run the batch in parallel
+    const dbQuery = async (keys: Record<string, string>[]) => {
+      const documentClient = connectToDynamo();
+      let accumulatedResponses: VaultSubmission[] = [];
+      while (keys && keys.length > 0) {
+        const queryCommand = new BatchGetCommand({
+          RequestItems: {
+            Vault: {
+              Keys: keys,
+              ProjectionExpression:
+                "FormID,SubmissionID,FormSubmission,ConfirmationCode,#status,SecurityAttribute,#name,CreatedAt,LastDownloadedBy,ConfirmTimestamp,DownloadedAt,RemovalDate",
+              ExpressionAttributeNames: {
+                "#name": "Name",
+                "#status": "Status",
+              },
             },
           },
-        },
-      });
+        });
 
-      // eslint-disable-next-line no-await-in-loop
-      const response = await documentClient.send(queryCommand);
+        // eslint-disable-next-line no-await-in-loop
+        const response = await documentClient.send(queryCommand);
 
-      if (response.Responses?.Vault.length) {
-        accumulatedResponses = accumulatedResponses.concat(
-          response.Responses.Vault.map((item) => {
-            return {
-              formID: item.FormID,
-              submissionID: item.SubmissionID,
-              formSubmission: item.FormSubmission,
-              confirmationCode: item.ConfirmationCode,
-              status: item.Status as VaultStatus,
-              securityAttribute: item.SecurityAttribute,
-              name: item.Name,
-              createdAt: item.CreatedAt,
-              lastDownloadedBy: item.LastDownloadedBy ?? null,
-              confirmedAt: item.ConfirmTimestamp ?? null,
-              downloadedAt: item.DownloadedAt ?? null,
-              removedAt: item.RemovalDate ?? null,
-            } as VaultSubmission;
-          })
-        );
+        if (response.Responses?.Vault.length) {
+          accumulatedResponses = accumulatedResponses.concat(
+            response.Responses.Vault.map((item) => {
+              return {
+                formID: item.FormID,
+                submissionID: item.SubmissionID,
+                formSubmission: item.FormSubmission,
+                confirmationCode: item.ConfirmationCode,
+                status: item.Status as VaultStatus,
+                securityAttribute: item.SecurityAttribute,
+                name: item.Name,
+                createdAt: item.CreatedAt,
+                lastDownloadedBy: item.LastDownloadedBy ?? null,
+                confirmedAt: item.ConfirmTimestamp ?? null,
+                downloadedAt: item.DownloadedAt ?? null,
+                removedAt: item.RemovalDate ?? null,
+              } as VaultSubmission;
+            })
+          );
+        }
+
+        // If there are unprocessed keys, we need to make another request
+        keys = response.UnprocessedKeys?.Vault?.Keys || [];
       }
+      return accumulatedResponses;
+    };
 
-      // If there are unprocessed keys, we need to make another request
-      keys = response.UnprocessedKeys?.Vault?.Keys || [];
-    }
-
+    // Run the batch in parallel
+    const submissions = (await Promise.all(chunkedKeys.map((keys) => dbQuery(keys)))).flat();
     // Log each response retrieved
-    accumulatedResponses.forEach((item) => {
+    submissions.forEach((item) => {
       logEvent(
         ability.userID,
         {
@@ -319,8 +312,18 @@ export async function retrieveSubmissions(
       );
     });
 
-    return accumulatedResponses;
+    return submissions;
   } catch (e) {
+    if (e instanceof AccessControlError)
+      logEvent(
+        ability.userID,
+        {
+          type: "Form",
+          id: formID,
+        },
+        "AccessDenied",
+        `Attempted to retrieve responses for form ${formID}`
+      );
     logMessage.error(e);
     return [];
   }

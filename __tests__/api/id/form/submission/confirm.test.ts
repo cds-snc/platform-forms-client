@@ -13,7 +13,10 @@ import {
   DynamoDBDocumentClient,
   TransactWriteCommand,
 } from "@aws-sdk/lib-dynamodb";
+
 import { prismaMock } from "@jestUtils";
+
+jest.mock("@lib/appSettings");
 
 import { Base, mockUserPrivileges } from "__utils__/permissions";
 jest.mock("next-auth/next");
@@ -164,7 +167,7 @@ describe("Confirm form submissions (with active session)", () => {
     expect(JSON.parse(res._getData()).error).toContain("does not match pattern");
   });
 
-  it("API should reject request if payload contains more than 20 confirmation codes", async () => {
+  it("API should reject request if payload contains more than 50 confirmation codes", async () => {
     const { req, res } = createMocks({
       method: "PUT",
       headers: {
@@ -174,13 +177,15 @@ describe("Confirm form submissions (with active session)", () => {
       query: {
         form: 8,
       },
-      body: Array(21).map(() => "2515ed36-0755-44e2-9e5c-927bc57f0570"),
+      body: Array(51).map(() => "2515ed36-0755-44e2-9e5c-927bc57f0570"),
     });
 
     await confirm(req, res);
 
     expect(res.statusCode).toEqual(400);
-    expect(JSON.parse(res._getData()).error).toContain("Too many receipt codes. Limit is 20.");
+    expect(JSON.parse(res._getData()).error).toContain(
+      "Too many confirmation codes. API call limit is 50."
+    );
   });
 
   it("API should accept request if payload is valid", async () => {

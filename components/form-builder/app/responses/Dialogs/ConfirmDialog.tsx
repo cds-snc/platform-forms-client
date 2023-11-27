@@ -5,10 +5,10 @@ import { LineItemEntries } from "./line-item-entries";
 import { Button, Alert } from "@components/globals";
 import { randomId } from "@lib/clientHelpers";
 import axios from "axios";
-import { logMessage } from "@lib/logger";
 import Link from "next/link";
 import { isUUID } from "@lib/validation";
 import { DialogStates } from "./DialogStates";
+import { chunkArray } from "@lib/utils";
 
 export const ConfirmDialog = ({
   isShow,
@@ -27,25 +27,25 @@ export const ConfirmDialog = ({
 }) => {
   const { t } = useTranslation("form-builder-responses");
   const [entries, setEntries] = useState<string[]>([]);
-  const [status, setStatus] = useState<DialogStates>(DialogStates.EDITTING);
+  const [status, setStatus] = useState<DialogStates>(DialogStates.EDITING);
   const [errorEntriesList, setErrorEntriesList] = useState<string[]>([]);
   const dialogRef = useDialogRef();
   const confirmInstructionId = `dialog-confirm-receipt-instruction-${randomId()}`;
 
   // Cleanup any un-needed errors from the last render
   if (status === DialogStates.MIN_ERROR && entries.length > 0) {
-    setStatus(DialogStates.EDITTING);
+    setStatus(DialogStates.EDITING);
   }
 
   const handleClose = () => {
     setIsShow(false);
     setEntries([]);
-    setStatus(DialogStates.EDITTING);
+    setStatus(DialogStates.EDITING);
     setErrorEntriesList([]);
     dialogRef.current?.close();
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setStatus(DialogStates.SENDING);
     setErrorEntriesList([]);
 
@@ -53,37 +53,53 @@ export const ConfirmDialog = ({
       setStatus(DialogStates.MIN_ERROR);
       return;
     }
+    // API endpoint only accepts 50 entries at a time
+    const batchedEntries = chunkArray(entries, 50);
 
-    const url = apiUrl;
-    return axios({
-      url,
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-      data: entries,
-    })
-      .then(({ data }) => {
-        // Confirmation error
-        if (data?.invalidConfirmationCodes && data.invalidConfirmationCodes?.length > 0) {
-          setStatus(DialogStates.FAILED_ERROR);
-          // Note: why a list of entries and another list for invalid entries? This makes showing
-          // only the invalid entries a lot easier in the LineItems component
-          setErrorEntriesList(data.invalidConfirmationCodes);
-          setEntries(data.invalidConfirmationCodes);
-          return;
-        }
+    const batchResults = await Promise.allSettled(
+      batchedEntries.map((batch) =>
+        axios({
+          url: apiUrl,
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+          data: batch,
+        })
+      )
+    );
 
-        // Success, close the dialog
-        setStatus(DialogStates.SENT);
-        onSuccessfulConfirm();
-        handleClose();
-      })
-      .catch((err) => {
-        logMessage.error(err as Error);
-        setStatus(DialogStates.UNKNOWN_ERROR);
-      });
+    // Check batched results for errors
+
+    const invalidEntries: string[] = [];
+    let criticalFailure = false;
+
+    batchResults.forEach((result, index) => {
+      if (result.status === "rejected") {
+        criticalFailure = true;
+        // Report all entries as invalid for that batch
+        invalidEntries.push(...batchedEntries[index]);
+        return;
+      }
+      const data = result.value.data;
+      if (data.invalidConfirmationCodes?.length > 0) {
+        invalidEntries.push(...data.invalidConfirmationCodes);
+      }
+    });
+
+    // If there are invalid entries, show them in the dialog
+    if (invalidEntries.length > 0) {
+      setStatus(criticalFailure ? DialogStates.UNKNOWN_ERROR : DialogStates.FAILED_ERROR);
+      setEntries(invalidEntries);
+      setErrorEntriesList(invalidEntries);
+      return;
+    }
+
+    // Success, close the dialog
+    setStatus(DialogStates.SENT);
+    onSuccessfulConfirm();
+    handleClose();
   };
 
   return (

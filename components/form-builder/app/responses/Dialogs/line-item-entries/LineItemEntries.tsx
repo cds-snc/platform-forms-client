@@ -54,7 +54,7 @@ export const LineItemEntries = ({
 
     // Reset any errors on an empty list
     if (!text && (status === DialogStates.MAX_ERROR || status === DialogStates.FORMAT_ERROR)) {
-      setStatus(DialogStates.EDITTING);
+      setStatus(DialogStates.EDITING);
     }
 
     // Backspace on an empty input sets the previous entry into "edit mode"
@@ -86,7 +86,7 @@ export const LineItemEntries = ({
       }
 
       // Reset
-      setStatus(DialogStates.EDITTING);
+      setStatus(DialogStates.EDITING);
       (e.target as HTMLInputElement).value = "";
     }
   };
