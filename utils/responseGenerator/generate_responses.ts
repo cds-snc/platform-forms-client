@@ -2,6 +2,7 @@
 import readline from "readline";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import { config } from "dotenv";
+import { chunkArray } from "../../lib/utils";
 
 const decoder = new TextDecoder();
 
@@ -49,30 +50,45 @@ const main = async () => {
     // Generate and submit responses
     console.log("Generating responses for form.");
 
-    for (let response = 0; response < numberOfResponses; response++) {
-      const command = new InvokeCommand({
-        FunctionName: "Submission",
-        Payload: encoder.encode(
-          JSON.stringify({
-            formID,
-            responses: {},
-            language: "en",
-            securityAttribute: "Protected A",
+    const submissions = chunkArray(
+      Array.from(
+        { length: numberOfResponses },
+        () =>
+          new InvokeCommand({
+            FunctionName: "Submission",
+            Payload: encoder.encode(
+              JSON.stringify({
+                formID,
+                responses: {},
+                language: "en",
+                securityAttribute: "Protected A",
+              })
+            ),
           })
-        ),
-      });
-      try {
-        const response = await lambdaClient.send(command);
+      ),
+      50
+    );
 
-        const payload = decoder.decode(response.Payload);
-        if (response.FunctionError || !JSON.parse(payload).status) {
+    let numOfProcessed = 0;
+
+    // Sending responses in batches of 50
+    console.log("Sending responses to Lambda Submission function.");
+
+    for (const submission of submissions) {
+      const results = await Promise.all(
+        submission.map((invokeCommand) => lambdaClient.send(invokeCommand))
+      ).catch((err) => {
+        console.error(err);
+        throw new Error("Could not process request with Lambda Submission function");
+      });
+      results.forEach((result) => {
+        const payload = decoder.decode(result.Payload);
+        if (result.FunctionError || !JSON.parse(payload).status) {
           throw new Error("Submission API could not process form response");
         }
-      } catch (err) {
-        console.error(err as Error);
-        throw new Error("Could not process request with Lambda Submission function");
-      }
-      writeWaitingPercent(response + 1, numberOfResponses);
+      });
+      numOfProcessed += submission.length;
+      writeWaitingPercent(numOfProcessed, numberOfResponses);
     }
 
     console.log(`\nData generation completed for ${numberOfResponses} responses.`);
