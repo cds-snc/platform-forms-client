@@ -232,6 +232,18 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
               </div>
             </>
           )}
+          {isStatus(statusQuery, VaultStatus.PROBLEM) && (
+            <>
+              <h1>{t("tabs.problemResponses.title")}</h1>
+              <div className="mb-4">
+                <p className="mb-4">
+                  <strong>{t("tabs.problemResponses.message1")}</strong>
+                  <br />
+                  {t("tabs.problemResponses.message2")}
+                </p>
+              </div>
+            </>
+          )}
         </>
       )}
 
