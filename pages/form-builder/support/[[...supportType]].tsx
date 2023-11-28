@@ -41,7 +41,7 @@ export default function Contactus() {
     email: Yup.string()
       .required(t("input-validation.required", { ns: "common" }))
       .email(t("input-validation.email", { ns: "common" })),
-    jobTitle: Yup.string().required(t("input-validation.required", { ns: "common" })),
+    department: Yup.string().required(t("input-validation.required", { ns: "common" })),
     request: Yup.array()
       .min(1)
       .of(Yup.string().required(t("input-validation.required", { ns: "common" }))),
@@ -251,25 +251,20 @@ export default function Contactus() {
                   />
                 </div>
                 <div className="focus-group mt-14">
-                  <Label id={"label-branch"} htmlFor={"branch"} className="required" required>
+                  <Label id={"label-branch"} htmlFor={"branch"}>
                     {t("contactus.branch")}
                   </Label>
-                  <TextInput
-                    type={"text"}
-                    id={"branch"}
-                    name={"branch"}
-                    className="required w-[34rem]"
-                  />
+                  <TextInput type={"text"} id={"branch"} name={"branch"} className="w-[34rem]" />
                 </div>
                 <div className="focus-group mt-14">
-                  <Label id={"label-jobTitle"} htmlFor={"jobTitle"} className="required" required>
+                  <Label id={"label-jobTitle"} htmlFor={"jobTitle"}>
                     {t("contactus.jobTitle")}
                   </Label>
                   <TextInput
                     type={"text"}
                     id={"jobTitle"}
                     name={"jobTitle"}
-                    className="required w-[34rem]"
+                    className="w-[34rem]"
                   />
                 </div>
                 <Button type="submit" className="gc-button--blue" disabled={isSubmitting}>
