@@ -10702,7 +10702,6 @@ __metadata:
     node-fetch: "npm:^3.3.2"
     node-gyp: "npm:^10.0.1"
     node-mocks-http: "npm:^1.12.1"
-    node-xlsx: "npm:^0.23.0"
     notifications-node-client: "npm:5.1.2"
     pino: "npm:8.8.0"
     pino-pretty: "npm:^9.1.1"
@@ -13753,17 +13752,6 @@ __metadata:
   version: 2.0.13
   resolution: "node-releases@npm:2.0.13"
   checksum: 2fb44bf70fc949d27f3a48a7fd1a9d1d603ddad4ccd091f26b3fb8b1da976605d919330d7388ccd55ca2ade0dc8b2e12841ba19ef249c8bb29bf82532d401af7
-  languageName: node
-  linkType: hard
-
-"node-xlsx@npm:^0.23.0":
-  version: 0.23.0
-  resolution: "node-xlsx@npm:0.23.0"
-  dependencies:
-    xlsx: "https://cdn.sheetjs.com/xlsx-0.19.3/xlsx-0.19.3.tgz"
-  bin:
-    node-xlsx: lib/bin/cli.js
-  checksum: 78c52cbdd6c164cd34d202dd18eeeccaff9e98872233d73b3f8079683f3af85458df519b032538ba2cadf493920a177311428af95435b4eb0c840d5c25c7ea13
   languageName: node
   linkType: hard
 
@@ -17641,15 +17629,6 @@ __metadata:
     utf-8-validate:
       optional: true
   checksum: 35b4c2da048b8015c797fd14bcb5a5766216ce65c8a5965616a5440ca7b6c3681ee3cbd0ea0c184a59975556e9d58f2002abf8485a14d11d3371770811050a16
-  languageName: node
-  linkType: hard
-
-"xlsx@https://cdn.sheetjs.com/xlsx-0.19.3/xlsx-0.19.3.tgz":
-  version: 0.19.3
-  resolution: "xlsx@https://cdn.sheetjs.com/xlsx-0.19.3/xlsx-0.19.3.tgz"
-  bin:
-    xlsx: ./bin/xlsx.njs
-  checksum: 86c0874bb71b14555b566a529dc3f3cf2bf1eb7170a4a058171332739b868e53bfe7f1137a85139ee99c9e5a1d9c85acc60c5c2af19579ad3f2f60ad55f74f7d
   languageName: node
   linkType: hard
 

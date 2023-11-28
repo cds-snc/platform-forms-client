@@ -79,7 +79,6 @@
     "next-auth": "4.24.5",
     "next-i18next": "^15.0.0",
     "node-fetch": "^3.3.2",
-    "node-xlsx": "^0.23.0",
     "notifications-node-client": "5.1.2",
     "pino": "8.8.0",
     "prisma": "4.12.0",

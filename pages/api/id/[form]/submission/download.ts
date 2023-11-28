@@ -179,16 +179,18 @@ const getSubmissions = async (
             });
           break;
 
-        case DownloadFormat.XLSX:
-          return res
-            .status(200)
-            .setHeader(
-              "Content-Type",
-              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            )
-            .setHeader("Content-Disposition", `attachment; filename=records.xlsx`)
-            .send(xlsxTransform(formResponse));
-          break;
+        // Disabling for now. If this get's re-enabled in future, will need to install
+        // the "node-xlsx" package.
+        // case DownloadFormat.XLSX:
+        //   return res
+        //     .status(200)
+        //     .setHeader(
+        //       "Content-Type",
+        //       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        //     )
+        //     .setHeader("Content-Disposition", `attachment; filename=records.xlsx`)
+        //     .send(xlsxTransform(formResponse));
+        //   break;
 
         case DownloadFormat.HTML_AGGREGATED:
           return res
@@ -204,7 +206,7 @@ const getSubmissions = async (
             .send(htmlTransform(formResponse));
           break;
 
-        case "html-zipped": {
+        case DownloadFormat.HTML_ZIPPED: {
           const zip = zipTransform(formResponse);
 
           return res
@@ -215,7 +217,7 @@ const getSubmissions = async (
           break;
         }
 
-        case "json":
+        case DownloadFormat.JSON:
           return res.status(200).json({
             receipt: htmlAggregatedTransform(formResponse),
             responses: jsonTransform(formResponse),
