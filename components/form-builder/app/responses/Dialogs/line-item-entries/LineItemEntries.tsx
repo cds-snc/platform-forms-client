@@ -4,6 +4,7 @@ import { scrollToBottom } from "@lib/clientHelpers";
 import { useTranslation } from "react-i18next";
 import { DialogStates } from "../DialogStates";
 import { isUUID } from "@lib/validation";
+import { logMessage } from "@lib/logger";
 
 // TODO: handle duplicate entries?
 // TODO: should "backspace" on an empty input set the next entry into "edit mode"?
@@ -133,8 +134,15 @@ export const LineItemEntries = ({
             const pastedText = e.clipboardData.getData("Text");
             const pastedTextArray = pastedText.split(/\r?\n/);
             const cleanedText = pastedTextArray.flatMap((text) => {
-              if (isUUID(text.trim())) {
-                return text.trim().replace(",", "").toLowerCase();
+              const cleanedText = text.trim().replace(",", "").replace("\t", "").toLowerCase();
+              if (validateInput && !validateInput(cleanedText)) {
+                setStatus(DialogStates.FORMAT_ERROR);
+                logMessage.info(cleanedText);
+                return [];
+              } else {
+                if (validateInput && validateInput(cleanedText)) {
+                  return cleanedText;
+                }
               }
               return [];
             });
