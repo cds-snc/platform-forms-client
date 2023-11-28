@@ -2,7 +2,7 @@ import { AccessControlError, createAbility } from "@lib/privileges";
 import { middleware, cors, sessionExists } from "@lib/middleware";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { MiddlewareProps, WithRequired } from "@lib/types";
-import { numberOfUnprocessedSubmissions } from "@lib/vault";
+import { unprocessedSubmissions } from "@lib/vault";
 
 const getNumberOfUnprocessedSubmissions = async (
   req: NextApiRequest,
@@ -18,9 +18,9 @@ const getNumberOfUnprocessedSubmissions = async (
       return res.status(400).json({ error: "Bad request" });
     }
 
-    const result = await numberOfUnprocessedSubmissions(createAbility(session), formId);
+    const result = await unprocessedSubmissions(createAbility(session), formId);
 
-    return res.status(200).json({ numberOfUnprocessedSubmissions: result });
+    return res.status(200).json({ unprocessedSubmissions: result });
   } catch (err) {
     if (err instanceof AccessControlError) return res.status(403).json({ error: "Forbidden" });
     else return res.status(500).json({ error: "There was an error. Please try again later." });

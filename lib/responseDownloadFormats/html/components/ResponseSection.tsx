@@ -1,98 +1,31 @@
 import React from "react";
-import { Table } from "@components/myforms/HTMLDownload/Table";
-import { useTranslation } from "next-i18next";
-import { FormProperties, Response, Responses, FormElementTypes } from "@lib/types";
-import { filterUndef } from "@lib/tsUtils";
+import { Submission } from "../../types";
+import { ColumnTable } from "./ColumnTable";
+import { RowTable } from "./RowTable";
+import { customTranslate } from "@lib/responseDownloadFormats/helpers";
 
 export interface ResponseSectionProps {
   confirmReceiptCode: string;
   lang: string;
   responseID: string;
   submissionDate: number;
-  formTemplate: FormProperties;
-  formResponse: Responses;
+  formResponse: Submission;
 }
 
 export function capitalize(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function getProperty(field: string, lang: string): string {
-  if (!field) {
-    throw new Error("Field does not exist");
-  }
-  return field + lang.charAt(0).toUpperCase() + lang.slice(1);
-}
-
-const parseQuestionsAndAnswers = (
-  formTemplate: FormProperties,
-  formResponse: Responses,
-  lang: string
-): {
-  question: string;
-  response:
-    | {
-        question: string;
-        response: Response[];
-        questionType: FormElementTypes;
-      }[]
-    | Response;
-  questionType: FormElementTypes;
-}[] => {
-  // Filter out only questions that have possible responses
-  const questionsOnly = formTemplate.elements.filter(
-    (element) => ![FormElementTypes.richText].includes(element.type)
-  );
-  // Filters out any undefined entries caused by richtext elements
-  return filterUndef(
-    formTemplate.layout.map((elementID, index) => {
-      const question = questionsOnly.filter((element) => element.id === elementID)[0]?.properties[
-        getProperty("title", lang)
-      ] as string;
-
-      // If the question type does not have a possible response it will return undefined here.
-      // Short circuit and return undefined to be filtered out in the next step
-
-      if (!question) return;
-
-      const response = formResponse[elementID];
-      const questionType = formTemplate.elements[index].type;
-      if (questionType === FormElementTypes.dynamicRow) {
-        // Remove the rich text fields and parse the questions and answers
-        const nonRichTextElements = formTemplate.elements[index].properties.subElements?.filter(
-          (element) => ![FormElementTypes.richText].includes(element.type)
-        );
-        // If dynamic row does not have answerable subelements
-        // Short circuit and return undefined to be filtered out in the next step
-        if (!nonRichTextElements || nonRichTextElements?.length === 0) {
-          return;
-        }
-
-        const dynamicRowResponse = nonRichTextElements.map((element, index) => {
-          const question = element.properties[getProperty("title", lang)] as string;
-          const response = (formResponse[elementID] as Record<string, Response>[]).map((answer) => {
-            return answer[index];
-          });
-          return { question, response, questionType: element.type };
-        });
-        return { question, response: dynamicRowResponse, questionType };
-      }
-      return { question, response, questionType };
-    })
-  );
-};
-
 export const ResponseSection = ({
   confirmReceiptCode,
   lang,
   responseID,
   submissionDate,
-  formTemplate,
   formResponse,
 }: ResponseSectionProps) => {
-  const { t } = useTranslation(["my-forms"]);
+  const { t } = customTranslate("my-forms");
+
   const capitalizedLang = capitalize(lang);
-  const questionsAnswers = parseQuestionsAndAnswers(formTemplate, formResponse, lang);
 
   const CopyToClipboardScripts = React.createElement("script", {
     dangerouslySetInnerHTML: {
@@ -160,7 +93,7 @@ export const ResponseSection = ({
       >
         <div
           id={`navTitle${capitalizedLang}`}
-          className="mr-4 pl-3 pr-4 py-1 bg-gray-800 text-white"
+          className="mr-4 bg-gray-800 py-1 pl-3 pr-4 text-white"
         >
           {t("responseTemplate.jumpTo", { lng: lang })}
         </div>
@@ -183,15 +116,14 @@ export const ResponseSection = ({
         </ul>
       </nav>
 
-      <h2 className="gc-h1 mt-20">{formTemplate[getProperty("title", lang)]?.toString()}</h2>
+      <h2 className="gc-h1 mt-20">dd</h2>
       <h3 id={`columnTable${capitalizedLang}`} className="gc-h2 mt-20" tabIndex={-1}>
         {t("responseTemplate.columnTable", { lng: lang })}
       </h3>
-      <Table
+      <ColumnTable
         responseID={responseID}
         submissionDate={submissionDate}
-        questionsAnswers={questionsAnswers}
-        isRowTable={false}
+        submission={formResponse}
         lang={lang}
         data-clipboard-text=""
       />
@@ -200,7 +132,7 @@ export const ResponseSection = ({
         {t("responseTemplate.rowTable", { lng: lang })}
       </h3>
       <p className="mt-8">{t("responseTemplate.rowTableInfo", { lng: lang })}</p>
-      <div className="mt-4 mb-8">
+      <div className="mb-8 mt-4">
         <button
           id={`copyResponseButton${capitalizedLang}`}
           aria-labelledby={`copyResponseLabel${capitalizedLang}`}
@@ -213,14 +145,14 @@ export const ResponseSection = ({
         <span
           id={`copyResponseOutput${capitalizedLang}`}
           aria-live="polite"
-          className="hidden text-green-default ml-8"
+          className="ml-8 hidden text-green"
         ></span>
       </div>
-      <Table
+
+      <RowTable
         responseID={responseID}
         submissionDate={submissionDate}
-        questionsAnswers={questionsAnswers}
-        isRowTable={true}
+        submission={formResponse}
         lang={lang}
       />
 
@@ -233,7 +165,7 @@ export const ResponseSection = ({
       <div id={`confirmReceiptCodeText${capitalizedLang}`} className="mt-8 font-bold">
         {confirmReceiptCode}
       </div>
-      <div className="mt-4 mb-32">
+      <div className="mb-32 mt-4">
         <button
           id={`copyCodeButton${capitalizedLang}`}
           className="gc-button--blue"
@@ -246,7 +178,7 @@ export const ResponseSection = ({
         <span
           id={`copyCodeOutput${capitalizedLang}`}
           aria-live="polite"
-          className="hidden text-green-default ml-8"
+          className="ml-8 hidden text-green"
         ></span>
       </div>
 

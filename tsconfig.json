@@ -36,6 +36,9 @@
       "@pages/*": [
         "pages/*"
       ],
+      "@public/*": [
+        "public/*"
+      ],
       "@jestFixtures/*": [
         "__fixtures__/*"
       ],
