@@ -14,7 +14,7 @@ const confirmpassword = async (req: NextApiRequest, res: NextApiResponse) => {
   if (!req.body.username || !req.body.password || !req.body.confirmationCode) {
     return res.status(400).json({
       message:
-        "username, password and confirmation code needs to be provided in the body of the request",
+        "username, password and security code needs to be provided in the body of the request",
     });
   }
 

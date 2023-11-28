@@ -13,5 +13,5 @@
     "dotenv": "16.0.1",
     "ioredis": "5.2.3"
   },
-  "packageManager": "yarn@4.0.1"
+  "packageManager": "yarn@4.0.2"
 }

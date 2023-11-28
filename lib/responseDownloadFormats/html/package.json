@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "compile": "node ./css/compile.js"
+  },
+  "type": "module",
+  "dependencies": {
+    "shelljs": "^0.8.5"
+  }
+}

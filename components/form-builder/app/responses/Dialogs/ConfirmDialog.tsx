@@ -5,11 +5,10 @@ import { LineItemEntries } from "./line-item-entries";
 import { Button, Alert } from "@components/globals";
 import { randomId } from "@lib/clientHelpers";
 import axios from "axios";
-import { useRouter } from "next/router";
-import { logMessage } from "@lib/logger";
 import Link from "next/link";
 import { isUUID } from "@lib/validation";
 import { DialogStates } from "./DialogStates";
+import { chunkArray } from "@lib/utils";
 
 export const ConfirmDialog = ({
   isShow,
@@ -17,35 +16,36 @@ export const ConfirmDialog = ({
   apiUrl,
   inputRegex = isUUID,
   maxEntries = 20,
+  onSuccessfulConfirm,
 }: {
   isShow: boolean;
   setIsShow: React.Dispatch<React.SetStateAction<boolean>>;
   apiUrl: string;
   inputRegex?: (field: string) => boolean;
   maxEntries?: number;
+  onSuccessfulConfirm: () => void;
 }) => {
   const { t } = useTranslation("form-builder-responses");
-  const router = useRouter();
   const [entries, setEntries] = useState<string[]>([]);
-  const [status, setStatus] = useState<DialogStates>(DialogStates.EDITTING);
+  const [status, setStatus] = useState<DialogStates>(DialogStates.EDITING);
   const [errorEntriesList, setErrorEntriesList] = useState<string[]>([]);
   const dialogRef = useDialogRef();
   const confirmInstructionId = `dialog-confirm-receipt-instruction-${randomId()}`;
 
   // Cleanup any un-needed errors from the last render
   if (status === DialogStates.MIN_ERROR && entries.length > 0) {
-    setStatus(DialogStates.EDITTING);
+    setStatus(DialogStates.EDITING);
   }
 
   const handleClose = () => {
     setIsShow(false);
     setEntries([]);
-    setStatus(DialogStates.EDITTING);
+    setStatus(DialogStates.EDITING);
     setErrorEntriesList([]);
     dialogRef.current?.close();
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setStatus(DialogStates.SENDING);
     setErrorEntriesList([]);
 
@@ -53,39 +53,53 @@ export const ConfirmDialog = ({
       setStatus(DialogStates.MIN_ERROR);
       return;
     }
+    // API endpoint only accepts 50 entries at a time
+    const batchedEntries = chunkArray(entries, 50);
 
-    const url = apiUrl;
-    return axios({
-      url,
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-      data: entries,
-    })
-      .then(({ data }) => {
-        // Refreshes data. Needed for error cases as well since may be a mix of valid/invalid codes
-        router.replace(router.asPath);
+    const batchResults = await Promise.allSettled(
+      batchedEntries.map((batch) =>
+        axios({
+          url: apiUrl,
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+          data: batch,
+        })
+      )
+    );
 
-        // Confirmation error
-        if (data?.invalidConfirmationCodes && data.invalidConfirmationCodes?.length > 0) {
-          setStatus(DialogStates.FAILED_ERROR);
-          // Note: why a list of entries and another list for invalid entries? This makes showing
-          // only the invalid entries a lot easier in the LineItems component
-          setErrorEntriesList(data.invalidConfirmationCodes);
-          setEntries(data.invalidConfirmationCodes);
-          return;
-        }
+    // Check batched results for errors
 
-        // Success, close the dialog
-        setStatus(DialogStates.SENT);
-        handleClose();
-      })
-      .catch((err) => {
-        logMessage.error(err as Error);
-        setStatus(DialogStates.UNKNOWN_ERROR);
-      });
+    const invalidEntries: string[] = [];
+    let criticalFailure = false;
+
+    batchResults.forEach((result, index) => {
+      if (result.status === "rejected") {
+        criticalFailure = true;
+        // Report all entries as invalid for that batch
+        invalidEntries.push(...batchedEntries[index]);
+        return;
+      }
+      const data = result.value.data;
+      if (data.invalidConfirmationCodes?.length > 0) {
+        invalidEntries.push(...data.invalidConfirmationCodes);
+      }
+    });
+
+    // If there are invalid entries, show them in the dialog
+    if (invalidEntries.length > 0) {
+      setStatus(criticalFailure ? DialogStates.UNKNOWN_ERROR : DialogStates.FAILED_ERROR);
+      setEntries(invalidEntries);
+      setErrorEntriesList(invalidEntries);
+      return;
+    }
+
+    // Success, close the dialog
+    setStatus(DialogStates.SENT);
+    onSuccessfulConfirm();
+    handleClose();
   };
 
   return (
@@ -95,8 +109,9 @@ export const ConfirmDialog = ({
           title={t("downloadResponsesModals.confirmReceiptDialog.title")}
           dialogRef={dialogRef}
           handleClose={handleClose}
+          className="max-w-[800px]"
         >
-          <div className="px-4">
+          <div className="px-8 py-4">
             <div>
               {status === DialogStates.MIN_ERROR && (
                 <Alert.Danger className="mb-2">
@@ -170,11 +185,13 @@ export const ConfirmDialog = ({
               )}
             </div>
             <div className="py-4">
-              <p className="mt-2">{t("downloadResponsesModals.confirmReceiptDialog.findCode")}</p>
+              <h4>{t("downloadResponsesModals.confirmReceiptDialog.contentHeading")}</h4>
+              <p>{t("downloadResponsesModals.confirmReceiptDialog.contentBody")}</p>
               <p className="mb-2 mt-10 font-bold" id={confirmInstructionId}>
-                {t("downloadResponsesModals.confirmReceiptDialog.copyCode", {
-                  max: maxEntries,
-                })}
+                {t("downloadResponsesModals.confirmReceiptDialog.copyCode")}
+              </p>
+              <p className="mb-4">
+                {t("downloadResponsesModals.confirmReceiptDialog.copyCodeNote")}
               </p>
 
               <LineItemEntries
@@ -188,21 +205,14 @@ export const ConfirmDialog = ({
                 setStatus={setStatus}
               ></LineItemEntries>
 
-              <p className="mt-8">
-                {t("downloadResponsesModals.confirmReceiptDialog.responsesAvailableFor")}
-              </p>
-              <div className="mt-4 flex">
-                <Button
-                  className="mr-4"
-                  onClick={handleSubmit}
-                  disabled={status === DialogStates.SENDING}
-                >
+              <div className="mt-4 flex gap-4">
+                <Button theme="secondary" onClick={handleClose}>
+                  {t("downloadResponsesModals.cancel")}
+                </Button>
+                <Button onClick={handleSubmit} disabled={status === DialogStates.SENDING}>
                   {status === DialogStates.SENDING
                     ? t("downloadResponsesModals.sending")
                     : t("downloadResponsesModals.confirmReceiptDialog.confirmReceipt")}
-                </Button>
-                <Button theme="secondary" onClick={handleClose}>
-                  {t("downloadResponsesModals.cancel")}
                 </Button>
               </div>
             </div>

@@ -13,7 +13,7 @@ import jwt, { Secret } from "jsonwebtoken";
 import { AccessControlError, checkPrivileges, checkPrivilegesAsBoolean } from "./privileges";
 import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
-import { numberOfUnprocessedSubmissions, deleteDraftFormResponses } from "./vault";
+import { unprocessedSubmissions, deleteDraftFormResponses } from "./vault";
 import { addOwnershipEmail, transferOwnershipEmail } from "./ownership";
 
 // ******************************************
@@ -950,8 +950,8 @@ export async function deleteTemplate(
     ]);
 
     // Ignore cache (last boolean parameter) because we want to make sure we did not get new submissions while in the flow of deleting a form
-    const numOfUnprocessedSubmissions = await numberOfUnprocessedSubmissions(ability, formID, true);
-    if (numOfUnprocessedSubmissions > 0) throw new TemplateHasUnprocessedSubmissions();
+    const numOfUnprocessedSubmissions = await unprocessedSubmissions(ability, formID, true);
+    if (numOfUnprocessedSubmissions) throw new TemplateHasUnprocessedSubmissions();
 
     const dateIn30Days = new Date(Date.now() + 2592000000); // 30 days = 60 (seconds) * 60 (minutes) * 24 (hours) * 30 (days) * 1000 (to ms)
 
