@@ -13,10 +13,7 @@ import {
   DynamoDBDocumentClient,
   TransactWriteCommand,
 } from "@aws-sdk/lib-dynamodb";
-
 import { prismaMock } from "@jestUtils";
-
-jest.mock("@lib/appSettings");
 
 import { Base, mockUserPrivileges } from "__utils__/permissions";
 jest.mock("next-auth/next");
