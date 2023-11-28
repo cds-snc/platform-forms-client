@@ -38,8 +38,6 @@ interface DownloadTableProps {
   setShowDownloadSuccess: React.Dispatch<React.SetStateAction<false | string>>;
 }
 
-// TODO remove this
-
 export const DownloadTable = ({
   vaultSubmissions,
   formName,
@@ -106,7 +104,7 @@ export const DownloadTable = ({
       <section>
         <SkipLinkReusable
           text={t("downloadResponsesTable.skipLink")}
-          anchor="#downloadTableButtonId"
+          anchor="#reportProblemButton"
         />
         <div id="notificationsTop">
           {downloadError && (

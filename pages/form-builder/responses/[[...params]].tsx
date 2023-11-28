@@ -289,6 +289,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
               onClick={() => setIsShowReportProblemsDialog(true)}
               href={"#"}
               className="text-black visited:text-black"
+              id="reportProblemButton"
             >
               <WarningIcon className="mr-2 inline-block" />
               {t("responses.reportProblems")}
