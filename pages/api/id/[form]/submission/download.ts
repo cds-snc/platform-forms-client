@@ -4,7 +4,6 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { FormElementTypes, MiddlewareProps, WithRequired } from "@lib/types";
 import { getFullTemplateByID } from "@lib/templates";
 import { transform as csvTransform } from "@lib/responseDownloadFormats/csv";
-import { transform as xlsxTransform } from "@lib/responseDownloadFormats/xlsx";
 import { transform as htmlAggregatedTransform } from "@lib/responseDownloadFormats/html-aggregated";
 import { transform as htmlTransform } from "@lib/responseDownloadFormats/html";
 import { transform as zipTransform } from "@lib/responseDownloadFormats/html-zipped";
@@ -15,25 +14,14 @@ import { logEvent } from "@lib/auditLogs";
 import { logMessage } from "@lib/logger";
 import { getAppSetting } from "@lib/appSettings";
 
-const officialRecordsFormats = [
-  DownloadFormat.HTML,
-  DownloadFormat.HTML_ZIPPED,
-  DownloadFormat.HTML_AGGREGATED,
-  DownloadFormat.CSV, // includes receipt.html
-  DownloadFormat.JSON, // includes receipt.html
-];
-
 const logDownload = async (
   responseIdStatusArray: { id: string; status: string }[],
   format: DownloadFormat,
   formId: string,
   ability: ReturnType<typeof createAbility>,
-  userEmail: string,
-  markDownloaded = false
+  userEmail: string
 ) => {
-  if (markDownloaded) {
-    await updateLastDownloadedBy(responseIdStatusArray, formId, userEmail);
-  }
+  await updateLastDownloadedBy(responseIdStatusArray, formId, userEmail);
   responseIdStatusArray.forEach((item) => {
     logEvent(
       ability.userID,
@@ -164,8 +152,7 @@ const getSubmissions = async (
         req.query.format as DownloadFormat,
         formId,
         ability,
-        userEmail,
-        officialRecordsFormats.includes(req.query.format as DownloadFormat)
+        userEmail
       );
 
       switch (req.query.format) {
@@ -177,7 +164,6 @@ const getSubmissions = async (
               receipt: htmlAggregatedTransform(formResponse),
               responses: csvTransform(formResponse),
             });
-          break;
 
         // Disabling for now. If this get's re-enabled in future, will need to install
         // the "node-xlsx" package.
@@ -197,14 +183,12 @@ const getSubmissions = async (
             .status(200)
             .setHeader("Content-Type", "text/html")
             .send(htmlAggregatedTransform(formResponse, lang));
-          break;
 
         case DownloadFormat.HTML:
           return res
             .status(200)
             .setHeader("Content-Type", "text/json")
             .send(htmlTransform(formResponse));
-          break;
 
         case DownloadFormat.HTML_ZIPPED: {
           const zip = zipTransform(formResponse);
@@ -214,7 +198,6 @@ const getSubmissions = async (
             .setHeader("Content-Type", "application/zip")
             .setHeader("Content-Disposition", `attachment; filename=records.zip`)
             .send(zip.generateNodeStream({ type: "nodebuffer", streamFiles: true }));
-          break;
         }
 
         case DownloadFormat.JSON:
@@ -222,7 +205,6 @@ const getSubmissions = async (
             receipt: htmlAggregatedTransform(formResponse),
             responses: jsonTransform(formResponse),
           });
-          break;
 
         default:
           return res.status(400).json({ error: `Bad request invalid format ${req.query.format}` });
