@@ -11,7 +11,7 @@ export const unprocessedSubmissionsCacheCheck = async (formID: string): Promise<
     const value = await redis.get(checkParameter);
     if (value) {
       logMessage.debug(`Using cached number of unprocessed submissions for ${checkParameter}`);
-      return Boolean(value);
+      return value === "1";
     } else {
       return false;
     }
