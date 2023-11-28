@@ -1,4 +1,4 @@
-import xlsx from "node-xlsx";
+// import xlsx from "node-xlsx";
 import { FormResponseSubmissions } from "../types";
 
 export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
@@ -28,5 +28,5 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
 
   records.unshift(header);
 
-  return xlsx.build([{ name: "Responses", data: records, options: {} }]);
+  // return xlsx.build([{ name: "Responses", data: records, options: {} }]);
 };
