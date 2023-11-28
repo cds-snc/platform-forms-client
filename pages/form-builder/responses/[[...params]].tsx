@@ -391,7 +391,11 @@ export const getServerSideProps: GetServerSideProps = async ({
       }
 
       // get status from url params (default = new) and capitalize/cast to VaultStatus
-      const status = ucfirst(String(statusQuery)) as VaultStatus;
+      // Protect against invalid status query
+
+      const status = Object.values(VaultStatus).includes(ucfirst(statusQuery) as VaultStatus)
+        ? (ucfirst(statusQuery) as VaultStatus)
+        : VaultStatus.NEW;
 
       const { submissions, submissionsRemaining } = await listAllSubmissions(
         ability,
