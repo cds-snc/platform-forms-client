@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.8.3](https://github.com/cds-snc/platform-forms-client/compare/v3.8.2...v3.8.3) (2023-11-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency next-auth to v4.24.5 [security] ([#2878](https://github.com/cds-snc/platform-forms-client/issues/2878)) ([cbd5425](https://github.com/cds-snc/platform-forms-client/commit/cbd54251336c6f36c89a43b2f293bb7b895c4b1e))
+
+
+### Miscellaneous Chores
+
+* Add Health Canada branding ([24c4f03](https://github.com/cds-snc/platform-forms-client/commit/24c4f031da3c8edb6e332fe197b7ed66265a26cd))
+* created local '.github/workflows/backstage-catalog-helper.yml' from remote 'tools/sre_file_sync/backstage-catalog-helper.yml' ([8b69a8c](https://github.com/cds-snc/platform-forms-client/commit/8b69a8c66441e5614106f16b547eef77ab2dee30))
+* **deps:** lock file maintenance ([#2573](https://github.com/cds-snc/platform-forms-client/issues/2573)) ([c32f569](https://github.com/cds-snc/platform-forms-client/commit/c32f56901a61c1544b6c6d9eef362bfd2a09a5a2))
+* **deps:** pin dependencies ([#2798](https://github.com/cds-snc/platform-forms-client/issues/2798)) ([14e6cd2](https://github.com/cds-snc/platform-forms-client/commit/14e6cd234efff8bd0e2b40bea7dbc720b7b7bfe2))
+* **deps:** update all non-major github action dependencies ([#2688](https://github.com/cds-snc/platform-forms-client/issues/2688)) ([9baf719](https://github.com/cds-snc/platform-forms-client/commit/9baf719dc95e081ab12a5a2d9598e08912d8fe74))
+* **deps:** update all patch dependencies ([#2571](https://github.com/cds-snc/platform-forms-client/issues/2571)) ([a02451a](https://github.com/cds-snc/platform-forms-client/commit/a02451a4d17c03b4485e49e0d7c07f0f2f2fa8a4))
+* Remove demo request from contact us form ([#2861](https://github.com/cds-snc/platform-forms-client/issues/2861)) ([549a9e8](https://github.com/cds-snc/platform-forms-client/commit/549a9e82711667f1700560f988d6ef17d5848932))
+* remove stories files ([#2863](https://github.com/cds-snc/platform-forms-client/issues/2863)) ([83a5528](https://github.com/cds-snc/platform-forms-client/commit/83a55288b4706a3d3b3d5d61293379dd148ebcbf))
+* remove unrequired env var ([#2864](https://github.com/cds-snc/platform-forms-client/issues/2864)) ([7002111](https://github.com/cds-snc/platform-forms-client/commit/7002111bf374386d4865ce1e26fa8affea817262))
+* synced file(s) with cds-snc/site-reliability-engineering ([#2805](https://github.com/cds-snc/platform-forms-client/issues/2805)) ([8b69a8c](https://github.com/cds-snc/platform-forms-client/commit/8b69a8c66441e5614106f16b547eef77ab2dee30))
+* Update link URLs with CDS website update ([#2897](https://github.com/cds-snc/platform-forms-client/issues/2897)) ([5851c39](https://github.com/cds-snc/platform-forms-client/commit/5851c3908b3e8b297639669cc91409a55ccbabe6))
+
 ## [3.8.2](https://github.com/cds-snc/platform-forms-client/compare/v3.8.1...v3.8.2) (2023-11-14)
 
 
