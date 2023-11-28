@@ -195,13 +195,6 @@ const getSubmissions = async (
             .status(200)
             .setHeader("Content-Type", "text/json")
             .send(zipTransform(formResponse));
-          // const zip = zipTransform(formResponse);
-
-          // return res
-          //   .status(200)
-          //   .setHeader("Content-Type", "application/zip")
-          //   .setHeader("Content-Disposition", `attachment; filename=records.zip`)
-          //   .send(zip.generateNodeStream({ type: "nodebuffer", streamFiles: true }));
         }
 
         case DownloadFormat.JSON:
