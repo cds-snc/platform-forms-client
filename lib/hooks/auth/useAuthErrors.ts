@@ -105,7 +105,10 @@ export const useAuthErrors = (): [AuthErrorsState, AuthErrorsDispatch] => {
         errorObj.title = t("ExpiredCodeException"); // TODO ask design/content for error message
         break;
       case "TooManyRequestsException":
-        errorObj.title = t("TooManyRequestsException"); // TODO ask design/content for error message
+        errorObj.title = t("TooManyRequestsException.title");
+        errorObj.description = t("TooManyRequestsException.description");
+        errorObj.callToActionLink = t("TooManyRequestsException.link");
+        errorObj.callToActionText = t("TooManyRequestsException.linkText");
         break;
       default:
         errorObj.title = t("InternalServiceException"); // TODO ask design/content for error message

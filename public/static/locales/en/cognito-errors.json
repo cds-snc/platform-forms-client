@@ -1,5 +1,5 @@
 {
-  "CodeMismatchException": "The security code provided does not match our records.",
+  "CodeMismatchException": "The security code provided does not match our records. Double check your email or request a new code.",
   "InternalServiceException": "We've encountered an error with your request. Please try again later.",
   "InternalServiceExceptionLogin": {
     "title": "There was a problem while signing in.",
@@ -7,7 +7,6 @@
     "link": "/form-builder/support",
     "linkText": "contact Support."
   },
-  "TooManyRequestsException": "Too many requests. Try again later.",
   "UsernameExistsException": "This account already exists.",
   "ExpiredCodeException": "The security code has expired. Please request a new one.",
   "InvalidPasswordException": "This password does not comply with our password policies",
@@ -15,6 +14,12 @@
     "sendForgotPassword": {
       "title": "To reset your password, you must first verify your email."
     }
+  },
+  "TooManyRequestsException": {
+    "title": "Too many requests.",
+    "description": "Try again later or",
+    "link": "en/form-builder/support",
+    "linkText": "contact Support."
   },
   "UsernameOrPasswordIncorrect": {
     "title": "The email address or password you entered is incorrect.",

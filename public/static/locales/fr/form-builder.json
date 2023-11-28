@@ -343,7 +343,7 @@
   },
   "formIntroduction": "Introduction du formulaire ",
   "formInvalidProperty": "Invalide : {{property}}",
-  "formMissingProperty": "Disparues : {{property}}",
+  "formMissingProperty": "Il manque : {{property}}",
   "formSettings": "Paramétres du formulaire",
   "formSubmissionDisabledInPreview": "Testez votre formulaire et le fonctionnement de la collecte de réponses sous l’onglet Livraison des réponses.",
   "formTitle": "Titre du formulaire",
@@ -357,7 +357,7 @@
   "gcFormsTest": "Tester",
   "gcFormsTranslate": "Traductions",
   "ifYouAreExperiencingProblems": "Si vous rencontrez des problèmes avec votre formulaire publié, <a href=\"/fr/form-builder/support\" target=\"_blank\">veuillez contacter l’équipe de soutien.</a>.",
-  "incomplete": "Incomplète",
+  "incomplete": "Incomplet",
   "inputDescription": "Description",
   "insertLink": "Insérer un lien  ",
   "lastSaved": "Dernier enregistrement :",
@@ -475,7 +475,7 @@
     "emailOption": "Recevoir les réponses par courriel",
     "saveButton": "Enregistrer les modifications",
     "savedSuccessMessage": "Vos modifications ont été enregistrées.",
-    "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Veuillez réessayer.",
+    "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Réessayez plus tard ou contacter l’équipe de soutien.",
     "emailSubjectEn": {
       "title": "Ligne d'objet en anglais",
       "hint": "Lorsque les réponses au formulaire sont soumises en anglais."
@@ -691,7 +691,7 @@
     "closed": "Fermé",
     "saveButton": "Enregistrer les modifications",
     "savedSuccessMessage": "Vos modifications ont été enregistrées.",
-    "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Veuillez réessayer."
+    "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Réessayez plus tard ou contacter l’équipe de soutien."
   },
   "errorSavingForm": {
     "title": "Une erreur s'est produite lors de l'enregistrement du formulaire",
