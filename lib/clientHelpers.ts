@@ -341,6 +341,11 @@ export const slugify = (str: string) =>
     .replace(/[\s_-]+/g, "-")
     .replace(/^-+|-+$/g, "");
 
+/**
+ * Capitalize the first letter of a string
+ * @param string
+ * @returns string with first letter capitalized
+ */
 export const ucfirst = (string: string) => {
   if (!string) {
     return "";
