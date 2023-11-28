@@ -18,7 +18,7 @@ export const RemovalStatus = ({
     if (daysLeft < 0) {
       status = t("downloadResponsesTable.unknown");
     } else {
-      status = t("downloadResponsesTable.status.withinXDays", { daysLeft });
+      status = t("downloadResponsesTable.status.removeWithinXDays", { daysLeft });
     }
   } else if (vaultStatus === VaultStatus.PROBLEM) {
     status = t("downloadResponsesTable.status.wontRemove");

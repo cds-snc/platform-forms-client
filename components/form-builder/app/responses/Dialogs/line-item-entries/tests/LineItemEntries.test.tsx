@@ -23,7 +23,7 @@ describe("LineItemEntries", () => {
   it("should render and handle keyboard events", async () => {
     const Container = () => {
       const [inputs, setInputs] = useState([]);
-      const [status, setStatus] = useState<DialogStates>(DialogStates.EDITTING);
+      const [status, setStatus] = useState<DialogStates>(DialogStates.EDITING);
 
       return (
         <LineItemEntries

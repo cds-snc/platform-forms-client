@@ -1,9 +1,27 @@
 {
+  "tabs": {
+    "newResponses": {
+      "title": "Nouvelles réponses disponibles",
+      "message1": "Formulaires GC conserve temporairement les réponses.",
+      "message2": "Commencez par télécharger les réponses, puis autorisez leur suppression de Formulaires GC."
+    },
+    "downloadedResponses": {
+      "title": "Réponses téléchargées récemment",
+      "message1": "Formulaires GC conserve temporairement les réponses. Vous devez approuver la suppression des réponses de Formulaires GC dans le délai indiqué.",
+      "message2": "Les fichiers de réponses resteront disponibles pendant 30 jours supplémentaires après l’autorisation."
+    },
+    "confirmedResponses": {
+      "title": "Réponses autorisées pour suppression",
+      "message1": "Formulaires GC conserve temporairement les réponses. Ces réponses seront définitivement supprimées après 30 jours."
+    }
+  },
   "responses": {
+    "recentlyDownloaded": "Téléchargements récents",
+    "deleted": "Pour suppression",
     "changeSetup": "Modifier les paramètres",
-    "confirmReceipt": "Confirmer la réception",
+    "confirmReceipt": "Autoriser la suppression avec les codes de réception",
     "navLabel": "Réponses",
-    "reportProblems": "Signaler un problème",
+    "reportProblems": "Signaler un problème avec les réponses",
     "title": "Réponses",
     "unauthenticated": {
       "createOne": "créez-en un",
@@ -17,38 +35,67 @@
       "title": "Paramètres des réponses courriel",
       "submitTo": "Les réponses soumises sont envoyées à :",
       "subjectLine": "La ligne d’objet apparaîtra comme :"
+    },
+    "status": {
+      "new": "Nouveautés",
+      "downloaded": "Téléchargements",
+      "deleted": "Pour suppression"
     }
   },
+  "downloadSuccess": {
+    "title": "Réponses déplacées vers Téléchargements",
+    "body": "Prochaine étape : autorisez la suppression des réponses de Formulaires GC."
+  },
+  "confirmSuccess": {
+    "title": "Réponses déplacées vers Pour suppression",
+    "body": "Les réponses seront supprimées dans 30 jours."
+  },
   "downloadResponsesTable": {
+    "download": "Télécharger",
+    "delete": "Supprimer",
     "header": {
-      "tableTitle": "Tableau des réponses à télécharger",
-      "select": "Sélection",
+      "tableTitle": "Tableau de réponses",
+      "select": "Sélectionner",
+      "selectAll": "Sélectionner tout",
+      "deselectAll": "Désélectionner tout",
       "number": "Soumission",
       "status": "État",
       "downloadResponse": "Période de téléchargement",
       "lastDownloadedBy": "Téléchargée par",
       "confirmReceipt": "Confirmation de réception",
-      "removal": "Suppression des données"
+      "removal": "Suppression des données",
+      "more": "Plus",
+      "download": "Télécharger",
+      "nextStep": "Prochaine étape",
+      "date": "Date",
+      "warning": "Avertissement"
     },
     "status": {
-      "downloaded": "Téléchargée",
+      "downloaded": "Téléchargé",
       "notDownloaded": "À télécharger",
       "new": "Nouveauté",
       "confirmed": "Confirmé",
       "unconfirmed": "À confirmer",
       "problem": "Problème",
-      "done": "Complétée",
-      "withinXDays": "D'ici {{daysLeft}} jours",
+      "done": "Complété",
+      "downloadWithinXDays": "À téléchargez d'ici {{daysLeft}} jours",
+      "confirmWithinXDays": "À autoriser pour supression d’ici {{daysLeft}} jours",
+      "removeWithinXDays": "Sera supprimée de manière permanente dans {{daysLeft}} jours",
       "overdue": "En retard",
       "wontRemove": "Ne peut pas être supprimée",
       "notSet": "Non réglée"
     },
     "card": {
-      "noResponses": "Vous n'avez pas de réponses",
-      "noResponsesToDownload": "Il n'y a pas de réponses disponibles pour le téléchargement."
+      "noNewResponses": "Aucune nouvelle réponse",
+      "noNewResponsesMessage": "Les réponses aux formulaires soumis apparaîtront ici et seront disponible dans Formulaires GC pendant 45 jours.",
+      "noDownloadedResponses": "Aucune réponse téléchargée récemment",
+      "noDownloadedResponsesMessage": "Les réponses téléchargées apparaîtront ici jusqu'à ce que vous approuviez leur suppression de Formulaires GC.",
+      "noDeletedResponses": "Aucune réponse à supprimer",
+      "noDeletedResponsesMessage": "Une fois que vous aurez téléchargé et approuvé la suppression des réponses, celles-ci seront disponibles ici pendant 30 jours."
     },
     "notifications": {
-      "downloadComplete": "Téléchargement complet",
+      "downloadComplete": "Réponses déplacées vers « Téléchargements »",
+      "downloadCompleteNew": "Prochaine étape : Autorisez la suppression des réponses de Formulaires GC",
       "downloadingXFiles": "Téléchargement de {{fileCount}} fichiers"
     },
     "errors": {
@@ -59,38 +106,67 @@
       "errorDownloadingFilesHeader": "Erreur lors du téléchargement des fichiers sélectionnés.",
       "errorDownloadingFiles": "Réessayez dans quelques minutes. Si le problème persiste, ",
       "errorDownloadingFilesLink": "contactez Soutien",
+      "remainingResponses": "Vous avez plus de {{max}} nouvelles réponses disponibles.",
+      "remainingResponsesBody": "Affichage de 1 à {{max}}. D'autres seront ajoutées au fur et à mesure que celles-ci seront téléchargées.",
       "overdueAlert": {
         "title": "L'accès aux nouvelles réponses est restreint jusqu'à ce que les réponses en retard soient téléchargées et confirmées",
         "description": "Il y a {{numberOfOverdueResponses}} réponses qui datent de {{escalatedAfter}} jours. Téléchargez et confirmez toutes les réponses en retard pour enlever cette restriction."
       }
     },
-    "downloadXSelectedResponses": "Télécharger {{size}} réponses sélectionnées",
-    "skipLink": "Sauter le tableau de téléchargement",
+    "downloadSelectedResponses": "Télécharger les réponses sélectionnées",
+    "deleteSelectedResponses": "Supprimer les réponses sélectionnées",
+    "skipLink": "Sauter le tableau de réponses",
     "unknown": "Inconnu"
   },
   "downloadResponsesModals": {
+    "downloadDialog": {
+      "title": "Télécharger les réponses",
+      "chooseDownloadFormat": "Choisissez le format des fichiers de réponses",
+      "downloadFormatContext": "En plus des fichiers de réponses, vous recevrez également un record officiel des réponses. Vous devrez conserver ce reçu pour vérifier que toutes les réponses sont bien passées de Formulaires GC à votre ordinateur.",
+      "html": "Réponses individuelles en HTML",
+      "htmlDescription": "Des fichiers distincts pour chaque soumission de formulaire",
+      "csv": "CSV",
+      "csvDescription": "Pour des listes, feuilles de calcul ou tableaux",
+      "json": "JSON",
+      "jsonDescription": "Pour API ou configuration des données",
+      "downloadAllAsZip": "Télécharger tout sous forme de fichier ZIP (compressé)",
+      "mayNotBeAvailable": "Pourrait ne pas être disponible dans certains ministères ou organismes",
+      "cancel": "Annuler",
+      "download": "Télécharger"
+    },
+    "confirmDeleteNewDialog": {
+      "confirmAndDelete": "Confirmer et supprimer de nouvelles réponses",
+      "responsesNotYetDownloaded": "Ces réponses n’ont pas encore été téléchargées",
+      "alertBody": "Vous n’avez pas téléchargé les réponses que vous tentez de supprimer. Si vous supprimez ces réponses, elles seront retirées du système après 30 jours.",
+      "deletePrompt": "Si vous souhaitez procéder à la suppression des réponses non téléchargées, entrez le mot « SUPPRIMER » ci-dessous.",
+      "required": "Obligatoire",
+      "cancel": "Annuler",
+      "delete": "Supprimer",
+      "deleteConfirmationString": "SUPPRIMER"
+    },
     "confirmReceiptDialog": {
-      "title": "Confirmer la réception de réponses",
-      "findCode": "Trouvez le code de confirmation au bas des réponses de formulaires téléchargées. Ces codes ressemblent à : c0c42c90-b816-49da-a69a-80bfd8ba15db.",
-      "copyCode": "Copiez et collez jusqu'à 20 codes de confirmation, un par ligne.",
-      "responsesAvailableFor": "Une fois que vous aurez confirmé la réception des réponses, celles-ci seront disponibles pendant 30 jours, puis, ensuite automatiquement retirées de notre base de données.",
-      "confirmReceipt": "Confirmer la réception",
+      "title": "Autoriser la suppression des réponses de Formulaires GC",
+      "contentHeading": "Formulaires GC doit vérifier que les réponses ont bien été téléchargées.",
+      "contentBody": "Pourquoi? Parce que les choses peuvent mal tourner lorsque des fichiers numériques passent d’un ordinateur à un autre. Formulaires GC ne supprimera pas de réponses de la base de données sans avoir vérifié que les fichiers ont été téléchargés en toute sécurité sur votre ordinateur.",
+      "copyCode": "Collez les codes de réception du Reçu et registre officiel des réponses pour confirmer que vous avez bien reçu les réponses.",
+      "copyCodeNote": "Utilisez le bouton « Copier les codes de réception » en haut du fichier de reçu HTML.",
+      "confirmReceipt": "Autoriser la suppression de réponses",
       "errors": {
         "minEntries": {
           "title": "Au moins une réponse doit être spécifiée",
-          "description": "Entrez les codes de confirmation des réponses téléchargées pour confirmer leur réception."
+          "description": "Entrez les codes de réception des réponses téléchargées pour confirmer leur réception."
         },
         "maxEntries": {
           "title": "Seulement {{max}} réponses peuvent être confirmées à la fois",
-          "description": "Soumettez {{max}} codes de confirmation avant d'en ajouter d'autres."
+          "description": "Soumettez {{max}} codes de réception avant d'en ajouter d'autres."
         },
         "errorEntries": {
-          "title": "Certains code de confirmation n'ont pas été soumis",
-          "description": "Vérifiez que les codes de confirmation ci-dessous sont corrects et réessayez."
+          "title": "Certains code de réception n'ont pas été soumis",
+          "description": "Vérifiez que les codes de réception ci-dessous sont corrects et réessayez."
         },
         "invalidEntry": {
-          "title": "Le code de confirmation ne correspond pas au format requis",
-          "description": "Vérifiez que le format du code de confirmation est correct et réessayez."
+          "title": "Le code de réception ne correspond pas au format requis",
+          "description": "Vérifiez que le format du code de réception est correct et réessayez."
         },
         "unknown": {
           "title": "Désolé, il y a un problème avec le site",

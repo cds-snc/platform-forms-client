@@ -4,6 +4,7 @@ import { VaultSubmissionList, VaultStatus } from "@lib/types";
 export enum TableActions {
   UPDATE = "UPDATE",
   SORT = "SORT",
+  RESET = "RESET",
 }
 
 interface ReducerTableItemsState {
@@ -11,9 +12,10 @@ interface ReducerTableItemsState {
   checkedItems: Map<string, boolean>;
   sortedItems: VaultSubmissionList[];
   numberOfOverdueResponses: number;
+  overdueAfter: string | undefined;
 }
 
-interface ReducerTableItemsActions {
+export interface ReducerTableItemsActions {
   type: string;
   payload: {
     item?: {
@@ -23,6 +25,25 @@ interface ReducerTableItemsActions {
     vaultSubmissions?: VaultSubmissionList[];
   };
 }
+
+export const initialTableItemsState = (
+  vaultSubmissions: VaultSubmissionList[],
+  overdueAfter: string | undefined
+) => {
+  return {
+    checkedItems: new Map(),
+    statusItems: new Map(vaultSubmissions.map((submission) => [submission.name, false])),
+    sortedItems: sortVaultSubmission(vaultSubmissions),
+    numberOfOverdueResponses: vaultSubmissions.filter((submission) =>
+      isSubmissionOverdue({
+        status: submission.status,
+        createdAt: submission.createdAt,
+        overdueAfter,
+      })
+    ).length,
+    overdueAfter,
+  };
+};
 
 // Sort submissions by created date first but prioritize New submissions to the top of the list.
 // Note: This can probably be done more efficiently but the sorting behavior has not been fully
@@ -95,6 +116,7 @@ export const reducerTableItems = (
           newCheckedItems.set(name, true);
         }
       });
+
       return {
         ...state,
         checkedItems: newCheckedItems,
@@ -109,6 +131,13 @@ export const reducerTableItems = (
         ...state,
         sortedItems: sortVaultSubmission(payload.vaultSubmissions),
       };
+    }
+
+    case "RESET": {
+      if (!payload.vaultSubmissions) {
+        throw Error("Table sort dispatch missing vaultSubmissions");
+      }
+      return initialTableItemsState(payload.vaultSubmissions, state.overdueAfter);
     }
     default:
       throw Error("Unknown action: " + action.type);

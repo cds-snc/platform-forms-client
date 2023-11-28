@@ -1,9 +1,27 @@
 {
+  "tabs": {
+    "newResponses": {
+      "title": "New responses available",
+      "message1": "GC Forms stores responses temporarily.",
+      "message2": "Start by downloading responses and then sign off for their removal from GC Forms."
+    },
+    "downloadedResponses": {
+      "title": "Recently downloaded responses",
+      "message1": "GC Forms stores responses temporarily. You must sign off on the removal of responses from GC Forms within the time indicated.",
+      "message2": "Response files will continue to be available for an additional 30 days after sign off."
+    },
+    "confirmedResponses": {
+      "title": "Responses signed off for removal",
+      "message1": "GC Forms stores responses temporarily. These responses will be removed permanently after 30 days."
+    }
+  },
   "responses": {
+    "recentlyDownloaded": "Recently downloaded",
+    "deleted": "Signed off for removal",
     "changeSetup": "Change settings",
-    "confirmReceipt": "Confirm receipt",
+    "confirmReceipt": "Sign off on removal with receipt codes",
     "navLabel": "Responses",
-    "reportProblems": "Report a problem",
+    "reportProblems": "Report a problem with responses",
     "title": "Responses",
     "unauthenticated": {
       "createOne": "create one",
@@ -17,18 +35,40 @@
       "title": "Email response settings",
       "submitTo": "Submitted responses are sent to:",
       "subjectLine": "Subject line will appear as:"
+    },
+    "status": {
+      "new": "New",
+      "downloaded": "Downloaded",
+      "deleted": "Signed off for removal"
     }
   },
+  "downloadSuccess": {
+    "title": "Responses moved to Downloaded",
+    "body": "Next: sign off on the removal of responses from GC Forms."
+  },
+  "confirmSuccess": {
+    "title": "Responses moved to Signed off for removal",
+    "body": "Responses will be removed in 30 days."
+  },
   "downloadResponsesTable": {
+    "download": "Download",
+    "delete": "Delete",
     "header": {
-      "tableTitle": "Download responses table",
+      "tableTitle": "Responses table",
       "select": "Select",
+      "selectAll": "Select all",
+      "deselectAll": "Deselect all",
       "number": "Submission",
       "status": "Status",
       "downloadResponse": "Download window",
       "lastDownloadedBy": "Downloaded by",
       "confirmReceipt": "Confirmation of receipt",
-      "removal": "Data removal"
+      "removal": "Data removal",
+      "more": "More",
+      "download": "Download",
+      "nextStep": "Next step",
+      "date": "Date",
+      "warning": "Warning"
     },
     "status": {
       "downloaded": "Downloaded",
@@ -38,17 +78,25 @@
       "unconfirmed": "Unconfirmed",
       "problem": "Problem",
       "done": "Done",
-      "withinXDays": "Within {{daysLeft}} days",
+      "downloadWithinXDays": "Download within {{daysLeft}} days",
+      "confirmWithinXDays": "Sign off on removal within {{daysLeft}} days",
+      "removeWithinXDays": "Will be removed permanently in {{daysLeft}} days",
       "overdue": "Overdue",
       "wontRemove": "Cannot remove",
       "notSet": "Not set"
     },
     "card": {
-      "noResponses": "You have no responses",
-      "noResponsesToDownload": "There are no responses available to download."
+      "noNewResponses": "No new responses",
+      "noNewResponsesMessage": "Submitted form responses will appear here and be available in GC Forms for 45 days.",
+      "noDownloadedResponses": "No recently downloaded responses",
+      "noDownloadedResponsesMessage": "Downloaded responses will appear here until you sign off on their removal from GC Forms.",
+      "noDeletedResponses": "No responses for removal",
+      "noDeletedResponsesMessage": "Once you’ve downloaded and signed off on the removal of responses, they will be available here for 30 days."
     },
     "notifications": {
-      "downloadComplete": "Download complete",
+
+      "downloadComplete": "Responses moved to “Downloaded”",
+      "downloadCompleteNew": "Next: Sign off on the removal of responses from GC Forms",
       "downloadingXFiles": "Downloading {{fileCount}} files"
     },
     "errors": {
@@ -59,38 +107,67 @@
       "errorDownloadingFilesHeader": "Error downloading the selected files.",
       "errorDownloadingFiles": "Try again in a few minutes. If the problem persists, ",
       "errorDownloadingFilesLink": "contact Support",
+      "remainingResponses": "You have over {{max}} responses available.",
+      "remainingResponsesBody": "Showing 1-{{max}}. More will load as displayed responses are downloaded.",
       "overdueAlert": {
         "title": "Access to new responses is restricted until overdue responses are downloaded and confirmed",
         "description": "There are {{numberOfOverdueResponses}} unconfirmed responses that are {{escalatedAfter}} days old. Download and confirm all overdue responses to remove this restriction."
       }
     },
-    "downloadXSelectedResponses": "Download {{size}} selected responses",
-    "skipLink": "Skip the download table",
+    "downloadSelectedResponses": "Download selected",
+    "deleteSelectedResponses": "Delete selected",
+    "skipLink": "Skip the response table",
     "unknown": "Unknown"
   },
   "downloadResponsesModals": {
+    "downloadDialog": {
+      "title": "Download responses",
+      "chooseDownloadFormat": "Choose the format of response files",
+      "downloadFormatContext": "Along with response files, you’ll also get an Official record of responses. You’ll need to keep this receipt to verify all responses made it safely from GC Forms to your computer.",
+      "html": "Individual response files",
+      "htmlDescription": "Separate files for each form submission",
+      "csv": "CSV",
+      "csvDescription": "For lists, spreadsheets, or tables",
+      "json": "JSON",
+      "jsonDescription": "For API or data configuration",
+      "downloadAllAsZip": "Download all files as ZIP (compressed) file",
+      "mayNotBeAvailable": "May not be available in some departments and agencies",
+      "cancel": "Cancel",
+      "download": "Download"
+    },
+    "confirmDeleteNewDialog": {
+      "confirmAndDelete": "Confirm and delete new responses",
+      "responsesNotYetDownloaded": "Responses not yet downloaded",
+      "alertBody": "You’ve not downloaded the responses you’re about to delete. If you delete these responses, they will be removed permanently from GC Forms after 30 days.",
+      "deletePrompt": "To proceed with deleting non-downloaded responses enter the word “DELETE” below.",
+      "required": "Required",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "deleteConfirmationString": "DELETE"
+    },
     "confirmReceiptDialog": {
-      "title": "Confirm receipt of responses",
-      "findCode": "Find the confirmation code on the bottom of the downloaded form response. It looks like: c0c42c90-b816-49da-a69a-80bfd8ba15db.",
-      "copyCode": "Copy and paste up to {{max}} confirmation codes, one per line.",
-      "responsesAvailableFor": "After you confirm receipt, responses will be available for 30 days then automatically removed from our database.",
-      "confirmReceipt": "Confirm receipt",
+      "title": "Sign off on the removal of responses from GC Forms",
+      "contentHeading": "GC Forms requires verification that responses were downloaded successfully",
+      "contentBody": "Why? Because things can go wrong when digital files move between computers. GC Forms will not remove responses from the database without having verified that all files made it safely to your computer.",
+      "copyCode": "Paste receipt codes from the Official receipt and record of responses to confirm you have responses.",
+      "copyCodeNote": "Use the “Copy receipt codes” button at the top of the receipt file.",
+      "confirmReceipt": "Sign off on removal of responses",
       "errors": {
         "minEntries": {
           "title": "At least one response must be specified",
-          "description": "Enter confirmation codes from downloaded responses to confirm having received them."
+          "description": "Enter receipt codes from downloaded responses to confirm having received them."
         },
         "maxEntries": {
           "title": "Only {{max}} responses can be reported at a time.",
-          "description": "Submit {{max}} confirmation codes before adding more."
+          "description": "Submit {{max}} receipt codes before adding more."
         },
         "errorEntries": {
-          "title": "Some confirmation codes could not be submitted",
-          "description": "Check that the confirmation codes below are correct and try again."
+          "title": "Some receipt codes could not be submitted",
+          "description": "Check that the receipt codes below are correct and try again."
         },
         "invalidEntry": {
-          "title": "The confirmation code does not match the required format",
-          "description": "Check that the confirmation code format is correct and try again."
+          "title": "The receipt code does not match the required format",
+          "description": "Check that the receipt code format is correct and try again."
         },
         "unknown": {
           "title": "Sorry, there’s a problem with the site",

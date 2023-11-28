@@ -63,6 +63,22 @@
     "submissionID": "Identifiant de la soumission",
     "copyResponse": "Copier la ligne de réponse dans le presse-papiers"
   },
+  "responseAggregatedTemplate": {
+    "title": "Réponses au formulaire",
+    "officialReceipt": "Reçu et registre officiel des réponses",
+    "responsesDownloaded": "réponses téléchargées :",
+    "needToVerify": "Vous aurez besoin de ce reçu pour vérifier que toutes les réponses sont bien passées de Formulaires GC à votre ordinateur.",
+    "useTheCopy": "Utilisez le bouton « Copier les codes de réception » pour copier et coller tous les codes, autorisant ainsi la suppression des réponses de Formulaires GC. Cela nous permet de savoir que les réponses ont bien été transférées sur votre ordinateur.",
+    "copyCodes": {
+      "title":"Autoriser la suppression de réponses de Formulaires GC",
+      "description": "Une fois que vous aurez vérifié les réponses téléchargées et que vous êtes prêt à les supprimer de Formulaires GC, copiez et collez les codes de réception. Cela nous permet de savoir quand les réponses vous ont été transférées et d’enlever les données de notre système.",
+      "copyButton": "Copier les codes de réception"
+    },
+    "dataList": {
+      "title": "Réponses au formulaire : liste des réponses sélectionnées",
+      "formResponse": "Réponse au formulaire :"
+    }
+  },
   "dataClassification": {
     "officialRecord": "Ceci est un document officiel",
     "retainCopy": "Conservez cette copie conformément à votre politique de conservation.",

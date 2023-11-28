@@ -1,4 +1,4 @@
-FROM node:18 as build
+FROM node:18@sha256:a17842484dd30af97540e5416c9a62943c709583977ba41481d601ecffb7f31b as build
 ENV NODE_ENV=production
 
 COPY . /src
@@ -16,7 +16,7 @@ RUN yarn workspaces focus gcforms flag_initialization
 RUN yarn build
 RUN yarn workspaces focus gcforms flag_initialization --production
 
-FROM node:18 as final
+FROM node:18@sha256:a17842484dd30af97540e5416c9a62943c709583977ba41481d601ecffb7f31b as final
 LABEL maintainer="-"
 
 ENV NODE_ENV=production

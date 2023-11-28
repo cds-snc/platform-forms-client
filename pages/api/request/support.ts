@@ -9,7 +9,7 @@ const requestSupport = async (req: NextApiRequest, res: NextApiResponse) => {
     req.body;
 
   if (supportType === "contactus") {
-    if (!name || !email || !request || !description || !department || !branch || !jobTitle) {
+    if (!name || !email || !request || !description || !department) {
       return res.status(400).json({ error: "Malformed request" });
     }
   } else if (supportType === "support") {
