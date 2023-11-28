@@ -10181,7 +10181,7 @@ __metadata:
     markdown-to-txt: "npm:2.0.1"
     mmmagic: "npm:0.5.3"
     next: "npm:13.4.12"
-    next-auth: "npm:4.22.5"
+    next-auth: "npm:4.24.5"
     next-i18next: "npm:^15.0.0"
     next-router-mock: "npm:^0.9.1-beta.0"
     node-fetch: "npm:^3.3.2"
@@ -12990,9 +12990,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-auth@npm:4.22.5":
-  version: 4.22.5
-  resolution: "next-auth@npm:4.22.5"
+"next-auth@npm:4.24.5":
+  version: 4.24.5
+  resolution: "next-auth@npm:4.24.5"
   dependencies:
     "@babel/runtime": "npm:^7.20.13"
     "@panva/hkdf": "npm:^1.0.2"
@@ -13004,14 +13004,14 @@ __metadata:
     preact-render-to-string: "npm:^5.1.19"
     uuid: "npm:^8.3.2"
   peerDependencies:
-    next: ^12.2.5 || ^13
+    next: ^12.2.5 || ^13 || ^14
     nodemailer: ^6.6.5
     react: ^17.0.2 || ^18
     react-dom: ^17.0.2 || ^18
   peerDependenciesMeta:
     nodemailer:
       optional: true
-  checksum: 816821a21d797af12511c5d6fd866180d3c9711c7fceb0f5a0a7ca6fc7112b013973a5c645c1cf4602095b245e7bb5758a40cd0945f029d50806ea9c20d079bc
+  checksum: 3ba2cf707903af8a0571ba9e95389e8fb110308110589dfa07c7edcfc185f92b3046474991e18f63bdf990694cda7a583cd3b020f9b58243b2c0403f341cc21a
   languageName: node
   linkType: hard
 
