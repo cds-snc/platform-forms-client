@@ -21,7 +21,7 @@ import { useTemplateStore } from "@components/form-builder/store";
 import { LoggedOutTabName, LoggedOutTab } from "@components/form-builder/app/LoggedOutTab";
 import Head from "next/head";
 import { FormBuilderLayout } from "@components/globals/layouts/FormBuilderLayout";
-import { Button, ErrorPanel } from "@components/globals";
+import { Button } from "@components/globals";
 import { ClosedBanner } from "@components/form-builder/app/shared/ClosedBanner";
 import { getAppSetting } from "@lib/appSettings";
 import { DeleteIcon, FolderIcon, InboxIcon, WarningIcon } from "@components/form-builder/icons";
@@ -58,7 +58,6 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
   const [showConfirmReceiptDialog, setShowConfirmReceiptDialog] = useState(false);
   const [successAlertMessage, setShowSuccessAlert] = useState<false | string>(false);
-  const [isServerError, setIsServerError] = useState(false);
 
   const router = useRouter();
   const [, statusQuery = "new"] = router.query.params || [];
@@ -121,20 +120,6 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           subjectEn={deliveryOption.emailSubjectEn || ""}
           subjectFr={deliveryOption.emailSubjectFr || ""}
         />
-      </>
-    );
-  }
-
-  if (isServerError) {
-    return (
-      <>
-        <Head>
-          <title>{t("responses.title")}</title>
-        </Head>
-        <div className="mb-8 flex flex-wrap items-baseline">
-          <h1 className="mb-0 border-none tablet:mb-4 tablet:mr-8">{t("responses.title")}</h1>
-          <ErrorPanel supportLink={false}>{t("server-error", { ns: "common" })}</ErrorPanel>
-        </div>
       </>
     );
   }
@@ -347,7 +332,6 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
       <ReportDialog
         isShow={isShowReportProblemsDialog}
         setIsShow={setIsShowReportProblemsDialog}
-        setIsServerError={setIsServerError}
         apiUrl={`/api/id/${formId}/submission/report`}
         maxEntries={MAX_REPORT_COUNT}
       />
