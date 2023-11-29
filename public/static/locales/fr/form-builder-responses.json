@@ -176,27 +176,27 @@
     },
     "reportProblemsDialog": {
       "title": "Signaler un problème avec les réponses",
-      "findForm": "Trouvez les numéros de soumissions dans la liste des réponses qui ne se téléchargent pas ou ne s'ouvrent pas. Ces numéros ressemblent à : 31-12-XCRV.",
-      "enterFormNumbers": "Entrez jusqu'à {{max}} numéros de soumission, un par ligne.",
+      "findForm": "Trouvez les identifiants de soumission dans la liste des réponses qui ne se téléchargent pas ou ne s'ouvrent pas. Ces identifiants ressemblent à : 31-12-XCRV.",
+      "enterFormNumbers": "Entrez jusqu'à {{max}} identifiants de soumission, un par ligne.",
       "problemReported": "Une fois que vous aurez signalé le problème, nous vous contacterons pour vous aider à le résoudre.",
       "reportProblems": "Signaler le problème",
       "describeProblem": "Décrivez le problème",
       "errors": {
         "minEntries": {
           "title": "Au moins un formulaire doit être spécifié",
-          "description": "Entrez les numéros de soumission pour les réponses qui posent un problème."
+          "description": "Entrez les identifiants de soumission pour les réponses qui posent un problème."
         },
         "maxEntries": {
           "title": "Seulement {{max}} problèmes peuvent être signalés à la fois",
-          "description": "Soumettez {{max}} numéros de soumission avant d'en soumettre d'autres."
+          "description": "Soumettez {{max}} identifiants de soumission avant d'en soumettre d'autres."
         },
         "errorEntries": {
-          "title": "Certains numéros de soumission n'ont pas été soumis",
-          "description": "Vérifiez que les numéros de soumission ci-dessous sont corrects et réessayez."
+          "title": "Certains identifiants de soumission n'ont pas été soumis",
+          "description": "Vérifiez que les identifiants de soumission ci-dessous sont corrects et réessayez."
         },
         "invalidEntry": {
-          "title": "Le numéro de soumission ne correspond pas au format requis",
-          "description": "Vérifiez que le format du numéro de soumission est correct et réessayez."
+          "title": "L'identifiant de soumission ne correspond pas au format requis",
+          "description": "Vérifiez que le format de l'identifiant de soumission est correct et réessayez."
         },
         "unknown": {
           "title": "Désolé, il y a un problème avec le site",

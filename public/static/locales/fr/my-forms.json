@@ -46,7 +46,7 @@
     }
   },
   "responseTemplate": {
-    "responseNumber": "Numéro de réponse",
+    "responseNumber": "Identifiant de soumission",
     "submissionDate": "Date de soumission",
     "errorNoQuestionsAnswers": "Aucune question ou réponse n'a été trouvée.",
     "jumpTo": "Passer à :",
@@ -60,7 +60,7 @@
     "copyCodeClipboard": "Copier le code dans le presse-papiers",
     "copiedToCipboard": "Copié dans le presse-papiers",
     "errorrCopyingToClipboard": "Erreur lors de la copie dans le presse-papiers",
-    "submissionID": "Identifiant de la soumission",
+    "submissionID": "Identifiant de soumission",
     "copyResponse": "Copier la ligne de réponse dans le presse-papiers"
   },
   "responseAggregatedTemplate": {

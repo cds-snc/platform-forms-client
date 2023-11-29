@@ -46,7 +46,7 @@
     }
   },
   "responseTemplate": {
-    "responseNumber": "Response number",
+    "responseNumber": "Submission ID",
     "submissionDate": "Submission date",
     "errorNoQuestionsAnswers": "No questions and answers were found.",
     "jumpTo": "Jump to:",
