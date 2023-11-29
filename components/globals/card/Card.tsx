@@ -33,8 +33,8 @@ export const Card = (props: CardProps) => {
       );
     }
 
-    if (title) {
-      return <p className="gc-h2 text-[#748094]">{title}</p>;
+    if (content) {
+      return <p className="gc-h2 text-[#748094]">{content}</p>;
     }
 
     return <></>;
