@@ -54,7 +54,7 @@ export const LineItemEntries = ({
     const text = (e.target as HTMLInputElement).value.trim().replace(",", "").toLowerCase();
 
     // Reset any errors on an empty list
-    if (!text && (status === DialogStates.MAX_ERROR || status === DialogStates.FORMAT_ERROR)) {
+    if (!inputs && (status === DialogStates.MAX_ERROR || status === DialogStates.FORMAT_ERROR)) {
       setStatus(DialogStates.EDITING);
     }
 
@@ -114,7 +114,12 @@ export const LineItemEntries = ({
       className="box-border max-h-60 overflow-y-auto rounded-md border-2 border-black-default"
     >
       <ol data-testid="values">
-        <LineItems values={inputs} onRemove={onRemove} errorEntriesList={errorEntriesList} />
+        <LineItems
+          values={inputs}
+          onRemove={onRemove}
+          errorEntriesList={errorEntriesList}
+          validateInput={validateInput}
+        />
       </ol>
       <div className="grow p-4">
         <input
@@ -137,14 +142,8 @@ export const LineItemEntries = ({
               const cleanedText = text.trim().replace(",", "").replace("\t", "").toLowerCase();
               if (validateInput && !validateInput(cleanedText)) {
                 setStatus(DialogStates.FORMAT_ERROR);
-                logMessage.info(cleanedText);
-                return [];
-              } else {
-                if (validateInput && validateInput(cleanedText)) {
-                  return cleanedText;
-                }
               }
-              return [];
+              return cleanedText;
             });
             setInputs([...new Set([...inputs, ...cleanedText])]);
             e.preventDefault();
