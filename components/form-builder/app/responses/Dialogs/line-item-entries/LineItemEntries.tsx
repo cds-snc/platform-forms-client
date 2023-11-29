@@ -3,8 +3,6 @@ import { LineItems } from "./LineItems";
 import { scrollToBottom } from "@lib/clientHelpers";
 import { useTranslation } from "react-i18next";
 import { DialogStates } from "../DialogStates";
-import { isUUID } from "@lib/validation";
-import { logMessage } from "@lib/logger";
 
 // TODO: handle duplicate entries?
 // TODO: should "backspace" on an empty input set the next entry into "edit mode"?
