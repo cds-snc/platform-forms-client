@@ -11,7 +11,7 @@ import { FormRecord, VaultStatus, VaultSubmissionList } from "@lib/types";
 import { listAllSubmissions } from "@lib/vault";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { Card } from "@components/globals/card/Card";
+import { Card, HeadingLevel } from "@components/globals/card/Card";
 import { DownloadTable } from "@components/form-builder/app/responses/DownloadTable";
 import { ReportDialog } from "@components/form-builder/app/responses/Dialogs/ReportDialog";
 import { NagwareResult } from "@lib/types";
@@ -253,33 +253,36 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
 
             {vaultSubmissions.length <= 0 && statusQuery === "new" && (
               <>
-                <h1 className="visually-hidden">{t("tabs.newResponses.title")}</h1>
                 <Card
                   icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
                   title={t("downloadResponsesTable.card.noNewResponses")}
                   content={t("downloadResponsesTable.card.noNewResponsesMessage")}
+                  heading={HeadingLevel.H1}
+                  headingStyle="gc-h2 text-[#748094]"
                 />
               </>
             )}
 
             {vaultSubmissions.length <= 0 && statusQuery === "downloaded" && (
               <>
-                <h1 className="visually-hidden">{t("tabs.downloadedResponses.title")}</h1>
                 <Card
                   icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
                   title={t("downloadResponsesTable.card.noDownloadedResponses")}
                   content={t("downloadResponsesTable.card.noDownloadedResponsesMessage")}
+                  heading={HeadingLevel.H1}
+                  headingStyle="gc-h2 text-[#748094]"
                 />
               </>
             )}
 
             {vaultSubmissions.length <= 0 && statusQuery === "confirmed" && (
               <>
-                <h1 className="visually-hidden">{t("tabs.confirmedResponses.title")}</h1>
                 <Card
                   icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
                   title={t("downloadResponsesTable.card.noDeletedResponses")}
                   content={t("downloadResponsesTable.card.noDeletedResponsesMessage")}
+                  heading={HeadingLevel.H1}
+                  headingStyle="gc-h2 text-[#748094]"
                 />
               </>
             )}
