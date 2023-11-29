@@ -7,8 +7,8 @@
     },
     "downloadedResponses": {
       "title": "Recently downloaded responses",
-      "message1": "GC Forms stores responses temporarily. You must sign off on the removal of responses from GC Forms within the time indicated.",
-      "message2": "Response files will continue to be available for an additional 30 days after sign off."
+      "message1": "GC Forms stores responses temporarily.",
+      "message2": "You must sign off on the removal of responses from GC Forms within the time indicated."
     },
     "confirmedResponses": {
       "title": "Responses signed off for removal",
@@ -123,7 +123,7 @@
     "downloadDialog": {
       "title": "Download responses",
       "chooseDownloadFormat": "Choose the format of response files",
-      "downloadFormatContext": "Along with response files, you’ll also get an Official record of responses. You’ll need to keep this receipt to verify all responses made it safely from GC Forms to your computer.",
+      "downloadFormatContext": "You’ll also get an Official receipt and record of responses. You’ll need to keep this receipt to verify all responses made it safely from GC Forms to your computer.",
       "html": "Individual response files",
       "htmlDescription": "Separate files for each form submission",
       "csv": "CSV",
@@ -131,7 +131,6 @@
       "json": "JSON",
       "jsonDescription": "For API or data configuration",
       "downloadAllAsZip": "Download all files as ZIP (compressed) file",
-      "mayNotBeAvailable": "May not be available in some departments and agencies",
       "cancel": "Cancel",
       "download": "Download"
     },
@@ -178,27 +177,27 @@
     },
     "reportProblemsDialog": {
       "title": "Report a problem with responses",
-      "findForm": "Find the submission numbers in the list for any responses that will not download or open. They look like 31-12-XCRV.",
-      "enterFormNumbers": "Enter up-to {{max}} submission numbers, one per line.",
+      "findForm": "Find the submission ID in the list for responses that will not download or open. It looks like 31-12-XCRV.",
+      "enterFormNumbers": "Enter up-to {{max}} submission IDs, one per line.",
       "problemReported": "After you report the problem, we will contact you to help resolve the problem.",
       "reportProblems": "Report problem",
       "describeProblem": "Describe the problem",
       "errors": {
         "minEntries": {
           "title": "At least one submission must be specified",
-          "description": "Enter submission numbers for responses that have a problem."
+          "description": "Enter submission IDs for responses that have a problem."
         },
         "maxEntries": {
           "title": "Only {{max}} problems can be reported at a time",
-          "description": "Submit {{max}} submission numbers before adding more."
+          "description": "Submit {{max}} submission IDs before adding more."
         },
         "errorEntries": {
-          "title": "Some submission numbers were not submitted",
-          "description": "Check that the submission numbers below are correct and try again."
+          "title": "Some submission IDs were not submitted",
+          "description": "Check that the submission ID below are correct and try again."
         },
         "invalidEntry": {
-          "title": "The submission number does not match the required format",
-          "description": "Check that the submission number format is correct and try again."
+          "title": "The submission ID does not match the required format",
+          "description": "Check that the submission ID format is correct and try again."
         },
         "unknown": {
           "title": "Sorry, there’s a problem with the site",
