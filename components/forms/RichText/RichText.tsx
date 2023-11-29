@@ -13,7 +13,7 @@ interface RichTextProps {
 // able to be programmatically focusable
 const H1 = ({ children, ...props }: { children: React.ReactElement }) => {
   return (
-    <h1 {...props} tabIndex={-1}>
+    <h1 {...props} id="main-header" tabIndex={-1}>
       {children}
     </h1>
   );

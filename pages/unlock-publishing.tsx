@@ -130,7 +130,7 @@ export default function UnlockPublishing() {
                         </ol>
                       </Alert>
                     )}
-                    <h1>{t("unlockPublishing.title")}</h1>
+                    <h1 id="main-heading">{t("unlockPublishing.title")}</h1>
                     <p className="mb-14">{t("unlockPublishing.paragraph1")}</p>
                     <form id="unlock-publishing" method="POST" onSubmit={handleSubmit} noValidate>
                       <div className="focus-group">
