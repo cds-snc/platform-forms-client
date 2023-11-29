@@ -210,18 +210,20 @@
     "gcFormsTeamLink": "Government of Canada contacts",
     "gcFormsTeamPart1": "The GC Forms team provides services to people who work in the government. We cannot give general advice to the public about the forms that we host. For other enquiries, go to the",
     "gcFormsTeamPart2": "page to find the department or agency that can help.",
-    "ifYouExperience": "To get technical support, use the",
+    "ifYouExperience": "To get technical support, use the ",
+    "followUp": "Provide your contact information so we can follow up with you.",
 
     "needSupport": "Need help using GC Forms?",
     "request": {
       "option1": "Join the mailing list",
-      "option2": "Give feedback",
-      "option3": "Other",
-      "title": "Reason for reaching out"
+      "option2": "Give feedback on the product",
+      "option3": "Suggest a new feature",
+      "option4": "Other",
+      "title": "What would you like to do?"
     },
     "supportFormLink": "support form",
     "title": "Contact us",
-    "useThisForm": "Use this form to learn more about GC Forms and how it can work in your government department or agency.",
+    "useThisForm": "Use this form to sign up for our newsletter, provide feedback, or suggest a new feature for GC Forms.",
     "errors": {
       "submissionError": "Something went wrong. Please try again later."
     }
@@ -429,7 +431,7 @@
     "forOtherEnquiriesLink": "Government of Canada contacts",
     "forOtherEnquiriesPart1": "For other enquiries, go to the",
     "forOtherEnquiriesPart2": "page to find the department or agency that can help",
-    "theGCFormsTeam": "We cannot give general advice to the public about the forms that we host.",
+    "theGCFormsTeam": "Please note that the GC Forms team provides services to people who work in the government. We cannot give general advice to the public about the forms that we host.",
     "title": "Thank you for your submission",
     "weWillRespond": "We will respond to you within 2 business days."
   },
@@ -473,7 +475,7 @@
     "emailOption": "Receive responses by email",
     "saveButton": "Save changes",
     "savedSuccessMessage": "Your changes have been saved.",
-    "savedErrorMessage": "There was an error saving your changes. Please try again.",
+    "savedErrorMessage": "There was an error saving your changes. Try again later or contact Support.",
     "emailSubjectEn": {
       "title": "English response subject line",
       "hint": "When form responses are submitted in English."
@@ -528,7 +530,7 @@
     "link": "Get the link",
     "message": "People you share to will receive an email with an attached JSON file. They can view the JSON form file using GC Forms, no account required.",
     "messageSent": "The message has been sent.",
-    "messageError": "The message failed to send. Please retry sharing.",
+    "messageError": "The message failed to send. Try again later or contact Support.",
     "open": "Open",
     "seePreview": "See a preview of the email message",
     "someone": "Someone",
@@ -588,10 +590,10 @@
     "name": "Your name",
     "email": "Your email address",
     "gcFormsTeamLink": "Government of Canada contacts",
-    "gcFormsTeamPart1": "We cannot give general advice to the public about the forms that we host. For other enquiries, go to the",
+    "gcFormsTeamPart1": "Please note that the GC Forms team provides services to people who work in the government. We cannot give general advice to the public about the forms that we host. For other enquiries, go to the",
     "gcFormsTeamPart2": "page to find the department or agency that can help.",
-    "ifYouWouldLike": "To learn more about GC Forms, fill out the ",
-    "lookingForADemo": "Looking for a product demo?",
+    "ifYouWouldLike": "Fill out the ",
+    "lookingForADemo": "Looking to learn more about GC Forms?",
     "request": {
       "option1": "Ask a question",
       "option2": "Get technical support",
@@ -689,7 +691,7 @@
     "closed": "Closed",
     "saveButton": "Save changes",
     "savedSuccessMessage": "Your changes have been saved.",
-    "savedErrorMessage": "There was an error saving your changes. Please try again."
+    "savedErrorMessage": "There was an error saving your changes. Try again later or contact Support."
   },
   "errorSavingForm": {
     "title": "There was an error saving the form",

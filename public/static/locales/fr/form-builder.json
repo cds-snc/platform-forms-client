@@ -208,20 +208,21 @@
     "branch": "Direction ou secteur",
     "jobTitle": "Titre de poste",
     "gcFormsTeamLink": "Coordonnées du Gouvernement du Canada",
-    "gcFormsTeamPart1": "Nous ne pouvons pas conseiller le public au sujet des formulaires que nous hébergeons. Pour toute autre demande, allez à la page",
+    "gcFormsTeamPart1": "Veuillez noter que l'équipe Formulaires GC fournit des services aux personnes qui travaillent au sein du gouvernement. Nous ne pouvons pas conseiller le public au sujet des formulaires que nous hébergeons. Pour toute autre demande, allez à la page",
     "gcFormsTeamPart2": "pour trouver le ministère ou l'organisme qui peut vous aider.",
     "ifYouExperience": "Pour obtenir du soutien technique, veuillez remplir le ",
-
+    "followUp": "Fournissez vos coordonnées pour que nous puissions vous contacter.",
     "needSupport": "Besoin d'aide pour l'utilisation de Formulaires GC?",
     "request": {
       "option1": "S'inscrire à la liste de diffusion",
-      "option2": "Donner un avis",
-      "option3": "Autre",
-      "title": "Raison pour laquelle vous nous contactez"
+      "option2": "Donner un avis sur le produit",
+      "option3": "Suggérer une nouvelle fonctionnalité",
+      "option4": "Autre",
+      "title": "Que souhaitez-vous faire?"
     },
     "supportFormLink": "formulaire de soutien",
     "title": "Nous contacter",
-    "useThisForm": "Utilisez ce formulaire pour en apprendre davantage sur Formulaires GC et sur la façon dont cet outil peut fonctionner au sein de votre ministère ou organisme gouvernemental.",
+    "useThisForm": "Utilisez ce formulaire pour vous inscrire à notre infolettre, nous faire part de vos commentaires ou suggérer une nouvelle fonctionnalité pour Formulaires GC.",
     "errors": {
       "submissionError": "Il y a eu une erreur. Veuillez réessayer plus tard."
     }
@@ -342,7 +343,7 @@
   },
   "formIntroduction": "Introduction du formulaire ",
   "formInvalidProperty": "Invalide : {{property}}",
-  "formMissingProperty": "Disparues : {{property}}",
+  "formMissingProperty": "Il manque : {{property}}",
   "formSettings": "Paramétres du formulaire",
   "formSubmissionDisabledInPreview": "Testez votre formulaire et le fonctionnement de la collecte de réponses sous l’onglet Livraison des réponses.",
   "formTitle": "Titre du formulaire",
@@ -356,7 +357,7 @@
   "gcFormsTest": "Tester",
   "gcFormsTranslate": "Traductions",
   "ifYouAreExperiencingProblems": "Si vous rencontrez des problèmes avec votre formulaire publié, <a href=\"/fr/form-builder/support\" target=\"_blank\">veuillez contacter l’équipe de soutien.</a>.",
-  "incomplete": "Incomplète",
+  "incomplete": "Incomplet",
   "inputDescription": "Description",
   "insertLink": "Insérer un lien  ",
   "lastSaved": "Dernier enregistrement :",
@@ -429,7 +430,7 @@
     "forOtherEnquiriesLink": "Coordonnées du Gouvernement du Canada",
     "forOtherEnquiriesPart1": "Pour toute autre question, allez à ",
     "forOtherEnquiriesPart2": "pour trouver le ministère ou l'organisme qui peut vous aider",
-    "theGCFormsTeam": "Nous ne pouvons pas donner de conseils généraux au public sur les formulaires que nous hébergeons.",
+    "theGCFormsTeam": "Veuillez noter que l'équipe Formulaires GC fournit des services aux personnes qui travaillent au sein du gouvernement. Nous ne pouvons pas donner de conseils généraux au public sur les formulaires que nous hébergeons.",
     "title": "Merci pour votre soumission",
     "weWillRespond": "Nous vous répondrons dans les 2 prochains jours ouvrables."
   },
@@ -474,7 +475,7 @@
     "emailOption": "Recevoir les réponses par courriel",
     "saveButton": "Enregistrer les modifications",
     "savedSuccessMessage": "Vos modifications ont été enregistrées.",
-    "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Veuillez réessayer.",
+    "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Réessayez plus tard ou contacter l’équipe de soutien.",
     "emailSubjectEn": {
       "title": "Ligne d'objet en anglais",
       "hint": "Lorsque les réponses au formulaire sont soumises en anglais."
@@ -583,16 +584,16 @@
   "support": {
     "contactUs": "formulaire de contact",
     "description": {
-      "description": "Fournissez plus de contexte autour du problème que vous rencontrez.",
+      "description": "Fournissez plus d'informations ou de contexte.",
       "title": "Dites-nous en plus"
     },
     "name": "Votre nom",
     "email": "Votre adresse courriel",
     "gcFormsTeamLink": "Coordonnées du Gouvernement du Canada",
-    "gcFormsTeamPart1": "Nous ne pouvons pas donner de conseils généraux au public sur les formulaires que nous hébergeons. Pour toute autre question, allez à la page ",
+    "gcFormsTeamPart1": "Veuillez noter que l'équipe Formulaires GC fournit des services aux personnes qui travaillent au sein du gouvernement. Nous ne pouvons pas donner de conseils généraux au public sur les formulaires que nous hébergeons. Pour toute autre question, allez à la page ",
     "gcFormsTeamPart2": "pour trouver le ministère ou l'organisme qui peut vous aider.",
-    "ifYouWouldLike": "Pour en savoir plus sur Formulaires GC, veuillez remplir le ",
-    "lookingForADemo": "À la recherche d'une démo de produit?",
+    "ifYouWouldLike": "Veuillez remplir le ",
+    "lookingForADemo": "Vous cherchez à en savoir plus sur Formulaires GC?",
     "request": {
       "option1": "Poser une question",
       "option2": "Obtenir du soutien technique",
@@ -690,7 +691,7 @@
     "closed": "Fermé",
     "saveButton": "Enregistrer les modifications",
     "savedSuccessMessage": "Vos modifications ont été enregistrées.",
-    "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Veuillez réessayer."
+    "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Réessayez plus tard ou contacter l’équipe de soutien."
   },
   "errorSavingForm": {
     "title": "Une erreur s'est produite lors de l'enregistrement du formulaire",

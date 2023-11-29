@@ -82,14 +82,22 @@ export const DownloadDialog = ({
         const response = await axios({
           url,
           method: "POST",
-          responseType: "blob",
           data: {
             ids: ids.join(","),
           },
         });
 
-        const fileName = `${filePrefix}responses-reponses.zip`;
-        downloadFileFromBlob(new Blob([response.data]), fileName);
+        const zip = new JSZip();
+        zip.file("receipt-recu.html", response.data.receipt);
+
+        response.data.responses.forEach((response: { id: string; html: string }) => {
+          zip.file(`${response.id}.html`, response.html);
+        });
+
+        zip.generateAsync({ type: "nodebuffer", streamFiles: true }).then((buffer) => {
+          const fileName = `${filePrefix}responses-reponses.zip`;
+          downloadFileFromBlob(new Blob([buffer]), fileName);
+        });
 
         onSuccessfulDownload();
         handleClose();
