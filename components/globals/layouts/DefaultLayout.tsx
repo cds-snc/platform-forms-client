@@ -7,6 +7,7 @@ import { HeadMeta } from "./HeadMeta";
 import LanguageToggle from "../LanguageToggle";
 import LoginMenu from "@components/auth/LoginMenu";
 import { cn } from "@lib/utils";
+import { useSkipLink } from "@lib/hooks/useSkipLink";
 
 interface DefaultLayoutProps extends React.PropsWithChildren {
   showLanguageToggle?: boolean;
@@ -44,6 +45,8 @@ const DefaultLayout = ({
   showLogin,
   isSplashPage,
 }: DefaultLayoutProps) => {
+  useSkipLink();
+
   return (
     <div className="flex h-full flex-col">
       <HeadMeta />

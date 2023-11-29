@@ -5,7 +5,7 @@ const SkipLink = () => {
   const { t } = useTranslation("common");
   return (
     <div id="skip-link-container">
-      <a href="#content" id="skip-link">
+      <a href="#main-header" id="skip-link">
         {t("skip-link")}
       </a>
     </div>

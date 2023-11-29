@@ -8,6 +8,7 @@ import LoginMenu from "@components/auth/LoginMenu";
 import { SiteLogo } from "@formbuilder/icons";
 import { ToastContainer } from "@formbuilder/app/shared/Toast";
 import { HeadMeta } from "./HeadMeta";
+import { useSkipLink } from "@lib/hooks/useSkipLink";
 
 const SiteLink = () => {
   const { t } = useTranslation("common");
@@ -41,6 +42,8 @@ const UserNavLayout = ({
 }: UserNavLayoutProps) => {
   const { ability } = useAccessControl();
   const { t } = useTranslation("common");
+
+  useSkipLink();
 
   return (
     <div className="flex min-h-full flex-col bg-gray-soft">

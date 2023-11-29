@@ -7,6 +7,7 @@ import { Header } from "../Header";
 import { User } from "next-auth";
 import { HeadMeta } from "./HeadMeta";
 import Footer from "../Footer";
+import { useSkipLink } from "@lib/hooks/useSkipLink";
 
 export const FullWidthLayout = ({
   children,
@@ -19,6 +20,8 @@ export const FullWidthLayout = ({
 }) => {
   // This will check to see if a user is deactivated and redirect them to the account deactivated page
   useAccessControl(); // @TODO: this belongs somewhere else
+
+  useSkipLink();
 
   // Wait until the Template Store has fully hydrated before rendering the page
   return (

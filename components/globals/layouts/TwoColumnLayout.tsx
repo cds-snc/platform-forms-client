@@ -6,6 +6,7 @@ import { User } from "next-auth";
 import { HeadMeta } from "./HeadMeta";
 import { cn } from "@lib/utils";
 import Footer from "../Footer";
+import { useSkipLink } from "@lib/hooks/useSkipLink";
 export const TwoColumnLayout = ({
   children,
   leftColumnContent,
@@ -17,6 +18,8 @@ export const TwoColumnLayout = ({
   user?: User;
   context?: "admin" | "formBuilder" | "default";
 }) => {
+  useSkipLink();
+
   return (
     <>
       <HeadMeta />
