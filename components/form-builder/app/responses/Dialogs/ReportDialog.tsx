@@ -103,8 +103,7 @@ export const ReportDialog = ({
       })
       .catch((err) => {
         logMessage.error(err as Error);
-        handleClose();
-        setIsServerError(true);
+        setStatus(DialogStates.FAILED_ERROR);
       });
   };
 
