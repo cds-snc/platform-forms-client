@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
-// TODO: ideally each H1 would manually have the id="main-header" but that could take some work 
-// given many H1's are dynamic shown/hidden/updated. When refactoring consider doing that and 
+// TODO: ideally each H1 would manually have the id="main-header" but that could take some work
+// given many H1's are dynamic shown/hidden/updated. When refactoring consider doing that and
 // deleting this.
 
 /**
