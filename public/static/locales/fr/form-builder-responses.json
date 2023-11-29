@@ -122,7 +122,7 @@
     "downloadDialog": {
       "title": "Télécharger les réponses",
       "chooseDownloadFormat": "Choisissez le format des fichiers de réponses",
-      "downloadFormatContext": "En plus des fichiers de réponses, vous recevrez également un record officiel des réponses. Vous devrez conserver ce reçu pour vérifier que toutes les réponses sont bien passées de Formulaires GC à votre ordinateur.",
+      "downloadFormatContext": "Vous recevrez également un Reçu et registre officiel des réponses. Vous devrez conserver ce reçu pour vérifier que toutes les réponses sont bien passées de Formulaires GC à votre ordinateur.",
       "html": "Réponses individuelles en HTML",
       "htmlDescription": "Des fichiers distincts pour chaque soumission de formulaire",
       "csv": "CSV",

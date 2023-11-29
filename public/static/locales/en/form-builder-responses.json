@@ -123,7 +123,7 @@
     "downloadDialog": {
       "title": "Download responses",
       "chooseDownloadFormat": "Choose the format of response files",
-      "downloadFormatContext": "Along with response files, you’ll also get an Official record of responses. You’ll need to keep this receipt to verify all responses made it safely from GC Forms to your computer.",
+      "downloadFormatContext": "You’ll also get an Official receipt and record of responses. You’ll need to keep this receipt to verify all responses made it safely from GC Forms to your computer.",
       "html": "Individual response files",
       "htmlDescription": "Separate files for each form submission",
       "csv": "CSV",
