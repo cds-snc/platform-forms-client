@@ -241,7 +241,7 @@ export const DownloadDialog = ({
                     className="gc-input-checkbox__input"
                     onChange={() => setZipAllFiles(zipAllFiles === true ? false : true)}
                   />
-                  <label htmlFor="combined" className="ml-14 inline-block">
+                  <label htmlFor="zipped" className="ml-14 inline-block">
                     <span className="block font-semibold">
                       {t("downloadResponsesModals.downloadDialog.downloadAllAsZip")}
                     </span>
