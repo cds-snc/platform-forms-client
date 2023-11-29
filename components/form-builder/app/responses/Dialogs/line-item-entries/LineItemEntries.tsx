@@ -139,7 +139,7 @@ export const LineItemEntries = ({
             const pastedText = e.clipboardData.getData("Text");
             const pastedTextArray = pastedText.split(/\r?\n/);
             const cleanedText = pastedTextArray.flatMap((text) => {
-              const cleanedText = text.trim().replace(",", "").replace("\t", "").toLowerCase();
+              const cleanedText = text.trim().replace(",", "").replaceAll("\t", "").toLowerCase();
               if (validateInput && !validateInput(cleanedText)) {
                 setStatus(DialogStates.FORMAT_ERROR);
               }
