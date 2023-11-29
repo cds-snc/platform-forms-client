@@ -130,7 +130,6 @@
       "json": "JSON",
       "jsonDescription": "Pour API ou configuration des données",
       "downloadAllAsZip": "Télécharger tout sous forme de fichier ZIP (compressé)",
-      "mayNotBeAvailable": "Pourrait ne pas être disponible dans certains ministères ou organismes",
       "cancel": "Annuler",
       "download": "Télécharger"
     },
