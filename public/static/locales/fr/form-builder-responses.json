@@ -7,8 +7,8 @@
     },
     "downloadedResponses": {
       "title": "Réponses téléchargées récemment",
-      "message1": "Formulaires GC conserve temporairement les réponses. Vous devez approuver la suppression des réponses de Formulaires GC dans le délai indiqué.",
-      "message2": "Les fichiers de réponses resteront disponibles pendant 30 jours supplémentaires après l’autorisation."
+      "message1": "Formulaires GC conserve temporairement les réponses.",
+      "message2": "Vous devez approuver la suppression des réponses de Formulaires GC dans le délai indiqué."
     },
     "confirmedResponses": {
       "title": "Réponses autorisées pour suppression",

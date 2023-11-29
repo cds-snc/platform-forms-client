@@ -7,8 +7,8 @@
     },
     "downloadedResponses": {
       "title": "Recently downloaded responses",
-      "message1": "GC Forms stores responses temporarily. You must sign off on the removal of responses from GC Forms within the time indicated.",
-      "message2": "Response files will continue to be available for an additional 30 days after sign off."
+      "message1": "GC Forms stores responses temporarily.",
+      "message2": "You must sign off on the removal of responses from GC Forms within the time indicated."
     },
     "confirmedResponses": {
       "title": "Responses signed off for removal",
