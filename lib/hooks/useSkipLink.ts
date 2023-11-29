@@ -1,8 +1,11 @@
 import { useEffect } from "react";
 
 /**
- * Sets the first h1 in a page to allow being focussed from SkipLink. This alows a user to "skip"
- * to the main content - a win for AT users.
+ * This alows a user to "skip" to the main content - a win for AT users.
+ * 
+ * TODO: ideally each H1 would manually have the id="main-header" but that could take some work 
+ * given many H1's are dynamic shown/hidden/updated. When refactoring consider doing that and 
+ * deleting this.
  */
 export const useSkipLink = () => {
   useEffect(() => {
