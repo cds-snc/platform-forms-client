@@ -17,7 +17,7 @@
     "problemResponses": {
       "title": "Réponses signalées avec problèmes",
       "message1": "L’équipe de soutien de Formulaires GC a été informée.",
-      "message2": "Quelqu’un communiquera avec vous pour aider à résoudre le problème. [FR] Sign off on the removal of these problem responses once resolved."
+      "message2": "Quelqu’un communiquera avec vous pour aider à résoudre le problème. Approuvez la suppression des ces réponses une fois que les problèmes ont été résolus."
     }
   },
   "responses": {
