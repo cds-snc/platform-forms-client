@@ -42,8 +42,8 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
         }
         return answerText;
       }),
-      "Get receipt codes in the Official record of responses to sign off on the removal of responses from GC Forms\n" +
-        "Obtenez les codes de réception dans le registre officiel des réponses afin d'autoriser la suppression de réponses de Formulaires GC",
+      "Receipt codes are in the Official receipt and record of responses\n" +
+        "Les codes de réception sont dans le Reçu et registre officiel des réponses",
     ];
   });
 

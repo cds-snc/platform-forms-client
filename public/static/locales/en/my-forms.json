@@ -46,7 +46,7 @@
     }
   },
   "responseTemplate": {
-    "responseNumber": "Response number",
+    "responseNumber": "Submission ID",
     "submissionDate": "Submission date",
     "errorNoQuestionsAnswers": "No questions and answers were found.",
     "jumpTo": "Jump to:",
@@ -68,7 +68,7 @@
     "officialReceipt": "Official receipt and record of responses",
     "responsesDownloaded": "responses downloaded:",
     "needToVerify": "You’ll need this receipt to verify all responses made it safely from GC Forms to your computer.",
-    "useTheCopy": "Use the “Copy receipt codes” button to copy and paste all the codes, signing off on the removal of these responses from GC Forms. This lets us know that responses made it safely to your computer.",
+    "useTheCopy": "Use the “Copy receipt codes” button to sign off on the removal of responses from GC Forms.",
     "copyCodes": {
       "title":"Sign off on removal of responses from GC Forms",
       "description": "Once you've checked the downloaded responses, and are ready to remove these from GC Forms, copy and paste the receipt codes. This helps us know when responses have been transferred to you so we can remove the data from our system.",

@@ -46,7 +46,7 @@
     }
   },
   "responseTemplate": {
-    "responseNumber": "Numéro de réponse",
+    "responseNumber": "Identifiant de soumission",
     "submissionDate": "Date de soumission",
     "errorNoQuestionsAnswers": "Aucune question ou réponse n'a été trouvée.",
     "jumpTo": "Passer à :",
@@ -60,7 +60,7 @@
     "copyCodeClipboard": "Copier le code dans le presse-papiers",
     "copiedToCipboard": "Copié dans le presse-papiers",
     "errorrCopyingToClipboard": "Erreur lors de la copie dans le presse-papiers",
-    "submissionID": "Identifiant de la soumission",
+    "submissionID": "Identifiant de soumission",
     "copyResponse": "Copier la ligne de réponse dans le presse-papiers"
   },
   "responseAggregatedTemplate": {
@@ -68,9 +68,9 @@
     "officialReceipt": "Reçu et registre officiel des réponses",
     "responsesDownloaded": "réponses téléchargées :",
     "needToVerify": "Vous aurez besoin de ce reçu pour vérifier que toutes les réponses sont bien passées de Formulaires GC à votre ordinateur.",
-    "useTheCopy": "Utilisez le bouton « Copier les codes de réception » pour copier et coller tous les codes, autorisant ainsi la suppression des réponses de Formulaires GC. Cela nous permet de savoir que les réponses ont bien été transférées sur votre ordinateur.",
+    "useTheCopy": "Utilisez le bouton « Copier les codes de réception » pour approuver la suppression des réponses de Formulaires GC.",
     "copyCodes": {
-      "title":"Autoriser la suppression de réponses de Formulaires GC",
+      "title":"Approuver la suppression de réponses de Formulaires GC",
       "description": "Une fois que vous aurez vérifié les réponses téléchargées et que vous êtes prêt à les supprimer de Formulaires GC, copiez et collez les codes de réception. Cela nous permet de savoir quand les réponses vous ont été transférées et d’enlever les données de notre système.",
       "copyButton": "Copier les codes de réception"
     },

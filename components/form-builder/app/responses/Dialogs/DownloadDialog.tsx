@@ -253,9 +253,6 @@ export const DownloadDialog = ({
                     <span className="block font-semibold">
                       {t("downloadResponsesModals.downloadDialog.downloadAllAsZip")}
                     </span>
-                    <span className="">
-                      {t("downloadResponsesModals.downloadDialog.mayNotBeAvailable")}
-                    </span>
                   </label>
                 </div>
               </div>

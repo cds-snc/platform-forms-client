@@ -3,12 +3,12 @@
     "newResponses": {
       "title": "Nouvelles réponses disponibles",
       "message1": "Formulaires GC conserve temporairement les réponses.",
-      "message2": "Commencez par télécharger les réponses, puis autorisez leur suppression de Formulaires GC."
+      "message2": "Commencez par télécharger les réponses, puis approuvez leur suppression de Formulaires GC."
     },
     "downloadedResponses": {
       "title": "Réponses téléchargées récemment",
-      "message1": "Formulaires GC conserve temporairement les réponses. Vous devez approuver la suppression des réponses de Formulaires GC dans le délai indiqué.",
-      "message2": "Les fichiers de réponses resteront disponibles pendant 30 jours supplémentaires après l’autorisation."
+      "message1": "Formulaires GC conserve temporairement les réponses.",
+      "message2": "Vous devez approuver la suppression des réponses de Formulaires GC dans le délai indiqué."
     },
     "confirmedResponses": {
       "title": "Réponses approuvées pour suppression",
@@ -24,7 +24,7 @@
     "recentlyDownloaded": "Téléchargements récents",
     "deleted": "Pour suppression",
     "changeSetup": "Modifier les paramètres",
-    "confirmReceipt": "Autoriser la suppression avec les codes de réception",
+    "confirmReceipt": "Approuver la suppression avec les codes de réception",
     "navLabel": "Réponses",
     "reportProblems": "Signaler un problème avec les réponses",
     "title": "Réponses",
@@ -88,7 +88,7 @@
       "problem": "Problème",
       "done": "Complété",
       "downloadWithinXDays": "À téléchargez d'ici {{daysLeft}} jours",
-      "confirmWithinXDays": "À autoriser pour supression d’ici {{daysLeft}} jours",
+      "confirmWithinXDays": "À approuver pour supression d’ici {{daysLeft}} jours",
       "removeWithinXDays": "Sera supprimée de manière permanente dans {{daysLeft}} jours",
       "overdue": "En retard",
       "wontRemove": "Ne peut pas être supprimée",
@@ -106,7 +106,7 @@
     },
     "notifications": {
       "downloadComplete": "Réponses déplacées vers « Téléchargements »",
-      "downloadCompleteNew": "Prochaine étape : Autorisez la suppression des réponses de Formulaires GC",
+      "downloadCompleteNew": "Prochaine étape : Approuvez la suppression des réponses de Formulaires GC",
       "downloadingXFiles": "Téléchargement de {{fileCount}} fichiers"
     },
     "errors": {
@@ -133,7 +133,7 @@
     "downloadDialog": {
       "title": "Télécharger les réponses",
       "chooseDownloadFormat": "Choisissez le format des fichiers de réponses",
-      "downloadFormatContext": "En plus des fichiers de réponses, vous recevrez également un record officiel des réponses. Vous devrez conserver ce reçu pour vérifier que toutes les réponses sont bien passées de Formulaires GC à votre ordinateur.",
+      "downloadFormatContext": "Vous recevrez également un Reçu et registre officiel des réponses. Vous devrez conserver ce reçu pour vérifier que toutes les réponses sont bien passées de Formulaires GC à votre ordinateur.",
       "html": "Réponses individuelles en HTML",
       "htmlDescription": "Des fichiers distincts pour chaque soumission de formulaire",
       "csv": "CSV",
@@ -141,7 +141,6 @@
       "json": "JSON",
       "jsonDescription": "Pour API ou configuration des données",
       "downloadAllAsZip": "Télécharger tout sous forme de fichier ZIP (compressé)",
-      "mayNotBeAvailable": "Pourrait ne pas être disponible dans certains ministères ou organismes",
       "cancel": "Annuler",
       "download": "Télécharger"
     },
@@ -156,12 +155,12 @@
       "deleteConfirmationString": "SUPPRIMER"
     },
     "confirmReceiptDialog": {
-      "title": "Autoriser la suppression des réponses de Formulaires GC",
+      "title": "Approuver la suppression des réponses de Formulaires GC",
       "contentHeading": "Formulaires GC doit vérifier que les réponses ont bien été téléchargées.",
       "contentBody": "Pourquoi? Parce que les choses peuvent mal tourner lorsque des fichiers numériques passent d’un ordinateur à un autre. Formulaires GC ne supprimera pas de réponses de la base de données sans avoir vérifié que les fichiers ont été téléchargés en toute sécurité sur votre ordinateur.",
       "copyCode": "Collez les codes de réception du Reçu et registre officiel des réponses pour confirmer que vous avez bien reçu les réponses.",
       "copyCodeNote": "Utilisez le bouton « Copier les codes de réception » en haut du fichier de reçu HTML.",
-      "confirmReceipt": "Autoriser la suppression de réponses",
+      "confirmReceipt": "Approuver la suppression de réponses",
       "errors": {
         "minEntries": {
           "title": "Au moins une réponse doit être spécifiée",
@@ -188,27 +187,27 @@
     },
     "reportProblemsDialog": {
       "title": "Signaler un problème avec les réponses",
-      "findForm": "Trouvez les numéros de soumissions dans la liste des réponses qui ne se téléchargent pas ou ne s'ouvrent pas. Ces numéros ressemblent à : 31-12-XCRV.",
-      "enterFormNumbers": "Entrez jusqu'à {{max}} numéros de soumission, un par ligne.",
+      "findForm": "Trouvez les identifiants de soumission dans la liste des réponses qui ne se téléchargent pas ou ne s'ouvrent pas. Ces identifiants ressemblent à : 31-12-XCRV.",
+      "enterFormNumbers": "Entrez jusqu'à {{max}} identifiants de soumission, un par ligne.",
       "problemReported": "Une fois que vous aurez signalé le problème, nous vous contacterons pour vous aider à le résoudre.",
       "reportProblems": "Signaler le problème",
       "describeProblem": "Décrivez le problème",
       "errors": {
         "minEntries": {
           "title": "Au moins un formulaire doit être spécifié",
-          "description": "Entrez les numéros de soumission pour les réponses qui posent un problème."
+          "description": "Entrez les identifiants de soumission pour les réponses qui posent un problème."
         },
         "maxEntries": {
           "title": "Seulement {{max}} problèmes peuvent être signalés à la fois",
-          "description": "Soumettez {{max}} numéros de soumission avant d'en soumettre d'autres."
+          "description": "Soumettez {{max}} identifiants de soumission avant d'en soumettre d'autres."
         },
         "errorEntries": {
-          "title": "Certains numéros de soumission n'ont pas été soumis",
-          "description": "Vérifiez que les numéros de soumission ci-dessous sont corrects et réessayez."
+          "title": "Certains identifiants de soumission n'ont pas été soumis",
+          "description": "Vérifiez que les identifiants de soumission ci-dessous sont corrects et réessayez."
         },
         "invalidEntry": {
-          "title": "Le numéro de soumission ne correspond pas au format requis",
-          "description": "Vérifiez que le format du numéro de soumission est correct et réessayez."
+          "title": "L'identifiant de soumission ne correspond pas au format requis",
+          "description": "Vérifiez que le format de l'identifiant de soumission est correct et réessayez."
         },
         "unknown": {
           "title": "Désolé, il y a un problème avec le site",
