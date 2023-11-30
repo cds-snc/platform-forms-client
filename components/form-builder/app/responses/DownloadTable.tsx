@@ -215,7 +215,9 @@ export const DownloadTable = ({
                     {submission.name}
                   </th>
                   <td className="whitespace-nowrap px-4">
-                    {isStatus(statusQuery, VaultStatus.NEW) && <span>{createdDateTime}</span>}
+                    {isStatus(statusQuery, [VaultStatus.NEW, VaultStatus.PROBLEM]) && (
+                      <span>{createdDateTime}</span>
+                    )}
                     {isStatus(statusQuery, VaultStatus.DOWNLOADED) && (
                       <span>{downloadedDateTime}</span>
                     )}
@@ -244,6 +246,13 @@ export const DownloadTable = ({
                         vaultStatus={submission.status}
                         removalAt={submission.removedAt}
                       />
+                    )}
+                    {isStatus(statusQuery, VaultStatus.PROBLEM) && (
+                      <p className="text-red">
+                        <strong>{t("supportWillContact")}</strong>
+                        <br />
+                        {t("reportedAsProblem")}
+                      </p>
                     )}
                   </td>
                   <td className="whitespace-nowrap text-center">

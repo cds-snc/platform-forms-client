@@ -13,6 +13,11 @@
     "confirmedResponses": {
       "title": "Responses signed off for removal",
       "message1": "GC Forms stores responses temporarily. These responses will be removed permanently after 30 days."
+    },
+    "problemResponses": {
+      "title": "Responses reported with problems",
+      "message1": "The GC Forms Support Team has been notified.",
+      "message2": "Someone will reach out to help resolve the problem. Sign off on the removal of these problem responses once resolved."
     }
   },
   "responses": {
@@ -39,9 +44,13 @@
     "status": {
       "new": "New",
       "downloaded": "Downloaded",
-      "deleted": "Signed off for removal"
-    }
+      "deleted": "Signed off for removal",
+      "problem": "Problems"
+    },
+    "viewAllProblemResponses": "View all responses reported as problems"
   },
+  "supportWillContact": "Support will contact you",
+  "reportedAsProblem": "Response reported as a problem",
   "downloadSuccess": {
     "title": "Responses moved to Downloaded",
     "body": "Next: sign off on the removal of responses from GC Forms."
@@ -91,7 +100,9 @@
       "noDownloadedResponses": "No recently downloaded responses",
       "noDownloadedResponsesMessage": "Downloaded responses will appear here until you sign off on their removal from GC Forms.",
       "noDeletedResponses": "No responses for removal",
-      "noDeletedResponsesMessage": "Once you’ve downloaded and signed off on the removal of responses, they will be available here for 30 days."
+      "noDeletedResponsesMessage": "Once you’ve downloaded and signed off on the removal of responses, they will be available here for 30 days.",
+      "noProblemResponses": "No problem responses",
+      "noProblemResponsesMessage": "Problem responses will appear here until you sign off on their removal from GC Forms."
     },
     "notifications": {
 
@@ -213,5 +224,6 @@
     },
     "sending": "Sending...",
     "cancel": "Cancel"
-  }
+  },
+  "loading": "Loading..."
 }

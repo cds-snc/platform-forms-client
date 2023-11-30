@@ -21,7 +21,7 @@ import { useTemplateStore } from "@components/form-builder/store";
 import { LoggedOutTabName, LoggedOutTab } from "@components/form-builder/app/LoggedOutTab";
 import Head from "next/head";
 import { FormBuilderLayout } from "@components/globals/layouts/FormBuilderLayout";
-import { Button, ErrorPanel } from "@components/globals";
+import { Button } from "@components/globals";
 import { ClosedBanner } from "@components/form-builder/app/shared/ClosedBanner";
 import { getAppSetting } from "@lib/appSettings";
 import { DeleteIcon, FolderIcon, InboxIcon, WarningIcon } from "@components/form-builder/icons";
@@ -58,7 +58,6 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
   const [showConfirmReceiptDialog, setShowConfirmReceiptDialog] = useState(false);
   const [successAlertMessage, setShowSuccessAlert] = useState<false | string>(false);
-  const [isServerError, setIsServerError] = useState(false);
 
   const router = useRouter();
   const [, statusQuery = "new"] = router.query.params || [];
@@ -121,20 +120,6 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           subjectEn={deliveryOption.emailSubjectEn || ""}
           subjectFr={deliveryOption.emailSubjectFr || ""}
         />
-      </>
-    );
-  }
-
-  if (isServerError) {
-    return (
-      <>
-        <Head>
-          <title>{t("responses.title")}</title>
-        </Head>
-        <div className="mb-8 flex flex-wrap items-baseline">
-          <h1 className="mb-0 border-none tablet:mb-4 tablet:mr-8">{t("responses.title")}</h1>
-          <ErrorPanel supportLink={false}>{t("server-error", { ns: "common" })}</ErrorPanel>
-        </div>
       </>
     );
   }
@@ -222,6 +207,21 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
               </div>
             </>
           )}
+          {isStatus(statusQuery, VaultStatus.PROBLEM) && (
+            <>
+              <h1>{t("tabs.problemResponses.title")}</h1>
+              <div className="mb-4">
+                <p className="mb-4">
+                  <strong>{t("tabs.problemResponses.message1")}</strong>
+                  <br />
+                  {t("tabs.problemResponses.message2")}
+                </p>
+                <Button onClick={() => setShowConfirmReceiptDialog(true)} theme="secondary">
+                  {t("responses.confirmReceipt")}
+                </Button>
+              </div>
+            </>
+          )}
         </>
       )}
 
@@ -286,6 +286,17 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
                 />
               </>
             )}
+
+            {vaultSubmissions.length <= 0 && statusQuery === "problem" && (
+              <>
+                <h1 className="visually-hidden">{t("tabs.problemResponses.title")}</h1>
+                <Card
+                  icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+                  title={t("downloadResponsesTable.card.noProblemResponses")}
+                  content={t("downloadResponsesTable.card.noProblemResponsesMessage")}
+                />
+              </>
+            )}
           </div>
           <div className="mt-8">
             <Link
@@ -296,6 +307,13 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
             >
               <WarningIcon className="mr-2 inline-block" />
               {t("responses.reportProblems")}
+            </Link>
+
+            <Link
+              href={`/form-builder/responses/${formId}/problem`}
+              className="ml-12 text-black visited:text-black"
+            >
+              {t("responses.viewAllProblemResponses")}
             </Link>
           </div>
         </>
@@ -318,7 +336,6 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
       <ReportDialog
         isShow={isShowReportProblemsDialog}
         setIsShow={setIsShowReportProblemsDialog}
-        setIsServerError={setIsServerError}
         apiUrl={`/api/id/${formId}/submission/report`}
         maxEntries={MAX_REPORT_COUNT}
       />

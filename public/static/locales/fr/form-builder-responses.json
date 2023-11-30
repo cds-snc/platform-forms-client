@@ -13,6 +13,11 @@
     "confirmedResponses": {
       "title": "Réponses approuvées pour suppression",
       "message1": "Formulaires GC conserve temporairement les réponses. Ces réponses seront définitivement supprimées après 30 jours."
+    },
+    "problemResponses": {
+      "title": "Réponses signalées avec problèmes",
+      "message1": "L’équipe de soutien de Formulaires GC a été informée.",
+      "message2": "Quelqu’un communiquera avec vous pour aider à résoudre le problème. Approuvez la suppression des ces réponses une fois que les problèmes ont été résolus."
     }
   },
   "responses": {
@@ -39,9 +44,13 @@
     "status": {
       "new": "Nouveautés",
       "downloaded": "Téléchargements",
-      "deleted": "Pour suppression"
-    }
+      "deleted": "Pour suppression",
+      "problem": "Problème"
+    },
+    "viewAllProblemResponses": "Afficher toutes les réponses signalées avec problèmes"
   },
+  "supportWillContact": "L’équipe de soutien vous contactera",
+  "reportedAsProblem": "Réponse signalée avec problème",
   "downloadSuccess": {
     "title": "Réponses déplacées vers Téléchargements",
     "body": "Prochaine étape : approuvez la suppression des réponses de Formulaires GC."
@@ -91,7 +100,9 @@
       "noDownloadedResponses": "Aucune réponse téléchargée récemment",
       "noDownloadedResponsesMessage": "Les réponses téléchargées apparaîtront ici jusqu'à ce que vous approuviez leur suppression de Formulaires GC.",
       "noDeletedResponses": "Aucune réponse à supprimer",
-      "noDeletedResponsesMessage": "Une fois que vous aurez téléchargé et approuvé la suppression des réponses, celles-ci seront disponibles ici pendant 30 jours."
+      "noDeletedResponsesMessage": "Une fois que vous aurez téléchargé et approuvé la suppression des réponses, celles-ci seront disponibles ici pendant 30 jours.",
+      "noProblemResponses": "Aucune réponse signalée avec problème",
+      "noProblemResponsesMessage": "Les réponses signalées avec problèmes apparaîtront ici jusqu'à ce que vous approuviez leur suppression de Formulaires GC."
     },
     "notifications": {
       "downloadComplete": "Réponses déplacées vers « Téléchargements »",
@@ -212,5 +223,6 @@
     },
     "sending": "Envoi en cours...",
     "cancel": "Annuler"
-  }
+  },
+  "loading": "Chargement..."
 }

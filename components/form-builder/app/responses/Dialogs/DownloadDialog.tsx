@@ -7,6 +7,7 @@ import axios from "axios";
 import { DownloadFormat } from "@lib/responseDownloadFormats/types";
 import JSZip from "jszip";
 import { getDate, slugify } from "@lib/clientHelpers";
+import { SpinnerIcon } from "@components/form-builder/icons/SpinnerIcon";
 
 export const DownloadDialog = ({
   checkedItems,
@@ -33,6 +34,7 @@ export const DownloadDialog = ({
   const defaultSelectedFormat = DownloadFormat.HTML_ZIPPED;
   const [selectedFormat, setSelectedFormat] = React.useState<DownloadFormat>(defaultSelectedFormat);
   const [zipAllFiles, setZipAllFiles] = React.useState<boolean>(true);
+  const [isDownloading, setIsDownloading] = React.useState<boolean>(false);
 
   useEffect(() => {
     if (selectedFormat === DownloadFormat.HTML_ZIPPED) {
@@ -45,6 +47,14 @@ export const DownloadDialog = ({
     setZipAllFiles(true);
     setIsDialogVisible(false);
     dialogRef.current?.close();
+  };
+
+  const handleDownloadComplete = () => {
+    setSelectedFormat(undefined);
+    setZipAllFiles(true);
+    setIsDownloading(false);
+    onSuccessfulDownload();
+    handleClose();
   };
 
   const downloadFileFromBlob = (data: Blob, fileName: string) => {
@@ -62,6 +72,7 @@ export const DownloadDialog = ({
   const availableFormats = [DownloadFormat.CSV, DownloadFormat.JSON, DownloadFormat.HTML_ZIPPED];
 
   const handleDownload = async () => {
+    setIsDownloading(true);
     if (!selectedFormat || !availableFormats.includes(selectedFormat)) {
       setDownloadError(true);
       return;
@@ -98,10 +109,9 @@ export const DownloadDialog = ({
         zip.generateAsync({ type: "nodebuffer", streamFiles: true }).then((buffer) => {
           const fileName = `${filePrefix}responses-reponses.zip`;
           downloadFileFromBlob(new Blob([buffer]), fileName);
-        });
 
-        onSuccessfulDownload();
-        handleClose();
+          handleDownloadComplete();
+        });
       }
 
       if (selectedFormat === DownloadFormat.CSV) {
@@ -121,6 +131,8 @@ export const DownloadDialog = ({
           file.generateAsync({ type: "nodebuffer", streamFiles: true }).then((buffer) => {
             const fileName = `${filePrefix}responses-reponses.zip`;
             downloadFileFromBlob(new Blob([buffer]), fileName);
+
+            handleDownloadComplete();
           });
         } else {
           downloadFileFromBlob(new Blob([response.data.receipt]), `${filePrefix}receipt-recu.html`);
@@ -128,9 +140,9 @@ export const DownloadDialog = ({
             new Blob([response.data.responses]),
             `${filePrefix}responses-reponses.csv`
           );
+
+          handleDownloadComplete();
         }
-        onSuccessfulDownload();
-        handleClose();
       }
 
       if (selectedFormat === DownloadFormat.JSON) {
@@ -149,6 +161,8 @@ export const DownloadDialog = ({
           file.generateAsync({ type: "nodebuffer", streamFiles: true }).then((buffer) => {
             const fileName = `${filePrefix}responses-reponses.zip`;
             downloadFileFromBlob(new Blob([buffer]), fileName);
+
+            handleDownloadComplete();
           });
         } else {
           downloadFileFromBlob(
@@ -156,13 +170,14 @@ export const DownloadDialog = ({
             `${filePrefix}responses-reponses.json`
           );
           downloadFileFromBlob(new Blob([response.data.receipt]), `${filePrefix}receipt-recu.html`);
+
+          handleDownloadComplete();
         }
-        onSuccessfulDownload();
-        handleClose();
       }
     } catch (err) {
       logMessage.error(err as Error);
       setDownloadError(true);
+      handleClose();
     }
   };
 
@@ -263,12 +278,22 @@ export const DownloadDialog = ({
             </div>
 
             <div className="mt-8 flex gap-4">
-              <Button theme="secondary" onClick={handleClose}>
+              <Button theme="secondary" onClick={handleClose} disabled={isDownloading}>
                 {t("downloadResponsesModals.downloadDialog.cancel")}
               </Button>
-              <Button theme="primary" onClick={handleDownload} disabled={!selectedFormat}>
+              <Button
+                theme="primary"
+                onClick={handleDownload}
+                disabled={!selectedFormat || isDownloading}
+              >
                 {t("downloadResponsesModals.downloadDialog.download")}
               </Button>
+              {isDownloading && (
+                <div role="status" className="mt-2">
+                  <SpinnerIcon className="h-8 w-8 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600" />
+                  <span className="sr-only">{t("loading")}</span>
+                </div>
+              )}
             </div>
           </div>
         </Dialog>
