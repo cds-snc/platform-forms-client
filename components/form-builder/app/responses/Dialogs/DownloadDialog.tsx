@@ -177,7 +177,11 @@ export const DownloadDialog = ({
             <h3 className="mb-4 block font-semibold">
               {t("downloadResponsesModals.downloadDialog.chooseDownloadFormat")}
             </h3>
-            <p>{t("downloadResponsesModals.downloadDialog.downloadFormatContext")}</p>
+            <p>{t("downloadResponsesModals.downloadDialog.downloadFormatContext1")}</p>
+            <p className="italic">
+              {t("downloadResponsesModals.downloadDialog.downloadFormatContext2")}
+            </p>
+            <p>{t("downloadResponsesModals.downloadDialog.downloadFormatContext3")}</p>
             <div className="mt-4 flex flex-col gap-6">
               <div>
                 <input
