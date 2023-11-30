@@ -227,5 +227,6 @@
     },
     "sending": "Sending...",
     "cancel": "Cancel"
-  }
+  },
+  "loading": "Loading..."
 }
