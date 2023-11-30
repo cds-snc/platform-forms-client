@@ -29,7 +29,7 @@ export const DownloadDialog = ({
   responseDownloadLimit: number;
 }) => {
   const dialogRef = useDialogRef();
-  const { t } = useTranslation("form-builder-responses");
+  const { t, i18n } = useTranslation("form-builder-responses");
   const [selectedFormat, setSelectedFormat] = React.useState<DownloadFormat>();
   const [zipAllFiles, setZipAllFiles] = React.useState<boolean>(true);
 
@@ -66,7 +66,7 @@ export const DownloadDialog = ({
       return;
     }
 
-    const url = `/api/id/${formId}/submission/download?format=${selectedFormat}`;
+    const url = `/api/id/${formId}/submission/download?format=${selectedFormat}&lang=${i18n.language}`;
 
     if (!checkedItems.size || checkedItems.size > responseDownloadLimit) {
       setDownloadError(true);
