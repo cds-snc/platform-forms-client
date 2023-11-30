@@ -121,8 +121,8 @@
       "remainingResponses": "Vous avez plus de {{max}} nouvelles réponses disponibles.",
       "remainingResponsesBody": "Affichage de 1 à {{max}}. D'autres seront ajoutées au fur et à mesure que celles-ci seront téléchargées.",
       "overdueAlert": {
-        "title": "L'accès aux nouvelles réponses est restreint jusqu'à ce que les réponses en retard soient téléchargées et approuvées pour suppression",
-        "description": "Il y a {{numberOfOverdueResponses}} réponses qui datent de {{escalatedAfter}} jours. Téléchargez et approuvez la suppression de toutes les réponses en retard pour enlever cette restriction."
+        "title": "L'accès aux nouvelles réponses est restreint jusqu'à ce que les réponses en retard soient téléchargées et confirmées",
+        "description": "Il y a {{numberOfOverdueResponses}} réponses qui datent de {{escalatedAfter}} jours. Téléchargez et confirmez toutes les réponses en retard pour enlever cette restriction."
       }
     },
     "downloadSelectedResponses": "Télécharger les réponses sélectionnées",
