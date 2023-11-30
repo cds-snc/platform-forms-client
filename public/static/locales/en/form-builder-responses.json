@@ -12,7 +12,8 @@
     },
     "confirmedResponses": {
       "title": "Responses signed off for removal",
-      "message1": "GC Forms stores responses temporarily. These responses will be removed permanently after 30 days."
+      "message1": "GC Forms stores responses temporarily.",
+      "message2": "These responses will be removed permanently after 30 days."
     }
   },
   "responses": {

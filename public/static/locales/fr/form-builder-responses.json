@@ -12,7 +12,8 @@
     },
     "confirmedResponses": {
       "title": "Réponses approuvées pour suppression",
-      "message1": "Formulaires GC conserve temporairement les réponses. Ces réponses seront définitivement supprimées après 30 jours."
+      "message1": "Formulaires GC conserve temporairement les réponses.",
+      "message2": "Ces réponses seront définitivement supprimées après 30 jours."
     }
   },
   "responses": {
