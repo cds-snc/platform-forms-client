@@ -30,9 +30,8 @@ export const DownloadDialog = ({
 }) => {
   const dialogRef = useDialogRef();
   const { t } = useTranslation("form-builder-responses");
-  const [selectedFormat, setSelectedFormat] = React.useState<DownloadFormat>(
-    DownloadFormat.HTML_ZIPPED
-  );
+  const defaultSelectedFormat = DownloadFormat.HTML_ZIPPED;
+  const [selectedFormat, setSelectedFormat] = React.useState<DownloadFormat>(defaultSelectedFormat);
   const [zipAllFiles, setZipAllFiles] = React.useState<boolean>(true);
 
   useEffect(() => {
@@ -42,7 +41,7 @@ export const DownloadDialog = ({
   }, [selectedFormat]);
 
   const handleClose = () => {
-    setSelectedFormat(undefined);
+    setSelectedFormat(defaultSelectedFormat);
     setZipAllFiles(true);
     setIsDialogVisible(false);
     dialogRef.current?.close();
