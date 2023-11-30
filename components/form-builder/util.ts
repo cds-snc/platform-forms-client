@@ -183,6 +183,35 @@ export const formatDateTimeLong = (updatedAt: number | undefined, locale = "en-C
   return date.toLocaleDateString(locale, options);
 };
 
+// Note: GMT = UTC as far as date-time is concerned
+export const formatDateTimeGMT = (updatedAt: number | undefined) => {
+  function formatHours(hours: number) {
+    return ((hours % 12 || 12) < 10 ? "0" : "") + (hours % 12 || 12);
+  }
+
+  function formatAmOrPm(hours: number) {
+    return hours < 12 ? "AM" : "PM";
+  }
+
+  function maybePrefixZero(timeNumber: number | string) {
+    return String(timeNumber).length < 2 ? `0${timeNumber}` : timeNumber;
+  }
+
+  const date = new Date(updatedAt || 0);
+
+  const year = date.getUTCFullYear();
+  const month = maybePrefixZero(date.getUTCMonth());
+  const day = maybePrefixZero(date.getUTCDate());
+  const hour = maybePrefixZero(formatHours(date.getUTCHours()));
+  const minute = maybePrefixZero(date.getUTCMinutes());
+  const amOrPm = formatAmOrPm(date.getUTCHours());
+
+  const yearMonthDay = `${year}-${month}-${day}`;
+  const time = `${hour}:${minute} ${amOrPm}`;
+
+  return [yearMonthDay, time, "GMT"];
+};
+
 export const autoCompleteFields = [
   "name",
   "given-name",
