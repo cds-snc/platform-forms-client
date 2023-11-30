@@ -3,7 +3,6 @@ import { LineItems } from "./LineItems";
 import { scrollToBottom } from "@lib/clientHelpers";
 import { useTranslation } from "react-i18next";
 import { DialogStates } from "../DialogStates";
-import { isUUID } from "@lib/validation";
 
 // TODO: handle duplicate entries?
 // TODO: should "backspace" on an empty input set the next entry into "edit mode"?
@@ -53,7 +52,7 @@ export const LineItemEntries = ({
     const text = (e.target as HTMLInputElement).value.trim().replace(",", "").toLowerCase();
 
     // Reset any errors on an empty list
-    if (!text && (status === DialogStates.MAX_ERROR || status === DialogStates.FORMAT_ERROR)) {
+    if (!inputs && (status === DialogStates.MAX_ERROR || status === DialogStates.FORMAT_ERROR)) {
       setStatus(DialogStates.EDITING);
     }
 
@@ -113,7 +112,12 @@ export const LineItemEntries = ({
       className="box-border max-h-60 overflow-y-auto rounded-md border-2 border-black-default"
     >
       <ol data-testid="values">
-        <LineItems values={inputs} onRemove={onRemove} errorEntriesList={errorEntriesList} />
+        <LineItems
+          values={inputs}
+          onRemove={onRemove}
+          errorEntriesList={errorEntriesList}
+          validateInput={validateInput}
+        />
       </ol>
       <div className="grow p-4">
         <input
@@ -133,10 +137,11 @@ export const LineItemEntries = ({
             const pastedText = e.clipboardData.getData("Text");
             const pastedTextArray = pastedText.split(/\r?\n/);
             const cleanedText = pastedTextArray.flatMap((text) => {
-              if (isUUID(text.trim())) {
-                return text.trim().replace(",", "").toLowerCase();
+              const cleanedText = text.trim().replace(",", "").replaceAll("\t", "").toLowerCase();
+              if (validateInput && !validateInput(cleanedText)) {
+                setStatus(DialogStates.FORMAT_ERROR);
               }
-              return [];
+              return cleanedText;
             });
             setInputs([...new Set([...inputs, ...cleanedText])]);
             e.preventDefault();

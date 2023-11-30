@@ -21,14 +21,12 @@ export const ReportDialog = ({
   apiUrl,
   inputRegex = isFormId,
   maxEntries = 20,
-  setIsServerError,
 }: {
   isShow: boolean;
   setIsShow: React.Dispatch<React.SetStateAction<boolean>>;
   apiUrl: string;
   inputRegex?: (field: string) => boolean;
   maxEntries?: number;
-  setIsServerError: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const { t, i18n } = useTranslation(["form-builder-responses", "common"]);
   const router = useRouter();
@@ -103,8 +101,7 @@ export const ReportDialog = ({
       })
       .catch((err) => {
         logMessage.error(err as Error);
-        handleClose();
-        setIsServerError(true);
+        setStatus(DialogStates.FAILED_ERROR);
       });
   };
 
