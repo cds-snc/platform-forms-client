@@ -53,7 +53,7 @@
   "reportedAsProblem": "Réponse signalée avec problème",
   "downloadSuccess": {
     "title": "Réponses déplacées vers Téléchargements",
-    "body": "Prochaine étape : autorisez la suppression des réponses de Formulaires GC."
+    "body": "Prochaine étape : approuvez la suppression des réponses de Formulaires GC."
   },
   "confirmSuccess": {
     "title": "Réponses déplacées vers Pour suppression",
