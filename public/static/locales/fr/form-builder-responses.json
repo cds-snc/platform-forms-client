@@ -11,7 +11,7 @@
       "message2": "Les fichiers de réponses resteront disponibles pendant 30 jours supplémentaires après l’autorisation."
     },
     "confirmedResponses": {
-      "title": "Réponses autorisées pour suppression",
+      "title": "Réponses approuvées pour suppression",
       "message1": "Formulaires GC conserve temporairement les réponses. Ces réponses seront définitivement supprimées après 30 jours."
     },
     "problemResponses": {
