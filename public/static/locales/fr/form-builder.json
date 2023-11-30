@@ -449,8 +449,9 @@
     "title": "Sélectionnez une option de livraison des réponses",
     "vaultOption": "Télécharger les réponses de Formulaires GC",
     "vaultOptionHint": {
-      "text1": " Les réponses reçues apparaîtront sur",
-      "text2": "la page Réponses"
+      "text1": " Les réponses soumises apparaîtront sur",
+      "text2": "la page Réponses",
+      "text3": "Formulaires GC conserve les données temporairement. Les réponses doivent être récupérées dans un délai de 14 jours."
     },
     "emailOption": "Les réponses soumises seront envoyées par courriel à cette boîte de réception.",
     "saveButton": "Enregistrer les modifications",
