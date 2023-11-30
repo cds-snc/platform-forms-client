@@ -162,6 +162,7 @@ export const DownloadDialog = ({
     } catch (err) {
       logMessage.error(err as Error);
       setDownloadError(true);
+      handleClose();
     }
   };
 
