@@ -134,7 +134,7 @@
     "downloadDialog": {
       "title": "Télécharger les réponses",
       "chooseDownloadFormat": "Choisissez le format des fichiers de réponses",
-      "downloadFormatContext": "Vous recevrez également un Reçu et registre officiel des réponses. Vous devrez conserver ce reçu pour vérifier que toutes les réponses sont bien passées de Formulaires GC à votre ordinateur.",
+      "downloadFormatContext": "Vous recevrez également un <i>Reçu et registre officiel des réponses</i>. Vous devrez conserver ce reçu pour vérifier que toutes les réponses sont bien passées de Formulaires GC à votre ordinateur.",
       "html": "Réponses individuelles en HTML",
       "htmlDescription": "Des fichiers distincts pour chaque soumission de formulaire",
       "csv": "CSV",
@@ -159,7 +159,7 @@
       "title": "Approuver la suppression des réponses de Formulaires GC",
       "contentHeading": "Formulaires GC doit vérifier que les réponses ont bien été téléchargées.",
       "contentBody": "Pourquoi? Parce que les choses peuvent mal tourner lorsque des fichiers numériques passent d’un ordinateur à un autre. Formulaires GC ne supprimera pas de réponses de la base de données sans avoir vérifié que les fichiers ont été téléchargés en toute sécurité sur votre ordinateur.",
-      "copyCode": "Collez les codes de réception du Reçu et registre officiel des réponses pour confirmer que vous avez bien reçu les réponses.",
+      "copyCode": "Collez les codes de réception du <i>Reçu et registre officiel des réponses</i> pour confirmer que vous avez bien reçu les réponses.",
       "copyCodeNote": "Utilisez le bouton « Copier les codes de réception » en haut du fichier de reçu HTML.",
       "confirmReceipt": "Approuver la suppression de réponses",
       "errors": {

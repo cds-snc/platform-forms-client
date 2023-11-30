@@ -135,7 +135,7 @@
     "downloadDialog": {
       "title": "Download responses",
       "chooseDownloadFormat": "Choose the format of response files",
-      "downloadFormatContext": "You’ll also get an Official receipt and record of responses. You’ll need to keep this receipt to verify all responses made it safely from GC Forms to your computer.",
+      "downloadFormatContext": "You’ll also get an <i>Official receipt and record of responses</i>. You’ll need to keep this receipt to verify all responses made it safely from GC Forms to your computer.",
       "html": "Individual response files",
       "htmlDescription": "Separate files for each form submission",
       "csv": "CSV",
@@ -160,7 +160,7 @@
       "title": "Sign off on the removal of responses from GC Forms",
       "contentHeading": "GC Forms requires verification that responses were downloaded successfully",
       "contentBody": "Why? Because things can go wrong when digital files move between computers. GC Forms will not remove responses from the database without having verified that all files made it safely to your computer.",
-      "copyCode": "Paste receipt codes from the Official receipt and record of responses to confirm you have responses.",
+      "copyCode": "Paste receipt codes from the <i>Official receipt and record of responses</i> to confirm you have responses.",
       "copyCodeNote": "Use the “Copy receipt codes” button at the top of the receipt file.",
       "confirmReceipt": "Sign off on removal of responses",
       "errors": {
