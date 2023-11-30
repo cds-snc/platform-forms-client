@@ -223,5 +223,6 @@
     },
     "sending": "Envoi en cours...",
     "cancel": "Annuler"
-  }
+  },
+  "loading": "Chargement..."
 }
