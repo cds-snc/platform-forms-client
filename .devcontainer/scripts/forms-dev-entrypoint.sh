@@ -8,20 +8,4 @@ set -ex
 ###################################################################
 
 cd /src 
-yarn install --production=false
-
-cd /src/migrations
-
-FILE=.env
-
-if [ ! -f "$FILE" ]; then
-cat <<EOF >> .env
-DB_NAME=formsDB
-DB_USERNAME=postgres
-DB_PASSWORD=chummy
-DB_HOST=db
-EOF
-fi
-
 yarn install
-node index.js

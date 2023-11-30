@@ -10,18 +10,18 @@ export const EditNavigation = () => {
   const { activePathname } = useActivePathname();
 
   return (
-    <div className="relative flex flex-col tablet:flex-row max-w-[800px]">
+    <div className="relative flex max-w-[800px] flex-col tablet:flex-row">
       <div className="flex">
-        <nav className="laptop:mb-4 flex flex-wrap" aria-label={t("navLabelEditor")}>
+        <nav className="flex flex-wrap laptop:mb-4" aria-label={t("navLabelEditor")}>
           <SubNavLink href="/form-builder/edit">
             <span className="text-sm laptop:text-base">
-              <QuestionsIcon className="inline-block laptop:mt-[-2px] mr-2" />
+              <QuestionsIcon className="mr-2 inline-block laptop:mt-[-2px]" />
               {t("questions")}
             </span>
           </SubNavLink>
           <SubNavLink href="/form-builder/edit/translate">
             <span className="text-sm laptop:text-base">
-              <TranslateIcon className="inline-block laptop:mt-[-2px] mr-2" />
+              <TranslateIcon className="mr-2 inline-block laptop:mt-[-2px]" />
               {t("translate")}
             </span>
           </SubNavLink>

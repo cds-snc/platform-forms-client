@@ -7,6 +7,7 @@ import {
   getFullTemplateByID,
   removeDeliveryOption,
   TemplateHasUnprocessedSubmissions,
+  updateClosingDateForTemplate,
 } from "@lib/templates";
 
 import { middleware, jsonValidator, cors, sessionExists } from "@lib/middleware";
@@ -73,6 +74,7 @@ const route = async ({
   deliveryOption,
   securityAttribute,
   isPublished,
+  closingDate,
   users,
   sendResponsesToVault,
 }: {
@@ -84,6 +86,7 @@ const route = async ({
   deliveryOption?: DeliveryOption;
   securityAttribute?: SecurityAttribute;
   isPublished?: boolean;
+  closingDate?: string;
   users?: { id: string; action: "add" | "remove" }[];
   sendResponsesToVault?: boolean;
 }) => {
@@ -95,10 +98,10 @@ const route = async ({
 
   switch (method) {
     case "GET":
-      return await getFullTemplateByID(ability, formID);
+      return getFullTemplateByID(ability, formID);
     case "PUT":
       if (formConfig) {
-        return await updateTemplate({
+        return updateTemplate({
           ability: ability,
           formID: formID,
           formConfig: formConfig,
@@ -107,17 +110,22 @@ const route = async ({
           securityAttribute: securityAttribute,
         });
       } else if (isPublished !== undefined) {
-        return await updateIsPublishedForTemplate(ability, formID, isPublished);
+        return updateIsPublishedForTemplate(ability, formID, isPublished);
+      } else if (closingDate) {
+        return updateClosingDateForTemplate(ability, formID, closingDate);
       } else if (users) {
-        return await updateAssignedUsersForTemplate(ability, formID, users);
+        if (!users.length) {
+          return { error: true, message: "mustHaveAtLeastOneUser" };
+        }
+        return updateAssignedUsersForTemplate(ability, formID, users);
       } else if (sendResponsesToVault) {
-        return await removeDeliveryOption(ability, formID);
+        return removeDeliveryOption(ability, formID);
       }
       throw new MalformedAPIRequest(
         "Missing additional request parameter (formConfig, isPublished, users, sendResponsesToVault)"
       );
     case "DELETE":
-      return await deleteTemplate(ability, formID);
+      return deleteTemplate(ability, formID);
     default:
       throw new MalformedAPIRequest("Unsupported method");
   }

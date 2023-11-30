@@ -3,6 +3,7 @@ Vos responsabilités relatives à l’utilisation de Formulaires GC sont décrit
 À titre de rappel, en voici les points saillants :
 - Obtenir les approbations nécessaires pour l’utilisation de Formulaires GC.
 - Accepter toutes les conditions et tous les risques, y compris nos [niveaux de services](/fr/sla). 
+- Pratiquer la sécurité en continu.
 - Publier le formulaire dans les deux langues officielles. 
 - Fournir des canaux multiples pour la prestation de services et de programmes. 
 - Contribuer à offrir une expérience fiable avec une image de marque et un contenu uniformes et des URL accessibles.
@@ -10,6 +11,6 @@ Vos responsabilités relatives à l’utilisation de Formulaires GC sont décrit
 - Protéger et traiter les renseignements personnels et sensibles : 
     - Obtenir les approbations nécessaires pour collecter des renseignements personnels.
     - Gérer les réponses aux formulaires conformément au calendrier de conservation et d’élimination de votre ministère ou organisme. 
-    - Utiliser Formulaires GC pour la collecte de données classées jusqu’à **Protégé A**. 
+    - Utiliser Formulaires GC pour la collecte de données classées jusqu’à Protégé B. 
 
 Pour toute question en lien avec les présentes conditions d’utilisation, veuillez [nous contacter](/fr/form-builder/support/contactus).

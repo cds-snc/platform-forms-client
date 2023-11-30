@@ -11,7 +11,7 @@
 
 .gc-alert,
 .gc-error-message {
-  @apply md:text-small_base text-base py-0 w-full text-red-700 mb-2;
+  @apply md:text-sm text-base py-0 w-full text-red-700 mb-2;
 }
 
 .gc-error-message + .gc-input-text,
@@ -38,7 +38,7 @@
   }
 
   &.gc-alert--success {
-    @apply bg-green-100;
+    @apply bg-emerald-50 text-emerald-700 rounded-sm laptop:rounded-md ;
   }
 
   .gc-alert__body {
@@ -77,7 +77,7 @@
 
 .gc-dropdown {
   background-image: url("../public/img/arrow-down.svg");
-  @apply md:w-full w-1/2 md:text-small_base text-base text-gray-700 block border-2 border-black-form py-3 pl-5 pr-10 mt-2 mb-14 appearance-none bg-no-repeat bg-center-right-15px;
+  @apply md:w-full w-1/2 md:text-sm text-base text-gray-700 block border-2 border-black-form py-3 pl-5 pr-10 mt-2 mb-14 appearance-none bg-no-repeat bg-center-right-15px;
 
   &:focus {
     @apply outline-none border-blue-focus shadow-input;
@@ -85,20 +85,17 @@
 }
 
 .gc-p {
-  @apply md:text-small_p text-p mb-10 w-full;
+  @apply md:text-sm text-xl mb-10 w-full;
 }
 
 .gc-description {
-  @apply md:text-small_sm text-gray-text mb-3 text-sm w-3/4 xl:w-full;
+  @apply md:text-xs text-gray-text mb-3 text-sm w-3/4 xl:w-full;
 }
 
 .gc-richText {
   p {
     @extend .gc-p;
-  }
-
-  h4 {
-    @extend .gc-section-header;
+    @apply text-base;
   }
 
   p:has(+ ul, + ol) {
@@ -146,7 +143,7 @@
   @apply border-t-2 pt-16 pb-3 px-0 bg-white-default mt-0 border-black-form;
 
   h3 {
-    @apply md:text-small_h3 font-bold text-h3 pb-0 mb-10;
+    @apply md:text-lg font-bold text-2xl pb-0 mb-10;
   }
 }
 
@@ -164,15 +161,11 @@
 }
 
 .gc-section-header {
-  @apply md:text-small_h2 font-bold text-h2 mb-16 mt-12 p-6 bg-gray-background;
-}
-
-.gc-legend {
-  @apply md:text-small_h2 text-h2 mb-14 font-bold;
+  @apply md:text-xl font-bold text-3xl mb-16 mt-12 p-6 bg-gray-background;
 }
 
 .gc-button {
-  @apply md:w-full md:text-small_base cursor-pointer border-b-4 border-gray-900 py-3 px-5 mr-2 m-0 font-bold text-base no-underline text-gray-50 bg-green-default outline-none w-60;
+  @apply md:w-full md:text-sm cursor-pointer border-b-4 border-gray-900 py-3 px-5 mr-2 m-0 font-bold text-base no-underline text-gray-50 bg-green-default outline-none w-60;
 
   &:hover {
     @apply bg-green-darker;
@@ -195,7 +188,7 @@
 }
 
 .gc-button--icon {
-  @apply md:text-base text-h3 md:w-10 md:h-10 w-12 h-12 py-0 px-0 rounded-md;
+  @apply md:text-base text-2xl md:w-10 md:h-10 w-12 h-12 py-0 px-0 rounded-md;
 }
 
 .gc-button--secondary {
@@ -235,9 +228,9 @@
 }
 
 .gc-label {
-  @apply md:text-small_base block mb-2 text-base font-bold w-3/4 xl:w-full;
+  @apply md:text-sm block mb-2 text-base font-bold w-3/4 xl:w-full;
   &.required > span {
-    @apply text-red-700;
+    @apply text-red-required;
     content: " *";
   }
 }
@@ -247,7 +240,7 @@
 }
 
 .gc-textarea {
-  @apply md:text-small_base md:w-full text-base text-gray-700 border-solid block border-2 border-black-form py-3 px-2 mt-2 w-3/4 h-40;
+  @apply md:text-sm md:w-full text-base text-gray-700 border-solid block border-2 border-black-form py-3 px-2 mt-2 w-3/4 h-40;
   &.full-height {
     @apply h-auto;
   }
@@ -273,7 +266,7 @@
 
 .gc-input-text {
   border: solid 2px black;
-  @apply md:w-full md:text-small_base text-base text-gray-700 border-2 py-3 px-2 mt-2 w-96;
+  @apply md:w-full md:text-sm text-base text-gray-700 border-2 py-3 px-2 mt-2 w-96;
 
   &:focus {
     @apply outline-none border-blue-focus shadow-input;
@@ -321,6 +314,11 @@
     &:focus + .gc-checkbox-label:after {
       background-image: url("../public/img/blue-checkmark.svg");
     }
+
+    &:disabled + .gc-checkbox-label {
+      pointer-events: none;
+      opacity: .5;
+    }
   }
 }
 
@@ -331,7 +329,7 @@
 
 .gc-radio-label,
 .gc-checkbox-label {
-  @apply md:text-small_base font-normal text-base flex items-center;
+  @apply md:text-sm font-normal text-base flex items-center;
 
   .checkbox-label-text,
   .radio-label-text {
@@ -378,7 +376,7 @@
 }
 
 .gc-file-input {
-  @apply w-full md:text-small_base text-base text-gray-700 py-3 pr-2 mt-2 mb-14;
+  @apply w-full md:text-sm text-base text-gray-700 py-3 pr-2 mt-2 mb-14;
 
   &:focus {
     @apply outline-none border-blue-focus shadow-input;
@@ -420,7 +418,7 @@
 
 .gc-form-confirmation {
   p {
-    @apply text-base md:text-small_p;
+    @apply text-base md:text-sm;
   }
 }
 
@@ -436,27 +434,14 @@
   @apply bg-gray-200 py-16 px-20 mb-10 w-5/6 xl:w-full md:py-10 md:px-10;
 
   h2 {
-    @apply text-h2 mb-6 md:text-small_h2;
+    @apply text-3xl mb-6 md:text-xl;
   }
 
   p:first-of-type {
-    @apply mb-5 md:text-small_p;
+    @apply mb-5 md:text-sm;
   }
 
   p:last-of-type {
-    @apply font-bold md:text-small_p;
-  }
-}
-
-.gc-last-logout-time {
-  @apply text-sm not-italic font-sans items-center font-normal pb-10 pt-3;
-  line-height: 125%;
-}
-
-.gc-go-to-login-btn {
-  a {
-    @apply bg-blue-500 hover:bg-blue-700 text-white-default font-bold py-2 px-4 rounded;
-    text-decoration: none !important;
-    background-color: #26374a;
+    @apply font-bold md:text-sm;
   }
 }

@@ -28,6 +28,9 @@
  * Creates a Template in the Database with the provided fixture
  * @param file JSON fixture file
  */
+
+import flagsDefault from "../../../flag_initialization/default_flag_settings.json";
+
 Cypress.Commands.add("useForm", (file) => {
   cy.login();
   cy.fixture(file).then((mockedForm) => {
@@ -75,7 +78,7 @@ Cypress.Commands.add("useFlag", (flagName, value, alreadyAuth) => {
     url: `/api/flags/${flagName}/check`,
   }).then(({ body: { status } }) => {
     if (status !== value) {
-      !alreadyAuth && cy.login();
+      !alreadyAuth && cy.login({ admin: true });
       cy.request({
         method: "GET",
         url: `/api/flags/${flagName}/${value ? "enable" : "disable"}`,
@@ -89,7 +92,8 @@ Cypress.Commands.add("useFlag", (flagName, value, alreadyAuth) => {
  * Log the test user into the application
  */
 
-Cypress.Commands.add("login", () => {
+Cypress.Commands.add("login", (options?: { admin?: boolean; acceptableUse?: boolean }) => {
+  const { admin = false, acceptableUse = false } = options || {};
   cy.request({
     method: "GET",
     url: "/api/auth/csrf",
@@ -98,20 +102,59 @@ Cypress.Commands.add("login", () => {
     const { csrfToken } = response.body;
     cy.request({
       method: "POST",
-      url: "/api/auth/callback/credentials",
+      url: "/api/auth/signin/cognito",
       form: true,
       body: {
-        username: "test.user@cds-snc.ca",
+        username: `test.${admin ? "admin" : "user"}@cds-snc.ca`,
         password: "testing",
-        redirect: false,
         csrfToken,
-        callbackUrl: "http://localhost:3000/en/auth/login",
-        json: true,
       },
-    }).then(() => {
-      cy.getCookie("next-auth.session-token").should("exist");
+    }).then((response) => {
+      expect(response.body).to.have.property("status", "success");
+      expect(response.body).to.have.property("challengeState", "MFA");
+      expect(response.body).to.have.property("authenticationFlowToken");
+
+      cy.request({
+        method: "POST",
+        url: "/api/auth/callback/cognito",
+        form: true,
+        body: {
+          username: `test.${admin ? "admin" : "user"}@cds-snc.ca`,
+          verificationCode: "123456",
+          authenticationFlowToken: response.body.authenticationFlowToken,
+          csrfToken,
+          json: true,
+        },
+      }).then(() => {
+        // Ensure cookie is created
+        cy.waitUntil(() =>
+          cy.getCookie("next-auth.session-token").then((cookie) => Boolean(cookie && cookie.value))
+        );
+        if (acceptableUse) {
+          cy.request({
+            method: "POST",
+            url: "/api/acceptableuse",
+            headers: {
+              "x-csrf-token": csrfToken,
+            },
+          }).then((response) => {
+            expect(response.status).to.eq(200);
+          });
+        }
+      });
     });
   });
+});
+
+Cypress.Commands.add("securityQuestions", () => {
+  cy.get("h1").contains("Set up security questions");
+  cy.get("#question1").select("What was your favourite school subject?");
+  cy.typeInField("#answer1", "example-answer-1");
+  cy.get("#question2").select("What was the name of your first manager?");
+  cy.typeInField("#answer2", "example-answer-2");
+  cy.get("#question3").select("What was the make of your first car?");
+  cy.typeInField("#answer3", "example-answer-3");
+  cy.contains("Continue").click();
 });
 
 /**
@@ -134,7 +177,67 @@ Cypress.Commands.add("logout", () => {
         json: true,
       },
     }).then(() => {
-      cy.getCookie("next-auth.session-token").should("not.exist");
+      // Ensure cookie is removed
+      cy.waitUntil(() =>
+        cy.getCookie("next-auth.session-token").then((cookie) => !cookie || !cookie.value)
+      );
     });
   });
+});
+
+/**
+ * Reset the database to it's default state
+ */
+Cypress.Commands.add("resetDB", () => {
+  cy.task("db:teardown");
+  cy.task("db:seed");
+});
+
+/**
+ * Reset the flags to default values
+ */
+Cypress.Commands.add("resetFlags", () => {
+  cy.login()
+    .then(() => {
+      Object.keys(flagsDefault).forEach((key) => {
+        cy.useFlag(`${key}`, (flagsDefault as Record<string, boolean>)[key], true);
+      });
+    })
+    .then(() => cy.logout());
+});
+
+/**
+ * Reset the database and flags to their default values
+ */
+Cypress.Commands.add("resetAll", () => {
+  cy.task("db:teardown");
+  cy.task("db:seed");
+  cy.login()
+    .then(() => {
+      Object.keys(flagsDefault).forEach((key) => {
+        cy.useFlag(`${key}`, (flagsDefault as Record<string, boolean>)[key], true);
+      });
+    })
+    .then(() => cy.logout());
+});
+
+/**
+ * Type in a field and wait for the field to be updated
+ */
+Cypress.Commands.add("typeInField", (field, typedText, outputText) => {
+  cy.get(field).type(typedText);
+
+  // Use passed in outputText or Remove actions in brackets from typedText
+  const text = outputText ?? typedText.replace(/\{.*\}/, "");
+
+  // If there is text to verify and not just an action
+  if (text) {
+    cy.get(field).then(($el) => {
+      if ($el.attr("value") !== undefined) {
+        cy.get(field).should("have.value", text);
+      } else {
+        cy.get(field).should("have.text", text);
+      }
+    });
+  }
 });

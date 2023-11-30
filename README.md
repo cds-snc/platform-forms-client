@@ -5,7 +5,6 @@
 This repository is work-in-progress for the GC Forms platform product. "Alpha" will be arriving in Spring 2021.
 
 - Explore it here: [https://forms-staging.cdssandbox.xyz/](https://forms-staging.cdssandbox.xyz/).
-- View our UI inventory and documentation on [Storybook](https://cds-snc.github.io/platform-forms-client/?path=/story/introduction--page)
 
 ## Built with
 
@@ -42,8 +41,6 @@ SUBMISSION_API=Submission
 TEMPLATES_API=Templates
 AWS_ACCESS_KEY_ID= // Can be found in LastPass
 AWS_SECRET_ACCESS_KEY= // Can be found in LastPass
-GOOGLE_CLIENT_ID= // Can be found in LastPass
-GOOGLE_CLIENT_SECRET= // Can be found in LastPass
 NEXTAUTH_URL=http://localhost:3000
 REDIS_URL=localhost
 ```
@@ -110,6 +107,38 @@ There are 2 ways to connect to the database. Either directly using PGAdmin or a 
 - A table will appear. Find your username in the list and double-click on the value under the `role` column to modify to "ADMINISTRATOR".
 - Click on "Save Change" button in the top menu bar once completed.
 
+## Testing
+
+This application uses Cypress for end-to-end testing.
+
+If you want to clear the database and run the tests in a clean slate:
+
+```
+yarn dev:test # run in a separate terminal
+```
+
+If you want to run a specific test:
+
+```
+yarn cypress:e2e --spec "PATH_TO_TEST"
+```
+
+If you want to run the entire test suite:
+
+```
+yarn cypress:e2e
+# an error? see the screenshot in ./cypress/screenshots
+```
+
+If a test is failing, you can run the test tool:
+
+```
+yarn cypress
+# A chrome instance starts, then manually start and watch that test running
+```
+
+The application also uses Jest for unit testing. To run the tests, run `yarn test`.
+
 ### Notify integration
 
 To send a form submission to an email address, you should configure the following environment variables in a `.env` file:
@@ -118,11 +147,6 @@ To send a form submission to an email address, you should configure the followin
 NOTIFY_API_KEY=
 ```
 
-### Debugging
-
-For verbose debug logging set an environment variable called DEBUG to `true` before running `yarn dev`
-ex. `DEBUG=true yarn dev`
-
 ## ---------------------------------------------------------------------
 
 # Plate-forme - Formulaires GC
@@ -130,7 +154,6 @@ ex. `DEBUG=true yarn dev`
 Ce dépôt est un travail en cours pour le produit de la plate-forme GC Forms. "Alpha" arrivera au printemps 2021.
 
 - Explorez le ici : [https://forms-staging.cdssandbox.xyz/](https://forms-staging.cdssandbox.xyz/).
-- Explorez le [Storybook](https://cds-snc.github.io/platform-forms-client/?path=/story/introduction--page)
 
 ## Contributions
 
@@ -166,8 +189,6 @@ SUBMISSION_API=Submission
 TEMPLATES_API=Templates
 AWS_ACCESS_KEY_ID= // Can be found in LastPass
 AWS_SECRET_ACCESS_KEY= // Can be found in LastPass
-GOOGLE_CLIENT_ID= // Can be found in LastPass
-GOOGLE_CLIENT_SECRET= // Can be found in LastPass
 NEXTAUTH_URL=http://localhost:3000
 REDIS_URL=localhost
 ```
@@ -227,8 +248,3 @@ Pour envoyer les réponses d'une formulaire à une adresse courriel, vous devez 
 ```sh
 NOTIFY_API_KEY=
 ```
-
-### Débougage
-
-Pour des logs plus verbose en fin de débougage, définissez une variable d'environnement appelée DEBUG comme `true` avant d'exécuter` yarn dev`
-ex. `DEBUG=true yarn dev`

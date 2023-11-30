@@ -4,14 +4,14 @@
 
 import { createMocks } from "node-mocks-http";
 import acceptableUse from "@pages/api/acceptableuse";
-import { setAcceptableUse } from "@lib/acceptableUseCache";
+import { setAcceptableUse } from "@lib/cache/acceptableUseCache";
 import { getCsrfToken } from "next-auth/react";
 import { getServerSession } from "next-auth/next";
 import { Session } from "next-auth";
 
 jest.mock("next-auth/next");
 jest.mock("next-auth/react");
-jest.mock("@lib/acceptableUseCache");
+jest.mock("@lib/cache/acceptableUseCache");
 const mockedSetAcceptableUse = jest.mocked(setAcceptableUse, { shallow: true });
 const mockedGetCsrfToken = jest.mocked(getCsrfToken, { shallow: true });
 //Needed in the typescript version of the test so types are inferred correctly
@@ -27,6 +27,7 @@ describe("Test acceptable use endpoint", () => {
         name: "forms user",
         privileges: [],
         acceptableUse: false,
+        hasSecurityQuestions: false,
       },
     };
 

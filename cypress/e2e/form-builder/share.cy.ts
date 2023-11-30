@@ -1,45 +1,46 @@
-import { NextData } from "types";
-
 describe("Form builder share", () => {
   beforeEach(() => {
-    cy.visit("/form-builder/edit", {
-      onBeforeLoad: (win) => {
-        win.sessionStorage.clear();
-        let nextData: NextData;
-        Object.defineProperty(win, "__NEXT_DATA__", {
-          set(serverSideProps) {
-            serverSideProps.context = {
-              user: {
-                acceptableUse: false,
-                name: null,
-                userId: "testId",
-              },
-            };
-            nextData = serverSideProps;
-          },
-          get() {
-            return nextData;
-          },
-        });
-      },
-    });
+    cy.login({ acceptableUse: true });
+    cy.visitPage("/form-builder/edit");
   });
 
   it("Renders share flyout with name check", () => {
     cy.get("button").contains("Share").click();
     cy.get("[role='menuitem']").should("have.length", 1);
-    cy.get("span").contains("You must name").should("exist");
-    cy.get("span button").contains("name your form").click();
-    cy.focused().should("have.attr", "id", "formTitle");
+    cy.get("[role='menuitem']").contains("You must").should("be.visible");
+    cy.get("[role='menuitem'] span").contains("name your form").click();
+    cy.focused().should("have.attr", "id", "fileName");
   });
-
-  it("Renders share flyout", () => {
-    cy.get("#formTitle").type("Cypress Share Test Form");
+  it("Renders share flyout for authenticated", () => {
+    // @todo replace with typeInField
+    // Getting weird error in GitHub actions where text is missing first character
+    // "Cypress Share Test Form" is rendered as "ypress Share Test Form"
+    cy.get("#fileName")
+      .should("have.attr", "placeholder", "Unnamed form file")
+      .type("Cypress Share Test Form");
     cy.get("button").contains("Share").click();
     cy.get("[role='menuitem']").should("have.length", 1);
     cy.get("span").contains("Share by email").click();
-    cy.get("h2").contains("Share").should("exist");
+    cy.get("dialog label").contains("Email address");
+    cy.get("summary").contains("See a preview of the email message").should("exist").click();
+    cy.get("h4")
+      .contains("Regular Test User has shared a form with you on GC Forms")
+      .should("exist");
+    cy.get("[data-testid='close-dialog']").click();
+  });
+  it("Renders share flyout for unAuthenticated", () => {
+    cy.logout();
+    cy.visitPage("/form-builder/edit");
+    cy.get("#fileName")
+      .should("have.attr", "placeholder", "Unnamed form file")
+      .type("Cypress Share Test Form");
+    cy.get("button").contains("Share").click();
+    cy.get("[role='menuitem']").should("have.length", 1);
+    cy.get("span").contains("Share by email").click();
+    // Using "exist" instead of "be.visible" because the content is hidden by scolling
+    cy.get("dialog").contains("Step 1").should("exist");
     cy.get("button").contains("Download form file").should("exist");
+    cy.get("button").contains("Copy instructions").should("exist");
     cy.get("summary").contains("See a preview of the email message").should("exist").click();
     cy.get("h4").contains("A GC Forms user has shared a form with you on GC Forms").should("exist");
     cy.get("button").contains("Close").click();

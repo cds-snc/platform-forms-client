@@ -8,21 +8,34 @@ import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { NextPageWithLayout } from "../_app";
 import { PageProps, FormRecord } from "@lib/types";
-import { Template, PageTemplate, Start } from "@components/form-builder/app";
+import { Start } from "@components/form-builder/app";
+import { FormBuilderLayout } from "@components/globals/layouts/FormBuilderLayout";
+import Head from "next/head";
 
 const Page: NextPageWithLayout<PageProps> = () => {
   const { t } = useTranslation("form-builder");
 
   const title = `${t("gcFormsStart")} — ${t("gcForms")}`;
+
+  const css = `
+  body {
+     background-color: #F9FAFB;
+  }
+`;
+
   return (
-    <PageTemplate title={title} leftNav={false}>
+    <>
+      <Head>
+        <title>{title}</title>
+        <style>{css}</style>
+      </Head>
       <Start />
-    </PageTemplate>
+    </>
   );
 };
 
 Page.getLayout = (page: ReactElement) => {
-  return <Template page={page} className="form-builder-start" />;
+  return <FormBuilderLayout hideLeftNav={true} page={page} />;
 };
 
 export const getServerSideProps: GetServerSideProps = async ({
@@ -45,6 +58,16 @@ export const getServerSideProps: GetServerSideProps = async ({
     return {
       redirect: {
         destination: `/${locale}/auth/policy`,
+        permanent: false,
+      },
+    };
+  }
+
+  if (session && !session.user.hasSecurityQuestions) {
+    // If they haven't setup security questions Use redirect to policy page for acceptance
+    return {
+      redirect: {
+        destination: `/${locale}/auth/setup-security-questions`,
         permanent: false,
       },
     };
@@ -94,7 +117,10 @@ export const getServerSideProps: GetServerSideProps = async ({
     props: {
       ...FormbuilderParams,
       ...(locale &&
-        (await serverSideTranslations(locale, ["common", "form-builder"], null, ["fr", "en"]))),
+        (await serverSideTranslations(locale, ["common", "form-builder", "form-closed"], null, [
+          "fr",
+          "en",
+        ]))),
     },
   };
 };

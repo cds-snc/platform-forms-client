@@ -3,8 +3,10 @@ import { useTranslation } from "next-i18next";
 import { NextPageWithLayout } from "../_app";
 import { PageProps } from "@lib/types";
 import { getServerSideProps } from "./index";
-import { Published, Template, PageTemplate } from "@components/form-builder/app";
+import { Published } from "@components/form-builder/app";
 import { useTemplateStore } from "@formbuilder/store/useTemplateStore";
+import Head from "next/head";
+import { FormBuilderLayout } from "@components/globals/layouts/FormBuilderLayout";
 
 const Page: NextPageWithLayout<PageProps> = () => {
   const { t } = useTranslation("form-builder");
@@ -17,14 +19,17 @@ const Page: NextPageWithLayout<PageProps> = () => {
   }));
 
   return (
-    <PageTemplate title={title} leftNav={false}>
+    <>
+      <Head>
+        <title>{title}</title>
+      </Head>
       <Published id={id} />
-    </PageTemplate>
+    </>
   );
 };
 
 Page.getLayout = (page: ReactElement) => {
-  return <Template page={page} />;
+  return <FormBuilderLayout page={page} />;
 };
 
 export { getServerSideProps };

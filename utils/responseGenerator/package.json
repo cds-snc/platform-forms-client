@@ -1,0 +1,22 @@
+{
+  "name": "response_generator",
+  "version": "0.1.0",
+  "description": "Generate responses to the Vault",
+  "main": "generate_responses.ts",
+  "scripts": {
+    "generate": "tsx generate_responses.ts"
+  },
+  "keywords": [],
+  "author": "Bryan Robitaille",
+  "dependencies": {
+    "@aws-sdk/client-lambda": "^3.441.0",
+    "@aws-sdk/client-sqs": "^3.441.0",
+    "@aws-sdk/types": "^3.433.0",
+    "@types/node": "^20.8.6",
+    "dotenv": "^16.3.1",
+    "tslib": "^2.6.2",
+    "tsx": "^3.14.0",
+    "typescript": "^5.2.2"
+  },
+  "packageManager": "yarn@4.0.2"
+}

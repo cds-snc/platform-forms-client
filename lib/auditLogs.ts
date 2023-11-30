@@ -18,10 +18,14 @@ export enum AuditLogEvent {
   ConfirmResponse = "ConfirmResponse",
   IdentifyProblemResponse = "IdentifyProblemResponse",
   ListResponses = "ListResponses",
+  DeleteResponses = "DeleteResponses",
+  RetrieveResponses = "RetrieveResponses",
   // User Events
   UserRegistration = "UserRegistration",
   UserSignIn = "UserSignIn",
   UserSignOut = "UserSignOut",
+  UserActivated = "UserActivated",
+  UserDeactivated = "UserDeactivated",
   UserPasswordReset = "UserPasswordReset",
   UserTooManyFailedAttempts = "UserTooManyFailedAttempts",
   GrantPrivilege = "GrantPrivilege",
@@ -100,7 +104,7 @@ export const logEvent = async (
     // Only log the error in Production environment.
     // Development may be running without LocalStack setup
     if (process.env.NODE_ENV === "development" || process.env.APP_ENV === "test")
-      return logMessage.info(auditLog);
+      return logMessage.info(`AuditLog:${auditLog}`);
 
     logMessage.error("ERROR with Audit Logging");
     logMessage.error(e as Error);

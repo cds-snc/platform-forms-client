@@ -1,16 +1,22 @@
-import React, { ReactElement, useState } from "react";
-import { Formik } from "formik";
+import React, { useState, MutableRefObject, ReactElement } from "react";
+import { Formik, FormikHelpers } from "formik";
 import { TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
-import { Button } from "@components/globals";
-import { useAuth } from "@lib/hooks";
+import { Button, LinkButton } from "@components/globals";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
-import { Confirmation } from "@components/auth/Confirmation/Confirmation";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
-import { checkOne } from "@lib/cache/flags";
 import Link from "next/link";
 import Head from "next/head";
+import { useRouter } from "next/router";
+import {
+  getPasswordResetAuthenticatedUserEmailAddress,
+  retrieveUserSecurityQuestions,
+  SecurityQuestion,
+  PasswordResetInvalidLink,
+  PasswordResetExpiredLink,
+} from "@lib/auth";
+
 import * as Yup from "yup";
 import {
   containsLowerCaseCharacter,
@@ -20,26 +26,21 @@ import {
   isValidGovEmail,
 } from "@lib/validation";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
+import { useResetPassword } from "@lib/hooks/auth";
+import { AuthErrorsState } from "@lib/hooks/auth/useAuthErrors";
 
-const ResetPassword = () => {
-  const {
-    username,
-    cognitoError,
-    cognitoErrorDescription,
-    cognitoErrorCallToActionLink,
-    cognitoErrorCallToActionText,
-    cognitoErrorIsDismissible,
-    needsConfirmation,
-    setNeedsConfirmation,
-    resetCognitoErrorState,
-    sendForgotPassword,
-    confirmPasswordReset,
-  } = useAuth();
-
-  const { t } = useTranslation(["reset-password", "common"]);
-
-  // we don't put this state in useAuth since its very unique to this page only
-  const [initialCodeSent, setInitialCodeSent] = useState(false);
+const Step1 = ({
+  username,
+  nextStep,
+  authErrorsState,
+  authErrorsReset,
+}: {
+  username: MutableRefObject<string>;
+  nextStep: () => void;
+  authErrorsState: AuthErrorsState;
+  authErrorsReset: () => void;
+}) => {
+  const { t, i18n } = useTranslation(["reset-password", "common"]);
 
   // validation schema for the initial form to send the forgot password verification code
   const sendForgotPasswordValidationSchema = Yup.object().shape({
@@ -53,123 +54,210 @@ const ResetPassword = () => {
       ),
   });
 
-  // validation schema for password reset form
-  const confirmPasswordResetValidationSchema = Yup.object().shape({
-    confirmationCode: Yup.number()
-      .typeError(t("resetPassword.fields.confirmationCode.error.number"))
-      .required(t("input-validation.required", { ns: "common" })),
-    password: Yup.string()
-      .required(t("input-validation.required", { ns: "common" }))
-      .min(8, t("resetPassword.fields.password.error.minLength"))
-      .max(50, t("resetPassword.fields.password.error.maxLength"))
-      .test(
-        "password-valid-lowerCase",
-        t("resetPassword.fields.password.error.oneLowerCase"),
-        (password = "") => containsLowerCaseCharacter(password)
-      )
-      .test(
-        "password-valid-upperCase",
-        t("resetPassword.fields.password.error.oneUpperCase"),
-        (password = "") => containsUpperCaseCharacter(password)
-      )
-      .test(
-        "password-valid-number",
-        t("resetPassword.fields.password.error.oneNumber"),
-        (password = "") => containsNumber(password)
-      )
-      .test(
-        "password-valid-symbol",
-        t("resetPassword.fields.password.error.oneSymbol"),
-        (password = "") => containsSymbol(password)
-      ),
-    passwordConfirmation: Yup.string()
-      .required(t("input-validation.required", { ns: "common" }))
-      .oneOf(
-        [Yup.ref("password"), null],
-        t("resetPassword.fields.passwordConfirmation.error.mustMatch")
-      ),
+  return (
+    <>
+      <Head>
+        <title>{t("provideUsername.title")}</title>
+      </Head>
+      <Formik
+        initialValues={{ username: "" }}
+        validateOnChange={false}
+        validateOnBlur={false}
+        validationSchema={sendForgotPasswordValidationSchema}
+        onSubmit={(values) => {
+          username.current = values.username;
+          nextStep();
+        }}
+      >
+        {({ handleSubmit, errors }) => (
+          <>
+            {authErrorsState.isError && (
+              <Alert
+                type={ErrorStatus.ERROR}
+                heading={authErrorsState.title}
+                onDismiss={authErrorsReset}
+                id="cognitoErrors"
+              >
+                {authErrorsState.description}&nbsp;
+                {authErrorsState.callToActionLink ? (
+                  <Link href={authErrorsState.callToActionLink}>
+                    {authErrorsState.callToActionText}
+                  </Link>
+                ) : undefined}
+              </Alert>
+            )}
+            {Object.keys(errors).length > 0 && !authErrorsState.isError && (
+              <Alert
+                className="w-full"
+                type={ErrorStatus.ERROR}
+                validation={true}
+                tabIndex={0}
+                id="registrationValidationErrors"
+                heading={t("input-validation.heading", { ns: "common" })}
+              >
+                <ol className="gc-ordered-list p-0">
+                  {Object.entries(errors).map(([fieldKey, fieldValue]) => {
+                    return (
+                      <ErrorListItem
+                        key={`error-${fieldKey}`}
+                        errorKey={fieldKey}
+                        value={fieldValue}
+                      />
+                    );
+                  })}
+                </ol>
+              </Alert>
+            )}
+            <h1 className="mb-12 mt-6 border-b-0">{t("provideUsername.title")}</h1>
+            <form id="provideUsername" method="POST" onSubmit={handleSubmit} noValidate>
+              <div className="focus-group">
+                <Label id="label-username" htmlFor="username" className="required" required>
+                  {t("provideUsername.fields.username.label")}
+                </Label>
+                <Description id="username-hint" className="text-black">
+                  {t("provideUsername.fields.username.hint")}
+                </Description>
+                <TextInput
+                  className="h-10 w-full max-w-lg rounded"
+                  type="email"
+                  id="username"
+                  name="username"
+                  ariaDescribedBy="desc-username-hint"
+                />
+              </div>
+
+              <Button theme="primary" className="mr-4" type="submit">
+                {t("provideUsername.resetPasswordButton")}
+              </Button>
+
+              <LinkButton.Secondary href={`/${i18n.language}/auth/login`}>
+                {t("account.actions.backToSignIn", { ns: "common" })}
+              </LinkButton.Secondary>
+            </form>
+          </>
+        )}
+      </Formik>
+    </>
+  );
+};
+
+// Security questions form
+const Step2 = ({
+  username,
+  confirmSecurityQuestions,
+  authErrorsState,
+  authErrorsReset,
+  userSecurityQuestions,
+}: {
+  username: MutableRefObject<string>;
+  userSecurityQuestions: SecurityQuestion[];
+  confirmSecurityQuestions: (
+    values: {
+      username: string;
+      question1: string;
+      question2: string;
+      question3: string;
+      qIds: string;
+    },
+    helpers: FormikHelpers<{
+      username: string;
+      question1: string;
+      question2: string;
+      question3: string;
+      qIds: string;
+    }>
+  ) => Promise<void>;
+  authErrorsState: AuthErrorsState;
+  authErrorsReset: () => void;
+}) => {
+  const { t, i18n } = useTranslation(["reset-password", "common"]);
+  const langKey = i18n.language === "en" ? "questionEn" : "questionFr";
+
+  // validation schema for the initial form to send the forgot password verification code
+  const confirmSecurityQuestionsValidationSchema = Yup.object().shape({
+    question1: Yup.string()
+      .required(t("securityQuestions.inputValidation.required"))
+      .min(4, t("securityQuestions.inputValidation.questionLength")),
+    question2: Yup.string()
+      .required(t("securityQuestions.inputValidation.required"))
+      .min(4, t("securityQuestions.inputValidation.questionLength")),
+    question3: Yup.string()
+      .required(t("securityQuestions.inputValidation.required"))
+      .min(4, t("securityQuestions.inputValidation.questionLength")),
   });
 
-  // confirmation code form in case a user has not yet confirmed their account
-  // password resets are not allowed by cognito unless someone has confirmed their account
-  if (needsConfirmation) {
+  if (!userSecurityQuestions || userSecurityQuestions.length < 3) {
     return (
-      <Confirmation
-        username={username.current}
-        password={""}
-        confirmationAuthenticationFailedCallback={() => ""}
-        confirmationCallback={() => {
-          setNeedsConfirmation(false);
-        }}
-        shouldSignIn={false}
-      />
+      <Alert
+        type={ErrorStatus.ERROR}
+        heading={t("errorPanel.defaultTitle")}
+        id="apiErrors"
+        focussable={true}
+      >
+        {t("errorPanel.defaultMessage")}
+      </Alert>
     );
   }
 
-  // The form to initially send a verification code needed to reset a user's password
-  if (!initialCodeSent && !needsConfirmation) {
-    return (
-      <>
-        <Head>
-          <title>{t("provideUsername.title")}</title>
-        </Head>
-        <Formik
-          initialValues={{ username: "" }}
-          validateOnChange={false}
-          validateOnBlur={false}
-          validationSchema={sendForgotPasswordValidationSchema}
-          onSubmit={async (values) => {
-            // set the username ( user's email ) to what was provided
-            username.current = values.username;
-            // call the sendForgotPassword method to attempt to send the verification code to the user
-            await sendForgotPassword(
-              values.username,
-              () => {
-                // if sending of the code succeeds we set the initialCodeSent state to true
-                // this will display the form to set the new password
-                setInitialCodeSent(true);
-              },
-              (error) => {
-                // The InvalidParameterException error will be returned in two cases
-                // 1. Where a user does not have an account
-                // 2. Where a user does not have a verified email
-                // We will show the confirmation code page in this case
-                // If a user does not have an account they will not be able to progress
-                // those that do but have not verified their email will be able to verify their
-                // email first and then return to set their passwords
-                if (error === "InvalidParameterException") {
-                  setNeedsConfirmation(true);
+  return (
+    <>
+      <Head>
+        <title>{t("resetPassword.title")}</title>
+      </Head>
+
+      <Formik
+        initialValues={{
+          username: username.current,
+          question1: "",
+          question2: "",
+          question3: "",
+          qIds: `${userSecurityQuestions[0]?.id},${userSecurityQuestions[1]?.id},${userSecurityQuestions[2]?.id}`,
+        }}
+        onSubmit={confirmSecurityQuestions}
+        validationSchema={confirmSecurityQuestionsValidationSchema}
+        validateOnChange={false}
+        validateOnBlur={false}
+      >
+        {({ handleSubmit, errors }) => (
+          <>
+            {authErrorsState.isError && (
+              <Alert
+                type={ErrorStatus.ERROR}
+                heading={authErrorsState.title}
+                onDismiss={authErrorsReset}
+                id="cognitoErrors"
+                focussable={true}
+              >
+                {authErrorsState.description}&nbsp;
+                {authErrorsState.callToActionLink ? (
+                  <Link href={authErrorsState.callToActionLink}>
+                    {authErrorsState.callToActionText}
+                  </Link>
+                ) : undefined}
+              </Alert>
+            )}
+            {Object.keys(errors).length > 0 && !authErrorsState.isError && (
+              <Alert
+                type={ErrorStatus.ERROR}
+                validation={true}
+                tabIndex={0}
+                id="registrationValidationErrors"
+                heading={
+                  Object.entries(errors).length === 3
+                    ? t("securityQuestions.inputValidation.allRequired.title")
+                    : t("input-validation.heading", { ns: "common" })
                 }
-              }
-            );
-          }}
-        >
-          {({ handleSubmit, errors }) => (
-            <>
-              {cognitoError && (
-                <Alert
-                  type={ErrorStatus.ERROR}
-                  heading={cognitoError}
-                  onDismiss={resetCognitoErrorState}
-                  id="cognitoErrors"
-                  dismissible={cognitoErrorIsDismissible}
-                >
-                  {cognitoErrorDescription}&nbsp;
-                  {cognitoErrorCallToActionLink ? (
-                    <Link href={cognitoErrorCallToActionLink}>{cognitoErrorCallToActionText}</Link>
-                  ) : undefined}
-                </Alert>
-              )}
-              {Object.keys(errors).length > 0 && !cognitoError && (
-                <Alert
-                  type={ErrorStatus.ERROR}
-                  validation={true}
-                  tabIndex={0}
-                  id="registrationValidationErrors"
-                  heading={t("input-validation.heading", { ns: "common" })}
-                >
-                  <ol className="gc-ordered-list">
-                    {Object.entries(errors).map(([fieldKey, fieldValue]) => {
+                focussable={true}
+              >
+                <ol className="gc-ordered-list">
+                  {Object.entries(errors).length === 3 ? (
+                    <ErrorListItem
+                      errorKey={"question1"}
+                      key={`resetPassword`}
+                      value={t("securityQuestions.inputValidation.allRequired.description")}
+                    />
+                  ) : (
+                    Object.entries(errors).map(([fieldKey, fieldValue]) => {
                       return (
                         <ErrorListItem
                           key={`error-${fieldKey}`}
@@ -177,40 +265,139 @@ const ResetPassword = () => {
                           value={fieldValue}
                         />
                       );
-                    })}
-                  </ol>
-                </Alert>
-              )}
-              <h1>{t("provideUsername.title")}</h1>
-              <form id="provideUsername" method="POST" onSubmit={handleSubmit} noValidate>
-                <div className="focus-group">
-                  <Label id="label-username" htmlFor="username" className="required" required>
-                    {t("provideUsername.fields.username.label")}
-                  </Label>
-                  <Description id="username-hint" className="text-p text-black-default">
-                    {t("provideUsername.fields.username.hint")}
-                  </Description>
-                  <TextInput
-                    className="h-10 w-full max-w-lg rounded"
-                    type="email"
-                    id="username"
-                    name="username"
-                    ariaDescribedBy="desc-username-hint"
-                  />
-                </div>
+                    })
+                  )}
+                </ol>
+              </Alert>
+            )}
+            <h1 className="mb-12 mt-6 border-b-0">{t("securityQuestions.title")}</h1>
+            <p className="mb-6 max-w-lg">{t("securityQuestions.description")}</p>
+            <form id="resetPassword" method="POST" onSubmit={handleSubmit} noValidate>
+              <div className="focus-group">
+                <Label
+                  id="label-question1"
+                  htmlFor="question1"
+                  className="required w-full max-w-lg"
+                  required
+                >
+                  {userSecurityQuestions[0][langKey]}
+                </Label>
+                <TextInput
+                  className="h-10 w-[75%] rounded"
+                  type="text"
+                  id="question1"
+                  name="question1"
+                  required
+                />
+              </div>
 
-                <Button className="gc-button--blue" type="submit">
-                  {t("provideUsername.resetPasswordButton")}
+              <div className="focus-group">
+                <Label
+                  id="label-question2"
+                  htmlFor="question2"
+                  className="required w-full max-w-lg"
+                  required
+                >
+                  {userSecurityQuestions[1][langKey]}
+                </Label>
+                <TextInput
+                  className="h-10 w-[75%] rounded"
+                  type="text"
+                  id="question2"
+                  name="question2"
+                  required
+                />
+              </div>
+
+              <div className="focus-group">
+                <Label
+                  id="label-question3"
+                  htmlFor="question3"
+                  className="required w-full max-w-lg"
+                  required
+                >
+                  {userSecurityQuestions[2][langKey]}
+                </Label>
+                <TextInput
+                  className="h-10 w-[75%] rounded"
+                  type="text"
+                  id="question3"
+                  name="question3"
+                  required
+                />
+              </div>
+
+              <div className="buttons">
+                <Button theme="primary" type="submit" className="mr-4">
+                  {t("securityQuestions.resetPasswordButton")}
                 </Button>
-              </form>
-            </>
-          )}
-        </Formik>
-      </>
-    );
-  }
 
-  // the form to reset the password with the verification code
+                <LinkButton.Secondary href="/form-builder/support">
+                  {t("securityQuestions.support")}
+                </LinkButton.Secondary>
+              </div>
+            </form>
+          </>
+        )}
+      </Formik>
+    </>
+  );
+};
+
+// Confirm password reset form
+const Step3 = ({
+  username,
+  confirmPasswordReset,
+  authErrorsState,
+  authErrorsReset,
+}: {
+  username: MutableRefObject<string>;
+  confirmPasswordReset: (
+    values: { username: string; password: string; confirmationCode: string },
+    helpers: FormikHelpers<{ username: string; password: string; confirmationCode: string }>
+  ) => Promise<void>;
+  authErrorsState: AuthErrorsState;
+  authErrorsReset: () => void;
+}) => {
+  const { t } = useTranslation(["reset-password", "common"]);
+
+  // validation schema for password reset form
+  const confirmPasswordResetValidationSchema = Yup.object().shape({
+    confirmationCode: Yup.number()
+      .typeError(t("resetPassword.fields.confirmationCode.error.number"))
+      .required(t("input-validation.required", { ns: "common" })),
+    password: Yup.string()
+      .required(t("input-validation.required", { ns: "common" }))
+      .min(8, t("account.fields.password.error.minLength", { ns: "common" }))
+      .max(50, t("account.fields.password.error.maxLength", { ns: "common" }))
+      .test(
+        "password-valid-lowerCase",
+        t("account.fields.password.error.oneLowerCase", { ns: "common" }),
+        (password = "") => containsLowerCaseCharacter(password)
+      )
+      .test(
+        "password-valid-upperCase",
+        t("account.fields.password.error.oneUpperCase", { ns: "common" }),
+        (password = "") => containsUpperCaseCharacter(password)
+      )
+      .test(
+        "password-valid-number",
+        t("account.fields.password.error.oneNumber", { ns: "common" }),
+        (password = "") => containsNumber(password)
+      )
+      .test(
+        "password-valid-symbol",
+        t("account.fields.password.error.oneSymbol", { ns: "common" }),
+        (password = "") => containsSymbol(password)
+      ),
+    passwordConfirmation: Yup.string()
+      .required(t("input-validation.required", { ns: "common" }))
+      .oneOf(
+        [Yup.ref("password"), null],
+        t("account.fields.passwordConfirmation.error.mustMatch", { ns: "common" })
+      ),
+  });
+
   return (
     <>
       <Head>
@@ -229,21 +416,22 @@ const ResetPassword = () => {
       >
         {({ handleSubmit, errors }) => (
           <>
-            {cognitoError && (
+            {authErrorsState.isError && (
               <Alert
                 type={ErrorStatus.ERROR}
-                heading={cognitoError}
-                onDismiss={resetCognitoErrorState}
+                heading={authErrorsState.title}
+                onDismiss={authErrorsReset}
                 id="cognitoErrors"
-                dismissible={cognitoErrorIsDismissible}
               >
-                {cognitoErrorDescription}&nbsp;
-                {cognitoErrorCallToActionLink ? (
-                  <Link href={cognitoErrorCallToActionLink}>{cognitoErrorCallToActionText}</Link>
+                {authErrorsState.description}&nbsp;
+                {authErrorsState.callToActionLink ? (
+                  <Link href={authErrorsState.callToActionLink}>
+                    {authErrorsState.callToActionText}
+                  </Link>
                 ) : undefined}
               </Alert>
             )}
-            {Object.keys(errors).length > 0 && !cognitoError && (
+            {Object.keys(errors).length > 0 && !authErrorsState.isError && (
               <Alert
                 type={ErrorStatus.ERROR}
                 validation={true}
@@ -264,7 +452,7 @@ const ResetPassword = () => {
                 </ol>
               </Alert>
             )}
-            <h1>{t("resetPassword.title")}</h1>
+            <h1 className="mb-12 mt-6 border-b-0">{t("resetPassword.title")}</h1>
             <form id="resetPassword" method="POST" onSubmit={handleSubmit} noValidate>
               <div className="focus-group">
                 <Label
@@ -285,10 +473,10 @@ const ResetPassword = () => {
               </div>
               <div className="focus-group">
                 <Label id="label-password" htmlFor="password" className="required" required>
-                  {t("resetPassword.fields.password.label")}
+                  {t("account.fields.password.label", { ns: "common" })}
                 </Label>
-                <Description className="text-p text-black-default" id="password-hint">
-                  {t("resetPassword.fields.password.hint")}
+                <Description className="text-xl text-black-default" id="password-hint">
+                  {t("account.fields.password.hint", { ns: "common" })}
                 </Description>
                 <TextInput
                   className="h-10 w-full max-w-lg rounded"
@@ -305,7 +493,7 @@ const ResetPassword = () => {
                   className="required"
                   required
                 >
-                  {t("resetPassword.fields.passwordConfirmation.label")}
+                  {t("account.fields.passwordConfirmation.label", { ns: "common" })}
                 </Label>
                 <TextInput
                   className="h-10 w-full max-w-lg rounded"
@@ -314,8 +502,11 @@ const ResetPassword = () => {
                   name="passwordConfirmation"
                 />
               </div>
+
               <div className="buttons">
-                <Button type="submit">{t("resetPassword.resetPasswordButton")}</Button>
+                <Button theme="primary" type="submit">
+                  {t("resetPassword.resetPasswordButton")}
+                </Button>
               </div>
             </form>
           </>
@@ -325,30 +516,143 @@ const ResetPassword = () => {
   );
 };
 
-ResetPassword.getLayout = (page: ReactElement) => {
-  return <UserNavLayout>{page}</UserNavLayout>;
+const ResetPassword = ({
+  email,
+  userSecurityQuestions,
+}: {
+  email: string;
+  userSecurityQuestions: [];
+}) => {
+  // we don't put this state in useAuth since its very unique to this page only
+  const [initialCodeSent, setInitialCodeSent] = useState(false);
+  const [securityQuestions, setSecurityQuestions] = useState(
+    userSecurityQuestions.length >= 1 ? true : false
+  );
+  const { i18n } = useTranslation();
+  const router = useRouter();
+
+  const {
+    username,
+    sendResetPasswordMagicLink,
+    sendForgotPassword,
+    confirmPasswordReset,
+    authErrorsState,
+    authErrorsReset,
+    confirmSecurityQuestions,
+  } = useResetPassword({
+    email,
+    onConfirmSecurityQuestions: () => {
+      sendForgotPassword(username.current);
+      setInitialCodeSent(true);
+      setSecurityQuestions(false);
+    },
+  });
+
+  // The form to initially send a verification code needed to reset a user's password
+  if (!initialCodeSent && !securityQuestions) {
+    return (
+      <Step1
+        username={username}
+        authErrorsState={authErrorsState}
+        authErrorsReset={authErrorsReset}
+        nextStep={async () => {
+          sendResetPasswordMagicLink(username.current);
+          await router.push(`/${i18n.language}/auth/reset-link`);
+        }}
+      />
+    );
+  }
+
+  if (securityQuestions) {
+    return (
+      <Step2
+        username={username}
+        authErrorsState={authErrorsState}
+        authErrorsReset={authErrorsReset}
+        confirmSecurityQuestions={confirmSecurityQuestions}
+        userSecurityQuestions={userSecurityQuestions}
+      />
+    );
+  }
+
+  // the form to reset the password with the verification code
+  return (
+    <Step3
+      username={username}
+      authErrorsState={authErrorsState}
+      authErrorsReset={authErrorsReset}
+      confirmPasswordReset={confirmPasswordReset}
+    />
+  );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  // if the password reset feature flag is not enabled. Redirect to the login page
-  const passwordResetEnabled = await checkOne("passwordReset");
-  if (!passwordResetEnabled) {
-    return {
-      redirect: {
-        destination: `/${context.locale}/auth/login`,
-        permanent: false,
-      },
-    };
+ResetPassword.getLayout = (page: ReactElement) => {
+  return (
+    <UserNavLayout contentWidth="tablet:w-[658px]">
+      <ResetPassword
+        email={page.props.email}
+        userSecurityQuestions={page.props.userSecurityQuestions}
+      />
+    </UserNavLayout>
+  );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ query: { token }, locale }) => {
+  let userSecurityQuestions: SecurityQuestion[] = [];
+  let email = "";
+
+  if (token) {
+    try {
+      email = await getPasswordResetAuthenticatedUserEmailAddress(token as string);
+      userSecurityQuestions = await retrieveUserSecurityQuestions({ email });
+
+      if (userSecurityQuestions.length === 0) {
+        return {
+          redirect: {
+            destination: `/${locale}/auth/reset-failed`,
+            permanent: false,
+          },
+        };
+      }
+    } catch (e) {
+      if (e instanceof PasswordResetExpiredLink) {
+        return {
+          redirect: {
+            destination: `/${locale}/auth/expired-link`,
+            permanent: false,
+          },
+        };
+      }
+
+      if (e instanceof PasswordResetInvalidLink) {
+        return {
+          redirect: {
+            destination: `/${locale}/auth/invalid-link`,
+            permanent: false,
+          },
+        };
+      }
+
+      return {
+        redirect: {
+          destination: `/${locale}/auth/login`,
+          permanent: false,
+        },
+      };
+    }
   }
+
   return {
     props: {
-      ...(context.locale &&
-        (await serverSideTranslations(context.locale, [
+      ...(locale &&
+        (await serverSideTranslations(locale, [
           "common",
           "cognito-errors",
           "reset-password",
           "signup",
         ]))),
+      email,
+      userSecurityQuestions,
     },
   };
 };

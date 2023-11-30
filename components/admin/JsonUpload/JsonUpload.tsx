@@ -83,7 +83,7 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
   const uploadJson = async (jsonConfig: string, formID?: string) => {
     const url = formID ? `/api/templates/${formID}` : "/api/templates";
 
-    return await axios({
+    return axios({
       url: url,
       method: formID ? "PUT" : "POST",
       headers: {
@@ -122,7 +122,7 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
                 aria-label={t("upload.jsonConfigAriaLabel")}
               />
               <div>
-                <button type="submit" className="gc-button" data-testid="upload">
+                <button type="submit" className="gc-button mt-10" data-testid="upload">
                   {t("upload.submit")}
                 </button>
                 {submitStatus && (

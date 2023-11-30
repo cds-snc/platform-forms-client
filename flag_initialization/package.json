@@ -1,16 +1,17 @@
 {
-  "name": "forms-flags-migrations",
+  "name": "flag_initialization",
   "version": "0.1.0",
   "description": "Initiates the Feature Flags between application versions",
   "main": "index.js",
   "private": true,
   "scripts": {
-    "initialize": "node index.js"
+    "initialize": "yarn node index.js"
   },
   "keywords": [],
   "author": "Bryan Robitaille",
   "dependencies": {
-    "dotenv": "^16.0.1",
-    "ioredis": "^5.2.3"
-  }
+    "dotenv": "16.0.1",
+    "ioredis": "5.2.3"
+  },
+  "packageManager": "yarn@4.0.2"
 }

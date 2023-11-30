@@ -17,7 +17,7 @@ const TermsOfUse = ({ content }: TermsOfUseProps) => {
       <Head>
         <title>{t("terms-of-use.title")}</title>
       </Head>
-      <RichText>{content}</RichText>
+      <RichText className="w-[100%] tablet:w-[90%] laptop:w-[70%]">{content}</RichText>
     </>
   );
 };

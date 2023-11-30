@@ -1,66 +1,81 @@
 import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
-import Link from "next/link";
-import Head from "next/head";
-import { User } from "next-auth";
 import { NextPageWithLayout } from "@pages/_app";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
+import { checkPrivilegesAsBoolean } from "@lib/privileges";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import Link from "next/link";
+import { ManageAccountsIcon, SettingsApplicationsIcon } from "@components/form-builder/icons";
+import Head from "next/head";
 
-type AdminWelcomeProps = {
-  user: User;
-};
-
-const AdminWelcome: NextPageWithLayout<AdminWelcomeProps> = (props: AdminWelcomeProps) => {
-  const { t, i18n } = useTranslation("admin-login");
-  const { user } = props;
+// keeping this here if we want to add a welcome page
+const AdminWelcome: NextPageWithLayout = () => {
+  const { t } = useTranslation(["admin-home", "common"]);
 
   return (
     <>
       <Head>
         <title>{t("title")}</title>
       </Head>
-      <h1>{t("title")}</h1>
-      <div className="flex flex-wrap">
-        <div className="flex-auto mb-10">
-          <h3>
-            {i18n.language === "en" ? "Welcome" : "Bienvenue"} {user.name}!
-          </h3>
-          <p className="text-sm mb-8">
-            {t("logged-in")} {user.email}
+      <h1 className="visually-hidden">{t("title", { ns: "admin-home" })}</h1>
+      <div className="flex flex-row justify-center">
+        <div className="rounded-lg border bg-white p-10">
+          <h2>
+            <ManageAccountsIcon className="inline-block h-14 w-14" /> {t("accountAdministration")}
+          </h2>
+          <p>{t("manageUsersAndTheirForms")}</p>
+          <p>
+            <Link href="/admin/accounts" legacyBehavior>
+              <a href={"/admin/accounts"}>{t("accounts")}</a>
+            </Link>
           </p>
         </div>
 
-        <div className="flex-auto mb-10 w-60">
-          <h3>Create forms</h3>
-          <p>
-            <Link href="/myforms">GC Forms</Link>
-          </p>
-          <p>
-            <Link href="/admin/upload">Upload form templates</Link>
-          </p>
-        </div>
-        <div className="flex-auto mb-10 w-60">
-          <h3>View existing forms</h3>
-          <p>
-            <Link href="/admin/view-templates">View form templates</Link>
-          </p>
-          <p>
-            <Link href="/admin/vault">View form submissions</Link>
-          </p>
+        <div className="ml-20 rounded-lg border bg-white p-10">
+          <h2>
+            <SettingsApplicationsIcon className="inline-block h-14 w-14" />
+            {t("systemAdministration")}
+          </h2>
+          <p>{t("configureHowTheApplicationWorks")}</p>
+          <ul className="list-none pl-0">
+            <li>
+              <Link href="/admin/settings" legacyBehavior>
+                <a href={"/admin/settings"}>{t("systemSettings")}</a>
+              </Link>
+            </li>
+            <li>
+              <Link href="/admin/flags" legacyBehavior>
+                <a href={"/admin/flags"}>{t("featureFlags")}</a>
+              </Link>
+            </li>
+          </ul>
         </div>
       </div>
     </>
   );
 };
 AdminWelcome.getLayout = (page: ReactElement) => {
-  return <AdminNavLayout user={page.props.user}>{page}</AdminNavLayout>;
+  return (
+    <AdminNavLayout user={page.props.user} hideLeftNav={true}>
+      {page}
+    </AdminNavLayout>
+  );
 };
-export const getServerSideProps = requireAuthentication(async ({ locale }) => {
+export const getServerSideProps = requireAuthentication(async ({ user: { ability }, locale }) => {
+  const canViewUsers = checkPrivilegesAsBoolean(ability, [{ action: "view", subject: "User" }]);
+  if (!canViewUsers) {
+    return {
+      redirect: {
+        destination: `/forms`,
+        permanent: false,
+      },
+    };
+  }
   return {
     props: {
-      ...(locale && (await serverSideTranslations(locale, ["common", "admin-login"]))),
+      ...(locale &&
+        (await serverSideTranslations(locale, ["common", "admin-home", "admin-login"]))),
     },
   };
 });

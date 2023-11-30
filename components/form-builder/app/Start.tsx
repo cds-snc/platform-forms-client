@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { useTemplateStore, clearTemplateStore } from "../store/useTemplateStore";
 import { useTranslation } from "next-i18next";
-import { DesignIcon, ExternalLinkIcon, WarningIcon } from "../icons";
 import { useRouter } from "next/router";
+
+import { useTemplateStore, clearTemplateStore } from "../store/useTemplateStore";
+import { DesignIcon, ExternalLinkIcon, WarningIcon } from "../icons";
 import { errorMessage, validateTemplate } from "../validate";
 
 export const Start = () => {
@@ -55,6 +56,11 @@ export const Start = () => {
         }
 
         importTemplate(data);
+
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: "open_form_file",
+        });
         router.push({ pathname: `/form-builder/preview` });
       };
     } catch (e) {
@@ -65,7 +71,7 @@ export const Start = () => {
   };
 
   const boxClass =
-    "group w-80 h-80 mx-4 mb-4 pt-28 pl-6 pr-5 bg-gray-background border-3 border-black-default text-left rounded-xl flex flex-col focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 hover:cursor-pointer focus:cursor-pointer hover:bg-gray-selected";
+    "group mx-4 mb-4 flex h-80 w-80 flex-col rounded-xl border-[0.5px] border-slate-500 bg-gray-background pl-6 pr-5 pt-28 text-left outline-none hover:cursor-pointer hover:border-[1px] hover:border-indigo-700 hover:bg-indigo-50 focus:cursor-pointer focus:border-[3px] focus:border-slate-700";
 
   /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
   /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
@@ -74,11 +80,11 @@ export const Start = () => {
       <h1 className="visually-hidden">{t("start")}</h1>
       <div role="alert">
         {errors && (
-          <div className="bg-red-100 w-5/12 m-auto mb-8 p-6 flex">
+          <div className="m-auto mb-8 flex w-5/12 bg-red-100 p-6">
             <WarningIcon />
             <div>
-              <h3 className="ml-6 mb-2 mt-1">{t("failedToReadFormFile")}</h3>
-              <ul className="list-none pl-6 mb-4">
+              <h3 className="mb-2 ml-6 mt-1">{t("failedToReadFormFile")}</h3>
+              <ul className="mb-4 list-none pl-6">
                 {errors.map((error, index) => {
                   return (
                     <li key={`section-${index}`}>
@@ -94,7 +100,7 @@ export const Start = () => {
           </div>
         )}
       </div>
-      <div className="flex flex-col tablet:flex-row justify-center">
+      <div className="flex flex-col justify-center tablet:flex-row">
         <button
           className={boxClass}
           onClick={async (e) => {
@@ -106,7 +112,7 @@ export const Start = () => {
           }}
         >
           <DesignIcon className="mb-2 scale-125" />
-          <h2 className="p-0 mb-1 group-hover:underline group-focus:underline">{t("startH2")}</h2>
+          <h2 className="mb-1 p-0 group-hover:underline group-focus:underline">{t("startH2")}</h2>
           <p className="text-sm">{t("startP1")}</p>
         </button>
         <div
@@ -122,7 +128,7 @@ export const Start = () => {
         >
           <label>
             <ExternalLinkIcon className="mb-2 scale-125" />
-            <h2 className="p-0 mb-1 group-hover:underline group-focus:underline">{t("startH3")}</h2>
+            <h2 className="mb-1 p-0 group-hover:underline group-focus:underline">{t("startH3")}</h2>
             <p className="text-sm">{t("startP2")}</p>
             <input id="file-upload" type="file" onChange={handleChange} className="hidden" />
           </label>

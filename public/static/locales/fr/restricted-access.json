@@ -1,0 +1,10 @@
+{
+  "title": "Accès limité aux réponses",
+  "text1": "Votre formulaire a des réponses qui ont été soumises il y a plus de 35 jours. L’accès à toutes les nouvelles réponses sera limité jusqu’à ce que vous confirmez ces réponses non-traitées.",
+  "text2": "Les",
+  "text3": "conditions d’utilisations",
+  "text4": "de Formulaire GC exigent que toutes les réponses soient confirmées dans les 45 jours suivant leur soumission. Sinon, vous risquez la désactivation de votre compte.",
+  "cta": {
+    "label": "Continuer"
+  }
+}

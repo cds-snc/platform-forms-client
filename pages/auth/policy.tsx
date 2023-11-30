@@ -26,7 +26,7 @@ const TermsOfUse = ({ content, referer }: TermsOfUse) => {
 };
 
 TermsOfUse.getLayout = (page: ReactElement) => {
-  return <UserNavLayout>{page}</UserNavLayout>;
+  return <UserNavLayout contentWidth="tablet:w-[768px] laptop:w-[850px]">{page}</UserNavLayout>;
 };
 
 export const getServerSideProps = requireAuthentication(async (context) => {
@@ -34,7 +34,7 @@ export const getServerSideProps = requireAuthentication(async (context) => {
     return {
       redirect: {
         //redirect to user landing page
-        destination: `/${context.locale}/myforms`,
+        destination: `/${context.locale}/forms`,
         permanent: false,
       },
     };

@@ -1,0 +1,93 @@
+name: Deploy to Production
+
+on:
+  workflow_run:
+    workflows: ["Production — Push container to ECR"]
+    types:
+      - completed
+
+env:
+  AWS_REGION: ca-central-1
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  unable-to-deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Slack if ECR build/push failed
+        env:
+          WORKFLOW_URL: "${{ github.event.workflow_run.html_url }}"
+          WORKFLOW_NAME: "${{ github.event.workflow_run.name }}"
+        run: |
+          json='{"channel":"#forms-production-events", "blocks":[{"type":"section","text":{"type":"mrkdwn","text":":red: GitHub workflow failure: <${{ env.WORKFLOW_URL }}|${{ env.WORKFLOW_NAME }}>"}}]}'
+          curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.PRODUCTION_SLACK_WEBHOOK }}
+          exit 1   
+
+  deploy-form-viewer-service:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2.7.0
+
+      - name: Configure AWS credentials using OIDC
+        uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a # v4.0.1
+        with:
+          role-to-assume: arn:aws:iam::957818836222:role/platform-forms-client-apply
+          role-session-name: ECSDeploy
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        # v1 as of Jan 28 2021
+        uses: aws-actions/amazon-ecr-login@008362efad0aaacc7df7adcc6933ace405f0fbf8
+
+      - name: Download Form Viewer task definition
+        id: download-taskdef-form-viewer
+        run: |
+          aws ecs describe-task-definition --task-definition form-viewer --query taskDefinition > form_viewer.json
+          echo "container_name=$(jq -r '.containerDefinitions[0].name' form_viewer.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Render image for form viewer service
+        id: taskdef-form-viewer
+        # v1.0.10
+        uses: aws-actions/amazon-ecs-render-task-definition@11e794c887074ceb05d9a786ae537ca13dfacd82
+        with:
+          task-definition: form_viewer.json
+          container-name: ${{ steps.download-taskdef-form-viewer.outputs.container_name }}
+          image: ${{ steps.login-ecr.outputs.registry }}/form_viewer_production:${{ github.event.workflow_run.head_branch }}
+
+      - name: Render appspec for form viewer service
+        run: |
+          CONTAINER_PORT=`jq '.containerDefinitions[0].portMappings[0].containerPort' form_viewer.json`
+          CONTAINER_NAME=${{ steps.download-taskdef-form-viewer.outputs.container_name }}
+          TASKDEF_ARN=`jq -r '.taskDefinitionArn' form_viewer.json | cut -f 1-6 -d "/"`
+          jq --argjson port "$CONTAINER_PORT" --arg cname "$CONTAINER_NAME" --arg taskdefarn "$TASKDEF_ARN" '.Resources[0].TargetService.Properties.TaskDefinition = $taskdefarn | .Resources[0].TargetService.Properties.LoadBalancerInfo.ContainerName = $cname | .Resources[0].TargetService.Properties.LoadBalancerInfo.ContainerPort = $port' config/infrastructure/aws/appspec-template.json > form-viewer-appspec.json
+
+      - name: Deploy image for Form Viewer
+        timeout-minutes: 10
+        # v1.4.11
+        uses: aws-actions/amazon-ecs-deploy-task-definition@47d7844ea25e76ab61792242e985f3a48e8c08c6
+        with:
+          task-definition: ${{ steps.taskdef-form-viewer.outputs.task-definition }}
+          service: form-viewer
+          cluster: Forms
+          wait-for-service-stability: true
+          codedeploy-appspec: ${{ github.workspace }}/form-viewer-appspec.json
+
+      - name: Logout of Amazon ECR
+        if: always()
+        run: docker logout ${{ steps.login-ecr.outputs.registry }}
+
+      - name: Report deployment to Sentinel
+        if: always()
+        uses: cds-snc/sentinel-forward-data-action@main
+        with:
+          input_data: '{"product": "forms", "sha": "${{ github.sha }}", "version": "${{ github.event.workflow_run.head_branch }}", "repository": "${{ github.repository }}", "environment": "production", "status": "${{ job.status }}"}'
+          log_type: CDS_Product_Deployment_Data
+          log_analytics_workspace_id: ${{ secrets.LOG_ANALYTICS_WORKSPACE_ID }}
+          log_analytics_workspace_key: ${{ secrets.LOG_ANALYTICS_WORKSPACE_KEY }}

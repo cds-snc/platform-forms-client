@@ -21,6 +21,7 @@ import {
   incrementElementId,
   getSchemaFromState,
   incrementSubElementId,
+  cleanInput,
 } from "../util";
 import { Language } from "../types";
 import update from "lodash.set";
@@ -86,6 +87,7 @@ export interface TemplateStoreProps {
   name: string;
   deliveryOption?: DeliveryOption;
   securityAttribute: SecurityAttribute;
+  closingDate?: string | null;
 }
 
 export interface InitialTemplateStoreProps extends TemplateStoreProps {
@@ -133,7 +135,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   updateSecurityAttribute: (value: SecurityAttribute) => void;
   propertyPath: (id: number, field: string, lang?: Language) => string;
   unsetField: (path: string) => void;
-  duplicateElement: (elIndex: number) => void;
+  duplicateElement: (id: number) => void;
   subDuplicateElement: (elIndex: number, subIndex: number) => void;
   importTemplate: (jsonConfig: FormProperties) => void;
   getSchema: () => string;
@@ -142,6 +144,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   getDeliveryOption: () => DeliveryOption | undefined;
   resetDeliveryOption: () => void;
   getSecurityAttribute: () => SecurityAttribute;
+  setClosingDate: (closingDate: string | null) => void;
   initialize: () => void;
 }
 
@@ -171,6 +174,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
     isPublished: false,
     name: "",
     securityAttribute: "Protected A",
+    closingDate: initProps?.closingDate,
   };
 
   // Ensure any required properties by Form Builder are defaulted by defaultForm
@@ -228,7 +232,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 : undefined,
             updateField: (path, value) =>
               set((state) => {
-                update(state, path, value);
+                update(state, path, cleanInput(value));
               }),
             updateSecurityAttribute: (value) =>
               set((state) => {
@@ -340,7 +344,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                   subIndex
                 ].properties.choices?.splice(choiceIndex, 1);
               }),
-            duplicateElement: (elIndex) => {
+            duplicateElement: (itemId) => {
+              const elIndex = get().form.elements.findIndex((el) => el.id === itemId);
               set((state) => {
                 const id = incrementElementId(state.form.elements);
                 // deep copy the element
@@ -382,6 +387,11 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               });
             },
             getSecurityAttribute: () => get().securityAttribute,
+            setClosingDate: (value) => {
+              set((state) => {
+                state.closingDate = value;
+              });
+            },
             initialize: () => {
               set((state) => {
                 state.id = "";
@@ -390,6 +400,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.isPublished = false;
                 state.name = "";
                 state.deliveryOption = undefined;
+                state.closingDate = null;
               });
             },
             importTemplate: (jsonConfig) =>
@@ -401,6 +412,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.name = "";
                 state.securityAttribute = "Protected A";
                 state.deliveryOption = undefined;
+                state.closingDate = null;
               }),
           }),
           {

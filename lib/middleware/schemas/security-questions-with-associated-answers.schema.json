@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "id": "https://forms-formulaires.alpha.canada.ca/",
+  "title": "GC Forms",
+  "description": "A schema to define security questions with associated answers",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "questionId": {
+        "description": "The question identifier",
+        "id": "#/properties/questionId",
+        "type": "string"
+      },
+      "answer": {
+        "description": "The associated answer",
+        "id": "#/properties/answer",
+        "type": "string"
+      }
+    },
+    "required": ["questionId", "answer"],
+    "additionalProperties": false
+  },
+  "minItems": 3
+}

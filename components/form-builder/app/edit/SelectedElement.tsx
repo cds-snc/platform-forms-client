@@ -2,7 +2,7 @@ import React from "react";
 import { FormElementTypes, HTMLTextInputTypeAttribute } from "@lib/types";
 import { useTranslation } from "next-i18next";
 
-import { CheckBoxEmptyIcon, RadioEmptyIcon } from "../../icons";
+import { CheckBoxEmptyIcon, CheckIcon, RadioEmptyIcon } from "../../icons";
 import { ShortAnswer, Options, SubOptions, RichText, SubElement } from "./elements";
 import { ElementOption, FormElementWithIndex } from "../../types";
 import { useElementOptions } from "../../hooks";
@@ -80,11 +80,7 @@ export const SelectedElement = ({
       element = <ShortAnswer>{t("shortAnswerText")}</ShortAnswer>;
       break;
     case "richText":
-      if (elIndex !== -1) {
-        element = <RichText elIndex={elIndex} subIndex={item.index} />;
-      } else {
-        element = <RichText elIndex={item.index} />;
-      }
+      element = <RichText id={item.id} elIndex={item.index} />;
       break;
     case "textArea":
       element = <ShortAnswer>{t("longAnswerText")}</ShortAnswer>;
@@ -114,7 +110,12 @@ export const SelectedElement = ({
       } else {
         element = (
           <>
-            <ShortAnswer>{t("addElementDialog.checkbox.title")}</ShortAnswer>
+            <ShortAnswer>
+              <div className="flex items-center ">
+                <CheckIcon />
+                <span className="ml-2 text-lg">{t("addElementDialog.checkbox.title")}</span>
+              </div>
+            </ShortAnswer>
             <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} />
           </>
         );

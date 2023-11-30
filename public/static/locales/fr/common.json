@@ -32,12 +32,12 @@
   "submitButton": "Soumettre",
   "input-validation": {
     "heading": "Veuillez corriger les erreurs sur la page.",
-    "required": "Compléter le champs obligatoire afin de continuer.",
+    "required": "Compléter le champ obligatoire afin de continuer.",
     "alphanumeric": "Entrer uniquement des lettres et des chiffres.",
     "text": "",
     "number": "Entrer un numéro.",
     "email": "Entrer une adresse courriel valide.",
-    "date": "Utiliser le format de date mm/jj/aaaa.",
+    "date": "Entrer une date valide au format mm/jj/aaaa.",
     "phone": "Entrer un numéro de téléphone valide.",
     "regex": "Veuillez utiliser le bon format.",
     "file-size-too-large": "Sélectionner un fichier plus petit.",
@@ -69,15 +69,16 @@
   "adminNav": {
     "dashboard": "Accueil",
     "formbuilder": "Générateur de formulaires",
-    "users": "Usagers",
-    "upload": "Téléversement de modèle",
+    "users": "Comptes",
     "templates": "Modèles",
-    "features": "Options",
+    "features": "Indicateurs de fonction",
     "login": "Se connecter",
     "logout": "Se déconnecter",
     "privileges": "Privilèges",
     "settings": "Paramètres",
-    "myForms": "Vos formulaires"
+    "administration": "Administration",
+    "myForms": "Formulaires",
+    "profile": "Profil"
   },
   "formElements": {
     "characterCount": {
@@ -112,11 +113,39 @@
   },
   "errorPanel": {
     "defaultTitle": "Quelque chose a mal tourné",
-    "defaultMessage": "Désolé, il y a un problème et nous vous avons perdu.",
+    "defaultMessage": "Désolé, il y a un problème et nous vous avons perdu. Veuillez réessayer plus tard.",
     "cta": {
-      "yourForms": "Retourner à Vos formulaires",
+      "yourForms": "Retourner aux formulaires",
       "home": "Retourner à l’accueil",
       "support": "Obtenir du soutien"
     }
-  }
+  },
+  "account": {
+    "actions": {
+      "backToSignIn": "Retourner à Se connecter"
+    },
+    "fields": {
+      "password": {
+        "label": "Mot de passe",
+        "hint": "Doit contenir au moins 8 caractères avec une majuscule, un chiffre et un symbole",
+        "error": {
+          "minLength": "Le mot de passe doit comporter au moins 8 caractères.",
+          "maxLength": "Le mot de passe ne doit pas dépasser 50 caractères.",
+          "oneLowerCase": "Le mot de passe doit contenir au moins 1 caractère minuscule.",
+          "oneUpperCase": "Le mot de passe doit contenir au moins 1 caractère majuscule.",
+          "oneNumber": "Le mot de passe doit contenir au moins 1 chiffre.",
+          "oneSymbol": "Le mot de passe doit contenir au moins 1 symbole."
+        }
+      },
+      "passwordConfirmation": {
+        "label": "Confirmation du mot de passe",
+        "error": {
+          "mustMatch": "Les valeurs entrées pour le mot de passe doivent correspondent."
+        }
+      }
+    }
+  },
+  "mainNavAriaLabel": "Navigation principale",
+  "yourAccount": "Votre compte",
+  "dateModified": "Date de modification"
 }

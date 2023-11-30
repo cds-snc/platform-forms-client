@@ -11,9 +11,9 @@ export const Card = (props: CardProps) => {
   const { children, icon, title, content } = props;
 
   return (
-    <div className="inline-flex justify-between p-4 border-2 border-solid border-[#ebf0f4] rounded-lg">
+    <div className="inline-flex justify-between rounded-lg border-2 border-solid border-[#ebf0f4] p-4">
       {icon && <div>{icon}</div>}
-      <div className="flex flex-col justify-center ml-8 mr-8">
+      <div className="mx-8 mt-4 flex flex-col justify-start">
         {children && children}
         {!children && (
           <>

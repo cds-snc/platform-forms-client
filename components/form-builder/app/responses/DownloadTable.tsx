@@ -1,42 +1,68 @@
 import React, { useEffect, useReducer, useState } from "react";
-import { VaultSubmissionList } from "@lib/types";
+import {
+  NagwareResult,
+  TypeOmit,
+  VaultStatus,
+  VaultSubmission,
+  VaultSubmissionList,
+} from "@lib/types";
 import { useTranslation } from "react-i18next";
 import { SkipLinkReusable } from "@components/globals/SkipLinkReusable";
 import { ConfirmReceiptStatus } from "./ConfirmReceiptStatus";
 import { DownloadResponseStatus } from "./DownloadResponseStatus";
 import { RemovalStatus } from "./RemovalStatus";
-import { DownloadStatus } from "./DownloadStatus";
 import { useRouter } from "next/router";
-import { logMessage } from "@lib/logger";
-import axios from "axios";
-import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
-import { toast } from "../shared/Toast";
 import { useSetting } from "@lib/hooks/useSetting";
 import Link from "next/link";
-import { TableActions, reducerTableItems, sortVaultSubmission } from "./DownloadTableReducer";
-
-// TODO: move to an app setting variable
-const MAX_FILE_DOWNLOADS = 20;
+import { TableActions, initialTableItemsState, reducerTableItems } from "./DownloadTableReducer";
+import { getDaysPassed, isStatus } from "@lib/clientHelpers";
+import { Alert } from "@components/globals";
+import { CheckAll } from "./CheckAll";
+import { DownloadButton } from "./DownloadButton";
+import { ActionsPanel } from "./ActionsPanel";
+import { DeleteButton } from "./DeleteButton";
+import { ConfirmDeleteNewDialog } from "./Dialogs/ConfirmDeleteNewDialog";
+import { DownloadDialog } from "./Dialogs/DownloadDialog";
+import { formatDateTime } from "@components/form-builder/util";
+import { WarningIcon } from "@components/form-builder/icons";
+import { DownloadSingleButton } from "./DownloadSingleButton";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
-  formId?: string;
+  formName: string;
+  formId: string;
+  nagwareResult: NagwareResult | null;
+  responseDownloadLimit: number;
+  responsesRemaining: boolean;
+  showDownloadSuccess: false | string;
+  setShowDownloadSuccess: React.Dispatch<React.SetStateAction<false | string>>;
 }
 
-export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) => {
+export const DownloadTable = ({
+  vaultSubmissions,
+  formName,
+  formId,
+  nagwareResult,
+  responseDownloadLimit,
+  responsesRemaining,
+  setShowDownloadSuccess,
+}: DownloadTableProps) => {
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
-  const [errors, setErrors] = useState({
-    downloadError: false,
-    maxItemsError: false,
-    noItemsError: false,
-  });
-  const [tableItems, tableItemsDispatch] = useReducer(reducerTableItems, {
-    checkedItems: new Map(),
-    statusItems: new Map(vaultSubmissions.map((submission) => [submission.name, false])),
-    sortedItems: sortVaultSubmission(vaultSubmissions),
-  });
+  const [, statusQuery = "new"] = router.query?.params || [];
+
+  const [downloadError, setDownloadError] = useState(false);
+  const [noSelectedItemsError, setNoSelectedItemsError] = useState(false);
+  const [showConfirmNewtDialog, setShowConfirmNewDialog] = useState(false);
+  const [showDownloadDialog, setShowDownloadDialog] = useState(false);
+
+  const accountEscalated = nagwareResult && nagwareResult.level > 2;
+
   const { value: overdueAfter } = useSetting("nagwarePhaseEncouraged");
+  const [tableItems, tableItemsDispatch] = useReducer(
+    reducerTableItems,
+    initialTableItemsState(vaultSubmissions, overdueAfter)
+  );
 
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.id;
@@ -47,263 +73,257 @@ export const DownloadTable = ({ vaultSubmissions, formId }: DownloadTableProps) 
     // Needed because of how useReducer updates state on the next render vs. inside this function..
     const nextState = reducerTableItems(tableItems, dispatchAction);
 
-    // Show or hide errors depending
-    if (nextState.checkedItems.size > MAX_FILE_DOWNLOADS && !errors.maxItemsError) {
-      setErrors({ ...errors, maxItemsError: true });
-    } else if (errors.maxItemsError) {
-      setErrors({ ...errors, maxItemsError: false });
-    }
-    if (nextState.checkedItems.size > 0 && errors.noItemsError) {
-      setErrors({ ...errors, noItemsError: false });
+    if (nextState.checkedItems.size > 0) {
+      setNoSelectedItemsError(false);
     }
   };
 
-  // NOTE: browsers have different limits for simultaneous downloads. May need to look into
-  // batching file downloads (e.g. 4 at a time) if edge cases/* come up.
-  const handleDownload = async () => {
-    // Reset any errors
-    if (errors.downloadError) {
-      setErrors({ ...errors, downloadError: false });
-    }
+  const blockDownload = (
+    submission: TypeOmit<VaultSubmission, "formSubmission" | "submissionID" | "confirmationCode">
+  ) => {
+    const daysPast = getDaysPassed(submission.createdAt);
 
-    // Handle any errors and show them
-    if (tableItems.checkedItems.size === 0) {
-      if (!errors.noItemsError) {
-        setErrors({ ...errors, noItemsError: true });
-      }
-      return;
+    if (
+      isStatus(submission.status, VaultStatus.NEW) &&
+      accountEscalated &&
+      daysPast < Number(overdueAfter)
+    ) {
+      return true;
     }
-    if (tableItems.checkedItems.size > MAX_FILE_DOWNLOADS) {
-      if (!errors.maxItemsError) {
-        setErrors({ ...errors, maxItemsError: true });
-      }
-      return;
-    }
-
-    toast.info(
-      t("downloadResponsesTable.notifications.downloadingXFiles", {
-        fileCount: tableItems.checkedItems.size,
-      })
-    );
-
-    try {
-      const downloads = Array.from(tableItems.checkedItems, async ([submissionName]) => {
-        if (!submissionName) {
-          throw new Error("Error downloading file from Retrieval table. SubmissionId missing.");
-        }
-        const url = `/api/id/${formId}/${submissionName}/download`;
-        const fileName = `${submissionName}.html`;
-        return axios({
-          url,
-          method: "GET",
-          responseType: "blob",
-          timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-        }).then((response) => {
-          const url = window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement("a");
-          link.href = url;
-          link.setAttribute("download", fileName);
-          document.body.appendChild(link);
-          link.click();
-        });
-      });
-
-      await Promise.all(downloads).then(() => {
-        // TODO: only occurs download more than one file at a time. Here is the issue to track
-        // https://github.com/cds-snc/platform-forms-client/issues/1744
-        setTimeout(() => {
-          // Refreshes getServerSideProps data without a full page reload
-          router.replace(router.asPath, undefined, { scroll: false });
-          toast.success(t("downloadResponsesTable.notifications.downloadComplete"));
-        }, 1000); // Increasing to 1 second to allow more time for prod - temp work around
-      });
-    } catch (err) {
-      logMessage.error(err as Error);
-      setErrors({ ...errors, downloadError: true });
-    }
+    return false;
   };
 
   useEffect(() => {
-    // NOTE: Table not updating when it should? May need to be more explicit in telling react
-    // what has changed in the array (e.g. a status). For now, this seems to work well.
-    const dispatchAction = { type: TableActions.SORT, payload: { vaultSubmissions } };
+    // Reset tableItems when vaultSubmissions changes (ie, when switching between Status tabs)
+    const dispatchAction = { type: TableActions.RESET, payload: { vaultSubmissions } };
     tableItemsDispatch(dispatchAction);
   }, [vaultSubmissions]);
 
   return (
-    <section>
-      <SkipLinkReusable
-        text={t("downloadResponsesTable.skipLink")}
-        anchor="#downloadTableButtonId"
-      />
-      <div id="notificationsTop">
-        {tableItems.checkedItems.size > MAX_FILE_DOWNLOADS && (
-          <Attention
-            type={AttentionTypes.ERROR}
-            isAlert={true}
-            heading={t("downloadResponsesTable.errors.trySelectingLessFilesHeader", {
-              max: MAX_FILE_DOWNLOADS,
-            })}
-          >
-            <p className="text-[#26374a] text-sm">
-              {t("downloadResponsesTable.errors.trySelectingLessFiles", {
-                max: MAX_FILE_DOWNLOADS,
-              })}
-            </p>
-          </Attention>
-        )}
-        {errors.noItemsError && (
-          <Attention
-            type={AttentionTypes.ERROR}
-            isAlert={true}
-            heading={t("downloadResponsesTable.errors.atLeastOneFileHeader")}
-          >
-            <p className="text-[#26374a] text-sm">
-              {t("downloadResponsesTable.errors.atLeastOneFile")}
-            </p>
-          </Attention>
-        )}
-        {errors.downloadError && (
-          <Attention
-            type={AttentionTypes.ERROR}
-            isAlert={true}
-            heading={t("downloadResponsesTable.errors.errorDownloadingFilesHeader")}
-          >
-            <p className="text-[#26374a] text-sm mb-2">
-              {t("downloadResponsesTable.errors.errorDownloadingFiles")}
-              <Link href="/form-builder/support">
-                {t("downloadResponsesTable.errors.errorDownloadingFilesLink")}
-              </Link>
-              .
-            </p>
-          </Attention>
-        )}
-      </div>
-
-      <table className="text-sm" aria-live="polite">
-        <caption className="sr-only">{t("downloadResponsesTable.header.tableTitle")}</caption>
-        <thead className="border-b-2 border-[#6a6d7b]">
-          <tr>
-            <th className="p-4 text-center">{t("downloadResponsesTable.header.select")}</th>
-            <th className="p-4 text-left">{t("downloadResponsesTable.header.number")}</th>
-            <th className="p-4 text-left">{t("downloadResponsesTable.header.status")}</th>
-            <th className="p-4 text-left">{t("downloadResponsesTable.header.downloadResponse")}</th>
-            <th className="p-4 text-left">{t("downloadResponsesTable.header.lastDownloadedBy")}</th>
-            <th className="p-4 text-left">{t("downloadResponsesTable.header.confirmReceipt")}</th>
-            <th className="p-4 text-left">{t("downloadResponsesTable.header.removal")}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tableItems.sortedItems.map((submission) => (
-            <tr
-              key={submission.name}
-              className={
-                "border-b-2 border-grey" +
-                (tableItems.statusItems.get(submission.name) ? " bg-[#fffbf3]" : "")
-              }
-            >
-              <td className="pl-8 pr-4 pb-2 flex whitespace-nowrap">
-                <div className="gc-input-checkbox">
-                  <input
-                    id={submission.name}
-                    className="gc-input-checkbox__input"
-                    name="responses"
-                    type="checkbox"
-                    checked={tableItems.statusItems.get(submission.name)}
-                    onChange={handleChecked}
-                  />
-                  <label className="gc-checkbox-label" htmlFor={submission.name}>
-                    <span className="sr-only">{submission.name}</span>
-                  </label>
-                </div>
-              </td>
-              <td className="px-4 whitespace-nowrap">{submission.name}</td>
-              <td className="px-4 whitespace-nowrap">
-                <DownloadStatus vaultStatus={submission.status} />
-              </td>
-              <td className="px-4 whitespace-nowrap">
-                <DownloadResponseStatus
-                  vaultStatus={submission.status}
-                  createdAt={submission.createdAt}
-                  downloadedAt={submission.downloadedAt}
-                  overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
-                />
-              </td>
-              <td className="px-4 whitespace-nowrap">
-                <div className="truncate w-40">
-                  {submission.lastDownloadedBy || t("downloadResponsesTable.status.notDownloaded")}
-                </div>
-              </td>
-              <td className="px-4 whitespace-nowrap">
-                <ConfirmReceiptStatus
-                  vaultStatus={submission.status}
-                  createdAtDate={submission.createdAt}
-                  overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
-                />
-              </td>
-              <td className="px-4 whitespace-nowrap">
-                <RemovalStatus vaultStatus={submission.status} removalAt={submission.removedAt} />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div className="mt-8 flex">
-        <button
-          id="downloadTableButtonId"
-          className="gc-button--blue whitespace-nowrap w-auto m-0"
-          type="button"
-          onClick={handleDownload}
-          aria-live="polite"
-        >
-          {t("downloadResponsesTable.downloadXSelectedResponses", {
-            size: tableItems.checkedItems.size,
-          })}
-        </button>
-
-        <div id="notificationsBottom" className="ml-4">
-          {tableItems.checkedItems.size > MAX_FILE_DOWNLOADS && (
-            <Attention
-              type={AttentionTypes.ERROR}
-              isIcon={false}
-              isSmall={true}
-              heading={t("downloadResponsesTable.errors.trySelectingLessFilesHeader", {
-                max: MAX_FILE_DOWNLOADS,
-              })}
-            >
-              <p className="text-black text-sm">
-                {t("downloadResponsesTable.errors.trySelectingLessFiles", {
-                  max: MAX_FILE_DOWNLOADS,
-                })}
-              </p>
-            </Attention>
-          )}
-          {errors.noItemsError && (
-            <Attention
-              type={AttentionTypes.ERROR}
-              isIcon={false}
-              isSmall={true}
-              heading={t("downloadResponsesTable.errors.atLeastOneFileHeader")}
-            >
-              <p className="text-black text-sm">
-                {t("downloadResponsesTable.errors.atLeastOneFile")}
-              </p>
-            </Attention>
-          )}
-          {errors.downloadError && (
-            <Attention
-              type={AttentionTypes.ERROR}
-              isIcon={false}
-              isSmall={true}
-              heading={t("downloadResponsesTable.errors.errorDownloadingFilesHeader")}
-            >
-              <p className="text-black text-sm">
+    <>
+      <section>
+        <SkipLinkReusable
+          text={t("downloadResponsesTable.skipLink")}
+          anchor="#downloadTableButtonId"
+        />
+        <div id="notificationsTop">
+          {downloadError && (
+            <Alert.Danger>
+              <Alert.Title>
+                {t("downloadResponsesTable.errors.errorDownloadingFilesHeader")}
+              </Alert.Title>
+              <p className="mb-2 text-sm text-[#26374a]">
                 {t("downloadResponsesTable.errors.errorDownloadingFiles")}
+                <Link href="/form-builder/support">
+                  {t("downloadResponsesTable.errors.errorDownloadingFilesLink")}
+                </Link>
+                .
               </p>
-            </Attention>
+            </Alert.Danger>
           )}
         </div>
-      </div>
-    </section>
+        <table className="w-full text-sm" aria-live="polite">
+          <caption>
+            <span className="sr-only">{t("downloadResponsesTable.header.tableTitle")}</span>
+          </caption>
+          <thead className="border-b-1 border-slate-400">
+            <tr>
+              <th scope="col" className="py-4 pr-3 text-center">
+                <CheckAll
+                  tableItems={tableItems}
+                  tableItemsDispatch={tableItemsDispatch}
+                  noSelectedItemsError={noSelectedItemsError}
+                  setNoSelectedItemsError={setNoSelectedItemsError}
+                />
+              </th>
+              <th scope="col" className="p-4 text-left">
+                {t("downloadResponsesTable.header.number")}
+              </th>
+              <th scope="col" className="p-4 text-left">
+                {t("downloadResponsesTable.header.date")}
+              </th>
+              <th scope="col" className="w-full p-4 text-left">
+                {t("downloadResponsesTable.header.nextStep")}
+              </th>
+              <th scope="col" className="py-4 text-center">
+                {t("downloadResponsesTable.header.download")}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {responsesRemaining && (
+              <tr className="border-b-1 border-slate-300 bg-yellow-50">
+                <th scope="row">
+                  <WarningIcon className="mx-8 mt-1 inline-block scale-150" />{" "}
+                  <span className="sr-only">{t("downloadResponsesTable.header.warning")}</span>
+                </th>
+                <td className="px-4 py-2" colSpan={4}>
+                  <p>
+                    <strong>
+                      {t("downloadResponsesTable.errors.remainingResponses", {
+                        max: responseDownloadLimit,
+                      })}
+                    </strong>
+                    <br />
+                    {t("downloadResponsesTable.errors.remainingResponsesBody", {
+                      max: responseDownloadLimit,
+                    })}
+                  </p>
+                </td>
+              </tr>
+            )}
+            {tableItems.sortedItems.map((submission) => {
+              const isBlocked = blockDownload(submission);
+              const createdDateTime = formatDateTime(submission.createdAt).join(" ");
+              const downloadedDateTime = submission.downloadedAt
+                ? formatDateTime(submission.downloadedAt).join(" ")
+                : "";
+              const confirmedDateTime = submission.confirmedAt
+                ? formatDateTime(submission.confirmedAt).join(" ")
+                : "";
+              return (
+                <tr
+                  key={submission.name}
+                  className={
+                    "border-b-2 border-grey" +
+                    (tableItems.statusItems.get(submission.name) ? " bg-[#fffbf3]" : "") +
+                    (isBlocked ? " opacity-50" : "")
+                  }
+                >
+                  <td className="flex whitespace-nowrap pb-2 pl-9 pr-4">
+                    <div className="gc-input-checkbox">
+                      <input
+                        id={submission.name}
+                        className="gc-input-checkbox__input"
+                        name="responses"
+                        type="checkbox"
+                        checked={tableItems.statusItems.get(submission.name)}
+                        onChange={handleChecked}
+                        {...(isBlocked && { disabled: true })}
+                      />
+                      <label className="gc-checkbox-label" htmlFor={submission.name}>
+                        <span className="sr-only">{submission.name}</span>
+                      </label>
+                    </div>
+                  </td>
+                  <th
+                    scope="row"
+                    id={submission.name}
+                    className="whitespace-nowrap px-4 font-normal"
+                  >
+                    <span className="sr-only">{t("downloadResponsesTable.header.download")}</span>
+                    {submission.name}
+                  </th>
+                  <td className="whitespace-nowrap px-4">
+                    {isStatus(statusQuery, [VaultStatus.NEW, VaultStatus.PROBLEM]) && (
+                      <span>{createdDateTime}</span>
+                    )}
+                    {isStatus(statusQuery, VaultStatus.DOWNLOADED) && (
+                      <span>{downloadedDateTime}</span>
+                    )}
+                    {isStatus(statusQuery, VaultStatus.CONFIRMED) && (
+                      <span>{confirmedDateTime}</span>
+                    )}
+                  </td>
+                  <td className="whitespace-nowrap px-4">
+                    {isStatus(statusQuery, VaultStatus.NEW) && (
+                      <DownloadResponseStatus
+                        vaultStatus={submission.status}
+                        createdAt={submission.createdAt}
+                        downloadedAt={submission.downloadedAt}
+                        overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
+                      />
+                    )}
+                    {isStatus(statusQuery, VaultStatus.DOWNLOADED) && (
+                      <ConfirmReceiptStatus
+                        vaultStatus={submission.status}
+                        createdAtDate={submission.createdAt}
+                        overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
+                      />
+                    )}
+                    {isStatus(statusQuery, VaultStatus.CONFIRMED) && (
+                      <RemovalStatus
+                        vaultStatus={submission.status}
+                        removalAt={submission.removedAt}
+                      />
+                    )}
+                    {isStatus(statusQuery, VaultStatus.PROBLEM) && (
+                      <p className="text-red">
+                        <strong>{t("supportWillContact")}</strong>
+                        <br />
+                        {t("reportedAsProblem")}
+                      </p>
+                    )}
+                  </td>
+                  <td className="whitespace-nowrap text-center">
+                    <DownloadSingleButton
+                      id={`button-${submission.name}`}
+                      formId={submission.formID}
+                      responseId={submission.name}
+                      onDownloadSuccess={() => {
+                        router.replace(router.asPath, undefined, { scroll: false });
+                        if (isStatus(statusQuery, VaultStatus.NEW)) {
+                          setShowDownloadSuccess("downloadSuccess");
+                        }
+                      }}
+                      setDownloadError={setDownloadError}
+                      ariaLabelledBy={submission.name}
+                    />
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+        <div className="mt-8 flex">
+          <div id="notificationsBottom" className="ml-4">
+            {downloadError && (
+              <Alert.Danger icon={false}>
+                <Alert.Title headingTag="h3">
+                  {t("downloadResponsesTable.errors.errorDownloadingFilesHeader")}
+                </Alert.Title>
+                <p className="text-sm text-black">
+                  {t("downloadResponsesTable.errors.errorDownloadingFiles")}
+                </p>
+              </Alert.Danger>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {tableItems.checkedItems.size > 0 && (
+        <ActionsPanel>
+          <DownloadButton
+            setShowDownloadDialog={setShowDownloadDialog}
+            onClick={() => setDownloadError(false)}
+          />
+          {isStatus(statusQuery, VaultStatus.NEW) && false && (
+            <DeleteButton setShowConfirmNewDialog={setShowConfirmNewDialog} />
+          )}
+        </ActionsPanel>
+      )}
+
+      <ConfirmDeleteNewDialog
+        isVisible={showConfirmNewtDialog}
+        setIsVisible={setShowConfirmNewDialog}
+      />
+
+      <DownloadDialog
+        checkedItems={tableItems.checkedItems}
+        isDialogVisible={showDownloadDialog}
+        setIsDialogVisible={setShowDownloadDialog}
+        formId={formId}
+        formName={formName}
+        onSuccessfulDownload={() => {
+          router.replace(router.asPath, undefined, { scroll: false });
+          if (isStatus(statusQuery, VaultStatus.NEW)) {
+            setShowDownloadSuccess("downloadSuccess");
+          }
+        }}
+        downloadError={downloadError}
+        setDownloadError={setDownloadError}
+        responseDownloadLimit={responseDownloadLimit}
+      />
+    </>
   );
 };

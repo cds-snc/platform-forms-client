@@ -1,16 +1,4 @@
-ARG VARIANT=16@sha256:550f484fc5f314b575f5e397c9e2c71d7f218e59729fcda9ffa7ea1fc825dce7@sha256:b35e76ba744a975b9a5428b6c3cde1a1cf0be53b246e1e9a4874f87034222b5a@sha256:b35e76ba744a975b9a5428b6c3cde1a1cf0be53b246e1e9a4874f87034222b5a
-
-FROM node:${VARIANT}
-
-ARG USERNAME=node
-ARG USER_UID=1000
-ARG USER_GID=$USER_UID
-
-COPY migrations /src
-WORKDIR /src
-RUN yarn install 
-
-FROM node:${VARIANT}
+FROM node:16@sha256:f77a1aef2da8d83e45ec990f45df50f1a286c5fe8bbfb8c6e4246c6389705c0b
 
 
 ARG USERNAME=node
@@ -21,7 +9,7 @@ COPY flag_initialization /src
 WORKDIR /src
 RUN yarn install
 
-FROM node:${VARIANT}
+FROM node:16@sha256:f77a1aef2da8d83e45ec990f45df50f1a286c5fe8bbfb8c6e4246c6389705c0b
 
 ARG USERNAME=node
 ARG USER_UID=1000
@@ -32,7 +20,7 @@ WORKDIR /src
 
 RUN yarn install 
 
-FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:0-${VARIANT}
+FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:0-16@sha256:4e8ea446290f6b2456e4bd4de6d2ea966059c28c08a2defeec830b0a90e8a275
 LABEL maintainer="-"
 
 ARG USERNAME=node
@@ -53,9 +41,8 @@ RUN apt-get update \
 
 WORKDIR /src
 
-COPY --from=0 /src/node_modules ./migrations/node_modules
-COPY --from=1 /src/node_modules ./flag_initialization/node_modules
-COPY --from=2 /src/node_modules ./node_modules
+COPY --from=0 /src/node_modules ./flag_initialization/node_modules
+COPY --from=1 /src/node_modules ./node_modules
 
 ENV PORT 3000
 

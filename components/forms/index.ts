@@ -12,6 +12,7 @@ export { Radio } from "./Radio/Radio";
 export { TextArea } from "./TextArea/TextArea";
 export { TextInput } from "./TextInput/TextInput";
 export { TextPage } from "./TextPage/TextPage";
+export { ClosedPage } from "./ClosedPage/ClosedPage";
 export { FileInput } from "./FileInput/FileInput";
 export { RichText } from "./RichText/RichText";
 export { DynamicGroup } from "./DynamicRow/DynamicRow";

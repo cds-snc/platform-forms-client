@@ -8,6 +8,8 @@ import { useIsWithin, useHandleAdd } from "@components/form-builder/hooks";
 import { useRefsContext } from "./RefsContext";
 import { FormElementTypes, FormElement } from "@lib/types";
 
+import { cn } from "@lib/utils";
+
 export const ElementPanel = ({
   item,
   elements,
@@ -64,13 +66,18 @@ export const ElementPanel = ({
 
   /* eslint-disable jsx-a11y/no-static-element-interactions */
   /* eslint-disable jsx-a11y/click-events-have-key-events */
+
   return (
     <div
       id={`element-${item.id}`}
       {...focusWithinProps}
-      className={`element-${item.index} ${className} group ${
-        isWithin ? "active" : ""
-      } hover:bg-violet-50 focus-within:bg-violet-50 border border-t-0 border-black max-w-[800px] h-auto relative`}
+      className={cn(
+        `element-${item.index}`,
+        className,
+        "group",
+        isWithin && "active",
+        "relative h-auto max-w-[800px] border-1 border-t-0 border-slate-500 focus-within:bg-violet-50 hover:bg-violet-50 bg-white"
+      )}
       onClick={(e) => {
         const el = e.target as HTMLElement;
         if (el.tagName === "DIV") {
@@ -145,7 +152,7 @@ export const ElementPanel = ({
         }}
         handleDuplicate={() => {
           setFocusInput(true);
-          duplicateElement(item.index);
+          duplicateElement(item.id);
         }}
         {...moreButton}
       />

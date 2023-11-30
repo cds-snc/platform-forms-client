@@ -14,7 +14,7 @@ import Brand from "@components/globals/Brand";
 
 const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element | string }) => {
   return (
-    <label className="block font-bold mb-1 text-sm" htmlFor={htmlFor}>
+    <label className="mb-1 block text-sm font-bold" htmlFor={htmlFor}>
       {children}
     </label>
   );
@@ -71,10 +71,13 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
   const lang = i18n.language;
   const logoTitle = lang === "en" ? "logoTitleEn" : "logoTitleFr";
 
-  const brandingOptions = options.map((option) => ({
+  let brandingOptions = options.map((option) => ({
     value: option.name,
     label: option[logoTitle],
   }));
+
+  // Sort by label
+  brandingOptions = brandingOptions.sort((a, b) => a.label.localeCompare(b.label));
 
   brandingOptions.unshift({
     value: "",
@@ -87,17 +90,13 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
 
   return (
     <div>
-      <h1 className="visually-hidden">{t("branding.heading")}</h1>
-      <div className="block mb-4 text-xl font-bold">{t("branding.heading")}</div>
-      <p className="block text-md">{t("branding.text1")}</p>
-      <p className="inline-block mt-5 mb-5 p-3 bg-purple-200 font-bold text-sm">
-        {t("beforePublishMessage")}
-      </p>
-
+      <h2 className="mb-6">{t("branding.heading")}</h2>
+      <p className="block text-sm">{t("branding.text1")}</p>
       {/* Logo select */}
       <div>
         <Label htmlFor="branding-select">{t("branding.select")}</Label>
         <Logos
+          className="mb-5 mt-2 max-w-[450px] truncate bg-gray-soft p-1 pr-10"
           disabled={isPublished as boolean}
           options={brandingOptions.map(({ value, label }) => ({ value, label }))}
           selected={brandName}
@@ -105,8 +104,8 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
         />
       </div>
       {/* Logo preview */}
-      <div className="mt-5 mb-5">
-        <div className="font-bold mb-3 text-md">{t("branding.preview")}</div>
+      <div className="my-5">
+        <div className="mb-3 text-sm font-bold">{t("branding.preview")}</div>
         {/* eslint-disable @next/next/no-img-element  */}
         <Brand brand={brand} />
       </div>
@@ -118,8 +117,8 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
 
       {hasBrandingRequestForm && (
         <div>
-          <p className="text-md mb-5 mt-6">{t("branding.notFound")}</p>
-          <p className="text-md mb-5">
+          <p className="mb-5 mt-6 text-sm">{t("branding.notFound")}</p>
+          <p className="mb-5 text-sm">
             <Link
               href="/form-builder/settings/branding-request"
               passHref

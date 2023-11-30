@@ -9,7 +9,7 @@ export const ElementRequired = ({
   onRequiredChange,
 }: {
   item: FormElementWithIndex;
-  onRequiredChange: (itemIndex: number, checked: boolean) => void;
+  onRequiredChange: (itemId: number, checked: boolean) => void;
 }) => {
   const { t } = useTranslation("form-builder");
   const allRequired = item.properties.validation?.all;
@@ -25,7 +25,7 @@ export const ElementRequired = ({
             return;
           }
 
-          onRequiredChange(item.index, e.target.checked);
+          onRequiredChange(item.id, e.target.checked);
         }}
         label={allRequired ? t("allRequired") : t("required")}
       />

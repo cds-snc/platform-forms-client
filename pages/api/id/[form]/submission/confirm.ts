@@ -13,9 +13,6 @@ import { AccessControlError, createAbility } from "@lib/privileges";
 import { checkUserHasTemplateOwnership } from "@lib/templates";
 import { logEvent } from "@lib/auditLogs";
 
-// TODO: move to an app setting variable
-const MAXIMUM_CONFIRMATION_CODES_PER_REQUEST = 20;
-
 const handler = async (req: NextApiRequest, res: NextApiResponse, props: MiddlewareProps) => {
   const { session } = props as WithRequired<MiddlewareProps, "session">;
 
@@ -33,9 +30,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
 
   const confirmationCodes = req.body as string[];
 
-  if (confirmationCodes.length > MAXIMUM_CONFIRMATION_CODES_PER_REQUEST) {
+  if (confirmationCodes.length > 50) {
     return res.status(400).json({
-      error: `Too many confirmation codes. Limit is ${MAXIMUM_CONFIRMATION_CODES_PER_REQUEST}.`,
+      error: `Too many confirmation codes. API call limit is 50.`,
     });
   }
   const ability = createAbility(session);
@@ -47,7 +44,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
     if (e instanceof AccessControlError) {
       logEvent(
         ability.userID,
-        { type: "Response" },
+        { type: "Form", id: formId },
         "AccessDenied",
         `Attempted to confirm response without form ownership`
       );
@@ -60,6 +57,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
   try {
     const dynamoDbClient = connectToDynamo();
 
+    // max 100 confirmation codes per request
     const submissionsFromConfirmationCodes = await getSubmissionsFromConfirmationCodes(
       formId,
       confirmationCodes,
@@ -67,6 +65,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
     );
 
     if (submissionsFromConfirmationCodes.submissionsToConfirm.length > 0) {
+      // max 50 submissions per request
       await confirm(formId, submissionsFromConfirmationCodes.submissionsToConfirm, dynamoDbClient);
       // Done asychronously to not block response back to client
       submissionsFromConfirmationCodes.submissionsToConfirm.forEach((confirmation) =>

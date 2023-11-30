@@ -58,6 +58,7 @@ export const ShareModal = ({
   const actions = (
     <>
       <Button
+        data-share="form-builder-email"
         theme="primary"
         onClick={() => {
           handleSend();
@@ -109,9 +110,9 @@ export const ShareModal = ({
         dialogRef={dialog}
         handleClose={handleClose}
         actions={status === "ready" ? actions : doneActions}
-        className="overflow-y-scroll max-h-[80%]"
+        className="max-h-[80%]"
       >
-        <div className="py-4">
+        <div className="p-4">
           {status === "error" && (
             <>
               <p className="text-red-default">{t("share.messageError")}</p>
@@ -125,14 +126,14 @@ export const ShareModal = ({
           {status === "ready" && (
             <>
               <p>{t("share.message")}</p>
-              <div className="mt-5 mb-5">
+              <div className="my-5">
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                   {t("share.emailLabel")}
                 </label>
                 <TagInput tags={emails} setTags={setEmails} validateTag={validateEmail} />
               </div>
               <InfoDetails summary={t("share.seePreview")}>
-                <div className="p-5 border-4 border-dashed border-blue-focus mt-4">
+                <div className="mt-4 border-4 border-dashed border-blue-focus p-5">
                   <h4>{t("share.someoneHasShared", { name: data?.user.name })}</h4>
                   <div className="mt-4">
                     {t("share.toPreview")}

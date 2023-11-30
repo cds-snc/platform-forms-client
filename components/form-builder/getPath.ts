@@ -1,10 +1,11 @@
 export const parseRootId = (id: number) => {
+  // @TODO: Revisit for sub elements. Note that the following will break if we have more than 99 sub elements
   // split 3 or 4 digit id into first 1 or 2 digits
-  const idStr = id.toString();
-  const sliceAt = idStr.length == 3 ? 1 : 2;
-  const idArr = idStr.split("");
-  const first = idArr.slice(0, sliceAt).join("");
-  return Number(first);
+  // const idStr = id.toString();
+  // const sliceAt = idStr.length == 3 ? 1 : 2;
+  // const idArr = idStr.split("");
+  // const first = idArr.slice(0, sliceAt).join("");
+  return Number(id);
 };
 
 interface Form {

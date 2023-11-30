@@ -1,27 +1,7 @@
-import { NextData } from "types";
 describe("Form builder attestation", () => {
   beforeEach(() => {
-    cy.visit("/form-builder/edit", {
-      onBeforeLoad: (win) => {
-        win.sessionStorage.clear();
-        let nextData: NextData;
-        Object.defineProperty(win, "__NEXT_DATA__", {
-          set(serverSideProps) {
-            serverSideProps.context = {
-              user: {
-                acceptableUse: false,
-                name: null,
-                userId: "testId",
-              },
-            };
-            nextData = serverSideProps;
-          },
-          get() {
-            return nextData;
-          },
-        });
-      },
-    });
+    cy.login({ acceptableUse: true });
+    cy.visitPage("/form-builder/edit");
   });
 
   it("Renders attestation block", () => {
@@ -36,10 +16,10 @@ describe("Form builder attestation", () => {
     cy.get("#required-1-id").should("be.disabled");
     cy.get("#required-1-id").should("be.checked");
 
-    cy.visit("/form-builder/preview");
-    cy.get("#label-1").contains("all checkboxes required").should("exist");
-    cy.get("label").contains("Condition 1").should("exist");
-    cy.get("label").contains("Condition 2").should("exist");
-    cy.get("label").contains("Condition 3").should("exist");
+    cy.visitPage("/form-builder/preview");
+    cy.get("#label-1").contains("all checkboxes required").should("be.visible");
+    cy.get("label").contains("Condition 1").should("be.visible");
+    cy.get("label").contains("Condition 2").should("be.visible");
+    cy.get("label").contains("Condition 3").should("be.visible");
   });
 });

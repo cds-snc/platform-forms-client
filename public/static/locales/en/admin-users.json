@@ -1,10 +1,13 @@
 {
-  "title": "Manage users",
+  "title": "Manage ownership",
+  "accounts": "Accounts",
   "username": "User name",
   "email": "Email address",
   "admin": "Administrator",
   "true": "Yes",
   "false": "No",
+  "on": "On",
+  "off": "Off",
   "enable": "Enable",
   "enabled": "Enabled",
   "disable": "Disable",
@@ -15,5 +18,38 @@
   "managePermissions": "Manage permissions",
   "viewPermissions": "View permissions",
   "managePermissionsFor": "Managing permissions of",
-  "assignUsersToTemplate": "Assign users to template"
+  "assignUsersToTemplate": "Add, remove, or transfer ownership to another GC Forms account within your department or agency.",
+  "enterOwnersEmail": "Enter form owner’s email address",
+  "deactivateAccount": "Deactivate account",
+  "activateAccount": "Reactivate account",
+  "moreMenu": "... More",
+  "manageForms": "Manage forms",
+  "publishedFormsMustBeTransferred": {
+    "text1": "Published forms",
+    "text2": "must be transferred or deleted before deactivating."
+  },
+  "deactivatingWillNotifyUser": "Deactivating this account will notify the user.",
+  "deactivateThisAccount": "Deactivate this account?",
+  "responseSuccess": {
+    "title": "Success",
+    "message": "Your changes have been saved."
+  },
+  "responseFail": {
+    "title": "Error",
+    "message": "Something went wrong."
+  },
+  "backToAccounts": "Back to Accounts",
+  "backToManageForms": "Back to Manage forms",
+  "lockPublishing": "Lock publishing",
+  "unlockPublishing": "Unlock publishing",
+  "mustHaveAtLeastOneUser": "Must assign at least one user.",
+  "accountsFilterLabel": "Accounts filters",
+  "accountsFilter": {
+    "all": "All",
+    "active": "Active",
+    "deactivated": "Deactivated",
+    "noAccounts": "No accounts",
+    "noActiveAccounts": "No active accounts",
+    "noDeactivatedAccounts": "No deactivated accounts"
+  }
 }

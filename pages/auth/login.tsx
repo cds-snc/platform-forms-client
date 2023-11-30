@@ -1,8 +1,7 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, MutableRefObject } from "react";
 import { Formik } from "formik";
-import { TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
+import { TextInput, Label, Alert, ErrorListItem } from "@components/forms";
 import { Button } from "@components/globals";
-import { useAuth, useFlag } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -10,29 +9,29 @@ import Link from "next/link";
 import Head from "next/head";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
-import { Confirmation } from "@components/auth/Confirmation/Confirmation";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import * as Yup from "yup";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
+import { useLogin } from "@lib/hooks/auth";
+import { AuthErrorsState } from "@lib/hooks/auth/useAuthErrors";
+import { Verify } from "@components/auth/Verify";
 
-const Login = () => {
-  const {
-    username,
-    password,
-    didConfirm,
-    needsConfirmation,
-    setNeedsConfirmation,
-    cognitoError,
-    cognitoErrorDescription,
-    cognitoErrorCallToActionLink,
-    cognitoErrorCallToActionText,
-    setCognitoErrorStates,
-    resetCognitoErrorState,
-    login,
-  } = useAuth();
+const LoginStep = ({
+  username,
+  password,
+  authErrorsState,
+  setNeedsVerification,
+  login,
+  authErrorsReset,
+}: {
+  username: MutableRefObject<string>;
+  password: MutableRefObject<string>;
+  authErrorsState: AuthErrorsState;
+  login: (values: { username: string; password: string }) => Promise<boolean | undefined>;
+  setNeedsVerification: (val: boolean) => void;
+  authErrorsReset: () => void;
+}) => {
   const { t } = useTranslation(["login", "cognito-errors", "common"]);
-  const { status: registrationOpen } = useFlag("accountRegistration");
-  const { status: passwordResetEnabled } = useFlag("passwordReset");
 
   const validationSchema = Yup.object().shape({
     username: Yup.string()
@@ -43,70 +42,57 @@ const Login = () => {
       .max(50, t("fields.password.errors.maxLength")),
   });
 
-  const confirmationCallback = () => {
-    setNeedsConfirmation(false);
-    didConfirm.current = true;
-  };
-
-  if (needsConfirmation) {
-    return (
-      <Confirmation
-        username={username.current}
-        password={password.current}
-        confirmationAuthenticationFailedCallback={setCognitoErrorStates}
-        confirmationCallback={confirmationCallback}
-      />
-    );
-  }
-
   return (
     <>
       <Head>
         <title>{t("title")}</title>
       </Head>
       <Formik
-        initialValues={{ username: cognitoError ? username.current : "", password: "" }}
-        onSubmit={async (values, helpers) => {
+        initialValues={{ username: authErrorsState.isError ? username.current : "", password: "" }}
+        onSubmit={async (values, { setSubmitting }) => {
           username.current = values.username;
           password.current = values.password;
-          await login(
-            {
-              ...values,
-            },
-            helpers
-          );
+
+          const result = await login({ username: username.current, password: password.current });
+          if (result) {
+            setNeedsVerification(true);
+          }
+
+          setSubmitting(false);
         }}
         validateOnChange={false}
         validateOnBlur={false}
         validationSchema={validationSchema}
-        validate={resetCognitoErrorState}
-        onReset={resetCognitoErrorState}
+        validate={authErrorsReset}
+        onReset={authErrorsReset}
       >
         {({ handleSubmit, errors }) => (
           <>
-            {cognitoError && (
+            {authErrorsState.isError && (
               <Alert
                 type={ErrorStatus.ERROR}
-                heading={cognitoError}
+                heading={authErrorsState.title}
                 id="cognitoErrors"
                 focussable={true}
               >
-                {cognitoErrorDescription}
-                {cognitoErrorCallToActionLink ? (
-                  <Link href={cognitoErrorCallToActionLink}>{cognitoErrorCallToActionText}</Link>
+                {authErrorsState.description}
+                {authErrorsState.callToActionLink ? (
+                  <Link href={authErrorsState.callToActionLink}>
+                    {authErrorsState.callToActionText}
+                  </Link>
                 ) : undefined}
-                .
               </Alert>
             )}
-            {Object.keys(errors).length > 0 && !cognitoError && (
+            {Object.keys(errors).length > 0 && !authErrorsState.isError && (
               <Alert
+                className="w-full"
                 type={ErrorStatus.ERROR}
                 validation={true}
                 tabIndex={0}
                 id="loginValidationErrors"
                 heading={t("input-validation.heading", { ns: "common" })}
               >
-                <ol className="gc-ordered-list">
+                <ol className="gc-ordered-list p-0">
                   {Object.entries(errors).map(([fieldKey, fieldValue]) => {
                     return (
                       <ErrorListItem
@@ -119,36 +105,32 @@ const Login = () => {
                 </ol>
               </Alert>
             )}
-            <h1>{t("title")}</h1>
-            {registrationOpen && (
-              <p className="mb-10 -mt-6">
-                {t("signUpText")}&nbsp;
-                <Link href={"/signup/register"}>{t("signUpLink")}</Link>
-              </p>
-            )}
+            <h1 className="mb-12 mt-6 border-b-0">{t("title")}</h1>
+            <p className="-mt-6 mb-10">
+              {t("signUpText")}&nbsp;
+              <Link href={"/signup/register"}>{t("signUpLink")}</Link>
+            </p>
             <form id="login" method="POST" onSubmit={handleSubmit} noValidate>
               <div className="focus-group">
                 <Label id={"label-username"} htmlFor={"username"} className="required" required>
                   {t("fields.username.label")}
                 </Label>
-                <Description className="text-p text-black-default" id="login">
+                <div className="mb-2 text-sm text-black" id="login-description">
                   {t("fields.username.description")}
-                </Description>
+                </div>
                 <TextInput
                   className="h-10 w-full max-w-lg rounded"
                   type={"email"}
                   id={"username"}
                   name={"username"}
                   required
+                  ariaDescribedBy="login-description"
                 />
               </div>
               <div className="focus-group">
                 <Label id={"label-password"} htmlFor={"password"} className="required" required>
                   {t("fields.password.label")}
                 </Label>
-                <Description id="password" className="text-p text-black-default">
-                  {t("fields.password.description")}
-                </Description>
                 <TextInput
                   className="h-10 w-full max-w-lg rounded"
                   type={"password"}
@@ -157,16 +139,13 @@ const Login = () => {
                   required
                 />
               </div>
-              {passwordResetEnabled && (
-                <p className="mb-10 -mt-6">
-                  <Link href={"/auth/resetpassword"} className="-mt-8 mb-10">
-                    {t("resetPasswordText")}
-                  </Link>
-                </p>
-              )}
-
-              <Button className="gc-button--blue" type="submit">
-                {t("signInButton")}
+              <p className="-mt-6 mb-10">
+                <Link href={"/auth/resetpassword"} className="-mt-8 mb-10">
+                  {t("resetPasswordText")}
+                </Link>
+              </p>
+              <Button theme="primary" type="submit">
+                {t("continueButton")}
               </Button>
             </form>
           </>
@@ -176,8 +155,38 @@ const Login = () => {
   );
 };
 
+const Login = () => {
+  const {
+    username,
+    password,
+    authenticationFlowToken,
+    needsVerification,
+    setNeedsVerification,
+    authErrorsState,
+    authErrorsReset,
+    login,
+  } = useLogin();
+
+  if (needsVerification) {
+    return (
+      <Verify type="login" username={username} authenticationFlowToken={authenticationFlowToken} />
+    );
+  }
+
+  return (
+    <LoginStep
+      username={username}
+      password={password}
+      setNeedsVerification={setNeedsVerification}
+      login={login}
+      authErrorsState={authErrorsState}
+      authErrorsReset={authErrorsReset}
+    />
+  );
+};
+
 Login.getLayout = (page: ReactElement) => {
-  return <UserNavLayout>{page}</UserNavLayout>;
+  return <UserNavLayout contentWidth="tablet:w-[658px]">{page}</UserNavLayout>;
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -186,7 +195,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (session)
     return {
       redirect: {
-        destination: `/${context.locale}/myforms/`,
+        destination: `/${context.locale}/forms/`,
         permanent: false,
       },
     };
@@ -199,6 +208,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           "signup",
           "login",
           "cognito-errors",
+          "auth-verify",
         ]))),
     },
   };

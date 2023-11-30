@@ -1,4 +1,4 @@
-import { FormElement, FormProperties, FormElementTypes } from "@lib/types";
+import { FormElement, FormProperties, FormElementTypes, DeliveryOption } from "@lib/types";
 import { TemplateStoreState } from "./store/useTemplateStore";
 
 export const completeEmailAddressRegex =
@@ -251,3 +251,35 @@ export const allowedTemplates = [
   FormElementTypes.firstMiddleLastName,
   FormElementTypes.contact,
 ] as const;
+
+export const isVaultDelivery = (deliveryOption: DeliveryOption | undefined) => {
+  return !deliveryOption;
+};
+
+export const isEmailDelivery = (deliveryOption: DeliveryOption | undefined) => {
+  return !!(deliveryOption && deliveryOption.emailAddress);
+};
+
+export const padAngleBrackets = (value: string) => {
+  const regex = /<(?!\s)(.*?)(?=\s*)>/g;
+  return value.replace(regex, (match, p1) => {
+    return `< ${p1.trim()} >`;
+  });
+};
+
+type Cleanable = string | Cleanable[] | { [key: string]: Cleanable } | unknown;
+
+export const cleanInput = <T extends Cleanable>(input: T): T => {
+  if (typeof input === "string") {
+    return padAngleBrackets(input) as T;
+  }
+  if (Array.isArray(input)) {
+    return input.map((elem) => cleanInput(elem)) as T;
+  }
+  if (input instanceof Object) {
+    return Object.fromEntries(
+      Object.entries(input).map(([key, value]) => [key, cleanInput(value)])
+    ) as T;
+  }
+  return input;
+};

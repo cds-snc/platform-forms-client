@@ -121,7 +121,8 @@ export const getServerSideProps = requireAuthentication(
         return {
           props: {
             form: template,
-            ...(locale && (await serverSideTranslations(locale, ["common", "admin-templates"]))),
+            ...(locale &&
+              (await serverSideTranslations(locale, ["common", "admin-templates", "admin-login"]))),
           },
         };
       }

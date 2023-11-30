@@ -25,18 +25,19 @@ export const PanelActionsButton = ({
   dataTestId?: string;
 }) => {
   const baseButtonClasses =
-    "py-2 px-5 rounded-lg border-2 border-solid inline-flex items-center active:top-0.5 focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:!bg-transparent disabled:cursor-not-allowed disabled:!text-gray-500 disabled:hover:no-underline";
+    "py-2 px-5 rounded-lg border-2 border-solid inline-flex items-center active:top-0.5 focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 disabled:!bg-transparent disabled:cursor-not-allowed disabled:!text-gray-500 disabled:hover:no-underline";
 
   const buttonClasses =
-    "group/button border-none hover:bg-gray-600 hover:text-white focus:!bg-blue-hover focus:text-black active:text-white active:bg-blue-hover transition duration-100";
+    "group/button border-none hover:bg-gray-600 active:text-white transition duration-100 text-slate-50 focus:bg-slate-50 focus:text-slate-800 active:bg-slate-50 active:text-slate-800 hover:text-slate-50";
 
   const responsiveButtonClasses =
-    "laptop:bg-transparent laptop:hover:text-black laptop:hover:bg-transparent laptop:hover:underline laptop:px-2";
+    "laptop:bg-transparent laptop:hover:text-black laptop:hover:text-black laptop:hover:bg-transparent laptop:hover:underline laptop:px-2 laptop:text-slate-800 laptop:focus:!bg-blue-hover laptop:active:bg-blue-hover laptop:focus:text-white-default";
 
   const iconClasses =
-    "group-hover/button:fill-black group-disabled/button:!fill-gray-500 group-active/button:!fill-white group-focus/button:!fill-white fill-black group-hover/button:fill-white transition duration-100";
+    "group-hover/button:fill-slate-50 group-disabled/button:!fill-gray-500 group-active/button:fill-slate-800 group-focus/button:!fill-slate-800 fill-black group-hover/button:fill-white transition duration-100 fill-slate-50";
 
-  const responsiveIconClasses = "laptop:group-hover/button:fill-black laptop:mr-2";
+  const responsiveIconClasses =
+    "laptop:group-hover/button:fill-black laptop:mr-2 laptop:fill-slate-800 laptop:group-active/button:!fill-white laptop:group-focus/button:!fill-white";
 
   return (
     <button

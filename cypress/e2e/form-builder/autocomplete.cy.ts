@@ -1,28 +1,7 @@
-import { NextData } from "types";
-
 describe("Test FormBuilder autocomplete props", () => {
   beforeEach(() => {
-    cy.visit("/form-builder", {
-      onBeforeLoad: (win) => {
-        win.sessionStorage.clear();
-        let nextData: NextData;
-        Object.defineProperty(win, "__NEXT_DATA__", {
-          set(serverSideProps) {
-            serverSideProps.context = {
-              user: {
-                acceptableUse: false,
-                name: null,
-                userId: "testId",
-              },
-            };
-            nextData = serverSideProps;
-          },
-          get() {
-            return nextData;
-          },
-        });
-      },
-    });
+    cy.login({ acceptableUse: true });
+    cy.visitPage("/form-builder");
   });
 
   const autocompleteOptions = [
@@ -53,7 +32,7 @@ describe("Test FormBuilder autocomplete props", () => {
   ];
 
   it("Checks the autocomplete list", () => {
-    cy.visit("/form-builder/edit");
+    cy.visitPage("/form-builder/edit");
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="textField"]').click();
@@ -68,7 +47,7 @@ describe("Test FormBuilder autocomplete props", () => {
 
   autocompleteOptions.forEach((option) => {
     it(`Adds a TextAreaInput with ${option[0]} autocomplete`, () => {
-      cy.visit("/form-builder/edit");
+      cy.visitPage("/form-builder/edit");
       cy.get("button").contains("Add").click();
 
       cy.get('[data-testid="textField"]').click();
@@ -80,10 +59,11 @@ describe("Test FormBuilder autocomplete props", () => {
 
       cy.get('[data-testid="more"]').click();
       cy.get('[data-testid="autocomplete"]').select(option[0]);
-      cy.get("button").contains("Save").click();
+
+      cy.get('[data-testid="more-modal-save-button"]').contains("Save").click();
       cy.get('[data-testid="autocomplete-1"]').should("contain", option[1]);
 
-      cy.visit("/form-builder/preview");
+      cy.visitPage("/form-builder/preview");
       cy.get('[data-testid="textInput"]').should("have.attr", "autocomplete", option[0]);
     });
   });

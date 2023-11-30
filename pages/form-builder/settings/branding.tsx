@@ -7,10 +7,11 @@ import { authOptions } from "@pages/api/auth/[...nextauth]";
 
 import { NextPageWithLayout } from "../../_app";
 import { PageProps } from "@lib/types";
-import { Template, PageTemplate } from "@components/form-builder/app";
 import { Branding } from "@components/form-builder/app/branding";
 import { SettingsNavigation } from "@components/form-builder/app/navigation/SettingsNavigation";
 import { getAppSetting } from "@lib/appSettings";
+import Head from "next/head";
+import { FormBuilderLayout } from "@components/globals/layouts/FormBuilderLayout";
 
 const Page: NextPageWithLayout<PageProps> = ({
   hasBrandingRequestForm,
@@ -20,14 +21,24 @@ const Page: NextPageWithLayout<PageProps> = ({
   const { t } = useTranslation("form-builder");
   const title = `${t("branding.heading")} — ${t("gcForms")}`;
   return (
-    <PageTemplate title={title} navigation={<SettingsNavigation />}>
-      <Branding hasBrandingRequestForm={hasBrandingRequestForm} />
-    </PageTemplate>
+    <>
+      <Head>
+        <title>{title}</title>
+      </Head>
+      <div className="max-w-4xl">
+        <h1>{t("gcFormsSettings")}</h1>
+        <p className="mb-5 inline-block bg-purple-200 p-3 text-sm font-bold">
+          {t("settingsResponseDelivery.beforePublishMessage")}
+        </p>
+        <SettingsNavigation />
+        <Branding hasBrandingRequestForm={hasBrandingRequestForm} />
+      </div>
+    </>
   );
 };
 
 Page.getLayout = (page: ReactElement) => {
-  return <Template page={page} isFormBuilder />;
+  return <FormBuilderLayout page={page} />;
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ locale, req, res }) => {
@@ -38,6 +49,16 @@ export const getServerSideProps: GetServerSideProps = async ({ locale, req, res 
     return {
       redirect: {
         destination: `/${locale}/auth/policy`,
+        permanent: false,
+      },
+    };
+  }
+
+  if (session && !session.user.hasSecurityQuestions) {
+    // If they haven't setup security questions Use redirect to policy page for acceptance
+    return {
+      redirect: {
+        destination: `/${locale}/auth/setup-security-questions`,
         permanent: false,
       },
     };

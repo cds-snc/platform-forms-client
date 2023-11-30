@@ -49,7 +49,7 @@ Lorsque l’on détecte une menace pour le site du Service numérique canadien o
 
 Ce site a recours à un fournisseur de services tiers, Google Inc., afin de réduire les activités malveillantes et détecter la fraude. Les données recueillies relatives aux consultations de ce site Web sont communiquées à Google Inc. par le biais du service reCAPTCHA. Ces données comportent : des adresses IP, des mouvements avec la souris, et la durée de la visite. Ces renseignements sont utilisés afin de déterminer si la visite au site Web est faite par une personne ou par un robot.
 
-Le [Secrétariat du Conseil du Trésor du Canada](https://www.canada.ca/fr/secretariat-conseil-tresor.html) est un défenseur de la divulgation responsable des vulnérabilités. Si vous avez repéré une vulnérabilité, nous aimerions le savoir afin de la corriger. Veuillez consulter cet [Avis de sécurité](https://numerique.canada.ca/transparence/avis-de-securite/) pour en savoir plus.
+Le [Secrétariat du Conseil du Trésor du Canada](https://www.canada.ca/fr/secretariat-conseil-tresor.html) est un défenseur de la divulgation responsable des vulnérabilités. Si vous avez repéré une vulnérabilité, nous aimerions le savoir afin de la corriger. Veuillez consulter cet [Avis de sécurité](https://numerique.canada.ca/avis-de-securite/) pour en savoir plus.
 
 ## Emploi de fichiers situés sur des serveurs autres que ceux du gouvernement du Canada
 

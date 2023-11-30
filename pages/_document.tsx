@@ -208,11 +208,22 @@ class StrictStaticCSP extends Head {
 // Actual main Document being rendered
 
 const CustomHead = process.env.NODE_ENV === "production" ? StrictStaticCSP : Head;
+
+const NoIndexMetaTag =
+  process.env.INDEX_SITE === "true" ? null : (
+    <>
+      {/* The msvalidate.01 meta tag is used to verify ownership of the website for Bing in order to get the staging URL out of search results.*/}
+      <meta name="msvalidate.01" content="90CA81AA34C5B1B1F53A42906A93992A" />
+      <meta name="robots" content="noindex,nofollow" />
+    </>
+  );
+
 class MyDocument extends Document {
   render() {
     return (
       <Html>
         <CustomHead>
+          {NoIndexMetaTag}
           <script async type="text/javascript" src="/static/scripts/form-polyfills.js"></script>
           {GoogleTagScript}
         </CustomHead>

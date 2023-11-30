@@ -74,7 +74,7 @@ const route = async ({
     }
     case "POST":
       if (formConfig) {
-        return await createTemplate({
+        return createTemplate({
           ability: ability,
           userID: user.id,
           formConfig: formConfig,

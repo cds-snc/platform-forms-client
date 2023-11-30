@@ -1,36 +1,41 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Footer from "../Footer";
-import Head from "next/head";
-import SkipLink from "../SkipLink";
-import AdminNav from "../AdminNav";
 import { User } from "next-auth";
+
+import { LeftNavigation } from "@components/admin/LeftNav/LeftNavigation";
+import { useAccessControl } from "@lib/hooks";
+import { TwoColumnLayout } from "./TwoColumnLayout";
+import { FullWidthLayout } from "./FullWidthLayout";
 
 interface AdminNavLayoutProps extends React.PropsWithChildren {
   user: User;
+  backLink?: React.ReactElement;
+  hideLeftNav?: boolean | false;
 }
 
-const AdminNavLayout = ({ children, user }: AdminNavLayoutProps) => {
+const AdminNavLayout = ({ children, user, backLink, hideLeftNav }: AdminNavLayoutProps) => {
+  // This will check to see if a user is deactivated and redirect them to the account deactivated page
+  useAccessControl();
   return (
-    <div className="flex flex-col h-full">
-      <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta charSet="utf-8" />
-        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
-      </Head>
-
-      <SkipLink />
-
-      <header>
-        <AdminNav user={user} />
-      </header>
-      <div id="page-container">
-        <main id="content" className="grow shrink-0 basis-auto">
+    <div className={`flex h-full flex-col ${hideLeftNav && "bg-gray-50"}`}>
+      {hideLeftNav ? (
+        <FullWidthLayout user={user} context="admin">
           {children}
-        </main>
-      </div>
-
-      <Footer displayFormBuilderFooter />
+        </FullWidthLayout>
+      ) : (
+        <TwoColumnLayout
+          user={user}
+          context="admin"
+          leftColumnContent={
+            <>
+              {backLink}
+              <LeftNavigation />
+            </>
+          }
+        >
+          {children}
+        </TwoColumnLayout>
+      )}
     </div>
   );
 };

@@ -63,7 +63,7 @@ const callLambda = async (
   const encoder = new TextEncoder();
 
   const command = new InvokeCommand({
-    FunctionName: process.env.SUBMISSION_API ?? "Submission",
+    FunctionName: "Submission",
     Payload: encoder.encode(
       JSON.stringify({
         formID,
@@ -96,7 +96,7 @@ const callLambda = async (
 const parseRequestData = async (
   requestBody: SubmissionRequestBody
 ): Promise<SubmissionParsedRequest> => {
-  return await Object.keys(requestBody).reduce(
+  return Object.keys(requestBody).reduce(
     async (prev, current) => {
       const previousValueResolved = await prev;
       const keyPairValue = requestBody[current];
@@ -133,7 +133,7 @@ const parseRequestData = async (
               ...previousValueResolved.files,
               [current]: await Promise.all(
                 arrayValue.map(async (fileObj) => {
-                  return await processFileData(fileObj as FileInputResponse);
+                  return processFileData(fileObj as FileInputResponse);
                 })
               ),
             },
@@ -256,6 +256,11 @@ const processFormData = async (
 
     if (!form) {
       return res.status(400).json({ error: "No form could be found with that ID" });
+    }
+
+    // Check to see if form is closed and block response submission
+    if (form.closingDate && new Date(form.closingDate) < new Date()) {
+      return res.status(400).json({ error: "Form is closed and not accepting submissions" });
     }
 
     const fields = rehydrateFormResponses({

@@ -26,6 +26,7 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
     localizeField,
     translationLanguagePriority,
     getLocalizationAttribute,
+    propertyPath,
   } = useTemplateStore((s) => ({
     updateField: s.updateField,
     subMoveUp: s.subMoveUp,
@@ -36,6 +37,7 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
     localizeField: s.localizeField,
     translationLanguagePriority: s.translationLanguagePriority,
     getLocalizationAttribute: s.getLocalizationAttribute,
+    propertyPath: s.propertyPath,
   }));
 
   const { handleAddSubElement } = useHandleAdd();
@@ -51,21 +53,12 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
     [updateField, localizeField, translationLanguagePriority]
   );
 
-  const onQuestionChange = (elIndex: number, subIndex: number, val: string, lang: Language) => {
-    updateField(
-      `form.elements[${elIndex}].properties.subElements[${subIndex}].properties.${localizeField(
-        LocalizedElementProperties.TITLE,
-        lang
-      )}`,
-      val
-    );
+  const onQuestionChange = (itemId: number, val: string, lang: Language) => {
+    updateField(propertyPath(itemId, LocalizedElementProperties.TITLE, lang), val);
   };
 
-  const onRequiredChange = (elIndex: number, subIndex: number, checked: boolean) => {
-    updateField(
-      `form.elements[${elIndex}].properties.subElements[${subIndex}].properties.validation.required`,
-      checked
-    );
+  const onRequiredChange = (itemId: number, checked: boolean) => {
+    updateField(propertyPath(itemId, "validation.required"), checked);
   };
 
   const elementFilter: ElementOptionsFilter = (elements) => {
@@ -90,7 +83,7 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
   const subElementTypes = subElements.map((element) => ({ id: element.id, type: element.type }));
 
   return (
-    <div {...props} className="mt-3 mb-3">
+    <div {...props} className="mb-3 mt-3">
       {subElements.map((element, subIndex: number) => {
         const questionNumber = getQuestionNumber(element, subElementTypes, true);
         const item = { ...element, index: subIndex, questionNumber };
@@ -136,9 +129,7 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
                 elIndex={elIndex}
                 item={item}
                 onQuestionChange={onQuestionChange}
-                onRequiredChange={(subIndex, checked) => {
-                  onRequiredChange(elIndex, subIndex, checked);
-                }}
+                onRequiredChange={onRequiredChange}
               />
             </PanelHightLight>
           </div>
@@ -146,11 +137,11 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
       })}
 
       {item.type === "dynamicRow" && (
-        <div className="max-w-[800px] border-1 border-gray-300 h-auto mt-4 first-of-type:rounded-t-md last-of-type:rounded-b-md">
+        <div className="mt-4 h-auto max-w-[800px] border-1 border-gray-300 first-of-type:rounded-t-md last-of-type:rounded-b-md">
           <LockedBadge className="laptop:absolute laptop:right-7 laptop:top-[15px]" />
-          <div className="mx-7 mt-5 mb-7">
-            <h2 className="text-h3 pb-3">{t("questionSet.addAnother.title")}</h2>
-            <p className="mb-8 text-[1rem] pt-5">{t("questionSet.addAnother.description")}</p>
+          <div className="mx-7 mb-7 mt-5">
+            <h2 className="pb-3 text-2xl">{t("questionSet.addAnother.title")}</h2>
+            <p className="mb-8 pt-5 text-[1rem]">{t("questionSet.addAnother.description")}</p>
             <Input
               id={`repeatable-button-${elIndex}`}
               {...getLocalizationAttribute()}

@@ -36,7 +36,7 @@ export const AutocompleteDropdown = ({
   return (
     <select
       data-testid="autocomplete"
-      className="gc-dropdown inline-block mb-4"
+      className="gc-dropdown mb-4 inline-block"
       onChange={handleChange}
       value={selectedValue}
     >

@@ -6,15 +6,25 @@ on:
     types:
       - completed
 
+env:
+  AWS_REGION: ca-central-1
+
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   unable-to-deploy:
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Post to Slack
+      - name: Notify Slack if ECR build/push failed
+        env:
+          WORKFLOW_URL: "${{ github.event.workflow_run.html_url }}"
+          WORKFLOW_NAME: "${{ github.event.workflow_run.name }}"
         run: |
-          json='{"channel":"#forms-deploy-activities", "blocks":[{"type":"section","text":{"type":"mrkdwn","text":":red: Unable to deploy Staging form viewer: <https://github.com/cds-snc/platform-forms-client/actions/workflows/staging-build-push-container.yml|ECR push failed>"}}]}'
-          curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.FORMS_DEV_SLACK_WEBHOOK }}
+          json='{"channel":"#forms-staging-events", "blocks":[{"type":"section","text":{"type":"mrkdwn","text":":red: GitHub workflow failure: <${{ env.WORKFLOW_URL }}|${{ env.WORKFLOW_NAME }}>"}}]}'
+          curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.STAGING_SLACK_WEBHOOK }}
           exit 1
 
   deploy-form-viewer-service:
@@ -24,34 +34,28 @@ jobs:
       - name: Checkout
         uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2.7.0
 
-      - name: Configure AWS credentials
-        # v1 as of Jan 28 2021
-        uses: aws-actions/configure-aws-credentials@580afbba8076b302fad6220e95a3a845f32b165a
+      - name: Configure AWS credentials using OIDC
+        uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a # v4.0.1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ca-central-1
+          role-to-assume: arn:aws:iam::687401027353:role/platform-forms-client-apply
+          role-session-name: ECSDeploy
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
         id: login-ecr
         # v1 as of Jan 28 2021
-        uses: aws-actions/amazon-ecr-login@90fc8e6f452d3963147a5673eecc2b62fd70665a
-
-      - name: Get Cluster Name
-        id: cluster
-        run: |
-          echo "##[set-output name=name;]$(aws ecs list-clusters | jq -r '.clusterArns[0]' | cut -f 2 -d "/" )"
+        uses: aws-actions/amazon-ecr-login@008362efad0aaacc7df7adcc6933ace405f0fbf8
 
       - name: Download Form Viewer task definition
         id: download-taskdef-form-viewer
         run: |
           aws ecs describe-task-definition --task-definition form-viewer --query taskDefinition > form_viewer.json
-          echo "##[set-output name=container_name;]$(jq -r '.containerDefinitions[0].name' form_viewer.json)"
+          echo "container_name=$(jq -r '.containerDefinitions[0].name' form_viewer.json)" >> "$GITHUB_OUTPUT"
 
       - name: Render image for form viewer service
         id: taskdef-form-viewer
         # v1.0.10
-        uses: aws-actions/amazon-ecs-render-task-definition@085d5cf692d153f2dcac5f5db5016ebba4d3e56f
+        uses: aws-actions/amazon-ecs-render-task-definition@11e794c887074ceb05d9a786ae537ca13dfacd82
         with:
           task-definition: form_viewer.json
           container-name: ${{ steps.download-taskdef-form-viewer.outputs.container_name }}
@@ -67,14 +71,23 @@ jobs:
       - name: Deploy image for Form Viewer
         timeout-minutes: 10
         # v1.4.11
-        uses: aws-actions/amazon-ecs-deploy-task-definition@68ea58cf6c1f592af588267ee8f6084284e95a86
+        uses: aws-actions/amazon-ecs-deploy-task-definition@47d7844ea25e76ab61792242e985f3a48e8c08c6
         with:
           task-definition: ${{ steps.taskdef-form-viewer.outputs.task-definition }}
           service: form-viewer
-          cluster: ${{ steps.cluster.outputs.name }}
+          cluster: Forms
           wait-for-service-stability: true
           codedeploy-appspec: ${{ github.workspace }}/form-viewer-appspec.json
 
       - name: Logout of Amazon ECR
         if: always()
         run: docker logout ${{ steps.login-ecr.outputs.registry }}
+
+      - name: Report deployment to Sentinel
+        if: always()
+        uses: cds-snc/sentinel-forward-data-action@main
+        with:
+          input_data: '{"product": "forms", "sha": "${{ github.sha }}", "version": "${{ github.sha }}", "repository": "${{ github.repository }}", "environment": "staging", "status": "${{ job.status }}"}'
+          log_type: CDS_Product_Deployment_Data
+          log_analytics_workspace_id: ${{ secrets.LOG_ANALYTICS_WORKSPACE_ID }}
+          log_analytics_workspace_key: ${{ secrets.LOG_ANALYTICS_WORKSPACE_KEY }}
