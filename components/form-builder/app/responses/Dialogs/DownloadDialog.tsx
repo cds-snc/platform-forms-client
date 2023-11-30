@@ -42,10 +42,16 @@ export const DownloadDialog = ({
   }, [selectedFormat]);
 
   const handleClose = () => {
-    setSelectedFormat(undefined);
-    setZipAllFiles(true);
     setIsDialogVisible(false);
     dialogRef.current?.close();
+  };
+
+  const handleDownloadComplete = () => {
+    setSelectedFormat(undefined);
+    setZipAllFiles(true);
+    setIsDownloading(false);
+    onSuccessfulDownload();
+    handleClose();
   };
 
   const downloadFileFromBlob = (data: Blob, fileName: string) => {
@@ -101,9 +107,7 @@ export const DownloadDialog = ({
           const fileName = `${filePrefix}responses-reponses.zip`;
           downloadFileFromBlob(new Blob([buffer]), fileName);
 
-          setIsDownloading(false);
-          onSuccessfulDownload();
-          handleClose();
+          handleDownloadComplete();
         });
       }
 
@@ -125,9 +129,7 @@ export const DownloadDialog = ({
             const fileName = `${filePrefix}responses-reponses.zip`;
             downloadFileFromBlob(new Blob([buffer]), fileName);
 
-            setIsDownloading(false);
-            onSuccessfulDownload();
-            handleClose();
+            handleDownloadComplete();
           });
         } else {
           downloadFileFromBlob(new Blob([response.data.receipt]), `${filePrefix}receipt-recu.html`);
@@ -136,9 +138,7 @@ export const DownloadDialog = ({
             `${filePrefix}responses-reponses.csv`
           );
 
-          setIsDownloading(false);
-          onSuccessfulDownload();
-          handleClose();
+          handleDownloadComplete();
         }
       }
 
@@ -159,9 +159,7 @@ export const DownloadDialog = ({
             const fileName = `${filePrefix}responses-reponses.zip`;
             downloadFileFromBlob(new Blob([buffer]), fileName);
 
-            setIsDownloading(false);
-            onSuccessfulDownload();
-            handleClose();
+            handleDownloadComplete();
           });
         } else {
           downloadFileFromBlob(
@@ -170,9 +168,7 @@ export const DownloadDialog = ({
           );
           downloadFileFromBlob(new Blob([response.data.receipt]), `${filePrefix}receipt-recu.html`);
 
-          setIsDownloading(false);
-          onSuccessfulDownload();
-          handleClose();
+          handleDownloadComplete();
         }
       }
     } catch (err) {
