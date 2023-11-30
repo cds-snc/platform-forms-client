@@ -54,7 +54,7 @@
   "reportedAsProblem": "Response reported as a problem",
   "downloadSuccess": {
     "title": "Responses moved to Downloaded",
-    "body": "Next: sign off on the removal of responses from GC Forms."
+    "body": "Check that you have the files on computer. Then, sign off on the removal of responses from GC Forms."
   },
   "confirmSuccess": {
     "title": "Responses moved to Signed off for removal",
