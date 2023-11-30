@@ -9,37 +9,21 @@ export enum HeadingLevel {
   H6 = "h6",
 }
 
-interface CardProps {
+export const Card = ({
+  children,
+  icon,
+  title,
+  content,
+  headingTag: HeadingTag = HeadingLevel.H2,
+  headingStyle,
+}: {
   children?: React.ReactNode;
   icon?: JSX.Element;
   title?: string;
   content?: string;
-  heading?: HeadingLevel;
+  headingTag?: HeadingLevel;
   headingStyle?: string;
-}
-
-export const Card = (props: CardProps) => {
-  const { children, icon, title, content, heading, headingStyle } = props;
-
-  function createTitle(
-    heading: HeadingLevel | undefined,
-    content: string | undefined
-  ): React.JSX.Element {
-    if (heading && content) {
-      return React.createElement(
-        heading,
-        { ...(headingStyle && { className: headingStyle }) },
-        content
-      );
-    }
-
-    if (content) {
-      return <p className="gc-h2 text-[#748094]">{content}</p>;
-    }
-
-    return <></>;
-  }
-
+}) => {
   return (
     <div className="inline-flex justify-between rounded-lg border-2 border-solid border-[#ebf0f4] p-4">
       {icon && <div>{icon}</div>}
@@ -47,7 +31,7 @@ export const Card = (props: CardProps) => {
         {children && children}
         {!children && (
           <>
-            {createTitle(heading, title)}
+            {title && <HeadingTag className={headingStyle}>{title}</HeadingTag>}
             {content && <p>{content}</p>}
           </>
         )}

@@ -253,12 +253,11 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
 
             {vaultSubmissions.length <= 0 && statusQuery === "new" && (
               <>
-                <h1 className="visually-hidden">{t("tabs.newResponses.title")}</h1>
                 <Card
                   icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
                   title={t("downloadResponsesTable.card.noNewResponses")}
                   content={t("downloadResponsesTable.card.noNewResponsesMessage")}
-                  heading={HeadingLevel.H1}
+                  headingTag={HeadingLevel.H1}
                   headingStyle="gc-h2 text-[#748094]"
                 />
               </>
@@ -266,12 +265,11 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
 
             {vaultSubmissions.length <= 0 && statusQuery === "downloaded" && (
               <>
-                <h1 className="visually-hidden">{t("tabs.downloadedResponses.title")}</h1>
                 <Card
                   icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
                   title={t("downloadResponsesTable.card.noDownloadedResponses")}
                   content={t("downloadResponsesTable.card.noDownloadedResponsesMessage")}
-                  heading={HeadingLevel.H1}
+                  headingTag={HeadingLevel.H1}
                   headingStyle="gc-h2 text-[#748094]"
                 />
               </>
@@ -279,12 +277,11 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
 
             {vaultSubmissions.length <= 0 && statusQuery === "confirmed" && (
               <>
-                <h1 className="visually-hidden">{t("tabs.confirmedResponses.title")}</h1>
                 <Card
                   icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
                   title={t("downloadResponsesTable.card.noDeletedResponses")}
                   content={t("downloadResponsesTable.card.noDeletedResponsesMessage")}
-                  heading={HeadingLevel.H1}
+                  headingTag={HeadingLevel.H1}
                   headingStyle="gc-h2 text-[#748094]"
                 />
               </>
