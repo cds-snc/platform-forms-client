@@ -300,11 +300,11 @@
   "formatNumberedList": "Format numbered list",
   "formConfirmationMessage": "Confirmation message",
   "formDeleteResponses": {
-    "title": "Confirm responses before deleting form",
-    "message1": "This form has been published and is receiving responses. You have responses to download and confirm.",
+    "title": "Sign off on the removal of responses before deleting form",
+    "message1": "This form has been published and is receiving responses. You have responses to download and sign off for removal from GC Forms.",
     "message2": "Before deleting this form:",
-    "message3": "1. Download all new responses.",
-    "message4": "2. Confirm the receipt of downloaded responses",
+    "message3": "1. Download all responses.",
+    "message4": "2. Confirm the receipt of downloaded responses by signing off on their removal from GC Forms.",
     "cta": "Go to responses"
   },
   "formDelete": {
@@ -388,7 +388,7 @@
   "phoneNumber": "Phone number",
   "placeHolderFormTitle": "Form title",
   "previewingIn": "Previewing in",
-  "previewDisabledForPublishedForm": "Preview is disabled for published forms",
+  "previewDisabledForPublishedForm": "Preview and testing is disabled for published forms.",
   "privacyNoticeDescription": "<p className=\"mb-4\">Help people filling out the form understand how you’re handling their personal information, as outlined in Section 4.2.10 of the <a href=\"https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309\" target=\"_blank\">Directive on privacy practices</a>.</p><p><strong>What to include in a privacy notice</strong></p><ul><li>What personal information is being collected and why.</li><li>What legal or program authorities you have to collect information.</li><li>How their information will be used, shared, stored, and retained.</li><li>How people can access or change their personal information and file complaints.</li></ul><p>You’re responsible for understanding your department or agency's responsibilities related to personal information. If you’re unsure how to proceed, we recommend contacting your <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-eng.asp\" target=\"_blank\">access to information and privacy coordinator.</a></p>",
   "privacyStatement": "Privacy statement",
   "provideFeedback": "Help us improve",
@@ -470,7 +470,8 @@
     "vaultOption": "Download responses from GC Forms",
     "vaultOptionHint": {
       "text1": "Submitted responses will appear on the",
-      "text2": "Responses page"
+      "text2": "Responses page",
+      "text3": "GC Forms holds data temporarily. Retrieve responses within 45 days."
     },
     "emailOption": "Receive responses by email",
     "saveButton": "Save changes",
@@ -627,32 +628,32 @@
   "formName": "Form name",
   "responsesNavLabel": "Responses",
   "nagware": {
-    "restrictedDownloadAfter35Days": "Downloading will be restricted if unconfirmed responses are older than 35 days.",
+    "restrictedDownloadAfter35Days": "Downloading will be restricted if overdue responses are older than 35 days.",
     "unsavedSubmissionsOver21DaysOld": {
-      "title": "Download and confirm receipt of responses",
+      "title": "Retrieve responses",
       "body1": "There are",
       "body2": {
-        "moreThan20Responses": "new responses older than 21 days. Download and confirm receipt of 20 overdue new responses at a time.",
-        "lessThan20Responses": "new responses older than 21 days. Download and confirm receipt of all overdue new responses."
+        "moreThan20Responses": "new responses older than 21 days. Download and sign off on the removal of 20 overdue new responses at a time.",
+        "lessThan20Responses": "new responses older than 21 days. Download and sign off on the removal of all overdue new responses."
       }
     },
     "unconfirmedSubmissionsOver21DaysOld": {
-      "title": "Confirm receipt of responses",
+      "title": "Sign off on the removal of responses from GC Forms",
       "body1": "There are",
-      "body2": "unconfirmed responses older than 21 days. Confirm receipt of all overdue unconfirmed responses."
+      "body2": "downloaded responses older than 21 days. Confirm receipt of all overdue responses by signing off on their removal from GC Forms."
     },
     "unsavedSubmissionsOver35DaysOld": {
-      "title": "Downloading is restricted to overdue responses until they are downloaded and confirmed",
+      "title": "Downloading is restricted to overdue responses until they are retrieved",
       "body1": "There are",
       "body2": {
-        "moreThan20Responses": "new responses over 35 days old. Download and confirm 20 overdue responses at a time before continuing.",
-        "lessThan20Responses": "new responses over 35 days old. Download and confirm all overdue responses before continuing."
+        "moreThan20Responses": "new responses over 35 days old. Download and sign off on 20 overdue responses at a time before continuing.",
+        "lessThan20Responses": "new responses over 35 days old. Download and sign off on all overdue responses before continuing."
       }
     },
     "unconfirmedSubmissionsOver35DaysOld": {
-      "title": "Downloading is restricted until receipt of responses is confirmed",
+      "title": "Downloading is restricted until responses are signed off for removal",
       "body1": "There are",
-      "body2": "unconfirmed responses 35 days overdue. Confirm the receipt of all overdue downloaded responses before saving new ones."
+      "body2": "downloaded responses 35 days overdue. Sign off on the removal of all overdue downloaded responses before saving new ones."
     }
   },
   "loading": "Loading...",

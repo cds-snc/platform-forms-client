@@ -41,8 +41,8 @@
     },
     "actionRequired": {
       "description": "Action required: ",
-      "linkSingular": "<a href=\"{{link}}\">Confirm receipt of {{responses}} response</a>",
-      "linkPlural": "<a href=\"{{link}}\">Confirm receipt of {{responses}} responses</a>"
+      "linkSingular": "<a href=\"{{link}}\">Sign off on removal of {{responses}} response</a>",
+      "linkPlural": "<a href=\"{{link}}\">Sign off on removal of {{responses}} responses</a>"
     }
   },
   "responseTemplate": {
@@ -53,9 +53,9 @@
     "columnTable": "Column table",
     "rowTable": "Row table",
     "rowTableInfo": "A row table is most useful when copy and pasting into a spreadsheet.",
-    "confirmReceiptResponse": "Confirm receipt of response",
-    "confirmReceipt": "Confirm receipt",
-    "confirmReceiptInfo": "Copy the code below and paste it into the Confirm Receipt of Responses page in the website.",
+    "confirmReceiptResponse": "Sign off on the removal of responses",
+    "confirmReceipt": "Sign off for removal",
+    "confirmReceiptInfo": "Copy the code below and paste it into the Sign off for removal page in GC Forms.",
     "copyCode": "Copy code",
     "copyCodeClipboard": "Copy code to clipboard",
     "copiedToCipboard": "Copied to clipboard",
@@ -68,7 +68,7 @@
     "officialReceipt": "Official receipt and record of responses",
     "responsesDownloaded": "responses downloaded:",
     "needToVerify": "You’ll need this receipt to verify all responses made it safely from GC Forms to your computer.",
-    "useTheCopy": "Use the “Copy receipt codes” button to sign off on the removal of responses from GC Forms.",
+    "useTheCopy": "Use the “Copy receipt codes” button to sign off on the removal of responses from GC Forms in the Downloaded tab in GC Forms.",
     "copyCodes": {
       "title":"Sign off on removal of responses from GC Forms",
       "description": "Once you've checked the downloaded responses, and are ready to remove these from GC Forms, copy and paste the receipt codes. This helps us know when responses have been transferred to you so we can remove the data from our system.",
@@ -76,7 +76,7 @@
     },
     "dataList": {
       "title": "Form responses: list of selected responses",
-      "formResponse": "Form response:"
+      "formResponse": "Response"
     }
   },
   "dataClassification": {

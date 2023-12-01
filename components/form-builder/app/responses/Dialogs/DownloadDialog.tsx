@@ -31,7 +31,8 @@ export const DownloadDialog = ({
 }) => {
   const dialogRef = useDialogRef();
   const { t, i18n } = useTranslation("form-builder-responses");
-  const [selectedFormat, setSelectedFormat] = React.useState<DownloadFormat>();
+  const defaultSelectedFormat = DownloadFormat.HTML_ZIPPED;
+  const [selectedFormat, setSelectedFormat] = React.useState<DownloadFormat>(defaultSelectedFormat);
   const [zipAllFiles, setZipAllFiles] = React.useState<boolean>(true);
   const [isDownloading, setIsDownloading] = React.useState<boolean>(false);
 
@@ -42,13 +43,13 @@ export const DownloadDialog = ({
   }, [selectedFormat]);
 
   const handleClose = () => {
+    setSelectedFormat(defaultSelectedFormat);
+    setZipAllFiles(true);
     setIsDialogVisible(false);
     dialogRef.current?.close();
   };
 
   const handleDownloadComplete = () => {
-    setSelectedFormat(undefined);
-    setZipAllFiles(true);
     setIsDownloading(false);
     onSuccessfulDownload();
     handleClose();
@@ -97,7 +98,7 @@ export const DownloadDialog = ({
         });
 
         const zip = new JSZip();
-        zip.file("receipt-recu.html", response.data.receipt);
+        zip.file("_receipt-recu.html", response.data.receipt);
 
         response.data.responses.forEach((response: { id: string; html: string }) => {
           zip.file(`${response.id}.html`, response.html);
@@ -162,11 +163,11 @@ export const DownloadDialog = ({
             handleDownloadComplete();
           });
         } else {
+          downloadFileFromBlob(new Blob([response.data.receipt]), `${filePrefix}receipt-recu.html`);
           downloadFileFromBlob(
             new Blob([JSON.stringify(response.data.responses)], { type: "application/json" }),
             `${filePrefix}responses-reponses.json`
           );
-          downloadFileFromBlob(new Blob([response.data.receipt]), `${filePrefix}receipt-recu.html`);
 
           handleDownloadComplete();
         }
@@ -202,10 +203,11 @@ export const DownloadDialog = ({
                   name="downloadFormat"
                   id="zip"
                   value={DownloadFormat.HTML_ZIPPED}
+                  checked={selectedFormat === DownloadFormat.HTML_ZIPPED}
                   className="gc-radio__input"
                   onChange={(e) => setSelectedFormat(e.target.value as DownloadFormat)}
                 />
-                <label htmlFor="zip" className="ml-14 inline-block">
+                <label htmlFor="zip" className="gc-checkbox-label ml-14 inline-block">
                   <span className="block font-semibold">
                     {t("downloadResponsesModals.downloadDialog.html")}
                   </span>
@@ -221,10 +223,11 @@ export const DownloadDialog = ({
                   name="downloadFormat"
                   id="combined"
                   value={DownloadFormat.CSV}
+                  checked={selectedFormat === DownloadFormat.CSV}
                   className="gc-radio__input"
                   onChange={(e) => setSelectedFormat(e.target.value as DownloadFormat)}
                 />
-                <label htmlFor="combined" className="ml-14 inline-block">
+                <label htmlFor="combined" className="gc-checkbox-label ml-14 inline-block">
                   <span className="block font-semibold">
                     {t("downloadResponsesModals.downloadDialog.csv")}
                   </span>
@@ -240,10 +243,11 @@ export const DownloadDialog = ({
                   name="downloadFormat"
                   id="json"
                   value={DownloadFormat.JSON}
+                  checked={selectedFormat === DownloadFormat.JSON}
                   className="gc-radio__input"
                   onChange={(e) => setSelectedFormat(e.target.value as DownloadFormat)}
                 />
-                <label htmlFor="json" className="ml-14 inline-block">
+                <label htmlFor="json" className="gc-checkbox-label ml-14 inline-block">
                   <span className="block font-semibold">
                     {t("downloadResponsesModals.downloadDialog.json")}
                   </span>
@@ -266,7 +270,7 @@ export const DownloadDialog = ({
                     className="gc-input-checkbox__input"
                     onChange={() => setZipAllFiles(zipAllFiles === true ? false : true)}
                   />
-                  <label htmlFor="combined" className="ml-14 inline-block">
+                  <label htmlFor="zipped" className="gc-checkbox-label">
                     <span className="block font-semibold">
                       {t("downloadResponsesModals.downloadDialog.downloadAllAsZip")}
                     </span>
