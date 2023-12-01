@@ -97,7 +97,7 @@ export const DownloadDialog = ({
         });
 
         const zip = new JSZip();
-        zip.file("receipt-recu.html", response.data.receipt);
+        zip.file("_receipt-recu.html", response.data.receipt);
 
         response.data.responses.forEach((response: { id: string; html: string }) => {
           zip.file(`${response.id}.html`, response.html);
@@ -162,11 +162,11 @@ export const DownloadDialog = ({
             handleDownloadComplete();
           });
         } else {
+          downloadFileFromBlob(new Blob([response.data.receipt]), `${filePrefix}receipt-recu.html`);
           downloadFileFromBlob(
             new Blob([JSON.stringify(response.data.responses)], { type: "application/json" }),
             `${filePrefix}responses-reponses.json`
           );
-          downloadFileFromBlob(new Blob([response.data.receipt]), `${filePrefix}receipt-recu.html`);
 
           handleDownloadComplete();
         }
