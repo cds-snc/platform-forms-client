@@ -306,7 +306,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
             <Link
               onClick={() => setIsShowReportProblemsDialog(true)}
               href={"#"}
-              className="text-black visited:text-black"
+              className="text-black visited:text-black focus:text-white-default"
               id="reportProblemButton"
             >
               <WarningIcon className="mr-2 inline-block" />
@@ -315,7 +315,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
 
             <Link
               href={`/form-builder/responses/${formId}/problem`}
-              className="ml-12 text-black visited:text-black"
+              className="ml-12 text-black visited:text-black focus:text-white-default"
             >
               {t("responses.viewAllProblemResponses")}
             </Link>
