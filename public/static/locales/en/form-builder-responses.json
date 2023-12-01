@@ -47,7 +47,7 @@
       "deleted": "Signed off for removal",
       "problem": "Problems"
     },
-    "viewAllProblemResponses": "View all responses reported as problems"
+    "viewAllProblemResponses": "View responses reported"
   },
   "supportWillContact": "Support will contact you",
   "reportedAsProblem": "Response reported as a problem",
@@ -101,8 +101,8 @@
       "noDownloadedResponsesMessage": "Downloaded responses will appear here until you sign off on their removal from GC Forms.",
       "noDeletedResponses": "No responses for removal",
       "noDeletedResponsesMessage": "Once you’ve downloaded and signed off on the removal of responses, they will be available here for 30 days.",
-      "noProblemResponses": "No problem responses",
-      "noProblemResponsesMessage": "Problem responses will appear here until you sign off on their removal from GC Forms."
+      "noProblemResponses": "No responses reported with problems",
+      "noProblemResponsesMessage": "Problem responses will appear here until signed off for removal from GC Forms."
     },
     "notifications": {
 

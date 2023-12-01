@@ -47,7 +47,7 @@
       "deleted": "Pour suppression",
       "problem": "Problème"
     },
-    "viewAllProblemResponses": "Afficher toutes les réponses signalées avec problèmes"
+    "viewAllProblemResponses": "Afficher les réponses signalées"
   },
   "supportWillContact": "L’équipe de soutien vous contactera",
   "reportedAsProblem": "Réponse signalée avec problème",
@@ -102,7 +102,7 @@
       "noDeletedResponses": "Aucune réponse à supprimer",
       "noDeletedResponsesMessage": "Une fois que vous aurez téléchargé et approuvé la suppression des réponses, celles-ci seront disponibles ici pendant 30 jours.",
       "noProblemResponses": "Aucune réponse signalée avec problème",
-      "noProblemResponsesMessage": "Les réponses signalées avec problèmes apparaîtront ici jusqu'à ce que vous approuviez leur suppression de Formulaires GC."
+      "noProblemResponsesMessage": "Les réponses signalées avec problèmes apparaîtront ici jusqu'à ce qu'elles soient approuvées pour leur suppression de Formulaires GC."
     },
     "notifications": {
       "downloadComplete": "Réponses déplacées vers « Téléchargements »",
