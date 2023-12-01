@@ -263,6 +263,7 @@ export const SetResponseDelivery = () => {
               <span className="mb-1 ml-3 block text-sm">
                 {t("settingsResponseDelivery.vaultOptionHint.text1")}{" "}
                 <a href={responsesLink}>{t("settingsResponseDelivery.vaultOptionHint.text2")}</a>.
+                {t("settingsResponseDelivery.vaultOptionHint.text3")}
               </span>
             </Radio>
             <Radio

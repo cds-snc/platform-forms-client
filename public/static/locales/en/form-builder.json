@@ -470,7 +470,8 @@
     "vaultOption": "Download responses from GC Forms",
     "vaultOptionHint": {
       "text1": "Submitted responses will appear on the",
-      "text2": "Responses page"
+      "text2": "Responses page",
+      "text3": "GC Forms holds data temporarily. Retrieve responses within 45 days."
     },
     "emailOption": "Receive responses by email",
     "saveButton": "Save changes",
