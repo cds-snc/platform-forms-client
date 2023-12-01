@@ -50,8 +50,6 @@ export const DownloadDialog = ({
   };
 
   const handleDownloadComplete = () => {
-    setSelectedFormat(defaultSelectedFormat);
-    setZipAllFiles(true);
     setIsDownloading(false);
     onSuccessfulDownload();
     handleClose();
