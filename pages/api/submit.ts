@@ -32,6 +32,17 @@ const submit = async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
     // https://nextjs.org/docs/messages/api-routes-body-size-limit
     const stringBody = await streamToString(req);
     const incomingFormJSON = JSON.parse(stringBody) as SubmissionRequestBody;
+
+    // Ensure required information is present
+
+    if (!incomingFormJSON.formID) {
+      return res.status(400).json({ error: "No form ID submitted with request" });
+    }
+
+    if (Object.entries(incomingFormJSON).length <= 2) {
+      return res.status(400).json({ error: "No form data submitted with request" });
+    }
+
     // We process the data into fields and files. Base64 file data is converted into buffers
     const data = await parseRequestData(incomingFormJSON);
     return await processFormData(data.fields, data.files, res, req);
