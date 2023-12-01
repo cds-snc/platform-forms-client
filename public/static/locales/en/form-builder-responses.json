@@ -52,11 +52,11 @@
   "supportWillContact": "Support will contact you",
   "reportedAsProblem": "Response reported as a problem",
   "downloadSuccess": {
-    "title": "Responses moved to Downloaded",
+    "title": "Responses moved to the “Downloaded” tab",
     "body": "Next: sign off on the removal of responses from GC Forms."
   },
   "confirmSuccess": {
-    "title": "Responses moved to Signed off for removal",
+    "title": "Responses moved to the “Signed off for removal” tab",
     "body": "Responses will be removed in 30 days."
   },
   "downloadResponsesTable": {
@@ -106,7 +106,7 @@
     },
     "notifications": {
 
-      "downloadComplete": "Responses moved to “Downloaded”",
+      "downloadComplete": "Responses moved to the “Downloaded” tab",
       "downloadCompleteNew": "Next: Sign off on the removal of responses from GC Forms",
       "downloadingXFiles": "Downloading {{fileCount}} files"
     },

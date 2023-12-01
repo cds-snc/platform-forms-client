@@ -52,11 +52,11 @@
   "supportWillContact": "L’équipe de soutien vous contactera",
   "reportedAsProblem": "Réponse signalée avec problème",
   "downloadSuccess": {
-    "title": "Réponses déplacées vers Téléchargements",
+    "title": "Réponses déplacées vers l'onglet « Téléchargements »",
     "body": "Prochaine étape : approuvez la suppression des réponses de Formulaires GC."
   },
   "confirmSuccess": {
-    "title": "Réponses déplacées vers Pour suppression",
+    "title": "Réponses déplacées vers vl'onglet « Pour suppression »",
     "body": "Les réponses seront supprimées dans 30 jours."
   },
   "downloadResponsesTable": {
@@ -105,7 +105,7 @@
       "noProblemResponsesMessage": "Les réponses signalées avec problèmes apparaîtront ici jusqu'à ce qu'elles soient approuvées pour leur suppression de Formulaires GC."
     },
     "notifications": {
-      "downloadComplete": "Réponses déplacées vers « Téléchargements »",
+      "downloadComplete": "Réponses déplacées vers l'onglet « Téléchargements »",
       "downloadCompleteNew": "Prochaine étape : Approuvez la suppression des réponses de Formulaires GC",
       "downloadingXFiles": "Téléchargement de {{fileCount}} fichiers"
     },
