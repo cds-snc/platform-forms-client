@@ -1,9 +1,9 @@
 {
   "title": "Restricted access to responses",
-  "text1": "Your form has responses that were submitted more than 35 days ago. Access to all new responses will be restricted until you’ve confirmed these overdue responses.",
+  "text1": "Your form has responses that were submitted more than 35 days ago. Access to all new responses will be restricted until you’ve addressed these overdue responses.",
   "text2": "The GC Forms",
   "text3": "terms of use",
-  "text4": "require all responses to be confirmed within 45 days of submission. If not, your account may be deactivated.",
+  "text4": "require all responses to be retrieved within 45 days of submission. If not, your account may be deactivated.",
   "cta": {
     "label": "Continue"
   }

@@ -104,10 +104,6 @@ export const ResponseHtmlAggregated = ({
 
             <h2>{t("responseAggregatedTemplate.title", { lng: lang })}</h2>
 
-            <h3 className="mt-14">
-              {t("responseAggregatedTemplate.copyCodes.title", { lng: lang })}
-            </h3>
-
             <div className="mt-14 overflow-x-auto">
               <AggregatedTable lang={lang} headers={headersForTable} submissions={submissions} />
             </div>
