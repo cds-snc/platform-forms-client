@@ -77,7 +77,7 @@ export const DownloadDialog = ({
       formId,
       downloadType,
       numberOfRecords,
-      time: getDate(true),
+      timestamp: getDate(true),
     });
   };
 
