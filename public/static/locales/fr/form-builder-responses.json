@@ -145,7 +145,7 @@
       "download": "Télécharger"
     },
     "confirmDeleteNewDialog": {
-      "confirmAndDelete": "Confirmer et supprimer de nouvelles réponses",
+      "confirmAndDelete": "Confirmer la suppression de nouvelles réponses",
       "responsesNotYetDownloaded": "Ces réponses n’ont pas encore été téléchargées",
       "alertBody": "Vous n’avez pas téléchargé les réponses que vous tentez de supprimer. Si vous supprimez ces réponses, elles seront retirées du système après 30 jours.",
       "deletePrompt": "Si vous souhaitez procéder à la suppression des réponses non téléchargées, entrez le mot « SUPPRIMER » ci-dessous.",

@@ -146,10 +146,10 @@
       "download": "Download"
     },
     "confirmDeleteNewDialog": {
-      "confirmAndDelete": "Confirm and delete new responses",
+      "confirmAndDelete": "Confirm the removal of new responses",
       "responsesNotYetDownloaded": "Responses not yet downloaded",
-      "alertBody": "You’ve not downloaded the responses you’re about to delete. If you delete these responses, they will be removed permanently from GC Forms after 30 days.",
-      "deletePrompt": "To proceed with deleting non-downloaded responses enter the word “DELETE” below.",
+      "alertBody": "You’ve not downloaded the responses you’re about to remove. If you remove these responses, they will be deleted permanently from GC Forms after 30 days.",
+      "deletePrompt": "To proceed with the removal of non-downloaded responses enter the word “DELETE” below.",
       "required": "Required",
       "cancel": "Cancel",
       "delete": "Delete",
