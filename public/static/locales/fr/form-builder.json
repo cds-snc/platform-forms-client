@@ -299,11 +299,11 @@
   "formatNumberedList": "Mettre en liste numérotée",
   "formConfirmationMessage": "Message de confirmation",
   "formDeleteResponses": {
-    "title": "Confirmer les réponses avant de supprimer le formulaire",
-    "message1": "Ce formulaire est publié et reçoit des réponses. Vous avez des réponses à télécharger et à confirmer.",
+    "title": "Approuvez la suppression des réponses avant de supprimer le formulaire",
+    "message1": "Ce formulaire est publié et reçoit des réponses. Vous avez des réponses à télécharger et à approuver pour suppression de Formulaires GC.",
     "message2": "Avant de supprimer ce formulaire :",
-    "message3": "1. Télécharger toutes les nouvelles réponses.",
-    "message4": "2. Confirmer la réception des réponses téléchargées.",
+    "message3": "1. Télécharger toutes les réponses.",
+    "message4": "2. Confirmer la réception des réponses téléchargées en approuvant leur suppression de Formulaires GC.",
     "cta": "Accéder aux réponses"
   },
   "formDelete": {
@@ -387,7 +387,7 @@
   "phoneNumber": "Numéro de téléphone",
   "placeHolderFormTitle": "Titre du formulaire",
   "previewingIn": "Prévisualiser en",
-  "previewDisabledForPublishedForm": "La prévisualisation est désactivée pour les formulaires publiés",
+  "previewDisabledForPublishedForm": "La prévisualisation et les tests sont désactivés pour les formulaires publiés",
   "privacyNoticeDescription": "<p className=\"mb-4\">Aidez les personnes qui remplissent le formulaire à comprendre comment vous traitez leurs renseignements personnels, comme énoncé à la section 4.2.10 de la <a href=\"https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=18309\" target=\"_blank\">Directive sur les pratiques relatives à la protection de la vie privée</a>.</p><p><strong>Ce qu'il faut préciser dans un avis de confidentialité</strong></p><ul><li>Les renseignements personnels qui sont recueillis et les fins de la collecte.</li><li>Les autorisations légales ou de programmes dont vous disposez.</li><li>Les façons dont les reseignements seront utilisés, partagés, stockés et conservés.</li><li>Les droits d’accès ou de correction des renseignements personnels et les droits de déposer une plainte.</li></ul><p>C’est votre responsabilité de bien connaître les exigences de votre ministère ou organisme en matière de renseignements personnels. Si vous ne savez pas comment procéder, nous vous recommandons de contacter votre <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-fra.asp\" target=\"_blank\">coordinateur·rice de l'accès à l'information et de la protection de la vie privée</a>.</p>",
   "privacyStatement": "Déclaration de confidentialité ",
   "provideFeedback": "Aidez-nous à nous améliorer",
@@ -470,7 +470,8 @@
     "vaultOption": "Télécharger les réponses de Formulaires GC",
     "vaultOptionHint": {
       "text1": " Les réponses soumises apparaîtront sur",
-      "text2": "la page Réponses"
+      "text2": "la page Réponses",
+      "text3": "Formulaires GC conserve les données temporairement. Les réponses doivent être récupérées dans un délai de 45 jours."
     },
     "emailOption": "Recevoir les réponses par courriel",
     "saveButton": "Enregistrer les modifications",
@@ -627,32 +628,32 @@
   "formName": "Nom du formulaire",
   "responsesNavLabel": "Réponses",
   "nagware": {
-    "restrictedDownloadAfter35Days": "Le téléchargement sera limité si les réponses non confirmées ont plus de 35 jours de retard.",
+    "restrictedDownloadAfter35Days": "Le téléchargement sera limité si les réponses non traitées ont plus de 35 jours de retard.",
     "unsavedSubmissionsOver21DaysOld": {
-      "title": "Téléchargez et confirmez la réception des réponses",
+      "title": "Veuillez extraire les réponses",
       "body1": "Il y a",
       "body2": {
-        "moreThan20Responses": "nouvelles réponses ayant plus de 21 jours de retard. Téléchargez et confirmez la réception de 20 nouvelles réponses en retard à la fois.",
-        "lessThan20Responses": "nouvelles réponses ayant plus de 21 jours de retard. Téléchargez et confirmez la réception de toute nouvelle réponse."
+        "moreThan20Responses": "nouvelles réponses ayant plus de 21 jours de retard. Téléchargez et approuvez la suppression de 20 nouvelles réponses en retard à la fois.",
+        "lessThan20Responses": "nouvelles réponses ayant plus de 21 jours de retard. Téléchargez et approuvez la suppression de toute nouvelle réponse."
       }
     },
     "unconfirmedSubmissionsOver21DaysOld": {
-      "title": "Confirmez la réception des réponses",
+      "title": "Approuvez la suppression de réponses de Formulaires GC",
       "body1": "Il y a",
-      "body2": "réponses non confirmées ayant plus de 21 jours de retard. Confirmez la réception de toute réponse non confirmée en retard."
+      "body2": "réponses téléchargées ayant plus de 21 jours de retard. Confirmez la réception de toute réponse en retard en approuvant leur suppression de Formulaires GC."
     },
     "unsavedSubmissionsOver35DaysOld": {
-      "title": "Le téléchargement est limité jusqu'à ce que la réception des réponses soit confirmée",
+      "title": "Le téléchargement est limité jusqu'à ce que les réponses soient extraites",
       "body1": "Il y a",
       "body2": {
-        "moreThan20Responses": "nouvelles réponses ayant plus de 35 jours de retard. Téléchargez et confirmez 20 réponses en retard à la fois avant de continuer.",
-        "lessThan20Responses": "nouvelles réponses ayant plus de 35 jours de retard. Téléchargez et confirmez toute réponse en retard avant de continuer."
+        "moreThan20Responses": "nouvelles réponses ayant plus de 35 jours de retard. Téléchargez et approuvez la suppression de 20 réponses en retard à la fois avant de continuer.",
+        "lessThan20Responses": "nouvelles réponses ayant plus de 35 jours de retard. Téléchargez et approuvez la suppression de toute réponse en retard avant de continuer."
       }
     },
     "unconfirmedSubmissionsOver35DaysOld": {
-      "title": "Le téléchargement est limité aux réponses en retard jusqu'à ce qu'elles soient téléchargées et confirmées",
+      "title": "Le téléchargement est limité aux réponses en retard jusqu'à ce qu'elles soient téléchargées et approuvées pour suppression",
       "body1": "Il y a",
-      "body2": "réponses non confirmées avec 35 jours de retard ou plus. Confirmez la réception de toute réponse téléchargée en retard avant d'en enregistrer de nouvelles."
+      "body2": "réponses téléchargées avec 35 jours de retard ou plus. Approuvez la suppression de toute réponse téléchargée en retard avant d'en enregistrer de nouvelles."
     },
     "loading": "Chargement..."
   },

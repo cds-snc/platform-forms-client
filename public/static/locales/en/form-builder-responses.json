@@ -48,16 +48,16 @@
       "deleted": "Signed off for removal",
       "problem": "Problems"
     },
-    "viewAllProblemResponses": "View all responses reported as problems"
+    "viewAllProblemResponses": "View responses reported"
   },
   "supportWillContact": "Support will contact you",
   "reportedAsProblem": "Response reported as a problem",
   "downloadSuccess": {
-    "title": "Responses moved to Downloaded",
-    "body": "Check that you have the files on computer. Then, sign off on the removal of responses from GC Forms."
+    "title": "Responses moved to the “Downloaded” tab",
+    "body": "Next: sign off on the removal of responses from GC Forms."
   },
   "confirmSuccess": {
-    "title": "Responses moved to Signed off for removal",
+    "title": "Responses moved to the “Signed off for removal” tab",
     "body": "Responses will be removed in 30 days."
   },
   "downloadResponsesTable": {
@@ -102,12 +102,12 @@
       "noDownloadedResponsesMessage": "Downloaded responses will appear here until you sign off on their removal from GC Forms.",
       "noDeletedResponses": "No responses for removal",
       "noDeletedResponsesMessage": "Once you’ve downloaded and signed off on the removal of responses, they will be available here for 30 days.",
-      "noProblemResponses": "No problem responses",
-      "noProblemResponsesMessage": "Problem responses will appear here once reported, until you sign off on their removal from GC Forms."
+      "noProblemResponses": "No responses reported with problems",
+      "noProblemResponsesMessage": "Problem responses will appear here until signed off for removal from GC Forms."
     },
     "notifications": {
 
-      "downloadComplete": "Responses moved to “Downloaded”",
+      "downloadComplete": "Responses moved to the “Downloaded” tab",
       "downloadCompleteNew": "Next: Sign off on the removal of responses from GC Forms",
       "downloadingXFiles": "Downloading {{fileCount}} files"
     },
@@ -122,8 +122,8 @@
       "remainingResponses": "You have over {{max}} responses available.",
       "remainingResponsesBody": "Showing 1-{{max}}. More will load as displayed responses are downloaded.",
       "overdueAlert": {
-"title": "Access to new responses is restricted until overdue responses are downloaded and confirmed",
-        "description": "There are {{numberOfOverdueResponses}} unconfirmed responses that are {{escalatedAfter}} days old. Download and confirm all overdue responses to remove this restriction."
+        "title": "Access to new responses is restricted until overdue responses are retrieved.",
+        "description": "There are {{numberOfOverdueResponses}} responses that are {{escalatedAfter}} days old. Download and sign off on the removal of overdue responses to remove this restriction."
       }
     },
     "downloadSelectedResponses": "Download selected",
@@ -149,10 +149,10 @@
       "download": "Download"
     },
     "confirmDeleteNewDialog": {
-      "confirmAndDelete": "Confirm and delete new responses",
+      "confirmAndDelete": "Confirm the removal of new responses",
       "responsesNotYetDownloaded": "Responses not yet downloaded",
-      "alertBody": "You’ve not downloaded the responses you’re about to delete. If you delete these responses, they will be removed permanently from GC Forms after 30 days.",
-      "deletePrompt": "To proceed with deleting non-downloaded responses enter the word “DELETE” below.",
+      "alertBody": "You’ve not downloaded the responses you’re about to remove. If you remove these responses, they will be deleted permanently from GC Forms after 30 days.",
+      "deletePrompt": "To proceed with the removal of non-downloaded responses enter the word “DELETE” below.",
       "required": "Required",
       "cancel": "Cancel",
       "delete": "Delete",
@@ -176,7 +176,7 @@
         },
         "errorEntries": {
           "title": "Some receipt codes could not be submitted",
-          "description": "Check that the receipt codes below are correct and try again."
+          "description": "Check that the receipt codes are correct and try again."
         },
         "invalidEntry": {
           "title": "The receipt code does not match the required format",
@@ -207,7 +207,7 @@
         },
         "errorEntries": {
           "title": "Some submission IDs were not submitted",
-          "description": "Check that the submission ID below are correct and try again."
+          "description": "Check that the submission IDs are correct and try again."
         },
         "invalidEntry": {
           "title": "The submission ID does not match the required format",
