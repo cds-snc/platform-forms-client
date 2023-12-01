@@ -121,8 +121,8 @@
       "remainingResponses": "You have over {{max}} responses available.",
       "remainingResponsesBody": "Showing 1-{{max}}. More will load as displayed responses are downloaded.",
       "overdueAlert": {
-        "title": "Access to new responses is restricted until overdue responses are downloaded and confirmed",
-        "description": "There are {{numberOfOverdueResponses}} unconfirmed responses that are {{escalatedAfter}} days old. Download and confirm all overdue responses to remove this restriction."
+        "title": "Access to new responses is restricted until overdue responses are retrieved.",
+        "description": "There are {{numberOfOverdueResponses}} responses that are {{escalatedAfter}} days old. Download and sign off on the removal of overdue responses to remove this restriction."
       }
     },
     "downloadSelectedResponses": "Download selected",
