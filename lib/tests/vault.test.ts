@@ -5,14 +5,13 @@
 import Redis from "ioredis-mock";
 import { mockClient } from "aws-sdk-client-mock";
 import { prismaMock } from "@jestUtils";
-import { DynamoDBDocumentClient, QueryCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocumentClient, QueryCommand, BatchWriteCommand } from "@aws-sdk/lib-dynamodb";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { Base, mockUserPrivileges } from "__utils__/permissions";
 import { Session } from "next-auth";
 import { deleteDraftFormResponses, unprocessedSubmissions } from "@lib/vault";
 import formConfiguration from "@jestFixtures/cdsIntakeTestForm.json";
 import { DeliveryOption } from "@lib/types";
-import { BatchWriteItemCommand } from "@aws-sdk/client-dynamodb";
 import { TemplateAlreadyPublishedError } from "@lib/templates";
 import { getAppSetting } from "@lib/appSettings";
 
@@ -230,10 +229,11 @@ describe("Deleting test responses (submissions)", () => {
     };
 
     ddbMock.on(QueryCommand).resolves(dynamodbMockedReponses);
+    ddbMock.on(BatchWriteCommand).resolves({});
 
     const response = await deleteDraftFormResponses(ability, "formtestID");
 
-    expect(ddbMock.commandCalls(BatchWriteItemCommand).length).toBe(1);
+    expect(ddbMock.commandCalls(BatchWriteCommand).length).toBe(1);
     expect(response.responsesDeleted).toBe(4);
   });
 

@@ -3,7 +3,7 @@ import { useTranslation } from "next-i18next";
 import { useDialogRef, Dialog } from "@components/form-builder/app/shared";
 import { LineItemEntries } from "./line-item-entries";
 import { Button, Alert } from "@components/globals";
-import { randomId } from "@lib/clientHelpers";
+import { randomId, runPromisesSynchronously } from "@lib/clientHelpers";
 import axios from "axios";
 import Link from "next/link";
 import { isUUID } from "@lib/validation";
@@ -56,8 +56,8 @@ export const ConfirmDialog = ({
     // API endpoint only accepts 50 entries at a time
     const batchedEntries = chunkArray(entries, 50);
 
-    const batchResults = await Promise.allSettled(
-      batchedEntries.map((batch) =>
+    const batchQueries = batchedEntries.map((batch) => {
+      return () =>
         axios({
           url: apiUrl,
           method: "PUT",
@@ -66,9 +66,10 @@ export const ConfirmDialog = ({
           },
           timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
           data: batch,
-        })
-      )
-    );
+        });
+    });
+
+    const batchResults = await runPromisesSynchronously(batchQueries);
 
     // Check batched results for errors
 
@@ -76,13 +77,13 @@ export const ConfirmDialog = ({
     let criticalFailure = false;
 
     batchResults.forEach((result, index) => {
-      if (result.status === "rejected") {
+      if (result.status !== 200) {
         criticalFailure = true;
         // Report all entries as invalid for that batch
         invalidEntries.push(...batchedEntries[index]);
         return;
       }
-      const data = result.value.data;
+      const data = result.data;
       if (data.invalidConfirmationCodes?.length > 0) {
         invalidEntries.push(...data.invalidConfirmationCodes);
       }
