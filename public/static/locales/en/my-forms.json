@@ -55,7 +55,7 @@
     "rowTableInfo": "A row table is most useful when copy and pasting into a spreadsheet.",
     "confirmReceiptResponse": "Sign off on the removal of responses",
     "confirmReceipt": "Sign off for removal",
-    "confirmReceiptInfo": "Copy the code below and paste it into the Sign off for removal page in GC Forms.",
+    "confirmReceiptInfo": "Copy the code below and paste it into the 'Sign off on removal with receipt codes' dialog within GC Forms.",
     "copyCode": "Copy code",
     "copyCodeClipboard": "Copy code to clipboard",
     "copiedToCipboard": "Copied to clipboard",
