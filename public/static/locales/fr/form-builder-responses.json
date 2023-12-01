@@ -160,7 +160,7 @@
     "confirmReceiptDialog": {
       "title": "Approuver la suppression des réponses de Formulaires GC",
       "contentHeading": "Formulaires GC doit vérifier que les réponses ont bien été téléchargées.",
-      "contentBody": "Pourquoi? Parce que les choses peuvent mal tourner lorsque des fichiers numériques passent d’un ordinateur à un autre. Formulaires GC ne supprimera pas de réponses de la base de données sans avoir vérifié que les fichiers ont été téléchargés en toute sécurité sur votre ordinateur.",
+      "contentBody": "Pourquoi? Parce que les choses peuvent mal tourner lorsque des fichiers numériques passent d’un ordinateur à un autre. Cette étape sert à vérifier que les fichiers ont été téléchargés en toute sécurité sur votre ordinateur de Formulaires GC.",
       "copyCode": "Collez les codes de réception du Reçu et registre officiel des réponses pour confirmer que vous avez bien reçu les réponses.",
       "copyCodeNote": "Utilisez le bouton « Copier les codes de réception » en haut du fichier de reçu HTML.",
       "confirmReceipt": "Approuver la suppression de réponses",
