@@ -12,7 +12,8 @@
     },
     "confirmedResponses": {
       "title": "Réponses approuvées pour suppression",
-      "message1": "Formulaires GC conserve temporairement les réponses. Ces réponses seront définitivement supprimées après 30 jours."
+      "message1": "Formulaires GC conserve temporairement les réponses.",
+      "message2": "Ces réponses seront définitivement supprimées après 30 jours."
     },
     "problemResponses": {
       "title": "Réponses signalées avec problèmes",
@@ -53,7 +54,7 @@
   "reportedAsProblem": "Réponse signalée avec problème",
   "downloadSuccess": {
     "title": "Réponses déplacées vers Téléchargements",
-    "body": "Prochaine étape : approuvez la suppression des réponses de Formulaires GC."
+    "body": "Vérifiez que vous avez les fichiers sur votre ordinateur. Ensuite, approuvez la suppression des réponses de Formulaires GC."
   },
   "confirmSuccess": {
     "title": "Réponses déplacées vers Pour suppression",
@@ -133,7 +134,9 @@
     "downloadDialog": {
       "title": "Télécharger les réponses",
       "chooseDownloadFormat": "Choisissez le format des fichiers de réponses",
-      "downloadFormatContext": "Vous recevrez également un Reçu et registre officiel des réponses. Vous devrez conserver ce reçu pour vérifier que toutes les réponses sont bien passées de Formulaires GC à votre ordinateur.",
+      "downloadFormatContext1": "Vous recevrez également un ",
+      "downloadFormatContext2": "Reçu et registre officiel des réponses",
+      "downloadFormatContext3": ". Vous devrez conserver ce reçu pour vérifier que toutes les réponses sont bien passées de Formulaires GC à votre ordinateur.",
       "html": "Réponses individuelles en HTML",
       "htmlDescription": "Des fichiers distincts pour chaque soumission de formulaire",
       "csv": "CSV",
