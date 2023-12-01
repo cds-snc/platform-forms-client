@@ -87,8 +87,8 @@ export const ResponseHtmlAggregated = ({
 
             <h1 id="main-header" className="mt-14">{`${form[getProperty("title", lang)]}`}</h1>
 
-            <div className="border-2 border-dashed border-black bg-slate-50 p-8 mb-14">
-              <div className="flex justify-between mb-4">
+            <div className="mb-14 border-2 border-dashed border-black bg-slate-50 p-8">
+              <div className="mb-4 flex justify-between">
                 <h2>{t("responseAggregatedTemplate.officialReceipt", { lng: lang })}</h2>
                 <ProtectedLevel securityAttribute={form.securityAttribute} lang={lang} />
               </div>
@@ -114,7 +114,7 @@ export const ResponseHtmlAggregated = ({
             {submissions &&
               submissions.map((submission) => {
                 return (
-                  <div key="" className="break-before-page mt-32">
+                  <div key="" className="mt-32 break-before-page">
                     <h3 id={submission.id} tabIndex={-1}>
                       {t("responseAggregatedTemplate.dataList.formResponse", { lng: lang })}{" "}
                       {submission.id}

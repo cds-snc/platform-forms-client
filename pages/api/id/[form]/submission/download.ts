@@ -70,6 +70,7 @@ const getSubmissions = async (
     // most sense to use the form submission language vs sesion/*. If not, the output could have
     // e.g. French questions and English answers etc.
     const lang = req.query?.lang === "fr" ? "fr" : "en";
+    logMessage.info("lang: " + lang);
 
     const queryResult = await retrieveSubmissions(ability, formId, ids);
 
@@ -161,7 +162,7 @@ const getSubmissions = async (
             .status(200)
             .setHeader("Content-Type", "text/json")
             .send({
-              receipt: htmlAggregatedTransform(formResponse),
+              receipt: htmlAggregatedTransform(formResponse, lang),
               responses: csvTransform(formResponse),
             });
 
@@ -194,12 +195,12 @@ const getSubmissions = async (
           return res
             .status(200)
             .setHeader("Content-Type", "text/json")
-            .send(zipTransform(formResponse));
+            .send(zipTransform(formResponse, lang));
         }
 
         case DownloadFormat.JSON:
           return res.status(200).json({
-            receipt: htmlAggregatedTransform(formResponse),
+            receipt: htmlAggregatedTransform(formResponse, lang),
             responses: jsonTransform(formResponse),
           });
 
