@@ -41,8 +41,8 @@
     },
     "actionRequired": {
       "description": "Action requise:: ",
-      "linkSingular": "<a href=\"{{link}}\">Confirmer la réception de {{responses}} réponse</a>",
-      "linkPlural": "<a href=\"{{link}}\">Confirmer la réception de {{responses}} réponses</a>"
+      "linkSingular": "<a href=\"{{link}}\">Approuver la suppression de {{responses}} réponse</a>",
+      "linkPlural": "<a href=\"{{link}}\">Approuver la suppression de {{responses}} réponses</a>"
     }
   },
   "responseTemplate": {
@@ -53,9 +53,9 @@
     "columnTable": "Tableau de colonnes",
     "rowTable": "Tableau de lignes",
     "rowTableInfo": "Un tableau de lignes est plus utile lorsqu'il s'agit de copier-coller dans une feuille de calcul.",
-    "confirmReceiptResponse": "Confirmer la réception de réponses",
-    "confirmReceipt": "Confirmer la réception",
-    "confirmReceiptInfo": "Copiez le code ci-dessous et collez-le dans la page Confirmation de réception des réponses du site Web.",
+    "confirmReceiptResponse": "Approuver la suppression des réponses",
+    "confirmReceipt": "Approuver la suppression",
+    "confirmReceiptInfo": "Copiez le code ci-dessous et collez-le dans la page Réponses pour suppression de Formulaires GC.",
     "copyCode": "Copier le code",
     "copyCodeClipboard": "Copier le code dans le presse-papiers",
     "copiedToCipboard": "Copiés dans le presse-papiers",
