@@ -176,7 +176,7 @@
         },
         "errorEntries": {
           "title": "Some receipt codes could not be submitted",
-          "description": "Check that the receipt codes below are correct and try again."
+          "description": "Check that the receipt codes are correct and try again."
         },
         "invalidEntry": {
           "title": "The receipt code does not match the required format",
@@ -207,7 +207,7 @@
         },
         "errorEntries": {
           "title": "Some submission IDs were not submitted",
-          "description": "Check that the submission ID below are correct and try again."
+          "description": "Check that the submission IDs are correct and try again."
         },
         "invalidEntry": {
           "title": "The submission ID does not match the required format",

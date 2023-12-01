@@ -175,7 +175,7 @@
         },
         "errorEntries": {
           "title": "Certains code de réception n'ont pas été soumis",
-          "description": "Vérifiez que les codes de réception ci-dessous sont corrects et réessayez."
+          "description": "Vérifiez que les codes de réception sont corrects et réessayez."
         },
         "invalidEntry": {
           "title": "Le code de réception ne correspond pas au format requis",
@@ -206,7 +206,7 @@
         },
         "errorEntries": {
           "title": "Certains identifiants de soumission n'ont pas été soumis",
-          "description": "Vérifiez que les identifiants de soumission ci-dessous sont corrects et réessayez."
+          "description": "Vérifiez que les identifiants de soumission sont corrects et réessayez."
         },
         "invalidEntry": {
           "title": "L'identifiant de soumission ne correspond pas au format requis",
