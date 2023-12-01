@@ -3,6 +3,7 @@ import { capitalize } from "./ResponseSection";
 import { customTranslate, orderLangugeStrings } from "../../helpers";
 import { Answer, Submission } from "../../types";
 import { TableProps } from "../types";
+import { formatDateTimeUTC } from "@components/form-builder/util";
 
 const QuestionColumns = ({
   submission,
@@ -51,8 +52,6 @@ const QuestionColumns = ({
 export const ColumnTable = (props: TableProps): React.ReactElement => {
   const { t } = customTranslate("my-forms");
   const { responseID, submissionDate, submission, lang = "en" } = props;
-  const formattedSubmissionDate =
-    new Date(submissionDate).toISOString().replace("T", " ").slice(0, -5) + " UTC";
 
   return (
     <dl id={`responseTableCol${capitalize(lang)}`} className="border-y-2 border-gray">
@@ -74,7 +73,7 @@ export const ColumnTable = (props: TableProps): React.ReactElement => {
             lang,
           })}
         </dt>
-        <dd className="py-4 pl-8">{formattedSubmissionDate}</dd>
+        <dd className="py-4 pl-8">{formatDateTimeUTC(submissionDate)}</dd>
       </div>
       <QuestionColumns submission={submission} lang={lang} />
     </dl>

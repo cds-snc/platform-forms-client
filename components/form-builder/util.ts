@@ -183,6 +183,13 @@ export const formatDateTimeLong = (updatedAt: number | undefined, locale = "en-C
   return date.toLocaleDateString(locale, options);
 };
 
+// Note: GMT = UTC as far as date-time is concerned
+export const formatDateTimeUTC = (timestamp: number | undefined, includeSeconds = false) => {
+  const arrayOffset = includeSeconds ? -5 : -8;
+  const date = new Date(timestamp || 0);
+  return date.toISOString().replace("T", " ").slice(0, arrayOffset) + " UTC";
+};
+
 export const autoCompleteFields = [
   "name",
   "given-name",
