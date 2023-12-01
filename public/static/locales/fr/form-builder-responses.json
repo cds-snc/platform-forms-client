@@ -48,16 +48,16 @@
       "deleted": "Pour suppression",
       "problem": "Problème"
     },
-    "viewAllProblemResponses": "Afficher toutes les réponses signalées avec problèmes"
+    "viewAllProblemResponses": "Afficher les réponses signalées"
   },
   "supportWillContact": "L’équipe de soutien vous contactera",
   "reportedAsProblem": "Réponse signalée avec problème",
   "downloadSuccess": {
-    "title": "Réponses déplacées vers Téléchargements",
-    "body": "Vérifiez que vous avez les fichiers sur votre ordinateur. Ensuite, approuvez la suppression des réponses de Formulaires GC."
+    "title": "Réponses déplacées vers l'onglet « Téléchargements »",
+    "body": "Prochaine étape : approuvez la suppression des réponses de Formulaires GC."
   },
   "confirmSuccess": {
-    "title": "Réponses déplacées vers Pour suppression",
+    "title": "Réponses déplacées vers vl'onglet « Pour suppression »",
     "body": "Les réponses seront supprimées dans 30 jours."
   },
   "downloadResponsesTable": {
@@ -103,10 +103,10 @@
       "noDeletedResponses": "Aucune réponse à supprimer",
       "noDeletedResponsesMessage": "Une fois que vous aurez téléchargé et approuvé la suppression des réponses, celles-ci seront disponibles ici pendant 30 jours.",
       "noProblemResponses": "Aucune réponse signalée avec problème",
-      "noProblemResponsesMessage": "Les réponses signalées avec problèmes apparaîtront ici jusqu'à ce que vous approuviez leur suppression de Formulaires GC."
+      "noProblemResponsesMessage": "Les réponses signalées avec problèmes apparaîtront ici jusqu'à ce qu'elles soient approuvées pour leur suppression de Formulaires GC."
     },
     "notifications": {
-      "downloadComplete": "Réponses déplacées vers « Téléchargements »",
+      "downloadComplete": "Réponses déplacées vers l'onglet « Téléchargements »",
       "downloadCompleteNew": "Prochaine étape : Approuvez la suppression des réponses de Formulaires GC",
       "downloadingXFiles": "Téléchargement de {{fileCount}} fichiers"
     },
@@ -121,8 +121,8 @@
       "remainingResponses": "Vous avez plus de {{max}} nouvelles réponses disponibles.",
       "remainingResponsesBody": "Affichage de 1 à {{max}}. D'autres seront ajoutées au fur et à mesure que celles-ci seront téléchargées.",
       "overdueAlert": {
-        "title": "L'accès aux nouvelles réponses est restreint jusqu'à ce que les réponses en retard soient téléchargées et confirmées",
-        "description": "Il y a {{numberOfOverdueResponses}} réponses qui datent de {{escalatedAfter}} jours. Téléchargez et confirmez toutes les réponses en retard pour enlever cette restriction."
+        "title": "L'accès aux nouvelles réponses est restreint jusqu'à ce que les réponses en retard soient extraites.",
+        "description": "Il y a {{numberOfOverdueResponses}} réponses qui datent de {{escalatedAfter}} jours. Téléchargez et approuvez la suppression des réponses en retard pour enlever cette restriction."
       }
     },
     "downloadSelectedResponses": "Télécharger les réponses sélectionnées",
@@ -148,7 +148,7 @@
       "download": "Télécharger"
     },
     "confirmDeleteNewDialog": {
-      "confirmAndDelete": "Confirmer et supprimer de nouvelles réponses",
+      "confirmAndDelete": "Confirmer la suppression de nouvelles réponses",
       "responsesNotYetDownloaded": "Ces réponses n’ont pas encore été téléchargées",
       "alertBody": "Vous n’avez pas téléchargé les réponses que vous tentez de supprimer. Si vous supprimez ces réponses, elles seront retirées du système après 30 jours.",
       "deletePrompt": "Si vous souhaitez procéder à la suppression des réponses non téléchargées, entrez le mot « SUPPRIMER » ci-dessous.",
@@ -175,7 +175,7 @@
         },
         "errorEntries": {
           "title": "Certains code de réception n'ont pas été soumis",
-          "description": "Vérifiez que les codes de réception ci-dessous sont corrects et réessayez."
+          "description": "Vérifiez que les codes de réception sont corrects et réessayez."
         },
         "invalidEntry": {
           "title": "Le code de réception ne correspond pas au format requis",
@@ -206,7 +206,7 @@
         },
         "errorEntries": {
           "title": "Certains identifiants de soumission n'ont pas été soumis",
-          "description": "Vérifiez que les identifiants de soumission ci-dessous sont corrects et réessayez."
+          "description": "Vérifiez que les identifiants de soumission sont corrects et réessayez."
         },
         "invalidEntry": {
           "title": "L'identifiant de soumission ne correspond pas au format requis",
