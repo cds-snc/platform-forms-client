@@ -14,7 +14,7 @@ import { copyCodeToClipboardScript } from "../scripts";
 import { TableHeader } from "./AggregatedTable";
 import { CopyCodes } from "./CopyCodes";
 import { ProtectedLevel } from "./ProtectedLevel";
-import { formatDateTimeGMT } from "@components/form-builder/util";
+import { formatDateTimeUTC } from "@components/form-builder/util";
 
 interface HTMLDownloadProps {
   lang: string;
@@ -27,7 +27,6 @@ export const ResponseHtmlAggregated = ({
 }: HTMLDownloadProps) => {
   const { t } = customTranslate("my-forms");
   const form = formResponseSubmissions.form;
-  const [yearMonthDay, time, timeZone] = formatDateTimeGMT(Date.now());
 
   // Newline deliniated will work to paste multiple codes in the confirmation dialog.
   // Note: The "\r\n" delimiter may be OS dependent. If so use an actual newline with .join(`
@@ -96,7 +95,7 @@ export const ResponseHtmlAggregated = ({
                 <strong>{submissions.length}</strong>
                 {` ${t("responseAggregatedTemplate.responsesDownloaded", {
                   lng: lang,
-                })} ${yearMonthDay} ${time} ${timeZone}`}
+                })} ${formatDateTimeUTC(Date.now())}`}
               </p>
               <p className="mb-4">{t("responseAggregatedTemplate.needToVerify", { lng: lang })}</p>
               <p className="mb-8">{t("responseAggregatedTemplate.useTheCopy", { lng: lang })}</p>
