@@ -76,7 +76,7 @@
     },
     "dataList": {
       "title": "Form responses: list of selected responses",
-      "formResponse": "Form response:"
+      "formResponse": "Response"
     }
   },
   "dataClassification": {
