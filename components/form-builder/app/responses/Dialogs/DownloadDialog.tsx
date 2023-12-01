@@ -66,6 +66,21 @@ export const DownloadDialog = ({
     window.URL.revokeObjectURL(href);
   };
 
+  const downloadFormatEvent = (
+    formId: string,
+    downloadType: DownloadFormat,
+    numberOfRecords: number
+  ) => {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "download_format",
+      formId,
+      downloadType,
+      numberOfRecords,
+      time: getDate(true),
+    });
+  };
+
   // Note: The API can provide additional formats, see DownloadFormat enum and update this array if needed
   const availableFormats = [DownloadFormat.CSV, DownloadFormat.JSON, DownloadFormat.HTML_ZIPPED];
 
@@ -97,6 +112,8 @@ export const DownloadDialog = ({
           },
         });
 
+        downloadFormatEvent(formId, selectedFormat, ids.length);
+
         const zip = new JSZip();
         zip.file("_receipt-recu.html", response.data.receipt);
 
@@ -120,6 +137,8 @@ export const DownloadDialog = ({
             ids: ids.join(","),
           },
         });
+
+        downloadFormatEvent(formId, selectedFormat, ids.length);
 
         if (zipAllFiles) {
           const file = new JSZip();
@@ -151,6 +170,8 @@ export const DownloadDialog = ({
             ids: ids.join(","),
           },
         });
+
+        downloadFormatEvent(formId, selectedFormat, ids.length);
 
         if (zipAllFiles) {
           const file = new JSZip();
