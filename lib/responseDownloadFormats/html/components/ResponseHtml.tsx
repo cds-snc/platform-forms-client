@@ -46,6 +46,7 @@ export const ResponseHtml = ({
             <Fip language="en" />
             <div className="mt-14" />
             <ResponseSection
+              form={form}
               confirmReceiptCode={confirmationCode}
               lang={"en"}
               responseID={responseID}
@@ -58,6 +59,7 @@ export const ResponseHtml = ({
               <Fip language="fr" />
               <div className="mt-14" />
               <ResponseSection
+                form={form}
                 confirmReceiptCode={confirmationCode}
                 lang={"fr"}
                 responseID={responseID}
