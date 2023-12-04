@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.9.0](https://github.com/cds-snc/platform-forms-client/compare/v3.8.3...v3.9.0) (2023-12-04)
+
+
+### Features
+
+* Download and confirmation flow.  New download formats (.zip, .csv .json) ([81fc8ab](https://github.com/cds-snc/platform-forms-client/commit/81fc8abc50874cae7d9dc4354b9c75cbdb6437ee))
+* Log GA event when downloading to record selected format ([#2993](https://github.com/cds-snc/platform-forms-client/issues/2993)) ([2dac2a2](https://github.com/cds-snc/platform-forms-client/commit/2dac2a24fc0b61f14f970937f840cee0daa474d1))
+
+
+### Bug Fixes
+
+* Allow no empty submissions ([#2990](https://github.com/cds-snc/platform-forms-client/issues/2990)) ([61e1daf](https://github.com/cds-snc/platform-forms-client/commit/61e1dafa2f9a6eaa7c341f8afb65c4b1884a1a58))
+* Download receipt first ([#2988](https://github.com/cds-snc/platform-forms-client/issues/2988)) ([2fbd618](https://github.com/cds-snc/platform-forms-client/commit/2fbd6186f55eb7d32efbc83813587cb775af9f3a))
+* Move zipping of individual HTML files to client side ([#2937](https://github.com/cds-snc/platform-forms-client/issues/2937)) ([0ddf2fd](https://github.com/cds-snc/platform-forms-client/commit/0ddf2fd40097d90cb35738f3f5418248bad34e0f))
+
+
+### Miscellaneous Chores
+
+* Contact us form iteration ([#2899](https://github.com/cds-snc/platform-forms-client/issues/2899)) ([510707d](https://github.com/cds-snc/platform-forms-client/commit/510707d467283c9a29f36db3530fa43e1d53eed8))
+* **deps:** update all patch dependencies ([#2996](https://github.com/cds-snc/platform-forms-client/issues/2996)) ([6a5c68f](https://github.com/cds-snc/platform-forms-client/commit/6a5c68fd4388d172ec9ebae0fd8c785ed050423f))
+* Updates to error message content ([#2846](https://github.com/cds-snc/platform-forms-client/issues/2846)) ([2bd0af3](https://github.com/cds-snc/platform-forms-client/commit/2bd0af346427ef13df04c45abe53efa80d42a18a))
+
 ## [3.8.3](https://github.com/cds-snc/platform-forms-client/compare/v3.8.2...v3.8.3) (2023-11-28)
 
 
