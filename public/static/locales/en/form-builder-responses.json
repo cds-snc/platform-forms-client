@@ -119,8 +119,20 @@
       "errorDownloadingFilesHeader": "Error downloading the selected files.",
       "errorDownloadingFiles": "Try again in a few minutes. If the problem persists, ",
       "errorDownloadingFilesLink": "contact Support",
-      "remainingResponses": "You have over {{max}} responses available.",
-      "remainingResponsesBody": "Showing 1-{{max}}. More will load as displayed responses are downloaded.",
+      "responsesState": {
+        "new": {
+          "remainingResponses": "You have over {{max}} responses available.",
+          "remainingResponsesBody": "Showing 1-{{max}}. More will load as displayed responses are downloaded."
+        },
+        "downloaded": {
+          "remainingResponses": "You have over {{max}} downloaded responses.",
+          "remainingResponsesBody": "Showing 1-{{max}}. More will load as responses are signed off for removal."
+        },
+        "confirmed": {
+          "remainingResponses": "You have over {{max}} responses waiting to be removed.",
+          "remainingResponsesBody": "Showing the latest {{max}}. If you need access to responses not displayed contact Support."
+        }
+      },
       "overdueAlert": {
         "title": "Access to new responses is restricted until overdue responses are retrieved.",
         "description": "There are {{numberOfOverdueResponses}} responses that are {{escalatedAfter}} days old. Download and sign off on the removal of overdue responses to remove this restriction."
