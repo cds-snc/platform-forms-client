@@ -13,6 +13,8 @@
     "@aws-sdk/client-sqs": "^3.441.0",
     "@aws-sdk/types": "^3.433.0",
     "@types/node": "^20.8.6",
+    "axios": "^1.6.2",
+    "cheerio": "^1.0.0-rc.12",
     "dotenv": "^16.3.1",
     "tslib": "^2.6.2",
     "tsx": "^3.14.0",
