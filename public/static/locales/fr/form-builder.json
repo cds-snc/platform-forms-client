@@ -345,7 +345,7 @@
   "formInvalidProperty": "Invalide : {{property}}",
   "formMissingProperty": "Il manque : {{property}}",
   "formSettings": "Paramétres du formulaire",
-  "formSubmissionDisabledInPreview": "Testez votre formulaire et le fonctionnement de la collecte de réponses sous l’onglet Livraison des réponses.",
+  "formSubmissionDisabledInPreview": "La soumission de formulaire est désactivée dans la prévisualisation.",
   "formTitle": "Titre du formulaire",
   "french": "français",
   "gcForms": "Formulaires GC",
