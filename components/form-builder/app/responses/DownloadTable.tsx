@@ -160,14 +160,44 @@ export const DownloadTable = ({
                 <td className="px-4 py-2" colSpan={4}>
                   <p>
                     <strong>
-                      {t("downloadResponsesTable.errors.remainingResponses", {
-                        max: responseDownloadLimit,
-                      })}
+                      {isStatus(statusQuery, VaultStatus.NEW) &&
+                        t("downloadResponsesTable.errors.responsesState.new.remainingResponses", {
+                          max: responseDownloadLimit,
+                        })}
+                      {isStatus(statusQuery, VaultStatus.DOWNLOADED) &&
+                        t(
+                          "downloadResponsesTable.errors.responsesState.downloaded.remainingResponses",
+                          {
+                            max: responseDownloadLimit,
+                          }
+                        )}
+                      {isStatus(statusQuery, VaultStatus.CONFIRMED) &&
+                        t(
+                          "downloadResponsesTable.errors.responsesState.confirmed.remainingResponses",
+                          {
+                            max: responseDownloadLimit,
+                          }
+                        )}
                     </strong>
                     <br />
-                    {t("downloadResponsesTable.errors.remainingResponsesBody", {
-                      max: responseDownloadLimit,
-                    })}
+                    {isStatus(statusQuery, VaultStatus.NEW) &&
+                      t("downloadResponsesTable.errors.responsesState.new.remainingResponsesBody", {
+                        max: responseDownloadLimit,
+                      })}
+                    {isStatus(statusQuery, VaultStatus.DOWNLOADED) &&
+                      t(
+                        "downloadResponsesTable.errors.responsesState.downloaded.remainingResponsesBody",
+                        {
+                          max: responseDownloadLimit,
+                        }
+                      )}
+                    {isStatus(statusQuery, VaultStatus.CONFIRMED) &&
+                      t(
+                        "downloadResponsesTable.errors.responsesState.confirmed.remainingResponsesBody",
+                        {
+                          max: responseDownloadLimit,
+                        }
+                      )}
                   </p>
                 </td>
               </tr>
