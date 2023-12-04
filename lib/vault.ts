@@ -3,6 +3,7 @@ import {
   QueryCommand,
   QueryCommandInput,
   TransactWriteCommand,
+  BatchWriteCommand,
 } from "@aws-sdk/lib-dynamodb";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { VaultSubmissionList, UserAbility, VaultStatus, VaultSubmission } from "@lib/types";
@@ -14,10 +15,10 @@ import {
 import { connectToDynamo } from "./integration/dynamodbConnector";
 import { logMessage } from "./logger";
 import { AccessControlError, checkPrivileges } from "./privileges";
-import { BatchWriteItemCommand } from "@aws-sdk/client-dynamodb";
 import { chunkArray } from "@lib/utils";
 import { TemplateAlreadyPublishedError } from "@lib/templates";
 import { getAppSetting } from "./appSettings";
+import { runPromisesSynchronously } from "./clientHelpers";
 
 /**
  * Returns the users associated with a Template
@@ -372,10 +373,12 @@ export async function updateLastDownloadedBy(
         };
       }),
     });
-    return documentClient.send(request);
+
+    return () => documentClient.send(request);
   });
 
-  return Promise.all(asyncUpdateRequests);
+  // @todo - handle errors that can result from failing TransactWriteCommand operations
+  return runPromisesSynchronously(asyncUpdateRequests);
 }
 
 /**
@@ -474,30 +477,28 @@ export async function deleteDraftFormResponses(ability: UserAbility, formID: str
     logMessage.debug(accumulatedResponses);
 
     // Batch delete all entries
-    // The `BatchWriteItemCommand` can only take up to 25 `DeleteRequest` at a time.
+    // The `BatchWriteCommand` can only take up to 25 `DeleteRequest` at a time.
 
     const asyncDeleteRequests = chunkArray(accumulatedResponses, 25).map((request) => {
-      return documentClient.send(
-        new BatchWriteItemCommand({
-          RequestItems: {
-            ["Vault"]: request.map((entryName) => ({
-              DeleteRequest: {
-                Key: {
-                  FormID: {
-                    S: formID,
-                  },
-                  NAME_OR_CONF: {
-                    S: entryName,
+      return () =>
+        documentClient.send(
+          new BatchWriteCommand({
+            RequestItems: {
+              Vault: request.map((entryName) => ({
+                DeleteRequest: {
+                  Key: {
+                    FormID: formID,
+                    NAME_OR_CONF: entryName,
                   },
                 },
-              },
-            })),
-          },
-        })
-      );
+              })),
+            },
+          })
+        );
     });
 
-    await Promise.all(asyncDeleteRequests);
+    await runPromisesSynchronously(asyncDeleteRequests);
+
     logEvent(
       ability.userID,
       { type: "Form", id: formID },

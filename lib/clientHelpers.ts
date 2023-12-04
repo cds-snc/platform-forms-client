@@ -361,3 +361,16 @@ export const isStatus = (query: string, status: VaultStatus | VaultStatus[]): bo
 
   return ucQuery === status;
 };
+
+export async function runPromisesSynchronously<T>(
+  promisesToBeExecuted: (() => Promise<T>)[]
+): Promise<T[]> {
+  const accumulator: T[] = [];
+
+  for (const p of promisesToBeExecuted) {
+    // eslint-disable-next-line no-await-in-loop
+    accumulator.push(await p());
+  }
+
+  return accumulator;
+}
