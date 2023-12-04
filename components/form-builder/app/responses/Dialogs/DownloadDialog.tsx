@@ -67,17 +67,16 @@ export const DownloadDialog = ({
   };
 
   const downloadFormatEvent = (
-    formId: string,
+    formID: string,
     downloadType: DownloadFormat,
     numberOfRecords: number
   ) => {
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
       event: "download_format",
-      formId,
+      formID,
       downloadType,
       numberOfRecords,
-      timestamp: getDate(true),
     });
   };
 
