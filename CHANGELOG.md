@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.9.1](https://github.com/cds-snc/platform-forms-client/compare/v3.9.0...v3.9.1) (2023-12-05)
+
+
+### Bug Fixes
+
+* run promises synchronously when making requests to DynamoDB ([7b58279](https://github.com/cds-snc/platform-forms-client/commit/7b582798d440962034ef9f2b8209e6bcb09b5a46))
+
+
+### Miscellaneous Chores
+
+* **deps:** update all non-major github action dependencies ([#2995](https://github.com/cds-snc/platform-forms-client/issues/2995)) ([be02cee](https://github.com/cds-snc/platform-forms-client/commit/be02cee47684c2053f7ad4cc71d257efa7068537))
+
 ## [3.9.0](https://github.com/cds-snc/platform-forms-client/compare/v3.8.3...v3.9.0) (2023-12-04)
 
 
