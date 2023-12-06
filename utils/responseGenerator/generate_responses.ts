@@ -38,6 +38,11 @@ const twirlTimer = () => {
   }, 250);
 };
 
+function clearStdout() {
+  readline.cursorTo(process.stdout, 0);
+  process.stdout.write("");
+}
+
 function getRandomInt(max: number) {
   return Math.floor(Math.random() * max);
 }
@@ -131,10 +136,31 @@ const main = async () => {
             ),
           })
       ),
-      50
+      process.env.LOCAL_AWS_ENDPOINT ? 2 : 50
     );
 
     let numOfProcessed = 0;
+
+    console.log("Warming up Lambda functions for 30 seconds");
+    const timer = twirlTimer();
+
+    const results = await Promise.all(
+      submissions[0].map((invokeCommand) => lambdaClient.send(invokeCommand))
+    ).catch((err) => {
+      console.error(err);
+      throw new Error("Could not process request with Lambda Submission function");
+    });
+    results.forEach((result) => {
+      const payload = decoder.decode(result.Payload);
+      if (result.FunctionError || !JSON.parse(payload).status) {
+        throw new Error("Submission API could not process form response");
+      }
+    });
+
+    await delay(30000);
+    submissions.shift();
+    clearInterval(timer);
+    clearStdout();
 
     console.log("Sending responses to Lambda Submission function.");
 
@@ -151,6 +177,7 @@ const main = async () => {
           throw new Error("Submission API could not process form response");
         }
       });
+
       numOfProcessed += submission.length;
       writeWaitingPercent(numOfProcessed, numberOfResponses);
     }
