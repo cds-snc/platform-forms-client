@@ -138,7 +138,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
       )}
 
       <nav
-        className="relative mb-4 flex border-b border-black"
+        className="relative mb-10 flex border-b border-black"
         aria-label={t("responses.navLabel")}
       >
         <TabNavLink
