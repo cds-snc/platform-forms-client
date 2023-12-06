@@ -19,9 +19,7 @@ import { logMessage } from "@lib/logger";
 import { getAppSetting } from "@lib/appSettings";
 
 const sortByLayout = ({ layout, elements }: { layout: number[]; elements: Answer[] }) => {
-  return elements.sort((a, b) => {
-    return layout.indexOf(a.questionId) - layout.indexOf(b.questionId);
-  });
+  return elements.sort((a, b) => layout.indexOf(a.questionId) - layout.indexOf(b.questionId));
 };
 
 const logDownload = async (
