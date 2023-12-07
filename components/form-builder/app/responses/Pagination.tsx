@@ -14,6 +14,11 @@ export const Pagination = ({
     : null;
 
   const router = useRouter();
+  let statusQuery;
+
+  if (router.query.params) {
+    [, statusQuery] = router.query.params;
+  }
 
   const isFirstPage = !router.query.lastEvaluatedKey;
 
@@ -27,11 +32,15 @@ export const Pagination = ({
     <>
       {showPrevious && (
         <Link
-          href={`/form-builder/responses/${formId}?lastEvaluatedKey=${lastEvaluatedResponseId}&scanForward=true`}
+          href={`/form-builder/responses/${formId}${
+            statusQuery ? "/" + statusQuery : ""
+          }?lastEvaluatedKey=${lastEvaluatedResponseId}&scanForward=true`}
           legacyBehavior
         >
           <a
-            href={`/form-builder/responses/${formId}?lastEvaluatedKey=${lastEvaluatedResponseId}&scanForward=true`}
+            href={`/form-builder/responses/${formId}${
+              statusQuery ? "/" + statusQuery : ""
+            }?lastEvaluatedKey=${lastEvaluatedResponseId}&scanForward=true`}
             className="mr-4 inline-block"
           >
             Previous Page
@@ -40,11 +49,15 @@ export const Pagination = ({
       )}
       {showNext && (
         <Link
-          href={`/form-builder/responses/${formId}?lastEvaluatedKey=${lastEvaluatedResponseId}&scanForward=false`}
+          href={`/form-builder/responses/${formId}${
+            statusQuery ? "/" + statusQuery : ""
+          }?lastEvaluatedKey=${lastEvaluatedResponseId}&scanForward=false`}
           legacyBehavior
         >
           <a
-            href={`/form-builder/responses/${formId}?lastEvaluatedKey=${lastEvaluatedResponseId}&scanForward=false`}
+            href={`/form-builder/responses/${formId}${
+              statusQuery ? "/" + statusQuery : ""
+            }?lastEvaluatedKey=${lastEvaluatedResponseId}&scanForward=false`}
             className="ml-4 inline-block"
           >
             Next Page
