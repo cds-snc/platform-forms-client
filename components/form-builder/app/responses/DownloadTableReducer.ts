@@ -3,6 +3,7 @@ import { VaultSubmissionList, VaultStatus } from "@lib/types";
 
 export enum TableActions {
   UPDATE = "UPDATE",
+  SORT = "SORT",
   RESET = "RESET",
 }
 
@@ -32,7 +33,7 @@ export const initialTableItemsState = (
   return {
     checkedItems: new Map(),
     statusItems: new Map(vaultSubmissions.map((submission) => [submission.name, false])),
-    sortedItems: vaultSubmissions,
+    sortedItems: sortVaultSubmission(vaultSubmissions),
     numberOfOverdueResponses: vaultSubmissions.filter((submission) =>
       isSubmissionOverdue({
         status: submission.status,
@@ -42,6 +43,25 @@ export const initialTableItemsState = (
     ).length,
     overdueAfter,
   };
+};
+
+// Sort submissions by created date first but prioritize New submissions to the top of the list.
+// Note: This can probably be done more efficiently but the sorting behavior has not been fully
+// defined yet and for now this simple way works.
+export const sortVaultSubmission = (
+  vaultSubmissions: VaultSubmissionList[]
+): VaultSubmissionList[] => {
+  const vaultSubmissionsNew = vaultSubmissions
+    .filter((submission) => submission.status === VaultStatus.NEW.valueOf())
+    .sort((submissionA, submissionB) => {
+      return submissionB.createdAt - submissionA.createdAt;
+    });
+  const vaultSubmissionsWithoutNew = vaultSubmissions
+    .filter((submission) => submission.status !== VaultStatus.NEW.valueOf())
+    .sort((submissionA, submissionB) => {
+      return submissionB.createdAt - submissionA.createdAt;
+    });
+  return [...vaultSubmissionsNew, ...vaultSubmissionsWithoutNew];
 };
 
 /**
@@ -101,6 +121,15 @@ export const reducerTableItems = (
         ...state,
         checkedItems: newCheckedItems,
         statusItems: newStatusItems,
+      };
+    }
+    case "SORT": {
+      if (!payload.vaultSubmissions) {
+        throw Error("Table sort dispatch missing vaultSubmissions");
+      }
+      return {
+        ...state,
+        sortedItems: sortVaultSubmission(payload.vaultSubmissions),
       };
     }
 
