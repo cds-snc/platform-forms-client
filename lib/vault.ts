@@ -121,8 +121,14 @@ const submissionTypeExists = async (ability: UserAbility, formID: string, status
 export async function listAllSubmissions(
   ability: UserAbility,
   formID: string,
-  status?: VaultStatus
-): Promise<{ submissions: VaultSubmissionList[]; submissionsRemaining: boolean }> {
+  status?: VaultStatus,
+  lastEvaluatedKey: Record<string, any> | null | undefined = null,
+  scanReverse = false
+): Promise<{
+  submissions: VaultSubmissionList[];
+  submissionsRemaining: boolean;
+  paginationLastEvaluatedKey: Record<string, any> | null | undefined;
+}> {
   // Check access control first
 
   try {
@@ -144,8 +150,8 @@ export async function listAllSubmissions(
     const documentClient = connectToDynamo();
 
     let accumulatedResponses: VaultSubmissionList[] = [];
-    let lastEvaluatedKey = null;
     let submissionsRemaining = false;
+    let paginationLastEvaluatedKey = null;
 
     while (lastEvaluatedKey !== undefined) {
       const getItemsDbParams: QueryCommandInput = {
@@ -156,7 +162,7 @@ export async function listAllSubmissions(
         Limit: responseDownloadLimit - accumulatedResponses.length,
         KeyConditionExpression: "FormID = :formID" + (status ? " AND #status = :status" : ""),
         // Sort by descending order of Status
-        ScanIndexForward: false,
+        ScanIndexForward: scanReverse,
         ExpressionAttributeValues: {
           ":formID": formID,
           ...(status && { ":status": status }),
@@ -203,6 +209,7 @@ export async function listAllSubmissions(
       // We either manually stop the paginated request when we have (responseDownloadLimit) items or we let it finish on its own
       if (accumulatedResponses.length >= responseDownloadLimit) {
         lastEvaluatedKey = undefined;
+        paginationLastEvaluatedKey = response.LastEvaluatedKey;
         submissionsRemaining = true;
       } else {
         lastEvaluatedKey = response.LastEvaluatedKey;
@@ -221,10 +228,11 @@ export async function listAllSubmissions(
     return {
       submissions: accumulatedResponses,
       submissionsRemaining: submissionsRemaining,
+      paginationLastEvaluatedKey: paginationLastEvaluatedKey,
     };
   } catch (e) {
     logMessage.error(e);
-    return { submissions: [], submissionsRemaining: true };
+    return { submissions: [], submissionsRemaining: true, paginationLastEvaluatedKey: undefined };
   }
 }
 
