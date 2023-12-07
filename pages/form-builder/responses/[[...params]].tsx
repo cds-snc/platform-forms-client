@@ -136,9 +136,10 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         </h1>
       )}
 
-      <nav
+      <div
         className="relative mb-10 flex border-b border-black"
         aria-label={t("responses.navLabel")}
+        role="tablist"
       >
         <TabNavLink
           id="new-responses"
@@ -146,6 +147,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           href={`/form-builder/responses/${formId}/new`}
           setAriaCurrent={true}
           onClick={() => setShowSuccessAlert(false)}
+          controlsId="tab-new"
         >
           <span className="text-sm laptop:text-base">
             <InboxIcon className="inline-block h-7 w-7" /> {t("responses.status.new")}
@@ -156,6 +158,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           href={`/form-builder/responses/${formId}/downloaded`}
           setAriaCurrent={true}
           onClick={() => setShowSuccessAlert(false)}
+          controlsId="tab-downloaded"
         >
           <span className="text-sm laptop:text-base">
             <FolderIcon className="inline-block h-7 w-7" /> {t("responses.status.downloaded")}
@@ -166,70 +169,180 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           href={`/form-builder/responses/${formId}/confirmed`}
           setAriaCurrent={true}
           onClick={() => setShowSuccessAlert(false)}
+          controlsId="tab-confirmed"
         >
           <span className="text-sm laptop:text-base">
             <DeleteIcon className="inline-block h-7 w-7" /> {t("responses.status.deleted")}
           </span>
         </TabNavLink>
-      </nav>
+      </div>
 
-      {isAuthenticated && vaultSubmissions.length > 0 && (
-        <>
-          {isStatus(statusQuery, VaultStatus.NEW) && (
-            <>
-              <h1>{t("tabs.newResponses.title")}</h1>
-              <div className="mb-4">
-                <p className="mb-4">
-                  <strong>{t("tabs.newResponses.message1")}</strong>
-                  <br />
-                  {t("tabs.newResponses.message2")}
-                </p>
-              </div>
-            </>
-          )}
-          {isStatus(statusQuery, VaultStatus.DOWNLOADED) && (
-            <>
-              <h1>{t("tabs.downloadedResponses.title")}</h1>
-              <div className="mb-4">
-                <p className="mb-4">
-                  <strong>{t("tabs.downloadedResponses.message1")}</strong>
-                  <br />
-                  {t("tabs.downloadedResponses.message2")}
-                </p>
-                <Button onClick={() => setShowConfirmReceiptDialog(true)} theme="secondary">
-                  {t("responses.confirmReceipt")}
-                </Button>
-              </div>
-            </>
-          )}
-          {isStatus(statusQuery, VaultStatus.CONFIRMED) && (
-            <>
-              <h1>{t("tabs.confirmedResponses.title")}</h1>
-              <div className="mb-4">
-                <p className="mb-4">
-                  <strong>{t("tabs.confirmedResponses.message1")}</strong>
-                  <br />
-                  {t("tabs.confirmedResponses.message2")}
-                </p>
-              </div>
-            </>
-          )}
-          {isStatus(statusQuery, VaultStatus.PROBLEM) && (
-            <>
-              <h1>{t("tabs.problemResponses.title")}</h1>
-              <div className="mb-4">
-                <p className="mb-4">
-                  <strong>{t("tabs.problemResponses.message1")}</strong>
-                  <br />
-                  {t("tabs.problemResponses.message2")}
-                </p>
-                <Button onClick={() => setShowConfirmReceiptDialog(true)} theme="secondary">
-                  {t("responses.confirmReceipt")}
-                </Button>
-              </div>
-            </>
-          )}
-        </>
+      {isAuthenticated && (
+        <div id="tabs">
+          <div
+            role="tabpanel"
+            id="tab-new"
+            className={isStatus(statusQuery, VaultStatus.NEW) ? "" : "hidden"}
+          >
+            {vaultSubmissions.length > 0 && (
+              <>
+                <h1>{t("tabs.newResponses.title")}</h1>
+                <div className="mb-4">
+                  <p className="mb-4">
+                    <strong>{t("tabs.newResponses.message1")}</strong>
+                    <br />
+                    {t("tabs.newResponses.message2")}
+                  </p>
+                </div>
+                <DownloadTable
+                  vaultSubmissions={vaultSubmissions}
+                  formName={formName}
+                  formId={formId}
+                  nagwareResult={nagwareResult}
+                  responseDownloadLimit={responseDownloadLimit}
+                  responsesRemaining={responsesRemaining}
+                  showDownloadSuccess={successAlertMessage}
+                  setShowDownloadSuccess={setShowSuccessAlert}
+                />
+              </>
+            )}
+            {vaultSubmissions.length <= 0 && (
+              <Card
+                icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+                title={t("downloadResponsesTable.card.noNewResponses")}
+                content={t("downloadResponsesTable.card.noNewResponsesMessage")}
+                headingTag={HeadingLevel.H1}
+                headingStyle="gc-h2 text-[#748094]"
+              />
+            )}
+          </div>
+
+          <div
+            role="tabpanel"
+            id="tab-downloaded"
+            className={isStatus(statusQuery, VaultStatus.DOWNLOADED) ? "" : "hidden"}
+          >
+            {vaultSubmissions.length > 0 && (
+              <>
+                <h1>{t("tabs.downloadedResponses.title")}</h1>
+                <div className="mb-4">
+                  <p className="mb-4">
+                    <strong>{t("tabs.downloadedResponses.message1")}</strong>
+                    <br />
+                    {t("tabs.downloadedResponses.message2")}
+                  </p>
+                  <Button onClick={() => setShowConfirmReceiptDialog(true)} theme="secondary">
+                    {t("responses.confirmReceipt")}
+                  </Button>
+                </div>
+                <DownloadTable
+                  vaultSubmissions={vaultSubmissions}
+                  formName={formName}
+                  formId={formId}
+                  nagwareResult={nagwareResult}
+                  responseDownloadLimit={responseDownloadLimit}
+                  responsesRemaining={responsesRemaining}
+                  showDownloadSuccess={successAlertMessage}
+                  setShowDownloadSuccess={setShowSuccessAlert}
+                />
+              </>
+            )}
+            {vaultSubmissions.length <= 0 && (
+              <>
+                <Card
+                  icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+                  title={t("downloadResponsesTable.card.noDownloadedResponses")}
+                  content={t("downloadResponsesTable.card.noDownloadedResponsesMessage")}
+                  headingTag={HeadingLevel.H1}
+                  headingStyle="gc-h2 text-[#748094]"
+                />
+              </>
+            )}
+          </div>
+
+          <div
+            role="tabpanel"
+            id="tab-confirmed"
+            className={isStatus(statusQuery, VaultStatus.CONFIRMED) ? "" : "hidden"}
+          >
+            {vaultSubmissions.length > 0 && (
+              <>
+                <h1>{t("tabs.confirmedResponses.title")}</h1>
+                <div className="mb-4">
+                  <p className="mb-4">
+                    <strong>{t("tabs.confirmedResponses.message1")}</strong>
+                    <br />
+                    {t("tabs.confirmedResponses.message2")}
+                  </p>
+                </div>
+                <DownloadTable
+                  vaultSubmissions={vaultSubmissions}
+                  formName={formName}
+                  formId={formId}
+                  nagwareResult={nagwareResult}
+                  responseDownloadLimit={responseDownloadLimit}
+                  responsesRemaining={responsesRemaining}
+                  showDownloadSuccess={successAlertMessage}
+                  setShowDownloadSuccess={setShowSuccessAlert}
+                />
+              </>
+            )}
+            {vaultSubmissions.length <= 0 && (
+              <>
+                <Card
+                  icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+                  title={t("downloadResponsesTable.card.noDeletedResponses")}
+                  content={t("downloadResponsesTable.card.noDeletedResponsesMessage")}
+                  headingTag={HeadingLevel.H1}
+                  headingStyle="gc-h2 text-[#748094]"
+                />
+              </>
+            )}
+          </div>
+
+          <div
+            role="tabpanel"
+            id="tab-confirmed"
+            className={isStatus(statusQuery, VaultStatus.PROBLEM) ? "" : "hidden"}
+          >
+            {vaultSubmissions.length > 0 && (
+              <>
+                <h1>{t("tabs.problemResponses.title")}</h1>
+                <div className="mb-4">
+                  <p className="mb-4">
+                    <strong>{t("tabs.problemResponses.message1")}</strong>
+                    <br />
+                    {t("tabs.problemResponses.message2")}
+                  </p>
+                  <Button onClick={() => setShowConfirmReceiptDialog(true)} theme="secondary">
+                    {t("responses.confirmReceipt")}
+                  </Button>
+                </div>
+
+                <DownloadTable
+                  vaultSubmissions={vaultSubmissions}
+                  formName={formName}
+                  formId={formId}
+                  nagwareResult={nagwareResult}
+                  responseDownloadLimit={responseDownloadLimit}
+                  responsesRemaining={responsesRemaining}
+                  showDownloadSuccess={successAlertMessage}
+                  setShowDownloadSuccess={setShowSuccessAlert}
+                />
+              </>
+            )}
+            {vaultSubmissions.length <= 0 && (
+              <>
+                <h1 className="visually-hidden">{t("tabs.problemResponses.title")}</h1>
+                <Card
+                  icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+                  title={t("downloadResponsesTable.card.noProblemResponses")}
+                  content={t("downloadResponsesTable.card.noProblemResponsesMessage")}
+                />
+              </>
+            )}
+          </div>
+        </div>
       )}
 
       {successAlertMessage && (
@@ -243,7 +356,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
 
       {isAuthenticated && (
         <>
-          <div aria-live="polite">
+          {/* <div role="tabpanel">
             <ClosedBanner id={formId} />
             {vaultSubmissions.length > 0 && (
               <DownloadTable
@@ -304,7 +417,8 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
                 />
               </>
             )}
-          </div>
+          </div> */}
+
           <div className="mt-8">
             <Link
               onClick={() => setIsShowReportProblemsDialog(true)}

@@ -10,6 +10,7 @@ export const TabNavLink = ({
   id,
   defaultActive = false,
   onClick,
+  controlsId,
 }: {
   children: ReactElement;
   href: string;
@@ -17,6 +18,7 @@ export const TabNavLink = ({
   id?: string;
   defaultActive?: boolean;
   onClick?: () => void;
+  controlsId: string;
 }) => {
   const baseClasses =
     "mr-3 rounded-t-[25px] border-x border-t border-black bg-white px-5 pb-2 pt-1 no-underline !shadow-none laptop:py-2";
@@ -49,13 +51,19 @@ export const TabNavLink = ({
   }, [asPath, isReady, href, setActive, activePathname, defaultActive]);
 
   return (
+    // TODO in the future if we switch to dynamic content updates on tab activation, this probably
+    // makes more sense as a button
     <Link href={href} legacyBehavior>
       <a
         href={href}
         className={cn(baseClasses, inactiveClasses, active && activeClasses)}
-        {...(setAriaCurrent && active && { "aria-current": "page" })}
+        // TODO
+        {...(setAriaCurrent && active && { "aria-current": "page" })} // TODO
         {...(id && { id })}
         onClick={onClick}
+        role="tab"
+        aria-selected={active ? "true" : "false"}
+        aria-controls={controlsId}
       >
         {children}
       </a>
