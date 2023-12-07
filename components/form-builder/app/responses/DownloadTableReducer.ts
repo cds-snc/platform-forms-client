@@ -51,17 +51,10 @@ export const initialTableItemsState = (
 export const sortVaultSubmission = (
   vaultSubmissions: VaultSubmissionList[]
 ): VaultSubmissionList[] => {
-  const vaultSubmissionsNew = vaultSubmissions
-    .filter((submission) => submission.status === VaultStatus.NEW.valueOf())
-    .sort((submissionA, submissionB) => {
-      return submissionB.createdAt - submissionA.createdAt;
-    });
-  const vaultSubmissionsWithoutNew = vaultSubmissions
-    .filter((submission) => submission.status !== VaultStatus.NEW.valueOf())
-    .sort((submissionA, submissionB) => {
-      return submissionB.createdAt - submissionA.createdAt;
-    });
-  return [...vaultSubmissionsNew, ...vaultSubmissionsWithoutNew];
+  const vaultSubmissionsSorted = vaultSubmissions.sort((submissionA, submissionB) => {
+    return submissionB.createdAt - submissionA.createdAt;
+  });
+  return [...vaultSubmissionsSorted];
 };
 
 /**
