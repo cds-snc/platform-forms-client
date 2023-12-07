@@ -1,10 +1,11 @@
 import { SecurityAttribute } from "@lib/types";
 
 export interface Answer {
+  questionId: number;
   questionEn: string | undefined;
   questionFr: string | undefined;
   answer: string | Array<Answer[]>;
-  [key: string]: string | Array<Answer[]> | undefined;
+  [key: string]: string | number | Array<Answer[]> | undefined;
 }
 
 export interface Submission {
