@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.10.0](https://github.com/cds-snc/platform-forms-client/compare/v3.9.1...v3.10.0) (2023-12-07)
+
+
+### Features
+
+* Render Responses page navigation as tabs ([#3002](https://github.com/cds-snc/platform-forms-client/issues/3002)) ([c052c9b](https://github.com/cds-snc/platform-forms-client/commit/c052c9be52840fe8966f87a08145d3f50486d9ca))
+
+
+### Bug Fixes
+
+* Download ensure questions/answers are sorted according to form.layout ([#3001](https://github.com/cds-snc/platform-forms-client/issues/3001)) ([5d50d5a](https://github.com/cds-snc/platform-forms-client/commit/5d50d5a94c81e017850633e5dfeeed6cc03f9415))
+
 ## [3.9.1](https://github.com/cds-snc/platform-forms-client/compare/v3.9.0...v3.9.1) (2023-12-05)
 
 
