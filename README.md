@@ -45,7 +45,7 @@ NEXTAUTH_URL=http://localhost:3000
 REDIS_URL=localhost
 ```
 
-For local development of the complete solution (running the AWS Serverless Application Model (SAM) for local Lambdas) add the following two environment variables to your .env file and see the instructions for launching the Lambda's locally in our [Infrastructure ReadMe](https://github.com/cds-snc/forms-terraform)
+For local development of the complete solution (running the AWS Serverless Application Model (SAM) for local Lambdas) add the following two environment variables to your .env file and see the instructions for launching the Lambda's locally in our [Infrastructure README](https://github.com/cds-snc/forms-terraform)
 
 ```
 LOCAL_LAMBDA_ENDPOINT=http://127.0.0.1:3001
@@ -186,7 +186,7 @@ NEXTAUTH_URL=http://localhost:3000
 REDIS_URL=localhost
 ```
 
-Pour le développement local de la solution complète (exécutant SAM pour les Lambda locaux), ajoutez les deux variables d'environnement suivantes à votre fichier .env et consultez les instructions pour lancer les Lambda localement dans notre [Infrastructure ReadME] (https://github.com/cds -snc/forms-staging-terraform)
+Pour le développement local de la solution complète (exécutant SAM pour les Lambda locaux), ajoutez les deux variables d'environnement suivantes à votre fichier .env et consultez les instructions pour lancer les Lambda localement dans notre [Infrastructure README](https://github.com/cds-snc/forms-terraform)
 
 ```
 LOCAL_LAMBDA_ENDPOINT=http://127.0.0.1:3001
