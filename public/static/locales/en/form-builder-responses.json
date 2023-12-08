@@ -3,7 +3,7 @@
     "newResponses": {
       "title": "New responses available",
       "message1": "GC Forms stores responses temporarily.",
-      "message2": "Start by downloading responses and then sign off for their removal from GC Forms."
+      "message2": "Start by downloading responses. Then sign off for their removal from GC Forms."
     },
     "downloadedResponses": {
       "title": "Downloaded responses",
