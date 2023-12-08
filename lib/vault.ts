@@ -123,14 +123,13 @@ export async function listAllSubmissions(
   formID: string,
   status?: VaultStatus,
   lastEvaluatedKey: Record<string, any> | null | undefined = null,
-  scanReverse = false
+  scanForward = true
 ): Promise<{
   submissions: VaultSubmissionList[];
   submissionsRemaining: boolean;
   paginationLastEvaluatedKey: Record<string, any> | null | undefined;
 }> {
   // Check access control first
-
   try {
     await checkAbilityToAccessSubmissions(ability, formID).catch((e) => {
       if (e instanceof AccessControlError)
@@ -162,7 +161,7 @@ export async function listAllSubmissions(
         Limit: responseDownloadLimit - accumulatedResponses.length,
         KeyConditionExpression: "FormID = :formID" + (status ? " AND #status = :status" : ""),
         // Sort by descending order of Status
-        ScanIndexForward: scanReverse,
+        ScanIndexForward: scanForward,
         ExpressionAttributeValues: {
           ":formID": formID,
           ...(status && { ":status": status }),
