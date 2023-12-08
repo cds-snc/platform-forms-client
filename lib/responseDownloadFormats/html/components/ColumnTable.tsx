@@ -35,9 +35,12 @@ const QuestionColumns = ({
           <dd className="w-full py-4 pl-16">
             <dl className="ml-8">
               {item.answer.map((subItem) => {
-                return subItem.map((subSubItem, subIndex) => {
-                  return renderRow(subIndex, lang, subSubItem);
-                });
+                return (
+                  Array.isArray(subItem) &&
+                  subItem.map((subSubItem, subIndex) => {
+                    return renderRow(subIndex, lang, subSubItem);
+                  })
+                );
               })}
             </dl>
           </dd>
