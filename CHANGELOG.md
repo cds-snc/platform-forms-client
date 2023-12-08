@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.10.1](https://github.com/cds-snc/platform-forms-client/compare/v3.10.0...v3.10.1) (2023-12-08)
+
+
+### Bug Fixes
+
+* check that subItem is an array before mapping ([#3009](https://github.com/cds-snc/platform-forms-client/issues/3009)) ([71eb977](https://github.com/cds-snc/platform-forms-client/commit/71eb97700946d73b3bcda3082bbf3f3b8a0d1e23))
+
 ## [3.10.0](https://github.com/cds-snc/platform-forms-client/compare/v3.9.1...v3.10.0) (2023-12-07)
 
 
