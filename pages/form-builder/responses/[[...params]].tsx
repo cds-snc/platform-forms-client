@@ -25,13 +25,14 @@ import { Button } from "@components/globals";
 import { ClosedBanner } from "@components/form-builder/app/shared/ClosedBanner";
 import { getAppSetting } from "@lib/appSettings";
 import { DeleteIcon, FolderIcon, InboxIcon, WarningIcon } from "@components/form-builder/icons";
-import { SubNavLink } from "@components/form-builder/app/navigation/SubNavLink";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { ConfirmDialog } from "@components/form-builder/app/responses/Dialogs/ConfirmDialog";
 import { Alert } from "@components/globals";
 import { isStatus, ucfirst } from "@lib/clientHelpers";
 import { Pagination } from "@components/form-builder/app/responses/Pagination";
+import { TabNavLink } from "@components/form-builder/app/navigation/TabNavLink";
+
 
 interface ResponsesProps {
   initialForm: FormRecord | null;
@@ -139,8 +140,11 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         </h1>
       )}
 
-      <nav className="relative mb-4 flex" aria-label={t("responses.navLabel")}>
-        <SubNavLink
+      <nav
+        className="relative mb-10 flex border-b border-black"
+        aria-label={t("responses.navLabel")}
+      >
+        <TabNavLink
           id="new-responses"
           defaultActive={statusQuery === "new"}
           href={`/form-builder/responses/${formId}/new`}
@@ -150,8 +154,8 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           <span className="text-sm laptop:text-base">
             <InboxIcon className="inline-block h-7 w-7" /> {t("responses.status.new")}
           </span>
-        </SubNavLink>
-        <SubNavLink
+        </TabNavLink>
+        <TabNavLink
           id="downloaded-responses"
           href={`/form-builder/responses/${formId}/downloaded`}
           setAriaCurrent={true}
@@ -160,8 +164,8 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           <span className="text-sm laptop:text-base">
             <FolderIcon className="inline-block h-7 w-7" /> {t("responses.status.downloaded")}
           </span>
-        </SubNavLink>
-        <SubNavLink
+        </TabNavLink>
+        <TabNavLink
           id="deleted-responses"
           href={`/form-builder/responses/${formId}/confirmed`}
           setAriaCurrent={true}
@@ -170,7 +174,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           <span className="text-sm laptop:text-base">
             <DeleteIcon className="inline-block h-7 w-7" /> {t("responses.status.deleted")}
           </span>
-        </SubNavLink>
+        </TabNavLink>
       </nav>
 
       {isAuthenticated && vaultSubmissions.length > 0 && (

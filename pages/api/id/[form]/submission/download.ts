@@ -9,10 +9,18 @@ import { transform as htmlTransform } from "@lib/responseDownloadFormats/html";
 import { transform as zipTransform } from "@lib/responseDownloadFormats/html-zipped";
 import { transform as jsonTransform } from "@lib/responseDownloadFormats/json";
 import { retrieveSubmissions, updateLastDownloadedBy } from "@lib/vault";
-import { DownloadFormat, FormResponseSubmissions } from "@lib/responseDownloadFormats/types";
+import {
+  Answer,
+  DownloadFormat,
+  FormResponseSubmissions,
+} from "@lib/responseDownloadFormats/types";
 import { logEvent } from "@lib/auditLogs";
 import { logMessage } from "@lib/logger";
 import { getAppSetting } from "@lib/appSettings";
+
+const sortByLayout = ({ layout, elements }: { layout: number[]; elements: Answer[] }) => {
+  return elements.sort((a, b) => layout.indexOf(a.questionId) - layout.indexOf(b.questionId));
+};
 
 const logDownload = async (
   responseIdStatusArray: { id: string; status: string }[],
@@ -70,7 +78,6 @@ const getSubmissions = async (
     // most sense to use the form submission language vs sesion/*. If not, the output could have
     // e.g. French questions and English answers etc.
     const lang = req.query?.lang === "fr" ? "fr" : "en";
-    logMessage.info("lang: " + lang);
 
     const queryResult = await retrieveSubmissions(ability, formId, ids);
 
@@ -87,6 +94,7 @@ const getSubmissions = async (
 
           if (question?.type === FormElementTypes.dynamicRow && answer instanceof Array) {
             return {
+              questionId: question.id,
               type: question?.type,
               questionEn: question?.properties.titleEn,
               questionFr: question?.properties.titleFr,
@@ -94,6 +102,7 @@ const getSubmissions = async (
                 return Object.values(item).map((value, index) => {
                   if (question?.properties.subElements) {
                     return {
+                      questionId: question?.id,
                       type: question?.properties.subElements[index].type,
                       questionEn: question?.properties.subElements[index].properties.titleEn,
                       questionFr: question?.properties.subElements[index].properties.titleFr,
@@ -102,22 +111,24 @@ const getSubmissions = async (
                   }
                 });
               }),
-            };
+            } as Answer;
           }
 
           return {
+            questionId: question?.id,
             type: question?.type,
             questionEn: question?.properties.titleEn,
             questionFr: question?.properties.titleFr,
             answer: question?.type === "checkbox" ? Array(answer).join(", ") : answer,
-          };
+          } as Answer;
         }
       );
+      const sorted = sortByLayout({ layout: fullFormTemplate.form.layout, elements: submission });
       return {
         id: item.name,
         createdAt: parseInt(item.createdAt.toString()),
         confirmationCode: item.confirmationCode,
-        answers: submission,
+        answers: sorted,
       };
     }) as FormResponseSubmissions["submissions"];
 
