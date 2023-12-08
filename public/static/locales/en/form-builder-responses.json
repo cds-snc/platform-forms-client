@@ -6,7 +6,7 @@
       "message2": "Start by downloading responses and then sign off for their removal from GC Forms."
     },
     "downloadedResponses": {
-      "title": "Recently downloaded responses",
+      "title": "Downloaded responses",
       "message1": "GC Forms stores responses temporarily.",
       "message2": "You must sign off on the removal of responses from GC Forms within the time indicated."
     },
@@ -48,7 +48,7 @@
       "deleted": "Signed off for removal",
       "problem": "Problems"
     },
-    "viewAllProblemResponses": "View responses reported"
+    "viewAllProblemResponses": "View reported responses"
   },
   "supportWillContact": "Support will contact you",
   "reportedAsProblem": "Response reported as a problem",

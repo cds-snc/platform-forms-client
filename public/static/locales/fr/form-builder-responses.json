@@ -6,7 +6,7 @@
       "message2": "Commencez par télécharger les réponses, puis approuvez leur suppression de Formulaires GC."
     },
     "downloadedResponses": {
-      "title": "Réponses téléchargées récemment",
+      "title": "Réponses téléchargées",
       "message1": "Formulaires GC conserve temporairement les réponses.",
       "message2": "Vous devez approuver la suppression des réponses de Formulaires GC dans le délai indiqué."
     },
@@ -97,8 +97,8 @@
     },
     "card": {
       "noNewResponses": "Aucune nouvelle réponse",
-      "noNewResponsesMessage": "Les réponses aux formulaires soumis apparaîtront ici et seront disponible dans Formulaires GC pendant 45 jours.",
-      "noDownloadedResponses": "Aucune réponse téléchargée récemment",
+      "noNewResponsesMessage": "Les réponses aux formulaires soumis apparaîtront ici et seront disponibles dans Formulaires GC pendant 45 jours.",
+      "noDownloadedResponses": "Aucune réponse téléchargée",
       "noDownloadedResponsesMessage": "Les réponses téléchargées apparaîtront ici jusqu'à ce que vous approuviez leur suppression de Formulaires GC.",
       "noDeletedResponses": "Aucune réponse à supprimer",
       "noDeletedResponsesMessage": "Une fois que vous aurez téléchargé et approuvé la suppression des réponses, celles-ci seront disponibles ici pendant 30 jours.",
