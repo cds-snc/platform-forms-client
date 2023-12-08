@@ -50,22 +50,25 @@ export const AggregatedTable = ({
               </td>
               <td className="w-64 p-4">{formatDate(new Date(submission.createdAt))}</td>
               {submission.answers &&
-                submission.answers.map((answer) => {
-                  if (Array.isArray(answer.answer)) {
+                submission.answers.map((item) => {
+                  if (Array.isArray(item.answer)) {
                     return (
                       <td key="" className="w-120 pl-4">
-                        <table className="table-fixed text-left ml-4">
-                          {answer.answer.map((subAnswer) => {
-                            return subAnswer.map((subSubAnswer) => {
-                              const question = String(subSubAnswer[getProperty("question", lang)]);
-                              const response = subSubAnswer.answer;
-                              return (
-                                <tr key="" className="flex">
-                                  <th className="w-64 p-4">{question}</th>
-                                  <td className="p-4">{formatAnswer(response as string)}</td>
-                                </tr>
-                              );
-                            });
+                        <table className="ml-4 table-fixed text-left">
+                          {item.answer.map((subItem) => {
+                            return (
+                              Array.isArray(subItem) &&
+                              subItem.map((subSubItem) => {
+                                const question = String(subSubItem[getProperty("question", lang)]);
+                                const response = subSubItem.answer;
+                                return (
+                                  <tr key="" className="flex">
+                                    <th className="w-64 p-4">{question}</th>
+                                    <td className="p-4">{formatAnswer(response as string)}</td>
+                                  </tr>
+                                );
+                              })
+                            );
                           })}
                         </table>
                       </td>
@@ -73,7 +76,7 @@ export const AggregatedTable = ({
                   }
                   return (
                     <td key="" className="w-64 p-4">
-                      {formatAnswer(answer.answer)}
+                      {formatAnswer(item.answer)}
                     </td>
                   );
                 })}
