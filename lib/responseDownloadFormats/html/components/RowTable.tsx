@@ -36,9 +36,12 @@ const QuestionRows = ({
           <dd className="w-full p-4">
             <dl className="flex flex-col">
               {item.answer.map((subItem) => {
-                return subItem.map((subSubItem, subIndex) => {
-                  return renderColumn(subIndex, lang, subSubItem, true);
-                });
+                return (
+                  Array.isArray(subItem) &&
+                  subItem.map((subSubItem, subIndex) => {
+                    return renderColumn(subIndex, lang, subSubItem, true);
+                  })
+                );
               })}
             </dl>
           </dd>

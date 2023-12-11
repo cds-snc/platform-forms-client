@@ -48,6 +48,7 @@ REDIS_URL=localhost
 For local development of the complete solution (running the AWS Serverless Application Model (SAM) for local Lambdas) add the following two environment variables to your .env file and see the instructions for launching the Lambda's locally in our [Infrastructure README](https://github.com/cds-snc/forms-terraform)
 
 ```
+LOCAL_AWS_ENDPOINT=http://127.0.0.1:4566
 DATABASE_URL=postgres://postgres:chummy@localhost:5432/formsDB
 ```
 
@@ -188,6 +189,7 @@ REDIS_URL=localhost
 Pour le développement local de la solution complète (exécutant SAM pour les Lambda locaux), ajoutez les deux variables d'environnement suivantes à votre fichier .env et consultez les instructions pour lancer les Lambda localement dans notre [Infrastructure README](https://github.com/cds-snc/forms-terraform)
 
 ```
+LOCAL_AWS_ENDPOINT=http://127.0.0.1:4566
 DATABASE_URL=postgres://postgres:chummy@localhost:5432/formsDB
 ```
 
