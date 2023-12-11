@@ -127,7 +127,7 @@ export async function listAllSubmissions(
 ): Promise<{
   submissions: VaultSubmissionList[];
   submissionsRemaining: boolean;
-  paginationLastEvaluatedKey: Record<string, any> | null | undefined;
+  lastEvaluatedKey: Record<string, any> | null | undefined;
 }> {
   // Check access control first
   try {
@@ -227,11 +227,11 @@ export async function listAllSubmissions(
     return {
       submissions: accumulatedResponses,
       submissionsRemaining: submissionsRemaining,
-      paginationLastEvaluatedKey: paginationLastEvaluatedKey,
+      lastEvaluatedKey: paginationLastEvaluatedKey,
     };
   } catch (e) {
     logMessage.error(e);
-    return { submissions: [], submissionsRemaining: true, paginationLastEvaluatedKey: undefined };
+    return { submissions: [], submissionsRemaining: true, lastEvaluatedKey: undefined };
   }
 }
 

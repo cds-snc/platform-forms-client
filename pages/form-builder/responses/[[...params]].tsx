@@ -33,7 +33,6 @@ import { isStatus, ucfirst } from "@lib/clientHelpers";
 import { Pagination } from "@components/form-builder/app/responses/Pagination";
 import { TabNavLink } from "@components/form-builder/app/navigation/TabNavLink";
 
-
 interface ResponsesProps {
   initialForm: FormRecord | null;
   vaultSubmissions: VaultSubmissionList[];
@@ -41,7 +40,7 @@ interface ResponsesProps {
   nagwareResult: NagwareResult | null;
   responseDownloadLimit: number;
   responsesRemaining: boolean;
-  paginationLastEvaluatedKey: Record<string, any> | null | undefined;
+  lastEvaluatedKey: Record<string, any> | null | undefined;
 }
 
 // TODO: move to an app setting variable
@@ -54,7 +53,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   nagwareResult,
   responseDownloadLimit,
   responsesRemaining,
-  paginationLastEvaluatedKey,
+  lastEvaluatedKey,
 }: ResponsesProps) => {
   const { t, i18n } = useTranslation("form-builder-responses");
   const { status } = useSession();
@@ -261,7 +260,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
                   showDownloadSuccess={successAlertMessage}
                   setShowDownloadSuccess={setShowSuccessAlert}
                 />
-                <Pagination lastEvaluatedKey={paginationLastEvaluatedKey} formId={formId} />
+                <Pagination lastEvaluatedKey={lastEvaluatedKey} formId={formId} />
               </>
             )}
 
@@ -373,7 +372,7 @@ Responses.getLayout = (page: ReactElement) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({
-  query: { params, lastEvaluatedKey = null, scanForward = false },
+  query: { params, lastKey = null, scanForward = "false" },
   locale,
   req,
   res,
@@ -431,21 +430,24 @@ export const getServerSideProps: GetServerSideProps = async ({
         ? (ucfirst(statusQuery) as VaultStatus)
         : VaultStatus.NEW;
 
-      // build up lastEvaluatedKey from url params
-      const parsedLastEvaluatedKey = {
-        Status: status,
-        NAME_OR_CONF: `NAME#${lastEvaluatedKey}`,
-        FormID: formID,
-      };
+      let currentLastEvaluatedKey = null;
 
-      const { submissions, submissionsRemaining, paginationLastEvaluatedKey } =
-        await listAllSubmissions(
-          ability,
-          formID,
-          status,
-          parsedLastEvaluatedKey,
-          scanForward === "true"
-        );
+      // build up lastEvaluatedKey from url params
+      if (lastKey) {
+        currentLastEvaluatedKey = {
+          Status: status,
+          NAME_OR_CONF: `NAME#${lastKey}`,
+          FormID: formID,
+        };
+      }
+
+      const { submissions, submissionsRemaining, lastEvaluatedKey } = await listAllSubmissions(
+        ability,
+        formID,
+        status,
+        currentLastEvaluatedKey,
+        scanForward === "true"
+      );
 
       FormbuilderParams.initialForm = initialForm;
 
@@ -465,7 +467,7 @@ export const getServerSideProps: GetServerSideProps = async ({
           formId: FormbuilderParams.initialForm?.id ?? null,
           responseDownloadLimit: responseDownloadLimit,
           responsesRemaining: submissionsRemaining,
-          paginationLastEvaluatedKey: paginationLastEvaluatedKey,
+          lastEvaluatedKey: lastEvaluatedKey,
           nagwareResult,
           ...(locale &&
             (await serverSideTranslations(

@@ -9,9 +9,10 @@ export const Pagination = ({
   lastEvaluatedKey: Record<string, any> | null | undefined;
   formId: string;
 }) => {
+  // Extract responseId from lastEvaluatedKey object
   const lastEvaluatedResponseId = lastEvaluatedKey
     ? lastEvaluatedKey.NAME_OR_CONF.split("#")[1]
-    : null;
+    : "end";
 
   const router = useRouter();
   let statusQuery;
@@ -20,13 +21,23 @@ export const Pagination = ({
     [, statusQuery] = router.query.params;
   }
 
-  const isFirstPage = !router.query.lastEvaluatedKey;
-
-  const showNext = !(router.query.scanForward === "false" && lastEvaluatedKey === null);
-  const showPrevious = !(
-    (router.query.scanForward === "true" && lastEvaluatedKey === null) ||
-    isFirstPage
+  const [pages, setPages] = React.useState<string[]>(
+    router.query.pages ? String(router.query.pages).split(",") : ["start"]
   );
+
+  const previousLastEvaluatedResponseId = pages[pages.indexOf(lastEvaluatedResponseId) - 2];
+
+  let previousLink = "";
+  if (previousLastEvaluatedResponseId !== "start") {
+    previousLink = `?pages=${pages.join(",")}&lastKey=${previousLastEvaluatedResponseId}`;
+  }
+
+  if (!pages.includes(lastEvaluatedResponseId)) {
+    setPages([...pages, lastEvaluatedResponseId]);
+  }
+
+  const showNext = lastEvaluatedKey !== null;
+  const showPrevious = previousLastEvaluatedResponseId !== undefined;
 
   return (
     <>
@@ -34,13 +45,13 @@ export const Pagination = ({
         <Link
           href={`/form-builder/responses/${formId}${
             statusQuery ? "/" + statusQuery : ""
-          }?lastEvaluatedKey=${lastEvaluatedResponseId}&scanForward=true`}
+          }${previousLink}`}
           legacyBehavior
         >
           <a
             href={`/form-builder/responses/${formId}${
               statusQuery ? "/" + statusQuery : ""
-            }?lastEvaluatedKey=${lastEvaluatedResponseId}&scanForward=true`}
+            }${previousLink}`}
             className="mr-4 inline-block"
           >
             Previous Page
@@ -51,13 +62,13 @@ export const Pagination = ({
         <Link
           href={`/form-builder/responses/${formId}${
             statusQuery ? "/" + statusQuery : ""
-          }?lastEvaluatedKey=${lastEvaluatedResponseId}&scanForward=false`}
+          }?pages=${pages.join(",")}&lastKey=${lastEvaluatedResponseId}`}
           legacyBehavior
         >
           <a
             href={`/form-builder/responses/${formId}${
               statusQuery ? "/" + statusQuery : ""
-            }?lastEvaluatedKey=${lastEvaluatedResponseId}&scanForward=false`}
+            }?pages=${pages.join(",")}&lastKey=${lastEvaluatedResponseId}`}
             className="ml-4 inline-block"
           >
             Next Page
