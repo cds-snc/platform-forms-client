@@ -100,6 +100,10 @@ There are several ways to connect to the database, but here's how to do it throu
 - A table will appear. Find your username and add all the privileges under the `privileges` column.
 - Click on "Save Change" button in the top menu bar once completed.
 
+### Enable forms submission locally
+
+If you want to thoroughly test the submission, i.e., invoke the Lambdas, please enable the feature flag 'Submit to Reliability Queue' in the administration settings.
+
 ## Testing
 
 This application uses Cypress for end-to-end testing.
@@ -241,3 +245,7 @@ Pour envoyer les réponses d'une formulaire à une adresse courriel, vous devez 
 ```sh
 NOTIFY_API_KEY=
 ```
+
+### Activer la soumission de formulaires en local
+
+Si vous souhaitez tester minutieusement la soumission, c'est-à-dire invoquer les Lambdas, veuillez activer le drapeau fonctionnel 'Submit to Reliability Queue' dans les paramètres d'administration.
