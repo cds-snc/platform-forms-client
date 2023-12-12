@@ -129,7 +129,7 @@ export const DownloadTable = ({
           </caption>
           <thead className="border-b-1 border-slate-400">
             <tr>
-              <th scope="col" className="py-4 pr-3 text-center">
+              <th scope="col" className="py-4 text-center">
                 <CheckAll
                   tableItems={tableItems}
                   tableItemsDispatch={tableItemsDispatch}
@@ -153,12 +153,9 @@ export const DownloadTable = ({
           </thead>
           <tbody>
             <tr className="border-b-1 border-slate-300 bg-slate-100 py-2">
-              <th scope="row">
-                <WarningIcon className="mx-8 mt-1 inline-block scale-125" />{" "}
-                <span className="sr-only">{t("downloadResponsesTable.header.warning")}</span>
-              </th>
-              <td className="relative px-4 py-2" colSpan={4}>
-                <div>
+              <td colSpan={5} className="px-4 py-2">
+                <WarningIcon className="ml-7 mt-1 inline-block scale-125" />
+                <div className="ml-16 inline-block">
                   {isStatus(statusQuery, VaultStatus.NEW) &&
                     t("downloadResponsesTable.header.pagination.new.remainingResponses", {
                       max: responseDownloadLimit,
@@ -172,7 +169,7 @@ export const DownloadTable = ({
                       max: responseDownloadLimit,
                     })}
                 </div>
-                <div className="absolute right-0 top-0 mr-4 mt-2">
+                <div className="float-right inline-block">
                   <Pagination
                     lastEvaluatedKey={lastEvaluatedKey}
                     formId={formId}
