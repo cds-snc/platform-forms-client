@@ -122,12 +122,12 @@ export async function listAllSubmissions(
   ability: UserAbility,
   formID: string,
   status?: VaultStatus,
-  lastEvaluatedKey: Record<string, any> | null | undefined = null,
+  lastEvaluatedKey: Record<string, string> | null | undefined = null,
   scanForward = true
 ): Promise<{
   submissions: VaultSubmissionList[];
   submissionsRemaining: boolean;
-  lastEvaluatedKey: Record<string, any> | null | undefined;
+  lastEvaluatedKey: Record<string, string> | null | undefined;
 }> {
   // Check access control first
   try {
