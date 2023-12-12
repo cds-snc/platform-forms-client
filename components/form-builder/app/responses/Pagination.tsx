@@ -24,7 +24,7 @@ export const Pagination = ({
     : "end"; // If lastEvaluatedKey is null, we're on the last page
 
   // Need statusQuery when building up the prev/next links
-  let statusQuery;
+  let statusQuery: string | undefined;
   if (router.query.params) {
     [, statusQuery] = router.query.params;
   }
@@ -36,8 +36,14 @@ export const Pagination = ({
 
   // Update our pages state when the query changes
   useEffect(() => {
-    setPages(router.query.pages ? String(atob(String(router.query.pages))).split(",") : ["start"]);
-  }, [router.query.pages, statusQuery]);
+    try {
+      setPages(
+        router.query.pages ? String(atob(String(router.query.pages))).split(",") : ["start"]
+      );
+    } catch (e) {
+      router.push(`/form-builder/responses/${formId}${statusQuery ? "/" + statusQuery : ""}`);
+    }
+  }, [formId, router, router.query.pages, statusQuery]);
 
   // When going back, we pop the last item off the pages array
   const previousPages = pages.slice(0, -1);
