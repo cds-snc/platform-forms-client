@@ -30,7 +30,6 @@ import Image from "next/image";
 import { ConfirmDialog } from "@components/form-builder/app/responses/Dialogs/ConfirmDialog";
 import { Alert } from "@components/globals";
 import { isStatus, ucfirst } from "@lib/clientHelpers";
-import { Pagination } from "@components/form-builder/app/responses/Pagination";
 import { TabNavLink } from "@components/form-builder/app/navigation/TabNavLink";
 
 interface ResponsesProps {
@@ -40,7 +39,7 @@ interface ResponsesProps {
   nagwareResult: NagwareResult | null;
   responseDownloadLimit: number;
   responsesRemaining: boolean;
-  lastEvaluatedKey: Record<string, any> | null | undefined;
+  lastEvaluatedKey: Record<string, string> | null | undefined;
 }
 
 // TODO: move to an app setting variable
@@ -52,7 +51,6 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   formId,
   nagwareResult,
   responseDownloadLimit,
-  responsesRemaining,
   lastEvaluatedKey,
 }: ResponsesProps) => {
   const { t, i18n } = useTranslation("form-builder-responses");
@@ -258,7 +256,6 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
                   formId={formId}
                   nagwareResult={nagwareResult}
                   responseDownloadLimit={responseDownloadLimit}
-                  responsesRemaining={responsesRemaining}
                   showDownloadSuccess={successAlertMessage}
                   setShowDownloadSuccess={setShowSuccessAlert}
                   lastEvaluatedKey={lastEvaluatedKey}

@@ -34,11 +34,9 @@ interface DownloadTableProps {
   formId: string;
   nagwareResult: NagwareResult | null;
   responseDownloadLimit: number;
-  responsesRemaining: boolean;
   showDownloadSuccess: false | string;
   setShowDownloadSuccess: React.Dispatch<React.SetStateAction<false | string>>;
-  children?: React.ReactNode;
-  lastEvaluatedKey: Record<string, any> | null | undefined;
+  lastEvaluatedKey: Record<string, string> | null | undefined;
 }
 
 export const DownloadTable = ({
@@ -47,10 +45,8 @@ export const DownloadTable = ({
   formId,
   nagwareResult,
   responseDownloadLimit,
-  responsesRemaining,
   setShowDownloadSuccess,
   lastEvaluatedKey,
-  children,
 }: DownloadTableProps) => {
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();

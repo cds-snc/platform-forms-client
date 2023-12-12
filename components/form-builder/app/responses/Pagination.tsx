@@ -10,7 +10,7 @@ export const Pagination = ({
   responseDownloadLimit,
   recordCount,
 }: {
-  lastEvaluatedKey: Record<string, any> | null | undefined;
+  lastEvaluatedKey: Record<string, string> | null | undefined;
   formId: string;
   responseDownloadLimit: number;
   recordCount: number;
