@@ -155,6 +155,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           </span>
         </TabNavLink>
         <TabNavLink
+          defaultActive={statusQuery === "downloaded"}
           id="downloaded-responses"
           href={`/form-builder/responses/${formId}/downloaded`}
           setAriaCurrent={true}
@@ -165,6 +166,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           </span>
         </TabNavLink>
         <TabNavLink
+          defaultActive={statusQuery === "confirmed"}
           id="deleted-responses"
           href={`/form-builder/responses/${formId}/confirmed`}
           setAriaCurrent={true}
@@ -259,8 +261,8 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
                   responsesRemaining={responsesRemaining}
                   showDownloadSuccess={successAlertMessage}
                   setShowDownloadSuccess={setShowSuccessAlert}
+                  lastEvaluatedKey={lastEvaluatedKey}
                 />
-                <Pagination lastEvaluatedKey={lastEvaluatedKey} formId={formId} />
               </>
             )}
 

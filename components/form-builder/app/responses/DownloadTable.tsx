@@ -26,6 +26,7 @@ import { DownloadDialog } from "./Dialogs/DownloadDialog";
 import { formatDateTime } from "@components/form-builder/util";
 import { WarningIcon } from "@components/form-builder/icons";
 import { DownloadSingleButton } from "./DownloadSingleButton";
+import { Pagination } from "./Pagination";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -36,6 +37,8 @@ interface DownloadTableProps {
   responsesRemaining: boolean;
   showDownloadSuccess: false | string;
   setShowDownloadSuccess: React.Dispatch<React.SetStateAction<false | string>>;
+  children?: React.ReactNode;
+  lastEvaluatedKey: Record<string, any> | null | undefined;
 }
 
 export const DownloadTable = ({
@@ -46,6 +49,8 @@ export const DownloadTable = ({
   responseDownloadLimit,
   responsesRemaining,
   setShowDownloadSuccess,
+  lastEvaluatedKey,
+  children,
 }: DownloadTableProps) => {
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
@@ -151,57 +156,37 @@ export const DownloadTable = ({
             </tr>
           </thead>
           <tbody>
-            {responsesRemaining && (
-              <tr className="border-b-1 border-slate-300 bg-yellow-50">
-                <th scope="row">
-                  <WarningIcon className="mx-8 mt-1 inline-block scale-150" />{" "}
-                  <span className="sr-only">{t("downloadResponsesTable.header.warning")}</span>
-                </th>
-                <td className="px-4 py-2" colSpan={4}>
-                  <p>
-                    <strong>
-                      {isStatus(statusQuery, VaultStatus.NEW) &&
-                        t("downloadResponsesTable.errors.responsesState.new.remainingResponses", {
-                          max: responseDownloadLimit,
-                        })}
-                      {isStatus(statusQuery, VaultStatus.DOWNLOADED) &&
-                        t(
-                          "downloadResponsesTable.errors.responsesState.downloaded.remainingResponses",
-                          {
-                            max: responseDownloadLimit,
-                          }
-                        )}
-                      {isStatus(statusQuery, VaultStatus.CONFIRMED) &&
-                        t(
-                          "downloadResponsesTable.errors.responsesState.confirmed.remainingResponses",
-                          {
-                            max: responseDownloadLimit,
-                          }
-                        )}
-                    </strong>
-                    <br />
-                    {isStatus(statusQuery, VaultStatus.NEW) &&
-                      t("downloadResponsesTable.errors.responsesState.new.remainingResponsesBody", {
-                        max: responseDownloadLimit,
-                      })}
-                    {isStatus(statusQuery, VaultStatus.DOWNLOADED) &&
-                      t(
-                        "downloadResponsesTable.errors.responsesState.downloaded.remainingResponsesBody",
-                        {
-                          max: responseDownloadLimit,
-                        }
-                      )}
-                    {isStatus(statusQuery, VaultStatus.CONFIRMED) &&
-                      t(
-                        "downloadResponsesTable.errors.responsesState.confirmed.remainingResponsesBody",
-                        {
-                          max: responseDownloadLimit,
-                        }
-                      )}
-                  </p>
-                </td>
-              </tr>
-            )}
+            <tr className="border-b-1 border-slate-300 bg-slate-100 py-2">
+              <th scope="row">
+                <WarningIcon className="mx-8 mt-1 inline-block scale-125" />{" "}
+                <span className="sr-only">{t("downloadResponsesTable.header.warning")}</span>
+              </th>
+              <td className="relative px-4 py-2" colSpan={4}>
+                <div>
+                  {isStatus(statusQuery, VaultStatus.NEW) &&
+                    t("downloadResponsesTable.header.pagination.new.remainingResponses", {
+                      max: responseDownloadLimit,
+                    })}
+                  {isStatus(statusQuery, VaultStatus.DOWNLOADED) &&
+                    t("downloadResponsesTable.header.pagination.downloaded.remainingResponses", {
+                      max: responseDownloadLimit,
+                    })}
+                  {isStatus(statusQuery, VaultStatus.CONFIRMED) &&
+                    t("downloadResponsesTable.header.pagination.confirmed.remainingResponses", {
+                      max: responseDownloadLimit,
+                    })}
+                </div>
+                <div className="absolute right-0 top-0 mr-4 mt-2">
+                  <Pagination
+                    lastEvaluatedKey={lastEvaluatedKey}
+                    formId={formId}
+                    responseDownloadLimit={responseDownloadLimit}
+                    recordCount={vaultSubmissions.length}
+                  />
+                </div>
+              </td>
+            </tr>
+
             {tableItems.sortedItems.map((submission) => {
               const isBlocked = blockDownload(submission);
               const createdDateTime = formatDateTime(submission.createdAt).join(" ");

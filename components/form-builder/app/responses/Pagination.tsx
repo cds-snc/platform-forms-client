@@ -1,14 +1,21 @@
 import React, { useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { BackArrowIcon, ForwardArrowIcon } from "@components/form-builder/icons";
+import { useTranslation } from "react-i18next";
 
 export const Pagination = ({
   lastEvaluatedKey,
   formId,
+  responseDownloadLimit,
+  recordCount,
 }: {
   lastEvaluatedKey: Record<string, any> | null | undefined;
   formId: string;
+  responseDownloadLimit: number;
+  recordCount: number;
 }) => {
+  const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
 
   // Extract responseId from lastEvaluatedKey object
@@ -35,6 +42,9 @@ export const Pagination = ({
   // When going back, we pop the last item off the pages array
   const previousPages = pages.slice(0, -1);
 
+  // Used to determine start and end points for the current page
+  const currentPageNumber = pages.indexOf(lastEvaluatedResponseId);
+
   // When going back, we need the lastEvaluatedResponseId of the previous page
   const previousLastEvaluatedResponseId = pages[pages.indexOf(lastEvaluatedResponseId) - 2];
 
@@ -57,40 +67,44 @@ export const Pagination = ({
 
   return (
     <>
-      {showPrevious && (
-        <Link
+      <Link
+        href={`/form-builder/responses/${formId}${
+          statusQuery ? "/" + statusQuery : ""
+        }${previousLink}`}
+        legacyBehavior
+      >
+        <a
           href={`/form-builder/responses/${formId}${
             statusQuery ? "/" + statusQuery : ""
           }${previousLink}`}
-          legacyBehavior
+          className={`mr-4 inline-block ${!showPrevious ? "pointer-events-none opacity-50" : ""}`}
+          aria-disabled={!showPrevious}
         >
-          <a
-            href={`/form-builder/responses/${formId}${
-              statusQuery ? "/" + statusQuery : ""
-            }${previousLink}`}
-            className="mr-4 inline-block"
-          >
-            Previous Page
-          </a>
-        </Link>
-      )}
-      {showNext && (
-        <Link
+          <BackArrowIcon className="inline-block h-6 w-6" />
+          {t("downloadResponsesTable.header.pagination.previous")}
+        </a>
+      </Link>
+      {t("downloadResponsesTable.header.pagination.showing", {
+        start: responseDownloadLimit * (currentPageNumber - 1) + 1,
+        end: currentPageNumber * responseDownloadLimit - (responseDownloadLimit - recordCount),
+      })}
+      <Link
+        href={`/form-builder/responses/${formId}${
+          statusQuery ? "/" + statusQuery : ""
+        }?pages=${pages.join(",")}&lastKey=${lastEvaluatedResponseId}`}
+        legacyBehavior
+      >
+        <a
           href={`/form-builder/responses/${formId}${
             statusQuery ? "/" + statusQuery : ""
           }?pages=${pages.join(",")}&lastKey=${lastEvaluatedResponseId}`}
-          legacyBehavior
+          className={`ml-4 inline-block ${!showNext ? "pointer-events-none opacity-50" : ""}`}
+          aria-disabled={!showNext}
         >
-          <a
-            href={`/form-builder/responses/${formId}${
-              statusQuery ? "/" + statusQuery : ""
-            }?pages=${pages.join(",")}&lastKey=${lastEvaluatedResponseId}`}
-            className="ml-4 inline-block"
-          >
-            Next Page
-          </a>
-        </Link>
-      )}
+          {t("downloadResponsesTable.header.pagination.next")}
+          <ForwardArrowIcon className="inline-block h-6 w-6" />
+        </a>
+      </Link>
     </>
   );
 };
