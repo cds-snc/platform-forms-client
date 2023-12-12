@@ -29,42 +29,40 @@ export const Pagination = ({
     [, statusQuery] = router.query.params;
   }
 
-  // Keep track of the start point for each of our pages.
+  // Keep track of the start point for each of our keys.
   // To help when determining whether we're at the beginning or end,
   // the first item in the array is always "start" and the last item is always "end"
-  const [pages, setPages] = React.useState<string[]>(["start"]);
+  const [keys, setKeys] = React.useState<string[]>(["start"]);
 
-  // Update our pages state when the query changes
+  // Update our keys state when the query changes
   useEffect(() => {
     try {
-      setPages(
-        router.query.pages ? String(atob(String(router.query.pages))).split(",") : ["start"]
-      );
+      setKeys(router.query.keys ? String(atob(String(router.query.keys))).split(",") : ["start"]);
     } catch (e) {
       router.push(`/form-builder/responses/${formId}${statusQuery ? "/" + statusQuery : ""}`);
     }
-  }, [formId, router, router.query.pages, statusQuery]);
+  }, [formId, router, router.query.keys, statusQuery]);
 
-  // When going back, we pop the last item off the pages array
-  const previousPages = pages.slice(0, -1);
+  // When going back, we pop the last item off the keys array
+  const previousPages = keys.slice(0, -1);
 
   // Used to determine start and end points for the current page
-  const currentPageNumber = pages.indexOf(lastEvaluatedResponseId);
+  const currentPageNumber = keys.indexOf(lastEvaluatedResponseId);
 
   // When going back, we need the lastEvaluatedResponseId of the previous page
-  const previousLastEvaluatedResponseId = pages[pages.indexOf(lastEvaluatedResponseId) - 2];
+  const previousLastEvaluatedResponseId = keys[keys.indexOf(lastEvaluatedResponseId) - 2];
 
   // If we're going back to the first page, just load the base url in case there are newer responses waiting
   let previousLink = "";
   if (previousLastEvaluatedResponseId !== "start") {
-    previousLink = `?pages=${btoa(
+    previousLink = `?keys=${btoa(
       previousPages.join(",")
     )}&lastKey=${previousLastEvaluatedResponseId}`;
   }
 
-  // Only append the lastEvaluatedResponseId to the pages array if it's not already there
-  if (!pages.includes(lastEvaluatedResponseId)) {
-    setPages([...pages, lastEvaluatedResponseId]);
+  // Only append the lastEvaluatedResponseId to the keys array if it's not already there
+  if (!keys.includes(lastEvaluatedResponseId)) {
+    setKeys([...keys, lastEvaluatedResponseId]);
   }
 
   // lastEvaluatedKey is null when we're on the last page
@@ -99,15 +97,15 @@ export const Pagination = ({
         end: currentPageNumber * responseDownloadLimit - (responseDownloadLimit - recordCount),
       })}
       <Link
-        href={`/form-builder/responses/${formId}${
-          statusQuery ? "/" + statusQuery : ""
-        }?pages=${btoa(pages.join(","))}&lastKey=${lastEvaluatedResponseId}`}
+        href={`/form-builder/responses/${formId}${statusQuery ? "/" + statusQuery : ""}?keys=${btoa(
+          keys.join(",")
+        )}&lastKey=${lastEvaluatedResponseId}`}
         legacyBehavior
       >
         <a
           href={`/form-builder/responses/${formId}${
             statusQuery ? "/" + statusQuery : ""
-          }?pages=${btoa(pages.join(","))}&lastKey=${lastEvaluatedResponseId}`}
+          }?keys=${btoa(keys.join(","))}&lastKey=${lastEvaluatedResponseId}`}
           className={`group ml-4 inline-block ${!showNext ? "pointer-events-none opacity-50" : ""}`}
           aria-disabled={!showNext}
         >
