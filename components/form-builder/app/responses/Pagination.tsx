@@ -36,7 +36,7 @@ export const Pagination = ({
 
   // Update our pages state when the query changes
   useEffect(() => {
-    setPages(router.query.pages ? String(router.query.pages).split(",") : ["start"]);
+    setPages(router.query.pages ? String(atob(String(router.query.pages))).split(",") : ["start"]);
   }, [router.query.pages, statusQuery]);
 
   // When going back, we pop the last item off the pages array
@@ -51,7 +51,9 @@ export const Pagination = ({
   // If we're going back to the first page, just load the base url in case there are newer responses waiting
   let previousLink = "";
   if (previousLastEvaluatedResponseId !== "start") {
-    previousLink = `?pages=${previousPages.join(",")}&lastKey=${previousLastEvaluatedResponseId}`;
+    previousLink = `?pages=${btoa(
+      previousPages.join(",")
+    )}&lastKey=${previousLastEvaluatedResponseId}`;
   }
 
   // Only append the lastEvaluatedResponseId to the pages array if it's not already there
@@ -91,13 +93,13 @@ export const Pagination = ({
       <Link
         href={`/form-builder/responses/${formId}${
           statusQuery ? "/" + statusQuery : ""
-        }?pages=${pages.join(",")}&lastKey=${lastEvaluatedResponseId}`}
+        }?pages=${btoa(pages.join(","))}&lastKey=${lastEvaluatedResponseId}`}
         legacyBehavior
       >
         <a
           href={`/form-builder/responses/${formId}${
             statusQuery ? "/" + statusQuery : ""
-          }?pages=${pages.join(",")}&lastKey=${lastEvaluatedResponseId}`}
+          }?pages=${btoa(pages.join(","))}&lastKey=${lastEvaluatedResponseId}`}
           className={`ml-4 inline-block ${!showNext ? "pointer-events-none opacity-50" : ""}`}
           aria-disabled={!showNext}
         >
