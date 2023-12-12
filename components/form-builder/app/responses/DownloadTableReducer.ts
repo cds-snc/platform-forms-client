@@ -9,7 +9,7 @@ export enum TableActions {
 interface ReducerTableItemsState {
   statusItems: Map<string, boolean>;
   checkedItems: Map<string, boolean>;
-  sortedItems: VaultSubmissionList[];
+  allItems: VaultSubmissionList[];
   numberOfOverdueResponses: number;
   overdueAfter: string | undefined;
 }
@@ -32,7 +32,7 @@ export const initialTableItemsState = (
   return {
     checkedItems: new Map(),
     statusItems: new Map(vaultSubmissions.map((submission) => [submission.name, false])),
-    sortedItems: vaultSubmissions,
+    allItems: vaultSubmissions,
     numberOfOverdueResponses: vaultSubmissions.filter((submission) =>
       isSubmissionOverdue({
         status: submission.status,

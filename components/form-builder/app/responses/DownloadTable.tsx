@@ -183,7 +183,7 @@ export const DownloadTable = ({
               </td>
             </tr>
 
-            {tableItems.sortedItems.map((submission) => {
+            {tableItems.allItems.map((submission) => {
               const isBlocked = blockDownload(submission);
               const createdDateTime = formatDateTime(submission.createdAt).join(" ");
               const downloadedDateTime = submission.downloadedAt
