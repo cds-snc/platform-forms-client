@@ -2,7 +2,6 @@ import React from "react";
 import { render, act } from "@testing-library/react";
 import { DownloadTable } from "../DownloadTable";
 import { VaultSubmissionList, VaultStatus } from "@lib/types";
-import { sortVaultSubmission } from "../DownloadTableReducer";
 import axios from "axios";
 
 jest.mock("next/router", () => require("next-router-mock"));
