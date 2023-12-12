@@ -37,7 +37,7 @@ export const Pagination = ({
   // Update our pages state when the query changes
   useEffect(() => {
     setPages(router.query.pages ? String(router.query.pages).split(",") : ["start"]);
-  }, [router.query.pages]);
+  }, [router.query.pages, statusQuery]);
 
   // When going back, we pop the last item off the pages array
   const previousPages = pages.slice(0, -1);
