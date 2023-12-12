@@ -79,6 +79,7 @@ describe("<DownloadTable />", () => {
 
     router = {
       back: cy.stub().as("routerBack"),
+      query: {},
     };
 
     cy.stub(Router, "useRouter").returns(router);
