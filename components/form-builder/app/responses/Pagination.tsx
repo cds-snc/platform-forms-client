@@ -18,45 +18,51 @@ export const Pagination = ({
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
 
-  // Extract responseId from lastEvaluatedKey object
-  const lastEvaluatedResponseId = lastEvaluatedKey
-    ? lastEvaluatedKey.NAME_OR_CONF.split("#")[1]
-    : "end"; // If lastEvaluatedKey is null, we're on the last page
-
   // Need statusQuery when building up the prev/next links
   let statusQuery: string | undefined;
   if (router.query.params) {
     [, statusQuery] = router.query.params;
   }
 
-  // Keep track of the start point for each of our keys.
-  // To help when determining whether we're at the beginning or end,
-  // the first item in the array is always "start" and the last item is always "end"
+  // Extract responseId from lastEvaluatedKey object
+  const lastEvaluatedResponseId = lastEvaluatedKey
+    ? lastEvaluatedKey.NAME_OR_CONF.split("#")[1]
+    : "end"; // If lastEvaluatedKey is null, we're on the last page
+
+  // Keep track of the last evaluated key for each of our pages.
+  // The first item in the array is always "start" and the last item is always "end"
   const [keys, setKeys] = React.useState<string[]>(["start"]);
 
-  // Update our keys state when the query changes
+  // Update our keys state when the query param changes
   useEffect(() => {
     try {
-      setKeys(router.query.keys ? String(atob(String(router.query.keys))).split(",") : ["start"]);
+      // Get the "page" keys as base64 encoded string from url
+      const queryKeys = router.query.keys;
+
+      // Use atob to decode the base64 encoded keys or we're at the "start"
+      const decodedKeys = queryKeys ? String(atob(String(queryKeys))).split(",") : ["start"];
+
+      setKeys(decodedKeys);
     } catch (e) {
+      // If the base64 encoded string has been tampered with, redirect to the first page
       router.push(`/form-builder/responses/${formId}${statusQuery ? "/" + statusQuery : ""}`);
     }
   }, [formId, router, router.query.keys, statusQuery]);
 
   // When going back, we pop the last item off the keys array
-  const previousPages = keys.slice(0, -1);
-
-  // Used to determine start and end points for the current page
-  const currentPageNumber = keys.indexOf(lastEvaluatedResponseId);
+  const previousKeys = keys.slice(0, -1);
 
   // When going back, we need the lastEvaluatedResponseId of the previous page
   const previousLastEvaluatedResponseId = keys[keys.indexOf(lastEvaluatedResponseId) - 2];
+
+  // Used to determine "start" and "end" for the current page
+  const currentPageNumber = keys.indexOf(lastEvaluatedResponseId);
 
   // If we're going back to the first page, just load the base url in case there are newer responses waiting
   let previousLink = "";
   if (previousLastEvaluatedResponseId !== "start") {
     previousLink = `?keys=${btoa(
-      previousPages.join(",")
+      previousKeys.join(",")
     )}&lastKey=${previousLastEvaluatedResponseId}`;
   }
 
@@ -66,10 +72,14 @@ export const Pagination = ({
   }
 
   // lastEvaluatedKey is null when we're on the last page
-  const showNext = lastEvaluatedKey !== null;
+  const isLastPage = lastEvaluatedKey === null;
 
   // previousLastEvaluatedResponseId is undefined when we're on the first page
-  const showPrevious = previousLastEvaluatedResponseId !== undefined;
+  const isFirstPage = previousLastEvaluatedResponseId === undefined;
+
+  // Calculate the start and end of the current page
+  const start = responseDownloadLimit * (currentPageNumber - 1) + 1;
+  const end = currentPageNumber * responseDownloadLimit - (responseDownloadLimit - recordCount);
 
   return (
     <>
@@ -84,18 +94,15 @@ export const Pagination = ({
             statusQuery ? "/" + statusQuery : ""
           }${previousLink}`}
           className={`group mr-4 inline-block ${
-            !showPrevious ? "pointer-events-none opacity-50" : ""
+            isFirstPage ? "pointer-events-none opacity-50" : ""
           }`}
-          aria-disabled={!showPrevious}
+          aria-disabled={isFirstPage}
         >
           <BackArrowIcon className="inline-block h-6 w-6 group-focus:fill-white" />
           {t("downloadResponsesTable.header.pagination.previous")}
         </a>
       </Link>
-      {t("downloadResponsesTable.header.pagination.showing", {
-        start: responseDownloadLimit * (currentPageNumber - 1) + 1,
-        end: currentPageNumber * responseDownloadLimit - (responseDownloadLimit - recordCount),
-      })}
+      {t("downloadResponsesTable.header.pagination.showing", { start, end })}
       <Link
         href={`/form-builder/responses/${formId}${statusQuery ? "/" + statusQuery : ""}?keys=${btoa(
           keys.join(",")
@@ -106,8 +113,10 @@ export const Pagination = ({
           href={`/form-builder/responses/${formId}${
             statusQuery ? "/" + statusQuery : ""
           }?keys=${btoa(keys.join(","))}&lastKey=${lastEvaluatedResponseId}`}
-          className={`group ml-4 inline-block ${!showNext ? "pointer-events-none opacity-50" : ""}`}
-          aria-disabled={!showNext}
+          className={`group ml-4 inline-block ${
+            isLastPage ? "pointer-events-none opacity-50" : ""
+          }`}
+          aria-disabled={isLastPage}
         >
           {t("downloadResponsesTable.header.pagination.next")}
           <ForwardArrowIcon className="inline-block h-6 w-6 group-focus:fill-white" />
