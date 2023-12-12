@@ -38,7 +38,6 @@ interface ResponsesProps {
   formId: string;
   nagwareResult: NagwareResult | null;
   responseDownloadLimit: number;
-  responsesRemaining: boolean;
   lastEvaluatedKey: Record<string, string> | null | undefined;
 }
 
@@ -440,7 +439,7 @@ export const getServerSideProps: GetServerSideProps = async ({
         };
       }
 
-      const { submissions, submissionsRemaining, lastEvaluatedKey } = await listAllSubmissions(
+      const { submissions, lastEvaluatedKey } = await listAllSubmissions(
         ability,
         formID,
         status,
@@ -464,7 +463,6 @@ export const getServerSideProps: GetServerSideProps = async ({
           vaultSubmissions: submissions,
           formId: FormbuilderParams.initialForm?.id ?? null,
           responseDownloadLimit: responseDownloadLimit,
-          responsesRemaining: submissionsRemaining,
           lastEvaluatedKey: lastEvaluatedKey,
           nagwareResult,
           ...(locale &&
