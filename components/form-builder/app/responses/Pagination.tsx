@@ -85,10 +85,12 @@ export const Pagination = ({
           href={`/form-builder/responses/${formId}${
             statusQuery ? "/" + statusQuery : ""
           }${previousLink}`}
-          className={`mr-4 inline-block ${!showPrevious ? "pointer-events-none opacity-50" : ""}`}
+          className={`group mr-4 inline-block ${
+            !showPrevious ? "pointer-events-none opacity-50" : ""
+          }`}
           aria-disabled={!showPrevious}
         >
-          <BackArrowIcon className="inline-block h-6 w-6" />
+          <BackArrowIcon className="inline-block h-6 w-6 group-focus:fill-white" />
           {t("downloadResponsesTable.header.pagination.previous")}
         </a>
       </Link>
@@ -106,11 +108,11 @@ export const Pagination = ({
           href={`/form-builder/responses/${formId}${
             statusQuery ? "/" + statusQuery : ""
           }?pages=${btoa(pages.join(","))}&lastKey=${lastEvaluatedResponseId}`}
-          className={`ml-4 inline-block ${!showNext ? "pointer-events-none opacity-50" : ""}`}
+          className={`group ml-4 inline-block ${!showNext ? "pointer-events-none opacity-50" : ""}`}
           aria-disabled={!showNext}
         >
           {t("downloadResponsesTable.header.pagination.next")}
-          <ForwardArrowIcon className="inline-block h-6 w-6" />
+          <ForwardArrowIcon className="inline-block h-6 w-6 group-focus:fill-white" />
         </a>
       </Link>
     </>
