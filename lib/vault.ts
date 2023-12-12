@@ -122,8 +122,7 @@ export async function listAllSubmissions(
   ability: UserAbility,
   formID: string,
   status?: VaultStatus,
-  lastEvaluatedKey: Record<string, string> | null | undefined = null,
-  scanForward = true
+  lastEvaluatedKey: Record<string, string> | null | undefined = null
 ): Promise<{
   submissions: VaultSubmissionList[];
   submissionsRemaining: boolean;
@@ -163,7 +162,7 @@ export async function listAllSubmissions(
         Limit: responseRetrievalLimit - accumulatedResponses.length,
         KeyConditionExpression: "FormID = :formID" + (status ? " AND #status = :status" : ""),
         // Sort by descending order of Status
-        ScanIndexForward: scanForward,
+        ScanIndexForward: false,
         ExpressionAttributeValues: {
           ":formID": formID,
           ...(status && { ":status": status }),

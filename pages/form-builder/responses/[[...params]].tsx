@@ -371,7 +371,7 @@ Responses.getLayout = (page: ReactElement) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({
-  query: { params, lastKey = null, scanForward = "false" },
+  query: { params, lastKey = null },
   locale,
   req,
   res,
@@ -431,7 +431,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 
       let currentLastEvaluatedKey = null;
 
-      // build up lastEvaluatedKey from url params
+      // build up lastEvaluatedKey from lastKey url param
       if (lastKey) {
         currentLastEvaluatedKey = {
           Status: status,
@@ -444,8 +444,7 @@ export const getServerSideProps: GetServerSideProps = async ({
         ability,
         formID,
         status,
-        currentLastEvaluatedKey,
-        scanForward === "true"
+        currentLastEvaluatedKey
       );
 
       FormbuilderParams.initialForm = initialForm;
