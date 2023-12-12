@@ -145,6 +145,8 @@ export async function listAllSubmissions(
       throw e;
     });
     const responseDownloadLimit = Number(await getAppSetting("responseDownloadLimit"));
+    // We're going to request one more than the limit so we can consistently determine if there are more responses
+    const responseRetrievalLimit = responseDownloadLimit + 1;
 
     const documentClient = connectToDynamo();
 
@@ -157,8 +159,8 @@ export async function listAllSubmissions(
         TableName: "Vault",
         IndexName: "Status",
         ExclusiveStartKey: lastEvaluatedKey ?? undefined,
-        // Limit the amount of response to responseDownloadLimit.  This can be changed in settings.
-        Limit: responseDownloadLimit - accumulatedResponses.length,
+        // Limit the amount of response to responseRetrievalLimit
+        Limit: responseRetrievalLimit - accumulatedResponses.length,
         KeyConditionExpression: "FormID = :formID" + (status ? " AND #status = :status" : ""),
         // Sort by descending order of Status
         ScanIndexForward: scanForward,
@@ -206,13 +208,28 @@ export async function listAllSubmissions(
       }
 
       // We either manually stop the paginated request when we have (responseDownloadLimit) items or we let it finish on its own
-      if (accumulatedResponses.length >= responseDownloadLimit) {
+      if (accumulatedResponses.length >= responseRetrievalLimit) {
         lastEvaluatedKey = undefined;
-        paginationLastEvaluatedKey = response.LastEvaluatedKey;
-        submissionsRemaining = true;
       } else {
         lastEvaluatedKey = response.LastEvaluatedKey;
       }
+    }
+
+    if (accumulatedResponses.length > responseDownloadLimit) {
+      // Since we're requesting one more than the limit, we need to remove the last item
+      const lastResponse = accumulatedResponses[accumulatedResponses.length - 2];
+      accumulatedResponses = accumulatedResponses.slice(0, responseDownloadLimit);
+
+      // Create a lastEvaluatedKey from lastResponse for pagination
+      paginationLastEvaluatedKey = {
+        Status: lastResponse.status,
+        NAME_OR_CONF: `NAME#${lastResponse.name}`,
+        FormID: lastResponse.formID,
+      };
+      submissionsRemaining = true;
+    } else {
+      paginationLastEvaluatedKey = null;
+      submissionsRemaining = false;
     }
 
     logEvent(
