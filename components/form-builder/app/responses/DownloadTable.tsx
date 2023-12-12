@@ -36,7 +36,7 @@ interface DownloadTableProps {
   responseDownloadLimit: number;
   showDownloadSuccess: false | string;
   setShowDownloadSuccess: React.Dispatch<React.SetStateAction<false | string>>;
-  lastEvaluatedKey: Record<string, string> | null | undefined;
+  lastEvaluatedKey?: Record<string, string> | null | undefined;
 }
 
 export const DownloadTable = ({
