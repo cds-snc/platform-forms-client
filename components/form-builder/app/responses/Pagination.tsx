@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { BackArrowIcon, ForwardArrowIcon } from "@components/form-builder/icons";
+import { BackArrowIcon, ForwardArrowIcon, WarningIcon } from "@components/form-builder/icons";
 import { useTranslation } from "react-i18next";
+import { isStatus } from "@lib/clientHelpers";
+import { VaultStatus } from "@lib/types";
 
 export const Pagination = ({
   lastEvaluatedKey,
@@ -19,7 +21,7 @@ export const Pagination = ({
   const router = useRouter();
 
   // Need statusQuery when building up the prev/next links
-  let statusQuery: string | undefined;
+  let statusQuery = "new";
   if (router.query.params) {
     [, statusQuery] = router.query.params;
   }
@@ -83,45 +85,65 @@ export const Pagination = ({
 
   return (
     <>
-      <Link
-        href={`/form-builder/responses/${formId}${
-          statusQuery ? "/" + statusQuery : ""
-        }${previousLink}`}
-        legacyBehavior
-      >
-        <a
+      <WarningIcon className="ml-7 mt-1 inline-block scale-125" />
+      <div className="ml-16 inline-block">
+        {isStatus(statusQuery, VaultStatus.NEW) &&
+          lastEvaluatedKey &&
+          t("downloadResponsesTable.header.pagination.new.remainingResponses", {
+            max: responseDownloadLimit,
+          })}
+        {isStatus(statusQuery, VaultStatus.DOWNLOADED) &&
+          lastEvaluatedKey &&
+          t("downloadResponsesTable.header.pagination.downloaded.remainingResponses", {
+            max: responseDownloadLimit,
+          })}
+        {isStatus(statusQuery, VaultStatus.CONFIRMED) &&
+          lastEvaluatedKey &&
+          t("downloadResponsesTable.header.pagination.confirmed.remainingResponses", {
+            max: responseDownloadLimit,
+          })}
+      </div>
+      <div className="float-right inline-block">
+        <Link
           href={`/form-builder/responses/${formId}${
             statusQuery ? "/" + statusQuery : ""
           }${previousLink}`}
-          className={`group mr-4 inline-block ${
-            isFirstPage ? "pointer-events-none opacity-50" : ""
-          }`}
-          aria-disabled={isFirstPage}
+          legacyBehavior
         >
-          <BackArrowIcon className="inline-block h-6 w-6 group-focus:fill-white" />
-          {t("downloadResponsesTable.header.pagination.previous")}
-        </a>
-      </Link>
-      {t("downloadResponsesTable.header.pagination.showing", { start, end })}
-      <Link
-        href={`/form-builder/responses/${formId}${statusQuery ? "/" + statusQuery : ""}?keys=${btoa(
-          keys.join(",")
-        )}&lastKey=${lastEvaluatedResponseId}`}
-        legacyBehavior
-      >
-        <a
+          <a
+            href={`/form-builder/responses/${formId}${
+              statusQuery ? "/" + statusQuery : ""
+            }${previousLink}`}
+            className={`group mr-4 inline-block ${
+              isFirstPage ? "pointer-events-none opacity-50" : ""
+            }`}
+            aria-disabled={isFirstPage}
+          >
+            <BackArrowIcon className="inline-block h-6 w-6 group-focus:fill-white" />
+            {t("downloadResponsesTable.header.pagination.previous")}
+          </a>
+        </Link>
+        {t("downloadResponsesTable.header.pagination.showing", { start, end })}
+        <Link
           href={`/form-builder/responses/${formId}${
             statusQuery ? "/" + statusQuery : ""
           }?keys=${btoa(keys.join(","))}&lastKey=${lastEvaluatedResponseId}`}
-          className={`group ml-4 inline-block ${
-            isLastPage ? "pointer-events-none opacity-50" : ""
-          }`}
-          aria-disabled={isLastPage}
+          legacyBehavior
         >
-          {t("downloadResponsesTable.header.pagination.next")}
-          <ForwardArrowIcon className="inline-block h-6 w-6 group-focus:fill-white" />
-        </a>
-      </Link>
+          <a
+            href={`/form-builder/responses/${formId}${
+              statusQuery ? "/" + statusQuery : ""
+            }?keys=${btoa(keys.join(","))}&lastKey=${lastEvaluatedResponseId}`}
+            className={`group ml-4 inline-block ${
+              isLastPage ? "pointer-events-none opacity-50" : ""
+            }`}
+            aria-disabled={isLastPage}
+          >
+            {t("downloadResponsesTable.header.pagination.next")}
+            <ForwardArrowIcon className="inline-block h-6 w-6 group-focus:fill-white" />
+          </a>
+        </Link>
+      </div>
     </>
   );
 };

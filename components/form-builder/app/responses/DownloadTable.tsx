@@ -24,7 +24,6 @@ import { DeleteButton } from "./DeleteButton";
 import { ConfirmDeleteNewDialog } from "./Dialogs/ConfirmDeleteNewDialog";
 import { DownloadDialog } from "./Dialogs/DownloadDialog";
 import { formatDateTime } from "@components/form-builder/util";
-import { WarningIcon } from "@components/form-builder/icons";
 import { DownloadSingleButton } from "./DownloadSingleButton";
 import { Pagination } from "./Pagination";
 
@@ -154,29 +153,12 @@ export const DownloadTable = ({
           <tbody>
             <tr className="border-b-1 border-slate-300 bg-slate-100 py-2">
               <td colSpan={5} className="px-4 py-2">
-                <WarningIcon className="ml-7 mt-1 inline-block scale-125" />
-                <div className="ml-16 inline-block">
-                  {isStatus(statusQuery, VaultStatus.NEW) &&
-                    t("downloadResponsesTable.header.pagination.new.remainingResponses", {
-                      max: responseDownloadLimit,
-                    })}
-                  {isStatus(statusQuery, VaultStatus.DOWNLOADED) &&
-                    t("downloadResponsesTable.header.pagination.downloaded.remainingResponses", {
-                      max: responseDownloadLimit,
-                    })}
-                  {isStatus(statusQuery, VaultStatus.CONFIRMED) &&
-                    t("downloadResponsesTable.header.pagination.confirmed.remainingResponses", {
-                      max: responseDownloadLimit,
-                    })}
-                </div>
-                <div className="float-right inline-block">
-                  <Pagination
-                    lastEvaluatedKey={lastEvaluatedKey}
-                    formId={formId}
-                    responseDownloadLimit={responseDownloadLimit}
-                    recordCount={vaultSubmissions.length}
-                  />
-                </div>
+                <Pagination
+                  lastEvaluatedKey={lastEvaluatedKey}
+                  formId={formId}
+                  responseDownloadLimit={responseDownloadLimit}
+                  recordCount={vaultSubmissions.length}
+                />
               </td>
             </tr>
 
@@ -283,29 +265,12 @@ export const DownloadTable = ({
             })}
             <tr className="border-b-1 border-slate-300 bg-slate-100 py-2">
               <td colSpan={5} className="px-4 py-2">
-                <WarningIcon className="ml-7 mt-1 inline-block scale-125" />
-                <div className="ml-16 inline-block">
-                  {isStatus(statusQuery, VaultStatus.NEW) &&
-                    t("downloadResponsesTable.header.pagination.new.remainingResponses", {
-                      max: responseDownloadLimit,
-                    })}
-                  {isStatus(statusQuery, VaultStatus.DOWNLOADED) &&
-                    t("downloadResponsesTable.header.pagination.downloaded.remainingResponses", {
-                      max: responseDownloadLimit,
-                    })}
-                  {isStatus(statusQuery, VaultStatus.CONFIRMED) &&
-                    t("downloadResponsesTable.header.pagination.confirmed.remainingResponses", {
-                      max: responseDownloadLimit,
-                    })}
-                </div>
-                <div className="float-right inline-block">
-                  <Pagination
-                    lastEvaluatedKey={lastEvaluatedKey}
-                    formId={formId}
-                    responseDownloadLimit={responseDownloadLimit}
-                    recordCount={vaultSubmissions.length}
-                  />
-                </div>
+                <Pagination
+                  lastEvaluatedKey={lastEvaluatedKey}
+                  formId={formId}
+                  responseDownloadLimit={responseDownloadLimit}
+                  recordCount={vaultSubmissions.length}
+                />
               </td>
             </tr>
           </tbody>
