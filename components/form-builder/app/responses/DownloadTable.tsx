@@ -204,17 +204,7 @@ export const DownloadTable = ({
                     <span className="sr-only">{t("downloadResponsesTable.header.download")}</span>
                     {submission.name}
                   </th>
-                  <td className="whitespace-nowrap px-4">
-                    {isStatus(statusQuery, [VaultStatus.NEW, VaultStatus.PROBLEM]) && (
-                      <span>{createdDateTime}</span>
-                    )}
-                    {isStatus(statusQuery, VaultStatus.DOWNLOADED) && (
-                      <span>{downloadedDateTime}</span>
-                    )}
-                    {isStatus(statusQuery, VaultStatus.CONFIRMED) && (
-                      <span>{confirmedDateTime}</span>
-                    )}
-                  </td>
+                  <td className="whitespace-nowrap px-4">{createdDateTime}</td>
                   <td className="whitespace-nowrap px-4">
                     {isStatus(statusQuery, VaultStatus.NEW) && (
                       <DownloadResponseStatus
