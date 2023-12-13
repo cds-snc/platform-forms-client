@@ -281,6 +281,33 @@ export const DownloadTable = ({
                 </tr>
               );
             })}
+            <tr className="border-b-1 border-slate-300 bg-slate-100 py-2">
+              <td colSpan={5} className="px-4 py-2">
+                <WarningIcon className="ml-7 mt-1 inline-block scale-125" />
+                <div className="ml-16 inline-block">
+                  {isStatus(statusQuery, VaultStatus.NEW) &&
+                    t("downloadResponsesTable.header.pagination.new.remainingResponses", {
+                      max: responseDownloadLimit,
+                    })}
+                  {isStatus(statusQuery, VaultStatus.DOWNLOADED) &&
+                    t("downloadResponsesTable.header.pagination.downloaded.remainingResponses", {
+                      max: responseDownloadLimit,
+                    })}
+                  {isStatus(statusQuery, VaultStatus.CONFIRMED) &&
+                    t("downloadResponsesTable.header.pagination.confirmed.remainingResponses", {
+                      max: responseDownloadLimit,
+                    })}
+                </div>
+                <div className="float-right inline-block">
+                  <Pagination
+                    lastEvaluatedKey={lastEvaluatedKey}
+                    formId={formId}
+                    responseDownloadLimit={responseDownloadLimit}
+                    recordCount={vaultSubmissions.length}
+                  />
+                </div>
+              </td>
+            </tr>
           </tbody>
         </table>
         <div className="mt-8 flex">
