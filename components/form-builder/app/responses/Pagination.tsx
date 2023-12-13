@@ -88,17 +88,17 @@ export const Pagination = ({
       <WarningIcon className="ml-7 mt-1 inline-block scale-125" />
       <div className="ml-16 inline-block">
         {isStatus(statusQuery, VaultStatus.NEW) &&
-          lastEvaluatedKey &&
+          (lastEvaluatedKey || keys.length > 2) &&
           t("downloadResponsesTable.header.pagination.new.remainingResponses", {
             max: responseDownloadLimit,
           })}
         {isStatus(statusQuery, VaultStatus.DOWNLOADED) &&
-          lastEvaluatedKey &&
+          (lastEvaluatedKey || keys.length > 2) &&
           t("downloadResponsesTable.header.pagination.downloaded.remainingResponses", {
             max: responseDownloadLimit,
           })}
         {isStatus(statusQuery, VaultStatus.CONFIRMED) &&
-          lastEvaluatedKey &&
+          (lastEvaluatedKey || keys.length > 2) &&
           t("downloadResponsesTable.header.pagination.confirmed.remainingResponses", {
             max: responseDownloadLimit,
           })}
