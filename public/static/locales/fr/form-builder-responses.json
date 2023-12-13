@@ -80,9 +80,9 @@
       "date": "Date",
       "warning": "Avertissement",
       "pagination": {
-        "showing": "[FR] Showing {{start}} to {{end}}",
-        "next": "[FR] Next",
-        "previous": "[FR] Previous",
+        "showing": "Affichage de {{start}} à {{end}}",
+        "next": "Suivant",
+        "previous": "Précédent",
         "new": {
           "remainingResponses": "Vous avez plus de {{max}} nouvelles réponses."
         },
