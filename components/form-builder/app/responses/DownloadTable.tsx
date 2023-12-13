@@ -165,12 +165,6 @@ export const DownloadTable = ({
             {tableItems.allItems.map((submission) => {
               const isBlocked = blockDownload(submission);
               const createdDateTime = formatDateTime(submission.createdAt).join(" ");
-              const downloadedDateTime = submission.downloadedAt
-                ? formatDateTime(submission.downloadedAt).join(" ")
-                : "";
-              const confirmedDateTime = submission.confirmedAt
-                ? formatDateTime(submission.confirmedAt).join(" ")
-                : "";
               return (
                 <tr
                   key={submission.name}
