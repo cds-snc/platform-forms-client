@@ -194,7 +194,7 @@ export const DownloadTable = ({
                   key={submission.name}
                   className={
                     "border-b-2 border-grey" +
-                    (tableItems.statusItems.get(submission.name) ? " bg-[#fffbf3]" : "") +
+                    (tableItems.statusItems.get(submission.name) ? " bg-purple-50" : "") +
                     (isBlocked ? " opacity-50" : "")
                   }
                 >
