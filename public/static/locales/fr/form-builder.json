@@ -701,7 +701,7 @@
     "errorCode": "Code d'erreur : {{code}}"
   },
   "addConditionalRules": {
-    "c": "Add a rule to a question [fr]",
+    "modalTitle": "Add a rule to a question [fr]",
     "modalDescription": "Allow an option in your question to show an additional short or long answer input field when selected. Only drop downs, single choice, and multi-select blocks can apply a rule. [fr]",
     "optionTitle": "If this option is selected: [fr]",
     "questionTitle": "Show question: [fr]",

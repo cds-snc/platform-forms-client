@@ -59,7 +59,7 @@ describe("Form Context", () => {
         properties: {
           titleEn: "Question 2 en",
           titleFr: "Question 2 fr",
-          conditionalRules: { whenId: "1.2" },
+          conditionalRules: [{ whenId: "1.2" }],
         },
       },
       {
@@ -68,7 +68,7 @@ describe("Form Context", () => {
         properties: {
           titleEn: "Question 3 en",
           titleFr: "Question 3 fr",
-          conditionalRules: { whenId: "1.1" },
+          conditionalRules: [{ whenId: "1.1" }],
         },
       },
     ];

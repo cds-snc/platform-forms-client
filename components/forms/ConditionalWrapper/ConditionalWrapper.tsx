@@ -7,11 +7,11 @@ import { useIsAdminUser } from "@components/form-builder/hooks/useIsAdminUser";
 export const ConditionalWrapper = ({
   children,
   element,
-  rule,
+  rules,
 }: {
   children: React.ReactElement;
   element: FormElement;
-  rule: ConditionalRule | null;
+  rules: ConditionalRule[] | null;
 }) => {
   const { matchedIds, currentGroup, groups } = useGCFormsContext();
 
@@ -30,11 +30,12 @@ export const ConditionalWrapper = ({
     return null;
 
   // If there's no rule or no whenId, just return the children
-  if (!rule || !rule?.whenId) return children;
+  if (!rules) return children;
+
+  const hasMatchedRule = rules.some((rule) => matchedIds.includes(rule?.whenId));
 
   // If the whenId is in the matchedIds, return the children
-  // @todo -- update here to handle array of rules
-  if (matchedIds.includes(rule?.whenId)) return children;
+  if (hasMatchedRule) return children;
 
   // Otherwise, return null
   return null;

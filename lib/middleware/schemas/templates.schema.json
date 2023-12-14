@@ -246,12 +246,15 @@
               }
             },
             "conditionalRules": {
-              "type": "object",
-              "properties": {
-                "whenId": {
-                  "description": "The id of the element that will trigger the conditional rule",
-                  "type": "string",
-                  "minimum": 1
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "whenId": {
+                    "description": "The id of the element that will trigger the conditional rule",
+                    "type": "string",
+                    "minimum": 1
+                  }
                 }
               }
             },

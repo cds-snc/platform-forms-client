@@ -43,7 +43,10 @@ export const ModalRules = ({ item }: { item: FormElementWithIndex }) => {
             choiceId = "1.0";
           }
 
-          properties.conditionalRules = { whenId: choiceId };
+          // Get the existing rules for element
+          const rules = properties.conditionalRules ?? [];
+          const updatedRules = [...rules, { whenId: choiceId }];
+          properties.conditionalRules = updatedRules;
           updateField(getPathString(Number(rule.questionId), elements), properties);
         }
       });
