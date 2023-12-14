@@ -31,7 +31,7 @@ const RuleIndicator = ({ whenId }: { whenId: string }) => {
 export const ConditionalIndicator = ({ item }: { item: FormElementWithIndex }) => {
   const hasConditionalRules = item.properties.conditionalRules;
 
-  if (!hasConditionalRules || !item.properties.conditionalRules) return null;
+  if (!hasConditionalRules) return null;
 
   const rules = item.properties.conditionalRules?.map((rule) => {
     const whenId = rule?.whenId as string;
