@@ -214,10 +214,9 @@ export const validateOnSubmit = (
     if (!formElement) return errors;
 
     if (formElement.properties.conditionalRules) {
-      // check if the conditional rule is met
-      // @todo -- update here to handle array of rules
-      const conditionalRules = formElement.properties.conditionalRules;
-      if (!matchRule(conditionalRules, props.formRecord, values as FormValues)) {
+      // check if a conditional rule is met
+      const rules = formElement.properties.conditionalRules;
+      if (!rules.some((rule) => matchRule(rule, props.formRecord, values as FormValues))) {
         continue;
       }
     }

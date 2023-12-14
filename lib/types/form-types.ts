@@ -50,7 +50,7 @@ export interface ElementProperties {
   isSectional?: boolean;
   maxNumberOfRows?: number;
   autoComplete?: string;
-  conditionalRules?: ConditionalRule;
+  conditionalRules?: ConditionalRule[];
   [key: string]:
     | string
     | number
@@ -58,7 +58,7 @@ export interface ElementProperties {
     | Array<PropertyChoices>
     | Array<FormElement>
     | ValidationProperties
-    | ConditionalRule
+    | Array<ConditionalRule>
     | undefined;
 }
 

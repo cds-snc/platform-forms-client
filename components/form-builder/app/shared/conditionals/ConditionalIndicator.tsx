@@ -31,13 +31,16 @@ const RuleIndicator = ({ whenId }: { whenId: string }) => {
 export const ConditionalIndicator = ({ item }: { item: FormElementWithIndex }) => {
   const hasConditionalRules = item.properties.conditionalRules;
 
-  if (!hasConditionalRules) return null;
+  if (!hasConditionalRules || !item.properties.conditionalRules) return null;
 
-  const whenId = item.properties.conditionalRules?.whenId as string;
-  // @todo update this to loop through all conditional rules
-  return (
-    <div className="mt-2">
-      <RuleIndicator whenId={whenId} />
-    </div>
-  );
+  const rules = item.properties.conditionalRules?.map((rule) => {
+    const whenId = rule?.whenId as string;
+    return (
+      <div className="mt-2" key={whenId}>
+        <RuleIndicator whenId={whenId} />
+      </div>
+    );
+  });
+
+  return <>{rules}</>;
 };

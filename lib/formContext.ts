@@ -92,12 +92,12 @@ export const getElementsWithRuleForChoice = ({
   formElements.forEach((element) => {
     // Look for conditional rules
     if (element.properties.conditionalRules) {
-      const whenId = element.properties.conditionalRules.whenId;
-
-      if (whenId && Number(whenId.split(".")[0]) === itemId) {
-        // add the element to the group
-        elements.push({ questionId: element.id.toString(), choiceId: whenId });
-      }
+      element.properties.conditionalRules.forEach((rule) => {
+        if (rule.whenId && Number(rule.whenId.split(".")[0]) === itemId) {
+          // add the element to the group
+          elements.push({ questionId: element.id.toString(), choiceId: rule.whenId });
+        }
+      });
     }
   });
 
@@ -116,12 +116,12 @@ export const getElementsUsingChoiceId = ({
   formElements.forEach((element) => {
     // Look for conditional rules
     if (element.properties.conditionalRules) {
-      const whenId = element.properties.conditionalRules.whenId;
-
-      if (whenId && whenId === choiceId) {
-        // add the element to the group
-        elements.push({ questionId: element.id.toString(), choiceId: whenId });
-      }
+      element.properties.conditionalRules.forEach((rule) => {
+        if (rule.whenId && rule.whenId === choiceId) {
+          // add the element to the group
+          elements.push({ questionId: element.id.toString(), choiceId: rule.whenId });
+        }
+      });
     }
   });
 
@@ -142,4 +142,31 @@ export const diffChoiceRules = (oldRules: ChoiceRule[], newRules: ChoiceRule[]) 
   });
 
   return { addedRules, removedRules };
+};
+
+export const conditionalRulesToChoiceRules = (conditionalRules: ConditionalRule[]) => {
+  const choiceRules: ChoiceRule[] = [];
+
+  conditionalRules.forEach((rule) => {
+    if (rule.whenId) {
+      choiceRules.push({ questionId: rule.whenId.split(".")[0], choiceId: rule.whenId });
+    }
+  });
+
+  return choiceRules;
+};
+
+export const mergeRules = (rules: ConditionalRule[], newRules: ChoiceRule[]) => {
+  const oldRules = conditionalRulesToChoiceRules(rules);
+  const { addedRules, removedRules } = diffChoiceRules(oldRules, newRules);
+
+  const mergedRules = [...oldRules, ...addedRules].filter((rule) => {
+    return !removedRules.find((removedRule) => {
+      return removedRule.questionId === rule.questionId && removedRule.choiceId === rule.choiceId;
+    });
+  });
+
+  return mergedRules.map((rule) => {
+    return { whenId: rule.choiceId };
+  });
 };
