@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { BackArrowIcon, ForwardArrowIcon } from "@components/form-builder/icons";
+import { BackArrowIcon, ForwardArrowIcon, StartIcon } from "@components/form-builder/icons";
 import { useTranslation } from "react-i18next";
-import { StartIcon } from "@components/form-builder/icons/StartIcon";
 
 export const Pagination = ({
   lastEvaluatedKey,
