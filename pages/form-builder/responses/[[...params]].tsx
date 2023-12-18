@@ -31,6 +31,7 @@ import { ConfirmDialog } from "@components/form-builder/app/responses/Dialogs/Co
 import { Alert } from "@components/globals";
 import { isStatus, ucfirst } from "@lib/clientHelpers";
 import { TabNavLink } from "@components/form-builder/app/navigation/TabNavLink";
+import { isResponseId } from "@lib/validation";
 
 interface ResponsesProps {
   initialForm: FormRecord | null;
@@ -431,7 +432,7 @@ export const getServerSideProps: GetServerSideProps = async ({
       let currentLastEvaluatedKey = null;
 
       // build up lastEvaluatedKey from lastKey url param
-      if (lastKey) {
+      if (lastKey && isResponseId(String(lastKey))) {
         currentLastEvaluatedKey = {
           Status: status,
           NAME_OR_CONF: `NAME#${lastKey}`,

@@ -380,7 +380,7 @@ export const isUUID = (field: string): boolean => {
  * @param field A string containing a Form ID (used in the UI)
  * @returns {boolean} The validation result
  */
-export const isFormId = (field: string): boolean => {
+export const isResponseId = (field: string): boolean => {
   const reg = new RegExp(formNameArraySchema.items.pattern, "i");
   if (!field || !reg.test(field)) {
     return false;
