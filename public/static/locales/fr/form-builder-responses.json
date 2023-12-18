@@ -80,7 +80,8 @@
       "date": "Date",
       "warning": "Avertissement",
       "pagination": {
-        "showing": "Affichage de {{start}} à {{end}}",
+        "start": "Commencez",
+        "showing": "Affichage de réponses {{start}} à {{end}}",
         "next": "Suivant",
         "previous": "Précédent",
         "new": {

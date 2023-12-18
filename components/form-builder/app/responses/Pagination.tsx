@@ -5,6 +5,7 @@ import { BackArrowIcon, ForwardArrowIcon, WarningIcon } from "@components/form-b
 import { useTranslation } from "react-i18next";
 import { isStatus } from "@lib/clientHelpers";
 import { VaultStatus } from "@lib/types";
+import { StartIcon } from "@components/form-builder/icons/StartIcon";
 
 export const Pagination = ({
   lastEvaluatedKey,
@@ -85,24 +86,22 @@ export const Pagination = ({
 
   return (
     <>
-      <WarningIcon className="ml-7 mt-1 inline-block scale-125" />
-      <div className="ml-16 inline-block">
-        {isStatus(statusQuery, VaultStatus.NEW) &&
-          (lastEvaluatedKey || keys.length > 2) &&
-          t("downloadResponsesTable.header.pagination.new.remainingResponses", {
-            max: responseDownloadLimit,
-          })}
-        {isStatus(statusQuery, VaultStatus.DOWNLOADED) &&
-          (lastEvaluatedKey || keys.length > 2) &&
-          t("downloadResponsesTable.header.pagination.downloaded.remainingResponses", {
-            max: responseDownloadLimit,
-          })}
-        {isStatus(statusQuery, VaultStatus.CONFIRMED) &&
-          (lastEvaluatedKey || keys.length > 2) &&
-          t("downloadResponsesTable.header.pagination.confirmed.remainingResponses", {
-            max: responseDownloadLimit,
-          })}
-      </div>
+      <Link
+        href={`/form-builder/responses/${formId}${statusQuery ? "/" + statusQuery : ""}`}
+        legacyBehavior
+      >
+        <a
+          href={`/form-builder/responses/${formId}${statusQuery ? "/" + statusQuery : ""}`}
+          className={`group mr-4 inline-block ${
+            isFirstPage ? "pointer-events-none opacity-50" : ""
+          }`}
+          aria-disabled={isFirstPage}
+        >
+          <StartIcon className="inline-block h-6 w-6 group-focus:fill-white" />
+          {t("downloadResponsesTable.header.pagination.start")}
+        </a>
+      </Link>
+
       <div className="float-right inline-block">
         <Link
           href={`/form-builder/responses/${formId}${
