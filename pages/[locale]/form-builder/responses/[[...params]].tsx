@@ -380,17 +380,6 @@ export const getServerSideProps: GetServerSideProps = async ({
     const [formID = null, statusQuery = "new", localeParam = "en"] = params || [];
     const locale = languageParamSanitization(localeParam);
 
-    if (Array.isArray(formID)) {
-      // Redirect to 404 if bad parameters
-      return {
-        redirect: {
-          // We can redirect to a 'Form does not exist page' in the future
-          destination: `/${locale}/404`,
-          permanent: false,
-        },
-      };
-    }
-
     const FormbuilderParams: { locale: string; initialForm: null | FormRecord } = {
       initialForm: null,
       locale: locale || "en",
