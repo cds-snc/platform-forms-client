@@ -151,7 +151,14 @@ describe("<DownloadTable />", () => {
     };
 
     cy.viewport(1050, 550);
-    cy.mount(<DownloadTable vaultSubmissions={vaultSubmissions} nagwareResult={nagwareResult} />);
+    cy.mount(
+      <DownloadTable
+        formId=""
+        responseDownloadLimit={50}
+        vaultSubmissions={vaultSubmissions}
+        nagwareResult={nagwareResult}
+      />
+    );
 
     // The -35 overdue causes the rest to be blocked
     cy.get("tbody tr:nth-child(1)").should("have.attr", "class").and("contain", "opacity-50");
@@ -231,7 +238,14 @@ describe("<DownloadTable />", () => {
     };
 
     cy.viewport(1050, 550);
-    cy.mount(<DownloadTable vaultSubmissions={vaultSubmissions} nagwareResult={nagwareResult} />);
+    cy.mount(
+      <DownloadTable
+        formId=""
+        responseDownloadLimit={50}
+        vaultSubmissions={vaultSubmissions}
+        nagwareResult={nagwareResult}
+      />
+    );
 
     cy.get("tbody tr:nth-child(1)").should("have.attr", "class").and("not.contain", "opacity-50");
     cy.get("tbody tr:nth-child(2)").should("have.attr", "class").and("not.contain", "opacity-50");

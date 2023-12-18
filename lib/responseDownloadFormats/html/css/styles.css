@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+
+@layer base {
+  body {
+    @apply text-xl leading-7 text-gray-front;
+  }
+
+  h1, h2, h3 {
+    font-variant-ligatures: no-common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    @apply font-lato font-bold;
+  }
+
+  h1, .gc-h1 {
+    @apply border-b border-red pb-2 mb-16 text-[34px] tablet:text-[38px];
+  }
+
+  h2, .gc-h2 {
+    @apply mb-6 text-[32px] tablet:text-[36px];
+  }
+
+  h3, .gc-h3 {
+    @apply mb-6 text-[24px];
+  }
+
+  #skip-link-container {
+    width: 100%;
+    position: absolute;
+    z-index: 5;
+    text-align: center;
+    top: 10px;
+  
+    #skip-link {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      white-space: nowrap;
+  
+      &:focus {
+        position: static;
+        padding: 5px;
+        width: auto;
+        height: auto;
+        overflow: auto;
+        text-align: center;
+      }
+    }
+  }
+
+  a:focus {
+    outline: none;
+    box-shadow: 4px 0 0 0 #303fc3, -4px 0 0 0 #303fc3;
+    @apply bg-blue-focus text-white;
+  }
+
+  #page-container {
+    @apply mx-4 tablet:mx-32 grow shrink-0 basis-auto;
+  }
+
+  .gc-fip {
+    @apply flex flex-col-reverse items-start tablet:flex-row tablet:justify-between tablet:items-center;
+  }
+  
+  .gc-fip a {
+    @apply block;
+  }
+
+  .gc-button--blue {
+    @apply h-16 rounded-lg py-3 px-6 text-white mx-auto bg-blue-800 shadow;
+  
+    &:hover {
+      @apply bg-blue-light;
+    }
+  
+    &:focus {
+      @apply outline-[3px] outline-blue-focus outline outline-offset-2 bg-blue-focus;
+    }
+  
+    &:active {
+      @apply text-white top-0.5;
+    }
+  
+    &:visited {
+      @apply text-white top-0.5;
+    }
+  }
+
+  a.tableLink {
+    color: #303f9f;
+    text-decoration: underline;
+  } 
+
+  a.tableLink:hover,
+  a.tableLink:focus {
+    color: #FFF !important;
+    text-decoration: underline;
+    background: #0d47a1;
+  }
+
+  a.tableLink:visited {
+    color: #9c27b0;
+    text-decoration: underline;
+  }
+
+}
+
+@tailwind utilities;

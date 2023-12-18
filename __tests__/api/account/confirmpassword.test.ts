@@ -94,7 +94,7 @@ describe("/account/confirmpassword", () => {
       expect(res.statusCode).toBe(400);
       expect(JSON.parse(res._getData())).toEqual({
         message:
-          "username, password and confirmation code needs to be provided in the body of the request",
+          "username, password and security code needs to be provided in the body of the request",
       });
     });
     it("handler returns empty body and cognito status code when command succeeds", async () => {

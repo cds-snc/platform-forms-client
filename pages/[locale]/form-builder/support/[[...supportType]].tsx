@@ -42,8 +42,6 @@ export default function Contactus() {
       .required(t("input-validation.required", { ns: "common" }))
       .email(t("input-validation.email", { ns: "common" })),
     department: Yup.string().required(t("input-validation.required", { ns: "common" })),
-    branch: Yup.string().required(t("input-validation.required", { ns: "common" })),
-    jobTitle: Yup.string().required(t("input-validation.required", { ns: "common" })),
     request: Yup.array()
       .min(1)
       .of(Yup.string().required(t("input-validation.required", { ns: "common" }))),
@@ -149,6 +147,70 @@ export default function Contactus() {
                     <Link href={`/form-builder/support`}>{t("contactus.supportFormLink")}</Link>.
                   </p>
                 </Alert.Warning>
+                <fieldset className="focus-group mt-14">
+                  <legend className="gc-label required">
+                    {t("contactus.request.title")}{" "}
+                    <span data-testid="required" aria-hidden>
+                      ({t("required")})
+                    </span>
+                  </legend>
+                  <MultipleChoiceGroup
+                    name="request"
+                    type="checkbox"
+                    choicesProps={[
+                      {
+                        id: "request-question",
+                        name: "question",
+                        label: t("contactus.request.option1"),
+                        required: true,
+                      },
+                      {
+                        id: "request-feedback",
+                        name: "feedback",
+                        label: t("contactus.request.option2"),
+                        required: true,
+                      },
+                      {
+                        id: "request-feature",
+                        name: "feature",
+                        label: t("contactus.request.option3"),
+                        required: true,
+                      },
+                      {
+                        id: "request-other",
+                        name: "other",
+                        label: t("contactus.request.option4"),
+                        required: true,
+                      },
+                    ]}
+                  ></MultipleChoiceGroup>
+                </fieldset>
+                <div className="focus-group">
+                  <Label
+                    id={"label-description"}
+                    htmlFor={"description"}
+                    className="required"
+                    required
+                  >
+                    {t("contactus.description.title")}
+                  </Label>
+                  <Description id={"description-description"}>
+                    {t("contactus.description.description")}
+                  </Description>
+                  <TextArea
+                    id={"description"}
+                    name={"description"}
+                    className="required mt-4 w-[34rem]"
+                    required
+                    characterCountMessages={{
+                      part1: t("formElements.characterCount.part1"),
+                      part2: t("formElements.characterCount.part2"),
+                      part1Error: t("formElements.characterCount.part1-error"),
+                      part2Error: t("formElements.characterCount.part2-error"),
+                    }}
+                  />
+                </div>
+                <p className="mt-14 text-[1.6rem]">{t("contactus.followUp")}</p>
                 <div className="focus-group mt-14">
                   <Label id={"label-name"} htmlFor={"name"} className="required" required>
                     {t("contactus.name")}
@@ -189,91 +251,22 @@ export default function Contactus() {
                   />
                 </div>
                 <div className="focus-group mt-14">
-                  <Label id={"label-branch"} htmlFor={"branch"} className="required" required>
+                  <Label id={"label-branch"} htmlFor={"branch"}>
                     {t("contactus.branch")}
                   </Label>
-                  <TextInput
-                    type={"text"}
-                    id={"branch"}
-                    name={"branch"}
-                    className="required w-[34rem]"
-                  />
+                  <TextInput type={"text"} id={"branch"} name={"branch"} className="w-[34rem]" />
                 </div>
                 <div className="focus-group mt-14">
-                  <Label id={"label-jobTitle"} htmlFor={"jobTitle"} className="required" required>
+                  <Label id={"label-jobTitle"} htmlFor={"jobTitle"}>
                     {t("contactus.jobTitle")}
                   </Label>
                   <TextInput
                     type={"text"}
                     id={"jobTitle"}
                     name={"jobTitle"}
-                    className="required w-[34rem]"
+                    className="w-[34rem]"
                   />
                 </div>
-                <fieldset className="focus-group">
-                  <legend className="gc-label required">
-                    {t("contactus.request.title")}{" "}
-                    <span data-testid="required" aria-hidden>
-                      ({t("required")})
-                    </span>
-                  </legend>
-                  <MultipleChoiceGroup
-                    name="request"
-                    type="checkbox"
-                    choicesProps={[
-                      {
-                        id: "request-question",
-                        name: "question",
-                        label: t("contactus.request.option1"),
-                        required: true,
-                      },
-                      {
-                        id: "request-feedback",
-                        name: "feedback",
-                        label: t("contactus.request.option2"),
-                        required: true,
-                      },
-                      {
-                        id: "request-demo",
-                        name: "demo",
-                        label: t("contactus.request.option3"),
-                        required: true,
-                      },
-                      {
-                        id: "request-other",
-                        name: "other",
-                        label: t("contactus.request.option4"),
-                        required: true,
-                      },
-                    ]}
-                  ></MultipleChoiceGroup>
-                </fieldset>
-                <div className="focus-group">
-                  <Label
-                    id={"label-description"}
-                    htmlFor={"description"}
-                    className="required"
-                    required
-                  >
-                    {t("contactus.description.title")}
-                  </Label>
-                  <Description id={"description-description"}>
-                    {t("contactus.description.description")}
-                  </Description>
-                  <TextArea
-                    id={"description"}
-                    name={"description"}
-                    className="required mt-4 w-[34rem]"
-                    required
-                    characterCountMessages={{
-                      part1: t("formElements.characterCount.part1"),
-                      part2: t("formElements.characterCount.part2"),
-                      part1Error: t("formElements.characterCount.part1-error"),
-                      part2Error: t("formElements.characterCount.part2-error"),
-                    }}
-                  />
-                </div>
-
                 <Button type="submit" className="gc-button--blue" disabled={isSubmitting}>
                   {t("submitButton", { ns: "common" })}
                 </Button>

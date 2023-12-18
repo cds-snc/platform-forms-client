@@ -6,11 +6,12 @@ import Markdown from "markdown-to-jsx";
 
 import { getRenderedForm } from "@lib/formBuilder";
 import { PublicFormRecord } from "@lib/types";
-import { Button, Form, RichText } from "@components/forms";
+import { Button, Form, RichText, ClosedPage } from "@components/forms";
 import { LocalizedElementProperties, LocalizedFormProperties } from "../types";
 import { useTemplateStore } from "../store";
 import { BackArrowIcon } from "../icons";
 import Brand from "@components/globals/Brand";
+import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
 
 export const Preview = () => {
   const { status } = useSession();
@@ -57,6 +58,29 @@ export const Preview = () => {
   const settingsLink = `/${i18n.language}/form-builder/settings/${id}`;
 
   const brand = formRecord?.form ? formRecord.form.brand : null;
+
+  const isPastClosingDate = useIsFormClosed();
+
+  if (isPastClosingDate) {
+    return (
+      <>
+        <div className="h-12"></div>
+        <div
+          className={`mb-8 border-3 border-dashed border-blue-focus bg-white p-4 ${
+            status !== "authenticated" && ""
+          }`}
+          {...getLocalizationAttribute()}
+        >
+          <div className="gc-formview">
+            <div className="mb-20 mt-0 border-b-4 border-blue-dark py-9">
+              <Brand brand={brand} lang={language} className="max-w-[360px]" />
+            </div>
+            <ClosedPage language={language} formRecord={formRecord} />
+          </div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>

@@ -1,17 +1,18 @@
 {
-  "name": "retrieve_responses",
+  "name": "retrieval_api",
   "version": "0.1.0",
   "description": "Retrieve form respones from the retrieval API",
   "main": "retrieveResponse.ts",
   "scripts": {
-    "retrieve": "ts-node retrieveResponse.ts"
+    "retrieve": "tsx retrieveResponse.ts"
   },
   "keywords": [],
   "author": "Bryan Robitaille",
   "dependencies": {
     "@types/node": "^18.7.14",
     "csv-writer": "^1.6.0",
-    "ts-node": "^10.9.1",
+    "tsx": "^3.14.0",
     "typescript": "^4.7.4"
-  }
+  },
+  "packageManager": "yarn@4.0.2"
 }

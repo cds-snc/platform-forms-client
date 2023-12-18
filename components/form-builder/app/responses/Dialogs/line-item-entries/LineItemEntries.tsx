@@ -52,8 +52,8 @@ export const LineItemEntries = ({
     const text = (e.target as HTMLInputElement).value.trim().replace(",", "").toLowerCase();
 
     // Reset any errors on an empty list
-    if (!text && (status === DialogStates.MAX_ERROR || status === DialogStates.FORMAT_ERROR)) {
-      setStatus(DialogStates.EDITTING);
+    if (!inputs && (status === DialogStates.MAX_ERROR || status === DialogStates.FORMAT_ERROR)) {
+      setStatus(DialogStates.EDITING);
     }
 
     // Backspace on an empty input sets the previous entry into "edit mode"
@@ -85,7 +85,7 @@ export const LineItemEntries = ({
       }
 
       // Reset
-      setStatus(DialogStates.EDITTING);
+      setStatus(DialogStates.EDITING);
       (e.target as HTMLInputElement).value = "";
     }
   };
@@ -109,10 +109,15 @@ export const LineItemEntries = ({
   return (
     <div
       ref={containerRef}
-      className="max-h-60 overflow-y-auto box-border border-black-default border-2 rounded-md"
+      className="box-border max-h-60 overflow-y-auto rounded-md border-2 border-black-default"
     >
       <ol data-testid="values">
-        <LineItems values={inputs} onRemove={onRemove} errorEntriesList={errorEntriesList} />
+        <LineItems
+          values={inputs}
+          onRemove={onRemove}
+          errorEntriesList={errorEntriesList}
+          validateInput={validateInput}
+        />
       </ol>
       <div className="grow p-4">
         <input
@@ -128,16 +133,23 @@ export const LineItemEntries = ({
           onBlur={onBlur}
           spellCheck="false"
           autoComplete="off"
+          onPaste={(e) => {
+            const pastedText = e.clipboardData.getData("Text");
+            const pastedTextArray = pastedText.split(/\r?\n/);
+            const cleanedText = pastedTextArray.flatMap((text) => {
+              const cleanedText = text.trim().replace(",", "").replaceAll("\t", "").toLowerCase();
+              if (validateInput && !validateInput(cleanedText)) {
+                setStatus(DialogStates.FORMAT_ERROR);
+              }
+              return cleanedText;
+            });
+            setInputs([...new Set([...inputs, ...cleanedText])]);
+            e.preventDefault();
+          }}
           aria-labelledby={inputLabelId}
         />
       </div>
-      <div
-        ref={liveRegionRef}
-        className="sr-only"
-        aria-live="polite"
-        aria-atomic="false"
-        // aria-relevant="text additions" -- Note: default
-      ></div>
+      <div ref={liveRegionRef} className="sr-only" aria-live="polite" aria-atomic="false"></div>
     </div>
   );
 };

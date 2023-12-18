@@ -114,9 +114,5 @@ export const useAllowPublish = () => {
     return hasData(fields);
   }, [data, hasData]);
 
-  const isSaveable = useCallback(() => {
-    return hasData(["title", "questions"]);
-  }, [hasData]);
-
-  return { data, hasData, isPublishable, isSaveable, userCanPublish };
+  return { data, hasData, isPublishable, userCanPublish };
 };

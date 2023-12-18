@@ -37,7 +37,7 @@
     "text": "",
     "number": "Entrer un numéro.",
     "email": "Entrer une adresse courriel valide.",
-    "date": "Utiliser le format de date mm/jj/aaaa.",
+    "date": "Entrer une date valide au format mm/jj/aaaa.",
     "phone": "Entrer un numéro de téléphone valide.",
     "regex": "Veuillez utiliser le bon format.",
     "file-size-too-large": "Sélectionner un fichier plus petit.",
@@ -113,7 +113,7 @@
   },
   "errorPanel": {
     "defaultTitle": "Quelque chose a mal tourné",
-    "defaultMessage": "Désolé, il y a un problème et nous vous avons perdu.",
+    "defaultMessage": "Désolé, il y a un problème et nous vous avons perdu. Veuillez réessayer plus tard.",
     "cta": {
       "yourForms": "Retourner aux formulaires",
       "home": "Retourner à l’accueil",
@@ -147,5 +147,5 @@
   },
   "mainNavAriaLabel": "Navigation principale",
   "yourAccount": "Votre compte",
-  "dateModified": "Date de modification"
+  "dateModified": "Date de modification "
 }

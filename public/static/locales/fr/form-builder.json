@@ -171,10 +171,10 @@
     "default": "(par défaut)",
     "heading": "Image de marque",
     "notFound": "Vous ne trouvez pas votre ministère ou votre organisme dans la liste?",
-    "preview": "Prévisualisation",
+    "preview": "Prévisualisation de l'image de marque",
     "select": "Sélectionnez l’image de marque de votre formulaire",
     "submitNew": "Proposer une nouvelle option d’image de marque (ouvre un nouvel onglet)",
-    "text1": "Formulaires GC affiche par défaut la signature du gouvernement du Canada dans l’en-tête de votre formulaire. Si nécessaire, vous pouvez modifier l’image de marque de ce formulaire."
+    "text1": "Formulaires GC affiche par défaut la signature du gouvernement du Canada dans l’en-tête de votre formulaire."
   },
   "cancel": "Annuler  ",
   "characterLimitDescription": "N'utilisez une limite de caractères que lorsqu'il existe une bonne raison de limiter le nombre de caractères que les utilisateur·rice·s peuvent entrer.",
@@ -208,21 +208,21 @@
     "branch": "Direction ou secteur",
     "jobTitle": "Titre de poste",
     "gcFormsTeamLink": "Coordonnées du Gouvernement du Canada",
-    "gcFormsTeamPart1": "Nous ne pouvons pas conseiller le public au sujet des formulaires que nous hébergeons. Pour toute autre demande, allez à la page",
+    "gcFormsTeamPart1": "Veuillez noter que l'équipe Formulaires GC fournit des services aux personnes qui travaillent au sein du gouvernement. Nous ne pouvons pas conseiller le public au sujet des formulaires que nous hébergeons. Pour toute autre demande, allez à la page",
     "gcFormsTeamPart2": "pour trouver le ministère ou l'organisme qui peut vous aider.",
     "ifYouExperience": "Pour obtenir du soutien technique, veuillez remplir le ",
-
+    "followUp": "Fournissez vos coordonnées pour que nous puissions vous contacter.",
     "needSupport": "Besoin d'aide pour l'utilisation de Formulaires GC?",
     "request": {
-      "option1": "Demander une démonstration du produit",
-      "option2": "S'inscrire à la liste de diffusion",
-      "option3": "Donner un avis",
+      "option1": "S'inscrire à la liste de diffusion",
+      "option2": "Donner un avis sur le produit",
+      "option3": "Suggérer une nouvelle fonctionnalité",
       "option4": "Autre",
-      "title": "Raison pour laquelle vous nous contactez"
+      "title": "Que souhaitez-vous faire?"
     },
     "supportFormLink": "formulaire de soutien",
     "title": "Nous contacter",
-    "useThisForm": "Utilisez ce formulaire pour en apprendre davantage sur Formulaires GC et sur la façon dont cet outil peut fonctionner au sein de votre ministère ou organisme gouvernemental.",
+    "useThisForm": "Utilisez ce formulaire pour vous inscrire à notre infolettre, nous faire part de vos commentaires ou suggérer une nouvelle fonctionnalité pour Formulaires GC.",
     "errors": {
       "submissionError": "Il y a eu une erreur. Veuillez réessayer plus tard."
     }
@@ -238,7 +238,7 @@
   },
   "description": "Description ",
   "descriptionDescription": "La description apparaît sous l'étiquette, et avant le champ. Elle est utilisée pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de mise en forme.",
-  "didYouFindThisToolHelpful": "Avez-vous trouvé cet outil pertinent? <a href=\"/fr/form-builder/support/contactus\" target=\"_blank\">Donner votre avis</a>",
+  "didYouFindThisToolHelpful": "Avez-vous trouvé Formulaires GC pertinent comme outil? <a href=\"/fr/form-builder/support/contactus\" target=\"_blank\">Donner votre avis</a>",
   "downloadCSV": "Exporter en fichier CSV",
   "downloadResponsesTable": {
     "card": {
@@ -297,13 +297,13 @@
   "formatH3": "Mettre en en-tête niveau 3",
   "formatItalic": "Mettre en italique",
   "formatNumberedList": "Mettre en liste numérotée",
-  "formConfirmationMessage": "Message de confirmation du formulaire",
+  "formConfirmationMessage": "Message de confirmation",
   "formDeleteResponses": {
-    "title": "Confirmer les réponses avant de supprimer le formulaire",
-    "message1": "Ce formulaire est publié et reçoit des réponses. Vous avez des réponses à télécharger et à confirmer.",
+    "title": "Approuvez la suppression des réponses avant de supprimer le formulaire",
+    "message1": "Ce formulaire est publié et reçoit des réponses. Vous avez des réponses à télécharger et à approuver pour suppression de Formulaires GC.",
     "message2": "Avant de supprimer ce formulaire :",
-    "message3": "1. Télécharger toutes les nouvelles réponses.",
-    "message4": "2. Confirmer la réception des réponses téléchargées.",
+    "message3": "1. Télécharger toutes les réponses.",
+    "message4": "2. Confirmer la réception des réponses téléchargées en approuvant leur suppression de Formulaires GC.",
     "cta": "Accéder aux réponses"
   },
   "formDelete": {
@@ -343,9 +343,9 @@
   },
   "formIntroduction": "Introduction du formulaire ",
   "formInvalidProperty": "Invalide : {{property}}",
-  "formMissingProperty": "Disparues : {{property}}",
+  "formMissingProperty": "Il manque : {{property}}",
   "formSettings": "Paramétres du formulaire",
-  "formSubmissionDisabledInPreview": "Testez votre formulaire et le fonctionnement de la collecte de réponses sous l’onglet Livraison des réponses.",
+  "formSubmissionDisabledInPreview": "La soumission de formulaire est désactivée dans la prévisualisation.",
   "formTitle": "Titre du formulaire",
   "french": "français",
   "gcForms": "Formulaires GC",
@@ -357,12 +357,12 @@
   "gcFormsTest": "Tester",
   "gcFormsTranslate": "Traductions",
   "ifYouAreExperiencingProblems": "Si vous rencontrez des problèmes avec votre formulaire publié, <a href=\"/fr/form-builder/support\" target=\"_blank\">veuillez contacter l’équipe de soutien.</a>.",
-  "incomplete": "Incomplète",
+  "incomplete": "Incomplet",
   "inputDescription": "Description",
   "insertLink": "Insérer un lien  ",
   "lastSaved": "Dernier enregistrement :",
   "linkUrl": "URL du lien",
-  "lockedBlock": "Bloc verouillé",
+  "lockedBlock": "Bloc verrouillé",
   "longAnswerText": "Réponse longue",
   "maxCharacterLength": "Longueur maximale des caractères :",
   "maximumCharacterLength": "Longueur maximale des caractères",
@@ -387,15 +387,15 @@
   "phoneNumber": "Numéro de téléphone",
   "placeHolderFormTitle": "Titre du formulaire",
   "previewingIn": "Prévisualiser en",
-  "previewDisabledForPublishedForm": "La prévisualisation est désactivée pour les formulaires publiés",
-  "privacyNoticeDescription": "<p className=\"mb-4\">Les avis de confidentialité fournissent aux personnes qui remplissent votre formulaire des informations sur la manière dont vous traitez leurs informations personnelles.</p><p className=\"mb-4\">C’est votre responsabilite de bien connaitre les exigences de votre ministère ou organisme en matière de renseignements personnels, y compris la rédaction d'avis de confidentialité conformes aux obligations énoncées à la section 4.2.10 de la <a href=\"https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309\" target=\"_blank\">Directive sur les pratiques en matière de protection de la vie privée</a>.</p><p>Si vous n'êtes pas sûr de la marche à suivre, nous vous recommandons de contacter votre <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-fra.asp\" target=\"_blank\">coordinateur de l'accès à l'information et de la protection de la vie privée</a>.</p>",
+  "previewDisabledForPublishedForm": "La prévisualisation et les tests sont désactivés pour les formulaires publiés",
+  "privacyNoticeDescription": "<p className=\"mb-4\">Aidez les personnes qui remplissent le formulaire à comprendre comment vous traitez leurs renseignements personnels, comme énoncé à la section 4.2.10 de la <a href=\"https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=18309\" target=\"_blank\">Directive sur les pratiques relatives à la protection de la vie privée</a>.</p><p><strong>Ce qu'il faut préciser dans un avis de confidentialité</strong></p><ul><li>Les renseignements personnels qui sont recueillis et les fins de la collecte.</li><li>Les autorisations légales ou de programmes dont vous disposez.</li><li>Les façons dont les reseignements seront utilisés, partagés, stockés et conservés.</li><li>Les droits d’accès ou de correction des renseignements personnels et les droits de déposer une plainte.</li></ul><p>C’est votre responsabilité de bien connaître les exigences de votre ministère ou organisme en matière de renseignements personnels. Si vous ne savez pas comment procéder, nous vous recommandons de contacter votre <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-fra.asp\" target=\"_blank\">coordinateur·rice de l'accès à l'information et de la protection de la vie privée</a>.</p>",
   "privacyStatement": "Déclaration de confidentialité ",
-  "provideFeedback": "Donner votre avis",
+  "provideFeedback": "Aidez-nous à nous améliorer",
   "publish": "Publier",
   "published": "Publié",
   "publishedBack": "Retourner aux formulaires",
-  "publishedErrors": "Erreurs du formulaire publiés",
-  "publishedTitle": "Votre formulaire est publié.",
+  "publishedErrors": "Obtenir du soutien",
+  "publishedTitle": "Votre formulaire est publié",
   "publishedViewLinks": "Visualisez et partagez votre formulaire publié à partir de ces liens : ",
   "whatYouNeedToKnow": "Ce qu’il faut savoir",
   "publishingDisablesEditing": "La publication désactive toute modification.",
@@ -430,7 +430,7 @@
     "forOtherEnquiriesLink": "Coordonnées du Gouvernement du Canada",
     "forOtherEnquiriesPart1": "Pour toute autre question, allez à ",
     "forOtherEnquiriesPart2": "pour trouver le ministère ou l'organisme qui peut vous aider",
-    "theGCFormsTeam": "Nous ne pouvons pas donner de conseils généraux au public sur les formulaires que nous hébergeons.",
+    "theGCFormsTeam": "Veuillez noter que l'équipe Formulaires GC fournit des services aux personnes qui travaillent au sein du gouvernement. Nous ne pouvons pas donner de conseils généraux au public sur les formulaires que nous hébergeons.",
     "title": "Merci pour votre soumission",
     "weWillRespond": "Nous vous répondrons dans les 2 prochains jours ouvrables."
   },
@@ -442,7 +442,7 @@
   "richTextIntroTitle": "Introduction du formulaire ",
   "richTextPrivacyTitle": "Déclaration de confidentialité",
   "save": "Enregistrer",
-  "saveAndRequest": "Enregistrer le formulaire et demander la capacité de publier",
+  "saveAndRequest": "Demander la capacité de publier",
   "saveDraft": "Enregistrer l’ébauche",
   "selectAutocomplete": "Sélectionnez un attribut d'autocomplétion",
   "selectAutocompleteHint": "Cette option est utile lorsque les personnes qui remplissent le formulaire fournissent des informations personnelles telles que leur adresse, courriel ou numéro de téléphone.",
@@ -470,12 +470,13 @@
     "vaultOption": "Télécharger les réponses de Formulaires GC",
     "vaultOptionHint": {
       "text1": " Les réponses soumises apparaîtront sur",
-      "text2": "la page Réponses"
+      "text2": "la page Réponses",
+      "text3": "Formulaires GC conserve les données temporairement. Les réponses doivent être récupérées dans un délai de 45 jours."
     },
     "emailOption": "Recevoir les réponses par courriel",
     "saveButton": "Enregistrer les modifications",
     "savedSuccessMessage": "Vos modifications ont été enregistrées.",
-    "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Veuillez réessayer.",
+    "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Réessayez plus tard ou contacter l’équipe de soutien.",
     "emailSubjectEn": {
       "title": "Ligne d'objet en anglais",
       "hint": "Lorsque les réponses au formulaire sont soumises en anglais."
@@ -490,13 +491,13 @@
       "description": "Il y a deux options pour obtenir les réponses des formulaires soumis. Le tableau ci-dessous vous aidera à choisir l’option qui répond le mieux à vos besoins.",
       "inbox": {
         "title": "Courriel à une boîte de réception",
-        "text1": "Pour les formulaires avec une classification jusqu’à Protégé A",
+        "text1": "Pour les formulaires avec une classification jusqu’à PROTÉGÉ A",
         "text2": "Les réponses sont envoyées directement dans une boîte de réception en temps réel",
         "text3": "Une seule adresse courriel peut recevoir les courriel de réponses. Il peut s'agir d'une boîte de réception partagée."
       },
       "vault": {
         "title": "Téléchargement des réponses",
-        "text1": "Pour les formulaires avec une classification jusqu’à Protégé B",
+        "text1": "Pour les formulaires avec une classification jusqu’à PROTÉGÉ B",
         "text2": "Téléchargement des réponses de Formulaires GC dans un délai de 30 jours"
       }
     }
@@ -584,16 +585,16 @@
   "support": {
     "contactUs": "formulaire de contact",
     "description": {
-      "description": "Fournissez plus de contexte autour du problème que vous rencontrez.",
+      "description": "Fournissez plus d'informations ou de contexte.",
       "title": "Dites-nous en plus"
     },
     "name": "Votre nom",
     "email": "Votre adresse courriel",
     "gcFormsTeamLink": "Coordonnées du Gouvernement du Canada",
-    "gcFormsTeamPart1": "Nous ne pouvons pas donner de conseils généraux au public sur les formulaires que nous hébergeons. Pour toute autre question, allez à la page ",
+    "gcFormsTeamPart1": "Veuillez noter que l'équipe Formulaires GC fournit des services aux personnes qui travaillent au sein du gouvernement. Nous ne pouvons pas donner de conseils généraux au public sur les formulaires que nous hébergeons. Pour toute autre question, allez à la page ",
     "gcFormsTeamPart2": "pour trouver le ministère ou l'organisme qui peut vous aider.",
-    "ifYouWouldLike": "Pour en savoir plus sur Formulaires GC, veuillez remplir le ",
-    "lookingForADemo": "À la recherche d'une démo de produit?",
+    "ifYouWouldLike": "Veuillez remplir le ",
+    "lookingForADemo": "Vous cherchez à en savoir plus sur Formulaires GC?",
     "request": {
       "option1": "Poser une question",
       "option2": "Obtenir du soutien technique",
@@ -621,38 +622,38 @@
   "translate": "Traductions",
   "translateDescription": "Traduisez le contenu de votre formulaire côte à côte pour offrir une expérience bilingue aux personnes qui remplissent votre formulaire. ",
   "translateTitle": "Entrer la traduction",
-  "unlockPublishing": "Soumettre",
+  "unlockPublishing": "Déverrouiller la publication",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
   "unnamedForm": "Formulaire sans titre",
   "formName": "Nom du formulaire",
   "responsesNavLabel": "Réponses",
   "nagware": {
-    "restrictedDownloadAfter35Days": "Le téléchargement sera limité si les réponses non confirmées ont plus de 35 jours de retard.",
+    "restrictedDownloadAfter35Days": "Le téléchargement sera limité si les réponses non traitées ont plus de 35 jours de retard.",
     "unsavedSubmissionsOver21DaysOld": {
-      "title": "Téléchargez et confirmez la réception des réponses",
+      "title": "Veuillez extraire les réponses",
       "body1": "Il y a",
       "body2": {
-        "moreThan20Responses": "nouvelles réponses ayant plus de 21 jours de retard. Téléchargez et confirmez la réception de 20 nouvelles réponses en retard à la fois.",
-        "lessThan20Responses": "nouvelles réponses ayant plus de 21 jours de retard. Téléchargez et confirmez la réception de toute nouvelle réponse."
+        "moreThan20Responses": "nouvelles réponses ayant plus de 21 jours de retard. Téléchargez et approuvez la suppression de 20 nouvelles réponses en retard à la fois.",
+        "lessThan20Responses": "nouvelles réponses ayant plus de 21 jours de retard. Téléchargez et approuvez la suppression de toute nouvelle réponse."
       }
     },
     "unconfirmedSubmissionsOver21DaysOld": {
-      "title": "Confirmez la réception des réponses",
+      "title": "Approuvez la suppression de réponses de Formulaires GC",
       "body1": "Il y a",
-      "body2": "réponses non confirmées ayant plus de 21 jours de retard. Confirmez la réception de toute réponse non confirmée en retard."
+      "body2": "réponses téléchargées ayant plus de 21 jours de retard. Confirmez la réception de toute réponse en retard en approuvant leur suppression de Formulaires GC."
     },
     "unsavedSubmissionsOver35DaysOld": {
-      "title": "Le téléchargement est limité jusqu'à ce que la réception des réponses soit confirmée",
+      "title": "Le téléchargement est limité jusqu'à ce que les réponses soient extraites",
       "body1": "Il y a",
       "body2": {
-        "moreThan20Responses": "nouvelles réponses ayant plus de 35 jours de retard. Téléchargez et confirmez 20 réponses en retard à la fois avant de continuer.",
-        "lessThan20Responses": "nouvelles réponses ayant plus de 35 jours de retard. Téléchargez et confirmez toute réponse en retard avant de continuer."
+        "moreThan20Responses": "nouvelles réponses ayant plus de 35 jours de retard. Téléchargez et approuvez la suppression de 20 réponses en retard à la fois avant de continuer.",
+        "lessThan20Responses": "nouvelles réponses ayant plus de 35 jours de retard. Téléchargez et approuvez la suppression de toute réponse en retard avant de continuer."
       }
     },
     "unconfirmedSubmissionsOver35DaysOld": {
-      "title": "Le téléchargement est limité aux réponses en retard jusqu'à ce qu'elles soient téléchargées et confirmées",
+      "title": "Le téléchargement est limité aux réponses en retard jusqu'à ce qu'elles soient téléchargées et approuvées pour suppression",
       "body1": "Il y a",
-      "body2": "réponses non confirmées avec 35 jours de retard ou plus. Confirmez la réception de toute réponse téléchargée en retard avant d'en enregistrer de nouvelles."
+      "body2": "réponses téléchargées avec 35 jours de retard ou plus. Approuvez la suppression de toute réponse téléchargée en retard avant d'en enregistrer de nouvelles."
     },
     "loading": "Chargement..."
   },
@@ -682,5 +683,21 @@
   },
   "brandingSelect": {
     "label": "Sélectionnez l'image de marque de votre formulaire"
+  },
+  "closingDate": {
+    "title": "Accepter les soumissions de formulaires",
+    "description": "Une fois que vous avez publié un formulaire, il est ouvert aux soumissions. Vous pouvez fermer le formulaire pour empêcher les soumissions.",
+    "status": "État du formulaire",
+    "open": "Ouvert",
+    "closed": "Fermé",
+    "saveButton": "Enregistrer les modifications",
+    "savedSuccessMessage": "Vos modifications ont été enregistrées.",
+    "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Réessayez plus tard ou contacter l’équipe de soutien."
+  },
+  "errorSavingForm": {
+    "title": "Une erreur s'est produite lors de l'enregistrement du formulaire",
+    "description": "Veuillez télécharger une copie du formulaire et réessayer ou",
+    "supportLink": "contacter l'équipe de soutien",
+    "errorCode": "Code d'erreur : {{code}}"
   }
 }

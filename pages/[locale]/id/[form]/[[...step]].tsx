@@ -5,12 +5,13 @@ import React, { ReactElement } from "react";
 import classnames from "classnames";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
-import { Form, TextPage } from "@components/forms";
+import { Form, TextPage, ClosedPage } from "@components/forms";
 import { getRenderedForm } from "@lib/formBuilder";
 import { useRouter } from "next/router";
 import { PublicFormRecord } from "@lib/types";
 import { GetServerSideProps } from "next";
-import { NextPageWithLayout } from "pages/_app";
+import { NextPageWithLayout } from "@pages/_app";
+import { dateHasPast } from "@lib/utils";
 import { languageParamSanitization } from "@app/i18n/utils";
 import { getLocalizedProperty } from "@lib/utils";
 
@@ -28,12 +29,22 @@ const RenderForm: NextPageWithLayout<RenderFormProps> = ({
   formRecord,
 }: RenderFormProps): React.ReactElement => {
   const { t, i18n } = useTranslation();
-  const language = i18n.language as string;
+  const language = i18n.language as "en" | "fr";
   const classes = classnames("gc-form-wrapper");
   const currentForm = getRenderedForm(formRecord, language, t);
   const formTitle = formRecord.form[getLocalizedProperty("title", language)] as string;
   const router = useRouter();
   const { step } = router.query;
+
+  let isPastClosingDate = false;
+
+  if (formRecord.closingDate) {
+    isPastClosingDate = dateHasPast(Date.parse(formRecord.closingDate));
+  }
+
+  if (isPastClosingDate) {
+    return <ClosedPage language={language} formRecord={formRecord} />;
+  }
 
   // render text pages
   if (step == "confirmation") {
@@ -105,11 +116,21 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (!publicForm || (!publicForm?.isPublished && !unpublishedForms)) {
     return redirect(locale);
   }
+
+  // undefined will throw a serialization error in which case delete the key as it's uneeded
+  if (typeof publicForm.closingDate === "undefined") {
+    delete publicForm.closingDate;
+  }
+
   return {
     props: {
       formRecord: publicForm,
       isEmbeddable: isEmbeddable,
-      ...(locale && (await serverSideTranslations(locale, ["common", "welcome", "confirmation"]))),
+      ...(locale && (await serverSideTranslations(locale, [
+          "common",
+          "welcome",
+          "confirmation",
+          "form-closed"]))),
     }, // will be passed to the page component as props
   };
 };

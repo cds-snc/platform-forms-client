@@ -7,16 +7,14 @@ import { authOptions } from "@app/api/auth/authConfig";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { NextPageWithLayout } from "@pages/_app";
 import { GetServerSideProps } from "next";
-import { FormRecord, VaultSubmissionList } from "@lib/types";
+import { FormRecord, VaultStatus, VaultSubmissionList } from "@lib/types";
 import { listAllSubmissions } from "@lib/vault";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { Card } from "@components/globals/card/Card";
+import { Card, HeadingLevel } from "@components/globals/card/Card";
 import { DownloadTable } from "@components/form-builder/app/responses/DownloadTable";
-import { ConfirmDialog } from "@components/form-builder/app/responses/Dialogs/ConfirmDialog";
 import { ReportDialog } from "@components/form-builder/app/responses/Dialogs/ReportDialog";
 import { NagwareResult } from "@lib/types";
-import { detectOldUnprocessedSubmissions } from "@lib/nagware";
 import { Nagware } from "@components/form-builder/app/Nagware";
 import { EmailResponseSettings } from "@components/form-builder/app/shared";
 import { useTemplateStore } from "@components/form-builder/store";
@@ -25,28 +23,46 @@ import Head from "next/head";
 import { FormBuilderLayout } from "@components/globals/layouts/FormBuilderLayout";
 import { languageParamSanitization } from "@app/i18n/utils";
 import { ErrorPanel } from "@components/globals";
+import { Button } from "@components/globals";
+import { ClosedBanner } from "@components/form-builder/app/shared/ClosedBanner";
+import { getAppSetting } from "@lib/appSettings";
+import { DeleteIcon, FolderIcon, InboxIcon, WarningIcon } from "@components/form-builder/icons";
+import { useRouter } from "next/router";
+import Image from "next/image";
+import { ConfirmDialog } from "@components/form-builder/app/responses/Dialogs/ConfirmDialog";
+import { Alert } from "@components/globals";
+import { isStatus, ucfirst } from "@lib/clientHelpers";
+import { TabNavLink } from "@components/form-builder/app/navigation/TabNavLink";
 
 interface ResponsesProps {
+  initialForm: FormRecord | null;
   vaultSubmissions: VaultSubmissionList[];
-  formId?: string;
+  formId: string;
   nagwareResult: NagwareResult | null;
+  responseDownloadLimit: number;
+  responsesRemaining: boolean;
 }
 
 // TODO: move to an app setting variable
-const MAX_CONFIRMATION_COUNT = 20;
 const MAX_REPORT_COUNT = 20;
 
 const Responses: NextPageWithLayout<ResponsesProps> = ({
+  initialForm,
   vaultSubmissions,
   formId,
   nagwareResult,
+  responseDownloadLimit,
+  responsesRemaining,
 }: ResponsesProps) => {
-  const { t } = useTranslation("form-builder-responses");
+  const { t, i18n } = useTranslation("form-builder-responses");
   const { status } = useSession();
   const isAuthenticated = status === "authenticated";
-  const [isShowConfirmReceiptDialog, setIsShowConfirmReceiptDialog] = useState(false);
   const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
-  const [isServerError, setIsServerError] = useState(false);
+  const [showConfirmReceiptDialog, setShowConfirmReceiptDialog] = useState(false);
+  const [successAlertMessage, setShowSuccessAlert] = useState<false | string>(false);
+
+  const router = useRouter();
+  const [, statusQuery = "new"] = router.query.params || [];
 
   const { getDeliveryOption, isPublished } = useTemplateStore((s) => ({
     getDeliveryOption: s.getDeliveryOption,
@@ -55,8 +71,14 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
 
   const deliveryOption = getDeliveryOption();
 
-  const navItemClasses =
-    "no-underline !shadow-none border-black border-1 rounded-[100px] pt-1 pb-2 laptop:py-2 px-5 mr-3 mb-0 text-black visited:text-black focus:bg-[#475569] hover:bg-[#475569] hover:!text-white focus:!text-white [&_svg]:focus:fill-white";
+  let formName = "";
+  if (initialForm) {
+    formName = initialForm.name
+      ? initialForm.name
+      : i18n.language === "fr"
+      ? initialForm.form.titleFr
+      : initialForm.form.titleEn;
+  }
 
   if (!isAuthenticated) {
     return (
@@ -77,18 +99,24 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         <Head>
           <title>{t("responses.email.title")}</title>
         </Head>
-        <div className="flex flex-wrap items-baseline mb-8">
-          <h1 className="border-none mb-0 tablet:mb-4 tablet:mr-8">
+        <div className="mb-8 flex flex-wrap items-baseline">
+          <h1 className="mb-0 border-none tablet:mb-4">
             {isAuthenticated ? t("responses.email.title") : t("responses.unauthenticated.title")}
           </h1>
           <nav className="flex gap-3">
             {!isPublished && (
-              <Link href="/form-builder/settings" className={`${navItemClasses}`}>
-                {t("responses.changeSetup")}
+              <Link href="/form-builder/settings" legacyBehavior>
+                <a
+                  href="/form-builder/settings"
+                  className="mb-0 mr-3 rounded-[100px] border-1 border-black px-5 pb-2 pt-1 text-black no-underline !shadow-none visited:text-black hover:bg-[#475569] hover:!text-white focus:bg-[#475569] focus:!text-white laptop:py-2 [&_svg]:focus:fill-white"
+                >
+                  {t("responses.changeSetup")}
+                </a>
               </Link>
             )}
           </nav>
         </div>
+        <ClosedBanner id={formId} />
         <EmailResponseSettings
           emailAddress={deliveryOption.emailAddress}
           subjectEn={deliveryOption.emailSubjectEn || ""}
@@ -98,83 +126,204 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
     );
   }
 
-  if (isServerError) {
-    return (
-      <>
-        <Head>
-          <title>{t("responses.title")}</title>
-        </Head>
-        <div className="flex flex-wrap items-baseline mb-8">
-          <h1 className="border-none mb-0 tablet:mb-4 tablet:mr-8">{t("responses.title")}</h1>
-          <ErrorPanel supportLink={false}>{t("server-error", { ns: "common" })}</ErrorPanel>
-        </div>
-      </>
-    );
-  }
-
   return (
     <>
       <Head>
         <title>{t("responses.title")}</title>
       </Head>
-      <div className="flex flex-wrap items-baseline mb-8">
-        <h1 className="border-none mb-0 tablet:mb-4 tablet:mr-8">
-          {isAuthenticated ? t("responses.title") : t("responses.unauthenticated.title")}
+
+      {!isAuthenticated && (
+        <h1 className="mb-0 border-none tablet:mb-4 tablet:mr-8">
+          {t("responses.unauthenticated.title")}
         </h1>
+      )}
 
-        <nav className="flex flex-wrap gap-3">
-          {isAuthenticated && (
-            <button
-              onClick={() => setIsShowConfirmReceiptDialog(true)}
-              className={navItemClasses}
-              disabled={status !== "authenticated"}
-            >
-              {t("responses.confirmReceipt")}
-            </button>
-          )}
+      <nav
+        className="relative mb-10 flex border-b border-black"
+        aria-label={t("responses.navLabel")}
+      >
+        <TabNavLink
+          id="new-responses"
+          defaultActive={statusQuery === "new"}
+          href={`/form-builder/responses/${formId}/new`}
+          setAriaCurrent={true}
+          onClick={() => setShowSuccessAlert(false)}
+        >
+          <span className="text-sm laptop:text-base">
+            <InboxIcon className="inline-block h-7 w-7" /> {t("responses.status.new")}
+          </span>
+        </TabNavLink>
+        <TabNavLink
+          id="downloaded-responses"
+          href={`/form-builder/responses/${formId}/downloaded`}
+          setAriaCurrent={true}
+          onClick={() => setShowSuccessAlert(false)}
+        >
+          <span className="text-sm laptop:text-base">
+            <FolderIcon className="inline-block h-7 w-7" /> {t("responses.status.downloaded")}
+          </span>
+        </TabNavLink>
+        <TabNavLink
+          id="deleted-responses"
+          href={`/form-builder/responses/${formId}/confirmed`}
+          setAriaCurrent={true}
+          onClick={() => setShowSuccessAlert(false)}
+        >
+          <span className="text-sm laptop:text-base">
+            <DeleteIcon className="inline-block h-7 w-7" /> {t("responses.status.deleted")}
+          </span>
+        </TabNavLink>
+      </nav>
 
-          {isAuthenticated && (
-            <button
-              onClick={() => setIsShowReportProblemsDialog(true)}
-              className={navItemClasses}
-              disabled={status !== "authenticated"}
-            >
-              {t("responses.reportProblems")}
-            </button>
+      {isAuthenticated && vaultSubmissions.length > 0 && (
+        <>
+          {isStatus(statusQuery, VaultStatus.NEW) && (
+            <>
+              <h1>{t("tabs.newResponses.title")}</h1>
+              <div className="mb-4">
+                <p className="mb-4">
+                  <strong>{t("tabs.newResponses.message1")}</strong>
+                  <br />
+                  {t("tabs.newResponses.message2")}
+                </p>
+              </div>
+            </>
           )}
+          {isStatus(statusQuery, VaultStatus.DOWNLOADED) && (
+            <>
+              <h1>{t("tabs.downloadedResponses.title")}</h1>
+              <div className="mb-4">
+                <p className="mb-4">
+                  <strong>{t("tabs.downloadedResponses.message1")}</strong>
+                  <br />
+                  {t("tabs.downloadedResponses.message2")}
+                </p>
+                <Button onClick={() => setShowConfirmReceiptDialog(true)} theme="secondary">
+                  {t("responses.confirmReceipt")}
+                </Button>
+              </div>
+            </>
+          )}
+          {isStatus(statusQuery, VaultStatus.CONFIRMED) && (
+            <>
+              <h1>{t("tabs.confirmedResponses.title")}</h1>
+              <div className="mb-4">
+                <p className="mb-4">
+                  <strong>{t("tabs.confirmedResponses.message1")}</strong>
+                  <br />
+                  {t("tabs.confirmedResponses.message2")}
+                </p>
+              </div>
+            </>
+          )}
+          {isStatus(statusQuery, VaultStatus.PROBLEM) && (
+            <>
+              <h1>{t("tabs.problemResponses.title")}</h1>
+              <div className="mb-4">
+                <p className="mb-4">
+                  <strong>{t("tabs.problemResponses.message1")}</strong>
+                  <br />
+                  {t("tabs.problemResponses.message2")}
+                </p>
+                <Button onClick={() => setShowConfirmReceiptDialog(true)} theme="secondary">
+                  {t("responses.confirmReceipt")}
+                </Button>
+              </div>
+            </>
+          )}
+        </>
+      )}
 
-          {!isPublished && (
-            <Link href="/form-builder/settings" className={`${navItemClasses}`}>
-              {t("responses.changeSetup")}
-            </Link>
-          )}
-        </nav>
-      </div>
+      {successAlertMessage && (
+        <Alert.Success className="mb-4">
+          <Alert.Title>{t(`${successAlertMessage}.title`)}</Alert.Title>
+          <Alert.Body>{t(`${successAlertMessage}.body`)}</Alert.Body>
+        </Alert.Success>
+      )}
 
       {nagwareResult && <Nagware nagwareResult={nagwareResult} />}
 
       {isAuthenticated && (
         <>
-          <div>
+          <div aria-live="polite">
+            <ClosedBanner id={formId} />
             {vaultSubmissions.length > 0 && (
               <DownloadTable
                 vaultSubmissions={vaultSubmissions}
+                formName={formName}
                 formId={formId}
                 nagwareResult={nagwareResult}
+                responseDownloadLimit={responseDownloadLimit}
+                responsesRemaining={responsesRemaining}
+                showDownloadSuccess={successAlertMessage}
+                setShowDownloadSuccess={setShowSuccessAlert}
               />
             )}
 
-            {vaultSubmissions.length <= 0 && (
-              <Card
-                icon={
-                  <picture>
-                    <img src="/img/mailbox.png" width="193" height="200" alt="" />
-                  </picture>
-                }
-                title={t("downloadResponsesTable.card.noResponses")}
-                content={t("downloadResponsesTable.card.noResponsesToDownload")}
-              />
+            {vaultSubmissions.length <= 0 && statusQuery === "new" && (
+              <>
+                <Card
+                  icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+                  title={t("downloadResponsesTable.card.noNewResponses")}
+                  content={t("downloadResponsesTable.card.noNewResponsesMessage")}
+                  headingTag={HeadingLevel.H1}
+                  headingStyle="gc-h2 text-[#748094]"
+                />
+              </>
             )}
+
+            {vaultSubmissions.length <= 0 && statusQuery === "downloaded" && (
+              <>
+                <Card
+                  icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+                  title={t("downloadResponsesTable.card.noDownloadedResponses")}
+                  content={t("downloadResponsesTable.card.noDownloadedResponsesMessage")}
+                  headingTag={HeadingLevel.H1}
+                  headingStyle="gc-h2 text-[#748094]"
+                />
+              </>
+            )}
+
+            {vaultSubmissions.length <= 0 && statusQuery === "confirmed" && (
+              <>
+                <Card
+                  icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+                  title={t("downloadResponsesTable.card.noDeletedResponses")}
+                  content={t("downloadResponsesTable.card.noDeletedResponsesMessage")}
+                  headingTag={HeadingLevel.H1}
+                  headingStyle="gc-h2 text-[#748094]"
+                />
+              </>
+            )}
+
+            {vaultSubmissions.length <= 0 && statusQuery === "problem" && (
+              <>
+                <h1 className="visually-hidden">{t("tabs.problemResponses.title")}</h1>
+                <Card
+                  icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+                  title={t("downloadResponsesTable.card.noProblemResponses")}
+                  content={t("downloadResponsesTable.card.noProblemResponsesMessage")}
+                />
+              </>
+            )}
+          </div>
+          <div className="mt-8">
+            <Link
+              onClick={() => setIsShowReportProblemsDialog(true)}
+              href={"#"}
+              className="text-black visited:text-black focus:text-white-default"
+              id="reportProblemButton"
+            >
+              <WarningIcon className="mr-2 inline-block" />
+              {t("responses.reportProblems")}
+            </Link>
+
+            <Link
+              href={`/form-builder/responses/${formId}/problem`}
+              className="ml-12 text-black visited:text-black focus:text-white-default"
+            >
+              {t("responses.viewAllProblemResponses")}
+            </Link>
           </div>
         </>
       )}
@@ -193,19 +342,22 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         </>
       )}
 
-      <ConfirmDialog
-        isShow={isShowConfirmReceiptDialog}
-        setIsShow={setIsShowConfirmReceiptDialog}
-        apiUrl={`/api/id/${formId}/submission/confirm`}
-        maxEntries={MAX_CONFIRMATION_COUNT}
-      />
-
       <ReportDialog
         isShow={isShowReportProblemsDialog}
         setIsShow={setIsShowReportProblemsDialog}
-        setIsServerError={setIsServerError}
         apiUrl={`/api/id/${formId}/submission/report`}
         maxEntries={MAX_REPORT_COUNT}
+      />
+
+      <ConfirmDialog
+        isShow={showConfirmReceiptDialog}
+        setIsShow={setShowConfirmReceiptDialog}
+        apiUrl={`/api/id/${formId}/submission/confirm`}
+        maxEntries={responseDownloadLimit}
+        onSuccessfulConfirm={() => {
+          router.replace(router.asPath, undefined, { scroll: false });
+          setShowSuccessAlert("confirmSuccess");
+        }}
       />
     </>
   );
@@ -215,53 +367,60 @@ Responses.getLayout = (page: ReactElement) => {
   return <FormBuilderLayout page={page} />;
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ query, req, res }) => {
-  const { formID = null, localeParam = "en" } = query;
-  const locale = languageParamSanitization(localeParam);
+export const getServerSideProps: GetServerSideProps = async ({
+  query: { params },
+  locale,
+  req,
+  res,
+}) => {
+  try {
 
-  if (Array.isArray(formID)) {
-    // Redirect to 404 if bad parameters
-    return {
-      redirect: {
-        // We can redirect to a 'Form does not exist page' in the future
-        destination: `/${locale}/404`,
-        permanent: false,
-      },
+  
+
+    const [formID = null, statusQuery = "new", localeParam = "en"] = params || [];
+    const locale = languageParamSanitization(localeParam);
+
+    if (Array.isArray(formID)) {
+      // Redirect to 404 if bad parameters
+      return {
+        redirect: {
+          // We can redirect to a 'Form does not exist page' in the future
+          destination: `/${locale}/404`,
+          permanent: false,
+        },
+      };
+    }
+
+    const FormbuilderParams: { locale: string; initialForm: null | FormRecord } = {
+      initialForm: null,
+      locale: locale || "en",
     };
-  }
 
-  const FormbuilderParams: { locale: string; initialForm: null | FormRecord } = {
-    initialForm: null,
-    locale: locale || "en",
-  };
+    let nagwareResult: NagwareResult | null = null;
 
-  const vaultSubmissions: VaultSubmissionList[] = [];
-  let nagwareResult: NagwareResult | null = null;
+    const session = await getServerSession(req, res, authOptions);
 
-  const session = await getServerSession(req, res, authOptions);
+    if (session && !session.user.acceptableUse) {
+      // If they haven't agreed to Acceptable Use redirect to policy page for acceptance
+      return {
+        redirect: {
+          destination: `/${locale}/auth/policy`,
+          permanent: false,
+        },
+      };
+    }
 
-  if (session && !session.user.acceptableUse) {
-    // If they haven't agreed to Acceptable Use redirect to policy page for acceptance
-    return {
-      redirect: {
-        destination: `/${locale}/auth/policy`,
-        permanent: false,
-      },
-    };
-  }
+    if (session && !session.user.hasSecurityQuestions) {
+      // If they haven't setup security questions Use redirect to policy page for acceptance
+      return {
+        redirect: {
+          destination: `/${locale}/auth/setup-security-questions`,
+          permanent: false,
+        },
+      };
+    }
 
-  if (session && !session.user.hasSecurityQuestions) {
-    // If they haven't setup security questions Use redirect to policy page for acceptance
-    return {
-      redirect: {
-        destination: `/${locale}/auth/setup-security-questions`,
-        permanent: false,
-      },
-    };
-  }
-
-  if (formID && session) {
-    try {
+    if (formID && session) {
       const ability = createAbility(session);
 
       const initialForm = await getFullTemplateByID(ability, formID);
@@ -276,41 +435,74 @@ export const getServerSideProps: GetServerSideProps = async ({ query, req, res }
         };
       }
 
-      const allSubmissions = await listAllSubmissions(ability, formID);
+      // get status from url params (default = new) and capitalize/cast to VaultStatus
+      // Protect against invalid status query
+
+      const status = Object.values(VaultStatus).includes(ucfirst(statusQuery) as VaultStatus)
+        ? (ucfirst(statusQuery) as VaultStatus)
+        : VaultStatus.NEW;
+
+      const { submissions, submissionsRemaining } = await listAllSubmissions(
+        ability,
+        formID,
+        status
+      );
 
       FormbuilderParams.initialForm = initialForm;
-      vaultSubmissions.push(...allSubmissions.submissions);
 
+      // TODO: re-enable nagware when we have a better solution for how to handle filtered statuses
+      nagwareResult = null;
+      /*
       nagwareResult = allSubmissions.submissions.length
         ? await detectOldUnprocessedSubmissions(allSubmissions.submissions)
         : null;
-    } catch (e) {
-      if (e instanceof AccessControlError) {
-        return {
-          redirect: {
-            destination: `/${locale}/admin/unauthorized`,
-            permanent: false,
-          },
-        };
-      }
-    }
-  }
+        */
+      const responseDownloadLimit = Number(await getAppSetting("responseDownloadLimit"));
 
-  return {
-    props: {
-      ...FormbuilderParams,
-      vaultSubmissions,
-      formId: FormbuilderParams.initialForm?.id ?? null,
-      nagwareResult,
-      ...(locale &&
-        (await serverSideTranslations(
-          locale,
-          ["common", "form-builder-responses", "form-builder"],
-          null,
-          ["fr", "en"]
-        ))),
-    },
-  };
+      return {
+        props: {
+          ...FormbuilderParams,
+          vaultSubmissions: submissions,
+          formId: FormbuilderParams.initialForm?.id ?? null,
+          responseDownloadLimit: responseDownloadLimit,
+          responsesRemaining: submissionsRemaining,
+          nagwareResult,
+          ...(locale &&
+            (await serverSideTranslations(
+              locale,
+              ["common", "form-builder-responses", "form-builder", "form-closed"],
+              null,
+              ["fr", "en"]
+            ))),
+        },
+      };
+    } else {
+      return {
+        props: {
+          ...FormbuilderParams,
+          vaultSubmissions: [],
+          formId: null,
+          ...(locale &&
+            (await serverSideTranslations(
+              locale,
+              ["common", "form-builder-responses", "form-builder", "form-closed"],
+              null,
+              ["fr", "en"]
+            ))),
+        },
+      };
+    }
+  } catch (e) {
+    if (e instanceof AccessControlError) {
+      return {
+        redirect: {
+          destination: `/${locale}/admin/unauthorized`,
+          permanent: false,
+        },
+      };
+    }
+    throw e;
+  }
 };
 
 export default Responses;

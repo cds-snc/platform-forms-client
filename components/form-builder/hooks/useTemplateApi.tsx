@@ -27,7 +27,19 @@ export const useTemplateApi = () => {
       formData = JSON.parse(jsonConfig);
     } catch (e) {
       if (e instanceof SyntaxError) {
-        return { error: new Error("failed to parse form data") };
+        const error = new Error("Failed to parse form data");
+        const axiosError = {
+          ...error,
+          isAxiosError: true,
+          response: {
+            status: 400,
+            data: {
+              message: error.message,
+            },
+          },
+        };
+
+        return { error: axiosError as AxiosError };
       }
     }
 

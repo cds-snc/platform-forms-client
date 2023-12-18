@@ -59,7 +59,8 @@ describe("Test FormBuilder autocomplete props", () => {
 
       cy.get('[data-testid="more"]').click();
       cy.get('[data-testid="autocomplete"]').select(option[0]);
-      cy.get("button").contains("Save").click();
+
+      cy.get('[data-testid="more-modal-save-button"]').contains("Save").click();
       cy.get('[data-testid="autocomplete-1"]').should("contain", option[1]);
 
       cy.visitPage("/form-builder/preview");

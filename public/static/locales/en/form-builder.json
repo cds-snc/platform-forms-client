@@ -171,10 +171,10 @@
     "default": "(default)",
     "heading": "Branding",
     "notFound": "Didn’t find your department or agency on the list?",
-    "preview": "Preview of logo",
-    "select": "Select a different logo for the top of your form",
+    "preview": "Preview of branding",
+    "select": "Select a different branding option for the top of your form",
     "submitNew": "Submit a new branding option (opens in new tab)",
-    "text1": "GC Forms displays the Government of Canada signature as the default logo at the top of your form."
+    "text1": "GC Forms displays the Government of Canada signature at the top of your form by default."
   },
   "cancel": "Cancel",
   "characterLimitDescription": "Only use a character limit when there is a good reason for limiting the number of characters users can enter.",
@@ -210,19 +210,20 @@
     "gcFormsTeamLink": "Government of Canada contacts",
     "gcFormsTeamPart1": "The GC Forms team provides services to people who work in the government. We cannot give general advice to the public about the forms that we host. For other enquiries, go to the",
     "gcFormsTeamPart2": "page to find the department or agency that can help.",
-    "ifYouExperience": "To get technical support, use the",
+    "ifYouExperience": "To get technical support, use the ",
+    "followUp": "Provide your contact information so we can follow up with you.",
 
     "needSupport": "Need help using GC Forms?",
     "request": {
-      "option1": "Request a product demo",
-      "option2": "Join the mailing list",
-      "option3": "Give feedback",
+      "option1": "Join the mailing list",
+      "option2": "Give feedback on the product",
+      "option3": "Suggest a new feature",
       "option4": "Other",
-      "title": "Reason for reaching out"
+      "title": "What would you like to do?"
     },
     "supportFormLink": "support form",
     "title": "Contact us",
-    "useThisForm": "Use this form to learn more about GC Forms and how it can work in your government department or agency.",
+    "useThisForm": "Use this form to sign up for our newsletter, provide feedback, or suggest a new feature for GC Forms.",
     "errors": {
       "submissionError": "Something went wrong. Please try again later."
     }
@@ -238,7 +239,7 @@
   },
   "description": "Description",
   "descriptionDescription": "The description appears below the label and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements.",
-  "didYouFindThisToolHelpful": "Did you find this tool helpful? <a href=\"/en/form-builder/support/contactus\" target=\"_blank\">Provide feedback</a>",
+  "didYouFindThisToolHelpful": "Did you find GC Forms helpful? <a href=\"/en/form-builder/support/contactus\" target=\"_blank\">Provide feedback</a>",
   "downloadCSV": "Export as a spreadsheet",
   "downloadResponsesTable": {
     "card": {
@@ -297,13 +298,13 @@
   "formatH3": "Format Heading 3",
   "formatItalic": "Format italic",
   "formatNumberedList": "Format numbered list",
-  "formConfirmationMessage": "Form confirmation message",
+  "formConfirmationMessage": "Confirmation message",
   "formDeleteResponses": {
-    "title": "Confirm responses before deleting form",
-    "message1": "This form has been published and is receiving responses. You have responses to download and confirm.",
+    "title": "Sign off on the removal of responses before deleting form",
+    "message1": "This form has been published and is receiving responses. You have responses to download and sign off for removal from GC Forms.",
     "message2": "Before deleting this form:",
-    "message3": "1. Download all new responses.",
-    "message4": "2. Confirm the receipt of downloaded responses",
+    "message3": "1. Download all responses.",
+    "message4": "2. Confirm the receipt of downloaded responses by signing off on their removal from GC Forms.",
     "cta": "Go to responses"
   },
   "formDelete": {
@@ -387,15 +388,15 @@
   "phoneNumber": "Phone number",
   "placeHolderFormTitle": "Form title",
   "previewingIn": "Previewing in",
-  "previewDisabledForPublishedForm": "Preview is disabled for published forms",
-  "privacyNoticeDescription": "<p className=\"mb-4\">Privacy notices provide people completing your form with information about how you are handling their personal information.</p><p className=\"mb-4\">You are responsible for understanding your department or agency's responsibilities related to personal information including drafting privacy notices that follow the requirements in Section 4.2.10 of the <a href=\"https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309\" target=\"_blank\">Directive on Privacy Practices</a>.</p><p>If you are unsure about how to proceed, we recommend contacting your <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-eng.asp\" target=\"_blank\">access to information and privacy coordinator.</a></p>",
+  "previewDisabledForPublishedForm": "Preview and testing is disabled for published forms.",
+  "privacyNoticeDescription": "<p className=\"mb-4\">Help people filling out the form understand how you’re handling their personal information, as outlined in Section 4.2.10 of the <a href=\"https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309\" target=\"_blank\">Directive on privacy practices</a>.</p><p><strong>What to include in a privacy notice</strong></p><ul><li>What personal information is being collected and why.</li><li>What legal or program authorities you have to collect information.</li><li>How their information will be used, shared, stored, and retained.</li><li>How people can access or change their personal information and file complaints.</li></ul><p>You’re responsible for understanding your department or agency's responsibilities related to personal information. If you’re unsure how to proceed, we recommend contacting your <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-eng.asp\" target=\"_blank\">access to information and privacy coordinator.</a></p>",
   "privacyStatement": "Privacy statement",
-  "provideFeedback": "Provide feedback",
+  "provideFeedback": "Help us improve",
   "publish": "Publish",
   "published": "Published",
   "publishedBack": "Back to Forms",
-  "publishedErrors": "Published form errors",
-  "publishedTitle": "Your form is published.",
+  "publishedErrors": "Get support",
+  "publishedTitle": "Your form is published",
   "publishedViewLinks": "View and share your published form with these links:",
   "whatYouNeedToKnow": "What you need to know",
   "publishingDisablesEditing": "Publishing disables editing.",
@@ -430,7 +431,7 @@
     "forOtherEnquiriesLink": "Government of Canada contacts",
     "forOtherEnquiriesPart1": "For other enquiries, go to the",
     "forOtherEnquiriesPart2": "page to find the department or agency that can help",
-    "theGCFormsTeam": "We cannot give general advice to the public about the forms that we host.",
+    "theGCFormsTeam": "Please note that the GC Forms team provides services to people who work in the government. We cannot give general advice to the public about the forms that we host.",
     "title": "Thank you for your submission",
     "weWillRespond": "We will respond to you within 2 business days."
   },
@@ -442,7 +443,7 @@
   "richTextIntroTitle": "Form introduction",
   "richTextPrivacyTitle": "Privacy statement",
   "save": "Save",
-  "saveAndRequest": "Save form and request publishing ability",
+  "saveAndRequest": "Request publishing ability",
   "saveDraft": "Save draft",
   "selectAutocomplete": "Select an autocomplete attribute",
   "selectAutocompleteHint": "This option is great when the form filler is providing personal information like their address, email or phone number.",
@@ -469,12 +470,13 @@
     "vaultOption": "Download responses from GC Forms",
     "vaultOptionHint": {
       "text1": "Submitted responses will appear on the",
-      "text2": "Responses page"
+      "text2": "Responses page",
+      "text3": "GC Forms holds data temporarily. Retrieve responses within 45 days."
     },
     "emailOption": "Receive responses by email",
     "saveButton": "Save changes",
     "savedSuccessMessage": "Your changes have been saved.",
-    "savedErrorMessage": "There was an error saving your changes. Please try again.",
+    "savedErrorMessage": "There was an error saving your changes. Try again later or contact Support.",
     "emailSubjectEn": {
       "title": "English response subject line",
       "hint": "When form responses are submitted in English."
@@ -484,18 +486,18 @@
       "hint": "When form responses are submitted in French."
     },
     "responseDeliveryHelp": {
-      "cta": "Help on choosing an option",
+      "cta": "Help choosing an option",
       "title": "Choosing a response delivery option",
       "description": "There are two options for getting submitted form responses. Use the chart below to help pick which option best fits your needs.",
       "inbox": {
         "title": "Email to an inbox",
-        "text1": "For up to Protected A forms",
+        "text1": "For up to PROTECTED A forms",
         "text2": "Responses are delivered directly to an inbox in real time",
         "text3": "One email address can receive response emails. This can be a shared inbox."
       },
       "vault": {
         "title": "Download from GC Forms",
-        "text1": "For up to Protected B forms",
+        "text1": "For up to PROTECTED B forms",
         "text2": "Download responses within 30 days"
       }
     }
@@ -529,7 +531,7 @@
     "link": "Get the link",
     "message": "People you share to will receive an email with an attached JSON file. They can view the JSON form file using GC Forms, no account required.",
     "messageSent": "The message has been sent.",
-    "messageError": "The message failed to send. Please retry sharing.",
+    "messageError": "The message failed to send. Try again later or contact Support.",
     "open": "Open",
     "seePreview": "See a preview of the email message",
     "someone": "Someone",
@@ -589,10 +591,10 @@
     "name": "Your name",
     "email": "Your email address",
     "gcFormsTeamLink": "Government of Canada contacts",
-    "gcFormsTeamPart1": "We cannot give general advice to the public about the forms that we host. For other enquiries, go to the",
+    "gcFormsTeamPart1": "Please note that the GC Forms team provides services to people who work in the government. We cannot give general advice to the public about the forms that we host. For other enquiries, go to the",
     "gcFormsTeamPart2": "page to find the department or agency that can help.",
-    "ifYouWouldLike": "To learn more about GC Forms, fill out the ",
-    "lookingForADemo": "Looking for a product demo?",
+    "ifYouWouldLike": "Fill out the ",
+    "lookingForADemo": "Looking to learn more about GC Forms?",
     "request": {
       "option1": "Ask a question",
       "option2": "Get technical support",
@@ -626,32 +628,32 @@
   "formName": "Form name",
   "responsesNavLabel": "Responses",
   "nagware": {
-    "restrictedDownloadAfter35Days": "Downloading will be restricted if unconfirmed responses are older than 35 days.",
+    "restrictedDownloadAfter35Days": "Downloading will be restricted if overdue responses are older than 35 days.",
     "unsavedSubmissionsOver21DaysOld": {
-      "title": "Download and confirm receipt of responses",
+      "title": "Retrieve responses",
       "body1": "There are",
       "body2": {
-        "moreThan20Responses": "new responses older than 21 days. Download and confirm receipt of 20 overdue new responses at a time.",
-        "lessThan20Responses": "new responses older than 21 days. Download and confirm receipt of all overdue new responses."
+        "moreThan20Responses": "new responses older than 21 days. Download and sign off on the removal of 20 overdue new responses at a time.",
+        "lessThan20Responses": "new responses older than 21 days. Download and sign off on the removal of all overdue new responses."
       }
     },
     "unconfirmedSubmissionsOver21DaysOld": {
-      "title": "Confirm receipt of responses",
+      "title": "Sign off on the removal of responses from GC Forms",
       "body1": "There are",
-      "body2": "unconfirmed responses older than 21 days. Confirm receipt of all overdue unconfirmed responses."
+      "body2": "downloaded responses older than 21 days. Confirm receipt of all overdue responses by signing off on their removal from GC Forms."
     },
     "unsavedSubmissionsOver35DaysOld": {
-      "title": "Downloading is restricted to overdue responses until they are downloaded and confirmed",
+      "title": "Downloading is restricted to overdue responses until they are retrieved",
       "body1": "There are",
       "body2": {
-        "moreThan20Responses": "new responses over 35 days old. Download and confirm 20 overdue responses at a time before continuing.",
-        "lessThan20Responses": "new responses over 35 days old. Download and confirm all overdue responses before continuing."
+        "moreThan20Responses": "new responses over 35 days old. Download and sign off on 20 overdue responses at a time before continuing.",
+        "lessThan20Responses": "new responses over 35 days old. Download and sign off on all overdue responses before continuing."
       }
     },
     "unconfirmedSubmissionsOver35DaysOld": {
-      "title": "Downloading is restricted until receipt of responses is confirmed",
+      "title": "Downloading is restricted until responses are signed off for removal",
       "body1": "There are",
-      "body2": "unconfirmed responses 35 days overdue. Confirm the receipt of all overdue downloaded responses before saving new ones."
+      "body2": "downloaded responses 35 days overdue. Sign off on the removal of all overdue downloaded responses before saving new ones."
     }
   },
   "loading": "Loading...",
@@ -681,5 +683,21 @@
   },
   "brandingSelect": {
     "label": "Select branding for your form"
+  },
+  "closingDate": {
+    "title": "Accept form submissions",
+    "description": "Once you publish a form, it is open to accept form submissions. You can close the form to prevent submissions.",
+    "status": "Form status",
+    "open": "Open",
+    "closed": "Closed",
+    "saveButton": "Save changes",
+    "savedSuccessMessage": "Your changes have been saved.",
+    "savedErrorMessage": "There was an error saving your changes. Try again later or contact Support."
+  },
+  "errorSavingForm": {
+    "title": "There was an error saving the form",
+    "description": "Download a copy of the form and try again or",
+    "supportLink": "contact Support",
+    "errorCode": "Error code: {{code}}"
   }
 }

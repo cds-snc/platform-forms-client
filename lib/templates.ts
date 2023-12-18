@@ -13,7 +13,7 @@ import jwt, { Secret } from "jsonwebtoken";
 import { AccessControlError, checkPrivileges, checkPrivilegesAsBoolean } from "./privileges";
 import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
-import { numberOfUnprocessedSubmissions, deleteDraftFormResponses } from "./vault";
+import { unprocessedSubmissions, deleteDraftFormResponses } from "./vault";
 import { addOwnershipEmail, transferOwnershipEmail } from "./ownership";
 
 // ******************************************
@@ -32,6 +32,7 @@ const _parseTemplate = (template: {
     emailSubjectFr: string | null;
   } | null;
   securityAttribute: string;
+  closingDate?: Date | null;
 }): FormRecord => {
   return {
     id: template.id,
@@ -58,6 +59,9 @@ const _parseTemplate = (template: {
     securityAttribute: template.securityAttribute as SecurityAttribute,
     ...(process.env.RECAPTCHA_V3_SITE_KEY && {
       reCaptchaID: process.env.RECAPTCHA_V3_SITE_KEY,
+    }),
+    ...(template.closingDate && {
+      closingDate: template.closingDate.toString(),
     }),
   };
 };
@@ -91,6 +95,7 @@ async function _unprotectedGetTemplateByID(formID: string): Promise<FormRecord |
         isPublished: true,
         deliveryOption: true,
         securityAttribute: true,
+        closingDate: true,
         ttl: true,
       },
     })
@@ -128,6 +133,7 @@ async function _unprotectedGetTemplateWithAssociatedUsers(formID: string): Promi
         isPublished: true,
         deliveryOption: true,
         securityAttribute: true,
+        closingDate: true,
         ttl: true,
         users: {
           select: {
@@ -944,8 +950,8 @@ export async function deleteTemplate(
     ]);
 
     // Ignore cache (last boolean parameter) because we want to make sure we did not get new submissions while in the flow of deleting a form
-    const numOfUnprocessedSubmissions = await numberOfUnprocessedSubmissions(ability, formID, true);
-    if (numOfUnprocessedSubmissions > 0) throw new TemplateHasUnprocessedSubmissions();
+    const numOfUnprocessedSubmissions = await unprocessedSubmissions(ability, formID, true);
+    if (numOfUnprocessedSubmissions) throw new TemplateHasUnprocessedSubmissions();
 
     const dateIn30Days = new Date(Date.now() + 2592000000); // 30 days = 60 (seconds) * 60 (minutes) * 24 (hours) * 30 (days) * 1000 (to ms)
 
@@ -1035,6 +1041,7 @@ export const onlyIncludePublicProperties = (template: FormRecord): PublicFormRec
   return {
     id: template.id,
     updatedAt: template.updatedAt,
+    closingDate: template.closingDate,
     form: template.form,
     isPublished: template.isPublished,
     securityAttribute: template.securityAttribute,
@@ -1042,4 +1049,44 @@ export const onlyIncludePublicProperties = (template: FormRecord): PublicFormRec
       reCaptchaID: process.env.RECAPTCHA_V3_SITE_KEY,
     }),
   };
+};
+
+export const updateClosingDateForTemplate = async (
+  ability: UserAbility,
+  formID: string,
+  closingDate: string
+) => {
+  let d = null;
+
+  if (closingDate !== "open") {
+    d = closingDate;
+  }
+
+  try {
+    await prisma.template
+      .update({
+        where: {
+          id: formID,
+        },
+        data: {
+          closingDate: d,
+        },
+        select: {
+          id: true,
+        },
+      })
+      .catch((e) => prismaErrors(e, null));
+
+    if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
+  } catch (e) {
+    if (e instanceof AccessControlError)
+      logEvent(
+        ability.userID,
+        { type: "Form", id: formID },
+        "AccessDenied",
+        "Attempted to update closing date for Form"
+      );
+    throw e;
+  }
+  return { formID, closingDate: d };
 };

@@ -9,6 +9,7 @@ import {
   PublicFormRecord,
   Response,
   Responses,
+  VaultStatus,
 } from "@lib/types";
 import { Submission } from "@lib/types/submission-types";
 import { getCsrfToken } from "next-auth/react";
@@ -289,11 +290,7 @@ export const formatDate = (date: Date): string => {
     return "Unknown";
   }
 
-  const formattedDate = date.toLocaleDateString("en-CA", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  });
+  const formattedDate = date.toISOString().split("T")[0];
   return formattedDate;
 };
 
@@ -336,6 +333,7 @@ export const getDate = (withTime = false) => {
   return withTime ? date.toISOString() : date.toISOString().split("T")[0];
 };
 
+// TODO cosider moving to helpers since this is used by both the client and API
 export const slugify = (str: string) =>
   str
     .toLowerCase()
@@ -343,3 +341,37 @@ export const slugify = (str: string) =>
     .replace(/[^\w\s-]/g, "")
     .replace(/[\s_-]+/g, "-")
     .replace(/^-+|-+$/g, "");
+
+/**
+ * Capitalize the first letter of a string
+ * @param string
+ * @returns string with first letter capitalized
+ */
+export const ucfirst = (string: string) => {
+  if (!string) {
+    return "";
+  }
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
+export const isStatus = (query: string, status: VaultStatus | VaultStatus[]): boolean => {
+  const ucQuery = ucfirst(query);
+  if (Array.isArray(status)) {
+    return status.includes(ucQuery as VaultStatus);
+  }
+
+  return ucQuery === status;
+};
+
+export async function runPromisesSynchronously<T>(
+  promisesToBeExecuted: (() => Promise<T>)[]
+): Promise<T[]> {
+  const accumulator: T[] = [];
+
+  for (const p of promisesToBeExecuted) {
+    // eslint-disable-next-line no-await-in-loop
+    accumulator.push(await p());
+  }
+
+  return accumulator;
+}

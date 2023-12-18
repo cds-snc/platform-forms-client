@@ -5,6 +5,155 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.10.1](https://github.com/cds-snc/platform-forms-client/compare/v3.10.0...v3.10.1) (2023-12-08)
+
+
+### Bug Fixes
+
+* check that subItem is an array before mapping ([#3009](https://github.com/cds-snc/platform-forms-client/issues/3009)) ([71eb977](https://github.com/cds-snc/platform-forms-client/commit/71eb97700946d73b3bcda3082bbf3f3b8a0d1e23))
+
+## [3.10.0](https://github.com/cds-snc/platform-forms-client/compare/v3.9.1...v3.10.0) (2023-12-07)
+
+
+### Features
+
+* Render Responses page navigation as tabs ([#3002](https://github.com/cds-snc/platform-forms-client/issues/3002)) ([c052c9b](https://github.com/cds-snc/platform-forms-client/commit/c052c9be52840fe8966f87a08145d3f50486d9ca))
+
+
+### Bug Fixes
+
+* Download ensure questions/answers are sorted according to form.layout ([#3001](https://github.com/cds-snc/platform-forms-client/issues/3001)) ([5d50d5a](https://github.com/cds-snc/platform-forms-client/commit/5d50d5a94c81e017850633e5dfeeed6cc03f9415))
+
+## [3.9.1](https://github.com/cds-snc/platform-forms-client/compare/v3.9.0...v3.9.1) (2023-12-05)
+
+
+### Bug Fixes
+
+* run promises synchronously when making requests to DynamoDB ([7b58279](https://github.com/cds-snc/platform-forms-client/commit/7b582798d440962034ef9f2b8209e6bcb09b5a46))
+
+
+### Miscellaneous Chores
+
+* **deps:** update all non-major github action dependencies ([#2995](https://github.com/cds-snc/platform-forms-client/issues/2995)) ([be02cee](https://github.com/cds-snc/platform-forms-client/commit/be02cee47684c2053f7ad4cc71d257efa7068537))
+
+## [3.9.0](https://github.com/cds-snc/platform-forms-client/compare/v3.8.3...v3.9.0) (2023-12-04)
+
+
+### Features
+
+* Download and confirmation flow.  New download formats (.zip, .csv .json) ([81fc8ab](https://github.com/cds-snc/platform-forms-client/commit/81fc8abc50874cae7d9dc4354b9c75cbdb6437ee))
+* Log GA event when downloading to record selected format ([#2993](https://github.com/cds-snc/platform-forms-client/issues/2993)) ([2dac2a2](https://github.com/cds-snc/platform-forms-client/commit/2dac2a24fc0b61f14f970937f840cee0daa474d1))
+
+
+### Bug Fixes
+
+* Allow no empty submissions ([#2990](https://github.com/cds-snc/platform-forms-client/issues/2990)) ([61e1daf](https://github.com/cds-snc/platform-forms-client/commit/61e1dafa2f9a6eaa7c341f8afb65c4b1884a1a58))
+* Download receipt first ([#2988](https://github.com/cds-snc/platform-forms-client/issues/2988)) ([2fbd618](https://github.com/cds-snc/platform-forms-client/commit/2fbd6186f55eb7d32efbc83813587cb775af9f3a))
+* Move zipping of individual HTML files to client side ([#2937](https://github.com/cds-snc/platform-forms-client/issues/2937)) ([0ddf2fd](https://github.com/cds-snc/platform-forms-client/commit/0ddf2fd40097d90cb35738f3f5418248bad34e0f))
+
+
+### Miscellaneous Chores
+
+* Contact us form iteration ([#2899](https://github.com/cds-snc/platform-forms-client/issues/2899)) ([510707d](https://github.com/cds-snc/platform-forms-client/commit/510707d467283c9a29f36db3530fa43e1d53eed8))
+* **deps:** update all patch dependencies ([#2996](https://github.com/cds-snc/platform-forms-client/issues/2996)) ([6a5c68f](https://github.com/cds-snc/platform-forms-client/commit/6a5c68fd4388d172ec9ebae0fd8c785ed050423f))
+* Updates to error message content ([#2846](https://github.com/cds-snc/platform-forms-client/issues/2846)) ([2bd0af3](https://github.com/cds-snc/platform-forms-client/commit/2bd0af346427ef13df04c45abe53efa80d42a18a))
+
+## [3.8.3](https://github.com/cds-snc/platform-forms-client/compare/v3.8.2...v3.8.3) (2023-11-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency next-auth to v4.24.5 [security] ([#2878](https://github.com/cds-snc/platform-forms-client/issues/2878)) ([cbd5425](https://github.com/cds-snc/platform-forms-client/commit/cbd54251336c6f36c89a43b2f293bb7b895c4b1e))
+
+
+### Miscellaneous Chores
+
+* Add Health Canada branding ([24c4f03](https://github.com/cds-snc/platform-forms-client/commit/24c4f031da3c8edb6e332fe197b7ed66265a26cd))
+* created local '.github/workflows/backstage-catalog-helper.yml' from remote 'tools/sre_file_sync/backstage-catalog-helper.yml' ([8b69a8c](https://github.com/cds-snc/platform-forms-client/commit/8b69a8c66441e5614106f16b547eef77ab2dee30))
+* **deps:** lock file maintenance ([#2573](https://github.com/cds-snc/platform-forms-client/issues/2573)) ([c32f569](https://github.com/cds-snc/platform-forms-client/commit/c32f56901a61c1544b6c6d9eef362bfd2a09a5a2))
+* **deps:** pin dependencies ([#2798](https://github.com/cds-snc/platform-forms-client/issues/2798)) ([14e6cd2](https://github.com/cds-snc/platform-forms-client/commit/14e6cd234efff8bd0e2b40bea7dbc720b7b7bfe2))
+* **deps:** update all non-major github action dependencies ([#2688](https://github.com/cds-snc/platform-forms-client/issues/2688)) ([9baf719](https://github.com/cds-snc/platform-forms-client/commit/9baf719dc95e081ab12a5a2d9598e08912d8fe74))
+* **deps:** update all patch dependencies ([#2571](https://github.com/cds-snc/platform-forms-client/issues/2571)) ([a02451a](https://github.com/cds-snc/platform-forms-client/commit/a02451a4d17c03b4485e49e0d7c07f0f2f2fa8a4))
+* Remove demo request from contact us form ([#2861](https://github.com/cds-snc/platform-forms-client/issues/2861)) ([549a9e8](https://github.com/cds-snc/platform-forms-client/commit/549a9e82711667f1700560f988d6ef17d5848932))
+* remove stories files ([#2863](https://github.com/cds-snc/platform-forms-client/issues/2863)) ([83a5528](https://github.com/cds-snc/platform-forms-client/commit/83a55288b4706a3d3b3d5d61293379dd148ebcbf))
+* remove unrequired env var ([#2864](https://github.com/cds-snc/platform-forms-client/issues/2864)) ([7002111](https://github.com/cds-snc/platform-forms-client/commit/7002111bf374386d4865ce1e26fa8affea817262))
+* synced file(s) with cds-snc/site-reliability-engineering ([#2805](https://github.com/cds-snc/platform-forms-client/issues/2805)) ([8b69a8c](https://github.com/cds-snc/platform-forms-client/commit/8b69a8c66441e5614106f16b547eef77ab2dee30))
+* Update link URLs with CDS website update ([#2897](https://github.com/cds-snc/platform-forms-client/issues/2897)) ([5851c39](https://github.com/cds-snc/platform-forms-client/commit/5851c3908b3e8b297639669cc91409a55ccbabe6))
+
+## [3.8.2](https://github.com/cds-snc/platform-forms-client/compare/v3.8.1...v3.8.2) (2023-11-14)
+
+
+### Bug Fixes
+
+* docker file build and yarn ([#2836](https://github.com/cds-snc/platform-forms-client/issues/2836)) ([011b5f7](https://github.com/cds-snc/platform-forms-client/commit/011b5f7747569d0a38e332650be8aa72b8920b2a))
+* Pad angle brackets in user uploaded json or text input to avoid html exception ([#2832](https://github.com/cds-snc/platform-forms-client/issues/2832)) ([8eff2ba](https://github.com/cds-snc/platform-forms-client/commit/8eff2ba51ef5bb9ec47c404e359c47eb9abd886c))
+
+
+### Miscellaneous Chores
+
+* Update Axios to 1.6.1 ([#2851](https://github.com/cds-snc/platform-forms-client/issues/2851)) ([db1809e](https://github.com/cds-snc/platform-forms-client/commit/db1809e53cd798337bff6fd315072d0598f0c481))
+* upgrade to yarn 4 ([#2827](https://github.com/cds-snc/platform-forms-client/issues/2827)) ([bf7ea6c](https://github.com/cds-snc/platform-forms-client/commit/bf7ea6c650a02159773a9fb83cf4c3d8837d40e5))
+
+## [3.8.1](https://github.com/cds-snc/platform-forms-client/compare/v3.8.0...v3.8.1) (2023-11-06)
+
+
+### Miscellaneous Chores
+
+* Fix typos and improve French content ([#2801](https://github.com/cds-snc/platform-forms-client/issues/2801)) ([1b7a9c3](https://github.com/cds-snc/platform-forms-client/commit/1b7a9c337f2c24c358f54a060e14962a52c1ef18))
+* Remove isSaveable check ([#2823](https://github.com/cds-snc/platform-forms-client/issues/2823)) ([1671edd](https://github.com/cds-snc/platform-forms-client/commit/1671edd268566681623d53229ef84ec322c1ea38))
+
+## [3.8.0](https://github.com/cds-snc/platform-forms-client/compare/v3.7.0...v3.8.0) (2023-11-06)
+
+
+### Features
+
+* form closing date ([#2792](https://github.com/cds-snc/platform-forms-client/issues/2792)) ([949c804](https://github.com/cds-snc/platform-forms-client/commit/949c804717fc3a6da566ffbf5905424a52463f61))
+
+
+### Bug Fixes
+
+* Fix manage forms delete ([#2816](https://github.com/cds-snc/platform-forms-client/issues/2816)) ([9df1f8a](https://github.com/cds-snc/platform-forms-client/commit/9df1f8a382de2437c706a5e458df8fab07791e8c))
+* Handle publish error ([#2817](https://github.com/cds-snc/platform-forms-client/issues/2817)) ([faffec3](https://github.com/cds-snc/platform-forms-client/commit/faffec398c1ebc61d22f68c4a1709151b37c5c47))
+
+
+### Miscellaneous Chores
+
+* Add node-gyp ([#2822](https://github.com/cds-snc/platform-forms-client/issues/2822)) ([580ddd7](https://github.com/cds-snc/platform-forms-client/commit/580ddd7ca199161cd108415ecf002d3548284951))
+* Federal Economic Development Agency for Southern Ontario branding ([#2818](https://github.com/cds-snc/platform-forms-client/issues/2818)) ([057382b](https://github.com/cds-snc/platform-forms-client/commit/057382b368275e5761ed2d3d2b8040227f499fcb))
+* update node version ([#2820](https://github.com/cds-snc/platform-forms-client/issues/2820)) ([2ddb535](https://github.com/cds-snc/platform-forms-client/commit/2ddb535c7a9d859926f911de8b1ac1ddd2694eb6))
+
+## [3.7.0](https://github.com/cds-snc/platform-forms-client/compare/v3.6.0...v3.7.0) (2023-11-01)
+
+
+### Features
+
+* Add SVG mime type on branding requests ([f2fd5ab](https://github.com/cds-snc/platform-forms-client/commit/f2fd5abf432f5c9f19407167342b14d0d6e54601))
+
+
+### Miscellaneous Chores
+
+* Add closing date to db ([#2799](https://github.com/cds-snc/platform-forms-client/issues/2799)) ([e12570f](https://github.com/cds-snc/platform-forms-client/commit/e12570ff35ba49e346aa96bcd1218a1e075fc627))
+* Prep for response filtering and pagination ([#2800](https://github.com/cds-snc/platform-forms-client/issues/2800)) ([4511e73](https://github.com/cds-snc/platform-forms-client/commit/4511e730d630729812d27da75edcedb151f195a2))
+* Utility to generate responses for development environment ([#2790](https://github.com/cds-snc/platform-forms-client/issues/2790)) ([f5044f6](https://github.com/cds-snc/platform-forms-client/commit/f5044f63b9f5e53c9421b26deffa2800f7734171))
+
+## [3.6.0](https://github.com/cds-snc/platform-forms-client/compare/v3.5.1...v3.6.0) (2023-10-18)
+
+
+### Features
+
+* Settings modal + quick select panel ([#2739](https://github.com/cds-snc/platform-forms-client/issues/2739)) ([3eacebe](https://github.com/cds-snc/platform-forms-client/commit/3eacebefe8b7378ac4513c95649ce835f8b9dc49))
+
+
+### Miscellaneous Chores
+
+* added Bing ownership verification meta tag for staging env ([#2770](https://github.com/cds-snc/platform-forms-client/issues/2770)) ([d4a23a6](https://github.com/cds-snc/platform-forms-client/commit/d4a23a63452d61aa4406db0de193300fb061efc0))
+* **deps:** update all non-major docker images ([#2687](https://github.com/cds-snc/platform-forms-client/issues/2687)) ([928458f](https://github.com/cds-snc/platform-forms-client/commit/928458f08145e8cd88c646da8def972593106423))
+* fix acceptable use heading margin ([#2774](https://github.com/cds-snc/platform-forms-client/issues/2774)) ([f865101](https://github.com/cds-snc/platform-forms-client/commit/f8651017f3e7cacc37bbe7863ea0d2e8909b3b45))
+* synced file(s) with cds-snc/site-reliability-engineering ([#2684](https://github.com/cds-snc/platform-forms-client/issues/2684)) ([67fdf3e](https://github.com/cds-snc/platform-forms-client/commit/67fdf3e5260bd46a348b6ad01cafc1a74ba378c2))
+* Update privacy notice content ([#2754](https://github.com/cds-snc/platform-forms-client/issues/2754)) ([32a77f5](https://github.com/cds-snc/platform-forms-client/commit/32a77f51e74a31961b7585e11877886eda2ee7e0))
+* update save button to only show on edit page ([#2769](https://github.com/cds-snc/platform-forms-client/issues/2769)) ([470025a](https://github.com/cds-snc/platform-forms-client/commit/470025a43bbc40eb5827ae1639a1316bb6745f03))
+* Update/tweak content strings ([#2775](https://github.com/cds-snc/platform-forms-client/issues/2775)) ([f72282f](https://github.com/cds-snc/platform-forms-client/commit/f72282f0cf61af8fae55445fd236820c653f6116))
+
 ## [3.5.1](https://github.com/cds-snc/platform-forms-client/compare/v3.5.0...v3.5.1) (2023-10-12)
 
 

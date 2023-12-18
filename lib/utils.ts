@@ -15,3 +15,15 @@ export function cn(...inputs: ClassValue[]) {
 export function getLocalizedProperty(field = "", lang = "en"): string {
   return field + lang.charAt(0).toUpperCase() + lang.slice(1);
 }
+
+export function dateHasPast(timestamp: number) {
+  // Get the current time in UTC
+  const now = new Date();
+
+  // Compare utc time to timestamp
+  if (now.getTime() > timestamp) {
+    return true;
+  }
+
+  return false;
+}

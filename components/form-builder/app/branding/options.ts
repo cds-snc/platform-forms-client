@@ -98,4 +98,22 @@ export const options = [
     logoTitleEn: "Shared Services Canada",
     logoTitleFr: "Services partagés Canada",
   },
+  {
+    name: "feddevon",
+    urlEn: "https://feddev-ontario.canada.ca/en",
+    urlFr: "https://feddev-ontario.canada.ca/fr",
+    logoEn: "/img/branding/fed-dev-ontario-en.svg",
+    logoFr: "/img/branding/fed-dev-ontario-fr.svg",
+    logoTitleEn: "Federal Economic Development Agency for Southern Ontario",
+    logoTitleFr: "Agence fédérale de développement économique pour le Sud de l’Ontario",
+  },
+  {
+    name: "hc",
+    urlEn: "https://www.canada.ca/en/health-canada.html",
+    urlFr: "https://www.canada.ca/fr/sante-canada.html",
+    logoEn: "/img/branding/hc-canada-en.svg",
+    logoFr: "/img/branding/hc-canada-fr.svg",
+    logoTitleEn: "Corporate logo Health Canada",
+    logoTitleFr: "Logo corporatif Santé Canada",
+  },
 ];

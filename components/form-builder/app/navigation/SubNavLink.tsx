@@ -9,12 +9,14 @@ export const SubNavLink = ({
   setAriaCurrent = false,
   id,
   defaultActive = false,
+  onClick,
 }: {
   children: ReactElement;
   href: string;
   setAriaCurrent?: boolean;
   id?: string;
   defaultActive?: boolean;
+  onClick?: () => void;
 }) => {
   const baseClasses =
     "mb-4 mr-3 rounded-[100px] border-1 border-black bg-white px-5 pb-2 pt-1 no-underline !shadow-none laptop:py-2";
@@ -39,10 +41,12 @@ export const SubNavLink = ({
       if (linkPathname === activePathname) {
         setActive(true);
       } else {
-        setActive(false);
+        if (!defaultActive) {
+          setActive(false);
+        }
       }
     }
-  }, [asPath, isReady, href, setActive, activePathname]);
+  }, [asPath, isReady, href, setActive, activePathname, defaultActive]);
 
   return (
     <Link href={href} legacyBehavior>
@@ -51,6 +55,7 @@ export const SubNavLink = ({
         className={cn(baseClasses, inactiveClasses, active && activeClasses)}
         {...(setAriaCurrent && active && { "aria-current": "page" })}
         {...(id && { id })}
+        onClick={onClick}
       >
         {children}
       </a>

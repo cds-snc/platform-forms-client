@@ -189,7 +189,7 @@ export const getServerSideProps = requireAuthentication(
 
       const overdue = await getUnprocessedSubmissionsForUser(ability, id);
 
-      templates.map((template) => {
+      templates.forEach((template) => {
         if (overdue[template.id]) {
           template.overdue = overdue[template.id].numberOfSubmissions;
         }

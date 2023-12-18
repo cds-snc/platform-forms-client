@@ -21,33 +21,31 @@ export const ReportDialog = ({
   apiUrl,
   inputRegex = isFormId,
   maxEntries = 20,
-  setIsServerError,
 }: {
   isShow: boolean;
   setIsShow: React.Dispatch<React.SetStateAction<boolean>>;
   apiUrl: string;
   inputRegex?: (field: string) => boolean;
   maxEntries?: number;
-  setIsServerError: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const { t, i18n } = useTranslation(["form-builder-responses", "common"]);
   const router = useRouter();
   const [entries, setEntries] = useState<string[]>([]);
   const descriptionRef = useRef("");
-  const [status, setStatus] = useState<DialogStates>(DialogStates.EDITTING);
+  const [status, setStatus] = useState<DialogStates>(DialogStates.EDITING);
   const [errorEntriesList, setErrorEntriesList] = useState<string[]>([]);
   const dialogRef = useDialogRef();
   const reportInstructionId = `dialog-report-instruction-${randomId()}`;
 
   // Cleanup any un-needed errors from the last render
   if (status === DialogStates.MIN_ERROR && entries.length > 0) {
-    setStatus(DialogStates.EDITTING);
+    setStatus(DialogStates.EDITING);
   }
 
   const handleClose = () => {
     setIsShow(false);
     setEntries([]);
-    setStatus(DialogStates.EDITTING);
+    setStatus(DialogStates.EDITING);
     setErrorEntriesList([]);
     dialogRef.current?.close();
   };
@@ -103,8 +101,7 @@ export const ReportDialog = ({
       })
       .catch((err) => {
         logMessage.error(err as Error);
-        handleClose();
-        setIsServerError(true);
+        setStatus(DialogStates.FAILED_ERROR);
       });
   };
 

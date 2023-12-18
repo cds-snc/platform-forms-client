@@ -14,7 +14,7 @@ import brokenFormTemplate from "../../__fixtures__/brokenFormTemplate.json";
 import { prismaMock } from "@jestUtils";
 import { Session } from "next-auth";
 import { Base, mockUserPrivileges, ManageForms, PublishForms } from "__utils__/permissions";
-import { numberOfUnprocessedSubmissions } from "@lib/vault";
+import { unprocessedSubmissions } from "@lib/vault";
 
 //Needed in the typescript version of the test so types are inferred correctly
 const mockGetSession = jest.mocked(getServerSession, { shallow: true });
@@ -29,7 +29,7 @@ jest.mock("@lib/integration/redisConnector", () => ({
 
 jest.mock("@lib/vault");
 
-const mockNumberOfUnprocessedSubmissions = jest.mocked(numberOfUnprocessedSubmissions, {
+const mockNumberOfUnprocessedSubmissions = jest.mocked(unprocessedSubmissions, {
   shallow: true,
 });
 

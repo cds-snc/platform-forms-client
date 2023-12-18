@@ -23,7 +23,7 @@ const protectedMethods = ["POST"];
 const lambdaClient = new LambdaClient({
   region: "ca-central-1",
   retryMode: "standard",
-  endpoint: process.env.LOCAL_LAMBDA_ENDPOINT,
+  ...(process.env.LOCAL_AWS_ENDPOINT && { endpoint: process.env.LOCAL_AWS_ENDPOINT }),
 });
 
 const submit = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
@@ -32,6 +32,17 @@ const submit = async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
     // https://nextjs.org/docs/messages/api-routes-body-size-limit
     const stringBody = await streamToString(req);
     const incomingFormJSON = JSON.parse(stringBody) as SubmissionRequestBody;
+
+    // Ensure required information is present
+
+    if (!incomingFormJSON.formID) {
+      return res.status(400).json({ error: "No form ID submitted with request" });
+    }
+
+    if (Object.entries(incomingFormJSON).length <= 2) {
+      return res.status(400).json({ error: "No form data submitted with request" });
+    }
+
     // We process the data into fields and files. Base64 file data is converted into buffers
     const data = await parseRequestData(incomingFormJSON);
     return await processFormData(data.fields, data.files, res, req);
@@ -63,7 +74,7 @@ const callLambda = async (
   const encoder = new TextEncoder();
 
   const command = new InvokeCommand({
-    FunctionName: process.env.SUBMISSION_API ?? "Submission",
+    FunctionName: "Submission",
     Payload: encoder.encode(
       JSON.stringify({
         formID,
@@ -256,6 +267,11 @@ const processFormData = async (
 
     if (!form) {
       return res.status(400).json({ error: "No form could be found with that ID" });
+    }
+
+    // Check to see if form is closed and block response submission
+    if (form.closingDate && new Date(form.closingDate) < new Date()) {
+      return res.status(400).json({ error: "Form is closed and not accepting submissions" });
     }
 
     const fields = rehydrateFormResponses({

@@ -183,6 +183,13 @@ export const formatDateTimeLong = (updatedAt: number | undefined, locale = "en-C
   return date.toLocaleDateString(locale, options);
 };
 
+// Note: GMT = UTC as far as date-time is concerned
+export const formatDateTimeUTC = (timestamp: number | undefined, includeSeconds = false) => {
+  const arrayOffset = includeSeconds ? -5 : -8;
+  const date = new Date(timestamp || 0);
+  return date.toISOString().replace("T", " ").slice(0, arrayOffset) + " UTC";
+};
+
 export const autoCompleteFields = [
   "name",
   "given-name",
@@ -258,4 +265,28 @@ export const isVaultDelivery = (deliveryOption: DeliveryOption | undefined) => {
 
 export const isEmailDelivery = (deliveryOption: DeliveryOption | undefined) => {
   return !!(deliveryOption && deliveryOption.emailAddress);
+};
+
+export const padAngleBrackets = (value: string) => {
+  const regex = /<(?!\s)(.*?)(?=\s*)>/g;
+  return value.replace(regex, (match, p1) => {
+    return `< ${p1.trim()} >`;
+  });
+};
+
+type Cleanable = string | Cleanable[] | { [key: string]: Cleanable } | unknown;
+
+export const cleanInput = <T extends Cleanable>(input: T): T => {
+  if (typeof input === "string") {
+    return padAngleBrackets(input) as T;
+  }
+  if (Array.isArray(input)) {
+    return input.map((elem) => cleanInput(elem)) as T;
+  }
+  if (input instanceof Object) {
+    return Object.fromEntries(
+      Object.entries(input).map(([key, value]) => [key, cleanInput(value)])
+    ) as T;
+  }
+  return input;
 };
