@@ -63,6 +63,7 @@
   "downloadResponsesTable": {
     "download": "Télécharger",
     "delete": "Supprimer",
+    "movedToDownloaded": "Déplacée vers Téléchargements",
     "header": {
       "tableTitle": "Tableau de réponses",
       "select": "Sélectionner",

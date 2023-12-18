@@ -63,6 +63,7 @@
   "downloadResponsesTable": {
     "download": "Download",
     "delete": "Delete",
+    "movedToDownloaded": "Moved to Downloaded",
     "header": {
       "tableTitle": "Responses table",
       "select": "Select",

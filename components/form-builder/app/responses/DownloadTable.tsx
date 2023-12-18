@@ -56,6 +56,7 @@ export const DownloadTable = ({
   const [noSelectedItemsError, setNoSelectedItemsError] = useState(false);
   const [showConfirmNewtDialog, setShowConfirmNewDialog] = useState(false);
   const [showDownloadDialog, setShowDownloadDialog] = useState(false);
+  const [removedRows, setRemovedRows] = useState<string[]>([]);
 
   const accountEscalated = nagwareResult && nagwareResult.level > 2;
 
@@ -172,7 +173,11 @@ export const DownloadTable = ({
                   className={cn(
                     "border-y-1 border-slate-300 hover:ring-2 hover:ring-purple-500" +
                       (tableItems.statusItems.get(submission.name) ? " bg-purple-50" : "") +
-                      (isBlocked ? " opacity-50" : "")
+                      (isBlocked ? " opacity-50" : "") +
+                      (isStatus(statusQuery, VaultStatus.NEW) &&
+                      removedRows.includes(submission.name)
+                        ? " transition-opacity opacity-50 ease-in-out duration-500"
+                        : "")
                   )}
                 >
                   <td className="flex whitespace-nowrap pb-2 pl-9 pr-4">
@@ -202,12 +207,26 @@ export const DownloadTable = ({
                   <td className="whitespace-nowrap px-4">{createdDateTime}</td>
                   <td className="whitespace-nowrap px-4">
                     {isStatus(statusQuery, VaultStatus.NEW) && (
-                      <DownloadResponseStatus
-                        vaultStatus={submission.status}
-                        createdAt={submission.createdAt}
-                        downloadedAt={submission.downloadedAt}
-                        overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
-                      />
+                      <>
+                        {removedRows.includes(submission.name) ? (
+                          <>
+                            <ConfirmReceiptStatus
+                              vaultStatus={VaultStatus.DOWNLOADED}
+                              createdAtDate={submission.createdAt}
+                              overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
+                            />
+                            <br />
+                            {t("downloadResponsesTable.movedToDownloaded")}
+                          </>
+                        ) : (
+                          <DownloadResponseStatus
+                            vaultStatus={submission.status}
+                            createdAt={submission.createdAt}
+                            downloadedAt={submission.downloadedAt}
+                            overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
+                          />
+                        )}
+                      </>
                     )}
                     {isStatus(statusQuery, VaultStatus.DOWNLOADED) && (
                       <ConfirmReceiptStatus
@@ -236,7 +255,8 @@ export const DownloadTable = ({
                       formId={submission.formID}
                       responseId={submission.name}
                       onDownloadSuccess={() => {
-                        router.replace(router.asPath, undefined, { scroll: false });
+                        setRemovedRows([...removedRows, submission.name]);
+                        // router.replace(router.asPath, undefined, { scroll: false });
                         if (isStatus(statusQuery, VaultStatus.NEW)) {
                           setShowDownloadSuccess("downloadSuccess");
                         }
@@ -300,7 +320,8 @@ export const DownloadTable = ({
         formId={formId}
         formName={formName}
         onSuccessfulDownload={() => {
-          router.replace(router.asPath, undefined, { scroll: false });
+          setRemovedRows([...removedRows, ...tableItems.checkedItems.keys()]);
+          // router.replace(router.asPath, undefined, { scroll: false });
           if (isStatus(statusQuery, VaultStatus.NEW)) {
             setShowDownloadSuccess("downloadSuccess");
           }
