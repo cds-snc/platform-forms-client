@@ -26,6 +26,7 @@ import { DownloadDialog } from "./Dialogs/DownloadDialog";
 import { formatDateTime } from "@components/form-builder/util";
 import { DownloadSingleButton } from "./DownloadSingleButton";
 import { Pagination } from "./Pagination";
+import { cn } from "@lib/utils";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -126,8 +127,8 @@ export const DownloadTable = ({
           <caption>
             <span className="sr-only">{t("downloadResponsesTable.header.tableTitle")}</span>
           </caption>
-          <thead className="border-b-1 border-slate-400">
-            <tr>
+          <thead>
+            <tr className="border-b-1 border-slate-300">
               <th scope="col" className="py-4 text-center">
                 <CheckAll
                   tableItems={tableItems}
@@ -151,7 +152,7 @@ export const DownloadTable = ({
             </tr>
           </thead>
           <tbody>
-            <tr className="border-b-1 border-slate-300 bg-slate-100 py-2">
+            <tr className="border-y-1 border-slate-400 bg-slate-100 py-2">
               <td colSpan={5} className="px-4 py-2">
                 <Pagination
                   lastEvaluatedKey={lastEvaluatedKey}
@@ -168,11 +169,11 @@ export const DownloadTable = ({
               return (
                 <tr
                   key={submission.name}
-                  className={
-                    "border-b-2 border-grey" +
-                    (tableItems.statusItems.get(submission.name) ? " bg-purple-50" : "") +
-                    (isBlocked ? " opacity-50" : "")
-                  }
+                  className={cn(
+                    "border-y-1 border-slate-300 hover:ring-2 hover:ring-purple-500" +
+                      (tableItems.statusItems.get(submission.name) ? " bg-purple-50" : "") +
+                      (isBlocked ? " opacity-50" : "")
+                  )}
                 >
                   <td className="flex whitespace-nowrap pb-2 pl-9 pr-4">
                     <div className="gc-input-checkbox">
@@ -247,7 +248,7 @@ export const DownloadTable = ({
                 </tr>
               );
             })}
-            <tr className="border-b-1 border-slate-300 bg-slate-100 py-2">
+            <tr className="border-y-1 border-slate-300 bg-slate-100 py-2">
               <td colSpan={5} className="px-4 py-2">
                 <Pagination
                   lastEvaluatedKey={lastEvaluatedKey}
