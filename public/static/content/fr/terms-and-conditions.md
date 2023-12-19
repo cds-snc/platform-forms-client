@@ -114,4 +114,4 @@ Bon nombre de plateformes de médias sociaux offrent plusieurs choix de langues 
 
 
 
-**Dernière mise à jour :** 12 avril 2023
+**Dernière mise à jour :** 14 décembre 2023

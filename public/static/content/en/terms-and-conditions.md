@@ -114,4 +114,4 @@ Many social media platforms have multiple language options and provide instructi
 
 
 
-**Last update:** April 12, 2023
+**Last update:** December 14, 2023
