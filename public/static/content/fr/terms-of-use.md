@@ -1,5 +1,5 @@
 # Conditions d’utilisation 
-Les conditions ci-dessous s’appliquent à l’utilisation de Formulaires GC, un produit géré par le Service numérique canadien (SNC) au sein d'Emploi et Développement social Canada (EDSC). Formulaires GC est un outil de création de formulaires en ligne mis à la disposition des ministères et organismes fédéraux canadiens.
+Les conditions ci-dessous s’appliquent à l’utilisation de Formulaires GC, un produit géré par le Service numérique canadien (SNC) au sein d'[Emploi et Développement social Canada (EDSC)](https://www.canada.ca/fr/emploi-developpement-social.html). Formulaires GC est un outil de création de formulaires en ligne mis à la disposition des ministères et organismes fédéraux canadiens.
 
 ## Acceptation de toutes les conditions et risques  
 
