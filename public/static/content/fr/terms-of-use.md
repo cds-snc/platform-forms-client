@@ -1,5 +1,5 @@
 # Conditions d’utilisation 
-Les conditions ci-dessous s’appliquent à l’utilisation de Formulaires GC, un produit géré par le Service numérique canadien (SNC) au sein du Secrétariat du Conseil du Trésor du Canada (SCT). Formulaires GC est un outil de création de formulaires en ligne mis à la disposition des ministères et organismes fédéraux canadiens.
+Les conditions ci-dessous s’appliquent à l’utilisation de Formulaires GC, un produit géré par le Service numérique canadien (SNC) au sein d'Emploi et Développement social Canada (EDSC). Formulaires GC est un outil de création de formulaires en ligne mis à la disposition des ministères et organismes fédéraux canadiens.
 
 ## Acceptation de toutes les conditions et risques  
 
@@ -32,7 +32,7 @@ Vous avez pour responsabilité :
 - d’adhérer aux directives ministérielles concernant la bonne utilisation des appareils et des réseaux.
 - d’accuser réception des réponses au formulaire et d’en enregistrer une copie dans les 45 jours suivant la réception d’une réponse.
 - de signaler tout problème lié aux réponses enregistrées.
-- de traiter et d’enregistrer les réponses aux formulaires conformément à votre calendrier de conservation et d’élimination.
+- de traiter, d'ouvrir et d’enregistrer les réponses aux formulaires conformément à votre calendrier de conservation et d’élimination.
 - d’accepter [les conditions d’utilisation de Notification GC](https://notification.canada.ca/conditions-dutilisation). 
 
 ## Pratique de sécurité en continu
@@ -64,4 +64,4 @@ Pour toute question en lien avec les présentes conditions d’utilisation, veui
 
 
 
-**Dernière mise à jour :** 12 avril 2023 
+**Dernière mise à jour :** 14 décembre 2023 
