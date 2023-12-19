@@ -1,5 +1,5 @@
 # Terms and conditions
-These terms and conditions outline the roles and responsibilities of the [Treasury Board of Canada Secretariat](https://www.canada.ca/en/treasury-board-secretariat.html) in hosting this form.  To learn about how the department or agency that published this form manages your submission, return to the form you were viewing.    
+These terms and conditions outline the roles and responsibilities of [Employment and Social Development Canada (ESDC)](https://www.canada.ca/en/employment-social-development.html) in hosting this form.  To learn about how the department or agency that published this form manages your submission, return to the form you were viewing.    
 
 ## How we protect your privacy
 

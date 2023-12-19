@@ -1,5 +1,5 @@
 # Conditions générales
-Les présentes conditions d’utilisation définissent les rôles et responsabilités du [Secrétariat du Conseil du Trésor du Canada](https://www.canada.ca/fr/secretariat-conseil-tresor.html) quant à l’hébergement de ce formulaire. Pour savoir comment le ministère ou l’organisme qui a publié ce formulaire gère vos réponses, revenez au formulaire que vous consultiez.  
+Les présentes conditions d’utilisation définissent les rôles et responsabilités d'[Emploi et Développement social Canada (EDSC)](https://www.canada.ca/fr/emploi-developpement-social.html) quant à l’hébergement de ce formulaire. Pour savoir comment le ministère ou l’organisme qui a publié ce formulaire gère vos réponses, revenez au formulaire que vous consultiez.  
 
 ## Protection de votre vie privée
 
