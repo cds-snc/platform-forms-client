@@ -40,7 +40,7 @@ export const AddOther = ({ item }: { item: FormElementWithIndex }) => {
       },
     };
 
-    add(item.index + 1, FormElementTypes.textField, data);
+    add(item.index, FormElementTypes.textField, data);
   }, [add, item, t]);
 
   return (
