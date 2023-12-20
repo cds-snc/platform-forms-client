@@ -27,11 +27,11 @@ export const CopyCodes = ({
           {t("responseAggregatedTemplate.copyCodes.copyButton", { lng: lang })}
         </button>
         <br />
-        <span
+        <div
           id={`copyCodeOutput${capitalizedLang}`}
           aria-live="polite"
-          className="ml-4 mt-4 hidden text-green"
-        ></span>
+          className="ml-6 mt-4 hidden text-green"
+        ></div>
       </div>
       <div>
         <a
