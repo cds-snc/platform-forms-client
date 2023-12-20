@@ -99,7 +99,11 @@ export const ResponseHtmlAggregated = ({
               </p>
               <p className="mb-4">{t("responseAggregatedTemplate.needToVerify", { lng: lang })}</p>
               <p className="mb-8">{t("responseAggregatedTemplate.useTheCopy", { lng: lang })}</p>
-              <CopyCodes confirmationCodes={confirmationCodes} lang={lang} />
+              <CopyCodes
+                confirmationCodes={confirmationCodes}
+                formId={formResponseSubmissions.form.id}
+                lang={lang}
+              />
             </div>
 
             <h2>{t("responseAggregatedTemplate.title", { lng: lang })}</h2>
