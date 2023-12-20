@@ -20,7 +20,7 @@ const RuleIndicator = ({ choiceId }: { choiceId: string }) => {
   return (
     <div>
       <ConditionalIcon className="mr-2 mt-[-5px] inline-block" />
-      <div className="inline-block rounded-md border-1 border-slate-500 bg-violet-50 p-2">
+      <div className="inline-block p-2">
         {t("question")} {`${parentId}`}
       </div>
       <span className="hidden">{`${choiceValue}`}</span>

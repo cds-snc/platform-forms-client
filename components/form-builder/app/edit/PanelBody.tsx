@@ -6,7 +6,6 @@ import { SelectedElement, ElementRequired } from ".";
 import { Question } from "./elements";
 import { QuestionDescription } from "./elements/question/QuestionDescription";
 import { useTemplateStore } from "@components/form-builder/store";
-import { ConditionalIndicator } from "../shared/conditionals/ConditionalIndicator";
 
 export const PanelBody = ({
   item,
@@ -72,7 +71,6 @@ export const PanelBody = ({
                 </div>
               )}
               <ElementRequired onRequiredChange={onRequiredChange} item={item} />
-              <ConditionalIndicator item={item} />
             </div>
           </div>
         </>
