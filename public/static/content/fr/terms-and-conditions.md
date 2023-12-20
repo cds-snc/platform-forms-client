@@ -5,11 +5,13 @@ Pour savoir comment le ministère ou l’organisme gère vos soumissions du form
 
 ## Protection de votre vie privée
 
-Lorsque vous publiez un formulaire, ce dernier est temporairement conservé dans une base de données sécurisée gérée par [Emploi et Développement social Canada](https://www.canada.ca/fr/emploi-developpement-social.html) avant d’être traité par le ministère ou l’organisme qui l’a créé. Une fois le traitement effectué, vos réponses au formulaire sont supprimées de notre base de données et le ministère ou l’organisme ayant créé le formulaire protège et conserve vos réponses conformément à ses propres politiques. 
+Lorsque vous soumettez un formulaire, ce dernier est temporairement conservé dans une base de données sécurisée gérée par Emploi et Développement social Canada pour une durée maximale de 60 jours. La soumission est ensuite traitée et stockée par le ministère ou l’organisme qui a créé le formulaire conformément à ses propres politiques et processus.
 
-[Emploi et Développement social Canada](https://www.canada.ca/fr/emploi-developpement-social.html) n’utilise pas les renseignements personnels que vous inscrivez au formulaire à des fins administratives, à moins qu’il n’ait créé le formulaire et l’administre lui-même. Nous ne prenons aucune décision à votre sujet ou au sujet de vos réponses et prenons des mesures de sécurité comme le chiffrage des renseignements et leur suppression après 60 jours au maximum. L’[article 7 de la *Loi sur la gestion des finances publiques*](https://laws-lois.justice.gc.ca/fra/lois/f-11/) nous autorise à recueillir et à stocker des renseignements personnels.
+[Emploi et Développement social Canada](https://www.canada.ca/fr/emploi-developpement-social.html) n’utilise pas les renseignements personnels que vous inscrivez au formulaire à des fins administratives, à moins qu’il n’ait créé le formulaire et l’administre lui-même. La Section 5.1 de la [*Loi sur le ministère de l’Emploi et du Développement social*](https://laws-lois.justice.gc.ca/fra/lois/h-5.7/TexteComplet.html) nous autorise à recueillir et à stocker des renseignements personnels.
 
 Le ministère ou l’organisme avec lequel vous communiquez protège également vos renseignements personnels. L’avis de confidentialité figurant sur le formulaire devrait préciser comment ils procèdent.  
+
+Les renseignements personnels sont recueillis conformément à la [Loi sur la protection des renseignements personnels](https://laws.justice.gc.ca/fra/lois/p-21/index.html).
 
 ### Analytique Web pour améliorer votre expérience  
 
@@ -45,7 +47,7 @@ Des logiciels sont utilisés pour surveiller le trafic réseau et pour détecter
 - les pages auxquelles vous avez accédé et les documents que vous avez téléchargés.
 - l’adresse Internet du site à partir duquel vous avez accédé directement à notre site, le cas échéant.
 
-Dans la plupart des cas, il s’agit de données statistiques anonymes. Aucune tentative n’est faite pour relier ces données (ni les adresses IP des appareils qui ont contacté notre site Web) à l’identité des personnes qui visitent notre site, à moins qu’une tentative d’endommager le site n’ait été détectée. Les logiciels ne sont jamais utilisés pour recueillir des renseignements personnels spécifiques tels que votre nom, votre numéro de téléphone ou votre adresse électronique.
+Il s'agit de données statistiques qui ne permettent pas de vous identifier directement. Aucune tentative n’est faite pour relier ces données (ni les adresses IP des appareils qui ont contacté notre site Web) à l’identité des personnes qui visitent notre site, à moins qu’une tentative d’endommager le site n’ait été détectée. Les logiciels ne sont jamais utilisés pour recueillir des renseignements personnels spécifiques tels que votre nom, votre numéro de téléphone ou votre adresse électronique.
 
 Lorsque l’on détecte une menace pour le site du Service numérique canadien ou les systèmes informatiques du gouvernement du Canada, on recueille des données conformément à l’article 161 de la _[Loi sur la gestion des finances publiques](https://laws-lois.justice.gc.ca/fra/lois/f-11/)_. Si des activités criminelles sont détectées, ces données peuvent être communiquées aux autorités compétentes chargées de l’application de la loi. De tels renseignements peuvent être utilisés pour établir des statistiques sur la sécurité du réseau ainsi qu’à des fins de vérification, d’évaluation, de recherche, de planification et d’établissement de rapports, et figurent dans le [fichier de renseignements personnels POU 939 Incidents de sécurité et atteintes à la vie privée](https://www.canada.ca/fr/secretariat-conseil-tresor/services/acces-information-protection-reseignements-personnels/acces-information/renseignements-programmes-fonds-renseignements/fichiers-renseignements-personnels-ordinaires.html#pou939).
 

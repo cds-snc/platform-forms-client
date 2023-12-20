@@ -5,11 +5,13 @@ To learn about how a department or agency manages your form submissions, return 
 
 ## How we protect your privacy
 
-When you submit a form, it is temporarily stored in a secure database managed by [Employment and Social Development Canada](https://www.canada.ca/en/employment-social-development.html), before being processed by the department or agency that created it. Once processed, your form submission is deleted from our database and the department or agency that created the form protects and stores your submission according to their own policies. 
+When you submit a form, it is temporarily stored in a secure database managed by Employment and Social Development Canada for up to 60 days. It is then processed and stored by the department or agency that created the form according to their own policies and processes.
 
-[Employment and Social Development Canada](https://www.canada.ca/en/employment-social-development.html) does not use the personal information you provide on a form for any administrative purpose, unless it created and administers the form itself. We do not make decisions about you or your submission and take security measures, such as encrypting the information and deleting it after up to 60 days. [Section 7 of the *Financial Administration Act*](https://laws-lois.justice.gc.ca/eng/acts/F-11/section-7.html), allows us to collect and store personal information.
+[Employment and Social Development Canada](https://www.canada.ca/en/employment-social-development.html) does not use the personal information you provide on a form for any administrative purpose, unless it created and administers the form itself. Section 5.1 of the [*Department of Employment and Social Development Act*](https://laws-lois.justice.gc.ca/eng/acts/h-5.7/FullText.html), allows us to collect and store personal information.
 
 The department or agency you’re communicating with also protects your personal information. The Privacy Notice on the form should explain how they do this.
+
+Personal information is also collected in compliance with the [Privacy Act](https://laws.justice.gc.ca/eng/acts/P-21/index.html).
 
 ### We use web analytics to help improve your experience
 
@@ -45,7 +47,7 @@ Software programs are used to monitor network traffic and to identify unauthoriz
 - the pages you have accessed and the documents you have downloaded.
 - the Internet address of the website from which you linked directly to our site, if applicable.
 
-In most circumstances, this is anonymous statistical data. No attempt is made to link this data, nor the IP addresses of devices that have contacted our website, with the identity of individuals visiting our site, unless an attempt to damage the site has been detected. The programs are never used to gather specific personal information such as your name, your phone number, or your email address.
+This is statistical data and does not directly identify you. No attempt is made to link this data, nor the IP addresses of devices that have contacted our website, with the identity of individuals visiting our site, unless an attempt to damage the site has been detected. The programs are never used to gather specific personal information such as your name, your phone number, or your email address.
 
 When a threat to the website or computer systems of the Government of Canada is detected, information is collected pursuant to section 161 of the [*Financial Administration Act*](https://laws-lois.justice.gc.ca/eng/acts/f-11/). The information may be shared with appropriate law enforcement authorities if suspected criminal activities are detected. Such information may be used for network security related statistical purposes, audit, evaluation, research, planning and reporting, and is included in [Personal Information Bank Security Incidents and Privacy Breaches (PSU 939)](https://www.canada.ca/en/treasury-board-secretariat/services/access-information-privacy/access-information/information-about-programs-information-holdings/standard-personal-information-banks.html#psu939).
 
