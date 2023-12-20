@@ -12,6 +12,7 @@ export const CopyCodes = ({
 }) => {
   const { t } = customTranslate("my-forms");
   const capitalizedLang = lang === "en" ? "En" : "Fr";
+  const HOST = process.env.NEXTAUTH_URL || "";
 
   return (
     <div className="flex flex-row">
@@ -34,7 +35,7 @@ export const CopyCodes = ({
       </div>
       <div>
         <a
-          href={`/form-builder/responses/${formId}/confirmed`}
+          href={`${HOST}/form-builder/responses/${formId}/confirmed`}
           className="ml-4 block h-16 rounded-lg border border-black bg-white px-6 py-4 text-black shadow hover:bg-gray-400"
         >
           {t("responseAggregatedTemplate.goToGcForms", { lng: lang })}
