@@ -7,7 +7,7 @@ import { Option } from "./Option";
 import { Button } from "@components/globals";
 import { FormElementWithIndex } from "../../../types";
 import { ModalRules } from "../../edit/ModalRules";
-import { ConditionalIndicatorOption } from "@components/form-builder/app/shared";
+import { ConditionalIndicatorOption, AddOther } from "@components/form-builder/app/shared";
 
 const AddButton = ({ index, onClick }: { index: number; onClick: (index: number) => void }) => {
   const { t } = useTranslation("form-builder");
@@ -102,9 +102,14 @@ export const Options = ({
     <div className="mt-5">
       {options}
       <div className="mr-2 inline-block">
-        <AddOptions index={parentIndex} />
+        <div className="mr-4 inline-block">
+          <AddOptions index={parentIndex} />
+        </div>
+        <AddOther item={item} />
       </div>
-      <ModalRules item={item} />
+      <div>
+        <ModalRules item={item} />
+      </div>
     </div>
   );
 };

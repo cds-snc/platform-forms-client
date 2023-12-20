@@ -708,8 +708,11 @@
     "text1": "Show when: [fr]",
     "text2": "Has value: [fr]",
     "defaultQuestion": "No conditions always show [fr]",
-    "addCustomRules": "Add a custom rule [fr]",
+    "addCustomRules": "Add a rule [fr]",
     "addAnotherRule": "Add another rule [fr]",
-    "removeRule": "remove [fr]"
+    "removeRule": "remove [fr]",
+    "addOther": "Add 'if other' option [fr]",
+    "other": "Other [fr]",
+    "show": "Show: [fr]"
   }
 }
