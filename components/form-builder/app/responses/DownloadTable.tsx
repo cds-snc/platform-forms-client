@@ -24,8 +24,9 @@ import { DeleteButton } from "./DeleteButton";
 import { ConfirmDeleteNewDialog } from "./Dialogs/ConfirmDeleteNewDialog";
 import { DownloadDialog } from "./Dialogs/DownloadDialog";
 import { formatDateTime } from "@components/form-builder/util";
-import { WarningIcon } from "@components/form-builder/icons";
 import { DownloadSingleButton } from "./DownloadSingleButton";
+import { Pagination } from "./Pagination";
+import { cn } from "@lib/utils";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -33,9 +34,9 @@ interface DownloadTableProps {
   formId: string;
   nagwareResult: NagwareResult | null;
   responseDownloadLimit: number;
-  responsesRemaining: boolean;
   showDownloadSuccess: false | string;
   setShowDownloadSuccess: React.Dispatch<React.SetStateAction<false | string>>;
+  lastEvaluatedKey?: Record<string, string> | null | undefined;
 }
 
 export const DownloadTable = ({
@@ -44,8 +45,8 @@ export const DownloadTable = ({
   formId,
   nagwareResult,
   responseDownloadLimit,
-  responsesRemaining,
   setShowDownloadSuccess,
+  lastEvaluatedKey,
 }: DownloadTableProps) => {
   const { t } = useTranslation("form-builder-responses");
   const router = useRouter();
@@ -55,6 +56,7 @@ export const DownloadTable = ({
   const [noSelectedItemsError, setNoSelectedItemsError] = useState(false);
   const [showConfirmNewtDialog, setShowConfirmNewDialog] = useState(false);
   const [showDownloadDialog, setShowDownloadDialog] = useState(false);
+  const [removedRows, setRemovedRows] = useState<string[]>([]);
 
   const accountEscalated = nagwareResult && nagwareResult.level > 2;
 
@@ -126,9 +128,9 @@ export const DownloadTable = ({
           <caption>
             <span className="sr-only">{t("downloadResponsesTable.header.tableTitle")}</span>
           </caption>
-          <thead className="border-b-1 border-slate-400">
-            <tr>
-              <th scope="col" className="py-4 pr-3 text-center">
+          <thead>
+            <tr className="border-b-1 border-slate-300">
+              <th scope="col" className="py-4 text-center">
                 <CheckAll
                   tableItems={tableItems}
                   tableItemsDispatch={tableItemsDispatch}
@@ -151,74 +153,32 @@ export const DownloadTable = ({
             </tr>
           </thead>
           <tbody>
-            {responsesRemaining && (
-              <tr className="border-b-1 border-slate-300 bg-yellow-50">
-                <th scope="row">
-                  <WarningIcon className="mx-8 mt-1 inline-block scale-150" />{" "}
-                  <span className="sr-only">{t("downloadResponsesTable.header.warning")}</span>
-                </th>
-                <td className="px-4 py-2" colSpan={4}>
-                  <p>
-                    <strong>
-                      {isStatus(statusQuery, VaultStatus.NEW) &&
-                        t("downloadResponsesTable.errors.responsesState.new.remainingResponses", {
-                          max: responseDownloadLimit,
-                        })}
-                      {isStatus(statusQuery, VaultStatus.DOWNLOADED) &&
-                        t(
-                          "downloadResponsesTable.errors.responsesState.downloaded.remainingResponses",
-                          {
-                            max: responseDownloadLimit,
-                          }
-                        )}
-                      {isStatus(statusQuery, VaultStatus.CONFIRMED) &&
-                        t(
-                          "downloadResponsesTable.errors.responsesState.confirmed.remainingResponses",
-                          {
-                            max: responseDownloadLimit,
-                          }
-                        )}
-                    </strong>
-                    <br />
-                    {isStatus(statusQuery, VaultStatus.NEW) &&
-                      t("downloadResponsesTable.errors.responsesState.new.remainingResponsesBody", {
-                        max: responseDownloadLimit,
-                      })}
-                    {isStatus(statusQuery, VaultStatus.DOWNLOADED) &&
-                      t(
-                        "downloadResponsesTable.errors.responsesState.downloaded.remainingResponsesBody",
-                        {
-                          max: responseDownloadLimit,
-                        }
-                      )}
-                    {isStatus(statusQuery, VaultStatus.CONFIRMED) &&
-                      t(
-                        "downloadResponsesTable.errors.responsesState.confirmed.remainingResponsesBody",
-                        {
-                          max: responseDownloadLimit,
-                        }
-                      )}
-                  </p>
-                </td>
-              </tr>
-            )}
-            {tableItems.sortedItems.map((submission) => {
+            <tr className="border-y-1 border-slate-400 bg-slate-100 py-2">
+              <td colSpan={5} className="px-4 py-2">
+                <Pagination
+                  lastEvaluatedKey={lastEvaluatedKey}
+                  formId={formId}
+                  responseDownloadLimit={responseDownloadLimit}
+                  recordCount={vaultSubmissions.length}
+                />
+              </td>
+            </tr>
+
+            {tableItems.allItems.map((submission) => {
               const isBlocked = blockDownload(submission);
               const createdDateTime = formatDateTime(submission.createdAt).join(" ");
-              const downloadedDateTime = submission.downloadedAt
-                ? formatDateTime(submission.downloadedAt).join(" ")
-                : "";
-              const confirmedDateTime = submission.confirmedAt
-                ? formatDateTime(submission.confirmedAt).join(" ")
-                : "";
               return (
                 <tr
                   key={submission.name}
-                  className={
-                    "border-b-2 border-grey" +
-                    (tableItems.statusItems.get(submission.name) ? " bg-[#fffbf3]" : "") +
-                    (isBlocked ? " opacity-50" : "")
-                  }
+                  className={cn(
+                    "border-y-1 border-slate-300 hover:ring-2 hover:ring-purple-500" +
+                      (tableItems.statusItems.get(submission.name) ? " bg-purple-50" : "") +
+                      (isBlocked ? " opacity-50" : "") +
+                      (isStatus(statusQuery, VaultStatus.NEW) &&
+                      removedRows.includes(submission.name)
+                        ? " transition-opacity opacity-50 ease-in-out duration-500"
+                        : "")
+                  )}
                 >
                   <td className="flex whitespace-nowrap pb-2 pl-9 pr-4">
                     <div className="gc-input-checkbox">
@@ -244,25 +204,29 @@ export const DownloadTable = ({
                     <span className="sr-only">{t("downloadResponsesTable.header.download")}</span>
                     {submission.name}
                   </th>
-                  <td className="whitespace-nowrap px-4">
-                    {isStatus(statusQuery, [VaultStatus.NEW, VaultStatus.PROBLEM]) && (
-                      <span>{createdDateTime}</span>
-                    )}
-                    {isStatus(statusQuery, VaultStatus.DOWNLOADED) && (
-                      <span>{downloadedDateTime}</span>
-                    )}
-                    {isStatus(statusQuery, VaultStatus.CONFIRMED) && (
-                      <span>{confirmedDateTime}</span>
-                    )}
-                  </td>
+                  <td className="whitespace-nowrap px-4">{createdDateTime}</td>
                   <td className="whitespace-nowrap px-4">
                     {isStatus(statusQuery, VaultStatus.NEW) && (
-                      <DownloadResponseStatus
-                        vaultStatus={submission.status}
-                        createdAt={submission.createdAt}
-                        downloadedAt={submission.downloadedAt}
-                        overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
-                      />
+                      <>
+                        {removedRows.includes(submission.name) ? (
+                          <>
+                            <ConfirmReceiptStatus
+                              vaultStatus={VaultStatus.DOWNLOADED}
+                              createdAtDate={submission.createdAt}
+                              overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
+                            />
+                            <br />
+                            {t("downloadResponsesTable.movedToDownloaded")}
+                          </>
+                        ) : (
+                          <DownloadResponseStatus
+                            vaultStatus={submission.status}
+                            createdAt={submission.createdAt}
+                            downloadedAt={submission.downloadedAt}
+                            overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
+                          />
+                        )}
+                      </>
                     )}
                     {isStatus(statusQuery, VaultStatus.DOWNLOADED) && (
                       <ConfirmReceiptStatus
@@ -291,7 +255,8 @@ export const DownloadTable = ({
                       formId={submission.formID}
                       responseId={submission.name}
                       onDownloadSuccess={() => {
-                        router.replace(router.asPath, undefined, { scroll: false });
+                        setRemovedRows([...removedRows, submission.name]);
+                        // router.replace(router.asPath, undefined, { scroll: false });
                         if (isStatus(statusQuery, VaultStatus.NEW)) {
                           setShowDownloadSuccess("downloadSuccess");
                         }
@@ -303,6 +268,16 @@ export const DownloadTable = ({
                 </tr>
               );
             })}
+            <tr className="border-y-1 border-slate-300 bg-slate-100 py-2">
+              <td colSpan={5} className="px-4 py-2">
+                <Pagination
+                  lastEvaluatedKey={lastEvaluatedKey}
+                  formId={formId}
+                  responseDownloadLimit={responseDownloadLimit}
+                  recordCount={vaultSubmissions.length}
+                />
+              </td>
+            </tr>
           </tbody>
         </table>
         <div className="mt-8 flex">
@@ -345,7 +320,8 @@ export const DownloadTable = ({
         formId={formId}
         formName={formName}
         onSuccessfulDownload={() => {
-          router.replace(router.asPath, undefined, { scroll: false });
+          setRemovedRows([...removedRows, ...tableItems.checkedItems.keys()]);
+          // router.replace(router.asPath, undefined, { scroll: false });
           if (isStatus(statusQuery, VaultStatus.NEW)) {
             setShowDownloadSuccess("downloadSuccess");
           }

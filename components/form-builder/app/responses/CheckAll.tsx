@@ -18,7 +18,7 @@ export const CheckAll = ({
   tableItems: {
     checkedItems: Map<string, boolean>;
     statusItems: Map<string, boolean>;
-    sortedItems: VaultSubmissionList[];
+    allItems: VaultSubmissionList[];
     numberOfOverdueResponses: number;
   };
   tableItemsDispatch: React.Dispatch<ReducerTableItemsActions>;
@@ -33,16 +33,16 @@ export const CheckAll = ({
     ALL = "ALL",
   }
 
-  const { checkedItems, sortedItems } = tableItems;
+  const { checkedItems, allItems } = tableItems;
 
   const checkedItemsCount = checkedItems.size;
-  const sortedItemsCount = sortedItems.length;
+  const allItemsCount = allItems.length;
 
   // Are all items checked, some items checked, or no items checked?
   const checkAllStatus =
     checkedItemsCount === 0
       ? allCheckedState.NONE
-      : checkedItemsCount === sortedItemsCount
+      : checkedItemsCount === allItemsCount
       ? allCheckedState.ALL
       : allCheckedState.SOME;
 
@@ -51,7 +51,7 @@ export const CheckAll = ({
    */
   const handleCheckAll = () => {
     if (checkAllStatus === allCheckedState.NONE) {
-      sortedItems.forEach((submission) => {
+      allItems.forEach((submission) => {
         tableItemsDispatch({
           type: TableActions.UPDATE,
           payload: { item: { name: submission.name, checked: true } },

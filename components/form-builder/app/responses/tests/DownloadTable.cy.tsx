@@ -79,6 +79,7 @@ describe("<DownloadTable />", () => {
 
     router = {
       back: cy.stub().as("routerBack"),
+      query: {},
     };
 
     cy.stub(Router, "useRouter").returns(router);
@@ -88,6 +89,17 @@ describe("<DownloadTable />", () => {
 
   it("Blocks download of newer items when one is overdue by 35 days (account restricted)", () => {
     const vaultSubmissions: VaultSubmissionList[] = [
+      {
+        formID: "clg17xha50008efkgfgxa8l4f",
+        status: VaultStatus.NEW,
+        securityAttribute: "Unclassified",
+        name: "Today",
+        createdAt: today, // (today)
+        lastDownloadedBy: "",
+        confirmedAt: undefined,
+        downloadedAt: undefined,
+        removedAt: undefined,
+      },
       {
         formID: "clg17xha50008efkgfgxa8l4f",
         status: VaultStatus.NEW,
@@ -132,17 +144,6 @@ describe("<DownloadTable />", () => {
         downloadedAt: undefined,
         removedAt: undefined,
       },
-      {
-        formID: "clg17xha50008efkgfgxa8l4f",
-        status: VaultStatus.NEW,
-        securityAttribute: "Unclassified",
-        name: "Today",
-        createdAt: today, // (today)
-        lastDownloadedBy: "",
-        confirmedAt: undefined,
-        downloadedAt: undefined,
-        removedAt: undefined,
-      },
     ];
 
     const nagwareResult = {
@@ -161,24 +162,24 @@ describe("<DownloadTable />", () => {
     );
 
     // The -35 overdue causes the rest to be blocked
-    cy.get("tbody tr:nth-child(1)").should("have.attr", "class").and("contain", "opacity-50");
     cy.get("tbody tr:nth-child(2)").should("have.attr", "class").and("contain", "opacity-50");
-    cy.get("tbody tr:nth-child(3)").should("have.attr", "class").and("not.contain", "opacity-50");
+    cy.get("tbody tr:nth-child(3)").should("have.attr", "class").and("contain", "opacity-50");
     cy.get("tbody tr:nth-child(4)").should("have.attr", "class").and("not.contain", "opacity-50");
     cy.get("tbody tr:nth-child(5)").should("have.attr", "class").and("not.contain", "opacity-50");
+    cy.get("tbody tr:nth-child(6)").should("have.attr", "class").and("not.contain", "opacity-50");
+
+    cy.get("tbody tr:nth-child(6) td:nth-child(4)").should(
+      "contain",
+      "downloadResponsesTable.status.overdue"
+    );
 
     cy.get("tbody tr:nth-child(5) td:nth-child(4)").should(
       "contain",
       "downloadResponsesTable.status.overdue"
     );
 
-    cy.get("tbody tr:nth-child(4) td:nth-child(4)").should(
-      "contain",
-      "downloadResponsesTable.status.overdue"
-    );
-
     // The -23 days should additionally have a warning
-    cy.get("tbody tr:nth-child(3) td:nth-child(4)").should(
+    cy.get("tbody tr:nth-child(4) td:nth-child(4)").should(
       "contain",
       "downloadResponsesTable.status.overdue"
     );
