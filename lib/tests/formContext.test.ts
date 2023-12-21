@@ -1,10 +1,14 @@
 import { FormElementTypes } from "../types";
+import validFormTemplate from "../../__fixtures__/validFormTemplate.json";
+import { PublicFormRecord } from "@lib/types";
 
 import {
   findChoiceIndex,
   getElementsWithRuleForChoice,
   choiceRulesToConditonalRules,
   ensureChoiceId,
+  mapIdsToValues,
+  matchRule,
 } from "../formContext";
 
 describe("Form Context", () => {
@@ -176,5 +180,62 @@ describe("Form Context", () => {
       expect(ensureChoiceId("2.0")).toEqual("2.0");
       expect(ensureChoiceId("2.1")).toEqual("2.1");
     });
+  });
+
+  describe("Map Ids to Values", () => {
+    const form = {
+      id: "test0form00000id000asdf11",
+      form: validFormTemplate,
+      isPublished: true,
+      deliveryOption: {
+        emailAddress: "",
+        emailSubjectEn: "",
+        emailSubjectFr: "",
+      },
+      securityAttribute: "Unclassified",
+    };
+
+    expect(
+      mapIdsToValues(form as PublicFormRecord, {
+        2: ["Individual Nomination"],
+        3: ["60 Years of Service Special Award (Individual only)"],
+        15: ["Saskatchewan"],
+        25: "Some name",
+      })
+    ).toEqual(["2.1", "3.5", "15.12"]);
+  });
+
+  describe("Match rule", () => {
+    const form = {
+      id: "test0form00000id000asdf11",
+      form: validFormTemplate,
+      isPublished: true,
+      deliveryOption: {
+        emailAddress: "",
+        emailSubjectEn: "",
+        emailSubjectFr: "",
+      },
+      securityAttribute: "Unclassified",
+    };
+
+    // False -> Pass Value that isn't in the list of values
+    expect(
+      matchRule({ choiceId: "2.0" }, form as PublicFormRecord, {
+        2: ["Individual Nomination"],
+        3: ["60 Years of Service Special Award (Individual only)"],
+        15: ["Saskatchewan"],
+        25: "Some name",
+      })
+    ).toEqual(false);
+
+    // True -> Pass Value that is in the list of values
+    expect(
+      matchRule({ choiceId: "2.1" }, form as PublicFormRecord, {
+        2: ["Individual Nomination"],
+        3: ["60 Years of Service Special Award (Individual only)"],
+        15: ["Saskatchewan"],
+        25: "Some name",
+      })
+    ).toEqual(true);
   });
 });
