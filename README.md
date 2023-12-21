@@ -2,7 +2,7 @@
 
 # Platform - GC Forms
 
-This repository is work-in-progress for the GC Forms platform product. "Alpha" will be arriving in Spring 2021.
+This repository is the web application for the GC Forms platform product.
 
 - Explore it here: [https://forms-staging.cdssandbox.xyz/](https://forms-staging.cdssandbox.xyz/).
 
@@ -10,7 +10,7 @@ This repository is work-in-progress for the GC Forms platform product. "Alpha" w
 
 This is a [Next.js](https://nextjs.org/) and is built with:
 
-- Next.js >= 10.x
+- Next.js >= 13.x
 - Sass (Syntactically Awesome Style Sheets) for reusable styles
 - [Tailwindcss](https://tailwindcss.com/) a utility-first css framework for rapidly building custom designs
 - [PostCSS](https://postcss.org/)
@@ -31,25 +31,25 @@ cd platform-forms-client
 yarn install
 ```
 
-Set .env variables
+Create the file .env at the root of the project and set the following variables
 
 For local development of the NextJS application but leveraging the AWS backend (Reliability Queue, Templates DB, etc.)
 
 ```
-NOTIFY_API_KEY= // Can be found in LastPass
+NOTIFY_API_KEY= // ask the dev team
 SUBMISSION_API=Submission
 TEMPLATES_API=Templates
-AWS_ACCESS_KEY_ID= // Can be found in LastPass
-AWS_SECRET_ACCESS_KEY= // Can be found in LastPass
+AWS_ACCESS_KEY_ID= // ask the dev team
+AWS_SECRET_ACCESS_KEY= // ask the dev team
 NEXTAUTH_URL=http://localhost:3000
 REDIS_URL=localhost
 ```
 
-For local development of the complete solution (running SAM for local Lambdas) add the following two environment variables to your .env file and see the instructions for launching the Lambda's locally in our [Infrastructure ReadME](https://github.com/cds-snc/forms-staging-terraform)
+For local development of the complete solution (running the AWS Serverless Application Model (SAM) for local Lambdas) add the following two environment variables to your .env file and see the instructions for launching the Lambda's locally in our [Infrastructure README](https://github.com/cds-snc/forms-terraform)
 
 ```
-LOCAL_LAMBDA_ENDPOINT=http://127.0.0.1:3001
-DATABASE_URL=postgres://postgres:password@localhost:5432/formsDB
+LOCAL_AWS_ENDPOINT=http://127.0.0.1:4566
+DATABASE_URL=postgres://postgres:chummy@localhost:5432/formsDB
 ```
 
 Start Redis in docker locally
@@ -88,24 +88,21 @@ Browse application on `http://localhost:3000`
 
 There are some environment variables that can optionally be configured. You can see a list in `.env.example`.
 
-### Grant yourself admin access locally
+## Grant yourself admin access locally
 
-There are 2 ways to connect to the database. Either directly using PGAdmin or a PSQL cli tool or through Prisma Studio. Once the change is made you will need to "Log Out" using the
+There are several ways to connect to the database, but here's how to do it through Prisma Studio. Once the change is made, you will need to 'Log Out' and log back in.
 
-## Connect to DataBase Directly
+### Prisma Studio
 
-- Login using your email via Google SSO
-- Connect to the local database `psql -h db -U postgres -d formsDB`
-- Retrieve your users id from the User table in the formsDB `SELECT * FROM "public"."User" WHERE email='$YOUR_EMAIL';`
-- Update the record to elevate yourself as an admin `UPDATE "public"."User" SET role='ADMINISTRATOR' WHERE id='$YOUR_ID';`
-
-## Prisma Studio
-
-- Login using your email via Google SSO
+- Login using your Staging account
 - Launch prisma studio with `yarn prisma:studio` or if you have prisma installed globally `prisma studio`
 - A browser window will open at `localhost:5555`. Open the model `User`
-- A table will appear. Find your username in the list and double-click on the value under the `role` column to modify to "ADMINISTRATOR".
+- A table will appear. Find your username and add all the privileges under the `privileges` column.
 - Click on "Save Change" button in the top menu bar once completed.
+
+### Enable forms submission locally
+
+If you want to thoroughly test the submission, i.e., invoke the Lambdas, please enable the feature flag 'Submit to Reliability Queue' in the administration settings.
 
 ## Testing
 
@@ -193,11 +190,11 @@ NEXTAUTH_URL=http://localhost:3000
 REDIS_URL=localhost
 ```
 
-Pour le développement local de la solution complète (exécutant SAM pour les Lambda locaux), ajoutez les deux variables d'environnement suivantes à votre fichier .env et consultez les instructions pour lancer les Lambda localement dans notre [Infrastructure ReadME] (https://github.com/cds -snc/forms-staging-terraform)
+Pour le développement local de la solution complète (exécutant SAM pour les Lambda locaux), ajoutez les deux variables d'environnement suivantes à votre fichier .env et consultez les instructions pour lancer les Lambda localement dans notre [Infrastructure README](https://github.com/cds-snc/forms-terraform)
 
 ```
-LOCAL_LAMBDA_ENDPOINT=http://127.0.0.1:3001
-DATABASE_URL=postgres://postgres:password@localhost:5432/formsDB
+LOCAL_AWS_ENDPOINT=http://127.0.0.1:4566
+DATABASE_URL=postgres://postgres:chummy@localhost:5432/formsDB
 ```
 
 Démarrer Redis dans docker localement
@@ -248,3 +245,7 @@ Pour envoyer les réponses d'une formulaire à une adresse courriel, vous devez 
 ```sh
 NOTIFY_API_KEY=
 ```
+
+### Activer la soumission de formulaires en local
+
+Si vous souhaitez tester minutieusement la soumission, c'est-à-dire invoquer les Lambdas, veuillez activer le drapeau fonctionnel 'Submit to Reliability Queue' dans les paramètres d'administration.

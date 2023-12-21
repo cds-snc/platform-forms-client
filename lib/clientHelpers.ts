@@ -333,6 +333,7 @@ export const getDate = (withTime = false) => {
   return withTime ? date.toISOString() : date.toISOString().split("T")[0];
 };
 
+// TODO cosider moving to helpers since this is used by both the client and API
 export const slugify = (str: string) =>
   str
     .toLowerCase()

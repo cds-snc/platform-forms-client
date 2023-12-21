@@ -23,7 +23,7 @@ const protectedMethods = ["POST"];
 const lambdaClient = new LambdaClient({
   region: "ca-central-1",
   retryMode: "standard",
-  endpoint: process.env.LOCAL_LAMBDA_ENDPOINT,
+  ...(process.env.LOCAL_AWS_ENDPOINT && { endpoint: process.env.LOCAL_AWS_ENDPOINT }),
 });
 
 const submit = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {

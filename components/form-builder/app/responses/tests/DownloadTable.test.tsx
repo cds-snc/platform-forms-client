@@ -2,7 +2,6 @@ import React from "react";
 import { render, act } from "@testing-library/react";
 import { DownloadTable } from "../DownloadTable";
 import { VaultSubmissionList, VaultStatus } from "@lib/types";
-import { sortVaultSubmission } from "../DownloadTableReducer";
 import axios from "axios";
 
 jest.mock("next/router", () => require("next-router-mock"));
@@ -37,29 +36,6 @@ describe("Download Table", () => {
     await act(async () => {
       await promise;
     });
-  });
-
-  // For expected sorting behavior see:
-  // https://app.zenhub.com/workspaces/gcforms-60cb8929764d71000e481cab/issues/gh/cds-snc/platform-forms-client/1865
-  it("Function sortVaultSubmission() sorts correctly", () => {
-    const sortedVaultSubmissions = sortVaultSubmission(vaultSubmissions);
-    expect(sortedVaultSubmissions.length === vaultSubmissions.length);
-
-    // Status = New sorted "sub list", test order of first three
-    expect(sortedVaultSubmissions[0].name).toEqual("06-04-c718");
-    expect(sortedVaultSubmissions[0].status).toEqual(VaultStatus.NEW.valueOf()); // Just being explicit with these, can also manually check by looking at the data
-    expect(sortedVaultSubmissions[1].name).toEqual("06-04-4aab");
-    expect(sortedVaultSubmissions[1].status).toEqual(VaultStatus.NEW.valueOf());
-    expect(sortedVaultSubmissions[2].name).toEqual("06-04-7f15");
-    expect(sortedVaultSubmissions[2].status).toEqual(VaultStatus.NEW.valueOf());
-
-    // Status !== New sorted "sub list", test order of first three
-    expect(sortedVaultSubmissions[11].name).toEqual("03-04-18df");
-    expect(sortedVaultSubmissions[11].status).not.toEqual(VaultStatus.NEW.valueOf());
-    expect(sortedVaultSubmissions[12].name).toEqual("03-04-6ca5");
-    expect(sortedVaultSubmissions[12].status).not.toEqual(VaultStatus.NEW.valueOf());
-    expect(sortedVaultSubmissions[13].name).toEqual("03-04-2ce6");
-    expect(sortedVaultSubmissions[13].status).not.toEqual(VaultStatus.NEW.valueOf());
   });
 });
 

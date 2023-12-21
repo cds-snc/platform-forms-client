@@ -63,6 +63,7 @@
   "downloadResponsesTable": {
     "download": "Download",
     "delete": "Delete",
+    "movedToDownloaded": "Moved to Downloaded",
     "header": {
       "tableTitle": "Responses table",
       "select": "Select",
@@ -78,7 +79,22 @@
       "download": "Download",
       "nextStep": "Next step",
       "date": "Date",
-      "warning": "Warning"
+      "warning": "Warning",
+      "pagination": {
+        "start": "Start",
+        "showing": "Showing responses {{start}} to {{end}}",
+        "next": "Next",
+        "previous": "Previous",
+        "new": {
+          "remainingResponses": "You have more than {{max}} new responses."
+        },
+        "downloaded": {
+          "remainingResponses": "You have more than {{max}} downloaded responses."
+        },
+        "confirmed": {
+          "remainingResponses": "You have more than {{max}} responses waiting to be removed."
+        }
+      }
     },
     "status": {
       "downloaded": "Downloaded",
@@ -106,7 +122,6 @@
       "noProblemResponsesMessage": "Problem responses will appear here until signed off for removal from GC Forms."
     },
     "notifications": {
-
       "downloadComplete": "Responses moved to the “Downloaded” tab",
       "downloadCompleteNew": "Next: Sign off on the removal of responses from GC Forms",
       "downloadingXFiles": "Downloading {{fileCount}} files"
@@ -119,20 +134,6 @@
       "errorDownloadingFilesHeader": "Error downloading the selected files.",
       "errorDownloadingFiles": "Try again in a few minutes. If the problem persists, ",
       "errorDownloadingFilesLink": "contact Support",
-      "responsesState": {
-        "new": {
-          "remainingResponses": "You have over {{max}} responses available.",
-          "remainingResponsesBody": "Showing 1-{{max}}. More will load as displayed responses are downloaded."
-        },
-        "downloaded": {
-          "remainingResponses": "You have over {{max}} downloaded responses.",
-          "remainingResponsesBody": "Showing 1-{{max}}. More will load as responses are signed off for removal."
-        },
-        "confirmed": {
-          "remainingResponses": "You have over {{max}} responses waiting to be removed.",
-          "remainingResponsesBody": "Showing the latest {{max}}. If you need access to responses not displayed contact Support."
-        }
-      },
       "overdueAlert": {
         "title": "Access to new responses is restricted until overdue responses are retrieved.",
         "description": "There are {{numberOfOverdueResponses}} responses that are {{escalatedAfter}} days old. Download and sign off on the removal of overdue responses to remove this restriction."

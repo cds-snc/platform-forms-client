@@ -8,7 +8,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { logMessage } from "@lib/logger";
 import Link from "next/link";
-import { isFormId } from "@lib/validation";
+import { isResponseId } from "@lib/validation";
 import {
   ValidationMessage,
   MessageType,
@@ -19,7 +19,7 @@ export const ReportDialog = ({
   isShow,
   setIsShow,
   apiUrl,
-  inputRegex = isFormId,
+  inputRegex = isResponseId,
   maxEntries = 20,
 }: {
   isShow: boolean;

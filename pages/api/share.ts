@@ -3,6 +3,7 @@ import { cors, middleware, sessionExists } from "@lib/middleware";
 import { getNotifyInstance } from "@lib/integration/notifyConnector";
 import { logMessage } from "@lib/logger";
 import { MiddlewareProps, WithRequired } from "@lib/types";
+import { slugify } from "@lib/clientHelpers";
 
 const shareFormJSON = async (req: NextApiRequest, res: NextApiResponse, props: MiddlewareProps) => {
   try {
@@ -26,7 +27,7 @@ const shareFormJSON = async (req: NextApiRequest, res: NextApiResponse, props: M
           personalisation: {
             application_file: {
               file: base64data,
-              filename: `${filename}.json`,
+              filename: `${slugify(filename)}.json`,
               sending_method: "attach",
             },
             subject: "Form shared | Formulaire partagé",

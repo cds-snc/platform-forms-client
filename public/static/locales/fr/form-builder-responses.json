@@ -63,6 +63,7 @@
   "downloadResponsesTable": {
     "download": "Télécharger",
     "delete": "Supprimer",
+    "movedToDownloaded": "Déplacée vers Téléchargements",
     "header": {
       "tableTitle": "Tableau de réponses",
       "select": "Sélectionner",
@@ -78,7 +79,22 @@
       "download": "Télécharger",
       "nextStep": "Prochaine étape",
       "date": "Date",
-      "warning": "Avertissement"
+      "warning": "Avertissement",
+      "pagination": {
+        "start": "Début",
+        "showing": "Affichage de réponses {{start}} à {{end}}",
+        "next": "Suivant",
+        "previous": "Précédent",
+        "new": {
+          "remainingResponses": "Vous avez plus de {{max}} nouvelles réponses."
+        },
+        "downloaded": {
+          "remainingResponses": "Vous avez plus de {{max}} réponses téléchargées."
+        },
+        "confirmed": {
+          "remainingResponses": "Vous avez plus de {{max}} réponses téléchargées."
+        }
+      }
     },
     "status": {
       "downloaded": "Téléchargé",
@@ -118,20 +134,6 @@
       "errorDownloadingFilesHeader": "Erreur lors du téléchargement des fichiers sélectionnés.",
       "errorDownloadingFiles": "Réessayez dans quelques minutes. Si le problème persiste, ",
       "errorDownloadingFilesLink": "contactez Soutien",
-      "responsesState": {
-        "new": {
-          "remainingResponses": "Vous avez plus de {{max}} nouvelles réponses.",
-          "remainingResponsesBody": "Affichage de 1 à {{max}}. D'autres s'ajouteront au fur et à mesure qu'elles seront téléchargées."
-        },
-        "downloaded": {
-          "remainingResponses": "Vous avez plus de {{max}} réponses téléchargées.",
-          "remainingResponsesBody": "Affichage de 1 à {{max}}. D'autres s'ajouteront au fur et à mesure que celles-ci seront approuvées pour suppression."
-        },
-        "confirmed": {
-          "remainingResponses": "Vous avez plus de {{max}} réponses téléchargées.",
-          "remainingResponsesBody": "Affichage des dernières {{max}}. Si vous avez besoin d'accéder à des réponses qui ne sont pas affichées, contactez l'équipe de soutien."
-        }
-      },
       "overdueAlert": {
         "title": "L'accès aux nouvelles réponses est restreint jusqu'à ce que les réponses en retard soient extraites.",
         "description": "Il y a {{numberOfOverdueResponses}} réponses qui datent de {{escalatedAfter}} jours. Téléchargez et approuvez la suppression des réponses en retard pour enlever cette restriction."
