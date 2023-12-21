@@ -1,5 +1,6 @@
 import { FormElement } from "@lib/types";
 import { PublicFormRecord, ConditionalRule } from "@lib/types";
+import { remove } from "jszip";
 
 export type Group = { nextAction?: string; elements: string[] };
 export type GroupsType = Record<string, Group>;
@@ -145,6 +146,20 @@ export const getElementsUsingChoiceId = ({
 };
 
 /**
+ *
+ * @param removeElementId - The elementId to remove from the rules
+ * i.e. "1" from "1.0, 1.1, 1.2, 2.0" we want to remove "1.0, 1.1, 1.2" and leave "2"
+ * @param rules - The rules to remove the elementId from
+ * @returns The rules with the elementId removed
+ */
+export const cleanChoiceIdsFromRules = (removeElementId: string, rules: ConditionalRule[]) => {
+  return rules.filter((rule) => {
+    const ruleElementId = rule.choiceId.split(".")[0];
+    return ruleElementId !== removeElementId;
+  });
+};
+
+/**
  * Converts a list of choice rules to a list of conditional rules for a list of form elements
  * @param elements - List of form elements
  * @param properties - List of choice rules to convert i.e. [{ elementId: "1", choiceId: "1.0" }]
@@ -169,20 +184,10 @@ export const choiceRulesToConditonalRules = (elements: FormElement[], properties
   */
   elements.forEach((element) => {
     let elementRules: ConditionalRule[] = [];
-    if (element.properties.condtionalRules) {
-      const rules = element.properties.condtionalRules as ConditionalRule[];
-
-      /*
-      Cleanup existing choiceIds that match the "pattern"
-      of the elementId (i.e. "1.0, 1.1, 1.2")
-
-      Given we're updating from a rules modal where the choiceIds are all from the same element,
-      we can assume that any existing choiceIds that match can be removed.
-      */
-      elementRules = rules.filter((rule) => {
-        const ruleElementId = rule.choiceId.split(".")[0];
-        return ruleElementId !== elementId;
-      });
+    if (element.properties.conditionalRules) {
+      const rules = element.properties.conditionalRules as ConditionalRule[];
+      // Remove any existing rules for the elementId
+      elementRules = cleanChoiceIdsFromRules(elementId, rules);
     }
     /*
       Add new choiceIds to the appropriate elements based on the elementId

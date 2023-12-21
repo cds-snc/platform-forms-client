@@ -10,6 +10,7 @@ import {
   mapIdsToValues,
   matchRule,
   getElementsUsingChoiceId,
+  cleanChoiceIdsFromRules,
 } from "../formContext";
 
 describe("Form Context", () => {
@@ -166,9 +167,10 @@ describe("Form Context", () => {
     ];
 
     const updatedElements = choiceRulesToConditonalRules(elements, properties);
+
     expect(updatedElements["3"]).toEqual([{ choiceId: "1.0" }]);
     expect(updatedElements["4"]).toEqual([{ choiceId: "1.3" }]);
-    // expect(updatedElements["5"]).toEqual([{ choiceId: "2.0" }]);
+    expect(updatedElements["5"]).toEqual([{ choiceId: "2.0" }]);
   });
 
   describe("Ensure choice id", () => {
@@ -301,6 +303,24 @@ describe("Form Context", () => {
     expect(getElementsUsingChoiceId({ formElements: elements, choiceId: "1.1" })).toEqual([
       { choiceId: "1.1", elementId: "3" },
       { choiceId: "1.1", elementId: "5" },
+    ]);
+  });
+
+  describe("Clean choice ids from rules", () => {
+    const rules = [
+      { choiceId: "1.0" },
+      { choiceId: "1.1" },
+      { choiceId: "1.2" },
+      { choiceId: "2.0" },
+      { choiceId: "2.1" },
+    ];
+
+    expect(cleanChoiceIdsFromRules("1", rules)).toEqual([{ choiceId: "2.0" }, { choiceId: "2.1" }]);
+
+    expect(cleanChoiceIdsFromRules("2", rules)).toEqual([
+      { choiceId: "1.0" },
+      { choiceId: "1.1" },
+      { choiceId: "1.2" },
     ]);
   });
 });
