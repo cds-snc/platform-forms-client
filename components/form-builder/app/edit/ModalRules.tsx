@@ -23,6 +23,7 @@ export const ModalRules = ({ item }: { item: FormElementWithIndex }) => {
   const { t } = useTranslation("form-builder");
   const isRichText = item.type == "richText";
   const { modals, updateModalProperties } = useModalRulesStore();
+  const descriptionId = `descriptionId-${Date.now()}`;
 
   const initialChoiceRules = getElementsWithRuleForChoice({
     formElements: elements,
@@ -83,12 +84,15 @@ export const ModalRules = ({ item }: { item: FormElementWithIndex }) => {
     >
       {!isRichText && modals[item.id] && (
         <>
-          <p className="mb-4">{t("addConditionalRules.modalDescription")}</p>
+          <p className="mb-4" id={descriptionId}>
+            {t("addConditionalRules.modalDescription")}
+          </p>
           <ModalFormRules
             initialChoiceRules={initialChoiceRules}
             item={item}
             properties={modals[item.id]}
             updateModalProperties={updateModalProperties}
+            descriptionId={descriptionId}
           />
         </>
       )}

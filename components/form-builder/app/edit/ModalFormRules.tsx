@@ -14,13 +14,16 @@ export const ModalFormRules = ({
   properties,
   initialChoiceRules,
   updateModalProperties,
+  descriptionId,
 }: {
   item: FormElementWithIndex;
   properties: ModalProperties;
   initialChoiceRules: ChoiceRule[];
   updateModalProperties: (id: number, properties: ModalProperties) => void;
+  descriptionId?: string;
 }) => {
   const { t } = useTranslation("form-builder");
+  const formId = `form-${Date.now()}`;
 
   const { elements } = useTemplateStore((s) => ({
     elements: s.form.elements,
@@ -54,8 +57,12 @@ export const ModalFormRules = ({
   };
 
   return (
-    <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}>
-      <div className="mb-6">
+    <form
+      onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}
+      id={formId}
+      {...(descriptionId && { "aria-describedby": descriptionId })}
+    >
+      <div className="mb-6" aria-live="polite" aria-relevant="all">
         {choiceRules.map((rule, index) => {
           return (
             <ConditionalSelector
@@ -77,6 +84,7 @@ export const ModalFormRules = ({
             setChoiceRules([...choiceRules, { elementId: "", choiceId: String(item.id) }]);
           }}
           theme={"secondary"}
+          aria-controls={formId}
         >
           {t("addConditionalRules.addAnotherRule")}
         </Button>
