@@ -26,6 +26,10 @@ export const ModalFormRules = ({
     elements: s.form.elements,
   }));
 
+  if (initialChoiceRules.length == 0) {
+    initialChoiceRules.push({ elementId: "", choiceId: `${item.id}.0` });
+  }
+
   const [choiceRules, setChoiceRules] = useState(initialChoiceRules);
 
   const updateElementId = (index: number, id: string) => {
