@@ -1,6 +1,5 @@
 import { FormElement } from "@lib/types";
 import { PublicFormRecord, ConditionalRule } from "@lib/types";
-import { remove } from "jszip";
 
 export type Group = { nextAction?: string; elements: string[] };
 export type GroupsType = Record<string, Group>;
