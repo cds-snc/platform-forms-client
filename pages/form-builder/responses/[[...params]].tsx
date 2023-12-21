@@ -31,6 +31,7 @@ import { ConfirmDialog } from "@components/form-builder/app/responses/Dialogs/Co
 import { Alert } from "@components/globals";
 import { isStatus, ucfirst } from "@lib/clientHelpers";
 import { TabNavLink } from "@components/form-builder/app/navigation/TabNavLink";
+import { isResponseId } from "@lib/validation";
 
 interface ResponsesProps {
   initialForm: FormRecord | null;
@@ -38,7 +39,7 @@ interface ResponsesProps {
   formId: string;
   nagwareResult: NagwareResult | null;
   responseDownloadLimit: number;
-  responsesRemaining: boolean;
+  lastEvaluatedKey: Record<string, string> | null | undefined;
 }
 
 // TODO: move to an app setting variable
@@ -50,7 +51,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   formId,
   nagwareResult,
   responseDownloadLimit,
-  responsesRemaining,
+  lastEvaluatedKey,
 }: ResponsesProps) => {
   const { t, i18n } = useTranslation("form-builder-responses");
   const { status } = useSession();
@@ -152,6 +153,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           </span>
         </TabNavLink>
         <TabNavLink
+          defaultActive={statusQuery === "downloaded"}
           id="downloaded-responses"
           href={`/form-builder/responses/${formId}/downloaded`}
           setAriaCurrent={true}
@@ -162,6 +164,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           </span>
         </TabNavLink>
         <TabNavLink
+          defaultActive={statusQuery === "confirmed"}
           id="deleted-responses"
           href={`/form-builder/responses/${formId}/confirmed`}
           setAriaCurrent={true}
@@ -246,16 +249,18 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
           <div aria-live="polite">
             <ClosedBanner id={formId} />
             {vaultSubmissions.length > 0 && (
-              <DownloadTable
-                vaultSubmissions={vaultSubmissions}
-                formName={formName}
-                formId={formId}
-                nagwareResult={nagwareResult}
-                responseDownloadLimit={responseDownloadLimit}
-                responsesRemaining={responsesRemaining}
-                showDownloadSuccess={successAlertMessage}
-                setShowDownloadSuccess={setShowSuccessAlert}
-              />
+              <>
+                <DownloadTable
+                  vaultSubmissions={vaultSubmissions}
+                  formName={formName}
+                  formId={formId}
+                  nagwareResult={nagwareResult}
+                  responseDownloadLimit={responseDownloadLimit}
+                  showDownloadSuccess={successAlertMessage}
+                  setShowDownloadSuccess={setShowSuccessAlert}
+                  lastEvaluatedKey={lastEvaluatedKey}
+                />
+              </>
             )}
 
             {vaultSubmissions.length <= 0 && statusQuery === "new" && (
@@ -366,7 +371,7 @@ Responses.getLayout = (page: ReactElement) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({
-  query: { params },
+  query: { params, lastKey = null },
   locale,
   req,
   res,
@@ -420,15 +425,26 @@ export const getServerSideProps: GetServerSideProps = async ({
 
       // get status from url params (default = new) and capitalize/cast to VaultStatus
       // Protect against invalid status query
-
       const status = Object.values(VaultStatus).includes(ucfirst(statusQuery) as VaultStatus)
         ? (ucfirst(statusQuery) as VaultStatus)
         : VaultStatus.NEW;
 
-      const { submissions, submissionsRemaining } = await listAllSubmissions(
+      let currentLastEvaluatedKey = null;
+
+      // build up lastEvaluatedKey from lastKey url param
+      if (lastKey && isResponseId(String(lastKey))) {
+        currentLastEvaluatedKey = {
+          Status: status,
+          NAME_OR_CONF: `NAME#${lastKey}`,
+          FormID: formID,
+        };
+      }
+
+      const { submissions, lastEvaluatedKey } = await listAllSubmissions(
         ability,
         formID,
-        status
+        status,
+        currentLastEvaluatedKey
       );
 
       FormbuilderParams.initialForm = initialForm;
@@ -448,7 +464,7 @@ export const getServerSideProps: GetServerSideProps = async ({
           vaultSubmissions: submissions,
           formId: FormbuilderParams.initialForm?.id ?? null,
           responseDownloadLimit: responseDownloadLimit,
-          responsesRemaining: submissionsRemaining,
+          lastEvaluatedKey: lastEvaluatedKey,
           nagwareResult,
           ...(locale &&
             (await serverSideTranslations(
