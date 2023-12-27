@@ -5,11 +5,7 @@ import { css } from "../../html/css/compiled";
 import { ColumnTable } from "../../html/components/ColumnTable";
 import { AggregatedTable } from "./AggregatedTable";
 import { FormResponseSubmissions, Submission } from "@lib/responseDownloadFormats/types";
-import {
-  customTranslate,
-  getProperty,
-  orderLangugeStrings,
-} from "@lib/responseDownloadFormats/helpers";
+import { customTranslate, getProperty, orderLangugeStrings } from "@lib/i18nHelpers";
 import { copyCodeToClipboardScript } from "../scripts";
 import { TableHeader } from "./AggregatedTable";
 import { CopyCodes } from "./CopyCodes";

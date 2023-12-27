@@ -1,6 +1,6 @@
 import React from "react";
 import { Submission } from "@lib/responseDownloadFormats/types";
-import { getProperty } from "@lib/formBuilder";
+import { getProperty } from "@lib/i18nHelpers";
 import { formatDate } from "@lib/clientHelpers";
 
 export interface TableHeader {

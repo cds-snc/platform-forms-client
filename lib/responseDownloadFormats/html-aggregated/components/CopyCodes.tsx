@@ -1,5 +1,5 @@
 import React from "react";
-import { customTranslate } from "../../helpers";
+import { customTranslate } from "../../../i18nHelpers";
 
 export const CopyCodes = ({
   confirmationCodes,

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useTranslation } from "next-i18next";
 import { RichText } from "@components/forms";
-import { getProperty } from "@lib/formBuilder";
+import { getProperty } from "@lib/i18nHelpers";
 import { PublicFormRecord } from "@lib/types";
 import { ClosedFormIcon } from "@components/form-builder/icons";
 

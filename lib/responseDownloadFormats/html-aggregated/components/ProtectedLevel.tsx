@@ -1,6 +1,6 @@
 import React from "react";
 import { SecurityAttribute } from "@lib/types";
-import { customTranslate } from "../../helpers";
+import { customTranslate } from "../../../i18nHelpers";
 
 export const ProtectedLevel = ({
   securityAttribute,
