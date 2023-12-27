@@ -8,6 +8,7 @@ import { Button } from "@components/globals";
 import { Input } from "../../shared/Input";
 import { useTemplateStore } from "../../../store/useTemplateStore";
 import { Language } from "../../../types";
+import { getElementsUsingChoiceId } from "@lib/formContext";
 
 type RenderIcon = (index: number) => ReactElement | string | undefined;
 
@@ -43,6 +44,8 @@ export const Option = ({
     translationLanguagePriority: s.translationLanguagePriority,
     getLocalizationAttribute: s.getLocalizationAttribute,
   }));
+
+  const elements = useTemplateStore((state) => state.form.elements);
 
   const icon = renderIcon && renderIcon(index);
   const { t } = useTranslation("form-builder");
@@ -88,6 +91,18 @@ export const Option = ({
     [setValue, translationLanguagePriority]
   );
 
+  const cleanUpRules = useCallback(
+    (parentIndex: number, index: number) => {
+      const choiceId = `${id}.${index}`;
+      const rules = getElementsUsingChoiceId({ formElements: elements, choiceId });
+
+      rules.forEach((el) => {
+        // @todo update rules
+      });
+    },
+    [id, elements]
+  );
+
   return (
     <div className="mt-3 flex">
       <div className="mt-2 flex w-5 justify-end">{icon}</div>
@@ -112,6 +127,7 @@ export const Option = ({
         aria-label={`${t("removeOption")} ${value}`}
         onClick={() => {
           removeChoice(parentIndex, index);
+          cleanUpRules(parentIndex, index);
         }}
       ></Button>
     </div>
