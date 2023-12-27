@@ -8,7 +8,6 @@ import { Button } from "@components/globals";
 import { Input } from "../../shared/Input";
 import { useTemplateStore } from "../../../store/useTemplateStore";
 import { Language } from "../../../types";
-import { getElementsUsingChoiceId } from "@lib/formContext";
 
 type RenderIcon = (index: number) => ReactElement | string | undefined;
 
@@ -44,8 +43,6 @@ export const Option = ({
     translationLanguagePriority: s.translationLanguagePriority,
     getLocalizationAttribute: s.getLocalizationAttribute,
   }));
-
-  const elements = useTemplateStore((state) => state.form.elements);
 
   const icon = renderIcon && renderIcon(index);
   const { t } = useTranslation("form-builder");
@@ -93,14 +90,10 @@ export const Option = ({
 
   const cleanUpRules = useCallback(
     (parentIndex: number, index: number) => {
+      // eslint-disable-next-line  @typescript-eslint/no-unused-vars
       const choiceId = `${id}.${index}`;
-      const rules = getElementsUsingChoiceId({ formElements: elements, choiceId });
-
-      rules.forEach((el) => {
-        // @todo update rules
-      });
     },
-    [id, elements]
+    [id]
   );
 
   return (
