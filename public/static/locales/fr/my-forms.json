@@ -40,7 +40,7 @@
       "somethingWentWrong": "Il y a eu un problème"
     },
     "actionRequired": {
-      "description": "Action requise:: ",
+      "description": "Action requise : ",
       "linkSingular": "<a href=\"{{link}}\">Approuver la suppression de {{responses}} réponse</a>",
       "linkPlural": "<a href=\"{{link}}\">Approuver la suppression de {{responses}} réponses</a>"
     }
