@@ -11,6 +11,7 @@ import {
   ChoiceRule,
   choiceRulesToConditonalRules,
   getElementsWithRuleForChoice,
+  cleanChoiceIdsFromRules,
 } from "@lib/formContext";
 
 export const ModalRules = ({ item }: { item: FormElementWithIndex }) => {
@@ -38,9 +39,31 @@ export const ModalRules = ({ item }: { item: FormElementWithIndex }) => {
     }
   }, [item, modals, updateModalProperties, initialChoiceRules]);
 
-  const handleSubmit = ({ conditionalRules }: { conditionalRules: ChoiceRule[] }) => {
+  const handleSubmit = ({
+    conditionalRules,
+    itemId,
+  }: {
+    conditionalRules: ChoiceRule[];
+    itemId: number;
+  }) => {
     return (e: React.MouseEvent<HTMLElement>) => {
       e.preventDefault();
+
+      if (!conditionalRules || !conditionalRules.length) {
+        elements.forEach((el) => {
+          if (!el.properties.conditionalRules) return;
+          const rules = cleanChoiceIdsFromRules(String(itemId), el.properties.conditionalRules);
+
+          // Just return if updated rules match existing rules
+          if (JSON.stringify(rules) === JSON.stringify(el.properties.conditionalRules)) return;
+
+          // Update the element rules if they have changed
+          const properties = { ...el.properties, conditionalRules: rules };
+          updateField(getPathString(el.id, elements), properties);
+        });
+        return;
+      }
+
       const els = choiceRulesToConditonalRules(elements, conditionalRules);
       // Update the element rules
       Object.entries(els).forEach(([key, value]) => {
@@ -59,7 +82,10 @@ export const ModalRules = ({ item }: { item: FormElementWithIndex }) => {
           <Button
             data-testid="more-modal-save-button"
             className="mr-4"
-            onClick={handleSubmit({ conditionalRules: modals[item.id].conditionalRules })}
+            onClick={handleSubmit({
+              conditionalRules: modals[item.id].conditionalRules,
+              itemId: item.id,
+            })}
           >
             {t("save")}
           </Button>
