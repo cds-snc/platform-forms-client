@@ -9,7 +9,7 @@
   "keywords": [],
   "author": "Clément Janin",
   "dependencies": {
-    "@aws-sdk/client-cognito-identity-provider": "^3.441.0",
+    "@aws-sdk/client-cognito-identity-provider": "^3.481.0",
     "@types/node": "^18.11.17",
     "dotenv": "^16.0.3",
     "tsx": "^3.14.0",

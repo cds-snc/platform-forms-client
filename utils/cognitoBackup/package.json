@@ -10,7 +10,7 @@
   "keywords": [],
   "author": "Bryan Robitaille",
   "dependencies": {
-    "@aws-sdk/client-cognito-identity-provider": "^3.441.0",
+    "@aws-sdk/client-cognito-identity-provider": "^3.481.0",
     "@aws-sdk/client-iam": "^3.444.0",
     "@types/node": "^18.11.17",
     "axios": "^1.2.1",
