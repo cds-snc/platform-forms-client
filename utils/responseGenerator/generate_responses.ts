@@ -85,20 +85,26 @@ const main = async () => {
   try {
     const formID = await getValue("Form ID to generate responses for:");
     const numberOfResponses = parseInt(await getValue("Number of responses to generate:"), 10);
-    const appUrl = await getValue("App Environment:  [0] Local || [1] Staging").then((ans) =>
-      ans === "1" ? "https://forms-staging.cdssandbox.xyz" : "http://localhost:3000"
+    const appEnv = await getValue("App Environment:  [0] Local || [1] Staging").then((ans) =>
+      ans === "1" ? "staging" : "local"
     );
 
-    console.log(`Getting form template from ${appUrl}`);
+    console.log(`Getting form template from ${appEnv}`);
 
     // Get the form template
-    const formTemplate = await axios.get(`${appUrl}/id/${formID}`).then(({ data }) => {
-      const nextData = load(data)("#__NEXT_DATA__").html();
-      if (!nextData) {
-        throw new Error("Could not retrieve data from web page");
-      }
-      return JSON.parse(nextData).props?.pageProps?.formRecord?.form;
-    });
+    const formTemplate = await axios
+      .get(
+        `${
+          appEnv === "staging" ? "https://forms-staging.cdssandbox.xyz" : "http://localhost:3000"
+        }/id/${formID}`
+      )
+      .then(({ data }) => {
+        const nextData = load(data)("#__NEXT_DATA__").html();
+        if (!nextData) {
+          throw new Error("Could not retrieve data from web page");
+        }
+        return JSON.parse(nextData).props?.pageProps?.formRecord?.form;
+      });
 
     if (!formTemplate) {
       throw new Error("Could not retrieve form template");
@@ -131,7 +137,7 @@ const main = async () => {
             ),
           })
       ),
-      50
+      appEnv === "staging" ? 50 : 2
     );
 
     let numOfProcessed = 0;
@@ -151,6 +157,7 @@ const main = async () => {
           throw new Error("Submission API could not process form response");
         }
       });
+      if (appEnv === "local") await delay(500);
       numOfProcessed += submission.length;
       writeWaitingPercent(numOfProcessed, numberOfResponses);
     }
