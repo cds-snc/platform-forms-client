@@ -205,6 +205,9 @@ export const choiceRulesToConditonalRules = (elements: FormElement[], properties
     if (mergedRules.length > 0) {
       // return updated rules with keys for an element id
       updatedRules[element.id] = mergedRules;
+    } else {
+      // return an empty array for the element id
+      updatedRules[element.id] = [];
     }
   });
 

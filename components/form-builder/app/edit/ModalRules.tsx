@@ -46,7 +46,6 @@ export const ModalRules = ({ item }: { item: FormElementWithIndex }) => {
       Object.entries(els).forEach(([key, value]) => {
         const element = elements.find((el) => el.id == Number(key));
         if (!element) return;
-
         const properties = { ...element.properties, conditionalRules: value };
         updateField(getPathString(Number(key), elements), properties);
       });
