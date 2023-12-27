@@ -1,6 +1,6 @@
 import { dir } from "i18next";
 import "../styles/app.scss";
-import { Metadata } from "next";
+import { Viewport } from "next";
 import "react-app-polyfill/stable";
 import { cookies } from "next/headers";
 import { languages } from "@app/i18n/settings";
@@ -18,8 +18,9 @@ const lato = Lato({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  viewport: "width=device-width, initial-scale=1, shrink-to-fit=no",
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
