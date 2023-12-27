@@ -2,13 +2,13 @@
   "tabs": {
     "newResponses": {
       "title": "Nouvelles réponses disponibles",
-      "message1": "Formulaires GC conserve temporairement les réponses.",
-      "message2": "Commencez par télécharger les réponses. Puis, approuvez leur suppression de Formulaires GC."
+      "message1": "Commencez par télécharger les réponses.",
+      "message2": "Puis, approuvez leur suppression, car Formulaires GC ne conserve les réponses que temporairement les réponses."
     },
     "downloadedResponses": {
       "title": "Réponses téléchargées",
-      "message1": "Formulaires GC conserve temporairement les réponses.",
-      "message2": "Vous devez approuver la suppression des réponses de Formulaires GC dans le délai indiqué."
+      "message1": "Approuvez la suppression des réponses dans le délai indiqué.",
+      "message2": "Les réponses seront disponibles dans Formulaires GC temporairement avant d’être supprimées de manière permanente."
     },
     "confirmedResponses": {
       "title": "Réponses approuvées pour suppression",

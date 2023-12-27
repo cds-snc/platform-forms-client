@@ -2,13 +2,13 @@
   "tabs": {
     "newResponses": {
       "title": "New responses available",
-      "message1": "GC Forms stores responses temporarily.",
-      "message2": "Start by downloading responses. Then, sign off for their removal from GC Forms."
+      "message1": "Start by downloading responses.",
+      "message2": "Then, sign off on their removal, as GC Forms only stores responses temporarily."
     },
     "downloadedResponses": {
       "title": "Downloaded responses",
-      "message1": "GC Forms stores responses temporarily.",
-      "message2": "You must sign off on the removal of responses from GC Forms within the time indicated."
+      "message1": "Sign off on the removal of responses within the time indicated.",
+      "message2": "Responses will be available on GC Forms temporarily, before being removed permanently."
     },
     "confirmedResponses": {
       "title": "Responses signed off for removal",
