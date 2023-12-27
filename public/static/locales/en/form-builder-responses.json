@@ -2,13 +2,13 @@
   "tabs": {
     "newResponses": {
       "title": "New responses available",
-      "message1": "GC Forms stores responses temporarily.",
-      "message2": "Start by downloading responses and then sign off for their removal from GC Forms."
+      "message1": "Start by downloading responses.",
+      "message2": "Then, sign off on their removal, as GC Forms only stores responses temporarily."
     },
     "downloadedResponses": {
-      "title": "Recently downloaded responses",
-      "message1": "GC Forms stores responses temporarily.",
-      "message2": "You must sign off on the removal of responses from GC Forms within the time indicated."
+      "title": "Downloaded responses",
+      "message1": "Sign off on the removal of responses within the time indicated.",
+      "message2": "Responses will be available on GC Forms temporarily, before being removed permanently."
     },
     "confirmedResponses": {
       "title": "Responses signed off for removal",
@@ -48,7 +48,7 @@
       "deleted": "Signed off for removal",
       "problem": "Problems"
     },
-    "viewAllProblemResponses": "View responses reported"
+    "viewAllProblemResponses": "View reported responses"
   },
   "supportWillContact": "Support will contact you",
   "reportedAsProblem": "Response reported as a problem",
@@ -148,9 +148,9 @@
     "downloadDialog": {
       "title": "Download responses",
       "chooseDownloadFormat": "Choose the format of response files",
-      "downloadFormatContext1": "You’ll also get an ",
-      "downloadFormatContext2": "Official receipt and record of responses",
-      "downloadFormatContext3": ". You’ll need to keep this receipt to verify all responses made it safely from GC Forms to your computer.",
+      "downloadFormatContext1": "You’ll get an ",
+      "downloadFormatContext2": "Official receipt",
+      "downloadFormatContext3": " with the response files you download. Keep this receipt to verify that responses made it safely from GC Forms to your computer.",
       "html": "Individual response files",
       "htmlDescription": "Separate files for each form submission",
       "csv": "CSV",
