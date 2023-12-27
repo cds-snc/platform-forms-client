@@ -49,6 +49,7 @@ export const ModalRules = ({ item }: { item: FormElementWithIndex }) => {
     return (e: React.MouseEvent<HTMLElement>) => {
       e.preventDefault();
 
+      // Handle the case where there are no rules
       if (!conditionalRules || !conditionalRules.length) {
         elements.forEach((el) => {
           if (!el.properties.conditionalRules) return;
