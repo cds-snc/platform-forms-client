@@ -6,8 +6,14 @@ export type GroupsType = Record<string, Group>;
 export type FormValues = Record<string, string | string[]>;
 export type ChoiceRule = { elementId: string; choiceId: string };
 
+/**
+ * Ensure the choiceId is in the format "1.0"
+ * @param choiceId - The choiceId to ensure is in the correct format
+ * @returns The choiceId in the correct format
+ * i.e. "1" becomes "1.0"
+ * i.e. "1.0" stays "1.0"
+ */
 export const ensureChoiceId = (choiceId: string) => {
-  // Ensure the choiceId is in the format "1.0"
   const choiceIdParts = choiceId.split(".");
   if (choiceIdParts.length === 1) {
     return `${choiceId}.0`;
@@ -16,6 +22,12 @@ export const ensureChoiceId = (choiceId: string) => {
   return choiceId;
 };
 
+/**
+ * @param formElements  - The form elements to search
+ * @param elementId - The id of the form element to search for
+ * @param value - The value to search for i.e. the 'en' or 'fr' value of a choice
+ * @returns The index of the choice with the specified value
+ */
 export function findChoiceIndex(
   formElements: FormElement[],
   elementId: number,
@@ -37,6 +49,11 @@ export function findChoiceIndex(
   return choiceIndex;
 }
 
+/**
+ * @param formRecord  - The form record to search
+ * @param values - The form values from Formik
+ * @returns - An array of choiceIds that match the values
+ */
 export const mapIdsToValues = (formRecord: PublicFormRecord, values: FormValues): string[] => {
   const elementIds = formRecord.form.elements.map((element) => element.id);
 
@@ -71,10 +88,22 @@ export const mapIdsToValues = (formRecord: PublicFormRecord, values: FormValues)
   return choiceIds.flat().filter((id) => id) as string[];
 };
 
+/**
+ * Utility function to check if two arrays match
+ * @param a - The first array
+ * @param b - The second array
+ * @returns - True if the arrays match, false otherwise
+ */
 export function idArraysMatch(a: string[], b: string[]) {
   return a.length === b.length && a.every((value, index) => value === b[index]);
 }
 
+/**
+ * @param rule - The rule to match
+ * @param formRecord - The form record to match against
+ * @param values - The form values from Formik
+ * @returns - True if the rule matches, false otherwise
+ */
 export const matchRule = (
   rule: ConditionalRule,
   formRecord: PublicFormRecord,
@@ -85,11 +114,22 @@ export const matchRule = (
   return false;
 };
 
+/**
+ * @param groupId - The id of the group to check
+ * @param elementId - The id of the element to check
+ * @param groups - The groups to check
+ * @returns - True if the element is in the group, false otherwise
+ */
 export const inGroup = (groupId: string, elementId: number, groups: GroupsType) => {
   if (!groups[groupId]) return false;
   return groups[groupId].elements.find((value) => elementId.toString() === value);
 };
 
+/**
+ * @param formElements - The form elements to search
+ * @param itemId - The id of the item to search for
+ * @returns - An array of elements that have a rule for the specified item
+ */
 export const getElementsWithRuleForChoice = ({
   formElements,
   itemId,
@@ -117,6 +157,11 @@ export const getElementsWithRuleForChoice = ({
   return elements;
 };
 
+/**
+ * @param formElements - The form elements to search
+ * @param choiceId - The id of the choice to search for
+ * @returns - An array of elements that have a rule for the specified choice
+ */
 export const getElementsUsingChoiceId = ({
   formElements,
   choiceId,
@@ -158,6 +203,12 @@ export const cleanChoiceIdsFromRules = (removeElementId: string, rules: Conditio
   });
 };
 
+/**
+ * @param removeChoiceId - The choiceId to remove from the rules
+ * i.e. "1.0" from "1.0, 1.1, 1.2, 2.0" we want to remove "1.0" and leave "1.1, 1.2, 2.0"
+ * @param rules - The rules to filter the choiceId from
+ * @returns The rules with the choiceId removed
+ */
 export const removeChoiceIdFromRules = (removeChoiceId: string, rules: ConditionalRule[]) => {
   return rules.filter((rule) => {
     return rule.choiceId !== removeChoiceId;
