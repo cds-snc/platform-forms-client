@@ -23,6 +23,7 @@ export const ensureChoiceId = (choiceId: string) => {
 };
 
 /**
+ * Find the index of a choice with the specified value
  * @param formElements  - The form elements to search
  * @param elementId - The id of the form element containing choices to search
  * @param value - The value to search for i.e. the 'en' or 'fr' value of a choice
@@ -50,14 +51,21 @@ export function findChoiceIndexByValue(
 }
 
 /**
- * @param formRecord  - The form record to search
- * @param values - The form values from Formik
- * @returns - An array of choiceIds that match the values
+ * Get an array of choiceIds that are "selected" /  "match" the values
+ * @param {Object} formRecord - The form record to search
+ * @param {Object} values - The form values from Formik. For example:
+ *  {
+ *    2:  ["value 1"],
+ *    3:  ["value 2"],
+ *    15: ["value 3"],
+ *    25: ["value 4"],
+ *  }
+ * @returns {Array} - An array of choiceIds that match the values
  */
 export const mapIdsToValues = (formRecord: PublicFormRecord, values: FormValues): string[] => {
   const elementIds = formRecord.form.elements.map((element) => element.id);
 
-  // Find elementIds that are in the current values object
+  // Find elementIds that are in the current form values object
   const valueIds = elementIds.filter((id) => values[id] && values[id].length > 0);
 
   // For each found id, find the index of the "choice" with the specified value
@@ -89,20 +97,23 @@ export const mapIdsToValues = (formRecord: PublicFormRecord, values: FormValues)
 };
 
 /**
- * Utility function to check if two arrays match
- * @param a - The first array
- * @param b - The second array
- * @returns - True if the arrays match, false otherwise
+ * Checks if two arrays match.
+ *
+ * @param {Array} a - The first array.
+ * @param {Array} b - The second array.
+ * @returns {boolean} - Returns true if the arrays match, false otherwise.
  */
 export function idArraysMatch(a: string[], b: string[]) {
   return a.length === b.length && a.every((value, index) => value === b[index]);
 }
 
 /**
- * @param rule - The rule to match
- * @param formRecord - The form record to match against
- * @param values - The form values from Formik
- * @returns - True if the rule matches, false otherwise
+ * Checks if a rule matches against conditional rule for a choiceId.
+ *
+ * @param {Object} rule - The rule to match.
+ * @param {Object} formRecord - The form record to match against.
+ * @param {Object} values - The form values from Formik.
+ * @returns {boolean} - Returns true if the rule matches, false otherwise.
  */
 export const matchRule = (
   rule: ConditionalRule,
@@ -115,6 +126,7 @@ export const matchRule = (
 };
 
 /**
+ * Checks if an element exists within a group.
  * @param groupId - The id of the group to check
  * @param elementId - The id of the element to check
  * @param groups - The groups to check
@@ -126,9 +138,11 @@ export const inGroup = (groupId: string, elementId: number, groups: GroupsType) 
 };
 
 /**
- * @param formElements - The form elements to search
- * @param itemId - The id of the item to search for
- * @returns - An array of elements that have a rule for the specified item
+ * Searches for form elements that have a rule for a specified item.
+ *
+ * @param {Array} formElements - The form elements to search.
+ * @param {string | number} itemId - The id of the item to search for.
+ * @returns {Array} - Returns an array of elements that have a rule for the specified item.
  */
 export const getElementsWithRuleForChoice = ({
   formElements,
@@ -158,9 +172,11 @@ export const getElementsWithRuleForChoice = ({
 };
 
 /**
- * @param formElements - The form elements to search
- * @param choiceId - The id of the choice to search for
- * @returns - An array of elements that have a rule for the specified choice
+ * Searches for form elements that have a rule for a specified choice.
+ *
+ * @param {Array} formElements - The form elements to search.
+ * @param {string | number} choiceId - The id of the choice to search for.
+ * @returns {Array} - Returns an array of elements that have a rule for the specified choice.
  */
 export const getElementsUsingChoiceId = ({
   formElements,
@@ -190,11 +206,11 @@ export const getElementsUsingChoiceId = ({
 };
 
 /**
+ * Removes a specified elementId from the rules.
  *
- * @param removeElementId - The elementId to remove from the rules
- * i.e. "1" from "1.0, 1.1, 1.2, 2.0" we want to remove "1.0, 1.1, 1.2" and leave "2"
- * @param rules - The rules to remove the elementId from
- * @returns The rules with the elementId removed
+ * @param {string} removeElementId - The elementId to remove from the rules. For example, if we have "1.0, 1.1, 1.2, 2.0" and we want to remove "1", it will remove "1.0, 1.1, 1.2" and leave "2".
+ * @param {Array} rules - The rules to remove the elementId from.
+ * @returns {Array} - Returns the rules with the elementId removed.
  */
 export const cleanChoiceIdsFromRules = (removeElementId: string, rules: ConditionalRule[]) => {
   return rules.filter((rule) => {
@@ -204,10 +220,11 @@ export const cleanChoiceIdsFromRules = (removeElementId: string, rules: Conditio
 };
 
 /**
- * @param removeChoiceId - The choiceId to remove from the rules
- * i.e. "1.0" from "1.0, 1.1, 1.2, 2.0" we want to remove "1.0" and leave "1.1, 1.2, 2.0"
- * @param rules - The rules to filter the choiceId from
- * @returns The rules with the choiceId removed
+ * Removes a specified choiceId from the rules.
+ *
+ * @param {string} removeChoiceId - The choiceId to remove from the rules. For example, if we have "1.0, 1.1, 1.2, 2.0" and we want to remove "1.0", it will leave "1.1, 1.2, 2.0".
+ * @param {Array} rules - The rules to filter the choiceId from.
+ * @returns {Array} - Returns the rules with the choiceId removed.
  */
 export const removeChoiceIdFromRules = (removeChoiceId: string, rules: ConditionalRule[]) => {
   return rules.filter((rule) => {
