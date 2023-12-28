@@ -4,6 +4,8 @@ import { useTranslation } from "next-i18next";
 import { ConditionalIcon } from "@components/form-builder/icons/ConditionalIcon";
 import { getElementsUsingChoiceId } from "@lib/formContext";
 import { FormElement } from "@lib/types";
+import { useRefsContext } from "@formbuilder/app/edit/RefsContext";
+import { Button } from "@components/globals";
 
 export const ConditionalIndicatorOption = ({
   id,
@@ -18,6 +20,8 @@ export const ConditionalIndicatorOption = ({
     choiceId: id,
   });
 
+  const { refs } = useRefsContext();
+
   if (!questions.length) {
     return null;
   }
@@ -30,7 +34,18 @@ export const ConditionalIndicatorOption = ({
           {questions.map(({ elementId }, index) => (
             <div key={`${elementId}-${index}`}>
               {t("addConditionalRules.show")}{" "}
-              {elements.find((element) => element.id === Number(elementId))?.properties?.titleEn}
+              <Button
+                theme="link"
+                onClick={() => {
+                  const id = Number(elementId);
+                  if (!refs || !refs.current) {
+                    return;
+                  }
+                  refs.current[id].focus();
+                }}
+              >
+                {elements.find((element) => element.id === Number(elementId))?.properties?.titleEn}
+              </Button>
             </div>
           ))}
         </div>
