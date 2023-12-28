@@ -1,5 +1,6 @@
+"use client";
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
 
@@ -18,7 +19,8 @@ export const SaveButton = () => {
 
   const { status } = useSession();
   const { t, i18n } = useTranslation(["common", "form-builder"]);
-  const { isReady, asPath } = useRouter();
+  const asPath = usePathname();
+
   const [isStartPage, setIsStartPage] = useState(false);
   const { updatedAt, getTemplateById } = useTemplateStatus();
 
@@ -31,15 +33,13 @@ export const SaveButton = () => {
   };
 
   useEffect(() => {
-    if (isReady) {
-      const activePathname = new URL(asPath, location.href).pathname;
-      if (activePathname === "/form-builder") {
-        setIsStartPage(true);
-      } else {
-        setIsStartPage(false);
-      }
+    const activePathname = new URL(asPath, location.href).pathname;
+    if (activePathname === "/form-builder") {
+      setIsStartPage(true);
+    } else {
+      setIsStartPage(false);
     }
-  }, [asPath, isReady]);
+  }, [asPath]);
 
   const dateTime =
     (updatedAt && formatDateTime(new Date(updatedAt).getTime(), `${i18n.language}-CA`)) || [];

@@ -1,6 +1,6 @@
+"use client";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-
+import { usePathname } from "next/navigation";
 export const cleanPath = (path = "") => {
   // remove id from path
   const idRegex = /\/[a-zA-Z0-9]{25}$/;
@@ -15,14 +15,12 @@ export const cleanPath = (path = "") => {
 };
 
 export const useActivePathname = () => {
-  const { asPath, isReady } = useRouter();
+  const asPath = usePathname();
   const [activePathname, setActivePathname] = useState("");
 
   useEffect(() => {
-    if (isReady) {
-      setActivePathname(cleanPath(asPath));
-    }
-  }, [asPath, isReady, setActivePathname]);
+    setActivePathname(cleanPath(asPath));
+  }, [asPath, setActivePathname]);
 
-  return { isReady, asPath, activePathname, currentPage: activePathname.split("/").pop() };
+  return { asPath, activePathname, currentPage: activePathname.split("/").pop() };
 };

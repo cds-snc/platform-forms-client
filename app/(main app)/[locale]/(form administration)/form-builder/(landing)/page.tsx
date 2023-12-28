@@ -11,15 +11,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Page() {
-  const css = `
-  body {
-     background-color: #F9FAFB;
-  }
-`;
-
   return (
     <TemplateStoreProvider>
-      <style>{css}</style>
       <Start />
     </TemplateStoreProvider>
   );

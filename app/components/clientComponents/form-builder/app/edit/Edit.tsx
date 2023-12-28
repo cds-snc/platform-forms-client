@@ -1,7 +1,8 @@
+"use client";
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import debounce from "lodash.debounce";
 import { useTranslation } from "@i18n/client";
-import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
 
 import { Language, LocalizedFormProperties } from "../../types";
 import { ElementPanel, ConfirmationDescription, PrivacyDescription } from ".";
@@ -35,8 +36,8 @@ export const Edit = () => {
   }));
 
   const [value, setValue] = useState<string>(title);
-  const { query } = useRouter();
-  const focusTitle = query.focusTitle ? true : false;
+  const searchParams = useSearchParams();
+  const focusTitle = searchParams.get("focusTitle") ? true : false;
   const titleInput = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {

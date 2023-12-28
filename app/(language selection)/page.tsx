@@ -1,5 +1,4 @@
 "use client";
-import { useEffect, useState } from "react";
 import { languages } from "@i18n/settings";
 import { useTranslation } from "@i18n/client";
 import Link from "next/link";
@@ -12,6 +11,8 @@ const Home = () => {
   // With the automatic language detection we can hopefully remove this page in the
   // near future
 
+  // This page is run Client Side in order to leverage initial automatic langugage detection of the browser
+
   const { i18n } = useTranslation(["common"]);
   const browserLanguage = i18n.language;
   const secondLanguage = i18n.language === "en" ? "fr" : "en";
@@ -21,14 +22,6 @@ const Home = () => {
     .reduce((acc, lang) => {
       return { ...acc, ...lang };
     });
-
-  const [clientRender, setClientRender] = useState(false);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setClientRender(true);
-    }
-  }, []);
 
   const SiteLink = () => {
     return (
@@ -49,36 +42,37 @@ const Home = () => {
 
   return (
     <>
-      <header>{clientRender && <Fip className="my-0 py-6" />}</header>
+      <header>
+        {" "}
+        <Fip className="my-0 py-6" />
+      </header>
       <div className="flex flex-col h-full">
         <div id="page-container">
           <main id="content">
-            {clientRender && (
-              <div className="mt-10 flex items-center justify-center">
-                <div className="w-[622px] rounded-2xl border-1 border-[#D1D5DB] bg-white p-8">
-                  <div className="flex  flex-col items-center">
-                    <SiteLink />
-                    <div className="flex justify-center gap-8">
-                      <Link
-                        href={`/${browserLanguage}/form-builder`}
-                        lang={browserLanguage}
-                        className={`${themes.primary} ${themes.base} ${themes.htmlLink}`}
-                      >
-                        {browserLanguage === "en" ? "English" : "Français"}
-                      </Link>
+            <div className="mt-10 flex items-center justify-center">
+              <div className="w-[622px] rounded-2xl border-1 border-[#D1D5DB] bg-white p-8">
+                <div className="flex  flex-col items-center">
+                  <SiteLink />
+                  <div className="flex justify-center gap-8">
+                    <Link
+                      href={`/${browserLanguage}/form-builder`}
+                      lang={browserLanguage}
+                      className={`${themes.primary} ${themes.base} ${themes.htmlLink}`}
+                    >
+                      {browserLanguage === "en" ? "English" : "Français"}
+                    </Link>
 
-                      <Link
-                        href={`/${secondLanguage}/form-builder`}
-                        className={`${themes.primary} ${themes.base} ${themes.htmlLink}`}
-                        lang={secondLanguage}
-                      >
-                        {browserLanguage === "en" ? "Français" : "English"}
-                      </Link>
-                    </div>
+                    <Link
+                      href={`/${secondLanguage}/form-builder`}
+                      className={`${themes.primary} ${themes.base} ${themes.htmlLink}`}
+                      lang={secondLanguage}
+                    >
+                      {browserLanguage === "en" ? "Français" : "English"}
+                    </Link>
                   </div>
                 </div>
               </div>
-            )}
+            </div>
           </main>
         </div>
       </div>

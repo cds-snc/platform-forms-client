@@ -8,12 +8,6 @@ import { LeftNavigation } from "@clientComponents/form-builder/app";
 import { FullWidthLayout } from "./FullWidthLayout";
 import { TwoColumnLayout } from "./TwoColumnLayout";
 
-const css = `
-body {
-   background-color: #F9FAFB;
-}
-`;
-
 const PageLayout = ({
   page,
   hideLeftNav,
@@ -25,8 +19,6 @@ const PageLayout = ({
 }) => {
   return (
     <>
-      <style>{css}</style>
-
       {hideLeftNav ? (
         <FullWidthLayout context="default">{page}</FullWidthLayout>
       ) : (
