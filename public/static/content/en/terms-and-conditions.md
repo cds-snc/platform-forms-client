@@ -1,13 +1,17 @@
 # Terms and conditions
-These terms and conditions outline the roles and responsibilities of the [Treasury Board of Canada Secretariat](https://www.canada.ca/en/treasury-board-secretariat.html) in hosting this form.  To learn about how the department or agency that published this form manages your submission, return to the form you were viewing.    
+These terms and conditions outline the roles and responsibilities of [Employment and Social Development Canada (ESDC)](https://www.canada.ca/en/employment-social-development.html) in hosting this form.  
+
+To learn about how a department or agency manages your form submissions, return to the form you were viewing.
 
 ## How we protect your privacy
 
-When you submit a form, it is temporarily stored in a secure database managed by the [Treasury Board of Canada Secretariat](https://www.canada.ca/en/treasury-board-secretariat.html), before being processed by the department or agency that created it. Once processed, your form submission is deleted from our database and the department or agency that created the form protects and stores your submission according to their own policies. 
+When you submit a form, it is temporarily stored in a secure database managed by Employment and Social Development Canada for up to 60 days. It is then processed and stored by the department or agency that created the form according to their own policies and processes.
 
-The [Treasury Board of Canada Secretariat](https://www.canada.ca/en/treasury-board-secretariat.html) does not use the personal information you provide on a form for any administrative purpose, unless it created and administers the form itself. We do not make decisions about you or your submission and take security measures, such as encrypting the information and deleting it after up to 60 days. [Section 7 of the *Financial Administration Act*](https://laws-lois.justice.gc.ca/eng/acts/F-11/section-7.html), allows us to collect and store personal information.
+[Employment and Social Development Canada](https://www.canada.ca/en/employment-social-development.html) does not use the personal information you provide on a form for any administrative purpose, unless it created and administers the form itself. Section 5.1 of the [*Department of Employment and Social Development Act*](https://laws-lois.justice.gc.ca/eng/acts/h-5.7/FullText.html), allows us to collect and store personal information.
 
 The department or agency you’re communicating with also protects your personal information. The Privacy Notice on the form should explain how they do this.
+
+Personal information is also collected in compliance with the [Privacy Act](https://laws.justice.gc.ca/eng/acts/P-21/index.html).
 
 ### We use web analytics to help improve your experience
 
@@ -25,15 +29,15 @@ Send complaints about how your personal information has been handled to the [Off
 
 ## Our commitment to accessibility
 
-The [Treasury Board of Canada Secretariat](https://www.canada.ca/en/treasury-board-secretariat.html) is committed to achieving a high standard of accessibility as defined in the [Standard on Web Accessibility](http://www.tbs-sct.gc.ca/pol/doc-eng.aspx?id=23601) and the [Standard on Optimizing Websites and Applications for Mobile Devices](http://www.tbs-sct.gc.ca/pol/doc-eng.aspx?id=27088).
+[Employment and Social Development Canada](https://www.canada.ca/en/employment-social-development.html) is committed to achieving a high standard of accessibility as defined in the [Standard on Web Accessibility](http://www.tbs-sct.gc.ca/pol/doc-eng.aspx?id=23601) and the [Standard on Optimizing Websites and Applications for Mobile Devices](http://www.tbs-sct.gc.ca/pol/doc-eng.aspx?id=27088).
 
 ## Providing content in Canada's official languages
 
-The [Treasury Board of Canada Secretariat](https://www.canada.ca/en/treasury-board-secretariat.html) enables the creation of forms in both official languages, English and French. The [*Official Languages Act*](http://laws-lois.justice.gc.ca/eng/acts/O-3.01/), the [Official Languages (Communications with and Services to the Public) Regulations](http://laws.justice.gc.ca/eng/regulations/SOR-92-48/index.html) and [Treasury Board policy requirements](https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=26160) establish the use of both English and French to provide services to or communicate with members of the public. When there is no obligation to provide information in both official languages, content may be available in one official language only.
+[Employment and Social Development Canada](https://www.canada.ca/en/employment-social-development.html) enables the creation of forms in both official languages, English and French. The [*Official Languages Act*](http://laws-lois.justice.gc.ca/eng/acts/O-3.01/), the [Official Languages (Communications with and Services to the Public) Regulations](http://laws.justice.gc.ca/eng/regulations/SOR-92-48/index.html) and [Treasury Board policy requirements](https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=26160) establish the use of both English and French to provide services to or communicate with members of the public. When there is no obligation to provide information in both official languages, content may be available in one official language only.
 
 ## Protecting the Security of Government of Canada Websites
 
-Software programs are used to monitor network traffic and to identify unauthorized attempts to upload or change information, or otherwise cause damage. When you visit a [Treasury Board of Canada Secretariat](https://www.canada.ca/en/treasury-board-secretariat.html) website, these software programs automatically receive and temporarily store information supplied by your browser in our Web server logs for 3 months. Some of the information automatically collected by our server when you browse our website includes:
+Software programs are used to monitor network traffic and to identify unauthorized attempts to upload or change information, or otherwise cause damage. When you visit an [Employment and Social Development Canada](https://www.canada.ca/en/employment-social-development.html) website, these software programs automatically receive and temporarily store information supplied by your browser in our Web server logs for 3 months. Some of the information automatically collected by our server when you browse our website includes:
 - the name of the form you completed (not your response).
 - the network location and the Internet Protocol (IP) address of the computer and other devices you used to contact our website.
 - the name of the domain you used to access the Internet (.com, .org, .net, .ca, etc.).
@@ -43,13 +47,13 @@ Software programs are used to monitor network traffic and to identify unauthoriz
 - the pages you have accessed and the documents you have downloaded.
 - the Internet address of the website from which you linked directly to our site, if applicable.
 
-In most circumstances, this is anonymous statistical data. No attempt is made to link this data, nor the IP addresses of devices that have contacted our website, with the identity of individuals visiting our site, unless an attempt to damage the site has been detected. The programs are never used to gather specific personal information such as your name, your phone number, or your email address.
+This is statistical data and does not directly identify you. No attempt is made to link this data, nor the IP addresses of devices that have contacted our website, with the identity of individuals visiting our site, unless an attempt to damage the site has been detected. The programs are never used to gather specific personal information such as your name, your phone number, or your email address.
 
 When a threat to the website or computer systems of the Government of Canada is detected, information is collected pursuant to section 161 of the [*Financial Administration Act*](https://laws-lois.justice.gc.ca/eng/acts/f-11/). The information may be shared with appropriate law enforcement authorities if suspected criminal activities are detected. Such information may be used for network security related statistical purposes, audit, evaluation, research, planning and reporting, and is included in [Personal Information Bank Security Incidents and Privacy Breaches (PSU 939)](https://www.canada.ca/en/treasury-board-secretariat/services/access-information-privacy/access-information/information-about-programs-information-holdings/standard-personal-information-banks.html#psu939).
 
 This website uses a third-party service provider, Google Inc. to reduce malicious activity and detect fraud. Information about visits to this website is transferred to Google Inc. through the reCAPTCHA service. This information may include: IP addresses, mouse movements, and the length of a visit. This information is used to determine whether or not the visit is from a human being or a bot. 
 
-The [Treasury Board of Canada Secretariat](https://www.canada.ca/en/treasury-board-secretariat.html) is an advocate of responsible vulnerability disclosure. If you’ve found a vulnerability, let us know so we can fix it as soon as possible. Please visit the [Security Notice](https://digital.canada.ca/security-notice/) to learn more about that process.
+[Employment and Social Development Canada](https://www.canada.ca/en/employment-social-development.html) is an advocate of responsible vulnerability disclosure. If you’ve found a vulnerability, let us know so we can fix it as soon as possible. Please visit the [Security Notice](https://digital.canada.ca/security-notice/) to learn more about that process.
 
 ## Using files located on non-Government of Canada servers
 
@@ -57,9 +61,9 @@ To improve the functionality of this website, certain files (such as open source
 
 ## Linking to non-Government of Canada websites
 
-Links to websites not under the control of the [Treasury Board of Canada Secretariat](https://www.canada.ca/en/treasury-board-secretariat.html), including those to our social media accounts, are provided solely for the convenience of our website visitors. We are not responsible for the accuracy, currency, or reliability of the content of such websites. The [Treasury Board of Canada Secretariat](https://www.canada.ca/en/treasury-board-secretariat.html) does not offer any guarantee in that regard and is not responsible for the information found through these links, nor does it endorse the sites and their content.
+Links to websites not under the control of [Employment and Social Development Canada (ESDC)](https://www.canada.ca/en/employment-social-development.html), including those to our social media accounts, are provided solely for the convenience of our website visitors. We are not responsible for the accuracy, currency, or reliability of the content of such websites. [Employment and Social Development Canada](https://www.canada.ca/en/employment-social-development.html) does not offer any guarantee in that regard and is not responsible for the information found through these links, nor does it endorse the sites and their content.
 
-Visitors should also be aware that information offered by non-[Treasury Board of Canada Secretariat](https://www.canada.ca/en/treasury-board-secretariat.html) sites to which this website links is not subject to the [*Privacy Act*](http://laws-lois.justice.gc.ca/eng/acts/P-21/index.html) or the [*Official Languages Act*](http://laws-lois.justice.gc.ca/eng/acts/O-3.01/) and may not be accessible to persons with disabilities. The information offered may be available only in the language(s) used by the sites in question. With respect to privacy, visitors should research the privacy policies of these non-government websites before providing personal information.
+Visitors should also be aware that information offered by non-[Employment and Social Development Canada](https://www.canada.ca/en/employment-social-development.html) sites to which this website links is not subject to the [*Privacy Act*](http://laws-lois.justice.gc.ca/eng/acts/P-21/index.html) or the [*Official Languages Act*](http://laws-lois.justice.gc.ca/eng/acts/O-3.01/) and may not be accessible to persons with disabilities. The information offered may be available only in the language(s) used by the sites in question. With respect to privacy, visitors should research the privacy policies of these non-government websites before providing personal information.
 
 ## Ownership and usage of content provided on this site
 
@@ -114,4 +118,4 @@ Many social media platforms have multiple language options and provide instructi
 
 
 
-**Last update:** April 12, 2023
+**Last update:** December 14, 2023
