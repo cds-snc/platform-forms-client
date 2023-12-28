@@ -25,6 +25,7 @@ You are responsible for:
 - Managing any non-legitimate documents uploaded and submitted by end users (e.g. inappropriate or disturbing content).
 - Implementing content scanning measures for submissions with file upload to reduce the possibility of viruses or malicious software (e.g. virus scanning done by departmental email services).
 - Addressing service or operational impacts due to end users uploading documents to submissions for the purpose of spamming.
+- Accepting [GC Notify's terms of use](https://notification.canada.ca/terms). 
 
 ### Responses retrieved from the database (up to PROTECTED B) 
 
@@ -33,7 +34,6 @@ You are responsible for:
 - Saving a copy and confirming receipt of your form responses within 45 days of receiving a submission.
 - Reporting any problems with saved form responses.
 - Handling, opening, and saving form responses in accordance with your retention and disposition schedule. 
-- Accepting [GC Notify's terms of use](https://notification.canada.ca/terms). 
 
 ## Practice continuous security
 
