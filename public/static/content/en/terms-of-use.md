@@ -3,7 +3,7 @@ The following terms apply to the use of GC Forms, a product operated by the Cana
 
 ## Accept all conditions and risks 
 
-You must be comfortable with our [service-level agreement](/en/sla), including the support process, application uptime, security measures, etc. 
+You must be comfortable with our [privacy notice](https://articles.alpha.canada.ca/forms-formulaires/privacy-notice-statement/) and [service-level agreement](/en/sla), including the support process, application uptime, security measures, etc. 
 
 We may:
 - Suspend your account if you misuse GC Forms. Misuse includes not following these terms of use or your department or agency’s policies and procedures for using software products. 

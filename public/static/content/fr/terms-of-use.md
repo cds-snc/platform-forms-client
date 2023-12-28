@@ -3,7 +3,7 @@ Les conditions ci-dessous s’appliquent à l’utilisation de Formulaires GC, u
 
 ## Acceptation de toutes les conditions et risques  
 
-Vous devez accepter l’[accord sur les niveaux de service](/fr/sla), y compris le processus de soutien, le temps de fonctionnement de l’application, les mesures de sécurité, etc. 
+Vous devez accepter la [déclaration sur la protection des renseignements personnels](https://articles.alpha.canada.ca/forms-formulaires/fr/declaration-sur-la-protection-des-renseignements-personnels/) et l’[accord sur les niveaux de service](/fr/sla), y compris le processus de soutien, le temps de fonctionnement de l’application, les mesures de sécurité, etc. 
 
 Nous pouvons :
 - suspendre votre compte en raison d’une utilisation abusive de Formulaires GC. Les cas d’utilisation abusive comprennent le non-respect des présentes conditions d’utilisation ou encore le non-respect des politiques et procédures de votre ministère ou organisme sur l’utilisation de produits logiciels.
