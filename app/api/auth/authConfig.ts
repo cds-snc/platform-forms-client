@@ -1,4 +1,4 @@
-import { NextAuthOptions } from "next-auth";
+import { NextAuthOptions, getServerSession } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import {
   Validate2FAVerificationCodeResultStatus,
@@ -13,6 +13,8 @@ import { acceptableUseCheck, removeAcceptableUse } from "@lib/cache/acceptableUs
 import { getPrivilegeRulesForUser } from "@lib/privileges";
 import { logEvent } from "@lib/auditLogs";
 import { activeStatusCheck, activeStatusUpdate } from "@lib/cache/userActiveStatus";
+
+import type { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from "next";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -228,4 +230,14 @@ const checkUserActiveStatus = async (userID: string): Promise<boolean> => {
   activeStatusUpdate(userID, user?.active ?? false);
 
   return user?.active ?? false;
+};
+
+// Use it in server contexts
+export const getAppSession = async (
+  ...args:
+    | [GetServerSidePropsContext["req"], GetServerSidePropsContext["res"]]
+    | [NextApiRequest, NextApiResponse]
+    | []
+) => {
+  return getServerSession(...args, authOptions);
 };

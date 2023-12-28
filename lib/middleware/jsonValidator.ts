@@ -1,7 +1,7 @@
 import { Schema, Validator, ValidatorResult, PreValidatePropertyFunction } from "jsonschema";
 import { NextApiRequest, NextApiResponse } from "next";
 import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
-import { padAngleBrackets } from "@components/form-builder/util";
+import { padAngleBrackets } from "@clientComponents/form-builder/util";
 import * as htmlparser2 from "htmlparser2";
 
 export type ValidateOptions = {

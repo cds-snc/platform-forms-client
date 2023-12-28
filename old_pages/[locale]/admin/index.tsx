@@ -1,0 +1,84 @@
+import React, { ReactElement } from "react";
+import { useTranslation } from "@i18n/client";
+import { requireAuthentication } from "@lib/auth";
+import { NextPageWithLayout } from "old_pages/_app";
+import AdminNavLayout from "@clientComponents/globals/layouts/AdminNavLayout";
+import { checkPrivilegesAsBoolean } from "@lib/privileges";
+import { serverTranslation } from "@i18n";
+import Link from "next/link";
+import { ManageAccountsIcon, SettingsApplicationsIcon } from "@clientComponents/icons";
+import Head from "next/head";
+
+// keeping this here if we want to add a welcome page
+const AdminWelcome: NextPageWithLayout = () => {
+  const { t } = useTranslation(["admin-home", "common"]);
+
+  return (
+    <>
+      <Head>
+        <title>{t("title")}</title>
+      </Head>
+      <h1 className="visually-hidden">{t("title", { ns: "admin-home" })}</h1>
+      <div className="flex flex-row justify-center">
+        <div className="rounded-lg border bg-white p-10">
+          <h2>
+            <ManageAccountsIcon className="inline-block h-14 w-14" /> {t("accountAdministration")}
+          </h2>
+          <p>{t("manageUsersAndTheirForms")}</p>
+          <p>
+            <Link href="/admin/accounts" legacyBehavior>
+              <a href={"/admin/accounts"}>{t("accounts")}</a>
+            </Link>
+          </p>
+        </div>
+
+        <div className="ml-20 rounded-lg border bg-white p-10">
+          <h2>
+            <SettingsApplicationsIcon className="inline-block h-14 w-14" />
+            {t("systemAdministration")}
+          </h2>
+          <p>{t("configureHowTheApplicationWorks")}</p>
+          <ul className="list-none pl-0">
+            <li>
+              <Link href="/admin/settings" legacyBehavior>
+                <a href={"/admin/settings"}>{t("systemSettings")}</a>
+              </Link>
+            </li>
+            <li>
+              <Link href="/admin/flags" legacyBehavior>
+                <a href={"/admin/flags"}>{t("featureFlags")}</a>
+              </Link>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </>
+  );
+};
+AdminWelcome.getLayout = (page: ReactElement) => {
+  return (
+    <AdminNavLayout user={page.props.user} hideLeftNav={true}>
+      {page}
+    </AdminNavLayout>
+  );
+};
+export const getServerSideProps = requireAuthentication(async ({ user: { ability }, params }) => {
+  const canViewUsers = checkPrivilegesAsBoolean(ability, [{ action: "view", subject: "User" }]);
+  const { locale = "en" }: { locale?: string } = params ?? {};
+  if (!canViewUsers) {
+    return {
+      redirect: {
+        destination: `/forms`,
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {
+      ...(locale &&
+        (await serverSideTranslations(locale, ["common", "admin-home", "admin-login"]))),
+    },
+  };
+});
+
+export default AdminWelcome;

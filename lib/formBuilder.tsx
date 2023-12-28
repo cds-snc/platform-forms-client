@@ -11,7 +11,7 @@ import {
   RichText,
   TextArea,
   TextInput,
-} from "@components/forms";
+} from "@clientComponents/forms";
 import {
   FormElement,
   FormElementTypes,
@@ -20,7 +20,7 @@ import {
   Responses,
   Response,
 } from "@lib/types";
-import { TFunction } from "next-i18next";
+import { TFunction } from "@i18n/client";
 import { getLocalizedProperty } from "@lib/utils";
 
 // This function is used for select/radio/checkbox i18n change of form labels

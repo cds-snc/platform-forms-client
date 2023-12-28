@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { useRouter } from "next/router";
 import { FormikHelpers } from "formik";
 import { logMessage } from "@lib/logger";
-import { useTranslation } from "next-i18next";
+import { useTranslation } from "@i18n/client";
 import { fetchWithCsrfToken } from "./fetchWithCsrfToken";
 import { useAuthErrors } from "./useAuthErrors";
 import { hasError } from "@lib/hasError";

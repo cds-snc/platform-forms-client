@@ -8,13 +8,14 @@ import { logMessage } from "@lib/logger";
 acceptLanguage.languages(languages);
 
 export function middleware(req: NextRequest) {
-  const interalRoute = new RegExp("^/(api|_next|favicon.ico|img|static).*$");
+  const interalRoute = new RegExp("^/(api|_next|favicon.ico|img|static|react_devtools).*$");
   const pathname = req.nextUrl.pathname;
   const pathLang = pathname.split("/")[1];
   const cookieLang = req.cookies.get("i18next")?.value;
 
   const requestHeaders = new Headers(req.headers);
-  const prefetch = requestHeaders.get("purpose") === "prefetch";
+  const prefetch =
+    requestHeaders.get("purpose") === "prefetch" || requestHeaders.get("next-router-prefetch");
 
   // We don't want to internationalize internal routes or prefetch requests
   if (!interalRoute.test(pathname) && !prefetch) {
@@ -60,9 +61,10 @@ export function middleware(req: NextRequest) {
     // Layer 4 - Set Content Security Policy
 
     // Set the Content Security Policy (CSP) header
-    const { csp } = generateCSP();
+    const { csp, nonce } = generateCSP();
 
     // Set the CSP header on the request to the server
+    requestHeaders.set("x-nonce", nonce);
     requestHeaders.set("content-security-policy", csp);
 
     // Create base Next Response with CSP header and i18n cookie

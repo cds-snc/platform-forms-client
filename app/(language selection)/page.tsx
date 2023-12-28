@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import { languages } from "@i18n/settings";
 import { useTranslation } from "@i18n/client";
 import Link from "next/link";
-import Fip from "@appComponents/globals/Fip";
-import { themes } from "@components/globals";
+import { Fip } from "@clientComponents/globals";
+import { themes } from "@clientComponents/globals";
 
-import { SiteLogo } from "@formbuilder/icons";
+import { SiteLogo } from "@clientComponents/icons";
 
 const Home = () => {
   // With the automatic language detection we can hopefully remove this page in the

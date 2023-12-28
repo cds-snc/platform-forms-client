@@ -20,7 +20,7 @@ const initI18next = async (lang: string, ns: string | string[]) => {
 };
 
 export async function serverTranslation(
-  ns: string | string[],
+  ns?: string | string[],
   options?: { keyPrefix?: string; lang?: string }
 ) {
   const cookieLang = cookies().get("i18next")?.value;
@@ -29,7 +29,7 @@ export async function serverTranslation(
 
   const i18nLang = options?.lang || pathLang || cookieLang || languages[0];
 
-  const i18nextInstance = await initI18next(i18nLang, ns);
+  const i18nextInstance = await initI18next(i18nLang, ns ?? ["common"]);
   return {
     t: i18nextInstance.getFixedT(i18nLang, ns, options?.keyPrefix),
     i18n: i18nextInstance,

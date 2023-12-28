@@ -25,7 +25,7 @@ if (window.location.host === "forms-formulaires.alpha.canada.ca") {
 `;
 
 export const generateCSP = (): { csp: string; nonce: string } => {
-  const nonce = crypto.randomUUID();
+  const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
   let csp = ``;
   csp += `object-src 'none';`;
   csp += `base-uri 'self';`;
@@ -41,10 +41,4 @@ export const generateCSP = (): { csp: string; nonce: string } => {
   csp += `connect-src 'self' www.googletagmanager.com www.google-analytics.com`;
 
   return { csp, nonce };
-};
-
-export const cspHashOf = (text: string): string => {
-  const hash = crypto.createHash("sha256");
-  hash.update(text);
-  return `sha256-${hash.digest("base64")}`;
 };

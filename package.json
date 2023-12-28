@@ -75,7 +75,6 @@
     "mmmagic": "0.5.3",
     "next": "^14.0.4",
     "next-auth": "4.24.5",
-    "next-i18next": "^15.0.0",
     "node-fetch": "^3.3.2",
     "notifications-node-client": "7.0.6",
     "pino": "8.17.2",

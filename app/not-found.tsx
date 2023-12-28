@@ -3,10 +3,10 @@ import { serverTranslation } from "@i18n";
 
 import { Metadata } from "next";
 
-import { ErrorPanel } from "@appComponents/globals/ErrorPanel";
-import Footer from "@appComponents/globals/Footer";
+import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
+import { Footer } from "@serverComponents/globals";
 
-import Fip from "@appComponents/globals/Fip";
+import { Fip } from "@clientComponents/globals/Fip";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await serverTranslation("error");
@@ -15,12 +15,12 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const PageNotFound = async () => {
+export default async function NotFound() {
   const { t } = await serverTranslation(["error"]);
   return (
     <div className="flex h-full flex-col">
       <header>
-        <Fip showLanguageToggle={true} showLogin={false} />
+        <Fip />
       </header>
       <div id="page-container">
         <main id="content">
@@ -34,6 +34,4 @@ const PageNotFound = async () => {
       <Footer />
     </div>
   );
-};
-
-export default PageNotFound;
+}

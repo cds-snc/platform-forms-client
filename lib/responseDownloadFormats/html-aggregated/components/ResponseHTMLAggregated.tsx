@@ -10,7 +10,7 @@ import { copyCodeToClipboardScript } from "../scripts";
 import { TableHeader } from "./AggregatedTable";
 import { CopyCodes } from "./CopyCodes";
 import { ProtectedLevel } from "./ProtectedLevel";
-import { formatDateTimeUTC } from "@components/form-builder/util";
+import { formatDateTimeUTC } from "@clientComponents/form-builder/util";
 
 interface HTMLDownloadProps {
   lang: string;

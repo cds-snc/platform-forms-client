@@ -1,5 +1,5 @@
 import { useReducer } from "react";
-import { useTranslation } from "next-i18next";
+import { useTranslation } from "@i18n/client";
 
 export interface AuthErrorsState {
   isError: boolean;

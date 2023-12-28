@@ -1,4 +1,4 @@
-import { useTemplateStore } from "@formbuilder/store";
+import { useTemplateStore } from "@clientComponents/form-builder/store";
 import { dateHasPast } from "@lib/utils";
 
 export const useIsFormClosed = () => {

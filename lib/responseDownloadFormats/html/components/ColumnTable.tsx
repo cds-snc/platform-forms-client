@@ -3,7 +3,7 @@ import { capitalize } from "./ResponseSection";
 import { customTranslate, orderLangugeStrings } from "../../../i18nHelpers";
 import { Answer, Submission } from "../../types";
 import { TableProps } from "../types";
-import { formatDateTimeUTC } from "@components/form-builder/util";
+import { formatDateTimeUTC } from "@clientComponents/form-builder/util";
 
 const QuestionColumns = ({
   submission,
