@@ -31,6 +31,8 @@ export const ModalRules = ({ item }: { item: FormElementWithIndex }) => {
     itemId: item.id,
   });
 
+  const hasRules = (initialChoiceRules && initialChoiceRules?.length > 0) ?? false;
+
   useEffect(() => {
     if (item.type != "richText") {
       if (!modals[item.id]) {
@@ -100,7 +102,9 @@ export const ModalRules = ({ item }: { item: FormElementWithIndex }) => {
       title={t("addConditionalRules.modalTitle")}
       openButton={
         <Button className="!m-0 !mt-4" theme="link">
-          {t("addConditionalRules.addCustomRules")}
+          {hasRules
+            ? t("addConditionalRules.editCustomRules")
+            : t("addConditionalRules.addCustomRules")}
         </Button>
       }
       saveButton={renderSaveButton()}

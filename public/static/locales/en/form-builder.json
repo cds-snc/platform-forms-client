@@ -709,6 +709,7 @@
     "text2": "Has value:",
     "defaultQuestion": "No conditions always show",
     "addCustomRules": "Add a rule",
+    "editCustomRules": "Edit rules",
     "addAnotherRule": "Add another rule",
     "removeRule": "remove",
     "addOther": "Add 'if other' option",

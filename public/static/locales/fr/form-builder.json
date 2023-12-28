@@ -709,6 +709,7 @@
     "text2": "Has value: [fr]",
     "defaultQuestion": "No conditions always show [fr]",
     "addCustomRules": "Add a rule [fr]",
+    "editCustomRules": "Edit rules [fr]",
     "addAnotherRule": "Add another rule [fr]",
     "removeRule": "remove [fr]",
     "addOther": "Add 'if other' option [fr]",
