@@ -158,6 +158,12 @@ export const cleanChoiceIdsFromRules = (removeElementId: string, rules: Conditio
   });
 };
 
+export const removeChoiceIdFromRules = (removeChoiceId: string, rules: ConditionalRule[]) => {
+  return rules.filter((rule) => {
+    return rule.choiceId !== removeChoiceId;
+  });
+};
+
 /**
  * Converts a list of choice rules to a list of conditional rules for a list of form elements
  * @param elements - List of form elements

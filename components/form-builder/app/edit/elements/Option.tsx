@@ -34,6 +34,7 @@ export const Option = ({
     setFocusInput,
     translationLanguagePriority,
     getLocalizationAttribute,
+    removeChoiceFromRules,
   } = useTemplateStore((s) => ({
     addChoice: s.addChoice,
     removeChoice: s.removeChoice,
@@ -42,6 +43,7 @@ export const Option = ({
     getFocusInput: s.getFocusInput,
     translationLanguagePriority: s.translationLanguagePriority,
     getLocalizationAttribute: s.getLocalizationAttribute,
+    removeChoiceFromRules: s.removeChoiceFromRules,
   }));
 
   const icon = renderIcon && renderIcon(index);
@@ -90,10 +92,10 @@ export const Option = ({
 
   const cleanUpRules = useCallback(
     (parentIndex: number, index: number) => {
-      // eslint-disable-next-line  @typescript-eslint/no-unused-vars
       const choiceId = `${id}.${index}`;
+      removeChoiceFromRules(choiceId);
     },
-    [id]
+    [id, removeChoiceFromRules]
   );
 
   return (

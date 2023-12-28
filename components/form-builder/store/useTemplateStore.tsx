@@ -36,6 +36,7 @@ import {
 } from "@lib/types";
 import { logMessage } from "@lib/logger";
 import { BrandProperties } from "@lib/types/form-types";
+import { getElementsUsingChoiceId, removeChoiceIdFromRules } from "@lib/formContext";
 
 const defaultField: FormElement = {
   id: 0,
@@ -149,6 +150,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   getSecurityAttribute: () => SecurityAttribute;
   setClosingDate: (closingDate: string | null) => void;
   initialize: () => void;
+  removeChoiceFromRules: (choiceId: string) => void;
 }
 
 /* Note: "async" getItem is intentional here to work-around a hydration issue   */
@@ -292,6 +294,27 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
 
                 state.form.layout.splice(elIndex + 1, 0, id);
                 state.form.elements.splice(elIndex + 1, 0, item);
+              });
+            },
+            removeChoiceFromRules: (choiceId: string) => {
+              set((state) => {
+                const elements = state.form.elements;
+                const rules = getElementsUsingChoiceId({ formElements: elements, choiceId });
+                rules.forEach((rule) => {
+                  const el = elements.find((element) => element.id === Number(rule.elementId));
+
+                  if (!el) return;
+
+                  const existingRules = el.properties.conditionalRules;
+
+                  if (!existingRules) return;
+
+                  const cleanedRules = removeChoiceIdFromRules(choiceId, existingRules);
+
+                  if (cleanedRules) {
+                    el.properties.conditionalRules = cleanedRules;
+                  }
+                });
               });
             },
             addSubItem: (elIndex, subIndex = 0, type = FormElementTypes.radio, data) =>
