@@ -24,11 +24,11 @@ export const ensureChoiceId = (choiceId: string) => {
 
 /**
  * @param formElements  - The form elements to search
- * @param elementId - The id of the form element to search for
+ * @param elementId - The id of the form element containing choices to search
  * @param value - The value to search for i.e. the 'en' or 'fr' value of a choice
  * @returns The index of the choice with the specified value
  */
-export function findChoiceIndex(
+export function findChoiceIndexByValue(
   formElements: FormElement[],
   elementId: number,
   value: string | string[]
@@ -69,7 +69,7 @@ export const mapIdsToValues = (formRecord: PublicFormRecord, values: FormValues)
     const value = values[id];
 
     if (!Array.isArray(value)) {
-      const choiceId = findChoiceIndex(formRecord.form.elements, id, value);
+      const choiceId = findChoiceIndexByValue(formRecord.form.elements, id, value);
       if (choiceId > -1) {
         return `${id}.${choiceId}`;
       }
@@ -77,7 +77,7 @@ export const mapIdsToValues = (formRecord: PublicFormRecord, values: FormValues)
     }
 
     return value.map((val) => {
-      const choiceId = findChoiceIndex(formRecord.form.elements, id, val);
+      const choiceId = findChoiceIndexByValue(formRecord.form.elements, id, val);
       if (choiceId > -1) {
         return `${id}.${choiceId}`;
       }

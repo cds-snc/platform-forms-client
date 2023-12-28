@@ -3,7 +3,7 @@ import validFormTemplate from "../../__fixtures__/validFormTemplate.json";
 import { PublicFormRecord } from "@lib/types";
 
 import {
-  findChoiceIndex,
+  findChoiceIndexByValue,
   getElementsWithRuleForChoice,
   choiceRulesToConditonalRules,
   ensureChoiceId,
@@ -45,8 +45,8 @@ describe("Form Context", () => {
       },
     ];
 
-    expect(findChoiceIndex(elements, 4, "no")).toEqual(1);
-    expect(findChoiceIndex(elements, 1, "possibly fr")).toEqual(2);
+    expect(findChoiceIndexByValue(elements, 4, "no")).toEqual(1);
+    expect(findChoiceIndexByValue(elements, 1, "possibly fr")).toEqual(2);
   });
 
   test("Gets elements with rule for choice", async () => {
