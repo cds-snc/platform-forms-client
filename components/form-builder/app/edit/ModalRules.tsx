@@ -99,7 +99,9 @@ export const ModalRules = ({ item }: { item: FormElementWithIndex }) => {
 
   return (
     <Modal
-      title={t("addConditionalRules.modalTitle")}
+      title={
+        hasRules ? t("addConditionalRules.modalTitleEdit") : t("addConditionalRules.modalTitle")
+      }
       openButton={
         <Button className="!m-0 !mt-4" theme="link">
           {hasRules
