@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect, useRef } from "react";
 import { serverTranslation } from "@i18n";
 import { useTranslation } from "@i18n/client"
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 import { getAllTemplates } from "@lib/templates";
 import { requireAuthentication } from "@lib/auth";

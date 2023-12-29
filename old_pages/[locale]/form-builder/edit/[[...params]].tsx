@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect } from "react";
 import { useTranslation } from "@i18n/client";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { NextPageWithLayout } from "../../../_app";
 import { FormBuilderPageProps } from "@lib/types";
 import { getServerSideProps } from "../index";

@@ -6,7 +6,7 @@ import { getLocalizedProperty } from "@lib/utils";
 import React, { ReactElement } from "react";
 import { useTranslation } from "@i18n/client";
 import Head from "next/head";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { checkPrivileges } from "@lib/privileges";
 import { useAccessControl, useRefresh } from "@lib/hooks";
 import axios from "axios";

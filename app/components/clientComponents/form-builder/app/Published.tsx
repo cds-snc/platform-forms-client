@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { RocketIcon } from "../../icons/RocketIcon";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { LinkButton } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "../store/useTemplateStore";

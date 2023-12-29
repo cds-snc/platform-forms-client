@@ -1,7 +1,7 @@
 import { Form } from "@clientComponents/forms";
 import { getRenderedForm } from "@lib/formBuilder";
 import { FormRecord } from "@lib/types";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { useTranslation } from "@i18n/client";
 

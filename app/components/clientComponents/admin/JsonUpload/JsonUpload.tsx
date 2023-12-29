@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useTranslation } from "@i18n/client";
 import { FormRecord } from "@lib/types";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import Loader from "../../globals/Loader";
 import { logMessage } from "@lib/logger";
 import { useRefresh } from "@lib/hooks/useRefresh";

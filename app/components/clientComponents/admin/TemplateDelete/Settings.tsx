@@ -2,7 +2,7 @@ import React from "react";
 import JSONUpload from "@clientComponents/admin/JsonUpload/JsonUpload";
 import { useTranslation } from "@i18n/client";
 import { DeleteButton, Label } from "@clientComponents/forms";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 import { logMessage } from "@lib/logger";
 import { FormRecord } from "@lib/types";

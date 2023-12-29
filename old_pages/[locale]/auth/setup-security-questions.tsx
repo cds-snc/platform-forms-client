@@ -16,7 +16,7 @@ import UserNavLayout from "@clientComponents/globals/layouts/UserNavLayout";
 import { LinkButton } from "@clientComponents/globals";
 import { logMessage } from "@lib/logger";
 import { fetchWithCsrfToken } from "@lib/hooks/auth/fetchWithCsrfToken";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { toast } from "@clientComponents/form-builder/app/shared";
 
 export interface Question {

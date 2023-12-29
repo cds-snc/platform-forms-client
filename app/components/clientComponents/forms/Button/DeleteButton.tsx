@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button } from "@clientComponents/forms";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import { logMessage } from "@lib/logger";
 

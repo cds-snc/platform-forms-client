@@ -3,7 +3,7 @@ import { GetServerSideProps } from "next";
 
 import React, { useRef, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { Formik } from "formik";
 import { useTranslation } from "@i18n/client";
 import { getCsrfToken } from "next-auth/react";

@@ -4,7 +4,7 @@ import { RichText } from "../forms/RichText/RichText";
 import { logMessage } from "@lib/logger";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { getCsrfToken } from "next-auth/react";
 import { localPathRegEx } from "@lib/validation";
 import { Button } from "@clientComponents/globals";

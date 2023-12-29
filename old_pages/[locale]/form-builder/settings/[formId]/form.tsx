@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import { NextPageWithLayout } from "../../../../_app";
 import { Settings, FormOwnership, SetClosingDate } from "@clientComponents/form-builder/app";

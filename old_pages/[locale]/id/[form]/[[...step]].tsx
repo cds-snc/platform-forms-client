@@ -7,7 +7,7 @@ import { useTranslation } from "@i18n/client";
 import Head from "next/head";
 import { Form, TextPage, ClosedPage } from "@clientComponents/forms";
 import { getRenderedForm } from "@lib/formBuilder";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { PublicFormRecord } from "@lib/types";
 import { GetServerSideProps } from "next";
 import { NextPageWithLayout } from "old_pages/_app";

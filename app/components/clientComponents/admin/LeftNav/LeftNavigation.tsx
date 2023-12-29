@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "@clientComponents/globals/NavLink";
 import { useTranslation } from "@i18n/client";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useAccessControl } from "@lib/hooks";
 
 import { NameIcon, FlagIcon, GearIcon } from "@clientComponents/icons";

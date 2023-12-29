@@ -8,7 +8,7 @@ import { serverTranslation } from "@i18n";
 import UserNavLayout from "@clientComponents/globals/layouts/UserNavLayout";
 import Link from "next/link";
 import Head from "next/head";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import {
   getPasswordResetAuthenticatedUserEmailAddress,
   retrieveUserSecurityQuestions,

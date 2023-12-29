@@ -1,8 +1,9 @@
+"use client";
 import React, { useCallback, useState } from "react";
 import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
 import { useTranslation } from "@i18n/client";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 import { useTemplateStore } from "../store";
 import { useTemplateApi, useAllowPublish } from "../hooks";
@@ -88,7 +89,7 @@ export const Publish = () => {
     window.dataLayer.push({
       event: "publish_form",
     });
-    router.push({ pathname: `/form-builder/published` });
+    router.push(`/form-builder/published`);
   };
 
   const handleSaveAndRequest = useCallback(async () => {
@@ -108,7 +109,7 @@ export const Publish = () => {
       return;
     }
 
-    router.push({ pathname: `/unlock-publishing` });
+    router.push(`/unlock-publishing`);
   }, [getSchema, getName, id, save, router]);
 
   if (status !== "authenticated") {

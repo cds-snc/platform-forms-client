@@ -1,5 +1,5 @@
 import React, { ReactElement, useState, useEffect, useRef } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { Formik } from "formik";
 import { TextInput, Label, Alert } from "@clientComponents/forms";
 import { useTranslation } from "@i18n/client";

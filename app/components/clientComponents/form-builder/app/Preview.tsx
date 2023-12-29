@@ -1,6 +1,7 @@
+"use client";
 import React, { useState } from "react";
 import { useTranslation } from "@i18n/client";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
 

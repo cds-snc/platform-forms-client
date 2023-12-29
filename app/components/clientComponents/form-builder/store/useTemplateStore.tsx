@@ -1,5 +1,6 @@
 "use client";
-import { createStore, useStore } from "zustand";
+import { createStore } from "zustand";
+import { useStoreWithEqualityFn } from "zustand/traditional";
 import { immer } from "zustand/middleware/immer";
 import { shallow } from "zustand/shallow";
 import {
@@ -465,7 +466,7 @@ export const useTemplateStore = <T,>(
 ): T => {
   const store = useContext(TemplateStoreContext);
   if (!store) throw new Error("Missing Template Store Provider in tree");
-  return useStore(store, selector, equalityFn ?? shallow);
+  return useStoreWithEqualityFn(store, selector, equalityFn ?? shallow);
 };
 
 export const useSubscibeToTemplateStore = <T,>(

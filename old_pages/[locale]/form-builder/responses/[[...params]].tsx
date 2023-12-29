@@ -27,7 +27,7 @@ import { Button } from "@clientComponents/globals";
 import { ClosedBanner } from "@clientComponents/form-builder/app/shared/ClosedBanner";
 import { getAppSetting } from "@lib/appSettings";
 import { DeleteIcon, FolderIcon, InboxIcon, WarningIcon } from "@clientComponents/icons";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { ConfirmDialog } from "@clientComponents/form-builder/app/responses/Dialogs/ConfirmDialog";
 import { Alert } from "@clientComponents/globals";

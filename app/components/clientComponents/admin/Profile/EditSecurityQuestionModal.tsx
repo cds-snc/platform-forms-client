@@ -7,7 +7,7 @@ import { logMessage } from "@lib/logger";
 import { Question } from "old_pages/[locale]/profile";
 import axios from "axios";
 import { getCsrfToken } from "next-auth/react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import debounce from "lodash.debounce";
 import {
   MessageType,

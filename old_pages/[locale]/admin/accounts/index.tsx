@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import { useTranslation } from "@i18n/client";
 import Head from "next/head";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 import { requireAuthentication } from "@lib/auth";
 import { checkPrivileges, getAllPrivileges } from "@lib/privileges";

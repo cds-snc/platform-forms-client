@@ -1,3 +1,4 @@
+"use client";
 export { Edit } from "./Edit";
 export { ElementPanel } from "./ElementPanel";
 export { PanelActions } from "./PanelActions";

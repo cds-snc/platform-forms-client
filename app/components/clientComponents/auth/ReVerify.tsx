@@ -1,5 +1,5 @@
 import React, { ReactElement, useRef } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import { Button, StyledLink } from "@clientComponents/globals";
 import { useAuthErrors } from "@lib/hooks/auth/useAuthErrors";
