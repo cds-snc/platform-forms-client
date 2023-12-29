@@ -4,7 +4,7 @@ import { Viewport } from "next";
 import Script from "next/script";
 import "react-app-polyfill/stable";
 import { cookies } from "next/headers";
-import { languages } from "@app/i18n/settings";
+import { languages } from "@i18n/settings";
 import { Noto_Sans, Lato } from "next/font/google";
 import { googleTagManager } from "@lib/cspScripts";
 import { headers } from "next/headers";

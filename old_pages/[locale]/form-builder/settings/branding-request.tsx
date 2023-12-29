@@ -11,7 +11,7 @@ import { NextPageWithLayout } from "../../../_app";
 import { BrandingRequestForm } from "@clientComponents/form-builder/app/branding";
 import { getAppSetting } from "@lib/appSettings";
 import Head from "next/head";
-import { FormBuilderLayout } from "@clientComponents/globals/layouts/FormBuilderLayout";
+import { FormBuilderInitializer } from "@clientComponents/globals/layouts/FormBuilderLayout";
 
 const Page: NextPageWithLayout<FormBuilderPageProps> = ({ publicForm }: FormBuilderPageProps) => {
   const { t } = useTranslation("form-builder");
@@ -27,7 +27,7 @@ const Page: NextPageWithLayout<FormBuilderPageProps> = ({ publicForm }: FormBuil
 };
 
 Page.getLayout = (page: ReactElement) => {
-  return <FormBuilderLayout hideLeftNav={true} page={page} />;
+  return <FormBuilderInitializer hideLeftNav={true} page={page} />;
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ params, req, res }) => {

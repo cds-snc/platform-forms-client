@@ -1,7 +1,7 @@
 import { Start } from "@clientComponents/form-builder/app/Start";
-import { serverTranslation } from "@app/i18n";
+import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import { TemplateStoreProvider } from "@clientComponents/form-builder/store/useTemplateStore";
+import { FormBuilderInitializer } from "@clientComponents/globals/layouts/FormBuilderLayout";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await serverTranslation(["common", "form-builder", "form-closed"]);
@@ -10,10 +10,10 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function Page() {
+export default async function Page(params: { locale: string }) {
   return (
-    <TemplateStoreProvider>
+    <FormBuilderInitializer locale={params.locale} hideLeftNav>
       <Start />
-    </TemplateStoreProvider>
+    </FormBuilderInitializer>
   );
 }

@@ -6,7 +6,7 @@ import { NextPageWithLayout } from "../../../_app";
 import { ResponseDelivery } from "@clientComponents/form-builder/app";
 import { SettingsNavigation } from "@clientComponents/form-builder/app/navigation/SettingsNavigation";
 import Head from "next/head";
-import { FormBuilderLayout } from "@clientComponents/globals/layouts/FormBuilderLayout";
+import { FormBuilderInitializer } from "@clientComponents/globals/layouts/FormBuilderLayout";
 
 const Page: NextPageWithLayout<FormBuilderPageProps> = () => {
   const { t } = useTranslation("form-builder");
@@ -29,7 +29,7 @@ const Page: NextPageWithLayout<FormBuilderPageProps> = () => {
 };
 
 Page.getLayout = (page: ReactElement) => {
-  return <FormBuilderLayout page={page} />;
+  return <FormBuilderInitializer page={page} />;
 };
 
 export { getServerSideProps };

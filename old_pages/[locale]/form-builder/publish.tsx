@@ -7,7 +7,7 @@ import { getServerSideProps } from "./index";
 import { Publish } from "@clientComponents/form-builder/app";
 import { useTemplateStore } from "@clientComponents/form-builder/store";
 import { TwoColumnLayout } from "@clientComponents/globals/layouts";
-import { FormBuilderLayout } from "@clientComponents/globals/layouts/FormBuilderLayout";
+import { FormBuilderInitializer } from "@clientComponents/globals/layouts/FormBuilderLayout";
 import Head from "next/head";
 
 const Page: NextPageWithLayout<FormBuilderPageProps> = () => {
@@ -46,7 +46,7 @@ const Page: NextPageWithLayout<FormBuilderPageProps> = () => {
 };
 
 Page.getLayout = (page: ReactElement) => {
-  return <FormBuilderLayout page={page} />;
+  return <FormBuilderInitializer page={page} />;
 };
 
 export { getServerSideProps };

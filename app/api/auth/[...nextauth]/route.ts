@@ -4,7 +4,7 @@ import { begin2FAAuthentication, initiateSignIn } from "@lib/auth/";
 
 import { NextRequest, NextResponse } from "next/server";
 
-import { authOptions } from "@app/api/auth/authConfig";
+import { authOptions } from "@api/auth/authConfig";
 
 if (
   (!process.env.COGNITO_APP_CLIENT_ID ||

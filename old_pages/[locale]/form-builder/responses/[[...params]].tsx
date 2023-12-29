@@ -20,7 +20,7 @@ import { EmailResponseSettings } from "@clientComponents/form-builder/app/shared
 import { useTemplateStore } from "@clientComponents/form-builder/store";
 import { LoggedOutTabName, LoggedOutTab } from "@clientComponents/form-builder/app/LoggedOutTab";
 import Head from "next/head";
-import { FormBuilderLayout } from "@clientComponents/globals/layouts/FormBuilderLayout";
+import { FormBuilderInitializer } from "@clientComponents/globals/layouts/FormBuilderLayout";
 import { languageParamSanitization } from "@app/i18n/utils";
 import { ErrorPanel } from "@clientComponents/globals";
 import { Button } from "@clientComponents/globals";
@@ -369,7 +369,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
 };
 
 Responses.getLayout = (page: ReactElement) => {
-  return <FormBuilderLayout page={page} />;
+  return <FormBuilderInitializer page={page} />;
 };
 
 export const getServerSideProps: GetServerSideProps = async ({

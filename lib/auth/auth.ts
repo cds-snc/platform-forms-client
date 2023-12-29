@@ -10,7 +10,7 @@ import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import jwt from "jsonwebtoken";
 import { hasOwnProperty } from "../tsUtils";
 import { TemporaryTokenPayload, UserAbility } from "../types";
-import { authOptions } from "@app/api/auth/authConfig";
+import { authOptions } from "app/api/auth/authConfig";
 import { AccessControlError, createAbility } from "../privileges";
 
 // Helpful to check whether a referer is local vs. an external URL

@@ -9,7 +9,7 @@ import { AccessControlError, createAbility } from "@lib/privileges";
 import { NextPageWithLayout } from "../../_app";
 import { FormBuilderPageProps, FormRecord } from "@lib/types";
 import { Start } from "@clientComponents/form-builder/app";
-import { FormBuilderLayout } from "@clientComponents/globals/layouts/FormBuilderLayout";
+import { FormBuilderInitializer } from "@clientComponents/globals/layouts/FormBuilderLayout";
 import Head from "next/head";
 
 const Page: NextPageWithLayout<FormBuilderPageProps> = () => {
@@ -35,7 +35,7 @@ const Page: NextPageWithLayout<FormBuilderPageProps> = () => {
 };
 
 Page.getLayout = (page: ReactElement) => {
-  return <FormBuilderLayout hideLeftNav={true} page={page} />;
+  return <FormBuilderInitializer hideLeftNav={true} page={page} />;
 };
 
 export const getServerSideProps: GetServerSideProps = async ({

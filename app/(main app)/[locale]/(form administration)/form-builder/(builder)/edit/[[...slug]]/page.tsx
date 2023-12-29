@@ -1,13 +1,13 @@
-import { TemplateStoreProvider } from "@clientComponents/form-builder/store";
-import { serverTranslation } from "@app/i18n";
+import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import { redirect } from "next/navigation";
-import { getAppSession } from "@app/api/auth/authConfig";
-import { FormRecord } from "@lib/types";
-import { AccessControlError, createAbility } from "@lib/privileges";
-import { getFullTemplateByID } from "@lib/templates";
 import { EditNavigation } from "@clientComponents/form-builder/app";
 import { Edit } from "@clientComponents/form-builder/app/edit";
+import { FormRecord } from "@lib/types";
+import { getAppSession } from "@api/auth/authConfig";
+import { AccessControlError, createAbility } from "@lib/privileges";
+import { getFullTemplateByID } from "@lib/templates";
+import { redirect } from "next/navigation";
+import { FormBuilderInitializer } from "@clientComponents/globals/layouts/FormBuilderLayout";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await serverTranslation("form-builder");
@@ -17,9 +17,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Page({
-  params: { slug = [], locale },
+  params: { locale, slug = [] },
 }: {
-  params: { slug?: string[]; locale: string };
+  params: { locale: string; slug: string[] };
 }) {
   const FormbuilderParams: { locale: string; initialForm: null | FormRecord } = {
     initialForm: null,
@@ -40,7 +40,7 @@ export default async function Page({
         redirect(`/${locale}/404`);
       }
 
-      if (initialForm?.isPublished) {
+      if (initialForm.isPublished) {
         redirect(`/${locale}/form-builder/settings/${formID}`);
       }
 
@@ -53,9 +53,12 @@ export default async function Page({
   }
 
   return (
-    <TemplateStoreProvider {...FormbuilderParams}>
+    <FormBuilderInitializer
+      initialForm={FormbuilderParams.initialForm}
+      locale={FormbuilderParams.locale}
+    >
       <EditNavigation />
       <Edit />
-    </TemplateStoreProvider>
+    </FormBuilderInitializer>
   );
 }

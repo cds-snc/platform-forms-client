@@ -7,13 +7,14 @@ import { TemplateApiProvider } from "@clientComponents/form-builder/hooks";
 import { LeftNavigation } from "@clientComponents/form-builder/app";
 import { FullWidthLayout } from "./FullWidthLayout";
 import { TwoColumnLayout } from "./TwoColumnLayout";
+import { FormRecord } from "@lib/types";
 
 const PageLayout = ({
   page,
   hideLeftNav,
   backLink,
 }: {
-  page: ReactElement;
+  page: React.ReactNode;
   hideLeftNav?: boolean | false;
   backLink?: ReactElement;
 }) => {
@@ -38,26 +39,28 @@ const PageLayout = ({
   );
 };
 
-export const FormBuilderLayout = ({
-  page,
-  className = "",
+export const FormBuilderInitializer = ({
+  children,
+  initialForm = null,
   hideLeftNav,
   backLink,
+  locale,
+  className = "",
 }: {
-  page: ReactElement;
-  className?: string;
+  children: React.ReactNode;
   hideLeftNav?: boolean | false;
   backLink?: ReactElement;
+  className?: string;
+  initialForm?: FormRecord | null;
+  locale: string;
 }) => {
   return (
-    <TemplateStoreProvider
-      {...{ ...(page.props.initialForm && page.props.initialForm), locale: page.props.locale }}
-    >
+    <TemplateStoreProvider {...{ ...initialForm, locale }}>
       <TemplateApiProvider>
         <RefStoreProvider>
           <div className={`flex h-full flex-col ${className}`}>
             <PageLoader
-              page={<PageLayout page={page} hideLeftNav={hideLeftNav} backLink={backLink} />}
+              page={<PageLayout page={children} hideLeftNav={hideLeftNav} backLink={backLink} />}
             />
           </div>
         </RefStoreProvider>

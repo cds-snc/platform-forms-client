@@ -13,7 +13,7 @@ import { User } from "@prisma/client";
 import { FormRecord } from "@lib/types";
 import { BackLink } from "@clientComponents/admin/LeftNav/BackLink";
 import Head from "next/head";
-import { FormBuilderLayout } from "@clientComponents/globals/layouts/FormBuilderLayout";
+import { FormBuilderInitializer } from "@clientComponents/globals/layouts/FormBuilderLayout";
 import { useTemplateStore } from "@clientComponents/form-builder/store";
 import { useSession } from "next-auth/react";
 
@@ -77,7 +77,7 @@ const Page: NextPageWithLayout<AssignUsersToTemplateProps> = ({
 };
 
 Page.getLayout = (page: ReactElement) => {
-  return <FormBuilderLayout page={page} backLink={<BackToManageForms />} />;
+  return <FormBuilderInitializer page={page} backLink={<BackToManageForms />} />;
 };
 
 const redirect = (locale: string | undefined) => {

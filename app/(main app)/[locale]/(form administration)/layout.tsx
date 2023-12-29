@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { getAppSession } from "@app/api/auth/authConfig";
+import { getAppSession } from "@api/auth/authConfig";
 import { ClientContexts } from "@clientComponents/globals/ClientContexts";
 
 export default async function Layout({

@@ -1,14 +1,7 @@
-import React, { ReactElement, useState } from "react";
-import { serverTranslation } from "@i18n";
+"use client";
+import { useState } from "react";
 import { useTranslation } from "@i18n/client";
-import { getFullTemplateByID } from "@lib/templates";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@app/api/auth/authConfig";
-import { AccessControlError, createAbility } from "@lib/privileges";
-import { NextPageWithLayout } from "old_pages/_app";
-import { GetServerSideProps } from "next";
 import { FormRecord, VaultStatus, VaultSubmissionList } from "@lib/types";
-import { listAllSubmissions } from "@lib/vault";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { Card, HeadingLevel } from "@clientComponents/globals/card/Card";
@@ -20,22 +13,17 @@ import { EmailResponseSettings } from "@clientComponents/form-builder/app/shared
 import { useTemplateStore } from "@clientComponents/form-builder/store";
 import { LoggedOutTabName, LoggedOutTab } from "@clientComponents/form-builder/app/LoggedOutTab";
 import Head from "next/head";
-import { FormBuilderLayout } from "@clientComponents/globals/layouts/FormBuilderLayout";
-import { languageParamSanitization } from "@app/i18n/utils";
-import { ErrorPanel } from "@clientComponents/globals";
 import { Button } from "@clientComponents/globals";
 import { ClosedBanner } from "@clientComponents/form-builder/app/shared/ClosedBanner";
-import { getAppSetting } from "@lib/appSettings";
 import { DeleteIcon, FolderIcon, InboxIcon, WarningIcon } from "@clientComponents/icons";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams, usePathname } from "next/navigation";
 import Image from "next/image";
 import { ConfirmDialog } from "@clientComponents/form-builder/app/responses/Dialogs/ConfirmDialog";
 import { Alert } from "@clientComponents/globals";
-import { isStatus, ucfirst } from "@lib/clientHelpers";
+import { isStatus } from "@lib/clientHelpers";
 import { TabNavLink } from "@clientComponents/form-builder/app/navigation/TabNavLink";
-import { isResponseId } from "@lib/validation";
 
-interface ResponsesProps {
+export interface ResponsesProps {
   initialForm: FormRecord | null;
   vaultSubmissions: VaultSubmissionList[];
   formId: string;
@@ -47,10 +35,10 @@ interface ResponsesProps {
 // TODO: move to an app setting variable
 const MAX_REPORT_COUNT = 20;
 
-const Responses: NextPageWithLayout<ResponsesProps> = ({
+export const ClientSide = ({
   initialForm,
   vaultSubmissions,
-  formId,
+  formId = "",
   nagwareResult,
   responseDownloadLimit,
   lastEvaluatedKey,
@@ -63,7 +51,9 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
   const [successAlertMessage, setShowSuccessAlert] = useState<false | string>(false);
 
   const router = useRouter();
-  const [, statusQuery = "new"] = router.query.params || [];
+  const { slug = [] } = useParams();
+  const statusQuery = slug[1] ?? "new";
+  const pathName = usePathname();
 
   const { getDeliveryOption, isPublished } = useTemplateStore((s) => ({
     getDeliveryOption: s.getDeliveryOption,
@@ -360,151 +350,10 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({
         apiUrl={`/api/id/${formId}/submission/confirm`}
         maxEntries={responseDownloadLimit}
         onSuccessfulConfirm={() => {
-          router.replace(router.asPath, undefined, { scroll: false });
+          router.replace(pathName, { scroll: false });
           setShowSuccessAlert("confirmSuccess");
         }}
       />
     </>
   );
 };
-
-Responses.getLayout = (page: ReactElement) => {
-  return <FormBuilderLayout page={page} />;
-};
-
-export const getServerSideProps: GetServerSideProps = async ({
-  query: { params, lastKey = null },
-  locale,
-  req,
-  res,
-}) => {
-  try {
-    const [formID = null, statusQuery = "new", localeParam = "en"] = params || [];
-    const locale = languageParamSanitization(localeParam);
-
-    const FormbuilderParams: { locale: string; initialForm: null | FormRecord } = {
-      initialForm: null,
-      locale: locale || "en",
-    };
-
-    let nagwareResult: NagwareResult | null = null;
-
-    const session = await getServerSession(req, res, authOptions);
-
-    if (session && !session.user.acceptableUse) {
-      // If they haven't agreed to Acceptable Use redirect to policy page for acceptance
-      return {
-        redirect: {
-          destination: `/${locale}/auth/policy`,
-          permanent: false,
-        },
-      };
-    }
-
-    if (session && !session.user.hasSecurityQuestions) {
-      // If they haven't setup security questions Use redirect to policy page for acceptance
-      return {
-        redirect: {
-          destination: `/${locale}/auth/setup-security-questions`,
-          permanent: false,
-        },
-      };
-    }
-
-    if (formID && session) {
-      const ability = createAbility(session);
-
-      const initialForm = await getFullTemplateByID(ability, formID);
-
-      if (initialForm === null) {
-        return {
-          redirect: {
-            // We can redirect to a 'Form does not exist page' in the future
-            destination: `/${locale}/404`,
-            permanent: false,
-          },
-        };
-      }
-
-      // get status from url params (default = new) and capitalize/cast to VaultStatus
-      // Protect against invalid status query
-      const status = Object.values(VaultStatus).includes(ucfirst(statusQuery) as VaultStatus)
-        ? (ucfirst(statusQuery) as VaultStatus)
-        : VaultStatus.NEW;
-
-      let currentLastEvaluatedKey = null;
-
-      // build up lastEvaluatedKey from lastKey url param
-      if (lastKey && isResponseId(String(lastKey))) {
-        currentLastEvaluatedKey = {
-          Status: status,
-          NAME_OR_CONF: `NAME#${lastKey}`,
-          FormID: formID,
-        };
-      }
-
-      const { submissions, lastEvaluatedKey } = await listAllSubmissions(
-        ability,
-        formID,
-        status,
-        currentLastEvaluatedKey
-      );
-
-      FormbuilderParams.initialForm = initialForm;
-
-      // TODO: re-enable nagware when we have a better solution for how to handle filtered statuses
-      nagwareResult = null;
-      /*
-      nagwareResult = allSubmissions.submissions.length
-        ? await detectOldUnprocessedSubmissions(allSubmissions.submissions)
-        : null;
-        */
-      const responseDownloadLimit = Number(await getAppSetting("responseDownloadLimit"));
-
-      return {
-        props: {
-          ...FormbuilderParams,
-          vaultSubmissions: submissions,
-          formId: FormbuilderParams.initialForm?.id ?? null,
-          responseDownloadLimit: responseDownloadLimit,
-          lastEvaluatedKey: lastEvaluatedKey,
-          nagwareResult,
-          ...(locale &&
-            (await serverSideTranslations(
-              locale,
-              ["common", "form-builder-responses", "form-builder", "form-closed"],
-              null,
-              ["fr", "en"]
-            ))),
-        },
-      };
-    } else {
-      return {
-        props: {
-          ...FormbuilderParams,
-          vaultSubmissions: [],
-          formId: null,
-          ...(locale &&
-            (await serverSideTranslations(
-              locale,
-              ["common", "form-builder-responses", "form-builder", "form-closed"],
-              null,
-              ["fr", "en"]
-            ))),
-        },
-      };
-    }
-  } catch (e) {
-    if (e instanceof AccessControlError) {
-      return {
-        redirect: {
-          destination: `/${locale}/admin/unauthorized`,
-          permanent: false,
-        },
-      };
-    }
-    throw e;
-  }
-};
-
-export default Responses;

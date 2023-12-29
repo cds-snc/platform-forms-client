@@ -11,7 +11,7 @@ import { Branding } from "@clientComponents/form-builder/app/branding";
 import { SettingsNavigation } from "@clientComponents/form-builder/app/navigation/SettingsNavigation";
 import { getAppSetting } from "@lib/appSettings";
 import Head from "next/head";
-import { FormBuilderLayout } from "@clientComponents/globals/layouts/FormBuilderLayout";
+import { FormBuilderInitializer } from "@clientComponents/globals/layouts/FormBuilderLayout";
 
 const Page: NextPageWithLayout<FormBuilderPageProps> = ({
   hasBrandingRequestForm,
@@ -38,7 +38,7 @@ const Page: NextPageWithLayout<FormBuilderPageProps> = ({
 };
 
 Page.getLayout = (page: ReactElement) => {
-  return <FormBuilderLayout page={page} />;
+  return <FormBuilderInitializer page={page} />;
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ params, req, res }) => {

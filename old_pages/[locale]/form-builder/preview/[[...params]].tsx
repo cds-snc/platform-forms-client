@@ -8,7 +8,7 @@ import { useTemplateStore } from "@clientComponents/form-builder/store";
 import { LockIcon } from "@clientComponents/icons";
 import Markdown from "markdown-to-jsx";
 import Head from "next/head";
-import { FormBuilderLayout } from "@clientComponents/globals/layouts/FormBuilderLayout";
+import { FormBuilderInitializer } from "@clientComponents/globals/layouts/FormBuilderLayout";
 
 const Page: NextPageWithLayout<FormBuilderPageProps> = () => {
   const { t } = useTranslation("form-builder");
@@ -54,7 +54,7 @@ const Page: NextPageWithLayout<FormBuilderPageProps> = () => {
 };
 
 Page.getLayout = (page: ReactElement) => {
-  return <FormBuilderLayout page={page} />;
+  return <FormBuilderInitializer page={page} />;
 };
 
 export { getServerSideProps };

@@ -3,7 +3,7 @@ import React, { ReactNode } from "react";
 import Link from "next/link";
 import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
-import { languages } from "@app/i18n/settings";
+import { languages } from "@i18n/settings";
 
 // TODO: probably should be updated to use the <LinkButton.. component some time
 
