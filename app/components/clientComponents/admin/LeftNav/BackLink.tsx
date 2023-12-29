@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { StyledLink } from "@clientComponents/globals";
 import { BackArrowIcon } from "@clientComponents/icons";

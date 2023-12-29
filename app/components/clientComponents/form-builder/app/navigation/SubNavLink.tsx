@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useActivePathname } from "../../hooks/useActivePathname";

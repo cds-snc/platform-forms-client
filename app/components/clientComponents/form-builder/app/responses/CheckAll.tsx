@@ -1,3 +1,4 @@
+"use client";
 import { CheckAllIcon, CheckBoxEmptyIcon, CheckIndeterminateIcon } from "@clientComponents/icons";
 import { VaultSubmissionList } from "@lib/types";
 import React from "react";

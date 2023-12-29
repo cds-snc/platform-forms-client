@@ -1,3 +1,4 @@
+"use client";
 import { cleanPath } from "../hooks/useActivePathname";
 
 it("removes id from path", () => {

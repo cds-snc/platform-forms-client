@@ -1,3 +1,4 @@
+"use client";
 import { signOut, useSession } from "next-auth/react";
 import { useTranslation } from "@i18n/client";
 import Link from "next/link";

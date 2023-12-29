@@ -1,3 +1,4 @@
+"use client";
 import useModalStore, { defaultProperties } from "../store/useModalStore";
 import { renderHook } from "@testing-library/react";
 import { act } from "react-dom/test-utils";

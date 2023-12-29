@@ -1,3 +1,4 @@
+"use client";
 import React, { useCallback, useState, useMemo } from "react";
 import { LocalizedFormProperties } from "../types";
 import axios from "axios";

@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { useTemplateStore } from "../../../store/useTemplateStore";
 import { RichTextEditor } from "./lexical-editor/RichTextEditor";

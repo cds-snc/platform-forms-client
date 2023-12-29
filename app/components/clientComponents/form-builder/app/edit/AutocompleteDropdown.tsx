@@ -1,3 +1,4 @@
+"use client";
 import React, { ChangeEvent } from "react";
 import { t } from "i18next";
 

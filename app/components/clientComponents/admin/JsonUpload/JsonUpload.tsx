@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import axios from "axios";
 import { useTranslation } from "@i18n/client";

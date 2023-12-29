@@ -1,3 +1,4 @@
+"use client";
 import React, { FocusEventHandler } from "react";
 
 import { cn } from "@lib/utils";

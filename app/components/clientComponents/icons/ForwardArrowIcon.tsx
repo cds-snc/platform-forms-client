@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 
 export const ForwardArrowIcon = ({ className, title }: { className?: string; title?: string }) => (

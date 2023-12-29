@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect } from "react";
 import { Dialog, useDialogRef } from "../../shared";
 import { useTranslation } from "@i18n/client";

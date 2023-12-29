@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import { RocketIcon } from "../../icons/RocketIcon";
 import { useSession } from "next-auth/react";

@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect } from "react";
 import { useTranslation } from "@i18n/client";
 import { RichText } from "@clientComponents/forms";

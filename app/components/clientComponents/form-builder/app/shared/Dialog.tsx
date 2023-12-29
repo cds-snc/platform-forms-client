@@ -1,3 +1,4 @@
+"use client";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { CDSHTMLDialogElement } from "../../types";
 import { useTranslation } from "@i18n/client";

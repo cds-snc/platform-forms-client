@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { useTemplateStore, TemplateStoreProvider } from "../store/useTemplateStore";
 import { renderHook, act } from "@testing-library/react";

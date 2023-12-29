@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { Alert } from "../../globals";
 import { CircleCheckIcon } from "../../form-builder/icons";

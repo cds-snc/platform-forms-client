@@ -1,3 +1,4 @@
+"use client";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import debounce from "lodash.debounce";

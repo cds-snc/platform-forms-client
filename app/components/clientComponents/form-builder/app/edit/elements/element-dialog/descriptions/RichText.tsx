@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Markdown from "markdown-to-jsx";
 export const RichText = ({ title, description }: { title: string; description: string }) => {

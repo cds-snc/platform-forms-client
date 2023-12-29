@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { Card } from "@clientComponents/globals/card/Card";
 import { LinkButton } from "@clientComponents/globals";

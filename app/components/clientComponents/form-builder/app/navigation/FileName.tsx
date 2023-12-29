@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useRef, useEffect, useImperativeHandle } from "react";
 import { cn } from "@lib/utils";
 

@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useTranslation } from "@i18n/client";
 import { useMediaQuery } from "usehooks-ts";

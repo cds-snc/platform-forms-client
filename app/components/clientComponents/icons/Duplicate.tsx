@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 export const Duplicate = ({ className, title }: { className?: string; title?: string }) => (
   <svg

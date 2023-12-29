@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 
 export const ThreeDotsIcon = ({ className, title }: { className?: string; title?: string }) => (

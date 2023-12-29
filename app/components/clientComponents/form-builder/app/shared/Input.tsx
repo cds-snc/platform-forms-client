@@ -1,3 +1,4 @@
+"use client";
 import React, { FocusEventHandler } from "react";
 
 interface Props {

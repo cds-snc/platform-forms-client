@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { ConfirmFormDeleteDialog } from "../ConfirmFormDeleteDialog";
 import { TemplateStoreProvider } from "@clientComponents/form-builder/store";

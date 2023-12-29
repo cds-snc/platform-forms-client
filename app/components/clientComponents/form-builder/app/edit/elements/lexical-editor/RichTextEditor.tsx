@@ -1,3 +1,4 @@
+"use client";
 import React, { useCallback, useState, useEffect } from "react";
 import { Editor } from "./Editor";
 import { useTemplateStore } from "../../../../store/useTemplateStore";

@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useRef, createContext, useContext, useCallback } from "react";
 import { useTranslation } from "@i18n/client";
 import PropTypes from "prop-types";

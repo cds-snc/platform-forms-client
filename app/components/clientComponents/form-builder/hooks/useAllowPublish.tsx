@@ -1,3 +1,4 @@
+"use client";
 import { useCallback, useMemo } from "react";
 
 import { FormElement, FormElementTypes, FormProperties, PropertyChoices } from "@lib/types";

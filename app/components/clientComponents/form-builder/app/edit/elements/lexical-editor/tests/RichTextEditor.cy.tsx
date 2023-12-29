@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { RichTextEditor } from "../RichTextEditor";
 import { defaultStore as store, Providers } from "@formbuilder/test-utils";

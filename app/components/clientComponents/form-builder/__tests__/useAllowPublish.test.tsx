@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { TemplateStoreProvider, TemplateStoreProps } from "../store/useTemplateStore";
 import { useAllowPublish } from "../hooks/useAllowPublish";

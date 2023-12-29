@@ -1,3 +1,4 @@
+"use client";
 import React, { useRef, useState, useCallback } from "react";
 import { Label } from "@clientComponents/forms";
 import { Button, Alert } from "@clientComponents/globals";

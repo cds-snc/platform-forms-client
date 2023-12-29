@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 
 export const ShortAnswer = ({ children, ...props }: { children: React.ReactElement | string }) => {

@@ -1,3 +1,4 @@
+"use client";
 import React, { createContext, useContext, useRef, RefObject } from "react";
 
 interface RefsContextType {

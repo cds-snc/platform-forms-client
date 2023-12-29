@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import JSONUpload from "@clientComponents/admin/JsonUpload/JsonUpload";
 import { useTranslation } from "@i18n/client";

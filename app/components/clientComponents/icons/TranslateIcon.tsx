@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 export const TranslateIcon = ({ className, title }: { className?: string; title?: string }) => (
   <svg

@@ -1,3 +1,4 @@
+"use client";
 import { FormElement } from "@lib/types";
 import { useTranslation } from "@i18n/client";
 import React from "react";

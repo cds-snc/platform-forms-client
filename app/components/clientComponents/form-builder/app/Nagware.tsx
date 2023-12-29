@@ -1,3 +1,4 @@
+"use client";
 import React, { useMemo } from "react";
 import { useTranslation } from "@i18n/client";
 import { Alert } from "@clientComponents/globals";

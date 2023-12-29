@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { Dialog, useDialogRef } from "../../shared";
 import { Alert, Button } from "@clientComponents/globals";

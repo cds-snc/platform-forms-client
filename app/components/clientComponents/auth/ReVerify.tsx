@@ -1,3 +1,4 @@
+"use client";
 import React, { ReactElement, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";

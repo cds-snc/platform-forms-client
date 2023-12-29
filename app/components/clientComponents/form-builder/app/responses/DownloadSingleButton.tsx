@@ -1,3 +1,4 @@
+"use client";
 import { DownloadIcon } from "@clientComponents/icons";
 import { logMessage } from "@lib/logger";
 import axios from "axios";

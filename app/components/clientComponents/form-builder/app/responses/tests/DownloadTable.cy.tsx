@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { DownloadTable } from "../../responses/DownloadTable";
 import { Nagware } from "../../Nagware";

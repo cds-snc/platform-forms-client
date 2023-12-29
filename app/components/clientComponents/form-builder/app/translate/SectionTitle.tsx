@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 
 export const SectionTitle = ({ children }: { children: React.ReactNode }) => {

@@ -1,3 +1,4 @@
+"use client";
 import React, { createContext, useState, useContext, useRef, useCallback } from "react";
 import { useTemplateStore, useSubscibeToTemplateStore } from "../store";
 import { useTemplateApi } from ".";

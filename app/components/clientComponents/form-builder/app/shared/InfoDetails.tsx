@@ -1,3 +1,4 @@
+"use client";
 import { AddIcon, RemoveIcon } from "@clientComponents/icons";
 import React from "react";
 

@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { useTranslation } from "@i18n/client";
 import { DesignIcon, PreviewIcon, PublishIcon, GearIcon, MessageIcon } from "../../../icons";

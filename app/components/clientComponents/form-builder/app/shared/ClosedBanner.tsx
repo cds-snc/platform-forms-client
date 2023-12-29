@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { useIsFormClosed } from "@lib/hooks";
 import { useTranslation } from "@i18n/client";

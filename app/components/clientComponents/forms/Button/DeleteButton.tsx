@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import { Button } from "@clientComponents/forms";
 import { useRouter } from "next/navigation";

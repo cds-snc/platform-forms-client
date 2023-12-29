@@ -1,3 +1,4 @@
+"use client";
 import { DeliveryOption, SecurityAttribute } from "@lib/types";
 import axios, { AxiosError, AxiosResponse } from "axios";
 

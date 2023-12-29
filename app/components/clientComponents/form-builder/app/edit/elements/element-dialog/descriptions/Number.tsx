@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { Text } from "./Text";
 export const Number = ({ title, description }: { title: string; description: string }) => {

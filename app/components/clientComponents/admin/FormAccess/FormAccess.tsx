@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@clientComponents/forms";
 import { logMessage } from "@lib/logger";
 import Loader from "@clientComponents/globals/Loader";

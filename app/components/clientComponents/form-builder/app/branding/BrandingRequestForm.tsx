@@ -1,3 +1,4 @@
+"use client";
 import { Form } from "@clientComponents/forms";
 import { getRenderedForm } from "@lib/formBuilder";
 import { FormRecord } from "@lib/types";

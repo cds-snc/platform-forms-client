@@ -1,3 +1,4 @@
+"use client";
 import Markdown from "markdown-to-jsx";
 import { useTranslation } from "@i18n/client";
 import React from "react";

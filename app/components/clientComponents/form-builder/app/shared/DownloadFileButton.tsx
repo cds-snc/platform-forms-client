@@ -1,3 +1,4 @@
+"use client";
 import React, { useCallback, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import Image from "next/image";

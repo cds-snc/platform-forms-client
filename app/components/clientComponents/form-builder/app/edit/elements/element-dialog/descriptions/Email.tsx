@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { Text } from "./Text";
 export const Email = ({ title, description }: { title: string; description: string }) => {

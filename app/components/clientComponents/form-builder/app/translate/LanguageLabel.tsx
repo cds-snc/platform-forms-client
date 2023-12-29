@@ -1,3 +1,4 @@
+"use client";
 import { Language } from "@clientComponents/form-builder/types";
 import React, { ReactElement } from "react";
 

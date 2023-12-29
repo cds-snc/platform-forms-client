@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useReducer, useState } from "react";
 import {
   NagwareResult,

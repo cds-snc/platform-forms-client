@@ -1,3 +1,4 @@
+"use client";
 import React, { ReactElement, useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Formik } from "formik";

@@ -1,3 +1,4 @@
+"use client";
 import { useTemplateStore } from "@clientComponents/form-builder/store";
 import {
   FormElementWithIndex,

@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { FormElementTypes, HTMLTextInputTypeAttribute } from "@lib/types";
 import { useTranslation } from "@i18n/client";

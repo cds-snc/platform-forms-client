@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 
 export const FieldsetLegend = ({ children }: { children: React.ReactNode }) => {

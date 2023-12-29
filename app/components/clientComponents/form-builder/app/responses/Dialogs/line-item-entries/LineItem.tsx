@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { RoundThinXCloseIcon } from "@clientComponents/icons";
 import { useTranslation } from "@i18n/client";

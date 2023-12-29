@@ -1,3 +1,4 @@
+"use client";
 import React, { useRef, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useDialogRef, Dialog, TextArea } from "@clientComponents/form-builder/app/shared";

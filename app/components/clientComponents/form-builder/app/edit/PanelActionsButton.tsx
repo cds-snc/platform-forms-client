@@ -1,3 +1,4 @@
+"use client";
 import React, { ComponentType, JSXElementConstructor } from "react";
 
 export const PanelActionsButton = ({

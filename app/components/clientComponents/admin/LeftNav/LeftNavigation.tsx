@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { NavLink } from "@clientComponents/globals/NavLink";
 import { useTranslation } from "@i18n/client";

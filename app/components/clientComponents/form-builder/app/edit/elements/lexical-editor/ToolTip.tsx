@@ -1,3 +1,4 @@
+"use client";
 import React, { useId, Children } from "react";
 
 export const ToolTip = ({ children, text }: { children: React.ReactElement; text: string }) => {

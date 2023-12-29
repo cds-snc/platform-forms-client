@@ -1,3 +1,4 @@
+"use client";
 export { CheckBox } from "./descriptions/CheckBox";
 export { Date } from "./descriptions/Date";
 export { DropDown } from "./descriptions/DropDown";
