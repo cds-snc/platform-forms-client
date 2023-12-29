@@ -1,13 +1,9 @@
-import { serverTranslation } from "@i18n";
-import { GetServerSideProps } from "next";
-
-import React, { useRef, useState } from "react";
+"use client";
+import { useRef, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { Formik } from "formik";
 import { useTranslation } from "@i18n/client";
 import { getCsrfToken } from "next-auth/react";
-import Head from "next/head";
 import * as Yup from "yup";
 import axios from "axios";
 import { logMessage } from "@lib/logger";
@@ -25,9 +21,7 @@ import { Button, LinkButton, Alert } from "@clientComponents/globals";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 
-export default function Contactus() {
-  const router = useRouter();
-  const supportType = router.query.supportType === undefined ? "support" : "contactus";
+export function ClientSide({ supportType }: { supportType: string }) {
   const { t, i18n } = useTranslation(["form-builder", "common"]);
   const [isSuccessScreen, setIsSuccessScreen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -50,9 +44,6 @@ export default function Contactus() {
 
   const contactUsForm = (
     <>
-      <Head>
-        <title>{t("contactus.title")}</title>
-      </Head>
       <h1>{t("contactus.title")}</h1>
       <Formik
         initialValues={{
@@ -289,9 +280,6 @@ export default function Contactus() {
 
   const supportForm = (
     <>
-      <Head>
-        <title>{t("support.title")}</title>
-      </Head>
       <h1>{t("support.title")}</h1>
       <Formik
         initialValues={{
@@ -497,22 +485,3 @@ export default function Contactus() {
     </>
   );
 }
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { locale = "en" }: { locale?: string } = context.params ?? {};
-  // For any URLs other than /support and /support/contactus, redirect the user to the 404 page
-  if (
-    context.query?.supportType !== undefined &&
-    String(context.query.supportType) !== "contactus"
-  ) {
-    return {
-      notFound: true,
-    };
-  }
-
-  return {
-    props: {
-      ...(locale && (await serverSideTranslations(locale, ["common", "form-builder"]))),
-    },
-  };
-};

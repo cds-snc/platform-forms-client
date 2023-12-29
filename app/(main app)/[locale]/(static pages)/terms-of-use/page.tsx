@@ -10,8 +10,12 @@ interface TermsOfUseProps {
     locale: string;
   };
 }
-export async function generateMetadata(): Promise<Metadata> {
-  const { t } = await serverTranslation(["terms"]);
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const { t } = await serverTranslation(["terms"], { lang: locale });
   return {
     title: t("terms-of-use.title"),
   };

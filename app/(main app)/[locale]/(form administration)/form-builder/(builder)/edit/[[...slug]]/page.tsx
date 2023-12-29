@@ -9,8 +9,12 @@ import { getFullTemplateByID } from "@lib/templates";
 import { redirect } from "next/navigation";
 import { FormBuilderInitializer } from "@clientComponents/globals/layouts/FormBuilderLayout";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const { t } = await serverTranslation("form-builder");
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const { t } = await serverTranslation("form-builder", { lang: locale });
   return {
     title: `${t("gcFormsEdit")} — ${t("gcForms")}`,
   };

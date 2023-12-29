@@ -12,8 +12,12 @@ import { isResponseId } from "@lib/validation";
 import { ClientSide, ResponsesProps } from "./clientSide";
 import { ucfirst } from "@lib/clientHelpers";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const { t } = await serverTranslation("form-builder");
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const { t } = await serverTranslation("form-builder", { lang: locale });
   return {
     title: `${t("gcFormsEdit")} — ${t("gcForms")}`,
   };

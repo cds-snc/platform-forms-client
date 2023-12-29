@@ -4,8 +4,12 @@ import { FormBuilderInitializer } from "@clientComponents/globals/layouts/FormBu
 
 import { Metadata } from "next";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const { t } = await serverTranslation("form-builder");
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const { t } = await serverTranslation("form-builder", { lang: locale });
   return {
     title: `${t("gcFormsPublished")} — ${t("gcForms")}`,
   };

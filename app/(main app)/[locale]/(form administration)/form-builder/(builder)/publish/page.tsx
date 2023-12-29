@@ -8,8 +8,12 @@ import { getFullTemplateByID } from "@lib/templates";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const { t } = await serverTranslation("form-builder");
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const { t } = await serverTranslation("form-builder", { lang: locale });
   return {
     title: `${t("gcFormsPublish")} — ${t("gcForms")}`,
   };
