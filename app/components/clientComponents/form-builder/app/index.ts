@@ -1,4 +1,3 @@
-"use client";
 export { ResponseDelivery } from "./ResponseDelivery";
 export { Settings } from "./Settings";
 export { LeftNavigation } from "./navigation/LeftNavigation";
