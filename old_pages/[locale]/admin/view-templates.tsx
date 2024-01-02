@@ -61,9 +61,7 @@ const DataView = (props: DataViewProps): React.ReactElement => {
         pathname = `/${i18n.language}/id/${formID}/users`;
         break;
     }
-    await router.push({
-      pathname: pathname,
-    });
+    router.push(pathname);
   };
 
   const { ability } = useAccessControl();

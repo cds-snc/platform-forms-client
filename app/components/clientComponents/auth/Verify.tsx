@@ -107,7 +107,7 @@ export const Verify = ({
       logMessage.error(err);
 
       if (hasError(["CredentialsSignin", "2FALockedOutSession", "2FAExpiredSession"], err)) {
-        await router.push("/auth/login");
+        router.push("/auth/login");
       } else if (hasError("2FAInvalidVerificationCode", err)) {
         handleErrorById("2FAInvalidVerificationCode");
       } else if (hasError("CodeMismatchException", err)) {

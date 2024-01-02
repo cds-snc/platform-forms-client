@@ -14,7 +14,7 @@ export const useRefresh = (
 
   const refreshData = async () => {
     setIsRefreshing(true);
-    await router.replace(router.asPath);
+    router.replace(router.asPath);
   };
 
   useEffect(() => {

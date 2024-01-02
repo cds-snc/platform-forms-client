@@ -67,7 +67,7 @@ export const ReVerify = ({
 
       if (hasError(["CredentialsSignin", "CSRF token not found"], err)) {
         // Missing CsrfToken or username so have the user try signing in
-        await router.push("/auth/login");
+        router.push("/auth/login");
       } else {
         handleErrorById("InternalServiceException");
       }

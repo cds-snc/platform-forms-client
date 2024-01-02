@@ -67,17 +67,17 @@ export const useLogin = () => {
         }
 
         if (hasError("PasswordResetRequiredException", reason)) {
-          await router.push("/auth/reset-password");
+          router.push("/auth/reset-password");
           return false;
         }
 
         if (hasError("AccountDeactivated", reason)) {
-          await router.push("/auth/account-deactivated");
+          router.push("/auth/account-deactivated");
           return false;
         }
 
         if (hasError("PasswordResetRequiredException", reason)) {
-          await router.push("/auth/reset-password");
+          router.push("/auth/reset-password");
           return false;
         }
       }

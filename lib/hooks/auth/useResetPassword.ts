@@ -36,7 +36,7 @@ export const useResetPassword = ({
       if (hasError("InvalidParameterException", err) && failedCallback) {
         failedCallback("InvalidParameterException");
       } else if (hasError("UserNotFoundException", err)) {
-        await router.push("/signup/register");
+        router.push("/signup/register");
       } else {
         handleErrorById("InternalServiceExceptionLogin");
         if (failedCallback) failedCallback("InternalServiceException");
@@ -57,7 +57,7 @@ export const useResetPassword = ({
       logMessage.error(err);
       if (axios.isAxiosError(err)) {
         if (err.response?.data.error === "Failed to send password reset link") {
-          await router.push("/auth/reset-failed");
+          router.push("/auth/reset-failed");
           if (failedCallback) failedCallback(err.response?.data.error);
           return;
         }
@@ -66,7 +66,7 @@ export const useResetPassword = ({
       if (hasError("InvalidParameterException", err) && failedCallback) {
         failedCallback("InvalidParameterException");
       } else if (hasError("UserNotFoundException", err)) {
-        await router.push("/signup/register");
+        router.push("/signup/register");
       } else {
         handleErrorById("InternalServiceExceptionLogin");
         if (failedCallback) failedCallback("InternalServiceException");
@@ -97,7 +97,7 @@ export const useResetPassword = ({
         confirmationCode,
       });
 
-      await router.push("/auth/login");
+      router.push("/auth/login");
     } catch (err) {
       if (hasError("CodeMismatchException", err)) {
         setErrors({
