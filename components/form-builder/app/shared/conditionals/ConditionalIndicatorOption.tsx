@@ -32,7 +32,7 @@ export const ConditionalIndicatorOption = ({
         <ConditionalIcon className="mr-2  inline-block" />
         <div className="inline-block">
           {questions.map(({ elementId }, index) => (
-            <div key={`${elementId}-${index}`}>
+            <label key={`${elementId}-${index}`}>
               {t("addConditionalRules.show")}{" "}
               <Button
                 theme="link"
@@ -46,7 +46,7 @@ export const ConditionalIndicatorOption = ({
               >
                 {elements.find((element) => element.id === Number(elementId))?.properties?.titleEn}
               </Button>
-            </div>
+            </label>
           ))}
         </div>
       </div>

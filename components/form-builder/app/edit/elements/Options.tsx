@@ -85,7 +85,7 @@ export const Options = ({
     const initialValue = element.properties.choices?.[index][translationLanguagePriority] ?? "";
 
     return (
-      <span key={`child-${item.id}-${index}`}>
+      <fieldset key={`child-${item.id}-${index}`}>
         <Option
           renderIcon={renderIcon}
           parentIndex={parentIndex}
@@ -94,7 +94,7 @@ export const Options = ({
           initialValue={initialValue}
         />
         <ConditionalIndicatorOption id={`${item.id}.${index}`} elements={elements} />
-      </span>
+      </fieldset>
     );
   });
 
