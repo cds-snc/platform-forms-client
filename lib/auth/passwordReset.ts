@@ -97,11 +97,11 @@ const sendPasswordResetEmail = async (email: string, token: string) => {
         formResponse: `
 Reset your password with this link:
 
-[${baseUrl}/en/auth/resetpassword?token=${token}](${baseUrl}/en/auth/resetpassword?token=${token})
+[${baseUrl}/en/auth/reset-password?token=${token}](${baseUrl}/en/auth/reset-password?token=${token})
 ****
 Réinitialisez votre mot de passe avec ce lien :
 
-[${baseUrl}/fr/auth/resetpassword?token=${token}](${baseUrl}/fr/auth/resetpassword?token=${token})`,
+[${baseUrl}/fr/auth/reset-password?token=${token}](${baseUrl}/fr/auth/reset-password?token=${token})`,
       },
     });
   } catch (err) {

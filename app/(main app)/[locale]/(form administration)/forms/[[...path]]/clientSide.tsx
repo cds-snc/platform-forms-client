@@ -1,15 +1,12 @@
 import React, { ReactElement, useEffect, useRef } from "react";
-import { serverTranslation } from "@i18n";
 import { useTranslation } from "@i18n/client";
-import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 import { getAllTemplates } from "@lib/templates";
 import { requireAuthentication } from "@lib/auth";
 import { checkPrivileges } from "@lib/privileges";
 import { FilterNavigation } from "@clientComponents/myforms/FilterNav/FilterNavigation";
 import { LinkButton } from "@clientComponents/globals";
-
-import { NextPageWithLayout } from "old_pages/_app";
 import { CardGrid } from "@clientComponents/myforms/CardGrid/CardGrid";
 import { TabPanel } from "@clientComponents/myforms/Tabs/TabPanel";
 import { StyledLink } from "@clientComponents/globals/StyledLink/StyledLink";
@@ -37,9 +34,9 @@ interface MyFormsProps {
   templates: Array<FormsDataItem>;
 }
 
-const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsProps) => {
-  const router = useRouter();
-  const path = String(router.query?.path);
+export default function RenderMyForms({ templates }: MyFormsProps) {
+  const path = usePathname();
+
   const { t } = useTranslation(["my-forms"]);
 
   const templatesAll = templates.sort((itemA, itemB) => {
@@ -51,12 +48,6 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
   const templatesDrafts = templatesAll?.filter((item) => item?.isPublished === false);
 
   const createNewFormRef = useRef<HTMLDivElement>(null);
-
-  const css = `
-    body {
-       background-color: #F9FAFB;
-    }
-`;
 
   useEffect(() => {
     const handleClick = () => {
@@ -76,7 +67,6 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
     <>
       <Head>
         <title>{t("title")}</title>
-        <style>{css}</style>
       </Head>
 
       <div className="center mx-auto w-[980px]">
@@ -136,7 +126,7 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
       </div>
     </>
   );
-};
+}
 
 RenderMyForms.getLayout = (page: ReactElement) => {
   return (
@@ -148,51 +138,49 @@ RenderMyForms.getLayout = (page: ReactElement) => {
   );
 };
 
-export const getServerSideProps = requireAuthentication(
-  async ({ user: { ability, id }, params }) => {
-    const { locale = "en" }: { locale?: string } = params ?? {};
-    {
-      checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
+// export const getServerSideProps = requireAuthentication(
+//   async ({ user: { ability, id }, params }) => {
+//     const { locale = "en" }: { locale?: string } = params ?? {};
+//     {
+//       checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
 
-      const templates = (await getAllTemplates(ability, id)).map((template) => {
-        const {
-          id,
-          form: { titleEn = "", titleFr = "" },
-          name,
-          deliveryOption = { emailAddress: "" },
-          isPublished,
-          updatedAt,
-        } = template;
-        return {
-          id,
-          titleEn,
-          titleFr,
-          deliveryOption,
-          name,
-          isPublished,
-          date: updatedAt,
-          url: `/${locale}/id/${id}`,
-          overdue: 0,
-        };
-      });
+//       const templates = (await getAllTemplates(ability, id)).map((template) => {
+//         const {
+//           id,
+//           form: { titleEn = "", titleFr = "" },
+//           name,
+//           deliveryOption = { emailAddress: "" },
+//           isPublished,
+//           updatedAt,
+//         } = template;
+//         return {
+//           id,
+//           titleEn,
+//           titleFr,
+//           deliveryOption,
+//           name,
+//           isPublished,
+//           date: updatedAt,
+//           url: `/${locale}/id/${id}`,
+//           overdue: 0,
+//         };
+//       });
 
-      const overdue = await getUnprocessedSubmissionsForUser(ability, id);
+//       const overdue = await getUnprocessedSubmissionsForUser(ability, id);
 
-      templates.forEach((template) => {
-        if (overdue[template.id]) {
-          template.overdue = overdue[template.id].numberOfSubmissions;
-        }
-      });
+//       templates.forEach((template) => {
+//         if (overdue[template.id]) {
+//           template.overdue = overdue[template.id].numberOfSubmissions;
+//         }
+//       });
 
-      return {
-        props: {
-          templates,
-          ...(locale &&
-            (await serverSideTranslations(locale, ["my-forms", "common", "form-builder"]))),
-        },
-      };
-    }
-  }
-);
-
-export default RenderMyForms;
+//       return {
+//         props: {
+//           templates,
+//           ...(locale &&
+//             (await serverSideTranslations(locale, ["my-forms", "common", "form-builder"]))),
+//         },
+//       };
+//     }
+//   }
+// );

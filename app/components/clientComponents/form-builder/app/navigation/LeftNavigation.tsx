@@ -66,12 +66,6 @@ export const LeftNavigation = () => {
             {t("responsesNavLabel")}
           </NavLink>
         </li>
-        <li>
-          <NavLink {...linkHelper("settings", activePathname, id)} onClick={saveForm}>
-            <GearIcon className={iconClassname} />
-            {t("pageSettings")}
-          </NavLink>
-        </li>
         {!isPublished && activePathname === "/form-builder/edit" && (
           <li>
             <SaveButton />

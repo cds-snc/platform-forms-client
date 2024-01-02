@@ -1,15 +1,12 @@
-import React, { ReactElement, MutableRefObject } from "react";
+"use client";
+import { MutableRefObject } from "react";
 import { Formik } from "formik";
 import { TextInput, Label, Alert, ErrorListItem } from "@clientComponents/forms";
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
-import { GetServerSideProps } from "next";
-import { serverTranslation } from "@i18n";
+
 import Link from "next/link";
-import Head from "next/head";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@app/api/auth/authConfig";
-import UserNavLayout from "@clientComponents/globals/layouts/UserNavLayout";
+
 import * as Yup from "yup";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import { useLogin } from "@lib/hooks/auth";
@@ -44,9 +41,6 @@ const LoginStep = ({
 
   return (
     <>
-      <Head>
-        <title>{t("title")}</title>
-      </Head>
       <Formik
         initialValues={{ username: authErrorsState.isError ? username.current : "", password: "" }}
         onSubmit={async (values, { setSubmitting }) => {
@@ -155,7 +149,7 @@ const LoginStep = ({
   );
 };
 
-const Login = () => {
+export const Login = () => {
   const {
     username,
     password,
@@ -183,36 +177,6 @@ const Login = () => {
       authErrorsReset={authErrorsReset}
     />
   );
-};
-
-Login.getLayout = (page: ReactElement) => {
-  return <UserNavLayout contentWidth="tablet:w-[658px]">{page}</UserNavLayout>;
-};
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { locale = "en" }: { locale?: string } = context.params ?? {};
-  const session = await getServerSession(context.req, context.res, authOptions);
-
-  if (session)
-    return {
-      redirect: {
-        destination: `/${locale}/forms/`,
-        permanent: false,
-      },
-    };
-
-  return {
-    props: {
-      ...(locale &&
-        (await serverSideTranslations(locale, [
-          "common",
-          "signup",
-          "login",
-          "cognito-errors",
-          "auth-verify",
-        ]))),
-    },
-  };
 };
 
 export default Login;

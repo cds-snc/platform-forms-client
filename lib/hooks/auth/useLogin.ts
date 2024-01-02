@@ -1,3 +1,4 @@
+"use client";
 import { useRef, useState } from "react";
 import axios from "axios";
 import { getCsrfToken } from "next-auth/react";
@@ -66,7 +67,7 @@ export const useLogin = () => {
         }
 
         if (hasError("PasswordResetRequiredException", reason)) {
-          await router.push("/auth/resetpassword");
+          await router.push("/auth/reset-password");
           return false;
         }
 
@@ -76,7 +77,7 @@ export const useLogin = () => {
         }
 
         if (hasError("PasswordResetRequiredException", reason)) {
-          await router.push("/auth/resetpassword");
+          await router.push("/auth/reset-password");
           return false;
         }
       }

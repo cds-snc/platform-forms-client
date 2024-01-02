@@ -5,20 +5,18 @@ import { RichText } from "../forms/RichText/RichText";
 import { logMessage } from "@lib/logger";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { getCsrfToken } from "next-auth/react";
 import { localPathRegEx } from "@lib/validation";
 import { Button } from "@clientComponents/globals";
 
 interface AcceptableUseProps {
   content: string;
-  referer?: string;
 }
-export const AcceptableUseTerms = ({
-  content,
-  referer = "/forms",
-}: AcceptableUseProps): React.ReactElement | null => {
+export const AcceptableUseTerms = ({ content }: AcceptableUseProps): React.ReactElement | null => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  let referer = searchParams.get("referer") ?? "/forms";
   const { t } = useTranslation("common");
   const { data: session, status } = useSession();
 

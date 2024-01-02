@@ -1,4 +1,11 @@
-export { themes, Button, LinkButton, RoundedButton } from "./Buttons";
+export {
+  themes,
+  Button,
+  LinkButton,
+  RoundedButton,
+  PrimaryLinkButton,
+  SecondaryLinkButton,
+} from "./Buttons";
 export { StyledLink } from "./StyledLink/StyledLink";
 export { ErrorBoundary, TriggerError } from "./ErrorBoundary";
 export { ErrorPanel } from "./ErrorPanel";
