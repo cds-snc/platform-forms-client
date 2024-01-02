@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.11.0](https://github.com/cds-snc/platform-forms-client/compare/v3.10.1...v3.11.0) (2023-12-28)
+
+
+### Features
+
+* Add pagination to Responses ([#3005](https://github.com/cds-snc/platform-forms-client/issues/3005)) ([1550c82](https://github.com/cds-snc/platform-forms-client/commit/1550c8280d05736b4a256a9b8c6abe1bb79226da))
+
+
+### Miscellaneous Chores
+
+* with the new infra update LOCAL_LAMBDA_ENDPOINT is now replaced by LOCAL_AWS_ENDPOINT ([#3019](https://github.com/cds-snc/platform-forms-client/issues/3019)) ([47c2d24](https://github.com/cds-snc/platform-forms-client/commit/47c2d24c7b9ffef580d2218f23cebf593ad45f22))
+
 ## [3.10.1](https://github.com/cds-snc/platform-forms-client/compare/v3.10.0...v3.10.1) (2023-12-08)
 
 
