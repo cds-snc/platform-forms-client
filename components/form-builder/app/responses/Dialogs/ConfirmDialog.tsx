@@ -152,9 +152,9 @@ export const ConfirmDialog = ({
                     <Trans
                       ns="form-builder-responses"
                       i18nKey="downloadResponsesModals.confirmReceiptDialog.errors.invalidEntry.description"
-                    >
-                      <i></i>
-                    </Trans>
+                      defaults="<italic></italic>" // indicate to translator: text with italic HTML element
+                      components={{ italic: <i /> }}
+                    ></Trans>
                   </p>
                 </Alert.Danger>
               )}

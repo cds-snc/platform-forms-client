@@ -193,7 +193,7 @@
         },
         "invalidEntry": {
           "title": "Le code de réception ne correspond pas au format requis",
-          "description": "Les codes de réception pour l'approbation se trouvent dans le fichier <0>Reçu et registre officiel</0> qui a été téléchargé avec vos réponses."
+          "description": "Les codes de réception pour l'approbation se trouvent dans le fichier <italic>Reçu et registre officiel</italic> qui a été téléchargé avec vos réponses."
         },
         "unknown": {
           "title": "Désolé, il y a un problème avec le site",
