@@ -193,7 +193,7 @@
         },
         "invalidEntry": {
           "title": "The receipt code does not match the required format",
-          "description": "Check that the receipt code format is correct and try again."
+          "description": "Receipt codes for sign off are found in the <0>Official receipt and record</0> file that downloaded with your responses."
         },
         "unknown": {
           "title": "Sorry, there’s a problem with the site",
