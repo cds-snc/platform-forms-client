@@ -8,7 +8,6 @@ export const POST = async (req: NextRequest) => {
   if (!allowedTemplates.includes(elementType)) {
     return NextResponse.json({ error: "Invalid element type" }, { status: 400 });
   }
-
   //Find the absolute path of the json directory
   const jsonDirectory = path.join(process.cwd(), "form-builder-templates");
   //Read the json data file data.json

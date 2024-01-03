@@ -1,6 +1,6 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextResponse } from "next/server";
 import { logMessage } from "@lib/logger";
-import { middleware, cors, jsonValidator, sessionExists } from "@lib/middleware";
+import { middleware, jsonValidator, sessionExists } from "@lib/middleware";
 import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
 import {
   DynamoDBDocumentClient,
@@ -12,90 +12,6 @@ import { connectToDynamo } from "@lib/integration/dynamodbConnector";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { checkUserHasTemplateOwnership } from "@lib/templates";
 import { logEvent } from "@lib/auditLogs";
-
-const handler = async (req: NextApiRequest, res: NextApiResponse, props: MiddlewareProps) => {
-  const { session } = props as WithRequired<MiddlewareProps, "session">;
-
-  const userEmail = session.user.email;
-  if (userEmail === null)
-    throw new Error(
-      `User does not have an associated email address: ${JSON.stringify(session.user)} `
-    );
-
-  const formId = req.query.form;
-
-  if (Array.isArray(formId) || !formId || !Array.isArray(req.body)) {
-    return res.status(400).json({ error: "Bad request" });
-  }
-
-  const confirmationCodes = req.body as string[];
-
-  if (confirmationCodes.length > 50) {
-    return res.status(400).json({
-      error: `Too many confirmation codes. API call limit is 50.`,
-    });
-  }
-  const ability = createAbility(session);
-
-  // Ensure the user has owernship of this form
-  try {
-    await checkUserHasTemplateOwnership(ability, formId);
-  } catch (e) {
-    if (e instanceof AccessControlError) {
-      logEvent(
-        ability.userID,
-        { type: "Form", id: formId },
-        "AccessDenied",
-        `Attempted to confirm response without form ownership`
-      );
-      return res.status(403).json({ error: "Forbidden" });
-    }
-    logMessage.error(e as Error);
-    return res.status(500).json({ error: "Error on server side" });
-  }
-
-  try {
-    const dynamoDbClient = connectToDynamo();
-
-    // max 100 confirmation codes per request
-    const submissionsFromConfirmationCodes = await getSubmissionsFromConfirmationCodes(
-      formId,
-      confirmationCodes,
-      dynamoDbClient
-    );
-
-    if (submissionsFromConfirmationCodes.submissionsToConfirm.length > 0) {
-      // max 50 submissions per request
-      await confirm(formId, submissionsFromConfirmationCodes.submissionsToConfirm, dynamoDbClient);
-      // Done asychronously to not block response back to client
-      submissionsFromConfirmationCodes.submissionsToConfirm.forEach((confirmation) =>
-        logEvent(
-          ability.userID,
-          { type: "Response", id: confirmation.name },
-          "ConfirmResponse",
-          `Confirmed response for form ${formId}`
-        )
-      );
-    }
-
-    return res.status(200).json({
-      ...(submissionsFromConfirmationCodes.submissionsToConfirm.length > 0 && {
-        confirmedSubmissions: submissionsFromConfirmationCodes.submissionsToConfirm.map(
-          (submission) => submission.confirmationCode
-        ),
-      }),
-      ...(submissionsFromConfirmationCodes.confirmationCodesAlreadyUsed.length > 0 && {
-        confirmationCodesAlreadyUsed: submissionsFromConfirmationCodes.confirmationCodesAlreadyUsed,
-      }),
-      ...(submissionsFromConfirmationCodes.confirmationCodesNotFound.length > 0 && {
-        invalidConfirmationCodes: submissionsFromConfirmationCodes.confirmationCodesNotFound,
-      }),
-    });
-  } catch (error) {
-    logMessage.error(error as Error);
-    return res.status(500).json({ error: "Error on server side" });
-  }
-};
 
 async function getSubmissionsFromConfirmationCodes(
   formId: string,
@@ -223,7 +139,94 @@ async function confirm(
   await dynamoDbClient.send(request);
 }
 
-export default middleware(
-  [cors({ allowedMethods: ["PUT"] }), sessionExists(), jsonValidator(uuidArraySchema)],
-  handler
+export const PUT = middleware(
+  [sessionExists(), jsonValidator(uuidArraySchema)],
+  async (req, props) => {
+    const { session } = props as WithRequired<MiddlewareProps, "session">;
+
+    const userEmail = session.user.email;
+    if (userEmail === null)
+      throw new Error(
+        `User does not have an associated email address: ${JSON.stringify(session.user)} `
+      );
+
+    const formId = props.context?.params.form;
+
+    if (Array.isArray(formId) || !formId || !Array.isArray(req.body)) {
+      return NextResponse.json({ error: "Bad request" }, { status: 400 });
+    }
+
+    const confirmationCodes = req.body as string[];
+
+    if (confirmationCodes.length > 50) {
+      return NextResponse.json(
+        { error: `Too many confirmation codes. API call limit is 50.` },
+        { status: 400 }
+      );
+    }
+    const ability = createAbility(session);
+
+    // Ensure the user has owernship of this form
+    try {
+      await checkUserHasTemplateOwnership(ability, formId);
+    } catch (e) {
+      if (e instanceof AccessControlError) {
+        logEvent(
+          ability.userID,
+          { type: "Form", id: formId },
+          "AccessDenied",
+          `Attempted to confirm response without form ownership`
+        );
+        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      }
+      logMessage.error(e as Error);
+      return NextResponse.json({ error: "Error on server side" }, { status: 500 });
+    }
+
+    try {
+      const dynamoDbClient = connectToDynamo();
+
+      // max 100 confirmation codes per request
+      const submissionsFromConfirmationCodes = await getSubmissionsFromConfirmationCodes(
+        formId,
+        confirmationCodes,
+        dynamoDbClient
+      );
+
+      if (submissionsFromConfirmationCodes.submissionsToConfirm.length > 0) {
+        // max 50 submissions per request
+        await confirm(
+          formId,
+          submissionsFromConfirmationCodes.submissionsToConfirm,
+          dynamoDbClient
+        );
+        // Done asychronously to not block response back to client
+        submissionsFromConfirmationCodes.submissionsToConfirm.forEach((confirmation) =>
+          logEvent(
+            ability.userID,
+            { type: "Response", id: confirmation.name },
+            "ConfirmResponse",
+            `Confirmed response for form ${formId}`
+          )
+        );
+      }
+      return NextResponse.json({
+        ...(submissionsFromConfirmationCodes.submissionsToConfirm.length > 0 && {
+          confirmedSubmissions: submissionsFromConfirmationCodes.submissionsToConfirm.map(
+            (submission) => submission.confirmationCode
+          ),
+        }),
+        ...(submissionsFromConfirmationCodes.confirmationCodesAlreadyUsed.length > 0 && {
+          confirmationCodesAlreadyUsed:
+            submissionsFromConfirmationCodes.confirmationCodesAlreadyUsed,
+        }),
+        ...(submissionsFromConfirmationCodes.confirmationCodesNotFound.length > 0 && {
+          invalidConfirmationCodes: submissionsFromConfirmationCodes.confirmationCodesNotFound,
+        }),
+      });
+    } catch (error) {
+      logMessage.error(error as Error);
+      return NextResponse.json({ error: "Error on server side" }, { status: 500 });
+    }
+  }
 );
