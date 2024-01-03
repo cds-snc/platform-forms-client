@@ -189,10 +189,13 @@ export const ConfirmDialog = ({
               )}
             </div>
             <div className="py-4">
-              <h4>{t("downloadResponsesModals.confirmReceiptDialog.contentHeading")}</h4>
-              <p>{t("downloadResponsesModals.confirmReceiptDialog.contentBody")}</p>
-              <p className="mb-2 mt-10 font-bold" id={confirmInstructionId}>
-                {t("downloadResponsesModals.confirmReceiptDialog.copyCode")}
+              <p className="font-bold" id={confirmInstructionId}>
+                <Trans
+                  ns="form-builder-responses"
+                  i18nKey="downloadResponsesModals.confirmReceiptDialog.copyCode"
+                  defaults="<italic></italic>" // indicate to translator: text with italic HTML element
+                  components={{ italic: <i /> }}
+                ></Trans>
               </p>
               <p className="mb-4">
                 {t("downloadResponsesModals.confirmReceiptDialog.copyCodeNote")}
@@ -208,6 +211,11 @@ export const ConfirmDialog = ({
                 status={status}
                 setStatus={setStatus}
               ></LineItemEntries>
+
+              <p className="mb-2 mt-10 font-bold">
+                {t("downloadResponsesModals.confirmReceiptDialog.contentHeading")}
+              </p>
+              <p>{t("downloadResponsesModals.confirmReceiptDialog.contentBody")}</p>
 
               <div className="mt-4 flex gap-4">
                 <Button theme="secondary" onClick={handleClose}>

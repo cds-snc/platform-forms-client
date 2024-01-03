@@ -174,10 +174,10 @@
     "confirmReceiptDialog": {
       "title": "Sign off on the removal of responses from GC Forms",
       "contentHeading": "GC Forms requires verification that responses were downloaded successfully",
-      "contentBody": "Why? Because things can go wrong when digital files move between computers. This step helps to verify that all files made it safely to your computer from GC Forms.",
-      "copyCode": "Copy-paste receipt codes from the 'Official receipt and record of responses' to confirm you have responses.",
-      "copyCodeNote": "Use the “Copy receipt codes” button at the top of the receipt file.",
-      "confirmReceipt": "Sign off on removal of responses",
+      "contentBody": "Why? Because things can go wrong when digital files move between computers. This step helps to verify that all files made it safely to your computer.",
+      "copyCode": "Copy-paste receipt codes from the <italic>Official Receipt and Record</italic> file",
+      "copyCodeNote": "Use button at the top of the receipt file you got with the downloaded responses",
+      "confirmReceipt": "Submit receipt codes",
       "errors": {
         "minEntries": {
           "title": "At least one response must be specified",
