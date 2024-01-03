@@ -268,48 +268,6 @@ describe("Test Auth lib", () => {
       },
     });
   });
-  describe("isAuthenticated", () => {
-    beforeEach(() => {
-      jest.clearAllMocks();
-    });
-    afterEach(() => {
-      mockGetSession.mockReset();
-    });
-    it("User has a valid session", async () => {
-      const { req, res } = createMocks({
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const mockSession = {
-        expires: "1",
-        user: {
-          email: "test@cds.ca",
-          name: "test",
-          image: "null",
-          id: "1",
-          privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
-          hasSecurityQuestions: false,
-        },
-      };
-      mockGetSession.mockResolvedValue(mockSession);
-      const userSession = await isAuthenticated({ req, res });
-      expect(userSession).toEqual(mockSession);
-    });
-    it("User does not have a valid session", async () => {
-      const { req, res } = createMocks({
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const mockSession = null;
-      mockGetSession.mockResolvedValue(mockSession);
-      const userSession = await isAuthenticated({ req, res });
-      expect(userSession).toEqual(null);
-    });
-  });
   describe("validateTemporaryToken", () => {
     beforeAll(() => {
       process.env.TOKEN_SECRET_WRONG = "wrong_secret_wrong_secret_wrong_secret_wrong_secret";

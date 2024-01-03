@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { type NextRequest, NextResponse } from "next/server";
 import { Session } from "next-auth";
 
 export interface LambdaResponse<T> {
@@ -15,18 +15,19 @@ export type UploadResult = {
 export interface MiddlewareReturn {
   next: boolean;
   props?: MiddlewareProps;
+  response?: NextResponse;
 }
 
-export type MiddlewareRequest = (
-  req: NextApiRequest,
-  res: NextApiResponse
-) => Promise<MiddlewareReturn>;
+export type MiddlewareRequest = (req: NextRequest) => Promise<MiddlewareReturn>;
 
 export interface MiddlewareProps {
   formID?: string;
   session?: Session;
   email?: string;
   temporaryToken?: string;
+  context?: {
+    params: Record<string, string | string[]>;
+  };
 }
 
 export type WithRequired<T, K extends keyof T> = T & Required<Pick<T, K>>;

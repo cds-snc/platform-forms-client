@@ -23,8 +23,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     redirect(`/${locale}/forms}`);
   }
 
-  const termsOfUseContent =
-    await require(`../../../public/static/content/${locale}/responsibilities.md`);
+  const termsOfUseContent = await require(`@public/static/content/${locale}/responsibilities.md`);
 
   return (
     <UserNavLayout contentWidth="tablet:w-[768px] laptop:w-[850px]">

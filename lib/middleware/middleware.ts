@@ -1,5 +1,5 @@
 import { logMessage } from "@lib/logger";
-import { NextApiRequest, NextApiResponse } from "next";
+import { type NextRequest, NextResponse } from "next/server";
 import { MiddlewareProps, MiddlewareRequest } from "@lib/types";
 
 /**
@@ -10,23 +10,36 @@ import { MiddlewareProps, MiddlewareRequest } from "@lib/types";
  */
 export const middleware = (
   middlewareArray: Array<MiddlewareRequest>,
-  handler: (req: NextApiRequest, res: NextApiResponse, props: MiddlewareProps) => Promise<void>
+  handler: (req: NextRequest, props: MiddlewareProps) => Promise<NextResponse>
 ) => {
-  return async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
+  return async (
+    req: NextRequest,
+    context: { params: Record<string, string | string[]> }
+  ): Promise<NextResponse> => {
     try {
-      let props = {};
+      let props = { context };
       for (const middlewareLayer of middlewareArray) {
-        // Middleware is run sequentially
-        // eslint-disable-next-line no-await-in-loop
-        const { next: pass, props: middlewareProps } = await middlewareLayer(req, res);
-        if (!pass) return;
+        const {
+          next: pass,
+          props: middlewareProps,
+          response: layerResponse,
+          // Middleware is run sequentially
+          // eslint-disable-next-line no-await-in-loop
+        } = await middlewareLayer(req);
+        if (!pass) {
+          if (layerResponse) {
+            return layerResponse;
+          } else {
+            return NextResponse.json({ error: "Middleware Error" }, { status: 401 });
+          }
+        }
 
         props = { ...props, ...middlewareProps };
       }
-      return handler(req, res, props);
+      return handler(req, props);
     } catch (e) {
       logMessage.error(e as Error);
-      res.status(500).json({ error: "Server Middleware Error" });
+      return NextResponse.json({ error: "Server Middleware Error" }, { status: 500 });
     }
   };
 };

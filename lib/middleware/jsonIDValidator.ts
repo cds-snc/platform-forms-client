@@ -1,9 +1,9 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { type NextRequest, NextResponse } from "next/server";
 import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
 import { FormElement, FormElementTypes, FormProperties } from "@lib/types/form-types";
 
 export type ValidateOptions = {
-  runValidationIf?: (req: NextApiRequest) => boolean;
+  runValidationIf?: (req: NextRequest) => boolean;
   jsonKey: string;
 };
 
@@ -13,11 +13,14 @@ export type ValidateOptions = {
  * @returns MiddlewareReturn
  */
 export const uniqueIDValidator = (options?: ValidateOptions): MiddlewareRequest => {
-  return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
+  return async (req: NextRequest): Promise<MiddlewareReturn> => {
     if (options?.runValidationIf?.(req) === false) {
       return { next: true };
     }
-    const formProperties: FormProperties = options?.jsonKey ? req.body[options.jsonKey] : req.body;
+    const requestBody = await req.json();
+    const formProperties: FormProperties = options?.jsonKey
+      ? requestBody[options.jsonKey]
+      : req.body;
     const elementIDs: Array<number> = formProperties.elements.map((element) => {
       return element.id;
     });
@@ -27,10 +30,13 @@ export const uniqueIDValidator = (options?: ValidateOptions): MiddlewareRequest 
     if (duplicateElementIDs.length === 0) {
       return { next: true };
     } else {
-      res.status(400).json({
-        error: `JSON Validation Error: Duplicate IDs detected: ${duplicateElementIDs.join()}`,
-      });
-      return { next: false };
+      return {
+        next: false,
+        response: NextResponse.json({
+          error: `JSON Validation Error: Duplicate IDs detected: ${duplicateElementIDs.join()}`,
+          status: 400,
+        }),
+      };
     }
   };
 };
@@ -41,11 +47,15 @@ export const uniqueIDValidator = (options?: ValidateOptions): MiddlewareRequest 
  * @returns MiddlewareReturn
  */
 export const layoutIDValidator = (options?: ValidateOptions): MiddlewareRequest => {
-  return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
+  return async (req: NextRequest): Promise<MiddlewareReturn> => {
     if (options?.runValidationIf?.(req) === false) {
       return { next: true };
     }
-    const formProperties: FormProperties = options?.jsonKey ? req.body[options.jsonKey] : req.body;
+
+    const requestBody = await req.json();
+    const formProperties: FormProperties = options?.jsonKey
+      ? requestBody[options.jsonKey]
+      : req.body;
     const elementIDs: Array<number> = formProperties.elements.map((element) => {
       return element.id;
     });
@@ -55,10 +65,13 @@ export const layoutIDValidator = (options?: ValidateOptions): MiddlewareRequest 
     if (missingLayoutIDs.length === 0) {
       return { next: true };
     } else {
-      res.status(400).json({
-        error: `JSON Validation Error: Layout IDs not found: ${missingLayoutIDs.join()}`,
-      });
-      return { next: false };
+      return {
+        next: false,
+        response: NextResponse.json({
+          error: `JSON Validation Error: Layout IDs not found: ${missingLayoutIDs.join()}`,
+          status: 400,
+        }),
+      };
     }
   };
 };
@@ -69,11 +82,14 @@ export const layoutIDValidator = (options?: ValidateOptions): MiddlewareRequest 
  * @returns MiddlewareReturn
  */
 export const subElementsIDValidator = (options?: ValidateOptions): MiddlewareRequest => {
-  return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
+  return async (req: NextRequest): Promise<MiddlewareReturn> => {
     if (options?.runValidationIf?.(req) === false) {
       return { next: true };
     }
-    const formProperties: FormProperties = options?.jsonKey ? req.body[options.jsonKey] : req.body;
+    const requestBody = await req.json();
+    const formProperties: FormProperties = options?.jsonKey
+      ? requestBody[options.jsonKey]
+      : req.body;
 
     const dynamicRowElements: Array<FormElement> = formProperties.elements.filter((element) => {
       return element.type === FormElementTypes.dynamicRow;
@@ -101,16 +117,22 @@ export const subElementsIDValidator = (options?: ValidateOptions): MiddlewareReq
       }
     });
     if (duplicateSubElementIDs.length > 0) {
-      res.status(400).json({
-        error: `JSON Validation Error: Duplicate subElement IDs detected: ${duplicateSubElementIDs.join()}`,
-      });
-      return { next: false };
+      return {
+        next: false,
+        response: NextResponse.json({
+          error: `JSON Validation Error: Duplicate subElement IDs detected: ${duplicateSubElementIDs.join()}`,
+          status: 400,
+        }),
+      };
     }
     if (unmatchedSubElementIDs.length > 0) {
-      res.status(400).json({
-        error: `JSON Validation Error: Incorrect subElement IDs detected: ${unmatchedSubElementIDs.join()}`,
-      });
-      return { next: false };
+      return {
+        next: false,
+        response: NextResponse.json({
+          error: `JSON Validation Error: Incorrect subElement IDs detected: ${unmatchedSubElementIDs.join()}`,
+          status: 400,
+        }),
+      };
     }
     return { next: true };
   };

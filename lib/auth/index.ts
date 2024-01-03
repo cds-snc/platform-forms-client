@@ -1,9 +1,4 @@
-export {
-  LoggingAction,
-  requireAuthentication,
-  isAuthenticated,
-  validateTemporaryToken,
-} from "./auth";
+export { LoggingAction, requireAuthentication, validateTemporaryToken } from "./auth";
 
 export { generateVerificationCode, sendVerificationCode } from "./2fa";
 

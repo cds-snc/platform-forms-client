@@ -45,14 +45,9 @@ export const Verify = ({
   useEffect(() => {
     if (authStatus === "authenticated") {
       if (session.user.newlyRegistered) {
-        router.push({
-          pathname: `/${i18n.language}/auth/policy`,
-          search: "?referer=/signup/account-created",
-        });
+        router.push(`/${i18n.language}/auth/policy?referer=/signup/account-created`);
       } else {
-        router.push({
-          pathname: `/${i18n.language}/auth/policy`,
-        });
+        router.push(`/${i18n.language}/auth/policy`);
       }
     }
   }, [session, authStatus, router, i18n.language]);
@@ -91,17 +86,16 @@ export const Verify = ({
           const data = await response.json();
 
           if (data.hasOverdueSubmissions) {
-            router.push({
-              pathname: `/${i18n.language}/auth/restricted-access`,
-            });
+            router.push(`/${i18n.language}/auth/restricted-access`);
             return;
           }
         }
 
-        router.push({
-          pathname: `/${i18n.language}/auth/policy`,
-          search: type === "register" ? "?referer=/signup/account-created" : "",
-        });
+        router.push(
+          `/${i18n.language}/auth/policy${
+            type === "register" ? "?referer=/signup/account-created" : ""
+          }`
+        );
       }
     } catch (err) {
       logMessage.error(err);

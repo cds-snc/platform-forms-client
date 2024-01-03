@@ -1,4 +1,4 @@
-import { getAppSession } from "app/api/auth/authConfig";
+import { getAppSession } from "@api/auth/authConfig";
 import { Session } from "next-auth";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
@@ -7,7 +7,7 @@ import { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from "next
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import jwt from "jsonwebtoken";
 import { TemporaryTokenPayload, UserAbility } from "../types";
-import { authOptions } from "app/api/auth/authConfig";
+import { authOptions } from "@api/auth/authConfig";
 import { AccessControlError, createAbility } from "../privileges";
 
 // Helpful to check whether a referer is local vs. an external URL
@@ -79,16 +79,6 @@ export async function requireAuthentication() {
     throw e;
   }
 }
-
-/**
- * Checks if session exists server side and if it belongs to a user
- * @param reqOrContext Request and Response Object
- * @returns session if exists otherwise null
- */
-export const isAuthenticated = async (): Promise<Session | null> => {
-  const session = await getAppSession();
-  return session;
-};
 
 /**
  * Verifies a temporary token against the database

@@ -14,8 +14,6 @@ import { getPrivilegeRulesForUser } from "@lib/privileges";
 import { logEvent } from "@lib/auditLogs";
 import { activeStatusCheck, activeStatusUpdate } from "@lib/cache/userActiveStatus";
 
-import type { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from "next";
-
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -232,12 +230,8 @@ const checkUserActiveStatus = async (userID: string): Promise<boolean> => {
   return user?.active ?? false;
 };
 
-// Use it in server contexts
-export const getAppSession = async (
-  ...args:
-    | [GetServerSidePropsContext["req"], GetServerSidePropsContext["res"]]
-    | [NextApiRequest, NextApiResponse]
-    | []
-) => {
-  return getServerSession(...args, authOptions);
+// Use it in server component contexts
+// Not compatible with API routes
+export const getAppSession = async () => {
+  return getServerSession(authOptions);
 };

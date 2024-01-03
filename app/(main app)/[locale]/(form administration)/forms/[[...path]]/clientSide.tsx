@@ -1,3 +1,4 @@
+"use client";
 import React, { ReactElement, useEffect, useRef } from "react";
 import { useTranslation } from "@i18n/client";
 import { usePathname } from "next/navigation";

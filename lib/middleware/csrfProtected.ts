@@ -1,32 +1,29 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { type NextRequest, NextResponse } from "next/server";
 import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
-import { getCsrfToken } from "next-auth/react";
+import axios from "axios";
 
-export const csrfProtected = (protectedMethods: string[]): MiddlewareRequest => {
-  return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
-    if (isProtected(req, protectedMethods)) {
-      // Need to remove body from NextApiRequest due to Next-Auth bug
-      // Next-Auth sets the method Call based on if a Body is present on the request.
-      // This causes issues with CSRF protection so only required arguments are passed.
-      const clonedReq = { body: undefined, headers: req.headers };
+export const csrfProtected = (): MiddlewareRequest => {
+  return async (req: NextRequest): Promise<MiddlewareReturn> => {
+    const csrfToken = await internalCsrfToken(req).catch(() => "");
+    const csrfCookie = req.cookies.get("x-csrf-token") || ""; // Ensure a string value for csrfCookie
 
-      const csrfToken = await getCsrfToken({ req: clonedReq }).catch(() => null);
-      if (csrfToken && csrfToken === req.headers["x-csrf-token"]) {
-        return { next: true };
-      } else {
-        res.status(403).json({ error: "Access Denied" });
-        return { next: false };
-      }
-    } else {
-      //allow unrestricted method
+    if (csrfToken && csrfToken === csrfCookie) {
+      // Compare csrfToken with csrfCookie
       return { next: true };
+    } else {
+      return {
+        next: false,
+        response: NextResponse.json({ error: "Access Denied" }, { status: 403 }),
+      };
     }
   };
 };
 
-const isProtected = (req: NextApiRequest, methods: string[]) => {
-  if (req.method) {
-    return methods.includes(req.method);
-  }
-  return false;
+const internalCsrfToken = async (req: NextRequest): Promise<string> => {
+  const csrfUrl = `${process.env.NEXTAUTH_URL}/api/auth/csrf`;
+  const cookies = req.cookies.getAll() as unknown as string[];
+  const csrfToken: string | undefined = await axios
+    .get(csrfUrl, { headers: { cookie: cookies } })
+    .then((res) => res.data.csrfToken);
+  return csrfToken ?? "";
 };
