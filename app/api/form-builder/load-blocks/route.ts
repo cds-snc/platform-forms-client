@@ -1,14 +1,12 @@
 import path from "path";
 import { promises as fs } from "fs";
-import { NextApiRequest, NextApiResponse } from "next";
-import { middleware, cors } from "@lib/middleware";
+import { type NextRequest, NextResponse } from "next/server";
 import { allowedTemplates } from "@clientComponents/form-builder/util";
 
-export async function getJsonFile(req: NextApiRequest, res: NextApiResponse) {
-  const { elementType } = req.body;
+export const POST = async (req: NextRequest) => {
+  const { elementType } = await req.json();
   if (!allowedTemplates.includes(elementType)) {
-    res.status(400).json({ error: "Invalid element type" });
-    return;
+    return NextResponse.json({ error: "Invalid element type" }, { status: 400 });
   }
 
   //Find the absolute path of the json directory
@@ -16,7 +14,5 @@ export async function getJsonFile(req: NextApiRequest, res: NextApiResponse) {
   //Read the json data file data.json
   const fileContents = await fs.readFile(jsonDirectory + `/${elementType}.json`, "utf8");
   //Return the content of the data file in json format
-  res.status(200).json(JSON.parse(fileContents));
-}
-
-export default middleware([cors({ allowedMethods: ["POST"] })], getJsonFile);
+  return NextResponse.json(JSON.parse(fileContents));
+};
