@@ -1,9 +1,27 @@
 import React, { Fragment, useState } from "react";
-import { Dialog, Transition } from "@headlessui/react";
+import { Dialog, Menu, Transition } from "@headlessui/react";
 import { Button } from "@components/globals";
+import { cn } from "@lib/utils";
 
 export const RightPanel = () => {
   const [open, setOpen] = useState(false);
+
+  const tabs = [
+    { name: "All", href: "#", current: true },
+    { name: "Online", href: "#", current: false },
+    { name: "Offline", href: "#", current: false },
+  ];
+  const team = [
+    {
+      name: "Leslie Alexander",
+      handle: "lesliealexander",
+      href: "#",
+      imageUrl:
+        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+      status: "online",
+    },
+    // More people...
+  ];
 
   return (
     <div>
@@ -17,20 +35,11 @@ export const RightPanel = () => {
 
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={setOpen}>
-          <Transition.Child
-            as={Fragment}
-            enter="ease-in-out duration-500"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in-out duration-500"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <div></div>
-          </Transition.Child>
+          <div className="fixed inset-0" />
+
           <div className="fixed inset-0 overflow-hidden">
             <div className="absolute inset-0 overflow-hidden">
-              <div className="pointer-events-none fixed inset-y-0 right-0 top-[72px] flex max-w-full pl-10">
+              <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 sm:pl-16">
                 <Transition.Child
                   as={Fragment}
                   enter="transform transition ease-in-out duration-500 sm:duration-700"
@@ -40,34 +49,139 @@ export const RightPanel = () => {
                   leaveFrom="translate-x-0"
                   leaveTo="translate-x-full"
                 >
-                  <Dialog.Panel className="pointer-events-auto relative w-screen max-w-md">
-                    <Transition.Child
-                      as={Fragment}
-                      enter="ease-in-out duration-500"
-                      enterFrom="opacity-0"
-                      enterTo="opacity-100"
-                      leave="ease-in-out duration-500"
-                      leaveFrom="opacity-100"
-                      leaveTo="opacity-0"
-                    >
-                      <div className="absolute left-0 top-0 -ml-8 flex pr-2 pt-4 sm:-ml-10 sm:pr-4">
-                        <button
-                          type="button"
-                          className="relative rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
-                          onClick={() => setOpen(false)}
-                        >
-                          <span className="absolute -inset-2.5" />
-                          <span className="sr-only">Close panel</span>
-                        </button>
+                  <Dialog.Panel className="pointer-events-auto w-screen max-w-md">
+                    <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
+                      <div className="p-6">
+                        <div className="flex items-start justify-between">
+                          <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
+                            Team
+                          </Dialog.Title>
+                          <div className="ml-3 flex h-7 items-center">
+                            <button
+                              type="button"
+                              className="relative rounded-md bg-white text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-indigo-500"
+                              onClick={() => setOpen(false)}
+                            >
+                              <span className="absolute -inset-2.5" />
+                              <span className="sr-only">Close panel</span>X
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                    </Transition.Child>
-                    <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
-                      <div className="px-4 sm:px-6">
-                        <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
-                          Panel title
-                        </Dialog.Title>
+                      <div className="border-b border-gray-200">
+                        <div className="px-6">
+                          <nav className="-mb-px flex space-x-6">
+                            {tabs.map((tab) => (
+                              <a
+                                key={tab.name}
+                                href={tab.href}
+                                className={cn(
+                                  tab.current
+                                    ? "border-indigo-500 text-indigo-600"
+                                    : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                                  "whitespace-nowrap border-b-2 px-1 pb-4 text-sm font-medium"
+                                )}
+                              >
+                                {tab.name}
+                              </a>
+                            ))}
+                          </nav>
+                        </div>
                       </div>
-                      <div className="relative mt-6 flex-1 px-4 sm:px-6">content here</div>
+                      <ul role="list" className="flex-1 divide-y divide-gray-200 overflow-y-auto">
+                        {team.map((person) => (
+                          <li key={person.handle}>
+                            <div className="group relative flex items-center px-5 py-6">
+                              <a href={person.href} className="-m-1 block flex-1 p-1">
+                                <div
+                                  className="absolute inset-0 group-hover:bg-gray-50"
+                                  aria-hidden="true"
+                                />
+                                <div className="relative flex min-w-0 flex-1 items-center">
+                                  <span className="relative inline-block flex-shrink-0">
+                                    <img
+                                      className="h-10 w-10 rounded-full"
+                                      src={person.imageUrl}
+                                      alt=""
+                                    />
+                                    <span
+                                      className={cn(
+                                        person.status === "online" ? "bg-green-400" : "bg-gray-300",
+                                        "absolute top-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white"
+                                      )}
+                                      aria-hidden="true"
+                                    />
+                                  </span>
+                                  <div className="ml-4 truncate">
+                                    <p className="truncate text-sm font-medium text-gray-900">
+                                      {person.name}
+                                    </p>
+                                    <p className="truncate text-sm text-gray-500">
+                                      {"@" + person.handle}
+                                    </p>
+                                  </div>
+                                </div>
+                              </a>
+                              <Menu
+                                as="div"
+                                className="relative ml-2 inline-block flex-shrink-0 text-left"
+                              >
+                                <Menu.Button className="group relative inline-flex h-8 w-8 items-center justify-center rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                  <span className="absolute -inset-1.5" />
+                                  <span className="sr-only">Open options menu</span>
+                                  <span className="flex h-full w-full items-center justify-center rounded-full">
+                                    ...
+                                  </span>
+                                </Menu.Button>
+                                <Transition
+                                  as={Fragment}
+                                  enter="transition ease-out duration-100"
+                                  enterFrom="transform opacity-0 scale-95"
+                                  enterTo="transform opacity-100 scale-100"
+                                  leave="transition ease-in duration-75"
+                                  leaveFrom="transform opacity-100 scale-100"
+                                  leaveTo="transform opacity-0 scale-95"
+                                >
+                                  <Menu.Items className="absolute right-9 top-0 z-10 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                    <div className="py-1">
+                                      <Menu.Item>
+                                        {({ active }) => (
+                                          <a
+                                            href="#"
+                                            className={cn(
+                                              active
+                                                ? "bg-gray-100 text-gray-900"
+                                                : "text-gray-700",
+                                              "block px-4 py-2 text-sm"
+                                            )}
+                                          >
+                                            View profile
+                                          </a>
+                                        )}
+                                      </Menu.Item>
+                                      <Menu.Item>
+                                        {({ active }) => (
+                                          <a
+                                            href="#"
+                                            className={cn(
+                                              active
+                                                ? "bg-gray-100 text-gray-900"
+                                                : "text-gray-700",
+                                              "block px-4 py-2 text-sm"
+                                            )}
+                                          >
+                                            Send message
+                                          </a>
+                                        )}
+                                      </Menu.Item>
+                                    </div>
+                                  </Menu.Items>
+                                </Transition>
+                              </Menu>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   </Dialog.Panel>
                 </Transition.Child>
