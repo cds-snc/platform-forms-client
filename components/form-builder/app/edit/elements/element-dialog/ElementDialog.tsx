@@ -1,11 +1,30 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
 import { FormElementTypes } from "@lib/types";
-
 import { useDialogRef, Dialog, ListBox } from "../../../shared";
 import { useElementOptions } from "../../../../hooks";
 import { ElementOptionsFilter } from "../../../../types";
-import { ElementDescription } from "./ElementDescription";
+import { Button } from "@components/globals";
+
+const Header = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className="absolute top-0 min-h-[60px] w-full border-b border-slate-800 bg-white p-4">
+      {children}
+    </div>
+  );
+};
+
+const Body = ({ children }: { children: React.ReactNode }) => {
+  return <div className="flex py-[65px]">{children}</div>;
+};
+
+const Footer = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className="absolute bottom-0 flex min-h-[60px] w-full gap-4 border-t border-slate-800 bg-white p-4">
+      {children}
+    </div>
+  );
+};
 
 export const ElementDialog = ({
   handleAddType,
@@ -54,36 +73,48 @@ export const ElementDialog = ({
 
   return (
     <Dialog dialogRef={dialog} handleClose={handleClose}>
-      <div className="flex">
-        <div className="max-h-[620px] w-1/3 overflow-y-auto bg-slate-50 py-4 pr-2">
-          <h4 className="mb-5 pl-4 text-2xl font-bold">{t("addElementDialog.questionElement")}</h4>
-          <ListBox
-            ariaLabel={t("addElementDialog.questionElement")}
-            options={elementOptions.map(({ id, value, group, className, icon }) => ({
-              id: id as string,
-              value,
-              group,
-              className,
-              icon,
-            }))}
-            handleChange={handleChange}
-          />
-        </div>
-        <div className="max-h-[620px] w-2/3 border-l-1 border-slate-500 p-4">
-          <ElementDescription
-            id={id}
-            title={`${value} ${t("addElementDialog.example")}`}
-            handleAdd={handleAdd}
-          >
-            <div className="-mt-2 mb-5 inline-block rounded border-1 border-gray-900 bg-gray-background px-4 py-1">
-              {t("addElementDialog.exampleElement")}
-            </div>
-            <Description
-              title={t(`addElementDialog.${id}.title`)}
-              description={t(`addElementDialog.${id}.description`)}
+      <div className="relative">
+        <Header>
+          <h4>Add elements to your page</h4>
+        </Header>
+
+        <Body>
+          {/* SIDEBAR */}
+          <div className="max-h-[630px] w-1/3 overflow-y-scroll">
+            <ListBox
+              ariaLabel={t("addElementDialog.questionElement")}
+              options={elementOptions.map(({ id, value, group, className, icon }) => ({
+                id: id as string,
+                value,
+                group,
+                className,
+                icon,
+              }))}
+              handleChange={handleChange}
             />
-          </ElementDescription>
-        </div>
+          </div>
+          {/* /SIDEBAR */}
+
+          {/* DESCRIPTION */}
+          <div className="w-2/3 bg-slate-100 p-4">
+            <div role="region" aria-label={`${value} ${t("addElementDialog.example")}`} id={id}>
+              <div data-testid="element-description-content">
+                <Description
+                  title={t(`addElementDialog.${id}.title`)}
+                  description={t(`addElementDialog.${id}.description`)}
+                />
+              </div>
+            </div>
+          </div>
+          {/* /DESCRIPTION */}
+        </Body>
+
+        <Footer>
+          <Button dataTestId="element-description-add-element" onClick={handleAdd}>
+            {t("addElementDialog.addButton")}
+          </Button>
+          <Button theme="secondary">Cancel</Button>
+        </Footer>
       </div>
     </Dialog>
   );
