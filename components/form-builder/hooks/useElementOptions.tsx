@@ -39,10 +39,11 @@ import { useFlag } from "@lib/hooks";
 
 export const useElementOptions = (filterElements?: ElementOptionsFilter | undefined) => {
   const { t } = useTranslation("form-builder");
-  const group = {
-    layout: { id: "layout", value: t("addElementDialog.layoutBlocks") },
-    input: { id: "input", value: t("addElementDialog.inputBlocks") },
-    advanced: { id: "advanced", value: t("addElementDialog.advancedBlocks") },
+  const groups = {
+    other: { id: "other", value: t("addElementDialog.categories.other") },
+    basic: { id: "basic", value: t("addElementDialog.categories.basic") },
+    preset: { id: "preset", value: t("addElementDialog.categories.preset") },
+    advanced: { id: "advanced", value: t("addElementDialog.categories.advanced") },
   };
 
   // default to off unless the user is an admin
@@ -56,7 +57,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     icon: UploadIcon,
     description: FileInput,
     className: "",
-    group: group.input,
+    group: groups.basic,
   };
 
   const repeatingSetsOption: ElementOption = {
@@ -65,7 +66,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     icon: AddIcon,
     description: QuestionSet,
     className: "",
-    group: group.advanced,
+    group: groups.advanced,
   };
 
   const elementOptions: ElementOption[] = [
@@ -75,7 +76,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: ParagraphIcon,
       description: RichText,
       className: "",
-      group: group.layout,
+      group: groups.other,
     },
     {
       id: "textField",
@@ -83,7 +84,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: ShortAnswerIcon,
       description: TextField,
       className: "",
-      group: group.input,
+      group: groups.basic,
     },
     {
       id: "textArea",
@@ -91,7 +92,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: ParagraphIcon,
       description: TextArea,
       className: "separator",
-      group: group.input,
+      group: groups.basic,
     },
     {
       id: "radio",
@@ -99,7 +100,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: RadioIcon,
       description: Radio,
       className: "",
-      group: group.input,
+      group: groups.basic,
     },
     {
       id: "checkbox",
@@ -107,7 +108,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: CheckIcon,
       description: CheckBox,
       className: "",
-      group: group.input,
+      group: groups.basic,
     },
     {
       id: "dropdown",
@@ -115,7 +116,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: SelectMenuIcon,
       description: DropDown,
       className: "separator",
-      group: group.input,
+      group: groups.basic,
     },
     {
       id: "date",
@@ -123,7 +124,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: CalendarIcon,
       description: Date,
       className: "",
-      group: group.input,
+      group: groups.preset,
     },
     {
       id: "number",
@@ -131,7 +132,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: NumericFieldIcon,
       description: Number,
       className: "",
-      group: group.input,
+      group: groups.preset,
     },
     ...(allowFileInput ? [{ ...(fileInputOption as ElementOption) }] : []),
     {
@@ -140,28 +141,28 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: AddIcon,
       description: Attestation,
       className: "separator",
-      group: group.input,
+      group: groups.basic,
     },
     {
       id: "name",
       value: t("addElementDialog.name.label"),
       icon: NameIcon,
       description: Name,
-      group: group.input,
+      group: groups.preset,
     },
     {
       id: "firstMiddleLastName",
       value: t("addElementDialog.firstMiddleLastName.label"),
       icon: NameIcon,
       description: FirstMiddleLastName,
-      group: group.input,
+      group: groups.preset,
     },
     {
       id: "address",
       value: t("addElementDialog.address.label"),
       icon: AddressIcon,
       description: Address,
-      group: group.input,
+      group: groups.preset,
     },
     {
       id: "contact",
@@ -169,7 +170,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: ContactIcon,
       description: Contact,
       className: "separator",
-      group: group.input,
+      group: groups.preset,
     },
     ...(experimentalBlocks ? [{ ...(repeatingSetsOption as ElementOption) }] : []),
   ];

@@ -8,14 +8,14 @@ import { Button } from "@components/globals";
 
 const Header = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="absolute top-0 min-h-[60px] w-full border-b border-slate-800 bg-white p-4">
+    <div className="absolute top-0 min-h-[60px] w-full border-b border-slate-800 bg-violet-100 p-4">
       {children}
     </div>
   );
 };
 
 const Body = ({ children }: { children: React.ReactNode }) => {
-  return <div className="flex py-[65px]">{children}</div>;
+  return <div className="flex py-[70px]">{children}</div>;
 };
 
 const Footer = ({ children }: { children: React.ReactNode }) => {
@@ -24,6 +24,10 @@ const Footer = ({ children }: { children: React.ReactNode }) => {
       {children}
     </div>
   );
+};
+
+const Pill = ({ children }: { children: React.ReactNode }) => {
+  return <div className="rounded-full border border-slate-800 bg-white px-4 py-2">{children}</div>;
 };
 
 export const ElementDialog = ({
@@ -76,11 +80,18 @@ export const ElementDialog = ({
       <div className="relative">
         <Header>
           <h4>Add elements to your page</h4>
+          <div className="mt-4 flex gap-4">
+            <Pill>All</Pill>
+            <Pill>Basic</Pill>
+            <Pill>Preset</Pill>
+            <Pill>Advanced</Pill>
+            <Pill>Other</Pill>
+          </div>
         </Header>
 
         <Body>
           {/* SIDEBAR */}
-          <div className="max-h-[630px] w-1/3 overflow-y-scroll">
+          <div className="max-h-[630px] w-1/3 overflow-y-scroll pt-16">
             <ListBox
               ariaLabel={t("addElementDialog.questionElement")}
               options={elementOptions.map(({ id, value, group, className, icon }) => ({
@@ -96,7 +107,7 @@ export const ElementDialog = ({
           {/* /SIDEBAR */}
 
           {/* DESCRIPTION */}
-          <div className="w-2/3 bg-slate-100 p-4">
+          <div className="max-h-[630px] w-2/3 overflow-y-scroll bg-slate-100 px-4 pb-8 pt-16">
             <div role="region" aria-label={`${value} ${t("addElementDialog.example")}`} id={id}>
               <div data-testid="element-description-content">
                 <Description

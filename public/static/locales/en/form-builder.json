@@ -15,13 +15,19 @@
       },
       "title": "What is your address?"
     },
-    "advancedBlocks": "Advanced blocks",
     "allRequired": "all required",
     "answer": "Answer...",
     "attest": "I attest to:",
     "attestation": {
       "description": "Use a legal attestation block when form fillers must attest to certain conditions to continue. This block allows you to add one or several required checkboxes.",
       "title": "Legal attestation"
+    },
+    "categories": {
+      "all": "All",
+      "basic": "Basic",
+      "preset": "Preset",
+      "advanced": "Advanced",
+      "other": "Other"
     },
     "checkbox": {
       "description": "These checkboxes allow form fillers to select one or multiple options from a list.",
@@ -92,8 +98,7 @@
       },
       "title": "What is your name?"
     },
-    "inputBlocks": "Input blocks",
-    "layoutBlocks": "Layout blocks",
+
     "listItem": "List item ",
     "name": {
       "description": "Include your first and last names. Middle names are optional",
