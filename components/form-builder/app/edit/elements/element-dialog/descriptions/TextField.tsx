@@ -11,11 +11,11 @@ export const TextField = () => {
       <p>{t("addElementDialog.textField.description")}</p>
 
       <ExampleWrapper className="mt-4">
-        <Label htmlFor="radio-yes" className="gc-label">
+        <Label htmlFor="name" className="gc-label">
           Enter a specific answer
         </Label>
         <Description>For example: a name or number</Description>
-        <TextInput label="title" type={"text"} name={"test"} />
+        <TextInput label="title" type={"text"} name={"name"} />
       </ExampleWrapper>
     </div>
   );

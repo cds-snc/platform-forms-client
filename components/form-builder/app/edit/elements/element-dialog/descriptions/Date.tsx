@@ -1,12 +1,22 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Text } from "./Text";
-export const Date = ({ title, description }: { title: string; description: string }) => {
+import { ExampleWrapper } from "./ExampleWrapper";
+import { Description, Label, TextInput } from "@components/forms";
+export const Date = () => {
   const { t } = useTranslation("form-builder");
   const dateExample = t("addElementDialog.date.example.dateValue");
   return (
     <div>
-      <Text label={title} description={description} value={dateExample} />
+      <h3 className="mb-0">{t("addElementDialog.date.title")}</h3>
+      <p>{t("addElementDialog.date.description")}</p>
+
+      <ExampleWrapper className="mt-4">
+        <Label htmlFor="name" className="gc-label">
+          Enter a specific answer
+        </Label>
+        <Description>Enter a date. For example: mm/dd/yyyy</Description>
+        <TextInput label="title" type={"text"} name={"name"} placeholder={dateExample} />
+      </ExampleWrapper>
     </div>
   );
 };
