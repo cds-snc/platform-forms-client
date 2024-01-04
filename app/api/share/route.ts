@@ -1,18 +1,20 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { cors, middleware, sessionExists } from "@lib/middleware";
+import { NextResponse } from "next/server";
+import { middleware, sessionExists } from "@lib/middleware";
 import { getNotifyInstance } from "@lib/integration/notifyConnector";
 import { logMessage } from "@lib/logger";
 import { MiddlewareProps, WithRequired } from "@lib/types";
 import { slugify } from "@lib/clientHelpers";
-
-const shareFormJSON = async (req: NextApiRequest, res: NextApiResponse, props: MiddlewareProps) => {
+import { headers } from "next/headers";
+export const POST = middleware([sessionExists()], async (req, props) => {
   try {
     const { session } = props as WithRequired<MiddlewareProps, "session">;
+    const reqHeaders = headers();
+    const host = reqHeaders.get("host");
 
     const { emails, form, filename }: { emails?: string[]; form?: string; filename?: string } =
-      req.body;
+      await req.json();
     if (!emails || !form || !filename) {
-      return res.status(400).json({ error: "Malformed request" });
+      return NextResponse.json({ error: "Malformed request" }, { status: 400 });
     }
 
     const base64data = Buffer.from(form).toString("base64");
@@ -38,7 +40,7 @@ To preview this form:
 - **Step 1**:
   Save the attached JSON form file to your computer.
 - **Step 2**:
-  Go to [GC Forms](https://${req.headers.host}). No account needed.
+  Go to [GC Forms](https://${host}). No account needed.
 - **Step 3**:
   Select open a form file.
 
@@ -50,7 +52,7 @@ Pour prévisualiser ce formulaire :
 - **Étape 1 :**
   Enregistrer le fichier de formulaire JSON ci-joint sur votre ordinateur.
 - **Étape 2 :**
-  Aller sur [Formulaires GC](https://${req.headers.host}). Aucun compte n'est nécessaire.
+  Aller sur [Formulaires GC](https://${host}). Aucun compte n'est nécessaire.
 - **Étape 3 :**
   Sélectionner "Ouvrir un formulaire".`,
           },
@@ -58,12 +60,9 @@ Pour prévisualiser ce formulaire :
         });
       })
     );
-
-    return res.status(200).json({});
+    return NextResponse.json({});
   } catch (error) {
     logMessage.error(error);
-    return res.status(500).json({ error: "Failed to send request" });
+    return NextResponse.json({ error: "Failed to send request" }, { status: 500 });
   }
-};
-
-export default middleware([cors({ allowedMethods: ["POST"] }), sessionExists()], shareFormJSON);
+});
