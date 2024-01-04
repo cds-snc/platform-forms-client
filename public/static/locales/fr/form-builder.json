@@ -704,7 +704,7 @@
     "modalTitle": "Add a rule to a question [fr]",
     "modalTitleEdit": "Edit rules [fr]",
     "modalDescription": "Allow an option in your question to show an additional short or long answer input field when selected. Only drop downs, single choice, and multi-select blocks can apply a rule. [fr]",
-    "optionTitle": "If this option is selected: [fr]",
+    "optionTitle": "Si l'option sélectionnée est :",
     "questionTitle": "Show question: [fr]",
     "text1": "Show when: [fr]",
     "text2": "Correspond à :",
