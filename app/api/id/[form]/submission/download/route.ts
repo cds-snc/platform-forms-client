@@ -1,6 +1,6 @@
 import { AccessControlError, createAbility } from "@lib/privileges";
-import { middleware, cors, sessionExists } from "@lib/middleware";
-import type { NextApiRequest, NextApiResponse } from "next";
+import { middleware, sessionExists } from "@lib/middleware";
+import { NextResponse } from "next/server";
 import { FormElementTypes, MiddlewareProps, WithRequired } from "@lib/types";
 import { getFullTemplateByID } from "@lib/templates";
 import { transform as csvTransform } from "@lib/responseDownloadFormats/csv";
@@ -40,15 +40,33 @@ const logDownload = async (
   });
 };
 
-const getSubmissions = async (
-  req: NextApiRequest,
-  res: NextApiResponse,
-  props: MiddlewareProps
-) => {
+interface APIProps {
+  ids?: string;
+}
+
+export const POST = middleware([sessionExists()], async (req, props) => {
   try {
     const { session } = props as WithRequired<MiddlewareProps, "session">;
     const responseConfirmLimit = Number(await getAppSetting("responseDownloadLimit"));
-    const formId = req.query.form;
+    const formID = props.context?.params?.form;
+    const format =
+      (req.nextUrl.searchParams.get("format") as DownloadFormat) ?? DownloadFormat.HTML;
+
+    // Format value checks
+    if (!format) {
+      // Format not specified
+      return NextResponse.json({ error: "Bad request please specify a format" }, { status: 400 });
+    }
+
+    // Only accept the specified formats
+    if (!Object.values(DownloadFormat).includes(format)) {
+      return NextResponse.json({ error: `Bad request invalid format ${format}` }, { status: 400 });
+    }
+
+    // Note: if we decided in the future to try to detect the user's language, it would make the
+    // most sense to use the form submission language vs sesion/*. If not, the output could have
+    // e.g. French questions and English answers etc.
+    const lang = req.nextUrl.searchParams.get("lang") === "fr" ? "fr" : "en";
 
     const userEmail = session.user.email;
     if (userEmail === null)
@@ -56,33 +74,35 @@ const getSubmissions = async (
         `User does not have an associated email address: ${JSON.stringify(session.user)} `
       );
 
-    if (!formId || typeof formId !== "string") {
-      return res.status(400).json({ error: "Bad request" });
+    if (!formID || typeof formID !== "string") {
+      return NextResponse.json({ error: "Bad request" }, { status: 400 });
     }
 
     const ability = createAbility(session);
-    const fullFormTemplate = await getFullTemplateByID(ability, formId);
+    const fullFormTemplate = await getFullTemplateByID(ability, formID);
 
-    if (fullFormTemplate === null) return res.status(404).json({ error: "Form Not Found" });
+    if (fullFormTemplate === null)
+      return NextResponse.json({ error: "Form Not Found" }, { status: 404 });
 
-    const data = req.body;
-    const ids: string[] = data.ids.split(",");
+    const data: APIProps = await req.json();
+    const ids: string[] = data.ids?.split(",") ?? [];
 
     if (ids.length > responseConfirmLimit) {
-      return res.status(400).json({
-        error: `You can only confirm a maximum of ${responseConfirmLimit} responses at a time.`,
-      });
+      return NextResponse.json(
+        {
+          error: `You can only download a maximum of ${responseConfirmLimit} responses at a time.`,
+        },
+        { status: 400 }
+      );
     }
 
-    // Note: if we decided in the future to try to detect the user's language, it would make the
-    // most sense to use the form submission language vs sesion/*. If not, the output could have
-    // e.g. French questions and English answers etc.
-    const lang = req.query?.lang === "fr" ? "fr" : "en";
-
-    const queryResult = await retrieveSubmissions(ability, formId, ids);
+    const queryResult = await retrieveSubmissions(ability, formID, ids);
 
     if (!queryResult)
-      return res.status(500).json({ error: "There was an error. Please try again later." });
+      return NextResponse.json(
+        { error: "There was an error. Please try again later." },
+        { status: 500 }
+      );
 
     // Get responses into a ResponseSubmission array containing questions and answers that can be easily transformed
     const responses = queryResult.map((item) => {
@@ -143,93 +163,84 @@ const getSubmissions = async (
     } as FormResponseSubmissions;
 
     if (!responses.length) {
-      return res.status(404).json({ error: "No responses found." });
+      return NextResponse.json({ error: "No responses found." }, { status: 404 });
     }
 
-    if (req.query.format) {
-      // Only accept the specified formats
-      if (!Object.values(DownloadFormat).includes(req.query.format as DownloadFormat)) {
-        return res.status(400).json({ error: `Bad request invalid format ${req.query.format}` });
-      }
+    const responseIdStatusArray = queryResult.map((item) => {
+      return {
+        id: item.name,
+        status: item.status,
+      };
+    });
 
-      const responseIdStatusArray = queryResult.map((item) => {
-        return {
-          id: item.name,
-          status: item.status,
-        };
-      });
+    await logDownload(
+      responseIdStatusArray,
+      req.nextUrl.searchParams.get("format") as DownloadFormat,
+      formID,
+      ability,
+      userEmail
+    );
 
-      await logDownload(
-        responseIdStatusArray,
-        req.query.format as DownloadFormat,
-        formId,
-        ability,
-        userEmail
-      );
-
-      switch (req.query.format) {
-        case DownloadFormat.CSV:
-          return res
-            .status(200)
-            .setHeader("Content-Type", "text/json")
-            .send({
-              receipt: htmlAggregatedTransform(formResponse, lang),
-              responses: csvTransform(formResponse),
-            });
-
-        // Disabling for now. If this get's re-enabled in future, will need to install
-        // the "node-xlsx" package.
-        // case DownloadFormat.XLSX:
-        //   return res
-        //     .status(200)
-        //     .setHeader(
-        //       "Content-Type",
-        //       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        //     )
-        //     .setHeader("Content-Disposition", `attachment; filename=records.xlsx`)
-        //     .send(xlsxTransform(formResponse));
-        //   break;
-
-        case DownloadFormat.HTML_AGGREGATED:
-          return res
-            .status(200)
-            .setHeader("Content-Type", "text/html")
-            .send(htmlAggregatedTransform(formResponse, lang));
-
-        case DownloadFormat.HTML:
-          return res
-            .status(200)
-            .setHeader("Content-Type", "text/json")
-            .send(htmlTransform(formResponse));
-
-        case DownloadFormat.HTML_ZIPPED: {
-          return res
-            .status(200)
-            .setHeader("Content-Type", "text/json")
-            .send(zipTransform(formResponse, lang));
-        }
-
-        case DownloadFormat.JSON:
-          return res.status(200).json({
+    switch (format) {
+      case DownloadFormat.CSV:
+        return NextResponse.json(
+          {
             receipt: htmlAggregatedTransform(formResponse, lang),
-            responses: jsonTransform(formResponse),
-          });
+            responses: csvTransform(formResponse),
+          },
+          { headers: { "Content-Type": "text/json" } }
+        );
 
-        default:
-          return res.status(400).json({ error: `Bad request invalid format ${req.query.format}` });
+      // Disabling for now. If this get's re-enabled in future, will need to install
+      // the "node-xlsx" package.
+      // case DownloadFormat.XLSX:
+      //   return res
+      //     .status(200)
+      //     .setHeader(
+      //       "Content-Type",
+      //       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      //     )
+      //     .setHeader("Content-Disposition", `attachment; filename=records.xlsx`)
+      //     .send(xlsxTransform(formResponse));
+      //   break;
+
+      case DownloadFormat.HTML_AGGREGATED:
+        return NextResponse.json(htmlAggregatedTransform(formResponse, lang), {
+          headers: { "Content-Type": "text/html" },
+        });
+
+      case DownloadFormat.HTML:
+        return NextResponse.json(htmlTransform(formResponse), {
+          headers: { "Content-Type": "text/json" },
+        });
+
+      case DownloadFormat.HTML_ZIPPED: {
+        return NextResponse.json(zipTransform(formResponse, lang), {
+          headers: { "Content-Type": "text/json" },
+        });
       }
-    }
 
-    // Format not specified
-    return res.status(400).json({ error: "Bad request please specify a format" });
+      case DownloadFormat.JSON:
+        return NextResponse.json({
+          receipt: htmlAggregatedTransform(formResponse, lang),
+          responses: jsonTransform(formResponse),
+        });
+
+      default:
+        return NextResponse.json(
+          { error: `Bad request invalid format ${format}` },
+          { status: 400 }
+        );
+    }
   } catch (err) {
     if (err instanceof AccessControlError) {
-      return res.status(403).json({ error: "Forbidden" });
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     } else {
       logMessage.error(err);
-      return res.status(500).json({ message: "There was an error. Please try again later." });
+      return NextResponse.json(
+        { message: "There was an error. Please try again later." },
+        { status: 500 }
+      );
     }
   }
-};
-
-export default middleware([cors({ allowedMethods: ["POST"] }), sessionExists()], getSubmissions);
+});

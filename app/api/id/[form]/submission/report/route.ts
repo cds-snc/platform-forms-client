@@ -1,6 +1,6 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextResponse } from "next/server";
 import { logMessage } from "@lib/logger";
-import { middleware, cors, jsonValidator, sessionExists } from "@lib/middleware";
+import { middleware, jsonValidator, sessionExists } from "@lib/middleware";
 import { createTicket } from "@lib/integration/freshdesk";
 import downloadReportProblemSchema from "@lib/middleware/schemas/download-report-problem-schema.json";
 import {
@@ -15,115 +15,6 @@ import { checkUserHasTemplateOwnership } from "@lib/templates";
 import { logEvent } from "@lib/auditLogs";
 
 const MAXIMUM_SUBMISSION_NAMES_PER_REQUEST = 20;
-
-const handler = async (req: NextApiRequest, res: NextApiResponse, props: MiddlewareProps) => {
-  const { session } = props as WithRequired<MiddlewareProps, "session">;
-
-  const userEmail = session.user.email;
-  if (userEmail === null)
-    throw new Error(
-      `User does not have an associated email address: ${JSON.stringify(session.user)} `
-    );
-
-  const formId = req.query.form;
-
-  if (
-    Array.isArray(formId) ||
-    !formId ||
-    !Array.isArray(req.body.entries) ||
-    !req.body.description
-  ) {
-    return res.status(400).json({ error: "Bad request" });
-  }
-
-  const submissionNames = req.body.entries as string[];
-
-  if (submissionNames.length > MAXIMUM_SUBMISSION_NAMES_PER_REQUEST) {
-    return res.status(400).json({
-      error: `Too many submission names. Limit is ${MAXIMUM_SUBMISSION_NAMES_PER_REQUEST}.`,
-    });
-  }
-
-  const description: string = req.body.description;
-
-  // Allows setting manually. Could also potentially get from the request header or add to session
-  const language = req.body.language || "en";
-
-  const ability = createAbility(session);
-
-  // Ensure the user has owernship of this form
-  try {
-    await checkUserHasTemplateOwnership(ability, formId);
-  } catch (e) {
-    if (e instanceof AccessControlError) {
-      logEvent(
-        ability.userID,
-        { type: "Form", id: formId },
-        "AccessDenied",
-        `Attempted to identify response problem without form ownership`
-      );
-      return res.status(403).json({ error: "Forbidden" });
-    }
-    logMessage.error(e as Error);
-    return res.status(500).json({ error: "Error on server side" });
-  }
-
-  try {
-    const dynamoDbClient = connectToDynamo();
-
-    const submissionsFromSubmissionNames = await getSubmissionsFromSubmissionNames(
-      formId,
-      submissionNames,
-      dynamoDbClient
-    );
-
-    if (submissionsFromSubmissionNames.submissionsToReport.length > 0) {
-      await report(formId, submissionsFromSubmissionNames.submissionsToReport, dynamoDbClient);
-      // Note: may throw an error and handled in below catch e.g. if api key missing
-      await notifySupport(
-        formId,
-        submissionsFromSubmissionNames.submissionsToReport.map((submission) => submission.name),
-        userEmail,
-        description,
-        language
-      );
-      submissionsFromSubmissionNames.submissionsToReport.forEach((problem) =>
-        logEvent(
-          ability.userID,
-          { type: "Response", id: problem.name },
-          "IdentifyProblemResponse",
-          `Identified problem response for form ${formId}`
-        )
-      );
-    }
-
-    return res.status(200).json({
-      ...(submissionsFromSubmissionNames.submissionsToReport.length > 0 && {
-        reportedSubmissions: submissionsFromSubmissionNames.submissionsToReport.map(
-          (submission) => submission.name
-        ),
-      }),
-      ...(submissionsFromSubmissionNames.submissionNamesAlreadyUsed.length > 0 && {
-        submissionNamesAlreadyReported: submissionsFromSubmissionNames.submissionNamesAlreadyUsed,
-      }),
-      ...(submissionsFromSubmissionNames.submissionNamesNotFound.length > 0 && {
-        invalidSubmissionNames: submissionsFromSubmissionNames.submissionNamesNotFound,
-      }),
-    });
-  } catch (error) {
-    if (error) {
-      logMessage.error(
-        `Failed to create ticket / contact the support team that user:${userEmail} reported problems with form submissions [${submissionNames.map(
-          (submissionName) => submissionName
-        )}] on form \`${formId}\` at:${Date.now()}`
-      );
-    } else {
-      logMessage.error(error as Error);
-    }
-
-    return res.status(500).json({ error: "Error on server side" });
-  }
-};
 
 async function getSubmissionsFromSubmissionNames(
   formId: string,
@@ -283,7 +174,111 @@ async function notifySupport(
   }
 }
 
-export default middleware(
-  [cors({ allowedMethods: ["PUT"] }), sessionExists(), jsonValidator(downloadReportProblemSchema)],
-  handler
+interface APIProps {
+  entries?: string[];
+  description?: string;
+  language?: string;
+}
+
+export const PUT = middleware(
+  [sessionExists(), jsonValidator(downloadReportProblemSchema)],
+  async (req, props) => {
+    const { session } = props as WithRequired<MiddlewareProps, "session">;
+
+    const userEmail = session.user.email;
+    if (userEmail === null)
+      throw new Error(
+        `User does not have an associated email address: ${JSON.stringify(session.user)} `
+      );
+
+    const formId = props.context?.params?.form;
+    const { entries, description, language = "en" }: APIProps = await req.json();
+
+    if (Array.isArray(formId) || !formId || !Array.isArray(entries) || !description || !entries) {
+      return NextResponse.json({ error: "Bad request" }, { status: 400 });
+    }
+
+    if (entries.length > MAXIMUM_SUBMISSION_NAMES_PER_REQUEST) {
+      return NextResponse.json(
+        {
+          error: `Too many submission names. Limit is ${MAXIMUM_SUBMISSION_NAMES_PER_REQUEST}.`,
+        },
+        { status: 400 }
+      );
+    }
+
+    const ability = createAbility(session);
+
+    // Ensure the user has owernship of this form
+    try {
+      await checkUserHasTemplateOwnership(ability, formId);
+    } catch (e) {
+      if (e instanceof AccessControlError) {
+        logEvent(
+          ability.userID,
+          { type: "Form", id: formId },
+          "AccessDenied",
+          `Attempted to identify response problem without form ownership`
+        );
+        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      }
+      logMessage.error(e as Error);
+      return NextResponse.json({ error: "Error on server side" }, { status: 500 });
+    }
+
+    try {
+      const dynamoDbClient = connectToDynamo();
+
+      const submissionsFromSubmissionNames = await getSubmissionsFromSubmissionNames(
+        formId,
+        entries,
+        dynamoDbClient
+      );
+
+      if (submissionsFromSubmissionNames.submissionsToReport.length > 0) {
+        await report(formId, submissionsFromSubmissionNames.submissionsToReport, dynamoDbClient);
+        // Note: may throw an error and handled in below catch e.g. if api key missing
+        await notifySupport(
+          formId,
+          submissionsFromSubmissionNames.submissionsToReport.map((submission) => submission.name),
+          userEmail,
+          description,
+          language
+        );
+        submissionsFromSubmissionNames.submissionsToReport.forEach((problem) =>
+          logEvent(
+            ability.userID,
+            { type: "Response", id: problem.name },
+            "IdentifyProblemResponse",
+            `Identified problem response for form ${formId}`
+          )
+        );
+      }
+
+      return NextResponse.json({
+        ...(submissionsFromSubmissionNames.submissionsToReport.length > 0 && {
+          reportedSubmissions: submissionsFromSubmissionNames.submissionsToReport.map(
+            (submission) => submission.name
+          ),
+        }),
+        ...(submissionsFromSubmissionNames.submissionNamesAlreadyUsed.length > 0 && {
+          submissionNamesAlreadyReported: submissionsFromSubmissionNames.submissionNamesAlreadyUsed,
+        }),
+        ...(submissionsFromSubmissionNames.submissionNamesNotFound.length > 0 && {
+          invalidSubmissionNames: submissionsFromSubmissionNames.submissionNamesNotFound,
+        }),
+      });
+    } catch (error) {
+      if (error) {
+        logMessage.error(
+          `Failed to create ticket / contact the support team that user:${userEmail} reported problems with form submissions [${entries.map(
+            (submissionName) => submissionName
+          )}] on form \`${formId}\` at:${Date.now()}`
+        );
+      } else {
+        logMessage.error(error as Error);
+      }
+      return NextResponse.json({ error: "Error on server side" }, { status: 500 });
+    }
+  }
 );
