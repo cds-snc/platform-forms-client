@@ -16,7 +16,7 @@ export const Radio = () => {
           <legend data-testid="label" className="gc-label" id="label-1">
             Choose an option
           </legend>
-          <Description>ASelect only one.</Description>
+          <Description>Select only one.</Description>
 
           <RadioComponent
             id="radio-yes"
