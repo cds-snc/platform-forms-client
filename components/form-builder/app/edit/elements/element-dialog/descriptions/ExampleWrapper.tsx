@@ -18,7 +18,7 @@ export const ExampleWrapper = ({
 
   return (
     <div className={cn("relative rounded-lg border border-slate-400 bg-white p-4", className)}>
-      <div className="absolute -top-4 right-6 rounded border border-slate-400 bg-indigo-700 px-2 py-1 text-white">
+      <div className="absolute -top-4 right-6 rounded border border-slate-400 bg-violet-700 px-2 py-1 text-white">
         Try it out
       </div>
       <FormikProvider value={formik}>{children}</FormikProvider>
