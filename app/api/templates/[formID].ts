@@ -10,9 +10,9 @@ import {
   updateClosingDateForTemplate,
 } from "@lib/templates";
 
-import { middleware, jsonValidator, cors, sessionExists } from "@lib/middleware";
+import { middleware, jsonValidator, sessionExists } from "@lib/middleware";
 import templatesSchema from "@lib/middleware/schemas/templates.schema.json";
-import { NextApiRequest, NextApiResponse } from "next";
+import { type NextRequest, NextResponse } from "next/server";
 import {
   layoutIDValidator,
   subElementsIDValidator,
@@ -22,7 +22,6 @@ import {
   MiddlewareProps,
   FormProperties,
   DeliveryOption,
-  UserAbility,
   SecurityAttribute,
   WithRequired,
 } from "@lib/types";
@@ -31,118 +30,16 @@ import { logMessage } from "@lib/logger";
 
 class MalformedAPIRequest extends Error {}
 
-const templates = async (req: NextApiRequest, res: NextApiResponse, props: MiddlewareProps) => {
-  try {
-    const { session } = props as WithRequired<MiddlewareProps, "session">;
-
-    const ability = createAbility(session);
-
-    const response = await route({
-      ability: ability,
-      method: req.method,
-      request: req,
-      ...req.body,
-    });
-
-    if (!response) throw new Error("Null operation response");
-
-    return res.status(200).json(response);
-  } catch (e) {
-    const error = e as Error;
-
-    if (e instanceof AccessControlError) {
-      return res.status(403).json({ error: "Forbidden" });
-    } else if (e instanceof TemplateAlreadyPublishedError) {
-      return res.status(409).json({ error: "Can't update published form" });
-    } else if (e instanceof TemplateHasUnprocessedSubmissions) {
-      return res.status(405).json({ error: "Found unprocessed submissions" });
-    } else if (e instanceof MalformedAPIRequest) {
-      return res.status(400).json({ error: `Malformed API Request. Reason: ${error.message}.` });
-    } else {
-      logMessage.error(error);
-      return res.status(500).json({ error: `Internal server error. Reason: ${error.message}.` });
-    }
-  }
+const runValidationCondition = async (req: NextRequest) => {
+  return (await req.json()).formConfig !== undefined;
 };
 
-const route = async ({
-  ability,
-  method,
-  request,
-  name,
-  formConfig,
-  deliveryOption,
-  securityAttribute,
-  isPublished,
-  closingDate,
-  users,
-  sendResponsesToVault,
-}: {
-  ability: UserAbility;
-  method: string;
-  request: NextApiRequest;
-  name?: string;
-  formConfig?: FormProperties;
-  deliveryOption?: DeliveryOption;
-  securityAttribute?: SecurityAttribute;
-  isPublished?: boolean;
-  closingDate?: string;
-  users?: { id: string; action: "add" | "remove" }[];
-  sendResponsesToVault?: boolean;
-}) => {
-  const formID = request.query.formID;
-
-  if (!formID || typeof formID !== "string") {
-    throw new MalformedAPIRequest("Invalid or missing formID");
-  }
-
-  switch (method) {
-    case "GET":
-      return getFullTemplateByID(ability, formID);
-    case "PUT":
-      if (formConfig) {
-        return updateTemplate({
-          ability: ability,
-          formID: formID,
-          formConfig: formConfig,
-          name: name,
-          deliveryOption: deliveryOption,
-          securityAttribute: securityAttribute,
-        });
-      } else if (isPublished !== undefined) {
-        return updateIsPublishedForTemplate(ability, formID, isPublished);
-      } else if (closingDate) {
-        return updateClosingDateForTemplate(ability, formID, closingDate);
-      } else if (users) {
-        if (!users.length) {
-          return { error: true, message: "mustHaveAtLeastOneUser" };
-        }
-        return updateAssignedUsersForTemplate(ability, formID, users);
-      } else if (sendResponsesToVault) {
-        return removeDeliveryOption(ability, formID);
-      }
-      throw new MalformedAPIRequest(
-        "Missing additional request parameter (formConfig, isPublished, users, sendResponsesToVault)"
-      );
-    case "DELETE":
-      return deleteTemplate(ability, formID);
-    default:
-      throw new MalformedAPIRequest("Unsupported method");
-  }
-};
-
-const runValidationCondition = (req: NextApiRequest) => {
-  return req.body.formConfig !== undefined;
-};
-
-export default middleware(
+export const GET = middleware(
   [
-    cors({ allowedMethods: ["GET", "POST", "PUT", "DELETE"] }),
     sessionExists(),
     jsonValidator(templatesSchema, {
       jsonKey: "formConfig",
       noHTML: true,
-      noValidateMethods: ["DELETE"],
     }),
     uniqueIDValidator({
       runValidationIf: runValidationCondition,
@@ -157,5 +54,183 @@ export default middleware(
       jsonKey: "formConfig",
     }),
   ],
-  templates
+  async (_, props) => {
+    try {
+      const { session } = props as WithRequired<MiddlewareProps, "session">;
+
+      const ability = createAbility(session);
+
+      const formID = props.context?.params?.formID;
+
+      if (!formID || typeof formID !== "string") {
+        throw new MalformedAPIRequest("Invalid or missing formID");
+      }
+
+      const response = getFullTemplateByID(ability, formID);
+      if (!response) throw new Error("Null operation response");
+      return NextResponse.json(response);
+    } catch (e) {
+      const error = e as Error;
+      if (e instanceof AccessControlError) {
+        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      } else if (e instanceof MalformedAPIRequest) {
+        return NextResponse.json(
+          { error: `Malformed API Request. Reason: ${error.message}.` },
+          { status: 400 }
+        );
+      } else {
+        logMessage.error(error);
+        return NextResponse.json(
+          { error: `Internal server error. Reason: ${error.message}.` },
+          { status: 500 }
+        );
+      }
+    }
+  }
 );
+
+interface PutApiProps {
+  name?: string;
+  formConfig?: FormProperties;
+  deliveryOption?: DeliveryOption;
+  securityAttribute?: SecurityAttribute;
+  isPublished?: boolean;
+  closingDate?: string;
+  users?: { id: string; action: "add" | "remove" }[];
+  sendResponsesToVault?: boolean;
+}
+
+export const PUT = middleware(
+  [
+    sessionExists(),
+    jsonValidator(templatesSchema, {
+      jsonKey: "formConfig",
+      noHTML: true,
+    }),
+    uniqueIDValidator({
+      runValidationIf: runValidationCondition,
+      jsonKey: "formConfig",
+    }),
+    layoutIDValidator({
+      runValidationIf: runValidationCondition,
+      jsonKey: "formConfig",
+    }),
+    subElementsIDValidator({
+      runValidationIf: runValidationCondition,
+      jsonKey: "formConfig",
+    }),
+  ],
+  async (req, props) => {
+    try {
+      const { session } = props as WithRequired<MiddlewareProps, "session">;
+
+      const ability = createAbility(session);
+      const {
+        formConfig,
+        name,
+        deliveryOption,
+        securityAttribute,
+        isPublished,
+        closingDate,
+        users,
+        sendResponsesToVault,
+      }: PutApiProps = await req.json();
+
+      const formID = props.context?.params?.formID;
+
+      if (!formID || typeof formID !== "string") {
+        throw new MalformedAPIRequest("Invalid or missing formID");
+      }
+
+      let response;
+
+      if (formConfig) {
+        response = await updateTemplate({
+          ability: ability,
+          formID: formID,
+          formConfig: formConfig,
+          name: name,
+          deliveryOption: deliveryOption,
+          securityAttribute: securityAttribute,
+        });
+        if (!response) throw new Error("Null operation response");
+        return NextResponse.json(response);
+      } else if (isPublished !== undefined) {
+        const response = await updateIsPublishedForTemplate(ability, formID, isPublished);
+        if (!response) throw new Error("Null operation response");
+        return NextResponse.json(response);
+      } else if (closingDate) {
+        const response = await updateClosingDateForTemplate(ability, formID, closingDate);
+        if (!response) throw new Error("Null operation response");
+        return NextResponse.json(response);
+      } else if (users) {
+        if (!users.length) {
+          return NextResponse.json({ error: true, message: "mustHaveAtLeastOneUser" });
+        }
+        const response = await updateAssignedUsersForTemplate(ability, formID, users);
+        if (!response) throw new Error("Null operation response");
+        return NextResponse.json(response);
+      } else if (sendResponsesToVault) {
+        const response = await removeDeliveryOption(ability, formID);
+        if (!response) throw new Error("Null operation response");
+        return NextResponse.json(response);
+      }
+      throw new MalformedAPIRequest(
+        "Missing additional request parameter (formConfig, isPublished, users, sendResponsesToVault)"
+      );
+    } catch (e) {
+      const error = e as Error;
+
+      if (e instanceof AccessControlError) {
+        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      } else if (e instanceof TemplateAlreadyPublishedError) {
+        return NextResponse.json({ error: "Can't update published form" }, { status: 409 });
+      } else if (e instanceof MalformedAPIRequest) {
+        return NextResponse.json(
+          { error: `Malformed API Request. Reason: ${error.message}.` },
+          { status: 400 }
+        );
+      } else {
+        logMessage.error(error);
+        return NextResponse.json(
+          { error: `Internal server error. Reason: ${error.message}.` },
+          { status: 500 }
+        );
+      }
+    }
+  }
+);
+
+export const DELETE = middleware([sessionExists()], async (_, props) => {
+  try {
+    const { session } = props as WithRequired<MiddlewareProps, "session">;
+
+    const ability = createAbility(session);
+    const formID = props.context?.params?.formID;
+
+    if (!formID || typeof formID !== "string") {
+      throw new MalformedAPIRequest("Invalid or missing formID");
+    }
+    const response = await deleteTemplate(ability, formID);
+    if (!response) throw new Error("Null operation response");
+    return NextResponse.json(response);
+  } catch (e) {
+    const error = e as Error;
+    if (e instanceof AccessControlError) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    } else if (e instanceof TemplateHasUnprocessedSubmissions) {
+      return NextResponse.json({ error: "Found unprocessed submissions" }, { status: 405 });
+    } else if (e instanceof MalformedAPIRequest) {
+      return NextResponse.json(
+        { error: `Malformed API Request. Reason: ${error.message}.` },
+        { status: 400 }
+      );
+    } else {
+      logMessage.error(error);
+      return NextResponse.json(
+        { error: `Internal server error. Reason: ${error.message}.` },
+        { status: 500 }
+      );
+    }
+  }
+});

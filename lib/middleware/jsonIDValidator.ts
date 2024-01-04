@@ -3,7 +3,7 @@ import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
 import { FormElement, FormElementTypes, FormProperties } from "@lib/types/form-types";
 
 export type ValidateOptions = {
-  runValidationIf?: (req: NextRequest) => boolean;
+  runValidationIf?: (req: NextRequest) => Promise<boolean>;
   jsonKey: string;
 };
 
@@ -14,7 +14,7 @@ export type ValidateOptions = {
  */
 export const uniqueIDValidator = (options?: ValidateOptions): MiddlewareRequest => {
   return async (req: NextRequest): Promise<MiddlewareReturn> => {
-    if (options?.runValidationIf?.(req) === false) {
+    if ((await options?.runValidationIf?.(req)) === false) {
       return { next: true };
     }
     const requestBody = await req.json();
