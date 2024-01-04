@@ -13,21 +13,18 @@ export const Radio = () => {
 
       <ExampleWrapper className="mt-4">
         <Label htmlFor="radio-yes" className="gc-label">
-          Ask your question in this label
+          Choose an option
         </Label>
-        <Description>
-          Add a description to your question to give your form fillers more context
-        </Description>
+        <Description>ASelect only one.</Description>
         <div className="overflow-hidden">
-          <RadioComponent id="radio-yes" label="Yes" required={false} value="yes" name="name" />
-          <RadioComponent id="radio-no" label="No" required={false} value="no" name="name" />
           <RadioComponent
-            id="radio-maybe"
-            label="Maybe so"
+            id="radio-yes"
+            label="Option A"
             required={false}
-            value="maybe"
+            value="yes"
             name="name"
           />
+          <RadioComponent id="radio-no" label="Option B" required={false} value="no" name="name" />
         </div>
       </ExampleWrapper>
     </>

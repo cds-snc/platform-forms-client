@@ -11,14 +11,12 @@ export const CheckBox = () => {
       <p>{t("addElementDialog.checkbox.description")}</p>
 
       <ExampleWrapper className="mt-4">
-        <Label className="gc-label">Ask your question in this label</Label>
-        <Description>
-          Add a description to your question to give your form fillers more context
-        </Description>
+        <Label className="gc-label">Choose items</Label>
+        <Description>Select all that apply.</Description>
         <div className="overflow-hidden">
-          <Checkbox label={"Option one"} name={"name"} />
-          <Checkbox label={"Option two"} name={"name"} />
-          <Checkbox label={"Option three"} name={"name"} />
+          <Checkbox label={"Item one"} name={"name"} />
+          <Checkbox label={"Item two"} name={"name"} />
+          <Checkbox label={"Item three"} name={"name"} />
         </div>
       </ExampleWrapper>
     </>

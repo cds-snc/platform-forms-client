@@ -12,11 +12,9 @@ export const TextField = () => {
 
       <ExampleWrapper className="mt-4">
         <Label htmlFor="radio-yes" className="gc-label">
-          Ask your question in this label
+          Enter a specific answer
         </Label>
-        <Description>
-          Add a description to your question to give your form fillers more context
-        </Description>
+        <Description>For example: a name or number</Description>
         <TextInput label="title" type={"text"} name={"test"} />
       </ExampleWrapper>
     </div>

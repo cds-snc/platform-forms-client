@@ -13,11 +13,9 @@ export const TextArea = () => {
 
       <ExampleWrapper className="mt-4">
         <Label htmlFor="radio-yes" className="gc-label">
-          Ask your question in this label
+          Tell us more
         </Label>
-        <Description>
-          Add a description to your question to give your form fillers more context
-        </Description>
+        <Description>For example: freeform details</Description>
         <TextAreaComponent
           characterCountMessages={{
             part1: "characters",

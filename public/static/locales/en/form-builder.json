@@ -24,8 +24,8 @@
       "title": "Legal attestation"
     },
     "checkbox": {
-      "description": "Multiple choice description",
-      "title": "Multiple choice"
+      "description": "These checkboxes allow form fillers to select one or multiple options from a list.",
+      "title": "Multiple options"
     },
     "checkboxItem": "Checkbox item",
     "condition1": "Condition 1",
@@ -58,8 +58,8 @@
       }
     },
     "dropdown": {
-      "description": "Dropdown description",
-      "title": "Dropdown",
+      "description": "This dropdown allows form fillers to select one option from a pre-defined list.",
+      "title": "Dropdown list",
       "example": {
         "select": "Select"
       }
@@ -107,8 +107,8 @@
     },
     "questionElement": "Blocks",
     "radio": {
-      "description": "Radio buttons description",
-      "title": "Radio buttons"
+      "description": "These radio buttons allow form fillers to select one single option from a small set.",
+      "title": "Single choice"
     },
     "richText": {
       "description": "Text for paragraphs, <a tab-index=\"-1\" href=\"#\">hyperlinks</a>, and lists.",
@@ -116,12 +116,12 @@
     },
     "sometimes": "Sometimes",
     "textArea": {
-      "description": "Long answer question description",
-      "title": "Long answer question"
+      "description": "This text area allows form fillers to enter long-form information.",
+      "title": "Long answer"
     },
     "textField": {
-      "description": "Short answer question description",
-      "title": "Short answer question"
+      "description": "This text input allows form fillers to enter short-form information.",
+      "title": "Short answer"
     },
     "yes": "Yes"
   },

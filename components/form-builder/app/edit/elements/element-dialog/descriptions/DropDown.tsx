@@ -13,11 +13,9 @@ export const DropDown = () => {
 
       <ExampleWrapper className="mt-4">
         <Label htmlFor="radio-yes" className="gc-label">
-          Ask your question in this label
+          Select which option applies.
         </Label>
-        <Description>
-          Add a description to your question to give your form fillers more context
-        </Description>
+        <Description>Select one.</Description>
         <div className="overflow-hidden">
           <Dropdown name={"name"} choices={["option one", "option two", "option three"]} />
         </div>
