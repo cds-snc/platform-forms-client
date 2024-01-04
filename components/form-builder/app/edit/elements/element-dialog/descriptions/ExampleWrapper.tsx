@@ -10,11 +10,9 @@ export const ExampleWrapper = ({
   className?: string;
 }) => {
   const formik = useFormik({
-    initialValues: {
-      name: "",
-    },
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    initialValues: {},
+    onSubmit: () => {
+      return;
     },
   });
 
