@@ -226,6 +226,8 @@ describe("<ElementDialog />", () => {
     cy.get('[data-testid="listbox"').tab();
     cy.focused().should("have.attr", "data-testid", "element-description-add-element");
     cy.get('[data-testid="element-description-add-element"').tab();
+    cy.focused().should("have.attr", "data-testid", "cancel-button");
+    cy.get('[data-testid="cancel-button"').tab();
     cy.focused().should("have.attr", "data-testid", "close-dialog");
   });
 

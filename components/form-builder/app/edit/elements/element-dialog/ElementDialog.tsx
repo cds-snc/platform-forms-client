@@ -113,7 +113,9 @@ export const ElementDialog = ({
           <Button dataTestId="element-description-add-element" onClick={handleAdd}>
             {t("addElementDialog.addButton")}
           </Button>
-          <Button theme="secondary">Cancel</Button>
+          <Button theme="secondary" dataTestId="cancel-button">
+            Cancel
+          </Button>
         </Footer>
       </div>
     </Dialog>
