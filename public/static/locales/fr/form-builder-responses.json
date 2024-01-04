@@ -2,13 +2,13 @@
   "tabs": {
     "newResponses": {
       "title": "Nouvelles réponses disponibles",
-      "message1": "Formulaires GC conserve temporairement les réponses.",
-      "message2": "Commencez par télécharger les réponses, puis approuvez leur suppression de Formulaires GC."
+      "message1": "Commencez par télécharger les réponses.",
+      "message2": "Puis, approuvez leur suppression, car Formulaires GC ne conserve les réponses que temporairement les réponses."
     },
     "downloadedResponses": {
-      "title": "Réponses téléchargées récemment",
-      "message1": "Formulaires GC conserve temporairement les réponses.",
-      "message2": "Vous devez approuver la suppression des réponses de Formulaires GC dans le délai indiqué."
+      "title": "Réponses téléchargées",
+      "message1": "Approuvez la suppression des réponses dans le délai indiqué.",
+      "message2": "Les réponses seront disponibles dans Formulaires GC temporairement avant d’être supprimées de manière permanente."
     },
     "confirmedResponses": {
       "title": "Réponses approuvées pour suppression",
@@ -113,8 +113,8 @@
     },
     "card": {
       "noNewResponses": "Aucune nouvelle réponse",
-      "noNewResponsesMessage": "Les réponses aux formulaires soumis apparaîtront ici et seront disponible dans Formulaires GC pendant 45 jours.",
-      "noDownloadedResponses": "Aucune réponse téléchargée récemment",
+      "noNewResponsesMessage": "Les réponses aux formulaires soumis apparaîtront ici et seront disponibles dans Formulaires GC pendant 45 jours.",
+      "noDownloadedResponses": "Aucune réponse téléchargée",
       "noDownloadedResponsesMessage": "Les réponses téléchargées apparaîtront ici jusqu'à ce que vous approuviez leur suppression de Formulaires GC.",
       "noDeletedResponses": "Aucune réponse à supprimer",
       "noDeletedResponsesMessage": "Une fois que vous aurez téléchargé et approuvé la suppression des réponses, celles-ci seront disponibles ici pendant 30 jours.",
@@ -148,9 +148,9 @@
     "downloadDialog": {
       "title": "Télécharger les réponses",
       "chooseDownloadFormat": "Choisissez le format des fichiers de réponses",
-      "downloadFormatContext1": "Vous recevrez également un ",
-      "downloadFormatContext2": "Reçu et registre officiel des réponses",
-      "downloadFormatContext3": ". Vous devrez conserver ce reçu pour vérifier que toutes les réponses sont bien passées de Formulaires GC à votre ordinateur.",
+      "downloadFormatContext1": "Vous recevrez un ",
+      "downloadFormatContext2": "Reçu officiel",
+      "downloadFormatContext3": " avec les fichiers de réponses que vous téléchargez. Ce reçu pour vérifier que les réponses sont bien passées de Formulaires GC à votre ordinateur.",
       "html": "Réponses individuelles en HTML",
       "htmlDescription": "Des fichiers distincts pour chaque soumission de formulaire",
       "csv": "CSV",

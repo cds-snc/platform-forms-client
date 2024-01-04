@@ -1,5 +1,5 @@
 # Terms of use
-The following terms apply to the use of GC Forms, a product operated by the Canadian Digital Service (CDS) at the Treasury Board of Canada Secretariat (TBS). GC Forms is available for use by Canadian federal departments and agencies to create online forms.
+The following terms apply to the use of GC Forms, a product operated by the Canadian Digital Service (CDS) at [Employment and Social Development Canada (ESDC)](https://www.canada.ca/en/employment-social-development.html). GC Forms is available for use by Canadian federal departments and agencies to create online forms.
 
 ## Accept all conditions and risks 
 
@@ -32,7 +32,7 @@ You are responsible for:
 - Adhering to your departmental guidance for acceptable device and network use.
 - Saving a copy and confirming receipt of your form responses within 45 days of receiving a submission.
 - Reporting any problems with saved form responses.
-- Handling and saving form responses in accordance with your retention and disposition schedule. 
+- Handling, opening, and saving form responses in accordance with your retention and disposition schedule. 
 - Accepting [GC Notify's terms of use](https://notification.canada.ca/terms). 
 
 ## Practice continuous security
@@ -64,4 +64,4 @@ For questions related to these terms of use, [contact us](/en/form-builder/suppo
 
 
 
-**Last update:** April 12, 2023 
+**Last update:** December 14, 2023 

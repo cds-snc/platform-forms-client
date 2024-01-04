@@ -36,11 +36,11 @@
       "edit": "Modifier",
       "settings": "Paramètres",
       "delete": "Supprimer",
-      "coppiedToClipboard": "Copiés dans le presse-papier",
+      "coppiedToClipboard": "Copié dans le presse-papier",
       "somethingWentWrong": "Il y a eu un problème"
     },
     "actionRequired": {
-      "description": "Action requise:: ",
+      "description": "Action requise : ",
       "linkSingular": "<a href=\"{{link}}\">Approuver la suppression de {{responses}} réponse</a>",
       "linkPlural": "<a href=\"{{link}}\">Approuver la suppression de {{responses}} réponses</a>"
     }
@@ -58,7 +58,7 @@
     "confirmReceiptInfo": "Copiez le code ci-dessous et collez-le dans la boîte dialogue « Approuver la suppression avec les codes de réception » dans Formulaires GC.",
     "copyCode": "Copier le code",
     "copyCodeClipboard": "Copier le code dans le presse-papiers",
-    "copiedToCipboard": "Copiés dans le presse-papiers",
+    "copiedToCipboard": "Copié dans le presse-papiers",
     "errorrCopyingToClipboard": "Erreur lors de la copie dans le presse-papiers",
     "submissionID": "Identifiant de soumission",
     "copyResponse": "Copier la ligne de réponse dans le presse-papiers"
