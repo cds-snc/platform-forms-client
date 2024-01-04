@@ -20,7 +20,7 @@ export const AddElementButton = ({
 }) => {
   const { t } = useTranslation("form-builder");
 
-  const [elementDialog, showElementDialog] = useState(false);
+  const [elementDialog, showElementDialog] = useState(true);
 
   const handleOpenDialog = useCallback(() => {
     showElementDialog(true);

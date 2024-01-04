@@ -72,7 +72,7 @@ export const ElementDialog = ({
   }, [handleAdd]);
 
   return (
-    <Dialog dialogRef={dialog} handleClose={handleClose}>
+    <Dialog dialogRef={dialog} handleClose={handleClose} className="max-w-[800px]">
       <div className="relative">
         <Header>
           <h4>Add elements to your page</h4>

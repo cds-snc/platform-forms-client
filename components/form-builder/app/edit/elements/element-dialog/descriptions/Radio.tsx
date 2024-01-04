@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
-import { Description, Radio as ExampleRadio, Label } from "@components/forms";
+import { Description, Radio as RadioComponent, Label } from "@components/forms";
 import { ExampleWrapper } from "./ExampleWrapper";
 
 export const Radio = () => {
@@ -19,9 +19,9 @@ export const Radio = () => {
           Add a description to your question to give your form fillers more context
         </Description>
         <div className="overflow-hidden">
-          <ExampleRadio id="radio-yes" label="Yes" required={false} value="yes" name="name" />
-          <ExampleRadio id="radio-no" label="No" required={false} value="no" name="name" />
-          <ExampleRadio
+          <RadioComponent id="radio-yes" label="Yes" required={false} value="yes" name="name" />
+          <RadioComponent id="radio-no" label="No" required={false} value="no" name="name" />
+          <RadioComponent
             id="radio-maybe"
             label="Maybe so"
             required={false}
