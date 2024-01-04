@@ -14,9 +14,9 @@ export const CheckBox = () => {
         <Label className="gc-label">Choose items</Label>
         <Description>Select all that apply.</Description>
         <div className="overflow-hidden">
-          <Checkbox label={"Item one"} name={"name"} />
-          <Checkbox label={"Item two"} name={"name"} />
-          <Checkbox label={"Item three"} name={"name"} />
+          <Checkbox label={"Item one"} id="item1" name={"name"} />
+          <Checkbox label={"Item two"} id="item2" name={"name"} />
+          <Checkbox label={"Item three"} id="item3" name={"name"} />
         </div>
       </ExampleWrapper>
     </>

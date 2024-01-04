@@ -1,30 +1,49 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
+import { ExampleWrapper } from "./ExampleWrapper";
+import { Description, Label, TextInput } from "@components/forms";
 
-const Text = ({ label, description }: { label: string; description?: string }) => {
-  return (
-    <div className="ml-1">
-      <p className="mb-1 font-bold mt-1 text-sm">{label}</p>
-      {description && <p className="mb-2 text-sm">{description}</p>}
-      <div className="w-[350px] h-[40px] rounded border-black-default border-2 p-1 mb-2" />
-    </div>
-  );
-};
-
-export const Address = ({ title }: { title: string }) => {
+export const Address = () => {
   const { t } = useTranslation("form-builder");
 
   return (
     <div>
-      <div className="font-bold text-[1.5rem] mb-2">{title}</div>
-      <Text
-        label={t("addElementDialog.address.street.label")}
-        description={t("addElementDialog.address.street.description")}
-      />
-      <Text label={t("addElementDialog.address.city")} />
-      <Text label={t("addElementDialog.address.province")} />
-      <Text label={t("addElementDialog.address.country")} />
-      <Text label={t("addElementDialog.address.postal")} />
+      <h3 className="mb-0">{t("addElementDialog.address.title")}</h3>
+      <p>{t("addElementDialog.address.description")}</p>
+
+      <ExampleWrapper className="mt-4">
+        <div className="mb-6">
+          <Label htmlFor="street" className="gc-label">
+            {t("addElementDialog.address.street.label")}
+          </Label>
+          <Description>{t("addElementDialog.address.street.description")}</Description>
+          <TextInput type="text" id="street" name="street" />
+        </div>
+        <div className="mb-6">
+          <Label htmlFor="city" className="gc-label">
+            {t("addElementDialog.address.city")}
+          </Label>
+          <TextInput type="text" id="city" name="city" />
+        </div>
+        <div className="mb-6">
+          <Label htmlFor="province" className="gc-label">
+            {t("addElementDialog.address.province")}
+          </Label>
+          <TextInput type="text" id="province" name="province" />
+        </div>
+        <div className="mb-6">
+          <Label htmlFor="country" className="gc-label">
+            {t("addElementDialog.address.country")}
+          </Label>
+          <TextInput id="country" type="text" name="country" />
+        </div>
+        <div className="mb-6">
+          <Label htmlFor="postal" className="gc-label">
+            {t("addElementDialog.address.postal")}
+          </Label>
+          <TextInput id="postal" type="text" name="postal" />
+        </div>
+      </ExampleWrapper>
     </div>
   );
 };

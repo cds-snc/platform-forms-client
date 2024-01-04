@@ -1,25 +1,36 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
+import { ExampleWrapper } from "./ExampleWrapper";
+import { Label, TextInput } from "@components/forms";
 
-const Text = ({ label, description }: { label: string; description?: string }) => {
-  return (
-    <div className="ml-1">
-      <p className="mb-1 font-bold mt-1 text-sm">{label}</p>
-      {description && <p className="mb-2 text-sm">{description}</p>}
-      <div className="w-[350px] h-[40px] rounded border-black-default border-2 p-1 mb-2" />
-    </div>
-  );
-};
-
-export const FirstMiddleLastName = ({ title }: { title: string }) => {
+export const FirstMiddleLastName = () => {
   const { t } = useTranslation("form-builder");
 
   return (
     <div>
-      <div className="font-bold text-[1.5rem] mb-2">{title}</div>
-      <Text label={t("addElementDialog.firstMiddleLastName.first.label")} />
-      <Text label={t("addElementDialog.firstMiddleLastName.middle.label")} />
-      <Text label={t("addElementDialog.firstMiddleLastName.last.label")} />
+      <h3 className="mb-0">{t("addElementDialog.firstMiddleLastName.title")}</h3>
+      <p>{t("addElementDialog.firstMiddleLastName.description")}</p>
+
+      <ExampleWrapper className="mt-4">
+        <div className="mb-6">
+          <Label htmlFor="first" className="gc-label">
+            {t("addElementDialog.firstMiddleLastName.first.label")}
+          </Label>
+          <TextInput id="first" type="text" name="first" />
+        </div>
+        <div className="mb-6">
+          <Label htmlFor="middle" className="gc-label">
+            {t("addElementDialog.firstMiddleLastName.middle.label")}
+          </Label>
+          <TextInput id="middle" type="text" name="middle" />
+        </div>
+        <div className="mb-6">
+          <Label htmlFor="last" className="gc-label">
+            {t("addElementDialog.firstMiddleLastName.last.label")}
+          </Label>
+          <TextInput id="last" type="text" name="last" />
+        </div>
+      </ExampleWrapper>
     </div>
   );
 };

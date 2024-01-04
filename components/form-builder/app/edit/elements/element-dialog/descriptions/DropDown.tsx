@@ -12,12 +12,16 @@ export const DropDown = () => {
       <p>{t("addElementDialog.dropdown.description")}</p>
 
       <ExampleWrapper className="mt-4">
-        <Label htmlFor="radio-yes" className="gc-label">
+        <Label htmlFor="dropdown" className="gc-label">
           Select which option applies.
         </Label>
         <Description>Select one.</Description>
         <div className="overflow-hidden">
-          <Dropdown name={"name"} choices={["option one", "option two", "option three"]} />
+          <Dropdown
+            name="name"
+            id="dropdown"
+            choices={["option one", "option two", "option three"]}
+          />
         </div>
       </ExampleWrapper>
     </>
