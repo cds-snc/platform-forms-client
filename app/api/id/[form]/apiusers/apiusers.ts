@@ -218,4 +218,4 @@ export async function addEmailToForm(
   }
 }
 // Removing access for all Methods until this API is ready for use.
-export default middleware([cors({ allowedMethods: [] }), sessionExists()], handler);
+// export default middleware([cors({ allowedMethods: [] }), sessionExists()], handler);

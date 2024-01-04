@@ -1,21 +1,24 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { cors, middleware, sessionExists } from "@lib/middleware";
+import { middleware, sessionExists } from "@lib/middleware";
 import { logMessage } from "@lib/logger";
 import { MiddlewareProps, WithRequired } from "@lib/types";
 import { createTicket } from "@lib/integration/freshdesk";
+import { NextResponse } from "next/server";
 
-const requestPublishingPermission = async (
-  req: NextApiRequest,
-  res: NextApiResponse,
-  props: MiddlewareProps
-) => {
+interface APIProps {
+  managerEmail?: string;
+  department?: string;
+  goals?: string;
+  language?: string;
+}
+
+export const POST = middleware([sessionExists()], async (req, props) => {
   try {
     const { session } = props as WithRequired<MiddlewareProps, "session">;
 
-    const { managerEmail, department, goals, language } = req.body;
+    const { managerEmail, department, goals, language = "en" }: APIProps = await req.json();
 
     if (!managerEmail || !department || !goals) {
-      return res.status(404).json({ error: "Malformed request" });
+      NextResponse.json({ error: "Malformed request" }, { status: 400 });
     }
 
     const description = `
@@ -49,15 +52,9 @@ Adresse email du responsable: ${managerEmail} .<br/>
     if (result && result?.status >= 400) {
       throw new Error(`Freshdesk error: ${result.status}`);
     }
-
-    return res.status(200).json({});
+    return NextResponse.json({});
   } catch (error) {
     logMessage.error(error);
-    return res.status(500).json({ error: "Failed to send request" });
+    return NextResponse.json({ error: "Failed to send request" }, { status: 500 });
   }
-};
-
-export default middleware(
-  [cors({ allowedMethods: ["POST"] }), sessionExists()],
-  requestPublishingPermission
-);
+});

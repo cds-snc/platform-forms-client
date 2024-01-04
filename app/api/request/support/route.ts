@@ -1,23 +1,50 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { cors, middleware, csrfProtected } from "@lib/middleware";
+import { NextResponse } from "next/server";
+import { middleware, csrfProtected } from "@lib/middleware";
 import { logMessage } from "@lib/logger";
 import { createTicket } from "@lib/integration/freshdesk";
 
-// Allows an authenticated or unauthenticated user to send an email requesting help
-const requestSupport = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { supportType, name, email, request, description, department, branch, jobTitle, language } =
-    req.body;
+interface APIProps {
+  supportType?: string;
+  name?: string;
+  email?: string;
+  request?: string;
+  description?: string;
+  department?: string;
+  branch?: string;
+  jobTitle?: string;
+  language?: string;
+}
 
-  if (supportType === "contactus") {
-    if (!name || !email || !request || !description || !department) {
-      return res.status(400).json({ error: "Malformed request" });
-    }
-  } else if (supportType === "support") {
-    if (!name || !email || !request || !description) {
-      return res.status(400).json({ error: "Malformed request" });
-    }
-  } else {
-    return res.status(400).json({ error: "Malformed request" });
+// Allows an authenticated or unauthenticated user to send an email requesting help
+
+export const POST = middleware([csrfProtected()], async (req, props) => {
+  const {
+    supportType,
+    name,
+    email,
+    request,
+    description,
+    department,
+    branch,
+    jobTitle,
+    language = "en",
+  }: APIProps = await req.json();
+
+  //Mandatory fields
+  if (
+    !supportType ||
+    !["contactus", "support"].includes(supportType) ||
+    !name ||
+    !email ||
+    !request ||
+    !description
+  ) {
+    return NextResponse.json({ error: "Malformed request" }, { status: 400 });
+  }
+
+  // Additional field required for contact us
+  if (supportType === "contactus" && !department) {
+    NextResponse.json({ error: "Malformed request" }, { status: 400 });
   }
 
   // Request may be a list of strings (checkbox), format it a bit if so, or just a string (radio)
@@ -103,15 +130,12 @@ ${description}<br/>
     if (result && result?.status >= 400) {
       throw new Error(`Freshdesk error: ${result.status}`);
     }
-
-    return res.status(200).json(result);
+    return NextResponse.json(result);
   } catch (error) {
     logMessage.error(error);
-    return res.status(500).json({ error: "Internal Service Error: Failed to send request" });
+    return NextResponse.json(
+      { error: "Internal Service Error: Failed to send request" },
+      { status: 500 }
+    );
   }
-};
-
-export default middleware(
-  [cors({ allowedMethods: ["POST"] }), csrfProtected(["POST"])],
-  requestSupport
-);
+});

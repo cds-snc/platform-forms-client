@@ -186,7 +186,7 @@ async function deleteFormResponses(
 
 // Removing access for all Methods until this API is ready for use.
 // Needs Refactoring... DynamoDB Vault Table structure has changed
-export default middleware(
-  [cors({ allowedMethods: [] }), validTemporaryToken(), jsonValidator(uuidArraySchema)],
-  handler
-);
+// export default middleware(
+//   [cors({ allowedMethods: [] }), validTemporaryToken(), jsonValidator(uuidArraySchema)],
+//   handler
+// );
