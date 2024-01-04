@@ -699,5 +699,8 @@
     "description": "Download a copy of the form and try again or",
     "supportLink": "contact Support",
     "errorCode": "Error code: {{code}}"
+  },
+  "leftNav": {
+    "collapse": "Collapse menu"
   }
 }

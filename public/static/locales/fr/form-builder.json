@@ -699,5 +699,8 @@
     "description": "Veuillez télécharger une copie du formulaire et réessayer ou",
     "supportLink": "contacter l'équipe de soutien",
     "errorCode": "Code d'erreur : {{code}}"
+  },
+  "leftNav": {
+    "collapse": "Collapse menu [fr]"
   }
 }

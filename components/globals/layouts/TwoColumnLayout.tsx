@@ -29,11 +29,10 @@ export const TwoColumnLayout = ({
           <>
             <div>
               <div className="flex flex-row gap-10">
-                <div className="min-w-[181px]">{leftColumnContent}</div>
-
+                <div>{leftColumnContent}</div>
                 <main
                   id="content"
-                  className={cn("w-full", context === "formBuilder" && "form-builder")}
+                  className={cn("w-full", context === "formBuilder" && "form-builder", "mt-12")}
                 >
                   {children}
                 </main>
