@@ -216,4 +216,4 @@ function buildUserLockedOutErrorMessage(
  */
 
 // Removing access for all Methods until this API is ready for use.
-export default middleware([cors({ allowedMethods: [] })], handler);
+// export default middleware([cors({ allowedMethods: [] })], handler);

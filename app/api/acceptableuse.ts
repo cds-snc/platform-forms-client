@@ -1,23 +1,14 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { cors, middleware, csrfProtected, sessionExists } from "@lib/middleware";
+import { NextResponse } from "next/server";
+import { middleware, csrfProtected, sessionExists } from "@lib/middleware";
 import { setAcceptableUse } from "@lib/cache/acceptableUseCache";
 import { MiddlewareProps, WithRequired } from "@lib/types";
 
-const acceptableUse = async (
-  _req: NextApiRequest,
-  res: NextApiResponse,
-  props: MiddlewareProps
-) => {
+export const POST = middleware([sessionExists(), csrfProtected()], async (req, props) => {
   try {
     const { session } = props as WithRequired<MiddlewareProps, "session">;
     await setAcceptableUse(session.user.id);
-    res.status(200).json({});
+    return NextResponse.json({});
   } catch (err) {
-    res.status(500).json({ error: "Internal server error" });
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
-};
-
-export default middleware(
-  [cors({ allowedMethods: ["POST"] }), csrfProtected(["POST"]), sessionExists()],
-  acceptableUse
-);
+});
