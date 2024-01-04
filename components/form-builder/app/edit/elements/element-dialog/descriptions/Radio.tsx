@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
-import { Description, Radio as RadioComponent, Label } from "@components/forms";
+import { Description, Radio as RadioComponent, Label, FormGroup } from "@components/forms";
 import { ExampleWrapper } from "./ExampleWrapper";
 
 export const Radio = () => {
@@ -12,11 +12,12 @@ export const Radio = () => {
       <p>{t("addElementDialog.radio.description")}</p>
 
       <ExampleWrapper className="mt-4">
-        <Label htmlFor="radio-yes" className="gc-label">
-          Choose an option
-        </Label>
-        <Description>ASelect only one.</Description>
-        <div className="overflow-hidden">
+        <FormGroup name={"radios"}>
+          <legend data-testid="label" className="gc-label" id="label-1">
+            Choose an option
+          </legend>
+          <Description>ASelect only one.</Description>
+
           <RadioComponent
             id="radio-yes"
             label="Option A"
@@ -25,7 +26,7 @@ export const Radio = () => {
             name="name"
           />
           <RadioComponent id="radio-no" label="Option B" required={false} value="no" name="name" />
-        </div>
+        </FormGroup>
       </ExampleWrapper>
     </>
   );

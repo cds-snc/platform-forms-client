@@ -1,4 +1,9 @@
 .form-builder {
+  .radio-label-text,
+  .checkbox-label-text {
+    @apply w-auto;
+  }
+
   /*--------------------------------------------*
   * Expanding Textarea
   *--------------------------------------------*/
@@ -22,7 +27,7 @@
       grid-area: 1 / 2;
       resize: none;
       appearance: none;
-      
+
       padding-top: 0.625rem;
       padding-bottom: 0.375rem;
       padding-left: 0.625rem;
@@ -68,7 +73,7 @@
     }
     input[type="radio"] + label::before {
       content: "";
-      border: 1px solid #64748B; // slate-500
+      border: 1px solid #64748b; // slate-500
       background: transparent;
       width: 34px;
       height: 34px;
@@ -81,7 +86,7 @@
     }
     input[type="radio"] + label::after {
       content: "";
-      border: 10px solid #64748B; // slate-500 
+      border: 10px solid #64748b; // slate-500
       width: 0;
       height: 0;
       position: absolute;
@@ -96,7 +101,7 @@
     }
     input[type="checkbox"] + label::before {
       content: "";
-      border: 2px solid #64748B; // slate-500
+      border: 2px solid #64748b; // slate-500
       background: transparent;
       width: 34px;
       height: 34px;
@@ -284,7 +289,7 @@
 
   .form-builder-dropdown {
     background-image: url("../public/img/form-builder-arrow-down.svg");
-    @apply  appearance-none bg-no-repeat bg-right;
+    @apply appearance-none bg-no-repeat bg-right;
   }
 
   /* end form builder styles */
