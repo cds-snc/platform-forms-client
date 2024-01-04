@@ -6,6 +6,7 @@ import { User } from "next-auth";
 import { HeadMeta } from "./HeadMeta";
 import { cn } from "@lib/utils";
 import Footer from "../Footer";
+import { RightPanel } from "../RightPanel";
 export const TwoColumnLayout = ({
   children,
   leftColumnContent,
@@ -37,11 +38,11 @@ export const TwoColumnLayout = ({
                 >
                   {children}
                 </main>
+                <RightPanel />
               </div>
             </div>
           </>
         </div>
-
         <Footer displayFormBuilderFooter />
       </div>
     </>
