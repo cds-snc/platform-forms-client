@@ -155,7 +155,7 @@
     "language": "Langue",
     "name": "Nom complet (y compris le prénom, le deuxième prénom et le nom de famille)",
     "organization-title": "Titre du poste",
-    "phone": "Numéro de téléphone",
+    "tel": "Numéro de téléphone",
     "postal-code": "Code postal ou zip",
     "street-address": "Adresse complète (y compris les lignes 1 à 3 de l'adresse)",
     "url": "Adresse du site Web"

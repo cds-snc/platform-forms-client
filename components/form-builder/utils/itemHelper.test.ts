@@ -45,10 +45,10 @@ describe("Set localized Item properties", () => {
 
 describe("Update elements", () => {
   it("sets properties for phone", () => {
-    const item = createElement(getItem(), "phone");
+    const item = createElement(getItem(), "tel");
     expect(item.type).toEqual("textField");
-    expect(item.properties.validation?.type).toEqual("phone");
-    expect(item.properties.autoComplete).toEqual("phone");
+    expect(item.properties.validation?.type).toEqual("tel");
+    expect(item.properties.autoComplete).toEqual("tel");
   });
 
   it("sets properties for email", () => {
