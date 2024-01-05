@@ -703,7 +703,7 @@
   "addConditionalRules": {
     "modalTitle": "Ajouter une règle à une question",
     "modalTitleEdit": "Modifier les règles",
-    "modalDescription": "Allow an option in your question to show an additional short or long answer input field when selected. Only drop downs, single choice, and multi-select blocks can apply a rule. [fr]",
+    "modalDescription": "Afficher des champs de saisie supplémentaires en fonction de la sélection d'une option spécifique. Ceci s'applique aux questions à choix unique, à choix multiples ou à liste déroulante.",
     "optionTitle": "Si l'option sélectionnée est :",
     "questionTitle": "Afficher la question :",
     "addCustomRules": "Ajouter une règle",
