@@ -32,12 +32,12 @@ export const LeftNavigation = () => {
   const [collapsed, setCollapsed] = useState(false);
 
   const iconClassname =
-    "inline-block w-6 h-6 group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
+    "inline-block w-6 h-6 group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default -mt-1";
 
   return (
     <nav
       aria-label={t("navLabelFormBuilder")}
-      className={cn(collapsed ? "min-w-[50px]" : "min-w-[181px]", "transition-all duration-300")}
+      className={cn(collapsed ? "" : "min-w-[181px]", "transition-all duration-300")}
     >
       <ul className="m-0 list-none p-0 pt-12">
         <li>
@@ -49,7 +49,7 @@ export const LeftNavigation = () => {
             }}
           >
             <>
-              <BackArrowIcon className="mr-2 inline-block" />
+              <BackArrowIcon className={cn(!collapsed && "mr-2", "inline-block")} />
               {!collapsed && t("leftNav.collapse")}
             </>
           </Button>
@@ -57,34 +57,34 @@ export const LeftNavigation = () => {
         {!isPublished && (
           <li>
             <NavLink {...linkHelper("/edit", activePathname)} onClick={saveForm}>
-              <DesignIcon className={iconClassname} />
+              <DesignIcon className={cn(!collapsed && "mr-2", iconClassname)} />
               {!collapsed && t("edit")}
             </NavLink>
           </li>
         )}
         <li>
           <NavLink {...linkHelper("/preview", activePathname)} onClick={saveForm}>
-            <PreviewIcon className={iconClassname} />
+            <PreviewIcon className={cn(!collapsed && "mr-2", iconClassname)} />
             {!collapsed ? (status === "authenticated" ? t("test") : t("pagePreview")) : null}
           </NavLink>
         </li>
         <li>
           <NavLink {...linkHelper(`/settings/${id}`, activePathname)} onClick={saveForm}>
-            <GearIcon className={iconClassname} />
+            <GearIcon className={cn(!collapsed && "mr-2", iconClassname)} />
             {!collapsed && t("pageSettings")}
           </NavLink>
         </li>
         {!isPublished && (
           <li>
             <NavLink {...linkHelper("/publish", activePathname)} onClick={saveForm}>
-              <PublishIcon className={iconClassname} />
+              <PublishIcon className={cn(!collapsed && "mr-2", iconClassname)} />
               {!collapsed && t("publish")}
             </NavLink>
           </li>
         )}
         <li>
           <NavLink {...linkHelper(`/responses/${id}`, activePathname)} onClick={saveForm}>
-            <MessageIcon className={cn(iconClassname, "mt-[6px] ml-[2px]")} />
+            <MessageIcon className={cn(!collapsed && "mr-2", iconClassname, "mt-[6px] ml-[2px]")} />
             {!collapsed && t("responsesNavLabel")}
           </NavLink>
         </li>
