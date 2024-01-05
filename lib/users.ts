@@ -9,7 +9,7 @@ import { sendDeactivationEmail } from "@lib/deactivate";
 import { getAllTemplatesForUser } from "./templates";
 import { listAllSubmissions } from "./vault";
 import { detectOldUnprocessedSubmissions } from "./nagware";
-import { DBUser } from "./types/user-types";
+import { AppUser } from "./types/user-types";
 import { activeStatusUpdate } from "@lib/cache/userActiveStatus";
 
 /**
@@ -120,10 +120,7 @@ export const getOrCreateUser = async ({
  * Get User by id
  * @returns User if found
  */
-export const getUser = async (
-  ability: UserAbility,
-  id: string
-): Promise<boolean | SelectedUser> => {
+export const getUser = async (ability: UserAbility, id: string): Promise<boolean | AppUser> => {
   try {
     checkPrivileges(ability, [{ action: "view", subject: "User" }]);
 
@@ -163,21 +160,11 @@ export const getUser = async (
   }
 };
 
-interface SelectedUser
-  extends Omit<DBUser, "privileges" | "image" | "emailVerified" | "lastLogin"> {
-  privileges: {
-    id: string;
-    name: string | null;
-    descriptionEn: string | null;
-    descriptionFr: string | null;
-  }[];
-}
-
 /**
  * Get all Users
  * @returns An array of all Users
  */
-export const getUsers = async (ability: UserAbility): Promise<SelectedUser[] | never[]> => {
+export const getUsers = async (ability: UserAbility): Promise<AppUser[] | never[]> => {
   try {
     checkPrivileges(ability, [
       {

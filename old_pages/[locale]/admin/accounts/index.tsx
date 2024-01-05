@@ -16,7 +16,7 @@ import AdminNavLayout from "@clientComponents/globals/layouts/AdminNavLayout";
 import { Dropdown } from "@clientComponents/admin/Users/Dropdown";
 import { ConfirmDeactivateModal } from "@clientComponents/admin/Users/ConfirmDeactivateModal";
 import { RoundedButton, Button, themes, LinkButton } from "@clientComponents/globals";
-import { DBUser } from "@lib/types/user-types";
+import { AppUser } from "@lib/types/user-types";
 import { Privilege } from "@prisma/client";
 import { Card } from "@clientComponents/globals/card/Card";
 
@@ -66,7 +66,7 @@ const Users = ({
   publishFormsId,
   previousUserRef,
 }: {
-  allUsers: DBUser[];
+  allUsers: AppUser[];
   publishFormsId: string;
   previousUserRef?: string;
 }): React.ReactElement => {
@@ -74,9 +74,9 @@ const Users = ({
   const { ability } = useAccessControl();
   const canManageUsers = ability?.can("update", "User") ?? false;
   const { data: session } = useSession();
-  const [selectedUser, setSelectedUser] = useState<DBUser | null>(null);
+  const [selectedUser, setSelectedUser] = useState<AppUser | null>(null);
   const router = useRouter();
-  const isCurrentUser = (user: DBUser) => {
+  const isCurrentUser = (user: AppUser) => {
     return user.id === session?.user?.id;
   };
   const [confirmDeleteModal, showConfirmDeleteModal] = useState(false);

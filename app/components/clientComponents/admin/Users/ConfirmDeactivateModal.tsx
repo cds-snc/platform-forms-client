@@ -9,7 +9,7 @@ import { updateActiveStatus } from "old_pages/[locale]/admin/accounts";
 import { useRefresh } from "@lib/hooks";
 import Loader from "@clientComponents/globals/Loader";
 import { Alert } from "@clientComponents/globals";
-import { DBUser } from "@lib/types/user-types";
+import { AppUser } from "@lib/types/user-types";
 
 const fetcher = async (url: string) => {
   const res = await fetch(url);
@@ -29,7 +29,7 @@ export const ConfirmDeactivateModal = ({
 }: {
   handleAddType?: (type?: FormElementTypes) => void;
   handleClose: () => void;
-  user: DBUser;
+  user: AppUser;
 }) => {
   const { t } = useTranslation("admin-users");
   const dialog = useDialogRef();

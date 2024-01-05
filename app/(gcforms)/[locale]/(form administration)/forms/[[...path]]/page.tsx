@@ -5,7 +5,6 @@ import { checkPrivileges } from "@lib/privileges";
 import { getAllTemplates } from "@lib/templates";
 import { getUnprocessedSubmissionsForUser } from "@lib/users";
 import { FullWidthLayout } from "@clientComponents/globals/layouts";
-import { Form } from "formik";
 import RenderMyForms from "./clientSide";
 export async function generateMetadata({
   params: { locale },

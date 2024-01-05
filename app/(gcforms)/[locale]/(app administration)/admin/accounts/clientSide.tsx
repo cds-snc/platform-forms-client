@@ -1,5 +1,6 @@
-import React, { ReactElement, useMemo, useState, useEffect } from "react";
-import { serverTranslation } from "@i18n";
+"use client";
+import React, { useMemo, useState, useEffect } from "react";
+
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import axios from "axios";
 import { useSession } from "next-auth/react";
@@ -8,16 +9,12 @@ import Head from "next/head";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { useRouter } from "next/navigation";
 
-import { requireAuthentication } from "@lib/auth";
-import { checkPrivileges, getAllPrivileges } from "@lib/privileges";
 import { logMessage } from "@lib/logger";
-import { getUsers } from "@lib/users";
-import AdminNavLayout from "@clientComponents/globals/layouts/AdminNavLayout";
+
 import { Dropdown } from "@clientComponents/admin/Users/Dropdown";
 import { ConfirmDeactivateModal } from "@clientComponents/admin/Users/ConfirmDeactivateModal";
 import { RoundedButton, Button, themes, LinkButton } from "@clientComponents/globals";
-import { DBUser } from "@lib/types/user-types";
-import { Privilege } from "@prisma/client";
+import { AppUser } from "@lib/types/user-types";
 import { Card } from "@clientComponents/globals/card/Card";
 
 const enum AccountsFilterState {
@@ -61,22 +58,25 @@ const updatePrivilege = async (
   }
 };
 
-const Users = ({
+export const Users = ({
   allUsers,
   publishFormsId,
   previousUserRef,
 }: {
-  allUsers: DBUser[];
+  allUsers: AppUser[];
   publishFormsId: string;
   previousUserRef?: string;
 }): React.ReactElement => {
-  const { t } = useTranslation("admin-users");
+  const {
+    t,
+    i18n: { language: locale },
+  } = useTranslation("admin-users");
   const { ability } = useAccessControl();
   const canManageUsers = ability?.can("update", "User") ?? false;
   const { data: session } = useSession();
-  const [selectedUser, setSelectedUser] = useState<DBUser | null>(null);
+  const [selectedUser, setSelectedUser] = useState<AppUser | null>(null);
   const router = useRouter();
-  const isCurrentUser = (user: DBUser) => {
+  const isCurrentUser = (user: AppUser) => {
     return user.id === session?.user?.id;
   };
   const [confirmDeleteModal, showConfirmDeleteModal] = useState(false);
@@ -127,7 +127,7 @@ const Users = ({
     privileges,
     privilegeName,
   }: {
-    privileges: Privilege[];
+    privileges: { name: string; id: string }[];
     privilegeName: string;
   }): boolean => {
     return Boolean(privileges?.find((privilege) => privilege.name === privilegeName)?.id);
@@ -137,7 +137,7 @@ const Users = ({
       // if there is a user id in the query param, scroll to that user card
       const element = document.getElementById(`user-${previousUserRef}`);
       element?.scrollIntoView({ behavior: "smooth" });
-      router.replace("/admin/accounts", undefined, { scroll: false });
+      router.replace(`/${locale}/admin/accounts`, { scroll: false });
     }
   }, [previousUserRef, router]);
 
@@ -255,9 +255,9 @@ const Users = ({
                           <DropdownMenuPrimitive.Item
                             className={`${themes.htmlLink} ${themes.base} !block !cursor-pointer`}
                             onClick={() => {
-                              router.push({
-                                pathname: `/admin/accounts/${user.id}/manage-permissions`,
-                              });
+                              router.push(
+                                `/${locale}/admin/accounts/${user.id}/manage-permissions`
+                              );
                             }}
                           >
                             {canManageUsers ? t("managePermissions") : t("viewPermissions")}
@@ -313,49 +313,3 @@ const Users = ({
     </>
   );
 };
-
-Users.getLayout = (page: ReactElement) => {
-  return <AdminNavLayout user={page.props.user}>{page}</AdminNavLayout>;
-};
-
-export const getServerSideProps = requireAuthentication(
-  async ({ user: { ability }, params, query }) => {
-    const { locale = "en" }: { locale?: string } = params ?? {};
-    checkPrivileges(
-      ability,
-      [
-        { action: "view", subject: "User" },
-        { action: "view", subject: "Privilege" },
-      ],
-      "all"
-    );
-    const allUsers = await getUsers(ability);
-
-    const allPrivileges = (await getAllPrivileges(ability)).map(
-      ({ id, name, descriptionFr, descriptionEn }) => ({
-        id,
-        name,
-        descriptionFr,
-        descriptionEn,
-      })
-    );
-
-    // Convenience for features, lock/unlock publishing that may or may not have the related Id
-    const publishFormsId = allPrivileges.find((privilege) => privilege.name === "PublishForms")?.id;
-
-    const previousUserRef = query.id as string;
-
-    return {
-      props: {
-        ...(locale &&
-          (await serverSideTranslations(locale, ["common", "admin-users", "admin-login"]))),
-        allUsers,
-        allPrivileges,
-        publishFormsId,
-        ...(previousUserRef && { previousUserRef }),
-      },
-    };
-  }
-);
-
-export default Users;

@@ -25,10 +25,10 @@ export async function generateMetadata({
 
 export default async function Page({
   params: { locale, slug = [] },
-  searchParams: { lastKey = null },
+  searchParams: { lastKey },
 }: {
   params: { locale: string; slug: string[] };
-  searchParams: { lastKey: string | null };
+  searchParams: { lastKey?: string };
 }) {
   const [formID = null, statusQuery = "new"] = slug;
 
