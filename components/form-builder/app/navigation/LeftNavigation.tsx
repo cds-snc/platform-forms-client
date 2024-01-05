@@ -37,12 +37,9 @@ export const LeftNavigation = () => {
   return (
     <nav
       aria-label={t("navLabelFormBuilder")}
-      className={cn(
-        collapsed ? "min-w-[50px]" : "min-w-[181px]",
-        "bg-white border-r-slate-500 border-right-1 fixed top-[72px] left-0 z-50 transition-all duration-300"
-      )}
+      className={cn(collapsed ? "min-w-[50px]" : "min-w-[181px]", "transition-all duration-300")}
     >
-      <ul className="m-0 h-[100vh] list-none p-0 pt-12">
+      <ul className="m-0 list-none p-0 pt-12">
         <li>
           <Button
             className="mb-10 text-[18px]"
