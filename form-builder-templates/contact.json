@@ -39,7 +39,7 @@
         "descriptionFr": "Entrez votre numéro de téléphone. Par exemple : 111-222-3333",
         "placeholderEn": "",
         "placeholderFr": "",
-        "autoComplete": "phone"
+        "autoComplete": "tel"
       }
     },
     {
