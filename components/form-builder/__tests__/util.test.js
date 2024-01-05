@@ -87,7 +87,7 @@ describe("Util", () => {
     expect(isValidatedTextType("textField")).toEqual(false);
     expect(isValidatedTextType("richText")).toEqual(false);
     expect(isValidatedTextType("email")).toEqual(true);
-    expect(isValidatedTextType("phone")).toEqual(true);
+    expect(isValidatedTextType("tel")).toEqual(true);
     expect(isValidatedTextType("date")).toEqual(true);
     expect(isValidatedTextType("number")).toEqual(true);
   });

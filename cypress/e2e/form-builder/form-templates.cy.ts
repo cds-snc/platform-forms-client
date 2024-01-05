@@ -79,7 +79,7 @@ describe("Test FormBuilder", () => {
     cy.visitPage("/form-builder/preview");
     cy.get('[data-testid="textInput"]').each(($el, index) => {
       if (index === 0) {
-        cy.wrap($el).should("have.attr", "autocomplete", "phone");
+        cy.wrap($el).should("have.attr", "autocomplete", "tel");
       } else if (index === 1) {
         cy.wrap($el).should("have.attr", "autocomplete", "email");
       }
