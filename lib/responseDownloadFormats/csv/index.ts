@@ -11,7 +11,7 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
   header.unshift(
     "Submission ID / Identifiant de soumission",
     "Date of submission / Date de soumission"
-    );
+  );
   header.push("Receipt codes / Codes de réception");
 
   const csvStringifier = createCsvStringifier({
