@@ -41,18 +41,20 @@ export const LeftNavigation = () => {
     >
       <ul className="m-0 list-none p-0 pt-12">
         <li>
-          <Button
-            className="mb-10 text-[18px]"
-            theme="link"
-            onClick={() => {
-              setCollapsed(!collapsed);
-            }}
-          >
-            <>
-              <BackArrowIcon className={cn(!collapsed && "mr-2", "inline-block")} />
-              {!collapsed && t("leftNav.collapse")}
-            </>
-          </Button>
+          {!collapsed && (
+            <Button
+              className="mb-10 text-[18px]"
+              theme="link"
+              onClick={() => {
+                setCollapsed(!collapsed);
+              }}
+            >
+              <>
+                <BackArrowIcon className={cn("mx-2", "inline-block")} />
+                {!collapsed && t("leftNav.collapse")}
+              </>
+            </Button>
+          )}
         </li>
         {!isPublished && (
           <li>
