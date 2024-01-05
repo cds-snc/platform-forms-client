@@ -69,7 +69,7 @@
       "select": "Select",
       "selectAll": "Select all",
       "deselectAll": "Deselect all",
-      "number": "Submission",
+      "number": "Submission ID",
       "status": "Status",
       "downloadResponse": "Download window",
       "lastDownloadedBy": "Downloaded by",
