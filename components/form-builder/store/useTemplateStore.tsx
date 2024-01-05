@@ -36,7 +36,7 @@ import {
 } from "@lib/types";
 import { logMessage } from "@lib/logger";
 import { BrandProperties } from "@lib/types/form-types";
-import { getElementsUsingChoiceId, removeChoiceIdFromRules } from "@lib/formContext";
+import { removeChoiceFromRules } from "@lib/formContext";
 
 const defaultField: FormElement = {
   id: 0,
@@ -150,7 +150,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   getSecurityAttribute: () => SecurityAttribute;
   setClosingDate: (closingDate: string | null) => void;
   initialize: () => void;
-  removeChoiceFromRules: (choiceId: string) => void;
+  removeChoiceFromRules: (elIndex: number, choiceIndex: number) => void;
 }
 
 /* Note: "async" getItem is intentional here to work-around a hydration issue   */
@@ -296,23 +296,14 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.form.elements.splice(elIndex + 1, 0, item);
               });
             },
-            removeChoiceFromRules: (choiceId: string) => {
+            removeChoiceFromRules: (elIndex: number, choiceIndex: number) => {
               set((state) => {
-                const elements = state.form.elements;
-                const rules = getElementsUsingChoiceId({ formElements: elements, choiceId });
-                rules.forEach((rule) => {
-                  const el = elements.find((element) => element.id === Number(rule.elementId));
-
-                  if (!el) return;
-
-                  const existingRules = el.properties.conditionalRules;
-
-                  if (!existingRules) return;
-
-                  const cleanedRules = removeChoiceIdFromRules(choiceId, existingRules);
-
-                  if (cleanedRules) {
-                    el.properties.conditionalRules = cleanedRules;
+                const choiceId = `${elIndex}.${choiceIndex}`;
+                const rules = removeChoiceFromRules(state.form.elements, choiceId);
+                state.form.elements.forEach((element) => {
+                  // If element id is in the rules array, update the conditionalRules property
+                  if (rules[element.id]) {
+                    element.properties.conditionalRules = rules[element.id];
                   }
                 });
               });

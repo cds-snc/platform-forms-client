@@ -92,10 +92,9 @@ export const Option = ({
 
   const cleanUpRules = useCallback(
     (parentIndex: number, index: number) => {
-      const choiceId = `${id}.${index}`;
-      removeChoiceFromRules(choiceId);
+      removeChoiceFromRules(parentIndex, index);
     },
-    [id, removeChoiceFromRules]
+    [removeChoiceFromRules]
   );
 
   return (

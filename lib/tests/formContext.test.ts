@@ -11,6 +11,7 @@ import {
   matchRule,
   getElementsUsingChoiceId,
   cleanChoiceIdsFromRules,
+  removeChoiceFromRules,
 } from "../formContext";
 
 describe("Form Context", () => {
@@ -322,5 +323,68 @@ describe("Form Context", () => {
       { choiceId: "1.1" },
       { choiceId: "1.2" },
     ]);
+  });
+
+  describe("Remove choice rules", () => {
+    const elements = [
+      {
+        id: 1,
+        type: FormElementTypes.radio,
+        properties: {
+          titleEn: "Question 1 en",
+          titleFr: "Question 1 fr",
+          choices: [
+            { en: "ya", fr: "ya fr" }, // 1.0
+            { en: "nope", fr: "nope fr" }, // 1.1
+            { en: "possibly", fr: "possibly fr" }, // 1.2
+          ],
+        },
+      },
+      {
+        id: 2,
+        type: FormElementTypes.radio,
+        properties: {
+          titleEn: "Question 2 en",
+          titleFr: "Question 2 fr",
+          choices: [
+            { en: "yes", fr: "yes" }, // 2.0
+            { en: "no", fr: "no" }, // 2.1
+            { en: "other", fr: "other fr" }, // 2.2
+          ],
+        },
+      },
+      {
+        id: 3,
+        type: FormElementTypes.textField,
+        properties: {
+          titleEn: "Question 3 en",
+          titleFr: "Question 3 fr",
+          conditionalRules: [{ choiceId: "1.0" }, { choiceId: "1.1" }],
+        },
+      },
+      {
+        id: 4,
+        type: FormElementTypes.textField,
+        properties: {
+          titleEn: "Question 4 en",
+          titleFr: "Question 4 fr",
+          conditionalRules: [{ choiceId: "1.3" }],
+        },
+      },
+      {
+        id: 5,
+        type: FormElementTypes.textField,
+        properties: {
+          titleEn: "Question 5 en",
+          titleFr: "Question 5 fr",
+          conditionalRules: [{ choiceId: "2.0" }, { choiceId: "1.1" }],
+        },
+      },
+    ];
+
+    expect(removeChoiceFromRules(elements, "1.1")).toEqual({
+      "3": [{ choiceId: "1.0" }],
+      "5": [{ choiceId: "2.0" }],
+    });
   });
 });

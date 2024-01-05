@@ -287,3 +287,30 @@ export const choiceRulesToConditonalRules = (elements: FormElement[], properties
 
   return updatedRules;
 };
+
+/**
+ *
+ * @param {Array} elements - The form elements to search.
+ * @param {string} choiceId - The choiceId to remove from the rules.
+ * @returns {Array} elements - Returns the rules with the choiceId removed.
+ */
+export const removeChoiceFromRules = (elements: FormElement[], choiceId: string) => {
+  const updatedRules: Record<string, ConditionalRule[]> = {};
+
+  const rules = getElementsUsingChoiceId({ formElements: elements, choiceId });
+  rules.forEach((rule) => {
+    const el = elements.find((element) => element.id.toString() === rule.elementId);
+    if (!el) return;
+
+    const existingRules = el.properties.conditionalRules;
+    if (!existingRules) return;
+
+    const cleanedRules = removeChoiceIdFromRules(choiceId, existingRules);
+
+    if (cleanedRules) {
+      updatedRules[el.id] = cleanedRules;
+    }
+  });
+
+  return updatedRules;
+};
