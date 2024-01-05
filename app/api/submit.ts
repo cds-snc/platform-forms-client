@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import { rehydrateFormResponses } from "@lib/clientHelpers";
 import { getPublicTemplateByID } from "@lib/templates";
@@ -8,10 +8,10 @@ import { pushFileToS3, deleteObject } from "@lib/s3-upload";
 import { fileTypeFromBuffer } from "file-type";
 import { Magic, MAGIC_MIME_TYPE } from "mmmagic";
 import { acceptedFileMimeTypes } from "@lib/tsUtils";
-import { Readable } from "stream";
-import { middleware, cors, csrfProtected } from "@lib/middleware";
+import { middleware, csrfProtected } from "@lib/middleware";
 import { Response, Responses, FileInputResponse, SubmissionRequestBody } from "@lib/types";
 import { ProcessedFile, SubmissionParsedRequest } from "@lib/types/submission-types";
+import { headers } from "next/headers";
 
 export const config = {
   api: {
@@ -19,51 +19,11 @@ export const config = {
   },
 };
 
-const protectedMethods = ["POST"];
 const lambdaClient = new LambdaClient({
   region: "ca-central-1",
   retryMode: "standard",
   ...(process.env.LOCAL_AWS_ENDPOINT && { endpoint: process.env.LOCAL_AWS_ENDPOINT }),
 });
-
-const submit = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
-  try {
-    // we use the raw stream as opposed to enabling bodyParsing as NextJS enforces a 5mb limit on payload if bodyParsing is enabled
-    // https://nextjs.org/docs/messages/api-routes-body-size-limit
-    const stringBody = await streamToString(req);
-    const incomingFormJSON = JSON.parse(stringBody) as SubmissionRequestBody;
-
-    // Ensure required information is present
-
-    if (!incomingFormJSON.formID) {
-      return res.status(400).json({ error: "No form ID submitted with request" });
-    }
-
-    if (Object.entries(incomingFormJSON).length <= 2) {
-      return res.status(400).json({ error: "No form data submitted with request" });
-    }
-
-    // We process the data into fields and files. Base64 file data is converted into buffers
-    const data = await parseRequestData(incomingFormJSON);
-    return await processFormData(data.fields, data.files, res, req);
-  } catch (err) {
-    logMessage.error(err as Error);
-    return res.status(500).json({ received: false });
-  }
-};
-
-/**
- * This function takes the request stream and parses the chunks into a concatenated string
- * @param stream {Readable} - The request stream from which to convert to a concatenated string
- */
-function streamToString(stream: Readable): Promise<string> {
-  const chunks: Buffer[] = [];
-  return new Promise((resolve, reject) => {
-    stream.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
-    stream.on("error", (err) => reject(err));
-    stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
-  });
-}
 
 const callLambda = async (
   formID: string,
@@ -238,8 +198,7 @@ const processFileData = async (fileObj: FileInputResponse): Promise<ProcessedFil
 const processFormData = async (
   reqFields: Record<string, Response>,
   files: Record<string, ProcessedFile | ProcessedFile[]>,
-  res: NextApiResponse,
-  req: NextApiRequest
+  req: NextRequest
 ) => {
   const uploadedFilesKeyUrlMapping: Map<string, string> = new Map();
   try {
@@ -250,15 +209,15 @@ const processFormData = async (
       logMessage.info(
         `TEST MODE - Not submitting Form ID: ${reqFields ? reqFields.formID : "No form attached"}`
       );
-      return res.status(200).json({ received: true });
+      return NextResponse.json({ received: true }, { status: 200 });
     }
 
     if (!reqFields) {
-      return res.status(400).json({ error: "No form submitted with request" });
+      return NextResponse.json({ error: "No form submitted with request" }, { status: 400 });
     }
 
     logMessage.info(
-      `Path: ${req.url}, Method: ${req.method}, Form ID: ${
+      `Path: ${req.nextUrl.pathname}, Method: ${req.method}, Form ID: ${
         reqFields ? reqFields.formID : "No form attached"
       }`
     );
@@ -266,12 +225,15 @@ const processFormData = async (
     const form = await getPublicTemplateByID(reqFields.formID as string);
 
     if (!form) {
-      return res.status(400).json({ error: "No form could be found with that ID" });
+      return NextResponse.json({ error: "No form could be found with that ID" }, { status: 400 });
     }
 
     // Check to see if form is closed and block response submission
     if (form.closingDate && new Date(form.closingDate) < new Date()) {
-      return res.status(400).json({ error: "Form is closed and not accepting submissions" });
+      return NextResponse.json(
+        { error: "Form is closed and not accepting submissions" },
+        { status: 400 }
+      );
     }
 
     const fields = rehydrateFormResponses({
@@ -282,7 +244,7 @@ const processFormData = async (
     if (!submitToReliabilityQueue) {
       // Local development and Heroku
       // Set this to a 200 response as it's valid if the send to reliability queue option is off.
-      return res.status(200).json({ received: true });
+      return NextResponse.json({ received: true }, { status: 200 });
     }
 
     // Staging or Production AWS environments
@@ -325,18 +287,18 @@ const processFormData = async (
       }
     }
     try {
+      const contentLanguage = headers().get("content-language");
       await callLambda(
         form.id,
         fields,
         // pass in the language from the header content language... assume english as the default
-        req.headers?.["content-language"] ? req.headers["content-language"] : "en",
+        contentLanguage ? contentLanguage : "en",
         reqFields.securityAttribute ? (reqFields.securityAttribute as string) : "Protected A"
       );
-
-      return res.status(201).json({ received: true });
+      return NextResponse.json({ received: true }, { status: 201 });
     } catch (err) {
       logMessage.error(err as Error);
-      return res.status(500).json({ received: false });
+      return NextResponse.json({ received: false }, { status: 500 });
     }
   } catch (err) {
     // it is true if file(s) has/have been already uploaded.It'll try a deletion of the file(s) on S3.
@@ -346,12 +308,29 @@ const processFormData = async (
       });
     }
     logMessage.error(err as Error);
-
-    return res.status(500).json({ received: false });
+    return NextResponse.json({ received: false }, { status: 500 });
   }
 };
 
-export default middleware(
-  [cors({ allowedMethods: ["POST"] }), csrfProtected(protectedMethods)],
-  submit
-);
+export const POST = middleware([csrfProtected()], async (req) => {
+  try {
+    const incomingFormJSON = (await req.json()) as SubmissionRequestBody;
+
+    // Ensure required information is present
+
+    if (!incomingFormJSON.formID) {
+      return NextResponse.json({ error: "No form ID submitted with request" }, { status: 400 });
+    }
+
+    if (Object.entries(incomingFormJSON).length <= 2) {
+      return NextResponse.json({ error: "No form data submitted with request" }, { status: 400 });
+    }
+
+    // We process the data into fields and files. Base64 file data is converted into buffers
+    const data = await parseRequestData(incomingFormJSON);
+    return await processFormData(data.fields, data.files, req);
+  } catch (err) {
+    logMessage.error(err as Error);
+    return NextResponse.json({ received: false }, { status: 500 });
+  }
+});
