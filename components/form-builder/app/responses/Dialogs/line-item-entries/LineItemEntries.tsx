@@ -102,6 +102,21 @@ export const LineItemEntries = ({
     }
   };
 
+  const onPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    setStatus(DialogStates.EDITING); // Reset any errors
+    const pastedText = e.clipboardData.getData("Text");
+    const pastedTextArray = pastedText.split(/\r?\n/);
+    const cleanedText = pastedTextArray.flatMap((text) => {
+      const cleanedText = text.trim().replace(",", "").replaceAll("\t", "").toLowerCase();
+      if (validateInput && !validateInput(cleanedText)) {
+        setStatus(DialogStates.FORMAT_ERROR);
+      }
+      return cleanedText;
+    });
+    setInputs([...new Set([...inputs, ...cleanedText])]);
+    e.preventDefault();
+  };
+
   useEffect(() => {
     scrollToBottom(containerRef?.current as HTMLElement);
   }, [inputs]);
@@ -133,19 +148,7 @@ export const LineItemEntries = ({
           onBlur={onBlur}
           spellCheck="false"
           autoComplete="off"
-          onPaste={(e) => {
-            const pastedText = e.clipboardData.getData("Text");
-            const pastedTextArray = pastedText.split(/\r?\n/);
-            const cleanedText = pastedTextArray.flatMap((text) => {
-              const cleanedText = text.trim().replace(",", "").replaceAll("\t", "").toLowerCase();
-              if (validateInput && !validateInput(cleanedText)) {
-                setStatus(DialogStates.FORMAT_ERROR);
-              }
-              return cleanedText;
-            });
-            setInputs([...new Set([...inputs, ...cleanedText])]);
-            e.preventDefault();
-          }}
+          onPaste={onPaste}
           aria-labelledby={inputLabelId}
         />
       </div>
