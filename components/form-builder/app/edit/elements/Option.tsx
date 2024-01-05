@@ -121,8 +121,8 @@ export const Option = ({
         icon={<Close className="group-focus:fill-white-default" />}
         aria-label={`${t("removeOption")} ${value}`}
         onClick={() => {
-          removeChoice(parentIndex, index);
           cleanUpRules(parentIndex, index);
+          removeChoice(parentIndex, index);
         }}
       ></Button>
     </div>
