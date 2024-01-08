@@ -1,14 +1,8 @@
-import React, { ReactElement, useState, useRef } from "react";
-import { serverTranslation } from "@i18n";
-import { requireAuthentication } from "@lib/auth";
+"use client";
+import { useState, useRef } from "react";
 import { useTranslation } from "@i18n/client";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
-import Head from "next/head";
-import { getUnprocessedSubmissionsForUser, getUser } from "@lib/users";
-import { checkPrivileges } from "@lib/privileges";
-import { getAllTemplatesForUser } from "@lib/templates";
 import { LinkButton } from "@clientComponents/globals";
-import { BackLink } from "@clientComponents/admin/LeftNav/BackLink";
 import { NagwareResult } from "@lib/types";
 import { useSetting } from "@lib/hooks/useSetting";
 import { Dropdown } from "@clientComponents/admin/Users/Dropdown";
@@ -17,12 +11,10 @@ import { ConfirmDelete } from "@clientComponents/form-builder/app/ConfirmDelete"
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { useRefresh } from "@lib/hooks";
 import { ExclamationIcon } from "@clientComponents/icons";
-import { TwoColumnLayout } from "@clientComponents/globals/layouts";
-import { TemplateStoreProvider } from "@clientComponents/form-builder/store/useTemplateStore";
 
 type User = {
   id: string;
-  name: string;
+  name: string | null;
   email: string;
   active: boolean;
 };
@@ -67,7 +59,7 @@ const OverdueStatus = ({ level }: { level: number }) => {
   return null;
 };
 
-const ManageForms = ({
+export const ManageForms = ({
   formUser,
   templates,
   overdue,
@@ -85,9 +77,6 @@ const ManageForms = ({
 
   return (
     <>
-      <Head>
-        <title>{t("title")}</title>
-      </Head>
       <div>
         <h1 className="mb-10 border-0">
           {formUser && <span className="block text-base">{formUser?.name}</span>}
@@ -188,83 +177,18 @@ const ManageForms = ({
   );
 };
 
-const BackToAccounts = ({ id }: { id: string }) => {
-  const { t } = useTranslation("admin-users");
-  return <BackLink href={`/admin/accounts?id=${id}`}>{t("backToAccounts")}</BackLink>;
-};
-
-ManageForms.getLayout = (page: ReactElement) => {
-  return (
-    <TemplateStoreProvider
-      {...{ ...(page.props.initialForm && page.props.initialForm), locale: page.props.locale }}
-    >
-      <TwoColumnLayout
-        user={page.props.user}
-        context="admin"
-        leftColumnContent={<BackToAccounts id={page.props.formUser.id} />}
-      >
-        {page}
-      </TwoColumnLayout>
-    </TemplateStoreProvider>
-  );
-};
-
-export const getServerSideProps = requireAuthentication(async ({ params, user: { ability } }) => {
-  const id = params?.id || null;
-  const { locale = "en" }: { locale?: string } = params ?? {};
-
-  checkPrivileges(ability, [
-    { action: "view", subject: "User" },
-    {
-      action: "view",
-      subject: {
-        type: "FormRecord",
-        // Passing an empty object here just to force CASL evaluate the condition part of a permission.
-        // Will only allow users who have privilege of Manage All Forms
-        object: {},
-      },
-    },
-  ]);
-
-  const formUser = await getUser(ability, id as string);
-
-  let templates: Templates = [];
-  if (id) {
-    templates = (await getAllTemplatesForUser(ability, id as string)).map((template) => {
-      const {
-        id,
-        form: { titleEn, titleFr },
-        isPublished,
-        createdAt,
-      } = template;
-
-      return {
-        id,
-        titleEn,
-        titleFr,
-        isPublished,
-        createdAt: Number(createdAt),
-      };
-    });
-  }
-
-  const overdue = await getUnprocessedSubmissionsForUser(ability, id as string, templates);
-
-  return {
-    props: {
-      ...(locale &&
-        (await serverSideTranslations(locale, [
-          "common",
-          "admin-forms",
-          "admin-login",
-          "admin-users",
-          "form-builder",
-        ]))),
-      formUser: formUser,
-      templates,
-      overdue,
-    },
-  };
-});
-
-export default ManageForms;
+// ManageForms.getLayout = (page: ReactElement) => {
+//   return (
+//     <TemplateStoreProvider
+//       {...{ ...(page.props.initialForm && page.props.initialForm), locale: page.props.locale }}
+//     >
+//       <TwoColumnLayout
+//         user={page.props.user}
+//         context="admin"
+//         leftColumnContent={<BackToAccounts id={page.props.formUser.id} />}
+//       >
+//         {page}
+//       </TwoColumnLayout>
+//     </TemplateStoreProvider>
+//   );
+// };

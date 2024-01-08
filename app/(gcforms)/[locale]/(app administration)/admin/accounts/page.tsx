@@ -20,7 +20,6 @@ export async function generateMetadata({
 export default async function Page({
   searchParams: { id: previousUserRef },
 }: {
-  params: { locale: string };
   searchParams: { id?: string };
 }) {
   const { user } = await requireAuthentication();

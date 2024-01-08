@@ -120,31 +120,29 @@ export const getOrCreateUser = async ({
  * Get User by id
  * @returns User if found
  */
-export const getUser = async (ability: UserAbility, id: string): Promise<boolean | AppUser> => {
+export const getUser = async (ability: UserAbility, id: string): Promise<AppUser> => {
   try {
     checkPrivileges(ability, [{ action: "view", subject: "User" }]);
 
-    const user = await prisma.user
-      .findFirstOrThrow({
-        where: {
-          id: id,
-        },
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          active: true,
-          privileges: {
-            select: {
-              id: true,
-              name: true,
-              descriptionEn: true,
-              descriptionFr: true,
-            },
+    const user = await prisma.user.findFirstOrThrow({
+      where: {
+        id: id,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        active: true,
+        privileges: {
+          select: {
+            id: true,
+            name: true,
+            descriptionEn: true,
+            descriptionFr: true,
           },
         },
-      })
-      .catch((e) => prismaErrors(e, false));
+      },
+    });
 
     return user;
   } catch (e) {
