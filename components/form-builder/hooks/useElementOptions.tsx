@@ -40,10 +40,17 @@ import { useFlag } from "@lib/hooks";
 export const useElementOptions = (filterElements?: ElementOptionsFilter | undefined) => {
   const { t } = useTranslation("form-builder");
   const groups = {
-    other: { id: "other", value: t("addElementDialog.categories.other") },
     basic: { id: "basic", value: t("addElementDialog.categories.basic") },
     preset: { id: "preset", value: t("addElementDialog.categories.preset") },
     advanced: { id: "advanced", value: t("addElementDialog.categories.advanced") },
+    other: { id: "other", value: t("addElementDialog.categories.other") },
+  };
+
+  const sortElements = (elementOptions: ElementOption[]) => {
+    return elementOptions.sort((a, b) => {
+      const order = Object.keys(groups);
+      return order.indexOf(a.group.id) - order.indexOf(b.group.id);
+    });
   };
 
   // default to off unless the user is an admin
@@ -175,5 +182,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     ...(experimentalBlocks ? [{ ...(repeatingSetsOption as ElementOption) }] : []),
   ];
 
-  return filterElements ? filterElements(elementOptions) : elementOptions;
+  return filterElements
+    ? sortElements(filterElements(elementOptions))
+    : sortElements(elementOptions);
 };
