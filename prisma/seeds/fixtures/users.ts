@@ -1,11 +1,16 @@
-import { User } from "@prisma/client";
-
 type UserCollection = {
-  test: User[];
-  [key: string]: Array<User | { privileges: Record<string, unknown> }>;
+  test: SeedUser[];
+  [key: string]: Array<SeedUser>;
 };
 
-const RegularUser: User | { privileges: Record<string, unknown> } = {
+type SeedUser = {
+  name: string;
+  email: string;
+  active: boolean;
+  privileges: Record<string, unknown>;
+};
+
+const RegularUser: SeedUser = {
   name: "Regular Test User",
   email: "test.user@cds-snc.ca",
   active: true,
@@ -14,7 +19,7 @@ const RegularUser: User | { privileges: Record<string, unknown> } = {
   },
 };
 
-const AdminUser: User | { privileges: Record<string, unknown> } = {
+const AdminUser: SeedUser = {
   name: "Admin Test User",
   email: "test.admin@cds-snc.ca",
   active: true,
@@ -29,7 +34,7 @@ const AdminUser: User | { privileges: Record<string, unknown> } = {
   },
 };
 
-const DeactivatedRegularUser: User | { privileges: Record<string, unknown> } = {
+const DeactivatedRegularUser: SeedUser = {
   name: "Deactivated Test User",
   email: "test.deactivated@cds-snc.ca",
   active: false,
@@ -38,7 +43,7 @@ const DeactivatedRegularUser: User | { privileges: Record<string, unknown> } = {
   },
 };
 
-export const UserWithoutSecurityAnswers: User | { privileges: Record<string, unknown> } = {
+export const UserWithoutSecurityAnswers: Omit<SeedUser, "active"> = {
   name: "Test User Without Scurity Answers",
   email: "test.withoutSecurityAnswers@cds-snc.ca",
   privileges: {
