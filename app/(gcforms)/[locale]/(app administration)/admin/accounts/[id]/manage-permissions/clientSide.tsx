@@ -1,29 +1,16 @@
+"use client";
 import React, { ReactElement, useState, SetStateAction } from "react";
 import axios from "axios";
-import { serverTranslation } from "@i18n";
 import { useTranslation } from "@i18n/client";
-import Head from "next/head";
 import { Privilege } from "@prisma/client";
-
 import { useAccessControl } from "@lib/hooks/useAccessControl";
-import { requireAuthentication } from "@lib/auth";
-import { checkPrivileges, getAllPrivileges } from "@lib/privileges";
 import { logMessage } from "@lib/logger";
-import { getUser } from "@lib/users";
 import { Button, Alert } from "@clientComponents/globals";
-import { BackLink } from "@clientComponents/admin/LeftNav/BackLink";
 import { PermissionToggle } from "@clientComponents/admin/Users/PermissionToggle";
 import { LinkButton } from "@clientComponents/globals";
-import { TwoColumnLayout } from "@clientComponents/globals/layouts";
+import { AppUser } from "@lib/types/user-types";
 
-type PrivilegeList = Omit<Privilege, "permissions">[];
-interface User {
-  privileges: Privilege[];
-  id: string;
-  name: string | null;
-  email: string | null;
-  active: boolean;
-}
+type PrivilegeList = Omit<Privilege, "permissions" | "priority">[];
 
 const updatePrivilege = async (
   userID: string,
@@ -49,7 +36,7 @@ const PrivilegeList = ({
   privileges,
   setChangedPrivileges,
 }: {
-  formUser: User;
+  formUser: AppUser;
   privileges: PrivilegeList;
   setChangedPrivileges: React.Dispatch<SetStateAction<{ id: string; action: "add" | "remove" }[]>>;
 }) => {
@@ -111,11 +98,11 @@ const PrivilegeList = ({
   );
 };
 
-const ManagePermissions = ({
+export const ManagePermissions = ({
   formUser,
   allPrivileges,
 }: {
-  formUser: User;
+  formUser: AppUser;
   allPrivileges: PrivilegeList;
 }) => {
   const { t } = useTranslation("admin-users");
@@ -181,9 +168,6 @@ const ManagePermissions = ({
 
   return (
     <div>
-      <Head>
-        <title>{`${t("managePermissions")} ${formUser.name} ${formUser.email}`}</title>
-      </Head>
       <h1 className="mb-6 border-0">
         {formUser && <span className="block text-base">{formUser?.name}</span>}
         {formUser && <span className="block text-base font-normal">{formUser?.email}</span>}
@@ -221,56 +205,3 @@ const ManagePermissions = ({
     </div>
   );
 };
-
-const BackToAccounts = ({ id }: { id: string }) => {
-  const { t } = useTranslation("admin-users");
-  return <BackLink href={`/admin/accounts?id=${id}`}>{t("backToAccounts")}</BackLink>;
-};
-
-ManagePermissions.getLayout = (page: ReactElement) => {
-  return (
-    <TwoColumnLayout
-      user={page.props.user}
-      context="admin"
-      leftColumnContent={<BackToAccounts id={page.props.formUser.id} />}
-    >
-      {page}
-    </TwoColumnLayout>
-  );
-};
-
-export const getServerSideProps = requireAuthentication(async ({ user: { ability }, params }) => {
-  checkPrivileges(
-    ability,
-    [
-      { action: "view", subject: "User" },
-      { action: "view", subject: "Privilege" },
-    ],
-    "all"
-  );
-
-  const id = params?.id || null;
-  const { locale = "en" }: { locale?: string } = params ?? {};
-
-  const formUser = await getUser(ability, id as string);
-
-  const allPrivileges = (await getAllPrivileges(ability)).map(
-    ({ id, name, descriptionFr, descriptionEn }) => ({
-      id,
-      name,
-      descriptionFr,
-      descriptionEn,
-    })
-  );
-
-  return {
-    props: {
-      ...(locale &&
-        (await serverSideTranslations(locale, ["common", "admin-users", "admin-login"]))),
-      formUser,
-      allPrivileges,
-    },
-  };
-});
-
-export default ManagePermissions;
