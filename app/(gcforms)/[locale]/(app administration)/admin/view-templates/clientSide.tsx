@@ -1,17 +1,10 @@
-import { serverTranslation } from "@i18n";
-import { getAllTemplates } from "@lib/templates";
-import { requireAuthentication } from "@lib/auth";
+"use client";
 import { getLocalizedProperty } from "@lib/utils";
-
-import React, { ReactElement } from "react";
 import { useTranslation } from "@i18n/client";
-import Head from "next/head";
 import { useRouter } from "next/navigation";
-import { checkPrivileges } from "@lib/privileges";
 import { useAccessControl, useRefresh } from "@lib/hooks";
 import axios from "axios";
 import { logMessage } from "@lib/logger";
-import AdminNavLayout from "@clientComponents/globals/layouts/AdminNavLayout";
 import { Button } from "@clientComponents/globals";
 
 interface DataViewProps {
@@ -42,7 +35,7 @@ const handlePublish = async (formID: string, isPublished: boolean) => {
   }).catch((err) => logMessage.error(err));
 };
 
-const DataView = (props: DataViewProps): React.ReactElement => {
+export const DataView = (props: DataViewProps): React.ReactElement => {
   const { t, i18n } = useTranslation("admin-templates");
   const { templates } = props;
   const router = useRouter();
@@ -68,10 +61,6 @@ const DataView = (props: DataViewProps): React.ReactElement => {
 
   return (
     <>
-      <Head>
-        <title>{t("view.title")}</title>
-      </Head>
-
       <h1 className="border-0 mb-0">{t("view.title")}</h1>
       <table className="w-full table-auto  border-4 border-gray-400">
         <thead className="border-4 border-gray-400">
@@ -150,47 +139,3 @@ const DataView = (props: DataViewProps): React.ReactElement => {
     </>
   );
 };
-
-DataView.getLayout = (page: ReactElement) => {
-  return <AdminNavLayout user={page.props.user}>{page}</AdminNavLayout>;
-};
-
-export const getServerSideProps = requireAuthentication(
-  async ({ user: { ability, id }, params }) => {
-    const { locale = "en" }: { locale?: string } = params ?? {};
-    checkPrivileges(
-      ability,
-      [
-        { action: "view", subject: "FormRecord" },
-        { action: "update", subject: "FormRecord" },
-      ],
-      "one"
-    );
-    // getStaticProps is serverside, and therefore instead of doing a request,
-    // we import the invoke Lambda function directly
-
-    const templates = (await getAllTemplates(ability, id)).map((template) => {
-      const {
-        id,
-        form: { titleEn, titleFr },
-        isPublished,
-      } = template;
-      return {
-        id,
-        titleEn,
-        titleFr,
-        isPublished,
-      };
-    });
-
-    return {
-      props: {
-        templates,
-        ...(locale &&
-          (await serverSideTranslations(locale, ["common", "admin-templates", "admin-login"]))),
-      }, // will be passed to the page component as props
-    };
-  }
-);
-
-export default DataView;

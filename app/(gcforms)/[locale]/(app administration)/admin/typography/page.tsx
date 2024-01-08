@@ -1,7 +1,3 @@
-import React, { ReactElement } from "react";
-import { serverTranslation } from "@i18n";
-import { GetStaticProps } from "next";
-import { NextPageWithLayout } from "old_pages/_app";
 import { FullWidthLayout } from "@clientComponents/globals/layouts";
 
 const Heading = ({ title }: { title: string }) => {
@@ -12,9 +8,9 @@ const Heading = ({ title }: { title: string }) => {
   );
 };
 
-const Typography: NextPageWithLayout = () => {
+export default async function Page() {
   return (
-    <>
+    <FullWidthLayout context="default">
       <Heading title="Public forms + pages" />
       <div className="gc-formview">
         <p className="mb-4">Default (base) text size (20px) Noto Sans</p>
@@ -82,20 +78,6 @@ const Typography: NextPageWithLayout = () => {
         <li>List item</li>
       </ol>
       <hr />
-    </>
+    </FullWidthLayout>
   );
-};
-
-Typography.getLayout = (page: ReactElement) => {
-  return <FullWidthLayout context="default">{page}</FullWidthLayout>;
-};
-
-export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  return {
-    props: {
-      ...(locale && (await serverSideTranslations(locale, ["common", "sla"]))),
-    },
-  };
-};
-
-export default Typography;
+}
