@@ -10,7 +10,7 @@ import { ElementFilters } from "./ElementFilters";
 
 const Header = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="absolute top-0 min-h-[60px] w-full border-b border-slate-800 bg-violet-100 p-4">
+    <div className="absolute top-0 z-[1000] min-h-[60px] w-full border-b border-slate-800 bg-violet-100 p-4">
       {children}
     </div>
   );
