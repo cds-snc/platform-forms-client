@@ -37,6 +37,13 @@ import { useIsAdminUser } from "./useIsAdminUser";
 import { ElementOptionsFilter, ElementOption } from "../types";
 import { useFlag } from "@lib/hooks";
 
+export enum Groups {
+  BASIC = "basic",
+  PRESET = "preset",
+  ADVANCED = "advanced",
+  OTHER = "other",
+}
+
 export const useElementOptions = (filterElements?: ElementOptionsFilter | undefined) => {
   const { t } = useTranslation("form-builder");
   const groups = {

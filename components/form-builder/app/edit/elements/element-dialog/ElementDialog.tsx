@@ -3,8 +3,10 @@ import { useTranslation } from "next-i18next";
 import { FormElementTypes } from "@lib/types";
 import { useDialogRef, Dialog, ListBox } from "../../../shared";
 import { useElementOptions } from "../../../../hooks";
-import { ElementOptionsFilter } from "../../../../types";
+import { ElementOption, ElementOptionsFilter } from "../../../../types";
 import { Button } from "@components/globals";
+import { Groups } from "@components/form-builder/hooks/useElementOptions";
+import { ElementFilters } from "./ElementFilters";
 
 const Header = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -26,10 +28,6 @@ const Footer = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-const Pill = ({ children }: { children: React.ReactNode }) => {
-  return <div className="rounded-full border border-slate-800 bg-white px-4 py-2">{children}</div>;
-};
-
 export const ElementDialog = ({
   handleAddType,
   handleClose,
@@ -43,7 +41,18 @@ export const ElementDialog = ({
 
   const dialog = useDialogRef();
 
-  const elementOptions = useElementOptions(filterElements);
+  const [selectedGroups, setSelectedGroups] = useState<Groups[]>([]);
+
+  const filterElementsByGroup = (elements: ElementOption[]) => {
+    if (selectedGroups.length === 0) {
+      return elements;
+    }
+
+    return elements.filter((element) => selectedGroups.includes(element.group.id as Groups));
+  };
+
+  // @TODO: This is only applying one filter or the other, need to apply both
+  const elementOptions = useElementOptions(filterElements ? filterElements : filterElementsByGroup);
 
   const [selected, setSelected] = useState(0);
 
@@ -80,13 +89,7 @@ export const ElementDialog = ({
       <div className="relative">
         <Header>
           <h4>Add elements to your page</h4>
-          <div className="mt-4 flex gap-4">
-            <Pill>All</Pill>
-            <Pill>Basic</Pill>
-            <Pill>Preset</Pill>
-            <Pill>Advanced</Pill>
-            <Pill>Other</Pill>
-          </div>
+          <ElementFilters setSelectedGroups={setSelectedGroups} selectedGroups={selectedGroups} />
         </Header>
 
         <Body>
