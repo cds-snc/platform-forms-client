@@ -23,6 +23,7 @@ import get from "lodash/get";
 
 import { logMessage } from "./logger";
 import { logEvent } from "./auditLogs";
+import { redirect } from "next/navigation";
 
 /*
 This file contains references to server side only modules.
@@ -332,12 +333,16 @@ export const checkPrivilegesAsBoolean = (
     subject: Subject | ForcedSubjectType;
     field?: string;
   }[],
-  logic: "all" | "one" = "all"
+  options?: {
+    logic?: "all" | "one";
+    redirect?: boolean;
+  }
 ): boolean => {
   try {
-    checkPrivileges(ability, rules, logic);
+    checkPrivileges(ability, rules, options?.logic ?? "all");
     return true;
   } catch (error) {
+    if (options?.redirect) redirect(`/admin/unauthorized`);
     return false;
   }
 };

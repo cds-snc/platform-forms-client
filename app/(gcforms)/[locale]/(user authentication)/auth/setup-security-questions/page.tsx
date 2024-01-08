@@ -8,7 +8,7 @@ import {
   retrievePoolOfSecurityQuestions,
   retrieveUserSecurityQuestions,
 } from "@lib/auth";
-import { checkPrivileges } from "@lib/privileges";
+import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { redirect } from "next/navigation";
 export async function generateMetadata({
   params: { locale },
@@ -35,7 +35,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     user: { ability },
   } = await requireAuthentication();
 
-  checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
+  checkPrivilegesAsBoolean(ability, [{ action: "view", subject: "FormRecord" }], {
+    redirect: true,
+  });
 
   const sessionSecurityQuestions = await retrieveUserSecurityQuestions({
     userId: ability.userID,

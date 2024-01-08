@@ -1,6 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { requireAuthentication } from "@lib/auth";
-import { checkPrivileges, getAllPrivileges } from "@lib/privileges";
+import { checkPrivilegesAsBoolean, getAllPrivileges } from "@lib/privileges";
 import { getUser } from "@lib/users";
 import { ManagePermissions } from "./clientSide";
 import { Metadata } from "next";
@@ -29,13 +29,13 @@ export default async function Page({
   params: { id: string; locale: string };
 }) {
   const { user } = await requireAuthentication();
-  checkPrivileges(
+  checkPrivilegesAsBoolean(
     user.ability,
     [
       { action: "view", subject: "User" },
       { action: "view", subject: "Privilege" },
     ],
-    "all"
+    { logic: "all", redirect: true }
   );
   const formUser = await getUser(user.ability, id as string);
 

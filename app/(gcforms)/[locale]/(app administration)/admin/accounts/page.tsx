@@ -1,6 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { requireAuthentication } from "@lib/auth";
-import { checkPrivileges, getAllPrivileges } from "@lib/privileges";
+import { checkPrivilegesAsBoolean, getAllPrivileges } from "@lib/privileges";
 import { getUsers } from "@lib/users";
 import AdminNavLayout from "@clientComponents/globals/layouts/AdminNavLayout";
 import { Users } from "./clientSide";
@@ -23,13 +23,13 @@ export default async function Page({
   searchParams: { id?: string };
 }) {
   const { user } = await requireAuthentication();
-  checkPrivileges(
+  checkPrivilegesAsBoolean(
     user.ability,
     [
       { action: "view", subject: "User" },
       { action: "view", subject: "Privilege" },
     ],
-    "all"
+    { logic: "all", redirect: true }
   );
   const allUsers = await getUsers(user.ability);
 

@@ -1,6 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { requireAuthentication } from "@lib/auth";
-import { checkPrivileges } from "@lib/privileges";
+import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { getUnprocessedSubmissionsForUser, getUser } from "@lib/users";
 
 import { ManageForms } from "./clientSide";
@@ -31,18 +31,22 @@ export default async function Page({
   params: { id: string; locale: string };
 }) {
   const { user } = await requireAuthentication();
-  checkPrivileges(user.ability, [
-    { action: "view", subject: "User" },
-    {
-      action: "view",
-      subject: {
-        type: "FormRecord",
-        // Passing an empty object here just to force CASL evaluate the condition part of a permission.
-        // Will only allow users who have privilege of Manage All Forms
-        object: {},
+  checkPrivilegesAsBoolean(
+    user.ability,
+    [
+      { action: "view", subject: "User" },
+      {
+        action: "view",
+        subject: {
+          type: "FormRecord",
+          // Passing an empty object here just to force CASL evaluate the condition part of a permission.
+          // Will only allow users who have privilege of Manage All Forms
+          object: {},
+        },
       },
-    },
-  ]);
+    ],
+    { redirect: true }
+  );
 
   const formUser = await getUser(user.ability, id);
 

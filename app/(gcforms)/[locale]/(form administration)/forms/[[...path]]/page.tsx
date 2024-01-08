@@ -1,7 +1,7 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { requireAuthentication } from "@lib/auth";
-import { checkPrivileges } from "@lib/privileges";
+import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { getAllTemplates } from "@lib/templates";
 import { getUnprocessedSubmissionsForUser } from "@lib/users";
 import { FullWidthLayout } from "@clientComponents/globals/layouts";
@@ -22,7 +22,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     user: { ability, id },
   } = await requireAuthentication();
 
-  checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
+  checkPrivilegesAsBoolean(ability, [{ action: "view", subject: "FormRecord" }], {
+    redirect: true,
+  });
 
   const templates = (await getAllTemplates(ability, id)).map((template) => {
     const {

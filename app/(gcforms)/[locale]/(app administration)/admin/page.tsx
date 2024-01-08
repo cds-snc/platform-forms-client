@@ -1,23 +1,39 @@
-import React, { ReactElement } from "react";
-import { useTranslation } from "@i18n/client";
 import { requireAuthentication } from "@lib/auth";
-import { NextPageWithLayout } from "old_pages/_app";
 import AdminNavLayout from "@clientComponents/globals/layouts/AdminNavLayout";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { serverTranslation } from "@i18n";
 import Link from "next/link";
 import { ManageAccountsIcon, SettingsApplicationsIcon } from "@clientComponents/icons";
-import Head from "next/head";
+import { Metadata } from "next";
+import { redirect } from "next/navigation";
+
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const { t } = await serverTranslation("admin-home", { lang: locale });
+  return {
+    title: `${t("title")}`,
+  };
+}
 
 // keeping this here if we want to add a welcome page
-const AdminWelcome: NextPageWithLayout = () => {
-  const { t } = useTranslation(["admin-home", "common"]);
+export default async function Page() {
+  const { t } = await serverTranslation(["admin-home", "common"]);
+  const { user } = await requireAuthentication();
+  const canViewUsers = checkPrivilegesAsBoolean(
+    user.ability,
+    [{ action: "view", subject: "User" }],
+    { redirect: true }
+  );
+
+  if (!canViewUsers) {
+    redirect("/forms");
+  }
 
   return (
-    <>
-      <Head>
-        <title>{t("title")}</title>
-      </Head>
+    <AdminNavLayout user={user} hideLeftNav={true}>
       <h1 className="visually-hidden">{t("title", { ns: "admin-home" })}</h1>
       <div className="flex flex-row justify-center">
         <div className="rounded-lg border bg-white p-10">
@@ -52,33 +68,6 @@ const AdminWelcome: NextPageWithLayout = () => {
           </ul>
         </div>
       </div>
-    </>
-  );
-};
-AdminWelcome.getLayout = (page: ReactElement) => {
-  return (
-    <AdminNavLayout user={page.props.user} hideLeftNav={true}>
-      {page}
     </AdminNavLayout>
   );
-};
-export const getServerSideProps = requireAuthentication(async ({ user: { ability }, params }) => {
-  const canViewUsers = checkPrivilegesAsBoolean(ability, [{ action: "view", subject: "User" }]);
-  const { locale = "en" }: { locale?: string } = params ?? {};
-  if (!canViewUsers) {
-    return {
-      redirect: {
-        destination: `/forms`,
-        permanent: false,
-      },
-    };
-  }
-  return {
-    props: {
-      ...(locale &&
-        (await serverSideTranslations(locale, ["common", "admin-home", "admin-login"]))),
-    },
-  };
-});
-
-export default AdminWelcome;
+}

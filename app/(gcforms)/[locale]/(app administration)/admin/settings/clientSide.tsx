@@ -1,14 +1,11 @@
-import React, { ReactElement, useState } from "react";
+"use client";
+import React, { useState } from "react";
 import axios from "axios";
 import { Setting } from "@prisma/client";
-import { serverTranslation } from "@i18n";
-import { requireAuthentication } from "@lib/auth";
 import { useTranslation } from "@i18n/client";
-import Head from "next/head";
-import { checkPrivileges } from "@lib/privileges";
-import AdminNavLayout from "@clientComponents/globals/layouts/AdminNavLayout";
+
 import { ToastContainer, toast } from "@clientComponents/form-builder/app/shared/Toast";
-import { getAllAppSettings } from "@lib/appSettings";
+
 import { Button } from "@clientComponents/globals";
 import { useAccessControl, useRefresh } from "@lib/hooks";
 import { logMessage } from "@lib/logger";
@@ -148,7 +145,7 @@ const ManageSetting = ({
 interface SettingsProps {
   settings: Setting[];
 }
-const Settings = ({ settings }: SettingsProps) => {
+export const Settings = ({ settings }: SettingsProps) => {
   const { t, i18n } = useTranslation("admin-settings");
   const [selectedSetting, setSelectedSetting] = useState<Setting | undefined>(undefined);
   const [manageSetting, setManageSetting] = useState(false);
@@ -181,9 +178,6 @@ const Settings = ({ settings }: SettingsProps) => {
 
   return (
     <>
-      <Head>
-        <title>{t("title")}</title>
-      </Head>
       <h1 className="border-0 mb-10">{t("title")}</h1>
       {!manageSetting ? (
         <div>
@@ -261,22 +255,3 @@ const Settings = ({ settings }: SettingsProps) => {
     </>
   );
 };
-
-Settings.getLayout = (page: ReactElement) => {
-  return <AdminNavLayout user={page.props.user}>{page}</AdminNavLayout>;
-};
-
-export const getServerSideProps = requireAuthentication(async ({ params, user: { ability } }) => {
-  checkPrivileges(ability, [{ action: "view", subject: "Setting" }]);
-  const { locale = "en" }: { locale?: string } = params ?? {};
-  const settings = await getAllAppSettings(ability);
-  return {
-    props: {
-      ...(locale &&
-        (await serverSideTranslations(locale, ["common", "admin-settings", "admin-login"]))),
-      settings,
-    },
-  };
-});
-
-export default Settings;
