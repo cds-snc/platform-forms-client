@@ -49,20 +49,6 @@ export const ElementFilters = ({
 
   return (
     <div className="z-100 mt-4 flex gap-4">
-      {/* <DropdownMenu.Root>
-        <DropdownMenu.Trigger asChild>
-          <span className="rounded-full bg-blue-800">
-            <FilterIcon className="scale-75 fill-white" />
-          </span>
-        </DropdownMenu.Trigger>
-        <DropdownMenu.Portal>
-          <DropdownMenu.Content side="bottom" sideOffset={15} align="start" className="">
-            <DropdownMenu.Item className="">Basic</DropdownMenu.Item>
-
-            <DropdownMenu.Item className="">Preset</DropdownMenu.Item>
-          </DropdownMenu.Content>
-        </DropdownMenu.Portal>
-      </DropdownMenu.Root> */}
       <Pill group="all">All</Pill>
       <Pill group={Groups.BASIC}>Basic</Pill>
       <Pill group={Groups.PRESET}>Preset</Pill>
