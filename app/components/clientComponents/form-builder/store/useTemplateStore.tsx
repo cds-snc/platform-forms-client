@@ -38,6 +38,7 @@ import {
 } from "@lib/types";
 import { logMessage } from "@lib/logger";
 import { BrandProperties } from "@lib/types/form-types";
+import { removeChoiceFromRules } from "@lib/formContext";
 
 const defaultField: FormElement = {
   id: 0,
@@ -54,6 +55,7 @@ const defaultField: FormElement = {
     descriptionFr: "",
     placeholderEn: "",
     placeholderFr: "",
+    conditionalRules: undefined,
   },
 };
 
@@ -76,6 +78,7 @@ export const defaultForm = {
   },
   layout: [],
   elements: [],
+  groups: {},
 };
 
 export interface TemplateStoreProps {
@@ -130,6 +133,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   addSubChoice: (elIndex: number, subIndex: number) => void;
   removeChoice: (elIndex: number, choiceIndex: number) => void;
   removeSubChoice: (elIndex: number, subIndex: number, choiceIndex: number) => void;
+  getChoice: (elIndex: number, choiceIndex: number) => { en: string; fr: string } | undefined;
   updateField: (
     path: string,
     value: string | boolean | ElementProperties | BrandProperties
@@ -148,6 +152,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   getSecurityAttribute: () => SecurityAttribute;
   setClosingDate: (closingDate: string | null) => void;
   initialize: () => void;
+  removeChoiceFromRules: (elIndex: number, choiceIndex: number) => void;
 }
 
 /* Note: "async" getItem is intentional here to work-around a hydration issue   */
@@ -293,6 +298,18 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.form.elements.splice(elIndex + 1, 0, item);
               });
             },
+            removeChoiceFromRules: (elIndex: number, choiceIndex: number) => {
+              set((state) => {
+                const choiceId = `${elIndex}.${choiceIndex}`;
+                const rules = removeChoiceFromRules(state.form.elements, choiceId);
+                state.form.elements.forEach((element) => {
+                  // If element id is in the rules array, update the conditionalRules property
+                  if (rules[element.id]) {
+                    element.properties.conditionalRules = rules[element.id];
+                  }
+                });
+              });
+            },
             addSubItem: (elIndex, subIndex = 0, type = FormElementTypes.radio, data) =>
               set((state) => {
                 // remove subElements array property given we're adding a sub item
@@ -346,6 +363,10 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                   subIndex
                 ].properties.choices?.splice(choiceIndex, 1);
               }),
+            getChoice: (elId, choiceIndex) => {
+              const elIndex = get().form.elements.findIndex((el) => el.id === elId);
+              return get().form.elements[elIndex].properties.choices?.[choiceIndex];
+            },
             duplicateElement: (itemId) => {
               const elIndex = get().form.elements.findIndex((el) => el.id === itemId);
               set((state) => {

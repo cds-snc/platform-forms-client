@@ -7,12 +7,13 @@ import Markdown from "markdown-to-jsx";
 
 import { getRenderedForm } from "@lib/formBuilder";
 import { PublicFormRecord } from "@lib/types";
-import { Button, Form, RichText, ClosedPage } from "@clientComponents/forms";
+import { Button, Form, RichText, ClosedPage, NextButton } from "@clientComponents/forms";
 import { LocalizedElementProperties, LocalizedFormProperties } from "../types";
 import { useTemplateStore } from "../store";
 import { BackArrowIcon } from "../../icons";
 import Brand from "@clientComponents/globals/Brand";
 import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
+import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 
 export const Preview = () => {
   const { status } = useSession();
@@ -150,44 +151,55 @@ export const Preview = () => {
           </>
         ) : (
           <div className="gc-formview">
-            <Form
-              formRecord={formRecord}
-              isPreview={true}
-              language={language}
-              router={router}
-              t={t}
-              onSuccess={setSent}
-              renderSubmit={() => (
-                <div id="PreviewSubmitButton">
-                  <span {...getLocalizationAttribute()}>
-                    <Button
-                      type="submit"
-                      id="SubmitButton"
-                      className="mb-4"
-                      onClick={(e) => {
-                        if (status !== "authenticated") {
-                          return preventSubmit(e);
-                        }
-                      }}
-                    >
-                      {t("submitButton", { ns: "common", lng: language })}
-                    </Button>
-                  </span>
-                  {status !== "authenticated" && (
-                    <div
-                      className="inline-block bg-purple-200 px-4 py-1"
-                      {...getLocalizationAttribute()}
-                    >
-                      <Markdown options={{ forceBlock: true }}>
-                        {t("signInToTest", { ns: "form-builder", lng: language })}
-                      </Markdown>
+            <GCFormsProvider formRecord={formRecord}>
+              <Form
+                formRecord={formRecord}
+                isPreview={true}
+                language={language}
+                router={router}
+                t={t}
+                onSuccess={setSent}
+                renderSubmit={({ validateForm }) => {
+                  return (
+                    <div id="PreviewSubmitButton">
+                      <span {...getLocalizationAttribute()}>
+                        <NextButton
+                          validateForm={validateForm}
+                          fallBack={() => {
+                            return (
+                              <Button
+                                type="submit"
+                                id="SubmitButton"
+                                className="mb-4"
+                                onClick={(e) => {
+                                  if (status !== "authenticated") {
+                                    return preventSubmit(e);
+                                  }
+                                }}
+                              >
+                                {t("submitButton", { ns: "common", lng: language })}
+                              </Button>
+                            );
+                          }}
+                        />
+                      </span>
+                      {status !== "authenticated" && (
+                        <div
+                          className="inline-block bg-purple-200 px-4 py-1"
+                          {...getLocalizationAttribute()}
+                        >
+                          <Markdown options={{ forceBlock: true }}>
+                            {t("signInToTest", { ns: "form-builder", lng: language })}
+                          </Markdown>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              )}
-            >
-              {currentForm}
-            </Form>
+                  );
+                }}
+              >
+                {currentForm}
+              </Form>
+            </GCFormsProvider>
           </div>
         )}
       </div>

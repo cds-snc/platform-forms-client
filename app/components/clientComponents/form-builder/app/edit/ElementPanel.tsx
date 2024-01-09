@@ -68,6 +68,9 @@ export const ElementPanel = ({
   /* eslint-disable jsx-a11y/no-static-element-interactions */
   /* eslint-disable jsx-a11y/click-events-have-key-events */
 
+  const hasRules =
+    (item.properties?.conditionalRules && item.properties?.conditionalRules?.length > 0) ?? false;
+
   return (
     <div
       id={`element-${item.id}`}
@@ -77,7 +80,8 @@ export const ElementPanel = ({
         className,
         "group",
         isWithin && "active",
-        "relative h-auto max-w-[800px] border-1 border-t-0 border-slate-500 focus-within:bg-violet-50 hover:bg-violet-50 bg-white"
+        "relative h-auto max-w-[800px] border-1 border-t-0 border-slate-500 focus-within:bg-violet-50 hover:bg-violet-50 bg-white",
+        hasRules && "border-dashed border-1 border-slate-500"
       )}
       onClick={(e) => {
         const el = e.target as HTMLElement;

@@ -7,6 +7,8 @@ import { useTemplateStore } from "../../../store/useTemplateStore";
 import { Option } from "./Option";
 import { Button } from "@clientComponents/globals";
 import { FormElementWithIndex } from "../../../types";
+import { ModalRules } from "../../edit/ModalRules";
+import { ConditionalIndicatorOption, AddOther } from "@components/form-builder/app/shared";
 
 const AddButton = ({ index, onClick }: { index: number; onClick: (index: number) => void }) => {
   const { t } = useTranslation("form-builder");
@@ -84,21 +86,31 @@ export const Options = ({
     const initialValue = element.properties.choices?.[index][translationLanguagePriority] ?? "";
 
     return (
-      <Option
-        renderIcon={renderIcon}
-        parentIndex={parentIndex}
-        key={`child-${item.id}-${index}`}
-        id={item.id}
-        index={index}
-        initialValue={initialValue}
-      />
+      <fieldset key={`child-${item.id}-${index}`} aria-live="polite">
+        <Option
+          renderIcon={renderIcon}
+          parentIndex={parentIndex}
+          id={item.id}
+          index={index}
+          initialValue={initialValue}
+        />
+        <ConditionalIndicatorOption id={`${item.id}.${index}`} elements={elements} />
+      </fieldset>
     );
   });
 
   return (
     <div className="mt-5">
       {options}
-      <AddOptions index={parentIndex} />
+      <div className="mr-2 inline-block">
+        <div className="mr-4 inline-block">
+          <AddOptions index={parentIndex} />
+        </div>
+        <AddOther item={item} />
+      </div>
+      <div>
+        <ModalRules item={item} />
+      </div>
     </div>
   );
 };

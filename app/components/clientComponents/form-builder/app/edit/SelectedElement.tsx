@@ -7,6 +7,7 @@ import { CheckBoxEmptyIcon, CheckIcon, RadioEmptyIcon } from "../../../icons";
 import { ShortAnswer, Options, SubOptions, RichText, SubElement } from "./elements";
 import { ElementOption, FormElementWithIndex } from "../../types";
 import { useElementOptions } from "../../hooks";
+import { ConditionalIndicator } from "../shared/conditionals/ConditionalIndicator";
 
 const filterSelected = (
   item: FormElementWithIndex,
@@ -158,5 +159,9 @@ export const SelectedElement = ({
       element = null;
   }
 
-  return element;
+  return (
+    <>
+      {element} <ConditionalIndicator item={item} />
+    </>
+  );
 };
