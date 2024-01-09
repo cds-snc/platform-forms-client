@@ -7,6 +7,7 @@ import { ElementOption, ElementOptionsFilter } from "../../../../types";
 import { Button } from "@components/globals";
 import { Groups } from "@components/form-builder/hooks/useElementOptions";
 import { ElementFilters } from "./ElementFilters";
+import { DropdownElementFilters } from "./DropdownElementFilters";
 
 const Header = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -90,6 +91,10 @@ export const ElementDialog = ({
         <Header>
           <h4>Add elements to your page</h4>
           <ElementFilters setSelectedGroups={setSelectedGroups} selectedGroups={selectedGroups} />
+          {/* <DropdownElementFilters
+            setSelectedGroups={setSelectedGroups}
+            selectedGroups={selectedGroups}
+          /> */}
         </Header>
 
         <Body>
