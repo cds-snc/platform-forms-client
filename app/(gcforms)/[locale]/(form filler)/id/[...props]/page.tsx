@@ -10,11 +10,12 @@ import { Metadata } from "next";
 import FormDisplayLayout from "@clientComponents/globals/layouts/FormDisplayLayout";
 
 export async function generateMetadata({
-  params: { locale, form },
+  params: { locale, props },
 }: {
-  params: { locale: string; form: string };
+  params: { locale: string; props: string[] };
 }): Promise<Metadata> {
-  const publicForm = await getPublicTemplateByID(form);
+  const formID = props[0];
+  const publicForm = await getPublicTemplateByID(formID);
   if (!publicForm) return {};
 
   const formTitle = publicForm.form[getLocalizedProperty("title", locale)] as string;
@@ -24,10 +25,12 @@ export async function generateMetadata({
 }
 
 export default async function Page({
-  params: { locale, step, form: formID },
+  params: { locale, props },
 }: {
-  params: { locale: string; step?: string[]; form: string };
+  params: { locale: string; props: string[] };
 }) {
+  const formID = props[0];
+  const step = props[1] ?? "";
   const formRecord = await getPublicTemplateByID(formID);
 
   // Redirect if form doesn't exist and only retrieve published forms
@@ -59,7 +62,7 @@ export default async function Page({
   }
 
   // render text pages
-  if (step?.[0] === "confirmation") {
+  if (step === "confirmation") {
     return <TextPage formRecord={formRecord} />;
   }
 
