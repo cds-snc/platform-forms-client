@@ -1,10 +1,9 @@
-import React, { ReactElement, useRef } from "react";
+"use client";
+import React, { useRef } from "react";
 import { Formik } from "formik";
 import { TextInput, Label, Alert, ErrorListItem } from "@clientComponents/forms";
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
-import { GetServerSideProps } from "next";
-import { serverTranslation } from "@i18n";
 import * as Yup from "yup";
 import {
   isValidGovEmail,
@@ -13,11 +12,7 @@ import {
   containsNumber,
   containsSymbol,
 } from "@lib/validation";
-import UserNavLayout from "@clientComponents/globals/layouts/UserNavLayout";
-import { authOptions } from "@app/api/auth/authConfig";
-import { getServerSession } from "next-auth/next";
 import Link from "next/link";
-import Head from "next/head";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import { fetchWithCsrfToken } from "@lib/hooks/auth/fetchWithCsrfToken";
 import { hasError } from "@lib/hasError";
@@ -26,7 +21,7 @@ import { Verify } from "@clientComponents/auth/Verify";
 import { useLogin } from "@lib/hooks/auth";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 
-const Register = () => {
+export const Register = () => {
   const { t } = useTranslation(["signup", "common"]);
   const {
     username,
@@ -140,9 +135,6 @@ const Register = () => {
 
   return (
     <>
-      <Head>
-        <title>{t("signUpRegistration.title")}</title>
-      </Head>
       <Formik
         initialValues={{ username: "", password: "", passwordConfirmation: "", name: "" }}
         onSubmit={async (values, { setSubmitting }) => {
@@ -286,34 +278,3 @@ const Register = () => {
     </>
   );
 };
-
-Register.getLayout = (page: ReactElement) => {
-  return <UserNavLayout contentWidth="tablet:w-[658px]">{page}</UserNavLayout>;
-};
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getServerSession(context.req, context.res, authOptions);
-
-  const { locale = "en" }: { locale?: string } = context.params ?? {};
-
-  if (session)
-    return {
-      redirect: {
-        destination: `/${locale}/forms/`,
-        permanent: false,
-      },
-    };
-  return {
-    props: {
-      ...(locale &&
-        (await serverSideTranslations(locale, [
-          "common",
-          "cognito-errors",
-          "signup",
-          "auth-verify",
-        ]))),
-    },
-  };
-};
-
-export default Register;
