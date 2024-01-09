@@ -1,20 +1,26 @@
 import { serverTranslation } from "@i18n";
 import { requireAuthentication } from "@lib/auth";
-
-import React, { ReactElement } from "react";
-import Head from "next/head";
-import { useTranslation } from "@i18n/client";
 import { StyledLink } from "@clientComponents/globals/StyledLink/StyledLink";
 import UserNavLayout from "@clientComponents/globals/layouts/UserNavLayout";
+import { Metadata } from "next";
 
-export default function AccountCreated() {
-  const { t, i18n } = useTranslation(["signup"]);
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const { t } = await serverTranslation("signup", { lang: locale });
+  return {
+    title: t("accountCreated.title"),
+  };
+}
+
+export default async function Page() {
+  const { t, i18n } = await serverTranslation(["signup"]);
+  await requireAuthentication();
 
   return (
-    <>
-      <Head>
-        <title>{t("accountCreated.title")}</title>
-      </Head>
+    <UserNavLayout contentWidth="tablet:w-[658px]">
       <h1 className="border-b-0 mt-6 mb-12">{t("accountCreated.title")}</h1>
       <h2>{t("accountCreated.yourAccountListDescription")}</h2>
       <ul>
@@ -43,21 +49,6 @@ export default function AccountCreated() {
           {t("accountCreated.skipStepButton")}
         </StyledLink>
       </div>
-    </>
+    </UserNavLayout>
   );
 }
-
-AccountCreated.getLayout = (page: ReactElement) => {
-  return <UserNavLayout contentWidth="tablet:w-[658px]">{page}</UserNavLayout>;
-};
-
-export const getServerSideProps = requireAuthentication(async (params) => {
-  {
-    const { locale = "en" }: { locale?: string } = params ?? {};
-    return {
-      props: {
-        ...(locale && (await serverSideTranslations(locale, ["signup", "common"]))),
-      },
-    };
-  }
-});
