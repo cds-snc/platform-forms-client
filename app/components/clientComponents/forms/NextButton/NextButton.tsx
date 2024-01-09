@@ -1,9 +1,10 @@
+"use client";
 import React from "react";
-import { useTranslation } from "next-i18next";
+import { useTranslation } from "@i18n/client";
 
 import { Validate } from "@lib/types";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
-import { Button } from "@components/globals";
+import { Button } from "@clientComponents/globals";
 
 export const NextButton = ({
   validateForm,

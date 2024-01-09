@@ -1,8 +1,9 @@
+"use client";
 import React, { useMemo } from "react";
-import { useTranslation } from "next-i18next";
+import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 import { FormElement } from "@lib/types";
-import { Button } from "@components/globals";
+import { Button } from "@clientComponents/globals";
 
 type Choice = {
   label: string;

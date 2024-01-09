@@ -1,11 +1,12 @@
+"use client";
 import React from "react";
-import { useTranslation } from "next-i18next";
+import { useTranslation } from "@i18n/client";
 
-import { ConditionalIcon } from "@components/form-builder/icons/ConditionalIcon";
+import { ConditionalIcon } from "@clientComponents/icons/ConditionalIcon";
 import { getElementsUsingChoiceId } from "@lib/formContext";
 import { FormElement } from "@lib/types";
 import { useRefsContext } from "@formbuilder/app/edit/RefsContext";
-import { Button } from "@components/globals";
+import { Button } from "@clientComponents/globals";
 
 export const ConditionalIndicatorOption = ({
   id,

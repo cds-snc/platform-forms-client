@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { ConditionalRule, FormElement } from "@lib/types";

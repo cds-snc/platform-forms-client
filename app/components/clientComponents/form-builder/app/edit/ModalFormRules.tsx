@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";

@@ -1,13 +1,14 @@
 import { getPublicTemplateByID } from "@lib/templates";
 import { serverTranslation } from "@i18n";
 import classnames from "classnames";
-import { Form, TextPage, ClosedPage } from "@clientComponents/forms";
+import { Form, TextPage, ClosedPage, NextButton } from "@clientComponents/forms";
 import { getRenderedForm } from "@lib/formBuilder";
 import { dateHasPast } from "@lib/utils";
 import { getLocalizedProperty } from "@lib/utils";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import FormDisplayLayout from "@clientComponents/globals/layouts/FormDisplayLayout";
+import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 
 export async function generateMetadata({
   params: { locale, props },
@@ -70,9 +71,18 @@ export default async function Page({
     <FormDisplayLayout formRecord={formRecord}>
       <div className={classes}>
         <h1>{formTitle}</h1>
-        <Form formRecord={formRecord} language={language} t={t}>
-          {currentForm}
-        </Form>
+        <GCFormsProvider formRecord={formRecord}>
+          <Form
+            formRecord={formRecord}
+            language={language}
+            t={t}
+            renderSubmit={({ validateForm, fallBack }) => {
+              return <NextButton validateForm={validateForm} fallBack={fallBack} />;
+            }}
+          >
+            {currentForm}
+          </Form>
+        </GCFormsProvider>
       </div>
     </FormDisplayLayout>
   );

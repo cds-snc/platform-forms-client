@@ -1,9 +1,10 @@
+"use client";
 import React, { useCallback } from "react";
-import { useTranslation } from "next-i18next";
+import { useTranslation } from "@i18n/client";
 
-import { Button } from "@components/globals";
-import { FormElementWithIndex } from "../../../types";
-import { useTemplateStore } from "@components/form-builder/store";
+import { Button } from "@clientComponents/globals";
+import { FormElementWithIndex } from "@clientComponents/form-builder/types";
+import { useTemplateStore } from "@clientComponents/form-builder/store";
 import { FormElementTypes } from "@lib/types";
 
 export const AddOther = ({ item }: { item: FormElementWithIndex }) => {

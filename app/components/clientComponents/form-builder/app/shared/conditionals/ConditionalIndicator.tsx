@@ -1,8 +1,9 @@
+"use client";
 import React from "react";
-import { useTranslation } from "next-i18next";
-import { FormElementWithIndex } from "../../../types";
-import { useTemplateStore } from "@components/form-builder/store";
-import { ConditionalIcon } from "@components/form-builder/icons/ConditionalIcon";
+import { useTranslation } from "@i18n/client";
+import { FormElementWithIndex } from "@clientComponents/form-builder/types";
+import { useTemplateStore } from "@clientComponents/form-builder/store";
+import { ConditionalIcon } from "@clientComponents/icons/ConditionalIcon";
 
 const RuleIndicator = ({ choiceId }: { choiceId: string }) => {
   const { t } = useTranslation("form-builder");
