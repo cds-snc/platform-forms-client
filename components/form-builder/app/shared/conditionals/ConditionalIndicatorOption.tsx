@@ -19,6 +19,7 @@ export const ConditionalIndicatorOption = ({
     formElements: elements,
     choiceId: id,
   });
+  const rulesTitleId = `rules-title-${Date.now()}`;
 
   const { refs } = useRefsContext();
 
@@ -30,26 +31,26 @@ export const ConditionalIndicatorOption = ({
     <div className="ml-2 mt-2">
       <div className="flex">
         <ConditionalIcon className="mr-2  inline-block" />
-        <div className="inline-block">
-          {questions.map(({ elementId }, index) => (
-            <label key={`${elementId}-${index}`}>
-              {t("addConditionalRules.show")}{" "}
-              <Button
-                theme="link"
-                onClick={() => {
-                  const id = Number(elementId);
-                  if (!refs || !refs.current) {
-                    return;
-                  }
-                  refs.current[id].focus();
-                }}
-              >
-                {elements.find((element) => element.id === Number(elementId))?.properties?.titleEn}
-              </Button>
-            </label>
-          ))}
-        </div>
+        <span id={rulesTitleId}>{t("addConditionalRules.show")}</span>
       </div>
+      <ul className="list-none pl-4" aria-labelledby={rulesTitleId}>
+        {questions.map(({ elementId }, index) => (
+          <li key={`${elementId}-${index}`} className="pl-4 py-1">
+            <Button
+              theme="link"
+              onClick={() => {
+                const id = Number(elementId);
+                if (!refs || !refs.current) {
+                  return;
+                }
+                refs.current[id].focus();
+              }}
+            >
+              {elements.find((element) => element.id === Number(elementId))?.properties?.titleEn}
+            </Button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
