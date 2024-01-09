@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useTranslation } from "next-i18next";
+import { useTranslation, Trans } from "next-i18next";
 import { useDialogRef, Dialog } from "@components/form-builder/app/shared";
 import { LineItemEntries } from "./line-item-entries";
 import { Button, Alert } from "@components/globals";
@@ -149,9 +149,12 @@ export const ConfirmDialog = ({
                     {t("downloadResponsesModals.confirmReceiptDialog.errors.invalidEntry.title")}
                   </Alert.Title>
                   <p>
-                    {t(
-                      "downloadResponsesModals.confirmReceiptDialog.errors.invalidEntry.description"
-                    )}
+                    <Trans
+                      ns="form-builder-responses"
+                      i18nKey="downloadResponsesModals.confirmReceiptDialog.errors.invalidEntry.description"
+                      defaults="<italic></italic>" // indicate to translator: text with italic HTML element
+                      components={{ italic: <i /> }}
+                    ></Trans>
                   </p>
                 </Alert.Danger>
               )}
@@ -186,10 +189,13 @@ export const ConfirmDialog = ({
               )}
             </div>
             <div className="py-4">
-              <h4>{t("downloadResponsesModals.confirmReceiptDialog.contentHeading")}</h4>
-              <p>{t("downloadResponsesModals.confirmReceiptDialog.contentBody")}</p>
-              <p className="mb-2 mt-10 font-bold" id={confirmInstructionId}>
-                {t("downloadResponsesModals.confirmReceiptDialog.copyCode")}
+              <p className="font-bold" id={confirmInstructionId}>
+                <Trans
+                  ns="form-builder-responses"
+                  i18nKey="downloadResponsesModals.confirmReceiptDialog.copyCode"
+                  defaults="<italic></italic>" // indicate to translator: text with italic HTML element
+                  components={{ italic: <i /> }}
+                ></Trans>
               </p>
               <p className="mb-4">
                 {t("downloadResponsesModals.confirmReceiptDialog.copyCodeNote")}
@@ -206,11 +212,19 @@ export const ConfirmDialog = ({
                 setStatus={setStatus}
               ></LineItemEntries>
 
+              <p className="mb-2 mt-10 font-bold">
+                {t("downloadResponsesModals.confirmReceiptDialog.contentHeading")}
+              </p>
+              <p>{t("downloadResponsesModals.confirmReceiptDialog.contentBody")}</p>
+
               <div className="mt-4 flex gap-4">
                 <Button theme="secondary" onClick={handleClose}>
                   {t("downloadResponsesModals.cancel")}
                 </Button>
-                <Button onClick={handleSubmit} disabled={status === DialogStates.SENDING}>
+                <Button
+                  onClick={handleSubmit}
+                  disabled={status === DialogStates.SENDING || status === DialogStates.FORMAT_ERROR}
+                >
                   {status === DialogStates.SENDING
                     ? t("downloadResponsesModals.sending")
                     : t("downloadResponsesModals.confirmReceiptDialog.confirmReceipt")}
