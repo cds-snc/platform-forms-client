@@ -361,7 +361,7 @@
   "incomplete": "Incomplete",
   "inputDescription": "Description",
   "insertLink": "Insert link",
-  "lastSaved": "Last saved:",
+  "lastSaved": "updated at",
   "linkUrl": "Link URL",
   "lockedBlock": "Locked block",
   "longAnswerText": "Long answer text",
@@ -698,7 +698,8 @@
     "title": "There was an error saving the form",
     "description": "Download a copy of the form and try again or",
     "supportLink": "contact Support",
-    "errorCode": "Error code: {{code}}"
+    "errorCode": "Error code: {{code}}",
+    "failedLink": "Failed - Contact support"
   },
   "addConditionalRules": {
     "modalTitle": "Add a rule to a question",
@@ -713,5 +714,6 @@
     "addOther": "Add input field for \"other\"",
     "other": "Other ",
     "show": "Show:"
-  }
+  },
+  "saved": "Saved"
 }

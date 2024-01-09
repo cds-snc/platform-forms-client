@@ -360,7 +360,7 @@
   "incomplete": "Incomplet",
   "inputDescription": "Description",
   "insertLink": "Insérer un lien  ",
-  "lastSaved": "Dernier enregistrement :",
+  "lastSaved": "updated at [fr]",
   "linkUrl": "URL du lien",
   "lockedBlock": "Bloc verrouillé",
   "longAnswerText": "Réponse longue",
@@ -698,7 +698,8 @@
     "title": "Une erreur s'est produite lors de l'enregistrement du formulaire",
     "description": "Veuillez télécharger une copie du formulaire et réessayer ou",
     "supportLink": "contacter l'équipe de soutien",
-    "errorCode": "Code d'erreur : {{code}}"
+    "errorCode": "Code d'erreur : {{code}}",
+    "failedLink": "Failed - Contact support [fr]"
   },
   "addConditionalRules": {
     "modalTitle": "Ajouter une règle à une question",
@@ -713,5 +714,6 @@
     "addOther": "Ajouter un champ de saisi pour  « Autre »",
     "other": "Autre ",
     "show": "Afficher :"
-  }
+  },
+  "saved": "Saved"
 }

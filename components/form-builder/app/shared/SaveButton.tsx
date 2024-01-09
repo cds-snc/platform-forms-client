@@ -3,24 +3,57 @@ import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { useSession } from "next-auth/react";
 
-import { Button } from "@components/globals";
+import { Button, StyledLink } from "@components/globals";
 import { useTemplateStore } from "../../store";
 import { useTemplateStatus, useTemplateContext } from "../../hooks";
 import { formatDateTime } from "../../util";
-import Markdown from "markdown-to-jsx";
+import { useActivePathname } from "@components/form-builder/hooks";
+import { cn } from "@lib/utils";
+
+import { Close, CheckIcon } from "@components/form-builder/icons";
+
+const Save = ({
+  handleSave,
+  templateIsDirty,
+}: {
+  handleSave: () => void;
+  templateIsDirty: boolean;
+}) => {
+  const { t } = useTranslation(["common", "form-builder"]);
+
+  if (templateIsDirty) {
+    return (
+      <>
+        <Button theme="link" onClick={handleSave} className={cn("mr-1 font-bold")}>
+          {t("saveDraft", { ns: "form-builder" })}
+        </Button>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <CheckIcon className="mr-1 mt-1 inline-block fill-green" />
+      <span className="mr-2 inline-block">{t("saved", { ns: "form-builder" })}</span>
+    </>
+  );
+};
 
 export const SaveButton = () => {
-  const { id } = useTemplateStore((s) => ({
+  const { isPublished, id } = useTemplateStore((s) => ({
+    isPublished: s.isPublished,
     id: s.id,
   }));
 
-  const { error, saveForm } = useTemplateContext();
+  const { error, saveForm, templateIsDirty } = useTemplateContext();
+  const { activePathname } = useActivePathname();
 
   const { status } = useSession();
   const { t, i18n } = useTranslation(["common", "form-builder"]);
   const { isReady, asPath } = useRouter();
   const [isStartPage, setIsStartPage] = useState(false);
   const { updatedAt, getTemplateById } = useTemplateStatus();
+  const supportHref = `/${i18n.language}/form-builder/support`;
 
   const handleSave = async () => {
     const saved = await saveForm();
@@ -40,33 +73,46 @@ export const SaveButton = () => {
       }
     }
   }, [asPath, isReady]);
-
   const dateTime =
     (updatedAt && formatDateTime(new Date(updatedAt).getTime(), `${i18n.language}-CA`)) || [];
+
+  if (isPublished) {
+    return null;
+  }
+
+  if (activePathname !== "/form-builder/edit") {
+    return null;
+  }
 
   return !isStartPage && status === "authenticated" ? (
     <div
       data-id={id}
-      className={`-ml-4 mt-12 w-40 p-4 text-sm laptop:w-52 laptop:text-base ${
-        id && (error ? "bg-red-100" : "bg-yellow-100")
-      }`}
-    >
-      <Button onClick={handleSave}>{t("saveDraft", { ns: "form-builder" })}</Button>
-      {error && (
-        <div className="pt-4 text-sm text-red-500">
-          <Markdown options={{ forceBlock: true }}>{error}</Markdown>
-        </div>
+      className={cn(
+        "mb-2 flex w-[800px] text-sm laptop:text-base",
+        id && error && "text-red-destructive"
       )}
-      <div className="mt-4" aria-live="polite">
+    >
+      {error ? (
+        <span className="inline-block">
+          <Close className="inline-block fill-red" />
+          <StyledLink
+            href={supportHref}
+            className="mr-2 text-red no-underline focus:shadow-none active:text-white active:shadow-none"
+          >
+            {t("errorSavingForm.failedLink", { ns: "form-builder" })}
+          </StyledLink>
+        </span>
+      ) : (
+        <Save handleSave={handleSave} templateIsDirty={templateIsDirty.current} />
+      )}
+      <span aria-live="polite">
         {dateTime.length == 2 && (
           <>
-            <div className="font-bold">{t("lastSaved", { ns: "form-builder" })}</div>
-            <div className="text-sm">
-              {dateTime[0]} {t("at")} {dateTime[1]}{" "}
-            </div>
+            {" - "} {t("lastSaved", { ns: "form-builder" })} {dateTime[1]}
+            {", "} {dateTime[0]}
           </>
         )}
-      </div>
+      </span>
     </div>
   ) : null;
 };

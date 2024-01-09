@@ -51,8 +51,10 @@ type ToastContext = {
 
 export const ToastContainer = ({
   autoClose = 3000,
+  width = "",
 }: {
   autoClose?: number | false | undefined;
+  width?: string;
 }) => {
   return (
     <OriginalContainer
@@ -69,6 +71,7 @@ export const ToastContainer = ({
       }) => {
         return `${contextClass[context?.type || "default"]["text"]} flex text-base`;
       }}
+      style={{ width: width }}
       position={originalToast.POSITION.TOP_CENTER}
       autoClose={autoClose}
       hideProgressBar={true}
@@ -99,5 +102,8 @@ export const toast = {
   },
   default: (message: string) => {
     originalToast(<p className="py-2">{message}</p>);
+  },
+  htmlError: (message: JSX.Element) => {
+    originalToast.error(message);
   },
 };
