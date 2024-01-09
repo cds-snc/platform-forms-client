@@ -85,7 +85,7 @@ export const Options = ({
     const initialValue = element.properties.choices?.[index][translationLanguagePriority] ?? "";
 
     return (
-      <fieldset key={`child-${item.id}-${index}`}>
+      <fieldset key={`child-${item.id}-${index}`} aria-live="polite">
         <Option
           renderIcon={renderIcon}
           parentIndex={parentIndex}

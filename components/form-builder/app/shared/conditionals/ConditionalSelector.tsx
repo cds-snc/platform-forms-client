@@ -167,7 +167,7 @@ export const ConditionalSelector = ({
   return (
     <>
       {choices && (
-        <div className="border-b border-dotted border-slate-500">
+        <fieldset className="border-b border-dotted border-slate-500">
           <div className="mb-4">
             <ChoiceSelect selected={choiceId} choices={choices} onChange={handleChoiceChange} />
           </div>
@@ -181,7 +181,7 @@ export const ConditionalSelector = ({
           <Button className="mb-8 inline-block" theme="link" onClick={handleRemove}>
             {t("addConditionalRules.removeRule")}
           </Button>
-        </div>
+        </fieldset>
       )}
     </>
   );
