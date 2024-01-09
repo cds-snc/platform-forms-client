@@ -20,7 +20,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({ params: { locale } }: { params: { locale: string } }) {
+export default async function Page() {
   const { user } = await requireAuthentication();
   checkPrivilegesAsBoolean(user.ability, [{ action: "view", subject: "FormRecord" }], {
     redirect: true,
