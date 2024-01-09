@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 
-import path from "path";
+const path = require("path");
 
 const isOutputStandalone = process.env.NEXT_OUTPUT_STANDALONE === "true";
 const securityHeaders = [
