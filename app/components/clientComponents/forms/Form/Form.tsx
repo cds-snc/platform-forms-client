@@ -12,7 +12,6 @@ import axios from "axios";
 import Loader from "../../globals/Loader";
 import classNames from "classnames";
 import { Responses, PublicFormRecord } from "@lib/types";
-import { NextRouter } from "next/router";
 import { ErrorStatus } from "../Alert/Alert";
 
 interface SubmitButtonProps {
@@ -285,7 +284,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 interface FormProps {
   formRecord: PublicFormRecord;
   language: string;
-  router: NextRouter;
   isReCaptchaEnableOnSite?: boolean;
   isPreview?: boolean;
   renderSubmit?: () => JSX.Element;

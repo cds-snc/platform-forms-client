@@ -1,15 +1,13 @@
 "use client";
 import { Form } from "@clientComponents/forms";
 import { getRenderedForm } from "@lib/formBuilder";
-import { FormRecord } from "@lib/types";
-import { useRouter } from "next/navigation";
+import { PublicFormRecord } from "@lib/types";
 import React from "react";
 import { useTranslation } from "@i18n/client";
 
-export const BrandingRequestForm = ({ formRecord }: { formRecord: FormRecord | null }) => {
+export const BrandingRequestForm = ({ formRecord }: { formRecord: PublicFormRecord | null }) => {
   const { t, i18n } = useTranslation("form-builder");
   const language = i18n.language;
-  const router = useRouter();
 
   let currentForm = null;
 
@@ -25,7 +23,7 @@ export const BrandingRequestForm = ({ formRecord }: { formRecord: FormRecord | n
       {formRecord && (
         <>
           <h2 className="border-b-2 border-red pb-2 mb-10">{formTitle}</h2>
-          <Form formRecord={formRecord} language={language} router={router} t={t}>
+          <Form formRecord={formRecord} language={language} t={t}>
             {currentForm}
           </Form>
         </>

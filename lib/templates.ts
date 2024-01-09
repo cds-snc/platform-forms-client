@@ -117,7 +117,7 @@ async function _unprotectedGetTemplateByID(formID: string): Promise<FormRecord |
  */
 async function _unprotectedGetTemplateWithAssociatedUsers(formID: string): Promise<{
   formRecord: FormRecord;
-  users: { id: string; name: string | null; email: string | null }[];
+  users: { id: string; name: string | null; email: string }[];
 } | null> {
   const templateWithUsers = await prisma.template
     .findUnique({
@@ -469,7 +469,10 @@ export async function getFullTemplateByID(
 export async function getTemplateWithAssociatedUsers(
   ability: UserAbility,
   formID: string
-): Promise<{ formRecord: FormRecord; users: { id: string; name: string | null }[] } | null> {
+): Promise<{
+  formRecord: FormRecord;
+  users: { id: string; name: string | null; email: string }[];
+} | null> {
   try {
     checkPrivileges(ability, [
       {

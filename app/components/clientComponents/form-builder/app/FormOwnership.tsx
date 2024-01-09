@@ -17,11 +17,13 @@ interface User {
 
 interface AssignUsersToTemplateProps {
   formRecord: FormRecord;
-  usersAssignedToFormRecord: User[];
-  allUsers: User[];
+  usersAssignedToFormRecord: { id: string; name: string | null; email: string }[];
+  allUsers: { id: string; name: string | null; email: string }[];
 }
 
-const usersToOptions = (users: User[]): { value: string; label: string | null }[] => {
+const usersToOptions = (
+  users: { id: string; email: string }[]
+): { value: string; label: string | null }[] => {
   return users.map((user) => {
     return { value: user.id, label: user.email };
   });
