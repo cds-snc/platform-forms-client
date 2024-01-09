@@ -126,7 +126,7 @@
     "yes": "Yes"
   },
   "addMultiple": "Add multiple options",
-  "addOption": "Add an option",
+  "addOption": "Add option",
   "addOptions": "Add options",
   "addRules": "Add rules",
   "addToSet": "Add to set",
@@ -699,5 +699,19 @@
     "description": "Download a copy of the form and try again or",
     "supportLink": "contact Support",
     "errorCode": "Error code: {{code}}"
+  },
+  "addConditionalRules": {
+    "modalTitle": "Add a rule to a question",
+    "modalTitleEdit": "Edit rules",
+    "modalDescription": "Display additional input fields depending on the selection of a specific option. This applies to single choice, multiple choice, or dropdown list questions.",
+    "optionTitle": "If option selected is:",
+    "questionTitle": "Show question:",
+    "addCustomRules": "Add a rule",
+    "editCustomRules": "Edit rules",
+    "addAnotherRule": "Add another rule",
+    "removeRule": "Remove",
+    "addOther": "Add input field for \"other\"",
+    "other": "Other ",
+    "show": "Show:"
   }
 }

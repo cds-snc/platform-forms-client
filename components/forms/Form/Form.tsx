@@ -10,9 +10,10 @@ import { useTranslation, TFunction } from "next-i18next";
 import axios from "axios";
 import Loader from "../../globals/Loader";
 import classNames from "classnames";
-import { Responses, PublicFormRecord } from "@lib/types";
+import { Responses, PublicFormRecord, Validate } from "@lib/types";
 import { NextRouter } from "next/router";
 import { ErrorStatus } from "../Alert/Alert";
+import { useFormValuesChanged } from "@lib/hooks";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -29,6 +30,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
   const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
   const [submitTooEarly, setSubmitTooEarly] = useState(false);
   const screenReaderRemainingTime = useRef(formTimerState.remainingTime);
+
   useEffect(() => {
     let intervalID: NodeJS.Timeout;
     // calculate initial delay for submit timer
@@ -142,6 +144,8 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
   const { t } = useTranslation();
 
+  useFormValuesChanged();
+
   const errorList = props.errors ? getErrorList(props) : null;
   const errorId = "gc-form-errors";
   const serverErrorId = `${errorId}-server`;
@@ -209,6 +213,10 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
 
+  const numberOfRequiredQuestions = form.elements.filter(
+    (element) => element.properties.validation?.required === true
+  ).length;
+
   return status === "submitting" ? (
     <Loader message={t("loading")} />
   ) : (
@@ -254,6 +262,8 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               }
             }}
             noValidate
+            // TODO move this to each child container but that I think will take some thought.
+            aria-live="polite"
           >
             {children}
 
@@ -262,14 +272,21 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 form.privacyPolicy[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
             </RichText>
             {props.renderSubmit ? (
-              props.renderSubmit()
+              props.renderSubmit({
+                validateForm: props.validateForm,
+                fallBack: () => {
+                  return (
+                    <SubmitButton
+                      numberOfRequiredQuestions={numberOfRequiredQuestions}
+                      formID={formID}
+                      formTitle={form.titleEn}
+                    />
+                  );
+                },
+              })
             ) : (
               <SubmitButton
-                numberOfRequiredQuestions={
-                  form.elements.filter(
-                    (element) => element.properties.validation?.required === true
-                  ).length
-                }
+                numberOfRequiredQuestions={numberOfRequiredQuestions}
                 formID={formID}
                 formTitle={form.titleEn}
               />
@@ -287,7 +304,13 @@ interface FormProps {
   router: NextRouter;
   isReCaptchaEnableOnSite?: boolean;
   isPreview?: boolean;
-  renderSubmit?: () => JSX.Element;
+  renderSubmit?: ({
+    validateForm,
+    fallBack,
+  }: {
+    validateForm: Validate["validateForm"];
+    fallBack?: () => JSX.Element;
+  }) => JSX.Element;
   onSuccess?: (id: string) => void;
   children?: (JSX.Element | undefined)[] | null;
   t: TFunction;
