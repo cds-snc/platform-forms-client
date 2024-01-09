@@ -10,14 +10,6 @@
   "featureStatus": "Status",
   "featureSwitch": "On/Off",
   "features": {
-    "sandbox": {
-      "title": "Sandbox Page",
-      "description": "A page that displays a list of all non-published forms"
-    },
-    "unpublishedForms": {
-      "title": "Unpublished forms",
-      "description": "Allow the access to and completion of forms that do not have a published status"
-    },
     "submitToReliabilityQueue": {
       "title": "Submit to reliability queue",
       "description": "Submit form responses to the Reliability Queue. If disabled no form submissions will be submitted.  Usually used for testing."
