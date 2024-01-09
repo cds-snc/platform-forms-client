@@ -12,7 +12,7 @@ declare module "next-auth" {
       privileges: RawRuleOf<MongoAbility<Abilities>>[];
       acceptableUse: boolean;
       name: string | null;
-      email: string | null;
+      email: string;
       image?: string | null;
       newlyRegistered?: boolean;
       deactivated?: boolean;
