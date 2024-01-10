@@ -35,7 +35,7 @@ const ErrorSaving = ({ supportHref, errorCode }: { supportHref: string; errorCod
       <p className="mb-5 text-sm text-black">
         {errorCode && t("errorSavingForm.errorCode", { code: errorCode })}
       </p>
-      <DownloadFileButton showInfo={false} autoShowDialog={false} />
+      <DownloadFileButton theme="primary" showInfo={false} autoShowDialog={false} />
     </div>
   );
 };

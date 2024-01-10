@@ -53,12 +53,14 @@ export const DownloadFileButton = ({
   showInfo = true,
   buttonText,
   autoShowDialog = false,
+  theme = "secondary",
 }: {
   className?: string;
   onClick?: any; // eslint-disable-line  @typescript-eslint/no-explicit-any
   showInfo?: boolean;
   buttonText?: string;
   autoShowDialog?: boolean;
+  theme?: "primary" | "secondary";
 }) => {
   const { t, i18n } = useTranslation("form-builder");
   const { getSchema, form, name } = useTemplateStore((s) => ({
@@ -114,7 +116,7 @@ export const DownloadFileButton = ({
     <div>
       <Button
         className={className}
-        theme="secondary"
+        theme={theme}
         onClick={() => {
           downloadfile();
           downloadFileEvent();
