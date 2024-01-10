@@ -80,7 +80,10 @@ export const SaveButton = () => {
     return null;
   }
 
-  if (activePathname !== "/form-builder/edit") {
+  const allowSave =
+    activePathname === "/form-builder/edit" || activePathname === "/form-builder/edit/translate";
+
+  if (!allowSave) {
     return null;
   }
 
