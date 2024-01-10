@@ -86,7 +86,9 @@ export const Edit = () => {
   return (
     <>
       <h1 className="visually-hidden">{t("edit")}</h1>
-      <SaveButton />
+      <div className="mb-4">
+        <SaveButton />
+      </div>
       <Panel />
       <RichTextLocked
         className="rounded-t-lg"
