@@ -1,11 +1,19 @@
-import React, { createContext, useState, useContext, useRef, useCallback } from "react";
+import React, {
+  createContext,
+  useState,
+  useContext,
+  useRef,
+  useCallback,
+  useEffect,
+  ElementRef,
+} from "react";
 import { useTemplateStore, useSubscibeToTemplateStore } from "../store";
 import { useTemplateApi } from "../hooks";
 import { useTranslation } from "next-i18next";
 import { logMessage } from "@lib/logger";
 import { useSession } from "next-auth/react";
 import { toast } from "../app/shared/Toast";
-import { Alert, StyledLink } from "@components/globals";
+import { StyledLink } from "@components/globals";
 import { DownloadFileButton } from "../app/shared/";
 
 interface TemplateApiType {
@@ -24,10 +32,19 @@ const TemplateApiContext = createContext<TemplateApiType>(defaultTemplateApi);
 
 const ErrorSaving = ({ supportHref, errorCode }: { supportHref: string; errorCode?: string }) => {
   const { t } = useTranslation("form-builder");
+  const titleRef = useRef<ElementRef<"h3">>(null);
+
+  useEffect(() => {
+    if (titleRef.current) {
+      titleRef.current.focus();
+    }
+  }, []);
 
   return (
     <div className="w-full">
-      <Alert.Title headingTag="h3">{t("errorSavingForm.title")}</Alert.Title>
+      <h3 ref={titleRef} className="!mb-0 pb-0 text-xl font-semibold">
+        {t("errorSavingForm.title")}
+      </h3>
       <p className="mb-2 text-black">
         {t("errorSavingForm.description")}{" "}
         <StyledLink href={supportHref}>{t("errorSavingForm.supportLink")}.</StyledLink>
