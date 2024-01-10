@@ -94,6 +94,8 @@ export const SaveButton = () => {
         "mb-2 flex w-[800px] text-sm laptop:text-base",
         id && error && "text-red-destructive"
       )}
+      aria-live="polite"
+      aria-atomic="true"
     >
       {error ? (
         <span className="inline-block">
@@ -108,7 +110,7 @@ export const SaveButton = () => {
       ) : (
         <Save handleSave={handleSave} templateIsDirty={templateIsDirty.current} />
       )}
-      <span aria-live="polite">
+      <span>
         {dateTime.length == 2 && (
           <>
             {" - "} {t("lastSaved", { ns: "form-builder" })} {dateTime[1]}
