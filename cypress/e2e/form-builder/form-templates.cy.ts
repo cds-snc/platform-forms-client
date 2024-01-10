@@ -55,7 +55,7 @@ describe("Test FormBuilder", () => {
     cy.visitPage("/form-builder/preview");
     cy.get('[data-testid="textInput"]').each(($el, index) => {
       if (index === 0) {
-        cy.wrap($el).should("have.attr", "autocomplete", "street-address");
+        cy.wrap($el).should("have.attr", "autocomplete", "address-line1");
       } else if (index === 1) {
         cy.wrap($el).should("have.attr", "autocomplete", "address-level2");
       } else if (index === 2) {
