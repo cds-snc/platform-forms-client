@@ -7,7 +7,6 @@ export const Radio = (
   props: ChoiceFieldProps & JSX.IntrinsicElements["input"]
 ): React.ReactElement => {
   const { id, label, required, name, ariaDescribedBy } = props;
-
   return (
     <div className="gc-input-radio">
       {ariaDescribedBy ? (

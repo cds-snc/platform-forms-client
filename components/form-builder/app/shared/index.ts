@@ -16,3 +16,5 @@ export { InfoDetails } from "./InfoDetails";
 export { ResponseDeliveryHelpButton } from "./ResponseDeliveryHelpDialog";
 export { toast } from "./Toast";
 export { EmailResponseSettings } from "./EmailResponseSettings";
+export { ConditionalIndicatorOption } from "./conditionals/ConditionalIndicatorOption";
+export { AddOther } from "./conditionals/AddOther";
