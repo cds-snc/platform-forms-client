@@ -9,7 +9,7 @@ import { StyledLink } from "@components/globals";
 import { DownloadFileButton } from "../app/shared/";
 
 interface TemplateApiType {
-  error: string | null;
+  error: string | null | undefined;
   saveForm: () => Promise<boolean>;
   templateIsDirty: React.MutableRefObject<boolean>;
 }
