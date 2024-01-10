@@ -10,7 +10,7 @@ import { formatDateTime } from "../../util";
 import { useActivePathname } from "@components/form-builder/hooks";
 import { cn } from "@lib/utils";
 
-import { Close, CheckIcon } from "@components/form-builder/icons";
+import { Close, SavedCheckIcon } from "@components/form-builder/icons";
 
 const Save = ({
   handleSave,
@@ -33,7 +33,7 @@ const Save = ({
 
   return (
     <>
-      <CheckIcon className="mr-1 mt-1 inline-block fill-green" />
+      <SavedCheckIcon className="mr-1 mt-3 inline-block fill-green" />
       <span className="mr-2 inline-block">{t("saved", { ns: "form-builder" })}</span>
     </>
   );
