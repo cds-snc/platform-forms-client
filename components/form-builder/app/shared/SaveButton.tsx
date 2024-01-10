@@ -10,7 +10,7 @@ import { formatDateTime } from "../../util";
 import { useActivePathname } from "@components/form-builder/hooks";
 import { cn } from "@lib/utils";
 
-import { Close, SavedCheckIcon } from "@components/form-builder/icons";
+import { SavedFailIcon, SavedCheckIcon } from "@components/form-builder/icons";
 
 const Save = ({
   handleSave,
@@ -24,7 +24,7 @@ const Save = ({
   if (templateIsDirty) {
     return (
       <>
-        <Button theme="link" onClick={handleSave} className={cn("mr-1 font-bold")}>
+        <Button theme="link" onClick={handleSave} className={cn("mr-1 font-bold text-slate-500")}>
           {t("saveDraft", { ns: "form-builder" })}
         </Button>
       </>
@@ -33,8 +33,10 @@ const Save = ({
 
   return (
     <>
-      <SavedCheckIcon className="mr-1 mt-3 inline-block fill-green" />
-      <span className="mr-2 inline-block">{t("saved", { ns: "form-builder" })}</span>
+      <span className="inline-block px-1">
+        <SavedCheckIcon className="mr-1 inline-block" />
+      </span>
+      <span className="mr-2 inline-block text-slate-500">{t("saved", { ns: "form-builder" })}</span>
     </>
   );
 };
@@ -91,7 +93,7 @@ export const SaveButton = () => {
     <div
       data-id={id}
       className={cn(
-        "mb-2 flex w-[800px] text-sm laptop:text-base",
+        "mb-2 flex w-[800px] text-sm laptop:text-base text-slate-500",
         id && error && "text-red-destructive"
       )}
       aria-live="polite"
@@ -99,10 +101,12 @@ export const SaveButton = () => {
     >
       {error ? (
         <span className="inline-block">
-          <Close className="inline-block fill-red" />
+          <span className="inline-block px-1">
+            <SavedFailIcon className="inline-block fill-red" />
+          </span>
           <StyledLink
             href={supportHref}
-            className="mr-2 text-red no-underline focus:shadow-none active:text-white active:shadow-none"
+            className="mr-2 text-red-700 no-underline focus:shadow-none active:text-white active:shadow-none"
           >
             {t("errorSavingForm.failedLink", { ns: "form-builder" })}
           </StyledLink>

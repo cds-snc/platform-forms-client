@@ -42,7 +42,7 @@ const ErrorSaving = ({ supportHref, errorCode }: { supportHref: string; errorCod
 
 export function TemplateApiProvider({ children }: { children: React.ReactNode }) {
   const { t, i18n } = useTranslation(["form-builder"]);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>();
   const supportHref = `/${i18n.language}/form-builder/support`;
   const { id, getSchema, getName, hasHydrated, setId, getIsPublished } = useTemplateStore((s) => ({
     id: s.id,
