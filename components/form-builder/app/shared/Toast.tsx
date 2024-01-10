@@ -53,10 +53,12 @@ export const ToastContainer = ({
   autoClose = 3000,
   width = "",
   containerId = "",
+  limit,
 }: {
   autoClose?: number | false | undefined;
   width?: string;
   containerId?: string;
+  limit?: number;
 }) => {
   return (
     <OriginalContainer
@@ -81,6 +83,7 @@ export const ToastContainer = ({
       hideProgressBar={true}
       closeOnClick={true}
       transition={Bounce}
+      limit={limit}
       icon={(context?: ToastContext) => {
         return contextClass[context?.type || "default"]["icon"];
       }}
