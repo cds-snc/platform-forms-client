@@ -1,12 +1,4 @@
-import React, {
-  createContext,
-  useState,
-  useContext,
-  useRef,
-  useCallback,
-  useEffect,
-  ElementRef,
-} from "react";
+import React, { createContext, useState, useContext, useRef, useCallback } from "react";
 import { useTemplateStore, useSubscibeToTemplateStore } from "../store";
 import { useTemplateApi } from "../hooks";
 import { useTranslation } from "next-i18next";
@@ -32,19 +24,10 @@ const TemplateApiContext = createContext<TemplateApiType>(defaultTemplateApi);
 
 const ErrorSaving = ({ supportHref, errorCode }: { supportHref: string; errorCode?: string }) => {
   const { t } = useTranslation("form-builder");
-  const titleRef = useRef<ElementRef<"h3">>(null);
-
-  useEffect(() => {
-    if (titleRef.current) {
-      titleRef.current.focus();
-    }
-  }, []);
 
   return (
     <div className="w-full">
-      <h3 ref={titleRef} className="!mb-0 pb-0 text-xl font-semibold">
-        {t("errorSavingForm.title")}
-      </h3>
+      <h3 className="!mb-0 pb-0 text-xl font-semibold">{t("errorSavingForm.title")}</h3>
       <p className="mb-2 text-black">
         {t("errorSavingForm.description")}{" "}
         <StyledLink href={supportHref}>{t("errorSavingForm.supportLink")}.</StyledLink>
