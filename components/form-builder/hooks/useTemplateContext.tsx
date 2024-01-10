@@ -22,7 +22,7 @@ const defaultTemplateApi: TemplateApiType = {
 
 const TemplateApiContext = createContext<TemplateApiType>(defaultTemplateApi);
 
-const ErrorSaving = ({ supportHref, errorCode }: { supportHref: string; errorCode: string }) => {
+const ErrorSaving = ({ supportHref, errorCode }: { supportHref: string; errorCode?: string }) => {
   const { t } = useTranslation("form-builder");
 
   return (
@@ -41,8 +41,9 @@ const ErrorSaving = ({ supportHref, errorCode }: { supportHref: string; errorCod
 };
 
 export function TemplateApiProvider({ children }: { children: React.ReactNode }) {
-  const { t } = useTranslation(["form-builder"]);
+  const { t, i18n } = useTranslation(["form-builder"]);
   const [error, setError] = useState<string | null>(null);
+  const supportHref = `/${i18n.language}/form-builder/support`;
   const { id, getSchema, getName, hasHydrated, setId, getIsPublished } = useTemplateStore((s) => ({
     id: s.id,
     getSchema: s.getSchema,
@@ -90,10 +91,10 @@ export function TemplateApiProvider({ children }: { children: React.ReactNode })
     } catch (err) {
       logMessage.error(err as Error);
       setError(t("errorSaving"));
-      toast.htmlError(<ErrorSaving supportHref="test" errorCode="tets" />);
+      toast.error(<ErrorSaving supportHref={supportHref} />, "wide");
       return false;
     }
-  }, [status, getIsPublished, getSchema, getName, id, save, setError, setId, t]);
+  }, [status, getIsPublished, getSchema, getName, id, save, setError, setId, t, supportHref]);
 
   return (
     <TemplateApiContext.Provider value={{ error, saveForm, templateIsDirty }}>
