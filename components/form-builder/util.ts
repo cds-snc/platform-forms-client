@@ -106,6 +106,7 @@ export const getSchemaFromState = (state: TemplateStoreState) => {
       brand,
       securityAttribute,
       layout,
+      groups,
     },
   } = state;
 
@@ -116,6 +117,7 @@ export const getSchemaFromState = (state: TemplateStoreState) => {
     privacyPolicy,
     confirmation,
     layout,
+    groups,
     elements,
     securityAttribute,
     brand,

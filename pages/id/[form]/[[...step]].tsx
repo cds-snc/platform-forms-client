@@ -5,13 +5,14 @@ import React, { ReactElement } from "react";
 import classnames from "classnames";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
-import { Form, TextPage, ClosedPage } from "@components/forms";
+import { Form, TextPage, ClosedPage, NextButton } from "@components/forms";
 import { getProperty, getRenderedForm } from "@lib/formBuilder";
 import { useRouter } from "next/router";
 import { PublicFormRecord } from "@lib/types";
 import { GetServerSideProps } from "next";
 import { NextPageWithLayout } from "@pages/_app";
 import { dateHasPast } from "@lib/utils";
+import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 
 import FormDisplayLayout from "@components/globals/layouts/FormDisplayLayout";
 
@@ -56,9 +57,19 @@ const RenderForm: NextPageWithLayout<RenderFormProps> = ({
       </Head>
       <div className={classes}>
         <h1>{formTitle}</h1>
-        <Form formRecord={formRecord} language={language} router={router} t={t}>
-          {currentForm}
-        </Form>
+        <GCFormsProvider formRecord={formRecord}>
+          <Form
+            formRecord={formRecord}
+            language={language}
+            router={router}
+            t={t}
+            renderSubmit={({ validateForm, fallBack }) => {
+              return <NextButton validateForm={validateForm} fallBack={fallBack} />;
+            }}
+          >
+            {currentForm}
+          </Form>
+        </GCFormsProvider>
       </div>
     </>
   );

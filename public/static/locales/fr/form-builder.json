@@ -699,5 +699,19 @@
     "description": "Veuillez télécharger une copie du formulaire et réessayer ou",
     "supportLink": "contacter l'équipe de soutien",
     "errorCode": "Code d'erreur : {{code}}"
+  },
+  "addConditionalRules": {
+    "modalTitle": "Ajouter une règle à une question",
+    "modalTitleEdit": "Modifier les règles",
+    "modalDescription": "Afficher des champs de saisie supplémentaires en fonction de la sélection d'une option spécifique. Ceci s'applique aux questions à choix unique, à choix multiples ou à liste déroulante.",
+    "optionTitle": "Si l'option sélectionnée est :",
+    "questionTitle": "Afficher la question :",
+    "addCustomRules": "Ajouter une règle",
+    "editCustomRules": "Modifier les règles",
+    "addAnotherRule": "Ajouter une autre règle",
+    "removeRule": "Supprimer",
+    "addOther": "Ajouter un champ de saisi pour  « Autre »",
+    "other": "Autre ",
+    "show": "Afficher :"
   }
 }

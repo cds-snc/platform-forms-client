@@ -3,7 +3,7 @@ Les conditions ci-dessous s’appliquent à l’utilisation de Formulaires GC, u
 
 ## Acceptation de toutes les conditions et risques  
 
-Vous devez accepter l’[accord sur les niveaux de service](/fr/sla), y compris le processus de soutien, le temps de fonctionnement de l’application, les mesures de sécurité, etc. 
+Vous devez accepter la [déclaration sur la protection des renseignements personnels](https://articles.alpha.canada.ca/forms-formulaires/fr/declaration-sur-la-protection-des-renseignements-personnels/) et l’[accord sur les niveaux de service](/fr/sla), y compris le processus de soutien, le temps de fonctionnement de l’application, les mesures de sécurité, etc. 
 
 Nous pouvons :
 - suspendre votre compte en raison d’une utilisation abusive de Formulaires GC. Les cas d’utilisation abusive comprennent le non-respect des présentes conditions d’utilisation ou encore le non-respect des politiques et procédures de votre ministère ou organisme sur l’utilisation de produits logiciels.
@@ -25,6 +25,7 @@ Vous avez pour responsabilité :
 - de gérer tout document illégitime téléversé et soumis par les utilisateurs finaux ou utilisatrices finales (p. ex. : du contenu inapproprié ou dérangeant).
 - de mettre en place des mesures d’analyse de contenu pour les soumissions avec téléversement de fichier afin de réduire le risque de virus ou de logiciel malveillant (p. ex. : détection de virus assurée par les services ministériels d’hébergement de courriels).
 - de répondre aux conséquences opérationnelles ou aux conséquences sur le service du téléversement par des utilisateurs finaux ou utilisatrices finales de documents en guise de soumission à des fins de pollupostage.
+- d’accepter [les conditions d’utilisation de Notification GC](https://notification.canada.ca/conditions-dutilisation). 
 
 ### Réponses extraites de la base de données (jusqu’à Protégé B) 
 
@@ -33,7 +34,6 @@ Vous avez pour responsabilité :
 - d’accuser réception des réponses au formulaire et d’en enregistrer une copie dans les 45 jours suivant la réception d’une réponse.
 - de signaler tout problème lié aux réponses enregistrées.
 - de traiter, d'ouvrir et d’enregistrer les réponses aux formulaires conformément à votre calendrier de conservation et d’élimination.
-- d’accepter [les conditions d’utilisation de Notification GC](https://notification.canada.ca/conditions-dutilisation). 
 
 ## Pratique de sécurité en continu
 
