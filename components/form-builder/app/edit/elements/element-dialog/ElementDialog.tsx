@@ -7,7 +7,6 @@ import { ElementOption, ElementOptionsFilter } from "../../../../types";
 import { Button } from "@components/globals";
 import { Groups } from "@components/form-builder/hooks/useElementOptions";
 import { ElementFilters } from "./ElementFilters";
-import { DropdownElementFilters } from "./DropdownElementFilters";
 
 const Header = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -18,7 +17,7 @@ const Header = ({ children }: { children: React.ReactNode }) => {
 };
 
 const Body = ({ children }: { children: React.ReactNode }) => {
-  return <div className="flex py-[70px]">{children}</div>;
+  return <div className="flex w-full py-[70px]">{children}</div>;
 };
 
 const Footer = ({ children }: { children: React.ReactNode }) => {
@@ -86,15 +85,11 @@ export const ElementDialog = ({
   }, [handleAdd]);
 
   return (
-    <Dialog dialogRef={dialog} handleClose={handleClose} className="max-w-[800px]">
-      <div className="relative">
+    <Dialog dialogRef={dialog} handleClose={handleClose} className="flex max-w-[800px]">
+      <div className="relative flex w-full">
         <Header>
           <h4>Add elements to your page</h4>
           <ElementFilters setSelectedGroups={setSelectedGroups} selectedGroups={selectedGroups} />
-          {/* <DropdownElementFilters
-            setSelectedGroups={setSelectedGroups}
-            selectedGroups={selectedGroups}
-          /> */}
         </Header>
 
         <Body>
