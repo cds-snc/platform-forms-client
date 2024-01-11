@@ -157,7 +157,6 @@
     "organization-title": "Titre du poste",
     "tel": "Numéro de téléphone",
     "postal-code": "Code postal ou zip",
-    "street-address": "Adresse complète (y compris les lignes 1 à 3 de l'adresse)",
     "url": "Adresse du site Web"
   },
   "autocompleteWhenNotToUse": {
