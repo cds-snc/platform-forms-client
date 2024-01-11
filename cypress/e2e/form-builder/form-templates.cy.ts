@@ -47,7 +47,7 @@ describe("Test FormBuilder", () => {
     cy.get('[data-testid="address"]').click();
     cy.get("button").contains("Select block").click();
 
-    cy.get('[data-testid="autocomplete-2"]').should("contain", "Full street address");
+    cy.get('[data-testid="autocomplete-2"]').should("contain", "Address line 1");
     cy.get('[data-testid="autocomplete-3"]').should("contain", "City, town, community");
     cy.get('[data-testid="autocomplete-4"]').should("contain", "Province, State");
     cy.get('[data-testid="autocomplete-5"]').should("contain", "Postal or zip");
@@ -55,7 +55,7 @@ describe("Test FormBuilder", () => {
     cy.visitPage("/form-builder/preview");
     cy.get('[data-testid="textInput"]').each(($el, index) => {
       if (index === 0) {
-        cy.wrap($el).should("have.attr", "autocomplete", "street-address");
+        cy.wrap($el).should("have.attr", "autocomplete", "address-line1");
       } else if (index === 1) {
         cy.wrap($el).should("have.attr", "autocomplete", "address-level2");
       } else if (index === 2) {

@@ -27,7 +27,6 @@ describe("Test FormBuilder autocomplete props", () => {
     ["organization-title", "Job title"],
     ["tel", "Phone number"],
     ["postal-code", "Postal or zip code"],
-    ["street-address", "Full street address (includes address lines 1-3)"],
     ["url", "Website address"],
   ];
 
