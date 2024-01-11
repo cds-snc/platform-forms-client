@@ -13,12 +13,6 @@ import { Response, Responses, FileInputResponse, SubmissionRequestBody } from "@
 import { ProcessedFile, SubmissionParsedRequest } from "@lib/types/submission-types";
 import { headers } from "next/headers";
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
 const lambdaClient = new LambdaClient({
   region: "ca-central-1",
   retryMode: "standard",
