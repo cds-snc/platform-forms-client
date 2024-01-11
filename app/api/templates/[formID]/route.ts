@@ -12,7 +12,7 @@ import {
 
 import { middleware, jsonValidator, sessionExists } from "@lib/middleware";
 import templatesSchema from "@lib/middleware/schemas/templates.schema.json";
-import { type NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import {
   layoutIDValidator,
   subElementsIDValidator,
@@ -30,8 +30,8 @@ import { logMessage } from "@lib/logger";
 
 class MalformedAPIRequest extends Error {}
 
-const runValidationCondition = async (req: NextRequest) => {
-  return (await req.json()).formConfig !== undefined;
+const runValidationCondition = async (body: Record<string, unknown>) => {
+  return body.formConfig !== undefined;
 };
 
 export const GET = middleware(
@@ -134,7 +134,7 @@ export const PUT = middleware(
         closingDate,
         users,
         sendResponsesToVault,
-      }: PutApiProps = await req.json();
+      }: PutApiProps = props.body;
 
       const formID = props.context?.params?.formID;
 

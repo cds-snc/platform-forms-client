@@ -92,8 +92,8 @@ interface ApiProps {
  *
  * @returns
  */
-export const POST = middleware([validAuthorizationHeader()], async (req) => {
-  const { submissionID, deliveryStatus }: ApiProps = await req.json();
+export const POST = middleware([validAuthorizationHeader()], async (req, props) => {
+  const { submissionID, deliveryStatus }: ApiProps = props.body;
 
   if (submissionID === undefined || deliveryStatus === undefined) {
     return NextResponse.json(

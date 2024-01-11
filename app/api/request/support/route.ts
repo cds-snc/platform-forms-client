@@ -28,7 +28,7 @@ export const POST = middleware([csrfProtected()], async (req, props) => {
     branch,
     jobTitle,
     language = "en",
-  }: APIProps = await req.json();
+  }: APIProps = props.body;
 
   //Mandatory fields
   if (

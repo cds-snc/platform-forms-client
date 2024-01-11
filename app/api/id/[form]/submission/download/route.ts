@@ -84,7 +84,7 @@ export const POST = middleware([sessionExists()], async (req, props) => {
     if (fullFormTemplate === null)
       return NextResponse.json({ error: "Form Not Found" }, { status: 404 });
 
-    const data: APIProps = await req.json();
+    const data: APIProps = props.body;
     const ids: string[] = data.ids?.split(",") ?? [];
 
     if (ids.length > responseConfirmLimit) {

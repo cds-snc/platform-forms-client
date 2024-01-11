@@ -12,7 +12,7 @@ export const POST = middleware([sessionExists()], async (req, props) => {
     const host = reqHeaders.get("host");
 
     const { emails, form, filename }: { emails?: string[]; form?: string; filename?: string } =
-      await req.json();
+      props.body;
     if (!emails || !form || !filename) {
       return NextResponse.json({ error: "Malformed request" }, { status: 400 });
     }

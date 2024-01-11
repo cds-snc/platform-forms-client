@@ -14,10 +14,10 @@ interface APIProps {
   confirmationCode?: string;
 }
 
-export const POST = middleware([csrfProtected()], async (req) => {
+export const POST = middleware([csrfProtected()], async (req, props) => {
   const { COGNITO_REGION, COGNITO_APP_CLIENT_ID } = process.env;
 
-  const { username, password, confirmationCode }: APIProps = await req.json();
+  const { username, password, confirmationCode }: APIProps = props.body;
 
   if (!username || !password || !confirmationCode) {
     return NextResponse.json(

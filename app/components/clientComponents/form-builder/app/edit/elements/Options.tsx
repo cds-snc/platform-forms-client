@@ -8,7 +8,7 @@ import { Option } from "./Option";
 import { Button } from "@clientComponents/globals";
 import { FormElementWithIndex } from "../../../types";
 import { ModalRules } from "../../edit/ModalRules";
-import { ConditionalIndicatorOption, AddOther } from "@components/form-builder/app/shared";
+import { ConditionalIndicatorOption, AddOther } from "@clientComponents/form-builder/app/shared";
 
 const AddButton = ({ index, onClick }: { index: number; onClick: (index: number) => void }) => {
   const { t } = useTranslation("form-builder");

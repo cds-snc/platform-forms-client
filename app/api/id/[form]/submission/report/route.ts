@@ -192,7 +192,7 @@ export const PUT = middleware(
       );
 
     const formId = props.context?.params?.form;
-    const { entries, description, language = "en" }: APIProps = await req.json();
+    const { entries, description, language = "en" }: APIProps = props.body;
 
     if (Array.isArray(formId) || !formId || !Array.isArray(entries) || !description || !entries) {
       return NextResponse.json({ error: "Bad request" }, { status: 400 });

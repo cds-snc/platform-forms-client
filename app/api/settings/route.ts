@@ -26,16 +26,23 @@ export const GET = middleware(
 
 export const POST = middleware(
   [sessionExists(), jsonValidator(settingSchema)],
-  async (req, props) => {
+  async (_, props) => {
     try {
       const { session } = props as WithRequired<MiddlewareProps, "session">;
       const ability = createAbility(session);
 
-      const setting = await req.json();
+      const setting = props.body;
       if (!setting.nameEn || !setting.nameFr || !setting.internalId)
         return NextResponse.json({ error: "Malformed Request" }, { status: 400 });
 
-      const createdSetting = await createAppSetting(ability, setting);
+      const createdSetting = await createAppSetting(
+        ability,
+        setting as {
+          internalId: string;
+          nameEn: string;
+          nameFr: string;
+        }
+      );
       return NextResponse.json(createdSetting);
     } catch (err) {
       logMessage.error(err);

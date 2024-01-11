@@ -54,7 +54,7 @@ export const cleanAngleBrackets: PreValidatePropertyFunction = (object, key) => 
 };
 
 export const jsonValidator = (schema: Schema, options?: ValidateOptions): MiddlewareRequest => {
-  return async (req: NextRequest): Promise<MiddlewareReturn> => {
+  return async (req: NextRequest, reqBody: Record<string, unknown>): Promise<MiddlewareReturn> => {
     try {
       if (
         req.method === "GET" ||
@@ -63,14 +63,10 @@ export const jsonValidator = (schema: Schema, options?: ValidateOptions): Middle
         return { next: true };
       }
 
-      const requestBody = await req.json();
+      const requestBody = reqBody;
 
       // If there is no object to test, fail quickly
-      if (
-        !requestBody &&
-        typeof requestBody === "object" &&
-        Object.keys(requestBody).length === 0
-      ) {
+      if (typeof requestBody === "object" && Object.keys(requestBody).length === 0) {
         return {
           next: false,
           response: NextResponse.json(
@@ -88,7 +84,6 @@ export const jsonValidator = (schema: Schema, options?: ValidateOptions): Middle
         schema,
         options?.noHTML ? { preValidateProperty: htmlChecker } : undefined
       );
-
       if (validatorResult.valid) {
         return { next: true };
       } else {
@@ -99,10 +94,14 @@ export const jsonValidator = (schema: Schema, options?: ValidateOptions): Middle
 
       return {
         next: false,
-        response: NextResponse.json({
-          error: `JSON Validation Error: ${validationError.message}`,
-          status: 400,
-        }),
+        response: NextResponse.json(
+          {
+            error: `JSON Validation Error: ${validationError.message}`,
+          },
+          {
+            status: 400,
+          }
+        ),
       };
     }
   };

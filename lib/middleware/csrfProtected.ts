@@ -1,13 +1,13 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
 import axios from "axios";
+import { headers } from "next/headers";
 
 export const csrfProtected = (): MiddlewareRequest => {
   return async (req: NextRequest): Promise<MiddlewareReturn> => {
     const csrfToken = await internalCsrfToken(req).catch(() => "");
-    const csrfCookie = req.cookies.get("x-csrf-token") || ""; // Ensure a string value for csrfCookie
-
-    if (csrfToken && csrfToken === csrfCookie) {
+    const csrfHeader = headers().get("x-csrf-token") || ""; // Ensure a string value for csrfCookie
+    if (csrfToken && csrfToken === csrfHeader) {
       // Compare csrfToken with csrfCookie
       return { next: true };
     } else {
@@ -21,7 +21,7 @@ export const csrfProtected = (): MiddlewareRequest => {
 
 const internalCsrfToken = async (req: NextRequest): Promise<string> => {
   const csrfUrl = `${process.env.NEXTAUTH_URL}/api/auth/csrf`;
-  const cookies = req.cookies.getAll() as unknown as string[];
+  const cookies = req.cookies as unknown as string;
   const csrfToken: string | undefined = await axios
     .get(csrfUrl, { headers: { cookie: cookies } })
     .then((res) => res.data.csrfToken);

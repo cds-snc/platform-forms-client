@@ -1,14 +1,12 @@
 import { getAppSession } from "@api/auth/authConfig";
-import { Session } from "next-auth";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { serverTranslation } from "@i18n";
-import { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from "next";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import jwt from "jsonwebtoken";
-import { TemporaryTokenPayload, UserAbility } from "../types";
-import { authOptions } from "@api/auth/authConfig";
+import { TemporaryTokenPayload } from "../types";
 import { AccessControlError, createAbility } from "../privileges";
+import { logMessage } from "@lib/logger";
 
 // Helpful to check whether a referer is local vs. an external URL
 // Note: a negated version of https://stackoverflow.com/questions/10687099/how-to-test-if-a-url-string-is-absolute-or-relative
@@ -35,6 +33,8 @@ export async function requireAuthentication() {
     const session = await getAppSession();
     const headersList = headers();
     const currentPath = headersList.get("x-path")?.replace(`/${locale}`, "") ?? "/";
+
+    //logMessage.debug(`session: ${JSON.stringify(session)}`);
 
     if (!session) {
       // If no user, redirect to login

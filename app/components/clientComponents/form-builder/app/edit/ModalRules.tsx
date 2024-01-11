@@ -1,11 +1,11 @@
 "use client";
 import React, { useEffect } from "react";
-import { useTranslation } from "next-i18next";
+import { useTranslation } from "@i18n/client";
 
 import { Modal, ModalButton, ModalFormRules } from "./index";
 import { FormElementWithIndex } from "../../types";
 import { useTemplateStore, useModalRulesStore } from "../../store";
-import { Button } from "@components/globals";
+import { Button } from "@clientComponents/globals";
 import { useRefsContext } from "@formbuilder/app/edit/RefsContext";
 import { getPathString } from "@formbuilder/getPath";
 import {

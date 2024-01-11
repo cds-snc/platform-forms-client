@@ -15,7 +15,7 @@ export const POST = middleware([sessionExists()], async (req, props) => {
   try {
     const { session } = props as WithRequired<MiddlewareProps, "session">;
 
-    const { managerEmail, department, goals, language = "en" }: APIProps = await req.json();
+    const { managerEmail, department, goals, language = "en" }: APIProps = props.body;
 
     if (!managerEmail || !department || !goals) {
       NextResponse.json({ error: "Malformed request" }, { status: 400 });

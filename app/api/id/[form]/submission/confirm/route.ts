@@ -152,11 +152,11 @@ export const PUT = middleware(
 
     const formId = props.context?.params.form;
 
-    if (Array.isArray(formId) || !formId || !Array.isArray(req.body)) {
+    if (Array.isArray(formId) || !formId || !Array.isArray(props.body)) {
       return NextResponse.json({ error: "Bad request" }, { status: 400 });
     }
 
-    const confirmationCodes = req.body as string[];
+    const confirmationCodes = props.body;
 
     if (confirmationCodes.length > 50) {
       return NextResponse.json(

@@ -19,8 +19,8 @@ import { logMessage } from "@lib/logger";
 
 class MalformedAPIRequest extends Error {}
 
-const runValidationCondition = async (req: NextRequest) => {
-  return (await req.json()).formConfig !== undefined;
+const runValidationCondition = async (body: Record<string, unknown>) => {
+  return body.formConfig !== undefined;
 };
 
 export const GET = middleware(
@@ -89,14 +89,13 @@ export const POST = middleware(
       jsonKey: "formConfig",
     }),
   ],
-  async (req, props) => {
+  async (_, props) => {
     try {
       const { session } = props as WithRequired<MiddlewareProps, "session">;
 
       const ability = createAbility(session);
 
-      const { formConfig, name, deliveryOption, securityAttribute }: PostApiProps =
-        await req.json();
+      const { formConfig, name, deliveryOption, securityAttribute }: PostApiProps = props.body;
 
       if (formConfig) {
         const response = await createTemplate({

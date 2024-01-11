@@ -14,11 +14,14 @@ export type UploadResult = {
 
 export interface MiddlewareReturn {
   next: boolean;
-  props?: MiddlewareProps;
+  props?: Record<string, unknown>;
   response?: NextResponse;
 }
 
-export type MiddlewareRequest = (req: NextRequest) => Promise<MiddlewareReturn>;
+export type MiddlewareRequest = (
+  req: NextRequest,
+  reqBody: Record<string, unknown>
+) => Promise<MiddlewareReturn>;
 
 export interface MiddlewareProps {
   formID?: string;
@@ -28,6 +31,7 @@ export interface MiddlewareProps {
   context?: {
     params: Record<string, string | string[]>;
   };
+  body: Record<string, unknown>;
 }
 
 export type WithRequired<T, K extends keyof T> = T & Required<Pick<T, K>>;

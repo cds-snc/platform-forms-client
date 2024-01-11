@@ -1,9 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
-import { FormElement, FormElementTypes, FormProperties } from "@lib/types/form-types";
+import { FormElement, FormElementTypes } from "@lib/types/form-types";
 
 export type ValidateOptions = {
-  runValidationIf?: (req: NextRequest) => Promise<boolean>;
+  runValidationIf?: (body: Record<string, unknown>) => Promise<boolean>;
   jsonKey: string;
 };
 
@@ -13,14 +13,24 @@ export type ValidateOptions = {
  * @returns MiddlewareReturn
  */
 export const uniqueIDValidator = (options?: ValidateOptions): MiddlewareRequest => {
-  return async (req: NextRequest): Promise<MiddlewareReturn> => {
+  return async (req: NextRequest, reqBody: Record<string, unknown>): Promise<MiddlewareReturn> => {
     if ((await options?.runValidationIf?.(req)) === false) {
       return { next: true };
     }
-    const requestBody = await req.json();
-    const formProperties: FormProperties = options?.jsonKey
-      ? requestBody[options.jsonKey]
-      : req.body;
+    const requestBody = reqBody as {
+      [key: string]: {
+        elements?: FormElement[];
+      };
+    };
+
+    const formProperties = options?.jsonKey ? requestBody[options.jsonKey] : requestBody;
+
+    if (!formProperties.elements || !Array.isArray(formProperties.elements))
+      return {
+        next: false,
+        response: NextResponse.json({ error: "Malformed request" }, { status: 400 }),
+      };
+
     const elementIDs: Array<number> = formProperties.elements.map((element) => {
       return element.id;
     });
@@ -32,10 +42,14 @@ export const uniqueIDValidator = (options?: ValidateOptions): MiddlewareRequest 
     } else {
       return {
         next: false,
-        response: NextResponse.json({
-          error: `JSON Validation Error: Duplicate IDs detected: ${duplicateElementIDs.join()}`,
-          status: 400,
-        }),
+        response: NextResponse.json(
+          {
+            error: `JSON Validation Error: Duplicate IDs detected: ${duplicateElementIDs.join()}`,
+          },
+          {
+            status: 400,
+          }
+        ),
       };
     }
   };
@@ -47,15 +61,31 @@ export const uniqueIDValidator = (options?: ValidateOptions): MiddlewareRequest 
  * @returns MiddlewareReturn
  */
 export const layoutIDValidator = (options?: ValidateOptions): MiddlewareRequest => {
-  return async (req: NextRequest): Promise<MiddlewareReturn> => {
-    if (options?.runValidationIf?.(req) === false) {
+  return async (req: NextRequest, reqBody: Record<string, unknown>): Promise<MiddlewareReturn> => {
+    if ((await options?.runValidationIf?.(req)) === false) {
       return { next: true };
     }
 
-    const requestBody = await req.json();
-    const formProperties: FormProperties = options?.jsonKey
-      ? requestBody[options.jsonKey]
-      : req.body;
+    const requestBody = reqBody as {
+      [key: string]: {
+        elements?: FormElement[];
+        layout?: Array<number>;
+      };
+    };
+
+    const formProperties = options?.jsonKey ? requestBody[options.jsonKey] : requestBody;
+
+    if (
+      !formProperties.elements ||
+      !formProperties.layout ||
+      !Array.isArray(formProperties.elements) ||
+      !Array.isArray(formProperties.layout)
+    )
+      return {
+        next: false,
+        response: NextResponse.json({ error: "Malformed request" }, { status: 400 }),
+      };
+
     const elementIDs: Array<number> = formProperties.elements.map((element) => {
       return element.id;
     });
@@ -67,10 +97,14 @@ export const layoutIDValidator = (options?: ValidateOptions): MiddlewareRequest 
     } else {
       return {
         next: false,
-        response: NextResponse.json({
-          error: `JSON Validation Error: Layout IDs not found: ${missingLayoutIDs.join()}`,
-          status: 400,
-        }),
+        response: NextResponse.json(
+          {
+            error: `JSON Validation Error: Layout IDs not found: ${missingLayoutIDs.join()}`,
+          },
+          {
+            status: 400,
+          }
+        ),
       };
     }
   };
@@ -82,14 +116,23 @@ export const layoutIDValidator = (options?: ValidateOptions): MiddlewareRequest 
  * @returns MiddlewareReturn
  */
 export const subElementsIDValidator = (options?: ValidateOptions): MiddlewareRequest => {
-  return async (req: NextRequest): Promise<MiddlewareReturn> => {
-    if (options?.runValidationIf?.(req) === false) {
+  return async (req: NextRequest, reqBody: Record<string, unknown>): Promise<MiddlewareReturn> => {
+    if ((await options?.runValidationIf?.(req)) === false) {
       return { next: true };
     }
-    const requestBody = await req.json();
-    const formProperties: FormProperties = options?.jsonKey
-      ? requestBody[options.jsonKey]
-      : req.body;
+    const requestBody = reqBody as {
+      [key: string]: {
+        elements?: FormElement[];
+      };
+    };
+
+    const formProperties = options?.jsonKey ? requestBody[options.jsonKey] : requestBody;
+
+    if (!formProperties.elements || !Array.isArray(formProperties.elements))
+      return {
+        next: false,
+        response: NextResponse.json({ error: "Malformed request" }, { status: 400 }),
+      };
 
     const dynamicRowElements: Array<FormElement> = formProperties.elements.filter((element) => {
       return element.type === FormElementTypes.dynamicRow;
@@ -119,19 +162,27 @@ export const subElementsIDValidator = (options?: ValidateOptions): MiddlewareReq
     if (duplicateSubElementIDs.length > 0) {
       return {
         next: false,
-        response: NextResponse.json({
-          error: `JSON Validation Error: Duplicate subElement IDs detected: ${duplicateSubElementIDs.join()}`,
-          status: 400,
-        }),
+        response: NextResponse.json(
+          {
+            error: `JSON Validation Error: Duplicate subElement IDs detected: ${duplicateSubElementIDs.join()}`,
+          },
+          {
+            status: 400,
+          }
+        ),
       };
     }
     if (unmatchedSubElementIDs.length > 0) {
       return {
         next: false,
-        response: NextResponse.json({
-          error: `JSON Validation Error: Incorrect subElement IDs detected: ${unmatchedSubElementIDs.join()}`,
-          status: 400,
-        }),
+        response: NextResponse.json(
+          {
+            error: `JSON Validation Error: Incorrect subElement IDs detected: ${unmatchedSubElementIDs.join()}`,
+          },
+          {
+            status: 400,
+          }
+        ),
       };
     }
     return { next: true };

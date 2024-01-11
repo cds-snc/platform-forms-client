@@ -15,10 +15,10 @@ interface APIProps {
   name?: string;
 }
 
-export const POST = middleware([csrfProtected()], async (req) => {
+export const POST = middleware([csrfProtected()], async (req, props) => {
   const { COGNITO_REGION, COGNITO_APP_CLIENT_ID } = process.env;
 
-  const { username, password, name }: APIProps = await req.json();
+  const { username, password, name }: APIProps = props.body;
 
   // craft registration params for the SignUpCommand
   if (!username || !password || !name) {

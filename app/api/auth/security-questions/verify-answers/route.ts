@@ -19,8 +19,8 @@ export const POST = middleware(
       jsonKey: "questionsWithAssociatedAnswers",
     }),
   ],
-  async (req: NextRequest) => {
-    const { email, questionsWithAssociatedAnswers }: VerifyAnswersRequest = await req.json();
+  async (req: NextRequest, props) => {
+    const { email, questionsWithAssociatedAnswers }: VerifyAnswersRequest = props.body;
 
     if (!email || !questionsWithAssociatedAnswers) {
       return NextResponse.json({ error: "Malformed request" }, { status: 400 });

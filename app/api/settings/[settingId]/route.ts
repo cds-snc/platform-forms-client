@@ -30,7 +30,7 @@ export const PUT = middleware(
       const { session } = props as WithRequired<MiddlewareProps, "session">;
       const ability = createAbility(session);
 
-      const setting = await req.json();
+      const setting = props.body;
       if (!setting.nameEn || !setting.nameFr || !setting.internalId)
         return NextResponse.json({ error: "Malformed Request" }, { status: 400 });
 

@@ -17,7 +17,9 @@ export const middleware = (
     context: { params: Record<string, string | string[]> }
   ): Promise<NextResponse> => {
     try {
-      let props = { context };
+      let props = {};
+      const reqBody = ((await req.json()) ?? {}) as Record<string, unknown>;
+
       for (const middlewareLayer of middlewareArray) {
         const {
           next: pass,
@@ -25,7 +27,7 @@ export const middleware = (
           response: layerResponse,
           // Middleware is run sequentially
           // eslint-disable-next-line no-await-in-loop
-        } = await middlewareLayer(req);
+        } = await middlewareLayer(req, reqBody);
         if (!pass) {
           if (layerResponse) {
             return layerResponse;
@@ -36,7 +38,7 @@ export const middleware = (
 
         props = { ...props, ...middlewareProps };
       }
-      return handler(req, props);
+      return handler(req, { ...props, body: reqBody, context });
     } catch (e) {
       logMessage.error(e as Error);
       return NextResponse.json({ error: "Server Middleware Error" }, { status: 500 });

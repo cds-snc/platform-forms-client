@@ -312,9 +312,9 @@ const processFormData = async (
   }
 };
 
-export const POST = middleware([csrfProtected()], async (req) => {
+export const POST = middleware([csrfProtected()], async (req, props) => {
   try {
-    const incomingFormJSON = (await req.json()) as SubmissionRequestBody;
+    const incomingFormJSON = props.body as SubmissionRequestBody;
 
     // Ensure required information is present
 

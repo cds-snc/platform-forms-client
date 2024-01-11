@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { middleware, sessionExists } from "@lib/middleware";
 import { getUsers, updateActiveStatus } from "@lib/users";
-import { MiddlewareProps, WithRequired, UserAbility } from "@lib/types";
+import { MiddlewareProps, WithRequired } from "@lib/types";
 
 import { createAbility, updatePrivilegesForUser, AccessControlError } from "@lib/privileges";
 
@@ -30,13 +30,13 @@ export const PUT = middleware([sessionExists()], async (req, props) => {
 
     const ability = createAbility(session);
 
-    const reqBody = await req.json();
+    const reqBody = props.body;
 
     // Update active Status
 
     if ("active" in reqBody) {
-      const { userID, active } = reqBody;
-      if (typeof userID === "undefined" || typeof active === "undefined") {
+      const { userID, active }: { userID?: string; active?: boolean } = reqBody;
+      if (!userID || typeof active === "undefined") {
         return NextResponse.json({ error: "Malformed Request" }, { status: 400 });
       }
 
@@ -48,11 +48,7 @@ export const PUT = middleware([sessionExists()], async (req, props) => {
 
     // Update Privileges
     const { userID, privileges } = reqBody;
-    if (
-      typeof userID === "undefined" ||
-      typeof privileges === "undefined" ||
-      !Array.isArray(privileges)
-    ) {
+    if (!userID || !privileges || !Array.isArray(privileges) || typeof userID !== "string") {
       return NextResponse.json({ error: "Malformed Request" }, { status: 400 });
     }
 

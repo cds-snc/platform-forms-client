@@ -28,10 +28,10 @@ interface APIProps {
   username?: string;
 }
 
-export const POST = middleware([csrfProtected()], async (req) => {
+export const POST = middleware([csrfProtected()], async (req, props) => {
   const { COGNITO_REGION, COGNITO_APP_CLIENT_ID } = process.env;
 
-  const { username }: APIProps = await req.json();
+  const { username }: APIProps = props.body;
 
   if (!username) {
     return NextResponse.json(

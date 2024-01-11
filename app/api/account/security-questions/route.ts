@@ -12,21 +12,26 @@ import {
 import securityQuestionsWithAssociatedAnswersSchema from "@lib/middleware/schemas/security-questions-with-associated-answers.schema.json";
 import { MiddlewareProps, UserAbility, WithRequired } from "@lib/types";
 import { createAbility } from "@lib/privileges";
+import { logMessage } from "@lib/logger";
+import { getAppSession } from "@api/auth/authConfig";
+import { redirect } from "next/navigation";
 
 async function saveUserSecurityAnswers(
   ability: UserAbility,
-  req: NextRequest
+  req: NextRequest,
+  props: MiddlewareProps
 ): Promise<NextResponse> {
   try {
-    const { questionsWithAssociatedAnswers } = await req.json();
+    const { questionsWithAssociatedAnswers } = props.body;
 
     if (!questionsWithAssociatedAnswers) {
       return NextResponse.json({ error: "Malformed request" }, { status: 400 });
     }
 
     await createSecurityAnswers(ability, questionsWithAssociatedAnswers);
-    return NextResponse.json({});
+    return NextResponse.json({ succeed: true });
   } catch (error) {
+    logMessage.debug(error);
     if (error instanceof AlreadyHasSecurityAnswers) {
       return NextResponse.json(
         { error: "Security questions have already been set up" },
@@ -42,21 +47,19 @@ async function saveUserSecurityAnswers(
         { error: "All security questions must be different" },
         { status: 400 }
       );
-    } else {
-      return NextResponse.json(
-        { error: "Failed to create user security answers" },
-        { status: 500 }
-      );
     }
+
+    return NextResponse.json({ error: "Failed to create user security answers" }, { status: 500 });
   }
 }
 
 async function updateUserSecurityAnswer(
   ability: UserAbility,
-  req: NextRequest
+  req: NextRequest,
+  props: MiddlewareProps
 ): Promise<NextResponse> {
   try {
-    const { oldQuestionId, newQuestionId, newAnswer } = await req.json();
+    const { oldQuestionId, newQuestionId, newAnswer } = props.body;
 
     if (
       !oldQuestionId ||
@@ -116,12 +119,12 @@ export const POST = middleware(
   (req, props) => {
     const { session } = props as WithRequired<MiddlewareProps, "session">;
     const ability = createAbility(session);
-    return saveUserSecurityAnswers(ability, req);
+    return saveUserSecurityAnswers(ability, req, props);
   }
 );
 
 export const PUT = middleware([csrfProtected(), sessionExists()], (req, props) => {
   const { session } = props as WithRequired<MiddlewareProps, "session">;
   const ability = createAbility(session);
-  return updateUserSecurityAnswer(ability, req);
+  return updateUserSecurityAnswer(ability, req, props);
 });

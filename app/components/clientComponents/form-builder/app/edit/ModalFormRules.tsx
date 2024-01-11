@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { useTranslation } from "next-i18next";
+import { useTranslation } from "@i18n/client";
 
-import { Button } from "@components/globals";
+import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@formbuilder/store";
 import { ModalProperties } from "../../store/useModalRulesStore";
 import { FormElementWithIndex } from "../../types";
