@@ -1,6 +1,6 @@
+"use client";
 import React, { useRef, useState } from "react";
 import { useTranslation } from "@i18n/client";
-import { NextPageWithLayout } from "old_pages/_app";
 import { Button } from "@clientComponents/globals";
 import { CancelIcon, CircleCheckIcon } from "@clientComponents/icons";
 import { EditSecurityQuestionModal } from "@clientComponents/admin/Profile/EditSecurityQuestionModal";
@@ -90,7 +90,7 @@ const Questions = ({
   );
 };
 
-export const Profile: NextPageWithLayout<ProfileProps> = ({
+export const Profile = ({
   email,
   publishingStatus,
   userQuestions = [],

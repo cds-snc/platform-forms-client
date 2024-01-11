@@ -71,7 +71,7 @@
     "lodash.set": "4.3.2",
     "lodash.unset": "4.5.2",
     "markdown-to-jsx": "7.3.2",
-    "mmmagic": "0.5.3",
+    "mmmagic": "^0.5.3",
     "next": "^14.0.4",
     "next-auth": "4.24.5",
     "node-fetch": "^3.3.2",

@@ -1,3 +1,4 @@
+"use client";
 import { renderToStaticMarkup } from "react-dom/server";
 import { FormResponseSubmissions } from "../types";
 import { ResponseHtmlAggregated } from "./components/ResponseHTMLAggregated";

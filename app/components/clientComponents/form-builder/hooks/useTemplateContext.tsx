@@ -6,7 +6,7 @@ import { useTranslation } from "@i18n/client";
 import { logMessage } from "@lib/logger";
 import { useSession } from "next-auth/react";
 import { toast } from "../app/shared/Toast";
-import { StyledLink } from "@components/globals";
+import { StyledLink } from "@clientComponents/globals";
 import { DownloadFileButton } from "../app/shared/";
 
 interface TemplateApiType {

@@ -9889,7 +9889,7 @@ __metadata:
     lodash.set: "npm:4.3.2"
     lodash.unset: "npm:4.5.2"
     markdown-to-jsx: "npm:7.3.2"
-    mmmagic: "npm:0.5.3"
+    mmmagic: "npm:^0.5.3"
     next: "npm:^14.0.4"
     next-auth: "npm:4.24.5"
     next-router-mock: "npm:^0.9.11"
@@ -12545,7 +12545,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mmmagic@npm:0.5.3":
+"mmmagic@npm:^0.5.3":
   version: 0.5.3
   resolution: "mmmagic@npm:0.5.3"
   dependencies:

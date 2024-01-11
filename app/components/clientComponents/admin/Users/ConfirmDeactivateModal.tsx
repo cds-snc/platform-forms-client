@@ -5,7 +5,7 @@ import { useTranslation } from "@i18n/client";
 import { FormElementTypes } from "@lib/types";
 import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef } from "@clientComponents/form-builder/app/shared";
-import { updateActiveStatus } from "old_pages/[locale]/admin/accounts";
+import { updateActiveStatus } from "app/(gcforms)/[locale]/(app administration)/admin/accounts/clientSide";
 import { useRefresh } from "@lib/hooks";
 import Loader from "@clientComponents/globals/Loader";
 import { Alert } from "@clientComponents/globals";
