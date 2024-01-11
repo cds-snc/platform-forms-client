@@ -1,18 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+import React from "react";
 import { useTranslation } from "next-i18next";
 import { useSession } from "next-auth/react";
+import { cn } from "@lib/utils";
 
 import { Button, StyledLink } from "@components/globals";
 import { useTemplateStore } from "../../store";
 import { useTemplateStatus, useTemplateContext } from "../../hooks";
 import { formatDateTime } from "../../util";
 import { useActivePathname } from "@components/form-builder/hooks";
-import { cn } from "@lib/utils";
-
 import { SavedFailIcon, SavedCheckIcon } from "@components/form-builder/icons";
 
-const Save = ({
+const SaveDraft = ({
   handleSave,
   templateIsDirty,
 }: {
@@ -41,6 +39,39 @@ const Save = ({
   );
 };
 
+export const DateTime = () => {
+  const { updatedAt } = useTemplateStatus();
+  const { t, i18n } = useTranslation(["common", "form-builder"]);
+  const dateTime =
+    (updatedAt && formatDateTime(new Date(updatedAt).getTime(), `${i18n.language}-CA`)) || [];
+
+  if (!dateTime || dateTime.length < 2) {
+    return null;
+  }
+
+  const [date, time] = dateTime;
+
+  return <span>{` - ${t("lastSaved", { ns: "form-builder" })} ${time}, ${date}`}</span>;
+};
+
+export const ErrorSavingForm = () => {
+  const { t, i18n } = useTranslation(["common", "form-builder"]);
+  const supportHref = `/${i18n.language}/form-builder/support`;
+  return (
+    <span className="inline-block">
+      <span className="inline-block px-1">
+        <SavedFailIcon className="inline-block fill-red" />
+      </span>
+      <StyledLink
+        href={supportHref}
+        className="mr-2 !text-red-700 underline hover:no-underline focus:bg-transparent focus:shadow-none active:bg-transparent"
+      >
+        {t("errorSavingForm.failedLink", { ns: "form-builder" })}
+      </StyledLink>
+    </span>
+  );
+};
+
 export const SaveButton = () => {
   const { isPublished, id } = useTemplateStore((s) => ({
     isPublished: s.isPublished,
@@ -49,13 +80,8 @@ export const SaveButton = () => {
 
   const { error, saveForm, templateIsDirty } = useTemplateContext();
   const { activePathname } = useActivePathname();
-
   const { status } = useSession();
-  const { t, i18n } = useTranslation(["common", "form-builder"]);
-  const { isReady, asPath } = useRouter();
-  const [isStartPage, setIsStartPage] = useState(false);
-  const { updatedAt, getTemplateById } = useTemplateStatus();
-  const supportHref = `/${i18n.language}/form-builder/support`;
+  const { getTemplateById } = useTemplateStatus();
 
   const handleSave = async () => {
     const saved = await saveForm();
@@ -64,19 +90,6 @@ export const SaveButton = () => {
       getTemplateById();
     }
   };
-
-  useEffect(() => {
-    if (isReady) {
-      const activePathname = new URL(asPath, location.href).pathname;
-      if (activePathname === "/form-builder") {
-        setIsStartPage(true);
-      } else {
-        setIsStartPage(false);
-      }
-    }
-  }, [asPath, isReady]);
-  const dateTime =
-    (updatedAt && formatDateTime(new Date(updatedAt).getTime(), `${i18n.language}-CA`)) || [];
 
   if (isPublished) {
     return null;
@@ -89,7 +102,7 @@ export const SaveButton = () => {
     return null;
   }
 
-  return !isStartPage && status === "authenticated" ? (
+  return status === "authenticated" ? (
     <div
       data-id={id}
       className={cn(
@@ -100,28 +113,11 @@ export const SaveButton = () => {
       aria-atomic="true"
     >
       {error ? (
-        <span className="inline-block">
-          <span className="inline-block px-1">
-            <SavedFailIcon className="inline-block fill-red" />
-          </span>
-          <StyledLink
-            href={supportHref}
-            className="mr-2 !text-red-700 underline hover:no-underline focus:bg-transparent focus:shadow-none active:bg-transparent"
-          >
-            {t("errorSavingForm.failedLink", { ns: "form-builder" })}
-          </StyledLink>
-        </span>
+        <ErrorSavingForm />
       ) : (
-        <Save handleSave={handleSave} templateIsDirty={templateIsDirty.current} />
+        <SaveDraft handleSave={handleSave} templateIsDirty={templateIsDirty.current} />
       )}
-      <span>
-        {dateTime.length == 2 && (
-          <>
-            {" - "} {t("lastSaved", { ns: "form-builder" })} {dateTime[1]}
-            {", "} {dateTime[0]}
-          </>
-        )}
-      </span>
+      <DateTime />
     </div>
   ) : null;
 };
