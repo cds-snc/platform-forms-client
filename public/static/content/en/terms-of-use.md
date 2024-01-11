@@ -3,7 +3,7 @@ The following terms apply to the use of GC Forms, a product operated by the Cana
 
 ## Accept all conditions and risks 
 
-You must be comfortable with our [service-level agreement](/en/sla), including the support process, application uptime, security measures, etc. 
+You must be comfortable with our [privacy notice](https://articles.alpha.canada.ca/forms-formulaires/privacy-notice-statement/) and [service-level agreement](/en/sla), including the support process, application uptime, security measures, etc. 
 
 We may:
 - Suspend your account if you misuse GC Forms. Misuse includes not following these terms of use or your department or agency’s policies and procedures for using software products. 
@@ -25,6 +25,7 @@ You are responsible for:
 - Managing any non-legitimate documents uploaded and submitted by end users (e.g. inappropriate or disturbing content).
 - Implementing content scanning measures for submissions with file upload to reduce the possibility of viruses or malicious software (e.g. virus scanning done by departmental email services).
 - Addressing service or operational impacts due to end users uploading documents to submissions for the purpose of spamming.
+- Accepting [GC Notify's terms of use](https://notification.canada.ca/terms). 
 
 ### Responses retrieved from the database (up to PROTECTED B) 
 
@@ -33,7 +34,6 @@ You are responsible for:
 - Saving a copy and confirming receipt of your form responses within 45 days of receiving a submission.
 - Reporting any problems with saved form responses.
 - Handling, opening, and saving form responses in accordance with your retention and disposition schedule. 
-- Accepting [GC Notify's terms of use](https://notification.canada.ca/terms). 
 
 ## Practice continuous security
 

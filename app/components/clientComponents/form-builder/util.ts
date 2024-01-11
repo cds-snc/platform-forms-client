@@ -200,7 +200,6 @@ export const autoCompleteFields = [
   "honorific-prefix",
   "honorific-suffix",
   "organization-title",
-  "street-address",
   "address-line1",
   "address-line2",
   "address-line3",

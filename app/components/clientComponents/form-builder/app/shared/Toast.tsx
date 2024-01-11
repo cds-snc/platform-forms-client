@@ -52,11 +52,19 @@ type ToastContext = {
 
 export const ToastContainer = ({
   autoClose = 3000,
+  width = "",
+  containerId = "",
+  limit,
 }: {
   autoClose?: number | false | undefined;
+  width?: string;
+  containerId?: string;
+  limit?: number;
 }) => {
   return (
     <OriginalContainer
+      enableMultiContainer
+      containerId={containerId}
       toastClassName={(context?: ToastContext) => {
         return `${
           contextClass[context?.type || "default"]["background"]
@@ -70,11 +78,13 @@ export const ToastContainer = ({
       }) => {
         return `${contextClass[context?.type || "default"]["text"]} flex text-base`;
       }}
+      style={{ width: width }}
       position={originalToast.POSITION.TOP_CENTER}
       autoClose={autoClose}
       hideProgressBar={true}
       closeOnClick={true}
       transition={Bounce}
+      limit={limit}
       icon={(context?: ToastContext) => {
         return contextClass[context?.type || "default"]["icon"];
       }}
@@ -82,23 +92,27 @@ export const ToastContainer = ({
   );
 };
 
+const toastContent = (message: string | JSX.Element) => {
+  return React.isValidElement(message) ? message : <p className="py-2">{message}</p>;
+};
+
 export const toast = {
-  success: (message: string) => {
-    originalToast.success(<p className="py-2">{message}</p>);
+  success: (message: string | JSX.Element, containerId = "default") => {
+    originalToast.success(toastContent(message), { containerId });
   },
-  error: (message: string) => {
-    originalToast.error(<p className="py-2">{message}</p>);
+  error: (message: string | JSX.Element, containerId = "default") => {
+    originalToast.error(toastContent(message), { containerId });
   },
-  info: (message: string) => {
-    originalToast.info(<p className="py-2">{message}</p>);
+  info: (message: string | JSX.Element, containerId = "default") => {
+    originalToast.info(toastContent(message), { containerId });
   },
-  warn: (message: string) => {
-    originalToast.warn(<p className="py-2">{message}</p>);
+  warn: (message: string | JSX.Element, containerId = "default") => {
+    originalToast.warn(toastContent(message), { containerId });
   },
-  warning: (message: string) => {
-    originalToast.warning(<p className="py-2">{message}</p>);
+  warning: (message: string | JSX.Element, containerId = "") => {
+    originalToast.warning(toastContent(message), { containerId });
   },
-  default: (message: string) => {
-    originalToast(<p className="py-2">{message}</p>);
+  default: (message: string | JSX.Element, containerId = "default") => {
+    originalToast(toastContent(message), { containerId });
   },
 };

@@ -11,6 +11,7 @@ import { DownloadCSV } from "./DownloadCSV";
 import { RichTextEditor } from "../edit/elements/lexical-editor/RichTextEditor";
 import { LanguageLabel } from "./LanguageLabel";
 import { FieldsetLegend, SectionTitle } from ".";
+import { SaveButton } from "../shared/SaveButton";
 
 import { FormElement } from "@lib/types";
 import { alphabet, sortByLayout } from "../../util";
@@ -116,6 +117,10 @@ export const Translate = () => {
         <h1 className="border-0 mb-0 mt-8">{t("translateTitle")}</h1>
         <p>{t("translateDescription")}</p>
         <br />
+
+        <div className="mb-4">
+          <SaveButton />
+        </div>
 
         <div className="mb-8">
           <DownloadCSV />

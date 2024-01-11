@@ -13,6 +13,7 @@ import { useTemplateStore } from "../../store";
 import { getQuestionNumber, sortByLayout } from "../../util";
 import { Panel } from "../settings-modal/panel";
 import { cleanInput } from "@clientComponents/form-builder/util";
+import { SaveButton } from "../shared/SaveButton";
 
 export const Edit = () => {
   const { t } = useTranslation("form-builder");
@@ -86,6 +87,9 @@ export const Edit = () => {
   return (
     <>
       <h1 className="visually-hidden">{t("edit")}</h1>
+      <div className="mb-4">
+        <SaveButton />
+      </div>
       <Panel />
       <RichTextLocked
         className="rounded-t-lg"

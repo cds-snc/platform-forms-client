@@ -39,7 +39,7 @@
       "descriptionFr": "Indiquez votre numéro civique et le nom de la rue, l'appartement ou la suite, ainsi que d'autres détails de l'adresse",
       "placeholderEn": "",
       "placeholderFr": "",
-      "autoComplete": "street-address"
+      "autoComplete": "address-line1"
     }
   },
   {
