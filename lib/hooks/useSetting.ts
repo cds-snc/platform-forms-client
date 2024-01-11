@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 import useSWR from "swr";
 import axios from "axios";

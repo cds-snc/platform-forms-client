@@ -1,3 +1,4 @@
+"use client";
 import React, { createContext, useRef, useContext, useCallback } from "react";
 interface RefStore {
   getRef: (key: string) => React.RefObject<HTMLElement> | undefined;

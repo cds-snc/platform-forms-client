@@ -1,3 +1,4 @@
+"use client";
 import { useEffect } from "react";
 /**
  * Adds an external script resource safely for CORS
