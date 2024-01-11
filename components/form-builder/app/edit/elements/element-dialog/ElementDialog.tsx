@@ -41,18 +41,18 @@ export const ElementDialog = ({
 
   const dialog = useDialogRef();
 
-  const [selectedGroups, setSelectedGroups] = useState<Groups[]>([]);
+  const [selectedGroup, setSelectedGroup] = useState<Groups | "all">("all");
 
   const filterElementsByGroup = (elements: ElementOption[]) => {
-    if (selectedGroups.length === 0) {
+    if (selectedGroup === "all") {
       return elements;
     }
 
-    return elements.filter((element) => selectedGroups.includes(element.group.id as Groups));
+    return elements.filter((element) => selectedGroup === element.group.id);
   };
 
   // @TODO: This is only applying one filter or the other, need to apply both
-  const elementOptions = useElementOptions(filterElements ? filterElements : filterElementsByGroup);
+  const elementOptions = useElementOptions(filterElementsByGroup);
 
   const [selected, setSelected] = useState(0);
 
@@ -89,7 +89,7 @@ export const ElementDialog = ({
       <div className="relative flex w-full">
         <Header>
           <h4>Add elements to your page</h4>
-          <ElementFilters setSelectedGroups={setSelectedGroups} selectedGroups={selectedGroups} />
+          <ElementFilters setSelectedGroup={setSelectedGroup} selectedGroup={selectedGroup} />
         </Header>
 
         <Body>

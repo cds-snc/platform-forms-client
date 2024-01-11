@@ -3,46 +3,31 @@ import { cn } from "@lib/utils";
 import React, { useRef } from "react";
 
 export const ElementFilters = ({
-  setSelectedGroups,
-  selectedGroups,
+  setSelectedGroup,
+  selectedGroup,
 }: {
-  setSelectedGroups: React.Dispatch<React.SetStateAction<Groups[]>>;
-  selectedGroups: Groups[];
+  setSelectedGroup: React.Dispatch<React.SetStateAction<Groups | "all">>;
+  selectedGroup: Groups | "all";
 }) => {
-  const updateSelectedGroups = (
-    group: Groups | "all",
-    pillRef: React.RefObject<HTMLButtonElement>
-  ) => {
-    if (group === "all") {
-      setSelectedGroups([]);
-    } else if (!selectedGroups.includes(group)) {
-      setSelectedGroups([...selectedGroups, group]);
-    } else if (selectedGroups.includes(group)) {
-      setSelectedGroups(selectedGroups.filter((g) => g !== group));
-    }
-    pillRef.current?.focus();
-  };
-
   const Pill = ({ group, children }: { group: Groups | "all"; children: React.ReactNode }) => {
-    let selected = false;
+    const selected = group === selectedGroup;
 
-    const pillRef = useRef(null);
+    const buttonRef = useRef<HTMLButtonElement>(null);
 
-    if (group === "all") {
-      selected = selectedGroups.length === 0;
-    } else {
-      selected = selectedGroups.includes(group);
-    }
+    const updateSelectedGroup = (group: Groups | "all") => {
+      setSelectedGroup(group);
+      buttonRef.current?.focus();
+    };
 
     return (
       <button
-        ref={pillRef}
+        ref={buttonRef}
         className={cn(
           "rounded-full border border-slate-800 bg-white px-4 py-2",
           selected && "bg-blue-800 text-white"
         )}
-        onClick={() => updateSelectedGroups(group, pillRef)}
-        role="checkbox"
+        onClick={() => updateSelectedGroup(group)}
+        role="radio"
         aria-checked={selected}
       >
         {children}
@@ -51,7 +36,11 @@ export const ElementFilters = ({
   };
 
   return (
-    <div className="z-100 mt-4 flex gap-4" aria-label="Filter form elements by type:">
+    <div
+      className="z-100 mt-4 flex gap-4"
+      aria-label="Filter form elements by type:"
+      data-testid="element-filters"
+    >
       <Pill group="all">All</Pill>
       <Pill group={Groups.BASIC}>
         Basic <span className="visually-hidden">questions</span>
