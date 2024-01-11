@@ -698,7 +698,7 @@
     "description": "Download a copy of the form and try again or",
     "supportLink": "contact Support",
     "errorCode": "Error code: {{code}}",
-    "failedLink": "Failed - Contact support"
+    "failedLink": "Saving failed - Contact support"
   },
   "addConditionalRules": {
     "modalTitle": "Add a rule to a question",
