@@ -2,7 +2,6 @@ import React from "react";
 import { useTranslation } from "next-i18next";
 import { DesignIcon, PreviewIcon, PublishIcon, GearIcon, MessageIcon } from "../../icons";
 import { useTemplateContext } from "@components/form-builder/hooks";
-import { SaveButton } from "../shared/SaveButton";
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { useSession } from "next-auth/react";
 import { useActivePathname, cleanPath } from "../../hooks/useActivePathname";
@@ -67,11 +66,6 @@ export const LeftNavigation = () => {
             {t("responsesNavLabel")}
           </NavLink>
         </li>
-        {!isPublished && activePathname === "/form-builder/edit" && (
-          <li>
-            <SaveButton />
-          </li>
-        )}
       </ul>
     </nav>
   );
