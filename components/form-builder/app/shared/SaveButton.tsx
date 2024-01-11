@@ -39,8 +39,7 @@ const SaveDraft = ({
   );
 };
 
-export const DateTime = () => {
-  const { updatedAt } = useTemplateStatus();
+export const DateTime = ({ updatedAt }: { updatedAt: number }) => {
   const { t, i18n } = useTranslation(["common", "form-builder"]);
   const dateTime =
     (updatedAt && formatDateTime(new Date(updatedAt).getTime(), `${i18n.language}-CA`)) || [];
@@ -81,7 +80,7 @@ export const SaveButton = () => {
   const { error, saveForm, templateIsDirty } = useTemplateContext();
   const { activePathname } = useActivePathname();
   const { status } = useSession();
-  const { getTemplateById } = useTemplateStatus();
+  const { updatedAt, getTemplateById } = useTemplateStatus();
 
   const handleSave = async () => {
     const saved = await saveForm();
@@ -117,7 +116,7 @@ export const SaveButton = () => {
       ) : (
         <SaveDraft handleSave={handleSave} templateIsDirty={templateIsDirty.current} />
       )}
-      <DateTime />
+      {updatedAt && <DateTime updatedAt={updatedAt} />}
     </div>
   ) : null;
 };
