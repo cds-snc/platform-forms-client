@@ -1,3 +1,6 @@
+import useArrowKeyNavigation, {
+  Selectors,
+} from "@components/form-builder/hooks/useArrowKeyNavigation";
 import { Groups } from "@components/form-builder/hooks/useElementOptions";
 import { cn } from "@lib/utils";
 import React, { useRef } from "react";
@@ -48,11 +51,18 @@ export const ElementFilters = ({
   selectedGroup: Groups | "all";
   activeGroups: Groups[];
 }) => {
+  const parentRef = useArrowKeyNavigation({
+    selectors: [Selectors.BUTTON],
+    orientation: "horizontal",
+  });
+
   return (
     <div
       className="z-100 mt-4 flex gap-4"
       aria-label="Filter form elements by type:"
       data-testid="element-filters"
+      role="radiogroup"
+      ref={parentRef}
     >
       <Pill selectedGroup={selectedGroup} setSelectedGroup={setSelectedGroup} group="all">
         All
