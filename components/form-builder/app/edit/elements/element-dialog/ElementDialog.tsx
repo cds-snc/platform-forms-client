@@ -8,6 +8,14 @@ import { Button } from "@components/globals";
 import { Groups } from "@components/form-builder/hooks/useElementOptions";
 import { ElementFilters } from "./ElementFilters";
 
+const filterElementsByGroup = (elements: ElementOption[], selectedGroup: Groups | "all") => {
+  if (selectedGroup === "all") {
+    return elements;
+  }
+
+  return elements.filter((element) => selectedGroup === element.group.id);
+};
+
 const Header = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="absolute top-0 z-[1000] min-h-[60px] w-full border-b border-slate-800 bg-violet-100 p-4">
@@ -38,39 +46,42 @@ export const ElementDialog = ({
   filterElements?: ElementOptionsFilter;
 }) => {
   const { t } = useTranslation("form-builder");
-
   const dialog = useDialogRef();
-
+  const [selectedElement, setSelectedElement] = useState(0);
   const [selectedGroup, setSelectedGroup] = useState<Groups | "all">("all");
 
-  const filterElementsByGroup = (elements: ElementOption[]) => {
-    if (selectedGroup === "all") {
-      return elements;
-    }
+  // Retrieve elements applying any initial filters
+  const filteredElements = useElementOptions(filterElements);
 
-    return elements.filter((element) => selectedGroup === element.group.id);
-  };
+  // Retrieve a list of active groups after filtering
+  const activeGroups = Array.from(
+    new Set(filteredElements.map((element) => element.group.id))
+  ) as Groups[];
 
-  // @TODO: This is only applying one filter or the other, need to apply both
-  const elementOptions = useElementOptions(filterElementsByGroup);
-
-  const [selected, setSelected] = useState(0);
+  // Now filter by selected group
+  const elementOptions = filterElementsByGroup(filteredElements, selectedGroup);
 
   const handleChange = useCallback(
     (val: number) => {
-      setSelected(val);
+      setSelectedElement(val);
     },
-    [setSelected]
+    [setSelectedElement]
   );
 
-  const id = elementOptions[selected].id as FormElementTypes;
-  const value = elementOptions[selected].value;
-  const Description = elementOptions[selected].description;
+  const id = elementOptions[selectedElement].id as FormElementTypes;
+  const value = elementOptions[selectedElement].value;
+  const Description = elementOptions[selectedElement].description;
 
   const handleAdd = useCallback(() => {
     handleAddType && handleAddType(id);
     handleClose();
   }, [handleClose, handleAddType, id]);
+
+  // Retain focus on selected filter on change
+  useEffect(() => {
+    const selectedFilter = document.getElementById(`${selectedGroup}-filter`);
+    selectedFilter?.focus();
+  }, [selectedGroup]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -89,7 +100,11 @@ export const ElementDialog = ({
       <div className="relative flex w-full">
         <Header>
           <h4>Add elements to your page</h4>
-          <ElementFilters setSelectedGroup={setSelectedGroup} selectedGroup={selectedGroup} />
+          <ElementFilters
+            setSelectedGroup={setSelectedGroup}
+            selectedGroup={selectedGroup}
+            activeGroups={activeGroups}
+          />
         </Header>
 
         <Body>
