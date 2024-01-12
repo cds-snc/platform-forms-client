@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 import { useActivePathname, cleanPath } from "../../hooks/useActivePathname";
 import { NavLink } from "@components/globals/NavLink";
 import { cn } from "@lib/utils";
+import { LinkButton } from "@components/globals";
 
 const linkHelper = (url: string, activePathname: string) => {
   const baseUrl = "/form-builder";
@@ -32,6 +33,11 @@ export const LeftNavigation = () => {
   return (
     <nav aria-label={t("navLabelFormBuilder")}>
       <ul className="m-0 list-none p-0">
+        <li>
+          <LinkButton.LeftNav href="/form-builder">
+            <PreviewIcon />
+          </LinkButton.LeftNav>
+        </li>
         {!isPublished && (
           <li>
             <NavLink {...linkHelper("/edit", activePathname)} onClick={saveForm}>
