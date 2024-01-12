@@ -14,7 +14,7 @@ export type ValidateOptions = {
  */
 export const uniqueIDValidator = (options?: ValidateOptions): MiddlewareRequest => {
   return async (req: NextRequest, reqBody: Record<string, unknown>): Promise<MiddlewareReturn> => {
-    if ((await options?.runValidationIf?.(req)) === false) {
+    if ((await options?.runValidationIf?.(reqBody)) === false) {
       return { next: true };
     }
     const requestBody = reqBody as {
@@ -62,7 +62,7 @@ export const uniqueIDValidator = (options?: ValidateOptions): MiddlewareRequest 
  */
 export const layoutIDValidator = (options?: ValidateOptions): MiddlewareRequest => {
   return async (req: NextRequest, reqBody: Record<string, unknown>): Promise<MiddlewareReturn> => {
-    if ((await options?.runValidationIf?.(req)) === false) {
+    if ((await options?.runValidationIf?.(reqBody)) === false) {
       return { next: true };
     }
 
@@ -117,7 +117,7 @@ export const layoutIDValidator = (options?: ValidateOptions): MiddlewareRequest 
  */
 export const subElementsIDValidator = (options?: ValidateOptions): MiddlewareRequest => {
   return async (req: NextRequest, reqBody: Record<string, unknown>): Promise<MiddlewareReturn> => {
-    if ((await options?.runValidationIf?.(req)) === false) {
+    if ((await options?.runValidationIf?.(reqBody)) === false) {
       return { next: true };
     }
     const requestBody = reqBody as {

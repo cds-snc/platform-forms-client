@@ -1,5 +1,4 @@
 import axios from "axios";
-import { NextRouter } from "next/router";
 import { logMessage } from "@lib/logger";
 import type { FormikBag } from "formik";
 import {
@@ -128,13 +127,11 @@ export async function submitToAPI(
     {
       formRecord: PublicFormRecord;
       language: string;
-      router: NextRouter;
     },
     Responses
-  >,
-  redirect = true
+  >
 ) {
-  const { language, router, formRecord } = formikBag.props;
+  const { language, formRecord } = formikBag.props;
   const { setStatus } = formikBag;
 
   const formDataObject = buildFormDataObject(formRecord, values);
@@ -155,12 +152,7 @@ export async function submitToAPI(
     })
       .then((serverResponse) => {
         if (serverResponse.data.received === true) {
-          if (!redirect) {
-            return formRecord.id;
-          }
-          router.push({
-            pathname: `/${language}/id/${formRecord.id}/confirmation`,
-          });
+          return formRecord.id;
         } else {
           throw Error("Server submit API returned an error");
         }

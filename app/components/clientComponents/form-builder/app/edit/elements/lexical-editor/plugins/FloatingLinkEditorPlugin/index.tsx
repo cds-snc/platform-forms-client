@@ -20,7 +20,6 @@ import {
   COMMAND_PRIORITY_HIGH,
   COMMAND_PRIORITY_LOW,
   COMMAND_PRIORITY_NORMAL,
-  GridSelection,
   KEY_ESCAPE_COMMAND,
   KEY_TAB_COMMAND,
   LexicalEditor,
@@ -55,7 +54,7 @@ function FloatingLinkEditor({
   const [linkUrl, setLinkUrl] = useState("");
   const [isEditMode, setEditMode] = useState(false);
   const [lastSelection, setLastSelection] = useState<
-    RangeSelection | GridSelection | NodeSelection | BaseSelection | null
+    RangeSelection | NodeSelection | BaseSelection | null
   >(null);
 
   const { t } = useTranslation();

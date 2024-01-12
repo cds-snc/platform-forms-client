@@ -4,7 +4,10 @@ import { MiddlewareProps, WithRequired } from "@lib/types";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { middleware, sessionExists } from "@lib/middleware";
 
-export const GET = middleware([sessionExists()], async (req, props) => {
+// Needed because NextJS attempts to cache the response of this route
+export const dynamic = "force-dynamic";
+
+export const GET = middleware([sessionExists()], async (_, props) => {
   try {
     const { session } = props as WithRequired<MiddlewareProps, "session">;
     const ability = createAbility(session);

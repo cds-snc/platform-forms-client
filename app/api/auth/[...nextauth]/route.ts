@@ -14,6 +14,9 @@ if (
 )
   throw new Error("Missing Cognito Credentials");
 
+// Needed because NextJS attempts to cache the response of this route
+export const dynamic = "force-dynamic";
+
 async function handler(req: NextRequest, context: { params: { nextauth: string[] } }) {
   // Listens for the sign-in action for Cognito to initiate the sign in process
 

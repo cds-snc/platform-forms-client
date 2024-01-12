@@ -15,7 +15,7 @@ interface APIProps {
   name?: string;
 }
 
-export const POST = middleware([csrfProtected()], async (req, props) => {
+export const POST = middleware([csrfProtected()], async (_, props) => {
   const { COGNITO_REGION, COGNITO_APP_CLIENT_ID } = process.env;
 
   const { username, password, name }: APIProps = props.body;

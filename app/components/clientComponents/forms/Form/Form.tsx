@@ -7,7 +7,8 @@ import { submitToAPI } from "@lib/clientHelpers";
 import { useExternalScript, useFlag, useFormTimer } from "@lib/hooks";
 import { Alert, Button, RichText } from "@clientComponents/forms";
 import { logMessage } from "@lib/logger";
-import { useTranslation, TFunction } from "@i18n/client";
+import { useTranslation } from "@i18n/client";
+import { TFunction } from "i18next";
 import axios from "axios";
 import Loader from "../../globals/Loader";
 import classNames from "classnames";
@@ -310,7 +311,7 @@ interface FormProps {
     validateForm: Validate["validateForm"];
     fallBack?: () => JSX.Element;
   }) => JSX.Element;
-  onSuccess?: (id: string) => void;
+  onSuccess: (id: string) => void;
   children?: (JSX.Element | undefined)[] | null;
   t: TFunction;
 }
@@ -335,8 +336,8 @@ export const Form = withFormik<FormProps, Responses>({
     // Needed so the Loader is displayed
     formikBag.setStatus("submitting");
     try {
-      const result = await submitToAPI(values, formikBag, formikBag.props.onSuccess ? false : true);
-      result && formikBag.props.onSuccess && formikBag.props.onSuccess(result);
+      const result = await submitToAPI(values, formikBag);
+      result && formikBag.props.onSuccess(result);
     } catch (err) {
       logMessage.error(err as Error);
     } finally {

@@ -20,7 +20,7 @@ export const Tab = (props: TabProps): React.ReactElement => {
     isActive,
     callback = () => {
       // Note: shallow=true avoids a getServerSideProps call on component update
-      router.push(url, undefined, { shallow: true });
+      router.push(url);
     },
   } = props;
   const router = useRouter();

@@ -4,6 +4,9 @@ import { NextResponse } from "next/server";
 import { MiddlewareProps, WithRequired } from "@lib/types";
 import { getUnprocessedSubmissionsForUser } from "@lib/users";
 
+// Needed because NextJS attempts to cache the response of this route
+export const dynamic = "force-dynamic";
+
 export const GET = middleware([sessionExists()], async (_, props) => {
   try {
     const { session } = props as WithRequired<MiddlewareProps, "session">;

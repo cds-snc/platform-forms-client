@@ -1,6 +1,6 @@
 "use client";
 import React, { Component, ErrorInfo, ReactNode } from "react";
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { ErrorPanel } from "./ErrorPanel";
 
 interface Props {
@@ -14,8 +14,7 @@ interface State {
 
 // use for testing error boundary
 export const TriggerError = () => {
-  const router = useRouter();
-  const { forceError } = router.query;
+  const forceError = useSearchParams().get("forceError");
 
   if (forceError) {
     // Simulate a JS error

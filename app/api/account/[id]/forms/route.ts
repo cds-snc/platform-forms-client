@@ -5,6 +5,9 @@ import { MiddlewareProps, WithRequired } from "@lib/types";
 import { getUser } from "@lib/users";
 import { getAllTemplatesForUser } from "@lib/templates";
 
+// Needed because NextJS attempts to cache the response of this route
+export const dynamic = "force-dynamic";
+
 export const GET = middleware([sessionExists()], async (_, props) => {
   try {
     const { session } = props as WithRequired<MiddlewareProps, "session">;

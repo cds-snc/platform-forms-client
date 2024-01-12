@@ -9,6 +9,7 @@ import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import FormDisplayLayout from "@clientComponents/globals/layouts/FormDisplayLayout";
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
+import { redirect } from "next/navigation";
 
 export async function generateMetadata({
   params: { locale, props },
@@ -75,6 +76,7 @@ export default async function Page({
           <Form
             formRecord={formRecord}
             language={language}
+            onSuccess={(formID) => redirect(`${language}/id/${formID}/confirmation`)}
             t={t}
             renderSubmit={({ validateForm, fallBack }) => {
               return <NextButton validateForm={validateForm} fallBack={fallBack} />;
