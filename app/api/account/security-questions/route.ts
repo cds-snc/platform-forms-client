@@ -13,8 +13,6 @@ import securityQuestionsWithAssociatedAnswersSchema from "@lib/middleware/schema
 import { MiddlewareProps, UserAbility, WithRequired } from "@lib/types";
 import { createAbility } from "@lib/privileges";
 import { logMessage } from "@lib/logger";
-import { getAppSession } from "@api/auth/authConfig";
-import { redirect } from "next/navigation";
 
 async function saveUserSecurityAnswers(
   ability: UserAbility,
@@ -24,12 +22,17 @@ async function saveUserSecurityAnswers(
   try {
     const { questionsWithAssociatedAnswers } = props.body;
 
-    if (!questionsWithAssociatedAnswers) {
-      return NextResponse.json({ error: "Malformed request" }, { status: 400 });
+    if (
+      questionsWithAssociatedAnswers &&
+      Array.isArray(questionsWithAssociatedAnswers) &&
+      questionsWithAssociatedAnswers.every((item) => {
+        return typeof item.questionId === "string" && typeof item.answer === "string";
+      })
+    ) {
+      await createSecurityAnswers(ability, questionsWithAssociatedAnswers);
+      return NextResponse.json({ succeed: true });
     }
-
-    await createSecurityAnswers(ability, questionsWithAssociatedAnswers);
-    return NextResponse.json({ succeed: true });
+    return NextResponse.json({ error: "Malformed request" }, { status: 400 });
   } catch (error) {
     logMessage.debug(error);
     if (error instanceof AlreadyHasSecurityAnswers) {

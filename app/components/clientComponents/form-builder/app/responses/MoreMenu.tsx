@@ -1,11 +1,10 @@
-"use client";
 import React from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { DeleteIcon, DownloadIcon, MoreIcon } from "@clientComponents/icons";
 import axios from "axios";
 import { useTranslation } from "@i18n/client";
 import { logMessage } from "@lib/logger";
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 export const MoreMenu = ({
   formId,
@@ -22,8 +21,8 @@ export const MoreMenu = ({
 }) => {
   const { t } = useTranslation("form-builder-responses");
 
-  const router = useRouter();
-  const [, statusQuery = "new"] = router.query?.params || [];
+  const params = useSearchParams();
+  const statusQuery = params.get("statusQuery") || "new";
 
   const handleDownload = () => {
     const url = `/api/id/${formId}/submission/download?format=html`;

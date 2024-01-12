@@ -2,8 +2,8 @@ import { middleware, csrfProtected } from "@lib/middleware";
 import { type NextRequest, NextResponse } from "next/server";
 import { sendPasswordResetLink } from "@lib/auth";
 
-export const POST = middleware([csrfProtected()], async (request: NextRequest) => {
-  const { email }: { email?: string } = await request.json();
+export const POST = middleware([csrfProtected()], async (request: NextRequest, props) => {
+  const { email }: { email?: string } = props.body;
 
   if (!email) return NextResponse.json({ error: "Malformed request" }, { status: 400 });
 

@@ -5,7 +5,7 @@ import { useField } from "formik";
 import { GenerateElement } from "@lib/formBuilder";
 import { FormElement } from "@lib/types";
 import { Button, Description } from "@clientComponents/forms";
-import { TFunction } from "@i18n/client";
+import { TFunction } from "i18next";
 
 interface DynamicGroupProps {
   name: string;

@@ -26,9 +26,7 @@ export const DeleteButton = (props: DeleteButtonProps): React.ReactElement => {
           try {
             const resp = await action(data);
             if (resp == 200) {
-              router.push({
-                pathname: redirect,
-              });
+              redirect && router.push(redirect);
             } else {
               // Todo show error message on page
               // Error should be logged already in its own action

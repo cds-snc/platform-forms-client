@@ -21,7 +21,7 @@ import {
   Responses,
   Response,
 } from "@lib/types";
-import { TFunction } from "@i18n/client";
+import { TFunction } from "i18next";
 import { getLocalizedProperty } from "@lib/utils";
 
 // This function is used for select/radio/checkbox i18n change of form labels

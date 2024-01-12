@@ -18,7 +18,7 @@ export const middleware = (
   ): Promise<NextResponse> => {
     try {
       let props = {};
-      const reqBody = ((await req.json()) ?? {}) as Record<string, unknown>;
+      const reqBody = (await req.json().catch(() => ({}))) as Record<string, unknown>;
 
       for (const middlewareLayer of middlewareArray) {
         const {

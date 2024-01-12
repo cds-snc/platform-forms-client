@@ -40,7 +40,10 @@ const UserNavLayout = ({
   afterContentWrapper = null,
 }: UserNavLayoutProps) => {
   const { ability } = useAccessControl();
-  const { t } = useTranslation("common");
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation("common");
 
   return (
     <div className="flex min-h-full flex-col bg-gray-soft">
@@ -54,7 +57,7 @@ const UserNavLayout = ({
           <div className="inline-flex gap-4">
             <div className="text-base font-normal not-italic md:text-sm">
               {ability?.can("view", "FormRecord") && (
-                <Link href="/forms">{t("adminNav.myForms")}</Link>
+                <Link href={`/${language}/forms`}>{t("adminNav.myForms")}</Link>
               )}
             </div>
             <LoginMenu />

@@ -27,7 +27,17 @@ describe("Download Table", () => {
     });
 
     const rendered = render(
-      <DownloadTable vaultSubmissions={vaultSubmissions} formId="clg17xha50008efkgfgxa8l4f" />
+      <DownloadTable
+        vaultSubmissions={vaultSubmissions}
+        formId="clg17xha50008efkgfgxa8l4f"
+        formName={""}
+        nagwareResult={null}
+        responseDownloadLimit={0}
+        showDownloadSuccess={""}
+        setShowDownloadSuccess={function (): void {
+          throw new Error("Function not implemented.");
+        }}
+      />
     );
     const table = rendered.getByRole("table");
     expect(table).toHaveAttribute("aria-live", "polite");

@@ -139,7 +139,7 @@ export const Users = ({
       element?.scrollIntoView({ behavior: "smooth" });
       router.replace(`/${locale}/admin/accounts`, { scroll: false });
     }
-  }, [previousUserRef, router]);
+  }, [previousUserRef, router, locale]);
 
   return (
     <>

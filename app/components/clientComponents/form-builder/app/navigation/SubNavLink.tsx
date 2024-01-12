@@ -27,27 +27,24 @@ export const SubNavLink = ({
   const activeClasses =
     "bg-[#475569] !text-white [&_svg]:fill-white ${svgStroke} focus:text-white [&_svg]:focus:stroke-white";
 
-  const { asPath, isReady, activePathname } = useActivePathname();
+  const { asPath, activePathname } = useActivePathname();
   const [active, setActive] = useState(defaultActive);
 
   useEffect(() => {
-    // Check if the router fields are updated client-side
-    if (isReady) {
-      let linkPathname = new URL(href as string, location.href).pathname;
+    let linkPathname = new URL(href as string, location.href).pathname;
 
-      const langRegex = /\/(en|fr)\//;
-      linkPathname = linkPathname.replace(langRegex, "/");
+    const langRegex = /\/(en|fr)\//;
+    linkPathname = linkPathname.replace(langRegex, "/");
 
-      // Only one nav link can be active at a time
-      if (linkPathname === activePathname) {
-        setActive(true);
-      } else {
-        if (!defaultActive) {
-          setActive(false);
-        }
+    // Only one nav link can be active at a time
+    if (linkPathname === activePathname) {
+      setActive(true);
+    } else {
+      if (!defaultActive) {
+        setActive(false);
       }
     }
-  }, [asPath, isReady, href, setActive, activePathname, defaultActive]);
+  }, [asPath, href, setActive, activePathname, defaultActive]);
 
   return (
     <Link href={href} legacyBehavior>

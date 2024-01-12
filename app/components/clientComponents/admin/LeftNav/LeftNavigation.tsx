@@ -2,7 +2,7 @@
 import React from "react";
 import { NavLink } from "@clientComponents/globals/NavLink";
 import { useTranslation } from "@i18n/client";
-import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useAccessControl } from "@lib/hooks";
 
 import { NameIcon, FlagIcon, GearIcon } from "@clientComponents/icons";
@@ -10,8 +10,8 @@ import { NameIcon, FlagIcon, GearIcon } from "@clientComponents/icons";
 export const LeftNavigation = () => {
   const { t } = useTranslation(["admin-login", "common"]);
   const { ability } = useAccessControl();
-  const router = useRouter();
-  const path = String(router.pathname);
+
+  const path = usePathname();
 
   const iconClassname =
     "block box-border mt-1 w-8 h-8 group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default";

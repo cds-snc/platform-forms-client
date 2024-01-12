@@ -12,7 +12,7 @@ interface ProfileProps {
   allQuestions: Question[];
 }
 
-export interface Question {
+interface Question {
   id: string;
   questionEn: string;
   questionFr: string;

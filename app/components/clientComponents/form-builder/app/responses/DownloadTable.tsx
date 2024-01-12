@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect, useReducer, useState } from "react";
 import {
   NagwareResult,
@@ -12,7 +11,7 @@ import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import { ConfirmReceiptStatus } from "./ConfirmReceiptStatus";
 import { DownloadResponseStatus } from "./DownloadResponseStatus";
 import { RemovalStatus } from "./RemovalStatus";
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useSetting } from "@lib/hooks/useSetting";
 import Link from "next/link";
 import { TableActions, initialTableItemsState, reducerTableItems } from "./DownloadTableReducer";
@@ -50,8 +49,8 @@ export const DownloadTable = ({
   lastEvaluatedKey,
 }: DownloadTableProps) => {
   const { t } = useTranslation("form-builder-responses");
-  const router = useRouter();
-  const [, statusQuery = "new"] = router.query?.params || [];
+  const params = useSearchParams();
+  const statusQuery = params.get("statusQuery") || "new";
 
   const [downloadError, setDownloadError] = useState(false);
   const [noSelectedItemsError, setNoSelectedItemsError] = useState(false);

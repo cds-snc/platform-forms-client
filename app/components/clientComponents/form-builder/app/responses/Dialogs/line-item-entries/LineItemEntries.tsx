@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect, useRef } from "react";
 import { LineItems } from "./LineItems";
 import { scrollToBottom } from "@lib/clientHelpers";

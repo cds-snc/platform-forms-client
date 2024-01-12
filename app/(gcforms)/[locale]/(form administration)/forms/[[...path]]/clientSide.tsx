@@ -1,23 +1,16 @@
 "use client";
-import React, { ReactElement, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useTranslation } from "@i18n/client";
 import { usePathname } from "next/navigation";
 
-import { getAllTemplates } from "@lib/templates";
-import { requireAuthentication } from "@lib/auth";
-import { checkPrivileges } from "@lib/privileges";
 import { FilterNavigation } from "@clientComponents/myforms/FilterNav/FilterNavigation";
 import { LinkButton } from "@clientComponents/globals";
 import { CardGrid } from "@clientComponents/myforms/CardGrid/CardGrid";
 import { TabPanel } from "@clientComponents/myforms/Tabs/TabPanel";
 import { StyledLink } from "@clientComponents/globals/StyledLink/StyledLink";
-import {
-  TemplateStoreProvider,
-  clearTemplateStore,
-} from "@clientComponents/form-builder/store/useTemplateStore";
+import { clearTemplateStore } from "@clientComponents/form-builder/store/useTemplateStore";
 import { ResumeEditingForm } from "@clientComponents/form-builder/app/shared";
-import { getUnprocessedSubmissionsForUser } from "@lib/users";
-import { FullWidthLayout } from "@clientComponents/globals/layouts";
+
 import Head from "next/head";
 
 interface FormsDataItem {
@@ -128,60 +121,3 @@ export default function RenderMyForms({ templates }: MyFormsProps) {
     </>
   );
 }
-
-RenderMyForms.getLayout = (page: ReactElement) => {
-  return (
-    <TemplateStoreProvider
-      {...{ ...(page.props.initialForm && page.props.initialForm), locale: page.props.locale }}
-    >
-      <FullWidthLayout>{page}</FullWidthLayout>
-    </TemplateStoreProvider>
-  );
-};
-
-// export const getServerSideProps = requireAuthentication(
-//   async ({ user: { ability, id }, params }) => {
-//     const { locale = "en" }: { locale?: string } = params ?? {};
-//     {
-//       checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
-
-//       const templates = (await getAllTemplates(ability, id)).map((template) => {
-//         const {
-//           id,
-//           form: { titleEn = "", titleFr = "" },
-//           name,
-//           deliveryOption = { emailAddress: "" },
-//           isPublished,
-//           updatedAt,
-//         } = template;
-//         return {
-//           id,
-//           titleEn,
-//           titleFr,
-//           deliveryOption,
-//           name,
-//           isPublished,
-//           date: updatedAt,
-//           url: `/${locale}/id/${id}`,
-//           overdue: 0,
-//         };
-//       });
-
-//       const overdue = await getUnprocessedSubmissionsForUser(ability, id);
-
-//       templates.forEach((template) => {
-//         if (overdue[template.id]) {
-//           template.overdue = overdue[template.id].numberOfSubmissions;
-//         }
-//       });
-
-//       return {
-//         props: {
-//           templates,
-//           ...(locale &&
-//             (await serverSideTranslations(locale, ["my-forms", "common", "form-builder"]))),
-//         },
-//       };
-//     }
-//   }
-// );

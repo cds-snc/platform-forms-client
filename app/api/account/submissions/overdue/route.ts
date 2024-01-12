@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import { MiddlewareProps, WithRequired } from "@lib/types";
 import { getUnprocessedSubmissionsForUser } from "@lib/users";
 
-export const GET = middleware([sessionExists()], async (req, props) => {
+export const GET = middleware([sessionExists()], async (_, props) => {
   try {
     const { session } = props as WithRequired<MiddlewareProps, "session">;
     const ability = createAbility(session);

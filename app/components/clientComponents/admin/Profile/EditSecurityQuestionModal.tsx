@@ -1,11 +1,10 @@
-"use client";
 import React, { useRef, useState, useCallback } from "react";
 import { Label } from "@clientComponents/forms";
 import { Button, Alert } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
 import { Dialog, useDialogRef } from "@clientComponents/form-builder/app/shared";
 import { logMessage } from "@lib/logger";
-import { Question } from "old_pages/[locale]/profile";
+
 import axios from "axios";
 import { getCsrfToken } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -14,6 +13,12 @@ import {
   MessageType,
   ValidationMessage,
 } from "@clientComponents/globals/ValidationMessage/ValidationMessage";
+
+interface Question {
+  id: string;
+  questionEn: string;
+  questionFr: string;
+}
 
 const updateSecurityQuestion = async (
   oldQuestionId: string,
@@ -111,9 +116,7 @@ export const EditSecurityQuestionModal = ({
 
       dialog.current?.close();
       handleClose();
-      router.push({
-        pathname: `${i18n.language}/profile`,
-      });
+      router.push(`${i18n.language}/profile`);
     } catch (err) {
       logMessage.error(err);
       setIsFormError(true);

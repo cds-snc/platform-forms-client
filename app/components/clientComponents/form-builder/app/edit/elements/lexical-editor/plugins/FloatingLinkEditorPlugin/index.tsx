@@ -15,6 +15,7 @@ import {
   $getSelection,
   $isRangeSelection,
   BLUR_COMMAND,
+  BaseSelection,
   COMMAND_PRIORITY_CRITICAL,
   COMMAND_PRIORITY_HIGH,
   COMMAND_PRIORITY_LOW,
@@ -54,7 +55,7 @@ function FloatingLinkEditor({
   const [linkUrl, setLinkUrl] = useState("");
   const [isEditMode, setEditMode] = useState(false);
   const [lastSelection, setLastSelection] = useState<
-    RangeSelection | GridSelection | NodeSelection | null
+    RangeSelection | GridSelection | NodeSelection | BaseSelection | null
   >(null);
 
   const { t } = useTranslation();

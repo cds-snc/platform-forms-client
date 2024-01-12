@@ -16,15 +16,17 @@ interface AcceptableUseProps {
 export const AcceptableUseTerms = ({ content }: AcceptableUseProps): React.ReactElement | null => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  let referer = searchParams.get("referer") ?? "/forms";
-  const { t } = useTranslation("common");
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation("common");
   const { data: session, status } = useSession();
-
-  const defaultRoute = `/myforms`;
+  let referer = searchParams.get("referer");
+  const defaultRoute = `/${language}/forms`;
 
   // An extra check just encase a malicous user sets the referer to an external URL
-  if (!localPathRegEx.test(referer)) {
-    referer = "/forms";
+  if (referer && !localPathRegEx.test(referer)) {
+    referer = defaultRoute;
   }
 
   const agree = async () => {

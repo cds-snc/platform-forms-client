@@ -1,4 +1,3 @@
-"use client";
 import React, { useRef, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useDialogRef, Dialog, TextArea } from "@clientComponents/form-builder/app/shared";
@@ -6,7 +5,7 @@ import { LineItemEntries } from "./line-item-entries";
 import { Button, Alert } from "@clientComponents/globals";
 import { randomId } from "@lib/clientHelpers";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { logMessage } from "@lib/logger";
 import Link from "next/link";
 import { isResponseId } from "@lib/validation";
@@ -31,6 +30,7 @@ export const ReportDialog = ({
 }) => {
   const { t, i18n } = useTranslation(["form-builder-responses", "common"]);
   const router = useRouter();
+  const path = usePathname();
   const [entries, setEntries] = useState<string[]>([]);
   const descriptionRef = useRef("");
   const [status, setStatus] = useState<DialogStates>(DialogStates.EDITING);
@@ -86,7 +86,7 @@ export const ReportDialog = ({
     })
       .then(({ data }) => {
         // Refreshes data. Needed for error cases as well since may be a mix of valid/invalid codes
-        router.replace(router.asPath);
+        router.replace(path);
 
         // Report error
         if (data?.invalidSubmissionNames && data.invalidSubmissionNames?.length > 0) {

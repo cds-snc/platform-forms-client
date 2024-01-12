@@ -6,7 +6,6 @@ import { logMessage } from "@lib/logger";
 import { checkOne } from "@lib/cache/flags";
 import { pushFileToS3, deleteObject } from "@lib/s3-upload";
 import { fileTypeFromBuffer } from "file-type";
-import { Magic, MAGIC_MIME_TYPE } from "mmmagic";
 import { acceptedFileMimeTypes } from "@lib/tsUtils";
 import { middleware, csrfProtected } from "@lib/middleware";
 import { Response, Responses, FileInputResponse, SubmissionRequestBody } from "@lib/types";
@@ -128,6 +127,10 @@ const parseRequestData = async (
  * @param fileObj
  */
 const processFileData = async (fileObj: FileInputResponse): Promise<ProcessedFile> => {
+  // Removing mmmagic due to build issue. Will be replaced with a better solution
+  // TODO: Find better solution at determining file type
+  // const { Magic, MAGIC_MIME_TYPE } = await import("mmmagic");
+
   // if we have a size key present in the data then we can simply throw an error if
   // that number is greater than 8mb. We do not depend on this however. This is simply
   // to be more efficient. Regardless if this parameter is less than 8mb the size will still be checked
@@ -149,34 +152,24 @@ const processFileData = async (fileObj: FileInputResponse): Promise<ProcessedFil
         `FileSizeError: The file ${fileObj.name} has been uploaded that is greater than 8mb in size`
       );
     }
-    // determine the real mime type of the file from the buffer
-    const magic = new Magic(MAGIC_MIME_TYPE);
-    // promisify the magic.detect call so that it works cleanly with the async function
-    const detectFilePromise = (): Promise<string | string[]> => {
-      return new Promise((resolve, reject) => {
-        magic.detect(fileBuff, (err, result) => {
-          if (err) {
-            return reject(err);
-          }
-          return resolve(result);
-        });
-      });
-    };
+    // // determine the real mime type of the file from the buffer
+    // const magic = new Magic(MAGIC_MIME_TYPE);
+    // // promisify the magic.detect call so that it works cleanly with the async function
+    // const detectFilePromise = (): Promise<string | string[]> => {
+    //   return new Promise((resolve, reject) => {
+    //     magic.detect(fileBuff, (err, result) => {
+    //       if (err) {
+    //         return reject(err);
+    //       }
+    //       return resolve(result);
+    //     });
+    //   });
+    // };
     // use mmmagic lib to detect mime types for text files and file-type for binary files
-    const [mimeTypefilebuff, mimeTypemmmagic] = await Promise.all([
-      fileTypeFromBuffer(fileBuff),
-      detectFilePromise(),
-    ]);
-    if (
-      (!mimeTypefilebuff || !acceptedFileMimeTypes.includes(mimeTypefilebuff.mime)) &&
-      (!mimeTypemmmagic || !acceptedFileMimeTypes.includes(mimeTypemmmagic as string))
-    ) {
+    const mimeTypefilebuff = await fileTypeFromBuffer(fileBuff);
+    if (!mimeTypefilebuff || !acceptedFileMimeTypes.includes(mimeTypefilebuff.mime)) {
       throw new Error(
-        `FileTypeError: The file ${
-          fileObj.name
-        } has been uploaded has an unacceptable mime type of ${
-          mimeTypefilebuff ? mimeTypefilebuff.mime : mimeTypemmmagic
-        }`
+        `FileTypeError: The file ${fileObj.name} has been uploaded has an unacceptable mime type of ${mimeTypefilebuff}`
       );
     }
     return {

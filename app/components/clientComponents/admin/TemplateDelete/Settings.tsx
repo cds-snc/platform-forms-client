@@ -3,7 +3,7 @@ import React from "react";
 import JSONUpload from "@clientComponents/admin/JsonUpload/JsonUpload";
 import { useTranslation } from "@i18n/client";
 import { DeleteButton, Label } from "@clientComponents/forms";
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import axios from "axios";
 import { logMessage } from "@lib/logger";
 import { FormRecord } from "@lib/types";
@@ -40,15 +40,14 @@ const handleDelete = async (formID: string) => {
 
 const FormSettings = (props: FormSettingsProps): React.ReactElement => {
   const { form: formRecord } = props;
-  const router = useRouter();
+  const params = useSearchParams();
   const { t, i18n } = useTranslation("admin-templates");
   const language = i18n.language as string;
-  const newText =
-    router.query && router.query.newForm ? (
-      <p className="gc-confirmation-banner">{t("settings.new")}</p>
-    ) : (
-      ""
-    );
+  const newText = params.get("newForm") ? (
+    <p className="gc-confirmation-banner">{t("settings.new")}</p>
+  ) : (
+    ""
+  );
 
   return (
     <>

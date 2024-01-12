@@ -20,7 +20,10 @@ export async function generateMetadata({
 
 // keeping this here if we want to add a welcome page
 export default async function Page() {
-  const { t } = await serverTranslation(["admin-home", "common"]);
+  const {
+    t,
+    i18n: { language },
+  } = await serverTranslation(["admin-home", "common"]);
   const { user } = await requireAuthentication();
   const canViewUsers = checkPrivilegesAsBoolean(
     user.ability,
@@ -29,7 +32,7 @@ export default async function Page() {
   );
 
   if (!canViewUsers) {
-    redirect("/forms");
+    redirect(`/${language}/forms`);
   }
 
   return (

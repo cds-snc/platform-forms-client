@@ -7,7 +7,7 @@ import {
   PublicFormRecord,
 } from "@lib/types";
 import { FormikProps } from "formik";
-import { TFunction } from "@i18n/client";
+import { TFunction } from "i18next";
 import { acceptedFileMimeTypes } from "@lib/tsUtils";
 import { ErrorListItem } from "@clientComponents/forms";
 import { isServer } from "./tsUtils";

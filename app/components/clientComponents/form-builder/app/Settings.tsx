@@ -1,13 +1,12 @@
 "use client";
 import React from "react";
 import { useTranslation } from "@i18n/client";
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { DownloadFileButton } from "./shared";
 
 export const Settings = () => {
   const { t } = useTranslation("form-builder");
-  const router = useRouter();
-  const { downloadconfirm } = router.query;
+  const downloadconfirm = useSearchParams().get("downloadconfirm");
   return (
     <>
       <div id="download-form" className="mb-6">

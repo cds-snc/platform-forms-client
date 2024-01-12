@@ -51,8 +51,6 @@
     "cypress",
     "cypress.config.ts",
     "**/*.cy.ts",
-    "**/*.cy.tsx",
-    "old_pages",
-    "old_globals"
+    "**/*.cy.tsx"
   ]
 }

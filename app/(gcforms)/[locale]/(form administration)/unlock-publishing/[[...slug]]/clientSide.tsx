@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import Head from "next/head";
 import { Formik } from "formik";
 import {
   Button,

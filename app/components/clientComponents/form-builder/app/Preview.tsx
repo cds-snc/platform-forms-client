@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import { useTranslation } from "@i18n/client";
-import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
 
@@ -39,8 +38,6 @@ export const Preview = () => {
       getLocalizationAttribute: s.getLocalizationAttribute,
       email: s.deliveryOption?.emailAddress,
     }));
-
-  const router = useRouter();
 
   const { t } = useTranslation(["common", "form-builder"]);
   const language = translationLanguagePriority;
@@ -156,7 +153,6 @@ export const Preview = () => {
                 formRecord={formRecord}
                 isPreview={true}
                 language={language}
-                router={router}
                 t={t}
                 onSuccess={setSent}
                 renderSubmit={({ validateForm }) => {

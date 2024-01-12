@@ -8,7 +8,7 @@ import {
   SecurityAttribute,
   WithRequired,
 } from "@lib/types";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import templatesSchema from "@lib/middleware/schemas/templates.schema.json";
 import {
   layoutIDValidator,

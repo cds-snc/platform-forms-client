@@ -9,12 +9,6 @@ import makeAnimated from "react-select/animated";
 import axios from "axios";
 import { FormRecord } from "@lib/types";
 
-interface User {
-  id: string;
-  name: string | null;
-  email: string | null;
-}
-
 interface AssignUsersToTemplateProps {
   formRecord: FormRecord;
   usersAssignedToFormRecord: { id: string; name: string | null; email: string }[];

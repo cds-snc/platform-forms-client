@@ -45,12 +45,7 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
 
       if (response?.config.method === "post" && response?.data) {
         const formID = response.data.id;
-        router.push({
-          pathname: `/${i18n.language}/id/${formID}/settings`,
-          query: {
-            newForm: true,
-          },
-        });
+        router.push(`/${i18n.language}/id/${formID}/settings?newForm=true`);
       } else {
         // If not, but response was successful,
         // update the page text to show a success

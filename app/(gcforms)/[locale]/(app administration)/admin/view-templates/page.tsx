@@ -17,7 +17,6 @@ export async function generateMetadata({
 }
 
 export default async function Page() {
-  const { t } = await serverTranslation("admin-templates");
   const { user } = await requireAuthentication();
   checkPrivilegesAsBoolean(
     user.ability,

@@ -2,9 +2,9 @@ import { middleware, csrfProtected } from "@lib/middleware";
 import { requestNew2FAVerificationCode } from "@lib/auth";
 import { type NextRequest, NextResponse } from "next/server";
 
-export const POST = middleware([csrfProtected()], async (request: NextRequest) => {
+export const POST = middleware([csrfProtected()], async (request: NextRequest, props) => {
   const { authenticationFlowToken, email }: { authenticationFlowToken?: string; email?: string } =
-    await request.json();
+    props.body;
 
   if (!authenticationFlowToken || !email)
     return NextResponse.json({ error: "Malformed request" }, { status: 400 });

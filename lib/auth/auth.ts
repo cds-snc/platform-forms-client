@@ -6,7 +6,6 @@ import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import jwt from "jsonwebtoken";
 import { TemporaryTokenPayload } from "../types";
 import { AccessControlError, createAbility } from "../privileges";
-import { logMessage } from "@lib/logger";
 
 // Helpful to check whether a referer is local vs. an external URL
 // Note: a negated version of https://stackoverflow.com/questions/10687099/how-to-test-if-a-url-string-is-absolute-or-relative
