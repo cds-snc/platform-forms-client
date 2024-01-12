@@ -12,6 +12,10 @@ env:
   COGNITO_APP_CLIENT_ID: ${{secrets.PRODUCTION_COGNITO_APP_CLIENT_ID}}
   COGNITO_USER_POOL_ID: ${{ secrets.PRODUCTION_COGNITO_USER_POOL_ID}}
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   push-production:
     runs-on: ubuntu-latest
