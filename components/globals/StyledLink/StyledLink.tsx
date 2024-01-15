@@ -20,7 +20,6 @@ interface StyledLinkProps {
   theme?: Theme;
   testid?: string;
   scroll?: boolean;
-  onClick?: () => void;
 }
 
 // Making all the buttons look the same, even the fake ones. Pulls styles from the global Button
@@ -42,18 +41,10 @@ export const StyledLink = (props: StyledLinkProps) => {
     theme = "default",
     testid = "",
     scroll = true, // NextJS default
-    onClick,
   } = props;
   const ref = useRef<HTMLAnchorElement>(null);
   return (
-    <Link
-      href={href}
-      {...(locale && { locale: locale })}
-      passHref
-      legacyBehavior
-      onClick={onClick}
-      scroll={scroll}
-    >
+    <Link href={href} {...(locale && { locale: locale })} passHref legacyBehavior scroll={scroll}>
       <WrappedLink
         href={href}
         className={theme ? `${className} ${linkThemes[theme]}` : className}
@@ -61,7 +52,6 @@ export const StyledLink = (props: StyledLinkProps) => {
         {...(lang && { lang: lang })}
         ref={ref}
         {...(testid && { testid })}
-        onClick={onClick}
       >
         {children}
       </WrappedLink>
@@ -76,7 +66,6 @@ interface WrappedLinkProps {
   ariaLabel?: string;
   lang?: string;
   testid?: string;
-  onClick?: () => void;
 }
 
 const WrappedLink = React.forwardRef(
@@ -84,7 +73,7 @@ const WrappedLink = React.forwardRef(
     // Note: href is populated by passHref "magic" and is needed for the case of getting the locale
     // prefix in the url. The passed prop href is ignored it seems, so this works. The prop is
     // included above for TypeScript but otherwise not needed.
-    const { children, className, ariaLabel, lang, testid, onClick } = props;
+    const { children, className, ariaLabel, lang, testid } = props;
 
     return (
       <a
@@ -94,7 +83,6 @@ const WrappedLink = React.forwardRef(
         {...(lang && { lang: lang })}
         ref={ref}
         {...(testid && { "data-testid": testid })}
-        onClick={onClick}
       >
         {children}
       </a>
