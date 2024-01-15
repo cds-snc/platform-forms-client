@@ -1,26 +1,23 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
-
-const Text = ({ label, description }: { label: string; description?: string }) => {
-  return (
-    <div className="ml-1">
-      <p className="mb-1 font-bold mt-1 text-sm">{label}</p>
-      {description && <p className="mb-2 text-sm">{description}</p>}
-      <div className="w-[350px] h-[40px] rounded border-black-default border-2 p-1 mb-2" />
-    </div>
-  );
-};
+import { ExampleWrapper } from "./ExampleWrapper";
+import { Description, Label, FileInput as FileInputComponent } from "@components/forms";
 
 export const FileInput = ({ title }: { title: string }) => {
   const { t } = useTranslation("form-builder");
 
   return (
     <div>
-      <div className="font-bold text-[1.5rem] mb-2">{title}</div>
-      <Text
-        label={t("addElementDialog.fileInput.label")}
-        description={t("addElementDialog.fileInput.description")}
-      />
+      <h3>{title}</h3>
+      <p>{t("addElementDialog.fileInput.description")}</p>
+
+      <ExampleWrapper className="mt-4">
+        <Label htmlFor="name" className="gc-label">
+          Enter a specific answer
+        </Label>
+        <Description>For example: a name or number</Description>
+        <FileInputComponent label="title" name={"name"} />
+      </ExampleWrapper>
     </div>
   );
 };
