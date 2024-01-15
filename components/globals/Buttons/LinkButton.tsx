@@ -56,7 +56,7 @@ export const LeftNav = ({ href, children, title = "", onClick, isActive }: LinkB
   };
 
   return (
-    <div className="relative flex h-[60px] w-[60px]">
+    <div className="relative z-10 flex h-[60px] w-[60px]">
       <Tooltip text={title} side="right">
         <StyledLink
           {...(isActive && { "aria-current": "page" })}
