@@ -106,6 +106,7 @@ export const getSchemaFromState = (state: TemplateStoreState) => {
       brand,
       securityAttribute,
       layout,
+      groups,
     },
   } = state;
 
@@ -116,6 +117,7 @@ export const getSchemaFromState = (state: TemplateStoreState) => {
     privacyPolicy,
     confirmation,
     layout,
+    groups,
     elements,
     securityAttribute,
     brand,
@@ -198,7 +200,6 @@ export const autoCompleteFields = [
   "honorific-prefix",
   "honorific-suffix",
   "organization-title",
-  "street-address",
   "address-line1",
   "address-line2",
   "address-line3",

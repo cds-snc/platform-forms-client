@@ -36,11 +36,11 @@ const PageLayout = ({
           context="formBuilder"
           leftColumnContent={
             <>
-              {backLink && <>{backLink}</>}
               <LeftNavigation />
             </>
           }
         >
+          {backLink && <>{backLink}</>}
           {page}
         </TwoColumnLayout>
       )}

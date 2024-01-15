@@ -8,7 +8,6 @@ import { QuestionsIcon, TranslateIcon } from "@components/form-builder/icons";
 export const EditNavigation = () => {
   const { t } = useTranslation("form-builder");
   const { activePathname } = useActivePathname();
-
   return (
     <div className="relative flex max-w-[800px] flex-col tablet:flex-row">
       <div className="flex">

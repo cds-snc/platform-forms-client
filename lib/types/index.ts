@@ -1,4 +1,5 @@
-import { FormRecord } from "@lib/types";
+import { FormRecord, Responses } from "@lib/types";
+import { FormikErrors } from "formik";
 
 export type {
   ValidationProperties,
@@ -10,6 +11,7 @@ export type {
   FormRecord,
   FormProperties,
   SecurityAttribute,
+  ConditionalRule,
 } from "./form-types";
 export { FormElementTypes } from "./form-types";
 
@@ -59,3 +61,7 @@ export type TypeOmit<T, K extends PropertyKey> = { [P in keyof T as Exclude<P, K
 
 export type { NagwareSubmission, NagwareResult } from "./nagware-types";
 export { NagLevel } from "./nagware-types";
+
+export interface Validate {
+  validateForm: () => Promise<FormikErrors<Responses>>;
+}

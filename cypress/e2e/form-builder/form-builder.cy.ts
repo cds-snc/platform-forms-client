@@ -23,7 +23,7 @@ describe("Test FormBuilder", () => {
 
     cy.typeInField("#item-1", "Question 1");
     cy.typeInField("#option--1--1", "option 1");
-    cy.get("button").contains("Add an option").click();
+    cy.get("button").contains("Add option").click();
     cy.typeInField("#option--1--2", "option 2");
     cy.typeInField(`[aria-label="Privacy statement"]`, "privacy statement");
     cy.typeInField(`[aria-label="Confirmation page and message"]`, "confirmation page");

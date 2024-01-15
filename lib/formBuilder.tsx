@@ -11,6 +11,7 @@ import {
   RichText,
   TextArea,
   TextInput,
+  ConditionalWrapper,
 } from "@components/forms";
 import {
   FormElement,
@@ -332,5 +333,9 @@ type GenerateElementProps = {
 export const GenerateElement = (props: GenerateElementProps): React.ReactElement => {
   const { element, language, t } = props;
   const generatedElement = _buildForm(element, language, t);
-  return <>{generatedElement}</>;
+  return (
+    <ConditionalWrapper element={element} rules={element.properties.conditionalRules || null}>
+      {generatedElement}
+    </ConditionalWrapper>
+  );
 };

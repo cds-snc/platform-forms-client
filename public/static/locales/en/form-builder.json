@@ -131,7 +131,7 @@
     "yes": "Yes"
   },
   "addMultiple": "Add multiple options",
-  "addOption": "Add an option",
+  "addOption": "Add option",
   "addOptions": "Add options",
   "addRules": "Add rules",
   "addToSet": "Add to set",
@@ -162,7 +162,6 @@
     "organization-title": "Job title",
     "tel": "Phone number",
     "postal-code": "Postal or zip code",
-    "street-address": "Full street address (includes address lines 1-3)",
     "url": "Website address"
   },
   "autocompleteWhenNotToUse": {
@@ -366,7 +365,7 @@
   "incomplete": "Incomplete",
   "inputDescription": "Description",
   "insertLink": "Insert link",
-  "lastSaved": "Last saved:",
+  "lastSaved": "updated at",
   "linkUrl": "Link URL",
   "lockedBlock": "Locked block",
   "longAnswerText": "Long answer text",
@@ -703,6 +702,22 @@
     "title": "There was an error saving the form",
     "description": "Download a copy of the form and try again or",
     "supportLink": "contact Support",
-    "errorCode": "Error code: {{code}}"
-  }
+    "errorCode": "Error code: {{code}}",
+    "failedLink": "Saving failed - Contact support"
+  },
+  "addConditionalRules": {
+    "modalTitle": "Add a rule to a question",
+    "modalTitleEdit": "Edit rules",
+    "modalDescription": "Display additional input fields depending on the selection of a specific option. This applies to single choice, multiple choice, or dropdown list questions.",
+    "optionTitle": "If option selected is:",
+    "questionTitle": "Show question:",
+    "addCustomRules": "Add a rule",
+    "editCustomRules": "Edit rules",
+    "addAnotherRule": "Add another rule",
+    "removeRule": "Remove",
+    "addOther": "Add input field for \"other\"",
+    "other": "Other ",
+    "show": "Show:"
+  },
+  "saved": "Saved"
 }

@@ -77,3 +77,5 @@ export { InboxIcon } from "./InboxIcon";
 export { ForwardArrowIcon } from "./ForwardArrowIcon";
 export { StartIcon } from "./StartIcon";
 export { FilterIcon } from "./FilterIcon";
+export { SavedCheckIcon } from "./SavedCheckIcon";
+export { SavedFailIcon } from "./SavedFailIcon";
