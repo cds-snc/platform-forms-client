@@ -46,7 +46,14 @@ export const StyledLink = (props: StyledLinkProps) => {
   } = props;
   const ref = useRef<HTMLAnchorElement>(null);
   return (
-    <Link href={href} {...(locale && { locale: locale })} passHref legacyBehavior scroll={scroll}>
+    <Link
+      href={href}
+      {...(locale && { locale: locale })}
+      passHref
+      legacyBehavior
+      onClick={onClick}
+      scroll={scroll}
+    >
       <WrappedLink
         href={href}
         className={theme ? `${className} ${linkThemes[theme]}` : className}
@@ -54,7 +61,7 @@ export const StyledLink = (props: StyledLinkProps) => {
         {...(lang && { lang: lang })}
         ref={ref}
         {...(testid && { testid })}
-        onClick={onClick ? () => onClick() : undefined}
+        onClick={onClick}
       >
         {children}
       </WrappedLink>
@@ -87,7 +94,7 @@ const WrappedLink = React.forwardRef(
         {...(lang && { lang: lang })}
         ref={ref}
         {...(testid && { "data-testid": testid })}
-        onClick={onClick ? () => onClick() : undefined}
+        onClick={onClick}
       >
         {children}
       </a>

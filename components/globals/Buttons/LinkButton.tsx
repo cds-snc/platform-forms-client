@@ -52,7 +52,7 @@ export const LeftNav = ({ href, children, title = "", onClick, isActive }: LinkB
         <StyledLink
           {...(isActive && { "aria-current": "page" })}
           href={href}
-          onClick={onClick ? () => onClick() : undefined}
+          onClick={onClick}
           className={cn(
             classes,
             isActive && "bg-indigo-700 !fill-white shadow-none outline-[0px] outline-indigo-700"
