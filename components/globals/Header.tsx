@@ -26,7 +26,7 @@ export const Header = ({ context = "default", user }: HeaderParams) => {
   const { t, i18n } = useTranslation(["common", "form-builder", "admin-login"]);
 
   return (
-    <header className="mb-12 border-b-1 border-gray-500 bg-white px-4 py-2 laptop:px-32 desktop:px-64">
+    <header className="mb-12 border-b-1 border-gray-500 bg-white px-4 py-2 ">
       <div className="grid w-full grid-flow-col">
         <div className="flex">
           <Link href="/form-builder" legacyBehavior>
@@ -35,7 +35,7 @@ export const Header = ({ context = "default", user }: HeaderParams) => {
               id="logo"
               className="mr-5 flex border-r-1 pr-5 text-3xl font-semibold !text-black no-underline !shadow-none focus:bg-white"
             >
-              <div className="inline-block h-[45px] w-[46px] py-2">
+              <div className="inline-block h-[45px] w-[46px] px-2 py-2">
                 <SiteLogo title={t("title")} />
               </div>
             </a>
