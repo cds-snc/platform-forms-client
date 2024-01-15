@@ -29,7 +29,7 @@ export const TwoColumnLayout = ({
           <ToastContainer limit={1} containerId="wide" autoClose={false} width="600px" />
           <>
             <div>
-              <div className="flex flex-row gap-10">
+              <div className="flex flex-row gap-10 pr-12">
                 <div id="left-nav" className="sticky top-5 z-10 h-full">
                   {leftColumnContent}
                 </div>
