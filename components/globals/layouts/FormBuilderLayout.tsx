@@ -12,6 +12,7 @@ import { TwoColumnLayout } from "./TwoColumnLayout";
 const css = `
 body {
    background-color: #F9FAFB;
+   background: linear-gradient(to right, white 59px, #d1d5db 59px, #d1d5db 60px, #F9FAFB 60px);
 }
 `;
 

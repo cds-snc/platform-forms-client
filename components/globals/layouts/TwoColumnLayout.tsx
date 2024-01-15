@@ -24,7 +24,7 @@ export const TwoColumnLayout = ({
         <SkipLink />
 
         <Header context={context} user={user} />
-        <div className="mx-4 shrink-0 grow basis-auto">
+        <div className="shrink-0 grow basis-auto">
           <ToastContainer containerId="default" />
           <ToastContainer limit={1} containerId="wide" autoClose={false} width="600px" />
           <>
