@@ -27,6 +27,7 @@ const Pill = ({
 
   return (
     <button
+      tabIndex={selected ? 0 : -1}
       id={`${group}-filter`}
       ref={buttonRef}
       className={cn(
