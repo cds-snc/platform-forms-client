@@ -68,9 +68,15 @@ export const ElementDialog = ({
     [setSelectedElement]
   );
 
-  const id = elementOptions[selectedElement].id as FormElementTypes;
-  const value = elementOptions[selectedElement].value;
-  const Description = elementOptions[selectedElement].description;
+  let id: FormElementTypes | undefined;
+  let value = "";
+  let Description = null;
+
+  if (elementOptions[selectedElement]) {
+    id = elementOptions[selectedElement].id as FormElementTypes;
+    value = elementOptions[selectedElement].value;
+    Description = elementOptions[selectedElement].description;
+  }
 
   const handleAdd = useCallback(() => {
     handleAddType && handleAddType(id);
@@ -81,6 +87,7 @@ export const ElementDialog = ({
   useEffect(() => {
     const selectedFilter = document.getElementById(`${selectedGroup}-filter`);
     selectedFilter?.focus();
+    setSelectedElement(0);
   }, [selectedGroup]);
 
   useEffect(() => {
@@ -128,10 +135,12 @@ export const ElementDialog = ({
           <div className="max-h-[630px] w-2/3 overflow-y-scroll bg-slate-100 px-4 pb-8 pt-16">
             <div role="region" aria-label={`${value} ${t("addElementDialog.example")}`} id={id}>
               <div data-testid="element-description-content">
-                <Description
-                  title={t(`addElementDialog.${id}.title`)}
-                  description={t(`addElementDialog.${id}.description`)}
-                />
+                {Description && (
+                  <Description
+                    title={t(`addElementDialog.${id}.title`)}
+                    description={t(`addElementDialog.${id}.description`)}
+                  />
+                )}
               </div>
             </div>
           </div>
