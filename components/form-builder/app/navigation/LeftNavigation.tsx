@@ -1,12 +1,16 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
-import { DesignIcon, PreviewIcon, PublishIcon, GearIcon, MessageIcon } from "../../icons";
+import {
+  NavEditIcon,
+  NavPreviewIcon,
+  NavPublishIcon,
+  NavSettingsIcon,
+  NavResponsesIcon,
+} from "../../icons";
 import { useTemplateContext } from "@components/form-builder/hooks";
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { useSession } from "next-auth/react";
 import { useActivePathname, cleanPath } from "../../hooks/useActivePathname";
-import { NavLink } from "@components/globals/NavLink";
-import { cn } from "@lib/utils";
 import { LinkButton } from "@components/globals";
 
 const linkHelper = (url: string, activePathname: string) => {
@@ -27,50 +31,57 @@ export const LeftNavigation = () => {
   const { activePathname } = useActivePathname();
   const { saveForm } = useTemplateContext();
 
-  const iconClassname =
-    "inline-block w-6 h-6 group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
-
   return (
     <nav aria-label={t("navLabelFormBuilder")}>
       <ul className="m-0 list-none p-0">
+        {!isPublished && (
+          <li>
+            <LinkButton.LeftNav
+              {...linkHelper("/edit", activePathname)}
+              onClick={saveForm}
+              title={t("edit")}
+            >
+              <NavEditIcon />
+            </LinkButton.LeftNav>
+          </li>
+        )}
         <li>
-          <LinkButton.LeftNav href="/form-builder">
-            <PreviewIcon />
+          <LinkButton.LeftNav
+            {...linkHelper("/preview", activePathname)}
+            onClick={saveForm}
+            title={status === "authenticated" ? t("test") : t("pagePreview")}
+          >
+            <NavPreviewIcon />
+          </LinkButton.LeftNav>
+        </li>
+        <li>
+          <LinkButton.LeftNav
+            {...linkHelper(`/settings/${id}`, activePathname)}
+            onClick={saveForm}
+            title={t("pageSettings")}
+          >
+            <NavSettingsIcon />
           </LinkButton.LeftNav>
         </li>
         {!isPublished && (
           <li>
-            <NavLink {...linkHelper("/edit", activePathname)} onClick={saveForm}>
-              <DesignIcon className={iconClassname} />
-              {t("edit")}
-            </NavLink>
+            <LinkButton.LeftNav
+              {...linkHelper("/publish", activePathname)}
+              onClick={saveForm}
+              title={t("publish")}
+            >
+              <NavPublishIcon />
+            </LinkButton.LeftNav>
           </li>
         )}
         <li>
-          <NavLink {...linkHelper("/preview", activePathname)} onClick={saveForm}>
-            <PreviewIcon className={iconClassname} />
-            {status === "authenticated" ? t("test") : t("pagePreview")}
-          </NavLink>
-        </li>
-        <li>
-          <NavLink {...linkHelper(`/settings/${id}`, activePathname)} onClick={saveForm}>
-            <GearIcon className={iconClassname} />
-            {t("pageSettings")}
-          </NavLink>
-        </li>
-        {!isPublished && (
-          <li>
-            <NavLink {...linkHelper("/publish", activePathname)} onClick={saveForm}>
-              <PublishIcon className={iconClassname} />
-              {t("publish")}
-            </NavLink>
-          </li>
-        )}
-        <li>
-          <NavLink {...linkHelper(`/responses/${id}`, activePathname)} onClick={saveForm}>
-            <MessageIcon className={cn(iconClassname, "mt-[6px] ml-[2px]")} />
-            {t("responsesNavLabel")}
-          </NavLink>
+          <LinkButton.LeftNav
+            {...linkHelper(`/responses/${id}`, activePathname)}
+            onClick={saveForm}
+            title={t("responsesNavLabel")}
+          >
+            <NavResponsesIcon />
+          </LinkButton.LeftNav>
         </li>
       </ul>
     </nav>
