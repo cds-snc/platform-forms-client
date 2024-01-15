@@ -3,6 +3,7 @@ import { StyledLink } from "@components/globals/";
 import { themes } from "@components/globals";
 import { cn } from "@lib/utils";
 import { Tooltip } from "../../form-builder/app/shared/Tooltip";
+import Link from "next/link";
 
 type LinkButtonProps = {
   href: string;
@@ -58,7 +59,7 @@ export const LeftNav = ({ href, children, title = "", onClick, isActive }: LinkB
   return (
     <div className="relative z-10 flex h-[60px] w-[60px]">
       <Tooltip text={title} side="right">
-        <StyledLink
+        <Link
           {...(isActive && { "aria-current": "page" })}
           href={href}
           onClick={onClick}
@@ -71,7 +72,7 @@ export const LeftNav = ({ href, children, title = "", onClick, isActive }: LinkB
           )}
         >
           {children}
-        </StyledLink>
+        </Link>
       </Tooltip>
     </div>
   );
