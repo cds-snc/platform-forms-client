@@ -130,6 +130,7 @@ export default function useArrowKeyNavigation({
     };
     document.addEventListener("keydown", eventHandler);
     return () => document.removeEventListener("keydown", eventHandler);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return parentNode;
