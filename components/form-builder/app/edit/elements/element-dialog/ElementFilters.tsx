@@ -1,9 +1,7 @@
-import useArrowKeyNavigation, {
-  Selectors,
-} from "@components/form-builder/hooks/useArrowKeyNavigation";
 import { Groups } from "@components/form-builder/hooks/useElementOptions";
 import { cn } from "@lib/utils";
 import React, { useRef } from "react";
+import { RovingTabIndexProvider, useFocusEffect, useRovingTabIndex } from "react-roving-tabindex";
 
 const Pill = ({
   group,
@@ -18,23 +16,30 @@ const Pill = ({
 }) => {
   const selected = group === selectedGroup;
 
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const ref = useRef<HTMLButtonElement>(null);
+
+  const disabled = false;
+
+  const [tabIndex, focused, handleKeyDown] = useRovingTabIndex(ref, disabled);
+
+  useFocusEffect(focused, ref);
 
   const updateSelectedGroup = (group: Groups | "all") => {
     setSelectedGroup(group);
-    buttonRef.current?.focus();
   };
 
   return (
     <button
-      tabIndex={selected ? 0 : -1}
+      tabIndex={tabIndex}
+      disabled={disabled}
+      onKeyDown={handleKeyDown}
+      onClick={() => updateSelectedGroup(group)}
       id={`${group}-filter`}
-      ref={buttonRef}
+      ref={ref}
       className={cn(
         "rounded-full border border-slate-800 bg-white px-4 py-2",
         selected && "bg-blue-800 text-white"
       )}
-      onClick={() => updateSelectedGroup(group)}
       role="radio"
       aria-checked={selected}
     >
@@ -52,58 +57,54 @@ export const ElementFilters = ({
   selectedGroup: Groups | "all";
   activeGroups: Groups[];
 }) => {
-  const parentRef = useArrowKeyNavigation({
-    selectors: [Selectors.BUTTON],
-    orientation: "horizontal",
-  });
-
   return (
     <div
       className="z-100 mt-4 flex gap-4"
       aria-label="Filter form elements by type:"
       data-testid="element-filters"
       role="radiogroup"
-      ref={parentRef}
     >
-      <Pill selectedGroup={selectedGroup} setSelectedGroup={setSelectedGroup} group="all">
-        All
-      </Pill>
-      {activeGroups.includes(Groups.BASIC) && (
-        <Pill
-          selectedGroup={selectedGroup}
-          setSelectedGroup={setSelectedGroup}
-          group={Groups.BASIC}
-        >
-          Basic <span className="visually-hidden">questions</span>
+      <RovingTabIndexProvider>
+        <Pill selectedGroup={selectedGroup} setSelectedGroup={setSelectedGroup} group="all">
+          All
         </Pill>
-      )}
-      {activeGroups.includes(Groups.PRESET) && (
-        <Pill
-          selectedGroup={selectedGroup}
-          setSelectedGroup={setSelectedGroup}
-          group={Groups.PRESET}
-        >
-          Preset <span className="visually-hidden">questions</span>
-        </Pill>
-      )}
-      {activeGroups.includes(Groups.ADVANCED) && (
-        <Pill
-          selectedGroup={selectedGroup}
-          setSelectedGroup={setSelectedGroup}
-          group={Groups.ADVANCED}
-        >
-          Advanced <span className="visually-hidden">questions</span>
-        </Pill>
-      )}
-      {activeGroups.includes(Groups.OTHER) && (
-        <Pill
-          selectedGroup={selectedGroup}
-          setSelectedGroup={setSelectedGroup}
-          group={Groups.OTHER}
-        >
-          Other <span className="visually-hidden">elements</span>
-        </Pill>
-      )}
+        {activeGroups.includes(Groups.BASIC) && (
+          <Pill
+            selectedGroup={selectedGroup}
+            setSelectedGroup={setSelectedGroup}
+            group={Groups.BASIC}
+          >
+            Basic <span className="visually-hidden">questions</span>
+          </Pill>
+        )}
+        {activeGroups.includes(Groups.PRESET) && (
+          <Pill
+            selectedGroup={selectedGroup}
+            setSelectedGroup={setSelectedGroup}
+            group={Groups.PRESET}
+          >
+            Preset <span className="visually-hidden">questions</span>
+          </Pill>
+        )}
+        {activeGroups.includes(Groups.ADVANCED) && (
+          <Pill
+            selectedGroup={selectedGroup}
+            setSelectedGroup={setSelectedGroup}
+            group={Groups.ADVANCED}
+          >
+            Advanced <span className="visually-hidden">questions</span>
+          </Pill>
+        )}
+        {activeGroups.includes(Groups.OTHER) && (
+          <Pill
+            selectedGroup={selectedGroup}
+            setSelectedGroup={setSelectedGroup}
+            group={Groups.OTHER}
+          >
+            Other <span className="visually-hidden">elements</span>
+          </Pill>
+        )}
+      </RovingTabIndexProvider>
     </div>
   );
 };
