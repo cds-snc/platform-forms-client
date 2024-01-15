@@ -44,8 +44,17 @@ export const Secondary = ({ href, className, children, scroll }: LinkButtonProps
 };
 
 export const LeftNav = ({ href, children, title = "", onClick, isActive }: LinkButtonProps) => {
-  const classes =
-    "border-box flex h-[60px] w-[60px] items-center justify-center text-black-default no-underline visited:text-black-default hover:border-indigo-700 [&_svg]:hover:fill-indigo-700 focus:border-indigo-700 focus:bg-white [&_svg]:focus:fill-indigo-700 focus:shadow-none focus:outline focus:outline-[0px] focus:outline-offset-0 focus:outline-indigo-700 active:top-0.5 active:bg-indigo-700 [&_svg]:active:fill-white active:text-white active:shadow-none active:outline-[0px] active:outline-indigo-700 disabled:cursor-not-allowed disabled:!border-none disabled:bg-gray-light disabled:text-gray-dark hover:border-1 focus:border-1";
+  const classes = {
+    base: "border-box flex h-[60px] w-[60px] items-center justify-center text-black-default no-underline ",
+    hover: "hover:border-indigo-700 [&_svg]:hover:fill-indigo-700 hover:border-1 ",
+    focus:
+      "focus:border-indigo-700 focus:bg-white [&_svg]:focus:fill-indigo-700 focus:shadow-none focus:outline-[0px] focus:outline-offset-0 focus:outline-indigo-700 focus:border-1",
+    active:
+      "active:top-0.5 active:bg-indigo-700 [&_svg]:active:fill-white active:text-white active:shadow-none active:outline-[0px] active:outline-indigo-700",
+    isActive:
+      "bg-indigo-700 [&_svg]:fill-white [&_svg]:hover:fill-white shadow-none outline-[0px] outline-indigo-700 focus:shadow-none focus:outline-[0px] focus:outline-offset-0",
+  };
+
   return (
     <div className="relative flex h-[60px] w-[60px]">
       <Tooltip text={title} side="right">
@@ -54,9 +63,11 @@ export const LeftNav = ({ href, children, title = "", onClick, isActive }: LinkB
           href={href}
           onClick={onClick}
           className={cn(
-            classes,
-            isActive &&
-              "bg-indigo-700 [&_svg]:fill-white [&_svg]:hover:fill-white shadow-none outline-[0px] outline-indigo-700"
+            classes.base,
+            classes.hover,
+            !isActive && classes.focus,
+            classes.active,
+            isActive && classes.isActive
           )}
         >
           {children}
