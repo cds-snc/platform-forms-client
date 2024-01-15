@@ -30,7 +30,9 @@ export const TwoColumnLayout = ({
           <>
             <div>
               <div className="flex flex-row gap-10">
-                <div>{leftColumnContent}</div>
+                <div id="left-nav" className="sticky top-10 h-screen">
+                  {leftColumnContent}
+                </div>
                 <main
                   id="content"
                   className={cn("w-full", context === "formBuilder" && "form-builder")}

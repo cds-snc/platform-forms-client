@@ -35,7 +35,7 @@ export const Header = ({ context = "default", user }: HeaderParams) => {
               id="logo"
               className="mr-5 flex border-r-1 pr-5 text-3xl font-semibold !text-black no-underline !shadow-none focus:bg-white"
             >
-              <div className="inline-block h-[45px] w-[46px] px-2 py-2">
+              <div className="inline-block h-[45px] w-[46px] p-2">
                 <SiteLogo title={t("title")} />
               </div>
             </a>
