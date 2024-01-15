@@ -17,31 +17,25 @@ export const Address = () => {
             {t("addElementDialog.address.street.label")}
           </Label>
           <Description>{t("addElementDialog.address.street.description")}</Description>
-          <TextInput type="text" id="street" name="street" />
+          <TextInput type="text" id="street" name="street" autoComplete="address-line1" />
         </div>
         <div className="mb-6">
           <Label htmlFor="city" className="gc-label">
             {t("addElementDialog.address.city")}
           </Label>
-          <TextInput type="text" id="city" name="city" />
+          <TextInput type="text" id="city" name="city" autoComplete="address-level2" />
         </div>
         <div className="mb-6">
           <Label htmlFor="province" className="gc-label">
             {t("addElementDialog.address.province")}
           </Label>
-          <TextInput type="text" id="province" name="province" />
-        </div>
-        <div className="mb-6">
-          <Label htmlFor="country" className="gc-label">
-            {t("addElementDialog.address.country")}
-          </Label>
-          <TextInput id="country" type="text" name="country" />
+          <TextInput type="text" id="province" name="province" autoComplete="address-level1" />
         </div>
         <div className="mb-6">
           <Label htmlFor="postal" className="gc-label">
             {t("addElementDialog.address.postal")}
           </Label>
-          <TextInput id="postal" type="text" name="postal" />
+          <TextInput id="postal" type="text" name="postal" autoComplete="postal-code" />
         </div>
       </ExampleWrapper>
     </div>

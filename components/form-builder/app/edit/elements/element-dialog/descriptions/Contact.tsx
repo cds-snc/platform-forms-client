@@ -16,13 +16,13 @@ export const Contact = () => {
           <Label htmlFor="phone" className="gc-label">
             {t("addElementDialog.contact.phone.label")}
           </Label>
-          <TextInput type="text" id="phone" name="phone" />
+          <TextInput type="text" id="phone" name="phone" autoComplete="tel" />
         </div>
         <div className="mb-6">
           <Label htmlFor="email" className="gc-label">
             {t("addElementDialog.contact.email.label")}
           </Label>
-          <TextInput type="text" id="email" name="email" />
+          <TextInput type="text" id="email" name="email" autoComplete="email" />
         </div>
         <div className="mb-6">
           <Label htmlFor="radio-english" className="gc-label">
