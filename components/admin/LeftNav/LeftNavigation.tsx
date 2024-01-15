@@ -17,7 +17,7 @@ export const LeftNavigation = () => {
 
   return (
     <nav>
-      <ul className="relative m-0 list-none p-0">
+      <ul className="m-0 list-none p-0">
         {ability?.can("view", "User") && (
           <li>
             <NavLink id="users" href={`/admin/accounts`} isActive={path === "/admin/accounts"}>
