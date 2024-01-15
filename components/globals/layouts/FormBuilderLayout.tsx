@@ -28,7 +28,7 @@ const PageLayout = ({
   return (
     <>
       <Head>
-        <style>{css}</style>
+        <style>{hideLeftNav ? `body{ background-color: #F9FAFB }` : css}</style>
       </Head>
       {hideLeftNav ? (
         <FullWidthLayout context="default">{page}</FullWidthLayout>
