@@ -1,5 +1,5 @@
 import { serverTranslation } from "@i18n";
-import { getAppSession } from "@api/auth/authConfig";
+import { auth } from "@lib/auth";
 import { Branding } from "@clientComponents/form-builder/app/branding";
 import { SettingsNavigation } from "@clientComponents/form-builder/app/navigation/SettingsNavigation";
 import { getAppSetting } from "@lib/appSettings";
@@ -20,7 +20,7 @@ export async function generateMetadata({
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const { t } = await serverTranslation("form-builder");
-  const session = await getAppSession();
+  const session = await auth();
   if (session && !session.user.acceptableUse) {
     // If they haven't agreed to Acceptable Use redirect to policy page for acceptance
     redirect(`/${locale}/auth/policy`);

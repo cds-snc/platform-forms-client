@@ -1,5 +1,5 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { JWT } from "next-auth/jwt";
+
 import { AccessControlError, checkPrivileges } from "@lib/privileges";
 import { NagwareResult, UserAbility } from "./types";
 import { logEvent } from "./auditLogs";
@@ -20,7 +20,11 @@ export const getOrCreateUser = async ({
   name,
   email,
   picture,
-}: JWT): Promise<{
+}: {
+  name?: string | null;
+  email?: string | null;
+  picture?: string | null;
+}): Promise<{
   newlyRegistered?: boolean;
   name: string | null;
   email: string | null;

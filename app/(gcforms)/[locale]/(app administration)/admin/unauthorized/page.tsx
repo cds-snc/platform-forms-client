@@ -2,7 +2,7 @@ import React from "react";
 import { serverTranslation } from "@i18n";
 import { ErrorPanel } from "@clientComponents/globals";
 import { Metadata } from "next";
-import { getAppSession } from "@api/auth/authConfig";
+import { auth } from "@lib/auth";
 import { redirect } from "next/navigation";
 
 export async function generateMetadata({
@@ -18,7 +18,7 @@ export async function generateMetadata({
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const { t } = await serverTranslation("admin-login");
-  const session = await getAppSession();
+  const session = await auth();
 
   if (!session) {
     redirect(`${locale}/auth/login`);

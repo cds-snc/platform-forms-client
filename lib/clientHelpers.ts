@@ -11,7 +11,12 @@ import {
   VaultStatus,
 } from "@lib/types";
 import { Submission } from "@lib/types/submission-types";
-import { getCsrfToken } from "next-auth/react";
+
+export async function getCsrfToken() {
+  return axios.get("/api/auth/csrf").then((response) => {
+    return response.data.csrfToken;
+  });
+}
 
 /**
  * Put any Client related global helper/utils here. The rest of /lib is for anything server related.

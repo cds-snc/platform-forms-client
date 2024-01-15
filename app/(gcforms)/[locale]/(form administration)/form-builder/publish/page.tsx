@@ -2,7 +2,7 @@ import { serverTranslation } from "@i18n";
 import { ClientSide } from "./clientSide";
 import { FormBuilderInitializer } from "@clientComponents/globals/layouts/FormBuilderLayout";
 import { FormRecord } from "@lib/types";
-import { getAppSession } from "@api/auth/authConfig";
+import { auth } from "@lib/auth";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { getFullTemplateByID } from "@lib/templates";
 import { Metadata } from "next";
@@ -29,7 +29,7 @@ export default async function Page({
     locale,
   };
 
-  const session = await getAppSession();
+  const session = await auth();
 
   const formID = slug[0] || null;
 

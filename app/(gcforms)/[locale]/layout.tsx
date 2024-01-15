@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { getAppSession } from "@api/auth/authConfig";
+import { auth } from "@lib/auth";
 import { ClientContexts } from "@clientComponents/globals/ClientContexts";
 import { headers } from "next/headers";
 import { localPathRegEx } from "@lib/auth/auth";
@@ -11,7 +11,7 @@ export default async function Layout({
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  const session = await getAppSession();
+  const session = await auth();
 
   const headersList = headers();
   const currentPath = headersList.get("x-path")?.replace(`/${locale}`, "") ?? "/";
@@ -41,5 +41,5 @@ export default async function Layout({
     }
   }
 
-  return <ClientContexts session={session}>{children}</ClientContexts>;
+  return <ClientContexts>{children}</ClientContexts>;
 }

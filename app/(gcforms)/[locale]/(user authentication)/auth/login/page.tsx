@@ -2,7 +2,7 @@ import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import UserNavLayout from "@clientComponents/globals/layouts/UserNavLayout";
 import { Login } from "./clientSide";
-import { getAppSession } from "@api/auth/authConfig";
+import { auth } from "@lib/auth";
 import { redirect } from "next/navigation";
 
 export async function generateMetadata({
@@ -17,7 +17,7 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
-  const session = await getAppSession();
+  const session = await auth();
   if (session) {
     redirect(`${locale}/forms`);
   }

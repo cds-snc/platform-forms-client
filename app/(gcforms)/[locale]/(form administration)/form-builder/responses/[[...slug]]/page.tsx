@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { getAppSession } from "@api/auth/authConfig";
+import { auth } from "@lib/auth";
 import { redirect } from "next/navigation";
 import { serverTranslation } from "@i18n";
 import { getFullTemplateByID } from "@lib/templates";
@@ -41,7 +41,7 @@ export default async function Page({
     nagwareResult: null,
   };
 
-  const session = await getAppSession();
+  const session = await auth();
 
   if (session && formID) {
     try {

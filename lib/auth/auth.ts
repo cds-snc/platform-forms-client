@@ -1,4 +1,4 @@
-import { getAppSession } from "@api/auth/authConfig";
+import { auth } from "@lib/auth";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { serverTranslation } from "@i18n";
@@ -29,7 +29,7 @@ export async function requireAuthentication() {
     i18n: { language: locale },
   } = await serverTranslation();
   try {
-    const session = await getAppSession();
+    const session = await auth();
     const headersList = headers();
     const currentPath = headersList.get("x-path")?.replace(`/${locale}`, "") ?? "/";
 

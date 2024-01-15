@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { MiddlewareReturn } from "@lib/types";
-import { getAppSession } from "@api/auth/authConfig";
+import { auth } from "@lib/auth";
 
 /**
  * Checks if the session is authenticated for requested HTTP method
@@ -11,11 +11,7 @@ import { getAppSession } from "@api/auth/authConfig";
 
 export const sessionExists = () => {
   return async (): Promise<MiddlewareReturn> => {
-    // The below work around is needed until we can upgrade to Next-Auth v5
-    // Once upgraded we can pass the request object to getServerSession to
-    // ensure that cookies are updated on the response object.
-
-    const session = await getAppSession();
+    const session = await auth();
 
     // If user is not authenticated or has a deactivated account, return 401
     if (!session || session.user.deactivated) {

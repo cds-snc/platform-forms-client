@@ -6,7 +6,7 @@ import { Dialog, useDialogRef } from "@clientComponents/form-builder/app/shared"
 import { logMessage } from "@lib/logger";
 
 import axios from "axios";
-import { getCsrfToken } from "next-auth/react";
+import { getCsrfToken } from "@lib/clientHelpers";
 import { useRouter } from "next/navigation";
 import debounce from "lodash.debounce";
 import {

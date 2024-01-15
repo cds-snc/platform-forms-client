@@ -42,3 +42,5 @@ export {
   PasswordResetInvalidLink,
   PasswordResetExpiredLink,
 } from "./passwordReset";
+
+export { GET, POST, auth } from "./nextAuth";

@@ -6,7 +6,7 @@ import { Button, StyledLink } from "@clientComponents/globals";
 import { useAuthErrors } from "@lib/hooks/auth/useAuthErrors";
 import { logMessage } from "@lib/logger";
 import axios from "axios";
-import { getCsrfToken } from "next-auth/react";
+import { getCsrfToken } from "@lib/clientHelpers";
 import { hasError } from "@lib/hasError";
 import { Alert } from "@clientComponents/forms";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";

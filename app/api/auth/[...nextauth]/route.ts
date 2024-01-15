@@ -1,10 +1,8 @@
-import NextAuth from "next-auth";
-
 import { begin2FAAuthentication, initiateSignIn } from "@lib/auth/";
 
 import { NextRequest, NextResponse } from "next/server";
 
-import { authOptions } from "@api/auth/authConfig";
+import { GET as NextGET, POST as NextPOST } from "@lib/auth";
 
 if (
   (!process.env.COGNITO_APP_CLIENT_ID ||
@@ -14,10 +12,9 @@ if (
 )
   throw new Error("Missing Cognito Credentials");
 
-// Needed because NextJS attempts to cache the response of this route
-export const dynamic = "force-dynamic";
+export const GET = NextGET;
 
-async function handler(req: NextRequest, context: { params: { nextauth: string[] } }) {
+export const POST = async (req: NextRequest, context: { params: { nextauth: string[] } }) => {
   // Listens for the sign-in action for Cognito to initiate the sign in process
 
   if (context.params.nextauth.includes("signin") && context.params.nextauth.includes("cognito")) {
@@ -84,6 +81,5 @@ async function handler(req: NextRequest, context: { params: { nextauth: string[]
     }
   }
 
-  return NextAuth(req, context, authOptions);
-}
-export { handler as GET, handler as POST };
+  return NextPOST(req);
+};

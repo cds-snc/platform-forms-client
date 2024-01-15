@@ -3,7 +3,8 @@ import { useRef, useState } from "react";
 import Link from "next/link";
 import { Formik } from "formik";
 import { useTranslation } from "@i18n/client";
-import { getCsrfToken } from "next-auth/react";
+
+import { getCsrfToken } from "@lib/clientHelpers";
 import * as Yup from "yup";
 import axios from "axios";
 import { logMessage } from "@lib/logger";

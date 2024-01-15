@@ -6,7 +6,7 @@ import { logMessage } from "@lib/logger";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { getCsrfToken } from "next-auth/react";
+import { getCsrfToken } from "@lib/clientHelpers";
 import { localPathRegEx } from "@lib/validation";
 import { Button } from "@clientComponents/globals";
 
