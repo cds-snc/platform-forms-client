@@ -61,6 +61,7 @@ export const LeftNav = ({ href, children, title = "", onClick, isActive }: LinkB
       <Tooltip text={title} side="right">
         <Link
           {...(isActive && { "aria-current": "page" })}
+          aria-label={title}
           href={href}
           onClick={onClick}
           className={cn(
