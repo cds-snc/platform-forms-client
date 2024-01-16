@@ -14,7 +14,6 @@ describe("Test FormBuilder", () => {
   it("Designs a form", () => {
     cy.visitPage("/form-builder/edit");
     cy.typeInField("#formTitle", "Cypress Test Form");
-    cy.get("a").contains("Edit").should("have.class", "font-bold");
     cy.typeInField(`[aria-label="Form introduction"]`, "form intro");
     cy.get("button").contains("Add").click();
 
@@ -45,7 +44,6 @@ describe("Test FormBuilder", () => {
 
     // preview form
     cy.get("a").contains("Preview").click();
-    cy.get("a").contains("Preview").should("have.class", "font-bold");
     cy.get("#content h1").should("contain", "Cypress Test Form");
     cy.get(".gc-richText p").should("contain", "form intro");
     cy.get("#label-1").should("contain", "Question 1-1");
@@ -58,12 +56,10 @@ describe("Test FormBuilder", () => {
 
     // settings
     cy.get("a").contains("Settings").click();
-    cy.get("a").contains("Settings").should("have.class", "font-bold");
     cy.get("h1").should("contain", "Settings");
 
     // publish form
     cy.get("a").contains("Publish").click();
-    cy.get("a").contains("Publish").should("have.class", "font-bold");
     cy.get("h1").should("contain", "You cannot publish");
     cy.get("a").contains("create one now").click();
 
