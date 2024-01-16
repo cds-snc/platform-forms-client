@@ -10,27 +10,9 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { logMessage } from "@lib/logger";
 import { getOrCreateUser } from "@lib/users";
 import { prisma } from "@lib/integration/prismaConnector";
-import { acceptableUseCheck, removeAcceptableUse } from "@lib/cache/acceptableUseCache";
 import { getPrivilegeRulesForUser } from "@lib/privileges";
 import { logEvent } from "@lib/auditLogs";
 import { activeStatusCheck, activeStatusUpdate } from "@lib/cache/userActiveStatus";
-
-/**
- * Get the acceptable Use value.
- * if key exists in cache return value and remove the key from cache
- * otherwise return false
- * @returns boolean
- */
-const getAcceptableUseValue = async (userId: string) => {
-  if (!userId) return false;
-  const acceptableUse = await acceptableUseCheck(userId);
-
-  // The requirement states that the key must be removed from cache
-  // once it's retrieved.
-
-  if (acceptableUse) await removeAcceptableUse(userId);
-  return acceptableUse;
-};
 
 /**
  * Checks the active status of a user using a cache strategy
