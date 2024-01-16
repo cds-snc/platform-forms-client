@@ -30,7 +30,7 @@ const Header = ({ children }: { children: React.ReactNode }) => {
 };
 
 const Body = ({ children }: { children: React.ReactNode }) => {
-  return <div className="flex w-full py-[70px]">{children}</div>;
+  return <div className="my-20 flex w-full">{children}</div>;
 };
 
 const Footer = ({ children }: { children: React.ReactNode }) => {
@@ -125,7 +125,7 @@ export const ElementDialog = ({
 
         <Body>
           {/* SIDEBAR */}
-          <div className="max-h-[630px] w-1/3 overflow-y-scroll pt-16">
+          <div className=" w-1/3 overflow-y-scroll pt-16">
             <ListBox
               ariaLabel={t("addElementDialog.questionElement")}
               options={elementOptions.map(({ id, value, group, className, icon }) => ({
@@ -141,7 +141,7 @@ export const ElementDialog = ({
           {/* /SIDEBAR */}
 
           {/* DESCRIPTION */}
-          <div className="max-h-[630px] w-2/3 overflow-y-scroll bg-slate-100 px-4 pb-8 pt-16">
+          <div className=" w-2/3 overflow-y-scroll bg-slate-100 px-4 pb-8 pt-16">
             <div role="region" aria-label={`${value} ${t("addElementDialog.example")}`} id={id}>
               <div data-testid="element-description-content" aria-live="polite">
                 {Description && (
