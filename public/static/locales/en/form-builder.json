@@ -138,15 +138,15 @@
     },
     "sometimes": "Sometimes",
     "textArea": {
-      "description": "This text area allows form fillers to enter long-form information.",
       "title": "Long answer",
+      "description": "A text area for a multi-line freeform answer.",
       "forExample": "For example: freeform text"
     },
     "textField": {
-      "description": "This text input allows form fillers to enter short-form information.",
+      "description": "A text input for a single-line answer.",
       "title": "Short answer",
-      "enterAnswer": "Enter your answer",
-      "forExample": "For example: a name or number"
+      "enterAnswer": "Label",
+      "forExample": "Hint or example"
     },
     "yes": "Yes"
   },

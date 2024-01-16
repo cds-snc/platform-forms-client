@@ -133,15 +133,15 @@
     },
     "sometimes": "Parfois",
     "textArea": {
-      "description": "Description de la question à réponse longue",
-      "title": "Question à réponse longue",
-      "forExample": "[FR] For example: freeform text"
+      "title": "Réponse longue",
+      "description": "Question",
+      "forExample": "Text explicatif ou réponse"
     },
     "textField": {
       "description": "Description de la question à réponse courte",
-      "title": "Question à réponse courte",
-      "enterAnswer": "[FR] Enter your answer",
-      "forExample": "[FR] For example: a name or number"
+      "title": "Réponse courte",
+      "enterAnswer": "Étiquette",
+      "forExample": "Texte explicatif our exemple"
     },
     "yes": "Oui"
   },
