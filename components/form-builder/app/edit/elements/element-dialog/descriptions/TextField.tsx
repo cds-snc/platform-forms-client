@@ -15,7 +15,7 @@ export const TextField = () => {
           {t("addElementDialog.textField.enterAnswer")}
         </Label>
         <Description>{t("addElementDialog.textField.forExample")}</Description>
-        <TextInput label="title" type={"text"} name={"name"} />
+        <TextInput label="title" id="name" type={"text"} name={"name"} />
       </ExampleWrapper>
     </div>
   );

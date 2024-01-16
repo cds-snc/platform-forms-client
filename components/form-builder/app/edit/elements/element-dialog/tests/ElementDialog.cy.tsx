@@ -111,6 +111,7 @@ describe("<ElementDialog />", () => {
 
     cy.mount(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
 
+    cy.get('[data-testid="preset-filter"]').click();
     cy.get('[data-testid="number"]').click();
     cy.typeInField("body", "{enter}");
     cy.get("@handleAddTypeSpy").should("have.been.calledWith", "number");
@@ -222,8 +223,9 @@ describe("<ElementDialog />", () => {
 
     cy.mount(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
 
+    cy.get("body").tab();
     cy.focused().should("have.attr", "data-testid", "listbox");
-    cy.get('[data-testid="listbox"').tab();
+    cy.get('[data-testid="listbox"').tab().tab(); // tab past the example element
     cy.focused().should("have.attr", "data-testid", "element-description-add-element");
     cy.get('[data-testid="element-description-add-element"').tab();
     cy.focused().should("have.attr", "data-testid", "cancel-button");
@@ -239,11 +241,12 @@ describe("<ElementDialog />", () => {
 
     cy.mount(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
 
+    cy.get("body").tab();
     cy.focused().should("have.attr", "data-testid", "listbox");
-    cy.get('[data-testid="richText"]').should("have.attr", "aria-selected", "true");
-
-    cy.typeInField("body", "{downarrow}");
     cy.get('[data-testid="textField"]').should("have.attr", "aria-selected", "true");
+
+    // cy.typeInField("body", "{downarrow}");
+    // cy.get('[data-testid="textField"]').should("have.attr", "aria-selected", "true");
 
     cy.typeInField("body", "{downarrow}");
     cy.get('[data-testid="textArea"]').should("have.attr", "aria-selected", "true");
@@ -258,13 +261,13 @@ describe("<ElementDialog />", () => {
     cy.get('[data-testid="dropdown"]').should("have.attr", "aria-selected", "true");
 
     cy.typeInField("body", "{downarrow}");
+    cy.get('[data-testid="attestation"]').should("have.attr", "aria-selected", "true");
+
+    cy.typeInField("body", "{downarrow}");
     cy.get('[data-testid="date"]').should("have.attr", "aria-selected", "true");
 
     cy.typeInField("body", "{downarrow}");
     cy.get('[data-testid="number"]').should("have.attr", "aria-selected", "true");
-
-    cy.typeInField("body", "{downarrow}");
-    cy.get('[data-testid="attestation"]').should("have.attr", "aria-selected", "true");
 
     cy.typeInField("body", "{downarrow}");
     cy.get('[data-testid="name"]').should("have.attr", "aria-selected", "true");
@@ -280,5 +283,8 @@ describe("<ElementDialog />", () => {
 
     cy.typeInField("body", "{downarrow}");
     cy.get('[data-testid="dynamicRow"]').should("have.attr", "aria-selected", "true");
+
+    cy.typeInField("body", "{downarrow}");
+    cy.get('[data-testid="richText"]').should("have.attr", "aria-selected", "true");
   });
 });

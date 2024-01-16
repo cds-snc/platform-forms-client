@@ -42,6 +42,7 @@ const Pill = ({
       )}
       role="radio"
       aria-checked={selected}
+      data-testid={`${group}-filter`}
     >
       {children}
     </button>

@@ -12,11 +12,12 @@ export const TextArea = () => {
       <p>{t("addElementDialog.textArea.description")}</p>
 
       <ExampleWrapper className="mt-4">
-        <Label htmlFor="radio-yes" className="gc-label">
+        <Label htmlFor="textarea" className="gc-label">
           {t("addElementDialog.textArea.title")}
         </Label>
         <Description>{t("addElementDialog.textArea.forExample")}</Description>
         <TextAreaComponent
+          id="textarea"
           characterCountMessages={{
             part1: "characters",
             part2: "characters",
