@@ -68,12 +68,10 @@ export async function requireAuthentication() {
       );
     }
 
-    return {
-      user: { ...session.user, ability: createAbility(session) },
-    };
+    return { user: { ...session.user, ability: createAbility(session) } };
   } catch (e) {
     if (e instanceof AccessControlError) {
-      redirect(`${locale}/admin/unauthorized`);
+      redirect(`/${locale}/admin/unauthorized`);
     }
     throw e;
   }

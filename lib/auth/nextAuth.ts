@@ -64,6 +64,7 @@ const checkUserActiveStatus = async (userID: string): Promise<boolean> => {
 export const {
   handlers: { GET, POST },
   auth,
+  update: authUpdate,
 } = NextAuth({
   providers: [
     CredentialsProvider({
@@ -170,7 +171,7 @@ export const {
   },
 
   callbacks: {
-    async jwt({ token, account }) {
+    async jwt({ token, account, trigger, session }) {
       // account is only available on the first call to the JWT function
       if (account?.provider) {
         if (!token.email) {
@@ -189,12 +190,24 @@ export const {
         }
       }
 
+      // Client side session update (e.g. when a user has accepted the Acceptable Use Policy)
+      // Only permit the updating of certain properties
+
+      if (trigger === "update" && session) {
+        logMessage.debug(`Client Side Session update recieved for user ${token.email}`);
+        token = {
+          ...token,
+          acceptableUse: session.user.acceptableUse,
+          ...(session.user.newlyRegistered && { newlyRegistered: session.user.newlyRegistered }),
+        };
+      }
+
       // Any logic that needs to happen after JWT initializtion needs to be below this point.
 
       // Check if user has accepted the Acceptable Use Policy
-      if (!token.acceptableUse && token.userId) {
-        token.acceptableUse = await getAcceptableUseValue(token.userId);
-      }
+      // if (!token.acceptableUse && token.userId) {
+      //   token.acceptableUse = await getAcceptableUseValue(token.userId);
+      // }
 
       // Check if user has setup required Security Questions
       if (!token.hasSecurityQuestions) {
@@ -211,7 +224,7 @@ export const {
         );
         token.deactivated = true;
       }
-
+      logMessage.debug(`JWT refreshed for user ${token.email}`);
       return token;
     },
     async session({ session, token }) {
@@ -229,7 +242,7 @@ export const {
         ...(token.deactivated && { deactivated: token.deactivated }),
         hasSecurityQuestions: token.hasSecurityQuestions ?? false,
       };
-
+      logMessage.debug(`Session refreshed for user ${token.email}`);
       return session;
     },
     async redirect({ url, baseUrl }) {

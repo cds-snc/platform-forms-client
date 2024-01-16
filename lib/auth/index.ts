@@ -43,4 +43,4 @@ export {
   PasswordResetExpiredLink,
 } from "./passwordReset";
 
-export { GET, POST, auth } from "./nextAuth";
+export { GET, POST, auth, authUpdate } from "./nextAuth";
