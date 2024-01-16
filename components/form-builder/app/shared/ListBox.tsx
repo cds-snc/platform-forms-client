@@ -122,9 +122,9 @@ export const ListBox = ({
                   }}
                   className={`${
                     focussed
-                      ? "border-[0.5px] border-indigo-700 bg-indigo-50 font-bold"
-                      : "font-normal"
-                  } group mb-2 cursor-pointer py-2 pl-4 pr-2 text-lg text-black hover:font-bold hover:text-indigo-700`}
+                      ? "border-[0.5px] border-l-8 border-indigo-700 bg-indigo-50 font-bold"
+                      : "border-l-8 border-l-transparent font-normal"
+                  } group mb-2 cursor-pointer p-2 text-lg text-black hover:font-bold hover:text-indigo-700`}
                   tabIndex={-1}
                   role="option"
                   onClick={() => setFocusIndex(index)}
