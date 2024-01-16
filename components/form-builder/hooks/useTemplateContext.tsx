@@ -12,12 +12,18 @@ interface TemplateApiType {
   error: string | null | undefined;
   saveForm: () => Promise<boolean>;
   templateIsDirty: React.MutableRefObject<boolean>;
+  introChanged: boolean | null;
+  privacyChanged: boolean | null;
+  confirmationChanged: boolean | null;
 }
 
 const defaultTemplateApi: TemplateApiType = {
   error: null,
   saveForm: async () => false,
   templateIsDirty: { current: false },
+  introChanged: null,
+  privacyChanged: null,
+  confirmationChanged: null,
 };
 
 const TemplateApiContext = createContext<TemplateApiType>(defaultTemplateApi);
@@ -40,9 +46,41 @@ const ErrorSaving = ({ supportHref, errorCode }: { supportHref: string; errorCod
   );
 };
 
+interface Description {
+  descriptionEn: string | undefined;
+  descriptionFr: string | undefined;
+}
+
+const descriptionsMatch = (
+  obj: Description | Record<string, string> | undefined,
+  obj2: Description | Record<string, string> | undefined
+) => {
+  let en = true;
+  let fr = true;
+
+  if (!obj || !obj2) {
+    return false;
+  }
+
+  if (obj.descriptionEn && obj2.descriptionEn) {
+    en = obj.descriptionEn === obj2.descriptionEn;
+  }
+
+  if (obj.descriptionFr && obj2.descriptionFr) {
+    fr = obj.descriptionFr === obj2.descriptionFr;
+  }
+
+  return en && fr;
+};
+
 export function TemplateApiProvider({ children }: { children: React.ReactNode }) {
   const { t, i18n } = useTranslation(["form-builder"]);
   const [error, setError] = useState<string | null>();
+
+  const [introChanged, setIntroChanged] = useState<boolean | null>(false);
+  const [privacyChanged, setPrivacyChanged] = useState<boolean | null>(false);
+  const [confirmationChanged, setConfirmationChanged] = useState<boolean | null>(false);
+
   const supportHref = `/${i18n.language}/form-builder/support`;
   const { id, getSchema, getName, hasHydrated, setId, getIsPublished } = useTemplateStore((s) => ({
     id: s.id,
@@ -67,6 +105,30 @@ export function TemplateApiProvider({ children }: { children: React.ReactNode })
     }
   );
 
+  useSubscibeToTemplateStore(
+    (s) => [s.form.introduction, s.form.privacyPolicy, s.form.confirmation],
+    (s, p) => {
+      // look for changes in the descriptions
+      // if changes update the state to ensure the provider
+      // updates the save button
+      const introduction = descriptionsMatch(s[0], p[0]);
+      const privacyPolicy = descriptionsMatch(s[1], p[1]);
+      const confirmation = descriptionsMatch(s[2], p[2]);
+
+      if (introduction !== introChanged) {
+        setIntroChanged(introduction);
+      }
+
+      if (privacyPolicy !== privacyChanged) {
+        setPrivacyChanged(privacyPolicy);
+      }
+
+      if (confirmation !== confirmationChanged) {
+        setConfirmationChanged(confirmation);
+      }
+    }
+  );
+
   const { save } = useTemplateApi();
 
   const saveForm = useCallback(async () => {
@@ -84,6 +146,9 @@ export function TemplateApiProvider({ children }: { children: React.ReactNode })
         }
 
         setError(null);
+        setIntroChanged(null);
+        setPrivacyChanged(null);
+        setConfirmationChanged(null);
         templateIsDirty.current = false;
         setId(result?.id);
       }
@@ -97,7 +162,16 @@ export function TemplateApiProvider({ children }: { children: React.ReactNode })
   }, [status, getIsPublished, getSchema, getName, id, save, setError, setId, t, supportHref]);
 
   return (
-    <TemplateApiContext.Provider value={{ error, saveForm, templateIsDirty }}>
+    <TemplateApiContext.Provider
+      value={{
+        error,
+        saveForm,
+        templateIsDirty,
+        introChanged,
+        privacyChanged,
+        confirmationChanged,
+      }}
+    >
       {children}
     </TemplateApiContext.Provider>
   );
