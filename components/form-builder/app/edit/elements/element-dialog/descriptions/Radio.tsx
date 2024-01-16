@@ -14,9 +14,9 @@ export const Radio = () => {
       <ExampleWrapper className="mt-4">
         <FormGroup name={"radios"}>
           <legend data-testid="label" className="gc-label" id="label-1">
-            Choose an option
+            {t("addElementDialog.radio.chooseAnOption")}
           </legend>
-          <Description>Select only one.</Description>
+          <Description>{t("addElementDialog.radio.selectOnlyOne")}</Description>
 
           <RadioComponent
             id="radio-yes"

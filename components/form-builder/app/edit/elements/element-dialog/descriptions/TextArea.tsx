@@ -13,9 +13,9 @@ export const TextArea = () => {
 
       <ExampleWrapper className="mt-4">
         <Label htmlFor="radio-yes" className="gc-label">
-          Tell us more
+          {t("addElementDialog.textArea.title")}
         </Label>
-        <Description>For example: freeform details</Description>
+        <Description>{t("addElementDialog.textArea.forExample")}</Description>
         <TextAreaComponent
           characterCountMessages={{
             part1: "characters",

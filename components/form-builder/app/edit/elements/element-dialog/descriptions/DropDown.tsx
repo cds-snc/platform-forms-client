@@ -1,5 +1,4 @@
 import React from "react";
-import { ChevronDown } from "@formbuilder/icons";
 import { useTranslation } from "react-i18next";
 import { ExampleWrapper } from "./ExampleWrapper";
 import { Description, Dropdown, Label } from "@components/forms";
@@ -13,14 +12,14 @@ export const DropDown = () => {
 
       <ExampleWrapper className="mt-4">
         <Label htmlFor="dropdown" className="gc-label">
-          Select which option applies.
+          {t("addElementDialog.dropdown.selectOption")}
         </Label>
-        <Description>Select one.</Description>
+        <Description>{t("addElementDialog.dropdown.selectOne")}</Description>
         <div className="overflow-hidden">
           <Dropdown
             name="name"
             id="dropdown"
-            choices={["option one", "option two", "option three"]}
+            choices={t("addElementDialog.dropdown.choices").split(",")}
           />
         </div>
       </ExampleWrapper>

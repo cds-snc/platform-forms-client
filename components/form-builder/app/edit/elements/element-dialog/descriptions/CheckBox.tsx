@@ -12,12 +12,12 @@ export const CheckBox = () => {
 
       <ExampleWrapper className="mt-4">
         <FormGroup name={"checkboxes"}>
-          <legend className="gc-label">Choose items</legend>
-          <Description>Select all that apply.</Description>
+          <legend className="gc-label">{t("addElementDialog.checkbox.chooseItems")}</legend>
+          <Description>{t("addElementDialog.checkbox.selectAllThatApply")}</Description>
 
-          <Checkbox label={"Item one"} id="item1" name={"name"} />
-          <Checkbox label={"Item two"} id="item2" name={"name"} />
-          <Checkbox label={"Item three"} id="item3" name={"name"} />
+          <Checkbox label={t("addElementDialog.checkboxItem")} id="item1" name={"name"} />
+          <Checkbox label={t("addElementDialog.checkboxItem")} id="item2" name={"name"} />
+          <Checkbox label={t("addElementDialog.checkboxItem")} id="item3" name={"name"} />
         </FormGroup>
       </ExampleWrapper>
     </>

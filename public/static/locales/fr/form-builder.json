@@ -1,6 +1,7 @@
 {
   "addElement": "Ajouter",
   "addElementDialog": {
+    "tryIt": "[FR] Try it out!",
     "addButton": "Sélectionner ce bloc",
     "address": {
       "city": "Ville ou communauté",
@@ -25,7 +26,9 @@
     },
     "checkbox": {
       "description": "Description des choix multiples",
-      "title": "Choix multiples"
+      "title": "Choix multiples",
+      "chooseItems": "[FR] Choose items",
+      "selectAllThatApply": "[FR] Select all that apply"
     },
     "checkboxItem": "Case à cocher",
     "condition1": "Condition 1",
@@ -55,14 +58,18 @@
       "title": "Date",
       "example": {
         "dateValue": "mm/jj/aaaa"
-      }
+      },
+      "forExample": "[FR] For example: mm/dd/yyyy"
     },
     "dropdown": {
       "description": "Description de la liste déroulante",
       "title": "Liste déroulante",
       "example": {
         "select": "Sélectionner"
-      }
+      },
+      "selectOption": "[FR] Select which option applies:",
+      "selectOne": "[FR] Select one",
+      "choices": "option one,option two,option three"
     },
     "dynamicRow": {
       "description": "Le bloc de questions répétées offre aux personnes qui remplissent les formulaires la possibilité d'ajouter une série de réponses similaires à une section. Ce bloc fonctionne avec une seule question ou un ensemble de questions connexes.",
@@ -103,12 +110,15 @@
     "no": "Non",
     "number": {
       "description": "Description du numéro",
-      "title": "Numéro"
+      "title": "Numéro",
+      "enterOnlyNumbers": "[FR] Enter only numbers"
     },
     "questionElement": "Blocs",
     "radio": {
       "description": "Description des boutons radio",
-      "title": "Boutons radio"
+      "title": "Boutons radio",
+      "chooseAnOption": "[FR] Choose an option",
+      "selectOnlyOne": "[FR] Select only one"
     },
     "richText": {
       "description": "Texte pour les paragraphes, les <a tab-index=\"-1\" href=\"#\">hyperliens</a> et les listes.",
@@ -117,11 +127,14 @@
     "sometimes": "Parfois",
     "textArea": {
       "description": "Description de la question à réponse longue",
-      "title": "Question à réponse longue"
+      "title": "Question à réponse longue",
+      "forExample": "[FR] For example: freeform text"
     },
     "textField": {
       "description": "Description de la question à réponse courte",
-      "title": "Question à réponse courte"
+      "title": "Question à réponse courte",
+      "enterAnswer": "[FR] Enter your answer",
+      "forExample": "[FR] For example: a name or number"
     },
     "yes": "Oui"
   },

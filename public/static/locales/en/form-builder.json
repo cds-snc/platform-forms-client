@@ -1,6 +1,7 @@
 {
   "addElement": "Add",
   "addElementDialog": {
+    "tryIt": "Try it out!",
     "addButton": "Select block",
     "address": {
       "city": "City, town or community",
@@ -31,7 +32,9 @@
     },
     "checkbox": {
       "description": "These checkboxes allow form fillers to select one or multiple options from a list.",
-      "title": "Multiple options"
+      "title": "Multiple options",
+      "chooseItems": "Choose items",
+      "selectAllThatApply": "Select all that apply"
     },
     "checkboxItem": "Checkbox item",
     "condition1": "Condition 1",
@@ -61,14 +64,18 @@
       "title": "Date",
       "example": {
         "dateValue": "mm/dd/yyyy"
-      }
+      },
+      "forExample": "For example: mm/dd/yyyy"
     },
     "dropdown": {
       "description": "This dropdown allows form fillers to select one option from a pre-defined list.",
       "title": "Dropdown list",
       "example": {
         "select": "Select"
-      }
+      },
+      "selectOption": "Select which option applies:",
+      "selectOne": "Select one",
+      "choices": "option one,option two,option three"
     },
     "dynamicRow": {
       "description": "The repeating question block provides form fillers with the option to add a set of similar answers to the section. This block works with one question or a group of related questions.",
@@ -108,12 +115,15 @@
     "no": "No",
     "number": {
       "description": "Number description",
-      "title": "Number"
+      "title": "Number",
+      "enterOnlyNumbers": "Enter only numbers"
     },
     "questionElement": "Blocks",
     "radio": {
       "description": "These radio buttons allow form fillers to select one single option from a small set.",
-      "title": "Single choice"
+      "title": "Single choice",
+      "chooseAnOption": "Choose an option",
+      "selectOnlyOne": "Select only one"
     },
     "richText": {
       "description": "Text for paragraphs, <a tab-index=\"-1\" href=\"#\">hyperlinks</a>, and lists.",
@@ -122,11 +132,14 @@
     "sometimes": "Sometimes",
     "textArea": {
       "description": "This text area allows form fillers to enter long-form information.",
-      "title": "Long answer"
+      "title": "Long answer",
+      "forExample": "For example: freeform text"
     },
     "textField": {
       "description": "This text input allows form fillers to enter short-form information.",
-      "title": "Short answer"
+      "title": "Short answer",
+      "enterAnswer": "Enter your answer",
+      "forExample": "For example: a name or number"
     },
     "yes": "Yes"
   },

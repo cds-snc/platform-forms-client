@@ -4,7 +4,7 @@ import { ExampleWrapper } from "./ExampleWrapper";
 import { Description, Label, TextInput } from "@components/forms";
 export const Date = () => {
   const { t } = useTranslation("form-builder");
-  const dateExample = t("addElementDialog.date.example.dateValue");
+
   return (
     <div>
       <h3 className="mb-0">{t("addElementDialog.date.title")}</h3>
@@ -12,10 +12,15 @@ export const Date = () => {
 
       <ExampleWrapper className="mt-4">
         <Label htmlFor="name" className="gc-label">
-          Enter a specific answer
+          {t("addElementDialog.date.title")}
         </Label>
-        <Description>Enter a date. For example: mm/dd/yyyy</Description>
-        <TextInput label="title" type={"text"} name={"name"} placeholder={dateExample} />
+        <Description>{t("addElementDialog.date.forExample")}</Description>
+        <TextInput
+          label="title"
+          type={"text"}
+          name={"name"}
+          placeholder={t("addElementDialog.date.example.dateValue")}
+        />
       </ExampleWrapper>
     </div>
   );

@@ -17,7 +17,7 @@ export const Text = ({
       <p className="mb-2">{description}</p>
       <div
         style={height ? { height } : {}}
-        className="w-[350px] rounded border-black-default border-2 p-1"
+        className="w-[350px] rounded border-2 border-black-default p-1"
       >
         {value}
       </div>

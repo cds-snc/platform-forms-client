@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
 import { ExampleWrapper } from "./ExampleWrapper";
-import { Description, Label, FileInput as FileInputComponent } from "@components/forms";
+import { Label, FileInput as FileInputComponent } from "@components/forms";
 
 export const FileInput = ({ title }: { title: string }) => {
   const { t } = useTranslation("form-builder");
@@ -13,10 +13,9 @@ export const FileInput = ({ title }: { title: string }) => {
 
       <ExampleWrapper className="mt-4">
         <Label htmlFor="name" className="gc-label">
-          Enter a specific answer
+          Upload a file
         </Label>
-        <Description>For example: a name or number</Description>
-        <FileInputComponent label="title" name={"name"} />
+        <FileInputComponent label="title" id="name" name={"name"} />
       </ExampleWrapper>
     </div>
   );

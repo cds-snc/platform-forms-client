@@ -4,7 +4,7 @@ import Image from "next/image";
 export const QuestionSet = ({ title, description }: { title: string; description: string }) => {
   return (
     <div>
-      <div className="font-bold text-[1.5rem]">{title}</div>
+      <div className="text-[1.5rem] font-bold">{title}</div>
       <p className="mb-2">{description}</p>
       <Image
         layout="responsive"

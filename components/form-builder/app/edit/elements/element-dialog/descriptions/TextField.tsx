@@ -12,9 +12,9 @@ export const TextField = () => {
 
       <ExampleWrapper className="mt-4">
         <Label htmlFor="name" className="gc-label">
-          Enter a specific answer
+          {t("addElementDialog.textField.enterAnswer")}
         </Label>
-        <Description>For example: a name or number</Description>
+        <Description>{t("addElementDialog.textField.forExample")}</Description>
         <TextInput label="title" type={"text"} name={"name"} />
       </ExampleWrapper>
     </div>

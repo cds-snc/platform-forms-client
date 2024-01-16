@@ -13,9 +13,9 @@ export const Number = () => {
 
       <ExampleWrapper className="mt-4">
         <Label htmlFor="name" className="gc-label">
-          Enter a specific answer
+          {t("addElementDialog.number.title")}
         </Label>
-        <Description>Enter a number</Description>
+        <Description>{t("addElementDialog.number.enterOnlyNumbers")}</Description>
         <TextInput label="title" type="number" name="name" placeholder="123456789" />
       </ExampleWrapper>
     </div>
