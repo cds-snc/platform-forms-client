@@ -11,7 +11,6 @@ export const config = {
   matcher: [
     /*
      * Match all request paths except for the ones starting with:
-     * - api (API routes)
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
@@ -21,7 +20,7 @@ export const config = {
      */
     {
       source:
-        "/((?!api|_next/static|_next/image|favicon.ico|img|static|react_devtools|unsupported-browser|javascript-disabled).*)",
+        "/((?!_next/static|_next/image|favicon.ico|img|static|react_devtools|unsupported-browser|javascript-disabled).*)",
       missing: [
         { type: "header", key: "next-router-prefetch" },
         { type: "header", key: "purpose", value: "prefetch" },
@@ -30,8 +29,34 @@ export const config = {
   ],
 };
 
+const allowedOrigins = [process.env.NEXTAUTH_URL];
+
 export async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
+
+  // Layer 0 - Set CORS on API routes
+  if (pathname.startsWith("/api")) {
+    // Response
+    const response = NextResponse.next();
+
+    // Allowed origins check
+    const origin = req.headers.get("origin") ?? "";
+    if (allowedOrigins.includes(origin)) {
+      response.headers.set("Access-Control-Allow-Origin", origin);
+    }
+
+    // Set default CORS headers
+    response.headers.set("Access-Control-Allow-Credentials", "true");
+    response.headers.set("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS");
+    response.headers.set(
+      "Access-Control-Allow-Headers",
+      "X-CSRF-Token,X-Requested-With,Accept,Accept-Version,Content-Length,Content-MD5,Content-Type,Date,X-Api-Version"
+    );
+    response.headers.set("Access-Control-Max-Age", "86400"); // 60 * 60 * 24 = 24 hours;
+
+    return response;
+  }
+
   const pathLang = pathname.split("/")[1];
   const cookieLang = req.cookies.get("i18next")?.value;
 

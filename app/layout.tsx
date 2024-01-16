@@ -65,6 +65,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
           {googleTagManager}
         </Script>
 
+        {/* Will only run if Browser does not have JS enabled */}
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-W3ZVVX5"
@@ -79,7 +80,6 @@ export default async function Layout({ children }: { children: React.ReactNode }
       </head>
 
       <body>{children}</body>
-      {/* Will only run if Browser does not have JS enabled */}
     </html>
   );
 }
