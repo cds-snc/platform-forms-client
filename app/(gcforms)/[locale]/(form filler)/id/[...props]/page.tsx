@@ -76,7 +76,7 @@ export default async function Page({
           <Form
             formRecord={formRecord}
             language={language}
-            onSuccess={(formID) => redirect(`${language}/id/${formID}/confirmation`)}
+            onSuccess={(formID) => redirect(`/${language}/id/${formID}/confirmation`)}
             t={t}
             renderSubmit={({ validateForm, fallBack }) => {
               return <NextButton validateForm={validateForm} fallBack={fallBack} />;

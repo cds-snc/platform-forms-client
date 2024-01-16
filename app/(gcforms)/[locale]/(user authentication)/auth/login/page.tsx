@@ -19,7 +19,7 @@ export async function generateMetadata({
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const session = await auth();
   if (session) {
-    redirect(`${locale}/forms`);
+    redirect(`/${locale}/forms`);
   }
   return (
     <UserNavLayout contentWidth="tablet:w-[768px] laptop:w-[850px]">

@@ -4,9 +4,12 @@ import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import frContent from "@content/fr/sla.md";
 import enContent from "@content/en/sla.md";
+import { languages } from "@i18n/settings";
 
-interface SLAProps {
-  params: { locale: string };
+export async function generateStaticParams() {
+  return languages.map((lang) => ({
+    locale: lang,
+  }));
 }
 
 export async function generateMetadata({
@@ -20,7 +23,7 @@ export async function generateMetadata({
   };
 }
 
-const SLA = async ({ params: { locale } }: SLAProps) => {
+const SLA = async ({ params: { locale } }: { params: { locale: string } }) => {
   return (
     <RichText className="w-[100%] tablet:w-[90%] laptop:w-[70%]">
       {locale === "fr" ? frContent : enContent}

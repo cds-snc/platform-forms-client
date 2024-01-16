@@ -62,6 +62,15 @@ export const Verify = ({
         authenticationFlowToken: authenticationFlowToken.current,
         redirect: false,
         json: true,
+      }).catch((err) => {
+        if (
+          err instanceof TypeError &&
+          err.message === "URL constructor: /api/auth is not a valid URL."
+        ) {
+          // Auth was sucessfull but the redirect failed, so we need to manually redirect
+          // Waiting for this fix: https://github.com/nextauthjs/next-auth/issues/9309
+          return { ok: true, error: null };
+        }
       });
 
       // Failed

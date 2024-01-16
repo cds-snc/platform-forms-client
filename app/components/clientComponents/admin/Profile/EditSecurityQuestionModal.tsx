@@ -116,7 +116,7 @@ export const EditSecurityQuestionModal = ({
 
       dialog.current?.close();
       handleClose();
-      router.push(`${i18n.language}/profile`);
+      router.push(`/${i18n.language}/profile`);
     } catch (err) {
       logMessage.error(err);
       setIsFormError(true);

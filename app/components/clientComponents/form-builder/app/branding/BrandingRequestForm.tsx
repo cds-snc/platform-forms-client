@@ -29,7 +29,7 @@ export const BrandingRequestForm = ({ formRecord }: { formRecord: PublicFormReco
             formRecord={formRecord}
             language={language}
             t={t}
-            onSuccess={(formID) => router.push(`${language}/id/${formID}/confirmation`)}
+            onSuccess={(formID) => router.push(`/${language}/id/${formID}/confirmation`)}
           >
             {currentForm}
           </Form>

@@ -22,7 +22,7 @@ export async function generateMetadata({
 
 const BackToAccounts = async ({ id, locale }: { id: string; locale: string }) => {
   const { t } = await serverTranslation("admin-users");
-  return <BackLink href={`${locale}/admin/accounts?id=${id}`}>{t("backToAccounts")}</BackLink>;
+  return <BackLink href={`/${locale}/admin/accounts?id=${id}`}>{t("backToAccounts")}</BackLink>;
 };
 
 export default async function Page({

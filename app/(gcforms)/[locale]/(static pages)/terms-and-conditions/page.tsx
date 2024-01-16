@@ -5,6 +5,14 @@ import { serverTranslation } from "@i18n";
 import frContent from "@content/fr/terms-and-conditions.md";
 import enContent from "@content/en/terms-and-conditions.md";
 
+import { languages } from "@i18n/settings";
+
+export async function generateStaticParams() {
+  return languages.map((lang) => ({
+    locale: lang,
+  }));
+}
+
 export async function generateMetadata({
   params: { locale },
 }: {

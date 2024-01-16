@@ -34,12 +34,12 @@ export default async function Layout({
       // If already on the policy page don't redirect, aka endless redirect loop.
       // Also check that the path is local and not an external URL
       redirect(
-        `/${locale}/auth/policy?referer=${
+        `/${locale}/auth/policy?referer=/${locale}${
           localPathRegEx.test(currentPath) ? currentPath : "/forms"
         }`
       );
     }
   }
 
-  return <ClientContexts>{children}</ClientContexts>;
+  return <ClientContexts session={session}>{children}</ClientContexts>;
 }

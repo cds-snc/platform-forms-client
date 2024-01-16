@@ -31,7 +31,7 @@ export default async function Page({
   ) {
     return {
       redirect: {
-        destination: `${locale}/forms`,
+        destination: `/${locale}/forms`,
         permanent: false,
       },
     };

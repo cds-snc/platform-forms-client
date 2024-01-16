@@ -21,7 +21,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const session = await auth();
 
   if (!session) {
-    redirect(`${locale}/auth/login`);
+    redirect(`/${locale}/auth/login`);
   }
   return (
     <div className="mt-10">
