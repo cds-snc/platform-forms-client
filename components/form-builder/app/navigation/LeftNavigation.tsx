@@ -37,6 +37,7 @@ export const LeftNavigation = () => {
         {!isPublished && (
           <li>
             <LinkButton.LeftNav
+              testid="edit"
               {...linkHelper("/edit", activePathname)}
               onClick={saveForm}
               title={t("edit")}
@@ -47,6 +48,7 @@ export const LeftNavigation = () => {
         )}
         <li>
           <LinkButton.LeftNav
+            testid="preview"
             {...linkHelper("/preview", activePathname)}
             onClick={saveForm}
             title={status === "authenticated" ? t("test") : t("pagePreview")}
@@ -56,6 +58,7 @@ export const LeftNavigation = () => {
         </li>
         <li>
           <LinkButton.LeftNav
+            testid="settings"
             {...linkHelper(`/settings/${id}`, activePathname)}
             onClick={saveForm}
             title={t("pageSettings")}
@@ -66,6 +69,7 @@ export const LeftNavigation = () => {
         {!isPublished && (
           <li>
             <LinkButton.LeftNav
+              testid="publish"
               {...linkHelper("/publish", activePathname)}
               onClick={saveForm}
               title={t("publish")}
@@ -76,6 +80,7 @@ export const LeftNavigation = () => {
         )}
         <li>
           <LinkButton.LeftNav
+            testid="responses"
             {...linkHelper(`/responses/${id}`, activePathname)}
             onClick={saveForm}
             title={t("responsesNavLabel")}

@@ -1,3 +1,5 @@
+import { screen } from "@testing-library/react";
+
 describe("Test FormBuilder", () => {
   beforeEach(() => {
     cy.visitPage("/form-builder");
@@ -43,7 +45,7 @@ describe("Test FormBuilder", () => {
     cy.get("#required-1-id").should("be.checked");
 
     // preview form
-    cy.get("a").contains("Preview").click();
+    screen.getByTestId("preview").click();
     cy.get("#content h1").should("contain", "Cypress Test Form");
     cy.get(".gc-richText p").should("contain", "form intro");
     cy.get("#label-1").should("contain", "Question 1-1");
@@ -55,11 +57,11 @@ describe("Test FormBuilder", () => {
     );
 
     // settings
-    cy.get("a").contains("Settings").click();
+    screen.getByTestId("settings").click();
     cy.get("h1").should("contain", "Settings");
 
     // publish form
-    cy.get("a").contains("Publish").click();
+    screen.getByTestId("publish").click();
     cy.get("h1").should("contain", "You cannot publish");
     cy.get("a").contains("create one now").click();
 

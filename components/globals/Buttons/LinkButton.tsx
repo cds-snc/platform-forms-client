@@ -13,6 +13,7 @@ type LinkButtonProps = {
   title?: string;
   onClick?: () => void;
   isActive?: boolean;
+  testid?: string;
 };
 
 export const Primary = ({ href, children, className, scroll }: LinkButtonProps) => {
@@ -44,7 +45,14 @@ export const Secondary = ({ href, className, children, scroll }: LinkButtonProps
   );
 };
 
-export const LeftNav = ({ href, children, title = "", onClick, isActive }: LinkButtonProps) => {
+export const LeftNav = ({
+  href,
+  children,
+  title = "",
+  onClick,
+  isActive,
+  testid,
+}: LinkButtonProps) => {
   const classes = {
     base: "border-box flex h-[60px] w-[60px] items-center justify-center text-black-default no-underline ",
     hover: "hover:border-indigo-700 [&_svg]:hover:fill-indigo-700 hover:border-1 ",
@@ -64,6 +72,7 @@ export const LeftNav = ({ href, children, title = "", onClick, isActive }: LinkB
           aria-label={title}
           href={href}
           onClick={onClick}
+          data-testid={testid ? testid : ""}
           className={cn(
             classes.base,
             classes.hover,
