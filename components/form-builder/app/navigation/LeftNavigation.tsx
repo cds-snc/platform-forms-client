@@ -9,7 +9,6 @@ import {
 } from "../../icons";
 import { useTemplateContext } from "@components/form-builder/hooks";
 import { useTemplateStore } from "../../store/useTemplateStore";
-import { useSession } from "next-auth/react";
 import { useActivePathname, cleanPath } from "../../hooks/useActivePathname";
 import { LinkButton } from "@components/globals";
 
@@ -27,7 +26,6 @@ const linkHelper = (url: string, activePathname: string) => {
 export const LeftNavigation = () => {
   const { t } = useTranslation("form-builder");
   const { isPublished, id } = useTemplateStore((s) => ({ id: s.id, isPublished: s.isPublished }));
-  const { status } = useSession();
   const { activePathname } = useActivePathname();
   const { saveForm } = useTemplateContext();
 
@@ -51,7 +49,7 @@ export const LeftNavigation = () => {
             testid="preview"
             {...linkHelper("/preview", activePathname)}
             onClick={saveForm}
-            title={status === "authenticated" ? t("test") : t("pagePreview")}
+            title={t("test")}
           >
             <NavPreviewIcon />
           </LinkButton.LeftNav>
