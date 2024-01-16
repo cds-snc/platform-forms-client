@@ -134,7 +134,7 @@ export const ElementDialog = ({
           {/* DESCRIPTION */}
           <div className="max-h-[630px] w-2/3 overflow-y-scroll bg-slate-100 px-4 pb-8 pt-16">
             <div role="region" aria-label={`${value} ${t("addElementDialog.example")}`} id={id}>
-              <div data-testid="element-description-content">
+              <div data-testid="element-description-content" aria-live="polite">
                 {Description && (
                   <Description
                     title={t(`addElementDialog.${id}.title`)}
