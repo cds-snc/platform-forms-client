@@ -72,6 +72,7 @@ describe("Test FormBuilder Add Elements", () => {
     cy.visitPage("/form-builder/edit");
     cy.get("button").contains("Add").click();
 
+    cy.get('[data-testid="dropdown"]').scrollIntoView();
     cy.get('[data-testid="dropdown"]').click();
     cy.get("button").contains("Select block").click();
 
@@ -86,6 +87,7 @@ describe("Test FormBuilder Add Elements", () => {
     cy.visitPage("/form-builder/edit");
     cy.get("button").contains("Add").click();
 
+    cy.get('[data-testid="date"]').scrollIntoView();
     cy.get('[data-testid="date"]').click();
     cy.get("button").contains("Select block").click();
 
@@ -102,6 +104,7 @@ describe("Test FormBuilder Add Elements", () => {
     cy.visitPage("/form-builder/edit");
     cy.get("button").contains("Add").click();
 
+    cy.get('[data-testid="number"]').scrollIntoView();
     cy.get('[data-testid="number"]').click();
     cy.get("button").contains("Select block").click();
 
