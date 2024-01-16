@@ -287,4 +287,59 @@ describe("<ElementDialog />", () => {
     cy.typeInField("body", "{downarrow}");
     cy.get('[data-testid="richText"]').should("have.attr", "aria-selected", "true");
   });
+
+  it("Keybaord navigate the filters", () => {
+    cy.viewport(950, 900);
+
+    const handleCloseSpy = cy.spy().as("handleCloseSpy");
+    const handleAddTypeSpy = cy.spy().as("handleAddTypeSpy");
+
+    cy.mount(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
+
+    cy.focused().should("have.attr", "data-testid", "all-filter");
+    cy.typeInField("body", "{rightarrow}");
+    cy.focused().should("have.attr", "data-testid", "basic-filter");
+    cy.typeInField("body", "{rightarrow}");
+    cy.focused().should("have.attr", "data-testid", "preset-filter");
+    cy.typeInField("body", "{rightarrow}");
+    cy.focused().should("have.attr", "data-testid", "advanced-filter");
+    cy.typeInField("body", "{rightarrow}");
+    cy.focused().should("have.attr", "data-testid", "other-filter");
+    cy.get('[data-testid="other-filter"]').tab();
+    cy.focused().should("have.attr", "data-testid", "listbox");
+    cy.get('[data-testid="listbox"]').tab({ shift: true });
+    cy.focused().should("have.attr", "data-testid", "other-filter");
+    cy.typeInField("body", "{leftarrow}");
+    cy.focused().should("have.attr", "data-testid", "advanced-filter");
+    cy.typeInField("body", "{leftarrow}");
+    cy.focused().should("have.attr", "data-testid", "preset-filter");
+    cy.typeInField("body", "{leftarrow}");
+    cy.focused().should("have.attr", "data-testid", "basic-filter");
+    cy.typeInField("body", "{leftarrow}");
+    cy.focused().should("have.attr", "data-testid", "all-filter");
+  });
+
+  it("Can filter the listbox", () => {
+    cy.viewport(950, 900);
+
+    const handleCloseSpy = cy.spy().as("handleCloseSpy");
+    const handleAddTypeSpy = cy.spy().as("handleAddTypeSpy");
+
+    cy.mount(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
+
+    cy.focused().should("have.attr", "data-testid", "all-filter");
+    cy.typeInField("body", "{rightarrow}");
+    cy.focused().should("have.attr", "data-testid", "basic-filter");
+    cy.get('[data-testid="basic-filter').click();
+    cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 6);
+    cy.get('[data-testid="preset-filter').click();
+    cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 6);
+    cy.get('[data-testid="advanced-filter').click();
+    cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 1);
+    cy.get('[data-testid="other-filter').click();
+    cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 1);
+
+    cy.get('[data-testid="all-filter').click();
+    cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 14);
+  });
 });
