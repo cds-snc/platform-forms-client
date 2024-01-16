@@ -40,7 +40,8 @@ const Pill = ({
       ref={ref}
       className={cn(
         "rounded-full border border-slate-800 bg-white px-4 py-2",
-        selected && "bg-blue-800 text-white"
+        selected && "bg-blue-800 text-white",
+        focused && "outline-1 outline-offset-4 outline-blue-focus"
       )}
       role="radio"
       aria-checked={selected}
