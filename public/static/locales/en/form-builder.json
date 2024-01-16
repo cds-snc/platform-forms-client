@@ -1,6 +1,13 @@
 {
   "addElement": "Add",
   "addElementDialog": {
+    "filters": {
+      "all": "All",
+      "basic": "Basic",
+      "preset": "Preset",
+      "advanced": "Advanced",
+      "other": "Other"
+    },
     "tryIt": "Try it out!",
     "addButton": "Select block",
     "address": {

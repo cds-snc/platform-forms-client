@@ -1,6 +1,13 @@
 {
   "addElement": "Ajouter",
   "addElementDialog": {
+    "filters": {
+      "all": "[FR] All",
+      "basic": "[FR] Basic",
+      "preset": "[FR] Preset",
+      "advanced": "[FR] Advanced",
+      "other": "[FR] Other"
+    },
     "tryIt": "[FR] Try it out!",
     "addButton": "Sélectionner ce bloc",
     "address": {

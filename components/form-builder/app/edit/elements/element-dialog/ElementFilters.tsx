@@ -3,6 +3,7 @@ import { cn } from "@lib/utils";
 import React, { useRef } from "react";
 import { RovingTabIndexProvider, useFocusEffect, useRovingTabIndex } from "react-roving-tabindex";
 import { SelectedGroupState } from "./ElementDialog";
+import { useTranslation } from "react-i18next";
 
 const Pill = ({
   group,
@@ -16,7 +17,6 @@ const Pill = ({
   setSelectedGroup: React.Dispatch<React.SetStateAction<SelectedGroupState>>;
 }) => {
   const selected = group === selectedGroup.group;
-
   const ref = useRef<HTMLButtonElement>(null);
   const groupObj = { group, ref } as SelectedGroupState;
 
@@ -60,6 +60,8 @@ export const ElementFilters = ({
   setSelectedGroup: React.Dispatch<React.SetStateAction<SelectedGroupState>>;
   activeGroups: Groups[];
 }) => {
+  const { t } = useTranslation("form-builder");
+
   return (
     <div
       className="z-100 mt-4 flex gap-4"
@@ -69,7 +71,7 @@ export const ElementFilters = ({
     >
       <RovingTabIndexProvider>
         <Pill selectedGroup={selectedGroup} setSelectedGroup={setSelectedGroup} group="all">
-          All
+          {t("addElementDialog.filters.all")}
         </Pill>
         {activeGroups.includes(Groups.BASIC) && (
           <Pill
@@ -77,7 +79,7 @@ export const ElementFilters = ({
             setSelectedGroup={setSelectedGroup}
             group={Groups.BASIC}
           >
-            Basic <span className="visually-hidden">questions</span>
+            {t("addElementDialog.filters.basic")}
           </Pill>
         )}
         {activeGroups.includes(Groups.PRESET) && (
@@ -86,7 +88,7 @@ export const ElementFilters = ({
             setSelectedGroup={setSelectedGroup}
             group={Groups.PRESET}
           >
-            Preset <span className="visually-hidden">questions</span>
+            {t("addElementDialog.filters.preset")}
           </Pill>
         )}
         {activeGroups.includes(Groups.ADVANCED) && (
@@ -95,7 +97,7 @@ export const ElementFilters = ({
             setSelectedGroup={setSelectedGroup}
             group={Groups.ADVANCED}
           >
-            Advanced <span className="visually-hidden">questions</span>
+            {t("addElementDialog.filters.advanced")}
           </Pill>
         )}
         {activeGroups.includes(Groups.OTHER) && (
@@ -104,7 +106,7 @@ export const ElementFilters = ({
             setSelectedGroup={setSelectedGroup}
             group={Groups.OTHER}
           >
-            Other <span className="visually-hidden">elements</span>
+            {t("addElementDialog.filters.other")}
           </Pill>
         )}
       </RovingTabIndexProvider>
