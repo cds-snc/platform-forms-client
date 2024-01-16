@@ -8,6 +8,11 @@ import { Button } from "@components/globals";
 import { Groups } from "@components/form-builder/hooks/useElementOptions";
 import { ElementFilters } from "./ElementFilters";
 
+export type SelectedGroupState = {
+  group: Groups | "all";
+  ref: React.RefObject<HTMLElement>;
+};
+
 const filterElementsByGroup = (elements: ElementOption[], selectedGroup: Groups | "all") => {
   if (selectedGroup === "all") {
     return elements;
@@ -48,7 +53,10 @@ export const ElementDialog = ({
   const { t } = useTranslation("form-builder");
   const dialog = useDialogRef();
   const [selectedElement, setSelectedElement] = useState(0);
-  const [selectedGroup, setSelectedGroup] = useState<Groups | "all">("all");
+  const [selectedGroup, setSelectedGroup] = useState<SelectedGroupState>({
+    group: "all",
+    ref: React.createRef<HTMLElement>(),
+  });
 
   // Retrieve elements applying any initial filters
   const filteredElements = useElementOptions(filterElements);
@@ -59,7 +67,7 @@ export const ElementDialog = ({
   ) as Groups[];
 
   // Now filter by selected group
-  const elementOptions = filterElementsByGroup(filteredElements, selectedGroup);
+  const elementOptions = filterElementsByGroup(filteredElements, selectedGroup.group);
 
   const handleChange = useCallback(
     (val: number) => {
@@ -85,8 +93,9 @@ export const ElementDialog = ({
 
   // Retain focus on selected filter on change
   useEffect(() => {
-    const selectedFilter = document.getElementById(`${selectedGroup}-filter`);
-    selectedFilter?.focus();
+    if (selectedGroup.ref.current) {
+      selectedGroup.ref.current.focus();
+    }
     setSelectedElement(0);
   }, [selectedGroup]);
 

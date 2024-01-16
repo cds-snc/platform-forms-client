@@ -2,6 +2,7 @@ import { Groups } from "@components/form-builder/hooks/useElementOptions";
 import { cn } from "@lib/utils";
 import React, { useRef } from "react";
 import { RovingTabIndexProvider, useFocusEffect, useRovingTabIndex } from "react-roving-tabindex";
+import { SelectedGroupState } from "./ElementDialog";
 
 const Pill = ({
   group,
@@ -11,12 +12,13 @@ const Pill = ({
 }: {
   group: Groups | "all";
   children: React.ReactNode;
-  selectedGroup: Groups | "all";
-  setSelectedGroup: React.Dispatch<React.SetStateAction<Groups | "all">>;
+  selectedGroup: SelectedGroupState;
+  setSelectedGroup: React.Dispatch<React.SetStateAction<SelectedGroupState>>;
 }) => {
-  const selected = group === selectedGroup;
+  const selected = group === selectedGroup.group;
 
   const ref = useRef<HTMLButtonElement>(null);
+  const groupObj = { group, ref } as SelectedGroupState;
 
   const disabled = false;
 
@@ -24,7 +26,7 @@ const Pill = ({
 
   useFocusEffect(focused, ref);
 
-  const updateSelectedGroup = (group: Groups | "all") => {
+  const updateSelectedGroup = (group: SelectedGroupState) => {
     setSelectedGroup(group);
   };
 
@@ -33,7 +35,7 @@ const Pill = ({
       tabIndex={tabIndex}
       disabled={disabled}
       onKeyDown={handleKeyDown}
-      onClick={() => updateSelectedGroup(group)}
+      onClick={() => updateSelectedGroup(groupObj)}
       id={`${group}-filter`}
       ref={ref}
       className={cn(
@@ -54,8 +56,8 @@ export const ElementFilters = ({
   selectedGroup,
   activeGroups,
 }: {
-  setSelectedGroup: React.Dispatch<React.SetStateAction<Groups | "all">>;
-  selectedGroup: Groups | "all";
+  selectedGroup: SelectedGroupState;
+  setSelectedGroup: React.Dispatch<React.SetStateAction<SelectedGroupState>>;
   activeGroups: Groups[];
 }) => {
   return (
