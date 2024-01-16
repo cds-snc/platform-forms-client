@@ -6,6 +6,7 @@ describe("Form builder description text", () => {
 
   it("Renders date element with example text", () => {
     cy.get("button").contains("Add").click();
+    cy.get('[data-testid="preset-filter"]').click();
     cy.get('[data-testid="date"]').click();
     cy.get("button").contains("Select block").click();
     cy.get(".description-text")
@@ -16,6 +17,7 @@ describe("Form builder description text", () => {
 
   it("Renders numeric element with example text", () => {
     cy.get("button").contains("Add").click();
+    cy.get('[data-testid="preset-filter"]').click();
     cy.get('[data-testid="number"]').click();
     cy.get("button").contains("Select block").click();
     cy.get(".description-text").should("be.visible").contains("Only enter numbers");
