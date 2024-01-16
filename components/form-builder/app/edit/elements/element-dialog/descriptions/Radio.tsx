@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
-import { Description, Radio as RadioComponent, Label, FormGroup } from "@components/forms";
+import { Description, Radio as RadioComponent, FormGroup } from "@components/forms";
 import { ExampleWrapper } from "./ExampleWrapper";
 
 export const Radio = () => {
