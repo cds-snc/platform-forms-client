@@ -15,7 +15,7 @@ describe("Test FormBuilder", () => {
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="radio"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.typeInField("#item-1", "Question 1");
     cy.typeInField("#option--1--1", "option 1");

@@ -11,7 +11,7 @@ describe("Test FormBuilder language switching", () => {
     cy.wait(1000);
     cy.get("button").contains("Add").click();
     cy.get('[data-testid="richText"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
 
     // Enter English Title and Introduction
     cy.typeInField("#formTitle", "Cypress Test Form");

@@ -35,7 +35,7 @@ describe("Test FormBuilder autocomplete props", () => {
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="textField"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.get('[data-testid="more"]').click();
     cy.get('[data-testid="autocomplete"] > option').should(
@@ -50,7 +50,7 @@ describe("Test FormBuilder autocomplete props", () => {
       cy.get("button").contains("Add").click();
 
       cy.get('[data-testid="textField"]').click();
-      cy.get("button").contains("Select block").click();
+      cy.get('[data-testid="element-description-add-element"]').click();
 
       cy.get('[id="item-1"]').should("have.attr", "placeholder", "Question");
 

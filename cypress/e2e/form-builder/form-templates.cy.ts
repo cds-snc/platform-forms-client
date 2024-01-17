@@ -9,7 +9,7 @@ describe("Test FormBuilder", () => {
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="name"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.get('[data-testid="autocomplete-1"]').should("contain", "Full name");
 
@@ -22,7 +22,7 @@ describe("Test FormBuilder", () => {
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="firstMiddleLastName"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.get('[data-testid="autocomplete-2"]').should("contain", "First name");
     cy.get('[data-testid="autocomplete-3"]').should("contain", "Middle name");
@@ -45,7 +45,7 @@ describe("Test FormBuilder", () => {
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="address"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.get('[data-testid="autocomplete-2"]').should("contain", "Address line 1");
     cy.get('[data-testid="autocomplete-3"]').should("contain", "City, town, community");
@@ -71,7 +71,7 @@ describe("Test FormBuilder", () => {
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="contact"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.get('[data-testid="autocomplete-2"]').should("contain", "Phone number");
     cy.get('[data-testid="autocomplete-3"]').should("contain", "Email address");

@@ -8,7 +8,7 @@ describe("Form builder attestation", () => {
     cy.get("button").contains("Add").click();
     cy.get('[data-testid="basic-filter"]').click();
     cy.get('[data-testid="attestation"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
     cy.get("#item-1").scrollIntoView();
     cy.get("#item-1").should("have.value", "I agree to:");
     cy.get("#option--1--1").should("have.value", "Condition 1");

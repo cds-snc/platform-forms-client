@@ -9,7 +9,7 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="richText"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.get('[data-testid="richText"]').should("be.visible");
   });
@@ -19,7 +19,7 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="textField"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.get('[id="item-1"]').should("have.attr", "placeholder", "Question");
 
@@ -31,7 +31,7 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="textArea"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.get('[id="item-1"]').should("have.attr", "placeholder", "Question");
 
@@ -43,7 +43,7 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="radio"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.get('[id="item-1"]').should("have.attr", "placeholder", "Question");
 
@@ -59,7 +59,7 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="checkbox"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.get('[id="item-1"]').should("have.attr", "placeholder", "Question");
 
@@ -74,7 +74,7 @@ describe("Test FormBuilder Add Elements", () => {
 
     cy.get('[data-testid="basic-filter"]').click();
     cy.get('[data-testid="dropdown"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.get('[id="item-1"]').should("have.attr", "placeholder", "Question");
 
@@ -89,7 +89,7 @@ describe("Test FormBuilder Add Elements", () => {
 
     cy.get('[data-testid="preset-filter"]').click();
     cy.get('[data-testid="date"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.get('[id="item-1"]').should("have.attr", "placeholder", "Question");
 
@@ -106,7 +106,7 @@ describe("Test FormBuilder Add Elements", () => {
 
     cy.get('[data-testid="preset-filter"]').click();
     cy.get('[data-testid="number"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.get('[id="item-1"]').should("have.attr", "placeholder", "Question");
 
