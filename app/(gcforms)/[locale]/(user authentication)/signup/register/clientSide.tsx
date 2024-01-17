@@ -124,11 +124,7 @@ export const Register = () => {
   if (needsVerification) {
     return (
       <>
-        <Verify
-          type="register"
-          username={username}
-          authenticationFlowToken={authenticationFlowToken}
-        />
+        <Verify username={username} authenticationFlowToken={authenticationFlowToken} />
       </>
     );
   }

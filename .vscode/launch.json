@@ -21,7 +21,8 @@
       "name": "Next.js: debug client-side",
       "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:3000"
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}",
     },
     {
       "name": "Next.js: debug full stack",
@@ -30,10 +31,11 @@
       "command": "npm run dev",
       "serverReadyAction": {
         "pattern": "- Local:.+(https?://.+)",
-        "uriFormat": "http://localhost:%s",
-        "action": "debugWithChrome"
+        "action": "startDebugging",
+        "name": "Next.js: debug client-side",
       }
     },
+
     {
       "type": "node",
       "name": "vscode-jest-tests",

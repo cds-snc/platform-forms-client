@@ -14,7 +14,7 @@ import { signIn } from "next-auth/react";
 import { hasError } from "@lib/hasError";
 import { useAuthErrors } from "@lib/hooks/auth/useAuthErrors";
 import { ReVerify } from "./ReVerify";
-import { useSession } from "next-auth/react";
+import { useSession, getSession } from "next-auth/react";
 import Head from "next/head";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { Locked2fa } from "./Locked2fa";
@@ -23,21 +23,16 @@ import { Expired2faSession } from "./Expired2faSession";
 interface VerifyProps {
   username: React.MutableRefObject<string>;
   authenticationFlowToken: React.MutableRefObject<string>;
-  type: "login" | "register";
 }
 
-export const Verify = ({
-  username,
-  authenticationFlowToken,
-  type = "login",
-}: VerifyProps): ReactElement => {
+export const Verify = ({ username, authenticationFlowToken }: VerifyProps): ReactElement => {
   const router = useRouter();
   const { t, i18n } = useTranslation(["auth-verify", "cognito-errors", "common"]);
   const [authErrorsState, { authErrorsReset, handleErrorById }] = useAuthErrors();
   const [isReVerify, setIsReverify] = useState(false);
   const [is2FAlocked, setIs2FAlocked] = useState(false);
   const [is2FAExpiredSession, set2FAExpiredSession] = useState(false);
-  const { data: session, status: authStatus } = useSession();
+  const { data: session, status: authStatus, update: authUpdate } = useSession();
 
   const headingRef = useRef(null);
   useFocusIt({ elRef: headingRef, dependencies: [isReVerify] });
@@ -45,12 +40,22 @@ export const Verify = ({
   useEffect(() => {
     if (authStatus === "authenticated") {
       if (session.user.newlyRegistered) {
-        router.push(`/${i18n.language}/auth/policy?referer=/signup/account-created`);
-      } else {
-        router.push(`/${i18n.language}/auth/policy`);
+        return router.push(`/${i18n.language}/auth/policy?referer=/signup/account-created`);
       }
+
+      fetch("/api/account/submissions/overdue").then(async (response) => {
+        if (response.status === 200) {
+          const data = await response.json();
+
+          if (data.hasOverdueSubmissions) {
+            router.push(`/${i18n.language}/auth/restricted-access`);
+          } else {
+            router.push(`/${i18n.language}/auth/policy`);
+          }
+        }
+      });
     }
-  }, [session, authStatus, router, i18n.language]);
+  }, [session, authStatus, router, i18n.language, authUpdate]);
 
   const handleVerify = async ({ verificationCode }: { verificationCode: string }) => {
     authErrorsReset();
@@ -87,25 +92,10 @@ export const Verify = ({
         }
         return;
       }
-
       // Success
-      if (result) {
-        const response = await fetch("/api/account/submissions/overdue");
-        if (response.status === 200) {
-          const data = await response.json();
-
-          if (data.hasOverdueSubmissions) {
-            router.push(`/${i18n.language}/auth/restricted-access`);
-            return;
-          }
-        }
-
-        router.push(
-          `/${i18n.language}/auth/policy${
-            type === "register" ? "?referer=/signup/account-created" : ""
-          }`
-        );
-      }
+      // if result.ok is true, then the redirect will happen in the useEffect
+      // Force update of SessionProvider by calling getSession
+      await getSession();
     } catch (err) {
       logMessage.error(err);
 
