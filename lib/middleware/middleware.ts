@@ -14,7 +14,7 @@ export const middleware = (
 ) => {
   return async (
     req: NextRequest,
-    context: { params: Record<string, string | string[]> }
+    context: { params?: Record<string, string | string[]> }
   ): Promise<NextResponse> => {
     try {
       let props = {};
@@ -38,7 +38,7 @@ export const middleware = (
 
         props = { ...props, ...middlewareProps };
       }
-      return handler(req, { ...props, body: reqBody, context });
+      return handler(req, { ...props, body: reqBody, ...context });
     } catch (e) {
       logMessage.error(e as Error);
       return NextResponse.json({ error: "Server Middleware Error" }, { status: 500 });

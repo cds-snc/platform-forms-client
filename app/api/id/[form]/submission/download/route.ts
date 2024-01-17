@@ -48,7 +48,7 @@ export const POST = middleware([sessionExists()], async (req, props) => {
   try {
     const { session } = props as WithRequired<MiddlewareProps, "session">;
     const responseConfirmLimit = Number(await getAppSetting("responseDownloadLimit"));
-    const formID = props.context?.params?.form;
+    const formID = props.params?.form;
     const format =
       (req.nextUrl.searchParams.get("format") as DownloadFormat) ?? DownloadFormat.HTML;
 

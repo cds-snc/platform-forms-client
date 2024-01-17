@@ -60,7 +60,7 @@ export const GET = middleware(
 
       const ability = createAbility(session);
 
-      const formID = props.context?.params?.formID;
+      const formID = props.params?.formID;
 
       if (!formID || typeof formID !== "string") {
         throw new MalformedAPIRequest("Invalid or missing formID");
@@ -136,7 +136,7 @@ export const PUT = middleware(
         sendResponsesToVault,
       }: PutApiProps = props.body;
 
-      const formID = props.context?.params?.formID;
+      const formID = props.params?.formID;
 
       if (!formID || typeof formID !== "string") {
         throw new MalformedAPIRequest("Invalid or missing formID");
@@ -206,7 +206,7 @@ export const DELETE = middleware([sessionExists()], async (_, props) => {
     const { session } = props as WithRequired<MiddlewareProps, "session">;
 
     const ability = createAbility(session);
-    const formID = props.context?.params?.formID;
+    const formID = props.params?.formID;
 
     if (!formID || typeof formID !== "string") {
       throw new MalformedAPIRequest("Invalid or missing formID");

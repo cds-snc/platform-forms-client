@@ -150,7 +150,7 @@ export const PUT = middleware(
         `User does not have an associated email address: ${JSON.stringify(session.user)} `
       );
 
-    const formId = props.context?.params.form;
+    const formId = props.params?.form;
 
     if (Array.isArray(formId) || !formId || !Array.isArray(props.body)) {
       return NextResponse.json({ error: "Bad request" }, { status: 400 });

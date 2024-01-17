@@ -28,9 +28,7 @@ export interface MiddlewareProps {
   session?: Session;
   email?: string;
   temporaryToken?: string;
-  context?: {
-    params: Record<string, string | string[]>;
-  };
+  params?: Record<string, string | string[]>;
   body: Record<string, unknown>;
 }
 

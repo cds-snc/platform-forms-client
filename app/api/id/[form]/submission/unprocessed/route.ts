@@ -11,7 +11,7 @@ export const GET = middleware([sessionExists()], async (req, props) => {
   try {
     const { session } = props as WithRequired<MiddlewareProps, "session">;
 
-    const formId = props.context?.params?.form;
+    const formId = props.params?.form;
 
     if (!formId || typeof formId !== "string") {
       return NextResponse.json({ error: "Bad request" }, { status: 400 });

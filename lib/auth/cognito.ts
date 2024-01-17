@@ -59,7 +59,8 @@ export const initiateSignIn = async ({
   try {
     const cognitoClient = new CognitoIdentityProviderClient({
       region: process.env.COGNITO_REGION,
-      ...(process.env.NODE_ENV === "development" && {
+      ...((process.env.NODE_ENV === "development" ||
+        process.env.NEXTAUTH_URL === "http://localhost:3000") && {
         credentials: {
           accessKeyId: process.env.COGNITO_ACCESS_KEY ?? "",
           secretAccessKey: process.env.COGNITO_SECRET_KEY ?? "",

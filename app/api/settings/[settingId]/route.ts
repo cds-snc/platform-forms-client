@@ -8,7 +8,7 @@ import { NextResponse } from "next/server";
 
 export const GET = middleware([jsonValidator(settingSchema)], async (req, props) => {
   try {
-    const internalId = props.context?.params.internalId;
+    const internalId = props.params?.internalId;
     if (typeof internalId === "undefined" || Array.isArray(internalId))
       return NextResponse.json({ error: "Malformed Request" }, { status: 400 });
 
@@ -24,7 +24,7 @@ export const PUT = middleware(
   [sessionExists(), jsonValidator(settingSchema)],
   async (req, props) => {
     try {
-      const internalId = props.context?.params.internalId;
+      const internalId = props.params?.internalId;
       if (typeof internalId === "undefined" || Array.isArray(internalId))
         return NextResponse.json({ error: "Malformed Request" }, { status: 400 });
       const { session } = props as WithRequired<MiddlewareProps, "session">;
@@ -47,7 +47,7 @@ export const PUT = middleware(
 
 export const DELETE = middleware([sessionExists()], async (req, props) => {
   try {
-    const internalId = props.context?.params.internalId;
+    const internalId = props.params?.internalId;
     if (typeof internalId === "undefined" || Array.isArray(internalId))
       return NextResponse.json({ error: "Malformed Request" }, { status: 400 });
     const { session } = props as WithRequired<MiddlewareProps, "session">;

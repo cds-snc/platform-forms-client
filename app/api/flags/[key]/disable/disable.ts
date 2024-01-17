@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 export const GET = middleware([sessionExists()], async (req, props) => {
   try {
     const { session } = props as WithRequired<MiddlewareProps, "session">;
-    const key = props.context?.params?.key;
+    const key = props.params?.key;
 
     if (Array.isArray(key) || !key) {
       return NextResponse.json({ error: "Bad request" }, { status: 400 });

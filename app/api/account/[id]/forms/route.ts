@@ -13,7 +13,7 @@ export const GET = middleware([sessionExists()], async (_, props) => {
     const { session } = props as WithRequired<MiddlewareProps, "session">;
     const ability = createAbility(session);
 
-    const accountId = props.context?.params?.id;
+    const accountId = props.params?.id;
 
     if (Array.isArray(accountId) || !accountId) {
       return NextResponse.json({ error: "Bad request" }, { status: 400 });

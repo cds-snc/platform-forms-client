@@ -3,7 +3,6 @@ import React from "react";
 import { useTranslation } from "@i18n/client";
 import { RichText } from "../forms/RichText/RichText";
 import { logMessage } from "@lib/logger";
-import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getCsrfToken } from "@lib/clientHelpers";
 import { localPathRegEx } from "@lib/validation";
@@ -35,18 +34,6 @@ export const AcceptableUseTerms = ({ content }: AcceptableUseProps): React.React
     const csrfToken = await getCsrfToken();
     try {
       if (csrfToken && session?.user.id) {
-        // await axios({
-        //   url: "/api/acceptableuse",
-        //   method: "POST",
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //     "X-CSRF-Token": csrfToken,
-        //   },
-        //   data: {
-        //     userID: session.user.id,
-        //   },
-        //   timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-        // });
         // Update the session to reflect the user has accepted the terms of use.
         await update({ ...session, user: { ...session.user, acceptableUse: true } });
 
