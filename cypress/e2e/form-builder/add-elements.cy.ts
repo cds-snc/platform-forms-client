@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 describe("Test FormBuilder Add Elements", () => {
   beforeEach(() => {
     cy.login({ acceptableUse: true });
@@ -23,7 +25,7 @@ describe("Test FormBuilder Add Elements", () => {
 
     cy.get('[id="item-1"]').should("have.attr", "placeholder", "Question");
 
-    cy.get(".example-text").should("contain", "Short answer");
+    cy.get(".example-text").should("contain", "A text input for a single-line answer.");
   });
 
   it("Adds a Long Answer element", () => {
@@ -51,7 +53,7 @@ describe("Test FormBuilder Add Elements", () => {
       .should("have.attr", "type", "text")
       .should("have.attr", "placeholder", "Option 1");
 
-    cy.get(".example-text").should("contain", "Single choice");
+    cy.get(".example-text").should("contain", "Radio buttons");
   });
 
   it("Adds a Multiple choice element", () => {
