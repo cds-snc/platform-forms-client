@@ -26,7 +26,7 @@ describe("Element dialog", () => {
 
     expect(button).toHaveTextContent("addElement");
 
-    await user.click(button); // huzzah
+    await user.click(button);
     expect(mockAddCallback.mock.calls.length).toBe(1);
     expect(mockAddCallback.mock.calls[0][0]).toBe("textField");
 
