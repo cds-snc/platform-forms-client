@@ -34,7 +34,12 @@ const templates = async (req: NextApiRequest, res: NextApiResponse, props: Middl
       ...req.body,
     });
 
-    if (!response) throw new Error("Null operation response");
+    if (!response)
+      throw new Error(
+        `Template API response was null. Request information: method = ${
+          req.method
+        } ; query = ${JSON.stringify(req.query)} ; body = ${JSON.stringify(req.body)}`
+      );
 
     return res.status(200).json(response);
   } catch (e) {
