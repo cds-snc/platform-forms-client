@@ -5,9 +5,8 @@
       "all": "Tout",
       "basic": "De base",
       "preset": "Prédéfini",
-      "other": "Autre",
+      "other": "Autre"
     },
-  },
     "tryIt": "Aperçu",
     "addButton": "Sélectionner cet élément",
     "addElement": {
@@ -156,7 +155,8 @@
       "description": "Un champ de texte pour une réponse d’une seule ligne.",
       "title": "Réponse courte",
       "enterAnswer": "Étiquette",
-      "forExample": "Texte explicatif ou exemple",
+      "forExample": "Texte explicatif ou exemple"
+    }
   },
   "addMultiple": "Ajouter plusieurs options",
   "addOption": "Ajouter une option",

@@ -5,9 +5,8 @@
       "all": "All",
       "basic": "Basic",
       "preset": "Preset",
-      "other": "Other",
+      "other": "Other"
     },
-  },
     "tryIt": "Preview",
     "addButton": "Select element",
     "addElement": {
@@ -36,7 +35,7 @@
       "province": "Province or territory",
       "street": {
         "description": "Include your street name and number. For example: 123 Main St. Apt 10",
-        "label": "Street address",
+        "label": "Street address"
       },
       "title": "What is your address?"
     },
@@ -45,19 +44,19 @@
     "attest": "I agree to:",
     "attestation": {
       "description": "A set of conditions that must be confirmed. For example, to ensure a legal responsibility is understood.",
-      "title": "Attestation",
+      "title": "Attestation"
     },
     "categories": {
       "all": "All",
       "basic": "Basic",
       "preset": "Preset",
-      "other": "Other",
+      "other": "Other"
     },
     "checkbox": {
       "description": "A set of options for multiple selections.",
       "title": "Checkboxes",
       "chooseItems": "Question",
-      "selectAllThatApply": "Select all that apply.",
+      "selectAllThatApply": "Select all that apply."
     },
     "checkboxItem": "Item",
     "condition1": "Condition 1",
@@ -141,22 +140,23 @@
       "description": "A small set of options for single selection.",
       "title": "Radio buttons",
       "chooseAnOption": "Question",
-      "selectOnlyOne": "Select one option.",
+      "selectOnlyOne": "Select one option."
     },
     "richText": {
       "description": "A rich text element for inserting headings, paragraph text, lists, or <a tab-index=\"-1\" href=\"#\">links</a>.",
-      "title": "Page text",
+      "title": "Page text"
     },
     "textField": {
       "description": "A text input for a single-line answer.",
       "title": "Short answer",
       "enterAnswer": "Label",
-      "forExample": "Hint or example",
+      "forExample": "Hint or example"
     },
     "textArea": {
       "title": "Long answer",
       "description": "A text area for a multi-line freeform answer.",
-      "forExample": "Hint or example",
+      "forExample": "Hint or example"
+    }
   },
   "addMultiple": "Add multiple options",
   "addOption": "Add option",
