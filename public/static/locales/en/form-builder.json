@@ -10,6 +10,7 @@
     },
     "tryIt": "Preview",
     "addButton": "Select block",
+    "addElement": "Add {{element}}",
     "address": {
       "city": "City, town or community",
       "country": "Country",

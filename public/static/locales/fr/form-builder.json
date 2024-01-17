@@ -10,6 +10,7 @@
     },
     "tryIt": "Aperçu",
     "addButton": "Sélectionner ce bloc",
+    "addElement": "Ajouter {{element}}",
     "address": {
       "city": "Ville ou communauté",
       "country": "Pays",
