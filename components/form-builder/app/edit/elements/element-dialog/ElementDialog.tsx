@@ -159,8 +159,8 @@ export const ElementDialog = ({
         <Footer>
           <Button dataTestId="element-description-add-element" onClick={handleAdd}>
             <>
-              {value
-                ? `${t("addElementDialog.addElement", { element: value.toLowerCase() })}`
+              {id
+                ? `${t(`addElementDialog.addElement.${id}`)}`
                 : `{t("addElementDialog.addButton")}`}
             </>
           </Button>
