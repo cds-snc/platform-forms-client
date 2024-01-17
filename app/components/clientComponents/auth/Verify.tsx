@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactElement, useState, useEffect, useRef } from "react";
+import React, { ReactElement, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Formik } from "formik";
 import { TextInput, Label, Alert } from "@clientComponents/forms";
@@ -14,7 +14,7 @@ import { signIn } from "next-auth/react";
 import { hasError } from "@lib/hasError";
 import { useAuthErrors } from "@lib/hooks/auth/useAuthErrors";
 import { ReVerify } from "./ReVerify";
-import { useSession, getSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
 import Head from "next/head";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { Locked2fa } from "./Locked2fa";
@@ -32,30 +32,9 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
   const [isReVerify, setIsReverify] = useState(false);
   const [is2FAlocked, setIs2FAlocked] = useState(false);
   const [is2FAExpiredSession, set2FAExpiredSession] = useState(false);
-  const { data: session, status: authStatus, update: authUpdate } = useSession();
 
   const headingRef = useRef(null);
   useFocusIt({ elRef: headingRef, dependencies: [isReVerify] });
-
-  useEffect(() => {
-    if (authStatus === "authenticated") {
-      if (session.user.newlyRegistered) {
-        return router.push(`/${i18n.language}/auth/policy?referer=/signup/account-created`);
-      }
-
-      fetch("/api/account/submissions/overdue").then(async (response) => {
-        if (response.status === 200) {
-          const data = await response.json();
-
-          if (data.hasOverdueSubmissions) {
-            router.push(`/${i18n.language}/auth/restricted-access`);
-          } else {
-            router.push(`/${i18n.language}/auth/policy`);
-          }
-        }
-      });
-    }
-  }, [session, authStatus, router, i18n.language, authUpdate]);
 
   const handleVerify = async ({ verificationCode }: { verificationCode: string }) => {
     authErrorsReset();
@@ -76,6 +55,7 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
           // Waiting for this fix: https://github.com/nextauthjs/next-auth/issues/9309
           return { ok: true, error: null };
         }
+        throw err;
       });
 
       // Failed
@@ -93,9 +73,24 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
         return;
       }
       // Success
-      // if result.ok is true, then the redirect will happen in the useEffect
-      // Force update of SessionProvider by calling getSession
-      await getSession();
+      // Ensure the Session Provider is updated and synced with the server
+      const session = await getSession();
+
+      if (session) {
+        if (session.user.newlyRegistered) {
+          return router.push(`/${i18n.language}/auth/policy?referer=/signup/account-created`);
+        }
+
+        const response = await fetch("/api/account/submissions/overdue");
+        if (response.status === 200) {
+          const data = await response.json();
+          if (data.hasOverdueSubmissions) {
+            return router.push(`/${i18n.language}/auth/restricted-access`);
+          }
+        }
+        return router.push(`/${i18n.language}/auth/policy`);
+      }
+      throw new Error("Session does not exist after attempted Cognito Sign In");
     } catch (err) {
       logMessage.error(err);
 
