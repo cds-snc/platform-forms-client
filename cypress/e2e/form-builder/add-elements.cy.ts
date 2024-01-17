@@ -67,7 +67,7 @@ describe("Test FormBuilder Add Elements", () => {
 
     cy.get('[id="option--1--1"]').should("have.attr", "placeholder", "Option 1");
 
-    cy.get(".example-text").should("contain", "Multiple options");
+    cy.get(".example-text").should("contain", "Checkboxes");
   });
 
   it("Adds a Dropdown list element", () => {

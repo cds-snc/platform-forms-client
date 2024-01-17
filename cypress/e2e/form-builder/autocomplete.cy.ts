@@ -23,7 +23,7 @@ describe("Test FormBuilder autocomplete props", () => {
     ["honorific-prefix", "Name prefix, Mr, Mrs, Dr"],
     ["honorific-suffix", "Name suffix, Jr, B.Sc,"],
     ["language", "Language"],
-    ["name", "Full name (includes first, middle and last names)"],
+    ["name", "Include your first and last names. Middle names are optional."],
     ["organization-title", "Job title"],
     ["tel", "Phone number"],
     ["postal-code", "Postal or zip code"],
