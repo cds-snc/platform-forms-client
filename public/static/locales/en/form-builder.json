@@ -1,5 +1,5 @@
 {
-  "addElement": "Add",
+  "addElement": "Add element",
   "addElementDialog": {
     "filters": {
       "all": "All",
@@ -42,7 +42,7 @@
     },
     "allRequired": "all required",
     "answer": "Answer...",
-    "attest": "I attest to:",
+    "attest": "I agree to:",
     "attestation": {
       "description": "Use a legal attestation block when form fillers must attest to certain conditions to continue. This block allows you to add one or several required checkboxes.",
       "title": "Legal attestation"
@@ -92,14 +92,14 @@
       "forExample": "For example: mm/dd/yyyy"
     },
     "dropdown": {
-      "description": "This dropdown allows form fillers to select one option from a pre-defined list.",
+      "description": "A long list of options for single selection.",
       "title": "Dropdown list",
       "example": {
         "select": "Select"
       },
-      "selectOption": "Select which option applies:",
+      "selectOption": "Select which option applies.",
       "selectOne": "Select one",
-      "choices": "option one,option two,option three"
+      "choices": "option 1,option 2,option 3,option 4,option 5,option 6,option 7"
     },
     "dynamicRow": {
       "description": "The repeating question block provides form fillers with the option to add a set of similar answers to the section. This block works with one question or a group of related questions.",
@@ -142,12 +142,12 @@
       "title": "Number",
       "enterOnlyNumbers": "Enter only numbers"
     },
-    "questionElement": "Blocks",
+    "questionElement": "Elements",
     "radio": {
       "description": "These radio buttons allow form fillers to select one single option from a small set.",
-      "title": "Single choice",
-      "chooseAnOption": "Choose an option",
-      "selectOnlyOne": "Select only one"
+      "title": "Radio buttons",
+      "chooseAnOption": "Question",
+      "selectOnlyOne": "Select one option."
     },
     "richText": {
       "description": "Text for paragraphs, <a tab-index=\"-1\" href=\"#\">hyperlinks</a>, and lists.",
@@ -174,7 +174,7 @@
   "addToSet": "Add to set",
   "allRequired": "All required",
   "at": "at",
-  "attestation": "Legal attestation",
+  "attestation": "Attestation",
   "autocompleteIsSetTo": "Autocomplete is set to:",
   "autocompleteOptions": {
     "additional-name": "Middle name",
@@ -195,7 +195,7 @@
     "honorific-prefix": "Name prefix, Mr, Mrs, Dr",
     "honorific-suffix": "Name suffix, Jr, B.Sc,",
     "language": "Language",
-    "name": "Full name (includes first, middle and last names)",
+    "name": "Full name (includes first, middle, and last names)",
     "organization-title": "Job title",
     "tel": "Phone number",
     "postal-code": "Postal or zip code",
@@ -322,7 +322,7 @@
     },
     "unknown": "Unknown"
   },
-  "dropdown": "Dropdown list",
+  "dropdown": "Dropdown",
   "duplicate": "Duplicate",
   "dyanamicRow": "Repeating set",
   "edit": "Edit",
@@ -419,7 +419,7 @@
   "navLabelEditor": "Edit navigation",
   "navLabelFormBuilder": "Form builder navigation",
   "numericField": "Number",
-  "openModal": "Open Modal",
+  "openModal": "Open modal",
   "option": "Option",
   "optionText": "Option",
   "pagePreview": "Preview",
@@ -606,9 +606,9 @@
     }
   },
   "shortAnswer": "Short answer",
-  "shortAnswerText": "Short answer",
+  "shortAnswerText": "A text input for a single-line answer.",
   "signInToTest": "<a href=\"/auth/login\">Sign in</a> to test how you can submit and view responses",
-  "singleChoice": "Single choice",
+  "singleChoice": "Radio buttons",
   "start": "Start",
   "startErrorParse": "Failed to read form file",
   "startFormIntro": "Add a description to your form to set expectations for those filling it out.",
