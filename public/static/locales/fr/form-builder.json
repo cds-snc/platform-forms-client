@@ -19,7 +19,7 @@
       "postal": "Code postal ou zip",
       "province": "Province ou état",
       "street": {
-        "description": "Indiquez votre numéro civique, le nom de la rue, l'appartement, et d'autres détails de l'adresse.",
+        "description": "Indiquez le nom de rue et le numéro d'unité. Par exemple : 123 Rue Principale Apt 10",
         "label": "Adresse municipale"
       },
       "title": "Quelle est votre adresse?"

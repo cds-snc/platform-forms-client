@@ -79,3 +79,8 @@ export { StartIcon } from "./StartIcon";
 export { FilterIcon } from "./FilterIcon";
 export { SavedCheckIcon } from "./SavedCheckIcon";
 export { SavedFailIcon } from "./SavedFailIcon";
+export { NavEditIcon } from "./NavEditIcon";
+export { NavPreviewIcon } from "./NavPreviewIcon";
+export { NavPublishIcon } from "./NavPublishIcon";
+export { NavSettingsIcon } from "./NavSettingsIcon";
+export { NavResponsesIcon } from "./NavResponsesIcon";

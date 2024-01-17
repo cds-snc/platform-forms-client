@@ -122,13 +122,10 @@ export const ConditionalSelector = ({
   const { t } = useTranslation("form-builder");
 
   const questions = useMemo(() => {
-    const validType = ["textField", "textArea"];
-    const items = elements
-      .filter((element) => validType.includes(element.type))
-      .map((question) => {
-        const result = { label: question.properties.titleEn, value: `${question.id}` };
-        return result;
-      });
+    const items = elements.map((question) => {
+      const result = { label: question.properties.titleEn, value: `${question.id}` };
+      return result;
+    });
 
     // Prepend empty option
     items.unshift({ label: "", value: "" });

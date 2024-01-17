@@ -19,7 +19,7 @@
       "postal": "Postal or zip code",
       "province": "Province or state",
       "street": {
-        "description": "Include your civic number and street name, apartment or suite, and other address details.",
+        "description": "Include your street name and number. For example: 123 Main St. Apt 10",
         "label": "Street address"
       },
       "title": "What is your address?"

@@ -35,8 +35,8 @@
       "validation": {
         "required": false
       },
-      "descriptionEn": "Include your civic number and street name, apartment or suite, and other address details",
-      "descriptionFr": "Indiquez votre numéro civique et le nom de la rue, l'appartement ou la suite, ainsi que d'autres détails de l'adresse",
+      "descriptionEn": "Include your street name and number. For example: 123 Main St. Apt 10",
+      "descriptionFr": "Indiquez le nom de rue et le numéro d'unité. Par exemple : 123 Rue Principale Apt 10",
       "placeholderEn": "",
       "placeholderFr": "",
       "autoComplete": "address-line1"
