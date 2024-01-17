@@ -40,7 +40,6 @@ import { useFlag } from "@lib/hooks";
 export enum Groups {
   BASIC = "basic",
   PRESET = "preset",
-  ADVANCED = "advanced",
   OTHER = "other",
 }
 
