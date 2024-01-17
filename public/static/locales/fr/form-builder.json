@@ -130,7 +130,7 @@
     },
     "richText": {
       "description": "Texte pour les paragraphes, les <a tab-index=\"-1\" href=\"#\">hyperliens</a> et les listes.",
-      "title": "Texte en grand format"
+      "title": "Texte"
     },
     "sometimes": "Parfois",
     "textArea": {

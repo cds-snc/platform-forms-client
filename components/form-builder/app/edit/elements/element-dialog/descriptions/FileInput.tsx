@@ -8,7 +8,7 @@ export const FileInput = ({ title }: { title: string }) => {
 
   return (
     <div>
-      <h3>{title}</h3>
+      <h3 className="mb-0">{title}</h3>
       <p>{t("addElementDialog.fileInput.description")}</p>
 
       <ExampleWrapper className="mt-4">

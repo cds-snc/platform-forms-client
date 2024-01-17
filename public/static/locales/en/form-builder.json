@@ -135,7 +135,7 @@
     },
     "richText": {
       "description": "Text for paragraphs, <a tab-index=\"-1\" href=\"#\">hyperlinks</a>, and lists.",
-      "title": "Large text"
+      "title": "Page text"
     },
     "sometimes": "Sometimes",
     "textArea": {
