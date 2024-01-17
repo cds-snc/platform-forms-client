@@ -76,14 +76,14 @@
       "forExample": "For example: mm/dd/yyyy"
     },
     "dropdown": {
-      "description": "This dropdown allows form fillers to select one option from a pre-defined list.",
+      "description": "A long list of options for single selection.",
       "title": "Dropdown list",
       "example": {
         "select": "Select"
       },
-      "selectOption": "Select which option applies:",
+      "selectOption": "Select which option applies.",
       "selectOne": "Select one",
-      "choices": "option one,option two,option three"
+      "choices": "option 1,option 2,option 3,option 4,option 5,option 6,option 7"
     },
     "dynamicRow": {
       "description": "The repeating question block provides form fillers with the option to add a set of similar answers to the section. This block works with one question or a group of related questions.",

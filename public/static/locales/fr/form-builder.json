@@ -70,14 +70,14 @@
       "forExample": "[FR] For example: mm/dd/yyyy"
     },
     "dropdown": {
-      "description": "Description de la liste déroulante",
+      "description": "Une longue liste d’options parmi lesquelles un choix est fait.",
       "title": "Liste déroulante",
       "example": {
         "select": "Sélectionner"
       },
-      "selectOption": "[FR] Select which option applies:",
+      "selectOption": "Sélectionnez l’option pertinente.",
       "selectOne": "[FR] Select one",
-      "choices": "option one,option two,option three"
+      "choices": "option 1,option 2,option 3,option 4,option 5,option 6,option 7"
     },
     "dynamicRow": {
       "description": "Le bloc de questions répétées offre aux personnes qui remplissent les formulaires la possibilité d'ajouter une série de réponses similaires à une section. Ce bloc fonctionne avec une seule question ou un ensemble de questions connexes.",
