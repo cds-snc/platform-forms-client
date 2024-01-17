@@ -1,15 +1,14 @@
 {
-  "addElement": "Add element",
+  "addElement": "Add form element",
   "addElementDialog": {
     "filters": {
       "all": "All",
       "basic": "Basic",
       "preset": "Preset",
-      "advanced": "Advanced",
-      "other": "Other"
+      "other": "Other",
     },
     "tryIt": "Preview",
-    "addButton": "Select block",
+    "addButton": "Select element",
     "addElement": {
       "textField": "Add short answer",
       "textArea": "Add long answer",
@@ -30,13 +29,13 @@
     "address": {
       "city": "City, town or community",
       "country": "Country",
-      "description": "Address description",
+      "description": "A pattern to collect an Canadian address, including fields for address, city, province, and postal code.",
       "label": "Address",
-      "postal": "Postal or zip code",
-      "province": "Province or state",
+      "postal": "Postal code",
+      "province": "Province or territory",
       "street": {
         "description": "Include your street name and number. For example: 123 Main St. Apt 10",
-        "label": "Street address"
+        "label": "Street address",
       },
       "title": "What is your address?"
     },
@@ -44,52 +43,50 @@
     "answer": "Answer...",
     "attest": "I agree to:",
     "attestation": {
-      "description": "Use a legal attestation block when form fillers must attest to certain conditions to continue. This block allows you to add one or several required checkboxes.",
-      "title": "Legal attestation"
+      "description": "A set of conditions that must be confirmed. For example, to ensure a legal responsibility is understood.",
+      "title": "Attestation",
     },
     "categories": {
       "all": "All",
       "basic": "Basic",
       "preset": "Preset",
-      "advanced": "Advanced",
-      "other": "Other"
+      "other": "Other",
     },
     "checkbox": {
-      "description": "These checkboxes allow form fillers to select one or multiple options from a list.",
-      "title": "Multiple options",
-      "chooseItems": "Choose items",
-      "selectAllThatApply": "Select all that apply"
+      "description": "A set of options for multiple selections.",
+      "title": "Checkboxes",
+      "chooseItems": "Question",
+      "selectAllThatApply": "Select all that apply.",
     },
-    "checkboxItem": "Checkbox item",
+    "checkboxItem": "Item",
     "condition1": "Condition 1",
     "condition2": "Condition 2",
     "condition3": "Condition 3",
     "contact": {
-      "description": "Contact description",
+      "description": "A pattern to collect information for follow-up communication, including phone number, email, and language of correspondence.",
       "email": {
-        "description": "Enter your email address. For example: name@example.com",
+        "description": "For example: name@example.com",
         "label": "Email address"
       },
       "label": "Contact",
       "language": {
-        "description": "We offer our services in both official languages, French and English",
         "english": "English",
         "french": "French",
-        "label": "What is your preferred language for communication?"
+        "label": "Preferred language for communication"
       },
       "phone": {
-        "description": "Enter your phone number. For example: 111-222-3333",
+        "description": "For example: 111-222-3333",
         "label": "Phone number"
       },
       "title": "How can we contact you?"
     },
     "date": {
-      "description": "Date description",
+      "description": "A field to collect the date in a predictable format.",
       "title": "Date",
       "example": {
         "dateValue": "mm/dd/yyyy"
       },
-      "forExample": "For example: mm/dd/yyyy"
+      "forExample": "Format the date as: mm/dd/yyyy"
     },
     "dropdown": {
       "description": "A long list of options for single selection.",
@@ -97,28 +94,26 @@
       "example": {
         "select": "Select"
       },
-      "selectOption": "Select which option applies.",
-      "selectOne": "Select one",
-      "choices": "option 1,option 2,option 3,option 4,option 5,option 6,option 7"
+      "selectOption": "Question",
+      "selectOne": "Select which option applies.",
+      "choices": "Option 1,Option 2,Option 3,Option 4,Option 5,Option 6,Option 7,Option 8"
     },
     "dynamicRow": {
-      "description": "The repeating question block provides form fillers with the option to add a set of similar answers to the section. This block works with one question or a group of related questions.",
+      "description": "The option to add a series of related answers to a question and repeat the set multiple times.",
       "title": "Repeating set"
     },
-    "example": "example",
-    "exampleElement": "Example",
     "fileInput": {
-      "description": "File input description",
-      "label": "File input",
-      "title": "File input"
+      "description": "A way to add supporting documentation.",
+      "label": "Add file",
+      "title": "File upload"
     },
     "firstMiddleLastName": {
-      "description": "Name description",
+      "description": "Separate fields for first, middle, and last names. This follows a conventional format that might be needed to process forms.",
       "first": {
         "description": "First name description",
         "label": "First name"
       },
-      "label": "Names",
+      "label": "Individual names",
       "last": {
         "description": "Last name description",
         "label": "Last name"
@@ -129,14 +124,12 @@
       },
       "title": "What is your name?"
     },
-
     "listItem": "List item ",
     "name": {
-      "description": "Include your first and last names. Middle names are optional",
+      "description": "A single field for name. This can be a more inclusive and sensitive way to collect this information.",
       "label": "Full name",
-      "title": "What is your name?"
+      "title": "Full name"
     },
-    "no": "No",
     "number": {
       "description": "Number description",
       "title": "Number",
@@ -144,28 +137,25 @@
     },
     "questionElement": "Elements",
     "radio": {
-      "description": "These radio buttons allow form fillers to select one single option from a small set.",
+      "description": "A small set of options for single selection.",
       "title": "Radio buttons",
       "chooseAnOption": "Question",
-      "selectOnlyOne": "Select one option."
+      "selectOnlyOne": "Select one option.",
     },
     "richText": {
-      "description": "Text for paragraphs, <a tab-index=\"-1\" href=\"#\">hyperlinks</a>, and lists.",
-      "title": "Page text"
-    },
-    "sometimes": "Sometimes",
-    "textArea": {
-      "title": "Long answer",
-      "description": "A text area for a multi-line freeform answer.",
-      "forExample": "For example: freeform text"
+      "description": "A rich text element for inserting headings, paragraph text, lists, or <a tab-index=\"-1\" href=\"#\">links</a>.",
+      "title": "Page text",
     },
     "textField": {
       "description": "A text input for a single-line answer.",
       "title": "Short answer",
       "enterAnswer": "Label",
-      "forExample": "Hint or example"
+      "forExample": "Hint or example",
     },
-    "yes": "Yes"
+    "textArea": {
+      "title": "Long answer",
+      "description": "A text area for a multi-line freeform answer.",
+      "forExample": "Hint or example",
   },
   "addMultiple": "Add multiple options",
   "addOption": "Add option",
@@ -404,7 +394,7 @@
   "insertLink": "Insert link",
   "lastSaved": "updated at",
   "linkUrl": "Link URL",
-  "lockedBlock": "Locked block",
+  "lockedBlock": "Essential element",
   "longAnswerText": "Long answer text",
   "maxCharacterLength": "Max character length: ",
   "maximumCharacterLength": "Maximum character length",

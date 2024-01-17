@@ -92,15 +92,6 @@ export const ElementFilters = ({
             {t("addElementDialog.filters.preset")}
           </Pill>
         )}
-        {activeGroups.includes(Groups.ADVANCED) && (
-          <Pill
-            selectedGroup={selectedGroup}
-            setSelectedGroup={setSelectedGroup}
-            group={Groups.ADVANCED}
-          >
-            {t("addElementDialog.filters.advanced")}
-          </Pill>
-        )}
         {activeGroups.includes(Groups.OTHER) && (
           <Pill
             selectedGroup={selectedGroup}

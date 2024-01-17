@@ -49,7 +49,6 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
   const groups = {
     basic: { id: "basic", value: t("addElementDialog.categories.basic") },
     preset: { id: "preset", value: t("addElementDialog.categories.preset") },
-    advanced: { id: "advanced", value: t("addElementDialog.categories.advanced") },
     other: { id: "other", value: t("addElementDialog.categories.other") },
   };
 
@@ -71,7 +70,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     icon: UploadIcon,
     description: FileInput,
     className: "",
-    group: groups.basic,
+    group: groups.other,
   };
 
   const repeatingSetsOption: ElementOption = {
@@ -80,7 +79,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     icon: AddIcon,
     description: QuestionSet,
     className: "",
-    group: groups.advanced,
+    group: groups.other,
   };
 
   const elementOptions: ElementOption[] = [
@@ -145,7 +144,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       value: t("numericField"),
       icon: NumericFieldIcon,
       description: Number,
-      className: "",
+      className: "separator",
       group: groups.preset,
     },
     ...(allowFileInput ? [{ ...(fileInputOption as ElementOption) }] : []),
@@ -169,6 +168,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       value: t("addElementDialog.firstMiddleLastName.label"),
       icon: NameIcon,
       description: FirstMiddleLastName,
+      className: "separator",
       group: groups.preset,
     },
     {

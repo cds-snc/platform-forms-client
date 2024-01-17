@@ -115,7 +115,7 @@ export const ElementDialog = ({
     <Dialog dialogRef={dialog} handleClose={handleClose} className="flex max-w-[800px]">
       <div className="relative flex w-full">
         <Header>
-          <h4>Add elements to your page</h4>
+          <h4>{t("addElement")}</h4>
           <ElementFilters
             setSelectedGroup={setSelectedGroup}
             selectedGroup={selectedGroup}
