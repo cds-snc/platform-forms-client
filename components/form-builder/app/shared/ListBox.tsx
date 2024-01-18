@@ -9,6 +9,7 @@ import React, {
 } from "react";
 
 import { ChevronRight } from "@components/form-builder/icons";
+import { SelectedGroupState } from "../edit/elements/element-dialog/ElementDialog";
 
 // for specs see:
 // https://www.w3.org/WAI/ARIA/apg/patterns/listbox
@@ -20,6 +21,7 @@ export const ListBox = ({
   options,
   handleChange,
   ariaLabel,
+  selectedGroup,
 }: {
   options: {
     id: string;
@@ -30,6 +32,7 @@ export const ListBox = ({
   }[];
   handleChange: (val: number) => void;
   ariaLabel?: string;
+  selectedGroup: SelectedGroupState;
 }) => {
   const listBoxRef = useRef<HTMLDivElement>(null);
   const rowsRef = useRef<[HTMLElement] | []>([]);
@@ -49,13 +52,18 @@ export const ListBox = ({
     [options]
   );
 
+  // Reset focusIndex when the group changes
+  useEffect(() => {
+    setFocusIndex(0);
+  }, [selectedGroup]);
+
   useEffect(() => {
     const el = rowsRef.current[`row-${focusIndex}` as unknown as number] as HTMLElement;
     if (el && rowsRef.current) {
       setActiveId(el.id);
       handleChange(focusIndex);
       if (el && el.scrollIntoView) {
-        el.scrollIntoView({ block: "center" });
+        el.scrollIntoView({ block: "nearest" });
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -122,9 +130,9 @@ export const ListBox = ({
                   }}
                   className={`${
                     focussed
-                      ? "border-[0.5px] border-indigo-700 bg-indigo-50 font-bold"
-                      : "font-normal"
-                  } group mb-2 cursor-pointer py-2 pl-4 pr-2 text-lg text-black hover:font-bold hover:text-indigo-700`}
+                      ? "border-[0.5px] border-l-8 border-indigo-700 bg-indigo-50 font-bold"
+                      : "border-l-8 border-l-transparent font-normal"
+                  } group mb-2 cursor-pointer p-2 text-lg text-black hover:font-bold hover:text-indigo-700`}
                   tabIndex={-1}
                   role="option"
                   onClick={() => setFocusIndex(index)}

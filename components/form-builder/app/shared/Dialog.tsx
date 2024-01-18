@@ -76,7 +76,7 @@ export const Dialog = ({
           </div>
         )}
 
-        <div>{children}</div>
+        <>{children}</>
         {actions && <div className="flex p-4">{actions}</div>}
         <Button
           theme="link"
