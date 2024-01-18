@@ -12,7 +12,6 @@ import { Nagware } from "@clientComponents/form-builder/app/Nagware";
 import { EmailResponseSettings } from "@clientComponents/form-builder/app/shared";
 import { useTemplateStore } from "@clientComponents/form-builder/store";
 import { LoggedOutTabName, LoggedOutTab } from "@clientComponents/form-builder/app/LoggedOutTab";
-import Head from "next/head";
 import { Button } from "@clientComponents/globals";
 import { ClosedBanner } from "@clientComponents/form-builder/app/shared/ClosedBanner";
 import { DeleteIcon, FolderIcon, InboxIcon, WarningIcon } from "@clientComponents/icons";
@@ -55,7 +54,7 @@ export const ClientSide = ({
 
   const router = useRouter();
   const { slug = [] } = useParams();
-  const statusQuery = slug[1] ?? "new";
+  const statusQuery = slug[0] ?? "new";
   const pathName = usePathname();
 
   const { getDeliveryOption, isPublished } = useTemplateStore((s) => ({
@@ -77,9 +76,9 @@ export const ClientSide = ({
   if (!isAuthenticated) {
     return (
       <>
-        <Head>
+        {/* <Head>
           <title>{t("responses.title")}</title>
-        </Head>
+        </Head> */}
         <div className="max-w-4xl">
           <LoggedOutTab tabName={LoggedOutTabName.RESPONSES} />
         </div>
@@ -90,9 +89,9 @@ export const ClientSide = ({
   if (deliveryOption && deliveryOption.emailAddress) {
     return (
       <>
-        <Head>
+        {/* <Head>
           <title>{t("responses.email.title")}</title>
-        </Head>
+        </Head> */}
         <div className="mb-8 flex flex-wrap items-baseline">
           <h1 className="mb-0 border-none tablet:mb-4">
             {isAuthenticated ? t("responses.email.title") : t("responses.unauthenticated.title")}
@@ -122,9 +121,9 @@ export const ClientSide = ({
 
   return (
     <>
-      <Head>
+      {/* <Head>
         <title>{t("responses.title")}</title>
-      </Head>
+      </Head> */}
 
       {!isAuthenticated && (
         <h1 className="mb-0 border-none tablet:mb-4 tablet:mr-8">
