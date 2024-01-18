@@ -54,7 +54,7 @@ export const GET = middleware(
       jsonKey: "formConfig",
     }),
   ],
-  async (_, props) => {
+  async (req, props) => {
     try {
       const { session } = props as WithRequired<MiddlewareProps, "session">;
 
@@ -67,7 +67,11 @@ export const GET = middleware(
       }
 
       const response = getFullTemplateByID(ability, formID);
-      if (!response) throw new Error("Null operation response");
+      throw new Error(
+        `Template API response was null. Request information: method = ${
+          req.method
+        } ; query = ${JSON.stringify(props.params)} ; body = ${JSON.stringify(props.body)}`
+      );
       return NextResponse.json(response);
     } catch (e) {
       const error = e as Error;
@@ -153,26 +157,50 @@ export const PUT = middleware(
           deliveryOption: deliveryOption,
           securityAttribute: securityAttribute,
         });
-        if (!response) throw new Error("Null operation response");
+        if (!response)
+          throw new Error(
+            `Template API response was null. Request information: method = ${
+              req.method
+            } ; query = ${JSON.stringify(props.params)} ; body = ${JSON.stringify(props.body)}`
+          );
         return NextResponse.json(response);
       } else if (isPublished !== undefined) {
         const response = await updateIsPublishedForTemplate(ability, formID, isPublished);
-        if (!response) throw new Error("Null operation response");
+        throw new Error(
+          `Template API response was null. Request information: method = ${
+            req.method
+          } ; query = ${JSON.stringify(props.params)} ; body = ${JSON.stringify(props.body)}`
+        );
         return NextResponse.json(response);
       } else if (closingDate) {
         const response = await updateClosingDateForTemplate(ability, formID, closingDate);
-        if (!response) throw new Error("Null operation response");
+        if (!response)
+          throw new Error(
+            `Template API response was null. Request information: method = ${
+              req.method
+            } ; query = ${JSON.stringify(props.params)} ; body = ${JSON.stringify(props.body)}`
+          );
         return NextResponse.json(response);
       } else if (users) {
         if (!users.length) {
           return NextResponse.json({ error: true, message: "mustHaveAtLeastOneUser" });
         }
         const response = await updateAssignedUsersForTemplate(ability, formID, users);
-        if (!response) throw new Error("Null operation response");
+        if (!response)
+          throw new Error(
+            `Template API response was null. Request information: method = ${
+              req.method
+            } ; query = ${JSON.stringify(props.params)} ; body = ${JSON.stringify(props.body)}`
+          );
         return NextResponse.json(response);
       } else if (sendResponsesToVault) {
         const response = await removeDeliveryOption(ability, formID);
-        if (!response) throw new Error("Null operation response");
+        if (!response)
+          throw new Error(
+            `Template API response was null. Request information: method = ${
+              req.method
+            } ; query = ${JSON.stringify(props.params)} ; body = ${JSON.stringify(props.body)}`
+          );
         return NextResponse.json(response);
       }
       throw new MalformedAPIRequest(
@@ -201,7 +229,7 @@ export const PUT = middleware(
   }
 );
 
-export const DELETE = middleware([sessionExists()], async (_, props) => {
+export const DELETE = middleware([sessionExists()], async (req, props) => {
   try {
     const { session } = props as WithRequired<MiddlewareProps, "session">;
 
@@ -212,7 +240,12 @@ export const DELETE = middleware([sessionExists()], async (_, props) => {
       throw new MalformedAPIRequest("Invalid or missing formID");
     }
     const response = await deleteTemplate(ability, formID);
-    if (!response) throw new Error("Null operation response");
+    if (!response)
+      throw new Error(
+        `Template API response was null. Request information: method = ${
+          req.method
+        } ; query = ${JSON.stringify(props.params)} ; body = ${JSON.stringify(props.body)}`
+      );
     return NextResponse.json(response);
   } catch (e) {
     const error = e as Error;

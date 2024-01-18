@@ -40,7 +40,7 @@ export const GET = middleware(
       jsonKey: "formConfig",
     }),
   ],
-  async (_, props) => {
+  async (req, props) => {
     try {
       const { session } = props as WithRequired<MiddlewareProps, "session">;
 
@@ -48,7 +48,13 @@ export const GET = middleware(
       const templates = await getAllTemplates(ability, session.user.id);
       const response = templates.map((template) => onlyIncludePublicProperties(template));
 
-      if (!response) throw new Error("Null operation response");
+      if (!response)
+        if (!response)
+          throw new Error(
+            `Template API response was null. Request information: method = ${
+              req.method
+            } ; query = ${JSON.stringify(props.params)} ; body = ${JSON.stringify(props.body)}`
+          );
       return NextResponse.json(response);
     } catch (e) {
       const error = e as Error;
@@ -89,7 +95,7 @@ export const POST = middleware(
       jsonKey: "formConfig",
     }),
   ],
-  async (_, props) => {
+  async (req, props) => {
     try {
       const { session } = props as WithRequired<MiddlewareProps, "session">;
 
@@ -106,7 +112,13 @@ export const POST = middleware(
           deliveryOption: deliveryOption,
           securityAttribute: securityAttribute,
         });
-        if (!response) throw new Error("Null operation response");
+        if (!response)
+          if (!response)
+            throw new Error(
+              `Template API response was null. Request information: method = ${
+                req.method
+              } ; query = ${JSON.stringify(props.params)} ; body = ${JSON.stringify(props.body)}`
+            );
         return NextResponse.json(response);
       } else {
         throw new MalformedAPIRequest("Missing formConfig");
