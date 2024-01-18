@@ -74,8 +74,8 @@
           "fr": ""
         }
       ],
-      "titleEn": "Province",
-      "titleFr": "Province",
+      "titleEn": "Province or territory",
+      "titleFr": "Province ou territoire",
       "validation": {
         "required": false
       },

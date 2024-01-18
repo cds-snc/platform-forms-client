@@ -55,7 +55,7 @@
     },
     "checkbox": {
       "description": "Un ensemble d’option en vue de sélection multiple.",
-      "title": "Choix multiples",
+      "title": "Cases à cocher",
       "chooseItems": "Question",
       "selectAllThatApply": "Sélectionnez toutes les options pertinentes."
     },
