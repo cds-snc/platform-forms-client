@@ -80,7 +80,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
         </noscript>
       </head>
 
-      <body className="gc-formview">{children}</body>
+      <body>{children}</body>
     </html>
   );
 }
