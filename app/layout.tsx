@@ -40,6 +40,10 @@ const css = `
     a:active {
         box-shadow: none !important;
     }
+
+    html {
+      font-family: ${notoSans.style.fontFamily};
+    }
 `;
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
@@ -53,6 +57,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
         <meta charSet="utf-8" />
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
         <style>{css}</style>
+        {/* eslint-disable-next-line react/no-unknown-property */}
         <meta name="authenticated" content={session ? "true" : "false"} />
         <Script
           nonce={nonce}
@@ -79,7 +84,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
         </noscript>
       </head>
 
-      <body>{children}</body>
+      <body className="gc-formview">{children}</body>
     </html>
   );
 }
