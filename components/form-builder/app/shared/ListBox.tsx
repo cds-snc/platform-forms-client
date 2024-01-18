@@ -63,7 +63,7 @@ export const ListBox = ({
       setActiveId(el.id);
       handleChange(focusIndex);
       if (el && el.scrollIntoView) {
-        el.scrollIntoView({ block: "center" });
+        el.scrollIntoView({ block: "nearest" });
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
