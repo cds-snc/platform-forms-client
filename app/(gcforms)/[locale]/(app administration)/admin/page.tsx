@@ -1,5 +1,5 @@
 import { requireAuthentication } from "@lib/auth";
-import AdminNavLayout from "@clientComponents/globals/layouts/AdminNavLayout";
+import { AdminNavLayout } from "@serverComponents/globals/layouts";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { serverTranslation } from "@i18n";
 import Link from "next/link";
@@ -19,11 +19,8 @@ export async function generateMetadata({
 }
 
 // keeping this here if we want to add a welcome page
-export default async function Page() {
-  const {
-    t,
-    i18n: { language },
-  } = await serverTranslation(["admin-home", "common"]);
+export default async function Page({ params: { locale } }: { params: { locale: string } }) {
+  const { t } = await serverTranslation(["admin-home", "common"]);
   const { user } = await requireAuthentication();
   const canViewUsers = checkPrivilegesAsBoolean(
     user.ability,
@@ -32,11 +29,11 @@ export default async function Page() {
   );
 
   if (!canViewUsers) {
-    redirect(`/${language}/forms`);
+    redirect(`/${locale}/forms`);
   }
 
   return (
-    <AdminNavLayout user={user} hideLeftNav={true}>
+    <AdminNavLayout hideLeftNav={true} locale={locale}>
       <h1 className="visually-hidden">{t("title", { ns: "admin-home" })}</h1>
       <div className="flex flex-row justify-center">
         <div className="rounded-lg border bg-white p-10">

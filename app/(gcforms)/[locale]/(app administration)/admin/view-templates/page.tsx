@@ -1,7 +1,7 @@
 import { serverTranslation } from "@i18n";
 import { requireAuthentication } from "@lib/auth";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
-import AdminNavLayout from "@clientComponents/globals/layouts/AdminNavLayout";
+import { AdminNavLayout } from "@serverComponents/globals/layouts";
 import { Metadata } from "next";
 import { DataView } from "./clientSide";
 import { getAllTemplates } from "@lib/templates";
@@ -16,7 +16,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page() {
+export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const { user } = await requireAuthentication();
   checkPrivilegesAsBoolean(
     user.ability,
@@ -42,7 +42,7 @@ export default async function Page() {
   });
 
   return (
-    <AdminNavLayout user={user}>
+    <AdminNavLayout locale={locale}>
       <DataView templates={templates} />
     </AdminNavLayout>
   );

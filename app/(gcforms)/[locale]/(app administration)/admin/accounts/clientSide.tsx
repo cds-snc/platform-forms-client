@@ -5,7 +5,6 @@ import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useTranslation } from "@i18n/client";
-import Head from "next/head";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { useRouter } from "next/navigation";
 
@@ -143,173 +142,166 @@ export const Users = ({
 
   return (
     <>
-      <Head>
-        <title>{t("accounts")}</title>
-      </Head>
-      <>
-        <h1 className="mb-0 border-0">{t("accounts")}</h1>
-        <div className="mb-5">
-          <ul
-            id="accountsFilterList"
-            className="flex list-none px-0 text-base"
-            aria-label={t("accountsFilterLabel")}
-          >
-            <li className="mr-2 py-2 pt-3 text-sm tablet:mr-4">
-              <RoundedButton
-                theme={isFilterAll() ? "primary" : "secondary"}
-                onClick={() => updateAccountsFilter(AccountsFilterState.ALL)}
-              >
-                {t("accountsFilter.all")}
-              </RoundedButton>
-            </li>
-            <li className="mr-2 py-2 pt-3 text-sm tablet:mr-4">
-              <RoundedButton
-                theme={isFilterActive() ? "primary" : "secondary"}
-                onClick={() => updateAccountsFilter(AccountsFilterState.ACTIVE)}
-              >
-                {t("accountsFilter.active")}
-              </RoundedButton>
-            </li>
-            <li className="mr-2 py-2 pt-3 text-sm tablet:mr-4">
-              <RoundedButton
-                theme={isFilterDeactivated() ? "primary" : "secondary"}
-                onClick={() => updateAccountsFilter(AccountsFilterState.DEACTIVATED)}
-              >
-                {t("accountsFilter.deactivated")}
-              </RoundedButton>
-            </li>
-          </ul>
-        </div>
-        <div aria-live="polite">
-          {accounts?.length > 0 && (
-            <ul data-testid="accountsList" className="m-0 list-none p-0">
-              {accounts.map((user) => {
-                return (
-                  <li
-                    className="mb-4 flex max-w-2xl flex-row rounded-md border-2 border-black p-2"
-                    id={`user-${user.id}`}
-                    key={user.id}
-                    data-testid={user.email}
-                  >
-                    <div className="m-auto grow basis-1/3 p-4">
-                      <h2 className="pb-6 text-base">{user.name}</h2>
-                      <p className="mb-4">{user.email}</p>
+      <h1 className="mb-0 border-0">{t("accounts")}</h1>
+      <div className="mb-5">
+        <ul
+          id="accountsFilterList"
+          className="flex list-none px-0 text-base"
+          aria-label={t("accountsFilterLabel")}
+        >
+          <li className="mr-2 py-2 pt-3 text-sm tablet:mr-4">
+            <RoundedButton
+              theme={isFilterAll() ? "primary" : "secondary"}
+              onClick={() => updateAccountsFilter(AccountsFilterState.ALL)}
+            >
+              {t("accountsFilter.all")}
+            </RoundedButton>
+          </li>
+          <li className="mr-2 py-2 pt-3 text-sm tablet:mr-4">
+            <RoundedButton
+              theme={isFilterActive() ? "primary" : "secondary"}
+              onClick={() => updateAccountsFilter(AccountsFilterState.ACTIVE)}
+            >
+              {t("accountsFilter.active")}
+            </RoundedButton>
+          </li>
+          <li className="mr-2 py-2 pt-3 text-sm tablet:mr-4">
+            <RoundedButton
+              theme={isFilterDeactivated() ? "primary" : "secondary"}
+              onClick={() => updateAccountsFilter(AccountsFilterState.DEACTIVATED)}
+            >
+              {t("accountsFilter.deactivated")}
+            </RoundedButton>
+          </li>
+        </ul>
+      </div>
+      <div aria-live="polite">
+        {accounts?.length > 0 && (
+          <ul data-testid="accountsList" className="m-0 list-none p-0">
+            {accounts.map((user) => {
+              return (
+                <li
+                  className="mb-4 flex max-w-2xl flex-row rounded-md border-2 border-black p-2"
+                  id={`user-${user.id}`}
+                  key={user.id}
+                  data-testid={user.email}
+                >
+                  <div className="m-auto grow basis-1/3 p-4">
+                    <h2 className="pb-6 text-base">{user.name}</h2>
+                    <p className="mb-4">{user.email}</p>
 
-                      <div className="">
-                        {canManageUsers && user.active && (
-                          /* Lock / unlock publishing */
-                          <Button
-                            theme={"secondary"}
-                            className="mr-2 tablet:mb-2"
-                            onClick={async () => {
-                              const action = hasPrivilege({
-                                privileges: user.privileges,
-                                privilegeName: "PublishForms",
-                              })
-                                ? "remove"
-                                : "add";
-
-                              await updatePrivilege(user.id, [{ id: publishFormsId, action }]);
-                              await refreshUserData();
-                            }}
-                          >
-                            {hasPrivilege({
+                    <div className="">
+                      {canManageUsers && user.active && (
+                        /* Lock / unlock publishing */
+                        <Button
+                          theme={"secondary"}
+                          className="mr-2 tablet:mb-2"
+                          onClick={async () => {
+                            const action = hasPrivilege({
                               privileges: user.privileges,
                               privilegeName: "PublishForms",
                             })
-                              ? t("lockPublishing")
-                              : t("unlockPublishing")}
-                          </Button>
-                        )}
+                              ? "remove"
+                              : "add";
 
-                        {/* Manage Forms */}
-                        {canManageUsers && user.active && (
-                          <LinkButton.Secondary
-                            scroll={false}
-                            href={`/admin/accounts/${user.id}/manage-forms`}
-                            className="mb-2 mr-2"
-                          >
-                            {t("manageForms")}
-                          </LinkButton.Secondary>
-                        )}
+                            await updatePrivilege(user.id, [{ id: publishFormsId, action }]);
+                            await refreshUserData();
+                          }}
+                        >
+                          {hasPrivilege({
+                            privileges: user.privileges,
+                            privilegeName: "PublishForms",
+                          })
+                            ? t("lockPublishing")
+                            : t("unlockPublishing")}
+                        </Button>
+                      )}
 
-                        {/* Activate account */}
-                        {canManageUsers && !isCurrentUser(user) && !user.active && (
-                          <Button
-                            theme={"secondary"}
-                            className="mr-2"
-                            onClick={async () => {
-                              await updateActiveStatus(user.id, true);
-                              await refreshUserData();
-                            }}
-                          >
-                            {t("activateAccount")}
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                    <div className="flex items-end p-2" data-testid="managePermissionsDropdown">
-                      {/* Manage Permissions  */}
-                      {user.active && (
-                        <Dropdown>
-                          <DropdownMenuPrimitive.Item
-                            className={`${themes.htmlLink} ${themes.base} !block !cursor-pointer`}
-                            onClick={() => {
-                              router.push(
-                                `/${locale}/admin/accounts/${user.id}/manage-permissions`
-                              );
-                            }}
-                          >
-                            {canManageUsers ? t("managePermissions") : t("viewPermissions")}
-                          </DropdownMenuPrimitive.Item>
+                      {/* Manage Forms */}
+                      {canManageUsers && user.active && (
+                        <LinkButton.Secondary
+                          scroll={false}
+                          href={`/admin/accounts/${user.id}/manage-forms`}
+                          className="mb-2 mr-2"
+                        >
+                          {t("manageForms")}
+                        </LinkButton.Secondary>
+                      )}
 
-                          {/* Deactivate Account  */}
-                          {canManageUsers && !isCurrentUser(user) && user.active && (
-                            <>
-                              <DropdownMenuPrimitive.Item
-                                className={`mt-2 w-full !block !cursor-pointer  ${themes.base} ${
-                                  !user.active ? themes.secondary : themes.destructive
-                                }`}
-                                onClick={async () => {
-                                  showConfirmDeleteModal(true);
-                                  setSelectedUser(user);
-                                }}
-                              >
-                                {user.active ? t("deactivateAccount") : t("activateAccount")}
-                              </DropdownMenuPrimitive.Item>
-                            </>
-                          )}
-                        </Dropdown>
+                      {/* Activate account */}
+                      {canManageUsers && !isCurrentUser(user) && !user.active && (
+                        <Button
+                          theme={"secondary"}
+                          className="mr-2"
+                          onClick={async () => {
+                            await updateActiveStatus(user.id, true);
+                            await refreshUserData();
+                          }}
+                        >
+                          {t("activateAccount")}
+                        </Button>
                       )}
                     </div>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-          {accounts?.length <= 0 && (
-            <Card>
-              <p className="text-[#748094]">
-                {isFilterAll() && t("accountsFilter.noAccounts")}
-                {isFilterActive() && t("accountsFilter.noActiveAccounts")}
-                {isFilterDeactivated() && t("accountsFilter.noDeactivatedAccounts")}
-              </p>
-            </Card>
-          )}
-        </div>
+                  </div>
+                  <div className="flex items-end p-2" data-testid="managePermissionsDropdown">
+                    {/* Manage Permissions  */}
+                    {user.active && (
+                      <Dropdown>
+                        <DropdownMenuPrimitive.Item
+                          className={`${themes.htmlLink} ${themes.base} !block !cursor-pointer`}
+                          onClick={() => {
+                            router.push(`/${locale}/admin/accounts/${user.id}/manage-permissions`);
+                          }}
+                        >
+                          {canManageUsers ? t("managePermissions") : t("viewPermissions")}
+                        </DropdownMenuPrimitive.Item>
 
-        {confirmDeleteModal && selectedUser && (
-          // Note: Placing this within the Dropdown will break it
-          <ConfirmDeactivateModal
-            user={selectedUser}
-            handleClose={async () => {
-              showConfirmDeleteModal(false);
-              setSelectedUser(null);
-              await refreshUserData();
-            }}
-          />
+                        {/* Deactivate Account  */}
+                        {canManageUsers && !isCurrentUser(user) && user.active && (
+                          <>
+                            <DropdownMenuPrimitive.Item
+                              className={`mt-2 w-full !block !cursor-pointer  ${themes.base} ${
+                                !user.active ? themes.secondary : themes.destructive
+                              }`}
+                              onClick={async () => {
+                                showConfirmDeleteModal(true);
+                                setSelectedUser(user);
+                              }}
+                            >
+                              {user.active ? t("deactivateAccount") : t("activateAccount")}
+                            </DropdownMenuPrimitive.Item>
+                          </>
+                        )}
+                      </Dropdown>
+                    )}
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
         )}
-      </>
+        {accounts?.length <= 0 && (
+          <Card>
+            <p className="text-[#748094]">
+              {isFilterAll() && t("accountsFilter.noAccounts")}
+              {isFilterActive() && t("accountsFilter.noActiveAccounts")}
+              {isFilterDeactivated() && t("accountsFilter.noDeactivatedAccounts")}
+            </p>
+          </Card>
+        )}
+      </div>
+
+      {confirmDeleteModal && selectedUser && (
+        // Note: Placing this within the Dropdown will break it
+        <ConfirmDeactivateModal
+          user={selectedUser}
+          handleClose={async () => {
+            showConfirmDeleteModal(false);
+            setSelectedUser(null);
+            await refreshUserData();
+          }}
+        />
+      )}
     </>
   );
 };

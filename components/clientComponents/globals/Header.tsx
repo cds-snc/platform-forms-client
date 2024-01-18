@@ -10,11 +10,10 @@ import { FileNameInput } from "@clientComponents/form-builder/app/navigation/Fil
 import { ShareDropdown } from "@clientComponents/form-builder/app/navigation/ShareDropdown";
 import LanguageToggle from "./LanguageToggle";
 import { YourAccountDropdown } from "./YourAccountDropdown";
-import { User } from "next-auth";
 
 type HeaderParams = {
   context?: "admin" | "formBuilder" | "default";
-  user?: User;
+  user?: { name: string | null; email: string };
 };
 
 export const Header = ({ context = "default", user }: HeaderParams) => {

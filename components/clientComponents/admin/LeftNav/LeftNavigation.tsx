@@ -8,10 +8,13 @@ import { useAccessControl } from "@lib/hooks";
 import { NameIcon, FlagIcon, GearIcon } from "@clientComponents/icons";
 
 export const LeftNavigation = () => {
-  const { t } = useTranslation(["admin-login", "common"]);
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation(["admin-login", "common"]);
   const { ability } = useAccessControl();
 
-  const path = usePathname();
+  const path = usePathname().replace(`/${language}`, "");
 
   const iconClassname =
     "block box-border mt-1 w-8 h-8 group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default";

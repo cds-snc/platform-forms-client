@@ -4,7 +4,7 @@ import { checkPrivilegesAsBoolean, getAllPrivileges } from "@lib/privileges";
 import { getUser } from "@lib/users";
 import { ManagePermissions } from "./clientSide";
 import { Metadata } from "next";
-import { TwoColumnLayout } from "@clientComponents/globals/layouts";
+import { TwoColumnLayout } from "@serverComponents/globals/layouts";
 import { BackLink } from "@clientComponents/admin/LeftNav/BackLink";
 
 export async function generateMetadata({
@@ -50,7 +50,7 @@ export default async function Page({
 
   return (
     <TwoColumnLayout
-      user={user}
+      user={{ name: user.name, email: user.email }}
       context="admin"
       leftColumnContent={<BackToAccounts id={formUser.id} locale={locale} />}
     >

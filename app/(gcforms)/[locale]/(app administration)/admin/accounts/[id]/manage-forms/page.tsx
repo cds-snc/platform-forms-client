@@ -2,11 +2,10 @@ import { serverTranslation } from "@i18n";
 import { requireAuthentication } from "@lib/auth";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { getUnprocessedSubmissionsForUser, getUser } from "@lib/users";
-
 import { ManageForms } from "./clientSide";
 import { Metadata } from "next";
 import { getAllTemplatesForUser } from "@lib/templates";
-import { TwoColumnLayout } from "@clientComponents/globals/layouts";
+import { TwoColumnLayout } from "@serverComponents/globals/layouts";
 import { BackLink } from "@clientComponents/admin/LeftNav/BackLink";
 
 export async function generateMetadata({
