@@ -7,19 +7,22 @@ import { LangSwitcher } from "../shared/LangSwitcher";
 import { QuestionsIcon, TranslateIcon } from "@clientComponents/icons";
 
 export const EditNavigation = () => {
-  const { t } = useTranslation("form-builder");
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation("form-builder");
   const { activePathname } = useActivePathname();
   return (
     <div className="relative flex max-w-[800px] flex-col tablet:flex-row">
       <div className="flex">
         <nav className="flex flex-wrap laptop:mb-4" aria-label={t("navLabelEditor")}>
-          <SubNavLink href="/form-builder/edit">
+          <SubNavLink href={`/${language}/form-builder/edit`}>
             <span className="text-sm laptop:text-base">
               <QuestionsIcon className="mr-2 inline-block laptop:mt-[-2px]" />
               {t("questions")}
             </span>
           </SubNavLink>
-          <SubNavLink href="/form-builder/edit/translate">
+          <SubNavLink href={`/${language}/edit/translate`}>
             <span className="text-sm laptop:text-base">
               <TranslateIcon className="mr-2 inline-block laptop:mt-[-2px]" />
               {t("translate")}

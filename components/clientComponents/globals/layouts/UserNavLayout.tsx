@@ -10,9 +10,12 @@ import { SiteLogo } from "@clientComponents/icons";
 import { ToastContainer } from "@clientComponents/form-builder/app/shared/Toast";
 
 const SiteLink = () => {
-  const { t } = useTranslation("common");
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation("common");
   return (
-    <Link href="/form-builder" legacyBehavior>
+    <Link href={`/${language}/form-builder`} legacyBehavior>
       {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
       <a className="mb-6 mr-10 inline-flex no-underline !shadow-none focus:bg-white">
         <span className="">

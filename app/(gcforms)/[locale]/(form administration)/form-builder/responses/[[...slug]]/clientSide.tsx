@@ -43,7 +43,10 @@ export const ClientSide = ({
   responseDownloadLimit,
   lastEvaluatedKey,
 }: ResponsesProps) => {
-  const { t, i18n } = useTranslation("form-builder-responses");
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation("form-builder-responses");
   const { status } = useSession();
   const isAuthenticated = status === "authenticated";
   const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
@@ -66,7 +69,7 @@ export const ClientSide = ({
   if (initialForm) {
     formName = initialForm.name
       ? initialForm.name
-      : i18n.language === "fr"
+      : language === "fr"
       ? initialForm.form.titleFr
       : initialForm.form.titleEn;
   }
@@ -96,9 +99,9 @@ export const ClientSide = ({
           </h1>
           <nav className="flex gap-3">
             {!isPublished && (
-              <Link href="/form-builder/settings" legacyBehavior>
+              <Link href={`/${language}/form-builder/settings`} legacyBehavior>
                 <a
-                  href="/form-builder/settings"
+                  href={`/${language}/form-builder/settings`}
                   className="mb-0 mr-3 rounded-[100px] border-1 border-black px-5 pb-2 pt-1 text-black no-underline !shadow-none visited:text-black hover:bg-[#475569] hover:!text-white focus:bg-[#475569] focus:!text-white laptop:py-2 [&_svg]:focus:fill-white"
                 >
                   {t("responses.changeSetup")}
@@ -327,12 +330,15 @@ export const ClientSide = ({
         <>
           <p>
             {t("responses.unauthenticated.toAccessPagePart1")}{" "}
-            <Link href={"/auth/login"}>{t("responses.unauthenticated.signIn")}</Link>{" "}
+            <Link href={`/${language}/auth/login`}>{t("responses.unauthenticated.signIn")}</Link>{" "}
             {t("responses.unauthenticated.toAccessPagePart2")}
           </p>
           <p className="mt-8">
             {t("responses.unauthenticated.noAccount")}{" "}
-            <Link href={"/signup/register"}>{t("responses.unauthenticated.createOne")}</Link>.
+            <Link href={`/${language}/signup/register`}>
+              {t("responses.unauthenticated.createOne")}
+            </Link>
+            .
           </p>
         </>
       )}

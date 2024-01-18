@@ -26,7 +26,10 @@ export const ReVerify = ({
   callback,
 }: ReVerifyProps): ReactElement => {
   const router = useRouter();
-  const { t } = useTranslation(["auth-verify", "cognito-errors", "common"]);
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation(["auth-verify", "cognito-errors", "common"]);
   const [authErrorsState, { authErrorsReset, handleErrorById }] = useAuthErrors();
 
   const headingRef = useRef(null);
@@ -100,7 +103,7 @@ export const ReVerify = ({
         <Button theme="primary" className="mr-4" onClick={handleReVerify}>
           {t("reVerify.buttons.reSendCode")}
         </Button>
-        <StyledLink theme="secondaryButton" href="/form-builder/support">
+        <StyledLink theme="secondaryButton" href={`/${language}/form-builder/support`}>
           {t("reVerify.buttons.getSupport")}
         </StyledLink>
       </div>
