@@ -56,7 +56,7 @@
     },
     "checkbox": {
       "description": "Un ensemble d’option en vue de sélection multiple.",
-      "title": "Choix multiples",
+      "title": "Cases à cocher",
       "chooseItems": "Question",
       "selectAllThatApply": "Sélectionnez toutes les options pertinentes."
     },
@@ -154,6 +154,7 @@
     "textArea": {
       "title": "Réponse longue",
       "description": "Une zone de texte pour une réponse libre de plusieurs lignes.",
+      "enterAnswer": "Question",
       "forExample": "Texte explicatif ou exemple"
     },
     "textField": {

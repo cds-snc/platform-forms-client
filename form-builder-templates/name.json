@@ -15,8 +15,8 @@
         "validation": {
             "required": true
         },
-        "descriptionEn": "Include your first and last names. Middle names are optional.",
-        "descriptionFr": "Indiquez votre prénom et nom de famille. Le deuxième prénom est optionnel.",
+        "descriptionEn": "",
+        "descriptionFr": "",
         "placeholderEn": "",
         "placeholderFr": "",
         "autoComplete": "name"
