@@ -14,7 +14,7 @@ export const LeftNavigation = () => {
   } = useTranslation(["admin-login", "common"]);
   const { ability } = useAccessControl();
 
-  const path = usePathname().replace(`/${language}`, "");
+  const path = usePathname()?.replace(`/${language}`, "");
 
   const iconClassname =
     "block box-border mt-1 w-8 h-8 group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default";
@@ -24,7 +24,11 @@ export const LeftNavigation = () => {
       <ul className="m-0 list-none p-0">
         {ability?.can("view", "User") && (
           <li>
-            <NavLink id="users" href={`/admin/accounts`} isActive={path === "/admin/accounts"}>
+            <NavLink
+              id="users"
+              href={`/${language}/admin/accounts`}
+              isActive={path === "/admin/accounts"}
+            >
               <div className="flex gap-2">
                 <NameIcon className={iconClassname} />
                 <div>{t("adminNav.users", { ns: "common" })}</div>
@@ -34,7 +38,11 @@ export const LeftNavigation = () => {
         )}
         {ability?.can("view", "Flag") && (
           <li>
-            <NavLink id="flags" href="/admin/flags" isActive={path === "/admin/flags"}>
+            <NavLink
+              id="flags"
+              href={`/${language}/admin/flags`}
+              isActive={path === "/admin/flags"}
+            >
               <div className="flex items-start gap-2">
                 <FlagIcon className={`${iconClassname}`} />
                 <div>{t("adminNav.features", { ns: "common" })}</div>
@@ -44,7 +52,11 @@ export const LeftNavigation = () => {
         )}
         {ability?.can("view", "Flag") && (
           <li>
-            <NavLink id="settings" href="/admin/settings" isActive={path === "/admin/settings"}>
+            <NavLink
+              id="settings"
+              href={`/${language}/admin/settings`}
+              isActive={path === "/admin/settings"}
+            >
               <div className="flex items-start gap-2">
                 <GearIcon className={iconClassname} />
                 <div>{t("adminNav.settings", { ns: "common" })}</div>

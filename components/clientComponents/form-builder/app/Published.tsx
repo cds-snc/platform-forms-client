@@ -11,7 +11,10 @@ import Markdown from "markdown-to-jsx";
 import { getHost } from "../util";
 
 export const Published = ({ id }: { id: string }) => {
-  const { t } = useTranslation("form-builder");
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation("form-builder");
   const { status } = useSession();
   const router = useRouter();
   const [formId] = useState(id);
@@ -27,9 +30,9 @@ export const Published = ({ id }: { id: string }) => {
 
   useEffect(() => {
     if (status !== "authenticated" || !formId) {
-      router.push("/form-builder/edit");
+      router.push(`/${language}/form-builder/edit`);
     }
-  }, [status, router, formId]);
+  }, [status, router, formId, language]);
 
   if (!formId) {
     return null;
@@ -65,7 +68,7 @@ export const Published = ({ id }: { id: string }) => {
       </div>
       <div>
         {ability?.can("view", "FormRecord") && (
-          <LinkButton.Primary href="/forms">{t("publishedBack")}</LinkButton.Primary>
+          <LinkButton.Primary href={`/${language}/forms`}>{t("publishedBack")}</LinkButton.Primary>
         )}
       </div>
     </div>

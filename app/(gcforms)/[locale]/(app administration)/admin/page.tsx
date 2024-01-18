@@ -42,8 +42,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </h2>
           <p>{t("manageUsersAndTheirForms")}</p>
           <p>
-            <Link href="/admin/accounts" legacyBehavior>
-              <a href={"/admin/accounts"}>{t("accounts")}</a>
+            <Link href={`/${locale}/admin/accounts`} legacyBehavior>
+              <a href={`/${locale}/admin/accounts`}>{t("accounts")}</a>
             </Link>
           </p>
         </div>
@@ -56,13 +56,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p>{t("configureHowTheApplicationWorks")}</p>
           <ul className="list-none pl-0">
             <li>
-              <Link href="/admin/settings" legacyBehavior>
-                <a href={"/admin/settings"}>{t("systemSettings")}</a>
+              <Link href={`/${locale}/admin/settings`} legacyBehavior>
+                <a href={`/${locale}/admin/settings`}>{t("systemSettings")}</a>
               </Link>
             </li>
             <li>
-              <Link href="/admin/flags" legacyBehavior>
-                <a href={"/admin/flags"}>{t("featureFlags")}</a>
+              <Link href={`/${locale}/admin/flags`} legacyBehavior>
+                <a href={`/${locale}/admin/flags`}>{t("featureFlags")}</a>
               </Link>
             </li>
           </ul>
