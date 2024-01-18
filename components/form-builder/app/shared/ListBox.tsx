@@ -9,6 +9,7 @@ import React, {
 } from "react";
 
 import { ChevronRight } from "@components/form-builder/icons";
+import { SelectedGroupState } from "../edit/elements/element-dialog/ElementDialog";
 
 // for specs see:
 // https://www.w3.org/WAI/ARIA/apg/patterns/listbox
@@ -20,6 +21,7 @@ export const ListBox = ({
   options,
   handleChange,
   ariaLabel,
+  selectedGroup,
 }: {
   options: {
     id: string;
@@ -30,6 +32,7 @@ export const ListBox = ({
   }[];
   handleChange: (val: number) => void;
   ariaLabel?: string;
+  selectedGroup: SelectedGroupState;
 }) => {
   const listBoxRef = useRef<HTMLDivElement>(null);
   const rowsRef = useRef<[HTMLElement] | []>([]);
@@ -48,6 +51,11 @@ export const ListBox = ({
     },
     [options]
   );
+
+  // Reset focusIndex when the group changes
+  useEffect(() => {
+    setFocusIndex(0);
+  }, [selectedGroup]);
 
   useEffect(() => {
     const el = rowsRef.current[`row-${focusIndex}` as unknown as number] as HTMLElement;

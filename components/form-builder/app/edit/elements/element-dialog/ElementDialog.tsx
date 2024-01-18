@@ -136,6 +136,7 @@ export const ElementDialog = ({
                 icon,
               }))}
               handleChange={handleChange}
+              selectedGroup={selectedGroup}
             />
           </div>
           {/* /SIDEBAR */}
