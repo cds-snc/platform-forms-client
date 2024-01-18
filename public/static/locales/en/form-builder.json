@@ -111,6 +111,7 @@
       "title": "File upload"
     },
     "firstMiddleLastName": {
+      "whatIsYourName": "What is your name?",
       "description": "Separate fields for first, middle, and last names. This follows a conventional format that might be needed to process forms.",
       "first": {
         "description": "First name description",

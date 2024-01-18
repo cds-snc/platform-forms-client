@@ -111,6 +111,7 @@
       "title": "Téléverseur de fichier"
     },
     "firstMiddleLastName": {
+      "whatIsYourName": "Quel est votre nom?",
       "description": "Les champs séparés pour le prénom, le deuxième prénom et le nom de famille. Ce format est conventionnel et pourrait être nécessaire pour le traitement de formulaires.",
       "first": {
         "description": "Description du prénom",

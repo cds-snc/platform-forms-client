@@ -12,7 +12,7 @@ export const Address = () => {
       <p>{t("addElementDialog.address.description")}</p>
 
       <ExampleWrapper className="mt-4">
-        <h4>{t("addElementDialog.address.whatIsYourAddress")}</h4>
+        <h4 className="mb-4">{t("addElementDialog.address.whatIsYourAddress")}</h4>
         <div className="mb-6">
           <Label htmlFor="street" className="gc-label">
             {t("addElementDialog.address.street.label")}
