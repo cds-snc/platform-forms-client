@@ -8,6 +8,7 @@ import { FullWidthLayout } from "@clientComponents/globals/layouts";
 import RenderMyForms from "./clientSide";
 import { AccessControlError } from "@lib/privileges";
 import { redirect } from "next/navigation";
+
 export async function generateMetadata({
   params: { locale },
 }: {
@@ -61,7 +62,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
     return (
       <FullWidthLayout>
-        <RenderMyForms {...{ templates, locale }} />
+        <RenderMyForms templates={templates} />
       </FullWidthLayout>
     );
   } catch (e) {
