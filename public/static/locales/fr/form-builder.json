@@ -150,6 +150,7 @@
     "textArea": {
       "title": "Réponse longue",
       "description": "Une zone de texte pour une réponse libre de plusieurs lignes.",
+      "enterAnswer": "Question",
       "forExample": "Texte explicatif ou exemple"
     },
     "textField": {

@@ -13,7 +13,7 @@ export const TextArea = () => {
 
       <ExampleWrapper className="mt-4">
         <Label htmlFor="textarea" className="gc-label">
-          {t("addElementDialog.textArea.title")}
+          {t("addElementDialog.textArea.enterAnswer")}
         </Label>
         <Description>{t("addElementDialog.textArea.forExample")}</Description>
         <TextAreaComponent

@@ -156,6 +156,7 @@
     "textArea": {
       "title": "Long answer",
       "description": "A text area for a multi-line freeform answer.",
+      "enterAnswer": "Question",
       "forExample": "Hint or example"
     }
   },
