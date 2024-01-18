@@ -84,3 +84,4 @@ export { NavPreviewIcon } from "./NavPreviewIcon";
 export { NavPublishIcon } from "./NavPublishIcon";
 export { NavSettingsIcon } from "./NavSettingsIcon";
 export { NavResponsesIcon } from "./NavResponsesIcon";
+export { GavelIcon } from "./GavelIcon";

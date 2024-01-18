@@ -12,6 +12,7 @@ import {
   AddressIcon,
   NameIcon,
   UploadIcon,
+  GavelIcon,
 } from "../icons";
 
 import {
@@ -150,7 +151,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     {
       id: "attestation",
       value: t("attestation"),
-      icon: AddIcon,
+      icon: GavelIcon,
       description: Attestation,
       className: "separator",
       group: groups.basic,
