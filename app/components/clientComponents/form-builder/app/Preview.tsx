@@ -132,7 +132,7 @@ export const Preview = () => {
           </div>
           <h1 className="mt-4">
             {formRecord.form[localizeField(LocalizedFormProperties.TITLE, language)] ||
-              t("pagePreview", { ns: "form-builder" })}
+              t("gcFormsTest", { ns: "form-builder" })}
           </h1>
         </div>
 

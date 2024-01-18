@@ -11,8 +11,11 @@ type BackLinkProps = {
 export const BackLink = ({ href, children }: BackLinkProps) => {
   return (
     <div className="mb-10">
-      <BackArrowIcon className="inline-block mr-2" />
-      <StyledLink className="text-[18px]" href={href}>
+      <BackArrowIcon className="mr-2 inline-block" />
+      <StyledLink
+        className="text-lg text-slate-800 visited:text-slate-800 active:text-white"
+        href={href}
+      >
         {children}
       </StyledLink>
     </div>

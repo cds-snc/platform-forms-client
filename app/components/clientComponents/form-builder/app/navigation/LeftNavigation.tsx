@@ -1,13 +1,17 @@
 "use client";
 import React from "react";
 import { useTranslation } from "@i18n/client";
-import { DesignIcon, PreviewIcon, PublishIcon, GearIcon, MessageIcon } from "../../../icons";
+import {
+  NavEditIcon,
+  NavPreviewIcon,
+  NavPublishIcon,
+  NavSettingsIcon,
+  NavResponsesIcon,
+} from "@clientComponents/icons";
 import { useTemplateContext } from "@clientComponents/form-builder/hooks";
 import { useTemplateStore } from "../../store/useTemplateStore";
-import { useSession } from "next-auth/react";
 import { useActivePathname } from "../../hooks/useActivePathname";
-import { NavLink } from "@clientComponents/globals/NavLink";
-import { cn } from "@lib/utils";
+import { LeftNav } from "@clientComponents/globals/Buttons/LinkButton";
 
 const linkHelper = (route: string, activePathname: string, id?: string) => {
   const pathTest = new RegExp(`/(en|fr)/form-builder/${route}(.*)?`);
@@ -21,49 +25,65 @@ const linkHelper = (route: string, activePathname: string, id?: string) => {
 export const LeftNavigation = () => {
   const { t } = useTranslation("form-builder");
   const { isPublished, id } = useTemplateStore((s) => ({ id: s.id, isPublished: s.isPublished }));
-  const { status } = useSession();
   const { activePathname } = useActivePathname();
   const { saveForm } = useTemplateContext();
-
-  const iconClassname =
-    "inline-block w-6 h-6 group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
 
   return (
     <nav aria-label={t("navLabelFormBuilder")}>
       <ul className="m-0 list-none p-0">
         {!isPublished && (
           <li>
-            <NavLink {...linkHelper("edit", activePathname)} onClick={saveForm}>
-              <DesignIcon className={iconClassname} />
-              {t("edit")}
-            </NavLink>
+            <LeftNav
+              testid="edit"
+              {...linkHelper("/edit", activePathname)}
+              onClick={saveForm}
+              title={t("edit")}
+            >
+              <NavEditIcon />
+            </LeftNav>
           </li>
         )}
         <li>
-          <NavLink {...linkHelper("preview", activePathname)} onClick={saveForm}>
-            <PreviewIcon className={iconClassname} />
-            {status === "authenticated" ? t("test") : t("pagePreview")}
-          </NavLink>
+          <LeftNav
+            testid="preview"
+            {...linkHelper("/preview", activePathname)}
+            onClick={saveForm}
+            title={t("test")}
+          >
+            <NavPreviewIcon />
+          </LeftNav>
         </li>
         <li>
-          <NavLink {...linkHelper(`/settings/${id}`, activePathname)} onClick={saveForm}>
-            <GearIcon className={iconClassname} />
-            {t("pageSettings")}
-          </NavLink>
+          <LeftNav
+            testid="settings"
+            {...linkHelper(`/settings/${id}`, activePathname)}
+            onClick={saveForm}
+            title={t("pageSettings")}
+          >
+            <NavSettingsIcon />
+          </LeftNav>
         </li>
         {!isPublished && (
           <li>
-            <NavLink {...linkHelper("publish", activePathname)} onClick={saveForm}>
-              <PublishIcon className={iconClassname} />
-              {t("publish")}
-            </NavLink>
+            <LeftNav
+              testid="publish"
+              {...linkHelper("/publish", activePathname)}
+              onClick={saveForm}
+              title={t("publish")}
+            >
+              <NavPublishIcon />
+            </LeftNav>
           </li>
         )}
         <li>
-          <NavLink {...linkHelper(`/responses/${id}`, activePathname)} onClick={saveForm}>
-            <MessageIcon className={cn(iconClassname, "mt-[6px] ml-[2px]")} />
-            {t("responsesNavLabel")}
-          </NavLink>
+          <LeftNav
+            testid="responses"
+            {...linkHelper(`/responses/${id}`, activePathname)}
+            onClick={saveForm}
+            title={t("responsesNavLabel")}
+          >
+            <NavResponsesIcon />
+          </LeftNav>
         </li>
       </ul>
     </nav>

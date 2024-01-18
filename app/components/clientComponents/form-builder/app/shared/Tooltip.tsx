@@ -12,7 +12,7 @@ interface TooltipProps {
 
 export const Tooltip = ({ text, children, className = "", side = "left" }: TooltipProps) => {
   return (
-    <TooltipPrimitive.Provider>
+    <TooltipPrimitive.Provider delayDuration={100}>
       <TooltipPrimitive.Root>
         <TooltipPrimitive.Trigger asChild>
           <span>{children}</span>
