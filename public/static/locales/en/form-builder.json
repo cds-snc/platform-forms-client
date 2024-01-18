@@ -28,6 +28,7 @@
       "richText": "Add page text"
     },
     "address": {
+      "whatIsYourAddress": "What is your address?",
       "city": "City, town or community",
       "country": "Country",
       "description": "A pattern to collect an Canadian address, including fields for address, city, province, and postal code.",
@@ -64,6 +65,7 @@
     "condition2": "Condition 2",
     "condition3": "Condition 3",
     "contact": {
+      "howCanWeContactYou": "How can we contact you?",
       "description": "A pattern to collect information for follow-up communication, including phone number, email, and language of correspondence.",
       "email": {
         "description": "For example: name@example.com",
@@ -144,7 +146,8 @@
       "selectOnlyOne": "Select one option."
     },
     "richText": {
-      "description": "A rich text element for inserting headings, paragraph text, lists, or <a tab-index=\"-1\" href=\"#\">links</a>.",
+      "description": "A rich text element for inserting headings, paragraph text, lists, or links.",
+      "example": "Paragraph text that can be formatted in <strong>bold</strong> or <i>italics</i>, or with <a tab-index=\"-1\" href=\"#\">hyperlinks</a>.",
       "title": "Page text"
     },
     "textField": {

@@ -8,11 +8,12 @@ export const RichText = () => {
   return (
     <div>
       <h3 className="mb-0">{t("addElementDialog.richText.title")}</h3>
+      <p>{t("addElementDialog.richText.description")}</p>
 
       <ExampleWrapper className="mt-4">
-        <div className="mb-5">
+        <div className="mb-5 mt-2">
           <Markdown options={{ forceBlock: true }}>
-            {t("addElementDialog.richText.description")}
+            {t("addElementDialog.richText.example")}
           </Markdown>
         </div>
 

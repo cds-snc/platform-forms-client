@@ -28,6 +28,7 @@
       "richText": "Ajouter du texte de page"
     },
     "address": {
+      "whatIsYourAddress": "Quelle est votre adresse?",
       "city": "Ville ou communauté",
       "country": "Pays",
       "description": "Une configuration pour recueillir une adresse canadienne, y compris des champs pour une adresse une ville, une province et un code postal.",
@@ -64,6 +65,7 @@
     "condition2": "Condition 2",
     "condition3": "Condition 3",
     "contact": {
+      "howCanWeContactYou": "Comment pouvons-nous vous contacter?",
       "description": "Une configuration pour recueillir des informations de contact en vue d'une communication de suivi, y compris numéro de téléphone, courriel et langue de correspondance.",
       "email": {
         "description": "Par exemple : nom@exemple.com",
@@ -144,7 +146,8 @@
       "selectOnlyOne": "Sélectionnez une option."
     },
     "richText": {
-      "description": "Élément de texte enrichi pour insérer des en-têtes, des paragraphes, des listes ou des <a tab-index=\"-1\" href=\"#\">liens</a>.",
+      "description": "Élément de texte enrichi pour insérer des en-têtes, des paragraphes, des listes ou des liens.",
+      "example": "Texte de paragraphe qui peut être mis en forme avec du <strong>gras</strong> ou de l'<i>italique</i>, ou avec des <a tab-index=\"-1\" href=\"#\">hyperliens</a>.",
       "title": "Texte de page"
     },
     "textArea": {

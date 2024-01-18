@@ -12,6 +12,7 @@ export const Contact = () => {
       <p>{t("addElementDialog.contact.description")}</p>
 
       <ExampleWrapper className="mt-4">
+        <h4>{t("addElementDialog.contact.howCanWeContactYou")}</h4>
         <div className="mb-6">
           <Label htmlFor="phone" className="gc-label">
             {t("addElementDialog.contact.phone.label")}
