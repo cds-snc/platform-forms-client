@@ -103,6 +103,7 @@ const QuestionSelect = ({
 };
 
 export const ConditionalSelector = ({
+  itemId,
   elements,
   elementId,
   choiceId,
@@ -111,6 +112,7 @@ export const ConditionalSelector = ({
   updateElementId,
   removeSelector,
 }: {
+  itemId: number;
   elements: FormElement[];
   elementId: string | null;
   choiceId: string | null;
@@ -119,18 +121,34 @@ export const ConditionalSelector = ({
   updateElementId: (index: number, id: string) => void;
   removeSelector: (index: number) => void;
 }) => {
-  const { t } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation("form-builder");
 
   const questions = useMemo(() => {
-    const items = elements.map((question) => {
-      const result = { label: question.properties.titleEn, value: `${question.id}` };
-      return result;
-    });
+    const items = elements
+      .filter((item) => {
+        return item.id !== itemId;
+      })
+      .map((question) => {
+        const titleKey = i18n.language === "en" ? "titleEn" : "titleFr";
+        const descKey = i18n.language === "en" ? "descriptionEn" : "descriptionFr";
+
+        let label = "";
+        if (question.properties[titleKey]) {
+          label = question.properties[titleKey] || "";
+        }
+
+        if (label === "" && question.properties[descKey]) {
+          label = question.properties[descKey] || "";
+        }
+
+        const result = { label, value: `${question.id}` };
+        return result;
+      });
 
     // Prepend empty option
     items.unshift({ label: "", value: "" });
     return items;
-  }, [elements]);
+  }, [elements, itemId, i18n.language]);
 
   const choiceParentQuestion = choiceId?.split(".")[0] || null;
 
