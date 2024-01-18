@@ -136,6 +136,7 @@
     "number": {
       "description": "Un champ qui n’accepte qu’une valeur numérique.",
       "title": "Chiffre",
+      "amount": "Montant",
       "enterOnlyNumbers": "Saisissez un chiffre."
     },
     "questionElement": "Éléments",

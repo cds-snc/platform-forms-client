@@ -136,6 +136,7 @@
     "number": {
       "description": "A field that only accepts a numeric value.",
       "title": "Number",
+      "amount": "Amount",
       "enterOnlyNumbers": "Enter a number."
     },
     "questionElement": "Elements",
