@@ -31,7 +31,7 @@
       "whatIsYourAddress": "What is your address?",
       "city": "City, town or community",
       "country": "Country",
-      "description": "A pattern to collect an Canadian address, including fields for address, city, province, and postal code.",
+      "description": "A pattern to collect a Canadian address, including fields for address, city, province, and postal code.",
       "label": "Address",
       "postal": "Postal code",
       "province": "Province or territory",
