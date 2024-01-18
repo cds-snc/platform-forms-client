@@ -35,7 +35,7 @@ ENV INDEX_SITE=$INDEX_SITE
 
 WORKDIR /src
 
-COPY package.json yarn.lock .yarnrc.yml next.config.js ./
+COPY package.json yarn.lock .yarnrc.yml next.config.mjs ./
 COPY .yarn ./.yarn
 # Update to latest yarn version
 RUN corepack enable && yarn set version berry
