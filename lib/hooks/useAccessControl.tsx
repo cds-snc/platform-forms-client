@@ -5,7 +5,7 @@ import { useSession, signOut } from "next-auth/react";
 import { PureAbility, createMongoAbility, MongoAbility } from "@casl/ability";
 import { Abilities } from "@lib/types";
 import { logMessage } from "@lib/logger";
-import Router from "next/router";
+import { useTranslation } from "@i18n/client";
 
 interface AccessControlInterface {
   ability: PureAbility<Abilities, unknown> | null;
@@ -15,24 +15,29 @@ const AbilityContext = createContext<AccessControlInterface>({} as AccessControl
 
 export const AccessControlProvider = ({ children }: { children: React.ReactNode }) => {
   const [ability, setAbility] = useState<PureAbility<Abilities, unknown> | null>(null);
-  const { data: session, status, update } = useSession();
+  const { data, status, update } = useSession();
+  const {
+    i18n: { language },
+  } = useTranslation();
+
+  //@todo: Do a deep comparison check on 'user' to ensure that the session has actually changed for values
+  // we're interested in.
+  const { user } = data ?? {};
 
   const refreshAbility = useCallback(async () => {
     // If the user is deactivated, sign them out automatically
-    if (session?.user.deactivated) {
-      const deactivated = await signOut({
+    if (user?.deactivated) {
+      await signOut({
         redirect: false,
-        callbackUrl: "/auth/account-deactivated",
+        callbackUrl: `/${language}/auth/account-deactivated`,
       });
-      // Not using useRouter() hook because it will cause unnecessary re-rendering
-      Router.push(deactivated.url);
     }
-    if (status === "authenticated" && session.user.privileges) {
+    if (status === "authenticated" && user?.privileges) {
       logMessage.debug("Refreshing Ability - useAccessControl hook - Creating ability");
-      const userAbility = createMongoAbility<MongoAbility<Abilities>>(session.user.privileges);
+      const userAbility = createMongoAbility<MongoAbility<Abilities>>(user?.privileges);
       setAbility(userAbility);
     }
-  }, [status, session]);
+  }, [status, user, language]);
 
   // Ensures that the ability is refreshed when the session is updated
   useEffect(() => {
