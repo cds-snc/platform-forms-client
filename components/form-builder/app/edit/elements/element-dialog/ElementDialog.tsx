@@ -166,7 +166,7 @@ export const ElementDialog = ({
             </>
           </Button>
           <Button theme="secondary" dataTestId="cancel-button" onClick={handleClose}>
-            Cancel
+          {t("addElementDialog.cancel")}
           </Button>
         </Footer>
       </div>

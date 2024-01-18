@@ -7,6 +7,7 @@
       "preset": "Prédéfini",
       "other": "Autre"
     },
+    "cancel": "Annuler",
     "tryIt": "Aperçu",
     "addButton": "Sélectionner cet élément",
     "addElement": {
@@ -37,7 +38,7 @@
         "description": "Indiquez le nom de rue et le numéro d'unité. Par exemple : 123 Rue Principale Apt 10.",
         "label": "Adresse municipale"
       },
-      "title": "Quelle est votre adresse?"
+      "title": "Adresse"
     },
     "allRequired": "toutes obligatoires",
     "answer": "Réponse...",
@@ -58,7 +59,7 @@
       "chooseItems": "Question",
       "selectAllThatApply": "Sélectionnez toutes les options pertinentes."
     },
-    "checkboxItem": "Item",
+    "checkboxItem": "Option",
     "condition1": "Condition 1",
     "condition2": "Condition 2",
     "condition3": "Condition 3",
@@ -78,7 +79,7 @@
         "description": "Par exemple : 111-222-3333",
         "label": "Numéro de téléphone"
       },
-      "title": "Comment pouvons-nous vous contacter?"
+      "title": "Coordonnées"
     },
     "date": {
       "description": "Un champ pour recueillir une date dans un format prévisible.",
@@ -96,7 +97,7 @@
       },
       "selectOption": "Question",
       "selectOne": "Sélectionnez l’option pertinente.",
-      "choices": "Option 1,Option 2,Option 3,Option 4,Option 5,Option 6,Option 7,Option 8"
+      "choices": "Option 1,Option 2,Option 3,Option 4,Option 5,Option 6,Option 7,Option 8,Option 9,Option 10"
     },
     "dynamicRow": {
       "description": "La possibilité d’ajouter une série de réponses connexes à une question et de répéter la série plusieurs fois.",
@@ -122,7 +123,7 @@
         "description": "Description du deuxième prénom",
         "label": "Deuxième prénom"
       },
-      "title": "Quel est votre nom?"
+      "title": "Noms individuels"
     },
     "listItem": "Élément de liste ",
     "name": {
@@ -131,9 +132,9 @@
       "title": "Nom complet"
     },
     "number": {
-      "description": "Description du numéro",
-      "title": "Numéro",
-      "enterOnlyNumbers": "[FR] Enter only numbers"
+      "description": "Un champ qui n’accepte qu’une valeur numérique.",
+      "title": "Chiffre",
+      "enterOnlyNumbers": "Saisissez un chiffre."
     },
     "questionElement": "Éléments",
     "radio": {
@@ -148,7 +149,7 @@
     },
     "textArea": {
       "title": "Réponse longue",
-      "description": "Une zone de texte pour une réponse libre de plusieurs lignes à une question ouverte.",
+      "description": "Une zone de texte pour une réponse libre de plusieurs lignes.",
       "forExample": "Texte explicatif ou exemple"
     },
     "textField": {
@@ -216,7 +217,7 @@
     "text3": "Si vos utilisateur·rice·s atteignent constamment à la limite de caractères imposée par le backend de votre service, essayez d'augmenter la limite plutôt que d'utiliser un nombre de caractères.",
     "title": "Raisons pour la limite de caractères"
   },
-  "checkboxes": "Choix multiples",
+  "checkboxes": "Cases à cocher",
   "close": "Fermer",
   "closeModal": "Fermer fenêtre modale",
   "completed": "Complétée",
@@ -263,10 +264,10 @@
   "copyMessage": "Le formulaire a été téléchargé avec succès.",
   "date": "Date",
   "defaultElementDescription": {
-    "date": "Entrez une date. Par exemple : mm/jj/aaaa",
-    "email": "Entrez une adresse courriel. Par exemple : nom@exemple.com",
+    "date": "Saisissez une date dans ce format : mm/jj/aaaa",
+    "email": "Par exemple : nom@exemple.com",
     "number": "N'entrez que des chiffres",
-    "phone": "Entrez un numéro de téléphone. Par exemple : 111-222-3333"
+    "phone": "Par exemple : 111-222-3333"
   },
   "description": "Description ",
   "descriptionDescription": "La description apparaît sous l'étiquette, et avant le champ. Elle est utilisée pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de mise en forme.",
@@ -394,7 +395,7 @@
   "insertLink": "Insérer un lien  ",
   "lastSaved": "mise à jour à",
   "linkUrl": "URL du lien",
-  "lockedBlock": "Élément essentiel",
+  "lockedBlock": "Essentiel",
   "longAnswerText": "Réponse longue",
   "maxCharacterLength": "Longueur maximale des caractères :",
   "maximumCharacterLength": "Longueur maximale des caractères",
@@ -597,7 +598,7 @@
     }
   },
   "shortAnswer": "Réponse courte",
-  "shortAnswerText": "Un champ de texte pour une réponse d’une seule ligne.",
+  "shortAnswerText": "Réponse courte",
   "signInToTest": "<a href=\"\">Connectez-vous</a> pour tester comment vous pouvez soumettre et visualiser les réponses.",
   "singleChoice": "Boutons radio",
   "start": "Commencer",

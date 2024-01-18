@@ -15,7 +15,6 @@ export const Name = () => {
         <Label htmlFor="name" className="gc-label">
           {t("addElementDialog.name.label")}
         </Label>
-        <Description>{t("addElementDialog.name.description")}</Description>
         <TextInput id="name" type="text" name="name" autoComplete="name" />
       </ExampleWrapper>
     </div>

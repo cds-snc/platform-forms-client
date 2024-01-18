@@ -7,8 +7,8 @@ export const Attestation = () => {
   const { t } = useTranslation("form-builder");
   return (
     <div>
-      <h3 className="mb-0">{t("addElementDialog.checkbox.title")}</h3>
-      <p>{t("addElementDialog.checkbox.description")}</p>
+      <h3 className="mb-0">{t("addElementDialog.attestation.title")}</h3>
+      <p>{t("addElementDialog.attestation.description")}</p>
 
       <ExampleWrapper className="mt-4">
         <Label className="gc-label">

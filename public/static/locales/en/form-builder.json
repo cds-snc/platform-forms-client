@@ -7,20 +7,21 @@
       "preset": "Preset",
       "other": "Other"
     },
+    "cancel": "Cancel",
     "tryIt": "Preview",
     "addButton": "Select element",
     "addElement": {
       "textField": "Add short answer",
       "textArea": "Add long answer",
-      "radio": "Add single choice",
-      "checkbox": "Add multiple choice",
-      "dropdown": "Add dropdown list",
+      "radio": "Add radio button",
+      "checkbox": "Add checkbox",
+      "dropdown": "Add dropdown",
       "fileInput": "Add file input",
-      "attestation": "Add legal attestation",
+      "attestation": "Add attestation",
       "date": "Add date",
       "number": "Add number",
-      "name": "Add name",
-      "firstMiddleLastName": "Add full name",
+      "name": "Add full name",
+      "firstMiddleLastName": "Add individual names",
       "address": "Add address",
       "contact": "Add contact",
       "dynamicRow": "Add repeating set",
@@ -37,7 +38,7 @@
         "description": "Include your street name and number. For example: 123 Main St. Apt 10",
         "label": "Street address"
       },
-      "title": "What is your address?"
+      "title": "Address"
     },
     "allRequired": "all required",
     "answer": "Answer...",
@@ -58,7 +59,7 @@
       "chooseItems": "Question",
       "selectAllThatApply": "Select all that apply."
     },
-    "checkboxItem": "Item",
+    "checkboxItem": "Option",
     "condition1": "Condition 1",
     "condition2": "Condition 2",
     "condition3": "Condition 3",
@@ -78,7 +79,7 @@
         "description": "For example: 111-222-3333",
         "label": "Phone number"
       },
-      "title": "How can we contact you?"
+      "title": "Contact"
     },
     "date": {
       "description": "A field to collect the date in a predictable format.",
@@ -90,13 +91,13 @@
     },
     "dropdown": {
       "description": "A long list of options for single selection.",
-      "title": "Dropdown list",
+      "title": "Dropdown",
       "example": {
         "select": "Select"
       },
       "selectOption": "Question",
       "selectOne": "Select which option applies.",
-      "choices": "Option 1,Option 2,Option 3,Option 4,Option 5,Option 6,Option 7,Option 8"
+      "choices": "Option 1,Option 2,Option 3,Option 4,Option 5,Option 6,Option 7,Option 8,Option 9,Option 10"
     },
     "dynamicRow": {
       "description": "The option to add a series of related answers to a question and repeat the set multiple times.",
@@ -122,7 +123,7 @@
         "description": "Middle name description",
         "label": "Middle name"
       },
-      "title": "What is your name?"
+      "title": "Individual names"
     },
     "listItem": "List item ",
     "name": {
@@ -131,9 +132,9 @@
       "title": "Full name"
     },
     "number": {
-      "description": "Number description",
+      "description": "A field that only accepts a numeric value.",
       "title": "Number",
-      "enterOnlyNumbers": "Enter only numbers"
+      "enterOnlyNumbers": "Enter a number."
     },
     "questionElement": "Elements",
     "radio": {
@@ -216,7 +217,7 @@
     "text3": "If your users keep hitting the character limit imposed by the backend of your service then try to increase the limit rather than use a character count.",
     "title": "Reasons for using a character limit"
   },
-  "checkboxes": "Multiple choice",
+  "checkboxes": "Checkboxes",
   "close": "Close",
   "closeModal": "Close modal",
   "completed": "Completed",
@@ -264,10 +265,10 @@
   "copyMessage": "(template copied)",
   "date": "Date",
   "defaultElementDescription": {
-    "date": "Enter a date. For example: mm/dd/yyyy",
-    "email": "Enter an email address. For example: name@example.com",
+    "date": "Format the date as: mm/dd/yyyy",
+    "email": "For example: name@example.com",
     "number": "Only enter numbers",
-    "phone": "Enter a phone number. For example: 111-222-3333"
+    "phone": "For example: 111-222-3333"
   },
   "description": "Description",
   "descriptionDescription": "The description appears below the label and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements.",
@@ -395,8 +396,8 @@
   "insertLink": "Insert link",
   "lastSaved": "updated at",
   "linkUrl": "Link URL",
-  "lockedBlock": "Essential element",
-  "longAnswerText": "Long answer text",
+  "lockedBlock": "Essential",
+  "longAnswerText": "Long answer",
   "maxCharacterLength": "Max character length: ",
   "maximumCharacterLength": "Maximum character length",
   "maxNumberOfRows": {
@@ -597,7 +598,7 @@
     }
   },
   "shortAnswer": "Short answer",
-  "shortAnswerText": "A text input for a single-line answer.",
+  "shortAnswerText": "Short answer",
   "signInToTest": "<a href=\"/auth/login\">Sign in</a> to test how you can submit and view responses",
   "singleChoice": "Radio buttons",
   "start": "Start",
