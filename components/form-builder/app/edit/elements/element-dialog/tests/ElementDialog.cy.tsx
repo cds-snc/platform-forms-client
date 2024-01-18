@@ -282,10 +282,10 @@ describe("<ElementDialog />", () => {
     cy.get('[data-testid="contact"]').should("have.attr", "aria-selected", "true");
 
     cy.typeInField("body", "{downarrow}");
-    cy.get('[data-testid="dynamicRow"]').should("have.attr", "aria-selected", "true");
+    cy.get('[data-testid="richText"]').should("have.attr", "aria-selected", "true");
 
     cy.typeInField("body", "{downarrow}");
-    cy.get('[data-testid="richText"]').should("have.attr", "aria-selected", "true");
+    cy.get('[data-testid="dynamicRow"]').should("have.attr", "aria-selected", "true");
   });
 
   it("Keybaord navigate the filters", () => {
@@ -302,15 +302,11 @@ describe("<ElementDialog />", () => {
     cy.typeInField("body", "{rightarrow}");
     cy.focused().should("have.attr", "data-testid", "preset-filter");
     cy.typeInField("body", "{rightarrow}");
-    cy.focused().should("have.attr", "data-testid", "advanced-filter");
-    cy.typeInField("body", "{rightarrow}");
     cy.focused().should("have.attr", "data-testid", "other-filter");
     cy.get('[data-testid="other-filter"]').tab();
     cy.focused().should("have.attr", "data-testid", "listbox");
     cy.get('[data-testid="listbox"]').tab({ shift: true });
     cy.focused().should("have.attr", "data-testid", "other-filter");
-    cy.typeInField("body", "{leftarrow}");
-    cy.focused().should("have.attr", "data-testid", "advanced-filter");
     cy.typeInField("body", "{leftarrow}");
     cy.focused().should("have.attr", "data-testid", "preset-filter");
     cy.typeInField("body", "{leftarrow}");
@@ -334,10 +330,8 @@ describe("<ElementDialog />", () => {
     cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 6);
     cy.get('[data-testid="preset-filter').click();
     cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 6);
-    cy.get('[data-testid="advanced-filter').click();
-    cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 1);
     cy.get('[data-testid="other-filter').click();
-    cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 1);
+    cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 2);
 
     cy.get('[data-testid="all-filter').click();
     cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 14);
