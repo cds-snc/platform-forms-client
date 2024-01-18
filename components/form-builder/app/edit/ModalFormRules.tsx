@@ -66,6 +66,7 @@ export const ModalFormRules = ({
         {choiceRules.map((rule, index) => {
           return (
             <ConditionalSelector
+              itemId={item.id}
               index={index}
               key={`${rule.choiceId}-${index}`}
               elements={elements}
