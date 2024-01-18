@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "next-i18next";
 import { FormElementTypes } from "@lib/types";
 import { useDialogRef, Dialog, ListBox } from "../../../shared";
@@ -52,6 +52,7 @@ export const ElementDialog = ({
 }) => {
   const { t } = useTranslation("form-builder");
   const dialog = useDialogRef();
+  const descriptionRef = useRef<HTMLDivElement>(null);
   const [selectedElement, setSelectedElement] = useState(0);
   const [selectedGroup, setSelectedGroup] = useState<SelectedGroupState>({
     group: "all",
@@ -100,6 +101,12 @@ export const ElementDialog = ({
   }, [selectedGroup]);
 
   useEffect(() => {
+    if (descriptionRef.current) {
+      descriptionRef.current.scrollTop = 0;
+    }
+  }, [descriptionRef, selectedElement]);
+
+  useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Enter") {
         e.stopPropagation();
@@ -142,7 +149,10 @@ export const ElementDialog = ({
           {/* /SIDEBAR */}
 
           {/* DESCRIPTION */}
-          <div className="mt-14 w-2/3 overflow-y-scroll bg-slate-100 px-4 pb-8 pt-2">
+          <div
+            className="mt-14 w-2/3 overflow-y-scroll bg-slate-100 px-4 pb-8 pt-2"
+            ref={descriptionRef}
+          >
             <div role="region" aria-label={`${value} ${t("addElementDialog.example")}`} id={id}>
               <div data-testid="element-description-content" aria-live="polite">
                 {Description && (
