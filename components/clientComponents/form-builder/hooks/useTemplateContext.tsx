@@ -7,7 +7,7 @@ import { logMessage } from "@lib/logger";
 import { useSession } from "next-auth/react";
 import { toast } from "../app/shared/Toast";
 import { StyledLink } from "@clientComponents/globals";
-import { DownloadFileButton } from "../app/shared/";
+import { DownloadFileButton } from "../app/shared";
 
 interface TemplateApiType {
   error: string | null | undefined;

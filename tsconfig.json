@@ -19,13 +19,13 @@
     "paths": {
       "@lib/*": ["lib/*"],
       "@api/*": ["app/api/*"],
-      "@serverComponents/*": ["app/components/serverComponents/*"],
-      "@clientComponents/*": ["app/components/clientComponents/*"],
-      "@formbuilder/*": ["app/components/clientComponents/form-builder/*"],
+      "@serverComponents/*": ["components/serverComponents/*"],
+      "@clientComponents/*": ["components/clientComponents/*"],
+      "@formbuilder/*": ["components/clientComponents/form-builder/*"],
       "@jestFixtures/*": ["__fixtures__/*"],
       "@jestUtils": ["__utils__"],
-      "@i18n": ["app/i18n"],
-      "@i18n/*": ["app/i18n/*"],
+      "@i18n": ["i18n"],
+      "@i18n/*": ["i18n/*"],
       "@content/*": ["public/static/content/*"],
       "@public/*": ["public/*"]
     },
