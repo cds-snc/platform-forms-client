@@ -54,7 +54,7 @@ describe("Test FormBuilder autocomplete props", () => {
 
       cy.get('[id="item-1"]').should("have.attr", "placeholder", "Question");
 
-      cy.get(".example-text").should("contain", "Short answer.");
+      cy.get(".example-text").should("contain", "Short answer");
 
       cy.get('[data-testid="more"]').click();
       cy.get('[data-testid="autocomplete"]').select(option[0]);
