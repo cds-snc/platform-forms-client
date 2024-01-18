@@ -264,22 +264,22 @@ describe("<ElementDialog />", () => {
     cy.get('[data-testid="attestation"]').should("have.attr", "aria-selected", "true");
 
     cy.typeInField("body", "{downarrow}");
-    cy.get('[data-testid="date"]').should("have.attr", "aria-selected", "true");
-
-    cy.typeInField("body", "{downarrow}");
-    cy.get('[data-testid="number"]').should("have.attr", "aria-selected", "true");
-
-    cy.typeInField("body", "{downarrow}");
     cy.get('[data-testid="name"]').should("have.attr", "aria-selected", "true");
 
     cy.typeInField("body", "{downarrow}");
     cy.get('[data-testid="firstMiddleLastName"]').should("have.attr", "aria-selected", "true");
 
     cy.typeInField("body", "{downarrow}");
+    cy.get('[data-testid="contact"]').should("have.attr", "aria-selected", "true");
+
+    cy.typeInField("body", "{downarrow}");
     cy.get('[data-testid="address"]').should("have.attr", "aria-selected", "true");
 
     cy.typeInField("body", "{downarrow}");
-    cy.get('[data-testid="contact"]').should("have.attr", "aria-selected", "true");
+    cy.get('[data-testid="date"]').should("have.attr", "aria-selected", "true");
+
+    cy.typeInField("body", "{downarrow}");
+    cy.get('[data-testid="number"]').should("have.attr", "aria-selected", "true");
 
     cy.typeInField("body", "{downarrow}");
     cy.get('[data-testid="richText"]').should("have.attr", "aria-selected", "true");
