@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
 import { ExampleWrapper } from "./ExampleWrapper";
-import { Description, Label, TextInput } from "@components/forms";
+import { Label, TextInput } from "@components/forms";
 
 export const Name = () => {
   const { t } = useTranslation("form-builder");

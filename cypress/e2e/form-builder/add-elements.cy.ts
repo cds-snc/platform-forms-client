@@ -1,5 +1,3 @@
-import { useTranslation } from "react-i18next";
-
 describe("Test FormBuilder Add Elements", () => {
   beforeEach(() => {
     cy.login({ acceptableUse: true });
