@@ -13,7 +13,7 @@ export const FileInput = ({ title }: { title: string }) => {
 
       <ExampleWrapper className="mt-4">
         <Label htmlFor="name" className="gc-label">
-          Upload a file
+         {t("addElementDialog.fileInput.label")}
         </Label>
         <FileInputComponent label="title" id="name" name={"name"} />
       </ExampleWrapper>

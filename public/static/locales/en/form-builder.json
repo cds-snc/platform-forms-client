@@ -13,10 +13,10 @@
     "addElement": {
       "textField": "Add short answer",
       "textArea": "Add long answer",
-      "radio": "Add radio button",
-      "checkbox": "Add checkbox",
+      "radio": "Add radio buttons",
+      "checkbox": "Add checkboxes",
       "dropdown": "Add dropdown",
-      "fileInput": "Add file input",
+      "fileInput": "Add file upload",
       "attestation": "Add attestation",
       "date": "Add date",
       "number": "Add number",
