@@ -9,9 +9,7 @@ describe("Form builder description text", () => {
     cy.get('[data-testid="preset-filter"]').click();
     cy.get('[data-testid="date"]').click();
     cy.get('[data-testid="element-description-add-element"]').click();
-    cy.get(".description-text")
-      .should("be.visible")
-      .contains("Enter a date. For example: mm/dd/yyyy");
+    cy.get(".description-text").should("be.visible").contains("Format the date as: mm/dd/yyyy");
     cy.get(".example-text").should("be.visible").contains("mm/dd/yyyy");
   });
 

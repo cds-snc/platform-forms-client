@@ -23,7 +23,7 @@ describe("Test FormBuilder Add Elements", () => {
 
     cy.get('[id="item-1"]').should("have.attr", "placeholder", "Question");
 
-    cy.get(".example-text").should("contain", "A text input for a single-line answer.");
+    cy.get(".example-text").should("contain", "Short answer");
   });
 
   it("Adds a Long Answer element", () => {
@@ -35,7 +35,7 @@ describe("Test FormBuilder Add Elements", () => {
 
     cy.get('[id="item-1"]').should("have.attr", "placeholder", "Question");
 
-    cy.get(".example-text").should("contain", "Long answer text");
+    cy.get(".example-text").should("contain", "Long answer");
   });
 
   it("Adds a Single choice element", () => {
@@ -93,10 +93,7 @@ describe("Test FormBuilder Add Elements", () => {
 
     cy.get('[id="item-1"]').should("have.attr", "placeholder", "Question");
 
-    cy.get('[data-testid="description-text"]').should(
-      "contain",
-      "Enter a date. For example: mm/dd/yyyy"
-    );
+    cy.get('[data-testid="description-text"]').should("contain", "Format the date as: mm/dd/yyyy");
     cy.get('[data-testid="date"]').should("contain", "mm/dd/yyyy");
   });
 
