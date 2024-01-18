@@ -48,7 +48,10 @@ export const DownloadTable = ({
   setShowDownloadSuccess,
   lastEvaluatedKey,
 }: DownloadTableProps) => {
-  const { t } = useTranslation("form-builder-responses");
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation("form-builder-responses");
   const params = useSearchParams();
   const statusQuery = params.get("statusQuery") || "new";
 
@@ -116,7 +119,7 @@ export const DownloadTable = ({
               </Alert.Title>
               <p className="mb-2 text-sm text-[#26374a]">
                 {t("downloadResponsesTable.errors.errorDownloadingFiles")}
-                <Link href="/form-builder/support">
+                <Link href={`/${language}/form-builder/support`}>
                   {t("downloadResponsesTable.errors.errorDownloadingFilesLink")}
                 </Link>
                 .

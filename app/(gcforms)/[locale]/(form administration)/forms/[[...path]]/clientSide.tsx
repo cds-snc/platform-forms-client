@@ -29,10 +29,13 @@ interface MyFormsProps {
 
 export default function RenderMyForms({ templates }: MyFormsProps) {
   // remove locale from path and get sub-route
-  const path = usePathname().split("/")[3];
+  const path = usePathname()?.split("/")[3];
   logMessage.debug(`path: ${path}`);
 
-  const { t } = useTranslation(["my-forms"]);
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation(["my-forms"]);
 
   const templatesAll = templates.sort((itemA, itemB) => {
     return new Date(itemB.date).getTime() - new Date(itemA.date).getTime();
@@ -65,7 +68,7 @@ export default function RenderMyForms({ templates }: MyFormsProps) {
       <div className="flex w-full justify-between">
         <FilterNavigation />
         <div ref={createNewFormRef} className="inline">
-          <LinkButton.Primary href="/form-builder">
+          <LinkButton.Primary href={`/${language}/form-builder`}>
             <>
               <span aria-hidden="true" className="mr-2 inline-block">
                 +
@@ -77,7 +80,7 @@ export default function RenderMyForms({ templates }: MyFormsProps) {
       </div>
 
       <ResumeEditingForm>
-        <StyledLink href="/form-builder/edit" className="mb-4 inline-block">
+        <StyledLink href={`/${language}/form-builder/edit`} className="mb-4 inline-block">
           <span aria-hidden="true"> ← </span> {t("actions.resumeForm")}
         </StyledLink>
       </ResumeEditingForm>

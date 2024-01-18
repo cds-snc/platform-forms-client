@@ -32,7 +32,10 @@ const Step1 = ({
   authErrorsState: AuthErrorsState;
   authErrorsReset: () => void;
 }) => {
-  const { t, i18n } = useTranslation(["reset-password", "common"]);
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation(["reset-password", "common"]);
 
   // validation schema for the initial form to send the forgot password verification code
   const sendForgotPasswordValidationSchema = Yup.object().shape({
@@ -118,7 +121,7 @@ const Step1 = ({
               {t("provideUsername.resetPasswordButton")}
             </Button>
 
-            <LinkButton.Secondary href={`/${i18n.language}/auth/login`}>
+            <LinkButton.Secondary href={`/${language}/auth/login`}>
               {t("account.actions.backToSignIn", { ns: "common" })}
             </LinkButton.Secondary>
           </form>
@@ -157,8 +160,11 @@ const Step2 = ({
   authErrorsState: AuthErrorsState;
   authErrorsReset: () => void;
 }) => {
-  const { t, i18n } = useTranslation(["reset-password", "common"]);
-  const langKey = i18n.language === "en" ? "questionEn" : "questionFr";
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation(["reset-password", "common"]);
+  const langKey = language === "en" ? "questionEn" : "questionFr";
 
   // validation schema for the initial form to send the forgot password verification code
   const confirmSecurityQuestionsValidationSchema = Yup.object().shape({
@@ -314,7 +320,7 @@ const Step2 = ({
                 {t("securityQuestions.resetPasswordButton")}
               </Button>
 
-              <LinkButton.Secondary href="/form-builder/support">
+              <LinkButton.Secondary href={`/${language}/form-builder/support`}>
                 {t("securityQuestions.support")}
               </LinkButton.Secondary>
             </div>
