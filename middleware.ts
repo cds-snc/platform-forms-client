@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import acceptLanguage from "accept-language";
-import { fallbackLng, languages } from "./app/i18n/settings";
+import { fallbackLng, languages } from "./i18n/settings";
 import type { NextRequest } from "next/server";
 import { generateCSP } from "@lib/cspScripts";
 import { logMessage } from "@lib/logger";
