@@ -50,7 +50,7 @@
   "required": "obligatoire",
   "all-required": "toutes les cases à cocher sont obligatoires",
   "required-field": "Champ obligatoire",
-  "file-upload-button-text": "Téléverser un fichier",
+  "file-upload-button-text": "Sélectionner un fichier",
   "file-upload-sr-only-file-selected": "Le fichier actuellement sélectionné est",
   "file-upload-no-file-selected": "Aucun fichier actuellement sélectionné",
   "dropdown-initial-option-text": "Pas de sélection",

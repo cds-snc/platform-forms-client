@@ -89,7 +89,7 @@
       "example": {
         "dateValue": "mm/jj/aaaa"
       },
-      "forExample": "Saisissez la date dans ce format : mm/dd/yyyy"
+      "forExample": "Saisissez la date dans ce format : mm/jj/aaaa"
     },
     "dropdown": {
       "description": "Une longue liste d’options parmi lesquelles un choix est fait.",
@@ -107,7 +107,7 @@
     },
     "fileInput": {
       "description": "Un moyen d'ajouter des documents à l'appui.",
-      "label": "Ajouter un fichier",
+      "label": "Téléverser un fichier",
       "title": "Téléverseur de fichier"
     },
     "firstMiddleLastName": {
