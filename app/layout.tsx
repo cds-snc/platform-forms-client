@@ -40,10 +40,6 @@ const css = `
     a:active {
         box-shadow: none !important;
     }
-
-    html {
-      font-family: ${notoSans.style.fontFamily};
-    }
 `;
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
