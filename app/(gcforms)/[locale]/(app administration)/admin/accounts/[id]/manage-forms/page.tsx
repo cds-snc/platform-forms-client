@@ -74,7 +74,7 @@ export default async function Page({
       context="admin"
       leftColumnContent={<BackToAccounts id={formUser.id} locale={locale} />}
     >
-      <ManageForms {...{ formUser, templates, overdue }} />;
+      <ManageForms {...{ formUser, templates, overdue }} />
     </TwoColumnLayout>
   );
 }

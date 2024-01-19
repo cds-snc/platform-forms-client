@@ -54,7 +54,7 @@ export default async function Page({
       context="admin"
       leftColumnContent={<BackToAccounts id={formUser.id} locale={locale} />}
     >
-      <ManagePermissions {...{ formUser, allPrivileges }} />;
+      <ManagePermissions {...{ formUser, allPrivileges }} />
     </TwoColumnLayout>
   );
 }
