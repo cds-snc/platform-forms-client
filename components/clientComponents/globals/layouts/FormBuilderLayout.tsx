@@ -9,15 +9,6 @@ import { FullWidthLayout } from "./FullWidthLayout";
 import { TwoColumnLayout } from "./TwoColumnLayout";
 import { FormRecord } from "@lib/types";
 
-//@todo find a way to include this styling without using the HEAD tag
-/*
-const css = `
-body {
-   background: linear-gradient(to right, white 59px, #d1d5db 59px, #d1d5db 60px, #F9FAFB 60px);
-}
-`;
-*/
-
 const PageLayout = ({
   page,
   hideLeftNav,
@@ -29,8 +20,6 @@ const PageLayout = ({
 }) => {
   return (
     <>
-      {/*<style>{!hideLeftNav && css}</style>*/}
-
       {hideLeftNav ? (
         <FullWidthLayout context="default">{page}</FullWidthLayout>
       ) : (
