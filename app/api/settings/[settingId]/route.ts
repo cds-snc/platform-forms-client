@@ -8,7 +8,7 @@ import { NextResponse } from "next/server";
 
 export const GET = middleware([jsonValidator(settingSchema)], async (req, props) => {
   try {
-    const internalId = props.params?.internalId;
+    const internalId = props.params?.settingId;
     if (typeof internalId === "undefined" || Array.isArray(internalId))
       return NextResponse.json({ error: "Malformed Request" }, { status: 400 });
 
