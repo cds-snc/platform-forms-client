@@ -14,8 +14,8 @@
       "validation": {
         "required": false
       },
-      "descriptionEn": "### What is your address?",
-      "descriptionFr": "### Quelle est votre adresse?",
+      "descriptionEn": "## What is your address?",
+      "descriptionFr": "## Quelle est votre adresse?",
       "placeholderEn": "",
       "placeholderFr": ""
     }
