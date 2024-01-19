@@ -11,7 +11,7 @@ import { hasError } from "@lib/hasError";
 import { Alert } from "@clientComponents/forms";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import Link from "next/link";
-import Head from "next/head";
+
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 
 interface ReVerifyProps {
@@ -79,9 +79,11 @@ export const ReVerify = ({
 
   return (
     <>
+      {/*
+      @todo find a way to inclde this in the page metadata
       <Head>
         <title>{t("reVerify.title")}</title>
-      </Head>
+      </Head> */}
       {authErrorsState?.isError && (
         <Alert
           type={ErrorStatus.ERROR}

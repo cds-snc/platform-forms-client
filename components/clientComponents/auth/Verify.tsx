@@ -15,7 +15,7 @@ import { hasError } from "@lib/hasError";
 import { useAuthErrors } from "@lib/hooks/auth/useAuthErrors";
 import { ReVerify } from "./ReVerify";
 import { getSession } from "next-auth/react";
-import Head from "next/head";
+
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { Locked2fa } from "./Locked2fa";
 import { Expired2faSession } from "./Expired2faSession";
@@ -142,9 +142,10 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
 
   return (
     <>
-      <Head>
+      {/* 
+         @todo find a way to inclde this in the page metadata<Head>
         <title>{t("verify.title")}</title>
-      </Head>
+      </Head> */}
       <div className="sticky top-0">
         <ToastContainer />
       </div>
