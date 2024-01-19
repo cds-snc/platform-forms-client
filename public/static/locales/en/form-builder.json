@@ -29,7 +29,7 @@
     },
     "address": {
       "whatIsYourAddress": "What is your address?",
-      "city": "City, town or community",
+      "city": "City, town, or community",
       "country": "Country",
       "description": "A pattern to collect a Canadian address, including fields for address, city, province, and postal code.",
       "label": "Address",
@@ -196,7 +196,7 @@
     "name": "Full name (includes first, middle, and last names)",
     "organization-title": "Job title",
     "tel": "Phone number",
-    "postal-code": "Postal or zip code",
+    "postal-code": "Postal code",
     "url": "Website address"
   },
   "autocompleteWhenNotToUse": {
@@ -273,7 +273,7 @@
   "defaultElementDescription": {
     "date": "Format the date as: mm/dd/yyyy",
     "email": "For example: name@example.com",
-    "number": "Only enter numbers",
+    "number": "Enter a number",
     "phone": "For example: 111-222-3333"
   },
   "description": "Description",
