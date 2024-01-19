@@ -36,7 +36,7 @@
       "postal": "Code postal",
       "province": "Province ou territoire",
       "street": {
-        "description": "Indiquez le nom de rue et le numéro d'unité. Par exemple : 123 Rue Principale Apt 10.",
+        "description": "Indiquez le nom de rue et le numéro d'unité.",
         "label": "Adresse municipale"
       },
       "title": "Adresse"

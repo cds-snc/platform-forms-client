@@ -35,8 +35,8 @@
       "validation": {
         "required": false
       },
-      "descriptionEn": "Include your street name and number. For example: 123 Main St. Apt 10",
-      "descriptionFr": "Indiquez le nom de rue et le numéro d'unité. Par exemple : 123 Rue Principale Apt 10",
+      "descriptionEn": "Include street name and number.",
+      "descriptionFr": "Indiquez le nom de rue et le numéro d'unité.",
       "placeholderEn": "",
       "placeholderFr": "",
       "autoComplete": "address-line1"

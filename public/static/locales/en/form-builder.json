@@ -36,7 +36,7 @@
       "postal": "Postal code",
       "province": "Province or territory",
       "street": {
-        "description": "Include your street name and number. For example: 123 Main St. Apt 10",
+        "description": "Include street name and number.",
         "label": "Street address"
       },
       "title": "Address"
