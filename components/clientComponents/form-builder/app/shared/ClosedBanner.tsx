@@ -6,8 +6,11 @@ import { StyledLink } from "@clientComponents/globals";
 
 export const ClosedBanner = ({ id }: { id: string | undefined }) => {
   const isPastClosingDate = useIsFormClosed();
-  const { t } = useTranslation("form-closed");
-  const href = `/form-builder/settings/${id}/form`;
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation("form-closed");
+  const href = `${language}/form-builder/settings/${id}/form`;
 
   if (!isPastClosingDate || !id) {
     return null;

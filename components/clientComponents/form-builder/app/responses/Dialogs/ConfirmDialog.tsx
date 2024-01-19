@@ -27,7 +27,10 @@ export const ConfirmDialog = ({
   maxEntries?: number;
   onSuccessfulConfirm: () => void;
 }) => {
-  const { t } = useTranslation("form-builder-responses");
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation("form-builder-responses");
   const [entries, setEntries] = useState<string[]>([]);
   const [status, setStatus] = useState<DialogStates>(DialogStates.EDITING);
   const [errorEntriesList, setErrorEntriesList] = useState<string[]>([]);
@@ -180,7 +183,7 @@ export const ConfirmDialog = ({
                   </Alert.Title>
                   <p>
                     {t("downloadResponsesModals.confirmReceiptDialog.errors.unknown.description")}
-                    <Link href={"/form-builder/support"}>
+                    <Link href={`${language}/form-builder/support`}>
                       {t(
                         "downloadResponsesModals.confirmReceiptDialog.errors.unknown.descriptionLink"
                       )}
