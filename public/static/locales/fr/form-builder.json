@@ -272,7 +272,7 @@
   "defaultElementDescription": {
     "date": "Saisissez une date dans ce format : mm/jj/aaaa",
     "email": "Par exemple : nom@exemple.com",
-    "number": "N'entrez que des chiffres",
+    "number": "Saisissez un chiffre",
     "phone": "Par exemple : 111-222-3333"
   },
   "description": "Description ",
