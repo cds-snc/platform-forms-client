@@ -14,7 +14,7 @@ export const blockLoader = async (
   }
 
   const result = await axios({
-    url: "/api/form-builder/load-block",
+    url: "/api/form-builder/load-blocks",
     method: "POST",
     data: {
       elementType: type,
