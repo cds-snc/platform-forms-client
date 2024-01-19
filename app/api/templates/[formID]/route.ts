@@ -67,11 +67,13 @@ export const GET = middleware(
       }
 
       const response = getFullTemplateByID(ability, formID);
-      throw new Error(
-        `Template API response was null. Request information: method = ${
-          req.method
-        } ; query = ${JSON.stringify(props.params)} ; body = ${JSON.stringify(props.body)}`
-      );
+      if (response === null) {
+        throw new Error(
+          `Template API response was null. Request information: method = ${
+            req.method
+          } ; query = ${JSON.stringify(props.params)} ; body = ${JSON.stringify(props.body)}`
+        );
+      }
       return NextResponse.json(response);
     } catch (e) {
       const error = e as Error;
