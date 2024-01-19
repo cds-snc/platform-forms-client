@@ -70,7 +70,7 @@ export const Header = ({ context = "default", user }: HeaderParams) => {
             </li>
             {status !== "authenticated" && (
               <li className="mr-2 py-2 text-base tablet:mr-4">
-                <Link href={`/${i18n.language}/auth/login`}>{t("loginMenu.login")}</Link>
+                <Link href={`/${language}/auth/login`}>{t("loginMenu.login")}</Link>
               </li>
             )}
             {
