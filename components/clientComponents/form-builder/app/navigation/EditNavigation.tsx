@@ -22,7 +22,7 @@ export const EditNavigation = () => {
               {t("questions")}
             </span>
           </SubNavLink>
-          <SubNavLink href={`/${language}/edit/translate`}>
+          <SubNavLink href={`/${language}/form-builder/edit/translate`}>
             <span className="text-sm laptop:text-base">
               <TranslateIcon className="mr-2 inline-block laptop:mt-[-2px]" />
               {t("translate")}
