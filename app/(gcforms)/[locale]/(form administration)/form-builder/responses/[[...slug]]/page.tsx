@@ -35,7 +35,6 @@ export default async function Page({
   const pageProps: ResponsesProps = {
     initialForm: null,
     vaultSubmissions: [],
-    formId: "",
     responseDownloadLimit: Number(await getAppSetting("responseDownloadLimit")),
     lastEvaluatedKey: null,
     nagwareResult: null,
