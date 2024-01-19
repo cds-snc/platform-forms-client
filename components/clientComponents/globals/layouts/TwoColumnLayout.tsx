@@ -22,19 +22,26 @@ export const TwoColumnLayout = ({
       <div className="flex h-full flex-col">
         <SkipLink />
 
-        <Header context={context} user={user} />
+        <Header context={context} user={user} className="mb-0" />
         <div className="shrink-0 grow basis-auto">
           <ToastContainer containerId="default" />
           <ToastContainer limit={1} containerId="wide" autoClose={false} width="600px" />
           <>
             <div>
               <div className="flex flex-row gap-10 pr-12">
-                <div id="left-nav" className="sticky top-5 z-10 h-full">
+                <div
+                  id="left-nav"
+                  className="sticky top-5 z-10 flex max-h-max border-r border-slate-200 bg-white"
+                >
                   {leftColumnContent}
                 </div>
                 <main
                   id="content"
-                  className={cn("w-full", context === "formBuilder" && "form-builder")}
+                  className={cn(
+                    "w-full",
+                    context === "formBuilder" && "form-builder",
+                    "mt-5 mb-10"
+                  )}
                 >
                   {children}
                 </main>
@@ -43,7 +50,7 @@ export const TwoColumnLayout = ({
           </>
         </div>
 
-        <Footer displayFormBuilderFooter />
+        <Footer displayFormBuilderFooter className="mt-0 lg:mt-0" />
       </div>
     </>
   );

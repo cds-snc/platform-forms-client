@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useAccessControl } from "@lib/hooks";
 import { useTranslation } from "@i18n/client";
+import { cn } from "@lib/utils";
 
 import { SiteLogo } from "@clientComponents/icons";
 import { FileNameInput } from "@clientComponents/form-builder/app/navigation/FileName";
@@ -14,9 +15,10 @@ import { YourAccountDropdown } from "./YourAccountDropdown";
 type HeaderParams = {
   context?: "admin" | "formBuilder" | "default";
   user?: { name: string | null; email: string };
+  className?: string;
 };
 
-export const Header = ({ context = "default", user }: HeaderParams) => {
+export const Header = ({ context = "default", user, className }: HeaderParams) => {
   const isFormBuilder = context === "formBuilder";
   const isAdmin = context === "admin";
   const isDefault = context === "default";
@@ -29,7 +31,7 @@ export const Header = ({ context = "default", user }: HeaderParams) => {
   } = useTranslation(["common", "form-builder", "admin-login"]);
 
   return (
-    <header className="mb-5 border-b-1 border-gray-500 bg-white px-0 py-2 ">
+    <header className={cn("mb-5 border-b-1 border-gray-500 bg-white px-0 py-2", className)}>
       <div className="grid w-full grid-flow-col">
         <div className="flex">
           <Link href={`/${language}/form-builder`} legacyBehavior>
