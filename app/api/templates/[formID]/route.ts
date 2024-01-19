@@ -66,7 +66,7 @@ export const GET = middleware(
         throw new MalformedAPIRequest("Invalid or missing formID");
       }
 
-      const response = getFullTemplateByID(ability, formID);
+      const response = await getFullTemplateByID(ability, formID);
       if (response === null) {
         throw new Error(
           `Template API response was null. Request information: method = ${
