@@ -25,7 +25,6 @@ import { TabNavLink } from "@clientComponents/form-builder/app/navigation/TabNav
 export interface ResponsesProps {
   initialForm: FormRecord | null;
   vaultSubmissions: VaultSubmissionList[];
-  formId: string;
   nagwareResult: NagwareResult | null;
   responseDownloadLimit: number;
   lastEvaluatedKey: Record<string, string> | null | undefined;
@@ -37,7 +36,6 @@ const MAX_REPORT_COUNT = 20;
 export const ClientSide = ({
   initialForm,
   vaultSubmissions,
-  formId = "",
   nagwareResult,
   responseDownloadLimit,
   lastEvaluatedKey,
@@ -54,7 +52,8 @@ export const ClientSide = ({
 
   const router = useRouter();
   const { slug = [] } = useParams();
-  const statusQuery = slug[0] ?? "new";
+
+  const [formId, statusQuery = "new"] = slug;
   const pathName = usePathname();
 
   const { getDeliveryOption, isPublished } = useTemplateStore((s) => ({
@@ -138,7 +137,7 @@ export const ClientSide = ({
         <TabNavLink
           id="new-responses"
           defaultActive={statusQuery === "new"}
-          href={`/form-builder/responses/${formId}/new`}
+          href={`/${language}/form-builder/responses/${formId}/new`}
           setAriaCurrent={true}
           onClick={() => setShowSuccessAlert(false)}
         >
@@ -149,7 +148,7 @@ export const ClientSide = ({
         <TabNavLink
           defaultActive={statusQuery === "downloaded"}
           id="downloaded-responses"
-          href={`/form-builder/responses/${formId}/downloaded`}
+          href={`/${language}/form-builder/responses/${formId}/downloaded`}
           setAriaCurrent={true}
           onClick={() => setShowSuccessAlert(false)}
         >
@@ -160,7 +159,7 @@ export const ClientSide = ({
         <TabNavLink
           defaultActive={statusQuery === "confirmed"}
           id="deleted-responses"
-          href={`/form-builder/responses/${formId}/confirmed`}
+          href={`/${language}/form-builder/responses/${formId}/confirmed`}
           setAriaCurrent={true}
           onClick={() => setShowSuccessAlert(false)}
         >
