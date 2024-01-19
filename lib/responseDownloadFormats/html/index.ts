@@ -1,9 +1,8 @@
-"use client";
 import { ResponseHtml } from "./components/ResponseHtml";
-import { renderToStaticMarkup } from "react-dom/server";
 import { FormResponseSubmissions } from "../types";
 
-export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
+export const transform = async (formResponseSubmissions: FormResponseSubmissions) => {
+  const renderToStaticMarkup = (await import("react-dom/server")).renderToStaticMarkup;
   const records = formResponseSubmissions.submissions.map((response) => {
     return {
       id: response.id,

@@ -205,17 +205,17 @@ export const POST = middleware([sessionExists()], async (req, props) => {
       //   break;
 
       case DownloadFormat.HTML_AGGREGATED:
-        return NextResponse.json(htmlAggregatedTransform(formResponse, lang), {
+        return NextResponse.json(await htmlAggregatedTransform(formResponse, lang), {
           headers: { "Content-Type": "text/html" },
         });
 
       case DownloadFormat.HTML:
-        return NextResponse.json(htmlTransform(formResponse), {
+        return NextResponse.json(await htmlTransform(formResponse), {
           headers: { "Content-Type": "text/json" },
         });
 
       case DownloadFormat.HTML_ZIPPED: {
-        return NextResponse.json(zipTransform(formResponse, lang), {
+        return NextResponse.json(await zipTransform(formResponse, lang), {
           headers: { "Content-Type": "text/json" },
         });
       }
