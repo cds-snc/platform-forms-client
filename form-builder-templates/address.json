@@ -52,7 +52,7 @@
           "fr": ""
         }
       ],
-      "titleEn": "City, town or community",
+      "titleEn": "City, town, or community",
       "titleFr": "Ville ou communauté",
       "validation": {
         "required": false
