@@ -31,7 +31,7 @@ export const TwoColumnLayout = ({
               <div className="flex flex-row gap-10 pr-12">
                 <div
                   id="left-nav"
-                  className="sticky top-5 z-10 flex max-h-max border-r border-slate-200 bg-white"
+                  className="sticky top-0 z-10 flex h-dvh border-r border-slate-200 bg-white"
                 >
                   {leftColumnContent}
                 </div>
