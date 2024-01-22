@@ -1,9 +1,10 @@
-import { Groups } from "@components/form-builder/hooks/useElementOptions";
+"use client";
+import { Groups } from "@clientComponents/form-builder/hooks/useElementOptions";
 import { cn } from "@lib/utils";
 import React, { useRef } from "react";
 import { RovingTabIndexProvider, useFocusEffect, useRovingTabIndex } from "react-roving-tabindex";
 import { SelectedGroupState } from "./ElementDialog";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@i18n/client";
 
 const Pill = ({
   group,
