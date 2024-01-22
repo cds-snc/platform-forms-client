@@ -12,13 +12,17 @@ import { $createParagraphNode, $getRoot } from "lexical";
 import { editorConfig } from "./config";
 import { Toolbar } from "./Toolbar";
 import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
+import dynamic from "next/dynamic";
 import {
   $convertFromMarkdownString,
   $convertToMarkdownString,
   TRANSFORMERS,
 } from "@lexical/markdown";
-import FloatingLinkEditorPlugin from "./plugins/FloatingLinkEditorPlugin";
-import ListMaxIndentPlugin from "./plugins/ListMaxIndentPlugin";
+
+const FloatingLinkEditorPlugin = dynamic(() => import("./plugins/FloatingLinkEditorPlugin"), {
+  ssr: false,
+});
+const ListMaxIndentPlugin = dynamic(() => import("./plugins/ListMaxIndentPlugin"), { ssr: false });
 
 export const Editor = ({
   content,
