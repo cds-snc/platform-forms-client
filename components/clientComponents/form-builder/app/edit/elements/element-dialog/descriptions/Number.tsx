@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 import { ExampleWrapper } from "./ExampleWrapper";
-import { Description, Label, TextInput } from "@components/forms";
-import { useTranslation } from "react-i18next";
+import { Description, Label, TextInput } from "@clientComponents/forms";
+import { useTranslation } from "@i18n/client";
 
 export const Number = () => {
   const { t } = useTranslation("form-builder");

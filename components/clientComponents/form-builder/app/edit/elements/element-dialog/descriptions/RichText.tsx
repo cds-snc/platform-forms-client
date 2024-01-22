@@ -2,7 +2,7 @@
 import React from "react";
 import Markdown from "markdown-to-jsx";
 import { ExampleWrapper } from "./ExampleWrapper";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@i18n/client";
 export const RichText = () => {
   const { t } = useTranslation("form-builder");
 

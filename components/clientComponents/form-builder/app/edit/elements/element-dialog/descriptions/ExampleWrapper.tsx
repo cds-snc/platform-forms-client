@@ -1,7 +1,7 @@
 import { cn } from "@lib/utils";
 import { FormikProvider, useFormik } from "formik";
 import React from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@i18n/client";
 
 export const ExampleWrapper = ({
   children,
