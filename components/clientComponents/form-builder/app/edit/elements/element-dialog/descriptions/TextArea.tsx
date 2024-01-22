@@ -3,7 +3,7 @@ import React from "react";
 import { useTranslation } from "@i18n/client";
 
 import { ExampleWrapper } from "./ExampleWrapper";
-import { Description, Label, TextArea as TextAreaComponent } from "@components/forms";
+import { Description, Label, TextArea as TextAreaComponent } from "@clientComponents/forms";
 
 export const TextArea = () => {
   const { t } = useTranslation("form-builder");
