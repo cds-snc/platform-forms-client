@@ -6,7 +6,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
     <div className="flex h-full flex-col">
       <SkipLink />
       <header>
-        <Fip>
+        <Fip className="mb-20 mt-0 border-b-4 border-blue-dark py-9">
           <LanguageToggle />
         </Fip>
       </header>
