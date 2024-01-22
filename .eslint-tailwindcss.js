@@ -31,6 +31,7 @@ module.exports = {
         "radio-label-text",
         "checkbox-label-text",
         "example-text",
+        "section"
       ],
     },
   },
