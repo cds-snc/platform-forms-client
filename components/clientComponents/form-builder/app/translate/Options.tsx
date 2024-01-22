@@ -39,14 +39,14 @@ export const Options = ({
                   className="sr-only"
                   htmlFor={`element-${element.id}-choice-${choiceIndex}-text-${primaryLanguage}`}
                 >
-                  {t(`${primaryLanguage}-text`)}
+                  {primaryLanguage}
                 </label>
                 <div className="w-1/2 flex-1 relative">
                   <LanguageLabel
                     id={`element-${index}-choice-${choiceIndex}-en-language`}
                     lang={primaryLanguage}
                   >
-                    <>{t(primaryLanguage)}</>
+                    <>{primaryLanguage}</>
                   </LanguageLabel>
                   <input
                     className="w-full p-4"
@@ -63,14 +63,14 @@ export const Options = ({
                   className="sr-only"
                   htmlFor={`element-${element.id}-choice-${choiceIndex}-text-${secondaryLanguage}`}
                 >
-                  {t(`${secondaryLanguage}-text`)}
+                  {secondaryLanguage}
                 </label>
                 <div className="w-1/2 flex-1 relative">
                   <LanguageLabel
                     id={`element-${index}-choice-${choiceIndex}-fr-language`}
                     lang={secondaryLanguage}
                   >
-                    <>{t(secondaryLanguage)}</>
+                    <>{secondaryLanguage}</>
                   </LanguageLabel>
                   <input
                     className="w-full p-4"

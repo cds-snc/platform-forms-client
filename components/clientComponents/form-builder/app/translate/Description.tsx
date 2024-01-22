@@ -34,14 +34,14 @@ export const Description = ({
             className="sr-only"
             htmlFor={`element-${element.id}-description-${primaryLanguage}`}
           >
-            {t(`${primaryLanguage}-text`)}
+            <>{primaryLanguage}</>
           </label>
           <div className="w-1/2 flex-1 relative">
             <LanguageLabel
               lang={primaryLanguage}
               id={`element-${element.id}-description-${primaryLanguage}-language`}
             >
-              <>{t(primaryLanguage)}</>
+              <>{primaryLanguage}</>
             </LanguageLabel>
             <textarea
               className="w-full p-4 h-full focus:outline-blue-focus"
@@ -57,14 +57,14 @@ export const Description = ({
             className="sr-only"
             htmlFor={`element-${element.id}-description-${secondaryLanguage}`}
           >
-            {t(`${secondaryLanguage}-text`)}
+            <>{secondaryLanguage}</>
           </label>
           <div className="w-1/2 flex-1 relative">
             <LanguageLabel
               lang={secondaryLanguage}
               id={`element-${element.id}-description-${secondaryLanguage}-language`}
             >
-              <>{t(secondaryLanguage)}</>
+              <>{secondaryLanguage}</>
             </LanguageLabel>
             <textarea
               className="w-full p-4 h-full focus:outline-blue-focus"

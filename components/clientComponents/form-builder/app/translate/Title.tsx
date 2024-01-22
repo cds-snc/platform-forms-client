@@ -31,14 +31,14 @@ export const Title = ({
         </FieldsetLegend>
         <div className="flex gap-px border-b border-r border-t border-gray-300 mb-10 divide-x-2">
           <label className="sr-only" htmlFor={`element-${element.id}-title-${primaryLanguage}`}>
-            {t(`${primaryLanguage}-text`)}
+            {primaryLanguage}
           </label>
           <div className="w-1/2 flex-1 relative">
             <LanguageLabel
               lang={primaryLanguage}
               id={`element-${element.id}-title-${primaryLanguage}-language`}
             >
-              <>{t(primaryLanguage)}</>
+              <>{primaryLanguage}</>
             </LanguageLabel>
             <textarea
               className="w-full p-4 h-full focus:outline-blue-focus"
@@ -51,14 +51,14 @@ export const Title = ({
             />
           </div>
           <label className="sr-only" htmlFor={`element-${element.id}-title-${secondaryLanguage}`}>
-            {t(`${secondaryLanguage}-text`)}
+            {secondaryLanguage}
           </label>
           <div className="w-1/2 flex-1 relative">
             <LanguageLabel
               lang={secondaryLanguage}
               id={`element-${element.id}-title-${secondaryLanguage}-language`}
             >
-              <>{t(secondaryLanguage)}</>
+              <>{secondaryLanguage}</>
             </LanguageLabel>
             <textarea
               className="w-full p-4 h-full focus:outline-blue-focus"
