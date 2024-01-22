@@ -1,5 +1,5 @@
 import CredentialsProvider from "next-auth/providers/credentials";
-import NextAuth from "next-auth";
+import NextAuth, { Session } from "next-auth";
 
 import {
   Validate2FAVerificationCodeResultStatus,
@@ -13,6 +13,7 @@ import { prisma } from "@lib/integration/prismaConnector";
 import { getPrivilegeRulesForUser } from "@lib/privileges";
 import { logEvent } from "@lib/auditLogs";
 import { activeStatusCheck, activeStatusUpdate } from "@lib/cache/userActiveStatus";
+import { JWT } from "next-auth/jwt";
 
 /**
  * Checks the active status of a user using a cache strategy
@@ -46,7 +47,6 @@ const checkUserActiveStatus = async (userID: string): Promise<boolean> => {
 export const {
   handlers: { GET, POST },
   auth,
-  update: authUpdate,
   signIn,
   signOut,
 } = NextAuth({
@@ -144,6 +144,8 @@ export const {
   adapter: PrismaAdapter(prisma),
   events: {
     async signIn({ user }) {
+      if (!user.id || !user.email) throw new Error("User missing id or email");
+
       logEvent(user.id, { type: "User", id: user.id }, "UserSignIn");
     },
     async signOut(obj) {
@@ -211,7 +213,8 @@ export const {
       logMessage.debug(`JWT refreshed for user ${token.email}`);
       return token;
     },
-    async session({ session, token }) {
+    async session(params) {
+      const { session, token } = params as { session: Session; token: JWT };
       // Add info like 'role' to session object
       session.user = {
         id: token.userId ?? "",

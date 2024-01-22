@@ -16,11 +16,17 @@ declare module "next-auth" {
       hasSecurityQuestions: boolean;
     };
   }
+
+  interface User {
+    id: string;
+    name?: string | null;
+    email: string;
+  }
 }
 
 // Hopefully guidance will be provided soon by Next-Auth on how to better augment this module
 
-declare module "next-auth/node_modules/@auth/core/jwt" {
+declare module "next-auth/jwt" {
   interface JWT {
     userId?: string;
     name: string;
