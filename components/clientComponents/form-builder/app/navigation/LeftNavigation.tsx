@@ -24,11 +24,9 @@ const linkHelper = ({
   id?: string;
   language: string;
 }) => {
-  const pathTest = new RegExp(`/(en|fr)/form-builder/${route}(.*)?`);
-
   return {
     href: `/${language}/form-builder${route}${id ? `/${id}` : ""}`,
-    isActive: pathTest.test(activePathname),
+    isActive: activePathname.includes(`/form-builder${route}`),
   };
 };
 
@@ -69,7 +67,7 @@ export const LeftNavigation = () => {
         <li>
           <LeftNav
             testid="settings"
-            {...linkHelper({ route: `/settings/${id}`, activePathname, language })}
+            {...linkHelper({ route: `/settings`, id, activePathname, language })}
             onClick={saveForm}
             title={t("pageSettings")}
           >
@@ -91,7 +89,7 @@ export const LeftNavigation = () => {
         <li>
           <LeftNav
             testid="responses"
-            {...linkHelper({ route: `/responses/${id}`, activePathname, language })}
+            {...linkHelper({ route: `/responses`, id, activePathname, language })}
             onClick={saveForm}
             title={t("responsesNavLabel")}
           >
