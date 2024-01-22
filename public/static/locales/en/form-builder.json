@@ -196,7 +196,7 @@
     "name": "Full name (includes first, middle, and last names)",
     "organization-title": "Job title",
     "tel": "Phone number",
-    "postal-code": "Postal code",
+    "postal-code": "Postal or zip code",
     "url": "Website address"
   },
   "autocompleteWhenNotToUse": {
