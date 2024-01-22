@@ -1,13 +1,28 @@
 "use client";
 import React from "react";
 import { useTranslation } from "@i18n/client";
-import { Text } from "./Text";
-export const Date = ({ title, description }: { title: string; description: string }) => {
+import { ExampleWrapper } from "./ExampleWrapper";
+import { Description, Label, TextInput } from "@clientComponents/forms";
+export const Date = () => {
   const { t } = useTranslation("form-builder");
-  const dateExample = t("addElementDialog.date.example.dateValue");
+
   return (
     <div>
-      <Text label={title} description={description} value={dateExample} />
+      <h3 className="mb-0">{t("addElementDialog.date.title")}</h3>
+      <p>{t("addElementDialog.date.description")}</p>
+
+      <ExampleWrapper className="mt-4">
+        <Label htmlFor="name" className="gc-label">
+          {t("addElementDialog.date.title")}
+        </Label>
+        <Description>{t("addElementDialog.date.forExample")}</Description>
+        <TextInput
+          label="title"
+          type={"text"}
+          name={"name"}
+          placeholder={t("addElementDialog.date.example.dateValue")}
+        />
+      </ExampleWrapper>
     </div>
   );
 };

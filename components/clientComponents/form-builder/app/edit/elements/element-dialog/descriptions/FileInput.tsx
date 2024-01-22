@@ -1,27 +1,23 @@
 "use client";
 import React from "react";
 import { useTranslation } from "@i18n/client";
-
-const Text = ({ label, description }: { label: string; description?: string }) => {
-  return (
-    <div className="ml-1">
-      <p className="mb-1 font-bold mt-1 text-sm">{label}</p>
-      {description && <p className="mb-2 text-sm">{description}</p>}
-      <div className="w-[350px] h-[40px] rounded border-black-default border-2 p-1 mb-2" />
-    </div>
-  );
-};
+import { ExampleWrapper } from "./ExampleWrapper";
+import { Label, FileInput as FileInputComponent } from "@clientComponents/forms";
 
 export const FileInput = ({ title }: { title: string }) => {
   const { t } = useTranslation("form-builder");
 
   return (
     <div>
-      <div className="font-bold text-[1.5rem] mb-2">{title}</div>
-      <Text
-        label={t("addElementDialog.fileInput.label")}
-        description={t("addElementDialog.fileInput.description")}
-      />
+      <h3 className="mb-0">{title}</h3>
+      <p>{t("addElementDialog.fileInput.description")}</p>
+
+      <ExampleWrapper className="mt-4">
+        <Label htmlFor="name" className="gc-label">
+          {t("addElementDialog.fileInput.label")}
+        </Label>
+        <FileInputComponent label="title" id="name" name={"name"} />
+      </ExampleWrapper>
     </div>
   );
 };

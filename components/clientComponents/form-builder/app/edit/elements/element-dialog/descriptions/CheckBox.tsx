@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 import { useTranslation } from "@i18n/client";
-
-import { CheckBoxEmptyIcon } from "@clientComponents/icons";
+import { ExampleWrapper } from "./ExampleWrapper";
+import { Checkbox, Description, FormGroup } from "@clientComponents/forms";
 
 export const CheckBox = () => {
   const { t } = useTranslation("form-builder");
@@ -11,28 +11,16 @@ export const CheckBox = () => {
       <h3 className="mb-0">{t("addElementDialog.checkbox.title")}</h3>
       <p>{t("addElementDialog.checkbox.description")}</p>
 
-      <div className="mt-8 ml-1">
-        <div className="flex flex-col">
-          <div className="flex mb-5">
-            <div>
-              <CheckBoxEmptyIcon className="scale-150" />
-            </div>
-            <div className="-mt-1 ml-5">{t("addElementDialog.checkboxItem")}</div>
-          </div>
-          <div className="flex mb-5">
-            <div>
-              <CheckBoxEmptyIcon className="scale-150" />
-            </div>
-            <div className="-mt-1 ml-5">{t("addElementDialog.checkboxItem")}</div>
-          </div>
-          <div className="flex">
-            <div>
-              <CheckBoxEmptyIcon className="scale-150" />
-            </div>
-            <div className="-mt-1 ml-5">{t("addElementDialog.checkboxItem")}</div>
-          </div>
-        </div>
-      </div>
+      <ExampleWrapper className="mt-4">
+        <FormGroup name={"checkboxes"}>
+          <legend className="gc-label">{t("addElementDialog.checkbox.chooseItems")}</legend>
+          <Description>{t("addElementDialog.checkbox.selectAllThatApply")}</Description>
+
+          <Checkbox label={t("addElementDialog.checkboxItem")} id="item1" name={"nameOne"} />
+          <Checkbox label={t("addElementDialog.checkboxItem")} id="item2" name={"nameTwo"} />
+          <Checkbox label={t("addElementDialog.checkboxItem")} id="item3" name={"nameThree"} />
+        </FormGroup>
+      </ExampleWrapper>
     </>
   );
 };

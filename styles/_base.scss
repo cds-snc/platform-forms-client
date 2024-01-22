@@ -12,6 +12,11 @@ body {
   background-color: #f9fafb;
 }
 
+/* prevent scrolling when there is an open dialog */
+body:has(dialog[open]) {
+  overflow: hidden;
+}
+
 footer,
 header {
   background-color: #fff;

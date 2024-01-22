@@ -9,7 +9,7 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="richText"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.get('[data-testid="richText"]').should("be.visible");
   });
@@ -19,7 +19,7 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="textField"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.get('[id="item-1"]').should("have.attr", "placeholder", "Question");
 
@@ -31,11 +31,11 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="textArea"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.get('[id="item-1"]').should("have.attr", "placeholder", "Question");
 
-    cy.get(".example-text").should("contain", "Long answer text");
+    cy.get(".example-text").should("contain", "Long answer");
   });
 
   it("Adds a Single choice element", () => {
@@ -43,7 +43,7 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="radio"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.get('[id="item-1"]').should("have.attr", "placeholder", "Question");
 
@@ -59,21 +59,22 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="checkbox"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.get('[id="item-1"]').should("have.attr", "placeholder", "Question");
 
     cy.get('[id="option--1--1"]').should("have.attr", "placeholder", "Option 1");
 
-    cy.get(".example-text").should("contain", "Multiple choice");
+    cy.get(".example-text").should("contain", "Checkboxes");
   });
 
   it("Adds a Dropdown list element", () => {
     cy.visitPage("/form-builder/edit");
     cy.get("button").contains("Add").click();
 
+    cy.get('[data-testid="basic-filter"]').click();
     cy.get('[data-testid="dropdown"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.get('[id="item-1"]').should("have.attr", "placeholder", "Question");
 
@@ -86,15 +87,13 @@ describe("Test FormBuilder Add Elements", () => {
     cy.visitPage("/form-builder/edit");
     cy.get("button").contains("Add").click();
 
+    cy.get('[data-testid="preset-filter"]').click();
     cy.get('[data-testid="date"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.get('[id="item-1"]').should("have.attr", "placeholder", "Question");
 
-    cy.get('[data-testid="description-text"]').should(
-      "contain",
-      "Enter a date. For example: mm/dd/yyyy"
-    );
+    cy.get('[data-testid="description-text"]').should("contain", "Format the date as: mm/dd/yyyy");
     cy.get('[data-testid="date"]').should("contain", "mm/dd/yyyy");
   });
 
@@ -102,8 +101,9 @@ describe("Test FormBuilder Add Elements", () => {
     cy.visitPage("/form-builder/edit");
     cy.get("button").contains("Add").click();
 
+    cy.get('[data-testid="preset-filter"]').click();
     cy.get('[data-testid="number"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.get('[id="item-1"]').should("have.attr", "placeholder", "Question");
 

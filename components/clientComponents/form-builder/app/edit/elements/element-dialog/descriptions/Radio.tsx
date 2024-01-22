@@ -1,38 +1,34 @@
 "use client";
 import React from "react";
 import { useTranslation } from "@i18n/client";
-
-import { RadioEmptyIcon } from "@clientComponents/icons";
+import { Description, Radio as RadioComponent, FormGroup } from "@clientComponents/forms";
+import { ExampleWrapper } from "./ExampleWrapper";
 
 export const Radio = () => {
   const { t } = useTranslation("form-builder");
+
   return (
     <>
       <h3 className="mb-0">{t("addElementDialog.radio.title")}</h3>
       <p>{t("addElementDialog.radio.description")}</p>
 
-      <div className="mt-8 ml-1">
-        <div className="flex flex-col">
-          <div className="flex mb-5">
-            <div>
-              <RadioEmptyIcon className="scale-150" />
-            </div>
-            <div className="-mt-1 ml-5">{t("addElementDialog.yes")}</div>
-          </div>
-          <div className="flex mb-5">
-            <div>
-              <RadioEmptyIcon className="scale-150" />
-            </div>
-            <div className="-mt-1 ml-5">{t("addElementDialog.no")}</div>
-          </div>
-          <div className="flex">
-            <div>
-              <RadioEmptyIcon className="scale-150" />
-            </div>
-            <div className="-mt-1 ml-5">{t("addElementDialog.sometimes")}</div>
-          </div>
-        </div>
-      </div>
+      <ExampleWrapper className="mt-4">
+        <FormGroup name={"radios"}>
+          <legend data-testid="label" className="gc-label" id="label-1">
+            {t("addElementDialog.radio.chooseAnOption")}
+          </legend>
+          <Description>{t("addElementDialog.radio.selectOnlyOne")}</Description>
+
+          <RadioComponent
+            id="radio-yes"
+            label="Option A"
+            required={false}
+            value="yes"
+            name="name"
+          />
+          <RadioComponent id="radio-no" label="Option B" required={false} value="no" name="name" />
+        </FormGroup>
+      </ExampleWrapper>
     </>
   );
 };
