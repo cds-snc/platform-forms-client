@@ -65,9 +65,7 @@ const ExpandingInput = React.forwardRef<Ref, Props>((props, ref) => {
         ref={ref}
         {...(lang && { lang: lang })}
         autoComplete="off"
-      >
-        {value}
-      </textarea>
+      />
     </div>
   );
 });
