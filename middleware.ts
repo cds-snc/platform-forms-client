@@ -109,10 +109,9 @@ export async function middleware(req: NextRequest) {
     // Set the CSP header on the request to the server
     requestHeaders.set("x-nonce", nonce);
     requestHeaders.set("content-security-policy", csp);
-
-    // Set path on request headers so we can access it in the app router
-    requestHeaders.set("x-path", pathname);
   }
+  // Set path on request headers so we can access it in the app router
+  requestHeaders.set("x-path", pathname);
 
   // Create base Next Response with CSP header and i18n cookie
   const response = NextResponse.next({

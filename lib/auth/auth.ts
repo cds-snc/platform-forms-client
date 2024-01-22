@@ -33,8 +33,6 @@ export async function requireAuthentication() {
     const headersList = headers();
     const currentPath = headersList.get("x-path")?.replace(`/${locale}`, "") ?? "/";
 
-    //logMessage.debug(`session: ${JSON.stringify(session)}`);
-
     if (!session) {
       // If no user, redirect to login
       redirect(`/${locale}/auth/login`);
