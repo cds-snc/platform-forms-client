@@ -1,6 +1,6 @@
 "use client";
 import { Form, NextButton } from "@clientComponents/forms";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import { FormRecord, TypeOmit } from "@lib/types";
 
@@ -16,13 +16,14 @@ export const FormWrapper = ({
     t,
     i18n: { language },
   } = useTranslation(["common", "welcome", "confirmation", "form-closed"]);
+  const router = useRouter();
 
   return (
     <Form
       formRecord={formRecord}
       language={language}
       onSuccess={(formID) => {
-        redirect(`/${language}/id/${formID}/confirmation`);
+        router.push(`/${language}/id/${formID}/confirmation`);
       }}
       t={t}
       renderSubmit={({ validateForm, fallBack }) => {

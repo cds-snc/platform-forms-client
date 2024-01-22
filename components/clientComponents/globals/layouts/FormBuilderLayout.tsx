@@ -2,7 +2,6 @@
 import React, { ReactElement } from "react";
 import { TemplateStoreProvider } from "@clientComponents/form-builder/store";
 import { RefStoreProvider } from "@lib/hooks/useRefStore";
-import { PageLoader } from "@clientComponents/globals/layouts/PageLoader";
 import { TemplateApiProvider } from "@clientComponents/form-builder/hooks";
 import { LeftNavigation } from "@clientComponents/form-builder/app";
 import { FullWidthLayout } from "./FullWidthLayout";
@@ -52,9 +51,7 @@ export const FormBuilderInitializer = ({
       <TemplateApiProvider>
         <RefStoreProvider>
           <div className={`flex h-full flex-col ${className}`}>
-            <PageLoader
-              page={<PageLayout page={children} hideLeftNav={hideLeftNav} backLink={backLink} />}
-            />
+            <PageLayout page={children} hideLeftNav={hideLeftNav} backLink={backLink} />
           </div>
         </RefStoreProvider>
       </TemplateApiProvider>

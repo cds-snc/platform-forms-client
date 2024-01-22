@@ -30,7 +30,6 @@ interface MyFormsProps {
 export default function RenderMyForms({ templates }: MyFormsProps) {
   // remove locale from path and get sub-route
   const path = usePathname()?.split("/")[3];
-  logMessage.debug(`path: ${path}`);
 
   const {
     t,

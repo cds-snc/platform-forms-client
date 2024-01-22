@@ -65,7 +65,13 @@ export default async function Page({
 
   // render text pages
   if (step === "confirmation") {
-    return <TextPage formRecord={formRecord} />;
+    return (
+      <FormDisplayLayout formRecord={formRecord}>
+        <div className={classes}>
+          <TextPage formRecord={formRecord} />
+        </div>
+      </FormDisplayLayout>
+    );
   }
 
   return (
