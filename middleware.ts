@@ -105,21 +105,22 @@ export async function middleware(req: NextRequest) {
 
   // Set the Content Security Policy (CSP) header
   const { csp, nonce } = generateCSP();
+  if (process.env.NODE_ENV !== "development") {
+    // Set the CSP header on the request to the server
+    requestHeaders.set("x-nonce", nonce);
+    requestHeaders.set("content-security-policy", csp);
 
-  // Set the CSP header on the request to the server
-  requestHeaders.set("x-nonce", nonce);
-  requestHeaders.set("content-security-policy", csp);
-
-  // Set path on request headers so we can access it in the app router
-  requestHeaders.set("x-path", pathname);
+    // Set path on request headers so we can access it in the app router
+    requestHeaders.set("x-path", pathname);
+  }
 
   // Create base Next Response with CSP header and i18n cookie
   const response = NextResponse.next({
     headers: requestHeaders,
   });
 
-  // Set the CSP header on the response to the browser
-  response.headers.set("content-security-policy", csp);
+  // Set the CSP header on the response to the browser on the built version of the app only
+  if (process.env.NODE_ENV !== "development") response.headers.set("content-security-policy", csp);
 
   // From layer 3
   // Set cookie on response back to browser so client can render correct language on client components
