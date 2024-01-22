@@ -135,11 +135,11 @@ export const Translate = () => {
             </FieldsetLegend>
             <div className="flex gap-px border border-gray-300 mb-10 divide-x-2">
               <label htmlFor="form-title-en" className="sr-only">
-                {t(`${primaryLanguage}-text`)}
+                <>{primaryLanguage}</>
               </label>
               <div className="relative flex-1">
                 <LanguageLabel id="form-title-en-language" lang={primaryLanguage}>
-                  <>{t(primaryLanguage)}</>
+                  <>{primaryLanguage}</>
                 </LanguageLabel>
                 <textarea
                   className="w-full p-4 h-full focus:outline-blue-focus"
@@ -156,11 +156,11 @@ export const Translate = () => {
                 />
               </div>
               <label htmlFor="form-title-fr" className="sr-only" {...getLocalizationAttribute()}>
-                {t(`${secondaryLanguage}-text`)}
+                {secondaryLanguage}
               </label>
               <div className="relative flex-1">
                 <LanguageLabel id="form-title-fr-language" lang={secondaryLanguage}>
-                  <>{t(secondaryLanguage)}</>
+                  <>{secondaryLanguage}</>
                 </LanguageLabel>
                 <textarea
                   className="w-full p-4 h-full focus:outline-blue-focus"
@@ -192,7 +192,7 @@ export const Translate = () => {
               >
                 <div className="w-1/2 flex-1 relative">
                   <LanguageLabel id="form-introduction-english-language" lang={primaryLanguage}>
-                    <>{t(primaryLanguage)}</>
+                    <>{primaryLanguage}</>
                   </LanguageLabel>
                   <RichTextEditor
                     path={`form.introduction.${localizeField(
@@ -201,7 +201,7 @@ export const Translate = () => {
                     )}`}
                     content={
                       form.introduction[
-                        localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)
+                      localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)
                       ]
                     }
                     lang={primaryLanguage}
@@ -211,7 +211,7 @@ export const Translate = () => {
                 </div>
                 <div className="w-1/2 flex-1 relative">
                   <LanguageLabel id="form-introduction-french-language" lang={secondaryLanguage}>
-                    <>{t(secondaryLanguage)}</>
+                    <>{secondaryLanguage}</>
                   </LanguageLabel>
                   <RichTextEditor
                     path={`form.introduction.${localizeField(
@@ -220,7 +220,7 @@ export const Translate = () => {
                     )}`}
                     content={
                       form.introduction[
-                        localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
+                      localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
                       ]
                     }
                     lang={secondaryLanguage}
@@ -269,7 +269,7 @@ export const Translate = () => {
                   id={`privacyPolicy-${primaryLanguage}-language`}
                   lang={primaryLanguage}
                 >
-                  <>{t(primaryLanguage)}</>
+                  <>{primaryLanguage}</>
                 </LanguageLabel>
                 <RichTextEditor
                   path={`form.privacyPolicy.${localizeField(
@@ -278,7 +278,7 @@ export const Translate = () => {
                   )}`}
                   content={
                     form.privacyPolicy?.[
-                      localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)
+                    localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)
                     ] ?? ""
                   }
                   lang={primaryLanguage}
@@ -291,7 +291,7 @@ export const Translate = () => {
                   id={`privacyPolicy-${secondaryLanguage}->language`}
                   lang={secondaryLanguage}
                 >
-                  <>{t(secondaryLanguage)}</>
+                  <>{secondaryLanguage}</>
                 </LanguageLabel>
                 <RichTextEditor
                   path={`form.privacyPolicy.${localizeField(
@@ -300,7 +300,7 @@ export const Translate = () => {
                   )}`}
                   content={
                     form.privacyPolicy?.[
-                      localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
+                    localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
                     ] ?? ""
                   }
                   lang={secondaryLanguage}
@@ -329,7 +329,7 @@ export const Translate = () => {
                   id={`confirmation-${primaryLanguage}-language`}
                   lang={primaryLanguage}
                 >
-                  <>{t(primaryLanguage)}</>
+                  <>{primaryLanguage}</>
                 </LanguageLabel>
                 <RichTextEditor
                   path={`form.confirmation.${localizeField(
@@ -338,7 +338,7 @@ export const Translate = () => {
                   )}`}
                   content={
                     form.confirmation?.[
-                      localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)
+                    localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)
                     ] ?? ""
                   }
                   lang={primaryLanguage}
@@ -351,7 +351,7 @@ export const Translate = () => {
                   id={`confirmation-${secondaryLanguage}-language`}
                   lang={secondaryLanguage}
                 >
-                  <>{t(secondaryLanguage)}</>
+                  <>{secondaryLanguage}</>
                 </LanguageLabel>
                 <RichTextEditor
                   path={`form.confirmation.${localizeField(
@@ -360,7 +360,7 @@ export const Translate = () => {
                   )}`}
                   content={
                     form.confirmation?.[
-                      localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
+                    localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
                     ] ?? ""
                   }
                   lang={secondaryLanguage}

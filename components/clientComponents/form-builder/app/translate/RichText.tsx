@@ -39,7 +39,7 @@ export const RichText = ({
               id={`elements-${index}-description-${primaryLanguage}-language`}
               lang={primaryLanguage}
             >
-              <>{t(primaryLanguage)}</>
+              <>{primaryLanguage}</>
             </LanguageLabel>
             <RichTextEditor
               path={propertyPath(element.id, field, primaryLanguage)}
@@ -54,13 +54,13 @@ export const RichText = ({
               id={`elements-${index}-description-${secondaryLanguage}-language`}
               lang={secondaryLanguage}
             >
-              <>{t(secondaryLanguage)}</>
+              <>{secondaryLanguage}</>
             </LanguageLabel>
             <RichTextEditor
               path={propertyPath(element.id, field, secondaryLanguage)}
               content={element.properties[fieldFr] ?? ""}
               lang={secondaryLanguage}
-              ariaLabel={t("pageText") + " " + t(secondaryLanguage)}
+              ariaLabel={t("pageText") + " " + secondaryLanguage}
               ariaDescribedBy={`elements-${index}-description-${secondaryLanguage}-language`}
             />
           </div>
