@@ -3,7 +3,6 @@ import React from "react";
 import { ToastContainer } from "@clientComponents/form-builder/app/shared/Toast";
 import { SkipLink, Footer } from "@clientComponents/globals";
 import { Header } from "../Header";
-import { User } from "next-auth";
 import { cn } from "@lib/utils";
 
 export const TwoColumnLayout = ({
@@ -14,7 +13,7 @@ export const TwoColumnLayout = ({
 }: {
   children: React.ReactNode;
   leftColumnContent?: React.ReactNode;
-  user?: User;
+  user?: { name: string | null; email: string };
   context?: "admin" | "formBuilder" | "default";
 }) => {
   return (

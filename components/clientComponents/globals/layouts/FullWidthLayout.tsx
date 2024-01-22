@@ -3,7 +3,6 @@ import React from "react";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { ToastContainer } from "@clientComponents/form-builder/app/shared/Toast";
 import { Header } from "../Header";
-import { User } from "next-auth";
 import { Footer, SkipLink } from "@clientComponents/globals";
 
 export const FullWidthLayout = ({
@@ -12,7 +11,7 @@ export const FullWidthLayout = ({
   context,
 }: {
   children: React.ReactNode;
-  user?: User;
+  user?: { name: string | null; email: string };
   context?: "admin" | "formBuilder" | "default";
 }) => {
   // This will check to see if a user is deactivated and redirect them to the account deactivated page

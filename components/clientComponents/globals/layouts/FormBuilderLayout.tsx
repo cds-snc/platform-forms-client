@@ -23,14 +23,7 @@ const PageLayout = ({
       {hideLeftNav ? (
         <FullWidthLayout context="default">{page}</FullWidthLayout>
       ) : (
-        <TwoColumnLayout
-          context="formBuilder"
-          leftColumnContent={
-            <>
-              <LeftNavigation />
-            </>
-          }
-        >
+        <TwoColumnLayout context="formBuilder" leftColumnContent={<LeftNavigation />}>
           {backLink && <>{backLink}</>}
           {page}
         </TwoColumnLayout>

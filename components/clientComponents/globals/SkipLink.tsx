@@ -1,14 +1,13 @@
-"use client";
-import React from "react";
 import { useTranslation } from "@i18n/client";
-
+import Link from "next/link";
 export const SkipLink = () => {
   const { t } = useTranslation("common");
+
   return (
     <div id="skip-link-container">
-      <a href="#content" id="skip-link">
+      <Link href="#content" id="skip-link" prefetch={false}>
         {t("skip-link")}
-      </a>
+      </Link>
     </div>
   );
 };

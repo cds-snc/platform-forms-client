@@ -52,7 +52,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta charSet="utf-8" />
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
-        <style>{css}</style>
+        <style nonce={nonce}>{css}</style>
         {/* eslint-disable-next-line react/no-unknown-property */}
         <meta name="authenticated" content={session ? "true" : "false"} />
         <Script
