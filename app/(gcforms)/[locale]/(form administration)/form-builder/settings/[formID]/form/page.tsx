@@ -47,9 +47,8 @@ export default async function Page({
 }) {
   const { user } = await requireAuthentication();
 
-  checkPrivilegesAsBoolean(
-    user.ability,
-    [
+  if (
+    checkPrivilegesAsBoolean(user.ability, [
       {
         action: "view",
         subject: {
@@ -66,27 +65,31 @@ export default async function Page({
           object: {},
         },
       },
-    ],
-    { redirect: true }
-  );
+    ])
+  ) {
+    if (!formID || Array.isArray(formID)) notFound();
 
-  if (!formID || Array.isArray(formID)) notFound();
+    const templateWithAssociatedUsers = await getTemplateWithAssociatedUsers(user.ability, formID);
+    if (!templateWithAssociatedUsers) notFound();
 
-  const templateWithAssociatedUsers = await getTemplateWithAssociatedUsers(user.ability, formID);
-  if (!templateWithAssociatedUsers) notFound();
-
-  const allUsers = (await getUsers(user.ability)).map((user) => {
-    return { id: user.id, name: user.name, email: user.email };
-  });
+    const allUsers = (await getUsers(user.ability)).map((user) => {
+      return { id: user.id, name: user.name, email: user.email };
+    });
+    return (
+      <FormBuilderInitializer locale={locale} backLink={<BackToManageForms backLink={backLink} />}>
+        <ClientSide
+          formRecord={templateWithAssociatedUsers.formRecord}
+          usersAssignedToFormRecord={templateWithAssociatedUsers.users}
+          allUsers={allUsers}
+          canManageOwnership={true}
+        />
+      </FormBuilderInitializer>
+    );
+  }
 
   return (
     <FormBuilderInitializer locale={locale} backLink={<BackToManageForms backLink={backLink} />}>
-      <ClientSide
-        formRecord={templateWithAssociatedUsers.formRecord}
-        usersAssignedToFormRecord={templateWithAssociatedUsers.users}
-        allUsers={allUsers}
-        canManageOwnership={true}
-      />
+      <ClientSide canManageOwnership={false} />
     </FormBuilderInitializer>
   );
 }
