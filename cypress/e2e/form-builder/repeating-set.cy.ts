@@ -11,18 +11,18 @@ describe("Test FormBuilder Repeating set", () => {
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="dynamicRow"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
     cy.typeInField("#item-1", "This is a repeating set");
 
     cy.get('[data-testid="add-element"]').contains("Add to set").click();
     cy.get('[data-testid="textField"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.typeInField("#item-101", "This is a short answer question");
 
     cy.get('[data-testid="addToSet"]').contains("Add to set").click();
     cy.get('[data-testid="radio"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.typeInField("#item-102", "This is a single choice question");
     cy.typeInField("#option--102--1", "This is an option");
@@ -40,12 +40,12 @@ describe("Test FormBuilder Repeating set", () => {
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="dynamicRow"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
     cy.typeInField("#item-1", "This is a repeating set");
 
     cy.get('[data-testid="add-element"]').contains("Add to set").click();
     cy.get('[data-testid="textField"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.typeInField("#repeatable-button-0", "something");
     cy.visitPage("/form-builder/preview");
@@ -58,7 +58,7 @@ describe("Test FormBuilder Repeating set", () => {
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="dynamicRow"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
     cy.typeInField("#item-1", "This is a repeating set");
 
     cy.get('[data-testid="more"]').click();
@@ -67,7 +67,7 @@ describe("Test FormBuilder Repeating set", () => {
 
     cy.get('[data-testid="add-element"]').contains("Add to set").click();
     cy.get('[data-testid="textField"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.typeInField("#item-101", "This is a short answer question");
 
@@ -89,28 +89,28 @@ describe("Test FormBuilder Repeating set", () => {
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="dynamicRow"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
     cy.typeInField("#item-1", "This is a repeating set");
 
     cy.get('[data-testid="add-element"]').contains("Add to set").click();
     cy.get('[data-testid="textField"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
     cy.typeInField("#item-101", "This is a short answer question");
 
     cy.get('#element-1 [data-testid="add-element"]').click();
 
     cy.get('[data-testid="dynamicRow"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
     cy.typeInField("#item-2", "This is another repeating set");
 
     cy.get("#element-2").find("button").contains("Add to set").click();
     cy.get('[data-testid="textField"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
     cy.typeInField("#item-201", "This is a short answer question");
 
     cy.get("#element-2").find("button").contains("Add to set").click();
     cy.get('[data-testid="radio"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.typeInField("#item-202", "Single choice question");
     cy.typeInField("#option--202--1", "Option");

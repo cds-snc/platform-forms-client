@@ -23,11 +23,10 @@ describe("Test FormBuilder autocomplete props", () => {
     ["honorific-prefix", "Name prefix, Mr, Mrs, Dr"],
     ["honorific-suffix", "Name suffix, Jr, B.Sc,"],
     ["language", "Language"],
-    ["name", "Full name (includes first, middle and last names)"],
+    ["name", "Full name (includes first, middle, and last names"],
     ["organization-title", "Job title"],
     ["tel", "Phone number"],
     ["postal-code", "Postal or zip code"],
-    ["street-address", "Full street address (includes address lines 1-3)"],
     ["url", "Website address"],
   ];
 
@@ -36,7 +35,7 @@ describe("Test FormBuilder autocomplete props", () => {
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="textField"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.get('[data-testid="more"]').click();
     cy.get('[data-testid="autocomplete"] > option').should(
@@ -51,7 +50,7 @@ describe("Test FormBuilder autocomplete props", () => {
       cy.get("button").contains("Add").click();
 
       cy.get('[data-testid="textField"]').click();
-      cy.get("button").contains("Select block").click();
+      cy.get('[data-testid="element-description-add-element"]').click();
 
       cy.get('[id="item-1"]').should("have.attr", "placeholder", "Question");
 

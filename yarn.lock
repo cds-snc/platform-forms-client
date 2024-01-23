@@ -10798,6 +10798,7 @@ __metadata:
     react-aria: "npm:3.22.0"
     react-dom: "npm:18.2.0"
     react-i18next: "npm:^13.3.1"
+    react-roving-tabindex: "npm:^3.2.0"
     react-select: "npm:5.7.4"
     react-tabs: "npm:4.2.1"
     react-toastify: "npm:9.1.3"
@@ -15412,6 +15413,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-roving-tabindex@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "react-roving-tabindex@npm:3.2.0"
+  dependencies:
+    warning: "npm:^4.0.3"
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 504e028806b161828125f15ab0156f32673fb5429faa8868bb85e4c04bbd53e0d161bb45a57559ddc261c0ff16b2fbd9918c0d78b4bb0d274abfb6193aa78ce6
+  languageName: node
+  linkType: hard
+
 "react-select@npm:5.7.4":
   version: 5.7.4
   resolution: "react-select@npm:5.7.4"
@@ -17451,6 +17464,15 @@ __metadata:
   dependencies:
     makeerror: "npm:1.0.12"
   checksum: a17e037bccd3ca8a25a80cb850903facdfed0de4864bd8728f1782370715d679fa72e0a0f5da7c1c1379365159901e5935f35be531229da53bbfc0efdabdb48e
+  languageName: node
+  linkType: hard
+
+"warning@npm:^4.0.3":
+  version: 4.0.3
+  resolution: "warning@npm:4.0.3"
+  dependencies:
+    loose-envify: "npm:^1.0.0"
+  checksum: aebab445129f3e104c271f1637fa38e55eb25f968593e3825bd2f7a12bd58dc3738bb70dc8ec85826621d80b4acfed5a29ebc9da17397c6125864d72301b937e
   languageName: node
   linkType: hard
 

@@ -1,9 +1,6 @@
 describe("Test FormBuilder", () => {
-  beforeEach(() => {
-    cy.visitPage("/form-builder");
-  });
-
   it("Renders form builder home page", () => {
+    cy.visitPage("/form-builder");
     cy.get("h2").should("contain", "Design a form");
     cy.get("h2").should("contain", "Open a form file");
     cy.get("a[lang='fr']").click();
@@ -14,12 +11,11 @@ describe("Test FormBuilder", () => {
   it("Designs a form", () => {
     cy.visitPage("/form-builder/edit");
     cy.typeInField("#formTitle", "Cypress Test Form");
-    cy.get("a").contains("Edit").should("have.class", "font-bold");
     cy.typeInField(`[aria-label="Form introduction"]`, "form intro");
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="radio"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.typeInField("#item-1", "Question 1");
     cy.typeInField("#option--1--1", "option 1");
@@ -44,8 +40,7 @@ describe("Test FormBuilder", () => {
     cy.get("#required-1-id").should("be.checked");
 
     // preview form
-    cy.get("a").contains("Preview").click();
-    cy.get("a").contains("Preview").should("have.class", "font-bold");
+    cy.get('[data-testid="preview"]').click();
     cy.get("#content h1").should("contain", "Cypress Test Form");
     cy.get(".gc-richText p").should("contain", "form intro");
     cy.get("#label-1").should("contain", "Question 1-1");
@@ -57,13 +52,11 @@ describe("Test FormBuilder", () => {
     );
 
     // settings
-    cy.get("a").contains("Settings").click();
-    cy.get("a").contains("Settings").should("have.class", "font-bold");
+    cy.get('[data-testid="settings"]').click();
     cy.get("h1").should("contain", "Settings");
 
     // publish form
-    cy.get("a").contains("Publish").click();
-    cy.get("a").contains("Publish").should("have.class", "font-bold");
+    cy.get('[data-testid="publish"]').click();
     cy.get("h1").should("contain", "You cannot publish");
     cy.get("a").contains("create one now").click();
 

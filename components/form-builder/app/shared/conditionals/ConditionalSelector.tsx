@@ -3,6 +3,8 @@ import { useTranslation } from "next-i18next";
 import { cn } from "@lib/utils";
 import { FormElement } from "@lib/types";
 import { Button } from "@components/globals";
+import { useTemplateStore } from "@formbuilder/store";
+import { LocalizedFormProperties, LocalizedElementProperties } from "../../../types";
 
 type Choice = {
   label: string;
@@ -103,6 +105,7 @@ const QuestionSelect = ({
 };
 
 export const ConditionalSelector = ({
+  itemId,
   elements,
   elementId,
   choiceId,
@@ -111,6 +114,7 @@ export const ConditionalSelector = ({
   updateElementId,
   removeSelector,
 }: {
+  itemId: number;
   elements: FormElement[];
   elementId: string | null;
   choiceId: string | null;
@@ -121,19 +125,39 @@ export const ConditionalSelector = ({
 }) => {
   const { t } = useTranslation("form-builder");
 
+  const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    translationLanguagePriority: s.translationLanguagePriority,
+  }));
+
+  const language = translationLanguagePriority;
+
   const questions = useMemo(() => {
-    const validType = ["textField", "textArea"];
     const items = elements
-      .filter((element) => validType.includes(element.type))
+      .filter((item) => {
+        return item.id !== itemId;
+      })
       .map((question) => {
-        const result = { label: question.properties.titleEn, value: `${question.id}` };
+        const titleKey = localizeField(LocalizedFormProperties.TITLE, language);
+        const descKey = localizeField(LocalizedElementProperties.DESCRIPTION, language);
+
+        let label = "";
+        if (question.properties[titleKey]) {
+          label = question.properties[titleKey] || "";
+        }
+
+        if (label === "" && question.properties[descKey]) {
+          label = question.properties[descKey] || "";
+        }
+
+        const result = { label, value: `${question.id}` };
         return result;
       });
 
     // Prepend empty option
     items.unshift({ label: "", value: "" });
     return items;
-  }, [elements]);
+  }, [elements, itemId, language, localizeField]);
 
   const choiceParentQuestion = choiceId?.split(".")[0] || null;
 
@@ -145,10 +169,10 @@ export const ConditionalSelector = ({
 
   const choices = useMemo(() => {
     return selectedElement?.properties.choices?.map((choice, index) => {
-      const result = { label: choice.en, value: `${choiceParentQuestion}.${index}` };
+      const result = { label: choice[language], value: `${choiceParentQuestion}.${index}` };
       return result;
     });
-  }, [selectedElement, choiceParentQuestion]);
+  }, [selectedElement, choiceParentQuestion, language]);
 
   const handleQuestionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;

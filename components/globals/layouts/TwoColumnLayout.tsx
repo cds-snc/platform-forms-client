@@ -24,13 +24,15 @@ export const TwoColumnLayout = ({
         <SkipLink />
 
         <Header context={context} user={user} />
-        <div className="mx-4 shrink-0 grow basis-auto laptop:mx-32 desktop:mx-64">
-          <ToastContainer />
+        <div className="shrink-0 grow basis-auto">
+          <ToastContainer containerId="default" />
+          <ToastContainer limit={1} containerId="wide" autoClose={false} width="600px" />
           <>
             <div>
-              <div className="flex flex-row gap-10">
-                <div className="min-w-[181px]">{leftColumnContent}</div>
-
+              <div className="flex flex-row gap-10 pr-12">
+                <div id="left-nav" className="sticky top-5 z-10 h-full">
+                  {leftColumnContent}
+                </div>
                 <main
                   id="content"
                   className={cn("w-full", context === "formBuilder" && "form-builder")}

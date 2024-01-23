@@ -14,8 +14,8 @@
       "validation": {
         "required": false
       },
-      "descriptionEn": "### What is your address?",
-      "descriptionFr": "### Quelle est votre adresse?",
+      "descriptionEn": "## What is your address?",
+      "descriptionFr": "## Quelle est votre adresse?",
       "placeholderEn": "",
       "placeholderFr": ""
     }
@@ -35,11 +35,11 @@
       "validation": {
         "required": false
       },
-      "descriptionEn": "Include your civic number and street name, apartment or suite, and other address details",
-      "descriptionFr": "Indiquez votre numéro civique et le nom de la rue, l'appartement ou la suite, ainsi que d'autres détails de l'adresse",
+      "descriptionEn": "Include street name and number.",
+      "descriptionFr": "Indiquez le nom de rue et le numéro d'unité.",
       "placeholderEn": "",
       "placeholderFr": "",
-      "autoComplete": "street-address"
+      "autoComplete": "address-line1"
     }
   },
   {
@@ -52,7 +52,7 @@
           "fr": ""
         }
       ],
-      "titleEn": "City, town or community",
+      "titleEn": "City, town, or community",
       "titleFr": "Ville ou communauté",
       "validation": {
         "required": false
@@ -74,8 +74,8 @@
           "fr": ""
         }
       ],
-      "titleEn": "Province",
-      "titleFr": "Province",
+      "titleEn": "Province or territory",
+      "titleFr": "Province ou territoire",
       "validation": {
         "required": false
       },

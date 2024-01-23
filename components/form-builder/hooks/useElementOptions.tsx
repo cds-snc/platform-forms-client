@@ -12,6 +12,7 @@ import {
   AddressIcon,
   NameIcon,
   UploadIcon,
+  GavelIcon,
 } from "../icons";
 
 import {
@@ -37,12 +38,25 @@ import { useIsAdminUser } from "./useIsAdminUser";
 import { ElementOptionsFilter, ElementOption } from "../types";
 import { useFlag } from "@lib/hooks";
 
+export enum Groups {
+  BASIC = "basic",
+  PRESET = "preset",
+  OTHER = "other",
+}
+
 export const useElementOptions = (filterElements?: ElementOptionsFilter | undefined) => {
   const { t } = useTranslation("form-builder");
-  const group = {
-    layout: { id: "layout", value: t("addElementDialog.layoutBlocks") },
-    input: { id: "input", value: t("addElementDialog.inputBlocks") },
-    advanced: { id: "advanced", value: t("addElementDialog.advancedBlocks") },
+  const groups = {
+    basic: { id: "basic", value: t("addElementDialog.categories.basic") },
+    preset: { id: "preset", value: t("addElementDialog.categories.preset") },
+    other: { id: "other", value: t("addElementDialog.categories.other") },
+  };
+
+  const sortElements = (elementOptions: ElementOption[]) => {
+    return elementOptions.sort((a, b) => {
+      const order = Object.keys(groups);
+      return order.indexOf(a.group.id) - order.indexOf(b.group.id);
+    });
   };
 
   // default to off unless the user is an admin
@@ -52,11 +66,11 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
 
   const fileInputOption: ElementOption = {
     id: "fileInput",
-    value: t("addElementDialog.fileInput.label"),
+    value: t("addElementDialog.fileInput.title"),
     icon: UploadIcon,
     description: FileInput,
     className: "",
-    group: group.input,
+    group: groups.other,
   };
 
   const repeatingSetsOption: ElementOption = {
@@ -65,7 +79,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     icon: AddIcon,
     description: QuestionSet,
     className: "",
-    group: group.advanced,
+    group: groups.other,
   };
 
   const elementOptions: ElementOption[] = [
@@ -75,7 +89,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: ParagraphIcon,
       description: RichText,
       className: "",
-      group: group.layout,
+      group: groups.other,
     },
     {
       id: "textField",
@@ -83,7 +97,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: ShortAnswerIcon,
       description: TextField,
       className: "",
-      group: group.input,
+      group: groups.basic,
     },
     {
       id: "textArea",
@@ -91,7 +105,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: ParagraphIcon,
       description: TextArea,
       className: "separator",
-      group: group.input,
+      group: groups.basic,
     },
     {
       id: "radio",
@@ -99,7 +113,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: RadioIcon,
       description: Radio,
       className: "",
-      group: group.input,
+      group: groups.basic,
     },
     {
       id: "checkbox",
@@ -107,7 +121,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: CheckIcon,
       description: CheckBox,
       className: "",
-      group: group.input,
+      group: groups.basic,
     },
     {
       id: "dropdown",
@@ -115,7 +129,46 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: SelectMenuIcon,
       description: DropDown,
       className: "separator",
-      group: group.input,
+      group: groups.basic,
+    },
+    ...(allowFileInput ? [{ ...(fileInputOption as ElementOption) }] : []),
+    {
+      id: "attestation",
+      value: t("attestation"),
+      icon: GavelIcon,
+      description: Attestation,
+      className: "separator",
+      group: groups.basic,
+    },
+    {
+      id: "name",
+      value: t("addElementDialog.name.label"),
+      icon: NameIcon,
+      description: Name,
+      group: groups.preset,
+    },
+    {
+      id: "firstMiddleLastName",
+      value: t("addElementDialog.firstMiddleLastName.label"),
+      icon: NameIcon,
+      description: FirstMiddleLastName,
+      className: "separator",
+      group: groups.preset,
+    },
+    {
+      id: "contact",
+      value: t("addElementDialog.contact.label"),
+      icon: ContactIcon,
+      description: Contact,
+      group: groups.preset,
+    },
+    {
+      id: "address",
+      value: t("addElementDialog.address.label"),
+      icon: AddressIcon,
+      description: Address,
+      className: "separator",
+      group: groups.preset,
     },
     {
       id: "date",
@@ -123,56 +176,20 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: CalendarIcon,
       description: Date,
       className: "",
-      group: group.input,
+      group: groups.preset,
     },
     {
       id: "number",
       value: t("numericField"),
       icon: NumericFieldIcon,
       description: Number,
-      className: "",
-      group: group.input,
-    },
-    ...(allowFileInput ? [{ ...(fileInputOption as ElementOption) }] : []),
-    {
-      id: "attestation",
-      value: t("attestation"),
-      icon: AddIcon,
-      description: Attestation,
       className: "separator",
-      group: group.input,
-    },
-    {
-      id: "name",
-      value: t("addElementDialog.name.label"),
-      icon: NameIcon,
-      description: Name,
-      group: group.input,
-    },
-    {
-      id: "firstMiddleLastName",
-      value: t("addElementDialog.firstMiddleLastName.label"),
-      icon: NameIcon,
-      description: FirstMiddleLastName,
-      group: group.input,
-    },
-    {
-      id: "address",
-      value: t("addElementDialog.address.label"),
-      icon: AddressIcon,
-      description: Address,
-      group: group.input,
-    },
-    {
-      id: "contact",
-      value: t("addElementDialog.contact.label"),
-      icon: ContactIcon,
-      description: Contact,
-      className: "separator",
-      group: group.input,
+      group: groups.preset,
     },
     ...(experimentalBlocks ? [{ ...(repeatingSetsOption as ElementOption) }] : []),
   ];
 
-  return filterElements ? filterElements(elementOptions) : elementOptions;
+  return filterElements
+    ? sortElements(filterElements(elementOptions))
+    : sortElements(elementOptions);
 };
