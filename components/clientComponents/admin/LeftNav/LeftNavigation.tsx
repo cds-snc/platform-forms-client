@@ -17,11 +17,11 @@ export const LeftNavigation = () => {
   const path = usePathname()?.replace(`/${language}`, "");
 
   const iconClassname =
-    "block box-border mt-1 w-8 h-8 group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default";
+    "block box-border mt-1 h-8 group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default";
 
   return (
-    <nav>
-      <ul className="m-0 list-none p-0">
+    <nav className="h-full">
+      <ul className="m-0 mt-5 w-48 list-none p-0">
         {ability?.can("view", "User") && (
           <li>
             <NavLink
