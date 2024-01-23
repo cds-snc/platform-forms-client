@@ -5828,6 +5828,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash.isequal@npm:^4":
+  version: 4.5.8
+  resolution: "@types/lodash.isequal@npm:4.5.8"
+  dependencies:
+    "@types/lodash": "npm:*"
+  checksum: 6db28cacf165d55421fbf2970ccfb1682a7b82b743bb7aba4398fa8ab98f1711fca2fe4afa1aa2b7b4afb3eff76c8aca13b22206f5efeb038d99e41300589bca
+  languageName: node
+  linkType: hard
+
 "@types/lodash.set@npm:^4.3.9":
   version: 4.3.9
   resolution: "@types/lodash.set@npm:4.3.9"
@@ -9963,6 +9972,7 @@ __metadata:
     "@types/json2md": "npm:^1.5.4"
     "@types/jsonwebtoken": "npm:^8.5.9"
     "@types/lodash.debounce": "npm:^4.0.9"
+    "@types/lodash.isequal": "npm:^4"
     "@types/lodash.set": "npm:^4.3.9"
     "@types/lodash.unset": "npm:^4.5.9"
     "@types/mmmagic": "npm:^0"
@@ -10028,6 +10038,7 @@ __metadata:
     lexical: "npm:^0.12.6"
     lint-staged: "npm:^13.3.0"
     lodash.debounce: "npm:4.0.8"
+    lodash.isequal: "npm:^4.5.0"
     lodash.set: "npm:4.3.2"
     lodash.unset: "npm:4.5.2"
     markdown-to-jsx: "npm:7.3.2"
@@ -12233,6 +12244,13 @@ __metadata:
   version: 3.0.3
   resolution: "lodash.isboolean@npm:3.0.3"
   checksum: 0aac604c1ef7e72f9a6b798e5b676606042401dd58e49f051df3cc1e3adb497b3d7695635a5cbec4ae5f66456b951fdabe7d6b387055f13267cde521f10ec7f7
+  languageName: node
+  linkType: hard
+
+"lodash.isequal@npm:^4.5.0":
+  version: 4.5.0
+  resolution: "lodash.isequal@npm:4.5.0"
+  checksum: dfdb2356db19631a4b445d5f37868a095e2402292d59539a987f134a8778c62a2810c2452d11ae9e6dcac71fc9de40a6fedcb20e2952a15b431ad8b29e50e28f
   languageName: node
   linkType: hard
 
