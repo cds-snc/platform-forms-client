@@ -70,7 +70,7 @@ export default async function Page({
 
   return (
     <TwoColumnLayout
-      user={user}
+      user={{ email: user.email, name: user.name }}
       context="admin"
       leftColumnContent={<BackToAccounts id={formUser.id} locale={locale} />}
     >

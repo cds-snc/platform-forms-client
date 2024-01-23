@@ -23,7 +23,7 @@ export const FullWidthLayout = ({
       <div className="flex h-full flex-col">
         <SkipLink />
 
-        <Header context={context} user={user} />
+        <Header context={context} user={user && { email: user.email, name: user.name }} />
         <div className="mx-4 shrink-0 grow basis-auto laptop:mx-32 desktop:mx-64">
           <ToastContainer />
           <>

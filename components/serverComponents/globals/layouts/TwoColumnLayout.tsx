@@ -19,7 +19,11 @@ export const TwoColumnLayout = ({
       <div className="flex h-full flex-col">
         <SkipLink />
 
-        <Header context={context} user={user} className="mb-0" />
+        <Header
+          context={context}
+          user={user && { email: user.email, name: user.name }}
+          className="mb-0"
+        />
         <div className="shrink-0 grow basis-auto">
           <ToastContainer containerId="default" />
           <ToastContainer limit={1} containerId="wide" autoClose={false} width="600px" />
