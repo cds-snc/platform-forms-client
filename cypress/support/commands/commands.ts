@@ -128,7 +128,7 @@ Cypress.Commands.add("login", (options?: { admin?: boolean; acceptableUse?: bool
       }).then(() => {
         // Ensure cookie is created
         cy.waitUntil(() =>
-          cy.getCookie("next-auth.session-token").then((cookie) => Boolean(cookie && cookie.value))
+          cy.getCookie("authjs.session-token").then((cookie) => Boolean(cookie && cookie.value))
         );
         if (acceptableUse) {
           cy.request({
@@ -179,7 +179,7 @@ Cypress.Commands.add("logout", () => {
     }).then(() => {
       // Ensure cookie is removed
       cy.waitUntil(() =>
-        cy.getCookie("next-auth.session-token").then((cookie) => !cookie || !cookie.value)
+        cy.getCookie("authjs.session-token").then((cookie) => !cookie || !cookie.value)
       );
     });
   });
