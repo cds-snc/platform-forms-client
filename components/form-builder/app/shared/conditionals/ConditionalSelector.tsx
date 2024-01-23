@@ -3,6 +3,8 @@ import { useTranslation } from "next-i18next";
 import { cn } from "@lib/utils";
 import { FormElement } from "@lib/types";
 import { Button } from "@components/globals";
+import { useTemplateStore } from "@formbuilder/store";
+import { LocalizedFormProperties, LocalizedElementProperties } from "../../../types";
 
 type Choice = {
   label: string;
@@ -121,7 +123,14 @@ export const ConditionalSelector = ({
   updateElementId: (index: number, id: string) => void;
   removeSelector: (index: number) => void;
 }) => {
-  const { t, i18n } = useTranslation("form-builder");
+  const { t } = useTranslation("form-builder");
+
+  const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    translationLanguagePriority: s.translationLanguagePriority,
+  }));
+
+  const language = translationLanguagePriority;
 
   const questions = useMemo(() => {
     const items = elements
@@ -129,8 +138,8 @@ export const ConditionalSelector = ({
         return item.id !== itemId;
       })
       .map((question) => {
-        const titleKey = i18n.language === "en" ? "titleEn" : "titleFr";
-        const descKey = i18n.language === "en" ? "descriptionEn" : "descriptionFr";
+        const titleKey = localizeField(LocalizedFormProperties.TITLE, language);
+        const descKey = localizeField(LocalizedElementProperties.DESCRIPTION, language);
 
         let label = "";
         if (question.properties[titleKey]) {
@@ -148,7 +157,7 @@ export const ConditionalSelector = ({
     // Prepend empty option
     items.unshift({ label: "", value: "" });
     return items;
-  }, [elements, itemId, i18n.language]);
+  }, [elements, itemId, language, localizeField]);
 
   const choiceParentQuestion = choiceId?.split(".")[0] || null;
 
@@ -160,10 +169,10 @@ export const ConditionalSelector = ({
 
   const choices = useMemo(() => {
     return selectedElement?.properties.choices?.map((choice, index) => {
-      const result = { label: choice.en, value: `${choiceParentQuestion}.${index}` };
+      const result = { label: choice[language], value: `${choiceParentQuestion}.${index}` };
       return result;
     });
-  }, [selectedElement, choiceParentQuestion]);
+  }, [selectedElement, choiceParentQuestion, language]);
 
   const handleQuestionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
