@@ -14,8 +14,8 @@
       "validation": {
         "required": false
       },
-      "descriptionEn": "### What is your address?",
-      "descriptionFr": "### Quelle est votre adresse?",
+      "descriptionEn": "## What is your address?",
+      "descriptionFr": "## Quelle est votre adresse?",
       "placeholderEn": "",
       "placeholderFr": ""
     }
@@ -35,8 +35,8 @@
       "validation": {
         "required": false
       },
-      "descriptionEn": "Include your street name and number. For example: 123 Main St. Apt 10",
-      "descriptionFr": "Indiquez le nom de rue et le numéro d'unité. Par exemple : 123 Rue Principale Apt 10",
+      "descriptionEn": "Include street name and number.",
+      "descriptionFr": "Indiquez le nom de rue et le numéro d'unité.",
       "placeholderEn": "",
       "placeholderFr": "",
       "autoComplete": "address-line1"
@@ -52,7 +52,7 @@
           "fr": ""
         }
       ],
-      "titleEn": "City, town or community",
+      "titleEn": "City, town, or community",
       "titleFr": "Ville ou communauté",
       "validation": {
         "required": false
