@@ -36,7 +36,7 @@
       "postal": "Code postal",
       "province": "Province ou territoire",
       "street": {
-        "description": "Indiquez le nom de rue et le numéro d'unité. Par exemple : 123 Rue Principale Apt 10.",
+        "description": "Indiquez le nom de rue et le numéro d'unité.",
         "label": "Adresse municipale"
       },
       "title": "Adresse"
@@ -272,7 +272,7 @@
   "defaultElementDescription": {
     "date": "Saisissez une date dans ce format : mm/jj/aaaa",
     "email": "Par exemple : nom@exemple.com",
-    "number": "N'entrez que des chiffres",
+    "number": "Saisissez un chiffre",
     "phone": "Par exemple : 111-222-3333"
   },
   "description": "Description ",
@@ -297,7 +297,7 @@
       "confirmReceipt": "Confirmer la réception",
       "downloadResponse": "Télécharger la réponse",
       "lastDownloadedBy": "Dernier téléchargement par",
-      "number": "Numéro",
+      "number": "Chiffre",
       "removal": "Suppresssion",
       "select": "Sélectionner",
       "status": "État",
@@ -321,7 +321,7 @@
   },
   "dropdown": "Liste déroulante",
   "duplicate": "Dupliquer",
-  "dyanamicRow": "Série de questions répétées",
+  "dyanamicRow": "Ensemble de réponses",
   "edit": "Modifier",
   "editingIn": "Modifier en :",
   "editLink": "Modifier un lien  ",
@@ -415,13 +415,13 @@
   "moveUp": "Déplacer vers le haut ",
   "navLabelEditor": "Navigation de l’onglet modifier",
   "navLabelFormBuilder": "Navigation de Formulaires GC",
-  "numericField": "Numéro",
+  "numericField": "Chiffre",
   "openModal": "Ouvrir fenêtre modale",
   "option": "Option",
   "optionText": "Option",
   "pagePreview": "Prévisualiser",
   "pageSettings": "Paramètres",
-  "pageText": "Texte",
+  "pageText": "Texte de page",
   "paragraph": "Réponse longue",
   "phoneNumber": "Numéro de téléphone",
   "placeHolderFormTitle": "Titre du formulaire",
@@ -460,7 +460,7 @@
       "title": "Bouton"
     }
   },
-  "questionTitle": "Titre de question",
+  "questionTitle": "Question",
   "remove": "Supprimer",
   "removeFromSet": "Enlever de la série",
   "removeOption": "Supprimer l'option :  ",
