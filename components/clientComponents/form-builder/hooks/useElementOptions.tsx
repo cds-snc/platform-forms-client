@@ -188,7 +188,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       group: groups.preset,
     },
     {
-      id: "managedDepartments",
+      id: "departments",
       value: "Departments",
       icon: SelectMenuIcon,
       description: DropDown,

@@ -25,7 +25,8 @@
       "address": "Add address",
       "contact": "Add contact",
       "dynamicRow": "Add repeating set",
-      "richText": "Add page text"
+      "richText": "Add page text",
+      "departments": "Add departments dropdown"
     },
     "address": {
       "whatIsYourAddress": "What is your address?",

@@ -76,7 +76,7 @@ export enum FormElementTypes {
   address = "address",
   name = "name",
   firstMiddleLastName = "firstMiddleLastName",
-  managedDepartments = "managedDepartments",
+  departments = "departments",
   contact = "contact",
 }
 // used to define attributes for a form element or field

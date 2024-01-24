@@ -25,7 +25,8 @@
       "address": "Ajouter une adresse",
       "contact": "Ajouter des coordonnées",
       "dynamicRow": "Ajouter un ensemble de réponses",
-      "richText": "Ajouter du texte de page"
+      "richText": "Ajouter du texte de page",
+      "departments": "[FR] Add departments dropdown"
     },
     "address": {
       "whatIsYourAddress": "Quelle est votre adresse?",
