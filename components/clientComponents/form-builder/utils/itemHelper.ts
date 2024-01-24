@@ -11,6 +11,7 @@ type ElementType =
   | "repeatableQuestionSet"
   | "attestation"
   | "firstMiddleLastName"
+  | "managedDepartments"
   | "name"
   | "contact"
   | "address";

@@ -59,7 +59,8 @@ export interface ElementOption {
     | "firstMiddleLastName"
     | "name"
     | "contact"
-    | "address";
+    | "address"
+    | "managedDepartments";
   value: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   icon?: JSXElementConstructor<any> | ComponentType | JSX.Element | any;

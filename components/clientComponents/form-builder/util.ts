@@ -258,6 +258,7 @@ export const allowedTemplates = [
   FormElementTypes.name,
   FormElementTypes.firstMiddleLastName,
   FormElementTypes.contact,
+  FormElementTypes.managedDepartments,
 ] as const;
 
 export const isVaultDelivery = (deliveryOption: DeliveryOption | undefined) => {

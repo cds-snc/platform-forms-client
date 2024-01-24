@@ -23,6 +23,7 @@ import {
 } from "@lib/types";
 import { TFunction } from "i18next";
 import { getLocalizedProperty } from "@lib/utils";
+import { ManagedData, getManagedData } from "./managedData";
 
 // This function is used for select/radio/checkbox i18n change of form labels
 function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: string) {
@@ -44,10 +45,17 @@ function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: str
 function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElement {
   const id = element.subId ?? element.id;
 
-  const choices =
+  let choices =
     element.properties && element.properties.choices
       ? getLocaleChoices(element.properties.choices, lang)
       : [];
+
+  // Retrieve managed data from static json file
+  if (element.properties.managedChoices) {
+    const dataFile = element.properties.managedChoices as ManagedData;
+    const data = getManagedData(dataFile);
+    choices = data ? getLocaleChoices(data, lang) : [];
+  }
 
   const subElements =
     element.properties && element.properties.subElements ? element.properties.subElements : [];

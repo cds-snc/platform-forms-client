@@ -1,0 +1,18 @@
+[
+  {
+    "type": "dropdown",
+    "properties": {
+      "subElements": [],
+      "managedChoices": "departments",
+      "titleEn": "Select a department",
+      "titleFr": "[FR] Select a department",
+      "validation": {
+        "required": false
+      },
+      "descriptionEn": "",
+      "descriptionFr": "",
+      "placeholderEn": "",
+      "placeholderFr": ""
+    }
+  }
+]

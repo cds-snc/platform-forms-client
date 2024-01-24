@@ -187,6 +187,14 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       className: "separator",
       group: groups.preset,
     },
+    {
+      id: "managedDepartments",
+      value: "Departments",
+      icon: SelectMenuIcon,
+      description: DropDown,
+      className: "",
+      group: groups.preset,
+    },
     ...(experimentalBlocks ? [{ ...(repeatingSetsOption as ElementOption) }] : []),
   ];
 
