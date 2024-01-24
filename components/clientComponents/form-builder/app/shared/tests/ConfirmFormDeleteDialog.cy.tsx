@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { ConfirmFormDeleteDialog } from "../ConfirmFormDeleteDialog";
-import { TemplateStoreProvider } from "@clientComponents/form-builder/store";
+import { TemplateStoreProvider } from "../../../store";
 
 describe("<ConfirmFormDeleteDialog />", () => {
   it("shows unprocessed screen", () => {
@@ -26,7 +26,7 @@ describe("<ConfirmFormDeleteDialog />", () => {
       </TemplateStoreProvider>
     );
 
-    cy.get("h2").contains("formDeleteResponses.title");
+    cy.get("h2").contains("Sign off on the removal of responses before deleting form");
   });
 
   it("shows delete confirm screen", () => {
@@ -53,7 +53,7 @@ describe("<ConfirmFormDeleteDialog />", () => {
       </TemplateStoreProvider>
     );
 
-    cy.get("h2").contains("formDelete.title");
+    cy.get("h2").contains("Delete this form?");
   });
 
   it("confirms delete and closes", () => {
@@ -80,7 +80,7 @@ describe("<ConfirmFormDeleteDialog />", () => {
       </TemplateStoreProvider>
     );
 
-    cy.get("h2").contains("formDelete.title");
+    cy.get("h2").contains("Delete this form?");
     cy.get('[data-testid="confirm-delete"]').click();
     cy.get("@handleConfirmSpy").should("have.been.calledOnce");
     cy.get("@handleCloseSpy").should("have.been.calledOnce");

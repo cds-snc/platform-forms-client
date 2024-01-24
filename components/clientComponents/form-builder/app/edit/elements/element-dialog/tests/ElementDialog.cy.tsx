@@ -242,12 +242,10 @@ describe("<ElementDialog />", () => {
 
     cy.mount(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
 
-    cy.get("body").tab();
+    cy.get('[data-testid="all-filter"]').click();
+    cy.get("body").tab().tab();
     cy.focused().should("have.attr", "data-testid", "listbox");
     cy.get('[data-testid="textField"]').should("have.attr", "aria-selected", "true");
-
-    // cy.typeInField("body", "{downarrow}");
-    // cy.get('[data-testid="textField"]').should("have.attr", "aria-selected", "true");
 
     cy.typeInField("body", "{downarrow}");
     cy.get('[data-testid="textArea"]').should("have.attr", "aria-selected", "true");
