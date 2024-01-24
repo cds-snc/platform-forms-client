@@ -132,7 +132,9 @@ export const SelectedElement = ({
         element = (
           <>
             <ShortAnswer>{t("addElementDialog.dropdown.title")}</ShortAnswer>
-            <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} />
+            {!item.properties.managedChoices && (
+              <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} />
+            )}
           </>
         );
       }
