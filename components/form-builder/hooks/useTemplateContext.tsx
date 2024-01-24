@@ -12,6 +12,7 @@ interface TemplateApiType {
   error: string | null | undefined;
   saveForm: () => Promise<boolean>;
   templateIsDirty: React.MutableRefObject<boolean>;
+  nameChanged: boolean | null;
   introChanged: boolean | null;
   privacyChanged: boolean | null;
   confirmationChanged: boolean | null;
@@ -21,6 +22,7 @@ const defaultTemplateApi: TemplateApiType = {
   error: null,
   saveForm: async () => false,
   templateIsDirty: { current: false },
+  nameChanged: null,
   introChanged: null,
   privacyChanged: null,
   confirmationChanged: null,
@@ -77,6 +79,7 @@ export function TemplateApiProvider({ children }: { children: React.ReactNode })
   const { t, i18n } = useTranslation(["form-builder"]);
   const [error, setError] = useState<string | null>();
 
+  const [nameChanged, setNameChanged] = useState<boolean | null>(false);
   const [introChanged, setIntroChanged] = useState<boolean | null>(false);
   const [privacyChanged, setPrivacyChanged] = useState<boolean | null>(false);
   const [confirmationChanged, setConfirmationChanged] = useState<boolean | null>(false);
@@ -101,6 +104,15 @@ export function TemplateApiProvider({ children }: { children: React.ReactNode })
       if (hasHydrated && !templateIsDirty.current) {
         logMessage.debug(`TemplateContext: Local State out of sync with server`);
         templateIsDirty.current = true;
+      }
+    }
+  );
+
+  useSubscibeToTemplateStore(
+    (s) => [s.getName() ?? ""],
+    (s, p) => {
+      if (p[0] !== s[0]) {
+        setNameChanged(true);
       }
     }
   );
@@ -146,6 +158,7 @@ export function TemplateApiProvider({ children }: { children: React.ReactNode })
         }
 
         setError(null);
+        setNameChanged(null);
         setIntroChanged(null);
         setPrivacyChanged(null);
         setConfirmationChanged(null);
@@ -167,6 +180,7 @@ export function TemplateApiProvider({ children }: { children: React.ReactNode })
         error,
         saveForm,
         templateIsDirty,
+        nameChanged,
         introChanged,
         privacyChanged,
         confirmationChanged,
