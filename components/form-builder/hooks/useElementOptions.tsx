@@ -66,7 +66,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
 
   const fileInputOption: ElementOption = {
     id: "fileInput",
-    value: t("addElementDialog.fileInput.label"),
+    value: t("addElementDialog.fileInput.title"),
     icon: UploadIcon,
     description: FileInput,
     className: "",

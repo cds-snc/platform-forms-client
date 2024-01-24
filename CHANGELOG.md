@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.12.0](https://github.com/cds-snc/platform-forms-client/compare/v3.11.0...v3.12.0) (2024-01-23)
+
+
+### Features
+
+* Add Element Dialog Refresh ([#3075](https://github.com/cds-snc/platform-forms-client/issues/3075)) ([c1f5bc4](https://github.com/cds-snc/platform-forms-client/commit/c1f5bc41c7c48d284e286ae6a286c8408eb6dc20))
+* Adds ability to add rules / conditional logic for showing / hiding form elements, adds grouping logic (no UI yet) ([a756af4](https://github.com/cds-snc/platform-forms-client/commit/a756af4174b408d99f4219f79a3c8699f593eafa))
+
+
+### Bug Fixes
+
+* 3135 Fix choice language ([#3136](https://github.com/cds-snc/platform-forms-client/issues/3136)) ([932efe2](https://github.com/cds-snc/platform-forms-client/commit/932efe2effdbec45e30a0bd7b8dded1a82e765d3))
+* Confirm Dialog allows badly formatter code to be submitted ([#3072](https://github.com/cds-snc/platform-forms-client/issues/3072)) ([ca65398](https://github.com/cds-snc/platform-forms-client/commit/ca6539872f699c08ba12b60a8068cc739b7e16bd))
+* Don't append "copy" to title on duplicate richText elements ([#3131](https://github.com/cds-snc/platform-forms-client/issues/3131)) ([4a039b6](https://github.com/cds-snc/platform-forms-client/commit/4a039b62279568d5a5569cf5a6f32541d2986b09))
+* update template subscribe ([#3121](https://github.com/cds-snc/platform-forms-client/issues/3121)) ([dd91934](https://github.com/cds-snc/platform-forms-client/commit/dd91934eb17aa6616840b86dd0eca3c834fb9cc0))
+
+
+### Miscellaneous Chores
+
+* add more information to null operation log message ([#3125](https://github.com/cds-snc/platform-forms-client/issues/3125)) ([0157a0f](https://github.com/cds-snc/platform-forms-client/commit/0157a0ffc9ce8f3d56da1221199126cec912f4f6))
+* content updates ([0424ec8](https://github.com/cds-snc/platform-forms-client/commit/0424ec8185d1b3ea6a626118160c521359dd5efa))
+* Move back link ([#3115](https://github.com/cds-snc/platform-forms-client/issues/3115)) ([808d6c0](https://github.com/cds-snc/platform-forms-client/commit/808d6c0f3863958583cfad497b03bd5297a04339))
+* Move share button ([#3103](https://github.com/cds-snc/platform-forms-client/issues/3103)) ([89c1909](https://github.com/cds-snc/platform-forms-client/commit/89c1909436e3804975363cb7c03051babda69d9d))
+* question selector dropdown fix ([#3126](https://github.com/cds-snc/platform-forms-client/issues/3126)) ([24411c1](https://github.com/cds-snc/platform-forms-client/commit/24411c14ca7963d51ad0d234f3f731e30f40d3ae))
+* Remove element type filter for rules ([#3123](https://github.com/cds-snc/platform-forms-client/issues/3123)) ([4969d54](https://github.com/cds-snc/platform-forms-client/commit/4969d54aadbed57ce3d6df1485fe3b46321b8b6b))
+* switch GitHub workflows to OIDC roles ([#3116](https://github.com/cds-snc/platform-forms-client/issues/3116)) ([ac27ff8](https://github.com/cds-snc/platform-forms-client/commit/ac27ff810c45578a2fc62a03a2de591a2ca9bffc))
+* update left navigation styling  ([#3120](https://github.com/cds-snc/platform-forms-client/issues/3120)) ([78835ee](https://github.com/cds-snc/platform-forms-client/commit/78835eee1dedfd0675d73d1175b5b54aa7ef6984))
+
 ## [3.11.0](https://github.com/cds-snc/platform-forms-client/compare/v3.10.1...v3.11.0) (2023-12-28)
 
 

@@ -107,7 +107,7 @@ describe("Test FormBuilder Add Elements", () => {
 
     cy.get('[id="item-1"]').should("have.attr", "placeholder", "Question");
 
-    cy.get('[data-testid="description-text"]').should("contain", "Only enter numbers");
+    cy.get('[data-testid="description-text"]').should("contain", "Enter a number");
     cy.get('[data-testid="number"]').should("contain", "0123456789");
 
     cy.visitPage("/form-builder/preview");
