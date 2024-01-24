@@ -80,7 +80,7 @@
           }
         ],
         "titleEn": "Preferred language for communication",
-        "titleFr": "Langue préférée de communication",
+        "titleFr": "Langue de communication préférée",
         "validation": {
           "required": false
         },

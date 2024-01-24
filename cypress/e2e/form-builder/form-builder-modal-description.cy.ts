@@ -22,11 +22,11 @@ describe("Form builder modal description", () => {
     cy.get('[data-testid="preset-filter"]').click();
     cy.get('[data-testid="number"]').click();
     cy.get('[data-testid="element-description-add-element"]').click();
-    cy.get(".description-text").should("be.visible").contains("Only enter numbers");
+    cy.get(".description-text").should("be.visible").contains("Enter a number");
     cy.get(".example-text").should("be.visible").contains("0123456789");
 
     cy.get('#element-2 [data-testid="more"]').click();
-    cy.get('[data-testid="description-input"]').contains("Only enter numbers");
+    cy.get('[data-testid="description-input"]').contains("Enter a number");
     cy.get("button").contains("Close").click();
 
     // rearrange the first element
@@ -38,7 +38,7 @@ describe("Form builder modal description", () => {
     cy.get("button").contains("Close").click();
 
     cy.get('#element-2 [data-testid="more"]').click();
-    cy.get('[data-testid="description-input"]').contains("Only enter numbers");
+    cy.get('[data-testid="description-input"]').contains("Enter a number");
     cy.get("button").contains("Close").click();
   });
 });
