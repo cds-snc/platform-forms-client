@@ -92,6 +92,16 @@
       },
       "forExample": "Format the date as: mm/dd/yyyy"
     },
+    "departments": {
+      "description": "A managed list of Government Departments.",
+      "title": "Departments",
+      "example": {
+        "select": "Select"
+      },
+      "selectOption": "Select a department",
+      "selectOne": "Select a department from the list.",
+      "choices": "Option 1,Option 2,Option 3,Option 4,Option 5,Option 6,Option 7,Option 8,Option 9,Option 10"
+    },
     "dropdown": {
       "description": "A long list of options for single selection.",
       "title": "Dropdown",

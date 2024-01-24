@@ -32,6 +32,7 @@ import {
   Contact,
   FirstMiddleLastName,
   FileInput,
+  Departments,
 } from "../app/edit/elements/element-dialog";
 
 import { useIsAdminUser } from "./useIsAdminUser";
@@ -191,7 +192,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       id: "departments",
       value: "Departments",
       icon: SelectMenuIcon,
-      description: DropDown,
+      description: Departments,
       className: "",
       group: groups.preset,
     },

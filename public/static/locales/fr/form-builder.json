@@ -92,6 +92,16 @@
       },
       "forExample": "Saisissez la date dans ce format : mm/jj/aaaa"
     },
+    "departments": {
+      "description": "[FR] A managed list of Government Departments.",
+      "title": "[FR] Departments",
+      "example": {
+        "select": "Sélectionner"
+      },
+      "selectOption": "[FR] Select a department",
+      "selectOne": "[FR] Select a department from the list.",
+      "choices": "Option 1,Option 2,Option 3,Option 4,Option 5,Option 6,Option 7,Option 8,Option 9,Option 10"
+    },
     "dropdown": {
       "description": "Une longue liste d’options parmi lesquelles un choix est fait.",
       "title": "Liste déroulante",
