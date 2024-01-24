@@ -34,22 +34,29 @@ export const ConditionalIndicatorOption = ({
         <span id={rulesTitleId}>{t("addConditionalRules.show")}</span>
       </div>
       <ul className="list-none pl-4" aria-labelledby={rulesTitleId}>
-        {questions.map(({ elementId }, index) => (
-          <li key={`${elementId}-${index}`} className="pl-4 py-1">
-            <Button
-              theme="link"
-              onClick={() => {
-                const id = Number(elementId);
-                if (!refs || !refs.current) {
-                  return;
-                }
-                refs.current[id].focus();
-              }}
-            >
-              {elements.find((element) => element.id === Number(elementId))?.properties?.titleEn}
-            </Button>
-          </li>
-        ))}
+        {questions.map(({ elementId }, index) => {
+          const element = elements.find((element) => element.id === Number(elementId));
+          let text = element?.properties?.titleEn;
+          if (element?.type === "richText") {
+            text = t("pageText", { ns: "form-builder" });
+          }
+          return (
+            <li key={`${elementId}-${index}`} className="py-1 pl-4">
+              <Button
+                theme="link"
+                onClick={() => {
+                  const id = Number(elementId);
+                  if (!refs || !refs.current) {
+                    return;
+                  }
+                  refs.current[id].focus();
+                }}
+              >
+                {text}
+              </Button>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
