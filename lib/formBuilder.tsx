@@ -50,7 +50,7 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
       ? getLocaleChoices(element.properties.choices, lang)
       : [];
 
-  // Retrieve managed data from static json file
+  // Retrieve managed data from static json file if specified
   if (element.properties.managedChoices) {
     const dataFile = element.properties.managedChoices as ManagedData;
     const data = getManagedData(dataFile);
