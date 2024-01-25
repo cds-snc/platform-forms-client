@@ -46,7 +46,7 @@ Adresse email du responsable: ${managerEmail} .<br/>
       language: language,
     });
 
-    if (result.status >= 400) {
+    if (result?.status >= 400) {
       throw new Error(
         `Freshdesk error: ${JSON.stringify(result)} - ${session.user.email} - ${description}`
       );

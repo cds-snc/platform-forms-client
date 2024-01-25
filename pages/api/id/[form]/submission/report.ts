@@ -278,7 +278,7 @@ async function notifySupport(
     language,
   });
 
-  if (result.status >= 400) {
+  if (result?.status >= 400) {
     throw new Error(
       `Freshdesk error: ${JSON.stringify(result)} - ${userEmailAddress} - ${description}`
     );
