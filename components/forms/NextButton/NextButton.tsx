@@ -12,12 +12,12 @@ export const NextButton = ({
   validateForm: Validate["validateForm"];
   fallBack?: () => JSX.Element;
 }) => {
-  const { currentGroup, hasNextAction, handleNextAction } = useGCFormsContext();
+  const { currentGroup, groups, hasNextAction, handleNextAction } = useGCFormsContext();
   const { t } = useTranslation("form-builder");
 
   const handleValidation = async () => {
     let errors = {};
-    validateForm && (errors = await validateForm());
+    validateForm && (errors = await validateForm(currentGroup, groups));
     if (Object.keys(errors).length === 0) {
       return true;
     }

@@ -14,6 +14,7 @@ import { isServer } from "./tsUtils";
 import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
 import formNameArraySchema from "@lib/middleware/schemas/submission-name-array.schema.json";
 import { matchRule, FormValues } from "@lib/formContext";
+import { inGroup, GroupsType } from "@lib/formContext";
 
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
@@ -203,7 +204,9 @@ export const validateOnSubmit = (
   props: {
     formRecord: PublicFormRecord;
     t: TFunction;
-  }
+  },
+  currentGroup?: string,
+  groups?: GroupsType
 ): Responses => {
   const errors: Responses = {};
 
@@ -219,6 +222,10 @@ export const validateOnSubmit = (
       if (!rules.some((rule) => matchRule(rule, props.formRecord, values as FormValues))) {
         continue;
       }
+    }
+
+    if (currentGroup && groups && !inGroup(currentGroup, formElement.id, groups)) {
+      continue;
     }
 
     if (formElement.properties.validation) {

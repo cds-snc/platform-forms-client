@@ -330,7 +330,8 @@ export const Form = withFormik<FormProps, Responses>({
 
   mapPropsToValues: (props) => getFormInitialValues(props.formRecord, props.language),
 
-  validate: (values, props) => validateOnSubmit(values, props),
+  validate: (values, props, groups, currentGroup) =>
+    validateOnSubmit(values, props, group, currentGroup),
 
   handleSubmit: async (values, formikBag) => {
     // Needed so the Loader is displayed
