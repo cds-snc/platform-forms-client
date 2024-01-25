@@ -242,12 +242,10 @@ describe("<ElementDialog />", () => {
 
     cy.mount(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
 
-    cy.get("body").tab();
+    cy.get('[data-testid="all-filter"]').click();
+    cy.get("body").tab().tab();
     cy.focused().should("have.attr", "data-testid", "listbox");
     cy.get('[data-testid="textField"]').should("have.attr", "aria-selected", "true");
-
-    // cy.typeInField("body", "{downarrow}");
-    // cy.get('[data-testid="textField"]').should("have.attr", "aria-selected", "true");
 
     cy.typeInField("body", "{downarrow}");
     cy.get('[data-testid="textArea"]').should("have.attr", "aria-selected", "true");
@@ -281,6 +279,9 @@ describe("<ElementDialog />", () => {
 
     cy.typeInField("body", "{downarrow}");
     cy.get('[data-testid="number"]').should("have.attr", "aria-selected", "true");
+
+    cy.typeInField("body", "{downarrow}");
+    cy.get('[data-testid="departments"]').should("have.attr", "aria-selected", "true");
 
     cy.typeInField("body", "{downarrow}");
     cy.get('[data-testid="richText"]').should("have.attr", "aria-selected", "true");
@@ -330,11 +331,11 @@ describe("<ElementDialog />", () => {
     cy.get('[data-testid="basic-filter').click();
     cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 6);
     cy.get('[data-testid="preset-filter').click();
-    cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 6);
+    cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 7);
     cy.get('[data-testid="other-filter').click();
     cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 2);
 
     cy.get('[data-testid="all-filter').click();
-    cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 14);
+    cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 15);
   });
 });
