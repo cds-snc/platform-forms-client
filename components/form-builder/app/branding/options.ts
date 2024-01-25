@@ -113,7 +113,7 @@ export const options = [
     urlFr: "https://www.canada.ca/fr/sante-canada.html",
     logoEn: "/img/branding/hc-canada-en.svg",
     logoFr: "/img/branding/hc-canada-fr.svg",
-    logoTitleEn: "Corporate logo Health Canada",
-    logoTitleFr: "Logo corporatif Santé Canada",
+    logoTitleEn: "Health Canada",
+    logoTitleFr: "Santé Canada",
   },
 ];
