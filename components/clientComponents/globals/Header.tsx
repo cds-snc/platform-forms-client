@@ -86,7 +86,7 @@ export const Header = ({ context = "default", user, className }: HeaderParams) =
               </li>
             )}
             {
-              <li className="mr-2 text-base">
+              <li className="mr-5 text-base">
                 <YourAccountDropdown isAuthenticated={status === "authenticated"} />
               </li>
             }
