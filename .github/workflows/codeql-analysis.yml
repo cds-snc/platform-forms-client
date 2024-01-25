@@ -9,6 +9,11 @@ on:
   schedule:
     - cron: "0 8 * * *"
 
+permissions:
+  actions: read
+  contents: read
+  security-events: write
+
 jobs:
   analyze:
     name: Check for Vulnerabilities
