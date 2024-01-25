@@ -100,8 +100,8 @@ ${description}<br/>
       language,
     });
 
-    if (result && result?.status >= 400) {
-      throw new Error(`Freshdesk error: ${result.status}`);
+    if (result.status >= 400) {
+      throw new Error(`Freshdesk error: ${JSON.stringify(result)} - ${email} - ${emailBody}`);
     }
 
     return res.status(200).json(result);
