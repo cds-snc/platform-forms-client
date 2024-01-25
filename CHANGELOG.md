@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.12.1](https://github.com/cds-snc/platform-forms-client/compare/v3.12.0...v3.12.1) (2024-01-25)
+
+
+### Bug Fixes
+
+* update page text rule indicator ([#3140](https://github.com/cds-snc/platform-forms-client/issues/3140)) ([31b8198](https://github.com/cds-snc/platform-forms-client/commit/31b8198ac9ec081becde21efc44285fcfe848515))
+
+
+### Miscellaneous Chores
+
+* fix filename save draft ([#3143](https://github.com/cds-snc/platform-forms-client/issues/3143)) ([66c35a5](https://github.com/cds-snc/platform-forms-client/commit/66c35a58183facfd92b3221d7179bf28b164e459))
+* fix your account dropdown margin ([#3141](https://github.com/cds-snc/platform-forms-client/issues/3141)) ([6954009](https://github.com/cds-snc/platform-forms-client/commit/695400993e066120fc9eb7471eeadc59adc01036))
+* update support error message logs ([#3146](https://github.com/cds-snc/platform-forms-client/issues/3146)) ([5659d93](https://github.com/cds-snc/platform-forms-client/commit/5659d934988915e65c0f87b2bbabe3663ee23d81))
+
 ## [3.12.0](https://github.com/cds-snc/platform-forms-client/compare/v3.11.0...v3.12.0) (2024-01-23)
 
 
