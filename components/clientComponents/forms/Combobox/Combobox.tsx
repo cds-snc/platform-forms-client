@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import React from "react";
 import { InputFieldProps } from "@lib/types";
@@ -10,45 +9,43 @@ import { useCombobox } from "downshift";
 import { cn } from "@lib/utils";
 
 interface ComboboxProps extends InputFieldProps {
-  children?: React.ReactElement;
   choices?: string[];
 }
 
 export const Combobox = (props: ComboboxProps): React.ReactElement => {
-  const { children, id, name, className, choices = [], required, ariaDescribedBy } = props;
+  const { id, name, className, choices = [], required, ariaDescribedBy } = props;
   const classes = classnames("gc-combobox", className);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [field, meta] = useField(props);
 
   const [items, setItems] = React.useState(choices);
-  const {
-    isOpen,
-    getToggleButtonProps,
-    getLabelProps,
-    getMenuProps,
-    getInputProps,
-    highlightedIndex,
-    getItemProps,
-    selectedItem,
-  } = useCombobox({
-    onInputValueChange({ inputValue }) {
-      setItems(
-        choices.filter((choice) => {
-          return inputValue ? choice.toLowerCase().includes(inputValue.toLowerCase()) : true;
-        })
-      );
-    },
-    items,
-    itemToString(item) {
-      return item ? item : "";
-    },
-  });
+  const { isOpen, getMenuProps, getInputProps, highlightedIndex, getItemProps, selectedItem } =
+    useCombobox({
+      onInputValueChange({ inputValue }) {
+        setItems(
+          choices.filter((choice) => {
+            return inputValue ? choice.toLowerCase().includes(inputValue.toLowerCase()) : true;
+          })
+        );
+      },
+      items,
+      itemToString(item) {
+        return item ? item : "";
+      },
+    });
 
   return (
     <>
-      <div className="gc-combobox">
+      <div className={classes}>
         {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
 
-        <input className="w-full p-1.5" {...getInputProps()} />
+        <input
+          {...getInputProps()}
+          aria-describedby={ariaDescribedBy}
+          id={id}
+          required={required}
+          {...(name && { name })}
+        />
 
         <ul className={`${!(isOpen && items.length) && "hidden"}`} {...getMenuProps()}>
           {isOpen &&
