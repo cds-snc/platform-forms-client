@@ -46,7 +46,7 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
       <div className="gc-combobox">
         {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
 
-        <input placeholder="" className="w-full p-1.5" {...getInputProps()} />
+        <input className="w-full p-1.5" {...getInputProps()} />
 
         <ul className={`${!(isOpen && items.length) && "hidden"}`} {...getMenuProps()}>
           {isOpen &&
