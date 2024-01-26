@@ -31,7 +31,8 @@ module.exports = {
         "radio-label-text",
         "checkbox-label-text",
         "example-text",
-        "section"
+        "section",
+        "maple-leaf-loader",
       ],
     },
   },

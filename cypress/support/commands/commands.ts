@@ -128,18 +128,37 @@ Cypress.Commands.add("login", (options?: { admin?: boolean; acceptableUse?: bool
       }).then(() => {
         // Ensure cookie is created
         cy.waitUntil(() =>
-          cy.getCookie("authjs.session-token").then((cookie) => Boolean(cookie && cookie.value))
+          cy.getCookie("authjs.session-token").then((cookie) => {
+            Boolean(cookie && cookie.value);
+          })
         );
+
+        let session;
         if (acceptableUse) {
           cy.request({
-            method: "POST",
-            url: "/api/acceptableuse",
-            headers: {
-              "x-csrf-token": csrfToken,
-            },
-          }).then((response) => {
-            expect(response.status).to.eq(200);
-          });
+            method: "GET",
+            url: "/api/auth/session",
+          })
+            .then((response) => {
+              session = response.body;
+              return session;
+            })
+            .then((session) => {
+              cy.request({
+                method: "POST",
+                url: "/api/auth/session",
+                headers: {
+                  "x-csrf-token": csrfToken,
+                },
+                body: {
+                  csrfToken,
+                  data: { ...session, user: { ...session.user, acceptableUse: true } },
+                },
+              }).then((response) => {
+                expect(response.status).to.eq(200);
+                cy.visit("/en/forms");
+              });
+            });
         }
       });
     });

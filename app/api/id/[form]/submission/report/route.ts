@@ -169,8 +169,10 @@ async function notifySupport(
     language,
   });
 
-  if (result && result?.status >= 400) {
-    throw new Error(`Freshdesk error: ${result.status}`);
+  if (result?.status >= 400) {
+    throw new Error(
+      `Freshdesk error: ${JSON.stringify(result)} - ${userEmailAddress} - ${description}`
+    );
   }
 }
 

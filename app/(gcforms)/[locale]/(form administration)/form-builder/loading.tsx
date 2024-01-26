@@ -1,5 +1,9 @@
-import { Loader } from "@clientComponents/globals/Loader";
+import { Loader } from "components/clientComponents/globals/Loader";
 
 export default function Loading() {
-  return <Loader />;
+  return (
+    <div className="form-builder flex min-h-screen items-center justify-center">
+      <Loader />
+    </div>
+  );
 }
