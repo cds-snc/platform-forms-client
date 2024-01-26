@@ -40,7 +40,7 @@ describe("Accessibility (A11Y) Check", () => {
       (page) => `${page.title} Test`,
       ({ path }) => {
         // There should not be a user logged in
-        cy.getCookie("next-auth.session-token").should("not.exist");
+        cy.getCookie("authjs.session-token").should("not.exist");
         cy.visitPage(path);
         cy.injectAxe();
         // Ensure page has fully loaded
