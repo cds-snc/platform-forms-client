@@ -260,6 +260,9 @@ describe("<ElementDialog />", () => {
     cy.get('[data-testid="dropdown"]').should("have.attr", "aria-selected", "true");
 
     cy.typeInField("body", "{downarrow}");
+    cy.get('[data-testid="combobox"]').should("have.attr", "aria-selected", "true");
+
+    cy.typeInField("body", "{downarrow}");
     cy.get('[data-testid="attestation"]').should("have.attr", "aria-selected", "true");
 
     cy.typeInField("body", "{downarrow}");
@@ -275,13 +278,13 @@ describe("<ElementDialog />", () => {
     cy.get('[data-testid="address"]').should("have.attr", "aria-selected", "true");
 
     cy.typeInField("body", "{downarrow}");
+    cy.get('[data-testid="departments"]').should("have.attr", "aria-selected", "true");
+
+    cy.typeInField("body", "{downarrow}");
     cy.get('[data-testid="date"]').should("have.attr", "aria-selected", "true");
 
     cy.typeInField("body", "{downarrow}");
     cy.get('[data-testid="number"]').should("have.attr", "aria-selected", "true");
-
-    cy.typeInField("body", "{downarrow}");
-    cy.get('[data-testid="departments"]').should("have.attr", "aria-selected", "true");
 
     cy.typeInField("body", "{downarrow}");
     cy.get('[data-testid="richText"]').should("have.attr", "aria-selected", "true");
@@ -329,13 +332,13 @@ describe("<ElementDialog />", () => {
     cy.typeInField("body", "{rightarrow}");
     cy.focused().should("have.attr", "data-testid", "basic-filter");
     cy.get('[data-testid="basic-filter').click();
-    cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 6);
+    cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 7);
     cy.get('[data-testid="preset-filter').click();
     cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 7);
     cy.get('[data-testid="other-filter').click();
     cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 2);
 
     cy.get('[data-testid="all-filter').click();
-    cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 15);
+    cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 16);
   });
 });
