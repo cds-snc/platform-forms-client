@@ -30,7 +30,9 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
   } = useCombobox({
     onInputValueChange({ inputValue }) {
       setItems(
-        choices.filter((choice) => (inputValue ? choice.includes(inputValue.toLowerCase()) : true))
+        choices.filter((choice) => {
+          return inputValue ? choice.toLowerCase().includes(inputValue.toLowerCase()) : true;
+        })
       );
     },
     items,
@@ -44,7 +46,7 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
       <div className="gc-combobox">
         {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
 
-        <input placeholder="Best book ever" className="w-full p-1.5" {...getInputProps()} />
+        <input placeholder="" className="w-full p-1.5" {...getInputProps()} />
 
         <ul className={`${!(isOpen && items.length) && "hidden"}`} {...getMenuProps()}>
           {isOpen &&

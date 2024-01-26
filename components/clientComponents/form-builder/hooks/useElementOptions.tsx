@@ -39,6 +39,7 @@ import { useIsAdminUser } from "./useIsAdminUser";
 
 import { ElementOptionsFilter, ElementOption } from "../types";
 import { useFlag } from "@lib/hooks";
+import { Combobox } from "../app/edit/elements/element-dialog/descriptions/Combobox";
 
 export enum Groups {
   BASIC = "basic",
@@ -130,6 +131,14 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       value: t("dropdown"),
       icon: SelectMenuIcon,
       description: DropDown,
+      className: "",
+      group: groups.basic,
+    },
+    {
+      id: "combobox",
+      value: t("combobox"),
+      icon: SelectMenuIcon,
+      description: Combobox,
       className: "separator",
       group: groups.basic,
     },
@@ -154,7 +163,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       value: t("addElementDialog.firstMiddleLastName.label"),
       icon: NameIcon,
       description: FirstMiddleLastName,
-      className: "separator",
+      className: "",
       group: groups.preset,
     },
     {
@@ -169,7 +178,15 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       value: t("addElementDialog.address.label"),
       icon: AddressIcon,
       description: Address,
-      className: "separator",
+      className: "",
+      group: groups.preset,
+    },
+    {
+      id: "departments",
+      value: "Departments",
+      icon: SelectMenuIcon,
+      description: Departments,
+      className: "",
       group: groups.preset,
     },
     {
@@ -186,14 +203,6 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: NumericFieldIcon,
       description: Number,
       className: "separator",
-      group: groups.preset,
-    },
-    {
-      id: "departments",
-      value: "Departments",
-      icon: SelectMenuIcon,
-      description: Departments,
-      className: "",
       group: groups.preset,
     },
     ...(experimentalBlocks ? [{ ...(repeatingSetsOption as ElementOption) }] : []),

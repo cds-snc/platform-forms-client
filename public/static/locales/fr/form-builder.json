@@ -26,7 +26,8 @@
       "contact": "Ajouter des coordonnées",
       "dynamicRow": "Ajouter un ensemble de réponses",
       "richText": "Ajouter du texte de page",
-      "departments": "[FR] Add departments dropdown"
+      "departments": "[FR] Add departments dropdown",
+      "combobox": "[FR] Add a searchable list"
     },
     "address": {
       "whatIsYourAddress": "Quelle est votre adresse?",
@@ -62,6 +63,16 @@
       "selectAllThatApply": "Sélectionnez toutes les options pertinentes."
     },
     "checkboxItem": "Option",
+    "combobox": {
+      "description": "[FR] A searchable list of options for single selection.",
+      "title": "[FR] Searchable list",
+      "example": {
+        "select": "Selectionnez"
+      },
+      "selectOption": "Question",
+      "selectOne": "[FR] Select which option applies.",
+      "choices": "Option 1,Option 2,Option 3,Option 4,Option 5,Option 6,Option 7,Option 8,Option 9,Option 10"
+    },
     "condition1": "Condition 1",
     "condition2": "Condition 2",
     "condition3": "Condition 3",
@@ -237,6 +248,7 @@
   "checkboxes": "Cases à cocher",
   "close": "Fermer",
   "closeModal": "Fermer fenêtre modale",
+  "combobox": "[FR] Searchable list",
   "completed": "Complétée",
   "confirmationDescriptionItem1": "des précisions sur la suite de choses.",
   "confirmationDescriptionItem2": "les coordonnées du service.",

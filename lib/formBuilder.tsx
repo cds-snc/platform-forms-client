@@ -12,6 +12,7 @@ import {
   TextArea,
   TextInput,
   ConditionalWrapper,
+  Combobox,
 } from "@clientComponents/forms";
 import {
   FormElement,
@@ -244,6 +245,19 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
         />
       );
     }
+    case FormElementTypes.combobox:
+      return (
+        <div className="focus-group">
+          {labelComponent}
+          {description && <Description id={`${id}`}>{description}</Description>}
+          <Combobox
+            id={`${id}`}
+            name={`${id}`}
+            ariaDescribedBy={description ? `desc-${id}` : undefined}
+            choices={choices}
+          />
+        </div>
+      );
     default:
       return <></>;
   }
@@ -276,6 +290,7 @@ const _getElementInitialValue = (element: FormElement, language: string): Respon
     // Radio and dropdown resolve to string values
     case FormElementTypes.radio:
     case FormElementTypes.dropdown:
+    case FormElementTypes.combobox:
     case FormElementTypes.textField:
     case FormElementTypes.textArea:
       return "";

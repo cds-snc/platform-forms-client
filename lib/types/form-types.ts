@@ -78,6 +78,7 @@ export enum FormElementTypes {
   firstMiddleLastName = "firstMiddleLastName",
   departments = "departments",
   contact = "contact",
+  combobox = "combobox",
 }
 // used to define attributes for a form element or field
 export interface FormElement {

@@ -26,7 +26,8 @@
       "contact": "Add contact",
       "dynamicRow": "Add repeating set",
       "richText": "Add page text",
-      "departments": "Add departments dropdown"
+      "departments": "Add departments dropdown",
+      "combobox": "Add a searchable list"
     },
     "address": {
       "whatIsYourAddress": "What is your address?",
@@ -62,6 +63,16 @@
       "selectAllThatApply": "Select all that apply."
     },
     "checkboxItem": "Option",
+    "combobox": {
+      "description": "A searchable list of options for single selection.",
+      "title": "Searchable list",
+      "example": {
+        "select": "Select"
+      },
+      "selectOption": "Question",
+      "selectOne": "Select which option applies.",
+      "choices": "Option 1,Option 2,Option 3,Option 4,Option 5,Option 6,Option 7,Option 8,Option 9,Option 10"
+    },
     "condition1": "Condition 1",
     "condition2": "Condition 2",
     "condition3": "Condition 3",
@@ -237,6 +248,7 @@
   "checkboxes": "Checkboxes",
   "close": "Close",
   "closeModal": "Close modal",
+  "combobox": "Searchable list",
   "completed": "Completed",
   "confirmationDescriptionItem1": "details of what happens next and when.",
   "confirmationDescriptionItem2": "contact details for the service.",

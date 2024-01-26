@@ -94,7 +94,7 @@
     }
   }
   ul {
-    @apply absolute z-10 mt-1 max-h-80 w-72 overflow-scroll p-0;
+    @apply absolute z-10 mt-1 max-h-80 min-w-80 overflow-scroll p-0 bg-white;
     li {
       @apply flex flex-col;
     }

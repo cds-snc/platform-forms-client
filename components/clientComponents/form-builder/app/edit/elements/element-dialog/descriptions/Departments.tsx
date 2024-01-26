@@ -2,7 +2,7 @@
 import React from "react";
 import { useTranslation } from "@i18n/client";
 import { ExampleWrapper } from "./ExampleWrapper";
-import { Description, Dropdown, Label } from "@clientComponents/forms";
+import { Combobox, Description, Label } from "@clientComponents/forms";
 
 export const Departments = () => {
   const { t } = useTranslation("form-builder");
@@ -17,7 +17,7 @@ export const Departments = () => {
         </Label>
         <Description>{t("addElementDialog.departments.selectOne")}</Description>
         <div className="overflow-hidden">
-          <Dropdown
+          <Combobox
             name="name"
             id="dropdown"
             choices={t("addElementDialog.departments.choices").split(",")}

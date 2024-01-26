@@ -1,6 +1,6 @@
 [
   {
-    "type": "dropdown",
+    "type": "combobox",
     "properties": {
       "subElements": [],
       "managedChoices": "departments",
