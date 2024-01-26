@@ -297,7 +297,7 @@
   /* start page laoding animation */
   @keyframes maple-leaf-dash {
     from {
-      stroke-dashoffset: 166.71;
+      stroke-dashoffset: 400;
     }
     to {
       stroke-dashoffset: 0;
@@ -305,9 +305,9 @@
   }
 
   .maple-leaf-loader {
-    stroke-dasharray: 166.71;
-    stroke-dashoffset: 166.71;
-    animation: maple-leaf-dash 1s linear alternate infinite;
+    stroke-dasharray: 400;
+    stroke-dashoffset: 400;
+    animation: maple-leaf-dash .8s linear alternate infinite;
   }
   /* end page laoding animation */
 
