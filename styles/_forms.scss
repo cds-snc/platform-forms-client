@@ -87,10 +87,16 @@
 .gc-combobox {
   input {
     background-image: url("../public/img/arrow-down.svg");
-    @apply relative md:w-full w-1/2 md:text-sm text-base text-gray-700 block border-2 border-black-form py-3 pl-5 pr-10 mt-2 mb-14 appearance-none bg-no-repeat bg-center-right-15px;
+    @apply relative md:w-full w-1/2 md:text-sm text-base text-gray-700 block border-2 border-black-form py-3 pl-5 pr-10 mt-2 appearance-none bg-no-repeat bg-center-right-15px;
 
     &:focus {
-      @apply outline-none border-blue-focus shadow-input;
+      @apply outline-none border-blue-focus;
+    }
+  }
+  ul {
+    @apply absolute z-10 mt-1 max-h-80 w-72 overflow-scroll p-0;
+    li {
+      @apply flex flex-col;
     }
   }
 }
