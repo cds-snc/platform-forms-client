@@ -9,8 +9,8 @@
       "validation": {
         "required": false
       },
-      "descriptionEn": "",
-      "descriptionFr": "",
+      "descriptionEn": "Start typing to filter the list",
+      "descriptionFr": "[FR] Start typing to filter the list",
       "placeholderEn": "",
       "placeholderFr": ""
     }

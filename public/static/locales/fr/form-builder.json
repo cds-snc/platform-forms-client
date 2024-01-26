@@ -296,7 +296,8 @@
     "date": "Saisissez une date dans ce format : mm/jj/aaaa",
     "email": "Par exemple : nom@exemple.com",
     "number": "Saisissez un chiffre",
-    "phone": "Par exemple : 111-222-3333"
+    "phone": "Par exemple : 111-222-3333",
+    "combobox": "Start typing to filter the list"
   },
   "description": "Description ",
   "descriptionDescription": "La description apparaît sous l'étiquette, et avant le champ. Elle est utilisée pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de mise en forme.",

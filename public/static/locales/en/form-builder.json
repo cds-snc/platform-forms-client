@@ -297,7 +297,8 @@
     "date": "Format the date as: mm/dd/yyyy",
     "email": "For example: name@example.com",
     "number": "Enter a number",
-    "phone": "For example: 111-222-3333"
+    "phone": "For example: 111-222-3333",
+    "combobox": "Start typing to filter the list"
   },
   "description": "Description",
   "descriptionDescription": "The description appears below the label and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements.",
