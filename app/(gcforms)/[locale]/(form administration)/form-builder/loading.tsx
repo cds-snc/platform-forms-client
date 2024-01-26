@@ -1,5 +1,9 @@
 import { Loader } from "@clientComponents/globals/Loader";
 
 export default function Loading() {
-  return <Loader />;
+  return (
+    <div className="flex min-h-screen items-center justify-center">
+      <Loader />
+    </div>
+  );
 }
