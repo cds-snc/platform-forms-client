@@ -199,7 +199,8 @@
             "fileInput",
             "dynamicRow",
             "richText",
-            "attestation"
+            "attestation",
+            "combobox"
           ]
         },
         "properties": {
