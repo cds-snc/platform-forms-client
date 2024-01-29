@@ -5,7 +5,6 @@ import classnames from "classnames";
 import { useField } from "formik";
 import { ErrorMessage } from "@clientComponents/forms";
 import { useCombobox } from "downshift";
-
 import { cn } from "@lib/utils";
 
 interface ComboboxProps extends InputFieldProps {
@@ -15,8 +14,10 @@ interface ComboboxProps extends InputFieldProps {
 export const Combobox = (props: ComboboxProps): React.ReactElement => {
   const { id, name, className, choices = [], required, ariaDescribedBy } = props;
   const classes = classnames("gc-combobox", className);
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [field, meta] = useField(props);
+  const [field, meta, helpers] = useField(props);
+  const { setValue } = helpers;
 
   const [items, setItems] = React.useState(choices);
   const { isOpen, getMenuProps, getInputProps, highlightedIndex, getItemProps, selectedItem } =
@@ -29,8 +30,8 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
         );
       },
       items,
-      itemToString(item) {
-        return item ? item : "";
+      onSelectedItemChange({ selectedItem }) {
+        setValue(selectedItem);
       },
     });
 
