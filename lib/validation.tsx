@@ -223,6 +223,7 @@ export const validateOnSubmit = (
       groups[currentGroup] &&
       !inGroup(currentGroup, formElement.id, groups)
     ) {
+      // skip validation if the element is not in the current group
       continue;
     }
 
