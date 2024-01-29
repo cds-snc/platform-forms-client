@@ -14,7 +14,7 @@ describe("Element dialog", () => {
     cleanup();
   });
 
-  it.skip("renders element dialog", async () => {
+  it("renders element dialog", async () => {
     const user = userEvent.setup();
     const mockAddCallback = jest.fn((e) => e);
     const mockCloseCallback = jest.fn((e) => e);
