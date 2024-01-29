@@ -69,7 +69,7 @@
       "select": "Sélectionner",
       "selectAll": "Sélectionner tout",
       "deselectAll": "Désélectionner tout",
-      "number": "Soumission",
+      "number": "Identifiant de soumission",
       "status": "État",
       "downloadResponse": "Période de téléchargement",
       "lastDownloadedBy": "Téléchargée par",
