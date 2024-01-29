@@ -176,19 +176,3 @@ export const ManageForms = ({
     </>
   );
 };
-
-// ManageForms.getLayout = (page: ReactElement) => {
-//   return (
-//     <TemplateStoreProvider
-//       {...{ ...(page.props.initialForm && page.props.initialForm), locale: page.props.locale }}
-//     >
-//       <TwoColumnLayout
-//         user={page.props.user}
-//         context="admin"
-//         leftColumnContent={<BackToAccounts id={page.props.formUser.id} />}
-//       >
-//         {page}
-//       </TwoColumnLayout>
-//     </TemplateStoreProvider>
-//   );
-// };

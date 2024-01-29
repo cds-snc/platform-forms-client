@@ -3,7 +3,7 @@ import { generateVerificationCode } from "./2fa";
 import { logMessage } from "@lib/logger";
 import { sanitizeEmailAddressForCognito } from "./cognito";
 import { getNotifyInstance } from "@lib/integration/notifyConnector";
-import { userHasSecurityQuestions } from "@lib/auth";
+import { userHasSecurityQuestions } from "@lib/auth/securityQuestions";
 
 export class PasswordResetInvalidLink extends Error {}
 export class PasswordResetExpiredLink extends Error {}
