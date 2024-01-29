@@ -13,7 +13,8 @@ import { ErrorListItem } from "@components/forms";
 import { isServer } from "./tsUtils";
 import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
 import formNameArraySchema from "@lib/middleware/schemas/submission-name-array.schema.json";
-import { matchRule, FormValues } from "@lib/formContext";
+import { matchRule, FormValues, GroupsType } from "@lib/formContext";
+import { inGroup } from "@lib/formContext";
 
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
@@ -212,6 +213,13 @@ export const validateOnSubmit = (
       (element) => element.id == parseInt(item)
     );
     if (!formElement) return errors;
+
+    const currentGroup = values.currentGroup as string;
+    const groups = props.formRecord.form.groups as GroupsType;
+
+    if (groups && currentGroup !== "" && !inGroup(currentGroup, formElement.id, groups)) {
+      continue;
+    }
 
     if (formElement.properties.conditionalRules) {
       // check if a conditional rule is met
