@@ -21,9 +21,9 @@ export const Pagination = ({
 
   // Need statusQuery when building up the prev/next links
   const searchParams = useSearchParams();
-  const params = useParams();
+  const { slug } = useParams();
   // 1st dynamic param is formId, 2nd is statusQuery
-  const statusQuery = params[1] || "new";
+  const statusQuery = slug[1] || "new";
   // Extract responseId from lastEvaluatedKey object
   const lastEvaluatedResponseId = lastEvaluatedKey
     ? lastEvaluatedKey.NAME_OR_CONF.split("#")[1]
