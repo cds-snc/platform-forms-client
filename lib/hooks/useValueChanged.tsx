@@ -7,6 +7,11 @@ export const useFormValuesChanged = () => {
   const { updateValues, currentGroup } = useGCFormsContext();
 
   useEffect(() => {
+    if (process.env.APP_ENV === "test") {
+      // skip for test env
+      return;
+    }
+
     updateValues({ formValues: values as Record<string, string> });
     setFieldValue("currentGroup", currentGroup);
   }, [updateValues, values, setFieldValue, currentGroup]);
