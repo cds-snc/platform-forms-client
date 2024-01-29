@@ -1,8 +1,8 @@
 ---
-name: 'Bug or enhancement'
-about: Use this template to file a critical bug or describe an opportunity for enhancement
+name: 'Bug'
+about: Use this template to file a bug
 title: ''
-labels: ''
+labels: 'bug'
 assignees: ''
 
 ---
@@ -25,10 +25,10 @@ A clear and concise description of what the problem is.
 - **Output**: (form ID, link, JSON form file...)
 
 ## Expected behaviour
-A clear and concise description of what you expected to happen.
+A clear and concise description of what's expected instead.
 
 ## Screenshots or videos
-If applicable, add visual proof to help explain the problem.
+Visual proof to help explain the problem.
 
 ## Additional context
-Add any other context about the problem here. 
+Any other information about the problem here. 
