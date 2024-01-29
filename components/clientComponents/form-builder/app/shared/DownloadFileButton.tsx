@@ -7,7 +7,7 @@ import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "../../store";
 import { useDialogRef, Dialog } from ".";
 import { InfoIcon } from "../../../icons";
-import { getDate, slugify } from "@lib/clientHelpers";
+import { getDate, slugify } from "@lib/client/clientHelpers";
 
 const FormDownloadDialog = ({ handleClose }: { handleClose: () => void }) => {
   const { t } = useTranslation("form-builder");

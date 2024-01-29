@@ -2,11 +2,11 @@ import React from "react";
 import { cleanup, render, screen, waitFor, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Form } from "@clientComponents/forms";
-import { submitToAPI } from "@lib/clientHelpers";
+import { submitToAPI } from "@lib/client/clientHelpers";
 import { useFlag } from "@lib/hooks/useFlag";
 
-jest.mock("@lib/clientHelpers", () => {
-  const originalModule = jest.requireActual("@lib/clientHelpers");
+jest.mock("@lib/client/clientHelpers", () => {
+  const originalModule = jest.requireActual("@lib/client/clientHelpers");
   return {
     __esModule: true,
     ...originalModule,
@@ -32,8 +32,6 @@ jest.mock("@lib/hooks", () => {
         case "formTimer":
           return { isLoading: false, status: true };
         case "reCaptcha":
-          return { isLoading: false, status: false };
-        case "submitToReliabilityQueue":
           return { isLoading: false, status: false };
         default:
           return useFlag(flag);

@@ -19,7 +19,7 @@ import { useRouter, useParams, usePathname } from "next/navigation";
 import Image from "next/image";
 import { ConfirmDialog } from "@clientComponents/form-builder/app/responses/Dialogs/ConfirmDialog";
 import { Alert } from "@clientComponents/globals";
-import { isStatus } from "@lib/clientHelpers";
+import { isStatus } from "@lib/client/clientHelpers";
 import { TabNavLink } from "@clientComponents/form-builder/app/navigation/TabNavLink";
 
 export interface ResponsesProps {

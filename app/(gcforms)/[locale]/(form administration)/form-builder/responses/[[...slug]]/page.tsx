@@ -10,7 +10,7 @@ import { FormBuilderInitializer } from "@clientComponents/globals/layouts/FormBu
 import { getAppSetting } from "@lib/appSettings";
 import { isResponseId } from "@lib/validation";
 import { ClientSide, ResponsesProps } from "./clientSide";
-import { ucfirst } from "@lib/clientHelpers";
+import { ucfirst } from "@lib/client/clientHelpers";
 
 export async function generateMetadata({
   params: { locale },

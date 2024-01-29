@@ -1,7 +1,7 @@
 "use client";
 import { useRef, useState } from "react";
 import axios from "axios";
-import { getCsrfToken } from "@lib/clientHelpers";
+import { getCsrfToken } from "@lib/client/csrfToken";
 import { useRouter } from "next/navigation";
 import { logMessage } from "@lib/logger";
 import { useAuthErrors } from "@lib/hooks/auth/useAuthErrors";

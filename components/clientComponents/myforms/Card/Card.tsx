@@ -8,7 +8,7 @@ import {
   MenuDropdownItemI,
   MenuDropdownItemCallback,
 } from "@clientComponents/myforms/MenuDropdown/MenuDropdown";
-import { getDate, slugify } from "@lib/clientHelpers";
+import { getDate, slugify } from "@lib/client/clientHelpers";
 import { MessageIcon, EnvelopeIcon, PreviewIcon, DesignIcon } from "@clientComponents/icons";
 import Markdown from "markdown-to-jsx";
 

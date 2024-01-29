@@ -4,7 +4,7 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { createMocks, RequestMethod } from "node-mocks-http";
 import support from "old_pages/api/request/support";
-import { getCsrfToken } from "@lib/clientHelpers";
+import { getCsrfToken } from "@lib/client/csrfToken";
 import { getServerSession } from "next-auth/next";
 import { mocked } from "jest-mock";
 import { Session } from "next-auth";

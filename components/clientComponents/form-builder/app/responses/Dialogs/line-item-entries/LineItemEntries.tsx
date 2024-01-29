@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { LineItems } from "./LineItems";
-import { scrollToBottom } from "@lib/clientHelpers";
+import { scrollToBottom } from "@lib/client/clientHelpers";
 import { useTranslation } from "@i18n/client";
 import { DialogStates } from "../DialogStates";
 

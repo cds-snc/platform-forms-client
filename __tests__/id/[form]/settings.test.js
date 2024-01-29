@@ -20,8 +20,12 @@ import { useRouter } from "next/navigation";
 import validFormTemplate from "../../../__fixtures__/validFormTemplate.json";
 
 jest.mock("axios");
-jest.mock("next/router", () => ({
-  useRouter: jest.fn(),
+jest.mock("next/navigation", () => ({
+  useRouter() {
+    return {
+      prefetch: () => null,
+    };
+  },
 }));
 
 // Mock your i18n

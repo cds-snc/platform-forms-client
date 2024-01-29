@@ -1,9 +1,9 @@
 "use client";
-import { formatDate } from "@lib/clientHelpers";
+import { formatDate } from "@lib/client/clientHelpers";
 import React from "react";
 import { useTranslation } from "@i18n/client";
 import { ExclamationText } from "../shared";
-import { getDaysPassed } from "@lib/clientHelpers";
+import { getDaysPassed } from "@lib/client/clientHelpers";
 import { VaultStatus } from "@lib/types";
 
 export const DownloadResponseStatus = ({

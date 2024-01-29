@@ -83,9 +83,9 @@ const createResponse = (formTemplate: any): SubmissionRequestBody => {
 
 const main = async () => {
   try {
-    const formID = await getValue("Form ID to generate responses for:");
-    const numberOfResponses = parseInt(await getValue("Number of responses to generate:"), 10);
-    const appEnv = await getValue("App Environment:  [0] Local || [1] Staging").then((ans) =>
+    const formID = await getValue("Form ID to generate responses for: ");
+    const numberOfResponses = parseInt(await getValue("Number of responses to generate: "), 10);
+    const appEnv = await getValue("App Environment:  [0] Local || [1] Staging: ").then((ans) =>
       ans === "1" ? "staging" : "local"
     );
 
@@ -96,16 +96,12 @@ const main = async () => {
       .get(
         `${
           appEnv === "staging" ? "https://forms-staging.cdssandbox.xyz" : "http://localhost:3000"
-        }/id/${formID}`
+        }/api/templates/${formID}`
       )
       .then(({ data }) => {
-        const nextData = load(data)("#__NEXT_DATA__").html();
-        if (!nextData) {
-          throw new Error("Could not retrieve data from web page");
-        }
-        return JSON.parse(nextData).props?.pageProps?.formRecord?.form;
+        return data.form;
       });
-
+    console.log(formTemplate);
     if (!formTemplate) {
       throw new Error("Could not retrieve form template");
     }

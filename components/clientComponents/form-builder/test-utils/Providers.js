@@ -1,15 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { render, act } from "@testing-library/react";
-import { SessionProvider } from "next-auth/react";
 import { TemplateStoreProvider } from "../store";
 
 export const Providers = ({ children, form }) => (
-  <SessionProvider session={null}>
-    <TemplateStoreProvider form={form} submission={undefined} isPublished={undefined}>
-      {children}
-    </TemplateStoreProvider>
-  </SessionProvider>
+  <TemplateStoreProvider form={form} submission={undefined} isPublished={undefined}>
+    {children}
+  </TemplateStoreProvider>
 );
 
 Providers.propTypes = {

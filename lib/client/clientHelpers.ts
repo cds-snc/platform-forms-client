@@ -11,12 +11,7 @@ import {
   VaultStatus,
 } from "@lib/types";
 import { Submission } from "@lib/types/submission-types";
-
-export async function getCsrfToken() {
-  return axios.get("/api/auth/csrf").then((response) => {
-    return response.data.csrfToken;
-  });
-}
+import { getCsrfToken } from "./csrfToken";
 
 /**
  * Put any Client related global helper/utils here. The rest of /lib is for anything server related.

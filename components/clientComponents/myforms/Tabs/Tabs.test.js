@@ -4,7 +4,13 @@ import { TabsList } from "@clientComponents/myforms/Tabs/TabsList";
 import { Tab } from "@clientComponents/myforms/Tabs/Tab";
 import { TabPanel } from "@clientComponents/myforms/Tabs/TabPanel";
 
-jest.mock("next/router", () => require("next-router-mock"));
+jest.mock("next/navigation", () => ({
+  useRouter() {
+    return {
+      prefetch: () => null,
+    };
+  },
+}));
 
 const tabsData = {
   id: "title-tabs",

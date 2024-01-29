@@ -7,7 +7,7 @@ import { logMessage } from "@lib/logger";
 import axios from "axios";
 import { DownloadFormat } from "@lib/responseDownloadFormats/types";
 import JSZip from "jszip";
-import { getDate, slugify } from "@lib/clientHelpers";
+import { getDate, slugify } from "@lib/client/clientHelpers";
 import { SpinnerIcon } from "@clientComponents/icons/SpinnerIcon";
 
 export const DownloadDialog = ({

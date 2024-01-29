@@ -4,7 +4,7 @@ import { useTranslation } from "@i18n/client";
 import { RichText } from "../forms/RichText/RichText";
 import { logMessage } from "@lib/logger";
 import { useRouter, useSearchParams } from "next/navigation";
-import { getCsrfToken } from "@lib/clientHelpers";
+import { getCsrfToken } from "@lib/client/csrfToken";
 import { localPathRegEx } from "@lib/validation";
 import { Button } from "@clientComponents/globals";
 import { useSession } from "next-auth/react";

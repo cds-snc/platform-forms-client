@@ -1,4 +1,4 @@
-import { getDaysPassed } from "@lib/clientHelpers";
+import { getDaysPassed } from "@lib/client/clientHelpers";
 import { VaultSubmissionList, VaultStatus } from "@lib/types";
 
 export enum TableActions {

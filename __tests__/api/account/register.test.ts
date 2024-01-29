@@ -3,7 +3,7 @@
  */
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { createMocks, RequestMethod } from "node-mocks-http";
-import { getCsrfToken } from "@lib/clientHelpers";
+import { getCsrfToken } from "@lib/client/csrfToken";
 import { mocked } from "jest-mock";
 import {
   CognitoIdentityProviderClient,

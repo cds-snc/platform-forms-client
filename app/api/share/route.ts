@@ -3,7 +3,7 @@ import { middleware, sessionExists } from "@lib/middleware";
 import { getNotifyInstance } from "@lib/integration/notifyConnector";
 import { logMessage } from "@lib/logger";
 import { MiddlewareProps, WithRequired } from "@lib/types";
-import { slugify } from "@lib/clientHelpers";
+import { slugify } from "@lib/client/clientHelpers";
 import { headers } from "next/headers";
 export const POST = middleware([sessionExists()], async (req, props) => {
   try {
