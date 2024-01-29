@@ -10,10 +10,6 @@
   "featureStatus": "Statut",
   "featureSwitch": "Activé/Déactivé",
   "features": {
-    "submitToReliabilityQueue": {
-      "title": "Soumettre à la file d'attente de fiabilité",
-      "description": "Soumet les réponses de formulaire à la file d'attente de fiabilité. Si cette option est désactivée, aucune soumission de formulaire ne sera soumise. Généralement utilisé pour les tests."
-    },
     "reCatpcha": {
       "title": "Je ne suis pas un robot",
       "description": "Active la protection « Je ne suis pas un robot » pour les formulaires avant leur soumission"
