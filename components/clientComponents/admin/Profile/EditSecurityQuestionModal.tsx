@@ -6,7 +6,7 @@ import { Dialog, useDialogRef } from "@clientComponents/form-builder/app/shared"
 import { logMessage } from "@lib/logger";
 
 import axios from "axios";
-import { getCsrfToken } from "@lib/clientHelpers";
+import { getCsrfToken } from "@lib/client/csrfToken";
 import { useRouter } from "next/navigation";
 import debounce from "lodash.debounce";
 import {

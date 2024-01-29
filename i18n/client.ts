@@ -5,14 +5,13 @@ import { initReactI18next, useTranslation as reactUseTranslation } from "react-i
 import resourcesToBackend from "i18next-resources-to-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
 import { getOptions, languages } from "./settings";
-// import ssrDetector from "./ssrDetector";
+
 import { useParams } from "next/navigation";
 
 const runsOnServerSide = typeof window === "undefined";
 const pathname = runsOnServerSide ? "" : window.location.pathname;
 
 const languageDetector = new LanguageDetector();
-// languageDetector.addDetector(ssrDetector);
 
 i18next
   .use(initReactI18next)

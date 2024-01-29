@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
-import { rehydrateFormResponses } from "@lib/clientHelpers";
+import { rehydrateFormResponses } from "@lib/client/clientHelpers";
 import { getPublicTemplateByID } from "@lib/templates";
 import { logMessage } from "@lib/logger";
-import { checkOne } from "@lib/cache/flags";
 import { pushFileToS3, deleteObject } from "@lib/s3-upload";
 import { fileTypeFromBuffer } from "file-type";
 import { acceptedFileMimeTypes } from "@lib/tsUtils";
@@ -189,8 +188,6 @@ const processFormData = async (
 ) => {
   const uploadedFilesKeyUrlMapping: Map<string, string> = new Map();
   try {
-    const submitToReliabilityQueue = await checkOne("submitToReliabilityQueue");
-
     // Do not process if in TEST mode
     if (process.env.APP_ENV === "test") {
       logMessage.info(
@@ -227,12 +224,6 @@ const processFormData = async (
       form,
       responses: reqFields,
     });
-
-    if (!submitToReliabilityQueue) {
-      // Local development and Heroku
-      // Set this to a 200 response as it's valid if the send to reliability queue option is off.
-      return NextResponse.json({ received: true }, { status: 200 });
-    }
 
     // Staging or Production AWS environments
     for (const [_key, value] of Object.entries(files)) {

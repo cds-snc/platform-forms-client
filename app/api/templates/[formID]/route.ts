@@ -8,6 +8,7 @@ import {
   removeDeliveryOption,
   TemplateHasUnprocessedSubmissions,
   updateClosingDateForTemplate,
+  getPublicTemplateByID,
 } from "@lib/templates";
 
 import { middleware, jsonValidator, sessionExists } from "@lib/middleware";
@@ -27,6 +28,7 @@ import {
 } from "@lib/types";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { logMessage } from "@lib/logger";
+import { auth } from "@lib/auth";
 
 class MalformedAPIRequest extends Error {}
 
@@ -36,7 +38,6 @@ const runValidationCondition = async (body: Record<string, unknown>) => {
 
 export const GET = middleware(
   [
-    sessionExists(),
     jsonValidator(templatesSchema, {
       jsonKey: "formConfig",
       noHTML: true,
@@ -56,15 +57,30 @@ export const GET = middleware(
   ],
   async (req, props) => {
     try {
-      const { session } = props as WithRequired<MiddlewareProps, "session">;
-
-      const ability = createAbility(session);
-
       const formID = props.params?.formID;
 
       if (!formID || typeof formID !== "string") {
         throw new MalformedAPIRequest("Invalid or missing formID");
       }
+
+      const session = await auth();
+
+      if (!session) {
+        const response = await getPublicTemplateByID(formID);
+        if (response === null) {
+          throw new Error(
+            `Template API response was null. Request information: method = ${
+              req.method
+            } ; query = ${JSON.stringify(props.params)} ; body = ${JSON.stringify(props.body)}`
+          );
+        }
+        if (!response.isPublished) {
+          return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+        }
+        return NextResponse.json(response);
+      }
+
+      const ability = createAbility(session);
 
       const response = await getFullTemplateByID(ability, formID);
       if (response === null) {

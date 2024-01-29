@@ -18,7 +18,7 @@ import { AccessControlError, checkPrivileges } from "./privileges";
 import { chunkArray } from "@lib/utils";
 import { TemplateAlreadyPublishedError } from "@lib/templates";
 import { getAppSetting } from "./appSettings";
-import { runPromisesSynchronously } from "./clientHelpers";
+import { runPromisesSynchronously } from "./client/clientHelpers";
 
 /**
  * Returns the users associated with a Template

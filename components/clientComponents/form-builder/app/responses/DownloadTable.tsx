@@ -15,7 +15,7 @@ import { useSearchParams } from "next/navigation";
 import { useSetting } from "@lib/hooks/useSetting";
 import Link from "next/link";
 import { TableActions, initialTableItemsState, reducerTableItems } from "./DownloadTableReducer";
-import { getDaysPassed, isStatus } from "@lib/clientHelpers";
+import { getDaysPassed, isStatus } from "@lib/client/clientHelpers";
 import { Alert } from "@clientComponents/globals";
 import { CheckAll } from "./CheckAll";
 import { DownloadButton } from "./DownloadButton";
@@ -36,7 +36,7 @@ interface DownloadTableProps {
   responseDownloadLimit: number;
   showDownloadSuccess: false | string;
   setShowDownloadSuccess: React.Dispatch<React.SetStateAction<false | string>>;
-  lastEvaluatedKey?: Record<string, string> | null | undefined;
+  lastEvaluatedKey?: Record<string, string> | null;
 }
 
 export const DownloadTable = ({

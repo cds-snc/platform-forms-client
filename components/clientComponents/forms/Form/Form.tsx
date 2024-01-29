@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { FormikProps, withFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage, validateOnSubmit } from "@lib/validation";
-import { submitToAPI } from "@lib/clientHelpers";
+import { submitToAPI } from "@lib/client/clientHelpers";
 import { useExternalScript, useFlag, useFormTimer } from "@lib/hooks";
 import { Alert, Button, RichText } from "@clientComponents/forms";
 import { logMessage } from "@lib/logger";

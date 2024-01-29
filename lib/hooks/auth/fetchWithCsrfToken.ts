@@ -1,6 +1,6 @@
 "use client";
 import axios from "axios";
-import { getCsrfToken } from "@lib/clientHelpers";
+import { getCsrfToken } from "@lib/client/csrfToken";
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
 export async function fetchWithCsrfToken(url: string, data: Record<string, any>) {
   const token = await getCsrfToken();

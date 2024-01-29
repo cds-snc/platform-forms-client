@@ -3,7 +3,7 @@ import { useTranslation } from "@i18n/client";
 import { useDialogRef, Dialog, TextArea } from "@clientComponents/form-builder/app/shared";
 import { LineItemEntries } from "./line-item-entries";
 import { Button, Alert } from "@clientComponents/globals";
-import { randomId } from "@lib/clientHelpers";
+import { randomId } from "@lib/client/clientHelpers";
 import axios from "axios";
 import { usePathname, useRouter } from "next/navigation";
 import { logMessage } from "@lib/logger";

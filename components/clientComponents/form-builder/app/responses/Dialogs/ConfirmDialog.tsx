@@ -5,7 +5,7 @@ import { Trans } from "react-i18next";
 import { useDialogRef, Dialog } from "@clientComponents/form-builder/app/shared";
 import { LineItemEntries } from "./line-item-entries";
 import { Button, Alert } from "@clientComponents/globals";
-import { randomId, runPromisesSynchronously } from "@lib/clientHelpers";
+import { randomId, runPromisesSynchronously } from "@lib/client/clientHelpers";
 import axios from "axios";
 import Link from "next/link";
 import { isUUID } from "@lib/validation";

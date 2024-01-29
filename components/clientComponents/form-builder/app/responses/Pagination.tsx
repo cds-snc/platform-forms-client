@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, useParams } from "next/navigation";
 import { BackArrowIcon, ForwardArrowIcon, StartIcon } from "@clientComponents/icons";
 import { useTranslation } from "@i18n/client";
 
@@ -20,8 +20,10 @@ export const Pagination = ({
   const router = useRouter();
 
   // Need statusQuery when building up the prev/next links
-  const params = useSearchParams();
-  const statusQuery = params.get("statusQuery") || "new";
+  const searchParams = useSearchParams();
+  const params = useParams();
+  // 1st dynamic param is formId, 2nd is statusQuery
+  const statusQuery = params[1] || "new";
   // Extract responseId from lastEvaluatedKey object
   const lastEvaluatedResponseId = lastEvaluatedKey
     ? lastEvaluatedKey.NAME_OR_CONF.split("#")[1]
@@ -35,7 +37,7 @@ export const Pagination = ({
   useEffect(() => {
     try {
       // Get the "page" keys as base64 encoded string from url
-      const queryKeys = params.get("keys");
+      const queryKeys = searchParams.get("keys");
 
       // Use atob to decode the base64 encoded keys or we're at the "start"
       const decodedKeys = queryKeys ? String(atob(String(queryKeys))).split(",") : ["start"];
@@ -45,7 +47,7 @@ export const Pagination = ({
       // If the base64 encoded string has been tampered with, redirect to the first page
       router.push(`/form-builder/responses/${formId}${statusQuery ? "/" + statusQuery : ""}`);
     }
-  }, [formId, router, params, statusQuery]);
+  }, [formId, router, searchParams, statusQuery]);
 
   // When going back, we pop the last item off the keys array
   const previousKeys = keys.slice(0, -1);

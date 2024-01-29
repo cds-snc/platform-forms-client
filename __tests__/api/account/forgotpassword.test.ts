@@ -4,7 +4,7 @@
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { createMocks, RequestMethod } from "node-mocks-http";
-import { getCsrfToken } from "@lib/clientHelpers";
+import { getCsrfToken } from "@lib/client/csrfToken";
 import { prismaMock } from "@jestUtils";
 import {
   CognitoIdentityProviderClient,
