@@ -217,7 +217,12 @@ export const validateOnSubmit = (
     const currentGroup = values.currentGroup as string;
     const groups = props.formRecord.form.groups as GroupsType;
 
-    if (groups && currentGroup !== "" && !inGroup(currentGroup, formElement.id, groups)) {
+    if (
+      groups &&
+      currentGroup !== "" &&
+      groups[currentGroup] &&
+      !inGroup(currentGroup, formElement.id, groups)
+    ) {
       continue;
     }
 
