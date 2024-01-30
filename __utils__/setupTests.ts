@@ -7,6 +7,15 @@ global.jest = jest;
 
 jest.mock("axios");
 
+jest.mock("@lib/auth/nextAuth", () => {
+  return {
+    __esModule: true,
+    auth: jest.fn(() => Promise.resolve(null)),
+    signIn: jest.fn(async () => undefined),
+    signOut: jest.fn(async () => undefined),
+  };
+});
+
 jest.mock("@lib/client/csrfToken", () => ({
   __esModule: true,
   getCsrfToken: jest.fn(() => "testtoken"),
@@ -22,21 +31,43 @@ jest.mock("next-auth/react", () => {
   };
 });
 
-jest.mock("next/navigation", () => ({
-  __esmodule: true,
-  useRouter() {
-    return {
-      prefetch: jest.fn(),
-    };
-  },
-  useSearchParams() {
-    return {
-      get: jest.fn(() => null),
-    };
-  },
-  useParams() {
-    return [];
-  },
+interface RedirectError extends Error {
+  url: string;
+}
+
+jest.mock("next/navigation", () => {
+  return {
+    __esmodule: true,
+
+    useRouter: () => {
+      return {
+        prefetch: jest.fn(),
+      };
+    },
+    useSearchParams: () => {
+      return {
+        get: jest.fn(() => null),
+      };
+    },
+    useParams: () => {
+      return jest.fn(() => undefined);
+    },
+
+    redirect: jest.fn((url: string) => {
+      const error = new Error("NEXT_REDIRECT") as RedirectError;
+      error.url = url;
+      throw error;
+    }),
+  };
+});
+
+jest.mock("next/headers", () => ({
+  headers: () => ({
+    get: jest.fn(),
+  }),
+  cookies: () => ({
+    get: jest.fn(),
+  }),
 }));
 
 jest.mock("next/config", () => () => ({
@@ -52,11 +83,24 @@ jest.mock("@i18n/client", () => ({
       t: (str: string) => str,
       i18n: {
         language: "en",
-        changeLanguage: () => Promise.resolve(),
+        changeLanguage: jest.fn(async () => undefined),
       },
     };
   },
 }));
+
+jest.mock("@i18n", () => {
+  return {
+    __esModule: true,
+    serverTranslation: jest.fn(async () => {
+      return {
+        i18n: {
+          language: "en",
+        },
+      };
+    }),
+  };
+});
 
 jest.mock("@lib/integration/redisConnector", () => ({
   __esModule: true,
@@ -65,7 +109,7 @@ jest.mock("@lib/integration/redisConnector", () => ({
 
 jest.mock("@lib/auditLogs", () => ({
   __esModule: true,
-  logEvent: jest.fn(),
+  logEvent: () => Promise.resolve(),
 }));
 
 jest.mock("@lib/hooks/useFlag", () => ({

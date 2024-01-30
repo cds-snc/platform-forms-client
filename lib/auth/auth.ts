@@ -31,7 +31,7 @@ export async function requireAuthentication() {
   try {
     const session = await auth();
     const headersList = headers();
-    const currentPath = headersList.get("x-path")?.replace(`/${locale}`, "") ?? "/";
+    const currentPath = headersList.get("x-path")?.replace(`/${locale}`, "") ?? "";
 
     if (!session) {
       // If no user, redirect to login
@@ -61,7 +61,7 @@ export async function requireAuthentication() {
       // Also check that the path is local and not an external URL
       redirect(
         `/${locale}/auth/policy?referer=${
-          localPathRegEx.test(currentPath) ? currentPath : "/forms"
+          currentPath && localPathRegEx.test(currentPath) ? currentPath : "/forms"
         }`
       );
     }
