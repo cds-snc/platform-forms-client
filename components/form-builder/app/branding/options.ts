@@ -116,4 +116,13 @@ export const options = [
     logoTitleEn: "Health Canada",
     logoTitleFr: "Santé Canada",
   },
+  {
+    name: "ec",
+    urlEn: "https://www.elections.ca/home.aspx",
+    urlFr: "https://www.elections.ca/accueil.aspx",
+    logoEn: "/img/branding/ec-en.png",
+    logoFr: "/img/branding/ec-en.png",
+    logoTitleEn: "Elections Canada",
+    logoTitleFr: "Elections Canada",
+  },
 ];
