@@ -30,7 +30,7 @@ services:
 
   redis:
     restart: unless-stopped
-    image: redis:latest@sha256:2976bc0437deff693af2dcf081a1d1758de8b413e6de861151a5a136c25eb9e4
+    image: redis:latest@sha256:b5ddcd52d425a8e354696c022f392fe45fca928f68d6289e6bb4a709c3a74668
     ports:
       - "6379:6379"
     expose:
