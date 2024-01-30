@@ -365,7 +365,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               }),
             getChoice: (elId, choiceIndex) => {
               const elIndex = get().form.elements.findIndex((el) => el.id === elId);
-              return get().form.elements[elIndex].properties.choices?.[choiceIndex];
+              return get().form.elements[elIndex]?.properties.choices?.[choiceIndex];
             },
             duplicateElement: (itemId) => {
               const elIndex = get().form.elements.findIndex((el) => el.id === itemId);

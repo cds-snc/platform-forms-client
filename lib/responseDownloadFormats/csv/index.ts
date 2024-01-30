@@ -8,8 +8,11 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
     return `${item.questionEn}\n${item.questionFr}`;
   });
 
-  header.unshift("id", "created_at");
-  header.push("code");
+  header.unshift(
+    "Submission ID / Identifiant de soumission",
+    "Date of submission / Date de soumission"
+  );
+  header.push("Receipt codes / Codes de réception");
 
   const csvStringifier = createCsvStringifier({
     header: header,
