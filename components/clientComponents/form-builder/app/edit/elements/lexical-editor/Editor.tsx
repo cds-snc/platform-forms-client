@@ -52,8 +52,11 @@ export const Editor = ({
   if (typeof content !== "string") {
     content = "";
   }
+
+  const editorKey = content ? `editor` : `editor-empty`;
+
   return (
-    <div className="rich-text-wrapper gc-formview">
+    <div key={editorKey} className="rich-text-wrapper gc-formview">
       <LexicalComposer
         initialConfig={{
           ...editorConfig,
