@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.12.2](https://github.com/cds-snc/platform-forms-client/compare/v3.12.1...v3.12.2) (2024-01-30)
+
+
+### Bug Fixes
+
+* get choice lookup when question is removed ([#3190](https://github.com/cds-snc/platform-forms-client/issues/3190)) ([f3a79ad](https://github.com/cds-snc/platform-forms-client/commit/f3a79adc3dca8aca410f730d57886615ce4b8fdf))
+* group validation ([#3155](https://github.com/cds-snc/platform-forms-client/issues/3155)) ([db87ce2](https://github.com/cds-snc/platform-forms-client/commit/db87ce24ea108acfd91f22b26799fd2f4c683754))
+* settings modal save ([#3182](https://github.com/cds-snc/platform-forms-client/issues/3182)) ([9fd7965](https://github.com/cds-snc/platform-forms-client/commit/9fd796551c81919fd8193a4673633837d8c52dc3))
+* use codeQL for javascript and typescript ([#3149](https://github.com/cds-snc/platform-forms-client/issues/3149)) ([c5d270b](https://github.com/cds-snc/platform-forms-client/commit/c5d270b4682b9b59f8ce3cee0c523d19ce1c0f27))
+
+
+### Miscellaneous Chores
+
+* switch back to prod deploy OIDC role ([#3148](https://github.com/cds-snc/platform-forms-client/issues/3148)) ([a15e26e](https://github.com/cds-snc/platform-forms-client/commit/a15e26e275ee4e4364f35cd730a9306ada1343e3))
+* update name of health canada branding option ([#3151](https://github.com/cds-snc/platform-forms-client/issues/3151)) ([b7e2589](https://github.com/cds-snc/platform-forms-client/commit/b7e2589cd8e407932de1ad2e51e7b1dd5fc8ab32))
+
 ## [3.12.1](https://github.com/cds-snc/platform-forms-client/compare/v3.12.0...v3.12.1) (2024-01-25)
 
 
