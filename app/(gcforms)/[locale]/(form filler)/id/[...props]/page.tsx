@@ -60,7 +60,11 @@ export default async function Page({
   }
 
   if (isPastClosingDate) {
-    return <ClosedPage language={language} formRecord={formRecord} />;
+    return (
+      <FormDisplayLayout formRecord={formRecord}>
+        <ClosedPage language={language} formRecord={formRecord} />
+      </FormDisplayLayout>
+    );
   }
 
   // render text pages
