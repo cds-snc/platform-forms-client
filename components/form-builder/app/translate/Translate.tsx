@@ -126,7 +126,7 @@ export const Translate = () => {
         </div>
 
         <section>
-          <SectionTitle>{t("start")}</SectionTitle>
+          <SectionTitle>{t("formIntroduction")}</SectionTitle>
           {/* FORM TITLE */}
           <fieldset>
             <FieldsetLegend>
@@ -183,7 +183,7 @@ export const Translate = () => {
           {(form.introduction?.descriptionEn || form.introduction?.descriptionFr) && (
             <fieldset>
               <FieldsetLegend>
-                {t("formIntroduction")}
+                {t("description")}
               </FieldsetLegend>
               <div
                 className="flex gap-px border border-gray-300 mb-10 divide-x-2"
