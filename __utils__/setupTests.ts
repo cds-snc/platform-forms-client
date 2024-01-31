@@ -10,7 +10,7 @@ jest.mock("axios");
 jest.mock("@lib/auth/nextAuth", () => {
   return {
     __esModule: true,
-    auth: jest.fn(() => Promise.resolve(null)),
+    auth: jest.fn(async () => null),
     signIn: jest.fn(async () => undefined),
     signOut: jest.fn(async () => undefined),
   };
@@ -104,13 +104,25 @@ jest.mock("@i18n", () => {
 
 jest.mock("@lib/integration/redisConnector", () => ({
   __esModule: true,
-  getRedisInstance: jest.fn(),
+  getRedisInstance: () => jest.fn(),
 }));
 
 jest.mock("@lib/auditLogs", () => ({
   __esModule: true,
-  logEvent: () => Promise.resolve(),
+  logEvent: jest.fn(jest.fn(async () => undefined)),
 }));
+
+jest.mock("@lib/logger", () => {
+  return {
+    __esModule: true,
+    logMessage: {
+      info: jest.fn(async () => undefined),
+      error: jest.fn(async () => undefined),
+      warn: jest.fn(async () => undefined),
+      debug: jest.fn(async () => undefined),
+    },
+  };
+});
 
 jest.mock("@lib/hooks/useFlag", () => ({
   __esModule: true,

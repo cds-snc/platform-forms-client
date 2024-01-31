@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-import Redis from "ioredis-mock";
+
 import { prismaMock } from "@jestUtils";
 import {
   getAppSetting,
@@ -20,13 +20,8 @@ import {
 import * as settingCache from "@lib/cache/settingCache";
 import { Session } from "next-auth";
 import { logEvent } from "@lib/auditLogs";
-jest.mock("@lib/auditLogs");
-const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
-const redis = new Redis();
 
-jest.mock("@lib/integration/redisConnector", () => ({
-  getRedisInstance: jest.fn(() => redis),
-}));
+const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
 
 // Needed because of a TypeScript error not allowing for non-default exported spyOn items.
 jest.mock("@lib/cache/settingCache", () => ({
