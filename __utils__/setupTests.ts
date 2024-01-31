@@ -16,10 +16,12 @@ jest.mock("@lib/auth/nextAuth", () => {
   };
 });
 
-jest.mock("@lib/client/csrfToken", () => ({
-  __esModule: true,
-  getCsrfToken: jest.fn(() => "testtoken"),
-}));
+jest.mock("@lib/client/csrfToken", () => {
+  return {
+    __esModule: true,
+    getCsrfToken: jest.fn(() => "testtoken"),
+  };
+});
 
 jest.mock("next-auth/react", () => {
   return {
@@ -39,19 +41,19 @@ jest.mock("next/navigation", () => {
   return {
     __esmodule: true,
 
-    useRouter: () => {
+    useRouter: jest.fn(() => {
       return {
         prefetch: jest.fn(),
       };
-    },
-    useSearchParams: () => {
+    }),
+    useSearchParams: jest.fn(() => {
       return {
-        get: jest.fn(() => null),
+        get: jest.fn(),
       };
-    },
-    useParams: () => {
-      return jest.fn(() => undefined);
-    },
+    }),
+    useParams: jest.fn(() => {
+      return jest.fn();
+    }),
 
     redirect: jest.fn((url: string) => {
       const error = new Error("NEXT_REDIRECT") as RedirectError;
@@ -61,14 +63,21 @@ jest.mock("next/navigation", () => {
   };
 });
 
-jest.mock("next/headers", () => ({
-  headers: () => ({
-    get: jest.fn(),
-  }),
-  cookies: () => ({
-    get: jest.fn(),
-  }),
-}));
+jest.mock("next/headers", () => {
+  return {
+    _esModule: true,
+    headers: jest.fn(() => {
+      return {
+        get: jest.fn<(name: string) => string | null>(),
+      };
+    }),
+    cookies: jest.fn(() => {
+      return {
+        get: jest.fn<(name: string) => string | null>(),
+      };
+    }),
+  };
+});
 
 jest.mock("next/config", () => () => ({
   publicRuntimeConfig: {
@@ -78,7 +87,7 @@ jest.mock("next/config", () => () => ({
 
 jest.mock("@i18n/client", () => ({
   __esModule: true,
-  useTranslation: () => {
+  useTranslation: jest.fn(() => {
     return {
       t: (str: string) => str,
       i18n: {
@@ -86,7 +95,7 @@ jest.mock("@i18n/client", () => ({
         changeLanguage: jest.fn(async () => undefined),
       },
     };
-  },
+  }),
 }));
 
 jest.mock("@i18n", () => {
