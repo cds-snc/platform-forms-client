@@ -276,8 +276,8 @@
     "number": "Enter a number",
     "phone": "For example: 111-222-3333"
   },
-  "description": "Description",
-  "descriptionDescription": "The description appears below the label and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements.",
+  "description": "Hint text",
+  "descriptionDescription": "The hint text appears below the label and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements or give an example.",
   "didYouFindThisToolHelpful": "Did you find GC Forms helpful? <a href=\"/en/form-builder/support/contactus\" target=\"_blank\">Provide feedback</a>",
   "downloadCSV": "Export as a spreadsheet",
   "downloadResponsesTable": {
@@ -381,7 +381,7 @@
     "downloadBtnText": "Download form file",
     "title": "Download form file"
   },
-  "formIntroduction": "Form introduction",
+  "formIntroduction": "Introduction",
   "formInvalidProperty": "Invalid: {{property}}",
   "formMissingProperty": "Missing: {{property}}",
   "formSettings": "Form settings",
@@ -479,7 +479,7 @@
   "richText": "Page text",
   "richTextConfirmationTitle": "Confirmation page and message",
   "richTextEditor": "Rich text editor",
-  "richTextIntroTitle": "Form introduction",
+  "richTextIntroTitle": "Introduction",
   "richTextPrivacyTitle": "Privacy statement",
   "save": "Save",
   "saveAndRequest": "Request publishing ability",
