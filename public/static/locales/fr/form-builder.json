@@ -275,8 +275,8 @@
     "number": "Saisissez un chiffre",
     "phone": "Par exemple : 111-222-3333"
   },
-  "description": "Description ",
-  "descriptionDescription": "La description apparaît sous l'étiquette, et avant le champ. Elle est utilisée pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de mise en forme.",
+  "description": "Texte explicatif ",
+  "descriptionDescription": "Le texte explicatif apparaît sous l'étiquette et avant le champ. Il est utilisé pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de mise en forme ou donner un exemple.",
   "didYouFindThisToolHelpful": "Avez-vous trouvé Formulaires GC pertinent comme outil? <a href=\"/fr/form-builder/support/contactus\" target=\"_blank\">Donner votre avis</a>",
   "downloadCSV": "Exporter en fichier CSV",
   "downloadResponsesTable": {
@@ -380,7 +380,7 @@
     "downloadBtnText": "Télécharger le fichier du formulaire",
     "title": "Télécharger le fichier du formulaire"
   },
-  "formIntroduction": "Introduction du formulaire ",
+  "formIntroduction": "Introduction ",
   "formInvalidProperty": "Invalide : {{property}}",
   "formMissingProperty": "Il manque : {{property}}",
   "formSettings": "Paramétres du formulaire",
@@ -478,7 +478,7 @@
   "richText": "Texte",
   "richTextConfirmationTitle": "Page et message de confirmation",
   "richTextEditor": "Éditeur de texte enrichi",
-  "richTextIntroTitle": "Introduction du formulaire ",
+  "richTextIntroTitle": "Introduction ",
   "richTextPrivacyTitle": "Déclaration de confidentialité",
   "save": "Enregistrer",
   "saveAndRequest": "Demander la capacité de publier",
@@ -649,7 +649,7 @@
   },
   "test": "Tester",
   "textFormatting": "Mise en forme du texte ",
-  "title": "Titre",
+  "title": "Titre du formulaire",
   "thereWasAnErrorPublishing": "Une erreur s'est produite lors de la publication de votre formulaire",
   "tooltipFormatBold": "En gras (⌘B)",
   "tooltipFormatBulletList": "Liste à puces",
