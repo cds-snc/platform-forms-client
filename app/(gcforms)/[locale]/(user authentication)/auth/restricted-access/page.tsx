@@ -16,7 +16,7 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
-  const continueHref = `/${locale}/`;
+  const continueHref = `/${locale}/auth/policy`;
   const { t } = await serverTranslation("restricted-access", { lang: locale });
   return (
     <UserNavLayout contentWidth="tablet:w-[768px] laptop:w-[850px]">
