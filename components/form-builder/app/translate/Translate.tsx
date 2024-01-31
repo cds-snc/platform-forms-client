@@ -129,9 +129,7 @@ export const Translate = () => {
           <SectionTitle>{t("formIntroduction")}</SectionTitle>
           {/* FORM TITLE */}
           <fieldset>
-            <FieldsetLegend>
-              {t("title")}
-            </FieldsetLegend>
+            <FieldsetLegend>{t("title")}</FieldsetLegend>
             <div className="flex gap-px border border-gray-300 mb-10 divide-x-2">
               <label htmlFor="form-title-en" className="sr-only">
                 {t(`${primaryLanguage}-text`)}
@@ -182,9 +180,7 @@ export const Translate = () => {
           {/* INTRO */}
           {(form.introduction?.descriptionEn || form.introduction?.descriptionFr) && (
             <fieldset>
-              <FieldsetLegend>
-                {t("description")}
-              </FieldsetLegend>
+              <FieldsetLegend>{t("description")}</FieldsetLegend>
               <div
                 className="flex gap-px border border-gray-300 mb-10 divide-x-2"
                 key={primaryLanguage}
@@ -255,9 +251,7 @@ export const Translate = () => {
         <section>
           <SectionTitle>{t("privacyStatement")}</SectionTitle>
           <fieldset>
-            <FieldsetLegend>
-              {t("pageText")}
-            </FieldsetLegend>
+            <FieldsetLegend>{t("pageText")}</FieldsetLegend>
 
             <div
               className="flex gap-px border border-gray-300 mb-10 divide-x-2"
@@ -316,9 +310,7 @@ export const Translate = () => {
         <section>
           <SectionTitle>{t("confirmationMessage")}</SectionTitle>
           <fieldset>
-            <FieldsetLegend>
-              {t("pageText")}
-            </FieldsetLegend>
+            <FieldsetLegend>{t("pageText")}</FieldsetLegend>
             <div
               className="flex gap-px border border-gray-300 mb-10 divide-x-2"
               key={primaryLanguage}
