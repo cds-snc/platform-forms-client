@@ -48,13 +48,12 @@ export const ReVerify = ({
         url: "/api/auth/2fa/request-new-verification-code",
         method: "POST",
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
           "X-CSRF-Token": token,
         },
-        data: new URLSearchParams({
+        data: {
           email: username.current,
           authenticationFlowToken: authenticationFlowToken.current,
-        }),
+        },
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       });
 
