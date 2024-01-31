@@ -381,7 +381,7 @@
     "downloadBtnText": "Download form file",
     "title": "Download form file"
   },
-  "formIntroduction": "Introduction",
+  "formIntroduction": "Form introduction",
   "formInvalidProperty": "Invalid: {{property}}",
   "formMissingProperty": "Missing: {{property}}",
   "formSettings": "Form settings",

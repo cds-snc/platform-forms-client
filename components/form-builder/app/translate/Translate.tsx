@@ -130,7 +130,7 @@ export const Translate = () => {
           {/* FORM TITLE */}
           <fieldset>
             <FieldsetLegend>
-              {t("formIntroduction")}: {t("title")}
+              {t("title")}
             </FieldsetLegend>
             <div className="flex gap-px border border-gray-300 mb-10 divide-x-2">
               <label htmlFor="form-title-en" className="sr-only">
@@ -183,7 +183,7 @@ export const Translate = () => {
           {(form.introduction?.descriptionEn || form.introduction?.descriptionFr) && (
             <fieldset>
               <FieldsetLegend>
-                {t("formIntroduction")}: {t("description")}
+                {t("formIntroduction")}
               </FieldsetLegend>
               <div
                 className="flex gap-px border border-gray-300 mb-10 divide-x-2"
@@ -256,7 +256,7 @@ export const Translate = () => {
           <SectionTitle>{t("privacyStatement")}</SectionTitle>
           <fieldset>
             <FieldsetLegend>
-              {t("pageText")}: {t("description")}
+              {t("pageText")}
             </FieldsetLegend>
 
             <div
@@ -317,7 +317,7 @@ export const Translate = () => {
           <SectionTitle>{t("confirmationMessage")}</SectionTitle>
           <fieldset>
             <FieldsetLegend>
-              {t("pageText")}: {t("description")}
+              {t("pageText")}
             </FieldsetLegend>
             <div
               className="flex gap-px border border-gray-300 mb-10 divide-x-2"

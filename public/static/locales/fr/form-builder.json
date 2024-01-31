@@ -380,7 +380,7 @@
     "downloadBtnText": "Télécharger le fichier du formulaire",
     "title": "Télécharger le fichier du formulaire"
   },
-  "formIntroduction": "Introduction ",
+  "formIntroduction": "Introduction du formulaire ",
   "formInvalidProperty": "Invalide : {{property}}",
   "formMissingProperty": "Il manque : {{property}}",
   "formSettings": "Paramétres du formulaire",
