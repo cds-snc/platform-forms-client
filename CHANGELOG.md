@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.12.3](https://github.com/cds-snc/platform-forms-client/compare/v3.12.2...v3.12.3) (2024-01-31)
+
+
+### Bug Fixes
+
+* request new 2FA code does not work if there is no active 2FA session ([#3193](https://github.com/cds-snc/platform-forms-client/issues/3193)) ([a57b64e](https://github.com/cds-snc/platform-forms-client/commit/a57b64ecbb948871774823fc8d46304b4959dd7d))
+* validation when conditional rules array is empty ([#3205](https://github.com/cds-snc/platform-forms-client/issues/3205)) ([5ae78e0](https://github.com/cds-snc/platform-forms-client/commit/5ae78e0937056f4640e2a5b562f066a36a18eac1))
+
+
+### Miscellaneous Chores
+
+* synced file(s) with cds-snc/site-reliability-engineering ([#3036](https://github.com/cds-snc/platform-forms-client/issues/3036)) ([97492ed](https://github.com/cds-snc/platform-forms-client/commit/97492edc914750751a2844993a61e2f6840ea447))
+
 ## [3.12.2](https://github.com/cds-snc/platform-forms-client/compare/v3.12.1...v3.12.2) (2024-01-30)
 
 
