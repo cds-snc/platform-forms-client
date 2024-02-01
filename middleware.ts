@@ -85,7 +85,9 @@ export async function middleware(req: NextRequest) {
         `Middleware - Redirecting to cookie language: ${cookieLang}, pathname: ${pathname}`
       );
 
-      return NextResponse.redirect(new URL(`/${cookieLang}${pathname}?${searchParams}`, req.url));
+      return NextResponse.redirect(
+        new URL(`/${cookieLang}${pathname}${searchParams && "?" + searchParams}`, req.url)
+      );
     } else {
       // Redirect to fallback language
       logMessage.debug(`Middleware - Redirecting to fallback language: : ${pathname}`);
