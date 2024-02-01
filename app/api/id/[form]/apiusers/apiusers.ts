@@ -1,3 +1,10 @@
+/**
+ * This is part of our old API calls when we used to support API downloading of the responses.
+ * It was left in for historical purposes.
+ *
+ * TODO: potentially remove.
+ */
+
 // import { NextApiRequest, NextApiResponse } from "next";
 // import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 // import { Prisma } from "@prisma/client";

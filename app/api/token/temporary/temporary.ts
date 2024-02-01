@@ -1,3 +1,13 @@
+/**
+ * This is part of our old API calls when we used to support API downloading of the responses.
+ * It was left in for historical purposes.
+ *
+ * NOTE: this is referenced in /utils/retrievalAPI/retrieveResponse.ts and could also be
+ * potentially be removed.
+ *
+ * TODO: potentially remove.
+ */
+
 // import { prisma } from "@lib/integration/prismaConnector";
 // import { Prisma } from "@prisma/client";
 // import { logMessage } from "@lib/logger";
