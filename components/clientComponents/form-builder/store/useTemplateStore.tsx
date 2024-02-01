@@ -443,10 +443,9 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
           {
             name: "form-storage",
             storage: createJSONStorage(() => storage),
+            skipHydration: true,
             onRehydrateStorage: () => {
               logMessage.debug("Template Store Hydration starting");
-
-              // optional
               return (state) => {
                 logMessage.debug("Template Store Hydrationfinished");
                 state?.setHasHydrated();
@@ -469,9 +468,9 @@ export const TemplateStoreProvider = ({
 }: React.PropsWithChildren<Partial<TemplateStoreProps>>) => {
   const storeRef = useRef<TemplateStore>();
   if (!storeRef.current) {
-    // When there is an incoming form to initialize the store, clear it first
+    // When there is an incoming form with a different id clear it first
     if (props.id) {
-      clearTemplateStore();
+      clearTemplateStorage(props.id);
     }
     storeRef.current = createTemplateStore(props);
   }
@@ -504,8 +503,41 @@ export const useSubscibeToTemplateStore = <T,>(
   );
 };
 
+export const useRehydrate = () => {
+  const store = useContext(TemplateStoreContext);
+  const hasHydrated = useTemplateStore((s) => s.hasHydrated);
+
+  if (!store) throw new Error("Missing Template Store Provider in tree");
+
+  useEffect(() => {
+    if (!hasHydrated) {
+      store.persist.rehydrate();
+    }
+  }, [store, hasHydrated]);
+
+  return hasHydrated;
+};
+
 export const clearTemplateStore = () => {
-  if (typeof window !== "undefined") {
+  if (typeof window === "undefined") return;
+
+  sessionStorage.removeItem("form-storage");
+};
+
+export const clearTemplateStorage = (id: string) => {
+  if (typeof window === "undefined") return;
+
+  const formStorage = sessionStorage.getItem("form-storage");
+
+  if (!formStorage) return;
+
+  const storage = JSON.parse(formStorage);
+
+  if (storage && storage.state.id !== id) {
     sessionStorage.removeItem("form-storage");
+    logMessage.debug(`Cleared form-storage: ${id}, ${storage.state.id}`);
+    return;
   }
+
+  logMessage.debug(`Keep form-storage: ${id}, ${storage.state.id}`);
 };
