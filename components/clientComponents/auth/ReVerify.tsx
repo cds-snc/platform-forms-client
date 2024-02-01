@@ -70,6 +70,7 @@ export const ReVerify = ({
       if (hasError(["CredentialsSignin", "CSRF token not found", "Missing 2FA session"], err)) {
         // Missing CsrfToken, username or 2FA session so have the user try signing in again
         router.push("/auth/login");
+        router.refresh();
       } else {
         handleErrorById("InternalServiceException");
       }
