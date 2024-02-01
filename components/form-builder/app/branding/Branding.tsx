@@ -119,18 +119,7 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
         <div>
           <p className="mb-5 mt-6 text-sm">{t("branding.notFound")}</p>
           <p className="mb-5 text-sm">
-            <Link
-              href="https://articles.alpha.canada.ca/forms-formulaires/request-alternate-branding/"
-              passHref
-              rel="noopener noreferrer"
-              target={"_blank"}
-            >
-              {/* Href is passed down to child.  This behavior is fixed in NextJS 13 */}
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <a target="_blank" rel="noopener noreferrer">
-                {t("branding.submitNew")}
-              </a>
-            </Link>
+          {t("branding.submitNew")}
           </p>
         </div>
       )}

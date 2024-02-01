@@ -212,7 +212,7 @@
     "notFound": "Vous ne trouvez pas votre ministère ou votre organisme dans la liste?",
     "preview": "Aperçu",
     "select": "Sélectionnez une image de marque différente pour le haut du formulaire",
-    "submitNew": "Proposer une autre image de marque (ouvre un nouvel onglet)",
+    "submitNew": "<a href=\"https://articles.alpha.canada.ca/forms-formulaires/fr/demander-une-autre-image-de-marque\" target=\"_blank\">Proposer une autre image de marque (ouvre un nouvel onglet)</a>",
     "text1": "Les formulaires publiés affichent par défaut la signature du gouvernement du Canada."
   },
   "cancel": "Annuler  ",

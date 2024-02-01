@@ -212,7 +212,7 @@
     "notFound": "Didn’t find your department or agency in the list?",
     "preview": "Preview",
     "select": "Select different branding for the top of your form",
-    "submitNew": "Submit alternate branding (opens in new tab)",
+    "submitNew": "<a href=\"https://articles.alpha.canada.ca/forms-formulaires/request-alternate-branding\" target=\"_blank\">Submit alternate branding (opens in new tab)</a>",
     "text1": "Published forms include the Government of Canada signature by default."
   },
   "cancel": "Cancel",
