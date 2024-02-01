@@ -8,7 +8,6 @@ import { useTemplateStore } from "../store";
 
 export const ResponseDelivery = () => {
   const { saveForm } = useTemplateContext();
-  const storeRef = useTemplateContext();
 
   const hasHydrated = useTemplateStore((s) => s.hasHydrated);
 
