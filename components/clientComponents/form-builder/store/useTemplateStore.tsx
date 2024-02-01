@@ -505,12 +505,17 @@ export const useSubscibeToTemplateStore = <T,>(
 
 export const useRehydrate = () => {
   const store = useContext(TemplateStoreContext);
-  if (!store) throw new Error("Missing Template Store Provider in tree");
-  useEffect(() => {
-    store.persist.rehydrate();
-  }, [store]);
+  const hasHydrated = useTemplateStore((s) => s.hasHydrated);
 
-  return store.getState().hasHydrated;
+  if (!store) throw new Error("Missing Template Store Provider in tree");
+
+  useEffect(() => {
+    if (!hasHydrated) {
+      store.persist.rehydrate();
+    }
+  }, [store, hasHydrated]);
+
+  return hasHydrated;
 };
 
 export const clearTemplateStore = () => {
