@@ -1,7 +1,6 @@
 import React, { useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useTranslation } from "next-i18next";
-import Link from "next/link";
 import axios from "axios";
 
 import { Logos, options } from "./";
@@ -118,19 +117,8 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
       {hasBrandingRequestForm && (
         <div>
           <p className="mb-5 mt-6 text-sm">{t("branding.notFound")}</p>
-          <p className="mb-5 text-sm">
-            <Link
-              passHref
-              rel="noopener noreferrer"
-              target={"_blank"}
-            >
-              {/* Href is passed down to child.  This behavior is fixed in NextJS 13 */}
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-           <a target="_blank" rel="noopener noreferrer">
-                {t("branding.submitNew")}
-              </a>
-            </Link>
-           <p className="mb-5 text-sm">{t("branding.submitNew")}</p>
+          <p className="mb-5 text-sm">{t("branding.submitNew")}
+          </p>
         </div>
       )}
     </div>
