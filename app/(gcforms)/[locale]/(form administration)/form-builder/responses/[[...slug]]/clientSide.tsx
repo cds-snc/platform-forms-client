@@ -21,6 +21,7 @@ import { ConfirmDialog } from "@clientComponents/form-builder/app/responses/Dial
 import { Alert } from "@clientComponents/globals";
 import { isStatus } from "@lib/client/clientHelpers";
 import { TabNavLink } from "@clientComponents/form-builder/app/navigation/TabNavLink";
+import { useRehydrate } from "@clientComponents/form-builder/hooks";
 
 export interface ResponsesProps {
   initialForm: FormRecord | null;
@@ -71,6 +72,9 @@ export const ClientSide = ({
       ? initialForm.form.titleFr
       : initialForm.form.titleEn;
   }
+
+  const hasHydrated = useRehydrate();
+  if (!hasHydrated) return null;
 
   if (!isAuthenticated) {
     return (
