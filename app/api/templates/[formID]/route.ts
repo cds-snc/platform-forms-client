@@ -36,8 +36,7 @@ const runValidationCondition = async (body: Record<string, unknown>) => {
   return body.formConfig !== undefined;
 };
 
-export const GET = async (  req: NextRequest,
-  { params }: { params: Record<string, string> }) => {
+export const GET = async (req: NextRequest, { params }: { params: Record<string, string> }) => {
   try {
     const formID = params?.formID;
 
@@ -90,7 +89,7 @@ export const GET = async (  req: NextRequest,
       );
     }
   }
-});
+};
 
 interface PutApiProps {
   name?: string;
