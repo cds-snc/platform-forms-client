@@ -28,7 +28,8 @@ const customJestConfig: Config = {
     ...pathsToModuleNameMapper(compilerOptions.paths, {
       prefix: "<rootDir>/",
     }),
-    "^next-auth/(.*)$": "<rootDir>/__utils__/mocks/next-auth/$1",
+    "^next-auth(/?.*)$": "<rootDir>/__utils__/mocks/next-auth",
+    "^lib/auth/nextAuth$": "<rootDir>/__utils__/mocks/nextAuth",
   },
   moduleDirectories: ["node_modules", "<rootDir>"],
   clearMocks: true,
@@ -38,12 +39,12 @@ const customJestConfig: Config = {
     "<rootDir>/__utils__/prismaConnector.ts",
   ],
   testEnvironment: "jsdom",
-  preset: "ts-jest/presets/js-with-ts",
+  preset: "ts-jest",
 };
 
-// createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
-//export default createJestConfig(customJestConfig);
-export default async () => ({
+const jestConfig = async () => ({
   ...(await createJestConfig(customJestConfig)()),
   transformIgnorePatterns: ["/node_modules/(?!(next-auth|@auth)/)"],
 });
+
+export default jestConfig;

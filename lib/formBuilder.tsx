@@ -333,6 +333,8 @@ export const getFormInitialValues = (formRecord: PublicFormRecord, language: str
       initialValues[element.id] = _getElementInitialValue(element, language);
     });
 
+  // Used to track the current group dynamically
+  initialValues.currentGroup = "";
   return initialValues;
 };
 

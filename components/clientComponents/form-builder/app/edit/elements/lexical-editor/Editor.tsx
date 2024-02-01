@@ -52,6 +52,7 @@ export const Editor = ({
   if (typeof content !== "string") {
     content = "";
   }
+
   return (
     <div className="rich-text-wrapper gc-formview">
       <LexicalComposer

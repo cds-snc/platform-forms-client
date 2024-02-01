@@ -3,7 +3,6 @@
  */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import Redis from "ioredis-mock";
 import { mockClient } from "aws-sdk-client-mock";
 import {
   CognitoIdentityProviderClient,
@@ -18,17 +17,15 @@ import {
   requestNew2FAVerificationCode,
   validate2FAVerificationCode,
   Validate2FAVerificationCodeResultStatus,
-} from "@lib/auth";
+} from "@lib/auth/cognito";
 import { Base } from "__utils__/permissions";
 import { generateVerificationCode, sendVerificationCode } from "@lib/auth/2fa";
 import { registerFailed2FAAttempt, clear2FALockout } from "@lib/auth/2faLockout";
 import { logEvent } from "@lib/auditLogs";
 import { logMessage } from "@lib/logger";
 
-const redis = new Redis();
-jest.mock("@lib/integration/redisConnector", () => ({
-  getRedisInstance: jest.fn(() => redis),
-}));
+const mockLogEvent = jest.mocked(logEvent, { shallow: true });
+const mockLogMessage = jest.mocked(logMessage, { shallow: true });
 
 const cognitoMock = mockClient(CognitoIdentityProviderClient);
 
@@ -48,12 +45,6 @@ const mockClear2FALockout = jest.mocked(clear2FALockout, {
   shallow: true,
 });
 
-jest.mock("@lib/auditLogs");
-const mockLogEvent = jest.mocked(logEvent, { shallow: true });
-
-jest.mock("@lib/logger");
-const mockLogMessage = jest.mocked(logMessage, { shallow: false });
-
 /*
 JWT token including:
 {
@@ -66,10 +57,6 @@ const mockedCognitoToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmNGY3Y2VkYi0wZjBiLTQzOTAtOTFhMi02OWU4YzhhMjlmNjciLCJuYW1lIjoiVGVzdCBVc2VyIiwiZW1haWwiOiJ0ZXN0QHRlc3QuY29tIn0.7BofsW0I0SRMb1BWgDuRV_CupOttdsOJXE4JV6kYhyc";
 
 describe("Test Cognito library", () => {
-  beforeEach(() => {
-    redis.flushall();
-  });
-
   describe("initiateSignIn", () => {
     it("Should return email with token if Cognito was able to authenticate the user", async () => {
       const cognitoMockedResponse: AdminInitiateAuthResponse = {
@@ -128,7 +115,7 @@ describe("Test Cognito library", () => {
           username: "test@test.com",
           password: "testtest",
         });
-      }).rejects.toThrowError(new Error("NotAuthorizedException: Password attempts exceeded"));
+      }).rejects.toThrow(new Error("NotAuthorizedException: Password attempts exceeded"));
 
       expect(mockLogEvent).toHaveBeenCalledWith(
         "3",

@@ -48,13 +48,12 @@ export const ReVerify = ({
         url: "/api/auth/2fa/request-new-verification-code",
         method: "POST",
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
           "X-CSRF-Token": token,
         },
-        data: new URLSearchParams({
+        data: {
           email: username.current,
           authenticationFlowToken: authenticationFlowToken.current,
-        }),
+        },
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       });
 
@@ -68,9 +67,10 @@ export const ReVerify = ({
     } catch (err) {
       logMessage.error(err);
 
-      if (hasError(["CredentialsSignin", "CSRF token not found"], err)) {
-        // Missing CsrfToken or username so have the user try signing in
+      if (hasError(["CredentialsSignin", "CSRF token not found", "Missing 2FA session"], err)) {
+        // Missing CsrfToken, username or 2FA session so have the user try signing in again
         router.push("/auth/login");
+        router.refresh();
       } else {
         handleErrorById("InternalServiceException");
       }

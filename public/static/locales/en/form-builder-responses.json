@@ -69,7 +69,7 @@
       "select": "Select",
       "selectAll": "Select all",
       "deselectAll": "Deselect all",
-      "number": "Submission",
+      "number": "Submission ID",
       "status": "Status",
       "downloadResponse": "Download window",
       "lastDownloadedBy": "Downloaded by",
@@ -157,7 +157,7 @@
       "csvDescription": "For lists, spreadsheets, or tables",
       "json": "JSON",
       "jsonDescription": "For API or data configuration",
-      "downloadAllAsZip": "Download all files as ZIP (compressed) file",
+      "downloadAllAsZip": "Download all as ZIP (compressed) file",
       "cancel": "Cancel",
       "download": "Download"
     },

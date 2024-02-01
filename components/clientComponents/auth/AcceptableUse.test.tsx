@@ -1,7 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import axios from "axios";
 import AcceptableUseTerms from "./AcceptableUse";
 import { useSession } from "next-auth/react";
 import { Session } from "next-auth";

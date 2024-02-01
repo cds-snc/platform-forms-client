@@ -35,13 +35,13 @@ jobs:
       - name: Configure AWS credentials using OIDC
         uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a # v4.0.1
         with:
-          aws-access-key-id: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/platform-forms-client-release
+          role-session-name: ECRPush
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Production Amazon ECR
         id: login-ecr-production
-        uses: aws-actions/amazon-ecr-login@fe743e6bc3eb2ab5094262c5b9c6a168ceb05bec
+        uses: aws-actions/amazon-ecr-login@822fc4df32eb7c09c94b76111b9946bd7f02478a
 
       - name: Tag Images for Production
         env:
