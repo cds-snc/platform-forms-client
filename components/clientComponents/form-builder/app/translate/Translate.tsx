@@ -15,6 +15,7 @@ import { SaveButton } from "../shared/SaveButton";
 
 import { FormElement } from "@lib/types";
 import { alphabet, sortByLayout } from "../../util";
+import { useRehydrate } from "../../hooks";
 
 const Element = ({
   element,
@@ -111,6 +112,9 @@ export const Translate = () => {
 
   let questionsIndex = 1;
 
+  const hasHydrated = useRehydrate();
+  if (!hasHydrated) return null;
+
   return (
     <>
       <div>
@@ -201,7 +205,7 @@ export const Translate = () => {
                     )}`}
                     content={
                       form.introduction[
-                        localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)
+                      localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)
                       ]
                     }
                     lang={primaryLanguage}
@@ -220,7 +224,7 @@ export const Translate = () => {
                     )}`}
                     content={
                       form.introduction[
-                        localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
+                      localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
                       ]
                     }
                     lang={secondaryLanguage}
@@ -278,7 +282,7 @@ export const Translate = () => {
                   )}`}
                   content={
                     form.privacyPolicy?.[
-                      localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)
+                    localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)
                     ] ?? ""
                   }
                   lang={primaryLanguage}
@@ -300,7 +304,7 @@ export const Translate = () => {
                   )}`}
                   content={
                     form.privacyPolicy?.[
-                      localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
+                    localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
                     ] ?? ""
                   }
                   lang={secondaryLanguage}
@@ -338,7 +342,7 @@ export const Translate = () => {
                   )}`}
                   content={
                     form.confirmation?.[
-                      localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)
+                    localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)
                     ] ?? ""
                   }
                   lang={primaryLanguage}
@@ -360,7 +364,7 @@ export const Translate = () => {
                   )}`}
                   content={
                     form.confirmation?.[
-                      localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
+                    localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
                     ] ?? ""
                   }
                   lang={secondaryLanguage}

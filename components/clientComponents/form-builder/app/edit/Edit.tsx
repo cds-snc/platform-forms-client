@@ -85,10 +85,7 @@ export const Edit = () => {
     }
   }, [focusTitle]);
 
-  const hasHydrated = useTemplateStore((s) => s.hasHydrated);
-
-  useRehydrate();
-
+  const hasHydrated = useRehydrate();
   if (!hasHydrated) return null;
 
   return (

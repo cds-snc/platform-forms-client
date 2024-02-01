@@ -510,6 +510,8 @@ export const useRehydrate = () => {
   useEffect(() => {
     store.persist.rehydrate();
   }, [store]);
+
+  return store.getState().hasHydrated;
 };
 
 export const clearTemplateStore = () => {
