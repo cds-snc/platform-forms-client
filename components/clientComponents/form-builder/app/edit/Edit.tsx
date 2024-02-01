@@ -84,6 +84,10 @@ export const Edit = () => {
     }
   }, [focusTitle]);
 
+  const hasHydrated = useTemplateStore((s) => s.hasHydrated);
+
+  if (!hasHydrated) return null;
+
   return (
     <>
       <h1 className="visually-hidden">{t("edit")}</h1>
