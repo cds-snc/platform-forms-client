@@ -117,8 +117,7 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
       {hasBrandingRequestForm && (
         <div>
           <p className="mb-5 mt-6 text-sm">{t("branding.notFound")}</p>
-          <p className="mb-5 text-sm">{t("branding.submitNew")}
-          </p>
+          <p className="mb-5 text-sm">{t("branding.submitNew")}</p>
         </div>
       )}
     </div>
