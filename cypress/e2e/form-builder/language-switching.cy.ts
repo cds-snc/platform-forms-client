@@ -4,7 +4,7 @@ describe("Test FormBuilder language switching", () => {
     cy.visitPage("/form-builder");
   });
 
-  it("Can enter English and French text in Introduction", () => {
+  it("Can enter English and French text in Description", () => {
     // Setup a form with one question
     cy.get("h2").first().click();
     // eslint-disable-next-line cypress/no-unnecessary-waiting
@@ -16,8 +16,8 @@ describe("Test FormBuilder language switching", () => {
     // Enter English Title and Description
     cy.typeInField("#formTitle", "Cypress Test Form");
     cy.get("#formTitle").should("have.value", "Cypress Test Form");
-    cy.typeInField(`[aria-label="Description"]`, "form intro in english");
-    cy.get(`[aria-label="Description"]`).contains("form intro in english");
+    cy.typeInField(`[aria-label="Description"]`, "form description in english");
+    cy.get(`[aria-label="Description"]`).contains("form description in english");
 
     // Enter some English "page text"
     cy.typeInField('[aria-label="Page text 1"]', "page text in english");
@@ -37,8 +37,8 @@ describe("Test FormBuilder language switching", () => {
     // Enter French Title and Description
     cy.typeInField("#formTitle", "Formulaire de test Cypress");
     cy.get("#formTitle").should("have.value", "Formulaire de test Cypress");
-    cy.typeInField(`[aria-label="Description"]`, "form intro in french");
-    cy.get(`[aria-label="Description"]`).contains("form intro in french");
+    cy.typeInField(`[aria-label="Description"]`, "form description in french");
+    cy.get(`[aria-label="Description"]`).contains("form description in french");
 
     // Enter some French "page text"
     cy.typeInField('[aria-label="Page text 1"]', "page text in french");
