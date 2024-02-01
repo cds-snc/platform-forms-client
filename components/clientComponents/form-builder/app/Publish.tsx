@@ -6,7 +6,7 @@ import { useTranslation } from "@i18n/client";
 import { useRouter } from "next/navigation";
 
 import { useTemplateStore } from "../store";
-import { useTemplateApi, useAllowPublish } from "../hooks";
+import { useTemplateApi, useAllowPublish, useRehydrate } from "../hooks";
 import { CancelIcon, CircleCheckIcon, LockIcon } from "../../icons";
 import { Button, Alert } from "@clientComponents/globals";
 import Link from "next/link";
@@ -111,6 +111,9 @@ export const Publish = () => {
 
     router.push(`/unlock-publishing`);
   }, [getSchema, getName, id, save, router]);
+
+  const hasHydrated = useRehydrate();
+  if (!hasHydrated) return null;
 
   if (status !== "authenticated") {
     return <LoggedOutTab tabName={LoggedOutTabName.PUBLISH} />;
