@@ -205,7 +205,7 @@ export const Translate = () => {
                     )}`}
                     content={
                       form.introduction[
-                      localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)
+                        localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)
                       ]
                     }
                     lang={primaryLanguage}
@@ -224,7 +224,7 @@ export const Translate = () => {
                     )}`}
                     content={
                       form.introduction[
-                      localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
+                        localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
                       ]
                     }
                     lang={secondaryLanguage}
@@ -282,7 +282,7 @@ export const Translate = () => {
                   )}`}
                   content={
                     form.privacyPolicy?.[
-                    localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)
+                      localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)
                     ] ?? ""
                   }
                   lang={primaryLanguage}
@@ -304,7 +304,7 @@ export const Translate = () => {
                   )}`}
                   content={
                     form.privacyPolicy?.[
-                    localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
+                      localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
                     ] ?? ""
                   }
                   lang={secondaryLanguage}
@@ -342,7 +342,7 @@ export const Translate = () => {
                   )}`}
                   content={
                     form.confirmation?.[
-                    localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)
+                      localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)
                     ] ?? ""
                   }
                   lang={primaryLanguage}
@@ -364,7 +364,7 @@ export const Translate = () => {
                   )}`}
                   content={
                     form.confirmation?.[
-                    localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
+                      localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
                     ] ?? ""
                   }
                   lang={secondaryLanguage}

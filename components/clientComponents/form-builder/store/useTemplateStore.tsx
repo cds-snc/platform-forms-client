@@ -375,8 +375,9 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 const element = JSON.parse(JSON.stringify(state.form.elements[elIndex]));
                 element.id = id;
                 if (element.type !== "richText") {
-                  element.properties[state.localizeField("title")] = `${element.properties[state.localizeField("title")]
-                    } copy`;
+                  element.properties[state.localizeField("title")] = `${
+                    element.properties[state.localizeField("title")]
+                  } copy`;
                 }
                 state.form.elements.splice(elIndex + 1, 0, element);
                 state.form.layout.splice(elIndex + 1, 0, id);
@@ -389,8 +390,9 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 if (subElements) {
                   const element = JSON.parse(JSON.stringify(subElements[subIndex]));
                   element.id = incrementElementId(subElements);
-                  element.properties[state.localizeField("title")] = `${element.properties[state.localizeField("title")]
-                    } copy`;
+                  element.properties[state.localizeField("title")] = `${
+                    element.properties[state.localizeField("title")]
+                  } copy`;
 
                   state.form.elements[elIndex].properties.subElements?.splice(
                     subIndex + 1,
@@ -443,6 +445,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             storage: createJSONStorage(() => storage),
             skipHydration: true,
             onRehydrateStorage: () => {
+              logMessage.debug("Template Store Hydration starting");
               return (state) => {
                 logMessage.debug("Template Store Hydrationfinished");
                 state?.setHasHydrated();
@@ -472,8 +475,6 @@ export const TemplateStoreProvider = ({
     }
 
     storeRef.current = createTemplateStore(props);
-
-    // storeRef.current?.persist.rehydrate();
   }
 
   return (
