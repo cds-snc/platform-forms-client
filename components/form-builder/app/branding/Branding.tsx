@@ -134,6 +134,6 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
           <p className="mb-5 text-sm">{t("branding.submitNew")}</p>
         </div>
       )}
-      </div>
+    </div>
   );
 };
