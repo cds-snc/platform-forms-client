@@ -200,7 +200,7 @@ export const Translate = () => {
                       ]
                     }
                     lang={primaryLanguage}
-                    ariaLabel={t("formIntroduction")}
+                    ariaLabel={t("description")}
                     ariaDescribedBy="form-introduction-english-language"
                   />
                 </div>
@@ -219,7 +219,7 @@ export const Translate = () => {
                       ]
                     }
                     lang={secondaryLanguage}
-                    ariaLabel={t("formIntroduction")}
+                    ariaLabel={t("description")}
                     ariaDescribedBy="form-introduction-french-language"
                   />
                 </div>
