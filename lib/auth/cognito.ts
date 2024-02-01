@@ -40,6 +40,8 @@ export type Validate2FAVerificationCodeResult = {
   decodedCognitoToken?: DecodedCognitoToken;
 };
 
+export class Missing2FASession extends Error {}
+
 export const initiateSignIn = async ({
   username,
   password,
@@ -196,15 +198,15 @@ export const requestNew2FAVerificationCode = async (
       })
       .catch((e) => prismaErrors(e, null));
 
-    if (result === null) {
-      throw new Error("Update failed because of missing 2FA authentication session");
-    }
+    if (result === null) throw new Missing2FASession();
 
     await sendVerificationCode(sanitizedEmail, verificationCode);
   } catch (error) {
-    throw new Error(
-      `Failed to generate and send new verification code. Reason: ${(error as Error).message}.`
-    );
+    if (error instanceof Missing2FASession) {
+      throw error;
+    } else {
+      throw new Error(`Failed to send new verification code. Reason: ${(error as Error).message}.`);
+    }
   }
 };
 
