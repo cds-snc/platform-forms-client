@@ -15,6 +15,7 @@ import { SaveButton } from "../shared/SaveButton";
 
 import { FormElement } from "@lib/types";
 import { alphabet, sortByLayout } from "../../util";
+import { useRehydrate } from "../../hooks";
 
 const Element = ({
   element,
@@ -110,6 +111,9 @@ export const Translate = () => {
   const secondaryLanguage = primaryLanguage === "en" ? "fr" : "en";
 
   let questionsIndex = 1;
+
+  const hasHydrated = useRehydrate();
+  if (!hasHydrated) return null;
 
   return (
     <>

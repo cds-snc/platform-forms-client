@@ -8,3 +8,4 @@ export { useIsWithin } from "./useIsWithin";
 export { usePanelActions } from "./usePanelActions";
 export { useHandleAdd } from "./useHandleAdd";
 export { useIsAdminUser } from "./useIsAdminUser";
+export { useRehydrate } from "../../form-builder/store/useTemplateStore";

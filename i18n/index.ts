@@ -23,11 +23,10 @@ export async function serverTranslation(
   ns?: string | string[],
   options?: { keyPrefix?: string; lang?: string }
 ) {
-  const cookieLang = cookies().get("i18next")?.value;
-  const path = headers().get("x-invoke-path") ?? "";
+  const path = headers().get("x-path") ?? "";
   const pathLang = pathLanguageDetection(path, languages);
 
-  const i18nLang = options?.lang || pathLang || cookieLang || languages[0];
+  const i18nLang = options?.lang || pathLang || languages[0];
 
   const i18nextInstance = await initI18next(i18nLang, ns ?? ["common"]);
   return {
