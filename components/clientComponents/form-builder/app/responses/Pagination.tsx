@@ -16,7 +16,10 @@ export const Pagination = ({
   responseDownloadLimit: number;
   recordCount: number;
 }) => {
-  const { t } = useTranslation("form-builder-responses");
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation("form-builder-responses");
   const router = useRouter();
 
   // Need statusQuery when building up the prev/next links
@@ -45,9 +48,11 @@ export const Pagination = ({
       setKeys(decodedKeys);
     } catch (e) {
       // If the base64 encoded string has been tampered with, redirect to the first page
-      router.push(`/form-builder/responses/${formId}${statusQuery ? "/" + statusQuery : ""}`);
+      router.push(
+        `/${language}/form-builder/responses/${formId}${statusQuery ? "/" + statusQuery : ""}`
+      );
     }
-  }, [formId, router, searchParams, statusQuery]);
+  }, [formId, router, searchParams, statusQuery, language]);
 
   // When going back, we pop the last item off the keys array
   const previousKeys = keys.slice(0, -1);
@@ -84,11 +89,15 @@ export const Pagination = ({
   return (
     <>
       <Link
-        href={`/form-builder/responses/${formId}${statusQuery ? "/" + statusQuery : ""}`}
+        href={`/${language}/form-builder/responses/${formId}${
+          statusQuery ? "/" + statusQuery : ""
+        }`}
         legacyBehavior
       >
         <a
-          href={`/form-builder/responses/${formId}${statusQuery ? "/" + statusQuery : ""}`}
+          href={`/${language}/form-builder/responses/${formId}${
+            statusQuery ? "/" + statusQuery : ""
+          }`}
           className={`group mr-4 inline-block ${
             isFirstPage ? "pointer-events-none opacity-50" : ""
           }`}
@@ -101,13 +110,13 @@ export const Pagination = ({
 
       <div className="float-right inline-block">
         <Link
-          href={`/form-builder/responses/${formId}${
+          href={`/${language}/form-builder/responses/${formId}${
             statusQuery ? "/" + statusQuery : ""
           }${previousLink}`}
           legacyBehavior
         >
           <a
-            href={`/form-builder/responses/${formId}${
+            href={`/${language}/form-builder/responses/${formId}${
               statusQuery ? "/" + statusQuery : ""
             }${previousLink}`}
             className={`group mr-4 inline-block ${
@@ -121,13 +130,13 @@ export const Pagination = ({
         </Link>
         {t("downloadResponsesTable.header.pagination.showing", { start, end })}
         <Link
-          href={`/form-builder/responses/${formId}${
+          href={`/${language}/form-builder/responses/${formId}${
             statusQuery ? "/" + statusQuery : ""
           }?keys=${btoa(keys.join(","))}&lastKey=${lastEvaluatedResponseId}`}
           legacyBehavior
         >
           <a
-            href={`/form-builder/responses/${formId}${
+            href={`/${language}/form-builder/responses/${formId}${
               statusQuery ? "/" + statusQuery : ""
             }?keys=${btoa(keys.join(","))}&lastKey=${lastEvaluatedResponseId}`}
             className={`group ml-4 inline-block ${

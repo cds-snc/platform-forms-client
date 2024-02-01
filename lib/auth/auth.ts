@@ -54,7 +54,9 @@ export async function requireAuthentication() {
       session.user.hasSecurityQuestions &&
       !session.user.acceptableUse &&
       !currentPath.startsWith("/auth/policy") &&
-      !currentPath.startsWith("/auth/setup-security-questions")
+      !currentPath.startsWith("/auth/setup-security-questions") &&
+      // If they don't want to accept let them log out
+      !currentPath.startsWith("/auth/logout")
     ) {
       // If they haven't agreed to Acceptable Use redirect to policy page for acceptance
       // If already on the policy page don't redirect, aka endless redirect loop.
