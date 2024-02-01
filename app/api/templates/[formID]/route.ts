@@ -10,7 +10,7 @@ import {
   updateClosingDateForTemplate,
   getPublicTemplateByID,
 } from "@lib/templates";
-
+import { NextRequest } from "next/server";
 import { middleware, jsonValidator, sessionExists } from "@lib/middleware";
 import templatesSchema from "@lib/middleware/schemas/templates.schema.json";
 import { NextResponse } from "next/server";
@@ -36,80 +36,61 @@ const runValidationCondition = async (body: Record<string, unknown>) => {
   return body.formConfig !== undefined;
 };
 
-export const GET = middleware(
-  [
-    jsonValidator(templatesSchema, {
-      jsonKey: "formConfig",
-      noHTML: true,
-    }),
-    uniqueIDValidator({
-      runValidationIf: runValidationCondition,
-      jsonKey: "formConfig",
-    }),
-    layoutIDValidator({
-      runValidationIf: runValidationCondition,
-      jsonKey: "formConfig",
-    }),
-    subElementsIDValidator({
-      runValidationIf: runValidationCondition,
-      jsonKey: "formConfig",
-    }),
-  ],
-  async (req, props) => {
-    try {
-      const formID = props.params?.formID;
+export const GET = async (  req: NextRequest,
+  { params }: { params: Record<string, string> }) => {
+  try {
+    const formID = params?.formID;
 
-      if (!formID || typeof formID !== "string") {
-        throw new MalformedAPIRequest("Invalid or missing formID");
-      }
+    if (!formID || typeof formID !== "string") {
+      throw new MalformedAPIRequest("Invalid or missing formID");
+    }
 
-      const session = await auth();
+    const session = await auth();
 
-      if (!session) {
-        const response = await getPublicTemplateByID(formID);
-        if (response === null) {
-          throw new Error(
-            `Template API response was null. Request information: method = ${
-              req.method
-            } ; query = ${JSON.stringify(props.params)} ; body = ${JSON.stringify(props.body)}`
-          );
-        }
-        if (!response.isPublished) {
-          return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-        }
-        return NextResponse.json(response);
-      }
-
-      const ability = createAbility(session);
-
-      const response = await getFullTemplateByID(ability, formID);
+    if (!session) {
+      const response = await getPublicTemplateByID(formID);
       if (response === null) {
         throw new Error(
           `Template API response was null. Request information: method = ${
             req.method
-          } ; query = ${JSON.stringify(props.params)} ; body = ${JSON.stringify(props.body)}`
+          } ; query = ${JSON.stringify(params)}`
         );
+      }
+      if (!response.isPublished) {
+        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
       }
       return NextResponse.json(response);
-    } catch (e) {
-      const error = e as Error;
-      if (e instanceof AccessControlError) {
-        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-      } else if (e instanceof MalformedAPIRequest) {
-        return NextResponse.json(
-          { error: `Malformed API Request. Reason: ${error.message}.` },
-          { status: 400 }
-        );
-      } else {
-        logMessage.error(error);
-        return NextResponse.json(
-          { error: `Internal server error. Reason: ${error.message}.` },
-          { status: 500 }
-        );
-      }
+    }
+
+    const ability = createAbility(session);
+
+    const response = await getFullTemplateByID(ability, formID);
+    if (response === null) {
+      throw new Error(
+        `Template API response was null. Request information: method = ${
+          req.method
+        } ; query = ${JSON.stringify(params)}`
+      );
+    }
+    return NextResponse.json(response);
+  } catch (e) {
+    const error = e as Error;
+    if (e instanceof AccessControlError) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    } else if (e instanceof MalformedAPIRequest) {
+      return NextResponse.json(
+        { error: `Malformed API Request. Reason: ${error.message}.` },
+        { status: 400 }
+      );
+    } else {
+      logMessage.error(error);
+      return NextResponse.json(
+        { error: `Internal server error. Reason: ${error.message}.` },
+        { status: 500 }
+      );
     }
   }
-);
+});
 
 interface PutApiProps {
   name?: string;
