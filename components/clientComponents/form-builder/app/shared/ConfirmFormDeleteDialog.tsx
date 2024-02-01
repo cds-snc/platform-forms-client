@@ -35,7 +35,7 @@ async function downloadForm(lang: string, id: string) {
     timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
   });
 
-  const fileName = lang === "fr"? response.data.form.titleFr : response.data.form.titleEn;
+  const fileName = lang === "fr" ? response.data.form.titleFr : response.data.form.titleEn;
   const data = JSON.stringify(response.data.form, null, 2);
   const tempUrl = window.URL.createObjectURL(new Blob([data]));
   const link = document.createElement("a");
