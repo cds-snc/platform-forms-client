@@ -227,7 +227,10 @@ export const validateOnSubmit = (
       continue;
     }
 
-    if (formElement.properties.conditionalRules) {
+    if (
+      formElement.properties.conditionalRules &&
+      formElement.properties.conditionalRules.length > 0
+    ) {
       // check if a conditional rule is met
       const rules = formElement.properties.conditionalRules;
       if (!rules.some((rule) => matchRule(rule, props.formRecord, values as FormValues))) {
