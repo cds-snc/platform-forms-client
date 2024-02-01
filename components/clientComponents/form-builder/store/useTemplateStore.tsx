@@ -467,13 +467,11 @@ export const TemplateStoreProvider = ({
   ...props
 }: React.PropsWithChildren<Partial<TemplateStoreProps>>) => {
   const storeRef = useRef<TemplateStore>();
-
   if (!storeRef.current) {
     // When there is an incoming form to initialize the store, clear it first
     if (props.id) {
       clearTemplateStore();
     }
-
     storeRef.current = createTemplateStore(props);
   }
 
