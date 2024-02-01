@@ -33,6 +33,7 @@ const allowedOrigins = [process.env.NEXTAUTH_URL];
 
 export async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
+  const searchParams = req.nextUrl.searchParams.toString();
 
   // Layer 0 - Set CORS on API routes
   if (pathname.startsWith("/api")) {
@@ -83,7 +84,10 @@ export async function middleware(req: NextRequest) {
       logMessage.debug(
         `Middleware - Redirecting to cookie language: ${cookieLang}, pathname: ${pathname}`
       );
-      return NextResponse.redirect(new URL(`/${cookieLang}${pathname}`, req.url));
+
+      return NextResponse.redirect(
+        new URL(`/${cookieLang}${pathname}${searchParams && "?" + searchParams}`, req.url)
+      );
     } else {
       // Redirect to fallback language
       logMessage.debug(`Middleware - Redirecting to fallback language: : ${pathname}`);
