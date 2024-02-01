@@ -64,7 +64,7 @@ export const ModalForm = ({
         />
       </div>
       <div className="mb-2">
-        <ModalLabel>{t("description")}</ModalLabel>
+        <ModalLabel>{t("inputdescription")}</ModalLabel>
         <Hint>{t("descriptionDescription")}</Hint>
         <TextArea
           id={`description--modal--${item.index}`}

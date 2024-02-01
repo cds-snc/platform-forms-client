@@ -275,7 +275,7 @@
     "number": "Saisissez un chiffre",
     "phone": "Par exemple : 111-222-3333"
   },
-  "description": "Texte explicatif ",
+  "description": "Description",
   "descriptionDescription": "Le texte explicatif apparaît sous l'étiquette et avant le champ. Il est utilisé pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de mise en forme ou donner un exemple.",
   "didYouFindThisToolHelpful": "Avez-vous trouvé Formulaires GC pertinent comme outil? <a href=\"/fr/form-builder/support/contactus\" target=\"_blank\">Donner votre avis</a>",
   "downloadCSV": "Exporter en fichier CSV",
@@ -397,7 +397,7 @@
   "gcFormsTranslate": "Traductions",
   "ifYouAreExperiencingProblems": "Si vous rencontrez des problèmes avec votre formulaire publié, <a href=\"/fr/form-builder/support\" target=\"_blank\">veuillez contacter l’équipe de soutien.</a>.",
   "incomplete": "Incomplet",
-  "inputDescription": "Description",
+  "inputDescription": "Texte explicatif",
   "insertLink": "Insérer un lien  ",
   "lastSaved": "mise à jour à",
   "linkUrl": "URL du lien",

@@ -276,7 +276,7 @@
     "number": "Enter a number",
     "phone": "For example: 111-222-3333"
   },
-  "description": "Hint text",
+  "description": "Description",
   "descriptionDescription": "The hint text appears below the label and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements or give an example.",
   "didYouFindThisToolHelpful": "Did you find GC Forms helpful? <a href=\"/en/form-builder/support/contactus\" target=\"_blank\">Provide feedback</a>",
   "downloadCSV": "Export as a spreadsheet",
@@ -398,7 +398,7 @@
   "gcFormsTranslate": "Translations",
   "ifYouAreExperiencingProblems": "If you are experiencing any problems with your published form, please <a href=\"/en/form-builder/support\" target=\"_blank\">contact support</a>.",
   "incomplete": "Incomplete",
-  "inputDescription": "Description",
+  "inputDescription": "Hint text",
   "insertLink": "Insert link",
   "lastSaved": "updated at",
   "linkUrl": "Link URL",
