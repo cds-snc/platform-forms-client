@@ -3,11 +3,12 @@ import React, { useEffect } from "react";
 
 import { SetResponseDelivery } from "./SetResponseDelivery";
 import { LoggedOutTabName, LoggedOutTab } from "./LoggedOutTab";
-import { useTemplateContext } from "../hooks";
+import { useTemplateContext, useRehydrate } from "../hooks";
 import { useTemplateStore } from "../store";
 
 export const ResponseDelivery = () => {
   const { saveForm } = useTemplateContext();
+  const storeRef = useTemplateContext();
 
   const hasHydrated = useTemplateStore((s) => s.hasHydrated);
 
@@ -18,9 +19,7 @@ export const ResponseDelivery = () => {
     }
   }, [saveForm, hasHydrated]);
 
-  useEffect(() => {
-    // storeRef.persist.rehydrate();
-  }, []);
+  useRehydrate();
 
   if (!hasHydrated) return null;
 

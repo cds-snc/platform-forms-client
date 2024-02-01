@@ -504,6 +504,14 @@ export const useSubscibeToTemplateStore = <T,>(
   );
 };
 
+export const useRehydrate = () => {
+  const store = useContext(TemplateStoreContext);
+  if (!store) throw new Error("Missing Template Store Provider in tree");
+  useEffect(() => {
+    store.persist.rehydrate();
+  }, [store]);
+};
+
 export const clearTemplateStore = () => {
   if (typeof window !== "undefined") {
     sessionStorage.removeItem("form-storage");
