@@ -22,7 +22,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     redirect(`/${locale}/forms`);
   }
   return (
-    <UserNavLayout contentWidth="tablet:w-[768px] laptop:w-[850px]">
+    <UserNavLayout contentWidth="tablet:w-[658px]">
       <Login />
     </UserNavLayout>
   );
