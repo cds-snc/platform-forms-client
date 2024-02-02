@@ -9,8 +9,6 @@ export const csrfProtected = (): MiddlewareRequest => {
     if (req.method === "GET") return { next: true };
     const csrfToken = await internalCsrfToken(req).catch(() => "");
     const csrfHeader = headers().get("x-csrf-token");
-    logMessage.info(`Request CSRF Token: ${csrfHeader}`);
-    logMessage.info(`ServerSide CSRF Token: ${csrfToken}`);
     if (csrfToken && csrfToken === csrfHeader) {
       // Compare csrfToken with csrfCookie
       return { next: true };
@@ -24,6 +22,7 @@ export const csrfProtected = (): MiddlewareRequest => {
 };
 
 const internalCsrfToken = async (req: NextRequest): Promise<string> => {
+  // Ensure we're using the same cookies as the client
   const csrfUrl = `http://127.0.0.1:3000/api/auth/csrf`;
   const cookies = req.cookies as unknown as string;
   const csrfToken: string | undefined = await axios
