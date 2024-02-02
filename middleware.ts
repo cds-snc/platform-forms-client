@@ -100,8 +100,6 @@ export async function middleware(req: NextRequest) {
   let cookieSyncRequired = false;
   if (pathLang && cookieLang !== pathLang) {
     logMessage.debug(`Middleware - Setting language cookie: ${cookieLang} for path: ${pathname}`);
-    // Set missing cookie on incoming request so server can render correct language on server components
-    req.cookies.set("i18next", pathLang);
     cookieSyncRequired = true;
   }
 
