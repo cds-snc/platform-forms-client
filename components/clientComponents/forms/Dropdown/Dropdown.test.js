@@ -84,7 +84,7 @@ describe.each([["en"], ["fr"]])("Dropdown component", (lang) => {
   afterEach(cleanup);
   test("renders without errors", async () => {
     const user = userEvent.setup();
-    render(<GenerateElement element={dropdownData} language={lang} t={(key) => key} />);
+    render(<GenerateElement element={dropdownData} language={lang} />);
     const title = lang === "en" ? dropdownData.properties.titleEn : dropdownData.properties.titleFr,
       description =
         lang === "en"
@@ -111,7 +111,7 @@ describe.each([["en"], ["fr"]])("Dropdown component", (lang) => {
   });
   test("required elements display properly", () => {
     dropdownData.properties.validation.required = true;
-    render(<GenerateElement element={dropdownData} language={lang} t={(key) => key} />);
+    render(<GenerateElement element={dropdownData} language={lang} />);
     expect(screen.queryByTestId("required")).toBeInTheDocument();
     dropdownData.properties.validation.required = false;
   });
