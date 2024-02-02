@@ -89,7 +89,7 @@ export const Publish = () => {
     window.dataLayer.push({
       event: "publish_form",
     });
-    router.push(`/form-builder/published/${id}`);
+    router.push(`/form-builder/published`);
   };
 
   const handleSaveAndRequest = useCallback(async () => {
