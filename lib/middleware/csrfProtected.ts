@@ -2,7 +2,6 @@ import { type NextRequest, NextResponse } from "next/server";
 import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
 import axios from "axios";
 import { headers } from "next/headers";
-import { logMessage } from "@lib/logger";
 
 export const csrfProtected = (): MiddlewareRequest => {
   return async (req: NextRequest): Promise<MiddlewareReturn> => {
