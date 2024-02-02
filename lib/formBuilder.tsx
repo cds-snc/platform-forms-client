@@ -231,7 +231,6 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
           rowLabel={placeHolder}
           rowElements={subElements}
           lang={lang}
-          t={t}
           maxNumberOfRows={element.properties.maxNumberOfRows}
         />
       );

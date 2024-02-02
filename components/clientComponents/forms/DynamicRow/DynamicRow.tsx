@@ -6,6 +6,7 @@ import { GenerateElement } from "@lib/formBuilder";
 import { FormElement } from "@lib/types";
 import { Button, Description } from "@clientComponents/forms";
 import { TFunction } from "i18next";
+import { useTranslation } from "react-i18next";
 
 interface DynamicGroupProps {
   name: string;
@@ -14,7 +15,7 @@ interface DynamicGroupProps {
   rowLabel?: string;
   rowElements: Array<FormElement>;
   lang: string;
-  t: TFunction;
+
   className?: string;
   error?: boolean;
   value?: string;
@@ -47,7 +48,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     error,
     rowElements,
     lang,
-    t,
+
     maxNumberOfRows,
   } = props;
   const [field, meta, helpers] = useField(props);
@@ -57,6 +58,8 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
   );
   const focusedRow = useRef<number | null>(null);
   const [hasReachedMaxNumberOfRows, setHasReachedMaxNumberOfRows] = useState<boolean>(false);
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (focusedRow.current !== null) {
