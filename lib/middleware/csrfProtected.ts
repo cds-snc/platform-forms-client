@@ -24,7 +24,7 @@ export const csrfProtected = (): MiddlewareRequest => {
 };
 
 const internalCsrfToken = async (req: NextRequest): Promise<string> => {
-  const csrfUrl = `${process.env.NEXTAUTH_URL}/api/auth/csrf`;
+  const csrfUrl = `http://127.0.0.1:3000/api/auth/csrf`;
   const cookies = req.cookies as unknown as string;
   const csrfToken: string | undefined = await axios
     .get(csrfUrl, { headers: { cookie: cookies } })
