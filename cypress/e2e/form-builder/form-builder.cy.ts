@@ -11,7 +11,7 @@ describe("Test FormBuilder", () => {
   it("Designs a form", () => {
     cy.visitPage("/form-builder/edit");
     cy.typeInField("#formTitle", "Cypress Test Form");
-    cy.typeInField(`[aria-label="Description"]`, "form description");
+    cy.typeInField(`[aria-label="Introduction"]`, "form description");
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="radio"]').click();
@@ -42,7 +42,7 @@ describe("Test FormBuilder", () => {
     // preview form
     cy.get('[data-testid="preview"]').click();
     cy.get("#content h1").should("contain", "Cypress Test Form");
-    cy.get(".gc-richText p").should("contain", "form intro");
+    cy.get(".gc-richText p").should("contain", "form description");
     cy.get("#label-1").should("contain", "Question 1-1");
     cy.get("#desc-1").should("contain", "Question 1 description");
     cy.get(".gc-input-radio").first().should("contain", "option 1");
