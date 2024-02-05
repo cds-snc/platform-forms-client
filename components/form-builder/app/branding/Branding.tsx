@@ -120,20 +120,19 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
           <p className="mb-5 text-sm">
             <Link
               href={`https://articles.alpha.canada.ca/forms-formulaires/${
-                i18n.language === "fr" && "fr/"
-              }request-alternate-branding`}
+                i18n.language === "fr"
+                  ? "fr/demander-une-autre-image-de-marque/"
+                  : "request-alternate-branding/"
+              }`}
               passHref
               rel="noopener noreferrer"
               target={"_blank"}
             >
-              {/* Href is passed down to child.  This behavior is fixed in NextJS 13 */}
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <a target="_blank" rel="noopener noreferrer">
-                {t("branding.submitNew")}
-              </a>
+              {t("branding.submitNew")}
             </Link>
+            .
           </p>
-          <p className="mb-5 text-sm">{t("branding.submitNew")}</p>
+          {/* <p className="mb-5 text-sm">{t("branding.submitNew")}</p> */}
         </div>
       )}
     </div>
