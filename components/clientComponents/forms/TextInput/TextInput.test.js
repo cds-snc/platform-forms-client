@@ -61,7 +61,7 @@ describe.each([["en"], ["fr"]])("Generate a text input", (lang) => {
 
 describe("Check attributes on rendered text input", () => {
   it("has the correct autoComplete value", () => {
-    render(<GenerateElement element={textInputData} language={"en"} t={(key) => key} />);
+    render(<GenerateElement element={textInputData} language={"en"} />);
     expect(screen.getByRole("textbox").hasAttribute("autoComplete").valueOf("name"));
   });
 });
@@ -70,7 +70,7 @@ describe("Verfify character count restrictions", () => {
   let screen;
 
   beforeEach(() => {
-    screen = render(<GenerateElement element={textInputData} language={"en"} t={(key) => key} />);
+    screen = render(<GenerateElement element={textInputData} language={"en"} />);
   });
 
   it("does not display any message when not enough characters have been typed in", async () => {

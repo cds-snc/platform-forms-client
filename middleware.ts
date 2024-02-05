@@ -44,6 +44,11 @@ export async function middleware(req: NextRequest) {
     const origin = req.headers.get("origin") ?? "";
     if (allowedOrigins.includes(origin)) {
       response.headers.set("Access-Control-Allow-Origin", origin);
+    } else {
+      response.headers.set(
+        "Access-Control-Allow-Origin",
+        process.env.NEXTAUTH_URL ?? "MISSING ORIGIN URL IN .env FILE!"
+      );
     }
 
     // Set default CORS headers

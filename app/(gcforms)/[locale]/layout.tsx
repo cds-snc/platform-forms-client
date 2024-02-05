@@ -18,7 +18,11 @@ export default async function Layout({
   if (session) {
     if (
       !session.user.hasSecurityQuestions &&
-      !currentPath.startsWith("/auth/setup-security-questions")
+      !currentPath.startsWith("/auth/setup-security-questions") &&
+      // Let them access support related pages if having issues with Security Questions
+      !currentPath.startsWith("/form-builder/support") &&
+      !currentPath.startsWith("/sla") &&
+      !currentPath.startsWith("/terms-of-use")
     ) {
       // check if user has setup security questions setup
       redirect(`/${locale}/auth/setup-security-questions`);
@@ -28,7 +32,9 @@ export default async function Layout({
       session.user.hasSecurityQuestions &&
       !session.user.acceptableUse &&
       !currentPath.startsWith("/auth/policy") &&
-      !currentPath.startsWith("/auth/setup-security-questions")
+      !currentPath.startsWith("/auth/setup-security-questions") &&
+      // If they don't want to accept let them log out
+      !currentPath.startsWith("/auth/logout")
     ) {
       // If they haven't agreed to Acceptable Use redirect to policy page for acceptance
       // If already on the policy page don't redirect, aka endless redirect loop.

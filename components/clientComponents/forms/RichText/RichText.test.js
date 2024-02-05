@@ -21,7 +21,7 @@ const richTextData = {
 describe("Generate a text area", () => {
   afterEach(cleanup);
   test.each([["en"], ["fr"]])("renders properly", (lang) => {
-    render(<GenerateElement element={richTextData} language={lang} t={(key) => key} />);
+    render(<GenerateElement element={richTextData} language={lang} />);
     const title = lang === "en" ? richTextData.properties.titleEn : richTextData.properties.titleFr,
       description =
         lang === "en"
@@ -44,7 +44,7 @@ describe("Generate a text area", () => {
         descriptionFr: "",
       },
     };
-    render(<GenerateElement element={emptyRichTextData} language="en" t={(key) => key} />);
+    render(<GenerateElement element={emptyRichTextData} language="en" />);
     expect(screen.queryByRole("label")).not.toBeInTheDocument();
     expect(screen.queryByTestId("richText")).not.toBeInTheDocument();
   });
@@ -52,14 +52,14 @@ describe("Generate a text area", () => {
     const richTextWithHTML = { ...richTextData };
     richTextWithHTML.properties.descriptionEn =
       "Testing <script data-testid='script'>alert('pwned')</script> this";
-    render(<GenerateElement element={richTextWithHTML} language="en" t={(key) => key} />);
+    render(<GenerateElement element={richTextWithHTML} language="en" />);
     expect(screen.queryByTestId("script")).not.toBeInTheDocument();
   });
 
   test("Renders link with target attribute", () => {
     const richTextWithHTML = { ...richTextData };
     richTextWithHTML.properties.descriptionEn = "Testing [link](https://google.ca) this";
-    render(<GenerateElement element={richTextWithHTML} language="en" t={(key) => key} />);
+    render(<GenerateElement element={richTextWithHTML} language="en" />);
     expect(screen.queryByRole("link")).toHaveAttribute("target");
   });
 });

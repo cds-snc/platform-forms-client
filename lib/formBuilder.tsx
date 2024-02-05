@@ -41,7 +41,7 @@ function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: str
 }
 
 // This function renders the form elements with passed in properties.
-function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElement {
+function _buildForm(element: FormElement, lang: string): ReactElement {
   const id = element.subId ?? element.id;
 
   const choices =
@@ -101,12 +101,6 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
             placeholder={placeHolder.toString()}
             autoComplete={element.properties.autoComplete?.toString()}
             maxLength={element.properties.validation?.maxLength}
-            characterCountMessages={{
-              part1: t("formElements.characterCount.part1"),
-              part2: t("formElements.characterCount.part2"),
-              part1Error: t("formElements.characterCount.part1-error"),
-              part2Error: t("formElements.characterCount.part2-error"),
-            }}
           />
         </div>
       );
@@ -122,12 +116,6 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             placeholder={placeHolder.toString()}
             maxLength={element.properties.validation?.maxLength}
-            characterCountMessages={{
-              part1: t("formElements.characterCount.part1"),
-              part2: t("formElements.characterCount.part2"),
-              part1Error: t("formElements.characterCount.part1-error"),
-              part2Error: t("formElements.characterCount.part2-error"),
-            }}
           />
         </div>
       );
@@ -231,7 +219,6 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
           rowLabel={placeHolder}
           rowElements={subElements}
           lang={lang}
-          t={t}
           maxNumberOfRows={element.properties.maxNumberOfRows}
         />
       );
@@ -247,12 +234,12 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
  * @param formRecord
  * @param language
  */
-export const getRenderedForm = (formRecord: PublicFormRecord, language: string, t: TFunction) => {
+export const getRenderedForm = (formRecord: PublicFormRecord, language: string) => {
   return formRecord.form.layout
     .map((item: number) => {
       const element = formRecord.form.elements.find((element: FormElement) => element.id === item);
       if (element) {
-        return <GenerateElement key={element.id} element={element} language={language} t={t} />;
+        return <GenerateElement key={element.id} element={element} language={language} />;
       }
     })
     .filter((element): element is JSX.Element => typeof element !== "undefined");
@@ -318,11 +305,10 @@ export const getFormInitialValues = (formRecord: PublicFormRecord, language: str
 type GenerateElementProps = {
   element: FormElement;
   language: string;
-  t: TFunction;
 };
 export const GenerateElement = (props: GenerateElementProps): React.ReactElement => {
-  const { element, language, t } = props;
-  const generatedElement = _buildForm(element, language, t);
+  const { element, language } = props;
+  const generatedElement = _buildForm(element, language);
   return (
     <ConditionalWrapper element={element} rules={element.properties.conditionalRules || null}>
       {generatedElement}

@@ -44,7 +44,9 @@ export async function requireAuthentication() {
 
     if (
       !session.user.hasSecurityQuestions &&
-      !currentPath.startsWith("/auth/setup-security-questions")
+      !currentPath.startsWith("/auth/setup-security-questions") &&
+      // Let them access the support page if having issues with Security Questions
+      !currentPath.startsWith("/form-builder/support")
     ) {
       // check if user has setup security questions setup
       redirect(`/${locale}/auth/setup-security-questions`);
