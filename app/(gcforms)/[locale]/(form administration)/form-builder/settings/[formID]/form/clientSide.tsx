@@ -6,6 +6,7 @@ import { SettingsNavigation } from "@clientComponents/form-builder/app/navigatio
 import { FormRecord } from "@lib/types";
 import { useTemplateStore } from "@clientComponents/form-builder/store";
 import { useSession } from "next-auth/react";
+import { useRehydrate } from "@clientComponents/form-builder/hooks";
 
 interface AssignUsersToTemplateProps {
   formRecord?: FormRecord;
@@ -25,6 +26,9 @@ export const ClientSide = ({
   const { id } = useTemplateStore((s) => ({
     id: s.id,
   }));
+
+  const hasHydrated = useRehydrate();
+  if (!hasHydrated) return null;
 
   // Can definitely be refactored once the parent components are refactored to server components
   if (
