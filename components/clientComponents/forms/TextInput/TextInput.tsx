@@ -3,30 +3,22 @@ import React, { useState } from "react";
 import classnames from "classnames";
 import { useField } from "formik";
 import { ErrorMessage } from "@clientComponents/forms";
-import { InputFieldProps, CharacterCountMessages, HTMLTextInputTypeAttribute } from "@lib/types";
+import { InputFieldProps, HTMLTextInputTypeAttribute } from "@lib/types";
+import { useTranslation } from "@i18n/client";
 
 export interface TextInputProps extends InputFieldProps {
   type: HTMLTextInputTypeAttribute;
-  characterCountMessages?: CharacterCountMessages;
   placeholder?: string;
 }
 
 export const TextInput = (
   props: TextInputProps & JSX.IntrinsicElements["input"]
 ): React.ReactElement => {
-  const {
-    id,
-    type,
-    className,
-    required,
-    ariaDescribedBy,
-    placeholder,
-    autoComplete,
-    maxLength,
-    characterCountMessages,
-  } = props;
+  const { id, type, className, required, ariaDescribedBy, placeholder, autoComplete, maxLength } =
+    props;
   const [field, meta, helpers] = useField(props);
   const classes = classnames("gc-input-text", className);
+  const { t } = useTranslation("common");
 
   const [remainingCharacters, setRemainingCharacters] = useState(maxLength ?? 0);
 
@@ -37,17 +29,22 @@ export const TextInput = (
     }
   };
 
-  const remainingCharactersMessage = characterCountMessages
-    ? characterCountMessages.part1 + " " + remainingCharacters + " " + characterCountMessages.part2
-    : "";
+  const characterCountMessages = {
+    part1: t("formElements.characterCount.part1"),
+    part2: t("formElements.characterCount.part2"),
+    part1Error: t("formElements.characterCount.part1-error"),
+    part2Error: t("formElements.characterCount.part2-error"),
+  };
 
-  const tooManyCharactersMessage = characterCountMessages
-    ? characterCountMessages.part1Error +
-      " " +
-      remainingCharacters * -1 +
-      " " +
-      characterCountMessages.part2Error
-    : "";
+  const remainingCharactersMessage =
+    characterCountMessages.part1 + " " + remainingCharacters + " " + characterCountMessages.part2;
+
+  const tooManyCharactersMessage =
+    characterCountMessages.part1Error +
+    " " +
+    remainingCharacters * -1 +
+    " " +
+    characterCountMessages.part2Error;
 
   const ariaDescribedByIds = () => {
     const returnValue = [];

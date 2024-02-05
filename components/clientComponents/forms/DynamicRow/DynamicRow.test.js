@@ -81,7 +81,7 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
     test("...initialState", () => {
       render(
         <Form formRecord={formRecord} t={(key) => key} language={lang}>
-          <GenerateElement element={dynamicRowData} language={lang} t={(key) => key} />
+          <GenerateElement element={dynamicRowData} language={lang} />
         </Form>
       );
 
@@ -111,7 +111,7 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
       const user = userEvent.setup();
       render(
         <Form formRecord={formRecord} t={(key) => key} language={lang}>
-          <GenerateElement element={dynamicRowData} language={lang} t={(key) => key} />
+          <GenerateElement element={dynamicRowData} language={lang} />
         </Form>
       );
       // mocking scroll into view function (not implemented in jsdom)
@@ -159,7 +159,7 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
       const user = userEvent.setup();
       render(
         <Form formRecord={formRecord} t={(key) => key} language={lang}>
-          <GenerateElement element={dynamicRowData} language={lang} t={(key) => key} />
+          <GenerateElement element={dynamicRowData} language={lang} />
         </Form>
       );
       // mocking scroll into view function (not implemented in jsdom)
@@ -194,7 +194,7 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
       const user = userEvent.setup();
       render(
         <Form formRecord={formRecord} t={(key) => key} language={lang}>
-          <GenerateElement element={dynamicRowData} language={lang} t={(key) => key} />
+          <GenerateElement element={dynamicRowData} language={lang} />
         </Form>
       );
       // mocking scroll into view function (not implemented in jsdom)
@@ -233,7 +233,7 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
       const user = userEvent.setup();
       render(
         <Form formRecord={formRecord} t={(key) => key} language={lang}>
-          <GenerateElement element={dynamicRowData} language={lang} t={(key) => key} />
+          <GenerateElement element={dynamicRowData} language={lang} />
         </Form>
       );
 

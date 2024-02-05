@@ -4,11 +4,11 @@ import settingSchema from "@lib/middleware/schemas/settings.schema.json";
 import { MiddlewareProps, WithRequired } from "@lib/types";
 import { logMessage } from "@lib/logger";
 import { getAppSetting, updateAppSetting, deleteAppSetting } from "@lib/appSettings";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export const GET = middleware([jsonValidator(settingSchema)], async (req, props) => {
+export const GET = async (req: NextRequest, { params }: { params: Record<string, string> }) => {
   try {
-    const internalId = props.params?.settingId;
+    const internalId = params?.internalId;
     if (typeof internalId === "undefined" || Array.isArray(internalId))
       return NextResponse.json({ error: "Malformed Request" }, { status: 400 });
 
@@ -18,7 +18,7 @@ export const GET = middleware([jsonValidator(settingSchema)], async (req, props)
     logMessage.error(err);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
-});
+};
 
 export const PUT = middleware(
   [sessionExists(), jsonValidator(settingSchema)],

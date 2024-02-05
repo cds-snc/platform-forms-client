@@ -3,10 +3,10 @@ import React, { useState } from "react";
 import classnames from "classnames";
 import { useField } from "formik";
 import { ErrorMessage } from "@clientComponents/forms";
-import { InputFieldProps, CharacterCountMessages } from "@lib/types";
+import { InputFieldProps } from "@lib/types";
+import { useTranslation } from "@i18n/client";
 
 export interface TextAreaProps extends InputFieldProps {
-  characterCountMessages: CharacterCountMessages;
   children?: React.ReactNode;
   placeholder?: string;
 }
@@ -14,18 +14,11 @@ export interface TextAreaProps extends InputFieldProps {
 export const TextArea = (
   props: TextAreaProps & JSX.IntrinsicElements["textarea"]
 ): React.ReactElement => {
-  const {
-    id,
-    className,
-    ariaDescribedBy,
-    required,
-    children,
-    placeholder,
-    maxLength,
-    characterCountMessages,
-  } = props;
+  const { id, className, ariaDescribedBy, required, children, placeholder, maxLength } = props;
 
   const classes = classnames("gc-textarea", className);
+
+  const { t } = useTranslation("common");
 
   const [field, meta, helpers] = useField(props);
 
@@ -36,6 +29,13 @@ export const TextArea = (
     if (maxLength) {
       setRemainingCharacters(maxLength - event.target.value.length);
     }
+  };
+
+  const characterCountMessages = {
+    part1: t("formElements.characterCount.part1"),
+    part2: t("formElements.characterCount.part2"),
+    part1Error: t("formElements.characterCount.part1-error"),
+    part2Error: t("formElements.characterCount.part2-error"),
   };
 
   const remainingCharactersMessage =
