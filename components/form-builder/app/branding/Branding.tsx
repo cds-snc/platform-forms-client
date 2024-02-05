@@ -119,7 +119,9 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
           <p className="mb-5 mt-6 text-sm">{t("branding.notFound")}</p>
           <p className="mb-5 text-sm">
             <Link
-              href="https://articles.alpha.canada.ca/forms-formulaires/request-alternate-branding"
+              href={`https://articles.alpha.canada.ca/forms-formulaires/${
+                i18n.language === "fr" && "fr/"
+              }request-alternate-branding`}
               passHref
               rel="noopener noreferrer"
               target={"_blank"}
