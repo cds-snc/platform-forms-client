@@ -42,7 +42,7 @@ describe.each([["en"], ["fr"]])("Checkbox component", (lang) => {
     const user = userEvent.setup();
     render(
       <Formik onSubmit={() => {}}>
-        <GenerateElement element={checkboxData} language={lang} t={(key) => key} />
+        <GenerateElement element={checkboxData} language={lang} />
       </Formik>
     );
     const description =
@@ -74,7 +74,7 @@ describe.each([["en"], ["fr"]])("Checkbox component", (lang) => {
     checkboxData.properties.validation.required = true;
     render(
       <Formik onSubmit={() => {}}>
-        <GenerateElement element={checkboxData} language={lang} t={(key) => key} />
+        <GenerateElement element={checkboxData} language={lang} />
       </Formik>
     );
 

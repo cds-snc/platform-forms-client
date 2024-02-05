@@ -5,8 +5,7 @@ import { useField } from "formik";
 import { GenerateElement } from "@lib/formBuilder";
 import { FormElement } from "@lib/types";
 import { Button, Description } from "@clientComponents/forms";
-import { TFunction } from "i18next";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@i18n/client";
 
 interface DynamicGroupProps {
   name: string;
@@ -26,14 +25,13 @@ interface DynamicRowProps {
   elements: Array<FormElement>;
   lang: string;
   name: string;
-  t: TFunction;
 }
 
 const DynamicRow = (props: DynamicRowProps) => {
   const { name, elements, lang, t } = props;
   const rowGroup = elements.map((subItem, subIndex) => {
     subItem.subId = `${name}.${subIndex}`;
-    return <GenerateElement key={subItem.subId} element={subItem} language={lang} t={t} />;
+    return <GenerateElement key={subItem.subId} element={subItem} language={lang} />;
   });
 
   return <div>{rowGroup}</div>;

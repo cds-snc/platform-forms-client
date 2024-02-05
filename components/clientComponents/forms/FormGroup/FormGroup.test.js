@@ -32,7 +32,7 @@ describe.each([["en"], ["fr"]])("Generate a form group", (lang) => {
   test("renders properly", () => {
     render(
       <Formik onSubmit={() => {}}>
-        <GenerateElement element={radioButtonData} language={lang} t={(key) => key} />
+        <GenerateElement element={radioButtonData} language={lang} />
       </Formik>
     );
     const title =

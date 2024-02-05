@@ -19,8 +19,10 @@ export default async function Layout({
     if (
       !session.user.hasSecurityQuestions &&
       !currentPath.startsWith("/auth/setup-security-questions") &&
-      // Let them access the support page if having issues with Security Questions
-      !currentPath.startsWith("/form-builder/support")
+      // Let them access support related pages if having issues with Security Questions
+      !currentPath.startsWith("/form-builder/support") &&
+      !currentPath.startsWith("/sla") &&
+      !currentPath.startsWith("/terms-of-use")
     ) {
       // check if user has setup security questions setup
       redirect(`/${locale}/auth/setup-security-questions`);
