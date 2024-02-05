@@ -41,22 +41,18 @@ export default async function Page({
 
       const initialForm = await getFullTemplateByID(ability, formID);
 
-      if (initialForm === null) {
-        redirect(`/${locale}/404`);
-      }
-
-      if (initialForm.isPublished) {
-        redirect(`/${locale}/form-builder/settings/${formID}`);
-      }
+      if (initialForm === null) redirect(`/${locale}/404`);
 
       FormbuilderParams.initialForm = initialForm;
+
+      if (initialForm.isPublished) redirect(`/${locale}/form-builder/settings/${formID}`);
     } catch (e) {
-      if (e instanceof AccessControlError) {
-        redirect(`/${locale}/admin/unauthorized`);
-      }
+      if (e instanceof AccessControlError) redirect(`/${locale}/admin/unauthorized`);
     }
   }
+
   const { t } = await serverTranslation("form-builder", { lang: locale });
+
   return (
     <FormBuilderInitializer
       initialForm={FormbuilderParams.initialForm}

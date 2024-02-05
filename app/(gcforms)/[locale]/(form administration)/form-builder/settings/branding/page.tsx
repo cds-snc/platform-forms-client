@@ -1,11 +1,10 @@
 import { serverTranslation } from "@i18n";
 import { auth } from "@lib/auth";
-import { Branding } from "@clientComponents/form-builder/app/branding";
-import { SettingsNavigation } from "@clientComponents/form-builder/app/navigation/SettingsNavigation";
 import { getAppSetting } from "@lib/appSettings";
-import { FormBuilderInitializer } from "@clientComponents/globals/layouts/FormBuilderLayout";
 import { redirect } from "next/navigation";
 import { Metadata } from "next";
+import { ClientSide } from "./clientSide";
+import { FormBuilderInitializer } from "@clientComponents/globals/layouts/FormBuilderLayout";
 
 export async function generateMetadata({
   params: { locale },
@@ -19,8 +18,8 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
-  const { t } = await serverTranslation("form-builder");
   const session = await auth();
+
   if (session && !session.user.acceptableUse) {
     // If they haven't agreed to Acceptable Use redirect to policy page for acceptance
     redirect(`/${locale}/auth/policy`);
@@ -35,14 +34,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
   return (
     <FormBuilderInitializer locale={locale}>
-      <div className="max-w-4xl">
-        <h1>{t("gcFormsSettings")}</h1>
-        <p className="mb-5 inline-block bg-purple-200 p-3 text-sm font-bold">
-          {t("settingsResponseDelivery.beforePublishMessage")}
-        </p>
-        <SettingsNavigation />
-        <Branding hasBrandingRequestForm={hasBrandingRequestForm} />
-      </div>
+      <ClientSide hasBrandingRequestForm={hasBrandingRequestForm} />
     </FormBuilderInitializer>
   );
 }

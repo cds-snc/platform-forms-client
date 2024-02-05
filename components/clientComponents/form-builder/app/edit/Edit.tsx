@@ -14,6 +14,7 @@ import { getQuestionNumber, sortByLayout } from "../../util";
 import { Panel } from "../settings-modal/panel";
 import { cleanInput } from "@clientComponents/form-builder/util";
 import { SaveButton } from "../shared/SaveButton";
+import { useRehydrate } from "../../hooks";
 
 export const Edit = () => {
   const { t } = useTranslation("form-builder");
@@ -83,6 +84,9 @@ export const Edit = () => {
       titleInput && titleInput.current && titleInput.current?.focus();
     }
   }, [focusTitle]);
+
+  const hasHydrated = useRehydrate();
+  if (!hasHydrated) return null;
 
   return (
     <>

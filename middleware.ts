@@ -44,6 +44,11 @@ export async function middleware(req: NextRequest) {
     const origin = req.headers.get("origin") ?? "";
     if (allowedOrigins.includes(origin)) {
       response.headers.set("Access-Control-Allow-Origin", origin);
+    } else {
+      response.headers.set(
+        "Access-Control-Allow-Origin",
+        process.env.NEXTAUTH_URL ?? "MISSING ORIGIN URL IN .env FILE!"
+      );
     }
 
     // Set default CORS headers
@@ -100,8 +105,6 @@ export async function middleware(req: NextRequest) {
   let cookieSyncRequired = false;
   if (pathLang && cookieLang !== pathLang) {
     logMessage.debug(`Middleware - Setting language cookie: ${cookieLang} for path: ${pathname}`);
-    // Set missing cookie on incoming request so server can render correct language on server components
-    req.cookies.set("i18next", pathLang);
     cookieSyncRequired = true;
   }
 

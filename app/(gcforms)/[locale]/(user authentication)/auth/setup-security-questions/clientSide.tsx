@@ -119,13 +119,12 @@ export const SetupSecurityQuestions = ({ questions = [] }: { questions: Question
         // Fail, show an error
         if (result && result instanceof Error) {
           setFormError(result.message);
+          setSubmitting(false);
         } else {
           toast.success(t("success.title"));
           // Note: Await so async call will not auto resolve and "flash" the submit to enabled while loading.
-          router.push(`/${i18n.language}/forms`);
+          router.push(`/${i18n.language}/auth/policy`);
         }
-
-        setSubmitting(false);
       }}
       validateOnChange={false}
       validateOnBlur={false}

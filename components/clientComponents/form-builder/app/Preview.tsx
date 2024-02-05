@@ -13,6 +13,7 @@ import { BackArrowIcon } from "../../icons";
 import Brand from "@clientComponents/globals/Brand";
 import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
+import { useRehydrate } from "../hooks";
 
 export const Preview = () => {
   const { status } = useSession();
@@ -59,6 +60,9 @@ export const Preview = () => {
   const brand = formRecord?.form ? formRecord.form.brand : null;
 
   const isPastClosingDate = useIsFormClosed();
+
+  const hasHydrated = useRehydrate();
+  if (!hasHydrated) return null;
 
   if (isPastClosingDate) {
     return (

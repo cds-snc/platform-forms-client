@@ -20,7 +20,7 @@
     "prisma:studio": "prisma studio",
     "prisma:test": "prisma migrate deploy && tsx prisma/seeds/seed_cli.ts --environment=test",
     "start:test": "yarn prisma:test && yarn initialize && APP_ENV=test next start",
-    "dev:test": "prisma migrate reset -f --skip-seed && yarn prisma:test && yarn initialize && APP_ENV=test next dev",
+    "dev:test": "prisma migrate reset -f --skip-seed && yarn prisma:test && yarn initialize && APP_ENV=test next dev | pino-pretty -c -i time",
     "build:test": "APP_ENV=test next build",
     "lint": "next lint && tsc --noEmit",
     "lint:tailwindcss": "eslint -c .eslint-tailwindcss.js",
@@ -95,7 +95,7 @@
     "usehooks-ts": "2.9.1",
     "uuid": "9.0.1",
     "yup": "0.32.11",
-    "zustand": "4.4.7"
+    "zustand": "4.5.0"
   },
   "devDependencies": {
     "@aws-sdk/types": "^3.468.0",

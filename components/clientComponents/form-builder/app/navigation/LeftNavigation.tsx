@@ -46,7 +46,7 @@ export const LeftNavigation = () => {
           <li>
             <LeftNav
               testid="edit"
-              {...linkHelper({ route: "/edit", activePathname, language })}
+              {...linkHelper({ route: "/edit", id, activePathname, language })}
               onClick={saveForm}
               title={t("edit")}
             >
@@ -57,7 +57,7 @@ export const LeftNavigation = () => {
         <li>
           <LeftNav
             testid="preview"
-            {...linkHelper({ route: "/preview", activePathname, language })}
+            {...linkHelper({ route: "/preview", id, activePathname, language })}
             onClick={saveForm}
             title={t("test")}
           >

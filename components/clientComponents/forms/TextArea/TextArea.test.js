@@ -78,7 +78,7 @@ describe("Generate a text area", () => {
 describe("Verfify character count restrictions", () => {
   let screen;
   beforeEach(() => {
-    screen = render(<GenerateElement element={textAreaData} language={"en"} t={(key) => key} />);
+    screen = render(<GenerateElement element={textAreaData} language={"en"} />);
   });
 
   it("does not display any message when not enough characters have been typed in", async () => {
@@ -114,7 +114,7 @@ describe("Accessibility tests for the textarea component.", () => {
   let screen;
 
   beforeEach(() => {
-    screen = render(<GenerateElement element={textAreaData2} language={"en"} t={(key) => key} />);
+    screen = render(<GenerateElement element={textAreaData2} language={"en"} />);
   });
   it("checks the `aria-describedby` attribute", () => {
     // initial attribute has no value since the description is empty.

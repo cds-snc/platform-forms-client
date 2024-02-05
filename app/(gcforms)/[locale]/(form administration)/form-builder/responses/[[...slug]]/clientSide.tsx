@@ -21,6 +21,7 @@ import { ConfirmDialog } from "@clientComponents/form-builder/app/responses/Dial
 import { Alert } from "@clientComponents/globals";
 import { isStatus } from "@lib/client/clientHelpers";
 import { TabNavLink } from "@clientComponents/form-builder/app/navigation/TabNavLink";
+import { useRehydrate } from "@clientComponents/form-builder/hooks";
 
 export interface ResponsesProps {
   initialForm: FormRecord | null;
@@ -72,6 +73,9 @@ export const ClientSide = ({
       : initialForm.form.titleEn;
   }
 
+  const hasHydrated = useRehydrate();
+  if (!hasHydrated) return null;
+
   if (!isAuthenticated) {
     return (
       <>
@@ -91,7 +95,7 @@ export const ClientSide = ({
         {/* <Head>
           <title>{t("responses.email.title")}</title>
         </Head> */}
-        <div className="mb-8 flex flex-wrap items-baseline">
+        <div className="mb-8 flex flex-wrap items-baseline justify-between">
           <h1 className="mb-0 border-none tablet:mb-4">
             {isAuthenticated ? t("responses.email.title") : t("responses.unauthenticated.title")}
           </h1>
@@ -100,7 +104,7 @@ export const ClientSide = ({
               <Link href={`/${language}/form-builder/settings`} legacyBehavior>
                 <a
                   href={`/${language}/form-builder/settings`}
-                  className="mb-0 mr-3 rounded-[100px] border-1 border-black px-5 pb-2 pt-1 text-black no-underline !shadow-none visited:text-black hover:bg-[#475569] hover:!text-white focus:bg-[#475569] focus:!text-white laptop:py-2 [&_svg]:focus:fill-white"
+                  className="mb-0 mr-3 rounded-[100px] border-1 border-black px-5 py-1 text-black no-underline !shadow-none visited:text-black hover:bg-[#475569] hover:!text-white focus:bg-[#475569] focus:!text-white laptop:py-2 [&_svg]:focus:fill-white"
                 >
                   {t("responses.changeSetup")}
                 </a>
