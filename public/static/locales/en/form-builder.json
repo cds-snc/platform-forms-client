@@ -209,11 +209,11 @@
     "defaultOption": "Government of Canada",
     "default": "(default)",
     "heading": "Branding",
-    "notFound": "Didn’t find your department or agency on the list?",
-    "preview": "Preview of branding",
-    "select": "Select a different branding option for the top of your form",
-    "submitNew": "Submit a new branding option (opens in new tab)",
-    "text1": "GC Forms displays the Government of Canada signature at the top of your form by default."
+    "notFound": "Didn’t find your department or agency in the list?",
+    "preview": "Preview",
+    "select": "Select different branding for the top of your form",
+    "submitNew": "Request alternate branding",
+    "text1": "Published forms include the Government of Canada signature by default."
   },
   "cancel": "Cancel",
   "characterLimitDescription": "Only use a character limit when there is a good reason for limiting the number of characters users can enter.",
@@ -510,7 +510,7 @@
     "vaultOptionHint": {
       "text1": "Submitted responses will appear on the",
       "text2": "Responses page",
-      "text3": "GC Forms holds data temporarily. Retrieve responses within 45 days."
+      "text3": " GC Forms holds data temporarily. Retrieve responses within 45 days."
     },
     "emailOption": "Receive responses by email",
     "saveButton": "Save changes",
@@ -754,5 +754,6 @@
     "other": "Other ",
     "show": "Show:"
   },
-  "saved": "Saved"
+  "saved": "Saved",
+  "opensInNewTab": "opens in a new tab"
 }
