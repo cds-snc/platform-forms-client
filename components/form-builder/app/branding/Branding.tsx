@@ -11,6 +11,7 @@ import { useTemplateApi } from "../../hooks";
 import { toast } from "../shared";
 import { Button } from "@components/globals";
 import Brand from "@components/globals/Brand";
+import { ExternalLinkIcon } from "@components/form-builder/icons";
 
 const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element | string }) => {
   return (
@@ -115,9 +116,9 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
         </Button>
       </div>
       {hasBrandingRequestForm && (
-        <div>
-          <p className="mb-5 mt-6 text-sm">{t("branding.notFound")}</p>
-          <p className="mb-5 text-sm">
+        <div className="mt-10">
+          <p className="mb-2 text-sm font-bold">{t("branding.notFound")}</p>
+          <p className="text-sm">
             <Link
               href={`https://articles.alpha.canada.ca/forms-formulaires/${
                 i18n.language === "fr"
@@ -129,10 +130,10 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
               target={"_blank"}
             >
               {t("branding.submitNew")}
+              <ExternalLinkIcon className="ml-1 inline-block" title={`(${t("opensInNewTab")})`} />
             </Link>
             .
           </p>
-          {/* <p className="mb-5 text-sm">{t("branding.submitNew")}</p> */}
         </div>
       )}
     </div>
