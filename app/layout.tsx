@@ -22,6 +22,8 @@ const lato = Lato({
   subsets: ["latin"],
 });
 
+// Currently the default from Nextjs. Adding any overrides here.
+// NOTE: originally also had `shrink-to-fit=no` but is no longer a viewport property: https://developer.mozilla.org/en-US/docs/Web/HTML/Viewport_meta_tag
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -49,8 +51,8 @@ export default async function Layout({ children }: { children: React.ReactNode }
   return (
     <html lang={locale} dir={dir(locale)} className={`${notoSans.variable} ${lato.variable}`}>
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta charSet="utf-8" />
+        {/* charSet and viewport set by default in Next14+ */}
+
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
         <style nonce={nonce}>{css}</style>
         {/* eslint-disable-next-line react/no-unknown-property */}
