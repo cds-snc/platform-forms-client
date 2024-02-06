@@ -151,7 +151,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   resetDeliveryOption: () => void;
   getSecurityAttribute: () => SecurityAttribute;
   setClosingDate: (closingDate: string | null) => void;
-  initialize: () => void;
+  initialize: (language: string) => void;
   removeChoiceFromRules: (elIndex: number, choiceIndex: number) => void;
 }
 
@@ -417,10 +417,11 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.closingDate = value;
               });
             },
-            initialize: () => {
+            initialize: (language) => {
               set((state) => {
                 state.id = "";
-                state.lang = "en";
+                state.lang = language;
+                state.translationLanguagePriority = language;
                 state.form = defaultForm;
                 state.isPublished = false;
                 state.name = "";
