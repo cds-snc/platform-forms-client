@@ -11,9 +11,11 @@ import { useActivePathname } from "@clientComponents/form-builder/hooks";
 import { SavedFailIcon, SavedCheckIcon } from "@clientComponents/icons";
 
 const SaveDraft = ({
+  updatedAt,
   handleSave,
   templateIsDirty,
 }: {
+  updatedAt: number | null;
   handleSave: () => void;
   templateIsDirty: boolean;
 }) => {
@@ -27,6 +29,10 @@ const SaveDraft = ({
         </Button>
       </>
     );
+  }
+
+  if (!updatedAt) {
+    return null;
   }
 
   return (
@@ -114,7 +120,11 @@ export const SaveButton = () => {
       {error ? (
         <ErrorSavingForm />
       ) : (
-        <SaveDraft handleSave={handleSave} templateIsDirty={templateIsDirty.current} />
+        <SaveDraft
+          updatedAt={updatedAt}
+          handleSave={handleSave}
+          templateIsDirty={templateIsDirty.current}
+        />
       )}
       {updatedAt && <DateTime updatedAt={updatedAt} />}
     </div>
