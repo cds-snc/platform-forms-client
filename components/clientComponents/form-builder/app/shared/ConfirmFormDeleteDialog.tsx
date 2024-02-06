@@ -3,11 +3,12 @@ import React from "react";
 import useSWR from "swr";
 import { useTranslation } from "@i18n/client";
 import Image from "next/image";
+import { getDate, slugify } from "@lib/client/clientHelpers";
+import axios from "axios";
 
 import Loader from "@clientComponents/globals/Loader";
 import { Button, LinkButton, Alert } from "@clientComponents/globals";
 import { useDialogRef, Dialog } from "./Dialog";
-import { DownloadFileButton } from "./DownloadFileButton";
 
 const fetcher = async (url: string) => {
   const res = await fetch(url);
@@ -24,6 +25,25 @@ const fetcher = async (url: string) => {
   // handle using swr error
   throw new Error("Something went wrong");
 };
+
+async function downloadForm(lang: string, id: string) {
+  const url = `/api/templates/${id}`;
+  const response = await axios({
+    url,
+    method: "GET",
+    responseType: "json",
+    timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+  });
+
+  const fileName = lang === "fr" ? response.data.form.titleFr : response.data.form.titleEn;
+  const data = JSON.stringify(response.data.form, null, 2);
+  const tempUrl = window.URL.createObjectURL(new Blob([data]));
+  const link = document.createElement("a");
+  link.href = tempUrl;
+  link.setAttribute("download", slugify(`${fileName}-${getDate()}`) + ".json");
+  document.body.appendChild(link);
+  link.click();
+}
 
 export const ConfirmFormDeleteDialog = ({
   formId,
@@ -57,7 +77,7 @@ export const ConfirmFormDeleteDialog = ({
           <div className="w-[100%] p-10">
             <Alert.Danger>
               <Alert.Title>{t("formDelete.error")}</Alert.Title>
-              <p>{t("somethingWentWrong")}</p>
+              <p>{t("formDelete.somethingWentWrong")}</p>
             </Alert.Danger>
           </div>
         </div>
@@ -67,7 +87,15 @@ export const ConfirmFormDeleteDialog = ({
 
   const actions = (
     <>
-      <DownloadFileButton showInfo={false} buttonText={t("formDelete.downloadButtonText")} />
+      <Button
+        theme="secondary"
+        onClick={() => {
+          downloadForm(i18n.language, formId);
+        }}
+        dataTestId="download-file-button"
+      >
+        {t("formDelete.downloadButtonText")}
+      </Button>
       <Button
         className="ml-5"
         theme="destructive"
