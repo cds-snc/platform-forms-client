@@ -26,8 +26,8 @@
       "contact": "Add contact",
       "dynamicRow": "Add repeating set",
       "richText": "Add page text",
-      "departments": "Add departments dropdown",
-      "combobox": "Add a searchable list"
+      "departments": "Add department",
+      "combobox": "Add searchable list"
     },
     "address": {
       "whatIsYourAddress": "What is your address?",
@@ -104,13 +104,13 @@
       "forExample": "Format the date as: mm/dd/yyyy"
     },
     "departments": {
-      "description": "A managed list of Government Departments.",
-      "title": "Departments",
+      "description": "A managed list of Government of Canada organizations for single selection.",
+      "title": "Department",
       "example": {
         "select": "Select"
       },
-      "selectOption": "Select a department",
-      "selectOne": "Select a department from the list.",
+      "selectOption": "Department or agency",
+      "selectOne": "Start typing to narrow down the list.",
       "choices": "Option 1,Option 2,Option 3,Option 4,Option 5,Option 6,Option 7,Option 8,Option 9,Option 10"
     },
     "dropdown": {
@@ -298,7 +298,7 @@
     "email": "For example: name@example.com",
     "number": "Enter a number",
     "phone": "For example: 111-222-3333",
-    "combobox": "Start typing to filter the list"
+    "combobox": "Start typing to narrow down the list."
   },
   "description": "Description",
   "descriptionDescription": "The description appears below the label and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements.",

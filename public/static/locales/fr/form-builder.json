@@ -26,8 +26,8 @@
       "contact": "Ajouter des coordonnées",
       "dynamicRow": "Ajouter un ensemble de réponses",
       "richText": "Ajouter du texte de page",
-      "departments": "[FR] Add departments dropdown",
-      "combobox": "[FR] Add a searchable list"
+      "departments": "Ajouter un ministère",
+      "combobox": "Ajouter une liste consultable"
     },
     "address": {
       "whatIsYourAddress": "Quelle est votre adresse?",
@@ -64,13 +64,13 @@
     },
     "checkboxItem": "Option",
     "combobox": {
-      "description": "[FR] A searchable list of options for single selection.",
-      "title": "[FR] Searchable list",
+      "description": "Une liste consultable d'options pstmi lesquelles un choix est fait.",
+      "title": "Liste consultable",
       "example": {
-        "select": "Selectionnez"
+        "select": "Selectionner"
       },
       "selectOption": "Question",
-      "selectOne": "[FR] Select which option applies.",
+      "selectOne": "Sélectionnez l’option pertinente.",
       "choices": "Option 1,Option 2,Option 3,Option 4,Option 5,Option 6,Option 7,Option 8,Option 9,Option 10"
     },
     "condition1": "Condition 1",
@@ -104,13 +104,13 @@
       "forExample": "Saisissez la date dans ce format : mm/jj/aaaa"
     },
     "departments": {
-      "description": "[FR] A managed list of Government Departments.",
-      "title": "[FR] Departments",
+      "description": "Une liste gérée d’organisations du gouvernement du Canada parmi lesquelles un choix est fait.",
+      "title": "Ministère",
       "example": {
         "select": "Sélectionner"
       },
-      "selectOption": "[FR] Select a department",
-      "selectOne": "[FR] Select a department from the list.",
+      "selectOption": "Ministère ou organisme",
+      "selectOne": "Commencez à taper pour réduire la liste.",
       "choices": "Option 1,Option 2,Option 3,Option 4,Option 5,Option 6,Option 7,Option 8,Option 9,Option 10"
     },
     "dropdown": {
@@ -248,7 +248,7 @@
   "checkboxes": "Cases à cocher",
   "close": "Fermer",
   "closeModal": "Fermer fenêtre modale",
-  "combobox": "[FR] Searchable list",
+  "combobox": "Liste consultable",
   "completed": "Complétée",
   "confirmationDescriptionItem1": "des précisions sur la suite de choses.",
   "confirmationDescriptionItem2": "les coordonnées du service.",
@@ -297,7 +297,7 @@
     "email": "Par exemple : nom@exemple.com",
     "number": "Saisissez un chiffre",
     "phone": "Par exemple : 111-222-3333",
-    "combobox": "Start typing to filter the list"
+    "combobox": "Commencez à taper pour réduire la liste."
   },
   "description": "Description ",
   "descriptionDescription": "La description apparaît sous l'étiquette, et avant le champ. Elle est utilisée pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de mise en forme.",

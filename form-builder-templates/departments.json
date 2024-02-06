@@ -4,13 +4,13 @@
     "properties": {
       "subElements": [],
       "managedChoices": "departments",
-      "titleEn": "Select a department",
-      "titleFr": "[FR] Select a department",
+      "titleEn": "Department or agency",
+      "titleFr": "Ministère ou organisme",
       "validation": {
         "required": false
       },
-      "descriptionEn": "Start typing to filter the list",
-      "descriptionFr": "[FR] Start typing to filter the list",
+      "descriptionEn": "Start typing to narrow down the list",
+      "descriptionFr": "Commencez à taper pour réduire la liste",
       "placeholderEn": "",
       "placeholderFr": ""
     }
