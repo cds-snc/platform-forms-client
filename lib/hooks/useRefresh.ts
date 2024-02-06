@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 /**
  * @description Function that watches for changes on props and initiates a server side props refresh
@@ -11,12 +11,11 @@ export const useRefresh = (
   data?: unknown[]
 ): { refreshData: () => Promise<void>; isRefreshing: boolean } => {
   const router = useRouter();
-  const pathname = usePathname();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const refreshData = async () => {
     setIsRefreshing(true);
-    router.replace(pathname);
+    router.refresh();
   };
 
   useEffect(() => {
