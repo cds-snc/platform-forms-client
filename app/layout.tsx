@@ -1,6 +1,6 @@
 import { dir } from "i18next";
 import "../styles/app.scss";
-import { Viewport } from "next";
+import { Metadata, Viewport } from "next";
 import Script from "next/script";
 import "react-app-polyfill/stable";
 import { cookies } from "next/headers";
@@ -27,6 +27,10 @@ const lato = Lato({
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+};
+
+export const metadata: Metadata = {
+  title: "GC Forms - Formulaires GC",
 };
 
 const NoIndexMetaTag =
