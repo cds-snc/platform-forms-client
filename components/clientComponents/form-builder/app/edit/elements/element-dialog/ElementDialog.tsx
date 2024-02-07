@@ -35,7 +35,7 @@ const Body = ({ children }: { children: React.ReactNode }) => {
 
 const Footer = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="absolute bottom-0 flex min-h-[60px] w-full gap-4 border-t border-slate-800 bg-white p-4">
+    <div className="absolute bottom-0 z-[100] flex min-h-[60px] w-full gap-4 border-t border-slate-800 bg-white p-4">
       {children}
     </div>
   );
