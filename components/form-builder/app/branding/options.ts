@@ -121,7 +121,7 @@ export const options = [
     urlEn: "https://www.elections.ca/home.aspx",
     urlFr: "https://www.elections.ca/accueil.aspx",
     logoEn: "/img/branding/ec-en.png",
-    logoFr: "/img/branding/ec-en.png",
+    logoFr: "/img/branding/ec-fr.png",
     logoTitleEn: "Elections Canada",
     logoTitleFr: "Élections Canada",
   },
