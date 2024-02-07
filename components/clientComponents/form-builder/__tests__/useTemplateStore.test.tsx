@@ -11,7 +11,7 @@ const createStore = () => {
   const { result } = renderHook(() => useTemplateStore((s) => s), { wrapper });
 
   act(() => {
-    result.current.initialize();
+    result.current.initialize("en");
   });
 
   return result;
@@ -339,7 +339,7 @@ describe("TemplateStore", () => {
 
     // Re-initialize the form
     act(() => {
-      result.current.initialize();
+      result.current.initialize("en");
     });
 
     expect(result.current.form.titleEn).toBe("");
