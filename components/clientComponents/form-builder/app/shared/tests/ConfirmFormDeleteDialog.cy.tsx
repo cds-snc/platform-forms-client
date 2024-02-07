@@ -110,6 +110,6 @@ describe("<ConfirmFormDeleteDialog />", () => {
       </TemplateStoreProvider>
     );
 
-    cy.get("p").contains("somethingWentWrong");
+    cy.get("p").contains("Something went wrong");
   });
 });
