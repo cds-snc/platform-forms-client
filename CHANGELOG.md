@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.12.4](https://github.com/cds-snc/platform-forms-client/compare/v3.12.3...v3.12.4) (2024-02-05)
+
+
+### Bug Fixes
+
+* conditional indicator question number output ([#3229](https://github.com/cds-snc/platform-forms-client/issues/3229)) ([0a9b0c4](https://github.com/cds-snc/platform-forms-client/commit/0a9b0c4b6eb39633fea3970d8473ee6dcd48597e))
+
+
+### Miscellaneous Chores
+
+* **deps:** update all non-major github action dependencies ([#3014](https://github.com/cds-snc/platform-forms-client/issues/3014)) ([51d4ae4](https://github.com/cds-snc/platform-forms-client/commit/51d4ae4eea0ba16072dbe9935bb3a9085e50fcaf))
+* update branding settings to link to new form ([#3212](https://github.com/cds-snc/platform-forms-client/issues/3212)) ([405ab3b](https://github.com/cds-snc/platform-forms-client/commit/405ab3b16cf36ece7c744ca82cf60a226019cbe6))
+
 ## [3.12.3](https://github.com/cds-snc/platform-forms-client/compare/v3.12.2...v3.12.3) (2024-01-31)
 
 

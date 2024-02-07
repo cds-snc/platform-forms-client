@@ -34,40 +34,42 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
   return (
     <AdminNavLayout hideLeftNav={true} locale={locale}>
-      <h1 className="visually-hidden">{t("title", { ns: "admin-home" })}</h1>
-      <div className="flex flex-row justify-center">
-        <div className="rounded-lg border bg-white p-10">
-          <h2>
-            <ManageAccountsIcon className="inline-block h-14 w-14" /> {t("accountAdministration")}
-          </h2>
-          <p>{t("manageUsersAndTheirForms")}</p>
-          <p>
-            <Link href={`/${locale}/admin/accounts`} legacyBehavior>
-              <a href={`/${locale}/admin/accounts`}>{t("accounts")}</a>
-            </Link>
-          </p>
-        </div>
+      <>
+        <h1 className="visually-hidden">{t("title", { ns: "admin-home" })}</h1>
+        <div className="flex flex-row justify-center">
+          <div className="rounded-lg border bg-white p-10">
+            <h2>
+              <ManageAccountsIcon className="inline-block h-14 w-14" /> {t("accountAdministration")}
+            </h2>
+            <p>{t("manageUsersAndTheirForms")}</p>
+            <p>
+              <Link href={`/${locale}/admin/accounts`} legacyBehavior>
+                <a href={`/${locale}/admin/accounts`}>{t("accounts")}</a>
+              </Link>
+            </p>
+          </div>
 
-        <div className="ml-20 rounded-lg border bg-white p-10">
-          <h2>
-            <SettingsApplicationsIcon className="inline-block h-14 w-14" />
-            {t("systemAdministration")}
-          </h2>
-          <p>{t("configureHowTheApplicationWorks")}</p>
-          <ul className="list-none pl-0">
-            <li>
-              <Link href={`/${locale}/admin/settings`} legacyBehavior>
-                <a href={`/${locale}/admin/settings`}>{t("systemSettings")}</a>
-              </Link>
-            </li>
-            <li>
-              <Link href={`/${locale}/admin/flags`} legacyBehavior>
-                <a href={`/${locale}/admin/flags`}>{t("featureFlags")}</a>
-              </Link>
-            </li>
-          </ul>
+          <div className="ml-20 rounded-lg border bg-white p-10">
+            <h2>
+              <SettingsApplicationsIcon className="inline-block h-14 w-14" />
+              {t("systemAdministration")}
+            </h2>
+            <p>{t("configureHowTheApplicationWorks")}</p>
+            <ul className="list-none pl-0">
+              <li>
+                <Link href={`/${locale}/admin/settings`} legacyBehavior>
+                  <a href={`/${locale}/admin/settings`}>{t("systemSettings")}</a>
+                </Link>
+              </li>
+              <li>
+                <Link href={`/${locale}/admin/flags`} legacyBehavior>
+                  <a href={`/${locale}/admin/flags`}>{t("featureFlags")}</a>
+                </Link>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
+      </>
     </AdminNavLayout>
   );
 }
