@@ -110,8 +110,7 @@
         "select": "Sélectionner"
       },
       "selectOption": "Ministère ou organisme",
-      "selectOne": "Commencez à taper pour réduire la liste.",
-      "choices": "Option 1,Option 2,Option 3,Option 4,Option 5,Option 6,Option 7,Option 8,Option 9,Option 10"
+      "selectOne": "Commencez à taper pour réduire la liste."
     },
     "dropdown": {
       "description": "Une longue liste d’options parmi lesquelles un choix est fait.",

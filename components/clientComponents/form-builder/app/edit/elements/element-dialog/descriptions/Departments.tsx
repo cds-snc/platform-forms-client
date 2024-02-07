@@ -3,9 +3,16 @@ import React from "react";
 import { useTranslation } from "@i18n/client";
 import { ExampleWrapper } from "./ExampleWrapper";
 import { Combobox, Description, Label } from "@clientComponents/forms";
+import { ManagedData, getManagedData } from "@lib/managedData";
 
 export const Departments = () => {
-  const { t } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation("form-builder");
+  const departments = getManagedData(ManagedData.DEPARTMENTS);
+
+  const choices = departments?.map((department) => {
+    return department[i18n.language];
+  });
+
   return (
     <>
       <h3 className="mb-0">{t("addElementDialog.departments.title")}</h3>
@@ -17,11 +24,7 @@ export const Departments = () => {
         </Label>
         <Description>{t("addElementDialog.departments.selectOne")}</Description>
         <div className="overflow-hidden">
-          <Combobox
-            name="name"
-            id="dropdown"
-            choices={t("addElementDialog.departments.choices").split(",")}
-          />
+          <Combobox name="name" id="dropdown" choices={choices} />
         </div>
       </ExampleWrapper>
     </>

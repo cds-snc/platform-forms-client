@@ -110,8 +110,7 @@
         "select": "Select"
       },
       "selectOption": "Department or agency",
-      "selectOne": "Start typing to narrow down the list.",
-      "choices": "Option 1,Option 2,Option 3,Option 4,Option 5,Option 6,Option 7,Option 8,Option 9,Option 10"
+      "selectOne": "Start typing to narrow down the list."
     },
     "dropdown": {
       "description": "A long list of options for single selection.",

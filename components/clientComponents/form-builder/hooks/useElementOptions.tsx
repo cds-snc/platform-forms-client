@@ -14,6 +14,7 @@ import {
   NameIcon,
   UploadIcon,
   GavelIcon,
+  DepartmentsIcon,
 } from "@clientComponents/icons";
 
 import {
@@ -183,8 +184,8 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     },
     {
       id: "departments",
-      value: "Departments",
-      icon: SelectMenuIcon,
+      value: t("addElementDialog.departments.title"),
+      icon: DepartmentsIcon,
       description: Departments,
       className: "",
       group: groups.preset,
