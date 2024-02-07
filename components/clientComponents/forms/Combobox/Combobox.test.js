@@ -1,5 +1,5 @@
 import React from "react";
-import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
+import { cleanup, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { GenerateElement } from "@lib/formBuilder";
 import { act } from "react-dom/test-utils";
@@ -89,7 +89,6 @@ describe.each([["en"], ["fr"]])("Combobox component", (lang) => {
   afterEach(cleanup);
 
   test("renders without errors", async () => {
-    const user = userEvent.setup();
     render(<GenerateElement element={comboboxData} language={lang} />);
 
     const title = lang === "en" ? comboboxData.properties.titleEn : comboboxData.properties.titleFr,
