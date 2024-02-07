@@ -17,3 +17,4 @@ export { FirstMiddleLastName } from "./descriptions/FirstMiddleLastName";
 export { Name } from "./descriptions/Name";
 export { FileInput } from "./descriptions/FileInput";
 export { Departments } from "./descriptions/Departments";
+export { Combobox } from "./descriptions/Combobox";

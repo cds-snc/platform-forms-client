@@ -34,13 +34,13 @@ import {
   FirstMiddleLastName,
   FileInput,
   Departments,
+  Combobox,
 } from "../app/edit/elements/element-dialog";
 
 import { useIsAdminUser } from "./useIsAdminUser";
 
 import { ElementOptionsFilter, ElementOption } from "../types";
 import { useFlag } from "@lib/hooks";
-import { Combobox } from "../app/edit/elements/element-dialog/descriptions/Combobox";
 
 export enum Groups {
   BASIC = "basic",
