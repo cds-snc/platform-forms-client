@@ -157,7 +157,7 @@ export const Verify = ({
         <title>{t("verify.title")}</title>
       </Head>
       <div className="sticky top-0">
-        <ToastContainer />
+        <ToastContainer containerId="default" />
       </div>
       <Formik
         initialValues={{ verificationCode: "" }}

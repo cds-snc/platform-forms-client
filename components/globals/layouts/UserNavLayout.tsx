@@ -70,7 +70,7 @@ const UserNavLayout = ({
             <main id="content">
               <SiteLink />
               {children}
-              <ToastContainer autoClose={false} />
+              <ToastContainer autoClose={false} containerId="default" />
             </main>
           </div>
         </div>
