@@ -37,7 +37,7 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
 
   return (
     <>
-      <div className={classes}>
+      <div className={classes} data-testid="combobox">
         {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
 
         <input
@@ -46,9 +46,15 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
           id={id}
           required={required}
           {...(name && { name })}
+          data-testid="combobox-input"
         />
 
-        <ul className={`${!(isOpen && items.length) && "hidden"}`} {...getMenuProps()}>
+        <ul
+          className={`${!(isOpen && items.length) ? "hidden" : ""}`}
+          {...getMenuProps()}
+          data-testid="combobox-listbox"
+          hidden={!isOpen}
+        >
           {isOpen &&
             items.map((item, index) => (
               <li
@@ -59,7 +65,7 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
                 key={item}
                 {...getItemProps({ item, index })}
               >
-                <span>{item}</span>
+                <>{item}</>
               </li>
             ))}
         </ul>
