@@ -44,6 +44,7 @@ const CardLinks = ({ isPublished, url, id, deliveryOption, overdue }: CardLinksP
   const textData = {
     responses: overdue,
     link: responsesLink,
+    interpolation: { escapeValue: false },
   };
 
   return (
@@ -194,8 +195,8 @@ export const Card = (props: CardProps): React.ReactElement => {
     const fileName = name
       ? name
       : i18n.language === "fr"
-      ? response.data.form.titleFr
-      : response.data.form.titleEn;
+        ? response.data.form.titleFr
+        : response.data.form.titleEn;
     const data = JSON.stringify(response.data.form, null, 2);
     const tempUrl = window.URL.createObjectURL(new Blob([data]));
     const link = document.createElement("a");

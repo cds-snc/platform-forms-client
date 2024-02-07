@@ -22,7 +22,6 @@ import {
   Responses,
   Response,
 } from "@lib/types";
-import { TFunction } from "i18next";
 import { getLocalizedProperty } from "@lib/utils";
 import { ManagedData, getManagedData } from "./managedData";
 

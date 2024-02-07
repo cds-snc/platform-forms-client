@@ -28,7 +28,7 @@ interface DynamicRowProps {
 }
 
 const DynamicRow = (props: DynamicRowProps) => {
-  const { name, elements, lang, t } = props;
+  const { name, elements, lang } = props;
   const rowGroup = elements.map((subItem, subIndex) => {
     subItem.subId = `${name}.${subIndex}`;
     return <GenerateElement key={subItem.subId} element={subItem} language={lang} />;
