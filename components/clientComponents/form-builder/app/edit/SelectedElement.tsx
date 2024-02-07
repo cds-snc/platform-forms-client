@@ -147,7 +147,7 @@ export const SelectedElement = ({
       } else {
         element = (
           <>
-            <ShortAnswer>{t("addElementDialog.dropdown.title")}</ShortAnswer>
+            <ShortAnswer>{t("addElementDialog.combobox.title")}</ShortAnswer>
             {!item.properties.managedChoices && (
               <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} />
             )}

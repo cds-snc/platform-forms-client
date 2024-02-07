@@ -427,6 +427,10 @@
   "linkUrl": "Link URL",
   "lockedBlock": "Essential",
   "longAnswerText": "Long answer",
+  "managedList": {
+    "prefix": "Managed list:",
+    "departments": "GC organizations"
+  },
   "maxCharacterLength": "Max character length: ",
   "maximumCharacterLength": "Maximum character length",
   "maxNumberOfRows": {

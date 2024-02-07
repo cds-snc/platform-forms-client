@@ -44,6 +44,7 @@ export interface ElementProperties {
   descriptionFr?: string;
   validation?: ValidationProperties | undefined;
   choices?: PropertyChoices[];
+  managedChoices?: string;
   subElements?: FormElement[];
   fileType?: string | undefined;
   headingLevel?: string | undefined;

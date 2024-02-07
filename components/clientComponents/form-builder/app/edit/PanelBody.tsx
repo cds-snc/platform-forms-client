@@ -71,6 +71,12 @@ export const PanelBody = ({
                   {t(`autocompleteOptions.${item.properties.autoComplete}`)}
                 </div>
               )}
+              {item.properties.managedChoices && (
+                <div data-testid={`managedChoices-${item.id}`} className="mt-5 text-sm">
+                  <strong>{t("managedList.prefix")}</strong>{" "}
+                  {t(`managedList.${item.properties.managedChoices}`)}
+                </div>
+              )}
               <ElementRequired onRequiredChange={onRequiredChange} item={item} />
             </div>
           </div>
