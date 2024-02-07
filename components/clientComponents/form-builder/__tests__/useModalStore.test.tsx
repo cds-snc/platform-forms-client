@@ -8,7 +8,7 @@ const createStore = () => {
   const { result } = renderHook(() => useModalStore());
 
   act(() => {
-    result.current.initialize("en");
+    result.current.initialize();
   });
 
   return result;
