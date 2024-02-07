@@ -1,21 +1,26 @@
 import React from "react";
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { GenerateElement } from "@lib/formBuilder";
+import { act } from "react-dom/test-utils";
 
 jest.mock("formik", () => ({
   ...jest.requireActual("formik"),
-  useField: jest.fn(() => [{ field: { value: "" } }, { meta: { touched: null, error: null } }]),
+  useField: jest.fn(() => [
+    { field: { value: "" } },
+    { meta: { touched: null, error: null } },
+    { setValue: jest.fn() },
+  ]),
 }));
 
-const dropdownData = {
+const comboboxData = {
   id: 16,
   type: "combobox",
   properties: {
     titleEn: "Province or territory",
     titleFr: "Province ou territoire",
-    descriptionEn: "English description",
-    descriptionFr: "Description en Francais",
+    descriptionEn: "Start typing to narrow down the list",
+    descriptionFr: "Commencez à taper pour réduire la liste",
     choices: [
       {
         en: "",
@@ -83,37 +88,39 @@ const dropdownData = {
 describe.each([["en"], ["fr"]])("Combobox component", (lang) => {
   afterEach(cleanup);
 
-  //   test("renders without errors", async () => {
-  //     const user = userEvent.setup();
-  //     render(<GenerateElement element={dropdownData} language={lang} />);
-  //     const title = lang === "en" ? dropdownData.properties.titleEn : dropdownData.properties.titleFr,
-  //       description =
-  //         lang === "en"
-  //           ? dropdownData.properties.descriptionEn
-  //           : dropdownData.properties.descriptionFr;
-  //     const dropdown = screen.queryByTestId("dropdown");
-  //     expect(dropdown).toBeInTheDocument();
-  //     expect(dropdown).toHaveAccessibleDescription(description);
-  //     expect(dropdown).toHaveClass("gc-dropdown");
-  //     expect(dropdown).toHaveDisplayValue("dropdown-initial-option-text");
-  //     expect(
-  //       screen.getByRole("combobox", {
-  //         name: title,
-  //       })
-  //     ).toBeInTheDocument();
+  test("renders without errors", async () => {
+    const user = userEvent.setup();
+    render(<GenerateElement element={comboboxData} language={lang} />);
 
-  //     // Change value
-  //     await user.selectOptions(screen.queryByTestId("dropdown"), [
-  //       dropdownData.properties.choices[2][lang],
-  //     ]);
-  //     expect(screen.getByTestId("dropdown")).toHaveDisplayValue(
-  //       dropdownData.properties.choices[2][lang]
-  //     );
-  //   });
-  //   test("required elements display properly", () => {
-  //     dropdownData.properties.validation.required = true;
-  //     render(<GenerateElement element={dropdownData} language={lang} />);
-  //     expect(screen.queryByTestId("required")).toBeInTheDocument();
-  //     dropdownData.properties.validation.required = false;
-  //   });
+    const title = lang === "en" ? comboboxData.properties.titleEn : comboboxData.properties.titleFr,
+      description =
+        lang === "en"
+          ? comboboxData.properties.descriptionEn
+          : comboboxData.properties.descriptionFr;
+
+    const combobox = screen.queryByTestId("combobox");
+    const comboboxInput = screen.queryByTestId("combobox-input");
+    const comboboxListbox = screen.queryByTestId("combobox-listbox");
+
+    expect(combobox).toBeInTheDocument();
+    expect(comboboxInput).toBeInTheDocument();
+    expect(comboboxListbox).toBeInTheDocument();
+    expect(comboboxInput).toHaveAccessibleDescription(description);
+    expect(combobox).toHaveClass("gc-combobox");
+
+    expect(
+      screen.getByRole("combobox", {
+        name: title,
+      })
+    ).toBeInTheDocument();
+
+    await act(async () => {
+      expect(comboboxListbox).not.toBeVisible();
+      await userEvent.click(comboboxInput);
+      await userEvent.type(comboboxInput, " "); // this should be {downarrow} but it's not working
+      expect(comboboxListbox).toBeVisible();
+      const options = within(comboboxListbox).getAllByRole("option");
+      expect(options).toHaveLength(14);
+    });
+  });
 });
