@@ -4,7 +4,7 @@ describe("Test FormBuilder language switching", () => {
     cy.visitPage("/form-builder");
   });
 
-  it("Can enter English and French text in Introduction", () => {
+  it("Can enter English and French text in Description", () => {
     // Setup a form with one question
     cy.get("h2").first().click();
     // eslint-disable-next-line cypress/no-unnecessary-waiting
@@ -13,11 +13,11 @@ describe("Test FormBuilder language switching", () => {
     cy.get('[data-testid="richText"]').click();
     cy.get('[data-testid="element-description-add-element"]').click();
 
-    // Enter English Title and Introduction
+    // Enter English Title and Description
     cy.typeInField("#formTitle", "Cypress Test Form");
     cy.get("#formTitle").should("have.value", "Cypress Test Form");
-    cy.typeInField(`[aria-label="Form introduction"]`, "form intro in english");
-    cy.get(`[aria-label="Form introduction"]`).contains("form intro in english");
+    cy.typeInField(`[aria-label="Introduction"]`, "form description in english");
+    cy.get(`[aria-label="Introduction"]`).contains("form description in english");
 
     // Enter some English "page text"
     cy.typeInField('[aria-label="Page text 1"]', "page text in english");
@@ -34,11 +34,11 @@ describe("Test FormBuilder language switching", () => {
     // Switch to French
     cy.get('[data-testid="lang-switcher"]').click();
 
-    // Enter French Title and Introduction
+    // Enter French Title and Description
     cy.typeInField("#formTitle", "Formulaire de test Cypress");
     cy.get("#formTitle").should("have.value", "Formulaire de test Cypress");
-    cy.typeInField(`[aria-label="Form introduction"]`, "form intro in french");
-    cy.get(`[aria-label="Form introduction"]`).contains("form intro in french");
+    cy.typeInField(`[aria-label="Introduction"]`, "form description in french");
+    cy.get(`[aria-label="Introduction"]`).contains("form description in french");
 
     // Enter some French "page text"
     cy.typeInField('[aria-label="Page text 1"]', "page text in french");
@@ -55,7 +55,7 @@ describe("Test FormBuilder language switching", () => {
     // Switch back to English
     cy.get('[data-testid="lang-switcher"]').click();
     cy.get("#formTitle").should("have.value", "Cypress Test Form");
-    cy.get(`[aria-label="Form introduction"]`).contains("form intro in english");
+    cy.get(`[aria-label="Introduction"]`).contains("form description in english");
     cy.get('[aria-label="Page text 1"]').contains("page text in english");
     cy.get('[aria-label="Privacy statement"]').contains("privacy text in english");
     cy.get('[aria-label="Confirmation page and message"]').contains("confirmation text in english");
@@ -63,7 +63,7 @@ describe("Test FormBuilder language switching", () => {
     // Switch back to French
     cy.get('[data-testid="lang-switcher"]').click();
     cy.get("#formTitle").should("have.value", "Formulaire de test Cypress");
-    cy.get(`[aria-label="Form introduction"]`).contains("form intro in french");
+    cy.get(`[aria-label="Introduction"]`).contains("form description in french");
     cy.get('[aria-label="Page text 1"]').contains("page text in french");
     cy.get('[aria-label="Privacy statement"]').contains("privacy text in french");
     cy.get('[aria-label="Confirmation page and message"]').contains("confirmation text in french");

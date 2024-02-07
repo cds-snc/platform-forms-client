@@ -269,7 +269,6 @@ export const SettingsDialog = ({
 
     if (brandName === "") {
       unsetField("form.brand");
-      return;
     }
 
     if (brandName !== initialBrandName) {
