@@ -74,7 +74,9 @@ export const PanelBody = ({
               {item.properties.managedChoices && (
                 <div data-testid={`managedChoices-${item.id}`} className="mt-5 text-sm">
                   <strong>{t("managedList.prefix")}</strong>{" "}
-                  {t(`managedList.${item.properties.managedChoices}`)}
+                  <a href="https://github.com/cds-snc/gc-organisations">
+                    {t(`managedList.${item.properties.managedChoices}`)}
+                  </a>
                 </div>
               )}
               <ElementRequired onRequiredChange={onRequiredChange} item={item} />
