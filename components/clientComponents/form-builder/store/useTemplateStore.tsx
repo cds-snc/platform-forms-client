@@ -420,8 +420,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             initialize: (language = "en") => {
               set((state) => {
                 state.id = "";
-                state.lang = language ? (language as Language) : "en";
-                state.translationLanguagePriority = language ? (language as Language) : "en";
+                state.lang = language as Language;
+                state.translationLanguagePriority = language as Language;
                 state.form = defaultForm;
                 state.isPublished = false;
                 state.name = "";
