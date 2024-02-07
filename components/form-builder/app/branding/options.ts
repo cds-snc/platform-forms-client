@@ -125,4 +125,13 @@ export const options = [
     logoTitleEn: "Elections Canada",
     logoTitleFr: "Elections Canada",
   },
+  {
+    name: "tbs",
+    urlEn: "https://www.canada.ca/en/treasury-board-secretariat.html",
+    urlFr: "https://www.canada.ca/fr/secretariat-conseil-tresor.html",
+    logoEn: "/img/branding/tbs-en.svg",
+    logoFr: "/img/branding/tbs-fr.svg",
+    logoTitleEn: "Treasury Board of Canada Secretariat",
+    logoTitleFr: "Secrétariat du Conseil du Trésor du Canada",
+  },
 ];
