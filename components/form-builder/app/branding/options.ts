@@ -123,7 +123,7 @@ export const options = [
     logoEn: "/img/branding/ec-en.png",
     logoFr: "/img/branding/ec-en.png",
     logoTitleEn: "Elections Canada",
-    logoTitleFr: "Elections Canada",
+    logoTitleFr: "Élections Canada",
   },
   {
     name: "tbs",
