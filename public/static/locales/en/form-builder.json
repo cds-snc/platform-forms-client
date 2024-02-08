@@ -209,11 +209,11 @@
     "defaultOption": "Government of Canada",
     "default": "(default)",
     "heading": "Branding",
-    "notFound": "Didn’t find your department or agency on the list?",
-    "preview": "Preview of branding",
-    "select": "Select a different branding option for the top of your form",
-    "submitNew": "Submit a new branding option (opens in new tab)",
-    "text1": "GC Forms displays the Government of Canada signature at the top of your form by default."
+    "notFound": "Didn’t find your department or agency in the list?",
+    "preview": "Preview",
+    "select": "Select different branding for the top of your form",
+    "submitNew": "Request alternate branding",
+    "text1": "Published forms include the Government of Canada signature by default."
   },
   "cancel": "Cancel",
   "characterLimitDescription": "Only use a character limit when there is a good reason for limiting the number of characters users can enter.",
@@ -277,7 +277,7 @@
     "phone": "For example: 111-222-3333"
   },
   "description": "Description",
-  "descriptionDescription": "The description appears below the label and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements.",
+  "descriptionDescription": "The hint text appears below the label and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements or give an example.",
   "didYouFindThisToolHelpful": "Did you find GC Forms helpful? <a href=\"/en/form-builder/support/contactus\" target=\"_blank\">Provide feedback</a>",
   "downloadCSV": "Export as a spreadsheet",
   "downloadResponsesTable": {
@@ -398,7 +398,7 @@
   "gcFormsTranslate": "Translations",
   "ifYouAreExperiencingProblems": "If you are experiencing any problems with your published form, please <a href=\"/en/form-builder/support\" target=\"_blank\">contact support</a>.",
   "incomplete": "Incomplete",
-  "inputDescription": "Description",
+  "inputDescription": "Hint text",
   "insertLink": "Insert link",
   "lastSaved": "updated at",
   "linkUrl": "Link URL",
@@ -479,7 +479,7 @@
   "richText": "Page text",
   "richTextConfirmationTitle": "Confirmation page and message",
   "richTextEditor": "Rich text editor",
-  "richTextIntroTitle": "Form introduction",
+  "richTextIntroTitle": "Introduction",
   "richTextPrivacyTitle": "Privacy statement",
   "save": "Save",
   "saveAndRequest": "Request publishing ability",
@@ -510,7 +510,7 @@
     "vaultOptionHint": {
       "text1": "Submitted responses will appear on the",
       "text2": "Responses page",
-      "text3": "GC Forms holds data temporarily. Retrieve responses within 45 days."
+      "text3": " GC Forms holds data temporarily. Retrieve responses within 45 days."
     },
     "emailOption": "Receive responses by email",
     "saveButton": "Save changes",
@@ -754,5 +754,6 @@
     "other": "Other ",
     "show": "Show:"
   },
-  "saved": "Saved"
+  "saved": "Saved",
+  "opensInNewTab": "opens in a new tab"
 }

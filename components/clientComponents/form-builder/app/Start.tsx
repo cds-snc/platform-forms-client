@@ -112,7 +112,7 @@ export const Start = () => {
             e.preventDefault();
             // clear any existing form data
             clearTemplateStore();
-            initialize();
+            initialize(language);
             router.push(`/${language}/form-builder/edit`);
           }}
         >
