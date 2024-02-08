@@ -3,14 +3,15 @@ import React from "react";
 import { useTranslation } from "@i18n/client";
 import { ExampleWrapper } from "./ExampleWrapper";
 import { Combobox, Description, Label } from "@clientComponents/forms";
-import { ManagedData, getManagedData } from "@lib/managedData";
+import { managedData } from "@lib/managedData";
+import { Language } from "@clientComponents/form-builder/types";
 
 export const Departments = () => {
   const { t, i18n } = useTranslation("form-builder");
-  const departments = getManagedData(ManagedData.DEPARTMENTS);
+  const departments = managedData.departments;
 
   const choices = departments?.map((department) => {
-    return department[i18n.language];
+    return department[i18n.language as Language];
   });
 
   return (

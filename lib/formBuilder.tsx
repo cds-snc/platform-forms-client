@@ -23,7 +23,7 @@ import {
   Response,
 } from "@lib/types";
 import { getLocalizedProperty } from "@lib/utils";
-import { ManagedData, getManagedData } from "./managedData";
+import { managedData } from "@lib/managedData";
 
 // This function is used for select/radio/checkbox i18n change of form labels
 function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: string) {
@@ -52,8 +52,8 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
 
   // Retrieve managed data from static json file if specified
   if (element.properties.managedChoices) {
-    const dataFile = element.properties.managedChoices as ManagedData;
-    const data = getManagedData(dataFile);
+    const dataFile = element.properties.managedChoices;
+    const data = managedData[dataFile];
     choices = data ? getLocaleChoices(data, lang) : [];
   }
 
