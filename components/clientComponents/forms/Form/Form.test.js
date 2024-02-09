@@ -114,7 +114,7 @@ describe("Form Functionality", () => {
     // "Warning: An update to Formik inside a test was not wrapped in act(...)."
     fireEvent.click(screen.getByRole("button", { type: "submit" }));
 
-    await waitFor(() => expect(submitToAPI).toBeCalledTimes(1));
+    await waitFor(() => expect(submitToAPI).toHaveBeenCalledTimes(1));
   });
 
   it("shows the alert after pressing submit if the timer hasn't expired", async () => {
