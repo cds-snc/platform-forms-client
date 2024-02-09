@@ -1,8 +1,8 @@
 import { PropertyChoices } from "@lib/types";
-import { organizations, Department } from "./departments";
+import { organizations, Organization } from "./organizations";
 
 export type ManagedDataSets = {
-  departments: ManagedDataSet<Department[]>;
+  departments: ManagedDataSet<Organization[]>;
 };
 
 export type ManagedDataSet<T> = {
