@@ -65,7 +65,7 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
                 key={item}
                 {...getItemProps({ item, index })}
               >
-                <>{item}</>
+                {item}
               </li>
             ))}
         </ul>
