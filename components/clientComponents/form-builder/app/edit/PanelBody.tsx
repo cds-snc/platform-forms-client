@@ -88,8 +88,8 @@ export const PanelBody = ({
                     <Trans
                       ns="form-builder"
                       i18nKey="tooltips.departmentElement.body"
-                      defaults="<italic></italic> <a></a> <p></p>"
-                      components={{ italic: <i />, a: <a />, p: <p /> }}
+                      defaults="<a></a> <p></p>"
+                      components={{ a: <a />, p: <p /> }}
                     />
                   </Tooltip.Info>
                 </div>
