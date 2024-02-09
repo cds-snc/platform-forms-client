@@ -39,7 +39,7 @@
     "test": "jest",
     "test:watch": "DEBUG_PRINT_LIMIT=10000  jest --watch",
     "cypress": "cypress open",
-    "cypress:run": "cypress run --browser chrome",
+    "cypress:run": "CYPRESS_DEBUG=true cypress run --browser chrome",
     "cypress:e2e": "cypress run --browser chrome --e2e",
     "cypress:component": "cypress run --browser chrome --component",
     "postinstall": "yarn node -e \"process.env.NODE_ENV != 'production' && process.exit(1)\" || husky install"
@@ -150,6 +150,7 @@
     "cypress-each": "^1.13.3",
     "cypress-network-idle": "^1.14.2",
     "cypress-plugin-tab": "^1.0.5",
+    "cypress-terminal-report": "^6.0.0",
     "cypress-wait-until": "^3.0.1",
     "eslint": "^8.56.0",
     "eslint-config-next": "^14.1.0",

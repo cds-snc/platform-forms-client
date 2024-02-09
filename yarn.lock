@@ -8304,6 +8304,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cypress-terminal-report@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "cypress-terminal-report@npm:6.0.0"
+  dependencies:
+    chalk: "npm:^4.0.0"
+    fs-extra: "npm:^10.1.0"
+    process: "npm:^0.11.10"
+    semver: "npm:^7.5.4"
+    tv4: "npm:^1.3.0"
+  peerDependencies:
+    cypress: ">=10.0.0"
+  checksum: 10c0/eb13ae5ea8cd27545b247be4c6d9516c3342d0a854211ee2fc7e9011e8ccaafa2b345a6f3d9df100750fb678ac6cb45d72e9f2a6d4844ef0e8d6b04f1f4cfb95
+  languageName: node
+  linkType: hard
+
 "cypress-wait-until@npm:^3.0.1":
   version: 3.0.1
   resolution: "cypress-wait-until@npm:3.0.1"
@@ -10005,6 +10020,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fs-extra@npm:^10.1.0":
+  version: 10.1.0
+  resolution: "fs-extra@npm:10.1.0"
+  dependencies:
+    graceful-fs: "npm:^4.2.0"
+    jsonfile: "npm:^6.0.1"
+    universalify: "npm:^2.0.0"
+  checksum: 10c0/5f579466e7109719d162a9249abbeffe7f426eb133ea486e020b89bc6d67a741134076bf439983f2eb79276ceaf6bd7b7c1e43c3fd67fe889863e69072fb0a5e
+  languageName: node
+  linkType: hard
+
 "fs-extra@npm:^9.1.0":
   version: 9.1.0
   resolution: "fs-extra@npm:9.1.0"
@@ -10154,6 +10180,7 @@ __metadata:
     cypress-each: "npm:^1.13.3"
     cypress-network-idle: "npm:^1.14.2"
     cypress-plugin-tab: "npm:^1.0.5"
+    cypress-terminal-report: "npm:^6.0.0"
     cypress-wait-until: "npm:^3.0.1"
     eslint: "npm:^8.56.0"
     eslint-config-next: "npm:^14.1.0"
@@ -16250,6 +16277,13 @@ __metadata:
   dependencies:
     safe-buffer: "npm:^5.0.1"
   checksum: 10c0/4c7a1b813e7beae66fdbf567a65ec6d46313643753d0beefb3c7973d66fcec3a1e7f39759f0a0b4465883499c6dc8b0750ab8b287399af2e583823e40410a17a
+  languageName: node
+  linkType: hard
+
+"tv4@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "tv4@npm:1.3.0"
+  checksum: 10c0/714a37d005a902db0099379ed473c4780f6473f31c223cb0f023640cb32e0be9957cf2c95add8ec07665c6a699d45e6fd5c6ef49162b4e92000038b13fd8b759
   languageName: node
   linkType: hard
 

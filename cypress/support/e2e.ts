@@ -21,9 +21,11 @@ import "./commands";
 
 // Import Axe-Core library
 import "cypress-axe";
+import terminalReport from "cypress-terminal-report/src/installLogsCollector";
 
 import flagsDefault from "../../flag_initialization/default_flag_settings.json";
 
+if (Cypress.env("DEBUG")) terminalReport();
 // Reset the Database and Flags at a minimum between test suites
 before(() => {
   cy.task("db:teardown");

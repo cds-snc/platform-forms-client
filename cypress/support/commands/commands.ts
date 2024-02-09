@@ -75,9 +75,9 @@ Cypress.Commands.add("visitPage", (path) => {
   });
   cy.visit(path);
   // Ensure page has fully loaded
-  cy.get("div[data-testid='loading-spinner']").should("not.exist");
+  cy.get("#react-hydration-loader").should("not.exist");
   cy.get("main").should("be.visible");
-  // Ensure network calls have ended that drive renders
+  //  Ensure network calls have ended that drive renders
   cy.waitForNetworkIdle("@calls", 1000);
 });
 
