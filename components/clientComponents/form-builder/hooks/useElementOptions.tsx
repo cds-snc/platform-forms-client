@@ -14,6 +14,7 @@ import {
   NameIcon,
   UploadIcon,
   GavelIcon,
+  DepartmentsIcon,
 } from "@clientComponents/icons";
 
 import {
@@ -32,6 +33,8 @@ import {
   Contact,
   FirstMiddleLastName,
   FileInput,
+  Departments,
+  Combobox,
 } from "../app/edit/elements/element-dialog";
 
 import { useIsAdminUser } from "./useIsAdminUser";
@@ -129,6 +132,14 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       value: t("dropdown"),
       icon: SelectMenuIcon,
       description: DropDown,
+      className: "",
+      group: groups.basic,
+    },
+    {
+      id: "combobox",
+      value: t("combobox"),
+      icon: SelectMenuIcon,
+      description: Combobox,
       className: "separator",
       group: groups.basic,
     },
@@ -153,7 +164,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       value: t("addElementDialog.firstMiddleLastName.label"),
       icon: NameIcon,
       description: FirstMiddleLastName,
-      className: "separator",
+      className: "",
       group: groups.preset,
     },
     {
@@ -168,7 +179,15 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       value: t("addElementDialog.address.label"),
       icon: AddressIcon,
       description: Address,
-      className: "separator",
+      className: "",
+      group: groups.preset,
+    },
+    {
+      id: "departments",
+      value: t("addElementDialog.departments.title"),
+      icon: DepartmentsIcon,
+      description: Departments,
+      className: "",
       group: groups.preset,
     },
     {

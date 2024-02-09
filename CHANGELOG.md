@@ -20,6 +20,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Bug Fixes
 
+- conditional indicator question number output ([#3229](https://github.com/cds-snc/platform-forms-client/issues/3229)) ([0a9b0c4](https://github.com/cds-snc/platform-forms-client/commit/0a9b0c4b6eb39633fea3970d8473ee6dcd48597e))
+
+### Miscellaneous Chores
+
+- **deps:** update all non-major github action dependencies ([#3014](https://github.com/cds-snc/platform-forms-client/issues/3014)) ([51d4ae4](https://github.com/cds-snc/platform-forms-client/commit/51d4ae4eea0ba16072dbe9935bb3a9085e50fcaf))
+- update branding settings to link to new form ([#3212](https://github.com/cds-snc/platform-forms-client/issues/3212)) ([405ab3b](https://github.com/cds-snc/platform-forms-client/commit/405ab3b16cf36ece7c744ca82cf60a226019cbe6))
+
+## [3.12.3](https://github.com/cds-snc/platform-forms-client/compare/v3.12.2...v3.12.3) (2024-01-31)
+
+### Bug Fixes
+
 - request new 2FA code does not work if there is no active 2FA session ([#3193](https://github.com/cds-snc/platform-forms-client/issues/3193)) ([a57b64e](https://github.com/cds-snc/platform-forms-client/commit/a57b64ecbb948871774823fc8d46304b4959dd7d))
 - validation when conditional rules array is empty ([#3205](https://github.com/cds-snc/platform-forms-client/issues/3205)) ([5ae78e0](https://github.com/cds-snc/platform-forms-client/commit/5ae78e0937056f4640e2a5b562f066a36a18eac1))
 

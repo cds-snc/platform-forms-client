@@ -44,6 +44,7 @@ const CardLinks = ({ isPublished, url, id, deliveryOption, overdue }: CardLinksP
   const textData = {
     responses: overdue,
     link: responsesLink,
+    interpolation: { escapeValue: false },
   };
 
   return (
