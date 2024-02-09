@@ -73,7 +73,7 @@ export const CheckAll = ({
       : t("downloadResponsesTable.header.deselectAll");
 
   return (
-    <Tooltip text={tooltip} side="top">
+    <Tooltip.Simple text={tooltip} side="top">
       <span
         className="m-auto inline-block cursor-pointer"
         role="checkbox"
@@ -102,6 +102,6 @@ export const CheckAll = ({
           <CheckBoxEmptyIcon title={tooltip} className="h-6 w-6" />
         )}
       </span>
-    </Tooltip>
+    </Tooltip.Simple>
   );
 };
