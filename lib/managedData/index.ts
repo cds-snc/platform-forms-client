@@ -18,4 +18,6 @@ type ManagedData = {
 
 export const managedData: ManagedData = {
   departments: organizations.filters.departments(organizations.values),
+  crownCorporations: organizations.filters.crownCorporations(organizations.values),
+  provincialTerritorial: organizations.filters.provincialTerritorial(organizations.values),
 };
