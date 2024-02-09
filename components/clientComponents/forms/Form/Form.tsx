@@ -30,28 +30,28 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
   const [formTimerState, { startTimer, checkTimer }] = useFormTimer();
   const [submitTooEarly, setSubmitTooEarly] = useState(false);
   const screenReaderRemainingTime = useRef(formTimerState.remainingTime);
+  const [formReady, setFormReady] = useState(false);
+
+  // calculate initial delay for submit timer
+  const secondsBaseDelay = 2;
+  const secondsPerFormElement = 2;
+  const submitDelaySeconds = secondsBaseDelay + numberOfRequiredQuestions * secondsPerFormElement;
+
+  // If the timer hasn't started yet, start the timer
+  if (!formTimerState.timerDelay) startTimer(submitDelaySeconds);
 
   useEffect(() => {
-    // calculate initial delay for submit timer
-    const secondsBaseDelay = 2;
-    const secondsPerFormElement = 2;
-
-    const submitDelaySeconds = secondsBaseDelay + numberOfRequiredQuestions * secondsPerFormElement;
-    logMessage.debug("Starting form timer in Form component");
-    startTimer(submitDelaySeconds);
+    if (formTimerState.timerDelay) setFormReady(true);
     // Initiate a callback to ensure that state of submit button is correctly displayed
-    const intervalID = setInterval(() => {
-      checkTimer();
-    }, 1000);
+
+    // Calling the checkTimer modifies the state of the formTimerState
+    // Which recalls this useEffect at least every second
+    const timerID = setTimeout(() => checkTimer(), 1000);
 
     return () => {
-      // If the timer exists remove it when the component unmounts
-      if (intervalID !== null) {
-        clearInterval(intervalID);
-      }
+      clearTimeout(timerID);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [checkTimer, formTimerState.timerDelay]);
 
   return (
     <>
@@ -90,6 +90,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
       <Button
         id="form-submit-button"
         type="submit"
+        disabled={!formReady}
         onClick={(e) => {
           checkTimer();
           screenReaderRemainingTime.current = formTimerState.remainingTime;
@@ -109,7 +110,6 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
           }
           // Only change state if submitTooEarly is already set to true
           submitTooEarly && setSubmitTooEarly(false);
-          logMessage.debug("Should submit to server");
         }}
       >
         {t("submitButton")}
@@ -143,8 +143,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const errorId = "gc-form-errors";
   const serverErrorId = `${errorId}-server`;
   const formStatusError = props.status === "Error" ? t("server-error") : null;
-
-  logMessage.debug(`Node ENV = ${process.env.NODE_ENV}`);
 
   const shouldUseRecaptcha = !isPreview && reCaptchaID;
 
