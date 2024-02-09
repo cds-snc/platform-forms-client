@@ -1,5 +1,5 @@
 import { ManagedDataSet } from ".";
-import { departmentsData } from "./data/departments";
+import organizationsData from "./data/organizations.json";
 
 export type Department = {
   type: string;
@@ -8,8 +8,8 @@ export type Department = {
   [key: string]: string | null;
 };
 
-export const departments: ManagedDataSet<Department[]> = {
-  values: departmentsData,
+export const organizations: ManagedDataSet<Department[]> = {
+  values: organizationsData,
   filters: {
     departments: (values: Department[]) =>
       values

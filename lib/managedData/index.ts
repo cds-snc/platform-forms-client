@@ -1,5 +1,5 @@
 import { PropertyChoices } from "@lib/types";
-import { departments, Department } from "./departments";
+import { organizations, Department } from "./departments";
 
 export type ManagedDataSets = {
   departments: ManagedDataSet<Department[]>;
@@ -17,5 +17,5 @@ type ManagedData = {
 };
 
 export const managedData: ManagedData = {
-  departments: departments.filters.departments(departments.values),
+  departments: organizations.filters.departments(organizations.values),
 };
