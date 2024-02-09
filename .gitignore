@@ -101,6 +101,3 @@ package-lock.json
 
 # Utils retrieval output
 responses.csv
-
-# Typescript
-*.tsbuildinfo
