@@ -25,7 +25,9 @@
       "address": "Add address",
       "contact": "Add contact",
       "dynamicRow": "Add repeating set",
-      "richText": "Add page text"
+      "richText": "Add page text",
+      "departments": "Add department",
+      "combobox": "Add searchable list"
     },
     "address": {
       "whatIsYourAddress": "What is your address?",
@@ -61,6 +63,16 @@
       "selectAllThatApply": "Select all that apply."
     },
     "checkboxItem": "Option",
+    "combobox": {
+      "description": "A searchable list of options for single selection.",
+      "title": "Searchable list",
+      "example": {
+        "select": "Select"
+      },
+      "selectOption": "Question",
+      "selectOne": "Start typing to narrow down the list.",
+      "choices": "Option 1,Option 2,Option 3,Option 4,Option 5,Option 6,Option 7,Option 8,Option 9,Option 10"
+    },
     "condition1": "Condition 1",
     "condition2": "Condition 2",
     "condition3": "Condition 3",
@@ -90,6 +102,15 @@
         "dateValue": "mm/dd/yyyy"
       },
       "forExample": "Format the date as: mm/dd/yyyy"
+    },
+    "departments": {
+      "description": "A managed list of Government of Canada organizations for single selection.",
+      "title": "Department",
+      "example": {
+        "select": "Select"
+      },
+      "selectOption": "Department or agency",
+      "selectOne": "Start typing to narrow down the list."
     },
     "dropdown": {
       "description": "A long list of options for single selection.",
@@ -226,6 +247,7 @@
   "checkboxes": "Checkboxes",
   "close": "Close",
   "closeModal": "Close modal",
+  "combobox": "Searchable list",
   "completed": "Completed",
   "confirmationDescriptionItem1": "details of what happens next and when.",
   "confirmationDescriptionItem2": "contact details for the service.",
@@ -274,7 +296,8 @@
     "date": "Format the date as: mm/dd/yyyy",
     "email": "For example: name@example.com",
     "number": "Enter a number",
-    "phone": "For example: 111-222-3333"
+    "phone": "For example: 111-222-3333",
+    "combobox": "Start typing to narrow down the list."
   },
   "description": "Description",
   "descriptionDescription": "The hint text appears below the label and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements or give an example.",
@@ -404,6 +427,10 @@
   "linkUrl": "Link URL",
   "lockedBlock": "Essential",
   "longAnswerText": "Long answer",
+  "managedList": {
+    "prefix": "Managed list:",
+    "departments": "GC organizations"
+  },
   "maxCharacterLength": "Max character length: ",
   "maximumCharacterLength": "Maximum character length",
   "maxNumberOfRows": {
