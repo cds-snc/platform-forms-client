@@ -20,23 +20,14 @@ export const organizations: ManagedDataSet<Organization[]> = {
     departments: (values: Organization[]) =>
       values
         .filter((item) => item.type === OrganizationType.GCDepartment)
-        .map((item) => ({
-          en: item.name_eng,
-          fr: item.name_fra,
-        })),
+        .map(({ name_eng: en, name_fra: fr }) => ({ en, fr })),
     crownCorporations: (values: Organization[]) =>
       values
         .filter((item) => item.type === OrganizationType.CrownCorp)
-        .map((item) => ({
-          en: item.name_eng,
-          fr: item.name_fra,
-        })),
+        .map(({ name_eng: en, name_fra: fr }) => ({ en, fr })),
     provincialTerritorial: (values: Organization[]) =>
       values
         .filter((item) => item.type === OrganizationType.PTM)
-        .map((item) => ({
-          en: item.name_eng,
-          fr: item.name_fra,
-        })),
+        .map(({ name_eng: en, name_fra: fr }) => ({ en, fr })),
   },
 };
