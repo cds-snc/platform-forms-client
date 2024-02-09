@@ -105,7 +105,7 @@ describe("Form Functionality", () => {
     expect(await screen.findAllByRole("button", { type: "submit" })).toHaveLength(1);
   });
 
-  it.skip("Form can be submitted", async () => {
+  it("Form can be submitted", async () => {
     render(<Form formRecord={formRecord} language="en" t={(key) => key} />);
     expect(screen.getByRole("button", { type: "submit" })).toBeInTheDocument();
 
@@ -114,7 +114,6 @@ describe("Form Functionality", () => {
     // "Warning: An update to Formik inside a test was not wrapped in act(...)."
     fireEvent.click(screen.getByRole("button", { type: "submit" }));
 
-    // Needs to be updated because the FormTimer is blocking the call to submitToAPI
     await waitFor(() => expect(submitToAPI).toBeCalledTimes(1));
   });
 
