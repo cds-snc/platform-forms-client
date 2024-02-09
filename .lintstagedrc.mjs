@@ -1,9 +1,9 @@
 export default {
   //"*.ts(x)": "eslint -c .eslint-tailwindcss.js"
-  "*.ts": ["eslint -c .eslintrc.js", "prettier --write"],
-  "*.tsx": ["eslint -c .eslintrc.js", "prettier --write"],
-  "*.js": ["eslint -c .eslintrc.js", "prettier --write"],
-  "*.jsx": ["eslint -c .eslintrc.js", "prettier --write"],
+  "*.ts": "prettier --write",
+  "*.tsx": "prettier --write",
+  "*.js": "prettier --write",
+  "*.jsx": "prettier --write",
   "*.json": "prettier --write",
   "*.md": "prettier --write",
 };
