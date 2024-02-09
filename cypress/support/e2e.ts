@@ -24,12 +24,6 @@ import "cypress-axe";
 
 import flagsDefault from "../../flag_initialization/default_flag_settings.json";
 
-Cypress.on("uncaught:exception", () => {
-  // returning false here prevents Cypress from
-  // failing the test
-  return false;
-});
-
 // Reset the Database and Flags at a minimum between test suites
 before(() => {
   cy.task("db:teardown");

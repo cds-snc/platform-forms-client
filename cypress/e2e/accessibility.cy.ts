@@ -51,7 +51,7 @@ describe("Accessibility (A11Y) Check", () => {
   });
   describe("Error Pages", () => {
     it("404 Page", () => {
-      cy.visitPage({ url: "i_do_not_exist_or_should_not", failOnStatusCode: false });
+      cy.visit({ url: "i_do_not_exist_or_should_not", failOnStatusCode: false });
       // Ensure page has fully loaded
       cy.get("h1").should("be.visible");
       cy.injectAxe();

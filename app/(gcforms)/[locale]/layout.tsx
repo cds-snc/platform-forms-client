@@ -14,8 +14,9 @@ export default async function Layout({
   const session = await auth();
 
   const headersList = headers();
-  const currentPath = headersList.get("x-path")?.replace(`/${locale}`, "") ?? "/";
-  if (session) {
+  const currentPath = headersList.get("x-path")?.replace(`/${locale}`, "");
+
+  if (session && currentPath) {
     if (
       !session.user.hasSecurityQuestions &&
       !currentPath.startsWith("/auth/setup-security-questions") &&

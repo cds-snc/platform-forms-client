@@ -3,6 +3,7 @@ import React from "react";
 import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@clientComponents/form-builder/store";
 import { ToggleLeft, ToggleRight } from "@clientComponents/icons";
+import { logMessage } from "@lib/logger";
 
 interface LangSwitcherProps {
   descriptionLangKey: string;
@@ -17,6 +18,7 @@ export const LangSwitcher = (props: LangSwitcherProps) => {
       toggleTranslationLanguagePriority: s.toggleTranslationLanguagePriority,
     })
   );
+  logMessage.debug(`LangSwitcher: translationLanguagePriority: ${translationLanguagePriority}`);
 
   const switchLang = () => {
     toggleTranslationLanguagePriority();

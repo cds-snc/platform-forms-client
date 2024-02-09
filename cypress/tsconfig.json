@@ -14,16 +14,16 @@
     "baseUrl": ".",
     "paths": {
       "@lib/*": ["lib/*"],
-      "@components/*": ["components/*"],
-      "@appComponents/*": ["app/_components/*"],
-      "@formbuilder/*": ["components/form-builder/*"],
-      "@pages/*": ["pages/*"],
-      "@app/*": ["app/*"],
+      "@api/*": ["app/api/*"],
+      "@serverComponents/*": ["components/serverComponents/*"],
+      "@clientComponents/*": ["components/clientComponents/*"],
+      "@formbuilder/*": ["components/clientComponents/form-builder/*"],
       "@jestFixtures/*": ["__fixtures__/*"],
       "@jestUtils": ["__utils__"],
-      "@i18n": ["app/i18n"],
-      "@i18n/*": ["app/i18n/*"],
-      "@content/*": ["public/static/content/*"]
+      "@i18n": ["i18n"],
+      "@i18n/*": ["i18n/*"],
+      "@content/*": ["public/static/content/*"],
+      "@public/*": ["public/*"]
     }
   },
   "include": [
