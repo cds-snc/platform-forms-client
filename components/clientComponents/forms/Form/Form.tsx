@@ -144,8 +144,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const serverErrorId = `${errorId}-server`;
   const formStatusError = props.status === "Error" ? t("server-error") : null;
 
-  const shouldUseRecaptcha = !isPreview && process.env.NODE_ENV !== "development";
-  logMessage.debug(`ReCaptcha is ${shouldUseRecaptcha ? "enabled" : "disabled"}`);
+  logMessage.debug(`Node ENV = ${process.env.NODE_ENV}`);
+
+  const shouldUseRecaptcha = !isPreview && reCaptchaID;
 
   const handleSubmitReCaptcha = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
