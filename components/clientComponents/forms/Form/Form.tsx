@@ -27,7 +27,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
   formTitle,
 }) => {
   const { t } = useTranslation();
-  const [formTimerState, { startTimer, checkTimer }] = useFormTimer();
+  const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
   const [submitTooEarly, setSubmitTooEarly] = useState(false);
   const screenReaderRemainingTime = useRef(formTimerState.remainingTime);
   const [formReady, setFormReady] = useState(false);
@@ -37,21 +37,37 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
   const secondsPerFormElement = 2;
   const submitDelaySeconds = secondsBaseDelay + numberOfRequiredQuestions * secondsPerFormElement;
 
+  const formTimerEnabled = process.env.NEXT_PUBLIC_APP_ENV !== "test";
+  logMessage.info(`Form Timer Enabled: ${formTimerEnabled}`);
+
   // If the timer hasn't started yet, start the timer
-  if (!formTimerState.timerDelay) startTimer(submitDelaySeconds);
+  if (!formTimerState.timerDelay && formTimerEnabled) startTimer(submitDelaySeconds);
 
   useEffect(() => {
-    if (formTimerState.timerDelay) setFormReady(true);
-    // Initiate a callback to ensure that state of submit button is correctly displayed
+    if (!formTimerEnabled && !formTimerState.canSubmit) {
+      logMessage.info(`Disabling Form Timer`);
 
-    // Calling the checkTimer modifies the state of the formTimerState
-    // Which recalls this useEffect at least every second
-    const timerID = setTimeout(() => checkTimer(), 1000);
+      disableTimer();
+      setFormReady(true);
+    }
+  }, [disableTimer, formTimerEnabled, formTimerState.canSubmit]);
 
-    return () => {
-      clearTimeout(timerID);
-    };
-  }, [checkTimer, formTimerState.timerDelay]);
+  useEffect(() => {
+    if (formTimerEnabled) {
+      if (formTimerState.timerDelay) setFormReady(true);
+      // Initiate a callback to ensure that state of submit button is correctly displayed
+
+      // Calling the checkTimer modifies the state of the formTimerState
+      // Which recalls this useEffect at least every second
+      const timerID = setTimeout(() => checkTimer(), 1000);
+
+      logMessage.info(`Form Timer useEffect - timer enabled`);
+
+      return () => {
+        clearTimeout(timerID);
+      };
+    }
+  }, [checkTimer, formTimerState.timerDelay, formTimerEnabled]);
 
   return (
     <>
@@ -92,7 +108,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
         type="submit"
         disabled={!formReady}
         onClick={(e) => {
-          checkTimer();
+          if (formTimerEnabled) checkTimer();
           screenReaderRemainingTime.current = formTimerState.remainingTime;
           if (!formTimerState.canSubmit) {
             e.preventDefault();

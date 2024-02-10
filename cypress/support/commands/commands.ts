@@ -62,6 +62,7 @@ Cypress.Commands.add("useForm", (file, published = true) => {
  */
 Cypress.Commands.add("visitForm", (formID, language = "en") => {
   cy.visitPage(`/${language}/id/${formID}`);
+  cy.get("#form-submit-button").should("not.be.disabled");
 });
 
 /**

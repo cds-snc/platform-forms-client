@@ -13,7 +13,6 @@ describe("Forms Functionality", () => {
   describe("text field tests", () => {
     beforeEach(() => {
       cy.visitForm(formID);
-      cy.get("form").should("be.visible");
     });
 
     it("the form displays an error when it is submitted and a field is required", () => {
@@ -35,8 +34,6 @@ describe("Forms Functionality", () => {
     beforeEach(() => {
       cy.clock();
       cy.visitForm(formID);
-      cy.get("form").should("be.visible");
-      cy.get("#form-submit-button").should("be.visible");
     });
 
     it("should display alert message when submitting too quickly", () => {
