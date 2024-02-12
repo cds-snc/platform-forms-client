@@ -4,6 +4,7 @@ import { serverTranslation } from "@i18n";
 import DefaultLayout from "@clientComponents/globals/layouts/DefaultLayout";
 
 import { Metadata } from "next";
+import { logMessage } from "@lib/logger";
 
 export async function generateMetadata({
   params: { supportType, locale },
@@ -22,6 +23,7 @@ export default async function Page({
 }: {
   params: { supportType: string[] | undefined };
 }) {
+  logMessage.debug(`SupportType: ${supportType}`);
   // For any URLs other than /support and /support/contactus, redirect the user to the 404 page
   if (supportType !== undefined && supportType[0] !== "contactus") {
     notFound();
@@ -29,7 +31,7 @@ export default async function Page({
 
   return (
     <DefaultLayout showLanguageToggle>
-      <ClientSide supportType={supportType ? supportType[0] : ""} />
+      <ClientSide supportType={supportType ? supportType[0] : "support"} />
     </DefaultLayout>
   );
 }
