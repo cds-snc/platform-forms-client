@@ -28,8 +28,18 @@
         "body": "Used to track specific form submissions or report a problem with responses."
       },
       "date": {
-        "title": "Submission date",
-        "body": "When the response was received by GC Forms."
+        "new": {
+          "title": "Submission date",
+          "body": "When the response was received by GC Forms."
+        },
+        "downloaded": {
+          "title": "Download date",
+          "body": "When the response was received by GC Forms."
+        },
+        "confirmed": {
+          "title": "Confirmed date",
+          "body": "When the response was received by GC Forms."
+        }
       },
       "nextSteps": {
         "title": "Next steps",

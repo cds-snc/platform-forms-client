@@ -161,8 +161,8 @@ export const DownloadTable = ({
                   triggerClassName="align-middle ml-1"
                   tooltipClassName="font-normal"
                 >
-                  <strong>{t("tooltips.downloadTable.date.title")}</strong>
-                  <p>{t("tooltips.downloadTable.date.body")}</p>
+                  <strong>{t(`tooltips.downloadTable.date.${statusQuery}.title`)}</strong>
+                  <p>{t(`tooltips.downloadTable.date.${statusQuery}.body`)}</p>
                 </Tooltip.Info>
               </th>
               <th scope="col" className="w-full p-4 text-left">
