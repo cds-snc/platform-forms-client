@@ -25,7 +25,9 @@
       "address": "Ajouter une adresse",
       "contact": "Ajouter des coordonnées",
       "dynamicRow": "Ajouter un ensemble de réponses",
-      "richText": "Ajouter du texte de page"
+      "richText": "Ajouter du texte de page",
+      "departments": "Ajouter un ministère",
+      "combobox": "Ajouter une liste consultable"
     },
     "address": {
       "whatIsYourAddress": "Quelle est votre adresse?",
@@ -61,6 +63,16 @@
       "selectAllThatApply": "Sélectionnez toutes les options pertinentes."
     },
     "checkboxItem": "Option",
+    "combobox": {
+      "description": "Une liste consultable d'options pstmi lesquelles un choix est fait.",
+      "title": "Liste consultable",
+      "example": {
+        "select": "Selectionner"
+      },
+      "selectOption": "Question",
+      "selectOne": "Commencez à taper pour réduire la liste.",
+      "choices": "Option 1,Option 2,Option 3,Option 4,Option 5,Option 6,Option 7,Option 8,Option 9,Option 10"
+    },
     "condition1": "Condition 1",
     "condition2": "Condition 2",
     "condition3": "Condition 3",
@@ -90,6 +102,15 @@
         "dateValue": "mm/jj/aaaa"
       },
       "forExample": "Saisissez la date dans ce format : mm/jj/aaaa"
+    },
+    "departments": {
+      "description": "Une liste gérée d’organisations du gouvernement du Canada parmi lesquelles un choix est fait.",
+      "title": "Ministère",
+      "example": {
+        "select": "Sélectionner"
+      },
+      "selectOption": "Ministère ou organisme",
+      "selectOne": "Commencez à taper pour réduire la liste."
     },
     "dropdown": {
       "description": "Une longue liste d’options parmi lesquelles un choix est fait.",
@@ -226,6 +247,7 @@
   "checkboxes": "Cases à cocher",
   "close": "Fermer",
   "closeModal": "Fermer fenêtre modale",
+  "combobox": "Liste consultable",
   "completed": "Complétée",
   "confirmationDescriptionItem1": "des précisions sur la suite de choses.",
   "confirmationDescriptionItem2": "les coordonnées du service.",
@@ -273,7 +295,8 @@
     "date": "Saisissez une date dans ce format : mm/jj/aaaa",
     "email": "Par exemple : nom@exemple.com",
     "number": "Saisissez un chiffre",
-    "phone": "Par exemple : 111-222-3333"
+    "phone": "Par exemple : 111-222-3333",
+    "combobox": "Commencez à taper pour réduire la liste."
   },
   "description": "Description",
   "descriptionDescription": "Le texte explicatif apparaît sous l'étiquette et avant le champ. Il est utilisé pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de mise en forme ou donner un exemple.",
@@ -403,6 +426,10 @@
   "linkUrl": "URL du lien",
   "lockedBlock": "Essentiel",
   "longAnswerText": "Réponse longue",
+  "managedList": {
+    "prefix": "Liste gérée :",
+    "departments": "Liste d’organisations du GC"
+  },
   "maxCharacterLength": "Longueur maximale des caractères :",
   "maximumCharacterLength": "Longueur maximale des caractères",
   "maxNumberOfRows": {

@@ -71,6 +71,14 @@ export const PanelBody = ({
                   {t(`autocompleteOptions.${item.properties.autoComplete}`)}
                 </div>
               )}
+              {item.properties.managedChoices && (
+                <div data-testid={`managedChoices-${item.id}`} className="mt-5 text-sm">
+                  <strong>{t("managedList.prefix")}</strong>{" "}
+                  <a href="https://github.com/cds-snc/gc-organisations" target="_blank">
+                    {t(`managedList.${item.properties.managedChoices}`)}
+                  </a>
+                </div>
+              )}
               <ElementRequired onRequiredChange={onRequiredChange} item={item} />
             </div>
           </div>
