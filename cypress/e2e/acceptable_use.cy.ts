@@ -30,13 +30,13 @@ describe("Test acceptable use Page", () => {
   });
 
   it("Redirects back to terms of use if not accepted", () => {
-    cy.visitPage("en/forms");
+    cy.visitPage("/en/forms");
     cy.get("main").should("be.visible");
     cy.location("pathname").should("contain", "/en/auth/policy");
     cy.contains("h1", "Know your responsibilities");
   });
   it("Redirects back to calling page after acceptance", () => {
-    cy.visitPage("en/forms");
+    cy.visitPage("/en/forms");
     cy.get("main").should("be.visible");
     cy.location("pathname").should("contain", "/en/auth/policy");
     cy.location("search").should("eq", "?referer=/en/forms");

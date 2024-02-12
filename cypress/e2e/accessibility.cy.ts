@@ -27,15 +27,15 @@ describe("Accessibility (A11Y) Check", () => {
   describe("Unauthenticated Pages", () => {
     it.each([
       { title: "Language selection", path: "/" },
-      { title: "Form builder landing", path: "/form-builder" },
-      { title: "Form builder edit", path: "/form-builder/edit" },
-      { title: "Form builder translation", path: "/form-builder/edit/translate" },
-      { title: "Form builder settings", path: "/form-builder/settings" },
-      { title: "Terms and conditions", path: "/terms-and-conditions" },
-      { title: "Service-level agreement", path: "/sla" },
-      { title: "Create an account", path: "/signup/register" },
-      { title: "Sign in", path: "/auth/login" },
-      { title: "Sign out", path: "/auth/logout" },
+      { title: "Form builder landing", path: "/en/form-builder" },
+      { title: "Form builder edit", path: "/en/form-builder/edit" },
+      { title: "Form builder translation", path: "/en/form-builder/edit/translate" },
+      { title: "Form builder settings", path: "/en/form-builder/settings" },
+      { title: "Terms and conditions", path: "/en/terms-and-conditions" },
+      { title: "Service-level agreement", path: "/en/sla" },
+      { title: "Create an account", path: "/en/signup/register" },
+      { title: "Sign in", path: "/en/auth/login" },
+      { title: "Sign out", path: "/en/auth/logout" },
     ])(
       (page) => `${page.title} Test`,
       ({ path }) => {
