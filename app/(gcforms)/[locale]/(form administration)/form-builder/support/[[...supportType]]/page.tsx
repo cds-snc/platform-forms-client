@@ -4,7 +4,6 @@ import { serverTranslation } from "@i18n";
 import DefaultLayout from "@clientComponents/globals/layouts/DefaultLayout";
 
 import { Metadata } from "next";
-import { logMessage } from "@lib/logger";
 
 export async function generateMetadata({
   params: { supportType, locale },
