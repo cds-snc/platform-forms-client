@@ -71,7 +71,7 @@ Cypress.Commands.add("visitForm", (formID, language = "en") => {
 Cypress.Commands.add("visitPage", (path) => {
   cy.waitForNetworkIdlePrepare({
     method: "GET",
-    pattern: "/api/*",
+    pattern: "/api/auth/*",
     alias: "calls",
   });
   cy.visit(path);
@@ -149,32 +149,13 @@ Cypress.Commands.add("login", (options?: { admin?: boolean; acceptableUse?: bool
           { timeout: 10000, interval: 500 }
         );
 
-        let session;
+        //let session;
         if (acceptableUse) {
-          cy.request({
-            method: "GET",
-            url: "/api/auth/session",
-          })
-            .then((response) => {
-              session = response.body;
-              return session;
-            })
-            .then((session) => {
-              cy.request({
-                method: "POST",
-                url: "/api/auth/session",
-                headers: {
-                  "x-csrf-token": csrfToken,
-                },
-                body: {
-                  csrfToken,
-                  data: { ...session, user: { ...session.user, acceptableUse: true } },
-                },
-              }).then((response) => {
-                expect(response.status).to.eq(200);
-                cy.visit("/en/forms");
-              });
-            });
+          cy.visitPage("/en/auth/policy");
+          cy.get("#acceptableUse").click();
+          cy.location("pathname").should("eq", "/en/forms");
+          cy.get("#react-hydration-loader").should("not.exist");
+          cy.get("main").should("be.visible");
         }
       });
     });
@@ -222,11 +203,6 @@ Cypress.Commands.add("logout", () => {
             .then((response) => response.body === null),
         { timeout: 10000, interval: 500 }
       );
-
-      // cy.waitUntil(
-      //   () => cy.getCookie("authjs.session-token").then((cookie) => !cookie || !cookie.value),
-      //   { timeout: 10000, interval: 500 }
-      // );
     });
   });
 });
