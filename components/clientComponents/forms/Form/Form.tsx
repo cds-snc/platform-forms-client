@@ -38,15 +38,12 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
   const submitDelaySeconds = secondsBaseDelay + numberOfRequiredQuestions * secondsPerFormElement;
 
   const formTimerEnabled = process.env.NEXT_PUBLIC_APP_ENV !== "test";
-  logMessage.info(`Form Timer Enabled: ${formTimerEnabled}`);
 
   // If the timer hasn't started yet, start the timer
   if (!formTimerState.timerDelay && formTimerEnabled) startTimer(submitDelaySeconds);
 
   useEffect(() => {
     if (!formTimerEnabled && !formTimerState.canSubmit) {
-      logMessage.info(`Disabling Form Timer`);
-
       disableTimer();
       setFormReady(true);
     }
