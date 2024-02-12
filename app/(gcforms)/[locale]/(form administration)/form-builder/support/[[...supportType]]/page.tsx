@@ -23,7 +23,6 @@ export default async function Page({
 }: {
   params: { supportType: string[] | undefined };
 }) {
-  logMessage.debug(`SupportType: ${supportType}`);
   // For any URLs other than /support and /support/contactus, redirect the user to the 404 page
   if (supportType !== undefined && supportType[0] !== "contactus") {
     notFound();
