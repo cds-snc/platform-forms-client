@@ -21,6 +21,22 @@
       "message2": "Quelqu’un communiquera avec vous pour aider à résoudre le problème. Approuvez la suppression des ces réponses une fois que les problèmes ont été résolus."
     }
   },
+  "tooltips": {
+    "downloadTable": {
+      "submissionID": {
+        "title": "Identifiant de soumission",
+        "body": "Permet de suivre l’état d’une réponse spécifique ou de signaler un problème avec les réponses."
+      },
+      "date": {
+        "title": "Date de soumission",
+        "body": "Indique quand la réponse a été reçue dans Formulaires GC."
+      },
+      "nextSteps": {
+        "title": "Prochaines étapes",
+        "body": "Étant donné que Formulaires GC ne conserve pas les réponses indéfiniment, vous devrez récupérer et effacer les données de réponses dans les 45 jours suivant la soumission."
+      }
+    }
+  },
   "responses": {
     "recentlyDownloaded": "Téléchargements récents",
     "deleted": "Pour suppression",

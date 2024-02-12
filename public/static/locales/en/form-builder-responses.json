@@ -21,6 +21,22 @@
       "message2": "Someone will reach out to help resolve the problem. Sign off on the removal of these problem responses once resolved."
     }
   },
+  "tooltips": {
+    "downloadTable": {
+      "submissionID": {
+        "title": "Submission ID",
+        "body": "Used to track specific form submissions or report a problem with responses."
+      },
+      "date": {
+        "title": "Submission date",
+        "body": "When the response was received by GC Forms."
+      },
+      "nextSteps": {
+        "title": "Next steps",
+        "body": "Since GC Forms does not store responses indefinitely, you’ll need to retrieve and clear all response data within 45 days of submission."
+      }
+    }
+  },
   "responses": {
     "recentlyDownloaded": "Recently downloaded",
     "deleted": "Signed off for removal",
