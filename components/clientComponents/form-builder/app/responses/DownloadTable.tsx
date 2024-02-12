@@ -11,7 +11,7 @@ import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import { ConfirmReceiptStatus } from "./ConfirmReceiptStatus";
 import { DownloadResponseStatus } from "./DownloadResponseStatus";
 import { RemovalStatus } from "./RemovalStatus";
-import { useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useSetting } from "@lib/hooks/useSetting";
 import Link from "next/link";
 import { TableActions, initialTableItemsState, reducerTableItems } from "./DownloadTableReducer";
@@ -28,7 +28,6 @@ import { DownloadSingleButton } from "./DownloadSingleButton";
 import { Pagination } from "./Pagination";
 import { cn } from "@lib/utils";
 import { Tooltip } from "../shared/Tooltip";
-import { Trans } from "react-i18next";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -54,8 +53,8 @@ export const DownloadTable = ({
     t,
     i18n: { language },
   } = useTranslation("form-builder-responses");
-  const params = useSearchParams();
-  const statusQuery = params.get("statusQuery") || "new";
+  const { slug = [] } = useParams();
+  const [, statusQuery = "new"] = slug;
 
   const [downloadError, setDownloadError] = useState(false);
   const [noSelectedItemsError, setNoSelectedItemsError] = useState(false);
