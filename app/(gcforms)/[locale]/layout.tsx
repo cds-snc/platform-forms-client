@@ -3,6 +3,7 @@ import { auth } from "@lib/auth";
 import { ClientContexts } from "@clientComponents/globals/ClientContexts";
 import { headers } from "next/headers";
 import { localPathRegEx } from "@lib/auth/auth";
+import { logMessage } from "@lib/logger";
 
 export default async function Layout({
   children,
@@ -25,6 +26,9 @@ export default async function Layout({
       !currentPath.startsWith("/sla") &&
       !currentPath.startsWith("/terms-of-use")
     ) {
+      logMessage.debug(
+        "Root Layout: User has not setup security questions, redirecting to setup-security-questions"
+      );
       // check if user has setup security questions setup
       redirect(`/${locale}/auth/setup-security-questions`);
     }
@@ -37,6 +41,9 @@ export default async function Layout({
       // If they don't want to accept let them log out
       !currentPath.startsWith("/auth/logout")
     ) {
+      logMessage.debug(
+        "Root Layout: User has not accepted the Acceptable Use Policy, redirecting to policy"
+      );
       // If they haven't agreed to Acceptable Use redirect to policy page for acceptance
       // If already on the policy page don't redirect, aka endless redirect loop.
       // Also check that the path is local and not an external URL
