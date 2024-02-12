@@ -71,6 +71,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
 
   return (
     <>
+      {formReady && <div id="form-ready-indicator" hidden={true} aria-hidden={true} />}
       <div
         className={classNames({
           "border-l-2": submitTooEarly,
@@ -106,7 +107,6 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
       <Button
         id="form-submit-button"
         type="submit"
-        disabled={!formReady}
         onClick={(e) => {
           if (formTimerEnabled) checkTimer();
           screenReaderRemainingTime.current = formTimerState.remainingTime;
