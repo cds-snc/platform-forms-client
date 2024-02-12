@@ -50,9 +50,7 @@ export const FormBuilderInitializer = ({
     <TemplateStoreProvider {...{ ...initialForm, locale }}>
       <TemplateApiProvider>
         <RefStoreProvider>
-          <div className={`flex h-full flex-col ${className}`}>
-            <PageLayout page={children} hideLeftNav={hideLeftNav} backLink={backLink} />
-          </div>
+          <div className={`flex h-full flex-col ${className}`}>{children}</div>
         </RefStoreProvider>
       </TemplateApiProvider>
     </TemplateStoreProvider>
