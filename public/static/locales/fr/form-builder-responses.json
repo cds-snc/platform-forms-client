@@ -28,18 +28,8 @@
         "body": "Permet de suivre l’état d’une réponse spécifique ou de signaler un problème avec les réponses."
       },
       "date": {
-        "new": {
-          "title": "[FR] Submission date",
-          "body": "[FR] When the response was received by GC Forms."
-        },
-        "downloaded": {
-          "title": "[FR] Submission date",
-          "body": "[FR] When the response was received by GC Forms."
-        },
-        "confirmed": {
-          "title": "[FR] Submission date",
-          "body": "[FR] When the response was received by GC Forms."
-        }
+        "title": "[FR] Submission date",
+        "body": "[FR] When the response was received by GC Forms."
       },
       "nextSteps": {
         "title": "Prochaines étapes",
