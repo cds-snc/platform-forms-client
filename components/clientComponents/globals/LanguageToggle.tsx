@@ -28,6 +28,7 @@ const LanguageToggle = () => {
       locale={currentLang === "en" ? "fr" : "en"}
       aria-label={`${t("lang-toggle")}: ${currentLang == "en" ? "Français" : "English"}`}
       lang={currentLang === "en" ? "fr" : "en"}
+      prefetch={false}
     >
       {currentLang === "en" ? "Français" : "English"}
     </Link>
