@@ -57,32 +57,48 @@ export default async function Layout({ children }: { children: React.ReactNode }
         {/* Currently wrapped in a suspense element because react does not handle SSR well when
         3rd party plugins add tags.  Our issue is that Cypress injects it's own tag in <head>
         that then causes hydration errors to be thrown */}
-        <Suspense fallback={null}>
-          <style id="site-styles" nonce={nonce}>
-            {css}
-          </style>
-          {/* eslint-disable-next-line react/no-unknown-property */}
-          <Script
-            id="form-polyfills"
-            nonce={nonce}
-            async
-            type="text/javascript"
-            src="/static/scripts/form-polyfills.js"
-          />
-          {NoIndexMetaTag}
-          <Script id="GoogleTagManager" nonce={nonce} async type="text/javascript">
-            {googleTagManager}
-          </Script>
-          {process.env.RECAPTCHA_V3_SITE_KEY && (
+
+        {process.env.APP_ENV === "test" ? (
+          <Suspense fallback={null}>
+            <style id="site-styles" nonce={nonce}>
+              {css}
+            </style>
             <Script
-              id="ReCaptcha"
+              id="form-polyfills"
               nonce={nonce}
               async
               type="text/javascript"
-              src={`https://www.google.com/recaptcha/api.js?render=${process.env.RECAPTCHA_V3_SITE_KEY}`}
+              src="/static/scripts/form-polyfills.js"
             />
-          )}
-        </Suspense>
+          </Suspense>
+        ) : (
+          <>
+            <style id="site-styles" nonce={nonce}>
+              {css}
+            </style>
+
+            <Script
+              id="form-polyfills"
+              nonce={nonce}
+              async
+              type="text/javascript"
+              src="/static/scripts/form-polyfills.js"
+            />
+            {NoIndexMetaTag}
+            <Script id="GoogleTagManager" nonce={nonce} async type="text/javascript">
+              {googleTagManager}
+            </Script>
+            {process.env.RECAPTCHA_V3_SITE_KEY && (
+              <Script
+                id="ReCaptcha"
+                nonce={nonce}
+                async
+                type="text/javascript"
+                src={`https://www.google.com/recaptcha/api.js?render=${process.env.RECAPTCHA_V3_SITE_KEY}`}
+              />
+            )}
+          </>
+        )}
 
         {/* Will only run if Browser does not have JS enabled */}
         <noscript>
