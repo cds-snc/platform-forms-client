@@ -39,10 +39,10 @@ const BackToManageForms = async ({ backLink }: { backLink: string }) => {
 };
 
 export default async function Page({
-  params: { locale, formID },
+  params: { locale, id },
   searchParams: { backLink },
 }: {
-  params: { locale: string; formID: string };
+  params: { locale: string; id: string };
   searchParams: { backLink: string };
 }) {
   const { user } = await requireAuthentication();
@@ -67,9 +67,9 @@ export default async function Page({
       },
     ])
   ) {
-    if (!formID || Array.isArray(formID)) notFound();
+    if (!id || Array.isArray(id)) notFound();
 
-    const templateWithAssociatedUsers = await getTemplateWithAssociatedUsers(user.ability, formID);
+    const templateWithAssociatedUsers = await getTemplateWithAssociatedUsers(user.ability, id);
     if (!templateWithAssociatedUsers) notFound();
 
     const allUsers = (await getUsers(user.ability)).map((user) => {

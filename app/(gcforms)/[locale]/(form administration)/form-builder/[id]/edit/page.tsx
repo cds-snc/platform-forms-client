@@ -21,9 +21,9 @@ export async function generateMetadata({
 }
 
 export default async function Page({
-  params: { locale, slug = [] },
+  params: { locale, id },
 }: {
-  params: { locale: string; slug: string[] };
+  params: { locale: string; id: string };
 }) {
   const FormbuilderParams: { locale: string; initialForm: null | FormRecord } = {
     initialForm: null,
@@ -32,7 +32,7 @@ export default async function Page({
 
   const session = await auth();
 
-  const formID = slug[0] || null;
+  const formID = id || null;
 
   if (session && formID) {
     try {

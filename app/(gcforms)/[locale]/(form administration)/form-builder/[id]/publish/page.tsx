@@ -44,7 +44,7 @@ export default async function Page({
       }
 
       if (initialForm.isPublished) {
-        redirect(`/${locale}/form-builder/settings/${formID}`);
+        redirect(`/${locale}/form-builder/${formID}/published`);
       }
 
       FormbuilderParams.initialForm = initialForm;
