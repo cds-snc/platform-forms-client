@@ -249,7 +249,7 @@ export const Settings = ({ settings }: SettingsProps) => {
       )}
 
       <div className="sticky top-0">
-        <ToastContainer />
+        <ToastContainer containerId="default" />
       </div>
     </>
   );
