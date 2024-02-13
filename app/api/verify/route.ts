@@ -6,6 +6,7 @@ export const POST = async (req: NextRequest) => {
     const { userToken } = await req.json();
     if (userToken) {
       const reCAPTCHASecret = process.env.RECAPTCHA_V3_SECRET_KEY;
+      if (!reCAPTCHASecret) throw new Error("RECAPTCHA_V3_SECRET_KEY is not set");
       const response = await axios({
         url: `https://www.google.com/recaptcha/api/siteverify?secret=${reCAPTCHASecret}&response=${userToken}`,
         method: "POST",
