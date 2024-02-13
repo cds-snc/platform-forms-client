@@ -2,6 +2,7 @@ import { Start } from "@clientComponents/form-builder/app/Start";
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { FormBuilderInitializer } from "@clientComponents/globals/layouts/FormBuilderLayout";
+import { FullWidthLayout } from "@clientComponents/globals/layouts/FullWidthLayout";
 
 export async function generateMetadata({
   params: { locale },
@@ -19,7 +20,9 @@ export async function generateMetadata({
 export default async function Page(params: { locale: string }) {
   return (
     <FormBuilderInitializer locale={params.locale} hideLeftNav>
-      <Start />
+      <FullWidthLayout context="default">
+        <Start />
+      </FullWidthLayout>
     </FormBuilderInitializer>
   );
 }
