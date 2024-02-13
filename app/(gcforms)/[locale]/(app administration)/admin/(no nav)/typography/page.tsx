@@ -1,5 +1,3 @@
-import { FullWidthLayout } from "@clientComponents/globals/layouts";
-
 const Heading = ({ title }: { title: string }) => {
   return (
     <h2 className="my-4 border-y-1 border-slate-700 bg-slate-50 py-4 text-center text-2xl font-bold">
@@ -10,7 +8,7 @@ const Heading = ({ title }: { title: string }) => {
 
 export default async function Page() {
   return (
-    <FullWidthLayout context="default">
+    <>
       <Heading title="Public forms + pages" />
       <div className="gc-formview">
         <p className="mb-4">Default (base) text size (20px) Noto Sans</p>
@@ -78,6 +76,6 @@ export default async function Page() {
         <li>List item</li>
       </ol>
       <hr />
-    </FullWidthLayout>
+    </>
   );
 }

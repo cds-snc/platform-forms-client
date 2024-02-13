@@ -1,7 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { requireAuthentication } from "@lib/auth";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
-import { AdminNavLayout } from "@serverComponents/globals/layouts";
 import { Metadata } from "next";
 import { Settings } from "./clientSide";
 import { getAllAppSettings } from "@lib/appSettings";
@@ -17,20 +16,19 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({ params: { locale } }: { params: { locale: string } }) {
+export default async function Page() {
   const { user } = await requireAuthentication();
   checkPrivilegesAsBoolean(user.ability, [{ action: "view", subject: "Setting" }], {
     redirect: true,
   });
   const settings = await getAllAppSettings(user.ability);
 
-  const { t } = await serverTranslation("admin-flags");
+  const { t } = await serverTranslation("admin-settings");
 
   return (
-    <AdminNavLayout locale={locale}>
+    <>
       <h1 className="border-0 mb-10">{t("title")}</h1>
-      <p className="pb-8">{t("subTitle")}</p>
       <Settings settings={settings} />
-    </AdminNavLayout>
+    </>
   );
 }

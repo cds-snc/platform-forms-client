@@ -178,7 +178,6 @@ export const Settings = ({ settings }: SettingsProps) => {
 
   return (
     <>
-      <h1 className="border-0 mb-10">{t("title")}</h1>
       {!manageSetting ? (
         <div>
           <ul className="list-none pl-0">

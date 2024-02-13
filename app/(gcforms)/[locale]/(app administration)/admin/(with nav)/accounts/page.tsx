@@ -2,7 +2,6 @@ import { serverTranslation } from "@i18n";
 import { requireAuthentication } from "@lib/auth";
 import { checkPrivilegesAsBoolean, getAllPrivileges } from "@lib/privileges";
 import { getUsers } from "@lib/users";
-import { AdminNavLayout } from "@serverComponents/globals/layouts";
 import { Users } from "./clientSide";
 import { Metadata } from "next";
 
@@ -18,7 +17,6 @@ export async function generateMetadata({
 }
 
 export default async function Page({
-  params: { locale },
   searchParams: { id: previousUserRef },
 }: {
   params: { locale: string };
@@ -52,9 +50,5 @@ export default async function Page({
     throw new Error("PublishForms privilege not found in global system privileges");
   }
 
-  return (
-    <AdminNavLayout locale={locale}>
-      <Users {...{ allUsers, allPrivileges, publishFormsId, previousUserRef }} />
-    </AdminNavLayout>
-  );
+  return <Users {...{ allUsers, allPrivileges, publishFormsId, previousUserRef }} />;
 }
