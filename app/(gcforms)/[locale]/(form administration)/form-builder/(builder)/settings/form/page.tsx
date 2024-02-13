@@ -19,10 +19,8 @@ export async function generateMetadata({
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   return (
     <FormBuilderInitializer locale={locale}>
-      <div className="max-w-4xl">
-        <SettingsNavigation />
-        <Settings />
-      </div>
+      <SettingsNavigation />
+      <Settings />
     </FormBuilderInitializer>
   );
 }

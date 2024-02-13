@@ -30,7 +30,7 @@ export default async function Layout({
                   <LeftNavigation />
                 </div>
                 <main id="content" className={cn("w-full form-builder mt-5 mb-10")}>
-                  {children}
+                  <div className="max-w-4xl">{children}</div>
                 </main>
               </div>
             </div>
