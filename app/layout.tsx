@@ -3,6 +3,7 @@ import "../styles/app.scss";
 import { Viewport } from "next";
 import Script from "next/script";
 import "react-app-polyfill/stable";
+import { Suspense } from "react";
 import { cookies } from "next/headers";
 import { languages } from "@i18n/settings";
 import { Noto_Sans, Lato } from "next/font/google";
@@ -52,19 +53,52 @@ export default async function Layout({ children }: { children: React.ReactNode }
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta charSet="utf-8" />
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
-        <style nonce={nonce}>{css}</style>
-        {/* eslint-disable-next-line react/no-unknown-property */}
         <meta name="authenticated" content={session ? "true" : "false"} />
-        <Script
-          nonce={nonce}
-          async
-          type="text/javascript"
-          src="/static/scripts/form-polyfills.js"
-        />
-        {NoIndexMetaTag}
-        <Script id="GoogleTagManager" nonce={nonce} async type="text/javascript">
-          {googleTagManager}
-        </Script>
+        {/* Currently wrapped in a suspense element because react does not handle SSR well when
+        3rd party plugins add tags.  Our issue is that Cypress injects it's own tag in <head>
+        that then causes hydration errors to be thrown */}
+
+        {process.env.APP_ENV === "test" ? (
+          <Suspense fallback={null}>
+            <style id="site-styles" nonce={nonce}>
+              {css}
+            </style>
+            <Script
+              id="form-polyfills"
+              nonce={nonce}
+              async
+              type="text/javascript"
+              src="/static/scripts/form-polyfills.js"
+            />
+          </Suspense>
+        ) : (
+          <>
+            <style id="site-styles" nonce={nonce}>
+              {css}
+            </style>
+
+            <Script
+              id="form-polyfills"
+              nonce={nonce}
+              async
+              type="text/javascript"
+              src="/static/scripts/form-polyfills.js"
+            />
+            {NoIndexMetaTag}
+            <Script id="GoogleTagManager" nonce={nonce} async type="text/javascript">
+              {googleTagManager}
+            </Script>
+            {process.env.RECAPTCHA_V3_SITE_KEY && (
+              <Script
+                id="ReCaptcha"
+                nonce={nonce}
+                async
+                type="text/javascript"
+                src={`https://www.google.com/recaptcha/api.js?render=${process.env.RECAPTCHA_V3_SITE_KEY}`}
+              />
+            )}
+          </>
+        )}
 
         {/* Will only run if Browser does not have JS enabled */}
         <noscript>

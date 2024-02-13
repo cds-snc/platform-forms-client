@@ -1,6 +1,5 @@
 import React from "react";
 import { cleanup, render, screen, waitFor, fireEvent } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import { Form } from "@clientComponents/forms";
 import { submitToAPI } from "@lib/client/clientHelpers";
 import { useFlag } from "@lib/hooks/useFlag";
@@ -28,14 +27,7 @@ jest.mock("@lib/hooks", () => {
     __esModule: true,
     ...originalModule,
     useFlag: jest.fn((flag) => {
-      switch (flag) {
-        case "formTimer":
-          return { isLoading: false, status: true };
-        case "reCaptcha":
-          return { isLoading: false, status: false };
-        default:
-          return useFlag(flag);
-      }
+      return useFlag(flag);
     }),
     useFormTimer: jest.fn(() => [
       mockFormTimerState,
@@ -113,19 +105,25 @@ describe("Form Functionality", () => {
   });
 
   it("Form can be submitted", async () => {
+    mockFormTimerState = {
+      canSubmit: true,
+      remainingTime: 5,
+      timerDelay: 5,
+      timeLock: 0,
+    };
     render(<Form formRecord={formRecord} language="en" t={(key) => key} />);
-    expect(screen.getByRole("button", { type: "submit" })).toBeInTheDocument();
+    const submitButton = screen.getByRole("button", { type: "submit" });
+    await waitFor(() => expect(submitButton).toBeInTheDocument());
 
     // using `fireEvent` instead of `user.click` because it triggers a Formik update,
     // which then throws the warning:
     // "Warning: An update to Formik inside a test was not wrapped in act(...)."
     fireEvent.click(screen.getByRole("button", { type: "submit" }));
 
-    await waitFor(() => expect(submitToAPI).toBeCalledTimes(1));
+    await waitFor(() => expect(submitToAPI).toHaveBeenCalledTimes(1));
   });
 
   it("shows the alert after pressing submit if the timer hasn't expired", async () => {
-    const user = userEvent.setup();
     mockFormTimerState = {
       canSubmit: false,
       remainingTime: 5,
@@ -139,8 +137,12 @@ describe("Form Functionality", () => {
 
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { type: "submit" }));
+    // using `fireEvent` instead of `user.click` because it triggers a Formik update,
+    // which then throws the warning:
+    // "Warning: An update to Formik inside a test was not wrapped in act(...)."
+    fireEvent.click(screen.getByRole("button", { type: "submit" }));
     expect(await screen.findByRole("alert")).toBeInTheDocument();
-    expect(submitToAPI).not.toBeCalled();
+    screen.debug();
+    expect(submitToAPI).not.toHaveBeenCalled();
   });
 });

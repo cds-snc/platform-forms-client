@@ -29,7 +29,7 @@ export default async function Page({
 
   return (
     <DefaultLayout showLanguageToggle>
-      <ClientSide supportType={supportType ? supportType[0] : ""} />
+      <ClientSide supportType={supportType ? supportType[0] : "support"} />
     </DefaultLayout>
   );
 }

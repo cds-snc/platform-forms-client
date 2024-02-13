@@ -104,7 +104,9 @@ export async function middleware(req: NextRequest) {
 
   let cookieSyncRequired = false;
   if (pathLang && cookieLang !== pathLang) {
-    logMessage.debug(`Middleware - Setting language cookie: ${cookieLang} for path: ${pathname}`);
+    logMessage.debug(
+      `Middleware - Setting language cookie from ${cookieLang} to ${pathLang} for path: ${pathname}`
+    );
     cookieSyncRequired = true;
   }
 
