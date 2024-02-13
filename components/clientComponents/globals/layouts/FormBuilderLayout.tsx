@@ -8,14 +8,11 @@ import { FormRecord } from "@lib/types";
 export const FormBuilderInitializer = ({
   children,
   initialForm = null,
-  hideLeftNav,
-  backLink,
+
   locale,
   className = "",
 }: {
   children: React.ReactNode;
-  hideLeftNav?: boolean | false;
-  backLink?: ReactElement;
   className?: string;
   initialForm?: FormRecord | null;
   locale: string;
