@@ -37,6 +37,7 @@ jobs:
       NEXTAUTH_URL: http://localhost:3000
       TOKEN_SECRET: testKey
       APP_ENV: test
+      NEXT_PUBLIC_APP_ENV: test
       REDIS_URL: localhost
       DATABASE_URL: postgres://postgres:postgres@localhost:5432/formsDB
     steps:

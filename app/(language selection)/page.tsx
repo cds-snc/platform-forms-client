@@ -25,7 +25,7 @@ const Home = () => {
 
   const SiteLink = () => {
     return (
-      <Link href="/form-builder" legacyBehavior>
+      <Link href={`${i18n.language}/form-builder`} legacyBehavior>
         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a className="mr-10 inline-flex no-underline !shadow-none focus:bg-white">
           <span className="">

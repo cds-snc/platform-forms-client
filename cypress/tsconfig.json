@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "typeRoots": ["../types", "../node_modules/@types", "./types"],
+    "typeRoots": ["./types", "./node_modules/@types", "cypress/types"],
     "target": "es5",
     "lib": ["es5", "dom"],
     "types": ["cypress", "node", "cypress-axe"],
@@ -13,26 +13,26 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@lib/*": ["lib/*"],
-      "@components/*": ["components/*"],
-      "@appComponents/*": ["app/_components/*"],
-      "@formbuilder/*": ["components/form-builder/*"],
-      "@pages/*": ["pages/*"],
-      "@app/*": ["app/*"],
-      "@jestFixtures/*": ["__fixtures__/*"],
-      "@jestUtils": ["__utils__"],
-      "@i18n": ["app/i18n"],
-      "@i18n/*": ["app/i18n/*"],
-      "@content/*": ["public/static/content/*"]
+      "@lib/*": ["../lib/*"],
+      "@api/*": ["../app/api/*"],
+      "@serverComponents/*": ["../components/serverComponents/*"],
+      "@clientComponents/*": ["../components/clientComponents/*"],
+      "@formbuilder/*": ["../components/clientComponents/form-builder/*"],
+      "@jestFixtures/*": ["../__fixtures__/*"],
+      "@jestUtils": ["../__utils__"],
+      "@i18n": ["../i18n"],
+      "@i18n/*": ["../i18n/*"],
+      "@content/*": ["../public/static/content/*"],
+      "@public/*": ["../public/*"]
     }
   },
   "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.js",
-    "**/*.jsx",
-    "../**/*.cy.tsx",
-    "../**/*.cy.ts",
+    "../**/*.ts",
+    "../**/*.tsx",
+    "../**/*.js",
+    "../**/*.jsx",
+    "**/*.cy.tsx",
+    "**/*.cy.ts",
     "../cypress.config.ts",
     "support/commands/selection-command.js"
   ]

@@ -1,7 +1,7 @@
 describe("Form builder attestation", () => {
   beforeEach(() => {
     cy.login({ acceptableUse: true });
-    cy.visitPage("/form-builder/edit");
+    cy.visitPage("/en/form-builder/edit");
   });
 
   it("Renders attestation block", () => {
@@ -17,7 +17,7 @@ describe("Form builder attestation", () => {
     cy.get("#required-1-id").should("be.disabled");
     cy.get("#required-1-id").should("be.checked");
 
-    cy.visitPage("/form-builder/preview");
+    cy.visitPage("/en/form-builder/preview");
     cy.get("#label-1").contains("all checkboxes required").should("be.visible");
     cy.get("label").contains("Condition 1").should("be.visible");
     cy.get("label").contains("Condition 2").should("be.visible");

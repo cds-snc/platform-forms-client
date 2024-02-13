@@ -209,7 +209,7 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
                 <Button theme="link" className="mr-8" onClick={() => setIsReverify(true)}>
                   {t("verify.resendConfirmationCodeButton")}
                 </Button>
-                <Link href={"/form-builder/support"}>{t("verify.help")}</Link>
+                <Link href={`/${i18n.language}/form-builder/support`}>{t("verify.help")}</Link>
               </div>
             </form>
           </>

@@ -669,7 +669,8 @@ export async function updateIsPublishedForTemplate(
     }
 
     // Delete all form responses created during draft mode before changing status to published
-    if (isPublished) await deleteDraftFormResponses(ability, formID);
+    if (isPublished && process.env.APP_ENV !== "test")
+      await deleteDraftFormResponses(ability, formID);
 
     const updatedTemplate = await prisma.template
       .update({

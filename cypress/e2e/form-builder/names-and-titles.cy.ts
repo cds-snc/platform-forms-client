@@ -1,7 +1,7 @@
 describe("Form builder names and titles", () => {
   beforeEach(() => {
     cy.login({ acceptableUse: true });
-    cy.visitPage("/form-builder/edit");
+    cy.visitPage("/en/form-builder/edit");
   });
 
   it("Autocompletes name with title on focus", () => {

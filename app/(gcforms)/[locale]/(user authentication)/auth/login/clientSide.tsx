@@ -28,7 +28,10 @@ const LoginStep = ({
   setNeedsVerification: (val: boolean) => void;
   authErrorsReset: () => void;
 }) => {
-  const { t } = useTranslation(["login", "cognito-errors", "common"]);
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation(["login", "cognito-errors", "common"]);
 
   const validationSchema = Yup.object().shape({
     username: Yup.string()
@@ -102,7 +105,7 @@ const LoginStep = ({
             <h1 className="mb-12 mt-6 border-b-0">{t("title")}</h1>
             <p className="-mt-6 mb-10">
               {t("signUpText")}&nbsp;
-              <Link href={"/signup/register"}>{t("signUpLink")}</Link>
+              <Link href={`/${language}/signup/register`}>{t("signUpLink")}</Link>
             </p>
             <form id="login" method="POST" onSubmit={handleSubmit} noValidate>
               <div className="focus-group">
@@ -134,7 +137,7 @@ const LoginStep = ({
                 />
               </div>
               <p className="-mt-6 mb-10">
-                <Link href={"/auth/reset-password"} className="-mt-8 mb-10">
+                <Link href={`/${language}/auth/reset-password`} className="-mt-8 mb-10">
                   {t("resetPasswordText")}
                 </Link>
               </p>

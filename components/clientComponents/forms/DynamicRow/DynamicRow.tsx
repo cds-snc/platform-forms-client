@@ -130,7 +130,6 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
               elements={row}
               name={`${field.name}.${index}`}
               lang={lang}
-              t={t}
             />
             <div>
               {!hasReachedMaxNumberOfRows && index === rows.length - 1 && (

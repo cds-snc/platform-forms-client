@@ -2,7 +2,6 @@
 import React from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { useAccessControl } from "@lib/hooks";
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 
@@ -24,7 +23,7 @@ export const Header = ({ context = "default", user, className }: HeaderParams) =
   const isDefault = context === "default";
 
   const { status } = useSession();
-  const { ability } = useAccessControl();
+
   const {
     t,
     i18n: { language },
@@ -66,7 +65,7 @@ export const Header = ({ context = "default", user, className }: HeaderParams) =
               </li>
             )}
             <li className="mr-2 py-2 text-base tablet:mr-4">
-              {ability?.can("view", "FormRecord") && (
+              {status === "authenticated" && (
                 <Link href={`/${language}/forms`}>{t("adminNav.myForms", { ns: "common" })}</Link>
               )}
             </li>
