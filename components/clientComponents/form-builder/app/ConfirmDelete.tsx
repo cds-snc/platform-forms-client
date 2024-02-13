@@ -54,7 +54,7 @@ export const ConfirmDelete = ({
         />
       )}
       <div className="sticky top-0">
-        <ToastContainer autoClose={false} />
+        <ToastContainer autoClose={false} containerId="default" />
       </div>
     </>
   );
