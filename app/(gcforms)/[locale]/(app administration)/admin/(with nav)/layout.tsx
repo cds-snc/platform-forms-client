@@ -23,7 +23,7 @@ export default async function Layout({
       <div className="flex h-full flex-col">
         <SkipLink />
 
-        <header className={"mb-5 border-b-1 border-gray-500 bg-white px-0 py-2 "}>
+        <header className={"mb-0 border-b-1 border-gray-500 bg-white px-0 py-2 "}>
           <div className="grid w-full grid-flow-col">
             <div className="flex">
               <Link

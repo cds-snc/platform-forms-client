@@ -68,13 +68,5 @@ export default async function Page({
 
   const overdue = await getUnprocessedSubmissionsForUser(user.ability, id as string, templates);
 
-  return (
-    <TwoColumnLayout
-      user={{ email: user.email, name: user.name }}
-      context="admin"
-      leftColumnContent={<BackToAccounts id={formUser.id} locale={locale} />}
-    >
-      <ManageForms {...{ formUser, templates, overdue }} />
-    </TwoColumnLayout>
-  );
+  return <ManageForms {...{ formUser, templates, overdue }} />;
 }
