@@ -4,7 +4,7 @@ import { Footer, SkipLink } from "@serverComponents/globals";
 
 import Link from "next/link";
 import { serverTranslation } from "@i18n";
-
+import { redirect } from "next/navigation";
 import { SiteLogo } from "@clientComponents/icons";
 
 import LanguageToggle from "@serverComponents/globals/LanguageToggle";
@@ -17,9 +17,10 @@ export default async function Layout({
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  const { t } = await serverTranslation(["common", "admin-login"], { lang: locale });
-
   const session = await auth();
+  if (!session) redirect(`${locale}/auth/login`);
+
+  const { t } = await serverTranslation(["common", "admin-login"], { lang: locale });
 
   return (
     <div className={`flex h-full flex-col  "bg-gray-50"`}>

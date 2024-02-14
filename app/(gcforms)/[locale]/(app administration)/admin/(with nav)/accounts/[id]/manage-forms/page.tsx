@@ -5,8 +5,6 @@ import { getUnprocessedSubmissionsForUser, getUser } from "@lib/users";
 import { ManageForms } from "./clientSide";
 import { Metadata } from "next";
 import { getAllTemplatesForUser } from "@lib/templates";
-import { TwoColumnLayout } from "@serverComponents/globals/layouts";
-import { BackLink } from "@clientComponents/admin/LeftNav/BackLink";
 
 export async function generateMetadata({
   params: { locale },
@@ -19,16 +17,7 @@ export async function generateMetadata({
   };
 }
 
-const BackToAccounts = async ({ id, locale }: { id: string; locale: string }) => {
-  const { t } = await serverTranslation("admin-users");
-  return <BackLink href={`/${locale}/admin/accounts?id=${id}`}>{t("backToAccounts")}</BackLink>;
-};
-
-export default async function Page({
-  params: { id, locale },
-}: {
-  params: { id: string; locale: string };
-}) {
+export default async function Page({ params: { id } }: { params: { id: string } }) {
   const { user } = await requireAuthentication();
   checkPrivilegesAsBoolean(
     user.ability,
