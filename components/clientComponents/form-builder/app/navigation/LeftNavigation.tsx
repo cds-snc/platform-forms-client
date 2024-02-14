@@ -25,7 +25,7 @@ const linkHelper = ({
   language: string;
 }) => {
   return {
-    href: `/${language}/form-builder${route}${id ? `/${id}` : ""}`,
+    href: `/${language}/form-builder${id ? `/${id}` : ""}/${route}`,
     isActive: activePathname.includes(`/form-builder${route}`),
   };
 };
@@ -78,7 +78,7 @@ export const LeftNavigation = () => {
           <li>
             <LeftNav
               testid="publish"
-              {...linkHelper({ route: "/publish", activePathname, language })}
+              {...linkHelper({ route: "/publish", id, activePathname, language })}
               onClick={saveForm}
               title={t("publish")}
             >
