@@ -1,6 +1,5 @@
 "use client";
 import React, { useCallback, useState } from "react";
-import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
 import { useTranslation } from "@i18n/client";
 import { useRouter } from "next/navigation";
@@ -10,7 +9,6 @@ import { useTemplateApi, useAllowPublish, useRehydrate } from "../hooks";
 import { CancelIcon, CircleCheckIcon, LockIcon } from "../../icons";
 import { Button, Alert } from "@clientComponents/globals";
 import Link from "next/link";
-import { LoggedOutTab, LoggedOutTabName } from "./LoggedOutTab";
 import { InfoCard } from "@clientComponents/globals/InfoCard/InfoCard";
 import { isVaultDelivery } from "@clientComponents/form-builder/util";
 import { StyledLink } from "@clientComponents/globals";
@@ -20,7 +18,6 @@ import { DownloadFileButton } from "./shared";
 
 export const Publish = () => {
   const { t, i18n } = useTranslation("form-builder");
-  const { status } = useSession();
   const router = useRouter();
   const {
     userCanPublish,
@@ -114,10 +111,6 @@ export const Publish = () => {
 
   const hasHydrated = useRehydrate();
   if (!hasHydrated) return null;
-
-  if (status !== "authenticated") {
-    return <LoggedOutTab tabName={LoggedOutTabName.PUBLISH} />;
-  }
 
   return (
     <>
