@@ -7,7 +7,6 @@ import { FormRecord } from "@lib/types";
 export const FormBuilderInitializer = ({
   children,
   initialForm = null,
-
   locale,
   className = "",
 }: {
