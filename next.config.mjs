@@ -32,7 +32,7 @@ const nextConfig = {
   poweredByHeader: false,
   compiler: {
     // Remove all console.* calls
-    removeConsole: false,
+    removeConsole: true,
   },
   output: isOutputStandalone ? "standalone" : undefined,
   webpack: (config, { isServer, nextRuntime, webpack }) => {
@@ -60,6 +60,7 @@ const nextConfig = {
   },
   experimental: {
     instrumentationHook: true,
+    ppr: true,
   },
   typescript: {
     // !! WARN !!
