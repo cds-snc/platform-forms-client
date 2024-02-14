@@ -73,11 +73,12 @@ export default async function Page({
     if (!templateWithAssociatedUsers) notFound();
 
     const allUsers = (await getUsers(user.ability)).map((user) => {
-      return { id: user.id, name: user.name, email: user.email };
+      return { id: user.id, name: user.name || "", email: user.email || "" };
     });
     return (
       <FormBuilderInitializer locale={locale} backLink={<BackToManageForms backLink={backLink} />}>
         <ClientSide
+          id={id}
           formRecord={templateWithAssociatedUsers.formRecord}
           usersAssignedToFormRecord={templateWithAssociatedUsers.users}
           allUsers={allUsers}
@@ -89,7 +90,7 @@ export default async function Page({
 
   return (
     <FormBuilderInitializer locale={locale} backLink={<BackToManageForms backLink={backLink} />}>
-      <ClientSide canManageOwnership={false} />
+      <ClientSide id={id} canManageOwnership={false} />
     </FormBuilderInitializer>
   );
 }

@@ -4,7 +4,6 @@ import { Settings, FormOwnership, SetClosingDate } from "@clientComponents/form-
 import { SettingsNavigation } from "@clientComponents/form-builder/app/navigation/SettingsNavigation";
 
 import { FormRecord } from "@lib/types";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
 import { useSession } from "next-auth/react";
 import { useRehydrate } from "@clientComponents/form-builder/hooks";
 
@@ -13,6 +12,7 @@ interface AssignUsersToTemplateProps {
   usersAssignedToFormRecord?: { id: string; name: string | null; email: string }[];
   allUsers?: { id: string; name: string | null; email: string }[];
   canManageOwnership: boolean;
+  id: string;
 }
 
 export const ClientSide = ({
@@ -20,12 +20,10 @@ export const ClientSide = ({
   usersAssignedToFormRecord,
   allUsers,
   canManageOwnership,
+  id,
 }: AssignUsersToTemplateProps) => {
   const { status } = useSession();
   const { t } = useTranslation("form-builder");
-  const { id } = useTemplateStore((s) => ({
-    id: s.id,
-  }));
 
   const hasHydrated = useRehydrate();
   if (!hasHydrated) return null;
@@ -40,7 +38,7 @@ export const ClientSide = ({
     return (
       <div className="max-w-4xl">
         <h1>{t("gcFormsSettings")}</h1>
-        <SettingsNavigation />
+        <SettingsNavigation id={id} />
         {status === "authenticated" && <SetClosingDate formID={id} />}
         <FormOwnership
           formRecord={formRecord}
@@ -55,7 +53,7 @@ export const ClientSide = ({
   return (
     <div className="max-w-4xl">
       <h1>{t("gcFormsSettings")}</h1>
-      <SettingsNavigation />
+      <SettingsNavigation id={id} />
       {status === "authenticated" && <SetClosingDate formID={id} />}
       <Settings />
     </div>

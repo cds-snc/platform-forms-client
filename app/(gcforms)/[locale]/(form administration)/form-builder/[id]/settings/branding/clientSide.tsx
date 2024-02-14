@@ -6,9 +6,10 @@ import { Branding } from "@clientComponents/form-builder/app/branding";
 
 interface BrandingClientSideProps {
   hasBrandingRequestForm: boolean;
+  id: string;
 }
 
-export const ClientSide = ({ hasBrandingRequestForm }: BrandingClientSideProps) => {
+export const ClientSide = ({ hasBrandingRequestForm, id }: BrandingClientSideProps) => {
   const { t } = useTranslation("form-builder");
 
   const hasHydrated = useRehydrate();
@@ -20,7 +21,7 @@ export const ClientSide = ({ hasBrandingRequestForm }: BrandingClientSideProps) 
       <p className="mb-5 inline-block bg-purple-200 p-3 text-sm font-bold">
         {t("settingsResponseDelivery.beforePublishMessage")}
       </p>
-      <SettingsNavigation />
+      <SettingsNavigation id={id} />
       <Branding hasBrandingRequestForm={hasBrandingRequestForm} />
     </div>
   );

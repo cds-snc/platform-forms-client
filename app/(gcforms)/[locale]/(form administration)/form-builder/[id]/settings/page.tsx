@@ -3,6 +3,8 @@ import { ResponseDelivery } from "@clientComponents/form-builder/app";
 import { SettingsNavigation } from "@clientComponents/form-builder/app/navigation/SettingsNavigation";
 
 import { Metadata } from "next";
+import { Suspense } from "react";
+import Loader from "@clientComponents/globals/Loader";
 
 export async function generateMetadata({
   params: { locale },
@@ -29,7 +31,9 @@ export default async function Page({
         {t("settingsResponseDelivery.beforePublishMessage")}
       </p>
       <SettingsNavigation id={id} />
-      <ResponseDelivery />
+      <Suspense key={id} fallback={<Loader />}>
+        <ResponseDelivery />
+      </Suspense>
     </>
   );
 }

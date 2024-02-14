@@ -17,7 +17,11 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({ params: { locale } }: { params: { locale: string } }) {
+export default async function Page({
+  params: { locale, id },
+}: {
+  params: { locale: string; id: string };
+}) {
   const session = await auth();
 
   if (session && !session.user.acceptableUse) {
@@ -34,7 +38,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
   return (
     <FormBuilderInitializer locale={locale}>
-      <ClientSide hasBrandingRequestForm={hasBrandingRequestForm} />
+      <ClientSide id={id} hasBrandingRequestForm={hasBrandingRequestForm} />
     </FormBuilderInitializer>
   );
 }
