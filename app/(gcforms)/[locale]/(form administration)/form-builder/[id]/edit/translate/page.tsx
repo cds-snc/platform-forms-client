@@ -2,7 +2,6 @@ import { serverTranslation } from "@i18n";
 import { EditNavigation } from "@clientComponents/form-builder/app";
 import { Translate } from "@clientComponents/form-builder/app/translate";
 import { Metadata } from "next";
-import { FormBuilderInitializer } from "@clientComponents/globals/layouts/FormBuilderLayout";
 
 export async function generateMetadata({
   params: { locale },
@@ -15,11 +14,11 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({ params: { locale } }: { params: { locale: string } }) {
+export default async function Page({ params: { id } }: { params: { id: string } }) {
   return (
-    <FormBuilderInitializer locale={locale}>
-      <EditNavigation />
+    <>
+      <EditNavigation id={id} />
       <Translate />
-    </FormBuilderInitializer>
+    </>
   );
 }

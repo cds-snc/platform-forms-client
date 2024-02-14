@@ -25,17 +25,17 @@ const linkHelper = ({
   language: string;
 }) => {
   return {
-    href: `/${language}/form-builder${id ? `/${id}` : ""}/${route}`,
+    href: `/${language}/form-builder${id ? `/${id}` : ""}${route}`,
     isActive: activePathname.includes(`/form-builder${route}`),
   };
 };
 
-export const LeftNavigation = () => {
+export const LeftNavigation = ({ id }: { id: string }) => {
   const {
     t,
     i18n: { language },
   } = useTranslation("form-builder");
-  const { isPublished, id } = useTemplateStore((s) => ({ id: s.id, isPublished: s.isPublished }));
+  const { isPublished } = useTemplateStore((s) => ({ isPublished: s.isPublished }));
   const { activePathname } = useActivePathname();
   const { saveForm } = useTemplateContext();
 
