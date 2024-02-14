@@ -17,7 +17,6 @@ export const ClientSide = ({ hasBrandingRequestForm, id }: BrandingClientSidePro
 
   return (
     <div className="max-w-4xl">
-      <h1>{t("gcFormsSettings")}</h1>
       <p className="mb-5 inline-block bg-purple-200 p-3 text-sm font-bold">
         {t("settingsResponseDelivery.beforePublishMessage")}
       </p>

@@ -37,7 +37,6 @@ export const ClientSide = ({
   ) {
     return (
       <div className="max-w-4xl">
-        <h1>{t("gcFormsSettings")}</h1>
         <SettingsNavigation id={id} />
         {status === "authenticated" && <SetClosingDate formID={id} />}
         <FormOwnership
