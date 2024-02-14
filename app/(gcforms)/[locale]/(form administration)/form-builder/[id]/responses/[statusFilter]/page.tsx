@@ -6,10 +6,9 @@ import { getFullTemplateByID } from "@lib/templates";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { VaultStatus } from "@lib/types";
 import { listAllSubmissions } from "@lib/vault";
-import { FormBuilderInitializer } from "@clientComponents/globals/layouts/FormBuilderLayout";
 import { getAppSetting } from "@lib/appSettings";
 import { isResponseId } from "@lib/validation";
-import { ClientSide, ResponsesProps } from "./clientSide";
+import { Responses, ResponsesProps } from "./Responses";
 import { ucfirst } from "@lib/client/clientHelpers";
 
 export async function generateMetadata({
@@ -24,14 +23,12 @@ export async function generateMetadata({
 }
 
 export default async function Page({
-  params: { locale, slug = [] },
+  params: { locale, id, statusFilter },
   searchParams: { lastKey },
 }: {
-  params: { locale: string; slug: string[] };
+  params: { locale: string; id: string; statusFilter: string };
   searchParams: { lastKey?: string };
 }) {
-  const [formID = null, statusQuery = "new"] = slug;
-
   const pageProps: ResponsesProps = {
     initialForm: null,
     vaultSubmissions: [],
@@ -42,11 +39,11 @@ export default async function Page({
 
   const session = await auth();
 
-  if (session && formID) {
+  if (session && id) {
     try {
       const ability = createAbility(session);
 
-      const initialForm = await getFullTemplateByID(ability, formID);
+      const initialForm = await getFullTemplateByID(ability, id);
 
       if (initialForm === null) {
         redirect(`/${locale}/404`);
@@ -56,8 +53,10 @@ export default async function Page({
 
       // get status from url params (default = new) and capitalize/cast to VaultStatus
       // Protect against invalid status query
-      const status = Object.values(VaultStatus).includes(ucfirst(statusQuery) as VaultStatus)
-        ? (ucfirst(statusQuery) as VaultStatus)
+      const selectedStatus = Object.values(VaultStatus).includes(
+        ucfirst(statusFilter) as VaultStatus
+      )
+        ? (ucfirst(statusFilter) as VaultStatus)
         : VaultStatus.NEW;
 
       let currentLastEvaluatedKey = null;
@@ -65,16 +64,16 @@ export default async function Page({
       // build up lastEvaluatedKey from lastKey url param
       if (lastKey && isResponseId(String(lastKey))) {
         currentLastEvaluatedKey = {
-          Status: status,
+          Status: selectedStatus,
           NAME_OR_CONF: `NAME#${lastKey}`,
-          FormID: formID,
+          formID: id,
         };
       }
 
       const { submissions, lastEvaluatedKey } = await listAllSubmissions(
         ability,
-        formID,
-        status,
+        id,
+        selectedStatus,
         currentLastEvaluatedKey
       );
 
@@ -93,9 +92,5 @@ export default async function Page({
       }
     }
   }
-  return (
-    <FormBuilderInitializer initialForm={pageProps.initialForm} locale={locale}>
-      <ClientSide {...pageProps} />
-    </FormBuilderInitializer>
-  );
+  return <Responses {...pageProps} />;
 }

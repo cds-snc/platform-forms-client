@@ -11,11 +11,11 @@ import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import { ConfirmReceiptStatus } from "./ConfirmReceiptStatus";
 import { DownloadResponseStatus } from "./DownloadResponseStatus";
 import { RemovalStatus } from "./RemovalStatus";
-import { useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useSetting } from "@lib/hooks/useSetting";
 import Link from "next/link";
 import { TableActions, initialTableItemsState, reducerTableItems } from "./DownloadTableReducer";
-import { getDaysPassed, isStatus } from "@lib/client/clientHelpers";
+import { getDaysPassed } from "@lib/client/clientHelpers";
 import { Alert } from "@clientComponents/globals";
 import { CheckAll } from "./CheckAll";
 import { DownloadButton } from "./DownloadButton";
@@ -52,8 +52,9 @@ export const DownloadTable = ({
     t,
     i18n: { language },
   } = useTranslation("form-builder-responses");
-  const params = useSearchParams();
-  const statusQuery = params.get("statusQuery") || "new";
+
+  const { statusFilter } = useParams();
+  const statusQuery = (statusFilter as string) || "new";
 
   const [downloadError, setDownloadError] = useState(false);
   const [noSelectedItemsError, setNoSelectedItemsError] = useState(false);
@@ -89,7 +90,7 @@ export const DownloadTable = ({
     const daysPast = getDaysPassed(submission.createdAt);
 
     if (
-      isStatus(submission.status, VaultStatus.NEW) &&
+      submission.status === VaultStatus.NEW &&
       accountEscalated &&
       daysPast < Number(overdueAfter)
     ) {
@@ -177,8 +178,7 @@ export const DownloadTable = ({
                     "border-y-1 border-slate-300 hover:ring-2 hover:ring-purple-500" +
                       (tableItems.statusItems.get(submission.name) ? " bg-purple-50" : "") +
                       (isBlocked ? " opacity-50" : "") +
-                      (isStatus(statusQuery, VaultStatus.NEW) &&
-                      removedRows.includes(submission.name)
+                      (statusQuery === VaultStatus.NEW && removedRows.includes(submission.name)
                         ? " transition-opacity opacity-50 ease-in-out duration-500"
                         : "")
                   )}
@@ -209,7 +209,7 @@ export const DownloadTable = ({
                   </th>
                   <td className="whitespace-nowrap px-4">{createdDateTime}</td>
                   <td className="whitespace-nowrap px-4">
-                    {isStatus(statusQuery, VaultStatus.NEW) && (
+                    {statusQuery === VaultStatus.NEW && (
                       <>
                         {removedRows.includes(submission.name) ? (
                           <>
@@ -231,20 +231,20 @@ export const DownloadTable = ({
                         )}
                       </>
                     )}
-                    {isStatus(statusQuery, VaultStatus.DOWNLOADED) && (
+                    {statusQuery === VaultStatus.DOWNLOADED && (
                       <ConfirmReceiptStatus
                         vaultStatus={submission.status}
                         createdAtDate={submission.createdAt}
                         overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
                       />
                     )}
-                    {isStatus(statusQuery, VaultStatus.CONFIRMED) && (
+                    {statusQuery === VaultStatus.CONFIRMED && (
                       <RemovalStatus
                         vaultStatus={submission.status}
                         removalAt={submission.removedAt}
                       />
                     )}
-                    {isStatus(statusQuery, VaultStatus.PROBLEM) && (
+                    {statusQuery === VaultStatus.PROBLEM && (
                       <p className="text-red">
                         <strong>{t("supportWillContact")}</strong>
                         <br />
@@ -260,7 +260,7 @@ export const DownloadTable = ({
                       onDownloadSuccess={() => {
                         setRemovedRows([...removedRows, submission.name]);
                         // router.replace(router.asPath, undefined, { scroll: false });
-                        if (isStatus(statusQuery, VaultStatus.NEW)) {
+                        if (statusQuery === VaultStatus.NEW) {
                           setShowDownloadSuccess("downloadSuccess");
                         }
                       }}
@@ -305,7 +305,7 @@ export const DownloadTable = ({
             setShowDownloadDialog={setShowDownloadDialog}
             onClick={() => setDownloadError(false)}
           />
-          {isStatus(statusQuery, VaultStatus.NEW) && false && (
+          {statusQuery === VaultStatus.NEW && false && (
             <DeleteButton setShowConfirmNewDialog={setShowConfirmNewDialog} />
           )}
         </ActionsPanel>
@@ -325,7 +325,7 @@ export const DownloadTable = ({
         onSuccessfulDownload={() => {
           setRemovedRows([...removedRows, ...tableItems.checkedItems.keys()]);
           // router.replace(router.asPath, undefined, { scroll: false });
-          if (isStatus(statusQuery, VaultStatus.NEW)) {
+          if (statusQuery === VaultStatus.NEW) {
             setShowDownloadSuccess("downloadSuccess");
           }
         }}

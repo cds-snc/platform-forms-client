@@ -65,7 +65,7 @@ export default async function Layout({
                 <LeftNavigation id={id} />
               </div>
               <main id="content" className={cn("w-full form-builder mt-5 mb-10")}>
-                <div className="max-w-4xl">{children}</div>
+                {children}
               </main>
             </div>
           </div>

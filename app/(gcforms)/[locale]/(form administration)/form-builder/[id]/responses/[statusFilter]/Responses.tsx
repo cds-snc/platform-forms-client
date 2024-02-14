@@ -19,7 +19,6 @@ import { useRouter, useParams, usePathname } from "next/navigation";
 import Image from "next/image";
 import { ConfirmDialog } from "@clientComponents/form-builder/app/responses/Dialogs/ConfirmDialog";
 import { Alert } from "@clientComponents/globals";
-import { isStatus } from "@lib/client/clientHelpers";
 import { TabNavLink } from "@clientComponents/form-builder/app/navigation/TabNavLink";
 import { useRehydrate } from "@clientComponents/form-builder/hooks";
 
@@ -34,7 +33,7 @@ export interface ResponsesProps {
 // TODO: move to an app setting variable
 const MAX_REPORT_COUNT = 20;
 
-export const ClientSide = ({
+export const Responses = ({
   initialForm,
   vaultSubmissions,
   nagwareResult,
@@ -50,11 +49,12 @@ export const ClientSide = ({
   const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
   const [showConfirmReceiptDialog, setShowConfirmReceiptDialog] = useState(false);
   const [successAlertMessage, setShowSuccessAlert] = useState<false | string>(false);
-
   const router = useRouter();
-  const { slug = [] } = useParams();
 
-  const [formId, statusQuery = "new"] = slug;
+  const { statusFilter, id } = useParams();
+  const formId = id as string;
+  const statusQuery = statusFilter as VaultStatus;
+
   const pathName = usePathname();
 
   const { getDeliveryOption, isPublished } = useTemplateStore((s) => ({
@@ -140,8 +140,8 @@ export const ClientSide = ({
       >
         <TabNavLink
           id="new-responses"
-          defaultActive={statusQuery === "new"}
-          href={`/${language}/form-builder/responses/${formId}/new`}
+          defaultActive={statusQuery === VaultStatus.NEW}
+          href={`/${language}/form-builder/${formId}/responses/new`}
           setAriaCurrent={true}
           onClick={() => setShowSuccessAlert(false)}
         >
@@ -150,9 +150,9 @@ export const ClientSide = ({
           </span>
         </TabNavLink>
         <TabNavLink
-          defaultActive={statusQuery === "downloaded"}
+          defaultActive={statusQuery === VaultStatus.DOWNLOADED}
           id="downloaded-responses"
-          href={`/${language}/form-builder/responses/${formId}/downloaded`}
+          href={`/${language}/form-builder/${formId}/responses/downloaded`}
           setAriaCurrent={true}
           onClick={() => setShowSuccessAlert(false)}
         >
@@ -161,9 +161,9 @@ export const ClientSide = ({
           </span>
         </TabNavLink>
         <TabNavLink
-          defaultActive={statusQuery === "confirmed"}
+          defaultActive={statusQuery === VaultStatus.CONFIRMED}
           id="deleted-responses"
-          href={`/${language}/form-builder/responses/${formId}/confirmed`}
+          href={`/${language}/form-builder/${formId}/responses/confirmed`}
           setAriaCurrent={true}
           onClick={() => setShowSuccessAlert(false)}
         >
@@ -175,7 +175,7 @@ export const ClientSide = ({
 
       {isAuthenticated && vaultSubmissions.length > 0 && (
         <>
-          {isStatus(statusQuery, VaultStatus.NEW) && (
+          {statusQuery === VaultStatus.NEW && (
             <>
               <h1>{t("tabs.newResponses.title")}</h1>
               <div className="mb-4">
@@ -187,7 +187,7 @@ export const ClientSide = ({
               </div>
             </>
           )}
-          {isStatus(statusQuery, VaultStatus.DOWNLOADED) && (
+          {statusQuery === VaultStatus.DOWNLOADED && (
             <>
               <h1>{t("tabs.downloadedResponses.title")}</h1>
               <div className="mb-4">
@@ -202,7 +202,7 @@ export const ClientSide = ({
               </div>
             </>
           )}
-          {isStatus(statusQuery, VaultStatus.CONFIRMED) && (
+          {statusQuery === VaultStatus.CONFIRMED && (
             <>
               <h1>{t("tabs.confirmedResponses.title")}</h1>
               <div className="mb-4">
@@ -214,7 +214,7 @@ export const ClientSide = ({
               </div>
             </>
           )}
-          {isStatus(statusQuery, VaultStatus.PROBLEM) && (
+          {statusQuery === VaultStatus.PROBLEM && (
             <>
               <h1>{t("tabs.problemResponses.title")}</h1>
               <div className="mb-4">
@@ -260,7 +260,7 @@ export const ClientSide = ({
               </>
             )}
 
-            {vaultSubmissions.length <= 0 && statusQuery === "new" && (
+            {vaultSubmissions.length <= 0 && statusQuery === VaultStatus.NEW && (
               <>
                 <Card
                   icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
@@ -272,7 +272,7 @@ export const ClientSide = ({
               </>
             )}
 
-            {vaultSubmissions.length <= 0 && statusQuery === "downloaded" && (
+            {vaultSubmissions.length <= 0 && statusQuery === VaultStatus.DOWNLOADED && (
               <>
                 <Card
                   icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
@@ -284,7 +284,7 @@ export const ClientSide = ({
               </>
             )}
 
-            {vaultSubmissions.length <= 0 && statusQuery === "confirmed" && (
+            {vaultSubmissions.length <= 0 && statusQuery === VaultStatus.CONFIRMED && (
               <>
                 <Card
                   icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
@@ -296,7 +296,7 @@ export const ClientSide = ({
               </>
             )}
 
-            {vaultSubmissions.length <= 0 && statusQuery === "problem" && (
+            {vaultSubmissions.length <= 0 && statusQuery === VaultStatus.PROBLEM && (
               <>
                 <h1 className="visually-hidden">{t("tabs.problemResponses.title")}</h1>
                 <Card
