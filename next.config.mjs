@@ -32,7 +32,7 @@ const nextConfig = {
   poweredByHeader: false,
   compiler: {
     // Remove all console.* calls
-    removeConsole: true,
+    removeConsole: false,
   },
   output: isOutputStandalone ? "standalone" : undefined,
   webpack: (config, { isServer, nextRuntime, webpack }) => {

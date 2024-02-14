@@ -10,23 +10,23 @@ import {
 } from "@clientComponents/icons";
 import { useTemplateContext } from "@clientComponents/form-builder/hooks";
 import { useTemplateStore } from "../../store/useTemplateStore";
-import { useActivePathname } from "../../hooks/useActivePathname";
 import { LeftNav } from "@clientComponents/globals/Buttons/LinkButton";
+import { useSelectedLayoutSegment } from "next/navigation";
 
 const linkHelper = ({
   route,
-  activePathname,
+  segment,
   id,
   language,
 }: {
   route: string;
-  activePathname: string;
+  segment: string | null;
   id?: string;
   language: string;
 }) => {
   return {
-    href: `/${language}/form-builder${id ? `/${id}` : ""}${route}`,
-    isActive: activePathname.includes(`/form-builder${route}`),
+    href: `/${language}/form-builder${id ? `/${id}` : ""}/${route}`,
+    isActive: segment === route,
   };
 };
 
@@ -36,8 +36,8 @@ export const LeftNavigation = ({ id }: { id: string }) => {
     i18n: { language },
   } = useTranslation("form-builder");
   const { isPublished } = useTemplateStore((s) => ({ isPublished: s.isPublished }));
-  const { activePathname } = useActivePathname();
   const { saveForm } = useTemplateContext();
+  const segment = useSelectedLayoutSegment();
 
   return (
     <nav aria-label={t("navLabelFormBuilder")}>
@@ -46,7 +46,7 @@ export const LeftNavigation = ({ id }: { id: string }) => {
           <li>
             <LeftNav
               testid="edit"
-              {...linkHelper({ route: "/edit", id, activePathname, language })}
+              {...linkHelper({ route: "edit", id, segment, language })}
               onClick={saveForm}
               title={t("edit")}
             >
@@ -57,7 +57,7 @@ export const LeftNavigation = ({ id }: { id: string }) => {
         <li>
           <LeftNav
             testid="preview"
-            {...linkHelper({ route: "/preview", id, activePathname, language })}
+            {...linkHelper({ route: "preview", id, segment, language })}
             onClick={saveForm}
             title={t("test")}
           >
@@ -67,7 +67,7 @@ export const LeftNavigation = ({ id }: { id: string }) => {
         <li>
           <LeftNav
             testid="settings"
-            {...linkHelper({ route: `/settings`, id, activePathname, language })}
+            {...linkHelper({ route: `settings`, id, segment, language })}
             onClick={saveForm}
             title={t("pageSettings")}
           >
@@ -78,7 +78,7 @@ export const LeftNavigation = ({ id }: { id: string }) => {
           <li>
             <LeftNav
               testid="publish"
-              {...linkHelper({ route: "/publish", id, activePathname, language })}
+              {...linkHelper({ route: "publish", id, segment, language })}
               onClick={saveForm}
               title={t("publish")}
             >
@@ -89,7 +89,7 @@ export const LeftNavigation = ({ id }: { id: string }) => {
         <li>
           <LeftNav
             testid="responses"
-            {...linkHelper({ route: `/responses`, id, activePathname, language })}
+            {...linkHelper({ route: `responses`, id, segment, language })}
             onClick={saveForm}
             title={t("responsesNavLabel")}
           >
