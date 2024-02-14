@@ -50,7 +50,7 @@ const CardLinks = ({ isPublished, url, id, deliveryOption, overdue }: CardLinksP
   return (
     <div className="mb-4 px-3">
       <a
-        href={isPublished ? url : `/${i18n.language}/form-builder/edit/${id}`}
+        href={isPublished ? url : `/${i18n.language}/form-builder/${id}/edit/`}
         className="my-4 block text-sm focus:fill-white active:fill-white"
         target={isPublished ? "_blank" : "_self"}
         aria-describedby={`card-title-${id} card-date-${id}`}
