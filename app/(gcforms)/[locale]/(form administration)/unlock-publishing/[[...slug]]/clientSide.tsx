@@ -175,12 +175,6 @@ export function UnlockPublishing({ requested }: { requested: boolean }) {
                         name={"goals"}
                         className="required w-[34rem] mt-4"
                         required
-                        characterCountMessages={{
-                          part1: t("formElements.characterCount.part1"),
-                          part2: t("formElements.characterCount.part2"),
-                          part1Error: t("formElements.characterCount.part1-error"),
-                          part2Error: t("formElements.characterCount.part2-error"),
-                        }}
                       />
                     </div>
 

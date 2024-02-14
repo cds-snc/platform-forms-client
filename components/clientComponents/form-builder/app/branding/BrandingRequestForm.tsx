@@ -13,7 +13,7 @@ export const BrandingRequestForm = ({ formRecord }: { formRecord: PublicFormReco
   let currentForm = null;
 
   if (formRecord) {
-    currentForm = getRenderedForm(formRecord, language, t);
+    currentForm = getRenderedForm(formRecord, language);
   }
 
   const formTitle = language === "en" ? formRecord?.form.titleEn : formRecord?.form.titleFr;

@@ -17,16 +17,7 @@ export const TextArea = () => {
           {t("addElementDialog.textArea.enterAnswer")}
         </Label>
         <Description>{t("addElementDialog.textArea.forExample")}</Description>
-        <TextAreaComponent
-          id="textarea"
-          characterCountMessages={{
-            part1: "characters",
-            part2: "characters",
-            part1Error: "error",
-            part2Error: "error",
-          }}
-          name={"test"}
-        />
+        <TextAreaComponent id="textarea" name={"test"} />
       </ExampleWrapper>
     </div>
   );
