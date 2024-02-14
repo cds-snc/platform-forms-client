@@ -1,6 +1,8 @@
 import { serverTranslation } from "@i18n";
 import { ResponseDelivery } from "@clientComponents/form-builder/app";
 import { SettingsNavigation } from "@clientComponents/form-builder/app/navigation/SettingsNavigation";
+import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
+import { auth } from "@lib/auth";
 
 import { Metadata } from "next";
 import { Suspense } from "react";
@@ -23,6 +25,11 @@ export default async function Page({
   params: { locale: string; id: string };
 }) {
   const { t } = await serverTranslation("form-builder", { lang: locale });
+  const session = await auth();
+
+  if (!session) {
+    return <LoggedOutTab tabName={LoggedOutTabName.PUBLISH} />;
+  }
 
   return (
     <>

@@ -2,7 +2,6 @@
 import React, { useEffect } from "react";
 
 import { SetResponseDelivery } from "./SetResponseDelivery";
-import { LoggedOutTabName, LoggedOutTab } from "./LoggedOutTab";
 import { useTemplateContext, useRehydrate } from "../hooks";
 
 export const ResponseDelivery = () => {
@@ -20,7 +19,6 @@ export const ResponseDelivery = () => {
 
   return (
     <>
-      <LoggedOutTab tabName={LoggedOutTabName.SETTINGS} />
       <SetResponseDelivery />
     </>
   );
