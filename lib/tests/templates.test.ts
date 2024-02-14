@@ -56,7 +56,7 @@ const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
 
 jest.mock("@lib/vault");
 
-const mockNumberOfUnprocessedSubmissions = jest.mocked(unprocessedSubmissions, {
+const mockUnprocessedSubmissions = jest.mocked(unprocessedSubmissions, {
   shallow: true,
 });
 
@@ -839,7 +839,7 @@ describe("Template CRUD functions", () => {
       buildPrismaResponse("formtestID", formConfiguration)
     );
 
-    mockNumberOfUnprocessedSubmissions.mockResolvedValueOnce(0);
+    mockUnprocessedSubmissions.mockResolvedValueOnce(false);
 
     const deletedTemplate = await deleteTemplate(ability, "formtestID");
 
@@ -897,7 +897,7 @@ describe("Template CRUD functions", () => {
         buildPrismaResponse("formtestID", formConfiguration)
       );
 
-      mockNumberOfUnprocessedSubmissions.mockResolvedValueOnce(1);
+      mockUnprocessedSubmissions.mockResolvedValueOnce(true);
 
       await expect(async () => {
         await deleteTemplate(ability, "formtestID");

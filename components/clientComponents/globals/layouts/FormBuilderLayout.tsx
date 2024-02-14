@@ -8,8 +8,6 @@ import { FormRecord } from "@lib/types";
 export const FormBuilderInitializer = ({
   children,
   initialForm = null,
-  hideLeftNav,
-  backLink,
   locale,
   className = "",
 }: {

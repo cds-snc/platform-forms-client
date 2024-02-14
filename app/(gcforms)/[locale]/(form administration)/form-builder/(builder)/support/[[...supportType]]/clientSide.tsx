@@ -194,12 +194,6 @@ export function ClientSide({ supportType }: { supportType: string }) {
                     name={"description"}
                     className="required mt-4 w-[34rem]"
                     required
-                    characterCountMessages={{
-                      part1: t("formElements.characterCount.part1"),
-                      part2: t("formElements.characterCount.part2"),
-                      part1Error: t("formElements.characterCount.part1-error"),
-                      part2Error: t("formElements.characterCount.part2-error"),
-                    }}
                   />
                 </div>
                 <p className="mt-14 text-[1.6rem]">{t("contactus.followUp")}</p>
@@ -440,12 +434,6 @@ export function ClientSide({ supportType }: { supportType: string }) {
                     name={"description"}
                     className="required w-[34rem] mt-4"
                     required
-                    characterCountMessages={{
-                      part1: t("formElements.characterCount.part1"),
-                      part2: t("formElements.characterCount.part2"),
-                      part1Error: t("formElements.characterCount.part1-error"),
-                      part2Error: t("formElements.characterCount.part2-error"),
-                    }}
                   />
                 </div>
 

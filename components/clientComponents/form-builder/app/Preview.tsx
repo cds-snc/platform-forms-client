@@ -42,7 +42,7 @@ export const Preview = () => {
 
   const { t } = useTranslation(["common", "form-builder"]);
   const language = translationLanguagePriority;
-  const currentForm = getRenderedForm(formRecord, language, t);
+  const currentForm = getRenderedForm(formRecord, language);
   const [sent, setSent] = useState<string | null>();
 
   const clearSent = () => {
