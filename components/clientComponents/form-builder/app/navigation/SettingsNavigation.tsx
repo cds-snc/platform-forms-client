@@ -3,17 +3,12 @@ import React from "react";
 import { useTranslation } from "@i18n/client";
 import { SubNavLink } from "./SubNavLink";
 import { EmailIcon, BrandIcon, GearIcon } from "@clientComponents/icons";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
 
-export const SettingsNavigation = () => {
+export const SettingsNavigation = ({ id }: { id: string }) => {
   const {
     t,
     i18n: { language },
   } = useTranslation("form-builder");
-
-  const { id } = useTemplateStore((s) => ({
-    id: s.id,
-  }));
 
   const manageFormLink = id
     ? `/${language}/form-builder/settings/${id}/form`
