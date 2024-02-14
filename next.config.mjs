@@ -60,7 +60,7 @@ const nextConfig = {
   },
   experimental: {
     instrumentationHook: true,
-    ppr: true,
+    // ppr: true, -- This is not yet ready for production use
   },
   typescript: {
     // !! WARN !!
