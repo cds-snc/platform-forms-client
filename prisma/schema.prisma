@@ -85,7 +85,7 @@ model Privilege {
 model User {
   id              String           @id @default(cuid())
   name            String?
-  email           String?          @unique
+  email           String           @unique
   image           String?
   emailVerified   DateTime?
   lastLogin       DateTime         @default(now()) @db.Timestamptz(6)

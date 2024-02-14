@@ -174,7 +174,7 @@ export const authOptions: NextAuthOptions = {
         lastLoginTime: token.lastLoginTime,
         acceptableUse: token.acceptableUse,
         name: token.name ?? null,
-        email: token.email ?? null,
+        email: token.email,
         image: token.picture ?? null,
         privileges: await getPrivilegeRulesForUser(token.userId as string),
         ...(token.newlyRegistered && { newlyRegistered: token.newlyRegistered }),
