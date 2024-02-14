@@ -39,7 +39,7 @@ interface CardLinksProps {
 
 const CardLinks = ({ isPublished, url, id, deliveryOption, overdue }: CardLinksProps) => {
   const { t, i18n } = useTranslation(["my-forms", "common"]);
-  const responsesLink = `/${i18n.language}/form-builder/responses/${id}`;
+  const responsesLink = `/${i18n.language}/form-builder/${id}/responses/new`;
 
   const textData = {
     responses: overdue,
