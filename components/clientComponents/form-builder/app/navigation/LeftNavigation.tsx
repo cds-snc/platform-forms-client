@@ -89,7 +89,7 @@ export const LeftNavigation = ({ id }: { id: string }) => {
         <li>
           <LeftNav
             testid="responses"
-            {...linkHelper({ route: `responses`, id, segment, language })}
+            {...linkHelper({ route: `responses/new`, id, segment, language })}
             onClick={saveForm}
             title={t("responsesNavLabel")}
           >
