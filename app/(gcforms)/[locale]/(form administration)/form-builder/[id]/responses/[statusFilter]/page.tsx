@@ -10,6 +10,7 @@ import { getAppSetting } from "@lib/appSettings";
 import { isResponseId } from "@lib/validation";
 import { Responses, ResponsesProps } from "./Responses";
 import { ucfirst } from "@lib/client/clientHelpers";
+import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
 
 export async function generateMetadata({
   params: { locale },
@@ -92,5 +93,19 @@ export default async function Page({
       }
     }
   }
+
+  if (!session) {
+    return (
+      <>
+        {/* <Head>
+          <title>{t("responses.title")}</title>
+        </Head> */}
+        <div className="max-w-4xl">
+          <LoggedOutTab tabName={LoggedOutTabName.RESPONSES} />
+        </div>
+      </>
+    );
+  }
+
   return <Responses {...pageProps} />;
 }

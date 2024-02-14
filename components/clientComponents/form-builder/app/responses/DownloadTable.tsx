@@ -53,9 +53,7 @@ export const DownloadTable = ({
     i18n: { language },
   } = useTranslation("form-builder-responses");
 
-  const { statusFilter } = useParams();
-  const statusQuery = (statusFilter as string) || "new";
-
+  const { statusFilter } = useParams<{ statusFilter: string }>();
   const [downloadError, setDownloadError] = useState(false);
   const [noSelectedItemsError, setNoSelectedItemsError] = useState(false);
   const [showConfirmNewtDialog, setShowConfirmNewDialog] = useState(false);
@@ -178,7 +176,7 @@ export const DownloadTable = ({
                     "border-y-1 border-slate-300 hover:ring-2 hover:ring-purple-500" +
                       (tableItems.statusItems.get(submission.name) ? " bg-purple-50" : "") +
                       (isBlocked ? " opacity-50" : "") +
-                      (statusQuery === VaultStatus.NEW && removedRows.includes(submission.name)
+                      (statusFilter === VaultStatus.NEW && removedRows.includes(submission.name)
                         ? " transition-opacity opacity-50 ease-in-out duration-500"
                         : "")
                   )}
@@ -209,7 +207,7 @@ export const DownloadTable = ({
                   </th>
                   <td className="whitespace-nowrap px-4">{createdDateTime}</td>
                   <td className="whitespace-nowrap px-4">
-                    {statusQuery === VaultStatus.NEW && (
+                    {statusFilter === VaultStatus.NEW && (
                       <>
                         {removedRows.includes(submission.name) ? (
                           <>
@@ -231,20 +229,20 @@ export const DownloadTable = ({
                         )}
                       </>
                     )}
-                    {statusQuery === VaultStatus.DOWNLOADED && (
+                    {statusFilter === VaultStatus.DOWNLOADED && (
                       <ConfirmReceiptStatus
                         vaultStatus={submission.status}
                         createdAtDate={submission.createdAt}
                         overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
                       />
                     )}
-                    {statusQuery === VaultStatus.CONFIRMED && (
+                    {statusFilter === VaultStatus.CONFIRMED && (
                       <RemovalStatus
                         vaultStatus={submission.status}
                         removalAt={submission.removedAt}
                       />
                     )}
-                    {statusQuery === VaultStatus.PROBLEM && (
+                    {statusFilter === VaultStatus.PROBLEM && (
                       <p className="text-red">
                         <strong>{t("supportWillContact")}</strong>
                         <br />
@@ -260,7 +258,7 @@ export const DownloadTable = ({
                       onDownloadSuccess={() => {
                         setRemovedRows([...removedRows, submission.name]);
                         // router.replace(router.asPath, undefined, { scroll: false });
-                        if (statusQuery === VaultStatus.NEW) {
+                        if (statusFilter === VaultStatus.NEW) {
                           setShowDownloadSuccess("downloadSuccess");
                         }
                       }}
@@ -305,7 +303,7 @@ export const DownloadTable = ({
             setShowDownloadDialog={setShowDownloadDialog}
             onClick={() => setDownloadError(false)}
           />
-          {statusQuery === VaultStatus.NEW && false && (
+          {statusFilter === VaultStatus.NEW && false && (
             <DeleteButton setShowConfirmNewDialog={setShowConfirmNewDialog} />
           )}
         </ActionsPanel>
@@ -325,7 +323,7 @@ export const DownloadTable = ({
         onSuccessfulDownload={() => {
           setRemovedRows([...removedRows, ...tableItems.checkedItems.keys()]);
           // router.replace(router.asPath, undefined, { scroll: false });
-          if (statusQuery === VaultStatus.NEW) {
+          if (statusFilter === VaultStatus.NEW) {
             setShowDownloadSuccess("downloadSuccess");
           }
         }}

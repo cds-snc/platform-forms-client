@@ -51,9 +51,8 @@ export const Responses = ({
   const [successAlertMessage, setShowSuccessAlert] = useState<false | string>(false);
   const router = useRouter();
 
-  const { statusFilter, id } = useParams();
-  const formId = id as string;
-  const statusQuery = statusFilter as VaultStatus;
+  const { id, statusFilter } = useParams<{ id: string; statusFilter: string }>();
+  const formId = id;
 
   const pathName = usePathname();
 
@@ -76,19 +75,7 @@ export const Responses = ({
   const hasHydrated = useRehydrate();
   if (!hasHydrated) return null;
 
-  if (!isAuthenticated) {
-    return (
-      <>
-        {/* <Head>
-          <title>{t("responses.title")}</title>
-        </Head> */}
-        <div className="max-w-4xl">
-          <LoggedOutTab tabName={LoggedOutTabName.RESPONSES} />
-        </div>
-      </>
-    );
-  }
-
+  // @TODO: Would like to move this up to page.tsx, but relies on useTemplateStore
   if (deliveryOption && deliveryOption.emailAddress) {
     return (
       <>
@@ -140,7 +127,7 @@ export const Responses = ({
       >
         <TabNavLink
           id="new-responses"
-          defaultActive={statusQuery === VaultStatus.NEW}
+          defaultActive={statusFilter === VaultStatus.NEW}
           href={`/${language}/form-builder/${formId}/responses/new`}
           setAriaCurrent={true}
           onClick={() => setShowSuccessAlert(false)}
@@ -150,7 +137,7 @@ export const Responses = ({
           </span>
         </TabNavLink>
         <TabNavLink
-          defaultActive={statusQuery === VaultStatus.DOWNLOADED}
+          defaultActive={statusFilter === VaultStatus.DOWNLOADED}
           id="downloaded-responses"
           href={`/${language}/form-builder/${formId}/responses/downloaded`}
           setAriaCurrent={true}
@@ -161,7 +148,7 @@ export const Responses = ({
           </span>
         </TabNavLink>
         <TabNavLink
-          defaultActive={statusQuery === VaultStatus.CONFIRMED}
+          defaultActive={statusFilter === VaultStatus.CONFIRMED}
           id="deleted-responses"
           href={`/${language}/form-builder/${formId}/responses/confirmed`}
           setAriaCurrent={true}
@@ -175,7 +162,7 @@ export const Responses = ({
 
       {isAuthenticated && vaultSubmissions.length > 0 && (
         <>
-          {statusQuery === VaultStatus.NEW && (
+          {statusFilter === VaultStatus.NEW && (
             <>
               <h1>{t("tabs.newResponses.title")}</h1>
               <div className="mb-4">
@@ -187,7 +174,7 @@ export const Responses = ({
               </div>
             </>
           )}
-          {statusQuery === VaultStatus.DOWNLOADED && (
+          {statusFilter === VaultStatus.DOWNLOADED && (
             <>
               <h1>{t("tabs.downloadedResponses.title")}</h1>
               <div className="mb-4">
@@ -202,7 +189,7 @@ export const Responses = ({
               </div>
             </>
           )}
-          {statusQuery === VaultStatus.CONFIRMED && (
+          {statusFilter === VaultStatus.CONFIRMED && (
             <>
               <h1>{t("tabs.confirmedResponses.title")}</h1>
               <div className="mb-4">
@@ -214,7 +201,7 @@ export const Responses = ({
               </div>
             </>
           )}
-          {statusQuery === VaultStatus.PROBLEM && (
+          {statusFilter === VaultStatus.PROBLEM && (
             <>
               <h1>{t("tabs.problemResponses.title")}</h1>
               <div className="mb-4">
@@ -260,7 +247,7 @@ export const Responses = ({
               </>
             )}
 
-            {vaultSubmissions.length <= 0 && statusQuery === VaultStatus.NEW && (
+            {vaultSubmissions.length <= 0 && statusFilter === VaultStatus.NEW && (
               <>
                 <Card
                   icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
@@ -272,7 +259,7 @@ export const Responses = ({
               </>
             )}
 
-            {vaultSubmissions.length <= 0 && statusQuery === VaultStatus.DOWNLOADED && (
+            {vaultSubmissions.length <= 0 && statusFilter === VaultStatus.DOWNLOADED && (
               <>
                 <Card
                   icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
@@ -284,7 +271,7 @@ export const Responses = ({
               </>
             )}
 
-            {vaultSubmissions.length <= 0 && statusQuery === VaultStatus.CONFIRMED && (
+            {vaultSubmissions.length <= 0 && statusFilter === VaultStatus.CONFIRMED && (
               <>
                 <Card
                   icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
@@ -296,7 +283,7 @@ export const Responses = ({
               </>
             )}
 
-            {vaultSubmissions.length <= 0 && statusQuery === VaultStatus.PROBLEM && (
+            {vaultSubmissions.length <= 0 && statusFilter === VaultStatus.PROBLEM && (
               <>
                 <h1 className="visually-hidden">{t("tabs.problemResponses.title")}</h1>
                 <Card

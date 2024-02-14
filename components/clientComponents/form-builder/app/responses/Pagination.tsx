@@ -22,8 +22,7 @@ export const Pagination = ({
   } = useTranslation("form-builder-responses");
   const router = useRouter();
   const searchParams = useSearchParams();
-
-  const { statusFilter } = useParams();
+  const { statusFilter } = useParams<{ statusFilter: string }>();
 
   // Extract responseId from lastEvaluatedKey object
   const lastEvaluatedResponseId = lastEvaluatedKey
