@@ -20,6 +20,7 @@ export default async function Layout({
     initialForm: null,
     locale,
   };
+  let initialForm;
 
   const session = await auth();
 
@@ -29,7 +30,7 @@ export default async function Layout({
     try {
       const ability = createAbility(session);
 
-      const initialForm = await getFullTemplateByID(ability, formID);
+      initialForm = await getFullTemplateByID(ability, formID);
 
       if (initialForm === null) {
         redirect(`/${locale}/404`);
@@ -48,7 +49,7 @@ export default async function Layout({
   }
 
   return (
-    <FormBuilderProviders locale={locale}>
+    <FormBuilderProviders locale={locale} initialForm={initialForm}>
       <div className="flex h-full flex-col">
         <SkipLink />
         <Header context="formBuilder" className="mb-0" />
