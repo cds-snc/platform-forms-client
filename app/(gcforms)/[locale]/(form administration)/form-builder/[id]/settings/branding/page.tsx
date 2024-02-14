@@ -4,7 +4,6 @@ import { getAppSetting } from "@lib/appSettings";
 import { redirect } from "next/navigation";
 import { Metadata } from "next";
 import { ClientSide } from "./clientSide";
-import { FormBuilderInitializer } from "@clientComponents/globals/layouts/FormBuilderLayout";
 
 export async function generateMetadata({
   params: { locale },
@@ -36,9 +35,5 @@ export default async function Page({
 
   const hasBrandingRequestForm = Boolean(await getAppSetting("brandingRequestForm"));
 
-  return (
-    <FormBuilderInitializer locale={locale}>
-      <ClientSide id={id} hasBrandingRequestForm={hasBrandingRequestForm} />
-    </FormBuilderInitializer>
-  );
+  return <ClientSide id={id} hasBrandingRequestForm={hasBrandingRequestForm} />;
 }

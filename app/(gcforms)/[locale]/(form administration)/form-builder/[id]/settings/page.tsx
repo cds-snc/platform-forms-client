@@ -31,7 +31,7 @@ export default async function Page({
         {t("settingsResponseDelivery.beforePublishMessage")}
       </p>
       <SettingsNavigation id={id} />
-      <Suspense key={id} fallback={<Loader />}>
+      <Suspense fallback={<Loader />}>
         <ResponseDelivery />
       </Suspense>
     </>

@@ -3,11 +3,6 @@ import { getTemplateWithAssociatedUsers } from "@lib/templates";
 import { requireAuthentication } from "@lib/auth";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { getUsers } from "@lib/users";
-
-import { BackLink } from "@clientComponents/admin/LeftNav/BackLink";
-
-import { FormBuilderInitializer } from "@clientComponents/globals/layouts/FormBuilderLayout";
-
 import { ClientSide } from "./clientSide";
 import { notFound } from "next/navigation";
 
@@ -24,6 +19,8 @@ export async function generateMetadata({
   };
 }
 
+/*
+@todo re enable back button
 const BackToManageForms = async ({ backLink }: { backLink: string }) => {
   const { t } = await serverTranslation("admin-users");
 
@@ -37,14 +34,9 @@ const BackToManageForms = async ({ backLink }: { backLink: string }) => {
     </div>
   );
 };
+*/
 
-export default async function Page({
-  params: { locale, id },
-  searchParams: { backLink },
-}: {
-  params: { locale: string; id: string };
-  searchParams: { backLink: string };
-}) {
+export default async function Page({ params: { id } }: { params: { id: string } }) {
   const { user } = await requireAuthentication();
 
   if (
@@ -76,21 +68,15 @@ export default async function Page({
       return { id: user.id, name: user.name || "", email: user.email || "" };
     });
     return (
-      <FormBuilderInitializer locale={locale} backLink={<BackToManageForms backLink={backLink} />}>
-        <ClientSide
-          id={id}
-          formRecord={templateWithAssociatedUsers.formRecord}
-          usersAssignedToFormRecord={templateWithAssociatedUsers.users}
-          allUsers={allUsers}
-          canManageOwnership={true}
-        />
-      </FormBuilderInitializer>
+      <ClientSide
+        id={id}
+        formRecord={templateWithAssociatedUsers.formRecord}
+        usersAssignedToFormRecord={templateWithAssociatedUsers.users}
+        allUsers={allUsers}
+        canManageOwnership={true}
+      />
     );
   }
 
-  return (
-    <FormBuilderInitializer locale={locale} backLink={<BackToManageForms backLink={backLink} />}>
-      <ClientSide id={id} canManageOwnership={false} />
-    </FormBuilderInitializer>
-  );
+  return <ClientSide id={id} canManageOwnership={false} />;
 }
