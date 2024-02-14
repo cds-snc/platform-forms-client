@@ -11,7 +11,6 @@ import { NagwareResult } from "@lib/types";
 import { Nagware } from "@clientComponents/form-builder/app/Nagware";
 import { EmailResponseSettings } from "@clientComponents/form-builder/app/shared";
 import { useTemplateStore } from "@clientComponents/form-builder/store";
-import { LoggedOutTabName, LoggedOutTab } from "@clientComponents/form-builder/app/LoggedOutTab";
 import { Button } from "@clientComponents/globals";
 import { ClosedBanner } from "@clientComponents/form-builder/app/shared/ClosedBanner";
 import { DeleteIcon, FolderIcon, InboxIcon, WarningIcon } from "@clientComponents/icons";
