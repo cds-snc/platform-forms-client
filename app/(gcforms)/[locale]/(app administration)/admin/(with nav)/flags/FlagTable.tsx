@@ -1,13 +1,10 @@
 "use client";
-import { useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { modifyFlag } from "./actions";
 import { Button } from "@clientComponents/globals";
 
-export const FlagTable = ({ initialFlags }: { initialFlags: Record<string, boolean> }) => {
+export const FlagTable = ({ flags }: { flags: Record<string, boolean> }) => {
   const { t } = useTranslation("admin-flags");
-
-  const [flags, setFlags] = useState(initialFlags);
 
   return (
     <table className="table-auto border-4">
@@ -34,8 +31,7 @@ export const FlagTable = ({ initialFlags }: { initialFlags: Record<string, boole
                 theme="primary"
                 className="text-sm whitespace-nowrap"
                 onClick={async () => {
-                  const newFlags = await modifyFlag(key, !value);
-                  setFlags(newFlags);
+                  await modifyFlag(key, !value);
                 }}
               >
                 {value ? t("disable") : t("enable")}

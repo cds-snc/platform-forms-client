@@ -2,6 +2,7 @@
 import { enableFlag, disableFlag, checkAll } from "@lib/cache/flags";
 import { auth } from "@lib/auth";
 import { createAbility } from "@lib/privileges";
+import { revalidatePath } from "next/cache";
 
 export async function modifyFlag(id: string, value: boolean) {
   const session = await auth();
@@ -14,7 +15,13 @@ export async function modifyFlag(id: string, value: boolean) {
   } else {
     await disableFlag(ability, id);
   }
-  const newFlags = await checkAll(ability);
+  revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/flags");
+}
 
-  return newFlags;
+export async function getAllFlags() {
+  const session = await auth();
+  if (!session) throw new Error("No session");
+
+  const ability = createAbility(session);
+  return checkAll(ability);
 }
