@@ -12,7 +12,7 @@ import { Responses, ResponsesProps } from "./Responses";
 import { ucfirst } from "@lib/client/clientHelpers";
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
 import { DeliveryOptionEmail } from "./DeliveryOptionEmail";
-import { isEmailDelivery, isVaultDelivery } from "@clientComponents/form-builder/util";
+import { isEmailDelivery } from "@clientComponents/form-builder/util";
 
 export async function generateMetadata({
   params: { locale },
