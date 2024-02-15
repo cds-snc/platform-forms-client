@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import { toast } from "../app/shared/Toast";
 import { StyledLink } from "@clientComponents/globals";
 import { DownloadFileButton } from "../app/shared";
+import { useRouter } from "next/navigation";
 
 interface TemplateApiType {
   error: string | null | undefined;
@@ -165,14 +166,25 @@ export function TemplateApiProvider({ children }: { children: React.ReactNode })
         setConfirmationChanged(null);
         templateIsDirty.current = false;
         setId(result?.id);
+        // result = {
+        //   newForm: id === "",
+        //   id: result?.id,
+        // };
       }
-      return true;
     } catch (err) {
       logMessage.error(err as Error);
       setError(t("errorSaving"));
       toast.error(<ErrorSaving supportHref={supportHref} />, "wide");
       return false;
     }
+
+    const promise = new Promise(function (resolve, reject) {
+      if (templateIsDirty.current && status === "authenticated" && !getIsPublished()) {
+        resolve(true);
+      }
+      reject(false);
+    });
+    return promise;
   }, [status, getIsPublished, getSchema, getName, id, save, setError, setId, t, supportHref]);
 
   return (
