@@ -8,7 +8,6 @@ import {
   NavSettingsIcon,
   NavResponsesIcon,
 } from "@clientComponents/icons";
-import { useTemplateContext } from "@clientComponents/form-builder/hooks";
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { LeftNav } from "@clientComponents/globals/Buttons/LinkButton";
 import { useSelectedLayoutSegment } from "next/navigation";
@@ -35,8 +34,15 @@ export const LeftNavigation = ({ id }: { id: string }) => {
     t,
     i18n: { language },
   } = useTranslation("form-builder");
-  const { isPublished } = useTemplateStore((s) => ({ isPublished: s.isPublished }));
-  const { saveForm } = useTemplateContext();
+  const { isPublished, id: storeId } = useTemplateStore((s) => ({
+    isPublished: s.isPublished,
+    id: s.id,
+  }));
+
+  if (storeId && storeId !== id) {
+    id = storeId;
+  }
+
   const segment = useSelectedLayoutSegment();
 
   return (
@@ -47,7 +53,6 @@ export const LeftNavigation = ({ id }: { id: string }) => {
             <LeftNav
               testid="edit"
               {...linkHelper({ route: "edit", id, segment, language })}
-              onClick={saveForm}
               title={t("edit")}
             >
               <NavEditIcon />
@@ -58,7 +63,6 @@ export const LeftNavigation = ({ id }: { id: string }) => {
           <LeftNav
             testid="preview"
             {...linkHelper({ route: "preview", id, segment, language })}
-            onClick={saveForm}
             title={t("test")}
           >
             <NavPreviewIcon />
@@ -68,7 +72,6 @@ export const LeftNavigation = ({ id }: { id: string }) => {
           <LeftNav
             testid="settings"
             {...linkHelper({ route: `settings`, id, segment, language })}
-            onClick={saveForm}
             title={t("pageSettings")}
           >
             <NavSettingsIcon />
@@ -79,7 +82,6 @@ export const LeftNavigation = ({ id }: { id: string }) => {
             <LeftNav
               testid="publish"
               {...linkHelper({ route: "publish", id, segment, language })}
-              onClick={saveForm}
               title={t("publish")}
             >
               <NavPublishIcon />
@@ -90,7 +92,6 @@ export const LeftNavigation = ({ id }: { id: string }) => {
           <LeftNav
             testid="responses"
             {...linkHelper({ route: `responses/new`, id, segment, language })}
-            onClick={saveForm}
             title={t("responsesNavLabel")}
           >
             <NavResponsesIcon />

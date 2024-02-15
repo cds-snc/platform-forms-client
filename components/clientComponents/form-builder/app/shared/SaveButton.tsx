@@ -8,7 +8,8 @@ import { useTemplateStore } from "../../store";
 import { useTemplateStatus, useTemplateContext } from "../../hooks";
 import { formatDateTime } from "../../util";
 import { SavedFailIcon, SavedCheckIcon } from "@clientComponents/icons";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const SaveDraft = ({
   updatedAt,
@@ -87,14 +88,34 @@ export const SaveButton = () => {
   const { status } = useSession();
   const { updatedAt, getTemplateById } = useTemplateStatus();
   const pathname = usePathname();
+  const router = useRouter();
 
   const handleSave = async () => {
     const saved = await saveForm();
+    // if (saved.newForm) {
+    //   const newPath = pathname.replace("0000", saved.id);
+    //   router.replace(newPath);
+    // }
 
     if (saved) {
       getTemplateById();
     }
   };
+
+  useEffect(() => {
+    return () => {
+      const autoSave = async () => {
+        const saved = await saveForm();
+        // if (saved.newForm) {
+        //   const newPath = window.location.pathname.replace("0000", saved.id);
+
+        //   router.replace(newPath);
+        // }
+      };
+      autoSave();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (isPublished) {
     return null;

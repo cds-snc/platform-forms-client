@@ -5,6 +5,7 @@ import { SubNavLink } from "./SubNavLink";
 import { useActivePathname } from "@clientComponents/form-builder/hooks";
 import { LangSwitcher } from "../shared/LangSwitcher";
 import { QuestionsIcon, TranslateIcon } from "@clientComponents/icons";
+import { useTemplateStore } from "@clientComponents/form-builder/store";
 
 export const EditNavigation = ({ id }: { id: string }) => {
   const {
@@ -12,6 +13,12 @@ export const EditNavigation = ({ id }: { id: string }) => {
     i18n: { language },
   } = useTranslation("form-builder");
   const { activePathname } = useActivePathname();
+  const { id: storeId } = useTemplateStore((s) => ({
+    id: s.id,
+  }));
+  if (storeId && storeId !== id) {
+    id = storeId;
+  }
   return (
     <div className="relative flex max-w-[800px] flex-col tablet:flex-row">
       <div className="flex">
