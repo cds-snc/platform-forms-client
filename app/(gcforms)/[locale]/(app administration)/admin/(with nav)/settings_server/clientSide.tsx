@@ -19,18 +19,24 @@ const ManageSetting = ({
   clearSelection: () => Promise<void>;
   canManageSettings: boolean;
 }) => {
-  const [_setting, _setSetting] = useState(setting);
   const { t } = useTranslation("admin-settings");
-  const newSetting = !setting.internalId;
+  const isNewSetting = !setting.internalId;
 
-  const saveSettingServer = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const saveSettingServer = async (formData: FormData) => {
+    const setting = {
+      internalId: formData.get("internalId") as string,
+      nameEn: formData.get("nameEn") as string,
+      nameFr: formData.get("nameFr") as string,
+      descriptionEn: formData.get("descriptionEn") as string,
+      descriptionFr: formData.get("descriptionFr") as string,
+      value: formData.get("value") as string,
+    };
 
     try {
-      if (newSetting) {
-        await createSetting(_setting.internalId, _setting);
+      if (isNewSetting) {
+        await createSetting(setting.internalId, setting);
       } else {
-        await updateSetting(_setting.internalId, _setting);
+        await updateSetting(setting.internalId, setting);
       }
 
       toast.success(t("success"));
@@ -43,14 +49,13 @@ const ManageSetting = ({
 
   return (
     <div className="gc-form">
-      <form onSubmit={saveSettingServer} method="POST">
+      <form action={saveSettingServer}>
         <label htmlFor="internalId" className="gc-label mt-2 mb-0">
           {t("label.internalId")}
         </label>
         <input
           className="gc-input-text mb-1"
-          onChange={(e) => _setSetting((oldVal) => ({ ...oldVal, internalId: e.target.value }))}
-          value={_setting.internalId}
+          defaultValue={setting.internalId}
           type="text"
           name="internalId"
           disabled={!canManageSettings}
@@ -60,8 +65,7 @@ const ManageSetting = ({
         </label>
         <input
           className="gc-input-text mb-1"
-          onChange={(e) => _setSetting((oldVal) => ({ ...oldVal, nameEn: e.target.value }))}
-          value={_setting.nameEn}
+          defaultValue={setting.nameEn}
           type="text"
           name="nameEn"
           id="nameEn"
@@ -72,8 +76,7 @@ const ManageSetting = ({
         </label>
         <input
           className="gc-input-text mb-1"
-          onChange={(e) => _setSetting((oldVal) => ({ ...oldVal, nameFr: e.target.value }))}
-          value={_setting.nameFr}
+          defaultValue={setting.nameFr}
           type="text"
           name="nameFr"
           id="nameFr"
@@ -84,8 +87,7 @@ const ManageSetting = ({
         </label>
         <input
           className="gc-input-text mb-1"
-          onChange={(e) => _setSetting((oldVal) => ({ ...oldVal, descriptionEn: e.target.value }))}
-          value={_setting.descriptionEn ?? ""}
+          defaultValue={setting.descriptionEn ?? ""}
           type="text"
           name="descriptionEn"
           id="descriptionEn"
@@ -96,8 +98,7 @@ const ManageSetting = ({
         </label>
         <input
           className="gc-input-text mb-1"
-          onChange={(e) => _setSetting((oldVal) => ({ ...oldVal, descriptionFr: e.target.value }))}
-          value={_setting.descriptionFr ?? ""}
+          defaultValue={setting.descriptionFr ?? ""}
           type="text"
           name="descriptionFr"
           id="descriptionFr"
@@ -108,11 +109,10 @@ const ManageSetting = ({
         </label>
         <input
           className="gc-input-text mb-1"
-          onChange={(e) => _setSetting((oldVal) => ({ ...oldVal, value: e.target.value }))}
-          value={_setting.value ?? ""}
+          defaultValue={setting.value ?? ""}
           type="text"
-          name="internalId"
-          id="internalId"
+          name="value"
+          id="value"
           disabled={!canManageSettings}
         />
         {canManageSettings ? (
@@ -152,7 +152,7 @@ export const Settings = ({ settings }: SettingsProps) => {
     await refreshData();
   };
 
-  // TODO
+  // TODO error handling
   const deleteSettingAction = async (internalId: string) => {
     try {
       await deleteSetting(internalId);

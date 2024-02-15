@@ -13,7 +13,7 @@ export async function updateSetting(internalId: string, setting: Record<string, 
   logMessage.debug(`Updating setting ${internalId} to ${setting}`);
   const updatedSetting = await updateAppSetting(ability, internalId, setting);
 
-  logMessage.debug(`Updates setting: ${JSON.stringify(updatedSetting)}`);
+  logMessage.debug(`Updated setting: ${JSON.stringify(updatedSetting)}`);
   return updatedSetting;
 }
 
@@ -46,6 +46,6 @@ export async function deleteSetting(internalId: string) {
   logMessage.debug(`Deleting setting ${internalId}`);
   await deleteAppSetting(ability, internalId);
 
-  logMessage.debug(`Created setting: ${internalId}`);
+  logMessage.debug(`Deleted setting: ${internalId}`);
   return "ok";
 }
