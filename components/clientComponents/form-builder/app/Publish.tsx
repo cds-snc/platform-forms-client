@@ -1,6 +1,5 @@
 "use client";
 import React, { useCallback, useState } from "react";
-import Markdown from "markdown-to-jsx";
 import { useTranslation } from "@i18n/client";
 import { useRouter } from "next/navigation";
 
@@ -9,7 +8,6 @@ import { useTemplateApi, useAllowPublish, useRehydrate } from "../hooks";
 import { CancelIcon, CircleCheckIcon, LockIcon } from "../../icons";
 import { Button, Alert } from "@clientComponents/globals";
 import Link from "next/link";
-import { InfoCard } from "@clientComponents/globals/InfoCard/InfoCard";
 import { isVaultDelivery } from "@clientComponents/form-builder/util";
 import { StyledLink } from "@clientComponents/globals";
 import { classificationOptions } from "./ClassificationSelect";
@@ -113,135 +111,95 @@ export const Publish = () => {
   if (!hasHydrated) return null;
 
   return (
-    <>
-      <div className="flex flex-wrap justify-between laptop:flex-nowrap">
-        <div className="mx-5 min-w-fit grow rounded-lg border-1 p-5">
-          <h1 className="mb-2 border-0">{t("publishYourForm")}</h1>
+    <div>
+      {!userCanPublish && error && (
+        <Alert.Danger focussable={true} className="mb-5">
+          <Alert.Title headingTag="h3">{t("errorSavingForm.title")}</Alert.Title>
+          <p className="mb-2">
+            {t("errorSavingForm.description")}{" "}
+            <StyledLink href={supportHref}>{t("errorSavingForm.supportLink")}.</StyledLink>
+          </p>
+          <p className="mb-5 text-sm">
+            {errorCode && t("errorSavingForm.errorCode", { code: errorCode })}
+          </p>
+          <DownloadFileButton showInfo={false} autoShowDialog={false} />
+        </Alert.Danger>
+      )}
 
-          {!userCanPublish && error && (
-            <Alert.Danger focussable={true} className="mb-5">
-              <Alert.Title headingTag="h3">{t("errorSavingForm.title")}</Alert.Title>
-              <p className="mb-2">
-                {t("errorSavingForm.description")}{" "}
-                <StyledLink href={supportHref}>{t("errorSavingForm.supportLink")}.</StyledLink>
-              </p>
-              <p className="mb-5 text-sm">
-                {errorCode && t("errorSavingForm.errorCode", { code: errorCode })}
-              </p>
-              <DownloadFileButton showInfo={false} autoShowDialog={false} />
-            </Alert.Danger>
+      {!userCanPublish && (
+        <Alert.Info className="my-5">
+          <Alert.IconWrapper className="mr-7">
+            <LockIcon className="mb-2 scale-125 fill-none stroke-none" />
+          </Alert.IconWrapper>
+          <Alert.Title headingTag="h2">{t("unlockPublishing")}</Alert.Title>
+
+          <p className="mb-5">{t("unlockPublishingDescription")}</p>
+          <p>
+            <Button theme="secondary" onClick={handleSaveAndRequest}>
+              {t("saveAndRequest")}
+            </Button>
+          </p>
+        </Alert.Info>
+      )}
+
+      <ul className="list-none p-0">
+        <li className="my-4">
+          <Icon checked={title} />
+          <Link href={`/${i18n.language}/form-builder/edit#formTitle`}>{t("formTitle")}</Link>
+        </li>
+        <li className="my-4">
+          <Icon checked={questions} />
+          <Link href={`/${i18n.language}/form-builder/edit`}>{t("questions")}</Link>
+        </li>
+        <li className="my-4">
+          <Icon checked={privacyPolicy} />
+          <Link href={`/${i18n.language}/form-builder/edit#privacy-text`}>
+            {t("privacyStatement")}
+          </Link>
+        </li>
+        <li className="my-4">
+          <Icon checked={confirmationMessage} />
+          <Link href={`/${i18n.language}/form-builder/edit#confirmation-text`}>
+            {t("formConfirmationMessage")}
+          </Link>
+        </li>
+        <li className="my-4">
+          <Icon checked={translate} />
+          <Link href={`/${i18n.language}/form-builder/edit/translate`}>{t("translate")}</Link>
+        </li>
+
+        <li className="my-4">
+          <Icon checked />
+          <strong>
+            {securityAttributeText}
+            {t("publishYourFormInstructions.text2")},{" "}
+          </strong>
+          {isVaultDelivery(getDeliveryOption()) ? (
+            <span>{t("publishYourFormInstructions.vaultOption")}</span>
+          ) : (
+            <span>{t("publishYourFormInstructions.emailOption")}</span>
           )}
+          <StyledLink href={`/${i18n.language}/form-builder/settings`}>
+            {t("publishYourFormInstructions.change")}
+          </StyledLink>
+        </li>
+      </ul>
 
-          <p className="mb-0 text-lg">{t("publishYourFormInstructions.text1")}</p>
-          {!userCanPublish && (
-            <Alert.Info className="my-5">
-              <Alert.IconWrapper className="mr-7">
-                <LockIcon className="mb-2 scale-125 fill-none stroke-none" />
-              </Alert.IconWrapper>
-              <Alert.Title headingTag="h2">{t("unlockPublishing")}</Alert.Title>
-
-              <p className="mb-5">{t("unlockPublishingDescription")}</p>
-              <p>
-                <Button theme="secondary" onClick={handleSaveAndRequest}>
-                  {t("saveAndRequest")}
-                </Button>
-              </p>
-            </Alert.Info>
-          )}
-
-          <ul className="list-none p-0">
-            <li className="my-4">
-              <Icon checked={title} />
-              <Link href={`/${i18n.language}/form-builder/edit#formTitle`}>{t("formTitle")}</Link>
-            </li>
-            <li className="my-4">
-              <Icon checked={questions} />
-              <Link href={`/${i18n.language}/form-builder/edit`}>{t("questions")}</Link>
-            </li>
-            <li className="my-4">
-              <Icon checked={privacyPolicy} />
-              <Link href={`/${i18n.language}/form-builder/edit#privacy-text`}>
-                {t("privacyStatement")}
-              </Link>
-            </li>
-            <li className="my-4">
-              <Icon checked={confirmationMessage} />
-              <Link href={`/${i18n.language}/form-builder/edit#confirmation-text`}>
-                {t("formConfirmationMessage")}
-              </Link>
-            </li>
-            <li className="my-4">
-              <Icon checked={translate} />
-              <Link href={`/${i18n.language}/form-builder/edit/translate`}>{t("translate")}</Link>
-            </li>
-
-            <li className="my-4">
-              <Icon checked />
-              <strong>
-                {securityAttributeText}
-                {t("publishYourFormInstructions.text2")},{" "}
-              </strong>
-              {isVaultDelivery(getDeliveryOption()) ? (
-                <span>{t("publishYourFormInstructions.vaultOption")}</span>
-              ) : (
-                <span>{t("publishYourFormInstructions.emailOption")}</span>
-              )}
-              <StyledLink href={`/${i18n.language}/form-builder/settings`}>
-                {t("publishYourFormInstructions.change")}
-              </StyledLink>
-            </li>
-          </ul>
-
-          {userCanPublish && isPublishable() && (
-            <>
-              <Button className="mt-5" onClick={handlePublish}>
-                {t("publish")}
-              </Button>
-              <div
-                role="alert"
-                className={`ml-5 inline-block px-3 py-1 
+      {userCanPublish && isPublishable() && (
+        <>
+          <Button className="mt-5" onClick={handlePublish}>
+            {t("publish")}
+          </Button>
+          <div
+            role="alert"
+            className={`ml-5 inline-block px-3 py-1 
             ${error ? "bg-red-100 text-red-destructive" : ""}
             ${!error ? "hidden" : ""}`}
-              >
-                <>{error && <p>{t("thereWasAnErrorPublishing")}</p>}</>
-              </div>
-            </>
-          )}
-        </div>
-        {userCanPublish && isPublishable() && (
-          <>
-            <div className="mt-8 min-w-fit max-w-md flex-none laptop:mt-0 laptop:min-w-min">
-              <InfoCard title={t("whatYouNeedToKnow")}>
-                <ul className="list-none p-0">
-                  <li className="mb-5 bg-gray-50 p-1.5">
-                    <h3 className="gc-h4 mb-1 pb-0 text-lg">{t("publishingDisablesEditing")}</h3>
-                    <p className="text-sm">{t("publishingDisablesEditingDescription")}</p>
-                  </li>
-                  <li className="mb-5 bg-gray-50 p-1.5">
-                    <h3 className="gc-h4 mb-1 pb-0 text-lg">{t("publishingLocksSettings")}</h3>
-                    <p className="text-sm">{t("publishingLocksSettingsDescription")}</p>
-                  </li>
-                  {isVaultDelivery(getDeliveryOption()) && (
-                    <>
-                      <li className="mb-5 bg-gray-50 p-1.5">
-                        <h3 className="gc-h4 mb-1 pb-0 text-lg">
-                          {t("publishingRemovesTestResponses")}
-                        </h3>
-                        <p className="text-sm">{t("publishingRemovesTestResponsesDescription")}</p>
-                      </li>
-                    </>
-                  )}
-                </ul>
-                <div className="bg-gray-50 p-1.5">
-                  <Markdown options={{ forceBlock: true }} className="text-sm">
-                    {t("contactSupportIfYouHaveQuestions")}
-                  </Markdown>
-                </div>
-              </InfoCard>
-            </div>
-          </>
-        )}
-      </div>
-    </>
+          >
+            <>{error && <p>{t("thereWasAnErrorPublishing")}</p>}</>
+          </div>
+        </>
+      )}
+    </div>
   );
 };
