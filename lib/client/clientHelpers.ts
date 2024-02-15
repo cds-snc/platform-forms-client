@@ -8,7 +8,6 @@ import {
   PublicFormRecord,
   Response,
   Responses,
-  VaultStatus,
 } from "@lib/types";
 import { Submission } from "@lib/types/submission-types";
 import { getCsrfToken } from "./csrfToken";
