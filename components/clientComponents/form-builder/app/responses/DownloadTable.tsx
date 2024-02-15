@@ -15,7 +15,7 @@ import { useParams } from "next/navigation";
 import { useSetting } from "@lib/hooks/useSetting";
 import Link from "next/link";
 import { TableActions, initialTableItemsState, reducerTableItems } from "./DownloadTableReducer";
-import { getDaysPassed } from "@lib/client/clientHelpers";
+import { getDaysPassed, ucfirst } from "@lib/client/clientHelpers";
 import { Alert } from "@clientComponents/globals";
 import { CheckAll } from "./CheckAll";
 import { DownloadButton } from "./DownloadButton";
@@ -53,7 +53,8 @@ export const DownloadTable = ({
     i18n: { language },
   } = useTranslation("form-builder-responses");
 
-  const { statusFilter } = useParams<{ statusFilter: string }>();
+  const { statusFilter: rawStatusFilter } = useParams<{ statusFilter: string }>();
+  const statusFilter = ucfirst(rawStatusFilter);
   const [downloadError, setDownloadError] = useState(false);
   const [noSelectedItemsError, setNoSelectedItemsError] = useState(false);
   const [showConfirmNewtDialog, setShowConfirmNewDialog] = useState(false);

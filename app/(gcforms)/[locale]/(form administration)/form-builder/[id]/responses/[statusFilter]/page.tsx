@@ -8,20 +8,20 @@ import { VaultStatus } from "@lib/types";
 import { listAllSubmissions } from "@lib/vault";
 import { getAppSetting } from "@lib/appSettings";
 import { isResponseId } from "@lib/validation";
-import { Responses, ResponsesProps } from "./Responses";
+import { Responses, ResponsesProps } from "./components/Responses";
 import { ucfirst } from "@lib/client/clientHelpers";
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
-import { DeliveryOptionEmail } from "./DeliveryOptionEmail";
-import { isEmailDelivery } from "@clientComponents/form-builder/util";
 
 export async function generateMetadata({
   params: { locale },
 }: {
   params: { locale: string };
 }): Promise<Metadata> {
-  const { t } = await serverTranslation("form-builder", { lang: locale });
+  const { t } = await serverTranslation(["form-builder-responses", "form-builder"], {
+    lang: locale,
+  });
   return {
-    title: `${t("gcFormsEdit")} — ${t("gcForms")}`,
+    title: `${t("responses.title")} — ${t("gcForms")}`,
   };
 }
 
@@ -103,23 +103,6 @@ export default async function Page({
           <LoggedOutTab tabName={LoggedOutTabName.RESPONSES} />
         </div>
       </>
-    );
-  }
-
-  const deliveryOption = pageProps.initialForm?.deliveryOption;
-  const isPublished = pageProps.initialForm?.isPublished || false;
-
-  if (deliveryOption && isEmailDelivery(deliveryOption)) {
-    return (
-      <DeliveryOptionEmail
-        email={deliveryOption.emailAddress}
-        emailSubject={{
-          en: deliveryOption.emailSubjectEn || "",
-          fr: deliveryOption.emailSubjectfr || "",
-        }}
-        isPublished={isPublished}
-        formId={id}
-      />
     );
   }
 
