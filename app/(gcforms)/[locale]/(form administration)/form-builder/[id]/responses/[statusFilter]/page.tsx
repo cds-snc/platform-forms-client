@@ -41,6 +41,7 @@ export default async function Page({
   };
 
   const session = await auth();
+  const isAuthenticated = session !== null;
 
   if (session && id) {
     try {
@@ -95,7 +96,7 @@ export default async function Page({
     }
   }
 
-  if (!session) {
+  if (!isAuthenticated) {
     return (
       <>
         <div className="max-w-4xl">

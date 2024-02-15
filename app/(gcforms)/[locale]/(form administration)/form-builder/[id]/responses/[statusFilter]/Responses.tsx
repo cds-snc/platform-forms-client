@@ -18,6 +18,7 @@ import { ConfirmDialog } from "@clientComponents/form-builder/app/responses/Dial
 import { Alert } from "@clientComponents/globals";
 import { TabNavLink } from "@clientComponents/form-builder/app/navigation/TabNavLink";
 import { useRehydrate } from "@clientComponents/form-builder/hooks";
+import { ucfirst } from "@lib/client/clientHelpers";
 
 export interface ResponsesProps {
   initialForm: FormRecord | null;
@@ -48,7 +49,9 @@ export const Responses = ({
   const [successAlertMessage, setShowSuccessAlert] = useState<false | string>(false);
   const router = useRouter();
 
-  const { id, statusFilter } = useParams<{ id: string; statusFilter: string }>();
+  const { id, statusFilter: rawStatusFilter } = useParams<{ id: string; statusFilter: string }>();
+  const statusFilter = ucfirst(rawStatusFilter);
+
   const formId = id;
 
   const pathName = usePathname();
@@ -112,7 +115,7 @@ export const Responses = ({
 
       {isAuthenticated && vaultSubmissions.length > 0 && (
         <>
-          {statusFilter === VaultStatus.NEW && (
+          {statusFilter == VaultStatus.NEW && (
             <>
               <h1>{t("tabs.newResponses.title")}</h1>
               <div className="mb-4">
@@ -196,7 +199,6 @@ export const Responses = ({
                 />
               </>
             )}
-
             {vaultSubmissions.length <= 0 && statusFilter === VaultStatus.NEW && (
               <>
                 <Card
@@ -208,7 +210,6 @@ export const Responses = ({
                 />
               </>
             )}
-
             {vaultSubmissions.length <= 0 && statusFilter === VaultStatus.DOWNLOADED && (
               <>
                 <Card
@@ -220,7 +221,6 @@ export const Responses = ({
                 />
               </>
             )}
-
             {vaultSubmissions.length <= 0 && statusFilter === VaultStatus.CONFIRMED && (
               <>
                 <Card
@@ -232,7 +232,6 @@ export const Responses = ({
                 />
               </>
             )}
-
             {vaultSubmissions.length <= 0 && statusFilter === VaultStatus.PROBLEM && (
               <>
                 <h1 className="visually-hidden">{t("tabs.problemResponses.title")}</h1>
