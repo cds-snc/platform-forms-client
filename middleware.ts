@@ -23,6 +23,7 @@ export const config = {
         "/((?!_next/static|_next/image|favicon.ico|img|static|react_devtools|unsupported-browser|javascript-disabled).*)",
       missing: [
         { type: "header", key: "next-router-prefetch" },
+        { type: "header", key: "next-action" },
         { type: "header", key: "purpose", value: "prefetch" },
       ],
     },
