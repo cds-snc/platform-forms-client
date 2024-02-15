@@ -9,8 +9,6 @@ import { DownloadTable } from "@clientComponents/form-builder/app/responses/Down
 import { ReportDialog } from "@clientComponents/form-builder/app/responses/Dialogs/ReportDialog";
 import { NagwareResult } from "@lib/types";
 import { Nagware } from "@clientComponents/form-builder/app/Nagware";
-import { EmailResponseSettings } from "@clientComponents/form-builder/app/shared";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
 import { Button } from "@clientComponents/globals";
 import { ClosedBanner } from "@clientComponents/form-builder/app/shared/ClosedBanner";
 import { DeleteIcon, FolderIcon, InboxIcon, WarningIcon } from "@clientComponents/icons";
@@ -55,13 +53,6 @@ export const Responses = ({
 
   const pathName = usePathname();
 
-  const { getDeliveryOption, isPublished } = useTemplateStore((s) => ({
-    getDeliveryOption: s.getDeliveryOption,
-    isPublished: s.isPublished,
-  }));
-
-  const deliveryOption = getDeliveryOption();
-
   let formName = "";
   if (initialForm) {
     formName = initialForm.name
@@ -74,51 +65,11 @@ export const Responses = ({
   const hasHydrated = useRehydrate();
   if (!hasHydrated) return null;
 
-  // @TODO: Would like to move this up to page.tsx, but relies on useTemplateStore
-  if (deliveryOption && deliveryOption.emailAddress) {
-    return (
-      <>
-        {/* <Head>
-          <title>{t("responses.email.title")}</title>
-        </Head> */}
-        <div className="mb-8 flex flex-wrap items-baseline justify-between">
-          <h1 className="mb-0 border-none tablet:mb-4">
-            {isAuthenticated ? t("responses.email.title") : t("responses.unauthenticated.title")}
-          </h1>
-          <nav className="flex gap-3">
-            {!isPublished && (
-              <Link href={`/${language}/form-builder/settings`} legacyBehavior>
-                <a
-                  href={`/${language}/form-builder/settings`}
-                  className="mb-0 mr-3 rounded-[100px] border-1 border-black px-5 py-1 text-black no-underline !shadow-none visited:text-black hover:bg-[#475569] hover:!text-white focus:bg-[#475569] focus:!text-white laptop:py-2 [&_svg]:focus:fill-white"
-                >
-                  {t("responses.changeSetup")}
-                </a>
-              </Link>
-            )}
-          </nav>
-        </div>
-        <ClosedBanner id={formId} />
-        <EmailResponseSettings
-          emailAddress={deliveryOption.emailAddress}
-          subjectEn={deliveryOption.emailSubjectEn || ""}
-          subjectFr={deliveryOption.emailSubjectFr || ""}
-        />
-      </>
-    );
-  }
-
   return (
     <>
       {/* <Head>
         <title>{t("responses.title")}</title>
       </Head> */}
-
-      {!isAuthenticated && (
-        <h1 className="mb-0 border-none tablet:mb-4 tablet:mr-8">
-          {t("responses.unauthenticated.title")}
-        </h1>
-      )}
 
       <nav
         className="relative mb-10 flex border-b border-black"
