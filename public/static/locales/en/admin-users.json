@@ -51,5 +51,8 @@
     "noAccounts": "No accounts",
     "noActiveAccounts": "No active accounts",
     "noDeactivatedAccounts": "No deactivated accounts"
-  }
+  },
+  "systemAdministration": "System administration",
+  "accountAdministration": "Account administration",
+  "userAdministration": "User administration"
 }

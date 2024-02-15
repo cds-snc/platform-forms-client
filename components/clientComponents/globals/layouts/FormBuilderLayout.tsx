@@ -1,5 +1,4 @@
 "use client";
-import React, { ReactElement } from "react";
 import { TemplateStoreProvider } from "@clientComponents/form-builder/store";
 import { RefStoreProvider } from "@lib/hooks/useRefStore";
 import { TemplateApiProvider } from "@clientComponents/form-builder/hooks";
@@ -12,8 +11,6 @@ export const FormBuilderInitializer = ({
   className = "",
 }: {
   children: React.ReactNode;
-  hideLeftNav?: boolean | false;
-  backLink?: ReactElement;
   className?: string;
   initialForm?: FormRecord | null;
   locale: string;
