@@ -3,13 +3,9 @@ import { enableFlag, disableFlag, checkAll } from "@lib/cache/flags";
 import { auth } from "@lib/auth";
 import { createAbility } from "@lib/privileges";
 
-import { logMessage } from "@lib/logger";
-
 export async function modifyFlag(id: string, value: boolean) {
   const session = await auth();
   if (!session) throw new Error("No session");
-
-  logMessage.debug(`Modifying flag ${id} to ${value}`);
 
   const ability = createAbility(session);
 
@@ -19,6 +15,6 @@ export async function modifyFlag(id: string, value: boolean) {
     await disableFlag(ability, id);
   }
   const newFlags = await checkAll(ability);
-  logMessage.debug(`New Flags Return Value: ${JSON.stringify(newFlags)}`);
+
   return newFlags;
 }

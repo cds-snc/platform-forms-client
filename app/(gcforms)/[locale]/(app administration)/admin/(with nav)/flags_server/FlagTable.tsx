@@ -4,8 +4,6 @@ import { useTranslation } from "@i18n/client";
 import { modifyFlag } from "./actions";
 import { Button } from "@clientComponents/globals";
 
-import { logMessage } from "@lib/logger";
-
 export const FlagTable = ({ initialFlags }: { initialFlags: Record<string, boolean> }) => {
   const { t } = useTranslation("admin-flags");
 
@@ -37,7 +35,6 @@ export const FlagTable = ({ initialFlags }: { initialFlags: Record<string, boole
                 className="text-sm whitespace-nowrap"
                 onClick={async () => {
                   const newFlags = await modifyFlag(key, !value);
-                  logMessage.debug(`Flags:{${JSON.stringify(newFlags)}`);
                   setFlags(newFlags);
                 }}
               >

@@ -4,7 +4,6 @@ import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { Metadata } from "next";
 import { FlagTable } from "./FlagTable";
 import { checkAll } from "@lib/cache/flags";
-import { logMessage } from "@lib/logger";
 
 export async function generateMetadata({
   params: { locale },
@@ -24,8 +23,6 @@ export default async function Page() {
 
   const { t } = await serverTranslation("admin-flags");
   const flags = await checkAll(user.ability);
-
-  logMessage.debug(`Server Page Flags: ${JSON.stringify(flags)}`);
 
   return (
     <>
