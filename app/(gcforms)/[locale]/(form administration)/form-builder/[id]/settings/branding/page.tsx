@@ -1,8 +1,9 @@
+import { redirect } from "next/navigation";
+import { Metadata } from "next";
+
 import { serverTranslation } from "@i18n";
 import { auth } from "@lib/auth";
 import { getAppSetting } from "@lib/appSettings";
-import { redirect } from "next/navigation";
-import { Metadata } from "next";
 import { ClientSide } from "./clientSide";
 
 export async function generateMetadata({
@@ -16,11 +17,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({
-  params: { locale, id },
-}: {
-  params: { locale: string; id: string };
-}) {
+export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const session = await auth();
 
   if (session && !session.user.acceptableUse) {
@@ -35,5 +32,5 @@ export default async function Page({
 
   const hasBrandingRequestForm = Boolean(await getAppSetting("brandingRequestForm"));
 
-  return <ClientSide id={id} hasBrandingRequestForm={hasBrandingRequestForm} />;
+  return <ClientSide hasBrandingRequestForm={hasBrandingRequestForm} />;
 }

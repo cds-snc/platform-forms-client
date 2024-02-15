@@ -21,9 +21,6 @@ export default async function Layout({
   return (
     <>
       <h1>{t("gcFormsSettings")}</h1>
-      <p className="mb-5 inline-block bg-purple-200 p-3 text-sm font-bold">
-        {t("settingsResponseDelivery.beforePublishMessage")}
-      </p>
       <SettingsNavigation id={id} />
       {children}
     </>
