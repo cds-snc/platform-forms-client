@@ -11,6 +11,8 @@ import { isResponseId } from "@lib/validation";
 import { Responses, ResponsesProps } from "./Responses";
 import { ucfirst } from "@lib/client/clientHelpers";
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
+import { DeliveryOptionEmail } from "./DeliveryOptionEmail";
+import { isEmailDelivery, isVaultDelivery } from "@clientComponents/form-builder/util";
 
 export async function generateMetadata({
   params: { locale },
@@ -104,6 +106,20 @@ export default async function Page({
           <LoggedOutTab tabName={LoggedOutTabName.RESPONSES} />
         </div>
       </>
+    );
+  }
+
+  const deliveryOption = pageProps.initialForm?.deliveryOption;
+
+  if (deliveryOption && isEmailDelivery(deliveryOption)) {
+    return (
+      <DeliveryOptionEmail
+        email={deliveryOption.emailAddress}
+        emailSubject={{
+          en: deliveryOption.emailSubjectEn || "",
+          fr: deliveryOption.emailSubjectfr || "",
+        }}
+      />
     );
   }
 
