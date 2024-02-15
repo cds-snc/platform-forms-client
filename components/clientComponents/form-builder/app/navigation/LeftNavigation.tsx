@@ -11,7 +11,7 @@ import {
 import { useTemplateContext } from "@clientComponents/form-builder/hooks";
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { LeftNav } from "@clientComponents/globals/Buttons/LinkButton";
-import { useRouter, useSelectedLayoutSegment } from "next/navigation";
+import { useSelectedLayoutSegment } from "next/navigation";
 
 const linkHelper = ({
   route,
@@ -38,7 +38,6 @@ export const LeftNavigation = ({ id }: { id: string }) => {
   const { isPublished } = useTemplateStore((s) => ({ isPublished: s.isPublished }));
   const { saveForm } = useTemplateContext();
   const segment = useSelectedLayoutSegment();
-  const router = useRouter();
 
   return (
     <nav aria-label={t("navLabelFormBuilder")}>
@@ -48,12 +47,7 @@ export const LeftNavigation = ({ id }: { id: string }) => {
             <LeftNav
               testid="edit"
               {...linkHelper({ route: "edit", id, segment, language })}
-              onClick={() => {
-                const saved =  await saveForm();
-                if (saved.newForm) {
-                  router.replace(`/${language}/form-builder/${saved.id}/edit`)
-                }
-              }
+              onClick={saveForm}
               title={t("edit")}
             >
               <NavEditIcon />
