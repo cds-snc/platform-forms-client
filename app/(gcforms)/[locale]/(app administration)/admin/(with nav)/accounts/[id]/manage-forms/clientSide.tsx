@@ -11,7 +11,7 @@ import { ConfirmDelete } from "@clientComponents/form-builder/app/ConfirmDelete"
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { useRefresh } from "@lib/hooks";
 import { ExclamationIcon } from "@clientComponents/icons";
-
+import { BackLink } from "@clientComponents/admin/LeftNav/BackLink";
 type User = {
   id: string;
   name: string | null;
@@ -68,7 +68,10 @@ export const ManageForms = ({
   templates: Templates;
   overdue: Overdue;
 }) => {
-  const { t, i18n } = useTranslation("admin-forms");
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation(["admin-forms", "admin-users"]);
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
   const activeForm = useRef<{ id: string; isPublished: boolean } | null>(null);
   const { ability } = useAccessControl();
@@ -78,6 +81,9 @@ export const ManageForms = ({
   return (
     <>
       <div>
+        <BackLink href={`/${language}/admin/accounts?id=${formUser.id}`}>
+          {t("backToAccounts", { ns: "admin-users" })}
+        </BackLink>
         <h1 className="mb-10 border-0">
           {formUser && <span className="block text-base">{formUser?.name}</span>}
           {formUser && <span className="block text-base font-normal">{formUser?.email}</span>}
@@ -103,7 +109,7 @@ export const ManageForms = ({
             >
               <div className="flex flex-row items-start justify-between">
                 <h2 className="mb-0 mr-2 overflow-hidden pb-0 text-base">
-                  {i18n.language === "en" ? (
+                  {language === "en" ? (
                     <>
                       {titleEn} / <span lang="fr">{titleFr}</span>
                     </>
@@ -131,13 +137,13 @@ export const ManageForms = ({
               <div className="mt-10 flex flex-row items-end justify-between">
                 <div>
                   <LinkButton.Secondary
-                    href={`/${i18n.language}/form-builder/settings/${id}/form?backLink=${formUser.id}`}
+                    href={`/${language}/form-builder/settings/${id}/form?backLink=${formUser.id}`}
                     className="mb-2 mr-3"
                   >
                     {t("manageOwnerships")}
                   </LinkButton.Secondary>
                   <LinkButton.Secondary
-                    href={`/${i18n.language}/form-builder/responses/${id}`}
+                    href={`/${language}/form-builder/responses/${id}`}
                     className="mb-2 mr-3"
                   >
                     {t("gotoResponses")}

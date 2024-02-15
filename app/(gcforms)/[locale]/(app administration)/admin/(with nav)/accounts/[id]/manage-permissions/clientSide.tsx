@@ -9,6 +9,7 @@ import { Button, Alert } from "@clientComponents/globals";
 import { PermissionToggle } from "@clientComponents/admin/Users/PermissionToggle";
 import { LinkButton } from "@clientComponents/globals";
 import { AppUser } from "@lib/types/user-types";
+import { BackLink } from "@clientComponents/admin/LeftNav/BackLink";
 
 type PrivilegeList = Omit<Privilege, "permissions" | "priority">[];
 
@@ -105,7 +106,10 @@ export const ManagePermissions = ({
   formUser: AppUser;
   allPrivileges: PrivilegeList;
 }) => {
-  const { t } = useTranslation("admin-users");
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation("admin-users");
   const [message, setMessage] = useState<ReactElement | null>(null);
   const { ability } = useAccessControl();
   const canManageUsers = ability?.can("update", "User") ?? false;
@@ -168,25 +172,28 @@ export const ManagePermissions = ({
 
   return (
     <div>
+      <BackLink href={`/${language}/admin/accounts?id=${formUser.id}`}>
+        {t("backToAccounts")}
+      </BackLink>
       <h1 className="mb-6 border-0">
         {formUser && <span className="block text-base">{formUser?.name}</span>}
         {formUser && <span className="block text-base font-normal">{formUser?.email}</span>}
         {t("managePermissions")}
       </h1>
-      {message && message}
-      <h2>{t("User")}</h2>
+      {message}
+      <h2>{t("userAdministration")}</h2>
       <PrivilegeList
         formUser={formUser}
         privileges={userPrivileges}
         setChangedPrivileges={setChangedPrivileges}
       />
-      <h2>{t("Account administration")}</h2>
+      <h2>{t("accountAdministration")}</h2>
       <PrivilegeList
         formUser={formUser}
         privileges={accountPrivileges}
         setChangedPrivileges={setChangedPrivileges}
       />
-      <h2>{t("System administration")}</h2>
+      <h2>{t("systemAdministration")}</h2>
       <PrivilegeList
         formUser={formUser}
         privileges={systemPrivileges}

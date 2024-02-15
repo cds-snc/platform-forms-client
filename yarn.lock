@@ -1545,7 +1545,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.12.0, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.15.4, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.22.5, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.23.5, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
+"@babel/runtime@npm:^7.12.0, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.15.4, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.23.5, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
   version: 7.23.6
   resolution: "@babel/runtime@npm:7.23.6"
   dependencies:
@@ -1554,7 +1554,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.22.15":
+"@babel/runtime@npm:^7.22.15, @babel/runtime@npm:^7.23.9":
   version: 7.23.9
   resolution: "@babel/runtime@npm:7.23.9"
   dependencies:
@@ -10220,7 +10220,7 @@ __metadata:
     formik: "npm:2.4.5"
     htmlparser2: "npm:8.0.2"
     husky: "npm:^9.0.10"
-    i18next: "npm:^23.7.11"
+    i18next: "npm:^23.8.2"
     i18next-browser-languagedetector: "npm:^7.2.0"
     i18next-resources-to-backend: "npm:^1.2.0"
     immer: "npm:10.0.3"
@@ -10256,7 +10256,7 @@ __metadata:
     react-app-polyfill: "npm:3.0.0"
     react-aria: "npm:3.31.0"
     react-dom: "npm:^18.2.0"
-    react-i18next: "npm:^13.5.0"
+    react-i18next: "npm:^14.0.5"
     react-roving-tabindex: "npm:^3.2.0"
     react-select: "npm:5.8.0"
     react-tabs: "npm:4.3.0"
@@ -10770,12 +10770,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^23.7.11":
-  version: 23.7.11
-  resolution: "i18next@npm:23.7.11"
+"i18next@npm:^23.8.2":
+  version: 23.8.2
+  resolution: "i18next@npm:23.8.2"
   dependencies:
     "@babel/runtime": "npm:^7.23.2"
-  checksum: 10c0/66f166bebbde565d4e0ed98b0f046f49d97c591fa8e4919bd9badfb6be3b1057ec137b9332beb4835b2d6714af243726dc3996d60f54949cfd23c839b0f8a3b6
+  checksum: 10c0/c16ccee81bc1e096fec8d10000de42f10137f7cd27b295eca22492cb174b364ebca72327b2e6be066c4308c79bf72c8585d1c7cde2aedf556e3f423af60cd66c
   languageName: node
   linkType: hard
 
@@ -14530,11 +14530,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-i18next@npm:^13.5.0":
-  version: 13.5.0
-  resolution: "react-i18next@npm:13.5.0"
+"react-i18next@npm:^14.0.5":
+  version: 14.0.5
+  resolution: "react-i18next@npm:14.0.5"
   dependencies:
-    "@babel/runtime": "npm:^7.22.5"
+    "@babel/runtime": "npm:^7.23.9"
     html-parse-stringify: "npm:^3.0.1"
   peerDependencies:
     i18next: ">= 23.2.3"
@@ -14544,7 +14544,7 @@ __metadata:
       optional: true
     react-native:
       optional: true
-  checksum: 10c0/955db09fb83bc68aa9fe7ed11c95fb3e9dc5ab95e85854f169c07a9e71f9154d2cc01f46e343801e2478d5de86475e7a19ec677bec532c3870cb7a01246a6a86
+  checksum: 10c0/60e3bedc6889689cfb96005b134da79d50097d3ff088284b35f213820aacedbdad1ff32e97b8447db70834c16d472ded829675e05c2a099baea9fd96b3a5b72f
   languageName: node
   linkType: hard
 
