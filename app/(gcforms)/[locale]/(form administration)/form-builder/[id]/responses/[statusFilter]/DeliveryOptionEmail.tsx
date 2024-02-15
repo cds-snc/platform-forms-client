@@ -1,46 +1,29 @@
-"use client";
 import React from "react";
 import Link from "next/link";
 import { EmailResponseSettings } from "@clientComponents/form-builder/app/shared";
 import { ClosedBanner } from "@clientComponents/form-builder/app/shared/ClosedBanner";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
-import { useSession } from "next-auth/react";
-import { useTranslation } from "@i18n/client";
-import { useParams } from "next/navigation";
+import { serverTranslation } from "@i18n";
 
-export const DeliveryOptionEmail = ({
+export const DeliveryOptionEmail = async ({
   email,
   emailSubject,
+  isPublished,
+  formId,
 }: {
   email: string;
   emailSubject: { en: string; fr: string };
+  isPublished: boolean;
+  formId: string;
 }) => {
-  const { status } = useSession();
-  const isAuthenticated = status === "authenticated";
-
-  const { id } = useParams<{ id: string }>();
-
   const {
     t,
     i18n: { language },
-  } = useTranslation("form-builder-responses");
-
-  const { getDeliveryOption, isPublished } = useTemplateStore((s) => ({
-    getDeliveryOption: s.getDeliveryOption,
-    isPublished: s.isPublished,
-  }));
-
-  const deliveryOption = getDeliveryOption();
+  } = await serverTranslation("form-builder-responses");
 
   return (
     <>
-      {/* <Head>
-          <title>{t("responses.email.title")}</title>
-        </Head> */}
       <div className="mb-8 flex flex-wrap items-baseline justify-between">
-        <h1 className="mb-0 border-none tablet:mb-4">
-          {isAuthenticated ? t("responses.email.title") : t("responses.unauthenticated.title")}
-        </h1>
+        <h1 className="mb-0 border-none tablet:mb-4">{t("responses.email.title")}</h1>
         <nav className="flex gap-3">
           {!isPublished && (
             <Link href={`/${language}/form-builder/settings`} legacyBehavior>
@@ -54,11 +37,11 @@ export const DeliveryOptionEmail = ({
           )}
         </nav>
       </div>
-      <ClosedBanner id={id} />
+      <ClosedBanner id={formId} />
       <EmailResponseSettings
-        emailAddress={deliveryOption?.emailAddress || ""}
-        subjectEn={deliveryOption?.emailSubjectEn || ""}
-        subjectFr={deliveryOption?.emailSubjectFr || ""}
+        emailAddress={email}
+        subjectEn={emailSubject.en}
+        subjectFr={emailSubject.fr}
       />
     </>
   );

@@ -45,7 +45,6 @@ export default async function Page({
   if (session && id) {
     try {
       const ability = createAbility(session);
-
       const initialForm = await getFullTemplateByID(ability, id);
 
       if (initialForm === null) {
@@ -99,9 +98,6 @@ export default async function Page({
   if (!session) {
     return (
       <>
-        {/* <Head>
-          <title>{t("responses.title")}</title>
-        </Head> */}
         <div className="max-w-4xl">
           <LoggedOutTab tabName={LoggedOutTabName.RESPONSES} />
         </div>
@@ -110,6 +106,7 @@ export default async function Page({
   }
 
   const deliveryOption = pageProps.initialForm?.deliveryOption;
+  const isPublished = pageProps.initialForm?.isPublished || false;
 
   if (deliveryOption && isEmailDelivery(deliveryOption)) {
     return (
@@ -119,6 +116,8 @@ export default async function Page({
           en: deliveryOption.emailSubjectEn || "",
           fr: deliveryOption.emailSubjectfr || "",
         }}
+        isPublished={isPublished}
+        formId={id}
       />
     );
   }
