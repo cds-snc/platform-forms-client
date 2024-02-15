@@ -3,6 +3,7 @@ import { auth } from "@lib/auth";
 import { createAbility } from "@lib/privileges";
 import { logMessage } from "@lib/logger";
 import { createAppSetting, deleteAppSetting, updateAppSetting } from "@lib/appSettings";
+import { revalidatePath } from "next/cache";
 
 // TODO error handling
 export async function updateSetting(internalId: string, setting: Record<string, unknown>) {
@@ -14,7 +15,11 @@ export async function updateSetting(internalId: string, setting: Record<string, 
   const updatedSetting = await updateAppSetting(ability, internalId, setting);
 
   logMessage.debug(`Updated setting: ${JSON.stringify(updatedSetting)}`);
-  return updatedSetting;
+
+  revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/settings_server");
+
+  // TODO come back to whether this is or should be returning anything
+  // return updatedSetting;
 }
 
 // TODO error handling
@@ -34,7 +39,11 @@ export async function createSetting(internalId: string, setting: Record<string, 
   );
 
   logMessage.debug(`Created setting: ${JSON.stringify(createdSetting)}`);
-  return createdSetting;
+
+  revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/settings_server");
+
+  // TODO come back to whether this is or should be returning anything
+  // return createdSetting;
 }
 
 // TODO error handling
@@ -47,5 +56,9 @@ export async function deleteSetting(internalId: string) {
   await deleteAppSetting(ability, internalId);
 
   logMessage.debug(`Deleted setting: ${internalId}`);
-  return "ok";
+
+  revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/settings_server");
+
+  // TODO come back to whether this is or should be returning anything
+  // return "ok";
 }

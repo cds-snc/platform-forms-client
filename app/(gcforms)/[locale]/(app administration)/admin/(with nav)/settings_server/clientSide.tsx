@@ -6,7 +6,7 @@ import { useTranslation } from "@i18n/client";
 import { ToastContainer, toast } from "@clientComponents/form-builder/app/shared/Toast";
 
 import { Button } from "@clientComponents/globals";
-import { useAccessControl, useRefresh } from "@lib/hooks";
+import { useAccessControl } from "@lib/hooks";
 import { logMessage } from "@lib/logger";
 import { createSetting, deleteSetting, updateSetting } from "./actions";
 
@@ -31,6 +31,8 @@ const ManageSetting = ({
       descriptionFr: formData.get("descriptionFr") as string,
       value: formData.get("value") as string,
     };
+
+    // TODO form validation?
 
     try {
       if (isNewSetting) {
@@ -144,21 +146,19 @@ export const Settings = ({ settings }: SettingsProps) => {
   const [selectedSetting, setSelectedSetting] = useState<Setting | undefined>(undefined);
   const [manageSetting, setManageSetting] = useState(false);
   const { ability } = useAccessControl();
-  const { refreshData } = useRefresh(settings);
   const canManageSettings = ability?.can("update", "Setting") ?? false;
+
   const clearSelection = async () => {
     setSelectedSetting(undefined);
     setManageSetting(false);
-    await refreshData();
   };
 
   // TODO error handling
+
   const deleteSettingAction = async (internalId: string) => {
     try {
       await deleteSetting(internalId);
-
       toast.success(t("deleted"));
-      refreshData();
     } catch (error) {
       logMessage.error(error);
       toast.error(t("error"));
