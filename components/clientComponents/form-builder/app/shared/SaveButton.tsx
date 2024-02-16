@@ -128,7 +128,7 @@ export const SaveButton = () => {
         <ErrorSavingForm />
       ) : (
         <SaveDraft
-          updatedAt={updatedAt ?? null}
+          updatedAt={updatedAt}
           handleSave={handleSave}
           templateIsDirty={templateIsDirty.current}
         />
