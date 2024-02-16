@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
-import { DownloadTable } from "../../responses/DownloadTable";
-import { Nagware } from "../../Nagware";
+import { DownloadTable } from "../DownloadTable";
+import { Nagware } from "@clientComponents/form-builder/app/Nagware";
 import Router from "next/router";
-import { NagLevel, VaultStatus, VaultSubmissionList } from "../../../../../../lib/types";
+import { NagLevel, VaultStatus, VaultSubmissionList } from "@lib/types";
 
 const today = new Date("July 16, 2023").valueOf();
 

@@ -1,6 +1,6 @@
 import { createAbility } from "@lib/privileges";
-import { DeliveryOptionEmail } from "./components/DeliveryOptionEmail";
-import { NavigationTabs } from "./components/NavigationTabs";
+import { DeliveryOptionEmail } from "./_components/DeliveryOptionEmail";
+import { NavigationTabs } from "./_components/NavigationTabs";
 import { isEmailDelivery } from "@clientComponents/form-builder/util";
 import { getFullTemplateByID } from "@lib/templates";
 import { auth } from "@lib/auth";

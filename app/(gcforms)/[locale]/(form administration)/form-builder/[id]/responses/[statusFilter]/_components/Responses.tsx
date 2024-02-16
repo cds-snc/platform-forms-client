@@ -5,15 +5,15 @@ import { FormRecord, VaultSubmissionList } from "@lib/types";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 
-import { DownloadTable } from "@clientComponents/form-builder/app/responses/DownloadTable";
-import { ReportDialog } from "@clientComponents/form-builder/app/responses/Dialogs/ReportDialog";
+import { DownloadTable } from "./DownloadTable";
+import { ReportDialog } from "./Dialogs/ReportDialog";
 import { NagwareResult } from "@lib/types";
 import { Nagware } from "@clientComponents/form-builder/app/Nagware";
 import { ClosedBanner } from "@clientComponents/form-builder/app/shared/ClosedBanner";
 import { WarningIcon } from "@serverComponents/icons";
 import { useRouter, useParams, usePathname } from "next/navigation";
 
-import { ConfirmDialog } from "@clientComponents/form-builder/app/responses/Dialogs/ConfirmDialog";
+import { ConfirmDialog } from "./Dialogs/ConfirmDialog";
 import { Alert } from "@clientComponents/globals";
 
 import { useRehydrate } from "@clientComponents/form-builder/hooks";
