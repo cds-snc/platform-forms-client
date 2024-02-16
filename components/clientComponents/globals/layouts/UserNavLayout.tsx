@@ -5,7 +5,7 @@ import Link from "next/link";
 
 import { Footer, Brand, SkipLink, LanguageToggle } from "@clientComponents/globals";
 import { LoginMenu } from "@clientComponents/auth/LoginMenu";
-import { SiteLogo } from "@clientComponents/icons";
+import { SiteLogo } from "@serverComponents/icons";
 import { ToastContainer } from "@clientComponents/form-builder/app/shared/Toast";
 
 const SiteLink = () => {

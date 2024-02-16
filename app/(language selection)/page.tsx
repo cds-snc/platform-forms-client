@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Fip } from "@clientComponents/globals";
 import { themes } from "@clientComponents/globals";
 
-import { SiteLogo } from "@clientComponents/icons";
+import { SiteLogo } from "@serverComponents/icons";
 
 const Home = () => {
   // With the automatic language detection we can hopefully remove this page in the

@@ -10,7 +10,7 @@ import { themes } from "@clientComponents/globals";
 import { ConfirmDelete } from "@clientComponents/form-builder/app/ConfirmDelete";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { useRefresh } from "@lib/hooks";
-import { ExclamationIcon } from "@clientComponents/icons";
+import { ExclamationIcon } from "@serverComponents/icons";
 import { BackLink } from "@clientComponents/admin/LeftNav/BackLink";
 type User = {
   id: string;

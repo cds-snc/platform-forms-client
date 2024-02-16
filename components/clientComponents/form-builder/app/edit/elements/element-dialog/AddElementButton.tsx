@@ -6,7 +6,7 @@ import { FormElementTypes } from "@lib/types";
 import { Button } from "@clientComponents/globals";
 import { ElementDialog } from "./ElementDialog";
 import { ElementOptionsFilter } from "../../../../types";
-import { AddIcon } from "@clientComponents/icons";
+import { AddIcon } from "@serverComponents/icons";
 
 export const AddElementButton = ({
   filterElements,

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { RoundThinXCloseIcon } from "@clientComponents/icons";
+import { RoundThinXCloseIcon } from "@serverComponents/icons";
 import { useTranslation } from "@i18n/client";
 
 type LineItemProps = {

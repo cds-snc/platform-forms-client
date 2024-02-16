@@ -1,5 +1,5 @@
 "use client";
-import { CheckAllIcon, CheckBoxEmptyIcon, CheckIndeterminateIcon } from "@clientComponents/icons";
+import { CheckAllIcon, CheckBoxEmptyIcon, CheckIndeterminateIcon } from "@serverComponents/icons";
 import { VaultSubmissionList } from "@lib/types";
 import React from "react";
 import { useTranslation } from "@i18n/client";

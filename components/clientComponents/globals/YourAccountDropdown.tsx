@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { ChevronDown } from "@clientComponents/icons";
+import { ChevronDown } from "@serverComponents/icons";
 import { useTranslation } from "@i18n/client";
 import { useAccessControl } from "@lib/hooks";
 import Link from "next/link";

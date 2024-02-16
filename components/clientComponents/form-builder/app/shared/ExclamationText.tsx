@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { ExclamationIcon } from "@clientComponents/icons";
+import { ExclamationIcon } from "@serverComponents/icons";
 
 export const ExclamationText = ({
   text,

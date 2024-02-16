@@ -5,7 +5,7 @@ import { getSession } from "next-auth/react";
 import { Session } from "next-auth";
 
 import { LinkButton } from "@clientComponents/globals";
-import { BackArrowIcon } from "@clientComponents/icons";
+import { BackArrowIcon } from "@serverComponents/icons";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 
 // Start the async call before the component renders

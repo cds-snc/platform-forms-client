@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { ToggleLeft, ToggleRight } from "@clientComponents/icons";
+import { ToggleLeft, ToggleRight } from "@serverComponents/icons";
 
 interface PermissionToggleProps {
   on: boolean;

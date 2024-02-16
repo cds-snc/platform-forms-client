@@ -19,7 +19,7 @@ i18next
   .use(
     resourcesToBackend(
       (language: string, namespace: string) =>
-        import(`../public/static/locales/${language}/${namespace}.json`)
+        import(`./translations/${language}/${namespace}.json`)
     )
   )
   .init({

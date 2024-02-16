@@ -2,7 +2,7 @@
 import React from "react";
 import { cn } from "@lib/utils";
 
-import { BrandingIcon } from "@clientComponents/icons";
+import { BrandingIcon } from "@serverComponents/icons";
 
 type Option = {
   value: string;

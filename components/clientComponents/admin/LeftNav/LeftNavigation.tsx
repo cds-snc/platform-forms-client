@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useAccessControl } from "@lib/hooks";
 import { BackLink } from "@clientComponents/admin/LeftNav/BackLink";
 import { useParams } from "next/navigation";
-import { NameIcon, FlagIcon, GearIcon } from "@clientComponents/icons";
+import { NameIcon, FlagIcon, GearIcon } from "@serverComponents/icons";
 
 export const LeftNavigation = () => {
   const {

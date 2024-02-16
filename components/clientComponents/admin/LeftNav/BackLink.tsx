@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { StyledLink } from "@clientComponents/globals";
-import { BackArrowIcon } from "@clientComponents/icons";
+import { BackArrowIcon } from "@serverComponents/icons";
 
 type BackLinkProps = {
   href: string;

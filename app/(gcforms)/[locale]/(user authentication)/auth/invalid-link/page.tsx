@@ -1,7 +1,7 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import UserNavLayout from "@clientComponents/globals/layouts/UserNavLayout";
-import { BackArrowIcon } from "@clientComponents/icons";
+import { BackArrowIcon } from "@serverComponents/icons";
 import { PrimaryLinkButton, SecondaryLinkButton } from "@clientComponents/globals";
 
 export async function generateMetadata({

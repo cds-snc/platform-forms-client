@@ -2,7 +2,7 @@ import { requireAuthentication } from "@lib/auth";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { serverTranslation } from "@i18n";
 import Link from "next/link";
-import { ManageAccountsIcon, SettingsApplicationsIcon } from "@clientComponents/icons";
+import { ManageAccountsIcon, SettingsApplicationsIcon } from "@serverComponents/icons";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
