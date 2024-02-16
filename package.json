@@ -1,6 +1,6 @@
 {
   "name": "gcforms",
-  "version": "3.12.4",
+  "version": "3.12.5",
   "private": true,
   "prisma": {
     "seed": "tsx prisma/seeds/seed_cli.ts --environment=development"
@@ -67,7 +67,7 @@
     "file-type": "^19.0.0",
     "formik": "2.4.5",
     "htmlparser2": "8.0.2",
-    "i18next": "^23.7.11",
+    "i18next": "^23.8.2",
     "i18next-browser-languagedetector": "^7.2.0",
     "i18next-resources-to-backend": "^1.2.0",
     "immer": "10.0.3",
@@ -91,7 +91,7 @@
     "react-app-polyfill": "3.0.0",
     "react-aria": "3.31.0",
     "react-dom": "^18.2.0",
-    "react-i18next": "^13.5.0",
+    "react-i18next": "^14.0.5",
     "react-roving-tabindex": "^3.2.0",
     "react-select": "5.8.0",
     "react-tabs": "4.3.0",

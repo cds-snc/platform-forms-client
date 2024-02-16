@@ -27,7 +27,7 @@ export const getOrCreateUser = async ({
 }): Promise<{
   newlyRegistered?: boolean;
   name: string | null;
-  email: string | null;
+  email: string;
   privileges: Privilege[];
   id: string;
   active: boolean;

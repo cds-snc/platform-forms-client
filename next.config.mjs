@@ -62,13 +62,6 @@ const nextConfig = {
     instrumentationHook: true,
     // ppr: true, -- This is not yet ready for production use
   },
-  typescript: {
-    // !! WARN !!
-    // Dangerously allow production builds to successfully complete even if
-    // your project has type errors.
-    // !! WARN !!
-    ignoreBuildErrors: true,
-  },
 };
 
 export default nextConfig;

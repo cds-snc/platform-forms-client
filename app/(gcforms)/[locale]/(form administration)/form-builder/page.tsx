@@ -19,7 +19,7 @@ export async function generateMetadata({
 
 export default async function Page(params: { locale: string }) {
   return (
-    <FormBuilderInitializer locale={params.locale} hideLeftNav>
+    <FormBuilderInitializer locale={params.locale}>
       <FullWidthLayout context="default">
         <Start />
       </FullWidthLayout>

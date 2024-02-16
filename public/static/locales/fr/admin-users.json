@@ -41,7 +41,7 @@
   "backToAccounts": "Retourner à Comptes",
   "backToManageForms": "Retourner à Gérer les formulaires",
   "lockPublishing": "Vérouiller la publication",
-  "unlockPublishing" : "Déverrouiller la publication",
+  "unlockPublishing": "Déverrouiller la publication",
   "mustHaveAtLeastOneUser": "Doit assigner au moins un·e utilisateur·rice.",
   "accountsFilterLabel": "Filtrer les comptes",
   "accountsFilter": {
@@ -51,5 +51,8 @@
     "noAccounts": "Aucun compte",
     "noActiveAccounts": "Aucun compte activé",
     "noDeactivatedAccounts": "Aucun compte désactivé"
-  }
+  },
+  "systemAdministration": "Administration du système",
+  "accountAdministration": "Administration des comptes",
+  "userAdministration": "Administration des l’utilisateurs"
 }
