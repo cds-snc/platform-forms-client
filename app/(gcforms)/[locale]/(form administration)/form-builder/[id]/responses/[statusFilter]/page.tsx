@@ -8,7 +8,7 @@ import { VaultStatus } from "@lib/types";
 import { listAllSubmissions } from "@lib/vault";
 import { getAppSetting } from "@lib/appSettings";
 import { isResponseId } from "@lib/validation";
-import { Responses, ResponsesProps } from "./_components/Responses";
+import { Responses, ResponsesProps } from "./components/Responses";
 import { ucfirst } from "@lib/client/clientHelpers";
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
 
