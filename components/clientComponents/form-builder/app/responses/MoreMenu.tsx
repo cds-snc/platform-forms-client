@@ -1,6 +1,6 @@
 import React from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { DeleteIcon, DownloadIcon, MoreIcon } from "@clientComponents/icons";
+import { DeleteIcon, DownloadIcon, MoreIcon } from "@serverComponents/icons";
 import axios from "axios";
 import { useTranslation } from "@i18n/client";
 import { logMessage } from "@lib/logger";

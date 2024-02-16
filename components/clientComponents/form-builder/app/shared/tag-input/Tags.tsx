@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 
-import { RoundCloseIcon } from "@clientComponents/icons";
+import { RoundCloseIcon } from "@serverComponents/icons";
 import { useTranslation } from "@i18n/client";
 
 type TagProps = {

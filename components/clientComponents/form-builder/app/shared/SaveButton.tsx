@@ -7,15 +7,16 @@ import { Button, StyledLink } from "@clientComponents/globals";
 import { useTemplateStore } from "../../store";
 import { useTemplateStatus, useTemplateContext } from "../../hooks";
 import { formatDateTime } from "../../util";
-import { useActivePathname } from "@clientComponents/form-builder/hooks";
-import { SavedFailIcon, SavedCheckIcon } from "@clientComponents/icons";
+import { SavedFailIcon, SavedCheckIcon } from "@serverComponents/icons";
+import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 
 const SaveDraft = ({
   updatedAt,
   handleSave,
   templateIsDirty,
 }: {
-  updatedAt: number | null;
+  updatedAt: number | undefined;
   handleSave: () => void;
   templateIsDirty: boolean;
 }) => {
@@ -84,9 +85,9 @@ export const SaveButton = () => {
   }));
 
   const { error, saveForm, templateIsDirty } = useTemplateContext();
-  const { activePathname } = useActivePathname();
   const { status } = useSession();
   const { updatedAt, getTemplateById } = useTemplateStatus();
+  const pathname = usePathname();
 
   const handleSave = async () => {
     const saved = await saveForm();
@@ -96,12 +97,18 @@ export const SaveButton = () => {
     }
   };
 
+  useEffect(() => {
+    return () => {
+      saveForm();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   if (isPublished) {
     return null;
   }
 
-  const showSave =
-    activePathname === "/form-builder/edit" || activePathname === "/form-builder/edit/translate";
+  const showSave = pathname.includes("edit") || pathname.includes("translate");
 
   if (!showSave) {
     return null;
@@ -121,7 +128,7 @@ export const SaveButton = () => {
         <ErrorSavingForm />
       ) : (
         <SaveDraft
-          updatedAt={updatedAt ?? null}
+          updatedAt={updatedAt}
           handleSave={handleSave}
           templateIsDirty={templateIsDirty.current}
         />

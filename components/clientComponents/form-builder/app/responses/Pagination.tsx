@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams, useParams } from "next/navigation";
-import { BackArrowIcon, ForwardArrowIcon, StartIcon } from "@clientComponents/icons";
+import { BackArrowIcon, ForwardArrowIcon, StartIcon } from "@serverComponents/icons";
 import { useTranslation } from "@i18n/client";
 
 export const Pagination = ({
@@ -21,12 +21,9 @@ export const Pagination = ({
     i18n: { language },
   } = useTranslation("form-builder-responses");
   const router = useRouter();
-
-  // Need statusQuery when building up the prev/next links
   const searchParams = useSearchParams();
-  const { slug } = useParams();
-  // 1st dynamic param is formId, 2nd is statusQuery
-  const statusQuery = slug[1] || "new";
+  const { statusFilter } = useParams<{ statusFilter: string }>();
+
   // Extract responseId from lastEvaluatedKey object
   const lastEvaluatedResponseId = lastEvaluatedKey
     ? lastEvaluatedKey.NAME_OR_CONF.split("#")[1]
@@ -49,10 +46,12 @@ export const Pagination = ({
     } catch (e) {
       // If the base64 encoded string has been tampered with, redirect to the first page
       router.push(
-        `/${language}/form-builder/responses/${formId}${statusQuery ? "/" + statusQuery : ""}`
+        `/${language}/form-builder/${formId}/responses/${
+          statusFilter ? `/${statusFilter}` : "/new"
+        }`
       );
     }
-  }, [formId, router, searchParams, statusQuery, language]);
+  }, [formId, router, searchParams, statusFilter, language]);
 
   // When going back, we pop the last item off the keys array
   const previousKeys = keys.slice(0, -1);
@@ -90,13 +89,13 @@ export const Pagination = ({
     <>
       <Link
         href={`/${language}/form-builder/responses/${formId}${
-          statusQuery ? "/" + statusQuery : ""
+          statusFilter ? `/${statusFilter}` : "/new"
         }`}
         legacyBehavior
       >
         <a
           href={`/${language}/form-builder/responses/${formId}${
-            statusQuery ? "/" + statusQuery : ""
+            statusFilter ? `/${statusFilter}` : "/new"
           }`}
           className={`group mr-4 inline-block ${
             isFirstPage ? "pointer-events-none opacity-50" : ""
@@ -111,13 +110,13 @@ export const Pagination = ({
       <div className="float-right inline-block">
         <Link
           href={`/${language}/form-builder/responses/${formId}${
-            statusQuery ? "/" + statusQuery : ""
+            statusFilter ? `/${statusFilter}` : "/new"
           }${previousLink}`}
           legacyBehavior
         >
           <a
             href={`/${language}/form-builder/responses/${formId}${
-              statusQuery ? "/" + statusQuery : ""
+              statusFilter ? `/${statusFilter}` : "/new"
             }${previousLink}`}
             className={`group mr-4 inline-block ${
               isFirstPage ? "pointer-events-none opacity-50" : ""
@@ -131,13 +130,13 @@ export const Pagination = ({
         {t("downloadResponsesTable.header.pagination.showing", { start, end })}
         <Link
           href={`/${language}/form-builder/responses/${formId}${
-            statusQuery ? "/" + statusQuery : ""
+            statusFilter ? `/${statusFilter}` : "/new"
           }?keys=${btoa(keys.join(","))}&lastKey=${lastEvaluatedResponseId}`}
           legacyBehavior
         >
           <a
             href={`/${language}/form-builder/responses/${formId}${
-              statusQuery ? "/" + statusQuery : ""
+              statusFilter ? `/${statusFilter}` : "/new"
             }?keys=${btoa(keys.join(","))}&lastKey=${lastEvaluatedResponseId}`}
             className={`group ml-4 inline-block ${
               isLastPage ? "pointer-events-none opacity-50" : ""

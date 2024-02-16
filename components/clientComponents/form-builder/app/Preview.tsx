@@ -9,7 +9,7 @@ import { PublicFormRecord } from "@lib/types";
 import { Button, Form, RichText, ClosedPage, NextButton } from "@clientComponents/forms";
 import { LocalizedElementProperties, LocalizedFormProperties } from "../types";
 import { useTemplateStore } from "../store";
-import { BackArrowIcon } from "../../icons";
+import { BackArrowIcon } from "../../../serverComponents/icons";
 import Brand from "@clientComponents/globals/Brand";
 import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useTranslation } from "@i18n/client";
-import { LockIcon } from "../../../icons";
+import { LockIcon } from "../../../../serverComponents/icons";
 
 export const LockedBadge = ({ className }: { className?: string }) => {
   const { t } = useTranslation("form-builder");

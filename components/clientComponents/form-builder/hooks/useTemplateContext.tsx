@@ -11,7 +11,7 @@ import { DownloadFileButton } from "../app/shared";
 
 interface TemplateApiType {
   error: string | null | undefined;
-  saveForm: () => Promise<boolean>;
+  saveForm: () => Promise<boolean | { newForm: boolean; id: string } | unknown>;
   templateIsDirty: React.MutableRefObject<boolean>;
   nameChanged: boolean | null;
   introChanged: boolean | null;
@@ -144,35 +144,42 @@ export function TemplateApiProvider({ children }: { children: React.ReactNode })
 
   const { save } = useTemplateApi();
 
-  const saveForm = useCallback(async () => {
-    try {
-      if (templateIsDirty.current && status === "authenticated" && !getIsPublished()) {
-        logMessage.debug("Saving Template to server");
-        const result = await save({
-          jsonConfig: getSchema(),
-          name: getName(),
-          formID: id,
-        });
+  const saveForm = useCallback(() => {
+    // eslint-disable-next-line no-async-promise-executor
+    return new Promise(async (resolve, reject) => {
+      try {
+        if (templateIsDirty.current && status === "authenticated" && !getIsPublished()) {
+          logMessage.debug("Saving Template to server");
+          const result = await save({
+            jsonConfig: getSchema(),
+            name: getName(),
+            formID: id,
+          });
 
-        if (result && result?.error) {
-          throw result?.error as Error;
+          if (result && result?.error) {
+            throw result?.error as Error;
+          }
+
+          setError(null);
+          setNameChanged(null);
+          setIntroChanged(null);
+          setPrivacyChanged(null);
+          setConfirmationChanged(null);
+          templateIsDirty.current = false;
+          setId(result?.id);
+
+          resolve({
+            newForm: id === "",
+            id: result?.id,
+          });
         }
-
-        setError(null);
-        setNameChanged(null);
-        setIntroChanged(null);
-        setPrivacyChanged(null);
-        setConfirmationChanged(null);
-        templateIsDirty.current = false;
-        setId(result?.id);
+      } catch (err) {
+        logMessage.error(err as Error);
+        setError(t("errorSaving"));
+        toast.error(<ErrorSaving supportHref={supportHref} />, "wide");
+        reject(false);
       }
-      return true;
-    } catch (err) {
-      logMessage.error(err as Error);
-      setError(t("errorSaving"));
-      toast.error(<ErrorSaving supportHref={supportHref} />, "wide");
-      return false;
-    }
+    });
   }, [status, getIsPublished, getSchema, getName, id, save, setError, setId, t, supportHref]);
 
   return (

@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "../../store";
 import { useDialogRef, Dialog } from ".";
-import { InfoIcon } from "../../../icons";
+import { InfoIcon } from "../../../../serverComponents/icons";
 import { getDate, slugify } from "@lib/client/clientHelpers";
 
 const FormDownloadDialog = ({ handleClose }: { handleClose: () => void }) => {

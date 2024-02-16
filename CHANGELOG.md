@@ -7,19 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.12.5](https://github.com/cds-snc/platform-forms-client/compare/v3.12.4...v3.12.5) (2024-02-12)
 
-
 ### Bug Fixes
 
-* Delete forms with unprocessed submission is not warning user ([#3244](https://github.com/cds-snc/platform-forms-client/issues/3244)) ([3988d75](https://github.com/cds-snc/platform-forms-client/commit/3988d756adec58fe3076b89468cd7fe77e1bd22a))
-* String ID showing up rather than text itself ([#3247](https://github.com/cds-snc/platform-forms-client/issues/3247)) ([c2f8134](https://github.com/cds-snc/platform-forms-client/commit/c2f8134f1365072247df62b450ccbf461f9afa2d))
-
+- Delete forms with unprocessed submission is not warning user ([#3244](https://github.com/cds-snc/platform-forms-client/issues/3244)) ([3988d75](https://github.com/cds-snc/platform-forms-client/commit/3988d756adec58fe3076b89468cd7fe77e1bd22a))
+- String ID showing up rather than text itself ([#3247](https://github.com/cds-snc/platform-forms-client/issues/3247)) ([c2f8134](https://github.com/cds-snc/platform-forms-client/commit/c2f8134f1365072247df62b450ccbf461f9afa2d))
 
 ### Miscellaneous Chores
 
-* cleaning up content on translations page ([#3210](https://github.com/cds-snc/platform-forms-client/issues/3210)) ([faa1263](https://github.com/cds-snc/platform-forms-client/commit/faa12633ddf7382bb2ae51dc52933a39cb01501c))
-* **deps:** update all non-major github action dependencies ([#3231](https://github.com/cds-snc/platform-forms-client/issues/3231)) ([0827ae9](https://github.com/cds-snc/platform-forms-client/commit/0827ae905dc4e60c946bf447dab4d3a76eb3c003))
-* small content tweaks found while testing ([#3233](https://github.com/cds-snc/platform-forms-client/issues/3233)) ([bcea609](https://github.com/cds-snc/platform-forms-client/commit/bcea6096401ec8f5e9885b4bbdff176aeca2a403))
-* Update branding options ([#3183](https://github.com/cds-snc/platform-forms-client/issues/3183)) ([90f1050](https://github.com/cds-snc/platform-forms-client/commit/90f10507d10b56328b33d552be302ce58092bd88))
+- cleaning up content on translations page ([#3210](https://github.com/cds-snc/platform-forms-client/issues/3210)) ([faa1263](https://github.com/cds-snc/platform-forms-client/commit/faa12633ddf7382bb2ae51dc52933a39cb01501c))
+- **deps:** update all non-major github action dependencies ([#3231](https://github.com/cds-snc/platform-forms-client/issues/3231)) ([0827ae9](https://github.com/cds-snc/platform-forms-client/commit/0827ae905dc4e60c946bf447dab4d3a76eb3c003))
+- small content tweaks found while testing ([#3233](https://github.com/cds-snc/platform-forms-client/issues/3233)) ([bcea609](https://github.com/cds-snc/platform-forms-client/commit/bcea6096401ec8f5e9885b4bbdff176aeca2a403))
+- Update branding options ([#3183](https://github.com/cds-snc/platform-forms-client/issues/3183)) ([90f1050](https://github.com/cds-snc/platform-forms-client/commit/90f10507d10b56328b33d552be302ce58092bd88))
 
 ## [3.12.4](https://github.com/cds-snc/platform-forms-client/compare/v3.12.3...v3.12.4) (2024-02-05)
 

@@ -13,7 +13,7 @@ import {
   Duplicate,
   ThreeDotsIcon,
   AddIcon,
-} from "@clientComponents/icons";
+} from "@serverComponents/icons";
 
 import { usePanelActions } from "@clientComponents/form-builder/hooks";
 import { ElementDialog } from "./elements/element-dialog/ElementDialog";

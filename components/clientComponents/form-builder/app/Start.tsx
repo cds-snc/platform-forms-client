@@ -4,7 +4,7 @@ import { useTranslation } from "@i18n/client";
 import { useRouter } from "next/navigation";
 
 import { useTemplateStore, clearTemplateStore } from "../store/useTemplateStore";
-import { DesignIcon, ExternalLinkIcon, WarningIcon } from "@clientComponents/icons";
+import { DesignIcon, ExternalLinkIcon, WarningIcon } from "@serverComponents/icons";
 import { errorMessage, validateTemplate } from "../validate";
 import Link from "next/link";
 
@@ -113,7 +113,7 @@ export const Start = () => {
             // clear any existing form data
             clearTemplateStore();
             initialize(language);
-            router.push(`/${language}/form-builder/edit`);
+            router.push(`/${language}/form-builder/0000/edit`);
           }}
         >
           <DesignIcon className="mb-2 scale-125" />

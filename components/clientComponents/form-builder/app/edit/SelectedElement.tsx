@@ -3,7 +3,7 @@ import React from "react";
 import { FormElementTypes, HTMLTextInputTypeAttribute } from "@lib/types";
 import { useTranslation } from "@i18n/client";
 
-import { CheckBoxEmptyIcon, CheckIcon, RadioEmptyIcon } from "../../../icons";
+import { CheckBoxEmptyIcon, CheckIcon, RadioEmptyIcon } from "../../../../serverComponents/icons";
 import { ShortAnswer, Options, SubOptions, RichText, SubElement } from "./elements";
 import { ElementOption, FormElementWithIndex } from "../../types";
 import { useElementOptions } from "../../hooks";

@@ -3,7 +3,7 @@ import React from "react";
 import { useTranslation } from "@i18n/client";
 import { FormElementWithIndex } from "@clientComponents/form-builder/types";
 import { useTemplateStore } from "@clientComponents/form-builder/store";
-import { ConditionalIcon } from "@clientComponents/icons/ConditionalIcon";
+import { ConditionalIcon } from "@serverComponents/icons/ConditionalIcon";
 import { getQuestionNumber } from "@formbuilder/util";
 import { getElementIndexes } from "@formbuilder/getPath";
 
