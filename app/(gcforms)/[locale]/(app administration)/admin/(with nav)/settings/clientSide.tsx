@@ -1,14 +1,14 @@
 "use client";
 import React, { useState } from "react";
-import axios from "axios";
 import { Setting } from "@prisma/client";
 import { useTranslation } from "@i18n/client";
 
 import { ToastContainer, toast } from "@clientComponents/form-builder/app/shared/Toast";
 
 import { Button } from "@clientComponents/globals";
-import { useAccessControl, useRefresh } from "@lib/hooks";
+import { useAccessControl } from "@lib/hooks";
 import { logMessage } from "@lib/logger";
+import { createSetting, deleteSetting, updateSetting } from "./actions";
 
 const ManageSetting = ({
   setting,
@@ -19,24 +19,26 @@ const ManageSetting = ({
   clearSelection: () => Promise<void>;
   canManageSettings: boolean;
 }) => {
-  const [_setting, _setSetting] = useState(setting);
   const { t } = useTranslation("admin-settings");
-  const newSetting = !setting.internalId;
+  const isNewSetting = !setting.internalId;
 
-  const saveSetting = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const saveSettingServer = async (formData: FormData) => {
+    const setting = {
+      internalId: formData.get("internalId") as string,
+      nameEn: formData.get("nameEn") as string,
+      nameFr: formData.get("nameFr") as string,
+      descriptionEn: formData.get("descriptionEn") as string,
+      descriptionFr: formData.get("descriptionFr") as string,
+      value: formData.get("value") as string,
+    };
+
+    // TODO form validation?
 
     try {
-      const result = await axios({
-        method: newSetting ? "POST" : "PUT",
-        url: newSetting ? "/api/settings" : `/api/settings/${setting.internalId}`,
-        data: _setting,
-        timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-      });
-      logMessage.debug(result);
-      if (result.data === null) {
-        toast.error("Duplicate Internal Id");
-        return;
+      if (isNewSetting) {
+        await createSetting(setting.internalId, setting);
+      } else {
+        await updateSetting(setting.internalId, setting);
       }
 
       toast.success(t("success"));
@@ -49,14 +51,13 @@ const ManageSetting = ({
 
   return (
     <div className="gc-form">
-      <form onSubmit={saveSetting} method="POST">
+      <form action={saveSettingServer}>
         <label htmlFor="internalId" className="gc-label mt-2 mb-0">
           {t("label.internalId")}
         </label>
         <input
           className="gc-input-text mb-1"
-          onChange={(e) => _setSetting((oldVal) => ({ ...oldVal, internalId: e.target.value }))}
-          value={_setting.internalId}
+          defaultValue={setting.internalId}
           type="text"
           name="internalId"
           disabled={!canManageSettings}
@@ -66,8 +67,7 @@ const ManageSetting = ({
         </label>
         <input
           className="gc-input-text mb-1"
-          onChange={(e) => _setSetting((oldVal) => ({ ...oldVal, nameEn: e.target.value }))}
-          value={_setting.nameEn}
+          defaultValue={setting.nameEn}
           type="text"
           name="nameEn"
           id="nameEn"
@@ -78,8 +78,7 @@ const ManageSetting = ({
         </label>
         <input
           className="gc-input-text mb-1"
-          onChange={(e) => _setSetting((oldVal) => ({ ...oldVal, nameFr: e.target.value }))}
-          value={_setting.nameFr}
+          defaultValue={setting.nameFr}
           type="text"
           name="nameFr"
           id="nameFr"
@@ -90,8 +89,7 @@ const ManageSetting = ({
         </label>
         <input
           className="gc-input-text mb-1"
-          onChange={(e) => _setSetting((oldVal) => ({ ...oldVal, descriptionEn: e.target.value }))}
-          value={_setting.descriptionEn ?? ""}
+          defaultValue={setting.descriptionEn ?? ""}
           type="text"
           name="descriptionEn"
           id="descriptionEn"
@@ -102,8 +100,7 @@ const ManageSetting = ({
         </label>
         <input
           className="gc-input-text mb-1"
-          onChange={(e) => _setSetting((oldVal) => ({ ...oldVal, descriptionFr: e.target.value }))}
-          value={_setting.descriptionFr ?? ""}
+          defaultValue={setting.descriptionFr ?? ""}
           type="text"
           name="descriptionFr"
           id="descriptionFr"
@@ -114,11 +111,10 @@ const ManageSetting = ({
         </label>
         <input
           className="gc-input-text mb-1"
-          onChange={(e) => _setSetting((oldVal) => ({ ...oldVal, value: e.target.value }))}
-          value={_setting.value ?? ""}
+          defaultValue={setting.value ?? ""}
           type="text"
-          name="internalId"
-          id="internalId"
+          name="value"
+          id="value"
           disabled={!canManageSettings}
         />
         {canManageSettings ? (
@@ -150,26 +146,19 @@ export const Settings = ({ settings }: SettingsProps) => {
   const [selectedSetting, setSelectedSetting] = useState<Setting | undefined>(undefined);
   const [manageSetting, setManageSetting] = useState(false);
   const { ability } = useAccessControl();
-  const { refreshData } = useRefresh(settings);
   const canManageSettings = ability?.can("update", "Setting") ?? false;
+
   const clearSelection = async () => {
     setSelectedSetting(undefined);
     setManageSetting(false);
-    await refreshData();
   };
 
-  const deleteSetting = async (internalId: string) => {
+  // TODO error handling
+
+  const deleteSettingAction = async (internalId: string) => {
     try {
-      await axios({
-        url: `/api/settings/${internalId}`,
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-      });
+      await deleteSetting(internalId);
       toast.success(t("deleted"));
-      refreshData();
     } catch (error) {
       logMessage.error(error);
       toast.error(t("error"));
@@ -209,7 +198,7 @@ export const Settings = ({ settings }: SettingsProps) => {
                       type="button"
                       theme="destructive"
                       className="text-sm whitespace-nowrap"
-                      onClick={() => deleteSetting(setting.internalId)}
+                      onClick={() => deleteSettingAction(setting.internalId)}
                     >
                       {t("deleteSetting")}
                     </Button>

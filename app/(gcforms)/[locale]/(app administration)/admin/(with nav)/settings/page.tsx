@@ -4,6 +4,8 @@ import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { Metadata } from "next";
 import { Settings } from "./clientSide";
 import { getAllAppSettings } from "@lib/appSettings";
+import { Suspense } from "react";
+import Loader from "@clientComponents/globals/Loader";
 
 export async function generateMetadata({
   params: { locale },
@@ -28,7 +30,9 @@ export default async function Page() {
   return (
     <>
       <h1 className="border-0 mb-10">{t("title")}</h1>
-      <Settings settings={settings} />
+      <Suspense fallback={<Loader />}>
+        <Settings settings={settings} />
+      </Suspense>
     </>
   );
 }
