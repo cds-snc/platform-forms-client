@@ -4,7 +4,7 @@ import { VaultSubmissionList } from "@lib/types";
 import React from "react";
 import { useTranslation } from "@i18n/client";
 import { ReducerTableItemsActions, TableActions } from "./DownloadTableReducer";
-import { Tooltip } from "../../../../../../../../../components/clientComponents/form-builder/app/shared/Tooltip";
+import { Tooltip } from "@clientComponents/form-builder/app/shared/Tooltip";
 
 export const CheckAll = ({
   tableItems,
