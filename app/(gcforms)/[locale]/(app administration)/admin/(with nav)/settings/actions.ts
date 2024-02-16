@@ -16,7 +16,7 @@ export async function updateSetting(internalId: string, setting: Record<string, 
 
   logMessage.debug(`Updated setting: ${JSON.stringify(updatedSetting)}`);
 
-  revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/settings_server");
+  revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/settings");
 
   // TODO come back to whether this is or should be returning anything
   // return updatedSetting;
@@ -40,7 +40,7 @@ export async function createSetting(internalId: string, setting: Record<string, 
 
   logMessage.debug(`Created setting: ${JSON.stringify(createdSetting)}`);
 
-  revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/settings_server");
+  revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/settings");
 
   // TODO come back to whether this is or should be returning anything
   // return createdSetting;
@@ -57,7 +57,7 @@ export async function deleteSetting(internalId: string) {
 
   logMessage.debug(`Deleted setting: ${internalId}`);
 
-  revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/settings_server");
+  revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/settings");
 
   // TODO come back to whether this is or should be returning anything
   // return "ok";
