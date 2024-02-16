@@ -8,7 +8,7 @@ import axios from "axios";
 import { DownloadFormat } from "@lib/responseDownloadFormats/types";
 import JSZip from "jszip";
 import { getDate, slugify } from "@lib/client/clientHelpers";
-import { SpinnerIcon } from "@clientComponents/icons/SpinnerIcon";
+import { SpinnerIcon } from "@serverComponents/icons/SpinnerIcon";
 
 export const DownloadDialog = ({
   checkedItems,

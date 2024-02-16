@@ -3,7 +3,7 @@ import { ToastContainer } from "@clientComponents/form-builder/app/shared/Toast"
 import { LeftNavigation } from "@serverComponents/admin/LeftNavigation";
 import Link from "next/link";
 import { serverTranslation } from "@i18n";
-import { SiteLogo } from "@clientComponents/icons";
+import { SiteLogo } from "@serverComponents/icons";
 import LanguageToggle from "@serverComponents/globals/LanguageToggle";
 import { YourAccountDropdown } from "@clientComponents/globals/YourAccountDropdown";
 import { auth } from "@lib/auth";

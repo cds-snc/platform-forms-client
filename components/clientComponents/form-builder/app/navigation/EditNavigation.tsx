@@ -4,7 +4,7 @@ import { useTranslation } from "@i18n/client";
 import { SubNavLink } from "./SubNavLink";
 import { useActivePathname } from "@clientComponents/form-builder/hooks";
 import { LangSwitcher } from "../shared/LangSwitcher";
-import { QuestionsIcon, TranslateIcon } from "@clientComponents/icons";
+import { QuestionsIcon, TranslateIcon } from "@serverComponents/icons";
 import { useTemplateStore } from "@clientComponents/form-builder/store";
 
 export const EditNavigation = ({ id }: { id: string }) => {

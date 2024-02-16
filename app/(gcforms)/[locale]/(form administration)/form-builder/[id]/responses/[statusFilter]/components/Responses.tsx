@@ -10,7 +10,7 @@ import { ReportDialog } from "@clientComponents/form-builder/app/responses/Dialo
 import { NagwareResult } from "@lib/types";
 import { Nagware } from "@clientComponents/form-builder/app/Nagware";
 import { ClosedBanner } from "@clientComponents/form-builder/app/shared/ClosedBanner";
-import { WarningIcon } from "@clientComponents/icons";
+import { WarningIcon } from "@serverComponents/icons";
 import { useRouter, useParams, usePathname } from "next/navigation";
 
 import { ConfirmDialog } from "@clientComponents/form-builder/app/responses/Dialogs/ConfirmDialog";

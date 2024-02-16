@@ -15,7 +15,7 @@ import {
   UploadIcon,
   GavelIcon,
   DepartmentsIcon,
-} from "@clientComponents/icons";
+} from "@serverComponents/icons";
 
 import {
   RichText,

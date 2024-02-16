@@ -2,7 +2,7 @@
 import React, { useRef, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
-import { CancelIcon, CircleCheckIcon } from "@clientComponents/icons";
+import { CancelIcon, CircleCheckIcon } from "@serverComponents/icons";
 import { EditSecurityQuestionModal } from "@clientComponents/admin/Profile/EditSecurityQuestionModal";
 
 interface ProfileProps {

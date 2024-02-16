@@ -2,7 +2,7 @@
 import { useTranslation } from "@i18n/client";
 import { PreviewNavigation, Preview } from "@clientComponents/form-builder/app";
 import { useTemplateStore } from "@clientComponents/form-builder/store";
-import { LockIcon } from "@clientComponents/icons";
+import { LockIcon } from "@serverComponents/icons";
 import Markdown from "markdown-to-jsx";
 
 export const ClientSide = () => {

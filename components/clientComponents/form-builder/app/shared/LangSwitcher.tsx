@@ -2,7 +2,7 @@
 import React from "react";
 import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@clientComponents/form-builder/store";
-import { ToggleLeft, ToggleRight } from "@clientComponents/icons";
+import { ToggleLeft, ToggleRight } from "@serverComponents/icons";
 
 interface LangSwitcherProps {
   descriptionLangKey: string;

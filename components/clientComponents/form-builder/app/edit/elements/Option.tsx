@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { useTranslation } from "@i18n/client";
 import debounce from "lodash.debounce";
 
-import { Close } from "../../../../icons";
+import { Close } from "../../../../../serverComponents/icons";
 import { Button } from "@clientComponents/globals";
 import { Input } from "../../shared/Input";
 import { useTemplateStore } from "../../../store/useTemplateStore";

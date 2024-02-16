@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { RocketIcon } from "../../icons/RocketIcon";
+import { RocketIcon } from "../../../serverComponents/icons/RocketIcon";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { LinkButton } from "@clientComponents/globals";

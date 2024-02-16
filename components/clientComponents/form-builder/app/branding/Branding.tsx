@@ -12,7 +12,7 @@ import { useTemplateApi } from "../../hooks";
 import { toast } from "../shared";
 import { Button } from "@clientComponents/globals";
 import Brand from "@clientComponents/globals/Brand";
-import { ExternalLinkIcon } from "@clientComponents/icons";
+import { ExternalLinkIcon } from "@serverComponents/icons";
 
 const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element | string }) => {
   return (

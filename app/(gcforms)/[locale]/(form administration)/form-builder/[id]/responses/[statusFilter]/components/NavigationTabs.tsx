@@ -1,5 +1,5 @@
 import React from "react";
-import { DeleteIcon, FolderIcon, InboxIcon } from "@clientComponents/icons";
+import { DeleteIcon, FolderIcon, InboxIcon } from "@serverComponents/icons";
 import { TabNavLink } from "@clientComponents/form-builder/app/navigation/TabNavLink";
 import { VaultStatus } from "@lib/types";
 import { serverTranslation } from "@i18n";

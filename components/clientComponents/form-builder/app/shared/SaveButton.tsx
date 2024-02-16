@@ -7,7 +7,7 @@ import { Button, StyledLink } from "@clientComponents/globals";
 import { useTemplateStore } from "../../store";
 import { useTemplateStatus, useTemplateContext } from "../../hooks";
 import { formatDateTime } from "../../util";
-import { SavedFailIcon, SavedCheckIcon } from "@clientComponents/icons";
+import { SavedFailIcon, SavedCheckIcon } from "@serverComponents/icons";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 

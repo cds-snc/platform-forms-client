@@ -7,7 +7,7 @@ import {
   NavPublishIcon,
   NavSettingsIcon,
   NavResponsesIcon,
-} from "@clientComponents/icons";
+} from "@serverComponents/icons";
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { LeftNav } from "@clientComponents/globals/Buttons/LinkButton";
 import { useSelectedLayoutSegment } from "next/navigation";

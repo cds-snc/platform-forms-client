@@ -1,5 +1,5 @@
 "use client";
-import { AddIcon, RemoveIcon } from "@clientComponents/icons";
+import { AddIcon, RemoveIcon } from "@serverComponents/icons";
 import React from "react";
 
 export const InfoDetails = ({

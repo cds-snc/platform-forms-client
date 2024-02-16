@@ -3,7 +3,7 @@ import React from "react";
 import { useTranslation } from "@i18n/client";
 
 import { LinkButton } from "@clientComponents/globals";
-import { BackArrowIcon } from "@clientComponents/icons";
+import { BackArrowIcon } from "@serverComponents/icons";
 
 export const Expired2faSession = () => {
   const { t, i18n } = useTranslation(["cognito-errors", "common"]);

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 
 import { useTemplateStore } from "../store";
 import { useTemplateApi, useAllowPublish, useRehydrate } from "../hooks";
-import { CancelIcon, CircleCheckIcon, LockIcon } from "../../icons";
+import { CancelIcon, CircleCheckIcon, LockIcon } from "../../../serverComponents/icons";
 import { Button, Alert } from "@clientComponents/globals";
 import Link from "next/link";
 import { isVaultDelivery } from "@clientComponents/form-builder/util";

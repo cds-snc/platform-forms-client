@@ -1,5 +1,5 @@
 "use client";
-import { DownloadIcon } from "@clientComponents/icons";
+import { DownloadIcon } from "@serverComponents/icons";
 import { logMessage } from "@lib/logger";
 import axios from "axios";
 import React from "react";

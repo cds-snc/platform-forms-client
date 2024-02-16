@@ -4,10 +4,10 @@ import { useTranslation } from "@i18n/client";
 import { RichText } from "@clientComponents/forms";
 import { getProperty } from "@lib/i18nHelpers";
 import { PublicFormRecord } from "@lib/types";
-import { ClosedFormIcon } from "@clientComponents/icons";
+import { ClosedFormIcon } from "@serverComponents/icons";
 
 import { LinkButton } from "@clientComponents/globals";
-import { BackArrowIcon } from "@clientComponents/icons";
+import { BackArrowIcon } from "@serverComponents/icons";
 
 /*
   This is the component for text pages within the form flow (start pages, end pages)

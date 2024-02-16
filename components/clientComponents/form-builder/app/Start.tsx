@@ -4,7 +4,7 @@ import { useTranslation } from "@i18n/client";
 import { useRouter } from "next/navigation";
 
 import { useTemplateStore, clearTemplateStore } from "../store/useTemplateStore";
-import { DesignIcon, ExternalLinkIcon, WarningIcon } from "@clientComponents/icons";
+import { DesignIcon, ExternalLinkIcon, WarningIcon } from "@serverComponents/icons";
 import { errorMessage, validateTemplate } from "../validate";
 import Link from "next/link";
 

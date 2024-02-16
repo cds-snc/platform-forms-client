@@ -4,7 +4,7 @@ import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
 
-import { ChevronDown, ChevronRight, ShareIcon, LinkIcon } from "../../../icons";
+import { ChevronDown, ChevronRight, ShareIcon, LinkIcon } from "../../../../serverComponents/icons";
 
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { ShareModal } from "../ShareModal";

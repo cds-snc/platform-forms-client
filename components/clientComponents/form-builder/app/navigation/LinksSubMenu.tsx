@@ -4,7 +4,7 @@ import { useTranslation } from "@i18n/client";
 
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { useTemplateStore } from "../../store/useTemplateStore";
-import { ShareExternalLinkIcon, CopyIcon } from "../../../icons";
+import { ShareExternalLinkIcon, CopyIcon } from "../../../../serverComponents/icons";
 import { getHost } from "@clientComponents/form-builder/util";
 
 interface LinkItem {

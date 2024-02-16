@@ -2,7 +2,7 @@
 import React from "react";
 import { useTranslation } from "@i18n/client";
 import { SubNavLink } from "./SubNavLink";
-import { EmailIcon, BrandIcon, GearIcon } from "@clientComponents/icons";
+import { EmailIcon, BrandIcon, GearIcon } from "@serverComponents/icons";
 
 export const SettingsNavigation = ({ id }: { id: string }) => {
   const {

@@ -12,7 +12,7 @@ import {
   BulletListIcon,
   NumberedListIcon,
   LinkIcon,
-} from "@clientComponents/icons";
+} from "@serverComponents/icons";
 
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
 import { useTranslation } from "@i18n/client";
