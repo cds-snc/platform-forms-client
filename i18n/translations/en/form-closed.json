@@ -2,7 +2,7 @@
   "title": "This form is now closed ",
   "body1": "The form, ",
   "body2": ", is no longer accepting form submissions.",
-  "closedBanner" :{
+  "closedBanner": {
     "text1": "This form is closed and not accepting form submissions - ",
     "text2": "Open the form in Settings"
   },

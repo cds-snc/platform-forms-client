@@ -2,7 +2,7 @@
   "title": "Ce formulaire est maintenant fermé",
   "body1": "Le formulaire, ",
   "body2": ", n’accepte plus de soumissions de formulaire.",
-  "closedBanner" :{
+  "closedBanner": {
     "text1": "Ce formulaire est fermé et n’accepte pas de soumissions de formulaire — ",
     "text2": "Ouvrir le formulaire dans les paramètres"
   },
