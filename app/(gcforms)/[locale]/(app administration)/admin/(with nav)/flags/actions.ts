@@ -1,5 +1,5 @@
 "use server";
-import { enableFlag, disableFlag, checkAll } from "@lib/cache/flags";
+import { enableFlag, disableFlag, checkAll, checkOne } from "@lib/cache/flags";
 import { auth } from "@lib/auth";
 import { createAbility } from "@lib/privileges";
 import { revalidatePath } from "next/cache";
@@ -24,4 +24,11 @@ export async function getAllFlags() {
 
   const ability = createAbility(session);
   return checkAll(ability);
+}
+
+export async function checkFlag(id: string) {
+  const session = await auth();
+  if (!session) throw new Error("No session");
+
+  return checkOne(id);
 }
