@@ -14,6 +14,9 @@ import { classificationOptions } from "./ClassificationSelect";
 import { logMessage } from "@lib/logger";
 import { DownloadFileButton } from "./shared";
 
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+
 export const Publish = () => {
   const { t, i18n } = useTranslation("form-builder");
   const router = useRouter();
@@ -84,7 +87,7 @@ export const Publish = () => {
     window.dataLayer.push({
       event: "publish_form",
     });
-    router.push(`/form-builder/published`);
+    router.push(`/form-builder/${id}/published`);
   };
 
   const handleSaveAndRequest = useCallback(async () => {
@@ -108,11 +111,20 @@ export const Publish = () => {
   }, [getSchema, getName, id, save, router]);
 
   const hasHydrated = useRehydrate();
-  if (!hasHydrated) return null;
+
+  const IconLoading = (
+    <Skeleton
+      inline
+      circle={true}
+      width={36}
+      height={36}
+      className="my-2 mr-2 inline-block w-9 align-middle"
+    />
+  );
 
   return (
     <div>
-      {!userCanPublish && error && (
+      {!userCanPublish && error && hasHydrated && (
         <Alert.Danger focussable={true} className="mb-5">
           <Alert.Title headingTag="h3">{t("errorSavingForm.title")}</Alert.Title>
           <p className="mb-2">
@@ -126,7 +138,7 @@ export const Publish = () => {
         </Alert.Danger>
       )}
 
-      {!userCanPublish && (
+      {!userCanPublish && hasHydrated && (
         <Alert.Info className="my-5">
           <Alert.IconWrapper className="mr-7">
             <LockIcon className="mb-2 scale-125 fill-none stroke-none" />
@@ -144,32 +156,32 @@ export const Publish = () => {
 
       <ul className="list-none p-0">
         <li className="my-4">
-          <Icon checked={title} />
-          <Link href={`/${i18n.language}/form-builder/edit#formTitle`}>{t("formTitle")}</Link>
+          {hasHydrated ? <Icon checked={title} /> : IconLoading}
+          <Link href={`/${i18n.language}/form-builder/${id}/edit#formTitle`}>{t("formTitle")}</Link>
         </li>
         <li className="my-4">
-          <Icon checked={questions} />
-          <Link href={`/${i18n.language}/form-builder/edit`}>{t("questions")}</Link>
+          {hasHydrated ? <Icon checked={questions} /> : IconLoading}
+          <Link href={`/${i18n.language}/form-builder/${id}/edit`}>{t("questions")}</Link>
         </li>
         <li className="my-4">
-          <Icon checked={privacyPolicy} />
-          <Link href={`/${i18n.language}/form-builder/edit#privacy-text`}>
+          {hasHydrated ? <Icon checked={privacyPolicy} /> : IconLoading}
+          <Link href={`/${i18n.language}/form-builder/${id}/edit#privacy-text`}>
             {t("privacyStatement")}
           </Link>
         </li>
         <li className="my-4">
-          <Icon checked={confirmationMessage} />
-          <Link href={`/${i18n.language}/form-builder/edit#confirmation-text`}>
+          {hasHydrated ? <Icon checked={confirmationMessage} /> : IconLoading}
+          <Link href={`/${i18n.language}/form-builder/${id}/edit#confirmation-text`}>
             {t("formConfirmationMessage")}
           </Link>
         </li>
         <li className="my-4">
-          <Icon checked={translate} />
-          <Link href={`/${i18n.language}/form-builder/edit/translate`}>{t("translate")}</Link>
+          {hasHydrated ? <Icon checked={translate} /> : IconLoading}
+          <Link href={`/${i18n.language}/form-builder/${id}/edit/translate`}>{t("translate")}</Link>
         </li>
 
         <li className="my-4">
-          <Icon checked />
+          {hasHydrated ? <Icon checked /> : IconLoading}
           <strong>
             {securityAttributeText}
             {t("publishYourFormInstructions.text2")},{" "}
@@ -179,7 +191,7 @@ export const Publish = () => {
           ) : (
             <span>{t("publishYourFormInstructions.emailOption")}</span>
           )}
-          <StyledLink href={`/${i18n.language}/form-builder/settings`}>
+          <StyledLink href={`/${i18n.language}/form-builder/${id}/settings`}>
             {t("publishYourFormInstructions.change")}
           </StyledLink>
         </li>
