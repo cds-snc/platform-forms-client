@@ -1,9 +1,7 @@
-import { createAbility } from "@lib/privileges";
 import { DeliveryOptionEmail } from "./components/DeliveryOptionEmail";
 import { NavigationTabs } from "./components/NavigationTabs";
 import { isEmailDelivery } from "@clientComponents/form-builder/util";
-import { getFullTemplateByID } from "@lib/templates";
-import { auth } from "@lib/auth";
+import { fetchTemplate } from "./utils";
 
 export default async function Layout({
   children,
@@ -12,9 +10,7 @@ export default async function Layout({
   children: React.ReactNode;
   params: { locale: string; statusFilter: string; id: string };
 }) {
-  const session = await auth();
-  const ability = session && createAbility(session);
-  const initialForm = ability && (await getFullTemplateByID(ability, id));
+  const initialForm = await fetchTemplate(id);
 
   const deliveryOption = initialForm?.deliveryOption;
   const isPublished = initialForm?.isPublished || false;
