@@ -50,7 +50,7 @@ export const fetchSubmissions = async ({
     currentLastEvaluatedKey = {
       Status: selectedStatus,
       NAME_OR_CONF: `NAME#${lastKey}`,
-      formID: formId,
+      FormID: formId,
     };
   }
 
