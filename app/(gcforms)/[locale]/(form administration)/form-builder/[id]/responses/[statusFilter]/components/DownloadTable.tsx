@@ -34,8 +34,6 @@ interface DownloadTableProps {
   formId: string;
   nagwareResult: NagwareResult | null;
   responseDownloadLimit: number;
-  showDownloadSuccess: false | string;
-  setShowDownloadSuccess: React.Dispatch<React.SetStateAction<false | string>>;
   lastEvaluatedKey?: Record<string, string> | null;
 }
 
@@ -45,7 +43,6 @@ export const DownloadTable = ({
   formId,
   nagwareResult,
   responseDownloadLimit,
-  setShowDownloadSuccess,
   lastEvaluatedKey,
 }: DownloadTableProps) => {
   const {
@@ -59,6 +56,7 @@ export const DownloadTable = ({
   const [noSelectedItemsError, setNoSelectedItemsError] = useState(false);
   const [showConfirmNewtDialog, setShowConfirmNewDialog] = useState(false);
   const [showDownloadDialog, setShowDownloadDialog] = useState(false);
+  const [showDownloadSuccess, setShowDownloadSuccess] = useState<false | string>(false);
   const [removedRows, setRemovedRows] = useState<string[]>([]);
 
   const accountEscalated = nagwareResult && nagwareResult.level > 2;
@@ -106,6 +104,12 @@ export const DownloadTable = ({
 
   return (
     <>
+      {showDownloadSuccess && (
+        <Alert.Success className="mb-4">
+          <Alert.Title>{t(`${showDownloadSuccess}.title`)}</Alert.Title>
+          <Alert.Body>{t(`${showDownloadSuccess}.body`)}</Alert.Body>
+        </Alert.Success>
+      )}
       <section>
         <SkipLinkReusable
           text={t("downloadResponsesTable.skipLink")}

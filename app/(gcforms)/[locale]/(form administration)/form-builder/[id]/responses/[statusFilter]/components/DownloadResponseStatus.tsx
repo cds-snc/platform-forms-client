@@ -1,6 +1,4 @@
-"use client";
 import { formatDate } from "@lib/client/clientHelpers";
-import React from "react";
 import { useTranslation } from "@i18n/client";
 import { ExclamationText } from "@clientComponents/form-builder/app/shared";
 import { getDaysPassed } from "@lib/client/clientHelpers";
