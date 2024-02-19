@@ -1,8 +1,8 @@
 import React from "react";
-import { Card } from "@clientComponents/globals/card/Card";
+import { Card } from "@serverComponents/globals/card/Card";
+import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 
 import { serverTranslation } from "@i18n";
-import Link from "next/link";
 
 export enum LoggedOutTabName {
   PUBLISH = "publish",
@@ -33,11 +33,12 @@ export const LoggedOutTab = async ({ tabName }: LoggedOutTabProps) => {
         {t("loggedOutTab.text3")} <a href={createAccountLink}>{t("loggedOutTab.text4")}</a>.
       </p>
       <p>
-        {/* @TODO: Switch these back out to linkButtons */}
-        <Link href={signInLink} className="mr-4">
+        <LinkButton.Primary href={signInLink} className="mr-4">
           {t("loggedOutTab.signinButton")}
-        </Link>
-        <Link href={createAccountLink}>{t("loggedOutTab.createButton")}</Link>
+        </LinkButton.Primary>
+        <LinkButton.Secondary href={createAccountLink}>
+          {t("loggedOutTab.createButton")}
+        </LinkButton.Secondary>
       </p>
     </Card>
   );
