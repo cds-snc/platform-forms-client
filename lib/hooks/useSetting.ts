@@ -1,25 +1,32 @@
 "use client";
 import { useState, useEffect } from "react";
-import useSWR from "swr";
-import axios from "axios";
-
-const fetcher = (url: string) => axios.get(url).then((response) => response.data);
+import { getSetting } from "app/(gcforms)/[locale]/(app administration)/admin/(with nav)/settings/actions";
 
 interface useSettingReturnType {
   isLoading: boolean;
-  value?: string;
+  value?: string | null;
+  error: string | undefined;
 }
 
+// TODO: this pattern can probably be optimized
 export const useSetting = (settingName: string): useSettingReturnType => {
-  const [value, setValue] = useState<string | undefined>();
-
-  const { data, isLoading } = useSWR(`/api/settings/${settingName}`, fetcher);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [value, setValue] = useState<string | null>();
+  const [error, setError] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    if (!isLoading) {
-      setValue(data?.setting);
-    }
-  }, [isLoading, data, setValue]);
+    setIsLoading(true);
 
-  return { isLoading, value };
+    getSetting(settingName)
+      .then((setting) => {
+        setValue(setting);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setError(err);
+        setIsLoading(false);
+      });
+  }, [settingName]);
+
+  return { isLoading, value, error };
 };
