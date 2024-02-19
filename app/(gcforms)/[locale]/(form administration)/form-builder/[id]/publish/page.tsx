@@ -13,6 +13,6 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page() {
-  return <Publish />;
+export default async function Page({ params: { id } }: { params: { id: string } }) {
+  return <Publish id={id} />;
 }

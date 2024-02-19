@@ -17,7 +17,7 @@ import { DownloadFileButton } from "./shared";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-export const Publish = () => {
+export const Publish = ({ id }: { id: string }) => {
   const { t, i18n } = useTranslation("form-builder");
   const router = useRouter();
   const {
@@ -30,9 +30,8 @@ export const Publish = () => {
   const [errorCode, setErrorCode] = useState<null | number>(null);
   const lang = i18n.language;
 
-  const { id, setId, getSchema, getName, getDeliveryOption, securityAttribute } = useTemplateStore(
+  const { setId, getSchema, getName, getDeliveryOption, securityAttribute } = useTemplateStore(
     (s) => ({
-      id: s.id,
       setId: s.setId,
       getSchema: s.getSchema,
       getName: s.getName,
