@@ -1,5 +1,5 @@
 import React from "react";
-import { Card } from "@clientComponents/globals/card/Card";
+import { Card } from "@serverComponents/globals/card/Card";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 
 import { serverTranslation } from "@i18n";
