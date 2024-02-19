@@ -32,15 +32,25 @@ export const Publish = ({ id }: { id: string }) => {
   const [errorCode, setErrorCode] = useState<null | number>(null);
   const lang = i18n.language;
 
-  const { setId, getSchema, getName, getDeliveryOption, securityAttribute } = useTemplateStore(
-    (s) => ({
-      setId: s.setId,
-      getSchema: s.getSchema,
-      getName: s.getName,
-      getDeliveryOption: s.getDeliveryOption,
-      securityAttribute: s.securityAttribute,
-    })
-  );
+  const {
+    id: storeId,
+    setId,
+    getSchema,
+    getName,
+    getDeliveryOption,
+    securityAttribute,
+  } = useTemplateStore((s) => ({
+    id: s.id,
+    setId: s.setId,
+    getSchema: s.getSchema,
+    getName: s.getName,
+    getDeliveryOption: s.getDeliveryOption,
+    securityAttribute: s.securityAttribute,
+  }));
+
+  if (storeId && storeId !== id) {
+    id = storeId;
+  }
 
   const securityOption: ClassificationOption | undefined = classificationOptions.find(
     (item) => item.value === securityAttribute
