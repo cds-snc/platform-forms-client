@@ -2,20 +2,22 @@
 import React, { useCallback, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useRouter } from "next/navigation";
-
-import { useTemplateStore } from "../store";
-import { useTemplateApi, useAllowPublish, useRehydrate } from "../hooks";
-import { CancelIcon, CircleCheckIcon, LockIcon } from "../../../serverComponents/icons";
+import { useTemplateStore } from "@clientComponents/form-builder/store";
+import {
+  useTemplateApi,
+  useAllowPublish,
+  useRehydrate,
+} from "@clientComponents/form-builder/hooks";
+import { CancelIcon, CircleCheckIcon, LockIcon } from "@serverComponents/icons";
 import { Button, Alert } from "@clientComponents/globals";
 import Link from "next/link";
 import { isVaultDelivery } from "@clientComponents/form-builder/util";
-import { StyledLink } from "@clientComponents/globals";
-import { classificationOptions } from "./ClassificationSelect";
+import { classificationOptions } from "@clientComponents/form-builder/app/ClassificationSelect";
 import { logMessage } from "@lib/logger";
-import { DownloadFileButton } from "./shared";
-
+import { DownloadFileButton } from "@clientComponents/form-builder/app/shared";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import LinkButton from "@serverComponents/globals/Buttons/LinkButton";
 
 export const Publish = ({ id }: { id: string }) => {
   const { t, i18n } = useTranslation("form-builder");
@@ -63,7 +65,7 @@ export const Publish = ({ id }: { id: string }) => {
   };
 
   const { save } = useTemplateApi();
-  const supportHref = `/${i18n.language}/form-builder/support`;
+  const supportHref = `/${i18n.language}/form-builder/${id}/support`;
 
   const handlePublish = async () => {
     setError(false);
@@ -86,7 +88,7 @@ export const Publish = ({ id }: { id: string }) => {
     window.dataLayer.push({
       event: "publish_form",
     });
-    router.push(`/form-builder/${id}/published`);
+    router.replace(`/form-builder/${id}/published`);
   };
 
   const handleSaveAndRequest = useCallback(async () => {
@@ -128,7 +130,9 @@ export const Publish = ({ id }: { id: string }) => {
           <Alert.Title headingTag="h3">{t("errorSavingForm.title")}</Alert.Title>
           <p className="mb-2">
             {t("errorSavingForm.description")}{" "}
-            <StyledLink href={supportHref}>{t("errorSavingForm.supportLink")}.</StyledLink>
+            <LinkButton href={supportHref}>
+              <>{t("errorSavingForm.supportLink")}.</>
+            </LinkButton>
           </p>
           <p className="mb-5 text-sm">
             {errorCode && t("errorSavingForm.errorCode", { code: errorCode })}
@@ -190,9 +194,9 @@ export const Publish = ({ id }: { id: string }) => {
           ) : (
             <span>{t("publishYourFormInstructions.emailOption")}</span>
           )}
-          <StyledLink href={`/${i18n.language}/form-builder/${id}/settings`}>
+          <LinkButton href={`/${i18n.language}/form-builder/${id}/settings`}>
             {t("publishYourFormInstructions.change")}
-          </StyledLink>
+          </LinkButton>
         </li>
       </ul>
 

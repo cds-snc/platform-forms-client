@@ -1,6 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import { Publish } from "@clientComponents/form-builder/app";
+import { Publish } from "./Publish";
 
 export async function generateMetadata({
   params: { locale },

@@ -28,6 +28,14 @@ type LinkButtonProps = {
   testid?: string;
 };
 
+export const Default = ({ href, children, className, scroll }: LinkButtonProps) => {
+  return (
+    <Link scroll={scroll} href={href} className={cn(themes.link, className)}>
+      {children}
+    </Link>
+  );
+};
+
 export const Primary = ({ href, children, className, scroll }: LinkButtonProps) => {
   return (
     <Link
@@ -56,6 +64,8 @@ export const Secondary = ({ href, className, children, scroll }: LinkButtonProps
     </Link>
   );
 };
+
+export default Default;
 
 export const LinkButton = {
   Primary,

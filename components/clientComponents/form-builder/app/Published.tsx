@@ -30,7 +30,7 @@ export const Published = ({ id }: { id: string }) => {
 
   useEffect(() => {
     if (status !== "authenticated" || !formId) {
-      router.push(`/${language}/form-builder/edit`);
+      router.push(`/${language}/form-builder/0000/edit`);
     }
   }, [status, router, formId, language]);
 
