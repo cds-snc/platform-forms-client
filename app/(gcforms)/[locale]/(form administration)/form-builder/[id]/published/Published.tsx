@@ -24,7 +24,7 @@ export const Published = async ({
   return (
     <div>
       <h1 className="visually-hidden">{t("published")}</h1>
-      <div className="mb-10 flex bg-green-50 p-7">
+      <div className="mb-10 flex bg-purple-200 p-7">
         <div className="flex">
           <div className="flex p-7">
             <RocketIcon className="block self-center" />
