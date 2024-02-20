@@ -1,11 +1,11 @@
+"use client";
 import React from "react";
 import { DeleteIcon, FolderIcon, InboxIcon } from "@serverComponents/icons";
 import { TabNavLink } from "@clientComponents/form-builder/app/navigation/TabNavLink";
-import { VaultStatus } from "@lib/types";
-import { serverTranslation } from "@i18n";
+import { usePathname } from "next/navigation";
+import { useTranslation } from "@i18n/client";
 
-export const NavigationTabs = async ({
-  statusFilter,
+export const NavigationTabs = ({
   formId,
   locale,
 }: {
@@ -13,14 +13,16 @@ export const NavigationTabs = async ({
   formId: string;
   locale: string;
 }) => {
-  const { t } = await serverTranslation("form-builder-responses");
+  const { t } = useTranslation("form-builder-responses");
+
+  const pathname = usePathname();
 
   return (
     <nav className="relative mb-10 flex border-b border-black" aria-label={t("responses.navLabel")}>
       <TabNavLink
         id="new-responses"
-        defaultActive={statusFilter === VaultStatus.NEW}
         href={`/${locale}/form-builder/${formId}/responses/new`}
+        active={pathname.includes("new")}
         setAriaCurrent={true}
       >
         <span className="text-sm laptop:text-base">
@@ -28,9 +30,9 @@ export const NavigationTabs = async ({
         </span>
       </TabNavLink>
       <TabNavLink
-        defaultActive={statusFilter === VaultStatus.DOWNLOADED}
         id="downloaded-responses"
         href={`/${locale}/form-builder/${formId}/responses/downloaded`}
+        active={pathname.includes("downloaded")}
         setAriaCurrent={true}
       >
         <span className="text-sm laptop:text-base">
@@ -38,9 +40,9 @@ export const NavigationTabs = async ({
         </span>
       </TabNavLink>
       <TabNavLink
-        defaultActive={statusFilter === VaultStatus.CONFIRMED}
         id="deleted-responses"
         href={`/${locale}/form-builder/${formId}/responses/confirmed`}
+        active={pathname.includes("confirmed")}
         setAriaCurrent={true}
       >
         <span className="text-sm laptop:text-base">
