@@ -1,5 +1,4 @@
 import React from "react";
-import { notFound } from "next/navigation";
 import { RocketIcon } from "@serverComponents/icons/RocketIcon";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { serverTranslation } from "@i18n";
@@ -19,10 +18,10 @@ export const Published = async ({
     i18n: { language },
   } = await serverTranslation("form-builder", { lang: locale });
 
-  const linkEn = `/en/id/${id}`;
-  const linkFr = `/fr/id/${id}`;
+  const baseUrl = process.env.NEXTAUTH_URL;
 
-  if (!id) return notFound();
+  const linkEn = `${baseUrl}/en/id/${id}`;
+  const linkFr = `${baseUrl}/fr/id/${id}`;
 
   return (
     <div>

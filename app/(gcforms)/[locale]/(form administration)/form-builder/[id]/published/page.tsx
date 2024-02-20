@@ -1,9 +1,10 @@
 import { serverTranslation } from "@i18n";
-import { Published } from "./Published";
 import { auth } from "@lib/auth";
 import { createAbility } from "@lib/privileges";
-
+import { getFullTemplateByID } from "@lib/templates";
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { Published } from "./Published";
 
 export async function generateMetadata({
   params: { locale },
@@ -27,8 +28,15 @@ export default async function Page({
     return null;
   }
 
+  const ability = createAbility(session);
+
+  const initialForm = await getFullTemplateByID(ability, id);
+
+  if (!initialForm?.isPublished) {
+    return notFound();
+  }
+
   try {
-    const ability = createAbility(session);
     const canView = ability?.can("view", "FormRecord");
     return <Published id={id} locale={locale} canView={canView} />;
   } catch (e) {
