@@ -16,7 +16,7 @@ export const ClientSide = () => {
     <>
       {isPublished ? (
         <>
-          <div className="mt-5 mb-5 p-5 bg-purple-200 flex">
+          <div className="my-5 flex bg-purple-200 p-5">
             <div className="flex">
               <div className="pr-7">
                 <LockIcon className="mb-2 scale-125" />

@@ -1,6 +1,5 @@
 import { serverTranslation } from "@i18n";
 import { ClientSide } from "./clientSide";
-import { FormBuilderInitializer } from "@clientComponents/globals/layouts/FormBuilderLayout";
 import { Metadata } from "next";
 import { FormRecord } from "@lib/types";
 import { auth } from "@lib/auth";
@@ -47,12 +46,5 @@ export default async function Page({
     }
   }
 
-  return (
-    <FormBuilderInitializer
-      initialForm={FormbuilderParams.initialForm}
-      locale={FormbuilderParams.locale}
-    >
-      <ClientSide />
-    </FormBuilderInitializer>
-  );
+  return <ClientSide />;
 }
