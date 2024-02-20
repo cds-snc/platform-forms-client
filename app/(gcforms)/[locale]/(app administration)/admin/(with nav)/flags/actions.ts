@@ -4,10 +4,11 @@ import { auth } from "@lib/auth";
 import { createAbility } from "@lib/privileges";
 import { revalidatePath } from "next/cache";
 
+// Note: any thrown errors will be caught in the Error boundary/component
+
 export async function modifyFlag(id: string, value: boolean) {
   const session = await auth();
   if (!session) throw new Error("No session");
-
   const ability = createAbility(session);
 
   if (value) {
@@ -21,8 +22,8 @@ export async function modifyFlag(id: string, value: boolean) {
 export async function getAllFlags() {
   const session = await auth();
   if (!session) throw new Error("No session");
-
   const ability = createAbility(session);
+
   return checkAll(ability);
 }
 

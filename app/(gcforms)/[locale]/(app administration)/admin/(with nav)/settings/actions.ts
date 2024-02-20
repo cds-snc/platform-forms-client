@@ -9,17 +9,14 @@ import {
 } from "@lib/appSettings";
 import { revalidatePath } from "next/cache";
 
-// TODO error handling
+// Note: any thrown errors will be caught in the Error boundary/component
 
 export async function getSetting(internalId: string) {
   const session = await auth();
   if (!session) throw new Error("No session");
 
-  const setting = await getAppSetting(internalId);
-
+  await getAppSetting(internalId);
   revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/settings");
-
-  return setting;
 }
 
 export async function updateSetting(internalId: string, setting: Record<string, unknown>) {
@@ -27,11 +24,8 @@ export async function updateSetting(internalId: string, setting: Record<string, 
   if (!session) throw new Error("No session");
   const ability = createAbility(session);
 
-  const updatedSetting = await updateAppSetting(ability, internalId, setting);
-
+  await updateAppSetting(ability, internalId, setting);
   revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/settings");
-
-  return updatedSetting;
 }
 
 export async function createSetting(internalId: string, setting: Record<string, unknown>) {
@@ -39,7 +33,7 @@ export async function createSetting(internalId: string, setting: Record<string, 
   if (!session) throw new Error("No session");
   const ability = createAbility(session);
 
-  const createdSetting = await createAppSetting(
+  await createAppSetting(
     ability,
     setting as {
       internalId: string;
@@ -47,10 +41,7 @@ export async function createSetting(internalId: string, setting: Record<string, 
       nameFr: string;
     }
   );
-
   revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/settings");
-
-  return createdSetting;
 }
 
 export async function deleteSetting(internalId: string) {
@@ -59,8 +50,5 @@ export async function deleteSetting(internalId: string) {
   const ability = createAbility(session);
 
   await deleteAppSetting(ability, internalId);
-
   revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/settings");
-
-  return "ok";
 }
