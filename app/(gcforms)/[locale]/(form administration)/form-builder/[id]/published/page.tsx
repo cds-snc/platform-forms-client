@@ -1,5 +1,7 @@
 import { serverTranslation } from "@i18n";
 import { Published } from "@clientComponents/form-builder/app";
+import { auth } from "@lib/auth";
+import { createAbility } from "@lib/privileges";
 
 import { Metadata } from "next";
 
@@ -14,10 +16,22 @@ export async function generateMetadata({
   };
 }
 
-export default function Page({
+export default async function Page({
   params: { locale, id },
 }: {
   params: { locale: string; id: string };
 }) {
-  return <Published id={id} locale={locale} />;
+  const session = await auth();
+
+  if (!session) {
+    return null;
+  }
+
+  try {
+    const ability = createAbility(session);
+    const canView = ability?.can("view", "FormRecord");
+    return <Published id={id} locale={locale} canView={canView} />;
+  } catch (e) {
+    return null;
+  }
 }
