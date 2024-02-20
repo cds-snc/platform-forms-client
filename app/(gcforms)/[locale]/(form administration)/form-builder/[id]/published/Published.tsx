@@ -1,40 +1,25 @@
-import React, { useState, useEffect } from "react";
-import { RocketIcon } from "../../../serverComponents/icons/RocketIcon";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import React from "react";
+import { RocketIcon } from "@serverComponents/icons/RocketIcon";
 import { LinkButton } from "@clientComponents/globals";
-import { useTranslation } from "@i18n/client";
-import { useTemplateStore } from "../store/useTemplateStore";
-import { useAccessControl } from "@lib/hooks";
+import { serverTranslation } from "@i18n";
 import Markdown from "markdown-to-jsx";
 
-export const Published = ({ id }: { id: string }) => {
+export const Published = async ({
+  locale,
+  id,
+  canView,
+}: {
+  locale: string;
+  id: string;
+  canView: boolean;
+}) => {
   const {
     t,
     i18n: { language },
-  } = useTranslation("form-builder");
-  const { status } = useSession();
-  const router = useRouter();
-  const [formId] = useState(id);
-  const { ability } = useAccessControl();
-  const resetForm = useTemplateStore((s) => s.initialize);
-  const linkEn = `${getHost()}/en/id/${formId}`;
-  const linkFr = `${getHost()}/fr/id/${formId}`;
+  } = await serverTranslation("form-builder", { lang: locale });
 
-  // reset the form once we reach the published page
-  useEffect(() => {
-    resetForm();
-  }, [resetForm]);
-
-  useEffect(() => {
-    if (status !== "authenticated" || !formId) {
-      router.push(`/${language}/form-builder/0000/edit`);
-    }
-  }, [status, router, formId, language]);
-
-  if (!formId) {
-    return null;
-  }
+  const linkEn = `/en/id/${id}`;
+  const linkFr = `/fr/id/${id}`;
 
   return (
     <div>
@@ -65,7 +50,7 @@ export const Published = ({ id }: { id: string }) => {
         <Markdown options={{ forceBlock: true }}>{t("didYouFindThisToolHelpful")}</Markdown>
       </div>
       <div>
-        {ability?.can("view", "FormRecord") && (
+        {canView && (
           <LinkButton.Primary href={`/${language}/forms`}>{t("publishedBack")}</LinkButton.Primary>
         )}
       </div>

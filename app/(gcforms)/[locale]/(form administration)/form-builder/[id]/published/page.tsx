@@ -14,6 +14,10 @@ export async function generateMetadata({
   };
 }
 
-export default function Page({ params: { id } }: { params: { id: string } }) {
-  return <Published id={id} />;
+export default function Page({
+  params: { locale, id },
+}: {
+  params: { locale: string; id: string };
+}) {
+  return <Published id={id} locale={locale} />;
 }
