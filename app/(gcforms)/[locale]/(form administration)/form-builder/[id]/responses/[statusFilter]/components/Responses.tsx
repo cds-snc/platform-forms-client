@@ -81,7 +81,7 @@ export const Responses = ({
               maxEntries={MAX_REPORT_COUNT}
             />
             <Link
-              href={`/form-builder/responses/${formId}/problem`}
+              href={`/form-builder/${formId}/responses/problem`}
               className="ml-12 text-black visited:text-black focus:text-white-default"
             >
               {t("responses.viewAllProblemResponses")}
