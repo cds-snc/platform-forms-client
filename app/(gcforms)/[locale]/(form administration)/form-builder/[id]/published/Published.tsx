@@ -1,4 +1,5 @@
 import React from "react";
+import { notFound } from "next/navigation";
 import { RocketIcon } from "@serverComponents/icons/RocketIcon";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { serverTranslation } from "@i18n";
@@ -20,6 +21,8 @@ export const Published = async ({
 
   const linkEn = `/en/id/${id}`;
   const linkFr = `/fr/id/${id}`;
+
+  if (!id) return notFound();
 
   return (
     <div>
