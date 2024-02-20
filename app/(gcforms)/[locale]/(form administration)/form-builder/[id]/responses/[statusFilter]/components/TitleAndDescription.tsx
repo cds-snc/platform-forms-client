@@ -25,7 +25,7 @@ export const TitleAndDescription = ({
         <>
           <h1>{t("tabs.newResponses.title")}</h1>
           <div className="mb-4">
-            <p className="mb-4">
+            <p>
               <strong>{t("tabs.newResponses.message1")}</strong>
               <br />
               {t("tabs.newResponses.message2")}
@@ -37,27 +37,19 @@ export const TitleAndDescription = ({
         <>
           <h1>{t("tabs.downloadedResponses.title")}</h1>
           <div className="mb-4">
-            <p className="mb-4">
+            <p>
               <strong>{t("tabs.downloadedResponses.message1")}</strong>
               <br />
               {t("tabs.downloadedResponses.message2")}
             </p>
           </div>
-          <ConfirmDialog
-            apiUrl={`/api/id/${formId}/submission/confirm`}
-            maxEntries={responseDownloadLimit}
-            onSuccessfulConfirm={() => {
-              router.replace(pathName, { scroll: false });
-              setShowSuccessAlert("confirmSuccess");
-            }}
-          />
         </>
       )}
       {statusFilter === VaultStatus.CONFIRMED && (
         <>
           <h1>{t("tabs.confirmedResponses.title")}</h1>
           <div className="mb-4">
-            <p className="mb-4">
+            <p>
               <strong>{t("tabs.confirmedResponses.message1")}</strong>
               <br />
               {t("tabs.confirmedResponses.message2")}
@@ -69,21 +61,23 @@ export const TitleAndDescription = ({
         <>
           <h1>{t("tabs.problemResponses.title")}</h1>
           <div className="mb-4">
-            <p className="mb-4">
+            <p>
               <strong>{t("tabs.problemResponses.message1")}</strong>
               <br />
               {t("tabs.problemResponses.message2")}
             </p>
-            <ConfirmDialog
-              apiUrl={`/api/id/${formId}/submission/confirm`}
-              maxEntries={responseDownloadLimit}
-              onSuccessfulConfirm={() => {
-                router.replace(pathName, { scroll: false });
-                setShowSuccessAlert("confirmSuccess");
-              }}
-            />
           </div>
         </>
+      )}
+      {[VaultStatus.PROBLEM, VaultStatus.DOWNLOADED].includes(statusFilter as VaultStatus) && (
+        <ConfirmDialog
+          apiUrl={`/api/id/${formId}/submission/confirm`}
+          maxEntries={responseDownloadLimit}
+          onSuccessfulConfirm={() => {
+            router.replace(pathName, { scroll: false });
+            setShowSuccessAlert("confirmSuccess");
+          }}
+        />
       )}
       {successAlertMessage && (
         <Alert.Success className="mb-4">
