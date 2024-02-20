@@ -1,3 +1,4 @@
+"use server";
 import { auth } from "@lib/auth";
 import { ucfirst } from "@lib/client/clientHelpers";
 import { createAbility } from "@lib/privileges";

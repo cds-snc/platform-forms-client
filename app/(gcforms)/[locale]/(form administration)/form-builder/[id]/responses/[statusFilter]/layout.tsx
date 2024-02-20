@@ -5,7 +5,7 @@ import { ucfirst } from "@lib/client/clientHelpers";
 import { DeliveryOptionEmail } from "./components/DeliveryOptionEmail";
 import { NavigationTabs } from "./components/NavigationTabs";
 import { TitleAndDescription } from "./components/TitleAndDescription";
-import { fetchSubmissions, fetchTemplate } from "./utils";
+import { fetchSubmissions, fetchTemplate } from "./actions";
 
 export default async function Layout({
   children,

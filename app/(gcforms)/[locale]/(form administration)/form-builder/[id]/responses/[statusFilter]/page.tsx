@@ -6,7 +6,7 @@ import { AccessControlError } from "@lib/privileges";
 import { getAppSetting } from "@lib/appSettings";
 import { Responses, ResponsesProps } from "./components/Responses";
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
-import { fetchSubmissions, fetchTemplate } from "./utils";
+import { fetchSubmissions, fetchTemplate } from "./actions";
 
 export async function generateMetadata({
   params: { locale },
