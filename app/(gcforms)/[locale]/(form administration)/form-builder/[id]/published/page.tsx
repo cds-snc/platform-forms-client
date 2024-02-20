@@ -1,5 +1,5 @@
 import { serverTranslation } from "@i18n";
-import { Published } from "@clientComponents/form-builder/app";
+import { Published } from "./Published";
 import { auth } from "@lib/auth";
 import { createAbility } from "@lib/privileges";
 

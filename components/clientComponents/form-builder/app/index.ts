@@ -6,7 +6,6 @@ export { EditNavigation } from "./navigation/EditNavigation";
 export { Start } from "./Start";
 export { Preview } from "./Preview";
 export { Publish } from "../../../../app/(gcforms)/[locale]/(form administration)/form-builder/[id]/publish/Publish";
-export { Published } from "./Published";
 export { Edit } from "./edit";
 export { ShareModal } from "./ShareModal";
 export { ShareModalUnauthenticated } from "./ShareModalUnauthenticated";

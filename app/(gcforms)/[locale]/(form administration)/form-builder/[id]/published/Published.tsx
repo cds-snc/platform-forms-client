@@ -1,6 +1,6 @@
 import React from "react";
 import { RocketIcon } from "@serverComponents/icons/RocketIcon";
-import { LinkButton } from "@clientComponents/globals";
+import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { serverTranslation } from "@i18n";
 import Markdown from "markdown-to-jsx";
 
