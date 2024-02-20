@@ -1,11 +1,8 @@
 import { serverTranslation } from "@i18n";
 import { ClientSide } from "./clientSide";
 import { Metadata } from "next";
-import { FormRecord } from "@lib/types";
 import { auth } from "@lib/auth";
-import { AccessControlError, createAbility } from "@lib/privileges";
-import { getFullTemplateByID } from "@lib/templates";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 export async function generateMetadata({
   params: { locale },
@@ -18,32 +15,13 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({
-  params: { locale, slug = [] },
-}: {
-  params: { locale: string; slug: string[] };
-}) {
-  const FormbuilderParams: { locale: string; initialForm: null | FormRecord } = {
-    initialForm: null,
-    locale,
-  };
-
+export default async function Page({ params: { id } }: { params: { id: string } }) {
   const session = await auth();
 
-  const formID = slug[0] || null;
+  const formID = id;
 
-  if (session && formID) {
-    try {
-      const ability = createAbility(session);
-
-      const initialForm = await getFullTemplateByID(ability, formID);
-
-      if (initialForm === null) redirect(`/${locale}/404`);
-
-      FormbuilderParams.initialForm = initialForm;
-    } catch (e) {
-      if (e instanceof AccessControlError) redirect(`/${locale}/admin/unauthorized`);
-    }
+  if (!session?.user && formID !== "0000") {
+    return notFound();
   }
 
   return <ClientSide />;
