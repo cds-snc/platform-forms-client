@@ -1,6 +1,5 @@
 import { serverTranslation } from "@i18n";
-import { ClientSide } from "./clientSide";
-import { FormBuilderInitializer } from "@clientComponents/globals/layouts/FormBuilderLayout";
+import { Published } from "@clientComponents/form-builder/app";
 
 import { Metadata } from "next";
 
@@ -15,10 +14,6 @@ export async function generateMetadata({
   };
 }
 
-export default function Page({ params: { locale } }: { params: { locale: string } }) {
-  return (
-    <FormBuilderInitializer locale={locale}>
-      <ClientSide />
-    </FormBuilderInitializer>
-  );
+export default function Page({ params: { id } }: { params: { id: string } }) {
+  return <Published id={id} />;
 }

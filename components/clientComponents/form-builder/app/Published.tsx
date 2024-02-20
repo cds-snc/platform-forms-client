@@ -1,4 +1,3 @@
-"use client";
 import React, { useState, useEffect } from "react";
 import { RocketIcon } from "../../../serverComponents/icons/RocketIcon";
 import { useSession } from "next-auth/react";
@@ -8,7 +7,6 @@ import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "../store/useTemplateStore";
 import { useAccessControl } from "@lib/hooks";
 import Markdown from "markdown-to-jsx";
-import { getHost } from "../util";
 
 export const Published = ({ id }: { id: string }) => {
   const {
@@ -41,7 +39,7 @@ export const Published = ({ id }: { id: string }) => {
   return (
     <div>
       <h1 className="visually-hidden">{t("published")}</h1>
-      <div className="p-7 mb-10 flex bg-green-50">
+      <div className="mb-10 flex bg-green-50 p-7">
         <div className="flex">
           <div className="flex p-7">
             <RocketIcon className="block self-center" />
