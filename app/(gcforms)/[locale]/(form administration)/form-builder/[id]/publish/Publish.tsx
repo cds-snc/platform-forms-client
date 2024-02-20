@@ -16,7 +16,6 @@ import { classificationOptions } from "@clientComponents/form-builder/app/Classi
 import { logMessage } from "@lib/logger";
 import { DownloadFileButton } from "@clientComponents/form-builder/app/shared";
 import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 import LinkButton from "@serverComponents/globals/Buttons/LinkButton";
 
 export const Publish = ({ id }: { id: string }) => {
