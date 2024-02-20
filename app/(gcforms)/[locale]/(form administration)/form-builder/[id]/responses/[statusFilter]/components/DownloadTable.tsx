@@ -8,9 +8,6 @@ import {
 } from "@lib/types";
 import { useTranslation } from "@i18n/client";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
-import { ConfirmReceiptStatus } from "./ConfirmReceiptStatus";
-import { DownloadResponseStatus } from "./DownloadResponseStatus";
-import { RemovalStatus } from "./RemovalStatus";
 import { useParams } from "next/navigation";
 import { useSetting } from "@lib/hooks/useSetting";
 import Link from "next/link";
@@ -27,6 +24,7 @@ import { formatDateTime } from "@clientComponents/form-builder/util";
 import { DownloadSingleButton } from "./DownloadSingleButton";
 import { Pagination } from "./Pagination";
 import { cn } from "@lib/utils";
+import { NextStep } from "./NextStep";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -58,7 +56,6 @@ export const DownloadTable = ({
   const [showDownloadDialog, setShowDownloadDialog] = useState(false);
   const [showDownloadSuccess, setShowDownloadSuccess] = useState<false | string>(false);
   const [removedRows, setRemovedRows] = useState<string[]>([]);
-
   const accountEscalated = nagwareResult && nagwareResult.level > 2;
 
   const { value: overdueAfter } = useSetting("nagwarePhaseEncouraged");
@@ -212,48 +209,12 @@ export const DownloadTable = ({
                   </th>
                   <td className="whitespace-nowrap px-4">{createdDateTime}</td>
                   <td className="whitespace-nowrap px-4">
-                    {statusFilter === VaultStatus.NEW && (
-                      <>
-                        {removedRows.includes(submission.name) ? (
-                          <>
-                            <ConfirmReceiptStatus
-                              vaultStatus={VaultStatus.DOWNLOADED}
-                              createdAtDate={submission.createdAt}
-                              overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
-                            />
-                            <br />
-                            {t("downloadResponsesTable.movedToDownloaded")}
-                          </>
-                        ) : (
-                          <DownloadResponseStatus
-                            vaultStatus={submission.status}
-                            createdAt={submission.createdAt}
-                            downloadedAt={submission.downloadedAt}
-                            overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
-                          />
-                        )}
-                      </>
-                    )}
-                    {statusFilter === VaultStatus.DOWNLOADED && (
-                      <ConfirmReceiptStatus
-                        vaultStatus={submission.status}
-                        createdAtDate={submission.createdAt}
-                        overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
-                      />
-                    )}
-                    {statusFilter === VaultStatus.CONFIRMED && (
-                      <RemovalStatus
-                        vaultStatus={submission.status}
-                        removalAt={submission.removedAt}
-                      />
-                    )}
-                    {statusFilter === VaultStatus.PROBLEM && (
-                      <p className="text-red">
-                        <strong>{t("supportWillContact")}</strong>
-                        <br />
-                        {t("reportedAsProblem")}
-                      </p>
-                    )}
+                    <NextStep
+                      statusFilter={statusFilter as VaultStatus}
+                      submission={submission}
+                      overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
+                      removedRows={removedRows}
+                    />
                   </td>
                   <td className="whitespace-nowrap text-center">
                     <DownloadSingleButton
