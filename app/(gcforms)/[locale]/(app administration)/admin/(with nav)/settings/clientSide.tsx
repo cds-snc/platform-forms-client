@@ -2,13 +2,12 @@
 import React, { useState } from "react";
 import { Setting } from "@prisma/client";
 import { useTranslation } from "@i18n/client";
-
 import { ToastContainer, toast } from "@clientComponents/form-builder/app/shared/Toast";
-
 import { Button } from "@clientComponents/globals";
 import { useAccessControl } from "@lib/hooks";
 import { logMessage } from "@lib/logger";
 import { createSetting, deleteSetting, updateSetting } from "./actions";
+import { useFormState } from "react-dom";
 
 const ManageSetting = ({
   setting,
@@ -22,19 +21,32 @@ const ManageSetting = ({
   const { t } = useTranslation("admin-settings");
   const isNewSetting = !setting.internalId;
 
-  const saveSettingServer = async (formData: FormData) => {
-    const setting = {
-      internalId: formData.get("internalId") as string,
-      nameEn: formData.get("nameEn") as string,
-      nameFr: formData.get("nameFr") as string,
-      descriptionEn: formData.get("descriptionEn") as string,
-      descriptionFr: formData.get("descriptionFr") as string,
-      value: formData.get("value") as string,
-    };
-
-    // TODO form validation?
+  // I think useFormState expects a function with a signature like this
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  const saveSetting = async (prevState: any, formData: FormData) => {
+    // TODO: Why is this not printing in the browser console?
+    logMessage.debug("saveSetting formData=" + JSON.stringify(formData));
 
     try {
+      const setting = {
+        internalId: formData.get("internalId") as string,
+        nameEn: formData.get("nameEn") as string,
+        nameFr: formData.get("nameFr") as string,
+        descriptionEn: formData.get("descriptionEn") as string,
+        descriptionFr: formData.get("descriptionFr") as string,
+        value: formData.get("value") as string,
+      };
+
+      // Example: server side validation. For anything complex consider a lib like zod?
+      if (setting.internalId.length < 2) {
+        // A pattern to throw and handle
+        throw new Error("Error: Internal ID must be at least 2 characters"); // Not an actual requirement
+      }
+      if (setting.nameEn.length < 3) {
+        // Can also return anywhere
+        return { message: "Error: English name must be at least 3 characters" }; // Not an actual requirement
+      }
+
       if (isNewSetting) {
         await createSetting(setting.internalId, setting);
       } else {
@@ -43,15 +55,20 @@ const ManageSetting = ({
 
       toast.success(t("success"));
       clearSelection();
-    } catch (error) {
-      logMessage.error(error);
+    } catch (e) {
+      logMessage.error(e);
       toast.error(t("error"));
+      return { message: (e as Error)?.message };
     }
   };
 
+  const initialState = { message: "" };
+  const [state, formAction] = useFormState(saveSetting, initialState);
+
+  // Example: client side validation through html attributes like `required` and `pattern`
   return (
     <div className="gc-form">
-      <form action={saveSettingServer}>
+      <form action={formAction}>
         <label htmlFor="internalId" className="gc-label mt-2 mb-0">
           {t("label.internalId")}
         </label>
@@ -60,7 +77,8 @@ const ManageSetting = ({
           defaultValue={setting.internalId}
           type="text"
           name="internalId"
-          disabled={!canManageSettings}
+          readOnly={!canManageSettings}
+          {...(canManageSettings && { required: true })}
         />
         <label htmlFor="nameEn" className="gc-label mt-2 mb-0">
           {t("label.nameEn")}
@@ -71,7 +89,8 @@ const ManageSetting = ({
           type="text"
           name="nameEn"
           id="nameEn"
-          disabled={!canManageSettings}
+          readOnly={!canManageSettings}
+          {...(canManageSettings && { required: true })}
         />
         <label htmlFor="nameFr" className="gc-label mt-2 mb-0">
           {t("label.nameFr")}
@@ -82,7 +101,8 @@ const ManageSetting = ({
           type="text"
           name="nameFr"
           id="nameFr"
-          disabled={!canManageSettings}
+          readOnly={!canManageSettings}
+          {...(canManageSettings && { required: true })}
         />
         <label htmlFor="descriptionEn" className="gc-label mt-2 mb-0">
           {t("label.descriptionEn")}
@@ -93,7 +113,7 @@ const ManageSetting = ({
           type="text"
           name="descriptionEn"
           id="descriptionEn"
-          disabled={!canManageSettings}
+          readOnly={!canManageSettings}
         />
         <label htmlFor="descriptionFr" className="gc-label mt-2 mb-0">
           {t("label.descriptionFr")}
@@ -104,7 +124,7 @@ const ManageSetting = ({
           type="text"
           name="descriptionFr"
           id="descriptionFr"
-          disabled={!canManageSettings}
+          readOnly={!canManageSettings}
         />
         <label htmlFor="value" className="gc-label mt-2 mb-0">
           {t("label.value")}
@@ -115,7 +135,8 @@ const ManageSetting = ({
           type="text"
           name="value"
           id="value"
-          disabled={!canManageSettings}
+          readOnly={!canManageSettings}
+          {...(canManageSettings && { required: true })}
         />
         {canManageSettings ? (
           <div className="mt-4">
@@ -133,6 +154,11 @@ const ManageSetting = ({
             </Button>
           </div>
         )}
+        <div className="mt-5 p-2">
+          <output aria-live="polite" className="text-red-default">
+            {state?.message}
+          </output>
+        </div>
       </form>
     </div>
   );
@@ -152,8 +178,6 @@ export const Settings = ({ settings }: SettingsProps) => {
     setSelectedSetting(undefined);
     setManageSetting(false);
   };
-
-  // TODO error handling
 
   const deleteSettingAction = async (internalId: string) => {
     try {
