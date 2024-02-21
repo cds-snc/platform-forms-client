@@ -4,6 +4,7 @@ import { AccountsIcon } from "@serverComponents/icons/AccountsIcon";
 import { SettingsIcon } from "@serverComponents/icons/SettingsIcon";
 import { FlagsIcon } from "@serverComponents/icons/FlagsIcon";
 import { UserAbility } from "@lib/types";
+import { PreviewIcon, TreeViewIcon, UploadIcon } from "@serverComponents/icons";
 export const LeftNavigation = async ({ ability }: { ability: UserAbility }) => {
   const {
     t,
@@ -42,6 +43,39 @@ export const LeftNavigation = async ({ ability }: { ability: UserAbility }) => {
               title={t("adminNav.settings", { ns: "common" })}
             >
               <SettingsIcon />
+            </LeftNav>
+          </li>
+        )}
+        {ability?.can("view", "Flag") && (
+          <li>
+            <LeftNav
+              testid="typography"
+              href={`/${language}/admin/typography`}
+              title={t("adminNav.typography", { ns: "common" })}
+            >
+              <PreviewIcon />
+            </LeftNav>
+          </li>
+        )}
+        {ability?.can("view", "Flag") && (
+          <li>
+            <LeftNav
+              testid="upload"
+              href={`/${language}/admin/upload`}
+              title={t("adminNav.upload", { ns: "common" })}
+            >
+              <UploadIcon />
+            </LeftNav>
+          </li>
+        )}
+        {ability?.can("view", "Flag") && (
+          <li>
+            <LeftNav
+              testid="view-templates"
+              href={`/${language}/admin/view-templates`}
+              title={t("adminNav.viewTemplates", { ns: "common" })}
+            >
+              <TreeViewIcon />
             </LeftNav>
           </li>
         )}

@@ -9,6 +9,7 @@ const Heading = ({ title }: { title: string }) => {
 export default async function Page() {
   return (
     <>
+      <h1>Typography Preview</h1>
       <Heading title="Public forms + pages" />
       <div className="gc-formview">
         <p className="mb-4">Default (base) text size (20px) Noto Sans</p>
