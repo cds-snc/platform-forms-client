@@ -134,4 +134,13 @@ export const options = [
     logoTitleEn: "Treasury Board of Canada Secretariat",
     logoTitleFr: "Secrétariat du Conseil du Trésor du Canada",
   },
+  {
+    name: "statscan",
+    urlEn: "https://www.statcan.gc.ca/en/start",
+    urlFr: "https://www.statcan.gc.ca/fr/debut",
+    logoEn: "/img/branding/stats-can-en.svg",
+    logoFr: "/img/branding/stats-can-fr.svg",
+    logoTitleEn: "Statistics Canada",
+    logoTitleFr: "Statistique Canada",
+  },
 ];
