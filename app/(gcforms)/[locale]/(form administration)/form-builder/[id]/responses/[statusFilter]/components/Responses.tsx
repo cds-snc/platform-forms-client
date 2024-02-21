@@ -18,6 +18,7 @@ export interface ResponsesProps {
   nagwareResult: NagwareResult | null;
   responseDownloadLimit: number;
   lastEvaluatedKey: Record<string, string> | null | undefined;
+  overdueAfter: number;
 }
 
 // TODO: move to an app setting variable
@@ -29,6 +30,7 @@ export const Responses = ({
   nagwareResult,
   responseDownloadLimit,
   lastEvaluatedKey,
+  overdueAfter,
 }: ResponsesProps) => {
   const {
     t,
@@ -70,6 +72,7 @@ export const Responses = ({
                   nagwareResult={nagwareResult}
                   responseDownloadLimit={responseDownloadLimit}
                   lastEvaluatedKey={lastEvaluatedKey}
+                  overdueAfter={overdueAfter}
                 />
               </>
             )}

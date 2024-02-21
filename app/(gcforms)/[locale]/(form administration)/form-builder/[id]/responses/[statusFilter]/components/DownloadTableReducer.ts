@@ -11,7 +11,7 @@ interface ReducerTableItemsState {
   checkedItems: Map<string, boolean>;
   allItems: VaultSubmissionList[];
   numberOfOverdueResponses: number;
-  overdueAfter: string | undefined;
+  overdueAfter: number | undefined;
 }
 
 export interface ReducerTableItemsActions {
@@ -27,7 +27,7 @@ export interface ReducerTableItemsActions {
 
 export const initialTableItemsState = (
   vaultSubmissions: VaultSubmissionList[],
-  overdueAfter: string | undefined
+  overdueAfter: number | undefined
 ) => {
   return {
     checkedItems: new Map(),
@@ -55,10 +55,10 @@ export function isSubmissionOverdue({
 }: {
   status: string;
   createdAt: number;
-  overdueAfter: string | undefined;
+  overdueAfter: number | undefined;
 }) {
   if (overdueAfter === undefined) return false;
-  const overdueDays = parseInt(overdueAfter);
+  const overdueDays = overdueAfter;
   if (isNaN(overdueDays)) return false;
   const isOverdue = overdueDays - getDaysPassed(createdAt) < 0;
   // Download is overdue

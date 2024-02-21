@@ -9,7 +9,6 @@ import {
 import { useTranslation } from "@i18n/client";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import { useParams } from "next/navigation";
-import { useSetting } from "@lib/hooks/useSetting";
 import Link from "next/link";
 import { TableActions, initialTableItemsState, reducerTableItems } from "./DownloadTableReducer";
 import { getDaysPassed, ucfirst } from "@lib/client/clientHelpers";
@@ -33,6 +32,7 @@ interface DownloadTableProps {
   nagwareResult: NagwareResult | null;
   responseDownloadLimit: number;
   lastEvaluatedKey?: Record<string, string> | null;
+  overdueAfter: number;
 }
 
 export const DownloadTable = ({
@@ -42,6 +42,7 @@ export const DownloadTable = ({
   nagwareResult,
   responseDownloadLimit,
   lastEvaluatedKey,
+  overdueAfter,
 }: DownloadTableProps) => {
   const {
     t,
@@ -58,7 +59,6 @@ export const DownloadTable = ({
   const [removedRows, setRemovedRows] = useState<string[]>([]);
   const accountEscalated = nagwareResult && nagwareResult.level > 2;
 
-  const { value: overdueAfter } = useSetting("nagwarePhaseEncouraged");
   const [tableItems, tableItemsDispatch] = useReducer(
     reducerTableItems,
     initialTableItemsState(vaultSubmissions, overdueAfter)
@@ -212,7 +212,7 @@ export const DownloadTable = ({
                     <NextStep
                       statusFilter={statusFilter as VaultStatus}
                       submission={submission}
-                      overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
+                      overdueAfter={overdueAfter ? overdueAfter : undefined}
                       removedRows={removedRows}
                     />
                   </td>

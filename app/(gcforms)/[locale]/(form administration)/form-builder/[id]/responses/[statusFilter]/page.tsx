@@ -34,6 +34,7 @@ export default async function Page({
     responseDownloadLimit: Number(await getAppSetting("responseDownloadLimit")),
     lastEvaluatedKey: null,
     nagwareResult: null,
+    overdueAfter: Number(await getAppSetting("nagwarePhaseEncouraged")),
   };
 
   const session = await auth();
