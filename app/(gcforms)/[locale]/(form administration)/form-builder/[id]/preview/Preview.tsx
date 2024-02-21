@@ -18,6 +18,7 @@ import Brand from "@clientComponents/globals/Brand";
 import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 import { useRehydrate } from "@clientComponents/form-builder/hooks";
+import Skeleton from "react-loading-skeleton";
 
 export const Preview = () => {
   const { status } = useSession();
@@ -66,7 +67,6 @@ export const Preview = () => {
   const isPastClosingDate = useIsFormClosed();
 
   const hasHydrated = useRehydrate();
-  if (!hasHydrated) return null;
 
   if (isPastClosingDate) {
     return (
@@ -158,54 +158,57 @@ export const Preview = () => {
           </>
         ) : (
           <div className="gc-formview">
-            <GCFormsProvider formRecord={formRecord}>
-              <Form
-                formRecord={formRecord}
-                isPreview={true}
-                language={language}
-                t={t}
-                onSuccess={setSent}
-                renderSubmit={({ validateForm }) => {
-                  return (
-                    <div id="PreviewSubmitButton">
-                      <span {...getLocalizationAttribute()}>
-                        <NextButton
-                          validateForm={validateForm}
-                          fallBack={() => {
-                            return (
-                              <Button
-                                type="submit"
-                                id="SubmitButton"
-                                className="mb-4"
-                                onClick={(e) => {
-                                  if (status !== "authenticated") {
-                                    return preventSubmit(e);
-                                  }
-                                }}
-                              >
-                                {t("submitButton", { ns: "common", lng: language })}
-                              </Button>
-                            );
-                          }}
-                        />
-                      </span>
-                      {status !== "authenticated" && (
-                        <div
-                          className="inline-block bg-purple-200 px-4 py-1"
-                          {...getLocalizationAttribute()}
-                        >
-                          <Markdown options={{ forceBlock: true }}>
-                            {t("signInToTest", { ns: "form-builder", lng: language })}
-                          </Markdown>
-                        </div>
-                      )}
-                    </div>
-                  );
-                }}
-              >
-                {currentForm}
-              </Form>
-            </GCFormsProvider>
+            {!hasHydrated && <Skeleton count={5} height={40} className="mb-4" />}
+            {hasHydrated && (
+              <GCFormsProvider formRecord={formRecord}>
+                <Form
+                  formRecord={formRecord}
+                  isPreview={true}
+                  language={language}
+                  t={t}
+                  onSuccess={setSent}
+                  renderSubmit={({ validateForm }) => {
+                    return (
+                      <div id="PreviewSubmitButton">
+                        <span {...getLocalizationAttribute()}>
+                          <NextButton
+                            validateForm={validateForm}
+                            fallBack={() => {
+                              return (
+                                <Button
+                                  type="submit"
+                                  id="SubmitButton"
+                                  className="mb-4"
+                                  onClick={(e) => {
+                                    if (status !== "authenticated") {
+                                      return preventSubmit(e);
+                                    }
+                                  }}
+                                >
+                                  {t("submitButton", { ns: "common", lng: language })}
+                                </Button>
+                              );
+                            }}
+                          />
+                        </span>
+                        {status !== "authenticated" && (
+                          <div
+                            className="inline-block bg-purple-200 px-4 py-1"
+                            {...getLocalizationAttribute()}
+                          >
+                            <Markdown options={{ forceBlock: true }}>
+                              {t("signInToTest", { ns: "form-builder", lng: language })}
+                            </Markdown>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  }}
+                >
+                  {currentForm}
+                </Form>
+              </GCFormsProvider>
+            )}
           </div>
         )}
       </div>
