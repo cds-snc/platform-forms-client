@@ -43,3 +43,15 @@ export enum DownloadFormat {
   HTML_ZIPPED = "html-zipped",
   HTML_AGGREGATED = "html-aggregated",
 }
+
+export type HtmlZippedResponse = {
+  receipt: string;
+  responses: {
+    id: string;
+    created_at: number;
+    html: string;
+  }[];
+};
+
+export type CSVResponse = { receipt: string; responses: string };
+export type JSONResponse = { receipt: string; responses: object };

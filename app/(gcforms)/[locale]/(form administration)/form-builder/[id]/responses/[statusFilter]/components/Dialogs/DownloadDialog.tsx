@@ -4,11 +4,17 @@ import { Dialog, useDialogRef } from "@clientComponents/form-builder/app/shared"
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import { logMessage } from "@lib/logger";
-import axios from "axios";
-import { DownloadFormat } from "@lib/responseDownloadFormats/types";
+import {
+  CSVResponse,
+  DownloadFormat,
+  HtmlZippedResponse,
+  JSONResponse,
+} from "@lib/responseDownloadFormats/types";
 import JSZip from "jszip";
 import { getDate, slugify } from "@lib/client/clientHelpers";
 import { SpinnerIcon } from "@serverComponents/icons/SpinnerIcon";
+import { getSubmissionsByFormat } from "../../actions";
+import { Language } from "@clientComponents/form-builder/types";
 
 export const DownloadDialog = ({
   checkedItems,
@@ -91,8 +97,6 @@ export const DownloadDialog = ({
       return;
     }
 
-    const url = `/api/id/${formId}/submission/download?format=${selectedFormat}&lang=${i18n.language}`;
-
     if (!checkedItems.size || checkedItems.size > responseDownloadLimit) {
       setDownloadError(true);
       return;
@@ -104,20 +108,19 @@ export const DownloadDialog = ({
 
     try {
       if (selectedFormat === DownloadFormat.HTML_ZIPPED) {
-        const response = await axios({
-          url,
-          method: "POST",
-          data: {
-            ids: ids.join(","),
-          },
-        });
+        const response = (await getSubmissionsByFormat({
+          formID: formId,
+          ids: ids,
+          format: DownloadFormat.HTML_ZIPPED,
+          lang: i18n.language as Language,
+        })) as HtmlZippedResponse;
 
         downloadFormatEvent(formId, selectedFormat, ids.length);
 
         const zip = new JSZip();
-        zip.file("_receipt-recu.html", response.data.receipt);
+        zip.file("_receipt-recu.html", response.receipt);
 
-        response.data.responses.forEach((response: { id: string; html: string }) => {
+        response.responses.forEach((response: { id: string; html: string }) => {
           zip.file(`${response.id}.html`, response.html);
         });
 
@@ -130,21 +133,20 @@ export const DownloadDialog = ({
       }
 
       if (selectedFormat === DownloadFormat.CSV) {
-        const response = await axios({
-          url,
-          method: "POST",
-          data: {
-            ids: ids.join(","),
-          },
-        });
+        const response = (await getSubmissionsByFormat({
+          formID: formId,
+          ids: ids,
+          format: DownloadFormat.CSV,
+          lang: "en", // @TODO
+        })) as CSVResponse;
 
         downloadFormatEvent(formId, selectedFormat, ids.length);
 
         if (zipAllFiles) {
           const file = new JSZip();
           const universalBOMForUTF8 = "\uFEFF";
-          file.file("receipt-recu.html", response.data.receipt);
-          file.file("responses-reponses.csv", universalBOMForUTF8 + response.data.responses);
+          file.file("receipt-recu.html", response.receipt);
+          file.file("responses-reponses.csv", universalBOMForUTF8 + response.responses);
           file.generateAsync({ type: "nodebuffer", streamFiles: true }).then((buffer) => {
             const fileName = `${filePrefix}responses-reponses.zip`;
             downloadFileFromBlob(new Blob([buffer]), fileName);
@@ -152,9 +154,9 @@ export const DownloadDialog = ({
             handleDownloadComplete();
           });
         } else {
-          downloadFileFromBlob(new Blob([response.data.receipt]), `${filePrefix}receipt-recu.html`);
+          downloadFileFromBlob(new Blob([response.receipt]), `${filePrefix}receipt-recu.html`);
           downloadFileFromBlob(
-            new Blob([response.data.responses]),
+            new Blob([response.responses]),
             `${filePrefix}responses-reponses.csv`
           );
 
@@ -163,20 +165,19 @@ export const DownloadDialog = ({
       }
 
       if (selectedFormat === DownloadFormat.JSON) {
-        const response = await axios({
-          url,
-          method: "POST",
-          data: {
-            ids: ids.join(","),
-          },
-        });
+        const response = (await getSubmissionsByFormat({
+          formID: formId,
+          ids: ids,
+          format: DownloadFormat.JSON,
+          lang: "en", // @TODO
+        })) as JSONResponse;
 
         downloadFormatEvent(formId, selectedFormat, ids.length);
 
         if (zipAllFiles) {
           const file = new JSZip();
-          file.file("receipt-recu.html", response.data.receipt);
-          file.file("responses-reponses.json", JSON.stringify(response.data.responses));
+          file.file("receipt-recu.html", response.receipt);
+          file.file("responses-reponses.json", JSON.stringify(response.responses));
           file.generateAsync({ type: "nodebuffer", streamFiles: true }).then((buffer) => {
             const fileName = `${filePrefix}responses-reponses.zip`;
             downloadFileFromBlob(new Blob([buffer]), fileName);
@@ -184,9 +185,9 @@ export const DownloadDialog = ({
             handleDownloadComplete();
           });
         } else {
-          downloadFileFromBlob(new Blob([response.data.receipt]), `${filePrefix}receipt-recu.html`);
+          downloadFileFromBlob(new Blob([response.receipt]), `${filePrefix}receipt-recu.html`);
           downloadFileFromBlob(
-            new Blob([JSON.stringify(response.data.responses)], { type: "application/json" }),
+            new Blob([JSON.stringify(response.responses)], { type: "application/json" }),
             `${filePrefix}responses-reponses.json`
           );
 

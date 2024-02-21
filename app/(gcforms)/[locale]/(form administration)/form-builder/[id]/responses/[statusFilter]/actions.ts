@@ -225,7 +225,7 @@ export const getSubmissionsByFormat = async ({
     switch (format) {
       case DownloadFormat.CSV:
         return {
-          receipt: htmlAggregatedTransform(formResponse, lang),
+          receipt: await htmlAggregatedTransform(formResponse, lang),
           responses: csvTransform(formResponse),
         };
       case DownloadFormat.HTML_AGGREGATED:
