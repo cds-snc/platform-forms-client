@@ -4,8 +4,8 @@ import { logMessage } from "@lib/logger";
 import React from "react";
 import { useTranslation } from "@i18n/client";
 import { getSubmissionsByFormat } from "../actions";
-import { DownloadFormat } from "@lib/responseDownloadFormats/types";
-import { HtmlResponse } from "@lib/responseDownloadFormats/html";
+import { DownloadFormat, HtmlResponse } from "@lib/responseDownloadFormats/types";
+import { Language } from "@clientComponents/form-builder/types";
 
 export const DownloadSingleButton = ({
   id,
@@ -22,7 +22,7 @@ export const DownloadSingleButton = ({
   onDownloadSuccess: () => void;
   ariaLabelledBy: string;
 }) => {
-  const { t } = useTranslation("form-builder-responses");
+  const { t, i18n } = useTranslation("form-builder-responses");
 
   const handleDownload = async () => {
     try {
@@ -30,7 +30,7 @@ export const DownloadSingleButton = ({
         formID: formId,
         ids: [responseId],
         format: DownloadFormat.HTML,
-        lang: "en", // @TODO
+        lang: i18n.language as Language,
       })) as HtmlResponse;
 
       const interval = 200;
