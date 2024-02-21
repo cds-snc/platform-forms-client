@@ -1,6 +1,12 @@
 import { ResponseHtml } from "./components/ResponseHtml";
 import { FormResponseSubmissions } from "../types";
 
+export type HtmlResponse = {
+  id: string;
+  created_at: number;
+  html: string;
+}[];
+
 export const transform = async (formResponseSubmissions: FormResponseSubmissions) => {
   const renderToStaticMarkup = (await import("react-dom/server")).renderToStaticMarkup;
   const records = formResponseSubmissions.submissions.map((response) => {
@@ -20,5 +26,5 @@ export const transform = async (formResponseSubmissions: FormResponseSubmissions
     };
   });
 
-  return records;
+  return records as HtmlResponse;
 };

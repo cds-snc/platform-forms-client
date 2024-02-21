@@ -1,9 +1,11 @@
 "use client";
 import { DownloadIcon } from "@serverComponents/icons";
 import { logMessage } from "@lib/logger";
-import axios from "axios";
 import React from "react";
 import { useTranslation } from "@i18n/client";
+import { getSubmissionsByFormat } from "../actions";
+import { DownloadFormat } from "@lib/responseDownloadFormats/types";
+import { HtmlResponse } from "@lib/responseDownloadFormats/html";
 
 export const DownloadSingleButton = ({
   id,
@@ -22,37 +24,34 @@ export const DownloadSingleButton = ({
 }) => {
   const { t } = useTranslation("form-builder-responses");
 
-  const handleDownload = () => {
-    const url = `/api/id/${formId}/submission/download?format=html`;
+  const handleDownload = async () => {
+    try {
+      const submissionHtml: HtmlResponse = (await getSubmissionsByFormat({
+        formID: formId,
+        ids: [responseId],
+        format: DownloadFormat.HTML,
+        lang: "en",
+      })) as HtmlResponse;
 
-    axios({
-      url,
-      method: "POST",
-      data: {
-        ids: responseId,
-      },
-    })
-      .then((response) => {
-        const interval = 200;
-        const submission = response.data[0];
-        const fileName = `${submission.id}.html`;
-        const href = window.URL.createObjectURL(new Blob([submission.html]));
-        const anchorElement = document.createElement("a");
-        anchorElement.href = href;
-        anchorElement.download = fileName;
-        document.body.appendChild(anchorElement);
-        anchorElement.click();
-        document.body.removeChild(anchorElement);
-        window.URL.revokeObjectURL(href);
+      const interval = 200;
+      const submission = submissionHtml[0];
+      const fileName = `${submission.id}.html`;
+      const href = window.URL.createObjectURL(new Blob([submission.html]));
+      const anchorElement = document.createElement("a");
+      anchorElement.href = href;
+      anchorElement.download = fileName;
+      document.body.appendChild(anchorElement);
+      anchorElement.click();
+      document.body.removeChild(anchorElement);
+      window.URL.revokeObjectURL(href);
 
-        setTimeout(() => {
-          onDownloadSuccess();
-        }, interval);
-      })
-      .catch((err) => {
-        logMessage.error(err as Error);
-        setDownloadError(true);
-      });
+      setTimeout(() => {
+        onDownloadSuccess();
+      }, interval);
+    } catch (err) {
+      logMessage.error(err as Error);
+      setDownloadError(true);
+    }
   };
 
   return (
