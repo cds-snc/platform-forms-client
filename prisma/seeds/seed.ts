@@ -234,11 +234,6 @@ async function templateSchemaMigration() {
 
 async function lowercaseEmailAddressMigration() {
   const users = (await prisma.user.findMany({
-    where: {
-      email: {
-        not: null,
-      },
-    },
     select: {
       id: true,
       email: true,
