@@ -13,15 +13,11 @@ import { DialogStates } from "./DialogStates";
 import { chunkArray } from "@lib/utils";
 
 export const ConfirmDialog = ({
-  isShow,
-  setIsShow,
   apiUrl,
   inputRegex = isUUID,
   maxEntries = 20,
   onSuccessfulConfirm,
 }: {
-  isShow: boolean;
-  setIsShow: React.Dispatch<React.SetStateAction<boolean>>;
   apiUrl: string;
   inputRegex?: (field: string) => boolean;
   maxEntries?: number;
@@ -36,6 +32,7 @@ export const ConfirmDialog = ({
   const [errorEntriesList, setErrorEntriesList] = useState<string[]>([]);
   const dialogRef = useDialogRef();
   const confirmInstructionId = `dialog-confirm-receipt-instruction-${randomId()}`;
+  const [showConfirmReceiptDialog, setShowConfirmReceiptDialog] = useState(false);
 
   // Cleanup any un-needed errors from the last render
   if (status === DialogStates.MIN_ERROR && entries.length > 0) {
@@ -43,7 +40,7 @@ export const ConfirmDialog = ({
   }
 
   const handleClose = () => {
-    setIsShow(false);
+    setShowConfirmReceiptDialog(false);
     setEntries([]);
     setStatus(DialogStates.EDITING);
     setErrorEntriesList([]);
@@ -110,7 +107,10 @@ export const ConfirmDialog = ({
 
   return (
     <>
-      {isShow && (
+      <Button onClick={() => setShowConfirmReceiptDialog(true)} theme="secondary">
+        {t("responses.confirmReceipt")}
+      </Button>
+      {showConfirmReceiptDialog && (
         <Dialog
           title={t("downloadResponsesModals.confirmReceiptDialog.title")}
           dialogRef={dialogRef}

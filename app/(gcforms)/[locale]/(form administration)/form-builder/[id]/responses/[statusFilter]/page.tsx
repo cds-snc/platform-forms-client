@@ -2,15 +2,11 @@ import { Metadata } from "next";
 import { auth } from "@lib/auth";
 import { redirect } from "next/navigation";
 import { serverTranslation } from "@i18n";
-import { getFullTemplateByID } from "@lib/templates";
-import { AccessControlError, createAbility } from "@lib/privileges";
-import { VaultStatus } from "@lib/types";
-import { listAllSubmissions } from "@lib/vault";
+import { AccessControlError } from "@lib/privileges";
 import { getAppSetting } from "@lib/appSettings";
-import { isResponseId } from "@lib/validation";
 import { Responses, ResponsesProps } from "./components/Responses";
-import { ucfirst } from "@lib/client/clientHelpers";
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
+import { fetchSubmissions, fetchTemplate } from "./actions";
 
 export async function generateMetadata({
   params: { locale },
@@ -38,6 +34,7 @@ export default async function Page({
     responseDownloadLimit: Number(await getAppSetting("responseDownloadLimit")),
     lastEvaluatedKey: null,
     nagwareResult: null,
+    overdueAfter: Number(await getAppSetting("nagwarePhaseEncouraged")),
   };
 
   const session = await auth();
@@ -45,8 +42,7 @@ export default async function Page({
 
   if (session && id) {
     try {
-      const ability = createAbility(session);
-      const initialForm = await getFullTemplateByID(ability, id);
+      const initialForm = await fetchTemplate(id);
 
       if (initialForm === null) {
         redirect(`/${locale}/404`);
@@ -54,31 +50,11 @@ export default async function Page({
 
       pageProps.initialForm = initialForm;
 
-      // get status from url params (default = new) and capitalize/cast to VaultStatus
-      // Protect against invalid status query
-      const selectedStatus = Object.values(VaultStatus).includes(
-        ucfirst(statusFilter) as VaultStatus
-      )
-        ? (ucfirst(statusFilter) as VaultStatus)
-        : VaultStatus.NEW;
-
-      let currentLastEvaluatedKey = null;
-
-      // build up lastEvaluatedKey from lastKey url param
-      if (lastKey && isResponseId(String(lastKey))) {
-        currentLastEvaluatedKey = {
-          Status: selectedStatus,
-          NAME_OR_CONF: `NAME#${lastKey}`,
-          formID: id,
-        };
-      }
-
-      const { submissions, lastEvaluatedKey } = await listAllSubmissions(
-        ability,
-        id,
-        selectedStatus,
-        currentLastEvaluatedKey
-      );
+      const { submissions, lastEvaluatedKey } = await fetchSubmissions({
+        formId: id,
+        status: statusFilter,
+        lastKey,
+      });
 
       pageProps.vaultSubmissions = submissions;
       pageProps.lastEvaluatedKey = lastEvaluatedKey;

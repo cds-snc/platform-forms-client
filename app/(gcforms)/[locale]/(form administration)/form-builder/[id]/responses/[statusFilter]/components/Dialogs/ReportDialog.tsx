@@ -1,33 +1,31 @@
-import React, { useRef, useState } from "react";
-import { useTranslation } from "@i18n/client";
-import { useDialogRef, Dialog, TextArea } from "@clientComponents/form-builder/app/shared";
-import { LineItemEntries } from "./line-item-entries";
-import { Button, Alert } from "@clientComponents/globals";
-import { randomId } from "@lib/client/clientHelpers";
-import axios from "axios";
-import { usePathname, useRouter } from "next/navigation";
-import { logMessage } from "@lib/logger";
-import Link from "next/link";
-import { isResponseId } from "@lib/validation";
+import { Dialog, TextArea, useDialogRef } from "@clientComponents/form-builder/app/shared";
+import { Alert, Button } from "@clientComponents/globals";
 import {
-  ValidationMessage,
   MessageType,
+  ValidationMessage,
 } from "@clientComponents/globals/ValidationMessage/ValidationMessage";
+import { useTranslation } from "@i18n/client";
+import { randomId } from "@lib/client/clientHelpers";
+import { logMessage } from "@lib/logger";
+import { isResponseId } from "@lib/validation";
+import { WarningIcon } from "@serverComponents/icons";
+import axios from "axios";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import React, { useRef, useState } from "react";
 import { DialogStates } from "./DialogStates";
+import { LineItemEntries } from "./line-item-entries";
 
 export const ReportDialog = ({
-  isShow,
-  setIsShow,
   apiUrl,
   inputRegex = isResponseId,
   maxEntries = 20,
 }: {
-  isShow: boolean;
-  setIsShow: React.Dispatch<React.SetStateAction<boolean>>;
   apiUrl: string;
   inputRegex?: (field: string) => boolean;
   maxEntries?: number;
 }) => {
+  const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
   const { t, i18n } = useTranslation(["form-builder-responses", "common"]);
   const router = useRouter();
   const path = usePathname();
@@ -44,7 +42,7 @@ export const ReportDialog = ({
   }
 
   const handleClose = () => {
-    setIsShow(false);
+    setIsShowReportProblemsDialog(false);
     setEntries([]);
     setStatus(DialogStates.EDITING);
     setErrorEntriesList([]);
@@ -108,7 +106,17 @@ export const ReportDialog = ({
 
   return (
     <>
-      {isShow && (
+      <Link
+        onClick={() => setIsShowReportProblemsDialog(true)}
+        href={"#"}
+        className="text-black visited:text-black focus:text-white-default"
+        id="reportProblemButton"
+      >
+        <WarningIcon className="mr-2 inline-block" />
+        {t("responses.reportProblems")}
+      </Link>
+
+      {isShowReportProblemsDialog && (
         <Dialog
           title={t("downloadResponsesModals.reportProblemsDialog.title")}
           dialogRef={dialogRef}

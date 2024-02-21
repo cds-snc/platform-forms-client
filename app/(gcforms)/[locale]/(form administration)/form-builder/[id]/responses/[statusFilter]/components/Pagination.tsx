@@ -88,13 +88,13 @@ export const Pagination = ({
   return (
     <>
       <Link
-        href={`/${language}/form-builder/responses/${formId}${
+        href={`/${language}/form-builder/${formId}/responses${
           statusFilter ? `/${statusFilter}` : "/new"
         }`}
         legacyBehavior
       >
         <a
-          href={`/${language}/form-builder/responses/${formId}${
+          href={`/${language}/form-builder/${formId}/responses${
             statusFilter ? `/${statusFilter}` : "/new"
           }`}
           className={`group mr-4 inline-block ${
@@ -109,13 +109,13 @@ export const Pagination = ({
 
       <div className="float-right inline-block">
         <Link
-          href={`/${language}/form-builder/responses/${formId}${
+          href={`/${language}/form-builder/${formId}/responses${
             statusFilter ? `/${statusFilter}` : "/new"
           }${previousLink}`}
           legacyBehavior
         >
           <a
-            href={`/${language}/form-builder/responses/${formId}${
+            href={`/${language}/form-builder/${formId}/responses${
               statusFilter ? `/${statusFilter}` : "/new"
             }${previousLink}`}
             className={`group mr-4 inline-block ${
@@ -129,13 +129,13 @@ export const Pagination = ({
         </Link>
         {t("downloadResponsesTable.header.pagination.showing", { start, end })}
         <Link
-          href={`/${language}/form-builder/responses/${formId}${
+          href={`/${language}/form-builder/${formId}/responses${
             statusFilter ? `/${statusFilter}` : "/new"
           }?keys=${btoa(keys.join(","))}&lastKey=${lastEvaluatedResponseId}`}
           legacyBehavior
         >
           <a
-            href={`/${language}/form-builder/responses/${formId}${
+            href={`/${language}/form-builder/${formId}/responses${
               statusFilter ? `/${statusFilter}` : "/new"
             }?keys=${btoa(keys.join(","))}&lastKey=${lastEvaluatedResponseId}`}
             className={`group ml-4 inline-block ${
