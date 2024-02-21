@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { LangSwitcher } from "../shared/LangSwitcher";
+import { LangSwitcher } from "@clientComponents/form-builder/app/shared/LangSwitcher";
 
 export const PreviewNavigation = () => {
   return (
