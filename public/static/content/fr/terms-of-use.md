@@ -66,6 +66,6 @@ Vous avez pour responsabilité :
 
 Vous pouvez remplacer la signature du gouvernement du Canada par la signature de votre ministère ou organisme. Si vous ne connaissez pas la signature de votre ministère ou organisme, veuillez contacter [le coordonnateur ou la coordonnatrice du Programme fédéral de l’image de marque](https://www.tbs-sct.canada.ca/ap/fip-pcim/coord-fra.asp).
 
-Pour toute question en lien avec les présentes conditions d’utilisation, veuillez [nous contacter](/fr/support/contactus).
+Pour toute question en lien avec les présentes conditions d’utilisation, veuillez [nous contacter](/fr/contact).
 
 **Dernière mise à jour :** 14 décembre 2023

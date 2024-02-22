@@ -66,6 +66,6 @@ You are responsible for:
 
 You may replace the Government of Canada signature with your department or agency’s signature. If you are unsure about your department or agency’s signature, contact your [Federal Identity Program coordinator](https://www.tbs-sct.canada.ca/ap/fip-pcim/coord-eng.asp).
 
-For questions related to these terms of use, [contact us](/en/support/contactus).
+For questions related to these terms of use, [contact us](/en/contact).
 
 **Last update:** December 14, 2023

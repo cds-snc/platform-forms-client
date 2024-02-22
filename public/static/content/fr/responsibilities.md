@@ -14,4 +14,4 @@ Vos responsabilités relatives à l’utilisation de Formulaires GC sont décrit
   - Gérer les réponses aux formulaires conformément au calendrier de conservation et d’élimination de votre ministère ou organisme.
   - Utiliser Formulaires GC pour la collecte de données classées jusqu’à PROTÉGÉ B.
 
-Pour toute question en lien avec les présentes conditions d’utilisation, veuillez [nous contacter](/fr/support/contactus).
+Pour toute question en lien avec les présentes conditions d’utilisation, veuillez [nous contacter](/fr/contact).

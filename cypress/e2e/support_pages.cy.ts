@@ -37,7 +37,7 @@ describe("Support Pages", () => {
 
   describe("Contact Us Page", () => {
     beforeEach(() => {
-      cy.visitPage("/en/support/contactus");
+      cy.visitPage("/en/contact");
     });
 
     it("English page loads", () => {

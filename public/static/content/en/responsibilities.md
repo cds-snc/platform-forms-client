@@ -14,4 +14,4 @@ As a reminder, here are the highlights:
   - Manage form responses based on your department or agency’s retention and disposition schedule.
   - Use GC Forms to collect data classified as up to PROTECTED B.
 
-For questions related to these terms of use, [contact us](/en/support/contactus).
+For questions related to these terms of use, [contact us](/en/contact).
