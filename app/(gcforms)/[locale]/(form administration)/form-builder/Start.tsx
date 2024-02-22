@@ -3,9 +3,9 @@ import React, { useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useRouter } from "next/navigation";
 
-import { useTemplateStore, clearTemplateStore } from "../store/useTemplateStore";
+import { useTemplateStore, clearTemplateStore } from "@clientComponents/form-builder/store";
 import { DesignIcon, ExternalLinkIcon, WarningIcon } from "@serverComponents/icons";
-import { errorMessage, validateTemplate } from "../validate";
+import { errorMessage, validateTemplate } from "@clientComponents/form-builder/validate";
 import Link from "next/link";
 
 export const Start = () => {
