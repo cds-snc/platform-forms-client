@@ -22,7 +22,7 @@ import { Button, LinkButton, Alert } from "@clientComponents/globals";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 
-export function ContactUs() {
+export function Contact() {
   const { t, i18n } = useTranslation(["form-builder", "common"]);
   const [isSuccessScreen, setIsSuccessScreen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);

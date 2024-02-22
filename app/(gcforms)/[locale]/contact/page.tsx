@@ -1,4 +1,4 @@
-import { ContactUs } from "./ContactUs";
+import { Contact } from "./Contact";
 import { serverTranslation } from "@i18n";
 import DefaultLayout from "@clientComponents/globals/layouts/DefaultLayout";
 
@@ -18,7 +18,7 @@ export async function generateMetadata({
 export default async function Page() {
   return (
     <DefaultLayout showLanguageToggle>
-      <ContactUs />
+      <Contact />
     </DefaultLayout>
   );
 }
