@@ -23,7 +23,7 @@ export async function generateMetadata({
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   return (
     <FormBuilderProviders locale={locale}>
-      <div className="flex h-full flex-col">
+      <div className="flex h-full flex-col bg-gray-soft">
         <SkipLink />
         <Header className="mb-0" />
         <div className="shrink-0 grow basis-auto">

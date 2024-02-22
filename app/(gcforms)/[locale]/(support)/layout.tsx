@@ -4,7 +4,7 @@ import LanguageToggle from "@clientComponents/globals/LanguageToggle";
 import { cn } from "@lib/utils";
 export default async function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex h-full flex-col bg-white">
+    <div className="flex h-full flex-col">
       <SkipLink />
       <header>
         <Fip className={"mb-20 mt-0 border-b-4 border-blue-dark py-9"}>
