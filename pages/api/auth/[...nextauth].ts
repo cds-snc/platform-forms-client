@@ -115,7 +115,31 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   events: {
     async signIn({ user }) {
-      logEvent(user.id, { type: "User", id: user.id }, "UserSignIn");
+      if (!user.email) {
+        throw new Error(
+          "Could not produce UserSignIn audit log because of undefined email information"
+        );
+      }
+
+      const internalUser = await prisma.user.findUnique({
+        where: {
+          email: user.email,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      if (internalUser === null) {
+        throw new Error("Could not produce UserSignIn audit log because user does not exist");
+      }
+
+      logEvent(
+        internalUser.id,
+        { type: "User", id: internalUser.id },
+        "UserSignIn",
+        `Cognito user unique identifier (sub): ${user.id}`
+      );
     },
     async signOut({ token }) {
       logEvent(token.userId, { type: "User", id: token.userId }, "UserSignOut");
