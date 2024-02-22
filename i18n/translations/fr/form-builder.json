@@ -257,7 +257,7 @@
   "confirmationMessage": "Message de confirmation",
   "confirmationPage": "Page de confirmation",
   "contactSupport": "Contacter l’équipe de soutien",
-  "contactSupportIfYouHaveQuestions": "<a href=\"/fr/form-builder/support\" target=\"_blank\">Veuillez contacter</a> l’équipe de soutien si vous avez des questions. ",
+  "contactSupportIfYouHaveQuestions": "<a href=\"/fr/support\" target=\"_blank\">Veuillez contacter</a> l’équipe de soutien si vous avez des questions. ",
   "contactus": {
     "description": {
       "description": "Ajouter plus de contexte ou d'informations.",
@@ -300,7 +300,7 @@
   },
   "description": "Description",
   "descriptionDescription": "Le texte explicatif apparaît sous l'étiquette et avant le champ. Il est utilisé pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de mise en forme ou donner un exemple.",
-  "didYouFindThisToolHelpful": "Avez-vous trouvé Formulaires GC pertinent comme outil? <a href=\"/fr/form-builder/support/contactus\" target=\"_blank\">Donner votre avis</a>",
+  "didYouFindThisToolHelpful": "Avez-vous trouvé Formulaires GC pertinent comme outil? <a href=\"/fr/support/contactus\" target=\"_blank\">Donner votre avis</a>",
   "downloadCSV": "Exporter en fichier CSV",
   "downloadResponsesTable": {
     "card": {
@@ -351,7 +351,7 @@
   "elementActions": "Actions des éléments",
   "email": "Courriel",
   "english": "anglais",
-  "errorSaving": "Une erreur s'est produite lors de l'enregistrement du formulaire. <a href=\"/fr/form-builder/support\" target=\"_blank\">Contacter l’équipe de soutien</a>.",
+  "errorSaving": "Une erreur s'est produite lors de l'enregistrement du formulaire. <a href=\"/fr/support\" target=\"_blank\">Contacter l’équipe de soutien</a>.",
   "failedToReadFormFile": "L’ouverture du fichier de formulaire a échoué",
   "formatBold": "Mettre en gras",
   "formatBulletList": "Mettre en liste à puces",
@@ -418,7 +418,7 @@
   "gcFormsStart": "Créer",
   "gcFormsTest": "Tester",
   "gcFormsTranslate": "Traductions",
-  "ifYouAreExperiencingProblems": "Si vous rencontrez des problèmes avec votre formulaire publié, <a href=\"/fr/form-builder/support\" target=\"_blank\">veuillez contacter l’équipe de soutien.</a>.",
+  "ifYouAreExperiencingProblems": "Si vous rencontrez des problèmes avec votre formulaire publié, <a href=\"/fr/support\" target=\"_blank\">veuillez contacter l’équipe de soutien.</a>.",
   "incomplete": "Incomplet",
   "inputDescription": "Texte explicatif",
   "insertLink": "Insérer un lien  ",
