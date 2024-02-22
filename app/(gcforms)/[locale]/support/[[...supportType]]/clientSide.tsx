@@ -136,7 +136,7 @@ export function ClientSide({ supportType }: { supportType: string }) {
                 <Alert.Warning title={t("contactus.needSupport")} role="note">
                   <p>
                     {t("contactus.ifYouExperience")}{" "}
-                    <Link href={`/form-builder/support`}>{t("contactus.supportFormLink")}</Link>.
+                    <Link href={`/support`}>{t("contactus.supportFormLink")}</Link>.
                   </p>
                 </Alert.Warning>
                 <fieldset className="focus-group mt-14">
@@ -353,7 +353,7 @@ export function ClientSide({ supportType }: { supportType: string }) {
                 <Alert.Warning title={t("support.lookingForADemo")} role="note">
                   <p>
                     {t("support.ifYouWouldLike")}{" "}
-                    <Link href={`/form-builder/support/contactus`}>{t("support.contactUs")}</Link>.
+                    <Link href={`/support/contactus`}>{t("support.contactUs")}</Link>.
                   </p>
                 </Alert.Warning>
                 <div className="focus-group mt-14">

@@ -184,7 +184,7 @@ export const ReportDialog = ({
                   </Alert.Title>
                   <p>
                     {t("downloadResponsesModals.reportProblemsDialog.errors.unknown.description")}
-                    <Link href={"/form-builder/support"}>
+                    <Link href={"/support"}>
                       {t(
                         "downloadResponsesModals.reportProblemsDialog.errors.unknown.descriptionLink"
                       )}
