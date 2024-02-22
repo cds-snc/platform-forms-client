@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import { UserCard } from "./UserCard";
 import { getPublishedFormsPrivilegeId, getAllUsers } from "../../actions";
 import { auth } from "@lib/auth";
@@ -6,7 +5,6 @@ import { createAbility } from "@lib/privileges";
 import { serverTranslation } from "@i18n";
 import { Card } from "@clientComponents/globals/card/Card";
 import { ScrollHelper } from "../client/ScrollHelper";
-import { Loader } from "@clientComponents/globals/Loader";
 
 export const UsersList = async ({ filter }: { filter?: string }) => {
   const session = await auth();
@@ -34,14 +32,12 @@ export const UsersList = async ({ filter }: { filter?: string }) => {
                 key={user.id}
                 data-testid={user.email}
               >
-                <Suspense fallback={<Loader />}>
-                  <UserCard
-                    user={user}
-                    canManageUser={canManageUser}
-                    currentUserId={session.user.id}
-                    publishFormsId={publishFormsId}
-                  />
-                </Suspense>
+                <UserCard
+                  user={user}
+                  canManageUser={canManageUser}
+                  currentUserId={session.user.id}
+                  publishFormsId={publishFormsId}
+                />
               </li>
             );
           })}

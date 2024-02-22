@@ -7,12 +7,6 @@ import { revalidatePath } from "next/cache";
 import { getUsers, updateActiveStatus } from "@lib/users";
 import { redirect } from "next/navigation";
 
-// for Testing
-function delay(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-///
-
 const authCheck = async () => {
   const session = await auth();
   if (!session) throw new Error("No session found");
@@ -25,7 +19,6 @@ export const updatePublishing = async (
   action: "add" | "remove"
 ) => {
   const ability = await authCheck();
-  await delay(2000);
   if (ability.can("update", "User")) {
     await updatePrivilegesForUser(ability, userID, [{ id: publishFormsId, action }]);
     revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/accounts");
@@ -47,7 +40,6 @@ export const serverRedirect = async (path: string) => {
 
 export const getAllUsers = async (active?: boolean) => {
   const ability = await authCheck();
-  await delay(3000);
   return getUsers(ability, typeof active !== "undefined" ? { active } : undefined);
 };
 

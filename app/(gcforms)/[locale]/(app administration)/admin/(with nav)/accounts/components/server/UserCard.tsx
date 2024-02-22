@@ -4,10 +4,6 @@ import { PublishPermission } from "../client/PublishPermission";
 import { AccountActivation } from "../client/AccountActivation";
 import { ManageFormsButton } from "../client/ManageFormsButton";
 
-function delay(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 export const UserCard = async ({
   user,
   canManageUser,
@@ -20,8 +16,6 @@ export const UserCard = async ({
   publishFormsId: string;
 }) => {
   const isCurrentUser = user.id === currentUserId;
-
-  await delay(2000);
 
   return (
     <>
