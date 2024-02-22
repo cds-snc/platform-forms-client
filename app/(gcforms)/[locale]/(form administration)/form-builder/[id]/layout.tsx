@@ -49,20 +49,19 @@ export default async function Layout({
 
   return (
     <FormBuilderProviders locale={locale} initialForm={initialForm}>
-      <div className="flex h-full flex-col bg-gray-soft">
+      <div className="flex h-full flex-col">
         <SkipLink />
         <Header context="formBuilder" className="mb-0" />
-        <div className="shrink-0 grow basis-auto">
+        <div className="shrink-0 grow basis-auto bg-gray-soft">
           <ToastContainer containerId="default" />
           <ToastContainer limit={1} containerId="wide" autoClose={false} width="600px" />
-
           <div className="flex h-full flex-row gap-10 pr-12">
-            <div
-              id="left-nav"
-              className="sticky top-0 z-10 flex w-16 border-r border-slate-200 bg-white"
-            >
-              <LeftNavigation id={id} />
+            <div id="left-nav" className="z-10 border-r border-slate-200 bg-white">
+              <div className="sticky top-0">
+                <LeftNavigation id={id} />
+              </div>
             </div>
+
             <main id="content" className="w-full form-builder my-5">
               {children}
             </main>
