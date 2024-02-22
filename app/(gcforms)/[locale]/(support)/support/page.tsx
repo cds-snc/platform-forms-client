@@ -1,6 +1,5 @@
-import { Contact } from "./Contact";
+import { Support } from "./Support";
 import { serverTranslation } from "@i18n";
-import DefaultLayout from "@clientComponents/globals/layouts/DefaultLayout";
 
 import { Metadata } from "next";
 
@@ -11,14 +10,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { t } = await serverTranslation("form-builder", { lang: locale });
   return {
-    title: `${t("contactus.title")}`,
+    title: t("support.title"),
   };
 }
 
 export default async function Page() {
-  return (
-    <DefaultLayout showLanguageToggle>
-      <Contact />
-    </DefaultLayout>
-  );
+  return <Support />;
 }
