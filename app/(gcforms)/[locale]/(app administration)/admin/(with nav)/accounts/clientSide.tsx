@@ -14,7 +14,6 @@ import { Dropdown } from "@clientComponents/admin/Users/Dropdown";
 import { ConfirmDeactivateModal } from "@clientComponents/admin/Users/ConfirmDeactivateModal";
 import { RoundedButton, Button, themes, LinkButton } from "@clientComponents/globals";
 import { AppUser } from "@lib/types/user-types";
-import { Card } from "@clientComponents/globals/card/Card";
 
 const enum AccountsFilterState {
   ALL,
@@ -279,15 +278,6 @@ export const Users = ({
               );
             })}
           </ul>
-        )}
-        {accounts?.length <= 0 && (
-          <Card>
-            <p className="text-[#748094]">
-              {isFilterAll() && t("accountsFilter.noAccounts")}
-              {isFilterActive() && t("accountsFilter.noActiveAccounts")}
-              {isFilterDeactivated() && t("accountsFilter.noDeactivatedAccounts")}
-            </p>
-          </Card>
         )}
       </div>
 
