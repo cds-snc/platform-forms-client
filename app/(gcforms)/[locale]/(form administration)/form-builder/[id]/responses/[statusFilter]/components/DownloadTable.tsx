@@ -8,11 +8,7 @@ import {
 } from "@lib/types";
 import { useTranslation } from "@i18n/client";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
-import { ConfirmReceiptStatus } from "./ConfirmReceiptStatus";
-import { DownloadResponseStatus } from "./DownloadResponseStatus";
-import { RemovalStatus } from "./RemovalStatus";
 import { useParams } from "next/navigation";
-import { useSetting } from "@lib/hooks/useSetting";
 import Link from "next/link";
 import { TableActions, initialTableItemsState, reducerTableItems } from "./DownloadTableReducer";
 import { getDaysPassed, ucfirst } from "@lib/client/clientHelpers";
@@ -27,6 +23,7 @@ import { formatDateTime } from "@clientComponents/form-builder/util";
 import { DownloadSingleButton } from "./DownloadSingleButton";
 import { Pagination } from "./Pagination";
 import { cn } from "@lib/utils";
+import { NextStep } from "./NextStep";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -34,9 +31,8 @@ interface DownloadTableProps {
   formId: string;
   nagwareResult: NagwareResult | null;
   responseDownloadLimit: number;
-  showDownloadSuccess: false | string;
-  setShowDownloadSuccess: React.Dispatch<React.SetStateAction<false | string>>;
   lastEvaluatedKey?: Record<string, string> | null;
+  overdueAfter: number;
 }
 
 export const DownloadTable = ({
@@ -45,8 +41,8 @@ export const DownloadTable = ({
   formId,
   nagwareResult,
   responseDownloadLimit,
-  setShowDownloadSuccess,
   lastEvaluatedKey,
+  overdueAfter,
 }: DownloadTableProps) => {
   const {
     t,
@@ -59,11 +55,10 @@ export const DownloadTable = ({
   const [noSelectedItemsError, setNoSelectedItemsError] = useState(false);
   const [showConfirmNewtDialog, setShowConfirmNewDialog] = useState(false);
   const [showDownloadDialog, setShowDownloadDialog] = useState(false);
+  const [showDownloadSuccess, setShowDownloadSuccess] = useState<false | string>(false);
   const [removedRows, setRemovedRows] = useState<string[]>([]);
-
   const accountEscalated = nagwareResult && nagwareResult.level > 2;
 
-  const { value: overdueAfter } = useSetting("nagwarePhaseEncouraged");
   const [tableItems, tableItemsDispatch] = useReducer(
     reducerTableItems,
     initialTableItemsState(vaultSubmissions, overdueAfter)
@@ -106,6 +101,12 @@ export const DownloadTable = ({
 
   return (
     <>
+      {showDownloadSuccess && (
+        <Alert.Success className="mb-4">
+          <Alert.Title>{t(`${showDownloadSuccess}.title`)}</Alert.Title>
+          <Alert.Body>{t(`${showDownloadSuccess}.body`)}</Alert.Body>
+        </Alert.Success>
+      )}
       <section>
         <SkipLinkReusable
           text={t("downloadResponsesTable.skipLink")}
@@ -208,48 +209,12 @@ export const DownloadTable = ({
                   </th>
                   <td className="whitespace-nowrap px-4">{createdDateTime}</td>
                   <td className="whitespace-nowrap px-4">
-                    {statusFilter === VaultStatus.NEW && (
-                      <>
-                        {removedRows.includes(submission.name) ? (
-                          <>
-                            <ConfirmReceiptStatus
-                              vaultStatus={VaultStatus.DOWNLOADED}
-                              createdAtDate={submission.createdAt}
-                              overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
-                            />
-                            <br />
-                            {t("downloadResponsesTable.movedToDownloaded")}
-                          </>
-                        ) : (
-                          <DownloadResponseStatus
-                            vaultStatus={submission.status}
-                            createdAt={submission.createdAt}
-                            downloadedAt={submission.downloadedAt}
-                            overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
-                          />
-                        )}
-                      </>
-                    )}
-                    {statusFilter === VaultStatus.DOWNLOADED && (
-                      <ConfirmReceiptStatus
-                        vaultStatus={submission.status}
-                        createdAtDate={submission.createdAt}
-                        overdueAfter={overdueAfter ? parseInt(overdueAfter) : undefined}
-                      />
-                    )}
-                    {statusFilter === VaultStatus.CONFIRMED && (
-                      <RemovalStatus
-                        vaultStatus={submission.status}
-                        removalAt={submission.removedAt}
-                      />
-                    )}
-                    {statusFilter === VaultStatus.PROBLEM && (
-                      <p className="text-red">
-                        <strong>{t("supportWillContact")}</strong>
-                        <br />
-                        {t("reportedAsProblem")}
-                      </p>
-                    )}
+                    <NextStep
+                      statusFilter={statusFilter as VaultStatus}
+                      submission={submission}
+                      overdueAfter={overdueAfter ? overdueAfter : undefined}
+                      removedRows={removedRows}
+                    />
                   </td>
                   <td className="whitespace-nowrap text-center">
                     <DownloadSingleButton

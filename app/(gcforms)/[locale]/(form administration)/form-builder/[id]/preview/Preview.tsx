@@ -4,16 +4,21 @@ import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
 
+import { PreviewNavigation } from "./PreviewNavigation";
 import { getRenderedForm } from "@lib/formBuilder";
 import { PublicFormRecord } from "@lib/types";
 import { Button, Form, RichText, ClosedPage, NextButton } from "@clientComponents/forms";
-import { LocalizedElementProperties, LocalizedFormProperties } from "../types";
-import { useTemplateStore } from "../store";
-import { BackArrowIcon } from "../../../serverComponents/icons";
+import {
+  LocalizedElementProperties,
+  LocalizedFormProperties,
+} from "@clientComponents/form-builder/types";
+import { useTemplateStore } from "@clientComponents/form-builder/store";
+import { BackArrowIcon } from "@serverComponents/icons";
 import Brand from "@clientComponents/globals/Brand";
 import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
-import { useRehydrate } from "../hooks";
+import { useRehydrate } from "@clientComponents/form-builder/hooks";
+import Skeleton from "react-loading-skeleton";
 
 export const Preview = () => {
   const { status } = useSession();
@@ -62,11 +67,11 @@ export const Preview = () => {
   const isPastClosingDate = useIsFormClosed();
 
   const hasHydrated = useRehydrate();
-  if (!hasHydrated) return null;
 
   if (isPastClosingDate) {
     return (
-      <>
+      <div className="max-w-4xl">
+        <PreviewNavigation />
         <div className="h-12"></div>
         <div
           className={`mb-8 border-3 border-dashed border-blue-focus bg-white p-4 ${
@@ -81,12 +86,13 @@ export const Preview = () => {
             <ClosedPage language={language} formRecord={formRecord} />
           </div>
         </div>
-      </>
+      </div>
     );
   }
 
   return (
-    <>
+    <div className="max-w-4xl">
+      <PreviewNavigation />
       <div className="h-12"></div>
       <div
         className={`mb-8 border-3 border-dashed border-blue-focus bg-white p-4 ${
@@ -152,54 +158,57 @@ export const Preview = () => {
           </>
         ) : (
           <div className="gc-formview">
-            <GCFormsProvider formRecord={formRecord}>
-              <Form
-                formRecord={formRecord}
-                isPreview={true}
-                language={language}
-                t={t}
-                onSuccess={setSent}
-                renderSubmit={({ validateForm }) => {
-                  return (
-                    <div id="PreviewSubmitButton">
-                      <span {...getLocalizationAttribute()}>
-                        <NextButton
-                          validateForm={validateForm}
-                          fallBack={() => {
-                            return (
-                              <Button
-                                type="submit"
-                                id="SubmitButton"
-                                className="mb-4"
-                                onClick={(e) => {
-                                  if (status !== "authenticated") {
-                                    return preventSubmit(e);
-                                  }
-                                }}
-                              >
-                                {t("submitButton", { ns: "common", lng: language })}
-                              </Button>
-                            );
-                          }}
-                        />
-                      </span>
-                      {status !== "authenticated" && (
-                        <div
-                          className="inline-block bg-purple-200 px-4 py-1"
-                          {...getLocalizationAttribute()}
-                        >
-                          <Markdown options={{ forceBlock: true }}>
-                            {t("signInToTest", { ns: "form-builder", lng: language })}
-                          </Markdown>
-                        </div>
-                      )}
-                    </div>
-                  );
-                }}
-              >
-                {currentForm}
-              </Form>
-            </GCFormsProvider>
+            {!hasHydrated && <Skeleton count={5} height={40} className="mb-4" />}
+            {hasHydrated && (
+              <GCFormsProvider formRecord={formRecord}>
+                <Form
+                  formRecord={formRecord}
+                  isPreview={true}
+                  language={language}
+                  t={t}
+                  onSuccess={setSent}
+                  renderSubmit={({ validateForm }) => {
+                    return (
+                      <div id="PreviewSubmitButton">
+                        <span {...getLocalizationAttribute()}>
+                          <NextButton
+                            validateForm={validateForm}
+                            fallBack={() => {
+                              return (
+                                <Button
+                                  type="submit"
+                                  id="SubmitButton"
+                                  className="mb-4"
+                                  onClick={(e) => {
+                                    if (status !== "authenticated") {
+                                      return preventSubmit(e);
+                                    }
+                                  }}
+                                >
+                                  {t("submitButton", { ns: "common", lng: language })}
+                                </Button>
+                              );
+                            }}
+                          />
+                        </span>
+                        {status !== "authenticated" && (
+                          <div
+                            className="inline-block bg-purple-200 px-4 py-1"
+                            {...getLocalizationAttribute()}
+                          >
+                            <Markdown options={{ forceBlock: true }}>
+                              {t("signInToTest", { ns: "form-builder", lng: language })}
+                            </Markdown>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  }}
+                >
+                  {currentForm}
+                </Form>
+              </GCFormsProvider>
+            )}
           </div>
         )}
       </div>
@@ -220,6 +229,6 @@ export const Preview = () => {
           </div>
         </>
       )}
-    </>
+    </div>
   );
 };
