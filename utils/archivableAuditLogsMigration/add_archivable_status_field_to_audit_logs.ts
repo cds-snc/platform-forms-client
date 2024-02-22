@@ -60,9 +60,14 @@ const main = async () => {
       }
 
       lastEvaluatedKey = scanResults.LastEvaluatedKey;
+
+      // Rate limiting to avoid exceeding provisioned capacity
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     }
 
-    console.log("\nMigration completed successfully!");
+    console.log(
+      `\nMigration completed successfully!\nA total of ${numberOfMigratedAuditLogs} audit logs have been updated and are now compatible with the archiver feature.`
+    );
   } catch (error) {
     console.log(error);
   }
