@@ -1,5 +1,4 @@
 import { auth } from "@lib/auth";
-import { cn } from "@lib/utils";
 import { LeftNavigation } from "@clientComponents/form-builder/app";
 import { ToastContainer } from "@clientComponents/form-builder/app/shared/Toast";
 import { SkipLink, Footer, Header } from "@clientComponents/globals";
@@ -53,21 +52,19 @@ export default async function Layout({
       <div className="flex h-full flex-col">
         <SkipLink />
         <Header context="formBuilder" className="mb-0" />
-        <div className="shrink-0 grow basis-auto">
+        <div className="shrink-0 grow basis-auto bg-gray-soft">
           <ToastContainer containerId="default" />
           <ToastContainer limit={1} containerId="wide" autoClose={false} width="600px" />
-          <div>
-            <div className="flex flex-row gap-10 pr-12">
-              <div
-                id="left-nav"
-                className="sticky top-0 z-10 flex h-dvh border-r border-slate-200 bg-white"
-              >
+          <div className="flex h-full flex-row gap-7 pr-12">
+            <div id="left-nav" className="z-10 border-r border-slate-200 bg-white">
+              <div className="sticky top-0">
                 <LeftNavigation id={id} />
               </div>
-              <main id="content" className={cn("w-full form-builder mt-5 mb-10")}>
-                {children}
-              </main>
             </div>
+
+            <main id="content" className="w-full form-builder my-7">
+              {children}
+            </main>
           </div>
         </div>
 

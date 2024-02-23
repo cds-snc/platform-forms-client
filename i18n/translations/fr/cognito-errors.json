@@ -4,13 +4,13 @@
   "InternalServiceExceptionLogin": {
     "title": "Il y a eu un problème lors de la connexion.",
     "description": "Veuillez réessayer plus tard ou contacter ",
-    "link": "/form-builder/support",
+    "link": "/support",
     "linkText": "contacter l'équipe de soutien."
   },
   "TooManyRequestsException": {
     "title": "Trop de demandes.",
     "description": "Réessayez plus tard ou ",
-    "link": "fr/form-builder/support",
+    "link": "fr/support",
     "linkText": "contactez l'équipe de soutien."
   },
   "UsernameExistsException": "Ce compte existe déjà.",

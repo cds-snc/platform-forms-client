@@ -17,7 +17,7 @@ export async function generateMetadata({
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const { t } = await serverTranslation(["deactivated"], { lang: locale });
-  const supportHref = `/${locale}/form-builder/support`;
+  const supportHref = `/${locale}/support`;
   return (
     <UserNavLayout contentWidth="tablet:w-[658px]">
       <>

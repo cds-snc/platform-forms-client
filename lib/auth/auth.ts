@@ -51,7 +51,7 @@ export async function requireAuthentication() {
       !session.user.hasSecurityQuestions &&
       !currentPath.startsWith("/auth/setup-security-questions") &&
       // Let them access the support page if having issues with Security Questions
-      !currentPath.startsWith("/form-builder/support")
+      !currentPath.startsWith("/support")
     ) {
       // check if user has setup security questions setup
       logMessage.debug(

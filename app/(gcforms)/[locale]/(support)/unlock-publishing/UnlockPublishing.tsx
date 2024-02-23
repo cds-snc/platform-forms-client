@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { Formik } from "formik";
 import {
-  Button,
   TextInput,
   Label,
   Alert,
@@ -14,21 +13,20 @@ import { useTranslation } from "@i18n/client";
 import * as Yup from "yup";
 import { isValidGovEmail } from "@lib/validation";
 import { logMessage } from "@lib/logger";
-import { StyledLink } from "@clientComponents/globals/StyledLink/StyledLink";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
-import { useRouter } from "next/navigation";
+import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
+import { Button } from "@clientComponents/globals";
 
-export function UnlockPublishing({ requested }: { requested: boolean }) {
+export function UnlockPublishing() {
   const { t, i18n } = useTranslation(["unlock-publishing", "common"]);
   const [errorState, setErrorState] = useState({ message: "" });
   const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const { data: session } = useSession();
-
-  const router = useRouter();
 
   const handleRequestPublishing = async (
     managerEmail: string,
@@ -71,7 +69,7 @@ export function UnlockPublishing({ requested }: { requested: boolean }) {
 
   return (
     <div aria-live="polite">
-      {!requested && (
+      {!submitted && (
         <Formik
           initialValues={{ managerEmail: "", department: "", goals: "" }}
           onSubmit={async ({ managerEmail, department, goals }) => {
@@ -84,7 +82,7 @@ export function UnlockPublishing({ requested }: { requested: boolean }) {
               }
               setErrorState({ message: "" });
               // Shows success screen
-              router.push(`/${i18n.language}/unlock-publishing/requested`);
+              setSubmitted(true);
             } catch (err) {
               logMessage.error(err);
               setSubmitting(false);
@@ -173,36 +171,24 @@ export function UnlockPublishing({ requested }: { requested: boolean }) {
                       <TextArea
                         id={"goals"}
                         name={"goals"}
-                        className="required w-[34rem] mt-4"
+                        className="required mt-4 w-[34rem]"
                         required
                       />
                     </div>
 
-                    <div className="flex mt-14">
+                    <div className="mt-14 flex gap-4">
                       <Button
                         type="submit"
                         data-submit="unlock-publishing"
-                        className={` 
-                          mr-8
-                          bg-blue-dark text-white-default border-black-default py-4 px-8 rounded-lg border-2 border-solid
-                          hover:text-white-default hover:bg-blue-light active:text-white-default active:bg-blue-active active:top-0.5
-                          focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500
-                        `}
+                        theme="primary"
                         disabled={submitting}
                       >
                         {t("submitButton", { ns: "common" })}
                       </Button>
-                      <StyledLink
-                        href={`/${i18n.language}/forms/`}
-                        className={` 
-                            no-underline visited:text-black-default 
-                            bg-white-default text-black-default border-black-default py-4 px-8 rounded-lg border-2 border-solid
-                            hover:text-white-default hover:bg-blue-light active:text-white-default active:bg-blue-active active:top-0.5
-                            focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500
-                          `}
-                      >
+
+                      <LinkButton.Secondary href={`/${i18n.language}/forms/`}>
                         {t("unlockPublishing.skipStepButton")}
-                      </StyledLink>
+                      </LinkButton.Secondary>
                     </div>
                   </form>
                 </>
@@ -211,7 +197,7 @@ export function UnlockPublishing({ requested }: { requested: boolean }) {
           )}
         </Formik>
       )}
-      {requested && (
+      {submitted && (
         <>
           <h1>{t("unlockPublishingSubmitted.title")}</h1>
           <h2>{t("unlockPublishingSubmitted.whatNext.title")}</h2>
@@ -219,19 +205,9 @@ export function UnlockPublishing({ requested }: { requested: boolean }) {
           <p className="mt-8 font-bold">{t("unlockPublishingSubmitted.whatNext.paragraph2")}</p>
           <p>{t("unlockPublishingSubmitted.whatNext.paragraph3")}</p>
           <p className="mt-8">{t("unlockPublishingSubmitted.whatNext.paragraph4")}</p>
-          <div className="mt-14 flex">
-            <StyledLink
-              href={`/${i18n.language}/forms/`}
-              className={` 
-                mr-8 rounded-lg border-2
-                border-solid border-black-default bg-blue-dark px-8 py-4 text-white-default no-underline visited:text-white-default
-                hover:bg-blue-light hover:text-white-default focus:bg-blue-focus focus:text-white-default focus:outline
-                focus:outline-[3px] focus:outline-offset-2 focus:outline-blue-focus active:top-0.5 active:bg-blue-active active:text-white-default disabled:cursor-not-allowed disabled:text-gray-500
-              `}
-            >
-              {t("continue", { ns: "common" })}
-            </StyledLink>
-          </div>
+          <LinkButton.Primary className="mt-8" href={`/${i18n.language}/forms/`}>
+            {t("continue", { ns: "common" })}
+          </LinkButton.Primary>
         </>
       )}
     </div>

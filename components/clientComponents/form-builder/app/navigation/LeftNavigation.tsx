@@ -25,7 +25,7 @@ const linkHelper = ({
 }) => {
   return {
     href: `/${language}/form-builder${id ? `/${id}` : ""}/${route}`,
-    isActive: segment === route,
+    isActive: segment ? route.includes(segment) : false,
   };
 };
 

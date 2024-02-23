@@ -183,7 +183,7 @@ export const ConfirmDialog = ({
                   </Alert.Title>
                   <p>
                     {t("downloadResponsesModals.confirmReceiptDialog.errors.unknown.description")}
-                    <Link href={`${language}/form-builder/support`}>
+                    <Link href={`${language}/support`}>
                       {t(
                         "downloadResponsesModals.confirmReceiptDialog.errors.unknown.descriptionLink"
                       )}

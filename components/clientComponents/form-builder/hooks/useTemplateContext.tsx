@@ -85,7 +85,7 @@ export function TemplateApiProvider({ children }: { children: React.ReactNode })
   const [privacyChanged, setPrivacyChanged] = useState<boolean | null>(false);
   const [confirmationChanged, setConfirmationChanged] = useState<boolean | null>(false);
 
-  const supportHref = `/${i18n.language}/form-builder/support`;
+  const supportHref = `/${i18n.language}/support`;
   const { id, getSchema, getName, hasHydrated, setId, getIsPublished } = useTemplateStore((s) => ({
     id: s.id,
     getSchema: s.getSchema,
