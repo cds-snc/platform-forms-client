@@ -4,7 +4,7 @@ import { useTranslation } from "@i18n/client";
 import PropTypes from "prop-types";
 
 import { Button } from "@clientComponents/globals";
-import { Close } from "../../../icons";
+import { Close } from "../../../../serverComponents/icons";
 import { CDSHTMLDialogElement } from "../../types";
 import { useModalStore } from "../../store";
 

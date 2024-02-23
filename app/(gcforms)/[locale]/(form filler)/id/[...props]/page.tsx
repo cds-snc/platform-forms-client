@@ -1,5 +1,4 @@
 import { getPublicTemplateByID } from "@lib/templates";
-import { serverTranslation } from "@i18n";
 import classnames from "classnames";
 import { TextPage, ClosedPage } from "@clientComponents/forms";
 import { getRenderedForm } from "@lib/formBuilder";
@@ -45,12 +44,9 @@ export default async function Page({
     delete formRecord.closingDate;
   }
 
-  const { t } = await serverTranslation(["common", "welcome", "confirmation", "form-closed"], {
-    lang: locale,
-  });
   const language = locale as "en" | "fr";
   const classes = classnames("gc-form-wrapper");
-  const currentForm = getRenderedForm(formRecord, language, t);
+  const currentForm = getRenderedForm(formRecord, language);
   const formTitle = formRecord.form[getLocalizedProperty("title", language)] as string;
 
   let isPastClosingDate = false;

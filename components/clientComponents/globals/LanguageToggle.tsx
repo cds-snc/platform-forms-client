@@ -1,9 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "@i18n/client";
-
+import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { StyledLink } from "./StyledLink/StyledLink";
 
 const LanguageToggle = () => {
   const {
@@ -23,15 +22,16 @@ const LanguageToggle = () => {
   }, [pathname, currentLang]);
 
   return (
-    <StyledLink
+    <Link
       href={href}
       className="text-base text-right"
       locale={currentLang === "en" ? "fr" : "en"}
-      ariaLabel={`${t("lang-toggle")}: ${currentLang == "en" ? "Français" : "English"}`}
+      aria-label={`${t("lang-toggle")}: ${currentLang == "en" ? "Français" : "English"}`}
       lang={currentLang === "en" ? "fr" : "en"}
+      prefetch={false}
     >
       {currentLang === "en" ? "Français" : "English"}
-    </StyledLink>
+    </Link>
   );
 };
 

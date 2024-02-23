@@ -12,6 +12,7 @@ import { useTemplateApi } from "../../hooks";
 import { toast } from "../shared";
 import { Button } from "@clientComponents/globals";
 import Brand from "@clientComponents/globals/Brand";
+import { ExternalLinkIcon } from "@serverComponents/icons";
 
 const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element | string }) => {
   return (
@@ -92,6 +93,9 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
   return (
     <div>
       <h2 className="mb-6">{t("branding.heading")}</h2>
+      <p className="mb-5 inline-block bg-purple-200 p-3 text-sm font-bold">
+        {t("settingsResponseDelivery.beforePublishMessage")}
+      </p>
       <p className="block text-sm">{t("branding.text1")}</p>
       {/* Logo select */}
       <div>
@@ -115,23 +119,24 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
           {t("settingsResponseDelivery.saveButton")}
         </Button>
       </div>
-
       {hasBrandingRequestForm && (
-        <div>
-          <p className="mb-5 mt-6 text-sm">{t("branding.notFound")}</p>
-          <p className="mb-5 text-sm">
+        <div className="mt-10">
+          <p className="mb-2 text-sm font-bold">{t("branding.notFound")}</p>
+          <p className="text-sm">
             <Link
-              href={`/${lang}/form-builder/settings/branding-request`}
+              href={`https://articles.alpha.canada.ca/forms-formulaires/${
+                i18n.language === "fr"
+                  ? "fr/demander-une-autre-image-de-marque/"
+                  : "request-alternate-branding/"
+              }`}
               passHref
               rel="noopener noreferrer"
               target={"_blank"}
             >
-              {/* Href is passed down to child.  This behavior is fixed in NextJS 13 */}
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <a target="_blank" rel="noopener noreferrer">
-                {t("branding.submitNew")}
-              </a>
+              {t("branding.submitNew")}
+              <ExternalLinkIcon className="ml-1 inline-block" title={`(${t("opensInNewTab")})`} />
             </Link>
+            .
           </p>
         </div>
       )}

@@ -3,10 +3,9 @@ import React from "react";
 import { useTranslation } from "@i18n/client";
 import Link from "next/link";
 
-import { useAccessControl } from "@lib/hooks";
 import { Footer, Brand, SkipLink, LanguageToggle } from "@clientComponents/globals";
 import { LoginMenu } from "@clientComponents/auth/LoginMenu";
-import { SiteLogo } from "@clientComponents/icons";
+import { SiteLogo } from "@serverComponents/icons";
 import { ToastContainer } from "@clientComponents/form-builder/app/shared/Toast";
 
 const SiteLink = () => {
@@ -42,7 +41,6 @@ const UserNavLayout = ({
   beforeContentWrapper = null,
   afterContentWrapper = null,
 }: UserNavLayoutProps) => {
-  const { ability } = useAccessControl();
   const {
     t,
     i18n: { language },
@@ -59,9 +57,9 @@ const UserNavLayout = ({
           </div>
           <div className="inline-flex gap-4">
             <div className="text-base font-normal not-italic md:text-sm">
-              {ability?.can("view", "FormRecord") && (
-                <Link href={`/${language}/forms`}>{t("adminNav.myForms")}</Link>
-              )}
+              <Link id="forms_link" href={`/${language}/forms`}>
+                {t("adminNav.myForms")}
+              </Link>
             </div>
             <LoginMenu />
             <LanguageToggle />
@@ -75,7 +73,7 @@ const UserNavLayout = ({
             <main id="content">
               <SiteLink />
               {children}
-              <ToastContainer autoClose={false} />
+              <ToastContainer autoClose={false} containerId="default" />
             </main>
           </div>
         </div>

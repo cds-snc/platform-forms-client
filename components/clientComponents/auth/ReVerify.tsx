@@ -105,7 +105,7 @@ export const ReVerify = ({
         <Button theme="primary" className="mr-4" onClick={handleReVerify}>
           {t("reVerify.buttons.reSendCode")}
         </Button>
-        <StyledLink theme="secondaryButton" href={`/${language}/form-builder/support`}>
+        <StyledLink theme="secondaryButton" href={`/${language}/support`}>
           {t("reVerify.buttons.getSupport")}
         </StyledLink>
       </div>

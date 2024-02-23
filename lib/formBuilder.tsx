@@ -12,6 +12,7 @@ import {
   TextArea,
   TextInput,
   ConditionalWrapper,
+  Combobox,
 } from "@clientComponents/forms";
 import {
   FormElement,
@@ -21,8 +22,8 @@ import {
   Responses,
   Response,
 } from "@lib/types";
-import { TFunction } from "i18next";
 import { getLocalizedProperty } from "@lib/utils";
+import { managedData } from "@lib/managedData";
 
 // This function is used for select/radio/checkbox i18n change of form labels
 function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: string) {
@@ -44,10 +45,17 @@ function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: str
 function _buildForm(element: FormElement, lang: string): ReactElement {
   const id = element.subId ?? element.id;
 
-  const choices =
+  let choices =
     element.properties && element.properties.choices
       ? getLocaleChoices(element.properties.choices, lang)
       : [];
+
+  // Retrieve managed data from static json file if specified
+  if (element.properties.managedChoices) {
+    const dataFile = element.properties.managedChoices;
+    const data = managedData[dataFile];
+    choices = data ? getLocaleChoices(data, lang) : [];
+  }
 
   const subElements =
     element.properties && element.properties.subElements ? element.properties.subElements : [];
@@ -223,6 +231,19 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
         />
       );
     }
+    case FormElementTypes.combobox:
+      return (
+        <div className="focus-group">
+          {labelComponent}
+          {description && <Description id={`${id}`}>{description}</Description>}
+          <Combobox
+            id={`${id}`}
+            name={`${id}`}
+            ariaDescribedBy={description ? `desc-${id}` : undefined}
+            choices={choices}
+          />
+        </div>
+      );
     default:
       return <></>;
   }
@@ -255,6 +276,7 @@ const _getElementInitialValue = (element: FormElement, language: string): Respon
     // Radio and dropdown resolve to string values
     case FormElementTypes.radio:
     case FormElementTypes.dropdown:
+    case FormElementTypes.combobox:
     case FormElementTypes.textField:
     case FormElementTypes.textArea:
       return "";

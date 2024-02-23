@@ -1,8 +1,8 @@
 import i18next from "i18next";
-import myFormsEn from "@public/static/locales/en/my-forms.json";
-import myFormsFr from "@public/static/locales/fr/my-forms.json";
-import commonEn from "@public/static/locales/en/common.json";
-import commonFr from "@public/static/locales/fr/common.json";
+import myFormsEn from "@i18n/translations/en/my-forms.json";
+import myFormsFr from "@i18n/translations/fr/my-forms.json";
+import commonEn from "@i18n/translations/en/common.json";
+import commonFr from "@i18n/translations/fr/common.json";
 
 /**
  * This custom translation function works like useTranslation() from react-i18next which was not working in this context.

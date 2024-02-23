@@ -58,15 +58,35 @@ const nextConfig = {
       },
     ];
   },
+
+  async redirects() {
+    return [
+      {
+        source: "/en/form-builder/support",
+        destination: "/en/support",
+        permanent: true,
+      },
+      {
+        source: "/fr/form-builder/support",
+        destination: "/fr/support",
+        permanent: true,
+      },
+      {
+        source: "/en/form-builder/support/contactus",
+        destination: "/en/contact",
+        permanent: true,
+      },
+      {
+        source: "/fr/form-builder/support/contactus",
+        destination: "/fr/contact",
+        permanent: true,
+      },
+    ];
+  },
+
   experimental: {
     instrumentationHook: true,
-  },
-  typescript: {
-    // !! WARN !!
-    // Dangerously allow production builds to successfully complete even if
-    // your project has type errors.
-    // !! WARN !!
-    ignoreBuildErrors: true,
+    // ppr: true, -- This is not yet ready for production use
   },
 };
 

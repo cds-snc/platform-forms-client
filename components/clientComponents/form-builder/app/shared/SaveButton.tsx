@@ -7,13 +7,16 @@ import { Button, StyledLink } from "@clientComponents/globals";
 import { useTemplateStore } from "../../store";
 import { useTemplateStatus, useTemplateContext } from "../../hooks";
 import { formatDateTime } from "../../util";
-import { useActivePathname } from "@clientComponents/form-builder/hooks";
-import { SavedFailIcon, SavedCheckIcon } from "@clientComponents/icons";
+import { SavedFailIcon, SavedCheckIcon } from "@serverComponents/icons";
+import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 
 const SaveDraft = ({
+  updatedAt,
   handleSave,
   templateIsDirty,
 }: {
+  updatedAt: number | undefined;
   handleSave: () => void;
   templateIsDirty: boolean;
 }) => {
@@ -27,6 +30,10 @@ const SaveDraft = ({
         </Button>
       </>
     );
+  }
+
+  if (!updatedAt) {
+    return null;
   }
 
   return (
@@ -55,7 +62,7 @@ export const DateTime = ({ updatedAt }: { updatedAt: number }) => {
 
 export const ErrorSavingForm = () => {
   const { t, i18n } = useTranslation(["common", "form-builder"]);
-  const supportHref = `/${i18n.language}/form-builder/support`;
+  const supportHref = `/${i18n.language}/support`;
   return (
     <span className="inline-block">
       <span className="inline-block px-1">
@@ -78,9 +85,9 @@ export const SaveButton = () => {
   }));
 
   const { error, saveForm, templateIsDirty } = useTemplateContext();
-  const { activePathname } = useActivePathname();
   const { status } = useSession();
   const { updatedAt, getTemplateById } = useTemplateStatus();
+  const pathname = usePathname();
 
   const handleSave = async () => {
     const saved = await saveForm();
@@ -90,12 +97,18 @@ export const SaveButton = () => {
     }
   };
 
+  useEffect(() => {
+    return () => {
+      saveForm();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   if (isPublished) {
     return null;
   }
 
-  const showSave =
-    activePathname === "/form-builder/edit" || activePathname === "/form-builder/edit/translate";
+  const showSave = pathname.includes("edit") || pathname.includes("translate");
 
   if (!showSave) {
     return null;
@@ -114,7 +127,11 @@ export const SaveButton = () => {
       {error ? (
         <ErrorSavingForm />
       ) : (
-        <SaveDraft handleSave={handleSave} templateIsDirty={templateIsDirty.current} />
+        <SaveDraft
+          updatedAt={updatedAt}
+          handleSave={handleSave}
+          templateIsDirty={templateIsDirty.current}
+        />
       )}
       {updatedAt && <DateTime updatedAt={updatedAt} />}
     </div>

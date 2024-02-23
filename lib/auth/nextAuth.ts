@@ -144,9 +144,31 @@ export const {
   adapter: PrismaAdapter(prisma),
   events: {
     async signIn({ user }) {
-      if (!user.id || !user.email) throw new Error("User missing id or email");
+      if (!user.email) {
+        throw new Error(
+          "Could not produce UserSignIn audit log because of undefined email information"
+        );
+      }
 
-      logEvent(user.id, { type: "User", id: user.id }, "UserSignIn");
+      const internalUser = await prisma.user.findUnique({
+        where: {
+          email: user.email,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      if (internalUser === null) {
+        throw new Error("Could not produce UserSignIn audit log because user does not exist");
+      }
+
+      logEvent(
+        internalUser.id,
+        { type: "User", id: internalUser.id },
+        "UserSignIn",
+        `Cognito user unique identifier (sub): ${user.id}`
+      );
     },
     async signOut(obj) {
       if ("token" in obj && obj.token !== null) {

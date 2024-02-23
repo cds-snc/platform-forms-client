@@ -1,5 +1,5 @@
 "use client";
-import { CircleCheckIcon, InfoIcon, WarningIcon } from "@clientComponents/icons";
+import { CircleCheckIcon, InfoIcon, WarningIcon } from "@serverComponents/icons";
 import React from "react";
 import {
   ToastContainer as OriginalContainer,

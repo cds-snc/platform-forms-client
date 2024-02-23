@@ -11,7 +11,6 @@ export { DownloadFileButton } from "./DownloadFileButton";
 export { ListBox } from "./ListBox";
 export { TagInput } from "./tag-input";
 export { LockedBadge } from "./LockedBadge";
-export { ExclamationText } from "./ExclamationText";
 export { InfoDetails } from "./InfoDetails";
 export { ResponseDeliveryHelpButton } from "./ResponseDeliveryHelpDialog";
 export { toast } from "./Toast";

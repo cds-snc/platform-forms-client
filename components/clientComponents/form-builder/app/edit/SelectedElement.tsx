@@ -3,7 +3,7 @@ import React from "react";
 import { FormElementTypes, HTMLTextInputTypeAttribute } from "@lib/types";
 import { useTranslation } from "@i18n/client";
 
-import { CheckBoxEmptyIcon, CheckIcon, RadioEmptyIcon } from "../../../icons";
+import { CheckBoxEmptyIcon, CheckIcon, RadioEmptyIcon } from "../../../../serverComponents/icons";
 import { ShortAnswer, Options, SubOptions, RichText, SubElement } from "./elements";
 import { ElementOption, FormElementWithIndex } from "../../types";
 import { useElementOptions } from "../../hooks";
@@ -132,7 +132,25 @@ export const SelectedElement = ({
         element = (
           <>
             <ShortAnswer>{t("addElementDialog.dropdown.title")}</ShortAnswer>
-            <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} />
+            {!item.properties.managedChoices && (
+              <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} />
+            )}
+          </>
+        );
+      }
+      break;
+    case "combobox":
+      if (elIndex !== -1) {
+        element = (
+          <SubOptions elIndex={elIndex} item={item} renderIcon={(index) => `${index + 1}.`} />
+        );
+      } else {
+        element = (
+          <>
+            <ShortAnswer>{t("addElementDialog.combobox.title")}</ShortAnswer>
+            {!item.properties.managedChoices && (
+              <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} />
+            )}
           </>
         );
       }

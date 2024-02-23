@@ -9,7 +9,7 @@ import React, {
   JSXElementConstructor,
 } from "react";
 
-import { ChevronRight } from "@clientComponents/icons";
+import { ChevronRight } from "@serverComponents/icons";
 import { SelectedGroupState } from "../edit/elements/element-dialog/ElementDialog";
 
 // for specs see:

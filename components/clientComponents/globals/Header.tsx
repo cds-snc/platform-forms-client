@@ -2,11 +2,10 @@
 import React from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { useAccessControl } from "@lib/hooks";
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 
-import { SiteLogo } from "@clientComponents/icons";
+import { SiteLogo } from "@serverComponents/icons";
 import { FileNameInput } from "@clientComponents/form-builder/app/navigation/FileName";
 import { ShareDropdown } from "@clientComponents/form-builder/app/navigation/ShareDropdown";
 import LanguageToggle from "./LanguageToggle";
@@ -24,7 +23,7 @@ export const Header = ({ context = "default", user, className }: HeaderParams) =
   const isDefault = context === "default";
 
   const { status } = useSession();
-  const { ability } = useAccessControl();
+
   const {
     t,
     i18n: { language },
@@ -38,7 +37,7 @@ export const Header = ({ context = "default", user, className }: HeaderParams) =
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a
               id="logo"
-              className="mr-5 flex border-r-1 pr-[0.77rem] text-3xl font-semibold !text-black no-underline !shadow-none focus:bg-white"
+              className="mr-7 flex border-r-1 pr-[14px] text-3xl font-semibold !text-black no-underline !shadow-none focus:bg-white"
             >
               <div className="inline-block h-[45px] w-[46px] p-2">
                 <SiteLogo title={t("title")} />
@@ -66,7 +65,7 @@ export const Header = ({ context = "default", user, className }: HeaderParams) =
               </li>
             )}
             <li className="mr-2 py-2 text-base tablet:mr-4">
-              {ability?.can("view", "FormRecord") && (
+              {status === "authenticated" && (
                 <Link href={`/${language}/forms`}>{t("adminNav.myForms", { ns: "common" })}</Link>
               )}
             </li>

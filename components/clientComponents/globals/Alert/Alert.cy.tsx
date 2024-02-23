@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Alert } from "../../globals";
-import { CircleCheckIcon } from "../../icons";
+import { CircleCheckIcon } from "@serverComponents/icons/CircleCheckIcon";
 import { Button } from "../../globals";
 import Link from "next/link";
 

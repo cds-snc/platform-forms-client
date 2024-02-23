@@ -2,7 +2,7 @@ import { createInstance } from "i18next";
 import resourcesToBackend from "i18next-resources-to-backend";
 import { initReactI18next } from "react-i18next/initReactI18next";
 import { getOptions, languages } from "./settings";
-import { cookies, headers } from "next/headers";
+import { headers } from "next/headers";
 import { pathLanguageDetection } from "./utils";
 
 const initI18next = async (lang: string, ns: string | string[]) => {
@@ -12,7 +12,7 @@ const initI18next = async (lang: string, ns: string | string[]) => {
     .use(
       resourcesToBackend(
         (language: string, namespace: string) =>
-          import(`../public/static/locales/${language}/${namespace}.json`)
+          import(`./translations/${language}/${namespace}.json`)
       )
     )
     .init(getOptions(lang, ns));

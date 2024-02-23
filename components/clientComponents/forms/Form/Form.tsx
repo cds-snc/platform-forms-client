@@ -4,7 +4,7 @@ import { FormikProps, withFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage, validateOnSubmit } from "@lib/validation";
 import { submitToAPI } from "@lib/client/clientHelpers";
-import { useExternalScript, useFlag, useFormTimer } from "@lib/hooks";
+import { useFormTimer } from "@lib/hooks";
 import { Alert, Button, RichText } from "@clientComponents/forms";
 import { logMessage } from "@lib/logger";
 import { useTranslation } from "@i18n/client";
@@ -27,41 +27,48 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
   formTitle,
 }) => {
   const { t } = useTranslation();
-  const { status: timerActive } = useFlag("formTimer");
   const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
   const [submitTooEarly, setSubmitTooEarly] = useState(false);
   const screenReaderRemainingTime = useRef(formTimerState.remainingTime);
+  const [formReady, setFormReady] = useState(false);
+
+  // calculate initial delay for submit timer
+  const secondsBaseDelay = 2;
+  const secondsPerFormElement = 2;
+  const submitDelaySeconds = secondsBaseDelay + numberOfRequiredQuestions * secondsPerFormElement;
+
+  const formTimerEnabled = process.env.NEXT_PUBLIC_APP_ENV !== "test";
+
+  // If the timer hasn't started yet, start the timer
+  if (!formTimerState.timerDelay && formTimerEnabled) startTimer(submitDelaySeconds);
 
   useEffect(() => {
-    let intervalID: NodeJS.Timeout;
-    // calculate initial delay for submit timer
-    if (timerActive) {
-      const secondsBaseDelay = 2;
-      const secondsPerFormElement = 2;
-
-      const submitDelaySeconds =
-        secondsBaseDelay + numberOfRequiredQuestions * secondsPerFormElement;
-      startTimer(submitDelaySeconds);
-      // Initiate a callback to ensure that state of submit button is correctly displayed
-      intervalID = setInterval(() => {
-        checkTimer();
-      }, 1000);
-    } else {
+    if (!formTimerEnabled && !formTimerState.canSubmit) {
       disableTimer();
+      setFormReady(true);
     }
+  }, [disableTimer, formTimerEnabled, formTimerState.canSubmit]);
 
-    return () => {
-      // If the timer exists remove it when the component unmounts
-      if (intervalID !== null) {
-        clearInterval(intervalID);
-      }
-    };
-    // we only want to run this effect when the timerActive flag changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timerActive]);
+  useEffect(() => {
+    if (formTimerEnabled) {
+      if (formTimerState.timerDelay) setFormReady(true);
+      // Initiate a callback to ensure that state of submit button is correctly displayed
+
+      // Calling the checkTimer modifies the state of the formTimerState
+      // Which recalls this useEffect at least every second
+      const timerID = setTimeout(() => checkTimer(), 1000);
+
+      logMessage.info(`Form Timer useEffect - timer enabled`);
+
+      return () => {
+        clearTimeout(timerID);
+      };
+    }
+  }, [checkTimer, formTimerState.timerDelay, formTimerEnabled]);
 
   return (
     <>
+      {formReady && <div id="form-ready-indicator" hidden={true} aria-hidden={true} />}
       <div
         className={classNames({
           "border-l-2": submitTooEarly,
@@ -95,29 +102,27 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
           ))}
       </div>
       <Button
+        id="form-submit-button"
         type="submit"
         onClick={(e) => {
-          if (timerActive) {
-            checkTimer();
-            screenReaderRemainingTime.current = formTimerState.remainingTime;
-            if (!formTimerState.canSubmit) {
-              e.preventDefault();
+          if (formTimerEnabled) checkTimer();
+          screenReaderRemainingTime.current = formTimerState.remainingTime;
+          if (!formTimerState.canSubmit) {
+            e.preventDefault();
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+              event: "form_submission_spam_trigger",
+              formID: formID,
+              formTitle: formTitle,
+              submitTime: formTimerState.remainingTime,
+            });
 
-              window.dataLayer = window.dataLayer || [];
-              window.dataLayer.push({
-                event: "form_submission_spam_trigger",
-                formID: formID,
-                formTitle: formTitle,
-                submitTime: formTimerState.remainingTime,
-              });
-
-              setSubmitTooEarly(true);
-              // In case the useEffect timer failed check again
-              return;
-            }
-            // Only change state if submitTooEarly is already set to true
-            submitTooEarly && setSubmitTooEarly(false);
+            setSubmitTooEarly(true);
+            // In case the useEffect timer failed check again
+            return;
           }
+          // Only change state if submitTooEarly is already set to true
+          submitTooEarly && setSubmitTooEarly(false);
         }}
       >
         {t("submitButton")}
@@ -152,13 +157,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const serverErrorId = `${errorId}-server`;
   const formStatusError = props.status === "Error" ? t("server-error") : null;
 
-  const { status: isReCaptchaEnableOnSite } = useFlag("reCaptcha");
-  const shouldUseRecaptcha = isPreview ? false : isReCaptchaEnableOnSite;
-
-  useExternalScript(
-    `https://www.google.com/recaptcha/api.js?render=${reCaptchaID}`,
-    shouldUseRecaptcha
-  );
+  const shouldUseRecaptcha = !isPreview && reCaptchaID;
 
   const handleSubmitReCaptcha = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();

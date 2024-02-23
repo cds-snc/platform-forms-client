@@ -151,7 +151,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   resetDeliveryOption: () => void;
   getSecurityAttribute: () => SecurityAttribute;
   setClosingDate: (closingDate: string | null) => void;
-  initialize: () => void;
+  initialize: (language?: string) => void;
   removeChoiceFromRules: (elIndex: number, choiceIndex: number) => void;
 }
 
@@ -417,10 +417,11 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.closingDate = value;
               });
             },
-            initialize: () => {
+            initialize: (language = "en") => {
               set((state) => {
                 state.id = "";
-                state.lang = "en";
+                state.lang = language as Language;
+                state.translationLanguagePriority = language as Language;
                 state.form = defaultForm;
                 state.isPublished = false;
                 state.name = "";
@@ -467,6 +468,7 @@ export const TemplateStoreProvider = ({
   ...props
 }: React.PropsWithChildren<Partial<TemplateStoreProps>>) => {
   const storeRef = useRef<TemplateStore>();
+  logMessage.debug(`== TemplateStoreProvider: ${props.id} ==`);
   if (!storeRef.current) {
     // When there is an incoming form with a different id clear it first
     if (props.id) {

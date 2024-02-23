@@ -2,7 +2,7 @@
 import React from "react";
 import { useTranslation } from "@i18n/client";
 
-import { ConditionalIcon } from "@clientComponents/icons/ConditionalIcon";
+import { ConditionalIcon } from "@serverComponents/icons/ConditionalIcon";
 import { getElementsUsingChoiceId } from "@lib/formContext";
 import { FormElement } from "@lib/types";
 import { useRefsContext } from "@formbuilder/app/edit/RefsContext";

@@ -1,7 +1,5 @@
-"use client";
 import Link from "next/link";
-import React, { ReactElement, useEffect, useState } from "react";
-import { useActivePathname } from "../../hooks/useActivePathname";
+import React, { ReactElement } from "react";
 import { cn } from "@lib/utils";
 
 export const TabNavLink = ({
@@ -9,14 +7,14 @@ export const TabNavLink = ({
   children,
   setAriaCurrent = false,
   id,
-  defaultActive = false,
+  active = false,
   onClick,
 }: {
   children: ReactElement;
   href: string;
   setAriaCurrent?: boolean;
   id?: string;
-  defaultActive?: boolean;
+  active: boolean;
   onClick?: () => void;
 }) => {
   const baseClasses =
@@ -26,25 +24,6 @@ export const TabNavLink = ({
     "!text-black hover:bg-gray-600 hover:!text-white-default focus:!text-white [&_svg]:hover:fill-white [&_svg]:hover:stroke-white [&_svg]:focus:fill-white";
   const activeClasses =
     "bg-[#475569] !text-white [&_svg]:fill-white ${svgStroke} focus:text-white [&_svg]:focus:stroke-white";
-
-  const { asPath, activePathname } = useActivePathname();
-  const [active, setActive] = useState(defaultActive);
-
-  useEffect(() => {
-    let linkPathname = new URL(href as string, location.href).pathname;
-
-    const langRegex = /\/(en|fr)\//;
-    linkPathname = linkPathname.replace(langRegex, "/");
-
-    // Only one nav link can be active at a time
-    if (linkPathname === activePathname) {
-      setActive(true);
-    } else {
-      if (!defaultActive) {
-        setActive(false);
-      }
-    }
-  }, [asPath, href, setActive, activePathname, defaultActive]);
 
   return (
     <Link href={href} legacyBehavior>

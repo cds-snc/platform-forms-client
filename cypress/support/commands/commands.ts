@@ -31,7 +31,7 @@
 
 import flagsDefault from "../../../flag_initialization/default_flag_settings.json";
 
-Cypress.Commands.add("useForm", (file) => {
+Cypress.Commands.add("useForm", (file, published = true) => {
   cy.login();
   cy.fixture(file).then((mockedForm) => {
     cy.request({
@@ -43,6 +43,15 @@ Cypress.Commands.add("useForm", (file) => {
     }).then((response) => {
       expect(response.body).to.have.property("id");
       cy.wrap(response.body.id).as("formID", { type: "static" });
+      if (published) {
+        cy.request({
+          method: "PUT",
+          url: `/api/templates/${response.body.id}`,
+          body: {
+            isPublished: true,
+          },
+        });
+      }
     });
   });
   cy.logout();
@@ -51,19 +60,26 @@ Cypress.Commands.add("useForm", (file) => {
 /**
  * Navigate to the fixture created in useForm
  */
-Cypress.Commands.add("visitForm", (formID) => {
-  cy.visit(`/id/${formID}`);
-  // Ensure page has fully loaded
-  cy.get("main").should("be.visible");
+Cypress.Commands.add("visitForm", (formID, language = "en") => {
+  cy.visitPage(`/${language}/id/${formID}`);
+  cy.get("#form-ready-indicator").should("exist");
 });
 
 /**
  * Navigate to a page and wait for it to load
  */
 Cypress.Commands.add("visitPage", (path) => {
+  cy.waitForNetworkIdlePrepare({
+    method: "GET",
+    pattern: "/api/auth/*",
+    alias: "calls",
+  });
   cy.visit(path);
   // Ensure page has fully loaded
+  cy.get("#react-hydration-loader").should("not.exist");
   cy.get("main").should("be.visible");
+  //  Ensure network calls have ended that drive renders
+  cy.waitForNetworkIdle("@calls", 1000);
 });
 
 /**
@@ -127,38 +143,19 @@ Cypress.Commands.add("login", (options?: { admin?: boolean; acceptableUse?: bool
         },
       }).then(() => {
         // Ensure cookie is created
-        cy.waitUntil(() =>
-          cy.getCookie("authjs.session-token").then((cookie) => {
-            Boolean(cookie && cookie.value);
-          })
+        cy.waitUntil(
+          () =>
+            cy.getCookie("authjs.session-token").then((cookie) => Boolean(cookie && cookie.value)),
+          { timeout: 10000, interval: 500 }
         );
 
-        let session;
+        //let session;
         if (acceptableUse) {
-          cy.request({
-            method: "GET",
-            url: "/api/auth/session",
-          })
-            .then((response) => {
-              session = response.body;
-              return session;
-            })
-            .then((session) => {
-              cy.request({
-                method: "POST",
-                url: "/api/auth/session",
-                headers: {
-                  "x-csrf-token": csrfToken,
-                },
-                body: {
-                  csrfToken,
-                  data: { ...session, user: { ...session.user, acceptableUse: true } },
-                },
-              }).then((response) => {
-                expect(response.status).to.eq(200);
-                cy.visit("/en/forms");
-              });
-            });
+          cy.visitPage("/en/auth/policy");
+          cy.get("#acceptableUse").click();
+          cy.location("pathname").should("eq", "/en/forms");
+          cy.get("#react-hydration-loader").should("not.exist");
+          cy.get("main").should("be.visible");
         }
       });
     });
@@ -197,8 +194,14 @@ Cypress.Commands.add("logout", () => {
       },
     }).then(() => {
       // Ensure cookie is removed
-      cy.waitUntil(() =>
-        cy.getCookie("authjs.session-token").then((cookie) => !cookie || !cookie.value)
+      cy.clearCookie("authjs.session-token");
+
+      cy.waitUntil(
+        () =>
+          cy
+            .request({ method: "GET", url: "/api/auth/session" })
+            .then((response) => response.body === null),
+        { timeout: 10000, interval: 500 }
       );
     });
   });
@@ -244,7 +247,7 @@ Cypress.Commands.add("resetAll", () => {
  * Type in a field and wait for the field to be updated
  */
 Cypress.Commands.add("typeInField", (field, typedText, outputText) => {
-  cy.get(field).type(typedText);
+  cy.get(field).type(typedText, { delay: 50 });
 
   // Use passed in outputText or Remove actions in brackets from typedText
   const text = outputText ?? typedText.replace(/\{.*\}/, "");
@@ -259,4 +262,27 @@ Cypress.Commands.add("typeInField", (field, typedText, outputText) => {
       }
     });
   }
+});
+
+Cypress.Commands.add("switchLanguage", (language) => {
+  cy.contains("a", language === "en" ? "English" : "Français")
+    .should("be.visible")
+    .click();
+  cy.location("pathname").should("contain", `/${language}/`);
+  cy.contains("a", language === "en" ? "Français" : "English").should("be.visible");
+});
+
+// Request a page over http from the server and mount it in the DOM
+//
+// To simulate server side rendering remove all scripts so no window:onload
+// events can occur and we can test server rendered views
+Cypress.Commands.add("serverSideRendered", (path) => {
+  cy.reload();
+  cy.request(path)
+    .its("body")
+    .then((html) => {
+      html = html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
+      cy.document().then((doc) => doc.write(html));
+    });
+  cy.get("script").should("not.exist");
 });

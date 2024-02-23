@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { cn } from "@lib/utils";
-import { ProtectedIcon } from "@clientComponents/icons";
+import { ProtectedIcon } from "@serverComponents/icons";
 
 export const classificationOptions = [
   { value: "Unclassified", en: "UNCLASSIFIED", fr: "NON CLASSIFIÉ" },
