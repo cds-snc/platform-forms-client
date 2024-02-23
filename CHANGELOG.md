@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.12.6](https://github.com/cds-snc/platform-forms-client/compare/v3.12.5...v3.12.6) (2024-02-22)
+
+### Bug Fixes
+
+- retrieve internal user id instead and pass it to the UserSignIn audit log instead of using the Cognito sub id ([#3266](https://github.com/cds-snc/platform-forms-client/issues/3266)) ([981336f](https://github.com/cds-snc/platform-forms-client/commit/981336f1f6cf8bf135c26d9fcf06ee98af9ab1b4))
+
+### Miscellaneous Chores
+
+- Add files Statistics Canada branding ([#3269](https://github.com/cds-snc/platform-forms-client/issues/3269)) ([2c2985c](https://github.com/cds-snc/platform-forms-client/commit/2c2985ca84350b3bbf094948f095f61998000b78))
+- added new migration script to make existing audit logs archivable ([#3268](https://github.com/cds-snc/platform-forms-client/issues/3268)) ([9210ffd](https://github.com/cds-snc/platform-forms-client/commit/9210ffdd7dfc1e74d0dfff625e36f13cab029775))
+- improve archivable audit logs migration script ([#3276](https://github.com/cds-snc/platform-forms-client/issues/3276)) ([8f99098](https://github.com/cds-snc/platform-forms-client/commit/8f9909860188a3e6618d54dbb5f5d6b35862623d))
+- Set User type to have mandatory email ([#3252](https://github.com/cds-snc/platform-forms-client/issues/3252)) ([a7e75a8](https://github.com/cds-snc/platform-forms-client/commit/a7e75a83465600d38c21195d2d1f3c493be6aca6))
+
 ## [3.12.5](https://github.com/cds-snc/platform-forms-client/compare/v3.12.4...v3.12.5) (2024-02-12)
 
 ### Bug Fixes
