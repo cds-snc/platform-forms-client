@@ -39,7 +39,7 @@ export const EditNavigation = ({ id }: { id: string }) => {
       </div>
       <div>
         {activePathname.endsWith("/edit") && (
-          <div className="flex tablet:absolute tablet:right-0 tablet:top-0 tablet:mt-4">
+          <div className="flex tablet:absolute tablet:right-0 tablet:top-0 tablet:mt-1">
             <LangSwitcher descriptionLangKey="editingIn" />
           </div>
         )}
