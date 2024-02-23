@@ -120,7 +120,7 @@ export const DownloadTable = ({
               </Alert.Title>
               <p className="mb-2 text-sm text-[#26374a]">
                 {t("downloadResponsesTable.errors.errorDownloadingFiles")}
-                <Link href={`/${language}/form-builder/support`}>
+                <Link href={`/${language}/support`}>
                   {t("downloadResponsesTable.errors.errorDownloadingFilesLink")}
                 </Link>
                 .

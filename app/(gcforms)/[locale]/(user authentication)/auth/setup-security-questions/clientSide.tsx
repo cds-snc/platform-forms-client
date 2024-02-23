@@ -56,7 +56,7 @@ export const SetupSecurityQuestions = ({ questions = [] }: { questions: Question
   const router = useRouter();
   const { t, i18n } = useTranslation(["setup-security-questions"]);
   const [formError, setFormError] = useState("");
-  const supportHref = `/${i18n.language}/form-builder/support`;
+  const supportHref = `/${i18n.language}/support`;
   const formRef = useRef<QuestionValuesProps>(null);
 
   const validationSchema = Yup.object().shape({

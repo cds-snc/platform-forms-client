@@ -47,7 +47,7 @@ export const ErrorPanel = ({
 
   const homeText = session !== null ? t("errorPanel.cta.yourForms") : t("errorPanel.cta.home");
 
-  const supportHref = `/${i18n.language}/form-builder/support`;
+  const supportHref = `/${i18n.language}/support`;
 
   useFocusIt({ elRef: headingRef });
 

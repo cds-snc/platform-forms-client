@@ -98,7 +98,7 @@ export const Start = () => {
                   );
                 })}
               </ul>
-              <Link href={`/${language}/form-builder/support`} className="ml-6">
+              <Link href={`/${language}/support`} className="ml-6">
                 {t("contactSupport")}
               </Link>
             </div>

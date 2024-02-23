@@ -37,7 +37,7 @@ export const Header = ({ context = "default", user, className }: HeaderParams) =
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a
               id="logo"
-              className="mr-5 flex border-r-1 pr-[0.77rem] text-3xl font-semibold !text-black no-underline !shadow-none focus:bg-white"
+              className="mr-7 flex border-r-1 pr-[14px] text-3xl font-semibold !text-black no-underline !shadow-none focus:bg-white"
             >
               <div className="inline-block h-[45px] w-[46px] p-2">
                 <SiteLogo title={t("title")} />

@@ -62,7 +62,7 @@ export const DateTime = ({ updatedAt }: { updatedAt: number }) => {
 
 export const ErrorSavingForm = () => {
   const { t, i18n } = useTranslation(["common", "form-builder"]);
-  const supportHref = `/${i18n.language}/form-builder/support`;
+  const supportHref = `/${i18n.language}/support`;
   return (
     <span className="inline-block">
       <span className="inline-block px-1">
