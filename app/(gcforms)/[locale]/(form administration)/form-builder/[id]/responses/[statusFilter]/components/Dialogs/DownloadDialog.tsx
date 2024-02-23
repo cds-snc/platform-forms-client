@@ -29,7 +29,6 @@ export const DownloadDialog = ({
   checkedItems: Map<string, boolean>;
   isDialogVisible: boolean;
   setIsDialogVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  downloadError: boolean;
   setDownloadError: React.Dispatch<React.SetStateAction<boolean>>;
   formId: string;
   formName: string;
@@ -92,6 +91,7 @@ export const DownloadDialog = ({
 
   const handleDownload = async () => {
     setIsDownloading(true);
+    setDownloadError(false);
     if (!selectedFormat || !availableFormats.includes(selectedFormat)) {
       setDownloadError(true);
       return;
