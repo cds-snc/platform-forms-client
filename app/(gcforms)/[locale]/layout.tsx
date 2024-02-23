@@ -22,7 +22,7 @@ export default async function Layout({
       !session.user.hasSecurityQuestions &&
       !currentPath.startsWith("/auth/setup-security-questions") &&
       // Let them access support related pages if having issues with Security Questions
-      !currentPath.startsWith("/form-builder/support") &&
+      !currentPath.startsWith("/support") &&
       !currentPath.startsWith("/sla") &&
       !currentPath.startsWith("/terms-of-use")
     ) {

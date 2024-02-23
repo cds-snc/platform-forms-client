@@ -24,7 +24,7 @@ const InvalidEmailError = ({ id, isActive }: { id: string; isActive: boolean }) 
           <div className="w-3/5 bg-red-100 p-2 text-sm">
             <span>{t("settingsInvalidEmailAlertDesc1")}</span>
             <br />
-            <a href={`/${i18n.language}/form-builder/support`} target="_blank" rel="noreferrer">
+            <a href={`/${i18n.language}/support`} target="_blank" rel="noreferrer">
               {t("contactSupport")}
             </a>
             <span> {t("settingsInvalidEmailAlertDesc2")}</span>

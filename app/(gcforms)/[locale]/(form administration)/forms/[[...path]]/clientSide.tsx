@@ -60,7 +60,7 @@ export default function RenderMyForms({ templates }: MyFormsProps) {
   }, []);
 
   return (
-    <div className="center mx-auto w-[980px]">
+    <div className="center mx-auto w-[980px] bg-gray-soft">
       <h1 className="mb-8 border-b-0">{t("title")}</h1>
 
       <div className="flex w-full justify-between">

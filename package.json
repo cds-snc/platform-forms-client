@@ -1,6 +1,6 @@
 {
   "name": "gcforms",
-  "version": "3.12.5",
+  "version": "3.12.6",
   "private": true,
   "prisma": {
     "seed": "tsx prisma/seeds/seed_cli.ts --environment=development"
@@ -92,6 +92,7 @@
     "react-aria": "3.31.0",
     "react-dom": "^18.2.0",
     "react-i18next": "^14.0.5",
+    "react-loading-skeleton": "^3.4.0",
     "react-roving-tabindex": "^3.2.0",
     "react-select": "5.8.0",
     "react-tabs": "4.3.0",

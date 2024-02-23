@@ -8,7 +8,7 @@ import { BackArrowIcon } from "@serverComponents/icons";
 export const Expired2faSession = () => {
   const { t, i18n } = useTranslation(["cognito-errors", "common"]);
   const homeHref = `/${i18n.language}/auth/login`;
-  const supportHref = `/${i18n.language}/form-builder/support`;
+  const supportHref = `/${i18n.language}/support`;
 
   return (
     <div>

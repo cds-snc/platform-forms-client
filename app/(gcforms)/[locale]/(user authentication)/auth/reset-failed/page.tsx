@@ -19,7 +19,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const { t } = await serverTranslation("reset-password", { lang: locale });
 
   const homeHref = `/${locale}/auth/login`;
-  const supportHref = `/${locale}/form-builder/support`;
+  const supportHref = `/${locale}/support`;
 
   return (
     <UserNavLayout contentWidth="tablet:w-[768px] laptop:w-[850px]">

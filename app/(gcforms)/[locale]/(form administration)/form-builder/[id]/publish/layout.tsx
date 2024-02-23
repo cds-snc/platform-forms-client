@@ -1,40 +1,51 @@
 import { serverTranslation } from "@i18n";
 import { auth } from "@lib/auth";
 import { createAbility } from "@lib/privileges";
-
-import { InfoCard } from "@clientComponents/globals/InfoCard/InfoCard";
 import Markdown from "markdown-to-jsx";
+
+import { InfoCard } from "@serverComponents/globals/InfoCard/InfoCard";
+import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
+import { getFullTemplateByID } from "@lib/templates";
+import { redirect } from "next/navigation";
 
 export default async function Layout({
   children,
-  params: { locale },
+  params: { locale, id },
 }: {
   children: React.ReactNode;
-  params: { locale: string };
+  params: { locale: string; id: string };
 }) {
   const { t } = await serverTranslation("form-builder", { lang: locale });
 
   const session = await auth();
   let userCanPublish = false;
-  const isVaultDelivery = true;
+  let isVaultDelivery = false;
 
-  if (session) {
-    try {
-      const ability = createAbility(session);
-      userCanPublish = ability?.can("update", "FormRecord", "isPublished");
-    } catch (e) {
-      // no-op
+  if (!session) {
+    return <LoggedOutTab tabName={LoggedOutTabName.PUBLISH} />;
+  }
+
+  try {
+    const ability = createAbility(session);
+    userCanPublish = ability?.can("update", "FormRecord", "isPublished");
+    const initialForm = ability && (await getFullTemplateByID(ability, id));
+
+    if (initialForm?.isPublished) {
+      redirect(`/${locale}/form-builder/${id}/published`);
     }
+
+    initialForm?.deliveryOption === undefined && (isVaultDelivery = true);
+  } catch (e) {
+    // no-op
   }
 
   return (
     <div className="flex flex-wrap justify-between laptop:flex-nowrap">
-      <div className="mx-5 min-w-fit grow rounded-lg border-1 p-5">
+      <div className="min-w-fit grow rounded-lg border-1 p-5">
         <h1 className="mb-2 border-0">{t("publishYourForm")}</h1>
         <p className="mb-0 text-lg">{t("publishYourFormInstructions.text1")}</p>
         {children}
       </div>
-
       {userCanPublish && (
         <div className="mt-8 min-w-fit max-w-md flex-none laptop:mt-0 laptop:min-w-min">
           <InfoCard title={t("whatYouNeedToKnow")}>

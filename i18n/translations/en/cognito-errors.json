@@ -4,7 +4,7 @@
   "InternalServiceExceptionLogin": {
     "title": "There was a problem while signing in.",
     "description": "Try again later or ",
-    "link": "/form-builder/support",
+    "link": "/support",
     "linkText": "contact Support."
   },
   "UsernameExistsException": "This account already exists.",
@@ -18,7 +18,7 @@
   "TooManyRequestsException": {
     "title": "Too many requests.",
     "description": "Try again later or",
-    "link": "en/form-builder/support",
+    "link": "en/support",
     "linkText": "contact Support."
   },
   "UsernameOrPasswordIncorrect": {

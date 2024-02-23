@@ -1,12 +1,13 @@
 import { serverTranslation } from "@i18n";
-import { ClientSide } from "./clientSide";
-import { FormBuilderInitializer } from "@clientComponents/globals/layouts/FormBuilderLayout";
 import { Metadata } from "next";
-import { FormRecord } from "@lib/types";
 import { auth } from "@lib/auth";
-import { AccessControlError, createAbility } from "@lib/privileges";
+
+import { notFound } from "next/navigation";
+import { createAbility } from "@lib/privileges";
 import { getFullTemplateByID } from "@lib/templates";
-import { redirect } from "next/navigation";
+import { Preview } from "./Preview";
+import { LockIcon } from "@serverComponents/icons";
+import Markdown from "markdown-to-jsx";
 
 export async function generateMetadata({
   params: { locale },
@@ -20,39 +21,47 @@ export async function generateMetadata({
 }
 
 export default async function Page({
-  params: { locale, slug = [] },
+  params: { locale, id },
 }: {
-  params: { locale: string; slug: string[] };
+  params: { locale: string; id: string };
 }) {
-  const FormbuilderParams: { locale: string; initialForm: null | FormRecord } = {
-    initialForm: null,
-    locale,
-  };
-
   const session = await auth();
+  const { t } = await serverTranslation("form-builder", { lang: locale });
 
-  const formID = slug[0] || null;
+  const formID = id;
 
-  if (session && formID) {
+  if (!session?.user && formID !== "0000") {
+    return notFound();
+  }
+
+  let isPublished = false;
+
+  if (session) {
     try {
       const ability = createAbility(session);
-
-      const initialForm = await getFullTemplateByID(ability, formID);
-
-      if (initialForm === null) redirect(`/${locale}/404`);
-
-      FormbuilderParams.initialForm = initialForm;
+      const initialForm = ability && (await getFullTemplateByID(ability, id));
+      isPublished = initialForm?.isPublished || false;
     } catch (e) {
-      if (e instanceof AccessControlError) redirect(`/${locale}/admin/unauthorized`);
+      // no-op
     }
   }
 
-  return (
-    <FormBuilderInitializer
-      initialForm={FormbuilderParams.initialForm}
-      locale={FormbuilderParams.locale}
-    >
-      <ClientSide />
-    </FormBuilderInitializer>
-  );
+  if (isPublished) {
+    return (
+      <div className="my-5 flex bg-purple-200 p-5">
+        <div className="flex">
+          <div className="pr-7">
+            <LockIcon className="mb-2 scale-125" />
+          </div>
+          <div>
+            <Markdown options={{ forceBlock: true }}>
+              {t("previewDisabledForPublishedForm", { ns: "form-builder" })}
+            </Markdown>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return <Preview />;
 }

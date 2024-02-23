@@ -257,7 +257,7 @@
   "confirmationMessage": "Confirmation message",
   "confirmationPage": "Confirmation page",
   "contactSupport": "Contact support",
-  "contactSupportIfYouHaveQuestions": "<a href=\"/en/form-builder/support\" target=\"_blank\">Contact support</a> if you have any questions.",
+  "contactSupportIfYouHaveQuestions": "<a href=\"/en/support\" target=\"_blank\">Contact support</a> if you have any questions.",
   "contactus": {
     "description": {
       "description": "Provide more information or context.",
@@ -301,7 +301,7 @@
   },
   "description": "Description",
   "descriptionDescription": "The hint text appears below the label and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements or give an example.",
-  "didYouFindThisToolHelpful": "Did you find GC Forms helpful? <a href=\"/en/form-builder/support/contactus\" target=\"_blank\">Provide feedback</a>",
+  "didYouFindThisToolHelpful": "Did you find GC Forms helpful? <a href=\"/en/contact\" target=\"_blank\">Provide feedback</a>",
   "downloadCSV": "Export as a spreadsheet",
   "downloadResponsesTable": {
     "card": {
@@ -352,7 +352,7 @@
   "elementActions": "Element actions",
   "email": "Email",
   "english": "English",
-  "errorSaving": "There was an error saving the form. Try again or <a href=\"/en/form-builder/support\" target=\"_blank\">contact support</a>.",
+  "errorSaving": "There was an error saving the form. Try again or <a href=\"/en/support\" target=\"_blank\">contact support</a>.",
   "failedToReadFormFile": "Failed to read form file",
   "formatBold": "Format bold",
   "formatBulletList": "Format bulleted list",
@@ -419,7 +419,7 @@
   "gcFormsStart": "Create new",
   "gcFormsTest": "Test",
   "gcFormsTranslate": "Translations",
-  "ifYouAreExperiencingProblems": "If you are experiencing any problems with your published form, please <a href=\"/en/form-builder/support\" target=\"_blank\">contact support</a>.",
+  "ifYouAreExperiencingProblems": "If you are experiencing any problems with your published form, please <a href=\"/en/support\" target=\"_blank\">contact support</a>.",
   "incomplete": "Incomplete",
   "inputDescription": "Hint text",
   "insertLink": "Insert link",
