@@ -79,8 +79,6 @@ export const fetchSubmissions = async ({
   return { submissions, lastEvaluatedKey };
 };
 
-// /api/id/${formId}/submission/download?format=${selectedFormat}&lang=${i18n.language}`;
-
 const sortByLayout = ({ layout, elements }: { layout: number[]; elements: Answer[] }) => {
   return elements.sort((a, b) => layout.indexOf(a.questionId) - layout.indexOf(b.questionId));
 };
