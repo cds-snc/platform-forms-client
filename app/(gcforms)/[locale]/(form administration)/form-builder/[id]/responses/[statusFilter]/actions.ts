@@ -208,9 +208,8 @@ export const getSubmissionsByFormat = async ({
       submissions: responses,
     } as FormResponseSubmissions;
 
-    // @TODO
     if (!responses.length) {
-      // return NextResponse.json({ error: "No responses found." }, { status: 404 });
+      throw new Error("No responses found.");
     }
 
     const responseIdStatusArray = queryResult.map((item) => {
