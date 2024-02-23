@@ -198,6 +198,10 @@ export const getSubmissionsByFormat = async ({
       };
     }) as FormResponseSubmissions["submissions"];
 
+    if (!responses.length) {
+      throw new Error("No responses found.");
+    }
+
     const formResponse = {
       form: {
         id: fullFormTemplate.id,
@@ -207,10 +211,6 @@ export const getSubmissionsByFormat = async ({
       },
       submissions: responses,
     } as FormResponseSubmissions;
-
-    if (!responses.length) {
-      throw new Error("No responses found.");
-    }
 
     const responseIdStatusArray = queryResult.map((item) => {
       return {
