@@ -19,10 +19,10 @@ import { transform as htmlAggregatedTransform } from "@lib/responseDownloadForma
 import { transform as htmlTransform } from "@lib/responseDownloadFormats/html";
 import { transform as zipTransform } from "@lib/responseDownloadFormats/html-zipped";
 import { transform as jsonTransform } from "@lib/responseDownloadFormats/json";
-import { cache } from "react";
 import { logMessage } from "@lib/logger";
+import { revalidatePath } from "next/cache";
 
-export const fetchTemplate = cache(async (id: string) => {
+export const fetchTemplate = async (id: string) => {
   const session = await auth();
 
   if (!session) {
@@ -33,7 +33,7 @@ export const fetchTemplate = cache(async (id: string) => {
   const template = await getFullTemplateByID(ability, id);
 
   return template;
-});
+};
 
 export const fetchSubmissions = async ({
   formId,
@@ -108,11 +108,13 @@ export const getSubmissionsByFormat = async ({
   ids,
   format = DownloadFormat.HTML,
   lang,
+  revalidate = false,
 }: {
   formID: string;
   ids: string[];
   format: DownloadFormat;
   lang: Language;
+  revalidate?: boolean;
 }) => {
   try {
     const session = await auth();
@@ -221,23 +223,32 @@ export const getSubmissionsByFormat = async ({
 
     await logDownload(responseIdStatusArray, format, formID, ability, userEmail);
 
+    const revalidateNewTab = () => {
+      revalidatePath(`${lang}/form-builder/${formID}/responses/new`, "page");
+    };
+
     switch (format) {
       case DownloadFormat.CSV:
+        revalidate && revalidateNewTab();
         return {
           receipt: await htmlAggregatedTransform(formResponse, lang),
           responses: csvTransform(formResponse),
         };
       case DownloadFormat.HTML_AGGREGATED:
+        revalidate && revalidateNewTab();
         return htmlAggregatedTransform(formResponse, lang);
 
       case DownloadFormat.HTML:
+        revalidate && revalidateNewTab();
         return htmlTransform(formResponse);
 
       case DownloadFormat.HTML_ZIPPED: {
+        revalidate && revalidateNewTab();
         return zipTransform(formResponse, lang);
       }
 
       case DownloadFormat.JSON:
+        revalidate && revalidateNewTab();
         return {
           receipt: htmlAggregatedTransform(formResponse, lang),
           responses: jsonTransform(formResponse),
