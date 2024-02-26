@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import axios from "axios";
 import copy from "copy-to-clipboard";
 import {
   MenuDropdownItemI,
@@ -11,6 +10,8 @@ import { MessageIcon, EnvelopeIcon, PreviewIcon, DesignIcon } from "@serverCompo
 import Markdown from "markdown-to-jsx";
 import { MenuDropdownButton } from "../client/MenuDropdownButton";
 import { useTranslation } from "react-i18next";
+import Link from "next/link";
+import { getForm } from "../../actions";
 
 const CardBanner = ({ isPublished }: { isPublished: boolean }) => {
   const { t } = useTranslation(["my-forms", "common"]);
@@ -49,12 +50,13 @@ const CardLinks = ({ isPublished, url, id, deliveryOption, overdue }: CardLinksP
 
   return (
     <div className="mb-4 px-3">
-      <a
+      <Link
         href={isPublished ? url : `/${i18n.language}/form-builder/${id}/edit/`}
         className="my-4 block text-sm focus:fill-white active:fill-white"
         target={isPublished ? "_blank" : "_self"}
         aria-describedby={`card-title-${id} card-date-${id}`}
         rel="noreferrer"
+        prefetch={false}
       >
         {isPublished ? (
           <PreviewIcon className="mr-2 inline-block" />
@@ -62,7 +64,7 @@ const CardLinks = ({ isPublished, url, id, deliveryOption, overdue }: CardLinksP
           <DesignIcon className="mr-2 inline-block" />
         )}
         {isPublished ? t("viewForm") : t("editForm")}
-      </a>
+      </Link>
 
       {/* Email delivery */}
       {deliveryOption && deliveryOption.emailAddress && (
@@ -85,13 +87,14 @@ const CardLinks = ({ isPublished, url, id, deliveryOption, overdue }: CardLinksP
               </Markdown>
             </span>
           ) : (
-            <a
+            <Link
               className="mt-4 block text-sm focus:fill-white active:fill-white"
               href={responsesLink}
+              prefetch={false}
             >
               <MessageIcon className="ml-[1px] mr-2 inline-block" />
               {t("card.deliveryOption.vault", { ns: "my-forms" })}{" "}
-            </a>
+            </Link>
           )}
         </>
       )}
@@ -184,20 +187,13 @@ export const Card = (props: CardProps) => {
   }
 
   async function downloadForm(name: string, id: string) {
-    const url = `/api/templates/${id}`;
-    const response = await axios({
-      url,
-      method: "GET",
-      responseType: "json",
-      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-    });
-
+    const response = await getForm(id);
     const fileName = name
       ? name
       : i18n.language === "fr"
-      ? response.data.form.titleFr
-      : response.data.form.titleEn;
-    const data = JSON.stringify(response.data.form, null, 2);
+      ? response.form.titleFr
+      : response.form.titleEn;
+    const data = JSON.stringify(response.form, null, 2);
     const tempUrl = window.URL.createObjectURL(new Blob([data]));
     const link = document.createElement("a");
     link.href = tempUrl;
