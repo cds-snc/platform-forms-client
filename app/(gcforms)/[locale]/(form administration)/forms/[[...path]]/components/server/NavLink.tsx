@@ -27,6 +27,7 @@ export const NavLink = ({
       id={id}
       className={cn(baseClasses, inactiveClasses, active && activeClasses)}
       {...(active && { "aria-current": "page" })}
+      prefetch={false}
     >
       {children}
     </Link>
