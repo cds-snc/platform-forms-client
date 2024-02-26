@@ -3,8 +3,8 @@ import React, { useCallback } from "react";
 import { useTranslation } from "@i18n/client";
 
 import { ConfirmFormDeleteDialog } from "./shared";
-import { clearTemplateStore } from "../../../../../../components/clientComponents/form-builder/store";
-import { handleDelete } from "../../../../../../components/clientComponents/form-builder/utils";
+import { clearTemplateStore } from "@clientComponents/form-builder/store";
+import { handleDelete } from "@clientComponents/form-builder/utils";
 import { toast, ToastContainer } from "./shared/Toast";
 
 export const ConfirmDelete = ({

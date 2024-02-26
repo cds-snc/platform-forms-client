@@ -4,12 +4,9 @@ import { useSession } from "next-auth/react";
 import { cn } from "@lib/utils";
 
 import { Button, StyledLink } from "@clientComponents/globals";
-import { useTemplateStore } from "../../../../../../../components/clientComponents/form-builder/store";
-import {
-  useTemplateStatus,
-  useTemplateContext,
-} from "../../../../../../../components/clientComponents/form-builder/hooks";
-import { formatDateTime } from "../../../../../../../components/clientComponents/form-builder/util";
+import { useTemplateStore } from "@clientComponents/form-builder/store";
+import { useTemplateStatus, useTemplateContext } from "@clientComponents/form-builder/hooks";
+import { formatDateTime } from "@clientComponents/form-builder/util";
 import { SavedFailIcon, SavedCheckIcon } from "@serverComponents/icons";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";

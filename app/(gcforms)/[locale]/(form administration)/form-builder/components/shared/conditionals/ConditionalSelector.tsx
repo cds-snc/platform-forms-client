@@ -8,7 +8,7 @@ import { useTemplateStore } from "@formbuilder/store";
 import {
   LocalizedFormProperties,
   LocalizedElementProperties,
-} from "../../../../../../../../components/clientComponents/form-builder/types";
+} from "@clientComponents/form-builder/types";
 
 type Choice = {
   label: string;

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useTemplateStore } from "../../../../../../../components/clientComponents/form-builder/store";
+import { useTemplateStore } from "@clientComponents/form-builder/store";
 
 export const Output = () => {
   const getSchema = useTemplateStore((s) => s.getSchema);
