@@ -1,14 +1,13 @@
 "use client";
 import React, { useEffect } from "react";
 import { useTranslation } from "@i18n/client";
-
 import { FormElementWithIndex } from "@clientComponents/form-builder/types";
 import { useTemplateStore, useModalStore } from "@clientComponents/form-builder/store";
 import { Button } from "@clientComponents/globals";
 import { Modal } from "./index";
 import { ModalButton, ModalForm } from "./index";
-import { useRefsContext } from "app/(gcforms)/[locale]/(form administration)/form-builder/[id]/edit/components/RefsContext";
 import { getPathString, getElementIndexes } from "@clientComponents/form-builder/getPath";
+import { useRefsContext } from "./RefsContext";
 
 export const MoreModal = ({
   item,
