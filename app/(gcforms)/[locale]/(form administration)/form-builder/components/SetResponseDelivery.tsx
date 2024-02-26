@@ -1,6 +1,6 @@
 "use client";
 import React, { useCallback, useState, useMemo } from "react";
-import { LocalizedFormProperties } from "../types";
+import { LocalizedFormProperties } from "../../../../../../components/clientComponents/form-builder/types";
 import axios from "axios";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
@@ -10,11 +10,11 @@ import { isValidGovEmail } from "@lib/validation";
 import { ResponseEmail } from "./ResponseEmail";
 import { Radio } from "./shared";
 import { Button } from "@clientComponents/globals";
-import { useTemplateApi } from "../hooks";
-import { useTemplateStore } from "../store";
-import { completeEmailAddressRegex } from "../util";
+import { useTemplateApi } from "../../../../../../components/clientComponents/form-builder/hooks";
+import { useTemplateStore } from "../../../../../../components/clientComponents/form-builder/store";
+import { completeEmailAddressRegex } from "../../../../../../components/clientComponents/form-builder/util";
 import { toast } from "./shared/Toast";
-import { ResponseDeliveryHelpButton } from "@clientComponents/form-builder/app/shared";
+import { ResponseDeliveryHelpButton } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";
 import { ClassificationType, ClassificationSelect } from "./ClassificationSelect";
 
 enum DeliveryOption {

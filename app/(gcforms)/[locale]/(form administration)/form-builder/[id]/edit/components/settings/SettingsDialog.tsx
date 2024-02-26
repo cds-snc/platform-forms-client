@@ -6,15 +6,19 @@ import axios from "axios";
 
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@clientComponents/form-builder/store";
-import { useDialogRef, Dialog, Radio } from "@clientComponents/form-builder/app/shared";
+import {
+  useDialogRef,
+  Dialog,
+  Radio,
+} from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";
 import { Logos, options } from "../../../settings/branding/components";
 import Brand from "@clientComponents/globals/Brand";
 import {
   ClassificationType,
   ClassificationSelect,
-} from "@clientComponents/form-builder/app/ClassificationSelect";
+} from "app/(gcforms)/[locale]/(form administration)/form-builder/components/ClassificationSelect";
 import { LocalizedFormProperties } from "@clientComponents/form-builder/types";
-import { ResponseEmail } from "@clientComponents/form-builder/app/ResponseEmail";
+import { ResponseEmail } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/ResponseEmail";
 import { isValidGovEmail } from "@lib/validation";
 import { useTemplateApi } from "@clientComponents/form-builder/hooks";
 import { completeEmailAddressRegex } from "@clientComponents/form-builder/util";

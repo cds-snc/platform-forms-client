@@ -6,7 +6,7 @@ import debounce from "lodash.debounce";
 
 import { Close } from "@serverComponents/icons";
 import { Button } from "@clientComponents/globals";
-import { Input } from "@clientComponents/form-builder/app/shared/Input";
+import { Input } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/Input";
 import { useTemplateStore } from "@clientComponents/form-builder/store/useTemplateStore";
 import { Language } from "@clientComponents/form-builder/types";
 

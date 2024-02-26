@@ -8,7 +8,7 @@ import { useTemplateStore } from "@formbuilder/store";
 import { ModalProperties } from "@clientComponents/form-builder/store/useModalRulesStore";
 import { FormElementWithIndex } from "@clientComponents/form-builder/types";
 import { ChoiceRule } from "@lib/formContext";
-import { ConditionalSelector } from "@clientComponents/form-builder/app/shared/conditionals/ConditionalSelector";
+import { ConditionalSelector } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/conditionals/ConditionalSelector";
 
 export const ModalFormRules = ({
   item,

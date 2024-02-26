@@ -4,7 +4,7 @@ import { useTranslation } from "@i18n/client";
 
 import { Button } from "@clientComponents/globals";
 import { useDialogRef, Dialog } from ".";
-import { InfoIcon } from "../../../../serverComponents/icons";
+import { InfoIcon } from "../../../../../../../components/serverComponents/icons";
 
 const ResponseDeliveryHelpDialog = ({ handleClose }: { handleClose: () => void }) => {
   const { t } = useTranslation("form-builder");

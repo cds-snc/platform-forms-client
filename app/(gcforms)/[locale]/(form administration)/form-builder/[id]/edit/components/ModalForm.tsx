@@ -8,7 +8,12 @@ import {
   FormElementWithIndex,
   LocalizedElementProperties,
 } from "@clientComponents/form-builder/types";
-import { Checkbox, Input, TextArea, InfoDetails } from "@clientComponents/form-builder/app/shared";
+import {
+  Checkbox,
+  Input,
+  TextArea,
+  InfoDetails,
+} from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";
 import { useTemplateStore } from "@clientComponents/form-builder/store";
 import { AutocompleteDropdown } from "./AutocompleteDropdown";
 

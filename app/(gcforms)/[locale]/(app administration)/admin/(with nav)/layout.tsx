@@ -1,5 +1,5 @@
 import { Footer, SkipLink } from "@serverComponents/globals";
-import { ToastContainer } from "@clientComponents/form-builder/app/shared/Toast";
+import { ToastContainer } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/Toast";
 import { LeftNavigation } from "@serverComponents/admin/LeftNavigation";
 import Link from "next/link";
 import { serverTranslation } from "@i18n";

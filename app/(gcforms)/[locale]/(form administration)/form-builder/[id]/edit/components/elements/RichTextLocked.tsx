@@ -4,7 +4,7 @@ import { useTemplateStore } from "@clientComponents/form-builder/store/useTempla
 import { RichTextEditor } from "./lexical-editor/RichTextEditor";
 import { AddElementButton } from "./element-dialog/AddElementButton";
 import { LocalizedElementProperties } from "@clientComponents/form-builder/types";
-import { LockedBadge } from "@clientComponents/form-builder/app/shared/LockedBadge";
+import { LockedBadge } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/LockedBadge";
 import { useHandleAdd } from "@clientComponents/form-builder/hooks";
 import { FormElementTypes } from "@lib/types";
 import { cn } from "@lib/utils";

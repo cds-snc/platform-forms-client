@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
-import { ToastContainer } from "@clientComponents/form-builder/app/shared/Toast";
+import { ToastContainer } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/Toast";
 import { Header } from "../Header";
 import { Footer, SkipLink } from "@clientComponents/globals";
 

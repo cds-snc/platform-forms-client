@@ -12,9 +12,9 @@ import { CancelIcon, CircleCheckIcon, LockIcon } from "@serverComponents/icons";
 import { Button, Alert } from "@clientComponents/globals";
 import Link from "next/link";
 import { isVaultDelivery } from "@clientComponents/form-builder/util";
-import { classificationOptions } from "@clientComponents/form-builder/app/ClassificationSelect";
+import { classificationOptions } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/ClassificationSelect";
 import { logMessage } from "@lib/logger";
-import { DownloadFileButton } from "@clientComponents/form-builder/app/shared";
+import { DownloadFileButton } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";
 import Skeleton from "react-loading-skeleton";
 import LinkButton from "@serverComponents/globals/Buttons/LinkButton";
 

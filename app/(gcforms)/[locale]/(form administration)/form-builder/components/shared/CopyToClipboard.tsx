@@ -2,7 +2,7 @@
 import React from "react";
 import { useTranslation } from "@i18n/client";
 
-import { useTemplateStore } from "../../store/useTemplateStore";
+import { useTemplateStore } from "../../../../../../../components/clientComponents/form-builder/store/useTemplateStore";
 import { withMessage } from "./WithMessage";
 import { Button } from "@clientComponents/globals";
 

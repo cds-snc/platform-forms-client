@@ -1,7 +1,7 @@
 "use client";
 import React, { useCallback, useState } from "react";
 import { useTranslation } from "@i18n/client";
-import { useTemplateStore } from "../store";
+import { useTemplateStore } from "../../../../../../components/clientComponents/form-builder/store";
 import { toast } from "./shared/Toast";
 import axios from "axios";
 

@@ -1,7 +1,7 @@
 "use client";
 import React, { ReactElement, useEffect } from "react";
 
-import { clearTemplateStore } from "../../store";
+import { clearTemplateStore } from "../../../../../../../components/clientComponents/form-builder/store";
 
 export const ResumeEditingForm = ({ children }: { children: ReactElement }) => {
   const [hasSession, setHasSession] = React.useState(false);

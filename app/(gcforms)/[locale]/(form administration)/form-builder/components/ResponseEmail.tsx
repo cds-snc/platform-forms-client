@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useTranslation } from "@i18n/client";
 import { isValidGovEmail } from "@lib/validation";
 import { Input } from "./shared";
-import { completeEmailAddressRegex } from "../util";
+import { completeEmailAddressRegex } from "../../../../../../components/clientComponents/form-builder/util";
 
 const HintText = ({ id, children }: { id: string; children?: JSX.Element | string }) => {
   return (

@@ -9,7 +9,7 @@ import { CardGrid } from "@clientComponents/myforms/CardGrid/CardGrid";
 import { TabPanel } from "@clientComponents/myforms/Tabs/TabPanel";
 import { StyledLink } from "@clientComponents/globals/StyledLink/StyledLink";
 import { clearTemplateStore } from "@clientComponents/form-builder/store/useTemplateStore";
-import { ResumeEditingForm } from "@clientComponents/form-builder/app/shared";
+import { ResumeEditingForm } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";
 
 interface FormsDataItem {
   id: string;
