@@ -6,7 +6,6 @@ import { Modal, ModalButton, ModalFormRules } from "./index";
 import { FormElementWithIndex } from "@clientComponents/form-builder/types";
 import { useTemplateStore, useModalRulesStore } from "@clientComponents/form-builder/store";
 import { Button } from "@clientComponents/globals";
-import { useRefsContext } from "app/(gcforms)/[locale]/(form administration)/form-builder/[id]/edit/components/RefsContext";
 import { getPathString } from "@formbuilder/getPath";
 import {
   ChoiceRule,
@@ -14,6 +13,7 @@ import {
   getElementsWithRuleForChoice,
   cleanChoiceIdsFromRules,
 } from "@lib/formContext";
+import { useRefsContext } from "./RefsContext";
 
 export const ModalRules = ({ item }: { item: FormElementWithIndex }) => {
   const { elements, updateField } = useTemplateStore((s) => ({
