@@ -1,6 +1,7 @@
 import React from "react";
 import { ToastContainer } from "@clientComponents/form-builder/app/shared/Toast";
-import { Footer, Header, SkipLink } from "@clientComponents/globals";
+import { Header } from "@clientComponents/globals";
+import { Footer, SkipLink } from "@serverComponents/globals";
 import { auth } from "@lib/auth";
 import { redirect } from "next/navigation";
 
