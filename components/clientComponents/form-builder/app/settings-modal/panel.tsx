@@ -4,7 +4,10 @@ import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
 
 import { ClassificationType, ClassificationSelect } from "../ClassificationSelect";
-import { Logos, options } from "../branding";
+import {
+  Logos,
+  options,
+} from "../../../../../app/(gcforms)/[locale]/(form administration)/form-builder/[id]/settings/branding/components";
 import { useTemplateStore } from "../../store";
 import { useTemplateApi } from "../../hooks";
 import { SettingsModal } from "./SettingsDialog";
