@@ -103,7 +103,7 @@ export const ConfirmDeactivateModal = ({
         <Alert.Danger className="mb-4">
           <p>
             <a
-              className="!text-red hover:no-underline focus:bg-inherit focus:shadow-none active:bg-inherit active:shadow-none active:outline-offset-0 active:outline-inherit"
+              className="!text-red hover:no-underline focus:bg-inherit active:bg-inherit active:outline-offset-0 active:outline-inherit"
               href={`/admin/accounts/${userId}/manage-forms`}
             >
               {t("publishedFormsMustBeTransferred.text1")}

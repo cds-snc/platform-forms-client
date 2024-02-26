@@ -20,7 +20,7 @@ export const SubNavLink = ({
   onClick?: () => void;
 }) => {
   const baseClasses =
-    "mb-4 mr-3 rounded-[100px] border-1 border-black bg-white px-5 pb-2 pt-1 no-underline !shadow-none laptop:py-2";
+    "mb-4 mr-3 rounded-[100px] border-1 border-black bg-white px-5 pb-2 pt-1 no-underline laptop:py-2";
 
   const inactiveClasses =
     "!text-black hover:bg-gray-600 hover:!text-white-default focus:!text-white [&_svg]:hover:fill-white [&_svg]:hover:stroke-white [&_svg]:focus:fill-white";

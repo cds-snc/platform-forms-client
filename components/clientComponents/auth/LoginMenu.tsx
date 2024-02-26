@@ -22,7 +22,7 @@ export const LoginMenu = () => {
       {status === "authenticated" ? (
         <button
           type="button"
-          className="border-0 bg-transparent text-blue-dark underline shadow-none hover:text-blue-hover"
+          className="border-0 bg-transparent text-blue-dark underline hover:text-blue-hover"
           onClick={handleClick}
           lang={i18n.language}
         >
