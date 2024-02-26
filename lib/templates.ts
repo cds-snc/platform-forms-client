@@ -265,11 +265,13 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
 
 /**
  * Get all form templates. Depending on the user permissions the function will return either all or a subset of templates.
+ * @param userID deprecated, retrieve from ability instead
  * @returns An array of Form Records
  */
 export async function getAllTemplates(
   ability: UserAbility,
-  userID: string
+  userID: string,
+  requestedWhere?: Prisma.TemplateWhereInput
 ): Promise<Array<FormRecord>> {
   try {
     checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
@@ -288,11 +290,12 @@ export async function getAllTemplates(
     const templates = await prisma.template
       .findMany({
         where: {
+          ...(requestedWhere && requestedWhere),
           ttl: null,
           ...(!canUserAccessAllTemplates && {
             users: {
               some: {
-                id: userID,
+                id: ability.userID,
               },
             },
           }),

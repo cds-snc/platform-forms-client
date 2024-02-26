@@ -10,7 +10,6 @@ type CardWithoutHandleDelete = Omit<CardProps, "handleDelete">;
 
 interface CardGridProps {
   cards: Array<CardWithoutHandleDelete>;
-  gridType: "all" | "published" | "drafts";
 }
 
 export const CardGrid = (props: CardGridProps): React.ReactElement => {

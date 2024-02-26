@@ -18,80 +18,58 @@ export const Cards = async ({
     i18n: { language },
   } = await serverTranslation(["my-forms", "form-builder"]);
 
-  const templates = (await getAllTemplates(ability, id)).map((template) => {
-    const {
-      id,
-      form: { titleEn = "", titleFr = "" },
-      name,
-      deliveryOption = { emailAddress: "" },
-      isPublished,
-      updatedAt,
-    } = template;
-    return {
-      id,
-      titleEn,
-      titleFr,
-      deliveryOption,
-      name,
-      isPublished,
-      date: updatedAt ?? Date.now().toString(),
-      url: `/${language}/id/${id}`,
-      overdue: 0,
-    };
-  });
-
+  // TODO can this be done in the below DB call?
   const overdue = await getUnprocessedSubmissionsForUser(ability, id);
 
-  templates.forEach((template) => {
-    if (overdue[template.id]) {
-      template.overdue = overdue[template.id].numberOfSubmissions;
-    }
-  });
+  const where = {
+    isPublished: filter === "published" ? true : filter === "drafts" ? false : undefined,
+  };
+  const templates = (await getAllTemplates(ability, id, where))
+    .map((template) => {
+      const {
+        id,
+        form: { titleEn = "", titleFr = "" },
+        name,
+        deliveryOption = { emailAddress: "" },
+        isPublished,
+        updatedAt,
+      } = template;
+      return {
+        id,
+        titleEn,
+        titleFr,
+        deliveryOption,
+        name,
+        isPublished,
+        date: updatedAt ?? Date.now().toString(),
+        url: `/${language}/id/${id}`,
+        overdue: 0,
+      };
+    })
+    .map((template) => {
+      // Mark any overdue templates
+      if (overdue[template.id]) {
+        template.overdue = overdue[template.id].numberOfSubmissions;
+      }
+      return template;
+    })
+    .sort((itemA, itemB) => {
+      return new Date(itemB.date).getTime() - new Date(itemA.date).getTime();
+    });
 
-  const templatesAll = templates.sort((itemA, itemB) => {
-    return new Date(itemB.date).getTime() - new Date(itemA.date).getTime();
-  });
-
-  const templatesPublished = templatesAll?.filter((item) => item?.isPublished === true);
-
-  const templatesDrafts = templatesAll?.filter((item) => item?.isPublished === false);
-
+  // TODO more testing with below live region. it may need to be placed higher in the tree
   return (
     <div aria-live="polite">
       <div
-        id="tabpanel-drafts"
+        id={`tabpanel-${filter}`}
         role="tabpanel"
-        aria-labelledby="tab-drafts"
-        className={`pt-8 ${filter === "drafts" ? "" : "hidden"}`}
+        aria-labelledby={`tab-${filter}`}
+        className={`pt-8`}
       >
-        {templatesDrafts && templatesDrafts?.length > 0 ? (
-          <CardGrid cards={templatesDrafts} gridType="drafts" />
+        {templates && templates?.length > 0 ? (
+          <CardGrid cards={templates} />
         ) : (
           <p>{t("cards.noDraftForms")}</p>
-        )}
-      </div>
-      <div
-        id="tabpanel-published"
-        role="tabpanel"
-        aria-labelledby="tab-published"
-        className={`pt-8 ${filter === "published" ? "" : "hidden"}`}
-      >
-        {templatesPublished && templatesPublished?.length > 0 ? (
-          <CardGrid cards={templatesPublished} gridType="published" />
-        ) : (
-          <p>{t("cards.noPublishedForms")}</p>
-        )}
-      </div>
-      <div
-        id="tabpanel-all"
-        role="tabpanel"
-        aria-labelledby="tab-all"
-        className={`pt-8 ${filter === "all" || typeof filter === "undefined" ? "" : "hidden"}`}
-      >
-        {templatesAll && templatesAll?.length > 0 ? (
-          <CardGrid cards={templatesAll} gridType="all" />
-        ) : (
-          <p>{t("cards.noForms")}</p>
         )}
       </div>
     </div>
