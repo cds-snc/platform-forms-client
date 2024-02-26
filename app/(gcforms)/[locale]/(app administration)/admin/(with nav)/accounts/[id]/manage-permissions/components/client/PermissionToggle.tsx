@@ -1,6 +1,6 @@
-"use client";
-import React, { useState } from "react";
+import { useTransition } from "react";
 import { ToggleLeft, ToggleRight } from "@serverComponents/icons";
+import { PleaseHold } from "@serverComponents/globals/PleaseHold";
 
 interface PermissionToggleProps {
   on: boolean;
@@ -18,39 +18,47 @@ export const PermissionToggle = ({
   description,
   handleToggle,
 }: PermissionToggleProps) => {
-  const [isChecked, setIsChecked] = useState(on);
   const boldOn = on ? "font-bold" : "font-normal";
   const boldOff = !on ? "font-bold" : "font-normal";
+
+  const [isPending, startTransition] = useTransition();
 
   return (
     <div
       role="switch"
-      aria-checked={isChecked}
+      aria-checked={on}
       tabIndex={0}
       onClick={() => {
-        handleToggle();
-        setIsChecked(isChecked ? false : true);
+        startTransition(() => {
+          handleToggle();
+        });
       }}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
-          handleToggle();
+          startTransition(() => {
+            handleToggle();
+          });
           // Stop the browser "space" key default behavior of scrolling down
           e.preventDefault();
-          setIsChecked(isChecked ? false : true);
         }
       }}
       className="flex items-center justify-between"
     >
       <p>{description}</p>
       <div className="cursor-pointer whitespace-nowrap">
-        <span id="switch-on" className={`mr-1 text-sm ${boldOff} mr-2`} aria-hidden="true">
-          {offLabel}
-        </span>
-        {!on && <ToggleLeft className="inline-block w-12 fill-gray-light" />}
-        {on && <ToggleRight className="inline-block w-12 fill-green" />}
-        <span id="switch-off" className={`ml-1 text-sm ${boldOn} ml-2`} aria-hidden="true">
-          {onLabel}
-        </span>
+        {isPending && <PleaseHold className="h-10 w-28" />}
+        {!isPending && (
+          <>
+            <span id="switch-on" className={`mr-1 text-sm ${boldOff} mr-2`} aria-hidden="true">
+              {offLabel}
+            </span>
+            {!on && <ToggleLeft className="inline-block w-12 fill-gray-light" />}
+            {on && <ToggleRight className="inline-block w-12 fill-green" />}
+            <span id="switch-off" className={`ml-1 text-sm ${boldOn} ml-2`} aria-hidden="true">
+              {onLabel}
+            </span>
+          </>
+        )}
       </div>
     </div>
   );

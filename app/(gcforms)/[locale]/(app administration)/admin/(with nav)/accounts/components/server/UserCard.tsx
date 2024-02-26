@@ -26,17 +26,15 @@ export const UserCard = async ({
         <div className="flex flex-wrap gap-2">
           {canManageUser && (
             <>
-              {user.active && (
-                <>
-                  <div className="flex-none">
-                    <PublishPermission user={user} publishFormsId={publishFormsId} />
-                  </div>
-                  <div className="flex-none">
-                    <ManageFormsButton userId={user.id} />
-                  </div>
-                </>
-              )}
               {!isCurrentUser && !user.active && <AccountActivation userId={user.id} />}
+              {user.active && (
+                <div className="flex-none">
+                  <PublishPermission user={user} publishFormsId={publishFormsId} />
+                </div>
+              )}
+              <div className="flex-none">
+                <ManageFormsButton userId={user.id} />
+              </div>
             </>
           )}
         </div>

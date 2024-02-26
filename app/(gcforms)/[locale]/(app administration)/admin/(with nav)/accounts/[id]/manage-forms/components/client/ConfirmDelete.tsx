@@ -1,10 +1,10 @@
 import React, { useCallback } from "react";
 import { useTranslation } from "@i18n/client";
 
-import { ConfirmFormDeleteDialog } from "./shared";
-import { clearTemplateStore } from "../store";
-import { handleDelete } from "../utils";
-import { toast, ToastContainer } from "./shared/Toast";
+import { ConfirmFormDeleteDialog } from "@clientComponents/form-builder/app/shared";
+
+import { toast, ToastContainer } from "@clientComponents/form-builder/app/shared/Toast";
+import { deleteForm } from "../../actions";
 
 export const ConfirmDelete = ({
   show,
@@ -22,23 +22,14 @@ export const ConfirmDelete = ({
   const { t } = useTranslation("form-builder");
 
   const handleConfirm = useCallback(async () => {
-    const result = await handleDelete(id);
-    if (result && "error" in result) {
-      if (
-        result.error.response?.status === 405 &&
-        (result.error.response?.data as Record<string, unknown> | undefined)?.error ===
-          "Found unprocessed submissions"
-      ) {
+    await deleteForm(id).catch((error) => {
+      if ((error as Error).message === "Responses Exist") {
         toast.error(t("formDeletedResponsesExist"));
-        return;
+      } else {
+        toast.error(t("formDeletedDialogMessageFailed"));
       }
+    });
 
-      toast.error(t("formDeletedDialogMessageFailed"));
-
-      return;
-    }
-
-    clearTemplateStore();
     onDeleted(id);
   }, [id, onDeleted, t]);
 
