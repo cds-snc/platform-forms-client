@@ -1,22 +1,22 @@
 import React from "react";
-// import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { ToastContainer } from "@clientComponents/form-builder/app/shared/Toast";
-
 import { Footer, Header, SkipLink } from "@clientComponents/globals";
+import { auth } from "@lib/auth";
+import { redirect } from "next/navigation";
 
-export default function FormsLayout({
+export default async function FormsLayout({
   children,
+  params: { locale },
   user,
   context,
 }: {
   children: React.ReactNode;
+  params: { locale: string };
   user?: { name: string | null; email: string };
   context?: "admin" | "formBuilder" | "default";
 }) {
-  // TODO -- Done in page.tsx?
-  //
-  // This will check to see if a user is deactivated and redirect them to the account deactivated page
-  // useAccessControl(); // @TODO: this belongs somewhere else
+  const session = await auth();
+  if (!session) redirect(`/${locale}/auth/login`);
 
   return (
     <>
