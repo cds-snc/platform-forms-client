@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import copy from "copy-to-clipboard";
 import { getForm } from "../../actions";
 import { getDate, slugify } from "@lib/client/clientHelpers";
-import { CardProps } from "../server/Card";
+import { CardProps } from "./Card";
 
 export const MenuDropdownButton = ({
   id,

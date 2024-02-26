@@ -2,7 +2,7 @@
 import React from "react";
 import { MessageIcon, EnvelopeIcon, PreviewIcon, DesignIcon } from "@serverComponents/icons";
 import Markdown from "markdown-to-jsx";
-import { MenuDropdownButton } from "../client/MenuDropdownButton";
+import { MenuDropdownButton } from "./MenuDropdownButton";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
 

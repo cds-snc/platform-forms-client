@@ -3,7 +3,7 @@ import React, { useCallback, useState, useRef } from "react";
 
 import { ConfirmDelete } from "@clientComponents/form-builder/app/ConfirmDelete";
 import { useRefresh } from "@lib/hooks";
-import { Card, CardProps } from "../server/Card";
+import { Card, CardProps } from "./Card";
 
 /* handle delete gets added via the CardGrid component */
 type CardWithoutHandleDelete = Omit<CardProps, "handleDelete">;
