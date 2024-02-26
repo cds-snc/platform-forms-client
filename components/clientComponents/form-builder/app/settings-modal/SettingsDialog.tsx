@@ -7,7 +7,10 @@ import axios from "axios";
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "../../store";
 import { useDialogRef, Dialog, Radio } from "../shared";
-import { Logos, options } from "../branding";
+import {
+  Logos,
+  options,
+} from "../../../../../app/(gcforms)/[locale]/(form administration)/form-builder/[id]/settings/branding/components";
 import Brand from "@clientComponents/globals/Brand";
 import { ClassificationType, ClassificationSelect } from "../ClassificationSelect";
 import { LocalizedFormProperties } from "../../types";
