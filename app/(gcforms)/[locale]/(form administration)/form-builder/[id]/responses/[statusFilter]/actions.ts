@@ -221,7 +221,9 @@ export const getSubmissionsByFormat = async ({
 
     await logDownload(responseIdStatusArray, format, formID, ability, userEmail);
 
-    const revalidateNewTab = () => {
+    const revalidateNewTab = async () => {
+      // delay revalidation so new tab doesn't refresh immediately
+      await new Promise((resolve) => setTimeout(resolve, 5));
       revalidatePath(`${lang}/form-builder/${formID}/responses/new`, "page");
     };
 
