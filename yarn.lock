@@ -36,26 +36,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth/core@npm:0.21.0":
-  version: 0.21.0
-  resolution: "@auth/core@npm:0.21.0"
-  dependencies:
-    "@panva/hkdf": "npm:^1.1.1"
-    "@types/cookie": "npm:0.6.0"
-    cookie: "npm:0.6.0"
-    jose: "npm:^5.1.3"
-    oauth4webapi: "npm:^2.4.0"
-    preact: "npm:10.11.3"
-    preact-render-to-string: "npm:5.2.3"
-  peerDependencies:
-    nodemailer: ^6.8.0
-  peerDependenciesMeta:
-    nodemailer:
-      optional: true
-  checksum: 10c0/e34fc3a0b81512dcaa56177f86581c7b945e4df9328357ef43934a882806e63c59cf20bc6bb153396efe0f4b987617e70d14487f52b85410eab5a05dbe349f4f
-  languageName: node
-  linkType: hard
-
 "@auth/core@npm:0.27.0":
   version: 0.27.0
   resolution: "@auth/core@npm:0.27.0"
@@ -3169,7 +3149,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prisma/client@npm:^5.7.1":
+"@prisma/client@npm:^5.10.2":
   version: 5.10.2
   resolution: "@prisma/client@npm:5.10.2"
   peerDependencies:
@@ -10425,7 +10405,7 @@ __metadata:
     "@jest/globals": "npm:^29.7.0"
     "@lexical/react": "npm:^0.12.6"
     "@next/eslint-plugin-next": "npm:^13.5.6"
-    "@prisma/client": "npm:^5.7.1"
+    "@prisma/client": "npm:^5.10.2"
     "@radix-ui/react-dropdown-menu": "npm:2.0.6"
     "@radix-ui/react-tooltip": "npm:^1.0.7"
     "@testing-library/dom": "npm:^8.20.1"
@@ -10512,7 +10492,7 @@ __metadata:
     lodash.unset: "npm:4.5.2"
     markdown-to-jsx: "npm:7.3.2"
     next: "npm:^14.1.0"
-    next-auth: "npm:5.0.0-beta.5"
+    next-auth: "npm:5.0.0-beta.13"
     node-fetch: "npm:^3.3.2"
     notifications-node-client: "npm:7.0.6"
     pino: "npm:8.17.2"
@@ -10521,7 +10501,7 @@ __metadata:
     postcss-import: "npm:^15.1.0"
     postcss-loader: "npm:^7.3.4"
     prettier: "npm:^2.8.8"
-    prisma: "npm:^5.7.1"
+    prisma: "npm:^5.10.2"
     react: "npm:^18.2.0"
     react-app-polyfill: "npm:3.0.0"
     react-aria: "npm:3.31.0"
@@ -13233,19 +13213,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-auth@npm:5.0.0-beta.5":
-  version: 5.0.0-beta.5
-  resolution: "next-auth@npm:5.0.0-beta.5"
+"next-auth@npm:5.0.0-beta.13":
+  version: 5.0.0-beta.13
+  resolution: "next-auth@npm:5.0.0-beta.13"
   dependencies:
-    "@auth/core": "npm:0.21.0"
+    "@auth/core": "npm:0.27.0"
   peerDependencies:
+    "@simplewebauthn/browser": ^9.0.1
+    "@simplewebauthn/server": ^9.0.2
     next: ^14
     nodemailer: ^6.6.5
     react: ^18.2.0
   peerDependenciesMeta:
+    "@simplewebauthn/browser":
+      optional: true
+    "@simplewebauthn/server":
+      optional: true
     nodemailer:
       optional: true
-  checksum: 10c0/f1175ab4526e218835a188bc728e720c3c3dfadce3bd1fa43fba2ef44c5cf7e215f3f404b4ee43f91327d5da1a1c9d916a286fb345c948f50e1c6e8f277e5cbe
+  checksum: 10c0/5a394fa93e670ac0e55ea459e5770f421fcb40dc3f5a55dbacf54c5cd87211f430c9c673a34eb85cc4904fe7c6674c13d199de89ce67e2f0f23a00b146cccf56
   languageName: node
   linkType: hard
 
@@ -14533,7 +14519,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prisma@npm:^5.7.1":
+"prisma@npm:^5.10.2":
   version: 5.10.2
   resolution: "prisma@npm:5.10.2"
   dependencies:
