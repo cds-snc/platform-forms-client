@@ -8,6 +8,7 @@ import { LockedBadge } from "@clientComponents/form-builder/app/shared/LockedBad
 import { useHandleAdd } from "@clientComponents/form-builder/hooks";
 import { FormElementTypes } from "@lib/types";
 import { cn } from "@lib/utils";
+import Skeleton from "react-loading-skeleton";
 
 export const RichTextLocked = ({
   beforeContent = null,
@@ -16,6 +17,7 @@ export const RichTextLocked = ({
   schemaProperty,
   ariaLabel,
   className,
+  hydrated,
 }: {
   beforeContent?: React.ReactElement | null;
   addElement: boolean;
@@ -23,6 +25,7 @@ export const RichTextLocked = ({
   schemaProperty: "introduction" | "privacyPolicy" | "confirmation";
   ariaLabel?: string;
   className?: string;
+  hydrated?: boolean;
 }) => {
   const { localizeField, form, translationLanguagePriority } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
@@ -52,14 +55,17 @@ export const RichTextLocked = ({
         <LockedBadge />
         {beforeContent && beforeContent}
         <div className="flex">{children}</div>
-        <div key={translationLanguagePriority} className="flex rounded border-2">
-          <RichTextEditor
-            path={path}
-            content={content}
-            lang={translationLanguagePriority}
-            ariaLabel={ariaLabel}
-          />
-        </div>
+        {!hydrated && <Skeleton className="w-full" height={200} />}
+        {hydrated && (
+          <div key={translationLanguagePriority} className="flex rounded border-2">
+            <RichTextEditor
+              path={path}
+              content={content}
+              lang={translationLanguagePriority}
+              ariaLabel={ariaLabel}
+            />
+          </div>
+        )}
       </div>
       <div className="flex">
         {addElement && (

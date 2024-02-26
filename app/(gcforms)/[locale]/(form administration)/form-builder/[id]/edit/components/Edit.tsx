@@ -86,7 +86,6 @@ export const Edit = () => {
   }, [focusTitle]);
 
   const hasHydrated = useRehydrate();
-  if (!hasHydrated) return null;
 
   return (
     <>
@@ -96,6 +95,7 @@ export const Edit = () => {
       </div>
       <SettingsPanel />
       <RichTextLocked
+        hydrated={hasHydrated}
         className="rounded-t-lg"
         beforeContent={
           <>
@@ -138,6 +138,7 @@ export const Edit = () => {
       </RefsProvider>
       <>
         <RichTextLocked
+          hydrated={hasHydrated}
           addElement={false}
           schemaProperty="privacyPolicy"
           ariaLabel={t("richTextPrivacyTitle")}
@@ -147,7 +148,9 @@ export const Edit = () => {
             <PrivacyDescription />
           </div>
         </RichTextLocked>
+
         <RichTextLocked
+          hydrated={hasHydrated}
           addElement={false}
           schemaProperty="confirmation"
           ariaLabel={t("richTextConfirmationTitle")}
