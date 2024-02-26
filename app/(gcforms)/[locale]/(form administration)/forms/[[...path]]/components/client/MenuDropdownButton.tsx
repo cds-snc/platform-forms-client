@@ -26,7 +26,7 @@ export const MenuDropdownButton = ({
     {
       title: t("card.menu.save"),
       callback: () => {
-        downloadForm(name, id);
+        downloadForm(card.name, id);
         return { message: "" };
       },
     },
