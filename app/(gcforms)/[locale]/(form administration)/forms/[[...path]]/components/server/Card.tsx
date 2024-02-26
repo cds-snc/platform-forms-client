@@ -1,17 +1,10 @@
 "use client";
 import React from "react";
-import copy from "copy-to-clipboard";
-import {
-  MenuDropdownItemI,
-  MenuDropdownItemCallback,
-} from "@clientComponents/myforms/MenuDropdown/MenuDropdown";
-import { getDate, slugify } from "@lib/client/clientHelpers";
 import { MessageIcon, EnvelopeIcon, PreviewIcon, DesignIcon } from "@serverComponents/icons";
 import Markdown from "markdown-to-jsx";
 import { MenuDropdownButton } from "../client/MenuDropdownButton";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
-import { getForm } from "../../actions";
 
 const CardBanner = ({ isPublished }: { isPublished: boolean }) => {
   const { t } = useTranslation(["my-forms", "common"]);
@@ -39,8 +32,11 @@ interface CardLinksProps {
 }
 
 const CardLinks = ({ isPublished, url, id, deliveryOption, overdue }: CardLinksProps) => {
-  const { t, i18n } = useTranslation(["my-forms", "common"]);
-  const responsesLink = `/${i18n.language}/form-builder/${id}/responses/new`;
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation(["my-forms", "common"]);
+  const responsesLink = `/${language}/form-builder/${id}/responses/new`;
 
   const textData = {
     responses: overdue,
@@ -51,7 +47,7 @@ const CardLinks = ({ isPublished, url, id, deliveryOption, overdue }: CardLinksP
   return (
     <div className="mb-4 px-3">
       <Link
-        href={isPublished ? url : `/${i18n.language}/form-builder/${id}/edit/`}
+        href={isPublished ? url : `/${language}/form-builder/${id}/edit/`}
         className="my-4 block text-sm focus:fill-white active:fill-white"
         target={isPublished ? "_blank" : "_self"}
         aria-describedby={`card-title-${id} card-date-${id}`}
@@ -141,79 +137,16 @@ export interface CardProps {
 }
 
 export const Card = (props: CardProps) => {
-  const { id, name, url, date, isPublished, deliveryOption, overdue } = props;
-  const { t, i18n } = useTranslation(["my-forms", "common"]);
-
-  const menuItemsList: Array<MenuDropdownItemI> = [
-    {
-      title: t("card.menu.save"),
-      callback: () => {
-        downloadForm(name, id);
-        return { message: "" };
-      },
-    },
-    {
-      title: t("card.menu.settings"),
-      url: `/${i18n.language}/form-builder/settings/${id}`,
-    },
-    {
-      title: t("card.menu.delete"),
-      callback: () => {
-        props.handleDelete(props);
-        return {
-          message: "",
-        };
-      },
-    },
-  ];
-
-  // Show slightly different list items depending on whether a Published or Draft card
-  if (isPublished) {
-    menuItemsList.unshift({
-      title: t("card.menu.copyLink"),
-      callback: copyLinkCallback,
-    });
-  } else {
-    menuItemsList.unshift(
-      {
-        title: t("card.menu.edit"),
-        url: `/${i18n.language}/form-builder/edit/${id}`,
-      },
-      {
-        title: t("card.menu.preview"),
-        url: `/${i18n.language}/form-builder/preview/${id} `,
-      }
-    );
-  }
-
-  async function downloadForm(name: string, id: string) {
-    const response = await getForm(id);
-    const fileName = name
-      ? name
-      : i18n.language === "fr"
-      ? response.form.titleFr
-      : response.form.titleEn;
-    const data = JSON.stringify(response.form, null, 2);
-    const tempUrl = window.URL.createObjectURL(new Blob([data]));
-    const link = document.createElement("a");
-    link.href = tempUrl;
-    link.setAttribute("download", slugify(`${fileName}-${getDate()}`) + ".json");
-    document.body.appendChild(link);
-    link.click();
-  }
-
-  function copyLinkCallback(): MenuDropdownItemCallback {
-    const path = `${window.location.origin}/${i18n.language}/id/${id}`;
-    if (copy(path)) {
-      return {
-        message: t("card.menu.coppiedToClipboard"),
-      };
-    }
-    return {
-      message: t("card.menu.somethingWentWrong"),
-      isError: true,
-    };
-  }
+  const { id, name, url, date, isPublished, deliveryOption, overdue, handleDelete } = props;
+  const card = {
+    id,
+    name,
+    url,
+    date,
+    isPublished,
+    deliveryOption,
+    overdue,
+  } as CardProps;
 
   return (
     <div
@@ -240,14 +173,7 @@ export const Card = (props: CardProps) => {
       <div className="mb-4 flex items-center justify-between px-3">
         <CardDate id={id} date={date} />
         <div className="flex items-center text-sm">
-          {/* <MenuDropdown id={id} items={menuItemsList} direction={"up"}>
-            <span className="mr-1 text-[2rem]" aria-hidden="true">
-              ⋮
-            </span>
-            {t("card.menu.more")}
-          </MenuDropdown> */}
-
-          <MenuDropdownButton id={id} menuItemsList={menuItemsList} direction={"up"} />
+          <MenuDropdownButton id={id} card={card} direction={"up"} handleDelete={handleDelete} />
         </div>
       </div>
     </div>

@@ -11,7 +11,7 @@ export const Navigation = async (/*{filter }: {filter?: string}*/) => {
   const iconClassname =
     "inline-block w-6 h-6 group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
 
-  // TODO refactor/recreate SubNavLink to use the filter query and be a server component?
+  // TODO recreate SubNavLink to use the filter query as a server component? -- move active logic here and pass down?
   return (
     <nav className="flex flex-wrap laptop:mb-4" aria-label={t("navLabel")}>
       <SubNavLink href={`/${language}/forms`} setAriaCurrent={true} id="tab-all">
