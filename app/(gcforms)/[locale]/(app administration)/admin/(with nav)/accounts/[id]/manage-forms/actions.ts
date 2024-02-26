@@ -4,7 +4,6 @@ import { auth } from "@lib/auth";
 import { createAbility } from "@lib/privileges";
 import { listAllSubmissions } from "@lib/vault";
 import { detectOldUnprocessedSubmissions } from "@lib/nagware";
-import { getAppSetting } from "@lib/appSettings";
 import { deleteTemplate } from "@lib/templates";
 import { TemplateHasUnprocessedSubmissions } from "@lib/templates";
 
@@ -20,10 +19,6 @@ export const getUnprocessedSubmissionsForTemplate = async (templateId: string) =
 
   return detectOldUnprocessedSubmissions(allSubmissions.submissions);
 };
-
-export const getSetting = cache(async (setting: string) => {
-  return getAppSetting(setting);
-});
 
 export const deleteForm = async (id: string) => {
   const ability = await authCheck();
