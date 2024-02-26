@@ -6,8 +6,9 @@ import debounce from "lodash.debounce";
 import { ExpandingInput } from "@clientComponents/form-builder/app/shared";
 import { Language } from "@clientComponents/form-builder/types";
 import { useTemplateStore } from "@clientComponents/form-builder/store";
-import { useRefsContext } from "app/(gcforms)/[locale]/(form administration)/form-builder/[id]/edit/components/RefsContext";
+
 import { cleanInput } from "@clientComponents/form-builder/util";
+import { useRefsContext } from "../../RefsContext";
 
 export const QuestionInput = ({
   index,

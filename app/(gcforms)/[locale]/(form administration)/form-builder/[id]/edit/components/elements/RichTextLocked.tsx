@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
-import { useTemplateStore } from "../../../../../../../../../components/clientComponents/form-builder/store/useTemplateStore";
+import { useTemplateStore } from "@clientComponents/form-builder/store/useTemplateStore";
 import { RichTextEditor } from "./lexical-editor/RichTextEditor";
 import { AddElementButton } from "./element-dialog/AddElementButton";
-import { LocalizedElementProperties } from "../../../../../../../../../components/clientComponents/form-builder/types";
-import { LockedBadge } from "../../../../../../../../../components/clientComponents/form-builder/app/shared/LockedBadge";
+import { LocalizedElementProperties } from "@clientComponents/form-builder/types";
+import { LockedBadge } from "@clientComponents/form-builder/app/shared/LockedBadge";
 import { useHandleAdd } from "@clientComponents/form-builder/hooks";
 import { FormElementTypes } from "@lib/types";
 import { cn } from "@lib/utils";

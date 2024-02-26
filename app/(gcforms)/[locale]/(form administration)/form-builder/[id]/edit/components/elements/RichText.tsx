@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
-import { useTemplateStore } from "../../../../../../../../../components/clientComponents/form-builder/store/useTemplateStore";
+import { useTemplateStore } from "@clientComponents/form-builder/store/useTemplateStore";
 import { RichTextEditor } from "./lexical-editor/RichTextEditor";
-import { LocalizedElementProperties } from "../../../../../../../../../components/clientComponents/form-builder/types";
-import { getPath } from "../../../../../../../../../components/clientComponents/form-builder/getPath";
+import { LocalizedElementProperties } from "@clientComponents/form-builder/types";
+import { getPath } from "@clientComponents/form-builder/getPath";
 import { useTranslation } from "@i18n/client";
 
 export const RichText = ({ id, elIndex }: { id: number; elIndex: number }) => {

@@ -3,11 +3,11 @@ import React, { useRef, useEffect, ReactElement, useCallback, useState } from "r
 import { useTranslation } from "@i18n/client";
 import debounce from "lodash.debounce";
 
-import { Close } from "../../../../../../../../../components/serverComponents/icons";
+import { Close } from "@serverComponents/icons";
 import { Button } from "@clientComponents/globals";
-import { Input } from "../../../../../../../../../components/clientComponents/form-builder/app/shared/Input";
-import { useTemplateStore } from "../../../../../../../../../components/clientComponents/form-builder/store/useTemplateStore";
-import { Language } from "../../../../../../../../../components/clientComponents/form-builder/types";
+import { Input } from "@clientComponents/form-builder/app/shared/Input";
+import { useTemplateStore } from "@clientComponents/form-builder/store/useTemplateStore";
+import { Language } from "@clientComponents/form-builder/types";
 
 type RenderIcon = (index: number) => ReactElement | string | undefined;
 
