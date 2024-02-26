@@ -4,7 +4,7 @@ import { Question } from "../question/Question";
 import { useTemplateStore } from "@formbuilder/store";
 import { defaultStore as store, Providers, localStorageMock } from "@formbuilder/test-utils";
 import userEvent from "@testing-library/user-event";
-import { LocalizedElementProperties } from "../../../../types";
+import { LocalizedElementProperties } from "@clientComponents/form-builder/types";
 
 // Mock sessionStorage
 Object.defineProperty(window, "sessionStorage", {
