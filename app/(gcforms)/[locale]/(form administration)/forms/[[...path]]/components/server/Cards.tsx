@@ -3,6 +3,7 @@ import { getUnprocessedSubmissionsForUser } from "@lib/users";
 import { getAllTemplates } from "@lib/templates";
 import { UserAbility } from "@lib/types";
 import { CardGrid } from "../client/CardGrid";
+import { ucfirst } from "@lib/client/clientHelpers";
 
 export const Cards = async ({
   filter,
@@ -18,7 +19,7 @@ export const Cards = async ({
     i18n: { language },
   } = await serverTranslation(["my-forms", "form-builder"]);
 
-  // TODO can this be done in the below DB call?
+  // TODO: can this be done in the below DB call?
   const overdue = await getUnprocessedSubmissionsForUser(ability, id);
 
   const where = {
@@ -57,7 +58,7 @@ export const Cards = async ({
       return new Date(itemB.date).getTime() - new Date(itemA.date).getTime();
     });
 
-  // TODO more testing with below live region. it may need to be placed higher in the tree
+  // TODO: more testing with below live region. it may need to be placed higher in the tree
   return (
     <div aria-live="polite">
       <div
@@ -69,7 +70,7 @@ export const Cards = async ({
         {templates && templates?.length > 0 ? (
           <CardGrid cards={templates} />
         ) : (
-          <p>{t("cards.noDraftForms")}</p>
+          <p>{t(`cards.no${ucfirst(filter || "")}Forms`)}</p>
         )}
       </div>
     </div>

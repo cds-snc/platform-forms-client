@@ -11,7 +11,7 @@
   },
   "cards": {
     "noForms": "You have no forms.",
-    "noDraftForms": "You have no draft forms.",
+    "noDraftsForms": "You have no draft forms.",
     "noPublishedForms": "You have no published forms."
   },
   "card": {
