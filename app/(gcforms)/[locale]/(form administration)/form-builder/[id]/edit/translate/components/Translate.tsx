@@ -1,21 +1,25 @@
 "use client";
 import React from "react";
-import { useTemplateStore } from "../../store/useTemplateStore";
+import { useTemplateStore } from "@clientComponents/form-builder/store/useTemplateStore";
 import { useTranslation } from "@i18n/client";
 import { RichText } from "./RichText";
 import { Title } from "./Title";
 import { Description } from "./Description";
 import { Options } from "./Options";
-import { LocalizedElementProperties, LocalizedFormProperties, Language } from "../../types";
+import {
+  LocalizedElementProperties,
+  LocalizedFormProperties,
+  Language,
+} from "@clientComponents/form-builder/types";
 import { DownloadCSV } from "./DownloadCSV";
-import { RichTextEditor } from "../../../../../app/(gcforms)/[locale]/(form administration)/form-builder/[id]/edit/components/elements/lexical-editor/RichTextEditor";
+import { RichTextEditor } from "../../components/elements/lexical-editor/RichTextEditor";
 import { LanguageLabel } from "./LanguageLabel";
 import { FieldsetLegend, SectionTitle } from ".";
-import { SaveButton } from "../shared/SaveButton";
+import { SaveButton } from "@clientComponents/form-builder/app/shared/SaveButton";
 
 import { FormElement } from "@lib/types";
-import { alphabet, sortByLayout } from "../../util";
-import { useRehydrate } from "../../hooks";
+import { alphabet, sortByLayout } from "@clientComponents/form-builder/util";
+import { useRehydrate } from "@clientComponents/form-builder/hooks";
 
 const Element = ({
   element,
@@ -118,7 +122,7 @@ export const Translate = () => {
   return (
     <>
       <div>
-        <h1 className="border-0 mb-0 mt-8">{t("translateTitle")}</h1>
+        <h1 className="mb-0 mt-8 border-0">{t("translateTitle")}</h1>
         <p>{t("translateDescription")}</p>
         <br />
 
@@ -135,7 +139,7 @@ export const Translate = () => {
           {/* FORM TITLE */}
           <fieldset>
             <FieldsetLegend>{t("title")}</FieldsetLegend>
-            <div className="flex gap-px border border-gray-300 mb-10 divide-x-2">
+            <div className="mb-10 flex gap-px divide-x-2 border border-gray-300">
               <label htmlFor="form-title-en" className="sr-only">
                 <>{primaryLanguage}</>
               </label>
@@ -144,7 +148,7 @@ export const Translate = () => {
                   <>{primaryLanguage}</>
                 </LanguageLabel>
                 <textarea
-                  className="w-full p-4 h-full focus:outline-blue-focus"
+                  className="h-full w-full p-4 focus:outline-blue-focus"
                   id="form-title-en"
                   aria-describedby="form-title-en-language"
                   value={form[localizeField(LocalizedFormProperties.TITLE, primaryLanguage)]}
@@ -165,7 +169,7 @@ export const Translate = () => {
                   <>{secondaryLanguage}</>
                 </LanguageLabel>
                 <textarea
-                  className="w-full p-4 h-full focus:outline-blue-focus"
+                  className="h-full w-full p-4 focus:outline-blue-focus"
                   id="form-title-fr"
                   aria-describedby="form-title-fr-language"
                   value={form[localizeField(LocalizedFormProperties.TITLE, secondaryLanguage)]}
@@ -187,10 +191,10 @@ export const Translate = () => {
             <fieldset>
               <FieldsetLegend>{t("description")}</FieldsetLegend>
               <div
-                className="flex gap-px border border-gray-300 mb-10 divide-x-2"
+                className="mb-10 flex gap-px divide-x-2 border border-gray-300"
                 key={primaryLanguage}
               >
-                <div className="w-1/2 flex-1 relative">
+                <div className="relative w-1/2 flex-1">
                   <LanguageLabel id="form-introduction-english-language" lang={primaryLanguage}>
                     <>{primaryLanguage}</>
                   </LanguageLabel>
@@ -209,7 +213,7 @@ export const Translate = () => {
                     ariaDescribedBy="form-introduction-english-language"
                   />
                 </div>
-                <div className="w-1/2 flex-1 relative">
+                <div className="relative w-1/2 flex-1">
                   <LanguageLabel id="form-introduction-french-language" lang={secondaryLanguage}>
                     <>{secondaryLanguage}</>
                   </LanguageLabel>
@@ -259,10 +263,10 @@ export const Translate = () => {
             <FieldsetLegend>{t("pageText")}</FieldsetLegend>
 
             <div
-              className="flex gap-px border border-gray-300 mb-10 divide-x-2"
+              className="mb-10 flex gap-px divide-x-2 border border-gray-300"
               key={primaryLanguage}
             >
-              <div className="w-1/2 flex-1 relative">
+              <div className="relative w-1/2 flex-1">
                 <LanguageLabel
                   id={`privacyPolicy-${primaryLanguage}-language`}
                   lang={primaryLanguage}
@@ -284,7 +288,7 @@ export const Translate = () => {
                   ariaDescribedBy={`privacyPolicy-${primaryLanguage}-language`}
                 />
               </div>
-              <div className="w-1/2 flex-1 relative">
+              <div className="relative w-1/2 flex-1">
                 <LanguageLabel
                   id={`privacyPolicy-${secondaryLanguage}->language`}
                   lang={secondaryLanguage}
@@ -317,10 +321,10 @@ export const Translate = () => {
           <fieldset>
             <FieldsetLegend>{t("pageText")}</FieldsetLegend>
             <div
-              className="flex gap-px border border-gray-300 mb-10 divide-x-2"
+              className="mb-10 flex gap-px divide-x-2 border border-gray-300"
               key={primaryLanguage}
             >
-              <div className="w-1/2 flex-1 relative">
+              <div className="relative w-1/2 flex-1">
                 <LanguageLabel
                   id={`confirmation-${primaryLanguage}-language`}
                   lang={primaryLanguage}
@@ -342,7 +346,7 @@ export const Translate = () => {
                   ariaDescribedBy={`confirmation-${primaryLanguage}-language`}
                 />
               </div>
-              <div className="w-1/2 flex-1 relative">
+              <div className="relative w-1/2 flex-1">
                 <LanguageLabel
                   id={`confirmation-${secondaryLanguage}-language`}
                   lang={secondaryLanguage}

@@ -2,9 +2,9 @@
 import { FormElement } from "@lib/types";
 import { useTranslation } from "@i18n/client";
 import React from "react";
-import { RichTextEditor } from "../../../../../app/(gcforms)/[locale]/(form administration)/form-builder/[id]/edit/components/elements/lexical-editor/RichTextEditor";
-import { useTemplateStore } from "../../store/useTemplateStore";
-import { Language, LocalizedElementProperties } from "../../types";
+import { RichTextEditor } from "../../components/elements/lexical-editor/RichTextEditor";
+import { useTemplateStore } from "@clientComponents/form-builder/store/useTemplateStore";
+import { Language, LocalizedElementProperties } from "@clientComponents/form-builder/types";
 import { LanguageLabel } from "./LanguageLabel";
 import { FieldsetLegend } from "./FieldsetLegend";
 
@@ -33,8 +33,8 @@ export const RichText = ({
         <FieldsetLegend>
           {t(element.type)}: {t("inputDescription")}
         </FieldsetLegend>
-        <div className="flex gap-px border border-gray-300 mb-10 divide-x-2">
-          <div className="w-1/2 flex-1 relative">
+        <div className="mb-10 flex gap-px divide-x-2 border border-gray-300">
+          <div className="relative w-1/2 flex-1">
             <LanguageLabel
               id={`elements-${index}-description-${primaryLanguage}-language`}
               lang={primaryLanguage}
@@ -49,7 +49,7 @@ export const RichText = ({
               ariaDescribedBy={`elements-${index}-description-${primaryLanguage}-language`}
             />
           </div>
-          <div className="w-1/2 flex-1 relative">
+          <div className="relative w-1/2 flex-1">
             <LanguageLabel
               id={`elements-${index}-description-${secondaryLanguage}-language`}
               lang={secondaryLanguage}

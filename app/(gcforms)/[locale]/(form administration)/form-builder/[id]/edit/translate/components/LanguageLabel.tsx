@@ -16,8 +16,8 @@ export const LanguageLabel = ({
   return (
     <div
       id={id}
-      className={`absolute right-0 text-sm bottom-0 pl-2 pr-2 mb-[1px] border mr-[1px] rounded-sm border ${
-        lang === "en" ? `bg-violet-300 border-violet-400` : "bg-fuchsia-300 border-fucsia-400"
+      className={`absolute bottom-0 right-0 mb-[1px] mr-[1px] rounded-sm border px-2 text-sm${
+        lang === "en" ? `border-violet-400 bg-violet-300` : "border-fucsia-400 bg-fuchsia-300"
       }`}
     >
       {children}

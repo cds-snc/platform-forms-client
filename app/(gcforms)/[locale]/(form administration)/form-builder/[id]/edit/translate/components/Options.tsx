@@ -2,8 +2,8 @@
 import { FormElement } from "@lib/types";
 import { useTranslation } from "@i18n/client";
 import React from "react";
-import { useTemplateStore } from "../../store/useTemplateStore";
-import { Language } from "../../types";
+import { useTemplateStore } from "@clientComponents/form-builder/store/useTemplateStore";
+import { Language } from "@clientComponents/form-builder/types";
 import { FieldsetLegend } from "./FieldsetLegend";
 import { LanguageLabel } from "./LanguageLabel";
 
@@ -34,14 +34,14 @@ export const Options = ({
               <FieldsetLegend>
                 {t(`addElementDialog.${element.type}.title`)}: {t("optionText")}
               </FieldsetLegend>
-              <div className="flex gap-px border-b border-r border-t border-gray-300 mb-10 divide-x-2">
+              <div className="mb-10 flex gap-px divide-x-2 border-y border-r border-gray-300">
                 <label
                   className="sr-only"
                   htmlFor={`element-${element.id}-choice-${choiceIndex}-text-${primaryLanguage}`}
                 >
                   {primaryLanguage}
                 </label>
-                <div className="w-1/2 flex-1 relative">
+                <div className="relative w-1/2 flex-1">
                   <LanguageLabel
                     id={`element-${index}-choice-${choiceIndex}-en-language`}
                     lang={primaryLanguage}
@@ -65,7 +65,7 @@ export const Options = ({
                 >
                   {secondaryLanguage}
                 </label>
-                <div className="w-1/2 flex-1 relative">
+                <div className="relative w-1/2 flex-1">
                   <LanguageLabel
                     id={`element-${index}-choice-${choiceIndex}-fr-language`}
                     lang={secondaryLanguage}

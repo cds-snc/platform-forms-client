@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import { useTemplateStore } from "../../store/useTemplateStore";
-import { Language, LocalizedElementProperties } from "../../types";
+import { useTemplateStore } from "@clientComponents/form-builder/store/useTemplateStore";
+import { Language, LocalizedElementProperties } from "@clientComponents/form-builder/types";
 import { useTranslation } from "@i18n/client";
 import { FormElement } from "@lib/types";
 import { LanguageLabel } from "./LanguageLabel";
@@ -29,14 +29,14 @@ export const Description = ({
         <FieldsetLegend>
           {t(`addElementDialog.${element.type}.title`)}: {t("inputDescription")}
         </FieldsetLegend>
-        <div className="flex gap-px border-b border-r border-t border-gray-300 mb-10 divide-x-2">
+        <div className="mb-10 flex gap-px divide-x-2 border-y border-r border-gray-300">
           <label
             className="sr-only"
             htmlFor={`element-${element.id}-description-${primaryLanguage}`}
           >
             <>{primaryLanguage}</>
           </label>
-          <div className="w-1/2 flex-1 relative">
+          <div className="relative w-1/2 flex-1">
             <LanguageLabel
               lang={primaryLanguage}
               id={`element-${element.id}-description-${primaryLanguage}-language`}
@@ -44,7 +44,7 @@ export const Description = ({
               <>{primaryLanguage}</>
             </LanguageLabel>
             <textarea
-              className="w-full p-4 h-full focus:outline-blue-focus"
+              className="h-full w-full p-4 focus:outline-blue-focus"
               id={`element-${element.id}-description-${primaryLanguage}`}
               aria-describedby={`element-${element.id}-description-${primaryLanguage}-language`}
               value={element.properties[localizeField(field, primaryLanguage)]}
@@ -59,7 +59,7 @@ export const Description = ({
           >
             <>{secondaryLanguage}</>
           </label>
-          <div className="w-1/2 flex-1 relative">
+          <div className="relative w-1/2 flex-1">
             <LanguageLabel
               lang={secondaryLanguage}
               id={`element-${element.id}-description-${secondaryLanguage}-language`}
@@ -67,7 +67,7 @@ export const Description = ({
               <>{secondaryLanguage}</>
             </LanguageLabel>
             <textarea
-              className="w-full p-4 h-full focus:outline-blue-focus"
+              className="h-full w-full p-4 focus:outline-blue-focus"
               id={`element-${element.id}-description-${secondaryLanguage}`}
               aria-describedby={`element-${element.id}-description-${secondaryLanguage}-language`}
               value={element.properties[localizeField(field, secondaryLanguage)]}
