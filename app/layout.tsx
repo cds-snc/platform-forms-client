@@ -37,12 +37,6 @@ const NoIndexMetaTag =
     </>
   );
 
-const css = `
-    a:active {
-        box-shadow: none !important;
-    }
-`;
-
 export default async function Layout({ children }: { children: React.ReactNode }) {
   const locale = cookies().get("i18next")?.value ?? languages[0];
   const nonce = headers().get("x-nonce") ?? "";
@@ -60,9 +54,6 @@ export default async function Layout({ children }: { children: React.ReactNode }
 
         {process.env.APP_ENV === "test" ? (
           <Suspense fallback={null}>
-            <style id="site-styles" nonce={nonce}>
-              {css}
-            </style>
             <Script
               id="form-polyfills"
               nonce={nonce}
@@ -73,10 +64,6 @@ export default async function Layout({ children }: { children: React.ReactNode }
           </Suspense>
         ) : (
           <>
-            <style id="site-styles" nonce={nonce}>
-              {css}
-            </style>
-
             <Script
               id="form-polyfills"
               nonce={nonce}
