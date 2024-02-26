@@ -2,7 +2,7 @@
 import { FormElement } from "@lib/types";
 import { useTranslation } from "@i18n/client";
 import React from "react";
-import { RichTextEditor } from "../edit/elements/lexical-editor/RichTextEditor";
+import { RichTextEditor } from "../../../../../app/(gcforms)/[locale]/(form administration)/form-builder/[id]/edit/components/elements/lexical-editor/RichTextEditor";
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { Language, LocalizedElementProperties } from "../../types";
 import { LanguageLabel } from "./LanguageLabel";

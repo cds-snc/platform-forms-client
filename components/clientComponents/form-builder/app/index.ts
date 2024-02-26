@@ -3,7 +3,7 @@ export { Settings } from "./Settings";
 export { LeftNavigation } from "./navigation/LeftNavigation";
 export { EditNavigation } from "./navigation/EditNavigation";
 export { Publish } from "../../../../app/(gcforms)/[locale]/(form administration)/form-builder/[id]/publish/Publish";
-export { Edit } from "./edit";
+export { Edit } from "../../../../app/(gcforms)/[locale]/(form administration)/form-builder/[id]/edit/components";
 export { ShareModal } from "./ShareModal";
 export { ShareModalUnauthenticated } from "./ShareModalUnauthenticated";
 export { FormOwnership } from "./FormOwnership";

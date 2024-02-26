@@ -8,7 +8,7 @@ import { Description } from "./Description";
 import { Options } from "./Options";
 import { LocalizedElementProperties, LocalizedFormProperties, Language } from "../../types";
 import { DownloadCSV } from "./DownloadCSV";
-import { RichTextEditor } from "../edit/elements/lexical-editor/RichTextEditor";
+import { RichTextEditor } from "../../../../../app/(gcforms)/[locale]/(form administration)/form-builder/[id]/edit/components/elements/lexical-editor/RichTextEditor";
 import { LanguageLabel } from "./LanguageLabel";
 import { FieldsetLegend, SectionTitle } from ".";
 import { SaveButton } from "../shared/SaveButton";

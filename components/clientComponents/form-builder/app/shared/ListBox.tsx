@@ -10,7 +10,7 @@ import React, {
 } from "react";
 
 import { ChevronRight } from "@serverComponents/icons";
-import { SelectedGroupState } from "../edit/elements/element-dialog/ElementDialog";
+import { SelectedGroupState } from "../../../../../app/(gcforms)/[locale]/(form administration)/form-builder/[id]/edit/components/elements/element-dialog/ElementDialog";
 
 // for specs see:
 // https://www.w3.org/WAI/ARIA/apg/patterns/listbox

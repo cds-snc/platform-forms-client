@@ -35,7 +35,7 @@ import {
   FileInput,
   Departments,
   Combobox,
-} from "../app/edit/elements/element-dialog";
+} from "../../../../app/(gcforms)/[locale]/(form administration)/form-builder/[id]/edit/components/elements/element-dialog";
 
 import { useIsAdminUser } from "./useIsAdminUser";
 
