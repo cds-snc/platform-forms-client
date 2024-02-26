@@ -11,7 +11,7 @@ import { RichTextLocked } from "./elements";
 import { ExpandingInput } from "../shared";
 import { useTemplateStore } from "../../store";
 import { getQuestionNumber, sortByLayout } from "../../util";
-import { Panel } from "../settings-modal/panel";
+import { SettingsPanel } from "./settings-modal/panel";
 import { cleanInput } from "@clientComponents/form-builder/util";
 import { SaveButton } from "../shared/SaveButton";
 import { useRehydrate } from "../../hooks";
@@ -94,7 +94,7 @@ export const Edit = () => {
       <div className="mb-4">
         <SaveButton />
       </div>
-      <Panel />
+      <SettingsPanel />
       <RichTextLocked
         className="rounded-t-lg"
         beforeContent={

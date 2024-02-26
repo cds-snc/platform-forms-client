@@ -5,19 +5,19 @@ import { useSession } from "next-auth/react";
 import axios from "axios";
 
 import { Button } from "@clientComponents/globals";
-import { useTemplateStore } from "../../store";
-import { useDialogRef, Dialog, Radio } from "../shared";
+import { useTemplateStore } from "../../../store";
+import { useDialogRef, Dialog, Radio } from "../../shared";
 import {
   Logos,
   options,
-} from "../../../../../app/(gcforms)/[locale]/(form administration)/form-builder/[id]/settings/branding/components";
+} from "../../../../../../app/(gcforms)/[locale]/(form administration)/form-builder/[id]/settings/branding/components";
 import Brand from "@clientComponents/globals/Brand";
-import { ClassificationType, ClassificationSelect } from "../ClassificationSelect";
-import { LocalizedFormProperties } from "../../types";
-import { ResponseEmail } from "../ResponseEmail";
+import { ClassificationType, ClassificationSelect } from "../../ClassificationSelect";
+import { LocalizedFormProperties } from "../../../types";
+import { ResponseEmail } from "../../ResponseEmail";
 import { isValidGovEmail } from "@lib/validation";
-import { useTemplateApi } from "../../hooks";
-import { completeEmailAddressRegex } from "../../util";
+import { useTemplateApi } from "../../../hooks";
+import { completeEmailAddressRegex } from "../../../util";
 
 enum DeliveryOption {
   vault = "vault",

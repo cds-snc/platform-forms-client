@@ -3,22 +3,22 @@ import React, { useState, useCallback } from "react";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
 
-import { ClassificationType, ClassificationSelect } from "../ClassificationSelect";
+import { ClassificationType, ClassificationSelect } from "../../ClassificationSelect";
 import {
   Logos,
   options,
-} from "../../../../../app/(gcforms)/[locale]/(form administration)/form-builder/[id]/settings/branding/components";
-import { useTemplateStore } from "../../store";
-import { useTemplateApi } from "../../hooks";
+} from "../../../../../../app/(gcforms)/[locale]/(form administration)/form-builder/[id]/settings/branding/components";
+import { useTemplateStore } from "../../../store";
+import { useTemplateApi } from "../../../hooks";
 import { SettingsModal } from "./SettingsDialog";
-import { Tooltip } from "../shared/Tooltip";
+import { Tooltip } from "../../shared/Tooltip";
 
 enum DeliveryOption {
   vault = "vault",
   email = "email",
 }
 
-export const Panel = () => {
+export const SettingsPanel = () => {
   const { t, i18n } = useTranslation("form-builder");
   const lang = i18n.language === "en" ? "en" : "fr";
   const { save } = useTemplateApi();
