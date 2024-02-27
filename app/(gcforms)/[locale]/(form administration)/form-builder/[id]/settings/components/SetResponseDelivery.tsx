@@ -7,15 +7,18 @@ import { useSession } from "next-auth/react";
 
 import { useRefresh } from "@lib/hooks";
 import { isValidGovEmail } from "@lib/validation";
-import { ResponseEmail } from "./ResponseEmail";
-import { Radio } from "./shared";
+import { ResponseEmail } from "@formBuilder/components/ResponseEmail";
+import { Radio } from "@formBuilder/components/shared";
 import { Button } from "@clientComponents/globals";
 import { useTemplateApi } from "@lib/hooks/form-builder";
 import { useTemplateStore } from "@lib/store";
 import { completeEmailAddressRegex } from "@lib/utils/form-builder";
-import { toast } from "./shared/Toast";
-import { ResponseDeliveryHelpButton } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";
-import { ClassificationType, ClassificationSelect } from "./ClassificationSelect";
+import { toast } from "@formBuilder/components/shared/Toast";
+import { ResponseDeliveryHelpButton } from "@formBuilder/components/shared";
+import {
+  ClassificationType,
+  ClassificationSelect,
+} from "@formBuilder/components/ClassificationSelect";
 
 enum DeliveryOption {
   vault = "vault",

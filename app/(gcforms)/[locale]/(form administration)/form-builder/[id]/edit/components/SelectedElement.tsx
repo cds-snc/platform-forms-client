@@ -7,7 +7,7 @@ import { CheckBoxEmptyIcon, CheckIcon, RadioEmptyIcon } from "@serverComponents/
 import { ShortAnswer, Options, SubOptions, RichText, SubElement } from "./elements";
 import { ElementOption, FormElementWithIndex } from "@lib/types/form-builder-types";
 import { useElementOptions } from "@lib/hooks/form-builder";
-import { ConditionalIndicator } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/conditionals/ConditionalIndicator";
+import { ConditionalIndicator } from "@formBuilder/components/shared/conditionals/ConditionalIndicator";
 
 const filterSelected = (
   item: FormElementWithIndex,

@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { EmailResponseSettings } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";
-import { ClosedBanner } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/ClosedBanner";
+import { EmailResponseSettings } from "@formBuilder/components/shared";
+import { ClosedBanner } from "@formBuilder/components/shared/ClosedBanner";
 import { serverTranslation } from "@i18n";
 
 export const DeliveryOptionEmail = async ({

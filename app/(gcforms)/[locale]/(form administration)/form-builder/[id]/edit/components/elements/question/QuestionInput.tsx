@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import debounce from "lodash.debounce";
 
-import { ExpandingInput } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";
+import { ExpandingInput } from "@formBuilder/components/shared";
 import { Language } from "@lib/types/form-builder-types";
 import { useTemplateStore } from "@lib/store";
 

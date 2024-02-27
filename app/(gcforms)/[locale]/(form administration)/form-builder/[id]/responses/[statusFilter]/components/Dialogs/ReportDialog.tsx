@@ -1,8 +1,4 @@
-import {
-  Dialog,
-  TextArea,
-  useDialogRef,
-} from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";
+import { Dialog, TextArea, useDialogRef } from "@formBuilder/components/shared";
 import { Alert, Button } from "@clientComponents/globals";
 import {
   MessageType,

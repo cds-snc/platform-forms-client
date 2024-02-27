@@ -2,7 +2,7 @@
 import React, { useCallback, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store";
-import { toast } from "./shared/Toast";
+import { toast } from "@formBuilder/components/shared/Toast";
 import axios from "axios";
 
 import { Button } from "@clientComponents/globals";

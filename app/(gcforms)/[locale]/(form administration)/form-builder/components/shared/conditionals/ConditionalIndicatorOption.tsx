@@ -5,7 +5,7 @@ import { useTranslation } from "@i18n/client";
 import { ConditionalIcon } from "@serverComponents/icons/ConditionalIcon";
 import { getElementsUsingChoiceId } from "@lib/formContext";
 import { FormElement } from "@lib/types";
-import { useRefsContext } from "app/(gcforms)/[locale]/(form administration)/form-builder/[id]/edit/components/RefsContext";
+import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
 import { Button } from "@clientComponents/globals";
 
 export const ConditionalIndicatorOption = ({

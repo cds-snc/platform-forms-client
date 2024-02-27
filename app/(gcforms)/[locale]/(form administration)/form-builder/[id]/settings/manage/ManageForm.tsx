@@ -1,12 +1,11 @@
 "use client";
-import {
-  Settings,
-  FormOwnership,
-  SetClosingDate,
-} from "app/(gcforms)/[locale]/(form administration)/form-builder/components";
+
 import { FormRecord } from "@lib/types";
 import { useSession } from "next-auth/react";
 import { useRehydrate } from "@lib/hooks/form-builder";
+import { DownloadForm } from "./DownloadForm";
+import { SetClosingDate } from "./SetClosingDate";
+import { FormOwnership } from "./FormOwnership";
 
 interface AssignUsersToTemplateProps {
   formRecord?: FormRecord;
@@ -16,7 +15,7 @@ interface AssignUsersToTemplateProps {
   id: string;
 }
 
-export const ClientSide = ({
+export const ManageForm = ({
   formRecord,
   usersAssignedToFormRecord,
   allUsers,
@@ -43,7 +42,7 @@ export const ClientSide = ({
           usersAssignedToFormRecord={usersAssignedToFormRecord}
           allUsers={allUsers}
         />
-        <Settings />
+        <DownloadForm />
       </>
     );
   }
@@ -51,7 +50,7 @@ export const ClientSide = ({
   return (
     <>
       {status === "authenticated" && <SetClosingDate formID={id} />}
-      <Settings />
+      <DownloadForm />
     </>
   );
 };

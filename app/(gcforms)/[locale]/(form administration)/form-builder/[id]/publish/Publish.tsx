@@ -8,9 +8,9 @@ import { CancelIcon, CircleCheckIcon, LockIcon } from "@serverComponents/icons";
 import { Button, Alert } from "@clientComponents/globals";
 import Link from "next/link";
 import { isVaultDelivery } from "@lib/utils/form-builder";
-import { classificationOptions } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/ClassificationSelect";
+import { classificationOptions } from "@formBuilder/components/ClassificationSelect";
 import { logMessage } from "@lib/logger";
-import { DownloadFileButton } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";
+import { DownloadFileButton } from "@formBuilder/components/shared";
 import Skeleton from "react-loading-skeleton";
 import LinkButton from "@serverComponents/globals/Buttons/LinkButton";
 

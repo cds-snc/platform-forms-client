@@ -1,6 +1,6 @@
 import { auth } from "@lib/auth";
-import { LeftNavigation } from "app/(gcforms)/[locale]/(form administration)/form-builder/components";
-import { ToastContainer } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/Toast";
+import { LeftNavigation } from "./components/LeftNavigation";
+import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { SkipLink, Footer, Header } from "@clientComponents/globals";
 import { FormRecord } from "@lib/types";
 import { AccessControlError, createAbility } from "@lib/privileges";

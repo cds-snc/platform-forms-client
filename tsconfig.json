@@ -19,6 +19,7 @@
     "paths": {
       "@lib/*": ["lib/*"],
       "@api/*": ["app/api/*"],
+      "@formBuilder/*": ["app/(gcforms)/[locale]/(form administration)/form-builder/*"],
       "@serverComponents/*": ["components/serverComponents/*"],
       "@clientComponents/*": ["components/clientComponents/*"],
       "@jestFixtures/*": ["__fixtures__/*"],

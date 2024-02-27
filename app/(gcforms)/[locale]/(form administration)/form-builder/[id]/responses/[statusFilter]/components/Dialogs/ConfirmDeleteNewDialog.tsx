@@ -1,9 +1,6 @@
 "use client";
 import React from "react";
-import {
-  Dialog,
-  useDialogRef,
-} from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";
+import { Dialog, useDialogRef } from "@formBuilder/components/shared";
 import { Alert, Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
 

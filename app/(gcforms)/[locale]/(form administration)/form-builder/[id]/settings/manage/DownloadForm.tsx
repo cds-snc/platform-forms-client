@@ -2,9 +2,9 @@
 import React from "react";
 import { useTranslation } from "@i18n/client";
 import { useSearchParams } from "next/navigation";
-import { DownloadFileButton } from "./shared";
+import { DownloadFileButton } from "@formBuilder/components/shared";
 
-export const Settings = () => {
+export const DownloadForm = () => {
   const { t } = useTranslation("form-builder");
   const downloadconfirm = useSearchParams().get("downloadconfirm");
   return (
