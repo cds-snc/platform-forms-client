@@ -9,15 +9,16 @@ import { useTemplateStore } from "@lib/store";
 import { useDialogRef, Dialog, Radio } from "@formBuilder/components/shared";
 import { Logos, options } from "../../../settings/branding/components";
 import Brand from "@clientComponents/globals/Brand";
-import {
-  ClassificationType,
-  ClassificationSelect,
-} from "@formBuilder/components/ClassificationSelect";
+
 import { LocalizedFormProperties } from "@lib/types/form-builder-types";
 import { ResponseEmail } from "@formBuilder/components/ResponseEmail";
 import { isValidGovEmail } from "@lib/validation";
 import { useTemplateApi } from "@lib/hooks/form-builder";
 import { completeEmailAddressRegex } from "@lib/utils/form-builder";
+import {
+  ClassificationSelect,
+  ClassificationType,
+} from "@formBuilder/components/ClassificationSelect";
 
 enum DeliveryOption {
   vault = "vault",

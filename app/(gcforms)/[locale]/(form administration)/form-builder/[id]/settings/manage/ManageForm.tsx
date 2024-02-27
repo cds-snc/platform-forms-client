@@ -1,9 +1,10 @@
 "use client";
-import { FormOwnership, SetClosingDate } from "@formBuilder/components";
+import { FormOwnership } from "@formBuilder/components";
 import { FormRecord } from "@lib/types";
 import { useSession } from "next-auth/react";
 import { useRehydrate } from "@lib/hooks/form-builder";
 import { DownloadForm } from "./DownloadForm";
+import { SetClosingDate } from "./SetClosingDate";
 
 interface AssignUsersToTemplateProps {
   formRecord?: FormRecord;
