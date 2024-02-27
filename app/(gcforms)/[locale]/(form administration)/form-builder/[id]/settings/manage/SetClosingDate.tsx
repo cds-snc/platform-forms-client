@@ -2,11 +2,11 @@
 import React, { useCallback, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store";
-import { toast } from "../../../components/shared/Toast";
+import { toast } from "@formBuilder/components/shared/Toast";
 import axios from "axios";
 
 import { Button } from "@clientComponents/globals";
-import { ClosingDateToggle } from "../../../components/ClosingDateToggle";
+import { ClosingDateToggle } from "./ClosingDateToggle";
 export const SetClosingDate = ({ formID }: { formID: string }) => {
   const { t } = useTranslation("form-builder");
 
