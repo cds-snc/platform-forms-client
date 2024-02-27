@@ -39,10 +39,10 @@ export const LinksSubMenu = () => {
   const menu = links.map(({ name, url }, i) => (
     <DropdownMenuPrimitive.Item
       key={`${name}-${i}`}
-      className="outline-none flex cursor-default select-none items-center rounded-md px-2 py-2 text-sm hover:text-white-default hover:bg-gray-600 focus-within:text-white-default focus-within:bg-gray-600 [&_svg]:hover:fill-white [&_svg]:focus-within:fill-white [&_span]:hover:text-white-default [&_span]:focus-within:text-white-default"
+      className="flex cursor-default select-none items-center rounded-md p-2 text-sm outline-none focus-within:bg-gray-600 focus-within:text-white-default hover:bg-gray-600 hover:text-white-default [&_span]:focus-within:text-white-default [&_span]:hover:text-white-default [&_svg]:focus-within:fill-white [&_svg]:hover:fill-white"
     >
       <div className="flex justify-between">
-        <div className="inline-block mr-3 w-[90px]">{name}:</div>
+        <div className="mr-3 inline-block w-[90px]">{name}:</div>
         <div className="flex">
           {/* copy link */}
           <DropdownMenuPrimitive.Item asChild>
@@ -54,7 +54,7 @@ export const LinksSubMenu = () => {
               }}
             >
               <CopyIcon className="scale-[80%]" />
-              <span className="hover:no-underline underline underline-offset-4 inline-block mr-1 ml-1 text-sm text-blue">
+              <span className="mx-1 inline-block text-sm text-blue underline underline-offset-4 hover:no-underline">
                 {t("share.copy")}
               </span>
             </button>
@@ -67,11 +67,11 @@ export const LinksSubMenu = () => {
               data-share="form-builder-link"
               href={url}
               target="_blank"
-              className="focus:outline focus:outline-white-default focus:outline-offset-2 inline-block mr-1 flex text-sm no-underline focus:bg-transparent active:bg-transparent active:shadow-none focus:shadow-none focus:outline-offset-2"
+              className="mr-1 inline-block text-sm no-underline focus:bg-transparent focus:outline focus:outline-offset-2 focus:outline-white-default active:bg-transparent"
               rel="noreferrer"
             >
               <ShareExternalLinkIcon className="scale-[70%]" />
-              <span className="hover:no-underline underline underline-offset-4 inline-block mr-1 ml-1">
+              <span className="mx-1 inline-block underline underline-offset-4 hover:no-underline">
                 {t("share.open")}
               </span>
             </a>

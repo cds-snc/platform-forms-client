@@ -30,7 +30,7 @@ export const Tab = (props: TabProps): React.ReactElement => {
   return (
     <button
       id={id}
-      className={`gc-button-link ${isActive ? " no-underline hover:underline" : ""}`}
+      className={`${isActive ? " no-underline hover:underline" : ""}`}
       role="tab"
       aria-selected={isActive ? "true" : "false"}
       aria-controls={tabpanelId}

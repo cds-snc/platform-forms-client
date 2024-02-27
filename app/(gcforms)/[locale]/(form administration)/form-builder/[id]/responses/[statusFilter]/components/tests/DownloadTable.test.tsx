@@ -1,3 +1,10 @@
+/**
+ * The tests in this file are currently skipped due to compatibility issues with NextJS Server Actions.
+ * Jest errors out when a mounted component or its children import a Server Action.
+ * In this case, DownloadTable imports DownloadDialog which imports a Server Action.
+ */
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
 import { render } from "@testing-library/react";
 import { DownloadTable } from "../DownloadTable";
@@ -18,19 +25,19 @@ describe.skip("Download Table", () => {
     //   }
     // });
 
-    const rendered = render(
-      <DownloadTable
-        vaultSubmissions={vaultSubmissions}
-        formId="clg17xha50008efkgfgxa8l4f"
-        formName={""}
-        nagwareResult={null}
-        responseDownloadLimit={0}
-        showDownloadSuccess={""}
-        setShowDownloadSuccess={function (): void {
-          throw new Error("Function not implemented.");
-        }}
-      />
-    );
+    // const rendered = render(
+    //   <DownloadTable
+    //     vaultSubmissions={vaultSubmissions}
+    //     formId="clg17xha50008efkgfgxa8l4f"
+    //     formName={""}
+    //     nagwareResult={null}
+    //     responseDownloadLimit={0}
+    //     showDownloadSuccess={""}
+    //     setShowDownloadSuccess={function (): void {
+    //       throw new Error("Function not implemented.");
+    //     }}
+    //   />
+    // );
     const table = rendered.getByRole("table");
     expect(table).toHaveAttribute("aria-live", "polite");
 

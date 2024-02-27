@@ -5,7 +5,7 @@ import { Dropdown } from "@clientComponents/admin/Users/Dropdown";
 import { themes } from "@clientComponents/globals";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";
-import { ConfirmDeactivateModal } from "@clientComponents/admin/Users/ConfirmDeactivateModal";
+import { ConfirmDeactivateModal } from "./ConfirmDeactivateModal";
 import { AppUser } from "@lib/types/user-types";
 
 export const MoreMenu = ({
@@ -52,12 +52,7 @@ export const MoreMenu = ({
         )}
       </Dropdown>
       {showConfirmDeleteModal && (
-        <ConfirmDeactivateModal
-          user={user}
-          handleClose={async () => {
-            setShowConfirmDeleteModal(false);
-          }}
-        />
+        <ConfirmDeactivateModal user={user} handleClose={() => setShowConfirmDeleteModal(false)} />
       )}
     </>
   );

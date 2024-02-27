@@ -29,7 +29,7 @@ export const DeliveryOptionEmail = async ({
             <Link href={`/${language}/form-builder/settings`} legacyBehavior>
               <a
                 href={`/${language}/form-builder/settings`}
-                className="mb-0 mr-3 rounded-[100px] border-1 border-black px-5 py-1 text-black no-underline !shadow-none visited:text-black hover:bg-[#475569] hover:!text-white focus:bg-[#475569] focus:!text-white laptop:py-2 [&_svg]:focus:fill-white"
+                className="mb-0 mr-3 rounded-[100px] border-1 border-black px-5 py-1 text-black no-underline visited:text-black hover:bg-[#475569] hover:!text-white focus:bg-[#475569] focus:!text-white laptop:py-2 [&_svg]:focus:fill-white"
               >
                 {t("responses.changeSetup")}
               </a>

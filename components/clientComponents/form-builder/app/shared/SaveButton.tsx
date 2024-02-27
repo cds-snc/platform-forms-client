@@ -70,7 +70,7 @@ export const ErrorSavingForm = () => {
       </span>
       <StyledLink
         href={supportHref}
-        className="mr-2 !text-red-700 underline hover:no-underline focus:bg-transparent focus:shadow-none active:bg-transparent"
+        className="mr-2 !text-red-700 underline hover:no-underline focus:bg-transparent active:bg-transparent"
       >
         {t("errorSavingForm.failedLink", { ns: "form-builder" })}
       </StyledLink>

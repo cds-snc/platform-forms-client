@@ -68,7 +68,7 @@ async function createSettings(env: string) {
   });
 }
 
-async function createTestUsers() {
+async function createUsers() {
   await prisma.user.create({
     data: UserWithoutSecurityAnswers,
   });
@@ -282,12 +282,9 @@ async function main(environment: string) {
       createSecurityQuestions(),
     ]);
 
-    if (environment === "test") {
+    if (environment !== "production") {
       console.log("Creating test Users");
-      await createTestUsers();
-
-      // No migrations need to run on pure new test database
-      return;
+      await createUsers();
     }
 
     console.log("Running 'publishingStatus' migration");

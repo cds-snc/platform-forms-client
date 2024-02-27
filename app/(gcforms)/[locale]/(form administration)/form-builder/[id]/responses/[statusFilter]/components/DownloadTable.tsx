@@ -222,6 +222,7 @@ export const DownloadTable = ({
                       formId={submission.formID}
                       responseId={submission.name}
                       onDownloadSuccess={() => {
+                        setDownloadError(false);
                         setRemovedRows([...removedRows, submission.name]);
                         // router.replace(router.asPath, undefined, { scroll: false });
                         if (statusFilter === VaultStatus.NEW) {
@@ -293,7 +294,6 @@ export const DownloadTable = ({
             setShowDownloadSuccess("downloadSuccess");
           }
         }}
-        downloadError={downloadError}
         setDownloadError={setDownloadError}
         responseDownloadLimit={responseDownloadLimit}
       />

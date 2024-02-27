@@ -5,7 +5,7 @@ import { Button } from "@clientComponents/globals";
 import { AppUser } from "@lib/types/user-types";
 import { useTranslation } from "@i18n/client";
 
-import { PleaseHold } from "./PleaseHold";
+import { PleaseHold } from "@serverComponents/globals/PleaseHold";
 
 export const PublishPermission = ({
   user,

@@ -5,7 +5,6 @@ import { auth } from "@lib/auth";
 import { createAbility, getPrivilege } from "@lib/privileges";
 import { revalidatePath } from "next/cache";
 import { getUsers, updateActiveStatus } from "@lib/users";
-import { redirect } from "next/navigation";
 
 const authCheck = async () => {
   const session = await auth();
@@ -32,10 +31,6 @@ export const updateActive = async (userID: string, active: boolean) => {
     await updateActiveStatus(ability, userID, active);
     revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/accounts");
   }
-};
-
-export const serverRedirect = async (path: string) => {
-  return redirect(path);
 };
 
 export const getAllUsers = async (active?: boolean) => {

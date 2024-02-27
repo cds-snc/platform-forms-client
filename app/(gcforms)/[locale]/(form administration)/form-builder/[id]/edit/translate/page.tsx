@@ -1,7 +1,7 @@
 import { serverTranslation } from "@i18n";
-import { EditNavigation } from "@clientComponents/form-builder/app";
-import { Translate } from "@clientComponents/form-builder/app/translate";
 import { Metadata } from "next";
+import { EditNavigation } from "../components/EditNavigation";
+import { Translate } from "./components";
 
 export async function generateMetadata({
   params: { locale },
