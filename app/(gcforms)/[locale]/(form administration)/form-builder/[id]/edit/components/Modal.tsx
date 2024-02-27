@@ -132,10 +132,7 @@ export const ModalContainer = ({
     if (isOpen && modalContainer.current) {
       modalContainer.current.showModal();
       modalContainer.current.focus();
-    } else {
-      close();
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
