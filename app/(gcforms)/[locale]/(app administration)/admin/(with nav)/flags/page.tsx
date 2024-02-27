@@ -3,10 +3,8 @@ import { serverTranslation } from "@i18n";
 import { requireAuthentication } from "@lib/auth";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { Metadata } from "next";
-import { FlagTable } from "./FlagTable";
+import { FlagList } from "./components/server/FlagList";
 import { Loader } from "@clientComponents/globals/Loader";
-import { checkAll } from "@lib/cache/flags";
-import { logMessage } from "@lib/logger";
 
 export async function generateMetadata({
   params: { locale },
@@ -24,10 +22,6 @@ export default async function Page() {
 
   checkPrivilegesAsBoolean(user.ability, [{ action: "view", subject: "Flag" }], { redirect: true });
 
-  const flags = await checkAll(user.ability);
-
-  logMessage.debug(`Server Page Flags: ${JSON.stringify(flags)}`);
-
   const { t } = await serverTranslation("admin-flags");
 
   return (
@@ -35,7 +29,7 @@ export default async function Page() {
       <h1 className="border-0 mb-10">{t("title")}</h1>
       <p className="pb-8">{t("subTitle")}</p>
       <Suspense fallback={<Loader />}>
-        <FlagTable flags={flags} />
+        <FlagList ability={user.ability} />
       </Suspense>
     </>
   );
