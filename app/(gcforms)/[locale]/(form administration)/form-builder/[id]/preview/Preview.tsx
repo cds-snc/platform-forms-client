@@ -8,7 +8,7 @@ import { PreviewNavigation } from "./PreviewNavigation";
 import { getRenderedForm } from "@lib/formBuilder";
 import { PublicFormRecord } from "@lib/types";
 import { Button, Form, RichText, ClosedPage, NextButton } from "@clientComponents/forms";
-import { LocalizedElementProperties, LocalizedFormProperties } from "@lib/types/form-builder";
+import { LocalizedElementProperties, LocalizedFormProperties } from "@lib/types/form-builder-types";
 import { useTemplateStore } from "@lib/store";
 import { BackArrowIcon } from "@serverComponents/icons";
 import Brand from "@clientComponents/globals/Brand";

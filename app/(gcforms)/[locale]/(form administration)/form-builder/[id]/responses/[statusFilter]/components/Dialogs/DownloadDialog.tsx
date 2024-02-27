@@ -17,7 +17,7 @@ import JSZip from "jszip";
 import { getDate, slugify } from "@lib/client/clientHelpers";
 import { SpinnerIcon } from "@serverComponents/icons/SpinnerIcon";
 import { getSubmissionsByFormat } from "../../actions";
-import { Language } from "@lib/types/form-builder";
+import { Language } from "@lib/types/form-builder-types";
 import { usePathname } from "next/navigation";
 
 export const DownloadDialog = ({

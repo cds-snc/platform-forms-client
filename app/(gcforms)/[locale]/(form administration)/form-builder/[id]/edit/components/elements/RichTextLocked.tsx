@@ -3,7 +3,7 @@ import React from "react";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { RichTextEditor } from "./lexical-editor/RichTextEditor";
 import { AddElementButton } from "./element-dialog/AddElementButton";
-import { LocalizedElementProperties } from "@lib/types/form-builder";
+import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { LockedBadge } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/LockedBadge";
 import { useHandleAdd } from "@lib/hooks";
 import { FormElementTypes } from "@lib/types";

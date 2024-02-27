@@ -10,7 +10,7 @@ import {
   LocalizedElementProperties,
   LocalizedFormProperties,
   Language,
-} from "@lib/types/form-builder";
+} from "@lib/types/form-builder-types";
 import { DownloadCSV } from "./DownloadCSV";
 import { RichTextEditor } from "../../components/elements/lexical-editor/RichTextEditor";
 import { LanguageLabel } from "./LanguageLabel";

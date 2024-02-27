@@ -2,7 +2,7 @@
 import React from "react";
 
 import { PanelBody } from ".";
-import { FormElementWithIndex, Language } from "@lib/types/form-builder";
+import { FormElementWithIndex, Language } from "@lib/types/form-builder-types";
 
 export const PanelBodySub = ({
   item,

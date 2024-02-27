@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useTranslation } from "@i18n/client";
 
 import { Modal, ModalButton, ModalFormRules } from "./index";
-import { FormElementWithIndex } from "@lib/types/form-builder";
+import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { useTemplateStore, useModalRulesStore } from "@lib/store";
 import { Button } from "@clientComponents/globals";
 import { getPathString } from "@formbuilder/getPath";

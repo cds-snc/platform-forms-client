@@ -6,7 +6,7 @@ import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Option } from "./Option";
 import { Button } from "@clientComponents/globals";
-import { FormElementWithIndex } from "@lib/types/form-builder";
+import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { ModalRules } from "../ModalRules";
 import {
   ConditionalIndicatorOption,

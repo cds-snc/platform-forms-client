@@ -5,7 +5,7 @@ import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { SubOption } from "./SubOption";
 import { Button } from "@clientComponents/globals";
-import { FormElementWithIndex } from "@lib/types/form-builder";
+import { FormElementWithIndex } from "@lib/types/form-builder-types";
 
 const AddButton = ({
   elIndex,

@@ -17,7 +17,7 @@ import {
   ClassificationType,
   ClassificationSelect,
 } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/ClassificationSelect";
-import { LocalizedFormProperties } from "@lib/types/form-builder";
+import { LocalizedFormProperties } from "@lib/types/form-builder-types";
 import { ResponseEmail } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/ResponseEmail";
 import { isValidGovEmail } from "@lib/validation";
 import { useTemplateApi } from "@lib/hooks";

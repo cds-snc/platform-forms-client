@@ -4,7 +4,7 @@ import debounce from "lodash.debounce";
 import { useTranslation } from "@i18n/client";
 import { useSearchParams } from "next/navigation";
 
-import { Language, LocalizedFormProperties } from "@lib/types/form-builder";
+import { Language, LocalizedFormProperties } from "@lib/types/form-builder-types";
 import { ElementPanel, ConfirmationDescription, PrivacyDescription } from ".";
 import { RefsProvider } from "./RefsContext";
 import { RichTextLocked } from "./elements";

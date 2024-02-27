@@ -1,6 +1,6 @@
 "use client";
 import { useTemplateStore } from "@lib/store";
-import { FormElementWithIndex, LocalizedElementProperties } from "@lib/types/form-builder";
+import { FormElementWithIndex, LocalizedElementProperties } from "@lib/types/form-builder-types";
 import React from "react";
 
 export const QuestionDescription = ({

@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import { useTranslation } from "@i18n/client";
-import { FormElementWithIndex } from "@lib/types/form-builder";
+import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { useTemplateStore, useModalStore } from "@lib/store";
 import { Button } from "@clientComponents/globals";
 import { Modal } from "./index";

@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { useTranslation } from "@i18n/client";
 import { FormElementTypes, ElementProperties } from "@lib/types";
 
-import { FormElementWithIndex, LocalizedElementProperties } from "@lib/types/form-builder";
+import { FormElementWithIndex, LocalizedElementProperties } from "@lib/types/form-builder-types";
 import {
   Checkbox,
   Input,

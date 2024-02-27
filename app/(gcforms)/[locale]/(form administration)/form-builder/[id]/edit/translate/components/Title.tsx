@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { Language, LocalizedElementProperties } from "@lib/types/form-builder";
+import { Language, LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { useTranslation } from "@i18n/client";
 import { FormElement } from "@lib/types";
 import { LanguageLabel } from "./LanguageLabel";

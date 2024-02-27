@@ -6,7 +6,7 @@ import {
   FormElementWithIndex,
   Language,
   LocalizedElementProperties,
-} from "@lib/types/form-builder";
+} from "@lib/types/form-builder-types";
 import { SelectedElement, ElementRequired } from ".";
 import { Question } from "./elements";
 import { QuestionDescription } from "./elements/question/QuestionDescription";
