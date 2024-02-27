@@ -6,7 +6,7 @@ import {
 } from "app/(gcforms)/[locale]/(form administration)/form-builder/components";
 import { FormRecord } from "@lib/types";
 import { useSession } from "next-auth/react";
-import { useRehydrate } from "@clientComponents/form-builder/hooks";
+import { useRehydrate } from "@lib/hooks/form-builder";
 
 interface AssignUsersToTemplateProps {
   formRecord?: FormRecord;

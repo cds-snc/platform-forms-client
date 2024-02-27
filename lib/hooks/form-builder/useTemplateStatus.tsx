@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import axios from "axios";
 import { logMessage } from "@lib/logger";
 
-import { useTemplateStore } from "../store";
+import { useTemplateStore } from "../../store";
 
 interface FormTemplate {
   id: string;

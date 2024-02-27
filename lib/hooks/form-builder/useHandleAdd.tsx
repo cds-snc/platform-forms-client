@@ -3,15 +3,15 @@ import { useCallback } from "react";
 import { useTranslation } from "@i18n/client";
 
 import { FormElementTypes } from "@lib/types";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
-import { blockLoader, LoaderType } from "../blockLoader";
-import { allowedTemplates } from "@clientComponents/form-builder/util";
+import { useTemplateStore } from "@lib/store";
+import { blockLoader, LoaderType } from "../../utils/form-builder/blockLoader";
+import { allowedTemplates } from "@lib/utils/form-builder";
 import {
   defaultField,
   createElement,
   setTitle,
   setDescription,
-} from "@clientComponents/form-builder/utils/itemHelper";
+} from "@lib/utils/form-builder/itemHelper";
 
 export const useHandleAdd = () => {
   const { add, addSubItem } = useTemplateStore((s) => ({

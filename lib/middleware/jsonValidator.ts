@@ -1,7 +1,7 @@
 import { Schema, Validator, ValidatorResult, PreValidatePropertyFunction } from "jsonschema";
 import { type NextRequest, NextResponse } from "next/server";
 import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
-import { padAngleBrackets } from "@clientComponents/form-builder/util";
+import { padAngleBrackets } from "@lib/utils/form-builder";
 import * as htmlparser2 from "htmlparser2";
 
 export type ValidateOptions = {

@@ -6,12 +6,12 @@ import { useSession } from "next-auth/react";
 
 import { ChevronDown, ChevronRight, ShareIcon, LinkIcon } from "@serverComponents/icons";
 
-import { useTemplateStore } from "@clientComponents/form-builder/store/useTemplateStore";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { ShareModal } from "../ShareModal";
 import { LinksSubMenu } from "./LinksSubMenu";
 import { ShareModalUnauthenticated } from "..";
 
-import { useRefStore } from "@lib/hooks/useRefStore";
+import { useRefStore } from "@lib/hooks/form-builder/useRefStore";
 
 export const ShareDropdown = () => {
   const { t } = useTranslation("form-builder");

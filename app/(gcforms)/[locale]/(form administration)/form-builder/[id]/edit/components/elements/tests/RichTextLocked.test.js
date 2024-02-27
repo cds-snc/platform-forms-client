@@ -1,7 +1,7 @@
 import React from "react";
 import { cleanup } from "@testing-library/react";
 import { RichTextLocked } from "../RichTextLocked";
-import { withProviders, defaultStore as store } from "@formbuilder/test-utils";
+import { withProviders, defaultStore as store } from "@lib/utils/form-builder/test-utils";
 
 describe("RichTextLocked", () => {
   afterEach(cleanup);

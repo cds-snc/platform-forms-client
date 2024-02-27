@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import axios from "axios";
 
 import { Button } from "@clientComponents/globals";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
+import { useTemplateStore } from "@lib/store";
 import {
   useDialogRef,
   Dialog,
@@ -17,11 +17,11 @@ import {
   ClassificationType,
   ClassificationSelect,
 } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/ClassificationSelect";
-import { LocalizedFormProperties } from "@clientComponents/form-builder/types";
+import { LocalizedFormProperties } from "@lib/types/form-builder-types";
 import { ResponseEmail } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/ResponseEmail";
 import { isValidGovEmail } from "@lib/validation";
-import { useTemplateApi } from "@clientComponents/form-builder/hooks";
-import { completeEmailAddressRegex } from "@clientComponents/form-builder/util";
+import { useTemplateApi } from "@lib/hooks/form-builder";
+import { completeEmailAddressRegex } from "@lib/utils/form-builder";
 
 enum DeliveryOption {
   vault = "vault",

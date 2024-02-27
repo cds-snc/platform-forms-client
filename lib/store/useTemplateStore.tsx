@@ -11,7 +11,7 @@ import {
 } from "zustand/middleware";
 
 import React, { createContext, useRef, useContext, useEffect } from "react";
-import { getPathString } from "../getPath";
+import { getPathString } from "../utils/form-builder/getPath";
 
 import {
   moveDown,
@@ -24,8 +24,8 @@ import {
   getSchemaFromState,
   incrementSubElementId,
   cleanInput,
-} from "../util";
-import { Language } from "../types";
+} from "../utils/form-builder";
+import { Language } from "../types/form-builder-types";
 import update from "lodash.set";
 import unset from "lodash.unset";
 import {

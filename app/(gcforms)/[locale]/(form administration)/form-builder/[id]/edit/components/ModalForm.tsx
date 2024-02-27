@@ -4,17 +4,14 @@ import PropTypes from "prop-types";
 import { useTranslation } from "@i18n/client";
 import { FormElementTypes, ElementProperties } from "@lib/types";
 
-import {
-  FormElementWithIndex,
-  LocalizedElementProperties,
-} from "@clientComponents/form-builder/types";
+import { FormElementWithIndex, LocalizedElementProperties } from "@lib/types/form-builder-types";
 import {
   Checkbox,
   Input,
   TextArea,
   InfoDetails,
 } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
+import { useTemplateStore } from "@lib/store";
 import { AutocompleteDropdown } from "./AutocompleteDropdown";
 
 const ModalLabel = ({ children, ...props }: React.LabelHTMLAttributes<HTMLLabelElement>) => (

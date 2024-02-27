@@ -2,16 +2,12 @@
 import React, { useCallback, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useRouter } from "next/navigation";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
-import {
-  useTemplateApi,
-  useAllowPublish,
-  useRehydrate,
-} from "@clientComponents/form-builder/hooks";
+import { useTemplateStore } from "@lib/store";
+import { useTemplateApi, useAllowPublish, useRehydrate } from "@lib/hooks/form-builder";
 import { CancelIcon, CircleCheckIcon, LockIcon } from "@serverComponents/icons";
 import { Button, Alert } from "@clientComponents/globals";
 import Link from "next/link";
-import { isVaultDelivery } from "@clientComponents/form-builder/util";
+import { isVaultDelivery } from "@lib/utils/form-builder";
 import { classificationOptions } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/ClassificationSelect";
 import { logMessage } from "@lib/logger";
 import { DownloadFileButton } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";

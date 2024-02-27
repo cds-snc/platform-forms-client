@@ -4,10 +4,10 @@ import { useTranslation } from "@i18n/client";
 import debounce from "lodash.debounce";
 
 import { ExpandingInput } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";
-import { Language } from "@clientComponents/form-builder/types";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
+import { Language } from "@lib/types/form-builder-types";
+import { useTemplateStore } from "@lib/store";
 
-import { cleanInput } from "@clientComponents/form-builder/util";
+import { cleanInput } from "@lib/utils/form-builder";
 import { useRefsContext } from "../../RefsContext";
 
 export const QuestionInput = ({

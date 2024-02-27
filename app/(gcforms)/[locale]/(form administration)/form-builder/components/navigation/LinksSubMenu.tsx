@@ -3,9 +3,9 @@ import React from "react";
 import { useTranslation } from "@i18n/client";
 
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
-import { useTemplateStore } from "@clientComponents/form-builder/store/useTemplateStore";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { ShareExternalLinkIcon, CopyIcon } from "@serverComponents/icons";
-import { getHost } from "@clientComponents/form-builder/util";
+import { getHost } from "@lib/utils/form-builder";
 
 interface LinkItem {
   name: string;

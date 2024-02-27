@@ -1,6 +1,6 @@
 "use client";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { CDSHTMLDialogElement } from "@clientComponents/form-builder/types";
+import { CDSHTMLDialogElement } from "@lib/types/form-builder-types";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import { Close } from "@serverComponents/icons/Close";

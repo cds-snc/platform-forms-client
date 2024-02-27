@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useTemplateStore, TemplateStoreProvider } from "../store/useTemplateStore";
+import { useTemplateStore, TemplateStoreProvider } from "../useTemplateStore";
 import { renderHook, act } from "@testing-library/react";
 
 const createStore = () => {

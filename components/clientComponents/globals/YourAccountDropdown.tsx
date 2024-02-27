@@ -6,7 +6,7 @@ import { useTranslation } from "@i18n/client";
 import { useAccessControl } from "@lib/hooks";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
-import { clearTemplateStore } from "@clientComponents/form-builder/store";
+import { clearTemplateStore } from "@lib/store";
 
 type YourAccountDropdownProps = {
   isAuthenticated: boolean;

@@ -8,8 +8,8 @@ import {
   ClassificationSelect,
 } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/ClassificationSelect";
 import { Logos, options } from "../../../settings/branding/components";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
-import { useTemplateApi } from "@clientComponents/form-builder/hooks";
+import { useTemplateStore } from "@lib/store";
+import { useTemplateApi } from "@lib/hooks/form-builder";
 import { SettingsModal } from "./SettingsDialog";
 import { Tooltip } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/Tooltip";
 

@@ -4,7 +4,7 @@ import { useTranslation } from "@i18n/client";
 import Image from "next/image";
 
 import { Button } from "@clientComponents/globals";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
+import { useTemplateStore } from "@lib/store";
 import { useDialogRef, Dialog } from ".";
 import { InfoIcon } from "@serverComponents/icons";
 import { getDate, slugify } from "@lib/client/clientHelpers";

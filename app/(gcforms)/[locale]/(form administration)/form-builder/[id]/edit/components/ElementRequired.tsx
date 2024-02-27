@@ -3,7 +3,7 @@ import React from "react";
 import { useTranslation } from "@i18n/client";
 
 import { Checkbox } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";
-import { FormElementWithIndex } from "@clientComponents/form-builder/types";
+import { FormElementWithIndex } from "@lib/types/form-builder-types";
 
 export const ElementRequired = ({
   item,

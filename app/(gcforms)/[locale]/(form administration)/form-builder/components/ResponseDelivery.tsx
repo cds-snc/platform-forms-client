@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 
 import { SetResponseDelivery } from "./SetResponseDelivery";
-import { useTemplateContext, useRehydrate } from "@clientComponents/form-builder/hooks";
+import { useTemplateContext, useRehydrate } from "@lib/hooks/form-builder";
 
 export const ResponseDelivery = () => {
   const { saveForm } = useTemplateContext();
