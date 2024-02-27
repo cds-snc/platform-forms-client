@@ -1,5 +1,9 @@
 "use client";
-import { Settings, FormOwnership, SetClosingDate } from "@clientComponents/form-builder/app";
+import {
+  Settings,
+  FormOwnership,
+  SetClosingDate,
+} from "app/(gcforms)/[locale]/(form administration)/form-builder/components";
 import { FormRecord } from "@lib/types";
 import { useSession } from "next-auth/react";
 import { useRehydrate } from "@clientComponents/form-builder/hooks";

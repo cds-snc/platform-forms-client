@@ -5,9 +5,9 @@ import { useTemplateApi } from ".";
 import { useTranslation } from "@i18n/client";
 import { logMessage } from "@lib/logger";
 import { useSession } from "next-auth/react";
-import { toast } from "../app/shared/Toast";
+import { toast } from "../../../../app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/Toast";
 import { StyledLink } from "@clientComponents/globals";
-import { DownloadFileButton } from "../app/shared";
+import { DownloadFileButton } from "../../../../app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";
 
 interface TemplateApiType {
   error: string | null | undefined;

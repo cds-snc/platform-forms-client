@@ -10,7 +10,7 @@ import { LinkButton } from "@clientComponents/globals";
 import { logMessage } from "@lib/logger";
 import { fetchWithCsrfToken } from "@lib/hooks/auth/fetchWithCsrfToken";
 import { useRouter } from "next/navigation";
-import { toast } from "@clientComponents/form-builder/app/shared";
+import { toast } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";
 
 export interface Question {
   id: string;

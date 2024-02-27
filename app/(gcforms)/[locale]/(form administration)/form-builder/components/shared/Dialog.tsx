@@ -1,9 +1,9 @@
 "use client";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { CDSHTMLDialogElement } from "../../types";
+import { CDSHTMLDialogElement } from "@clientComponents/form-builder/types";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
-import { Close } from "../../../../serverComponents/icons/Close";
+import { Close } from "@serverComponents/icons/Close";
 import { cn } from "@lib/utils";
 
 export const useDialogRef = () => {

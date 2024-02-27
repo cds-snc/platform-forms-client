@@ -14,7 +14,10 @@ import {
 import { SubElementModal } from "./SubElementModal";
 import { PanelHightLight } from "./PanelHightlight";
 import { PanelActions } from "../../PanelActions";
-import { Input, LockedBadge } from "@clientComponents/form-builder/app/shared";
+import {
+  Input,
+  LockedBadge,
+} from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";
 import { getQuestionNumber } from "@clientComponents/form-builder/util";
 import { useHandleAdd } from "@clientComponents/form-builder/hooks";
 

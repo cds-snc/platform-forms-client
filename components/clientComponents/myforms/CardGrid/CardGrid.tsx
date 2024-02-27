@@ -1,7 +1,7 @@
 "use client";
 import React, { useCallback, useState, useRef } from "react";
 import { Card, CardProps } from "@clientComponents/myforms/Card/Card";
-import { ConfirmDelete } from "@clientComponents/form-builder/app/ConfirmDelete";
+import { ConfirmDelete } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/ConfirmDelete";
 import { useRefresh } from "@lib/hooks";
 
 /* handle delete gets added via the CardGrid component */

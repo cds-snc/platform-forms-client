@@ -6,8 +6,8 @@ import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 
 import { SiteLogo } from "@serverComponents/icons";
-import { FileNameInput } from "@clientComponents/form-builder/app/navigation/FileName";
-import { ShareDropdown } from "@clientComponents/form-builder/app/navigation/ShareDropdown";
+import { FileNameInput } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/navigation/FileName";
+import { ShareDropdown } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/navigation/ShareDropdown";
 import LanguageToggle from "./LanguageToggle";
 import { YourAccountDropdown } from "./YourAccountDropdown";
 

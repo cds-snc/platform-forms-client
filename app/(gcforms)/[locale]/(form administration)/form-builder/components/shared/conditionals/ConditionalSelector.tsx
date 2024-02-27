@@ -5,7 +5,10 @@ import { cn } from "@lib/utils";
 import { FormElement } from "@lib/types";
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@formbuilder/store";
-import { LocalizedFormProperties, LocalizedElementProperties } from "../../../types";
+import {
+  LocalizedFormProperties,
+  LocalizedElementProperties,
+} from "@clientComponents/form-builder/types";
 
 type Choice = {
   label: string;

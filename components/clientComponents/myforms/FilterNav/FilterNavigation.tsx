@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useTranslation } from "@i18n/client";
-import { SubNavLink } from "@clientComponents/form-builder/app/navigation/SubNavLink";
+import { SubNavLink } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/navigation/SubNavLink";
 
 import { PageIcon, GlobeIcon, FolderIcon } from "@serverComponents/icons";
 

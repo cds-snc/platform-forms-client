@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Nagware } from "@clientComponents/form-builder/app/Nagware";
+import { Nagware } from "../Nagware";
 import { NagLevel } from "@lib/types";
 
 describe("<Nagware />", () => {

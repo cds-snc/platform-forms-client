@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Footer, Brand, SkipLink, LanguageToggle } from "@clientComponents/globals";
 import { LoginMenu } from "@clientComponents/auth/LoginMenu";
 import { SiteLogo } from "@serverComponents/icons";
-import { ToastContainer } from "@clientComponents/form-builder/app/shared/Toast";
+import { ToastContainer } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/Toast";
 
 const SiteLink = () => {
   const {
