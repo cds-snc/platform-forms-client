@@ -15,7 +15,7 @@ export const formatTicketData = ({
   description,
   language,
 }: createTicketProps) => {
-  const HOST = process.env.NEXTAUTH_URL || "";
+  const HOST = process.env.HOST_URL || "";
   const hostTag = tagHost(HOST);
 
   const ticket = {
