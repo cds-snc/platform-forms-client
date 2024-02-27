@@ -2,7 +2,7 @@
 
 import { PublicFormRecord } from "@lib/types";
 import { Footer, SkipLink, Fip } from "@clientComponents/globals";
-import LanguageToggle from "../LanguageToggle";
+import LanguageToggle from "../Header/LanguageToggle";
 import { DateModified } from "../DateModified";
 import { cn } from "@lib/utils";
 

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { serverTranslation } from "@i18n";
 import { SiteLogo } from "@serverComponents/icons";
 import LanguageToggle from "@serverComponents/globals/LanguageToggle";
-import { YourAccountDropdown } from "@clientComponents/globals/YourAccountDropdown";
+import { YourAccountDropdown } from "@clientComponents/globals/Header/YourAccountDropdown";
 import { auth } from "@lib/auth";
 import { redirect } from "next/navigation";
 import { createAbility } from "@lib/privileges";

@@ -1,5 +1,5 @@
 import { ToastContainer } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/Toast";
-import { Header } from "@clientComponents/globals/Header";
+import { Header } from "@clientComponents/globals/Header/Header";
 import { Footer, SkipLink } from "@clientComponents/globals";
 
 export const FullWidthLayout = ({

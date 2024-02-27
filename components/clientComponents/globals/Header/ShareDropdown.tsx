@@ -7,9 +7,9 @@ import { useSession } from "next-auth/react";
 import { ChevronDown, ChevronRight, ShareIcon, LinkIcon } from "@serverComponents/icons";
 
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { ShareModal } from "../ShareModal";
-import { LinksSubMenu } from "./LinksSubMenu";
-import { ShareModalUnauthenticated } from "..";
+import { ShareModal } from "../../../../app/(gcforms)/[locale]/(form administration)/form-builder/components/ShareModal";
+import { LinksSubMenu } from "../../../../app/(gcforms)/[locale]/(form administration)/form-builder/components/navigation/LinksSubMenu";
+import { ShareModalUnauthenticated } from "../../../../app/(gcforms)/[locale]/(form administration)/form-builder/components";
 
 import { useRefStore } from "@lib/hooks/form-builder/useRefStore";
 
