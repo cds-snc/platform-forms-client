@@ -2,7 +2,7 @@
 import React, { useCallback } from "react";
 import { useTranslation } from "@i18n/client";
 
-import { useTemplateStore } from "@clientComponents/form-builder/store";
+import { useTemplateStore } from "@lib/store";
 import { PanelBodySub } from "../../PanelBodySub";
 import { FormElement, FormElementTypes } from "@lib/types";
 import { AddElementButton } from "../element-dialog/AddElementButton";

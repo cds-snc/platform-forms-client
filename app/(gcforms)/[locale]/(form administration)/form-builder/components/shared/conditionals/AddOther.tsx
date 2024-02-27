@@ -4,7 +4,7 @@ import { useTranslation } from "@i18n/client";
 
 import { Button } from "@clientComponents/globals";
 import { FormElementWithIndex } from "@clientComponents/form-builder/types";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
+import { useTemplateStore } from "@lib/store";
 import { FormElementTypes } from "@lib/types";
 
 export const AddOther = ({ item }: { item: FormElementWithIndex }) => {

@@ -5,7 +5,7 @@ import { SubNavLink } from "app/(gcforms)/[locale]/(form administration)/form-bu
 import { useActivePathname } from "@lib/hooks";
 import { LangSwitcher } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/LangSwitcher";
 import { QuestionsIcon, TranslateIcon } from "@serverComponents/icons";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
+import { useTemplateStore } from "@lib/store";
 
 export const EditNavigation = ({ id }: { id: string }) => {
   const {

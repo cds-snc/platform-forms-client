@@ -4,7 +4,7 @@ import { cn } from "@lib/utils";
 import { Header } from "@clientComponents/globals";
 import { SkipLink, Footer } from "@serverComponents/globals";
 import { Start } from "./Start";
-import { TemplateStoreProvider } from "@clientComponents/form-builder/store";
+import { TemplateStoreProvider } from "@lib/store";
 
 export async function generateMetadata({
   params: { locale },

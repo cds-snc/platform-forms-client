@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect, useImperativeHandle } from "react";
 import { cn } from "@lib/utils";
 
-import { useTemplateStore } from "@clientComponents/form-builder/store/useTemplateStore";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useTranslation } from "@i18n/client";
 import { useRefStore } from "@lib/hooks/useRefStore";
 import { LocalizedFormProperties } from "@clientComponents/form-builder/types";

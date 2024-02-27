@@ -1,5 +1,5 @@
 "use client";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
+import { useTemplateStore } from "@lib/store";
 import {
   FormElementWithIndex,
   LocalizedElementProperties,

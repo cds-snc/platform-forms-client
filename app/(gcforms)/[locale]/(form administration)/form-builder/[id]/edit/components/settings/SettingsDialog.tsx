@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import axios from "axios";
 
 import { Button } from "@clientComponents/globals";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
+import { useTemplateStore } from "@lib/store";
 import {
   useDialogRef,
   Dialog,

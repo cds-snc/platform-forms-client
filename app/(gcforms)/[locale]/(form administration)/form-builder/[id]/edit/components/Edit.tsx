@@ -9,7 +9,7 @@ import { ElementPanel, ConfirmationDescription, PrivacyDescription } from ".";
 import { RefsProvider } from "./RefsContext";
 import { RichTextLocked } from "./elements";
 import { ExpandingInput } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
+import { useTemplateStore } from "@lib/store";
 import { getQuestionNumber, sortByLayout } from "@clientComponents/form-builder/util";
 import { SettingsPanel } from "./settings/SettingsPanel";
 import { cleanInput } from "@clientComponents/form-builder/util";

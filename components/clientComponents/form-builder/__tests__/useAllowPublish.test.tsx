@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { TemplateStoreProvider, TemplateStoreProps } from "../store/useTemplateStore";
+import { TemplateStoreProvider, TemplateStoreProps } from "../../../../lib/store/useTemplateStore";
 import { useAllowPublish } from "../../../../lib/hooks/useAllowPublish";
 import { renderHook, act } from "@testing-library/react";
 import {

@@ -6,7 +6,7 @@ import { FormRecord } from "@lib/types";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { getFullTemplateByID } from "@lib/templates";
 import { redirect } from "next/navigation";
-import { TemplateStoreProvider } from "@clientComponents/form-builder/store";
+import { TemplateStoreProvider } from "@lib/store";
 import { TemplateApiProvider, RefStoreProvider } from "@lib/hooks";
 
 export default async function Layout({

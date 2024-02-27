@@ -1,7 +1,7 @@
 "use client";
 import React, { useCallback, useState, useEffect } from "react";
 import { Editor } from "./Editor";
-import { useTemplateStore } from "@clientComponents/form-builder/store/useTemplateStore";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Language } from "@clientComponents/form-builder/types";
 import debounce from "lodash.debounce";
 import { useTranslation } from "@i18n/client";

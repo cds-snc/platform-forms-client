@@ -2,7 +2,7 @@
 import { FormElement } from "@lib/types";
 import { useTranslation } from "@i18n/client";
 import React from "react";
-import { useTemplateStore } from "@clientComponents/form-builder/store/useTemplateStore";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Language } from "@clientComponents/form-builder/types";
 import { FieldsetLegend } from "./FieldsetLegend";
 import { LanguageLabel } from "./LanguageLabel";

@@ -5,7 +5,7 @@ import { useTranslation } from "@i18n/client";
 import { ElementProperties } from "@lib/types";
 import { ModalForm, ModalButton } from "../../index";
 import { FormElementWithIndex } from "@clientComponents/form-builder/types";
-import { useModalStore, useTemplateStore } from "@clientComponents/form-builder/store";
+import { useModalStore, useTemplateStore } from "@lib/store";
 import { Button } from "@clientComponents/globals";
 import { Modal } from "../../Modal";
 

@@ -4,8 +4,8 @@ import PropTypes from "prop-types";
 import { useTranslation } from "@i18n/client";
 
 import { Button } from "@clientComponents/globals";
-import { useTemplateStore } from "@formbuilder/store";
-import { ModalProperties } from "@clientComponents/form-builder/store/useModalRulesStore";
+import { useTemplateStore } from "@lib/store";
+import { ModalProperties } from "@lib/store/useModalRulesStore";
 import { FormElementWithIndex } from "@clientComponents/form-builder/types";
 import { ChoiceRule } from "@lib/formContext";
 import { ConditionalSelector } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/conditionals/ConditionalSelector";

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 
 import { FormElementWithIndex } from "@clientComponents/form-builder/types";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
+import { useTemplateStore } from "@lib/store";
 import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
 
 import { useIsWithin, useHandleAdd } from "@lib/hooks";

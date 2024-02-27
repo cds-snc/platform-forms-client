@@ -15,5 +15,5 @@ export { useIsWithin } from "./useIsWithin";
 export { usePanelActions } from "./usePanelActions";
 export { useHandleAdd } from "./useHandleAdd";
 export { useIsAdminUser } from "./useIsAdminUser";
-export { useRehydrate } from "../../components/clientComponents/form-builder/store/useTemplateStore";
+export { useRehydrate } from "../store/useTemplateStore";
 export { RefStoreProvider } from "./useRefStore";

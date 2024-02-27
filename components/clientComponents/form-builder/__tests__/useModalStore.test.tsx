@@ -1,5 +1,5 @@
 "use client";
-import useModalStore, { defaultProperties } from "../store/useModalStore";
+import useModalStore, { defaultProperties } from "../../../../lib/store/useModalStore";
 import { renderHook } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 import { HTMLTextInputTypeAttribute } from "@lib/types";

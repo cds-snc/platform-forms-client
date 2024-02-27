@@ -8,7 +8,7 @@ import {
   publishRequiredFields,
   Title,
 } from "../../components/clientComponents/form-builder/types";
-import { useTemplateStore } from "../../components/clientComponents/form-builder/store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 
 export class MissingTranslation extends Error {}
 

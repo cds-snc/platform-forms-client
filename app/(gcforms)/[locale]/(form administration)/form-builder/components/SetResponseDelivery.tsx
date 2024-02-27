@@ -11,7 +11,7 @@ import { ResponseEmail } from "./ResponseEmail";
 import { Radio } from "./shared";
 import { Button } from "@clientComponents/globals";
 import { useTemplateApi } from "@lib/hooks";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
+import { useTemplateStore } from "@lib/store";
 import { completeEmailAddressRegex } from "@clientComponents/form-builder/util";
 import { toast } from "./shared/Toast";
 import { ResponseDeliveryHelpButton } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";

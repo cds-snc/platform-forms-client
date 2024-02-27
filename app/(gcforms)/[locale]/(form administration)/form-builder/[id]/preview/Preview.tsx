@@ -12,7 +12,7 @@ import {
   LocalizedElementProperties,
   LocalizedFormProperties,
 } from "@clientComponents/form-builder/types";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
+import { useTemplateStore } from "@lib/store";
 import { BackArrowIcon } from "@serverComponents/icons";
 import Brand from "@clientComponents/globals/Brand";
 import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";

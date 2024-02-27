@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 
 import { ChevronDown, ChevronRight, ShareIcon, LinkIcon } from "@serverComponents/icons";
 
-import { useTemplateStore } from "@clientComponents/form-builder/store/useTemplateStore";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { ShareModal } from "../ShareModal";
 import { LinksSubMenu } from "./LinksSubMenu";
 import { ShareModalUnauthenticated } from "..";

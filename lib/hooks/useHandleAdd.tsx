@@ -3,7 +3,7 @@ import { useCallback } from "react";
 import { useTranslation } from "@i18n/client";
 
 import { FormElementTypes } from "@lib/types";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
+import { useTemplateStore } from "@lib/store";
 import {
   blockLoader,
   LoaderType,

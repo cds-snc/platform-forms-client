@@ -6,7 +6,7 @@ import Link from "next/link";
 import axios from "axios";
 
 import { Logos, options } from ".";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
+import { useTemplateStore } from "@lib/store";
 import {
   LoggedOutTabName,
   LoggedOutTab,

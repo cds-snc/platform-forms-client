@@ -2,7 +2,7 @@
 import { signOut, useSession } from "next-auth/react";
 import { useTranslation } from "@i18n/client";
 import Link from "next/link";
-import { clearTemplateStore } from "@clientComponents/form-builder/store";
+import { clearTemplateStore } from "@lib/store";
 
 export const LoginMenu = () => {
   const { i18n, t } = useTranslation("common");

@@ -14,7 +14,7 @@ import {
   TextArea,
   InfoDetails,
 } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
+import { useTemplateStore } from "@lib/store";
 import { AutocompleteDropdown } from "./AutocompleteDropdown";
 
 const ModalLabel = ({ children, ...props }: React.LabelHTMLAttributes<HTMLLabelElement>) => (

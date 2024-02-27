@@ -1,9 +1,6 @@
 "use client";
 import React, { createContext, useState, useContext, useRef, useCallback } from "react";
-import {
-  useTemplateStore,
-  useSubscibeToTemplateStore,
-} from "../../components/clientComponents/form-builder/store";
+import { useTemplateStore, useSubscibeToTemplateStore } from "../store";
 import { useTemplateApi } from ".";
 import { useTranslation } from "@i18n/client";
 import { logMessage } from "@lib/logger";

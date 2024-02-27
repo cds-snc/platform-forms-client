@@ -10,7 +10,7 @@ import {
 import { SelectedElement, ElementRequired } from ".";
 import { Question } from "./elements";
 import { QuestionDescription } from "./elements/question/QuestionDescription";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
+import { useTemplateStore } from "@lib/store";
 
 export const PanelBody = ({
   item,
