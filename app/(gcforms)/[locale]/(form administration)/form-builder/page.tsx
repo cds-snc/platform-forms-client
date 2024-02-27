@@ -19,7 +19,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({ params: { locale } }: { params: { locale: string } }) {
+export default async function StartPage({ params: { locale } }: { params: { locale: string } }) {
   return (
     <TemplateStoreProvider {...{ locale }}>
       <div className="flex h-full flex-col bg-gray-soft">
