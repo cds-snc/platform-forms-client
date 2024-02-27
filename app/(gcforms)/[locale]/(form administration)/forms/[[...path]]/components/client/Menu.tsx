@@ -11,7 +11,7 @@ import { getDate, slugify } from "@lib/client/clientHelpers";
 import { useCallback, useState } from "react";
 import { ConfirmDelete } from "./ConfirmDelete";
 
-export const MenuDropdownButton = ({
+export const Menu = ({
   id,
   name,
   isPublished,

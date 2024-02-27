@@ -1,7 +1,7 @@
 import React from "react";
 import { MessageIcon, EnvelopeIcon, PreviewIcon, DesignIcon } from "@serverComponents/icons";
 import Markdown from "markdown-to-jsx";
-import { MenuDropdownButton } from "../client/MenuDropdownButton";
+import { Menu } from "../client/Menu";
 import { serverTranslation } from "@i18n";
 import Link from "next/link";
 import { CardI } from "./Cards";
@@ -149,12 +149,7 @@ export const Card = async ({ card }: { card: CardI }) => {
       <div className="mb-4 flex items-center justify-between px-3">
         <CardDate id={card.id} date={card.date} />
         <div className="flex items-center text-sm">
-          <MenuDropdownButton
-            id={card.id}
-            name={card.name}
-            isPublished={card.isPublished}
-            direction={"up"}
-          />
+          <Menu id={card.id} name={card.name} isPublished={card.isPublished} direction={"up"} />
         </div>
       </div>
     </div>
