@@ -19,7 +19,7 @@ import { SaveButton } from "app/(gcforms)/[locale]/(form administration)/form-bu
 
 import { FormElement } from "@lib/types";
 import { alphabet, sortByLayout } from "@lib/utils/form-builder";
-import { useRehydrate } from "@lib/hooks";
+import { useRehydrate } from "@lib/hooks/form-builder";
 
 const Element = ({
   element,
