@@ -2,7 +2,7 @@
 import React from "react";
 import { useTranslation } from "@i18n/client";
 import { useSearchParams } from "next/navigation";
-import { DownloadFileButton } from "../../../components/shared";
+import { DownloadFileButton } from "@formBuilder/components/shared";
 
 export const DownloadForm = () => {
   const { t } = useTranslation("form-builder");
