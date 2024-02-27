@@ -17,7 +17,6 @@
       "@api/*": ["../app/api/*"],
       "@serverComponents/*": ["../components/serverComponents/*"],
       "@clientComponents/*": ["../components/clientComponents/*"],
-      "@formbuilder/*": ["../components/clientComponents/form-builder/*"],
       "@jestFixtures/*": ["../__fixtures__/*"],
       "@jestUtils": ["../__utils__"],
       "@i18n": ["../i18n"],
