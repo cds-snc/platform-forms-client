@@ -1,4 +1,10 @@
-import { parseRootId, getElementIndexes, indexesToPath, getPath, getPathString } from "./getPath";
+import {
+  parseRootId,
+  getElementIndexes,
+  indexesToPath,
+  getPath,
+  getPathString,
+} from "../../../lib/utils/form-builder/getPath";
 
 describe("Parse root ID", () => {
   it.skip("parses root id", () => {

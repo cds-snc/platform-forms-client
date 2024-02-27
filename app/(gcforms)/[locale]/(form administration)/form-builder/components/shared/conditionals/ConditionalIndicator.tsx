@@ -4,8 +4,8 @@ import { useTranslation } from "@i18n/client";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { useTemplateStore } from "@lib/store";
 import { ConditionalIcon } from "@serverComponents/icons/ConditionalIcon";
-import { getQuestionNumber } from "@formbuilder/util";
-import { getElementIndexes } from "@formbuilder/getPath";
+import { getQuestionNumber } from "@lib/utils/form-builder";
+import { getElementIndexes } from "@lib/utils/form-builder/getPath";
 
 const RuleIndicator = ({ choiceId }: { choiceId: string }) => {
   const { t } = useTranslation("form-builder");

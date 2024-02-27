@@ -1,6 +1,6 @@
 "use client";
 import { useTranslation } from "@i18n/client";
-import { autoCompleteFields } from "../../components/clientComponents/form-builder/util";
+import { autoCompleteFields } from "../utils/form-builder";
 
 export const useAutocompleteOptions = () => {
   const { t } = useTranslation("form-builder");

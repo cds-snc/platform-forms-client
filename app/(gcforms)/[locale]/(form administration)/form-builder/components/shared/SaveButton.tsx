@@ -6,7 +6,7 @@ import { cn } from "@lib/utils";
 import { Button, StyledLink } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store";
 import { useTemplateStatus, useTemplateContext } from "@lib/hooks";
-import { formatDateTime } from "@clientComponents/form-builder/util";
+import { formatDateTime } from "@lib/utils/form-builder";
 import { SavedFailIcon, SavedCheckIcon } from "@serverComponents/icons";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";

@@ -18,7 +18,7 @@ import {
   Input,
   LockedBadge,
 } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";
-import { getQuestionNumber } from "@clientComponents/form-builder/util";
+import { getQuestionNumber } from "@lib/utils/form-builder";
 import { useHandleAdd } from "@lib/hooks";
 
 export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elIndex: number }) => {

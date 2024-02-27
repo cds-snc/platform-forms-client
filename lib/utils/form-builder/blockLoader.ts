@@ -1,6 +1,6 @@
 import { FormElement } from "@lib/types";
 import axios from "axios";
-import { allowedTemplates } from "@clientComponents/form-builder/util";
+import { allowedTemplates } from "@lib/utils/form-builder";
 
 export type LoaderType = (typeof allowedTemplates)[number];
 

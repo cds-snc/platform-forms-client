@@ -7,7 +7,7 @@ import { ExpandingInput } from "app/(gcforms)/[locale]/(form administration)/for
 import { Language } from "@lib/types/form-builder-types";
 import { useTemplateStore } from "@lib/store";
 
-import { cleanInput } from "@clientComponents/form-builder/util";
+import { cleanInput } from "@lib/utils/form-builder";
 import { useRefsContext } from "../../RefsContext";
 
 export const QuestionInput = ({

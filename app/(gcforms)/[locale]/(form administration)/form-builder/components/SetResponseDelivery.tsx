@@ -12,7 +12,7 @@ import { Radio } from "./shared";
 import { Button } from "@clientComponents/globals";
 import { useTemplateApi } from "@lib/hooks";
 import { useTemplateStore } from "@lib/store";
-import { completeEmailAddressRegex } from "@clientComponents/form-builder/util";
+import { completeEmailAddressRegex } from "@lib/utils/form-builder";
 import { toast } from "./shared/Toast";
 import { ResponseDeliveryHelpButton } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";
 import { ClassificationType, ClassificationSelect } from "./ClassificationSelect";

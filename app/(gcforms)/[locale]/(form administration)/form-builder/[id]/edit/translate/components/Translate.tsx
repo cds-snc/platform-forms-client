@@ -18,7 +18,7 @@ import { FieldsetLegend, SectionTitle } from ".";
 import { SaveButton } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/SaveButton";
 
 import { FormElement } from "@lib/types";
-import { alphabet, sortByLayout } from "@clientComponents/form-builder/util";
+import { alphabet, sortByLayout } from "@lib/utils/form-builder";
 import { useRehydrate } from "@lib/hooks";
 
 const Element = ({

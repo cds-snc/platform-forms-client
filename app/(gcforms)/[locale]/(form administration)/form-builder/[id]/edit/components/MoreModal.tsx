@@ -6,7 +6,7 @@ import { useTemplateStore, useModalStore } from "@lib/store";
 import { Button } from "@clientComponents/globals";
 import { Modal } from "./index";
 import { ModalButton, ModalForm } from "./index";
-import { getPathString, getElementIndexes } from "@clientComponents/form-builder/getPath";
+import { getPathString, getElementIndexes } from "@lib/utils/form-builder/getPath";
 import { useRefsContext } from "./RefsContext";
 
 export const MoreModal = ({

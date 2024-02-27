@@ -7,7 +7,7 @@ import { useTemplateApi, useAllowPublish, useRehydrate } from "@lib/hooks";
 import { CancelIcon, CircleCheckIcon, LockIcon } from "@serverComponents/icons";
 import { Button, Alert } from "@clientComponents/globals";
 import Link from "next/link";
-import { isVaultDelivery } from "@clientComponents/form-builder/util";
+import { isVaultDelivery } from "@lib/utils/form-builder";
 import { classificationOptions } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/ClassificationSelect";
 import { logMessage } from "@lib/logger";
 import { DownloadFileButton } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";

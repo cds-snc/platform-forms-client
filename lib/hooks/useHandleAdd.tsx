@@ -8,13 +8,13 @@ import {
   blockLoader,
   LoaderType,
 } from "../../components/clientComponents/form-builder/blockLoader";
-import { allowedTemplates } from "@clientComponents/form-builder/util";
+import { allowedTemplates } from "@lib/utils/form-builder";
 import {
   defaultField,
   createElement,
   setTitle,
   setDescription,
-} from "@clientComponents/form-builder/utils/itemHelper";
+} from "@lib/utils/form-builder/itemHelper";
 
 export const useHandleAdd = () => {
   const { add, addSubItem } = useTemplateStore((s) => ({

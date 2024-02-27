@@ -1,4 +1,4 @@
-import { padAngleBrackets } from "@clientComponents/form-builder/util";
+import { padAngleBrackets } from "@lib/utils/form-builder";
 /**
  * Cleans up the provided JSON to remove any opening/closing angle brackets
  * without preceding or trailing spaces (ie <something> becomes < something >)

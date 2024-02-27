@@ -3,7 +3,7 @@ import React from "react";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { RichTextEditor } from "./lexical-editor/RichTextEditor";
 import { LocalizedElementProperties } from "@lib/types/form-builder-types";
-import { getPath } from "@clientComponents/form-builder/getPath";
+import { getPath } from "@lib/utils/form-builder/getPath";
 import { useTranslation } from "@i18n/client";
 
 export const RichText = ({ id, elIndex }: { id: number; elIndex: number }) => {
