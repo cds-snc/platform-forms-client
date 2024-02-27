@@ -1,9 +1,21 @@
 import { serverTranslation } from "@i18n";
 import { getUnprocessedSubmissionsForUser } from "@lib/users";
 import { getAllTemplates } from "@lib/templates";
-import { UserAbility } from "@lib/types";
-import { CardGrid } from "./CardGrid";
+import { DeliveryOption, UserAbility } from "@lib/types";
 import { ucfirst } from "@lib/client/clientHelpers";
+import { Card } from "./Card";
+
+export interface CardI {
+  id: string;
+  titleEn: string;
+  titleFr: string;
+  deliveryOption: DeliveryOption;
+  name: string;
+  isPublished: boolean;
+  date: string;
+  url: string;
+  overdue: number;
+}
 
 export const Cards = async ({
   filter,
@@ -56,7 +68,7 @@ export const Cards = async ({
     })
     .sort((itemA, itemB) => {
       return new Date(itemB.date).getTime() - new Date(itemA.date).getTime();
-    });
+    }) as CardI[];
 
   // TODO: more testing with below live region. it may need to be placed higher in the tree
   return (
@@ -68,7 +80,30 @@ export const Cards = async ({
         className={`pt-8`}
       >
         {templates && templates?.length > 0 ? (
-          <CardGrid cards={templates} />
+          <ol
+            className="grid gap-4 p-0"
+            style={{ gridTemplateColumns: "repeat(auto-fill, minmax(27rem, 1fr))" }}
+          >
+            {templates.map((card) => {
+              return (
+                <li className="flex flex-col" key={card.id}>
+                  <Card
+                    id={`${card.id}`}
+                    name={card.name}
+                    titleEn={card.titleEn}
+                    titleFr={card.titleFr}
+                    url={card.url}
+                    date={card.date}
+                    isPublished={card.isPublished}
+                    deliveryOption={card.deliveryOption || null}
+                    overdue={card.overdue}
+                    // TODO: remove once add server action to delete a form
+                    cards={templates}
+                  />
+                </li>
+              );
+            })}
+          </ol>
         ) : (
           <p>{t(`cards.no${ucfirst(filter || "")}Forms`)}</p>
         )}

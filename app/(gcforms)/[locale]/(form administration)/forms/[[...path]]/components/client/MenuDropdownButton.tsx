@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import copy from "copy-to-clipboard";
 import { getForm } from "../../actions";
 import { getDate, slugify } from "@lib/client/clientHelpers";
-import { CardProps } from "../server/Card";
+import { CardI } from "../server/Cards";
 import { ConfirmDelete } from "@clientComponents/form-builder/app/ConfirmDelete";
 import { useCallback, useState } from "react";
 import { useRefresh } from "@lib/hooks";
@@ -20,10 +20,10 @@ export const MenuDropdownButton = ({
   cards,
 }: {
   id: string;
-  card: CardProps;
+  card: CardI;
   direction: string;
   // TODO: remove once add server acction + refresh data to delete a form
-  cards: Array<CardProps>;
+  cards: CardI[];
 }) => {
   const { t, i18n } = useTranslation(["my-forms", "common"]);
   const menuItemsList: Array<MenuDropdownItemI> = [

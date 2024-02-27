@@ -4,6 +4,7 @@ import Markdown from "markdown-to-jsx";
 import { MenuDropdownButton } from "../client/MenuDropdownButton";
 import { serverTranslation } from "@i18n";
 import Link from "next/link";
+import { CardI } from "./Cards";
 
 const CardBanner = async ({ isPublished }: { isPublished: boolean }) => {
   const { t } = await serverTranslation(["my-forms", "common"]);
@@ -132,7 +133,7 @@ export interface CardProps {
   isPublished: boolean;
   overdue: number;
   deliveryOption?: { emailAddress?: string } | null;
-  cards: Array<CardProps>;
+  cards: CardI[];
 }
 
 export const Card = async (props: CardProps) => {
@@ -145,7 +146,7 @@ export const Card = async (props: CardProps) => {
     isPublished,
     deliveryOption,
     overdue,
-  } as CardProps;
+  } as CardI;
 
   return (
     <div
