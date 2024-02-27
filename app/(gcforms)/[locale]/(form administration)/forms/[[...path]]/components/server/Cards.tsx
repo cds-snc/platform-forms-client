@@ -14,7 +14,7 @@ export interface CardI {
   isPublished: boolean;
   date: string;
   url: string;
-  overdue: number;
+  overdue?: number;
 }
 
 export const Cards = async ({
@@ -37,7 +37,7 @@ export const Cards = async ({
   const where = {
     isPublished: filter === "published" ? true : filter === "drafts" ? false : undefined,
   };
-  // TODO: sort using orderby -- see docs
+
   const templates = (await getAllTemplates(ability, id, where))
     .map((template) => {
       const {
@@ -66,10 +66,7 @@ export const Cards = async ({
         template.overdue = overdue[template.id].numberOfSubmissions;
       }
       return template;
-    })
-    .sort((itemA, itemB) => {
-      return new Date(itemB.date).getTime() - new Date(itemA.date).getTime();
-    }) as CardI[];
+    });
 
   // TODO: more testing with below live region. it may need to be placed higher in the tree
   return (

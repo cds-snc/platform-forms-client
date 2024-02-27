@@ -310,6 +310,9 @@ export async function getAllTemplates(
           deliveryOption: true,
           securityAttribute: true,
         },
+        orderBy: {
+          created_at: "desc",
+        },
       })
       .catch((e) => prismaErrors(e, []));
 
