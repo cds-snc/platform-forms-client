@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardProps } from "../client/Card";
+import { Card, CardProps } from "./Card";
 
 /* handle delete gets added via the CardGrid component */
 type CardWithoutHandleDelete = Omit<CardProps, "handleDelete">;

@@ -1,13 +1,12 @@
-"use client";
 import React from "react";
 import { MessageIcon, EnvelopeIcon, PreviewIcon, DesignIcon } from "@serverComponents/icons";
 import Markdown from "markdown-to-jsx";
-import { MenuDropdownButton } from "./MenuDropdownButton";
-import { useTranslation } from "react-i18next";
+import { MenuDropdownButton } from "../client/MenuDropdownButton";
+import { serverTranslation } from "@i18n";
 import Link from "next/link";
 
-const CardBanner = ({ isPublished }: { isPublished: boolean }) => {
-  const { t } = useTranslation(["my-forms", "common"]);
+const CardBanner = async ({ isPublished }: { isPublished: boolean }) => {
+  const { t } = await serverTranslation(["my-forms", "common"]);
   return (
     <div
       className={
@@ -31,11 +30,11 @@ interface CardLinksProps {
   deliveryOption?: { emailAddress?: string } | null;
 }
 
-const CardLinks = ({ isPublished, url, id, deliveryOption, overdue }: CardLinksProps) => {
+const CardLinks = async ({ isPublished, url, id, deliveryOption, overdue }: CardLinksProps) => {
   const {
     t,
     i18n: { language },
-  } = useTranslation(["my-forms", "common"]);
+  } = await serverTranslation(["my-forms", "common"]);
   const responsesLink = `/${language}/form-builder/${id}/responses/new`;
 
   const textData = {
@@ -98,14 +97,14 @@ const CardLinks = ({ isPublished, url, id, deliveryOption, overdue }: CardLinksP
   );
 };
 
-const CardTitle = ({ name }: { name: string }) => {
-  const { t } = useTranslation(["my-forms", "common"]);
+const CardTitle = async ({ name }: { name: string }) => {
+  const { t } = await serverTranslation(["my-forms", "common"]);
   const classes = "mb-0 mr-2 overflow-hidden pb-0 text-base font-bold";
   return <h2 className={classes}>{name ? name : t("unnamedForm", { ns: "form-builder" })}</h2>;
 };
 
-const CardDate = ({ id, date }: { id: string; date: string }) => {
-  const { t } = useTranslation(["my-forms", "common"]);
+const CardDate = async ({ id, date }: { id: string; date: string }) => {
+  const { t } = await serverTranslation(["my-forms", "common"]);
   function formatDate(date: string) {
     try {
       const dateParts = new Date(date).toLocaleDateString("en-GB").split("/");
@@ -136,7 +135,7 @@ export interface CardProps {
   cards: Array<CardProps>;
 }
 
-export const Card = (props: CardProps) => {
+export const Card = async (props: CardProps) => {
   const { id, name, url, date, isPublished, deliveryOption, overdue, cards } = props;
   const card = {
     id,
