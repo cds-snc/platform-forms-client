@@ -4,10 +4,7 @@ import { useTranslation } from "@i18n/client";
 
 import { FormElementTypes } from "@lib/types";
 import { useTemplateStore } from "@lib/store";
-import {
-  blockLoader,
-  LoaderType,
-} from "../../components/clientComponents/form-builder/blockLoader";
+import { blockLoader, LoaderType } from "../utils/form-builder/blockLoader";
 import { allowedTemplates } from "@lib/utils/form-builder";
 import {
   defaultField,

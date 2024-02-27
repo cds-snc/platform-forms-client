@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 
 import { useTemplateStore, clearTemplateStore } from "@lib/store";
 import { DesignIcon, ExternalLinkIcon, WarningIcon } from "@serverComponents/icons";
-import { errorMessage, validateTemplate } from "@clientComponents/form-builder/validate";
+import { errorMessage, validateTemplate } from "@lib/utils/form-builder/validate";
 import Link from "next/link";
 
 export const Start = () => {

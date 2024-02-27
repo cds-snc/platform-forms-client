@@ -1,5 +1,5 @@
 import { FormElement } from "@lib/types";
-import { setDescription, setTitle, createElement } from "./itemHelper";
+import { setDescription, setTitle, createElement } from "../itemHelper";
 
 function getItem() {
   return {
