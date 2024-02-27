@@ -66,7 +66,7 @@ export const Start = () => {
         window.dataLayer.push({
           event: "open_form_file",
         });
-        router.push(`/${language}/form-builder/preview`);
+        router.push(`/${language}/form-builder/0000/preview`);
       };
     } catch (e) {
       if (e instanceof Error) {
