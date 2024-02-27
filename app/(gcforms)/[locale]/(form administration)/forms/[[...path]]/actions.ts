@@ -8,8 +8,18 @@ import {
 } from "@lib/templates";
 import { logMessage } from "@lib/logger";
 import { revalidatePath } from "next/cache";
+import { listAllSubmissions } from "@lib/vault";
+import { detectOldUnprocessedSubmissions } from "@lib/nagware";
+import { cache } from "react";
 
 class MalformedAPIRequest extends Error {}
+
+// Note: copied from manage-forms actions
+export const authCheck = cache(async () => {
+  const session = await auth();
+  if (!session) throw new Error("No session found");
+  return createAbility(session);
+});
 
 export async function getForm(formId: string) {
   try {
@@ -17,9 +27,7 @@ export async function getForm(formId: string) {
       throw new MalformedAPIRequest("Invalid or missing formID");
     }
 
-    const session = await auth();
-    if (!session) throw new Error("No session");
-    const ability = createAbility(session);
+    const ability = await authCheck();
 
     const response = await getFullTemplateByID(ability, formId);
     if (response === null) {
@@ -44,11 +52,9 @@ export async function getForm(formId: string) {
   }
 }
 
-// Note: copied from manage-forms and added revalidatePath()
+// Note: copied from manage-forms actions and added revalidatePath()
 export const deleteForm = async (id: string) => {
-  const session = await auth();
-  if (!session) throw new Error("No session found");
-  const ability = createAbility(session);
+  const ability = await authCheck();
 
   const result = deleteTemplate(ability, id).catch((error) => {
     if (error instanceof TemplateHasUnprocessedSubmissions) {
@@ -61,4 +67,12 @@ export const deleteForm = async (id: string) => {
   revalidatePath("(gcforms)/[locale]/(form administration)/forms");
 
   return result;
+};
+
+// Note: copied from manage-forms actions
+export const getUnprocessedSubmissionsForTemplate = async (templateId: string) => {
+  const ability = await authCheck();
+  const allSubmissions = await listAllSubmissions(ability, templateId);
+
+  return detectOldUnprocessedSubmissions(allSubmissions.submissions);
 };

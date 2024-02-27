@@ -1,5 +1,4 @@
 import { serverTranslation } from "@i18n";
-import { getUnprocessedSubmissionsForUser } from "@lib/users";
 import { getAllTemplates } from "@lib/templates";
 import { DeliveryOption, UserAbility } from "@lib/types";
 import { ucfirst } from "@lib/client/clientHelpers";
@@ -31,42 +30,30 @@ export const Cards = async ({
     i18n: { language },
   } = await serverTranslation(["my-forms"]);
 
-  // TODO: instead do in each card to check if it is overdue. E.g. settings manage form actions..
-  const overdue = await getUnprocessedSubmissionsForUser(ability, id);
-
   const where = {
     isPublished: filter === "published" ? true : filter === "drafts" ? false : undefined,
   };
-
-  const templates = (await getAllTemplates(ability, id, where))
-    .map((template) => {
-      const {
-        id,
-        form: { titleEn = "", titleFr = "" },
-        name,
-        deliveryOption = { emailAddress: "" },
-        isPublished,
-        updatedAt,
-      } = template;
-      return {
-        id,
-        titleEn,
-        titleFr,
-        deliveryOption,
-        name,
-        isPublished,
-        date: updatedAt ?? Date.now().toString(),
-        url: `/${language}/id/${id}`,
-        overdue: 0,
-      };
-    })
-    .map((template) => {
-      // Mark any overdue templates
-      if (overdue[template.id]) {
-        template.overdue = overdue[template.id].numberOfSubmissions;
-      }
-      return template;
-    });
+  const templates = (await getAllTemplates(ability, id, where)).map((template) => {
+    const {
+      id,
+      form: { titleEn = "", titleFr = "" },
+      name,
+      deliveryOption = { emailAddress: "" },
+      isPublished,
+      updatedAt,
+    } = template;
+    return {
+      id,
+      titleEn,
+      titleFr,
+      deliveryOption,
+      name,
+      isPublished,
+      date: updatedAt ?? Date.now().toString(),
+      url: `/${language}/id/${id}`,
+      overdue: 0,
+    };
+  });
 
   // TODO: more testing with below live region. it may need to be placed higher in the tree
   return (

@@ -5,6 +5,7 @@ import { Menu } from "../client/Menu";
 import { serverTranslation } from "@i18n";
 import Link from "next/link";
 import { CardI } from "./Cards";
+import { getUnprocessedSubmissionsForTemplate } from "../../actions";
 
 const CardBanner = async ({ isPublished }: { isPublished: boolean }) => {
   const { t } = await serverTranslation(["my-forms", "common"]);
@@ -124,6 +125,8 @@ const CardDate = async ({ id, date }: { id: string; date: string }) => {
 };
 
 export const Card = async ({ card }: { card: CardI }) => {
+  const overdue = await getUnprocessedSubmissionsForTemplate(card.id);
+
   return (
     <div
       className="flex h-full flex-col justify-between rounded border-1 border-slate-500 bg-white"
@@ -138,7 +141,7 @@ export const Card = async ({ card }: { card: CardI }) => {
         </div>
 
         <CardLinks
-          overdue={card.overdue}
+          overdue={overdue?.numberOfSubmissions ?? 0}
           isPublished={card.isPublished}
           url={card.url}
           id={card.id}
