@@ -8,35 +8,41 @@ import { useTranslation } from "react-i18next";
 import copy from "copy-to-clipboard";
 import { getForm } from "../../actions";
 import { getDate, slugify } from "@lib/client/clientHelpers";
-import { CardI } from "../server/Cards";
-import { ConfirmDelete } from "@clientComponents/form-builder/app/ConfirmDelete";
 import { useCallback, useState } from "react";
-import { useRefresh } from "@lib/hooks";
+import { ConfirmDelete } from "./ConfirmDelete";
 
 export const MenuDropdownButton = ({
   id,
-  card,
-  direction,
-  cards,
+  name,
+  isPublished,
+  direction = "up",
 }: {
   id: string;
-  card: CardI;
-  direction: string;
-  // TODO: remove once add server acction + refresh data to delete a form
-  cards: CardI[];
+  name: string;
+  isPublished: boolean;
+  direction?: "up" | "down";
 }) => {
-  const { t, i18n } = useTranslation(["my-forms", "common"]);
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation(["my-forms"]);
+  const [showConfirm, setShowConfirm] = useState<boolean>(false);
+
+  const handleDelete = useCallback(() => {
+    setShowConfirm(true);
+  }, []);
+
   const menuItemsList: Array<MenuDropdownItemI> = [
     {
       title: t("card.menu.save"),
       callback: () => {
-        downloadForm(card.name, id);
+        downloadForm(name, id);
         return { message: "" };
       },
     },
     {
       title: t("card.menu.settings"),
-      url: `/${i18n.language}/form-builder/settings/${id}`,
+      url: `/${language}/form-builder/settings/${id}`,
     },
     {
       title: t("card.menu.delete"),
@@ -50,7 +56,7 @@ export const MenuDropdownButton = ({
   ];
 
   // Show slightly different list items depending on whether a Published or Draft card
-  if (card.isPublished) {
+  if (isPublished) {
     menuItemsList.unshift({
       title: t("card.menu.copyLink"),
       callback: copyLinkCallback,
@@ -59,11 +65,11 @@ export const MenuDropdownButton = ({
     menuItemsList.unshift(
       {
         title: t("card.menu.edit"),
-        url: `/${i18n.language}/form-builder/edit/${id}`,
+        url: `/${language}/form-builder/${id}/edit`,
       },
       {
         title: t("card.menu.preview"),
-        url: `/${i18n.language}/form-builder/preview/${id} `,
+        url: `/${language}/form-builder/preview/${id} `,
       }
     );
   }
@@ -72,7 +78,7 @@ export const MenuDropdownButton = ({
     const response = await getForm(id);
     const fileName = name
       ? name
-      : i18n.language === "fr"
+      : language === "fr"
       ? response.form.titleFr
       : response.form.titleEn;
     const data = JSON.stringify(response.form, null, 2);
@@ -85,7 +91,7 @@ export const MenuDropdownButton = ({
   }
 
   function copyLinkCallback(): MenuDropdownItemCallback {
-    const path = `${window.location.origin}/${i18n.language}/id/${id}`;
+    const path = `${window.location.origin}/${language}/id/${id}`;
     if (copy(path)) {
       return {
         message: t("card.menu.coppiedToClipboard"),
@@ -96,15 +102,6 @@ export const MenuDropdownButton = ({
       isError: true,
     };
   }
-
-  const [showConfirm, setShowConfirm] = useState<boolean>(false);
-
-  // TODO: remove once add server acction + refresh data to delete a form
-  const { refreshData } = useRefresh(cards);
-
-  const handleDelete = useCallback(() => {
-    setShowConfirm(true);
-  }, []);
 
   return (
     <>
@@ -117,11 +114,10 @@ export const MenuDropdownButton = ({
       <ConfirmDelete
         onDeleted={() => {
           setShowConfirm(false);
-          refreshData();
         }}
         show={showConfirm}
-        id={card.id}
-        isPublished={card.isPublished}
+        id={id}
+        isPublished={isPublished}
         handleClose={setShowConfirm}
       />
     </>

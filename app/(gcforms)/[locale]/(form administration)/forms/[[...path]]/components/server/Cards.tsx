@@ -29,14 +29,15 @@ export const Cards = async ({
   const {
     t,
     i18n: { language },
-  } = await serverTranslation(["my-forms", "form-builder"]);
+  } = await serverTranslation(["my-forms"]);
 
-  // TODO: can this be done in the below DB call?
+  // TODO: instead do in each card to check if it is overdue. E.g. settings manage form actions..
   const overdue = await getUnprocessedSubmissionsForUser(ability, id);
 
   const where = {
     isPublished: filter === "published" ? true : filter === "drafts" ? false : undefined,
   };
+  // TODO: sort using orderby -- see docs
   const templates = (await getAllTemplates(ability, id, where))
     .map((template) => {
       const {
@@ -87,19 +88,7 @@ export const Cards = async ({
             {templates.map((card) => {
               return (
                 <li className="flex flex-col" key={card.id}>
-                  <Card
-                    id={`${card.id}`}
-                    name={card.name}
-                    titleEn={card.titleEn}
-                    titleFr={card.titleFr}
-                    url={card.url}
-                    date={card.date}
-                    isPublished={card.isPublished}
-                    deliveryOption={card.deliveryOption || null}
-                    overdue={card.overdue}
-                    // TODO: remove once add server action to delete a form
-                    cards={templates}
-                  />
+                  <Card card={card} />
                 </li>
               );
             })}

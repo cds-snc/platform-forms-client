@@ -13,6 +13,7 @@ export const NewFormButton = () => {
   const createNewFormRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // TODO: Ask Tim and dave, ok to remove? or how to deal with..
     const handleClick = () => {
       clearTemplateStore();
     };

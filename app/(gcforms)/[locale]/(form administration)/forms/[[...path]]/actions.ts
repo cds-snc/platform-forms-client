@@ -1,8 +1,13 @@
 "use server";
 import { auth } from "@lib/auth";
 import { AccessControlError, createAbility } from "@lib/privileges";
-import { getFullTemplateByID } from "@lib/templates";
+import {
+  TemplateHasUnprocessedSubmissions,
+  deleteTemplate,
+  getFullTemplateByID,
+} from "@lib/templates";
 import { logMessage } from "@lib/logger";
+import { revalidatePath } from "next/cache";
 
 class MalformedAPIRequest extends Error {}
 
@@ -38,3 +43,22 @@ export async function getForm(formId: string) {
     }
   }
 }
+
+// Note: copied from manage-forms and added revalidatePath()
+export const deleteForm = async (id: string) => {
+  const session = await auth();
+  if (!session) throw new Error("No session found");
+  const ability = createAbility(session);
+
+  const result = deleteTemplate(ability, id).catch((error) => {
+    if (error instanceof TemplateHasUnprocessedSubmissions) {
+      throw new Error("Responses Exist");
+    } else {
+      throw new Error("Failed to Delete Form");
+    }
+  });
+
+  revalidatePath("(gcforms)/[locale]/(form administration)/forms");
+
+  return result;
+};

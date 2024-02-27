@@ -35,7 +35,7 @@ const CardLinks = async ({ isPublished, url, id, deliveryOption, overdue }: Card
   const {
     t,
     i18n: { language },
-  } = await serverTranslation(["my-forms", "common"]);
+  } = await serverTranslation(["my-forms"]);
   const responsesLink = `/${language}/form-builder/${id}/responses/new`;
 
   const textData = {
@@ -123,57 +123,38 @@ const CardDate = async ({ id, date }: { id: string; date: string }) => {
   );
 };
 
-export interface CardProps {
-  id: string;
-  titleEn: string;
-  titleFr: string;
-  name: string;
-  url: string;
-  date: string;
-  isPublished: boolean;
-  overdue: number;
-  deliveryOption?: { emailAddress?: string } | null;
-  cards: CardI[];
-}
-
-export const Card = async (props: CardProps) => {
-  const { id, name, url, date, isPublished, deliveryOption, overdue, cards } = props;
-  const card = {
-    id,
-    name,
-    url,
-    date,
-    isPublished,
-    deliveryOption,
-    overdue,
-  } as CardI;
-
+export const Card = async ({ card }: { card: CardI }) => {
   return (
     <div
       className="flex h-full flex-col justify-between rounded border-1 border-slate-500 bg-white"
-      data-testid={`card-${id}`}
+      data-testid={`card-${card.id}`}
     >
       <div className="mt-3 flex flex-col justify-between">
         <div className="flex flex-col px-3">
           <div className="flex h-full justify-between">
-            <CardTitle name={name} />
-            <CardBanner isPublished={isPublished} />
+            <CardTitle name={card.name} />
+            <CardBanner isPublished={card.isPublished} />
           </div>
         </div>
 
         <CardLinks
-          overdue={overdue}
-          isPublished={isPublished}
-          url={url}
-          id={id}
-          deliveryOption={deliveryOption}
+          overdue={card.overdue}
+          isPublished={card.isPublished}
+          url={card.url}
+          id={card.id}
+          deliveryOption={card.deliveryOption}
         />
       </div>
 
       <div className="mb-4 flex items-center justify-between px-3">
-        <CardDate id={id} date={date} />
+        <CardDate id={card.id} date={card.date} />
         <div className="flex items-center text-sm">
-          <MenuDropdownButton id={id} card={card} direction={"up"} cards={cards} />
+          <MenuDropdownButton
+            id={card.id}
+            name={card.name}
+            isPublished={card.isPublished}
+            direction={"up"}
+          />
         </div>
       </div>
     </div>
