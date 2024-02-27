@@ -1,5 +1,5 @@
 import { serverTranslation } from "@i18n";
-import { ResponseDelivery } from "app/(gcforms)/[locale]/(form administration)/form-builder/components";
+import { ResponseDelivery } from "@formBuilder/components";
 import { Metadata } from "next";
 
 export async function generateMetadata({

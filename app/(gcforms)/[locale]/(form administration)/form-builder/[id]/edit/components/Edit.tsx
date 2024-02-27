@@ -8,12 +8,12 @@ import { Language, LocalizedFormProperties } from "@lib/types/form-builder-types
 import { ElementPanel, ConfirmationDescription, PrivacyDescription } from ".";
 import { RefsProvider } from "./RefsContext";
 import { RichTextLocked } from "./elements";
-import { ExpandingInput } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";
+import { ExpandingInput } from "@formBuilder/components/shared";
 import { useTemplateStore } from "@lib/store";
 import { getQuestionNumber, sortByLayout } from "@lib/utils/form-builder";
 import { SettingsPanel } from "./settings/SettingsPanel";
 import { cleanInput } from "@lib/utils/form-builder";
-import { SaveButton } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/SaveButton";
+import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 import { useRehydrate } from "@lib/hooks/form-builder";
 
 export const Edit = () => {

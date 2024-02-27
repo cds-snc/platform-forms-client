@@ -3,14 +3,10 @@ import React, { useCallback, useState } from "react";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
-
 import { ChevronDown, ChevronRight, ShareIcon, LinkIcon } from "@serverComponents/icons";
-
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { ShareModal } from "../../../../app/(gcforms)/[locale]/(form administration)/form-builder/components/ShareModal";
 import { LinksSubMenu } from "./LinksSubMenu";
-import { ShareModalUnauthenticated } from "../../../../app/(gcforms)/[locale]/(form administration)/form-builder/components";
-
+import { ShareModal, ShareModalUnauthenticated } from "@formBuilder/components";
 import { useRefStore } from "@lib/hooks/form-builder/useRefStore";
 
 export const ShareDropdown = () => {

@@ -1,11 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { FormElementTypes } from "@lib/types";
-import {
-  useDialogRef,
-  Dialog,
-  ListBox,
-} from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";
+import { useDialogRef, Dialog, ListBox } from "@formBuilder/components/shared";
 import { useElementOptions } from "@lib/hooks/form-builder";
 import { ElementOption, ElementOptionsFilter } from "@lib/types/form-builder-types";
 import { Button } from "@clientComponents/globals";

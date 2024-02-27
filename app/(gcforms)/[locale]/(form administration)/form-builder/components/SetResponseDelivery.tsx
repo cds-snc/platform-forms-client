@@ -14,7 +14,7 @@ import { useTemplateApi } from "@lib/hooks/form-builder";
 import { useTemplateStore } from "@lib/store";
 import { completeEmailAddressRegex } from "@lib/utils/form-builder";
 import { toast } from "./shared/Toast";
-import { ResponseDeliveryHelpButton } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";
+import { ResponseDeliveryHelpButton } from "@formBuilder/components/shared";
 import { ClassificationType, ClassificationSelect } from "./ClassificationSelect";
 
 enum DeliveryOption {

@@ -1,4 +1,4 @@
-import { ToastContainer } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/Toast";
+import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { SkipLink, Footer } from "@clientComponents/globals";
 import { Header } from "@clientComponents/globals/Header/Header";
 import { cn } from "@lib/utils";

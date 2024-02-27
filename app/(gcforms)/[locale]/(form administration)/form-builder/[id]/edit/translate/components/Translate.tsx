@@ -15,7 +15,7 @@ import { DownloadCSV } from "./DownloadCSV";
 import { RichTextEditor } from "../../components/elements/lexical-editor/RichTextEditor";
 import { LanguageLabel } from "./LanguageLabel";
 import { FieldsetLegend, SectionTitle } from ".";
-import { SaveButton } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/SaveButton";
+import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 
 import { FormElement } from "@lib/types";
 import { alphabet, sortByLayout } from "@lib/utils/form-builder";
