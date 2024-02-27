@@ -4,7 +4,10 @@ import { useTranslation } from "@i18n/client";
 
 import { FormElementTypes } from "@lib/types";
 import { useTemplateStore } from "@clientComponents/form-builder/store";
-import { blockLoader, LoaderType } from "../components/clientComponents/form-builder/blockLoader";
+import {
+  blockLoader,
+  LoaderType,
+} from "../../components/clientComponents/form-builder/blockLoader";
 import { allowedTemplates } from "@clientComponents/form-builder/util";
 import {
   defaultField,

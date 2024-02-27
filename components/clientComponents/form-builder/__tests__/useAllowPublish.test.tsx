@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { TemplateStoreProvider, TemplateStoreProps } from "../store/useTemplateStore";
-import { useAllowPublish } from "../../../../hooks/useAllowPublish";
+import { useAllowPublish } from "../../../../lib/hooks/useAllowPublish";
 import { renderHook, act } from "@testing-library/react";
 import {
   isTitleTranslated,
@@ -9,7 +9,7 @@ import {
   isFormElementTranslated,
   areChoicesTranslated,
   MissingTranslation,
-} from "../../../../hooks/useAllowPublish";
+} from "../../../../lib/hooks/useAllowPublish";
 import { FormElementTypes } from "@lib/types";
 
 const promise = Promise.resolve();

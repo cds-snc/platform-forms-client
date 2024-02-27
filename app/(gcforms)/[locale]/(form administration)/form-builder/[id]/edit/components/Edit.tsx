@@ -14,7 +14,7 @@ import { getQuestionNumber, sortByLayout } from "@clientComponents/form-builder/
 import { SettingsPanel } from "./settings/SettingsPanel";
 import { cleanInput } from "@clientComponents/form-builder/util";
 import { SaveButton } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/SaveButton";
-import { useRehydrate } from "hooks";
+import { useRehydrate } from "@lib/hooks";
 
 export const Edit = () => {
   const { t } = useTranslation("form-builder");

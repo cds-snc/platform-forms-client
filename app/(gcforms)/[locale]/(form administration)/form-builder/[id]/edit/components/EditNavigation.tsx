@@ -2,7 +2,7 @@
 import React from "react";
 import { useTranslation } from "@i18n/client";
 import { SubNavLink } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/navigation/SubNavLink";
-import { useActivePathname } from "hooks";
+import { useActivePathname } from "@lib/hooks";
 import { LangSwitcher } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/LangSwitcher";
 import { QuestionsIcon, TranslateIcon } from "@serverComponents/icons";
 import { useTemplateStore } from "@clientComponents/form-builder/store";

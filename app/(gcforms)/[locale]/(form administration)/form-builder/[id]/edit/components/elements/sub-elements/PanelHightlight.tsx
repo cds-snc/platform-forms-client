@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 
-import { useIsWithin } from "hooks/useIsWithin";
+import { useIsWithin } from "@lib/hooks/useIsWithin";
 
 export const PanelHightLight = ({
   children,

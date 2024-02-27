@@ -3,7 +3,7 @@ import React, { useCallback, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useRouter } from "next/navigation";
 import { useTemplateStore } from "@clientComponents/form-builder/store";
-import { useTemplateApi, useAllowPublish, useRehydrate } from "hooks";
+import { useTemplateApi, useAllowPublish, useRehydrate } from "@lib/hooks";
 import { CancelIcon, CircleCheckIcon, LockIcon } from "@serverComponents/icons";
 import { Button, Alert } from "@clientComponents/globals";
 import Link from "next/link";
