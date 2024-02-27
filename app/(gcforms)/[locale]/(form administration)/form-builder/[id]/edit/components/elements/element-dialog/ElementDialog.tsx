@@ -6,10 +6,10 @@ import {
   Dialog,
   ListBox,
 } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";
-import { useElementOptions } from "@clientComponents/form-builder/hooks";
+import { useElementOptions } from "hooks";
 import { ElementOption, ElementOptionsFilter } from "@clientComponents/form-builder/types";
 import { Button } from "@clientComponents/globals";
-import { Groups } from "@clientComponents/form-builder/hooks/useElementOptions";
+import { Groups } from "hooks/useElementOptions";
 import { ElementFilters } from "./ElementFilters";
 
 export type SelectedGroupState = {

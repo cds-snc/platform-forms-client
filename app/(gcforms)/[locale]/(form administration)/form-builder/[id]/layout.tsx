@@ -7,7 +7,7 @@ import { AccessControlError, createAbility } from "@lib/privileges";
 import { getFullTemplateByID } from "@lib/templates";
 import { redirect } from "next/navigation";
 import { TemplateStoreProvider } from "@clientComponents/form-builder/store";
-import { TemplateApiProvider } from "@clientComponents/form-builder/hooks";
+import { TemplateApiProvider } from "hooks";
 import { RefStoreProvider } from "@lib/hooks/useRefStore";
 
 export default async function Layout({

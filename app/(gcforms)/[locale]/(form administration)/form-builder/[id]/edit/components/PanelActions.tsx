@@ -15,7 +15,7 @@ import {
   AddIcon,
 } from "@serverComponents/icons";
 
-import { usePanelActions } from "@clientComponents/form-builder/hooks";
+import { usePanelActions } from "hooks";
 import { ElementDialog } from "./elements/element-dialog/ElementDialog";
 import { PanelActionsButton } from "./PanelActionsButton";
 

@@ -5,7 +5,7 @@ import { FormElementWithIndex } from "@clientComponents/form-builder/types";
 import { useTemplateStore } from "@clientComponents/form-builder/store";
 import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
 
-import { useIsWithin, useHandleAdd } from "@clientComponents/form-builder/hooks";
+import { useIsWithin, useHandleAdd } from "hooks";
 import { useRefsContext } from "./RefsContext";
 import { FormElementTypes, FormElement } from "@lib/types";
 

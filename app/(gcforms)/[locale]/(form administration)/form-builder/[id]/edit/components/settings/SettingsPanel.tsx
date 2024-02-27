@@ -9,7 +9,7 @@ import {
 } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/ClassificationSelect";
 import { Logos, options } from "../../../settings/branding/components";
 import { useTemplateStore } from "@clientComponents/form-builder/store";
-import { useTemplateApi } from "@clientComponents/form-builder/hooks";
+import { useTemplateApi } from "hooks";
 import { SettingsModal } from "./SettingsDialog";
 import { Tooltip } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/Tooltip";
 
