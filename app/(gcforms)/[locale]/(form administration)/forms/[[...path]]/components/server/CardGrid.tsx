@@ -1,9 +1,5 @@
-"use client";
-import React, { useCallback, useState, useRef } from "react";
-
-import { ConfirmDelete } from "@clientComponents/form-builder/app/ConfirmDelete";
-import { useRefresh } from "@lib/hooks";
-import { Card, CardProps } from "./Card";
+import React from "react";
+import { Card, CardProps } from "../client/Card";
 
 /* handle delete gets added via the CardGrid component */
 type CardWithoutHandleDelete = Omit<CardProps, "handleDelete">;
@@ -12,17 +8,7 @@ interface CardGridProps {
   cards: Array<CardWithoutHandleDelete>;
 }
 
-export const CardGrid = (props: CardGridProps): React.ReactElement => {
-  const { cards } = props;
-  const activeCard = useRef<CardProps | null>(null);
-  const [showConfirm, setShowConfirm] = useState<boolean>(false);
-  const { refreshData } = useRefresh(cards);
-
-  const handleDelete = useCallback((card: CardProps) => {
-    setShowConfirm(true);
-    activeCard.current = card;
-  }, []);
-
+export const CardGrid = async ({ cards }: CardGridProps) => {
   return (
     <>
       <ol
@@ -43,24 +29,14 @@ export const CardGrid = (props: CardGridProps): React.ReactElement => {
                   date={card.date}
                   isPublished={card.isPublished}
                   deliveryOption={card.deliveryOption || null}
-                  handleDelete={handleDelete}
                   overdue={card.overdue}
+                  // TODO: remove once add server action to delete a form
+                  cards={cards}
                 ></Card>
               </li>
             );
           })}
       </ol>
-
-      <ConfirmDelete
-        onDeleted={() => {
-          setShowConfirm(false);
-          refreshData();
-        }}
-        show={showConfirm}
-        id={activeCard.current?.id || ""}
-        isPublished={activeCard.current?.isPublished || false}
-        handleClose={setShowConfirm}
-      />
     </>
   );
 };

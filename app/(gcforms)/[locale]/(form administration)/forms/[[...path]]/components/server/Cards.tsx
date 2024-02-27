@@ -2,7 +2,7 @@ import { serverTranslation } from "@i18n";
 import { getUnprocessedSubmissionsForUser } from "@lib/users";
 import { getAllTemplates } from "@lib/templates";
 import { UserAbility } from "@lib/types";
-import { CardGrid } from "../client/CardGrid";
+import { CardGrid } from "./CardGrid";
 import { ucfirst } from "@lib/client/clientHelpers";
 
 export const Cards = async ({

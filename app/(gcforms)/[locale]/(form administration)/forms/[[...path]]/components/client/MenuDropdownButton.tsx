@@ -9,17 +9,21 @@ import copy from "copy-to-clipboard";
 import { getForm } from "../../actions";
 import { getDate, slugify } from "@lib/client/clientHelpers";
 import { CardProps } from "./Card";
+import { ConfirmDelete } from "@clientComponents/form-builder/app/ConfirmDelete";
+import { useCallback, useState } from "react";
+import { useRefresh } from "@lib/hooks";
 
 export const MenuDropdownButton = ({
   id,
   card,
   direction,
-  handleDelete,
+  cards,
 }: {
   id: string;
   card: CardProps;
   direction: string;
-  handleDelete: (card: CardProps) => void;
+  // TODO: remove once add server acction + refresh data to delete a form
+  cards: Array<CardProps>;
 }) => {
   const { t, i18n } = useTranslation(["my-forms", "common"]);
   const menuItemsList: Array<MenuDropdownItemI> = [
@@ -37,7 +41,7 @@ export const MenuDropdownButton = ({
     {
       title: t("card.menu.delete"),
       callback: () => {
-        handleDelete(card);
+        handleDelete();
         return {
           message: "",
         };
@@ -93,12 +97,33 @@ export const MenuDropdownButton = ({
     };
   }
 
+  const [showConfirm, setShowConfirm] = useState<boolean>(false);
+
+  // TODO: remove once add server acction + refresh data to delete a form
+  const { refreshData } = useRefresh(cards);
+
+  const handleDelete = useCallback(() => {
+    setShowConfirm(true);
+  }, []);
+
   return (
-    <MenuDropdown id={id} items={menuItemsList} direction={direction}>
-      <span className="mr-1 text-[2rem]" aria-hidden="true">
-        ⋮
-      </span>
-      {t("card.menu.more")}
-    </MenuDropdown>
+    <>
+      <MenuDropdown id={id} items={menuItemsList} direction={direction}>
+        <span className="mr-1 text-[2rem]" aria-hidden="true">
+          ⋮
+        </span>
+        {t("card.menu.more")}
+      </MenuDropdown>
+      <ConfirmDelete
+        onDeleted={() => {
+          setShowConfirm(false);
+          refreshData();
+        }}
+        show={showConfirm}
+        id={card.id}
+        isPublished={card.isPublished}
+        handleClose={setShowConfirm}
+      />
+    </>
   );
 };

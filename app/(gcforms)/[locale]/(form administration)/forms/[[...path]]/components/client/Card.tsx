@@ -133,11 +133,11 @@ export interface CardProps {
   isPublished: boolean;
   overdue: number;
   deliveryOption?: { emailAddress?: string } | null;
-  handleDelete: (card: CardProps) => void;
+  cards: Array<CardProps>;
 }
 
 export const Card = (props: CardProps) => {
-  const { id, name, url, date, isPublished, deliveryOption, overdue, handleDelete } = props;
+  const { id, name, url, date, isPublished, deliveryOption, overdue, cards } = props;
   const card = {
     id,
     name,
@@ -173,7 +173,7 @@ export const Card = (props: CardProps) => {
       <div className="mb-4 flex items-center justify-between px-3">
         <CardDate id={id} date={date} />
         <div className="flex items-center text-sm">
-          <MenuDropdownButton id={id} card={card} direction={"up"} handleDelete={handleDelete} />
+          <MenuDropdownButton id={id} card={card} direction={"up"} cards={cards} />
         </div>
       </div>
     </div>
