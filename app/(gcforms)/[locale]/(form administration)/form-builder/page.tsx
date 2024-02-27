@@ -1,11 +1,10 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-
 import { cn } from "@lib/utils";
 import { Header } from "@clientComponents/globals";
 import { SkipLink, Footer } from "@serverComponents/globals";
-import { FormBuilderProviders } from "@clientComponents/form-builder/providers";
 import { Start } from "./Start";
+import { TemplateStoreProvider } from "@clientComponents/form-builder/store";
 
 export async function generateMetadata({
   params: { locale },
@@ -22,7 +21,7 @@ export async function generateMetadata({
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   return (
-    <FormBuilderProviders locale={locale}>
+    <TemplateStoreProvider {...{ locale }}>
       <div className="flex h-full flex-col bg-gray-soft">
         <SkipLink />
         <Header className="mb-0" />
@@ -35,6 +34,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         </div>
         <Footer displayFormBuilderFooter className="mt-0 lg:mt-0" />
       </div>
-    </FormBuilderProviders>
+    </TemplateStoreProvider>
   );
 }
