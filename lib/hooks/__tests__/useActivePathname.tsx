@@ -1,5 +1,5 @@
 "use client";
-import { cleanPath } from "../../../../lib/hooks/useActivePathname";
+import { cleanPath } from "../useActivePathname";
 
 it("removes id from path", () => {
   expect(cleanPath("/form-builder/settings")).toBe("/form-builder/settings");
