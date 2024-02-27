@@ -27,7 +27,7 @@ const Home = () => {
     return (
       <Link href={`${i18n.language}/form-builder`} legacyBehavior>
         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        <a className="mr-10 inline-flex no-underline !shadow-none focus:bg-white">
+        <a className="mr-10 inline-flex no-underline focus:bg-white">
           <span className="">
             <SiteLogo title={languageT[browserLanguage]("title")} />
           </span>

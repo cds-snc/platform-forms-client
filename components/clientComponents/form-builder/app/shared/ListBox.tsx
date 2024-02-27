@@ -10,7 +10,12 @@ import React, {
 } from "react";
 
 import { ChevronRight } from "@serverComponents/icons";
-import { SelectedGroupState } from "../edit/elements/element-dialog/ElementDialog";
+import { Groups } from "@clientComponents/form-builder/hooks/useElementOptions";
+
+type SelectedGroupState = {
+  group: Groups | "all";
+  ref: React.RefObject<HTMLElement>;
+};
 
 // for specs see:
 // https://www.w3.org/WAI/ARIA/apg/patterns/listbox

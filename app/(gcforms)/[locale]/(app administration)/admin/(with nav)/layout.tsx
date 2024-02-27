@@ -34,7 +34,7 @@ export default async function Layout({
               <Link
                 href={`/${locale}/form-builder`}
                 id="logo"
-                className="mr-5 flex border-r-1 pr-[0.77rem] text-3xl font-semibold !text-black no-underline !shadow-none focus:bg-white"
+                className="mr-5 flex border-r-1 pr-[0.77rem] text-3xl font-semibold !text-black no-underline focus:bg-white"
                 prefetch={false}
               >
                 <div className="inline-block h-[45px] w-[46px] p-2">
