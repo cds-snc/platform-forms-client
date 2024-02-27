@@ -11,7 +11,7 @@ import {
   LoggedOutTabName,
   LoggedOutTab,
 } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/LoggedOutTab";
-import { useTemplateApi } from "@lib/hooks";
+import { useTemplateApi } from "@lib/hooks/form-builder";
 import { toast } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";
 import { Button } from "@clientComponents/globals";
 import Brand from "@clientComponents/globals/Brand";

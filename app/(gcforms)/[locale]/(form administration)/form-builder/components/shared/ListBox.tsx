@@ -10,7 +10,7 @@ import React, {
 } from "react";
 
 import { ChevronRight } from "@serverComponents/icons";
-import { Groups } from "@lib/hooks/useElementOptions";
+import { Groups } from "@lib/hooks/form-builder/useElementOptions";
 
 type SelectedGroupState = {
   group: Groups | "all";

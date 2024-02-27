@@ -20,7 +20,7 @@ import {
 import { LocalizedFormProperties } from "@lib/types/form-builder-types";
 import { ResponseEmail } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/ResponseEmail";
 import { isValidGovEmail } from "@lib/validation";
-import { useTemplateApi } from "@lib/hooks";
+import { useTemplateApi } from "@lib/hooks/form-builder";
 import { completeEmailAddressRegex } from "@lib/utils/form-builder";
 
 enum DeliveryOption {

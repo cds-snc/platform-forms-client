@@ -10,7 +10,7 @@ import { isValidGovEmail } from "@lib/validation";
 import { ResponseEmail } from "./ResponseEmail";
 import { Radio } from "./shared";
 import { Button } from "@clientComponents/globals";
-import { useTemplateApi } from "@lib/hooks";
+import { useTemplateApi } from "@lib/hooks/form-builder";
 import { useTemplateStore } from "@lib/store";
 import { completeEmailAddressRegex } from "@lib/utils/form-builder";
 import { toast } from "./shared/Toast";

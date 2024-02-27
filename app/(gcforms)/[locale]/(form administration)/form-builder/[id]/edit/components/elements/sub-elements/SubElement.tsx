@@ -19,7 +19,7 @@ import {
   LockedBadge,
 } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";
 import { getQuestionNumber } from "@lib/utils/form-builder";
-import { useHandleAdd } from "@lib/hooks";
+import { useHandleAdd } from "@lib/hooks/form-builder";
 
 export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elIndex: number }) => {
   const { t } = useTranslation("form-builder");

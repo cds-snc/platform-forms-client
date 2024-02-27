@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import React, { ReactElement, useEffect, useState } from "react";
-import { useActivePathname } from "@lib/hooks/useActivePathname";
+import { useActivePathname } from "@lib/hooks/form-builder";
 import { cn } from "@lib/utils";
 
 export const SubNavLink = ({

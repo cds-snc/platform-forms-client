@@ -1,7 +1,7 @@
 "use client";
 import { Nagware } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/Nagware";
 import { ClosedBanner } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/ClosedBanner";
-import { useRehydrate } from "@lib/hooks";
+import { useRehydrate } from "@lib/hooks/form-builder";
 import { useTranslation } from "@i18n/client";
 import { ucfirst } from "@lib/client/clientHelpers";
 import { FormRecord, NagwareResult, VaultSubmissionList } from "@lib/types";

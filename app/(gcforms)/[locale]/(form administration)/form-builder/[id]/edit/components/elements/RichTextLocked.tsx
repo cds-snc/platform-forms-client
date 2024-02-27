@@ -5,7 +5,7 @@ import { RichTextEditor } from "./lexical-editor/RichTextEditor";
 import { AddElementButton } from "./element-dialog/AddElementButton";
 import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { LockedBadge } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/LockedBadge";
-import { useHandleAdd } from "@lib/hooks";
+import { useHandleAdd } from "@lib/hooks/form-builder";
 import { FormElementTypes } from "@lib/types";
 import { cn } from "@lib/utils";
 import Skeleton from "react-loading-skeleton";

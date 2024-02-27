@@ -11,7 +11,7 @@ import { ShareModal } from "../ShareModal";
 import { LinksSubMenu } from "./LinksSubMenu";
 import { ShareModalUnauthenticated } from "..";
 
-import { useRefStore } from "@lib/hooks/useRefStore";
+import { useRefStore } from "@lib/hooks/form-builder/useRefStore";
 
 export const ShareDropdown = () => {
   const { t } = useTranslation("form-builder");

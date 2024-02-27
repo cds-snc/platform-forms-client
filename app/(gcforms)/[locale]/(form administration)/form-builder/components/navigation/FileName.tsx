@@ -4,7 +4,7 @@ import { cn } from "@lib/utils";
 
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useTranslation } from "@i18n/client";
-import { useRefStore } from "@lib/hooks/useRefStore";
+import { useRefStore } from "@lib/hooks/form-builder/useRefStore";
 import { LocalizedFormProperties } from "@lib/types/form-builder-types";
 
 export const FileNameInput = () => {

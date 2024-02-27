@@ -14,7 +14,7 @@ import { BackArrowIcon } from "@serverComponents/icons";
 import Brand from "@clientComponents/globals/Brand";
 import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
-import { useRehydrate } from "@lib/hooks";
+import { useRehydrate } from "@lib/hooks/form-builder";
 import Skeleton from "react-loading-skeleton";
 
 export const Preview = () => {

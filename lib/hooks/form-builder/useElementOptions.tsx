@@ -35,11 +35,11 @@ import {
   FileInput,
   Departments,
   Combobox,
-} from "../../app/(gcforms)/[locale]/(form administration)/form-builder/[id]/edit/components/elements/element-dialog";
+} from "../../../app/(gcforms)/[locale]/(form administration)/form-builder/[id]/edit/components/elements/element-dialog";
 
 import { useIsAdminUser } from "./useIsAdminUser";
 
-import { ElementOptionsFilter, ElementOption } from "../types/form-builder-types";
+import { ElementOptionsFilter, ElementOption } from "../../types/form-builder-types";
 import { useFlag } from "@lib/hooks";
 
 export enum Groups {
