@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { cn } from "@lib/utils";
-import { Tooltip } from "../../../../app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/Tooltip";
+import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
