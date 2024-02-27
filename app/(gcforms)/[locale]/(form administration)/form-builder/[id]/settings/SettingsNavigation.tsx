@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useTranslation } from "@i18n/client";
-import { SubNavLink } from "../../components/navigation/SubNavLink";
+import { SubNavLink } from "../../../../../../../components/clientComponents/globals/SubNavLink";
 import { EmailIcon, BrandIcon, GearIcon } from "@serverComponents/icons";
 
 export const SettingsNavigation = ({ id }: { id: string }) => {

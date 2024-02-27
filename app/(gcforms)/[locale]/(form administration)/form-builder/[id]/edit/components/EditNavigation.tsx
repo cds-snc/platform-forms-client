@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useTranslation } from "@i18n/client";
-import { SubNavLink } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/navigation/SubNavLink";
+import { SubNavLink } from "@clientComponents/globals/SubNavLink";
 import { useActivePathname } from "@lib/hooks/form-builder";
 import { LangSwitcher } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/LangSwitcher";
 import { QuestionsIcon, TranslateIcon } from "@serverComponents/icons";
