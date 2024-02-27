@@ -25,7 +25,7 @@ import {
   incrementSubElementId,
   cleanInput,
 } from "../../components/clientComponents/form-builder/util";
-import { Language } from "../../components/clientComponents/form-builder/types";
+import { Language } from "../types/form-builder";
 import update from "lodash.set";
 import unset from "lodash.unset";
 import {

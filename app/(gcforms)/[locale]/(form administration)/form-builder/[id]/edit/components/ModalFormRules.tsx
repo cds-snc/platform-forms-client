@@ -6,7 +6,7 @@ import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store";
 import { ModalProperties } from "@lib/store/useModalRulesStore";
-import { FormElementWithIndex } from "@clientComponents/form-builder/types";
+import { FormElementWithIndex } from "@lib/types/form-builder";
 import { ChoiceRule } from "@lib/formContext";
 import { ConditionalSelector } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/conditionals/ConditionalSelector";
 

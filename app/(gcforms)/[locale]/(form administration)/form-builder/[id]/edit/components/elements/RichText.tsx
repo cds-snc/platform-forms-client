@@ -2,7 +2,7 @@
 import React from "react";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { RichTextEditor } from "./lexical-editor/RichTextEditor";
-import { LocalizedElementProperties } from "@clientComponents/form-builder/types";
+import { LocalizedElementProperties } from "@lib/types/form-builder";
 import { getPath } from "@clientComponents/form-builder/getPath";
 import { useTranslation } from "@i18n/client";
 

@@ -3,11 +3,7 @@ import { useCallback, useMemo } from "react";
 
 import { FormElement, FormElementTypes, FormProperties, PropertyChoices } from "@lib/types";
 import { useAccessControl } from "@lib/hooks";
-import {
-  Description,
-  publishRequiredFields,
-  Title,
-} from "../../components/clientComponents/form-builder/types";
+import { Description, publishRequiredFields, Title } from "../types/form-builder";
 import { useTemplateStore } from "../store/useTemplateStore";
 
 export class MissingTranslation extends Error {}

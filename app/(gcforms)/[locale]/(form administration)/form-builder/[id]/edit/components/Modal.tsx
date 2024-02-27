@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 
 import { Button } from "@clientComponents/globals";
 import { Close } from "@serverComponents/icons";
-import { CDSHTMLDialogElement } from "@clientComponents/form-builder/types";
+import { CDSHTMLDialogElement } from "@lib/types/form-builder";
 import { useModalStore } from "@lib/store";
 
 interface IModalContext {

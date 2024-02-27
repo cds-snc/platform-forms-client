@@ -5,7 +5,7 @@ import React from "react";
 import { useTranslation } from "@i18n/client";
 import { getSubmissionsByFormat } from "../actions";
 import { DownloadFormat, HtmlResponse } from "@lib/responseDownloadFormats/types";
-import { Language } from "@clientComponents/form-builder/types";
+import { Language } from "@lib/types/form-builder";
 import { usePathname } from "next/navigation";
 
 export const DownloadSingleButton = ({

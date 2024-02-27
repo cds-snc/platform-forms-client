@@ -5,7 +5,7 @@ import { cn } from "@lib/utils";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useTranslation } from "@i18n/client";
 import { useRefStore } from "@lib/hooks/useRefStore";
-import { LocalizedFormProperties } from "@clientComponents/form-builder/types";
+import { LocalizedFormProperties } from "@lib/types/form-builder";
 
 export const FileNameInput = () => {
   const { t } = useTranslation(["form-builder"]);

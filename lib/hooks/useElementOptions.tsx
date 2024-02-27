@@ -39,10 +39,7 @@ import {
 
 import { useIsAdminUser } from "./useIsAdminUser";
 
-import {
-  ElementOptionsFilter,
-  ElementOption,
-} from "../../components/clientComponents/form-builder/types";
+import { ElementOptionsFilter, ElementOption } from "../types/form-builder";
 import { useFlag } from "@lib/hooks";
 
 export enum Groups {

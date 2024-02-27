@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 
-import { FormElementWithIndex } from "@clientComponents/form-builder/types";
+import { FormElementWithIndex } from "@lib/types/form-builder";
 import { useTemplateStore } from "@lib/store";
 import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
 

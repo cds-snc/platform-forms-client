@@ -5,7 +5,7 @@ import { useTranslation } from "@i18n/client";
 
 import { CheckBoxEmptyIcon, CheckIcon, RadioEmptyIcon } from "@serverComponents/icons";
 import { ShortAnswer, Options, SubOptions, RichText, SubElement } from "./elements";
-import { ElementOption, FormElementWithIndex } from "@clientComponents/form-builder/types";
+import { ElementOption, FormElementWithIndex } from "@lib/types/form-builder";
 import { useElementOptions } from "@lib/hooks";
 import { ConditionalIndicator } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/conditionals/ConditionalIndicator";
 

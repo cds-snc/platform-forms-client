@@ -7,7 +7,7 @@ import {
   ListBox,
 } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";
 import { useElementOptions } from "@lib/hooks";
-import { ElementOption, ElementOptionsFilter } from "@clientComponents/form-builder/types";
+import { ElementOption, ElementOptionsFilter } from "@lib/types/form-builder";
 import { Button } from "@clientComponents/globals";
 import { Groups } from "@lib/hooks/useElementOptions";
 import { ElementFilters } from "./ElementFilters";

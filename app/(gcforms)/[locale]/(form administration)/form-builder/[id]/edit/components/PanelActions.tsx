@@ -5,7 +5,7 @@ import { useMediaQuery } from "usehooks-ts";
 
 import { FormElementTypes } from "@lib/types";
 import { AddElementButton } from "./elements/element-dialog/AddElementButton";
-import { ElementOptionsFilter, RenderMoreFunc } from "@clientComponents/form-builder/types";
+import { ElementOptionsFilter, RenderMoreFunc } from "@lib/types/form-builder";
 import {
   ChevronDown,
   ChevronUp,

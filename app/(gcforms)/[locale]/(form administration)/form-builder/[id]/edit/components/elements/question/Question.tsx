@@ -4,7 +4,7 @@ import {
   FormElementWithIndex,
   LocalizedElementProperties,
   Language,
-} from "@clientComponents/form-builder/types";
+} from "@lib/types/form-builder";
 import { useTemplateStore } from "@lib/store";
 import { QuestionInput, QuestionNumber } from "..";
 

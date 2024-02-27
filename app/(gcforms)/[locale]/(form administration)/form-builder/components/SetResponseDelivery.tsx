@@ -1,6 +1,6 @@
 "use client";
 import React, { useCallback, useState, useMemo } from "react";
-import { LocalizedFormProperties } from "@clientComponents/form-builder/types";
+import { LocalizedFormProperties } from "@lib/types/form-builder";
 import axios from "axios";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";

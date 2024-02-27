@@ -1,5 +1,5 @@
 import { FormElement, FormElementTypes, HTMLTextInputTypeAttribute } from "@lib/types";
-import { Language, LocalizedElementProperties } from "../types";
+import { Language, LocalizedElementProperties } from "../../../../lib/types/form-builder";
 import { isValidatedTextType, isAutoCompleteField } from "@clientComponents/form-builder/util";
 
 type ElementType =

@@ -10,7 +10,7 @@ import {
   LocalizedElementProperties,
   Language,
   ElementOptionsFilter,
-} from "@clientComponents/form-builder/types";
+} from "@lib/types/form-builder";
 import { SubElementModal } from "./SubElementModal";
 import { PanelHightLight } from "./PanelHightlight";
 import { PanelActions } from "../../PanelActions";

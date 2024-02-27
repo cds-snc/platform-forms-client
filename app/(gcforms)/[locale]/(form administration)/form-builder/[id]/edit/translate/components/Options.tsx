@@ -3,7 +3,7 @@ import { FormElement } from "@lib/types";
 import { useTranslation } from "@i18n/client";
 import React from "react";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { Language } from "@clientComponents/form-builder/types";
+import { Language } from "@lib/types/form-builder";
 import { FieldsetLegend } from "./FieldsetLegend";
 import { LanguageLabel } from "./LanguageLabel";
 

@@ -3,7 +3,7 @@ import React from "react";
 import { BrandProperties } from "@lib/types/form-types";
 import { getLocalizedProperty } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
-import { Language } from "@clientComponents/form-builder/types";
+import { Language } from "@lib/types/form-builder";
 
 const Brand = ({
   brand,

@@ -3,7 +3,7 @@ import React, { useCallback } from "react";
 import { useTranslation } from "@i18n/client";
 
 import { Button } from "@clientComponents/globals";
-import { FormElementWithIndex } from "@clientComponents/form-builder/types";
+import { FormElementWithIndex } from "@lib/types/form-builder";
 import { useTemplateStore } from "@lib/store";
 import { FormElementTypes } from "@lib/types";
 

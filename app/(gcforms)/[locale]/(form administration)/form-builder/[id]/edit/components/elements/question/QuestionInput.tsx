@@ -4,7 +4,7 @@ import { useTranslation } from "@i18n/client";
 import debounce from "lodash.debounce";
 
 import { ExpandingInput } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared";
-import { Language } from "@clientComponents/form-builder/types";
+import { Language } from "@lib/types/form-builder";
 import { useTemplateStore } from "@lib/store";
 
 import { cleanInput } from "@clientComponents/form-builder/util";

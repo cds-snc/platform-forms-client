@@ -8,7 +8,7 @@ import { Close } from "@serverComponents/icons";
 import { Button } from "@clientComponents/globals";
 import { Input } from "app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/Input";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { Language } from "@clientComponents/form-builder/types";
+import { Language } from "@lib/types/form-builder";
 
 type RenderIcon = (index: number) => ReactElement | string | undefined;
 
