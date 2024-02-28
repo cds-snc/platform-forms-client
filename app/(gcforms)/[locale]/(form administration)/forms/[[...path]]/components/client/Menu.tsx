@@ -69,7 +69,7 @@ export const Menu = ({
       },
       {
         title: t("card.menu.preview"),
-        url: `/${language}/form-builder/preview/${id} `,
+        url: `/${language}/form-builder/${id}/preview`,
       }
     );
   }

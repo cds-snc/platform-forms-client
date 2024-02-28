@@ -265,13 +265,15 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
 
 /**
  * Get all form templates. Depending on the user permissions the function will return either all or a subset of templates.
- * @param userID deprecated, retrieve from ability instead
+ * @param userID use to get a specific user's templates. By default this should not be used and the
+ * current userID instead be automatically pulled from the ability. Reduces risk of userID changing.
  * @returns An array of Form Records
  */
 export async function getAllTemplates(
   ability: UserAbility,
   userID: string,
-  requestedWhere?: Prisma.TemplateWhereInput
+  requestedWhere?: Prisma.TemplateWhereInput,
+  sortByDateCreated?: "asc" | "desc"
 ): Promise<Array<FormRecord>> {
   try {
     checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
@@ -295,7 +297,7 @@ export async function getAllTemplates(
           ...(!canUserAccessAllTemplates && {
             users: {
               some: {
-                id: ability.userID,
+                id: userID ?? ability.userID,
               },
             },
           }),
@@ -310,9 +312,11 @@ export async function getAllTemplates(
           deliveryOption: true,
           securityAttribute: true,
         },
-        orderBy: {
-          created_at: "desc",
-        },
+        ...(sortByDateCreated && {
+          orderBy: {
+            created_at: sortByDateCreated,
+          },
+        }),
       })
       .catch((e) => prismaErrors(e, []));
 

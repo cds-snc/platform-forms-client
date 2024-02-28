@@ -4,34 +4,29 @@ import { Header } from "@clientComponents/globals";
 import { Footer, SkipLink } from "@serverComponents/globals";
 import { auth } from "@lib/auth";
 import { redirect } from "next/navigation";
+import { createAbility } from "@lib/privileges";
+import { getUser } from "@lib/users";
 
-export default async function FormsLayout({
+export default async function Layout({
   children,
   params: { locale },
-  user,
-  context,
 }: {
   children: React.ReactNode;
   params: { locale: string };
-  user?: { name: string | null; email: string };
-  context?: "admin" | "formBuilder" | "default";
 }) {
   const session = await auth();
   if (!session) redirect(`/${locale}/auth/login`);
+  const ability = createAbility(session);
+  const user = await getUser(ability, session.user.id);
 
   return (
     <>
       <div className="flex h-full flex-col">
         <SkipLink />
-
-        <Header context={context} user={user && { email: user.email, name: user.name }} />
+        <Header context={"default"} user={user && { email: user.email, name: user.name }} />
         <div className="mx-4 shrink-0 grow basis-auto laptop:mx-32 desktop:mx-64">
+          <main id="content">{children}</main>
           <ToastContainer />
-          <>
-            <div>
-              <main id="content">{children}</main>
-            </div>
-          </>
         </div>
         <Footer displayFormBuilderFooter />
       </div>

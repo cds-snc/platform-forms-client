@@ -4,11 +4,11 @@ import Markdown from "markdown-to-jsx";
 import { Menu } from "../client/Menu";
 import { serverTranslation } from "@i18n";
 import Link from "next/link";
-import { CardI } from "./Cards";
 import { getUnprocessedSubmissionsForTemplate } from "../../actions";
+import { DeliveryOption } from "@lib/types";
 
 const CardBanner = async ({ isPublished }: { isPublished: boolean }) => {
-  const { t } = await serverTranslation(["my-forms", "common"]);
+  const { t } = await serverTranslation("my-forms");
   return (
     <div
       className={
@@ -100,7 +100,7 @@ const CardLinks = async ({ isPublished, url, id, deliveryOption, overdue }: Card
 };
 
 const CardTitle = async ({ name }: { name: string }) => {
-  const { t } = await serverTranslation(["my-forms", "common"]);
+  const { t } = await serverTranslation("my-forms");
   const classes = "mb-0 mr-2 overflow-hidden pb-0 text-base font-bold";
   return <h2 className={classes}>{name ? name : t("unnamedForm", { ns: "form-builder" })}</h2>;
 };
@@ -123,6 +123,18 @@ const CardDate = async ({ id, date }: { id: string; date: string }) => {
     </div>
   );
 };
+
+export interface CardI {
+  id: string;
+  titleEn: string;
+  titleFr: string;
+  deliveryOption: DeliveryOption;
+  name: string;
+  isPublished: boolean;
+  date: string;
+  url: string;
+  overdue?: number;
+}
 
 export const Card = async ({ card }: { card: CardI }) => {
   const overdue = await getUnprocessedSubmissionsForTemplate(card.id);

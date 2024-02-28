@@ -1,20 +1,8 @@
 import { serverTranslation } from "@i18n";
 import { getAllTemplates } from "@lib/templates";
-import { DeliveryOption, UserAbility } from "@lib/types";
+import { UserAbility } from "@lib/types";
 import { ucfirst } from "@lib/client/clientHelpers";
 import { Card } from "./Card";
-
-export interface CardI {
-  id: string;
-  titleEn: string;
-  titleFr: string;
-  deliveryOption: DeliveryOption;
-  name: string;
-  isPublished: boolean;
-  date: string;
-  url: string;
-  overdue?: number;
-}
 
 export const Cards = async ({
   filter,
@@ -64,7 +52,7 @@ export const Cards = async ({
         aria-labelledby={`tab-${filter}`}
         className={`pt-8`}
       >
-        {templates && templates?.length > 0 ? (
+        {templates.length > 0 ? (
           <ol
             className="grid gap-4 p-0"
             style={{ gridTemplateColumns: "repeat(auto-fill, minmax(27rem, 1fr))" }}
