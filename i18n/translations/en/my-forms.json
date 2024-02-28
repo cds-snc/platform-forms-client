@@ -89,5 +89,9 @@
   },
   "viewForm": "View form (opens in new tab)",
   "editForm": "Edit form",
-  "navLabel": "Forms navigation"
+  "navLabel": "Forms navigation",
+  "errors": {
+    "formDownloadNotExist": "The form you are trying to download does not exist.",
+    "formDownloadFailed": "Failed to download the form."
+  }
 }

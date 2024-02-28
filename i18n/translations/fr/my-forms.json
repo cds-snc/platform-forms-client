@@ -89,5 +89,9 @@
   },
   "viewForm": "Afficher le formulaire (ouvre un nouvel onglet)",
   "editForm": "Modifier le formulaire",
-  "navLabel": "Navigation des formulaires"
+  "navLabel": "Navigation des formulaires",
+  "errors": {
+    "formDownloadNotExist": "[FR]The form you are trying to download does not exist.",
+    "formDownloadFailed": "[FR]Failed to download the form."
+  }
 }

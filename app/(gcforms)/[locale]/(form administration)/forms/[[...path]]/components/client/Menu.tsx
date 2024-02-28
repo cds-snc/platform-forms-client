@@ -10,6 +10,7 @@ import { getForm } from "../../actions";
 import { getDate, slugify } from "@lib/client/clientHelpers";
 import { useCallback, useState } from "react";
 import { ConfirmDelete } from "./ConfirmDelete";
+import { toast, ToastContainer } from "@clientComponents/form-builder/app/shared/Toast";
 
 export const Menu = ({
   id,
@@ -75,19 +76,28 @@ export const Menu = ({
   }
 
   async function downloadForm(name: string, id: string) {
-    const response = await getForm(id);
-    const fileName = name
-      ? name
-      : language === "fr"
-      ? response.form.titleFr
-      : response.form.titleEn;
-    const data = JSON.stringify(response.form, null, 2);
-    const tempUrl = window.URL.createObjectURL(new Blob([data]));
-    const link = document.createElement("a");
-    link.href = tempUrl;
-    link.setAttribute("download", slugify(`${fileName}-${getDate()}`) + ".json");
-    document.body.appendChild(link);
-    link.click();
+    const response = await getForm(id).catch((error) => {
+      if ((error as Error).message === "Form Not Found") {
+        toast.error(t("errors.formDownloadNotExist"));
+      } else {
+        toast.error(t("errors.formDownloadFailed"));
+      }
+    });
+
+    if (response) {
+      const fileName = name
+        ? name
+        : language === "fr"
+        ? response.form.titleFr
+        : response.form.titleEn;
+      const data = JSON.stringify(response.form, null, 2);
+      const tempUrl = window.URL.createObjectURL(new Blob([data]));
+      const link = document.createElement("a");
+      link.href = tempUrl;
+      link.setAttribute("download", slugify(`${fileName}-${getDate()}`) + ".json");
+      document.body.appendChild(link);
+      link.click();
+    }
   }
 
   function copyLinkCallback(): MenuDropdownItemCallback {
@@ -120,6 +130,9 @@ export const Menu = ({
         isPublished={isPublished}
         handleClose={setShowConfirm}
       />
+      <div className="sticky top-0">
+        <ToastContainer autoClose={false} containerId="default" />
+      </div>
     </>
   );
 };
