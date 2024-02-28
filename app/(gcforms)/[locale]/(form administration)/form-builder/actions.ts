@@ -11,6 +11,8 @@ import {
   updateClosingDateForTemplate,
   updateTemplate as updateDbTemplate,
   updateIsPublishedForTemplate,
+  deleteTemplate as deleteDbTemplate,
+  TemplateHasUnprocessedSubmissions,
 } from "@lib/templates";
 import { logMessage } from "@lib/logger";
 
@@ -27,6 +29,8 @@ const _getSessionAndAbility = async () => {
 };
 
 // @TODO: review error messages + exception throwing/handling
+//        for example, should we just re-throw the same error
+//        instead of a generic?
 
 export const createTemplate = async ({
   formConfig,
@@ -218,6 +222,29 @@ export const sendResponsesToVault = async ({ id: formID }: { id: string }) => {
     } else {
       logMessage.error(error);
 
+      throw new Error(`Internal server error. Reason: ${(error as Error).message}.`);
+    }
+  }
+};
+
+export const deleteTemplate = async ({ id: formID }: { id: string }) => {
+  const { ability } = await _getSessionAndAbility();
+
+  try {
+    const response = await deleteDbTemplate(ability, formID);
+
+    if (!response) {
+      throw new Error(`Template API response was null. Request information: { ${formID} }`);
+    }
+
+    return response;
+  } catch (error) {
+    if (error instanceof AccessControlError) {
+      throw new Error("Forbidden");
+    } else if (error instanceof TemplateHasUnprocessedSubmissions) {
+      throw new Error("Found unprocessed submissions");
+    } else {
+      logMessage.error(error);
       throw new Error(`Internal server error. Reason: ${(error as Error).message}.`);
     }
   }
