@@ -27,6 +27,8 @@ export const ConditionalWrapper = ({
   // If there's no rule or no choiceId, just return the children
   if (!rules || rules.length < 1) return children;
 
+  // const parentIds = rules.map((rule) => rule?.choiceId.split(".")[0]);
+
   const hasMatchedRule = rules.some((rule) => matchedIds.includes(rule?.choiceId));
 
   // If the choiceId is in the matchedIds, return the children
