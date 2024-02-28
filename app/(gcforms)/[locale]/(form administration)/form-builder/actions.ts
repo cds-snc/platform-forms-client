@@ -6,39 +6,13 @@ import { DeliveryOption, FormProperties, SecurityAttribute } from "@lib/types";
 import {
   TemplateAlreadyPublishedError,
   createTemplate as createDbTemplate,
+  removeDeliveryOption,
+  updateAssignedUsersForTemplate,
   updateClosingDateForTemplate,
   updateTemplate as updateDbTemplate,
   updateIsPublishedForTemplate,
 } from "@lib/templates";
 import { logMessage } from "@lib/logger";
-
-// interface CreateOrUpdateTemplateProps {
-//   id?: string;
-//   formConfig?: FormProperties;
-//   name?: string;
-//   deliveryOption?: DeliveryOption;
-//   securityAttribute?: SecurityAttribute;
-//   isPublished?: boolean;
-//   closingDate?: string;
-//   users?: { id: string; action: "add" | "remove" }[];
-//   sendResponsesToVault?: boolean;
-// }
-
-// @TODO: confirm required props- just formConfig?
-interface CreateTemplateProps {
-  formConfig: FormProperties;
-  name?: string;
-  deliveryOption?: DeliveryOption;
-  securityAttribute?: SecurityAttribute;
-}
-
-interface UpdateTemplateProps {
-  id: string;
-  formConfig: FormProperties;
-  name?: string;
-  deliveryOption?: DeliveryOption;
-  securityAttribute?: SecurityAttribute;
-}
 
 const _getSessionAndAbility = async () => {
   const session = await auth();
@@ -52,12 +26,19 @@ const _getSessionAndAbility = async () => {
   return { session, ability };
 };
 
+// @TODO: review error messages + exception throwing/handling
+
 export const createTemplate = async ({
   formConfig,
   name,
   deliveryOption,
   securityAttribute,
-}: CreateTemplateProps) => {
+}: {
+  formConfig: FormProperties;
+  name?: string;
+  deliveryOption?: DeliveryOption;
+  securityAttribute?: SecurityAttribute;
+}) => {
   const { session, ability } = await _getSessionAndAbility();
   try {
     const response = await createDbTemplate({
@@ -93,7 +74,13 @@ export const updateTemplate = async ({
   name,
   deliveryOption,
   securityAttribute,
-}: UpdateTemplateProps) => {
+}: {
+  id: string;
+  formConfig: FormProperties;
+  name?: string;
+  deliveryOption?: DeliveryOption;
+  securityAttribute?: SecurityAttribute;
+}) => {
   const { ability } = await _getSessionAndAbility();
 
   try {
@@ -106,7 +93,6 @@ export const updateTemplate = async ({
       securityAttribute: securityAttribute,
     });
 
-    // @TODO: review these error messages
     if (!response) {
       throw new Error(
         `Template API response was null. Request information: { formConfig: ${formConfig}, name: ${name}, deliveryOption: ${deliveryOption}, securityAttribute: ${securityAttribute}`
@@ -164,12 +150,24 @@ export const updateTemplateClosingDate = async ({
 }) => {
   const { ability } = await _getSessionAndAbility();
 
-  const response = await updateClosingDateForTemplate(ability, formID, closingDate);
-  if (!response)
-    throw new Error(
-      `Template API response was null. Request information: { ${formID}, ${closingDate} }`
-    );
-  return response;
+  try {
+    const response = await updateClosingDateForTemplate(ability, formID, closingDate);
+    if (!response) {
+      throw new Error(
+        `Template API response was null. Request information: { ${formID}, ${closingDate} }`
+      );
+    }
+
+    return response;
+  } catch (error) {
+    if (error instanceof AccessControlError) {
+      throw new Error("Forbidden");
+    } else {
+      logMessage.error(error);
+
+      throw new Error(`Internal server error. Reason: ${(error as Error).message}.`);
+    }
+  }
 };
 
 export const updateTemplateUsers = async ({
@@ -179,9 +177,48 @@ export const updateTemplateUsers = async ({
   id: string;
   users: { id: string; action: "add" | "remove" }[];
 }) => {
-  //
+  if (!users.length) {
+    throw new Error("mustHaveAtLeastOneUser");
+  }
+  const { ability } = await _getSessionAndAbility();
+
+  try {
+    const response = await updateAssignedUsersForTemplate(ability, formID, users);
+    if (!response) {
+      throw new Error(
+        `Template API response was null. Request information: { ${formID}, ${users} }`
+      );
+    }
+
+    return response;
+  } catch (error) {
+    if (error instanceof AccessControlError) {
+      throw new Error("Forbidden");
+    } else {
+      logMessage.error(error);
+
+      throw new Error(`Internal server error. Reason: ${(error as Error).message}.`);
+    }
+  }
 };
 
-export const removeDeliveryOption = async ({ id: formID }: { id: string }) => {
-  //
+export const sendResponsesToVault = async ({ id: formID }: { id: string }) => {
+  const { ability } = await _getSessionAndAbility();
+
+  try {
+    const response = await removeDeliveryOption(ability, formID);
+    if (!response) {
+      throw new Error(`Template API response was null. Request information: { ${formID} }`);
+    }
+
+    return response;
+  } catch (error) {
+    if (error instanceof AccessControlError) {
+      throw new Error("Forbidden");
+    } else {
+      logMessage.error(error);
+
+      throw new Error(`Internal server error. Reason: ${(error as Error).message}.`);
+    }
+  }
 };
