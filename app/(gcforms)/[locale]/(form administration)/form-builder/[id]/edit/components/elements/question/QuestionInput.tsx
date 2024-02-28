@@ -3,11 +3,11 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import debounce from "lodash.debounce";
 
-import { ExpandingInput } from "@clientComponents/form-builder/app/shared";
-import { Language } from "@clientComponents/form-builder/types";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
+import { ExpandingInput } from "@formBuilder/components/shared";
+import { Language } from "@lib/types/form-builder-types";
+import { useTemplateStore } from "@lib/store";
 
-import { cleanInput } from "@clientComponents/form-builder/util";
+import { cleanInput } from "@lib/utils/form-builder";
 import { useRefsContext } from "../../RefsContext";
 
 export const QuestionInput = ({

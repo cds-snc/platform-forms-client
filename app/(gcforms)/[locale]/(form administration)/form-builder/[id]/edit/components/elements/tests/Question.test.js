@@ -1,10 +1,14 @@
 import React from "react";
 import { cleanup, render, act, waitFor } from "@testing-library/react";
 import { Question } from "../question/Question";
-import { useTemplateStore } from "@formbuilder/store";
-import { defaultStore as store, Providers, localStorageMock } from "@formbuilder/test-utils";
+import { useTemplateStore } from "@lib/store";
+import {
+  defaultStore as store,
+  Providers,
+  localStorageMock,
+} from "@lib/utils/form-builder/test-utils";
 import userEvent from "@testing-library/user-event";
-import { LocalizedElementProperties } from "@clientComponents/form-builder/types";
+import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 
 // Mock sessionStorage
 Object.defineProperty(window, "sessionStorage", {

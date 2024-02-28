@@ -4,17 +4,17 @@ import debounce from "lodash.debounce";
 import { useTranslation } from "@i18n/client";
 import { useSearchParams } from "next/navigation";
 
-import { Language, LocalizedFormProperties } from "@clientComponents/form-builder/types";
+import { Language, LocalizedFormProperties } from "@lib/types/form-builder-types";
 import { ElementPanel, ConfirmationDescription, PrivacyDescription } from ".";
 import { RefsProvider } from "./RefsContext";
 import { RichTextLocked } from "./elements";
-import { ExpandingInput } from "@clientComponents/form-builder/app/shared";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
-import { getQuestionNumber, sortByLayout } from "@clientComponents/form-builder/util";
+import { ExpandingInput } from "@formBuilder/components/shared";
+import { useTemplateStore } from "@lib/store";
+import { getQuestionNumber, sortByLayout } from "@lib/utils/form-builder";
 import { SettingsPanel } from "./settings/SettingsPanel";
-import { cleanInput } from "@clientComponents/form-builder/util";
-import { SaveButton } from "@clientComponents/form-builder/app/shared/SaveButton";
-import { useRehydrate } from "@clientComponents/form-builder/hooks";
+import { cleanInput } from "@lib/utils/form-builder";
+import { SaveButton } from "@formBuilder/components/shared/SaveButton";
+import { useRehydrate } from "@lib/hooks/form-builder";
 
 export const Edit = () => {
   const { t } = useTranslation("form-builder");

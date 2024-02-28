@@ -4,8 +4,8 @@ import {
   FormElementWithIndex,
   LocalizedElementProperties,
   Language,
-} from "@clientComponents/form-builder/types";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
+} from "@lib/types/form-builder-types";
+import { useTemplateStore } from "@lib/store";
 import { QuestionInput, QuestionNumber } from "..";
 
 export const Question = ({

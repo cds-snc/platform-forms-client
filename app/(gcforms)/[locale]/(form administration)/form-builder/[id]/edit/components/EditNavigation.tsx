@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
 import { useTranslation } from "@i18n/client";
-import { SubNavLink } from "@clientComponents/form-builder/app/navigation/SubNavLink";
-import { useActivePathname } from "@clientComponents/form-builder/hooks";
-import { LangSwitcher } from "@clientComponents/form-builder/app/shared/LangSwitcher";
+import { SubNavLink } from "@clientComponents/globals/SubNavLink";
+import { useActivePathname } from "@lib/hooks/form-builder";
+import { LangSwitcher } from "@formBuilder/components/shared/LangSwitcher";
 import { QuestionsIcon, TranslateIcon } from "@serverComponents/icons";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
+import { useTemplateStore } from "@lib/store";
 
 export const EditNavigation = ({ id }: { id: string }) => {
   const {

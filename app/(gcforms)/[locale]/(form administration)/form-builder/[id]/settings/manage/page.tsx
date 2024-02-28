@@ -3,7 +3,7 @@ import { getTemplateWithAssociatedUsers } from "@lib/templates";
 import { requireAuthentication } from "@lib/auth";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { getUsers } from "@lib/users";
-import { ClientSide } from "./clientSide";
+import { ManageForm } from "./ManageForm";
 import { notFound } from "next/navigation";
 
 import { Metadata } from "next";
@@ -68,7 +68,7 @@ export default async function Page({ params: { id } }: { params: { id: string } 
       return { id: user.id, name: user.name || "", email: user.email || "" };
     });
     return (
-      <ClientSide
+      <ManageForm
         id={id}
         formRecord={templateWithAssociatedUsers.formRecord}
         usersAssignedToFormRecord={templateWithAssociatedUsers.users}
@@ -78,5 +78,5 @@ export default async function Page({ params: { id } }: { params: { id: string } 
     );
   }
 
-  return <ClientSide id={id} canManageOwnership={false} />;
+  return <ManageForm id={id} canManageOwnership={false} />;
 }
