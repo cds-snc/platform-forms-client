@@ -12,8 +12,7 @@ export const ConditionalWrapper = ({
   element: FormElement;
   rules: ConditionalRule[] | null;
 }) => {
-  const { matchedIds, currentGroup, groups } = useGCFormsContext();
-
+  const { matchedIds, currentGroup, groups, formRecord } = useGCFormsContext();
   // Check if we're using groups and if the current element is in a group
   if (
     currentGroup &&
@@ -27,12 +26,37 @@ export const ConditionalWrapper = ({
   // If there's no rule or no choiceId, just return the children
   if (!rules || rules.length < 1) return children;
 
-  // const parentIds = rules.map((rule) => rule?.choiceId.split(".")[0]);
+  const parentIds = rules.map((rule) => rule?.choiceId.split(".")[0]);
+  const parentId = parentIds[0];
 
   const hasMatchedRule = rules.some((rule) => matchedIds.includes(rule?.choiceId));
 
-  // If the choiceId is in the matchedIds, return the children
-  if (hasMatchedRule) return children;
+  // If we have a matched rule for the element
+  // also ensure the parent element has a matched rule
+  if (hasMatchedRule) {
+    // Find parent element and get it's rules
+    const parentMatches = formRecord.form.elements
+      .filter((el) => String(el.id) === parentId)
+      .map((el) => {
+        if (el.properties.conditionalRules && el.properties.conditionalRules.length > 0) {
+          const parentRules = el.properties.conditionalRules;
+          const parentHasMatchedRule = parentRules.some((rule) =>
+            matchedIds.includes(rule?.choiceId)
+          );
+          if (parentHasMatchedRule) {
+            // The parent element has a matched rule i.e. is showing
+            return true;
+          }
+        } else {
+          // No rules, so the parent element is showing
+          return true;
+        }
+      });
+
+    if (parentMatches && parentMatches.length && parentMatches[0]) {
+      return children;
+    }
+  }
 
   // Otherwise, return null
   return null;
