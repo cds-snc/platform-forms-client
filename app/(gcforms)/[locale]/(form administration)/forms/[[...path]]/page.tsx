@@ -42,7 +42,7 @@ export default async function Page({
     const {
       t,
       i18n: { language },
-    } = await serverTranslation(["my-forms"]);
+    } = await serverTranslation("my-forms");
 
     return (
       <div className="center mx-auto w-[980px] bg-gray-soft">

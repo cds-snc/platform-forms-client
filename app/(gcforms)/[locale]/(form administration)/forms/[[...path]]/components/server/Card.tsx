@@ -36,7 +36,7 @@ const CardLinks = async ({ isPublished, url, id, deliveryOption, overdue }: Card
   const {
     t,
     i18n: { language },
-  } = await serverTranslation(["my-forms"]);
+  } = await serverTranslation("my-forms");
   const responsesLink = `/${language}/form-builder/${id}/responses/new`;
 
   const textData = {

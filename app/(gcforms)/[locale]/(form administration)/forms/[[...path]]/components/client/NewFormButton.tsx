@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@i18n/client";
 import { LinkButton } from "@clientComponents/globals";
 import { clearTemplateStore } from "@clientComponents/form-builder/store/useTemplateStore";
 
@@ -8,7 +8,7 @@ export const NewFormButton = () => {
   const {
     t,
     i18n: { language },
-  } = useTranslation(["my-forms"]);
+  } = useTranslation("my-forms");
 
   const createNewFormRef = useRef<HTMLDivElement>(null);
 

@@ -8,7 +8,7 @@ export const Cards = async ({ filter, ability }: { filter?: string; ability: Use
   const {
     t,
     i18n: { language },
-  } = await serverTranslation(["my-forms"]);
+  } = await serverTranslation("my-forms");
 
   const where = {
     isPublished: filter === "published" ? true : filter === "drafts" ? false : undefined,

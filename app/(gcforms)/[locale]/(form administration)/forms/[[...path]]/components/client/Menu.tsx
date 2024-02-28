@@ -4,7 +4,7 @@ import {
   MenuDropdownItemI,
   MenuDropdownItemCallback,
 } from "@clientComponents/myforms/MenuDropdown/MenuDropdown";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@i18n/client";
 import copy from "copy-to-clipboard";
 import { getForm } from "../../actions";
 import { getDate, slugify } from "@lib/client/clientHelpers";
@@ -25,7 +25,7 @@ export const Menu = ({
   const {
     t,
     i18n: { language },
-  } = useTranslation(["my-forms"]);
+  } = useTranslation("my-forms");
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
 
   const handleDelete = useCallback(() => {
