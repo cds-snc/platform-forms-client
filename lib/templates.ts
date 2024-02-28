@@ -265,8 +265,6 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
 
 /**
  * Get all form templates. Depending on the user permissions the function will return either all or a subset of templates.
- * @param userID use to get a specific user's templates. By default this should not be used and the
- * current userID instead be automatically pulled from the ability. Reduces risk of userID changing.
  * @returns An array of Form Records
  */
 export async function getAllTemplates(
