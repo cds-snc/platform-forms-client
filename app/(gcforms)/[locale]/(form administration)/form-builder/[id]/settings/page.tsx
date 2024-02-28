@@ -1,5 +1,5 @@
 import { serverTranslation } from "@i18n";
-import { ResponseDelivery } from "@clientComponents/form-builder/app";
+import { ResponseDelivery } from "./components/ResponseDelivery";
 import { Metadata } from "next";
 
 export async function generateMetadata({

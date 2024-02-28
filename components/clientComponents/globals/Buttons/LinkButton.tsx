@@ -3,7 +3,7 @@ import React from "react";
 import { StyledLink } from "@clientComponents/globals";
 import { themes } from "@clientComponents/globals";
 import { cn } from "@lib/utils";
-import { Tooltip } from "../../form-builder/app/shared/Tooltip";
+import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 import Link from "next/link";
 
 type LinkButtonProps = {

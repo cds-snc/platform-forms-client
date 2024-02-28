@@ -2,7 +2,7 @@ import React, { useRef, useState, useCallback } from "react";
 import { Label } from "@clientComponents/forms";
 import { Button, Alert } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
-import { Dialog, useDialogRef } from "@clientComponents/form-builder/app/shared";
+import { Dialog, useDialogRef } from "@formBuilder/components/shared";
 import { logMessage } from "@lib/logger";
 
 import axios from "axios";

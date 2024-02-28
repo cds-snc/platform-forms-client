@@ -2,8 +2,8 @@
 import React from "react";
 import { useTranslation } from "@i18n/client";
 
-import { Checkbox } from "@clientComponents/form-builder/app/shared";
-import { FormElementWithIndex } from "@clientComponents/form-builder/types";
+import { Checkbox } from "@formBuilder/components/shared";
+import { FormElementWithIndex } from "@lib/types/form-builder-types";
 
 export const ElementRequired = ({
   item,

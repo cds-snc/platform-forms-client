@@ -2,7 +2,9 @@
 import React, { useState } from "react";
 import { Setting } from "@prisma/client";
 import { useTranslation } from "@i18n/client";
-import { ToastContainer, toast } from "@clientComponents/form-builder/app/shared/Toast";
+
+import { ToastContainer, toast } from "@formBuilder/components/shared/Toast";
+
 import { Button } from "@clientComponents/globals";
 import { useAccessControl } from "@lib/hooks";
 import { logMessage } from "@lib/logger";

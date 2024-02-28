@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useTemplateStore } from "@clientComponents/form-builder/store/useTemplateStore";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useTranslation } from "@i18n/client";
 import { RichText } from "./RichText";
 import { Title } from "./Title";
@@ -10,16 +10,16 @@ import {
   LocalizedElementProperties,
   LocalizedFormProperties,
   Language,
-} from "@clientComponents/form-builder/types";
+} from "@lib/types/form-builder-types";
 import { DownloadCSV } from "./DownloadCSV";
 import { RichTextEditor } from "../../components/elements/lexical-editor/RichTextEditor";
 import { LanguageLabel } from "./LanguageLabel";
 import { FieldsetLegend, SectionTitle } from ".";
-import { SaveButton } from "@clientComponents/form-builder/app/shared/SaveButton";
+import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 
 import { FormElement } from "@lib/types";
-import { alphabet, sortByLayout } from "@clientComponents/form-builder/util";
-import { useRehydrate } from "@clientComponents/form-builder/hooks";
+import { alphabet, sortByLayout } from "@lib/utils/form-builder";
+import { useRehydrate } from "@lib/hooks/form-builder";
 
 const Element = ({
   element,

@@ -1,5 +1,5 @@
 "use server";
-import { Language } from "@clientComponents/form-builder/types";
+import { Language } from "@lib/types/form-builder-types";
 import { getAppSetting } from "@lib/appSettings";
 import { logEvent } from "@lib/auditLogs";
 import { auth } from "@lib/auth";

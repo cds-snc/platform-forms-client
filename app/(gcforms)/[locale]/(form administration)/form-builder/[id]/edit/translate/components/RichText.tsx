@@ -3,8 +3,8 @@ import { FormElement } from "@lib/types";
 import { useTranslation } from "@i18n/client";
 import React from "react";
 import { RichTextEditor } from "../../components/elements/lexical-editor/RichTextEditor";
-import { useTemplateStore } from "@clientComponents/form-builder/store/useTemplateStore";
-import { Language, LocalizedElementProperties } from "@clientComponents/form-builder/types";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { Language, LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { LanguageLabel } from "./LanguageLabel";
 import { FieldsetLegend } from "./FieldsetLegend";
 

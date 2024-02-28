@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { RichTextEditor } from "../RichTextEditor";
-import { defaultStore as store, Providers } from "@formbuilder/test-utils";
+import { defaultStore as store, Providers } from "@lib/utils/form-builder/test-utils";
 
 describe("<RichTextEditor />", () => {
   it("Adds and styles text", () => {

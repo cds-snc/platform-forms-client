@@ -1,6 +1,6 @@
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
-import { Dialog, useDialogRef } from "@clientComponents/form-builder/app/shared";
+import { Dialog, useDialogRef } from "@formBuilder/components/shared";
 
 import { AppUser } from "@lib/types/user-types";
 import { updateActive } from "../../actions";

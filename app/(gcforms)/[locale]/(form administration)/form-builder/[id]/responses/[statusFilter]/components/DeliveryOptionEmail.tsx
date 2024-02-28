@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { EmailResponseSettings } from "@clientComponents/form-builder/app/shared";
-import { ClosedBanner } from "@clientComponents/form-builder/app/shared/ClosedBanner";
+import { EmailResponseSettings } from "@formBuilder/components/shared";
+import { ClosedBanner } from "@formBuilder/components/shared/ClosedBanner";
 import { serverTranslation } from "@i18n";
 
 export const DeliveryOptionEmail = async ({

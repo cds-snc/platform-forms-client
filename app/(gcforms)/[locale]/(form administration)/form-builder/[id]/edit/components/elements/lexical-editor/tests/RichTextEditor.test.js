@@ -1,7 +1,7 @@
 import React from "react";
 import { cleanup, screen, render, act, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { defaultStore as store, Providers } from "@formbuilder/test-utils";
+import { defaultStore as store, Providers } from "@lib/utils/form-builder/test-utils";
 import { RichTextEditor } from "../RichTextEditor";
 
 const promise = Promise.resolve();

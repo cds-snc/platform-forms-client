@@ -1,7 +1,7 @@
 import { serverTranslation } from "@i18n";
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
 import { auth } from "@lib/auth";
-import { SettingsNavigation } from "@clientComponents/form-builder/app/navigation/SettingsNavigation";
+import { SettingsNavigation } from "./components/SettingsNavigation";
 
 export default async function Layout({
   children,
