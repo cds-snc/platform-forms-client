@@ -10,7 +10,7 @@ import { getForm } from "../../actions";
 import { getDate, slugify } from "@lib/client/clientHelpers";
 import { useCallback, useState } from "react";
 import { ConfirmDelete } from "./ConfirmDelete";
-import { toast, ToastContainer } from "@clientComponents/form-builder/app/shared/Toast";
+import { toast, ToastContainer } from "@formBuilder/components/shared/Toast";
 
 export const Menu = ({
   id,

@@ -5,12 +5,12 @@ import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { AccessControlError } from "@lib/privileges";
 import { redirect } from "next/navigation";
 import { Navigation } from "./components/server/Navigation";
-import { ResumeEditingForm } from "@clientComponents/form-builder/app/shared";
+import { ResumeEditingForm } from "@formBuilder/components/shared";
 import Link from "next/link";
 import { Cards } from "./components/server/Cards";
 import { Suspense } from "react";
 import Loader from "@clientComponents/globals/Loader";
-import { NewFormButton } from "./components/client/NewFormButton";
+import { NewFormButton } from "./components/server/NewFormButton";
 
 export async function generateMetadata({
   params: { locale },

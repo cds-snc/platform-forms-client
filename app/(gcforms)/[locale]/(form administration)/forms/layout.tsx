@@ -1,5 +1,5 @@
 import React from "react";
-import { ToastContainer } from "@clientComponents/form-builder/app/shared/Toast";
+import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { Header } from "@clientComponents/globals";
 import { Footer, SkipLink } from "@serverComponents/globals";
 import { auth } from "@lib/auth";
