@@ -136,7 +136,7 @@ describe("Template CRUD functions", () => {
       buildPrismaResponse("formtestID2", formConfiguration),
     ]);
 
-    const templates = await getAllTemplates(ability, "1");
+    const templates = await getAllTemplates(ability);
 
     expect(templates).toEqual([
       expect.objectContaining({
@@ -188,7 +188,7 @@ describe("Template CRUD functions", () => {
 
     (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([]);
 
-    const template = await getAllTemplates(ability, "1");
+    const template = await getAllTemplates(ability);
     expect(template).toEqual([]);
     expect(mockedLogEvent).toBeCalledTimes(0);
   });
@@ -206,7 +206,7 @@ describe("Template CRUD functions", () => {
       buildPrismaResponse("formtestID", formConfiguration),
     ]);
 
-    await getAllTemplates(ability, "1");
+    await getAllTemplates(ability);
 
     expect(prismaMock.template.findMany).toHaveBeenCalledWith({
       where: {
@@ -241,7 +241,7 @@ describe("Template CRUD functions", () => {
       buildPrismaResponse("formtestID", formConfiguration),
     ]);
 
-    await getAllTemplates(ability, "1");
+    await getAllTemplates(ability);
 
     expect(prismaMock.template.findMany).toHaveBeenCalledWith({
       where: {
@@ -949,7 +949,7 @@ describe("Template CRUD functions", () => {
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
     await expect(async () => {
-      await getAllTemplates(ability, "1");
+      await getAllTemplates(ability);
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
     await expect(async () => {

@@ -4,15 +4,7 @@ import { UserAbility } from "@lib/types";
 import { ucfirst } from "@lib/client/clientHelpers";
 import { Card } from "./Card";
 
-export const Cards = async ({
-  filter,
-  ability,
-  id,
-}: {
-  filter?: string;
-  ability: UserAbility;
-  id: string;
-}) => {
+export const Cards = async ({ filter, ability }: { filter?: string; ability: UserAbility }) => {
   const {
     t,
     i18n: { language },
@@ -21,7 +13,7 @@ export const Cards = async ({
   const where = {
     isPublished: filter === "published" ? true : filter === "drafts" ? false : undefined,
   };
-  const templates = (await getAllTemplates(ability, id, where)).map((template) => {
+  const templates = (await getAllTemplates(ability, where)).map((template) => {
     const {
       id,
       form: { titleEn = "", titleFr = "" },

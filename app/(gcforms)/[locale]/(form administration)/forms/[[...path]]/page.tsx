@@ -32,7 +32,7 @@ export default async function Page({
 }) {
   try {
     const {
-      user: { ability, id },
+      user: { ability },
     } = await requireAuthentication();
 
     checkPrivilegesAsBoolean(ability, [{ action: "view", subject: "FormRecord" }], {
@@ -60,7 +60,7 @@ export default async function Page({
         </ResumeEditingForm>
 
         <Suspense fallback={<Loader />}>
-          <Cards filter={formsState} ability={ability} id={id} />
+          <Cards filter={formsState} ability={ability} />
         </Suspense>
       </div>
     );

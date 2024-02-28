@@ -271,7 +271,6 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
  */
 export async function getAllTemplates(
   ability: UserAbility,
-  userID: string,
   requestedWhere?: Prisma.TemplateWhereInput,
   sortByDateCreated?: "asc" | "desc"
 ): Promise<Array<FormRecord>> {
@@ -297,7 +296,7 @@ export async function getAllTemplates(
           ...(!canUserAccessAllTemplates && {
             users: {
               some: {
-                id: userID ?? ability.userID,
+                id: ability.userID,
               },
             },
           }),
