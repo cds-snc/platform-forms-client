@@ -63,11 +63,10 @@ export const createTemplate = async ({
     return response;
   } catch (error) {
     if (error instanceof AccessControlError) {
-      throw new Error("Forbidden");
+      throw error;
     } else {
       logMessage.error(error);
-
-      throw new Error(`Internal server error. Reason: ${(error as Error).message}.`);
+      throw error;
     }
   }
 };
@@ -104,14 +103,11 @@ export const updateTemplate = async ({
     }
     return response;
   } catch (error) {
-    if (error instanceof AccessControlError) {
-      throw new Error("Forbidden");
-    } else if (error instanceof TemplateAlreadyPublishedError) {
-      throw new Error("Can't update published form");
+    if (error instanceof AccessControlError || error instanceof TemplateAlreadyPublishedError) {
+      throw error;
     } else {
       logMessage.error(error);
-
-      throw new Error(`Internal server error. Reason: ${(error as Error).message}.`);
+      throw error;
     }
   }
 };
@@ -136,11 +132,10 @@ export const updateTemplatePublishedStatus = async ({
     return response;
   } catch (error) {
     if (error instanceof AccessControlError) {
-      throw new Error("Forbidden");
+      throw error;
     } else {
       logMessage.error(error);
-
-      throw new Error(`Internal server error. Reason: ${(error as Error).message}.`);
+      throw error;
     }
   }
 };
@@ -165,11 +160,10 @@ export const updateTemplateClosingDate = async ({
     return response;
   } catch (error) {
     if (error instanceof AccessControlError) {
-      throw new Error("Forbidden");
+      throw error;
     } else {
       logMessage.error(error);
-
-      throw new Error(`Internal server error. Reason: ${(error as Error).message}.`);
+      throw error;
     }
   }
 };
@@ -197,11 +191,10 @@ export const updateTemplateUsers = async ({
     return response;
   } catch (error) {
     if (error instanceof AccessControlError) {
-      throw new Error("Forbidden");
+      throw error;
     } else {
       logMessage.error(error);
-
-      throw new Error(`Internal server error. Reason: ${(error as Error).message}.`);
+      throw error;
     }
   }
 };
@@ -218,11 +211,10 @@ export const sendResponsesToVault = async ({ id: formID }: { id: string }) => {
     return response;
   } catch (error) {
     if (error instanceof AccessControlError) {
-      throw new Error("Forbidden");
+      throw error;
     } else {
       logMessage.error(error);
-
-      throw new Error(`Internal server error. Reason: ${(error as Error).message}.`);
+      throw error;
     }
   }
 };
@@ -239,13 +231,11 @@ export const deleteTemplate = async ({ id: formID }: { id: string }) => {
 
     return response;
   } catch (error) {
-    if (error instanceof AccessControlError) {
-      throw new Error("Forbidden");
-    } else if (error instanceof TemplateHasUnprocessedSubmissions) {
-      throw new Error("Found unprocessed submissions");
+    if (error instanceof AccessControlError || error instanceof TemplateHasUnprocessedSubmissions) {
+      throw error;
     } else {
       logMessage.error(error);
-      throw new Error(`Internal server error. Reason: ${(error as Error).message}.`);
+      throw error;
     }
   }
 };
