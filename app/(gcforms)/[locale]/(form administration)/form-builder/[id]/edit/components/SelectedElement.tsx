@@ -5,9 +5,9 @@ import { useTranslation } from "@i18n/client";
 
 import { CheckBoxEmptyIcon, CheckIcon, RadioEmptyIcon } from "@serverComponents/icons";
 import { ShortAnswer, Options, SubOptions, RichText, SubElement } from "./elements";
-import { ElementOption, FormElementWithIndex } from "@clientComponents/form-builder/types";
-import { useElementOptions } from "@clientComponents/form-builder/hooks";
-import { ConditionalIndicator } from "@clientComponents/form-builder/app/shared/conditionals/ConditionalIndicator";
+import { ElementOption, FormElementWithIndex } from "@lib/types/form-builder-types";
+import { useElementOptions } from "@lib/hooks/form-builder";
+import { ConditionalIndicator } from "@formBuilder/components/shared/conditionals/ConditionalIndicator";
 
 const filterSelected = (
   item: FormElementWithIndex,

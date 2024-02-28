@@ -1,6 +1,10 @@
 import React from "react";
 import { cleanup, render, act } from "@testing-library/react";
-import { defaultStore as store, Providers, localStorageMock } from "@formbuilder/test-utils";
+import {
+  defaultStore as store,
+  Providers,
+  localStorageMock,
+} from "@lib/utils/form-builder/test-utils";
 import { QuestionDescription } from "../question/QuestionDescription";
 
 // Mock sessionStorage

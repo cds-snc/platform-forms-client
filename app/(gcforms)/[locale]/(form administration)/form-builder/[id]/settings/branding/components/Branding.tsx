@@ -6,10 +6,10 @@ import Link from "next/link";
 import axios from "axios";
 
 import { Logos, options } from ".";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
-import { LoggedOutTabName, LoggedOutTab } from "@clientComponents/form-builder/app/LoggedOutTab";
-import { useTemplateApi } from "@clientComponents/form-builder/hooks";
-import { toast } from "@clientComponents/form-builder/app/shared";
+import { useTemplateStore } from "@lib/store";
+import { LoggedOutTabName, LoggedOutTab } from "@formBuilder/components/LoggedOutTab";
+import { useTemplateApi } from "@lib/hooks/form-builder";
+import { toast } from "@formBuilder/components/shared";
 import { Button } from "@clientComponents/globals";
 import Brand from "@clientComponents/globals/Brand";
 import { ExternalLinkIcon } from "@serverComponents/icons";

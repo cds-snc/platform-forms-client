@@ -1,4 +1,4 @@
-import { isEmailDelivery } from "@clientComponents/form-builder/util";
+import { isEmailDelivery } from "@lib/utils/form-builder";
 import { getAppSetting } from "@lib/appSettings";
 import { auth } from "@lib/auth";
 import { ucfirst } from "@lib/client/clientHelpers";

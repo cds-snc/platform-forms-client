@@ -4,11 +4,11 @@ import PropTypes from "prop-types";
 import { useTranslation } from "@i18n/client";
 
 import { Button } from "@clientComponents/globals";
-import { useTemplateStore } from "@formbuilder/store";
-import { ModalProperties } from "@clientComponents/form-builder/store/useModalRulesStore";
-import { FormElementWithIndex } from "@clientComponents/form-builder/types";
+import { useTemplateStore } from "@lib/store";
+import { ModalProperties } from "@lib/store/useModalRulesStore";
+import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { ChoiceRule } from "@lib/formContext";
-import { ConditionalSelector } from "@clientComponents/form-builder/app/shared/conditionals/ConditionalSelector";
+import { ConditionalSelector } from "@formBuilder/components/shared/conditionals/ConditionalSelector";
 
 export const ModalFormRules = ({
   item,

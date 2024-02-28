@@ -2,10 +2,10 @@
 import React, { ReactElement } from "react";
 import { useTranslation } from "@i18n/client";
 
-import { useTemplateStore } from "@clientComponents/form-builder/store/useTemplateStore";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { SubOption } from "./SubOption";
 import { Button } from "@clientComponents/globals";
-import { FormElementWithIndex } from "@clientComponents/form-builder/types";
+import { FormElementWithIndex } from "@lib/types/form-builder-types";
 
 const AddButton = ({
   elIndex,

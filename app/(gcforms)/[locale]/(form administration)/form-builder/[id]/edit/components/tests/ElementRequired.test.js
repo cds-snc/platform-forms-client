@@ -1,7 +1,7 @@
 import React from "react";
 import { render, cleanup, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { defaultStore as store, Providers } from "@formbuilder/test-utils";
+import { defaultStore as store, Providers } from "@lib/utils/form-builder/test-utils";
 import { ElementRequired } from "../ElementRequired";
 
 describe("ElementRequired", () => {

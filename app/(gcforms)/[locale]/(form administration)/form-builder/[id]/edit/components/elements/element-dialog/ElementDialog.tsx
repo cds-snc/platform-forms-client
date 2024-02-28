@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { FormElementTypes } from "@lib/types";
-import { useDialogRef, Dialog, ListBox } from "@clientComponents/form-builder/app/shared";
-import { useElementOptions } from "@clientComponents/form-builder/hooks";
-import { ElementOption, ElementOptionsFilter } from "@clientComponents/form-builder/types";
+import { useDialogRef, Dialog, ListBox } from "@formBuilder/components/shared";
+import { useElementOptions } from "@lib/hooks/form-builder";
+import { ElementOption, ElementOptionsFilter } from "@lib/types/form-builder-types";
 import { Button } from "@clientComponents/globals";
-import { Groups } from "@clientComponents/form-builder/hooks/useElementOptions";
+import { Groups } from "@lib/hooks/form-builder/useElementOptions";
 import { ElementFilters } from "./ElementFilters";
 
 export type SelectedGroupState = {

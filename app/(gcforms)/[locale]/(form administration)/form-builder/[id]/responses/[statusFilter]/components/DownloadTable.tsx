@@ -19,7 +19,7 @@ import { ActionsPanel } from "./ActionsPanel";
 import { DeleteButton } from "./DeleteButton";
 import { ConfirmDeleteNewDialog } from "./Dialogs/ConfirmDeleteNewDialog";
 import { DownloadDialog } from "./Dialogs/DownloadDialog";
-import { formatDateTime } from "@clientComponents/form-builder/util";
+import { formatDateTime } from "@lib/utils/form-builder";
 import { DownloadSingleButton } from "./DownloadSingleButton";
 import { Pagination } from "./Pagination";
 import { cn } from "@lib/utils";

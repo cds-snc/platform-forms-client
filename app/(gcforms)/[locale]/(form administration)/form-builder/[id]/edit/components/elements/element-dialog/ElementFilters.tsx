@@ -1,5 +1,5 @@
 "use client";
-import { Groups } from "@clientComponents/form-builder/hooks/useElementOptions";
+import { Groups } from "@lib/hooks/form-builder/useElementOptions";
 import { cn } from "@lib/utils";
 import React, { useRef } from "react";
 import { RovingTabIndexProvider, useFocusEffect, useRovingTabIndex } from "react-roving-tabindex";

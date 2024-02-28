@@ -2,7 +2,7 @@
 import React, { useCallback } from "react";
 import { useTranslation } from "@i18n/client";
 
-import { useTemplateStore } from "@clientComponents/form-builder/store";
+import { useTemplateStore } from "@lib/store";
 import { PanelBodySub } from "../../PanelBodySub";
 import { FormElement, FormElementTypes } from "@lib/types";
 import { AddElementButton } from "../element-dialog/AddElementButton";
@@ -10,13 +10,13 @@ import {
   LocalizedElementProperties,
   Language,
   ElementOptionsFilter,
-} from "@clientComponents/form-builder/types";
+} from "@lib/types/form-builder-types";
 import { SubElementModal } from "./SubElementModal";
 import { PanelHightLight } from "./PanelHightlight";
 import { PanelActions } from "../../PanelActions";
-import { Input, LockedBadge } from "@clientComponents/form-builder/app/shared";
-import { getQuestionNumber } from "@clientComponents/form-builder/util";
-import { useHandleAdd } from "@clientComponents/form-builder/hooks";
+import { Input, LockedBadge } from "@formBuilder/components/shared";
+import { getQuestionNumber } from "@lib/utils/form-builder";
+import { useHandleAdd } from "@lib/hooks/form-builder";
 
 export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elIndex: number }) => {
   const { t } = useTranslation("form-builder");

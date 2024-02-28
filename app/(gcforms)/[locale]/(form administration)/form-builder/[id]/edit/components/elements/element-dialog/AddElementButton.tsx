@@ -5,7 +5,7 @@ import { useTranslation } from "@i18n/client";
 import { FormElementTypes } from "@lib/types";
 import { Button } from "@clientComponents/globals";
 import { ElementDialog } from "./ElementDialog";
-import { ElementOptionsFilter } from "@clientComponents/form-builder/types";
+import { ElementOptionsFilter } from "@lib/types/form-builder-types";
 import { AddIcon } from "@serverComponents/icons";
 
 export const AddElementButton = ({

@@ -6,8 +6,8 @@ import {
   FormElementWithIndex,
   Language,
   LocalizedElementProperties,
-} from "@clientComponents/form-builder/types";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
+} from "@lib/types/form-builder-types";
+import { useTemplateStore } from "@lib/store";
 
 export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
   const { updateField, propertyPath } = useTemplateStore((s) => ({

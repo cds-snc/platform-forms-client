@@ -1,6 +1,6 @@
-import { ToastContainer } from "@clientComponents/form-builder/app/shared/Toast";
+import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { SkipLink, Footer } from "@clientComponents/globals";
-import { Header } from "@clientComponents/globals/Header";
+import { Header } from "@clientComponents/globals/Header/Header";
 import { cn } from "@lib/utils";
 
 export const TwoColumnLayout = ({

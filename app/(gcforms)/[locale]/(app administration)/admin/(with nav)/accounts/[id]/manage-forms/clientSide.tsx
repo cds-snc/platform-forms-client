@@ -7,7 +7,7 @@ import { NagwareResult } from "@lib/types";
 import { useSetting } from "@lib/hooks/useSetting";
 import { Dropdown } from "@clientComponents/admin/Users/Dropdown";
 import { themes } from "@clientComponents/globals";
-import { ConfirmDelete } from "@clientComponents/form-builder/app/ConfirmDelete";
+import { ConfirmDelete } from "@formBuilder/components/ConfirmDelete";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { useRefresh } from "@lib/hooks";
 import { ExclamationIcon } from "@serverComponents/icons";

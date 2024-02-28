@@ -5,7 +5,7 @@ import { useMediaQuery } from "usehooks-ts";
 
 import { FormElementTypes } from "@lib/types";
 import { AddElementButton } from "./elements/element-dialog/AddElementButton";
-import { ElementOptionsFilter, RenderMoreFunc } from "@clientComponents/form-builder/types";
+import { ElementOptionsFilter, RenderMoreFunc } from "@lib/types/form-builder-types";
 import {
   ChevronDown,
   ChevronUp,
@@ -15,7 +15,7 @@ import {
   AddIcon,
 } from "@serverComponents/icons";
 
-import { usePanelActions } from "@clientComponents/form-builder/hooks";
+import { usePanelActions } from "@lib/hooks/form-builder";
 import { ElementDialog } from "./elements/element-dialog/ElementDialog";
 import { PanelActionsButton } from "./PanelActionsButton";
 

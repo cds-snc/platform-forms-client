@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
-import { Dialog, useDialogRef } from "@clientComponents/form-builder/app/shared";
+import { Dialog, useDialogRef } from "@formBuilder/components/shared";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import { logMessage } from "@lib/logger";
@@ -14,7 +14,7 @@ import JSZip from "jszip";
 import { getDate, slugify } from "@lib/client/clientHelpers";
 import { SpinnerIcon } from "@serverComponents/icons/SpinnerIcon";
 import { getSubmissionsByFormat } from "../../actions";
-import { Language } from "@clientComponents/form-builder/types";
+import { Language } from "@lib/types/form-builder-types";
 import { usePathname } from "next/navigation";
 
 export const DownloadDialog = ({

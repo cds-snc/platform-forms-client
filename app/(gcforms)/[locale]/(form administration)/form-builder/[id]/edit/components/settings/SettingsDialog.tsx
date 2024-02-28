@@ -5,19 +5,20 @@ import { useSession } from "next-auth/react";
 import axios from "axios";
 
 import { Button } from "@clientComponents/globals";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
-import { useDialogRef, Dialog, Radio } from "@clientComponents/form-builder/app/shared";
+import { useTemplateStore } from "@lib/store";
+import { useDialogRef, Dialog, Radio } from "@formBuilder/components/shared";
 import { Logos, options } from "../../../settings/branding/components";
 import Brand from "@clientComponents/globals/Brand";
-import {
-  ClassificationType,
-  ClassificationSelect,
-} from "@clientComponents/form-builder/app/ClassificationSelect";
-import { LocalizedFormProperties } from "@clientComponents/form-builder/types";
-import { ResponseEmail } from "@clientComponents/form-builder/app/ResponseEmail";
+
+import { LocalizedFormProperties } from "@lib/types/form-builder-types";
+import { ResponseEmail } from "@formBuilder/components/ResponseEmail";
 import { isValidGovEmail } from "@lib/validation";
-import { useTemplateApi } from "@clientComponents/form-builder/hooks";
-import { completeEmailAddressRegex } from "@clientComponents/form-builder/util";
+import { useTemplateApi } from "@lib/hooks/form-builder";
+import { completeEmailAddressRegex } from "@lib/utils/form-builder";
+import {
+  ClassificationSelect,
+  ClassificationType,
+} from "@formBuilder/components/ClassificationSelect";
 
 enum DeliveryOption {
   vault = "vault",

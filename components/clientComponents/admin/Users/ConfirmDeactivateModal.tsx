@@ -4,7 +4,7 @@ import useSWR from "swr";
 import { useTranslation } from "@i18n/client";
 import { FormElementTypes } from "@lib/types";
 import { Button } from "@clientComponents/globals";
-import { Dialog, useDialogRef } from "@clientComponents/form-builder/app/shared";
+import { Dialog, useDialogRef } from "@formBuilder/components/shared";
 import { updateActiveStatus } from "app/(gcforms)/[locale]/(app administration)/admin/(with nav)/accounts/clientSide";
 import { useRefresh } from "@lib/hooks";
 import Loader from "@clientComponents/globals/Loader";
