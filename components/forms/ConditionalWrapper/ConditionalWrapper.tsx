@@ -36,7 +36,7 @@ export const ConditionalWrapper = ({
   if (hasMatchedRule) {
     // Find parent element and get it's rules
     const parentMatches = formRecord.form.elements
-      .filter((el) => String(el.id) === parentId)
+      .filter((el) => parentIds.includes(String(el.id)))
       .map((el) => {
         if (el.properties.conditionalRules && el.properties.conditionalRules.length > 0) {
           const parentRules = el.properties.conditionalRules;
@@ -53,7 +53,7 @@ export const ConditionalWrapper = ({
         }
       });
 
-    if (parentMatches && parentMatches.length && parentMatches[0]) {
+    if (parentMatches && parentMatches.some(Boolean)) {
       return children;
     }
   }
