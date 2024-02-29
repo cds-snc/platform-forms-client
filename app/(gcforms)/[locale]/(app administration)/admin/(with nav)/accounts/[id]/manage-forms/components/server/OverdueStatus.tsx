@@ -1,13 +1,10 @@
 import { serverTranslation } from "@i18n";
 import { ExclamationIcon } from "@serverComponents/icons";
-import { getAppSetting } from "@lib/appSettings";
-
-const promptAfter = await getAppSetting("nagwarePhasePrompted");
-
-const warnAfter = await getAppSetting("nagwarePhaseWarned");
+import { overdueSettings } from "../../actions";
 
 export const OverdueStatus = async ({ level }: { level: number }) => {
   const { t } = await serverTranslation("admin-forms");
+  const { promptPhaseDays: promptAfter, warnPhaseDays: warnAfter } = await overdueSettings();
 
   // 35 days +
   if ([3, 4].includes(level)) {
