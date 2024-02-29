@@ -1,0 +1,18 @@
+{
+  "name": "archivable_audit_logs_migration",
+  "version": "0.1.0",
+  "description": "Update existing audit logs to make them archivable",
+  "main": "add_archivable_status_field_to_audit_logs.ts",
+  "scripts": {
+    "make-audit-logs-archivable": "tsx add_archivable_status_field_to_audit_logs.ts"
+  },
+  "keywords": [],
+  "author": "Clément Janin",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.518.0",
+    "@aws-sdk/lib-dynamodb": "^3.518.0",
+    "dotenv": "^16.3.1",
+    "tsx": "^3.14.0"
+  },
+  "packageManager": "yarn@4.0.2"
+}
