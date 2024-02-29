@@ -10,6 +10,7 @@ import { revalidatePath } from "next/cache";
 import { listAllSubmissions } from "@lib/vault";
 import { detectOldUnprocessedSubmissions } from "@lib/nagware";
 import { cache } from "react";
+import { getAppSetting } from "@lib/appSettings";
 
 // Note: copied from manage-forms actions
 export const authCheck = cache(async () => {
@@ -46,10 +47,26 @@ export const deleteForm = async (id: string) => {
   return result;
 };
 
+const overdueSettings = cache(async () => {
+  const promptPhaseDays = await getAppSetting("nagwarePhasePrompted");
+  const warnPhaseDays = await getAppSetting("nagwarePhaseWarned");
+  const responseDownloadLimit = await getAppSetting("responseDownloadLimit");
+  return { promptPhaseDays, warnPhaseDays, responseDownloadLimit };
+});
+
 // Note: copied from manage-forms actions
 export const getUnprocessedSubmissionsForTemplate = async (templateId: string) => {
   const ability = await authCheck();
-  const allSubmissions = await listAllSubmissions(ability, templateId);
-
-  return detectOldUnprocessedSubmissions(allSubmissions.submissions);
+  const { promptPhaseDays, warnPhaseDays, responseDownloadLimit } = await overdueSettings();
+  const allSubmissions = await listAllSubmissions(
+    ability,
+    templateId,
+    undefined,
+    Number(responseDownloadLimit)
+  );
+  return detectOldUnprocessedSubmissions(
+    allSubmissions.submissions,
+    promptPhaseDays,
+    warnPhaseDays
+  );
 };
