@@ -10,7 +10,7 @@ import { formatDateTime } from "@lib/utils/form-builder";
 import { SavedFailIcon, SavedCheckIcon } from "@serverComponents/icons";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { createTemplate, updateTemplate } from "@formBuilder/actions";
+import { createOrUpdateTemplate } from "@formBuilder/actions";
 import { ErrorSaving } from "./ErrorSaving";
 
 const SaveDraft = ({
@@ -102,20 +102,7 @@ export const SaveButton = () => {
     const formConfig = getSchema();
 
     try {
-      if (!id) {
-        const template = await createTemplate({
-          formConfig: JSON.parse(formConfig),
-          name: getName(),
-          deliveryOption: getDeliveryOption(),
-          securityAttribute: securityAttribute,
-        });
-
-        setId(template.id);
-
-        setUpdatedAt(new Date(template.updatedAt ? template.updatedAt : "").getTime());
-      }
-
-      const template = await updateTemplate({
+      const template = await createOrUpdateTemplate({
         id: id,
         formConfig: JSON.parse(formConfig),
         name: getName(),
@@ -123,7 +110,9 @@ export const SaveButton = () => {
         securityAttribute: securityAttribute,
       });
 
+      setId(template.id);
       setUpdatedAt(new Date(template.updatedAt ? template.updatedAt : "").getTime());
+      setError(false);
     } catch (error) {
       toast.error(<ErrorSaving />, "wide");
       setError(true);

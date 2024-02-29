@@ -28,9 +28,24 @@ const _getSessionAndAbility = async () => {
   return { session, ability };
 };
 
-// @TODO: review error messages + exception throwing/handling
-//        for example, should we just re-throw the same error
-//        instead of a generic?
+export const createOrUpdateTemplate = async ({
+  id,
+  formConfig,
+  name,
+  deliveryOption,
+  securityAttribute,
+}: {
+  id?: string;
+  formConfig: FormProperties;
+  name?: string;
+  deliveryOption?: DeliveryOption;
+  securityAttribute?: SecurityAttribute;
+}) => {
+  if (id) {
+    return updateTemplate({ id, formConfig, name, deliveryOption, securityAttribute });
+  }
+  return createTemplate({ formConfig, name, deliveryOption, securityAttribute });
+};
 
 export const createTemplate = async ({
   formConfig,
