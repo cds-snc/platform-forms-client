@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
 import { useTranslation } from "@i18n/client";
-import { useTemplateStore } from "@clientComponents/form-builder/store/useTemplateStore";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Button } from "@clientComponents/globals";
 import { FormElement } from "@lib/types";
 import { getDate, slugify } from "@lib/client/clientHelpers";
-import { alphabet } from "@clientComponents/form-builder/util";
+import { alphabet } from "@lib/utils/form-builder";
 
 const formatText = (str: string) => `"${str}"`;
 

@@ -2,19 +2,15 @@
 import React, { useCallback, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useRouter } from "next/navigation";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
-import {
-  useTemplateApi,
-  useAllowPublish,
-  useRehydrate,
-} from "@clientComponents/form-builder/hooks";
+import { useTemplateStore } from "@lib/store";
+import { useTemplateApi, useAllowPublish, useRehydrate } from "@lib/hooks/form-builder";
 import { CancelIcon, CircleCheckIcon, LockIcon } from "@serverComponents/icons";
 import { Button, Alert } from "@clientComponents/globals";
 import Link from "next/link";
-import { isVaultDelivery } from "@clientComponents/form-builder/util";
-import { classificationOptions } from "@clientComponents/form-builder/app/ClassificationSelect";
+import { isVaultDelivery } from "@lib/utils/form-builder";
+import { classificationOptions } from "@formBuilder/components/ClassificationSelect";
 import { logMessage } from "@lib/logger";
-import { DownloadFileButton } from "@clientComponents/form-builder/app/shared";
+import { DownloadFileButton } from "@formBuilder/components/shared";
 import Skeleton from "react-loading-skeleton";
 import LinkButton from "@serverComponents/globals/Buttons/LinkButton";
 

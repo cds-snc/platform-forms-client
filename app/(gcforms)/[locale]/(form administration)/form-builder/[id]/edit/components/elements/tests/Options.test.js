@@ -2,7 +2,7 @@ import React from "react";
 import { cleanup, render, waitFor } from "@testing-library/react";
 import { Options } from "../Options";
 import userEvent from "@testing-library/user-event";
-import { defaultStore as store, Providers } from "@formbuilder/test-utils";
+import { defaultStore as store, Providers } from "@lib/utils/form-builder/test-utils";
 
 describe("Options", () => {
   afterEach(() => {

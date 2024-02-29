@@ -1,7 +1,7 @@
 import React from "react";
 import { cleanup, render, act } from "@testing-library/react";
 import { Option } from "../Option";
-import { defaultStore as store, Providers } from "@formbuilder/test-utils";
+import { defaultStore as store, Providers } from "@lib/utils/form-builder/test-utils";
 
 describe("Option", () => {
   afterEach(() => {

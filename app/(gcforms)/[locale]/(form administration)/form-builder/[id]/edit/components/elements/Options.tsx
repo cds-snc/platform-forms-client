@@ -3,12 +3,12 @@ import React, { ReactElement } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "@i18n/client";
 
-import { useTemplateStore } from "@clientComponents/form-builder/store/useTemplateStore";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Option } from "./Option";
 import { Button } from "@clientComponents/globals";
-import { FormElementWithIndex } from "@clientComponents/form-builder/types";
+import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { ModalRules } from "../ModalRules";
-import { ConditionalIndicatorOption, AddOther } from "@clientComponents/form-builder/app/shared";
+import { ConditionalIndicatorOption, AddOther } from "@formBuilder/components/shared";
 
 const AddButton = ({ index, onClick }: { index: number; onClick: (index: number) => void }) => {
   const { t } = useTranslation("form-builder");

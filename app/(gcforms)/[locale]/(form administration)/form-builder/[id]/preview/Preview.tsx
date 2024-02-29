@@ -8,16 +8,13 @@ import { PreviewNavigation } from "./PreviewNavigation";
 import { getRenderedForm } from "@lib/formBuilder";
 import { PublicFormRecord } from "@lib/types";
 import { Button, Form, RichText, ClosedPage, NextButton } from "@clientComponents/forms";
-import {
-  LocalizedElementProperties,
-  LocalizedFormProperties,
-} from "@clientComponents/form-builder/types";
-import { useTemplateStore } from "@clientComponents/form-builder/store";
+import { LocalizedElementProperties, LocalizedFormProperties } from "@lib/types/form-builder-types";
+import { useTemplateStore } from "@lib/store";
 import { BackArrowIcon } from "@serverComponents/icons";
 import Brand from "@clientComponents/globals/Brand";
 import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
-import { useRehydrate } from "@clientComponents/form-builder/hooks";
+import { useRehydrate } from "@lib/hooks/form-builder";
 import Skeleton from "react-loading-skeleton";
 
 export const Preview = () => {

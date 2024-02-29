@@ -1,9 +1,8 @@
 import React, { useCallback } from "react";
 import { useTranslation } from "@i18n/client";
 
-import { ConfirmFormDeleteDialog } from "@clientComponents/form-builder/app/shared";
-
-import { toast, ToastContainer } from "@clientComponents/form-builder/app/shared/Toast";
+import { ConfirmFormDeleteDialog } from "@formBuilder/components/shared";
+import { toast, ToastContainer } from "@formBuilder/components/shared/Toast";
 import { deleteForm } from "../../actions";
 
 export const ConfirmDelete = ({
