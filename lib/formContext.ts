@@ -317,34 +317,69 @@ export const removeChoiceFromRules = (elements: FormElement[], choiceId: string)
 
 /**
  * @param elements - The form elements to search.
- * @param parentIds - The parentIds of the element we want to check
- * @param matchedIds - The matchedIds from the form context
- * @returns {boolean} - Returns true if the parent element has a matched rule, false otherwise
+ * @param rules - The rules to search
+ * @returns {Array} - Returns an array of parentIds from the rules
  */
-export const parentHasMatchedRule = (
+export const getRelatedElementsFromRule = (
   elements: FormElement[],
-  parentIds: string[],
+  rules: ConditionalRule[] | undefined
+) => {
+  if (!rules) return [];
+  const ids = rules.map((rule) => Number(rule?.choiceId.split(".")[0]));
+  return elements.filter((el) => Array.from(new Set(ids)).includes(el.id));
+};
+
+/**
+ * @param elements: FormElement[],
+ * @param matchedIds - The matchedIds from the form context
+ * @returns {boolean} - Returns true if the related element has a matched rule, false otherwise
+ */
+export const validConditionalRules = (element: FormElement, matchedIds: string[]) => {
+  if (element?.properties?.conditionalRules && element.properties.conditionalRules.length > 0) {
+    const rules = element.properties?.conditionalRules;
+    const matchedRule = rules.some((rule) => matchedIds.includes(rule?.choiceId));
+    if (matchedRule) {
+      // Matched rule.
+      return true;
+    }
+    return false;
+  }
+  // No rules to match.
+  return true;
+};
+
+/**
+ * @param elements - The form elements to search.
+ * @param rules - The rules to search
+ * @param matchedIds - The matchedIds from the form context
+ * @returns {Array} - Returns an array of parentIds from the rules
+ */
+export const checkRelatedRules = (
+  elements: FormElement[],
+  rules: ConditionalRule[] | undefined,
   matchedIds: string[]
 ) => {
-  const parentMatches = elements
-    .filter((el) => parentIds.includes(String(el.id)))
-    .map((el) => {
-      if (el.properties.conditionalRules && el.properties.conditionalRules.length > 0) {
-        const parentRules = el.properties.conditionalRules;
-        const parentHasMatchedRule = parentRules.some((rule) =>
-          matchedIds.includes(rule?.choiceId)
-        );
-        if (parentHasMatchedRule) {
-          // The parent element has a matched rule (it's visible).
-          return true;
-        }
-      } else {
-        // No rules (we know the parent element is visible).
-        return true;
-      }
-    });
+  const relatedElements = getRelatedElementsFromRule(elements, rules);
 
-  // If any of the parent elements have a matched rule, return true.
-  // Otherwise, return false.
-  return parentMatches.some(Boolean);
+  const ids = relatedElements.map((el) => {
+    if (validConditionalRules(el, matchedIds)) {
+      return el.id;
+    }
+  });
+
+  return ids.filter((id) => id);
+};
+
+/**
+ * @param elements - The form elements to search.
+ * @param rules - The rules to search
+ * @param matchedIds - The matchedIds from the form context
+ * @returns {boolean} - Returns true if the related element has a matched rule, false otherwise
+ */
+export const checkRelatedRulesAsBoolean = (
+  elements: FormElement[],
+  rules: ConditionalRule[] | undefined,
+  matchedIds: string[]
+) => {
+  return checkRelatedRules(elements, rules, matchedIds).length > 0;
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { ConditionalRule, FormElement } from "@lib/types";
-import { inGroup, parentHasMatchedRule } from "@lib/formContext";
+import { inGroup, checkRelatedRulesAsBoolean } from "@lib/formContext";
 
 export const ConditionalWrapper = ({
   children,
@@ -28,12 +28,9 @@ export const ConditionalWrapper = ({
 
   const hasMatchedRule = rules.some((rule) => matchedIds.includes(rule?.choiceId));
 
-  // If we have a matched rule for the element
-  // Also ensure a parent element also has a matched rule
-  // This is to ensure that the parent element is visible
   if (hasMatchedRule) {
-    const parentIds = rules.map((rule) => rule?.choiceId.split(".")[0]);
-    if (parentHasMatchedRule(formRecord.form.elements, parentIds, matchedIds)) {
+    // Ensure rules for elements tied to the element are also matched.
+    if (checkRelatedRulesAsBoolean(formRecord.form.elements, rules, matchedIds)) {
       return children;
     }
   }
