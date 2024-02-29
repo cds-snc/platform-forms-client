@@ -314,3 +314,67 @@ export const removeChoiceFromRules = (elements: FormElement[], choiceId: string)
 
   return updatedRules;
 };
+
+/**
+ * @param elements - The form elements to search.
+ * @param rules - The rules to search
+ * @returns {Array} - Returns an array of parentIds from the rules
+ */
+export const getRelatedElementsFromRule = (
+  elements: FormElement[],
+  rules: ConditionalRule[] | undefined
+) => {
+  if (!rules) return [];
+  const ids = rules.map((rule) => Number(rule?.choiceId.split(".")[0]));
+  return elements.filter((el) => Array.from(new Set(ids)).includes(el.id));
+};
+
+/**
+ * @param elements: FormElement[],
+ * @param matchedIds - The matchedIds from the form context
+ * @returns {boolean} - Returns true if the related element has a matched rule, false otherwise
+ */
+export const validConditionalRules = (element: FormElement, matchedIds: string[]) => {
+  if (element?.properties?.conditionalRules && element.properties.conditionalRules.length > 0) {
+    const rules = element.properties?.conditionalRules;
+    return rules.some((rule) => matchedIds.includes(rule?.choiceId));
+  }
+  // No rules to match against so it's valid.
+  return true;
+};
+
+/**
+ * @param elements - The form elements to search.
+ * @param rules - The rules to search
+ * @param matchedIds - The matchedIds from the form context
+ * @returns {Array} - Returns an array of parentIds from the rules
+ */
+export const getRelatedIdsPassingRules = (
+  elements: FormElement[],
+  rules: ConditionalRule[] | undefined,
+  matchedIds: string[]
+) => {
+  const relatedElements = getRelatedElementsFromRule(elements, rules);
+
+  const ids = relatedElements.map((el) => {
+    if (validConditionalRules(el, matchedIds)) {
+      return el.id;
+    }
+  });
+
+  return ids.filter((id) => id);
+};
+
+/**
+ * @param elements - The form elements to search.
+ * @param rules - The rules to search
+ * @param matchedIds - The matchedIds from the form context
+ * @returns {boolean} - Returns true if the related element has a matched rule, false otherwise
+ */
+export const checkRelatedRulesAsBoolean = (
+  elements: FormElement[],
+  rules: ConditionalRule[] | undefined,
+  matchedIds: string[]
+) => {
+  return getRelatedIdsPassingRules(elements, rules, matchedIds).length > 0;
+};
