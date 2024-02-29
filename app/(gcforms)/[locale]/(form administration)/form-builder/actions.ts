@@ -43,8 +43,9 @@ export const createTemplate = async ({
   deliveryOption?: DeliveryOption;
   securityAttribute?: SecurityAttribute;
 }) => {
-  const { session, ability } = await _getSessionAndAbility();
   try {
+    const { session, ability } = await _getSessionAndAbility();
+
     const response = await createDbTemplate({
       ability: ability,
       userID: session.user.id,
@@ -84,9 +85,9 @@ export const updateTemplate = async ({
   deliveryOption?: DeliveryOption;
   securityAttribute?: SecurityAttribute;
 }) => {
-  const { ability } = await _getSessionAndAbility();
-
   try {
+    const { ability } = await _getSessionAndAbility();
+
     const response = await updateDbTemplate({
       ability: ability,
       formID: formID,
@@ -119,9 +120,9 @@ export const updateTemplatePublishedStatus = async ({
   id: string;
   isPublished: boolean;
 }) => {
-  const { ability } = await _getSessionAndAbility();
-
   try {
+    const { ability } = await _getSessionAndAbility();
+
     const response = await updateIsPublishedForTemplate(ability, formID, isPublished);
     if (!response) {
       throw new Error(
@@ -147,9 +148,9 @@ export const updateTemplateClosingDate = async ({
   id: string;
   closingDate: string;
 }) => {
-  const { ability } = await _getSessionAndAbility();
-
   try {
+    const { ability } = await _getSessionAndAbility();
+
     const response = await updateClosingDateForTemplate(ability, formID, closingDate);
     if (!response) {
       throw new Error(
@@ -178,9 +179,10 @@ export const updateTemplateUsers = async ({
   if (!users.length) {
     throw new Error("mustHaveAtLeastOneUser");
   }
-  const { ability } = await _getSessionAndAbility();
 
   try {
+    const { ability } = await _getSessionAndAbility();
+
     const response = await updateAssignedUsersForTemplate(ability, formID, users);
     if (!response) {
       throw new Error(
@@ -200,9 +202,9 @@ export const updateTemplateUsers = async ({
 };
 
 export const sendResponsesToVault = async ({ id: formID }: { id: string }) => {
-  const { ability } = await _getSessionAndAbility();
-
   try {
+    const { ability } = await _getSessionAndAbility();
+
     const response = await removeDeliveryOption(ability, formID);
     if (!response) {
       throw new Error(`Template API response was null. Request information: { ${formID} }`);
@@ -220,9 +222,9 @@ export const sendResponsesToVault = async ({ id: formID }: { id: string }) => {
 };
 
 export const deleteTemplate = async ({ id: formID }: { id: string }) => {
-  const { ability } = await _getSessionAndAbility();
-
   try {
+    const { ability } = await _getSessionAndAbility();
+
     const response = await deleteDbTemplate(ability, formID);
 
     if (!response) {
