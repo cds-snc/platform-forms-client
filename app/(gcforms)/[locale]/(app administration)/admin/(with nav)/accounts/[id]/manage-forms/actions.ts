@@ -14,7 +14,7 @@ export const authCheck = cache(async () => {
   return createAbility(session);
 });
 
-const overdueSettings = cache(async () => {
+export const overdueSettings = cache(async () => {
   const promptPhaseDays = await getAppSetting("nagwarePhasePrompted");
   const warnPhaseDays = await getAppSetting("nagwarePhaseWarned");
   const responseDownloadLimit = await getAppSetting("responseDownloadLimit");
