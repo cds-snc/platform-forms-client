@@ -73,6 +73,7 @@ export const fetchSubmissions = async ({
     ability,
     formId,
     selectedStatus,
+    undefined,
     currentLastEvaluatedKey
   );
 
