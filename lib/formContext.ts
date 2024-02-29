@@ -314,3 +314,37 @@ export const removeChoiceFromRules = (elements: FormElement[], choiceId: string)
 
   return updatedRules;
 };
+
+/**
+ * @param elements - The form elements to search.
+ * @param parentIds - The parentIds of the element we want to check
+ * @param matchedIds - The matchedIds from the form context
+ * @returns {boolean} - Returns true if the parent element has a matched rule, false otherwise
+ */
+export const parentHasMatchedRule = (
+  elements: FormElement[],
+  parentIds: string[],
+  matchedIds: string[]
+) => {
+  const parentMatches = elements
+    .filter((el) => parentIds.includes(String(el.id)))
+    .map((el) => {
+      if (el.properties.conditionalRules && el.properties.conditionalRules.length > 0) {
+        const parentRules = el.properties.conditionalRules;
+        const parentHasMatchedRule = parentRules.some((rule) =>
+          matchedIds.includes(rule?.choiceId)
+        );
+        if (parentHasMatchedRule) {
+          // The parent element has a matched rule (it's visible).
+          return true;
+        }
+      } else {
+        // No rules (we know the parent element is visible).
+        return true;
+      }
+    });
+
+  // If any of the parent elements have a matched rule, return true.
+  // Otherwise, return false.
+  return parentMatches.some(Boolean);
+};

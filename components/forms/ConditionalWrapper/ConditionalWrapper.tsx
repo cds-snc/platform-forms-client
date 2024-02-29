@@ -1,7 +1,7 @@
 import React from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { ConditionalRule, FormElement } from "@lib/types";
-import { inGroup } from "@lib/formContext";
+import { inGroup, parentHasMatchedRule } from "@lib/formContext";
 
 export const ConditionalWrapper = ({
   children,
@@ -26,34 +26,14 @@ export const ConditionalWrapper = ({
   // If there's no rule or no choiceId, just return the children
   if (!rules || rules.length < 1) return children;
 
-  const parentIds = rules.map((rule) => rule?.choiceId.split(".")[0]);
-  const parentId = parentIds[0];
-
   const hasMatchedRule = rules.some((rule) => matchedIds.includes(rule?.choiceId));
 
   // If we have a matched rule for the element
-  // also ensure the parent element has a matched rule
+  // Also ensure a parent element also has a matched rule
+  // This is to ensure that the parent element is visible
   if (hasMatchedRule) {
-    // Find parent element and get it's rules
-    const parentMatches = formRecord.form.elements
-      .filter((el) => parentIds.includes(String(el.id)))
-      .map((el) => {
-        if (el.properties.conditionalRules && el.properties.conditionalRules.length > 0) {
-          const parentRules = el.properties.conditionalRules;
-          const parentHasMatchedRule = parentRules.some((rule) =>
-            matchedIds.includes(rule?.choiceId)
-          );
-          if (parentHasMatchedRule) {
-            // The parent element has a matched rule i.e. is showing
-            return true;
-          }
-        } else {
-          // No rules, so the parent element is showing
-          return true;
-        }
-      });
-
-    if (parentMatches && parentMatches.some(Boolean)) {
+    const parentIds = rules.map((rule) => rule?.choiceId.split(".")[0]);
+    if (parentHasMatchedRule(formRecord.form.elements, parentIds, matchedIds)) {
       return children;
     }
   }
