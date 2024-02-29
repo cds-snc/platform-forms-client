@@ -337,14 +337,9 @@ export const getRelatedElementsFromRule = (
 export const validConditionalRules = (element: FormElement, matchedIds: string[]) => {
   if (element?.properties?.conditionalRules && element.properties.conditionalRules.length > 0) {
     const rules = element.properties?.conditionalRules;
-    const matchedRule = rules.some((rule) => matchedIds.includes(rule?.choiceId));
-    if (matchedRule) {
-      // Matched rule.
-      return true;
-    }
-    return false;
+    return rules.some((rule) => matchedIds.includes(rule?.choiceId));
   }
-  // No rules to match.
+  // No rules to match against so it's valid.
   return true;
 };
 
