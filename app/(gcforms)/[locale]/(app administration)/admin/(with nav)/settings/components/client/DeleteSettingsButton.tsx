@@ -1,7 +1,8 @@
 "use client";
 import { deleteSetting } from "../../actions";
-import { toast } from "@clientComponents/form-builder/app/shared/Toast";
+
 import { Button } from "@clientComponents/globals";
+import { toast } from "@formBuilder/components/shared";
 import { logMessage } from "@lib/logger";
 import { useTranslation } from "react-i18next";
 

@@ -2,11 +2,10 @@
 import { Setting } from "@prisma/client";
 import { useTranslation } from "react-i18next";
 import { createSetting, updateSetting } from "../../actions";
-
-import { toast } from "@clientComponents/form-builder/app/shared/Toast";
 import { logMessage } from "@lib/logger";
 import { Button } from "@clientComponents/globals";
 import { ManageSettingButton } from "./ManageSettingButton";
+import { toast } from "@formBuilder/components/shared";
 
 export const ManageSetting = ({
   setting,
