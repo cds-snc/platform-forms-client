@@ -354,7 +354,7 @@ export const validConditionalRules = (element: FormElement, matchedIds: string[]
  * @param matchedIds - The matchedIds from the form context
  * @returns {Array} - Returns an array of parentIds from the rules
  */
-export const checkRelatedRules = (
+export const getRelatedIdsPassingRules = (
   elements: FormElement[],
   rules: ConditionalRule[] | undefined,
   matchedIds: string[]
@@ -381,5 +381,5 @@ export const checkRelatedRulesAsBoolean = (
   rules: ConditionalRule[] | undefined,
   matchedIds: string[]
 ) => {
-  return checkRelatedRules(elements, rules, matchedIds).length > 0;
+  return getRelatedIdsPassingRules(elements, rules, matchedIds).length > 0;
 };

@@ -14,7 +14,7 @@ import {
   removeChoiceFromRules,
   getRelatedElementsFromRule,
   validConditionalRules,
-  checkRelatedRules,
+  getRelatedIdsPassingRules,
 } from "../formContext";
 
 describe("Form Context", () => {
@@ -464,16 +464,16 @@ describe("Form Context", () => {
       expect(validConditionalRules(elements[3], ["2.2"])).toEqual(true);
     });
 
-    test("Element selected but not parent", async () => {
+    test("Related IDs - element selected but not parent", async () => {
       const rules = elements[3].properties?.conditionalRules;
       // Expect empty array as 2.2 is selected but 1.0 is not
-      expect(checkRelatedRules(elements, rules, ["2.2"])).toEqual([]);
+      expect(getRelatedIdsPassingRules(elements, rules, ["2.2"])).toEqual([]);
     });
 
-    test("Element selected and parent selected", async () => {
+    test("Related IDs - element selected and parent selected", async () => {
       const rules = elements[3].properties?.conditionalRules;
       // Expect parent element id to be returned
-      expect(checkRelatedRules(elements, rules, ["1.0", "2.2"])).toEqual([2]);
+      expect(getRelatedIdsPassingRules(elements, rules, ["1.0", "2.2"])).toEqual([2]);
     });
   });
 });
