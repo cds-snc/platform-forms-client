@@ -1,10 +1,12 @@
+"use client";
+
 import React, { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { Button } from "@lib/components/Button";
+import { Button } from "@clientComponents/globals";
 import { cn } from "@lib/utils";
 
 export const RightPanel = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   const tabs = [
     { name: "Questions", href: "#", current: true },
