@@ -1,5 +1,5 @@
 "use client";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@i18n/client";
 import { deleteSetting } from "../../actions";
 import { Button } from "@clientComponents/globals";
 import { useRouter } from "next/navigation";

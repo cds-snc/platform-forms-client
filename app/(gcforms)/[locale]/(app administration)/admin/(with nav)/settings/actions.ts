@@ -9,15 +9,15 @@ import {
 } from "@lib/appSettings";
 import { revalidatePath } from "next/cache";
 
-const authCheck = async () => {
+export const authCheck = async () => {
   const session = await auth();
   if (!session) throw new Error("No session found");
   return createAbility(session);
 };
 
 export async function getSetting(internalId: string) {
-  await authCheck();
-  return getFullAppSetting(internalId);
+  const ability = await authCheck();
+  return getFullAppSetting(ability, internalId);
 }
 
 export async function updateSetting(formData: FormData) {
@@ -33,7 +33,7 @@ export async function updateSetting(formData: FormData) {
   await updateAppSetting(ability, setting.internalId, setting).catch(() => {
     throw new Error("Error updating setting");
   });
-  revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/settings");
+  revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/settings", "page");
 }
 
 export async function createSetting(formData: FormData) {
@@ -56,7 +56,7 @@ export async function createSetting(formData: FormData) {
   ).catch(() => {
     throw new Error("Error creating setting");
   });
-  revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/settings");
+  revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/settings", "page");
 }
 
 export async function deleteSetting(internalId: string) {
@@ -64,5 +64,5 @@ export async function deleteSetting(internalId: string) {
   await deleteAppSetting(ability, internalId).catch(() => {
     throw new Error("Error deleting setting");
   });
-  revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/settings");
+  revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/settings", "page");
 }

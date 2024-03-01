@@ -21,6 +21,8 @@ export const ManageSettingForm = async ({
 
   let setting;
   if (settingId) {
+    // An access control error will redirect the user to the login page
+    // Other errors will hit the nearest error boundary
     setting = await getSetting(settingId);
   } else {
     setting = {

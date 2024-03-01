@@ -3,7 +3,13 @@ import { Danger, Success } from "@clientComponents/globals/Alert/Alert";
 import { useTranslation } from "@i18n/client";
 import { useRouter } from "next/navigation";
 
-export const Messages = ({ success, error }: { success: string; error: string }) => {
+export const Messages = ({
+  success,
+  error,
+}: {
+  success?: string | undefined;
+  error?: string | undefined;
+}) => {
   const {
     t,
     i18n: { language },
@@ -12,7 +18,7 @@ export const Messages = ({ success, error }: { success: string; error: string })
 
   const dismiss = () => {
     // Removes the queryParam used to show the last message
-    router.push(`/${language}/admin/settings`);
+    router.replace(`/${language}/admin/settings`);
   };
 
   return (

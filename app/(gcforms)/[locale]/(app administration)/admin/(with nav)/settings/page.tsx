@@ -22,7 +22,7 @@ export async function generateMetadata({
 export default async function Page({
   searchParams: { success, error },
 }: {
-  searchParams: { success: string; error: string };
+  searchParams: { success?: string; error?: string };
 }) {
   const { user } = await requireAuthentication();
   checkPrivilegesAsBoolean(user.ability, [{ action: "view", subject: "Setting" }], {

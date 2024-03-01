@@ -1,5 +1,5 @@
 import { serverTranslation } from "@i18n";
-import { requireAuthentication } from "@lib/auth";
+import { authCheck } from "../actions";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { Metadata } from "next";
 import { ManageSettingForm } from "../components/server/ManageSettingForm";
@@ -11,13 +11,13 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { t } = await serverTranslation("admin-settings", { lang: locale });
   return {
-    title: `${t("title-create")}`, //TODO
+    title: `${t("title-create")}`,
   };
 }
 
 export default async function Page() {
-  const { user } = await requireAuthentication();
-  checkPrivilegesAsBoolean(user.ability, [{ action: "create", subject: "Setting" }], {
+  const ability = await authCheck();
+  checkPrivilegesAsBoolean(ability, [{ action: "create", subject: "Setting" }], {
     redirect: true,
   });
 
