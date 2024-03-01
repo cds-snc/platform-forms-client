@@ -9,6 +9,7 @@ import { redirect } from "next/navigation";
 import { TemplateStoreProvider } from "@lib/store";
 import { TemplateApiProvider } from "@lib/hooks/form-builder";
 import { RefStoreProvider } from "@lib/hooks/form-builder/useRefStore";
+import { RightPanel } from "@formBuilder/components/shared/right-panel/RightPanel";
 
 export default async function Layout({
   children,
@@ -70,6 +71,7 @@ export default async function Layout({
 
                   <main id="content" className="form-builder my-7 w-full">
                     {children}
+                    <RightPanel />
                   </main>
                 </div>
               </div>

@@ -53,6 +53,7 @@
     "@aws-sdk/client-sqs": "3.481.0",
     "@aws-sdk/lib-dynamodb": "3.481.0",
     "@casl/ability": "6.5.0",
+    "@headlessui/react": "^1.7.18",
     "@lexical/react": "^0.12.6",
     "@prisma/client": "^5.7.1",
     "@radix-ui/react-dropdown-menu": "2.0.6",
