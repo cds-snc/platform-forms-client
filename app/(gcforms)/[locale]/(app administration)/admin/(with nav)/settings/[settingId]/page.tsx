@@ -31,7 +31,7 @@ export default async function Page({ params: { settingId } }: { params: { settin
     <>
       <h1 className="border-0 mb-10">{t("title-update")}</h1>
       <Suspense fallback={<Loader />}>
-        <ManageSettingForm settingId={settingId} canManageSettings={true} />
+        <ManageSettingForm settingId={settingId} />
       </Suspense>
     </>
   );

@@ -26,7 +26,7 @@ export default async function Page() {
   return (
     <>
       <h1 className="border-0 mb-10">{t("title-create")}</h1>
-      <ManageSettingForm canManageSettings={true} />
+      <ManageSettingForm />
     </>
   );
 }

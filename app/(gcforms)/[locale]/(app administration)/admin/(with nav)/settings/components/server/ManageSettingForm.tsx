@@ -4,14 +4,9 @@ import { SecondaryLinkButton } from "@clientComponents/globals";
 import { SaveButton } from "../client/SaveButton";
 import { redirect } from "next/navigation";
 import { Danger } from "@clientComponents/globals/Alert/Alert";
+import { Label } from "@clientComponents/forms";
 
-export const ManageSettingForm = async ({
-  settingId,
-  canManageSettings,
-}: {
-  settingId?: string;
-  canManageSettings: boolean;
-}) => {
+export const ManageSettingForm = async ({ settingId }: { settingId?: string }) => {
   const {
     t,
     i18n: { language },
@@ -54,79 +49,73 @@ export const ManageSettingForm = async ({
     <div className="gc-form">
       {setting ? (
         <form action={formActionWrapper}>
-          <label htmlFor="internalId" className="gc-label mt-2 mb-0">
+          <Label htmlFor="internalId" required={true}>
             {t("label.internalId")}
-          </label>
+          </Label>
           <input
             className="gc-input-text mb-1"
             defaultValue={setting?.internalId}
             type="text"
             name="internalId"
-            readOnly={!canManageSettings}
-            {...(canManageSettings && { required: true })}
+            required={true}
           />
-          <label htmlFor="nameEn" className="gc-label mt-2 mb-0">
+          <Label htmlFor="nameEn" required={true} className="mt-6">
             {t("label.nameEn")}
-          </label>
+          </Label>
           <input
             className="gc-input-text mb-1"
             defaultValue={setting?.nameEn}
             type="text"
             name="nameEn"
             id="nameEn"
-            readOnly={!canManageSettings}
-            {...(canManageSettings && { required: true })}
+            required={true}
           />
-          <label htmlFor="nameFr" className="gc-label mt-2 mb-0">
+          <Label htmlFor="nameFr" required={true} className="mt-6">
             {t("label.nameFr")}
-          </label>
+          </Label>
           <input
             className="gc-input-text mb-1"
             defaultValue={setting?.nameFr}
             type="text"
             name="nameFr"
             id="nameFr"
-            readOnly={!canManageSettings}
-            {...(canManageSettings && { required: true })}
+            required={true}
           />
-          <label htmlFor="descriptionEn" className="gc-label mt-2 mb-0">
+          <Label htmlFor="descriptionEn" className="mt-6">
             {t("label.descriptionEn")}
-          </label>
+          </Label>
           <input
             className="gc-input-text mb-1"
             defaultValue={setting?.descriptionEn ?? ""}
             type="text"
             name="descriptionEn"
             id="descriptionEn"
-            readOnly={!canManageSettings}
           />
-          <label htmlFor="descriptionFr" className="gc-label mt-2 mb-0">
+          <Label htmlFor="descriptionFr" className="mt-6">
             {t("label.descriptionFr")}
-          </label>
+          </Label>
           <input
             className="gc-input-text mb-1"
             defaultValue={setting?.descriptionFr ?? ""}
             type="text"
             name="descriptionFr"
             id="descriptionFr"
-            readOnly={!canManageSettings}
           />
-          <label htmlFor="value" className="gc-label mt-2 mb-0">
+          <Label htmlFor="value" required={true} className="mt-6">
             {t("label.value")}
-          </label>
+          </Label>
           <input
             className="gc-input-text mb-1"
             defaultValue={setting?.value ?? ""}
             type="text"
             name="value"
             id="value"
-            readOnly={!canManageSettings}
-            {...(canManageSettings && { required: true })}
+            required={true}
           />
-          <div className="mt-4">
+          <div className="mt-8">
             <SaveButton />
             <SecondaryLinkButton href={`/${language}/admin/settings`}>
-              {canManageSettings ? t("cancel") : t("back")}
+              {t("cancel")}
             </SecondaryLinkButton>
           </div>
         </form>

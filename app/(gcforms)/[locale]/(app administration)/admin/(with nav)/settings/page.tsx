@@ -18,7 +18,7 @@ export async function generateMetadata({
   };
 }
 
-// Note: the searchParam is used to as the language key to display the success or error message
+// Note: the searchParam is used as the language key to display the success or error message
 export default async function Page({
   searchParams: { success, error },
 }: {
