@@ -2,10 +2,7 @@ import { serverTranslation } from "@i18n";
 import { requireAuthentication } from "@lib/auth";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { Metadata } from "next";
-import { Settings } from "./clientSide";
-import { getAllAppSettings } from "@lib/appSettings";
-import { Suspense } from "react";
-import Loader from "@clientComponents/globals/Loader";
+import { ManageSettingForm } from "../components/server/ManageSettingForm";
 
 export async function generateMetadata({
   params: { locale },
@@ -14,25 +11,22 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { t } = await serverTranslation("admin-settings", { lang: locale });
   return {
-    title: `${t("title")}`,
+    title: `${t("title-create")}`, //TODO
   };
 }
 
 export default async function Page() {
   const { user } = await requireAuthentication();
-  checkPrivilegesAsBoolean(user.ability, [{ action: "view", subject: "Setting" }], {
+  checkPrivilegesAsBoolean(user.ability, [{ action: "create", subject: "Setting" }], {
     redirect: true,
   });
-  const settings = await getAllAppSettings(user.ability);
 
   const { t } = await serverTranslation("admin-settings");
 
   return (
     <>
-      <h1 className="border-0 mb-10">{t("title")}</h1>
-      <Suspense fallback={<Loader />}>
-        <Settings settings={settings} />
-      </Suspense>
+      <h1 className="border-0 mb-10">{t("title-create")}</h1>
+      <ManageSettingForm canManageSettings={true} />
     </>
   );
 }

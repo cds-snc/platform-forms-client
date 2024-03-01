@@ -53,6 +53,25 @@ export const getAppSetting = async (internalId: string) => {
   return uncachedSetting?.value ?? null;
 };
 
+export const getFullAppSetting = async (internalId: string) => {
+  // Note: the setting is not cached here because it's not expected to be called frequently
+  return prisma.setting
+    .findUnique({
+      where: {
+        internalId,
+      },
+      select: {
+        internalId: true,
+        nameEn: true,
+        nameFr: true,
+        descriptionEn: true,
+        descriptionFr: true,
+        value: true,
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+};
+
 interface SettingUpdateData {
   nameEn?: string;
   nameFr?: string;

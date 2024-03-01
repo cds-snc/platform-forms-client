@@ -1,22 +1,21 @@
 "use client";
-import { deleteSetting } from "../../actions";
-
-import { Button } from "@clientComponents/globals";
-import { toast } from "@formBuilder/components/shared";
-import { logMessage } from "@lib/logger";
 import { useTranslation } from "react-i18next";
+import { deleteSetting } from "../../actions";
+import { Button } from "@clientComponents/globals";
+import { useRouter } from "next/navigation";
 
 export const DeleteSettingsButton = ({ id }: { id: string }) => {
-  const { t } = useTranslation("admin-settings");
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation("admin-settings");
+  const router = useRouter();
 
-  const deleteSettingAction = async (internalId: string) => {
-    try {
-      await deleteSetting(internalId);
-      toast.success(t("deleted"));
-    } catch (error) {
-      logMessage.error(error);
-      toast.error(t("error"));
-    }
+  const deleteSettingWrapper = async (id: string) => {
+    await deleteSetting(id).catch(() => {
+      router.push(`/${language}/admin/settings?success=errorDeleting`);
+    });
+    router.push(`/${language}/admin/settings?success=deleted`);
   };
 
   return (
@@ -24,7 +23,7 @@ export const DeleteSettingsButton = ({ id }: { id: string }) => {
       type="button"
       theme="destructive"
       className="text-sm whitespace-nowrap"
-      onClick={() => deleteSettingAction(id)}
+      onClick={() => deleteSettingWrapper(id)}
     >
       {t("deleteSetting")}
     </Button>

@@ -4,35 +4,48 @@ import { createAbility } from "@lib/privileges";
 import {
   createAppSetting,
   deleteAppSetting,
-  getAppSetting,
+  getFullAppSetting,
   updateAppSetting,
 } from "@lib/appSettings";
 import { revalidatePath } from "next/cache";
 
-// Note: any thrown errors will be caught in the Error boundary/component
+const authCheck = async () => {
+  const session = await auth();
+  if (!session) throw new Error("No session found");
+  return createAbility(session);
+};
 
 export async function getSetting(internalId: string) {
-  const session = await auth();
-  if (!session) throw new Error("No session");
+  await authCheck();
+  return getFullAppSetting(internalId);
+}
 
-  await getAppSetting(internalId);
+export async function updateSetting(formData: FormData) {
+  const ability = await authCheck();
+  const setting = {
+    internalId: formData.get("internalId") as string,
+    nameEn: formData.get("nameEn") as string,
+    nameFr: formData.get("nameFr") as string,
+    descriptionEn: formData.get("descriptionEn") as string,
+    descriptionFr: formData.get("descriptionFr") as string,
+    value: formData.get("value") as string,
+  };
+  await updateAppSetting(ability, setting.internalId, setting).catch(() => {
+    throw new Error("Error updating setting");
+  });
   revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/settings");
 }
 
-export async function updateSetting(internalId: string, setting: Record<string, unknown>) {
-  const session = await auth();
-  if (!session) throw new Error("No session");
-  const ability = createAbility(session);
-
-  await updateAppSetting(ability, internalId, setting);
-  revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/settings");
-}
-
-export async function createSetting(internalId: string, setting: Record<string, unknown>) {
-  const session = await auth();
-  if (!session) throw new Error("No session");
-  const ability = createAbility(session);
-
+export async function createSetting(formData: FormData) {
+  const ability = await authCheck();
+  const setting = {
+    internalId: formData.get("internalId") as string,
+    nameEn: formData.get("nameEn") as string,
+    nameFr: formData.get("nameFr") as string,
+    descriptionEn: formData.get("descriptionEn") as string,
+    descriptionFr: formData.get("descriptionFr") as string,
+    value: formData.get("value") as string,
+  };
   await createAppSetting(
     ability,
     setting as {
@@ -40,15 +53,16 @@ export async function createSetting(internalId: string, setting: Record<string, 
       nameEn: string;
       nameFr: string;
     }
-  );
+  ).catch(() => {
+    throw new Error("Error creating setting");
+  });
   revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/settings");
 }
 
 export async function deleteSetting(internalId: string) {
-  const session = await auth();
-  if (!session) throw new Error("No session");
-  const ability = createAbility(session);
-
-  await deleteAppSetting(ability, internalId);
+  const ability = await authCheck();
+  await deleteAppSetting(ability, internalId).catch(() => {
+    throw new Error("Error deleting setting");
+  });
   revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/settings");
 }
