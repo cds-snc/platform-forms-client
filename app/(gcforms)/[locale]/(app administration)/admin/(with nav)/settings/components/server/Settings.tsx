@@ -1,12 +1,14 @@
 import React from "react";
 import { PrimaryLinkButton, SecondaryLinkButton } from "@clientComponents/globals";
 import { DeleteSettingsButton } from "../client/DeleteSettingsButton";
-import { authCheck } from "app/(gcforms)/[locale]/(form administration)/forms/[[...path]]/actions";
+import { requireAuthentication } from "@lib/auth";
 import { getAllAppSettings } from "@lib/appSettings";
 import { serverTranslation } from "@i18n";
 
 export const Settings = async () => {
-  const ability = await authCheck();
+  const {
+    user: { ability },
+  } = await requireAuthentication();
   // Note: could add a util to return an array if this is useful elsewhere
   const canUpdateSettings = ability?.can("update", "Setting") ?? false;
   const canCreateSettings = ability?.can("create", "Setting") ?? false;

@@ -9,6 +9,12 @@ import {
 } from "@lib/appSettings";
 import { revalidatePath } from "next/cache";
 
+function nullCheck(formData: FormData, key: string) {
+  const result = formData.get(key);
+  if (!result) throw new Error(`No value found for ${key}`);
+  return result as string;
+}
+
 export const authCheck = async () => {
   const session = await auth();
   if (!session) throw new Error("No session found");
@@ -23,13 +29,14 @@ export async function getSetting(internalId: string) {
 export async function updateSetting(formData: FormData) {
   const ability = await authCheck();
   const setting = {
-    internalId: formData.get("internalId") as string,
-    nameEn: formData.get("nameEn") as string,
-    nameFr: formData.get("nameFr") as string,
-    descriptionEn: formData.get("descriptionEn") as string,
-    descriptionFr: formData.get("descriptionFr") as string,
-    value: formData.get("value") as string,
+    internalId: nullCheck(formData, "internalId"),
+    nameEn: nullCheck(formData, "nameEn"),
+    nameFr: nullCheck(formData, "nameFr"),
+    descriptionEn: nullCheck(formData, "descriptionEn"),
+    descriptionFr: nullCheck(formData, "descriptionFr"),
+    value: nullCheck(formData, "value"),
   };
+
   await updateAppSetting(ability, setting.internalId, setting).catch(() => {
     throw new Error("Error updating setting");
   });
@@ -39,12 +46,12 @@ export async function updateSetting(formData: FormData) {
 export async function createSetting(formData: FormData) {
   const ability = await authCheck();
   const setting = {
-    internalId: formData.get("internalId") as string,
-    nameEn: formData.get("nameEn") as string,
-    nameFr: formData.get("nameFr") as string,
-    descriptionEn: formData.get("descriptionEn") as string,
-    descriptionFr: formData.get("descriptionFr") as string,
-    value: formData.get("value") as string,
+    internalId: nullCheck(formData, "internalId"),
+    nameEn: nullCheck(formData, "nameEn"),
+    nameFr: nullCheck(formData, "nameFr"),
+    descriptionEn: nullCheck(formData, "descriptionEn"),
+    descriptionFr: nullCheck(formData, "descriptionFr"),
+    value: nullCheck(formData, "value"),
   };
   await createAppSetting(
     ability,

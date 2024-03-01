@@ -56,7 +56,7 @@ export const getAppSetting = async (internalId: string) => {
 export const getFullAppSetting = async (ability: UserAbility, internalId: string) => {
   checkPrivileges(ability, [{ action: "view", subject: "Setting" }]);
   // Note: the setting is not cached here because it's not expected to be called frequently
-  return prisma.setting
+  const result = prisma.setting
     .findUnique({
       where: {
         internalId,
@@ -82,6 +82,9 @@ export const getFullAppSetting = async (ability: UserAbility, internalId: string
       }
       prismaErrors(e, null);
     });
+
+  logEvent(ability.userID, { type: "Setting" }, "ListSetting");
+  return result;
 };
 
 interface SettingUpdateData {

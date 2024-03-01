@@ -1,5 +1,5 @@
 import { serverTranslation } from "@i18n";
-import { authCheck } from "../actions";
+import { requireAuthentication } from "@lib/auth";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { Metadata } from "next";
 import { ManageSettingForm } from "../components/server/ManageSettingForm";
@@ -18,7 +18,9 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params: { settingId } }: { params: { settingId: string } }) {
-  const ability = await authCheck();
+  const {
+    user: { ability },
+  } = await requireAuthentication();
   checkPrivilegesAsBoolean(ability, [{ action: "update", subject: "Setting" }], {
     redirect: true,
   });
