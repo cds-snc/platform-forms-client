@@ -34,11 +34,7 @@ export default async function Page({
   return (
     <>
       <h1 className="border-0 mb-10">{t("title")}</h1>
-      {/* {success && <Success title={t(success)} dismissible={true} focussable={true} />}
-      {error && <Danger title={t(error)} dismissible={true} focussable={true} />} */}
-
       <Messages success={success} error={error} />
-
       <Suspense fallback={<Loader />}>
         <Settings />
       </Suspense>

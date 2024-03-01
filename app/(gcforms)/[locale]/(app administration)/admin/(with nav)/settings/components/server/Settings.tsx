@@ -11,6 +11,7 @@ export const Settings = async () => {
   checkPrivilegesAsBoolean(user.ability, [{ action: "update", subject: "Setting" }], {
     redirect: true,
   });
+  // Note: could add a util to return an array if this is useful elsewhere
   const canUpdateSettings = user.ability?.can("update", "Setting") ?? false;
   const canCreateSettings = user.ability?.can("create", "Setting") ?? false;
   const canDeleteSettings = user.ability?.can("delete", "Setting") ?? false;
