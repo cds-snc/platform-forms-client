@@ -1,21 +1,50 @@
 "use client";
 
 import React, { Fragment, useState } from "react";
-import { Transition } from "@headlessui/react";
+import { useRouter } from "next/navigation";
+import { Transition, Tab } from "@headlessui/react";
 import { Button } from "@clientComponents/globals";
-import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { RightPanelOpen, RoundCloseIcon } from "@serverComponents/icons";
+import { cn } from "@lib/utils";
+import { LangSwitcher } from "@formBuilder/components/shared/LangSwitcher";
 
-export const RightPanel = () => {
+import { DownloadCSV } from "@formBuilder/[id]/edit/translate/components/DownloadCSV";
+import { DownloadFileButton } from "@formBuilder/components/shared";
+
+const TabButton = ({
+  selected,
+  text,
+  onClick,
+  className,
+  ...rest
+}: {
+  selected: boolean;
+  text: string;
+  onClick: () => void;
+  className?: string;
+}) => {
+  return (
+    <button
+      {...rest}
+      className={cn(
+        selected
+          ? "border-indigo-500 text-indigo-600"
+          : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+        "whitespace-nowrap border-b-2 px-2 py-2 flex justify-center w-full",
+        className
+      )}
+      onClick={onClick}
+    >
+      <span className={cn(selected && "font-bold")}>{text}</span>
+    </button>
+  );
+};
+
+export const RightPanel = ({ id }: { id: string }) => {
   const [open, setOpen] = useState(true);
-  const { t } = useTranslation("form-builder");
-
-  const tabs = [
-    { name: "Questions", href: "#", current: false },
-    { name: "Translation", href: "#", current: true },
-    { name: "Logic", href: "#", current: false },
-  ];
+  const router = useRouter();
+  const { t, i18n } = useTranslation("form-builder");
 
   return (
     <div className="relative">
@@ -49,7 +78,7 @@ export const RightPanel = () => {
                   <div className="p-6">
                     <div className="flex justify-between">
                       <div>
-                        <h2 className="text-base">Title</h2>
+                        <h2 className="text-base">{t("rightPanel.openPanel")}</h2>
                       </div>
                       <div>
                         <button
@@ -63,27 +92,53 @@ export const RightPanel = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="border-b border-gray-200">
-                    <div className="px-6">
-                      <nav className="-mb-px flex space-x-6">
-                        {tabs.map((tab) => (
-                          <a
-                            key={tab.name}
-                            href={tab.href}
-                            className={cn(
-                              tab.current
-                                ? "border-indigo-500 text-indigo-600"
-                                : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
-                              "whitespace-nowrap border-b-2 px-1 pb-4 text-sm font-medium"
-                            )}
-                          >
-                            {tab.name}
-                          </a>
-                        ))}
-                      </nav>
-                    </div>
-                  </div>
-                  <div className="p-6">content here</div>
+                  {/* start tabs */}
+                  <Tab.Group>
+                    <Tab.List className={"flex justify-between border-b border-gray-200"}>
+                      <Tab as={Fragment}>
+                        {({ selected }) => (
+                          <TabButton
+                            selected={selected}
+                            text={t("rightPanel.questions")}
+                            onClick={() => {
+                              router.push(`/${i18n.language}/form-builder/${id}/edit`);
+                            }}
+                            className="justify-start px-6"
+                          />
+                        )}
+                      </Tab>
+                      {/* 
+                      <Tab as={Fragment}>
+                        {({ selected }) => (
+                          <TabButton selected={selected} text={t("rightPanel.logic")} />
+                        )}
+                      </Tab>
+                      */}
+                      <Tab as={Fragment}>
+                        {({ selected }) => (
+                          <TabButton
+                            selected={selected}
+                            text={t("rightPanel.translation")}
+                            onClick={() => {
+                              router.push(`/${i18n.language}/form-builder/${id}/edit/translate`);
+                            }}
+                          />
+                        )}
+                      </Tab>
+                    </Tab.List>
+                    <Tab.Panels className="p-6">
+                      <Tab.Panel>
+                        <div className="mb-4 flex">
+                          <LangSwitcher descriptionLangKey="editingIn" />
+                        </div>
+                        <DownloadFileButton showInfo={false} autoShowDialog={false} />
+                      </Tab.Panel>
+                      <Tab.Panel>
+                        <DownloadCSV />
+                      </Tab.Panel>
+                    </Tab.Panels>
+                  </Tab.Group>
+                  {/* end tabs */}
                 </div>
               </div>
             </Transition.Child>

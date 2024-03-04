@@ -785,6 +785,9 @@
   "opensInNewTab": "opens in a new tab",
   "rightPanel": {
     "openPanel": "Design form",
-    "closePanel": "Close panel"
+    "closePanel": "Close panel",
+    "questions": "Questions",
+    "logic": "Logic",
+    "translation": "Translation"
   }
 }

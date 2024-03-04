@@ -72,7 +72,7 @@ export default async function Layout({
                   <main id="content" className="form-builder my-7 w-full">
                     {children}
                   </main>
-                  <RightPanel />
+                  <RightPanel id={id} />
                 </div>
               </div>
 
