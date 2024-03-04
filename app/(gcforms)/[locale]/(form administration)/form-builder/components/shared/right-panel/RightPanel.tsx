@@ -77,7 +77,7 @@ export const RightPanel = ({ id }: { id: string }) => {
               leaveTo="translate-x-full"
             >
               <div className="pointer-events-auto w-screen max-w-md">
-                <div className="flex h-full flex-col overflow-y-scroll border-l border-slate-200 bg-white">
+                <div className="flex h-full flex-col border-l border-slate-200 bg-white">
                   <div className="p-6">
                     <div className="flex justify-between">
                       <div>
