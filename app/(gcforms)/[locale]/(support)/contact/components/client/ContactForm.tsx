@@ -65,7 +65,7 @@ export const ContactForm = () => {
             throw new Error(t("contactus.errors.submissionError"));
           }
           setErrorMessage("");
-          router.push(`/${i18n.language}/contact?success`);
+          router.replace(`/${i18n.language}/contact?success`);
         } catch (err) {
           logMessage.error(err);
           setIsSubmitting(false);

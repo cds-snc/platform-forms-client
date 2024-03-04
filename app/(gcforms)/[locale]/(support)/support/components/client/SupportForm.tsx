@@ -60,7 +60,7 @@ export const SupportForm = () => {
             throw new Error(t("support.errors.submissionError"));
           }
           setErrorMessage("");
-          router.push(`/${language}/support?success`);
+          router.replace(`/${language}/support?success`);
         } catch (err) {
           logMessage.error(err);
           setIsSubmitting(false);
