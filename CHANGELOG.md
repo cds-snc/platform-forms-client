@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.12.7](https://github.com/cds-snc/platform-forms-client/compare/v3.12.6...v3.12.7) (2024-02-29)
+
+
+### Bug Fixes
+
+* Nested conditional rule ([#3295](https://github.com/cds-snc/platform-forms-client/issues/3295)) ([64a2a44](https://github.com/cds-snc/platform-forms-client/commit/64a2a4466f08ea28bf03a419226414ff518fb8f4))
+
+
+### Miscellaneous Chores
+
+* Rename NEXTAUTH_URL as it is no longer required for Next-Auth ([#3288](https://github.com/cds-snc/platform-forms-client/issues/3288)) ([6ea5064](https://github.com/cds-snc/platform-forms-client/commit/6ea506440a5c3742f72716336354eb2f3d2c0744))
+
 ## [3.12.6](https://github.com/cds-snc/platform-forms-client/compare/v3.12.5...v3.12.6) (2024-02-22)
 
 ### Bug Fixes

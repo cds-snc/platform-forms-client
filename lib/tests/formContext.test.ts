@@ -12,6 +12,9 @@ import {
   getElementsUsingChoiceId,
   cleanChoiceIdsFromRules,
   removeChoiceFromRules,
+  getRelatedElementsFromRule,
+  validConditionalRules,
+  getRelatedIdsPassingRules,
 } from "../formContext";
 
 describe("Form Context", () => {
@@ -385,6 +388,92 @@ describe("Form Context", () => {
     expect(removeChoiceFromRules(elements, "1.1")).toEqual({
       "3": [{ choiceId: "1.0" }],
       "5": [{ choiceId: "2.0" }],
+    });
+  });
+
+  describe("Element Related rules", () => {
+    const elements = [
+      {
+        id: 1,
+        type: FormElementTypes.radio,
+        properties: {
+          titleEn: "Question 1 en",
+          titleFr: "Question 1 fr",
+          choices: [
+            { en: "A", fr: "A" }, // 1.0
+            { en: "B", fr: "B" }, // 1.1
+          ],
+        },
+      },
+      {
+        id: 2,
+        type: FormElementTypes.radio,
+        properties: {
+          titleEn: "A Question 2 en",
+          titleFr: "A Question 2 fr",
+          choices: [
+            { en: "yes", fr: "yes" }, // 2.0
+            { en: "no", fr: "no" }, // 2.1
+            { en: "other", fr: "other fr" }, // 2.2
+          ],
+          conditionalRules: [{ choiceId: "1.0" }], // Show if A is selected
+        },
+      },
+      {
+        id: 3,
+        type: FormElementTypes.textField,
+        properties: {
+          titleEn: "B Question 2 en",
+          titleFr: "B Question 2 fr",
+          conditionalRules: [{ choiceId: "1.1" }], // Show if B is selected
+        },
+      },
+      {
+        id: 4,
+        type: FormElementTypes.textField,
+        properties: {
+          titleEn: "Other => Question",
+          titleFr: "Other => Question FR",
+          conditionalRules: [{ choiceId: "2.2" }], // Show if Other is selected
+        },
+      },
+    ];
+
+    test("Gets related elements from rule", async () => {
+      const rules = elements[2].properties?.conditionalRules;
+      const relatedElements = getRelatedElementsFromRule(elements, rules);
+      expect(relatedElements[0]).toEqual(elements[0]);
+    });
+
+    test("Element with no rules", async () => {
+      expect(validConditionalRules(elements[0], [])).toEqual(true);
+    });
+
+    test("Element with rules when no matched values", async () => {
+      // Not valid depends 1.0 being selected
+      expect(validConditionalRules(elements[1], [])).toEqual(false);
+    });
+
+    test("Element with rules when matched values", async () => {
+      // Valid as 1.0 is selected
+      expect(validConditionalRules(elements[1], ["1.0"])).toEqual(true);
+    });
+
+    test("Nested element with rules when matched values", async () => {
+      // Valid as 2.2 is selected -- not testing parent rule
+      expect(validConditionalRules(elements[3], ["2.2"])).toEqual(true);
+    });
+
+    test("Related IDs - element selected but not parent", async () => {
+      const rules = elements[3].properties?.conditionalRules;
+      // Expect empty array as 2.2 is selected but 1.0 is not
+      expect(getRelatedIdsPassingRules(elements, rules, ["2.2"])).toEqual([]);
+    });
+
+    test("Related IDs - element selected and parent selected", async () => {
+      const rules = elements[3].properties?.conditionalRules;
+      // Expect parent element id to be returned
+      expect(getRelatedIdsPassingRules(elements, rules, ["1.0", "2.2"])).toEqual([2]);
     });
   });
 });
