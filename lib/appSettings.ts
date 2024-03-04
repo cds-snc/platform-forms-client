@@ -74,7 +74,7 @@ export const getFullAppSetting = async (ability: UserAbility, internalId: string
       if (e instanceof AccessControlError) {
         logEvent(
           ability.userID,
-          { type: "Setting" },
+          { type: "Setting", id: internalId },
           "AccessDenied",
           "Attempted to get full setting"
         );
