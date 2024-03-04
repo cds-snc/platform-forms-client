@@ -784,6 +784,7 @@
   "saved": "Enregistré",
   "opensInNewTab": "ouvre un nouvel onglet",
   "rightPanel": {
-    "openPanel": "Design form [FR]"
+    "openPanel": "Design form [FR]",
+    "closePanel": "Close panel [FR]"
   }
 }

@@ -5,7 +5,7 @@ import { Transition } from "@headlessui/react";
 import { Button } from "@clientComponents/globals";
 import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
-import { RightPanelOpen } from "@serverComponents/icons";
+import { RightPanelOpen, RoundCloseIcon } from "@serverComponents/icons";
 
 export const RightPanel = () => {
   const [open, setOpen] = useState(true);
@@ -37,25 +37,28 @@ export const RightPanel = () => {
           <div className="sticky top-0 z-20 flex h-dvh">
             <Transition.Child
               as={Fragment}
-              enter="transform transition ease-in-out duration-500 sm:duration-700"
+              enter="transform transition ease-in-out duration-500"
               enterFrom="translate-x-full"
               enterTo="translate-x-0"
-              leave="transform transition ease-in-out duration-500 sm:duration-700"
+              leave="transform transition ease-in-out duration-500"
               leaveFrom="translate-x-0"
               leaveTo="translate-x-full"
             >
               <div className="pointer-events-auto w-screen max-w-md">
-                <div className="flex h-full flex-col overflow-y-scroll bg-white">
+                <div className="flex h-full flex-col overflow-y-scroll border-l border-slate-200 bg-white">
                   <div className="p-6">
-                    <div className="flex items-start justify-between">
-                      <div className="ml-3 flex h-7 items-center">
+                    <div className="flex justify-between">
+                      <div>
+                        <h2 className="text-base">Title</h2>
+                      </div>
+                      <div>
                         <button
                           type="button"
                           className="relative rounded-md bg-white text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-indigo-500"
                           onClick={() => setOpen(false)}
                         >
-                          <span className="absolute -inset-2.5" />
-                          <span className="sr-only">Close panel</span>X
+                          <span className="sr-only">{t("rightPanel.closePanel")}</span>
+                          <RoundCloseIcon />
                         </button>
                       </div>
                     </div>
@@ -80,7 +83,7 @@ export const RightPanel = () => {
                       </nav>
                     </div>
                   </div>
-                  content here
+                  <div className="p-6">content here</div>
                 </div>
               </div>
             </Transition.Child>

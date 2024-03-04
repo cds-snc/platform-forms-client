@@ -784,6 +784,7 @@
   "saved": "Saved",
   "opensInNewTab": "opens in a new tab",
   "rightPanel": {
-    "openPanel": "Design form"
+    "openPanel": "Design form",
+    "closePanel": "Close panel"
   }
 }
