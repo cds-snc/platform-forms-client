@@ -11,7 +11,7 @@ import { Logos, options } from "../../../settings/branding/components";
 import { useTemplateStore } from "@lib/store";
 import { SettingsModal } from "./SettingsDialog";
 import { Tooltip } from "@formBuilder/components/shared/Tooltip";
-import { updateTemplateSecurityAttribute } from "@formBuilder/actions";
+import { updateTemplate, updateTemplateSecurityAttribute } from "@formBuilder/actions";
 
 enum DeliveryOption {
   vault = "vault",
@@ -32,6 +32,7 @@ export const SettingsPanel = () => {
     brandName,
     unsetField,
     updateField,
+    getSchema,
   } = useTemplateStore((s) => ({
     id: s.id,
     email: s.deliveryOption?.emailAddress,
@@ -41,6 +42,7 @@ export const SettingsPanel = () => {
     brandName: s.form?.brand?.name || "",
     unsetField: s.unsetField,
     updateField: s.updateField,
+    getSchema: s.getSchema,
   }));
 
   const initialDeliveryOption = !email ? DeliveryOption.vault : DeliveryOption.email;
@@ -87,14 +89,22 @@ export const SettingsPanel = () => {
     (type: string) => {
       if (type === "") {
         unsetField("form.brand");
+        updateTemplate({
+          id,
+          formConfig: JSON.parse(getSchema()),
+        });
         return;
       }
 
       if (type !== brandName) {
         updateField("form.brand", options.filter((o) => o.name === type)[0]);
+        updateTemplate({
+          id,
+          formConfig: JSON.parse(getSchema()),
+        });
       }
     },
-    [brandName, updateField, unsetField]
+    [brandName, unsetField, updateField, id, getSchema]
   );
 
   // More ...
