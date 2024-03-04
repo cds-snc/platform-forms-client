@@ -1,8 +1,10 @@
+import { Suspense } from "react";
 import { serverTranslation } from "@i18n";
 import { requireAuthentication } from "@lib/auth";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { Metadata } from "next";
-import { FlagTable } from "./clientSide";
+import { FlagList } from "./components/server/FlagList";
+import { Loader } from "@clientComponents/globals/Loader";
 
 export async function generateMetadata({
   params: { locale },
@@ -26,7 +28,9 @@ export default async function Page() {
     <>
       <h1 className="border-0 mb-10">{t("title")}</h1>
       <p className="pb-8">{t("subTitle")}</p>
-      <FlagTable />
+      <Suspense fallback={<Loader />}>
+        <FlagList ability={user.ability} />
+      </Suspense>
     </>
   );
 }

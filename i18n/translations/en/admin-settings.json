@@ -1,5 +1,7 @@
 {
   "title": "Settings",
+  "title-update": "Update setting",
+  "title-create": "Create setting",
   "brandingRequestId": "Branding request form ID",
   "success": "Data saved successfully",
   "loadingError": "Sorry, something went wrong.",
@@ -11,6 +13,12 @@
   "save": "Save",
   "back": "Back",
   "deleted": "Setting deleted",
+  "errorDeleting": "Error deleting setting",
+  "created": "Setting created",
+  "errorCreating": "Error creating setting",
+  "updated": "Setting updated",
+  "errorUpdating": "Error updating setting",
+  "settingNotFound": "Setting not found",
   "error": {
     "save": "Error saving data",
     "duplicateId": "Duplicate internal ID, please select another"

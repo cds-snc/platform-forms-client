@@ -4,6 +4,7 @@ import { AccountsIcon } from "@serverComponents/icons/AccountsIcon";
 import { SettingsIcon } from "@serverComponents/icons/SettingsIcon";
 import { FlagsIcon } from "@serverComponents/icons/FlagsIcon";
 import { UserAbility } from "@lib/types";
+
 export const LeftNavigation = async ({ ability }: { ability: UserAbility }) => {
   const {
     t,

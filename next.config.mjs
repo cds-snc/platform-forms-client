@@ -35,16 +35,12 @@ const nextConfig = {
     removeConsole: true,
   },
   output: isOutputStandalone ? "standalone" : undefined,
-  webpack: (config, { isServer, nextRuntime, webpack }) => {
+  webpack: (config) => {
     // Support reading markdown
     config.module.rules.push({
       test: /\.md$/,
       type: "asset/source",
     });
-
-    // Silences a repeated warning from the aws-sdk
-    if (isServer && nextRuntime === "nodejs")
-      config.plugins.push(new webpack.IgnorePlugin({ resourceRegExp: /^aws-crt$/ }));
 
     return config;
   },
@@ -87,6 +83,7 @@ const nextConfig = {
   experimental: {
     instrumentationHook: true,
     // ppr: true, -- This is not yet ready for production use
+    serverComponentsExternalPackages: ["@aws-sdk/lib-dynamodb"],
   },
 };
 

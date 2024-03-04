@@ -1,9 +1,12 @@
+import { Suspense } from "react";
 import { serverTranslation } from "@i18n";
 import { requireAuthentication } from "@lib/auth";
-import { checkPrivilegesAsBoolean, getAllPrivileges } from "@lib/privileges";
-import { getUsers } from "@lib/users";
-import { Users } from "./clientSide";
+import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { Metadata } from "next";
+import { NavigtationFrame } from "./components/server/NavigationFrame";
+import { Loader } from "@clientComponents/globals/Loader";
+
+import { UsersList } from "./components/server/UsersList";
 
 export async function generateMetadata({
   params: { locale },
@@ -17,12 +20,14 @@ export async function generateMetadata({
 }
 
 export default async function Page({
-  searchParams: { id: previousUserRef },
+  params: { locale },
+  searchParams: { userState },
 }: {
   params: { locale: string };
-  searchParams: { id?: string };
+  searchParams: { userState?: string };
 }) {
   const { user } = await requireAuthentication();
+  // Can the user view this page
   checkPrivilegesAsBoolean(
     user.ability,
     [
@@ -31,24 +36,17 @@ export default async function Page({
     ],
     { logic: "all", redirect: true }
   );
-  const allUsers = await getUsers(user.ability);
 
-  const allPrivileges = (await getAllPrivileges(user.ability)).map(
-    ({ id, name, descriptionFr, descriptionEn }) => ({
-      id,
-      name,
-      descriptionFr,
-      descriptionEn,
-    })
+  const { t } = await serverTranslation("admin-users", { lang: locale });
+
+  return (
+    <>
+      <h1 className="mb-0 border-0">{t("accounts")}</h1>
+      <NavigtationFrame userState={userState}>
+        <Suspense key={userState} fallback={<Loader />}>
+          <UsersList filter={userState} />
+        </Suspense>
+      </NavigtationFrame>
+    </>
   );
-
-  // Convenience for features, lock/unlock publishing that may or may not have the related Id
-  const publishFormsId = allPrivileges.find((privilege) => privilege.name === "PublishForms")?.id;
-
-  // If the PublishForms privilege does not exist then we have a system wide issue
-  if (!publishFormsId) {
-    throw new Error("PublishForms privilege not found in global system privileges");
-  }
-
-  return <Users {...{ allUsers, allPrivileges, publishFormsId, previousUserRef }} />;
 }
