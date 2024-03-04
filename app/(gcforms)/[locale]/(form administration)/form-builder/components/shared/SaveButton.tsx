@@ -99,6 +99,9 @@ export const SaveButton = () => {
   const pathname = usePathname();
 
   const handleSave = async () => {
+    if (status !== "authenticated") {
+      return;
+    }
     const formConfig = getSchema();
 
     try {
