@@ -1,7 +1,7 @@
 import { serverTranslation } from "@i18n";
 import Link from "next/link";
 import { Primary } from "@clientComponents/globals/Buttons/LinkButton";
-import { FocusHeader } from "../../../components/client/FocusHeader";
+import { FocusHeader } from "../client/FocusHeader";
 
 export const Success = async () => {
   const {

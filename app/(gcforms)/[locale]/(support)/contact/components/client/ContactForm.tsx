@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import Link from "next/link";
 import { Formik } from "formik";
 import { useTranslation } from "@i18n/client";
 import * as Yup from "yup";
@@ -15,12 +14,12 @@ import {
   TextArea,
   Description,
 } from "@clientComponents/forms";
-import { Button, Alert } from "@clientComponents/globals";
+import { Button } from "@clientComponents/globals";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import { useRouter } from "next/navigation";
 import { contact } from "../../actions";
 
-export function Contact() {
+export const ContactForm = () => {
   const { t, i18n } = useTranslation(["form-builder", "common"]);
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -105,20 +104,6 @@ export function Contact() {
           )}
           {!errorMessage && (
             <form id="contactus" method="POST" onSubmit={handleSubmit} noValidate>
-              <p className="mb-6 mt-[-2rem] text-[1.6rem]">{t("contactus.useThisForm")}</p>
-              <p className="mb-14">
-                {t("contactus.gcFormsTeamPart1")}{" "}
-                <Link href={`https://www.canada.ca/${i18n.language}/contact.html`}>
-                  {t("contactus.gcFormsTeamLink")}
-                </Link>{" "}
-                {t("contactus.gcFormsTeamPart2")}
-              </p>
-              <Alert.Warning title={t("contactus.needSupport")} role="note">
-                <p>
-                  {t("contactus.ifYouExperience")}{" "}
-                  <Link href={`/support`}>{t("contactus.supportFormLink")}</Link>.
-                </p>
-              </Alert.Warning>
               <fieldset className="focus-group mt-14">
                 <legend className="gc-label required">
                   {t("contactus.request.title")}{" "}
@@ -227,4 +212,4 @@ export function Contact() {
       )}
     </Formik>
   );
-}
+};
