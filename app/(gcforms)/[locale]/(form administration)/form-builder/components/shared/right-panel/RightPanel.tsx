@@ -8,6 +8,7 @@ import { useTranslation } from "@i18n/client";
 import { RightPanelOpen, RoundCloseIcon } from "@serverComponents/icons";
 import { cn } from "@lib/utils";
 import { LangSwitcher } from "@formBuilder/components/shared/LangSwitcher";
+import { useActivePathname } from "@lib/hooks/form-builder";
 
 import { DownloadCSV } from "@formBuilder/[id]/edit/translate/components/DownloadCSV";
 import { DownloadFileButton } from "@formBuilder/components/shared";
@@ -45,6 +46,8 @@ export const RightPanel = ({ id }: { id: string }) => {
   const [open, setOpen] = useState(true);
   const router = useRouter();
   const { t, i18n } = useTranslation("form-builder");
+  const { activePathname } = useActivePathname();
+  const selectedIndex = activePathname.endsWith("/edit") ? 0 : 1;
 
   return (
     <div className="relative">
@@ -93,7 +96,7 @@ export const RightPanel = ({ id }: { id: string }) => {
                     </div>
                   </div>
                   {/* start tabs */}
-                  <Tab.Group>
+                  <Tab.Group selectedIndex={selectedIndex}>
                     <Tab.List className={"flex justify-between border-b border-gray-200"}>
                       <Tab as={Fragment}>
                         {({ selected }) => (
