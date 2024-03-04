@@ -2,10 +2,9 @@ import { serverTranslation } from "@i18n";
 import { requireAuthentication } from "@lib/auth";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { Metadata } from "next";
-import { Settings } from "./components/server/Settings";
+import { ManageSettingForm } from "../components/server/ManageSettingForm";
 import { Suspense } from "react";
 import Loader from "@clientComponents/globals/Loader";
-import { Messages } from "./components/client/Messages";
 
 export async function generateMetadata({
   params: { locale },
@@ -14,18 +13,15 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { t } = await serverTranslation("admin-settings", { lang: locale });
   return {
-    title: `${t("title")}`,
+    title: `${t("title-update")}`,
   };
 }
 
-// Note: the searchParam is used as the language key to display the success or error message
-export default async function Page({
-  searchParams: { success, error },
-}: {
-  searchParams: { success?: string; error?: string };
-}) {
-  const { user } = await requireAuthentication();
-  checkPrivilegesAsBoolean(user.ability, [{ action: "view", subject: "Setting" }], {
+export default async function Page({ params: { settingId } }: { params: { settingId: string } }) {
+  const {
+    user: { ability },
+  } = await requireAuthentication();
+  checkPrivilegesAsBoolean(ability, [{ action: "update", subject: "Setting" }], {
     redirect: true,
   });
 
@@ -33,10 +29,9 @@ export default async function Page({
 
   return (
     <>
-      <h1 className="border-0 mb-10">{t("title")}</h1>
-      <Messages success={success} error={error} />
+      <h1 className="border-0 mb-10">{t("title-update")}</h1>
       <Suspense fallback={<Loader />}>
-        <Settings />
+        <ManageSettingForm settingId={settingId} />
       </Suspense>
     </>
   );
