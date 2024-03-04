@@ -4,30 +4,34 @@ import React, { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Button } from "@clientComponents/globals";
 import { cn } from "@lib/utils";
+import { useTranslation } from "@i18n/client";
+import { RightPanelOpen } from "@serverComponents/icons";
 
 export const RightPanel = () => {
   const [open, setOpen] = useState(true);
+  const { t } = useTranslation("form-builder");
 
   const tabs = [
-    { name: "Questions", href: "#", current: true },
-    { name: "Translation", href: "#", current: false },
+    { name: "Questions", href: "#", current: false },
+    { name: "Translation", href: "#", current: true },
     { name: "Logic", href: "#", current: false },
   ];
 
   return (
-    <div>
+    <div className="">
       <Button
+        theme="link"
+        className="mt-5 whitespace-nowrap [&_svg]:focus:fill-white"
         onClick={() => {
           setOpen(true);
         }}
       >
-        open
+        <>
+          {t("rightPanel.openPanel")} <RightPanelOpen className="ml-2 inline-block " />
+        </>
       </Button>
-
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={setOpen}>
-          <div className="fixed inset-0" />
-
           <div className="fixed inset-0 overflow-hidden">
             <div className="absolute inset-0 overflow-hidden">
               <div className="pointer-events-none fixed inset-y-0 right-0 top-[72px] flex max-w-full pl-10 sm:pl-16">

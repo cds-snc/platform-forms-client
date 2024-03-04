@@ -782,5 +782,8 @@
     "show": "Afficher :"
   },
   "saved": "Enregistré",
-  "opensInNewTab": "ouvre un nouvel onglet"
+  "opensInNewTab": "ouvre un nouvel onglet",
+  "rightPanel": {
+    "openPanel": "Design form [FR]"
+  }
 }
