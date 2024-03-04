@@ -1,7 +1,7 @@
-import { Contact } from "./Contact";
 import { serverTranslation } from "@i18n";
-
 import { Metadata } from "next";
+import { Contact } from "./components/client/Contact";
+import { Success } from "./components/server/Success";
 
 export async function generateMetadata({
   params: { locale },
@@ -14,6 +14,25 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page() {
-  return <Contact />;
+export default async function Page({
+  searchParams: { success },
+}: {
+  searchParams: { success?: string };
+}) {
+  const { t } = await serverTranslation(["form-builder"]);
+
+  return (
+    <>
+      {success === undefined ? (
+        <>
+          <h1>{t("contactus.title")}</h1>
+          <Contact />
+        </>
+      ) : (
+        <>
+          <Success />
+        </>
+      )}
+    </>
+  );
 }
