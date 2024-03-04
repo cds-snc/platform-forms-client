@@ -47,9 +47,7 @@ export default async function Page({
           <SupportForm />
         </>
       ) : (
-        <>
-          <Success />
-        </>
+        <Success />
       )}
     </>
   );
