@@ -13,6 +13,7 @@ import {
   updateIsPublishedForTemplate,
   deleteTemplate as deleteDbTemplate,
   TemplateHasUnprocessedSubmissions,
+  updateSecurityAttribute,
 } from "@lib/templates";
 import { logMessage } from "@lib/logger";
 
@@ -111,7 +112,6 @@ export const updateTemplate = async ({
       deliveryOption: deliveryOption,
       securityAttribute: securityAttribute,
     });
-
     if (!response) {
       throw new Error(
         `Template API response was null. Request information: { formConfig: ${formConfig}, name: ${name}, deliveryOption: ${deliveryOption}, securityAttribute: ${securityAttribute}`
@@ -142,6 +142,34 @@ export const updateTemplatePublishedStatus = async ({
     if (!response) {
       throw new Error(
         `Template API response was null. Request information: { ${formID}, ${isPublished} }`
+      );
+    }
+
+    return response;
+  } catch (error) {
+    if (error instanceof AccessControlError) {
+      throw error;
+    } else {
+      logMessage.error(error);
+      throw error;
+    }
+  }
+};
+
+export const updateTemplateSecurityAttribute = async ({
+  id: formID,
+  securityAttribute,
+}: {
+  id: string;
+  securityAttribute: SecurityAttribute;
+}) => {
+  try {
+    const { ability } = await _getSessionAndAbility();
+
+    const response = await updateSecurityAttribute(ability, formID, securityAttribute);
+    if (!response) {
+      throw new Error(
+        `Template API response was null. Request information: { ${formID}, ${securityAttribute} }`
       );
     }
 

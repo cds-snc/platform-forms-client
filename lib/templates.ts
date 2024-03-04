@@ -1094,3 +1094,64 @@ export const updateClosingDateForTemplate = async (
   }
   return { formID, closingDate: d };
 };
+
+export const updateSecurityAttribute = async (
+  ability: UserAbility,
+  formID: string,
+  securityAttribute: string
+) => {
+  try {
+    const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(formID);
+    if (!templateWithAssociatedUsers) return null;
+
+    checkPrivileges(ability, [
+      {
+        action: "update",
+        subject: {
+          type: "FormRecord",
+          object: {
+            ...templateWithAssociatedUsers.formRecord,
+            users: templateWithAssociatedUsers.users,
+          },
+        },
+        field: "securityAttribute",
+      },
+    ]);
+
+    const updatedTemplate = await prisma.template
+      .update({
+        where: {
+          id: formID,
+        },
+        data: { securityAttribute },
+        select: {
+          id: true,
+          created_at: true,
+          updated_at: true,
+          name: true,
+          jsonConfig: true,
+          isPublished: true,
+          deliveryOption: true,
+          securityAttribute: true,
+        },
+      })
+      .catch((e) => prismaErrors(e, null));
+
+    if (updatedTemplate === null) return updatedTemplate;
+
+    if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
+
+    logEvent(ability.userID, { type: "Form", id: formID }, "ChangeSecurityAttribute");
+
+    return _parseTemplate(updatedTemplate);
+  } catch (e) {
+    if (e instanceof AccessControlError)
+      logEvent(
+        ability.userID,
+        { type: "Form", id: formID },
+        "AccessDenied",
+        "Attempted to update security attribute"
+      );
+    throw e;
+  }
+};

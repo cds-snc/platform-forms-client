@@ -9,9 +9,9 @@ import {
 } from "@formBuilder/components/ClassificationSelect";
 import { Logos, options } from "../../../settings/branding/components";
 import { useTemplateStore } from "@lib/store";
-import { useTemplateApi } from "@lib/hooks/form-builder";
 import { SettingsModal } from "./SettingsDialog";
 import { Tooltip } from "@formBuilder/components/shared/Tooltip";
+import { updateTemplateSecurityAttribute } from "@formBuilder/actions";
 
 enum DeliveryOption {
   vault = "vault",
@@ -21,14 +21,10 @@ enum DeliveryOption {
 export const SettingsPanel = () => {
   const { t, i18n } = useTranslation("form-builder");
   const lang = i18n.language === "en" ? "en" : "fr";
-  const { save } = useTemplateApi();
   const { status } = useSession();
 
   const {
     id,
-    getSchema,
-    getName,
-    getDeliveryOption,
     email,
     securityAttribute,
     updateSecurityAttribute,
@@ -38,9 +34,6 @@ export const SettingsPanel = () => {
     updateField,
   } = useTemplateStore((s) => ({
     id: s.id,
-    getSchema: s.getSchema,
-    getName: s.getName,
-    getDeliveryOption: s.getDeliveryOption,
     email: s.deliveryOption?.emailAddress,
     updateSecurityAttribute: s.updateSecurityAttribute,
     securityAttribute: s.securityAttribute,
@@ -66,15 +59,12 @@ export const SettingsPanel = () => {
       setClassification(value);
       updateSecurityAttribute(value);
 
-      save({
-        jsonConfig: getSchema(),
-        name: getName(),
-        formID: id,
-        deliveryOption: getDeliveryOption(),
+      updateTemplateSecurityAttribute({
+        id,
         securityAttribute: value,
       });
     },
-    [updateSecurityAttribute, getDeliveryOption, getSchema, getName, id, save]
+    [updateSecurityAttribute, id]
   );
 
   // Branding options
