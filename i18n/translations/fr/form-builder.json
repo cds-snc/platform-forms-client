@@ -789,5 +789,8 @@
     "questions": "Questions [FR]",
     "logic": "Logic  [FR]",
     "translation": "Translation [FR]"
+  },
+  "logic": {
+    "heading": "Logic [FR]"
   }
 }
