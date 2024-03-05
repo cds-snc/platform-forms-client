@@ -1,6 +1,5 @@
 export { useAllowPublish } from "./useAllowPublish";
 export { useElementOptions } from "./useElementOptions";
-export { useTemplateApi } from "./useTemplateApi";
 export { useActivePathname } from "./useActivePathname";
 export { TemplateApiProvider, useTemplateContext } from "./useTemplateContext";
 export { useIsWithin } from "./useIsWithin";
