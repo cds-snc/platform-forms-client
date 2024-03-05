@@ -14,6 +14,7 @@ import {
   deleteTemplate as deleteDbTemplate,
   TemplateHasUnprocessedSubmissions,
   updateSecurityAttribute,
+  updateResponseDeliveryOption,
 } from "@lib/templates";
 import { logMessage } from "@lib/logger";
 
@@ -230,6 +231,38 @@ export const updateTemplateUsers = async ({
     if (!response) {
       throw new Error(
         `Template API response was null. Request information: { ${formID}, ${users} }`
+      );
+    }
+
+    return response;
+  } catch (error) {
+    if (error instanceof AccessControlError) {
+      throw error;
+    } else {
+      logMessage.error(error);
+      throw error;
+    }
+  }
+};
+
+export const updateTemplateDeliveryOption = async ({
+  id: formID,
+  deliveryOption,
+}: {
+  id: string;
+  deliveryOption: DeliveryOption | undefined;
+}) => {
+  if (!deliveryOption) {
+    return; // use sendResponsesToVault to remove delivery option should this be an exception?
+  }
+
+  try {
+    const { ability } = await _getSessionAndAbility();
+
+    const response = await updateResponseDeliveryOption(ability, formID, deliveryOption);
+    if (!response) {
+      throw new Error(
+        `Template API response was null. Request information: { ${formID}, ${deliveryOption} }`
       );
     }
 

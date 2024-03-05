@@ -46,12 +46,12 @@ export const SettingsPanel = () => {
   }));
 
   const initialDeliveryOption = !email ? DeliveryOption.vault : DeliveryOption.email;
-
   const [, setDeliveryOption] = useState(initialDeliveryOption);
 
-  const [classification, setClassification] = useState<ClassificationType>(
-    securityAttribute ? (securityAttribute as ClassificationType) : "Protected A"
-  );
+  const initialClassification = securityAttribute
+    ? (securityAttribute as ClassificationType)
+    : "Protected A";
+  const [classification, setClassification] = useState<ClassificationType>(initialClassification);
 
   const handleUpdateClassification = useCallback(
     (value: ClassificationType) => {

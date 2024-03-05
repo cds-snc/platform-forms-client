@@ -843,6 +843,89 @@ export async function updateAssignedUsersForTemplate(
   }
 }
 
+export async function updateResponseDeliveryOption(
+  ability: UserAbility,
+  formID: string,
+  deliveryOption: DeliveryOption
+): Promise<FormRecord | null> {
+  try {
+    const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(formID);
+    if (!templateWithAssociatedUsers) return null;
+
+    checkPrivileges(ability, [
+      {
+        action: "update",
+        subject: {
+          type: "FormRecord",
+          object: {
+            ...templateWithAssociatedUsers.formRecord,
+            users: templateWithAssociatedUsers.users,
+          },
+        },
+      },
+    ]);
+
+    // Prevent already published templates from being updated
+    if (templateWithAssociatedUsers.formRecord.isPublished)
+      throw new TemplateAlreadyPublishedError();
+
+    const updatedTemplate = await prisma.template
+      .update({
+        where: {
+          id: formID,
+        },
+        data: {
+          deliveryOption: {
+            upsert: {
+              create: {
+                emailAddress: deliveryOption.emailAddress,
+                emailSubjectEn: deliveryOption.emailSubjectEn,
+                emailSubjectFr: deliveryOption.emailSubjectFr,
+              },
+              update: {
+                emailAddress: deliveryOption.emailAddress,
+                emailSubjectEn: deliveryOption.emailSubjectEn,
+                emailSubjectFr: deliveryOption.emailSubjectFr,
+              },
+            },
+          },
+        },
+        select: {
+          id: true,
+          created_at: true,
+          updated_at: true,
+          name: true,
+          jsonConfig: true,
+          isPublished: true,
+          deliveryOption: true,
+          securityAttribute: true,
+        },
+      })
+      .catch((e) => prismaErrors(e, null));
+
+    if (updatedTemplate === null) return updatedTemplate;
+
+    logEvent(
+      ability.userID,
+      { type: "Form", id: formID },
+      "ChangeDeliveryOption",
+      `Delivery Option set to ${deliveryOption.emailAddress}`
+    );
+
+    if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
+    return _parseTemplate(updatedTemplate);
+  } catch (e) {
+    if (e instanceof AccessControlError)
+      logEvent(
+        ability.userID,
+        { type: "Form", id: formID },
+        "AccessDenied",
+        "Attempted to set Delivery Option to the Vault"
+      );
+    throw e;
+  }
+}
+
 /**
  * Remove DeliveryOption from template. Form responses will be sent to the Vault.
  * @param formID The unique identifier of the form you want to modify
