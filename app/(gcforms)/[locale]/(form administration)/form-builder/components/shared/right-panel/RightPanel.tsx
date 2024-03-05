@@ -49,6 +49,11 @@ export const RightPanel = ({ id }: { id: string }) => {
   const { activePathname } = useActivePathname();
   const selectedIndex = activePathname.endsWith("/edit") ? 0 : 1;
 
+  if (!activePathname.endsWith("/edit") && !activePathname.endsWith("/translate")) {
+    // Only show the right panel on the form builder edit and translate pages
+    return null;
+  }
+
   return (
     <div className="relative">
       <div className="fixed right-2 top-20 z-10">
