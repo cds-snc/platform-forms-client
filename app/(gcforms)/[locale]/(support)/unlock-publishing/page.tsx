@@ -33,13 +33,6 @@ export default async function Page({
       { action: "update", subject: "FormRecord", field: "isPublished" },
     ])
   ) {
-    // TODO ask about this vs. that - curently the below errors
-    // return {
-    //   redirect: {
-    //     destination: `/${locale}/forms`,
-    //     permanent: false,
-    //   },
-    // };
     redirect(`/${locale}/forms`, RedirectType.replace);
   }
 

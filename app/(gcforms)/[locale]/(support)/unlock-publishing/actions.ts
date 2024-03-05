@@ -50,13 +50,11 @@ export async function unlockPublishing({
       description,
       language: language,
     });
-
     if (result?.status >= 400) {
       throw new Error(
         `Freshdesk error: ${JSON.stringify(result)} - ${session.user.email} - ${description}`
       );
     }
-
     return { status: 200 };
   } catch (error) {
     logMessage.error(error);

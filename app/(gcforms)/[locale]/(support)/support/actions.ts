@@ -55,7 +55,6 @@ ${description}<br/>
       description: emailBody,
       language,
     });
-
     if (result?.status >= 400) {
       throw new Error(`Freshdesk error: ${JSON.stringify(result)} - ${email} - ${emailBody}`);
     }
