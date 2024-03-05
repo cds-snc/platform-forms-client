@@ -9,6 +9,7 @@ import { RightPanelOpen, RoundCloseIcon } from "@serverComponents/icons";
 import { cn } from "@lib/utils";
 import { LangSwitcher } from "@formBuilder/components/shared/LangSwitcher";
 import { useActivePathname } from "@lib/hooks/form-builder";
+import { useEffect, useRef } from "react";
 
 import { DownloadCSV } from "@formBuilder/[id]/edit/translate/components/DownloadCSV";
 import { DownloadFileButton } from "@formBuilder/components/shared";
@@ -47,19 +48,57 @@ export const RightPanel = ({ id }: { id: string }) => {
   const router = useRouter();
   const { t, i18n } = useTranslation("form-builder");
   const { activePathname } = useActivePathname();
-  const selectedIndex = activePathname.endsWith("/edit") ? 0 : 1;
 
-  if (!activePathname.endsWith("/edit") && !activePathname.endsWith("/translate")) {
+  // Update once logic tab / screen  is implemented
+  let selectedIndex = 0;
+
+  if (activePathname.endsWith("/translate")) {
+    selectedIndex = 1;
+  }
+
+  if (activePathname.endsWith("/logic")) {
+    selectedIndex = 2;
+  }
+
+  const [isIntersecting, setIsIntersecting] = useState(false);
+
+  // Observe if the header is offscreen
+  // Used to determine the position of the right panel button "toggle" button
+  const observer = useRef<IntersectionObserver>();
+  useEffect(() => {
+    observer.current = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsIntersecting(true);
+        } else {
+          setIsIntersecting(false);
+        }
+      },
+      { threshold: 0 }
+    );
+    observer.current.observe(document.querySelector("header") as Element);
+    return () => {
+      observer.current?.disconnect();
+    };
+  }, []);
+
+  if (
+    !activePathname.endsWith("/edit") &&
+    !activePathname.endsWith("/translate") &&
+    !activePathname.endsWith("/logic")
+  ) {
     // Only show the right panel on the form builder edit and translate pages
     return null;
   }
 
   return (
     <div className="relative">
-      <div className="fixed right-2 top-20 z-10">
+      <div
+        className={cn("fixed right-0 z-10", isIntersecting ? "top-20" : "top-0", open && "hidden")}
+      >
         <Button
           theme="link"
-          className="mr-10 mt-5 whitespace-nowrap [&_svg]:focus:fill-white"
+          className="mr-8 mt-5 whitespace-nowrap [&_svg]:focus:fill-white"
           onClick={() => {
             setOpen(true);
           }}
@@ -82,6 +121,7 @@ export const RightPanel = ({ id }: { id: string }) => {
               leaveTo="translate-x-full"
             >
               <div className="pointer-events-auto w-screen max-w-md">
+                {/* <-- Panel Header */}
                 <div className="flex h-full flex-col border-l border-slate-200 bg-white">
                   <div className="p-6">
                     <div className="flex justify-between">
@@ -100,7 +140,8 @@ export const RightPanel = ({ id }: { id: string }) => {
                       </div>
                     </div>
                   </div>
-                  {/* start tabs */}
+                  {/* Panel Header --> */}
+                  {/* <-- Tabs */}
                   <Tab.Group selectedIndex={selectedIndex}>
                     <Tab.List className={"flex justify-between border-b border-gray-200"}>
                       <Tab as={Fragment}>
@@ -115,13 +156,6 @@ export const RightPanel = ({ id }: { id: string }) => {
                           />
                         )}
                       </Tab>
-                      {/* 
-                      <Tab as={Fragment}>
-                        {({ selected }) => (
-                          <TabButton selected={selected} text={t("rightPanel.logic")} />
-                        )}
-                      </Tab>
-                      */}
                       <Tab as={Fragment}>
                         {({ selected }) => (
                           <TabButton
@@ -129,6 +163,17 @@ export const RightPanel = ({ id }: { id: string }) => {
                             text={t("rightPanel.translation")}
                             onClick={() => {
                               router.push(`/${i18n.language}/form-builder/${id}/edit/translate`);
+                            }}
+                          />
+                        )}
+                      </Tab>
+                      <Tab as={Fragment}>
+                        {({ selected }) => (
+                          <TabButton
+                            selected={selected}
+                            text={t("rightPanel.logic")}
+                            onClick={() => {
+                              router.push(`/${i18n.language}/form-builder/${id}/edit/logic`);
                             }}
                           />
                         )}
@@ -144,9 +189,10 @@ export const RightPanel = ({ id }: { id: string }) => {
                       <Tab.Panel>
                         <DownloadCSV />
                       </Tab.Panel>
+                      <Tab.Panel>{t("logic.heading")}</Tab.Panel>
                     </Tab.Panels>
                   </Tab.Group>
-                  {/* end tabs */}
+                  {/* --> */}
                 </div>
               </div>
             </Transition.Child>
