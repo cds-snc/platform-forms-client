@@ -81,7 +81,8 @@
     "profile": "Profile",
     "typography": "Typography",
     "upload": "Upload",
-    "viewTemplates": "View Templates"
+    "viewTemplates": "View Templates",
+    "allForms": "All Forms"
   },
   "formElements": {
     "characterCount": {
