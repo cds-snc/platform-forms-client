@@ -13,7 +13,7 @@ export const Success = async () => {
       <FocusHeader>{t("requestSuccess.title")}</FocusHeader>
       <p className="mb-16 mt-[-2rem] font-bold">{t("requestSuccess.weWillRespond")}</p>
       <div className="mb-16">
-        <PrimaryLinkButton href={`${language}/forms`}>
+        <PrimaryLinkButton href={`/${language}/forms`}>
           {t("requestSuccess.backToForms")}
         </PrimaryLinkButton>
       </div>

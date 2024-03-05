@@ -51,7 +51,7 @@ export const ContactForm = () => {
       onSubmit={async ({ name, email, department, branch, jobTitle, request, description }) => {
         setIsSubmitting(true);
         try {
-          const response = await contact({
+          await contact({
             name,
             email,
             department,
@@ -60,16 +60,13 @@ export const ContactForm = () => {
             request,
             description,
           });
-          setIsSubmitting(false);
-          if (response?.status !== 200) {
-            throw new Error(t("contactus.errors.submissionError"));
-          }
           setErrorMessage("");
           router.replace(`/${i18n.language}/contact?success`);
         } catch (err) {
           logMessage.error(err);
-          setIsSubmitting(false);
           setErrorMessage(t("contactus.errors.submissionError"));
+        } finally {
+          setIsSubmitting(false);
         }
       }}
       validateOnChange={false}

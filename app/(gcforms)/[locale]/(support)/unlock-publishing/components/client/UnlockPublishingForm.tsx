@@ -13,7 +13,6 @@ import { useTranslation } from "@i18n/client";
 import * as Yup from "yup";
 import { isValidGovEmail } from "@lib/validation";
 import { logMessage } from "@lib/logger";
-import { useSession } from "next-auth/react";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
@@ -21,7 +20,7 @@ import { Button } from "@clientComponents/globals";
 import { useRouter } from "next/navigation";
 import { unlockPublishing } from "../../actions";
 
-export const UnlockPublishingForm = () => {
+export const UnlockPublishingForm = ({ email }: { email: string }) => {
   const {
     t,
     i18n: { language },
@@ -29,7 +28,6 @@ export const UnlockPublishingForm = () => {
   const router = useRouter();
   const [errorState, setErrorState] = useState({ message: "" });
   const [submitting, setSubmitting] = useState(false);
-  const { data: session } = useSession();
 
   const validationSchema = Yup.object().shape({
     department: Yup.string()
@@ -46,7 +44,7 @@ export const UnlockPublishingForm = () => {
       .test(
         "managerEmail-notSameAsUserEmail",
         t("input-validation.notSameAsUserEmail", { ns: "common" }),
-        (value) => value?.toUpperCase() != session?.user?.email?.toUpperCase()
+        (value) => value?.toUpperCase() != email?.toUpperCase()
       ),
     goals: Yup.string().required(t("input-validation.required", { ns: "common" })),
   });

@@ -42,7 +42,7 @@ export default async function Page({
           <Alert.Warning title={t("contactus.needSupport")} role="note">
             <p>
               {t("contactus.ifYouExperience")}{" "}
-              <Link href={`/support`}>{t("contactus.supportFormLink")}</Link>.
+              <Link href={`/${language}/support`}>{t("contactus.supportFormLink")}</Link>.
             </p>
           </Alert.Warning>
           <ContactForm />

@@ -2,21 +2,21 @@
 import { createTicket } from "@lib/integration/freshdesk";
 import { logMessage } from "@lib/logger";
 
-interface Submission {
-  name?: string;
-  email?: string;
-  request?: string;
-  description?: string;
-  language?: string;
-}
-
-export async function support({ name, email, request, description, language = "en" }: Submission) {
+export async function support({
+  name,
+  email,
+  request,
+  description,
+  language = "en",
+}: {
+  name: string;
+  email: string;
+  request: string;
+  description: string;
+  language: string;
+}) {
   // No auth etc. checking since this is a public endpoint
-
-  //Mandatory fields
-  if (!name || !email || !request || !description) {
-    throw new Error("Malformed request");
-  }
+  // Validation done on the client component
 
   // Request may be a list of strings (checkbox), format it a bit if so, or just a string (radio)
   const requestParsed =

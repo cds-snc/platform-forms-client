@@ -48,23 +48,20 @@ export const SupportForm = () => {
       onSubmit={async ({ name, email, request, description }) => {
         setIsSubmitting(true);
         try {
-          const response = await support({
+          await support({
             name,
             email,
             request,
             description,
             language: language,
           });
-          setIsSubmitting(false);
-          if (response?.status !== 200) {
-            throw new Error(t("support.errors.submissionError"));
-          }
           setErrorMessage("");
           router.replace(`/${language}/support?success`);
         } catch (err) {
           logMessage.error(err);
-          setIsSubmitting(false);
           setErrorMessage(t("support.errors.submissionError"));
+        } finally {
+          setIsSubmitting(false);
         }
       }}
       validateOnChange={false}

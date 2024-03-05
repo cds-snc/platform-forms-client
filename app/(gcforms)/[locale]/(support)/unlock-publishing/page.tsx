@@ -25,7 +25,7 @@ export default async function Page({
   searchParams: { success?: string };
 }) {
   const {
-    user: { ability },
+    user: { ability, email },
   } = await requireAuthentication();
 
   if (
@@ -44,7 +44,7 @@ export default async function Page({
         <>
           <h1>{t("unlockPublishing.title")}</h1>
           <p className="mb-14">{t("unlockPublishing.paragraph1")}</p>
-          <UnlockPublishingForm />
+          <UnlockPublishingForm email={email} />
         </>
       ) : (
         <Success />
