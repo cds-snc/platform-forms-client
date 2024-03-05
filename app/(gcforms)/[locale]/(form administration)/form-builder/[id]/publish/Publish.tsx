@@ -76,7 +76,7 @@ export const Publish = ({ id }: { id: string }) => {
     setError(false);
     setErrorCode(null);
     try {
-      const result = await updateTemplatePublishedStatus(id, true);
+      const result = await updateTemplatePublishedStatus({ id, isPublished: true });
       setId(result?.id);
 
       window.dataLayer = window.dataLayer || [];
