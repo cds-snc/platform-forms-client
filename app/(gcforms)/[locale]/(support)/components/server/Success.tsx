@@ -1,6 +1,6 @@
 import { serverTranslation } from "@i18n";
 import Link from "next/link";
-import { Primary } from "@clientComponents/globals/Buttons/LinkButton";
+import { PrimaryLinkButton } from "@clientComponents/globals/Buttons";
 import { FocusHeader } from "../client/FocusHeader";
 
 export const Success = async () => {
@@ -13,11 +13,9 @@ export const Success = async () => {
       <FocusHeader>{t("requestSuccess.title")}</FocusHeader>
       <p className="mb-16 mt-[-2rem] font-bold">{t("requestSuccess.weWillRespond")}</p>
       <div className="mb-16">
-        {/* 
-          Note: 
-          LinkButton.Primary was throwing an error - removing the dot notation LinkButton.Primary for now
-        */}
-        <Primary href={`${language}/forms`}>{t("requestSuccess.backToForms")}</Primary>
+        <PrimaryLinkButton href={`${language}/forms`}>
+          {t("requestSuccess.backToForms")}
+        </PrimaryLinkButton>
       </div>
       <p className="mb-8">
         {t("requestSuccess.forOtherEnquiriesPart1")}{" "}
