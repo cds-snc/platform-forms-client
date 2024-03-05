@@ -2,7 +2,9 @@ import { serverTranslation } from "@i18n";
 import { requireAuthentication } from "@lib/auth";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { Metadata } from "next";
-import { UnlockPublishing } from "./UnlockPublishing";
+import { RedirectType, redirect } from "next/navigation";
+import { Success } from "./components/server/Success";
+import { UnlockPublishingForm } from "./components/client/UnlockPublishingForm";
 
 export async function generateMetadata({
   params: { locale },
@@ -15,21 +17,38 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({ params: { locale } }: { params: { locale: string } }) {
-  const { user } = await requireAuthentication();
+export default async function Page({
+  params: { locale },
+  searchParams: { success },
+}: {
+  params: { locale: string };
+  searchParams: { success?: string };
+}) {
+  const {
+    user: { ability, email },
+  } = await requireAuthentication();
 
   if (
-    checkPrivilegesAsBoolean(user.ability, [
+    checkPrivilegesAsBoolean(ability, [
       { action: "update", subject: "FormRecord", field: "isPublished" },
     ])
   ) {
-    return {
-      redirect: {
-        destination: `/${locale}/forms`,
-        permanent: false,
-      },
-    };
+    redirect(`/${locale}/forms`, RedirectType.replace);
   }
 
-  return <UnlockPublishing />;
+  const { t } = await serverTranslation("unlock-publishing");
+
+  return (
+    <>
+      {success === undefined ? (
+        <>
+          <h1>{t("unlockPublishing.title")}</h1>
+          <p className="mb-14">{t("unlockPublishing.paragraph1")}</p>
+          <UnlockPublishingForm email={email} />
+        </>
+      ) : (
+        <Success />
+      )}
+    </>
+  );
 }

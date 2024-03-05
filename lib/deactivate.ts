@@ -3,7 +3,7 @@ import { logMessage } from "@lib/logger";
 
 export const sendDeactivationEmail = async (email: string) => {
   try {
-    const HOST = process.env.NEXTAUTH_URL;
+    const HOST = process.env.HOST_URL;
     const TEMPLATE_ID = process.env.TEMPLATE_ID;
     const notify = getNotifyInstance();
 

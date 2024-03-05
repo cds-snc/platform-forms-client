@@ -782,5 +782,15 @@
     "show": "Afficher :"
   },
   "saved": "Enregistré",
-  "opensInNewTab": "ouvre un nouvel onglet"
+  "opensInNewTab": "ouvre un nouvel onglet",
+  "rightPanel": {
+    "openPanel": "Design form [FR]",
+    "closePanel": "Close panel [FR]",
+    "questions": "Questions [FR]",
+    "logic": "Logic  [FR]",
+    "translation": "Translation [FR]"
+  },
+  "logic": {
+    "heading": "Logic [FR]"
+  }
 }

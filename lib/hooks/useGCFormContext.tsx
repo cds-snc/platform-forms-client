@@ -10,6 +10,7 @@ interface GCFormsContextValueType {
   currentGroup: string | null;
   handleNextAction: () => void;
   hasNextAction: (group: string) => boolean;
+  formRecord: PublicFormRecord;
 }
 
 const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefined);
@@ -53,7 +54,15 @@ export const GCFormsProvider = ({
 
   return (
     <GCFormsContext.Provider
-      value={{ updateValues, matchedIds, groups, currentGroup, handleNextAction, hasNextAction }}
+      value={{
+        formRecord,
+        updateValues,
+        matchedIds,
+        groups,
+        currentGroup,
+        handleNextAction,
+        hasNextAction,
+      }}
     >
       {children}
     </GCFormsContext.Provider>
@@ -73,6 +82,7 @@ export const useGCFormsContext = () => {
       currentGroup: "",
       hasNextAction: () => void 0,
       handleNextAction: () => void 0,
+      formRecord: {} as PublicFormRecord,
     };
   }
   return formsContext;

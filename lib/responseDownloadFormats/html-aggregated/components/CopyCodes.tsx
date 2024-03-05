@@ -12,7 +12,7 @@ export const CopyCodes = ({
 }) => {
   const { t } = customTranslate("my-forms");
   const capitalizedLang = lang === "en" ? "En" : "Fr";
-  const HOST = process.env.NEXTAUTH_URL || "";
+  const HOST = process.env.HOST_URL || "";
 
   return (
     <div className="flex flex-row">

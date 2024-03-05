@@ -11,7 +11,7 @@
   },
   "cards": {
     "noForms": "You have no forms.",
-    "noDraftForms": "You have no draft forms.",
+    "noDraftsForms": "You have no draft forms.",
     "noPublishedForms": "You have no published forms."
   },
   "card": {
@@ -89,5 +89,9 @@
   },
   "viewForm": "View form (opens in new tab)",
   "editForm": "Edit form",
-  "navLabel": "Forms navigation"
+  "navLabel": "Forms navigation",
+  "errors": {
+    "formDownloadNotExist": "The form you are trying to download does not exist.",
+    "formDownloadFailed": "Failed to download the form."
+  }
 }

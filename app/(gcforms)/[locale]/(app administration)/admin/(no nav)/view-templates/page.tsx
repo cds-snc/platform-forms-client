@@ -26,7 +26,7 @@ export default async function Page() {
     { logic: "one", redirect: true }
   );
 
-  const templates = (await getAllTemplates(user.ability, user.id)).map((template) => {
+  const templates = (await getAllTemplates(user.ability)).map((template) => {
     const {
       id,
       form: { titleEn, titleFr },

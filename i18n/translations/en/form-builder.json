@@ -782,5 +782,15 @@
     "show": "Show:"
   },
   "saved": "Saved",
-  "opensInNewTab": "opens in a new tab"
+  "opensInNewTab": "opens in a new tab",
+  "rightPanel": {
+    "openPanel": "Design form",
+    "closePanel": "Close panel",
+    "questions": "Questions",
+    "logic": "Logic",
+    "translation": "Translation"
+  },
+  "logic": {
+    "heading": "Logic"
+  }
 }

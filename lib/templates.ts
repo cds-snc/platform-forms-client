@@ -269,7 +269,8 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
  */
 export async function getAllTemplates(
   ability: UserAbility,
-  userID: string
+  requestedWhere?: Prisma.TemplateWhereInput,
+  sortByDateCreated?: "asc" | "desc"
 ): Promise<Array<FormRecord>> {
   try {
     checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
@@ -288,11 +289,12 @@ export async function getAllTemplates(
     const templates = await prisma.template
       .findMany({
         where: {
+          ...(requestedWhere && requestedWhere),
           ttl: null,
           ...(!canUserAccessAllTemplates && {
             users: {
               some: {
-                id: userID,
+                id: ability.userID,
               },
             },
           }),
@@ -307,6 +309,11 @@ export async function getAllTemplates(
           deliveryOption: true,
           securityAttribute: true,
         },
+        ...(sortByDateCreated && {
+          orderBy: {
+            created_at: sortByDateCreated,
+          },
+        }),
       })
       .catch((e) => prismaErrors(e, []));
 

@@ -30,7 +30,9 @@ export const Header = ({ context = "default", user, className }: HeaderParams) =
   } = useTranslation(["common", "form-builder", "admin-login"]);
 
   return (
-    <header className={cn("mb-5 border-b-1 border-gray-500 bg-white px-0 py-2", className)}>
+    <header
+      className={cn("mb-5 border-b-1 border-gray-500 bg-white px-0 py-2 relative", className)}
+    >
       <div className="grid w-full grid-flow-col">
         <div className="flex">
           <Link href={`/${language}/form-builder`} legacyBehavior>
@@ -55,6 +57,12 @@ export const Header = ({ context = "default", user, className }: HeaderParams) =
               {t("title", { ns: "admin-login" })}
             </div>
           )}
+          {isFormBuilder && status === "authenticated" && (
+            <div className="pt-3">
+              <Link href={`/${language}/forms`}>{t("adminNav.allForms", { ns: "common" })}</Link>
+              <span className="mx-2 inline-block"> / </span>
+            </div>
+          )}
           {isFormBuilder && <FileNameInput />}
         </div>
         <nav className="justify-self-end" aria-label={t("mainNavAriaLabel", { ns: "common" })}>
@@ -64,11 +72,6 @@ export const Header = ({ context = "default", user, className }: HeaderParams) =
                 {t("logged-in", { ns: "admin-login" })}: <span>{user.email}</span>
               </li>
             )}
-            <li className="mr-2 py-2 text-base tablet:mr-4">
-              {status === "authenticated" && (
-                <Link href={`/${language}/forms`}>{t("adminNav.myForms", { ns: "common" })}</Link>
-              )}
-            </li>
             {status !== "authenticated" && (
               <li className="mr-2 py-2 text-base tablet:mr-4">
                 <Link href={`/${language}/auth/login`}>{t("loginMenu.login")}</Link>
