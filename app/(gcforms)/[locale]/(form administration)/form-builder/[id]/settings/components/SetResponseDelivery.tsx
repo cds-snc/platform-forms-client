@@ -1,16 +1,13 @@
 "use client";
 import React, { useCallback, useState, useMemo } from "react";
 import { LocalizedFormProperties } from "@lib/types/form-builder-types";
-import axios from "axios";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
-
 import { useRefresh } from "@lib/hooks";
 import { isValidGovEmail } from "@lib/validation";
 import { ResponseEmail } from "@formBuilder/components/ResponseEmail";
 import { Radio } from "@formBuilder/components/shared";
 import { Button } from "@clientComponents/globals";
-import { useTemplateApi } from "@lib/hooks/form-builder";
 import { useTemplateStore } from "@lib/store";
 import { completeEmailAddressRegex } from "@lib/utils/form-builder";
 import { toast } from "@formBuilder/components/shared/Toast";
@@ -19,6 +16,11 @@ import {
   ClassificationType,
   ClassificationSelect,
 } from "@formBuilder/components/ClassificationSelect";
+import {
+  sendResponsesToVault,
+  updateTemplateDeliveryOption,
+  updateTemplateSecurityAttribute,
+} from "@formBuilder/actions";
 
 enum DeliveryOption {
   vault = "vault",
@@ -29,7 +31,6 @@ export const SetResponseDelivery = () => {
   const { t, i18n } = useTranslation("form-builder");
   const { status } = useSession();
   const session = useSession();
-  const { save, updateResponseDelivery } = useTemplateApi();
   const { refreshData } = useRefresh();
   const lang = i18n.language === "en" ? "en" : "fr";
 
@@ -37,8 +38,6 @@ export const SetResponseDelivery = () => {
     email,
     id,
     resetDeliveryOption,
-    getSchema,
-    getName,
     getDeliveryOption,
     updateField,
     subjectEn: initialSubjectEn,
@@ -56,8 +55,6 @@ export const SetResponseDelivery = () => {
     defaultSubjectEn: s.form[s.localizeField(LocalizedFormProperties.TITLE, "en")] + " - Response",
     defaultSubjectFr: s.form[s.localizeField(LocalizedFormProperties.TITLE, "fr")] + " - Réponse",
     resetDeliveryOption: s.resetDeliveryOption,
-    getSchema: s.getSchema,
-    getName: s.getName,
     getDeliveryOption: s.getDeliveryOption,
     updateField: s.updateField,
     updateSecurityAttribute: s.updateSecurityAttribute,
@@ -140,29 +137,10 @@ export const SetResponseDelivery = () => {
     resetDeliveryOption();
     updateSecurityAttribute(classification);
 
-    const result = await updateResponseDelivery(id);
-
-    if (!result || axios.isAxiosError(result)) {
-      return result;
-    }
-
-    return save({
-      jsonConfig: getSchema(),
-      name: getName(),
-      formID: id,
-      securityAttribute: classification,
+    await sendResponsesToVault({
+      id: id,
     });
-  }, [
-    id,
-    resetDeliveryOption,
-    setInputEmail,
-    classification,
-    updateSecurityAttribute,
-    save,
-    getSchema,
-    getName,
-    updateResponseDelivery,
-  ]);
+  }, [id, resetDeliveryOption, setInputEmail, classification, updateSecurityAttribute]);
 
   /*--------------------------------------------*
    * Set as Email Delivery
@@ -174,21 +152,16 @@ export const SetResponseDelivery = () => {
     updateField("deliveryOption.emailSubjectFr", subjectFr);
 
     updateSecurityAttribute(classification);
-    return save({
-      jsonConfig: getSchema(),
-      name: getName(),
-      formID: id,
+
+    await updateTemplateDeliveryOption({
+      id,
       deliveryOption: getDeliveryOption(),
-      securityAttribute: classification,
     });
   }, [
     inputEmail,
     subjectEn,
     subjectFr,
     id,
-    save,
-    getSchema,
-    getName,
     getDeliveryOption,
     updateField,
     classification,
@@ -199,24 +172,35 @@ export const SetResponseDelivery = () => {
    * Save Delivery Option
    *--------------------------------------------*/
   const saveDeliveryOption = useCallback(async () => {
-    let result;
+    try {
+      if (email !== "" && deliveryOption === DeliveryOption.vault) {
+        await setToDatabaseDelivery();
+      } else {
+        await setToEmailDelivery();
+      }
 
-    if (email !== "" && deliveryOption === DeliveryOption.vault) {
-      result = await setToDatabaseDelivery();
-    } else {
-      result = await setToEmailDelivery();
-    }
-
-    if (!result || axios.isAxiosError(result)) {
+      updateTemplateSecurityAttribute({
+        id,
+        securityAttribute: classification,
+      });
+    } catch (error) {
       toast.error(t("settingsResponseDelivery.savedErrorMessage"));
-
       return;
     }
 
     toast.success(t("settingsResponseDelivery.savedSuccessMessage"));
 
     refreshData && refreshData();
-  }, [refreshData, deliveryOption, email, setToDatabaseDelivery, setToEmailDelivery, t]);
+  }, [
+    t,
+    refreshData,
+    email,
+    deliveryOption,
+    id,
+    classification,
+    setToDatabaseDelivery,
+    setToEmailDelivery,
+  ]);
 
   const updateDeliveryOption = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
