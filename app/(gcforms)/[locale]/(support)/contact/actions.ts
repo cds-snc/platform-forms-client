@@ -16,12 +16,17 @@ export async function contact({
   email: string;
   request: string;
   description: string;
-  department: string;
+  department?: string;
   branch?: string;
   jobTitle?: string;
   language?: string;
 }) {
   // No auth etc. checking since this is a public endpoint
+
+  //Mandatory fields
+  if (!name || !email || !request || !description) {
+    throw new Error("Malformed request");
+  }
 
   // Request may be a list of strings (checkbox), format it a bit if so, or just a string (radio)
   const requestParsed =
