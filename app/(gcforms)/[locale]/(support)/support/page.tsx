@@ -41,7 +41,8 @@ export default async function Page({
           </p>
           <Alert.Warning title={t("support.lookingForADemo")} role="note">
             <p>
-              {t("support.ifYouWouldLike")} <Link href={`/contact`}>{t("support.contactUs")}</Link>.
+              {t("support.ifYouWouldLike")}{" "}
+              <Link href={`/${language}/contact`}>{t("support.contactUs")}</Link>.
             </p>
           </Alert.Warning>
           <SupportForm />

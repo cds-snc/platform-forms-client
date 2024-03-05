@@ -16,7 +16,6 @@ export async function support({
   language: string;
 }) {
   // No auth etc. checking since this is a public endpoint
-  // Validation done on the client component
 
   // Request may be a list of strings (checkbox), format it a bit if so, or just a string (radio)
   const requestParsed =
