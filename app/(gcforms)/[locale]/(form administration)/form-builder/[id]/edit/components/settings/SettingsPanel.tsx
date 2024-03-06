@@ -120,6 +120,7 @@ export const SettingsPanel = () => {
           <div className="ml-4 inline-block">
             <div className="my-[6px] border-[.5px] border-violet-50 p-1 px-2 hover:border-[.5px] hover:border-slate-800">
               <ClassificationSelect
+                disableProtectedB={email ? true : false}
                 className="w-auto max-w-[400px] truncate border-none bg-violet-50 p-1 text-sm"
                 lang={lang}
                 isPublished={isPublished}
