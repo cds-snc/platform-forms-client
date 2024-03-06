@@ -9,13 +9,18 @@ export async function unlockPublishing({
   goals,
   language = "en",
 }: {
-  managerEmail?: string;
-  department?: string;
-  goals?: string;
+  managerEmail: string;
+  department: string;
+  goals: string;
   language?: string;
 }) {
   const session = await auth();
   if (!session) throw new Error("No session");
+
+  //Mandatory fields
+  if (!managerEmail || !department || !goals) {
+    throw new Error("Malformed request");
+  }
 
   const description = `
   ${session.user.name} (${session.user.email}) from ${department} has requested permission to publish forms.<br/>
