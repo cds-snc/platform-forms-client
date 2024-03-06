@@ -3,7 +3,8 @@ import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
 import { cn } from "@lib/utils";
 import { toast } from "@formBuilder/components/shared/Toast";
-import { Button, StyledLink } from "@clientComponents/globals";
+import { Button } from "@clientComponents/globals";
+import LinkButton from "@serverComponents/globals/Buttons/LinkButton";
 import { useTemplateStore } from "@lib/store";
 import { useTemplateContext } from "@lib/hooks/form-builder";
 import { formatDateTime } from "@lib/utils/form-builder";
@@ -70,12 +71,12 @@ export const ErrorSavingForm = () => {
       <span className="inline-block px-1">
         <SavedFailIcon className="inline-block fill-red" />
       </span>
-      <StyledLink
+      <LinkButton
         href={supportHref}
         className="mr-2 !text-red-700 underline hover:no-underline focus:bg-transparent active:bg-transparent"
       >
         {t("errorSavingForm.failedLink", { ns: "form-builder" })}
-      </StyledLink>
+      </LinkButton>
     </span>
   );
 };
@@ -127,7 +128,7 @@ export const SaveButton = () => {
       handleSave();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [id]);
 
   if (isPublished) {
     return null;
