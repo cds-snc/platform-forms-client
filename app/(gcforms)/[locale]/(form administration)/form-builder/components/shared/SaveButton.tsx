@@ -81,16 +81,25 @@ export const ErrorSavingForm = () => {
 };
 
 export const SaveButton = () => {
-  const { isPublished, id, getSchema, getName, getDeliveryOption, securityAttribute, setId } =
-    useTemplateStore((s) => ({
-      isPublished: s.isPublished,
-      id: s.id,
-      getSchema: s.getSchema,
-      getName: s.getName,
-      getDeliveryOption: s.getDeliveryOption,
-      securityAttribute: s.securityAttribute,
-      setId: s.setId,
-    }));
+  const {
+    isPublished,
+    id,
+    getSchema,
+    getId,
+    getName,
+    getDeliveryOption,
+    securityAttribute,
+    setId,
+  } = useTemplateStore((s) => ({
+    isPublished: s.isPublished,
+    id: s.id,
+    getId: s.getId,
+    getSchema: s.getSchema,
+    getName: s.getName,
+    getDeliveryOption: s.getDeliveryOption,
+    securityAttribute: s.securityAttribute,
+    setId: s.setId,
+  }));
 
   const { templateIsDirty, createOrUpdateTemplate } = useTemplateContext();
   const { status } = useSession();
@@ -117,7 +126,7 @@ export const SaveButton = () => {
       }
 
       const template = await createOrUpdateTemplate({
-        id: id,
+        id: getId(),
         formConfig: JSON.parse(formConfig),
         name: getName(),
         deliveryOption: getDeliveryOption(),

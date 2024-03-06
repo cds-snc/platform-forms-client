@@ -60,7 +60,7 @@ const descriptionsMatch = (
   return en && fr;
 };
 
-export function TemplateApiProvider({ children }: { children: React.ReactNode }) {
+export function SaveTemplateProvider({ children }: { children: React.ReactNode }) {
   const [nameChanged, setNameChanged] = useState<boolean | null>(false);
   const [introChanged, setIntroChanged] = useState<boolean | null>(false);
   const [privacyChanged, setPrivacyChanged] = useState<boolean | null>(false);
