@@ -1,9 +1,11 @@
-import { TestForm } from "./TestForm";
+import { TestForm } from "./components/client/TestForm";
 
 /**
-Notes
--Label has state variable from Formik, validation.*. Probably create a new Label
--TextInput has state vars from Formik, useField(), helpers.. Probably create new input
+Why defining a bunch of new components?
+Forms-Form components are coupled to Fomik state. 
+E.g. Label relies on validation.* and TextInput relies on useField() and helpers.
+So we'll need to either refactor the existing components to be more configurable. I created new
+components for now.
 */
 
 export default function Page() {
