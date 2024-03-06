@@ -17,7 +17,7 @@ export default async function Layout({
 
   return (
     <>
-      <div className="flex h-full flex-col">
+      <div className="flex h-full flex-col bg-gray-soft">
         <SkipLink />
         <Header context={"default"} user={{ email: session.user.email, name: session.user.name }} />
         <div className="mx-4 shrink-0 grow basis-auto laptop:mx-32 desktop:mx-64">
