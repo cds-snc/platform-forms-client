@@ -5,7 +5,7 @@ import { Header } from "@clientComponents/globals";
 import { SkipLink, Footer } from "@serverComponents/globals";
 import { Start } from "./Start";
 import { TemplateStoreProvider } from "@lib/store";
-import { SaveTemplateProvider } from "@lib/hooks/form-builder";
+import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext";
 
 export async function generateMetadata({
   params: { locale },

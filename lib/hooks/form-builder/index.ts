@@ -1,7 +1,6 @@
 export { useAllowPublish } from "./useAllowPublish";
 export { useElementOptions } from "./useElementOptions";
 export { useActivePathname } from "./useActivePathname";
-export { SaveTemplateProvider, useTemplateContext } from "./useTemplateContext";
 export { useIsWithin } from "./useIsWithin";
 export { usePanelActions } from "./usePanelActions";
 export { useHandleAdd } from "./useHandleAdd";
