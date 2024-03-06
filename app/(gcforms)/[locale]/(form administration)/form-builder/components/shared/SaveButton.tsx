@@ -1,4 +1,5 @@
 "use client";
+import { useEffect, useState, useRef } from "react";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
 import { cn } from "@lib/utils";
@@ -10,7 +11,6 @@ import { useTemplateContext } from "@lib/hooks/form-builder";
 import { formatDateTime } from "@lib/utils/form-builder";
 import { SavedFailIcon, SavedCheckIcon } from "@serverComponents/icons";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
 import { createOrUpdateTemplate } from "@formBuilder/actions";
 import { ErrorSaving } from "./ErrorSaving";
 
@@ -98,8 +98,9 @@ export const SaveButton = () => {
   const [updatedAt, setUpdatedAt] = useState<number | undefined>();
   const [error, setError] = useState(false);
   const pathname = usePathname();
+  const idRef = useRef(id);
 
-  const handleSave = async () => {
+  const handleSave = async (id: string) => {
     if (status !== "authenticated") {
       return;
     }
@@ -124,8 +125,9 @@ export const SaveButton = () => {
   };
 
   useEffect(() => {
+    idRef.current = id;
     return () => {
-      handleSave();
+      handleSave(idRef.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
@@ -155,7 +157,9 @@ export const SaveButton = () => {
       ) : (
         <SaveDraft
           updatedAt={updatedAt}
-          handleSave={handleSave}
+          handleSave={() => {
+            handleSave(id);
+          }}
           templateIsDirty={templateIsDirty.current}
         />
       )}
