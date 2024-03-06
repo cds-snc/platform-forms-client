@@ -5,7 +5,6 @@ export { ExpandingInput } from "./ExpandingInput";
 export { Output } from "./Output";
 export { TextArea } from "./TextArea";
 export { Radio, Checkbox } from "./MultipleChoice";
-export { ResumeEditingForm } from "./ResumeEditingForm";
 export { DownloadFileButton } from "./DownloadFileButton";
 export { ListBox } from "./ListBox";
 export { TagInput } from "./tag-input";
