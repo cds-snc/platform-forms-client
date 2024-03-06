@@ -1,10 +1,16 @@
 "use client";
-import React, { ReactElement, useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 import { clearTemplateStore } from "@lib/store";
+import Link from "next/link";
+import { useTranslation } from "@i18n/client";
 
-export const ResumeEditingForm = ({ children }: { children: ReactElement }) => {
+export const ResumeEditingForm = () => {
   const [hasSession, setHasSession] = React.useState(false);
+
+  const { t, i18n } = useTranslation("my-forms");
+
+  const formIdRef = useRef();
 
   useEffect(() => {
     if (typeof sessionStorage === "undefined") {
@@ -17,9 +23,12 @@ export const ResumeEditingForm = ({ children }: { children: ReactElement }) => {
       const parsedData = data && JSON.parse(data);
       const {
         state: {
+          id,
           form: { titleEn, titleFr },
         },
       } = parsedData;
+
+      formIdRef.current = id;
 
       if (titleEn !== "" || titleFr !== "") {
         setHasSession(true);
@@ -34,5 +43,12 @@ export const ResumeEditingForm = ({ children }: { children: ReactElement }) => {
     }
   }, []);
 
-  return hasSession ? <div>{children}</div> : null;
+  return hasSession ? (
+    <Link
+      href={`/${i18n.language}/form-builder/${formIdRef.current}/edit`}
+      className="mb-4 inline-block"
+    >
+      <span aria-hidden="true"> ← </span> {t("actions.resumeForm")}
+    </Link>
+  ) : null;
 };

@@ -6,8 +6,11 @@ import {
   retrieveUserSecurityQuestions,
 } from "@lib/auth";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
-import { FullWidthLayout } from "@clientComponents/globals/layouts";
 import { Profile } from "./clientSide";
+import { cn } from "@lib/utils";
+import { Header } from "@clientComponents/globals/Header/Header";
+import { SkipLink } from "@clientComponents/globals/SkipLink";
+import { Footer } from "@clientComponents/globals/Footer";
 
 export async function generateMetadata({
   params: { locale },
@@ -36,8 +39,17 @@ export default async function Page() {
   ]);
 
   return (
-    <FullWidthLayout context="default">
-      <Profile email={user.email} {...{ publishingStatus, userQuestions, allQuestions }} />
-    </FullWidthLayout>
+    <div className="flex h-full flex-col bg-gray-soft">
+      <SkipLink />
+      <Header className="mb-0" />
+      <div className="shrink-0 grow basis-auto">
+        <div className="flex flex-row gap-10">
+          <main id="content" className={cn("w-full form-builder mt-5 mb-10 mx-60")}>
+            <Profile email={user.email} {...{ publishingStatus, userQuestions, allQuestions }} />
+          </main>
+        </div>
+      </div>
+      <Footer displayFormBuilderFooter className="mt-0 lg:mt-0" />
+    </div>
   );
 }

@@ -6,7 +6,6 @@ import { AccessControlError } from "@lib/privileges";
 import { redirect } from "next/navigation";
 import { Navigation } from "./components/server/Navigation";
 import { ResumeEditingForm } from "@formBuilder/components/shared";
-import Link from "next/link";
 import { Cards } from "./components/server/Cards";
 import { Suspense } from "react";
 import Loader from "@clientComponents/globals/Loader";
@@ -39,10 +38,7 @@ export default async function Page({
       redirect: true,
     });
 
-    const {
-      t,
-      i18n: { language },
-    } = await serverTranslation("my-forms");
+    const { t } = await serverTranslation("my-forms");
 
     return (
       <div className="center mx-auto w-[980px] bg-gray-soft">
@@ -52,12 +48,7 @@ export default async function Page({
           <NewFormButton />
         </div>
 
-        {/* TODO: ask Tim and Dave how to implement now with new code. Note will also need an Id. Currently appears to be working? */}
-        <ResumeEditingForm>
-          <Link href={`/${language}/form-builder/edit`} className="mb-4 inline-block">
-            <span aria-hidden="true"> ← </span> {t("actions.resumeForm")}
-          </Link>
-        </ResumeEditingForm>
+        <ResumeEditingForm />
 
         <Suspense fallback={<Loader />}>
           <Cards filter={formsState} ability={ability} />
