@@ -10559,6 +10559,7 @@ __metadata:
     uuid: "npm:9.0.1"
     webpack: "npm:^5.89.0"
     yup: "npm:0.32.11"
+    zod: "npm:^3.22.4"
     zustand: "npm:4.5.0"
   languageName: unknown
   linkType: soft
@@ -17389,6 +17390,13 @@ __metadata:
     property-expr: "npm:^2.0.4"
     toposort: "npm:^2.0.2"
   checksum: 10c0/f0802798dc64b49f313886b983a9bea5f283e2094ee2aa1197587b84f50ac5b5d03af99857c313139e63dc02558fac3aaa343503bdbffa96f70006b39d1f59c9
+  languageName: node
+  linkType: hard
+
+"zod@npm:^3.22.4":
+  version: 3.22.4
+  resolution: "zod@npm:3.22.4"
+  checksum: 10c0/7578ab283dac0eee66a0ad0fc4a7f28c43e6745aadb3a529f59a4b851aa10872b3890398b3160f257f4b6817b4ce643debdda4fb21a2c040adda7862cab0a587
   languageName: node
   linkType: hard
 
