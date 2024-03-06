@@ -2,6 +2,8 @@
 import React, { createContext, useState, useContext, useRef } from "react";
 import { useTemplateStore, useSubscibeToTemplateStore } from "../../store";
 import { logMessage } from "@lib/logger";
+import { CreateOrUpdateTemplateType, createOrUpdateTemplate } from "@formBuilder/actions";
+import { PublicFormRecord } from "@lib/types";
 
 interface TemplateApiType {
   templateIsDirty: React.MutableRefObject<boolean>;
@@ -9,6 +11,15 @@ interface TemplateApiType {
   introChanged: boolean | null;
   privacyChanged: boolean | null;
   confirmationChanged: boolean | null;
+  createOrUpdateTemplate:
+    | (({
+        id,
+        formConfig,
+        name,
+        deliveryOption,
+        securityAttribute,
+      }: CreateOrUpdateTemplateType) => Promise<PublicFormRecord>)
+    | null;
 }
 
 const defaultTemplateApi: TemplateApiType = {
@@ -17,6 +28,7 @@ const defaultTemplateApi: TemplateApiType = {
   introChanged: null,
   privacyChanged: null,
   confirmationChanged: null,
+  createOrUpdateTemplate: null,
 };
 
 const TemplateApiContext = createContext<TemplateApiType>(defaultTemplateApi);
@@ -111,6 +123,7 @@ export function TemplateApiProvider({ children }: { children: React.ReactNode })
         introChanged,
         privacyChanged,
         confirmationChanged,
+        createOrUpdateTemplate,
       }}
     >
       {children}

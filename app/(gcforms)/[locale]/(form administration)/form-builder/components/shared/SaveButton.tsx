@@ -11,7 +11,6 @@ import { useTemplateContext } from "@lib/hooks/form-builder";
 import { formatDateTime } from "@lib/utils/form-builder";
 import { SavedFailIcon, SavedCheckIcon } from "@serverComponents/icons";
 import { usePathname } from "next/navigation";
-import { createOrUpdateTemplate } from "@formBuilder/actions";
 import { ErrorSaving } from "./ErrorSaving";
 
 const SaveDraft = ({
@@ -93,7 +92,7 @@ export const SaveButton = () => {
       setId: s.setId,
     }));
 
-  const { templateIsDirty } = useTemplateContext();
+  const { templateIsDirty, createOrUpdateTemplate } = useTemplateContext();
   const { status } = useSession();
   const [updatedAt, setUpdatedAt] = useState<number | undefined>();
   const [error, setError] = useState(false);
@@ -107,6 +106,10 @@ export const SaveButton = () => {
     const formConfig = getSchema();
 
     try {
+      if (!createOrUpdateTemplate) {
+        return;
+      }
+
       const template = await createOrUpdateTemplate({
         id: id,
         formConfig: JSON.parse(formConfig),

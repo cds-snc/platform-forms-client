@@ -30,19 +30,21 @@ const _getSessionAndAbility = async () => {
   return { session, ability };
 };
 
+export type CreateOrUpdateTemplateType = {
+  id?: string;
+  formConfig: FormProperties;
+  name?: string;
+  deliveryOption?: DeliveryOption;
+  securityAttribute?: SecurityAttribute;
+};
+
 export const createOrUpdateTemplate = async ({
   id,
   formConfig,
   name,
   deliveryOption,
   securityAttribute,
-}: {
-  id?: string;
-  formConfig: FormProperties;
-  name?: string;
-  deliveryOption?: DeliveryOption;
-  securityAttribute?: SecurityAttribute;
-}) => {
+}: CreateOrUpdateTemplateType) => {
   if (id) {
     return updateTemplate({ id, formConfig, name, deliveryOption, securityAttribute });
   }
