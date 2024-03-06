@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
 import { cn } from "@lib/utils";
@@ -97,11 +97,18 @@ export const SaveButton = () => {
   const [updatedAt, setUpdatedAt] = useState<number | undefined>();
   const [error, setError] = useState(false);
   const pathname = usePathname();
+  const timeRef = useRef(new Date().getTime());
 
   const handleSave = async () => {
     if (status !== "authenticated") {
       return;
     }
+
+    // If the timeRef is within 2 secs of the current time, don't save
+    if (timeRef.current && new Date().getTime() - timeRef.current < 2000) {
+      return;
+    }
+
     const formConfig = getSchema();
 
     try {
@@ -158,9 +165,7 @@ export const SaveButton = () => {
       ) : (
         <SaveDraft
           updatedAt={updatedAt}
-          handleSave={() => {
-            handleSave(id);
-          }}
+          handleSave={handleSave}
           templateIsDirty={templateIsDirty.current}
         />
       )}
