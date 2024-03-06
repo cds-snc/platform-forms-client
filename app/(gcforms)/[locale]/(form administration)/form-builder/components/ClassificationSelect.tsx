@@ -22,6 +22,7 @@ export interface ClassificationSelectProps {
   classification: ClassificationType;
   handleUpdateClassification: (classification: ClassificationType) => void;
   className?: string;
+  disableProtectedB?: boolean;
 }
 
 export const ClassificationSelect = ({
@@ -30,6 +31,7 @@ export const ClassificationSelect = ({
   classification,
   handleUpdateClassification,
   className,
+  disableProtectedB,
   ...rest
 }: ClassificationSelectProps) => {
   return (
@@ -50,7 +52,11 @@ export const ClassificationSelect = ({
         {...rest}
       >
         {classificationOptions.map((option) => (
-          <option key={option.value} value={option.value}>
+          <option
+            key={option.value}
+            value={option.value}
+            disabled={option.value === "Protected B" && disableProtectedB}
+          >
             {option[lang]}
           </option>
         ))}
