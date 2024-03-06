@@ -3,7 +3,7 @@ import React, { useCallback, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useRouter } from "next/navigation";
 import { useTemplateStore } from "@lib/store";
-import { useTemplateApi, useAllowPublish, useRehydrate } from "@lib/hooks/form-builder";
+import { useAllowPublish, useRehydrate } from "@lib/hooks/form-builder";
 import { CancelIcon, CircleCheckIcon, LockIcon } from "@serverComponents/icons";
 import { Button, Alert } from "@clientComponents/globals";
 import Link from "next/link";
@@ -13,6 +13,7 @@ import { logMessage } from "@lib/logger";
 import { DownloadFileButton } from "@formBuilder/components/shared";
 import Skeleton from "react-loading-skeleton";
 import LinkButton from "@serverComponents/globals/Buttons/LinkButton";
+import { updateTemplate, updateTemplatePublishedStatus } from "@formBuilder/actions";
 
 export const Publish = ({ id }: { id: string }) => {
   const { t, i18n } = useTranslation("form-builder");
@@ -69,52 +70,46 @@ export const Publish = ({ id }: { id: string }) => {
     );
   };
 
-  const { save } = useTemplateApi();
   const supportHref = `/${i18n.language}/form-builder/${id}/support`;
 
   const handlePublish = async () => {
     setError(false);
     setErrorCode(null);
-    const result = await save({
-      jsonConfig: getSchema(),
-      name: getName(),
-      formID: id,
-      publish: true,
-    });
+    try {
+      const result = await updateTemplatePublishedStatus({ id, isPublished: true });
+      setId(result?.id);
 
-    if (result && result?.error) {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: "publish_form",
+      });
+      router.replace(`/form-builder/${id}/published`);
+    } catch (e) {
+      logMessage.error(e);
       setError(true);
-      return;
+      setErrorCode(500);
     }
-
-    setId(result?.id);
-
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-      event: "publish_form",
-    });
-    router.replace(`/form-builder/${id}/published`);
   };
 
   const handleSaveAndRequest = useCallback(async () => {
     setError(false);
     setErrorCode(null);
-    const result = await save({
-      jsonConfig: getSchema(),
-      name: getName(),
-      formID: id,
-      publish: false,
-    });
+    try {
+      // @TODO: do we need this save?
+      updateTemplate({
+        id,
+        name: getName(),
+        formConfig: JSON.parse(getSchema()),
+      });
 
-    if (result && result?.error) {
-      logMessage.error(result?.error as Error);
+      router.push(`/unlock-publishing`);
+    } catch (e) {
+      logMessage.error(e);
       setError(true);
-      setErrorCode(result.error.response?.status || 400);
+      setErrorCode(500);
       return;
     }
-
-    router.push(`/unlock-publishing`);
-  }, [getSchema, getName, id, save, router]);
+  }, [getSchema, getName, id, router]);
 
   const hasHydrated = useRehydrate();
 

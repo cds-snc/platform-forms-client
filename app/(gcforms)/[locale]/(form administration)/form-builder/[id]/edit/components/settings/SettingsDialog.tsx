@@ -2,23 +2,24 @@
 import React, { useCallback, useState, useMemo } from "react";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
-import axios from "axios";
-
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store";
 import { useDialogRef, Dialog, Radio } from "@formBuilder/components/shared";
 import { Logos, options } from "../../../settings/branding/components";
 import Brand from "@clientComponents/globals/Brand";
-
 import { LocalizedFormProperties } from "@lib/types/form-builder-types";
 import { ResponseEmail } from "@formBuilder/components/ResponseEmail";
 import { isValidGovEmail } from "@lib/validation";
-import { useTemplateApi } from "@lib/hooks/form-builder";
 import { completeEmailAddressRegex } from "@lib/utils/form-builder";
 import {
   ClassificationSelect,
   ClassificationType,
 } from "@formBuilder/components/ClassificationSelect";
+import {
+  sendResponsesToVault,
+  updateTemplate,
+  updateTemplateDeliveryOption,
+} from "@formBuilder/actions";
 
 enum DeliveryOption {
   vault = "vault",
@@ -41,7 +42,6 @@ export const SettingsDialog = ({
   const dialog = useDialogRef();
   const { t, i18n } = useTranslation("form-builder");
   const { status, data } = useSession();
-  const { save, updateResponseDelivery } = useTemplateApi();
 
   /*--------------------------------------------*
    * Current store values
@@ -55,7 +55,6 @@ export const SettingsDialog = ({
     defaultSubjectFr,
     resetDeliveryOption,
     getSchema,
-    getName,
     getDeliveryOption,
     securityAttribute,
     updateSecurityAttribute,
@@ -72,7 +71,6 @@ export const SettingsDialog = ({
     defaultSubjectFr: s.form[s.localizeField(LocalizedFormProperties.TITLE, "fr")] + " - Réponse",
     resetDeliveryOption: s.resetDeliveryOption,
     getSchema: s.getSchema,
-    getName: s.getName,
     getDeliveryOption: s.getDeliveryOption,
     securityAttribute: s.securityAttribute,
     updateSecurityAttribute: s.updateSecurityAttribute,
@@ -212,21 +210,16 @@ export const SettingsDialog = ({
     updateField("deliveryOption.emailSubjectFr", subjectFr);
 
     updateSecurityAttribute(classification);
-    return save({
-      jsonConfig: getSchema(),
-      name: getName(),
-      formID: id,
+
+    await updateTemplateDeliveryOption({
+      id,
       deliveryOption: getDeliveryOption(),
-      securityAttribute: classification,
     });
   }, [
     inputEmail,
     subjectEn,
     subjectFr,
     id,
-    save,
-    getSchema,
-    getName,
     getDeliveryOption,
     updateField,
     classification,
@@ -241,37 +234,16 @@ export const SettingsDialog = ({
     resetDeliveryOption();
     updateSecurityAttribute(classification);
 
-    const result = await updateResponseDelivery(id);
-
-    if (!result || axios.isAxiosError(result)) {
-      return result;
-    }
-
-    return save({
-      jsonConfig: getSchema(),
-      name: getName(),
-      formID: id,
-      securityAttribute: classification,
+    await sendResponsesToVault({
+      id: id,
     });
-  }, [
-    id,
-    resetDeliveryOption,
-    setInputEmail,
-    classification,
-    updateSecurityAttribute,
-    save,
-    getSchema,
-    getName,
-    updateResponseDelivery,
-  ]);
+  }, [id, resetDeliveryOption, setInputEmail, classification, updateSecurityAttribute]);
 
   /*--------------------------------------------*
    * Save Settings
    *--------------------------------------------*/
 
   const saveSettings = useCallback(async () => {
-    let result;
-
     if (brandName === "") {
       unsetField("form.brand");
     }
@@ -283,20 +255,26 @@ export const SettingsDialog = ({
     updateSecurityAttribute(classification);
 
     if (email !== "" && deliveryOption === DeliveryOption.vault) {
-      result = await setToDatabaseDelivery();
+      await setToDatabaseDelivery();
     } else {
-      result = await setToEmailDelivery();
+      await setToEmailDelivery();
     }
 
-    if (!result || axios.isAxiosError(result)) {
-      return false;
-    }
+    updateTemplate({
+      id,
+      formConfig: JSON.parse(getSchema()),
+      securityAttribute: classification,
+      deliveryOption: getDeliveryOption(),
+    });
   }, [
     brand,
     brandName,
     classification,
     deliveryOption,
     email,
+    getDeliveryOption,
+    getSchema,
+    id,
     initialBrandName,
     setToDatabaseDelivery,
     setToEmailDelivery,

@@ -1,17 +1,9 @@
 "use client";
-import React, { createContext, useState, useContext, useRef, useCallback } from "react";
+import React, { createContext, useState, useContext, useRef } from "react";
 import { useTemplateStore, useSubscibeToTemplateStore } from "../../store";
-import { useTemplateApi } from "./";
-import { useTranslation } from "@i18n/client";
 import { logMessage } from "@lib/logger";
-import { useSession } from "next-auth/react";
-import { toast } from "@formBuilder/components/shared/Toast";
-import { StyledLink } from "@clientComponents/globals";
-import { DownloadFileButton } from "@formBuilder/components/shared";
 
 interface TemplateApiType {
-  error: string | null | undefined;
-  saveForm: () => Promise<boolean | { newForm: boolean; id: string } | unknown>;
   templateIsDirty: React.MutableRefObject<boolean>;
   nameChanged: boolean | null;
   introChanged: boolean | null;
@@ -20,8 +12,6 @@ interface TemplateApiType {
 }
 
 const defaultTemplateApi: TemplateApiType = {
-  error: null,
-  saveForm: async () => false,
   templateIsDirty: { current: false },
   nameChanged: null,
   introChanged: null,
@@ -30,24 +20,6 @@ const defaultTemplateApi: TemplateApiType = {
 };
 
 const TemplateApiContext = createContext<TemplateApiType>(defaultTemplateApi);
-
-const ErrorSaving = ({ supportHref, errorCode }: { supportHref: string; errorCode?: string }) => {
-  const { t } = useTranslation("form-builder");
-
-  return (
-    <div className="w-full">
-      <h3 className="!mb-0 pb-0 text-xl font-semibold">{t("errorSavingForm.title")}</h3>
-      <p className="mb-2 text-black">
-        {t("errorSavingForm.description")}{" "}
-        <StyledLink href={supportHref}>{t("errorSavingForm.supportLink")}.</StyledLink>
-      </p>
-      <p className="mb-5 text-sm text-black">
-        {errorCode && t("errorSavingForm.errorCode", { code: errorCode })}
-      </p>
-      <DownloadFileButton theme="primary" showInfo={false} autoShowDialog={false} />
-    </div>
-  );
-};
 
 interface Description {
   descriptionEn: string | undefined;
@@ -77,27 +49,16 @@ const descriptionsMatch = (
 };
 
 export function TemplateApiProvider({ children }: { children: React.ReactNode }) {
-  const { t, i18n } = useTranslation(["form-builder"]);
-  const [error, setError] = useState<string | null>();
-
   const [nameChanged, setNameChanged] = useState<boolean | null>(false);
   const [introChanged, setIntroChanged] = useState<boolean | null>(false);
   const [privacyChanged, setPrivacyChanged] = useState<boolean | null>(false);
   const [confirmationChanged, setConfirmationChanged] = useState<boolean | null>(false);
 
-  const supportHref = `/${i18n.language}/support`;
-  const { id, getSchema, getName, hasHydrated, setId, getIsPublished } = useTemplateStore((s) => ({
-    id: s.id,
-    getSchema: s.getSchema,
-    getName: s.getName,
+  const { hasHydrated } = useTemplateStore((s) => ({
     hasHydrated: s.hasHydrated,
-    setId: s.setId,
-    getIsPublished: s.getIsPublished,
   }));
 
   const templateIsDirty = useRef(false);
-
-  const { status } = useSession();
 
   useSubscibeToTemplateStore(
     (s) => [s.form, s.isPublished, s.name, s.deliveryOption, s.securityAttribute],
@@ -142,51 +103,9 @@ export function TemplateApiProvider({ children }: { children: React.ReactNode })
     }
   );
 
-  const { save } = useTemplateApi();
-
-  const saveForm = useCallback(() => {
-    // eslint-disable-next-line no-async-promise-executor
-    return new Promise(async (resolve, reject) => {
-      try {
-        if (templateIsDirty.current && status === "authenticated" && !getIsPublished()) {
-          logMessage.debug("Saving Template to server");
-          const result = await save({
-            jsonConfig: getSchema(),
-            name: getName(),
-            formID: id,
-          });
-
-          if (result && result?.error) {
-            throw result?.error as Error;
-          }
-
-          setError(null);
-          setNameChanged(null);
-          setIntroChanged(null);
-          setPrivacyChanged(null);
-          setConfirmationChanged(null);
-          templateIsDirty.current = false;
-          setId(result?.id);
-
-          resolve({
-            newForm: id === "",
-            id: result?.id,
-          });
-        }
-      } catch (err) {
-        logMessage.error(err as Error);
-        setError(t("errorSaving"));
-        toast.error(<ErrorSaving supportHref={supportHref} />, "wide");
-        reject(false);
-      }
-    });
-  }, [status, getIsPublished, getSchema, getName, id, save, setError, setId, t, supportHref]);
-
   return (
     <TemplateApiContext.Provider
       value={{
-        error,
-        saveForm,
         templateIsDirty,
         nameChanged,
         introChanged,

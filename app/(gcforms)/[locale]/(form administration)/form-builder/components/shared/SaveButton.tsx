@@ -2,14 +2,16 @@
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
 import { cn } from "@lib/utils";
-
+import { toast } from "@formBuilder/components/shared/Toast";
 import { Button, StyledLink } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store";
-import { useTemplateStatus, useTemplateContext } from "@lib/hooks/form-builder";
+import { useTemplateContext } from "@lib/hooks/form-builder";
 import { formatDateTime } from "@lib/utils/form-builder";
 import { SavedFailIcon, SavedCheckIcon } from "@serverComponents/icons";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { createOrUpdateTemplate } from "@formBuilder/actions";
+import { ErrorSaving } from "./ErrorSaving";
 
 const SaveDraft = ({
   updatedAt,
@@ -79,27 +81,50 @@ export const ErrorSavingForm = () => {
 };
 
 export const SaveButton = () => {
-  const { isPublished, id } = useTemplateStore((s) => ({
-    isPublished: s.isPublished,
-    id: s.id,
-  }));
+  const { isPublished, id, getSchema, getName, getDeliveryOption, securityAttribute, setId } =
+    useTemplateStore((s) => ({
+      isPublished: s.isPublished,
+      id: s.id,
+      getSchema: s.getSchema,
+      getName: s.getName,
+      getDeliveryOption: s.getDeliveryOption,
+      securityAttribute: s.securityAttribute,
+      setId: s.setId,
+    }));
 
-  const { error, saveForm, templateIsDirty } = useTemplateContext();
+  const { templateIsDirty } = useTemplateContext();
   const { status } = useSession();
-  const { updatedAt, getTemplateById } = useTemplateStatus();
+  const [updatedAt, setUpdatedAt] = useState<number | undefined>();
+  const [error, setError] = useState(false);
   const pathname = usePathname();
 
   const handleSave = async () => {
-    const saved = await saveForm();
+    if (status !== "authenticated") {
+      return;
+    }
+    const formConfig = getSchema();
 
-    if (saved) {
-      getTemplateById();
+    try {
+      const template = await createOrUpdateTemplate({
+        id: id,
+        formConfig: JSON.parse(formConfig),
+        name: getName(),
+        deliveryOption: getDeliveryOption(),
+        securityAttribute: securityAttribute,
+      });
+
+      setId(template.id);
+      setUpdatedAt(new Date(template.updatedAt ? template.updatedAt : "").getTime());
+      setError(false);
+    } catch (error) {
+      toast.error(<ErrorSaving />, "wide");
+      setError(true);
     }
   };
 
   useEffect(() => {
     return () => {
-      saveForm();
+      handleSave();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

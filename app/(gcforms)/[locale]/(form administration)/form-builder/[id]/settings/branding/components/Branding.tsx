@@ -3,16 +3,15 @@ import React, { useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useTranslation } from "@i18n/client";
 import Link from "next/link";
-import axios from "axios";
-
 import { Logos, options } from ".";
 import { useTemplateStore } from "@lib/store";
 import { LoggedOutTabName, LoggedOutTab } from "@formBuilder/components/LoggedOutTab";
-import { useTemplateApi } from "@lib/hooks/form-builder";
 import { toast } from "@formBuilder/components/shared";
 import { Button } from "@clientComponents/globals";
 import Brand from "@clientComponents/globals/Brand";
 import { ExternalLinkIcon } from "@serverComponents/icons";
+import { updateTemplate } from "@formBuilder/actions";
+import { logMessage } from "@lib/logger";
 
 const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element | string }) => {
   return (
@@ -25,7 +24,6 @@ const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element 
 export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: boolean }) => {
   const { t, i18n } = useTranslation("form-builder");
   const { status } = useSession();
-  const { save } = useTemplateApi();
   const { id, isPublished, brandName, updateField, unsetField, getSchema, getName, brand } =
     useTemplateStore((s) => ({
       id: s.id,
@@ -56,19 +54,20 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
   const savedErrorMessage = t("settingsResponseDelivery.savedErrorMessage");
 
   const handleSave = useCallback(async () => {
-    const result = await save({
-      jsonConfig: getSchema(),
-      name: getName(),
-      formID: id,
-    });
-
-    if (!result || axios.isAxiosError(result)) {
+    try {
+      await updateTemplate({
+        id,
+        formConfig: JSON.parse(getSchema()),
+        name: getName(),
+      });
+    } catch (e) {
+      logMessage.error(e);
       toast.error(savedErrorMessage);
       return;
     }
 
     toast.success(savedSuccessMessage);
-  }, [id, save, getSchema, getName, savedSuccessMessage, savedErrorMessage]);
+  }, [id, getSchema, getName, savedSuccessMessage, savedErrorMessage]);
 
   const lang = i18n.language;
   const logoTitle = lang === "en" ? "logoTitleEn" : "logoTitleFr";
