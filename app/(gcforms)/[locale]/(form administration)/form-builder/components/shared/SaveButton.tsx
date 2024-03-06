@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
 import { cn } from "@lib/utils";
@@ -97,9 +97,8 @@ export const SaveButton = () => {
   const [updatedAt, setUpdatedAt] = useState<number | undefined>();
   const [error, setError] = useState(false);
   const pathname = usePathname();
-  const idRef = useRef(id);
 
-  const handleSave = async (id: string) => {
+  const handleSave = async () => {
     if (status !== "authenticated") {
       return;
     }
@@ -128,12 +127,11 @@ export const SaveButton = () => {
   };
 
   useEffect(() => {
-    idRef.current = id;
     return () => {
-      handleSave(idRef.current);
+      handleSave();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, []);
 
   if (isPublished) {
     return null;
