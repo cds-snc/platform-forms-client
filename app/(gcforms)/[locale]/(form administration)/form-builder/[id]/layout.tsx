@@ -7,7 +7,7 @@ import { AccessControlError, createAbility } from "@lib/privileges";
 import { getFullTemplateByID } from "@lib/templates";
 import { redirect } from "next/navigation";
 import { TemplateStoreProvider } from "@lib/store";
-import { TemplateApiProvider } from "@lib/hooks/form-builder";
+import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext";
 import { RefStoreProvider } from "@lib/hooks/form-builder/useRefStore";
 import { RightPanel } from "@formBuilder/components/shared/right-panel/RightPanel";
 
@@ -52,7 +52,7 @@ export default async function Layout({
 
   return (
     <TemplateStoreProvider {...{ ...initialForm, locale }}>
-      <TemplateApiProvider>
+      <SaveTemplateProvider>
         <RefStoreProvider>
           <div className={`flex h-full flex-col`}>
             {/* @TODO: Backlink?? */}
@@ -80,7 +80,7 @@ export default async function Layout({
             </div>
           </div>
         </RefStoreProvider>
-      </TemplateApiProvider>
+      </SaveTemplateProvider>
     </TemplateStoreProvider>
   );
 }

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
 import { cn } from "@lib/utils";
@@ -7,7 +7,7 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
 import LinkButton from "@serverComponents/globals/Buttons/LinkButton";
 import { useTemplateStore } from "@lib/store";
-import { useTemplateContext } from "@lib/hooks/form-builder";
+import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 import { formatDateTime } from "@lib/utils/form-builder";
 import { SavedFailIcon, SavedCheckIcon } from "@serverComponents/icons";
 import { usePathname } from "next/navigation";
@@ -81,27 +81,43 @@ export const ErrorSavingForm = () => {
 };
 
 export const SaveButton = () => {
-  const { isPublished, id, getSchema, getName, getDeliveryOption, securityAttribute, setId } =
-    useTemplateStore((s) => ({
-      isPublished: s.isPublished,
-      id: s.id,
-      getSchema: s.getSchema,
-      getName: s.getName,
-      getDeliveryOption: s.getDeliveryOption,
-      securityAttribute: s.securityAttribute,
-      setId: s.setId,
-    }));
+  const {
+    isPublished,
+    id,
+    getSchema,
+    getId,
+    getName,
+    getDeliveryOption,
+    securityAttribute,
+    setId,
+  } = useTemplateStore((s) => ({
+    isPublished: s.isPublished,
+    id: s.id,
+    getId: s.getId,
+    getSchema: s.getSchema,
+    getName: s.getName,
+    getDeliveryOption: s.getDeliveryOption,
+    securityAttribute: s.securityAttribute,
+    setId: s.setId,
+  }));
 
   const { templateIsDirty, createOrUpdateTemplate } = useTemplateContext();
   const { status } = useSession();
   const [updatedAt, setUpdatedAt] = useState<number | undefined>();
   const [error, setError] = useState(false);
   const pathname = usePathname();
+  const timeRef = useRef(new Date().getTime());
 
   const handleSave = async () => {
     if (status !== "authenticated") {
       return;
     }
+
+    // If the timeRef is within 2 secs of the current time, don't save
+    if (timeRef.current && new Date().getTime() - timeRef.current < 2000) {
+      return;
+    }
+
     const formConfig = getSchema();
 
     try {
@@ -110,7 +126,7 @@ export const SaveButton = () => {
       }
 
       const template = await createOrUpdateTemplate({
-        id: id,
+        id: getId(),
         formConfig: JSON.parse(formConfig),
         name: getName(),
         deliveryOption: getDeliveryOption(),
@@ -158,9 +174,7 @@ export const SaveButton = () => {
       ) : (
         <SaveDraft
           updatedAt={updatedAt}
-          handleSave={() => {
-            handleSave(id);
-          }}
+          handleSave={handleSave}
           templateIsDirty={templateIsDirty.current}
         />
       )}

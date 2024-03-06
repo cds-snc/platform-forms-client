@@ -113,6 +113,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
       arg1?: Language
     ): `${LocalizedProperty}${Capitalize<Language>}`;
   };
+  getId: () => string;
   setId: (id: string) => void;
   setLang: (lang: Language) => void;
   toggleLang: () => void;
@@ -403,6 +404,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               });
             },
             getSchema: () => JSON.stringify(getSchemaFromState(get()), null, 2),
+            getId: () => get().id,
             getIsPublished: () => get().isPublished,
             getName: () => get().name,
             getDeliveryOption: () => get().deliveryOption,
