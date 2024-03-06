@@ -57,7 +57,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     });
 
   return (
-    <UserNavLayout beforeContentWrapper={<Info />} contentWidth="tablet:w-[658px]">
+    <UserNavLayout beforeContentWrapper={<Info />}>
       <SetupSecurityQuestions questions={questions} />
     </UserNavLayout>
   );

@@ -1,6 +1,5 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import UserNavLayout from "@clientComponents/globals/layouts/UserNavLayout";
 import { redirect } from "next/navigation";
 import { AcceptableUseTerms } from "@clientComponents/auth/AcceptableUse";
 import { requireAuthentication } from "@lib/auth";
@@ -25,9 +24,5 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
   const termsOfUseContent = await require(`@public/static/content/${locale}/responsibilities.md`);
 
-  return (
-    <UserNavLayout contentWidth="tablet:w-[768px] laptop:w-[850px]">
-      <AcceptableUseTerms content={termsOfUseContent} />
-    </UserNavLayout>
-  );
+  return <AcceptableUseTerms content={termsOfUseContent} />;
 }

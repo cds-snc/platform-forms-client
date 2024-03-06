@@ -1,7 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { ResetPassword } from "./clientSide";
-import UserNavLayout from "@clientComponents/globals/layouts/UserNavLayout";
 import {
   PasswordResetExpiredLink,
   PasswordResetInvalidLink,
@@ -52,9 +51,5 @@ export default async function Page({
     }
   }
 
-  return (
-    <UserNavLayout contentWidth="tablet:w-[658px]">
-      <ResetPassword {...{ email, userSecurityQuestions }} />
-    </UserNavLayout>
-  );
+  return <ResetPassword {...{ email, userSecurityQuestions }} />;
 }

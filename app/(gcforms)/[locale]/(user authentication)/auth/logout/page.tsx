@@ -1,6 +1,5 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import UserNavLayout from "@clientComponents/globals/layouts/UserNavLayout";
 import { PrimaryLinkButton } from "@clientComponents/globals";
 
 export async function generateMetadata({
@@ -18,21 +17,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const { t } = await serverTranslation("logout", { lang: locale });
 
   return (
-    <UserNavLayout contentWidth="tablet:w-[658px]">
-      <div>
-        <h1 className="mb-12 mt-6 border-b-0">{t("messageContent")}</h1>
-        <div className="items-center pb-10 pt-3 text-sm font-normal not-italic">
-          {t("logoutDate")} :{" "}
-          {new Date().toLocaleString(`${locale + "-CA"}`, {
-            timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-          })}
-        </div>
-        <div>
-          <PrimaryLinkButton href={`/${locale}/auth/login`}>
-            {t("goToSignInLabel")}
-          </PrimaryLinkButton>
-        </div>
+    <div>
+      <h1 className="mb-12 mt-6 border-b-0">{t("messageContent")}</h1>
+      <div className="items-center pb-10 pt-3 text-sm font-normal not-italic">
+        {t("logoutDate")} :{" "}
+        {new Date().toLocaleString(`${locale + "-CA"}`, {
+          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        })}
       </div>
-    </UserNavLayout>
+      <div>
+        <PrimaryLinkButton href={`/${locale}/auth/login`}>{t("goToSignInLabel")}</PrimaryLinkButton>
+      </div>
+    </div>
   );
 }

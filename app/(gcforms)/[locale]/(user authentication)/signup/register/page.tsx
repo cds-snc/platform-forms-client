@@ -1,5 +1,4 @@
 import { serverTranslation } from "@i18n";
-import UserNavLayout from "@clientComponents/globals/layouts/UserNavLayout";
 import { Metadata } from "next";
 import { auth } from "@lib/auth";
 import { redirect } from "next/navigation";
@@ -21,9 +20,5 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
   if (session) redirect(`/${locale}/forms/`);
 
-  return (
-    <UserNavLayout contentWidth="tablet:w-[658px]">
-      <Register />
-    </UserNavLayout>
-  );
+  return <Register />;
 }

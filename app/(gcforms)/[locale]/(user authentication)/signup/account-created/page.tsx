@@ -1,7 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { requireAuthentication } from "@lib/auth";
 import { StyledLink } from "@clientComponents/globals/StyledLink/StyledLink";
-import UserNavLayout from "@clientComponents/globals/layouts/UserNavLayout";
 import { Metadata } from "next";
 
 export async function generateMetadata({
@@ -20,7 +19,7 @@ export default async function Page() {
   await requireAuthentication();
 
   return (
-    <UserNavLayout contentWidth="tablet:w-[658px]">
+    <>
       <h1 className="border-b-0 mt-6 mb-12">{t("accountCreated.title")}</h1>
       <h2>{t("accountCreated.yourAccountListDescription")}</h2>
       <ul>
@@ -49,6 +48,6 @@ export default async function Page() {
           {t("accountCreated.skipStepButton")}
         </StyledLink>
       </div>
-    </UserNavLayout>
+    </>
   );
 }
