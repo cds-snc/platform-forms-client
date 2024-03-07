@@ -5,6 +5,7 @@ import { useTemplateStore } from "@lib/store";
 import { ArrowDown } from "./icons/ArrowDown";
 import { ArrowRight } from "./icons/ArrowRight";
 import { cn } from "@lib/utils";
+import { LockIcon } from "@serverComponents/icons";
 
 export type FormItem = {
   id: string;
@@ -69,8 +70,9 @@ function Node({ node, style, dragHandle }: NodeRendererProps<FormItem>) {
             {node.isEditing ? (
               <Input node={node} />
             ) : (
-              <div className="border-r-[40px] border-gray-soft bg-white p-1 pl-4">
-                {node.data.name}{" "}
+              <div className="flex justify-between border-r-[40px] border-gray-soft bg-white p-1 pl-4">
+                {node.data.name}
+                {node.data.readOnly && <LockIcon className="mr-2 mt-1 inline-block scale-75" />}
               </div>
             )}
           </span>
@@ -140,6 +142,7 @@ export const TreeView = () => {
         indent={40}
         rowHeight={46}
         width="100%"
+        disableDrag={(data) => data.readOnly}
       >
         {Node}
       </Tree>
