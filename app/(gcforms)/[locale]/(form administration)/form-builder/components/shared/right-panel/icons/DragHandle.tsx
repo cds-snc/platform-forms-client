@@ -1,4 +1,4 @@
-export const DragIcon = ({ className, title }: { className?: string; title?: string }) => (
+export const DragHandle = ({ className, title }: { className?: string; title?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="10"

@@ -1,10 +1,12 @@
 import { NodeApi, NodeRendererProps } from "react-arborist";
 
+import { cn } from "@lib/utils";
+import { FormItem } from "./types";
+
 import { ArrowDown } from "./icons/ArrowDown";
 import { ArrowRight } from "./icons/ArrowRight";
-import { cn } from "@lib/utils";
+import { DragHandle } from "./icons/DragHandle";
 import { LockIcon } from "@serverComponents/icons";
-import { FormItem } from "./types";
 
 function Input({ node }: { node: NodeApi<FormItem> }) {
   return (
@@ -59,6 +61,7 @@ export const Node = ({ node, style, dragHandle }: NodeRendererProps<FormItem>) =
             ) : (
               <div className="flex justify-between border-r-[40px] border-gray-soft bg-white p-1 pl-4">
                 {node.data.name}
+                {!node.data.readOnly && <DragHandle className="mt-[7px]" />}
                 {node.data.readOnly && <LockIcon className="mr-2 mt-1 inline-block scale-75" />}
               </div>
             )}
