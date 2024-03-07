@@ -1,16 +1,17 @@
-import { redirect } from "next/navigation";
+import { logMessage } from "@lib/logger";
 import { ZodError, z } from "zod";
 
 // Simple Data Structure. This could be a lot more detailed/complex
 export const initialState = {
+  _status: "",
   name: "",
-  _name: "", // Hide errors in state using an underscore. There are probalby many ways to do this.
+  _nameError: "", // Hide errors in state using an underscore. There are probalby many ways to do this.
   email: "",
-  _email: "",
+  _emailError: "",
   city: "",
-  _city: "",
+  _cityError: "",
   province: "",
-  _province: "",
+  _provinceError: "",
 };
 
 const schema = z.object({
@@ -26,10 +27,11 @@ function handleErrorCode(code: string) {
   return code;
 }
 
+// Issue with the zod-throw way is sharing formInput must be outside try-catch and this could generate an error
+// but putting inside the try-catch would require re-getting the formInput from the formData
 export async function doSomething(formData: FormData) {
   // Another way: const data = Object.fromEntries(formData.entries());
-  const data = {
-    ...initialState, // build off of default to remove any past errors
+  const formInput = {
     name: formData.get("name"),
     email: formData.get("email"),
     city: formData.get("city"),
@@ -40,23 +42,34 @@ export async function doSomething(formData: FormData) {
     // Result Object:
     // -pass == {succes: true}
     // -fail == {success: false, error: {issues: [{path: ["FIELD_NAME"], code: "CODE"}] }}
-    schema.parse(data); // use schema.safeParse(data) to not have the error thrown
+    schema.parse(formInput); // use schema.safeParse(data) to not have the error thrown
 
-    // Success.
-    redirect("/en/test/success"); // Or could return success/* and do a router.rewrite() in the client
+    // Success. -- Or could redirect here instead of the client
+    return {
+      ...initialState, // build off of default to remove any past errors
+      ...formInput,
+      _status: "success",
+    };
   } catch (e) {
+    if (!(e instanceof ZodError)) {
+      logMessage.error(e);
+      throw e;
+    }
+
     // Fail
     const { issues } = e as ZodError;
     const errors = issues.reduce((accumulator, issue) => {
       const fieldName = issue.path[0];
       const code = issue.code;
-      const error = { [`_${fieldName}`]: `${handleErrorCode(code)}` };
+      const error = { [`_${fieldName}Error`]: `${handleErrorCode(code)}` };
       return { ...accumulator, ...error };
     }, {});
 
     return {
-      ...data,
+      ...initialState,
+      ...formInput,
       ...errors,
+      _status: "error",
     };
   }
 }
