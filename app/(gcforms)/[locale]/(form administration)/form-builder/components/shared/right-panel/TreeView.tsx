@@ -1,5 +1,4 @@
 import { CursorProps, Tree } from "react-arborist";
-
 import { useTemplateStore } from "@lib/store";
 import { Node } from "./Node";
 
@@ -67,6 +66,12 @@ export const TreeView = () => {
         indent={40}
         rowHeight={46}
         width="100%"
+        disableDrop={({ parentNode }) => {
+          if (parentNode.data.id === "end") {
+            return true;
+          }
+          return false;
+        }}
         disableDrag={(data) => data.readOnly}
       >
         {Node}
