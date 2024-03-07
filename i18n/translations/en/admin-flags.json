@@ -21,6 +21,10 @@
     "experimentalBlocks": {
       "title": "Experimental blocks",
       "description": "Enable experimental blocks"
+    },
+    "conditionalLogic": {
+      "title": "Conditional logic",
+      "description": "Enable conditional logic + right panel"
     }
   }
 }
