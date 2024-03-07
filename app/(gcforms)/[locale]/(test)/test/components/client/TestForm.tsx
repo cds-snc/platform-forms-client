@@ -53,7 +53,7 @@ export const TestForm = () => {
             Email (required)
           </Label>
           <Error fieldName="email">{state?._emailError && state._emailError}</Error>
-          <Input name="email" required hasError={Boolean(state._emailError)} />
+          <Input name="email" hasError={Boolean(state._emailError)} />
         </>
       </Field>
       <fieldset>
@@ -77,8 +77,28 @@ export const TestForm = () => {
           </>
         </Field>
       </fieldset>
-      <Button type="submit" theme="primary" className="mr-4" {...(pending && { disabled: true })}>
-        Submit
+      {/* To help visually and semantically show show a disabled button but not descrease accessibility,
+          I added a new:
+          -theme for "disabled" to work with aria-disabled. best not to disable a submit button fot a11y 
+          -onKeyDown to button to prevent form submission on enter key press (and click)
+      */}
+      <Button
+        type="submit"
+        theme={`${pending ? "disabled" : "primary"}`}
+        className={`mr-4`}
+        {...(pending && { "aria-disabled": true })}
+        onClick={(e) => {
+          if (pending) {
+            e.preventDefault();
+          }
+        }}
+        onKeyDown={(e) => {
+          if (pending && (e.key === "Enter" || e.key === " ")) {
+            e.preventDefault();
+          }
+        }}
+      >
+        {!pending ? "Submit" : "Submit (loading...)"}
       </Button>
       <Button type="reset" theme="secondary">
         Reset

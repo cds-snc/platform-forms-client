@@ -16,10 +16,10 @@ export const initialState = {
 };
 
 const schema = z.object({
-  name: z.string().min(1),
+  name: z.string().min(1), // required by min(1)
   email: z.string().email().min(1),
   city: z.string().max(5), // optional but with a character limit of 5
-  province: z.string().max(5), // optional but with a character limit of 5
+  province: z.string().max(5),
 });
 //.required(); To make all fields required
 
@@ -41,7 +41,7 @@ export async function doSomethingBetter(formData: FormData) {
     // Zod Result Object:
     // -pass == {succes: true}
     // -fail == {success: false, error: {issues: [{path: ["FIELD_NAME"], code: "CODE"}] }}
-    const result = schema.safeParse(formInput);
+    const result = await schema.safeParseAsync(formInput);
 
     // Success. -- Or could redirect here instead of the client
     if (result.success) {
