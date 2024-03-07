@@ -20,6 +20,7 @@ interface TemplateApiType {
         securityAttribute,
       }: CreateOrUpdateTemplateType) => Promise<PublicFormRecord>)
     | null;
+  lastChange: number;
 }
 
 const defaultTemplateApi: TemplateApiType = {
@@ -29,6 +30,7 @@ const defaultTemplateApi: TemplateApiType = {
   privacyChanged: null,
   confirmationChanged: null,
   createOrUpdateTemplate: null,
+  lastChange: new Date().getTime(),
 };
 
 const TemplateApiContext = createContext<TemplateApiType>(defaultTemplateApi);
@@ -70,6 +72,7 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
     hasHydrated: s.hasHydrated,
   }));
 
+  const [lastChange, setLastChange] = useState(new Date().getTime());
   const templateIsDirty = useRef(false);
 
   useSubscibeToTemplateStore(
@@ -79,6 +82,7 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
         logMessage.debug(`TemplateContext: Local State out of sync with server`);
         templateIsDirty.current = true;
       }
+      setLastChange(new Date().getTime());
     }
   );
 
@@ -87,6 +91,7 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
     (s, p) => {
       if (p[0] !== s[0]) {
         setNameChanged(true);
+        setLastChange(new Date().getTime());
       }
     }
   );
@@ -103,14 +108,17 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
 
       if (introduction !== introChanged) {
         setIntroChanged(introduction);
+        setLastChange(new Date().getTime());
       }
 
       if (privacyPolicy !== privacyChanged) {
         setPrivacyChanged(privacyPolicy);
+        setLastChange(new Date().getTime());
       }
 
       if (confirmation !== confirmationChanged) {
         setConfirmationChanged(confirmation);
+        setLastChange(new Date().getTime());
       }
     }
   );
@@ -124,6 +132,7 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
         privacyChanged,
         confirmationChanged,
         createOrUpdateTemplate,
+        lastChange,
       }}
     >
       {children}

@@ -46,8 +46,6 @@ export const Node = ({ node, style, dragHandle }: NodeRendererProps<FormItem>) =
     className = cn("border-x-1 border-b-1 border-gray-soft p-2", node.isClosed && "bg-white");
   }
 
-  // hover:border-1 hover:border-dashed hover:border-violet-400
-
   return (
     <div
       ref={dragHandle}
@@ -61,12 +59,14 @@ export const Node = ({ node, style, dragHandle }: NodeRendererProps<FormItem>) =
             {node.isEditing ? (
               <Input node={node} />
             ) : (
-              <div className="group flex justify-between border-r-[40px] border-gray-soft bg-white p-1 pl-4">
+              <div className="group relative w-[350px] overflow-hidden truncate border-gray-soft bg-white p-1 pr-10">
                 {node.data.name}
                 {!node.data.readOnly && (
-                  <DragHandle className="mr-4 mt-[7px] hidden group-hover:block" />
+                  <DragHandle className="absolute right-0 top-0 mr-4 mt-3 hidden cursor-pointer group-hover:block" />
                 )}
-                {node.data.readOnly && <LockIcon className="mr-2 mt-1 inline-block scale-75" />}
+                {node.data.readOnly && (
+                  <LockIcon className="absolute right-0 mr-2 inline-block scale-75" />
+                )}
               </div>
             )}
           </span>

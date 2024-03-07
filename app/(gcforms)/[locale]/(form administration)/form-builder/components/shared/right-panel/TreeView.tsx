@@ -1,19 +1,11 @@
 import React, { useEffect } from "react";
-import { CursorProps, Tree } from "react-arborist";
+import { Tree } from "react-arborist";
 import { useTemplateStore } from "@lib/store";
 import { Node } from "./Node";
 import { useDynamicTree } from "./hooks/useDynamicTree";
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 import { useTranslation } from "react-i18next";
-
-const Cursor = ({ top, left }: CursorProps) => {
-  return (
-    <div
-      className="absolute z-[50000] h-[4px] w-[368px] border-b-2 bg-violet-900 pr-[60px]"
-      style={{ top, left }}
-    ></div>
-  );
-};
+import { Cursor } from "./Cursor";
 
 export const TreeView = () => {
   const { elements } = useTemplateStore((s) => ({
@@ -22,7 +14,7 @@ export const TreeView = () => {
 
   const { t } = useTranslation("form-builder");
 
-  const { templateIsDirty } = useTemplateContext();
+  const { lastChange } = useTemplateContext();
 
   const { data, setData, controllers } = useDynamicTree();
 
@@ -40,7 +32,7 @@ export const TreeView = () => {
       };
     });
 
-    const formData = [
+    const treeData = [
       {
         id: "start",
         name: "Start",
@@ -72,9 +64,9 @@ export const TreeView = () => {
       },
     ];
 
-    setData(formData);
+    setData(treeData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [elementCount, templateIsDirty]);
+  }, [elementCount, lastChange]);
 
   return (
     <div className="relative mr-[1px] bg-gray-soft">
