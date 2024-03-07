@@ -1,13 +1,14 @@
 "use client";
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormState } from "react-dom";
+import { useRouter } from "next/navigation";
+import { useTranslation } from "@i18n/client";
+import { Button } from "@clientComponents/globals";
+import { doSomethingBetter, initialState } from "../../actions";
 import { Label } from "./Label";
 import { Error } from "./Error";
 import { Input } from "./Input";
 import { Field } from "./Field";
-import { Button } from "@clientComponents/globals";
-import { doSomethingBetter, initialState } from "../../actions";
-import { useRouter } from "next/navigation";
-import { useTranslation } from "@i18n/client";
+import { SubmitButton } from "./SubmitButton";
 
 export const TestForm = () => {
   const router = useRouter();
@@ -17,6 +18,9 @@ export const TestForm = () => {
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const handleSubmit = async (prevState: any, formData: FormData) => {
+    // Simulate a delay to show the loading state
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     const result = await doSomethingBetter(formData);
     if (result._status === "success") {
       router.replace(`/${language}/test?success`);
@@ -30,7 +34,6 @@ export const TestForm = () => {
   };
 
   const [state, formAction] = useFormState(handleSubmit, initialState);
-  const { pending } = useFormStatus();
 
   return (
     <form action={formAction} onReset={handleReset}>
@@ -77,29 +80,7 @@ export const TestForm = () => {
           </>
         </Field>
       </fieldset>
-      {/* To help visually and semantically show show a disabled button but not descrease accessibility,
-          I added a new:
-          -theme for "disabled" to work with aria-disabled. best not to disable a submit button fot a11y 
-          -onKeyDown to button to prevent form submission on enter key press (and click)
-      */}
-      <Button
-        type="submit"
-        theme={`${pending ? "disabled" : "primary"}`}
-        className={`mr-4`}
-        {...(pending && { "aria-disabled": true })}
-        onClick={(e) => {
-          if (pending) {
-            e.preventDefault();
-          }
-        }}
-        onKeyDown={(e) => {
-          if (pending && (e.key === "Enter" || e.key === " ")) {
-            e.preventDefault();
-          }
-        }}
-      >
-        {!pending ? "Submit" : "Submit (loading...)"}
-      </Button>
+      <SubmitButton />
       <Button type="reset" theme="secondary">
         Reset
       </Button>
