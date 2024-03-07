@@ -1,11 +1,11 @@
 "use client";
-import { useFormState } from "react-dom";
+import { useFormState, useFormStatus } from "react-dom";
 import { Label } from "./Label";
 import { Error } from "./Error";
 import { Input } from "./Input";
 import { Field } from "./Field";
 import { Button } from "@clientComponents/globals";
-import { doSomething, initialState } from "../../actions";
+import { doSomethingBetter, initialState } from "../../actions";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 
@@ -17,23 +17,27 @@ export const TestForm = () => {
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const handleSubmit = async (prevState: any, formData: FormData) => {
-    const result = await doSomething(formData);
+    const result = await doSomethingBetter(formData);
     if (result._status === "success") {
       router.replace(`/${language}/test?success`);
     }
     return result;
   };
 
-  // TODO: not working..
+  // TODO: event firing but not sure how to reset the state.
   const handleReset = () => {
     return initialState;
   };
 
   const [state, formAction] = useFormState(handleSubmit, initialState);
+  const { pending } = useFormStatus();
 
   return (
     <form action={formAction} onReset={handleReset}>
-      <div className="mb-10">Debugging: state={JSON.stringify(state)}</div>
+      <div className="mb-5">Debugging: state={JSON.stringify(state)}</div>
+      <output aria-live="polite" className="block text-red-500 mb-5">
+        {state._status === "error" && "Error form did not validate."}
+      </output>
       <Field>
         <>
           <Label fieldName="name" hasError={!!state._nameError}>
@@ -73,7 +77,7 @@ export const TestForm = () => {
           </>
         </Field>
       </fieldset>
-      <Button type="submit" theme="primary" className="mr-4">
+      <Button type="submit" theme="primary" className="mr-4" {...(pending && { disabled: true })}>
         Submit
       </Button>
       <Button type="reset" theme="secondary">

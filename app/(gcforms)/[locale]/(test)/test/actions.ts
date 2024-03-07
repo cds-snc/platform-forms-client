@@ -2,10 +2,11 @@ import { logMessage } from "@lib/logger";
 import { ZodError, z } from "zod";
 
 // Simple Data Structure. This could be a lot more detailed/complex
+// Zod only validates what you tell it to so you can have extra fields E.g. hide errors in underscored names
 export const initialState = {
   _status: "",
   name: "",
-  _nameError: "", // Hide errors in state using an underscore. There are probalby many ways to do this.
+  _nameError: "",
   email: "",
   _emailError: "",
   city: "",
@@ -25,6 +26,50 @@ const schema = z.object({
 function handleErrorCode(code: string) {
   // TODO: use code to lookup translation key? or similar
   return code;
+}
+
+export async function doSomethingBetter(formData: FormData) {
+  try {
+    // Another way: const data = Object.fromEntries(formData.entries());
+    const formInput = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      city: formData.get("city"),
+      province: formData.get("province"),
+    };
+
+    // Zod Result Object:
+    // -pass == {succes: true}
+    // -fail == {success: false, error: {issues: [{path: ["FIELD_NAME"], code: "CODE"}] }}
+    const result = schema.safeParse(formInput);
+
+    // Success. -- Or could redirect here instead of the client
+    if (result.success) {
+      return {
+        ...initialState, // build off of default to remove any past errors
+        ...formInput,
+        _status: "success",
+      };
+    }
+
+    // Fail.
+    const { issues } = result.error;
+    const errors = issues.reduce((accumulator, issue) => {
+      const fieldName = issue.path[0];
+      const code = issue.code;
+      const error = { [`_${fieldName}Error`]: `${handleErrorCode(code)}` };
+      return { ...accumulator, ...error };
+    }, {});
+    return {
+      ...initialState,
+      ...formInput,
+      ...errors,
+      _status: "error",
+    };
+  } catch (e) {
+    logMessage.error(e);
+    throw e;
+  }
 }
 
 // Issue with the zod-throw way is sharing formInput must be outside try-catch and this could generate an error
