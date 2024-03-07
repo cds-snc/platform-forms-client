@@ -4,7 +4,12 @@ import { useTemplateStore } from "@lib/store";
 import { Node } from "./Node";
 
 function Cursor({ top, left }: CursorProps) {
-  return <div className="border-b-2 bg-black" style={{ top, left }}></div>;
+  return (
+    <div
+      className="absolute z-[50000] h-[4px] w-[368px] border-b-2 bg-violet-900 pr-[60px]"
+      style={{ top, left }}
+    ></div>
+  );
 }
 
 export const TreeView = () => {
@@ -54,7 +59,7 @@ export const TreeView = () => {
   ];
 
   return (
-    <div className="mr-[1px] bg-gray-soft">
+    <div className="relative mr-[1px] bg-gray-soft">
       <Tree
         initialData={data}
         disableEdit={(data) => data.readOnly}
