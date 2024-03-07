@@ -2,12 +2,14 @@
 import { useFormStatus } from "react-dom";
 import { Button } from "@clientComponents/globals";
 
-/* To help visually and semantically show show a disabled button but not descrease accessibility,
+/* 
+    To help visually and semantically show show a disabled button but not descrease accessibility,
     I added a new:
     -theme for "disabled" to work with aria-disabled. best not to disable a submit button fot a11y 
     -onKeyDown to button to prevent form submission on enter key press (and click)
 */
 export const SubmitButton = () => {
+  // Note: useFormStatus() will only work in a component outside of the form. (because React said so..)
   const { pending } = useFormStatus();
 
   return (
@@ -27,7 +29,7 @@ export const SubmitButton = () => {
         }
       }}
     >
-      {!pending ? "Submit" : "Submit (loading...)"}
+      <span aria-live="polite">{!pending ? "Submit" : "Submit (loading...)"}</span>
     </Button>
   );
 };

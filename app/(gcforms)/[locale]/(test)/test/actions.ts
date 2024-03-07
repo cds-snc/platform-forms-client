@@ -24,7 +24,7 @@ const schema = z.object({
 //.required(); To make all fields required
 
 function handleErrorCode(code: string) {
-  // TODO: use code to lookup translation key? or similar
+  // TODO: use code to lookup a translation key? or similar
   return code;
 }
 
