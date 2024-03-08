@@ -1,5 +1,5 @@
+import React from "react";
 import { NodeApi, NodeRendererProps } from "react-arborist";
-
 import { cn } from "@lib/utils";
 import { FormItem } from "./types";
 import { ArrowDown } from "./icons/ArrowDown";
@@ -47,14 +47,7 @@ export const ParentNode = ({ node }: { node: NodeApi<FormItem> }) => {
           <Input node={node} />
         </div>
       ) : (
-        <div
-          onDoubleClick={async () => {
-            if (node.data.readOnly) {
-              return;
-            }
-            node.edit();
-          }}
-        >
+        <div>
           <FolderArrow node={node} />
           {node.data.name}
         </div>
@@ -66,12 +59,7 @@ export const ParentNode = ({ node }: { node: NodeApi<FormItem> }) => {
 export const ChildNode = ({ node }: { node: NodeApi<FormItem> }) => {
   const active = node.isSelected;
   return (
-    <div
-      className={cn("border-x-1 border-b-1 border-gray-soft p-2", active && "font-bold")}
-      onDoubleClick={async () => {
-        node.edit();
-      }}
-    >
+    <div className={cn("border-x-1 border-b-1 border-gray-soft p-2", active && "font-bold")}>
       {node.isEditing ? (
         <Input node={node} />
       ) : (
@@ -103,7 +91,17 @@ export const Node = ({ node, style, dragHandle }: NodeRendererProps<FormItem>) =
       ref={dragHandle}
       style={style}
       className={className}
-      onClick={() => node.isInternal && node.toggle()}
+      onClick={() => {
+        setTimeout(() => {
+          if (!node.isEditing) node.toggle();
+        }, 200); // Delay of 200ms to allow for double click to be detected
+      }}
+      onDoubleClick={() => {
+        if (node.data.readOnly) {
+          return;
+        }
+        node.edit();
+      }}
     >
       {node.isLeaf ? <ChildNode node={node} /> : <ParentNode node={node} />}
     </div>
