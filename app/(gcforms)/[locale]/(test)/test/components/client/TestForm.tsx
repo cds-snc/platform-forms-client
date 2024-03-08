@@ -9,6 +9,7 @@ import { Error } from "./Error";
 import { Input } from "./Input";
 import { Field } from "./Field";
 import { SubmitButton } from "./SubmitButton";
+import { Errors } from "./Errors";
 
 // Note: Had to put FormInputState and initialState here vs in actions because of the below error thrown when in actions.ts:
 // "Error: A "use server" file can only export async functions, found object."
@@ -58,33 +59,6 @@ export const TestForm = () => {
     return result;
   };
 
-  function handleErrors(data: FormInputState) {
-    const errorList = Object.keys(data)
-      .filter((key) => key.includes("Error"))
-      .map((key) => ({ key, value: data[key as keyof FormInputState] }))
-      .filter((error) => error.value && String(error.value).length > 0);
-
-    function removeError(key: string) {
-      // TODO improve regex
-      return key.replace(/Error/, "").replace(/_/, "");
-    }
-
-    return (
-      <>
-        Error form did not validate. Please fix these errors:
-        <ul>
-          {errorList.map((error) => {
-            return (
-              <li key={error.key}>
-                {removeError(error.key)}: {translateCode(String(error.value))}
-              </li>
-            );
-          })}
-        </ul>
-      </>
-    );
-  }
-
   function translateCode(code: string) {
     return t(`validation.${code}`);
   }
@@ -99,9 +73,7 @@ export const TestForm = () => {
   return (
     <form action={formAction} onReset={handleReset}>
       {/* <div className="mb-10">Debugging: state={JSON.stringify(state)}</div> */}
-      <output aria-live="polite" className="block text-red-500 mb-5">
-        {state && state._status === "error" && handleErrors(state)}
-      </output>
+      <Errors state={state} />
       <Field>
         <>
           <Label fieldName="name" hasError={!!state._nameError}>
