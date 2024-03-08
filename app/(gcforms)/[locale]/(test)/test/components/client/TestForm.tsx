@@ -3,7 +3,7 @@ import { useFormState } from "react-dom";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
-import { doSomethingBetter, initialState } from "../../actions";
+import { FormInputState, doSomethingElse, initialState } from "../../actions";
 import { Label } from "./Label";
 import { Error } from "./Error";
 import { Input } from "./Input";
@@ -21,7 +21,7 @@ export const TestForm = () => {
     // Simulate a delay to show the loading state
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    const result = await doSomethingBetter(formData);
+    const result = await doSomethingElse(formData);
     if (result._status === "success") {
       router.replace(`/${language}/test?success`);
     }
@@ -33,13 +33,31 @@ export const TestForm = () => {
     return initialState;
   };
 
+  function handleErrors(data: FormInputState) {
+    const errorList = Object.keys(data)
+      .filter((key) => key.includes("Error"))
+      .map((key) => ({ key, value: data[key] }))
+      .filter((error) => error.value && error.value.length > 0);
+
+    return (
+      <>
+        Error form did not validate. Please fix these errors:
+        <ul>
+          {errorList.map((error) => {
+            return <li key={error.key}>{error.value}</li>;
+          })}
+        </ul>
+      </>
+    );
+  }
+
   const [state, formAction] = useFormState(handleSubmit, initialState);
 
   return (
     <form action={formAction} onReset={handleReset}>
-      <div className="mb-5">Debugging: state={JSON.stringify(state)}</div>
+      <div className="mb-10">Debugging: state={JSON.stringify(state)}</div>
       <output aria-live="polite" className="block text-red-500 mb-5">
-        {state._status === "error" && "Error form did not validate."}
+        {state && state._status === "error" && handleErrors(state)}
       </output>
       <Field>
         <>

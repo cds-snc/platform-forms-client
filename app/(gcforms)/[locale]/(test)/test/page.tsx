@@ -7,8 +7,8 @@ Note: useFormState() is in React’s Canary release
 Why defining a bunch of new components?
 Forms-Form components are coupled to Fomik state. 
 E.g. Label relies on validation.* and TextInput relies on useField() and helpers.
-So we'll need to either refactor the existing components to be more configurable. I created new
-components for now.
+So we'll need to either refactor the existing components to be more configurable or create new ones. 
+I created new components for now.
 */
 
 export default function Page({

@@ -2,8 +2,20 @@ import { logMessage } from "@lib/logger";
 import { ZodError, z } from "zod";
 
 // Simple Data Structure. This could be a lot more detailed/complex
+export type FormInputState = {
+  _status: string;
+  name: string;
+  _nameError: string;
+  email: string;
+  _emailError: string;
+  city: string;
+  _cityError: string;
+  province: string;
+  _provinceError: string;
+};
+
 // Zod only validates what you tell it to so you can have extra fields E.g. hide errors in underscored names
-export const initialState = {
+export const initialState: FormInputState = {
   _status: "",
   name: "",
   _nameError: "",
@@ -28,7 +40,8 @@ function handleErrorCode(code: string) {
   return code;
 }
 
-export async function doSomethingBetter(formData: FormData) {
+// Example: zod safeParse() that does not throw an error.
+export async function doSomethingElse(formData: FormData) {
   try {
     // Another way: const data = Object.fromEntries(formData.entries());
     const formInput = {
@@ -72,6 +85,7 @@ export async function doSomethingBetter(formData: FormData) {
   }
 }
 
+// Example: zod parse() that throws an error.
 // Issue with the zod-throw way is sharing formInput must be outside try-catch and this could generate an error
 // but putting inside the try-catch would require re-getting the formInput from the formData
 export async function doSomething(formData: FormData) {
