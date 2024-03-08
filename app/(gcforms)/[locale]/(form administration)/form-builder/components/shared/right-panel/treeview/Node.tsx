@@ -47,7 +47,14 @@ export const ParentNode = ({ node }: { node: NodeApi<FormItem> }) => {
           <Input node={node} />
         </div>
       ) : (
-        <div>
+        <div
+          onDoubleClick={async () => {
+            if (node.data.readOnly) {
+              return;
+            }
+            node.edit();
+          }}
+        >
           <FolderArrow node={node} />
           {node.data.name}
         </div>
@@ -61,8 +68,8 @@ export const ChildNode = ({ node }: { node: NodeApi<FormItem> }) => {
   return (
     <div
       className={cn("border-x-1 border-b-1 border-gray-soft p-2", active && "font-bold")}
-      onDoubleClick={() => {
-        // alert("double click event on node");
+      onDoubleClick={async () => {
+        node.edit();
       }}
     >
       {node.isEditing ? (
