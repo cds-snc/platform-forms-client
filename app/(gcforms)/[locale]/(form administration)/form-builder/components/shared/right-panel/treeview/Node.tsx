@@ -37,8 +37,10 @@ function FolderArrow({ node }: { node: NodeApi<FormItem> }) {
 }
 
 export const ParentNode = ({ node }: { node: NodeApi<FormItem> }) => {
+  const active = node.isSelected;
+  // const childActive = node.children?.some((child) => child.isSelected);
   return (
-    <div>
+    <div className={cn(active && "font-bold")}>
       {node.isEditing ? (
         <div>
           <FolderArrow node={node} />
@@ -55,12 +57,13 @@ export const ParentNode = ({ node }: { node: NodeApi<FormItem> }) => {
 };
 
 export const ChildNode = ({ node }: { node: NodeApi<FormItem> }) => {
+  const active = node.isSelected;
   return (
     <div
+      className={cn("border-x-1 border-b-1 border-gray-soft p-2", active && "font-bold")}
       onDoubleClick={() => {
-        alert("double click event on node");
+        // alert("double click event on node");
       }}
-      className="border-x-1 border-b-1 border-gray-soft p-2"
     >
       {node.isEditing ? (
         <Input node={node} />
