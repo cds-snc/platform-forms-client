@@ -16,6 +16,7 @@ import { cleanInput } from "@lib/utils/form-builder";
 import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 import { useRehydrate } from "@lib/hooks/form-builder";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store";
+import { NewSection } from "./NewSection";
 
 export const Edit = () => {
   const { t } = useTranslation("form-builder");
@@ -133,6 +134,8 @@ export const Edit = () => {
         />
       )}
 
+      <NewSection groupId={groupId} />
+
       <RefsProvider>
         {layout.length >= 1 &&
           layout.map((id, index) => {
@@ -159,6 +162,7 @@ export const Edit = () => {
             </div>
           </RichTextLocked>
         )}
+
         {groupId === "end" && (
           <RichTextLocked
             hydrated={hasHydrated}
