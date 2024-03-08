@@ -6,3 +6,5 @@ export type FormItem = {
   readOnly: boolean;
   children?: FormItem[];
 };
+
+export type TreeData = FormItem[];
