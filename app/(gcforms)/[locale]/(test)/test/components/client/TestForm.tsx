@@ -64,12 +64,21 @@ export const TestForm = () => {
       .map((key) => ({ key, value: data[key as keyof FormInputState] }))
       .filter((error) => error.value && String(error.value).length > 0);
 
+    function removeError(key: string) {
+      // TODO improve regex
+      return key.replace(/Error/, "").replace(/_/, "");
+    }
+
     return (
       <>
         Error form did not validate. Please fix these errors:
         <ul>
           {errorList.map((error) => {
-            return <li key={error.key}>{translateCode(String(error.value))}</li>;
+            return (
+              <li key={error.key}>
+                {removeError(error.key)}: {translateCode(String(error.value))}
+              </li>
+            );
           })}
         </ul>
       </>
@@ -89,7 +98,7 @@ export const TestForm = () => {
 
   return (
     <form action={formAction} onReset={handleReset}>
-      <div className="mb-10">Debugging: state={JSON.stringify(state)}</div>
+      {/* <div className="mb-10">Debugging: state={JSON.stringify(state)}</div> */}
       <output aria-live="polite" className="block text-red-500 mb-5">
         {state && state._status === "error" && handleErrors(state)}
       </output>
