@@ -28,28 +28,28 @@ export const TestForm = () => {
     return result;
   };
 
-  // TODO: event firing but not sure how to reset the state.
-  const handleReset = () => {
-    return initialState;
-  };
-
   function handleErrors(data: FormInputState) {
     const errorList = Object.keys(data)
       .filter((key) => key.includes("Error"))
-      .map((key) => ({ key, value: data[key] }))
-      .filter((error) => error.value && error.value.length > 0);
+      .map((key) => ({ key, value: data[key as keyof FormInputState] }))
+      .filter((error) => error.value && String(error.value).length > 0);
 
     return (
       <>
         Error form did not validate. Please fix these errors:
         <ul>
           {errorList.map((error) => {
-            return <li key={error.key}>{error.value}</li>;
+            return <li key={error.key}>{String(error.value)}</li>;
           })}
         </ul>
       </>
     );
   }
+
+  // TODO: event firing but not sure how to reset the state.
+  const handleReset = () => {
+    return initialState;
+  };
 
   const [state, formAction] = useFormState(handleSubmit, initialState);
 

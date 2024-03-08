@@ -4,13 +4,13 @@ import { ZodError, z } from "zod";
 // Simple Data Structure. This could be a lot more detailed/complex
 export type FormInputState = {
   _status: string;
-  name: string;
+  name: FormDataEntryValue | null;
   _nameError: string;
-  email: string;
+  email: FormDataEntryValue | null;
   _emailError: string;
-  city: string;
+  city: FormDataEntryValue | null;
   _cityError: string;
-  province: string;
+  province: FormDataEntryValue | null;
   _provinceError: string;
 };
 
