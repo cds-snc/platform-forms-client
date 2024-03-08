@@ -4,9 +4,11 @@ import { useStoreWithEqualityFn } from "zustand/traditional";
 import { immer } from "zustand/middleware/immer";
 import { shallow } from "zustand/shallow";
 import React, { createContext, useRef, useContext } from "react";
+import { GroupsType } from "@lib/formContext";
 
 export interface GroupStoreProps {
   id: string;
+  groups: GroupsType;
 }
 
 export interface GroupStoreState extends GroupStoreProps {
@@ -16,7 +18,11 @@ export interface GroupStoreState extends GroupStoreProps {
 
 const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
   const DEFAULT_PROPS: GroupStoreProps = {
-    id: "",
+    id: "start",
+    groups: {
+      start: { elements: [] },
+      end: { elements: [] },
+    },
   };
 
   return createStore<GroupStoreState>()(

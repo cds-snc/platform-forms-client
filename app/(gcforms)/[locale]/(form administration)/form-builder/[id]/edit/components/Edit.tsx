@@ -95,38 +95,44 @@ export const Edit = () => {
       <div className="mb-4">
         <SaveButton />
       </div>
-      <SettingsPanel />
-      <RichTextLocked
-        hydrated={hasHydrated}
-        className="rounded-t-lg"
-        beforeContent={
-          <>
-            <label htmlFor="formTitle" className="visually-hidden" {...getLocalizationAttribute()}>
-              {t("formTitle")}
-            </label>
-            <div className="my-2 mb-4">
-              <ExpandingInput
-                id="formTitle"
-                wrapperClassName="w-full laptop:w-3/4 mt-2 laptop:mt-0 font-bold laptop:text-3xl"
-                className="font-bold placeholder:text-slate-500 laptop:text-3xl"
-                ref={titleInput}
-                placeholder={t("placeHolderFormTitle")}
-                value={value}
-                onBlur={() => {
-                  setValue(cleanInput(value));
-                }}
-                onChange={updateValue}
+      {groupId === "start" && <SettingsPanel />}
+      {groupId === "start" && (
+        <RichTextLocked
+          hydrated={hasHydrated}
+          className="rounded-t-lg"
+          beforeContent={
+            <>
+              <label
+                htmlFor="formTitle"
+                className="visually-hidden"
                 {...getLocalizationAttribute()}
-              />
-            </div>
-            <p className="mb-4 text-sm">{t("startFormIntro")}</p>
-          </>
-        }
-        addElement={true}
-        schemaProperty="introduction"
-        ariaLabel={t("richTextIntroTitle")}
-      />
-      {groupId}
+              >
+                {t("formTitle")}
+              </label>
+              <div className="my-2 mb-4">
+                <ExpandingInput
+                  id="formTitle"
+                  wrapperClassName="w-full laptop:w-3/4 mt-2 laptop:mt-0 font-bold laptop:text-3xl"
+                  className="font-bold placeholder:text-slate-500 laptop:text-3xl"
+                  ref={titleInput}
+                  placeholder={t("placeHolderFormTitle")}
+                  value={value}
+                  onBlur={() => {
+                    setValue(cleanInput(value));
+                  }}
+                  onChange={updateValue}
+                  {...getLocalizationAttribute()}
+                />
+              </div>
+              <p className="mb-4 text-sm">{t("startFormIntro")}</p>
+            </>
+          }
+          addElement={true}
+          schemaProperty="introduction"
+          ariaLabel={t("richTextIntroTitle")}
+        />
+      )}
+
       <RefsProvider>
         {layout.length >= 1 &&
           layout.map((id, index) => {
@@ -140,29 +146,32 @@ export const Edit = () => {
           })}
       </RefsProvider>
       <>
-        <RichTextLocked
-          hydrated={hasHydrated}
-          addElement={false}
-          schemaProperty="privacyPolicy"
-          ariaLabel={t("richTextPrivacyTitle")}
-        >
-          <div id="privacy-text">
-            <h2 className="mt-4 text-2xl laptop:mt-0">{t("richTextPrivacyTitle")}</h2>
-            <PrivacyDescription />
-          </div>
-        </RichTextLocked>
-
-        <RichTextLocked
-          hydrated={hasHydrated}
-          addElement={false}
-          schemaProperty="confirmation"
-          ariaLabel={t("richTextConfirmationTitle")}
-        >
-          <div id="confirmation-text">
-            <h2 className="mt-4 text-2xl laptop:mt-0">{t("richTextConfirmationTitle")}</h2>
-            <ConfirmationDescription />
-          </div>
-        </RichTextLocked>
+        {groupId === "start" && (
+          <RichTextLocked
+            hydrated={hasHydrated}
+            addElement={false}
+            schemaProperty="privacyPolicy"
+            ariaLabel={t("richTextPrivacyTitle")}
+          >
+            <div id="privacy-text">
+              <h2 className="mt-4 text-2xl laptop:mt-0">{t("richTextPrivacyTitle")}</h2>
+              <PrivacyDescription />
+            </div>
+          </RichTextLocked>
+        )}
+        {groupId === "end" && (
+          <RichTextLocked
+            hydrated={hasHydrated}
+            addElement={false}
+            schemaProperty="confirmation"
+            ariaLabel={t("richTextConfirmationTitle")}
+          >
+            <div id="confirmation-text">
+              <h2 className="mt-4 text-2xl laptop:mt-0">{t("richTextConfirmationTitle")}</h2>
+              <ConfirmationDescription />
+            </div>
+          </RichTextLocked>
+        )}
       </>
     </>
   );

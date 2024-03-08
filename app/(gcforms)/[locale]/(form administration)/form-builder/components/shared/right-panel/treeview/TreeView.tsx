@@ -10,14 +10,11 @@ import { Cursor } from "./Cursor";
 import { Button } from "@clientComponents/globals";
 import { start, end, createItem } from "./data";
 import { TreeData } from "./types";
-import { useGroupStore } from "./store";
 
 export const TreeView = () => {
   const { elements } = useTemplateStore((s) => ({
     elements: s.form.elements,
   }));
-
-  const id = useGroupStore((state) => state.id);
 
   const { t } = useTranslation("form-builder");
 
@@ -68,7 +65,6 @@ export const TreeView = () => {
 
   return (
     <div className="relative mr-[1px]">
-      Name: {id}
       <div className="m-4 flex">
         <Button
           theme="secondary"
