@@ -37,6 +37,44 @@ function FolderArrow({ node }: { node: NodeApi<FormItem> }) {
   );
 }
 
+export const ParentNode = ({ node }: { node: NodeApi<FormItem> }) => {
+  return (
+    <div>
+      {node.isEditing ? (
+        <div>
+          <FolderArrow node={node} />
+          <Input node={node} />
+        </div>
+      ) : (
+        <div>
+          <FolderArrow node={node} />
+          {node.data.name}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export const ChildNode = ({ node }: { node: NodeApi<FormItem> }) => {
+  return (
+    <div className="border-x-1 border-b-1 border-gray-soft p-2">
+      {node.isEditing ? (
+        <Input node={node} />
+      ) : (
+        <div className="group relative w-[350px] overflow-hidden truncate border-gray-soft bg-white p-1 pr-10">
+          {node.data.name}
+          {!node.data.readOnly && (
+            <DragHandle className="absolute right-0 top-0 mr-4 mt-3 hidden cursor-pointer group-hover:block" />
+          )}
+          {node.data.readOnly && (
+            <LockIcon className="absolute right-0 mr-2 inline-block scale-75" />
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
 export const Node = ({ node, style, dragHandle }: NodeRendererProps<FormItem>) => {
   let className = "";
 
@@ -53,30 +91,7 @@ export const Node = ({ node, style, dragHandle }: NodeRendererProps<FormItem>) =
       className={className}
       onClick={() => node.isInternal && node.toggle()}
     >
-      {node.isLeaf ? (
-        <div>
-          <span>
-            {node.isEditing ? (
-              <Input node={node} />
-            ) : (
-              <div className="group relative w-[350px] overflow-hidden truncate border-gray-soft bg-white p-1 pr-10">
-                {node.data.name}
-                {!node.data.readOnly && (
-                  <DragHandle className="absolute right-0 top-0 mr-4 mt-3 hidden cursor-pointer group-hover:block" />
-                )}
-                {node.data.readOnly && (
-                  <LockIcon className="absolute right-0 mr-2 inline-block scale-75" />
-                )}
-              </div>
-            )}
-          </span>
-        </div>
-      ) : (
-        <div>
-          <FolderArrow node={node} />
-          {node.data.name}
-        </div>
-      )}
+      {node.isLeaf ? <ChildNode node={node} /> : <ParentNode node={node} />}
     </div>
   );
 };
