@@ -12,13 +12,18 @@ export const NewSection = ({ groupId }: { groupId: string }) => {
   }
 
   return (
-    <div className="flex mb-10 justify-center ">
-      <AddElementButton
-        handleAdd={(type?: FormElementTypes) => {
-          handleAddElement(-1, type);
-        }}
-        text={t("addElement")}
-      />
-    </div>
+    <>
+      <div className="mb-10 flex max-w-[800px] justify-center">
+        <AddElementButton
+          handleAdd={(type?: FormElementTypes) => {
+            handleAddElement(-1, type);
+          }}
+          text={t("addElement")}
+        />
+      </div>
+      <div className="flex max-w-[800px] justify-center rounded-t-lg border-1 border-slate-700 p-2">
+        <h4>{groupId}</h4>
+      </div>
+    </>
   );
 };
