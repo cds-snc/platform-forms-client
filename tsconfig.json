@@ -51,6 +51,7 @@
     "cypress",
     "cypress.config.ts",
     "**/*.cy.ts",
-    "**/*.cy.tsx"
+    "**/*.cy.tsx",
+    "__tests__"
   ]
 }

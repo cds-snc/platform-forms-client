@@ -101,3 +101,5 @@ package-lock.json
 
 # Utils retrieval output
 responses.csv
+
+tsconfig.tsbuildinfo
