@@ -1,11 +1,14 @@
 import React, { useEffect } from "react";
 import { Tree } from "react-arborist";
+import { useTranslation } from "react-i18next";
+
 import { useTemplateStore } from "@lib/store";
 import { Node } from "./Node";
 import { useDynamicTree } from "./hooks/useDynamicTree";
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
-import { useTranslation } from "react-i18next";
+
 import { Cursor } from "./Cursor";
+import { Button } from "@clientComponents/globals";
 
 export const TreeView = () => {
   const { elements } = useTemplateStore((s) => ({
@@ -69,7 +72,12 @@ export const TreeView = () => {
   }, [elementCount, lastChange]);
 
   return (
-    <div className="relative mr-[1px] bg-gray-soft">
+    <div className="relative mr-[1px]">
+      <div className="m-4 flex">
+        <Button theme="secondary" onClick={() => {}}>
+          {t("rightPanel.treeView.addSection")}
+        </Button>
+      </div>
       <Tree
         data={data}
         {...controllers}
