@@ -792,5 +792,10 @@
   },
   "logic": {
     "heading": "Logic [FR]"
+  },
+  "validation": {
+    "too_small": "[FR]Please fill in this field.",
+    "too_big": "[FR]Please shorten this field.",
+    "invalid_string": "[FR]Please enter a valid email."
   }
 }

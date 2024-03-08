@@ -3,16 +3,46 @@ import { useFormState } from "react-dom";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
-import { FormInputState, doSomethingElse, initialState } from "../../actions";
+import { doSomethingElse } from "../../actions";
 import { Label } from "./Label";
 import { Error } from "./Error";
 import { Input } from "./Input";
 import { Field } from "./Field";
 import { SubmitButton } from "./SubmitButton";
 
+// Note: Had to put FormInputState and initialState here vs in actions because of the below error thrown when in actions.ts:
+// "Error: A "use server" file can only export async functions, found object."
+
+// Simple Data Structure. This could be a lot more detailed/complex
+export type FormInputState = {
+  _status: string;
+  name: FormDataEntryValue | null;
+  _nameError: string;
+  email: FormDataEntryValue | null;
+  _emailError: string;
+  city: FormDataEntryValue | null;
+  _cityError: string;
+  province: FormDataEntryValue | null;
+  _provinceError: string;
+};
+
+// Zod only validates what you tell it to so you can have extra fields E.g. hide errors in underscored names
+export const initialState: FormInputState = {
+  _status: "",
+  name: "",
+  _nameError: "",
+  email: "",
+  _emailError: "",
+  city: "",
+  _cityError: "",
+  province: "",
+  _provinceError: "",
+};
+
 export const TestForm = () => {
   const router = useRouter();
   const {
+    t,
     i18n: { language },
   } = useTranslation("form-builder");
 
@@ -39,11 +69,15 @@ export const TestForm = () => {
         Error form did not validate. Please fix these errors:
         <ul>
           {errorList.map((error) => {
-            return <li key={error.key}>{String(error.value)}</li>;
+            return <li key={error.key}>{translateCode(String(error.value))}</li>;
           })}
         </ul>
       </>
     );
+  }
+
+  function translateCode(code: string) {
+    return t(`validation.${code}`);
   }
 
   // TODO: event firing but not sure how to reset the state.
@@ -64,7 +98,7 @@ export const TestForm = () => {
           <Label fieldName="name" hasError={!!state._nameError}>
             Name (required)
           </Label>
-          <Error fieldName="name">{state?._nameError && state._nameError}</Error>
+          <Error fieldName="name">{state?._nameError && translateCode(state._nameError)}</Error>
           <Input name="name" hasError={Boolean(state._nameError)} />
         </>
       </Field>
@@ -73,7 +107,7 @@ export const TestForm = () => {
           <Label fieldName="email" hasError={!!state._emailError}>
             Email (required)
           </Label>
-          <Error fieldName="email">{state?._emailError && state._emailError}</Error>
+          <Error fieldName="email">{state?._emailError && translateCode(state._emailError)}</Error>
           <Input name="email" hasError={Boolean(state._emailError)} />
         </>
       </Field>
@@ -84,7 +118,7 @@ export const TestForm = () => {
             <Label fieldName="city" hasError={!!state._cityError}>
               City
             </Label>
-            <Error fieldName="city">{state?._cityError && state._cityError}</Error>
+            <Error fieldName="city">{state?._cityError && translateCode(state._cityError)}</Error>
             <Input name="city" hasError={Boolean(state._cityError)} />
           </>
         </Field>
@@ -93,7 +127,9 @@ export const TestForm = () => {
             <Label fieldName="province" hasError={!!state._provinceError}>
               Province
             </Label>
-            <Error fieldName="province">{state?._provinceError && state._provinceError}</Error>
+            <Error fieldName="province">
+              {state?._provinceError && translateCode(state._provinceError)}
+            </Error>
             <Input name="province" hasError={Boolean(state._provinceError)} />
           </>
         </Field>

@@ -1,31 +1,7 @@
+"use server";
 import { logMessage } from "@lib/logger";
 import { ZodError, z } from "zod";
-
-// Simple Data Structure. This could be a lot more detailed/complex
-export type FormInputState = {
-  _status: string;
-  name: FormDataEntryValue | null;
-  _nameError: string;
-  email: FormDataEntryValue | null;
-  _emailError: string;
-  city: FormDataEntryValue | null;
-  _cityError: string;
-  province: FormDataEntryValue | null;
-  _provinceError: string;
-};
-
-// Zod only validates what you tell it to so you can have extra fields E.g. hide errors in underscored names
-export const initialState: FormInputState = {
-  _status: "",
-  name: "",
-  _nameError: "",
-  email: "",
-  _emailError: "",
-  city: "",
-  _cityError: "",
-  province: "",
-  _provinceError: "",
-};
+import { initialState } from "./components/client/TestForm";
 
 const schema = z.object({
   name: z.string().min(1), // required by min(1)
@@ -34,11 +10,6 @@ const schema = z.object({
   province: z.string().max(5),
 });
 //.required(); To make all fields required
-
-function handleErrorCode(code: string) {
-  // TODO: use code to lookup a translation key? or similar
-  return code;
-}
 
 // Example: zod safeParse() that does not throw an error.
 export async function doSomethingElse(formData: FormData) {
@@ -70,7 +41,7 @@ export async function doSomethingElse(formData: FormData) {
     const errors = issues.reduce((accumulator, issue) => {
       const fieldName = issue.path[0];
       const code = issue.code;
-      const error = { [`_${fieldName}Error`]: `${handleErrorCode(code)}` };
+      const error = { [`_${fieldName}Error`]: code };
       return { ...accumulator, ...error };
     }, {});
     return {
@@ -120,7 +91,7 @@ export async function doSomething(formData: FormData) {
     const errors = issues.reduce((accumulator, issue) => {
       const fieldName = issue.path[0];
       const code = issue.code;
-      const error = { [`_${fieldName}Error`]: `${handleErrorCode(code)}` };
+      const error = { [`_${fieldName}Error`]: code };
       return { ...accumulator, ...error };
     }, {});
 

@@ -792,5 +792,10 @@
   },
   "logic": {
     "heading": "Logic"
+  },
+  "validation": {
+    "too_small": "Please fill in this field.",
+    "too_big": "Please shorten this field.",
+    "invalid_string": "Please enter a valid email."
   }
 }
