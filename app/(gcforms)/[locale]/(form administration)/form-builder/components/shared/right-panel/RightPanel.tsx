@@ -4,7 +4,6 @@ import React, { Fragment, useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Transition, Tab } from "@headlessui/react";
 import { useTranslation } from "@i18n/client";
-
 import { Button } from "@clientComponents/globals";
 
 import { RightPanelOpen, RoundCloseIcon } from "@serverComponents/icons";

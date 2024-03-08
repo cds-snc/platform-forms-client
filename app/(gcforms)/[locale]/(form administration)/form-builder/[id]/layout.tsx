@@ -11,6 +11,7 @@ import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext
 import { RefStoreProvider } from "@lib/hooks/form-builder/useRefStore";
 import { RightPanel } from "@formBuilder/components/shared/right-panel/RightPanel";
 import { checkFlag } from "./actions";
+import { GroupStoreProvider } from "@formBuilder/components/shared/right-panel/treeview/store";
 
 export default async function Layout({
   children,
@@ -71,11 +72,12 @@ export default async function Layout({
                       <LeftNavigation id={id} />
                     </div>
                   </div>
-
-                  <main id="content" className="form-builder my-7 w-full">
-                    {children}
-                  </main>
-                  {showRightPanel && <RightPanel id={id} />}
+                  <GroupStoreProvider>
+                    <main id="content" className="form-builder my-7 w-full">
+                      {children}
+                    </main>
+                    {showRightPanel && <RightPanel id={id} />}
+                  </GroupStoreProvider>
                 </div>
               </div>
 

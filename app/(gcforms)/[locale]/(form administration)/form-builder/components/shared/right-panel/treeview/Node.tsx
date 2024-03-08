@@ -6,6 +6,7 @@ import { ArrowDown } from "./icons/ArrowDown";
 import { ArrowRight } from "./icons/ArrowRight";
 import { DragHandle } from "./icons/DragHandle";
 import { LockIcon } from "@serverComponents/icons";
+import { useGroupStore } from "./store";
 
 function Input({ node }: { node: NodeApi<FormItem> }) {
   return (
@@ -78,6 +79,7 @@ export const ChildNode = ({ node }: { node: NodeApi<FormItem> }) => {
 };
 
 export const Node = ({ node, style, dragHandle }: NodeRendererProps<FormItem>) => {
+  const setId = useGroupStore((s) => s.setId);
   let className = "";
 
   if (node.isLeaf) {
@@ -95,6 +97,8 @@ export const Node = ({ node, style, dragHandle }: NodeRendererProps<FormItem>) =
         setTimeout(() => {
           if (!node.isEditing) node.toggle();
         }, 200); // Delay of 200ms to allow for double click to be detected
+
+        setId(node.data.id);
       }}
       onDoubleClick={() => {
         if (node.data.readOnly) {

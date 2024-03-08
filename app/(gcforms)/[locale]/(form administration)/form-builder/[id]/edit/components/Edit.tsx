@@ -15,6 +15,7 @@ import { SettingsPanel } from "./settings/SettingsPanel";
 import { cleanInput } from "@lib/utils/form-builder";
 import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 import { useRehydrate } from "@lib/hooks/form-builder";
+import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store";
 
 export const Edit = () => {
   const { t } = useTranslation("form-builder");
@@ -41,6 +42,7 @@ export const Edit = () => {
   const searchParams = useSearchParams();
   const focusTitle = searchParams.get("focusTitle") ? true : false;
   const titleInput = useRef<HTMLTextAreaElement>(null);
+  const groupId = useGroupStore((state) => state.id);
 
   useEffect(() => {
     setValue(title);
@@ -124,6 +126,7 @@ export const Edit = () => {
         schemaProperty="introduction"
         ariaLabel={t("richTextIntroTitle")}
       />
+      {groupId}
       <RefsProvider>
         {layout.length >= 1 &&
           layout.map((id, index) => {
