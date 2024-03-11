@@ -105,7 +105,7 @@ const LoginStep = ({
             <h1 className="mb-12 mt-6 border-b-0">{t("title")}</h1>
             <p className="-mt-6 mb-10">
               {t("signUpText")}&nbsp;
-              <Link href={`/${language}/signup/register`}>{t("signUpLink")}</Link>
+              <Link href={`/${language}/auth/register`}>{t("signUpLink")}</Link>
             </p>
             <form id="login" method="POST" onSubmit={handleSubmit} noValidate>
               <div className="focus-group">

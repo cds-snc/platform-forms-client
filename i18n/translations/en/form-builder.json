@@ -614,7 +614,7 @@
     "toPreview": "To preview this form:",
     "unauthenticated": {
       "copyInstructions": "Copy instructions",
-      "description": "You cannot share a form directly from GC Forms without an account. <a href=\"/auth/login\">Sign in</a> or <a href=\"/signup/register\">create an account</a> to get access to this feature and more.",
+      "description": "You cannot share a form directly from GC Forms without an account. <a href=\"/auth/login\">Sign in</a> or <a href=\"/auth/register\">create an account</a> to get access to this feature and more.",
       "downloadFormFile": "Download form file",
       "instructions": "You can download a copy of this form file to your computer and share it through your email.",
       "step1": "Step 1",

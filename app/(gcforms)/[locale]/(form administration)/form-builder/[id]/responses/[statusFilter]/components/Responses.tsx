@@ -102,7 +102,7 @@ export const Responses = ({
           </p>
           <p className="mt-8">
             {t("responses.unauthenticated.noAccount")}{" "}
-            <Link href={`/${language}/signup/register`}>
+            <Link href={`/${language}/auth/register`}>
               {t("responses.unauthenticated.createOne")}
             </Link>
             .

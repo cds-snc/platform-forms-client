@@ -19,7 +19,7 @@ export const LoggedOutTab = ({ tabName }: LoggedOutTabProps) => {
   const { status } = useSession();
   const { t, i18n } = useTranslation("form-builder");
   const signInLink = `/${i18n.language}/auth/login`;
-  const createAccountLink = `/${i18n.language}/signup/register`;
+  const createAccountLink = `/${i18n.language}/auth/register`;
 
   if (status === "authenticated" || status === "loading") {
     return null;

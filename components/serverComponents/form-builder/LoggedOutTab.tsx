@@ -17,7 +17,7 @@ interface LoggedOutTabProps {
 export const LoggedOutTab = async ({ tabName }: LoggedOutTabProps) => {
   const { t, i18n } = await serverTranslation("form-builder");
   const signInLink = `/${i18n.language}/auth/login`;
-  const createAccountLink = `/${i18n.language}/signup/register`;
+  const createAccountLink = `/${i18n.language}/auth/register`;
 
   return (
     <Card
