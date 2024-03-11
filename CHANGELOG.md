@@ -5,6 +5,49 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.12.7](https://github.com/cds-snc/platform-forms-client/compare/v3.12.6...v3.12.7) (2024-02-29)
+
+
+### Bug Fixes
+
+* Nested conditional rule ([#3295](https://github.com/cds-snc/platform-forms-client/issues/3295)) ([64a2a44](https://github.com/cds-snc/platform-forms-client/commit/64a2a4466f08ea28bf03a419226414ff518fb8f4))
+
+
+### Miscellaneous Chores
+
+* Rename NEXTAUTH_URL as it is no longer required for Next-Auth ([#3288](https://github.com/cds-snc/platform-forms-client/issues/3288)) ([6ea5064](https://github.com/cds-snc/platform-forms-client/commit/6ea506440a5c3742f72716336354eb2f3d2c0744))
+
+## [3.12.6](https://github.com/cds-snc/platform-forms-client/compare/v3.12.5...v3.12.6) (2024-02-22)
+
+
+### Bug Fixes
+
+* retrieve internal user id instead and pass it to the UserSignIn audit log instead of using the Cognito sub id ([#3266](https://github.com/cds-snc/platform-forms-client/issues/3266)) ([981336f](https://github.com/cds-snc/platform-forms-client/commit/981336f1f6cf8bf135c26d9fcf06ee98af9ab1b4))
+
+
+### Miscellaneous Chores
+
+* Add files Statistics Canada branding ([#3269](https://github.com/cds-snc/platform-forms-client/issues/3269)) ([2c2985c](https://github.com/cds-snc/platform-forms-client/commit/2c2985ca84350b3bbf094948f095f61998000b78))
+* added new migration script to make existing audit logs archivable ([#3268](https://github.com/cds-snc/platform-forms-client/issues/3268)) ([9210ffd](https://github.com/cds-snc/platform-forms-client/commit/9210ffdd7dfc1e74d0dfff625e36f13cab029775))
+* improve archivable audit logs migration script ([#3276](https://github.com/cds-snc/platform-forms-client/issues/3276)) ([8f99098](https://github.com/cds-snc/platform-forms-client/commit/8f9909860188a3e6618d54dbb5f5d6b35862623d))
+* Set User type to have mandatory email ([#3252](https://github.com/cds-snc/platform-forms-client/issues/3252)) ([a7e75a8](https://github.com/cds-snc/platform-forms-client/commit/a7e75a83465600d38c21195d2d1f3c493be6aca6))
+
+## [3.12.5](https://github.com/cds-snc/platform-forms-client/compare/v3.12.4...v3.12.5) (2024-02-12)
+
+
+### Bug Fixes
+
+* Delete forms with unprocessed submission is not warning user ([#3244](https://github.com/cds-snc/platform-forms-client/issues/3244)) ([3988d75](https://github.com/cds-snc/platform-forms-client/commit/3988d756adec58fe3076b89468cd7fe77e1bd22a))
+* String ID showing up rather than text itself ([#3247](https://github.com/cds-snc/platform-forms-client/issues/3247)) ([c2f8134](https://github.com/cds-snc/platform-forms-client/commit/c2f8134f1365072247df62b450ccbf461f9afa2d))
+
+
+### Miscellaneous Chores
+
+* cleaning up content on translations page ([#3210](https://github.com/cds-snc/platform-forms-client/issues/3210)) ([faa1263](https://github.com/cds-snc/platform-forms-client/commit/faa12633ddf7382bb2ae51dc52933a39cb01501c))
+* **deps:** update all non-major github action dependencies ([#3231](https://github.com/cds-snc/platform-forms-client/issues/3231)) ([0827ae9](https://github.com/cds-snc/platform-forms-client/commit/0827ae905dc4e60c946bf447dab4d3a76eb3c003))
+* small content tweaks found while testing ([#3233](https://github.com/cds-snc/platform-forms-client/issues/3233)) ([bcea609](https://github.com/cds-snc/platform-forms-client/commit/bcea6096401ec8f5e9885b4bbdff176aeca2a403))
+* Update branding options ([#3183](https://github.com/cds-snc/platform-forms-client/issues/3183)) ([90f1050](https://github.com/cds-snc/platform-forms-client/commit/90f10507d10b56328b33d552be302ce58092bd88))
+
 ## [3.12.4](https://github.com/cds-snc/platform-forms-client/compare/v3.12.3...v3.12.4) (2024-02-05)
 
 
