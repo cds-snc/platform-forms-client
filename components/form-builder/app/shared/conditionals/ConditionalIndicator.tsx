@@ -16,8 +16,8 @@ const RuleIndicator = ({ choiceId }: { choiceId: string }) => {
   );
 
   const elements = useTemplateStore((state) => state.form.elements);
+  // Ensure elements are sorted by layout
   const sortedElements = sortByLayout({ layout, elements: [...elements] });
-
   const parentId = Number(choiceId.split(".")[0]);
   const childId = Number(choiceId.split(".")[1]);
   const choice = getChoice(parentId, childId);
