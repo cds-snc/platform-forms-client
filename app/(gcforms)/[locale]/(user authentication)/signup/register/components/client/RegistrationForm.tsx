@@ -50,9 +50,13 @@ export const RegistrationForm = () => {
           heading={t("input-validation.heading", { ns: "common" })}
         >
           <ol className="gc-ordered-list p-0">
-            {state.validationErrors.map(({ fieldKey, fieldValue }) => {
+            {state.validationErrors.map(({ fieldKey, fieldValue }, index) => {
               return (
-                <ErrorListItem key={`error-${fieldKey}`} errorKey={fieldKey} value={fieldValue} />
+                <ErrorListItem
+                  key={`error-${fieldKey}-${index}`}
+                  errorKey={fieldKey}
+                  value={fieldValue}
+                />
               );
             })}
           </ol>

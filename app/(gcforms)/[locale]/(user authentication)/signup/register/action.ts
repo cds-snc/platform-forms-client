@@ -72,9 +72,12 @@ const validate = async (
       ]),
     },
     [
-      v.custom(
-        (input) => input.password === input.passwordConfirmation,
-        t("account.fields.passwordConfirmation.error.mustMatch", { ns: "common" })
+      v.forward(
+        v.custom(
+          (input) => input.password === input.passwordConfirmation,
+          t("account.fields.passwordConfirmation.error.mustMatch", { ns: "common" })
+        ),
+        ["passwordConfirmation"]
       ),
     ]
   );
