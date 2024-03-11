@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.12.8](https://github.com/cds-snc/platform-forms-client/compare/v3.12.7...v3.12.8) (2024-03-11)
+
+
+### Bug Fixes
+
+* add comment - 3314 ([#3316](https://github.com/cds-snc/platform-forms-client/issues/3316)) ([c09a6eb](https://github.com/cds-snc/platform-forms-client/commit/c09a6eb41cfd75148a012dda30f84283ee8335c6))
+* Conditional Indicator ([#3314](https://github.com/cds-snc/platform-forms-client/issues/3314)) ([2c2cb61](https://github.com/cds-snc/platform-forms-client/commit/2c2cb610175c2aa0a5741e14ef54a6ce024f0cfe))
+
 ## [3.12.7](https://github.com/cds-snc/platform-forms-client/compare/v3.12.6...v3.12.7) (2024-02-29)
 
 
