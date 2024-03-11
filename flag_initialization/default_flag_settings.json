@@ -1,3 +1,4 @@
 {
-  "experimentalBlocks": false
+  "experimentalBlocks": false,
+  "conditionalLogic": false
 }
