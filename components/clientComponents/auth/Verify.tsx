@@ -78,7 +78,7 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
 
       if (session) {
         if (session.user.newlyRegistered) {
-          return router.push(`/${i18n.language}/auth/policy?referer=/signup/account-created`);
+          return router.push(`/${i18n.language}/auth/policy?referer=/auth/account-created`);
         }
 
         const response = await fetch("/api/account/submissions/overdue");
