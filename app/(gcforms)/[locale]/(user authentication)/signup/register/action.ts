@@ -7,17 +7,21 @@ import {
   containsNumber,
   containsSymbol,
 } from "@lib/validation";
-
 import { serverTranslation } from "@i18n";
-
-import { logMessage } from "@lib/logger";
-
+import { sanitizeEmailAddressForCognito, begin2FAAuthentication, initiateSignIn } from "@lib/auth";
+import {
+  CognitoIdentityProviderClient,
+  SignUpCommand,
+  SignUpCommandInput,
+  CognitoIdentityProviderServiceException,
+} from "@aws-sdk/client-cognito-identity-provider";
+import { redirect } from "next/navigation";
 export interface ErrorStates {
   authError?: {
     title: string;
-    description: string;
-    callToActionText: string;
-    callToActionLink: string;
+    description?: string;
+    callToActionText?: string;
+    callToActionLink?: string;
   };
   validationErrors: {
     fieldKey: string;
@@ -85,13 +89,15 @@ const validate = async (
 };
 export const register = async (
   language: string,
-  _: ErrorStates,
+  previousState: ErrorStates,
   formData: FormData
 ): Promise<ErrorStates> => {
+  const { COGNITO_REGION, COGNITO_APP_CLIENT_ID } = process.env;
+  const { t } = await serverTranslation("cognito-errors", { lang: language });
   const rawFormData = Object.fromEntries(formData.entries());
-  logMessage.debug(rawFormData);
-  const result = await validate("en", rawFormData);
-  logMessage.debug(result);
+
+  const result = await validate(language, rawFormData);
+
   if (!result.success) {
     return {
       validationErrors: result.issues.map((issue) => ({
@@ -100,26 +106,51 @@ export const register = async (
       })),
     };
   }
-  return { validationErrors: [] };
+  const sanitizedUsername = sanitizeEmailAddressForCognito(result.output.username);
 
-  // try {
-  // Try signing in the newly registered user
-  //   const result = await login({ username: username, password: password });
-  //   if (result) {
-  //     window.dataLayer = window.dataLayer || [];
-  //     window.dataLayer.push({
-  //       event: "sign_up",
-  //       method: "cognito",
-  //     });
+  const params: SignUpCommandInput = {
+    ClientId: COGNITO_APP_CLIENT_ID,
+    Password: result.output.password,
+    Username: sanitizedUsername,
+    UserAttributes: [
+      {
+        Name: "name",
+        Value: result.output.name,
+      },
+    ],
+  };
 
-  //     setNeedsVerification(true);
-  //   }
-  // } catch (err) {
-  //   logMessage.error(err);
-  //   if (hasError("UsernameExistsException", err)) {
-  //     handleErrorById("UsernameExistsException");
-  //     return;
-  //   }
-  //   handleErrorById(t("InternalServiceException"));
-  // }
+  // instantiate the cognito client object. cognito is region specific and so a region must be specified
+  const cognitoClient = new CognitoIdentityProviderClient({
+    region: COGNITO_REGION,
+  });
+
+  // instantiate the signup command object
+  const signUpCommand = new SignUpCommand(params);
+
+  try {
+    await cognitoClient.send(signUpCommand);
+  } catch (err) {
+    // if there is an error, forward the status code and the error message as the body
+
+    const cognitoError = err as CognitoIdentityProviderServiceException;
+    if (cognitoError.name === "UsernameExistsException") {
+      return { validationErrors: [], authError: { title: t("UsernameExistsException") } };
+    }
+    return { validationErrors: [], authError: { title: t("InternalServiceException") } };
+  }
+
+  // Continue sign in process with 2FA
+
+  const cognitoToken = await initiateSignIn({
+    username: result.output.username,
+    password: result.output.password,
+  });
+
+  if (cognitoToken) {
+    const authenticationFlowToken = await begin2FAAuthentication(cognitoToken);
+    redirect(`/${language}/auth/mfa?token=${authenticationFlowToken}`);
+  }
+
+  return { validationErrors: [], authError: { title: t("InternalServiceException") } };
 };

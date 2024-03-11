@@ -1,6 +1,6 @@
 "use client";
 import React, { useRef } from "react";
-import { useFormState } from "react-dom";
+import { useFormState, useFormStatus } from "react-dom";
 import { Alert } from "./Alert";
 import { ErrorListItem } from "./ErrorListItem";
 import { Label } from "./Label";
@@ -12,6 +12,28 @@ import Link from "next/link";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 
 import { useFocusIt } from "@lib/hooks/useFocusIt";
+
+const SubmitButton = () => {
+  const { t } = useTranslation("signup");
+  const { pending } = useFormStatus();
+  return (
+    <Button
+      theme="primary"
+      type="submit"
+      disabled={pending}
+      aria-disabled={pending}
+      onClick={() => {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: "sign_up",
+          method: "cognito",
+        });
+      }}
+    >
+      {t("signUpRegistration.signUpButton")}
+    </Button>
+  );
+};
 
 export const RegistrationForm = () => {
   const {
@@ -147,10 +169,7 @@ export const RegistrationForm = () => {
           {t("signUpRegistration.termsAgreement")}&nbsp;
           <Link href={"/terms-of-use"}>{t("signUpRegistration.termsAgreementLink")}</Link>
         </p>
-
-        <Button theme="primary" type="submit">
-          {t("signUpRegistration.signUpButton")}
-        </Button>
+        <SubmitButton />
       </form>
     </>
   );
