@@ -3,17 +3,21 @@ import { useTranslation } from "next-i18next";
 import { FormElementWithIndex } from "../../../types";
 import { useTemplateStore } from "@components/form-builder/store";
 import { ConditionalIcon } from "@components/form-builder/icons/ConditionalIcon";
-import { getQuestionNumber } from "@formbuilder/util";
+import { getQuestionNumber, sortByLayout } from "@formbuilder/util";
 import { getElementIndexes } from "@formbuilder/getPath";
 
 const RuleIndicator = ({ choiceId }: { choiceId: string }) => {
   const { t } = useTranslation("form-builder");
   const getChoice = useTemplateStore((state) => state.getChoice);
+  const layout = useTemplateStore((state) => state.form.layout);
+
   const translationLanguagePriority = useTemplateStore(
     (state) => state.translationLanguagePriority
   );
 
   const elements = useTemplateStore((state) => state.form.elements);
+  const sortedElements = sortByLayout({ layout, elements: [...elements] });
+
   const parentId = Number(choiceId.split(".")[0]);
   const childId = Number(choiceId.split(".")[1]);
   const choice = getChoice(parentId, childId);
@@ -22,7 +26,7 @@ const RuleIndicator = ({ choiceId }: { choiceId: string }) => {
   const indexes = getElementIndexes(parentId, elements);
   if (!indexes || !indexes[0]) return null;
   const itemId = indexes[0];
-  const questionNumber = getQuestionNumber(elements[itemId], elements);
+  const questionNumber = getQuestionNumber(elements[itemId], sortedElements);
   return (
     <div>
       <ConditionalIcon className="mr-2 mt-[-5px] inline-block" />
