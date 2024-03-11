@@ -15,7 +15,7 @@ export const LoginMenu = ({ authenticated }: { authenticated: boolean }) => {
     <div
       id="login-menu"
       className="text-base font-normal not-italic"
-      data-authenticated={`${status === "authenticated"}`}
+      data-authenticated={`${authenticated}`}
     >
       {authenticated ? (
         <button

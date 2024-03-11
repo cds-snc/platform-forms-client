@@ -2,7 +2,7 @@ import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { auth } from "@lib/auth";
 import { redirect } from "next/navigation";
-import { Register } from "./clientSide";
+import { RegistrationForm } from "./components/client/RegistrationForm";
 
 export async function generateMetadata({
   params: { locale },
@@ -20,5 +20,5 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
   if (session) redirect(`/${locale}/forms/`);
 
-  return <Register />;
+  return <RegistrationForm />;
 }

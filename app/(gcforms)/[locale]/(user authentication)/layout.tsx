@@ -50,7 +50,7 @@ export default async function Layout({
       <div id="page-container" className="gc-authpages">
         <div className="account-wrapper mt-10 flex items-center justify-center">
           <div
-            className={`max-w-[900px] tablet:w-[768px] laptop:w-[850px] rounded-2xl border-1 border-[#D1D5DB] bg-white p-10`}
+            className={`max-w-[900px] tablet:min-w-[658px] laptop:w-[850px] rounded-2xl border-1 border-[#D1D5DB] bg-white p-10`}
           >
             <main id="content">
               <Link
