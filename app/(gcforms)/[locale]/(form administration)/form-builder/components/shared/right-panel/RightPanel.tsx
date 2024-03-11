@@ -1,19 +1,17 @@
 "use client";
 
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Transition, Tab } from "@headlessui/react";
-import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
+import { Button } from "@clientComponents/globals";
+
 import { RightPanelOpen, RoundCloseIcon } from "@serverComponents/icons";
 import { cn } from "@lib/utils";
-import { LangSwitcher } from "@formBuilder/components/shared/LangSwitcher";
 import { useActivePathname } from "@lib/hooks/form-builder";
-import { useEffect, useRef } from "react";
-
 import { DownloadCSV } from "@formBuilder/[id]/edit/translate/components/DownloadCSV";
-import { DownloadFileButton } from "@formBuilder/components/shared";
 import { useRehydrate } from "@lib/hooks/form-builder";
+import { TreeView } from "./treeview/TreeView";
 
 const TabButton = ({
   text,
@@ -171,12 +169,9 @@ export const RightPanel = ({ id }: { id: string }) => {
                         }}
                       />
                     </Tab.List>
-                    <Tab.Panels className="p-6">
+                    <Tab.Panels>
                       <Tab.Panel>
-                        <div className="mb-4 flex">
-                          <LangSwitcher descriptionLangKey="editingIn" />
-                        </div>
-                        <DownloadFileButton showInfo={false} autoShowDialog={false} />
+                        <TreeView />
                       </Tab.Panel>
                       <Tab.Panel>
                         <DownloadCSV />

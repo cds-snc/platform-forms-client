@@ -3,6 +3,7 @@ import { Metadata } from "next";
 
 import { Edit } from "./components/Edit";
 import { EditNavigation } from "./components/EditNavigation";
+import { checkFlag } from "../actions";
 
 export async function generateMetadata({
   params: { locale },
@@ -16,10 +17,13 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params: { id } }: { params: { id: string } }) {
+  const conditionalLogic = await checkFlag("conditionalLogic");
+
   return (
     <>
-      <EditNavigation id={id} />
-      <Edit />
+      {/* If conditional logic is off use "Pill" navigation */}
+      {!conditionalLogic && <EditNavigation id={id} />}
+      <Edit groupElements={conditionalLogic} />
     </>
   );
 }

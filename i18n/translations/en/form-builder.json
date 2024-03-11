@@ -788,7 +788,10 @@
     "closePanel": "Close panel",
     "questions": "Questions",
     "logic": "Logic",
-    "translation": "Translation"
+    "translation": "Translation",
+    "treeView": {
+      "addSection": "New section"
+    }
   },
   "logic": {
     "heading": "Logic"
