@@ -14,13 +14,14 @@ import { TreeData } from "./types";
 export const TreeView = () => {
   const { elements } = useTemplateStore((s) => ({
     elements: s.form.elements,
+    //formGroups: s.form.groups,
   }));
 
   const { t } = useTranslation("form-builder");
 
   const { lastChange } = useTemplateContext();
 
-  const { data, setData, controllers } = useDynamicTree();
+  const { groups, setGroups, controllers } = useDynamicTree();
 
   const elementCount = elements.length;
 
@@ -41,9 +42,9 @@ export const TreeView = () => {
 
       let newData: TreeData = [];
 
-      if (data.length >= 3) {
+      if (groups.length >= 3) {
         // Remove the "start" and the "end" sections from data
-        newData = data.slice(1, data.length - 1);
+        newData = groups.slice(1, groups.length - 1);
       }
 
       if (itemName) {
@@ -51,10 +52,10 @@ export const TreeView = () => {
         return [start, ...newData, newItem, end];
       }
 
-      return data;
+      return groups;
       // eslint-disable-next-line react-hooks/exhaustive-deps
     },
-    [data]
+    [groups]
   );
 
   useEffect(() => {
@@ -70,14 +71,14 @@ export const TreeView = () => {
           theme="secondary"
           onClick={() => {
             const treeData = addItem("New Section");
-            setData(treeData);
+            setGroups(treeData);
           }}
         >
           {t("rightPanel.treeView.addSection")}
         </Button>
       </div>
       <Tree
-        data={data.length < 1 ? [start, end] : data}
+        data={groups.length < 1 ? [start, end] : groups}
         {...controllers}
         disableEdit={(data) => data.readOnly}
         renderCursor={Cursor}

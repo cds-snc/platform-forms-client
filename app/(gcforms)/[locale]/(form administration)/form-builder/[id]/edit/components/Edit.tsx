@@ -18,7 +18,7 @@ import { useRehydrate } from "@lib/hooks/form-builder";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store";
 import { NewSection } from "./NewSection";
 
-export const Edit = () => {
+export const Edit = ({ groupElements }: { groupElements: boolean }) => {
   const { t } = useTranslation("form-builder");
   const {
     title,
@@ -96,8 +96,8 @@ export const Edit = () => {
       <div className="mb-4">
         <SaveButton />
       </div>
-      {groupId === "start" && <SettingsPanel />}
-      {groupId === "start" && (
+      {(groupId === "start" || !groupElements) && <SettingsPanel />}
+      {(groupId === "start" || !groupElements) && (
         <RichTextLocked
           hydrated={hasHydrated}
           className="rounded-t-lg"
@@ -133,9 +133,7 @@ export const Edit = () => {
           ariaLabel={t("richTextIntroTitle")}
         />
       )}
-
-      <NewSection groupId={groupId} />
-
+      {groupElements && <NewSection groupId={groupId} />}
       <RefsProvider>
         {layout.length >= 1 &&
           layout.map((id, index) => {
@@ -149,7 +147,7 @@ export const Edit = () => {
           })}
       </RefsProvider>
       <>
-        {groupId === "start" && (
+        {(groupId === "start" || !groupElements) && (
           <RichTextLocked
             hydrated={hasHydrated}
             addElement={false}
@@ -162,8 +160,7 @@ export const Edit = () => {
             </div>
           </RichTextLocked>
         )}
-
-        {groupId === "end" && (
+        {(groupId === "end" || !groupElements) && (
           <RichTextLocked
             hydrated={hasHydrated}
             addElement={false}

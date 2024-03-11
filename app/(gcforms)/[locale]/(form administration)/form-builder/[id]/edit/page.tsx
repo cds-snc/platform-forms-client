@@ -17,12 +17,13 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params: { id } }: { params: { id: string } }) {
-  const showNavigation = !(await checkFlag("conditionalLogic"));
+  const conditionalLogic = await checkFlag("conditionalLogic");
 
   return (
     <>
-      {showNavigation && <EditNavigation id={id} />}
-      <Edit />
+      {/* If conditional logic is off use "Pill" navigation */}
+      {!conditionalLogic && <EditNavigation id={id} />}
+      <Edit groupElements={conditionalLogic} />
     </>
   );
 }
