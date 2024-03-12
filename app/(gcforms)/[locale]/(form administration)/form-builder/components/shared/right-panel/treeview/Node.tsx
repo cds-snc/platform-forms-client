@@ -7,6 +7,9 @@ import { ArrowRight } from "./icons/ArrowRight";
 import { DragHandle } from "./icons/DragHandle";
 import { LockIcon } from "@serverComponents/icons";
 import { useGroupStore } from "./store";
+import { FormElement } from "@lib/types";
+import { LocalizedFormProperties, LocalizedElementProperties } from "@lib/types/form-builder-types";
+import { useTemplateStore } from "@lib/store";
 
 function Input({ node }: { node: NodeApi<FormItem> }) {
   return (
@@ -57,15 +60,44 @@ export const ParentNode = ({ node }: { node: NodeApi<FormItem> }) => {
   );
 };
 
-export const ChildNode = ({ node }: { node: NodeApi<FormItem> }) => {
+export const ChildNode = ({
+  node,
+  element,
+}: {
+  node: NodeApi<FormItem>;
+  element: FormElement | undefined;
+}) => {
   const active = node.isSelected;
+  const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    translationLanguagePriority: s.translationLanguagePriority,
+  }));
+
+  const language = translationLanguagePriority;
+
+  const titleKey = localizeField(LocalizedFormProperties.TITLE, language);
+  const descKey = localizeField(LocalizedElementProperties.DESCRIPTION, language);
+
+  let label = "";
+  if (element && element.properties[titleKey]) {
+    label = element.properties[titleKey] || "";
+  }
+
+  if (label === "" && element && element.properties[descKey]) {
+    label = element.properties[descKey] || "";
+  }
+
+  if (label === "") {
+    label = node.data.name || "";
+  }
+
   return (
     <div className={cn("border-x-1 border-b-1 border-gray-soft p-2", active && "font-bold")}>
       {node.isEditing ? (
         <Input node={node} />
       ) : (
         <div className="group relative w-[350px] overflow-hidden truncate border-gray-soft bg-white p-1 pr-10">
-          {node.data.name}
+          {label}
           {!node.data.readOnly && (
             <DragHandle className="absolute right-0 top-0 mr-4 mt-3 hidden cursor-pointer group-hover:block" />
           )}
@@ -80,6 +112,9 @@ export const ChildNode = ({ node }: { node: NodeApi<FormItem> }) => {
 
 export const Node = ({ node, style, dragHandle }: NodeRendererProps<FormItem>) => {
   const setId = useGroupStore((s) => s.setId);
+  const getElement = useGroupStore((s) => s.getElement);
+  const element = getElement(Number(node.data.id));
+
   let className = "";
 
   if (node.isLeaf) {
@@ -107,7 +142,7 @@ export const Node = ({ node, style, dragHandle }: NodeRendererProps<FormItem>) =
         node.edit();
       }}
     >
-      {node.isLeaf ? <ChildNode node={node} /> : <ParentNode node={node} />}
+      {node.isLeaf ? <ChildNode node={node} element={element} /> : <ParentNode node={node} />}
     </div>
   );
 };

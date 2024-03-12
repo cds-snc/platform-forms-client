@@ -1,45 +1,26 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback } from "react";
 import { Tree } from "react-arborist";
 import { useTranslation } from "react-i18next";
 
 import { useTemplateStore } from "@lib/store";
 import { Node } from "./Node";
 import { useDynamicTree } from "./hooks/useDynamicTree";
-import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 import { Cursor } from "./Cursor";
 import { Button } from "@clientComponents/globals";
 import { start, end, createItem } from "./data";
-import { TreeData } from "./types";
+import { TreeData, FormItem } from "./types";
 
 export const TreeView = () => {
   const { elements } = useTemplateStore((s) => ({
     elements: s.form.elements,
-    //formGroups: s.form.groups,
   }));
 
   const { t } = useTranslation("form-builder");
 
-  const { lastChange } = useTemplateContext();
-
   const { groups, setGroups, controllers } = useDynamicTree();
-
-  const elementCount = elements.length;
 
   const addItem = useCallback(
     (itemName?: string): TreeData => {
-      /*
-    const formElements = elements.map((element) => {
-      return {
-        id: String(element.id),
-        name: element.properties.titleEn
-          ? element.properties.titleEn
-          : t(`addElementDialog.${element.type}.title`),
-        icon: null,
-        readOnly: false,
-      };
-    });
-    */
-
       let newData: TreeData = [];
 
       if (groups.length >= 3) {
@@ -58,11 +39,31 @@ export const TreeView = () => {
     [groups]
   );
 
-  useEffect(() => {
-    // @ todo re-add this but we need to add elements to each group
-    // setData(treeData);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [elementCount, lastChange]);
+  let startGroup = {} as FormItem;
+  if (groups.length < 1) {
+    startGroup = {
+      id: "start",
+      name: "Start",
+      icon: null,
+      readOnly: true,
+      children: [
+        {
+          id: "introduction",
+          name: "Introduction",
+          icon: null,
+          readOnly: true,
+        },
+        ...elements.map((element) => {
+          return {
+            id: String(element.id),
+            name: "",
+            icon: null,
+            readOnly: false,
+          };
+        }),
+      ],
+    };
+  }
 
   return (
     <div className="relative mr-[1px]">
@@ -78,7 +79,7 @@ export const TreeView = () => {
         </Button>
       </div>
       <Tree
-        data={groups.length < 1 ? [start, end] : groups}
+        data={groups.length < 1 ? [startGroup, end] : groups}
         {...controllers}
         disableEdit={(data) => data.readOnly}
         renderCursor={Cursor}
