@@ -2,10 +2,8 @@ import { Metadata } from "next";
 import { auth } from "@lib/auth";
 import { redirect } from "next/navigation";
 import { serverTranslation } from "@i18n";
-import { AccessControlError } from "@lib/privileges";
 import { getAppSetting } from "@lib/appSettings";
 import { Responses, ResponsesProps } from "./components/Responses";
-import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
 import { fetchSubmissions, fetchTemplate } from "./actions";
 
 export async function generateMetadata({
@@ -38,48 +36,31 @@ export default async function Page({
   };
 
   const session = await auth();
-  const isAuthenticated = session !== null;
 
   if (session && id) {
-    try {
-      const initialForm = await fetchTemplate(id);
+    const initialForm = await fetchTemplate(id);
 
-      if (initialForm === null) {
-        redirect(`/${locale}/404`);
-      }
+    if (initialForm === null) {
+      redirect(`/${locale}/404`);
+    }
 
-      pageProps.initialForm = initialForm;
+    pageProps.initialForm = initialForm;
 
-      const { submissions, lastEvaluatedKey } = await fetchSubmissions({
-        formId: id,
-        status: statusFilter,
-        lastKey,
-      });
+    const { submissions, lastEvaluatedKey } = await fetchSubmissions({
+      formId: id,
+      status: statusFilter,
+      lastKey,
+    });
 
-      pageProps.vaultSubmissions = submissions;
-      pageProps.lastEvaluatedKey = lastEvaluatedKey;
+    pageProps.vaultSubmissions = submissions;
+    pageProps.lastEvaluatedKey = lastEvaluatedKey;
 
-      // TODO: re-enable nagware when we have a better solution for how to handle filtered statuses
-      /*
+    // TODO: re-enable nagware when we have a better solution for how to handle filtered statuses
+    /*
         nagwareResult = allSubmissions.submissions.length
         ? await detectOldUnprocessedSubmissions(allSubmissions.submissions)
         : null;
         */
-    } catch (e) {
-      if (e instanceof AccessControlError) {
-        redirect(`/${locale}/admin/unauthorized`);
-      }
-    }
-  }
-
-  if (!isAuthenticated) {
-    return (
-      <>
-        <div className="max-w-4xl">
-          <LoggedOutTab tabName={LoggedOutTabName.RESPONSES} />
-        </div>
-      </>
-    );
   }
 
   return <Responses {...pageProps} />;
