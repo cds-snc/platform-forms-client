@@ -473,10 +473,12 @@
   "publishingRemovesTestResponsesDescription": "Any prior responses will be removed from the system.",
   "publishYourForm": "Publish your form",
   "publishYourFormInstructions": {
-    "text1": "Complete the following items before you publish your form.",
-    "text2": "",
+    "text1": "Complete the following items before you publish your form",
+    "text2": "Tell us about your form",
     "vaultOption": "Responses to be downloaded — ",
     "emailOption": "Responses delivered by email — ",
+    "whatTypeOfForm": "What type of form is it?",
+    "provideDescription": "Provide a brief description of the form and it's use.",
     "change": "Change settings"
   },
   "prePublishFormDialog": {
