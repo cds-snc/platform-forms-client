@@ -143,4 +143,13 @@ export const options = [
     logoTitleEn: "Statistics Canada",
     logoTitleFr: "Statistique Canada",
   },
+  {
+    name: "lac",
+    urlEn: "https://library-archives.canada.ca/eng",
+    urlFr: "https://bibliotheque-archives.canada.ca/fra",
+    logoEn: "/img/branding/lac-bac-fip-red-en.svg",
+    logoFr: "/img/branding/lac-bac-fip-red-fr.svg",
+    logoTitleEn: "Library and Archives Canada",
+    logoTitleFr: "Bibliothèque et Archives Canada",
+  },
 ];
