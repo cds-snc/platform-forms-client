@@ -4,7 +4,7 @@ import { Dialog, useDialogRef } from "@formBuilder/components/shared";
 import { useState } from "react";
 
 export const PrePublishDialog = ({ handleClose }: { handleClose: () => void }) => {
-  const { t } = useTranslation("admin-users");
+  const { t } = useTranslation("form-builder");
   const dialog = useDialogRef();
 
   const [prePublishStep, setPrePublishStep] = useState(0);
@@ -49,7 +49,7 @@ export const PrePublishDialog = ({ handleClose }: { handleClose: () => void }) =
       )}
       {prePublishStep == 1 && (
         <Dialog
-          title={t("prePublishFormDialog.title1")}
+          title={t("prePublishFormDialog.title2")}
           dialogRef={dialog}
           actions={actions}
           className="max-h-[80%] overflow-y-scroll"
