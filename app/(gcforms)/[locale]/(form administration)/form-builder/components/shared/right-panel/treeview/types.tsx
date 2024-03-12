@@ -2,7 +2,7 @@ import { ComponentType } from "react";
 export type FormItem = {
   id: string;
   readOnly: boolean;
-  name?: string;
+  name: string;
   icon?: ComponentType | null;
   children?: FormItem[];
 };
