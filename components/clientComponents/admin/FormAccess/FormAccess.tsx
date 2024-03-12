@@ -8,6 +8,13 @@ import React, { useEffect, useState } from "react";
 import { isValidGovEmail } from "@lib/validation";
 import { FormOwner } from "@lib/types";
 
+/**
+ * This is part of our old API calls when we used to support API downloading of the responses.
+ * It was left in for historical purposes.
+ *
+ * TODO: potentially remove.
+ */
+
 export interface FormAccessProps {
   formID: string;
 }

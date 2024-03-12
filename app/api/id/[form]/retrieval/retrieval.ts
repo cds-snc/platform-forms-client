@@ -1,3 +1,12 @@
+/**
+ * This is part of our old API calls when we used to support API downloading of the responses.
+ * It was left in for historical purposes.
+ *
+ * NOTE: /utils/retrievalAPI/retrieveResponse.ts is related and could also potentially be removed.
+ *
+ * TODO: potentially remove.
+ */
+
 // import { NextApiRequest, NextApiResponse } from "next";
 // import { logMessage } from "@lib/logger";
 

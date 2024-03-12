@@ -7,6 +7,16 @@ import { useTranslation } from "@i18n/client";
 import React, { useEffect, useState } from "react";
 import { BearerResponse } from "@lib/types";
 
+/**
+ * This is part of our old API calls when we used to support API downloading of the responses.
+ * It was left in for historical purposes.
+ *
+ * NOTE: this is imported in components/clientComponents/admin/TemplateDelete/Settings.tsx that
+ * could also potentially be removed.
+ *
+ * TODO: potentially remove.
+ */
+
 export interface BearerRefreshProps {
   formID: string;
 }
