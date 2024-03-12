@@ -6,6 +6,7 @@ import { DeliveryOptionEmail } from "./components/DeliveryOptionEmail";
 import { NavigationTabs } from "./components/NavigationTabs";
 import { TitleAndDescription } from "./components/TitleAndDescription";
 import { fetchSubmissions, fetchTemplate } from "./actions";
+import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
 
 export default async function Layout({
   children,
@@ -14,9 +15,18 @@ export default async function Layout({
   children: React.ReactNode;
   params: { locale: string; statusFilter: string; id: string };
 }) {
-  const initialForm = await fetchTemplate(id);
   const session = await auth();
   const isAuthenticated = session !== null;
+
+  if (!isAuthenticated) {
+    return (
+      <div className="max-w-4xl">
+        <LoggedOutTab tabName={LoggedOutTabName.RESPONSES} />
+      </div>
+    );
+  }
+
+  const initialForm = await fetchTemplate(id);
   const responseDownloadLimit = Number(await getAppSetting("responseDownloadLimit"));
   const deliveryOption = initialForm?.deliveryOption;
   const isPublished = initialForm?.isPublished || false;
