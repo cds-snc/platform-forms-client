@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import { useTranslation } from "@i18n/client";
-import { isValidGovEmail } from "@lib/validation";
+import { isValidGovEmail } from "@lib/validation/validation";
 import { Input } from "./shared";
 import { completeEmailAddressRegex } from "@lib/utils/form-builder";
 

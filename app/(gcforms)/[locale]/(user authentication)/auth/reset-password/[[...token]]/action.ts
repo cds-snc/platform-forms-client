@@ -21,7 +21,7 @@ import {
   containsLowerCaseCharacter,
   containsNumber,
   containsSymbol,
-} from "@lib/validation";
+} from "@lib/validation/validation";
 import { deleteMagicLinkEntry } from "@lib/auth/passwordReset";
 
 export interface ErrorStates {

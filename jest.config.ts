@@ -30,6 +30,7 @@ const customJestConfig: Config = {
     }),
     "^next-auth(/?.*)$": "<rootDir>/__utils__/mocks/next-auth",
     "^lib/auth/nextAuth$": "<rootDir>/__utils__/mocks/nextAuth",
+    "^file-type$": "<rootDir>/__utils__/mocks/file-type",
   },
   moduleDirectories: ["node_modules", "<rootDir>"],
   clearMocks: true,

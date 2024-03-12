@@ -1,8 +1,10 @@
 import { FileInputResponse, SubmissionRequestBody } from "@lib/types";
-import { fileTypeFromBuffer } from "file-type";
-import { acceptedFileMimeTypes } from "@lib/tsUtils";
 import { ProcessedFile, SubmissionParsedRequest } from "@lib/types/submission-types";
 import { FileObjectInvalid, FileSizeError, FileTypeError } from "./exceptions";
+import {
+  FileValidationResult,
+  validateFileToUpload,
+} from "@lib/validation/fileValidationServerSide";
 
 /**
  * This function takes raw request JSON and parses the fields and files.
@@ -50,7 +52,7 @@ export const parseRequestData = async (
               ...previousValueResolved.files,
               [current]: await Promise.all(
                 arrayValue.map(async (fileObj) => {
-                  return processFileData(fileObj as FileInputResponse);
+                  return processFileInputResponse(fileObj as FileInputResponse);
                 })
               ),
             },
@@ -61,7 +63,7 @@ export const parseRequestData = async (
           ...previousValueResolved,
           files: {
             ...previousValueResolved.files,
-            [current]: await processFileData(keyPairValue as FileInputResponse),
+            [current]: await processFileInputResponse(keyPairValue as FileInputResponse),
           },
         };
       }
@@ -75,64 +77,46 @@ export const parseRequestData = async (
 };
 
 /**
- * This function will take a FileInputResponse object and return File object should
+ * This function will take a FileInputResponse object and return a ProcessedFile should
  * the file conform to expected mimetypes and size. Otherwise an error will be thrown
- * @param fileObj
+ * @param fileInputResponse
  */
-const processFileData = async (fileObj: FileInputResponse): Promise<ProcessedFile> => {
-  // Removing mmmagic due to build issue. Will be replaced with a better solution
-  // TODO: Find better solution at determining file type
-  // const { Magic, MAGIC_MIME_TYPE } = await import("mmmagic");
+const processFileInputResponse = async (
+  fileInputResponse: FileInputResponse
+): Promise<ProcessedFile> => {
+  if (
+    fileInputResponse.name === null ||
+    fileInputResponse.size === null ||
+    fileInputResponse.based64EncodedFile === null
+  ) {
+    throw new FileObjectInvalid("FileInputResponse is missing required properties");
+  }
 
-  // if we have a size key present in the data then we can simply throw an error if
-  // that number is greater than 8mb. We do not depend on this however. This is simply
-  // to be more efficient. Regardless if this parameter is less than 8mb the size will still be checked
-  if (typeof fileObj?.size === "number" && fileObj.size / 1048576 > 8) {
-    throw new FileSizeError(
-      "FileSizeError: A file has been uploaded that is greater than 8mb in size"
-    );
-  }
-  // process Base64 encoded data
-  if (typeof fileObj?.name === "string" && typeof fileObj?.file === "string") {
-    // base64 string should be data URL https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs
-    const fileData = fileObj.file.match(/^data:([A-Za-z-+./]+);base64,(.+)$/);
-    if (fileData?.length !== 3) {
-      throw new FileTypeError(`FileTypeError: The file ${fileObj.name} was not a valid data URL`);
-    }
-    // create buffer with fileData
-    const fileBuff = Buffer.from(fileData[2], "base64");
-    // if the buffer is larger then 8mb then this is larger than the filesize that's allowed
-    if (Buffer.byteLength(fileBuff) / 1048576 > 8) {
-      throw new FileSizeError(
-        `FileSizeError: The file ${fileObj.name} has been uploaded that is greater than 8mb in size`
-      );
-    }
-    // // determine the real mime type of the file from the buffer
-    // const magic = new Magic(MAGIC_MIME_TYPE);
-    // // promisify the magic.detect call so that it works cleanly with the async function
-    // const detectFilePromise = (): Promise<string | string[]> => {
-    //   return new Promise((resolve, reject) => {
-    //     magic.detect(fileBuff, (err, result) => {
-    //       if (err) {
-    //         return reject(err);
-    //       }
-    //       return resolve(result);
-    //     });
-    //   });
-    // };
-    // use mmmagic lib to detect mime types for text files and file-type for binary files
-    const mimeTypefilebuff = await fileTypeFromBuffer(fileBuff);
-    if (!mimeTypefilebuff || !acceptedFileMimeTypes.includes(mimeTypefilebuff.mime)) {
-      throw new FileTypeError(
-        `FileTypeError: The file ${fileObj.name} has been uploaded has an unacceptable mime type of ${mimeTypefilebuff}`
-      );
-    }
-    return {
-      name: fileObj.name,
-      buffer: fileBuff,
-    };
-  }
-  throw new FileObjectInvalid(
-    "FileObjectInvalid: A file object does not have the needed properties to process it"
+  const fileAsBuffer = Buffer.from(fileInputResponse.based64EncodedFile, "base64");
+
+  const fileValidationResult = await validateFileToUpload(
+    fileInputResponse.name,
+    fileInputResponse.size,
+    fileAsBuffer
   );
+
+  switch (fileValidationResult.result) {
+    case FileValidationResult.SIZE_IS_TOO_LARGE:
+      throw new FileSizeError(
+        `FileValidationResult: file is too large to be processed. Detected size: ${fileValidationResult.detectedValue} bytes.`
+      );
+    case FileValidationResult.INVALID_EXTENSION:
+      throw new FileTypeError(
+        `FileValidationResult: file extension is not allowed. Detected extension: ${fileValidationResult.detectedValue}.`
+      );
+    case FileValidationResult.INVALID_MIME_TYPE:
+      throw new FileTypeError(
+        `FileValidationResult: file MIME type is not allowed. Detected MIME type: ${fileValidationResult.detectedValue}.`
+      );
+    case FileValidationResult.VALID:
+      return {
+        name: fileInputResponse.name,
+        buffer: fileAsBuffer,
+      };
+  }
 };

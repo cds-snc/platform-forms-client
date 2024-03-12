@@ -11,7 +11,7 @@ import {
 } from "@clientComponents/forms";
 import { useTranslation } from "@i18n/client";
 import * as Yup from "yup";
-import { isValidGovEmail } from "@lib/validation";
+import { isValidGovEmail } from "@lib/validation/validation";
 import { logMessage } from "@lib/logger";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
