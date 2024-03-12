@@ -18,7 +18,8 @@ export default async function Layout({
   const session = await auth();
   const isAuthenticated = session !== null;
 
-  if (!isAuthenticated) {
+  // @TODO: should 0000 (unsaved) show a different message
+  if (!isAuthenticated || id === "0000") {
     return (
       <div className="max-w-4xl">
         <LoggedOutTab tabName={LoggedOutTabName.RESPONSES} />

@@ -1,6 +1,4 @@
 import { Metadata } from "next";
-import { auth } from "@lib/auth";
-import { redirect } from "next/navigation";
 import { serverTranslation } from "@i18n";
 import { getAppSetting } from "@lib/appSettings";
 import { Responses, ResponsesProps } from "./components/Responses";
@@ -20,7 +18,7 @@ export async function generateMetadata({
 }
 
 export default async function Page({
-  params: { locale, id, statusFilter },
+  params: { id, statusFilter },
   searchParams: { lastKey },
 }: {
   params: { locale: string; id: string; statusFilter: string };
@@ -35,33 +33,25 @@ export default async function Page({
     overdueAfter: Number(await getAppSetting("nagwarePhaseEncouraged")),
   };
 
-  const session = await auth();
+  const initialForm = await fetchTemplate(id);
 
-  if (session && id) {
-    const initialForm = await fetchTemplate(id);
+  pageProps.initialForm = initialForm;
 
-    if (initialForm === null) {
-      redirect(`/${locale}/404`);
-    }
+  const { submissions, lastEvaluatedKey } = await fetchSubmissions({
+    formId: id,
+    status: statusFilter,
+    lastKey,
+  });
 
-    pageProps.initialForm = initialForm;
+  pageProps.vaultSubmissions = submissions;
+  pageProps.lastEvaluatedKey = lastEvaluatedKey;
 
-    const { submissions, lastEvaluatedKey } = await fetchSubmissions({
-      formId: id,
-      status: statusFilter,
-      lastKey,
-    });
-
-    pageProps.vaultSubmissions = submissions;
-    pageProps.lastEvaluatedKey = lastEvaluatedKey;
-
-    // TODO: re-enable nagware when we have a better solution for how to handle filtered statuses
-    /*
-        nagwareResult = allSubmissions.submissions.length
-        ? await detectOldUnprocessedSubmissions(allSubmissions.submissions)
-        : null;
-        */
-  }
+  // TODO: re-enable nagware when we have a better solution for how to handle filtered statuses
+  /*
+      nagwareResult = allSubmissions.submissions.length
+      ? await detectOldUnprocessedSubmissions(allSubmissions.submissions)
+      : null;
+      */
 
   return <Responses {...pageProps} />;
 }

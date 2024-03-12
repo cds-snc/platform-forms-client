@@ -5,7 +5,6 @@ import { useRehydrate } from "@lib/hooks/form-builder";
 import { useTranslation } from "@i18n/client";
 import { ucfirst } from "@lib/client/clientHelpers";
 import { FormRecord, NagwareResult, VaultSubmissionList } from "@lib/types";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ReportDialog } from "./Dialogs/ReportDialog";
@@ -36,8 +35,6 @@ export const Responses = ({
     t,
     i18n: { language },
   } = useTranslation("form-builder-responses");
-  const { status } = useSession();
-  const isAuthenticated = status === "authenticated";
   const { id, statusFilter: rawStatusFilter } = useParams<{ id: string; statusFilter: string }>();
   const statusFilter = ucfirst(rawStatusFilter);
 
@@ -58,57 +55,35 @@ export const Responses = ({
   return (
     <>
       {nagwareResult && <Nagware nagwareResult={nagwareResult} />}
-
-      {isAuthenticated && (
-        <>
-          <div aria-live="polite">
-            <ClosedBanner id={formId} />
-            {vaultSubmissions.length > 0 && (
-              <>
-                <DownloadTable
-                  vaultSubmissions={vaultSubmissions}
-                  formName={formName}
-                  formId={formId}
-                  nagwareResult={nagwareResult}
-                  responseDownloadLimit={responseDownloadLimit}
-                  lastEvaluatedKey={lastEvaluatedKey}
-                  overdueAfter={overdueAfter}
-                />
-              </>
-            )}
-            {vaultSubmissions.length <= 0 && <NoResponses statusFilter={statusFilter} />}
-          </div>
-          <div className="mt-8">
-            <ReportDialog
-              apiUrl={`/api/id/${formId}/submission/report`}
-              maxEntries={MAX_REPORT_COUNT}
+      <div aria-live="polite">
+        <ClosedBanner id={formId} />
+        {vaultSubmissions.length > 0 && (
+          <>
+            <DownloadTable
+              vaultSubmissions={vaultSubmissions}
+              formName={formName}
+              formId={formId}
+              nagwareResult={nagwareResult}
+              responseDownloadLimit={responseDownloadLimit}
+              lastEvaluatedKey={lastEvaluatedKey}
+              overdueAfter={overdueAfter}
             />
-            <Link
-              href={`/form-builder/${formId}/responses/problem`}
-              className="ml-12 text-black visited:text-black focus:text-white-default"
-            >
-              {t("responses.viewAllProblemResponses")}
-            </Link>
-          </div>
-        </>
-      )}
-
-      {!isAuthenticated && (
-        <>
-          <p>
-            {t("responses.unauthenticated.toAccessPagePart1")}{" "}
-            <Link href={`/${language}/auth/login`}>{t("responses.unauthenticated.signIn")}</Link>{" "}
-            {t("responses.unauthenticated.toAccessPagePart2")}
-          </p>
-          <p className="mt-8">
-            {t("responses.unauthenticated.noAccount")}{" "}
-            <Link href={`/${language}/signup/register`}>
-              {t("responses.unauthenticated.createOne")}
-            </Link>
-            .
-          </p>
-        </>
-      )}
+          </>
+        )}
+        {vaultSubmissions.length <= 0 && <NoResponses statusFilter={statusFilter} />}
+      </div>
+      <div className="mt-8">
+        <ReportDialog
+          apiUrl={`/api/id/${formId}/submission/report`}
+          maxEntries={MAX_REPORT_COUNT}
+        />
+        <Link
+          href={`/form-builder/${formId}/responses/problem`}
+          className="ml-12 text-black visited:text-black focus:text-white-default"
+        >
+          {t("responses.viewAllProblemResponses")}
+        </Link>
+      </div>
     </>
   );
 };
