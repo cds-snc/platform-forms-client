@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useEffect } from "react";
 import { Tree } from "react-arborist";
 import { useTranslation } from "react-i18next";
 
@@ -7,8 +7,9 @@ import { Node } from "./Node";
 import { useDynamicTree } from "./hooks/useDynamicTree";
 import { Cursor } from "./Cursor";
 import { Button } from "@clientComponents/globals";
-import { start, end, createItem } from "./data";
-import { TreeData, FormItem } from "./types";
+import { end } from "./data";
+import { FormItem } from "./types";
+import { v4 as uuid } from "uuid";
 
 export const TreeView = () => {
   const { elements } = useTemplateStore((s) => ({
@@ -17,27 +18,7 @@ export const TreeView = () => {
 
   const { t } = useTranslation("form-builder");
 
-  const { groups, setGroups, controllers } = useDynamicTree();
-
-  const addItem = useCallback(
-    (itemName?: string): TreeData => {
-      let newData: TreeData = [];
-
-      if (groups.length >= 3) {
-        // Remove the "start" and the "end" sections from data
-        newData = groups.slice(1, groups.length - 1);
-      }
-
-      if (itemName) {
-        const newItem = createItem(itemName);
-        return [start, ...newData, newItem, end];
-      }
-
-      return groups;
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    },
-    [groups]
-  );
+  const { groups, addGroup, controllers } = useDynamicTree();
 
   let startGroup = {} as FormItem;
   if (groups.length < 1) {
@@ -65,14 +46,17 @@ export const TreeView = () => {
     };
   }
 
+  useEffect(() => {
+    //
+  }, [addGroup, groups.length]);
+
   return (
     <div className="relative mr-[1px]">
       <div className="m-4 flex">
         <Button
           theme="secondary"
           onClick={() => {
-            const treeData = addItem("New Section");
-            setGroups(treeData);
+            addGroup(uuid());
           }}
         >
           {t("rightPanel.treeView.addSection")}

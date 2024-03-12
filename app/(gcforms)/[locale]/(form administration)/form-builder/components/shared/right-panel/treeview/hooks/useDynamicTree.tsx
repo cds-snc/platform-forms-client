@@ -14,9 +14,9 @@ import { FormItem } from "../types";
 let nextId = 0;
 
 export function useDynamicTree<T extends FormItem>() {
-  const { groups, setGroups } = useGroupStore((s) => ({
-    groups: s.groups,
-    setGroups: s.setGroups,
+  const { groups, addGroup } = useGroupStore((s) => ({
+    groups: s.getGroups(),
+    addGroup: s.addGroup,
   }));
 
   const tree = useMemo(() => new SimpleTree<FormItem>(groups), [groups]);
@@ -29,28 +29,29 @@ export function useDynamicTree<T extends FormItem>() {
     for (const id of args.dragIds) {
       tree.move({ id, parentId: args.parentId, index: args.index });
     }
-    setGroups(tree.data);
+
+    // setGroups(tree.data);
   };
 
   const onRename: RenameHandler<T> = ({ name, id }) => {
     tree.update({ id, changes: { name } } as updateObj<T>);
-    setGroups(tree.data);
+    // setGroups(tree.data);
   };
 
   const onCreate: CreateHandler<T> = ({ parentId, index, type }) => {
     const data = { id: `simple-tree-id-${nextId++}`, name: "" } as T;
     if (type === "internal") data.children = [];
     tree.create({ parentId, index, data });
-    setGroups(tree.data);
+    // setGroups(tree.data);
     return data;
   };
 
   const onDelete: DeleteHandler<T> = (args: { ids: string[] }) => {
     args.ids.forEach((id) => tree.drop({ id }));
-    setGroups(tree.data);
+    // setGroups(tree.data);
   };
 
   const controllers = { onMove, onRename, onCreate, onDelete };
 
-  return { groups, setGroups, controllers } as const;
+  return { groups, addGroup, controllers } as const;
 }

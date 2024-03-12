@@ -22,8 +22,8 @@ import { FormElement } from "@lib/types";
 export interface GroupStoreState extends GroupStoreProps {
   getId: () => string;
   setId: (id: string) => void;
-  setGroups: (groups: FormItem[]) => void;
-  groups: FormItem[];
+  addGroup: (id: string) => void;
+  getGroups: () => FormItem[] | [];
   getElement: (id: number) => FormElement | undefined;
 }
 
@@ -47,10 +47,48 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
           .getTemplateState()
           .form.elements.find((el) => el.id === id);
       },
-      setGroups: (groups: FormItem[]) =>
-        set((state) => {
-          state.groups = groups;
-        }),
+      getGroups: () => {
+        const formGroups = get().getTemplateState().form.groups;
+        const items = [];
+        if (formGroups) {
+          for (const [key, value] of Object.entries(formGroups)) {
+            const children =
+              value.elements &&
+              value.elements.map((id) => {
+                const element = get().getElement(Number(id));
+                if (element) {
+                  return {
+                    id: String(element.id),
+                    name: "",
+                    icon: null,
+                    readOnly: false,
+                  };
+                }
+              });
+
+            if (!children) continue;
+
+            const item = {
+              id: key,
+              name: "8",
+              icon: null,
+              readOnly: false,
+              children: children.filter((el) => el !== undefined) as FormItem[],
+            };
+
+            items.push(item);
+          }
+        }
+        return items;
+      },
+      addGroup: (id: string) => {
+        get().setTemplateState((s) => {
+          if (!s.form.groups) {
+            s.form.groups = {};
+          }
+          s.form.groups[id] = { elements: [] };
+        });
+      },
     }))
   );
 };
