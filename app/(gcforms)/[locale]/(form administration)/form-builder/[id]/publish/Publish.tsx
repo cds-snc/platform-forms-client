@@ -14,6 +14,7 @@ import { DownloadFileButton } from "@formBuilder/components/shared";
 import Skeleton from "react-loading-skeleton";
 import LinkButton from "@serverComponents/globals/Buttons/LinkButton";
 import { updateTemplate, updateTemplatePublishedStatus } from "@formBuilder/actions";
+import { PrePublishDialog } from "./PrePublishDialog";
 
 export const Publish = ({ id }: { id: string }) => {
   const { t, i18n } = useTranslation("form-builder");
@@ -72,6 +73,12 @@ export const Publish = ({ id }: { id: string }) => {
 
   const supportHref = `/${i18n.language}/form-builder/${id}/support`;
 
+  const handlePrePublish = async () => {
+    setShowPrePublishDialog(true);
+    //todo.... check if cancel or not....
+    handlePublish();
+  };
+
   const handlePublish = async () => {
     setError(false);
     setErrorCode(null);
@@ -122,6 +129,8 @@ export const Publish = ({ id }: { id: string }) => {
       className="my-2 mr-2 inline-block w-9 align-middle"
     />
   );
+
+  const [showPrePublishDialog, setShowPrePublishDialog] = useState(false);
 
   return (
     <div>
@@ -202,7 +211,7 @@ export const Publish = ({ id }: { id: string }) => {
 
       {userCanPublish && isPublishable() && (
         <>
-          <Button className="mt-5" onClick={handlePublish}>
+          <Button className="mt-5" onClick={handlePrePublish}>
             {t("publish")}
           </Button>
           <div
@@ -214,6 +223,10 @@ export const Publish = ({ id }: { id: string }) => {
             <>{error && <p>{t("thereWasAnErrorPublishing")}</p>}</>
           </div>
         </>
+      )}
+
+      {showPrePublishDialog && (
+        <PrePublishDialog handleClose={() => setShowPrePublishDialog(false)} />
       )}
     </div>
   );

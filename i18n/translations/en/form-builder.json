@@ -479,6 +479,14 @@
     "emailOption": "Responses delivered by email — ",
     "change": "Change settings"
   },
+  "prePublishFormDialog": {
+    "title1": "Publish form",
+    "text1": "What is your reason for publishing?",
+    "readyForPublicUse": "Ready for public use",
+    "readyForInternalUse": "Ready for internal use",
+    "sharingForFeedback": "Sharing for feedback or approval",
+    "other": "Other"
+  },
   "question": "Question",
   "questions": "Questions",
   "questionSet": {
