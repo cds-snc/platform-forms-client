@@ -10599,6 +10599,7 @@ __metadata:
     typescript: "npm:^5.3.3"
     usehooks-ts: "npm:2.9.1"
     uuid: "npm:9.0.1"
+    valibot: "npm:^0.30.0"
     webpack: "npm:^5.89.0"
     yup: "npm:0.32.11"
     zustand: "npm:4.5.0"
@@ -17095,6 +17096,13 @@ __metadata:
     "@types/istanbul-lib-coverage": "npm:^2.0.1"
     convert-source-map: "npm:^2.0.0"
   checksum: 10c0/e691ba4dd0dea4a884e52c37dbda30cce6f9eeafe9b26721e449429c6bb0f4b6d1e33fabe7711d0f67f7a34c3bfd56c873f7375bba0b1534e6a2843ce99550e5
+  languageName: node
+  linkType: hard
+
+"valibot@npm:^0.30.0":
+  version: 0.30.0
+  resolution: "valibot@npm:0.30.0"
+  checksum: 10c0/9b343d3b9812d580a0e2452952e74570a3781fc76e6187cd90898b83249353b95a04d8d9193789ee1c86379b94ee76b45e045f26870384f036af6410ce2dfc0a
   languageName: node
   linkType: hard
 
