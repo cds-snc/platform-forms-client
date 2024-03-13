@@ -1,6 +1,6 @@
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
-import { Dialog, useDialogRef } from "@formBuilder/components/shared";
+import { Dialog, useDialogRef, Radio } from "@formBuilder/components/shared";
 import { useState } from "react";
 
 export const PrePublishDialog = ({
@@ -53,7 +53,32 @@ export const PrePublishDialog = ({
         >
           <div className="my-8 mx-5 flex flex-col gap-4">
             <p>{t("prePublishFormDialog.text1")}</p>
-            <p></p>
+            <p>
+              <Radio
+                id="public-use"
+                name="reason-for-publish"
+                value="public-use"
+                label={t("prePublishFormDialog.readyForPublicUse")}
+              />
+              <Radio
+                id="internal-use"
+                name="reason-for-publish"
+                value="internal-use"
+                label={t("prePublishFormDialog.readyForInternalUse")}
+              />
+              <Radio
+                id="feedback-use"
+                name="reason-for-publish"
+                value="feedback-use"
+                label={t("prePublishFormDialog.sharingForFeedback")}
+              />
+              <Radio
+                id="other-use"
+                name="reason-for-publish"
+                value="other-use"
+                label={t("prePublishFormDialog.other")}
+              />
+            </p>
           </div>
         </Dialog>
       )}
