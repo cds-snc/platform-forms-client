@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.12.10](https://github.com/cds-snc/platform-forms-client/compare/v3.12.9...v3.12.10) (2024-03-13)
+
+
+### Bug Fixes
+
+* Password reset is case sensitive for user emails ([#3324](https://github.com/cds-snc/platform-forms-client/issues/3324)) ([ba64788](https://github.com/cds-snc/platform-forms-client/commit/ba6478817daabf2bea4f657a92f36fa61df2ca44))
+
 ## [3.12.9](https://github.com/cds-snc/platform-forms-client/compare/v3.12.8...v3.12.9) (2024-03-12)
 
 
