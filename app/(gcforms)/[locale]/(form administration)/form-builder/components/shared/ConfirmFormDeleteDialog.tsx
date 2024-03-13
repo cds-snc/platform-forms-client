@@ -111,7 +111,7 @@ export const ConfirmFormDeleteDialog = ({
     </>
   );
 
-  const responsesLink = `/${i18n.language}/form-builder/responses/${formId}`;
+  const responsesLink = `/${i18n.language}/form-builder/${formId}/responses/new`;
 
   if (data && data.error === "unprocessed") {
     return (
