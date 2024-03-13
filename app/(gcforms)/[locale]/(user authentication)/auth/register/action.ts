@@ -89,7 +89,7 @@ const validate = async (
 };
 export const register = async (
   language: string,
-  previousState: ErrorStates,
+  _: ErrorStates,
   formData: FormData
 ): Promise<ErrorStates> => {
   const { COGNITO_REGION, COGNITO_APP_CLIENT_ID } = process.env;

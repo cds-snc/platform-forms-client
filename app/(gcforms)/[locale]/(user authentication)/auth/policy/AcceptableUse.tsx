@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useTranslation } from "@i18n/client";
-import { RichText } from "../forms/RichText/RichText";
+import { RichText } from "../../../../../../components/clientComponents/forms/RichText/RichText";
 import { logMessage } from "@lib/logger";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getCsrfToken } from "@lib/client/csrfToken";

@@ -21,13 +21,13 @@ import { Locked2fa } from "./Locked2fa";
 import { Expired2faSession } from "./Expired2faSession";
 
 interface VerifyProps {
-  username: React.MutableRefObject<string>;
-  authenticationFlowToken: React.MutableRefObject<string>;
+  username: string;
+  authenticationFlowToken: string;
 }
 
 export const Verify = ({ username, authenticationFlowToken }: VerifyProps): ReactElement => {
   const router = useRouter();
-  const { t, i18n } = useTranslation(["auth-verify", "cognito-errors", "common"]);
+  const { t, i18n } = useTranslation(["auth-verify",  "common"]);
   const [authErrorsState, { authErrorsReset, handleErrorById }] = useAuthErrors();
   const [isReVerify, setIsReverify] = useState(false);
   const [is2FAlocked, setIs2FAlocked] = useState(false);
@@ -41,9 +41,9 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
     setIs2FAlocked(false);
     try {
       const result = await signIn("cognito", {
-        username: username.current,
+        username: username,
         verificationCode: verificationCode,
-        authenticationFlowToken: authenticationFlowToken.current,
+        authenticationFlowToken: authenticationFlowToken,
         redirect: false,
         json: true,
       }).catch((err) => {

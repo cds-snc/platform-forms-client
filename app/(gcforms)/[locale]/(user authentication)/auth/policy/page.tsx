@@ -1,7 +1,7 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { AcceptableUseTerms } from "@clientComponents/auth/AcceptableUse";
+import { AcceptableUseTerms } from "app/(gcforms)/[locale]/(user authentication)/auth/policy/AcceptableUse";
 import { requireAuthentication } from "@lib/auth";
 
 export async function generateMetadata({

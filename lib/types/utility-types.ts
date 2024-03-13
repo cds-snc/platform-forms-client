@@ -43,3 +43,6 @@ export type HTMLTextInputTypeAttribute =
   | "search"
   | "tel"
   | "url";
+
+
+  export type SearchParams = { [key: string]: string | string[] | undefined };

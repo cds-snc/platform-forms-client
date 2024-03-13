@@ -1,10 +1,7 @@
 "use client";
 import React, { useRef } from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import { Alert } from "./Alert";
-import { ErrorListItem } from "./ErrorListItem";
-import { Label } from "./Label";
-import { TextInput } from "./TextInput";
+import { ErrorListItem, Label, TextInput, Alert } from "../../../../components/client/forms";
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
 import { register } from "../../action";

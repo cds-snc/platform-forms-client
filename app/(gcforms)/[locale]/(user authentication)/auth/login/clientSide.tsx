@@ -11,7 +11,7 @@ import * as Yup from "yup";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import { useLogin } from "@lib/hooks/auth";
 import { AuthErrorsState } from "@lib/hooks/auth/useAuthErrors";
-import { Verify } from "@clientComponents/auth/Verify";
+import { Verify } from "app/(gcforms)/[locale]/(user authentication)/auth/mfa/components/client/Verify";
 
 const LoginStep = ({
   username,
