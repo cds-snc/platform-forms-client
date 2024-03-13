@@ -18,13 +18,14 @@ export const TreeView = () => {
   const { t } = useTranslation("form-builder");
 
   const { groups, addGroup, setGroups, controllers } = useDynamicTree();
+  const [lastNodeAdded, setLastNodeAdded] = React.useState<string | null>(null);
 
   useEffect(() => {
     // If there are no groups create them
     if (groups.length < 1) {
       const startGroup = {
         id: uuid(),
-        name: "New Section",
+        name: "Default Section",
         readOnly: true,
         icon: null,
         children: [
@@ -40,7 +41,7 @@ export const TreeView = () => {
       };
       setGroups([startGroup]);
     }
-  }, [addGroup, setGroups, elements, groups]);
+  }, [setGroups, elements, groups]);
 
   return (
     <div className="relative mr-[1px]">
@@ -48,30 +49,38 @@ export const TreeView = () => {
         <Button
           theme="secondary"
           onClick={() => {
-            addGroup(uuid(), "New Section");
+            const id = uuid();
+            addGroup(id, "New Section");
+            setLastNodeAdded(id);
           }}
         >
           {t("rightPanel.treeView.addSection")}
         </Button>
       </div>
-      <Tree
-        data={[start, ...groups, end]}
-        {...controllers}
-        disableEdit={(data) => data.readOnly}
-        renderCursor={Cursor}
-        indent={40}
-        rowHeight={46}
-        width="100%"
-        disableDrop={({ parentNode }) => {
-          if (parentNode.data.id === "end") {
-            return true;
-          }
-          return false;
-        }}
-        disableDrag={(data) => data.readOnly}
-      >
-        {Node}
-      </Tree>
+      <div data-last-element={lastNodeAdded}>
+        <Tree
+          data={[start, ...groups, end]}
+          {...controllers}
+          onRename={(data) => {
+            controllers.onRename(data);
+            setLastNodeAdded(data.id);
+          }}
+          disableEdit={(data) => data.readOnly}
+          renderCursor={Cursor}
+          indent={40}
+          rowHeight={46}
+          width="100%"
+          disableDrop={({ parentNode }) => {
+            if (parentNode.data.id === "end") {
+              return true;
+            }
+            return false;
+          }}
+          disableDrag={(data) => data.readOnly}
+        >
+          {Node}
+        </Tree>
+      </div>
     </div>
   );
 };

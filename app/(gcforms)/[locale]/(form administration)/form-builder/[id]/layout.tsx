@@ -43,7 +43,7 @@ export default async function Layout({
       }
 
       if (initialForm.isPublished) {
-        redirect(`/${locale}/form-builder/settings/${formID}`);
+        redirect(`/${locale}/form-builder/${formID}/settings`);
       }
 
       FormbuilderParams.initialForm = initialForm;
