@@ -30,7 +30,7 @@ export const SupportForm = () => {
 
   return (
     <>
-      {state.validationErrors && Object.keys(state.validationErrors).length > 0 && (
+      {Object.keys(state.validationErrors).length > 0 && (
         <ValidationMessage
           type={ErrorStatus.ERROR}
           validation={true}

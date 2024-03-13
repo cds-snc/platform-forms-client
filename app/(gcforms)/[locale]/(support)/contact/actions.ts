@@ -1,32 +1,67 @@
 "use server";
+import { serverTranslation } from "@i18n";
 import { createTicket } from "@lib/integration/freshdesk";
 import { logMessage } from "@lib/logger";
+import { redirect } from "next/navigation";
+import { email, minLength, object, safeParse, string } from "valibot";
 
-export async function contact({
-  name,
-  email,
-  request,
-  description,
-  department,
-  branch,
-  jobTitle,
-  language = "en",
-}: {
-  name: string;
-  email: string;
-  request: string;
-  description: string;
-  department?: string;
-  branch?: string;
-  jobTitle?: string;
-  language?: string;
-}) {
-  // No auth etc. checking since this is a public endpoint
+export interface ErrorStates {
+  validationErrors: {
+    fieldKey: string;
+    fieldValue: string;
+  }[];
+}
 
-  //Mandatory fields
-  if (!name || !email || !request || !description) {
-    throw new Error("Malformed request");
+const validate = async (
+  language: string,
+  formEntries: {
+    [k: string]: FormDataEntryValue;
   }
+) => {
+  const { t } = await serverTranslation(["signup", "common"], { lang: language });
+
+  const SupportSchema = object({
+    // checkbox input can send a non-string value when empty
+    request: string(t("input-validation.required", { ns: "common" }), [
+      minLength(1, t("input-validation.required", { ns: "common" })),
+    ]),
+    description: string([minLength(1, t("input-validation.required", { ns: "common" }))]),
+    name: string([minLength(1, t("input-validation.required", { ns: "common" }))]),
+    email: string([
+      minLength(1, t("input-validation.required", { ns: "common" })),
+      email(t("input-validation.email", { ns: "common" })),
+    ]),
+    department: string([minLength(1, t("input-validation.required", { ns: "common" }))]),
+    // Note: branch and jobTitle are not required/validated
+  });
+
+  return safeParse(SupportSchema, formEntries);
+};
+
+export async function contact(
+  language: string,
+  _: ErrorStates,
+  formData: FormData
+): Promise<ErrorStates> {
+  const rawFormData = Object.fromEntries(formData.entries());
+  const result = await validate(language, rawFormData);
+
+  if (!result.success) {
+    return {
+      validationErrors: result.issues.map((issue) => ({
+        fieldKey: issue.path?.[0].key as string,
+        fieldValue: issue.message,
+      })),
+    };
+  }
+
+  const request = String(formData.get("request") || "");
+  const description = String(formData.get("description") || "");
+  const name = String(formData.get("name") || "");
+  const email = String(formData.get("email") || "");
+  const department = String(formData.get("department") || "");
+  const branch = String(formData.get("branch") || "");
+  const jobTitle = String(formData.get("jobTitle") || "");
 
   // Request may be a list of strings (checkbox), format it a bit if so, or just a string (radio)
   const requestParsed =
@@ -86,9 +121,11 @@ ${description}<br/>
     if (result?.status >= 400) {
       throw new Error(`Freshdesk error: ${JSON.stringify(result)} - ${email} - ${emailBody}`);
     }
-    return result;
   } catch (error) {
     logMessage.error(error);
     throw new Error("Internal Service Error: Failed to send request");
   }
+
+  // Success
+  redirect(`/${language}/contact?success`);
 }
