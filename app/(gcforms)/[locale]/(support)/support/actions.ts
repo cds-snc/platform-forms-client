@@ -1,4 +1,5 @@
 "use server";
+import { serverTranslation } from "@i18n";
 import { createTicket } from "@lib/integration/freshdesk";
 import { logMessage } from "@lib/logger";
 import { redirect } from "next/navigation";
@@ -11,30 +12,37 @@ export interface ErrorStates {
   }[];
 }
 
-// TODO translation strings
-const SupportSchema = object({
-  name: string("Name required", [minLength(1, "Name too short")]),
-  email: string("Email required", [
-    minLength(1, "Please enter your email."),
-    email("The email address is badly formatted."),
-  ]),
-  request: string("Complete the required field to continue.", [
-    minLength(1, "Complete the required field to continue."),
-  ]),
-  description: string("Description required", [minLength(1, "Please enter a description.")]),
-});
+const validate = async (
+  language: string,
+  formEntries: {
+    [k: string]: FormDataEntryValue;
+  }
+) => {
+  const { t } = await serverTranslation(["signup", "common"], { lang: language });
+
+  const SupportSchema = object({
+    name: string([minLength(1, t("input-validation.required", { ns: "common" }))]),
+    email: string([
+      minLength(1, t("input-validation.required", { ns: "common" })),
+      email(t("input-validation.email", { ns: "common" })),
+    ]),
+    request: string(t("input-validation.required", { ns: "common" }), [
+      // radio input can send a non-string value when empty
+      minLength(1, t("input-validation.required", { ns: "common" })),
+    ]),
+    description: string([minLength(1, t("input-validation.required", { ns: "common" }))]),
+  });
+
+  return safeParse(SupportSchema, formEntries);
+};
 
 export async function support(
   language: string,
   _: ErrorStates,
   formData: FormData
 ): Promise<ErrorStates> {
-  // Validate the form data and throw an error if it's invalid - values used in the email body also
-  const name = String(formData.get("name") || "");
-  const email = String(formData.get("email") || "");
-  const request = String(formData.get("request") || "");
-  const description = String(formData.get("description") || "");
-  const result = safeParse(SupportSchema, { name, email, request, description });
+  const rawFormData = Object.fromEntries(formData.entries());
+  const result = await validate(language, rawFormData);
 
   if (!result.success) {
     return {
@@ -44,6 +52,11 @@ export async function support(
       })),
     };
   }
+
+  const name = String(formData.get("name") || "");
+  const email = String(formData.get("email") || "");
+  const request = String(formData.get("request") || "");
+  const description = String(formData.get("description") || "");
 
   // Request may be a list of strings (checkbox), format it a bit if so, or just a string (radio)
   const requestParsed =
@@ -75,6 +88,7 @@ ${description}<br/>
 `;
 
   try {
+    // TODO: -uncomment when ready to test!-
     const result = await createTicket({
       type: "problem",
       name,
@@ -85,9 +99,11 @@ ${description}<br/>
     if (result?.status >= 400) {
       throw new Error(`Freshdesk error: ${JSON.stringify(result)} - ${email} - ${emailBody}`);
     }
-    redirect(`/${language}/support?success`);
   } catch (error) {
     logMessage.error(error);
     throw new Error("Internal Service Error: Failed to send request");
   }
+
+  // Success
+  redirect(`/${language}/support?success`);
 }

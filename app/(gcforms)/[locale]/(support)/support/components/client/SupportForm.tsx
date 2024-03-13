@@ -29,14 +29,6 @@ export const SupportForm = () => {
 
   return (
     <>
-      {/* 
-          TODO: probably remove - replaced by error boundary error
-          {errorMessage && (
-          <ErrorPanel supportLink={false}>{t("server-error", { ns: "common" })}</ErrorPanel>
-      )} */}
-
-      {/* {`DEBUG=>${JSON.stringify(errors)}`} */}
-
       {state.validationErrors && Object.keys(state.validationErrors).length > 0 && (
         <ValidationMessage
           type={ErrorStatus.ERROR}
