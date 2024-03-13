@@ -14,8 +14,9 @@ import { FormItem } from "../types";
 let nextId = 0;
 
 export function useDynamicTree<T extends FormItem>() {
-  const { groups, setGroups } = useGroupStore((s) => ({
-    groups: s.groups,
+  const { groups, addGroup, setGroups } = useGroupStore((s) => ({
+    groups: s.getGroups(),
+    addGroup: s.addGroup,
     setGroups: s.setGroups,
   }));
 
@@ -29,6 +30,7 @@ export function useDynamicTree<T extends FormItem>() {
     for (const id of args.dragIds) {
       tree.move({ id, parentId: args.parentId, index: args.index });
     }
+
     setGroups(tree.data);
   };
 
@@ -52,5 +54,5 @@ export function useDynamicTree<T extends FormItem>() {
 
   const controllers = { onMove, onRename, onCreate, onDelete };
 
-  return { groups, setGroups, controllers } as const;
+  return { groups, addGroup, setGroups, controllers } as const;
 }

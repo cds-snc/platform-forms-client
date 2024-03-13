@@ -12,12 +12,15 @@ import {
   setTitle,
   setDescription,
 } from "@lib/utils/form-builder/itemHelper";
+import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store";
 
 export const useHandleAdd = () => {
   const { add, addSubItem } = useTemplateStore((s) => ({
     add: s.add,
     addSubItem: s.addSubItem,
   }));
+
+  const groupId = useGroupStore((state) => state.id);
 
   const { t } = useTranslation("form-builder");
 
@@ -45,15 +48,15 @@ export const useHandleAdd = () => {
     (index: number, type?: FormElementTypes) => {
       if (allowedTemplates.includes(type as LoaderType)) {
         blockLoader(type as LoaderType, index, (data, position) => {
-          add(position, data.type, data);
+          add(position, data.type, data, groupId);
         });
         return;
       }
 
       const item = create(type as FormElementTypes);
-      add(index, item.type, item);
+      add(index, item.type, item, groupId);
     },
-    [add, create]
+    [add, create, groupId]
   );
 
   const handleAddSubElement = useCallback(
