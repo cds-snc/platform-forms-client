@@ -132,7 +132,9 @@ export const Node = ({ node, style, dragHandle }: NodeRendererProps<TreeItem>) =
           if (!node.isEditing) node.toggle();
         }, 200); // Delay of 200ms to allow for double click to be detected
 
-        setId(node.data.id);
+        const focusNode = node.isLeaf ? node.parent?.id : node.id;
+
+        focusNode && setId(focusNode);
       }}
       onDoubleClick={() => {
         if (node.data.readOnly) {
