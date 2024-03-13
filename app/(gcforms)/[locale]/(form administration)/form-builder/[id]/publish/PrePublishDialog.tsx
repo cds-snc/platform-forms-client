@@ -33,7 +33,7 @@ export const PrePublishDialog = ({
       <Button
         theme="secondary"
         onClick={() => {
-          dialog.current?.close();
+          handleClose();
         }}
       >
         {t("cancel")}
@@ -53,7 +53,7 @@ export const PrePublishDialog = ({
         >
           <div className="my-8 mx-5 flex flex-col gap-4">
             <p>{t("prePublishFormDialog.text1")}</p>
-            <p>
+            <span>
               <Radio
                 id="public-use"
                 name="reason-for-publish"
@@ -78,7 +78,7 @@ export const PrePublishDialog = ({
                 value="other-use"
                 label={t("prePublishFormDialog.other")}
               />
-            </p>
+            </span>
           </div>
         </Dialog>
       )}
