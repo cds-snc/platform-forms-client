@@ -11,6 +11,7 @@ import { start, end } from "./data";
 import { v4 as uuid } from "uuid";
 import { TreeApi } from "react-arborist";
 import { TreeItem } from "./types";
+import { useGroupStore } from "./store";
 
 export const TreeView = () => {
   const { elements } = useTemplateStore((s) => ({
@@ -23,6 +24,7 @@ export const TreeView = () => {
 
   const { groups, addGroup, setGroups, controllers } = useDynamicTree();
   const [lastNodeAdded, setLastNodeAdded] = React.useState<string | null>(null);
+  const setId = useGroupStore((s) => s.setId);
 
   useEffect(() => {
     // If there are no groups create them
@@ -58,10 +60,13 @@ export const TreeView = () => {
             setLastNodeAdded(id);
             if (!treeRef.current) return;
 
-            // const tree = treeRef.current;
+            const tree = treeRef.current;
 
-            // lastNodeAdded && tree
-            //treeRef.current.focus(id);
+            // Set focus on the newly added node
+            tree.setSelection({ ids: [id], anchor: id, mostRecent: id });
+
+            // Set the current group id
+            setId(id);
           }}
         >
           {t("rightPanel.treeView.addSection")}
