@@ -36,5 +36,5 @@ export default async function Page({
     redirect(`/${locale}/forms`, RedirectType.replace);
   }
 
-  return <>{success === undefined ? <UnlockPublishingForm email={email} /> : <Success />}</>;
+  return <>{success === undefined ? <UnlockPublishingForm userEmail={email} /> : <Success />}</>;
 }
