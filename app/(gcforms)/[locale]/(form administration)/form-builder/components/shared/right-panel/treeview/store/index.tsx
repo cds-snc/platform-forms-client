@@ -7,8 +7,6 @@ import React, { createContext, useRef, useContext } from "react";
 import { TemplateStoreContext } from "@lib/store/index";
 import { TemplateStore } from "@lib/store/useTemplateStore";
 
-// import { GroupsType } from "@lib/formContext";
-
 export interface GroupStoreProps {
   id: string;
   groups: FormItem[];
@@ -81,6 +79,7 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
             items.push(item);
           }
         }
+
         return items;
       },
       addGroup: (id: string, name: string) => {
@@ -105,16 +104,12 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
               })
               .filter((el) => el !== undefined) as string[]) || [];
 
-          groups[group.id] = { name: group.name, elements };
+          groups[group.id] = { name: group.name, elements: [...new Set(elements)] };
         });
 
         if (!groups) return;
 
         get().setTemplateState((s) => {
-          if (!s.form.groups) {
-            s.form.groups = {};
-          }
-
           s.form.groups = { ...groups };
         });
       },
