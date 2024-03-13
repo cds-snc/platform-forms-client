@@ -71,7 +71,7 @@ export const Publish = ({ id }: { id: string }) => {
     );
   };
 
-  const supportHref = `/${i18n.language}/form-builder/${id}/support`;
+  const supportHref = `/${i18n.language}/support`;
 
   const handleOpenPrePublish = async () => {
     setShowPrePublishDialog(true);

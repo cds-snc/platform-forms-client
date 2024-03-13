@@ -151,7 +151,7 @@ export const Card = (props: CardProps): React.ReactElement => {
     },
     {
       title: t("card.menu.settings"),
-      url: `/${i18n.language}/form-builder/settings/${id}`,
+      url: `/${i18n.language}/form-builder/${id}/settings`,
     },
     {
       title: t("card.menu.delete"),
