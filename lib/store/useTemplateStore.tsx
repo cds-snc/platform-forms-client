@@ -298,7 +298,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
 
                 if (groupId) {
                   if (!state.form.groups) state.form.groups = {};
-                  if (!state.form.groups[groupId]) state.form.groups[groupId] = { elements: [] };
+                  if (!state.form.groups[groupId])
+                    state.form.groups[groupId] = { name: "", elements: [] };
                   state.form.groups &&
                     state.form.groups[groupId].elements.splice(elIndex + 1, 0, String(id));
                 }
