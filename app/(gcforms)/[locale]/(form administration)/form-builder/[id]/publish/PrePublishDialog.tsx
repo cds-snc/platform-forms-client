@@ -45,7 +45,7 @@ export const PrePublishDialog = ({
     <div className="form-builder">
       {prePublishStep == 0 && (
         <Dialog
-          title={t("prePublishFormDialog.title1")}
+          title={t("prePublishFormDialog.title")}
           dialogRef={dialog}
           actions={actions}
           className="max-h-[80%] overflow-y-scroll"
@@ -59,14 +59,14 @@ export const PrePublishDialog = ({
       )}
       {prePublishStep == 1 && (
         <Dialog
-          title={t("prePublishFormDialog.title2")}
+          title={t("prePublishFormDialog.title")}
           dialogRef={dialog}
           actions={actions}
           className="max-h-[80%] overflow-y-scroll"
           handleClose={handleClose}
         >
           <div className="my-8 mx-5 flex flex-col gap-4">
-            <p>{t("prePublishFormDialog.meow")}</p>
+            <p>{t("prePublishFormDialog.text2")}</p>
             <p></p>
           </div>
         </Dialog>
