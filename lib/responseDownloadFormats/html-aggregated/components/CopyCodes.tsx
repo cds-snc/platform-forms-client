@@ -35,7 +35,7 @@ export const CopyCodes = ({
       </div>
       <div>
         <a
-          href={`${HOST}/form-builder/responses/${formId}/downloaded`}
+          href={`${HOST}/form-builder/${formId}/responses/downloaded`}
           className="ml-4 block h-16 rounded-lg border border-black bg-white px-6 py-4 text-black shadow hover:bg-gray-400"
         >
           {t("responseAggregatedTemplate.goToGcForms", { lng: lang })}

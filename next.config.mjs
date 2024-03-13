@@ -32,7 +32,7 @@ const nextConfig = {
   poweredByHeader: false,
   compiler: {
     // Remove all console.* calls
-    removeConsole: false,
+    removeConsole: true,
   },
   output: isOutputStandalone ? "standalone" : undefined,
   webpack: (config) => {
@@ -58,23 +58,18 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: "/en/form-builder/support",
-        destination: "/en/support",
+        source: "/:locale/form-builder/support",
+        destination: "/:locale/support",
         permanent: true,
       },
       {
-        source: "/fr/form-builder/support",
-        destination: "/fr/support",
+        source: "/:locale/form-builder/support/contactus",
+        destination: "/:locale/contact",
         permanent: true,
       },
       {
-        source: "/en/form-builder/support/contactus",
-        destination: "/en/contact",
-        permanent: true,
-      },
-      {
-        source: "/fr/form-builder/support/contactus",
-        destination: "/fr/contact",
+        source: "/:locale/form-builder/:id/responses",
+        destination: "/:locale/form-builder/:id/responses/new",
         permanent: true,
       },
     ];

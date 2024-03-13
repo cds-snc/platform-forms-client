@@ -10,7 +10,7 @@ export const ClosedBanner = ({ id }: { id: string | undefined }) => {
     t,
     i18n: { language },
   } = useTranslation("form-closed");
-  const href = `/${language}/form-builder/settings/${id}/form`;
+  const href = `/${language}/form-builder/${id}/settings/manage`;
 
   if (!isPastClosingDate || !id) {
     return null;
