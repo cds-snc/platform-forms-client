@@ -3,7 +3,13 @@ import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared";
 import { useState } from "react";
 
-export const PrePublishDialog = ({ handleClose }: { handleClose: () => void }) => {
+export const PrePublishDialog = ({
+  handleClose,
+  handleConfirm,
+}: {
+  handleClose: () => void;
+  handleConfirm: () => void;
+}) => {
   const { t } = useTranslation("form-builder");
   const dialog = useDialogRef();
 
@@ -14,7 +20,11 @@ export const PrePublishDialog = ({ handleClose }: { handleClose: () => void }) =
       <Button
         theme="primary"
         onClick={async () => {
-          setPrePublishStep(1);
+          if (prePublishStep == 0) {
+            setPrePublishStep(1);
+          } else {
+            handleConfirm();
+          }
         }}
       >
         {t("continue")}

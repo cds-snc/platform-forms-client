@@ -73,9 +73,16 @@ export const Publish = ({ id }: { id: string }) => {
 
   const supportHref = `/${i18n.language}/form-builder/${id}/support`;
 
-  const handlePrePublish = async () => {
+  const handleOpenPrePublish = async () => {
     setShowPrePublishDialog(true);
-    //todo.... check if cancel or not....
+  };
+
+  const handlePrePublishClose = async () => {
+    setShowPrePublishDialog(false);
+  };
+
+  const handlePrePublish = async () => {
+    setShowPrePublishDialog(false);
     handlePublish();
   };
 
@@ -211,7 +218,7 @@ export const Publish = ({ id }: { id: string }) => {
 
       {userCanPublish && isPublishable() && (
         <>
-          <Button className="mt-5" onClick={handlePrePublish}>
+          <Button className="mt-5" onClick={handleOpenPrePublish}>
             {t("publish")}
           </Button>
           <div
@@ -226,7 +233,10 @@ export const Publish = ({ id }: { id: string }) => {
       )}
 
       {showPrePublishDialog && (
-        <PrePublishDialog handleClose={() => setShowPrePublishDialog(false)} />
+        <PrePublishDialog
+          handleClose={() => handlePrePublishClose()}
+          handleConfirm={() => handlePrePublish()}
+        />
       )}
     </div>
   );
