@@ -20,7 +20,7 @@ export const verify = async (
   _: ErrorStates,
   formData: FormData
 ): Promise<ErrorStates> => {
-  // const rawFormData = Object.fromEntries(formData.entries());
+  const rawFormData = Object.fromEntries(formData.entries());
 
   return {
     validationErrors: [],
