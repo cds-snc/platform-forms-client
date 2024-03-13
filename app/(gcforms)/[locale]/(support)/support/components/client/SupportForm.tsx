@@ -8,19 +8,20 @@ import {
   ErrorListItem,
   Description,
 } from "@clientComponents/forms";
-import { Button } from "@clientComponents/globals";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import Link from "next/link";
 import { Alert } from "@clientComponents/globals";
 import { TextInput } from "../../../components/client/TextInput";
 import { MultipleChoiceGroup } from "../../../components/client/MultipleChoiceGroup";
 import { TextArea } from "../../../components/client/TextArea";
+import { SubmitButton } from "../../../components/client/SubmitButton";
 
 export const SupportForm = () => {
   const {
     t,
     i18n: { language },
   } = useTranslation(["form-builder", "common"]);
+
   const [state, formAction] = useFormState(support.bind(null, language), { validationErrors: [] });
 
   const getError = (fieldKey: string) => {
@@ -40,7 +41,11 @@ export const SupportForm = () => {
           <ol className="gc-ordered-list">
             {Object.entries(state.validationErrors).map(([, { fieldKey, fieldValue }]) => {
               return (
-                <ErrorListItem key={`error-${fieldKey}`} errorKey={fieldKey} value={fieldValue} />
+                <ErrorListItem
+                  key={`error-${fieldKey}-${fieldValue}`}
+                  errorKey={fieldKey}
+                  value={fieldValue}
+                />
               );
             })}
           </ol>
@@ -136,9 +141,7 @@ export const SupportForm = () => {
             error={getError("description")}
           />
         </div>
-        <Button type="submit" theme="primary">
-          {t("submitButton", { ns: "common" })}
-        </Button>
+        <SubmitButton>{t("submitButton", { ns: "common" })}</SubmitButton>
       </form>
     </>
   );

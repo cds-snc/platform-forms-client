@@ -9,6 +9,7 @@ export const themes = {
     "border-red-destructive bg-red-destructive text-white-default hover:border-red-hover hover:bg-red-hover",
   link: "!border-none bg-transparent !p-0 text-blue-default underline hover:no-underline focus:!text-white-default",
   icon: "ml-1.5 max-h-9 !rounded-full !border-none bg-gray-selected !p-1.5 hover:bg-gray-600",
+  disabled: "cursor-not-allowed border-none bg-[#e2e8ef] text-[#748094]",
 } as const;
 
 export type Theme = keyof typeof themes;

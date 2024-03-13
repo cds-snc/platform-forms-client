@@ -26,8 +26,8 @@ const validate = async (
       minLength(1, t("input-validation.required", { ns: "common" })),
       email(t("input-validation.email", { ns: "common" })),
     ]),
+    // radio input can send a non-string value when empty
     request: string(t("input-validation.required", { ns: "common" }), [
-      // radio input can send a non-string value when empty
       minLength(1, t("input-validation.required", { ns: "common" })),
     ]),
     description: string([minLength(1, t("input-validation.required", { ns: "common" }))]),
@@ -88,7 +88,6 @@ ${description}<br/>
 `;
 
   try {
-    // TODO: -uncomment when ready to test!-
     const result = await createTicket({
       type: "problem",
       name,
