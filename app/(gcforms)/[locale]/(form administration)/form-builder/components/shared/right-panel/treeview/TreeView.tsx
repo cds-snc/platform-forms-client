@@ -18,13 +18,14 @@ export const TreeView = () => {
   const { t } = useTranslation("form-builder");
 
   const { groups, addGroup, setGroups, controllers } = useDynamicTree();
+  const [lastNodeAdded, setLastNodeAdded] = React.useState<string | null>(null);
 
   useEffect(() => {
     // If there are no groups create them
     if (groups.length < 1) {
       const startGroup = {
         id: uuid(),
-        name: "New Section",
+        name: "Default Section",
         readOnly: true,
         icon: null,
         children: [
@@ -40,7 +41,7 @@ export const TreeView = () => {
       };
       setGroups([startGroup]);
     }
-  }, [addGroup, setGroups, elements, groups]);
+  }, [setGroups, elements, groups]);
 
   return (
     <div className="relative mr-[1px]">
@@ -48,7 +49,9 @@ export const TreeView = () => {
         <Button
           theme="secondary"
           onClick={() => {
-            addGroup(uuid(), "New Section");
+            const id = uuid();
+            addGroup(id, "New Section");
+            setLastNodeAdded(id);
           }}
         >
           {t("rightPanel.treeView.addSection")}
@@ -56,6 +59,7 @@ export const TreeView = () => {
       </div>
       <Tree
         data={[start, ...groups, end]}
+        data-last-element={lastNodeAdded} // this will force a re-render of the tree
         {...controllers}
         disableEdit={(data) => data.readOnly}
         renderCursor={Cursor}
