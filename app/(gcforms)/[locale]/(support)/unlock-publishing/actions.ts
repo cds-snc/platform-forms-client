@@ -101,7 +101,7 @@ export async function publishing(
     });
     if (result?.status >= 400) {
       throw new Error(
-        `Freshdesk error: ${JSON.stringify(result)} - ${session.user.email} - ${description}`
+        `Freshdesk error: ${JSON.stringify(result)} - ${session.user.email} - ${emailBody}`
       );
     }
   } catch (error) {
