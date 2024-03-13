@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Tree } from "react-arborist";
 import { useTranslation } from "react-i18next";
 
@@ -9,11 +9,15 @@ import { Cursor } from "./Cursor";
 import { Button } from "@clientComponents/globals";
 import { start, end } from "./data";
 import { v4 as uuid } from "uuid";
+import { TreeApi } from "react-arborist";
+import { TreeItem } from "./types";
 
 export const TreeView = () => {
   const { elements } = useTemplateStore((s) => ({
     elements: s.form.elements,
   }));
+
+  const treeRef = useRef<TreeApi<TreeItem>>();
 
   const { t } = useTranslation("form-builder");
 
@@ -52,6 +56,12 @@ export const TreeView = () => {
             const id = uuid();
             addGroup(id, "New Section");
             setLastNodeAdded(id);
+            if (!treeRef.current) return;
+
+            // const tree = treeRef.current;
+
+            // lastNodeAdded && tree
+            //treeRef.current.focus(id);
           }}
         >
           {t("rightPanel.treeView.addSection")}
@@ -59,6 +69,7 @@ export const TreeView = () => {
       </div>
       <div data-last-element={lastNodeAdded}>
         <Tree
+          ref={treeRef}
           data={[start, ...groups, end]}
           {...controllers}
           onRename={(data) => {

@@ -6,24 +6,25 @@ import { shallow } from "zustand/shallow";
 import React, { createContext, useRef, useContext } from "react";
 import { TemplateStoreContext } from "@lib/store/index";
 import { TemplateStore } from "@lib/store/useTemplateStore";
+import { groupsToTreeData } from "../util/groupsToTreeData";
+import { treeDataToGroups } from "../util/treeDataToGroups";
 
 export interface GroupStoreProps {
   id: string;
-  groups: FormItem[];
+  groups: TreeItem[];
   getTemplateState: TemplateStore["getState"];
   setTemplateState: TemplateStore["setState"];
 }
 
-import { FormItem } from "../types";
+import { TreeItem } from "../types";
 import { FormElement } from "@lib/types";
-import { GroupsType } from "@lib/formContext";
 
 export interface GroupStoreState extends GroupStoreProps {
   getId: () => string;
   setId: (id: string) => void;
   addGroup: (id: string, name: string) => void;
-  getGroups: () => FormItem[] | [];
-  setGroups: (data: FormItem[]) => void;
+  getGroups: () => TreeItem[] | [];
+  setGroups: (data: TreeItem[]) => void;
   getElement: (id: number) => FormElement | undefined;
 }
 
@@ -49,38 +50,8 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
       },
       getGroups: () => {
         const formGroups = get().getTemplateState().form.groups;
-        const items = [];
-        if (formGroups) {
-          for (const [key, value] of Object.entries(formGroups)) {
-            const children =
-              value.elements &&
-              value.elements.map((id) => {
-                const element = get().getElement(Number(id));
-                if (element) {
-                  return {
-                    id: String(element.id),
-                    name: "",
-                    icon: null,
-                    readOnly: false,
-                  };
-                }
-              });
-
-            if (!children) continue;
-
-            const item = {
-              id: key,
-              name: formGroups[key].name,
-              icon: null,
-              readOnly: false,
-              children: children.filter((el) => el !== undefined) as FormItem[],
-            };
-
-            items.push(item);
-          }
-        }
-
-        return items;
+        if (!formGroups) return [];
+        return groupsToTreeData(formGroups);
       },
       addGroup: (id: string, name: string) => {
         get().setTemplateState((s) => {
@@ -91,24 +62,9 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
         });
       },
 
-      setGroups: (treeData: FormItem[]) => {
-        const groups: GroupsType = {};
-        treeData.forEach((group) => {
-          const elements =
-            (group.children
-              ?.map((el) => {
-                const element = get().getElement(Number(el.id));
-                if (element) {
-                  return String(element.id);
-                }
-              })
-              .filter((el) => el !== undefined) as string[]) || [];
-
-          groups[group.id] = { name: group.name, elements: [...new Set(elements)] };
-        });
-
+      setGroups: (treeData: TreeItem[]) => {
+        const groups = treeDataToGroups(treeData);
         if (!groups) return;
-
         get().setTemplateState((s) => {
           s.form.groups = { ...groups };
         });
