@@ -2,10 +2,18 @@ import { AddElementButton } from "./elements/element-dialog/AddElementButton";
 import { useHandleAdd } from "@lib/hooks/form-builder";
 import { useTranslation } from "@i18n/client";
 import { FormElementTypes } from "@lib/types";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 export const NewSection = ({ groupId }: { groupId: string }) => {
   const { t } = useTranslation("form-builder");
+
+  const { groups } = useTemplateStore((s) => ({
+    groups: s.form.groups,
+  }));
+
   const { handleAddElement } = useHandleAdd();
+
+  const groupName = groups?.[groupId]?.name;
 
   if (groupId === "start" || groupId === "end") {
     return null;
@@ -22,7 +30,7 @@ export const NewSection = ({ groupId }: { groupId: string }) => {
         />
       </div>
       <div className="flex max-w-[800px] justify-center rounded-t-lg border-1 border-slate-700 p-2">
-        <h4>{groupId}</h4>
+        <h4>{groupName}</h4>
       </div>
     </>
   );
