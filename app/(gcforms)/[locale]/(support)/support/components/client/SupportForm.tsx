@@ -1,5 +1,7 @@
 "use client";
 import { useTranslation } from "@i18n/client";
+import { useFormState } from "react-dom";
+import { support } from "../../actions";
 import {
   Label,
   Alert as ValidationMessage,
@@ -8,39 +10,22 @@ import {
 } from "@clientComponents/forms";
 import { Button } from "@clientComponents/globals";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
-import { useState } from "react";
-import { support } from "../../actions";
 import Link from "next/link";
 import { Alert } from "@clientComponents/globals";
 import { TextInput } from "../../../components/client/TextInput";
-import { useFormState } from "react-dom";
 import { MultipleChoiceGroup } from "../../../components/client/MultipleChoiceGroup";
 import { TextArea } from "../../../components/client/TextArea";
-
-const initialState = {
-  name: "",
-  email: "",
-  request: "",
-  description: "",
-};
 
 export const SupportForm = () => {
   const {
     t,
     i18n: { language },
   } = useTranslation(["form-builder", "common"]);
-  const [errors, setErrors] = useState({});
+  const [state, formAction] = useFormState(support.bind(null, language), { validationErrors: [] });
 
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  const handleSubmit = async (prevState: any, formData: FormData) => {
-    const result = await support({ formData, language });
-    if (result?.errors) {
-      setErrors(result?.errors);
-    }
-    return prevState;
+  const getError = (fieldKey: string) => {
+    return state.validationErrors.find((e) => e.fieldKey === fieldKey)?.fieldValue || "";
   };
-
-  const [formAction] = useFormState(handleSubmit, initialState);
 
   return (
     <>
@@ -52,7 +37,7 @@ export const SupportForm = () => {
 
       {/* {`DEBUG=>${JSON.stringify(errors)}`} */}
 
-      {errors && Object.keys(errors).length > 0 && (
+      {state.validationErrors && Object.keys(state.validationErrors).length > 0 && (
         <ValidationMessage
           type={ErrorStatus.ERROR}
           validation={true}
@@ -61,7 +46,7 @@ export const SupportForm = () => {
           heading={t("input-validation.heading", { ns: "common" })}
         >
           <ol className="gc-ordered-list">
-            {Object.entries(errors).map(([fieldKey, fieldValue]) => {
+            {Object.entries(state.validationErrors).map(([, { fieldKey, fieldValue }]) => {
               return (
                 <ErrorListItem key={`error-${fieldKey}`} errorKey={fieldKey} value={fieldValue} />
               );
@@ -85,7 +70,7 @@ export const SupportForm = () => {
           <Link href={`/${language}/contact`}>{t("support.contactUs")}</Link>.
         </p>
       </Alert.Warning>
-      <form id="support" action={formAction}>
+      <form id="support" action={formAction} noValidate>
         <div className="focus-group mt-14">
           <Label id={"label-name"} htmlFor={"name"} className="required" required>
             {t("support.name")}
@@ -95,7 +80,7 @@ export const SupportForm = () => {
             id={"name"}
             name={"name"}
             className="required w-[34rem]"
-            error={errors?.name}
+            error={getError("name")}
           />
         </div>
         <div className="focus-group">
@@ -107,7 +92,7 @@ export const SupportForm = () => {
             id="email"
             name="email"
             className="required w-[34rem]"
-            error={errors?.email}
+            error={getError("email")}
           />
         </div>
         <fieldset className="focus-group">
@@ -142,7 +127,7 @@ export const SupportForm = () => {
                 label: t("support.request.option4"),
               },
             ]}
-            error={errors?.request}
+            error={getError("request")}
           />
         </fieldset>
         <div className="focus-group">
@@ -156,7 +141,7 @@ export const SupportForm = () => {
             id="description"
             name="description"
             className="required w-[34rem] mt-4"
-            error={errors?.description}
+            error={getError("description")}
           />
         </div>
         <Button type="submit" theme="primary">
