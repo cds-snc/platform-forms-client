@@ -56,7 +56,6 @@ export const TreeView = () => {
             const id = uuid();
             addGroup(id, "New Section");
             setLastNodeAdded(id);
-
             if (!treeRef.current) return;
 
             // const tree = treeRef.current;

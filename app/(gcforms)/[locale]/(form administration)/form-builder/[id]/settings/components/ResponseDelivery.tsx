@@ -207,7 +207,7 @@ export const ResponseDelivery = () => {
     setDeliveryOption(value as DeliveryOption);
   }, []);
 
-  const responsesLink = `/${i18n.language}/form-builder/responses/${id}`;
+  const responsesLink = `/${i18n.language}/form-builder/${id}/responses`;
 
   const handleUpdateClassification = useCallback((value: ClassificationType) => {
     if (value === "Protected B") {
