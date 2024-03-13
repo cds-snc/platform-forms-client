@@ -6,6 +6,14 @@ export const start = {
   name: "Start",
   icon: null,
   readOnly: true,
+  children: [
+    {
+      id: "introduction",
+      name: "Introduction",
+      icon: null,
+      readOnly: true,
+    },
+  ],
 };
 
 export const createItem = (name: string): FormItem => {
@@ -14,7 +22,7 @@ export const createItem = (name: string): FormItem => {
     name,
     icon: null,
     readOnly: false,
-    children: [{ id: uuid(), name: "", icon: null, readOnly: false }],
+    children: [{ id: uuid(), name: "New Section!!", icon: null, readOnly: false }],
   };
 };
 

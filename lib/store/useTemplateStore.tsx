@@ -186,11 +186,12 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
   };
 
   // Ensure any required properties by Form Builder are defaulted by defaultForm
-  if (initProps?.form)
+  if (initProps?.form) {
     initProps.form = {
       ...defaultForm,
       ...initProps?.form,
     };
+  }
 
   return createStore<TemplateStoreState>()(
     immer(

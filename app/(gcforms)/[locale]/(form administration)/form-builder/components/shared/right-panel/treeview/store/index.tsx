@@ -18,12 +18,14 @@ export interface GroupStoreProps {
 
 import { FormItem } from "../types";
 import { FormElement } from "@lib/types";
+import { GroupsType } from "@lib/formContext";
 
 export interface GroupStoreState extends GroupStoreProps {
   getId: () => string;
   setId: (id: string) => void;
-  addGroup: (id: string) => void;
+  addGroup: (id: string, name: string) => void;
   getGroups: () => FormItem[] | [];
+  setGroups: (data: FormItem[]) => void;
   getElement: (id: number) => FormElement | undefined;
 }
 
@@ -70,7 +72,7 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
 
             const item = {
               id: key,
-              name: "8",
+              name: formGroups[key].name,
               icon: null,
               readOnly: false,
               children: children.filter((el) => el !== undefined) as FormItem[],
@@ -81,12 +83,39 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
         }
         return items;
       },
-      addGroup: (id: string) => {
+      addGroup: (id: string, name: string) => {
         get().setTemplateState((s) => {
           if (!s.form.groups) {
             s.form.groups = {};
           }
-          s.form.groups[id] = { elements: [] };
+          s.form.groups[id] = { name, elements: [] };
+        });
+      },
+
+      setGroups: (treeData: FormItem[]) => {
+        const groups: GroupsType = {};
+        treeData.forEach((group) => {
+          const elements =
+            (group.children
+              ?.map((el) => {
+                const element = get().getElement(Number(el.id));
+                if (element) {
+                  return String(element.id);
+                }
+              })
+              .filter((el) => el !== undefined) as string[]) || [];
+
+          groups[group.id] = { name: group.name, elements };
+        });
+
+        if (!groups) return;
+
+        get().setTemplateState((s) => {
+          if (!s.form.groups) {
+            s.form.groups = {};
+          }
+
+          s.form.groups = { ...groups };
         });
       },
     }))

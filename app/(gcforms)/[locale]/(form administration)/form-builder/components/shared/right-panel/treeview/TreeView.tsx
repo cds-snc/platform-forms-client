@@ -7,8 +7,7 @@ import { Node } from "./Node";
 import { useDynamicTree } from "./hooks/useDynamicTree";
 import { Cursor } from "./Cursor";
 import { Button } from "@clientComponents/globals";
-import { end } from "./data";
-import { FormItem } from "./types";
+import { start, end } from "./data";
 import { v4 as uuid } from "uuid";
 
 export const TreeView = () => {
@@ -18,37 +17,30 @@ export const TreeView = () => {
 
   const { t } = useTranslation("form-builder");
 
-  const { groups, addGroup, controllers } = useDynamicTree();
-
-  let startGroup = {} as FormItem;
-  if (groups.length < 1) {
-    startGroup = {
-      id: "start",
-      name: "Start",
-      icon: null,
-      readOnly: true,
-      children: [
-        {
-          id: "introduction",
-          name: "Introduction",
-          icon: null,
-          readOnly: true,
-        },
-        ...elements.map((element) => {
-          return {
-            id: String(element.id),
-            name: "",
-            icon: null,
-            readOnly: false,
-          };
-        }),
-      ],
-    };
-  }
+  const { groups, addGroup, setGroups, controllers } = useDynamicTree();
 
   useEffect(() => {
-    //
-  }, [addGroup, groups.length]);
+    // If there are no groups create them
+    if (groups.length < 1) {
+      const startGroup = {
+        id: uuid(),
+        name: "New Section",
+        readOnly: true,
+        icon: null,
+        children: [
+          ...elements.map((element) => {
+            return {
+              id: String(element.id),
+              name: "default",
+              icon: null,
+              readOnly: false,
+            };
+          }),
+        ],
+      };
+      setGroups([startGroup]);
+    }
+  }, [addGroup, setGroups, elements, groups]);
 
   return (
     <div className="relative mr-[1px]">
@@ -56,14 +48,14 @@ export const TreeView = () => {
         <Button
           theme="secondary"
           onClick={() => {
-            addGroup(uuid());
+            addGroup(uuid(), "New Section");
           }}
         >
           {t("rightPanel.treeView.addSection")}
         </Button>
       </div>
       <Tree
-        data={groups.length < 1 ? [startGroup, end] : groups}
+        data={[start, ...groups, end]}
         {...controllers}
         disableEdit={(data) => data.readOnly}
         renderCursor={Cursor}

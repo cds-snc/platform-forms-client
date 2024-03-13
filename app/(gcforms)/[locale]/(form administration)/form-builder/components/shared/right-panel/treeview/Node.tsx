@@ -74,7 +74,6 @@ export const ChildNode = ({
   }));
 
   const language = translationLanguagePriority;
-
   const titleKey = localizeField(LocalizedFormProperties.TITLE, language);
   const descKey = localizeField(LocalizedElementProperties.DESCRIPTION, language);
 
@@ -88,7 +87,7 @@ export const ChildNode = ({
   }
 
   if (label === "") {
-    label = node.data.name || "";
+    label = node.data.name || "Untitled";
   }
 
   return (
