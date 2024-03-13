@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid";
-import { FormItem } from "../types";
+import { TreeItem } from "../types";
 
 export const start = {
   id: "start",
@@ -16,7 +16,7 @@ export const start = {
   ],
 };
 
-export const createItem = (name: string): FormItem => {
+export const createItem = (name: string): TreeItem => {
   return {
     id: uuid(),
     name,

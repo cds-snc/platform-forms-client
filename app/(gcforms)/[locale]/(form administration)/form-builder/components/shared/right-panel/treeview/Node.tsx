@@ -1,7 +1,7 @@
 import React from "react";
 import { NodeApi, NodeRendererProps } from "react-arborist";
 import { cn } from "@lib/utils";
-import { FormItem } from "./types";
+import { TreeItem } from "./types";
 import { ArrowDown } from "./icons/ArrowDown";
 import { ArrowRight } from "./icons/ArrowRight";
 import { DragHandle } from "./icons/DragHandle";
@@ -11,7 +11,7 @@ import { FormElement } from "@lib/types";
 import { LocalizedFormProperties, LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { useTemplateStore } from "@lib/store";
 
-function Input({ node }: { node: NodeApi<FormItem> }) {
+function Input({ node }: { node: NodeApi<TreeItem> }) {
   return (
     <input
       autoFocus
@@ -27,7 +27,7 @@ function Input({ node }: { node: NodeApi<FormItem> }) {
   );
 }
 
-function FolderArrow({ node }: { node: NodeApi<FormItem> }) {
+function FolderArrow({ node }: { node: NodeApi<TreeItem> }) {
   if (node.isLeaf) return <span></span>;
   return (
     <span>
@@ -40,7 +40,7 @@ function FolderArrow({ node }: { node: NodeApi<FormItem> }) {
   );
 }
 
-export const ParentNode = ({ node }: { node: NodeApi<FormItem> }) => {
+export const ParentNode = ({ node }: { node: NodeApi<TreeItem> }) => {
   const active = node.isSelected;
   // const childActive = node.children?.some((child) => child.isSelected);
   return (
@@ -64,7 +64,7 @@ export const ChildNode = ({
   node,
   element,
 }: {
-  node: NodeApi<FormItem>;
+  node: NodeApi<TreeItem>;
   element: FormElement | undefined;
 }) => {
   const active = node.isSelected;
@@ -109,7 +109,7 @@ export const ChildNode = ({
   );
 };
 
-export const Node = ({ node, style, dragHandle }: NodeRendererProps<FormItem>) => {
+export const Node = ({ node, style, dragHandle }: NodeRendererProps<TreeItem>) => {
   const setId = useGroupStore((s) => s.setId);
   const getElement = useGroupStore((s) => s.getElement);
   const element = getElement(Number(node.data.id));

@@ -9,18 +9,18 @@ export interface updateObj<T> {
   changes: Partial<T>;
 }
 
-import { FormItem } from "../types";
+import { TreeItem } from "../types";
 
 let nextId = 0;
 
-export function useDynamicTree<T extends FormItem>() {
+export function useDynamicTree<T extends TreeItem>() {
   const { groups, addGroup, setGroups } = useGroupStore((s) => ({
     groups: s.getGroups(),
     addGroup: s.addGroup,
     setGroups: s.setGroups,
   }));
 
-  const tree = useMemo(() => new SimpleTree<FormItem>(groups), [groups]);
+  const tree = useMemo(() => new SimpleTree<TreeItem>(groups), [groups]);
 
   const onMove: MoveHandler<T> = (args: {
     dragIds: string[];
