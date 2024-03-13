@@ -22,7 +22,7 @@ export const createItem = (name: string): FormItem => {
     name,
     icon: null,
     readOnly: false,
-    children: [{ id: uuid(), name: "Fake form element", icon: null, readOnly: false }],
+    children: [{ id: uuid(), name: "New Section!!", icon: null, readOnly: false }],
   };
 };
 
@@ -34,8 +34,8 @@ export const end = {
   children: [
     {
       id: "confirmation",
-      icon: null,
       name: "Confirmation",
+      icon: null,
       readOnly: true,
     },
   ],
