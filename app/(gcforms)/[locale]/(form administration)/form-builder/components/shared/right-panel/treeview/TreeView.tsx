@@ -57,25 +57,30 @@ export const TreeView = () => {
           {t("rightPanel.treeView.addSection")}
         </Button>
       </div>
-      <Tree
-        data={[start, ...groups, end]}
-        data-last-element={lastNodeAdded} // this will force a re-render of the tree
-        {...controllers}
-        disableEdit={(data) => data.readOnly}
-        renderCursor={Cursor}
-        indent={40}
-        rowHeight={46}
-        width="100%"
-        disableDrop={({ parentNode }) => {
-          if (parentNode.data.id === "end") {
-            return true;
-          }
-          return false;
-        }}
-        disableDrag={(data) => data.readOnly}
-      >
-        {Node}
-      </Tree>
+      <div data-last-element={lastNodeAdded}>
+        <Tree
+          data={[start, ...groups, end]}
+          {...controllers}
+          onRename={(data) => {
+            controllers.onRename(data);
+            setLastNodeAdded(data.id);
+          }}
+          disableEdit={(data) => data.readOnly}
+          renderCursor={Cursor}
+          indent={40}
+          rowHeight={46}
+          width="100%"
+          disableDrop={({ parentNode }) => {
+            if (parentNode.data.id === "end") {
+              return true;
+            }
+            return false;
+          }}
+          disableDrag={(data) => data.readOnly}
+        >
+          {Node}
+        </Tree>
+      </div>
     </div>
   );
 };
