@@ -12,6 +12,8 @@ import { LocalizedFormProperties, LocalizedElementProperties } from "@lib/types/
 import { useTemplateStore } from "@lib/store";
 
 function Input({ node }: { node: NodeApi<TreeItem> }) {
+  const updateElementTitle = useGroupStore((s) => s.updateElementTitle);
+
   return (
     <input
       autoFocus
@@ -21,7 +23,12 @@ function Input({ node }: { node: NodeApi<TreeItem> }) {
       onBlur={() => node.reset()}
       onKeyDown={(e) => {
         if (e.key === "Escape") node.reset();
-        if (e.key === "Enter") node.submit(e.currentTarget.value);
+        if (e.key === "Enter") {
+          node.submit(e.currentTarget.value);
+          if (node.isLeaf) {
+            updateElementTitle({ id: Number(node.data.id), text: e.currentTarget.value });
+          }
+        }
       }}
     />
   );

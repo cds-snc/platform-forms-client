@@ -8,6 +8,7 @@ import { TemplateStoreContext } from "@lib/store/index";
 import { TemplateStore } from "@lib/store/useTemplateStore";
 import { groupsToTreeData } from "../util/groupsToTreeData";
 import { treeDataToGroups } from "../util/treeDataToGroups";
+import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 
 export interface GroupStoreProps {
   id: string;
@@ -27,6 +28,7 @@ export interface GroupStoreState extends GroupStoreProps {
   getGroups: () => TreeItem[] | [];
   setGroups: (data: TreeItem[]) => void;
   getElement: (id: number) => FormElement | undefined;
+  updateElementTitle: ({ id, text }: { id: number; text: string }) => void;
 }
 
 const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
@@ -48,6 +50,11 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
         return get()
           .getTemplateState()
           .form.elements.find((el) => el.id === id);
+      },
+      updateElementTitle: ({ id, text }: { id: number; text: string }) => {
+        const updateField = get().getTemplateState().updateField;
+        const propertyPath = get().getTemplateState().propertyPath;
+        updateField(propertyPath(id, LocalizedElementProperties.TITLE, "en"), text);
       },
       getGroups: () => {
         const formGroups = get().getTemplateState().form.groups;
