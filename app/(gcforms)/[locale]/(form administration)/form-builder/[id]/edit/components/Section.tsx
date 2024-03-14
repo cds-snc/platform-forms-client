@@ -39,6 +39,9 @@ export const Section = ({ groupId }: { groupId: string }) => {
       </div>
       <div className="flex max-w-[800px] justify-center rounded-t-lg border-1 border-slate-700 p-2">
         <h4>{groupName}</h4>
+
+        <input id="my-element" name="my-element" className="ml-10 border-1" type="text" />
+
         <button
           className="ml-10 inline-block"
           onClick={() => {
@@ -47,6 +50,21 @@ export const Section = ({ groupId }: { groupId: string }) => {
           }}
         >
           Delete
+        </button>
+
+        <button
+          className="ml-10 inline-block"
+          onClick={() => {
+            // get the value from my-element
+            // set the value to the id
+            const el = document.getElementById("my-element");
+            if (el) {
+              const val = (el as HTMLInputElement).value;
+              setId(val);
+            }
+          }}
+        >
+          Select ID
         </button>
       </div>
     </>

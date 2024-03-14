@@ -96,7 +96,7 @@ export const ChildNode = ({
         <Input node={node} />
       ) : (
         <div className="group relative w-[350px] overflow-hidden truncate border-gray-soft bg-white p-1 pr-10">
-          {label}
+          {label} - {node.data.id}
           {!node.data.readOnly && (
             <DragHandle className="absolute right-0 top-0 mr-4 mt-3 hidden cursor-pointer group-hover:block" />
           )}
