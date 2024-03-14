@@ -55,8 +55,10 @@ export async function publishing(
   const session = await auth();
   if (!session) throw new Error("No session");
 
-  const rawFormData = Object.fromEntries(formData.entries());
-  const result = await validate(language, userEmail, rawFormData);
+  const { managerEmail, department, goals } = <
+    { managerEmail: string; department: string; goals: string }
+  >Object.fromEntries(formData.entries());
+  const result = await validate(language, userEmail, { managerEmail, department, goals });
 
   if (!result.success) {
     return {
@@ -66,10 +68,6 @@ export async function publishing(
       })),
     };
   }
-
-  const managerEmail = String(formData.get("managerEmail") || "");
-  const department = String(formData.get("department") || "");
-  const goals = String(formData.get("goals") || "");
 
   const emailBody = `
   ${session.user.name} (${session.user.email}) from ${department} has requested permission to publish forms.<br/>

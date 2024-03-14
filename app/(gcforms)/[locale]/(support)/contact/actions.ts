@@ -43,8 +43,26 @@ export async function contact(
   _: ErrorStates,
   formData: FormData
 ): Promise<ErrorStates> {
-  const rawFormData = Object.fromEntries(formData.entries());
-  const result = await validate(language, rawFormData);
+  const { request, description, name, email, department, branch, jobTitle } = <
+    {
+      request: string;
+      description: string;
+      name: string;
+      email: string;
+      department: string;
+      branch: string;
+      jobTitle: string;
+    }
+  >Object.fromEntries(formData.entries());
+  const result = await validate(language, {
+    request,
+    description,
+    name,
+    email,
+    department,
+    branch,
+    jobTitle,
+  });
 
   if (!result.success) {
     return {
@@ -54,14 +72,6 @@ export async function contact(
       })),
     };
   }
-
-  const request = String(formData.get("request") || "");
-  const description = String(formData.get("description") || "");
-  const name = String(formData.get("name") || "");
-  const email = String(formData.get("email") || "");
-  const department = String(formData.get("department") || "");
-  const branch = String(formData.get("branch") || "");
-  const jobTitle = String(formData.get("jobTitle") || "");
 
   // Request may be a list of strings (checkbox), format it a bit if so, or just a string (radio)
   const requestParsed =

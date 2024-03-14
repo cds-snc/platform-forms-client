@@ -41,8 +41,10 @@ export async function support(
   _: ErrorStates,
   formData: FormData
 ): Promise<ErrorStates> {
-  const rawFormData = Object.fromEntries(formData.entries());
-  const result = await validate(language, rawFormData);
+  const { name, email, request, description } = <
+    { name: string; email: string; request: string; description: string }
+  >Object.fromEntries(formData.entries());
+  const result = await validate(language, { name, email, request, description });
 
   if (!result.success) {
     return {
@@ -52,11 +54,6 @@ export async function support(
       })),
     };
   }
-
-  const name = String(formData.get("name") || "");
-  const email = String(formData.get("email") || "");
-  const request = String(formData.get("request") || "");
-  const description = String(formData.get("description") || "");
 
   // Request may be a list of strings (checkbox), format it a bit if so, or just a string (radio)
   const requestParsed =
