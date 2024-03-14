@@ -58,7 +58,9 @@ export const TreeView = () => {
   useEffect(() => {
     // Update the tree selection when the id changes
     const tree = treeRef.current;
+    tree?.closeAll();
     tree?.setSelection({ ids: [id], anchor: id, mostRecent: id });
+    tree?.openParents(id);
   }, [id]);
 
   return (
