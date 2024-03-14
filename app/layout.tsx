@@ -75,7 +75,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
             <Script id="GoogleTagManager" nonce={nonce} async type="text/javascript">
               {googleTagManager}
             </Script>
-            {process.env.RECAPTCHA_V3_SITE_KEY && (
+            {/* {process.env.RECAPTCHA_V3_SITE_KEY && (
               <Script
                 id="ReCaptcha"
                 nonce={nonce}
@@ -83,7 +83,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
                 type="text/javascript"
                 src={`https://www.google.com/recaptcha/api.js?render=${process.env.RECAPTCHA_V3_SITE_KEY}`}
               />
-            )}
+            )} */}
           </>
         )}
 

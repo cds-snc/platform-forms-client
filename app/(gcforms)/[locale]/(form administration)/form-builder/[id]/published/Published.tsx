@@ -18,10 +18,8 @@ export const Published = async ({
     i18n: { language },
   } = await serverTranslation("form-builder", { lang: locale });
 
-  const baseUrl = process.env.NEXTAUTH_URL;
-
-  const linkEn = `${baseUrl}/en/id/${id}`;
-  const linkFr = `${baseUrl}/fr/id/${id}`;
+  const linkEn = `/en/id/${id}`;
+  const linkFr = `/fr/id/${id}`;
 
   return (
     <div>
