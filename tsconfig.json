@@ -19,9 +19,9 @@
     "paths": {
       "@lib/*": ["lib/*"],
       "@api/*": ["app/api/*"],
+      "@formBuilder/*": ["app/(gcforms)/[locale]/(form administration)/form-builder/*"],
       "@serverComponents/*": ["components/serverComponents/*"],
       "@clientComponents/*": ["components/clientComponents/*"],
-      "@formbuilder/*": ["components/clientComponents/form-builder/*"],
       "@jestFixtures/*": ["__fixtures__/*"],
       "@jestUtils": ["__utils__"],
       "@i18n": ["i18n"],
@@ -51,6 +51,7 @@
     "cypress",
     "cypress.config.ts",
     "**/*.cy.ts",
-    "**/*.cy.tsx"
+    "**/*.cy.tsx",
+    "__tests__"
   ]
 }

@@ -1,5 +1,8 @@
 {
+  "unpublishedForms": true,
+  "submitToReliabilityQueue": false,
   "reCaptcha": false,
   "formTimer": false,
-  "experimentalBlocks": false
+  "experimentalBlocks": false,
+  "conditionalLogic": false
 }

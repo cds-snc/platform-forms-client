@@ -1,0 +1,34 @@
+{
+  "title": "Paramètres",
+  "title-update": "[FR]Update setting",
+  "title-create": "[FR]Create setting",
+  "brandingRequestId": "Identifiant du formulaire de demande d'image de marque",
+  "success": "Données enregistrées avec succès",
+  "loadingError": "Désolé, il y a eu un problème.",
+  "createSetting": "Créer",
+  "manageSetting": "Gérer",
+  "viewSetting": "Afficher",
+  "deleteSetting": "Supprimer",
+  "cancel": "Annuler",
+  "save": "Enregistrer",
+  "back": "Retour",
+  "deleted": "[FR]Setting deleted",
+  "errorDeleting": "[FR]Error deleting setting",
+  "created": "[FR]Setting created",
+  "errorCreating": "[FR]Error creating setting",
+  "updated": "[FR]Setting updated",
+  "errorUpdating": "[FR]Error updating setting",
+  "settingNotFound": "[FR]Setting not found",
+  "error": {
+    "save": "Erreur d'enregistrement des données",
+    "duplicateId": "Il s'agit d'un double de l'identifiant interne, veuillez en sélectionner un autre."
+  },
+  "label": {
+    "internalId": "Identifiant interne",
+    "nameEn": "Nom en anglais",
+    "nameFr": "Nom en français",
+    "descriptionEn": "Description en anglais",
+    "descriptionFr": "Description en français",
+    "value": "Valeur de ce paramètre"
+  }
+}

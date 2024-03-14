@@ -9,7 +9,7 @@ import {
   MenuDropdownItemCallback,
 } from "@clientComponents/myforms/MenuDropdown/MenuDropdown";
 import { getDate, slugify } from "@lib/client/clientHelpers";
-import { MessageIcon, EnvelopeIcon, PreviewIcon, DesignIcon } from "@clientComponents/icons";
+import { MessageIcon, EnvelopeIcon, PreviewIcon, DesignIcon } from "@serverComponents/icons";
 import Markdown from "markdown-to-jsx";
 
 const CardBanner = ({ isPublished }: { isPublished: boolean }) => {
@@ -39,7 +39,7 @@ interface CardLinksProps {
 
 const CardLinks = ({ isPublished, url, id, deliveryOption, overdue }: CardLinksProps) => {
   const { t, i18n } = useTranslation(["my-forms", "common"]);
-  const responsesLink = `/${i18n.language}/form-builder/responses/${id}`;
+  const responsesLink = `/${i18n.language}/form-builder/${id}/responses/new`;
 
   const textData = {
     responses: overdue,
@@ -50,7 +50,7 @@ const CardLinks = ({ isPublished, url, id, deliveryOption, overdue }: CardLinksP
   return (
     <div className="mb-4 px-3">
       <a
-        href={isPublished ? url : `/${i18n.language}/form-builder/edit/${id}`}
+        href={isPublished ? url : `/${i18n.language}/form-builder/${id}/edit/`}
         className="my-4 block text-sm focus:fill-white active:fill-white"
         target={isPublished ? "_blank" : "_self"}
         aria-describedby={`card-title-${id} card-date-${id}`}
@@ -151,7 +151,7 @@ export const Card = (props: CardProps): React.ReactElement => {
     },
     {
       title: t("card.menu.settings"),
-      url: `/${i18n.language}/form-builder/settings/${id}`,
+      url: `/${i18n.language}/form-builder/${id}/settings`,
     },
     {
       title: t("card.menu.delete"),

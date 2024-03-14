@@ -2,7 +2,7 @@
 import { signOut, useSession } from "next-auth/react";
 import { useTranslation } from "@i18n/client";
 import Link from "next/link";
-import { clearTemplateStore } from "@clientComponents/form-builder/store";
+import { clearTemplateStore } from "@lib/store";
 
 export const LoginMenu = () => {
   const { i18n, t } = useTranslation("common");
@@ -22,7 +22,7 @@ export const LoginMenu = () => {
       {status === "authenticated" ? (
         <button
           type="button"
-          className="border-0 bg-transparent text-blue-dark underline shadow-none hover:text-blue-hover"
+          className="border-0 bg-transparent text-blue-dark underline hover:text-blue-hover"
           onClick={handleClick}
           lang={i18n.language}
         >

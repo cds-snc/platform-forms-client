@@ -1,0 +1,30 @@
+{
+  "title": "Indicateurs de fonction",
+  "subTitle": "Les indicateurs de fonctionnalité vous permettent de contrôler les différentes fonctionnalités activées dans l'application",
+  "loading": "Chargement des indicateurs de fonctionnalité",
+  "enabled": "Activé",
+  "disabled": "Déactivé",
+  "enable": "Activer",
+  "disable": "Désactiver",
+  "featureTitle": "Fonctionnalité",
+  "featureStatus": "Statut",
+  "featureSwitch": "Activé/Déactivé",
+  "features": {
+    "reCatpcha": {
+      "title": "Je ne suis pas un robot",
+      "description": "Active la protection « Je ne suis pas un robot » pour les formulaires avant leur soumission"
+    },
+    "formTimer": {
+      "title": "Minuteur de formulaire",
+      "description": "Attendre un certain temps avant d'être autorisé à soumettre le formulaire"
+    },
+    "experimentalBlocks": {
+      "title": "Blocs expérimentaux",
+      "description": "Activer les blocs expérimentaux"
+    },
+    "conditionalLogic": {
+      "title": "[FR] Conditional logic",
+      "description": "[FR] Enable conditional logic + right panel"
+    }
+  }
+}

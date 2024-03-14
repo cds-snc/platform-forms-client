@@ -6,7 +6,7 @@ declare global {
       mount: typeof mount;
       tab: typeof tab;
       useForm: (file: string) => Chainable<void>;
-      visitForm: (formID: string) => Chainable<Window>;
+      visitForm: (formID: string, language?: string) => Chainable<Window>;
       visitPage: (path: string) => Chainable<Window>;
       securityQuestions: () => Chainable<void>;
       login: ({
@@ -36,6 +36,9 @@ declare global {
       resetFlags: () => Chainable<void>;
       resetAll: () => Chainable<void>;
       typeInField: (query: string, typedText: string, outputText?: string) => Chainable<void>;
+      safeClick: (query: string) => Chainable<void>;
+      serverSideRendered: (path: string) => Chainable<void>;
+      switchLanguage: (language: string) => Chainable<void>;
     }
   }
 }

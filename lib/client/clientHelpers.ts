@@ -8,7 +8,6 @@ import {
   PublicFormRecord,
   Response,
   Responses,
-  VaultStatus,
 } from "@lib/types";
 import { Submission } from "@lib/types/submission-types";
 import { getCsrfToken } from "./csrfToken";
@@ -345,15 +344,6 @@ export const ucfirst = (string: string) => {
     return "";
   }
   return string.charAt(0).toUpperCase() + string.slice(1);
-};
-
-export const isStatus = (query: string, status: VaultStatus | VaultStatus[]): boolean => {
-  const ucQuery = ucfirst(query);
-  if (Array.isArray(status)) {
-    return status.includes(ucQuery as VaultStatus);
-  }
-
-  return ucQuery === status;
 };
 
 export async function runPromisesSynchronously<T>(

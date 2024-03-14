@@ -45,7 +45,7 @@ export const GET = middleware(
       const { session } = props as WithRequired<MiddlewareProps, "session">;
 
       const ability = createAbility(session);
-      const templates = await getAllTemplates(ability, session.user.id);
+      const templates = await getAllTemplates(ability);
       const response = templates.map((template) => onlyIncludePublicProperties(template));
 
       if (!response)

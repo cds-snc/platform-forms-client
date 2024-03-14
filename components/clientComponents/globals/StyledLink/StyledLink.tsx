@@ -27,7 +27,7 @@ interface StyledLinkProps {
 const linkThemes = {
   default: "",
   primaryButton: `${themes.primary} ${themes.htmlLink} ${themes.base}`,
-  secondaryButton: `no-underline active:shadow-none ${themes.secondary} ${themes.base}`,
+  secondaryButton: `no-underline ${themes.secondary} ${themes.base}`,
 };
 type Theme = keyof typeof linkThemes;
 

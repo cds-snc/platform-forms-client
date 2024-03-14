@@ -3,7 +3,7 @@ import React from "react";
 import { StyledLink } from "@clientComponents/globals";
 import { themes } from "@clientComponents/globals";
 import { cn } from "@lib/utils";
-import { Tooltip } from "../../form-builder/app/shared/Tooltip";
+import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 import Link from "next/link";
 
 type LinkButtonProps = {
@@ -35,7 +35,7 @@ export const Secondary = ({ href, className, children, scroll }: LinkButtonProps
       scroll={scroll}
       href={href}
       className={cn(
-        "text-black-default visited:text-black-default active:text-black-default no-underline focus:shadow-none active:shadow-none",
+        "text-black-default visited:text-black-default active:text-black-default no-underline",
         themes.secondary,
         themes.base,
         className
@@ -58,11 +58,11 @@ export const LeftNav = ({
     base: "border-box flex h-[60px] w-[60px] items-center justify-center text-black-default no-underline ",
     hover: "hover:border-indigo-700 [&_svg]:hover:fill-indigo-700 hover:border-1 ",
     focus:
-      "focus:border-indigo-700 focus:bg-white [&_svg]:focus:fill-indigo-700 focus:shadow-none focus:outline-[0px] focus:outline-offset-0 focus:outline-indigo-700 focus:border-1",
+      "focus:border-indigo-700 focus:bg-white [&_svg]:focus:fill-indigo-700 focus:outline-[0px] focus:outline-offset-0 focus:outline-indigo-700 focus:border-1",
     active:
-      "active:top-0.5 active:bg-indigo-700 [&_svg]:active:fill-white active:text-white active:shadow-none active:outline-[0px] active:outline-indigo-700",
+      "active:top-0.5 active:bg-indigo-700 [&_svg]:active:fill-white active:text-white active:outline-[0px] active:outline-indigo-700",
     isActive:
-      "bg-indigo-700 [&_svg]:fill-white [&_svg]:hover:fill-white shadow-none outline-[0px] outline-indigo-700 focus:shadow-none focus:outline-[0px] focus:outline-offset-0",
+      "bg-indigo-700 [&_svg]:fill-white [&_svg]:hover:fill-white outline-[0px] outline-indigo-700 focus:outline-[0px] focus:outline-offset-0",
   };
 
   return (

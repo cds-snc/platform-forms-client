@@ -1,0 +1,97 @@
+{
+  "title": "Forms",
+  "nav": {
+    "drafts": "Drafts",
+    "published": "Published",
+    "all": "All"
+  },
+  "actions": {
+    "resumeForm": "Resume editing form",
+    "createNewForm": "Create new form"
+  },
+  "cards": {
+    "noForms": "You have no forms.",
+    "noDraftsForms": "You have no draft forms.",
+    "noPublishedForms": "You have no published forms."
+  },
+  "card": {
+    "states": {
+      "draft": "Draft",
+      "published": "Published"
+    },
+    "title": {
+      "notTranslatedEn": "No English translation",
+      "notTranslatedFr": "No French translation"
+    },
+    "lastEdited": "Last edited",
+    "deliveryOption": {
+      "email": "Responses get sent to:",
+      "vault": "Responses page"
+    },
+    "menu": {
+      "more": "More",
+      "save": "Save to computer",
+      "copyLink": "Copy link",
+      "preview": "Preview",
+      "edit": "Edit",
+      "settings": "Settings",
+      "delete": "Delete",
+      "coppiedToClipboard": "Copied to clipboard",
+      "somethingWentWrong": "Something went wrong"
+    },
+    "actionRequired": {
+      "description": "Action required: ",
+      "linkSingular": "<a href=\"{{link}}\">Sign off on {{responses}} response</a>",
+      "linkPlural": "<a href=\"{{link}}\">Sign off on {{responses}} responses</a>"
+    }
+  },
+  "responseTemplate": {
+    "responseNumber": "Submission ID",
+    "submissionDate": "Submission date",
+    "errorNoQuestionsAnswers": "No questions and answers were found.",
+    "jumpTo": "Jump to:",
+    "columnTable": "Column table",
+    "rowTable": "Row table",
+    "rowTableInfo": "A row table is most useful when copy and pasting into a spreadsheet.",
+    "confirmReceiptResponse": "Sign off on the removal of responses",
+    "confirmReceipt": "Sign off for removal",
+    "confirmReceiptInfo": "Copy the code below and paste it into the 'Sign off on removal with receipt codes' dialog within GC Forms.",
+    "copyCode": "Copy code",
+    "copyCodeClipboard": "Copy code to clipboard",
+    "copiedToCipboard": "Copied to clipboard",
+    "errorrCopyingToClipboard": "Error copying to clipboard",
+    "submissionID": "Submission ID",
+    "copyResponse": "Copy answer row to clipboard"
+  },
+  "responseAggregatedTemplate": {
+    "title": "Form responses",
+    "officialReceipt": "Official receipt and record of responses",
+    "responsesDownloaded": "responses downloaded:",
+    "needToVerify": "You’ll need this receipt to verify all responses made it safely from GC Forms to your computer.",
+    "useTheCopy": "Use the “Copy all receipt codes” button to copy and paste all the codes, signing off on the removal of these responses from GC Forms.",
+    "copyCodes": {
+      "title": "Sign off on removal of responses from GC Forms",
+      "description": "Once you've checked the downloaded responses, and are ready to remove these from GC Forms, copy and paste the receipt codes. This helps us know when responses have been transferred to you so we can remove the data from our system.",
+      "copyButton": "Copy all receipt codes"
+    },
+    "goToGcForms": "Go to GC Forms to sign off on removal",
+    "dataList": {
+      "title": "Form responses: list of selected responses",
+      "formResponse": "Response"
+    }
+  },
+  "dataClassification": {
+    "officialRecord": "This is an official record",
+    "retainCopy": "Retain this copy in accordance to your retention policy.",
+    "unclassified": "UNCLASSIFIED",
+    "protectedA": "PROTECTED A",
+    "protectedB": "PROTECTED B"
+  },
+  "viewForm": "View form (opens in new tab)",
+  "editForm": "Edit form",
+  "navLabel": "Forms navigation",
+  "errors": {
+    "formDownloadNotExist": "The form you are trying to download does not exist.",
+    "formDownloadFailed": "Failed to download the form."
+  }
+}

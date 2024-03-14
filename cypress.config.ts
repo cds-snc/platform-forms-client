@@ -1,10 +1,10 @@
 import { defineConfig } from "cypress";
 import { logMessage } from "@lib/logger";
+import terminalReport from "cypress-terminal-report/src/installLogsPrinter";
 
 export default defineConfig({
   video: false,
   defaultCommandTimeout: 10000,
-
   e2e: {
     baseUrl: "http://localhost:3000",
     setupNodeEvents(on) {
@@ -22,6 +22,10 @@ export default defineConfig({
           return null;
         },
       });
+      if (process.env.CYPRESS_DEBUG) {
+        logMessage.info("Enabling terminal report for Debugging");
+        terminalReport(on);
+      }
     },
   },
 

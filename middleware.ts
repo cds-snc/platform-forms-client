@@ -23,6 +23,7 @@ export const config = {
         "/((?!_next/static|_next/image|favicon.ico|img|static|react_devtools|unsupported-browser|javascript-disabled).*)",
       missing: [
         { type: "header", key: "next-router-prefetch" },
+        { type: "header", key: "next-action" },
         { type: "header", key: "purpose", value: "prefetch" },
       ],
     },
@@ -104,7 +105,9 @@ export async function middleware(req: NextRequest) {
 
   let cookieSyncRequired = false;
   if (pathLang && cookieLang !== pathLang) {
-    logMessage.debug(`Middleware - Setting language cookie: ${cookieLang} for path: ${pathname}`);
+    logMessage.debug(
+      `Middleware - Setting language cookie from ${cookieLang} to ${pathLang} for path: ${pathname}`
+    );
     cookieSyncRequired = true;
   }
 

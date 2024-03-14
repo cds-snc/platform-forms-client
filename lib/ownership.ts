@@ -17,12 +17,12 @@ export const transferOwnershipEmail = async ({
   formId: string;
 }) => {
   try {
-    const HOST = process.env.NEXTAUTH_URL;
+    const HOST = process.env.HOST_URL;
     const TEMPLATE_ID = process.env.TEMPLATE_ID;
     const notify = getNotifyInstance();
 
-    const formUrlEn = `${HOST}/en/form-builder/responses/${formId}`;
-    const formUrlFr = `${HOST}/fr/form-builder/responses/${formId}`;
+    const formUrlEn = `${HOST}/en/form-builder/${formId}/responses`;
+    const formUrlFr = `${HOST}/fr/form-builder/${formId}/responses`;
 
     await notify.sendEmail(TEMPLATE_ID, emailTo, {
       personalisation: {
@@ -79,12 +79,12 @@ export const addOwnershipEmail = async ({
   formId: string;
 }) => {
   try {
-    const HOST = process.env.NEXTAUTH_URL;
+    const HOST = process.env.HOST_URL;
     const TEMPLATE_ID = process.env.TEMPLATE_ID;
     const notify = getNotifyInstance();
 
-    const formUrlEn = `${HOST}/en/form-builder/responses/${formId}`;
-    const formUrlFr = `${HOST}/fr/form-builder/responses/${formId}`;
+    const formUrlEn = `${HOST}/en/form-builder/${formId}/responses`;
+    const formUrlFr = `${HOST}/fr/form-builder/${formId}/responses`;
 
     await notify.sendEmail(TEMPLATE_ID, emailTo, {
       personalisation: {

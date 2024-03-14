@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
 import { useTranslation } from "@i18n/client";
-import { SubNavLink } from "@clientComponents/form-builder/app/navigation/SubNavLink";
+import { SubNavLink } from "@clientComponents/globals/SubNavLink";
 
-import { PageIcon, GlobeIcon, FolderIcon } from "@clientComponents/icons";
+import { PageIcon, GlobeIcon, FolderIcon } from "@serverComponents/icons";
 
 export const FilterNavigation = () => {
   const { t, i18n } = useTranslation(["my-forms", "form-builder"]);

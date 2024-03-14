@@ -1,0 +1,30 @@
+{
+  "title": "Feature flags",
+  "subTitle": "Feature flags allow you to control the various enabled features in the application",
+  "loading": "Loading feature flags",
+  "enabled": "On",
+  "disabled": "Off",
+  "enable": "Turn On",
+  "disable": "Turn Off",
+  "featureTitle": "Feature",
+  "featureStatus": "Status",
+  "featureSwitch": "On/Off",
+  "features": {
+    "reCaptcha": {
+      "title": "I am not a robot",
+      "description": "Enable protected by reCaptcha on forms before submission"
+    },
+    "formTimer": {
+      "title": "Form timer",
+      "description": "Wait a specific amount of time before being allowed to submit the form"
+    },
+    "experimentalBlocks": {
+      "title": "Experimental blocks",
+      "description": "Enable experimental blocks"
+    },
+    "conditionalLogic": {
+      "title": "Conditional logic",
+      "description": "Enable conditional logic + right panel"
+    }
+  }
+}

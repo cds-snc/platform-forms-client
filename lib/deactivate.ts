@@ -3,7 +3,7 @@ import { logMessage } from "@lib/logger";
 
 export const sendDeactivationEmail = async (email: string) => {
   try {
-    const HOST = process.env.NEXTAUTH_URL;
+    const HOST = process.env.HOST_URL;
     const TEMPLATE_ID = process.env.TEMPLATE_ID;
     const notify = getNotifyInstance();
 
@@ -17,7 +17,7 @@ Hello,
 
 The GC Forms account for ${email} has been deactivated.
 
-To find out more or request account reactivation, [contact us](${HOST}/en/form-builder/support/contactus).
+To find out more or request account reactivation, [contact us](${HOST}/en/contact).
 
 Thanks,
 The GC Forms team
@@ -26,7 +26,7 @@ Bonjour,
 
 Le compte Formulaires GC de ${email} a été désactivé.
 
-Pour en savoir plus ou pour demander la réactivation de votre compte, n’hésitez pas à [nous contacter](${HOST}/fr/form-builder/support/contactus).
+Pour en savoir plus ou pour demander la réactivation de votre compte, n’hésitez pas à [nous contacter](${HOST}/fr/contact).
 
 Merci,
 L’équipe Formulaires GC

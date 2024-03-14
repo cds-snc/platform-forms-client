@@ -1,7 +1,7 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import UserNavLayout from "@clientComponents/globals/layouts/UserNavLayout";
-import { BackArrowIcon } from "@clientComponents/icons";
+import { BackArrowIcon } from "@serverComponents/icons";
 import { PrimaryLinkButton, SecondaryLinkButton } from "@clientComponents/globals";
 
 export async function generateMetadata({
@@ -18,7 +18,7 @@ export async function generateMetadata({
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const { t } = await serverTranslation(["reset-password", "common"], { lang: locale });
   const homeHref = `/${locale}/auth/login`;
-  const supportHref = `/${locale}}/form-builder/support`;
+  const supportHref = `/${locale}}/support`;
   return (
     <UserNavLayout contentWidth="tablet:w-[658px]">
       <>

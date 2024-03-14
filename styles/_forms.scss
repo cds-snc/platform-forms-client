@@ -136,23 +136,8 @@
     @apply list-inside;
   }
 
-  a:visited {
-    @apply text-purple-default;
-  }
-
   a {
     @apply underline text-blue-dark hover:text-blue-hover;
-  }
-
-  a:focus {
-    outline: none;
-    box-shadow: 4px 0 0 0 #303fc3, -4px 0 0 0 #303fc3;
-    @apply bg-blue-focus text-white-default;
-  }
-
-  a:active {
-    box-shadow: 4px 0 0 0 #1b2736, -4px 0 0 0 #1b2736;
-    @apply underline bg-blue-active text-white-default;
   }
 }
 

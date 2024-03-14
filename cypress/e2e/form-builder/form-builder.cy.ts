@@ -1,6 +1,6 @@
 describe("Test FormBuilder", () => {
   it("Renders form builder home page", () => {
-    cy.visitPage("/form-builder");
+    cy.visitPage("/en/form-builder");
     cy.get("h2").should("contain", "Design a form");
     cy.get("h2").should("contain", "Open a form file");
     cy.get("a[lang='fr']").click();
@@ -9,7 +9,7 @@ describe("Test FormBuilder", () => {
   });
 
   it("Designs a form", () => {
-    cy.visitPage("/form-builder/edit");
+    cy.visitPage("/en/form-builder/edit");
     cy.typeInField("#formTitle", "Cypress Test Form");
     cy.typeInField(`[aria-label="Introduction"]`, "form description");
     cy.get("button").contains("Add").click();

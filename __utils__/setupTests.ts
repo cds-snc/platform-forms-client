@@ -144,5 +144,6 @@ process.env = {
   ...process.env,
   TOKEN_SECRET: "testsecret",
   APP_ENV: "test",
+  NEXT_PUBLIC_APP_ENV: "test",
   DATABASE_URL: "postgres://postgres:postgres@localhost:5432",
 };

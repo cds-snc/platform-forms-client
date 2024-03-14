@@ -1,16 +1,16 @@
-type UserCollection = {
-  test: SeedUser[];
-  [key: string]: Array<SeedUser>;
-};
-
-type SeedUser = {
-  name: string;
+interface CreateAppUser {
   email: string;
-  active: boolean;
+  name: string;
+  active?: boolean;
   privileges: Record<string, unknown>;
+}
+
+type UserCollection = {
+  test: CreateAppUser[];
+  [key: string]: Array<CreateAppUser>;
 };
 
-const RegularUser: SeedUser = {
+const RegularUser: CreateAppUser = {
   name: "Regular Test User",
   email: "test.user@cds-snc.ca",
   active: true,
@@ -19,7 +19,7 @@ const RegularUser: SeedUser = {
   },
 };
 
-const AdminUser: SeedUser = {
+const AdminUser: CreateAppUser = {
   name: "Admin Test User",
   email: "test.admin@cds-snc.ca",
   active: true,
@@ -34,7 +34,7 @@ const AdminUser: SeedUser = {
   },
 };
 
-const DeactivatedRegularUser: SeedUser = {
+const DeactivatedRegularUser: CreateAppUser = {
   name: "Deactivated Test User",
   email: "test.deactivated@cds-snc.ca",
   active: false,
@@ -43,9 +43,9 @@ const DeactivatedRegularUser: SeedUser = {
   },
 };
 
-export const UserWithoutSecurityAnswers: Omit<SeedUser, "active"> = {
+export const UserWithoutSecurityAnswers: CreateAppUser = {
   name: "Test User Without Scurity Answers",
-  email: "test.withoutSecurityAnswers@cds-snc.ca",
+  email: "test.withoutsecurityanswers@cds-snc.ca",
   privileges: {
     connect: [{ name: "Base" }, { name: "PublishForms" }],
   },
@@ -53,4 +53,5 @@ export const UserWithoutSecurityAnswers: Omit<SeedUser, "active"> = {
 
 export default {
   test: [RegularUser, AdminUser, DeactivatedRegularUser],
+  development: [RegularUser, AdminUser, DeactivatedRegularUser],
 } as UserCollection;

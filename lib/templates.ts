@@ -269,7 +269,8 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
  */
 export async function getAllTemplates(
   ability: UserAbility,
-  userID: string
+  requestedWhere?: Prisma.TemplateWhereInput,
+  sortByDateCreated?: "asc" | "desc"
 ): Promise<Array<FormRecord>> {
   try {
     checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
@@ -288,11 +289,12 @@ export async function getAllTemplates(
     const templates = await prisma.template
       .findMany({
         where: {
+          ...(requestedWhere && requestedWhere),
           ttl: null,
           ...(!canUserAccessAllTemplates && {
             users: {
               some: {
-                id: userID,
+                id: ability.userID,
               },
             },
           }),
@@ -307,6 +309,11 @@ export async function getAllTemplates(
           deliveryOption: true,
           securityAttribute: true,
         },
+        ...(sortByDateCreated && {
+          orderBy: {
+            created_at: sortByDateCreated,
+          },
+        }),
       })
       .catch((e) => prismaErrors(e, []));
 
@@ -669,7 +676,8 @@ export async function updateIsPublishedForTemplate(
     }
 
     // Delete all form responses created during draft mode before changing status to published
-    if (isPublished) await deleteDraftFormResponses(ability, formID);
+    if (isPublished && process.env.APP_ENV !== "test")
+      await deleteDraftFormResponses(ability, formID);
 
     const updatedTemplate = await prisma.template
       .update({
@@ -837,6 +845,89 @@ export async function updateAssignedUsersForTemplate(
         { type: "Form", id: formID },
         "AccessDenied",
         "Attempted to update assigned users for form"
+      );
+    throw e;
+  }
+}
+
+export async function updateResponseDeliveryOption(
+  ability: UserAbility,
+  formID: string,
+  deliveryOption: DeliveryOption
+): Promise<FormRecord | null> {
+  try {
+    const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(formID);
+    if (!templateWithAssociatedUsers) return null;
+
+    checkPrivileges(ability, [
+      {
+        action: "update",
+        subject: {
+          type: "FormRecord",
+          object: {
+            ...templateWithAssociatedUsers.formRecord,
+            users: templateWithAssociatedUsers.users,
+          },
+        },
+      },
+    ]);
+
+    // Prevent already published templates from being updated
+    if (templateWithAssociatedUsers.formRecord.isPublished)
+      throw new TemplateAlreadyPublishedError();
+
+    const updatedTemplate = await prisma.template
+      .update({
+        where: {
+          id: formID,
+        },
+        data: {
+          deliveryOption: {
+            upsert: {
+              create: {
+                emailAddress: deliveryOption.emailAddress,
+                emailSubjectEn: deliveryOption.emailSubjectEn,
+                emailSubjectFr: deliveryOption.emailSubjectFr,
+              },
+              update: {
+                emailAddress: deliveryOption.emailAddress,
+                emailSubjectEn: deliveryOption.emailSubjectEn,
+                emailSubjectFr: deliveryOption.emailSubjectFr,
+              },
+            },
+          },
+        },
+        select: {
+          id: true,
+          created_at: true,
+          updated_at: true,
+          name: true,
+          jsonConfig: true,
+          isPublished: true,
+          deliveryOption: true,
+          securityAttribute: true,
+        },
+      })
+      .catch((e) => prismaErrors(e, null));
+
+    if (updatedTemplate === null) return updatedTemplate;
+
+    logEvent(
+      ability.userID,
+      { type: "Form", id: formID },
+      "ChangeDeliveryOption",
+      `Delivery Option set to ${deliveryOption.emailAddress}`
+    );
+
+    if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
+    return _parseTemplate(updatedTemplate);
+  } catch (e) {
+    if (e instanceof AccessControlError)
+      logEvent(
+        ability.userID,
+        { type: "Form", id: formID },
+        "AccessDenied",
+        "Attempted to set Delivery Option to the Vault"
       );
     throw e;
   }
@@ -1092,4 +1183,65 @@ export const updateClosingDateForTemplate = async (
     throw e;
   }
   return { formID, closingDate: d };
+};
+
+export const updateSecurityAttribute = async (
+  ability: UserAbility,
+  formID: string,
+  securityAttribute: string
+) => {
+  try {
+    const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(formID);
+    if (!templateWithAssociatedUsers) return null;
+
+    checkPrivileges(ability, [
+      {
+        action: "update",
+        subject: {
+          type: "FormRecord",
+          object: {
+            ...templateWithAssociatedUsers.formRecord,
+            users: templateWithAssociatedUsers.users,
+          },
+        },
+        field: "securityAttribute",
+      },
+    ]);
+
+    const updatedTemplate = await prisma.template
+      .update({
+        where: {
+          id: formID,
+        },
+        data: { securityAttribute },
+        select: {
+          id: true,
+          created_at: true,
+          updated_at: true,
+          name: true,
+          jsonConfig: true,
+          isPublished: true,
+          deliveryOption: true,
+          securityAttribute: true,
+        },
+      })
+      .catch((e) => prismaErrors(e, null));
+
+    if (updatedTemplate === null) return updatedTemplate;
+
+    if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
+
+    logEvent(ability.userID, { type: "Form", id: formID }, "ChangeSecurityAttribute");
+
+    return _parseTemplate(updatedTemplate);
+  } catch (e) {
+    if (e instanceof AccessControlError)
+      logEvent(
+        ability.userID,
+        { type: "Form", id: formID },
+        "AccessDenied",
+        "Attempted to update security attribute"
+      );
+    throw e;
+  }
 };

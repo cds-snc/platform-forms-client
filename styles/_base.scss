@@ -8,10 +8,6 @@ body,
   height: 100%;
 }
 
-body {
-  background-color: #f9fafb;
-}
-
 /* prevent scrolling when there is an open dialog */
 body:has(dialog[open]) {
   overflow: hidden;
@@ -30,20 +26,6 @@ header {
   @apply xxs:w-cr-label-fold xs:w-cr-label-5s sm:w-cr-label-6s md:w-cr-label-duo md:mt-10px lg:w-cr-label-ipad xl:w-cr-label-1025 w-cr-label-desktop mt-2;
 }
 
-ul.custom {
-  list-style: none;
-  padding-left: 1em;
-  margin-left: 0;
-  li {
-    margin: 0.5rem 0;
-  }
-  li:before {
-    content: "•";
-    margin: 0 0.5em 0.1em -0.9em;
-    font-size: 22px;
-  }
-}
-
 /* Adjustments for tailwind defaults that conflict with the node-starter-app defaults */
 
 ol {
@@ -58,47 +40,6 @@ li ul {
   @apply list-circle;
 }
 
-a:visited {
-  @apply text-purple-default;
-}
-
-a,
-.gc-button-link {
+a {
   @apply underline text-blue-dark hover:text-blue-hover;
-}
-
-a:focus,
-.gc-button-link:focus {
-  outline: none;
-  box-shadow: 4px 0 0 0 #303fc3, -4px 0 0 0 #303fc3;
-  @apply bg-blue-focus text-white-default;
-}
-
-a:active {
-  box-shadow: 4px 0 0 0 #1b2736, -4px 0 0 0 #1b2736;
-  @apply underline bg-blue-active text-white-default;
-}
-
-.link-list {
-  li {
-    @apply mb-2;
-  }
-
-  li:last-of-type {
-    @apply mb-0;
-  }
-}
-
-.outer-container {
-  position: relative;
-  min-height: 100vh;
-  width: 100%;
-}
-
-.email-preview > * {
-  all: revert;
-}
-
-.email-preview ul {
-  padding-left: 20px !important;
 }

@@ -8,7 +8,7 @@ import * as Yup from "yup";
 import Link from "next/link";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import { Button } from "@clientComponents/globals";
-import { toast, ToastContainer } from "@clientComponents/form-builder/app/shared/Toast";
+import { toast, ToastContainer } from "@formBuilder/components/shared/Toast";
 import { logMessage } from "@lib/logger";
 import { signIn } from "next-auth/react";
 import { hasError } from "@lib/hasError";
@@ -147,7 +147,7 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
         <title>{t("verify.title")}</title>
       </Head> */}
       <div className="sticky top-0">
-        <ToastContainer />
+        <ToastContainer containerId="default" />
       </div>
       <Formik
         initialValues={{ verificationCode: "" }}
@@ -209,7 +209,7 @@ export const Verify = ({ username, authenticationFlowToken }: VerifyProps): Reac
                 <Button theme="link" className="mr-8" onClick={() => setIsReverify(true)}>
                   {t("verify.resendConfirmationCodeButton")}
                 </Button>
-                <Link href={"/form-builder/support"}>{t("verify.help")}</Link>
+                <Link href={`/${i18n.language}/support`}>{t("verify.help")}</Link>
               </div>
             </form>
           </>
