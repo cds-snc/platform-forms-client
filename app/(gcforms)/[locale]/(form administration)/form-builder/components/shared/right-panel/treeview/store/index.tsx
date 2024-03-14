@@ -13,8 +13,7 @@ import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 export interface GroupStoreProps {
   id: string;
   groups: TreeItem[];
-  getTemplateState: TemplateStore["getState"];
-  setTemplateState: TemplateStore["setState"];
+  templateStore: TemplateStore;
 }
 
 import { TreeItem } from "../types";
@@ -48,21 +47,21 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
       getId: () => get().id,
       getElement: (id) => {
         return get()
-          .getTemplateState()
+          .templateStore.getState()
           .form.elements.find((el) => el.id === id);
       },
       updateElementTitle: ({ id, text }: { id: number; text: string }) => {
-        const updateField = get().getTemplateState().updateField;
-        const propertyPath = get().getTemplateState().propertyPath;
+        const updateField = get().templateStore.getState().updateField;
+        const propertyPath = get().templateStore.getState().propertyPath;
         updateField(propertyPath(id, LocalizedElementProperties.TITLE, "en"), text);
       },
       getGroups: () => {
-        const formGroups = get().getTemplateState().form.groups;
+        const formGroups = get().templateStore.getState().form.groups;
         if (!formGroups) return [];
         return groupsToTreeData(formGroups);
       },
       addGroup: (id: string, name: string) => {
-        get().setTemplateState((s) => {
+        get().templateStore.setState((s) => {
           if (!s.form.groups) {
             s.form.groups = {};
           }
@@ -70,7 +69,7 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
         });
       },
       deleteGroup: (id: string) => {
-        get().setTemplateState((s) => {
+        get().templateStore.setState((s) => {
           if (!s.form.groups) return;
           delete s.form.groups[id];
         });
@@ -78,7 +77,7 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
       setGroups: (treeData: TreeItem[]) => {
         const groups = treeDataToGroups(treeData);
         if (!groups) return;
-        get().setTemplateState((s) => {
+        get().templateStore.setState((s) => {
           s.form.groups = { ...groups };
         });
       },
@@ -97,8 +96,7 @@ export const GroupStoreProvider = ({
   const storeRef = useRef<GroupStore>();
 
   const store = useContext(TemplateStoreContext);
-  props.getTemplateState = store?.getState;
-  props.setTemplateState = store?.setState;
+  props.templateStore = store || undefined;
 
   if (!storeRef.current) {
     storeRef.current = createGroupStore(props);
