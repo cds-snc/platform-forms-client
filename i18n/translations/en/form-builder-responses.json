@@ -29,7 +29,7 @@
       },
       "date": {
         "title": "Submission date",
-        "body": "When the response was received by GC Forms."
+        "body": "Indicates when the response was received by GC Forms."
       },
       "nextSteps": {
         "title": "Next steps",
