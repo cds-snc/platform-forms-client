@@ -51,7 +51,7 @@ export const ParentNode = ({ node }: { node: NodeApi<TreeItem> }) => {
           <Input node={node} />
         </div>
       ) : (
-        <div>
+        <div data-id={node.data.id}>
           <FolderArrow node={node} />
           {node.data.name}
         </div>
@@ -95,8 +95,11 @@ export const ChildNode = ({
       {node.isEditing ? (
         <Input node={node} />
       ) : (
-        <div className="group relative w-[350px] overflow-hidden truncate border-gray-soft bg-white p-1 pr-10">
-          {label} - {node.data.id}
+        <div
+          data-id={node.data.id}
+          className="group relative w-[350px] overflow-hidden truncate border-gray-soft bg-white p-1 pr-10"
+        >
+          {label}
           {!node.data.readOnly && (
             <DragHandle className="absolute right-0 top-0 mr-4 mt-3 hidden cursor-pointer group-hover:block" />
           )}

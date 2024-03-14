@@ -40,7 +40,13 @@ export const Section = ({ groupId }: { groupId: string }) => {
       <div className="flex max-w-[800px] justify-center rounded-t-lg border-1 border-slate-700 p-2">
         <h4>{groupName}</h4>
 
-        <input id="my-element" name="my-element" className="ml-10 border-1" type="text" />
+        <input
+          id="my-element"
+          placeholder="Enter Tree Id here"
+          name="my-element"
+          className="ml-10 border-1"
+          type="text"
+        />
 
         <button
           className="ml-10 inline-block"
