@@ -24,6 +24,10 @@ export const TreeView = () => {
 
   const { t } = useTranslation("form-builder");
 
+  // @todo maybe use templateIsDirty or lastChange to trigger a render
+  // const { templateIsDirty, lastChange } = useContext(TemplateApiContext);
+  // when updating a question title and we need to reflect the change in the tree
+
   const { groups, addGroup, controllers } = useDynamicTree();
   const [lastNodeAdded, setLastNodeAdded] = React.useState<string | null>(null);
   const { id, setId } = useGroupStore((s) => {
@@ -31,6 +35,10 @@ export const TreeView = () => {
   });
 
   // @todo setup default groups
+  // add elements from layouts if we have no groups
+  // the following won't work because it's possible
+  // to delete all groups --- we should likley do
+  // this in the store (one time migration)
   /*
   useEffect(() => {
     if (groups.length < 1) {
