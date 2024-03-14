@@ -288,6 +288,9 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               }),
             add: (elIndex = 0, type = FormElementTypes.radio, data, groupId) => {
               set((state) => {
+                // @todo maybe set the id from the outside
+                // and pass in as part of data so we have access
+                // to the id from outside i.e. to open the right panel
                 const id = incrementElementId(state.form.elements);
                 const item = {
                   ...defaultField,
