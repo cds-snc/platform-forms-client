@@ -9,7 +9,7 @@ import { Cursor } from "./Cursor";
 import { Button } from "@clientComponents/globals";
 import { start, end } from "./data";
 import { v4 as uuid } from "uuid";
-import { TreeApi } from "react-arborist";
+import { TreeApi, NodeApi } from "react-arborist";
 import { TreeItem } from "./types";
 import { useGroupStore } from "./store";
 
@@ -86,7 +86,7 @@ export const TreeView = () => {
           indent={40}
           rowHeight={46}
           width="100%"
-          disableDrop={({ parentNode }) => {
+          disableDrop={({ parentNode }: { parentNode: NodeApi<TreeItem> }) => {
             if (parentNode.data.id === "end") {
               return true;
             }
