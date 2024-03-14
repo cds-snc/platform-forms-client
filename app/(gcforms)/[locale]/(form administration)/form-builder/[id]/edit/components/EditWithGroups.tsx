@@ -16,12 +16,14 @@ import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 import { useRehydrate } from "@lib/hooks/form-builder";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store";
 import { Section } from "./Section";
+import { FormElement } from "@lib/types";
 
 export const EditWithGroups = () => {
   const { t } = useTranslation("form-builder");
   const {
     title,
     layout,
+    groups,
     elements,
     localizeField,
     updateField,
@@ -31,6 +33,7 @@ export const EditWithGroups = () => {
     title:
       s.form[s.localizeField(LocalizedFormProperties.TITLE, s.translationLanguagePriority)] ?? "",
     layout: s.form.layout,
+    groups: s.form.groups,
     elements: s.form.elements,
     localizeField: s.localizeField,
     updateField: s.updateField,
@@ -58,7 +61,13 @@ export const EditWithGroups = () => {
     100
   );
 
-  const sortedElements = sortByLayout({ layout, elements: [...elements] });
+  // Filter out elements that are not in the current group.
+  const sortedElements = sortByLayout({ layout, elements: [...elements] }).filter(
+    (element: FormElement) => {
+      // Ensure that the element is in the groups array
+      return groups && groups[groupId]?.elements?.includes(String(element.id));
+    }
+  );
 
   // grab only the data we need to render the question number
   const elementTypes = sortedElements.map((element) => ({
