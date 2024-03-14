@@ -5,6 +5,7 @@ export const groupsToTreeData = (formGroups: GroupsType): TreeItem[] => {
   const items = [];
   if (formGroups) {
     for (const [key, value] of Object.entries(formGroups)) {
+      // @todo --- we should validate the element exists in the form elements
       const children =
         value.elements &&
         value.elements.map((id) => {
