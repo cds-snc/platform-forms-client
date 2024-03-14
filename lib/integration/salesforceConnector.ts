@@ -1,23 +1,25 @@
-import * as jsforce from "jsforce";
+import { Rest, requestAccessToken } from "ts-force";
 
 const SALESFORCE_URL = process.env.SALESFORCE_URL;
+const SALESFORCE_CLIENT_ID = "" + process.env.SALESFORCE_CONSUMER_KEY;
 
 export class SalesforceConnector {
-  private conn: jsforce.Connection;
+  private resp: any; // eslint-disable-line
+  private conn: any; // eslint-disable-line
 
-  constructor() {
-    this.conn = new jsforce.Connection({
-      loginUrl: SALESFORCE_URL,
-      oauth2: {
-        clientId: process.env.SALESFORCE_CLIENT_ID,
-        clientSecret: process.env.SALESFORCE_CLIENT_SECRET,
-        redirectUri: process.env.SALESFORCE_REDIRECT_URI,
-      },
-    });
-  }
+  constructor() {}
 
   public async login(username: string, password: string): Promise<void> {
-    await this.conn.login(username, password);
+    this.resp = await requestAccessToken({
+      grant_type: "password",
+      instanceUrl: SALESFORCE_URL,
+      client_id: SALESFORCE_CLIENT_ID,
+      client_secret: process.env.SALESFORCE_CONSUMER_SECRET,
+      username: username,
+      password: password,
+    });
+
+    this.conn = new Rest(this.resp);
   }
 
   public async query(query: string): Promise<void> {
