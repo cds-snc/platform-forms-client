@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { Tree } from "react-arborist";
 import { useTranslation } from "react-i18next";
 
-import { useTemplateStore } from "@lib/store";
+// import { useTemplateStore } from "@lib/store";
 import { Node } from "./Node";
 import { useDynamicTree } from "./hooks/useDynamicTree";
 import { Cursor } from "./Cursor";
@@ -14,20 +14,25 @@ import { TreeItem } from "./types";
 import { useGroupStore } from "./store";
 
 export const TreeView = () => {
+  /*
   const { elements } = useTemplateStore((s) => ({
     elements: s.form.elements,
   }));
+  */
 
   const treeRef = useRef<TreeApi<TreeItem>>();
 
   const { t } = useTranslation("form-builder");
 
-  const { groups, addGroup, setGroups, controllers } = useDynamicTree();
+  const { groups, addGroup, controllers } = useDynamicTree();
   const [lastNodeAdded, setLastNodeAdded] = React.useState<string | null>(null);
-  const setId = useGroupStore((s) => s.setId);
+  const { id, setId } = useGroupStore((s) => {
+    return { id: s.id, setId: s.setId };
+  });
 
+  // @todo setup default groups
+  /*
   useEffect(() => {
-    // If there are no groups create them
     if (groups.length < 1) {
       const startGroup = {
         id: uuid(),
@@ -48,6 +53,13 @@ export const TreeView = () => {
       setGroups([startGroup]);
     }
   }, [setGroups, elements, groups]);
+  */
+
+  useEffect(() => {
+    // Update the tree selection when the id changes
+    const tree = treeRef.current;
+    tree?.setSelection({ ids: [id], anchor: id, mostRecent: id });
+  }, [id]);
 
   return (
     <div className="relative mr-[1px]">
@@ -58,14 +70,6 @@ export const TreeView = () => {
             const id = uuid();
             addGroup(id, "New Section");
             setLastNodeAdded(id);
-            if (!treeRef.current) return;
-
-            const tree = treeRef.current;
-
-            // Set focus on the newly added node
-            tree.setSelection({ ids: [id], anchor: id, mostRecent: id });
-
-            // Set the current group id
             setId(id);
           }}
         >
