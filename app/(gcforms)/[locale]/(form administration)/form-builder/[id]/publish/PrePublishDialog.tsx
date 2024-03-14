@@ -2,6 +2,7 @@ import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef, Radio } from "@formBuilder/components/shared";
 import { useState } from "react";
+import { UpdateSalesforceRecords } from "./PrePublishActions";
 
 export const PrePublishDialog = ({
   handleClose,
@@ -15,18 +16,18 @@ export const PrePublishDialog = ({
 
   const [prePublishStep, setPrePublishStep] = useState(0);
 
+  async function ContinuePublishSteps() {
+    if (prePublishStep == 0) {
+      setPrePublishStep(1);
+    } else {
+      UpdateSalesforceRecords();
+      handleConfirm();
+    }
+  }
+
   const actions = (
     <div className="flex gap-4">
-      <Button
-        theme="primary"
-        onClick={async () => {
-          if (prePublishStep == 0) {
-            setPrePublishStep(1);
-          } else {
-            handleConfirm();
-          }
-        }}
-      >
+      <Button theme="primary" onClick={ContinuePublishSteps}>
         {t("continue")}
       </Button>
 
