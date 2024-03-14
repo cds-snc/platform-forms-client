@@ -122,6 +122,7 @@ export async function listAllSubmissions(
   ability: UserAbility,
   formID: string,
   status?: VaultStatus,
+  responseDownloadLimit?: number,
   lastEvaluatedKey: Record<string, string> | null | undefined = null
 ): Promise<{
   submissions: VaultSubmissionList[];
@@ -143,7 +144,9 @@ export async function listAllSubmissions(
         );
       throw e;
     });
-    const responseDownloadLimit = Number(await getAppSetting("responseDownloadLimit"));
+    if (!responseDownloadLimit) {
+      responseDownloadLimit = Number(await getAppSetting("responseDownloadLimit"));
+    }
     // We're going to request one more than the limit so we can consistently determine if there are more responses
     const responseRetrievalLimit = responseDownloadLimit + 1;
 

@@ -1,22 +1,39 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { act, render } from "@testing-library/react";
 import { DownloadTable } from "../DownloadTable";
 import { VaultSubmissionList, VaultStatus } from "@lib/types";
+import axios from "axios";
 
-describe.skip("Download Table", () => {
+jest.mock("next/navigation", () => ({
+  useSearchParams: () => jest.fn(),
+  usePathname: () => jest.fn(),
+  useParams: () => jest.fn(),
+  useRouter: () => ({
+    push: jest.fn(),
+    replace: jest.fn(),
+    prefetch: jest.fn(),
+  }),
+}));
+
+jest.mock("../../actions", () => ({
+  __esModule: true,
+  getSubmissionsByFormat: jest.fn(),
+}));
+
+describe("Download Table", () => {
   it("Download Table should render", async () => {
-    //const promise = Promise.resolve();
-    // const axiosSpy = jest.spyOn(axios, "get");
+    const promise = Promise.resolve();
+    const axiosSpy = jest.spyOn(axios, "get");
 
-    // axiosSpy.mockImplementation((url: string) => {
-    //   if (url === "/api/settings/nagwarePhaseEncouraged") {
-    //     return Promise.resolve({ data: 21 });
-    //   } else if (url === "/api/settings/nagwarePhaseWarned") {
-    //     return Promise.resolve({ data: 35 });
-    //   } else {
-    //     return Promise.reject(new Error("Invalid URL"));
-    //   }
-    // });
+    axiosSpy.mockImplementation((url: string) => {
+      if (url === "/api/settings/nagwarePhaseEncouraged") {
+        return Promise.resolve({ data: 21 });
+      } else if (url === "/api/settings/nagwarePhaseWarned") {
+        return Promise.resolve({ data: 35 });
+      } else {
+        return Promise.reject(new Error("Invalid URL"));
+      }
+    });
 
     const rendered = render(
       <DownloadTable
@@ -25,10 +42,7 @@ describe.skip("Download Table", () => {
         formName={""}
         nagwareResult={null}
         responseDownloadLimit={0}
-        showDownloadSuccess={""}
-        setShowDownloadSuccess={function (): void {
-          throw new Error("Function not implemented.");
-        }}
+        overdueAfter={0}
       />
     );
     const table = rendered.getByRole("table");
@@ -36,9 +50,9 @@ describe.skip("Download Table", () => {
 
     // see: https://kentcdodds.com/blog/fix-the-not-wrapped-in-act-warning#an-alternative-waiting-for-the-mocked-promise
     // > especially if there's no visual indication of the async task completing.
-    // await act(async () => {
-    //   await promise;
-    // });
+    await act(async () => {
+      await promise;
+    });
   });
 });
 

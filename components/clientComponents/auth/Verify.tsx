@@ -8,7 +8,7 @@ import * as Yup from "yup";
 import Link from "next/link";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import { Button } from "@clientComponents/globals";
-import { toast, ToastContainer } from "@clientComponents/form-builder/app/shared/Toast";
+import { toast, ToastContainer } from "@formBuilder/components/shared/Toast";
 import { logMessage } from "@lib/logger";
 import { signIn } from "next-auth/react";
 import { hasError } from "@lib/hasError";

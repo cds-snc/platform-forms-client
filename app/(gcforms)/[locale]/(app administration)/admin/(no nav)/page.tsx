@@ -64,6 +64,21 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 <a href={`/${locale}/admin/flags`}>{t("featureFlags")}</a>
               </Link>
             </li>
+            <li>
+              <Link href={`/${locale}/admin/typography`} legacyBehavior>
+                <a href={`/${locale}/admin/typography`}>{t("typography")}</a>
+              </Link>
+            </li>
+            <li>
+              <Link href={`/${locale}/admin/upload`} legacyBehavior>
+                <a href={`/${locale}/admin/upload`}>{t("upload")}</a>
+              </Link>
+            </li>
+            <li>
+              <Link href={`/${locale}/admin/view-templates`} legacyBehavior>
+                <a href={`/${locale}/admin/view-templates`}>{t("viewTemplates")}</a>
+              </Link>
+            </li>
           </ul>
         </div>
       </div>

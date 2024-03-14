@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { DeleteIcon, FolderIcon, InboxIcon } from "@serverComponents/icons";
-import { TabNavLink } from "@clientComponents/form-builder/app/navigation/TabNavLink";
+import { TabNavLink } from "@clientComponents/globals/TabNavLink";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 

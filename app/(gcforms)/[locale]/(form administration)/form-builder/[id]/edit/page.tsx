@@ -1,7 +1,9 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import { EditNavigation } from "@clientComponents/form-builder/app";
-import { Edit } from "@clientComponents/form-builder/app/edit";
+import { Edit } from "./components/Edit";
+import { EditNavigation } from "./components/EditNavigation";
+import { checkFlag } from "../actions";
+import { EditWithGroups } from "./components/EditWithGroups";
 
 export async function generateMetadata({
   params: { locale },
@@ -15,10 +17,18 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params: { id } }: { params: { id: string } }) {
+  const conditionalLogic = await checkFlag("conditionalLogic");
+
   return (
     <>
-      <EditNavigation id={id} />
-      <Edit />
+      {conditionalLogic ? (
+        <EditWithGroups />
+      ) : (
+        <>
+          <EditNavigation id={id} />
+          <Edit />
+        </>
+      )}
     </>
   );
 }

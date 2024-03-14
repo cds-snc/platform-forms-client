@@ -4,7 +4,7 @@ import { AccessControlError, checkPrivileges } from "@lib/privileges";
 import { NagwareResult, UserAbility } from "./types";
 import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
-import { Privilege } from "@prisma/client";
+import { Privilege, Prisma } from "@prisma/client";
 import { sendDeactivationEmail } from "@lib/deactivate";
 import { getAllTemplatesForUser } from "./templates";
 import { listAllSubmissions } from "./vault";
@@ -166,7 +166,10 @@ export const getUser = async (ability: UserAbility, id: string): Promise<AppUser
  * Get all Users
  * @returns An array of all Users
  */
-export const getUsers = async (ability: UserAbility): Promise<AppUser[] | never[]> => {
+export const getUsers = async (
+  ability: UserAbility,
+  where?: Prisma.UserWhereInput
+): Promise<AppUser[] | never[]> => {
   try {
     checkPrivileges(ability, [
       {
@@ -181,6 +184,7 @@ export const getUsers = async (ability: UserAbility): Promise<AppUser[] | never[
 
     const users = await prisma.user
       .findMany({
+        ...(where && { where }),
         select: {
           id: true,
           name: true,

@@ -3,9 +3,9 @@ import React, { useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useRouter } from "next/navigation";
 
-import { useTemplateStore, clearTemplateStore } from "@clientComponents/form-builder/store";
+import { useTemplateStore, clearTemplateStore } from "@lib/store";
 import { DesignIcon, ExternalLinkIcon, WarningIcon } from "@serverComponents/icons";
-import { errorMessage, validateTemplate } from "@clientComponents/form-builder/validate";
+import { errorMessage, validateTemplate } from "@lib/utils/form-builder/validate";
 import Link from "next/link";
 
 export const Start = () => {
@@ -66,7 +66,7 @@ export const Start = () => {
         window.dataLayer.push({
           event: "open_form_file",
         });
-        router.push(`/${language}/form-builder/preview`);
+        router.push(`/${language}/form-builder/0000/preview`);
       };
     } catch (e) {
       if (e instanceof Error) {

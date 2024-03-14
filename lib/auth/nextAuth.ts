@@ -118,7 +118,7 @@ export const {
     // Seconds - How long until an idle session expires and is no longer valid.
     maxAge: 2 * 60 * 60, // 2 hours
   },
-
+  trustHost: true,
   debug: process.env.NODE_ENV !== "production",
   logger: {
     error(code, ...message) {
@@ -172,7 +172,8 @@ export const {
     },
     async signOut(obj) {
       if ("token" in obj && obj.token !== null) {
-        const userId = String(obj.token.userId);
+        // Token will always be availabe because we leverage JWT for session management
+        const userId = (obj.token as JWT).userId ?? "Unknown User ID";
         logEvent(userId, { type: "User", id: userId }, "UserSignOut");
       }
     },

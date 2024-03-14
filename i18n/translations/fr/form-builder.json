@@ -685,6 +685,12 @@
   "tooltipFormatItalic": "Italique (⌘I)",
   "tooltipFormatNumberedList": "Liste numérotée",
   "tooltipInsertLink": "Insérer un lien",
+  "tooltips": {
+    "departmentElement": {
+      "title": "D’où vient la liste d’organisations du GC?",
+      "body": "<p>Formulaires GC utilise une <a href=\"https://github.com/cds-snc/gc-organisations\" target=\"_blank\">liste de ministères et d’organismes</a> tenue à jour par le Service numérique canadien. Votre formulaire sera automatiquement mis à jour avec cette liste.</p>"
+    }
+  },
   "translate": "Traductions",
   "translateDescription": "Traduisez le contenu de votre formulaire côte à côte pour offrir une expérience bilingue aux personnes qui remplissent votre formulaire. ",
   "translateTitle": "Entrer la traduction",
@@ -782,5 +788,18 @@
     "show": "Afficher :"
   },
   "saved": "Enregistré",
-  "opensInNewTab": "ouvre un nouvel onglet"
+  "opensInNewTab": "ouvre un nouvel onglet",
+  "rightPanel": {
+    "openPanel": "Design form [FR]",
+    "closePanel": "Close panel [FR]",
+    "questions": "Questions [FR]",
+    "logic": "Logic  [FR]",
+    "translation": "Translation [FR]",
+    "treeView": {
+      "addSection": "New section [FR]"
+    }
+  },
+  "logic": {
+    "heading": "Logic [FR]"
+  }
 }

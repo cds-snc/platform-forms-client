@@ -86,3 +86,5 @@ export { NavSettingsIcon } from "./NavSettingsIcon";
 export { NavResponsesIcon } from "./NavResponsesIcon";
 export { GavelIcon } from "./GavelIcon";
 export { DepartmentsIcon } from "./DepartmentsIcon";
+export { HelpIcon } from "./HelpIcon";
+export { RightPanelOpen } from "./RightPanelOpen";

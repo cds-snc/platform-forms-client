@@ -35,16 +35,12 @@ const nextConfig = {
     // removeConsole: false,
   },
   output: isOutputStandalone ? "standalone" : undefined,
-  webpack: (config, { isServer, nextRuntime, webpack }) => {
+  webpack: (config) => {
     // Support reading markdown
     config.module.rules.push({
       test: /\.md$/,
       type: "asset/source",
     });
-
-    // Silences a repeated warning from the aws-sdk
-    if (isServer && nextRuntime === "nodejs")
-      config.plugins.push(new webpack.IgnorePlugin({ resourceRegExp: /^aws-crt$/ }));
 
     return config;
   },
@@ -62,23 +58,18 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: "/en/form-builder/support",
-        destination: "/en/support",
+        source: "/:locale/form-builder/support",
+        destination: "/:locale/support",
         permanent: true,
       },
       {
-        source: "/fr/form-builder/support",
-        destination: "/fr/support",
+        source: "/:locale/form-builder/support/contactus",
+        destination: "/:locale/contact",
         permanent: true,
       },
       {
-        source: "/en/form-builder/support/contactus",
-        destination: "/en/contact",
-        permanent: true,
-      },
-      {
-        source: "/fr/form-builder/support/contactus",
-        destination: "/fr/contact",
+        source: "/:locale/form-builder/:id/responses",
+        destination: "/:locale/form-builder/:id/responses/new",
         permanent: true,
       },
     ];
@@ -87,6 +78,7 @@ const nextConfig = {
   experimental: {
     instrumentationHook: true,
     // ppr: true, -- This is not yet ready for production use
+    serverComponentsExternalPackages: ["@aws-sdk/lib-dynamodb"],
   },
 };
 

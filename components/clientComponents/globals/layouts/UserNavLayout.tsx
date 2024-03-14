@@ -6,7 +6,8 @@ import Link from "next/link";
 import { Footer, Brand, SkipLink, LanguageToggle } from "@clientComponents/globals";
 import { LoginMenu } from "@clientComponents/auth/LoginMenu";
 import { SiteLogo } from "@serverComponents/icons";
-import { ToastContainer } from "@clientComponents/form-builder/app/shared/Toast";
+import { ToastContainer } from "@formBuilder/components/shared/Toast";
+import { useSession } from "next-auth/react";
 
 const SiteLink = () => {
   const {
@@ -16,7 +17,7 @@ const SiteLink = () => {
   return (
     <Link href={`/${language}/form-builder`} legacyBehavior>
       {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-      <a className="mb-6 mr-10 inline-flex no-underline !shadow-none focus:bg-white">
+      <a className="mb-6 mr-10 inline-flex no-underline focus:bg-white">
         <span className="">
           <SiteLogo title={t("title")} />
         </span>
@@ -46,6 +47,8 @@ const UserNavLayout = ({
     i18n: { language },
   } = useTranslation("common");
 
+  const { status } = useSession();
+
   return (
     <div className="flex min-h-full flex-col bg-gray-soft">
       <SkipLink />
@@ -56,11 +59,13 @@ const UserNavLayout = ({
             <Brand brand={null} />
           </div>
           <div className="inline-flex gap-4">
-            <div className="text-base font-normal not-italic md:text-sm">
-              <Link id="forms_link" href={`/${language}/forms`}>
-                {t("adminNav.myForms")}
-              </Link>
-            </div>
+            {status === "authenticated" && (
+              <div className="text-base font-normal not-italic md:text-sm">
+                <Link id="forms_link" href={`/${language}/forms`}>
+                  {t("adminNav.myForms")}
+                </Link>
+              </div>
+            )}
             <LoginMenu />
             <LanguageToggle />
           </div>

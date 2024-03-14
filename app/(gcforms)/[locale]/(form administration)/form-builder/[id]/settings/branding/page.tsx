@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { serverTranslation } from "@i18n";
 import { auth } from "@lib/auth";
 import { getAppSetting } from "@lib/appSettings";
-import { ClientSide } from "./clientSide";
+import { Branding } from "./components";
 
 export async function generateMetadata({
   params: { locale },
@@ -32,5 +32,5 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
   const hasBrandingRequestForm = Boolean(await getAppSetting("brandingRequestForm"));
 
-  return <ClientSide hasBrandingRequestForm={hasBrandingRequestForm} />;
+  return <Branding hasBrandingRequestForm={hasBrandingRequestForm} />;
 }

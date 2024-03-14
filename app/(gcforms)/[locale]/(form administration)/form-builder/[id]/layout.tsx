@@ -1,12 +1,17 @@
 import { auth } from "@lib/auth";
-import { LeftNavigation } from "@clientComponents/form-builder/app";
-import { ToastContainer } from "@clientComponents/form-builder/app/shared/Toast";
+import { LeftNavigation } from "./components/LeftNavigation";
+import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { SkipLink, Footer, Header } from "@clientComponents/globals";
-import { FormBuilderProviders } from "@clientComponents/form-builder/providers";
 import { FormRecord } from "@lib/types";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { getFullTemplateByID } from "@lib/templates";
 import { redirect } from "next/navigation";
+import { TemplateStoreProvider } from "@lib/store";
+import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext";
+import { RefStoreProvider } from "@lib/hooks/form-builder/useRefStore";
+import { RightPanel } from "@formBuilder/components/shared/right-panel/RightPanel";
+import { checkFlag } from "./actions";
+import { GroupStoreProvider } from "@formBuilder/components/shared/right-panel/treeview/store";
 
 export default async function Layout({
   children,
@@ -25,6 +30,8 @@ export default async function Layout({
 
   const formID = id || null;
 
+  const showRightPanel = await checkFlag("conditionalLogic");
+
   if (session && formID) {
     try {
       const ability = createAbility(session);
@@ -36,7 +43,7 @@ export default async function Layout({
       }
 
       if (initialForm.isPublished) {
-        redirect(`/${locale}/form-builder/settings/${formID}`);
+        redirect(`/${locale}/form-builder/${formID}/settings`);
       }
 
       FormbuilderParams.initialForm = initialForm;
@@ -48,28 +55,37 @@ export default async function Layout({
   }
 
   return (
-    <FormBuilderProviders locale={locale} initialForm={initialForm}>
-      <div className="flex h-full flex-col">
-        <SkipLink />
-        <Header context="formBuilder" className="mb-0" />
-        <div className="shrink-0 grow basis-auto bg-gray-soft">
-          <ToastContainer containerId="default" />
-          <ToastContainer limit={1} containerId="wide" autoClose={false} width="600px" />
-          <div className="flex h-full flex-row gap-7 pr-12">
-            <div id="left-nav" className="z-10 border-r border-slate-200 bg-white">
-              <div className="sticky top-0">
-                <LeftNavigation id={id} />
+    <TemplateStoreProvider {...{ ...initialForm, locale }}>
+      <SaveTemplateProvider>
+        <RefStoreProvider>
+          <div className={`flex h-full flex-col`}>
+            {/* @TODO: Backlink?? */}
+            <div className="flex h-full flex-col">
+              <SkipLink />
+              <Header context="formBuilder" className="mb-0" />
+              <div className="shrink-0 grow basis-auto bg-gray-soft">
+                <ToastContainer containerId="default" />
+                <ToastContainer limit={1} containerId="wide" autoClose={false} width="600px" />
+                <div className="flex h-full flex-row gap-7">
+                  <div id="left-nav" className="z-10 border-r border-slate-200 bg-white">
+                    <div className="sticky top-0">
+                      <LeftNavigation id={id} />
+                    </div>
+                  </div>
+                  <GroupStoreProvider>
+                    <main id="content" className="form-builder my-7 w-full">
+                      {children}
+                    </main>
+                    {showRightPanel && <RightPanel id={id} />}
+                  </GroupStoreProvider>
+                </div>
               </div>
+
+              <Footer displayFormBuilderFooter className="mt-0 lg:mt-0" />
             </div>
-
-            <main id="content" className="w-full form-builder my-7">
-              {children}
-            </main>
           </div>
-        </div>
-
-        <Footer displayFormBuilderFooter className="mt-0 lg:mt-0" />
-      </div>
-    </FormBuilderProviders>
+        </RefStoreProvider>
+      </SaveTemplateProvider>
+    </TemplateStoreProvider>
   );
 }

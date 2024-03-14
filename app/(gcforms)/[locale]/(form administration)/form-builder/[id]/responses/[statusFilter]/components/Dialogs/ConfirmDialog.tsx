@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { Trans } from "react-i18next";
-import { useDialogRef, Dialog } from "@clientComponents/form-builder/app/shared";
+import { useDialogRef, Dialog } from "@formBuilder/components/shared";
 import { LineItemEntries } from "./line-item-entries";
 import { Button, Alert } from "@clientComponents/globals";
 import { randomId, runPromisesSynchronously } from "@lib/client/clientHelpers";

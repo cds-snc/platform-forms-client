@@ -4,7 +4,7 @@ import { VaultSubmissionList } from "@lib/types";
 import React from "react";
 import { useTranslation } from "@i18n/client";
 import { ReducerTableItemsActions, TableActions } from "./DownloadTableReducer";
-import { Tooltip } from "@clientComponents/form-builder/app/shared/Tooltip";
+import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 
 export const CheckAll = ({
   tableItems,
@@ -73,7 +73,7 @@ export const CheckAll = ({
       : t("downloadResponsesTable.header.deselectAll");
 
   return (
-    <Tooltip text={tooltip} side="top">
+    <Tooltip.Simple text={tooltip} side="top">
       <span
         className="m-auto inline-block cursor-pointer"
         role="checkbox"
@@ -102,6 +102,6 @@ export const CheckAll = ({
           <CheckBoxEmptyIcon title={tooltip} className="h-6 w-6" />
         )}
       </span>
-    </Tooltip>
+    </Tooltip.Simple>
   );
 };

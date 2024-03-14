@@ -1,4 +1,4 @@
-import { ToastContainer } from "@clientComponents/form-builder/app/shared/Toast";
+import { ToastContainer } from "@formBuilder/components/shared/Toast";
 
 import { Footer, SkipLink } from "@serverComponents/globals";
 
@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 import { SiteLogo } from "@serverComponents/icons";
 
 import LanguageToggle from "@serverComponents/globals/LanguageToggle";
-import { YourAccountDropdown } from "@clientComponents/globals/YourAccountDropdown";
+import { YourAccountDropdown } from "@clientComponents/globals/Header/YourAccountDropdown";
 import { auth } from "@lib/auth";
 export default async function Layout({
   children,
@@ -33,7 +33,7 @@ export default async function Layout({
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a
                   id="logo"
-                  className="mr-5 flex border-r-1 pr-[0.77rem] text-3xl font-semibold !text-black no-underline !shadow-none focus:bg-white"
+                  className="mr-5 flex border-r-1 pr-[0.77rem] text-3xl font-semibold !text-black no-underline focus:bg-white"
                 >
                   <div className="inline-block h-[45px] w-[46px] p-2">
                     <SiteLogo title={t("title")} />

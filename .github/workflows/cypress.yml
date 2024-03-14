@@ -13,7 +13,7 @@ jobs:
         # Docker Hub image
         image: postgres@sha256:71da05df8c4f1e1bac9b92ebfba2a0eeb183f6ac6a972fd5e55e8146e29efe9c
         env:
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_PASSWORD: chummy
         # Set health checks to wait until postgres has started
         options: >-
           --health-cmd pg_isready
@@ -34,7 +34,7 @@ jobs:
           - 6379:6379
     env:
       # Needed for Next Auth to initialize
-      NEXTAUTH_URL: http://localhost:3000
+      HOST_URL: http://localhost:3000
       TOKEN_SECRET: testKey
       APP_ENV: test
       NEXT_PUBLIC_APP_ENV: test

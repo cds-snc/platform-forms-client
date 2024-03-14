@@ -78,7 +78,11 @@
     "settings": "Settings",
     "administration": "Administration",
     "myForms": "Forms",
-    "profile": "Profile"
+    "profile": "Profile",
+    "typography": "Typography",
+    "upload": "Upload",
+    "viewTemplates": "View Templates",
+    "allForms": "All Forms"
   },
   "formElements": {
     "characterCount": {

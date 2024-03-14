@@ -11,7 +11,7 @@
   },
   "cards": {
     "noForms": "Vous n’avez aucun formulaire.",
-    "noDraftForms": "Vous n’avez aucune ébauche enregistrée.",
+    "noDraftsForms": "Vous n’avez aucune ébauche enregistrée.",
     "noPublishedForms": "Vous n’avez aucun formulaire publié."
   },
   "card": {
@@ -89,5 +89,9 @@
   },
   "viewForm": "Afficher le formulaire (ouvre un nouvel onglet)",
   "editForm": "Modifier le formulaire",
-  "navLabel": "Navigation des formulaires"
+  "navLabel": "Navigation des formulaires",
+  "errors": {
+    "formDownloadNotExist": "[FR]The form you are trying to download does not exist.",
+    "formDownloadFailed": "[FR]Failed to download the form."
+  }
 }

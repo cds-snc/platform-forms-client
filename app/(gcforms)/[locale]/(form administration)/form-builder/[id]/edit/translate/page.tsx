@@ -1,7 +1,8 @@
 import { serverTranslation } from "@i18n";
-import { EditNavigation } from "@clientComponents/form-builder/app";
-import { Translate } from "@clientComponents/form-builder/app/translate";
 import { Metadata } from "next";
+import { EditNavigation } from "../components/EditNavigation";
+import { Translate } from "./components";
+import { checkFlag } from "@formBuilder/[id]/actions";
 
 export async function generateMetadata({
   params: { locale },
@@ -15,9 +16,11 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params: { id } }: { params: { id: string } }) {
+  const showNavigation = !(await checkFlag("conditionalLogic"));
+
   return (
     <>
-      <EditNavigation id={id} />
+      {showNavigation && <EditNavigation id={id} />}
       <Translate />
     </>
   );

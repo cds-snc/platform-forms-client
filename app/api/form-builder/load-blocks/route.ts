@@ -1,7 +1,7 @@
 import path from "path";
 import { promises as fs } from "fs";
 import { type NextRequest, NextResponse } from "next/server";
-import { allowedTemplates } from "@clientComponents/form-builder/util";
+import { allowedTemplates } from "@lib/utils/form-builder";
 
 export const POST = async (req: NextRequest) => {
   const { elementType } = await req.json();
