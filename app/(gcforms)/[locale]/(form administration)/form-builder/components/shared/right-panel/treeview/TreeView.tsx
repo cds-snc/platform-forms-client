@@ -71,7 +71,8 @@ export const TreeView = () => {
           onClick={() => {
             const id = uuid();
             addGroup(id, "New Section");
-            setLastNodeAdded(id);
+            const rId = `${id}-${new Date().getTime().toString()}`;
+            setLastNodeAdded(rId);
             setId(id);
           }}
         >
@@ -85,7 +86,8 @@ export const TreeView = () => {
           {...controllers}
           onRename={(data) => {
             controllers.onRename(data);
-            setLastNodeAdded(data.id);
+            const rId = `${data.id}-${new Date().getTime().toString()}`;
+            setLastNodeAdded(rId);
           }}
           disableEdit={(data) => data.readOnly}
           renderCursor={Cursor}
