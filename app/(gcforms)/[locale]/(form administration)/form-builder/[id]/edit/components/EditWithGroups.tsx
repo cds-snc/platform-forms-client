@@ -15,7 +15,7 @@ import { cleanInput } from "@lib/utils/form-builder";
 import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 import { useRehydrate } from "@lib/hooks/form-builder";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store";
-import { NewSection } from "./NewSection";
+import { Section } from "./Section";
 
 export const EditWithGroups = () => {
   const { t } = useTranslation("form-builder");
@@ -132,7 +132,7 @@ export const EditWithGroups = () => {
           ariaLabel={t("richTextIntroTitle")}
         />
       )}
-      <NewSection groupId={groupId} />
+      <Section groupId={groupId} />
       <RefsProvider>
         {!["start", "end"].includes(groupId) &&
           layout.length >= 1 &&

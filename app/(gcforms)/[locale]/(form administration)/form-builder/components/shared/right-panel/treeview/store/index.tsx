@@ -23,6 +23,7 @@ export interface GroupStoreState extends GroupStoreProps {
   getId: () => string;
   setId: (id: string) => void;
   addGroup: (id: string, name: string) => void;
+  deleteGroup: (id: string) => void;
   getGroups: () => TreeItem[] | [];
   setGroups: (data: TreeItem[]) => void;
   getElement: (id: number) => FormElement | undefined;
@@ -61,7 +62,12 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
           s.form.groups[id] = { name, elements: [] };
         });
       },
-
+      deleteGroup: (id: string) => {
+        get().setTemplateState((s) => {
+          if (!s.form.groups) return;
+          delete s.form.groups[id];
+        });
+      },
       setGroups: (treeData: TreeItem[]) => {
         const groups = treeDataToGroups(treeData);
         if (!groups) return;
