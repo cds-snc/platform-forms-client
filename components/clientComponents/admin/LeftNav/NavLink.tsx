@@ -40,7 +40,7 @@ export const LeftNav = ({ href, children, title = "", onClick, testid }: LinkBut
 
   return (
     <div className="relative z-10 flex h-[60px] w-[60px]">
-      <Tooltip text={title} side="right">
+      <Tooltip.Simple text={title} side="right">
         <Link
           {...(isActive && { "aria-current": "page" })}
           aria-label={title}
@@ -57,7 +57,7 @@ export const LeftNav = ({ href, children, title = "", onClick, testid }: LinkBut
         >
           {children}
         </Link>
-      </Tooltip>
+      </Tooltip.Simple>
     </div>
   );
 };
