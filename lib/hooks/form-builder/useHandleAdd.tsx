@@ -13,8 +13,9 @@ import {
   setDescription,
 } from "@lib/utils/form-builder/itemHelper";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store";
+import { treeRefType } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 
-export const useHandleAdd = () => {
+export const useHandleAdd = (treeRef?: treeRefType) => {
   const { add, addSubItem } = useTemplateStore((s) => ({
     add: s.add,
     addSubItem: s.addSubItem,
@@ -56,9 +57,12 @@ export const useHandleAdd = () => {
 
       const item = create(type as FormElementTypes);
       // Note add() returns the element id -- we're not using it yet
-      await add(index, item.type, item, groupId);
+      const id = await add(index, item.type, item, groupId);
+      if (treeRef) {
+        treeRef.openParents(String(id));
+      }
     },
-    [add, create, groupId]
+    [add, create, groupId, treeRef]
   );
 
   const handleAddSubElement = useCallback(

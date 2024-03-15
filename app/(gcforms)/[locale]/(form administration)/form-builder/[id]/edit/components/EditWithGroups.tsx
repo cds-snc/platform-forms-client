@@ -141,6 +141,7 @@ export const EditWithGroups = () => {
           ariaLabel={t("richTextIntroTitle")}
         />
       )}
+
       <Section groupId={groupId} />
       <RefsProvider>
         {!["start", "end"].includes(groupId) &&
@@ -155,6 +156,7 @@ export const EditWithGroups = () => {
             }
           })}
       </RefsProvider>
+
       <>
         {groupId === "start" && (
           <RichTextLocked

@@ -4,6 +4,7 @@ import { useTranslation } from "@i18n/client";
 import { FormElementTypes } from "@lib/types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store";
+import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 
 export const Section = ({ groupId }: { groupId: string }) => {
   const { t } = useTranslation("form-builder");
@@ -19,7 +20,8 @@ export const Section = ({ groupId }: { groupId: string }) => {
     };
   });
 
-  const { handleAddElement } = useHandleAdd();
+  const treeRef = useTreeRef();
+  const { handleAddElement } = useHandleAdd(treeRef.current);
 
   const groupName = groups?.[groupId]?.name;
 

@@ -12,6 +12,7 @@ import {
 
 import React, { createContext, useRef, useContext, useEffect } from "react";
 import { getPathString } from "../utils/form-builder/getPath";
+import { TreeRefProvider } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 
 import {
   moveDown,
@@ -499,7 +500,7 @@ export const TemplateStoreProvider = ({
 
   return (
     <TemplateStoreContext.Provider value={storeRef.current}>
-      {children}
+      <TreeRefProvider>{children}</TreeRefProvider>
     </TemplateStoreContext.Provider>
   );
 };

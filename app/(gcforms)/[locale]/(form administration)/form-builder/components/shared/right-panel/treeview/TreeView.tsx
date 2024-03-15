@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { Tree } from "react-arborist";
 import { useTranslation } from "react-i18next";
 
@@ -9,9 +9,10 @@ import { Cursor } from "./Cursor";
 import { Button } from "@clientComponents/globals";
 import { start, end } from "./data";
 import { v4 as uuid } from "uuid";
-import { TreeApi, NodeApi } from "react-arborist";
+import { NodeApi } from "react-arborist";
 import { TreeItem } from "./types";
 import { useGroupStore } from "./store";
+import { useTreeRef } from "./provider/TreeRefProvider";
 
 export const TreeView = () => {
   /*
@@ -20,7 +21,7 @@ export const TreeView = () => {
   }));
   */
 
-  const treeRef = useRef<TreeApi<TreeItem>>();
+  const treeRef = useTreeRef();
 
   const { t } = useTranslation("form-builder");
 
