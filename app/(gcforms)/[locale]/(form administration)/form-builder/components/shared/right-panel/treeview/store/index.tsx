@@ -6,9 +6,11 @@ import { shallow } from "zustand/shallow";
 import React, { createContext, useRef, useContext } from "react";
 import { TemplateStoreContext } from "@lib/store/index";
 import { TemplateStore } from "@lib/store/useTemplateStore";
+import { LocalizedElementProperties } from "@lib/types/form-builder-types";
+
 import { groupsToTreeData } from "../util/groupsToTreeData";
 import { treeDataToGroups } from "../util/treeDataToGroups";
-import { LocalizedElementProperties } from "@lib/types/form-builder-types";
+import { findParentGroup } from "../util/findParentGroup";
 
 export interface GroupStoreProps {
   id: string;
@@ -26,6 +28,7 @@ export interface GroupStoreState extends GroupStoreProps {
   deleteGroup: (id: string) => void;
   getGroups: () => TreeItem[] | [];
   setGroups: (data: TreeItem[]) => void;
+  findParentGroup: (id: number) => TreeItem | undefined;
   getElement: (id: number) => FormElement | undefined;
   updateElementTitle: ({ id, text }: { id: number; text: string }) => void;
 }
@@ -44,6 +47,9 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
         set((state) => {
           state.id = id;
         }),
+      findParentGroup: (id: number) => {
+        return findParentGroup(get().groups, id);
+      },
       getId: () => get().id,
       getElement: (id) => {
         return get()

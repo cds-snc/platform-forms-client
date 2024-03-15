@@ -121,7 +121,12 @@ export interface TemplateStoreState extends TemplateStoreProps {
   setTranslationLanguagePriority: (lang: Language) => void;
   setFocusInput: (isSet: boolean) => void;
   getLocalizationAttribute: () => Record<"lang", Language> | undefined;
-  add: (elIndex?: number, type?: FormElementTypes, data?: FormElement, groupId?: string) => void;
+  add: (
+    elIndex?: number,
+    type?: FormElementTypes,
+    data?: FormElement,
+    groupId?: string
+  ) => Promise<number>;
   addSubItem: (
     elIndex: number,
     subIndex?: number,
@@ -286,29 +291,30 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                   );
                 }
               }),
-            add: (elIndex = 0, type = FormElementTypes.radio, data, groupId) => {
-              set((state) => {
-                // @todo maybe set the id from the outside
-                // and pass in as part of data so we have access
-                // to the id from outside i.e. to open the right panel
-                const id = incrementElementId(state.form.elements);
-                const item = {
-                  ...defaultField,
-                  ...data,
-                  id,
-                  type,
-                };
+            add: async (elIndex = 0, type = FormElementTypes.radio, data, groupId) => {
+              return new Promise((resolve) => {
+                set((state) => {
+                  const id = incrementElementId(state.form.elements);
+                  const item = {
+                    ...defaultField,
+                    ...data,
+                    id,
+                    type,
+                  };
 
-                if (groupId) {
-                  if (!state.form.groups) state.form.groups = {};
-                  if (!state.form.groups[groupId])
-                    state.form.groups[groupId] = { name: "", elements: [] };
-                  state.form.groups &&
-                    state.form.groups[groupId].elements.splice(elIndex + 1, 0, String(id));
-                }
+                  if (groupId) {
+                    if (!state.form.groups) state.form.groups = {};
+                    if (!state.form.groups[groupId])
+                      state.form.groups[groupId] = { name: "", elements: [] };
+                    state.form.groups &&
+                      state.form.groups[groupId].elements.splice(elIndex + 1, 0, String(id));
+                  }
 
-                state.form.layout.splice(elIndex + 1, 0, id);
-                state.form.elements.splice(elIndex + 1, 0, item);
+                  state.form.layout.splice(elIndex + 1, 0, id);
+                  state.form.elements.splice(elIndex + 1, 0, item);
+
+                  resolve(id);
+                });
               });
             },
             removeChoiceFromRules: (elIndex: number, choiceIndex: number) => {

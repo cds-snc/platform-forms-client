@@ -45,16 +45,18 @@ export const useHandleAdd = () => {
 
   /* Note this callback is also in ElementPanel */
   const handleAddElement = useCallback(
-    (index: number, type?: FormElementTypes) => {
+    async (index: number, type?: FormElementTypes) => {
       if (allowedTemplates.includes(type as LoaderType)) {
-        blockLoader(type as LoaderType, index, (data, position) => {
-          add(position, data.type, data, groupId);
+        blockLoader(type as LoaderType, index, async (data, position) => {
+          // Note add() returns the element id -- we're not using it yet
+          await add(position, data.type, data, groupId);
         });
         return;
       }
 
       const item = create(type as FormElementTypes);
-      add(index, item.type, item, groupId);
+      // Note add() returns the element id -- we're not using it yet
+      await add(index, item.type, item, groupId);
     },
     [add, create, groupId]
   );
