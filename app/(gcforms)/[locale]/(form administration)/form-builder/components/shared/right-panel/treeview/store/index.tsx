@@ -28,7 +28,7 @@ export interface GroupStoreState extends GroupStoreProps {
   deleteGroup: (id: string) => void;
   getGroups: () => TreeItem[] | [];
   setGroups: (data: TreeItem[]) => void;
-  findParentGroup: (id: number) => TreeItem | undefined;
+  findParentGroup: (id: string) => TreeItem | undefined;
   getElement: (id: number) => FormElement | undefined;
   updateElementTitle: ({ id, text }: { id: number; text: string }) => void;
 }
@@ -47,7 +47,7 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
         set((state) => {
           state.id = id;
         }),
-      findParentGroup: (id: number) => {
+      findParentGroup: (id: string) => {
         return findParentGroup(get().groups, id);
       },
       getId: () => get().id,
