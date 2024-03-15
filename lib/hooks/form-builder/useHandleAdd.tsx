@@ -59,6 +59,7 @@ export const useHandleAdd = (treeRef?: treeRefType) => {
       // Note add() returns the element id -- we're not using it yet
       const id = await add(index, item.type, item, groupId);
       if (treeRef) {
+        await new Promise((resolve) => setTimeout(resolve, 200)); // @TODO
         treeRef.openParents(String(id));
       }
     },

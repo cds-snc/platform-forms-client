@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Tree } from "react-arborist";
 import { useTranslation } from "react-i18next";
 
@@ -15,12 +15,6 @@ import { useGroupStore } from "./store";
 import { useTreeRef } from "./provider/TreeRefProvider";
 
 export const TreeView = () => {
-  /*
-  const { elements } = useTemplateStore((s) => ({
-    elements: s.form.elements,
-  }));
-  */
-
   const treeRef = useTreeRef();
 
   const { t } = useTranslation("form-builder");
@@ -31,46 +25,9 @@ export const TreeView = () => {
 
   const { groups, addGroup, controllers } = useDynamicTree();
   const [lastNodeAdded, setLastNodeAdded] = React.useState<string | null>(null);
-  const { id, setId } = useGroupStore((s) => {
+  const { setId } = useGroupStore((s) => {
     return { id: s.id, setId: s.setId };
   });
-
-  // @todo setup default groups
-  // add elements from layouts if we have no groups
-  // the following won't work because it's possible
-  // to delete all groups --- we should likley do
-  // this in the store (one time migration)
-  /*
-  useEffect(() => {
-    if (groups.length < 1) {
-      const startGroup = {
-        id: uuid(),
-        name: "Default Section",
-        readOnly: true,
-        icon: null,
-        children: [
-          ...elements.map((element) => {
-            return {
-              id: String(element.id),
-              name: "default",
-              icon: null,
-              readOnly: false,
-            };
-          }),
-        ],
-      };
-      setGroups([startGroup]);
-    }
-  }, [setGroups, elements, groups]);
-  */
-
-  useEffect(() => {
-    // Update the tree selection when the id changes
-    const tree = treeRef.current;
-    tree?.closeAll();
-    tree?.setSelection({ ids: [id], anchor: id, mostRecent: id });
-    tree?.openParents(id);
-  }, [id]);
 
   return (
     <div className="relative mr-[1px]">
@@ -90,6 +47,7 @@ export const TreeView = () => {
       </div>
       <div data-last-element={lastNodeAdded}>
         <Tree
+          openByDefault={false}
           ref={treeRef}
           data={[start, ...groups, end]}
           {...controllers}
