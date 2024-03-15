@@ -20,6 +20,9 @@ export interface GroupStoreProps {
 
 import { TreeItem } from "../types";
 import { FormElement } from "@lib/types";
+import { findNextGroup } from "../util/findNextGroup";
+import { findPreviousGroup } from "../util/findPreviousGroup";
+import { getGroupFromId } from "../util/getGroupFromId";
 
 export interface GroupStoreState extends GroupStoreProps {
   getId: () => string;
@@ -29,6 +32,9 @@ export interface GroupStoreState extends GroupStoreProps {
   getGroups: () => TreeItem[] | [];
   setGroups: (data: TreeItem[]) => void;
   findParentGroup: (id: string) => TreeItem | undefined;
+  findNextGroup: (id: string) => TreeItem | undefined;
+  findPreviousGroup: (id: string) => TreeItem | undefined;
+  getGroupFromId: (id: string) => TreeItem | undefined;
   getElement: (id: number) => FormElement | undefined;
   updateElementTitle: ({ id, text }: { id: number; text: string }) => void;
 }
@@ -48,7 +54,16 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
           state.id = id;
         }),
       findParentGroup: (id: string) => {
-        return findParentGroup(get().groups, id);
+        return findParentGroup(get().getGroups(), id);
+      },
+      findNextGroup: (id: string) => {
+        return findNextGroup(get().getGroups(), id);
+      },
+      findPreviousGroup: (id: string) => {
+        return findPreviousGroup(get().getGroups(), id);
+      },
+      getGroupFromId: (id: string) => {
+        return getGroupFromId(get().getGroups(), id);
       },
       getId: () => get().id,
       getElement: (id) => {

@@ -13,12 +13,17 @@ export const Section = ({ groupId }: { groupId: string }) => {
     groups: s.form.groups,
   }));
 
-  const { deleteGroup, setId } = useGroupStore((state) => {
-    return {
-      setId: state.setId,
-      deleteGroup: state.deleteGroup,
-    };
-  });
+  const { deleteGroup, setId, findParentGroup, findNextGroup, findPreviousGroup } = useGroupStore(
+    (state) => {
+      return {
+        setId: state.setId,
+        deleteGroup: state.deleteGroup,
+        findParentGroup: state.findParentGroup,
+        findNextGroup: state.findNextGroup,
+        findPreviousGroup: state.findPreviousGroup,
+      };
+    }
+  );
 
   const treeRef = useTreeRef();
   const { handleAddElement } = useHandleAdd(treeRef.current);
@@ -53,8 +58,9 @@ export const Section = ({ groupId }: { groupId: string }) => {
         <button
           className="ml-10 inline-block"
           onClick={() => {
+            const id = findNextGroup(groupId)?.id || findPreviousGroup(groupId)?.id;
             deleteGroup(groupId);
-            setId("start");
+            setId(id || "start");
           }}
         >
           Delete
@@ -68,6 +74,12 @@ export const Section = ({ groupId }: { groupId: string }) => {
             const el = document.getElementById("my-element");
             if (el) {
               const val = (el as HTMLInputElement).value;
+              // find parent group if there is one
+              const parent = findParentGroup(val);
+              if (parent) {
+                setId(parent.id);
+                return;
+              }
               setId(val);
             }
           }}
