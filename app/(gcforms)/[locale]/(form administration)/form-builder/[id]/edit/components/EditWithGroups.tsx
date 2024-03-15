@@ -9,7 +9,6 @@ import { RefsProvider } from "./RefsContext";
 import { RichTextLocked } from "./elements";
 import { ExpandingInput } from "@formBuilder/components/shared";
 import { useTemplateStore } from "@lib/store";
-import { getQuestionNumber, sortByLayout } from "@lib/utils/form-builder";
 import { SettingsPanel } from "./settings/SettingsPanel";
 import { cleanInput } from "@lib/utils/form-builder";
 import { SaveButton } from "@formBuilder/components/shared/SaveButton";
@@ -22,9 +21,6 @@ export const EditWithGroups = () => {
   const { t } = useTranslation("form-builder");
   const {
     title,
-    layout,
-    groups,
-    elements,
     localizeField,
     updateField,
     translationLanguagePriority,
@@ -32,9 +28,6 @@ export const EditWithGroups = () => {
   } = useTemplateStore((s) => ({
     title:
       s.form[s.localizeField(LocalizedFormProperties.TITLE, s.translationLanguagePriority)] ?? "",
-    layout: s.form.layout,
-    groups: s.form.groups,
-    elements: s.form.elements,
     localizeField: s.localizeField,
     updateField: s.updateField,
     translationLanguagePriority: s.translationLanguagePriority,
@@ -46,6 +39,9 @@ export const EditWithGroups = () => {
   const focusTitle = searchParams.get("focusTitle") ? true : false;
   const titleInput = useRef<HTMLTextAreaElement>(null);
   const groupId = useGroupStore((state) => state.id);
+  const getElement = useGroupStore((state) => state.getElement);
+  const getElementsGroupById = useGroupStore((state) => state.getElementsGroupById);
+  const group = getElementsGroupById(groupId);
 
   useEffect(() => {
     setValue(title);
@@ -62,18 +58,23 @@ export const EditWithGroups = () => {
   );
 
   // Filter out elements that are not in the current group.
-  const sortedElements = sortByLayout({ layout, elements: [...elements] }).filter(
-    (element: FormElement) => {
-      // Ensure that the element is in the groups array
-      return groups && groups[groupId]?.elements?.includes(String(element.id));
-    }
-  );
+  // const sortedElements = sortByLayout({ layout, elements: [...elements] }).filter(
+  //   (element: FormElement) => {
+  //     // Ensure that the element is in the groups array
+  //     return groups && groups[groupId]?.elements?.includes(String(element.id));
+  //   }
+  // );
 
-  // grab only the data we need to render the question number
-  const elementTypes = sortedElements.map((element) => ({
-    id: element.id,
-    type: element.type,
-  }));
+  const sortedElements: FormElement[] = [] as FormElement[];
+
+  if (group) {
+    group.elements.forEach((elementId: string) => {
+      const el = getElement(Number(elementId));
+      if (el) {
+        sortedElements.push(el);
+      }
+    });
+  }
 
   const updateValue = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -145,15 +146,10 @@ export const EditWithGroups = () => {
       <Section groupId={groupId} />
       <RefsProvider>
         {!["start", "end"].includes(groupId) &&
-          layout.length >= 1 &&
-          layout.map((id, index) => {
-            const element = sortedElements.find((element) => element.id === id);
-
-            if (element) {
-              const questionNumber = getQuestionNumber(element, elementTypes);
-              const item = { ...element, index, questionNumber };
-              return <ElementPanel elements={sortedElements} item={item} key={item.id} />;
-            }
+          sortedElements.map((element, index) => {
+            const questionNumber = 0;
+            const item = { ...element, index, questionNumber };
+            return <ElementPanel elements={sortedElements} item={item} key={item.id} />;
           })}
       </RefsProvider>
 

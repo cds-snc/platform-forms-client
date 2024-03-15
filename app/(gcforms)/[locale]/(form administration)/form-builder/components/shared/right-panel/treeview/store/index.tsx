@@ -23,6 +23,7 @@ import { FormElement } from "@lib/types";
 import { findNextGroup } from "../util/findNextGroup";
 import { findPreviousGroup } from "../util/findPreviousGroup";
 import { getGroupFromId } from "../util/getGroupFromId";
+import { Group } from "@lib/formContext";
 
 export interface GroupStoreState extends GroupStoreProps {
   getId: () => string;
@@ -37,6 +38,7 @@ export interface GroupStoreState extends GroupStoreProps {
   getGroupFromId: (id: string) => TreeItem | undefined;
   getElement: (id: number) => FormElement | undefined;
   updateElementTitle: ({ id, text }: { id: number; text: string }) => void;
+  getElementsGroupById: (id: string) => Group;
 }
 
 const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
@@ -67,6 +69,7 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
       },
       getId: () => get().id,
       getElement: (id) => {
+        if (get().templateStore.getState().form.elements === undefined) return;
         return get()
           .templateStore.getState()
           .form.elements.find((el) => el.id === id);
@@ -80,6 +83,11 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
         const formGroups = get().templateStore.getState().form.groups;
         if (!formGroups) return [];
         return groupsToTreeData(formGroups);
+      },
+      getElementsGroupById: (id: string) => {
+        const formGroups = get().templateStore.getState().form.groups;
+        if (!formGroups) return { id, elements: [], name: "" };
+        return formGroups[id];
       },
       addGroup: (id: string, name: string) => {
         get().templateStore.setState((s) => {

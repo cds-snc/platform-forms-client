@@ -30,7 +30,6 @@ export function useDynamicTree<T extends TreeItem>() {
     for (const id of args.dragIds) {
       tree.move({ id, parentId: args.parentId, index: args.index });
     }
-
     setGroups(tree.data);
   };
 
