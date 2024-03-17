@@ -5,6 +5,8 @@ import { begin2FAAuthentication, initiateSignIn } from "@lib/auth";
 import { redirect } from "next/navigation";
 import { CognitoIdentityProviderServiceException } from "@aws-sdk/client-cognito-identity-provider";
 import { hasError } from "@lib/hasError";
+import { cookies } from "next/headers";
+import { handleErrorById } from "@lib/auth/cognito";
 
 export interface ErrorStates {
   authError?: {
@@ -39,58 +41,6 @@ const validate = async (
   });
   return v.safeParse(formValidationSchema, formEntries);
 };
-async function handleErrorById(id: string, language: string) {
-  const { t } = await serverTranslation("cognito-errors", { lang: language });
-  const errorObj: {
-    title: string;
-    description?: string;
-    callToActionText?: string;
-    callToActionLink?: string;
-  } = { title: t("InternalServiceException") };
-  switch (id) {
-    // Custom and specific message. Would a more generic message be better?
-    case "InternalServiceExceptionLogin":
-      errorObj.title = t("InternalServiceExceptionLogin.title");
-      errorObj.description = t("InternalServiceExceptionLogin.description");
-      errorObj.callToActionText = t("InternalServiceExceptionLogin.linkText");
-      errorObj.callToActionLink = t("InternalServiceExceptionLogin.link");
-      break;
-    case "UsernameOrPasswordIncorrect":
-    case "UserNotFoundException":
-    case "NotAuthorizedException":
-      errorObj.title = t("UsernameOrPasswordIncorrect.title");
-      errorObj.description = t("UsernameOrPasswordIncorrect.description");
-      errorObj.callToActionLink = t("UsernameOrPasswordIncorrect.link");
-      errorObj.callToActionText = t("UsernameOrPasswordIncorrect.linkText");
-      break;
-    case "UsernameExistsException":
-      errorObj.title = t("UsernameExistsException"); // TODO ask design/content for error message
-      break;
-    case "IncorrectSecurityAnswerException":
-      errorObj.title = t("IncorrectSecurityAnswerException.title");
-      errorObj.description = t("IncorrectSecurityAnswerException.description");
-      break;
-    case "2FAInvalidVerificationCode":
-    case "CodeMismatchException":
-      errorObj.title = t("CodeMismatchException"); // TODO ask design/content for error message
-      break;
-    case "ExpiredCodeException":
-    case "2FAExpiredSession":
-      errorObj.title = t("ExpiredCodeException"); // TODO ask design/content for error message
-      break;
-    case "TooManyRequestsException":
-      errorObj.title = t("TooManyRequestsException.title");
-      errorObj.description = t("TooManyRequestsException.description");
-      errorObj.callToActionLink = t("TooManyRequestsException.link");
-      errorObj.callToActionText = t("TooManyRequestsException.linkText");
-      break;
-    default:
-      errorObj.title = t("InternalServiceException"); // TODO ask design/content for error message
-  }
-
-  return errorObj;
-}
-
 export const login = async (
   language: string,
   _: ErrorStates,
@@ -147,7 +97,16 @@ export const login = async (
       email: cognitoResult.email,
       token: cognitoResult.token,
     });
-    redirect(`/${language}/auth/mfa?token=${authenticationFlowToken}&user=${cognitoResult.email}`);
+    cookies().set(
+      "authenticationFlow",
+      JSON.stringify({
+        authenticationFlowToken,
+        email: cognitoResult.email,
+      }),
+      { secure: true, sameSite: "strict", maxAge: 60 * 15 }
+    );
+
+    redirect(`/${language}/auth/mfa`);
   }
 
   return {

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useTranslation } from "@i18n/client";
-
+import { clearAuthTokenCookie } from "../../actions";
 import { LinkButton } from "@clientComponents/globals";
 import { BackArrowIcon } from "@serverComponents/icons";
 
@@ -15,13 +15,21 @@ export const Locked2fa = () => {
       <h2 className="mb-6 mt-4 p-0">{t("2FALockedOutSession.title")}</h2>
       <p className="mb-10">{t("2FALockedOutSession.description")}</p>
       <div className="laptop:flex">
-        <LinkButton.Primary href={homeHref} className="mb-2 mr-3">
+        <LinkButton.Primary
+          href={homeHref}
+          className="mb-2 mr-3"
+          onClick={() => clearAuthTokenCookie}
+        >
           <span>
             <BackArrowIcon className="mr-2 inline-block self-stretch fill-white" />
             {t("account.actions.backToSignIn", { ns: "common" })}
           </span>
         </LinkButton.Primary>
-        <LinkButton.Secondary href={supportHref} className="mb-2">
+        <LinkButton.Secondary
+          href={supportHref}
+          className="mb-2"
+          onClick={() => clearAuthTokenCookie}
+        >
           {t("errorPanel.cta.support", { ns: "common" })}
         </LinkButton.Secondary>
       </div>

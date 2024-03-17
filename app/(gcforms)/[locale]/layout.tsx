@@ -17,7 +17,8 @@ export default async function Layout({
   const headersList = headers();
   const currentPath = headersList.get("x-path")?.replace(`/${locale}`, "");
 
-  if (session && currentPath) {
+  // Ignore if user is in the auth flow of MfA
+  if (session && currentPath && !currentPath.startsWith("/auth/mfa")) {
     if (
       !session.user.hasSecurityQuestions &&
       !currentPath.startsWith("/auth/setup-security-questions") &&

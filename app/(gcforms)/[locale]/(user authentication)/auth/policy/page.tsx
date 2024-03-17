@@ -19,7 +19,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const { user } = await requireAuthentication();
 
   if (user.acceptableUse) {
-    redirect(`/${locale}/forms}`);
+    redirect(`/${locale}/forms`);
   }
 
   const termsOfUseContent = await require(`@public/static/content/${locale}/responsibilities.md`);

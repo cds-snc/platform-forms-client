@@ -52,8 +52,8 @@ export const {
 } = NextAuth({
   providers: [
     CredentialsProvider({
-      id: "cognito",
-      name: "CognitoLogin",
+      id: "mfa",
+      name: "MultiFactorAuth",
       credentials: {
         authenticationFlowToken: { label: "Authentication flow token", type: "text" },
         username: { label: "Username", type: "text" },
@@ -99,15 +99,16 @@ export const {
         switch (validationResult.status) {
           case Validate2FAVerificationCodeResultStatus.VALID: {
             if (!validationResult.decodedCognitoToken)
-              throw new Error("Missing decoded Cognito token");
+              throw new Error("Missing decoded Cognito token in 2FA validation result");
+
             return validationResult.decodedCognitoToken;
           }
+          // These errors are checked and returned in the MFA Form server action
           case Validate2FAVerificationCodeResultStatus.INVALID:
-            throw new Error("2FAInvalidVerificationCode");
           case Validate2FAVerificationCodeResultStatus.EXPIRED:
-            throw new Error("2FAExpiredSession");
           case Validate2FAVerificationCodeResultStatus.LOCKED_OUT:
-            throw new Error("2FALockedOutSession");
+          default:
+            return null;
         }
       },
     }),

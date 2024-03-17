@@ -1,37 +1,56 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useFormState } from "react-dom";
-import { TextInput, Label, Alert } from "../../../../components/client/forms";
+import { TextInput, Label, Alert, ErrorListItem } from "../../../../components/client/forms";
 import { useTranslation } from "@i18n/client";
 import { verify } from "../../actions";
-
+import { Expired2faSession } from "./Expired2faSession";
+import { Locked2fa } from "./Locked2fa";
 import Link from "next/link";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import { Button } from "@clientComponents/globals";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
+import { logMessage } from "@lib/logger";
 
-export const MFAForm = ({
-  username,
-  authenticationFlowToken,
-}: {
-  username: string;
-  authenticationFlowToken: string;
-}) => {
+export const MFAForm = ({ authFlowToken }: { authFlowToken?: { value: string; name: string } }) => {
   const {
     t,
     i18n: { language },
-  } = useTranslation(["auth-verify"]);
-  const [state, formAction] = useFormState(
-    verify.bind(null, language, username, authenticationFlowToken),
-    {
-      validationErrors: [],
-    }
-  );
-  // const [isResend, setIsResend] = useState(false);
+  } = useTranslation(["auth-verify", "common"]);
+
+  const [state, formAction] = useFormState(verify.bind(null, language), {
+    validationErrors: [],
+  });
   const headingRef = useRef(null);
 
   useFocusIt({ elRef: headingRef });
+
+  const [isLocked, setIsLocked] = useState(false);
+  const [isExpired, setIsExpired] = useState(() => Boolean(authFlowToken?.value));
+
+  useEffect(() => {
+    switch (state.authError?.id) {
+      case "2FALockedOutSession":
+        setIsLocked(true);
+        break;
+      case "2FAExpiredSession":
+        setIsExpired(true);
+        break;
+    }
+  }, [state.authError]);
+
+  useEffect(() => {
+    logMessage.debug(state);
+  }, [state]);
+
+  if (isLocked) {
+    return <Locked2fa />;
+  }
+
+  if (isExpired) {
+    return <Expired2faSession />;
+  }
 
   return (
     <>
@@ -50,6 +69,29 @@ export const MFAForm = ({
           {state.authError.callToActionLink ? (
             <Link href={state.authError.callToActionLink}>{state.authError.callToActionText}</Link>
           ) : undefined}
+        </Alert>
+      )}
+      {Object.keys(state.validationErrors).length > 0 && !state.authError && (
+        <Alert
+          className="w-full"
+          type={ErrorStatus.ERROR}
+          validation={true}
+          tabIndex={0}
+          focussable={true}
+          id="mfaValidationErrors"
+          heading={t("input-validation.heading", { ns: "common" })}
+        >
+          <ol className="gc-ordered-list p-0">
+            {state.validationErrors.map(({ fieldKey, fieldValue }, index) => {
+              return (
+                <ErrorListItem
+                  key={`error-${fieldKey}-${index}`}
+                  errorKey={fieldKey}
+                  value={fieldValue}
+                />
+              );
+            })}
+          </ol>
         </Alert>
       )}
       <h1 data-testid="verify-title" ref={headingRef} className="mb-6 mt-6 border-0">
@@ -82,9 +124,9 @@ export const MFAForm = ({
           {t("verify.confirmButton")}
         </Button>
         <div className="mt-12 flex">
-          <Button theme="link" className="mr-8" onClick={() => /* setIsResend(true)*/ null}>
+          <Link className="mr-8" href={`/${language}/auth/mfa/resend`}>
             {t("verify.resendConfirmationCodeButton")}
-          </Button>
+          </Link>
           <Link href={`/${language}/support`}>{t("verify.help")}</Link>
         </div>
       </form>

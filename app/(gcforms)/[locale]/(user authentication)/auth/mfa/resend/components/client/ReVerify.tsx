@@ -15,16 +15,11 @@ import Link from "next/link";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 
 interface ReVerifyProps {
-  username: React.MutableRefObject<string>;
-  authenticationFlowToken: React.MutableRefObject<string>;
-  callback: () => void;
+  email: string;
+  authenticationFlowToken: string;
 }
 
-export const ReVerify = ({
-  username,
-  authenticationFlowToken,
-  callback,
-}: ReVerifyProps): ReactElement => {
+export const ReVerify = ({ email, authenticationFlowToken }: ReVerifyProps): ReactElement => {
   const router = useRouter();
   const {
     t,
@@ -51,18 +46,14 @@ export const ReVerify = ({
           "X-CSRF-Token": token,
         },
         data: {
-          email: username.current,
-          authenticationFlowToken: authenticationFlowToken.current,
+          email,
+          authenticationFlowToken,
         },
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       });
 
       if (Number(status) !== 200) {
         return;
-      }
-
-      if (typeof callback === "function") {
-        callback();
       }
     } catch (err) {
       logMessage.error(err);
@@ -79,11 +70,6 @@ export const ReVerify = ({
 
   return (
     <>
-      {/*
-      @todo find a way to inclde this in the page metadata
-      <Head>
-        <title>{t("reVerify.title")}</title>
-      </Head> */}
       {authErrorsState?.isError && (
         <Alert
           type={ErrorStatus.ERROR}

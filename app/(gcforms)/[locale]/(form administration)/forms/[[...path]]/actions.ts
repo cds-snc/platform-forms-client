@@ -42,7 +42,7 @@ export const deleteForm = async (id: string) => {
     }
   });
 
-  revalidatePath("(gcforms)/[locale]/(form administration)/forms");
+  revalidatePath("(gcforms)/[locale]/(form administration)/forms", "page");
 
   return result;
 };
