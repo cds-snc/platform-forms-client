@@ -145,7 +145,7 @@ export const EditWithGroups = () => {
 
       <Section groupId={groupId} />
       <RefsProvider>
-        {!["start", "end"].includes(groupId) &&
+        {!["end"].includes(groupId) &&
           sortedElements.map((element, index) => {
             const questionNumber = 0;
             const item = { ...element, index, questionNumber };
