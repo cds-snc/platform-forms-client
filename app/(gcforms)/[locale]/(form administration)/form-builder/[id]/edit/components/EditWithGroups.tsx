@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import debounce from "lodash.debounce";
 import { useTranslation } from "@i18n/client";
 import { useSearchParams } from "next/navigation";
@@ -41,7 +41,7 @@ export const EditWithGroups = () => {
   const groupId = useGroupStore((state) => state.id);
   const getElement = useGroupStore((state) => state.getElement);
   const getElementsGroupById = useGroupStore((state) => state.getElementsGroupById);
-  const group = getElementsGroupById(groupId);
+  const { elements } = getElementsGroupById(groupId);
 
   useEffect(() => {
     setValue(title);
@@ -57,24 +57,18 @@ export const EditWithGroups = () => {
     100
   );
 
-  // Filter out elements that are not in the current group.
-  // const sortedElements = sortByLayout({ layout, elements: [...elements] }).filter(
-  //   (element: FormElement) => {
-  //     // Ensure that the element is in the groups array
-  //     return groups && groups[groupId]?.elements?.includes(String(element.id));
-  //   }
-  // );
-
-  const sortedElements: FormElement[] = [] as FormElement[];
-
-  if (group) {
-    group.elements.forEach((elementId: string) => {
-      const el = getElement(Number(elementId));
-      if (el) {
-        sortedElements.push(el);
-      }
-    });
-  }
+  const sortedElements: FormElement[] = useMemo((): FormElement[] => {
+    const sorted: FormElement[] = [];
+    if (elements && elements.length > 0) {
+      elements.forEach((elementId: string) => {
+        const el = getElement(Number(elementId));
+        if (el) {
+          sorted.push(el);
+        }
+      });
+    }
+    return sorted;
+  }, [elements, getElement]);
 
   const updateValue = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {

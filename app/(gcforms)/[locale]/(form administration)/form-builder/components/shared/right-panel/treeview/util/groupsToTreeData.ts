@@ -9,6 +9,30 @@ export const groupsToTreeData = (formGroups: GroupsType): TreeItem[] => {
       const children =
         value.elements &&
         value.elements.map((id) => {
+          if (id === "-1") {
+            return {
+              id: "introduction",
+              name: "Introduction",
+              readOnly: true,
+            };
+          }
+
+          if (id === "-2") {
+            return {
+              id: "privacy",
+              name: "Privacy",
+              readOnly: true,
+            };
+          }
+
+          if (id === "-3") {
+            return {
+              id: "confirmation",
+              name: "Confirmation",
+              readOnly: true,
+            };
+          }
+
           return {
             id: id,
             name: "",
