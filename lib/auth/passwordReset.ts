@@ -29,7 +29,7 @@ export const sendPasswordResetLink = async (email: string): Promise<void> => {
   const dateIn15Minutes = new Date(Date.now() + 900000); // 15 minutes (= 900000 ms)
 
   try {
-    const doesUserHaveSecurityQuestions = await userHasSecurityQuestions({ email });
+    const doesUserHaveSecurityQuestions = await userHasSecurityQuestions({ email: sanitizedEmail });
 
     if (!doesUserHaveSecurityQuestions)
       throw new Error(`Missing security questions for user ${email}`);

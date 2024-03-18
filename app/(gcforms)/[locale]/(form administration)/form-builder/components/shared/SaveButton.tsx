@@ -1,15 +1,17 @@
 "use client";
+import { useEffect, useState, useRef } from "react";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
 import { cn } from "@lib/utils";
-
-import { Button, StyledLink } from "@clientComponents/globals";
+import { toast } from "@formBuilder/components/shared/Toast";
+import { Button } from "@clientComponents/globals";
+import LinkButton from "@serverComponents/globals/Buttons/LinkButton";
 import { useTemplateStore } from "@lib/store";
-import { useTemplateStatus, useTemplateContext } from "@lib/hooks/form-builder";
+import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 import { formatDateTime } from "@lib/utils/form-builder";
 import { SavedFailIcon, SavedCheckIcon } from "@serverComponents/icons";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { ErrorSaving } from "./ErrorSaving";
 
 const SaveDraft = ({
   updatedAt,
@@ -68,38 +70,81 @@ export const ErrorSavingForm = () => {
       <span className="inline-block px-1">
         <SavedFailIcon className="inline-block fill-red" />
       </span>
-      <StyledLink
+      <LinkButton
         href={supportHref}
         className="mr-2 !text-red-700 underline hover:no-underline focus:bg-transparent active:bg-transparent"
       >
         {t("errorSavingForm.failedLink", { ns: "form-builder" })}
-      </StyledLink>
+      </LinkButton>
     </span>
   );
 };
 
 export const SaveButton = () => {
-  const { isPublished, id } = useTemplateStore((s) => ({
+  const {
+    isPublished,
+    id,
+    getSchema,
+    getId,
+    getName,
+    getDeliveryOption,
+    securityAttribute,
+    setId,
+  } = useTemplateStore((s) => ({
     isPublished: s.isPublished,
     id: s.id,
+    getId: s.getId,
+    getSchema: s.getSchema,
+    getName: s.getName,
+    getDeliveryOption: s.getDeliveryOption,
+    securityAttribute: s.securityAttribute,
+    setId: s.setId,
   }));
 
-  const { error, saveForm, templateIsDirty } = useTemplateContext();
+  const { templateIsDirty, createOrUpdateTemplate } = useTemplateContext();
   const { status } = useSession();
-  const { updatedAt, getTemplateById } = useTemplateStatus();
+  const [updatedAt, setUpdatedAt] = useState<number | undefined>();
+  const [error, setError] = useState(false);
   const pathname = usePathname();
+  const timeRef = useRef(new Date().getTime());
 
   const handleSave = async () => {
-    const saved = await saveForm();
+    if (status !== "authenticated") {
+      return;
+    }
 
-    if (saved) {
-      getTemplateById();
+    // If the timeRef is within 2 secs of the current time, don't save
+    if (timeRef.current && new Date().getTime() - timeRef.current < 2000) {
+      return;
+    }
+
+    const formConfig = getSchema();
+
+    try {
+      if (!createOrUpdateTemplate) {
+        return;
+      }
+
+      const template = await createOrUpdateTemplate({
+        id: getId(),
+        formConfig: JSON.parse(formConfig),
+        name: getName(),
+        deliveryOption: getDeliveryOption(),
+        securityAttribute: securityAttribute,
+      });
+
+      setId(template.id);
+      setUpdatedAt(new Date(template.updatedAt ? template.updatedAt : "").getTime());
+      setError(false);
+    } catch (error) {
+      toast.error(<ErrorSaving />, "wide");
+      setError(true);
     }
   };
 
   useEffect(() => {
     return () => {
-      saveForm();
+      handleSave();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

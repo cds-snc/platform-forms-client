@@ -113,6 +113,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
       arg1?: Language
     ): `${LocalizedProperty}${Capitalize<Language>}`;
   };
+  getId: () => string;
   setId: (id: string) => void;
   setLang: (lang: Language) => void;
   toggleLang: () => void;
@@ -120,7 +121,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   setTranslationLanguagePriority: (lang: Language) => void;
   setFocusInput: (isSet: boolean) => void;
   getLocalizationAttribute: () => Record<"lang", Language> | undefined;
-  add: (elIndex?: number, type?: FormElementTypes, data?: FormElement) => void;
+  add: (elIndex?: number, type?: FormElementTypes, data?: FormElement, groupId?: string) => void;
   addSubItem: (
     elIndex: number,
     subIndex?: number,
@@ -185,11 +186,12 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
   };
 
   // Ensure any required properties by Form Builder are defaulted by defaultForm
-  if (initProps?.form)
+  if (initProps?.form) {
     initProps.form = {
       ...defaultForm,
       ...initProps?.form,
     };
+  }
 
   return createStore<TemplateStoreState>()(
     immer(
@@ -284,7 +286,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                   );
                 }
               }),
-            add: (elIndex = 0, type = FormElementTypes.radio, data) => {
+            add: (elIndex = 0, type = FormElementTypes.radio, data, groupId) => {
               set((state) => {
                 const id = incrementElementId(state.form.elements);
                 const item = {
@@ -293,6 +295,14 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                   id,
                   type,
                 };
+
+                if (groupId) {
+                  if (!state.form.groups) state.form.groups = {};
+                  if (!state.form.groups[groupId])
+                    state.form.groups[groupId] = { name: "", elements: [] };
+                  state.form.groups &&
+                    state.form.groups[groupId].elements.splice(elIndex + 1, 0, String(id));
+                }
 
                 state.form.layout.splice(elIndex + 1, 0, id);
                 state.form.elements.splice(elIndex + 1, 0, item);
@@ -403,6 +413,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               });
             },
             getSchema: () => JSON.stringify(getSchemaFromState(get()), null, 2),
+            getId: () => get().id,
             getIsPublished: () => get().isPublished,
             getName: () => get().name,
             getDeliveryOption: () => get().deliveryOption,
@@ -459,9 +470,9 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
   );
 };
 
-type TemplateStore = ReturnType<typeof createTemplateStore>;
+export type TemplateStore = ReturnType<typeof createTemplateStore>;
 
-const TemplateStoreContext = createContext<TemplateStore | null>(null);
+export const TemplateStoreContext = createContext<TemplateStore | null>(null);
 
 export const TemplateStoreProvider = ({
   children,

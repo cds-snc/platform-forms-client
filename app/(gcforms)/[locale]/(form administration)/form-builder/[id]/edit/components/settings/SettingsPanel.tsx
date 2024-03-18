@@ -9,9 +9,9 @@ import {
 } from "@formBuilder/components/ClassificationSelect";
 import { Logos, options } from "../../../settings/branding/components";
 import { useTemplateStore } from "@lib/store";
-import { useTemplateApi } from "@lib/hooks/form-builder";
 import { SettingsModal } from "./SettingsDialog";
 import { Tooltip } from "@formBuilder/components/shared/Tooltip";
+import { updateTemplate, updateTemplateSecurityAttribute } from "@formBuilder/actions";
 
 enum DeliveryOption {
   vault = "vault",
@@ -21,14 +21,10 @@ enum DeliveryOption {
 export const SettingsPanel = () => {
   const { t, i18n } = useTranslation("form-builder");
   const lang = i18n.language === "en" ? "en" : "fr";
-  const { save } = useTemplateApi();
   const { status } = useSession();
 
   const {
     id,
-    getSchema,
-    getName,
-    getDeliveryOption,
     email,
     securityAttribute,
     updateSecurityAttribute,
@@ -36,11 +32,9 @@ export const SettingsPanel = () => {
     brandName,
     unsetField,
     updateField,
+    getSchema,
   } = useTemplateStore((s) => ({
     id: s.id,
-    getSchema: s.getSchema,
-    getName: s.getName,
-    getDeliveryOption: s.getDeliveryOption,
     email: s.deliveryOption?.emailAddress,
     updateSecurityAttribute: s.updateSecurityAttribute,
     securityAttribute: s.securityAttribute,
@@ -48,33 +42,30 @@ export const SettingsPanel = () => {
     brandName: s.form?.brand?.name || "",
     unsetField: s.unsetField,
     updateField: s.updateField,
+    getSchema: s.getSchema,
   }));
 
   const initialDeliveryOption = !email ? DeliveryOption.vault : DeliveryOption.email;
-
   const [, setDeliveryOption] = useState(initialDeliveryOption);
 
-  const [classification, setClassification] = useState<ClassificationType>(
-    securityAttribute ? (securityAttribute as ClassificationType) : "Protected A"
-  );
+  const classification = securityAttribute
+    ? (securityAttribute as ClassificationType)
+    : "Protected A";
 
   const handleUpdateClassification = useCallback(
     (value: ClassificationType) => {
       if (value === "Protected B") {
         setDeliveryOption(DeliveryOption.vault);
       }
-      setClassification(value);
+
       updateSecurityAttribute(value);
 
-      save({
-        jsonConfig: getSchema(),
-        name: getName(),
-        formID: id,
-        deliveryOption: getDeliveryOption(),
+      updateTemplateSecurityAttribute({
+        id,
         securityAttribute: value,
       });
     },
-    [updateSecurityAttribute, getDeliveryOption, getSchema, getName, id, save]
+    [updateSecurityAttribute, id]
   );
 
   // Branding options
@@ -97,14 +88,22 @@ export const SettingsPanel = () => {
     (type: string) => {
       if (type === "") {
         unsetField("form.brand");
+        updateTemplate({
+          id,
+          formConfig: JSON.parse(getSchema()),
+        });
         return;
       }
 
       if (type !== brandName) {
         updateField("form.brand", options.filter((o) => o.name === type)[0]);
+        updateTemplate({
+          id,
+          formConfig: JSON.parse(getSchema()),
+        });
       }
     },
-    [brandName, updateField, unsetField]
+    [brandName, unsetField, updateField, id, getSchema]
   );
 
   // More ...
@@ -121,6 +120,7 @@ export const SettingsPanel = () => {
           <div className="ml-4 inline-block">
             <div className="my-[6px] border-[.5px] border-violet-50 p-1 px-2 hover:border-[.5px] hover:border-slate-800">
               <ClassificationSelect
+                disableProtectedB={email ? true : false}
                 className="w-auto max-w-[400px] truncate border-none bg-violet-50 p-1 text-sm"
                 lang={lang}
                 isPublished={isPublished}
@@ -142,7 +142,7 @@ export const SettingsPanel = () => {
           </div>
         </div>
         <div>
-          <Tooltip text={t("formSettingsModal.more")}>
+          <Tooltip.Simple text={t("formSettingsModal.more")}>
             <button
               onClick={() => {
                 setShowShowSettings(true);
@@ -151,7 +151,7 @@ export const SettingsPanel = () => {
             >
               {"..."}
             </button>
-          </Tooltip>
+          </Tooltip.Simple>
         </div>
       </div>
       <SettingsModal

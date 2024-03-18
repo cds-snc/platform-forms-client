@@ -685,6 +685,12 @@
   "tooltipFormatItalic": "Italic (⌘I)",
   "tooltipFormatNumberedList": "Numbered list",
   "tooltipInsertLink": "Insert link",
+  "tooltips": {
+    "departmentElement": {
+      "title": "Where the list of GC organizations comes from?",
+      "body": "<p>GC Forms uses a <a href=\"https://github.com/cds-snc/gc-organisations\" target=\"_blank\">list of departments and agencies</a> maintained by the Canadian Digital Service. Your form will automatically update with this list.</p>"
+    }
+  },
   "translate": "Translations",
   "translateDescription": "Translate your form content side by side to provide a bilingual experience to those filling out your form.",
   "translateTitle": "Enter your translation",
@@ -788,7 +794,10 @@
     "closePanel": "Close panel",
     "questions": "Questions",
     "logic": "Logic",
-    "translation": "Translation"
+    "translation": "Translation",
+    "treeView": {
+      "addSection": "New section"
+    }
   },
   "logic": {
     "heading": "Logic"

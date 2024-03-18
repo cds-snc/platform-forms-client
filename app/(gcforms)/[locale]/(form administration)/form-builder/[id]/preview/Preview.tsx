@@ -56,8 +56,8 @@ export const Preview = () => {
     return false;
   };
 
-  const responsesLink = `/${i18n.language}/form-builder/responses/${id}`;
-  const settingsLink = `/${i18n.language}/form-builder/settings/${id}`;
+  const responsesLink = `/${i18n.language}/form-builder/${id}/responses/new`;
+  const settingsLink = `/${i18n.language}/form-builder/${id}/settings`;
 
   const brand = formRecord?.form ? formRecord.form.brand : null;
 

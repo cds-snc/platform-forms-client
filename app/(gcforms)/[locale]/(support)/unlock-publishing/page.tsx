@@ -36,19 +36,5 @@ export default async function Page({
     redirect(`/${locale}/forms`, RedirectType.replace);
   }
 
-  const { t } = await serverTranslation("unlock-publishing");
-
-  return (
-    <>
-      {success === undefined ? (
-        <>
-          <h1>{t("unlockPublishing.title")}</h1>
-          <p className="mb-14">{t("unlockPublishing.paragraph1")}</p>
-          <UnlockPublishingForm email={email} />
-        </>
-      ) : (
-        <Success />
-      )}
-    </>
-  );
+  return <>{success === undefined ? <UnlockPublishingForm email={email} /> : <Success />}</>;
 }

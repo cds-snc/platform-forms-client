@@ -1,6 +1,6 @@
 {
   "name": "gcforms",
-  "version": "3.12.7",
+  "version": "3.12.10",
   "private": true,
   "prisma": {
     "seed": "tsx prisma/seeds/seed_cli.ts --environment=development"
@@ -90,6 +90,7 @@
     "prisma": "^5.10.2",
     "react": "^18.2.0",
     "react-app-polyfill": "3.0.0",
+    "react-arborist": "^3.4.0",
     "react-aria": "3.31.0",
     "react-dom": "^18.2.0",
     "react-i18next": "^14.0.5",

@@ -101,73 +101,77 @@ export const UnlockPublishingForm = ({ email }: { email: string }) => {
                   </ol>
                 </Alert>
               )}
-              <form id="unlock-publishing" method="POST" onSubmit={handleSubmit} noValidate>
-                <div className="focus-group">
-                  <Label
-                    id={"label-managerEmail"}
-                    htmlFor={"managerEmail"}
-                    className="required"
-                    required
-                  >
-                    {t("unlockPublishing.form.field1.title")}
-                  </Label>
-                  <Description id={"unlock-publishing-description"}>
-                    {t("unlockPublishing.form.field1.description")}
-                  </Description>
-                  <TextInput
-                    type={"text"}
-                    id={"managerEmail"}
-                    name={"managerEmail"}
-                    className="required w-[34rem]"
-                    ariaDescribedBy={"unlock-publishing-description"}
-                  />
-                </div>
+              <>
+                <h1>{t("unlockPublishing.title")}</h1>
+                <p className="mb-14">{t("unlockPublishing.paragraph1")}</p>
+                <form id="unlock-publishing" method="POST" onSubmit={handleSubmit} noValidate>
+                  <div className="focus-group">
+                    <Label
+                      id={"label-managerEmail"}
+                      htmlFor={"managerEmail"}
+                      className="required"
+                      required
+                    >
+                      {t("unlockPublishing.form.field1.title")}
+                    </Label>
+                    <Description id={"unlock-publishing-description"}>
+                      {t("unlockPublishing.form.field1.description")}
+                    </Description>
+                    <TextInput
+                      type={"text"}
+                      id={"managerEmail"}
+                      name={"managerEmail"}
+                      className="required w-[34rem]"
+                      ariaDescribedBy={"unlock-publishing-description"}
+                    />
+                  </div>
 
-                <div className="focus-group">
-                  <Label
-                    id={"label-department"}
-                    htmlFor={"department"}
-                    className="required"
-                    required
-                  >
-                    {t("unlockPublishing.form.field2.title")}
-                  </Label>
-                  <TextInput
-                    type={"text"}
-                    id={"department"}
-                    name={"department"}
-                    className="required w-[34rem]"
-                    required
-                  />
-                </div>
+                  <div className="focus-group">
+                    <Label
+                      id={"label-department"}
+                      htmlFor={"department"}
+                      className="required"
+                      required
+                    >
+                      {t("unlockPublishing.form.field2.title")}
+                    </Label>
+                    <TextInput
+                      type={"text"}
+                      id={"department"}
+                      name={"department"}
+                      className="required w-[34rem]"
+                      required
+                    />
+                  </div>
 
-                <div className="focus-group">
-                  <Label id={"label-goals"} htmlFor={"goals"} className="required" required>
-                    {t("unlockPublishing.form.field3.title")}
-                  </Label>
-                  <TextArea
-                    id={"goals"}
-                    name={"goals"}
-                    className="required mt-4 w-[34rem]"
-                    required
-                  />
-                </div>
+                  <div className="focus-group">
+                    <Label id={"label-goals"} htmlFor={"goals"} className="required" required>
+                      {t("unlockPublishing.form.field3.title")}
+                    </Label>
+                    <TextArea
+                      id={"goals"}
+                      name={"goals"}
+                      className="required mt-4 w-[34rem]"
+                      required
+                    />
+                  </div>
 
-                <div className="mt-14 flex gap-4">
-                  <Button
-                    type="submit"
-                    data-submit="unlock-publishing"
-                    theme="primary"
-                    disabled={submitting}
-                  >
-                    {t("submitButton", { ns: "common" })}
-                  </Button>
+                  <div className="mt-14 flex gap-4">
+                    <Button
+                      type="submit"
+                      data-submit="unlock-publishing"
+                      theme="primary"
+                      disabled={submitting}
+                    >
+                      {t("submitButton", { ns: "common" })}
+                    </Button>
 
-                  <LinkButton.Secondary href={`/${language}/forms/`}>
-                    {t("unlockPublishing.skipStepButton")}
-                  </LinkButton.Secondary>
-                </div>
-              </form>
+                    <LinkButton.Secondary href={`/${language}/forms/`}>
+                      {t("unlockPublishing.skipStepButton")}
+                    </LinkButton.Secondary>
+                  </div>
+                </form>
+              </>
             </>
           )}
         </>

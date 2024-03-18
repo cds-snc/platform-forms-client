@@ -1,53 +1,60 @@
 "use client";
 
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Transition, Tab } from "@headlessui/react";
-import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
+import { Button } from "@clientComponents/globals";
+
 import { RightPanelOpen, RoundCloseIcon } from "@serverComponents/icons";
 import { cn } from "@lib/utils";
-import { LangSwitcher } from "@formBuilder/components/shared/LangSwitcher";
 import { useActivePathname } from "@lib/hooks/form-builder";
-import { useEffect, useRef } from "react";
-
 import { DownloadCSV } from "@formBuilder/[id]/edit/translate/components/DownloadCSV";
-import { DownloadFileButton } from "@formBuilder/components/shared";
+import { useRehydrate } from "@lib/hooks/form-builder";
+import { TreeView } from "./treeview/TreeView";
 
 const TabButton = ({
-  selected,
   text,
   onClick,
   className,
-  ...rest
 }: {
-  selected: boolean;
   text: string;
   onClick: () => void;
   className?: string;
 }) => {
   return (
-    <button
-      {...rest}
-      className={cn(
-        selected
-          ? "border-indigo-500 text-indigo-600"
-          : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
-        "whitespace-nowrap border-b-2 px-2 py-2 flex justify-center w-full",
-        className
+    <Tab as={Fragment}>
+      {({ selected }) => (
+        <button
+          className={cn(
+            selected
+              ? "border-indigo-500 text-indigo-600"
+              : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+            "whitespace-nowrap border-b-2 px-2 py-2 flex justify-center w-full",
+            className
+          )}
+          onClick={onClick}
+        >
+          <span className={cn(selected && "font-bold")}>{text}</span>
+        </button>
       )}
-      onClick={onClick}
-    >
-      <span className={cn(selected && "font-bold")}>{text}</span>
-    </button>
+    </Tab>
   );
 };
 
 export const RightPanel = ({ id }: { id: string }) => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const router = useRouter();
   const { t, i18n } = useTranslation("form-builder");
   const { activePathname } = useActivePathname();
+
+  const hasHydrated = useRehydrate();
+
+  useEffect(() => {
+    if (hasHydrated) {
+      setOpen(true);
+    }
+  }, [hasHydrated, setOpen]);
 
   // Update once logic tab / screen  is implemented
   let selectedIndex = 0;
@@ -93,9 +100,7 @@ export const RightPanel = ({ id }: { id: string }) => {
 
   return (
     <div className="relative">
-      <div
-        className={cn("fixed right-0 z-10", isIntersecting ? "top-20" : "top-0", open && "hidden")}
-      >
+      <div className={cn("fixed right-0", isIntersecting ? "top-20" : "top-0", open && "hidden")}>
         <Button
           theme="link"
           className="mr-8 mt-5 whitespace-nowrap [&_svg]:focus:fill-white"
@@ -110,7 +115,7 @@ export const RightPanel = ({ id }: { id: string }) => {
       </div>
       <Transition.Root show={open} as={Fragment}>
         <div className="h-full">
-          <div className="sticky top-0 z-20 flex h-dvh">
+          <div className="sticky top-0 z-auto flex h-dvh">
             <Transition.Child
               as={Fragment}
               enter="transform transition ease-in-out duration-500"
@@ -144,47 +149,29 @@ export const RightPanel = ({ id }: { id: string }) => {
                   {/* <-- Tabs */}
                   <Tab.Group selectedIndex={selectedIndex}>
                     <Tab.List className={"flex justify-between border-b border-gray-200"}>
-                      <Tab as={Fragment}>
-                        {({ selected }) => (
-                          <TabButton
-                            selected={selected}
-                            text={t("rightPanel.questions")}
-                            onClick={() => {
-                              router.push(`/${i18n.language}/form-builder/${id}/edit`);
-                            }}
-                            className="justify-start px-6"
-                          />
-                        )}
-                      </Tab>
-                      <Tab as={Fragment}>
-                        {({ selected }) => (
-                          <TabButton
-                            selected={selected}
-                            text={t("rightPanel.translation")}
-                            onClick={() => {
-                              router.push(`/${i18n.language}/form-builder/${id}/edit/translate`);
-                            }}
-                          />
-                        )}
-                      </Tab>
-                      <Tab as={Fragment}>
-                        {({ selected }) => (
-                          <TabButton
-                            selected={selected}
-                            text={t("rightPanel.logic")}
-                            onClick={() => {
-                              router.push(`/${i18n.language}/form-builder/${id}/edit/logic`);
-                            }}
-                          />
-                        )}
-                      </Tab>
+                      <TabButton
+                        text={t("rightPanel.questions")}
+                        onClick={() => {
+                          router.push(`/${i18n.language}/form-builder/${id}/edit`);
+                        }}
+                        className="justify-start px-6"
+                      />
+                      <TabButton
+                        text={t("rightPanel.translation")}
+                        onClick={() => {
+                          router.push(`/${i18n.language}/form-builder/${id}/edit/translate`);
+                        }}
+                      />
+                      <TabButton
+                        text={t("rightPanel.logic")}
+                        onClick={() => {
+                          router.push(`/${i18n.language}/form-builder/${id}/edit/logic`);
+                        }}
+                      />
                     </Tab.List>
-                    <Tab.Panels className="p-6">
+                    <Tab.Panels>
                       <Tab.Panel>
-                        <div className="mb-4 flex">
-                          <LangSwitcher descriptionLangKey="editingIn" />
-                        </div>
-                        <DownloadFileButton showInfo={false} autoShowDialog={false} />
+                        <TreeView />
                       </Tab.Panel>
                       <Tab.Panel>
                         <DownloadCSV />

@@ -7,9 +7,11 @@ import { AccessControlError, createAbility } from "@lib/privileges";
 import { getFullTemplateByID } from "@lib/templates";
 import { redirect } from "next/navigation";
 import { TemplateStoreProvider } from "@lib/store";
-import { TemplateApiProvider } from "@lib/hooks/form-builder";
+import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext";
 import { RefStoreProvider } from "@lib/hooks/form-builder/useRefStore";
 import { RightPanel } from "@formBuilder/components/shared/right-panel/RightPanel";
+import { checkFlag } from "./actions";
+import { GroupStoreProvider } from "@formBuilder/components/shared/right-panel/treeview/store";
 
 export default async function Layout({
   children,
@@ -28,6 +30,8 @@ export default async function Layout({
 
   const formID = id || null;
 
+  const showRightPanel = await checkFlag("conditionalLogic");
+
   if (session && formID) {
     try {
       const ability = createAbility(session);
@@ -39,7 +43,7 @@ export default async function Layout({
       }
 
       if (initialForm.isPublished) {
-        redirect(`/${locale}/form-builder/settings/${formID}`);
+        redirect(`/${locale}/form-builder/${formID}/settings`);
       }
 
       FormbuilderParams.initialForm = initialForm;
@@ -52,7 +56,7 @@ export default async function Layout({
 
   return (
     <TemplateStoreProvider {...{ ...initialForm, locale }}>
-      <TemplateApiProvider>
+      <SaveTemplateProvider>
         <RefStoreProvider>
           <div className={`flex h-full flex-col`}>
             {/* @TODO: Backlink?? */}
@@ -68,11 +72,12 @@ export default async function Layout({
                       <LeftNavigation id={id} />
                     </div>
                   </div>
-
-                  <main id="content" className="form-builder my-7 w-full">
-                    {children}
-                  </main>
-                  <RightPanel id={id} />
+                  <GroupStoreProvider>
+                    <main id="content" className="form-builder my-7 w-full">
+                      {children}
+                    </main>
+                    {showRightPanel && <RightPanel id={id} />}
+                  </GroupStoreProvider>
                 </div>
               </div>
 
@@ -80,7 +85,7 @@ export default async function Layout({
             </div>
           </div>
         </RefStoreProvider>
-      </TemplateApiProvider>
+      </SaveTemplateProvider>
     </TemplateStoreProvider>
   );
 }

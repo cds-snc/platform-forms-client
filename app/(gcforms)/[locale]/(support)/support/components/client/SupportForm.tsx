@@ -18,6 +18,8 @@ import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import { useState } from "react";
 import { support } from "../../actions";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Alert } from "@clientComponents/globals";
 
 export const SupportForm = () => {
   const {
@@ -95,87 +97,109 @@ export const SupportForm = () => {
             </ValidationMessage>
           )}
           {!errorMessage && (
-            <form id="support" method="POST" onSubmit={handleSubmit} noValidate>
-              <div className="focus-group mt-14">
-                <Label id={"label-name"} htmlFor={"name"} className="required" required>
-                  {t("support.name")}
-                </Label>
-                <TextInput type={"text"} id={"name"} name={"name"} className="required w-[34rem]" />
-              </div>
-              <div className="focus-group">
-                <Label id={"label-email"} htmlFor={"email"} className="required" required>
-                  {t("support.email")}
-                </Label>
-                <TextInput
-                  type={"text"}
-                  id={"email"}
-                  name={"email"}
-                  className="required w-[34rem]"
-                  required
-                />
-              </div>
-              <fieldset className="focus-group">
-                <legend className="gc-label required">
-                  {t("support.request.title")}{" "}
-                  <span data-testid="required" aria-hidden>
-                    ({t("required", { ns: "common" })})
-                  </span>
-                </legend>
-                <MultipleChoiceGroup
-                  name="request"
-                  type="radio"
-                  choicesProps={[
-                    {
-                      id: "request-question",
-                      name: "question",
-                      label: t("support.request.option1"),
-                      required: true,
-                    },
-                    {
-                      id: "request-technical",
-                      name: "technical",
-                      label: t("support.request.option2"),
-                      required: true,
-                    },
-                    {
-                      id: "request-form",
-                      name: "form",
-                      label: t("support.request.option3"),
-                      required: true,
-                    },
-                    {
-                      id: "request-other",
-                      name: "other",
-                      label: t("support.request.option4"),
-                      required: true,
-                    },
-                  ]}
-                ></MultipleChoiceGroup>
-              </fieldset>
-              <div className="focus-group">
-                <Label
-                  id={"label-description"}
-                  htmlFor={"description"}
-                  className="required"
-                  required
-                >
-                  {t("support.description.title")}
-                </Label>
-                <Description id={"description-description"}>
-                  {t("support.description.description")}
-                </Description>
-                <TextArea
-                  id={"description"}
-                  name={"description"}
-                  className="required w-[34rem] mt-4"
-                  required
-                />
-              </div>
+            <>
+              <h1>{t("support.title")}</h1>
+              <p className="mb-6 mt-[-2rem] text-[1.6rem]">{t("support.useThisForm")}</p>
+              <p className="mb-14">
+                {t("support.gcFormsTeamPart1")}{" "}
+                <Link href={`https://www.canada.ca/${language}/contact.html`}>
+                  {t("support.gcFormsTeamLink")}
+                </Link>{" "}
+                {t("support.gcFormsTeamPart2")}
+              </p>
+              <Alert.Warning title={t("support.lookingForADemo")} role="note">
+                <p>
+                  {t("support.ifYouWouldLike")}{" "}
+                  <Link href={`/${language}/contact`}>{t("support.contactUs")}</Link>.
+                </p>
+              </Alert.Warning>
+              <form id="support" method="POST" onSubmit={handleSubmit} noValidate>
+                <div className="focus-group mt-14">
+                  <Label id={"label-name"} htmlFor={"name"} className="required" required>
+                    {t("support.name")}
+                  </Label>
+                  <TextInput
+                    type={"text"}
+                    id={"name"}
+                    name={"name"}
+                    className="required w-[34rem]"
+                  />
+                </div>
+                <div className="focus-group">
+                  <Label id={"label-email"} htmlFor={"email"} className="required" required>
+                    {t("support.email")}
+                  </Label>
+                  <TextInput
+                    type={"text"}
+                    id={"email"}
+                    name={"email"}
+                    className="required w-[34rem]"
+                    required
+                  />
+                </div>
+                <fieldset className="focus-group">
+                  <legend className="gc-label required">
+                    {t("support.request.title")}{" "}
+                    <span data-testid="required" aria-hidden>
+                      ({t("required", { ns: "common" })})
+                    </span>
+                  </legend>
+                  <MultipleChoiceGroup
+                    name="request"
+                    type="radio"
+                    choicesProps={[
+                      {
+                        id: "request-question",
+                        name: "question",
+                        label: t("support.request.option1"),
+                        required: true,
+                      },
+                      {
+                        id: "request-technical",
+                        name: "technical",
+                        label: t("support.request.option2"),
+                        required: true,
+                      },
+                      {
+                        id: "request-form",
+                        name: "form",
+                        label: t("support.request.option3"),
+                        required: true,
+                      },
+                      {
+                        id: "request-other",
+                        name: "other",
+                        label: t("support.request.option4"),
+                        required: true,
+                      },
+                    ]}
+                  ></MultipleChoiceGroup>
+                </fieldset>
+                <div className="focus-group">
+                  <Label
+                    id={"label-description"}
+                    htmlFor={"description"}
+                    className="required"
+                    required
+                  >
+                    {t("support.description.title")}
+                  </Label>
+                  <Description id={"description-description"}>
+                    {t("support.description.description")}
+                  </Description>
+                  <TextArea
+                    id={"description"}
+                    name={"description"}
+                    className="required w-[34rem] mt-4"
+                    required
+                  />
+                </div>
 
-              <Button type="submit" theme="primary" disabled={isSubmitting}>
-                {t("submitButton", { ns: "common" })}
-              </Button>
-            </form>
+                <Button type="submit" theme="primary" disabled={isSubmitting}>
+                  {t("submitButton", { ns: "common" })}
+                </Button>
+              </form>
+            </>
           )}
         </>
       )}

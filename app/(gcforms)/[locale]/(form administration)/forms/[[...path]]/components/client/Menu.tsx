@@ -43,7 +43,7 @@ export const Menu = ({
     },
     {
       title: t("card.menu.settings"),
-      url: `/${language}/form-builder/settings/${id}`,
+      url: `/${language}/form-builder/${id}/settings`,
     },
     {
       title: t("card.menu.delete"),

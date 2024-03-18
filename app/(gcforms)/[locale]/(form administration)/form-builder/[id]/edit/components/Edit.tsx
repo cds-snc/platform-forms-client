@@ -3,7 +3,6 @@ import React, { useState, useCallback, useEffect, useRef } from "react";
 import debounce from "lodash.debounce";
 import { useTranslation } from "@i18n/client";
 import { useSearchParams } from "next/navigation";
-
 import { Language, LocalizedFormProperties } from "@lib/types/form-builder-types";
 import { ElementPanel, ConfirmationDescription, PrivacyDescription } from ".";
 import { RefsProvider } from "./RefsContext";
@@ -94,6 +93,7 @@ export const Edit = () => {
         <SaveButton />
       </div>
       <SettingsPanel />
+
       <RichTextLocked
         hydrated={hasHydrated}
         className="rounded-t-lg"
@@ -124,6 +124,7 @@ export const Edit = () => {
         schemaProperty="introduction"
         ariaLabel={t("richTextIntroTitle")}
       />
+
       <RefsProvider>
         {layout.length >= 1 &&
           layout.map((id, index) => {

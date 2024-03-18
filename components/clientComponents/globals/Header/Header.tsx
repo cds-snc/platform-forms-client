@@ -72,6 +72,13 @@ export const Header = ({ context = "default", user, className }: HeaderParams) =
                 {t("logged-in", { ns: "admin-login" })}: <span>{user.email}</span>
               </li>
             )}
+            {status === "authenticated" && !isFormBuilder && (
+              <li className="mr-2 py-2 text-base tablet:mr-4">
+                <Link href={`/${language}/forms`} prefetch={false}>
+                  {t("adminNav.myForms", { ns: "common" })}
+                </Link>
+              </li>
+            )}
             {status !== "authenticated" && (
               <li className="mr-2 py-2 text-base tablet:mr-4">
                 <Link href={`/${language}/auth/login`}>{t("loginMenu.login")}</Link>
