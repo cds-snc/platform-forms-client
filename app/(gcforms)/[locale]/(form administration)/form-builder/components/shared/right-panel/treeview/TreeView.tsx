@@ -7,7 +7,6 @@ import { Node } from "./Node";
 import { useDynamicTree } from "./hooks/useDynamicTree";
 import { Cursor } from "./Cursor";
 import { Button } from "@clientComponents/globals";
-import { start, end } from "./data";
 import { v4 as uuid } from "uuid";
 import { NodeApi } from "react-arborist";
 import { TreeItem } from "./types";
@@ -49,7 +48,7 @@ export const TreeView = () => {
         <Tree
           openByDefault={false}
           ref={treeRef}
-          data={[start, ...groups, end]}
+          data={groups}
           {...controllers}
           onRename={(data) => {
             controllers.onRename(data);
