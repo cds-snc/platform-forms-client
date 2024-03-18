@@ -15,6 +15,11 @@ import { fileTypeFromBuffer } from "file-type";
 import { acceptedFileMimeTypes } from "@lib/tsUtils";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 
+class MissingFormIdError extends Error {}
+class MissingFormDataError extends Error {}
+class FormNotFoundError extends Error {}
+class FormIsClosedError extends Error {}
+
 export async function submitForm(
   values: Responses,
   language: string,
@@ -26,11 +31,11 @@ export async function submitForm(
   const formDataObject = buildFormDataObject(formRecord, values);
 
   if (!formDataObject.formID) {
-    throw new Error("No form ID submitted with request");
+    throw new MissingFormIdError("No form ID submitted with request");
   }
 
   if (Object.entries(formDataObject).length <= 2) {
-    throw new Error("No form data submitted with request");
+    throw new MissingFormDataError("No form data submitted with request");
   }
 
   const data = await parseRequestData(formDataObject as SubmissionRequestBody);
@@ -188,7 +193,7 @@ const processFormData = async (
       // return NextResponse.json({ error: "No form submitted with request" }, { status: 400 });
     }
 
-    // @TODO
+    // @TODO LOG THE SUBMISSION
     // logMessage.info(
     //   `Path: ${req.nextUrl.pathname}, Method: ${req.method}, Form ID: ${
     //     reqFields ? reqFields.formID : "No form attached"
@@ -198,13 +203,13 @@ const processFormData = async (
     const form = await getPublicTemplateByID(reqFields.formID as string);
 
     if (!form) {
-      throw new Error("No form could be found with that ID");
+      throw new FormNotFoundError("No form could be found with that ID");
       // return NextResponse.json({ error: "No form could be found with that ID" }, { status: 400 });
     }
 
     // Check to see if form is closed and block response submission
     if (form.closingDate && new Date(form.closingDate) < new Date()) {
-      throw new Error("Form is closed and not accepting submissions");
+      throw new FormIsClosedError("Form is closed and not accepting submissions");
       // return NextResponse.json(
       //   { error: "Form is closed and not accepting submissions" },
       //   { status: 400 }
@@ -257,7 +262,7 @@ const processFormData = async (
     }
     try {
       // const contentLanguage = headers().get("content-language");
-      const contentLanguage = "en"; // @TODO ??
+      const contentLanguage = "en"; // @TODO Where will this come from?
       await callLambda(
         form.id,
         fields,
