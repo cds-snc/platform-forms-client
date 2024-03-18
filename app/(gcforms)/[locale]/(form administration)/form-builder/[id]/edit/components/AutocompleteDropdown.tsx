@@ -1,8 +1,8 @@
 "use client";
 import React, { ChangeEvent } from "react";
-import { t } from "i18next";
 
 import { useAutocompleteOptions } from "@lib/hooks/useAutocompleteOptions";
+import { useTranslation } from "react-i18next";
 
 interface DropdownOptionProps {
   label: string;
@@ -22,6 +22,7 @@ export const AutocompleteDropdown = ({
   selectedValue: string;
 }) => {
   const autocompleteOptions = useAutocompleteOptions();
+  const { t } = useTranslation("form-builder");
 
   const options = autocompleteOptions.map((option, i) => {
     return (
