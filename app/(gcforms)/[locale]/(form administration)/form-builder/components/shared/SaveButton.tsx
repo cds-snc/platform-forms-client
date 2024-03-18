@@ -101,9 +101,10 @@ export const SaveButton = () => {
     setId: s.setId,
   }));
 
-  const { templateIsDirty, createOrUpdateTemplate } = useTemplateContext();
+  const { templateIsDirty, createOrUpdateTemplate, resetState, updatedAt, setUpdatedAt } =
+    useTemplateContext();
   const { status } = useSession();
-  const [updatedAt, setUpdatedAt] = useState<number | undefined>();
+
   const [error, setError] = useState(false);
   const pathname = usePathname();
   const timeRef = useRef(new Date().getTime());
@@ -136,6 +137,7 @@ export const SaveButton = () => {
       setId(template.id);
       setUpdatedAt(new Date(template.updatedAt ? template.updatedAt : "").getTime());
       setError(false);
+      resetState();
     } catch (error) {
       toast.error(<ErrorSaving />, "wide");
       setError(true);
