@@ -50,6 +50,11 @@ export const TreeView = () => {
           ref={treeRef}
           data={groups}
           {...controllers}
+          onMove={(data) => {
+            controllers.onMove(data);
+            const rId = `${data.parentId}-${new Date().getTime().toString()}`;
+            setLastNodeAdded(rId);
+          }}
           onRename={(data) => {
             controllers.onRename(data);
             const rId = `${data.id}-${new Date().getTime().toString()}`;

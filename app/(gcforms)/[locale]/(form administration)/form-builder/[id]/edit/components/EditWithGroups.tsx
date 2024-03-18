@@ -40,8 +40,9 @@ export const EditWithGroups = () => {
   const titleInput = useRef<HTMLTextAreaElement>(null);
   const groupId = useGroupStore((state) => state.id);
   const getElement = useGroupStore((state) => state.getElement);
-  const getElementsGroupById = useGroupStore((state) => state.getElementsGroupById);
-  const { elements } = getElementsGroupById(groupId);
+  const elements = useTemplateStore(
+    (s) => (s.form.groups && s.form.groups[groupId].elements) || []
+  );
 
   useEffect(() => {
     setValue(title);
