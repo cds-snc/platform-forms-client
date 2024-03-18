@@ -12,7 +12,6 @@ export const groupsToTreeData = (formGroups: GroupsType): TreeItem[] => {
           return {
             id: id,
             name: "",
-            icon: null,
             readOnly: false,
           };
         });
@@ -22,7 +21,6 @@ export const groupsToTreeData = (formGroups: GroupsType): TreeItem[] => {
       const item = {
         id: key,
         name: formGroups[key].name,
-        icon: null,
         readOnly: false,
         children: children.filter((el) => el !== undefined) as TreeItem[],
       };
