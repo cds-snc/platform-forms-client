@@ -22,6 +22,7 @@ class FormIsClosedError extends Error {}
 class FileSizeError extends Error {}
 class FileTypeError extends Error {}
 class FileObjectInvalid extends Error {}
+class SubmissionApiError extends Error {}
 
 export async function submitForm(
   values: Responses,
@@ -43,7 +44,9 @@ export async function submitForm(
 
   const data = await parseRequestData(formDataObject as SubmissionRequestBody);
 
-  return processFormData(data.fields, data.files);
+  await processFormData(data.fields, data.files);
+
+  return formRecord.id;
 }
 
 /**
@@ -314,11 +317,11 @@ const callLambda = async (
     const decoder = new TextDecoder();
     const payload = decoder.decode(response.Payload);
     if (response.FunctionError || !JSON.parse(payload).status) {
-      throw new Error("Submission API could not process form response");
+      throw new SubmissionApiError("Submission API could not process form response");
     }
   } catch (err) {
     logMessage.error(err as Error);
-    throw new Error("Could not process request with Lambda Submission function");
+    throw new SubmissionApiError("Could not process request with Lambda Submission function");
   }
 };
 
