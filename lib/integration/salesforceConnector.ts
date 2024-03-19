@@ -9,7 +9,9 @@ export class SalesforceConnector {
 
   constructor() {}
 
-  public async login(username: string, password: string): Promise<void> {
+  public async login(): Promise<void> {
+    const username = "" + process.env.SALESFORCE_USERNAME;
+    const password = "" + process.env.SALESFORCE_PASSWORD;
     this.resp = await requestAccessToken({
       grant_type: "password",
       instanceUrl: SALESFORCE_URL,
@@ -22,23 +24,20 @@ export class SalesforceConnector {
     this.conn = new Rest(this.resp);
   }
 
-  public async query(query: string): Promise<void> {
-    return this.conn.query(query);
-  }
-
   public async logout(): Promise<void> {
     await this.conn.logout();
   }
 
-  // TO DO: Replace 'any' with the correct type
-  public GetAccountByName(name: string): Promise<any> {
-    // eslint-disable-line
-    let retObj = this.conn.sobject("Account").find({ Name: name });
-    // If the account is not found, find the account by the name 'department not listed'
-    if (retObj == null) {
-      retObj = this.conn.sobject("Account").find({ Name: "Department Not Listed" });
+  // Provides the Account ID for a SalesForce Account based on the name of the account, if not found, it will return the account with the name 'Department not listed'
+  public async GetAccountByName(name: string): Promise<string> {
+    const salesForceQuery = "SELECT Id FROM Account WHERE Name = '" + name + "'";
+    let retObj = await this.conn.query(salesForceQuery);
+
+    if (retObj.totalSize === 0) {
+      retObj = await this.conn.query("SELECT Id FROM Account WHERE Name = 'Department not listed'");
     }
-    return retObj;
+
+    return retObj.records[0].Id;
   }
 
   public async AddPublishRecord(
