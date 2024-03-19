@@ -3,7 +3,6 @@ import React, { useEffect, useState, useRef } from "react";
 import { FormikProps, withFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage, validateOnSubmit } from "@lib/validation";
-// import { submitToAPI } from "@lib/client/clientHelpers";
 import { useFormTimer } from "@lib/hooks";
 import { Alert, Button, RichText } from "@clientComponents/forms";
 import { logMessage } from "@lib/logger";
@@ -336,7 +335,6 @@ export const Form = withFormik<FormProps, Responses>({
     // Needed so the Loader is displayed
     formikBag.setStatus("submitting");
     try {
-      // const result = await submitToAPI(values, formikBag);
       const result = await submitForm(values, formikBag.props.language, formikBag.props.formRecord);
       result && formikBag.props.onSuccess(result);
     } catch (err) {
