@@ -338,10 +338,10 @@ export const Form = withFormik<FormProps, Responses>({
     try {
       // const result = await submitToAPI(values, formikBag);
       const result = await submitForm(values, formikBag.props.language, formikBag.props.formRecord);
-      // @TODO
       result && formikBag.props.onSuccess(result);
     } catch (err) {
       logMessage.error(err as Error);
+      formikBag.setStatus("Error");
     } finally {
       if (formikBag.props && !formikBag.props.isPreview) {
         window.dataLayer = window.dataLayer || [];
