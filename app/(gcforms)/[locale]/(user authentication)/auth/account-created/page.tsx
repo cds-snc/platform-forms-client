@@ -1,5 +1,4 @@
 import { serverTranslation } from "@i18n";
-import { requireAuthentication } from "@lib/auth";
 import { StyledLink } from "@clientComponents/globals/StyledLink/StyledLink";
 import { Metadata } from "next";
 
@@ -16,7 +15,6 @@ export async function generateMetadata({
 
 export default async function Page() {
   const { t, i18n } = await serverTranslation(["signup"]);
-  await requireAuthentication();
 
   return (
     <>

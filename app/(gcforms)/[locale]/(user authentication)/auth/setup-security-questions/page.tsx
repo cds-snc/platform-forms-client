@@ -1,7 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import UserNavLayout from "@clientComponents/globals/layouts/UserNavLayout";
-import { Alert } from "@clientComponents/globals";
+
 import { SetupSecurityQuestions } from "./clientSide";
 import {
   requireAuthentication,
@@ -21,14 +20,14 @@ export async function generateMetadata({
   };
 }
 
-const Info = async () => {
-  const { t } = await serverTranslation(["setup-security-questions"]);
-  return (
-    <div className="mx-auto mt-10 w-[850px]">
-      <Alert.Info title={t("banner.title")} body={t("banner.body")} />
-    </div>
-  );
-};
+// const Info = async () => {
+//   const { t } = await serverTranslation(["setup-security-questions"]);
+//   return (
+//     <div className="mx-auto mt-10 w-[850px]">
+//       <Alert.Info title={t("banner.title")} body={t("banner.body")} />
+//     </div>
+//   );
+// };
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const {
@@ -56,9 +55,5 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       };
     });
 
-  return (
-    <UserNavLayout beforeContentWrapper={<Info />}>
-      <SetupSecurityQuestions questions={questions} />
-    </UserNavLayout>
-  );
+  return <SetupSecurityQuestions questions={questions} />;
 }

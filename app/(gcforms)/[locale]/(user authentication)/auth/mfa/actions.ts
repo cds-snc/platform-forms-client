@@ -170,7 +170,7 @@ export const getRedirectPath = async (locale: string) => {
   }
 
   if (session.user.newlyRegistered) {
-    return { callback: `/${locale}/auth/policy?referer=/auth/account-created` };
+    return { callback: `/${locale}/auth/setup-security-questions` };
   }
 
   const ability = createAbility(session);

@@ -122,7 +122,6 @@ export const SetupSecurityQuestions = ({ questions = [] }: { questions: Question
           setSubmitting(false);
         } else {
           toast.success(t("success.title"));
-          // Note: Await so async call will not auto resolve and "flash" the submit to enabled while loading.
           router.push(`/${i18n.language}/auth/policy`);
         }
       }}
