@@ -19,6 +19,9 @@ class MissingFormIdError extends Error {}
 class MissingFormDataError extends Error {}
 class FormNotFoundError extends Error {}
 class FormIsClosedError extends Error {}
+class FileSizeError extends Error {}
+class FileTypeError extends Error {}
+class FileObjectInvalid extends Error {}
 
 export async function submitForm(
   values: Responses,
@@ -127,20 +130,22 @@ const processFileData = async (fileObj: FileInputResponse): Promise<ProcessedFil
   // that number is greater than 8mb. We do not depend on this however. This is simply
   // to be more efficient. Regardless if this parameter is less than 8mb the size will still be checked
   if (typeof fileObj?.size === "number" && fileObj.size / 1048576 > 8) {
-    throw new Error("FileSizeError: A file has been uploaded that is greater than 8mb in size");
+    throw new FileSizeError(
+      "FileSizeError: A file has been uploaded that is greater than 8mb in size"
+    );
   }
   // process Base64 encoded data
   if (typeof fileObj?.name === "string" && typeof fileObj?.file === "string") {
     // base64 string should be data URL https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs
     const fileData = fileObj.file.match(/^data:([A-Za-z-+./]+);base64,(.+)$/);
     if (fileData?.length !== 3) {
-      throw new Error(`FileTypeError: The file ${fileObj.name} was not a valid data URL`);
+      throw new FileTypeError(`FileTypeError: The file ${fileObj.name} was not a valid data URL`);
     }
     // create buffer with fileData
     const fileBuff = Buffer.from(fileData[2], "base64");
     // if the buffer is larger then 8mb then this is larger than the filesize that's allowed
     if (Buffer.byteLength(fileBuff) / 1048576 > 8) {
-      throw new Error(
+      throw new FileSizeError(
         `FileSizeError: The file ${fileObj.name} has been uploaded that is greater than 8mb in size`
       );
     }
@@ -160,7 +165,7 @@ const processFileData = async (fileObj: FileInputResponse): Promise<ProcessedFil
     // use mmmagic lib to detect mime types for text files and file-type for binary files
     const mimeTypefilebuff = await fileTypeFromBuffer(fileBuff);
     if (!mimeTypefilebuff || !acceptedFileMimeTypes.includes(mimeTypefilebuff.mime)) {
-      throw new Error(
+      throw new FileTypeError(
         `FileTypeError: The file ${fileObj.name} has been uploaded has an unacceptable mime type of ${mimeTypefilebuff}`
       );
     }
@@ -169,7 +174,7 @@ const processFileData = async (fileObj: FileInputResponse): Promise<ProcessedFil
       buffer: fileBuff,
     };
   }
-  throw new Error(
+  throw new FileObjectInvalid(
     "FileObjectInvalid: A file object does not have the needed properties to process it"
   );
 };
@@ -189,16 +194,11 @@ const processFormData = async (
     }
 
     if (!reqFields) {
-      throw new Error("No form submitted with request");
+      throw new MissingFormDataError("No form submitted with request");
       // return NextResponse.json({ error: "No form submitted with request" }, { status: 400 });
     }
 
-    // @TODO LOG THE SUBMISSION
-    // logMessage.info(
-    //   `Path: ${req.nextUrl.pathname}, Method: ${req.method}, Form ID: ${
-    //     reqFields ? reqFields.formID : "No form attached"
-    //   }`
-    // );
+    logMessage.info(`Form ID: ${reqFields ? reqFields.formID : "No form attached"}`);
 
     const form = await getPublicTemplateByID(reqFields.formID as string);
 
