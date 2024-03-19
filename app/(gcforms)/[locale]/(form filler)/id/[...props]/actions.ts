@@ -29,9 +29,6 @@ export async function submitForm(
   language: string,
   formRecord: PublicFormRecord
 ) {
-  // const { language, formRecord } = formikBag.props;
-  // const { setStatus } = formikBag;
-
   const formDataObject = buildFormDataObject(formRecord, values);
 
   if (!formDataObject.formID) {
@@ -44,7 +41,7 @@ export async function submitForm(
 
   const data = await parseRequestData(formDataObject as SubmissionRequestBody);
 
-  await processFormData(data.fields, data.files);
+  await processFormData(data.fields, data.files, language);
 
   return formRecord.id;
 }
@@ -184,7 +181,8 @@ const processFileData = async (fileObj: FileInputResponse): Promise<ProcessedFil
 
 const processFormData = async (
   reqFields: Record<string, Response>,
-  files: Record<string, ProcessedFile | ProcessedFile[]>
+  files: Record<string, ProcessedFile | ProcessedFile[]>,
+  contentLanguage: string
 ) => {
   const uploadedFilesKeyUrlMapping: Map<string, string> = new Map();
   try {
@@ -193,12 +191,11 @@ const processFormData = async (
       logMessage.info(
         `TEST MODE - Not submitting Form ID: ${reqFields ? reqFields.formID : "No form attached"}`
       );
-      return; // return NextResponse.json({ received: true }, { status: 200 });
+      return;
     }
 
     if (!reqFields) {
       throw new MissingFormDataError("No form submitted with request");
-      // return NextResponse.json({ error: "No form submitted with request" }, { status: 400 });
     }
 
     logMessage.info(`Form ID: ${reqFields ? reqFields.formID : "No form attached"}`);
@@ -207,16 +204,11 @@ const processFormData = async (
 
     if (!form) {
       throw new FormNotFoundError("No form could be found with that ID");
-      // return NextResponse.json({ error: "No form could be found with that ID" }, { status: 400 });
     }
 
     // Check to see if form is closed and block response submission
     if (form.closingDate && new Date(form.closingDate) < new Date()) {
       throw new FormIsClosedError("Form is closed and not accepting submissions");
-      // return NextResponse.json(
-      //   { error: "Form is closed and not accepting submissions" },
-      //   { status: 400 }
-      // );
     }
 
     const fields = rehydrateFormResponses({
@@ -264,12 +256,9 @@ const processFormData = async (
       }
     }
     try {
-      // const contentLanguage = headers().get("content-language");
-      const contentLanguage = "en"; // @TODO Where will this come from?
       await callLambda(
         form.id,
         fields,
-        // pass in the language from the header content language... assume english as the default
         contentLanguage ? contentLanguage : "en",
         reqFields.securityAttribute ? (reqFields.securityAttribute as string) : "Protected A"
       );
@@ -277,7 +266,6 @@ const processFormData = async (
     } catch (err) {
       logMessage.error(err as Error);
       throw err;
-      // return NextResponse.json({ received: false }, { status: 500 });
     }
   } catch (err) {
     // it is true if file(s) has/have been already uploaded.It'll try a deletion of the file(s) on S3.
@@ -288,7 +276,6 @@ const processFormData = async (
     }
     logMessage.error(err as Error);
     throw err;
-    // return NextResponse.json({ received: false }, { status: 500 });
   }
 };
 
