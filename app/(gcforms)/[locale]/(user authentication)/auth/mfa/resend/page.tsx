@@ -3,7 +3,6 @@ import { Metadata } from "next";
 import { ReVerify } from "./components/client/ReVerify";
 import { auth } from "@lib/auth";
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
 
 export async function generateMetadata({
   params: { locale },
@@ -22,13 +21,5 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     redirect(`/${locale}/forms`);
   }
 
-  const authFlowCookie = cookies().get("authenticationFlow");
-  if (!authFlowCookie) {
-    redirect(`/${locale}/auth/login`);
-  }
-  const { email, authenticationFlowToken }: Record<string, string> = JSON.parse(
-    authFlowCookie.value
-  );
-
-  return <ReVerify email={email} authenticationFlowToken={authenticationFlowToken} />;
+  return <ReVerify />;
 }

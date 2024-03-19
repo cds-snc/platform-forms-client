@@ -1,10 +1,11 @@
 "use client";
+
 import { useFormStatus, useFormState } from "react-dom";
 import { Alert, ErrorListItem, Label, TextInput } from "../../../../components/client/forms";
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
-import { login } from "../../actions";
-
+import { login, ErrorStates } from "../../actions";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
@@ -24,9 +25,23 @@ export const LoginForm = () => {
     t,
     i18n: { language },
   } = useTranslation(["login", "cognito-errors", "common"]);
-  const [state, formAction] = useFormState(login.bind(null, language), {
+
+  const localFormAction = async (
+    language: string,
+    _: ErrorStates,
+    formData: FormData
+  ): Promise<ErrorStates> => {
+    const result = await login(language, _, formData);
+    if (result.authFlowToken) {
+      sessionStorage.setItem("authFlowToken", JSON.stringify(result.authFlowToken));
+      router.push(`/${language}/auth/mfa`);
+    }
+    return result;
+  };
+  const [state, formAction] = useFormState(localFormAction.bind(null, language), {
     validationErrors: [],
   });
+  const router = useRouter();
 
   return (
     <>

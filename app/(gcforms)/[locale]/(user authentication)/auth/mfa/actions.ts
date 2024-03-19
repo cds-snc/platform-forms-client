@@ -2,12 +2,15 @@
 import * as v from "valibot";
 import { serverTranslation } from "@i18n";
 import { redirect } from "next/navigation";
-import { requestNew2FAVerificationCode } from "@lib/auth";
+import { requestNew2FAVerificationCode, auth } from "@lib/auth";
 import { signIn } from "@lib/auth";
 import { handleErrorById } from "@lib/auth/cognito";
 import { cookies } from "next/headers";
 import { prisma } from "@lib/integration/prismaConnector";
 import { AuthError } from "next-auth";
+import { createAbility } from "@lib/privileges";
+import { getUnprocessedSubmissionsForUser } from "@lib/users";
+import { logMessage } from "@lib/logger";
 
 export interface ErrorStates {
   authError?: {
@@ -17,10 +20,11 @@ export interface ErrorStates {
     callToActionText?: string;
     callToActionLink?: string;
   };
-  validationErrors: {
+  validationErrors?: {
     fieldKey: string;
     fieldValue: string;
   }[];
+  success?: boolean;
 }
 
 const validate = async (
@@ -33,11 +37,12 @@ const validate = async (
 
   const formValidationSchema = v.object({
     verificationCode: v.string([
-      v.toLowerCase(),
       v.minLength(1, t("verify.fields.confirmationCode.error.notEmpty")),
       v.length(5, t("verify.fields.confirmationCode.error.length")),
       v.regex(/^[a-z0-9]*$/i, t("verify.fields.confirmationCode.error.noSymbols")),
     ]),
+    authenticationFlowToken: v.string([v.minLength(1)]),
+    email: v.string([v.toTrimmed(), v.toLowerCase(), v.minLength(1)]),
   });
   return v.safeParse(formValidationSchema, formEntries);
 };
@@ -79,34 +84,16 @@ export const verify = async (
         fieldKey: issue.path?.[0].key as string,
         fieldValue: issue.message,
       })),
-    };
-  }
-  const authFlowTokenCookie = cookies().get("authenticationFlow");
-
-  // Check if cookie is in the header, if not the 2fa code is expired
-  if (!authFlowTokenCookie?.value) {
-    return {
-      validationErrors: [],
-      authError: {
-        id: "2FAExpiredSession",
-      },
+      success: false,
     };
   }
 
-  const { email, authenticationFlowToken }: Record<string, string | undefined> = JSON.parse(
-    authFlowTokenCookie.value
-  );
-
-  // Invalid Cookie. Delete and redirect to login
-  if (!email || !authenticationFlowToken) {
-    clearAuthTokenCookie();
-    redirect(`/${language}/auth/login`);
-  }
+  const { email, authenticationFlowToken, verificationCode } = valid.output;
 
   // If the cookie exists but the token does not exist in the database, the user is locked out
   if (await isUserLockedOut(email)) {
     return {
-      validationErrors: [],
+      success: false,
       authError: {
         id: "2FALockedOutSession",
       },
@@ -117,8 +104,6 @@ export const verify = async (
   if (!(await isUserActive(email))) {
     redirect(`/${language}/auth/account-deactivated`);
   }
-
-  const verificationCode = valid.output.verificationCode;
 
   // A failed login will always return an error
   try {
@@ -132,7 +117,7 @@ export const verify = async (
     // Failed login attempt
     if (err instanceof AuthError && err.name === "CredentialsSignin") {
       return {
-        validationErrors: [],
+        success: false,
         authError: {
           id: "2FAInvalidVerificationCode",
           ...(await handleErrorById("2FAInvalidVerificationCode", language)),
@@ -141,19 +126,16 @@ export const verify = async (
     }
 
     return {
-      validationErrors: [],
+      success: false,
       authError: {
         id: "InternalNextAuthError",
-        ...(await handleErrorById((err as Error).message, language)),
+        ...(await handleErrorById("InternalNextAuthError", language)),
       },
     };
   }
 
-  // Remove the auth flow cookie after a sucessfull login
-  clearAuthTokenCookie();
-
   return {
-    validationErrors: [],
+    success: true,
   };
 };
 
@@ -162,10 +144,62 @@ export const resendVerificationCode = async (
   email: string,
   authenticationFlowToken: string
 ): Promise<void> => {
-  await requestNew2FAVerificationCode(authenticationFlowToken, email);
+  const newCode = await requestNew2FAVerificationCode(authenticationFlowToken, email);
+  cookies().set(
+    "authenticationFlow",
+    JSON.stringify({
+      authenticationFlowToken: newCode,
+      email,
+    }),
+    { secure: true, sameSite: "strict", maxAge: 60 * 15 }
+  );
+
   redirect(`/${language}/auth/mfa`);
 };
 
-export const clearAuthTokenCookie = () => {
-  cookies().delete("authenticationFlow");
+export const getErrorText = async (language: string, errorID: string) => {
+  return handleErrorById(errorID, language);
+};
+
+export const getRedirectPath = async (locale: string) => {
+  const session = await auth();
+  if (!session) {
+    // The sessions between client and server are not in sync.
+    // Try to redirect to auth policy page and let logic handle there.
+    return { callback: `/${locale}/auth/policy` };
+  }
+
+  if (session.user.newlyRegistered) {
+    return { callback: `/${locale}/auth/policy?referer=/auth/account-created` };
+  }
+
+  const ability = createAbility(session);
+
+  // Get user
+  const user = session.user;
+
+  const overdue = await getUnprocessedSubmissionsForUser(ability, user.id).catch((err) => {
+    logMessage.warn(`Error getting unprocessed submissions for user ${user.id}: ${err.message}`);
+    // Fail gracefully if we can't get the unprocessed submissions.
+    return { callback: `/${locale}/auth/policy` };
+  });
+
+  logMessage.debug(`${user.name} has ${Object.keys(overdue).length} overdue submissions`);
+
+  let hasOverdueSubmissions = false;
+
+  Object.entries(overdue).forEach(([, value]) => {
+    if (value.level > 2) {
+      hasOverdueSubmissions = true;
+      return;
+    }
+  });
+
+  if (hasOverdueSubmissions) {
+    return { callback: `/${locale}/auth/restricted-access` };
+  }
+
+  logMessage.debug(`Redirecting to policy page for user ${user.name}`);
+
+  return { callback: `/${locale}/auth/policy` };
 };

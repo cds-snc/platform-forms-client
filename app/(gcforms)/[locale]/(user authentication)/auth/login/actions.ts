@@ -5,7 +5,6 @@ import { begin2FAAuthentication, initiateSignIn } from "@lib/auth";
 import { redirect } from "next/navigation";
 import { CognitoIdentityProviderServiceException } from "@aws-sdk/client-cognito-identity-provider";
 import { hasError } from "@lib/hasError";
-import { cookies } from "next/headers";
 import { handleErrorById } from "@lib/auth/cognito";
 
 export interface ErrorStates {
@@ -19,6 +18,10 @@ export interface ErrorStates {
     fieldKey: string;
     fieldValue: string;
   }[];
+  authFlowToken?: {
+    email: string;
+    authenticationFlowToken: string;
+  };
 }
 
 const validate = async (
@@ -31,6 +34,8 @@ const validate = async (
 
   const formValidationSchema = v.object({
     username: v.string([
+      v.toLowerCase(),
+      v.toTrimmed(),
       v.minLength(1, t("input-validation.required", { ns: "common" })),
       v.email(t("input-validation.email", { ns: "common" })),
     ]),
@@ -97,16 +102,14 @@ export const login = async (
       email: cognitoResult.email,
       token: cognitoResult.token,
     });
-    cookies().set(
-      "authenticationFlow",
-      JSON.stringify({
-        authenticationFlowToken,
-        email: cognitoResult.email,
-      }),
-      { secure: true, sameSite: "strict", maxAge: 60 * 15 }
-    );
 
-    redirect(`/${language}/auth/mfa`);
+    return {
+      validationErrors: [],
+      authFlowToken: {
+        email: cognitoResult.email,
+        authenticationFlowToken,
+      },
+    };
   }
 
   return {

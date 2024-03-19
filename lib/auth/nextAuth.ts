@@ -1,11 +1,7 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth, { Session } from "next-auth";
 
-import {
-  Validate2FAVerificationCodeResultStatus,
-  validate2FAVerificationCode,
-  userHasSecurityQuestions,
-} from "@lib/auth/";
+import { validate2FAVerificationCode, userHasSecurityQuestions } from "@lib/auth/";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { logMessage } from "@lib/logger";
 import { getOrCreateUser } from "@lib/users";
@@ -90,26 +86,18 @@ export const {
           };
         }
 
-        const validationResult = await validate2FAVerificationCode(
+        const { valid, decodedCognitoToken } = await validate2FAVerificationCode(
           authenticationFlowToken,
           username,
           verificationCode
         );
 
-        switch (validationResult.status) {
-          case Validate2FAVerificationCodeResultStatus.VALID: {
-            if (!validationResult.decodedCognitoToken)
-              throw new Error("Missing decoded Cognito token in 2FA validation result");
-
-            return validationResult.decodedCognitoToken;
-          }
-          // These errors are checked and returned in the MFA Form server action
-          case Validate2FAVerificationCodeResultStatus.INVALID:
-          case Validate2FAVerificationCodeResultStatus.EXPIRED:
-          case Validate2FAVerificationCodeResultStatus.LOCKED_OUT:
-          default:
-            return null;
+        if (valid) {
+          if (!decodedCognitoToken)
+            throw new Error("Missing decoded Cognito token in 2FA validation result");
+          return decodedCognitoToken;
         }
+        return null;
       },
     }),
   ],

@@ -1,14 +1,17 @@
 "use client";
-import React from "react";
+import { useEffect } from "react";
 import { useTranslation } from "@i18n/client";
-import { clearAuthTokenCookie } from "../../actions";
-import { LinkButton } from "@clientComponents/globals";
+import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { BackArrowIcon } from "@serverComponents/icons";
 
 export const Expired2faSession = () => {
   const { t, i18n } = useTranslation(["cognito-errors", "common"]);
   const homeHref = `/${i18n.language}/auth/login`;
   const supportHref = `/${i18n.language}/support`;
+
+  useEffect(() => {
+    sessionStorage.removeItem("authFlowToken");
+  }, []);
 
   return (
     <div>
@@ -17,21 +20,13 @@ export const Expired2faSession = () => {
       </h2>
       <p className="mb-10">{t("2FASessionExpired.description")}</p>
       <div className="laptop:flex">
-        <LinkButton.Primary
-          href={homeHref}
-          className="mb-2 mr-3"
-          onClick={() => clearAuthTokenCookie}
-        >
+        <LinkButton.Primary href={homeHref} className="mb-2 mr-3">
           <span>
             <BackArrowIcon className="mr-2 inline-block self-stretch fill-white" />
             {t("account.actions.backToSignIn", { ns: "common" })}
           </span>
         </LinkButton.Primary>
-        <LinkButton.Secondary
-          href={supportHref}
-          className="mb-2"
-          onClick={() => clearAuthTokenCookie}
-        >
+        <LinkButton.Secondary href={supportHref} className="mb-2">
           {t("errorPanel.cta.support", { ns: "common" })}
         </LinkButton.Secondary>
       </div>

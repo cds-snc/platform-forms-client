@@ -10,7 +10,6 @@ import { generateVerificationCode, sendVerificationCode } from "./2fa";
 import { registerFailed2FAAttempt, clear2FALockout } from "./2faLockout";
 import { logMessage } from "@lib/logger";
 import { serverTranslation } from "@i18n";
-import { redirect } from "next/navigation";
 
 if (
   (!process.env.COGNITO_APP_CLIENT_ID ||
@@ -38,15 +37,8 @@ type DecodedCognitoToken = {
 
 export type AuthenticationFlowToken = string;
 
-export enum Validate2FAVerificationCodeResultStatus {
-  VALID,
-  INVALID,
-  EXPIRED,
-  LOCKED_OUT,
-}
-
 export type Validate2FAVerificationCodeResult = {
-  status: Validate2FAVerificationCodeResultStatus;
+  valid: boolean;
   decodedCognitoToken?: DecodedCognitoToken;
 };
 
@@ -188,7 +180,7 @@ export const begin2FAAuthentication = async ({
 export const requestNew2FAVerificationCode = async (
   authenticationFlowToken: AuthenticationFlowToken,
   email: string
-): Promise<void> => {
+): Promise<string> => {
   const sanitizedEmail = sanitizeEmailAddressForCognito(email);
 
   const verificationCode = await generateVerificationCode();
@@ -211,6 +203,7 @@ export const requestNew2FAVerificationCode = async (
     if (result === null) throw new Missing2FASession();
 
     await sendVerificationCode(sanitizedEmail, verificationCode);
+    return verificationCode;
   } catch (error) {
     if (error instanceof Missing2FASession) {
       throw error;
@@ -244,15 +237,8 @@ export const validate2FAVerificationCode = async (
       },
       select: {
         id: true,
-        active: true,
       },
     });
-
-    // Very small edge case where the user is deactivated while they are trying to log in
-    if (prismaUser?.active === false) {
-      await delete2FAVerificationCode(sanitizedEmail);
-      redirect(`/auth/account-deactivated`);
-    }
 
     // If the verification code and username do not match fail the login
     if (mfaEntry === null || mfaEntry.verificationCode !== verificationCode) {
@@ -269,18 +255,15 @@ export const validate2FAVerificationCode = async (
         );
 
         logMessage.warn("2FA Lockout: Verification code attempts exceeded");
-
-        return { status: Validate2FAVerificationCodeResultStatus.LOCKED_OUT };
-      } else {
-        return { status: Validate2FAVerificationCodeResultStatus.INVALID };
       }
+      return { valid: false };
     }
 
     // If the verification code is expired remove it from the database
     if (mfaEntry.expires.getTime() < new Date().getTime()) {
       await delete2FAVerificationCode(sanitizedEmail);
       await clear2FALockout(sanitizedEmail);
-      return { status: Validate2FAVerificationCodeResultStatus.EXPIRED };
+      return { valid: false };
     }
 
     // 2FA is valid, remove the verification code from the database and return user info
@@ -291,7 +274,7 @@ export const validate2FAVerificationCode = async (
     const decodedCognitoToken = decodeCognitoToken(mfaEntry.cognitoToken);
 
     return {
-      status: Validate2FAVerificationCodeResultStatus.VALID,
+      valid: true,
       decodedCognitoToken: {
         id: decodedCognitoToken.id,
         name: decodedCognitoToken.name,
@@ -299,7 +282,10 @@ export const validate2FAVerificationCode = async (
       },
     };
   } catch (error) {
-    throw new Error(`Failed to validate verification code. Reason: ${(error as Error).message}.`);
+    logMessage.warn(`Failed to validate verification code. Reason: ${(error as Error).message}.`);
+    return {
+      valid: false,
+    };
   }
 };
 

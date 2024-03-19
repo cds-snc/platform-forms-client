@@ -1,85 +1,71 @@
 "use client";
-import React, { ReactElement, useRef } from "react";
+import React, { ReactElement, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import { Button, StyledLink } from "@clientComponents/globals";
-import { useAuthErrors } from "@lib/hooks/auth/useAuthErrors";
-import { logMessage } from "@lib/logger";
-import axios from "axios";
-import { getCsrfToken } from "@lib/client/csrfToken";
+import { getErrorText, resendVerificationCode } from "../../../actions";
+
 import { hasError } from "@lib/hasError";
-import { Alert } from "@clientComponents/forms";
+import { Alert } from "../../../../../components/client/forms/Alert";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import Link from "next/link";
 
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 
-interface ReVerifyProps {
-  email: string;
-  authenticationFlowToken: string;
-}
-
-export const ReVerify = ({ email, authenticationFlowToken }: ReVerifyProps): ReactElement => {
+export const ReVerify = (): ReactElement => {
   const router = useRouter();
   const {
     t,
     i18n: { language },
-  } = useTranslation(["auth-verify", "cognito-errors", "common"]);
-  const [authErrorsState, { authErrorsReset, handleErrorById }] = useAuthErrors();
+  } = useTranslation(["auth-verify"]);
 
   const headingRef = useRef(null);
   useFocusIt({ elRef: headingRef });
 
+  const [authErrorState, setAuthErrorState] = useState<Record<string, string | undefined>>({});
+  const [resending, setResending] = useState(false);
+
+  // If there is no existing flow redirect to login
+  const { email, authenticationFlowToken }: { email?: string; authenticationFlowToken?: string } =
+    JSON.parse(sessionStorage.getItem("authFlowToken") || "{}");
+  if (!email || !authenticationFlowToken) {
+    router.push(`/${language}/auth/login`);
+  }
+
   const handleReVerify = async () => {
-    authErrorsReset();
-
-    const token = await getCsrfToken();
-    if (!token) {
-      throw new Error("CSRF token not found");
-    }
-
     try {
-      const { status } = await axios({
-        url: "/api/auth/2fa/request-new-verification-code",
-        method: "POST",
-        headers: {
-          "X-CSRF-Token": token,
-        },
-        data: {
-          email,
-          authenticationFlowToken,
-        },
-        timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-      });
-
-      if (Number(status) !== 200) {
+      setResending(true);
+      if (!email || !authenticationFlowToken) {
+        router.push(`/${language}/auth/login`);
         return;
       }
+      await resendVerificationCode(language, email, authenticationFlowToken);
     } catch (err) {
-      logMessage.error(err);
-
-      if (hasError(["CredentialsSignin", "CSRF token not found", "Missing 2FA session"], err)) {
-        // Missing CsrfToken, username or 2FA session so have the user try signing in again
+      if (hasError(["Missing 2FA session"], err)) {
+        // Missing 2FA session so have the user try signing in again
         router.push("/auth/login");
         router.refresh();
       } else {
-        handleErrorById("InternalServiceException");
+        // Internal Error
+        const errorText = await getErrorText(language, "InternalServiceException");
+        setAuthErrorState(errorText);
+        setResending(false);
       }
     }
   };
 
   return (
     <>
-      {authErrorsState?.isError && (
+      {authErrorState?.title && (
         <Alert
           type={ErrorStatus.ERROR}
-          heading={authErrorsState.title}
-          onDismiss={authErrorsReset}
+          heading={authErrorState?.title}
+          onDismiss={() => setAuthErrorState({})}
           id="cognitoErrors"
         >
-          {authErrorsState.description}&nbsp;
-          {authErrorsState.callToActionLink ? (
-            <Link href={authErrorsState.callToActionLink}>{authErrorsState.callToActionText}</Link>
+          {authErrorState.description}&nbsp;
+          {authErrorState.callToActionLink ? (
+            <Link href={authErrorState.callToActionLink}>{authErrorState.callToActionText}</Link>
           ) : undefined}
         </Alert>
       )}
@@ -88,7 +74,7 @@ export const ReVerify = ({ email, authenticationFlowToken }: ReVerifyProps): Rea
       </h1>
       <p className="mt-10">{t("reVerify.description")}</p>
       <div className="flex mt-16">
-        <Button theme="primary" className="mr-4" onClick={handleReVerify}>
+        <Button theme="primary" className="mr-4" onClick={handleReVerify} disabled={resending}>
           {t("reVerify.buttons.reSendCode")}
         </Button>
         <StyledLink theme="secondaryButton" href={`/${language}/support`}>

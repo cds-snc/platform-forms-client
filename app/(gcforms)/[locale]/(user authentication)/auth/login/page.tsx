@@ -20,5 +20,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   if (session) {
     redirect(`/${locale}/forms`);
   }
+
   return <LoginForm />;
 }

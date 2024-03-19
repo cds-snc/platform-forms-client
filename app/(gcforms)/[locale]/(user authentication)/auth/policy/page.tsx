@@ -2,7 +2,7 @@ import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { AcceptableUseTerms } from "app/(gcforms)/[locale]/(user authentication)/auth/policy/AcceptableUse";
-import { requireAuthentication } from "@lib/auth";
+import { auth } from "@lib/auth";
 
 export async function generateMetadata({
   params: { locale },
@@ -16,9 +16,13 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
-  const { user } = await requireAuthentication();
+  const session = await auth();
 
-  if (user.acceptableUse) {
+  if (!session) {
+    redirect(`/${locale}/auth/login`);
+  }
+  // If already accepted redirect to forms
+  if (session.user.acceptableUse) {
     redirect(`/${locale}/forms`);
   }
 
