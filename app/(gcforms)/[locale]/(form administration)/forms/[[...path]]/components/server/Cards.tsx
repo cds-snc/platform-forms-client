@@ -45,10 +45,7 @@ export const Cards = async ({ filter, ability }: { filter?: string; ability: Use
         className={`pt-8`}
       >
         {templates.length > 0 ? (
-          <ol
-            className="grid gap-4 p-0"
-            style={{ gridTemplateColumns: "repeat(auto-fill, minmax(27rem, 1fr))" }}
-          >
+          <ol className="grid gap-4 grid-cols-2 p-0">
             {templates.map((card) => {
               return (
                 <li className="flex flex-col" key={card.id}>

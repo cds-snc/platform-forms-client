@@ -20,17 +20,19 @@ export default async function Layout({
   return (
     <TemplateStoreProvider {...{ locale }}>
       <SaveTemplateProvider>
-        <div className="flex h-full flex-col bg-gray-soft">
+        <div className="flex h-auto flex-col bg-gray-soft">
           <SkipLink />
           <Header
             context={"default"}
             user={{ email: session.user.email, name: session.user.name }}
           />
           <div className="mx-4 shrink-0 grow basis-auto laptop:mx-32 desktop:mx-64">
-            <main id="content">{children}</main>
+            <main id="content" className="mb-10">
+              {children}
+            </main>
             <ToastContainer />
           </div>
-          <Footer displayFormBuilderFooter />
+          <Footer displayFormBuilderFooter className="mt-0" />
         </div>
       </SaveTemplateProvider>
     </TemplateStoreProvider>
