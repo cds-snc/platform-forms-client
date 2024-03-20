@@ -33,7 +33,10 @@ const customJestConfig: Config = {
   },
   moduleDirectories: ["node_modules", "<rootDir>"],
   clearMocks: true,
-  setupFiles: ["<rootDir>/__utils__/jestShim.ts"],
+  setupFiles: [
+    "<rootDir>/__utils__/jestShim.ts",
+    "<rootDir>/__utils__/mocks/server-actions/submitForm.ts",
+  ],
   setupFilesAfterEnv: [
     "<rootDir>/__utils__/setupTests.ts",
     "<rootDir>/__utils__/prismaConnector.ts",
