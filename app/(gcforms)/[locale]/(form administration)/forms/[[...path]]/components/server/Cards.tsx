@@ -13,7 +13,7 @@ export const Cards = async ({ filter, ability }: { filter?: string; ability: Use
   const where = {
     isPublished: filter === "published" ? true : filter === "drafts" ? false : undefined,
   };
-  const templates = (await getAllTemplates(ability, where)).map((template) => {
+  const templates = (await getAllTemplates(ability, where, "desc")).map((template) => {
     const {
       id,
       form: { titleEn = "", titleFr = "" },
