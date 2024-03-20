@@ -14,7 +14,6 @@ import classNames from "classnames";
 import { Responses, PublicFormRecord, Validate } from "@lib/types";
 import { ErrorStatus } from "../Alert/Alert";
 import { useFormValuesChanged } from "@lib/hooks";
-import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -313,6 +312,11 @@ interface FormProps {
   onSuccess: (id: string) => void;
   children?: (JSX.Element | undefined)[] | null;
   t: TFunction;
+  submitForm: (
+    values: Responses,
+    language: string,
+    formRecord: PublicFormRecord
+  ) => Promise<string>;
 }
 
 /**
@@ -335,7 +339,11 @@ export const Form = withFormik<FormProps, Responses>({
     // Needed so the Loader is displayed
     formikBag.setStatus("submitting");
     try {
-      const result = await submitForm(values, formikBag.props.language, formikBag.props.formRecord);
+      const result = await formikBag.props.submitForm(
+        values,
+        formikBag.props.language,
+        formikBag.props.formRecord
+      );
       result && formikBag.props.onSuccess(result);
     } catch (err) {
       logMessage.error(err as Error);
