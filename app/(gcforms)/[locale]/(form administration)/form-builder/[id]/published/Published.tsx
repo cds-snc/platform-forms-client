@@ -3,6 +3,7 @@ import { RocketIcon } from "@serverComponents/icons/RocketIcon";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { serverTranslation } from "@i18n";
 import Markdown from "markdown-to-jsx";
+import { headers } from "next/headers";
 
 export const Published = async ({
   locale,
@@ -18,7 +19,8 @@ export const Published = async ({
     i18n: { language },
   } = await serverTranslation("form-builder", { lang: locale });
 
-  const baseUrl = process.env.NEXTAUTH_URL;
+  const headersList = headers();
+  const baseUrl = headersList.get("host");
 
   const linkEn = `${baseUrl}/en/id/${id}`;
   const linkFr = `${baseUrl}/fr/id/${id}`;
