@@ -3,7 +3,6 @@ import { Form, NextButton } from "@clientComponents/forms";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import { FormRecord, TypeOmit } from "@lib/types";
-import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 
 export const FormWrapper = ({
   formRecord,
@@ -18,7 +17,6 @@ export const FormWrapper = ({
     i18n: { language },
   } = useTranslation(["common", "welcome", "confirmation", "form-closed"]);
   const router = useRouter();
-  const { submitForm } = useGCFormsContext();
 
   return (
     <Form
@@ -27,7 +25,6 @@ export const FormWrapper = ({
       onSuccess={(formID) => {
         router.push(`/${language}/id/${formID}/confirmation`);
       }}
-      submitForm={submitForm}
       t={t}
       renderSubmit={({ validateForm, fallBack }) => {
         return <NextButton validateForm={validateForm} fallBack={fallBack} />;
