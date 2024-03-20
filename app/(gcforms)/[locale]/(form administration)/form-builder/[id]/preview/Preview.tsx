@@ -7,7 +7,7 @@ import Markdown from "markdown-to-jsx";
 import { PreviewNavigation } from "./PreviewNavigation";
 import { getRenderedForm } from "@lib/formBuilder";
 import { PublicFormRecord } from "@lib/types";
-import { Button, Form, RichText, ClosedPage, NextButton } from "@clientComponents/forms";
+import { Button, RichText, ClosedPage, NextButton } from "@clientComponents/forms";
 import { LocalizedElementProperties, LocalizedFormProperties } from "@lib/types/form-builder-types";
 import { useTemplateStore } from "@lib/store";
 import { BackArrowIcon } from "@serverComponents/icons";
@@ -16,6 +16,7 @@ import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 import { useRehydrate } from "@lib/hooks/form-builder";
 import Skeleton from "react-loading-skeleton";
+import { Form } from "@clientComponents/forms/Form/Form";
 
 export const Preview = () => {
   const { status } = useSession();

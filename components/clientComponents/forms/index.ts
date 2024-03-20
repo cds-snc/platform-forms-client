@@ -18,7 +18,6 @@ export { RichText } from "./RichText/RichText";
 export { DynamicGroup } from "./DynamicRow/DynamicRow";
 export { Description } from "./Description/Description";
 export { MultipleChoiceGroup } from "./MultipleChoiceGroup/MultipleChoiceGroup";
-export { Form } from "./Form/Form";
 export { ConditionalWrapper } from "./ConditionalWrapper/ConditionalWrapper";
 export { NextButton } from "./NextButton/NextButton";
 export { Combobox } from "./Combobox/Combobox";
