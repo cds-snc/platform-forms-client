@@ -22,8 +22,8 @@ export const Published = async ({
   const headersList = headers();
   const baseUrl = headersList.get("host");
 
-  const linkEn = `${baseUrl}/en/id/${id}`;
-  const linkFr = `${baseUrl}/fr/id/${id}`;
+  const linkEn = `https://${baseUrl}/en/id/${id}`;
+  const linkFr = `https://${baseUrl}/fr/id/${id}`;
 
   return (
     <div>
