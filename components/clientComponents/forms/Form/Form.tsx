@@ -3,7 +3,6 @@ import React, { useEffect, useState, useRef } from "react";
 import { FormikProps, withFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage, validateOnSubmit } from "@lib/validation";
-import { submitToAPI } from "@lib/client/clientHelpers";
 import { useFormTimer } from "@lib/hooks";
 import { Alert, Button, RichText } from "@clientComponents/forms";
 import { logMessage } from "@lib/logger";
@@ -313,6 +312,11 @@ interface FormProps {
   onSuccess: (id: string) => void;
   children?: (JSX.Element | undefined)[] | null;
   t: TFunction;
+  submitForm: (
+    values: Responses,
+    language: string,
+    formRecord: PublicFormRecord
+  ) => Promise<string>;
 }
 
 /**
@@ -335,10 +339,15 @@ export const Form = withFormik<FormProps, Responses>({
     // Needed so the Loader is displayed
     formikBag.setStatus("submitting");
     try {
-      const result = await submitToAPI(values, formikBag);
+      const result = await formikBag.props.submitForm(
+        values,
+        formikBag.props.language,
+        formikBag.props.formRecord
+      );
       result && formikBag.props.onSuccess(result);
     } catch (err) {
       logMessage.error(err as Error);
+      formikBag.setStatus("Error");
     } finally {
       if (formikBag.props && !formikBag.props.isPreview) {
         window.dataLayer = window.dataLayer || [];
