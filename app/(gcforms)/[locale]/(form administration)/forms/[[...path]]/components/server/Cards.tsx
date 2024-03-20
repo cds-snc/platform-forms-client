@@ -1,39 +1,16 @@
 import { serverTranslation } from "@i18n";
-import { getAllTemplates } from "@lib/templates";
-import { UserAbility } from "@lib/types";
 import { ucfirst } from "@lib/client/clientHelpers";
 import { Card } from "./Card";
+import { FormsTemplate } from "../../page";
 
-export const Cards = async ({ filter, ability }: { filter?: string; ability: UserAbility }) => {
-  const {
-    t,
-    i18n: { language },
-  } = await serverTranslation("my-forms");
-
-  const where = {
-    isPublished: filter === "published" ? true : filter === "drafts" ? false : undefined,
-  };
-  const templates = (await getAllTemplates(ability, where, "desc")).map((template) => {
-    const {
-      id,
-      form: { titleEn = "", titleFr = "" },
-      name,
-      deliveryOption = { emailAddress: "" },
-      isPublished,
-      updatedAt,
-    } = template;
-    return {
-      id,
-      titleEn,
-      titleFr,
-      deliveryOption,
-      name,
-      isPublished,
-      date: updatedAt ?? Date.now().toString(),
-      url: `/${language}/id/${id}`,
-      overdue: 0,
-    };
-  });
+export const Cards = async ({
+  filter,
+  templates,
+}: {
+  filter?: string;
+  templates: FormsTemplate[];
+}) => {
+  const { t } = await serverTranslation("my-forms");
 
   // TODO: more testing with below live region. it may need to be placed higher in the tree
   return (

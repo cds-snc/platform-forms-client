@@ -10,6 +10,20 @@ import { Suspense } from "react";
 import Loader from "@clientComponents/globals/Loader";
 import { NewFormButton } from "./components/server/NewFormButton";
 import { ResumeEditingForm } from "./components/ResumeEditingForm";
+import { getAllTemplates } from "@lib/templates";
+import { DeliveryOption } from "@lib/types";
+
+export type FormsTemplate = {
+  id: string;
+  titleEn: string;
+  titleFr: string;
+  deliveryOption: DeliveryOption;
+  name: string;
+  isPublished: boolean;
+  date: string;
+  url: string;
+  overdue: number;
+};
 
 export async function generateMetadata({
   params: { locale },
@@ -38,7 +52,36 @@ export default async function Page({
       redirect: true,
     });
 
-    const { t } = await serverTranslation("my-forms");
+    const {
+      t,
+      i18n: { language },
+    } = await serverTranslation("my-forms");
+
+    // Moved from Cards to Page to avoid component being cached when navigating back to this page
+    const where = {
+      isPublished: formsState === "published" ? true : formsState === "drafts" ? false : undefined,
+    };
+    const templates = (await getAllTemplates(ability, where, "desc")).map((template) => {
+      const {
+        id,
+        form: { titleEn = "", titleFr = "" },
+        name,
+        deliveryOption = { emailAddress: "" },
+        isPublished,
+        updatedAt,
+      } = template;
+      return {
+        id,
+        titleEn,
+        titleFr,
+        deliveryOption,
+        name,
+        isPublished,
+        date: updatedAt ?? Date.now().toString(),
+        url: `/${language}/id/${id}`,
+        overdue: 0,
+      };
+    });
 
     return (
       <div className="center mx-auto w-[980px] bg-gray-soft">
@@ -51,7 +94,7 @@ export default async function Page({
         <ResumeEditingForm />
 
         <Suspense fallback={<Loader />}>
-          <Cards filter={formsState} ability={ability} />
+          <Cards templates={templates} />
         </Suspense>
       </div>
     );
