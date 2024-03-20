@@ -1,6 +1,6 @@
 import React from "react";
 import { cleanup, render, screen, waitFor, fireEvent } from "@testing-library/react";
-import { Form } from "@clientComponents/forms";
+import { Form } from "@clientComponents/forms/Form/Form";
 import { useFlag } from "@lib/hooks/useFlag";
 import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 
