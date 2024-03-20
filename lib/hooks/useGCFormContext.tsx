@@ -1,8 +1,7 @@
 "use client";
 import React, { createContext, useContext, ReactNode } from "react";
-import { PublicFormRecord, Responses } from "@lib/types";
+import { PublicFormRecord } from "@lib/types";
 import { mapIdsToValues, FormValues, idArraysMatch, GroupsType } from "@lib/formContext";
-import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 
 interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: FormValues }) => void;
@@ -12,11 +11,6 @@ interface GCFormsContextValueType {
   handleNextAction: () => void;
   hasNextAction: (group: string) => boolean;
   formRecord: PublicFormRecord;
-  submitForm: (
-    values: Responses,
-    language: string,
-    formRecord: PublicFormRecord
-  ) => Promise<string>;
 }
 
 const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefined);
@@ -68,7 +62,6 @@ export const GCFormsProvider = ({
         currentGroup,
         handleNextAction,
         hasNextAction,
-        submitForm,
       }}
     >
       {children}
@@ -90,7 +83,6 @@ export const useGCFormsContext = () => {
       hasNextAction: () => void 0,
       handleNextAction: () => void 0,
       formRecord: {} as PublicFormRecord,
-      submitForm: submitForm,
     };
   }
   return formsContext;
