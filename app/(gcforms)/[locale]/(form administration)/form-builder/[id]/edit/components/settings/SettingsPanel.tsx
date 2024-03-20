@@ -142,7 +142,7 @@ export const SettingsPanel = () => {
           </div>
         </div>
         <div>
-          <Tooltip text={t("formSettingsModal.more")}>
+          <Tooltip.Simple text={t("formSettingsModal.more")}>
             <button
               onClick={() => {
                 setShowShowSettings(true);
@@ -151,7 +151,7 @@ export const SettingsPanel = () => {
             >
               {"..."}
             </button>
-          </Tooltip>
+          </Tooltip.Simple>
         </div>
       </div>
       <SettingsModal

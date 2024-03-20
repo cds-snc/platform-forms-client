@@ -1,5 +1,5 @@
 "use client";
-import { Form } from "@clientComponents/forms";
+import { Form } from "@clientComponents/forms/Form/Form";
 import { getRenderedForm } from "@lib/formBuilder";
 import { PublicFormRecord } from "@lib/types";
 import React from "react";
