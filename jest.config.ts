@@ -36,6 +36,7 @@ const customJestConfig: Config = {
   setupFiles: [
     "<rootDir>/__utils__/jestShim.ts",
     "<rootDir>/__utils__/mocks/server-actions/submitForm.ts",
+    "<rootDir>/__utils__/mocks/server-actions/getTranslatedElementProperties.ts",
   ],
   setupFilesAfterEnv: [
     "<rootDir>/__utils__/setupTests.ts",
