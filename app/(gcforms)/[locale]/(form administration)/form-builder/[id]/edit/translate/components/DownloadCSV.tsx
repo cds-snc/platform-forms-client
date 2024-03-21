@@ -17,7 +17,10 @@ export const DownloadCSV = () => {
   let data = [];
 
   const parseElement = (element: FormElement, index: string | number) => {
-    const description = element.type === "richText" ? "Page text" : `Question ${index}`;
+    const description =
+      element.type === "richText"
+        ? formatText("Page text/Texte de page")
+        : formatText(`Question ${index}`);
 
     if (element.type === "dynamicRow") {
       let subElementIndex = -1;
@@ -60,10 +63,12 @@ export const DownloadCSV = () => {
   };
 
   const generateCSV = async () => {
-    data = [["description", "english", "french"]];
-    data.push(["Form introduction - Title", formatText(form.titleEn), formatText(form.titleFr)]);
+    data = [
+      [formatText("Description"), formatText("English/Anglais"), formatText("French/Français")],
+    ];
+    data.push([formatText("Title/Titre"), formatText(form.titleEn), formatText(form.titleFr)]);
     data.push([
-      "Form introduction - Description",
+      formatText("Description"),
       formatText(form.introduction?.descriptionEn ?? ""),
       formatText(form.introduction?.descriptionFr ?? ""),
     ]);
@@ -75,7 +80,7 @@ export const DownloadCSV = () => {
 
     if (form.privacyPolicy?.descriptionEn || form.privacyPolicy?.descriptionFr) {
       data.push([
-        "Privacy statement",
+        formatText("Privacy statement/Déclaration de confidentialité"),
         formatText(form.privacyPolicy.descriptionEn),
         formatText(form.privacyPolicy.descriptionFr),
       ]);
@@ -83,7 +88,7 @@ export const DownloadCSV = () => {
 
     if (form.confirmation?.descriptionEn || form.confirmation?.descriptionFr) {
       data.push([
-        "Confirmation message",
+        formatText("Confirmation message/Message de confirmation"),
         formatText(form.confirmation.descriptionEn),
         formatText(form.confirmation.descriptionFr),
       ]);
