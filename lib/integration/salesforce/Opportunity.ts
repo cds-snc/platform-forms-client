@@ -38,8 +38,8 @@ export class Opportunity {
     this.contactId = contactId;
   }
 
-  public toJSON(): string {
-    return JSON.stringify({
+  public toJSON(): object {
+    return {
       AccountId: this.departmentId,
       Name: this.formName,
       StageName: "Published",
@@ -48,7 +48,7 @@ export class Opportunity {
       Type: "New Business",
       CDS_Lead_Team__c: "Platform",
       Product_to_Add__c: "GC Forms",
-    });
+    };
   }
 }
 
