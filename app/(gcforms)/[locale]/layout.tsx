@@ -45,7 +45,6 @@ export default async function Layout({
       !session.user.acceptableUse &&
       !onSupport &&
       !currentPath.startsWith("/auth/policy") &&
-      !currentPath.startsWith("/auth/setup-security-questions") &&
       // If they don't want to accept let them log out
       !currentPath.startsWith("/auth/logout")
     ) {

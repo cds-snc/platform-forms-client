@@ -222,7 +222,6 @@ export const {
         );
         token.deactivated = true;
       }
-      logMessage.debug(`JWT refreshed for user ${token.email}`);
       return token;
     },
     async session(params) {
@@ -241,7 +240,6 @@ export const {
         ...(token.deactivated && { deactivated: token.deactivated }),
         hasSecurityQuestions: token.hasSecurityQuestions ?? false,
       };
-      logMessage.debug(`Session refreshed for user ${token.email}`);
       return session;
     },
     async redirect({ url, baseUrl }) {

@@ -1,12 +1,10 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import {
-  requireAuthentication,
-  retrievePoolOfSecurityQuestions,
-  retrieveUserSecurityQuestions,
-} from "@lib/auth";
+import { auth, retrievePoolOfSecurityQuestions, retrieveUserSecurityQuestions } from "@lib/auth";
+import { createAbility } from "@lib/privileges";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
-import { Profile } from "./clientSide";
+import { Profile } from "./components/server/Profile";
+import { redirect } from "next/navigation";
 
 export async function generateMetadata({
   params: { locale },
@@ -19,20 +17,26 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page() {
-  const { user } = await requireAuthentication();
-  checkPrivilegesAsBoolean(user.ability, [{ action: "view", subject: "FormRecord" }], {
-    redirect: true,
-  });
+export default async function Page({ params: { locale } }: { params: { locale: string } }) {
+  const session = await auth();
+  if (!session) redirect(`/${locale}/auth/login`);
 
-  const publishingStatus = checkPrivilegesAsBoolean(user.ability, [
+  const ability = createAbility(session);
+
+  const hasPublishPrivilege = checkPrivilegesAsBoolean(ability, [
     { action: "update", subject: "FormRecord", field: "isPublished" },
   ]);
 
   const [userQuestions, allQuestions] = await Promise.all([
-    retrieveUserSecurityQuestions({ userId: user.ability.userID }),
+    retrieveUserSecurityQuestions({ userId: ability.userID }),
     retrievePoolOfSecurityQuestions(),
   ]);
 
-  return <Profile email={user.email} {...{ publishingStatus, userQuestions, allQuestions }} />;
+  return (
+    <Profile
+      locale={locale}
+      email={session.user.email}
+      {...{ publishingStatus: hasPublishPrivilege, userQuestions, allQuestions }}
+    />
+  );
 }

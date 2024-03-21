@@ -1,13 +1,11 @@
+"use client";
 import React, { useRef, useState, useCallback } from "react";
 import { Label } from "@clientComponents/forms";
 import { Button, Alert } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared";
 import { logMessage } from "@lib/logger";
-
-import axios from "axios";
-import { getCsrfToken } from "@lib/client/csrfToken";
-import { useRouter } from "next/navigation";
+import { updateSecurityQuestion } from "../../action";
 import debounce from "lodash.debounce";
 import {
   MessageType,
@@ -20,32 +18,44 @@ interface Question {
   questionFr: string;
 }
 
-const updateSecurityQuestion = async (
-  oldQuestionId: string,
-  newQuestionId: string,
-  answer: string | undefined
-) => {
-  const csrfToken = await getCsrfToken();
+export const EditSecurityQuestionButton = ({
+  questionNumber,
+  questionId,
+  questions,
+}: {
+  questionNumber: number;
+  questionId: string;
+  questions: Question[];
+}) => {
+  const { t } = useTranslation(["profile"]);
+  const [showModal, setShowModal] = useState(false);
 
-  if (csrfToken) {
-    await axios.put(
-      "/api/account/security-questions",
-      {
-        oldQuestionId: oldQuestionId,
-        newQuestionId: newQuestionId,
-        newAnswer: answer,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRF-Token": csrfToken,
-        },
-      }
-    );
-  }
+  return (
+    <>
+      <Button
+        onClick={() => {
+          setShowModal(true);
+        }}
+        theme="link"
+        className="self-start !px-2 text-lg"
+      >
+        {t("securityPanel.edit")}
+      </Button>
+      {showModal && (
+        <EditSecurityQuestionModal
+          questionNumber={questionNumber}
+          questionId={questionId}
+          questions={questions}
+          handleClose={async () => {
+            setShowModal(false);
+          }}
+        />
+      )}
+    </>
+  );
 };
 
-export const EditSecurityQuestionModal = ({
+const EditSecurityQuestionModal = ({
   questionNumber,
   questionId,
   questions,
@@ -61,7 +71,6 @@ export const EditSecurityQuestionModal = ({
   const questionRef = useRef<HTMLSelectElement>(null);
   const answerRef = useRef<HTMLInputElement>(null);
   const originalQuestionId = questionId;
-  const router = useRouter();
 
   const [isFormError, setIsFormError] = useState(false);
   const [isFormWarning, setIsFormWarning] = useState(false);
@@ -116,7 +125,6 @@ export const EditSecurityQuestionModal = ({
 
       dialog.current?.close();
       handleClose();
-      router.push(`/${i18n.language}/profile`);
     } catch (err) {
       logMessage.error(err);
       setIsFormError(true);
