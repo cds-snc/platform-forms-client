@@ -8,7 +8,7 @@ import {
   containsSymbol,
 } from "@lib/validation";
 import { serverTranslation } from "@i18n";
-import { sanitizeEmailAddressForCognito, begin2FAAuthentication, initiateSignIn } from "@lib/auth";
+import { begin2FAAuthentication, initiateSignIn } from "@lib/auth";
 import {
   CognitoIdentityProviderClient,
   SignUpCommand,
@@ -45,6 +45,8 @@ const validate = async (
         v.maxLength(50, t("signUpRegistration.fields.name.error.maxLength")),
       ]),
       username: v.string([
+        v.toLowerCase(),
+        v.toTrimmed(),
         v.minLength(1, t("input-validation.required", { ns: "common" })),
         v.email(t("input-validation.email", { ns: "common" })),
         v.custom(
@@ -107,12 +109,11 @@ export const register = async (
       })),
     };
   }
-  const sanitizedUsername = sanitizeEmailAddressForCognito(result.output.username);
 
   const params: SignUpCommandInput = {
     ClientId: COGNITO_APP_CLIENT_ID,
     Password: result.output.password,
-    Username: sanitizedUsername,
+    Username: result.output.username,
     UserAttributes: [
       {
         Name: "name",

@@ -21,8 +21,8 @@ export default async function Layout({
     currentPath?.startsWith("/auth/mfa") || currentPath?.startsWith("/auth/restricted-access");
 
   const onSupport =
-    currentPath?.startsWith("/support") &&
-    currentPath?.startsWith("/sla") &&
+    currentPath?.startsWith("/support") ||
+    currentPath?.startsWith("/sla") ||
     currentPath?.startsWith("/terms-of-use");
 
   // Ignore if user is in the auth flow of MfA

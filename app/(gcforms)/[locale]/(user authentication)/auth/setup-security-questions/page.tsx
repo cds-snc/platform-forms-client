@@ -1,14 +1,10 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-
-import { SetupSecurityQuestions } from "./clientSide";
-import {
-  requireAuthentication,
-  retrievePoolOfSecurityQuestions,
-  retrieveUserSecurityQuestions,
-} from "@lib/auth";
-import { checkPrivilegesAsBoolean } from "@lib/privileges";
+import { SecurityQuestionsForm } from "./components/client/SecurityQuestionsForm";
+import { auth, retrievePoolOfSecurityQuestions, retrieveUserSecurityQuestions } from "@lib/auth";
+import { createAbility } from "@lib/privileges";
 import { redirect } from "next/navigation";
+
 export async function generateMetadata({
   params: { locale },
 }: {
@@ -20,29 +16,22 @@ export async function generateMetadata({
   };
 }
 
-// const Info = async () => {
-//   const { t } = await serverTranslation(["setup-security-questions"]);
-//   return (
-//     <div className="mx-auto mt-10 w-[850px]">
-//       <Alert.Info title={t("banner.title")} body={t("banner.body")} />
-//     </div>
-//   );
-// };
-
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
-  const {
-    user: { ability },
-  } = await requireAuthentication();
+  const session = await auth();
+  if (!session) redirect(`/${locale}/auth/login`);
 
-  checkPrivilegesAsBoolean(ability, [{ action: "view", subject: "FormRecord" }], {
-    redirect: true,
-  });
+  const ability = createAbility(session);
+
+  // if (session.user.hasSecurityQuestions) {
+  //   redirect(`/${locale}/profile`);
+  // }
 
   const sessionSecurityQuestions = await retrieveUserSecurityQuestions({
     userId: ability.userID,
   });
+
   if (sessionSecurityQuestions && sessionSecurityQuestions.length >= 3) {
-    redirect(`/${locale}/profile`);
+    // redirect(`/${locale}/profile`);
   }
 
   // Removes any removed (deprecated) questions and formats for the related language
@@ -55,5 +44,5 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       };
     });
 
-  return <SetupSecurityQuestions questions={questions} />;
+  return <SecurityQuestionsForm questions={questions} />;
 }

@@ -1,8 +1,10 @@
+import { Suspense } from "react";
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { AcceptableUseTerms } from "app/(gcforms)/[locale]/(user authentication)/auth/policy/AcceptableUse";
+import { AcceptableUseTerms } from "app/(gcforms)/[locale]/(user authentication)/auth/policy/components/server/AcceptableUse";
 import { auth } from "@lib/auth";
+import Loading from "./components/server/Loading";
 
 export async function generateMetadata({
   params: { locale },
@@ -26,7 +28,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     redirect(`/${locale}/forms`);
   }
 
-  const termsOfUseContent = await require(`@public/static/content/${locale}/responsibilities.md`);
-
-  return <AcceptableUseTerms content={termsOfUseContent} />;
+  return (
+    <Suspense fallback={<Loading />}>
+      <AcceptableUseTerms locale={locale} />
+    </Suspense>
+  );
 }
