@@ -1,8 +1,7 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { SecurityQuestionsForm } from "./components/client/SecurityQuestionsForm";
-import { auth, retrievePoolOfSecurityQuestions, retrieveUserSecurityQuestions } from "@lib/auth";
-import { createAbility } from "@lib/privileges";
+import { auth, retrievePoolOfSecurityQuestions } from "@lib/auth";
 import { redirect } from "next/navigation";
 
 export async function generateMetadata({
@@ -20,18 +19,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const session = await auth();
   if (!session) redirect(`/${locale}/auth/login`);
 
-  const ability = createAbility(session);
-
-  // if (session.user.hasSecurityQuestions) {
-  //   redirect(`/${locale}/profile`);
-  // }
-
-  const sessionSecurityQuestions = await retrieveUserSecurityQuestions({
-    userId: ability.userID,
-  });
-
-  if (sessionSecurityQuestions && sessionSecurityQuestions.length >= 3) {
-    // redirect(`/${locale}/profile`);
+  if (session.user.hasSecurityQuestions) {
+    redirect(`/${locale}/profile`);
   }
 
   // Removes any removed (deprecated) questions and formats for the related language
