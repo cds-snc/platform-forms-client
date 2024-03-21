@@ -35,7 +35,7 @@ const customJestConfig: Config = {
   clearMocks: true,
   setupFiles: [
     "<rootDir>/__utils__/jestShim.ts",
-    "<rootDir>/__utils__/mocks/server-actions/submitForm.ts",
+    "<rootDir>/__utils__/mocks/server-actions/index.ts",
   ],
   setupFilesAfterEnv: [
     "<rootDir>/__utils__/setupTests.ts",
