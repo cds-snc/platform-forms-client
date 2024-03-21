@@ -1,12 +1,13 @@
 "use client";
 import React from "react";
 import { useTranslation } from "@i18n/client";
-
+import { useTemplateStore } from "@lib/store";
 import { ConditionalIcon } from "@serverComponents/icons/ConditionalIcon";
 import { getElementsUsingChoiceId } from "@lib/formContext";
 import { FormElement } from "@lib/types";
 import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
 import { Button } from "@clientComponents/globals";
+import { LocalizedFormProperties } from "@lib/types/form-builder-types";
 
 export const ConditionalIndicatorOption = ({
   id,
@@ -24,6 +25,15 @@ export const ConditionalIndicatorOption = ({
 
   const { refs } = useRefsContext();
 
+  const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    translationLanguagePriority: s.translationLanguagePriority,
+  }));
+
+  const language = translationLanguagePriority;
+
+  const titleKey = localizeField(LocalizedFormProperties.TITLE, language);
+
   if (!questions.length) {
     return null;
   }
@@ -37,7 +47,7 @@ export const ConditionalIndicatorOption = ({
       <ul className="list-none pl-4" aria-labelledby={rulesTitleId}>
         {questions.map(({ elementId }, index) => {
           const element = elements.find((element) => element.id === Number(elementId));
-          let text = element?.properties?.titleEn;
+          let text = element?.properties?.[titleKey] || "";
           if (element?.type === "richText") {
             text = t("pageText", { ns: "form-builder" });
           }
