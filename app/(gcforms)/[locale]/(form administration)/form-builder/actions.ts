@@ -325,13 +325,9 @@ export const getTranslatedElementProperties = async (type: string) => {
   const { t: en } = await serverTranslation("form-builder", { lang: "en" });
   const { t: fr } = await serverTranslation("form-builder", { lang: "fr" });
   return {
-    title: {
-      en: en(`addElementDialog.${type}.title`),
-      fr: fr(`addElementDialog.${type}.title`),
-    },
     description: {
-      en: en(`defaultElementDescription.${type}`),
-      fr: fr(`defaultElementDescription.${type}`),
+      en: en([`defaultElementDescription.${type}`, ""]),
+      fr: fr([`defaultElementDescription.${type}`, ""]),
     },
   };
 };
