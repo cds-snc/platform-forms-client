@@ -18,7 +18,7 @@ import { useRouter } from "next/router";
 
 export const Edit = () => {
   const router = useRouter();
-  const { t } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation("form-builder");
   const {
     title,
     layout,
@@ -54,10 +54,10 @@ export const Edit = () => {
 
   useEffect(() => {
     if (isPublished) {
-      router.replace(`/form-builder/${formId}/settings/`);
+      router.replace(`/${i18n.language}/form-builder/${formId}/settings/`);
       return;
     }
-  }, [router, isPublished, formId]);
+  }, [router, isPublished, formId, i18n.language]);
 
   const _debounced = debounce(
     useCallback(
