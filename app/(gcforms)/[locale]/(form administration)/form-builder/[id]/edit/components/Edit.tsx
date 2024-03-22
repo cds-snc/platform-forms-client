@@ -2,7 +2,7 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import debounce from "lodash.debounce";
 import { useTranslation } from "@i18n/client";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Language, LocalizedFormProperties } from "@lib/types/form-builder-types";
 import { ElementPanel, ConfirmationDescription, PrivacyDescription } from ".";
 import { RefsProvider } from "./RefsContext";
@@ -14,9 +14,8 @@ import { SettingsPanel } from "./settings/SettingsPanel";
 import { cleanInput } from "@lib/utils/form-builder";
 import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 import { useRehydrate } from "@lib/hooks/form-builder";
-import { useRouter } from "next/router";
 
-export const Edit = () => {
+export const Edit = ({ formId }: { formId: string }) => {
   const router = useRouter();
   const { t, i18n } = useTranslation("form-builder");
   const {
@@ -47,8 +46,7 @@ export const Edit = () => {
     setValue(title);
   }, [title]);
 
-  const { formId, isPublished } = useTemplateStore((s) => ({
-    formId: s.form.id,
+  const { isPublished } = useTemplateStore((s) => ({
     isPublished: s.isPublished,
   }));
 
