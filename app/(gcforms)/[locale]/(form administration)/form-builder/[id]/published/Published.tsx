@@ -26,7 +26,7 @@ export const Published = async ({
   const linkFr = `https://${baseUrl}/fr/id/${id}`;
 
   return (
-    <div>
+    <div className="mr-10">
       <h1 className="visually-hidden">{t("published")}</h1>
       <div className="mb-10 flex bg-purple-200 p-7">
         <div className="flex">
