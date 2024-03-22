@@ -49,12 +49,12 @@ export const Header = ({ context = "default", user, className }: HeaderParams) =
 
           {isDefault && (
             <div className="mt-3 box-border block h-[40px] px-2 py-1 text-xl font-semibold">
-              {t("title", { ns: "common" })}
+              {t("adminNav.allForms", { ns: "common" })}
             </div>
           )}
           {isAdmin && (
             <div className="mt-3 box-border block h-[40px] px-2 py-1 text-xl font-semibold">
-              {t("title", { ns: "admin-login" })}
+              {t("adminNav.allForms", { ns: "admin-login" })}
             </div>
           )}
           {isFormBuilder && status === "authenticated" && (
