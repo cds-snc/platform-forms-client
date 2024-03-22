@@ -1,7 +1,6 @@
 import { prisma } from "@lib/integration/prismaConnector";
 import { generateVerificationCode } from "./2fa";
 import { logMessage } from "@lib/logger";
-import { sanitizeEmailAddressForCognito } from "./cognito";
 import { getNotifyInstance } from "@lib/integration/notifyConnector";
 import { userHasSecurityQuestions } from "@lib/auth/securityQuestions";
 
@@ -9,11 +8,9 @@ export class PasswordResetInvalidLink extends Error {}
 export class PasswordResetExpiredLink extends Error {}
 
 export const sendPasswordResetLink = async (email: string): Promise<void> => {
-  const sanitizedEmail = sanitizeEmailAddressForCognito(email);
-
   const doesUserExist = await prisma.user.findUnique({
     where: {
-      email: sanitizedEmail,
+      email,
     },
   });
 
@@ -29,27 +26,27 @@ export const sendPasswordResetLink = async (email: string): Promise<void> => {
   const dateIn15Minutes = new Date(Date.now() + 900000); // 15 minutes (= 900000 ms)
 
   try {
-    const doesUserHaveSecurityQuestions = await userHasSecurityQuestions({ email: sanitizedEmail });
+    const doesUserHaveSecurityQuestions = await userHasSecurityQuestions({ email });
 
     if (!doesUserHaveSecurityQuestions)
       throw new Error(`Missing security questions for user ${email}`);
 
     await prisma.magicLink.upsert({
       where: {
-        identifier: sanitizedEmail,
+        identifier: email,
       },
       update: {
         token: generatedToken,
         expires: dateIn15Minutes,
       },
       create: {
-        identifier: sanitizedEmail,
+        identifier: email,
         token: generatedToken,
         expires: dateIn15Minutes,
       },
     });
 
-    await sendPasswordResetEmail(sanitizedEmail, generatedToken);
+    await sendPasswordResetEmail(email, generatedToken);
   } catch (error) {
     throw new Error(`Failed to send password reset link. Reason: ${(error as Error).message}.`);
   }

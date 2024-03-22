@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import classnames from "classnames";
 import { useTranslation } from "@i18n/client";

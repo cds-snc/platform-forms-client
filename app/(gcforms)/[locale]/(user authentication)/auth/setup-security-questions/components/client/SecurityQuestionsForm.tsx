@@ -28,29 +28,28 @@ const SubmitButton = () => {
 
 export const SecurityQuestionsForm = ({ questions = [] }: { questions: Question[] }) => {
   const router = useRouter();
-  const { t, i18n } = useTranslation(["setup-security-questions"]);
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation(["setup-security-questions"]);
 
   const [selectedQuestions, setSelectedQuestions] = useState<string[]>([]);
 
   const formRef = useRef<HTMLFormElement>(null);
 
-  const supportHref = `/${i18n.language}/support`;
+  const supportHref = `/${language}/support`;
 
-  const localFormAction = async (
-    language: string,
-    _: ErrorStates,
-    formData: FormData
-  ): Promise<ErrorStates> => {
+  const localFormAction = async (_: ErrorStates, formData: FormData): Promise<ErrorStates> => {
     const result = await setupQuestions(language, _, formData);
     if (!result.validationErrors && !result.generalError) {
       toast.success(t("success.title"));
-      router.push(`/${i18n.language}/auth/policy`);
+      router.push(`/${language}/auth/policy`);
     }
 
     return result;
   };
 
-  const [state, formAction] = useFormState(localFormAction.bind(null, i18n.language), {});
+  const [state, formAction] = useFormState(localFormAction, {});
 
   const onSelect = () => {
     if (formRef.current !== null) {

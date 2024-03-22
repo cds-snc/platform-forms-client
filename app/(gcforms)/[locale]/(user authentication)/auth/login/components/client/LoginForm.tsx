@@ -26,11 +26,7 @@ export const LoginForm = () => {
     i18n: { language },
   } = useTranslation(["login", "cognito-errors", "common"]);
 
-  const localFormAction = async (
-    language: string,
-    _: ErrorStates,
-    formData: FormData
-  ): Promise<ErrorStates> => {
+  const localFormAction = async (_: ErrorStates, formData: FormData): Promise<ErrorStates> => {
     const result = await login(language, _, formData);
     if (result.authFlowToken) {
       sessionStorage.setItem("authFlowToken", JSON.stringify(result.authFlowToken));
@@ -38,7 +34,7 @@ export const LoginForm = () => {
     }
     return result;
   };
-  const [state, formAction] = useFormState(localFormAction.bind(null, language), {
+  const [state, formAction] = useFormState(localFormAction, {
     validationErrors: [],
   });
   const router = useRouter();

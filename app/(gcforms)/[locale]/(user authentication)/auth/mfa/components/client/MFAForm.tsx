@@ -41,11 +41,7 @@ export const MFAForm = () => {
     }
   }, []);
 
-  const localFormAction = async (
-    language: string,
-    _: ErrorStates,
-    formData: FormData
-  ): Promise<ErrorStates> => {
+  const localFormAction = async (_: ErrorStates, formData: FormData): Promise<ErrorStates> => {
     setIsSubmittingStep1(true);
     formData.append("email", authToken.current.email ?? "");
     formData.append("authenticationFlowToken", authToken.current.authenticationFlowToken ?? "");
@@ -64,7 +60,7 @@ export const MFAForm = () => {
     return mfaState;
   };
 
-  const [state, formAction] = useFormState(localFormAction.bind(null, language), {});
+  const [state, formAction] = useFormState(localFormAction, {});
 
   useEffect(() => {
     switch (state.authError?.id) {

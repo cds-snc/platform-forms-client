@@ -1,31 +1,17 @@
 import { serverTranslation } from "@i18n";
-import { Metadata } from "next";
-import { PrimaryLinkButton, SecondaryLinkButton } from "@clientComponents/globals";
 import { BackArrowIcon } from "@serverComponents/icons";
+import { PrimaryLinkButton, SecondaryLinkButton } from "@clientComponents/globals";
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
-  const { t } = await serverTranslation("reset-password", { lang: locale });
-  return {
-    title: t("resetFailed.title"),
-  };
-}
-
-export default async function Page({ params: { locale } }: { params: { locale: string } }) {
-  const { t } = await serverTranslation("reset-password", { lang: locale });
-
+export const ExpiredLink = async ({ locale }: { locale: string }) => {
+  const { t } = await serverTranslation(["reset-password", "common"], { lang: locale });
   const homeHref = `/${locale}/auth/login`;
-  const supportHref = `/${locale}/support`;
-
+  const supportHref = `/${locale}}/support`;
   return (
     <div>
       <h2 className="mb-6 mt-4 p-0" data-testid="session-expired">
-        {t("resetFailed.title")}
+        {t("expiredLink.title")}
       </h2>
-      <p className="mb-10">{t("resetFailed.description")}</p>
+      <p className="mb-10">{t("expiredLink.description")}</p>
       <div className="laptop:flex">
         <PrimaryLinkButton href={homeHref} className="mb-2 mr-3">
           <span>
@@ -39,4 +25,4 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       </div>
     </div>
   );
-}
+};

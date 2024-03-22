@@ -1,6 +1,5 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import { ResetPassword } from "./clientSide";
 import {
   PasswordResetExpiredLink,
   PasswordResetInvalidLink,
@@ -9,6 +8,9 @@ import {
   retrieveUserSecurityQuestions,
 } from "@lib/auth";
 import { redirect } from "next/navigation";
+import { CheckEmail, CannotReset, ExpiredLink, InvalidLink } from "./components/server";
+
+import { InitiateResetForm, QuestionChallengeForm } from "./components/client";
 
 export async function generateMetadata({
   params: { locale },
@@ -35,21 +37,27 @@ export default async function Page({
     try {
       email = await getPasswordResetAuthenticatedUserEmailAddress(token);
       userSecurityQuestions = await retrieveUserSecurityQuestions({ email });
-
       if (userSecurityQuestions.length === 0) {
-        redirect(`/${locale}/auth/reset-failed`);
+        return <CannotReset {...{ locale }} />;
       }
+
+      return <QuestionChallengeForm email={email} userSecurityQuestions={userSecurityQuestions} />;
     } catch (e) {
       if (e instanceof PasswordResetExpiredLink) {
-        redirect(`/${locale}/auth/expired-link`);
+        return <ExpiredLink {...{ locale }} />;
       }
 
       if (e instanceof PasswordResetInvalidLink) {
-        redirect(`/${locale}/auth/invalid-link`);
+        return <InvalidLink {...{ locale }} />;
       }
       redirect(`/$locale/auth/login`);
     }
   }
 
-  return <ResetPassword {...{ email, userSecurityQuestions }} />;
+  return (
+    <InitiateResetForm
+      confirmationPage={<CheckEmail locale={locale} />}
+      errorPage={<CannotReset locale={locale} />}
+    />
+  );
 }
