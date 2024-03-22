@@ -14,8 +14,10 @@ import { SettingsPanel } from "./settings/SettingsPanel";
 import { cleanInput } from "@lib/utils/form-builder";
 import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 import { useRehydrate } from "@lib/hooks/form-builder";
+import { useRouter } from "next/router";
 
 export const Edit = () => {
+  const router = useRouter();
   const { t } = useTranslation("form-builder");
   const {
     title,
@@ -44,6 +46,18 @@ export const Edit = () => {
   useEffect(() => {
     setValue(title);
   }, [title]);
+
+  const { formId, isPublished } = useTemplateStore((s) => ({
+    formId: s.form.id,
+    isPublished: s.isPublished,
+  }));
+
+  useEffect(() => {
+    if (isPublished) {
+      router.replace(`/form-builder/${formId}/settings/`);
+      return;
+    }
+  }, [router, isPublished, formId]);
 
   const _debounced = debounce(
     useCallback(
@@ -85,6 +99,10 @@ export const Edit = () => {
   }, [focusTitle]);
 
   const hasHydrated = useRehydrate();
+
+  if (isPublished) {
+    return <div />;
+  }
 
   return (
     <>
