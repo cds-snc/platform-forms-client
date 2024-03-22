@@ -17,6 +17,7 @@ import {
   updateResponseDeliveryOption,
 } from "@lib/templates";
 import { logMessage } from "@lib/logger";
+import { serverTranslation } from "@i18n";
 
 const _getSessionAndAbility = async () => {
   const session = await auth();
@@ -318,4 +319,15 @@ export const deleteTemplate = async ({ id: formID }: { id: string }) => {
       throw error;
     }
   }
+};
+
+export const getTranslatedElementProperties = async (type: string) => {
+  const { t: en } = await serverTranslation("form-builder", { lang: "en" });
+  const { t: fr } = await serverTranslation("form-builder", { lang: "fr" });
+  return {
+    description: {
+      en: en([`defaultElementDescription.${type}`, ""]),
+      fr: fr([`defaultElementDescription.${type}`, ""]),
+    },
+  };
 };

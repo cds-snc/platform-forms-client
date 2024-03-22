@@ -106,7 +106,7 @@ export const Edit = () => {
               <ExpandingInput
                 id="formTitle"
                 wrapperClassName="w-full laptop:w-3/4 mt-2 laptop:mt-0 font-bold laptop:text-3xl"
-                className="font-bold placeholder:text-slate-500 laptop:text-3xl"
+                className="font-bold placeholder:text-slate-500 laptop:text-4xl"
                 ref={titleInput}
                 placeholder={t("placeHolderFormTitle")}
                 value={value}
