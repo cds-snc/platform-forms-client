@@ -42,7 +42,7 @@ export default async function Layout({
         email={deliveryOption.emailAddress}
         emailSubject={{
           en: deliveryOption.emailSubjectEn || "",
-          fr: deliveryOption.emailSubjectfr || "",
+          fr: deliveryOption.emailSubjectFr || "",
         }}
         isPublished={isPublished}
         formId={id}
