@@ -7,7 +7,6 @@ import { LinkButton } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
 import { ErrorStates, checkQuestionChallenge } from "../../action";
 import Link from "next/link";
-
 import { SecurityQuestion } from "@lib/auth";
 import { SubmitButton } from "./SubmitButton";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
@@ -22,7 +21,7 @@ export const QuestionChallengeForm = ({
   const {
     t,
     i18n: { language },
-  } = useTranslation(["securityQuestions", "common"]);
+  } = useTranslation(["reset-password", "common"]);
   const [confirmationStage, setConfirmationStage] = useState(false);
 
   const langKey = language === "en" ? "questionEn" : "questionFr";
@@ -31,13 +30,14 @@ export const QuestionChallengeForm = ({
     formData.append("question1Id", userSecurityQuestions[0].id);
     formData.append("question2Id", userSecurityQuestions[0].id);
     formData.append("question3Id", userSecurityQuestions[0].id);
+    formData.append("email", email);
     const checkResult = await checkQuestionChallenge(language, _, formData);
 
-    if (!checkResult.authError || !checkResult.validationErrors) {
+    if (!checkResult.authError && !checkResult.validationErrors) {
       setConfirmationStage(true);
     }
 
-    return {};
+    return checkResult;
   };
 
   const [state, formAction] = useFormState(localFormAction, {});
@@ -68,11 +68,7 @@ export const QuestionChallengeForm = ({
             tabIndex={0}
             focussable={true}
             id="registrationValidationErrors"
-            heading={
-              state.validationErrors.length === 3
-                ? t("securityQuestions.inputValidation.allRequired.title")
-                : t("input-validation.heading", { ns: "common" })
-            }
+            heading={t("input-validation.heading", { ns: "common" })}
           >
             <ol className="gc-ordered-list p-0">
               {state.validationErrors.map(({ fieldKey, fieldValue }, index) => {

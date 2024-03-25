@@ -163,6 +163,7 @@ export const getErrorText = async (language: string, errorID: string) => {
 
 export const getRedirectPath = async (locale: string) => {
   const session = await auth();
+
   if (!session) {
     // The sessions between client and server are not in sync.
     // Try to redirect to auth policy page and let logic handle there.

@@ -22,6 +22,7 @@ import {
   containsNumber,
   containsSymbol,
 } from "@lib/validation";
+import { deleteMagicLinkEntry } from "@lib/auth/passwordReset";
 
 export interface ErrorStates {
   authError?: {
@@ -94,16 +95,16 @@ const validateQuestionChallengeForm = async (
     ]),
   });
 
-  return v.safeParse(schema, formEntries, { abortPipeEarly: true });
+  return v.safeParse(schema, formEntries);
 };
 
 const validatePasswordResetForm = async (
   language: string,
   formEntries: { [k: string]: FormDataEntryValue }
 ) => {
-  const { t } = await serverTranslation(["common"], { lang: language });
+  const { t } = await serverTranslation(["reset-password", "common"], { lang: language });
   const schema = v.object({
-    confirmationCode: v.string([v.minLength(1, t("input-validation.required"))]),
+    confirmationCode: v.number([v.integer("resetPassword.fields.confirmationCode.error.number")]),
     username: v.string([
       v.toLowerCase(),
       v.toTrimmed(),
@@ -169,13 +170,28 @@ export const checkQuestionChallenge = async (
 ): Promise<ErrorStates> => {
   const rawFormData = Object.fromEntries(formData.entries());
   const validationResult = await validateQuestionChallengeForm(language, rawFormData);
+  logMessage.debug(validationResult);
   if (!validationResult.success) {
-    return {
-      validationErrors: validationResult.issues.map((issue) => ({
-        fieldKey: issue.path?.[0].key as string,
-        fieldValue: issue.message,
-      })),
-    };
+    // Question Ids are not a user input field,  if missing the API is being hit manually
+    if (
+      checkForSpecificFieldErrors(validationResult.issues, [
+        "question1",
+        "question2",
+        "question3",
+        "email",
+      ])
+    ) {
+      return {
+        authError: await handleErrorById("InternalServiceExceptionLogin", language),
+      };
+    } else {
+      return {
+        validationErrors: validationResult.issues.map((issue) => ({
+          fieldKey: issue.path?.[0].key as string,
+          fieldValue: issue.message,
+        })),
+      };
+    }
   }
   try {
     const responsesValid = await validateSecurityAnswers({
@@ -201,6 +217,9 @@ export const checkQuestionChallenge = async (
         authError: await handleErrorById("IncorrectSecurityAnswerException", language),
       };
     }
+    // No need to await, this is a fire and forget
+    deleteMagicLinkEntry(validationResult.output.email);
+
     await sendCongnitoCode(validationResult.output.email);
     return {};
   } catch (error) {
@@ -223,17 +242,24 @@ export const resetPassword = async (
   const rawFormData = Object.fromEntries(formData.entries());
   const validationResult = await validatePasswordResetForm(language, rawFormData);
   if (!validationResult.success) {
-    return {
-      validationErrors: validationResult.issues.map((issue) => ({
-        fieldKey: issue.path?.[0].key as string,
-        fieldValue: issue.message,
-      })),
-    };
+    // Username is not a user input field,  if missing the API is being hit manually
+    if (checkForSpecificFieldErrors(validationResult.issues, ["username"])) {
+      return {
+        authError: await handleErrorById("InternalServiceExceptionLogin", language),
+      };
+    } else {
+      return {
+        validationErrors: validationResult.issues.map((issue) => ({
+          fieldKey: issue.path?.[0].key as string,
+          fieldValue: issue.message,
+        })),
+      };
+    }
   }
 
   const { confirmationCode, username, password } = validationResult.output;
   try {
-    await resetCognitoPassword(username, confirmationCode, password);
+    await resetCognitoPassword(username, confirmationCode.toString(), password);
     logPasswordReset(username);
     return {};
   } catch (err) {
@@ -319,4 +345,10 @@ const resetCognitoPassword = async (
     const cognitoError = err as CognitoIdentityProviderServiceException;
     throw new Error(cognitoError.toString());
   });
+};
+
+const checkForSpecificFieldErrors = (issues: v.SchemaIssues, fields: string[]): boolean => {
+  const fieldErrors = issues.filter((issue) => fields.includes(issue.path?.[0].key as string));
+
+  return Boolean(fieldErrors.length);
 };

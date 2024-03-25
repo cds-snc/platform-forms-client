@@ -21,14 +21,20 @@ const validateData = async (formData: { [k: string]: FormDataEntryValue }, langu
       question2: v.string([v.minLength(1, t("errors.required"))]),
       question3: v.string([v.minLength(1, t("errors.required"))]),
       answer1: v.string([
+        v.toLowerCase(),
+        v.toTrimmed(),
         v.minLength(1, t("errors.required")),
         v.minLength(4, t("errors.answerLength")),
       ]),
       answer2: v.string([
+        v.toLowerCase(),
+        v.toTrimmed(),
         v.minLength(1, t("errors.required")),
         v.minLength(4, t("errors.answerLength")),
       ]),
       answer3: v.string([
+        v.toLowerCase(),
+        v.toTrimmed(),
         v.minLength(1, t("errors.required")),
         v.minLength(4, t("errors.answerLength")),
       ]),

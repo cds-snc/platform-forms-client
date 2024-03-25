@@ -7,6 +7,14 @@ import { userHasSecurityQuestions } from "@lib/auth/securityQuestions";
 export class PasswordResetInvalidLink extends Error {}
 export class PasswordResetExpiredLink extends Error {}
 
+export const deleteMagicLinkEntry = async (identifier: string) => {
+  await prisma.magicLink.deleteMany({
+    where: {
+      identifier,
+    },
+  });
+};
+
 export const sendPasswordResetLink = async (email: string): Promise<void> => {
   const doesUserExist = await prisma.user.findUnique({
     where: {
@@ -55,15 +63,6 @@ export const sendPasswordResetLink = async (email: string): Promise<void> => {
 export const getPasswordResetAuthenticatedUserEmailAddress = async (
   token: string
 ): Promise<string> => {
-  const deleteMagicLinkEntry = async (identifier: string) => {
-    await prisma.magicLink.deleteMany({
-      where: {
-        identifier,
-        token,
-      },
-    });
-  };
-
   const magicLink = await prisma.magicLink.findUnique({
     where: {
       token: token,
@@ -76,8 +75,6 @@ export const getPasswordResetAuthenticatedUserEmailAddress = async (
     await deleteMagicLinkEntry(magicLink.identifier);
     throw new PasswordResetExpiredLink();
   }
-
-  await deleteMagicLinkEntry(magicLink.identifier);
 
   return magicLink.identifier;
 };

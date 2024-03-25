@@ -242,7 +242,7 @@ export async function validateSecurityAnswers(
 
   const answerValidationsResults = await Promise.all(answerValidationRequests);
 
-  return answerValidationsResults.includes(false) === false;
+  return !answerValidationsResults.includes(false);
 }
 
 async function _retrieveUserSecurityAnswers({
