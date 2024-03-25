@@ -8,6 +8,7 @@ interface ButtonProps {
   children?: JSX.Element | string;
   id?: string;
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLElement>) => void;
   icon?: ReactElement;
   className?: string;
   disabled?: boolean;
@@ -22,6 +23,7 @@ export const Button = ({
   type = "button",
   children,
   onClick,
+  onKeyDown,
   className,
   icon,
   disabled = false,
@@ -36,6 +38,7 @@ export const Button = ({
     <button
       type={type}
       onClick={onClick}
+      onKeyDown={onKeyDown}
       className={cn(themes["base"], themes[theme], className)}
       disabled={disabled}
       aria-label={ariaLabel}
