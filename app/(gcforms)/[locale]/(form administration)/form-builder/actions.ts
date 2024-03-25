@@ -18,6 +18,7 @@ import {
 } from "@lib/templates";
 import { logMessage } from "@lib/logger";
 import { serverTranslation } from "@i18n";
+import { revalidatePath } from "next/cache";
 
 const _getSessionAndAbility = async () => {
   const session = await auth();
@@ -148,6 +149,8 @@ export const updateTemplatePublishedStatus = async ({
         `Template API response was null. Request information: { ${formID}, ${isPublished} }`
       );
     }
+
+    revalidatePath("/form-builder/[id]", "layout");
 
     return response;
   } catch (error) {

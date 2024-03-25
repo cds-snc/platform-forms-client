@@ -2,7 +2,7 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import debounce from "lodash.debounce";
 import { useTranslation } from "@i18n/client";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Language, LocalizedFormProperties } from "@lib/types/form-builder-types";
 import { ElementPanel, ConfirmationDescription, PrivacyDescription } from ".";
 import { RefsProvider } from "./RefsContext";
@@ -15,8 +15,9 @@ import { cleanInput } from "@lib/utils/form-builder";
 import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 import { useRehydrate } from "@lib/hooks/form-builder";
 
-export const Edit = () => {
-  const { t } = useTranslation("form-builder");
+export const Edit = ({ formId }: { formId: string }) => {
+  const router = useRouter();
+  const { t, i18n } = useTranslation("form-builder");
   const {
     title,
     layout,
@@ -44,6 +45,17 @@ export const Edit = () => {
   useEffect(() => {
     setValue(title);
   }, [title]);
+
+  const { isPublished } = useTemplateStore((s) => ({
+    isPublished: s.isPublished,
+  }));
+
+  useEffect(() => {
+    if (isPublished) {
+      router.replace(`/${i18n.language}/form-builder/${formId}/settings/`);
+      return;
+    }
+  }, [router, isPublished, formId, i18n.language]);
 
   const _debounced = debounce(
     useCallback(
@@ -85,6 +97,10 @@ export const Edit = () => {
   }, [focusTitle]);
 
   const hasHydrated = useRehydrate();
+
+  if (isPublished) {
+    return <div />;
+  }
 
   return (
     <>
