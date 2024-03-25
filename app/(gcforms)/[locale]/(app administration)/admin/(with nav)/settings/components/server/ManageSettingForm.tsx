@@ -34,12 +34,12 @@ export const ManageSettingForm = async ({ settingId }: { settingId?: string }) =
     "use server";
     if (isCreateSetting) {
       await createSetting(formData).catch(() => {
-        redirect(`/${language}/admin/settings?success=errorCreating`);
+        redirect(`/${language}/admin/settings?error=errorCreating`);
       });
       redirect(`/${language}/admin/settings?success=created`);
     } else {
       await updateSetting(formData).catch(() => {
-        redirect(`/${language}/admin/settings?success=errorUpdating`);
+        redirect(`/${language}/admin/settings?error=errorUpdating`);
       });
       redirect(`/${language}/admin/settings?success=updated`);
     }
