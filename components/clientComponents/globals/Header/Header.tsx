@@ -13,11 +13,10 @@ import { YourAccountDropdown } from "./YourAccountDropdown";
 
 type HeaderParams = {
   context?: "admin" | "formBuilder" | "default";
-  user?: { name: string | null; email: string };
   className?: string;
 };
 
-export const Header = ({ context = "default", user, className }: HeaderParams) => {
+export const Header = ({ context = "default", className }: HeaderParams) => {
   const isFormBuilder = context === "formBuilder";
   const isAdmin = context === "admin";
   const isDefault = context === "default";
@@ -67,11 +66,6 @@ export const Header = ({ context = "default", user, className }: HeaderParams) =
         </div>
         <nav className="justify-self-end" aria-label={t("mainNavAriaLabel", { ns: "common" })}>
           <ul className="mt-2 flex list-none px-0 text-base">
-            {user?.name && (
-              <li className="mr-2 py-2 pt-3 text-sm tablet:mr-4">
-                {t("logged-in", { ns: "admin-login" })}: <span>{user.email}</span>
-              </li>
-            )}
             {status === "authenticated" && !isFormBuilder && (
               <li className="mr-2 py-2 text-base tablet:mr-4">
                 <Link href={`/${language}/forms`} prefetch={false}>
