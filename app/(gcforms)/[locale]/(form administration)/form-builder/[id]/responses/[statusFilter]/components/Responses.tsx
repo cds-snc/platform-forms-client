@@ -79,7 +79,7 @@ export const Responses = ({
         />
         <Link
           href={`/form-builder/${formId}/responses/problem`}
-          className="ml-12 text-black visited:text-black focus:text-white-default"
+          className="ml-12 text-black visited:text-black"
         >
           {t("responses.viewAllProblemResponses")}
         </Link>
