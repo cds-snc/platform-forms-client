@@ -26,6 +26,7 @@ export default async function Page({
   params: { locale: string; id: string };
 }) {
   const session = await auth();
+  const formDisabled = id === "0000" || !session?.user;
   const { t } = await serverTranslation("form-builder", { lang: locale });
 
   const formID = id;
@@ -63,5 +64,5 @@ export default async function Page({
     );
   }
 
-  return <Preview />;
+  return <Preview disableSubmit={formDisabled} />;
 }
