@@ -334,3 +334,12 @@ export const getTranslatedElementProperties = async (type: string) => {
     },
   };
 };
+
+export const getTranslatedProperties = async (type: string) => {
+  const { t: en } = await serverTranslation("form-builder", { lang: "en" });
+  const { t: fr } = await serverTranslation("form-builder", { lang: "fr" });
+  return {
+    en: en(type),
+    fr: fr(type),
+  };
+};
