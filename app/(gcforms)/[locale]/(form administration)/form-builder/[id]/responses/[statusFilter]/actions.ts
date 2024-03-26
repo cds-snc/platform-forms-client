@@ -237,21 +237,21 @@ export const getSubmissionsByFormat = async ({
         };
       case DownloadFormat.HTML_AGGREGATED:
         revalidate && revalidateNewTab();
-        return htmlAggregatedTransform(formResponse, lang);
+        return await htmlAggregatedTransform(formResponse, lang);
 
       case DownloadFormat.HTML:
         revalidate && revalidateNewTab();
-        return htmlTransform(formResponse);
+        return await htmlTransform(formResponse);
 
       case DownloadFormat.HTML_ZIPPED: {
         revalidate && revalidateNewTab();
-        return zipTransform(formResponse, lang);
+        return await zipTransform(formResponse, lang);
       }
 
       case DownloadFormat.JSON:
         revalidate && revalidateNewTab();
         return {
-          receipt: htmlAggregatedTransform(formResponse, lang),
+          receipt: await htmlAggregatedTransform(formResponse, lang),
           responses: jsonTransform(formResponse),
         };
 
