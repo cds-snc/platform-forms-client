@@ -3,7 +3,7 @@ import {
   MenuDropdown,
   MenuDropdownItemI,
   MenuDropdownItemCallback,
-} from "@clientComponents/myforms/MenuDropdown/MenuDropdown";
+} from "app/(gcforms)/[locale]/(form administration)/forms/[[...path]]/components/client/MenuDropdown/MenuDropdown";
 import { useTranslation } from "@i18n/client";
 import copy from "copy-to-clipboard";
 import { getForm } from "../../actions";
