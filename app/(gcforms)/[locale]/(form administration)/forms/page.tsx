@@ -38,10 +38,10 @@ export async function generateMetadata({
 
 export default async function Page({
   params: { locale },
-  searchParams: { formsState },
+  searchParams: { status },
 }: {
   params: { locale: string };
-  searchParams: { formsState?: string };
+  searchParams: { status?: string };
 }) {
   try {
     const {
@@ -59,7 +59,7 @@ export default async function Page({
 
     // Moved from Cards to Page to avoid component being cached when navigating back to this page
     const where = {
-      isPublished: formsState === "published" ? true : formsState === "drafts" ? false : undefined,
+      isPublished: status === "published" ? true : status === "draft" ? false : undefined,
     };
     const templates = (await getAllTemplates(ability, where, "desc")).map((template) => {
       const {
@@ -87,7 +87,7 @@ export default async function Page({
       <div className="center mx-auto w-[980px] bg-gray-soft">
         <h1 className="mb-8 border-b-0">{t("title")}</h1>
         <div className="flex w-full justify-between">
-          <Navigation filter={formsState} />
+          <Navigation filter={status} />
           <NewFormButton />
         </div>
 
