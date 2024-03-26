@@ -1,4 +1,4 @@
-import origSlugify from "@sindresorhus/slugify";
+import { nfd } from "unorm";
 
 /**
  * Scrolls an element with overflow to its bottom.
@@ -84,7 +84,15 @@ export const getDate = (withTime = false) => {
 };
 
 export const slugify = (str: string) => {
-  return origSlugify(str, { separator: "-" });
+  str = nfd(str).replace(/[\u0300-\u036f]/g, ""); // Decompose accented characters
+  str = str
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/[\s_-]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+  return str;
 };
 
 /**
