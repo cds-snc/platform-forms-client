@@ -6,10 +6,22 @@ import { AccessControlError } from "@lib/privileges";
 import { redirect } from "next/navigation";
 import { Navigation } from "./components/server/Navigation";
 import { Cards } from "./components/server/Cards";
-import { Suspense } from "react";
-import Loader from "@clientComponents/globals/Loader";
 import { NewFormButton } from "./components/server/NewFormButton";
 import { ResumeEditingForm } from "./components/ResumeEditingForm";
+import { getAllTemplates } from "@lib/templates";
+import { DeliveryOption } from "@lib/types";
+
+export type FormsTemplate = {
+  id: string;
+  titleEn: string;
+  titleFr: string;
+  deliveryOption: DeliveryOption;
+  name: string;
+  isPublished: boolean;
+  date: string;
+  url: string;
+  overdue: number;
+};
 
 export async function generateMetadata({
   params: { locale },
@@ -24,10 +36,10 @@ export async function generateMetadata({
 
 export default async function Page({
   params: { locale },
-  searchParams: { formsState },
+  searchParams: { status },
 }: {
   params: { locale: string };
-  searchParams: { formsState?: string };
+  searchParams: { status?: string };
 }) {
   try {
     const {
@@ -38,21 +50,48 @@ export default async function Page({
       redirect: true,
     });
 
-    const { t } = await serverTranslation("my-forms");
+    const {
+      t,
+      i18n: { language },
+    } = await serverTranslation("my-forms");
+
+    // Moved from Cards to Page to avoid component being cached when navigating back to this page
+    const where = {
+      isPublished: status === "published" ? true : status === "draft" ? false : undefined,
+    };
+    const templates = (await getAllTemplates(ability, where, "desc")).map((template) => {
+      const {
+        id,
+        form: { titleEn = "", titleFr = "" },
+        name,
+        deliveryOption = { emailAddress: "" },
+        isPublished,
+        updatedAt,
+      } = template;
+      return {
+        id,
+        titleEn,
+        titleFr,
+        deliveryOption,
+        name,
+        isPublished,
+        date: updatedAt ?? Date.now().toString(),
+        url: `/${language}/id/${id}`,
+        overdue: 0,
+      };
+    });
 
     return (
       <div className="center mx-auto w-[980px] bg-gray-soft">
         <h1 className="mb-8 border-b-0">{t("title")}</h1>
         <div className="flex w-full justify-between">
-          <Navigation filter={formsState} />
+          <Navigation filter={status} />
           <NewFormButton />
         </div>
 
         <ResumeEditingForm />
 
-        <Suspense fallback={<Loader />}>
-          <Cards filter={formsState} ability={ability} />
-        </Suspense>
+        <Cards templates={templates} />
       </div>
     );
   } catch (e) {
