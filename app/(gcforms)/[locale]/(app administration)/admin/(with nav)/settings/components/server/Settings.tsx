@@ -1,25 +1,28 @@
 import React from "react";
 import { LinkButton } from "@serverComponents/globals";
 import { DeleteSettingsButton } from "../client/DeleteSettingsButton";
-import { requireAuthentication } from "@lib/auth";
+import { auth } from "@lib/auth";
 import { getAllAppSettings } from "@lib/appSettings";
 import { serverTranslation } from "@i18n";
+import { redirect } from "next/navigation";
+import { createAbility } from "@lib/privileges";
 
 export const Settings = async () => {
   const {
-    user: { ability },
-  } = await requireAuthentication();
+    t,
+    i18n: { language },
+  } = await serverTranslation("admin-settings");
+
+  const session = await auth();
+  if (!session) redirect(`/${language}/auth/login`);
+  const ability = createAbility(session);
+
   // Note: could add a util to return an array if this is useful elsewhere
   const canUpdateSettings = ability?.can("update", "Setting") ?? false;
   const canCreateSettings = ability?.can("create", "Setting") ?? false;
   const canDeleteSettings = ability?.can("delete", "Setting") ?? false;
 
   const settings = await getAllAppSettings(ability);
-
-  const {
-    t,
-    i18n: { language },
-  } = await serverTranslation("admin-settings");
 
   return (
     <div>
