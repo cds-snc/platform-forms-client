@@ -6,8 +6,6 @@ import { AccessControlError } from "@lib/privileges";
 import { redirect } from "next/navigation";
 import { Navigation } from "./components/server/Navigation";
 import { Cards } from "./components/server/Cards";
-import { Suspense } from "react";
-import Loader from "@clientComponents/globals/Loader";
 import { NewFormButton } from "./components/server/NewFormButton";
 import { ResumeEditingForm } from "./components/ResumeEditingForm";
 import { getAllTemplates } from "@lib/templates";
@@ -93,9 +91,7 @@ export default async function Page({
 
         <ResumeEditingForm />
 
-        <Suspense fallback={<Loader />}>
-          <Cards templates={templates} />
-        </Suspense>
+        <Cards templates={templates} />
       </div>
     );
   } catch (e) {

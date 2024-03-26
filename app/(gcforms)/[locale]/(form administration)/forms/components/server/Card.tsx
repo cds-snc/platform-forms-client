@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { MessageIcon, EnvelopeIcon, PreviewIcon, DesignIcon } from "@serverComponents/icons";
 import Markdown from "markdown-to-jsx";
 import { Menu } from "../client/Menu";
@@ -6,6 +6,7 @@ import { serverTranslation } from "@i18n";
 import Link from "next/link";
 import { getUnprocessedSubmissionsForTemplate } from "../../actions";
 import { DeliveryOption } from "@lib/types";
+import Skeleton from "react-loading-skeleton";
 
 const CardBanner = async ({ isPublished }: { isPublished: boolean }) => {
   const { t } = await serverTranslation("my-forms");
@@ -28,16 +29,17 @@ interface CardLinksProps {
   id: string;
   url: string;
   isPublished: boolean;
-  overdue: number;
   deliveryOption?: { emailAddress?: string } | null;
 }
 
-const CardLinks = async ({ isPublished, url, id, deliveryOption, overdue }: CardLinksProps) => {
+const CardLinks = async ({ isPublished, url, id, deliveryOption }: CardLinksProps) => {
   const {
     t,
     i18n: { language },
   } = await serverTranslation("my-forms");
   const responsesLink = `/${language}/form-builder/${id}/responses/new`;
+  const nagwareResult = await getUnprocessedSubmissionsForTemplate(id);
+  const overdue = nagwareResult.numberOfSubmissions;
 
   const textData = {
     responses: overdue,
@@ -132,8 +134,6 @@ export interface CardI {
 }
 
 export const Card = async ({ card }: { card: CardI }) => {
-  const overdue = await getUnprocessedSubmissionsForTemplate(card.id);
-
   return (
     <div
       className="flex h-full flex-col justify-between rounded border-1 border-slate-500 bg-white"
@@ -147,13 +147,14 @@ export const Card = async ({ card }: { card: CardI }) => {
           </div>
         </div>
 
-        <CardLinks
-          overdue={overdue?.numberOfSubmissions ?? 0}
-          isPublished={card.isPublished}
-          url={card.url}
-          id={card.id}
-          deliveryOption={card.deliveryOption}
-        />
+        <Suspense fallback={<Skeleton count={2} className="my-4 ml-4 w-[300px]" />}>
+          <CardLinks
+            isPublished={card.isPublished}
+            url={card.url}
+            id={card.id}
+            deliveryOption={card.deliveryOption}
+          />
+        </Suspense>
       </div>
 
       <div className="mb-4 flex items-center justify-between px-3">
