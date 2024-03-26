@@ -144,6 +144,15 @@ export const options = [
     logoTitleFr: "Statistique Canada",
   },
   {
+    name: "csa",
+    urlEn: "https://www.asc-csa.gc.ca/eng",
+    urlFr: "https://www.asc-csa.gc.ca/fra",
+    logoEn: "/img/branding/asc-csa-en.svg",
+    logoFr: "/img/branding/asc-csa-fr.svg",
+    logoTitleEn: "Canadian Space Agency",
+    logoTitleFr: "Agence spatiale canadienne",
+  },
+  {
     name: "lac",
     urlEn: "https://library-archives.canada.ca/eng",
     urlFr: "https://bibliotheque-archives.canada.ca/fra",
