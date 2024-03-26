@@ -261,7 +261,6 @@ export const resetPassword = async (
         authError: await handleErrorById("InternalServiceExceptionLogin", language),
       };
     } else {
-      logMessage.debug(validationResult);
       return {
         validationErrors: validationResult.issues.map((issue) => ({
           fieldKey: issue.path?.[0].key as string,

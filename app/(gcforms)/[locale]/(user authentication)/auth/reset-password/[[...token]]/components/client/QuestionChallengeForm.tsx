@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useFormState } from "react-dom";
-import { TextInput, Label, Alert, ErrorListItem } from "../../../../components/client/forms";
+import { TextInput, Label, Alert, ErrorListItem } from "../../../../../components/client/forms";
 import { PasswordResetForm } from "./PasswordResetForm";
 import { LinkButton } from "@serverComponents/globals";
 import { useTranslation } from "@i18n/client";

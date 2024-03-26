@@ -8,7 +8,7 @@ import {
   Alert,
   ErrorListItem,
   Description,
-} from "../../../../components/client/forms";
+} from "../../../../../components/client/forms";
 import { LinkButton } from "@serverComponents/globals";
 import { useTranslation } from "@i18n/client";
 import { sendResetLink, ErrorStates } from "../../action";

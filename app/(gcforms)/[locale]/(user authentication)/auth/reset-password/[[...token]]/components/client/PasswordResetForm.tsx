@@ -7,7 +7,7 @@ import {
   Alert,
   ErrorListItem,
   Description,
-} from "../../../../components/client/forms";
+} from "../../../../../components/client/forms";
 import { useTranslation } from "@i18n/client";
 import { SubmitButton } from "./SubmitButton";
 import Link from "next/link";

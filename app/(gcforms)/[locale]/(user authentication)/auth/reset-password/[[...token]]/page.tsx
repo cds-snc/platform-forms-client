@@ -8,9 +8,10 @@ import {
 } from "@lib/auth";
 import { redirect } from "next/navigation";
 import { CheckEmail, CannotReset, ExpiredLink, InvalidLink } from "./components/server";
-import { revalidatePath } from "next/cache";
 import { InitiateResetForm, QuestionChallengeForm } from "./components/client";
 import { logMessage } from "@lib/logger";
+
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params: { locale },
@@ -24,19 +25,15 @@ export async function generateMetadata({
 }
 
 export default async function Page({
-  params: { locale },
-  searchParams: { token },
+  params: { locale, token },
 }: {
-  params: { locale: string };
-  searchParams: { token?: string };
+  params: { locale: string; token?: string[] };
 }) {
-  logMessage.debug("Running server component of page");
-  // Ensure this path is always revalidated
-  revalidatePath("(gcforms)/[locale]/(user authentication)/auth/reset-password", "page");
+  logMessage.debug("Running server component of password reset page");
 
-  if (token) {
+  if (token && token[0]) {
     try {
-      const email = await getPasswordResetAuthenticatedUserEmailAddress(token);
+      const email = await getPasswordResetAuthenticatedUserEmailAddress(token[0]);
 
       const userSecurityQuestions = await retrieveUserSecurityQuestions({ email });
 
