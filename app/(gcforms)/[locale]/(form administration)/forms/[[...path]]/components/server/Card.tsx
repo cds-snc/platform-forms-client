@@ -108,13 +108,8 @@ const CardTitle = async ({ name }: { name: string }) => {
 const CardDate = async ({ id, date }: { id: string; date: string }) => {
   const { t } = await serverTranslation(["my-forms", "common"]);
   function formatDate(date: string) {
-    try {
-      const dateParts = new Date(date).toLocaleDateString("en-GB").split("/");
-      const shortYear = dateParts[2].split("").slice(2).join("");
-      return `${dateParts[0]}/${dateParts[1]}/${shortYear}`;
-    } catch (err) {
-      return t("unknown", { ns: "common" });
-    }
+    const jsDate = new Date(date);
+    return jsDate.toISOString().split("T")[0];
   }
 
   return (
