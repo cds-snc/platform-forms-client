@@ -18,11 +18,7 @@ type HeaderParams = {
 
 export const Header = ({ context = "default", className }: HeaderParams) => {
   const isFormBuilder = context === "formBuilder";
-  const isAdmin = context === "admin";
-  const isDefault = context === "default";
-
   const { status } = useSession();
-
   const {
     t,
     i18n: { language },
@@ -45,34 +41,18 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
               </div>
             </a>
           </Link>
-
-          {isDefault && (
-            <div className="mt-3 box-border block h-[40px] px-2 py-1 text-xl font-semibold">
-              {t("adminNav.allForms", { ns: "common" })}
-            </div>
+          {status === "authenticated" && (
+            <>
+              <div className="mt-3 box-border block h-[40px] px-2 py-1 font-semibold">
+                <Link href={`/${language}/forms`}>{t("adminNav.allForms", { ns: "common" })}</Link>
+                {isFormBuilder && <span className="mx-2 inline-block"> / </span>}
+              </div>
+              {isFormBuilder && <FileNameInput />}
+            </>
           )}
-          {isAdmin && (
-            <div className="mt-3 box-border block h-[40px] px-2 py-1 text-xl font-semibold">
-              {t("adminNav.allForms", { ns: "admin-login" })}
-            </div>
-          )}
-          {isFormBuilder && status === "authenticated" && (
-            <div className="pt-3">
-              <Link href={`/${language}/forms`}>{t("adminNav.allForms", { ns: "common" })}</Link>
-              <span className="mx-2 inline-block"> / </span>
-            </div>
-          )}
-          {isFormBuilder && <FileNameInput />}
         </div>
         <nav className="justify-self-end" aria-label={t("mainNavAriaLabel", { ns: "common" })}>
           <ul className="mt-2 flex list-none px-0 text-base">
-            {status === "authenticated" && !isFormBuilder && (
-              <li className="mr-2 py-2 text-base tablet:mr-4">
-                <Link href={`/${language}/forms`} prefetch={false}>
-                  {t("adminNav.myForms", { ns: "common" })}
-                </Link>
-              </li>
-            )}
             {status !== "authenticated" && (
               <li className="mr-2 py-2 text-base tablet:mr-4">
                 <Link href={`/${language}/auth/login`}>{t("loginMenu.login")}</Link>
