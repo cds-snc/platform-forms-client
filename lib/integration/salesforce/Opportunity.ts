@@ -18,6 +18,7 @@ export class Opportunity {
   departmentId: string; // accountId in Salesforce for the Department
   formName: string; // name in Salesforce
   contactId: string; // contactId in Salesforce for the Contact
+  recordType: string; // hardcoded to "Notify Product" in Salesforce, ID for it is pulled from Salesforce
   // stageName is the "Stage" field hardcoded to "Published", as a dropdown in Salesforce
   // closeDate is the "Target Date" field (todo : validate???) hardcoded to today's date
   // Type is the "Type" field hardcoded to "New Business", as a dropdown in Salesforce
@@ -28,14 +29,17 @@ export class Opportunity {
     departmentId,
     formName,
     contactId,
+    recordType,
   }: {
     departmentId: string;
     formName: string;
     contactId: string;
+    recordType: string;
   }) {
     this.departmentId = departmentId;
     this.formName = formName;
     this.contactId = contactId;
+    this.recordType = recordType;
   }
 
   public toJSON(): object {
@@ -48,6 +52,7 @@ export class Opportunity {
       Type: "New Business",
       CDS_Lead_Team__c: "Platform",
       Product_to_Add__c: "GC Forms",
+      RecordTypeId: this.recordType,
     };
   }
 }
