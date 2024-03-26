@@ -1,5 +1,6 @@
 import { Rest, requestAccessToken } from "ts-force";
 import { Opportunity } from "./salesforce/Opportunity";
+import { OpportunityLineItem } from "./salesforce/OpportunityLineItem";
 import { Contact } from "./salesforce/Contact";
 
 const SALESFORCE_URL = process.env.SALESFORCE_URL;
@@ -29,6 +30,25 @@ export class SalesforceConnector {
 
   public async logout(): Promise<void> {
     await this.conn.logout();
+  }
+
+  // TODO : Cache this in Redis....
+  private async GetRecordType() {
+    const salesForceQuery = "SELECT Id FROM RecordType WHERE Name = 'Forms Product'";
+    const retObj = await this.conn.query(salesForceQuery);
+    return retObj.records[0].Id;
+  }
+  //TODO : Cache this in Redis....
+  private async GetProduct2Id() {
+    const salesForceQuery = "SELECT Id FROM Product2 WHERE Name = 'GC Forms'";
+    const retObj = await this.conn.query(salesForceQuery);
+    return retObj.records[0].Id;
+  }
+  //TODO : Cache this in Redis....
+  private async GetPricebookEntryId() {
+    const salesForceQuery = "SELECT Id FROM PricebookEntry WHERE Product2.Name = 'GC Forms'";
+    const retObj = await this.conn.query(salesForceQuery);
+    return retObj.records[0].Id;
   }
 
   // Provides the Account ID for a SalesForce Account based on the name of the account, if not found, it will return the account with the name 'Department not listed'
@@ -74,6 +94,21 @@ export class SalesforceConnector {
     }
   }
 
+  private async CreateOpportunity(opportunity: Opportunity): Promise<string> {
+    const url = `/services/data/${CURRENT_SALESFORCE_VERSION}/sobjects/Opportunity`;
+    const output = await this.conn.request.post(url, opportunity.toJSON());
+    return output.data.id;
+  }
+
+  private async CreateOpportunityLineItem(
+    opportunityLineItem: OpportunityLineItem
+  ): Promise<string> {
+    const url = `/services/data/${CURRENT_SALESFORCE_VERSION}/sobjects/OpportunityLineItem`;
+    const output = await this.conn.request.post(url, opportunityLineItem.toJSON());
+    return output.data.id;
+  }
+
+  //TODO : Refactor the constructor... it's a bit of a mess
   public async AddPublishRecord(
     departmentName: string,
     reasonForPublish: string,
@@ -91,28 +126,27 @@ export class SalesforceConnector {
       contactEmail
     );
 
+    const recordTypeId = await this.GetRecordType();
     const opportunity = new Opportunity({
       departmentId: departmentId,
       formName: formName,
       contactId: contactId,
+      recordType: recordTypeId,
     });
 
-    //TODO : Remove Composite Request, and replace with a single request to the Opportunity endpoint
-    //TODO : Attach the Contact to the Opportunity
-    //TODO : Attach the Product 'GC Forms' to the Opportunity. (TODO : Figure out how to do that!~)
-    //TODO : Refactor the constructor... it's a bit of a mess
-    /*
-    await composite.addRequest({
-      referenceId: 'refOpportunity',
-      method: 'POST',
-      url: `/services/data/v${this.conn.config.version}/sobjects/Opportunity`,
-      body: opportunity.toJSON()
+    const newOpportunityId = await this.CreateOpportunity(opportunity);
+
+    const product2Id = await this.GetProduct2Id();
+    const pricebookEntryId = await this.GetPricebookEntryId();
+
+    const opportunityLineItem = new OpportunityLineItem({
+      opportunityId: newOpportunityId,
+      productId: product2Id,
+      pricebookEntryId: pricebookEntryId,
     });
 
-    const results = await composite.send();
-    */
-    const results = opportunity.toJSON();
+    const results = await this.CreateOpportunityLineItem(opportunityLineItem);
 
-    return results;
+    return { results };
   }
 }
