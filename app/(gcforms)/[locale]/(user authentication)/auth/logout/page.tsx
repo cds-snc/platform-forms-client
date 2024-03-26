@@ -1,6 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import { PrimaryLinkButton } from "@clientComponents/globals";
+import { LinkButton } from "@serverComponents/globals";
 
 export async function generateMetadata({
   params: { locale },
@@ -26,7 +26,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         })}
       </div>
       <div>
-        <PrimaryLinkButton href={`/${locale}/auth/login`}>{t("goToSignInLabel")}</PrimaryLinkButton>
+        <LinkButton.Primary href={`/${locale}/auth/login`}>
+          {t("goToSignInLabel")}
+        </LinkButton.Primary>
       </div>
     </div>
   );

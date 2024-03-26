@@ -1,5 +1,5 @@
 import { serverTranslation } from "@i18n";
-import { StyledLink } from "@clientComponents/globals/StyledLink/StyledLink";
+import { LinkButton } from "@serverComponents/globals";
 import { Metadata } from "next";
 
 export async function generateMetadata({
@@ -31,20 +31,12 @@ export default async function Page() {
       <p>{t("accountCreated.unlockPublishing.paragraph1")}</p>
       <p className="mt-6">{t("accountCreated.unlockPublishing.paragraph2")}</p>
       <div className="mt-20">
-        <StyledLink
-          href={`/${i18n.language}/unlock-publishing/`}
-          theme="primaryButton"
-          className="mr-4"
-        >
+        <LinkButton.Primary href={`/${i18n.language}/unlock-publishing/`} className="mr-4">
           {t("accountCreated.unlockPublishingButton")}
-        </StyledLink>
-        <StyledLink
-          href={`/${i18n.language}/forms/`}
-          theme="secondaryButton"
-          testid="skipStepButton"
-        >
+        </LinkButton.Primary>
+        <LinkButton.Secondary href={`/${i18n.language}/forms/`} testid="skipStepButton">
           {t("accountCreated.skipStepButton")}
-        </StyledLink>
+        </LinkButton.Secondary>
       </div>
     </>
   );

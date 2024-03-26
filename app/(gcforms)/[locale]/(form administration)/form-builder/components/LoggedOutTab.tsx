@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Card } from "@clientComponents/globals/card/Card";
-import { LinkButton } from "@clientComponents/globals";
+import { LinkButton } from "@serverComponents/globals";
 import { useSession } from "next-auth/react";
 import { useTranslation } from "@i18n/client";
 

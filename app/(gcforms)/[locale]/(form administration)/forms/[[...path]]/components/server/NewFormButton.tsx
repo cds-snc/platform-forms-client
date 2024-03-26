@@ -1,5 +1,5 @@
 import { serverTranslation } from "@i18n";
-import { PrimaryLinkButton } from "@clientComponents/globals/Buttons";
+import { LinkButton } from "@serverComponents/globals";
 
 export const NewFormButton = async () => {
   const {
@@ -9,14 +9,14 @@ export const NewFormButton = async () => {
 
   return (
     <div className="inline">
-      <PrimaryLinkButton href={`/${language}/form-builder`}>
+      <LinkButton.Primary href={`/${language}/form-builder`}>
         <>
           <span aria-hidden="true" className="mr-2 inline-block">
             +
           </span>{" "}
           {t("actions.createNewForm")}
         </>
-      </PrimaryLinkButton>
+      </LinkButton.Primary>
     </div>
   );
 };

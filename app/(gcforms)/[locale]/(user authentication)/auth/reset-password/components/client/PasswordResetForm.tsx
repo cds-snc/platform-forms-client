@@ -25,11 +25,11 @@ export const PasswordResetForm = ({ email }: { email: string }) => {
   const localFormAction = async (_: ErrorStates, formData: FormData): Promise<ErrorStates> => {
     formData.append("username", email);
     const updatePassword = await resetPassword(language, _, formData);
-    if (!updatePassword.authError || !updatePassword.validationErrors) {
+    if (!updatePassword.authError && !updatePassword.validationErrors) {
       router.push(`/${language}/auth/login`);
     }
 
-    return {};
+    return updatePassword;
   };
 
   const [state, formAction] = useFormState(localFormAction, {});

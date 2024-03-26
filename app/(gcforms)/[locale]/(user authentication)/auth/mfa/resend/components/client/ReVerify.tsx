@@ -2,7 +2,8 @@
 import React, { ReactElement, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";
-import { Button, StyledLink } from "@clientComponents/globals";
+import { Button } from "@clientComponents/globals";
+import { LinkButton } from "@serverComponents/globals";
 import { getErrorText, resendVerificationCode } from "../../../actions";
 
 import { hasError } from "@lib/hasError";
@@ -77,9 +78,9 @@ export const ReVerify = (): ReactElement => {
         <Button theme="primary" className="mr-4" onClick={handleReVerify} disabled={resending}>
           {t("reVerify.buttons.reSendCode")}
         </Button>
-        <StyledLink theme="secondaryButton" href={`/${language}/support`}>
+        <LinkButton.Secondary href={`/${language}/support`}>
           {t("reVerify.buttons.getSupport")}
-        </StyledLink>
+        </LinkButton.Secondary>
       </div>
     </>
   );

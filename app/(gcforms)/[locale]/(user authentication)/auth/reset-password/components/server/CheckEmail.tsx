@@ -1,6 +1,6 @@
 import { serverTranslation } from "@i18n";
 
-import { PrimaryLinkButton } from "@clientComponents/globals";
+import { LinkButton } from "@serverComponents/globals";
 
 export const CheckEmail = async ({ locale }: { locale: string }) => {
   const continueHref = `/${locale}/form-builder`;
@@ -10,9 +10,9 @@ export const CheckEmail = async ({ locale }: { locale: string }) => {
       <h2 className="mt-4 mb-6 p-0">{t("magicLink.title")}</h2>
       <p className="mb-10">{t("magicLink.description")}</p>
       <div className="laptop:flex">
-        <PrimaryLinkButton href={continueHref} className="mb-2">
+        <LinkButton.Primary href={continueHref} className="mb-2">
           {t("magicLink.cta.label")}
-        </PrimaryLinkButton>
+        </LinkButton.Primary>
       </div>
     </div>
   );

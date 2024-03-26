@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useFormState } from "react-dom";
 import { TextInput, Label, Alert, ErrorListItem } from "../../../../components/client/forms";
 import { PasswordResetForm } from "./PasswordResetForm";
-import { LinkButton } from "@clientComponents/globals";
+import { LinkButton } from "@serverComponents/globals";
 import { useTranslation } from "@i18n/client";
 import { ErrorStates, checkQuestionChallenge } from "../../action";
 import Link from "next/link";
@@ -28,8 +28,8 @@ export const QuestionChallengeForm = ({
 
   const localFormAction = async (_: ErrorStates, formData: FormData): Promise<ErrorStates> => {
     formData.append("question1Id", userSecurityQuestions[0].id);
-    formData.append("question2Id", userSecurityQuestions[0].id);
-    formData.append("question3Id", userSecurityQuestions[0].id);
+    formData.append("question2Id", userSecurityQuestions[1].id);
+    formData.append("question3Id", userSecurityQuestions[2].id);
     formData.append("email", email);
     const checkResult = await checkQuestionChallenge(language, _, formData);
 

@@ -7,7 +7,7 @@ import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { logMessage } from "@lib/logger";
 import { Button, Alert } from "@clientComponents/globals";
 import { PermissionToggle } from "app/(gcforms)/[locale]/(app administration)/admin/(with nav)/accounts/[id]/manage-permissions/components/client/PermissionToggle";
-import { LinkButton } from "@clientComponents/globals";
+import { LinkButton } from "@serverComponents/globals";
 import { AppUser } from "@lib/types/user-types";
 import { BackLink } from "@clientComponents/admin/LeftNav/BackLink";
 

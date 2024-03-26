@@ -59,7 +59,11 @@ const isUserActive = async (email: string) => {
     },
   });
 
-  return Boolean(prismaUser?.active);
+  if (prismaUser === null) {
+    // The user is logging in for the first time and doesn't yet exist in the db
+    return true;
+  }
+  return prismaUser.active;
 };
 
 const isUserLockedOut = async (email: string) => {
@@ -170,7 +174,7 @@ export const getRedirectPath = async (locale: string) => {
     return { callback: `/${locale}/auth/policy` };
   }
 
-  if (session.user.newlyRegistered) {
+  if (session.user.newlyRegistered || !session.user.hasSecurityQuestions) {
     return { callback: `/${locale}/auth/setup-security-questions` };
   }
 

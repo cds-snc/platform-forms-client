@@ -103,39 +103,53 @@ const validatePasswordResetForm = async (
   formEntries: { [k: string]: FormDataEntryValue }
 ) => {
   const { t } = await serverTranslation(["reset-password", "common"], { lang: language });
-  const schema = v.object({
-    confirmationCode: v.number([v.integer("resetPassword.fields.confirmationCode.error.number")]),
-    username: v.string([
-      v.toLowerCase(),
-      v.toTrimmed(),
-      v.minLength(1, t("input-validation.required")),
-      v.email(t("input-validation.email")),
-      v.custom((input) => isValidGovEmail(input), t("input-validation.validGovEmail")),
-    ]),
-    password: v.string([
-      v.minLength(8, t("account.fields.password.error.minLength", { ns: "common" })),
-      v.maxLength(50, t("account.fields.password.error.maxLength", { ns: "common" })),
-      v.custom(
-        (password) => containsLowerCaseCharacter(password),
-        t("account.fields.password.error.oneLowerCase", { ns: "common" })
+  const schema = v.object(
+    {
+      confirmationCode: v.coerce(
+        v.number("resetPassword.fields.confirmationCode.error.number"),
+        Number
       ),
-      v.custom(
-        (password) => containsUpperCaseCharacter(password),
-        t("account.fields.password.error.oneUpperCase", { ns: "common" })
+      username: v.string([
+        v.toLowerCase(),
+        v.toTrimmed(),
+        v.minLength(1, t("input-validation.required")),
+        v.email(t("input-validation.email")),
+        v.custom((input) => isValidGovEmail(input), t("input-validation.validGovEmail")),
+      ]),
+      password: v.string([
+        v.minLength(8, t("account.fields.password.error.minLength", { ns: "common" })),
+        v.maxLength(50, t("account.fields.password.error.maxLength", { ns: "common" })),
+        v.custom(
+          (password) => containsLowerCaseCharacter(password),
+          t("account.fields.password.error.oneLowerCase", { ns: "common" })
+        ),
+        v.custom(
+          (password) => containsUpperCaseCharacter(password),
+          t("account.fields.password.error.oneUpperCase", { ns: "common" })
+        ),
+        v.custom(
+          (password) => containsNumber(password),
+          t("account.fields.password.error.oneNumber", { ns: "common" })
+        ),
+        v.custom(
+          (password) => containsSymbol(password),
+          t("account.fields.password.error.oneSymbol", { ns: "common" })
+        ),
+      ]),
+      passwordConfirmation: v.string([
+        v.minLength(1, t("input-validation.required", { ns: "common" })),
+      ]),
+    },
+    [
+      v.forward(
+        v.custom(
+          (input) => input.password === input.passwordConfirmation,
+          t("account.fields.passwordConfirmation.error.mustMatch", { ns: "common" })
+        ),
+        ["passwordConfirmation"]
       ),
-      v.custom(
-        (password) => containsNumber(password),
-        t("account.fields.password.error.oneNumber", { ns: "common" })
-      ),
-      v.custom(
-        (password) => containsSymbol(password),
-        t("account.fields.password.error.oneSymbol", { ns: "common" })
-      ),
-    ]),
-    passwordConfirmation: v.string([
-      v.minLength(1, t("input-validation.required", { ns: "common" })),
-    ]),
-  });
+    ]
+  );
   return v.safeParse(schema, formEntries);
 };
 
@@ -170,7 +184,6 @@ export const checkQuestionChallenge = async (
 ): Promise<ErrorStates> => {
   const rawFormData = Object.fromEntries(formData.entries());
   const validationResult = await validateQuestionChallengeForm(language, rawFormData);
-  logMessage.debug(validationResult);
   if (!validationResult.success) {
     // Question Ids are not a user input field,  if missing the API is being hit manually
     if (
@@ -248,6 +261,7 @@ export const resetPassword = async (
         authError: await handleErrorById("InternalServiceExceptionLogin", language),
       };
     } else {
+      logMessage.debug(validationResult);
       return {
         validationErrors: validationResult.issues.map((issue) => ({
           fieldKey: issue.path?.[0].key as string,

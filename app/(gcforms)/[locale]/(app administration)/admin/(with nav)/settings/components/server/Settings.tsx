@@ -1,5 +1,5 @@
 import React from "react";
-import { PrimaryLinkButton, SecondaryLinkButton } from "@clientComponents/globals";
+import { LinkButton } from "@serverComponents/globals";
 import { DeleteSettingsButton } from "../client/DeleteSettingsButton";
 import { requireAuthentication } from "@lib/auth";
 import { getAllAppSettings } from "@lib/appSettings";
@@ -36,12 +36,12 @@ export const Settings = async () => {
               </p>
             </div>
             <div>
-              <SecondaryLinkButton
+              <LinkButton.Secondary
                 href={`/${language}/admin/settings/${setting.internalId}`}
                 className="mr-2"
               >
                 {canUpdateSettings ? t("manageSetting") : t("viewSetting")}
-              </SecondaryLinkButton>
+              </LinkButton.Secondary>
               {canDeleteSettings && <DeleteSettingsButton id={setting.internalId} />}
             </div>
           </li>
@@ -49,9 +49,9 @@ export const Settings = async () => {
       </ul>
       {canCreateSettings && (
         <div className="pt-6">
-          <PrimaryLinkButton href={`/${language}/admin/settings/create`}>
+          <LinkButton.Primary href={`/${language}/admin/settings/create`}>
             {t("createSetting")}
-          </PrimaryLinkButton>
+          </LinkButton.Primary>
         </div>
       )}
     </div>

@@ -1,7 +1,6 @@
 import { serverTranslation } from "@i18n";
-
 import { BackArrowIcon } from "@serverComponents/icons";
-import { PrimaryLinkButton, SecondaryLinkButton } from "@clientComponents/globals";
+import { LinkButton } from "@serverComponents/globals";
 
 export const InvalidLink = async ({ locale }: { locale: string }) => {
   const { t } = await serverTranslation(["reset-password", "common"], { lang: locale });
@@ -14,15 +13,15 @@ export const InvalidLink = async ({ locale }: { locale: string }) => {
       </h2>
       <p className="mb-10">{t("errorPanel.defaultMessage")}</p>
       <div className="laptop:flex">
-        <PrimaryLinkButton href={homeHref} className="mb-2 mr-3">
+        <LinkButton.Primary href={homeHref} className="mb-2 mr-3">
           <span>
             <BackArrowIcon className="mr-2 inline-block self-stretch fill-white" />
             {t("account.actions.backToSignIn", { ns: "common" })}
           </span>
-        </PrimaryLinkButton>
-        <SecondaryLinkButton href={supportHref} className="mb-2">
+        </LinkButton.Primary>
+        <LinkButton.Secondary href={supportHref} className="mb-2">
           {t("errorPanel.cta.support", { ns: "common" })}
-        </SecondaryLinkButton>
+        </LinkButton.Secondary>
       </div>
     </div>
   );

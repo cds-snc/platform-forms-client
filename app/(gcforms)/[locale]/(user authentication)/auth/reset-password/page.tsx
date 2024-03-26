@@ -3,14 +3,14 @@ import { Metadata } from "next";
 import {
   PasswordResetExpiredLink,
   PasswordResetInvalidLink,
-  SecurityQuestion,
   getPasswordResetAuthenticatedUserEmailAddress,
   retrieveUserSecurityQuestions,
 } from "@lib/auth";
 import { redirect } from "next/navigation";
 import { CheckEmail, CannotReset, ExpiredLink, InvalidLink } from "./components/server";
-
+import { revalidatePath } from "next/cache";
 import { InitiateResetForm, QuestionChallengeForm } from "./components/client";
+import { logMessage } from "@lib/logger";
 
 export async function generateMetadata({
   params: { locale },
@@ -30,13 +30,16 @@ export default async function Page({
   params: { locale: string };
   searchParams: { token?: string };
 }) {
-  let userSecurityQuestions: SecurityQuestion[] = [];
-  let email = "";
+  logMessage.debug("Running server component of page");
+  // Ensure this path is always revalidated
+  revalidatePath("(gcforms)/[locale]/(user authentication)/auth/reset-password", "page");
 
   if (token) {
     try {
-      email = await getPasswordResetAuthenticatedUserEmailAddress(token);
-      userSecurityQuestions = await retrieveUserSecurityQuestions({ email });
+      const email = await getPasswordResetAuthenticatedUserEmailAddress(token);
+
+      const userSecurityQuestions = await retrieveUserSecurityQuestions({ email });
+
       if (userSecurityQuestions.length === 0) {
         return <CannotReset {...{ locale }} />;
       }
@@ -50,14 +53,15 @@ export default async function Page({
       if (e instanceof PasswordResetInvalidLink) {
         return <InvalidLink {...{ locale }} />;
       }
+
       redirect(`/$locale/auth/login`);
     }
+  } else {
+    return (
+      <InitiateResetForm
+        confirmationPage={<CheckEmail locale={locale} />}
+        errorPage={<CannotReset locale={locale} />}
+      />
+    );
   }
-
-  return (
-    <InitiateResetForm
-      confirmationPage={<CheckEmail locale={locale} />}
-      errorPage={<CannotReset locale={locale} />}
-    />
-  );
 }

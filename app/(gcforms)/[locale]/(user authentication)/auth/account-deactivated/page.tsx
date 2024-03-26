@@ -1,6 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import { PrimaryLinkButton } from "@clientComponents/globals";
+import { LinkButton } from "@serverComponents/globals";
 
 export async function generateMetadata({
   params: { locale },
@@ -21,9 +21,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       <h2 className="mt-4 mb-6 p-0">{t("title")}</h2>
       <p className="mb-10">{t("description")}</p>
       <div className="laptop:flex">
-        <PrimaryLinkButton href={supportHref} className="mb-2">
+        <LinkButton.Primary href={supportHref} className="mb-2">
           {t("cta.label")}
-        </PrimaryLinkButton>
+        </LinkButton.Primary>
       </div>
     </div>
   );

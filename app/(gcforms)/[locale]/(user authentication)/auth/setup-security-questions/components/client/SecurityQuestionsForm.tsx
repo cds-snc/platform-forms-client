@@ -4,7 +4,7 @@ import { useFormState, useFormStatus } from "react-dom";
 import { useTranslation } from "@i18n/client";
 import { TextInput, Label, Dropdown } from "../../../../components/client/forms";
 import { Button, Alert } from "@clientComponents/globals";
-import { LinkButton } from "@clientComponents/globals";
+import { LinkButton } from "@serverComponents/globals";
 import { useRouter } from "next/navigation";
 import { toast } from "@formBuilder/components/shared";
 import { ErrorStates } from "../../actions";
@@ -73,13 +73,7 @@ export const SecurityQuestionsForm = ({ questions = [] }: { questions: Question[
 
       <h1 className="gc-h2">{t("title")}</h1>
 
-      <form
-        id="updateSecurityQuestionsForm"
-        ref={formRef}
-        method="POST"
-        action={formAction}
-        noValidate
-      >
+      <form id="updateSecurityQuestionsForm" ref={formRef} action={formAction} noValidate>
         <div className="mb-10 mt-4">
           <p className="font-bold">{t("description")}</p>
           <p id="requirementsListTitle">{t("requirementsTitle")}</p>
