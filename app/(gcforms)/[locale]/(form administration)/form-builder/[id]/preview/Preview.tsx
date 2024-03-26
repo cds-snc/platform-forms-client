@@ -18,7 +18,7 @@ import { useRehydrate } from "@lib/hooks/form-builder";
 import Skeleton from "react-loading-skeleton";
 import { Form } from "@clientComponents/forms/Form/Form";
 
-export const Preview = () => {
+export const Preview = ({ disableSubmit = true }: { disableSubmit?: boolean }) => {
   const { status } = useSession();
   const { i18n } = useTranslation("common");
   const { id, getSchema, getIsPublished, getSecurityAttribute } = useTemplateStore((s) => ({
@@ -178,7 +178,7 @@ export const Preview = () => {
                                   id="SubmitButton"
                                   className="mb-4"
                                   onClick={(e) => {
-                                    if (status !== "authenticated") {
+                                    if (disableSubmit) {
                                       return preventSubmit(e);
                                     }
                                   }}

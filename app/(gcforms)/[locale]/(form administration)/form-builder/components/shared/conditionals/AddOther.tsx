@@ -6,6 +6,7 @@ import { Button } from "@clientComponents/globals";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { useTemplateStore } from "@lib/store";
 import { FormElementTypes } from "@lib/types";
+import { getTranslatedProperties } from "../../../actions";
 
 export const AddOther = ({ item }: { item: FormElementWithIndex }) => {
   const { t } = useTranslation("form-builder");
@@ -14,16 +15,15 @@ export const AddOther = ({ item }: { item: FormElementWithIndex }) => {
     add: s.add,
   }));
 
-  const addOther = useCallback(() => {
+  const addOther = useCallback(async () => {
     if (!item.properties.choices) return;
 
     // get last choice
     const lastChoice = item.properties.choices.length - 1;
 
-    const otherLabel = {
-      en: t("addConditionalRules.other"),
-      fr: t("addConditionalRules.other", { lng: "fr" }),
-    };
+    const otherLabel: { en: string; fr: string } = await getTranslatedProperties(
+      "addConditionalRules.other"
+    );
 
     const data = {
       id: 1,
@@ -42,7 +42,7 @@ export const AddOther = ({ item }: { item: FormElementWithIndex }) => {
     };
 
     add(item.index, FormElementTypes.textField, data);
-  }, [add, item, t]);
+  }, [add, item]);
 
   return (
     <Button className="!m-0 !mt-4" theme="link" onClick={addOther}>

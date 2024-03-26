@@ -6,12 +6,10 @@ import { cn } from "@lib/utils";
 export const TwoColumnLayout = ({
   children,
   leftColumnContent,
-  user,
   context,
 }: {
   children: React.ReactNode;
   leftColumnContent?: React.ReactNode;
-  user?: { name: string | null; email: string };
   context?: "admin" | "formBuilder" | "default";
 }) => {
   return (
@@ -19,11 +17,7 @@ export const TwoColumnLayout = ({
       <div className="flex h-full flex-col">
         <SkipLink />
 
-        <Header
-          context={context}
-          user={user && { email: user.email, name: user.name }}
-          className="mb-0"
-        />
+        <Header context={context} className="mb-0" />
         <div className="shrink-0 grow basis-auto">
           <ToastContainer containerId="default" />
           <ToastContainer limit={1} containerId="wide" autoClose={false} width="600px" />

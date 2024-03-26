@@ -154,29 +154,33 @@ export const Edit = ({ formId }: { formId: string }) => {
           })}
       </RefsProvider>
       <>
-        <RichTextLocked
-          hydrated={hasHydrated}
-          addElement={false}
-          schemaProperty="privacyPolicy"
-          ariaLabel={t("richTextPrivacyTitle")}
-        >
-          <div id="privacy-text">
-            <h2 className="mt-4 text-2xl laptop:mt-0">{t("richTextPrivacyTitle")}</h2>
-            <PrivacyDescription />
-          </div>
-        </RichTextLocked>
+        <div id="privacy-text">
+          <RichTextLocked
+            hydrated={hasHydrated}
+            addElement={false}
+            schemaProperty="privacyPolicy"
+            ariaLabel={t("richTextPrivacyTitle")}
+          >
+            <div>
+              <h2 className="mt-4 text-2xl laptop:mt-0">{t("richTextPrivacyTitle")}</h2>
+              <PrivacyDescription />
+            </div>
+          </RichTextLocked>
+        </div>
 
-        <RichTextLocked
-          hydrated={hasHydrated}
-          addElement={false}
-          schemaProperty="confirmation"
-          ariaLabel={t("richTextConfirmationTitle")}
-        >
-          <div id="confirmation-text">
-            <h2 className="mt-4 text-2xl laptop:mt-0">{t("richTextConfirmationTitle")}</h2>
-            <ConfirmationDescription />
-          </div>
-        </RichTextLocked>
+        <div id="confirmation-text">
+          <RichTextLocked
+            hydrated={hasHydrated}
+            addElement={false}
+            schemaProperty="confirmation"
+            ariaLabel={t("richTextConfirmationTitle")}
+          >
+            <div>
+              <h2 className="mt-4 text-2xl laptop:mt-0">{t("richTextConfirmationTitle")}</h2>
+              <ConfirmationDescription />
+            </div>
+          </RichTextLocked>
+        </div>
       </>
     </>
   );
