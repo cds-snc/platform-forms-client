@@ -1,3 +1,5 @@
+import origSlugify from "@sindresorhus/slugify";
+
 /**
  * Scrolls an element with overflow to its bottom.
  *
@@ -81,14 +83,9 @@ export const getDate = (withTime = false) => {
   return withTime ? date.toISOString() : date.toISOString().split("T")[0];
 };
 
-// TODO cosider moving to helpers since this is used by both the client and API
-export const slugify = (str: string) =>
-  str
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, "")
-    .replace(/[\s_-]+/g, "-")
-    .replace(/^-+|-+$/g, "");
+export const slugify = (str: string) => {
+  return origSlugify(str, { separator: "-" });
+};
 
 /**
  * Capitalize the first letter of a string
