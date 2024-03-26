@@ -1,6 +1,6 @@
 {
   "name": "gcforms",
-  "version": "3.12.10",
+  "version": "3.12.11",
   "private": true,
   "prisma": {
     "seed": "tsx prisma/seeds/seed_cli.ts --environment=development"
@@ -19,6 +19,7 @@
   },
   "scripts": {
     "dev": "yarn prisma:dev && yarn initialize && next dev | pino-pretty -c -i time",
+    "dev:turbo": "yarn prisma:dev && yarn initialize && next dev --turbo | pino-pretty -c -i time",
     "build": "DATABASE_URL=postgres://postgres:chummy@localhost:5432/formsDB next build --debug",
     "start": "yarn prisma:deploy && yarn initialize && next start -p ${PORT:-3000}",
     "initialize": "yarn workspace flag_initialization initialize",
@@ -82,7 +83,7 @@
     "lodash.set": "4.3.2",
     "lodash.unset": "4.5.2",
     "markdown-to-jsx": "7.3.2",
-    "next": "^14.1.0",
+    "next": "^14.2.0-canary.38",
     "next-auth": "5.0.0-beta.13",
     "node-fetch": "^3.3.2",
     "notifications-node-client": "7.0.6",
@@ -178,6 +179,7 @@
     "postcss-import": "^15.1.0",
     "postcss-loader": "^7.3.4",
     "prettier": "^2.8.8",
+    "raw-loader": "^4.0.2",
     "sass": "^1.69.5",
     "sass-loader": "^13.3.3",
     "tailwindcss": "^3.4.0",

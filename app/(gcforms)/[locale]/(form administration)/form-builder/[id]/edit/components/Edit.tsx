@@ -2,7 +2,7 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import debounce from "lodash.debounce";
 import { useTranslation } from "@i18n/client";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Language, LocalizedFormProperties } from "@lib/types/form-builder-types";
 import { ElementPanel, ConfirmationDescription, PrivacyDescription } from ".";
 import { RefsProvider } from "./RefsContext";
@@ -15,8 +15,9 @@ import { cleanInput } from "@lib/utils/form-builder";
 import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 import { useRehydrate } from "@lib/hooks/form-builder";
 
-export const Edit = () => {
-  const { t } = useTranslation("form-builder");
+export const Edit = ({ formId }: { formId: string }) => {
+  const router = useRouter();
+  const { t, i18n } = useTranslation("form-builder");
   const {
     title,
     layout,
@@ -44,6 +45,17 @@ export const Edit = () => {
   useEffect(() => {
     setValue(title);
   }, [title]);
+
+  const { isPublished } = useTemplateStore((s) => ({
+    isPublished: s.isPublished,
+  }));
+
+  useEffect(() => {
+    if (isPublished) {
+      router.replace(`/${i18n.language}/form-builder/${formId}/settings/`);
+      return;
+    }
+  }, [router, isPublished, formId, i18n.language]);
 
   const _debounced = debounce(
     useCallback(
@@ -86,6 +98,10 @@ export const Edit = () => {
 
   const hasHydrated = useRehydrate();
 
+  if (isPublished) {
+    return <div />;
+  }
+
   return (
     <>
       <h1 className="visually-hidden">{t("edit")}</h1>
@@ -106,7 +122,7 @@ export const Edit = () => {
               <ExpandingInput
                 id="formTitle"
                 wrapperClassName="w-full laptop:w-3/4 mt-2 laptop:mt-0 font-bold laptop:text-3xl"
-                className="font-bold placeholder:text-slate-500 laptop:text-3xl"
+                className="font-bold placeholder:text-slate-500 laptop:text-4xl"
                 ref={titleInput}
                 placeholder={t("placeHolderFormTitle")}
                 value={value}
@@ -138,29 +154,33 @@ export const Edit = () => {
           })}
       </RefsProvider>
       <>
-        <RichTextLocked
-          hydrated={hasHydrated}
-          addElement={false}
-          schemaProperty="privacyPolicy"
-          ariaLabel={t("richTextPrivacyTitle")}
-        >
-          <div id="privacy-text">
-            <h2 className="mt-4 text-2xl laptop:mt-0">{t("richTextPrivacyTitle")}</h2>
-            <PrivacyDescription />
-          </div>
-        </RichTextLocked>
+        <div id="privacy-text">
+          <RichTextLocked
+            hydrated={hasHydrated}
+            addElement={false}
+            schemaProperty="privacyPolicy"
+            ariaLabel={t("richTextPrivacyTitle")}
+          >
+            <div>
+              <h2 className="mt-4 text-2xl laptop:mt-0">{t("richTextPrivacyTitle")}</h2>
+              <PrivacyDescription />
+            </div>
+          </RichTextLocked>
+        </div>
 
-        <RichTextLocked
-          hydrated={hasHydrated}
-          addElement={false}
-          schemaProperty="confirmation"
-          ariaLabel={t("richTextConfirmationTitle")}
-        >
-          <div id="confirmation-text">
-            <h2 className="mt-4 text-2xl laptop:mt-0">{t("richTextConfirmationTitle")}</h2>
-            <ConfirmationDescription />
-          </div>
-        </RichTextLocked>
+        <div id="confirmation-text">
+          <RichTextLocked
+            hydrated={hasHydrated}
+            addElement={false}
+            schemaProperty="confirmation"
+            ariaLabel={t("richTextConfirmationTitle")}
+          >
+            <div>
+              <h2 className="mt-4 text-2xl laptop:mt-0">{t("richTextConfirmationTitle")}</h2>
+              <ConfirmationDescription />
+            </div>
+          </RichTextLocked>
+        </div>
       </>
     </>
   );

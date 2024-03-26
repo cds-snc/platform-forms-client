@@ -8,6 +8,7 @@ import {
   updateAppSetting,
 } from "@lib/appSettings";
 import { revalidatePath } from "next/cache";
+import { logMessage } from "@lib/logger";
 
 function nullCheck(formData: FormData, key: string) {
   const result = formData.get(key);
@@ -23,46 +24,53 @@ export const authCheck = async () => {
 
 export async function getSetting(internalId: string) {
   const ability = await authCheck();
+  logMessage.error("Getting setting with internalId: " + internalId);
   return getFullAppSetting(ability, internalId);
 }
 
 export async function updateSetting(formData: FormData) {
-  const ability = await authCheck();
-  const setting = {
-    internalId: nullCheck(formData, "internalId"),
-    nameEn: nullCheck(formData, "nameEn"),
-    nameFr: nullCheck(formData, "nameFr"),
-    descriptionEn: nullCheck(formData, "descriptionEn"),
-    descriptionFr: nullCheck(formData, "descriptionFr"),
-    value: nullCheck(formData, "value"),
-  };
+  try {
+    const ability = await authCheck();
+    const setting = {
+      internalId: nullCheck(formData, "internalId"),
+      nameEn: nullCheck(formData, "nameEn"),
+      nameFr: nullCheck(formData, "nameFr"),
+      descriptionEn: formData.get("descriptionEn") as string,
+      descriptionFr: formData.get("descriptionFr") as string,
+      value: nullCheck(formData, "value"),
+    };
 
-  await updateAppSetting(ability, setting.internalId, setting).catch(() => {
-    throw new Error("Error updating setting");
-  });
+    await updateAppSetting(ability, setting.internalId, setting);
+  } catch (e) {
+    logMessage.error("Error updating setting: " + e);
+    throw e;
+  }
   revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/settings", "page");
 }
 
 export async function createSetting(formData: FormData) {
-  const ability = await authCheck();
-  const setting = {
-    internalId: nullCheck(formData, "internalId"),
-    nameEn: nullCheck(formData, "nameEn"),
-    nameFr: nullCheck(formData, "nameFr"),
-    descriptionEn: nullCheck(formData, "descriptionEn"),
-    descriptionFr: nullCheck(formData, "descriptionFr"),
-    value: nullCheck(formData, "value"),
-  };
-  await createAppSetting(
-    ability,
-    setting as {
-      internalId: string;
-      nameEn: string;
-      nameFr: string;
-    }
-  ).catch(() => {
-    throw new Error("Error creating setting");
-  });
+  try {
+    const ability = await authCheck();
+    const setting = {
+      internalId: nullCheck(formData, "internalId"),
+      nameEn: nullCheck(formData, "nameEn"),
+      nameFr: nullCheck(formData, "nameFr"),
+      descriptionEn: formData.get("descriptionEn") as string,
+      descriptionFr: formData.get("descriptionFr") as string,
+      value: nullCheck(formData, "value"),
+    };
+    await createAppSetting(
+      ability,
+      setting as {
+        internalId: string;
+        nameEn: string;
+        nameFr: string;
+      }
+    );
+  } catch (e) {
+    logMessage.error("Error creating setting: " + e);
+    throw e;
+  }
   revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/settings", "page");
 }
 

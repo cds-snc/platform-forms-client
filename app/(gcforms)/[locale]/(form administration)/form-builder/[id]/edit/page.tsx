@@ -26,7 +26,7 @@ export default async function Page({ params: { id } }: { params: { id: string } 
       ) : (
         <>
           <EditNavigation id={id} />
-          <Edit />
+          <Edit formId={id} />
         </>
       )}
     </>

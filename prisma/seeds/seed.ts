@@ -284,7 +284,18 @@ async function main(environment: string) {
 
     if (environment !== "production") {
       console.log("Creating test Users");
-      await createUsers();
+      try {
+        await createUsers();
+      } catch (e) {
+        if (e instanceof Prisma.PrismaClientKnownRequestError) {
+          // The .code property can be accessed in a type-safe manner
+          if (e.code === "P2002") {
+            console.log(
+              "There is a unique constraint violation, a new user cannot be created with this email"
+            ); // just log it and keep going
+          } else throw e;
+        }
+      }
     }
 
     console.log("Running 'publishingStatus' migration");

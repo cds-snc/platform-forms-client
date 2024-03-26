@@ -20,10 +20,12 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const { user } = await requireAuthentication();
 
   if (user.acceptableUse) {
-    redirect(`/${locale}/forms}`);
+    redirect(`/${locale}/forms`);
   }
 
-  const termsOfUseContent = await require(`@public/static/content/${locale}/responsibilities.md`);
+  const termsOfUseContent = await import(
+    `public/static/content/${locale}/responsibilities.md`
+  ).then((res) => res.default);
 
   return (
     <UserNavLayout contentWidth="tablet:w-[768px] laptop:w-[850px]">

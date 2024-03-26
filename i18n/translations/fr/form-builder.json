@@ -64,7 +64,7 @@
     },
     "checkboxItem": "Option",
     "combobox": {
-      "description": "Une liste consultable d'options pstmi lesquelles un choix est fait.",
+      "description": "Une liste consultable d'options parmi lesquelles un choix est fait.",
       "title": "Liste consultable",
       "example": {
         "select": "Selectionner"

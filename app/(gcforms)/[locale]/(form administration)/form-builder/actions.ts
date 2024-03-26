@@ -17,6 +17,8 @@ import {
   updateResponseDeliveryOption,
 } from "@lib/templates";
 import { logMessage } from "@lib/logger";
+import { serverTranslation } from "@i18n";
+import { revalidatePath } from "next/cache";
 
 const _getSessionAndAbility = async () => {
   const session = await auth();
@@ -147,6 +149,8 @@ export const updateTemplatePublishedStatus = async ({
         `Template API response was null. Request information: { ${formID}, ${isPublished} }`
       );
     }
+
+    revalidatePath("/form-builder/[id]", "layout");
 
     return response;
   } catch (error) {
@@ -318,4 +322,24 @@ export const deleteTemplate = async ({ id: formID }: { id: string }) => {
       throw error;
     }
   }
+};
+
+export const getTranslatedElementProperties = async (type: string) => {
+  const { t: en } = await serverTranslation("form-builder", { lang: "en" });
+  const { t: fr } = await serverTranslation("form-builder", { lang: "fr" });
+  return {
+    description: {
+      en: en([`defaultElementDescription.${type}`, ""]),
+      fr: fr([`defaultElementDescription.${type}`, ""]),
+    },
+  };
+};
+
+export const getTranslatedProperties = async (type: string) => {
+  const { t: en } = await serverTranslation("form-builder", { lang: "en" });
+  const { t: fr } = await serverTranslation("form-builder", { lang: "fr" });
+  return {
+    en: en(type),
+    fr: fr(type),
+  };
 };

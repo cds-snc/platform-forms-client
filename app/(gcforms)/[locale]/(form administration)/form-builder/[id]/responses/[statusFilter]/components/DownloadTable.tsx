@@ -195,7 +195,10 @@ export const DownloadTable = ({
 
             {tableItems.allItems.map((submission) => {
               const isBlocked = blockDownload(submission);
-              const createdDateTime = formatDateTime(submission.createdAt).join(" ");
+              const createdDateTime = formatDateTime(
+                submission.createdAt,
+                language == "en" ? "en-CA" : "fr-CA"
+              ).join(" ");
               return (
                 <tr
                   key={submission.name}
