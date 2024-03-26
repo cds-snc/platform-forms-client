@@ -47,6 +47,8 @@ export const createOrUpdateTemplate = async ({
   deliveryOption,
   securityAttribute,
 }: CreateOrUpdateTemplateType) => {
+  revalidatePath("/[locale]/forms", "page");
+
   if (id) {
     return updateTemplate({ id, formConfig, name, deliveryOption, securityAttribute });
   }

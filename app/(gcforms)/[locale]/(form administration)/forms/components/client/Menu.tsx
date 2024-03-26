@@ -1,9 +1,5 @@
 "use client";
-import {
-  MenuDropdown,
-  MenuDropdownItemI,
-  MenuDropdownItemCallback,
-} from "@clientComponents/myforms/MenuDropdown/MenuDropdown";
+
 import { useTranslation } from "@i18n/client";
 import copy from "copy-to-clipboard";
 import { getForm } from "../../actions";
@@ -11,6 +7,11 @@ import { getDate, slugify } from "@lib/client/clientHelpers";
 import { useCallback, useState } from "react";
 import { ConfirmDelete } from "./ConfirmDelete";
 import { toast, ToastContainer } from "@formBuilder/components/shared/Toast";
+import {
+  MenuDropdown,
+  MenuDropdownItemCallback,
+  MenuDropdownItemI,
+} from "./MenuDropdown/MenuDropdown";
 
 export const Menu = ({
   id,

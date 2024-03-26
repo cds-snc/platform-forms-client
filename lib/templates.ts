@@ -270,7 +270,7 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
 export async function getAllTemplates(
   ability: UserAbility,
   requestedWhere?: Prisma.TemplateWhereInput,
-  sortByDateCreated?: "asc" | "desc"
+  sortByDateUpdated?: "asc" | "desc"
 ): Promise<Array<FormRecord>> {
   try {
     checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
@@ -309,9 +309,9 @@ export async function getAllTemplates(
           deliveryOption: true,
           securityAttribute: true,
         },
-        ...(sortByDateCreated && {
+        ...(sortByDateUpdated && {
           orderBy: {
-            created_at: sortByDateCreated,
+            updated_at: sortByDateUpdated,
           },
         }),
       })

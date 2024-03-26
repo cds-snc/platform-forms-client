@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from "react";
 import { clearTemplateStore } from "@lib/store";
 import Link from "next/link";
 import { useTranslation } from "@i18n/client";
+import Skeleton from "react-loading-skeleton";
 
 export const ResumeEditingForm = () => {
   const [hasSession, setHasSession] = React.useState(false);
@@ -50,5 +51,7 @@ export const ResumeEditingForm = () => {
     >
       <span aria-hidden="true"> ← </span> {t("actions.resumeForm")}
     </Link>
-  ) : null;
+  ) : (
+    <Skeleton className="h-6 w-[200px]" />
+  );
 };
