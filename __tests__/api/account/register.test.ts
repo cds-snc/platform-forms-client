@@ -19,7 +19,7 @@ jest.mock("@aws-sdk/client-cognito-identity-provider", () => ({
   SignUpCommand: jest.fn(),
 }));
 
-describe("/signup/register", () => {
+describe("/auth/register", () => {
   afterEach(() => {
     mockGetCSRFToken.mockReset();
   });

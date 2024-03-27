@@ -61,6 +61,6 @@ describe("Test FormBuilder", () => {
     cy.get("a").contains("create one now").click();
 
     // can visit create account
-    cy.url().should("contain", "/signup/register");
+    cy.url().should("contain", "/auth/register");
   });
 });

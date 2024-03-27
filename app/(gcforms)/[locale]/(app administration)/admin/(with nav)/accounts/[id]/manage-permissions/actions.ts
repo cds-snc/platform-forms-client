@@ -19,7 +19,8 @@ export const updatePrivileges = async (
   if (ability.can("update", "User")) {
     await updatePrivilegesForUser(ability, userID, [{ id: privilegeID, action }]);
     revalidatePath(
-      "(gcforms)/[locale]/(app administration)/admin/(with nav)/accounts/[id]/manage-permissions"
+      "(gcforms)/[locale]/(app administration)/admin/(with nav)/accounts/[id]/manage-permissions",
+      "page"
     );
   }
 };

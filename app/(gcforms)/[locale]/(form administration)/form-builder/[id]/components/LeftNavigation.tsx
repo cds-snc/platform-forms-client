@@ -9,7 +9,7 @@ import {
   NavResponsesIcon,
 } from "@serverComponents/icons";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { LeftNav } from "@clientComponents/globals/Buttons/LinkButton";
+import { LeftNav } from "@clientComponents/globals/Buttons/LeftNav";
 import { useSelectedLayoutSegment } from "next/navigation";
 
 const linkHelper = ({

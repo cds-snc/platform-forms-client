@@ -1,1 +1,0 @@
-export { FullWidthLayout } from "./FullWidthLayout";

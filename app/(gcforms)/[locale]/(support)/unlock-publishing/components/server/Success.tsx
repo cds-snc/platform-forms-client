@@ -1,5 +1,5 @@
 import { serverTranslation } from "@i18n";
-import { Primary } from "@clientComponents/globals/Buttons/LinkButton";
+import { LinkButton } from "@serverComponents/globals";
 import { FocusHeader } from "../../../components/client/FocusHeader";
 
 export const Success = async () => {
@@ -15,9 +15,9 @@ export const Success = async () => {
       <p className="mt-8 font-bold">{t("unlockPublishingSubmitted.whatNext.paragraph2")}</p>
       <p>{t("unlockPublishingSubmitted.whatNext.paragraph3")}</p>
       <p className="mt-8">{t("unlockPublishingSubmitted.whatNext.paragraph4")}</p>
-      <Primary className="mt-8" href={`/${language}/forms/`}>
+      <LinkButton.Primary className="mt-8" href={`/${language}/forms/`}>
         {t("continue", { ns: "common" })}
-      </Primary>
+      </LinkButton.Primary>
     </>
   );
 };

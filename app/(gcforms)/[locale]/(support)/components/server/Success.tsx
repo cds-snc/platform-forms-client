@@ -1,6 +1,6 @@
 import { serverTranslation } from "@i18n";
 import Link from "next/link";
-import { PrimaryLinkButton } from "@clientComponents/globals/Buttons";
+import { LinkButton } from "@serverComponents/globals";
 import { FocusHeader } from "../client/FocusHeader";
 
 export const Success = async () => {
@@ -13,9 +13,9 @@ export const Success = async () => {
       <FocusHeader>{t("requestSuccess.title")}</FocusHeader>
       <p className="mb-16 mt-[-2rem] font-bold">{t("requestSuccess.weWillRespond")}</p>
       <div className="mb-16">
-        <PrimaryLinkButton href={`/${language}/forms`}>
+        <LinkButton.Primary href={`/${language}/forms`}>
           {t("requestSuccess.backToForms")}
-        </PrimaryLinkButton>
+        </LinkButton.Primary>
       </div>
       <p className="mb-8">
         {t("requestSuccess.forOtherEnquiriesPart1")}{" "}

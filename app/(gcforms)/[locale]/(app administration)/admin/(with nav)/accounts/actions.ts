@@ -20,7 +20,7 @@ export const updatePublishing = async (
   const ability = await authCheck();
   if (ability.can("update", "User")) {
     await updatePrivilegesForUser(ability, userID, [{ id: publishFormsId, action }]);
-    revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/accounts");
+    revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/accounts", "page");
   }
 };
 
@@ -29,7 +29,7 @@ export const updateActive = async (userID: string, active: boolean) => {
 
   if (ability.can("update", "User")) {
     await updateActiveStatus(ability, userID, active);
-    revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/accounts");
+    revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/accounts", "page");
   }
 };
 

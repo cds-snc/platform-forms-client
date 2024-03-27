@@ -15,7 +15,6 @@ export const activeStatusCheck = async (userID: string): Promise<boolean | null>
       const redis = await getRedisInstance();
       const value = await redis.get(checkParameter);
       if (value) {
-        logMessage.debug(`Using Cached User Status for ${checkParameter}`);
         return value === "1";
       }
     } catch (e) {

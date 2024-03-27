@@ -4,20 +4,31 @@ import { logMessage } from "@lib/logger";
 // See https://www.prisma.io/docs/support/help-articles/nextjs-prisma-client-dev-practices
 // Needed to ensure we only instantiate Prisma Client once
 
-export const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
+const prismaClientSingleton = () => {
+  return new PrismaClient({
+    log: ["info", "warn", "error"],
+  }).$extends({
+    model: {
+      $allModels: {
+        async exists<T>(this: T, where: Prisma.Args<T, "findFirst">["where"]): Promise<boolean> {
+          const context = Prisma.getExtensionContext(this);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const result = await (context as any).findFirst({ where });
+          return result !== null;
+        },
+      },
+    },
+  });
 };
 
-export const prisma =
-  globalForPrisma.prisma ??
-  new PrismaClient({
-    log:
-      process.env.NODE_ENV === "development"
-        ? ["query", "info", "warn", "error"]
-        : ["info", "warn", "error"],
-  });
+declare global {
+  // eslint-disable-next-line no-var
+  var prismaGlobal: undefined | ReturnType<typeof prismaClientSingleton>;
+}
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+export const prisma = globalThis.prismaGlobal ?? prismaClientSingleton();
+
+if (process.env.NODE_ENV !== "production") globalThis.prismaGlobal = prisma;
 
 /**
  * Filters Prisma Connection and DB errors

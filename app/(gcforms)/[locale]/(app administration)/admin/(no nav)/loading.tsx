@@ -1,4 +1,4 @@
-import { Loader } from "components/clientComponents/globals/Loader";
+import { Loader } from "@clientComponents/globals/Loader";
 
 export default function Loading() {
   return (
