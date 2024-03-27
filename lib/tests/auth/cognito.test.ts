@@ -16,7 +16,6 @@ import {
   begin2FAAuthentication,
   requestNew2FAVerificationCode,
   validate2FAVerificationCode,
-  Validate2FAVerificationCodeResultStatus,
 } from "@lib/auth/cognito";
 import { Base } from "__utils__/permissions";
 import { generateVerificationCode, sendVerificationCode } from "@lib/auth/2fa";

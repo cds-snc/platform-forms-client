@@ -1,11 +1,12 @@
 import { serverTranslation } from "@i18n";
-import { requireAuthentication } from "@lib/auth";
-import { checkPrivilegesAsBoolean } from "@lib/privileges";
+import { auth } from "@lib/auth";
+import { checkPrivilegesAsBoolean, createAbility } from "@lib/privileges";
 import { Metadata } from "next";
 import { Settings } from "./components/server/Settings";
 import { Suspense } from "react";
 import Loader from "@clientComponents/globals/Loader";
 import { Messages } from "./components/client/Messages";
+import { redirect } from "next/navigation";
 
 export async function generateMetadata({
   params: { locale },
@@ -20,12 +21,17 @@ export async function generateMetadata({
 
 // Note: the searchParam is used as the language key to display the success or error message
 export default async function Page({
+  params: { locale },
   searchParams: { success, error },
 }: {
+  params: { locale: string };
   searchParams: { success?: string; error?: string };
 }) {
-  const { user } = await requireAuthentication();
-  checkPrivilegesAsBoolean(user.ability, [{ action: "view", subject: "Setting" }], {
+  const session = await auth();
+  if (!session) redirect(`/${locale}/auth/login}`);
+  const ability = createAbility(session);
+
+  checkPrivilegesAsBoolean(ability, [{ action: "view", subject: "Setting" }], {
     redirect: true,
   });
 

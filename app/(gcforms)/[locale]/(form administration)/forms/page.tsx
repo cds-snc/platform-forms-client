@@ -1,7 +1,7 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import { requireAuthentication } from "@lib/auth";
-import { checkPrivilegesAsBoolean } from "@lib/privileges";
+import { auth } from "@lib/auth";
+import { checkPrivilegesAsBoolean, createAbility } from "@lib/privileges";
 import { AccessControlError } from "@lib/privileges";
 import { redirect } from "next/navigation";
 import { Navigation } from "./components/server/Navigation";
@@ -42,9 +42,9 @@ export default async function Page({
   searchParams: { status?: string };
 }) {
   try {
-    const {
-      user: { ability },
-    } = await requireAuthentication();
+    const session = await auth();
+    if (!session) redirect(`/${locale}/admin/login`);
+    const ability = createAbility(session);
 
     checkPrivilegesAsBoolean(ability, [{ action: "view", subject: "FormRecord" }], {
       redirect: true,

@@ -1,10 +1,11 @@
 import { serverTranslation } from "@i18n";
-import { requireAuthentication } from "@lib/auth";
-import { checkPrivilegesAsBoolean } from "@lib/privileges";
+import { auth } from "@lib/auth";
+import { checkPrivilegesAsBoolean, createAbility } from "@lib/privileges";
 import { Metadata } from "next";
 import { ManageSettingForm } from "../components/server/ManageSettingForm";
 import { Suspense } from "react";
 import Loader from "@clientComponents/globals/Loader";
+import { redirect } from "next/navigation";
 
 export async function generateMetadata({
   params: { locale },
@@ -17,10 +18,15 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({ params: { settingId } }: { params: { settingId: string } }) {
-  const {
-    user: { ability },
-  } = await requireAuthentication();
+export default async function Page({
+  params: { settingId, locale },
+}: {
+  params: { settingId: string; locale: string };
+}) {
+  const session = await auth();
+  if (!session) redirect(`/${locale}/auth/login`);
+  const ability = createAbility(session);
+
   checkPrivilegesAsBoolean(ability, [{ action: "update", subject: "Setting" }], {
     redirect: true,
   });

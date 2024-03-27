@@ -1,10 +1,10 @@
 import { serverTranslation } from "@i18n";
 import { getTemplateWithAssociatedUsers } from "@lib/templates";
-import { requireAuthentication } from "@lib/auth";
-import { checkPrivilegesAsBoolean } from "@lib/privileges";
+import { auth } from "@lib/auth";
+import { checkPrivilegesAsBoolean, createAbility } from "@lib/privileges";
 import { getUsers } from "@lib/users";
 import { ManageForm } from "./ManageForm";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import { Metadata } from "next";
 
@@ -36,11 +36,17 @@ const BackToManageForms = async ({ backLink }: { backLink: string }) => {
 };
 */
 
-export default async function Page({ params: { id } }: { params: { id: string } }) {
-  const { user } = await requireAuthentication();
+export default async function Page({
+  params: { id, locale },
+}: {
+  params: { id: string; locale: string };
+}) {
+  const session = await auth();
+  if (!session) redirect(`/${locale}/auth/login`);
+  const ability = createAbility(session);
 
   if (
-    checkPrivilegesAsBoolean(user.ability, [
+    checkPrivilegesAsBoolean(ability, [
       {
         action: "view",
         subject: {
@@ -61,10 +67,10 @@ export default async function Page({ params: { id } }: { params: { id: string } 
   ) {
     if (!id || Array.isArray(id)) notFound();
 
-    const templateWithAssociatedUsers = await getTemplateWithAssociatedUsers(user.ability, id);
+    const templateWithAssociatedUsers = await getTemplateWithAssociatedUsers(ability, id);
     if (!templateWithAssociatedUsers) notFound();
 
-    const allUsers = (await getUsers(user.ability)).map((user) => {
+    const allUsers = (await getUsers(ability)).map((user) => {
       return { id: user.id, name: user.name || "", email: user.email || "" };
     });
     return (

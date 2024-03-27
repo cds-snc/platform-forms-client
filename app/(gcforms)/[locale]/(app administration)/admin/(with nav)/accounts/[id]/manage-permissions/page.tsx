@@ -1,10 +1,11 @@
 import { serverTranslation } from "@i18n";
-import { requireAuthentication } from "@lib/auth";
-import { checkPrivilegesAsBoolean, getAllPrivileges } from "@lib/privileges";
+import { auth } from "@lib/auth";
+import { checkPrivilegesAsBoolean, createAbility, getAllPrivileges } from "@lib/privileges";
 import { getUser } from "@lib/users";
 import { BackLink } from "@clientComponents/admin/LeftNav/BackLink";
 import { Metadata } from "next";
 import { PrivilegeList } from "./components/server/PrivilegeList";
+import { redirect } from "next/navigation";
 
 export async function generateMetadata({
   params: { locale },
@@ -22,18 +23,21 @@ export default async function Page({
 }: {
   params: { id: string; locale: string };
 }) {
-  const { user } = await requireAuthentication();
+  const session = await auth();
+  if (!session) redirect(`/${locale}/auth/login`);
+  const ability = createAbility(session);
+
   checkPrivilegesAsBoolean(
-    user.ability,
+    ability,
     [
       { action: "view", subject: "User" },
       { action: "view", subject: "Privilege" },
     ],
     { logic: "all", redirect: true }
   );
-  const formUser = await getUser(user.ability, id as string);
+  const formUser = await getUser(ability, id as string);
 
-  const allPrivileges = (await getAllPrivileges(user.ability)).map(
+  const allPrivileges = (await getAllPrivileges(ability)).map(
     ({ id, name, descriptionFr, descriptionEn }) => ({
       id,
       name,
@@ -42,7 +46,7 @@ export default async function Page({
     })
   );
 
-  const canManageUsers = user.ability.can("update", "User");
+  const canManageUsers = ability.can("update", "User");
   const userPrivileges = allPrivileges.filter(
     (privilege) => privilege.name === "Base" || privilege.name === "PublishForms"
   );
