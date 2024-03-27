@@ -80,7 +80,7 @@ export const TitleAndDescription = ({
         />
       )}
       {successAlertMessage && (
-        <Alert.Success className="mb-4">
+        <Alert.Success className="my-4">
           <Alert.Title>{t(`${successAlertMessage}.title`)}</Alert.Title>
           <Alert.Body>{t(`${successAlertMessage}.body`)}</Alert.Body>
         </Alert.Success>
