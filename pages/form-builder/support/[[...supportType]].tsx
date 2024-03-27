@@ -359,7 +359,11 @@ export default function Contactus() {
             )}
             {!errorMessage && (
               <form id="support" method="POST" onSubmit={handleSubmit} noValidate>
-                <p className="mb-6 mt-[-2rem] text-[1.6rem]">{t("support.useThisForm")}</p>
+                <p className="mb-6 mt-[-2rem] text-[1.6rem]">
+                <Markdown options={{ forceBlock: true }}>
+                  {t("support.useThisForm")}
+                </Markdown>
+                </p>
                 <p className="mb-14">
                   {t("support.gcFormsTeamPart1")}{" "}
                   <Link href={`https://www.canada.ca/${i18n.language}/contact.html`}>
