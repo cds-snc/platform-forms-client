@@ -6384,6 +6384,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/unorm@npm:^1":
+  version: 1.3.31
+  resolution: "@types/unorm@npm:1.3.31"
+  checksum: 10c0/5d0dba59d0c80d0dde5cc831af0b88045d60abc83d69ddc83a0a18adbf83766742d5e12f578e4395da5a0ece0db75db38cc3876a0d7018d92f29a716d51b2b43
+  languageName: node
+  linkType: hard
+
 "@types/uuid@npm:^8.3.4":
   version: 8.3.4
   resolution: "@types/uuid@npm:8.3.4"
@@ -10512,6 +10519,7 @@ __metadata:
     "@types/react": "npm:^18.2.45"
     "@types/react-dom": "npm:^18.2.18"
     "@types/react-tabs": "npm:^2.3.4"
+    "@types/unorm": "npm:^1"
     "@types/uuid": "npm:^8.3.4"
     "@typescript-eslint/eslint-plugin": "npm:^6.21.0"
     "@typescript-eslint/parser": "npm:^6.21.0"
@@ -10606,6 +10614,7 @@ __metadata:
     ts-node: "npm:^10.9.2"
     tsx: "npm:^4.7.0"
     typescript: "npm:^5.3.3"
+    unorm: "npm:^1.6.0"
     usehooks-ts: "npm:2.9.1"
     uuid: "npm:9.0.1"
     valibot: "npm:^0.30.0"
@@ -16972,6 +16981,13 @@ __metadata:
   version: 2.0.1
   resolution: "universalify@npm:2.0.1"
   checksum: 10c0/73e8ee3809041ca8b818efb141801a1004e3fc0002727f1531f4de613ea281b494a40909596dae4a042a4fb6cd385af5d4db2e137b1362e0e91384b828effd3a
+  languageName: node
+  linkType: hard
+
+"unorm@npm:^1.6.0":
+  version: 1.6.0
+  resolution: "unorm@npm:1.6.0"
+  checksum: 10c0/ff0caa3292f318e2e832d02ad019a401118fe42f5e554dca3b9c7e4a2a3100eda051945711234a6ffbd74088cf51930755782456d30864240936cb3485f80a01
   languageName: node
   linkType: hard
 

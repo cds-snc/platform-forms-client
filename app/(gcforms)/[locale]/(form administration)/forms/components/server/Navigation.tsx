@@ -19,18 +19,14 @@ export const Navigation = async ({ filter }: { filter?: string }) => {
           {t("nav.all")}
         </>
       </NavLink>
-      <NavLink
-        href={`/${language}/forms?formsState=drafts`}
-        id="tab-drafts"
-        active={filter === "drafts"}
-      >
+      <NavLink href={`/${language}/forms?status=draft`} id="tab-drafts" active={filter === "draft"}>
         <>
           <PageIcon className={iconClassname} />
           {t("nav.drafts")}
         </>
       </NavLink>
       <NavLink
-        href={`/${language}/forms?formsState=published`}
+        href={`/${language}/forms?status=published`}
         id="tab-published"
         active={filter === "published"}
       >
