@@ -642,7 +642,7 @@
       "title": "Reason for reaching out"
     },
     "title": "Get support",
-    "useThisForm": "Use this form if you experience technical issues with GC Forms.",
+    "useThisForm": "If you experience technical issues with GC Forms, <a href=\"https://articles.alpha.canada.ca/forms-formulaires/guidance\" target=\"_blank\">consult our guidance</a> or use this form.",
     "errors": {
       "submissionError": "Something went wrong. Please try again later."
     }
