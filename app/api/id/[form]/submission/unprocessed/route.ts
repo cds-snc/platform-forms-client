@@ -3,6 +3,7 @@ import { middleware, sessionExists } from "@lib/middleware";
 import { NextResponse } from "next/server";
 import { MiddlewareProps, WithRequired } from "@lib/types";
 import { unprocessedSubmissions } from "@lib/vault";
+import { logMessage } from "@lib/logger";
 
 // Needed because NextJS attempts to cache the response of this route
 export const dynamic = "force-dynamic";
@@ -20,6 +21,9 @@ export const GET = middleware([sessionExists()], async (req, props) => {
     const result = await unprocessedSubmissions(createAbility(session), formId);
     return NextResponse.json({ unprocessedSubmissions: result });
   } catch (err) {
+    //TEMP
+    logMessage.error(`~~~~~~~~~~~~~~~~~~~~~~~~~~error=${JSON.stringify(err)}`);
+
     if (err instanceof AccessControlError)
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     else
