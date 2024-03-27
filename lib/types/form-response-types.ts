@@ -12,7 +12,7 @@ export type Response =
   | Record<string, unknown>;
 
 export type FileInputResponse = {
-  name: string;
-  file: string;
-  [key: string]: string | number | File | FileReader;
+  name: string | null;
+  size: number | null;
+  based64EncodedFile: string | null;
 };
