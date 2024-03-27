@@ -15,7 +15,6 @@ import {
   SignUpCommandInput,
   CognitoIdentityProviderServiceException,
 } from "@aws-sdk/client-cognito-identity-provider";
-import { redirect } from "next/navigation";
 
 export interface ErrorStates {
   authError?: {
@@ -24,10 +23,14 @@ export interface ErrorStates {
     callToActionText?: string;
     callToActionLink?: string;
   };
-  validationErrors: {
+  validationErrors?: {
     fieldKey: string;
     fieldValue: string;
   }[];
+  authFlowToken?: {
+    authenticationFlowToken: string;
+    email: string;
+  };
 }
 
 const validate = async (
@@ -151,7 +154,7 @@ export const register = async (
 
   if (cognitoToken) {
     const authenticationFlowToken = await begin2FAAuthentication(cognitoToken);
-    redirect(`/${language}/auth/mfa?token=${authenticationFlowToken}`);
+    return { authFlowToken: { authenticationFlowToken, email: result.output.username } };
   }
 
   return { validationErrors: [], authError: { title: t("InternalServiceException") } };

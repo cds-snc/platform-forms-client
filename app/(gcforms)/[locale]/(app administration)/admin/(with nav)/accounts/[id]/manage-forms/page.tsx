@@ -47,9 +47,9 @@ export default async function Page({
     { redirect: true }
   );
 
-  const formUser = await getUser(user.ability, id);
+  const formUser = await getUser(ability, id);
 
-  const templates = (await getAllTemplatesForUser(user.ability, id as string)).map((template) => {
+  const templates = (await getAllTemplatesForUser(ability, id as string)).map((template) => {
     const {
       id,
       form: { titleEn, titleFr },

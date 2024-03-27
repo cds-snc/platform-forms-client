@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { useTranslation } from "@i18n/client";
-import { logMessage } from "@lib/logger";
 import { useRouter, useSearchParams } from "next/navigation";
 import { localPathRegEx } from "@lib/validation";
 import { Button } from "@clientComponents/globals";
@@ -26,19 +25,15 @@ export const AcceptButton = () => {
   }
 
   const agree = async () => {
-    try {
-      if (session?.user.id) {
-        // Update the session to reflect the user has accepted the terms of use.
-        await update({ ...session, user: { ...session.user, acceptableUse: true } });
+    // Undefined Session
+    if (!session) return router.push(`/${language}/auth/login`);
 
-        // Go back to the page the user was redirected from.
-        router.push(referer ?? defaultRoute);
-      } else {
-        logMessage.error("Undefined Session");
-      }
-    } catch (err) {
-      logMessage.error(err as Error);
-    }
+    // Update the session to reflect the user has accepted the terms of use.
+    await update({ ...session, user: { ...session.user, acceptableUse: true } });
+
+    if (session.user.newlyRegistered) router.push(`/${language}/auth/account-created`);
+    // Go back to the page the user was redirected from.
+    else router.push(referer ?? defaultRoute);
   };
 
   return (

@@ -14,7 +14,7 @@ export interface ErrorStates {
     callToActionText?: string;
     callToActionLink?: string;
   };
-  validationErrors: {
+  validationErrors?: {
     fieldKey: string;
     fieldValue: string;
   }[];

@@ -9,7 +9,7 @@ const mockedUseSession = jest.mocked(useSession);
 
 describe("Acceptable use terms", () => {
   const props = {
-    content: "test",
+    locale: "en",
   };
 
   mockedUseSession.mockReturnValue({

@@ -4,10 +4,10 @@ import { useFormState, useFormStatus } from "react-dom";
 import { ErrorListItem, Label, TextInput, Alert } from "../../../../components/client/forms";
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
-import { register } from "../../action";
+import { ErrorStates, register } from "../../action";
 import Link from "next/link";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
-
+import { useRouter } from "next/navigation";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 
 const SubmitButton = () => {
@@ -39,9 +39,19 @@ export const RegistrationForm = () => {
   } = useTranslation(["signup", "common"]);
 
   const headingRef = useRef(null);
+  const router = useRouter();
+
+  const localFormAction = async (_: ErrorStates, formData: FormData) => {
+    const result = await register(language, _, formData);
+    if (result.authFlowToken) {
+      sessionStorage.setItem("authFlowToken", JSON.stringify(result.authFlowToken));
+      router.push(`/${language}/auth/mfa`);
+    }
+    return result;
+  };
 
   useFocusIt({ elRef: headingRef });
-  const [state, formAction] = useFormState(register.bind(null, language), { validationErrors: [] });
+  const [state, formAction] = useFormState(localFormAction, {});
 
   return (
     <>
@@ -58,29 +68,31 @@ export const RegistrationForm = () => {
           ) : undefined}
         </Alert>
       )}
-      {Object.keys(state.validationErrors).length > 0 && !state.authError && (
-        <Alert
-          className="w-full"
-          type={ErrorStatus.ERROR}
-          validation={true}
-          tabIndex={0}
-          focussable={true}
-          id="registrationValidationErrors"
-          heading={t("input-validation.heading", { ns: "common" })}
-        >
-          <ol className="gc-ordered-list p-0">
-            {state.validationErrors.map(({ fieldKey, fieldValue }, index) => {
-              return (
-                <ErrorListItem
-                  key={`error-${fieldKey}-${index}`}
-                  errorKey={fieldKey}
-                  value={fieldValue}
-                />
-              );
-            })}
-          </ol>
-        </Alert>
-      )}
+      {state.validationErrors &&
+        Object.keys(state.validationErrors).length > 0 &&
+        !state.authError && (
+          <Alert
+            className="w-full"
+            type={ErrorStatus.ERROR}
+            validation={true}
+            tabIndex={0}
+            focussable={true}
+            id="registrationValidationErrors"
+            heading={t("input-validation.heading", { ns: "common" })}
+          >
+            <ol className="gc-ordered-list p-0">
+              {state.validationErrors.map(({ fieldKey, fieldValue }, index) => {
+                return (
+                  <ErrorListItem
+                    key={`error-${fieldKey}-${index}`}
+                    errorKey={fieldKey}
+                    value={fieldValue}
+                  />
+                );
+              })}
+            </ol>
+          </Alert>
+        )}
       <h1 ref={headingRef} className="mb-12 mt-6 border-b-0">
         {t("signUpRegistration.title")}
       </h1>
@@ -98,7 +110,7 @@ export const RegistrationForm = () => {
             type={"text"}
             id={"name"}
             name={"name"}
-            validationError={state.validationErrors.find((e) => e.fieldKey === "name")?.fieldValue}
+            validationError={state.validationErrors?.find((e) => e.fieldKey === "name")?.fieldValue}
           />
         </div>
         <div className="focus-group">
@@ -115,7 +127,7 @@ export const RegistrationForm = () => {
             name={"username"}
             ariaDescribedBy={"username-hint"}
             validationError={
-              state.validationErrors.find((e) => e.fieldKey === "username")?.fieldValue
+              state.validationErrors?.find((e) => e.fieldKey === "username")?.fieldValue
             }
           />
         </div>
@@ -139,7 +151,7 @@ export const RegistrationForm = () => {
             name={"password"}
             ariaDescribedBy={"password-hint"}
             validationError={
-              state.validationErrors.find((e) => e.fieldKey === "password")?.fieldValue
+              state.validationErrors?.find((e) => e.fieldKey === "password")?.fieldValue
             }
           />
         </div>
@@ -158,7 +170,7 @@ export const RegistrationForm = () => {
             id={"passwordConfirmation"}
             name={"passwordConfirmation"}
             validationError={
-              state.validationErrors.find((e) => e.fieldKey === "passwordConfirmation")?.fieldValue
+              state.validationErrors?.find((e) => e.fieldKey === "passwordConfirmation")?.fieldValue
             }
           />
         </div>

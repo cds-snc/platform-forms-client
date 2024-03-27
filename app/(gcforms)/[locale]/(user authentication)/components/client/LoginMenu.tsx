@@ -1,14 +1,14 @@
 "use client";
-import { signOut } from "next-auth/react";
 import { useTranslation } from "@i18n/client";
 import Link from "next/link";
 import { clearTemplateStore } from "@lib/store";
+import { logout } from "../action";
 
 export const LoginMenu = ({ authenticated }: { authenticated: boolean }) => {
   const { i18n, t } = useTranslation("common");
-  const handleClick = () => {
+  const handleClick = async () => {
     clearTemplateStore();
-    signOut({ callbackUrl: `/${i18n.language}/auth/logout` });
+    await logout(i18n.language);
   };
 
   return (

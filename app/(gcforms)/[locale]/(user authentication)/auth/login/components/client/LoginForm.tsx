@@ -34,9 +34,7 @@ export const LoginForm = () => {
     }
     return result;
   };
-  const [state, formAction] = useFormState(localFormAction, {
-    validationErrors: [],
-  });
+  const [state, formAction] = useFormState(localFormAction, {});
   const router = useRouter();
 
   return (
@@ -54,29 +52,31 @@ export const LoginForm = () => {
           ) : undefined}
         </Alert>
       )}
-      {Object.keys(state.validationErrors).length > 0 && !state.authError && (
-        <Alert
-          className="w-full"
-          type={ErrorStatus.ERROR}
-          validation={true}
-          tabIndex={0}
-          focussable={true}
-          id="loginValidationErrors"
-          heading={t("input-validation.heading", { ns: "common" })}
-        >
-          <ol className="gc-ordered-list p-0">
-            {state.validationErrors.map(({ fieldKey, fieldValue }, index) => {
-              return (
-                <ErrorListItem
-                  key={`error-${fieldKey}-${index}`}
-                  errorKey={fieldKey}
-                  value={fieldValue}
-                />
-              );
-            })}
-          </ol>
-        </Alert>
-      )}
+      {state.validationErrors &&
+        Object.keys(state.validationErrors).length > 0 &&
+        !state.authError && (
+          <Alert
+            className="w-full"
+            type={ErrorStatus.ERROR}
+            validation={true}
+            tabIndex={0}
+            focussable={true}
+            id="loginValidationErrors"
+            heading={t("input-validation.heading", { ns: "common" })}
+          >
+            <ol className="gc-ordered-list p-0">
+              {state.validationErrors.map(({ fieldKey, fieldValue }, index) => {
+                return (
+                  <ErrorListItem
+                    key={`error-${fieldKey}-${index}`}
+                    errorKey={fieldKey}
+                    value={fieldValue}
+                  />
+                );
+              })}
+            </ol>
+          </Alert>
+        )}
       <h1 className="mb-12 mt-6 border-b-0">{t("title")}</h1>
       <p className="-mt-6 mb-10">
         {t("signUpText")}&nbsp;
