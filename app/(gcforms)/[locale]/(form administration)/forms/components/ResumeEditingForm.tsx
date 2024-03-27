@@ -8,6 +8,7 @@ import Skeleton from "react-loading-skeleton";
 
 export const ResumeEditingForm = () => {
   const [hasSession, setHasSession] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
 
   const { t, i18n } = useTranslation("my-forms");
 
@@ -15,6 +16,7 @@ export const ResumeEditingForm = () => {
 
   useEffect(() => {
     if (typeof sessionStorage === "undefined") {
+      setLoading(false);
       return;
     }
 
@@ -33,6 +35,7 @@ export const ResumeEditingForm = () => {
 
       if (titleEn !== "" || titleFr !== "") {
         setHasSession(true);
+        setLoading(false);
         return;
       }
 
@@ -41,6 +44,7 @@ export const ResumeEditingForm = () => {
     } catch (e) {
       // noop
       clearTemplateStore();
+      setLoading(false);
     }
   }, []);
 
@@ -52,6 +56,6 @@ export const ResumeEditingForm = () => {
       <span aria-hidden="true"> ← </span> {t("actions.resumeForm")}
     </Link>
   ) : (
-    <Skeleton className="h-6 w-[200px]" />
+    loading && <Skeleton className="h-6 w-[200px]" />
   );
 };
