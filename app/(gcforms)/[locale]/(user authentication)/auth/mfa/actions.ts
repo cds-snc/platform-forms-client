@@ -189,8 +189,6 @@ export const getRedirectPath = async (locale: string) => {
     return { callback: `/${locale}/auth/policy` };
   });
 
-  logMessage.debug(`${user.name} has ${Object.keys(overdue).length} overdue submissions`);
-
   let hasOverdueSubmissions = false;
 
   Object.entries(overdue).forEach(([, value]) => {
@@ -203,8 +201,6 @@ export const getRedirectPath = async (locale: string) => {
   if (hasOverdueSubmissions) {
     return { callback: `/${locale}/auth/restricted-access` };
   }
-
-  logMessage.debug(`Redirecting to policy page for user ${user.name}`);
 
   return { callback: `/${locale}/auth/policy` };
 };

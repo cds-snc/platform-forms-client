@@ -9,7 +9,6 @@ import {
 import { redirect } from "next/navigation";
 import { CheckEmail, CannotReset, ExpiredLink, InvalidLink } from "./components/server";
 import { InitiateResetForm, QuestionChallengeForm } from "./components/client";
-import { logMessage } from "@lib/logger";
 
 export const dynamic = "force-dynamic";
 
@@ -29,8 +28,6 @@ export default async function Page({
 }: {
   params: { locale: string; token?: string[] };
 }) {
-  logMessage.debug("Running server component of password reset page");
-
   if (token && token[0]) {
     try {
       const email = await getPasswordResetAuthenticatedUserEmailAddress(token[0]);
