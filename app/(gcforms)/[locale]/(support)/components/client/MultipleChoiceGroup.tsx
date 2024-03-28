@@ -1,4 +1,3 @@
-"use client";
 import { ErrorMessage } from "@clientComponents/forms";
 import { ChoiceFieldProps, InputFieldProps } from "@lib/types";
 import { Checkbox } from "./Checkbox";

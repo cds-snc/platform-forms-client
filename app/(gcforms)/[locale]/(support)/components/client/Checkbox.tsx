@@ -1,4 +1,3 @@
-"use client";
 import { Description } from "@clientComponents/forms";
 import { ChoiceFieldProps } from "@lib/types";
 

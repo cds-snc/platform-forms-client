@@ -1,4 +1,3 @@
-"use client";
 import classnames from "classnames";
 import { InputFieldProps, HTMLTextInputTypeAttribute } from "@lib/types";
 import { ErrorMessage } from "@clientComponents/forms";

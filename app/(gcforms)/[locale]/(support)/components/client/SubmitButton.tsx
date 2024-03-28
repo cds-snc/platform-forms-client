@@ -1,4 +1,3 @@
-"use client";
 import { useFormStatus } from "react-dom";
 import { Button } from "@clientComponents/globals";
 
