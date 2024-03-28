@@ -13,7 +13,7 @@ import {
 import React, { createContext, useRef, useContext, useEffect } from "react";
 import { getPathString } from "../utils/form-builder/getPath";
 import { TreeRefProvider } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
-import { initializeGroups } from "@formBuilder/components/shared/right-panel/treeview/util/initializeGroups";
+// import { initializeGroups } from "@formBuilder/components/shared/right-panel/treeview/util/initializeGroups";
 
 import {
   moveDown,
