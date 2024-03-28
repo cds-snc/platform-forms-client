@@ -452,7 +452,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.id = "";
                 state.lang = language as Language;
                 state.translationLanguagePriority = language as Language;
-                state.form = initializeGroups(defaultForm);
+                state.form = defaultForm; // initializeGroups(defaultForm);
                 state.isPublished = false;
                 state.name = "";
                 state.deliveryOption = undefined;
@@ -463,7 +463,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               set((state) => {
                 state.id = "";
                 state.lang = "en";
-                state.form = initializeGroups({ ...defaultForm, ...jsonConfig });
+                state.form = { ...defaultForm, ...jsonConfig }; // initializeGroups({ ...defaultForm, ...jsonConfig });
                 state.isPublished = false;
                 state.name = "";
                 state.securityAttribute = "Protected A";
