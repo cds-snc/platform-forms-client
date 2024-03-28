@@ -33,6 +33,10 @@
     "experimentalBlocks": {
       "title": "Blocs expérimentaux",
       "description": "Activer les blocs expérimentaux"
+    },
+    "conditionalLogic": {
+      "title": "[FR] Conditional logic",
+      "description": "[FR] Enable conditional logic + right panel"
     }
   }
 }
