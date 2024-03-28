@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import debounce from "lodash.debounce";
 import { useTranslation } from "@i18n/client";
 import { useSearchParams } from "next/navigation";
@@ -9,20 +9,18 @@ import { RefsProvider } from "./RefsContext";
 import { RichTextLocked } from "./elements";
 import { ExpandingInput } from "@formBuilder/components/shared";
 import { useTemplateStore } from "@lib/store";
-import { getQuestionNumber, sortByLayout } from "@lib/utils/form-builder";
 import { SettingsPanel } from "./settings/SettingsPanel";
 import { cleanInput } from "@lib/utils/form-builder";
 import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 import { useRehydrate } from "@lib/hooks/form-builder";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store";
-import { NewSection } from "./NewSection";
+import { Section } from "./Section";
+import { FormElement } from "@lib/types";
 
 export const EditWithGroups = () => {
   const { t } = useTranslation("form-builder");
   const {
     title,
-    layout,
-    elements,
     localizeField,
     updateField,
     translationLanguagePriority,
@@ -30,8 +28,6 @@ export const EditWithGroups = () => {
   } = useTemplateStore((s) => ({
     title:
       s.form[s.localizeField(LocalizedFormProperties.TITLE, s.translationLanguagePriority)] ?? "",
-    layout: s.form.layout,
-    elements: s.form.elements,
     localizeField: s.localizeField,
     updateField: s.updateField,
     translationLanguagePriority: s.translationLanguagePriority,
@@ -43,6 +39,10 @@ export const EditWithGroups = () => {
   const focusTitle = searchParams.get("focusTitle") ? true : false;
   const titleInput = useRef<HTMLTextAreaElement>(null);
   const groupId = useGroupStore((state) => state.id);
+  const getElement = useGroupStore((state) => state.getElement);
+  const elements = useTemplateStore(
+    (s) => (s.form.groups && s.form.groups[groupId]?.elements) || []
+  );
 
   useEffect(() => {
     setValue(title);
@@ -58,13 +58,18 @@ export const EditWithGroups = () => {
     100
   );
 
-  const sortedElements = sortByLayout({ layout, elements: [...elements] });
-
-  // grab only the data we need to render the question number
-  const elementTypes = sortedElements.map((element) => ({
-    id: element.id,
-    type: element.type,
-  }));
+  const sortedElements: FormElement[] = useMemo((): FormElement[] => {
+    const sorted: FormElement[] = [];
+    if (elements && elements.length > 0) {
+      elements.forEach((elementId: string) => {
+        const el = getElement(Number(elementId));
+        if (el) {
+          sorted.push(el);
+        }
+      });
+    }
+    return sorted;
+  }, [elements, getElement]);
 
   const updateValue = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -132,20 +137,17 @@ export const EditWithGroups = () => {
           ariaLabel={t("richTextIntroTitle")}
         />
       )}
-      <NewSection groupId={groupId} />
-      <RefsProvider>
-        {!["start", "end"].includes(groupId) &&
-          layout.length >= 1 &&
-          layout.map((id, index) => {
-            const element = sortedElements.find((element) => element.id === id);
 
-            if (element) {
-              const questionNumber = getQuestionNumber(element, elementTypes);
-              const item = { ...element, index, questionNumber };
-              return <ElementPanel elements={sortedElements} item={item} key={item.id} />;
-            }
+      <Section groupId={groupId} />
+      <RefsProvider>
+        {!["end"].includes(groupId) &&
+          sortedElements.map((element, index) => {
+            const questionNumber = 0;
+            const item = { ...element, index, questionNumber };
+            return <ElementPanel elements={sortedElements} item={item} key={item.id} />;
           })}
       </RefsProvider>
+
       <>
         {groupId === "start" && (
           <RichTextLocked

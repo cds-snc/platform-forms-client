@@ -12,6 +12,8 @@ import { LocalizedFormProperties, LocalizedElementProperties } from "@lib/types/
 import { useTemplateStore } from "@lib/store";
 
 function Input({ node }: { node: NodeApi<TreeItem> }) {
+  const updateElementTitle = useGroupStore((s) => s.updateElementTitle);
+
   return (
     <input
       autoFocus
@@ -21,7 +23,12 @@ function Input({ node }: { node: NodeApi<TreeItem> }) {
       onBlur={() => node.reset()}
       onKeyDown={(e) => {
         if (e.key === "Escape") node.reset();
-        if (e.key === "Enter") node.submit(e.currentTarget.value);
+        if (e.key === "Enter") {
+          node.submit(e.currentTarget.value);
+          if (node.isLeaf) {
+            updateElementTitle({ id: Number(node.data.id), text: e.currentTarget.value });
+          }
+        }
       }}
     />
   );
@@ -51,7 +58,7 @@ export const ParentNode = ({ node }: { node: NodeApi<TreeItem> }) => {
           <Input node={node} />
         </div>
       ) : (
-        <div>
+        <div data-id={node.data.id}>
           <FolderArrow node={node} />
           {node.data.name}
         </div>
@@ -95,8 +102,11 @@ export const ChildNode = ({
       {node.isEditing ? (
         <Input node={node} />
       ) : (
-        <div className="group relative w-[350px] overflow-hidden truncate border-gray-soft bg-white p-1 pr-10">
-          {label}
+        <div
+          data-id={node.data.id}
+          className="group relative w-[350px] overflow-hidden truncate border-gray-soft bg-white p-1 pr-10"
+        >
+          {label} - {node.data.id}
           {!node.data.readOnly && (
             <DragHandle className="absolute right-0 top-0 mr-4 mt-3 hidden cursor-pointer group-hover:block" />
           )}
@@ -132,7 +142,9 @@ export const Node = ({ node, style, dragHandle }: NodeRendererProps<TreeItem>) =
           if (!node.isEditing) node.toggle();
         }, 200); // Delay of 200ms to allow for double click to be detected
 
-        setId(node.data.id);
+        const focusNode = node.isLeaf ? node.parent?.id : node.id;
+
+        focusNode && setId(focusNode);
       }}
       onDoubleClick={() => {
         if (node.data.readOnly) {

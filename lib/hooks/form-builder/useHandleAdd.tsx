@@ -6,9 +6,10 @@ import { blockLoader, LoaderType } from "../../utils/form-builder/blockLoader";
 import { allowedTemplates } from "@lib/utils/form-builder";
 import { defaultField, createElement, setDescription } from "@lib/utils/form-builder/itemHelper";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store";
+import { treeRefType } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 import { getTranslatedElementProperties } from "@formBuilder/actions";
 
-export const useHandleAdd = () => {
+export const useHandleAdd = (treeRef?: treeRefType) => {
   const { add, addSubItem } = useTemplateStore((s) => ({
     add: s.add,
     addSubItem: s.addSubItem,
@@ -33,16 +34,22 @@ export const useHandleAdd = () => {
   const handleAddElement = useCallback(
     async (index: number, type?: FormElementTypes) => {
       if (allowedTemplates.includes(type as LoaderType)) {
-        blockLoader(type as LoaderType, index, (data, position) => {
-          add(position, data.type, data, groupId);
+        blockLoader(type as LoaderType, index, async (data, position) => {
+          // Note add() returns the element id -- we're not using it yet
+          await add(position, data.type, data, groupId);
         });
         return;
       }
 
       const item = await create(type as FormElementTypes);
-      add(index, item.type, item, groupId);
+      // Note add() returns the element id -- we're not using it yet
+      const id = await add(index, item.type, item, groupId);
+      if (treeRef) {
+        await new Promise((resolve) => setTimeout(resolve, 200)); // @TODO
+        treeRef.openParents(String(id));
+      }
     },
-    [add, create, groupId]
+    [add, create, groupId, treeRef]
   );
 
   const handleAddSubElement = useCallback(

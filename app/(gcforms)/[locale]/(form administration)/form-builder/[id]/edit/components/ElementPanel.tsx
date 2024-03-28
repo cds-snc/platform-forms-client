@@ -6,6 +6,8 @@ import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
 import { useIsWithin } from "@lib/hooks/form-builder";
 import { useRefsContext } from "./RefsContext";
 import { FormElementTypes, FormElement } from "@lib/types";
+import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
+
 import { cn } from "@lib/utils";
 import { useHandleAdd } from "@lib/hooks/form-builder/useHandleAdd";
 
@@ -28,7 +30,8 @@ export const ElementPanel = ({
 
   const [className, setClassName] = useState<string>("");
   const [ifFocus, setIfFocus] = useState<boolean>(false);
-  const { handleAddElement } = useHandleAdd();
+  const treeRef = useTreeRef();
+  const { handleAddElement } = useHandleAdd(treeRef.current);
 
   if (ifFocus === false) {
     // Only run this 1 time

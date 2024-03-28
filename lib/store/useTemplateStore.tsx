@@ -12,6 +12,8 @@ import {
 
 import React, { createContext, useRef, useContext, useEffect } from "react";
 import { getPathString } from "../utils/form-builder/getPath";
+import { TreeRefProvider } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
+// import { initializeGroups } from "@formBuilder/components/shared/right-panel/treeview/util/initializeGroups";
 
 import {
   moveDown,
@@ -121,7 +123,12 @@ export interface TemplateStoreState extends TemplateStoreProps {
   setTranslationLanguagePriority: (lang: Language) => void;
   setFocusInput: (isSet: boolean) => void;
   getLocalizationAttribute: () => Record<"lang", Language> | undefined;
-  add: (elIndex?: number, type?: FormElementTypes, data?: FormElement, groupId?: string) => void;
+  add: (
+    elIndex?: number,
+    type?: FormElementTypes,
+    data?: FormElement,
+    groupId?: string
+  ) => Promise<number>;
   addSubItem: (
     elIndex: number,
     subIndex?: number,
@@ -287,28 +294,32 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                   );
                 }
               }),
-            add: (elIndex = 0, type = FormElementTypes.radio, data, groupId) => {
-              set((state) => {
-                const id = incrementElementId(state.form.elements);
-                const item = {
-                  ...defaultField,
-                  ...data,
-                  id,
-                  type,
-                };
+            add: async (elIndex = 0, type = FormElementTypes.radio, data, groupId) => {
+              return new Promise((resolve) => {
+                set((state) => {
+                  const id = incrementElementId(state.form.elements);
+                  const item = {
+                    ...defaultField,
+                    ...data,
+                    id,
+                    type,
+                  };
 
-                groupId = groupId || ""; // noop
+                  groupId = groupId || ""; // noop
 
-                // if (groupId) {
-                //   if (!state.form.groups) state.form.groups = {};
-                //   if (!state.form.groups[groupId])
-                //     state.form.groups[groupId] = { name: "", elements: [] };
-                //   state.form.groups &&
-                //     state.form.groups[groupId].elements.splice(elIndex + 1, 0, String(id));
-                // }
+                  // if (groupId) {
+                  //   if (!state.form.groups) state.form.groups = {};
+                  //   if (!state.form.groups[groupId])
+                  //     state.form.groups[groupId] = { name: "", elements: [] };
+                  //   state.form.groups &&
+                  //     state.form.groups[groupId].elements.splice(elIndex + 1, 0, String(id));
+                  // }
 
-                state.form.layout.splice(elIndex + 1, 0, id);
-                state.form.elements.splice(elIndex + 1, 0, item);
+                  state.form.layout.splice(elIndex + 1, 0, id);
+                  state.form.elements.splice(elIndex + 1, 0, item);
+
+                  resolve(id);
+                });
               });
             },
             removeChoiceFromRules: (elIndex: number, choiceIndex: number) => {
@@ -441,7 +452,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.id = "";
                 state.lang = language as Language;
                 state.translationLanguagePriority = language as Language;
-                state.form = defaultForm;
+                state.form = defaultForm; // initializeGroups(defaultForm);
                 state.isPublished = false;
                 state.name = "";
                 state.deliveryOption = undefined;
@@ -452,7 +463,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               set((state) => {
                 state.id = "";
                 state.lang = "en";
-                state.form = { ...defaultForm, ...jsonConfig };
+                state.form = { ...defaultForm, ...jsonConfig }; // initializeGroups({ ...defaultForm, ...jsonConfig });
                 state.isPublished = false;
                 state.name = "";
                 state.securityAttribute = "Protected A";
@@ -498,7 +509,7 @@ export const TemplateStoreProvider = ({
 
   return (
     <TemplateStoreContext.Provider value={storeRef.current}>
-      {children}
+      <TreeRefProvider>{children}</TreeRefProvider>
     </TemplateStoreContext.Provider>
   );
 };
