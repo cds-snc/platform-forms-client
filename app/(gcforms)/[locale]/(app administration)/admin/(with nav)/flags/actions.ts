@@ -16,7 +16,7 @@ export async function modifyFlag(id: string, value: boolean) {
   } else {
     await disableFlag(ability, id);
   }
-  revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/flags");
+  revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/flags", "page");
 }
 
 export async function getAllFlags() {

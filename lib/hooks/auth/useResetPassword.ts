@@ -36,7 +36,7 @@ export const useResetPassword = ({
       if (hasError("InvalidParameterException", err) && failedCallback) {
         failedCallback("InvalidParameterException");
       } else if (hasError("UserNotFoundException", err)) {
-        router.push("/signup/register");
+        router.push("/auth/register");
       } else {
         handleErrorById("InternalServiceExceptionLogin");
         if (failedCallback) failedCallback("InternalServiceException");
@@ -66,7 +66,7 @@ export const useResetPassword = ({
       if (hasError("InvalidParameterException", err) && failedCallback) {
         failedCallback("InvalidParameterException");
       } else if (hasError("UserNotFoundException", err)) {
-        router.push("/signup/register");
+        router.push("/auth/register");
       } else {
         handleErrorById("InternalServiceExceptionLogin");
         if (failedCallback) failedCallback("InternalServiceException");

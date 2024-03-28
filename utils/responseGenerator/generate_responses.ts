@@ -70,6 +70,7 @@ const createResponse = (formTemplate: any): SubmissionRequestBody => {
       case "radio":
       case "checkbox":
       case "attestation":
+      case "combobox":
         const numOfChoices = question.properties.choices.length;
         const randomChoice = getRandomInt(numOfChoices);
         return (response[questionId] = question.properties.choices[randomChoice][language]);

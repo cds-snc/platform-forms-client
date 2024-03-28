@@ -1,10 +1,11 @@
 import { Suspense } from "react";
 import { serverTranslation } from "@i18n";
-import { requireAuthentication } from "@lib/auth";
-import { checkPrivilegesAsBoolean } from "@lib/privileges";
+import { auth } from "@lib/auth";
+import { checkPrivilegesAsBoolean, createAbility } from "@lib/privileges";
 import { Metadata } from "next";
 import { FlagList } from "./components/server/FlagList";
 import { Loader } from "@clientComponents/globals/Loader";
+import { redirect } from "next/navigation";
 
 export async function generateMetadata({
   params: { locale },
@@ -17,10 +18,12 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page() {
-  const { user } = await requireAuthentication();
+export default async function Page({ params: { locale } }: { params: { locale: string } }) {
+  const session = await auth();
+  if (!session) redirect(`/${locale}/auth/login`);
+  const ability = createAbility(session);
 
-  checkPrivilegesAsBoolean(user.ability, [{ action: "view", subject: "Flag" }], { redirect: true });
+  checkPrivilegesAsBoolean(ability, [{ action: "view", subject: "Flag" }], { redirect: true });
 
   const { t } = await serverTranslation("admin-flags");
 
@@ -29,7 +32,7 @@ export default async function Page() {
       <h1 className="border-0 mb-10">{t("title")}</h1>
       <p className="pb-8">{t("subTitle")}</p>
       <Suspense fallback={<Loader />}>
-        <FlagList ability={user.ability} />
+        <FlagList ability={ability} />
       </Suspense>
     </>
   );

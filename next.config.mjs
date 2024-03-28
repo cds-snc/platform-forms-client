@@ -79,6 +79,11 @@ const nextConfig = {
     instrumentationHook: true,
     ppr: true,
     serverComponentsExternalPackages: ["@aws-sdk/lib-dynamodb"],
+    turbo: {
+      rules: {
+        "*.md": ["raw-loader"],
+      },
+    },
   },
 };
 

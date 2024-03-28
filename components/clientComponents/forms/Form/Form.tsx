@@ -58,8 +58,6 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
       // Which recalls this useEffect at least every second
       const timerID = setTimeout(() => checkTimer(), 1000);
 
-      logMessage.info(`Form Timer useEffect - timer enabled`);
-
       return () => {
         clearTimeout(timerID);
       };

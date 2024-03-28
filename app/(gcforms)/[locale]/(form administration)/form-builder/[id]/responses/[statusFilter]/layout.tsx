@@ -42,7 +42,7 @@ export default async function Layout({
         email={deliveryOption.emailAddress}
         emailSubject={{
           en: deliveryOption.emailSubjectEn || "",
-          fr: deliveryOption.emailSubjectfr || "",
+          fr: deliveryOption.emailSubjectFr || "",
         }}
         isPublished={isPublished}
         formId={id}
@@ -51,7 +51,7 @@ export default async function Layout({
   }
 
   return (
-    <>
+    <div className="mr-10">
       <NavigationTabs statusFilter={statusFilter} formId={id} locale={locale} />
       {isAuthenticated && submissions.length > 0 && (
         <TitleAndDescription
@@ -61,6 +61,6 @@ export default async function Layout({
         />
       )}
       {children}
-    </>
+    </div>
   );
 }

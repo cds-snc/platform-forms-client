@@ -52,17 +52,13 @@ ${description}<br/>
 `;
 
   try {
-    const result = await createTicket({
+    await createTicket({
       type: "problem",
       name,
       email,
       description: emailBody,
       language,
     });
-    if (result?.status >= 400) {
-      throw new Error(`Freshdesk error: ${JSON.stringify(result)} - ${email} - ${emailBody}`);
-    }
-    return result;
   } catch (error) {
     logMessage.error(error);
     throw new Error("Internal Service Error: Failed to send request");

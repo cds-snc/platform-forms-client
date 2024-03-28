@@ -24,15 +24,9 @@ export const AdminNavLayout = async ({
   return (
     <div className={`flex h-full flex-col ${hideLeftNav && "bg-gray-50"}`}>
       {hideLeftNav ? (
-        <FullWidthLayout
-          user={{ name: session.user.name, email: session.user.email }}
-          context="admin"
-        >
-          {children}
-        </FullWidthLayout>
+        <FullWidthLayout context="admin">{children}</FullWidthLayout>
       ) : (
         <TwoColumnLayout
-          user={{ name: session.user.name, email: session.user.email }}
           context="admin"
           leftColumnContent={
             <>

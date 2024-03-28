@@ -34,7 +34,7 @@ export const AccessControlProvider = ({ children }: { children: React.ReactNode 
     // If the user is deactivated, sign them out automatically
     if (user?.deactivated) {
       await signOut({
-        redirect: false,
+        redirect: true,
         callbackUrl: `/${language}/auth/account-deactivated`,
       });
     }

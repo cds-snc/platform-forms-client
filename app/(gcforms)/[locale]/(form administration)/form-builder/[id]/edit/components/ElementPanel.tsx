@@ -1,16 +1,15 @@
 "use client";
 import React, { useState, useEffect } from "react";
-
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { useTemplateStore } from "@lib/store";
 import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
-
-import { useIsWithin, useHandleAdd } from "@lib/hooks/form-builder";
+import { useIsWithin } from "@lib/hooks/form-builder";
 import { useRefsContext } from "./RefsContext";
 import { FormElementTypes, FormElement } from "@lib/types";
-import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
+import {} from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 
 import { cn } from "@lib/utils";
+import { useHandleAdd } from "@lib/hooks/form-builder/useHandleAdd";
 
 export const ElementPanel = ({
   item,

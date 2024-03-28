@@ -1,4 +1,4 @@
-export { LoggingAction, requireAuthentication, validateTemporaryToken } from "./auth";
+export { LoggingAction, validateTemporaryToken } from "./auth";
 
 export { generateVerificationCode, sendVerificationCode } from "./2fa";
 
@@ -7,7 +7,6 @@ export { registerFailed2FAAttempt, clear2FALockout } from "./2faLockout";
 export type { AuthenticationFlowToken, Validate2FAVerificationCodeResult } from "./cognito";
 
 export {
-  Validate2FAVerificationCodeResultStatus,
   initiateSignIn,
   begin2FAAuthentication,
   requestNew2FAVerificationCode,
@@ -43,4 +42,4 @@ export {
   PasswordResetExpiredLink,
 } from "./passwordReset";
 
-export { GET, POST, auth } from "./nextAuth";
+export { GET, POST, auth, signIn, signOut } from "./nextAuth";

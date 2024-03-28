@@ -64,7 +64,7 @@
     },
     "checkboxItem": "Option",
     "combobox": {
-      "description": "Une liste consultable d'options pstmi lesquelles un choix est fait.",
+      "description": "Une liste consultable d'options parmi lesquelles un choix est fait.",
       "title": "Liste consultable",
       "example": {
         "select": "Selectionner"
@@ -614,7 +614,7 @@
     "toPreview": "Pour prévisualiser ce formulaire :",
     "unauthenticated": {
       "copyInstructions": "Copier les instructions",
-      "description": "Vous ne pouvez pas partager un formulaire directement de Formulaires GC sans compte. <a href=\"/auth/login\">Connectez-vous</a> ou <a href=\"/signup/register\">créez un compte</a> pour accéder à cette fonctionalité et d'autres.",
+      "description": "Vous ne pouvez pas partager un formulaire directement de Formulaires GC sans compte. <a href=\"/auth/login\">Connectez-vous</a> ou <a href=\"/auth/register\">créez un compte</a> pour accéder à cette fonctionalité et d'autres.",
       "downloadFormFile": "Télécharger le fichier du formulaire",
       "instructions": "Vous pouvez télécharger une copie de ce fichier de formulaire sur votre ordinateur et le partager par courriel.",
       "step1": "Étape 1",

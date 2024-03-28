@@ -154,6 +154,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   importTemplate: (jsonConfig: FormProperties) => void;
   getSchema: () => string;
   getIsPublished: () => boolean;
+  setIsPublished: (isPublished: boolean) => void;
   getName: () => string;
   getDeliveryOption: () => DeliveryOption | undefined;
   resetDeliveryOption: () => void;
@@ -428,6 +429,11 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             getSchema: () => JSON.stringify(getSchemaFromState(get()), null, 2),
             getId: () => get().id,
             getIsPublished: () => get().isPublished,
+            setIsPublished: (isPublished) => {
+              set((state) => {
+                state.isPublished = isPublished;
+              });
+            },
             getName: () => get().name,
             getDeliveryOption: () => get().deliveryOption,
             resetDeliveryOption: () => {
