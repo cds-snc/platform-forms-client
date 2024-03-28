@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.12.12](https://github.com/cds-snc/platform-forms-client/compare/v3.12.11...v3.12.12) (2024-03-28)
+
+
+### Miscellaneous Chores
+
+* synced file(s) with cds-snc/site-reliability-engineering ([#3215](https://github.com/cds-snc/platform-forms-client/issues/3215)) ([f6f1535](https://github.com/cds-snc/platform-forms-client/commit/f6f1535f6e296a1e56cbd89095bfa91bdeb70b4c))
+
 ## [3.12.11](https://github.com/cds-snc/platform-forms-client/compare/v3.12.10...v3.12.11) (2024-03-26)
 
 
