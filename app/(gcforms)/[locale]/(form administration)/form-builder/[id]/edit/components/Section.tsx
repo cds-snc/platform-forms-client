@@ -1,5 +1,5 @@
 import { AddElementButton } from "./elements/element-dialog/AddElementButton";
-import { useHandleAdd } from "@lib/hooks/form-builder";
+import { useHandleAdd } from "@lib/hooks/form-builder/useHandleAdd";
 import { useTranslation } from "@i18n/client";
 import { FormElementTypes } from "@lib/types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";

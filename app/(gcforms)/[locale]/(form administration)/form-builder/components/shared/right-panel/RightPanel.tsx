@@ -11,6 +11,7 @@ import { cn } from "@lib/utils";
 import { useActivePathname } from "@lib/hooks/form-builder";
 import { DownloadCSV } from "@formBuilder/[id]/edit/translate/components/DownloadCSV";
 import { useRehydrate } from "@lib/hooks/form-builder";
+import { TreeView } from "./treeview/TreeView";
 
 const TabButton = ({
   text,
@@ -170,8 +171,7 @@ export const RightPanel = ({ id }: { id: string }) => {
                     </Tab.List>
                     <Tab.Panels>
                       <Tab.Panel>
-                        {/* Removing for now */}
-                        {/* <TreeView /> */}
+                        <TreeView />
                       </Tab.Panel>
                       <Tab.Panel>
                         <DownloadCSV />
