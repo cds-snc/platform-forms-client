@@ -2,6 +2,7 @@ import { Rest, requestAccessToken } from "ts-force";
 import { Opportunity } from "./salesforce/Opportunity";
 import { OpportunityLineItem } from "./salesforce/OpportunityLineItem";
 import { Contact } from "./salesforce/Contact";
+import { settingCheck, settingPut } from "@lib/cache/settingCache";
 
 const SALESFORCE_URL = process.env.SALESFORCE_URL;
 const SALESFORCE_CLIENT_ID = "" + process.env.SALESFORCE_CONSUMER_KEY;
@@ -32,23 +33,31 @@ export class SalesforceConnector {
     await this.conn.logout();
   }
 
-  // TODO : Cache this in Redis....
+  private async GetRecordFromSalesforce(
+    cacheId: string,
+    salesforceId: string,
+    tableId: string
+  ): Promise<string> {
+    const salesforceRecord = await settingCheck(cacheId);
+    if (salesforceRecord == null) {
+      const salesForceQuery = "SELECT Id FROM " + tableId + " WHERE Name = '" + salesforceId + "'";
+      const retObj = await this.conn.query(salesForceQuery);
+      settingPut(cacheId, retObj.records[0].Id);
+      return retObj.records[0].Id;
+    }
+    return salesforceRecord;
+  }
+
   private async GetRecordType() {
-    const salesForceQuery = "SELECT Id FROM RecordType WHERE Name = 'Forms Product'";
-    const retObj = await this.conn.query(salesForceQuery);
-    return retObj.records[0].Id;
+    return this.GetRecordFromSalesforce("SalesforceRecordType", "Forms Product", "RecordType");
   }
-  //TODO : Cache this in Redis....
+
   private async GetProduct2Id() {
-    const salesForceQuery = "SELECT Id FROM Product2 WHERE Name = 'GC Forms'";
-    const retObj = await this.conn.query(salesForceQuery);
-    return retObj.records[0].Id;
+    return this.GetRecordFromSalesforce("SalesforceProduct2", "GC Forms", "Product2");
   }
-  //TODO : Cache this in Redis....
+
   private async GetPricebookEntryId() {
-    const salesForceQuery = "SELECT Id FROM PricebookEntry WHERE Product2.Name = 'GC Forms'";
-    const retObj = await this.conn.query(salesForceQuery);
-    return retObj.records[0].Id;
+    return this.GetRecordFromSalesforce("SalesforcePricebookEntry", "GC Forms", "PricebookEntry");
   }
 
   // Provides the Account ID for a SalesForce Account based on the name of the account, if not found, it will return the account with the name 'Department not listed'

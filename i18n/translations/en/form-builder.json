@@ -490,7 +490,8 @@
     "other": "Other",
     "text2": "Tell us about your form",
     "whatType": "What type of form is it?",
-    "briefDesc": "Provide a brief description of the form and it's use."
+    "briefDesc": "Provide a brief description of the form and it's use.",
+    "thisInformation": "This information will be used to help us understand how GC Forms is being used so we can better serve your needs."
   },
   "question": "Question",
   "questions": "Questions",
