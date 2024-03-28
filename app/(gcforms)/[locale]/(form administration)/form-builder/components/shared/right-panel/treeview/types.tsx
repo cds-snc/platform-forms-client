@@ -1,3 +1,5 @@
+import { TreeItemIndex, TreeItem as TreeItemComplex } from "react-complex-tree";
+
 export type TreeItem = {
   id: string;
   readOnly: boolean;
@@ -6,3 +8,5 @@ export type TreeItem = {
 };
 
 export type TreeData = TreeItem[];
+
+export type TreeItems = Record<TreeItemIndex, TreeItemComplex>;

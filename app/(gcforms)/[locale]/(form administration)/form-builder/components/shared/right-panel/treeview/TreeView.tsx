@@ -3,57 +3,32 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@clientComponents/globals";
 import { v4 as uuid } from "uuid";
 import { useGroupStore } from "./store";
-
-// import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
-
-import {
-  UncontrolledTreeEnvironment,
-  Tree,
-  StaticTreeDataProvider,
-  TreeItem,
-  TreeItemIndex,
-} from "react-complex-tree";
+import { UncontrolledTreeEnvironment, Tree, StaticTreeDataProvider } from "react-complex-tree";
 import "react-complex-tree/lib/style-modern.css";
-
-const testItems = {
-  root: {
-    index: "root",
-    canMove: true,
-    isFolder: true,
-    children: ["child1", "child2"],
-    data: "Root item",
-    canRename: true,
-  },
-  child1: {
-    index: "child1",
-    canMove: true,
-    isFolder: true,
-    children: ["subChild1"],
-    data: "Child item 1",
-    canRename: true,
-  },
-  child2: {
-    index: "child2",
-    canMove: true,
-    isFolder: false,
-    children: [],
-    data: "Child item 2",
-    canRename: true,
-  },
-  subChild1: {
-    index: "subChild1",
-    canMove: true,
-    isFolder: false,
-    children: [],
-    data: "Child item 2",
-    canRename: true,
-  },
-};
-
-type TreeItems = Record<TreeItemIndex, TreeItem>;
+import { groupsToTreeData } from "./util/groupsToTreeData";
+import { TreeItems } from "./types";
 
 export const TreeView = () => {
-  const items: TreeItems = useMemo(() => testItems, []);
+  const testItems = groupsToTreeData({
+    start: {
+      name: "Start",
+      elements: [],
+    },
+    group2: {
+      name: "Group two",
+      elements: [],
+    },
+    group3: {
+      name: "Group three",
+      elements: [],
+    },
+  });
+
+  const items = useMemo(() => testItems, []);
+
+  const { setId, getId } = useGroupStore((s) => {
+    return { setId: s.setId, getId: s.getId };
+  });
 
   const dataProvider = useMemo(
     () =>
@@ -64,12 +39,20 @@ export const TreeView = () => {
     [items]
   );
 
-  const injectItem = (id: string) => {
-    items[id] = { data: id, index: id, children: [], canMove: true, isFolder: false };
+  const injectItem = (itemId: string) => {
+    const id = getId();
+    items[itemId] = {
+      data: "New section",
+      index: itemId,
+      children: [],
+      canMove: true,
+      isFolder: false,
+    };
 
     // @todo update this to add children current section
-    if (items["child1"] && items["child1"].children !== undefined) {
-      items["child1"].children.push(id);
+    if (items[id] && items[id].children !== undefined) {
+      const children = items[id].children;
+      children && children.push(itemId);
     }
 
     dataProvider.onDidChangeTreeDataEmitter.emit(["root"]);
@@ -86,9 +69,18 @@ export const TreeView = () => {
   const { t } = useTranslation("form-builder");
 
   // const { groups, addGroup, controllers } = useDynamicTree();
-  const { setId } = useGroupStore((s) => {
-    return { id: s.id, setId: s.setId };
-  });
+
+  const findParentGroup = (groups: TreeItems, id: string) => {
+    for (const [, group] of Object.entries(groups)) {
+      if (group.children) {
+        for (const child of group.children) {
+          if (child === id) {
+            return group;
+          }
+        }
+      }
+    }
+  };
 
   return (
     <div className="relative mr-[1px]">
@@ -96,9 +88,10 @@ export const TreeView = () => {
         <Button
           theme="secondary"
           onClick={() => {
-            const id = uuid();
-            injectItem(id);
-            setId(id);
+            const itemId = uuid();
+
+            injectItem(itemId);
+            // setId(id); // @TODO: should this be parent or current?
           }}
         >
           {t("rightPanel.treeView.addSection")}
@@ -107,8 +100,15 @@ export const TreeView = () => {
         <div>
           <div>
             <UncontrolledTreeEnvironment
-              onPrimaryAction={(item) => {
-                setId(String(item.index));
+              onFocusItem={(item) => {
+                if (item.isFolder) {
+                  setId(String(item.index));
+                } else {
+                  const parent = findParentGroup(items, String(item.index));
+                  if (parent) {
+                    setId(String(parent.index));
+                  }
+                }
               }}
               canDragAndDrop={true}
               canReorderItems={true}
