@@ -37,6 +37,12 @@ export default async function Page({
   }
 
   return (
-    <>{success === undefined ? <UnlockPublishingForm email={session.user.email} /> : <Success />}</>
+    <>
+      {success === undefined ? (
+        <UnlockPublishingForm userEmail={session.user.email} />
+      ) : (
+        <Success />
+      )}
+    </>
   );
 }
