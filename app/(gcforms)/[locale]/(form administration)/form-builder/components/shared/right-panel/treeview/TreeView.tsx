@@ -95,6 +95,9 @@ export const TreeView = () => {
         <div>
           <div>
             <UncontrolledTreeEnvironment
+              onPrimaryAction={(item) => {
+                setId(String(item.index));
+              }}
               canDragAndDrop={true}
               canReorderItems={true}
               dataProvider={dataProvider}
