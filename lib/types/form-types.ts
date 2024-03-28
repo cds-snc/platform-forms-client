@@ -44,6 +44,7 @@ export interface ElementProperties {
   descriptionFr?: string;
   validation?: ValidationProperties | undefined;
   choices?: PropertyChoices[];
+  managedChoices?: string;
   subElements?: FormElement[];
   fileType?: string | undefined;
   headingLevel?: string | undefined;
@@ -76,7 +77,9 @@ export enum FormElementTypes {
   address = "address",
   name = "name",
   firstMiddleLastName = "firstMiddleLastName",
+  departments = "departments",
   contact = "contact",
+  combobox = "combobox",
 }
 // used to define attributes for a form element or field
 export interface FormElement {

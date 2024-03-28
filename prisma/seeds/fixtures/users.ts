@@ -45,7 +45,7 @@ const DeactivatedRegularUser: CreateAppUser = {
 
 export const UserWithoutSecurityAnswers: CreateAppUser = {
   name: "Test User Without Scurity Answers",
-  email: "test.withoutSecurityAnswers@cds-snc.ca",
+  email: "test.withoutsecurityanswers@cds-snc.ca",
   privileges: {
     connect: [{ name: "Base" }, { name: "PublishForms" }],
   },
@@ -53,4 +53,5 @@ export const UserWithoutSecurityAnswers: CreateAppUser = {
 
 export default {
   test: [RegularUser, AdminUser, DeactivatedRegularUser],
+  development: [RegularUser, AdminUser, DeactivatedRegularUser],
 } as UserCollection;

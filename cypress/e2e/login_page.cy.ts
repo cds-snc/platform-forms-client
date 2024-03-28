@@ -12,6 +12,8 @@ describe("Login Page", () => {
 
     it("Change page language", () => {
       cy.get("a[lang='fr']").click();
+      // Ensure page has fully loaded
+      cy.get("main").should("be.visible");
       cy.url().should("contain", "/fr");
       cy.get("h1").should("contain", "Se connecter");
     });
@@ -88,11 +90,13 @@ describe("Login Page", () => {
       cy.get("button[type='submit']").should("be.visible");
     });
     it("Displays an error message when submitting an empty form.", () => {
+      cy.get("[id='verificationCodeForm']").should("be.visible");
       cy.get("button[type='submit']").should("be.visible");
       cy.get("button[type='submit']").click();
       cy.get("[data-testid='errorMessage']").should("be.visible");
     });
     it("Displays an error message when submitting wrong number of characters.", () => {
+      cy.get("[id='verificationCodeForm']").should("be.visible");
       cy.get("input[id='verificationCode']").should("be.visible");
       cy.typeInField("input[id='verificationCode']", "12");
       cy.get("button[type='submit']").should("be.visible");
@@ -100,6 +104,7 @@ describe("Login Page", () => {
       cy.get("[data-testid='errorMessage']").should("be.visible");
     });
     it("Displays an error message when submitting a symbol in the verification code.", () => {
+      cy.get("[id='verificationCodeForm']").should("be.visible");
       cy.get("input[id='verificationCode']").should("be.visible");
       cy.typeInField("input[id='verificationCode']", "12/34");
       cy.get("button[type='submit']").should("be.visible");

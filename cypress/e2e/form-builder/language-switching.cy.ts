@@ -1,7 +1,7 @@
 describe("Test FormBuilder language switching", () => {
   beforeEach(() => {
     cy.login({ acceptableUse: true });
-    cy.visitPage("/form-builder");
+    cy.visitPage("/en/form-builder");
   });
 
   it("Can enter English and French text in Description", () => {

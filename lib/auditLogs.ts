@@ -35,6 +35,7 @@ export enum AuditLogEvent {
   DisableFlag = "DisableFlag",
   ListAllFlags = "ListAllFlags",
   ListAllSettings = "ListAllSettings",
+  ListSetting = "ListSetting",
   ChangeSetting = "ChangeSetting",
   CreateSetting = "CreateSetting",
   DeleteSetting = "DeleteSetting",

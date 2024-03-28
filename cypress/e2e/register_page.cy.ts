@@ -1,6 +1,6 @@
 describe("Register Page", () => {
   beforeEach(() => {
-    cy.visitPage("/en/signup/register");
+    cy.visitPage("/en/auth/register");
   });
 
   // TODO test French translation when signup form more final

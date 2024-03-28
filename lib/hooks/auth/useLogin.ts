@@ -1,7 +1,8 @@
+"use client";
 import { useRef, useState } from "react";
 import axios from "axios";
-import { getCsrfToken } from "next-auth/react";
-import { useRouter } from "next/router";
+import { getCsrfToken } from "@lib/client/csrfToken";
+import { useRouter } from "next/navigation";
 import { logMessage } from "@lib/logger";
 import { useAuthErrors } from "@lib/hooks/auth/useAuthErrors";
 import { hasError } from "@lib/hasError";
@@ -66,17 +67,17 @@ export const useLogin = () => {
         }
 
         if (hasError("PasswordResetRequiredException", reason)) {
-          await router.push("/auth/resetpassword");
+          router.push("/auth/reset-password");
           return false;
         }
 
         if (hasError("AccountDeactivated", reason)) {
-          await router.push("/auth/account-deactivated");
+          router.push("/auth/account-deactivated");
           return false;
         }
 
         if (hasError("PasswordResetRequiredException", reason)) {
-          await router.push("/auth/resetpassword");
+          router.push("/auth/reset-password");
           return false;
         }
       }

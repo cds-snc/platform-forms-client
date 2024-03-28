@@ -1,8 +1,9 @@
+"use client";
 import { useRef } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { FormikHelpers } from "formik";
 import { logMessage } from "@lib/logger";
-import { useTranslation } from "next-i18next";
+import { useTranslation } from "@i18n/client";
 import { fetchWithCsrfToken } from "./fetchWithCsrfToken";
 import { useAuthErrors } from "./useAuthErrors";
 import { hasError } from "@lib/hasError";
@@ -35,7 +36,7 @@ export const useResetPassword = ({
       if (hasError("InvalidParameterException", err) && failedCallback) {
         failedCallback("InvalidParameterException");
       } else if (hasError("UserNotFoundException", err)) {
-        await router.push("/signup/register");
+        router.push("/auth/register");
       } else {
         handleErrorById("InternalServiceExceptionLogin");
         if (failedCallback) failedCallback("InternalServiceException");
@@ -56,7 +57,7 @@ export const useResetPassword = ({
       logMessage.error(err);
       if (axios.isAxiosError(err)) {
         if (err.response?.data.error === "Failed to send password reset link") {
-          await router.push("/auth/reset-failed");
+          router.push("/auth/reset-failed");
           if (failedCallback) failedCallback(err.response?.data.error);
           return;
         }
@@ -65,7 +66,7 @@ export const useResetPassword = ({
       if (hasError("InvalidParameterException", err) && failedCallback) {
         failedCallback("InvalidParameterException");
       } else if (hasError("UserNotFoundException", err)) {
-        await router.push("/signup/register");
+        router.push("/auth/register");
       } else {
         handleErrorById("InternalServiceExceptionLogin");
         if (failedCallback) failedCallback("InternalServiceException");
@@ -96,7 +97,7 @@ export const useResetPassword = ({
         confirmationCode,
       });
 
-      await router.push("/auth/login");
+      router.push("/auth/login");
     } catch (err) {
       if (hasError("CodeMismatchException", err)) {
         setErrors({

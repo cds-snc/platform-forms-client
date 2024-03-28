@@ -1,5 +1,7 @@
 import { hasError } from "@lib/hasError";
 
+jest.unmock("axios");
+
 describe("Handles string values", () => {
   test("error single value array", () => {
     const message = "UsernameExistsException: An account with the given email already exists.";
@@ -47,7 +49,7 @@ describe("Handles Error messages", () => {
 });
 
 describe("Handles Axios Error messages", () => {
-  test("has axios error", () => {
+  test("has axios error identified", () => {
     const error = {
       config: {},
       level: 50,
@@ -65,7 +67,7 @@ describe("Handles Axios Error messages", () => {
     expect(hasError(["UsernameExistsException"], error)).toBe(true);
   });
 
-  test("doesn't have axios error", () => {
+  test("doesn't have axios error identified", () => {
     const error = {
       config: {},
       level: 50,

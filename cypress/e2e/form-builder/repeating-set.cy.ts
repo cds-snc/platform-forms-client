@@ -3,11 +3,11 @@ describe("Test FormBuilder Repeating set", () => {
   beforeEach(() => {
     cy.useFlag("experimentalBlocks", true);
     cy.login({ acceptableUse: true });
-    cy.visitPage("/form-builder");
+    cy.visitPage("/en/form-builder");
   });
 
   it.skip("Adds a Repeating set with a few questions", () => {
-    cy.visitPage("/form-builder/edit");
+    cy.visitPage("/en/form-builder/edit");
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="dynamicRow"]').click();
@@ -27,7 +27,7 @@ describe("Test FormBuilder Repeating set", () => {
     cy.typeInField("#item-102", "This is a single choice question");
     cy.typeInField("#option--102--1", "This is an option");
 
-    cy.visitPage("/form-builder/preview");
+    cy.visitPage("/en/form-builder/preview");
     cy.typeInField('[id="1.0.0"]', "An answer");
 
     // Can't select/click the input directly because it's covered by the label
@@ -36,7 +36,7 @@ describe("Test FormBuilder Repeating set", () => {
   });
 
   it.skip("Adds a Repeating set with custom add label", () => {
-    cy.visitPage("/form-builder/edit");
+    cy.visitPage("/en/form-builder/edit");
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="dynamicRow"]').click();
@@ -48,13 +48,13 @@ describe("Test FormBuilder Repeating set", () => {
     cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.typeInField("#repeatable-button-0", "something");
-    cy.visitPage("/form-builder/preview");
+    cy.visitPage("/en/form-builder/preview");
 
     cy.get('[data-testid="add-row-button-1"]').contains("Add something");
   });
 
   it.skip("Adds a Repeating set with max rows", () => {
-    cy.visitPage("/form-builder/edit");
+    cy.visitPage("/en/form-builder/edit");
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="dynamicRow"]').click();
@@ -71,7 +71,7 @@ describe("Test FormBuilder Repeating set", () => {
 
     cy.typeInField("#item-101", "This is a short answer question");
 
-    cy.visitPage("/form-builder/preview");
+    cy.visitPage("/en/form-builder/preview");
 
     cy.typeInField('[id="1.0.0"]', "An answer");
     cy.get('[data-testid="add-row-button-1"]').click();
@@ -85,7 +85,7 @@ describe("Test FormBuilder Repeating set", () => {
 
   // re-add when we re-look at this feature
   it.skip("Adds multiple Repeating sets", () => {
-    cy.visitPage("/form-builder/edit");
+    cy.visitPage("/en/form-builder/edit");
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="dynamicRow"]').click();
@@ -115,7 +115,7 @@ describe("Test FormBuilder Repeating set", () => {
     cy.typeInField("#item-202", "Single choice question");
     cy.typeInField("#option--202--1", "Option");
 
-    cy.visitPage("/form-builder/preview");
+    cy.visitPage("/en/form-builder/preview");
     cy.typeInField('[id="1.0.0"]', "An answer");
     cy.typeInField('[id="2.0.0"]', "Another answer");
     // Can't select/click the input directly because it's covered by the label

@@ -1,5 +1,5 @@
 import React from "react";
-import { customTranslate } from "../helpers";
+import { customTranslate } from "../../i18nHelpers";
 
 // Note: this depends on clipboardjs in ../html/scripts.js
 export const copyCodeToClipboardScript = function (lang = "en") {

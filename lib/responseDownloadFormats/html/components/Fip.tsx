@@ -1,5 +1,5 @@
 import React from "react";
-import { customTranslate } from "../../helpers";
+import { customTranslate } from "../../../i18nHelpers";
 
 // Base64 Images to simplify creating portable HTML files
 const logoBase64En =

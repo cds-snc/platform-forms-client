@@ -23,6 +23,7 @@ import get from "lodash/get";
 
 import { logMessage } from "./logger";
 import { logEvent } from "./auditLogs";
+import { redirect } from "next/navigation";
 
 /*
 This file contains references to server side only modules.
@@ -248,6 +249,28 @@ export const getAllPrivileges = async (ability: UserAbility) => {
   }
 };
 
+export const getPrivilege = async (ability: UserAbility, where: Prisma.PrivilegeWhereInput) => {
+  try {
+    checkPrivileges(ability, [{ action: "view", subject: "Privilege" }]);
+    return await prisma.privilege.findFirst({
+      where,
+      select: {
+        id: true,
+        name: true,
+        descriptionEn: true,
+        descriptionFr: true,
+        permissions: true,
+        priority: true,
+      },
+      orderBy: {
+        priority: "asc",
+      },
+    });
+  } catch (e) {
+    return prismaErrors(e, null);
+  }
+};
+
 /**
  * Helper function to determine which Subject Type is being passed
  * @param subject  Rule subject
@@ -332,12 +355,16 @@ export const checkPrivilegesAsBoolean = (
     subject: Subject | ForcedSubjectType;
     field?: string;
   }[],
-  logic: "all" | "one" = "all"
+  options?: {
+    logic?: "all" | "one";
+    redirect?: boolean;
+  }
 ): boolean => {
   try {
-    checkPrivileges(ability, rules, logic);
+    checkPrivileges(ability, rules, options?.logic ?? "all");
     return true;
   } catch (error) {
+    if (options?.redirect) redirect(`/admin/unauthorized`);
     return false;
   }
 };

@@ -1,4 +1,2 @@
 # Ignore build folder
 .next
-# Ignore IDE settings
-.vscode

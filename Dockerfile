@@ -1,4 +1,4 @@
-FROM node:18@sha256:a17842484dd30af97540e5416c9a62943c709583977ba41481d601ecffb7f31b as build
+FROM node:20 as build
 ENV NODE_ENV=production
 
 COPY . /src
@@ -16,7 +16,7 @@ RUN yarn workspaces focus gcforms flag_initialization
 RUN yarn build
 RUN yarn workspaces focus gcforms flag_initialization --production
 
-FROM node:18@sha256:a17842484dd30af97540e5416c9a62943c709583977ba41481d601ecffb7f31b as final
+FROM node:20 as final
 LABEL maintainer="-"
 
 ENV NODE_ENV=production
@@ -35,7 +35,7 @@ ENV INDEX_SITE=$INDEX_SITE
 
 WORKDIR /src
 
-COPY package.json yarn.lock .yarnrc.yml next-i18next.config.js next.config.js ./
+COPY package.json yarn.lock .yarnrc.yml next.config.mjs ./
 COPY .yarn ./.yarn
 # Update to latest yarn version
 RUN corepack enable && yarn set version berry

@@ -3,13 +3,13 @@
  */
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { createMocks, RequestMethod } from "node-mocks-http";
-import { getCsrfToken } from "next-auth/react";
+import { getCsrfToken } from "@lib/client/csrfToken";
 import { mocked } from "jest-mock";
 import {
   CognitoIdentityProviderClient,
   SignUpCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
-import register from "@pages/api/account/register";
+import register from "old_pages/api/account/register";
 
 const mockGetCSRFToken = mocked(getCsrfToken, { shallow: true });
 
@@ -19,7 +19,7 @@ jest.mock("@aws-sdk/client-cognito-identity-provider", () => ({
   SignUpCommand: jest.fn(),
 }));
 
-describe("/signup/register", () => {
+describe("/auth/register", () => {
   afterEach(() => {
     mockGetCSRFToken.mockReset();
   });

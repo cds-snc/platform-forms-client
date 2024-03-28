@@ -1,7 +1,7 @@
 describe("Form ownership", () => {
   beforeEach(() => {
     cy.login({ acceptableUse: true });
-    cy.visitPage("/form-builder");
+    cy.visitPage("/en/form-builder");
   });
 
   let formID: string;
@@ -13,19 +13,19 @@ describe("Form ownership", () => {
 
   it("Non-Admin cannot manage Form Ownership", () => {
     cy.login({ acceptableUse: true });
-    cy.visitPage(`/form-builder/settings/${formID}/form`);
+    cy.visitPage(`/en/form-builder/settings/${formID}/form`);
     cy.get("[data-testid='form-ownership']").should("not.exist");
   });
 
   it("Admin can manage Form Ownership", () => {
     cy.login({ admin: true, acceptableUse: true });
-    cy.visitPage(`/form-builder/settings/${formID}/form`);
+    cy.visitPage(`/en/form-builder/settings/${formID}/form`);
     cy.get("h2").contains("Manage ownership").should("be.visible");
   });
 
   it("Must have at least one owner", () => {
     cy.login({ admin: true, acceptableUse: true });
-    cy.visitPage(`/form-builder/settings/${formID}/form`);
+    cy.visitPage(`/en/form-builder/settings/${formID}/form`);
     cy.get("h2").contains("Manage ownership").should("be.visible");
 
     cy.get("[aria-label='Remove test.user@cds-snc.ca']").click();

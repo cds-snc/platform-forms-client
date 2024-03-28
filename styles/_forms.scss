@@ -38,7 +38,7 @@
   }
 
   &.gc-alert--success {
-    @apply bg-emerald-50 text-emerald-700 rounded-sm laptop:rounded-md ;
+    @apply bg-emerald-50 text-emerald-700 rounded-sm laptop:rounded-md;
   }
 
   .gc-alert__body {
@@ -84,6 +84,23 @@
   }
 }
 
+.gc-combobox {
+  input {
+    background-image: url("../public/img/arrow-down.svg");
+    @apply relative md:w-full w-3/4 md:text-sm text-base text-gray-700 block border-2 border-black-form py-3 pl-5 pr-10 mt-2 appearance-none bg-no-repeat bg-center-right-15px;
+
+    &:focus {
+      @apply outline-none border-blue-focus shadow-input;
+    }
+  }
+  ul {
+    @apply absolute z-10 max-h-80 min-w-80 overflow-y-scroll p-0 bg-white border border-slate-500;
+    li {
+      @apply px-3 py-2 flex flex-col;
+    }
+  }
+}
+
 .gc-p {
   @apply md:text-sm text-xl mb-10 w-full;
 }
@@ -119,23 +136,8 @@
     @apply list-inside;
   }
 
-  a:visited {
-    @apply text-purple-default;
-  }
-
   a {
     @apply underline text-blue-dark hover:text-blue-hover;
-  }
-
-  a:focus {
-    outline: none;
-    box-shadow: 4px 0 0 0 #303fc3, -4px 0 0 0 #303fc3;
-    @apply bg-blue-focus text-white-default;
-  }
-
-  a:active {
-    box-shadow: 4px 0 0 0 #1b2736, -4px 0 0 0 #1b2736;
-    @apply underline bg-blue-active text-white-default;
   }
 }
 
@@ -317,7 +319,7 @@
 
     &:disabled + .gc-checkbox-label {
       pointer-events: none;
-      opacity: .5;
+      opacity: 0.5;
     }
   }
 }

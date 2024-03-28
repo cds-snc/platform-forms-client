@@ -1,7 +1,7 @@
 describe("Form builder share", () => {
   beforeEach(() => {
     cy.login({ acceptableUse: true });
-    cy.visitPage("/form-builder/edit");
+    cy.visitPage("/en/form-builder/edit");
   });
 
   it("Renders share flyout with name check", () => {
@@ -30,7 +30,7 @@ describe("Form builder share", () => {
   });
   it("Renders share flyout for unAuthenticated", () => {
     cy.logout();
-    cy.visitPage("/form-builder/edit");
+    cy.visitPage("/en/form-builder/edit");
     cy.get("#fileName")
       .should("have.attr", "placeholder", "Unnamed form file")
       .type("Cypress Share Test Form");

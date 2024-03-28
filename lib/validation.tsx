@@ -7,9 +7,9 @@ import {
   PublicFormRecord,
 } from "@lib/types";
 import { FormikProps } from "formik";
-import { TFunction } from "next-i18next";
+import { TFunction } from "i18next";
 import { acceptedFileMimeTypes } from "@lib/tsUtils";
-import { ErrorListItem } from "@components/forms";
+import { ErrorListItem } from "@clientComponents/forms";
 import { isServer } from "./tsUtils";
 import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
 import formNameArraySchema from "@lib/middleware/schemas/submission-name-array.schema.json";
@@ -115,6 +115,7 @@ const isFieldResponseValid = (
       break;
     }
     case FormElementTypes.radio:
+    case FormElementTypes.combobox:
     case FormElementTypes.dropdown: {
       if (validator.required && (value === undefined || value === "")) {
         return t("input-validation.required");

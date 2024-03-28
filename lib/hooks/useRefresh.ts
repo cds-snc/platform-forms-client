@@ -1,5 +1,6 @@
+"use client";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 /**
  * @description Function that watches for changes on props and initiates a server side props refresh
@@ -14,7 +15,7 @@ export const useRefresh = (
 
   const refreshData = async () => {
     setIsRefreshing(true);
-    await router.replace(router.asPath);
+    router.refresh();
   };
 
   useEffect(() => {

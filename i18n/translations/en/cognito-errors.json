@@ -1,0 +1,42 @@
+{
+  "CodeMismatchException": "The security code provided does not match our records. Double check your email or request a new code.",
+  "InternalServiceException": "We've encountered an error with your request. Please try again later.",
+  "InternalServiceExceptionLogin": {
+    "title": "There was a problem while signing in.",
+    "description": "Try again later or ",
+    "link": "/support",
+    "linkText": "contact Support."
+  },
+  "UsernameExistsException": "This account already exists.",
+  "ExpiredCodeException": "The security code has expired. Please request a new one.",
+  "InvalidPasswordException": "This password does not comply with our password policies",
+  "InvalidParameterException": {
+    "sendForgotPassword": {
+      "title": "To reset your password, you must first verify your email."
+    }
+  },
+  "TooManyRequestsException": {
+    "title": "Too many requests.",
+    "description": "Try again later or",
+    "link": "en/support",
+    "linkText": "contact Support."
+  },
+  "UsernameOrPasswordIncorrect": {
+    "title": "The email address or password you entered is incorrect.",
+    "description": "The email address or password you entered is incorrect or the account does not exist. ",
+    "link": "/auth/register",
+    "linkText": "If you don’t have an account, create one now."
+  },
+  "2FALockedOutSession": {
+    "title": "Too many sign-in attempts ",
+    "description": "Try signing in again to generate a new security code."
+  },
+  "2FASessionExpired": {
+    "title": "Your session expired",
+    "description": "Try signing in again to generate a new security code."
+  },
+  "IncorrectSecurityAnswerException": {
+    "title": "Review your answers",
+    "description": "The answers provided do not match our records."
+  }
+}

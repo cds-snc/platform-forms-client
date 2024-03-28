@@ -1,10 +1,11 @@
 import { ResponseHtml } from "../html/components/ResponseHtml";
-import { renderToStaticMarkup } from "react-dom/server";
+
 import { FormResponseSubmissions } from "../types";
 import { transform as transformAggregated } from "../html-aggregated";
 
-export const transform = (formResponseSubmissions: FormResponseSubmissions, lang = "en") => {
-  const receipt = transformAggregated(formResponseSubmissions, lang);
+export const transform = async (formResponseSubmissions: FormResponseSubmissions, lang = "en") => {
+  const renderToStaticMarkup = (await import("react-dom/server")).renderToStaticMarkup;
+  const receipt = await transformAggregated(formResponseSubmissions, lang);
   const responses = formResponseSubmissions.submissions.map((response) => {
     return {
       id: response.id,

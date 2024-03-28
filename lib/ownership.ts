@@ -21,8 +21,8 @@ export const transferOwnershipEmail = async ({
     const TEMPLATE_ID = process.env.TEMPLATE_ID;
     const notify = getNotifyInstance();
 
-    const formUrlEn = `${HOST}/en/form-builder/responses/${formId}`;
-    const formUrlFr = `${HOST}/fr/form-builder/responses/${formId}`;
+    const formUrlEn = `${HOST}/en/form-builder/${formId}/responses`;
+    const formUrlFr = `${HOST}/fr/form-builder/${formId}/responses`;
 
     await notify.sendEmail(TEMPLATE_ID, emailTo, {
       personalisation: {
@@ -83,8 +83,8 @@ export const addOwnershipEmail = async ({
     const TEMPLATE_ID = process.env.TEMPLATE_ID;
     const notify = getNotifyInstance();
 
-    const formUrlEn = `${HOST}/en/form-builder/responses/${formId}`;
-    const formUrlFr = `${HOST}/fr/form-builder/responses/${formId}`;
+    const formUrlEn = `${HOST}/en/form-builder/${formId}/responses`;
+    const formUrlFr = `${HOST}/fr/form-builder/${formId}/responses`;
 
     await notify.sendEmail(TEMPLATE_ID, emailTo, {
       personalisation: {

@@ -1,0 +1,14 @@
+{
+  "title": "Administration",
+  "accounts": "Comptes",
+  "systemSettings": "Paramètres",
+  "featureFlags": "Indicateurs de fonctionnalité",
+  "permissions": "Permissions",
+  "systemAdministration": "Administration du système",
+  "accountAdministration": "Administration des comptes",
+  "manageUsersAndTheirForms": "Gérer les utilisateur·rice·s et leurs formulaires",
+  "configureHowTheApplicationWorks": "Configurer le fonctionnement de l’application.",
+  "typography": "[FR]Typography",
+  "upload": "[FR]Upload",
+  "viewTemplates": "[FR]View Templates"
+}

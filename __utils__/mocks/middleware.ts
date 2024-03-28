@@ -1,5 +1,5 @@
 import { MiddlewareProps, MiddlewareRequest } from "@lib/types";
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 
 /**
  * Middleware function that iterates through middleware resolvers
@@ -8,10 +8,10 @@ import { NextApiRequest, NextApiResponse } from "next";
  * @returns
  */
 export const mockMiddleware = (
-  middlewareArray: Array<MiddlewareRequest>,
-  handler: (req: NextApiRequest, res: NextApiResponse, props: MiddlewareProps) => Promise<void>
+  _: Array<MiddlewareRequest>,
+  handler: (req: NextRequest, props: MiddlewareProps) => Promise<NextResponse>
 ) => {
-  return async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
-    return handler(req, res, {});
+  return async (req: NextRequest): Promise<NextResponse> => {
+    return handler(req, { body: {} });
   };
 };

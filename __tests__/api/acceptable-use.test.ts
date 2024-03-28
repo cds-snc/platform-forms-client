@@ -3,9 +3,9 @@
  */
 
 import { createMocks } from "node-mocks-http";
-import acceptableUse from "@pages/api/acceptableuse";
+import acceptableUse from "old_pages/api/acceptableuse";
 import { setAcceptableUse } from "@lib/cache/acceptableUseCache";
-import { getCsrfToken } from "next-auth/react";
+import { getCsrfToken } from "@lib/client/csrfToken";
 import { getServerSession } from "next-auth/next";
 import { Session } from "next-auth";
 

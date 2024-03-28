@@ -1,7 +1,7 @@
 describe("Test FormBuilder autocomplete props", () => {
   beforeEach(() => {
     cy.login({ acceptableUse: true });
-    cy.visitPage("/form-builder");
+    cy.visitPage("/en/form-builder");
   });
 
   const autocompleteOptions = [
@@ -31,7 +31,7 @@ describe("Test FormBuilder autocomplete props", () => {
   ];
 
   it("Checks the autocomplete list", () => {
-    cy.visitPage("/form-builder/edit");
+    cy.visitPage("/en/form-builder/edit");
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="textField"]').click();
@@ -46,7 +46,7 @@ describe("Test FormBuilder autocomplete props", () => {
 
   autocompleteOptions.forEach((option) => {
     it(`Adds a TextAreaInput with ${option[0]} autocomplete`, () => {
-      cy.visitPage("/form-builder/edit");
+      cy.visitPage("/en/form-builder/edit");
       cy.get("button").contains("Add").click();
 
       cy.get('[data-testid="textField"]').click();
@@ -62,7 +62,7 @@ describe("Test FormBuilder autocomplete props", () => {
       cy.get('[data-testid="more-modal-save-button"]').contains("Save").click();
       cy.get('[data-testid="autocomplete-1"]').should("contain", option[1]);
 
-      cy.visitPage("/form-builder/preview");
+      cy.visitPage("/en/form-builder/preview");
       cy.get('[data-testid="textInput"]').should("have.attr", "autocomplete", option[0]);
     });
   });

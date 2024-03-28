@@ -68,7 +68,7 @@ async function createSettings(env: string) {
   });
 }
 
-async function createTestUsers() {
+async function createUsers() {
   await prisma.user.create({
     data: UserWithoutSecurityAnswers,
   });
@@ -282,12 +282,20 @@ async function main(environment: string) {
       createSecurityQuestions(),
     ]);
 
-    if (environment === "test") {
+    if (environment !== "production") {
       console.log("Creating test Users");
-      await createTestUsers();
-
-      // No migrations need to run on pure new test database
-      return;
+      try {
+        await createUsers();
+      } catch (e) {
+        if (e instanceof Prisma.PrismaClientKnownRequestError) {
+          // The .code property can be accessed in a type-safe manner
+          if (e.code === "P2002") {
+            console.log(
+              "There is a unique constraint violation, a new user cannot be created with this email"
+            ); // just log it and keep going
+          } else throw e;
+        }
+      }
     }
 
     console.log("Running 'publishingStatus' migration");

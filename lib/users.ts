@@ -1,15 +1,15 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { JWT } from "next-auth/jwt";
+
 import { AccessControlError, checkPrivileges } from "@lib/privileges";
 import { NagwareResult, UserAbility } from "./types";
 import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
-import { Privilege } from "@prisma/client";
+import { Privilege, Prisma } from "@prisma/client";
 import { sendDeactivationEmail } from "@lib/deactivate";
 import { getAllTemplatesForUser } from "./templates";
 import { listAllSubmissions } from "./vault";
 import { detectOldUnprocessedSubmissions } from "./nagware";
-import { DBUser } from "./types/user-types";
+import { AppUser } from "./types/user-types";
 import { activeStatusUpdate } from "@lib/cache/userActiveStatus";
 
 /**
@@ -20,7 +20,11 @@ export const getOrCreateUser = async ({
   name,
   email,
   picture,
-}: JWT): Promise<{
+}: {
+  name?: string | null;
+  email?: string | null;
+  picture?: string | null;
+}): Promise<{
   newlyRegistered?: boolean;
   name: string | null;
   email: string;
@@ -120,34 +124,29 @@ export const getOrCreateUser = async ({
  * Get User by id
  * @returns User if found
  */
-export const getUser = async (
-  ability: UserAbility,
-  id: string
-): Promise<boolean | SelectedUser> => {
+export const getUser = async (ability: UserAbility, id: string): Promise<AppUser> => {
   try {
     checkPrivileges(ability, [{ action: "view", subject: "User" }]);
 
-    const user = await prisma.user
-      .findFirstOrThrow({
-        where: {
-          id: id,
-        },
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          active: true,
-          privileges: {
-            select: {
-              id: true,
-              name: true,
-              descriptionEn: true,
-              descriptionFr: true,
-            },
+    const user = await prisma.user.findFirstOrThrow({
+      where: {
+        id: id,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        active: true,
+        privileges: {
+          select: {
+            id: true,
+            name: true,
+            descriptionEn: true,
+            descriptionFr: true,
           },
         },
-      })
-      .catch((e) => prismaErrors(e, false));
+      },
+    });
 
     return user;
   } catch (e) {
@@ -163,21 +162,14 @@ export const getUser = async (
   }
 };
 
-interface SelectedUser
-  extends Omit<DBUser, "privileges" | "image" | "emailVerified" | "lastLogin"> {
-  privileges: {
-    id: string;
-    name: string | null;
-    descriptionEn: string | null;
-    descriptionFr: string | null;
-  }[];
-}
-
 /**
  * Get all Users
  * @returns An array of all Users
  */
-export const getUsers = async (ability: UserAbility): Promise<SelectedUser[] | never[]> => {
+export const getUsers = async (
+  ability: UserAbility,
+  where?: Prisma.UserWhereInput
+): Promise<AppUser[] | never[]> => {
   try {
     checkPrivileges(ability, [
       {
@@ -192,6 +184,7 @@ export const getUsers = async (ability: UserAbility): Promise<SelectedUser[] | n
 
     const users = await prisma.user
       .findMany({
+        ...(where && { where }),
         select: {
           id: true,
           name: true,

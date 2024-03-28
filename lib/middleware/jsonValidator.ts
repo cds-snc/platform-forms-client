@@ -1,7 +1,7 @@
 import { Schema, Validator, ValidatorResult, PreValidatePropertyFunction } from "jsonschema";
-import { NextApiRequest, NextApiResponse } from "next";
+import { type NextRequest, NextResponse } from "next/server";
 import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
-import { padAngleBrackets } from "@components/form-builder/util";
+import { padAngleBrackets } from "@lib/utils/form-builder";
 import * as htmlparser2 from "htmlparser2";
 
 export type ValidateOptions = {
@@ -54,7 +54,7 @@ export const cleanAngleBrackets: PreValidatePropertyFunction = (object, key) => 
 };
 
 export const jsonValidator = (schema: Schema, options?: ValidateOptions): MiddlewareRequest => {
-  return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
+  return async (req: NextRequest, reqBody: Record<string, unknown>): Promise<MiddlewareReturn> => {
     try {
       if (
         req.method === "GET" ||
@@ -63,21 +63,27 @@ export const jsonValidator = (schema: Schema, options?: ValidateOptions): Middle
         return { next: true };
       }
 
+      const requestBody = reqBody;
+
       // If there is no object to test, fail quickly
-      if (req.body?.constructor === Object && Object.keys(req.body).length === 0) {
-        res.status(400).json({ error: "JSON Validation Error: Object Required" });
-        return { next: false };
+      if (typeof requestBody === "object" && Object.keys(requestBody).length === 0) {
+        return {
+          next: false,
+          response: NextResponse.json(
+            { error: "JSON Validation Error: Object Required" },
+            { status: 400 }
+          ),
+        };
       }
 
       const validator = new Validator();
-      const validateObject = options?.jsonKey ? req.body[options.jsonKey] : req.body;
+      const validateObject = options?.jsonKey ? requestBody[options.jsonKey] : requestBody;
 
       const validatorResult: ValidatorResult = validator.validate(
         validateObject,
         schema,
         options?.noHTML ? { preValidateProperty: htmlChecker } : undefined
       );
-
       if (validatorResult.valid) {
         return { next: true };
       } else {
@@ -85,8 +91,18 @@ export const jsonValidator = (schema: Schema, options?: ValidateOptions): Middle
       }
     } catch (e) {
       const validationError = e as Error;
-      res.status(400).json({ error: `JSON Validation Error: ${validationError.message}` });
-      return { next: false };
+
+      return {
+        next: false,
+        response: NextResponse.json(
+          {
+            error: `JSON Validation Error: ${validationError.message}`,
+          },
+          {
+            status: 400,
+          }
+        ),
+      };
     }
   };
 };

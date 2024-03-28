@@ -1,9 +1,11 @@
+/** @type {import('tailwindcss').Config} */
 const colors = require("tailwindcss/colors");
 
 module.exports = {
   theme: {
     extend: {
       fontFamily: {
+        sans: ["var(--font-noto-sans)"],
         "noto-sans": "var(--font-noto-sans)",
         lato: "var(--font-lato)",
         mono: ["monospace"],
@@ -175,6 +177,6 @@ module.exports = {
       xxs: { max: "290px" },
     },
   },
-  content: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
+  content: ["./app/**/*.{js,ts,jsx,tsx,mdx}", "./components/**/*.{js,ts,jsx,tsx,mdx}"],
   plugins: [],
 };

@@ -1,3 +1,4 @@
+"use client";
 import React, { createContext, useContext, ReactNode } from "react";
 import { PublicFormRecord } from "@lib/types";
 import { mapIdsToValues, FormValues, idArraysMatch, GroupsType } from "@lib/formContext";

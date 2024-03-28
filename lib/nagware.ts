@@ -3,14 +3,17 @@ import { getAppSetting } from "./appSettings";
 import { logMessage } from "./logger";
 
 export async function detectOldUnprocessedSubmissions(
-  submissions: NagwareSubmission[]
+  submissions: NagwareSubmission[],
+  promptPhaseDays?: string | null,
+  warnPhaseDays?: string | null
 ): Promise<NagwareResult> {
   try {
+    if (!promptPhaseDays || !warnPhaseDays) {
+      promptPhaseDays = await getAppSetting("nagwarePhasePrompted");
+      warnPhaseDays = await getAppSetting("nagwarePhaseWarned");
+    }
+
     const currentDate = Date.now();
-    const [promptPhaseDays, warnPhaseDays] = await Promise.all([
-      getAppSetting("nagwarePhasePrompted"),
-      getAppSetting("nagwarePhaseWarned"),
-    ]);
 
     if (!promptPhaseDays || !warnPhaseDays) {
       logMessage.error("Nagware settings are not configured");

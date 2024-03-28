@@ -1,23 +1,10 @@
-import { getServerSession } from "next-auth/next";
-import { Session } from "next-auth";
-import {
-  GetServerSidePropsResult,
-  GetServerSidePropsContext,
-  NextApiRequest,
-  NextApiResponse,
-} from "next";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import jwt from "jsonwebtoken";
-import { hasOwnProperty } from "../tsUtils";
-import { TemporaryTokenPayload, UserAbility } from "../types";
-import { authOptions } from "@pages/api/auth/[...nextauth]";
-import { AccessControlError, createAbility } from "../privileges";
+import { TemporaryTokenPayload } from "../types";
 
-import { localPathRegEx } from "@lib/validation";
-
-interface ServerSidePropsAuthContext extends GetServerSidePropsContext {
-  user: Session["user"] & { ability: UserAbility };
-}
+// Helpful to check whether a referer is local vs. an external URL
+// Note: a negated version of https://stackoverflow.com/questions/10687099/how-to-test-if-a-url-string-is-absolute-or-relative
+export const localPathRegEx = new RegExp("^(?!((?:[a-z+]+:)?//))", "i");
 
 /**
  * Enum used to record Logging action events
@@ -27,117 +14,6 @@ export enum LoggingAction {
   LOGOUT = "LOGOUT",
   LOCKED = "LOCKED",
 }
-
-/**
- * Verifies if their is a session and redirects user as required.
- * @param innerFunction Next JS getServerSideProps resolver function
- * @returns Context with a 'user' object if there is a session detected
- */
-export function requireAuthentication(
-  innerFunction: (
-    ctx: ServerSidePropsAuthContext
-  ) => Promise<GetServerSidePropsResult<Record<string, unknown>>>
-) {
-  return async (
-    context: GetServerSidePropsContext
-  ): Promise<GetServerSidePropsResult<Record<string, unknown>>> => {
-    try {
-      const session = await getServerSession(context.req, context.res, authOptions);
-
-      if (!session) {
-        // If no user, redirect to login
-        return {
-          redirect: {
-            destination: `/${context.locale}/auth/login`,
-            permanent: false,
-          },
-        };
-      }
-
-      if (session.user.deactivated) {
-        return {
-          redirect: {
-            destination: `/${context.locale}/auth/account-deactivated`,
-            permanent: false,
-          },
-        };
-      }
-
-      if (
-        !session.user.hasSecurityQuestions &&
-        !context.resolvedUrl?.startsWith("/auth/setup-security-questions")
-      ) {
-        // check if user has setup security questions setup
-        return {
-          redirect: {
-            destination: `/${context.locale}/auth/setup-security-questions`,
-            permanent: false,
-          },
-        };
-      }
-      // Redirect to policy page only if users aren't on the policy or security questions page
-      if (
-        session.user.hasSecurityQuestions &&
-        !session.user.acceptableUse &&
-        !context.resolvedUrl?.startsWith("/auth/policy") &&
-        !context.resolvedUrl?.startsWith("/auth/setup-security-questions")
-      ) {
-        // If they haven't agreed to Acceptable Use redirect to policy page for acceptance
-        // If already on the policy page don't redirect, aka endless redirect loop.
-        // Also check that the path is local and not an external URL
-        return {
-          redirect: {
-            destination: `/${context.locale}/auth/policy?referer=${
-              localPathRegEx.test(context.resolvedUrl || "") ? context.resolvedUrl : "/forms"
-            }`,
-            permanent: false,
-          },
-        };
-      }
-
-      const innerFunctionProps = await innerFunction({
-        user: { ...session.user, ability: createAbility(session) },
-        ...context,
-      }); // Continue on to call `getServerSideProps` logic
-      if (hasOwnProperty(innerFunctionProps, "props")) {
-        return {
-          props: {
-            ...(innerFunctionProps.props as Record<string, unknown>),
-            user: { ...session.user },
-          },
-        };
-      }
-
-      return innerFunctionProps;
-    } catch (e) {
-      if (e instanceof AccessControlError) {
-        return {
-          redirect: {
-            destination: `/${context.locale}/admin/unauthorized`,
-            permanent: false,
-          },
-        };
-      }
-      throw e;
-    }
-  };
-}
-
-/**
- * Checks if session exists server side and if it belongs to a user
- * @param reqOrContext Request and Response Object
- * @returns session if exists otherwise null
- */
-export const isAuthenticated = async ({
-  req,
-  res,
-}: {
-  req: NextApiRequest;
-  res: NextApiResponse;
-}): Promise<Session | null> => {
-  const session = await getServerSession(req, res, authOptions);
-  return session;
-};
 
 /**
  * Verifies a temporary token against the database

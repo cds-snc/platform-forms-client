@@ -4,13 +4,13 @@
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { createMocks, RequestMethod } from "node-mocks-http";
-import { getCsrfToken } from "next-auth/react";
+import { getCsrfToken } from "@lib/client/csrfToken";
 import { prismaMock } from "@jestUtils";
 import {
   CognitoIdentityProviderClient,
   ForgotPasswordCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
-import forgotpassword from "@pages/api/account/forgotpassword";
+import forgotpassword from "old_pages/api/account/forgotpassword";
 import { logEvent } from "@lib/auditLogs";
 
 const mockGetCSRFToken = jest.mocked(getCsrfToken, { shallow: true });
