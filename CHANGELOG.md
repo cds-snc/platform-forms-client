@@ -7,10 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.12.11](https://github.com/cds-snc/platform-forms-client/compare/v3.12.10...v3.12.11) (2024-03-26)
 
-
 ### Miscellaneous Chores
 
-* Add Canadian Space Agency branding ([#3417](https://github.com/cds-snc/platform-forms-client/issues/3417)) ([e1ad3ca](https://github.com/cds-snc/platform-forms-client/commit/e1ad3ca67bc22533c648cadbca4a8a567ecfc209))
+- Add Canadian Space Agency branding ([#3417](https://github.com/cds-snc/platform-forms-client/issues/3417)) ([e1ad3ca](https://github.com/cds-snc/platform-forms-client/commit/e1ad3ca67bc22533c648cadbca4a8a567ecfc209))
 
 ## [3.12.10](https://github.com/cds-snc/platform-forms-client/compare/v3.12.9...v3.12.10) (2024-03-13)
 
