@@ -93,6 +93,7 @@
     "react-app-polyfill": "3.0.0",
     "react-arborist": "^3.4.0",
     "react-aria": "3.31.0",
+    "react-complex-tree": "^2.4.1",
     "react-dom": "^18.2.0",
     "react-i18next": "^14.0.5",
     "react-loading-skeleton": "^3.4.0",

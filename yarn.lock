@@ -10597,6 +10597,7 @@ __metadata:
     react-app-polyfill: "npm:3.0.0"
     react-arborist: "npm:^3.4.0"
     react-aria: "npm:3.31.0"
+    react-complex-tree: "npm:^2.4.1"
     react-dom: "npm:^18.2.0"
     react-i18next: "npm:^14.0.5"
     react-loading-skeleton: "npm:^3.4.0"
@@ -14893,6 +14894,15 @@ __metadata:
     react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
   checksum: 10c0/92fefcdd9aa8e8b808d2c096ddb1b2eee88e6d8d5cd610e0fcf88cd11af41779c01983764ad1642abfa054531a71d647ee4fc155a746435cbd1556ff77203cba
+  languageName: node
+  linkType: hard
+
+"react-complex-tree@npm:^2.4.1":
+  version: 2.4.1
+  resolution: "react-complex-tree@npm:2.4.1"
+  peerDependencies:
+    react: ">=16.0.0"
+  checksum: 10c0/8d53b9102910fc94c23840df31a0251de44476f869275c438f7f56fc369a0a1f964334c8827ba774ef97a7519d66cb8ff9c8cbe74370a48a05eb89ff17ee9a5e
   languageName: node
   linkType: hard
 
