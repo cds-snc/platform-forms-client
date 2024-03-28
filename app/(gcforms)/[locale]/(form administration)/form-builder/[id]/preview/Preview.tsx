@@ -7,7 +7,7 @@ import Markdown from "markdown-to-jsx";
 import { PreviewNavigation } from "./PreviewNavigation";
 import { getRenderedForm } from "@lib/formBuilder";
 import { PublicFormRecord } from "@lib/types";
-import { Button, Form, RichText, ClosedPage, NextButton } from "@clientComponents/forms";
+import { Button, RichText, ClosedPage, NextButton } from "@clientComponents/forms";
 import { LocalizedElementProperties, LocalizedFormProperties } from "@lib/types/form-builder-types";
 import { useTemplateStore } from "@lib/store";
 import { BackArrowIcon } from "@serverComponents/icons";
@@ -16,8 +16,9 @@ import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 import { useRehydrate } from "@lib/hooks/form-builder";
 import Skeleton from "react-loading-skeleton";
+import { Form } from "@clientComponents/forms/Form/Form";
 
-export const Preview = () => {
+export const Preview = ({ disableSubmit = true }: { disableSubmit?: boolean }) => {
   const { status } = useSession();
   const { i18n } = useTranslation("common");
   const { id, getSchema, getIsPublished, getSecurityAttribute } = useTemplateStore((s) => ({
@@ -56,8 +57,8 @@ export const Preview = () => {
     return false;
   };
 
-  const responsesLink = `/${i18n.language}/form-builder/responses/${id}`;
-  const settingsLink = `/${i18n.language}/form-builder/settings/${id}`;
+  const responsesLink = `/${i18n.language}/form-builder/${id}/responses/new`;
+  const settingsLink = `/${i18n.language}/form-builder/${id}/settings`;
 
   const brand = formRecord?.form ? formRecord.form.brand : null;
 
@@ -177,7 +178,7 @@ export const Preview = () => {
                                   id="SubmitButton"
                                   className="mb-4"
                                   onClick={(e) => {
-                                    if (status !== "authenticated") {
+                                    if (disableSubmit) {
                                       return preventSubmit(e);
                                     }
                                   }}

@@ -15,7 +15,7 @@ export default async function Layout({
   const session = await auth();
 
   if (!session) {
-    return <LoggedOutTab tabName={LoggedOutTabName.PUBLISH} />;
+    return <LoggedOutTab tabName={LoggedOutTabName.SETTINGS} />;
   }
 
   return (

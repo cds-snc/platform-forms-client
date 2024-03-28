@@ -4,42 +4,71 @@ import { useStoreWithEqualityFn } from "zustand/traditional";
 import { immer } from "zustand/middleware/immer";
 import { shallow } from "zustand/shallow";
 import React, { createContext, useRef, useContext } from "react";
-
-// import { GroupsType } from "@lib/formContext";
+import { TemplateStoreContext } from "@lib/store/index";
+import { TemplateStore } from "@lib/store/useTemplateStore";
+import { groupsToTreeData } from "../util/groupsToTreeData";
+import { treeDataToGroups } from "../util/treeDataToGroups";
 
 export interface GroupStoreProps {
   id: string;
-  groups: FormItem[];
+  groups: TreeItem[];
+  getTemplateState: TemplateStore["getState"];
+  setTemplateState: TemplateStore["setState"];
 }
 
-import { FormItem } from "../types";
+import { TreeItem } from "../types";
+import { FormElement } from "@lib/types";
 
 export interface GroupStoreState extends GroupStoreProps {
   getId: () => string;
   setId: (id: string) => void;
-  setGroups: (groups: FormItem[]) => void;
-  groups: FormItem[];
+  addGroup: (id: string, name: string) => void;
+  getGroups: () => TreeItem[] | [];
+  setGroups: (data: TreeItem[]) => void;
+  getElement: (id: number) => FormElement | undefined;
 }
 
 const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
   const DEFAULT_PROPS: GroupStoreProps = {
     id: "start",
     groups: [],
-  };
+    ...initProps,
+  } as GroupStoreProps;
 
   return createStore<GroupStoreState>()(
     immer((set, get) => ({
       ...DEFAULT_PROPS,
-      ...initProps,
       setId: (id) =>
         set((state) => {
           state.id = id;
         }),
       getId: () => get().id,
-      setGroups: (groups: FormItem[]) =>
-        set((state) => {
-          state.groups = groups;
-        }),
+      getElement: (id) => {
+        return get()
+          .getTemplateState()
+          .form.elements.find((el) => el.id === id);
+      },
+      getGroups: () => {
+        const formGroups = get().getTemplateState().form.groups;
+        if (!formGroups) return [];
+        return groupsToTreeData(formGroups);
+      },
+      addGroup: (id: string, name: string) => {
+        get().setTemplateState((s) => {
+          if (!s.form.groups) {
+            s.form.groups = {};
+          }
+          s.form.groups[id] = { name, elements: [] };
+        });
+      },
+
+      setGroups: (treeData: TreeItem[]) => {
+        const groups = treeDataToGroups(treeData);
+        if (!groups) return;
+        get().setTemplateState((s) => {
+          s.form.groups = { ...groups };
+        });
+      },
     }))
   );
 };
@@ -53,6 +82,11 @@ export const GroupStoreProvider = ({
   ...props
 }: React.PropsWithChildren<Partial<GroupStoreProps>>) => {
   const storeRef = useRef<GroupStore>();
+
+  const store = useContext(TemplateStoreContext);
+  props.getTemplateState = store?.getState;
+  props.setTemplateState = store?.setState;
+
   if (!storeRef.current) {
     storeRef.current = createGroupStore(props);
   }

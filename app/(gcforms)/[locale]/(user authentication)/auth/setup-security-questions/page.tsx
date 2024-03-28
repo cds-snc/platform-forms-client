@@ -1,15 +1,9 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import UserNavLayout from "@clientComponents/globals/layouts/UserNavLayout";
-import { Alert } from "@clientComponents/globals";
-import { SetupSecurityQuestions } from "./clientSide";
-import {
-  requireAuthentication,
-  retrievePoolOfSecurityQuestions,
-  retrieveUserSecurityQuestions,
-} from "@lib/auth";
-import { checkPrivilegesAsBoolean } from "@lib/privileges";
+import { SecurityQuestionsForm } from "./components/client/SecurityQuestionsForm";
+import { auth, retrievePoolOfSecurityQuestions } from "@lib/auth";
 import { redirect } from "next/navigation";
+
 export async function generateMetadata({
   params: { locale },
 }: {
@@ -21,28 +15,11 @@ export async function generateMetadata({
   };
 }
 
-const Info = async () => {
-  const { t } = await serverTranslation(["setup-security-questions"]);
-  return (
-    <div className="mx-auto mt-10 w-[850px]">
-      <Alert.Info title={t("banner.title")} body={t("banner.body")} />
-    </div>
-  );
-};
-
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
-  const {
-    user: { ability },
-  } = await requireAuthentication();
+  const session = await auth();
+  if (!session) redirect(`/${locale}/auth/login`);
 
-  checkPrivilegesAsBoolean(ability, [{ action: "view", subject: "FormRecord" }], {
-    redirect: true,
-  });
-
-  const sessionSecurityQuestions = await retrieveUserSecurityQuestions({
-    userId: ability.userID,
-  });
-  if (sessionSecurityQuestions && sessionSecurityQuestions.length >= 3) {
+  if (session.user.hasSecurityQuestions) {
     redirect(`/${locale}/profile`);
   }
 
@@ -56,9 +33,5 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       };
     });
 
-  return (
-    <UserNavLayout beforeContentWrapper={<Info />} contentWidth="tablet:w-[658px]">
-      <SetupSecurityQuestions questions={questions} />
-    </UserNavLayout>
-  );
+  return <SecurityQuestionsForm questions={questions} />;
 }

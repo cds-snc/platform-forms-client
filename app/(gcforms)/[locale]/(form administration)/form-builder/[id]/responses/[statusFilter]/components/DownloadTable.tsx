@@ -24,6 +24,7 @@ import { DownloadSingleButton } from "./DownloadSingleButton";
 import { Pagination } from "./Pagination";
 import { cn } from "@lib/utils";
 import { NextStep } from "./NextStep";
+import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -142,14 +143,38 @@ export const DownloadTable = ({
                   setNoSelectedItemsError={setNoSelectedItemsError}
                 />
               </th>
-              <th scope="col" className="p-4 text-left">
+              <th scope="col" className="whitespace-nowrap p-4 text-left">
                 {t("downloadResponsesTable.header.number")}
+                <Tooltip.Info
+                  side="top"
+                  triggerClassName="align-middle ml-1"
+                  tooltipClassName="font-normal whitespace-normal"
+                >
+                  <strong>{t("tooltips.downloadTable.submissionID.title")}</strong>
+                  <p>{t("tooltips.downloadTable.submissionID.body")}</p>
+                </Tooltip.Info>
               </th>
               <th scope="col" className="p-4 text-left">
                 {t("downloadResponsesTable.header.date")}
+                <Tooltip.Info
+                  side="top"
+                  triggerClassName="align-middle ml-1"
+                  tooltipClassName="font-normal"
+                >
+                  <strong>{t(`tooltips.downloadTable.date.title`)}</strong>
+                  <p>{t(`tooltips.downloadTable.date.body`)}</p>
+                </Tooltip.Info>
               </th>
               <th scope="col" className="w-full p-4 text-left">
                 {t("downloadResponsesTable.header.nextStep")}
+                <Tooltip.Info
+                  side="top"
+                  triggerClassName="align-middle ml-1"
+                  tooltipClassName="font-normal"
+                >
+                  <strong>{t(`tooltips.downloadTable.nextSteps.title`)}</strong>
+                  <p>{t(`tooltips.downloadTable.nextSteps.body`)}</p>
+                </Tooltip.Info>
               </th>
               <th scope="col" className="py-4 text-center">
                 {t("downloadResponsesTable.header.download")}
@@ -170,7 +195,10 @@ export const DownloadTable = ({
 
             {tableItems.allItems.map((submission) => {
               const isBlocked = blockDownload(submission);
-              const createdDateTime = formatDateTime(submission.createdAt).join(" ");
+              const createdDateTime = formatDateTime(
+                submission.createdAt,
+                language == "en" ? "en-CA" : "fr-CA"
+              ).join(" ");
               return (
                 <tr
                   key={submission.name}

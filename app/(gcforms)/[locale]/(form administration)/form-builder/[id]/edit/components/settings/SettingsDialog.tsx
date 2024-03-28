@@ -81,7 +81,7 @@ export const SettingsDialog = ({
     updateField: s.updateField,
   }));
 
-  const responsesLink = `/${i18n.language}/form-builder/responses/${id}`;
+  const responsesLink = `/${i18n.language}/form-builder/${id}/responses/new`;
 
   /*--------------------------------------------*
    * Classification state and handlers

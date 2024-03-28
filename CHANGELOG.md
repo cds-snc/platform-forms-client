@@ -5,17 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [3.12.7](https://github.com/cds-snc/platform-forms-client/compare/v3.12.6...v3.12.7) (2024-02-29)
-
-
-### Bug Fixes
-
-* Nested conditional rule ([#3295](https://github.com/cds-snc/platform-forms-client/issues/3295)) ([64a2a44](https://github.com/cds-snc/platform-forms-client/commit/64a2a4466f08ea28bf03a419226414ff518fb8f4))
-
+## [3.12.11](https://github.com/cds-snc/platform-forms-client/compare/v3.12.10...v3.12.11) (2024-03-26)
 
 ### Miscellaneous Chores
 
-* Rename NEXTAUTH_URL as it is no longer required for Next-Auth ([#3288](https://github.com/cds-snc/platform-forms-client/issues/3288)) ([6ea5064](https://github.com/cds-snc/platform-forms-client/commit/6ea506440a5c3742f72716336354eb2f3d2c0744))
+- Add Canadian Space Agency branding ([#3417](https://github.com/cds-snc/platform-forms-client/issues/3417)) ([e1ad3ca](https://github.com/cds-snc/platform-forms-client/commit/e1ad3ca67bc22533c648cadbca4a8a567ecfc209))
+
+## [3.12.10](https://github.com/cds-snc/platform-forms-client/compare/v3.12.9...v3.12.10) (2024-03-13)
+
+### Bug Fixes
+
+- Password reset is case sensitive for user emails ([#3324](https://github.com/cds-snc/platform-forms-client/issues/3324)) ([ba64788](https://github.com/cds-snc/platform-forms-client/commit/ba6478817daabf2bea4f657a92f36fa61df2ca44))
+
+## [3.12.9](https://github.com/cds-snc/platform-forms-client/compare/v3.12.8...v3.12.9) (2024-03-12)
+
+### Miscellaneous Chores
+
+- Add Library and Archives Canada branding ([#3317](https://github.com/cds-snc/platform-forms-client/issues/3317)) ([fb28674](https://github.com/cds-snc/platform-forms-client/commit/fb28674e52653f3215a13b9ff284a3c259c492ef))
+
+## [3.12.8](https://github.com/cds-snc/platform-forms-client/compare/v3.12.7...v3.12.8) (2024-03-11)
+
+### Bug Fixes
+
+- add comment - 3314 ([#3316](https://github.com/cds-snc/platform-forms-client/issues/3316)) ([c09a6eb](https://github.com/cds-snc/platform-forms-client/commit/c09a6eb41cfd75148a012dda30f84283ee8335c6))
+- Conditional Indicator ([#3314](https://github.com/cds-snc/platform-forms-client/issues/3314)) ([2c2cb61](https://github.com/cds-snc/platform-forms-client/commit/2c2cb610175c2aa0a5741e14ef54a6ce024f0cfe))
+
+## [3.12.7](https://github.com/cds-snc/platform-forms-client/compare/v3.12.6...v3.12.7) (2024-02-29)
+
+### Bug Fixes
+
+- Nested conditional rule ([#3295](https://github.com/cds-snc/platform-forms-client/issues/3295)) ([64a2a44](https://github.com/cds-snc/platform-forms-client/commit/64a2a4466f08ea28bf03a419226414ff518fb8f4))
+
+### Miscellaneous Chores
+
+- Rename NEXTAUTH_URL as it is no longer required for Next-Auth ([#3288](https://github.com/cds-snc/platform-forms-client/issues/3288)) ([6ea5064](https://github.com/cds-snc/platform-forms-client/commit/6ea506440a5c3742f72716336354eb2f3d2c0744))
 
 ## [3.12.6](https://github.com/cds-snc/platform-forms-client/compare/v3.12.5...v3.12.6) (2024-02-22)
 

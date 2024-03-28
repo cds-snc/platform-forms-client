@@ -11,6 +11,8 @@ import { SelectedElement, ElementRequired } from ".";
 import { Question } from "./elements";
 import { QuestionDescription } from "./elements/question/QuestionDescription";
 import { useTemplateStore } from "@lib/store";
+import { Trans } from "react-i18next";
+import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 
 export const PanelBody = ({
   item,
@@ -76,11 +78,24 @@ export const PanelBody = ({
                 </div>
               )}
               {item.properties.managedChoices && (
-                <div data-testid={`managedChoices-${item.id}`} className="mt-5 text-sm">
+                <div data-testid={`managedChoices-${item.id}`} className="mt-5 flex text-sm">
                   <strong>{t("managedList.prefix")}</strong>{" "}
-                  <a href="https://github.com/cds-snc/gc-organisations" target="_blank">
+                  <a
+                    href="https://github.com/cds-snc/gc-organisations"
+                    className="ml-2"
+                    target="_blank"
+                  >
                     {t(`managedList.${item.properties.managedChoices}`)}
                   </a>
+                  <Tooltip.Info side="top" triggerClassName="align-baseline ml-1">
+                    <strong>{t("tooltips.departmentElement.title")}</strong>
+                    <Trans
+                      ns="form-builder"
+                      i18nKey="tooltips.departmentElement.body"
+                      defaults="<a></a> <p></p>"
+                      components={{ a: <a />, p: <p /> }}
+                    />
+                  </Tooltip.Info>
                 </div>
               )}
               <ElementRequired onRequiredChange={onRequiredChange} item={item} />

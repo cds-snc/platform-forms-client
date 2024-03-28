@@ -3,7 +3,6 @@ import React, { useEffect, useState, useRef } from "react";
 import { FormikProps, withFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage, validateOnSubmit } from "@lib/validation";
-import { submitToAPI } from "@lib/client/clientHelpers";
 import { useFormTimer } from "@lib/hooks";
 import { Alert, Button, RichText } from "@clientComponents/forms";
 import { logMessage } from "@lib/logger";
@@ -15,6 +14,7 @@ import classNames from "classnames";
 import { Responses, PublicFormRecord, Validate } from "@lib/types";
 import { ErrorStatus } from "../Alert/Alert";
 import { useFormValuesChanged } from "@lib/hooks";
+import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -57,8 +57,6 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
       // Calling the checkTimer modifies the state of the formTimerState
       // Which recalls this useEffect at least every second
       const timerID = setTimeout(() => checkTimer(), 1000);
-
-      logMessage.info(`Form Timer useEffect - timer enabled`);
 
       return () => {
         clearTimeout(timerID);
@@ -335,10 +333,11 @@ export const Form = withFormik<FormProps, Responses>({
     // Needed so the Loader is displayed
     formikBag.setStatus("submitting");
     try {
-      const result = await submitToAPI(values, formikBag);
+      const result = await submitForm(values, formikBag.props.language, formikBag.props.formRecord);
       result && formikBag.props.onSuccess(result);
     } catch (err) {
       logMessage.error(err as Error);
+      formikBag.setStatus("Error");
     } finally {
       if (formikBag.props && !formikBag.props.isPreview) {
         window.dataLayer = window.dataLayer || [];

@@ -7,6 +7,8 @@ import { PublicFormRecord } from "@lib/types";
 
 interface TemplateApiType {
   templateIsDirty: React.MutableRefObject<boolean>;
+  updatedAt: number | undefined;
+  setUpdatedAt: React.Dispatch<React.SetStateAction<number | undefined>>;
   nameChanged: boolean | null;
   introChanged: boolean | null;
   privacyChanged: boolean | null;
@@ -20,17 +22,19 @@ interface TemplateApiType {
         securityAttribute,
       }: CreateOrUpdateTemplateType) => Promise<PublicFormRecord>)
     | null;
-  lastChange: number;
+  resetState: () => void;
 }
 
 const defaultTemplateApi: TemplateApiType = {
   templateIsDirty: { current: false },
+  updatedAt: undefined,
+  setUpdatedAt: () => {},
   nameChanged: null,
   introChanged: null,
   privacyChanged: null,
   confirmationChanged: null,
   createOrUpdateTemplate: null,
-  lastChange: new Date().getTime(),
+  resetState: () => {},
 };
 
 const TemplateApiContext = createContext<TemplateApiType>(defaultTemplateApi);
@@ -67,13 +71,21 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
   const [introChanged, setIntroChanged] = useState<boolean | null>(false);
   const [privacyChanged, setPrivacyChanged] = useState<boolean | null>(false);
   const [confirmationChanged, setConfirmationChanged] = useState<boolean | null>(false);
+  const [updatedAt, setUpdatedAt] = useState<number | undefined>();
 
   const { hasHydrated } = useTemplateStore((s) => ({
     hasHydrated: s.hasHydrated,
   }));
 
-  const [lastChange, setLastChange] = useState(new Date().getTime());
   const templateIsDirty = useRef(false);
+
+  const resetState = () => {
+    setNameChanged(null);
+    setIntroChanged(null);
+    setPrivacyChanged(null);
+    setConfirmationChanged(null);
+    templateIsDirty.current = false;
+  };
 
   useSubscibeToTemplateStore(
     (s) => [s.form, s.isPublished, s.name, s.deliveryOption, s.securityAttribute],
@@ -82,7 +94,6 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
         logMessage.debug(`TemplateContext: Local State out of sync with server`);
         templateIsDirty.current = true;
       }
-      setLastChange(new Date().getTime());
     }
   );
 
@@ -91,7 +102,6 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
     (s, p) => {
       if (p[0] !== s[0]) {
         setNameChanged(true);
-        setLastChange(new Date().getTime());
       }
     }
   );
@@ -108,17 +118,14 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
 
       if (introduction !== introChanged) {
         setIntroChanged(introduction);
-        setLastChange(new Date().getTime());
       }
 
       if (privacyPolicy !== privacyChanged) {
         setPrivacyChanged(privacyPolicy);
-        setLastChange(new Date().getTime());
       }
 
       if (confirmation !== confirmationChanged) {
         setConfirmationChanged(confirmation);
-        setLastChange(new Date().getTime());
       }
     }
   );
@@ -127,12 +134,14 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
     <TemplateApiContext.Provider
       value={{
         templateIsDirty,
+        updatedAt,
+        setUpdatedAt,
         nameChanged,
         introChanged,
         privacyChanged,
         confirmationChanged,
         createOrUpdateTemplate,
-        lastChange,
+        resetState,
       }}
     >
       {children}

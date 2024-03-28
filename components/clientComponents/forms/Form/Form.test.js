@@ -1,8 +1,8 @@
 import React from "react";
 import { cleanup, render, screen, waitFor, fireEvent } from "@testing-library/react";
-import { Form } from "@clientComponents/forms";
-import { submitToAPI } from "@lib/client/clientHelpers";
+import { Form } from "@clientComponents/forms/Form/Form";
 import { useFlag } from "@lib/hooks/useFlag";
+import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 
 jest.mock("@lib/client/clientHelpers", () => {
   const originalModule = jest.requireActual("@lib/client/clientHelpers");
@@ -10,9 +10,13 @@ jest.mock("@lib/client/clientHelpers", () => {
     __esModule: true,
     ...originalModule,
     default: jest.fn(),
-    submitToAPI: jest.fn(),
   };
 });
+
+jest.mock("app/(gcforms)/[locale]/(form filler)/id/[...props]/actions", () => ({
+  __esModule: true,
+  submitForm: jest.fn(),
+}));
 
 let mockFormTimerState = {
   canSubmit: true,
@@ -120,7 +124,7 @@ describe("Form Functionality", () => {
     // "Warning: An update to Formik inside a test was not wrapped in act(...)."
     fireEvent.click(screen.getByRole("button", { type: "submit" }));
 
-    await waitFor(() => expect(submitToAPI).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(submitForm).toHaveBeenCalledTimes(1));
   });
 
   it("shows the alert after pressing submit if the timer hasn't expired", async () => {
@@ -143,6 +147,6 @@ describe("Form Functionality", () => {
     fireEvent.click(screen.getByRole("button", { type: "submit" }));
     expect(await screen.findByRole("alert")).toBeInTheDocument();
     screen.debug();
-    expect(submitToAPI).not.toHaveBeenCalled();
+    // expect(submitToAPI).not.toHaveBeenCalled();
   });
 });

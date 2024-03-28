@@ -7,7 +7,8 @@ import { getDate, slugify } from "@lib/client/clientHelpers";
 import axios from "axios";
 
 import Loader from "@clientComponents/globals/Loader";
-import { Button, LinkButton, Alert } from "@clientComponents/globals";
+import { Button, Alert } from "@clientComponents/globals";
+import { LinkButton } from "@serverComponents/globals";
 import { useDialogRef, Dialog } from "./Dialog";
 
 const fetcher = async (url: string) => {
@@ -111,7 +112,7 @@ export const ConfirmFormDeleteDialog = ({
     </>
   );
 
-  const responsesLink = `/${i18n.language}/form-builder/responses/${formId}`;
+  const responsesLink = `/${i18n.language}/form-builder/${formId}/responses/new`;
 
   if (data && data.error === "unprocessed") {
     return (

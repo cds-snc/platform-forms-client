@@ -4,7 +4,7 @@ import { useTranslation } from "@i18n/client";
 import { getSession } from "next-auth/react";
 import { Session } from "next-auth";
 
-import { LinkButton } from "@clientComponents/globals";
+import { LinkButton } from "@serverComponents/globals";
 import { BackArrowIcon } from "@serverComponents/icons";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 

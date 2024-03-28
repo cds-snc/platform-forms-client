@@ -1,10 +1,10 @@
 import { ComponentType } from "react";
-export type FormItem = {
+export type TreeItem = {
   id: string;
-  name: string;
-  icon: ComponentType | null;
   readOnly: boolean;
-  children?: FormItem[];
+  name: string;
+  icon?: ComponentType | null;
+  children?: TreeItem[];
 };
 
-export type TreeData = FormItem[];
+export type TreeData = TreeItem[];

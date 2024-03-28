@@ -16,7 +16,7 @@ import { PanelHightLight } from "./PanelHightlight";
 import { PanelActions } from "../../PanelActions";
 import { Input, LockedBadge } from "@formBuilder/components/shared";
 import { getQuestionNumber } from "@lib/utils/form-builder";
-import { useHandleAdd } from "@lib/hooks/form-builder";
+import { useHandleAdd } from "@lib/hooks/form-builder/useHandleAdd";
 
 export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elIndex: number }) => {
   const { t } = useTranslation("form-builder");

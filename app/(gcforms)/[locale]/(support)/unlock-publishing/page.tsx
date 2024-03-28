@@ -1,6 +1,6 @@
 import { serverTranslation } from "@i18n";
-import { requireAuthentication } from "@lib/auth";
-import { checkPrivilegesAsBoolean } from "@lib/privileges";
+import { auth } from "@lib/auth";
+import { checkPrivilegesAsBoolean, createAbility } from "@lib/privileges";
 import { Metadata } from "next";
 import { RedirectType, redirect } from "next/navigation";
 import { Success } from "./components/server/Success";
@@ -24,9 +24,9 @@ export default async function Page({
   params: { locale: string };
   searchParams: { success?: string };
 }) {
-  const {
-    user: { ability, email },
-  } = await requireAuthentication();
+  const session = await auth();
+  if (!session) redirect(`/${locale}/auth/login`);
+  const ability = createAbility(session);
 
   if (
     checkPrivilegesAsBoolean(ability, [
@@ -36,5 +36,13 @@ export default async function Page({
     redirect(`/${locale}/forms`, RedirectType.replace);
   }
 
-  return <>{success === undefined ? <UnlockPublishingForm userEmail={email} /> : <Success />}</>;
+  return (
+    <>
+      {success === undefined ? (
+        <UnlockPublishingForm userEmail={session.user.email} />
+      ) : (
+        <Success />
+      )}
+    </>
+  );
 }

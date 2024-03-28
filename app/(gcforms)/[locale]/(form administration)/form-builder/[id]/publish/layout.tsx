@@ -40,7 +40,7 @@ export default async function Layout({
   }
 
   return (
-    <div className="flex flex-wrap justify-between laptop:flex-nowrap">
+    <div className="mr-10 flex flex-wrap justify-between laptop:flex-nowrap">
       <div className="min-w-fit grow rounded-lg border-1 p-5">
         <h1 className="mb-2 border-0">{t("publishYourForm")}</h1>
         <p className="mb-0 text-lg">{t("publishYourFormInstructions.text1")}</p>

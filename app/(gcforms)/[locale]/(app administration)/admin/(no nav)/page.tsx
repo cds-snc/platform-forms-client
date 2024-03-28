@@ -1,5 +1,5 @@
-import { requireAuthentication } from "@lib/auth";
-import { checkPrivilegesAsBoolean } from "@lib/privileges";
+import { auth } from "@lib/auth";
+import { checkPrivilegesAsBoolean, createAbility } from "@lib/privileges";
 import { serverTranslation } from "@i18n";
 import Link from "next/link";
 import { ManageAccountsIcon, SettingsApplicationsIcon } from "@serverComponents/icons";
@@ -20,12 +20,14 @@ export async function generateMetadata({
 // keeping this here if we want to add a welcome page
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const { t } = await serverTranslation(["admin-home", "common"]);
-  const { user } = await requireAuthentication();
-  const canViewUsers = checkPrivilegesAsBoolean(
-    user.ability,
-    [{ action: "view", subject: "User" }],
-    { redirect: true }
-  );
+
+  const session = await auth();
+  if (!session) redirect(`/${locale}/auth/login`);
+  const ability = createAbility(session);
+
+  const canViewUsers = checkPrivilegesAsBoolean(ability, [{ action: "view", subject: "User" }], {
+    redirect: true,
+  });
 
   if (!canViewUsers) {
     redirect(`/${locale}/forms`);

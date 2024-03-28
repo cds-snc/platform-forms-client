@@ -1,5 +1,5 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
+@tailwind base;
+@tailwind components;
 
 // Custom Variables
 @import "./_mixins";
@@ -13,4 +13,4 @@
 @import "./animations";
 
 // Tailwind Utilities needs to be loaded last to use inline
-@import "tailwindcss/utilities";
+@tailwind utilities;

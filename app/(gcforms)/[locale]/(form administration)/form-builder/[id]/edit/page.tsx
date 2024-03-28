@@ -1,9 +1,9 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-
 import { Edit } from "./components/Edit";
 import { EditNavigation } from "./components/EditNavigation";
 import { checkFlag } from "../actions";
+import { EditWithGroups } from "./components/EditWithGroups";
 
 export async function generateMetadata({
   params: { locale },
@@ -21,9 +21,14 @@ export default async function Page({ params: { id } }: { params: { id: string } 
 
   return (
     <>
-      {/* If conditional logic is off use "Pill" navigation */}
-      {!conditionalLogic && <EditNavigation id={id} />}
-      <Edit groupElements={conditionalLogic} />
+      {conditionalLogic ? (
+        <EditWithGroups />
+      ) : (
+        <>
+          <EditNavigation id={id} />
+          <Edit formId={id} />
+        </>
+      )}
     </>
   );
 }
