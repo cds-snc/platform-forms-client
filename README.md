@@ -181,11 +181,11 @@ Définir les variables .env
 Pour le développement local de l'application NextJS mais en s'appuyant sur le backend AWS (File d'attente de fiabilité, DB de modèles, etc.)
 
 ```
-NOTIFY_API_KEY= // Can be found in LastPass
+NOTIFY_API_KEY= // ask the dev team
 SUBMISSION_API=Submission
 TEMPLATES_API=Templates
-AWS_ACCESS_KEY_ID= // Can be found in LastPass
-AWS_SECRET_ACCESS_KEY= // Can be found in LastPass
+AWS_ACCESS_KEY_ID= // ask the dev team
+AWS_SECRET_ACCESS_KEY= // ask the dev team
 HOST_URL=http://localhost:3000
 REDIS_URL=localhost
 ```
