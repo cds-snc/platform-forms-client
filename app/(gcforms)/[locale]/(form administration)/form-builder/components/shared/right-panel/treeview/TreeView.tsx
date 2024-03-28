@@ -27,13 +27,21 @@ const testItems = {
   child1: {
     index: "child1",
     canMove: true,
-    isFolder: false,
-    children: [],
+    isFolder: true,
+    children: ["subChild1"],
     data: "Child item 1",
     canRename: true,
   },
   child2: {
     index: "child2",
+    canMove: true,
+    isFolder: false,
+    children: [],
+    data: "Child item 2",
+    canRename: true,
+  },
+  subChild1: {
+    index: "subChild1",
     canMove: true,
     isFolder: false,
     children: [],
@@ -57,9 +65,13 @@ export const TreeView = () => {
   );
 
   const injectItem = (id: string) => {
-    items[id] = { data: "New Item", index: id };
-    if (items.root.children === undefined) items.root.children = [];
-    items.root.children.push(id);
+    items[id] = { data: id, index: id, children: [], canMove: true, isFolder: false };
+
+    // @todo update this to add children current section
+    if (items["child1"] && items["child1"].children !== undefined) {
+      items["child1"].children.push(id);
+    }
+
     dataProvider.onDidChangeTreeDataEmitter.emit(["root"]);
   };
 
@@ -80,7 +92,7 @@ export const TreeView = () => {
 
   return (
     <div className="relative mr-[1px]">
-      <div className="m-4 flex">
+      <div className="m-4">
         <Button
           theme="secondary"
           onClick={() => {
