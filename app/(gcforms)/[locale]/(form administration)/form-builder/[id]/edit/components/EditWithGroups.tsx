@@ -41,7 +41,7 @@ export const EditWithGroups = () => {
   const groupId = useGroupStore((state) => state.id);
   const getElement = useGroupStore((state) => state.getElement);
   const elements = useTemplateStore(
-    (s) => (s.form.groups && s.form.groups[groupId].elements) || []
+    (s) => (s.form.groups && s.form.groups[groupId]?.elements) || []
   );
 
   useEffect(() => {
