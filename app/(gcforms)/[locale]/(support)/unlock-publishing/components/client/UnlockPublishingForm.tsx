@@ -1,7 +1,7 @@
 "use client";
 import { useTranslation } from "@i18n/client";
 import { useFormState } from "react-dom";
-import { publishing } from "../../actions";
+import { unlockPublishing } from "../../actions";
 import { Label, Alert, ErrorListItem, Description } from "@clientComponents/forms";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
@@ -15,7 +15,7 @@ export const UnlockPublishingForm = ({ userEmail }: { userEmail: string }) => {
     i18n: { language },
   } = useTranslation("unlock-publishing");
 
-  const [state, formAction] = useFormState(publishing.bind(null, language, userEmail), {
+  const [state, formAction] = useFormState(unlockPublishing.bind(null, language, userEmail), {
     validationErrors: [],
   });
 

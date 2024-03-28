@@ -4,7 +4,17 @@ import { serverTranslation } from "@i18n";
 import { createTicket } from "@lib/integration/freshdesk";
 import { logMessage } from "@lib/logger";
 import { redirect } from "next/navigation";
-import { custom, email, minLength, maxLength, object, safeParse, string } from "valibot";
+import {
+  custom,
+  email,
+  minLength,
+  maxLength,
+  object,
+  safeParse,
+  string,
+  toLowerCase,
+  toTrimmed,
+} from "valibot";
 import { isValidGovEmail } from "@lib/validation";
 
 export interface ErrorStates {
@@ -25,6 +35,8 @@ const validate = async (
 
   const SupportSchema = object({
     managerEmail: string([
+      toLowerCase(),
+      toTrimmed(),
       minLength(1, t("input-validation.required", { ns: "common" })),
       email(t("input-validation.email", { ns: "common" })),
       custom(
@@ -32,7 +44,7 @@ const validate = async (
         t("input-validation.validGovEmail", { ns: "common" })
       ),
       custom(
-        (email) => email?.toUpperCase() != userEmail?.toUpperCase(),
+        (email) => email?.toLowerCase() != userEmail?.toLowerCase(),
         t("input-validation.notSameAsUserEmail", { ns: "common" })
       ),
     ]),
@@ -46,7 +58,7 @@ const validate = async (
   return safeParse(SupportSchema, formEntries);
 };
 
-export async function publishing(
+export async function unlockPublishing(
   language: string,
   userEmail: string,
   _: ErrorStates,
@@ -55,19 +67,19 @@ export async function publishing(
   const session = await auth();
   if (!session) throw new Error("No session");
 
-  const { managerEmail, department, goals } = <
-    { managerEmail: string; department: string; goals: string }
-  >Object.fromEntries(formData.entries());
-  const result = await validate(language, userEmail, { managerEmail, department, goals });
+  const rawData = Object.fromEntries(formData.entries());
+  const validatedData = await validate(language, userEmail, rawData);
 
-  if (!result.success) {
+  if (!validatedData.success) {
     return {
-      validationErrors: result.issues.map((issue) => ({
+      validationErrors: validatedData.issues.map((issue) => ({
         fieldKey: issue.path?.[0].key as string,
         fieldValue: issue.message,
       })),
     };
   }
+
+  const { managerEmail, department, goals } = validatedData.output;
 
   const emailBody = `
   ${session.user.name} (${session.user.email}) from ${department} has requested permission to publish forms.<br/>
@@ -90,18 +102,13 @@ export async function publishing(
   }
 
   try {
-    const result = await createTicket({
+    await createTicket({
       type: "publishing",
       name: session.user.name,
       email: session.user.email,
       description: emailBody,
       language: language,
     });
-    if (result?.status >= 400) {
-      throw new Error(
-        `Freshdesk error: ${JSON.stringify(result)} - ${session.user.email} - ${emailBody}`
-      );
-    }
   } catch (error) {
     logMessage.error(error);
     throw new Error("Failed to send request");

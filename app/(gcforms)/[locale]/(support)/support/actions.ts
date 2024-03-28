@@ -3,7 +3,7 @@ import { serverTranslation } from "@i18n";
 import { createTicket } from "@lib/integration/freshdesk";
 import { logMessage } from "@lib/logger";
 import { redirect } from "next/navigation";
-import { email, minLength, object, safeParse, string } from "valibot";
+import { email, minLength, object, safeParse, string, toLowerCase, toTrimmed } from "valibot";
 
 export interface ErrorStates {
   validationErrors: {
@@ -18,19 +18,19 @@ const validate = async (
     [k: string]: FormDataEntryValue;
   }
 ) => {
-  const { t } = await serverTranslation(["signup", "common"], { lang: language });
+  const { t } = await serverTranslation(["common"], { lang: language });
 
   const SupportSchema = object({
-    name: string([minLength(1, t("input-validation.required", { ns: "common" }))]),
+    name: string([minLength(1, t("input-validation.required"))]),
     email: string([
-      minLength(1, t("input-validation.required", { ns: "common" })),
-      email(t("input-validation.email", { ns: "common" })),
+      toLowerCase(),
+      toTrimmed(),
+      minLength(1, t("input-validation.required")),
+      email(t("input-validation.email")),
     ]),
     // radio input can send a non-string value when empty
-    request: string(t("input-validation.required", { ns: "common" }), [
-      minLength(1, t("input-validation.required", { ns: "common" })),
-    ]),
-    description: string([minLength(1, t("input-validation.required", { ns: "common" }))]),
+    request: string(t("input-validation.required"), [minLength(1, t("input-validation.required"))]),
+    description: string([minLength(1, t("input-validation.required"))]),
   });
 
   return safeParse(SupportSchema, formEntries);
@@ -41,19 +41,19 @@ export async function support(
   _: ErrorStates,
   formData: FormData
 ): Promise<ErrorStates> {
-  const { name, email, request, description } = <
-    { name: string; email: string; request: string; description: string }
-  >Object.fromEntries(formData.entries());
-  const result = await validate(language, { name, email, request, description });
+  const rawData = Object.fromEntries(formData.entries());
+  const validatedData = await validate(language, rawData);
 
-  if (!result.success) {
+  if (!validatedData.success) {
     return {
-      validationErrors: result.issues.map((issue) => ({
+      validationErrors: validatedData.issues.map((issue) => ({
         fieldKey: issue.path?.[0].key as string,
         fieldValue: issue.message,
       })),
     };
   }
+
+  const { name, email, request, description } = validatedData.output;
 
   // Request may be a list of strings (checkbox), format it a bit if so, or just a string (radio)
   const requestParsed =

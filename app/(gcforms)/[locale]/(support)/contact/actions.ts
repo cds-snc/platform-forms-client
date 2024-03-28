@@ -3,7 +3,7 @@ import { serverTranslation } from "@i18n";
 import { createTicket } from "@lib/integration/freshdesk";
 import { logMessage } from "@lib/logger";
 import { redirect } from "next/navigation";
-import { email, minLength, object, safeParse, string } from "valibot";
+import { email, minLength, object, safeParse, string, toLowerCase, toTrimmed } from "valibot";
 
 export interface ErrorStates {
   validationErrors: {
@@ -28,11 +28,15 @@ const validate = async (
     description: string([minLength(1, t("input-validation.required", { ns: "common" }))]),
     name: string([minLength(1, t("input-validation.required", { ns: "common" }))]),
     email: string([
+      toLowerCase(),
+      toTrimmed(),
       minLength(1, t("input-validation.required", { ns: "common" })),
       email(t("input-validation.email", { ns: "common" })),
     ]),
     department: string([minLength(1, t("input-validation.required", { ns: "common" }))]),
     // Note: branch and jobTitle are not required/validated
+    branch: string(),
+    jobTitle: string(),
   });
 
   return safeParse(SupportSchema, formEntries);
@@ -43,26 +47,8 @@ export async function contact(
   _: ErrorStates,
   formData: FormData
 ): Promise<ErrorStates> {
-  const { request, description, name, email, department, branch, jobTitle } = <
-    {
-      request: string;
-      description: string;
-      name: string;
-      email: string;
-      department: string;
-      branch: string;
-      jobTitle: string;
-    }
-  >Object.fromEntries(formData.entries());
-  const result = await validate(language, {
-    request,
-    description,
-    name,
-    email,
-    department,
-    branch,
-    jobTitle,
-  });
+  const rawData = Object.fromEntries(formData.entries());
+  const result = await validate(language, rawData);
 
   if (!result.success) {
     return {
@@ -72,6 +58,8 @@ export async function contact(
       })),
     };
   }
+
+  const { name, email, department, branch, jobTitle, request, description } = result.output;
 
   // Request may be a list of strings (checkbox), format it a bit if so, or just a string (radio)
   const requestParsed =
@@ -121,16 +109,13 @@ ${description}<br/>
 `;
 
   try {
-    const result = await createTicket({
+    await createTicket({
       type: "contact",
       name,
       email,
       description: emailBody,
       language,
     });
-    if (result?.status >= 400) {
-      throw new Error(`Freshdesk error: ${JSON.stringify(result)} - ${email} - ${emailBody}`);
-    }
   } catch (error) {
     logMessage.error(error);
     throw new Error("Internal Service Error: Failed to send request");
