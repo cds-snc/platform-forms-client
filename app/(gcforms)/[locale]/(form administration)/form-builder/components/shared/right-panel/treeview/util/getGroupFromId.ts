@@ -1,20 +1,10 @@
-import { TreeItem } from "../types";
+import { TreeItem } from "react-complex-tree";
+import { TreeItems } from "../types";
 
-export function getGroupFromId(groups: TreeItem[], elementId: string): TreeItem | undefined {
-  if (!Array.isArray(groups)) {
-    return undefined;
+export function getGroupFromId(groups: TreeItems, elementId: string): TreeItem | undefined {
+  if (groups[elementId]) {
+    return groups[elementId];
   }
 
-  for (const group of groups) {
-    if (group.id === elementId) {
-      return group;
-    }
-    if (group.children) {
-      for (const child of group.children) {
-        if (child.id === elementId) {
-          return group;
-        }
-      }
-    }
-  }
+  return undefined;
 }

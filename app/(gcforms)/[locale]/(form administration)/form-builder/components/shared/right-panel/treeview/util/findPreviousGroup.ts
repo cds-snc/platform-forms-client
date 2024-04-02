@@ -1,22 +1,22 @@
-import { TreeItem } from "../types";
+import { TreeItem } from "react-complex-tree";
+import { TreeItems } from "../types";
 import { getGroupFromId } from "./getGroupFromId";
 
-export function findPreviousGroup(groups: TreeItem[], elementId: string): TreeItem | undefined {
-  if (!Array.isArray(groups)) {
-    return undefined;
-  }
-
+export function findPreviousGroup(groups: TreeItems, elementId: string): TreeItem | undefined {
   const currentGroup = getGroupFromId(groups, elementId);
 
   if (!currentGroup) {
     return undefined;
   }
 
-  const currentIndex = groups.findIndex((group) => group.id === currentGroup.id);
+  const keys = Object.keys(groups);
 
-  if (currentIndex === -1) {
+  const currentIndex = keys.findIndex((group) => group === elementId);
+  const previousGroup = keys.at(keys.indexOf(elementId) - 1);
+
+  if (currentIndex === -1 || previousGroup === undefined) {
     return undefined;
   }
 
-  return groups[currentIndex - 1];
+  return groups[previousGroup];
 }
