@@ -1,15 +1,25 @@
-import React, { useMemo } from "react";
-import { useTranslation } from "react-i18next";
+import React, { useMemo, forwardRef, useImperativeHandle, ForwardRefRenderFunction } from "react";
 import { Button } from "@clientComponents/globals";
 import { v4 as uuid } from "uuid";
 import { useGroupStore } from "./store";
-import { UncontrolledTreeEnvironment, Tree, StaticTreeDataProvider } from "react-complex-tree";
+import {
+  UncontrolledTreeEnvironment,
+  Tree,
+  StaticTreeDataProvider,
+  TreeItem,
+} from "react-complex-tree";
 import "react-complex-tree/lib/style-modern.css";
-// import { groupsToTreeData } from "./util/groupsToTreeData";
 import { useTreeRef } from "./provider/TreeRefProvider";
 import { findParentGroup } from "./util/findParentGroup";
+import { TreeWrapperProps } from "./types";
 
-export const TreeView = () => {
+export const TreeView = ({
+  dataProvider,
+  onFocusItem,
+}: {
+  dataProvider: StaticTreeDataProvider;
+  onFocusItem: (item: TreeItem) => void;
+}) => {
   const { environment, tree } = useTreeRef();
 
   // This is only for testing purposes
@@ -34,8 +44,45 @@ export const TreeView = () => {
   //   },
   // });
 
-  const { setId, getId, getGroups } = useGroupStore((s) => {
-    return { setId: s.setId, getId: s.getId, getGroups: s.getGroups };
+  return (
+    <div className="relative mr-[1px]">
+      <div className="m-4">
+        <Button
+          onClick={() => {
+            if (tree && tree.current) {
+              tree.current.expandItem(getFocus());
+            }
+          }}
+        >
+          Collapse focused Item
+        </Button>
+
+        <div>
+          <div>
+            <UncontrolledTreeEnvironment
+              ref={environment}
+              onFocusItem={onFocusItem}
+              canDragAndDrop={true}
+              canReorderItems={true}
+              dataProvider={dataProvider}
+              getItemTitle={(item) => item.data}
+              viewState={{}}
+            >
+              <Tree treeId="tree-1" rootItem="root" treeLabel="Tree Example" ref={tree} />
+            </UncontrolledTreeEnvironment>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Wrapper: ForwardRefRenderFunction<unknown, TreeWrapperProps> = (
+  { children, ...rest },
+  ref
+) => {
+  const { getGroups, getId, setId } = useGroupStore((s) => {
+    return { getGroups: s.getGroups, getId: s.getId, setId: s.setId };
   });
 
   const items = useMemo(() => getGroups(), []);
@@ -68,68 +115,31 @@ export const TreeView = () => {
     dataProvider.onDidChangeTreeDataEmitter.emit(["root"]);
   };
 
-  /*
-  const removeItem = () => {
-    if (items.root.children.length === 0) return;
-    items.root.children.pop();
-    dataProvider.onDidChangeTreeDataEmitter.emit(['root']);
-  };
-  */
-
-  const { t } = useTranslation("form-builder");
-
-  // const { groups, addGroup, controllers } = useDynamicTree();
+  useImperativeHandle(ref, () => ({
+    addItem: () => {
+      const itemId = uuid();
+      return injectItem(itemId);
+    },
+  }));
 
   return (
-    <div className="relative mr-[1px]">
-      <div className="m-4">
-        <Button
-          onClick={() => {
-            if (tree && tree.current) {
-              tree.current.expandItem(getFocus());
+    <div {...rest}>
+      <TreeView
+        dataProvider={dataProvider}
+        onFocusItem={(item: TreeItem) => {
+          if (item.isFolder) {
+            setId(String(item.index));
+          } else {
+            const parent = findParentGroup(items, String(item.index));
+            if (parent) {
+              setId(String(parent.index));
             }
-          }}
-        >
-          Collapse focused Item
-        </Button>
-
-        <Button
-          theme="secondary"
-          onClick={() => {
-            const itemId = uuid();
-
-            injectItem(itemId);
-            // setId(id); // @TODO: should this be parent or current?
-          }}
-        >
-          {t("rightPanel.treeView.addSection")}
-        </Button>
-
-        <div>
-          <div>
-            <UncontrolledTreeEnvironment
-              ref={environment}
-              onFocusItem={(item) => {
-                if (item.isFolder) {
-                  setId(String(item.index));
-                } else {
-                  const parent = findParentGroup(items, String(item.index));
-                  if (parent) {
-                    setId(String(parent.index));
-                  }
-                }
-              }}
-              canDragAndDrop={true}
-              canReorderItems={true}
-              dataProvider={dataProvider}
-              getItemTitle={(item) => item.data}
-              viewState={{}}
-            >
-              <Tree treeId="tree-1" rootItem="root" treeLabel="Tree Example" ref={tree} />
-            </UncontrolledTreeEnvironment>
-          </div>
-        </div>
-      </div>
+          }
+        }}
+      />
+      {children}
     </div>
   );
 };
+
+export const TreeWrapper = forwardRef(Wrapper);

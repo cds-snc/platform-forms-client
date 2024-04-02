@@ -11,7 +11,8 @@ import { cn } from "@lib/utils";
 import { useActivePathname } from "@lib/hooks/form-builder";
 import { DownloadCSV } from "@formBuilder/[id]/edit/translate/components/DownloadCSV";
 import { useRehydrate } from "@lib/hooks/form-builder";
-import { TreeView } from "./treeview/TreeView";
+import { TreeWrapper } from "./treeview/TreeView";
+import { useTreeRef } from "./treeview/provider/TreeRefProvider";
 
 const TabButton = ({
   text,
@@ -47,6 +48,7 @@ export const RightPanel = ({ id }: { id: string }) => {
   const router = useRouter();
   const { t, i18n } = useTranslation("form-builder");
   const { activePathname } = useActivePathname();
+  const { wrapper } = useTreeRef();
 
   const hasHydrated = useRehydrate();
 
@@ -171,7 +173,19 @@ export const RightPanel = ({ id }: { id: string }) => {
                     </Tab.List>
                     <Tab.Panels>
                       <Tab.Panel>
-                        <TreeView />
+                        <TreeWrapper ref={wrapper} />
+                        <Button
+                          theme="link"
+                          onClick={() => {
+                            if (!wrapper?.current || !wrapper.current.addItem) {
+                              return;
+                            }
+                            wrapper?.current?.addItem();
+                            // dataProvider.onDidChangeTreeDataEmitter.emit(['root']);
+                          }}
+                        >
+                          Test Button
+                        </Button>
                       </Tab.Panel>
                       <Tab.Panel>
                         <DownloadCSV />
