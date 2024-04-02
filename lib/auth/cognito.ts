@@ -113,8 +113,7 @@ export const initiateSignIn = async ({
       logMessage.warn("Cognito Lockout: Password attempts exceeded");
     }
 
-    // throw new Error with cognito error converted to string so as to include the exception name
-    throw new Error((e as CognitoIdentityProviderServiceException).toString());
+    throw e;
   }
 };
 
