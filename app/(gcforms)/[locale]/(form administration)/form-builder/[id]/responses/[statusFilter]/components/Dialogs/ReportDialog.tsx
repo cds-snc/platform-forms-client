@@ -7,7 +7,7 @@ import {
 import { useTranslation } from "@i18n/client";
 import { randomId } from "@lib/client/clientHelpers";
 import { logMessage } from "@lib/logger";
-import { isResponseId } from "@lib/validation";
+import { isResponseId } from "@lib/validation/validation";
 import { WarningIcon } from "@serverComponents/icons";
 import axios from "axios";
 import Link from "next/link";

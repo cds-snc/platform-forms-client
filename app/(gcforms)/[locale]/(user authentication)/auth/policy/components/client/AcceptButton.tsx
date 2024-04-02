@@ -2,7 +2,7 @@
 import React from "react";
 import { useTranslation } from "@i18n/client";
 import { useRouter, useSearchParams } from "next/navigation";
-import { localPathRegEx } from "@lib/validation";
+import { localPathRegEx } from "@lib/validation/validation";
 import { Button } from "@clientComponents/globals";
 import { useSession } from "next-auth/react";
 
