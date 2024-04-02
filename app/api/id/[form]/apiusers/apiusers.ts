@@ -1,7 +1,7 @@
 // import { NextApiRequest, NextApiResponse } from "next";
 // import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 // import { Prisma } from "@prisma/client";
-// import { isValidGovEmail } from "@lib/validation";
+// import { isValidGovEmail } from "@lib/validation/validation";
 // import { MiddlewareProps, WithRequired, UserAbility } from "@lib/types";
 // import { createAbility, AccessControlError } from "@lib/privileges";
 // import { checkPrivileges } from "@lib/privileges";

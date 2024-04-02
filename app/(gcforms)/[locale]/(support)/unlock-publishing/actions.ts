@@ -15,7 +15,7 @@ import {
   toLowerCase,
   toTrimmed,
 } from "valibot";
-import { isValidGovEmail } from "@lib/validation";
+import { isValidGovEmail } from "@lib/validation/validation";
 
 export interface ErrorStates {
   validationErrors: {

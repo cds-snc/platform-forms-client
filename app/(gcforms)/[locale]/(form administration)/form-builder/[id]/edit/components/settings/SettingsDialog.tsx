@@ -9,7 +9,7 @@ import { Logos, options } from "../../../settings/branding/components";
 import Brand from "@clientComponents/globals/Brand";
 import { LocalizedFormProperties } from "@lib/types/form-builder-types";
 import { ResponseEmail } from "@formBuilder/components/ResponseEmail";
-import { isValidGovEmail } from "@lib/validation";
+import { isValidGovEmail } from "@lib/validation/validation";
 import { completeEmailAddressRegex } from "@lib/utils/form-builder";
 import {
   ClassificationSelect,
