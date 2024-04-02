@@ -64,7 +64,7 @@ const validateData = async (formData: { [k: string]: FormDataEntryValue }, langu
     ]
   );
 
-  return v.safeParse(schema, formData);
+  return v.safeParse(schema, formData, { abortPipeEarly: true });
 };
 
 export const setupQuestions = async (

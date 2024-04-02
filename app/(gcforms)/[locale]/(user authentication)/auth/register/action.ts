@@ -91,7 +91,7 @@ const validate = async (
       ),
     ]
   );
-  return v.safeParse(formValidationSchema, formEntries);
+  return v.safeParse(formValidationSchema, formEntries, { abortPipeEarly: true });
 };
 export const register = async (
   language: string,

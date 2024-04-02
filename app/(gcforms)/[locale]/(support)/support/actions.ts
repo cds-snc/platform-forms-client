@@ -33,7 +33,7 @@ const validate = async (
     description: string([minLength(1, t("input-validation.required"))]),
   });
 
-  return safeParse(SupportSchema, formEntries);
+  return safeParse(SupportSchema, formEntries, { abortPipeEarly: true });
 };
 
 export async function support(

@@ -97,6 +97,9 @@ export const LoginForm = () => {
             name={"username"}
             required
             ariaDescribedBy="login-description"
+            validationError={
+              state.validationErrors?.find((e) => e.fieldKey === "username")?.fieldValue
+            }
           />
         </div>
         <div className="focus-group">
@@ -109,6 +112,9 @@ export const LoginForm = () => {
             id={"password"}
             name={"password"}
             required
+            validationError={
+              state.validationErrors?.find((e) => e.fieldKey === "password")?.fieldValue
+            }
           />
         </div>
         <p className="-mt-6 mb-10">

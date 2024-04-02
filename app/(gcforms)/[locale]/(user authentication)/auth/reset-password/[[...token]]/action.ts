@@ -95,7 +95,7 @@ const validateQuestionChallengeForm = async (
     ]),
   });
 
-  return v.safeParse(schema, formEntries);
+  return v.safeParse(schema, formEntries, { abortPipeEarly: true });
 };
 
 const validatePasswordResetForm = async (
@@ -150,7 +150,7 @@ const validatePasswordResetForm = async (
       ),
     ]
   );
-  return v.safeParse(schema, formEntries);
+  return v.safeParse(schema, formEntries, { abortPipeEarly: true });
 };
 
 export const sendResetLink = async (

@@ -44,7 +44,7 @@ const validate = async (
       v.maxLength(50, t("fields.password.errors.maxLength")),
     ]),
   });
-  return v.safeParse(formValidationSchema, formEntries);
+  return v.safeParse(formValidationSchema, formEntries, { abortPipeEarly: true });
 };
 export const login = async (
   language: string,

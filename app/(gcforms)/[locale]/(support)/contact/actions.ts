@@ -39,7 +39,7 @@ const validate = async (
     jobTitle: string(),
   });
 
-  return safeParse(SupportSchema, formEntries);
+  return safeParse(SupportSchema, formEntries, { abortPipeEarly: true });
 };
 
 export async function contact(

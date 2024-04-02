@@ -91,6 +91,9 @@ export const PasswordResetForm = ({ email }: { email: string }) => {
             id="confirmationCode"
             name="confirmationCode"
             required
+            validationError={
+              state.validationErrors?.find((e) => e.fieldKey === "confirmationCode")?.fieldValue
+            }
           />
         </div>
         <div className="focus-group">
@@ -106,6 +109,9 @@ export const PasswordResetForm = ({ email }: { email: string }) => {
             id="password"
             name="password"
             ariaDescribedBy="desc-username-hint"
+            validationError={
+              state.validationErrors?.find((e) => e.fieldKey === "password")?.fieldValue
+            }
           />
         </div>
         <div className="focus-group">
@@ -122,6 +128,9 @@ export const PasswordResetForm = ({ email }: { email: string }) => {
             type="password"
             id="passwordConfirmation"
             name="passwordConfirmation"
+            validationError={
+              state.validationErrors?.find((e) => e.fieldKey === "passwordConfirmation")?.fieldValue
+            }
           />
         </div>
 
