@@ -1,14 +1,23 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@clientComponents/globals";
 import { v4 as uuid } from "uuid";
 import { useGroupStore } from "./store";
-import { UncontrolledTreeEnvironment, Tree, StaticTreeDataProvider } from "react-complex-tree";
+import { UncontrolledTreeEnvironment, Tree, StaticTreeDataProvider, TreeEnvironmentRef, TreeRef } from "react-complex-tree";
 import "react-complex-tree/lib/style-modern.css";
 import { groupsToTreeData } from "./util/groupsToTreeData";
 import { TreeItems } from "./types";
 
 export const TreeView = () => {
+  const environment = useRef<TreeEnvironmentRef>(null);
+  const tree = useRef<TreeRef>(null);
+
+  const getFocus = () => {
+    if (!environment || !environment.current) return 'Fruit';
+    const state = environment.current.viewState;
+    return state['tree-1'] && state['tree-1'].focusedItem || 'Fruit';
+  }
+
   const testItems = groupsToTreeData({
     start: {
       name: "Start",
@@ -85,6 +94,17 @@ export const TreeView = () => {
   return (
     <div className="relative mr-[1px]">
       <div className="m-4">
+
+        <Button onClick={() => {
+          if (tree.current) {
+            tree.current.expandItem(getFocus())
+          }
+        }
+        }>
+          Collapse focused Item
+        </Button>
+
+
         <Button
           theme="secondary"
           onClick={() => {
@@ -100,6 +120,7 @@ export const TreeView = () => {
         <div>
           <div>
             <UncontrolledTreeEnvironment
+              ref={environment}
               onFocusItem={(item) => {
                 if (item.isFolder) {
                   setId(String(item.index));
@@ -116,7 +137,12 @@ export const TreeView = () => {
               getItemTitle={(item) => item.data}
               viewState={{}}
             >
-              <Tree treeId="tree-1" rootItem="root" treeLabel="Tree Example" />
+              <Tree
+                treeId="tree-1"
+                rootItem="root"
+                treeLabel="Tree Example"
+                ref={tree}
+              />
             </UncontrolledTreeEnvironment>
           </div>
         </div>

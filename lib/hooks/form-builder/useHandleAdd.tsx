@@ -6,10 +6,10 @@ import { blockLoader, LoaderType } from "../../utils/form-builder/blockLoader";
 import { allowedTemplates } from "@lib/utils/form-builder";
 import { defaultField, createElement, setDescription } from "@lib/utils/form-builder/itemHelper";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store";
-import { treeRefType } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
+import { treeContextType } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 import { getTranslatedElementProperties } from "@formBuilder/actions";
 
-export const useHandleAdd = (treeRef?: treeRefType) => {
+export const useHandleAdd = (treeRefContext?: treeContextType) => {
   const { add, addSubItem } = useTemplateStore((s) => ({
     add: s.add,
     addSubItem: s.addSubItem,
@@ -44,12 +44,12 @@ export const useHandleAdd = (treeRef?: treeRefType) => {
       const item = await create(type as FormElementTypes);
       // Note add() returns the element id -- we're not using it yet
       const id = await add(index, item.type, item, groupId);
-      if (treeRef) {
+      if (treeRefContext && treeRefContext.treeRef) {
         await new Promise((resolve) => setTimeout(resolve, 200)); // @TODO
-        treeRef.openParents(String(id));
+        treeRefContext.environmentRef.current.
       }
     },
-    [add, create, groupId, treeRef]
+    [add, create, groupId, treeRefContext]
   );
 
   const handleAddSubElement = useCallback(
