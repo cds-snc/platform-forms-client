@@ -9,7 +9,7 @@ import { useGroupStore } from "@formBuilder/components/shared/right-panel/treevi
 import { TreeRef } from "react-complex-tree";
 import { getTranslatedElementProperties } from "@formBuilder/actions";
 
-export const useHandleAdd = (treeRef?: TreeRef) => {
+export const useHandleAdd = (treeRef?: TreeRef | null) => {
   const { add, addSubItem } = useTemplateStore((s) => ({
     add: s.add,
     addSubItem: s.addSubItem,
