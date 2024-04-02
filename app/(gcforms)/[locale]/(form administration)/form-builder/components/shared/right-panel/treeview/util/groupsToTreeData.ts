@@ -1,7 +1,8 @@
 import { GroupsType } from "@lib/formContext";
 import { TreeItems } from "../types";
+import { FormElement } from "@lib/types";
 
-export const groupsToTreeData = (formGroups: GroupsType): TreeItems => {
+export const groupsToTreeData = (formGroups: GroupsType, elements: FormElement[]): TreeItems => {
   const items: TreeItems = {
     root: {
       index: "root",
@@ -10,59 +11,45 @@ export const groupsToTreeData = (formGroups: GroupsType): TreeItems => {
     },
   };
 
-  if (formGroups) {
-    for (const [key, value] of Object.entries(formGroups)) {
-      // @todo --- we should validate the element exists in the form elements
-      const children =
-        value.elements &&
-        value.elements.map((id) => {
-          // if (id === "-1") {
-          //   return {
-          //     id: "introduction",
-          //     name: "Introduction",
-          //     readOnly: true,
-          //   };
-          // }
+  if (!formGroups) {
+    return items;
+  }
 
-          // if (id === "-2") {
-          //   return {
-          //     id: "privacy",
-          //     name: "Privacy",
-          //     readOnly: true,
-          //   };
-          // }
+  for (const [key, value] of Object.entries(formGroups)) {
+    const children =
+      value.elements &&
+      value.elements.map((id) => {
+        return id;
+      });
 
-          // if (id === "-3") {
-          //   return {
-          //     id: "confirmation",
-          //     name: "Confirmation",
-          //     readOnly: true,
-          //   };
-          // }
-          //       index: "root",
-          // canMove: true,
-          // isFolder: true,
-          // children: ["start", "child2"],
-          // data: "Root item",
-          // canRename: true,
+    if (!children) continue;
 
-          return id;
-        });
+    const item = {
+      index: key,
+      isFolder: true,
+      canRename: true,
+      canMove: true,
+      data: formGroups[key].name,
+      children: children,
+    };
 
-      if (!children) continue;
+    items[key] = item;
+    items.root.children?.push(key);
 
-      const item = {
-        index: key,
-        isFolder: true,
+    children.forEach((childId) => {
+      const element = elements.find((el) => el.id === Number(childId));
+      if (!element) return;
+
+      const childItem = {
+        index: childId,
+        isFolder: false,
         canRename: true,
         canMove: true,
-        data: formGroups[key].name,
-        children: [],
+        data: element.properties.titleEn, // @TODO
       };
 
-      items[key] = item;
-      items.root.children?.push(key);
-    }
+      items[childId] = childItem;
+    });
   }
 
   return items;

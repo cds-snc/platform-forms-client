@@ -7,31 +7,30 @@ import React, { createContext, useRef, useContext } from "react";
 import { TemplateStoreContext } from "@lib/store/index";
 import { TemplateStore } from "@lib/store/useTemplateStore";
 import { LocalizedElementProperties } from "@lib/types/form-builder-types";
-
 import { groupsToTreeData } from "../util/groupsToTreeData";
-import { treeDataToGroups } from "../util/treeDataToGroups";
+// import { treeDataToGroups } from "../util/treeDataToGroups";
 import { findParentGroup } from "../util/findParentGroup";
-
-export interface GroupStoreProps {
-  id: string;
-  groups: TreeItem[];
-  templateStore: TemplateStore;
-}
-
-import { TreeItem } from "../types";
+import { TreeItems } from "../types";
 import { FormElement } from "@lib/types";
 import { findNextGroup } from "../util/findNextGroup";
 import { findPreviousGroup } from "../util/findPreviousGroup";
 import { getGroupFromId } from "../util/getGroupFromId";
 import { Group } from "@lib/formContext";
+import { TreeItem } from "react-complex-tree";
+
+export interface GroupStoreProps {
+  id: string;
+  groups: TreeItems;
+  templateStore: TemplateStore;
+}
 
 export interface GroupStoreState extends GroupStoreProps {
   getId: () => string;
   setId: (id: string) => void;
   addGroup: (id: string, name: string) => void;
   deleteGroup: (id: string) => void;
-  getGroups: () => TreeItem[] | [];
-  setGroups: (data: TreeItem[]) => void;
+  getGroups: () => TreeItems;
+  // setGroups: (data: TreeItems) => void;
   findParentGroup: (id: string) => TreeItem | undefined;
   findNextGroup: (id: string) => TreeItem | undefined;
   findPreviousGroup: (id: string) => TreeItem | undefined;
@@ -81,8 +80,9 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
       },
       getGroups: () => {
         const formGroups = get().templateStore.getState().form.groups;
-        if (!formGroups) return [];
-        return groupsToTreeData(formGroups);
+        const elements = get().templateStore.getState().form.elements;
+        if (!formGroups) return {};
+        return groupsToTreeData(formGroups, elements);
       },
       getElementsGroupById: (id: string) => {
         const formGroups = get().templateStore.getState().form.groups;
@@ -103,13 +103,13 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
           delete s.form.groups[id];
         });
       },
-      setGroups: (treeData: TreeItem[]) => {
-        const groups = treeDataToGroups(treeData);
-        if (!groups) return;
-        get().templateStore.setState((s) => {
-          s.form.groups = { ...groups };
-        });
-      },
+      // setGroups: (treeData: TreeItems) => {
+      //   const groups = treeDataToGroups(treeData);
+      //   if (!groups) return;
+      //   get().templateStore.setState((s) => {
+      //     s.form.groups = { ...groups };
+      //   });
+      // },
     }))
   );
 };

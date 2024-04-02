@@ -13,7 +13,7 @@ import {
 import React, { createContext, useRef, useContext, useEffect } from "react";
 import { getPathString } from "../utils/form-builder/getPath";
 import { TreeRefProvider } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
-// import { initializeGroups } from "@formBuilder/components/shared/right-panel/treeview/util/initializeGroups";
+import { initializeGroups } from "@formBuilder/components/shared/right-panel/treeview/util/initializeGroups";
 
 import {
   moveDown,
@@ -452,7 +452,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.id = "";
                 state.lang = language as Language;
                 state.translationLanguagePriority = language as Language;
-                state.form = defaultForm; // initializeGroups(defaultForm);
+                state.form = initializeGroups(defaultForm); // @TODO: FeatureFlag
                 state.isPublished = false;
                 state.name = "";
                 state.deliveryOption = undefined;
@@ -463,7 +463,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               set((state) => {
                 state.id = "";
                 state.lang = "en";
-                state.form = { ...defaultForm, ...jsonConfig }; // initializeGroups({ ...defaultForm, ...jsonConfig });
+                state.form = initializeGroups({ ...defaultForm, ...jsonConfig }); // @TODO: FeatureFlag
                 state.isPublished = false;
                 state.name = "";
                 state.securityAttribute = "Protected A";

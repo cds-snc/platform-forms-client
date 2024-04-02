@@ -5,10 +5,9 @@ import { v4 as uuid } from "uuid";
 import { useGroupStore } from "./store";
 import { UncontrolledTreeEnvironment, Tree, StaticTreeDataProvider } from "react-complex-tree";
 import "react-complex-tree/lib/style-modern.css";
-import { groupsToTreeData } from "./util/groupsToTreeData";
+// import { groupsToTreeData } from "./util/groupsToTreeData";
 import { useTreeRef } from "./provider/TreeRefProvider";
-
-import { TreeItems } from "./types";
+import { findParentGroup } from "./util/findParentGroup";
 
 export const TreeView = () => {
   const { environment, tree } = useTreeRef();
@@ -20,26 +19,26 @@ export const TreeView = () => {
     return (state["tree-1"] && state["tree-1"].focusedItem) || "Fruit";
   };
 
-  const testItems = groupsToTreeData({
-    start: {
-      name: "Start",
-      elements: [],
-    },
-    group2: {
-      name: "Group two",
-      elements: [],
-    },
-    group3: {
-      name: "Group three",
-      elements: [],
-    },
+  // const testItems = groupsToTreeData({
+  //   start: {
+  //     name: "Start",
+  //     elements: [],
+  //   },
+  //   group2: {
+  //     name: "Group two",
+  //     elements: [],
+  //   },
+  //   group3: {
+  //     name: "Group three",
+  //     elements: [],
+  //   },
+  // });
+
+  const { setId, getId, getGroups } = useGroupStore((s) => {
+    return { setId: s.setId, getId: s.getId, getGroups: s.getGroups };
   });
 
-  const items = useMemo(() => testItems, []);
-
-  const { setId, getId } = useGroupStore((s) => {
-    return { setId: s.setId, getId: s.getId };
-  });
+  const items = useMemo(() => getGroups(), []);
 
   const dataProvider = useMemo(
     () =>
@@ -80,18 +79,6 @@ export const TreeView = () => {
   const { t } = useTranslation("form-builder");
 
   // const { groups, addGroup, controllers } = useDynamicTree();
-
-  const findParentGroup = (groups: TreeItems, id: string) => {
-    for (const [, group] of Object.entries(groups)) {
-      if (group.children) {
-        for (const child of group.children) {
-          if (child === id) {
-            return group;
-          }
-        }
-      }
-    }
-  };
 
   return (
     <div className="relative mr-[1px]">
