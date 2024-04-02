@@ -55,7 +55,7 @@ const validate = async (
     goals: string([minLength(1, t("input-validation.required", { ns: "common" }))]),
   });
 
-  return safeParse(SupportSchema, formEntries);
+  return safeParse(SupportSchema, formEntries, { abortPipeEarly: true });
 };
 
 export async function unlockPublishing(

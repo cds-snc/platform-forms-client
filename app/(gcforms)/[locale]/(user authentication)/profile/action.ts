@@ -10,7 +10,7 @@ const validateData = (formData: { [k: string]: unknown }) => {
     newQuestionId: v.string("Field is required", [v.minLength(1)]),
     newAnswer: v.string("Field is required", [v.toLowerCase(), v.toTrimmed(), v.minLength(4)]),
   });
-  return v.safeParse(schema, formData);
+  return v.safeParse(schema, formData, { abortPipeEarly: true });
 };
 
 export const updateSecurityQuestion = async (

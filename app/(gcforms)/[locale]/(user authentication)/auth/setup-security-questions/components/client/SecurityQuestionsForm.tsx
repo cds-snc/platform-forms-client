@@ -93,6 +93,9 @@ export const SecurityQuestionsForm = ({ questions = [] }: { questions: Question[
             name="question1"
             className="mb-0 w-full rounded"
             onChange={onSelect}
+            validationError={
+              state.validationErrors?.find((e) => e.fieldKey === "question1")?.fieldValue
+            }
           >
             <>
               <option key={"default"} value="">
@@ -132,6 +135,9 @@ export const SecurityQuestionsForm = ({ questions = [] }: { questions: Question[
             name="question2"
             className="mb-0 w-full rounded"
             onChange={onSelect}
+            validationError={
+              state.validationErrors?.find((e) => e.fieldKey === "question2")?.fieldValue
+            }
           >
             <>
               <option key={"default"} value="">
@@ -171,6 +177,9 @@ export const SecurityQuestionsForm = ({ questions = [] }: { questions: Question[
             name="question3"
             className="mb-0 w-full rounded"
             onChange={onSelect}
+            validationError={
+              state.validationErrors?.find((e) => e.fieldKey === "question3")?.fieldValue
+            }
           >
             <>
               <option key={"default"} value="">

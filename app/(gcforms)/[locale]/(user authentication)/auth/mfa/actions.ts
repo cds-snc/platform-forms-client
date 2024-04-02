@@ -44,7 +44,7 @@ const validate = async (
     authenticationFlowToken: v.string([v.minLength(1)]),
     email: v.string([v.toTrimmed(), v.toLowerCase(), v.minLength(1)]),
   });
-  return v.safeParse(formValidationSchema, formEntries);
+  return v.safeParse(formValidationSchema, formEntries, { abortPipeEarly: true });
 };
 
 const isUserActive = async (email: string) => {

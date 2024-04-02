@@ -86,6 +86,9 @@ export const InitiateResetForm = ({
             id="username"
             name="username"
             ariaDescribedBy="desc-username-hint"
+            validationError={
+              state.validationErrors?.find((e) => e.fieldKey === "username")?.fieldValue
+            }
           />
         </div>
 

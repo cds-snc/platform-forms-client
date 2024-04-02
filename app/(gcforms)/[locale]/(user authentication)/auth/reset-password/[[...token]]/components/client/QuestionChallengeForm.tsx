@@ -102,6 +102,9 @@ export const QuestionChallengeForm = ({
             id="question1"
             name="question1"
             required
+            validationError={
+              state.validationErrors?.find((e) => e.fieldKey === "question1")?.fieldValue
+            }
           />
         </div>
 
@@ -120,6 +123,9 @@ export const QuestionChallengeForm = ({
             id="question2"
             name="question2"
             required
+            validationError={
+              state.validationErrors?.find((e) => e.fieldKey === "question2")?.fieldValue
+            }
           />
         </div>
 
@@ -138,6 +144,9 @@ export const QuestionChallengeForm = ({
             id="question3"
             name="question3"
             required
+            validationError={
+              state.validationErrors?.find((e) => e.fieldKey === "question3")?.fieldValue
+            }
           />
         </div>
 
