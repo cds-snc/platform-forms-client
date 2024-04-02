@@ -43,8 +43,8 @@ export const RichTextLocked = ({
 
   const path = `form.${schemaProperty}[${localizedField}]]`;
 
-  const { tree } = useTreeRef();
-  const { handleAddElement } = useHandleAdd(tree?.current);
+  const { wrapper } = useTreeRef();
+  const { handleAddElement } = useHandleAdd(wrapper?.current);
 
   return (
     <div

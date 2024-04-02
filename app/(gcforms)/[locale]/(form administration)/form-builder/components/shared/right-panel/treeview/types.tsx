@@ -10,9 +10,10 @@ import { TreeItemIndex, TreeItem } from "react-complex-tree";
 
 export type TreeData = TreeItem[];
 
-export interface TreeWrapperProps {
+export interface TreeDataProviderProps {
   children?: ReactElement;
-  addItem?: () => void;
+  addItem?: (id: string) => void;
+  // openSection?: (id: string) => void;
 }
 
 export type TreeItems = Record<TreeItemIndex, TreeItem>;

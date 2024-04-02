@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useRef, RefObject } from "react";
 import { TreeEnvironmentRef, TreeRef } from "react-complex-tree";
-import { TreeWrapperProps } from "../types";
+import { TreeDataProviderProps } from "../types";
 
 export type treeContextType = {
-  wrapper: RefObject<TreeWrapperProps> | null;
+  wrapper: RefObject<TreeDataProviderProps> | null;
   environment: RefObject<TreeEnvironmentRef> | null;
   tree: RefObject<TreeRef> | null;
 };
@@ -13,7 +13,7 @@ const TreeRefContext = createContext<treeContextType | null>(null);
 
 // Create a provider component for the tree ref context
 export const TreeRefProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const wrapper = useRef<TreeWrapperProps>(null);
+  const wrapper = useRef<TreeDataProviderProps>(null);
   const environment = useRef<TreeEnvironmentRef>(null);
   const tree = useRef<TreeRef>(null);
   return (

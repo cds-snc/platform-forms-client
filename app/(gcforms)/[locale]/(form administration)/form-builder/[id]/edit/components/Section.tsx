@@ -25,8 +25,8 @@ export const Section = ({ groupId }: { groupId: string }) => {
     }
   );
 
-  const { tree } = useTreeRef();
-  const { handleAddElement } = useHandleAdd(tree?.current);
+  const { wrapper } = useTreeRef();
+  const { handleAddElement } = useHandleAdd(wrapper?.current);
 
   const groupName = groups?.[groupId]?.name;
 
@@ -61,8 +61,8 @@ export const Section = ({ groupId }: { groupId: string }) => {
             const id = findNextGroup(groupId)?.id || findPreviousGroup(groupId)?.id;
             deleteGroup(groupId);
             setId(id || "start");
-            tree && tree.current?.expandItem(id || "start");
-            tree && tree.current?.focusItem(id || "start");
+            // tree && tree.current?.expandItem(id || "start");
+            // tree && tree.current?.focusItem(id || "start");
           }}
         >
           Delete

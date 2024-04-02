@@ -307,13 +307,14 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
 
                   groupId = groupId || ""; // noop
 
-                  // if (groupId) {
-                  //   if (!state.form.groups) state.form.groups = {};
-                  //   if (!state.form.groups[groupId])
-                  //     state.form.groups[groupId] = { name: "", elements: [] };
-                  //   state.form.groups &&
-                  //     state.form.groups[groupId].elements.splice(elIndex + 1, 0, String(id));
-                  // }
+                  // @TODO: Feature flag
+                  if (groupId) {
+                    if (!state.form.groups) state.form.groups = {};
+                    if (!state.form.groups[groupId])
+                      state.form.groups[groupId] = { name: "", elements: [] };
+                    state.form.groups &&
+                      state.form.groups[groupId].elements.splice(elIndex + 1, 0, String(id));
+                  }
 
                   state.form.layout.splice(elIndex + 1, 0, id);
                   state.form.elements.splice(elIndex + 1, 0, item);

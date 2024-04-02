@@ -6,10 +6,10 @@ import { blockLoader, LoaderType } from "../../utils/form-builder/blockLoader";
 import { allowedTemplates } from "@lib/utils/form-builder";
 import { defaultField, createElement, setDescription } from "@lib/utils/form-builder/itemHelper";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store";
-import { TreeRef } from "react-complex-tree";
 import { getTranslatedElementProperties } from "@formBuilder/actions";
+import { TreeDataProviderProps } from "@formBuilder/components/shared/right-panel/treeview/types";
 
-export const useHandleAdd = (treeRef?: TreeRef | null) => {
+export const useHandleAdd = (treeData?: TreeDataProviderProps | null) => {
   const { add, addSubItem } = useTemplateStore((s) => ({
     add: s.add,
     addSubItem: s.addSubItem,
@@ -44,12 +44,12 @@ export const useHandleAdd = (treeRef?: TreeRef | null) => {
       const item = await create(type as FormElementTypes);
       // Note add() returns the element id -- we're not using it yet
       const id = await add(index, item.type, item, groupId);
-      if (treeRef) {
+      if (treeData) {
         await new Promise((resolve) => setTimeout(resolve, 200)); // @TODO
-        treeRef.focusItem(id);
+        treeData && treeData.addItem && treeData.addItem(String(id));
       }
     },
-    [add, create, groupId, treeRef]
+    [add, create, groupId, treeData]
   );
 
   const handleAddSubElement = useCallback(

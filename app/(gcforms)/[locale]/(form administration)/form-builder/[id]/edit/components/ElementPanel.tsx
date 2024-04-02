@@ -30,8 +30,8 @@ export const ElementPanel = ({
 
   const [className, setClassName] = useState<string>("");
   const [ifFocus, setIfFocus] = useState<boolean>(false);
-  const { tree } = useTreeRef();
-  const { handleAddElement } = useHandleAdd(tree?.current);
+  const { wrapper } = useTreeRef();
+  const { handleAddElement } = useHandleAdd(wrapper?.current);
 
   if (ifFocus === false) {
     // Only run this 1 time
