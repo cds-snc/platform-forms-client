@@ -1,5 +1,6 @@
 import { FormElement, FormProperties, FormElementTypes, DeliveryOption } from "@lib/types";
 import { TemplateStoreState } from "../../store/useTemplateStore";
+import { GroupsType } from "@lib/formContext";
 
 export const completeEmailAddressRegex =
   /^([a-zA-Z0-9!#$%&'*+-/=?^_`{|}~.])+@([a-zA-Z0-9-.]+)\.([a-zA-Z0-9]{2,})+$/;
@@ -291,4 +292,24 @@ export const cleanInput = <T extends Cleanable>(input: T): T => {
     ) as T;
   }
   return input;
+};
+
+export const removeGroupElement = (
+  groups: GroupsType | undefined,
+  groupId: string,
+  elementId: number
+) => {
+  if (groups) {
+    const group = groups[groupId];
+
+    if (!group) return groups;
+
+    group.elements = group.elements.filter((el) => String(el) !== String(elementId));
+
+    if (groups) {
+      groups[groupId] = group;
+    }
+
+    return groups;
+  }
 };

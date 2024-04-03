@@ -26,6 +26,7 @@ import {
   getSchemaFromState,
   incrementSubElementId,
   cleanInput,
+  removeGroupElement,
 } from "../utils/form-builder";
 import { Language } from "../types/form-builder-types";
 import update from "lodash.set";
@@ -361,11 +362,13 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                   type,
                 });
               }),
-            remove: (elementId) =>
+            remove: (elementId) => {
               set((state) => {
                 state.form.elements = removeElementById(state.form.elements, elementId);
                 state.form.layout = removeById(state.form.layout, elementId);
-              }),
+                state.form.groups = removeGroupElement(state.form.groups, state.id, elementId);
+              });
+            },
             removeSubItem: (elIndex, elementId) =>
               set((state) => {
                 const subElements = state.form.elements[elIndex].properties?.subElements;
