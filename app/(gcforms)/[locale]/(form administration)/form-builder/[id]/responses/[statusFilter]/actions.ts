@@ -12,7 +12,7 @@ import {
 } from "@lib/responseDownloadFormats/types";
 import { getFullTemplateByID } from "@lib/templates";
 import { FormElementTypes, VaultStatus } from "@lib/types";
-import { isResponseId } from "@lib/validation";
+import { isResponseId } from "@lib/validation/validation";
 import { listAllSubmissions, retrieveSubmissions, updateLastDownloadedBy } from "@lib/vault";
 import { transform as csvTransform } from "@lib/responseDownloadFormats/csv";
 import { transform as htmlAggregatedTransform } from "@lib/responseDownloadFormats/html-aggregated";

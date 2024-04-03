@@ -31,6 +31,7 @@ export const Publish = ({ id }: { id: string }) => {
   const {
     id: storeId,
     setId,
+    setIsPublished,
     getSchema,
     getName,
     getDeliveryOption,
@@ -38,6 +39,7 @@ export const Publish = ({ id }: { id: string }) => {
   } = useTemplateStore((s) => ({
     id: s.id,
     setId: s.setId,
+    setIsPublished: s.setIsPublished,
     getSchema: s.getSchema,
     getName: s.getName,
     getDeliveryOption: s.getDeliveryOption,
@@ -78,6 +80,7 @@ export const Publish = ({ id }: { id: string }) => {
     try {
       const result = await updateTemplatePublishedStatus({ id, isPublished: true });
       setId(result?.id);
+      setIsPublished(result?.isPublished);
 
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({

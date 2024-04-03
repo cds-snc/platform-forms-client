@@ -1,9 +1,11 @@
 import { serverTranslation } from "@i18n";
-import { requireAuthentication } from "@lib/auth";
-import { checkPrivilegesAsBoolean } from "@lib/privileges";
+import { auth } from "@lib/auth";
+import { checkPrivilegesAsBoolean, createAbility } from "@lib/privileges";
 import { Metadata } from "next";
 import { DataView } from "./clientSide";
 import { getAllTemplates } from "@lib/templates";
+import { redirect } from "next/navigation";
+
 export async function generateMetadata({
   params: { locale },
 }: {
@@ -15,10 +17,12 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page() {
-  const { user } = await requireAuthentication();
+export default async function Page({ params: { locale } }: { params: { locale: string } }) {
+  const session = await auth();
+  if (!session) redirect(`/${locale}/auth/login`);
+  const ability = createAbility(session);
   checkPrivilegesAsBoolean(
-    user.ability,
+    ability,
     [
       { action: "view", subject: "FormRecord" },
       { action: "update", subject: "FormRecord" },
@@ -26,7 +30,7 @@ export default async function Page() {
     { logic: "one", redirect: true }
   );
 
-  const templates = (await getAllTemplates(user.ability)).map((template) => {
+  const templates = (await getAllTemplates(ability)).map((template) => {
     const {
       id,
       form: { titleEn, titleFr },

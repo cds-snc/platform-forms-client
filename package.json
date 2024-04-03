@@ -29,7 +29,7 @@
     "prisma:studio": "prisma studio",
     "prisma:test": "prisma migrate deploy && tsx prisma/seeds/seed_cli.ts --environment=test",
     "start:test": "yarn prisma:test && yarn initialize && APP_ENV=test next start",
-    "dev:test": "prisma migrate reset -f --skip-seed && yarn prisma:test && yarn initialize && APP_ENV=test NEXT_PUBLIC_APP_ENV=test next dev | pino-pretty -c -i time",
+    "dev:test": "prisma migrate reset -f --skip-seed && yarn prisma:test && yarn initialize && APP_ENV=test NEXT_PUBLIC_APP_ENV=test next dev --turbo | pino-pretty -c -i time",
     "build:test": "APP_ENV=test NEXT_PUBLIC_APP_ENV=test next build",
     "lint": "next lint && tsc --noEmit",
     "lint:tailwindcss": "eslint -c .eslint-tailwindcss.js",
@@ -107,6 +107,7 @@
     "unorm": "^1.6.0",
     "usehooks-ts": "2.9.1",
     "uuid": "9.0.1",
+    "valibot": "^0.30.0",
     "yup": "0.32.11",
     "zustand": "4.5.0"
   },
@@ -196,5 +197,5 @@
     "not ie < 11",
     "not op_mini all"
   ],
-  "packageManager": "yarn@4.1.0"
+  "packageManager": "yarn@4.1.1"
 }

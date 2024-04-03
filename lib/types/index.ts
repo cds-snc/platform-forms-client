@@ -40,6 +40,7 @@ export type {
   MiddlewareProps,
   HTMLTextInputTypeAttribute,
   WithRequired,
+  SearchParams,
 } from "./utility-types";
 
 export type {

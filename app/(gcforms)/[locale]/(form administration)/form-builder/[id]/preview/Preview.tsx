@@ -46,6 +46,11 @@ export const Preview = ({ disableSubmit = true }: { disableSubmit?: boolean }) =
   const { t } = useTranslation(["common", "form-builder"]);
   const language = translationLanguagePriority;
   const currentForm = getRenderedForm(formRecord, language);
+
+  if (!currentForm.length) {
+    disableSubmit = true;
+  }
+
   const [sent, setSent] = useState<string | null>();
 
   const clearSent = () => {

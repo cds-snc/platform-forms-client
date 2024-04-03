@@ -1,11 +1,7 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth, { Session } from "next-auth";
 
-import {
-  Validate2FAVerificationCodeResultStatus,
-  validate2FAVerificationCode,
-  userHasSecurityQuestions,
-} from "@lib/auth/";
+import { validate2FAVerificationCode, userHasSecurityQuestions } from "@lib/auth/";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { logMessage } from "@lib/logger";
 import { getOrCreateUser } from "@lib/users";
@@ -52,8 +48,8 @@ export const {
 } = NextAuth({
   providers: [
     CredentialsProvider({
-      id: "cognito",
-      name: "CognitoLogin",
+      id: "mfa",
+      name: "MultiFactorAuth",
       credentials: {
         authenticationFlowToken: { label: "Authentication flow token", type: "text" },
         username: { label: "Username", type: "text" },
@@ -90,25 +86,18 @@ export const {
           };
         }
 
-        const validationResult = await validate2FAVerificationCode(
+        const { valid, decodedCognitoToken } = await validate2FAVerificationCode(
           authenticationFlowToken,
           username,
           verificationCode
         );
 
-        switch (validationResult.status) {
-          case Validate2FAVerificationCodeResultStatus.VALID: {
-            if (!validationResult.decodedCognitoToken)
-              throw new Error("Missing decoded Cognito token");
-            return validationResult.decodedCognitoToken;
-          }
-          case Validate2FAVerificationCodeResultStatus.INVALID:
-            throw new Error("2FAInvalidVerificationCode");
-          case Validate2FAVerificationCodeResultStatus.EXPIRED:
-            throw new Error("2FAExpiredSession");
-          case Validate2FAVerificationCodeResultStatus.LOCKED_OUT:
-            throw new Error("2FALockedOutSession");
+        if (valid) {
+          if (!decodedCognitoToken)
+            throw new Error("Missing decoded Cognito token in 2FA validation result");
+          return decodedCognitoToken;
         }
+        return null;
       },
     }),
   ],
@@ -233,7 +222,6 @@ export const {
         );
         token.deactivated = true;
       }
-      logMessage.debug(`JWT refreshed for user ${token.email}`);
       return token;
     },
     async session(params) {
@@ -252,7 +240,6 @@ export const {
         ...(token.deactivated && { deactivated: token.deactivated }),
         hasSecurityQuestions: token.hasSecurityQuestions ?? false,
       };
-      logMessage.debug(`Session refreshed for user ${token.email}`);
       return session;
     },
     async redirect({ url, baseUrl }) {

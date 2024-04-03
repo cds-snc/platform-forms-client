@@ -103,8 +103,8 @@ function _handleFormDataFileInput(
   key: string,
   value: FileInputResponse
 ): [string, FileInputResponse | string] {
-  return value.file
-    ? [key, { file: value.file, name: value.name, size: value.size, type: value.type }]
+  return value.based64EncodedFile
+    ? [key, { name: value.name, size: value.size, based64EncodedFile: value.based64EncodedFile }]
     : _handleFormDataText(key, "");
 }
 

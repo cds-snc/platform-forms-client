@@ -147,6 +147,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   importTemplate: (jsonConfig: FormProperties) => void;
   getSchema: () => string;
   getIsPublished: () => boolean;
+  setIsPublished: (isPublished: boolean) => void;
   getName: () => string;
   getDeliveryOption: () => DeliveryOption | undefined;
   resetDeliveryOption: () => void;
@@ -417,6 +418,11 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             getSchema: () => JSON.stringify(getSchemaFromState(get()), null, 2),
             getId: () => get().id,
             getIsPublished: () => get().isPublished,
+            setIsPublished: (isPublished) => {
+              set((state) => {
+                state.isPublished = isPublished;
+              });
+            },
             getName: () => get().name,
             getDeliveryOption: () => get().deliveryOption,
             resetDeliveryOption: () => {
@@ -481,7 +487,6 @@ export const TemplateStoreProvider = ({
   ...props
 }: React.PropsWithChildren<Partial<TemplateStoreProps>>) => {
   const storeRef = useRef<TemplateStore>();
-  logMessage.debug(`== TemplateStoreProvider: ${props.id} ==`);
   if (!storeRef.current) {
     // When there is an incoming form with a different id clear it first
     if (props.id) {

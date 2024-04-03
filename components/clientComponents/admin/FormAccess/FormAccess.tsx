@@ -5,7 +5,7 @@ import Loader from "@clientComponents/globals/Loader";
 import axios from "axios";
 import { useTranslation } from "@i18n/client";
 import React, { useEffect, useState } from "react";
-import { isValidGovEmail } from "@lib/validation";
+import { isValidGovEmail } from "@lib/validation/validation";
 import { FormOwner } from "@lib/types";
 
 export interface FormAccessProps {
