@@ -21,9 +21,6 @@ export const TreeView = ({
 }) => {
   const { environment, tree } = useTreeRef();
 
-
-  console.log("dataProvider", dataProvider);
-
   // This is only for testing purposes
   const getFocus = () => {
     if (!environment || !environment.current) return "Fruit";
@@ -64,6 +61,9 @@ export const TreeView = ({
             <UncontrolledTreeEnvironment
               ref={environment}
               onFocusItem={onFocusItem}
+              onDrop={(items, target) => {
+                console.log(items, target);
+              }}
               canDragAndDrop={true}
               canReorderItems={true}
               dataProvider={dataProvider}
