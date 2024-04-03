@@ -16,7 +16,7 @@ import { findNextGroup } from "../util/findNextGroup";
 import { findPreviousGroup } from "../util/findPreviousGroup";
 import { getGroupFromId } from "../util/getGroupFromId";
 import { Group } from "@lib/formContext";
-import { TreeItem } from "react-complex-tree";
+import { TreeItem, TreeItemIndex } from "react-complex-tree";
 
 export interface GroupStoreProps {
   id: string;
@@ -30,7 +30,7 @@ export interface GroupStoreState extends GroupStoreProps {
   addGroup: (id: string, name: string) => void;
   deleteGroup: (id: string) => void;
   getGroups: () => TreeItems;
-  // setGroups: (data: TreeItems) => void;
+  updateGroup: (parent: TreeItemIndex, children: TreeItemIndex[] | undefined) => void;
   findParentGroup: (id: string) => TreeItem | undefined;
   findNextGroup: (id: string) => TreeItem | undefined;
   findPreviousGroup: (id: string) => TreeItem | undefined;
@@ -105,13 +105,23 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
           delete s.form.groups[id];
         });
       },
-      // setGroups: (treeData: TreeItems) => {
-      //   const groups = treeDataToGroups(treeData);
-      //   if (!groups) return;
-      //   get().templateStore.setState((s) => {
-      //     s.form.groups = { ...groups };
-      //   });
-      // },
+      updateGroup: (parent: TreeItemIndex, children: TreeItemIndex[] | undefined) => {
+        if (!children) return;
+
+        const formGroups = get().templateStore.getState().form.groups;
+        const setChangeKey = get().templateStore.getState().setChangeKey;
+        if (formGroups && formGroups[parent]) {
+          get().templateStore.setState((s) => {
+            if (s.form.groups) {
+              s.form.groups[parent] = {
+                name: formGroups[parent].name,
+                elements: children as string[],
+              };
+            }
+          });
+          setChangeKey(String(new Date().getTime()));
+        }
+      },
     }))
   );
 };

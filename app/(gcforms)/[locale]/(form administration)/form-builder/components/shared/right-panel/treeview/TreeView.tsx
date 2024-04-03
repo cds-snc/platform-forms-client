@@ -6,6 +6,8 @@ import {
   StaticTreeDataProvider,
   TreeItem,
   IndividualTreeViewState,
+  DraggingPosition,
+  DraggingPositionItem,
 } from "react-complex-tree";
 import "react-complex-tree/lib/style-modern.css";
 import { useTreeRef } from "./provider/TreeRefProvider";
@@ -30,21 +32,7 @@ export const TreeView = ({
   };
 
   const updateElementTitle = useGroupStore((state) => state.updateElementTitle);
-
-  // const testItems = groupsToTreeData({
-  //   start: {
-  //     name: "Start",
-  //     elements: [],
-  //   },
-  //   group2: {
-  //     name: "Group two",
-  //     elements: [],
-  //   },
-  //   group3: {
-  //     name: "Group three",
-  //     elements: [],
-  //   },
-  // });
+  const updateGroup = useGroupStore((state) => state.updateGroup);
 
   return (
     <div className="relative mr-[1px]">
@@ -64,9 +52,11 @@ export const TreeView = ({
             <UncontrolledTreeEnvironment
               ref={environment}
               onFocusItem={onFocusItem}
-              // onDrop={(items, target) => {
-              //   // console.log(items, target);
-              // }}
+              onDrop={async (items: TreeItem[], target: DraggingPosition) => {
+                const { parentItem } = target as DraggingPositionItem;
+                const children = (await dataProvider.getTreeItem(parentItem)).children;
+                updateGroup(parentItem, children);
+              }}
               onRenameItem={(item, name) => {
                 updateElementTitle({
                   id: Number(item.index),
