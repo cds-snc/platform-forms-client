@@ -18,9 +18,10 @@ export const ElementPanel = ({
   item: FormElementWithIndex;
   elements: FormElement[];
 }) => {
-  const { getFocusInput, setFocusInput, remove, moveUp, moveDown, duplicateElement } =
+  const { getFocusInput, setChangeKey, setFocusInput, remove, moveUp, moveDown, duplicateElement } =
     useTemplateStore((s) => ({
       getFocusInput: s.getFocusInput,
+      setChangeKey: s.setChangeKey,
       setFocusInput: s.setFocusInput,
       remove: s.remove,
       moveUp: s.moveUp,
@@ -111,6 +112,7 @@ export const ElementPanel = ({
         handleRemove={() => {
           const previousElement = elements[item.index - 1];
           remove(item.id);
+          setChangeKey(String(new Date().getTime()));
 
           // if index is 0, then highlight the form title
           if (item.index === 0) {
