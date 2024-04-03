@@ -5,13 +5,19 @@ import { createAbility } from "@lib/privileges";
 import { serverTranslation } from "@i18n";
 import { Card } from "@clientComponents/globals/card/Card";
 import { ScrollHelper } from "../client/ScrollHelper";
+import { checkPrivilegesAsBoolean } from "@lib/privileges";
 
 export const UsersList = async ({ filter }: { filter?: string }) => {
   const session = await auth();
   if (!session) throw new Error("No session found");
   const ability = createAbility(session);
 
-  const canManageUser = ability.can("update", "User");
+  const canManageUser = checkPrivilegesAsBoolean(ability, [
+    { action: "update", subject: { type: "User", object: {} } },
+  ]);
+  const canManageForms = checkPrivilegesAsBoolean(ability, [
+    { action: "update", subject: { type: "FormRecord", object: {} } },
+  ]);
 
   const publishFormsId = await getPublishedFormsPrivilegeId();
   if (!publishFormsId) throw new Error("No publish forms privilege found in global privileges.");
@@ -35,6 +41,7 @@ export const UsersList = async ({ filter }: { filter?: string }) => {
                 <UserCard
                   user={user}
                   canManageUser={canManageUser}
+                  canManageForms={canManageForms}
                   currentUserId={session.user.id}
                   publishFormsId={publishFormsId}
                 />
