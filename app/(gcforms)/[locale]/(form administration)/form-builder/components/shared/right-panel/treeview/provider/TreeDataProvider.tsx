@@ -25,21 +25,13 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
   const { tree } = useTreeRef();
 
   const [items, setItems] = useState(getGroups());
-  const [viewState, setViewState] = useState({});
 
-
-  //const items = useMemo(() => getGroups(), [getGroups]);
-
-  const dataProvider = useMemo(
-    () => {
-      console.log("items", items);
-      return new StaticTreeDataProvider(items, (item, data) => ({
-        ...item,
-        data,
-      }))
-    },
-    [items]
-  );
+  const dataProvider = useMemo(() => {
+    return new StaticTreeDataProvider(items, (item, data) => ({
+      ...item,
+      data,
+    }));
+  }, [items]);
 
   const injectItem = (itemId: string) => {
     const id = getId();
@@ -73,26 +65,20 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
       parent && tree?.current?.focusItem(parent.index);
       return;
     },
-    updateItems: () => {
+    updateItem: (id: string, value: string) => {
       const updatedItems = getGroups();
       if (isEqual(items, updatedItems)) {
         return;
       }
-      setItems(updatedItems);
-
-
-      dataProvider.onDidChangeTreeDataEmitter.emit(["1", "root"]);
-
-      console.log("updatedItems", updatedItems);
-      dataProvider.onRenameItem(updatedItems["1"], updatedItems["1"].data);
-      dataProvider.onDidChangeTreeDataEmitter.emit(["1"]);
-    }
+      dataProvider.onRenameItem(updatedItems[id], value);
+      dataProvider.onDidChangeTreeDataEmitter.emit([id]);
+    },
   }));
 
   return (
     <div {...rest}>
       <TreeView
-        viewState={viewState}
+        viewState={{}}
         dataProvider={dataProvider}
         onFocusItem={(item: TreeItem) => {
           if (item.isFolder) {

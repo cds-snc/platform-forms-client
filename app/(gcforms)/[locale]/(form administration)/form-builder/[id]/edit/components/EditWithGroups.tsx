@@ -124,6 +124,7 @@ export const EditWithGroups = () => {
                   value={value}
                   onBlur={() => {
                     setValue(cleanInput(value));
+                    //
                   }}
                   onChange={updateValue}
                   {...getLocalizationAttribute()}
