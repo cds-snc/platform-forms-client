@@ -7,6 +7,7 @@ import { detectOldUnprocessedSubmissions } from "@lib/nagware";
 import { deleteTemplate } from "@lib/templates";
 import { TemplateHasUnprocessedSubmissions } from "@lib/templates";
 import { getAppSetting } from "@lib/appSettings";
+import { revalidatePath } from "next/cache";
 
 export const authCheck = cache(async () => {
   const session = await auth();
@@ -39,11 +40,15 @@ export const getUnprocessedSubmissionsForTemplate = async (templateId: string) =
 
 export const deleteForm = async (id: string) => {
   const ability = await authCheck();
-  return deleteTemplate(ability, id).catch((error) => {
+
+  try {
+    await deleteTemplate(ability, id);
+    revalidatePath("app/[locale]/(app administration)/admin/(with nav)/accounts/[id]/manage-forms");
+  } catch (error) {
     if (error instanceof TemplateHasUnprocessedSubmissions) {
       throw new Error("Responses Exist");
     } else {
       throw new Error("Failed to Delete Form");
     }
-  });
+  }
 };
