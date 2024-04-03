@@ -119,7 +119,8 @@ export const verify = async (
     });
   } catch (err) {
     // Failed login attempt
-    if (err instanceof AuthError && err.name === "CredentialsSignin") {
+    logMessage.debug(err);
+    if ((err as AuthError).name === "CredentialsSignin") {
       return {
         success: false,
         authError: {
