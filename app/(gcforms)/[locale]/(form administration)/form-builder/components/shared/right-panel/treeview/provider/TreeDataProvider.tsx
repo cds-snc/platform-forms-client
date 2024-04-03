@@ -80,10 +80,12 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
       }
       setItems(updatedItems);
 
-      
+
       dataProvider.onDidChangeTreeDataEmitter.emit(["1", "root"]);
+
+      console.log("updatedItems", updatedItems);
+      dataProvider.onRenameItem(updatedItems["1"], updatedItems["1"].data);
       dataProvider.onDidChangeTreeDataEmitter.emit(["1"]);
-      setViewState({selectedItems: [], focusedItem: "root"});
     }
   }));
 
