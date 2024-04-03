@@ -13,6 +13,7 @@ export type TreeData = TreeItem[];
 export interface TreeDataProviderProps {
   children?: ReactElement;
   addItem: (id: string) => void;
+  addGroup: (id: string) => void;
   updateItem: (id: string, value: string) => void;
   removeItem: (id: string) => void;
   // openSection?: (id: string) => void;

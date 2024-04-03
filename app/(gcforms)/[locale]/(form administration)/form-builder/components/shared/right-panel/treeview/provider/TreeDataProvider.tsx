@@ -45,7 +45,7 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
     }
 
     newItems[itemId] = {
-      data: "New section",
+      data: "New item",
       index: itemId,
       children: [],
       canMove: true,
@@ -66,6 +66,26 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
       // tree?.current?.selectItems([id]);
       return;
     },
+    addGroup: (itemId: string) => {
+      const newItems = getGroups();
+
+      // console.log({ newItems });
+      newItems[itemId] = {
+        data: "New section",
+        index: itemId,
+        children: [],
+        canMove: true,
+        isFolder: true,
+      };
+
+      if (newItems.root.children) {
+        newItems.root.children.push(itemId);
+      }
+
+      setItems(newItems);
+      console.log({ items });
+      dataProvider.onDidChangeTreeDataEmitter.emit(["root"]);
+    },
     updateItem: (id: string, value: string) => {
       const updatedItems = getGroups();
       if (isEqual(items, updatedItems)) {
@@ -75,10 +95,14 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
       dataProvider.onDidChangeTreeDataEmitter.emit([id]);
     },
     removeItem: (id: string) => {
+      console.log("removeItem", id);
       const updatedItems = getGroups();
+      console.log({ updatedItems });
+      // delete updatedItems[id];
+      updatedItems.start.children = updatedItems.start.children.filter((child) => child !== id);
       setItems(updatedItems);
-      dataProvider.onDidChangeTreeDataEmitter.emit(["root"]);
-      dataProvider.onDidChangeTreeDataEmitter.emit([id]);
+      dataProvider.onDidChangeTreeDataEmitter.emit(["start"]);
+      // dataProvider.onDidChangeTreeDataEmitter.emit(["root"]);
     },
   }));
 

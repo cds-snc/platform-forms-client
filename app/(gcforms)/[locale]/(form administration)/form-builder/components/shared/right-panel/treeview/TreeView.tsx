@@ -12,6 +12,7 @@ import {
 import "react-complex-tree/lib/style-modern.css";
 import { useTreeRef } from "./provider/TreeRefProvider";
 import { useGroupStore } from "./store";
+import { v4 as uuid } from "uuid";
 
 export const TreeView = ({
   dataProvider,
@@ -22,7 +23,7 @@ export const TreeView = ({
   viewState: IndividualTreeViewState;
   onFocusItem: (item: TreeItem) => void;
 }) => {
-  const { environment, tree } = useTreeRef();
+  const { environment, tree, wrapper } = useTreeRef();
 
   // This is only for testing purposes
   const getFocus = () => {
@@ -39,12 +40,11 @@ export const TreeView = ({
       <div className="m-4">
         <Button
           onClick={() => {
-            if (tree && tree.current) {
-              tree.current.expandItem(getFocus());
-            }
+            const id = uuid();
+            wrapper?.current?.addGroup(id);
           }}
         >
-          Collapse focused Item
+          Add section
         </Button>
 
         <div>
