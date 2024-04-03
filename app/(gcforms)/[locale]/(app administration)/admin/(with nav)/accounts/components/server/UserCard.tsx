@@ -7,11 +7,13 @@ import { ManageFormsButton } from "../client/ManageFormsButton";
 export const UserCard = async ({
   user,
   canManageUser,
+  canManageForms,
   currentUserId,
   publishFormsId,
 }: {
   user: AppUser;
   canManageUser: boolean;
+  canManageForms: boolean;
   currentUserId: string;
   publishFormsId: string;
 }) => {
@@ -32,6 +34,10 @@ export const UserCard = async ({
                   <PublishPermission user={user} publishFormsId={publishFormsId} />
                 </div>
               )}
+            </>
+          )}
+          {canManageForms && (
+            <>
               <div className="flex-none">
                 <ManageFormsButton userId={user.id} />
               </div>
