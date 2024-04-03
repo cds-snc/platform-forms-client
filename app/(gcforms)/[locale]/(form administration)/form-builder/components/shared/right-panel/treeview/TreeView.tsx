@@ -5,10 +5,11 @@ import {
   Tree,
   StaticTreeDataProvider,
   TreeItem,
-  IndividualTreeViewState
+  IndividualTreeViewState,
 } from "react-complex-tree";
 import "react-complex-tree/lib/style-modern.css";
 import { useTreeRef } from "./provider/TreeRefProvider";
+import { useGroupStore } from "./store";
 
 export const TreeView = ({
   dataProvider,
@@ -27,6 +28,8 @@ export const TreeView = ({
     const state = environment.current.viewState;
     return (state["tree-1"] && state["tree-1"].focusedItem) || "Fruit";
   };
+
+  const updateElementTitle = useGroupStore((state) => state.updateElementTitle);
 
   // const testItems = groupsToTreeData({
   //   start: {
@@ -61,8 +64,14 @@ export const TreeView = ({
             <UncontrolledTreeEnvironment
               ref={environment}
               onFocusItem={onFocusItem}
-              onDrop={(items, target) => {
-                console.log(items, target);
+              // onDrop={(items, target) => {
+              //   // console.log(items, target);
+              // }}
+              onRenameItem={(item, name) => {
+                updateElementTitle({
+                  id: Number(item.index),
+                  text: name,
+                });
               }}
               canDragAndDrop={true}
               canReorderItems={true}

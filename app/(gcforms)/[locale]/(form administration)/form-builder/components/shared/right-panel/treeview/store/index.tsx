@@ -76,7 +76,9 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
       updateElementTitle: ({ id, text }: { id: number; text: string }) => {
         const updateField = get().templateStore.getState().updateField;
         const propertyPath = get().templateStore.getState().propertyPath;
+        const setChangeKey = get().templateStore.getState().setChangeKey;
         updateField(propertyPath(id, LocalizedElementProperties.TITLE, "en"), text);
+        setChangeKey(String(new Date().getTime()));
       },
       getGroups: () => {
         const formGroups = get().templateStore.getState().form.groups;

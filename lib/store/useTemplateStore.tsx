@@ -95,6 +95,7 @@ export interface TemplateStoreProps {
   deliveryOption?: DeliveryOption;
   securityAttribute: SecurityAttribute;
   closingDate?: string | null;
+  changeKey: string;
 }
 
 export interface InitialTemplateStoreProps extends TemplateStoreProps {
@@ -162,6 +163,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   setClosingDate: (closingDate: string | null) => void;
   initialize: (language?: string) => void;
   removeChoiceFromRules: (elIndex: number, choiceIndex: number) => void;
+  setChangeKey: (key: string) => void;
 }
 
 /* Note: "async" getItem is intentional here to work-around a hydration issue   */
@@ -191,6 +193,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
     name: "",
     securityAttribute: "Protected A",
     closingDate: initProps?.closingDate,
+    changeKey: String(new Date().getTime()),
   };
 
   // Ensure any required properties by Form Builder are defaulted by defaultForm
@@ -208,6 +211,11 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
           (set, get) => ({
             ...DEFAULT_PROPS,
             ...initProps,
+            setChangeKey: (key: string) => {
+              set((state) => {
+                state.changeKey = key;
+              });
+            },
             setHasHydrated: () => {
               set({ hasHydrated: true });
             },

@@ -63,6 +63,7 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
       parent && tree?.current?.expandItem(parent.index);
       injectItem(id);
       parent && tree?.current?.focusItem(parent.index);
+      // tree?.current?.selectItems([id]);
       return;
     },
     updateItem: (id: string, value: string) => {

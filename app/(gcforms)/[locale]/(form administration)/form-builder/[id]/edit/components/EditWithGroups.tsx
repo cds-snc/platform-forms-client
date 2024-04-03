@@ -43,6 +43,9 @@ export const EditWithGroups = () => {
   const elements = useTemplateStore(
     (s) => (s.form.groups && s.form.groups[groupId]?.elements) || []
   );
+  const { changeKey } = useTemplateStore((s) => ({
+    changeKey: s.changeKey,
+  }));
 
   useEffect(() => {
     setValue(title);
@@ -60,6 +63,7 @@ export const EditWithGroups = () => {
 
   const sortedElements: FormElement[] = useMemo((): FormElement[] => {
     const sorted: FormElement[] = [];
+
     if (elements && elements.length > 0) {
       elements.forEach((elementId: string) => {
         const el = getElement(Number(elementId));
@@ -69,7 +73,9 @@ export const EditWithGroups = () => {
       });
     }
     return sorted;
-  }, [elements, getElement]);
+    // changeKey is a timestamp that can be used to trigger a refresh on element change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [elements, getElement, changeKey]);
 
   const updateValue = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
