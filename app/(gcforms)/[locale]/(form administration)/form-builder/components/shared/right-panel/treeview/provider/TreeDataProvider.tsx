@@ -74,10 +74,11 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
       dataProvider.onRenameItem(updatedItems[id], value);
       dataProvider.onDidChangeTreeDataEmitter.emit([id]);
     },
-    removeItem: () => {
+    removeItem: (id: string) => {
       const updatedItems = getGroups();
       setItems(updatedItems);
       dataProvider.onDidChangeTreeDataEmitter.emit(["root"]);
+      dataProvider.onDidChangeTreeDataEmitter.emit([id]);
     },
   }));
 

@@ -112,6 +112,7 @@ export const ElementPanel = ({
         handleRemove={() => {
           const previousElement = elements[item.index - 1];
           remove(item.id);
+          wrapper?.current && wrapper?.current.removeItem(String(item.id));
           setChangeKey(String(new Date().getTime()));
 
           // if index is 0, then highlight the form title

@@ -173,7 +173,12 @@ export const RightPanel = ({ id }: { id: string }) => {
                     </Tab.List>
                     <Tab.Panels>
                       <Tab.Panel>
-                        <TreeDataProvider ref={wrapper} updateItem={() => {}} addItem={() => {}} />
+                        <TreeDataProvider
+                          ref={wrapper}
+                          updateItem={() => {}}
+                          addItem={() => {}}
+                          removeItem={() => {}}
+                        />
                       </Tab.Panel>
                       <Tab.Panel>
                         <DownloadCSV />
