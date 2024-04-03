@@ -12,6 +12,7 @@ import { findParentGroup } from "../util/findParentGroup";
 import { TreeDataProviderProps } from "../types";
 import { TreeView } from "../TreeView";
 import { useTreeRef } from "./TreeRefProvider";
+import isEqual from "lodash.isequal";
 
 const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
   { children, ...rest },
@@ -24,15 +25,19 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
   const { tree } = useTreeRef();
 
   const [items, setItems] = useState(getGroups());
+  const [viewState, setViewState] = useState({});
 
-  // const items = useMemo(() => getGroups(), []);
+
+  //const items = useMemo(() => getGroups(), [getGroups]);
 
   const dataProvider = useMemo(
-    () =>
-      new StaticTreeDataProvider(items, (item, data) => ({
+    () => {
+      console.log("items", items);
+      return new StaticTreeDataProvider(items, (item, data) => ({
         ...item,
         data,
-      })),
+      }))
+    },
     [items]
   );
 
@@ -54,6 +59,7 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
       canMove: true,
       isFolder: false,
     };
+
     setItems(newItems);
 
     dataProvider.onDidChangeTreeDataEmitter.emit(["root"]);
@@ -67,11 +73,24 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
       parent && tree?.current?.focusItem(parent.index);
       return;
     },
+    updateItems: () => {
+      const updatedItems = getGroups();
+      if (isEqual(items, updatedItems)) {
+        return;
+      }
+      setItems(updatedItems);
+
+      
+      dataProvider.onDidChangeTreeDataEmitter.emit(["1", "root"]);
+      dataProvider.onDidChangeTreeDataEmitter.emit(["1"]);
+      setViewState({selectedItems: [], focusedItem: "root"});
+    }
   }));
 
   return (
     <div {...rest}>
       <TreeView
+        viewState={viewState}
         dataProvider={dataProvider}
         onFocusItem={(item: TreeItem) => {
           if (item.isFolder) {

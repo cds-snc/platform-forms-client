@@ -12,7 +12,8 @@ export type TreeData = TreeItem[];
 
 export interface TreeDataProviderProps {
   children?: ReactElement;
-  addItem?: (id: string) => void;
+  addItem: (id: string) => void;
+  updateItems: () => void;
   // openSection?: (id: string) => void;
 }
 

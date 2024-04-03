@@ -5,18 +5,24 @@ import {
   Tree,
   StaticTreeDataProvider,
   TreeItem,
+  IndividualTreeViewState
 } from "react-complex-tree";
 import "react-complex-tree/lib/style-modern.css";
 import { useTreeRef } from "./provider/TreeRefProvider";
 
 export const TreeView = ({
   dataProvider,
+  viewState,
   onFocusItem,
 }: {
   dataProvider: StaticTreeDataProvider;
+  viewState: IndividualTreeViewState;
   onFocusItem: (item: TreeItem) => void;
 }) => {
   const { environment, tree } = useTreeRef();
+
+
+  console.log("dataProvider", dataProvider);
 
   // This is only for testing purposes
   const getFocus = () => {
@@ -62,7 +68,7 @@ export const TreeView = ({
               canReorderItems={true}
               dataProvider={dataProvider}
               getItemTitle={(item) => item.data}
-              viewState={{}}
+              viewState={viewState}
             >
               <Tree treeId="tree-1" rootItem="root" treeLabel="Tree Example" ref={tree} />
             </UncontrolledTreeEnvironment>

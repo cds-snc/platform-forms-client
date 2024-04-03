@@ -173,14 +173,20 @@ export const RightPanel = ({ id }: { id: string }) => {
                     </Tab.List>
                     <Tab.Panels>
                       <Tab.Panel>
-                        <TreeDataProvider ref={wrapper} />
+                        <TreeDataProvider
+                          ref={wrapper}
+                          addItem={() => {}}
+                          updateItems={() => {}}
+                        />
                         <Button
                           theme="link"
                           onClick={() => {
                             if (!wrapper?.current || !wrapper.current.addItem) {
                               return;
                             }
-                            wrapper?.current?.addItem();
+                            //wrapper?.current.addItem("some-id");
+
+                            wrapper.current.updateItems();
                             // dataProvider.onDidChangeTreeDataEmitter.emit(['root']);
                           }}
                         >
