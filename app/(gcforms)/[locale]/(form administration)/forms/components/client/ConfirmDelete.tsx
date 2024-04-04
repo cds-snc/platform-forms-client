@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useTranslation } from "@i18n/client";
 import { ConfirmFormDeleteDialog } from "@formBuilder/components/shared";
 import { toast, ToastContainer } from "@formBuilder/components/shared/Toast";
@@ -24,17 +24,26 @@ export const ConfirmDelete = ({
 
   const handleConfirm = useCallback(async () => {
     logMessage.info("Start delete form " + id);
-    await deleteForm(id).catch((error) => {
-      logMessage.debug(error);
-      if ((error as Error).message === "Responses Exist") {
-        toast.error(t("formDeletedResponsesExist"));
-      } else {
-        toast.error(t("formDeletedDialogMessageFailed"));
-      }
-    });
-
-    onDeleted(id);
+    await deleteForm(id)
+      .then(() => {
+        logMessage.info("Form deleted with id " + id);
+        onDeleted(id);
+      })
+      .catch((error) => {
+        logMessage.debug(error);
+        if ((error as Error).message === "Responses Exist") {
+          toast.error(t("formDeletedResponsesExist"));
+        } else {
+          toast.error(t("formDeletedDialogMessageFailed"));
+        }
+      });
   }, [id, onDeleted, t]);
+
+  useEffect(() => {
+    if (show) {
+      logMessage.info("Show delete form dialog");
+    }
+  }, [show]);
 
   return (
     <>
