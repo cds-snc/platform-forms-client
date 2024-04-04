@@ -4,8 +4,8 @@ import { useField } from "formik";
 import classNames from "classnames";
 import { useTranslation } from "@i18n/client";
 import { ErrorMessage } from "@clientComponents/forms";
-import { acceptedFileMimeTypes } from "@lib/tsUtils";
 import { InputFieldProps } from "@lib/types";
+import { htmlInputAccept } from "@lib/validation/fileValidationClientSide";
 
 interface FileInputProps extends InputFieldProps {
   error?: boolean;
@@ -59,11 +59,9 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
           if (newFile.name !== fileName) {
             setFileName(newFile.name);
             setValue({
-              file: reader.result?.toString(),
-              src: reader,
               name: newFile.name,
               size: newFile.size,
-              type: newFile.type,
+              based64EncodedFile: reader.result?.toString().split(";base64,").pop(),
             });
           }
         };
@@ -103,7 +101,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
             id={`${name}_hidden`}
             tabIndex={-1}
             type="file"
-            accept={acceptedFileMimeTypes}
+            accept={htmlInputAccept}
             onChange={_onChange}
             onClick={(e) => e.stopPropagation()}
             disabled={disabled}

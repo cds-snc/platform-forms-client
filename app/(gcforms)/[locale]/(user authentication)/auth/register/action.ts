@@ -6,7 +6,7 @@ import {
   containsLowerCaseCharacter,
   containsNumber,
   containsSymbol,
-} from "@lib/validation";
+} from "@lib/validation/validation";
 import { serverTranslation } from "@i18n";
 import { begin2FAAuthentication, initiateSignIn } from "@lib/auth";
 import {
@@ -91,7 +91,7 @@ const validate = async (
       ),
     ]
   );
-  return v.safeParse(formValidationSchema, formEntries);
+  return v.safeParse(formValidationSchema, formEntries, { abortPipeEarly: true });
 };
 export const register = async (
   language: string,

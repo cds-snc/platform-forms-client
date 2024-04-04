@@ -21,7 +21,7 @@ import {
   containsLowerCaseCharacter,
   containsNumber,
   containsSymbol,
-} from "@lib/validation";
+} from "@lib/validation/validation";
 import { deleteMagicLinkEntry } from "@lib/auth/passwordReset";
 
 export interface ErrorStates {
@@ -95,7 +95,7 @@ const validateQuestionChallengeForm = async (
     ]),
   });
 
-  return v.safeParse(schema, formEntries);
+  return v.safeParse(schema, formEntries, { abortPipeEarly: true });
 };
 
 const validatePasswordResetForm = async (
@@ -150,7 +150,7 @@ const validatePasswordResetForm = async (
       ),
     ]
   );
-  return v.safeParse(schema, formEntries);
+  return v.safeParse(schema, formEntries, { abortPipeEarly: true });
 };
 
 export const sendResetLink = async (

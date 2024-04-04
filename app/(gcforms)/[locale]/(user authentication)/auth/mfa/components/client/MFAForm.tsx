@@ -168,6 +168,9 @@ export const MFAForm = () => {
               name="verificationCode"
               ariaDescribedBy="verificationCode-hint"
               required
+              validationError={
+                state.validationErrors?.find((e) => e.fieldKey === "verificationCode")?.fieldValue
+              }
             />
           </div>
           <Button

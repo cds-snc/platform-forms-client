@@ -5,16 +5,17 @@ import {
   FormElementTypes,
   Responses,
   PublicFormRecord,
+  FileInputResponse,
 } from "@lib/types";
 import { FormikProps } from "formik";
 import { TFunction } from "i18next";
-import { acceptedFileMimeTypes } from "@lib/tsUtils";
 import { ErrorListItem } from "@clientComponents/forms";
-import { isServer } from "./tsUtils";
+import { isServer } from "../tsUtils";
 import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
 import formNameArraySchema from "@lib/middleware/schemas/submission-name-array.schema.json";
 import { matchRule, FormValues, GroupsType } from "@lib/formContext";
 import { inGroup } from "@lib/formContext";
+import { isFileExtensionValid, isFileSizeValid } from "./fileValidationClientSide";
 
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
@@ -123,26 +124,17 @@ const isFieldResponseValid = (
       break;
     }
     case FormElementTypes.fileInput: {
-      //TODO need refactoring.
-      const typedValue = value as {
-        file: File | string;
-        src: FileReader;
-        name: string;
-        size: number;
-        type: string;
-      };
-      if ((validator.required && typedValue === undefined) || typedValue === null)
+      const fileInputResponse = value as FileInputResponse;
+
+      if (validator.required && (!fileInputResponse.name || !fileInputResponse.size || !fileInputResponse.based64EncodedFile))
         return t("input-validation.required");
-      if (validator.required && typedValue && typedValue.file === null)
-        return t("input-validation.required");
-      // Size limit is 8 MB
-      if (typedValue?.size > 8000000) return t("input-validation.file-size-too-large");
-      if (
-        typedValue?.file &&
-        acceptedFileMimeTypes.split(",").find((value) => value === typedValue.type) === undefined
-      ) {
+
+      if (fileInputResponse.size && !isFileSizeValid(fileInputResponse.size))
+        return t("input-validation.file-size-too-large");
+
+      if (fileInputResponse.name && !isFileExtensionValid(fileInputResponse.name))
         return t("input-validation.file-type-invalid");
-      }
+
       break;
     }
     case FormElementTypes.dynamicRow: {

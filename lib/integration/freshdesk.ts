@@ -82,6 +82,7 @@ export const createTicket = async ({
   language,
 }: createTicketProps) => {
   if (process.env.APP_ENV === "test") {
+    logMessage.info("Not sending to Fresh Desk, application in Test mode");
     return { status: 200 };
   }
 
