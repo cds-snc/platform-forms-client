@@ -14,7 +14,6 @@ import { TreeView } from "../TreeView";
 import { useTreeRef } from "./TreeRefProvider";
 import isEqual from "lodash.isequal";
 import { useTemplateStore } from "@lib/store";
-import { get } from "lodash";
 
 const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
   { children },
@@ -29,9 +28,6 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
     };
   });
 
-  const changeKey = useTemplateStore((s) => s.changeKey);
-  const setChangeKey = useTemplateStore((s) => s.setChangeKey);
-
   const { tree } = useTreeRef();
 
   const [items, setItems] = useState(getGroups());
@@ -41,7 +37,7 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
       ...item,
       data,
     }));
-  }, [items, changeKey]);
+  }, [items]);
 
   const injectItem = (itemId: string) => {
     const id = getId();
@@ -111,6 +107,8 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
       // delete updatedItems[id];
       updatedItems.start.children = updatedItems.start.children.filter((child) => child !== id);
       setItems(updatedItems);
+
+      dataProvider.onChangeItemChildren("start", updatedItems.start.children);
       dataProvider.onDidChangeTreeDataEmitter.emit(["start"]);
       // dataProvider.onDidChangeTreeDataEmitter.emit(["root"]);
     },
