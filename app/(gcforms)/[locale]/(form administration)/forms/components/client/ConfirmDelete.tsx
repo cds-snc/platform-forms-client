@@ -23,8 +23,9 @@ export const ConfirmDelete = ({
   const { t } = useTranslation("form-builder");
 
   const handleConfirm = useCallback(async () => {
+    logMessage.info("Start delete form " + id);
     await deleteForm(id).catch((error) => {
-      logMessage.error(JSON.stringify(error));
+      logMessage.debug(error);
       if ((error as Error).message === "Responses Exist") {
         toast.error(t("formDeletedResponsesExist"));
       } else {

@@ -11,6 +11,7 @@ import { listAllSubmissions } from "@lib/vault";
 import { detectOldUnprocessedSubmissions } from "@lib/nagware";
 import { cache } from "react";
 import { getAppSetting } from "@lib/appSettings";
+import { logMessage } from "@lib/logger";
 
 // Note: copied from manage-forms actions
 export const authCheck = cache(async () => {
@@ -35,6 +36,7 @@ export const deleteForm = async (id: string) => {
   const ability = await authCheck();
 
   const result = deleteTemplate(ability, id).catch((error) => {
+    logMessage.debug(error);
     if (error instanceof TemplateHasUnprocessedSubmissions) {
       throw new Error("Responses Exist");
     } else {
