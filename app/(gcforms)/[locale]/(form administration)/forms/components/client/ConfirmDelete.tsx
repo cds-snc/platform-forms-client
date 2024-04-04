@@ -3,6 +3,7 @@ import { useTranslation } from "@i18n/client";
 import { ConfirmFormDeleteDialog } from "@formBuilder/components/shared";
 import { toast, ToastContainer } from "@formBuilder/components/shared/Toast";
 import { deleteForm } from "../../actions";
+import { logMessage } from "@lib/logger";
 
 // Note: copied from accounts manage-forms.
 // If there are no difference this component should become a shared component
@@ -23,6 +24,7 @@ export const ConfirmDelete = ({
 
   const handleConfirm = useCallback(async () => {
     await deleteForm(id).catch((error) => {
+      logMessage.error(JSON.stringify(error));
       if ((error as Error).message === "Responses Exist") {
         toast.error(t("formDeletedResponsesExist"));
       } else {
