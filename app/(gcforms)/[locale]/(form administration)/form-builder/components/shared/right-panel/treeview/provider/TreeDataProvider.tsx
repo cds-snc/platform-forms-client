@@ -13,18 +13,14 @@ import { TreeDataProviderProps } from "../types";
 import { TreeView } from "../TreeView";
 import { useTreeRef } from "./TreeRefProvider";
 import isEqual from "lodash.isequal";
-import { useTemplateStore } from "@lib/store";
 
-const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
-  { children },
-  ref
-) => {
+const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = ({ children }, ref) => {
   const { getId, setId, getGroups, addGroup } = useGroupStore((s) => {
     return {
       getId: s.getId,
       setId: s.setId,
       getGroups: s.getGroups,
-      addGroup: s.addGroup
+      addGroup: s.addGroup,
     };
   });
 
@@ -90,6 +86,7 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
         newItems.root.children.push(itemId);
         dataProvider.onChangeItemChildren("root", newItems.root.children);
         dataProvider.onDidChangeTreeDataEmitter.emit(["root"]);
+        tree?.current?.selectItems([itemId]);
       }
     },
     updateItem: (id: string, value: string) => {
@@ -101,16 +98,13 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
       dataProvider.onDidChangeTreeDataEmitter.emit([id]);
     },
     removeItem: (id: string) => {
-      console.log("removeItem", id);
       const updatedItems = getGroups();
-      console.log({ updatedItems });
-      // delete updatedItems[id];
-      updatedItems.start.children = updatedItems.start.children.filter((child) => child !== id);
+      updatedItems.start.children = updatedItems.start.children?.filter((child) => child !== id);
       setItems(updatedItems);
 
-      dataProvider.onChangeItemChildren("start", updatedItems.start.children);
+      const children = updatedItems.start.children || [];
+      dataProvider.onChangeItemChildren("start", children);
       dataProvider.onDidChangeTreeDataEmitter.emit(["start"]);
-      // dataProvider.onDidChangeTreeDataEmitter.emit(["root"]);
     },
   }));
 
