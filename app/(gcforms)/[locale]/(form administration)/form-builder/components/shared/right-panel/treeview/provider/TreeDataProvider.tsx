@@ -15,7 +15,7 @@ import { useTreeRef } from "./TreeRefProvider";
 import isEqual from "lodash.isequal";
 
 const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
-  { children, ...rest },
+  { children },
   ref
 ) => {
   const { getGroups, getId, setId } = useGroupStore((s) => {
@@ -107,7 +107,7 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
   }));
 
   return (
-    <div {...rest}>
+    <>
       <TreeView
         viewState={{}}
         dataProvider={dataProvider}
@@ -123,7 +123,7 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
         }}
       />
       {children}
-    </div>
+    </>
   );
 };
 
