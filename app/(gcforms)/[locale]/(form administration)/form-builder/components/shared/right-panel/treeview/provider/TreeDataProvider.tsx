@@ -18,8 +18,13 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
   { children },
   ref
 ) => {
-  const { getGroups, getId, setId } = useGroupStore((s) => {
-    return { getGroups: s.getGroups, getId: s.getId, setId: s.setId };
+  const { getId, setId, getGroups, addGroup } = useGroupStore((s) => {
+    return {
+      getId: s.getId,
+      setId: s.setId,
+      getGroups: s.getGroups,
+      addGroup: s.addGroup
+    };
   });
 
   const { tree } = useTreeRef();
@@ -82,9 +87,13 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
         newItems.root.children.push(itemId);
       }
 
+      addGroup(itemId, "New section");
+      setId(itemId);
+
       setItems(newItems);
       console.log({ items });
       dataProvider.onDidChangeTreeDataEmitter.emit(["root"]);
+      // dataProvider.onDidChangeTreeDataEmitter.emit([itemId]);
     },
     updateItem: (id: string, value: string) => {
       const updatedItems = getGroups();
