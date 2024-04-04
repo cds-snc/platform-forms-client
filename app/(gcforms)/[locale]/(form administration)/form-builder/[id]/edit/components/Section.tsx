@@ -39,6 +39,7 @@ export const Section = ({ groupId }: { groupId: string }) => {
   const saveGroupName = (groupName: string) => {
     updateGroupName({ id: groupId, name: groupName });
     setEditing(false);
+    wrapper?.current?.updateItem(groupId, groupName);
   };
 
   return (
