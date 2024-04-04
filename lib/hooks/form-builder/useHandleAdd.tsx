@@ -5,7 +5,7 @@ import { useTemplateStore } from "@lib/store";
 import { blockLoader, LoaderType } from "../../utils/form-builder/blockLoader";
 import { allowedTemplates } from "@lib/utils/form-builder";
 import { defaultField, createElement, setDescription } from "@lib/utils/form-builder/itemHelper";
-import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store";
+import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { getTranslatedElementProperties } from "@formBuilder/actions";
 import { TreeDataProviderProps } from "@formBuilder/components/shared/right-panel/treeview/types";
 

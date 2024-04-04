@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { SimpleTree } from "react-arborist";
 import { CreateHandler, DeleteHandler, MoveHandler, RenameHandler } from "react-arborist";
 
-import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store";
+import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 
 export interface updateObj<T> {
   id: string;

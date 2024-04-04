@@ -11,7 +11,7 @@ import {
 } from "react-complex-tree";
 import "react-complex-tree/lib/style-modern.css";
 import { useTreeRef } from "./provider/TreeRefProvider";
-import { useGroupStore } from "./store";
+import { useGroupStore } from "./store/useGroupStore";
 import { v4 as uuid } from "uuid";
 
 export const TreeView = ({
@@ -63,10 +63,11 @@ export const TreeView = ({
                 item.isFolder && updateGroupName({ id: String(item.index), name });
 
                 // Rename the element
-                !item.isFolder && updateElementTitle({
-                  id: Number(item.index),
-                  text: name,
-                });
+                !item.isFolder &&
+                  updateElementTitle({
+                    id: Number(item.index),
+                    text: name,
+                  });
               }}
               canDragAndDrop={true}
               canReorderItems={true}

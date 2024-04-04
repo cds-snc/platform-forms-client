@@ -6,7 +6,7 @@ import { ArrowDown } from "./icons/ArrowDown";
 import { ArrowRight } from "./icons/ArrowRight";
 import { DragHandle } from "./icons/DragHandle";
 import { LockIcon } from "@serverComponents/icons";
-import { useGroupStore } from "./store";
+import { useGroupStore } from "./store/useGroupStore";
 import { FormElement } from "@lib/types";
 import { LocalizedFormProperties, LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { useTemplateStore } from "@lib/store";

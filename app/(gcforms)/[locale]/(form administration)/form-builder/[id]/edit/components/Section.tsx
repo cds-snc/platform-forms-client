@@ -5,7 +5,7 @@ import { FormElementTypes } from "@lib/types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 import { useState } from "react";
-import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store";
+import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 
 export const Section = ({ groupId }: { groupId: string }) => {
   const { t } = useTranslation("form-builder");

@@ -5,7 +5,7 @@ import React, {
   ForwardRefRenderFunction,
   useState,
 } from "react";
-import { useGroupStore } from "../store";
+import { useGroupStore } from "../store/useGroupStore";
 import { StaticTreeDataProvider, TreeItem } from "react-complex-tree";
 import "react-complex-tree/lib/style-modern.css";
 import { findParentGroup } from "../util/findParentGroup";

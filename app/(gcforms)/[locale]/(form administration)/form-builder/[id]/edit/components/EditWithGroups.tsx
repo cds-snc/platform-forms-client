@@ -13,7 +13,7 @@ import { SettingsPanel } from "./settings/SettingsPanel";
 import { cleanInput } from "@lib/utils/form-builder";
 import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 import { useRehydrate } from "@lib/hooks/form-builder";
-import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store";
+import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { Section } from "./Section";
 import { FormElement } from "@lib/types";
 
