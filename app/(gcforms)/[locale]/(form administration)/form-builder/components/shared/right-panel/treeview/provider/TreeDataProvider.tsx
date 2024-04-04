@@ -99,12 +99,17 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = ({ chi
     },
     removeItem: (id: string) => {
       const updatedItems = getGroups();
-      updatedItems.start.children = updatedItems.start.children?.filter((child) => child !== id);
-      setItems(updatedItems);
+      const parent = findParentGroup(updatedItems, id);
+      if (parent) {
+        updatedItems[parent.index].children = updatedItems[parent.index].children?.filter(
+          (child) => child !== id
+        );
+        setItems(updatedItems);
 
-      const children = updatedItems.start.children || [];
-      dataProvider.onChangeItemChildren("start", children);
-      dataProvider.onDidChangeTreeDataEmitter.emit(["start"]);
+        const children = updatedItems[parent.index].children || [];
+        dataProvider.onChangeItemChildren(parent.index, children);
+        dataProvider.onDidChangeTreeDataEmitter.emit([parent.index]);
+      }
     },
   }));
 
