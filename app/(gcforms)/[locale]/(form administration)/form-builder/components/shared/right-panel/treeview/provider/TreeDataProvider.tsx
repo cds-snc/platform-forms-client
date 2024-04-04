@@ -13,6 +13,8 @@ import { TreeDataProviderProps } from "../types";
 import { TreeView } from "../TreeView";
 import { useTreeRef } from "./TreeRefProvider";
 import isEqual from "lodash.isequal";
+import { useTemplateStore } from "@lib/store";
+import { get } from "lodash";
 
 const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
   { children },
@@ -27,6 +29,9 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
     };
   });
 
+  const changeKey = useTemplateStore((s) => s.changeKey);
+  const setChangeKey = useTemplateStore((s) => s.setChangeKey);
+
   const { tree } = useTreeRef();
 
   const [items, setItems] = useState(getGroups());
@@ -36,7 +41,7 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
       ...item,
       data,
     }));
-  }, [items]);
+  }, [items, changeKey]);
 
   const injectItem = (itemId: string) => {
     const id = getId();
@@ -73,8 +78,6 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
     },
     addGroup: (itemId: string) => {
       const newItems = getGroups();
-
-      // console.log({ newItems });
       newItems[itemId] = {
         data: "New section",
         index: itemId,
@@ -83,17 +86,15 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
         isFolder: true,
       };
 
-      if (newItems.root.children) {
-        newItems.root.children.push(itemId);
-      }
-
       addGroup(itemId, "New section");
       setId(itemId);
+      setItems(getGroups());
 
-      setItems(newItems);
-      console.log({ items });
-      dataProvider.onDidChangeTreeDataEmitter.emit(["root"]);
-      // dataProvider.onDidChangeTreeDataEmitter.emit([itemId]);
+      if (newItems.root.children) {
+        newItems.root.children.push(itemId);
+        dataProvider.onChangeItemChildren("root", newItems.root.children);
+        dataProvider.onDidChangeTreeDataEmitter.emit(["root"]);
+      }
     },
     updateItem: (id: string, value: string) => {
       const updatedItems = getGroups();
