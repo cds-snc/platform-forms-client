@@ -33,6 +33,7 @@ export const TreeView = ({
   };
 
   const updateElementTitle = useGroupStore((state) => state.updateElementTitle);
+  const updateGroupName = useGroupStore((state) => state.updateGroupName);
   const updateGroup = useGroupStore((state) => state.updateGroup);
 
   return (
@@ -58,7 +59,11 @@ export const TreeView = ({
                 updateGroup(parentItem, children);
               }}
               onRenameItem={(item, name) => {
-                updateElementTitle({
+                // Rename the group
+                item.isFolder && updateGroupName({ id: String(item.index), name });
+
+                // Rename the element
+                !item.isFolder && updateElementTitle({
                   id: Number(item.index),
                   text: name,
                 });
