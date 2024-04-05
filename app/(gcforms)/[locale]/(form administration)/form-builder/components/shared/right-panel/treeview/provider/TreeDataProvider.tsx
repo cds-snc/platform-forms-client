@@ -109,6 +109,7 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = ({ chi
         const children = updatedItems[parent.index].children || [];
         dataProvider.onChangeItemChildren(parent.index, children);
         dataProvider.onDidChangeTreeDataEmitter.emit([parent.index]);
+        tree?.current?.selectItems([parent.index]);
       }
     },
   }));
