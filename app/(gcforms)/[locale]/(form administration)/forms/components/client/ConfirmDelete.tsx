@@ -31,7 +31,8 @@ export const ConfirmDelete = ({
       })
       .catch((error) => {
         logMessage.debug(error);
-        if ((error as Error).message === "Responses Exist") {
+        logMessage.info(error);
+        if ((error as Error).message === "Found unprocessed submissions") {
           toast.error(t("formDeletedResponsesExist"));
         } else {
           toast.error(t("formDeletedDialogMessageFailed"));

@@ -31,22 +31,19 @@ export async function getForm(formId: string) {
   return response;
 }
 
-// Note: copied from manage-forms actions and added revalidatePath()
 export const deleteForm = async (id: string) => {
   const ability = await authCheck();
-
-  const result = deleteTemplate(ability, id).catch((error) => {
-    logMessage.debug(error);
+  const result = await deleteTemplate(ability, id).catch((error) => {
+    logMessage.error(error);
     if (error instanceof TemplateHasUnprocessedSubmissions) {
-      throw new Error("Responses Exist");
-    } else {
-      throw new Error("Failed to Delete Form");
+      throw new Error("Found unprocessed submissions");
     }
+    throw new Error("Failed to Delete Form");
   });
-
+  if (!result) {
+    throw new Error("Template with user not found");
+  }
   revalidatePath("(gcforms)/[locale]/(form administration)/forms", "page");
-
-  return result;
 };
 
 const overdueSettings = cache(async () => {
