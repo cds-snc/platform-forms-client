@@ -365,13 +365,14 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               }),
             remove: (elementId, groupId = "") => {
               set((state) => {
-                console.log("remove", elementId, groupId);
                 state.form.elements = removeElementById(state.form.elements, elementId);
                 state.form.layout = removeById(state.form.layout, elementId);
-                
+
                 // @TODO: Feature flag
                 if (groupId && state.form.groups) {
-                  state.form.groups = removeGroupElement(original(state.form.groups), groupId, elementId);
+                  const groups = removeGroupElement({ ...original(state.form.groups) }, groupId, elementId);
+                  console.log("new groups", groups);
+                  state.form.groups = { ...groups };
                 }
               });
             },
