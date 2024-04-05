@@ -74,6 +74,7 @@ export const TreeView = ({
               dataProvider={dataProvider}
               getItemTitle={(item) => item.data}
               viewState={viewState}
+              disableMultiselect={true}
             >
               <Tree treeId="tree-1" rootItem="root" treeLabel="Tree Example" ref={tree} />
             </UncontrolledTreeEnvironment>
