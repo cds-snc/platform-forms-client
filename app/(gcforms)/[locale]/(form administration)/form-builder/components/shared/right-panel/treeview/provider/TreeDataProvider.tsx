@@ -15,7 +15,7 @@ import { useTreeRef } from "./TreeRefProvider";
 import isEqual from "lodash.isequal";
 
 const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = ({ children }, ref) => {
-  const { getId, setId, getGroups, addGroup } = useGroupStore((s) => {
+  const { setId, getGroups, addGroup } = useGroupStore((s) => {
     return {
       getId: s.getId,
       setId: s.setId,
@@ -35,38 +35,30 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = ({ chi
     }));
   }, [items]);
 
-  const injectItem = (itemId: string) => {
-    const id = getId();
-
-    const newItems = items;
-
-    // @todo update this to add children current section
-    if (newItems[id] && newItems[id].children !== undefined) {
-      const children = newItems[id].children;
-      children && children.push(itemId);
-    }
-
-    newItems[itemId] = {
-      data: "New item",
-      index: itemId,
-      children: [],
-      canMove: true,
-      isFolder: false,
-    };
-
-    setItems(newItems);
-
-    dataProvider.onDidChangeTreeDataEmitter.emit(["root"]);
-  };
-
   useImperativeHandle(ref, () => ({
     addItem: (id: string) => {
       const parent = findParentGroup(getGroups(), id);
-      parent && tree?.current?.expandItem(parent.index);
-      injectItem(id);
-      parent && tree?.current?.focusItem(parent.index);
-      // tree?.current?.selectItems([id]);
-      return;
+      if (parent) {
+        const newItems = getGroups();
+
+        newItems[id] = {
+          data: "New item",
+          index: id,
+          children: [],
+          canMove: true,
+          isFolder: false,
+        };
+
+        setItems(newItems);
+
+        const children = newItems[parent.index].children || [];
+
+        dataProvider.onChangeItemChildren(parent.index, children);
+        dataProvider.onDidChangeTreeDataEmitter.emit([parent.index]);
+
+        tree?.current?.expandItem(parent.index);
+        tree?.current?.selectItems([id]);
+      }
     },
     addGroup: (itemId: string) => {
       const newItems = getGroups();
@@ -104,12 +96,14 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = ({ chi
         updatedItems[parent.index].children = updatedItems[parent.index].children?.filter(
           (child) => child !== id
         );
+        delete updatedItems[id];
         setItems(updatedItems);
 
         const children = updatedItems[parent.index].children || [];
         dataProvider.onChangeItemChildren(parent.index, children);
         dataProvider.onDidChangeTreeDataEmitter.emit([parent.index]);
         tree?.current?.selectItems([parent.index]);
+        tree?.current?.expandItem(parent.index);
       }
     },
   }));
