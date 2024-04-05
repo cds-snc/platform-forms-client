@@ -2,6 +2,7 @@
 import { createStore } from "zustand";
 import { useStoreWithEqualityFn } from "zustand/traditional";
 import { immer } from "zustand/middleware/immer";
+import { original } from "immer";
 import { shallow } from "zustand/shallow";
 import {
   persist,
@@ -364,9 +365,10 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               }),
             remove: (elementId) => {
               set((state) => {
+                console.log("remove", elementId);
                 state.form.elements = removeElementById(state.form.elements, elementId);
                 state.form.layout = removeById(state.form.layout, elementId);
-                state.form.groups = removeGroupElement(state.form.groups, state.id, elementId);
+                state.form.groups = removeGroupElement(original(state.form.groups), state.id, elementId);
               });
             },
             removeSubItem: (elIndex, elementId) =>
@@ -411,9 +413,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 const element = JSON.parse(JSON.stringify(state.form.elements[elIndex]));
                 element.id = id;
                 if (element.type !== "richText") {
-                  element.properties[state.localizeField("title")] = `${
-                    element.properties[state.localizeField("title")]
-                  } copy`;
+                  element.properties[state.localizeField("title")] = `${element.properties[state.localizeField("title")]
+                    } copy`;
                 }
                 state.form.elements.splice(elIndex + 1, 0, element);
                 state.form.layout.splice(elIndex + 1, 0, id);
@@ -426,9 +427,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 if (subElements) {
                   const element = JSON.parse(JSON.stringify(subElements[subIndex]));
                   element.id = incrementElementId(subElements);
-                  element.properties[state.localizeField("title")] = `${
-                    element.properties[state.localizeField("title")]
-                  } copy`;
+                  element.properties[state.localizeField("title")] = `${element.properties[state.localizeField("title")]
+                    } copy`;
 
                   state.form.elements[elIndex].properties.subElements?.splice(
                     subIndex + 1,

@@ -299,15 +299,20 @@ export const removeGroupElement = (
   groupId: string,
   elementId: number
 ) => {
+
+  console.log("groups", groups);
   if (groups) {
     const group = groups[groupId];
+    console.log("group", group, "groupId", groups[groupId]);
 
     if (!group) return groups;
 
     group.elements = group.elements.filter((el) => String(el) !== String(elementId));
 
+    console.log("group", group);
+
     if (groups) {
-      groups[groupId] = group;
+      groups[groupId] = { ...group };
     }
 
     return groups;
