@@ -1,4 +1,4 @@
-import React, { useMemo, forwardRef, useImperativeHandle, ForwardRefRenderFunction } from "react";
+import React, { forwardRef, useImperativeHandle, ForwardRefRenderFunction } from "react";
 import { useGroupStore } from "../store/useGroupStore";
 import { TreeItem } from "react-complex-tree";
 import "react-complex-tree/lib/style-modern.css";
@@ -20,13 +20,18 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = ({ chi
 
   const { tree } = useTreeRef();
 
-  const dataProvider = useMemo(() => {
-    return new CustomStaticTreeDataProvider(getGroups(), (item, data) => ({
-      ...item,
-      data,
-    }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const dataProvider = new CustomStaticTreeDataProvider(getGroups(), (item, data) => ({
+    ...item,
+    data,
+  }));
+
+  // const dataProvider = useMemo(() => {
+  //   return new CustomStaticTreeDataProvider(getGroups(), (item, data) => ({
+  //     ...item,
+  //     data,
+  //   }));
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   useImperativeHandle(ref, () => ({
     addItem: async (id: string) => {
