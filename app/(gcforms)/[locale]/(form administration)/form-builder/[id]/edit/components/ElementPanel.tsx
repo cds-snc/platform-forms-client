@@ -7,6 +7,7 @@ import { useIsWithin } from "@lib/hooks/form-builder";
 import { useRefsContext } from "./RefsContext";
 import { FormElementTypes, FormElement } from "@lib/types";
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
+import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 
 import { cn } from "@lib/utils";
 import { useHandleAdd } from "@lib/hooks/form-builder/useHandleAdd";
@@ -33,6 +34,7 @@ export const ElementPanel = ({
   const [ifFocus, setIfFocus] = useState<boolean>(false);
   const { wrapper } = useTreeRef();
   const { handleAddElement } = useHandleAdd(wrapper?.current);
+  const groupId = useGroupStore((state) => state.id);
 
   if (ifFocus === false) {
     // Only run this 1 time
@@ -59,12 +61,12 @@ export const ElementPanel = ({
   const moreButton =
     item.type !== "richText"
       ? {
-          moreButtonRenderer: (
-            moreButton: JSX.Element | undefined
-          ): React.ReactElement | string | undefined => (
-            <MoreModal item={item} moreButton={moreButton} />
-          ),
-        }
+        moreButtonRenderer: (
+          moreButton: JSX.Element | undefined
+        ): React.ReactElement | string | undefined => (
+          <MoreModal item={item} moreButton={moreButton} />
+        ),
+      }
       : {};
 
   /* eslint-disable jsx-a11y/no-static-element-interactions */
@@ -111,7 +113,7 @@ export const ElementPanel = ({
         }}
         handleRemove={() => {
           const previousElement = elements[item.index - 1];
-          remove(item.id);
+          remove(item.id, groupId);
           wrapper?.current && wrapper?.current.removeItem(String(item.id));
           setChangeKey(String(new Date().getTime()));
 

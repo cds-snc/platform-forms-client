@@ -138,7 +138,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
     type?: FormElementTypes,
     data?: FormElement
   ) => void;
-  remove: (id: number) => void;
+  remove: (id: number, groupId?: string) => void;
   removeSubItem: (elIndex: number, id: number) => void;
   addChoice: (elIndex: number) => void;
   addSubChoice: (elIndex: number, subIndex: number) => void;
@@ -363,12 +363,16 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                   type,
                 });
               }),
-            remove: (elementId) => {
+            remove: (elementId, groupId = "") => {
               set((state) => {
-                console.log("remove", elementId);
+                console.log("remove", elementId, groupId);
                 state.form.elements = removeElementById(state.form.elements, elementId);
                 state.form.layout = removeById(state.form.layout, elementId);
-                state.form.groups = removeGroupElement(original(state.form.groups), state.id, elementId);
+                
+                // @TODO: Feature flag
+                if (groupId && state.form.groups) {
+                  state.form.groups = removeGroupElement(original(state.form.groups), groupId, elementId);
+                }
               });
             },
             removeSubItem: (elIndex, elementId) =>
