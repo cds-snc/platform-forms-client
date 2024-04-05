@@ -3,34 +3,35 @@ import { Button } from "@clientComponents/globals";
 import {
   UncontrolledTreeEnvironment,
   Tree,
-  StaticTreeDataProvider,
   TreeItem,
   IndividualTreeViewState,
   DraggingPosition,
   DraggingPositionItem,
+  TreeDataProvider,
 } from "react-complex-tree";
 import "react-complex-tree/lib/style-modern.css";
 import { useTreeRef } from "./provider/TreeRefProvider";
 import { useGroupStore } from "./store/useGroupStore";
 import { v4 as uuid } from "uuid";
+import { CustomStaticTreeDataProvider } from "./provider/CustomDataProvider";
 
 export const TreeView = ({
   dataProvider,
   viewState,
   onFocusItem,
 }: {
-  dataProvider: StaticTreeDataProvider;
+  dataProvider: CustomStaticTreeDataProvider;
   viewState: IndividualTreeViewState;
   onFocusItem: (item: TreeItem) => void;
 }) => {
   const { environment, tree, wrapper } = useTreeRef();
 
   // This is only for testing purposes
-  const getFocus = () => {
-    if (!environment || !environment.current) return "Fruit";
-    const state = environment.current.viewState;
-    return (state["tree-1"] && state["tree-1"].focusedItem) || "Fruit";
-  };
+  // const getFocus = () => {
+  //   if (!environment || !environment.current) return "Fruit";
+  //   const state = environment.current.viewState;
+  //   return (state["tree-1"] && state["tree-1"].focusedItem) || "Fruit";
+  // };
 
   const updateElementTitle = useGroupStore((state) => state.updateElementTitle);
   const updateGroupName = useGroupStore((state) => state.updateGroupName);
@@ -71,8 +72,8 @@ export const TreeView = ({
               }}
               canDragAndDrop={true}
               canReorderItems={true}
-              dataProvider={dataProvider}
-              getItemTitle={(item) => item.data}
+              dataProvider={dataProvider as unknown as TreeDataProvider}
+              getItemTitle={(item) => item.data || "New item"}
               viewState={viewState}
               disableMultiselect={true}
             >

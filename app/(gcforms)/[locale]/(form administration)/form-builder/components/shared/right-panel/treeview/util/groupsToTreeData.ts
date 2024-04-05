@@ -45,6 +45,7 @@ export const groupsToTreeData = (formGroups: GroupsType, elements: FormElement[]
         isFolder: false,
         canRename: true,
         canMove: true,
+        children: [],
         data: element.properties.titleEn, // @TODO
       };
 

@@ -98,30 +98,30 @@ export const sortByLayout = ({
 export const getSchemaFromState = (state: TemplateStoreState) => {
   const {
     form: {
-      titleEn,
-      titleFr,
-      introduction,
-      privacyPolicy,
-      confirmation,
-      elements,
-      brand,
-      securityAttribute,
-      layout,
+      // titleEn,
+      // titleFr,
+      // introduction,
+      // privacyPolicy,
+      // confirmation,
+      // elements,
+      // brand,
+      // securityAttribute,
+      // layout,
       groups,
     },
   } = state;
 
   const form: FormProperties = {
-    titleEn,
-    titleFr,
-    introduction,
-    privacyPolicy,
-    confirmation,
-    layout,
+    // titleEn,
+    // titleFr,
+    // introduction,
+    // privacyPolicy,
+    // confirmation,
+    // layout,
     groups,
-    elements,
-    securityAttribute,
-    brand,
+    // elements,
+    // securityAttribute,
+    // brand,
   };
 
   return form;
@@ -304,7 +304,7 @@ export const removeGroupElement = (
     if (!group) return groups;
 
     group.elements = group.elements.filter((el) => {
-      return String(el) !== String(elementId)
+      return String(el) !== String(elementId);
     });
 
     if (groups) {

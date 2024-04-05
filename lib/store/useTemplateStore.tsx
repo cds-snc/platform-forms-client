@@ -370,8 +370,11 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
 
                 // @TODO: Feature flag
                 if (groupId && state.form.groups) {
-                  const groups = removeGroupElement({ ...original(state.form.groups) }, groupId, elementId);
-                  console.log("new groups", groups);
+                  const groups = removeGroupElement(
+                    { ...original(state.form.groups) },
+                    groupId,
+                    elementId
+                  );
                   state.form.groups = { ...groups };
                 }
               });
@@ -418,8 +421,9 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 const element = JSON.parse(JSON.stringify(state.form.elements[elIndex]));
                 element.id = id;
                 if (element.type !== "richText") {
-                  element.properties[state.localizeField("title")] = `${element.properties[state.localizeField("title")]
-                    } copy`;
+                  element.properties[state.localizeField("title")] = `${
+                    element.properties[state.localizeField("title")]
+                  } copy`;
                 }
                 state.form.elements.splice(elIndex + 1, 0, element);
                 state.form.layout.splice(elIndex + 1, 0, id);
@@ -432,8 +436,9 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 if (subElements) {
                   const element = JSON.parse(JSON.stringify(subElements[subIndex]));
                   element.id = incrementElementId(subElements);
-                  element.properties[state.localizeField("title")] = `${element.properties[state.localizeField("title")]
-                    } copy`;
+                  element.properties[state.localizeField("title")] = `${
+                    element.properties[state.localizeField("title")]
+                  } copy`;
 
                   state.form.elements[elIndex].properties.subElements?.splice(
                     subIndex + 1,

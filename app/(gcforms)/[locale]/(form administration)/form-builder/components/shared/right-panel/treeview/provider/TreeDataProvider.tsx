@@ -1,18 +1,12 @@
-import React, {
-  useMemo,
-  forwardRef,
-  useImperativeHandle,
-  ForwardRefRenderFunction,
-  useState,
-} from "react";
+import React, { useMemo, forwardRef, useImperativeHandle, ForwardRefRenderFunction } from "react";
 import { useGroupStore } from "../store/useGroupStore";
-import { StaticTreeDataProvider, TreeItem } from "react-complex-tree";
+import { TreeItem } from "react-complex-tree";
 import "react-complex-tree/lib/style-modern.css";
 import { findParentGroup } from "../util/findParentGroup";
 import { TreeDataProviderProps } from "../types";
 import { TreeView } from "../TreeView";
 import { useTreeRef } from "./TreeRefProvider";
-import isEqual from "lodash.isequal";
+import { CustomStaticTreeDataProvider } from "./CustomDataProvider";
 
 const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = ({ children }, ref) => {
   const { setId, getGroups, addGroup } = useGroupStore((s) => {
@@ -26,66 +20,46 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = ({ chi
 
   const { tree } = useTreeRef();
 
-  const [items, setItems] = useState(getGroups());
-
   const dataProvider = useMemo(() => {
-    return new StaticTreeDataProvider(items, (item, data) => ({
+    return new CustomStaticTreeDataProvider(getGroups(), (item, data) => ({
       ...item,
       data,
     }));
-  }, [items]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useImperativeHandle(ref, () => ({
-    addItem: (id: string) => {
+    addItem: async (id: string) => {
       const parent = findParentGroup(getGroups(), id);
       if (parent) {
-        const newItems = getGroups();
+        const groups = getGroups();
+        dataProvider.setItems(groups);
 
-        newItems[id] = {
-          data: "New item",
-          index: id,
-          children: [],
-          canMove: true,
-          isFolder: false,
-        };
+        const children = groups[parent.index].children || [id];
 
-        setItems(newItems);
-
-        const children = newItems[parent.index].children || [];
+        dataProvider.onDidChangeTreeDataEmitter.emit([parent.index]);
 
         dataProvider.onChangeItemChildren(parent.index, children);
-        dataProvider.onDidChangeTreeDataEmitter.emit([parent.index]);
 
         tree?.current?.expandItem(parent.index);
         tree?.current?.selectItems([id]);
       }
     },
     addGroup: (itemId: string) => {
-      const newItems = getGroups();
-      newItems[itemId] = {
-        data: "New section",
-        index: itemId,
-        children: [],
-        canMove: true,
-        isFolder: true,
-      };
-
       addGroup(itemId, "New section");
       setId(itemId);
-      setItems(getGroups());
+      const groups = getGroups();
+      dataProvider.setItems(groups);
 
-      if (newItems.root.children) {
-        newItems.root.children.push(itemId);
-        dataProvider.onChangeItemChildren("root", newItems.root.children);
+      if (groups.root.children) {
+        dataProvider.onChangeItemChildren("root", groups.root.children);
         dataProvider.onDidChangeTreeDataEmitter.emit(["root"]);
-        tree?.current?.selectItems([itemId]);
+        // tree?.current?.expandItem(itemId);
+        // tree?.current?.selectItems([itemId]);
       }
     },
     updateItem: (id: string, value: string) => {
       const updatedItems = getGroups();
-      if (isEqual(items, updatedItems)) {
-        return;
-      }
       dataProvider.onRenameItem(updatedItems[id], value);
       dataProvider.onDidChangeTreeDataEmitter.emit([id]);
     },
@@ -97,7 +71,7 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = ({ chi
           (child) => child !== id
         );
         delete updatedItems[id];
-        setItems(updatedItems);
+        dataProvider.setItems(updatedItems);
 
         const children = updatedItems[parent.index].children || [];
         dataProvider.onChangeItemChildren(parent.index, children);
@@ -117,7 +91,7 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = ({ chi
           if (item.isFolder) {
             setId(String(item.index));
           } else {
-            const parent = findParentGroup(items, String(item.index));
+            const parent = findParentGroup(getGroups(), String(item.index));
             if (parent) {
               setId(String(parent.index));
             }
