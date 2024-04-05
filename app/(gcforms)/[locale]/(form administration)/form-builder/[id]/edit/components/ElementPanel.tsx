@@ -61,12 +61,12 @@ export const ElementPanel = ({
   const moreButton =
     item.type !== "richText"
       ? {
-        moreButtonRenderer: (
-          moreButton: JSX.Element | undefined
-        ): React.ReactElement | string | undefined => (
-          <MoreModal item={item} moreButton={moreButton} />
-        ),
-      }
+          moreButtonRenderer: (
+            moreButton: JSX.Element | undefined
+          ): React.ReactElement | string | undefined => (
+            <MoreModal item={item} moreButton={moreButton} />
+          ),
+        }
       : {};
 
   /* eslint-disable jsx-a11y/no-static-element-interactions */
@@ -113,8 +113,9 @@ export const ElementPanel = ({
         }}
         handleRemove={() => {
           const previousElement = elements[item.index - 1];
-          remove(item.id, groupId);
           wrapper?.current && wrapper?.current.removeItem(String(item.id));
+          remove(item.id, groupId);
+
           setChangeKey(String(new Date().getTime()));
 
           // if index is 0, then highlight the form title
