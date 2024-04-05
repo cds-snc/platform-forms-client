@@ -7,7 +7,7 @@ import { Language, LocalizedFormProperties } from "@lib/types/form-builder-types
 import { ElementPanel, ConfirmationDescription, PrivacyDescription } from ".";
 import { RefsProvider } from "./RefsContext";
 import { RichTextLocked } from "./elements";
-import { ExpandingInput } from "@formBuilder/components/shared";
+import { ExpandingInput, Output } from "@formBuilder/components/shared";
 import { useTemplateStore } from "@lib/store";
 import { SettingsPanel } from "./settings/SettingsPanel";
 import { cleanInput } from "@lib/utils/form-builder";
@@ -106,6 +106,7 @@ export const EditWithGroups = () => {
       <div className="mb-4">
         <SaveButton />
       </div>
+
       {groupId === "start" && <SettingsPanel />}
       {groupId === "start" && (
         <RichTextLocked
@@ -154,6 +155,8 @@ export const EditWithGroups = () => {
             return <ElementPanel elements={sortedElements} item={item} key={item.id} />;
           })}
       </RefsProvider>
+
+      <Output />
 
       <>
         {groupId === "start" && (
