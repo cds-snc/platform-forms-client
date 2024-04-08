@@ -124,6 +124,10 @@ export const Start = () => {
           tabIndex={0}
           role="button"
           className={boxClass}
+          onClick={() => {
+            const uploadButton = document.getElementById("file-upload");
+            if (uploadButton) uploadButton.click();
+          }}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
               const uploadButton = document.getElementById("file-upload");
