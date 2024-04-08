@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle, ForwardRefRenderFunction } from "react";
+import React, { forwardRef, useImperativeHandle, ForwardRefRenderFunction, useMemo } from "react";
 import { useGroupStore } from "../store/useGroupStore";
 import { TreeItem } from "react-complex-tree";
 import "react-complex-tree/lib/style-modern.css";
@@ -22,19 +22,18 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = ({ chi
 
   const [viewState, setViewState] = React.useState({});
 
+  // const dataProvider = new CustomStaticTreeDataProvider(getGroups(), (item, data) => ({
+  //   ...item,
+  //   data,
+  // }));
 
-  const dataProvider = new CustomStaticTreeDataProvider(getGroups(), (item, data) => ({
-    ...item,
-    data,
-  }));
-
-  // const dataProvider = useMemo(() => {
-  //   return new CustomStaticTreeDataProvider(getGroups(), (item, data) => ({
-  //     ...item,
-  //     data,
-  //   }));
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  const dataProvider = useMemo(() => {
+    return new CustomStaticTreeDataProvider(getGroups(), (item, data) => ({
+      ...item,
+      data,
+    }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useImperativeHandle(ref, () => ({
     addItem: async (id: string) => {
@@ -141,12 +140,14 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = ({ chi
               const parent = findParentGroup(getGroups(), result);
 
               const state = {
-                selectedItems: [result],
-                expandedItems: [parent.index],
-                focusedItem: result,
-              }
+                ["tree-1"]: {
+                  selectedItems: [result],
+                  expandedItems: [parent.index],
+                  focusedItem: result,
+                },
+              };
 
-              console.log('state:', state);
+              console.log("state:", state);
 
               setViewState(state);
             }
@@ -164,7 +165,6 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = ({ chi
             check viewState
           </button>
         </div>
-
       </div>
     </>
   );

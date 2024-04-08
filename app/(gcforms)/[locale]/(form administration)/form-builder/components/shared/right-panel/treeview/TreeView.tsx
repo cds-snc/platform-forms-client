@@ -74,7 +74,7 @@ export const TreeView = ({
               canReorderItems={true}
               dataProvider={dataProvider as unknown as TreeDataProvider}
               getItemTitle={(item) => item.data || "New item"}
-              viewState={viewState}
+              viewState={{ ...viewState }}
               disableMultiselect={true}
             >
               <Tree treeId="tree-1" rootItem="root" treeLabel="Tree Example" ref={tree} />
