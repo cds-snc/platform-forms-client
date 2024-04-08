@@ -97,18 +97,18 @@ export default auth((req) => {
   const layer2 = addLangToPath(req, pathname, cookieLang, searchParams);
   if (layer2) return layer2;
 
-  // Layer 3 - Language Cookie Sync
-
-  const cookieSyncRequired = needCookieSync(pathLang, cookieLang, pathname);
+  // Layer 3 - Pages with Required Auth
+  const layer3 = pageRequiresAuth(req, pathname, pathLang);
+  if (layer3) return layer3;
 
   // Layer 4 - Auth Users Redirect
 
-  const layer4 = authUsersRedirect(req, pathname, pathLang);
+  const layer4 = authFlowRedirect(req, pathname, pathLang);
   if (layer4) return layer4;
 
   // Final Layer - Set Content Security Policy
 
-  return setCSP(req, pathname, cookieSyncRequired, pathLang);
+  return setCSP(req, pathname, cookieLang, pathLang);
 });
 
 const setCORS = (req: NextRequest, pathname: string) => {
@@ -177,21 +177,10 @@ const addLangToPath = (
   }
 };
 
-const needCookieSync = (pathLang: string, cookieLang: string | undefined, pathname: string) => {
-  if (pathLang && cookieLang !== pathLang) {
-    logMessage.debug(
-      `Middleware - Setting language cookie from ${cookieLang} to ${pathLang} for path: ${pathname}`
-    );
-    return true;
-  }
-
-  return false;
-};
-
 const setCSP = (
   req: NextRequest,
   pathname: string,
-  cookieSyncRequired: boolean,
+  cookieLang: string | undefined,
   pathLang: string
 ) => {
   // Set the Content Security Policy (CSP) header
@@ -213,14 +202,13 @@ const setCSP = (
   // Set the CSP header on the response to the browser on the built version of the app only
   if (process.env.NODE_ENV !== "development") response.headers.set("content-security-policy", csp);
 
-  // From layer 3
   // Set cookie on response back to browser so client can render correct language on client components
-  if (cookieSyncRequired) response.cookies.set("i18next", pathLang);
+  if (pathLang && cookieLang !== pathLang) response.cookies.set("i18next", pathLang);
 
   return response;
 };
 
-const authUsersRedirect = (req: NextAuthRequest, pathname: string, pathLang: string) => {
+const authFlowRedirect = (req: NextAuthRequest, pathname: string, pathLang: string) => {
   const path = pathname.replace(`/${pathLang}/`, "/");
 
   const onAuthFlow = path.startsWith("/auth/mfa") || path.startsWith("/auth/restricted-access");
@@ -271,5 +259,29 @@ const authUsersRedirect = (req: NextAuthRequest, pathname: string, pathLang: str
       );
       return NextResponse.redirect(acceptableUsePage);
     }
+  }
+};
+
+const pageRequiresAuth = (req: NextAuthRequest, pathname: string, pathLang: string) => {
+  const path = pathname.replace(`/${pathLang}/`, "/");
+  const session = req.auth;
+
+  const pathsRequiringAuth = [
+    "/admin",
+    "/forms",
+    "/unlock-publishing",
+    "/profile",
+    "/setup-security-questions",
+    "/policy",
+    "/account-created",
+  ];
+
+  const onProtectedPath = pathsRequiringAuth.find((protectedPath) =>
+    path.startsWith(protectedPath)
+  );
+
+  if (!session && onProtectedPath) {
+    const login = new URL(`/${pathLang}/auth/login`, req.nextUrl.origin);
+    return NextResponse.redirect(login);
   }
 };

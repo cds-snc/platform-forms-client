@@ -4,7 +4,6 @@ import { auth, retrievePoolOfSecurityQuestions, retrieveUserSecurityQuestions } 
 import { createAbility } from "@lib/privileges";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { Profile } from "./components/server/Profile";
-import { redirect } from "next/navigation";
 
 export async function generateMetadata({
   params: { locale },
@@ -19,7 +18,7 @@ export async function generateMetadata({
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const session = await auth();
-  if (!session) redirect(`/${locale}/auth/login`);
+  if (!session) return null;
 
   const ability = createAbility(session);
 

@@ -17,7 +17,7 @@ export async function generateMetadata({
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const session = await auth();
-  if (!session) redirect(`/${locale}/auth/login`);
+  if (!session) return null;
 
   if (session.user.hasSecurityQuestions) {
     redirect(`/${locale}/profile`);
