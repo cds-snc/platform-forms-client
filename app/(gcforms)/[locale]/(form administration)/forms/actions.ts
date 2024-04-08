@@ -33,17 +33,21 @@ export async function getForm(formId: string) {
 
 export const deleteForm = async (id: string) => {
   const ability = await authCheck();
-  const result = await deleteTemplate(ability, id).catch((error) => {
-    logMessage.error(error);
-    if (error instanceof TemplateHasUnprocessedSubmissions) {
-      throw new Error("Found unprocessed submissions");
+  try {
+    const result = await deleteTemplate(ability, id).catch((error) => {
+      logMessage.error(error);
+      if (error instanceof TemplateHasUnprocessedSubmissions) {
+        throw new Error("Found unprocessed submissions");
+      }
+      throw new Error("Failed to Delete Form");
+    });
+    if (!result) {
+      throw new Error("Template with user not found");
     }
-    throw new Error("Failed to Delete Form");
-  });
-  if (!result) {
-    throw new Error("Template with user not found");
+    revalidatePath("(gcforms)/[locale]/(form administration)/forms", "page");
+  } catch (e) {
+    logMessage.info(e);
   }
-  revalidatePath("(gcforms)/[locale]/(form administration)/forms", "page");
 };
 
 const overdueSettings = cache(async () => {
