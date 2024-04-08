@@ -18,7 +18,10 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = ({ chi
     };
   });
 
-  const { tree } = useTreeRef();
+  const { tree, environment } = useTreeRef();
+
+  const [viewState, setViewState] = React.useState({});
+
 
   const dataProvider = new CustomStaticTreeDataProvider(getGroups(), (item, data) => ({
     ...item,
@@ -90,7 +93,7 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = ({ chi
   return (
     <>
       <TreeView
-        viewState={{}}
+        viewState={{ ...viewState }}
         dataProvider={dataProvider}
         onFocusItem={(item: TreeItem) => {
           if (item.isFolder) {
@@ -112,7 +115,7 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = ({ chi
             if (result) {
               // console.log('expand result:', result)
               tree?.current?.expandItem(result);
-              tree?.current?.selectItems([]);
+              // tree?.current?.selectItems([]);
             }
           }}
         >
@@ -125,13 +128,43 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = ({ chi
             const result = prompt("ID", "");
             if (result) {
               // console.log('select result:', result);
-              tree?.current?.selectItems([result]);
-              tree?.current?.focusItem(result);
+              // environment?.current?.selectItems([result], "tree-1");
+              // environment?.current?.focusItem(result, "tree-1");
+              /*
+              setViewState({
+                selectedItems: [result],
+                expandedItems: [result],
+                focusedItem: result,
+              });
+              */
+
+              const parent = findParentGroup(getGroups(), result);
+
+              const state = {
+                selectedItems: [result],
+                expandedItems: [parent.index],
+                focusedItem: result,
+              }
+
+              console.log('state:', state);
+
+              setViewState(state);
             }
           }}
         >
           Test select
         </button>
+
+        <div>
+          <button
+            onClick={() => {
+              console.log(environment?.current?.viewState["tree-1"]);
+            }}
+          >
+            check viewState
+          </button>
+        </div>
+
       </div>
     </>
   );
