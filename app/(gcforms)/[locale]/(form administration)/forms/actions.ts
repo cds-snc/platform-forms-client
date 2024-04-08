@@ -46,7 +46,8 @@ export const deleteForm = async (id: string) => {
     }
     revalidatePath("(gcforms)/[locale]/(form administration)/forms", "page");
   } catch (e) {
-    logMessage.info(e);
+    const error = e as Error;
+    throw new Error(error.message + ">>>>" + JSON.stringify(error.stack));
   }
 };
 
