@@ -104,6 +104,35 @@ const Wrapper: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = ({ chi
         }}
       />
       {children}
+
+      <div>
+        <button
+          onClick={() => {
+            const result = prompt("ID", "");
+            if (result) {
+              // console.log('expand result:', result)
+              tree?.current?.expandItem(result);
+              tree?.current?.selectItems([]);
+            }
+          }}
+        >
+          Test expand
+        </button>
+      </div>
+      <div>
+        <button
+          onClick={() => {
+            const result = prompt("ID", "");
+            if (result) {
+              // console.log('select result:', result);
+              tree?.current?.selectItems([result]);
+              tree?.current?.focusItem(result);
+            }
+          }}
+        >
+          Test select
+        </button>
+      </div>
     </>
   );
 };

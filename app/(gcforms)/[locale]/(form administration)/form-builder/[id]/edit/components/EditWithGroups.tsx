@@ -40,6 +40,8 @@ export const EditWithGroups = () => {
   const titleInput = useRef<HTMLTextAreaElement>(null);
   const groupId = useGroupStore((state) => state.id);
   const getElement = useGroupStore((state) => state.getElement);
+  const getGroups = useGroupStore((state) => state.getGroups);
+
   const elements = useTemplateStore(
     (s) => (s.form.groups && s.form.groups[groupId]?.elements) || []
   );
@@ -158,6 +160,9 @@ export const EditWithGroups = () => {
 
       <Output />
 
+      <pre className="mt-5 overflow-scroll border-2 border-black/50 p-5">
+        {JSON.stringify(getGroups(), null, 4)}
+      </pre>
       <>
         {groupId === "start" && (
           <RichTextLocked
