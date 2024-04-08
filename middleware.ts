@@ -32,6 +32,7 @@ const { auth } = NextAuth({
   callbacks: {
     async session(params) {
       const { session, token } = params as { session: Session; token: JWT };
+
       // Add info like 'role' to session object
       session.user = {
         id: token.userId ?? "",
@@ -103,13 +104,23 @@ export default auth((req) => {
 
   // Layer 4 - Auth Users Redirect
 
-  const layer4 = authFlowRedirect(req, pathname, pathLang);
+  const layer4 = authFlowRedirect(req, pathname, pathLang, cookieLang);
   if (layer4) return layer4;
 
   // Final Layer - Set Content Security Policy
 
   return setCSP(req, pathname, cookieLang, pathLang);
 });
+
+/**
+ *************************
+ * LAYERS                *
+ *************************
+ */
+
+/**
+ * Set the CORS headers on API routes
+ */
 
 const setCORS = (req: NextRequest, pathname: string) => {
   // Response
@@ -136,22 +147,31 @@ const setCORS = (req: NextRequest, pathname: string) => {
     );
     response.headers.set("Access-Control-Max-Age", "86400"); // 60 * 60 * 24 = 24 hours;
 
+    logMessage.debug(`Middleware Action: Setting CORS on API route: ${pathname}`);
+
     return response;
   }
 };
 
+/**
+ * Redirect to the language selection page if `/en` or /fr` is the page path
+ */
 const languageSelectorRedirect = (req: NextRequest, pathname: string, pathLang: string) => {
   if (languages.some((lang) => new RegExp(`^/${lang}/?$`).test(pathname))) {
     const redirect = NextResponse.redirect(new URL("/", req.url));
     // Set cookie on response back to browser so client can render correct language on client components
     redirect.cookies.set("i18next", pathLang);
     logMessage.debug(
-      `Middleware - Redirecting to language selector: ${pathname} pathlang: ${pathLang} `
+      `Middleware Action: Redirecting to language selector: ${pathname} pathlang: ${pathLang} `
     );
     return redirect;
   }
 };
 
+/**
+ * Ensure the the language param is always in the path.
+ * Set the language param using the cookie language if param is missing or not supported.
+ */
 const addLangToPath = (
   req: NextRequest,
   pathname: string,
@@ -163,7 +183,7 @@ const addLangToPath = (
     if (languages.some((lang) => lang === cookieLang)) {
       // Cookies language is already supported, redirect to that language
       logMessage.debug(
-        `Middleware - Redirecting to cookie language: ${cookieLang}, pathname: ${pathname}`
+        `Middleware Action: Adding language to path: ${cookieLang}, pathname: ${pathname}`
       );
 
       return NextResponse.redirect(
@@ -171,12 +191,15 @@ const addLangToPath = (
       );
     } else {
       // Redirect to fallback language
-      logMessage.debug(`Middleware - Redirecting to fallback language: : ${pathname}`);
+      logMessage.debug(`Middleware Action: Adding default language to path:  ${pathname}`);
       return NextResponse.redirect(new URL(`/${fallbackLng}${pathname}`, req.url));
     }
   }
 };
 
+/**
+ * Set the Content Security Policy
+ */
 const setCSP = (
   req: NextRequest,
   pathname: string,
@@ -208,8 +231,18 @@ const setCSP = (
   return response;
 };
 
-const authFlowRedirect = (req: NextAuthRequest, pathname: string, pathLang: string) => {
+/**
+ * Handles the redirection of users in the authentication flow
+ */
+const authFlowRedirect = (
+  req: NextAuthRequest,
+  pathname: string,
+  pathLang: string | undefined,
+  cookieLang: string | undefined
+) => {
   const path = pathname.replace(`/${pathLang}/`, "/");
+
+  const lang = pathLang || cookieLang || fallbackLng;
 
   const onAuthFlow = path.startsWith("/auth/mfa") || path.startsWith("/auth/restricted-access");
 
@@ -229,11 +262,12 @@ const authFlowRedirect = (req: NextAuthRequest, pathname: string, pathLang: stri
       !onSupport
     ) {
       logMessage.debug(
-        "Root Layout: User has not setup security questions, redirecting to setup-security-questions"
+        "Middlware Action: User has not setup security questions, redirecting to setup-security-questions"
       );
       // check if user has setup security questions setup
 
-      const securityQuestionsPage = new URL(`/${pathLang}/auth/setup-security-questions`, origin);
+      const securityQuestionsPage = new URL(`/${lang}/auth/setup-security-questions`, origin);
+      logMessage.debug(`Middleware: Redirecting to ${securityQuestionsPage}`);
       return NextResponse.redirect(securityQuestionsPage);
     }
     // Redirect to policy page only if users aren't on the policy, support, or security questions page
@@ -246,15 +280,13 @@ const authFlowRedirect = (req: NextAuthRequest, pathname: string, pathLang: stri
       !path.startsWith("/auth/logout")
     ) {
       logMessage.debug(
-        "Root Layout: User has not accepted the Acceptable Use Policy, redirecting to policy"
+        "Middleware Action: User has not accepted the Acceptable Use Policy, redirecting to policy"
       );
       // If they haven't agreed to Acceptable Use redirect to policy page for acceptance
       // Also check that the path is local and not an external URL
 
       const acceptableUsePage = new URL(
-        `/${pathLang}/auth/policy?referer=/${pathLang}${
-          localPathRegEx.test(path) ? path : "/forms"
-        }`,
+        `/${lang}/auth/policy?referer=/${lang}${localPathRegEx.test(path) ? path : "/forms"}`,
         origin
       );
       return NextResponse.redirect(acceptableUsePage);
@@ -262,6 +294,10 @@ const authFlowRedirect = (req: NextAuthRequest, pathname: string, pathLang: stri
   }
 };
 
+/**
+ * Ensures that a user visiting a page that requires authentication
+ * is redirected to the login page if they are not authenticated
+ */
 const pageRequiresAuth = (req: NextAuthRequest, pathname: string, pathLang: string) => {
   const path = pathname.replace(`/${pathLang}/`, "/");
   const session = req.auth;
@@ -271,16 +307,21 @@ const pageRequiresAuth = (req: NextAuthRequest, pathname: string, pathLang: stri
     "/forms",
     "/unlock-publishing",
     "/profile",
-    "/setup-security-questions",
+    "/auth/setup-security-questions",
     "/policy",
     "/account-created",
   ];
 
-  const onProtectedPath = pathsRequiringAuth.find((protectedPath) =>
-    path.startsWith(protectedPath)
-  );
+  const onProtectedPath = pathsRequiringAuth.find((protectedPath) => {
+    // If the path is the same as the protected path or it starts with the protected path
+    if (path === protectedPath) return true;
+    return path.startsWith(protectedPath);
+  });
 
   if (!session && onProtectedPath) {
+    logMessage.debug(
+      `Middleware Action: Redirecting unauthenticated user to login page from ${path}`
+    );
     const login = new URL(`/${pathLang}/auth/login`, req.nextUrl.origin);
     return NextResponse.redirect(login);
   }
