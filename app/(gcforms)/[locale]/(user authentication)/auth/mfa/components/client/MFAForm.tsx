@@ -27,18 +27,21 @@ export const MFAForm = () => {
 
   const [isLocked, setIsLocked] = useState(false);
   const [isExpired, setIsExpired] = useState(false);
+  const [isReady, setIsReady] = useState(false);
   const [isSubmittingStep1, setIsSubmittingStep1] = useState(false);
   const [isSubmittingStep2, setIsSubmittingStep2] = useState(false);
-  const authToken = useRef<{ email?: string; authenticationFlowToken?: string }>(
-    JSON.parse(sessionStorage.getItem("authFlowToken") ?? "{}")
-  );
+
+  const authToken = useRef<{ email?: string; authenticationFlowToken?: string }>({});
 
   const router = useRouter();
 
   useEffect(() => {
-    if (!authToken.current?.authenticationFlowToken || !authToken.current?.email) {
+    const localToken = JSON.parse(sessionStorage.getItem("authFlowToken") ?? "{}");
+    if (!localToken?.authenticationFlowToken || !localToken?.email) {
       setIsExpired(true);
     }
+    authToken.current = localToken;
+    setIsReady(true);
   }, []);
 
   const localFormAction = async (_: ErrorStates, formData: FormData): Promise<ErrorStates> => {
@@ -84,6 +87,8 @@ export const MFAForm = () => {
       }
     }
   }, [state.validationErrors]);
+
+  if (!isReady) return <Loader />;
 
   if (isLocked) {
     return <Locked2fa />;
