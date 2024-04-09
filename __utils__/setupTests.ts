@@ -133,7 +133,7 @@ jest.mock("@lib/logger", () => {
   };
 });
 
-jest.mock("@lib/hooks/useFlag", () => ({
+jest.mock("@lib/hooks/form-builder/useFlag", () => ({
   __esModule: true,
   useFlag: jest.fn((flag: string) => (initialSettings as Record<string, boolean>)[flag]),
 }));

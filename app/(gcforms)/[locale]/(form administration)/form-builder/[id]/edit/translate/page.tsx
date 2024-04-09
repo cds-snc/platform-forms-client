@@ -2,7 +2,7 @@ import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { EditNavigation } from "../components/EditNavigation";
 import { Translate } from "./components";
-import { checkFlag } from "@formBuilder/[id]/actions";
+import { checkFlag } from "@formBuilder/actions";
 
 export async function generateMetadata({
   params: { locale },

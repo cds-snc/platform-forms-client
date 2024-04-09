@@ -36,11 +36,9 @@ import {
   Departments,
   Combobox,
 } from "@formBuilder/[id]/edit/components/elements/element-dialog";
-
 import { useIsAdminUser } from "./useIsAdminUser";
-
 import { ElementOptionsFilter, ElementOption } from "../../types/form-builder-types";
-import { useFlag } from "@lib/hooks/useFlag";
+import { useFlag } from "./useFlag";
 
 export enum Groups {
   BASIC = "basic",
