@@ -33,7 +33,7 @@ const { auth } = NextAuth({
     async session(params) {
       const { session, token } = params as { session: Session; token: JWT };
 
-      // Add info like 'role' to session object
+      // Copy token contents into session for middleware
       session.user = {
         id: token.userId ?? "",
         lastLoginTime: token.lastLoginTime,
@@ -42,7 +42,6 @@ const { auth } = NextAuth({
         email: token.email,
         privileges: [],
         ...(token.newlyRegistered && { newlyRegistered: token.newlyRegistered }),
-        // Used client side to immidiately log out a user if they have been deactivated
         ...(token.deactivated && { deactivated: token.deactivated }),
         hasSecurityQuestions: token.hasSecurityQuestions ?? false,
       };
