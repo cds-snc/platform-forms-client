@@ -171,7 +171,7 @@ export const Edit = ({ formId }: { formId: string }) => {
         <div id="confirmation-text">
           <RichTextLocked
             hydrated={hasHydrated}
-            className="rounded-lg"
+            className="rounded-b-lg"
             addElement={false}
             schemaProperty="confirmation"
             ariaLabel={t("richTextConfirmationTitle")}
