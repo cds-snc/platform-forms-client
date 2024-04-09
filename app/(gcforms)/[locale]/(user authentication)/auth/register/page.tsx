@@ -20,5 +20,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
   if (session) redirect(`/${locale}/forms/`);
 
-  return <RegistrationForm />;
+  return (
+    <div id="auth-panel">
+      <RegistrationForm />
+    </div>
+  );
 }

@@ -33,5 +33,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       };
     });
 
-  return <SecurityQuestionsForm questions={questions} />;
+  return (
+    <div id="auth-panel">
+      <SecurityQuestionsForm questions={questions} />
+    </div>
+  );
 }
