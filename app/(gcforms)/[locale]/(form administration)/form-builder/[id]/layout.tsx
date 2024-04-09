@@ -10,8 +10,8 @@ import { TemplateStoreProvider } from "@lib/store";
 import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext";
 import { RefStoreProvider } from "@lib/hooks/form-builder/useRefStore";
 import { RightPanel } from "@formBuilder/components/shared/right-panel/RightPanel";
-import { checkFlag } from "./actions";
 import { GroupStoreProvider } from "@formBuilder/components/shared/right-panel/treeview/store";
+import { checkFlag } from "@formBuilder/actions";
 
 export default async function Layout({
   children,
