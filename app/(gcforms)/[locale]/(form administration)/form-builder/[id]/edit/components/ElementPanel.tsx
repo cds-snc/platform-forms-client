@@ -32,8 +32,8 @@ export const ElementPanel = ({
 
   const [className, setClassName] = useState<string>("");
   const [ifFocus, setIfFocus] = useState<boolean>(false);
-  const { wrapper } = useTreeRef();
-  const { handleAddElement } = useHandleAdd(wrapper?.current);
+  const { treeView } = useTreeRef();
+  const { handleAddElement } = useHandleAdd();
   const groupId = useGroupStore((state) => state.id);
 
   if (ifFocus === false) {
@@ -113,7 +113,7 @@ export const ElementPanel = ({
         }}
         handleRemove={() => {
           const previousElement = elements[item.index - 1];
-          wrapper?.current && wrapper?.current.removeItem(String(item.id));
+          treeView?.current && treeView?.current.removeItem(String(item.id));
           remove(item.id, groupId);
 
           setChangeKey(String(new Date().getTime()));

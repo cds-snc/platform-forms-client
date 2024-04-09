@@ -9,7 +9,6 @@ import { useHandleAdd } from "@lib/hooks/form-builder/useHandleAdd";
 import { FormElementTypes } from "@lib/types";
 import { cn } from "@lib/utils";
 import Skeleton from "react-loading-skeleton";
-import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 
 export const RichTextLocked = ({
   beforeContent = null,
@@ -43,8 +42,7 @@ export const RichTextLocked = ({
 
   const path = `form.${schemaProperty}[${localizedField}]]`;
 
-  const { wrapper } = useTreeRef();
-  const { handleAddElement } = useHandleAdd(wrapper?.current);
+  const { handleAddElement } = useHandleAdd();
 
   return (
     <div

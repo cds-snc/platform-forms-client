@@ -3,7 +3,6 @@ import { useHandleAdd } from "@lib/hooks/form-builder/useHandleAdd";
 import { useTranslation } from "@i18n/client";
 import { FormElementTypes } from "@lib/types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 import { SectionTitle } from "./SectionTitle";
 
 export const Section = ({ groupId }: { groupId: string }) => {
@@ -13,8 +12,7 @@ export const Section = ({ groupId }: { groupId: string }) => {
     groups: s.form.groups,
   }));
 
-  const { wrapper } = useTreeRef();
-  const { handleAddElement } = useHandleAdd(wrapper?.current);
+  const { handleAddElement } = useHandleAdd();
 
   const groupName = groups?.[groupId]?.name || "";
 

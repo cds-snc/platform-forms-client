@@ -7,13 +7,15 @@ import { allowedTemplates } from "@lib/utils/form-builder";
 import { defaultField, createElement, setDescription } from "@lib/utils/form-builder/itemHelper";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { getTranslatedElementProperties } from "@formBuilder/actions";
-import { TreeDataProviderProps } from "@formBuilder/components/shared/right-panel/treeview/types";
+import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 
-export const useHandleAdd = (treeData?: TreeDataProviderProps | null) => {
+export const useHandleAdd = () => {
   const { add, addSubItem } = useTemplateStore((s) => ({
     add: s.add,
     addSubItem: s.addSubItem,
   }));
+
+  const { treeView } = useTreeRef();
 
   const groupId = useGroupStore((state) => state.id);
 
@@ -44,12 +46,10 @@ export const useHandleAdd = (treeData?: TreeDataProviderProps | null) => {
       const item = await create(type as FormElementTypes);
       // Note add() returns the element id -- we're not using it yet
       const id = await add(index, item.type, item, groupId);
-      if (treeData) {
-        await new Promise((resolve) => setTimeout(resolve, 200)); // @TODO
-        treeData && treeData.addItem && treeData.addItem(String(id));
-      }
+      treeView?.current?.addItem(String(id));
+      // environment?.current?.viewState["tree-1"].focusedItem = String(id);
     },
-    [add, create, groupId, treeData]
+    [add, create, groupId, treeView]
   );
 
   const handleAddSubElement = useCallback(

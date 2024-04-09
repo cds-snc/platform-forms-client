@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 export const SectionTitle = ({ groupName, groupId }: { groupName: string; groupId: string }) => {
   const [editing, setEditing] = useState(false);
   const groupNameRef = useRef<HTMLHeadingElement>(null);
-  const { wrapper } = useTreeRef();
+  const { treeView } = useTreeRef();
   const updateGroupName = useGroupStore((state) => state.updateGroupName);
 
   const handleOnBlur = (e: React.FocusEvent) => {
@@ -22,7 +22,7 @@ export const SectionTitle = ({ groupName, groupId }: { groupName: string; groupI
   const saveGroupName = (groupName: string) => {
     updateGroupName({ id: groupId, name: groupName });
     setEditing(false);
-    wrapper?.current?.updateItem(groupId, groupName);
+    treeView?.current?.updateItem(groupId, groupName);
   };
 
   useEffect(() => {
