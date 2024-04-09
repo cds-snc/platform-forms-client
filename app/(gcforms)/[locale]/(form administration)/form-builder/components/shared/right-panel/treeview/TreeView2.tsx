@@ -4,6 +4,7 @@ import {
   ForwardRefRenderFunction,
   ReactElement,
   forwardRef,
+  useEffect,
   useImperativeHandle,
   useState,
 } from "react";
@@ -11,6 +12,7 @@ import { useTreeRef } from "./provider/TreeRefProvider";
 import { v4 as uuid } from "uuid";
 import { TreeItems } from "./types";
 import "react-complex-tree/lib/style-modern.css";
+import { findParentGroup } from "./util/findParentGroup";
 
 export interface TreeDataProviderProps {
   children?: ReactElement;
@@ -26,10 +28,11 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
   ref
 ) => {
   // export const TreeView = () => {
-  const { getGroups, addGroup } = useGroupStore((s) => {
+  const { getGroups, addGroup, setId } = useGroupStore((s) => {
     return {
       getGroups: s.getGroups,
       addGroup: s.addGroup,
+      setId: s.setId,
     };
   });
 
@@ -40,21 +43,38 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
   const [expandedItems, setExpandedItems] = useState<TreeItemIndex[]>([]);
   const [selectedItems, setSelectedItems] = useState<TreeItemIndex[]>([]);
 
-  // useEffect(() => {
-  //   console.log({ items });
-  // }, [items]);
+  useEffect(() => {
+    console.log({ items });
+    console.log({ focusedItem });
+    console.log({ expandedItems });
+    console.log({ selectedItems });
+  }, [items, focusedItem, expandedItems, selectedItems]);
 
   const addSection = () => {
     const id = uuid();
     addGroup(id, "New section");
     setItems(getGroups());
+    setSelectedItems([id]);
+    setExpandedItems([id]);
+    setId(id);
+  };
+
+  const refreshItems = () => {
+    setItems(getGroups());
   };
 
   useImperativeHandle(ref, () => ({
-    addItem: async () => {
+    addItem: async (id: string) => {
+      const parent = findParentGroup(getGroups(), id);
+      console.log({ parent });
+      setExpandedItems([parent]);
+      setSelectedItems([id]);
       setItems(getGroups());
     },
-    updateItem: () => {
+    updateItem: (id: string) => {
+      const parent = findParentGroup(getGroups(), id);
+      setExpandedItems([parent]);
+      setSelectedItems([id]);
       setItems(getGroups());
     },
   }));
@@ -81,8 +101,12 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       onSelectItems={(items) => setSelectedItems(items)}
     >
       <Tree treeId="default" rootItem="root" treeLabel="Tree Example" ref={tree} />
-      <button onClick={() => setItems(getGroups())}>Refresh</button>
-      <button onClick={addSection}>Add section</button>
+      <button className="mr-2 rounded-md border border-slate-300 p-2" onClick={refreshItems}>
+        Refresh
+      </button>
+      <button className="mr-2 rounded-md border border-slate-300 p-2" onClick={addSection}>
+        Add section
+      </button>
       <>{children}</>
     </ControlledTreeEnvironment>
   );
