@@ -38,7 +38,6 @@ import {
 } from "@formBuilder/[id]/edit/components/elements/element-dialog";
 import { useIsAdminUser } from "./useIsAdminUser";
 import { ElementOptionsFilter, ElementOption } from "../../types/form-builder-types";
-import { useFlag } from "./useFlag";
 
 export enum Groups {
   BASIC = "basic",
@@ -64,7 +63,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
   // default to off unless the user is an admin
   const allowFileInput = useIsAdminUser();
 
-  const { status: experimentalBlocks } = useFlag("experimentalBlocks");
+  const { status: experimentalBlocks } = { status: false };
 
   const fileInputOption: ElementOption = {
     id: "fileInput",
