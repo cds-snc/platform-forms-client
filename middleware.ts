@@ -308,8 +308,8 @@ const pageRequiresAuth = (req: NextAuthRequest, pathname: string, pathLang: stri
     "/unlock-publishing",
     "/profile",
     "/auth/setup-security-questions",
-    "/policy",
-    "/account-created",
+    "/auth/policy",
+    "/auth/account-created",
   ];
 
   const onProtectedPath = pathsRequiringAuth.find((protectedPath) => {
