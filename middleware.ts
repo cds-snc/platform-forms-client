@@ -13,8 +13,8 @@ acceptLanguage.languages(languages);
 const localPathRegEx = new RegExp("^(?!((?:[a-z+]+:)?//))", "i");
 
 /**
- * We need to instantiate the NextAuth middleware to decrypt to token on the header.
- * The normal @lib/auth `auth` function cannot be used because it invokes Prisma which is not Edge runtime compatible.
+ * We need to instantiate the NextAuth middleware to decrypt the token on the header.
+ * The normal @lib/auth `auth` function can not be used because it invokes Prisma which is not Edge runtime compatible.
  */
 const { auth } = NextAuth({
   providers: [
