@@ -25,7 +25,7 @@ export default async function Page({
   searchParams: { success?: string };
 }) {
   const session = await auth();
-  if (!session) redirect(`/${locale}/auth/login`);
+  if (!session) return null;
   const ability = createAbility(session);
 
   if (

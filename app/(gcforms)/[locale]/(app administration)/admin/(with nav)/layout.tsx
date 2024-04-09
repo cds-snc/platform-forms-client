@@ -6,9 +6,7 @@ import { serverTranslation } from "@i18n";
 import { SiteLogo } from "@serverComponents/icons";
 import LanguageToggle from "@serverComponents/globals/LanguageToggle";
 import { YourAccountDropdown } from "@clientComponents/globals/Header/YourAccountDropdown";
-import { auth } from "@lib/auth";
-import { redirect } from "next/navigation";
-import { createAbility } from "@lib/privileges";
+
 export default async function Layout({
   children,
   params: { locale },
@@ -16,11 +14,6 @@ export default async function Layout({
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  const session = await auth();
-  if (!session) redirect(`/${locale}/auth/login`);
-
-  const ability = createAbility(session);
-
   const { t } = await serverTranslation(["common", "admin-login"], { lang: locale });
 
   return (
@@ -59,7 +52,7 @@ export default async function Layout({
                 </li>
 
                 <li className="mr-5 text-base">
-                  <YourAccountDropdown isAuthenticated={Boolean(session)} />
+                  <YourAccountDropdown isAuthenticated={true} />
                 </li>
               </ul>
             </nav>
@@ -75,7 +68,7 @@ export default async function Layout({
                   id="left-nav"
                   className="sticky top-0 z-10 flex h-dvh border-r border-slate-200 bg-white"
                 >
-                  <LeftNavigation ability={ability} />
+                  <LeftNavigation />
                 </div>
                 <main id="content" className="w-full">
                   {children}
