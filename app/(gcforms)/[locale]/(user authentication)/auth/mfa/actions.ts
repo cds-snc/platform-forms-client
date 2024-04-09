@@ -11,6 +11,7 @@ import { AuthError } from "next-auth";
 import { createAbility } from "@lib/privileges";
 import { getUnprocessedSubmissionsForUser } from "@lib/users";
 import { logMessage } from "@lib/logger";
+import { revalidatePath } from "next/cache";
 
 export interface ErrorStates {
   authError?: {
@@ -137,7 +138,8 @@ export const verify = async (
       },
     };
   }
-
+  // Ensure all components get new Session data
+  revalidatePath("/", "layout");
   return {
     success: true,
   };

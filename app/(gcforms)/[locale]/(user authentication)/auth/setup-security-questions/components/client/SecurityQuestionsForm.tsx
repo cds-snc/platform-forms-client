@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "@formBuilder/components/shared";
 import { ErrorStates } from "../../actions";
 import { setupQuestions } from "../../actions";
+import { getSession } from "next-auth/react";
 
 export interface Question {
   id: string;
@@ -43,6 +44,8 @@ export const SecurityQuestionsForm = ({ questions = [] }: { questions: Question[
     const result = await setupQuestions(language, _, formData);
     if (!result.validationErrors && !result.generalError) {
       toast.success(t("success.title"));
+      // force JWT token update / Set new Next-Auth cookie
+      await getSession();
       router.push(`/${language}/auth/policy`);
     }
 

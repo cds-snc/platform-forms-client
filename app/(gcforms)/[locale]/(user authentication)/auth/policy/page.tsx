@@ -21,7 +21,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const session = await auth();
 
   if (!session) {
-    redirect(`/${locale}/auth/login`);
+    return null;
   }
   // If already accepted redirect to forms
   if (session.user.acceptableUse) {
