@@ -10,13 +10,23 @@ This repository is the web application for the GC Forms platform product.
 
 This is a [Next.js](https://nextjs.org/) and is built with:
 
-- Next.js >= 13.x
+- Next.js >= 14.x
 - Sass (Syntactically Awesome Style Sheets) for reusable styles
 - [Tailwindcss](https://tailwindcss.com/) a utility-first css framework for rapidly building custom designs
 - [PostCSS](https://postcss.org/)
 - [Prisma](https://www.prisma.io/)
 
 ## Running locally
+
+### Infrastructure setup
+
+Clone the [forms-terraform repository](https://github.com/cds-snc/forms-terraform) and follow the instructions in our [README](https://github.com/cds-snc/forms-terraform/blob/develop/README.md) to launch the Localstack infrastructure locally.
+
+```sh
+git clone https://github.com/cds-snc/forms-terraform.git
+```
+
+### Web application setup
 
 Clone this repository
 
@@ -31,68 +41,50 @@ cd platform-forms-client
 yarn install
 ```
 
-Create the file .env at the root of the project and set the following variables
+### Set your environment variables
 
-For local development of the NextJS application but leveraging the AWS backend (Reliability Queue, Templates DB, etc.)
+Create an `.env` file at the root of the project and use the `.env.example` as a template. If you want you can find a ready to use version of the `.env` file in 1Password > Local Development .ENV secure note.
 
-```
-NOTIFY_API_KEY= // ask the dev team
-SUBMISSION_API=Submission
-TEMPLATES_API=Templates
-AWS_ACCESS_KEY_ID= // ask the dev team
-AWS_SECRET_ACCESS_KEY= // ask the dev team
-HOST_URL=http://localhost:3000
-REDIS_URL=localhost
-```
-
-For local development of the complete solution (running the AWS Serverless Application Model (SAM) for local Lambdas) add the following two environment variables to your .env file and see the instructions for launching the Lambda's locally in our [Infrastructure README](https://github.com/cds-snc/forms-terraform)
-
-```
-LOCAL_AWS_ENDPOINT=http://127.0.0.1:4566
-DATABASE_URL=postgres://postgres:chummy@localhost:5432/formsDB
-```
-
-Start Redis in docker locally
-
-```sh
-docker-compose up -d redis
-```
-
-Set up local database (only if you want to run the project in isolation)
-
-Run postgres by using the following command
-
-```sh
-docker-compose up -d db
-```
-
-A GUI manager is installed with prisma and can be launched with `yarn prisma:studio`
-You can optionally install a gui manager like PgAdmin if you would like.
-For more information about developing with prisma migrate please visit: https://www.prisma.io/docs/guides/database/developing-with-prisma-migrate
-
-In your main forms .env file, DATABASE_URL can be filled in as followed (replace values in {} with the values you used in your migrations env file)
-`DATABASE_URL=postgres://{DB_USERNAME}:{DB_PASSWORD}@DB_HOST:5432/{DB_NAME}`
-
-As an example, here's the DB string with the example values from above:
-`DATABASE_URL=postgres://postgres:chummy@localhost:5432/formsDB`
-
-Run in development mode:
+### Run the web application in development mode
 
 ```sh
 yarn dev
 ```
 
-Browse application on `http://localhost:3000`
+Browse web application on `http://localhost:3000`.
 
-## Configuration
+### How to access databases
 
-There are some environment variables that can optionally be configured. You can see a list in `.env.example`.
+#### PostgreSQL GUI
+
+A GUI manager is installed with prisma and can be launched with `yarn prisma:studio`
+For more information about developing with prisma migrate please visit: https://www.prisma.io/docs/guides/database/developing-with-prisma-migrate
+
+You can optionally install a GUI manager like pgAdmin4 ([MacOS download link](https://www.postgresql.org/ftp/pgadmin/pgadmin4/v8.4/macos/)) if you would like.
+Here are the credentials to access your local PostgreSQL instance:
+
+```
+Hostname/Address: 127.0.0.1
+Port: 4510
+Maintenance database: forms
+Username: localstack_postgres
+Password: chummy
+```
+
+#### Redis GUI
+
+You can download RedisInsight (see download link at the bottom of this [page](https://redis.com/redis-enterprise/redis-insight/)).
+
+Here are the credentials to access your local Redis instance:
+
+```
+Host: localhost
+Port: 6379
+```
 
 ## Grant yourself admin access locally
 
-There are several ways to connect to the database, but here's how to do it through Prisma Studio. Once the change is made, you will need to 'Log Out' and log back in.
-
-### Prisma Studio
+There are several ways to connect to the database, but here's how to do it through Prisma Studio:
 
 - Login using your Staging account
 - Launch prisma studio with `yarn prisma:studio` or if you have prisma installed globally `prisma studio`
@@ -100,9 +92,7 @@ There are several ways to connect to the database, but here's how to do it throu
 - A table will appear. Find your username and add all the privileges under the `privileges` column.
 - Click on "Save Change" button in the top menu bar once completed.
 
-### Enable forms submission locally
-
-If you want to thoroughly test the submission, i.e., invoke the Lambdas, please enable the feature flag 'Submit to Reliability Queue' in the administration settings.
+Once the change is made, you will need to 'Log Out' and log back in. Alternatively, if you want to avoid logging out, you can open RedisInsight and delete the key named `auth:privileges:<your_user_id>`. Then you just need to refresh the web application for the new privileges to be applied.
 
 ## Testing
 
@@ -136,116 +126,4 @@ yarn cypress
 
 The application also uses Jest for unit testing. To run the tests, run `yarn test`.
 
-### Notify integration
-
-To send a form submission to an email address, you should configure the following environment variables in a `.env` file:
-
-```sh
-NOTIFY_API_KEY=
-```
-
-## ---------------------------------------------------------------------
-
-# Plate-forme - Formulaires GC
-
-Ce dépôt est un travail en cours pour le produit de la plate-forme GC Forms. "Alpha" arrivera au printemps 2021.
-
-- Explorez le ici : [https://forms-staging.cdssandbox.xyz/](https://forms-staging.cdssandbox.xyz/).
-
-## Contributions
-
-Ce projet est conçu sur une de base [Next.js](https://nextjs.org/) et utilise les contributions suivantes :
-
-- Next.js >= 10.x
-- Feuilles de styles Sass (Syntactically Awesome Style Sheets)
-- [Tailwindcss](https://tailwindcss.com/) un environnement CSS modulaire accélérant la conception de pages web
-- [PostCSS](https://postcss.org/)
-
-## Exécuter localement
-
-Cloner ce référentiel
-
-```sh
-git clone https://github.com/cds-snc/platform-forms-client.git
-```
-
-Installer les dépendances
-
-```sh
-cd platform-forms-client
-yarn install
-```
-
-Définir les variables .env
-
-Pour le développement local de l'application NextJS mais en s'appuyant sur le backend AWS (File d'attente de fiabilité, DB de modèles, etc.)
-
-```
-NOTIFY_API_KEY= // ask the dev team
-SUBMISSION_API=Submission
-TEMPLATES_API=Templates
-AWS_ACCESS_KEY_ID= // ask the dev team
-AWS_SECRET_ACCESS_KEY= // ask the dev team
-HOST_URL=http://localhost:3000
-REDIS_URL=localhost
-```
-
-Pour le développement local de la solution complète (exécutant SAM pour les Lambda locaux), ajoutez les deux variables d'environnement suivantes à votre fichier .env et consultez les instructions pour lancer les Lambda localement dans notre [Infrastructure README](https://github.com/cds-snc/forms-terraform)
-
-```
-LOCAL_AWS_ENDPOINT=http://127.0.0.1:4566
-DATABASE_URL=postgres://postgres:chummy@localhost:5432/formsDB
-```
-
-Démarrer Redis dans docker localement
-
-```sh
-docker run --name local-redis -p 6379:6379 -d redis:alpine
-```
-
-Configurer la base de données locale (uniquement si vous souhaitez exécuter le projet de manière isolée)
-
-- Assurez-vous que postgres est installé et en cours d'exécution sur votre machine locale
-- Installez un gestionnaire d'interface graphique comme PgAdmin si vous le souhaitez (facultatif)
-
-dans `/migrations`, remplissez le fichier .env séparé.
-Exemples de valeurs :
-
-```
-DB_NAME=formsDB
-DB_USERNAME=postgres
-DB_PASSWORD=password
-DB_HOST=localhost
-```
-
-dans le dossier `/migrations`, exécutez `node index.js` pour exécuter des migrations sur la base de données locale.
-
-Dans votre fichier .env de formulaires principaux, DATABASE_URL peut être rempli comme suit (remplacez les valeurs dans {} par les valeurs que vous avez utilisées dans votre fichier env de migrations)
-`DATABASE_URL=postgres://{DB_USERNAME}:{DB_PASSWORD}@DB_HOST:5432/{DB_NAME}`
-
-À titre d'exemple, voici la chaîne de base de données avec les exemples de valeurs ci-dessus :
-`DATABASE_URL=postgres://postgres:password@localhost:5432/formsDB`
-
-Exécuter en mode développement
-
-```sh
-yarn dev
-```
-
-Accéder à l’application au `http://localhost:3000`
-
-## Configuration
-
-Certaines valeurs d'environnement peuvent être configurés. Cette étape est optionnelle. Consultez la liste des valeurs disponibles dans `.env.example`.
-
-### Intégration avec Notify
-
-Pour envoyer les réponses d'une formulaire à une adresse courriel, vous devez configurer les variables suivantes :
-
-```sh
-NOTIFY_API_KEY=
-```
-
-### Activer la soumission de formulaires en local
-
-Si vous souhaitez tester minutieusement la soumission, c'est-à-dire invoquer les Lambdas, veuillez activer le drapeau fonctionnel 'Submit to Reliability Queue' dans les paramètres d'administration.
+# Traduction en français à venir...
