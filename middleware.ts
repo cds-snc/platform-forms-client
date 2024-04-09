@@ -29,6 +29,7 @@ const { auth } = NextAuth({
   ],
   secret: process.env.TOKEN_SECRET,
   debug: process.env.NODE_ENV !== "production",
+  trustHost: true,
   callbacks: {
     async session(params) {
       const { session, token } = params as { session: Session; token: JWT };
