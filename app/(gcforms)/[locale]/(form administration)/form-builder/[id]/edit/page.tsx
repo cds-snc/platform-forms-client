@@ -2,8 +2,8 @@ import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { Edit } from "./components/Edit";
 import { EditNavigation } from "./components/EditNavigation";
-import { checkFlag } from "../actions";
 import { EditWithGroups } from "./components/EditWithGroups";
+import { checkFlag } from "@formBuilder/actions";
 
 export async function generateMetadata({
   params: { locale },
