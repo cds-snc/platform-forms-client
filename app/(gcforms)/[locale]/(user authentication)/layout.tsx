@@ -30,28 +30,6 @@ export default async function Layout({
   const headersList = headers();
   const currentPath = headersList.get("x-path")?.replace(`/${locale}`, "");
 
-  const containerWidth = () => {
-    const smallPanelPaths = [
-      "/auth/reset-password",
-      "/auth/setup-security-questions",
-      "/auth/logout",
-      "/auth/login",
-      "/auth/register",
-      "/auth/account-created",
-    ];
-    const onPath = smallPanelPaths.find((path) => {
-      if (path === currentPath || currentPath?.startsWith(path)) {
-        return true;
-      }
-    });
-
-    if (onPath) {
-      return "tablet:w-[658px] ";
-    }
-
-    return "tablet:w-[768px] laptop:w-[850px]";
-  };
-
   return (
     <div className="flex min-h-full flex-col bg-gray-soft">
       <SkipLink />
@@ -87,7 +65,7 @@ export default async function Layout({
         {currentPath?.startsWith("/auth/setup-security-questions") && <Info locale={locale} />}
         <div className="account-wrapper mt-10 flex items-center justify-center">
           <div
-            className={`${containerWidth()} rounded-2xl border-1 border-[#D1D5DB] bg-white p-10`}
+            className={`has-[#auth-panel]:tablet:w-[658px] tablet:w-[768px] laptop:w-[850px] rounded-2xl border-1 border-[#D1D5DB] bg-white p-10`}
           >
             <main id="content">
               <Link

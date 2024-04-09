@@ -17,7 +17,7 @@ export default async function Page() {
   const { t, i18n } = await serverTranslation(["signup"]);
 
   return (
-    <>
+    <div id="auth-panel">
       <h1 className="border-b-0 mt-6 mb-12">{t("accountCreated.title")}</h1>
       <h2>{t("accountCreated.yourAccountListDescription")}</h2>
       <ul>
@@ -38,6 +38,6 @@ export default async function Page() {
           {t("accountCreated.skipStepButton")}
         </LinkButton.Secondary>
       </div>
-    </>
+    </div>
   );
 }

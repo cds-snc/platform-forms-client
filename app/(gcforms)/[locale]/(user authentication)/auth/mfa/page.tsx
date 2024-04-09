@@ -22,5 +22,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     redirect(`/${locale}/forms`);
   }
 
-  return <MFAForm />;
+  return (
+    <div id="auth-panel">
+      <MFAForm />
+    </div>
+  );
 }
