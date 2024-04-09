@@ -21,5 +21,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     redirect(`/${locale}/forms`);
   }
 
-  return <LoginForm />;
+  return (
+    <div id="auth-panel">
+      <LoginForm />
+    </div>
+  );
 }

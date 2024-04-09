@@ -52,10 +52,12 @@ export default async function Page({
     }
   } else {
     return (
-      <InitiateResetForm
-        confirmationPage={<CheckEmail locale={locale} />}
-        errorPage={<CannotReset locale={locale} />}
-      />
+      <div id="auth-panel">
+        <InitiateResetForm
+          confirmationPage={<CheckEmail locale={locale} />}
+          errorPage={<CannotReset locale={locale} />}
+        />
+      </div>
     );
   }
 }
