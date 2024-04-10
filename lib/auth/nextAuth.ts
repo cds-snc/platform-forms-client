@@ -106,7 +106,8 @@ export const {
     // Seconds - How long until an idle session expires and is no longer valid.
     maxAge: 2 * 60 * 60, // 2 hours
   },
-  trustHost: true,
+  // Only trust the host if we don't explicitly have a AUTH_URL set
+  trustHost: process.env.AUTH_URL ? false : true,
   debug: process.env.NODE_ENV !== "production",
   logger: {
     error(code, ...message) {
