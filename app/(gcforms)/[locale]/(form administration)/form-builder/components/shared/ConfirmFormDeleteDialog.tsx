@@ -25,8 +25,8 @@ const fetcher = async (url: string) => {
     }
   }
   // handle using swr error
-  // throw new Error("Something went wrong");
-  logMessage.info("Error fetching form data /submission/unprocessed");
+  logMessage.error("Error fetching form data at /submission/unprocessed");
+  throw new Error("Something went wrong");
 };
 
 async function downloadForm(lang: string, id: string) {
