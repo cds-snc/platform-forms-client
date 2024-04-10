@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import acceptLanguage from "accept-language";
 import { fallbackLng, languages } from "./i18n/settings";
 import type { NextRequest } from "next/server";
 import { generateCSP } from "@lib/cspScripts";
@@ -9,8 +8,15 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth, { Session } from "next-auth";
 import { JWT } from "next-auth/jwt";
 
-acceptLanguage.languages(languages);
 const localPathRegEx = new RegExp("^(?!((?:[a-z+]+:)?//))", "i");
+
+const verboseDebug = false;
+
+const debugLogger = async (message: string) => {
+  if (verboseDebug) {
+    logMessage.debug(message);
+  }
+};
 
 /**
  * We need to instantiate the NextAuth middleware to decrypt the token on the header.
@@ -147,7 +153,7 @@ const setCORS = (req: NextRequest, pathname: string) => {
     );
     response.headers.set("Access-Control-Max-Age", "86400"); // 60 * 60 * 24 = 24 hours;
 
-    logMessage.debug(`Middleware Action: Setting CORS on API route: ${pathname}`);
+    debugLogger(`Middleware Action: Setting CORS on API route: ${pathname}`);
 
     return response;
   }
@@ -161,7 +167,7 @@ const languageSelectorRedirect = (req: NextRequest, pathname: string, pathLang: 
     const redirect = NextResponse.redirect(new URL("/", req.url));
     // Set cookie on response back to browser so client can render correct language on client components
     redirect.cookies.set("i18next", pathLang);
-    logMessage.debug(
+    debugLogger(
       `Middleware Action: Redirecting to language selector: ${pathname} pathlang: ${pathLang} `
     );
     return redirect;
@@ -191,7 +197,7 @@ const addLangToPath = (
       );
     } else {
       // Redirect to fallback language
-      logMessage.debug(`Middleware Action: Adding default language to path:  ${pathname}`);
+      debugLogger(`Middleware Action: Adding default language to path:  ${pathname}`);
       return NextResponse.redirect(new URL(`/${fallbackLng}${pathname}`, req.url));
     }
   }
@@ -267,7 +273,7 @@ const authFlowRedirect = (
       // check if user has setup security questions setup
 
       const securityQuestionsPage = new URL(`/${lang}/auth/setup-security-questions`, origin);
-      logMessage.debug(`Middleware: Redirecting to ${securityQuestionsPage}`);
+      debugLogger(`Middleware: Redirecting to ${securityQuestionsPage}`);
       return NextResponse.redirect(securityQuestionsPage);
     }
     // Redirect to policy page only if users aren't on the policy, support, or security questions page
@@ -279,7 +285,7 @@ const authFlowRedirect = (
       // If they don't want to accept let them log out
       !path.startsWith("/auth/logout")
     ) {
-      logMessage.debug(
+      debugLogger(
         "Middleware Action: User has not accepted the Acceptable Use Policy, redirecting to policy"
       );
       // If they haven't agreed to Acceptable Use redirect to policy page for acceptance
@@ -319,9 +325,7 @@ const pageRequiresAuth = (req: NextAuthRequest, pathname: string, pathLang: stri
   });
 
   if (!session && onProtectedPath) {
-    logMessage.debug(
-      `Middleware Action: Redirecting unauthenticated user to login page from ${path}`
-    );
+    debugLogger(`Middleware Action: Redirecting unauthenticated user to login page from ${path}`);
     const login = new URL(`/${pathLang}/auth/login`, req.nextUrl.origin);
     return NextResponse.redirect(login);
   }
