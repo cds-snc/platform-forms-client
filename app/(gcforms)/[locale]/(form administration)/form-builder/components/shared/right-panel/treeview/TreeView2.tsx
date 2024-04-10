@@ -4,13 +4,11 @@ import {
   ForwardRefRenderFunction,
   ReactElement,
   forwardRef,
-  useEffect,
   useImperativeHandle,
   useState,
 } from "react";
 import { useTreeRef } from "./provider/TreeRefProvider";
 import { v4 as uuid } from "uuid";
-import { TreeItems } from "./types";
 import "react-complex-tree/lib/style-modern.css";
 import { findParentGroup } from "./util/findParentGroup";
 
@@ -28,61 +26,53 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
   ref
 ) => {
   // export const TreeView = () => {
-  const { getGroups, addGroup, setId } = useGroupStore((s) => {
+  const { getGroups, addGroup, setId, updateGroupName, updateElementTitle } = useGroupStore((s) => {
     return {
       getGroups: s.getGroups,
       addGroup: s.addGroup,
       setId: s.setId,
+      updateGroupName: s.updateGroupName,
+      updateElementTitle: s.updateElementTitle,
     };
   });
 
   const { tree, environment } = useTreeRef();
-
-  const [items, setItems] = useState<TreeItems>(getGroups());
   const [focusedItem, setFocusedItem] = useState<TreeItemIndex | undefined>();
   const [expandedItems, setExpandedItems] = useState<TreeItemIndex[]>([]);
   const [selectedItems, setSelectedItems] = useState<TreeItemIndex[]>([]);
 
-  useEffect(() => {
-    console.log({ items });
-    console.log({ focusedItem });
-    console.log({ expandedItems });
-    console.log({ selectedItems });
-  }, [items, focusedItem, expandedItems, selectedItems]);
-
   const addSection = () => {
     const id = uuid();
     addGroup(id, "New section");
-    setItems(getGroups());
+    // setItems(getGroups());
     setSelectedItems([id]);
     setExpandedItems([id]);
     setId(id);
   };
 
   const refreshItems = () => {
-    setItems(getGroups());
+    // setItems(getGroups());
   };
 
   useImperativeHandle(ref, () => ({
     addItem: async (id: string) => {
       const parent = findParentGroup(getGroups(), id);
-      console.log({ parent });
-      setExpandedItems([parent]);
+      setExpandedItems([parent?.index as TreeItemIndex]);
       setSelectedItems([id]);
-      setItems(getGroups());
+      // setItems(getGroups());
     },
     updateItem: (id: string) => {
       const parent = findParentGroup(getGroups(), id);
-      setExpandedItems([parent]);
+      setExpandedItems([parent?.index as TreeItemIndex]);
       setSelectedItems([id]);
-      setItems(getGroups());
+      // setItems(getGroups());
     },
   }));
 
   return (
     <ControlledTreeEnvironment
       ref={environment}
-      items={items}
+      items={getGroups()}
       getItemTitle={(item) => item.data}
       viewState={{
         ["default"]: {
@@ -91,7 +81,23 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           selectedItems,
         },
       }}
-      onFocusItem={(item) => setFocusedItem(item.index)}
+      onRenameItem={(item, name) => {
+        item.isFolder && updateGroupName({ id: String(item.index), name });
+
+        // Rename the element
+        !item.isFolder &&
+          updateElementTitle({
+            id: Number(item.index),
+            text: name,
+          });
+
+        setSelectedItems([item.index]);
+      }}
+      onFocusItem={(item) => {
+        setFocusedItem(item.index);
+        const parent = findParentGroup(getGroups(), String(item.index));
+        setId(item.isFolder ? String(item.index) : String(parent?.index));
+      }}
       onExpandItem={(item) => setExpandedItems([...expandedItems, item.index])}
       onCollapseItem={(item) =>
         setExpandedItems(

@@ -37,7 +37,7 @@ export interface GroupStoreState extends GroupStoreProps {
   getGroupFromId: (id: string) => TreeItem | undefined;
   getElement: (id: number) => FormElement | undefined;
   updateElementTitle: ({ id, text }: { id: number; text: string }) => void;
-  updateGroupName: ({ id, name }: { id: string, name: string }) => void;
+  updateGroupName: ({ id, name }: { id: string; name: string }) => void;
   getElementsGroupById: (id: string) => Group;
 }
 
@@ -81,7 +81,7 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
         updateField(propertyPath(id, LocalizedElementProperties.TITLE, "en"), text);
         setChangeKey(String(new Date().getTime()));
       },
-      updateGroupName: ({ id, name }: { id: string, name: string }) => {
+      updateGroupName: ({ id, name }: { id: string; name: string }) => {
         const formGroups = get().templateStore.getState().form.groups;
         const setChangeKey = get().templateStore.getState().setChangeKey;
         if (formGroups && formGroups[id]) {
