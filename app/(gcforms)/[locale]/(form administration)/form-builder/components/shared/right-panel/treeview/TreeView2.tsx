@@ -112,7 +112,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         });
 
         // Insert the items into the new position
-        children.splice(target.linearIndex - 1, 0, ...items.map((item) => String(item.index)));
+        children.splice(target.linearIndex, 0, ...items.map((item) => String(item.index)));
         updateGroup(parentItem, children);
         setSelectedItems([parentItem]);
       }}
