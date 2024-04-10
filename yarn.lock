@@ -6840,16 +6840,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"accept-language@npm:3.0.18":
-  version: 3.0.18
-  resolution: "accept-language@npm:3.0.18"
-  dependencies:
-    bcp47: "npm:^1.1.2"
-    stable: "npm:^0.1.6"
-  checksum: 10c0/5c9b59981e54016e946f882c1d3d4410cb0983fbb9274c64c71e9c781bb33ce5359ffac084d3bc29d4006e64f736fe6414649cfa1947a49b9ae22a8567c89560
-  languageName: node
-  linkType: hard
-
 "acorn-globals@npm:^7.0.0":
   version: 7.0.1
   resolution: "acorn-globals@npm:7.0.1"
@@ -7548,13 +7538,6 @@ __metadata:
   version: 1.5.1
   resolution: "base64-js@npm:1.5.1"
   checksum: 10c0/f23823513b63173a001030fae4f2dabe283b99a9d324ade3ad3d148e218134676f1ee8568c877cd79ec1c53158dcf2d2ba527a97c606618928ba99dd930102bf
-  languageName: node
-  linkType: hard
-
-"bcp47@npm:^1.1.2":
-  version: 1.1.2
-  resolution: "bcp47@npm:1.1.2"
-  checksum: 10c0/f079e69fe3a5d0e33462bf0d8d5da92e9518023470db69e8dcc828f80a3398071821530bd8aeef1725fe9c1f638fd940c43f5aab8231cd02351a369999642f78
   languageName: node
   linkType: hard
 
@@ -10524,7 +10507,6 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:^6.21.0"
     "@typescript-eslint/parser": "npm:^6.21.0"
     "@typescript-eslint/typescript-estree": "npm:^6.21.0"
-    accept-language: "npm:3.0.18"
     add: "npm:^2.0.6"
     autoprefixer: "npm:^10.4.16"
     aws-sdk-client-mock: "npm:^3.0.0"
@@ -15978,7 +15960,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stable@npm:^0.1.6, stable@npm:^0.1.8":
+"stable@npm:^0.1.8":
   version: 0.1.8
   resolution: "stable@npm:0.1.8"
   checksum: 10c0/df74b5883075076e78f8e365e4068ecd977af6c09da510cfc3148a303d4b87bc9aa8f7c48feb67ed4ef970b6140bd9eabba2129e28024aa88df5ea0114cba39d
