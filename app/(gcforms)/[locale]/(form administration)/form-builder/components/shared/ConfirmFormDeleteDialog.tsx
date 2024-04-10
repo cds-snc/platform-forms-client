@@ -10,6 +10,7 @@ import Loader from "@clientComponents/globals/Loader";
 import { Button, Alert } from "@clientComponents/globals";
 import { LinkButton } from "@serverComponents/globals";
 import { useDialogRef, Dialog } from "./Dialog";
+import { logMessage } from "@lib/logger";
 
 const fetcher = async (url: string) => {
   const res = await fetch(url);
@@ -24,7 +25,8 @@ const fetcher = async (url: string) => {
     }
   }
   // handle using swr error
-  throw new Error("Something went wrong");
+  // throw new Error("Something went wrong");
+  logMessage.info("Error fetching form data /submission/unprocessed");
 };
 
 async function downloadForm(lang: string, id: string) {
