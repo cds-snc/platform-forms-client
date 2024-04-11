@@ -88,6 +88,19 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       }}
       canDragAndDrop={true}
       canReorderItems={true}
+      canDropAt={(items, target) => {
+        const folderItemsCount = items.filter((item) => item.isFolder).length;
+
+        // if any of the selected items is a folder, disallow dropping on a folder
+        if (folderItemsCount > 1) {
+          const { parentItem } = target as DraggingPositionBetweenItems;
+          if (items[0].isFolder && parentItem !== "root") {
+            return false;
+          }
+        }
+
+        return true;
+      }}
       onRenameItem={(item, name) => {
         item.isFolder && updateGroupName({ id: String(item.index), name });
 
