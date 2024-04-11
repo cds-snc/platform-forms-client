@@ -75,7 +75,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     <ControlledTreeEnvironment
       ref={environment}
       items={getGroups()}
-      getItemTitle={(item) => item.data}
+      getItemTitle={(item) => item.index}
       renderLiveDescriptorContainer={() => {
         return null;
       }}
@@ -151,6 +151,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           }
 
           originParent.children.splice(originIndex, 1);
+          updateGroup(originParent.index, originParent.children);
         });
 
         // Insert items into new position
