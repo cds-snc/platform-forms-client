@@ -1,5 +1,6 @@
 import fetch from "node-fetch";
 import { logMessage } from "@lib/logger";
+import { getOrigin } from "@lib/origin";
 
 interface createTicketProps {
   type: "branding" | "publishing" | "contact" | "problem";
@@ -16,7 +17,7 @@ export const formatTicketData = ({
   description,
   language,
 }: createTicketProps) => {
-  const HOST = process.env.HOST_URL || "";
+  const HOST = getOrigin() || "";
   const hostTag = tagHost(HOST);
 
   const ticket = {

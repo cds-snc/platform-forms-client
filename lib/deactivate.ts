@@ -1,9 +1,10 @@
 import { getNotifyInstance } from "./integration/notifyConnector";
 import { logMessage } from "@lib/logger";
+import { getOrigin } from "./origin";
 
 export const sendDeactivationEmail = async (email: string) => {
   try {
-    const HOST = process.env.HOST_URL;
+    const HOST = getOrigin();
     const TEMPLATE_ID = process.env.TEMPLATE_ID;
     const notify = getNotifyInstance();
 

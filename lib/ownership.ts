@@ -1,5 +1,6 @@
 import { getNotifyInstance } from "./integration/notifyConnector";
 import { logMessage } from "@lib/logger";
+import { getOrigin } from "./origin";
 
 export const transferOwnershipEmail = async ({
   emailTo = "",
@@ -17,7 +18,7 @@ export const transferOwnershipEmail = async ({
   formId: string;
 }) => {
   try {
-    const HOST = process.env.HOST_URL;
+    const HOST = getOrigin();
     const TEMPLATE_ID = process.env.TEMPLATE_ID;
     const notify = getNotifyInstance();
 
@@ -79,7 +80,7 @@ export const addOwnershipEmail = async ({
   formId: string;
 }) => {
   try {
-    const HOST = process.env.HOST_URL;
+    const HOST = getOrigin();
     const TEMPLATE_ID = process.env.TEMPLATE_ID;
     const notify = getNotifyInstance();
 
