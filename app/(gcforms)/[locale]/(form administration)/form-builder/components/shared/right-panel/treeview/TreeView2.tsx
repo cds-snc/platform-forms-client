@@ -102,22 +102,21 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       }}
       onDrop={async (items: TreeItem[], target: DraggingPosition) => {
         let itemsPriorToInsertion = 0;
-        // console.log({ target });
 
+        // current state of the tree
         const currentItems = getGroups();
-        // console.log({ currentItems });
 
+        // Ids of the items being dragged
         const itemsIndices = items.map((i) => i.index);
-        // console.log({ itemsIndices });
 
-        const { parentItem: targetParent, childIndex: targetIndex } =
+        // Target parent and index
+        const { parentItem: targetParentIndex, childIndex: targetIndex } =
           target as DraggingPositionBetweenItems;
-        // console.log({ targetParent });
-        // console.log({ targetIndex });
 
+        // Loop over the items being dragged
         items.forEach((item) => {
+          // Find the parent of the item being dragged
           const originParent = findParentGroup(currentItems, String(item.index));
-          // console.log({ parent: originParent });
 
           if (!originParent) {
             throw Error(`Could not find parent of item "${item.index}"`);
@@ -134,43 +133,48 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
             return;
           }
 
-          // Remove items from their original positions
+          // Origin index of the item being dragged
           const originIndex = originParent.children.indexOf(String(item.index));
-          // console.log({ originIndex });
 
           if (originIndex === -1) {
             throw Error(`Item "${item.index}" not found in parent "${originParent.index}"`);
           }
 
-          if (target.targetType === "between-items") {
-            const newParent = currentItems[target.parentItem];
-            const isOldItemPriorToNewItem =
-              ((newParent.children ?? []).findIndex((child) => child === item.index) ?? Infinity) <
-              target.childIndex;
-            itemsPriorToInsertion += isOldItemPriorToNewItem ? 1 : 0;
-          }
+          // Get the target parent
+          const targetParent = currentItems[targetParentIndex];
 
+          // Adjust the index if the item is being moved to a position after itself
+          const isOldItemPriorToNewItem =
+            ((targetParent.children ?? []).findIndex((child) => child === item.index) ?? Infinity) <
+            targetIndex;
+          itemsPriorToInsertion += isOldItemPriorToNewItem ? 1 : 0;
+
+          // Remove the item from the origin parent
           originParent.children.splice(originIndex, 1);
+
+          // Update groups
           updateGroup(originParent.index, originParent.children);
         });
 
-        // Insert items into new position
+        // Get the new state of the tree
         const newItems = getGroups();
-        const newParent = newItems[targetParent];
-        // console.log({ newParent });
 
-        if (!newParent.children) {
-          newParent.children = [];
+        // Get the target parent in the new state
+        const targetParent = newItems[targetParentIndex];
+
+        // Initialize children if there are none
+        if (!targetParent.children) {
+          targetParent.children = [];
         }
 
-        // console.log(itemsIndices);
+        // Insert the items into the target parent
+        targetParent.children.splice(targetIndex - itemsPriorToInsertion, 0, ...itemsIndices);
 
-        newParent.children.splice(targetIndex - itemsPriorToInsertion, 0, ...itemsIndices);
-        // console.log({ newParent });
+        // Update groups
+        updateGroup(targetParentIndex, targetParent.children);
 
-        updateGroup(targetParent, newParent.children);
-        setSelectedItems([targetParent]);
-        // console.log(getGroups());
+        // Set selected to trigger a re-render
+        setSelectedItems([targetParentIndex]);
       }}
       onFocusItem={(item) => {
         setFocusedItem(item.index);
