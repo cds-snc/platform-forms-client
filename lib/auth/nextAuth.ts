@@ -1,6 +1,5 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth, { Session } from "next-auth";
-
 import { validate2FAVerificationCode, userHasSecurityQuestions } from "@lib/auth/";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { logMessage } from "@lib/logger";

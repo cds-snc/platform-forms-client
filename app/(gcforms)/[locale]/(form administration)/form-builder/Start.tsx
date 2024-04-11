@@ -120,24 +120,24 @@ export const Start = () => {
           <h2 className="mb-1 p-0 group-hover:underline group-focus:underline">{t("startH2")}</h2>
           <p className="text-sm">{t("startP1")}</p>
         </button>
-        <div
-          tabIndex={0}
-          role="button"
-          className={boxClass}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              const uploadButton = document.getElementById("file-upload");
-              if (uploadButton) uploadButton.click();
-            }
-          }}
-        >
-          <label>
+        <label>
+          <div
+            tabIndex={0}
+            role="button"
+            className={boxClass}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                const uploadButton = document.getElementById("file-upload");
+                if (uploadButton) uploadButton.click();
+              }
+            }}
+          >
             <ExternalLinkIcon className="mb-2 scale-125" />
             <h2 className="mb-1 p-0 group-hover:underline group-focus:underline">{t("startH3")}</h2>
             <p className="text-sm">{t("startP2")}</p>
             <input id="file-upload" type="file" onChange={handleChange} className="hidden" />
-          </label>
-        </div>
+          </div>
+        </label>
       </div>
     </>
   );

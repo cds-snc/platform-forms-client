@@ -17,7 +17,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const { t } = await serverTranslation("logout", { lang: locale });
 
   return (
-    <div>
+    <div id="auth-panel">
       <h1 className="mb-12 mt-6 border-b-0">{t("messageContent")}</h1>
       <div className="items-center pb-10 pt-3 text-sm font-normal not-italic">
         {t("logoutDate")} :{" "}

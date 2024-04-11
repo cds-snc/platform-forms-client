@@ -19,6 +19,7 @@ import {
 import { logMessage } from "@lib/logger";
 import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
+import { checkOne } from "@lib/cache/flags";
 
 const _getSessionAndAbility = async () => {
   const session = await auth();
@@ -345,3 +346,7 @@ export const getTranslatedProperties = async (type: string) => {
     fr: fr(type),
   };
 };
+
+export async function checkFlag(id: string) {
+  return checkOne(id);
+}
