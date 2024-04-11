@@ -155,7 +155,8 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         });
 
         // Insert items into new position
-        const newParent = currentItems[targetParent];
+        const newItems = getGroups();
+        const newParent = newItems[targetParent];
         // console.log({ newParent });
 
         if (!newParent.children) {
