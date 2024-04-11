@@ -98,30 +98,30 @@ export const sortByLayout = ({
 export const getSchemaFromState = (state: TemplateStoreState) => {
   const {
     form: {
-      // titleEn,
-      // titleFr,
-      // introduction,
-      // privacyPolicy,
-      // confirmation,
-      // elements,
-      // brand,
-      // securityAttribute,
-      // layout,
+      titleEn,
+      titleFr,
+      introduction,
+      privacyPolicy,
+      confirmation,
+      elements,
+      brand,
+      securityAttribute,
+      layout,
       groups,
     },
   } = state;
 
   const form: FormProperties = {
-    // titleEn,
-    // titleFr,
-    // introduction,
-    // privacyPolicy,
-    // confirmation,
-    // layout,
+    titleEn,
+    titleFr,
+    introduction,
+    privacyPolicy,
+    confirmation,
+    layout,
+    elements,
+    securityAttribute,
+    brand,
     groups,
-    // elements,
-    // securityAttribute,
-    // brand,
   };
 
   return form;
