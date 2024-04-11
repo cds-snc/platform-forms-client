@@ -33,7 +33,8 @@ const { auth } = NextAuth({
       },
     }),
   ],
-  secret: process.env.TOKEN_SECRET,
+  // When building the app use a random UUID as the token secret
+  secret: process.env.TOKEN_SECRET ?? crypto.randomUUID(),
   debug: process.env.NODE_ENV !== "production",
   trustHost: process.env.AUTH_URL ? false : true,
   callbacks: {
