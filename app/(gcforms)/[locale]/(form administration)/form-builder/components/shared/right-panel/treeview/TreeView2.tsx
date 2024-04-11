@@ -1,7 +1,7 @@
 import {
   ControlledTreeEnvironment,
   DraggingPosition,
-  DraggingPositionItem,
+  DraggingPositionBetweenItems,
   Tree,
   TreeItem,
   TreeItemIndex,
@@ -101,23 +101,74 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         setSelectedItems([item.index]);
       }}
       onDrop={async (items: TreeItem[], target: DraggingPosition) => {
-        const { parentItem } = target as DraggingPositionItem;
-        const groups = getGroups();
-        const parent = groups[parentItem];
-        const children = parent.children || [];
+        let itemsPriorToInsertion = 0;
+        // console.log({ target });
 
-        // Remove the items from their original positions
+        const currentItems = getGroups();
+        // console.log({ currentItems });
+
+        const itemsIndices = items.map((i) => i.index);
+        // console.log({ itemsIndices });
+
+        const { parentItem: targetParent, childIndex: targetIndex } =
+          target as DraggingPositionBetweenItems;
+        // console.log({ targetParent });
+        // console.log({ targetIndex });
+
         items.forEach((item) => {
-          const index = children.indexOf(String(item.index));
-          if (index !== -1) {
-            children.splice(index, 1);
+          const originParent = findParentGroup(currentItems, String(item.index));
+          // console.log({ parent: originParent });
+
+          if (!originParent) {
+            throw Error(`Could not find parent of item "${item.index}"`);
           }
+
+          if (!originParent.children) {
+            throw Error(
+              `Parent "${originParent.index}" of item "${item.index}" did not have any children`
+            );
+          }
+
+          if (target.targetType === "between-items" && target.parentItem === item.index) {
+            // Trying to drop inside itself
+            return;
+          }
+
+          // Remove items from their original positions
+          const originIndex = originParent.children.indexOf(String(item.index));
+          // console.log({ originIndex });
+
+          if (originIndex === -1) {
+            throw Error(`Item "${item.index}" not found in parent "${originParent.index}"`);
+          }
+
+          if (target.targetType === "between-items") {
+            const newParent = currentItems[target.parentItem];
+            const isOldItemPriorToNewItem =
+              ((newParent.children ?? []).findIndex((child) => child === item.index) ?? Infinity) <
+              target.childIndex;
+            itemsPriorToInsertion += isOldItemPriorToNewItem ? 1 : 0;
+          }
+
+          originParent.children.splice(originIndex, 1);
         });
 
-        // Insert the items into the new position
-        children.splice(target.linearIndex, 0, ...items.map((item) => String(item.index)));
-        updateGroup(parentItem, children);
-        setSelectedItems([parentItem]);
+        // Insert items into new position
+        const newParent = currentItems[targetParent];
+        // console.log({ newParent });
+
+        if (!newParent.children) {
+          newParent.children = [];
+        }
+
+        // console.log(itemsIndices);
+
+        newParent.children.splice(targetIndex - itemsPriorToInsertion, 0, ...itemsIndices);
+        // console.log({ newParent });
+
+        updateGroup(targetParent, newParent.children);
+        setSelectedItems([targetParent]);
+        // console.log(getGroups());
       }}
       onFocusItem={(item) => {
         setFocusedItem(item.index);
