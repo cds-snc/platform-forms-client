@@ -76,6 +76,9 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       ref={environment}
       items={getGroups()}
       getItemTitle={(item) => item.data}
+      renderLiveDescriptorContainer={() => {
+        return null;
+      }}
       viewState={{
         ["default"]: {
           focusedItem,
