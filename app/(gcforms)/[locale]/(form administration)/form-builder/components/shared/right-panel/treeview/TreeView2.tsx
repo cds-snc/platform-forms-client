@@ -75,7 +75,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     <ControlledTreeEnvironment
       ref={environment}
       items={getGroups()}
-      getItemTitle={(item) => item.index}
+      getItemTitle={(item) => item.data}
       renderLiveDescriptorContainer={() => {
         return null;
       }}
