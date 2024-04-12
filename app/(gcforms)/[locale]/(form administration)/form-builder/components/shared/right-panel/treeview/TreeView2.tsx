@@ -88,6 +88,9 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       }}
       canDragAndDrop={true}
       canReorderItems={true}
+      canDrag={(items: TreeItem[]) => {
+        return items.some((item) => item.data !== "Start");
+      }}
       canDropAt={(items, target) => {
         const folderItemsCount = items.filter((item) => item.isFolder).length;
 
