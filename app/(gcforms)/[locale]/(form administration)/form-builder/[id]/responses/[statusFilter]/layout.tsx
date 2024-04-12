@@ -7,6 +7,7 @@ import { NavigationTabs } from "./components/NavigationTabs";
 import { TitleAndDescription } from "./components/TitleAndDescription";
 import { fetchSubmissions, fetchTemplate } from "./actions";
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
+import { ResponsesFooter } from "./components/ResponsesFooter";
 
 export default async function Layout({
   children,
@@ -53,14 +54,17 @@ export default async function Layout({
   return (
     <div className="mr-10">
       <NavigationTabs statusFilter={statusFilter} formId={id} locale={locale} />
-      {isAuthenticated && submissions.length > 0 && (
-        <TitleAndDescription
-          statusFilter={ucfirst(statusFilter)}
-          formId={id}
-          responseDownloadLimit={responseDownloadLimit}
-        />
-      )}
+      <div className="has-[.gc-confirm-success]:hidden">
+        {isAuthenticated && submissions.length > 0 && (
+          <TitleAndDescription
+            statusFilter={ucfirst(statusFilter)}
+            formId={id}
+            responseDownloadLimit={responseDownloadLimit}
+          />
+        )}
+      </div>
       {children}
+      <ResponsesFooter formId={id} />
     </div>
   );
 }
