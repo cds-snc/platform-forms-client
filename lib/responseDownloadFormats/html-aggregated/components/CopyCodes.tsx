@@ -1,5 +1,6 @@
 import React from "react";
 import { customTranslate } from "../../../i18nHelpers";
+import { getOrigin } from "@lib/origin";
 
 export const CopyCodes = ({
   confirmationCodes,
@@ -12,7 +13,7 @@ export const CopyCodes = ({
 }) => {
   const { t } = customTranslate("my-forms");
   const capitalizedLang = lang === "en" ? "En" : "Fr";
-  const HOST = process.env.HOST_URL || "";
+  const HOST = getOrigin();
 
   return (
     <div className="flex flex-row gap-4">

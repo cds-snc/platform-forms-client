@@ -10,6 +10,7 @@ import { generateVerificationCode, sendVerificationCode } from "./2fa";
 import { registerFailed2FAAttempt, clear2FALockout } from "./2faLockout";
 import { logMessage } from "@lib/logger";
 import { serverTranslation } from "@i18n";
+import { getOrigin } from "@lib/origin";
 
 if (
   (!process.env.COGNITO_APP_CLIENT_ID ||
@@ -63,8 +64,7 @@ export const initiateSignIn = async ({
   try {
     const cognitoClient = new CognitoIdentityProviderClient({
       region: process.env.COGNITO_REGION,
-      ...((process.env.NODE_ENV === "development" ||
-        process.env.HOST_URL === "http://localhost:3000") && {
+      ...((process.env.NODE_ENV === "development" || getOrigin() === "http://localhost:3000") && {
         credentials: {
           accessKeyId: process.env.COGNITO_ACCESS_KEY ?? "",
           secretAccessKey: process.env.COGNITO_SECRET_KEY ?? "",

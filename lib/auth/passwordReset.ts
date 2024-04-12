@@ -3,6 +3,7 @@ import { generateVerificationCode } from "./2fa";
 import { logMessage } from "@lib/logger";
 import { getNotifyInstance } from "@lib/integration/notifyConnector";
 import { userHasSecurityQuestions } from "@lib/auth/securityQuestions";
+import { getOrigin } from "@lib/origin";
 
 export class PasswordResetInvalidLink extends Error {}
 export class PasswordResetExpiredLink extends Error {}
@@ -83,7 +84,7 @@ const sendPasswordResetEmail = async (email: string, token: string) => {
   try {
     const notify = getNotifyInstance();
 
-    const baseUrl = process.env.HOST_URL;
+    const baseUrl = getOrigin();
 
     await notify.sendEmail(process.env.TEMPLATE_ID, email, {
       personalisation: {

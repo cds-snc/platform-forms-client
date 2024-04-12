@@ -34,7 +34,6 @@ jobs:
           - 6379:6379
     env:
       # Needed for Next Auth to initialize
-      HOST_URL: http://localhost:3000
       TOKEN_SECRET: testKey
       APP_ENV: test
       NEXT_PUBLIC_APP_ENV: test
