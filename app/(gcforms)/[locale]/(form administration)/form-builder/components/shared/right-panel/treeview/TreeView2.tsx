@@ -16,7 +16,6 @@ import {
 } from "react";
 import { useTreeRef } from "./provider/TreeRefProvider";
 import { v4 as uuid } from "uuid";
-import "react-complex-tree/lib/style-modern.css";
 import { findParentGroup } from "./util/findParentGroup";
 import { ArrowRight } from "./icons/ArrowRight";
 import { ArrowDown } from "./icons/ArrowDown";
@@ -98,7 +97,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
             {...context.itemContainerWithChildrenProps}
             className={cn(
               "flex flex-col p-2",
-              arrow && "border-b-1 border-slate-500 border-x-1 border-r-2 b-t-1",
+              arrow && "border-b-1 border-slate-00 border-x-1 border-r-2 b-t-1",
               !context.isExpanded && "",
               children && "bg-slate-50"
             )}
@@ -262,8 +261,8 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       onSelectItems={(items) => setSelectedItems(items)}
     >
       <Tree treeId="default" rootItem="root" treeLabel="Tree Example" ref={tree} />
-      <button className="mr-2 rounded-md border border-slate-300 p-2" onClick={addSection}>
-        Add section
+      <button className="ml-2 mt-2 rounded-md border border-slate-500 p-2" onClick={addSection}>
+        New section
       </button>
       <>{children}</>
     </ControlledTreeEnvironment>
