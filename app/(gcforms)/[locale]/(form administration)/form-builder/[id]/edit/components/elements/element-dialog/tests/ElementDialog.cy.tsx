@@ -1,13 +1,8 @@
 "use client";
 import React from "react";
-// import { ElementDialog } from "../ElementDialog";
-const ElementDialog = () => <></>;
+import { ElementDialog } from "../ElementDialog";
 
-/**
- * Does not work because ElementDialog imports useElementOptions which
- * imports useFlag which imports a server action.
- */
-describe.skip("<ElementDialog />", () => {
+describe("<ElementDialog />", () => {
   it("adds a richText element", () => {
     cy.viewport(950, 900);
 

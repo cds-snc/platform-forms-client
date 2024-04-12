@@ -1,7 +1,8 @@
 import { auth } from "@lib/auth";
 import { LeftNavigation } from "./components/LeftNavigation";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
-import { SkipLink, Footer, Header } from "@clientComponents/globals";
+import { SkipLink, Footer } from "@clientComponents/globals";
+import { Header } from "@clientComponents/globals/Header/Header";
 import { FormRecord } from "@lib/types";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { getFullTemplateByID } from "@lib/templates";
