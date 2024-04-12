@@ -18,6 +18,10 @@ import { useTreeRef } from "./provider/TreeRefProvider";
 import { v4 as uuid } from "uuid";
 import "react-complex-tree/lib/style-modern.css";
 import { findParentGroup } from "./util/findParentGroup";
+import { ArrowRight } from "./icons/ArrowRight";
+import { ArrowDown } from "./icons/ArrowDown";
+import { DragHandle } from "./icons/DragHandle";
+import { LockIcon } from "@serverComponents/icons";
 
 export interface TreeDataProviderProps {
   children?: ReactElement;
@@ -76,6 +80,45 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       ref={environment}
       items={getGroups()}
       getItemTitle={(item) => item.data}
+      renderItemTitle={({ title }) => <span>{title}</span>}
+      renderItemArrow={({ item, context }) => {
+        return item.isFolder ? (
+          <span {...context.arrowProps} className="absolute left-5 top-2 mr-2 inline-block">
+            {context.isExpanded ? <ArrowDown className="absolute top-1" /> : <ArrowRight />}
+          </span>
+        ) : null;
+      }}
+      renderItem={({ title, arrow, context, children }) => {
+        // console.log(context)
+        // https://www.figma.com/file/2bmknDRpZXN3lwqhs7mqNH/Dynamic-fields-%2B-Grouping-questions?type=design&node-id=1443-9511&mode=design&t=hoeXgJBaxGD62YuS-0
+        //  className = cn("border-x-1 border-b-1 border-gray-soft p-2", node.isClosed && "bg-white");
+        return (
+          <li
+            {...context.itemContainerWithChildrenProps}
+            style={{
+              margin: 0,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+            }}
+          >
+            <button
+              className="text-left group relative w-[350px] overflow-hidden truncate border-gray-soft bg-white p-1 pr-10"
+              {...context.itemContainerWithoutChildrenProps}
+              {...context.interactiveElementProps}
+            >
+              {arrow}
+              <span className="ml-10">{title}</span>
+              {context.canDrag ? (
+                <DragHandle className="absolute right-0 top-0 mr-4 mt-3 hidden cursor-pointer group-hover:block" />
+              ) : (
+                <LockIcon className="absolute right-0 mr-2 inline-block scale-75" />
+              )}
+            </button>
+            {children}
+          </li>
+        );
+      }}
       renderLiveDescriptorContainer={() => {
         return null;
       }}
