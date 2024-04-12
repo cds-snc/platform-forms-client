@@ -53,5 +53,44 @@ export const groupsToTreeData = (formGroups: GroupsType, elements: FormElement[]
     });
   }
 
+  // Add items to start
+  const introItem = {
+    index: "intro",
+    isFolder: false,
+    canRename: true,
+    canMove: true,
+    children: [],
+    data: "Introduction",
+  };
+
+  items["intro"] = introItem;
+
+  const policyItem = {
+    index: "policy",
+    isFolder: false,
+    canRename: true,
+    canMove: true,
+    children: [],
+    data: "Policy",
+  };
+
+  items["policy"] = policyItem;
+
+  // Add start item to the beginning
+  items["start"].children = ["intro", "policy"];
+
+  // Add confirmation item to the end
+  const confirmationItem = {
+    index: "confirm",
+    isFolder: false,
+    canRename: true,
+    canMove: true,
+    children: [],
+    data: "Confirmation",
+  };
+
+  items["confirm"] = confirmationItem;
+  items["end"].children = ["confirm"];
+
   return items;
 };

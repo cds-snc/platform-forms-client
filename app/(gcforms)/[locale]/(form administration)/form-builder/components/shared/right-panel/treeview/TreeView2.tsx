@@ -145,7 +145,13 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       canReorderItems={true}
       canDrag={(items: TreeItem[]) => {
         return items.some((item) => {
-          return item.data !== "Start" && item.data !== "End";
+          return (
+            item.data !== "Start" &&
+            item.data !== "Introduction" &&
+            item.data !== "Policy" &&
+            item.data !== "End" &&
+            item.data !== "Confirmation"
+          );
         });
       }}
       canDropAt={(items, target) => {
