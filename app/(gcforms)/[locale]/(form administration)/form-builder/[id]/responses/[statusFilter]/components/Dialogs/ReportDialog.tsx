@@ -1,3 +1,4 @@
+"use client";
 import { Dialog, TextArea, useDialogRef } from "@formBuilder/components/shared";
 import { Alert, Button } from "@clientComponents/globals";
 import {
@@ -20,10 +21,12 @@ export const ReportDialog = ({
   apiUrl,
   inputRegex = isResponseId,
   maxEntries = 20,
+  onSuccess,
 }: {
   apiUrl: string;
   inputRegex?: (field: string) => boolean;
   maxEntries?: number;
+  onSuccess?: () => void;
 }) => {
   const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
   const { t, i18n } = useTranslation(["form-builder-responses", "common"]);
@@ -96,6 +99,7 @@ export const ReportDialog = ({
 
         // Success, close the dialog
         setStatus(DialogStates.SENT);
+        onSuccess && onSuccess();
         handleClose();
       })
       .catch((err) => {

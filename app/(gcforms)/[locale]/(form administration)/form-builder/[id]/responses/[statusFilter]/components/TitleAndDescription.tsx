@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import { VaultStatus } from "@lib/types";
 import { useTranslation } from "@i18n/client";
 import { ConfirmDialog } from "./Dialogs/ConfirmDialog";
-import { usePathname, useRouter } from "next/navigation";
 import { Alert } from "@clientComponents/globals";
+import { useRouter } from "next/navigation";
 
 export const TitleAndDescription = ({
   statusFilter,
@@ -18,7 +18,6 @@ export const TitleAndDescription = ({
   const { t } = useTranslation("form-builder-responses");
   const [successAlertMessage, setShowSuccessAlert] = useState<false | string>(false);
   const router = useRouter();
-  const pathName = usePathname();
   return (
     <>
       {statusFilter == VaultStatus.NEW && (
@@ -74,13 +73,13 @@ export const TitleAndDescription = ({
           apiUrl={`/api/id/${formId}/submission/confirm`}
           maxEntries={responseDownloadLimit}
           onSuccessfulConfirm={() => {
-            router.replace(pathName, { scroll: false });
+            router.refresh();
             setShowSuccessAlert("confirmSuccess");
           }}
         />
       )}
       {successAlertMessage && (
-        <Alert.Success className="my-4">
+        <Alert.Success className="gc-confirm-success my-4">
           <Alert.Title>{t(`${successAlertMessage}.title`)}</Alert.Title>
           <Alert.Body>{t(`${successAlertMessage}.body`)}</Alert.Body>
         </Alert.Success>
