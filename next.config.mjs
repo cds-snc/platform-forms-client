@@ -2,8 +2,11 @@
 
 import path from "path";
 import { fileURLToPath } from "url";
+import { createRequire } from "node:module";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+const require = createRequire(import.meta.url);
 
 const isOutputStandalone = process.env.NEXT_OUTPUT_STANDALONE === "true";
 const securityHeaders = [
@@ -35,6 +38,12 @@ const nextConfig = {
     // removeConsole: false,
   },
   output: isOutputStandalone ? "standalone" : undefined,
+  cacheHandler:
+    process.env.NODE_ENV === "production"
+      ? require.resolve("./lib/cache/nextCacheHandler.mjs")
+      : undefined,
+  cacheMaxMemorySize: 0, // disable default in-memory caching
+
   webpack: (config) => {
     // Support reading markdown
     config.module.rules.push({
@@ -77,7 +86,7 @@ const nextConfig = {
 
   experimental: {
     instrumentationHook: true,
-    ppr: true,
+    // ppr: true,
     serverComponentsExternalPackages: ["@aws-sdk/lib-dynamodb"],
     turbo: {
       rules: {
