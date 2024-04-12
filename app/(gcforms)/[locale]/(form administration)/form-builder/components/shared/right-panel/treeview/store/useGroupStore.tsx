@@ -8,7 +8,6 @@ import { TemplateStoreContext } from "@lib/store/index";
 import { TemplateStore } from "@lib/store/useTemplateStore";
 import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { groupsToTreeData } from "../util/groupsToTreeData";
-// import { treeDataToGroups } from "../util/treeDataToGroups";
 import { findParentGroup } from "../util/findParentGroup";
 import { TreeItems } from "../types";
 import { FormElement } from "@lib/types";

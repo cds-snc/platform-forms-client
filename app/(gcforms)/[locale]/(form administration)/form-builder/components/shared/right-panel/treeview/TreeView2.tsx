@@ -89,9 +89,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         ) : null;
       }}
       renderItem={({ title, arrow, context, children }) => {
-        // console.log(context)
         // https://www.figma.com/file/2bmknDRpZXN3lwqhs7mqNH/Dynamic-fields-%2B-Grouping-questions?type=design&node-id=1443-9511&mode=design&t=hoeXgJBaxGD62YuS-0
-        //  className = cn("border-x-1 border-b-1 border-gray-soft p-2", node.isClosed && "bg-white");
         return (
           <li
             {...context.itemContainerWithChildrenProps}
@@ -105,29 +103,31 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
               margin: 0,
             }}
           >
-            <button
-              className={cn(
-                "text-left group relative w-full overflow-hidden truncate p-1",
-                !arrow && "bg-white",
-                !arrow && "border-slate-500 border-1 rounded-md"
-              )}
-              {...context.itemContainerWithoutChildrenProps}
-              {...context.interactiveElementProps}
-            >
-              {arrow}
-              <span className="ml-10">{title}</span>
-              {context.canDrag ? (
-                <DragHandle
-                  className={cn(
-                    "absolute right-0 top-0 mr-4 mt-3 hidden cursor-pointer group-hover:block",
-                    !arrow && "mt-2"
-                  )}
-                />
-              ) : (
-                <LockIcon className="absolute right-0 mr-2 inline-block scale-75" />
-              )}
-            </button>
-            {children}
+            <>
+              <button
+                className={cn(
+                  "text-left group relative w-full overflow-hidden truncate p-1",
+                  !arrow && "bg-white",
+                  !arrow && "border-slate-500 border-1 rounded-md"
+                )}
+                {...context.itemContainerWithoutChildrenProps}
+                {...context.interactiveElementProps}
+              >
+                {arrow}
+                <span className="ml-10">{title}</span>
+                {context.canDrag ? (
+                  <DragHandle
+                    className={cn(
+                      "absolute right-0 top-0 mr-4 mt-3 hidden cursor-pointer group-hover:block",
+                      !arrow && "mt-2"
+                    )}
+                  />
+                ) : (
+                  <LockIcon className="absolute right-0 mr-2 inline-block scale-75" />
+                )}
+              </button>
+              {children}
+            </>
           </li>
         );
       }}
@@ -144,7 +144,9 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       canDragAndDrop={true}
       canReorderItems={true}
       canDrag={(items: TreeItem[]) => {
-        return items.some((item) => item.data !== "Start");
+        return items.some((item) => {
+          return item.data !== "Start" && item.data !== "End";
+        });
       }}
       canDropAt={(items, target) => {
         const folderItemsCount = items.filter((item) => item.isFolder).length;

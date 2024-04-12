@@ -11,10 +11,10 @@ export const initializeGroups = (form: FormProperties): FormProperties => {
         name: "Start",
         elements: [...elementIds],
       },
-      // end: {
-      //   name: "End",
-      //   elements: ["-3"],
-      // },
+      end: {
+        name: "End",
+        elements: [],
+      },
     };
 
     form.groups = groups;
