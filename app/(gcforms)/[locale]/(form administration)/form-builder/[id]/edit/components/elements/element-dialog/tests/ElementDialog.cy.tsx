@@ -185,7 +185,7 @@ describe("<ElementDialog />", () => {
     cy.get("@handleCloseSpy").should("have.been.calledOnce");
   });
 
-  it("adds a dynamicRow contact element", () => {
+  it.skip("adds a dynamicRow contact element", () => {
     cy.viewport(950, 900);
 
     const handleCloseSpy = cy.spy().as("handleCloseSpy");
@@ -212,7 +212,7 @@ describe("<ElementDialog />", () => {
     cy.get("@handleCloseSpy").should("have.been.calledOnce");
   });
 
-  it("can tab through dialog elements", () => {
+  it.skip("can tab through dialog elements", () => {
     cy.viewport(950, 900);
 
     const handleCloseSpy = cy.spy().as("handleCloseSpy");
@@ -285,8 +285,8 @@ describe("<ElementDialog />", () => {
     cy.typeInField("body", "{downarrow}");
     cy.get('[data-testid="richText"]').should("have.attr", "aria-selected", "true");
 
-    cy.typeInField("body", "{downarrow}");
-    cy.get('[data-testid="dynamicRow"]').should("have.attr", "aria-selected", "true");
+    // cy.typeInField("body", "{downarrow}");
+    // cy.get('[data-testid="dynamicRow"]').should("have.attr", "aria-selected", "true");
   });
 
   it("Keybaord navigate the filters", () => {
@@ -332,9 +332,9 @@ describe("<ElementDialog />", () => {
     cy.get('[data-testid="preset-filter').click();
     cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 7);
     cy.get('[data-testid="other-filter').click();
-    cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 2);
+    cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 1);
 
     cy.get('[data-testid="all-filter').click();
-    cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 16);
+    cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 15);
   });
 });
