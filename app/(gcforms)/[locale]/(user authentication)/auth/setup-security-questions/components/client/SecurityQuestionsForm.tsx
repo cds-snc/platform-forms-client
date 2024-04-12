@@ -4,7 +4,7 @@ import { useFormState, useFormStatus } from "react-dom";
 import { useTranslation } from "@i18n/client";
 import { TextInput, Label, Dropdown } from "../../../../components/client/forms";
 import { Button, Alert } from "@clientComponents/globals";
-import { LinkButton } from "@serverComponents/globals";
+import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { useRouter } from "next/navigation";
 import { toast } from "@formBuilder/components/shared";
 import { ErrorStates } from "../../actions";

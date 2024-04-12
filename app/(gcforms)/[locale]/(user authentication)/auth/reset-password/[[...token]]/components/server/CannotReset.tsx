@@ -1,5 +1,5 @@
 import { serverTranslation } from "@i18n";
-import { LinkButton } from "@serverComponents/globals";
+import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { BackArrowIcon } from "@serverComponents/icons";
 
 export const CannotReset = async ({ locale }: { locale: string }) => {
