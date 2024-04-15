@@ -1,13 +1,13 @@
 "use client";
 import { Nagware } from "@formBuilder/components/Nagware";
 import { ClosedBanner } from "@formBuilder/components/shared/ClosedBanner";
-import { useRehydrate } from "@lib/hooks/form-builder";
 import { useTranslation } from "@i18n/client";
 import { ucfirst } from "@lib/client/clientHelpers";
 import { FormRecord, NagwareResult, VaultSubmissionList } from "@lib/types";
 import { useParams } from "next/navigation";
 import { DownloadTable } from "./DownloadTable";
 import { NoResponses } from "./NoResponses";
+import { useRehydrate } from "@lib/store/useTemplateStore";
 
 export interface ResponsesProps {
   initialForm: FormRecord | null;
