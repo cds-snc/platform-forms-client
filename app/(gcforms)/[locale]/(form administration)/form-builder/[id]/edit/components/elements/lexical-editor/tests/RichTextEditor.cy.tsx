@@ -2,11 +2,14 @@
 import React from "react";
 // import { RichTextEditor } from "../RichTextEditor";
 const RichTextEditor = () => <></>;
-import { defaultStore as store, Providers } from "@lib/utils/form-builder/test-utils";
+// import { defaultStore as store, Providers } from "@lib/utils/form-builder/test-utils";
+const store = {};
+const Providers = () => <></>;
+
+// NOTE: This test is skipped because the RichTextEditor component includes useTemplateStore,
+// which includes a call to a server action and causes an error here.
 
 describe("<RichTextEditor />", () => {
-  // NOTE: This test is skipped because the RichTextEditor component includes useTemplateStore,
-  // which includes a call to a server action and causes an error here.
   it.skip("Adds and styles text", () => {
     // see: https://on.cypress.io/mounting-react
     cy.mount(

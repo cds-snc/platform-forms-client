@@ -2,11 +2,10 @@
 import React, { useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useRouter } from "next/navigation";
-
-import { useTemplateStore, clearTemplateStore } from "@lib/store";
 import { DesignIcon, ExternalLinkIcon, WarningIcon } from "@serverComponents/icons";
 import { errorMessage, validateTemplate } from "@lib/utils/form-builder/validate";
 import Link from "next/link";
+import { clearTemplateStore, useTemplateStore } from "@lib/store/useTemplateStore";
 
 export const Start = () => {
   const {

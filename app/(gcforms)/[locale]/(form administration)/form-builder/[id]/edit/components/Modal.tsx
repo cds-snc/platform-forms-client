@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import { Button } from "@clientComponents/globals";
 import { Close } from "@serverComponents/icons";
 import { CDSHTMLDialogElement } from "@lib/types/form-builder-types";
-import { useModalStore } from "@lib/store";
+import { useModalStore } from "@lib/store/useModalStore";
 
 interface IModalContext {
   isOpen: boolean;

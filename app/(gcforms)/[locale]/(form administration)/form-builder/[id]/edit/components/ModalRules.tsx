@@ -4,7 +4,6 @@ import { useTranslation } from "@i18n/client";
 
 import { Modal, ModalButton, ModalFormRules } from "./index";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
-import { useTemplateStore, useModalRulesStore } from "@lib/store";
 import { Button } from "@clientComponents/globals";
 import { getPathString } from "@lib/utils/form-builder/getPath";
 import {
@@ -14,6 +13,8 @@ import {
   cleanChoiceIdsFromRules,
 } from "@lib/formContext";
 import { useRefsContext } from "./RefsContext";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
+import useModalRulesStore from "@lib/store/useModalRulesStore";
 
 export const ModalRules = ({ item }: { item: FormElementWithIndex }) => {
   const { elements, updateField } = useTemplateStore((s) => ({

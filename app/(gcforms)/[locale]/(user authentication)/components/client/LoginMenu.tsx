@@ -1,9 +1,9 @@
 "use client";
 import { useTranslation } from "@i18n/client";
 import Link from "next/link";
-import { clearTemplateStore } from "@lib/store";
 import { logout } from "../action";
 import { useSession } from "next-auth/react";
+import { clearTemplateStore } from "@lib/store/useTemplateStore";
 
 export const LoginMenu = () => {
   const { i18n, t } = useTranslation("common");
