@@ -1,9 +1,9 @@
 "use client";
 import React, { createContext, useState, useContext, useRef } from "react";
-import { useTemplateStore, useSubscibeToTemplateStore } from "../../store";
 import { logMessage } from "@lib/logger";
 import { CreateOrUpdateTemplateType, createOrUpdateTemplate } from "@formBuilder/actions";
 import { PublicFormRecord } from "@lib/types";
+import { useSubscibeToTemplateStore, useTemplateStore } from "@lib/store/useTemplateStore";
 
 interface TemplateApiType {
   templateIsDirty: React.MutableRefObject<boolean>;
