@@ -1,7 +1,7 @@
 import { serverTranslation } from "@i18n";
 import { getUnprocessedSubmissionsForTemplate, authCheck } from "../../actions";
 import { OverdueStatus } from "./OverdueStatus";
-import { LinkButton } from "@serverComponents/globals";
+import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { MoreMenu } from "../client/MoreMenu";
 
 export const FormCard = async ({

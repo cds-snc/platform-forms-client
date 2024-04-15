@@ -1,6 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { createSetting, getSetting, updateSetting } from "../../actions";
-import { LinkButton } from "@serverComponents/globals";
+import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { SaveButton } from "../client/SaveButton";
 import { redirect } from "next/navigation";
 import { Danger } from "@clientComponents/globals/Alert/Alert";

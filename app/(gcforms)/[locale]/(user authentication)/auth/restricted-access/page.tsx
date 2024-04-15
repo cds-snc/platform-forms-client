@@ -1,6 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import { LinkButton } from "@serverComponents/globals";
+import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import Link from "next/link";
 
 export async function generateMetadata({

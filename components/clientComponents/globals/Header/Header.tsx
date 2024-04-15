@@ -6,8 +6,8 @@ import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 
 import { SiteLogo } from "@serverComponents/icons";
-import { FileNameInput } from "@clientComponents/globals/Header/FileName";
-import { ShareDropdown } from "@clientComponents/globals/Header/ShareDropdown";
+import { FileNameInput } from "./FileName";
+import { ShareDropdown } from "./ShareDropdown";
 import LanguageToggle from "./LanguageToggle";
 import { YourAccountDropdown } from "./YourAccountDropdown";
 

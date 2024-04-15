@@ -9,7 +9,7 @@ import {
   ErrorListItem,
   Description,
 } from "../../../../../components/client/forms";
-import { LinkButton } from "@serverComponents/globals";
+import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { useTranslation } from "@i18n/client";
 import { sendResetLink, ErrorStates } from "../../action";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";

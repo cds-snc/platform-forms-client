@@ -1,6 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { BackArrowIcon } from "@serverComponents/icons";
-import { LinkButton } from "@serverComponents/globals";
+import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 
 export const ExpiredLink = async ({ locale }: { locale: string }) => {
   const { t } = await serverTranslation(["reset-password", "common"], { lang: locale });

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { ConfirmFormDeleteDialog } from "../ConfirmFormDeleteDialog";
-import { TemplateStoreProvider } from "@lib/store";
+import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
 
 describe("<ConfirmFormDeleteDialog />", () => {
   it("shows unprocessed screen", () => {

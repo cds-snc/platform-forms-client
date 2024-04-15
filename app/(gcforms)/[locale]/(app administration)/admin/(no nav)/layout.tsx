@@ -1,7 +1,5 @@
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 
-import { Footer, SkipLink } from "@serverComponents/globals";
-
 import Link from "next/link";
 import { serverTranslation } from "@i18n";
 import { redirect } from "next/navigation";
@@ -10,6 +8,8 @@ import { SiteLogo } from "@serverComponents/icons";
 import LanguageToggle from "@serverComponents/globals/LanguageToggle";
 import { YourAccountDropdown } from "@clientComponents/globals/Header/YourAccountDropdown";
 import { auth } from "@lib/auth";
+import { SkipLink } from "@serverComponents/globals/SkipLink";
+import { Footer } from "@serverComponents/globals/Footer";
 export default async function Layout({
   children,
   params: { locale },
