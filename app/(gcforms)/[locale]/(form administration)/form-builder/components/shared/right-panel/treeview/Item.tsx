@@ -39,6 +39,7 @@ export const Item = ({
           )}
           {...context.itemContainerWithoutChildrenProps}
           {...context.interactiveElementProps}
+          type="button"
         >
           {arrow}
           <span className="ml-10">{title}</span>
