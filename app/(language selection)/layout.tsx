@@ -1,4 +1,5 @@
-import { Footer, SkipLink } from "@serverComponents/globals";
+import { Footer } from "@serverComponents/globals/Footer";
+import { SkipLink } from "@serverComponents/globals/SkipLink";
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
   return (

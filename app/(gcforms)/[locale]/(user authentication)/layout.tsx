@@ -1,13 +1,14 @@
 import { serverTranslation } from "@i18n";
 import Link from "next/link";
 import { LanguageToggle } from "@clientComponents/globals";
-import { Footer, SkipLink } from "@serverComponents/globals";
 import { LoginMenu } from "./components/client/LoginMenu";
 import { FormsLink } from "./components/client/FormsLink";
 import { SiteLogo } from "@serverComponents/icons";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { headers } from "next/headers";
 import { Info as AlertInfo } from "@clientComponents/globals/Alert/Alert";
+import { SkipLink } from "@serverComponents/globals/SkipLink";
+import { Footer } from "@serverComponents/globals/Footer";
 
 const Info = async ({ locale }: { locale: string }) => {
   const { t } = await serverTranslation(["setup-security-questions"], { lang: locale });

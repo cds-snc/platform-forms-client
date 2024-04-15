@@ -6,7 +6,7 @@ import { getProperty } from "@lib/i18nHelpers";
 import { PublicFormRecord } from "@lib/types";
 import { ClosedFormIcon } from "@serverComponents/icons";
 
-import { LinkButton } from "@serverComponents/globals";
+import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { BackArrowIcon } from "@serverComponents/icons";
 
 /*

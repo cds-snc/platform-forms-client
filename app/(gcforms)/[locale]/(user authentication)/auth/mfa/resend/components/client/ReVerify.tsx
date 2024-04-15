@@ -3,7 +3,7 @@ import React, { ReactElement, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
-import { LinkButton } from "@serverComponents/globals";
+import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { getErrorText, resendVerificationCode } from "../../../actions";
 
 import { hasError } from "@lib/hasError";

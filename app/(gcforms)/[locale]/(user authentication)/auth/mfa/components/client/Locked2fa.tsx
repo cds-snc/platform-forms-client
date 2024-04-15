@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { useTranslation } from "@i18n/client";
-import { LinkButton } from "@serverComponents/globals";
+import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { BackArrowIcon } from "@serverComponents/icons";
 
 export const Locked2fa = () => {

@@ -1,5 +1,5 @@
 import { serverTranslation } from "@i18n";
-import { LinkButton } from "@serverComponents/globals";
+import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 
 export const NewFormButton = async () => {
   const {
