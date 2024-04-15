@@ -10,9 +10,9 @@ import { RightPanelOpen, RoundCloseIcon } from "@serverComponents/icons";
 import { cn } from "@lib/utils";
 import { useActivePathname } from "@lib/hooks/form-builder";
 import { DownloadCSV } from "@formBuilder/[id]/edit/translate/components/DownloadCSV";
-import { useRehydrate } from "@lib/hooks/form-builder";
 import { useTreeRef } from "./treeview/provider/TreeRefProvider";
 import { TreeView } from "./treeview/TreeView";
+import { useRehydrate } from "@lib/store/useTemplateStore";
 
 const TabButton = ({
   text,

@@ -2,10 +2,10 @@
 
 import { FormRecord } from "@lib/types";
 import { useSession } from "next-auth/react";
-import { useRehydrate } from "@lib/hooks/form-builder";
 import { DownloadForm } from "./DownloadForm";
 import { SetClosingDate } from "./SetClosingDate";
 import { FormOwnership } from "./FormOwnership";
+import { useRehydrate } from "@lib/store/useTemplateStore";
 
 interface AssignUsersToTemplateProps {
   formRecord?: FormRecord;
