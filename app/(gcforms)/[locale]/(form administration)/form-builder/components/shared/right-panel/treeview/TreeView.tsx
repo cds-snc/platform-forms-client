@@ -17,7 +17,8 @@ import {
 import { useTreeRef } from "./provider/TreeRefProvider";
 import { v4 as uuid } from "uuid";
 import { findParentGroup } from "./util/findParentGroup";
-import { Item } from "./Item";
+import "react-complex-tree/lib/style-modern.css";
+// import { Item } from "./Item";
 
 export interface TreeDataProviderProps {
   children?: ReactElement;
@@ -76,15 +77,15 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       ref={environment}
       items={getGroups()}
       getItemTitle={(item) => item.data}
-      renderItem={({ title, arrow, context, children }) => {
-        return (
-          <Item title={title} arrow={arrow} context={context}>
-            {children}
-          </Item>
-        );
-      }}
-      renderItemTitle={({ title }) => <Item.Title title={title} />}
-      renderItemArrow={({ item, context }) => <Item.Arrow item={item} context={context} />}
+      // renderItem={({ title, arrow, context, children }) => {
+      //   return (
+      //     <Item title={title} arrow={arrow} context={context}>
+      //       {children}
+      //     </Item>
+      //   );
+      // }}
+      // renderItemTitle={({ title }) => <Item.Title title={title} />}
+      // renderItemArrow={({ item, context }) => <Item.Arrow item={item} context={context} />}
       renderLiveDescriptorContainer={() => null}
       viewState={{
         ["default"]: {
@@ -108,9 +109,8 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       }}
       canDropAt={(items, target) => {
         const folderItemsCount = items.filter((item) => item.isFolder).length;
-
         // if any of the selected items is a folder, disallow dropping on a folder
-        if (folderItemsCount > 1) {
+        if (folderItemsCount >= 1) {
           const { parentItem } = target as DraggingPositionBetweenItems;
           if (items[0].isFolder && parentItem !== "root") {
             return false;
