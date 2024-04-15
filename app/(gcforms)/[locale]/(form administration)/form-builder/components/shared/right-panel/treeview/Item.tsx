@@ -32,14 +32,14 @@ export const Item = ({
     >
       <>
         <button
+          {...context.itemContainerWithoutChildrenProps}
+          {...context.interactiveElementProps}
+          type="button"
           className={cn(
             "text-left group relative w-full overflow-hidden truncate p-1",
             !arrow && "bg-white",
             !arrow && "border-slate-500 border-1 rounded-md"
           )}
-          {...context.itemContainerWithoutChildrenProps}
-          {...context.interactiveElementProps}
-          type="button"
         >
           {arrow}
           <span className="ml-10">{title}</span>
