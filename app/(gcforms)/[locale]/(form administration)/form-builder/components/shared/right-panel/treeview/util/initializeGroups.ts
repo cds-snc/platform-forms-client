@@ -3,7 +3,7 @@ import { FormProperties } from "@lib/types/form-types";
 export const initializeGroups = (form: FormProperties, allowGroups: boolean): FormProperties => {
   // Clean and remove any existing groups
   if (!allowGroups) {
-    form.groups = {};
+    delete form.groups;
     return form;
   }
 
