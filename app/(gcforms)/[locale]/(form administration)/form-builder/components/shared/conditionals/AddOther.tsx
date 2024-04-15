@@ -4,7 +4,7 @@ import { useTranslation } from "@i18n/client";
 
 import { Button } from "@clientComponents/globals";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
-import { useTemplateStore } from "@lib/store";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { FormElementTypes } from "@lib/types";
 import { getTranslatedProperties } from "../../../actions";
 

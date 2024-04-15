@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useTemplateStore } from "@lib/store";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 export const Output = () => {
   const getSchema = useTemplateStore((s) => s.getSchema);

@@ -5,7 +5,7 @@ import debounce from "lodash.debounce";
 
 import { ExpandingInput } from "@formBuilder/components/shared";
 import { Language } from "@lib/types/form-builder-types";
-import { useTemplateStore } from "@lib/store";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 import { cleanInput } from "@lib/utils/form-builder";
 import { useRefsContext } from "../../RefsContext";

@@ -5,7 +5,7 @@ import {
   LocalizedElementProperties,
   Language,
 } from "@lib/types/form-builder-types";
-import { useTemplateStore } from "@lib/store";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { QuestionInput, QuestionNumber } from "..";
 
 export const Question = ({

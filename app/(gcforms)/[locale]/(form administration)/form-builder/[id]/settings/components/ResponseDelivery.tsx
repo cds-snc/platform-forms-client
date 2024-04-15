@@ -8,7 +8,7 @@ import { isValidGovEmail } from "@lib/validation/validation";
 import { ResponseEmail } from "@formBuilder/components/ResponseEmail";
 import { Radio } from "@formBuilder/components/shared";
 import { Button } from "@clientComponents/globals";
-import { useTemplateStore } from "@lib/store";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { completeEmailAddressRegex } from "@lib/utils/form-builder";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ResponseDeliveryHelpButton } from "@formBuilder/components/shared";

@@ -5,7 +5,7 @@ import { SubNavLink } from "@clientComponents/globals/SubNavLink";
 import { useActivePathname } from "@lib/hooks/form-builder";
 import { LangSwitcher } from "@formBuilder/components/shared/LangSwitcher";
 import { QuestionsIcon, TranslateIcon } from "@serverComponents/icons";
-import { useTemplateStore } from "@lib/store";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 export const EditNavigation = ({ id }: { id: string }) => {
   const {
