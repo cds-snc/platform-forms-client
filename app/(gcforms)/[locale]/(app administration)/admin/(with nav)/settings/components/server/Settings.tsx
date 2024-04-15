@@ -1,5 +1,5 @@
 import React from "react";
-import { LinkButton } from "@serverComponents/globals";
+import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { DeleteSettingsButton } from "../client/DeleteSettingsButton";
 import { auth } from "@lib/auth";
 import { getAllAppSettings } from "@lib/appSettings";

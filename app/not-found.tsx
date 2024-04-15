@@ -4,9 +4,9 @@ import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 
 import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
-import { Footer } from "@serverComponents/globals";
 
 import { Fip } from "@clientComponents/globals/Fip";
+import { Footer } from "@serverComponents/globals/Footer";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await serverTranslation("error");

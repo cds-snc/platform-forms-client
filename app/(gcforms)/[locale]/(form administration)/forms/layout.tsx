@@ -1,11 +1,12 @@
 import React from "react";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
-import { Header } from "@clientComponents/globals";
-import { Footer, SkipLink } from "@serverComponents/globals";
+import { Header } from "@clientComponents/globals/Header/Header";
 import { auth } from "@lib/auth";
 import { redirect } from "next/navigation";
 import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext";
 import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
+import { SkipLink } from "@serverComponents/globals/SkipLink";
+import { Footer } from "@serverComponents/globals/Footer";
 
 export default async function Layout({
   children,
