@@ -39,6 +39,8 @@ ENV TAG_VERSION=$TAG_VERSION
 ENV AWS_LWA_ENABLE_COMPRESSION=true
 ENV HOSTNAME=localhost
 ENV PORT=3000
+# Temporary for debugging / need to remove below
+ENV NEXT_PRIVATE_DEBUG_CACHE=1
 
 WORKDIR /src
 
