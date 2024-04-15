@@ -12,7 +12,7 @@ import { useActivePathname } from "@lib/hooks/form-builder";
 import { DownloadCSV } from "@formBuilder/[id]/edit/translate/components/DownloadCSV";
 import { useRehydrate } from "@lib/hooks/form-builder";
 import { useTreeRef } from "./treeview/provider/TreeRefProvider";
-import { TreeView } from "./treeview/TreeView2";
+import { TreeView } from "./treeview/TreeView";
 
 const TabButton = ({
   text,
