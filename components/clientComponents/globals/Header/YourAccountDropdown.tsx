@@ -3,10 +3,10 @@ import React from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { ChevronDown } from "@serverComponents/icons";
 import { useTranslation } from "@i18n/client";
-import { useAccessControl } from "@lib/hooks";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { clearTemplateStore } from "@lib/store/useTemplateStore";
+import { useAccessControl } from "@lib/hooks/useAccessControl";
 
 type YourAccountDropdownProps = {
   isAuthenticated: boolean;

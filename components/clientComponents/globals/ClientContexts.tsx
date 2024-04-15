@@ -1,7 +1,7 @@
 "use client";
 import { SessionProvider } from "next-auth/react";
-import { AccessControlProvider } from "@lib/hooks";
 import { Session } from "next-auth";
+import { AccessControlProvider } from "@lib/hooks/useAccessControl";
 
 export const ClientContexts: React.FC<{ session: Session | null; children: React.ReactNode }> = ({
   session,

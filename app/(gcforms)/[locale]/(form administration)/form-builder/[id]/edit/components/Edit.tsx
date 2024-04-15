@@ -8,12 +8,11 @@ import { ElementPanel, ConfirmationDescription, PrivacyDescription } from ".";
 import { RefsProvider } from "./RefsContext";
 import { RichTextLocked } from "./elements";
 import { ExpandingInput } from "@formBuilder/components/shared";
-import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useRehydrate, useTemplateStore } from "@lib/store/useTemplateStore";
 import { getQuestionNumber, sortByLayout } from "@lib/utils/form-builder";
 import { SettingsPanel } from "./settings/SettingsPanel";
 import { cleanInput } from "@lib/utils/form-builder";
 import { SaveButton } from "@formBuilder/components/shared/SaveButton";
-import { useRehydrate } from "@lib/hooks/form-builder";
 
 export const Edit = ({ formId }: { formId: string }) => {
   const router = useRouter();

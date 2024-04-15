@@ -2,10 +2,11 @@
 import { getLocalizedProperty } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { useRouter } from "next/navigation";
-import { useAccessControl, useRefresh } from "@lib/hooks";
 import axios from "axios";
 import { logMessage } from "@lib/logger";
 import { Button } from "@clientComponents/globals";
+import { useRefresh } from "@lib/hooks/useRefresh";
+import { useAccessControl } from "@lib/hooks/useAccessControl";
 
 interface DataViewProps {
   templates: Array<{

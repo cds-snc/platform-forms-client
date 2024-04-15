@@ -1,6 +1,6 @@
 "use client";
 import { useMemo } from "react";
-import { useAccessControl } from "@lib/hooks";
+import { useAccessControl } from "../useAccessControl";
 
 export const useIsAdminUser = () => {
   const { ability } = useAccessControl();

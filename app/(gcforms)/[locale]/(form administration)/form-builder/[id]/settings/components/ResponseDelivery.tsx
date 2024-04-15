@@ -3,7 +3,6 @@ import React, { useCallback, useState, useMemo } from "react";
 import { LocalizedFormProperties } from "@lib/types/form-builder-types";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
-import { useRefresh } from "@lib/hooks";
 import { isValidGovEmail } from "@lib/validation/validation";
 import { ResponseEmail } from "@formBuilder/components/ResponseEmail";
 import { Radio } from "@formBuilder/components/shared";
@@ -21,6 +20,7 @@ import {
   updateTemplateDeliveryOption,
   updateTemplateSecurityAttribute,
 } from "@formBuilder/actions";
+import { useRefresh } from "@lib/hooks/useRefresh";
 
 enum DeliveryOption {
   vault = "vault",
