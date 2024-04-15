@@ -17,11 +17,7 @@ import {
 import { useTreeRef } from "./provider/TreeRefProvider";
 import { v4 as uuid } from "uuid";
 import { findParentGroup } from "./util/findParentGroup";
-import { ArrowRight } from "./icons/ArrowRight";
-import { ArrowDown } from "./icons/ArrowDown";
-import { DragHandle } from "./icons/DragHandle";
-import { LockIcon } from "@serverComponents/icons";
-import { cn } from "@lib/utils";
+import { Item } from "./Item";
 
 export interface TreeDataProviderProps {
   children?: ReactElement;
@@ -80,60 +76,16 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       ref={environment}
       items={getGroups()}
       getItemTitle={(item) => item.data}
-      renderItemTitle={({ title }) => <span>{title}</span>}
-      renderItemArrow={({ item, context }) => {
-        return item.isFolder ? (
-          <span {...context.arrowProps} className="absolute left-5 top-2 mr-2 inline-block">
-            {context.isExpanded ? <ArrowDown className="absolute top-1" /> : <ArrowRight />}
-          </span>
-        ) : null;
-      }}
       renderItem={({ title, arrow, context, children }) => {
-        // https://www.figma.com/file/2bmknDRpZXN3lwqhs7mqNH/Dynamic-fields-%2B-Grouping-questions?type=design&node-id=1443-9511&mode=design&t=hoeXgJBaxGD62YuS-0
         return (
-          <li
-            {...context.itemContainerWithChildrenProps}
-            className={cn(
-              "flex flex-col p-2",
-              arrow && "border-b-1 border-slate-00 border-x-1 border-r-2 b-t-1",
-              !context.isExpanded && "",
-              children && "bg-slate-50"
-            )}
-            style={{
-              margin: 0,
-            }}
-          >
-            <>
-              <button
-                className={cn(
-                  "text-left group relative w-full overflow-hidden truncate p-1",
-                  !arrow && "bg-white",
-                  !arrow && "border-slate-500 border-1 rounded-md"
-                )}
-                {...context.itemContainerWithoutChildrenProps}
-                {...context.interactiveElementProps}
-              >
-                {arrow}
-                <span className="ml-10">{title}</span>
-                {context.canDrag ? (
-                  <DragHandle
-                    className={cn(
-                      "absolute right-0 top-0 mr-4 mt-3 hidden cursor-pointer group-hover:block",
-                      !arrow && "mt-2"
-                    )}
-                  />
-                ) : (
-                  <LockIcon className="absolute right-0 mr-2 inline-block scale-75" />
-                )}
-              </button>
-              {children}
-            </>
-          </li>
+          <Item title={title} arrow={arrow} context={context}>
+            {children}
+          </Item>
         );
       }}
-      renderLiveDescriptorContainer={() => {
-        return null;
-      }}
+      renderItemTitle={({ title }) => <Item.Title title={title} />}
+      renderItemArrow={({ item, context }) => <Item.Arrow item={item} context={context} />}
+      renderLiveDescriptorContainer={() => null}
       viewState={{
         ["default"]: {
           focusedItem,

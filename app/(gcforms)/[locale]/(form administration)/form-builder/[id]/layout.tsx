@@ -10,7 +10,7 @@ import { TemplateStoreProvider } from "@lib/store";
 import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext";
 import { RefStoreProvider } from "@lib/hooks/form-builder/useRefStore";
 import { RightPanel } from "@formBuilder/components/shared/right-panel/RightPanel";
-import { checkFlag } from "@formBuilder/actions";
+import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 import { GroupStoreProvider } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 
 export default async function Layout({
@@ -30,7 +30,7 @@ export default async function Layout({
 
   const formID = id || null;
 
-  const showRightPanel = await checkFlag("conditionalLogic");
+  const showRightPanel = await allowGrouping();
 
   if (session && formID) {
     try {

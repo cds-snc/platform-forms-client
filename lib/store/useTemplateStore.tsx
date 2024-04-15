@@ -15,6 +15,7 @@ import React, { createContext, useRef, useContext, useEffect } from "react";
 import { getPathString } from "../utils/form-builder/getPath";
 import { TreeRefProvider } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 import { initializeGroups } from "@formBuilder/components/shared/right-panel/treeview/util/initializeGroups";
+import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 
 import {
   moveDown,
@@ -305,6 +306,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 }
               }),
             add: async (elIndex = 0, type = FormElementTypes.radio, data, groupId) => {
+              const allowGroups = await allowGrouping();
               return new Promise((resolve) => {
                 set((state) => {
                   const id = incrementElementId(state.form.elements);
@@ -315,10 +317,9 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                     type,
                   };
 
-                  groupId = groupId || ""; // noop
+                  groupId = allowGroups && groupId ? groupId : "";
 
-                  // @TODO: Feature flag
-                  if (groupId) {
+                  if (allowGroups && groupId) {
                     if (!state.form.groups) state.form.groups = {};
                     if (!state.form.groups[groupId])
                       state.form.groups[groupId] = { name: "", elements: [] };
@@ -363,13 +364,13 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                   type,
                 });
               }),
-            remove: (elementId, groupId = "") => {
+            remove: async (elementId, groupId = "") => {
+              const allowGroups = await allowGrouping();
               set((state) => {
                 state.form.elements = removeElementById(state.form.elements, elementId);
                 state.form.layout = removeById(state.form.layout, elementId);
 
-                // @TODO: Feature flag
-                if (groupId && state.form.groups) {
+                if (allowGroups && groupId && state.form.groups) {
                   const groups = removeGroupElement(
                     { ...original(state.form.groups) },
                     groupId,
@@ -469,29 +470,32 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.closingDate = value;
               });
             },
-            initialize: (language = "en") => {
+            initialize: async (language = "en") => {
+              const allowGroups = await allowGrouping();
               set((state) => {
                 state.id = "";
                 state.lang = language as Language;
                 state.translationLanguagePriority = language as Language;
-                state.form = initializeGroups(defaultForm); // @TODO: FeatureFlag
+                state.form = initializeGroups(defaultForm, allowGroups);
                 state.isPublished = false;
                 state.name = "";
                 state.deliveryOption = undefined;
                 state.closingDate = null;
               });
             },
-            importTemplate: (jsonConfig) =>
+            importTemplate: async (jsonConfig) => {
+              const allowGroups = await allowGrouping();
               set((state) => {
                 state.id = "";
                 state.lang = "en";
-                state.form = initializeGroups({ ...defaultForm, ...jsonConfig }); // @TODO: FeatureFlag
+                state.form = initializeGroups({ ...defaultForm, ...jsonConfig }, allowGroups);
                 state.isPublished = false;
                 state.name = "";
                 state.securityAttribute = "Protected A";
                 state.deliveryOption = undefined;
                 state.closingDate = null;
-              }),
+              });
+            },
           }),
           {
             name: "form-storage",

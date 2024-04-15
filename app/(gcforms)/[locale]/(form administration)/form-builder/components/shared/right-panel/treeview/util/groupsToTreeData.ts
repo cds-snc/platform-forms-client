@@ -54,6 +54,8 @@ export const groupsToTreeData = (formGroups: GroupsType, elements: FormElement[]
   }
 
   // Add items to start
+  // @todo re-add these
+  /*
   const introItem = {
     index: "intro",
     isFolder: false,
@@ -62,9 +64,11 @@ export const groupsToTreeData = (formGroups: GroupsType, elements: FormElement[]
     children: [],
     data: "Introduction",
   };
+  */
 
-  items["intro"] = introItem;
+  // items["intro"] = introItem;
 
+  /*
   const policyItem = {
     index: "policy",
     isFolder: false,
@@ -73,13 +77,15 @@ export const groupsToTreeData = (formGroups: GroupsType, elements: FormElement[]
     children: [],
     data: "Policy",
   };
+  */
 
-  items["policy"] = policyItem;
+  // items["policy"] = policyItem;
 
   // Add start item to the beginning
-  items["start"].children = ["intro", "policy"];
+  // items["start"].children = ["intro", "policy"];
 
   // Add confirmation item to the end
+  /*
   const confirmationItem = {
     index: "confirm",
     isFolder: false,
@@ -88,9 +94,10 @@ export const groupsToTreeData = (formGroups: GroupsType, elements: FormElement[]
     children: [],
     data: "Confirmation",
   };
+  */
 
-  items["confirm"] = confirmationItem;
-  items["end"].children = ["confirm"];
+  // items["confirm"] = confirmationItem;
+  // items["end"].children = ["confirm"];
 
   return items;
 };
