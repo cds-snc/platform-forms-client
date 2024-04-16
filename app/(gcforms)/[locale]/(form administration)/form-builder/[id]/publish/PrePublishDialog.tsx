@@ -57,7 +57,8 @@ export const PrePublishDialog = ({
           handleClose={handleClose}
         >
           <div className="my-8 mx-5 flex flex-col gap-4">
-            <p>{t("prePublishFormDialog.text1")}</p>
+            <h3 className="gc-h4 mb-1 pb-0 text-lg">{t("prePublishFormDialog.text1")}</h3>
+            <p className="text-sm">{t("prePublishFormDialog.helpsUnderstand")}</p>
             <span>
               <Radio
                 id="public-use"
