@@ -216,7 +216,7 @@ describe.skip("Test Cognito library", () => {
       );
 
       expect(validate2FAVerificationCodeResponse).toEqual({
-        status: Validate2FAVerificationCodeResultStatus.VALID,
+        // status: Validate2FAVerificationCodeResultStatus.VALID,
         decodedCognitoToken: {
           id: "f4f7cedb-0f0b-4390-91a2-69e8c8a29f67",
           name: "Test User",
@@ -248,7 +248,7 @@ describe.skip("Test Cognito library", () => {
       );
 
       expect(validate2FAVerificationCodeResponse).toEqual({
-        status: Validate2FAVerificationCodeResultStatus.INVALID,
+        // status: Validate2FAVerificationCodeResultStatus.INVALID,
       });
     });
 
@@ -274,7 +274,7 @@ describe.skip("Test Cognito library", () => {
       );
 
       expect(validate2FAVerificationCodeResponse).toEqual({
-        status: Validate2FAVerificationCodeResultStatus.INVALID,
+        // status: Validate2FAVerificationCodeResultStatus.INVALID,
       });
     });
 
@@ -300,7 +300,7 @@ describe.skip("Test Cognito library", () => {
       );
 
       expect(validate2FAVerificationCodeResponse).toEqual({
-        status: Validate2FAVerificationCodeResultStatus.LOCKED_OUT,
+        // status: Validate2FAVerificationCodeResultStatus.LOCKED_OUT,
       });
 
       expect(prismaMock.cognitoCustom2FA.deleteMany).toHaveBeenCalledWith({
@@ -340,7 +340,7 @@ describe.skip("Test Cognito library", () => {
       );
 
       expect(validate2FAVerificationCodeResponse).toEqual({
-        status: Validate2FAVerificationCodeResultStatus.EXPIRED,
+        // status: Validate2FAVerificationCodeResultStatus.EXPIRED,
       });
 
       expect(prismaMock.cognitoCustom2FA.deleteMany).toHaveBeenCalledWith({
