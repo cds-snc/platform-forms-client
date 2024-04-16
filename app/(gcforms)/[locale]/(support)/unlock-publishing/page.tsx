@@ -41,7 +41,7 @@ export default async function Page({
       {success === undefined ? (
         <UnlockPublishingForm userEmail={session.user.email} />
       ) : (
-        <Success />
+        <Success lang={locale} />
       )}
     </>
   );
