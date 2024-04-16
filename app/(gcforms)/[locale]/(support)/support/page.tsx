@@ -16,8 +16,10 @@ export async function generateMetadata({
 
 export default async function Page({
   searchParams: { success },
+  params: { locale },
 }: {
   searchParams: { success?: string };
+  params: { locale: string };
 }) {
-  return <>{success === undefined ? <SupportForm /> : <Success />}</>;
+  return <>{success === undefined ? <SupportForm /> : <Success lang={locale} />}</>;
 }
