@@ -173,7 +173,7 @@ export const RightPanel = ({ id }: { id: string }) => {
                     </Tab.List>
                     <Tab.Panels>
                       <Tab.Panel>
-                        <div className="m-0 mt-1 w-full border-t-1 border-slate200 p-0">
+                        <div className="m-0 mt-1 w-full border-t-1 border-slate-200 p-0">
                           <TreeView ref={treeView} addItem={() => {}} updateItem={() => {}} />
                         </div>
                       </Tab.Panel>
