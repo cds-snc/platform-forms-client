@@ -42,7 +42,8 @@
     "**/*.ts",
     "**/*.tsx",
     "cypress/support/commands/selection-command.js",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "nextCacheHandler.mjs"
   ],
   "exclude": [
     "node_modules",

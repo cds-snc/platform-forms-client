@@ -3046,15 +3046,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@neshca/cache-handler@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "@neshca/cache-handler@npm:1.1.0"
+"@neshca/cache-handler@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "@neshca/cache-handler@npm:1.2.1"
   dependencies:
     lru-cache: "npm:10.2.0"
   peerDependencies:
     next: ">=13.5.1"
     redis: ">=4.6"
-  checksum: 10c0/60762f3efd3f3d896302fbb38f650483c57f3c2d981cc3b8c36c4cf02220166f7db4018b25d5acc7dcc7b4a04fb08c9389807f229cee41ebe82ff8749388f5ec
+  checksum: 10c0/75d44ffc997d78e71118206d4b13f12289425494ffeac5911730b667593ce3ca7a0226d6ff61c90c6a3bf9a2b09a7b321b286e0e92818f9c4f7e127037c9c51e
   languageName: node
   linkType: hard
 
@@ -10570,7 +10570,7 @@ __metadata:
     "@headlessui/react": "npm:^1.7.18"
     "@jest/globals": "npm:^29.7.0"
     "@lexical/react": "npm:^0.12.6"
-    "@neshca/cache-handler": "npm:^1.1.0"
+    "@neshca/cache-handler": "npm:^1.2.1"
     "@next/eslint-plugin-next": "npm:^13.5.6"
     "@prisma/client": "npm:^5.10.2"
     "@radix-ui/react-dropdown-menu": "npm:2.0.6"

@@ -39,7 +39,7 @@ const nextConfig = {
   },
   output: isOutputStandalone ? "standalone" : undefined,
   ...(process.env.NODE_ENV === "production" && {
-    cacheHandler: require.resolve("./lib/cache/nextCacheHandler.mjs"),
+    cacheHandler: require.resolve("./nextCacheHandler.mjs"),
     cacheMaxMemorySize: 0, // disable default in-memory caching
   }),
   webpack: (config) => {
