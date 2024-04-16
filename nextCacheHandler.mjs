@@ -8,19 +8,23 @@ import { createClient } from "redis";
 // Once next js config supports type script this file can be convereted to ts module format
 
 CacheHandler.onCreation(async ({ buildId }) => {
-  // always create a Redis client inside the `onCreation` callback
-  const client = createClient();
+  let redisHandler;
 
-  await client.connect();
+  if (process.env.REDIS_URL) {
+    // always create a Redis client inside the `onCreation` callback
+    const client = createClient(process.env.REDIS_URL);
 
-  // Catch the network connection errors but don't print out.
-  client.on("error", () => {});
+    await client.connect();
 
-  const redisHandler = await createRedisHandler({
-    client,
-    keyPrefix: `next:${buildId}:`,
-    timeoutMs: 5000,
-  });
+    // Catch the network connection errors but don't print out.
+    client.on("error", () => {});
+
+    redisHandler = await createRedisHandler({
+      client,
+      keyPrefix: `next:${buildId}:`,
+      timeoutMs: 5000,
+    });
+  }
 
   // Create an in-memory Least Recently Used cache for use when NextJS is Building or Redis is unavailable
   const localHandler = createLruHandler({
