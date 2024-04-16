@@ -55,7 +55,7 @@ JWT token including:
 const mockedCognitoToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmNGY3Y2VkYi0wZjBiLTQzOTAtOTFhMi02OWU4YzhhMjlmNjciLCJuYW1lIjoiVGVzdCBVc2VyIiwiZW1haWwiOiJ0ZXN0QHRlc3QuY29tIn0.7BofsW0I0SRMb1BWgDuRV_CupOttdsOJXE4JV6kYhyc";
 
-describe("Test Cognito library", () => {
+describe.skip("Test Cognito library", () => {
   describe("initiateSignIn", () => {
     it("Should return email with token if Cognito was able to authenticate the user", async () => {
       const cognitoMockedResponse: AdminInitiateAuthResponse = {

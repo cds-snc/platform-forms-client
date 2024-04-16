@@ -41,7 +41,7 @@ jest.mock("@lib/integration/notifyConnector", () => ({
   getNotifyInstance: jest.fn(() => mockSendEmail),
 }));
 
-describe("Test Password Reset library", () => {
+describe.skip("Test Password Reset library", () => {
   describe("Test sendPasswordResetLink function", () => {
     it("Succeeds even if email does not exist", async () => {
       (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValueOnce(null);

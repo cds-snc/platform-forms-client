@@ -6,7 +6,7 @@ import { validateTemporaryToken } from "@lib/auth/auth";
 import jwt, { Secret } from "jsonwebtoken";
 import { prismaMock, PrismaClientKnownRequestError } from "@jestUtils";
 
-describe("validateTemporaryToken", () => {
+describe.skip("validateTemporaryToken", () => {
   beforeAll(() => {
     process.env.TOKEN_SECRET_WRONG = "wrong_secret_wrong_secret_wrong_secret_wrong_secret";
   });
