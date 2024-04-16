@@ -116,9 +116,13 @@ export const PrePublishDialog = ({
             <h3 className="gc-h4 mb-1 pb-0 text-lg">{t("prePublishFormDialog.text2")}</h3>
             <p className="text-sm">{t("prePublishFormDialog.thisInformation")}</p>
             <label>{t("prePublishFormDialog.whatType")}</label>
-            <p>
-              <Select options={elementOptions} onChange={onFormTypeChange} />
-            </p>
+            <div>
+              <Select
+                className="gc-dropdown"
+                options={elementOptions}
+                onChange={onFormTypeChange}
+              />
+            </div>
             <label>{t("prePublishFormDialog.briefDesc")}</label>
             <p>
               <TextArea id="txtDescription" className="w-11/12" onChange={onDescriptionChange} />
