@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useTranslation } from "@i18n/client";
-import { useTemplateStore } from "@lib/store";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { ConditionalIcon } from "@serverComponents/icons/ConditionalIcon";
 import { getElementsUsingChoiceId } from "@lib/formContext";
 import { FormElement } from "@lib/types";

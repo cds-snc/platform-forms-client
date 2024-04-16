@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useIsFormClosed } from "@lib/hooks";
+import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
 import { useTranslation } from "@i18n/client";
 import { StyledLink } from "@clientComponents/globals";
 

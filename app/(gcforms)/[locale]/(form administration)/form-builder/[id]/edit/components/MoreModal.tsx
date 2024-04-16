@@ -2,12 +2,13 @@
 import React, { useEffect } from "react";
 import { useTranslation } from "@i18n/client";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
-import { useTemplateStore, useModalStore } from "@lib/store";
 import { Button } from "@clientComponents/globals";
 import { Modal } from "./index";
 import { ModalButton, ModalForm } from "./index";
 import { getPathString, getElementIndexes } from "@lib/utils/form-builder/getPath";
 import { useRefsContext } from "./RefsContext";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
+import useModalStore from "@lib/store/useModalStore";
 
 export const MoreModal = ({
   item,

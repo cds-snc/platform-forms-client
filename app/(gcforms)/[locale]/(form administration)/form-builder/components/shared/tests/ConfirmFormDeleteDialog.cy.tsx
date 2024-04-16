@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { ConfirmFormDeleteDialog } from "../ConfirmFormDeleteDialog";
-import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
 
 describe("<ConfirmFormDeleteDialog />", () => {
   it("shows unprocessed screen", () => {
@@ -16,14 +15,12 @@ describe("<ConfirmFormDeleteDialog />", () => {
     });
 
     cy.mount(
-      <TemplateStoreProvider>
-        <ConfirmFormDeleteDialog
-          formId="123"
-          handleConfirm={handleConfirmSpy}
-          handleClose={handleCloseSpy}
-          isPublished={false}
-        />
-      </TemplateStoreProvider>
+      <ConfirmFormDeleteDialog
+        formId="123"
+        handleConfirm={handleConfirmSpy}
+        handleClose={handleCloseSpy}
+        isPublished={false}
+      />
     );
 
     cy.get("h2").contains("Sign off on the removal of responses before deleting form");
@@ -43,14 +40,12 @@ describe("<ConfirmFormDeleteDialog />", () => {
     });
 
     cy.mount(
-      <TemplateStoreProvider>
-        <ConfirmFormDeleteDialog
-          formId="456"
-          handleConfirm={handleConfirmSpy}
-          handleClose={handleCloseSpy}
-          isPublished={false}
-        />
-      </TemplateStoreProvider>
+      <ConfirmFormDeleteDialog
+        formId="456"
+        handleConfirm={handleConfirmSpy}
+        handleClose={handleCloseSpy}
+        isPublished={false}
+      />
     );
 
     cy.get("h2").contains("Delete this form?");
@@ -70,14 +65,12 @@ describe("<ConfirmFormDeleteDialog />", () => {
     });
 
     cy.mount(
-      <TemplateStoreProvider>
-        <ConfirmFormDeleteDialog
-          formId="456"
-          handleConfirm={handleConfirmSpy}
-          handleClose={handleCloseSpy}
-          isPublished={false}
-        />
-      </TemplateStoreProvider>
+      <ConfirmFormDeleteDialog
+        formId="456"
+        handleConfirm={handleConfirmSpy}
+        handleClose={handleCloseSpy}
+        isPublished={false}
+      />
     );
 
     cy.get("h2").contains("Delete this form?");
@@ -100,14 +93,12 @@ describe("<ConfirmFormDeleteDialog />", () => {
     });
 
     cy.mount(
-      <TemplateStoreProvider>
-        <ConfirmFormDeleteDialog
-          formId="789"
-          handleConfirm={handleConfirmSpy}
-          handleClose={handleCloseSpy}
-          isPublished={false}
-        />
-      </TemplateStoreProvider>
+      <ConfirmFormDeleteDialog
+        formId="789"
+        handleConfirm={handleConfirmSpy}
+        handleClose={handleCloseSpy}
+        isPublished={false}
+      />
     );
 
     cy.get("p").contains("Something went wrong");

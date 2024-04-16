@@ -5,10 +5,11 @@ import debounce from "lodash.debounce";
 
 import { ExpandingInput } from "@formBuilder/components/shared";
 import { Language } from "@lib/types/form-builder-types";
-import { useTemplateStore } from "@lib/store";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 import { cleanInput } from "@lib/utils/form-builder";
 import { useRefsContext } from "../../RefsContext";
+import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 
 export const QuestionInput = ({
   index,
@@ -25,6 +26,8 @@ export const QuestionInput = ({
 }) => {
   const { t } = useTranslation("form-builder");
   const [value, setValue] = useState(initialValue);
+
+  const { treeView } = useTreeRef();
 
   const { refs } = useRefsContext();
   const getRef = (element: HTMLTextAreaElement) => {
@@ -88,6 +91,7 @@ export const QuestionInput = ({
       describedBy={describedById ?? undefined}
       onBlur={() => {
         updateValue(id, cleanInput(value));
+        treeView?.current?.updateItem(String(id), cleanInput(value));
       }}
       onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateValue(id, e.target.value)}
       {...getLocalizationAttribute()}

@@ -10,7 +10,9 @@ import { RightPanelOpen, RoundCloseIcon } from "@serverComponents/icons";
 import { cn } from "@lib/utils";
 import { useActivePathname } from "@lib/hooks/form-builder";
 import { DownloadCSV } from "@formBuilder/[id]/edit/translate/components/DownloadCSV";
-import { useRehydrate } from "@lib/hooks/form-builder";
+import { useTreeRef } from "./treeview/provider/TreeRefProvider";
+import { TreeView } from "./treeview/TreeView";
+import { useRehydrate } from "@lib/store/useTemplateStore";
 
 const TabButton = ({
   text,
@@ -46,6 +48,7 @@ export const RightPanel = ({ id }: { id: string }) => {
   const router = useRouter();
   const { t, i18n } = useTranslation("form-builder");
   const { activePathname } = useActivePathname();
+  const { treeView } = useTreeRef();
 
   const hasHydrated = useRehydrate();
 
@@ -170,8 +173,9 @@ export const RightPanel = ({ id }: { id: string }) => {
                     </Tab.List>
                     <Tab.Panels>
                       <Tab.Panel>
-                        {/* Removing for now */}
-                        {/* <TreeView /> */}
+                        <div className="m-0 mt-1 w-full border-t-1 border-slate-200 p-0">
+                          <TreeView ref={treeView} addItem={() => {}} updateItem={() => {}} />
+                        </div>
                       </Tab.Panel>
                       <Tab.Panel>
                         <DownloadCSV />

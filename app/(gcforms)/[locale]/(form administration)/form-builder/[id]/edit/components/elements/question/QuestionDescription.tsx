@@ -1,5 +1,5 @@
 "use client";
-import { useTemplateStore } from "@lib/store";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { FormElementWithIndex, LocalizedElementProperties } from "@lib/types/form-builder-types";
 import React from "react";
 

@@ -4,7 +4,7 @@ import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 import { FormElement } from "@lib/types";
 import { Button } from "@clientComponents/globals";
-import { useTemplateStore } from "@lib/store";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { LocalizedFormProperties, LocalizedElementProperties } from "@lib/types/form-builder-types";
 
 type Choice = {
