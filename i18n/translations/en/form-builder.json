@@ -486,11 +486,21 @@
     "readyForInternalUse": "Ready for internal use",
     "sharingForFeedback": "Sharing for feedback or approval",
     "other": "Other",
-    "text2": "Tell us about your form",
-    "whatType": "What type of form is it?",
-    "briefDesc": "Provide a brief description of the form and it's use.",
-    "thisInformation": "This information will be used to help us understand how GC Forms is being used so we can better serve your needs.",
-    "helpsUnderstand": "This helps us understand who forms are intended for."
+    "text2": "Tell us more about your form",
+    "whatType": "Type of form",
+    "briefDesc": "Description of the form and its use",
+    "thisInformation": "This help us understand how GC Forms is used, so we can better serve your needs.",
+    "helpsUnderstand": "This helps us understand who forms are intended for.",
+    "formtypes": {
+      "Application": "Application",
+      "Consent": "Consent",
+      "Declaration": "Declaration",
+      "Feedback": "Feedback",
+      "Registration": "Registration",
+      "Request": "Request",
+      "Survey": "Survey",
+      "Other": "Other"
+    }
   },
   "question": "Question",
   "questions": "Questions",

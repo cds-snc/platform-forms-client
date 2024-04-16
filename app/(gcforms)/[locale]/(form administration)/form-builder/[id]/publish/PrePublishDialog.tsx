@@ -1,8 +1,9 @@
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef, Radio, TextArea } from "@formBuilder/components/shared";
-import { useState } from "react";
+import React, { useState } from "react";
 import { UpdateSalesforceRecords } from "./PrePublishActions";
+import Select from "react-select";
 
 export const PrePublishDialog = ({
   handleClose,
@@ -28,6 +29,21 @@ export const PrePublishDialog = ({
   async function onDescriptionChange() {
     //TODO : store the value so it updates on the final dialog state
   }
+
+  async function onFormTypeChange() {
+    //TODO : store the value so it updates on the final dialog state
+  }
+
+  const elementOptions = [
+    { label: t("prePublishFormDialog.formtypes.Application"), value: "Application" },
+    { label: t("prePublishFormDialog.formtypes.Consent"), value: "Consent" },
+    { label: t("prePublishFormDialog.formtypes.Declaration"), value: "Declaration" },
+    { label: t("prePublishFormDialog.formtypes.Feedback"), value: "Feedback" },
+    { label: t("prePublishFormDialog.formtypes.Registration"), value: "Registration" },
+    { label: t("prePublishFormDialog.formtypes.Request"), value: "Request" },
+    { label: t("prePublishFormDialog.formtypes.Survey"), value: "Survey" },
+    { label: t("prePublishFormDialog.formtypes.Other"), value: "Other" },
+  ];
 
   const actions = (
     <div className="flex gap-4">
@@ -97,10 +113,12 @@ export const PrePublishDialog = ({
           handleClose={handleClose}
         >
           <div className="my-8 mx-5 flex flex-col gap-4">
-            <h3>{t("prePublishFormDialog.text2")}</h3>
-            <p>{t("prePublishFormDialog.thisInformation")}</p>
+            <h3 className="gc-h4 mb-1 pb-0 text-lg">{t("prePublishFormDialog.text2")}</h3>
+            <p className="text-sm">{t("prePublishFormDialog.thisInformation")}</p>
             <label>{t("prePublishFormDialog.whatType")}</label>
-            <p></p>
+            <p>
+              <Select options={elementOptions} onChange={onFormTypeChange} />
+            </p>
             <label>{t("prePublishFormDialog.briefDesc")}</label>
             <p>
               <TextArea id="txtDescription" className="w-11/12" onChange={onDescriptionChange} />
