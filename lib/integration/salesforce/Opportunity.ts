@@ -24,22 +24,30 @@ export class Opportunity {
   // Type is the "Type" field hardcoded to "New Business", as a dropdown in Salesforce
   // CDS_Lead_Team__c is the "Lead Team" field hardcoded to "Platform", as a dropdown in Salesforce
   // Product_to_Add__c is the "Product" field hardcoded to "GC Forms", as a dropdown in Salesforce
+  description: string; // description of the form from GC-Forms
+  formType: string; // form type from GC-Forms
 
   constructor({
     departmentId,
     formName,
     contactId,
     recordType,
+    description,
+    formType,
   }: {
     departmentId: string;
     formName: string;
     contactId: string;
     recordType: string;
+    description: string;
+    formType: string;
   }) {
     this.departmentId = departmentId;
     this.formName = formName;
     this.contactId = contactId;
     this.recordType = recordType;
+    this.description = description;
+    this.formType = formType;
   }
 
   public toJSON(): object {
@@ -53,8 +61,7 @@ export class Opportunity {
       CDS_Lead_Team__c: "Platform",
       Product_to_Add__c: "GC Forms",
       RecordTypeId: this.recordType,
+      Description: this.description,
     };
   }
 }
-
-//todo : Have to add "product"

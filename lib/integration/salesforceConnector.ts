@@ -125,7 +125,9 @@ export class SalesforceConnector {
     contactFirstName: string,
     contactLastName: string,
     contactEmail: string,
-    contactInternalId: string
+    contactInternalId: string,
+    description: string,
+    formType: string
   ): Promise<object> {
     const departmentId = await this.GetAccountByName(departmentName);
     const contactId = await this.GetOrCreateContact(
@@ -141,6 +143,8 @@ export class SalesforceConnector {
       formName: formName,
       contactId: contactId,
       recordType: recordTypeId,
+      description: description,
+      formType: formType,
     });
 
     const newOpportunityId = await this.CreateOpportunity(opportunity);

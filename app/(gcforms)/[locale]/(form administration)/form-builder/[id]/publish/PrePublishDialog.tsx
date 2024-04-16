@@ -3,7 +3,7 @@ import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef, Radio, TextArea } from "@formBuilder/components/shared";
 import React, { useState } from "react";
 import { UpdateSalesforceRecords } from "./PrePublishActions";
-import Select from "react-select";
+import Select, { SingleValue } from "react-select";
 
 export const PrePublishDialog = ({
   handleClose,
@@ -16,22 +16,31 @@ export const PrePublishDialog = ({
   const dialog = useDialogRef();
 
   const [prePublishStep, setPrePublishStep] = useState(0);
+  const [formType, setFormType] = useState("Application");
+  const [description, setDescription] = useState("");
+  const [reasonForPublish, setReasonForPublish] = useState("");
 
   async function ContinuePublishSteps() {
     if (prePublishStep == 0) {
       setPrePublishStep(1);
     } else {
-      UpdateSalesforceRecords();
+      UpdateSalesforceRecords(formType, description, reasonForPublish);
       handleConfirm();
     }
   }
 
-  async function onDescriptionChange() {
-    //TODO : store the value so it updates on the final dialog state
+  async function onDescriptionChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
+    setDescription(event.target.value);
   }
 
-  async function onFormTypeChange() {
-    //TODO : store the value so it updates on the final dialog state
+  async function onFormTypeChange(event: SingleValue<{ label: string; value: string }>) {
+    if (event != null) {
+      setFormType(event.value);
+    }
+  }
+
+  async function onReasonForPublishChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setReasonForPublish(event.target.value);
   }
 
   const elementOptions = [
@@ -77,24 +86,28 @@ export const PrePublishDialog = ({
             <p className="text-sm">{t("prePublishFormDialog.helpsUnderstand")}</p>
             <span>
               <Radio
+                onChange={onReasonForPublishChange}
                 id="public-use"
                 name="reason-for-publish"
                 value="public-use"
                 label={t("prePublishFormDialog.readyForPublicUse")}
               />
               <Radio
+                onChange={onReasonForPublishChange}
                 id="internal-use"
                 name="reason-for-publish"
                 value="internal-use"
                 label={t("prePublishFormDialog.readyForInternalUse")}
               />
               <Radio
+                onChange={onReasonForPublishChange}
                 id="feedback-use"
                 name="reason-for-publish"
                 value="feedback-use"
                 label={t("prePublishFormDialog.sharingForFeedback")}
               />
               <Radio
+                onChange={onReasonForPublishChange}
                 id="other-use"
                 name="reason-for-publish"
                 value="other-use"
@@ -120,7 +133,7 @@ export const PrePublishDialog = ({
               <Select
                 className="gc-dropdown"
                 options={elementOptions}
-                onChange={onFormTypeChange}
+                onChange={(e) => onFormTypeChange(e)}
               />
             </div>
             <label>{t("prePublishFormDialog.briefDesc")}</label>
