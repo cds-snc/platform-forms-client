@@ -1,6 +1,6 @@
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
-import { Dialog, useDialogRef, Radio } from "@formBuilder/components/shared";
+import { Dialog, useDialogRef, Radio, TextArea } from "@formBuilder/components/shared";
 import { useState } from "react";
 import { UpdateSalesforceRecords } from "./PrePublishActions";
 
@@ -23,6 +23,10 @@ export const PrePublishDialog = ({
       UpdateSalesforceRecords();
       handleConfirm();
     }
+  }
+
+  async function onDescriptionChange() {
+    //TODO : store the value so it updates on the final dialog state
   }
 
   const actions = (
@@ -92,8 +96,14 @@ export const PrePublishDialog = ({
           handleClose={handleClose}
         >
           <div className="my-8 mx-5 flex flex-col gap-4">
-            <p>{t("prePublishFormDialog.text2")}</p>
+            <h3>{t("prePublishFormDialog.text2")}</h3>
+            <p>{t("prePublishFormDialog.thisInformation")}</p>
+            <label>{t("prePublishFormDialog.whatType")}</label>
             <p></p>
+            <label>{t("prePublishFormDialog.briefDesc")}</label>
+            <p>
+              <TextArea id="txtDescription" className="w-11/12" onChange={onDescriptionChange} />
+            </p>
           </div>
         </Dialog>
       )}
