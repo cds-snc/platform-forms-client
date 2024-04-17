@@ -13,13 +13,13 @@ export const GroupNode = (node: NodeProps) => {
 
       <div
         id={node.id}
-        className="rounded-md border-1 border-violet-800 bg-gray-200 p-4 text-white"
+        className="space-y-2 rounded-md border-1 border-violet-800 bg-gray-200 p-4 text-white"
       >
         {node.data.children.map((child: TreeItem) => {
           return (
             <div
               key={child.index}
-              className="mb-2 flex w-[100%] min-w-[200px] rounded-sm bg-white p-1 text-sm text-slate-600"
+              className="flex w-[100%] min-w-[200px] rounded-sm bg-white p-1 text-sm text-slate-600"
             >
               {child.data}
             </div>
