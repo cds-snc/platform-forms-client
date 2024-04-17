@@ -31,7 +31,7 @@ export default async function Layout({
 
   const formID = id || null;
 
-  const showRightPanel = await allowGrouping();
+  const allowGroupsFlag = await allowGrouping();
 
   if (session && formID) {
     try {
@@ -56,7 +56,7 @@ export default async function Layout({
   }
 
   return (
-    <TemplateStoreProvider {...{ ...initialForm, locale }}>
+    <TemplateStoreProvider {...{ ...initialForm, locale, allowGroupsFlag }}>
       <SaveTemplateProvider>
         <RefStoreProvider>
           <div className={`flex h-full flex-col`}>
@@ -77,7 +77,7 @@ export default async function Layout({
                     <main id="content" className="form-builder my-7 w-full">
                       {children}
                     </main>
-                    {showRightPanel && <RightPanel id={id} />}
+                    {allowGroupsFlag && <RightPanel id={id} />}
                   </GroupStoreProvider>
                 </div>
               </div>
