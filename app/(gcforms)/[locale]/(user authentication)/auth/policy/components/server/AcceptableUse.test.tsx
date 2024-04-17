@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 // import AcceptableUseTerms from "./AcceptableUse";
-const AcceptableUseTerms = () => <>AcceptableUseTerms</>;
+const AcceptableUseTerms = ({ locale }: { locale: string }) => <>{locale} AcceptableUseTerms</>;
 import { useSession } from "next-auth/react";
 import { Session } from "next-auth";
 
