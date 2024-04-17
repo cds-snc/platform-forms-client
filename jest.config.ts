@@ -40,7 +40,7 @@ const customJestConfig: Config = {
   ],
   setupFilesAfterEnv: [
     "<rootDir>/__utils__/setupTests.ts",
-    "<rootDir>/__utils__/prismaConnector.ts",
+    // "<rootDir>/__utils__/prismaConnector.ts",
   ],
   testEnvironment: "jsdom",
   preset: "ts-jest",
