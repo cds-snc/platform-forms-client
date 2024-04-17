@@ -2,8 +2,10 @@
 
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import React from "react";
-import ReactFlow, { Edge, Position, Background, Controls } from "reactflow";
+import ReactFlow, { Edge, Background, Controls } from "reactflow";
 import "reactflow/dist/style.css";
+import { TreeItem } from "react-complex-tree";
+import { GroupNode } from "./GroupNode";
 
 export const Flow = () => {
   const { getGroups } = useGroupStore((s) => {
@@ -12,6 +14,7 @@ export const Flow = () => {
     };
   });
 
+  const nodeTypes = { groupNode: GroupNode };
   const groups = getGroups();
   const children = groups.root.children;
 
@@ -29,25 +32,35 @@ export const Flow = () => {
     const group = groups[key];
     const id = group.index as string;
 
-    const connectPosition =
-      id === "start"
-        ? {
-            sourcePosition: Position.Right,
-            targetPosition: Position.Right,
-          }
-        : {
-            sourcePosition: Position.Right,
-            targetPosition: Position.Left,
-          };
+    let elements: TreeItem[] = [];
+
+    if (group.children && group.children.length > 0) {
+      elements = group.children.map((childId) => {
+        return groups[childId];
+      });
+    } else {
+      if (key === "start") {
+        elements = [
+          {
+            data: "Inroduction",
+            index: "start",
+          },
+          {
+            data: "Privacy Policy",
+            index: "privacy",
+          },
+        ];
+      }
+    }
 
     const obj = {
       id,
       position: { x: x_pos, y: y_pos },
-      data: { label: group.data },
-      ...connectPosition,
+      data: { label: group.data, children: elements },
+      type: "groupNode",
     };
 
-    x_pos += 200;
+    x_pos += 275;
 
     if (prevNodeId) {
       edges.push({
@@ -63,24 +76,33 @@ export const Flow = () => {
     return obj;
   });
 
+  // Add confirmation node
   nodes.push({
-    id: "10000",
+    id: "end",
     position: { x: x_pos, y: y_pos },
-    data: { label: "confirmation" },
-    targetPosition: Position.Left,
-    sourcePosition: Position.Left,
+    data: {
+      label: "End",
+      children: [
+        {
+          data: "Confirmation",
+          index: "end",
+        },
+      ],
+    },
+    type: "groupNode",
   });
 
+  // Add edge from last group to confirmation node
   edges.push({
-    id: `e-${prevNodeId}-10000`,
+    id: `e-${prevNodeId}-end`,
     source: prevNodeId,
-    target: "10000",
+    target: "end",
     type: "smoothstep",
   });
 
   return (
     <div className="my-10 w-full border-1" style={{ height: "calc(100vh - 300px)" }}>
-      <ReactFlow fitView={true} nodes={nodes} edges={edges}>
+      <ReactFlow fitView={true} nodes={nodes} edges={edges} nodeTypes={nodeTypes}>
         <Background />
         <Controls />
       </ReactFlow>
