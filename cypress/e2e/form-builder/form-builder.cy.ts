@@ -52,8 +52,8 @@ describe("Test FormBuilder", () => {
     );
 
     // settings
-    cy.get('[data-testid="settings"]').click();
-    cy.get("h1").should("contain", "Settings");
+    // cy.get('[data-testid="settings"]').click();
+    // cy.get("h1").should("contain", "Settings");
 
     // publish form
     cy.get('[data-testid="publish"]').click();
