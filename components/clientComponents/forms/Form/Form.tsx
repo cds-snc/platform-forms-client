@@ -3,7 +3,6 @@ import React, { useEffect, useState, useRef } from "react";
 import { FormikProps, withFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage, validateOnSubmit } from "@lib/validation/validation";
-import { useFormTimer } from "@lib/hooks";
 import { Alert, Button, RichText } from "@clientComponents/forms";
 import { logMessage } from "@lib/logger";
 import { useTranslation } from "@i18n/client";
@@ -13,8 +12,9 @@ import Loader from "../../globals/Loader";
 import classNames from "classnames";
 import { Responses, PublicFormRecord, Validate } from "@lib/types";
 import { ErrorStatus } from "../Alert/Alert";
-import { useFormValuesChanged } from "@lib/hooks";
 import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
+import useFormTimer from "@lib/hooks/useFormTimer";
+import { useFormValuesChanged } from "@lib/hooks/useValueChanged";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;

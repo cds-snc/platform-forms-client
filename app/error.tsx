@@ -1,5 +1,6 @@
 "use client";
-import { Button, ErrorPanel } from "@clientComponents/globals";
+import { Button } from "@clientComponents/globals";
+import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
 import { logMessage } from "@lib/logger";
 import { useEffect } from "react";
 

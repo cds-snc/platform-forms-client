@@ -3,7 +3,7 @@ import React, { useCallback, useState, useMemo } from "react";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
 import { Button } from "@clientComponents/globals";
-import { useTemplateStore } from "@lib/store";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useDialogRef, Dialog, Radio } from "@formBuilder/components/shared";
 import { Logos, options } from "../../../settings/branding/components";
 import Brand from "@clientComponents/globals/Brand";

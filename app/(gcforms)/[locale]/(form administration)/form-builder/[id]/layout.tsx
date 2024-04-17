@@ -1,17 +1,18 @@
 import { auth } from "@lib/auth";
 import { LeftNavigation } from "./components/LeftNavigation";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
-import { SkipLink, Footer, Header } from "@clientComponents/globals";
+import { SkipLink, Footer } from "@clientComponents/globals";
+import { Header } from "@clientComponents/globals/Header/Header";
 import { FormRecord } from "@lib/types";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { getFullTemplateByID } from "@lib/templates";
 import { redirect } from "next/navigation";
-import { TemplateStoreProvider } from "@lib/store";
 import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext";
 import { RefStoreProvider } from "@lib/hooks/form-builder/useRefStore";
 import { RightPanel } from "@formBuilder/components/shared/right-panel/RightPanel";
-import { GroupStoreProvider } from "@formBuilder/components/shared/right-panel/treeview/store";
-import { checkFlag } from "@formBuilder/actions";
+import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
+import { GroupStoreProvider } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
 
 export default async function Layout({
   children,
@@ -30,7 +31,7 @@ export default async function Layout({
 
   const formID = id || null;
 
-  const showRightPanel = await checkFlag("conditionalLogic");
+  const showRightPanel = await allowGrouping();
 
   if (session && formID) {
     try {

@@ -1,6 +1,6 @@
 import React from "react";
 import { serverTranslation } from "@i18n";
-import { ErrorPanel } from "@clientComponents/globals";
+import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
 import { Metadata } from "next";
 import { auth } from "@lib/auth";
 import { redirect } from "next/navigation";

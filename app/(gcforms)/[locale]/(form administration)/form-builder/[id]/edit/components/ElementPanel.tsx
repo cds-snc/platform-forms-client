@@ -1,11 +1,14 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
-import { useTemplateStore } from "@lib/store";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
 import { useIsWithin } from "@lib/hooks/form-builder";
 import { useRefsContext } from "./RefsContext";
 import { FormElementTypes, FormElement } from "@lib/types";
+import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
+import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+
 import { cn } from "@lib/utils";
 import { useHandleAdd } from "@lib/hooks/form-builder/useHandleAdd";
 
@@ -16,9 +19,10 @@ export const ElementPanel = ({
   item: FormElementWithIndex;
   elements: FormElement[];
 }) => {
-  const { getFocusInput, setFocusInput, remove, moveUp, moveDown, duplicateElement } =
+  const { getFocusInput, setChangeKey, setFocusInput, remove, moveUp, moveDown, duplicateElement } =
     useTemplateStore((s) => ({
       getFocusInput: s.getFocusInput,
+      setChangeKey: s.setChangeKey,
       setFocusInput: s.setFocusInput,
       remove: s.remove,
       moveUp: s.moveUp,
@@ -28,7 +32,9 @@ export const ElementPanel = ({
 
   const [className, setClassName] = useState<string>("");
   const [ifFocus, setIfFocus] = useState<boolean>(false);
+  const { treeView } = useTreeRef();
   const { handleAddElement } = useHandleAdd();
+  const groupId = useGroupStore((state) => state.id);
 
   if (ifFocus === false) {
     // Only run this 1 time
@@ -107,7 +113,10 @@ export const ElementPanel = ({
         }}
         handleRemove={() => {
           const previousElement = elements[item.index - 1];
-          remove(item.id);
+          treeView?.current && treeView?.current.removeItem(String(item.id));
+          remove(item.id, groupId);
+
+          setChangeKey(String(new Date().getTime()));
 
           // if index is 0, then highlight the form title
           if (item.index === 0) {

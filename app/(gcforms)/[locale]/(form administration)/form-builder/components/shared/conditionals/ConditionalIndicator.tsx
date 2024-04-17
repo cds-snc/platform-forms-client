@@ -2,7 +2,7 @@
 import React from "react";
 import { useTranslation } from "@i18n/client";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
-import { useTemplateStore } from "@lib/store";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { ConditionalIcon } from "@serverComponents/icons/ConditionalIcon";
 import { getQuestionNumber, sortByLayout } from "@lib/utils/form-builder";
 import { getElementIndexes } from "@lib/utils/form-builder/getPath";

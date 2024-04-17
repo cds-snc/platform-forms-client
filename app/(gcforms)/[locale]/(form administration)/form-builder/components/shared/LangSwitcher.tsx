@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useTranslation } from "@i18n/client";
-import { useTemplateStore } from "@lib/store";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { ToggleLeft, ToggleRight } from "@serverComponents/icons";
 
 interface LangSwitcherProps {

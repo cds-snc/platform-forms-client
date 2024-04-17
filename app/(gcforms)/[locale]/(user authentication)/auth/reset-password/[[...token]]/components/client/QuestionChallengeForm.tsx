@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useFormState } from "react-dom";
 import { TextInput, Label, Alert, ErrorListItem } from "../../../../../components/client/forms";
 import { PasswordResetForm } from "./PasswordResetForm";
-import { LinkButton } from "@serverComponents/globals";
+import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { useTranslation } from "@i18n/client";
 import { ErrorStates, checkQuestionChallenge } from "../../action";
 import Link from "next/link";

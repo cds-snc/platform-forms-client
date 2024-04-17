@@ -1,12 +1,9 @@
 import { serverTranslation } from "@i18n";
-import { LinkButton } from "@serverComponents/globals";
+import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { FocusHeader } from "../../../components/client/FocusHeader";
 
-export const Success = async () => {
-  const {
-    t,
-    i18n: { language },
-  } = await serverTranslation("unlock-publishing");
+export const Success = async ({ lang }: { lang: string }) => {
+  const { t } = await serverTranslation("unlock-publishing", { lang });
   return (
     <>
       <FocusHeader>{t("unlockPublishingSubmitted.title")}</FocusHeader>
@@ -15,7 +12,7 @@ export const Success = async () => {
       <p className="mt-8 font-bold">{t("unlockPublishingSubmitted.whatNext.paragraph2")}</p>
       <p>{t("unlockPublishingSubmitted.whatNext.paragraph3")}</p>
       <p className="mt-8">{t("unlockPublishingSubmitted.whatNext.paragraph4")}</p>
-      <LinkButton.Primary className="mt-8" href={`/${language}/forms/`}>
+      <LinkButton.Primary className="mt-8" href={`/${lang}/forms/`}>
         {t("continue", { ns: "common" })}
       </LinkButton.Primary>
     </>

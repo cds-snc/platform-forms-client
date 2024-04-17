@@ -8,7 +8,7 @@ import {
   ClassificationSelect,
 } from "@formBuilder/components/ClassificationSelect";
 import { Logos, options } from "../../../settings/branding/components";
-import { useTemplateStore } from "@lib/store";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { SettingsModal } from "./SettingsDialog";
 import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 import { updateTemplate, updateTemplateSecurityAttribute } from "@formBuilder/actions";

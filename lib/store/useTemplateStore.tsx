@@ -2,6 +2,7 @@
 import { createStore } from "zustand";
 import { useStoreWithEqualityFn } from "zustand/traditional";
 import { immer } from "zustand/middleware/immer";
+import { original } from "immer";
 import { shallow } from "zustand/shallow";
 import {
   persist,
@@ -12,6 +13,9 @@ import {
 
 import React, { createContext, useRef, useContext, useEffect } from "react";
 import { getPathString } from "../utils/form-builder/getPath";
+import { TreeRefProvider } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
+import { initializeGroups } from "@formBuilder/components/shared/right-panel/treeview/util/initializeGroups";
+import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 
 import {
   moveDown,
@@ -24,6 +28,7 @@ import {
   getSchemaFromState,
   incrementSubElementId,
   cleanInput,
+  removeGroupElement,
 } from "../utils/form-builder";
 import { Language } from "../types/form-builder-types";
 import update from "lodash.set";
@@ -93,6 +98,7 @@ export interface TemplateStoreProps {
   deliveryOption?: DeliveryOption;
   securityAttribute: SecurityAttribute;
   closingDate?: string | null;
+  changeKey: string;
 }
 
 export interface InitialTemplateStoreProps extends TemplateStoreProps {
@@ -121,14 +127,19 @@ export interface TemplateStoreState extends TemplateStoreProps {
   setTranslationLanguagePriority: (lang: Language) => void;
   setFocusInput: (isSet: boolean) => void;
   getLocalizationAttribute: () => Record<"lang", Language> | undefined;
-  add: (elIndex?: number, type?: FormElementTypes, data?: FormElement, groupId?: string) => void;
+  add: (
+    elIndex?: number,
+    type?: FormElementTypes,
+    data?: FormElement,
+    groupId?: string
+  ) => Promise<number>;
   addSubItem: (
     elIndex: number,
     subIndex?: number,
     type?: FormElementTypes,
     data?: FormElement
   ) => void;
-  remove: (id: number) => void;
+  remove: (id: number, groupId?: string) => void;
   removeSubItem: (elIndex: number, id: number) => void;
   addChoice: (elIndex: number) => void;
   addSubChoice: (elIndex: number, subIndex: number) => void;
@@ -155,6 +166,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   setClosingDate: (closingDate: string | null) => void;
   initialize: (language?: string) => void;
   removeChoiceFromRules: (elIndex: number, choiceIndex: number) => void;
+  setChangeKey: (key: string) => void;
 }
 
 /* Note: "async" getItem is intentional here to work-around a hydration issue   */
@@ -184,6 +196,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
     name: "",
     securityAttribute: "Protected A",
     closingDate: initProps?.closingDate,
+    changeKey: String(new Date().getTime()),
   };
 
   // Ensure any required properties by Form Builder are defaulted by defaultForm
@@ -201,6 +214,11 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
           (set, get) => ({
             ...DEFAULT_PROPS,
             ...initProps,
+            setChangeKey: (key: string) => {
+              set((state) => {
+                state.changeKey = key;
+              });
+            },
             setHasHydrated: () => {
               set({ hasHydrated: true });
             },
@@ -287,28 +305,33 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                   );
                 }
               }),
-            add: (elIndex = 0, type = FormElementTypes.radio, data, groupId) => {
-              set((state) => {
-                const id = incrementElementId(state.form.elements);
-                const item = {
-                  ...defaultField,
-                  ...data,
-                  id,
-                  type,
-                };
+            add: async (elIndex = 0, type = FormElementTypes.radio, data, groupId) => {
+              const allowGroups = await allowGrouping();
+              return new Promise((resolve) => {
+                set((state) => {
+                  const id = incrementElementId(state.form.elements);
+                  const item = {
+                    ...defaultField,
+                    ...data,
+                    id,
+                    type,
+                  };
 
-                groupId = groupId || ""; // noop
+                  groupId = allowGroups && groupId ? groupId : "";
 
-                // if (groupId) {
-                //   if (!state.form.groups) state.form.groups = {};
-                //   if (!state.form.groups[groupId])
-                //     state.form.groups[groupId] = { name: "", elements: [] };
-                //   state.form.groups &&
-                //     state.form.groups[groupId].elements.splice(elIndex + 1, 0, String(id));
-                // }
+                  if (allowGroups && groupId) {
+                    if (!state.form.groups) state.form.groups = {};
+                    if (!state.form.groups[groupId])
+                      state.form.groups[groupId] = { name: "", elements: [] };
+                    state.form.groups &&
+                      state.form.groups[groupId].elements.splice(elIndex + 1, 0, String(id));
+                  }
 
-                state.form.layout.splice(elIndex + 1, 0, id);
-                state.form.elements.splice(elIndex + 1, 0, item);
+                  state.form.layout.splice(elIndex + 1, 0, id);
+                  state.form.elements.splice(elIndex + 1, 0, item);
+
+                  resolve(id);
+                });
               });
             },
             removeChoiceFromRules: (elIndex: number, choiceIndex: number) => {
@@ -341,11 +364,22 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                   type,
                 });
               }),
-            remove: (elementId) =>
+            remove: async (elementId, groupId = "") => {
+              const allowGroups = await allowGrouping();
               set((state) => {
                 state.form.elements = removeElementById(state.form.elements, elementId);
                 state.form.layout = removeById(state.form.layout, elementId);
-              }),
+
+                if (allowGroups && groupId && state.form.groups) {
+                  const groups = removeGroupElement(
+                    { ...original(state.form.groups) },
+                    groupId,
+                    elementId
+                  );
+                  state.form.groups = { ...groups };
+                }
+              });
+            },
             removeSubItem: (elIndex, elementId) =>
               set((state) => {
                 const subElements = state.form.elements[elIndex].properties?.subElements;
@@ -436,29 +470,32 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.closingDate = value;
               });
             },
-            initialize: (language = "en") => {
+            initialize: async (language = "en") => {
+              const allowGroups = await allowGrouping();
               set((state) => {
                 state.id = "";
                 state.lang = language as Language;
                 state.translationLanguagePriority = language as Language;
-                state.form = defaultForm;
+                state.form = initializeGroups(defaultForm, allowGroups);
                 state.isPublished = false;
                 state.name = "";
                 state.deliveryOption = undefined;
                 state.closingDate = null;
               });
             },
-            importTemplate: (jsonConfig) =>
+            importTemplate: async (jsonConfig) => {
+              const allowGroups = await allowGrouping();
               set((state) => {
                 state.id = "";
                 state.lang = "en";
-                state.form = { ...defaultForm, ...jsonConfig };
+                state.form = initializeGroups({ ...defaultForm, ...jsonConfig }, allowGroups);
                 state.isPublished = false;
                 state.name = "";
                 state.securityAttribute = "Protected A";
                 state.deliveryOption = undefined;
                 state.closingDate = null;
-              }),
+              });
+            },
           }),
           {
             name: "form-storage",
@@ -497,7 +534,7 @@ export const TemplateStoreProvider = ({
 
   return (
     <TemplateStoreContext.Provider value={storeRef.current}>
-      {children}
+      <TreeRefProvider>{children}</TreeRefProvider>
     </TemplateStoreContext.Provider>
   );
 };

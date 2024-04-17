@@ -1,11 +1,12 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { cn } from "@lib/utils";
-import { Header } from "@clientComponents/globals";
-import { SkipLink, Footer } from "@serverComponents/globals";
+import { Header } from "@clientComponents/globals/Header/Header";
 import { Start } from "./Start";
-import { TemplateStoreProvider } from "@lib/store";
 import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext";
+import { SkipLink } from "@serverComponents/globals/SkipLink";
+import { Footer } from "@serverComponents/globals/Footer";
+import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
 
 export async function generateMetadata({
   params: { locale },
