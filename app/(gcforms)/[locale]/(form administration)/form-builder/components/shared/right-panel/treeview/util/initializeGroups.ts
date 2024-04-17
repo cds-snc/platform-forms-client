@@ -7,6 +7,10 @@ export const initializeGroups = (form: FormProperties, allowGroups: boolean): Fo
     return form;
   }
 
+  if (!form.groups) {
+    form.groups = {};
+  }
+
   // Check if the form groups is an empty object
   if (form.groups && Object.keys(form.groups).length === 0) {
     // Default the forms groups with a start and an end group
