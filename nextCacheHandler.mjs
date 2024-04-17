@@ -12,8 +12,10 @@ CacheHandler.onCreation(async ({ buildId }) => {
 
   if (process.env.REDIS_URL) {
     // always create a Redis client inside the `onCreation` callback
+    const connectionURL = `redis://${process.env.REDIS_URL}:6379`;
+    console.log(`REDIS Connection URL: ${connectionURL}`);
     const client = createClient({
-      url: `redis://${process.env.REDIS_URL}:6379`,
+      url: connectionURL,
     });
 
     await client.connect();
