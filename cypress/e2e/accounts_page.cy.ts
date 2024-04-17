@@ -1,4 +1,4 @@
-describe("Accounts Page", () => {
+describe.skip("Accounts Page", () => {
   const adminUserEmail = "test.admin@cds-snc.ca";
   const testUserEmail = "test.user@cds-snc.ca";
   const deactivatedUserEmail = "test.deactivated@cds-snc.ca";

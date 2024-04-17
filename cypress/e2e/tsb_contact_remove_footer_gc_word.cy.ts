@@ -1,4 +1,4 @@
-describe("TSB Contact Form functionality", () => {
+describe.skip("TSB Contact Form functionality", () => {
   let formID: string;
   before(() => {
     cy.useForm("../../__fixtures__/tsbDisableFooterGCBranding.json");

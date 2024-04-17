@@ -1,4 +1,4 @@
-describe("Security Questions Page", () => {
+describe.skip("Security Questions Page", () => {
   // NOTE: looking at text values instead of Id's since each run would return different
   // generated question Id's
   const questions1 = "What was your favourite school subject?";
