@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { useTranslation } from "@i18n/client";
 
 import { Button } from "@clientComponents/globals";
-import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { FormElement } from "@lib/types";
 import { NextActionRule } from "@lib/formContext";
 import { NextActionSelector } from "./conditionals/NextActionSelector";
@@ -20,10 +19,6 @@ export const NextActions = ({
 }) => {
   const { t } = useTranslation("form-builder");
   const formId = `form-${Date.now()}`;
-
-  const { elements } = useTemplateStore((s) => ({
-    elements: s.form.elements,
-  }));
 
   if (initialNextActionRules.length == 0) {
     initialNextActionRules.push({ groupId: "start", choiceId: `${item.id}.0` });
@@ -51,6 +46,7 @@ export const NextActions = ({
 
   return (
     <div>
+      <pre>{JSON.stringify(item.properties.titleEn)}</pre>
       <pre>{JSON.stringify(nextActions)}</pre>
       <form
         onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}
@@ -63,7 +59,7 @@ export const NextActions = ({
               <NextActionSelector
                 index={index}
                 key={`${action.choiceId}-${index}`}
-                elements={elements}
+                selectedElement={item}
                 groupId={action.groupId}
                 choiceId={action.choiceId}
                 updateGroupId={updateGroupId}

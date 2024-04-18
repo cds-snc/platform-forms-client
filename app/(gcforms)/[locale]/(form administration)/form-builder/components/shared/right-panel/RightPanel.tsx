@@ -55,6 +55,9 @@ export const RightPanel = ({ id }: { id: string }) => {
   const getElement = useGroupStore((s) => s.getElement);
   const hasHydrated = useRehydrate();
 
+  const selectedElementId = useGroupStore((s) => s.selectedElementId);
+  const item = (selectedElementId && getElement(selectedElementId)) || null;
+
   useEffect(() => {
     if (hasHydrated) {
       setOpen(true);
@@ -102,8 +105,6 @@ export const RightPanel = ({ id }: { id: string }) => {
     // Only show the right panel on the form builder edit and translate pages
     return null;
   }
-
-  const item = getElement(1);
 
   return (
     <div className="relative">

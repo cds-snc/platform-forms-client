@@ -105,7 +105,7 @@ const GroupSelect = ({
 };
 
 export const NextActionSelector = ({
-  elements,
+  selectedElement,
   groupId,
   choiceId,
   index,
@@ -113,7 +113,7 @@ export const NextActionSelector = ({
   updateGroupId,
   removeSelector,
 }: {
-  elements: FormElement[];
+  selectedElement: FormElement | null;
   groupId: string | null;
   choiceId: string | null;
   index: number;
@@ -135,20 +135,12 @@ export const NextActionSelector = ({
     return { label: item.name, value: key };
   });
 
-  const choiceParentQuestion = choiceId?.split(".")[0] || null;
-
-  // The selected element "parent" of the choice
-  const selectedElement = useMemo(
-    () => elements.find((element) => element.id === Number(choiceParentQuestion)),
-    [choiceParentQuestion, elements]
-  );
-
   const choices = useMemo(() => {
     return selectedElement?.properties.choices?.map((choice, index) => {
-      const result = { label: choice[language], value: `${choiceParentQuestion}.${index}` };
+      const result = { label: choice[language], value: `${selectedElement.id}.${index}` };
       return result;
     });
-  }, [selectedElement, choiceParentQuestion, language]);
+  }, [selectedElement, language]);
 
   const handleQuestionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;

@@ -18,6 +18,7 @@ import { TreeItem, TreeItemIndex } from "react-complex-tree";
 
 export interface GroupStoreProps {
   id: string;
+  selectedElementId?: number;
   groups: TreeItems;
   templateStore: TemplateStore;
 }
@@ -25,6 +26,7 @@ export interface GroupStoreProps {
 export interface GroupStoreState extends GroupStoreProps {
   getId: () => string;
   setId: (id: string) => void;
+  setSelectedElementId: (id: number) => void;
   addGroup: (id: string, name: string) => void;
   deleteGroup: (id: string) => void;
   getGroups: () => TreeItems;
@@ -42,6 +44,7 @@ export interface GroupStoreState extends GroupStoreProps {
 const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
   const DEFAULT_PROPS: GroupStoreProps = {
     id: "start",
+    elementId: 0,
     groups: [],
     ...initProps,
   } as GroupStoreProps;
@@ -52,6 +55,10 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
       setId: (id) =>
         set((state) => {
           state.id = id;
+        }),
+      setSelectedElementId: (id) =>
+        set((state) => {
+          state.selectedElementId = id;
         }),
       findParentGroup: (id: string) => {
         return findParentGroup(get().getGroups(), id);
