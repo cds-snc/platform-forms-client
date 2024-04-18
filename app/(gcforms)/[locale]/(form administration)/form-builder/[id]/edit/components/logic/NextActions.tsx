@@ -26,7 +26,7 @@ export const NextActions = ({
   }));
 
   if (initialNextActionRules.length == 0) {
-    initialNextActionRules.push({ groupId: "", choiceId: `${item.id}.0` });
+    initialNextActionRules.push({ groupId: "start", choiceId: `${item.id}.0` });
   }
 
   const [nextActions, setNextActions] = useState(initialNextActionRules);

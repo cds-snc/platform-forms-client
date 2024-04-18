@@ -130,8 +130,9 @@ export const NextActionSelector = ({
   const language = translationLanguagePriority;
 
   const formGroups: GroupsType = useTemplateStore((s) => s.form.groups) || {};
-  const groupItems = Object.values(formGroups).map((item) => {
-    return { label: item.name, value: item.name };
+  const groupItems = Object.keys(formGroups).map((key) => {
+    const item = formGroups[key];
+    return { label: item.name, value: key };
   });
 
   const choiceParentQuestion = choiceId?.split(".")[0] || null;
