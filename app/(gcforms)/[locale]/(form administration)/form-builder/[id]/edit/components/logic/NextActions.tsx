@@ -7,9 +7,9 @@ import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { FormElement } from "@lib/types";
 import { NextActionRule } from "@lib/formContext";
-import { ConditionalSelector } from "./conditionals/ConditionalSelector";
+import { NextActionSelector } from "./conditionals/NextActionSelector";
 
-export const NextActionSelector = ({
+export const NextActions = ({
   item,
   initialNextActionRules,
   descriptionId,
@@ -60,7 +60,7 @@ export const NextActionSelector = ({
         <div className="mb-6" aria-live="polite" aria-relevant="all">
           {nextActions.map((action, index) => {
             return (
-              <ConditionalSelector
+              <NextActionSelector
                 index={index}
                 key={`${action.choiceId}-${index}`}
                 elements={elements}
@@ -83,12 +83,20 @@ export const NextActionSelector = ({
           >
             {t("addConditionalRules.addAnotherRule")}
           </Button>
+          <Button
+            className="ml-4"
+            onClick={() => {
+              alert("Save");
+            }}
+          >
+            Save
+          </Button>
         </div>
       </form>
     </div>
   );
 };
 
-NextActionSelector.propTypes = {
+NextActions.propTypes = {
   item: PropTypes.object,
 };

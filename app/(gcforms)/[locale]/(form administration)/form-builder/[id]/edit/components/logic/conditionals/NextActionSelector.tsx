@@ -80,7 +80,7 @@ const GroupSelect = ({
   return (
     <div className="mb-4">
       <h4 className="mb-2" id={labelId}>
-        Select a section
+        Go to section
       </h4>
       <select
         value={selected || ""}
@@ -104,7 +104,7 @@ const GroupSelect = ({
   );
 };
 
-export const ConditionalSelector = ({
+export const NextActionSelector = ({
   elements,
   groupId,
   choiceId,

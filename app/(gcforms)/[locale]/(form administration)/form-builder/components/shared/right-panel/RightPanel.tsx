@@ -14,7 +14,7 @@ import { useTreeRef } from "./treeview/provider/TreeRefProvider";
 import { TreeView } from "./treeview/TreeView";
 import { useRehydrate } from "@lib/store/useTemplateStore";
 
-import { NextActionSelector } from "@formBuilder/[id]/edit/components/logic/NextActionSelector";
+import { NextActions } from "@formBuilder/[id]/edit/components/logic/NextActions";
 import { useGroupStore } from "./treeview/store/useGroupStore";
 
 const TabButton = ({
@@ -186,8 +186,8 @@ export const RightPanel = ({ id }: { id: string }) => {
                         <DownloadCSV />
                       </Tab.Panel>
                       <Tab.Panel>
-                        <div className="m-0 mt-1 w-full border-t-1 border-slate-200 p-0">
-                          {item && <NextActionSelector item={item} initialNextActionRules={[]} />}
+                        <div className="m-0 mt-1 w-full border-t-1 border-slate-200 p-10">
+                          {item && <NextActions item={item} initialNextActionRules={[]} />}
                         </div>
                       </Tab.Panel>
                     </Tab.Panels>
