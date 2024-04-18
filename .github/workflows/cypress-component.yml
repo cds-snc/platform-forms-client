@@ -5,7 +5,7 @@ on:
 
 jobs:
   cypress-run:
-    name: Cypress
+    name: Cypress Component Tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
