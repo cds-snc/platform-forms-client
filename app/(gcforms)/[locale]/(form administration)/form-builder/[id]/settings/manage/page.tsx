@@ -7,6 +7,7 @@ import { ManageForm } from "./ManageForm";
 import { notFound, redirect } from "next/navigation";
 
 import { Metadata } from "next";
+import { DownloadForm } from "./DownloadForm";
 
 export async function generateMetadata({
   params: { locale },
@@ -68,7 +69,9 @@ export default async function Page({
     if (!id || Array.isArray(id)) notFound();
 
     const templateWithAssociatedUsers = await getTemplateWithAssociatedUsers(ability, id);
-    if (!templateWithAssociatedUsers) notFound();
+    if (!templateWithAssociatedUsers) {
+      return <DownloadForm />;
+    }
 
     const allUsers = (await getUsers(ability)).map((user) => {
       return { id: user.id, name: user.name || "", email: user.email || "" };
