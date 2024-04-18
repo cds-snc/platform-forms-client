@@ -102,7 +102,12 @@ export const Flow = () => {
 
   return (
     <div className="my-10 w-full border-1" style={{ height: "calc(100vh - 300px)" }}>
-      <ReactFlow fitView={true} nodes={nodes} edges={edges} nodeTypes={nodeTypes}>
+      <ReactFlow
+        fitView={true}
+        nodes={nodes}
+        edges={edges}
+        nodeTypes={nodeTypes}
+      >
         <Background />
         <Controls />
       </ReactFlow>
