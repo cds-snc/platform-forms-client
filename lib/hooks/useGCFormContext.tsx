@@ -34,6 +34,8 @@ export const GCFormsProvider = ({
 
   const handleNextAction = () => {
     if (!currentGroup) return;
+
+    // @todo add a test for this
     if (hasNextAction(currentGroup)) {
       let nextAction = groups[currentGroup].nextAction || "";
 
@@ -54,7 +56,10 @@ export const GCFormsProvider = ({
           }
         });
       }
-      setCurrentGroup(nextAction);
+
+      if (typeof nextAction === "string") {
+        setCurrentGroup(nextAction);
+      }
     }
   };
 
