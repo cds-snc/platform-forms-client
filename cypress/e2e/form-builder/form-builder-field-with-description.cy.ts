@@ -1,7 +1,7 @@
 describe("Form builder description text", () => {
   beforeEach(() => {
-    cy.login({ acceptableUse: true });
-    cy.visitPage("/en/form-builder/edit");
+    // cy.login({ acceptableUse: true });
+    cy.visitPage("/en/form-builder/0000/edit");
   });
 
   it("Renders date element with example text", () => {

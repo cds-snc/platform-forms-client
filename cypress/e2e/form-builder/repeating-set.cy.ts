@@ -1,5 +1,5 @@
 // skipping this test until we re-look at this feature
-describe("Test FormBuilder Repeating set", () => {
+describe.skip("Test FormBuilder Repeating set", () => {
   beforeEach(() => {
     cy.useFlag("experimentalBlocks", true);
     cy.login({ acceptableUse: true });
