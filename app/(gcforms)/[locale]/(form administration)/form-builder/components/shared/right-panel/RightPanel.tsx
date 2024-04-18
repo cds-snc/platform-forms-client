@@ -14,6 +14,9 @@ import { useTreeRef } from "./treeview/provider/TreeRefProvider";
 import { TreeView } from "./treeview/TreeView";
 import { useRehydrate } from "@lib/store/useTemplateStore";
 
+import { NextActionSelector } from "@formBuilder/[id]/edit/components/logic/NextActionSelector";
+import { useGroupStore } from "./treeview/store/useGroupStore";
+
 const TabButton = ({
   text,
   onClick,
@@ -49,7 +52,7 @@ export const RightPanel = ({ id }: { id: string }) => {
   const { t, i18n } = useTranslation("form-builder");
   const { activePathname } = useActivePathname();
   const { treeView } = useTreeRef();
-
+  const getElement = useGroupStore((s) => s.getElement);
   const hasHydrated = useRehydrate();
 
   useEffect(() => {
@@ -99,6 +102,8 @@ export const RightPanel = ({ id }: { id: string }) => {
     // Only show the right panel on the form builder edit and translate pages
     return null;
   }
+
+  const item = getElement(1);
 
   return (
     <div className="relative">
@@ -180,7 +185,11 @@ export const RightPanel = ({ id }: { id: string }) => {
                       <Tab.Panel>
                         <DownloadCSV />
                       </Tab.Panel>
-                      <Tab.Panel>{t("logic.heading")}</Tab.Panel>
+                      <Tab.Panel>
+                        <div className="m-0 mt-1 w-full border-t-1 border-slate-200 p-0">
+                          {item && <NextActionSelector item={item} initialChoiceRules={[]} />}
+                        </div>
+                      </Tab.Panel>
                     </Tab.Panels>
                   </Tab.Group>
                   {/* --> */}
