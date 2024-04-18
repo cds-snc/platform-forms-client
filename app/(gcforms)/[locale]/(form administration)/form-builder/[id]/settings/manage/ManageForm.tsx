@@ -12,11 +12,11 @@ interface User {
 }
 
 interface ManageFormProps {
+  canManageOwnership: boolean;
+  canSetClosingDate: boolean;
   formRecord?: FormRecord;
   usersAssignedToFormRecord?: User[];
   allUsers?: User[];
-  canManageOwnership: boolean;
-  canSetClosingDate: boolean;
   id: string;
 }
 
@@ -40,7 +40,7 @@ export const ManageForm = (props: ManageFormProps) => {
   }
 
   if (!formRecord || !usersAssignedToFormRecord || !allUsers) {
-    throw new Error("Something went wrong");
+    return <>There has been an error.</>; // @TODO: how to handle better?
   }
 
   return (
