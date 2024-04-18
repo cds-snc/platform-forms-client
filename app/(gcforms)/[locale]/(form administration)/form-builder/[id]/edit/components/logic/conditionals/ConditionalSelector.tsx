@@ -106,19 +106,19 @@ const GroupSelect = ({
 
 export const ConditionalSelector = ({
   elements,
-  elementId,
+  groupId,
   choiceId,
   index,
   updateChoiceId,
-  updateElementId,
+  updateGroupId,
   removeSelector,
 }: {
   elements: FormElement[];
-  elementId: string | null;
+  groupId: string | null;
   choiceId: string | null;
   index: number;
   updateChoiceId: (index: number, id: string) => void;
-  updateElementId: (index: number, id: string) => void;
+  updateGroupId: (index: number, id: string) => void;
   removeSelector: (index: number) => void;
 }) => {
   const { t } = useTranslation("form-builder");
@@ -151,7 +151,7 @@ export const ConditionalSelector = ({
 
   const handleQuestionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
-    updateElementId(index, value);
+    updateGroupId(index, value);
   };
 
   const handleChoiceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -171,7 +171,7 @@ export const ConditionalSelector = ({
             <ChoiceSelect selected={choiceId} choices={choices} onChange={handleChoiceChange} />
           </div>
           <div className="mb-4">
-            <GroupSelect selected={elementId} groups={groupItems} onChange={handleQuestionChange} />
+            <GroupSelect selected={groupId} groups={groupItems} onChange={handleQuestionChange} />
           </div>
           <Button className="mb-8 inline-block" theme="link" onClick={handleRemove}>
             {t("addConditionalRules.removeRule")}

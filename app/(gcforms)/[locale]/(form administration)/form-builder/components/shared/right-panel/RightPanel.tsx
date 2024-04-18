@@ -187,7 +187,7 @@ export const RightPanel = ({ id }: { id: string }) => {
                       </Tab.Panel>
                       <Tab.Panel>
                         <div className="m-0 mt-1 w-full border-t-1 border-slate-200 p-0">
-                          {item && <NextActionSelector item={item} initialChoiceRules={[]} />}
+                          {item && <NextActionSelector item={item} initialNextActionRules={[]} />}
                         </div>
                       </Tab.Panel>
                     </Tab.Panels>
