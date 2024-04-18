@@ -18,7 +18,7 @@ export async function generateMetadata({
   };
 }
 
-const _getSessionAndAbility = async () => {
+const getSessionAndAbility = async () => {
   const session = await auth();
 
   const ability = session && createAbility(session);
@@ -26,7 +26,7 @@ const _getSessionAndAbility = async () => {
   return { session, ability };
 };
 
-const _getCanManageOwnership = (ability: UserAbility | null) => {
+const getCanManageOwnership = (ability: UserAbility | null) => {
   if (!ability) {
     return false;
   }
@@ -51,9 +51,18 @@ const _getCanManageOwnership = (ability: UserAbility | null) => {
   ]);
 };
 
+const getAllUsers = async (ability: UserAbility) => {
+  const users = await getUsers(ability);
+  return users.map((user) => ({
+    id: user.id,
+    name: user.name || "",
+    email: user.email || "",
+  }));
+};
+
 export default async function Page({ params: { id } }: { params: { id: string } }) {
-  const { session, ability } = await _getSessionAndAbility();
-  const canManageOwnership = _getCanManageOwnership(ability);
+  const { session, ability } = await getSessionAndAbility();
+  const canManageOwnership = getCanManageOwnership(ability);
   const canSetClosingDate = (session && id !== "0000") || false;
 
   if (!canManageOwnership || id === "0000") {
@@ -67,9 +76,7 @@ export default async function Page({ params: { id } }: { params: { id: string } 
     throw new Error("Template not found");
   }
 
-  const allUsers = (await getUsers(ability)).map((user) => {
-    return { id: user.id, name: user.name || "", email: user.email || "" };
-  });
+  const allUsers = await getAllUsers(ability);
 
   return (
     <ManageForm
