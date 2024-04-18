@@ -4,10 +4,8 @@ import { auth } from "@lib/auth";
 import { checkPrivilegesAsBoolean, createAbility } from "@lib/privileges";
 import { getUsers } from "@lib/users";
 import { ManageForm } from "./ManageForm";
-import { notFound, redirect } from "next/navigation";
-
 import { Metadata } from "next";
-import { DownloadForm } from "./DownloadForm";
+import { UserAbility } from "@lib/types";
 
 export async function generateMetadata({
   params: { locale },
@@ -20,72 +18,67 @@ export async function generateMetadata({
   };
 }
 
-/*
-@todo re enable back button
-const BackToManageForms = async ({ backLink }: { backLink: string }) => {
-  const { t } = await serverTranslation("admin-users");
-
-  if (!backLink) return null;
-
-  return (
-    <div className="mb-10">
-      <BackLink href={`/admin/accounts/${backLink}/manage-forms`}>
-        {t("backToManageForms")}
-      </BackLink>
-    </div>
-  );
-};
-*/
-
-export default async function Page({
-  params: { id, locale },
-}: {
-  params: { id: string; locale: string };
-}) {
+const _getSessionAndAbility = async () => {
   const session = await auth();
-  if (!session) redirect(`/${locale}/auth/login`);
-  const ability = createAbility(session);
 
-  if (
-    checkPrivilegesAsBoolean(ability, [
-      {
-        action: "view",
-        subject: {
-          type: "User",
-          // Empty object to force the ability to check for any user
-          object: {},
-        },
-      },
-      {
-        action: "view",
-        subject: {
-          type: "FormRecord",
-          // We want to make sure the user has the permission to view all templates
-          object: {},
-        },
-      },
-    ])
-  ) {
-    if (!id || Array.isArray(id)) notFound();
+  const ability = session && createAbility(session);
 
-    const templateWithAssociatedUsers = await getTemplateWithAssociatedUsers(ability, id);
-    if (!templateWithAssociatedUsers) {
-      return <DownloadForm />;
-    }
+  return { session, ability };
+};
 
-    const allUsers = (await getUsers(ability)).map((user) => {
-      return { id: user.id, name: user.name || "", email: user.email || "" };
-    });
-    return (
-      <ManageForm
-        id={id}
-        formRecord={templateWithAssociatedUsers.formRecord}
-        usersAssignedToFormRecord={templateWithAssociatedUsers.users}
-        allUsers={allUsers}
-        canManageOwnership={true}
-      />
-    );
+const _getCanManageOwnership = (ability: UserAbility | null) => {
+  if (!ability) {
+    return false;
   }
 
-  return <ManageForm id={id} canManageOwnership={false} />;
+  return checkPrivilegesAsBoolean(ability, [
+    {
+      action: "view",
+      subject: {
+        type: "User",
+        // Empty object to force the ability to check for any user
+        object: {},
+      },
+    },
+    {
+      action: "view",
+      subject: {
+        type: "FormRecord",
+        // We want to make sure the user has the permission to view all templates
+        object: {},
+      },
+    },
+  ]);
+};
+
+export default async function Page({ params: { id } }: { params: { id: string } }) {
+  const { session, ability } = await _getSessionAndAbility();
+  const canManageOwnership = _getCanManageOwnership(ability);
+  const canSetClosingDate = (session && id !== "0000") || false;
+
+  if (!canManageOwnership || id === "0000") {
+    return <ManageForm id={id} canManageOwnership={false} canSetClosingDate={canSetClosingDate} />;
+  }
+
+  const templateWithAssociatedUsers =
+    ability && (await getTemplateWithAssociatedUsers(ability, id));
+
+  if (!templateWithAssociatedUsers) {
+    throw new Error("Template not found");
+  }
+
+  const allUsers = (await getUsers(ability)).map((user) => {
+    return { id: user.id, name: user.name || "", email: user.email || "" };
+  });
+
+  return (
+    <ManageForm
+      id={id}
+      canManageOwnership={canManageOwnership}
+      canSetClosingDate={canSetClosingDate}
+      formRecord={templateWithAssociatedUsers.formRecord}
+      usersAssignedToFormRecord={templateWithAssociatedUsers.users}
+      allUsers={allUsers}
+    />
+  );
 }

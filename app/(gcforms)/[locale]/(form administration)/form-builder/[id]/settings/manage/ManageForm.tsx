@@ -1,17 +1,16 @@
 "use client";
 
 import { FormRecord } from "@lib/types";
-import { useSession } from "next-auth/react";
 import { DownloadForm } from "./DownloadForm";
 import { SetClosingDate } from "./SetClosingDate";
 import { FormOwnership } from "./FormOwnership";
-import { useRehydrate } from "@lib/store/useTemplateStore";
 
-interface AssignUsersToTemplateProps {
+interface ManageFormProps {
   formRecord?: FormRecord;
   usersAssignedToFormRecord?: { id: string; name: string | null; email: string }[];
   allUsers?: { id: string; name: string | null; email: string }[];
   canManageOwnership: boolean;
+  canSetClosingDate: boolean;
   id: string;
 }
 
@@ -20,23 +19,16 @@ export const ManageForm = ({
   usersAssignedToFormRecord,
   allUsers,
   canManageOwnership,
+  canSetClosingDate,
   id,
-}: AssignUsersToTemplateProps) => {
-  const { status } = useSession();
-
-  const hasHydrated = useRehydrate();
-  if (!hasHydrated) return null;
-
-  // Can definitely be refactored once the parent components are refactored to server components
-  if (
-    canManageOwnership &&
-    typeof formRecord !== "undefined" &&
-    typeof usersAssignedToFormRecord !== "undefined" &&
-    typeof allUsers !== "undefined"
-  ) {
+}: ManageFormProps) => {
+  if (canManageOwnership) {
+    if (!formRecord || !usersAssignedToFormRecord || !allUsers) {
+      throw new Error("Something went wrong");
+    }
     return (
       <>
-        {status === "authenticated" && <SetClosingDate formID={id} />}
+        <SetClosingDate formID={id} />
         <FormOwnership
           formRecord={formRecord}
           usersAssignedToFormRecord={usersAssignedToFormRecord}
@@ -49,7 +41,7 @@ export const ManageForm = ({
 
   return (
     <>
-      {status === "authenticated" && <SetClosingDate formID={id} />}
+      {canSetClosingDate && <SetClosingDate formID={id} />}
       <DownloadForm />
     </>
   );
