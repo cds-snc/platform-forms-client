@@ -19,7 +19,7 @@ describe("Finds parent group using element id", () => {
   });
 
   it("Returns undefined when group has no children", () => {
-    const parent = findParentGroup([], "5");
+    const parent = findParentGroup({}, "5");
     expect(parent).toBeUndefined();
   });
 
