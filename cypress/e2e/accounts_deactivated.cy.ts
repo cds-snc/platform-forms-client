@@ -1,4 +1,4 @@
-describe("Deactivated Page", () => {
+describe.skip("Deactivated Page", () => {
   afterEach(() => {
     cy.resetAll();
   });

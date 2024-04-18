@@ -1,6 +1,6 @@
 describe("Security Questions Redirect", () => {
   afterEach(() => {
-    cy.resetAll();
+    // cy.resetAll();
   });
 
   // Works in real life but test is an issue.

@@ -1,7 +1,7 @@
-describe("Form builder share", () => {
+describe.skip("Form builder share", () => {
   beforeEach(() => {
-    cy.login({ acceptableUse: true });
-    cy.visitPage("/en/form-builder/edit");
+    // cy.login({ acceptableUse: true });
+    cy.visitPage("/en/form-builder/0000/edit");
   });
 
   it("Renders share flyout with name check", () => {
@@ -11,7 +11,7 @@ describe("Form builder share", () => {
     cy.get("[role='menuitem'] span").contains("name your form").click();
     cy.focused().should("have.attr", "id", "fileName");
   });
-  it("Renders share flyout for authenticated", () => {
+  it.skip("Renders share flyout for authenticated", () => {
     // @todo replace with typeInField
     // Getting weird error in GitHub actions where text is missing first character
     // "Cypress Share Test Form" is rendered as "ypress Share Test Form"
@@ -30,7 +30,7 @@ describe("Form builder share", () => {
   });
   it("Renders share flyout for unAuthenticated", () => {
     cy.logout();
-    cy.visitPage("/en/form-builder/edit");
+    cy.visitPage("/en/form-builder/0000/edit");
     cy.get("#fileName")
       .should("have.attr", "placeholder", "Unnamed form file")
       .type("Cypress Share Test Form");

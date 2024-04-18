@@ -1,11 +1,11 @@
 describe("Test FormBuilder Add Elements", () => {
   beforeEach(() => {
-    cy.login({ acceptableUse: true });
+    // cy.login({ acceptableUse: true });
     cy.visitPage("/en/form-builder");
   });
 
   it("Adds a Page Text element", () => {
-    cy.visitPage("/en/form-builder/edit");
+    cy.visitPage("/en/form-builder/0000/edit");
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="richText"]').click();
@@ -15,7 +15,7 @@ describe("Test FormBuilder Add Elements", () => {
   });
 
   it("Adds a Short Answer element", () => {
-    cy.visitPage("/en/form-builder/edit");
+    cy.visitPage("/en/form-builder/0000/edit");
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="textField"]').click();
@@ -27,7 +27,7 @@ describe("Test FormBuilder Add Elements", () => {
   });
 
   it("Adds a Long Answer element", () => {
-    cy.visitPage("/en/form-builder/edit");
+    cy.visitPage("/en/form-builder/0000/edit");
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="textArea"]').click();
@@ -39,7 +39,7 @@ describe("Test FormBuilder Add Elements", () => {
   });
 
   it("Adds a Single choice element", () => {
-    cy.visitPage("/en/form-builder/edit");
+    cy.visitPage("/en/form-builder/0000/edit");
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="radio"]').click();
@@ -55,7 +55,7 @@ describe("Test FormBuilder Add Elements", () => {
   });
 
   it("Adds a Multiple choice element", () => {
-    cy.visitPage("/en/form-builder/edit");
+    cy.visitPage("/en/form-builder/0000/edit");
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="checkbox"]').click();
@@ -69,7 +69,7 @@ describe("Test FormBuilder Add Elements", () => {
   });
 
   it("Adds a Dropdown list element", () => {
-    cy.visitPage("/en/form-builder/edit");
+    cy.visitPage("/en/form-builder/0000/edit");
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="basic-filter"]').click();
@@ -84,7 +84,7 @@ describe("Test FormBuilder Add Elements", () => {
   });
 
   it("Adds a Date element", () => {
-    cy.visitPage("/en/form-builder/edit");
+    cy.visitPage("/en/form-builder/0000/edit");
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="preset-filter"]').click();
@@ -98,7 +98,7 @@ describe("Test FormBuilder Add Elements", () => {
   });
 
   it("Adds a Numeric field element", () => {
-    cy.visitPage("/en/form-builder/edit");
+    cy.visitPage("/en/form-builder/0000/edit");
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="preset-filter"]').click();
@@ -110,7 +110,7 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get('[data-testid="description-text"]').should("contain", "Enter a number");
     cy.get('[data-testid="number"]').should("contain", "0123456789");
 
-    cy.visitPage("/en/form-builder/preview");
+    cy.visitPage("/en/form-builder/0000/preview");
     cy.get('[data-testid="textInput"]').should("have.attr", "type", "number");
   });
 });

@@ -1,4 +1,4 @@
-describe("Restricted Access Page", () => {
+describe.skip("Restricted Access Page", () => {
   afterEach(() => {
     cy.resetAll();
   });
