@@ -4,6 +4,7 @@ import { FormRecord } from "@lib/types";
 import { DownloadForm } from "./DownloadForm";
 import { SetClosingDate } from "./SetClosingDate";
 import { FormOwnership } from "./FormOwnership";
+import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
 
 interface User {
   id: string;
@@ -40,12 +41,12 @@ export const ManageForm = (props: ManageFormProps) => {
   }
 
   if (!formRecord || !usersAssignedToFormRecord || !allUsers) {
-    return <>There has been an error.</>; // @TODO: how to handle better?
+    return <ErrorPanel>There has been an error.</ErrorPanel>;
   }
 
   return (
     <>
-      <SetClosingDate formID={id} />
+      {canSetClosingDate && <SetClosingDate formID={id} />}
       <FormOwnership
         formRecord={formRecord}
         usersAssignedToFormRecord={usersAssignedToFormRecord}

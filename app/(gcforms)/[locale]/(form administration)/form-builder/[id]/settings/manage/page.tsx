@@ -6,6 +6,7 @@ import { getUsers } from "@lib/users";
 import { ManageForm } from "./ManageForm";
 import { Metadata } from "next";
 import { UserAbility } from "@lib/types";
+import { Session } from "next-auth";
 
 export async function generateMetadata({
   params: { locale },
@@ -26,8 +27,8 @@ const getSessionAndAbility = async () => {
   return { session, ability };
 };
 
-const getCanManageOwnership = (ability: UserAbility | null) => {
-  if (!ability) {
+const getCanManageOwnership = (formId: string, ability: UserAbility | null) => {
+  if (!ability || formId === "0000") {
     return false;
   }
 
@@ -51,6 +52,18 @@ const getCanManageOwnership = (ability: UserAbility | null) => {
   ]);
 };
 
+const getCanSetClosingDate = (
+  formId: string,
+  ability: UserAbility | null,
+  session: Session | null
+) => {
+  if (!ability || !session || formId === "0000") {
+    return false;
+  }
+
+  return session ? true : false;
+};
+
 const getAllUsers = async (ability: UserAbility) => {
   const users = await getUsers(ability);
   return users.map((user) => ({
@@ -62,11 +75,17 @@ const getAllUsers = async (ability: UserAbility) => {
 
 export default async function Page({ params: { id } }: { params: { id: string } }) {
   const { session, ability } = await getSessionAndAbility();
-  const canManageOwnership = getCanManageOwnership(ability);
-  const canSetClosingDate = (session && id !== "0000") || false;
+  const canManageOwnership = getCanManageOwnership(id, ability);
+  const canSetClosingDate = getCanSetClosingDate(id, ability, session);
 
   if (!canManageOwnership || id === "0000") {
-    return <ManageForm id={id} canManageOwnership={false} canSetClosingDate={canSetClosingDate} />;
+    return (
+      <ManageForm
+        id={id}
+        canManageOwnership={canManageOwnership}
+        canSetClosingDate={canSetClosingDate}
+      />
+    );
   }
 
   const templateWithAssociatedUsers =
