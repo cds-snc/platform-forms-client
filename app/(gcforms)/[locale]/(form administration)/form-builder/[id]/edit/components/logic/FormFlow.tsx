@@ -7,7 +7,7 @@ import "reactflow/dist/style.css";
 import { TreeItem } from "react-complex-tree";
 import { GroupNode } from "./GroupNode";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { Group } from "@lib/formContext";
+import { Group, NextActionRule } from "@lib/formContext";
 
 const nodeTypes = { groupNode: GroupNode };
 
@@ -85,6 +85,19 @@ export const FormFlow = () => {
           source: id,
           target: group.nextAction,
           type: "smoothstep",
+        });
+      }
+
+      if (prevNodeId && group && Array.isArray(group.nextAction)) {
+        // Add edges for next actions
+        const nextActions = group.nextAction;
+        nextActions.forEach((action: NextActionRule) => {
+          edges.push({
+            id: `e-${prevNodeId}-${id}-${action}`,
+            source: id,
+            target: action.groupId,
+            type: "smoothstep",
+          });
         });
       }
 
