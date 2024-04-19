@@ -26,7 +26,7 @@ export const NextActions = ({
   // const autoSetNextActions = useGroupStore((state) => state.autoSetNextActions);
 
   if (initialNextActionRules.length == 0) {
-    initialNextActionRules.push({ groupId: "start", choiceId: "" });
+    initialNextActionRules.push({ groupId: "start", choiceId: `${item.id}.0` });
   }
 
   const [nextActions, setNextActions] = useState(initialNextActionRules);

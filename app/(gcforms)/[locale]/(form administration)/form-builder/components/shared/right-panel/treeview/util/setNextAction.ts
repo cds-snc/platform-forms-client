@@ -1,4 +1,4 @@
-import { GroupsType, Group } from "@lib/formContext";
+import { GroupsType, NextActionRule, Group } from "@lib/formContext";
 
 /*
   This function "auto" sets the nextAction for each group
@@ -33,6 +33,38 @@ export const setGroupNextAction = (
 
   if (currentAction === nextAction) {
     return currentAction;
+  }
+
+  if (Array.isArray(nextAction)) {
+    const filteredActions: (string | NextActionRule)[] = [];
+
+    nextAction.forEach((action) => {
+      // Does it have choiceId and groupId
+      const choiceId = action.choiceId;
+      const nextGroupId = action.groupId;
+
+      if (choiceId && nextGroupId) {
+        filteredActions.push(action);
+      }
+
+      // If it only has groupId than add it as a string
+      if (!choiceId && nextGroupId) {
+        filteredActions.push(nextGroupId);
+      }
+    });
+
+    // If the array length is 0, then set the nextAction to an empty string
+    if (filteredActions.length === 0) {
+      nextAction = "";
+    }
+
+    if (filteredActions.length === 1 && typeof filteredActions[0] === "string") {
+      nextAction = filteredActions[0];
+    }
+
+    if (filteredActions.length > 1) {
+      nextAction = filteredActions as NextActionRule[];
+    }
   }
 
   return nextAction;
