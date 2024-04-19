@@ -1,7 +1,7 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
-import { FormFlow } from "../components/logic/FormFlow";
+import { Flow } from "../components/logic/FormFlow";
 
 export async function generateMetadata({
   params: { locale },
@@ -29,7 +29,7 @@ export default async function Page({
   return (
     <div id={id}>
       <h1 className="mb-0 mt-8 border-0">{t("logic.heading")}</h1>
-      <FormFlow />
+      <Flow />
     </div>
   );
 }

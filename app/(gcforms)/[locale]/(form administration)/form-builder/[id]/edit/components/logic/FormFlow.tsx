@@ -5,8 +5,8 @@ import ReactFlow, {
   Background,
   Controls,
   MarkerType,
-  useNodesState,
-  useEdgesState,
+  useStoreApi,
+  ReactFlowProvider,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import { useFlowData } from "./useFlowData";
@@ -20,10 +20,18 @@ const defaultEdgeOptions = {
 };
 
 export const FormFlow = () => {
-  const { edges: initialEdges, nodes: initialNodes } = useFlowData();
+  const { edges, nodes } = useFlowData();
 
-  const [nodes] = useNodesState(initialNodes);
-  const [edges] = useEdgesState(initialEdges);
+  // @todo temp fix for https://github.com/xyflow/xyflow/issues/3243
+  const store = useStoreApi();
+  if (process.env.NODE_ENV === "development") {
+    store.getState().onError = (code) => {
+      if (code === "002") {
+        return;
+      }
+      // console.warn(message);
+    };
+  }
 
   return (
     <div className="my-10 w-full border-1" style={{ height: "calc(100vh - 300px)" }}>
@@ -38,5 +46,13 @@ export const FormFlow = () => {
         <Controls />
       </ReactFlow>
     </div>
+  );
+};
+
+export const Flow = () => {
+  return (
+    <ReactFlowProvider>
+      <FormFlow />
+    </ReactFlowProvider>
   );
 };

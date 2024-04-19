@@ -47,7 +47,7 @@ export const useFlowData = () => {
       return { edges, nodes: [] };
     }
 
-    const nodes = children.map((key) => {
+    const nodes = children.map((key, i) => {
       const treeItem = treeItems[key];
       const group: Group | undefined = formGroups && formGroups[key] ? formGroups[key] : undefined;
       const id = treeItem.index as string;
@@ -76,7 +76,7 @@ export const useFlowData = () => {
       if (prevNodeId && group && typeof group.nextAction === "string") {
         // Add edge from this node to next action
         edges.push({
-          id: `e-${prevNodeId}-${id}`,
+          id: `e-${i}`,
           source: id,
           target: group.nextAction,
         });
@@ -85,9 +85,9 @@ export const useFlowData = () => {
       if (prevNodeId && group && Array.isArray(group.nextAction)) {
         // Add edges for next actions
         const nextActions = group.nextAction;
-        nextActions.forEach((action: NextActionRule) => {
+        nextActions.forEach((action: NextActionRule, j) => {
           edges.push({
-            id: `e-${prevNodeId}-${id}-${action}`,
+            id: `e-arr-${i}-${j}`,
             source: id,
             target: action.groupId,
           });
@@ -100,15 +100,13 @@ export const useFlowData = () => {
       if (prevNodeId && group && typeof group.nextAction === "undefined") {
         // Add edge from this node to end node
         edges.push({
-          id: `e-${prevNodeId}-end`,
+          id: `e-end-${i}`,
           source: id,
           target: "end",
-          type: "bezier",
         });
       }
 
       prevNodeId = id;
-
       return flowNode;
     });
 
