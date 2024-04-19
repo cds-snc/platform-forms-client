@@ -30,12 +30,8 @@ export const GroupNode = (node: NodeProps) => {
           );
         })}
 
-        {node.data.id !== "start" && (
-          <Handle type="target" position={Position.Left} isConnectable={false} />
-        )}
-        {node.data.id !== "end" && (
-          <Handle type="source" position={Position.Right} isConnectable={false} />
-        )}
+        <Handle type="source" position={Position.Right} isConnectable={false} />
+        <Handle type="target" position={Position.Left} isConnectable={false} />
       </div>
     </div>
   );
